@@ -44,7 +44,7 @@ NS_AX_BACKEND_BEGIN
 /**
  * @brief Used to store vertex and index data data.
  */
-class Buffer : public axis::Ref
+class Buffer : public ax::Ref
 {
 public:
     /**

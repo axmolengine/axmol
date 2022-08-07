@@ -39,7 +39,7 @@ class Bone;
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL DisplayManager : public axis::Ref
+class CCS_DLL DisplayManager : public ax::Ref
 {
 public:
     static DisplayManager* create(Bone* bone);
@@ -70,11 +70,11 @@ public:
      */
     void addDisplay(DisplayData* displayData, int index);
 
-    void addDisplay(axis::Node* display, int index);
+    void addDisplay(ax::Node* display, int index);
 
     void removeDisplay(int index);
 
-    const axis::Vector<DecorativeDisplay*>& getDecorativeDisplayList() const;
+    const ax::Vector<DecorativeDisplay*>& getDecorativeDisplayList() const;
 
     /*
      * @deprecated, please use changeDisplayWithIndex and changeDisplayWithName
@@ -95,7 +95,7 @@ public:
     void changeDisplayWithIndex(int index, bool force);
     void changeDisplayWithName(std::string_view name, bool force);
 
-    axis::Node* getDisplayRenderNode() const;
+    ax::Node* getDisplayRenderNode() const;
     DisplayType getDisplayRenderNodeType() const;
 
     int getCurrentDisplayIndex() const;
@@ -119,16 +119,16 @@ public:
      */
     virtual bool isVisible() const;
 
-    axis::Size getContentSize() const;
-    axis::Rect getBoundingBox() const;
+    ax::Size getContentSize() const;
+    ax::Rect getBoundingBox() const;
 
-    axis::Vec2 getAnchorPoint() const;
-    axis::Vec2 getAnchorPointInPoints() const;
+    ax::Vec2 getAnchorPoint() const;
+    ax::Vec2 getAnchorPointInPoints() const;
 
     /**
      * Check if the position is inside the bone.
      */
-    virtual bool containPoint(axis::Vec2& _point);
+    virtual bool containPoint(ax::Vec2& _point);
 
     /**
      * Check if the position is inside the bone.
@@ -139,9 +139,9 @@ public:
     virtual bool isForceChangeDisplay() const { return _forceChangeDisplay; }
 
 protected:
-    axis::Vector<DecorativeDisplay*> _decoDisplayList;
+    ax::Vector<DecorativeDisplay*> _decoDisplayList;
     //! Display render node.
-    axis::Node* _displayRenderNode;
+    ax::Node* _displayRenderNode;
     //! Display render node type
     DisplayType _displayType;
     //! Include current display information, like contour sprite, etc.

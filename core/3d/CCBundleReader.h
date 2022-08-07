@@ -45,7 +45,7 @@ NS_AX_BEGIN
  * @js NA
  * @lua NA
  */
-class BundleReader : public axis::Ref
+class BundleReader : public ax::Ref
 {
 public:
     /**

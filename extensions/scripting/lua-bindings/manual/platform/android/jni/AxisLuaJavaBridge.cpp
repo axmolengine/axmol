@@ -41,7 +41,7 @@ JNIEXPORT jint JNICALL Java_org_axys1_lib_AxysLuaJavaBridge_callLuaFunctionWithS
                                                                                              jint functionId,
                                                                                              jstring value)
 {
-    std::string strValue = axis::StringUtils::getStringUTFCharsJNI(env, value);
+    std::string strValue = ax::StringUtils::getStringUTFCharsJNI(env, value);
     int ret              = LuaJavaBridge::callLuaFunctionById(functionId, strValue.c_str());
     return ret;
 }
@@ -52,8 +52,8 @@ Java_org_axys1_lib_AxysLuaJavaBridge_callLuaGlobalFunctionWithString(JNIEnv* env
                                                                             jstring luaFunctionName,
                                                                             jstring value)
 {
-    std::string functionNameStr = axis::StringUtils::getStringUTFCharsJNI(env, luaFunctionName);
-    std::string valueStr        = axis::StringUtils::getStringUTFCharsJNI(env, value);
+    std::string functionNameStr = ax::StringUtils::getStringUTFCharsJNI(env, luaFunctionName);
+    std::string valueStr        = ax::StringUtils::getStringUTFCharsJNI(env, value);
 
     int ret = LuaJavaBridge::callLuaGlobalFunction(functionNameStr.c_str(), valueStr.c_str());
     return ret;

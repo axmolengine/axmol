@@ -65,7 +65,7 @@
 #include "renderer/CCTextureCache.h"
 #include "renderer/ccShaders.h"
 
-void LuaNode::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
+void LuaNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
     int handler =
         ScriptHandlerMgr::getInstance()->getObjectHandler((void*)this, ScriptHandlerMgr::HandlerType::LUANODE_DRAW);
@@ -452,14 +452,14 @@ static int tolua_cocos2d_Menu_create(lua_State* tolua_S)
                 goto tolua_lerror;
 #endif
 
-            axis::MenuItem* item = static_cast<axis::MenuItem*>(tolua_tousertype(tolua_S, 1 + i, NULL));
+            ax::MenuItem* item = static_cast<ax::MenuItem*>(tolua_tousertype(tolua_S, 1 + i, NULL));
             if (NULL != item)
             {
                 items.pushBack(item);
                 ++i;
             }
         }
-        axis::Menu* tolua_ret = axis::Menu::createWithArray(items);
+        ax::Menu* tolua_ret = ax::Menu::createWithArray(items);
         // UnCheck
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : NULL;
@@ -468,7 +468,7 @@ static int tolua_cocos2d_Menu_create(lua_State* tolua_S)
     }
     else if (argc == 0)
     {
-        axis::Menu* tolua_ret = axis::Menu::create();
+        ax::Menu* tolua_ret = ax::Menu::create();
         int nID                  = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID              = (tolua_ret) ? &tolua_ret->_luaID : NULL;
         toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Menu");
@@ -644,7 +644,7 @@ static int tolua_cocos2d_MenuItem_registerScriptTapHandler(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.MenuItem", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = static_cast<axis::MenuItemImage*>(tolua_tousertype(tolua_S, 1, 0));
+    cobj = static_cast<ax::MenuItemImage*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == cobj)
     {
@@ -692,7 +692,7 @@ static int tolua_cocos2d_MenuItem_unregisterScriptTapHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = static_cast<axis::MenuItemImage*>(tolua_tousertype(tolua_S, 1, 0));
+    cobj = static_cast<ax::MenuItemImage*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == cobj)
@@ -766,7 +766,7 @@ static int lua_axis_Layer_setTouchEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -814,7 +814,7 @@ static int lua_axis_Layer_isTouchEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -855,7 +855,7 @@ static int lua_axis_Layer_setTouchMode(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -904,7 +904,7 @@ static int lua_axis_Layer_getTouchMode(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -947,7 +947,7 @@ static int lua_axis_Layer_setSwallowsTouches(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -995,7 +995,7 @@ static int lua_axis_Layer_isSwallowsTouches(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1036,7 +1036,7 @@ static int lua_axis_Layer_setKeyboardEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1082,7 +1082,7 @@ static int lua_axis_Layer_isKeyboardEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1123,7 +1123,7 @@ static int lua_axis_Layer_setAccelerometerEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1170,7 +1170,7 @@ static int lua_axis_Layer_isAccelerometerEnabled(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1212,7 +1212,7 @@ static int lua_axis_Layer_setAccelerometerInterval(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(L, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1259,7 +1259,7 @@ static int tolua_cocos2d_Layer_registerScriptTouchHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1352,7 +1352,7 @@ static int tolua_cocos2d_Layer_unregisterScriptTouchHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1396,7 +1396,7 @@ static int tolua_cocos2d_Layer_registerScriptKeypadHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1446,7 +1446,7 @@ static int tolua_cocos2d_Layer_unregisterScriptKeypadHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1490,7 +1490,7 @@ static int tolua_cocos2d_Layer_registerScriptAccelerateHandler(lua_State* tolua_
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1541,7 +1541,7 @@ static int tolua_cocos2d_Layer_unregisterScriptAccelerateHandler(lua_State* tolu
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Layer*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Layer*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1587,7 +1587,7 @@ static int tolua_cocos2d_Scheduler_scheduleScriptFunc(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Scheduler*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Scheduler*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1640,7 +1640,7 @@ static int tolua_cocos2d_Scheduler_unscheduleScriptEntry(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Scheduler*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Scheduler*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -1679,7 +1679,7 @@ tolua_lerror:
 static int tolua_cocos2d_RenderTexture_newImage(lua_State* tolua_S)
 {
     int argc                     = 0;
-    axis::RenderTexture* cobj = nullptr;
+    ax::RenderTexture* cobj = nullptr;
     bool ok                      = true;
 
 #if _AX_DEBUG >= 1
@@ -1691,7 +1691,7 @@ static int tolua_cocos2d_RenderTexture_newImage(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::RenderTexture*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::RenderTexture*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -1713,7 +1713,7 @@ static int tolua_cocos2d_RenderTexture_newImage(lua_State* tolua_S)
         }
 #endif
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
-        auto callback        = [=](RefPtr<axis::Image> image) {
+        auto callback        = [=](RefPtr<ax::Image> image) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
             stack->pushObject(image, "ax.Image");
             stack->executeFunctionByHandler(handler, 1);
@@ -1777,8 +1777,8 @@ int tolua_cocos2d_Sequence_create(lua_State* tolua_S)
                     goto tolua_lerror;
 #endif
 
-                axis::FiniteTimeAction* item =
-                    static_cast<axis::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, nullptr));
+                ax::FiniteTimeAction* item =
+                    static_cast<ax::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, nullptr));
                 if (nullptr != item)
                 {
                     array.pushBack(item);
@@ -1787,7 +1787,7 @@ int tolua_cocos2d_Sequence_create(lua_State* tolua_S)
             }
         }
 
-        axis::Sequence* tolua_ret = axis::Sequence::create(array);
+        ax::Sequence* tolua_ret = ax::Sequence::create(array);
         // issue 2433 uncheck
         int nID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID = (tolua_ret) ? &tolua_ret->_luaID : nullptr;
@@ -1912,7 +1912,7 @@ static int tolua_cocos2d_Node_registerScriptHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1961,7 +1961,7 @@ static int tolua_cocos2d_Node_unregisterScriptHandler(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2003,7 +2003,7 @@ static int tolua_Cocos2d_Node_scheduleUpdateWithPriorityLua(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2055,7 +2055,7 @@ static int tolua_cocos2d_Node_unscheduleUpdate(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2086,7 +2086,7 @@ tolua_lerror:
 int tolua_cocos2d_Node_setContentSize(lua_State* tolua_S)
 {
     int argc            = 0;
-    axis::Node* cobj = NULL;
+    ax::Node* cobj = NULL;
     bool ok             = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2095,7 +2095,7 @@ int tolua_cocos2d_Node_setContentSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.Node", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Node*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -2107,7 +2107,7 @@ int tolua_cocos2d_Node_setContentSize(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        axis::Size size;
+        ax::Size size;
         ok &= luaval_to_size(tolua_S, 2, &size, "ax.Node:setContentSize");
         if (!ok)
             return 0;
@@ -2147,7 +2147,7 @@ tolua_lerror:
 int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
 {
     int argc            = 0;
-    axis::Node* cobj = NULL;
+    ax::Node* cobj = NULL;
     bool ok             = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2156,7 +2156,7 @@ int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.Node", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Node*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -2168,7 +2168,7 @@ int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        axis::Vec2 pt;
+        ax::Vec2 pt;
         ok &= luaval_to_vec2(tolua_S, 2, &pt, "ax.Node:setAnchorPoint");
         if (!ok)
             return 0;
@@ -2191,7 +2191,7 @@ int tolua_cocos2d_Node_setAnchorPoint(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        cobj->setAnchorPoint(axis::Vec2((float)x, (float)y));
+        cobj->setAnchorPoint(ax::Vec2((float)x, (float)y));
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -2219,7 +2219,7 @@ static int tolua_cocos2d_Node_getPosition(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::Node*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Node*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2261,7 +2261,7 @@ tolua_lerror:
 static int lua_axis_Node_enumerateChildren(lua_State* tolua_S)
 {
     int argc            = 0;
-    axis::Node* cobj = nullptr;
+    ax::Node* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2272,7 +2272,7 @@ static int lua_axis_Node_enumerateChildren(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Node*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -2323,7 +2323,7 @@ tolua_lerror:
 int lua_axis_Node_setAdditionalTransform(lua_State* tolua_S)
 {
     int argc            = 0;
-    axis::Node* cobj = nullptr;
+    ax::Node* cobj = nullptr;
     bool ok             = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2333,7 +2333,7 @@ int lua_axis_Node_setAdditionalTransform(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.Node", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Node*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -2346,7 +2346,7 @@ int lua_axis_Node_setAdditionalTransform(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::AffineTransform arg0;
+            ax::AffineTransform arg0;
             ok &= luaval_to_affinetransform(tolua_S, 2, &arg0, "ax.Node:setAdditionalTransform");
 
             if (!ok)
@@ -2363,7 +2363,7 @@ int lua_axis_Node_setAdditionalTransform(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::Mat4 arg0;
+            ax::Mat4 arg0;
             ok &= luaval_to_mat4(tolua_S, 2, &arg0, "ax.Node:setAdditionalTransform");
 
             if (!ok)
@@ -2391,7 +2391,7 @@ tolua_lerror:
 int lua_axis_Node_setRotationQuat(lua_State* tolua_S)
 {
     int argc            = 0;
-    axis::Node* cobj = nullptr;
+    ax::Node* cobj = nullptr;
     bool ok             = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2401,7 +2401,7 @@ int lua_axis_Node_setRotationQuat(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.Node", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::Node*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Node*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -2414,7 +2414,7 @@ int lua_axis_Node_setRotationQuat(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::Quaternion arg0;
+            ax::Quaternion arg0;
             ok &= luaval_to_quaternion(tolua_S, 2, &arg0, "ax.Node:setRotationQuat");
 
             if (!ok)
@@ -2444,7 +2444,7 @@ tolua_lerror:
 int lua_axis_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
     int argc             = 0;
-    axis::Scene* cobj = nullptr;
+    ax::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if _AX_DEBUG >= 1
@@ -2456,7 +2456,7 @@ int lua_axis_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -2469,9 +2469,9 @@ int lua_axis_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        axis::Camera* arg0;
+        ax::Camera* arg0;
 
-        ok &= luaval_to_object<axis::Camera>(tolua_S, 2, "ax.Camera", &arg0, "ax.Scene:setNavMeshDebugCamera");
+        ok &= luaval_to_object<ax::Camera>(tolua_S, 2, "ax.Camera", &arg0, "ax.Scene:setNavMeshDebugCamera");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_Scene_setNavMeshDebugCamera'", nullptr);
@@ -2495,7 +2495,7 @@ tolua_lerror:
 int lua_axis_Scene_setNavMesh(lua_State* tolua_S)
 {
     int argc             = 0;
-    axis::Scene* cobj = nullptr;
+    ax::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if _AX_DEBUG >= 1
@@ -2507,7 +2507,7 @@ int lua_axis_Scene_setNavMesh(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -2520,9 +2520,9 @@ int lua_axis_Scene_setNavMesh(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        axis::NavMesh* arg0;
+        ax::NavMesh* arg0;
 
-        ok &= luaval_to_object<axis::NavMesh>(tolua_S, 2, "ax.NavMesh", &arg0, "ax.Scene:setNavMesh");
+        ok &= luaval_to_object<ax::NavMesh>(tolua_S, 2, "ax.NavMesh", &arg0, "ax.Scene:setNavMesh");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_Scene_setNavMesh'", nullptr);
@@ -2546,7 +2546,7 @@ tolua_lerror:
 int lua_axis_Scene_getNavMesh(lua_State* tolua_S)
 {
     int argc             = 0;
-    axis::Scene* cobj = nullptr;
+    ax::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if _AX_DEBUG >= 1
@@ -2558,7 +2558,7 @@ int lua_axis_Scene_getNavMesh(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -2576,8 +2576,8 @@ int lua_axis_Scene_getNavMesh(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_Scene_getNavMesh'", nullptr);
             return 0;
         }
-        axis::NavMesh* ret = cobj->getNavMesh();
-        object_to_luaval<axis::NavMesh>(tolua_S, "ax.NavMesh", (axis::NavMesh*)ret);
+        ax::NavMesh* ret = cobj->getNavMesh();
+        object_to_luaval<ax::NavMesh>(tolua_S, "ax.NavMesh", (ax::NavMesh*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getNavMesh", argc, 0);
@@ -2626,8 +2626,8 @@ static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
                     goto tolua_lerror;
 #endif
 
-                axis::FiniteTimeAction* item =
-                    static_cast<axis::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, NULL));
+                ax::FiniteTimeAction* item =
+                    static_cast<ax::FiniteTimeAction*>(tolua_tousertype(tolua_S, 1 + i, NULL));
                 if (NULL != item)
                 {
                     array.pushBack(item);
@@ -2636,7 +2636,7 @@ static int tolua_cocos2d_Spawn_create(lua_State* tolua_S)
             }
         }
 
-        axis::Spawn* tolua_ret = axis::Spawn::create(array);
+        ax::Spawn* tolua_ret = ax::Spawn::create(array);
         int nID                   = (tolua_ret) ? (int)tolua_ret->_ID : -1;
         int* pLuaID               = (tolua_ret) ? &tolua_ret->_luaID : NULL;
         toluafix_pushusertype_ccobject(tolua_S, nID, pLuaID, (void*)tolua_ret, "ax.Spawn");
@@ -2677,7 +2677,7 @@ int lua_cocos2d_CardinalSplineBy_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        axis::Vec2* arr = NULL;
+        ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.CardinalSplineBy:create");
         if (!ok)
             return 0;
@@ -2752,7 +2752,7 @@ int tolua_cocos2d_CatmullRomBy_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        axis::Vec2* arr = NULL;
+        ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.CatmullRomBy:create");
         if (!ok)
             return 0;
@@ -2818,7 +2818,7 @@ int tolua_cocos2d_CatmullRomTo_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        axis::Vec2* arr = NULL;
+        ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.CatmullRomTo:create");
         if (!ok)
             return 0;
@@ -2884,7 +2884,7 @@ int tolua_cocos2d_BezierBy_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        axis::Vec2* arr = NULL;
+        ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.BezierBy:create");
         if (!ok)
             return 0;
@@ -2945,7 +2945,7 @@ int tolua_cocos2d_BezierTo_create(lua_State* tolua_S)
             return 0;
 
         int num            = 0;
-        axis::Vec2* arr = NULL;
+        ax::Vec2* arr = NULL;
         ok &= luaval_to_array_of_vec2(tolua_S, 3, &arr, &num, "ax.BezierTo:create");
         if (!ok)
             return 0;
@@ -2996,7 +2996,7 @@ static int tolua_axis_DrawNode_drawPolygon(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::DrawNode*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::DrawNode*>(tolua_tousertype(tolua_S, 1, 0));
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -3019,7 +3019,7 @@ static int tolua_axis_DrawNode_drawPolygon(lua_State* tolua_S)
         int size = lua_tointeger(tolua_S, 3);
         if (size > 0)
         {
-            axis::Vec2* points = new axis::Vec2[size];
+            ax::Vec2* points = new ax::Vec2[size];
             for (int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3076,7 +3076,7 @@ tolua_lerror:
 int tolua_axis_DrawNode_drawSolidPoly(lua_State* tolua_S)
 {
     int argc                = 0;
-    axis::DrawNode* self = nullptr;
+    ax::DrawNode* self = nullptr;
     bool ok                 = true;
 
     tolua_Error tolua_err;
@@ -3086,7 +3086,7 @@ int tolua_axis_DrawNode_drawSolidPoly(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!self)
@@ -3103,7 +3103,7 @@ int tolua_axis_DrawNode_drawSolidPoly(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "ax.DrawNode:drawSolidPoly");
         if (size > 0)
         {
-            axis::Vec2* points = new axis::Vec2[size];
+            ax::Vec2* points = new ax::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3125,7 +3125,7 @@ int tolua_axis_DrawNode_drawSolidPoly(lua_State* tolua_S)
                 lua_pop(tolua_S, 1);
             }
 
-            axis::Color4F arg2;
+            ax::Color4F arg2;
 
             ok &= luaval_to_color4f(tolua_S, 4, &arg2, "ax.DrawNode:drawSolidPoly");
             if (!ok)
@@ -3164,7 +3164,7 @@ int tolua_axis_DrawNode_drawPoly(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = static_cast<axis::DrawNode*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::DrawNode*>(tolua_tousertype(tolua_S, 1, 0));
 
 #if _AX_DEBUG >= 1
     if (!self)
@@ -3181,7 +3181,7 @@ int tolua_axis_DrawNode_drawPoly(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "ax.DrawNode:drawPoly");
         if (size > 0)
         {
-            axis::Vec2* points = new axis::Vec2[size];
+            ax::Vec2* points = new ax::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3204,7 +3204,7 @@ int tolua_axis_DrawNode_drawPoly(lua_State* tolua_S)
             }
 
             bool arg2;
-            axis::Color4F arg3;
+            ax::Color4F arg3;
 
             ok &= luaval_to_boolean(tolua_S, 4, &arg2, "ax.DrawNode:drawPoly");
 
@@ -3232,7 +3232,7 @@ tolua_lerror:
 int tolua_axis_DrawNode_drawCardinalSpline(lua_State* tolua_S)
 {
     int argc                = 0;
-    axis::DrawNode* self = nullptr;
+    ax::DrawNode* self = nullptr;
     bool ok                 = true;
 
 #if _AX_DEBUG >= 1
@@ -3241,7 +3241,7 @@ int tolua_axis_DrawNode_drawCardinalSpline(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!self)
@@ -3255,7 +3255,7 @@ int tolua_axis_DrawNode_drawCardinalSpline(lua_State* tolua_S)
     if (argc == 4)
     {
         int num            = 0;
-        axis::Vec2* arr = NULL;
+        ax::Vec2* arr = NULL;
         if (!luaval_to_array_of_vec2(tolua_S, 2, &arr, &num, "ax.DrawNode:drawCardinalSpline"))
             return 0;
         PointArray* config = PointArray::create(num);
@@ -3273,7 +3273,7 @@ int tolua_axis_DrawNode_drawCardinalSpline(lua_State* tolua_S)
 
         double arg1;
         unsigned int arg2;
-        axis::Color4F arg3;
+        ax::Color4F arg3;
 
         ok &= luaval_to_number(tolua_S, 3, &arg1, "ax.DrawNode:drawCardinalSpline");
 
@@ -3300,7 +3300,7 @@ tolua_lerror:
 int tolua_axis_DrawNode_drawCatmullRom(lua_State* tolua_S)
 {
     int argc                = 0;
-    axis::DrawNode* self = nullptr;
+    ax::DrawNode* self = nullptr;
     bool ok                 = true;
 
 #if _AX_DEBUG >= 1
@@ -3309,7 +3309,7 @@ int tolua_axis_DrawNode_drawCatmullRom(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!self)
@@ -3323,7 +3323,7 @@ int tolua_axis_DrawNode_drawCatmullRom(lua_State* tolua_S)
     if (argc == 3)
     {
         int num            = 0;
-        axis::Vec2* arr = NULL;
+        ax::Vec2* arr = NULL;
         if (!luaval_to_array_of_vec2(tolua_S, 2, &arr, &num, "ax.DrawNode:drawCatmullRom"))
             return 0;
         PointArray* config = PointArray::create(num);
@@ -3340,7 +3340,7 @@ int tolua_axis_DrawNode_drawCatmullRom(lua_State* tolua_S)
         AX_SAFE_DELETE_ARRAY(arr);
 
         unsigned int arg1;
-        axis::Color4F arg2;
+        ax::Color4F arg2;
 
         ok &= luaval_to_uint32(tolua_S, 3, &arg1, "ax.DrawNode:drawCatmullRom");
 
@@ -3366,7 +3366,7 @@ tolua_lerror:
 int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
 {
     int argc                = 0;
-    axis::DrawNode* self = nullptr;
+    ax::DrawNode* self = nullptr;
     bool ok                 = true;
 
     tolua_Error tolua_err;
@@ -3376,7 +3376,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::DrawNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!self)
@@ -3393,7 +3393,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "ax.DrawNode:drawPoints");
         if (size > 0)
         {
-            axis::Vec2* points = new axis::Vec2[size];
+            ax::Vec2* points = new ax::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3415,7 +3415,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
                 lua_pop(tolua_S, 1);
             }
 
-            axis::Color4F arg2;
+            ax::Color4F arg2;
 
             ok &= luaval_to_color4f(tolua_S, 4, &arg2, "ax.DrawNode:drawPoints");
             if (!ok)
@@ -3430,7 +3430,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
         luaval_to_uint32(tolua_S, 3, &size, "ax.DrawNode:drawPoints");
         if (size > 0)
         {
-            axis::Vec2* points = new axis::Vec2[size];
+            ax::Vec2* points = new ax::Vec2[size];
             for (unsigned int i = 0; i < size; i++)
             {
                 lua_pushnumber(tolua_S, i + 1);
@@ -3453,7 +3453,7 @@ int tolua_axis_DrawNode_drawPoints(lua_State* tolua_S)
             }
 
             float pointSize = (float)tolua_tonumber(tolua_S, 4, 0);
-            axis::Color4F color;
+            ax::Color4F color;
             ok &= luaval_to_color4f(tolua_S, 5, &color, "ax.DrawNode:drawPoints");
             if (!ok)
                 return 0;
@@ -3726,7 +3726,7 @@ static int tolua_axis_SpriteBatchNode_getDescendants(lua_State* tolua_S)
         return 0;
 
     int argc                       = 0;
-    axis::SpriteBatchNode* cobj = nullptr;
+    ax::SpriteBatchNode* cobj = nullptr;
     bool ok                        = true;
 
 #if _AX_DEBUG >= 1
@@ -3738,7 +3738,7 @@ static int tolua_axis_SpriteBatchNode_getDescendants(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::SpriteBatchNode*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::SpriteBatchNode*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -3791,7 +3791,7 @@ tolua_lerror:
 int lua_axis_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
     int argc             = 0;
-    axis::Scene* cobj = nullptr;
+    ax::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if _AX_DEBUG >= 1
@@ -3803,7 +3803,7 @@ int lua_axis_Scene_getPhysics3DWorld(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -3821,8 +3821,8 @@ int lua_axis_Scene_getPhysics3DWorld(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_Scene_getPhysics3DWorld'", nullptr);
             return 0;
         }
-        axis::Physics3DWorld* ret = cobj->getPhysics3DWorld();
-        object_to_luaval<axis::Physics3DWorld>(tolua_S, "ax.Physics3DWorld", (axis::Physics3DWorld*)ret);
+        ax::Physics3DWorld* ret = cobj->getPhysics3DWorld();
+        object_to_luaval<ax::Physics3DWorld>(tolua_S, "ax.Physics3DWorld", (ax::Physics3DWorld*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scene:getPhysics3DWorld", argc,
@@ -3840,7 +3840,7 @@ tolua_lerror:
 int lua_axis_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
 {
     int argc             = 0;
-    axis::Scene* cobj = nullptr;
+    ax::Scene* cobj = nullptr;
     bool ok              = true;
 
 #    if _AX_DEBUG >= 1
@@ -3852,7 +3852,7 @@ int lua_axis_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::Scene*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Scene*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -3872,7 +3872,7 @@ int lua_axis_Scene_setPhysics3DDebugCamera(lua_State* tolua_S)
         }
 #    endif
 
-        axis::Camera* camera = (axis::Camera*)tolua_tousertype(tolua_S, 2, 0);
+        ax::Camera* camera = (ax::Camera*)tolua_tousertype(tolua_S, 2, 0);
         cobj->setPhysics3DDebugCamera(camera);
         return 0;
     }
@@ -4271,7 +4271,7 @@ static void extendDrawNode(lua_State* tolua_S)
 int lua_axis_Sprite_initWithPolygon(lua_State* tolua_S)
 {
     int argc              = 0;
-    axis::Sprite* cobj = nullptr;
+    ax::Sprite* cobj = nullptr;
     bool ok               = true;
 
 #if _AX_DEBUG >= 1
@@ -4283,7 +4283,7 @@ int lua_axis_Sprite_initWithPolygon(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Sprite*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Sprite*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -4296,9 +4296,9 @@ int lua_axis_Sprite_initWithPolygon(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        axis::PolygonInfo* arg0;
+        ax::PolygonInfo* arg0;
 
-        ok &= luaval_to_object<axis::PolygonInfo>(tolua_S, 2, "ax.PolygonInfo", &arg0, "ax.Sprite:initWithPolygon");
+        ok &= luaval_to_object<ax::PolygonInfo>(tolua_S, 2, "ax.PolygonInfo", &arg0, "ax.Sprite:initWithPolygon");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_Sprite_initWithPolygon'", nullptr);
@@ -4322,7 +4322,7 @@ tolua_lerror:
 int lua_axis_Sprite_setPolygonInfo(lua_State* tolua_S)
 {
     int argc              = 0;
-    axis::Sprite* cobj = nullptr;
+    ax::Sprite* cobj = nullptr;
     bool ok               = true;
 
 #if _AX_DEBUG >= 1
@@ -4334,7 +4334,7 @@ int lua_axis_Sprite_setPolygonInfo(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Sprite*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Sprite*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -4347,9 +4347,9 @@ int lua_axis_Sprite_setPolygonInfo(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        axis::PolygonInfo* arg0;
+        ax::PolygonInfo* arg0;
 
-        ok &= luaval_to_object<axis::PolygonInfo>(tolua_S, 2, "ax.PolygonInfo", &arg0, "ax.Sprite:setPolygonInfo");
+        ok &= luaval_to_object<ax::PolygonInfo>(tolua_S, 2, "ax.PolygonInfo", &arg0, "ax.Sprite:setPolygonInfo");
         if (!ok)
         {
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_Sprite_setPolygonInfo'", nullptr);
@@ -4395,8 +4395,8 @@ int lua_axis_Sprite_create(lua_State* tolua_S)
             {
                 break;
             }
-            axis::Sprite* ret = axis::Sprite::create(arg0);
-            object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite", (axis::Sprite*)ret);
+            ax::Sprite* ret = ax::Sprite::create(arg0);
+            object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite", (ax::Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -4405,8 +4405,8 @@ int lua_axis_Sprite_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::Sprite* ret = axis::Sprite::create();
-            object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite", (axis::Sprite*)ret);
+            ax::Sprite* ret = ax::Sprite::create();
+            object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite", (ax::Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -4415,14 +4415,14 @@ int lua_axis_Sprite_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::PolygonInfo* arg0;
-            ok &= luaval_to_object<axis::PolygonInfo>(tolua_S, 2, "ax.PolygonInfo", &arg0, "ax.Sprite:create");
+            ax::PolygonInfo* arg0;
+            ok &= luaval_to_object<ax::PolygonInfo>(tolua_S, 2, "ax.PolygonInfo", &arg0, "ax.Sprite:create");
             if (!ok)
             {
                 break;
             }
-            axis::Sprite* ret = axis::Sprite::create(*arg0);
-            object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite", (axis::Sprite*)ret);
+            ax::Sprite* ret = ax::Sprite::create(*arg0);
+            object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite", (ax::Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -4437,14 +4437,14 @@ int lua_axis_Sprite_create(lua_State* tolua_S)
             {
                 break;
             }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.Sprite:create");
             if (!ok)
             {
                 break;
             }
-            axis::Sprite* ret = axis::Sprite::create(arg0, arg1);
-            object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite", (axis::Sprite*)ret);
+            ax::Sprite* ret = ax::Sprite::create(arg0, arg1);
+            object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite", (ax::Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -4587,7 +4587,7 @@ static int tolua_axis_LuaEventListenerAcceleration_create(lua_State* tolua_S)
         }
 #endif
         LUA_FUNCTION handler                          = toluafix_ref_function(tolua_S, 2, 0);
-        axis::EventListenerAcceleration* tolua_ret = axis::LuaEventListenerAcceleration::create();
+        ax::EventListenerAcceleration* tolua_ret = ax::LuaEventListenerAcceleration::create();
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_ACC);
         int ID     = (tolua_ret) ? (int)tolua_ret->_ID : -1;
@@ -4633,7 +4633,7 @@ static int tolua_cocos2d_LuaEventListenerCustom_create(lua_State* tolua_S)
 #endif
         auto eventName                          = axislua_tosv(tolua_S, 2);
         LUA_FUNCTION handler                    = toluafix_ref_function(tolua_S, 3, 0);
-        axis::EventListenerCustom* tolua_ret = LuaEventListenerCustom::create(eventName);
+        ax::EventListenerCustom* tolua_ret = LuaEventListenerCustom::create(eventName);
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)tolua_ret, handler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_CUSTIOM);
 
@@ -4693,7 +4693,7 @@ static int tolua_axis_EventListenerKeyboard_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerKeyboard* tolua_ret = axis::EventListenerKeyboard::create();
+        ax::EventListenerKeyboard* tolua_ret = ax::EventListenerKeyboard::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -4726,7 +4726,7 @@ static void cloneKeyboardHandler(const EventListenerKeyboard* src,
     if (0 != handler)
     {
         int newscriptHandler =
-            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
         switch (type)
@@ -4781,7 +4781,7 @@ static int tolua_axis_EventListenerKeyboard_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerKeyboard* tolua_ret = axis::EventListenerKeyboard::create();
+        ax::EventListenerKeyboard* tolua_ret = ax::EventListenerKeyboard::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -4914,7 +4914,7 @@ static int tolua_axis_EventListenerTouchOneByOne_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerTouchOneByOne* tolua_ret = axis::EventListenerTouchOneByOne::create();
+        ax::EventListenerTouchOneByOne* tolua_ret = ax::EventListenerTouchOneByOne::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -4947,7 +4947,7 @@ static void cloneTouchOneByOneHandler(const EventListenerTouchOneByOne* src,
     if (0 != handler)
     {
         int newscriptHandler =
-            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
         switch (type)
@@ -5020,7 +5020,7 @@ static int tolua_axis_EventListenerTouchOneByOne_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerTouchOneByOne* tolua_ret = axis::EventListenerTouchOneByOne::create();
+        ax::EventListenerTouchOneByOne* tolua_ret = ax::EventListenerTouchOneByOne::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5179,7 +5179,7 @@ static int tolua_axis_EventListenerTouchAllAtOnce_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerTouchAllAtOnce* tolua_ret = axis::EventListenerTouchAllAtOnce::create();
+        ax::EventListenerTouchAllAtOnce* tolua_ret = ax::EventListenerTouchAllAtOnce::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5212,7 +5212,7 @@ static void cloneTouchAllAtOnceHandler(const EventListenerTouchAllAtOnce* src,
     if (0 != handler)
     {
         int newscriptHandler =
-            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
         switch (type)
@@ -5286,7 +5286,7 @@ static int tolua_axis_EventListenerTouchAllAtOnce_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerTouchAllAtOnce* tolua_ret = axis::EventListenerTouchAllAtOnce::create();
+        ax::EventListenerTouchAllAtOnce* tolua_ret = ax::EventListenerTouchAllAtOnce::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5444,7 +5444,7 @@ static int tolua_axis_EventListenerMouse_create(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerMouse* tolua_ret = axis::EventListenerMouse::create();
+        ax::EventListenerMouse* tolua_ret = ax::EventListenerMouse::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5477,7 +5477,7 @@ static void cloneMouseHandler(const EventListenerMouse* src,
     if (0 != handler)
     {
         int newscriptHandler =
-            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler, type);
         switch (type)
@@ -5550,7 +5550,7 @@ static int tolua_axis_EventListenerMouse_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerMouse* tolua_ret = axis::EventListenerMouse::create();
+        ax::EventListenerMouse* tolua_ret = ax::EventListenerMouse::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -5696,7 +5696,7 @@ static int tolua_axis_ActionCamera_reverse(lua_State* tolua_S)
         return 0;
 
     int argc                    = 0;
-    axis::ActionCamera* cobj = nullptr;
+    ax::ActionCamera* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5707,7 +5707,7 @@ static int tolua_axis_ActionCamera_reverse(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::ActionCamera*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::ActionCamera*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -5720,7 +5720,7 @@ static int tolua_axis_ActionCamera_reverse(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        axis::ActionCamera* reverse = cobj->reverse();
+        ax::ActionCamera* reverse = cobj->reverse();
         toluafix_pushusertype_ccobject(tolua_S, reverse->_ID, &(reverse->_luaID), (void*)(reverse), "ax.ActionCamera");
         return 1;
     }
@@ -5751,7 +5751,7 @@ static int tolua_axis_GridAction_reverse(lua_State* tolua_S)
         return 0;
 
     int argc                  = 0;
-    axis::GridAction* cobj = nullptr;
+    ax::GridAction* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5762,7 +5762,7 @@ static int tolua_axis_GridAction_reverse(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::GridAction*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::GridAction*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -5775,7 +5775,7 @@ static int tolua_axis_GridAction_reverse(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        axis::GridAction* reverse = cobj->reverse();
+        ax::GridAction* reverse = cobj->reverse();
         toluafix_pushusertype_ccobject(tolua_S, reverse->_ID, &(reverse->_luaID), (void*)(reverse), "ax.GridAction");
         return 1;
     }
@@ -5838,8 +5838,8 @@ static int lua_axis_Label_createWithTTF00(lua_State* L)
 
         int alignment = (int)tolua_tonumber(L, 4, 1);
         int lineSize  = (int)tolua_tonumber(L, 5, 0);
-        axis::Label* ret =
-            axis::Label::createWithTTF(ttfConfig, text, static_cast<TextHAlignment>(alignment), lineSize);
+        ax::Label* ret =
+            ax::Label::createWithTTF(ttfConfig, text, static_cast<TextHAlignment>(alignment), lineSize);
         int ID     = ret ? (int)(ret->_ID) : -1;
         int* luaID = ret ? &(ret->_luaID) : nullptr;
         toluafix_pushusertype_ccobject(L, ID, luaID, (void*)ret, "ax.Label");
@@ -5880,7 +5880,7 @@ static int lua_axis_Label_createWithTTF01(lua_State* L)
             std::string text         = tolua_tostring(L, 2, "");
             std::string fontFile     = tolua_tostring(L, 3, "");
             float fontSize           = (float)tolua_tonumber(L, 4, 0);
-            axis::Size dimensions = axis::Size::ZERO;
+            ax::Size dimensions = ax::Size::ZERO;
             if (lua_istable(L, 5))
             {
                 luaval_to_size(L, 5, &dimensions, "ax.Label:createWithTTF");
@@ -5888,8 +5888,8 @@ static int lua_axis_Label_createWithTTF01(lua_State* L)
             TextHAlignment hAlignment = static_cast<TextHAlignment>((int)tolua_tonumber(L, 6, 0));
             TextVAlignment vAlignment = static_cast<TextVAlignment>((int)tolua_tonumber(L, 7, 0));
 
-            axis::Label* ret =
-                axis::Label::createWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment);
+            ax::Label* ret =
+                ax::Label::createWithTTF(text, fontFile, fontSize, dimensions, hAlignment, vAlignment);
 
             int ID     = ret ? (int)(ret->_ID) : -1;
             int* luaID = ret ? &(ret->_luaID) : nullptr;
@@ -5917,7 +5917,7 @@ static void extendLabel(lua_State* tolua_S)
 static int lua_axis_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
 {
     int argc                   = 0;
-    axis::TMXTiledMap* cobj = NULL;
+    ax::TMXTiledMap* cobj = NULL;
     bool ok                    = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -5927,7 +5927,7 @@ static int lua_axis_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.TMXTiledMap", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::TMXTiledMap*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::TMXTiledMap*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -5944,7 +5944,7 @@ static int lua_axis_TMXTiledMap_getPropertiesForGID(lua_State* tolua_S)
 
         if (!ok)
             return 0;
-        axis::Value ret = cobj->getPropertiesForGID(arg0);
+        ax::Value ret = cobj->getPropertiesForGID(arg0);
         ccvalue_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5973,7 +5973,7 @@ static void extendTMXTiledMap(lua_State* tolua_S)
 
 static int lua_axis_Console_send(lua_State* tolua_S)
 {
-    axis::Console* cobj = nullptr;
+    ax::Console* cobj = nullptr;
     int argc               = 0;
     bool ok                = true;
 #if _AX_DEBUG >= 1
@@ -5984,7 +5984,7 @@ static int lua_axis_Console_send(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.Console", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::Console*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Console*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -6020,7 +6020,7 @@ tolua_lerror:
 
 static int lua_axis_Console_wait(lua_State* tolua_S)
 {
-    axis::Console* cobj = nullptr;
+    ax::Console* cobj = nullptr;
     int argc               = 0;
     bool ok                = true;
 #if _AX_DEBUG >= 1
@@ -6031,7 +6031,7 @@ static int lua_axis_Console_wait(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.Console", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::Console*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Console*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -6066,7 +6066,7 @@ tolua_lerror:
 
 static int lua_axis_Console_addCommand(lua_State* tolua_S)
 {
-    axis::Console* cobj = nullptr;
+    ax::Console* cobj = nullptr;
     int argc               = 0;
     bool ok                = true;
 #if _AX_DEBUG >= 1
@@ -6078,7 +6078,7 @@ static int lua_axis_Console_addCommand(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Console*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Console*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -6149,7 +6149,7 @@ static void extendConsole(lua_State* tolua_S)
 static int lua_axis_OrbitCamera_sphericalRadius(lua_State* tolua_S)
 {
     int argc                   = 0;
-    axis::OrbitCamera* self = nullptr;
+    ax::OrbitCamera* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6160,7 +6160,7 @@ static int lua_axis_OrbitCamera_sphericalRadius(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OrbitCamera*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::OrbitCamera*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!self)
@@ -6219,7 +6219,7 @@ static void extendOrbitCamera(lua_State* tolua_S)
 int lua_axis_TMXLayer_getTileGIDAt(lua_State* tolua_S)
 {
     int argc                = 0;
-    axis::TMXLayer* cobj = nullptr;
+    ax::TMXLayer* cobj = nullptr;
     bool ok                 = true;
 
 #if _AX_DEBUG >= 1
@@ -6231,7 +6231,7 @@ int lua_axis_TMXLayer_getTileGIDAt(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::TMXLayer*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::TMXLayer*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -6244,7 +6244,7 @@ int lua_axis_TMXLayer_getTileGIDAt(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.TMXLayer:getTileGIDAt");
         if (!ok)
@@ -6256,7 +6256,7 @@ int lua_axis_TMXLayer_getTileGIDAt(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
         int arg1;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.TMXLayer:getTileGIDAt");
@@ -6265,7 +6265,7 @@ int lua_axis_TMXLayer_getTileGIDAt(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        unsigned int ret = cobj->getTileGIDAt(arg0, (axis::TMXTileFlags*)&arg1);
+        unsigned int ret = cobj->getTileGIDAt(arg0, (ax::TMXTileFlags*)&arg1);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         tolua_pushnumber(tolua_S, (lua_Number)arg1);
         return 2;
@@ -6285,7 +6285,7 @@ tolua_lerror:
 int lua_axis_TMXLayer_setTiles(lua_State* tolua_S)
 {
     int argc                = 0;
-    axis::TMXLayer* cobj = nullptr;
+    ax::TMXLayer* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6296,7 +6296,7 @@ int lua_axis_TMXLayer_setTiles(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::TMXLayer*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::TMXLayer*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -6359,7 +6359,7 @@ static void extendTMXLayer(lua_State* tolua_S)
 static int lua_axis_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
 {
     int argc                    = 0;
-    axis::FastTMXLayer* cobj = nullptr;
+    ax::FastTMXLayer* cobj = nullptr;
     bool ok                     = true;
 
 #if _AX_DEBUG >= 1
@@ -6371,7 +6371,7 @@ static int lua_axis_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::FastTMXLayer*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::FastTMXLayer*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -6384,7 +6384,7 @@ static int lua_axis_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.FastTMXLayer:getTileGIDAt");
         if (!ok)
@@ -6396,7 +6396,7 @@ static int lua_axis_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
         int arg1 = 0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.FastTMXLayer:getTileGIDAt");
@@ -6405,7 +6405,7 @@ static int lua_axis_FastTMXLayer_getTileGIDAt(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        unsigned int ret = cobj->getTileGIDAt(arg0, (axis::TMXTileFlags*)&arg1);
+        unsigned int ret = cobj->getTileGIDAt(arg0, (ax::TMXTileFlags*)&arg1);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         tolua_pushnumber(tolua_S, (lua_Number)arg1);
         return 2;
@@ -6436,7 +6436,7 @@ static void extendFastTMXLayer(lua_State* tolua_S)
 int lua_axis_Application_isIOS64bit(lua_State* tolua_S)
 {
     int argc                   = 0;
-    axis::Application* cobj = nullptr;
+    ax::Application* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6447,7 +6447,7 @@ int lua_axis_Application_isIOS64bit(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Application*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Application*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -6461,7 +6461,7 @@ int lua_axis_Application_isIOS64bit(lua_State* tolua_S)
     if (argc == 0)
     {
         bool isIOS64bit                = false;
-        Application::Platform platform = axis::Application::getInstance()->getTargetPlatform();
+        Application::Platform platform = ax::Application::getInstance()->getTargetPlatform();
         if (Application::Platform::iOS == platform)
         {
 #if defined(__LP64__)
@@ -6487,7 +6487,7 @@ tolua_lerror:
 int lua_axis_Application_is64BitMobileDevice(lua_State* tolua_S)
 {
     int argc                   = 0;
-    axis::Application* cobj = nullptr;
+    ax::Application* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6498,7 +6498,7 @@ int lua_axis_Application_is64BitMobileDevice(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Application*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Application*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -6512,7 +6512,7 @@ int lua_axis_Application_is64BitMobileDevice(lua_State* tolua_S)
     if (argc == 0)
     {
         bool is64BitMobileDevice          = false;
-        Application::Platform platform = axis::Application::getInstance()->getTargetPlatform();
+        Application::Platform platform = ax::Application::getInstance()->getTargetPlatform();
         if (Application::Platform::iOS == platform ||
             Application::Platform::Android == platform)
         {
@@ -6621,7 +6621,7 @@ static void extendTextureCache(lua_State* tolua_S)
 int lua_axis_GLView_getAllTouches(lua_State* tolua_S)
 {
     int argc              = 0;
-    axis::GLView* cobj = nullptr;
+    ax::GLView* cobj = nullptr;
     bool ok               = true;
 
 #if _AX_DEBUG >= 1
@@ -6633,7 +6633,7 @@ int lua_axis_GLView_getAllTouches(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::GLView*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::GLView*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -6649,7 +6649,7 @@ int lua_axis_GLView_getAllTouches(lua_State* tolua_S)
         if (!ok)
             return 0;
 
-        std::vector<axis::Touch*> ret = cobj->getAllTouches();
+        std::vector<ax::Touch*> ret = cobj->getAllTouches();
         lua_newtable(tolua_S);
         if (ret.empty())
             return 1;
@@ -6696,7 +6696,7 @@ static void extendGLView(lua_State* tolua_S)
 int lua_axis_Camera_unproject(lua_State* tolua_S)
 {
     int argc              = 0;
-    axis::Camera* cobj = nullptr;
+    ax::Camera* cobj = nullptr;
     bool ok               = true;
 
 #if _AX_DEBUG >= 1
@@ -6708,7 +6708,7 @@ int lua_axis_Camera_unproject(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Camera*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Camera*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -6721,7 +6721,7 @@ int lua_axis_Camera_unproject(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        axis::Vec3 arg0;
+        ax::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:project");
         if (!ok)
@@ -6735,9 +6735,9 @@ int lua_axis_Camera_unproject(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        axis::Size arg0;
-        axis::Vec3 arg1;
-        axis::Vec3 arg2;
+        ax::Size arg0;
+        ax::Vec3 arg1;
+        ax::Vec3 arg2;
 
         ok &= luaval_to_size(tolua_S, 2, &arg0, "ax.Camera:unproject");
 
@@ -6799,8 +6799,8 @@ int lua_axis_Properties_createNonRefCounted(lua_State* tolua_S)
                         nullptr);
             return 0;
         }
-        axis::Properties* ret = axis::Properties::createNonRefCounted(arg0);
-        object_to_luaval<axis::Properties>(tolua_S, "ax.Properties", (axis::Properties*)ret);
+        ax::Properties* ret = ax::Properties::createNonRefCounted(arg0);
+        object_to_luaval<ax::Properties>(tolua_S, "ax.Properties", (ax::Properties*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
@@ -6816,7 +6816,7 @@ tolua_lerror:
 
 static int lua_collect_Properties(lua_State* tolua_S)
 {
-    axis::Properties* self = (axis::Properties*)tolua_tousertype(tolua_S, 1, 0);
+    ax::Properties* self = (ax::Properties*)tolua_tousertype(tolua_S, 1, 0);
     AX_SAFE_DELETE(self);
     return 0;
 }
@@ -6841,7 +6841,7 @@ static void extendProperties(lua_State* tolua_S)
 
 int lua_axis_get_PolygonInfo_rect(lua_State* tolua_S)
 {
-    axis::PolygonInfo* cobj = nullptr;
+    ax::PolygonInfo* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6849,7 +6849,7 @@ int lua_axis_get_PolygonInfo_rect(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == cobj)
     {
@@ -6870,7 +6870,7 @@ tolua_lerror:
 int lua_axis_set_PolygonInfo_rect(lua_State* tolua_S)
 {
     int argc                   = 0;
-    axis::PolygonInfo* self = nullptr;
+    ax::PolygonInfo* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6878,7 +6878,7 @@ int lua_axis_set_PolygonInfo_rect(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -6912,7 +6912,7 @@ tolua_lerror:
 
 int lua_axis_get_PolygonInfo_filename(lua_State* tolua_S)
 {
-    axis::PolygonInfo* cobj = nullptr;
+    ax::PolygonInfo* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6920,7 +6920,7 @@ int lua_axis_get_PolygonInfo_filename(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == cobj)
     {
@@ -6941,7 +6941,7 @@ tolua_lerror:
 int lua_axis_set_PolygonInfo_filename(lua_State* tolua_S)
 {
     int argc                   = 0;
-    axis::PolygonInfo* self = nullptr;
+    ax::PolygonInfo* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6949,7 +6949,7 @@ int lua_axis_set_PolygonInfo_filename(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -6979,14 +6979,14 @@ tolua_lerror:
 
 static int lua_collect_PolygonInfo(lua_State* tolua_S)
 {
-    axis::PolygonInfo* self = (axis::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
+    ax::PolygonInfo* self = (ax::PolygonInfo*)tolua_tousertype(tolua_S, 1, 0);
     AX_SAFE_DELETE(self);
     return 0;
 }
 
 int lua_axis_get_PipelineDescriptor_programState(lua_State* tolua_S)
 {
-    axis::PipelineDescriptor* cobj = nullptr;
+    ax::PipelineDescriptor* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -6994,7 +6994,7 @@ int lua_axis_get_PipelineDescriptor_programState(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::PipelineDescriptor*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PipelineDescriptor*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == cobj)
     {
@@ -7016,7 +7016,7 @@ tolua_lerror:
 int lua_axis_set_PipelineDescriptor_programState(lua_State* tolua_S)
 {
     int argc                          = 0;
-    axis::PipelineDescriptor* self = nullptr;
+    ax::PipelineDescriptor* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -7024,7 +7024,7 @@ int lua_axis_set_PipelineDescriptor_programState(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::PipelineDescriptor*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::PipelineDescriptor*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -7038,8 +7038,8 @@ int lua_axis_set_PipelineDescriptor_programState(lua_State* tolua_S)
 
     if (1 == argc)
     {
-        axis::backend::ProgramState* programState = nullptr;
-        luaval_to_object<axis::backend::ProgramState>(tolua_S, 2, "axb.ProgramState", &programState,
+        ax::backend::ProgramState* programState = nullptr;
+        luaval_to_object<ax::backend::ProgramState>(tolua_S, 2, "axb.ProgramState", &programState,
                                                          "lua_axis_set_PipelineDescriptor_programState");
         self->programState = programState;
         return 0;
@@ -7089,7 +7089,7 @@ static void extendPipelineDescriptor(lua_State* tolua_S)
 static int lua_axis_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
 {
     int argc                             = 0;
-    axis::backend::ProgramState* cobj = nullptr;
+    ax::backend::ProgramState* cobj = nullptr;
     bool ok                              = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -7099,7 +7099,7 @@ static int lua_axis_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "axb.ProgramState", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -7122,20 +7122,20 @@ static int lua_axis_backend_ProgramState_getUniformLocation(lua_State* tolua_S)
                 {
                     break;
                 }
-                axis::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
+                ax::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
                 uniformLocation_to_luaval(tolua_S, ret);
                 return 1;
             }
             else if (lua_isnumber(tolua_S, -1))
             {
-                axis::backend::Uniform arg0;
+                ax::backend::Uniform arg0;
                 ok &= luaval_to_int32(tolua_S, 2, (int*)&arg0, "axb.ProgramState:getUniformLocation");
 
                 if (!ok)
                 {
                     break;
                 }
-                axis::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
+                ax::backend::UniformLocation ret = cobj->getUniformLocation(arg0);
                 uniformLocation_to_luaval(tolua_S, ret);
                 return 1;
             }
@@ -7158,7 +7158,7 @@ static int lua_axis_ProgramState_setUniform(lua_State* tolua_S)
 {
     bool ok                              = true;
     int argc                             = 0;
-    axis::backend::ProgramState* self = nullptr;
+    ax::backend::ProgramState* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -7166,7 +7166,7 @@ static int lua_axis_ProgramState_setUniform(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    self = (axis::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
+    self = (ax::backend::ProgramState*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -7179,7 +7179,7 @@ static int lua_axis_ProgramState_setUniform(lua_State* tolua_S)
 
     if (2 == argc)
     {
-        axis::backend::UniformLocation location;
+        ax::backend::UniformLocation location;
 
         if (lua_isstring(tolua_S, 2))
         {
@@ -7262,15 +7262,15 @@ int lua_axis_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        axis::PolygonInfo* ret = new axis::PolygonInfo(axis::AutoPolygon::generatePolygon(arg0));
-        object_to_luaval<axis::PolygonInfo>(tolua_S, "ax.PolygonInfo", (axis::PolygonInfo*)ret);
+        ax::PolygonInfo* ret = new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0));
+        object_to_luaval<ax::PolygonInfo>(tolua_S, "ax.PolygonInfo", (ax::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 2)
     {
         std::string arg0;
-        axis::Rect arg1;
+        ax::Rect arg1;
         ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.AutoPolygon:generatePolygon");
         if (!ok)
@@ -7278,15 +7278,15 @@ int lua_axis_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        axis::PolygonInfo* ret = new axis::PolygonInfo(axis::AutoPolygon::generatePolygon(arg0, arg1));
-        object_to_luaval<axis::PolygonInfo>(tolua_S, "ax.PolygonInfo", (axis::PolygonInfo*)ret);
+        ax::PolygonInfo* ret = new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0, arg1));
+        object_to_luaval<ax::PolygonInfo>(tolua_S, "ax.PolygonInfo", (ax::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 3)
     {
         std::string arg0;
-        axis::Rect arg1;
+        ax::Rect arg1;
         double arg2;
         ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.AutoPolygon:generatePolygon");
@@ -7296,16 +7296,16 @@ int lua_axis_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        axis::PolygonInfo* ret =
-            new axis::PolygonInfo(axis::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
-        object_to_luaval<axis::PolygonInfo>(tolua_S, "ax.PolygonInfo", (axis::PolygonInfo*)ret);
+        ax::PolygonInfo* ret =
+            new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2));
+        object_to_luaval<ax::PolygonInfo>(tolua_S, "ax.PolygonInfo", (ax::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
     if (argc == 4)
     {
         std::string arg0;
-        axis::Rect arg1;
+        ax::Rect arg1;
         double arg2;
         double arg3;
         ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.AutoPolygon:generatePolygon");
@@ -7317,9 +7317,9 @@ int lua_axis_AutoPolygon_generatePolygon(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_AutoPolygon_generatePolygon'", nullptr);
             return 0;
         }
-        axis::PolygonInfo* ret =
-            new axis::PolygonInfo(axis::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2, (float)arg3));
-        object_to_luaval<axis::PolygonInfo>(tolua_S, "ax.PolygonInfo", (axis::PolygonInfo*)ret);
+        ax::PolygonInfo* ret =
+            new ax::PolygonInfo(ax::AutoPolygon::generatePolygon(arg0, arg1, (float)arg2, (float)arg3));
+        object_to_luaval<ax::PolygonInfo>(tolua_S, "ax.PolygonInfo", (ax::PolygonInfo*)ret);
         tolua_register_gc(tolua_S, lua_gettop(tolua_S));
         return 1;
     }
@@ -7335,7 +7335,7 @@ tolua_lerror:
 
 static int lua_collect_AutoPolygon(lua_State* tolua_S)
 {
-    axis::AutoPolygon* self = (axis::AutoPolygon*)tolua_tousertype(tolua_S, 1, 0);
+    ax::AutoPolygon* self = (ax::AutoPolygon*)tolua_tousertype(tolua_S, 1, 0);
     AX_SAFE_DELETE(self);
     return 0;
 }
@@ -7443,7 +7443,7 @@ static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
     {
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         auto fileName        = axislua_tosv(tolua_S, 3);
-        axis::utils::captureScreen(
+        ax::utils::captureScreen(
             [=](bool succeed, std::string_view name) {
                 auto stack = LuaEngine::getInstance()->getLuaStack();
                 auto Ls    = stack->getLuaState();
@@ -7473,9 +7473,9 @@ static int tolua_cocos2d_utils_findChildren(lua_State* tolua_S)
     else
 #endif
     {
-        axis::Node* node         = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
+        ax::Node* node         = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
         auto name                   = axislua_tosv(tolua_S, 3);
-        std::vector<Node*> children = axis::utils::findChildren(*node, name);
+        std::vector<Node*> children = ax::utils::findChildren(*node, name);
         lua_newtable(tolua_S);
         int index = 1;
         for (const auto& obj : children)
@@ -7508,9 +7508,9 @@ static int tolua_cocos2d_utils_findChild(lua_State* tolua_S)
     else
 #endif
     {
-        axis::Node* node = static_cast<Node*>(tolua_tousertype(tolua_S, 1, nullptr));
+        ax::Node* node = static_cast<Node*>(tolua_tousertype(tolua_S, 1, nullptr));
         auto name           = axislua_tosv(tolua_S, 2);
-        auto obj            = axis::utils::findChild(node, name);
+        auto obj            = ax::utils::findChild(node, name);
         int ID              = (obj) ? (int)obj->_ID : -1;
         int* luaID          = (obj) ? &obj->_luaID : NULL;
         toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)obj, "ax.Node");
@@ -7551,7 +7551,7 @@ static int tolua_cocos2d_Mat4_getInversed(lua_State* tolua_S)
     else
 #endif
     {
-        axis::Mat4 mat;
+        ax::Mat4 mat;
         bool ok = luaval_to_mat4(tolua_S, 1, &mat);
         if (ok)
         {
@@ -7584,9 +7584,9 @@ static int tolua_cocos2d_Mat4_transformVector(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Mat4 mat;
-            axis::Vec4 vector;
-            axis::Vec4 dst;
+            ax::Mat4 mat;
+            ax::Vec4 vector;
+            ax::Vec4 dst;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
@@ -7613,9 +7613,9 @@ static int tolua_cocos2d_Mat4_transformVector(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Mat4 mat;
+            ax::Mat4 mat;
             float x, y, z, w;
-            axis::Vec3 dst;
+            ax::Vec3 dst;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
@@ -7652,10 +7652,10 @@ static int tolua_cocos2d_Mat4_decompose(lua_State* tolua_S)
     else
 #endif
     {
-        axis::Mat4 mat;
-        axis::Vec3 scale;
-        axis::Quaternion rotation;
-        axis::Vec3 translation;
+        ax::Mat4 mat;
+        ax::Vec3 scale;
+        ax::Quaternion rotation;
+        ax::Vec3 translation;
         bool ok = true;
 
         ok &= luaval_to_mat4(tolua_S, 1, &mat);
@@ -7881,8 +7881,8 @@ static int tolua_cocos2d_Vec3_cross(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Vec3 cobj;
-            axis::Vec3 v;
+            ax::Vec3 cobj;
+            ax::Vec3 v;
 
             bool ok = true;
 
@@ -7909,9 +7909,9 @@ static int tolua_cocos2d_Vec3_cross(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Vec3 v1;
-            axis::Vec3 v2;
-            axis::Vec3 dst;
+            ax::Vec3 v1;
+            ax::Vec3 v2;
+            ax::Vec3 dst;
             bool ok = true;
 
             ok &= luaval_to_vec3(tolua_S, 1, &v1);
@@ -7926,7 +7926,7 @@ static int tolua_cocos2d_Vec3_cross(lua_State* tolua_S)
             if (!ok)
                 return 0;
 
-            axis::Vec3::cross(v1, v2, &dst);
+            ax::Vec3::cross(v1, v2, &dst);
 
             vec3_to_luaval(tolua_S, dst);
             return 1;
@@ -7949,17 +7949,17 @@ static int tolua_cocos2d_Mat4_multiply(lua_State* tolua_S)
     else
 #endif
     {
-        axis::Mat4 mat1;
+        ax::Mat4 mat1;
         bool ok = luaval_to_mat4(tolua_S, 1, &mat1);
         if (!ok)
             return 0;
 
-        axis::Mat4 mat2;
+        ax::Mat4 mat2;
         ok = luaval_to_mat4(tolua_S, 2, &mat2);
         if (!ok)
             return 0;
 
-        axis::Mat4 ret = mat1 * mat2;
+        ax::Mat4 ret = mat1 * mat2;
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7988,8 +7988,8 @@ int tolua_cocos2d_Mat4_translate(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Mat4 mat;
-            axis::Vec3 vec3;
+            ax::Mat4 mat;
+            ax::Vec3 vec3;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
@@ -8029,13 +8029,13 @@ int tolua_cocos2d_Mat4_createRotationZ(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Mat4 mat;
+            ax::Mat4 mat;
             float angle;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
             angle = (float)lua_tonumber(tolua_S, 2);
-            axis::Mat4::createRotationZ(angle, &mat);
+            ax::Mat4::createRotationZ(angle, &mat);
             mat4_to_luaval(tolua_S, mat);
             return 1;
         }
@@ -8066,7 +8066,7 @@ int tolua_cocos2d_Mat4_setIdentity(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Mat4 mat;
+            ax::Mat4 mat;
             ok &= luaval_to_mat4(tolua_S, 1, &mat);
             if (!ok)
                 return 0;
@@ -8102,12 +8102,12 @@ int tolua_cocos2d_Mat4_createTranslation(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Mat4 dst;
+            ax::Mat4 dst;
             float xTranslation = (float)lua_tonumber(tolua_S, 1);
             float yTranslation = (float)lua_tonumber(tolua_S, 2);
             float zTranslation = (float)lua_tonumber(tolua_S, 3);
 
-            axis::Mat4::createTranslation(xTranslation, yTranslation, zTranslation, &dst);
+            ax::Mat4::createTranslation(xTranslation, yTranslation, zTranslation, &dst);
             mat4_to_luaval(tolua_S, dst);
             return 1;
         }
@@ -8120,14 +8120,14 @@ int tolua_cocos2d_Mat4_createTranslation(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Vec3 translation;
-            axis::Mat4 dst;
+            ax::Vec3 translation;
+            ax::Mat4 dst;
 
             ok &= luaval_to_vec3(tolua_S, 1, &translation, "ax.Mat4.createTranslation");
             if (!ok)
                 return 0;
 
-            axis::Mat4::createTranslation(translation, &dst);
+            ax::Mat4::createTranslation(translation, &dst);
             mat4_to_luaval(tolua_S, dst);
             return 1;
         }
@@ -8158,14 +8158,14 @@ int tolua_cocos2d_Mat4_createRotation(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Quaternion quat;
-            axis::Mat4 dst;
+            ax::Quaternion quat;
+            ax::Mat4 dst;
 
             ok &= luaval_to_quaternion(tolua_S, 1, &quat, "ax.Mat4.createRotation");
             if (!ok)
                 return 0;
 
-            axis::Mat4::createRotation(quat, &dst);
+            ax::Mat4::createRotation(quat, &dst);
             mat4_to_luaval(tolua_S, dst);
             return 1;
         }
@@ -8179,8 +8179,8 @@ int tolua_cocos2d_Mat4_createRotation(lua_State* tolua_S)
         else
 #endif
         {
-            axis::Vec3 axis;
-            axis::Mat4 dst;
+            ax::Vec3 axis;
+            ax::Mat4 dst;
 
             ok &= luaval_to_vec3(tolua_S, 1, &axis, "ax.Mat4.createRotation");
             if (!ok)
@@ -8188,7 +8188,7 @@ int tolua_cocos2d_Mat4_createRotation(lua_State* tolua_S)
 
             float angle = (float)tolua_tonumber(tolua_S, 2, 0);
 
-            axis::Mat4::createRotation(axis, angle, &dst);
+            ax::Mat4::createRotation(axis, angle, &dst);
             mat4_to_luaval(tolua_S, dst);
             return 1;
         }
@@ -8318,7 +8318,7 @@ static int tolua_cocos2d_bytearray_vec2(lua_State* L)
         else
 #endif
         {
-            axis::Vec2 arg;
+            ax::Vec2 arg;
             ok &= luaval_to_vec2(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;
@@ -8359,7 +8359,7 @@ static int tolua_cocos2d_bytearray_vec3(lua_State* L)
         else
 #endif
         {
-            axis::Vec3 arg;
+            ax::Vec3 arg;
             ok &= luaval_to_vec3(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;
@@ -8400,7 +8400,7 @@ static int tolua_cocos2d_bytearray_vec4(lua_State* L)
         else
 #endif
         {
-            axis::Vec4 arg;
+            ax::Vec4 arg;
             ok &= luaval_to_vec4(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;
@@ -8441,7 +8441,7 @@ static int tolua_cocos2d_bytearray_mat4(lua_State* L)
         else
 #endif
         {
-            axis::Mat4 arg;
+            ax::Mat4 arg;
             ok &= luaval_to_mat4(L, 1, &arg, "tolua_cocos2d_bytearray_template");
             if (!ok)
                 return 0;

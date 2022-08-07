@@ -105,15 +105,15 @@ Copyright (c) 2021 Bytedance Inc.
 
 // Generic macros
 
-/// @name namespace axis
+/// @name namespace axys
 /// @{
 #ifdef __cplusplus
 #    define NS_AX_BEGIN   \
-        namespace axis \
+        namespace axys \
         {
 #    define NS_AX_END }
-#    define USING_NS_AX using namespace axis
-#    define NS_AX ::axis
+#    define USING_NS_AX using namespace axys
+#    define NS_AX ::axys
 #else
 #    define NS_AX_BEGIN
 #    define NS_AX_END
@@ -121,8 +121,9 @@ Copyright (c) 2021 Bytedance Inc.
 #    define NS_AX
 #endif
 
-namespace axis {}
-namespace ax = axis;
+namespace axys {}
+namespace axis = axys;
+namespace ax = axys;
 //  end of namespace group
 /// @}
 
@@ -300,7 +301,7 @@ public:                                                             \
     break
 
 #define __AXLOGWITHFUNCTION(s, ...) \
-    axis::log("%s : %s", __FUNCTION__, axis::StringUtils::format(s, ##__VA_ARGS__).c_str())
+    ax::log("%s : %s", __FUNCTION__, ax::StringUtils::format(s, ##__VA_ARGS__).c_str())
 
 /// @name Cocos2d debug
 /// @{
@@ -323,8 +324,8 @@ public:                                                             \
         } while (0)
 
 #elif _AX_DEBUG == 1
-#    define AXLOG(format, ...) axis::log(format, ##__VA_ARGS__)
-#    define AXLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define AXLOG(format, ...) ax::log(format, ##__VA_ARGS__)
+#    define AXLOGERROR(format, ...) ax::log(format, ##__VA_ARGS__)
 #    define AXLOGINFO(format, ...) \
         do                         \
         {                          \
@@ -332,9 +333,9 @@ public:                                                             \
 #    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
 
 #elif _AX_DEBUG > 1
-#    define AXLOG(format, ...) axis::log(format, ##__VA_ARGS__)
-#    define AXLOGERROR(format, ...) axis::log(format, ##__VA_ARGS__)
-#    define AXLOGINFO(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define AXLOG(format, ...) ax::log(format, ##__VA_ARGS__)
+#    define AXLOGERROR(format, ...) ax::log(format, ##__VA_ARGS__)
+#    define AXLOGINFO(format, ...) ax::log(format, ##__VA_ARGS__)
 #    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
 #endif  // _AX_DEBUG
 
@@ -342,7 +343,7 @@ public:                                                             \
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
 #    define LUALOG(...)
 #else
-#    define LUALOG(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define LUALOG(format, ...) ax::log(format, ##__VA_ARGS__)
 #endif  // Lua engine debug
 
 //  end of debug group

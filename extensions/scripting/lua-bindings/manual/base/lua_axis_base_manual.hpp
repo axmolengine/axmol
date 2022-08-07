@@ -115,12 +115,12 @@ struct LuaEventMouseData
     }
 };
 
-class LuaNode :public axis::Node
+class LuaNode :public ax::Node
 {
 public:
     virtual ~LuaNode() {}
 
-    virtual void draw(axis::Renderer *renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer *renderer, const ax::Mat4& transform, uint32_t flags) override;
 };
 
 TOLUA_API int tolua_luanode_open(lua_State* tolua_S);

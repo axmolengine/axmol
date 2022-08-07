@@ -69,7 +69,7 @@ struct DepthStencilDescriptor
 /**
  * Store Depth and stencil status.
  */
-class DepthStencilState : public axis::Ref
+class DepthStencilState : public ax::Ref
 {
 public:
     virtual void update(const DepthStencilDescriptor& desc);

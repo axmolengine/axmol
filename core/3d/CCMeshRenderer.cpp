@@ -727,7 +727,7 @@ void MeshRenderer::removeAllAttachNode()
     _attachments.clear();
 }
 
-void MeshRenderer::visit(axis::Renderer* renderer, const axis::Mat4& parentTransform, uint32_t parentFlags)
+void MeshRenderer::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)

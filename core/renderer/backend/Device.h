@@ -54,7 +54,7 @@ class RenderTarget;
 /**
  * New or create resources from Device.
  */
-class AX_DLL Device : public axis::Ref
+class AX_DLL Device : public ax::Ref
 {
 public:
     friend class ProgramCache;

@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #include "base/ccRandom.h"
 
-std::mt19937& axis::RandomHelper::getEngine()
+std::mt19937& ax::RandomHelper::getEngine()
 {
     static std::random_device seed_gen;
     static std::mt19937 engine(seed_gen());

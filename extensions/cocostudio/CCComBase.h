@@ -33,14 +33,14 @@ THE SOFTWARE.
 
 #define DECLARE_CLASS_COMPONENT_INFO           \
 public:                                        \
-    static axis::ObjectFactory::TInfo Type; \
-    static axis::Ref* createInstance(void);
+    static ax::ObjectFactory::TInfo Type; \
+    static ax::Ref* createInstance(void);
 
 #define IMPLEMENT_CLASS_COMPONENT_INFO(className)                                 \
-    axis::Ref* className::createInstance(void) { return className::create(); } \
-    axis::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
+    ax::Ref* className::createInstance(void) { return className::create(); } \
+    ax::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
 
-#define CREATE_CLASS_COMPONENT_INFO(className) axis::ObjectFactory::TInfo(#className, &className::createInstance)
+#define CREATE_CLASS_COMPONENT_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)
 
 struct CCS_DLL SerData
 {

@@ -43,9 +43,9 @@ class ScheduleHandlerDelegate;
 
 /// @cond
 typedef std::vector<ScheduleHandlerDelegate*> VecShedule;
-typedef std::map<axis::Node*, VecShedule> MapNodeSchedules;
+typedef std::map<ax::Node*, VecShedule> MapNodeSchedules;
 
-class ScheduleHandlerDelegate : public axis::Ref
+class ScheduleHandlerDelegate : public ax::Ref
 {
 public:
     ScheduleHandlerDelegate() : _isUpdateSchedule(false) {}
@@ -72,7 +72,7 @@ private:
  * @lua NA
  * @js NA
  */
-class LuaCallFunc : public axis::CallFuncN
+class LuaCallFunc : public ax::CallFuncN
 {
 public:
     /**

@@ -185,7 +185,7 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
 
     int durationTween = _movementData->durationTween == 0 ? _rawDuration : _movementData->durationTween;
 
-    axis::tweenfunc::TweenType tweenEasing = _movementData->tweenEasing;
+    ax::tweenfunc::TweenType tweenEasing = _movementData->tweenEasing;
     loop                                      = (loop < 0) ? _movementData->loop : loop;
 
     _onMovementList = false;

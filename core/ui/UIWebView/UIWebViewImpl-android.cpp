@@ -94,7 +94,7 @@ JNIEXPORT jboolean JNICALL Java_org_axys1_lib_AxysWebViewHelper_shouldStartLoadi
     auto charUrl    = env->GetStringUTFChars(jurl, NULL);
     std::string url = charUrl;
     env->ReleaseStringUTFChars(jurl, charUrl);
-    return axis::ui::WebViewImpl::shouldStartLoading(index, url);
+    return ax::ui::WebViewImpl::shouldStartLoading(index, url);
 }
 
 /*
@@ -111,7 +111,7 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysWebViewHelper_didFinishLoading(JNI
     auto charUrl    = env->GetStringUTFChars(jurl, NULL);
     std::string url = charUrl;
     env->ReleaseStringUTFChars(jurl, charUrl);
-    axis::ui::WebViewImpl::didFinishLoading(index, url);
+    ax::ui::WebViewImpl::didFinishLoading(index, url);
 }
 
 /*
@@ -128,7 +128,7 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysWebViewHelper_didFailLoading(JNIEn
     auto charUrl    = env->GetStringUTFChars(jurl, NULL);
     std::string url = charUrl;
     env->ReleaseStringUTFChars(jurl, charUrl);
-    axis::ui::WebViewImpl::didFailLoading(index, url);
+    ax::ui::WebViewImpl::didFailLoading(index, url);
 }
 
 /*
@@ -145,7 +145,7 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysWebViewHelper_onJsCallback(JNIEnv*
     auto charMessage    = env->GetStringUTFChars(jmessage, NULL);
     std::string message = charMessage;
     env->ReleaseStringUTFChars(jmessage, charMessage);
-    axis::ui::WebViewImpl::onJsCallback(index, message);
+    ax::ui::WebViewImpl::onJsCallback(index, message);
 }
 }
 
@@ -154,8 +154,8 @@ namespace
 
 int createWebViewJNI()
 {
-    axis::JniMethodInfo t;
-    if (axis::JniHelper::getStaticMethodInfo(t, className, "createWebView", "()I"))
+    ax::JniMethodInfo t;
+    if (ax::JniHelper::getStaticMethodInfo(t, className, "createWebView", "()I"))
     {
         // LOGD("error: %s,%d",__func__,__LINE__);
         jint viewTag = t.env->CallStaticIntMethod(t.classID, t.methodID);
@@ -168,7 +168,7 @@ int createWebViewJNI()
 std::string getUrlStringByFileName(std::string_view fileName)
 {
     // LOGD("error: %s,%d",__func__,__LINE__);
-    std::string urlString = axis::FileUtils::getInstance()->fullPathForFilename(fileName);
+    std::string urlString = ax::FileUtils::getInstance()->fullPathForFilename(fileName);
     if (urlString.empty())
         return urlString;
 
@@ -188,7 +188,7 @@ NS_AX_BEGIN
 namespace ui
 {
 
-static std::unordered_map<int, axis::ui::WebViewImpl*> s_WebViewImpls;
+static std::unordered_map<int, ax::ui::WebViewImpl*> s_WebViewImpls;
 
 WebViewImpl::WebViewImpl(WebView* webView) : _viewTag(-1), _webView(webView)
 {
@@ -332,11 +332,11 @@ void WebViewImpl::onJsCallback(const int viewTag, std::string_view message)
     }
 }
 
-void WebViewImpl::draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags)
+void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags)
 {
-    if (flags & axis::Node::FLAGS_TRANSFORM_DIRTY)
+    if (flags & ax::Node::FLAGS_TRANSFORM_DIRTY)
     {
-        auto uiRect = axis::ui::Helper::convertBoundingBoxToScreen(_webView);
+        auto uiRect = ax::ui::Helper::convertBoundingBoxToScreen(_webView);
         JniHelper::callStaticVoidMethod(className, "setWebViewRect", _viewTag, (int)uiRect.origin.x,
                                         (int)uiRect.origin.y, (int)uiRect.size.width, (int)uiRect.size.height);
     }

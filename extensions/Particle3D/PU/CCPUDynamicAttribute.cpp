@@ -127,7 +127,7 @@ void PUDynamicAttributeRandom::setMinMax(float min, float max)
 //-----------------------------------------------------------------------
 float PUDynamicAttributeRandom::getValue(float /*x*/)
 {
-    return axis::random(_min, _max);
+    return ax::random(_min, _max);
 }
 
 void PUDynamicAttributeRandom::copyAttributesTo(PUDynamicAttribute* dynamicAttribute)

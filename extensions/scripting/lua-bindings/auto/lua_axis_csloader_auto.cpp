@@ -6,7 +6,7 @@
 int lua_axis_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18,7 +18,7 @@ int lua_axis_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39,8 +39,8 @@ int lua_axis_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_createNodeFromJson'", nullptr);
             return 0;
         }
-        axis::Node* ret = cobj->createNodeFromJson(arg0);
-        object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+        ax::Node* ret = cobj->createNodeFromJson(arg0);
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:createNodeFromJson",argc, 1);
@@ -56,7 +56,7 @@ int lua_axis_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -68,7 +68,7 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -89,8 +89,8 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile'", nullptr);
             return 0;
         }
-        axis::Node* ret = cobj->createNodeWithFlatBuffersFile(arg0);
-        object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+        ax::Node* ret = cobj->createNodeWithFlatBuffersFile(arg0);
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:createNodeWithFlatBuffersFile",argc, 1);
@@ -106,7 +106,7 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -118,7 +118,7 @@ int lua_axis_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -139,8 +139,8 @@ int lua_axis_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_loadNodeWithFile'", nullptr);
             return 0;
         }
-        axis::Node* ret = cobj->loadNodeWithFile(arg0);
-        object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+        ax::Node* ret = cobj->loadNodeWithFile(arg0);
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:loadNodeWithFile",argc, 1);
@@ -156,7 +156,7 @@ int lua_axis_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_bindCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -168,7 +168,7 @@ int lua_axis_csloader_CSLoader_bindCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -183,16 +183,16 @@ int lua_axis_csloader_CSLoader_bindCallback(lua_State* tolua_S)
     {
         std::string_view arg0;
         std::string_view arg1;
-        axis::ui::Widget* arg2;
-        axis::Node* arg3;
+        ax::ui::Widget* arg2;
+        ax::Node* arg3;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.CSLoader:bindCallback");
 
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.CSLoader:bindCallback");
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 4, "axui.Widget",&arg2, "ax.CSLoader:bindCallback");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 4, "axui.Widget",&arg2, "ax.CSLoader:bindCallback");
 
-        ok &= luaval_to_object<axis::Node>(tolua_S, 5, "ax.Node",&arg3, "ax.CSLoader:bindCallback");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 5, "ax.Node",&arg3, "ax.CSLoader:bindCallback");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_bindCallback'", nullptr);
@@ -215,7 +215,7 @@ int lua_axis_csloader_CSLoader_bindCallback(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -227,7 +227,7 @@ int lua_axis_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -265,7 +265,7 @@ int lua_axis_csloader_CSLoader_setJsonPath(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -277,7 +277,7 @@ int lua_axis_csloader_CSLoader_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -312,7 +312,7 @@ int lua_axis_csloader_CSLoader_init(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -324,7 +324,7 @@ int lua_axis_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -345,8 +345,8 @@ int lua_axis_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_loadNodeWithContent'", nullptr);
             return 0;
         }
-        axis::Node* ret = cobj->loadNodeWithContent(arg0);
-        object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+        ax::Node* ret = cobj->loadNodeWithContent(arg0);
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:loadNodeWithContent",argc, 1);
@@ -362,7 +362,7 @@ int lua_axis_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -374,7 +374,7 @@ int lua_axis_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -409,7 +409,7 @@ int lua_axis_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -421,7 +421,7 @@ int lua_axis_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -456,7 +456,7 @@ int lua_axis_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -468,7 +468,7 @@ int lua_axis_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -506,7 +506,7 @@ int lua_axis_csloader_CSLoader_setRecordJsonPath(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -518,7 +518,7 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"ax.CSLoader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::CSLoader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::CSLoader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -539,8 +539,8 @@ int lua_axis_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'", nullptr);
             return 0;
         }
-        axis::Node* ret = cobj->createNodeWithFlatBuffersForSimulator(arg0);
-        object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+        ax::Node* ret = cobj->createNodeWithFlatBuffersForSimulator(arg0);
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.CSLoader:createNodeWithFlatBuffersForSimulator",argc, 1);
@@ -575,7 +575,7 @@ int lua_axis_csloader_CSLoader_destroyInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_destroyInstance'", nullptr);
             return 0;
         }
-        axis::CSLoader::destroyInstance();
+        ax::CSLoader::destroyInstance();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -608,15 +608,15 @@ int lua_axis_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.CSLoader:createNodeWithVisibleSize");
             if (!ok) { break; }
-            std::function<void (axis::Ref *)> arg1;
+            std::function<void (ax::Ref *)> arg1;
             do {
 			// Lambda binding for lua is not supported.
 			assert(false);
 		} while(0)
 		;
             if (!ok) { break; }
-            axis::Node* ret = axis::CSLoader::createNodeWithVisibleSize(arg0, arg1);
-            object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+            ax::Node* ret = ax::CSLoader::createNodeWithVisibleSize(arg0, arg1);
+            object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
             return 1;
         }
     } while (0);
@@ -628,8 +628,8 @@ int lua_axis_csloader_CSLoader_createNodeWithVisibleSize(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.CSLoader:createNodeWithVisibleSize");
             if (!ok) { break; }
-            axis::Node* ret = axis::CSLoader::createNodeWithVisibleSize(arg0);
-            object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+            ax::Node* ret = ax::CSLoader::createNodeWithVisibleSize(arg0);
+            object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
             return 1;
         }
     } while (0);
@@ -664,8 +664,8 @@ int lua_axis_csloader_CSLoader_getInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_getInstance'", nullptr);
             return 0;
         }
-        axis::CSLoader* ret = axis::CSLoader::getInstance();
-        object_to_luaval<axis::CSLoader>(tolua_S, "ax.CSLoader",(axis::CSLoader*)ret);
+        ax::CSLoader* ret = ax::CSLoader::getInstance();
+        object_to_luaval<ax::CSLoader>(tolua_S, "ax.CSLoader",(ax::CSLoader*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.CSLoader:getInstance",argc, 0);
@@ -679,7 +679,7 @@ int lua_axis_csloader_CSLoader_getInstance(lua_State* tolua_S)
 int lua_axis_csloader_CSLoader_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::CSLoader* cobj = nullptr;
+    ax::CSLoader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -696,7 +696,7 @@ int lua_axis_csloader_CSLoader_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_csloader_CSLoader_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::CSLoader();
+        cobj = new ax::CSLoader();
         tolua_pushusertype(tolua_S,(void*)cobj,"ax.CSLoader");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
@@ -739,7 +739,7 @@ int lua_register_axis_csloader_CSLoader(lua_State* tolua_S)
         tolua_function(tolua_S,"createNodeWithVisibleSize", lua_axis_csloader_CSLoader_createNodeWithVisibleSize);
         tolua_function(tolua_S,"getInstance", lua_axis_csloader_CSLoader_getInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::CSLoader).name(); // rtti is literal storage
+    auto typeName = typeid(ax::CSLoader).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.CSLoader";
     g_typeCast[typeName] = "ax.CSLoader";
     return 1;

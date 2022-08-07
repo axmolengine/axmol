@@ -74,7 +74,7 @@ Offset<Table> SingleNodeReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void SingleNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* singleNodeOptions)
+void SingleNodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* singleNodeOptions)
 {
     auto options = (SingleNodeOptions*)(singleNodeOptions);
 

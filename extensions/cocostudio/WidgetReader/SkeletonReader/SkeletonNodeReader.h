@@ -40,6 +40,6 @@ public:
     AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
 };
 #endif  //_SKELETONNODEREADER_H_

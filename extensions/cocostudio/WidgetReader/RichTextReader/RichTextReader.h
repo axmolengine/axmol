@@ -45,8 +45,8 @@ public:
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textBMFontOptions);
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textBMFontOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textBMFontOptions);
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textBMFontOptions);
 };
 }  // namespace cocostudio
 

@@ -46,7 +46,7 @@ bool GridBase::initWithSize(const Vec2& gridSize)
     return initWithSize(gridSize, Rect::ZERO);
 }
 
-bool GridBase::initWithSize(const Vec2& gridSize, const axis::Rect& rect)
+bool GridBase::initWithSize(const Vec2& gridSize, const ax::Rect& rect)
 {
     Director* director = Director::getInstance();
     Vec2 s             = director->getWinSizeInPixels();
@@ -194,7 +194,7 @@ void GridBase::set2DProjection()
     director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
-void GridBase::setGridRect(const axis::Rect& rect)
+void GridBase::setGridRect(const ax::Rect& rect)
 {
     _gridRect = rect;
 }
@@ -227,7 +227,7 @@ void GridBase::beforeDraw()
     renderer->clear(TargetBufferFlags::COLOR, _clearColor, 1, 0, 0.0);
 }
 
-void GridBase::afterDraw(axis::Node* /*target*/)
+void GridBase::afterDraw(ax::Node* /*target*/)
 {
     // restore projection
     Director* director = Director::getInstance();
@@ -380,7 +380,7 @@ void Grid3D::blit()
     updateVertexBuffer();
     _drawCommand.init(0, _blendFunc);
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
-    axis::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    ax::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState           = _drawCommand.getPipelineDescriptor().programState;
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());
@@ -630,7 +630,7 @@ void TiledGrid3D::blit()
 {
     updateVertexBuffer();
     Director::getInstance()->getRenderer()->addCommand(&_drawCommand);
-    axis::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    ax::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState           = _drawCommand.getPipelineDescriptor().programState;
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
     programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());

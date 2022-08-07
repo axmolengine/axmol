@@ -83,8 +83,8 @@ public:
     virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
         pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder)                                                     = 0;
-    virtual void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions) = 0;
-    virtual axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)          = 0;
+    virtual void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOptions) = 0;
+    virtual ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)          = 0;
 };
 }  // namespace cocostudio
 
@@ -138,44 +138,44 @@ AX_DLL extern APP_LOGERROR_FUNC getAppErrorLogFunc();
 
 CCS_DLL extern void (*onLoadSpriteFramesWithFile)(std::string& file);
 
-CCS_DLL extern axis::ResourceData makeResourceData(const flatbuffers::ResourceData* data);
-CCS_DLL extern axis::ResourceData makeResourceData(std::string_view path, int type = 0);
-CCS_DLL extern axis::ResourceData makeResourceData(std::string&& path, int type = 0);
+CCS_DLL extern ax::ResourceData makeResourceData(const flatbuffers::ResourceData* data);
+CCS_DLL extern ax::ResourceData makeResourceData(std::string_view path, int type = 0);
+CCS_DLL extern ax::ResourceData makeResourceData(std::string&& path, int type = 0);
 CCS_DLL extern void resetReaderAllHooks();
 
 /// Assets Hooks
-CCS_DLL extern bool (*onBeforeLoadObjectAsset)(axis::Node*, axis::ResourceData& assets, int index /*= 0*/);
+CCS_DLL extern bool (*onBeforeLoadObjectAsset)(ax::Node*, ax::ResourceData& assets, int index /*= 0*/);
 
 // Object creator Hooks
-CCS_DLL extern axis::Node* (*aNode)();
-CCS_DLL extern axis::ui::Widget* (*aWidget)();
-CCS_DLL extern axis::Sprite* (*aSprite)();
-CCS_DLL extern axis::ui::ImageView* (*aImageView)();
-CCS_DLL extern axis::ui::Button* (*aButton)();
-CCS_DLL extern axis::ui::CheckBox* (*aCheckBox)();
-CCS_DLL extern axis::ui::Slider* (*aSlider)();
-CCS_DLL extern axis::ui::LoadingBar* (*aLoadingBar)();
-CCS_DLL extern axis::ui::Text* (*aText)();
-CCS_DLL extern axis::ui::TextField* (*aTextField)();
-CCS_DLL extern axis::ui::TextAtlas* (*aTextAtlas)();
-CCS_DLL extern axis::ui::TextBMFont* (*aTextBMFont)();
-CCS_DLL extern axis::ui::Layout* (*aLayout)();
-CCS_DLL extern axis::ui::ScrollView* (*aScrollView)();
-CCS_DLL extern axis::ui::ListView* (*aListView)();
-CCS_DLL extern axis::ui::PageView* (*aPageView)();
-CCS_DLL extern axis::Node* (*aArmatureNode)();
+CCS_DLL extern ax::Node* (*aNode)();
+CCS_DLL extern ax::ui::Widget* (*aWidget)();
+CCS_DLL extern ax::Sprite* (*aSprite)();
+CCS_DLL extern ax::ui::ImageView* (*aImageView)();
+CCS_DLL extern ax::ui::Button* (*aButton)();
+CCS_DLL extern ax::ui::CheckBox* (*aCheckBox)();
+CCS_DLL extern ax::ui::Slider* (*aSlider)();
+CCS_DLL extern ax::ui::LoadingBar* (*aLoadingBar)();
+CCS_DLL extern ax::ui::Text* (*aText)();
+CCS_DLL extern ax::ui::TextField* (*aTextField)();
+CCS_DLL extern ax::ui::TextAtlas* (*aTextAtlas)();
+CCS_DLL extern ax::ui::TextBMFont* (*aTextBMFont)();
+CCS_DLL extern ax::ui::Layout* (*aLayout)();
+CCS_DLL extern ax::ui::ScrollView* (*aScrollView)();
+CCS_DLL extern ax::ui::ListView* (*aListView)();
+CCS_DLL extern ax::ui::PageView* (*aPageView)();
+CCS_DLL extern ax::Node* (*aArmatureNode)();
 CCS_DLL extern cocostudio::timeline::SkeletonNode* (*aSkeletonNode)();
 CCS_DLL extern cocostudio::timeline::BoneNode* (*aBoneNode)();
-CCS_DLL extern axis::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
-CCS_DLL extern axis::Node* (*aNestingNode)(std::string);
+CCS_DLL extern ax::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
+CCS_DLL extern ax::Node* (*aNestingNode)(std::string);
 
 ///// 3d objects /////
-CCS_DLL extern axis::Node* (*aNode3D)();
-CCS_DLL extern axis::Node* (*aGameNode3D)();
-CCS_DLL extern axis::Node* (*aLight3D)();
-CCS_DLL extern axis::Camera* (*aCamera)();
-CCS_DLL extern axis::MeshRenderer* (*aSprite3D)();
-CCS_DLL extern axis::Node* (*aParticleSystem3D)();
+CCS_DLL extern ax::Node* (*aNode3D)();
+CCS_DLL extern ax::Node* (*aGameNode3D)();
+CCS_DLL extern ax::Node* (*aLight3D)();
+CCS_DLL extern ax::Camera* (*aCamera)();
+CCS_DLL extern ax::MeshRenderer* (*aSprite3D)();
+CCS_DLL extern ax::Node* (*aParticleSystem3D)();
 }  // namespace wext
 
 NS_AX_END  // namespace axis

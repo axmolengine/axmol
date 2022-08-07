@@ -33,7 +33,7 @@
 
 bool AX_DLL cc_assert_script_compatible(const char* msg)
 {
-    axis::ScriptEngineProtocol* engine = axis::ScriptEngineManager::getInstance()->getScriptEngine();
+    ax::ScriptEngineProtocol* engine = ax::ScriptEngineManager::getInstance()->getScriptEngine();
     if (engine && engine->handleAssert(msg))
     {
         return true;

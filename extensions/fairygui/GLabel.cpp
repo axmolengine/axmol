@@ -48,7 +48,7 @@ void GLabel::setIcon(const std::string & value)
     updateGear(7);
 }
 
-axis::Color3B GLabel::getTitleColor() const
+ax::Color3B GLabel::getTitleColor() const
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -57,7 +57,7 @@ axis::Color3B GLabel::getTitleColor() const
         return Color3B::BLACK;
 }
 
-void GLabel::setTitleColor(const axis::Color3B & value)
+void GLabel::setTitleColor(const ax::Color3B & value)
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -92,7 +92,7 @@ GTextField * GLabel::getTextField() const
         return nullptr;
 }
 
-axis::Value GLabel::getProp(ObjectPropID propId)
+ax::Value GLabel::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -113,7 +113,7 @@ axis::Value GLabel::getProp(ObjectPropID propId)
     }
 }
 
-void GLabel::setProp(ObjectPropID propId, const axis::Value& value)
+void GLabel::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {

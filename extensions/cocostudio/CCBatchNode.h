@@ -38,7 +38,7 @@ NS_AX_END
 namespace cocostudio
 {
 
-class CCS_DLL BatchNode : public axis::Node
+class CCS_DLL BatchNode : public ax::Node
 {
 public:
     static BatchNode* create();
@@ -58,18 +58,18 @@ public:
      */
     virtual bool init() override;
     using Node::addChild;
-    virtual void addChild(axis::Node* pChild, int zOrder, int tag) override;
-    virtual void addChild(axis::Node* pChild, int zOrder, std::string_view name) override;
-    virtual void removeChild(axis::Node* child, bool cleanup) override;
-    virtual void visit(axis::Renderer* renderer,
-                       const axis::Mat4& parentTransform,
+    virtual void addChild(ax::Node* pChild, int zOrder, int tag) override;
+    virtual void addChild(ax::Node* pChild, int zOrder, std::string_view name) override;
+    virtual void removeChild(ax::Node* child, bool cleanup) override;
+    virtual void visit(ax::Renderer* renderer,
+                       const ax::Mat4& parentTransform,
                        uint32_t parentFlags) override;
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:
     void generateGroupCommand();
 
-    axis::GroupCommand* _groupCommand;
+    ax::GroupCommand* _groupCommand;
 };
 
 }  // namespace cocostudio

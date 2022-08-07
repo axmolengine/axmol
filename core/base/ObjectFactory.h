@@ -37,8 +37,8 @@ NS_AX_BEGIN
 class AX_DLL ObjectFactory
 {
 public:
-    typedef axis::Ref* (*Instance)(void);
-    typedef std::function<axis::Ref*(void)> InstanceFunc;
+    typedef ax::Ref* (*Instance)(void);
+    typedef std::function<ax::Ref*(void)> InstanceFunc;
     struct AX_DLL TInfo
     {
         TInfo();
@@ -55,7 +55,7 @@ public:
 
     static ObjectFactory* getInstance();
     static void destroyInstance();
-    axis::Ref* createObject(std::string_view name);
+    ax::Ref* createObject(std::string_view name);
 
     void registerType(const TInfo& t);
     void removeAll();

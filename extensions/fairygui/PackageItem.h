@@ -13,7 +13,7 @@ class BitmapFont;
 class PixelHitTestData;
 class ByteBuffer;
 
-class PackageItem : public axis::Ref
+class PackageItem : public ax::Ref
 {
 public:
     PackageItem();
@@ -38,17 +38,17 @@ public:
     std::vector<std::string>* highResolution;
 
     //atlas
-    axis::Texture2D* texture;
+    ax::Texture2D* texture;
 
     //image
-    axis::Rect* scale9Grid;
+    ax::Rect* scale9Grid;
     bool scaleByTile;
     int tileGridIndice;
-    axis::SpriteFrame* spriteFrame;
+    ax::SpriteFrame* spriteFrame;
     PixelHitTestData* pixelHitTestData;
 
     //movieclip
-    axis::Animation* animation;
+    ax::Animation* animation;
     float delayPerUnit;
     float repeatDelay;
     bool swing;
@@ -61,7 +61,7 @@ public:
     BitmapFont* bitmapFont;
 
     //skeleton
-    axis::Vec2* skeletonAnchor;
+    ax::Vec2* skeletonAnchor;
 };
 
 NS_FGUI_END

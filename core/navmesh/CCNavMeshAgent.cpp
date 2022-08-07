@@ -66,7 +66,7 @@ std::string_view NavMeshAgent::getNavMeshAgentComponentName()
     return comName;
 }
 
-axis::NavMeshAgent::NavMeshAgent()
+ax::NavMeshAgent::NavMeshAgent()
     : _syncFlag(NODE_AND_NODE)
     , _rotRefAxes(Vec3::UNIT_Z)
     , _state(DT_CROWDAGENT_STATE_WALKING)
@@ -80,7 +80,7 @@ axis::NavMeshAgent::NavMeshAgent()
     , _navMeshQuery(nullptr)
 {}
 
-axis::NavMeshAgent::~NavMeshAgent() {}
+ax::NavMeshAgent::~NavMeshAgent() {}
 
 bool NavMeshAgent::initWith(const NavMeshAgentParam& param)
 {
@@ -89,19 +89,19 @@ bool NavMeshAgent::initWith(const NavMeshAgentParam& param)
     return true;
 }
 
-void axis::NavMeshAgent::setNavMeshQuery(dtNavMeshQuery* query)
+void ax::NavMeshAgent::setNavMeshQuery(dtNavMeshQuery* query)
 {
     _navMeshQuery = query;
 }
 
-void axis::NavMeshAgent::removeFrom(dtCrowd* crowed)
+void ax::NavMeshAgent::removeFrom(dtCrowd* crowed)
 {
     crowed->removeAgent(_agentID);
     _crowd   = nullptr;
     _agentID = -1;
 }
 
-void axis::NavMeshAgent::addTo(dtCrowd* crowed)
+void ax::NavMeshAgent::addTo(dtCrowd* crowed)
 {
     _crowd = crowed;
     dtCrowdAgentParams ap;
@@ -110,7 +110,7 @@ void axis::NavMeshAgent::addTo(dtCrowd* crowed)
     _agentID = _crowd->addAgent(&mat.m[12], &ap);
 }
 
-void axis::NavMeshAgent::convertTodtAgentParam(const NavMeshAgentParam& inParam, dtCrowdAgentParams& outParam)
+void ax::NavMeshAgent::convertTodtAgentParam(const NavMeshAgentParam& inParam, dtCrowdAgentParams& outParam)
 {
     memset(&outParam, 0, sizeof(outParam));
     outParam.collisionQueryRange   = inParam.collisionQueryRange;
@@ -125,7 +125,7 @@ void axis::NavMeshAgent::convertTodtAgentParam(const NavMeshAgentParam& inParam,
     outParam.updateFlags           = inParam.updateFlags;
 }
 
-void axis::NavMeshAgent::onExit()
+void ax::NavMeshAgent::onExit()
 {
     if (_agentID == -1)
         return;
@@ -138,7 +138,7 @@ void axis::NavMeshAgent::onExit()
     }
 }
 
-void axis::NavMeshAgent::onEnter()
+void ax::NavMeshAgent::onEnter()
 {
     if (_agentID != -1)
         return;
@@ -166,7 +166,7 @@ float NavMeshAgent::getSeparationWeight() const
     return _param.separationWeight;
 }
 
-void axis::NavMeshAgent::setObstacleAvoidanceType(unsigned char type)
+void ax::NavMeshAgent::setObstacleAvoidanceType(unsigned char type)
 {
     _param.obstacleAvoidanceType = type;
     _needUpdateAgent             = true;
@@ -260,7 +260,7 @@ bool NavMeshAgent::isOnOffMeshLink()
     return _state == DT_CROWDAGENT_STATE_OFFMESH;
 }
 
-void axis::NavMeshAgent::completeOffMeshLink()
+void ax::NavMeshAgent::completeOffMeshLink()
 {
     if (_crowd && isOnOffMeshLink())
     {
@@ -294,7 +294,7 @@ void NavMeshAgent::setOrientationRefAxes(const Vec3& rotRefAxes)
     _rotRefAxes = rotRefAxes;
 }
 
-void axis::NavMeshAgent::setAutoOrientation(bool isAuto)
+void ax::NavMeshAgent::setAutoOrientation(bool isAuto)
 {
     _needAutoOrientation = isAuto;
 }

@@ -33,17 +33,17 @@ THE SOFTWARE.
 
 #define DECLARE_CLASS_INFO                     \
 public:                                        \
-    static axis::ObjectFactory::TInfo Type; \
-    static axis::Ref* createInstance(void);
+    static ax::ObjectFactory::TInfo Type; \
+    static ax::Ref* createInstance(void);
 
 #define IMPLEMENT_CLASS_INFO(className)           \
-    axis::Ref* className::createInstance(void) \
+    ax::Ref* className::createInstance(void) \
     {                                             \
         auto ret = new className;                 \
         ret->autorelease();                       \
         return ret;                               \
     }                                             \
-    axis::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
+    ax::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
 
 void CCS_DLL sendEvent(unsigned int event);
 

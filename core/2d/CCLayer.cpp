@@ -409,8 +409,8 @@ LayerRadialGradient::~LayerRadialGradient()
     AX_SAFE_RELEASE_NULL(_customCommand.getPipelineDescriptor().programState);
 }
 
-bool LayerRadialGradient::initWithColor(const axis::Color4B& startColor,
-                                        const axis::Color4B& endColor,
+bool LayerRadialGradient::initWithColor(const ax::Color4B& startColor,
+                                        const ax::Color4B& endColor,
                                         float radius,
                                         const Vec2& center,
                                         float expand)
@@ -523,7 +523,7 @@ void LayerRadialGradient::setStartColor(const Color3B& color)
     setStartColor(Color4B(color));
 }
 
-void LayerRadialGradient::setStartColor(const axis::Color4B& color)
+void LayerRadialGradient::setStartColor(const ax::Color4B& color)
 {
     _startColor = color;
     convertColor4B24F(_startColorRend, _startColor);
@@ -544,7 +544,7 @@ void LayerRadialGradient::setEndColor(const Color3B& color)
     setEndColor(Color4B(color));
 }
 
-void LayerRadialGradient::setEndColor(const axis::Color4B& color)
+void LayerRadialGradient::setEndColor(const ax::Color4B& color)
 {
     _endColor = color;
     convertColor4B24F(_endColorRend, _endColor);

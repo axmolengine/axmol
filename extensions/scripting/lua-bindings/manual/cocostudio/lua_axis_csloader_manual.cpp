@@ -53,7 +53,7 @@ int lua_axis_csloader_CSLoader_createTimeline(lua_State* tolua_S)
         ok &= luaval_to_std_string(tolua_S, 2, &arg0, "ax.CSLoader:createTimeline");
         if (!ok)
             return 0;
-        cocostudio::timeline::ActionTimeline* ret = axis::CSLoader::createTimeline(arg0);
+        cocostudio::timeline::ActionTimeline* ret = ax::CSLoader::createTimeline(arg0);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",
                                                                (cocostudio::timeline::ActionTimeline*)ret);
         return 1;
@@ -102,7 +102,7 @@ int lua_axis_csloader_CSLoader_createNode(lua_State* tolua_S)
 #endif
 
             LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 3, 0));
-            auto callback        = [handler](axis::Ref* ref) {
+            auto callback        = [handler](ax::Ref* ref) {
                 if (nullptr == ref)
                     return;
                 auto stack = LuaEngine::getInstance()->getLuaStack();
@@ -110,9 +110,9 @@ int lua_axis_csloader_CSLoader_createNode(lua_State* tolua_S)
                 stack->executeFunctionByHandler(handler, 1);
             };
 
-            axis::Node* ret = axis::CSLoader::createNode(filename, callback);
+            ax::Node* ret = ax::CSLoader::createNode(filename, callback);
             ScriptHandlerMgr::getInstance()->addCustomHandler((void*)ret, handler);
-            object_to_luaval<axis::Node>(tolua_S, "ax.Node", (axis::Node*)ret);
+            object_to_luaval<ax::Node>(tolua_S, "ax.Node", (ax::Node*)ret);
             return 1;
         }
     } while (0);
@@ -127,8 +127,8 @@ int lua_axis_csloader_CSLoader_createNode(lua_State* tolua_S)
             {
                 break;
             }
-            axis::Node* ret = axis::CSLoader::createNode(filename);
-            object_to_luaval<axis::Node>(tolua_S, "ax.Node", (axis::Node*)ret);
+            ax::Node* ret = ax::CSLoader::createNode(filename);
+            object_to_luaval<ax::Node>(tolua_S, "ax.Node", (ax::Node*)ret);
             return 1;
         }
     } while (0);

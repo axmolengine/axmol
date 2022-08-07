@@ -132,7 +132,7 @@ void ActionObject::initWithDictionary(const rapidjson::Value& dic, Ref* root)
     _fTotalTime = maxLength * _fUnitTime;
 }
 
-void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, axis::Ref* root)
+void ActionObject::initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, ax::Ref* root)
 {
     stExpCocoNode* stChildNode    = cocoNode->GetChildArray(cocoLoader);
     stExpCocoNode* actionNodeList = nullptr;

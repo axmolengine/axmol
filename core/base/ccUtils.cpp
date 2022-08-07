@@ -633,7 +633,7 @@ backend::SamplerAddressMode toBackendAddressMode(int mode)
 
 const Mat4& getAdjustMatrix()
 {
-    static axis::Mat4 adjustMatrix = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.5, 0.5, 0, 0, 0, 1};
+    static ax::Mat4 adjustMatrix = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0.5, 0.5, 0, 0, 0, 1};
 
     return adjustMatrix;
 }

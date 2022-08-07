@@ -51,7 +51,7 @@ NSMutableParagraphStyle* _calculateParagraphStyle(bool enableWrap, int overflow)
     return paragraphStyle;
 }
 
-NSTextAlignment _calculateTextAlignment(axis::Device::TextAlign align)
+NSTextAlignment _calculateTextAlignment(ax::Device::TextAlign align)
 {
     unsigned uHoriFlag      = (int)align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag)   ? NSTextAlignmentRight
@@ -61,7 +61,7 @@ NSTextAlignment _calculateTextAlignment(axis::Device::TextAlign align)
     return nsAlign;
 }
 
-CGFloat _calculateTextDrawStartWidth(axis::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
+CGFloat _calculateTextDrawStartWidth(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
 {
     CGFloat xPadding   = 0;
     unsigned uHoriFlag = (int)align & 0x0f;

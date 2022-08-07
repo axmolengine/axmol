@@ -114,7 +114,7 @@ void CustomCommand::assign(CustomCommand&& rhs)
 #    pragma GCC diagnostic pop
 #endif
 
-void CustomCommand::init(float depth, const axis::Mat4& modelViewTransform, unsigned int flags)
+void CustomCommand::init(float depth, const ax::Mat4& modelViewTransform, unsigned int flags)
 {
     RenderCommand::init(depth, modelViewTransform, flags);
 }

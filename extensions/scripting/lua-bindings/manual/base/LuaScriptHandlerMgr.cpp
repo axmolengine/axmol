@@ -94,7 +94,7 @@ LuaCallFunc* LuaCallFunc::clone() const
     ret->autorelease();
 
     int newscriptHandler =
-        axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+        ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
     ScriptHandlerMgr::getInstance()->addObjectHandler((void*)ret, newscriptHandler,
                                                       ScriptHandlerMgr::HandlerType::CALLFUNC);
@@ -271,8 +271,8 @@ static int tolua_Cocos2d_ScriptHandlerMgr_registerScriptHandler00(lua_State* tol
     else
 #endif
     {
-        axis::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<axis::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        ax::ScriptHandlerMgr* scriptHanlderMgr =
+            static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
@@ -307,8 +307,8 @@ static int tolua_Cocos2d_ScriptHandlerMgr_unregisterScriptHandler00(lua_State* t
     else
 #endif
     {
-        axis::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<axis::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        ax::ScriptHandlerMgr* scriptHanlderMgr =
+            static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {
@@ -341,8 +341,8 @@ static int tolua_Cocos2d_ScriptHandlerMgr_removeObjectAllHandlers00(lua_State* t
     else
 #endif
     {
-        axis::ScriptHandlerMgr* scriptHanlderMgr =
-            static_cast<axis::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
+        ax::ScriptHandlerMgr* scriptHanlderMgr =
+            static_cast<ax::ScriptHandlerMgr*>(tolua_tousertype(tolua_S, 1, 0));
 #ifndef TOLUA_RELEASE
         if (nullptr == scriptHanlderMgr)
         {

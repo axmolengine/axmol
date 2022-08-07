@@ -294,7 +294,7 @@ void Armature::changeBoneParent(Bone* bone, std::string_view parentName)
     }
 }
 
-const axis::StringMap<Bone*>& Armature::getBoneDic() const
+const ax::StringMap<Bone*>& Armature::getBoneDic() const
 {
     return _boneDic;
 }
@@ -368,7 +368,7 @@ void Armature::update(float dt)
     _armatureTransformDirty = false;
 }
 
-void Armature::draw(axis::Renderer* renderer, const Mat4& transform, uint32_t flags)
+void Armature::draw(ax::Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     if (_parentBone == nullptr && _batchNode == nullptr)
     {
@@ -444,7 +444,7 @@ void Armature::onExit()
     unscheduleUpdate();
 }
 
-void Armature::visit(axis::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
+void Armature::visit(ax::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -565,7 +565,7 @@ void Armature::drawContour()
         if (!detector)
             continue;
 
-        const axis::Vector<ColliderBody*>& bodyList = detector->getColliderBodyList();
+        const ax::Vector<ColliderBody*>& bodyList = detector->getColliderBodyList();
 
         for (auto&& object : bodyList)
         {
@@ -587,7 +587,7 @@ void Armature::drawContour()
 #        pragma warning(push)
 #        pragma warning(disable : 4996)
 #    endif
-            axis::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
+            ax::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
 
 #    if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #        pragma GCC diagnostic warning "-Wdeprecated-declarations"

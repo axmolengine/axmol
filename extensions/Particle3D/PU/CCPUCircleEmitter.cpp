@@ -122,7 +122,7 @@ void PUCircleEmitter::initParticlePosition(PUParticle3D* particle)
     if (_random)
     {
         // Choose a random position on the circle.
-        angle = axis::random(0.0, M_PI * 2.0);
+        angle = ax::random(0.0, M_PI * 2.0);
     }
     else
     {
@@ -193,7 +193,7 @@ PUCircleEmitter* PUCircleEmitter::create()
     return pe;
 }
 
-axis::Quaternion PUCircleEmitter::getRotationTo(const Vec3& src,
+ax::Quaternion PUCircleEmitter::getRotationTo(const Vec3& src,
                                                    const Vec3& dest,
                                                    const Vec3& fallbackAxis /*= Vec3::ZERO*/) const
 {

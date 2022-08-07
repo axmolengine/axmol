@@ -58,7 +58,7 @@
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
 
-// !FIXME: the previous version of axis::log not thread safe
+// !FIXME: the previous version of ax::log not thread safe
 // since axis make it multi-threading safe by default
 #if !defined(AX_LOG_MULTITHREAD)
 #    define AX_LOG_MULTITHREAD 1
@@ -568,7 +568,7 @@ bool Console::listenOnTCP(int port)
         char buf[INET_ADDRSTRLEN] = {0};
         struct sockaddr_in* sin   = (struct sockaddr_in*)res->ai_addr;
         if (inet_ntop(res->ai_family, &sin->sin_addr, buf, sizeof(buf)) != nullptr)
-            axis::log("Console: IPV4 server is listening on %s:%d", buf, ntohs(sin->sin_port));
+            ax::log("Console: IPV4 server is listening on %s:%d", buf, ntohs(sin->sin_port));
         else
             perror("inet_ntop");
     }
@@ -578,7 +578,7 @@ bool Console::listenOnTCP(int port)
         char buf[INET6_ADDRSTRLEN] = {0};
         struct sockaddr_in6* sin   = (struct sockaddr_in6*)res->ai_addr;
         if (inet_ntop(res->ai_family, &sin->sin6_addr, buf, sizeof(buf)) != nullptr)
-            axis::log("Console: IPV6 server is listening on [%s]:%d", buf, ntohs(sin->sin6_port));
+            ax::log("Console: IPV6 server is listening on [%s]:%d", buf, ntohs(sin->sin6_port));
         else
             perror("inet_ntop");
     }
@@ -591,7 +591,7 @@ bool Console::listenOnFileDescriptor(int fd)
 {
     if (_running)
     {
-        axis::log("Console already started. 'stop' it before calling 'listen' again");
+        ax::log("Console already started. 'stop' it before calling 'listen' again");
         return false;
     }
 
@@ -741,7 +741,7 @@ void Console::loop()
         {
             /* error */
             if (errno != EINTR)
-                axis::log("Abnormal error in select()\n");
+                ax::log("Abnormal error in select()\n");
             continue;
         }
         else if (nready == 0)
@@ -776,7 +776,7 @@ void Console::loop()
                     int n = 0;
                     if (ioctl(fd, FIONREAD, &n) < 0)
                     {
-                        axis::log("Abnormal error in ioctl()\n");
+                        ax::log("Abnormal error in ioctl()\n");
                         break;
                     }
 #endif
@@ -1272,13 +1272,13 @@ void Console::commandProjection(socket_native_type fd, std::string_view /*args*/
     auto proj = director->getProjection();
     switch (proj)
     {
-    case axis::Director::Projection::_2D:
+    case ax::Director::Projection::_2D:
         sprintf(buf, "2d");
         break;
-    case axis::Director::Projection::_3D:
+    case ax::Director::Projection::_3D:
         sprintf(buf, "3d");
         break;
-    case axis::Director::Projection::CUSTOM:
+    case ax::Director::Projection::CUSTOM:
         sprintf(buf, "custom");
         break;
 

@@ -22,7 +22,7 @@ public:
     InputProcessor(GComponent* owner);
     ~InputProcessor();
 
-    axis::Vec2 getTouchPosition(int touchId);
+    ax::Vec2 getTouchPosition(int touchId);
 
     void addTouchMonitor(int touchId, GObject* target);
     void removeTouchMonitor(GObject* target);
@@ -33,23 +33,23 @@ public:
     void setCaptureCallback(CaptureEventCallback value) { _captureCallback = value; }
     
     void disableDefaultTouchEvent();
-    bool touchDown(axis::Touch *touch, axis::Event *event);
-    void touchMove(axis::Touch *touch, axis::Event *event);
-    void touchUp(axis::Touch *touch, axis::Event *event);
+    bool touchDown(ax::Touch *touch, ax::Event *event);
+    void touchMove(ax::Touch *touch, ax::Event *event);
+    void touchUp(ax::Touch *touch, ax::Event *event);
     
 private:
-    bool onTouchBegan(axis::Touch * touch, axis::Event *);
-    void onTouchMoved(axis::Touch * touch, axis::Event *);
-    void onTouchEnded(axis::Touch * touch, axis::Event *);
-    void onTouchCancelled(axis::Touch * touch, axis::Event *);
+    bool onTouchBegan(ax::Touch * touch, ax::Event *);
+    void onTouchMoved(ax::Touch * touch, ax::Event *);
+    void onTouchEnded(ax::Touch * touch, ax::Event *);
+    void onTouchCancelled(ax::Touch * touch, ax::Event *);
 
-    void onMouseDown(axis::EventMouse* event);
-    void onMouseUp(axis::EventMouse* event);
-    void onMouseMove(axis::EventMouse* event);
-    void onMouseScroll(axis::EventMouse* event);
+    void onMouseDown(ax::EventMouse* event);
+    void onMouseUp(ax::EventMouse* event);
+    void onMouseMove(ax::EventMouse* event);
+    void onMouseScroll(ax::EventMouse* event);
 
-    void onKeyDown(axis::EventKeyboard::KeyCode keyCode, axis::Event*);
-    void onKeyUp(axis::EventKeyboard::KeyCode keyCode, axis::Event*);
+    void onKeyDown(ax::EventKeyboard::KeyCode keyCode, ax::Event*);
+    void onKeyUp(ax::EventKeyboard::KeyCode keyCode, ax::Event*);
 
     TouchInfo* getTouch(int touchId, bool createIfNotExisits = true);
     void updateRecentInput(TouchInfo* touch, GObject* target);
@@ -58,9 +58,9 @@ private:
     void setEnd(TouchInfo* touch, GObject* target);
     GObject* clickTest(TouchInfo* touch, GObject* target);
 
-    axis::EventListenerTouchOneByOne* _touchListener;
-    axis::EventListenerMouse* _mouseListener;
-    axis::EventListenerKeyboard* _keyboardListener;
+    ax::EventListenerTouchOneByOne* _touchListener;
+    ax::EventListenerMouse* _mouseListener;
+    ax::EventListenerKeyboard* _keyboardListener;
     std::vector<TouchInfo*> _touches;
     GComponent* _owner;
     CaptureEventCallback _captureCallback;

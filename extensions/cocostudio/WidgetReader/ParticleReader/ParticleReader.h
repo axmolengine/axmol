@@ -31,7 +31,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL ParticleReader : public axis::Ref, public NodeReaderProtocol
+class CCS_DLL ParticleReader : public ax::Ref, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -46,8 +46,8 @@ public:
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* particleOptions);
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* particleOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* particleOptions);
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* particleOptions);
 };
 }  // namespace cocostudio
 

@@ -38,16 +38,16 @@ void Label::computeAlignmentOffset()
     _linesOffsetX.clear();
     switch (_hAlignment)
     {
-    case axis::TextHAlignment::LEFT:
+    case ax::TextHAlignment::LEFT:
         _linesOffsetX.assign(_numberOfLines, 0);
         break;
-    case axis::TextHAlignment::CENTER:
+    case ax::TextHAlignment::CENTER:
         for (auto&& lineWidth : _linesWidth)
         {
             _linesOffsetX.push_back((_contentSize.width - lineWidth) / 2.f);
         }
         break;
-    case axis::TextHAlignment::RIGHT:
+    case ax::TextHAlignment::RIGHT:
         for (auto&& lineWidth : _linesWidth)
         {
             _linesOffsetX.push_back(_contentSize.width - lineWidth);
@@ -59,13 +59,13 @@ void Label::computeAlignmentOffset()
 
     switch (_vAlignment)
     {
-    case axis::TextVAlignment::TOP:
+    case ax::TextVAlignment::TOP:
         _letterOffsetY = _contentSize.height;
         break;
-    case axis::TextVAlignment::CENTER:
+    case ax::TextVAlignment::CENTER:
         _letterOffsetY = (_contentSize.height + _textDesiredHeight) / 2.f;
         break;
-    case axis::TextVAlignment::BOTTOM:
+    case ax::TextVAlignment::BOTTOM:
         _letterOffsetY = _textDesiredHeight;
         break;
     default:
@@ -421,7 +421,7 @@ void Label::shrinkLabelToContentSize(const std::function<bool(void)>& lambda)
     }
 }
 
-void Label::recordLetterInfo(const axis::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex)
+void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex)
 {
     if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
     {

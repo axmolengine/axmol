@@ -55,7 +55,7 @@ static void internalBodyUpdateVelocity(cpBody* body, cpVect gravity, cpFloat dam
     cpAssertSoft(body->m > 0.0f && body->i > 0.0f,
                  "Body's mass and moment must be positive to simulate. (Mass: %f Moment: f)", body->m, body->i);
 
-    axis::PhysicsBody* physicsBody = static_cast<axis::PhysicsBody*>(body->userData);
+    ax::PhysicsBody* physicsBody = static_cast<ax::PhysicsBody*>(body->userData);
 
     if (physicsBody->isGravityEnabled())
         body->v =

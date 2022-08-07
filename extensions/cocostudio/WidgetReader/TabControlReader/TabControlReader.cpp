@@ -35,7 +35,7 @@
 USING_NS_AX;
 using namespace cocostudio;
 using namespace flatbuffers;
-using namespace axis::ui;
+using namespace ax::ui;
 
 IMPLEMENT_CLASS_NODE_READER_INFO(TabControlReader)
 
@@ -164,14 +164,14 @@ flatbuffers::Offset<flatbuffers::Table> TabControlReader::createOptionsWithFlatB
     return *(Offset<Table>*)(&options);
 }
 
-void TabControlReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOption)
+void TabControlReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOption)
 {
-    auto tabControl = static_cast<axis::ui::TabControl*>(node);
+    auto tabControl = static_cast<ax::ui::TabControl*>(node);
     auto options    = (flatbuffers::TabControlOption*)nodeOption;
 
     int headerPlace = options->headerPlace();
     tabControl->ignoreHeadersTextureSize(options->ignoreHeaderTextureSize() != 0);
-    tabControl->setHeaderDockPlace((axis::ui::TabControl::Dock)headerPlace);
+    tabControl->setHeaderDockPlace((ax::ui::TabControl::Dock)headerPlace);
     tabControl->setHeaderWidth(options->headerWidth());
     tabControl->setHeaderHeight(options->headerHeight());
     tabControl->setHeaderSelectedZoom(options->selectedTabZoom());
@@ -187,9 +187,9 @@ void TabControlReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffe
     tabControl->setSelectTab(options->selectedTabIndex());
 }
 
-axis::Node* TabControlReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+ax::Node* TabControlReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
-    auto node = axis::ui::TabControl::create();
+    auto node = ax::ui::TabControl::create();
 
     auto taboptions = (flatbuffers::TabControlOption*)nodeOptions;
     setPropsWithFlatBuffers(node, nodeOptions);
@@ -229,7 +229,7 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
 
     int fontsize = 12;
     std::string text;
-    axis::Color4B textColor(255, 255, 255, 255);
+    ax::Color4B textColor(255, 255, 255, 255);
     std::string fontName;
 
     int backgroundboxResourceType = 0;
@@ -525,9 +525,9 @@ flatbuffers::Offset<flatbuffers::Table> TabHeaderReader::createOptionsWithFlatBu
     return *(Offset<Table>*)(&option);
 }
 
-void TabHeaderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOption)
+void TabHeaderReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOption)
 {
-    auto header  = static_cast<axis::ui::TabHeader*>(node);
+    auto header  = static_cast<ax::ui::TabHeader*>(node);
     auto options = (flatbuffers::TabHeaderOption*)nodeOption;
 
     header->setTitleFontSize(options->fontSize());
@@ -672,7 +672,7 @@ void TabHeaderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffer
     if (backGroundSelectedfileExist)
     {
         header->loadTextureBackGroundSelected(backGroundSelectedTexturePath,
-                                              (axis::ui::Widget::TextureResType)backGroundSelectedType);
+                                              (ax::ui::Widget::TextureResType)backGroundSelectedType);
     }
 
     // load frontCross image
@@ -855,9 +855,9 @@ void TabHeaderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffer
     }
 }
 
-axis::Node* TabHeaderReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+ax::Node* TabHeaderReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
-    auto node = axis::ui::TabHeader::create();
+    auto node = ax::ui::TabHeader::create();
 
     auto taboptions = (flatbuffers::TabHeaderOption*)nodeOptions;
     setPropsWithFlatBuffers(node, nodeOptions);
@@ -943,12 +943,12 @@ flatbuffers::Offset<flatbuffers::TabItemOption> TabItemReader::createTabItemOpti
     return *(&options);
 }
 
-void TabItemReader::setPropsWithFlatBuffers(axis::Node* /*node*/, const flatbuffers::Table* /*nodeOption*/)
+void TabItemReader::setPropsWithFlatBuffers(ax::Node* /*node*/, const flatbuffers::Table* /*nodeOption*/)
 {
     // do nothing
 }
 
-axis::Node* TabItemReader::createNodeWithFlatBuffers(const flatbuffers::Table* /*nodeOptions*/)
+ax::Node* TabItemReader::createNodeWithFlatBuffers(const flatbuffers::Table* /*nodeOptions*/)
 {
     // do nothing
     return nullptr;

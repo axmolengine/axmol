@@ -81,7 +81,7 @@ MeshIndexData::MeshIndexData()
 #endif
 }
 
-void MeshIndexData::setIndexData(const axis::MeshData::IndexArray& indexdata)
+void MeshIndexData::setIndexData(const ax::MeshData::IndexArray& indexdata)
 {
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     if (!_indexData.empty())

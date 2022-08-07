@@ -145,7 +145,7 @@ PhysicsJoint::~PhysicsJoint()
     delete _writeCache;
 }
 
-bool PhysicsJoint::init(axis::PhysicsBody* a, axis::PhysicsBody* b)
+bool PhysicsJoint::init(ax::PhysicsBody* a, ax::PhysicsBody* b)
 {
     do
     {

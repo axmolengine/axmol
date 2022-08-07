@@ -96,7 +96,7 @@
 
 #include <fstream>
 
-using namespace axis::ui;
+using namespace ax::ui;
 using namespace cocostudio;
 using namespace cocostudio::timeline;
 /* peterson */
@@ -866,7 +866,7 @@ Component* CSLoader::loadComAudio(const rapidjson::Value& json)
     return audio;
 }
 
-axis::Node* CSLoader::createNode(const Data& data)
+ax::Node* CSLoader::createNode(const Data& data)
 {
     return createNode(data, nullptr);
 }
@@ -975,7 +975,7 @@ Node* CSLoader::createNodeWithFlatBuffersFile(std::string_view filename, const c
     return node;
 }
 
-inline void CSLoader::reconstructNestNode(axis::Node* node)
+inline void CSLoader::reconstructNestNode(ax::Node* node)
 {
     /* To reconstruct nest node as WidgetCallBackHandlerProtocol. */
     auto callbackHandler = dynamic_cast<WidgetCallBackHandlerProtocol*>(node);
@@ -1250,8 +1250,8 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
 
 bool CSLoader::bindCallback(std::string_view callbackName,
                             std::string_view callbackType,
-                            axis::ui::Widget* sender,
-                            axis::Node* handler)
+                            ax::ui::Widget* sender,
+                            ax::Node* handler)
 {
     if (callbackName.empty())
         return false;

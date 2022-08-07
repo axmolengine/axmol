@@ -7,7 +7,7 @@
 int lua_axis_3d_Animation3D_initWithFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animation3D* cobj = nullptr;
+    ax::Animation3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19,7 +19,7 @@ int lua_axis_3d_Animation3D_initWithFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animation3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animation3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animation3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -60,7 +60,7 @@ int lua_axis_3d_Animation3D_initWithFile(lua_State* tolua_S)
 int lua_axis_3d_Animation3D_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animation3D* cobj = nullptr;
+    ax::Animation3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -72,7 +72,7 @@ int lua_axis_3d_Animation3D_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animation3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animation3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animation3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -85,7 +85,7 @@ int lua_axis_3d_Animation3D_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Animation3DData arg0;
+        ax::Animation3DData arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR Animation3DData
 		ok = false;
@@ -111,7 +111,7 @@ int lua_axis_3d_Animation3D_init(lua_State* tolua_S)
 int lua_axis_3d_Animation3D_getDuration(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animation3D* cobj = nullptr;
+    ax::Animation3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -123,7 +123,7 @@ int lua_axis_3d_Animation3D_getDuration(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animation3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animation3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animation3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -179,8 +179,8 @@ int lua_axis_3d_Animation3D_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Animation3D_create'", nullptr);
             return 0;
         }
-        axis::Animation3D* ret = axis::Animation3D::create(arg0);
-        object_to_luaval<axis::Animation3D>(tolua_S, "ax.Animation3D",(axis::Animation3D*)ret);
+        ax::Animation3D* ret = ax::Animation3D::create(arg0);
+        object_to_luaval<ax::Animation3D>(tolua_S, "ax.Animation3D",(ax::Animation3D*)ret);
         return 1;
     }
     if (argc == 2)
@@ -194,8 +194,8 @@ int lua_axis_3d_Animation3D_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Animation3D_create'", nullptr);
             return 0;
         }
-        axis::Animation3D* ret = axis::Animation3D::create(arg0, arg1);
-        object_to_luaval<axis::Animation3D>(tolua_S, "ax.Animation3D",(axis::Animation3D*)ret);
+        ax::Animation3D* ret = ax::Animation3D::create(arg0, arg1);
+        object_to_luaval<ax::Animation3D>(tolua_S, "ax.Animation3D",(ax::Animation3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Animation3D:create",argc, 1);
@@ -209,7 +209,7 @@ int lua_axis_3d_Animation3D_create(lua_State* tolua_S)
 int lua_axis_3d_Animation3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animation3D* cobj = nullptr;
+    ax::Animation3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -226,7 +226,7 @@ int lua_axis_3d_Animation3D_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Animation3D_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::Animation3D();
+        cobj = new ax::Animation3D();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -261,7 +261,7 @@ int lua_register_axis_3d_Animation3D(lua_State* tolua_S)
         tolua_function(tolua_S,"getDuration",lua_axis_3d_Animation3D_getDuration);
         tolua_function(tolua_S,"create", lua_axis_3d_Animation3D_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::Animation3D).name(); // rtti is literal storage
+    auto typeName = typeid(ax::Animation3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Animation3D";
     g_typeCast[typeName] = "ax.Animation3D";
     return 1;
@@ -270,7 +270,7 @@ int lua_register_axis_3d_Animation3D(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_setKeyFrameUserInfo(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -282,7 +282,7 @@ int lua_axis_3d_Animate3D_setKeyFrameUserInfo(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -296,7 +296,7 @@ int lua_axis_3d_Animate3D_setKeyFrameUserInfo(lua_State* tolua_S)
     if (argc == 2) 
     {
         int arg0;
-        axis::ValueMap arg1;
+        ax::ValueMap arg1;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Animate3D:setKeyFrameUserInfo");
 
@@ -323,7 +323,7 @@ int lua_axis_3d_Animate3D_setKeyFrameUserInfo(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_getSpeed(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -335,7 +335,7 @@ int lua_axis_3d_Animate3D_getSpeed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -370,7 +370,7 @@ int lua_axis_3d_Animate3D_getSpeed(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_setQuality(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -382,7 +382,7 @@ int lua_axis_3d_Animate3D_setQuality(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -395,7 +395,7 @@ int lua_axis_3d_Animate3D_setQuality(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Animate3DQuality arg0;
+        ax::Animate3DQuality arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Animate3D:setQuality");
         if(!ok)
@@ -420,7 +420,7 @@ int lua_axis_3d_Animate3D_setQuality(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_setWeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -432,7 +432,7 @@ int lua_axis_3d_Animate3D_setWeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -470,7 +470,7 @@ int lua_axis_3d_Animate3D_setWeight(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_removeFromMap(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -482,7 +482,7 @@ int lua_axis_3d_Animate3D_removeFromMap(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -517,7 +517,7 @@ int lua_axis_3d_Animate3D_removeFromMap(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_initWithFrames(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -529,7 +529,7 @@ int lua_axis_3d_Animate3D_initWithFrames(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -542,12 +542,12 @@ int lua_axis_3d_Animate3D_initWithFrames(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 4) 
     {
-        axis::Animation3D* arg0;
+        ax::Animation3D* arg0;
         int arg1;
         int arg2;
         double arg3;
 
-        ok &= luaval_to_object<axis::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:initWithFrames");
+        ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:initWithFrames");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Animate3D:initWithFrames");
 
@@ -576,7 +576,7 @@ int lua_axis_3d_Animate3D_initWithFrames(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_getOriginInterval(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -588,7 +588,7 @@ int lua_axis_3d_Animate3D_getOriginInterval(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -623,7 +623,7 @@ int lua_axis_3d_Animate3D_getOriginInterval(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_setSpeed(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -635,7 +635,7 @@ int lua_axis_3d_Animate3D_setSpeed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -673,7 +673,7 @@ int lua_axis_3d_Animate3D_setSpeed(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -682,7 +682,7 @@ int lua_axis_3d_Animate3D_init(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -693,8 +693,8 @@ int lua_axis_3d_Animate3D_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 3) {
-            axis::Animation3D* arg0;
-            ok &= luaval_to_object<axis::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:init");
+            ax::Animation3D* arg0;
+            ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:init");
 
             if (!ok) { break; }
             double arg1;
@@ -713,8 +713,8 @@ int lua_axis_3d_Animate3D_init(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::Animation3D* arg0;
-            ok &= luaval_to_object<axis::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:init");
+            ax::Animation3D* arg0;
+            ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:init");
 
             if (!ok) { break; }
             bool ret = cobj->init(arg0);
@@ -736,7 +736,7 @@ int lua_axis_3d_Animate3D_init(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_setOriginInterval(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -748,7 +748,7 @@ int lua_axis_3d_Animate3D_setOriginInterval(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -786,7 +786,7 @@ int lua_axis_3d_Animate3D_setOriginInterval(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_getWeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -798,7 +798,7 @@ int lua_axis_3d_Animate3D_getWeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -833,7 +833,7 @@ int lua_axis_3d_Animate3D_getWeight(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_getQuality(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -845,7 +845,7 @@ int lua_axis_3d_Animate3D_getQuality(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Animate3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Animate3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Animate3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -895,8 +895,8 @@ int lua_axis_3d_Animate3D_create(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            axis::Animation3D* arg0;
-            ok &= luaval_to_object<axis::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:create");
+            ax::Animation3D* arg0;
+            ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:create");
             if (!ok) { break; }
             double arg1;
             ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Animate3D:create");
@@ -904,8 +904,8 @@ int lua_axis_3d_Animate3D_create(lua_State* tolua_S)
             double arg2;
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.Animate3D:create");
             if (!ok) { break; }
-            axis::Animate3D* ret = axis::Animate3D::create(arg0, arg1, arg2);
-            object_to_luaval<axis::Animate3D>(tolua_S, "ax.Animate3D",(axis::Animate3D*)ret);
+            ax::Animate3D* ret = ax::Animate3D::create(arg0, arg1, arg2);
+            object_to_luaval<ax::Animate3D>(tolua_S, "ax.Animate3D",(ax::Animate3D*)ret);
             return 1;
         }
     } while (0);
@@ -914,11 +914,11 @@ int lua_axis_3d_Animate3D_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::Animation3D* arg0;
-            ok &= luaval_to_object<axis::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:create");
+            ax::Animation3D* arg0;
+            ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:create");
             if (!ok) { break; }
-            axis::Animate3D* ret = axis::Animate3D::create(arg0);
-            object_to_luaval<axis::Animate3D>(tolua_S, "ax.Animate3D",(axis::Animate3D*)ret);
+            ax::Animate3D* ret = ax::Animate3D::create(arg0);
+            object_to_luaval<ax::Animate3D>(tolua_S, "ax.Animate3D",(ax::Animate3D*)ret);
             return 1;
         }
     } while (0);
@@ -953,7 +953,7 @@ int lua_axis_3d_Animate3D_getTransitionTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Animate3D_getTransitionTime'", nullptr);
             return 0;
         }
-        double ret = axis::Animate3D::getTransitionTime();
+        double ret = ax::Animate3D::getTransitionTime();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -982,10 +982,10 @@ int lua_axis_3d_Animate3D_createWithFrames(lua_State* tolua_S)
 
     if (argc == 3)
     {
-        axis::Animation3D* arg0;
+        ax::Animation3D* arg0;
         int arg1;
         int arg2;
-        ok &= luaval_to_object<axis::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:createWithFrames");
+        ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:createWithFrames");
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Animate3D:createWithFrames");
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Animate3D:createWithFrames");
         if(!ok)
@@ -993,17 +993,17 @@ int lua_axis_3d_Animate3D_createWithFrames(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Animate3D_createWithFrames'", nullptr);
             return 0;
         }
-        axis::Animate3D* ret = axis::Animate3D::createWithFrames(arg0, arg1, arg2);
-        object_to_luaval<axis::Animate3D>(tolua_S, "ax.Animate3D",(axis::Animate3D*)ret);
+        ax::Animate3D* ret = ax::Animate3D::createWithFrames(arg0, arg1, arg2);
+        object_to_luaval<ax::Animate3D>(tolua_S, "ax.Animate3D",(ax::Animate3D*)ret);
         return 1;
     }
     if (argc == 4)
     {
-        axis::Animation3D* arg0;
+        ax::Animation3D* arg0;
         int arg1;
         int arg2;
         double arg3;
-        ok &= luaval_to_object<axis::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:createWithFrames");
+        ok &= luaval_to_object<ax::Animation3D>(tolua_S, 2, "ax.Animation3D",&arg0, "ax.Animate3D:createWithFrames");
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Animate3D:createWithFrames");
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Animate3D:createWithFrames");
         ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.Animate3D:createWithFrames");
@@ -1012,8 +1012,8 @@ int lua_axis_3d_Animate3D_createWithFrames(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Animate3D_createWithFrames'", nullptr);
             return 0;
         }
-        axis::Animate3D* ret = axis::Animate3D::createWithFrames(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::Animate3D>(tolua_S, "ax.Animate3D",(axis::Animate3D*)ret);
+        ax::Animate3D* ret = ax::Animate3D::createWithFrames(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::Animate3D>(tolua_S, "ax.Animate3D",(ax::Animate3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Animate3D:createWithFrames",argc, 3);
@@ -1048,7 +1048,7 @@ int lua_axis_3d_Animate3D_setTransitionTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Animate3D_setTransitionTime'", nullptr);
             return 0;
         }
-        axis::Animate3D::setTransitionTime(arg0);
+        ax::Animate3D::setTransitionTime(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -1063,7 +1063,7 @@ int lua_axis_3d_Animate3D_setTransitionTime(lua_State* tolua_S)
 int lua_axis_3d_Animate3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Animate3D* cobj = nullptr;
+    ax::Animate3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1080,7 +1080,7 @@ int lua_axis_3d_Animate3D_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Animate3D_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::Animate3D();
+        cobj = new ax::Animate3D();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1127,7 +1127,7 @@ int lua_register_axis_3d_Animate3D(lua_State* tolua_S)
         tolua_function(tolua_S,"createWithFrames", lua_axis_3d_Animate3D_createWithFrames);
         tolua_function(tolua_S,"setTransitionTime", lua_axis_3d_Animate3D_setTransitionTime);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::Animate3D).name(); // rtti is literal storage
+    auto typeName = typeid(ax::Animate3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Animate3D";
     g_typeCast[typeName] = "ax.Animate3D";
     return 1;
@@ -1136,7 +1136,7 @@ int lua_register_axis_3d_Animate3D(lua_State* tolua_S)
 int lua_axis_3d_TextureCube_getImagePaths(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::TextureCube* cobj = nullptr;
+    ax::TextureCube* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1148,7 +1148,7 @@ int lua_axis_3d_TextureCube_getImagePaths(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.TextureCube",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::TextureCube*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::TextureCube*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1183,7 +1183,7 @@ int lua_axis_3d_TextureCube_getImagePaths(lua_State* tolua_S)
 int lua_axis_3d_TextureCube_getBackendTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::TextureCube* cobj = nullptr;
+    ax::TextureCube* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1195,7 +1195,7 @@ int lua_axis_3d_TextureCube_getBackendTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.TextureCube",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::TextureCube*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::TextureCube*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1213,8 +1213,8 @@ int lua_axis_3d_TextureCube_getBackendTexture(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_TextureCube_getBackendTexture'", nullptr);
             return 0;
         }
-        axis::backend::TextureBackend* ret = cobj->getBackendTexture();
-        object_to_luaval<axis::backend::TextureBackend>(tolua_S, "axb.TextureBackend",(axis::backend::TextureBackend*)ret);
+        ax::backend::TextureBackend* ret = cobj->getBackendTexture();
+        object_to_luaval<ax::backend::TextureBackend>(tolua_S, "axb.TextureBackend",(ax::backend::TextureBackend*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCube:getBackendTexture",argc, 0);
@@ -1230,7 +1230,7 @@ int lua_axis_3d_TextureCube_getBackendTexture(lua_State* tolua_S)
 int lua_axis_3d_TextureCube_reloadTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::TextureCube* cobj = nullptr;
+    ax::TextureCube* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1242,7 +1242,7 @@ int lua_axis_3d_TextureCube_reloadTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.TextureCube",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::TextureCube*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::TextureCube*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1277,7 +1277,7 @@ int lua_axis_3d_TextureCube_reloadTexture(lua_State* tolua_S)
 int lua_axis_3d_TextureCube_setTexParameters(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::TextureCube* cobj = nullptr;
+    ax::TextureCube* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1289,7 +1289,7 @@ int lua_axis_3d_TextureCube_setTexParameters(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.TextureCube",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::TextureCube*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::TextureCube*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1302,7 +1302,7 @@ int lua_axis_3d_TextureCube_setTexParameters(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Texture2D::TexParams arg0;
+        ax::Texture2D::TexParams arg0;
 
         ok &= luaval_to_texparams(tolua_S, 2, &arg0, "ax.TextureCube:setTexParameters");
         if(!ok)
@@ -1358,8 +1358,8 @@ int lua_axis_3d_TextureCube_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_TextureCube_create'", nullptr);
             return 0;
         }
-        axis::TextureCube* ret = axis::TextureCube::create(arg0, arg1, arg2, arg3, arg4, arg5);
-        object_to_luaval<axis::TextureCube>(tolua_S, "ax.TextureCube",(axis::TextureCube*)ret);
+        ax::TextureCube* ret = ax::TextureCube::create(arg0, arg1, arg2, arg3, arg4, arg5);
+        object_to_luaval<ax::TextureCube>(tolua_S, "ax.TextureCube",(ax::TextureCube*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.TextureCube:create",argc, 6);
@@ -1373,7 +1373,7 @@ int lua_axis_3d_TextureCube_create(lua_State* tolua_S)
 int lua_axis_3d_TextureCube_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::TextureCube* cobj = nullptr;
+    ax::TextureCube* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1390,7 +1390,7 @@ int lua_axis_3d_TextureCube_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_TextureCube_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::TextureCube();
+        cobj = new ax::TextureCube();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1426,7 +1426,7 @@ int lua_register_axis_3d_TextureCube(lua_State* tolua_S)
         tolua_function(tolua_S,"setTexParameters",lua_axis_3d_TextureCube_setTexParameters);
         tolua_function(tolua_S,"create", lua_axis_3d_TextureCube_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::TextureCube).name(); // rtti is literal storage
+    auto typeName = typeid(ax::TextureCube).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.TextureCube";
     g_typeCast[typeName] = "ax.TextureCube";
     return 1;
@@ -1449,15 +1449,15 @@ int lua_axis_3d_AttachNode_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Bone3D* arg0;
-        ok &= luaval_to_object<axis::Bone3D>(tolua_S, 2, "ax.Bone3D",&arg0, "ax.AttachNode:create");
+        ax::Bone3D* arg0;
+        ok &= luaval_to_object<ax::Bone3D>(tolua_S, 2, "ax.Bone3D",&arg0, "ax.AttachNode:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_AttachNode_create'", nullptr);
             return 0;
         }
-        axis::AttachNode* ret = axis::AttachNode::create(arg0);
-        object_to_luaval<axis::AttachNode>(tolua_S, "ax.AttachNode",(axis::AttachNode*)ret);
+        ax::AttachNode* ret = ax::AttachNode::create(arg0);
+        object_to_luaval<ax::AttachNode>(tolua_S, "ax.AttachNode",(ax::AttachNode*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AttachNode:create",argc, 1);
@@ -1471,7 +1471,7 @@ int lua_axis_3d_AttachNode_create(lua_State* tolua_S)
 int lua_axis_3d_AttachNode_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::AttachNode* cobj = nullptr;
+    ax::AttachNode* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1488,7 +1488,7 @@ int lua_axis_3d_AttachNode_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_AttachNode_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::AttachNode();
+        cobj = new ax::AttachNode();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1520,7 +1520,7 @@ int lua_register_axis_3d_AttachNode(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_axis_3d_AttachNode_constructor);
         tolua_function(tolua_S,"create", lua_axis_3d_AttachNode_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::AttachNode).name(); // rtti is literal storage
+    auto typeName = typeid(ax::AttachNode).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AttachNode";
     g_typeCast[typeName] = "ax.AttachNode";
     return 1;
@@ -1529,7 +1529,7 @@ int lua_register_axis_3d_AttachNode(lua_State* tolua_S)
 int lua_axis_3d_BillBoard_getMode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::BillBoard* cobj = nullptr;
+    ax::BillBoard* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1541,7 +1541,7 @@ int lua_axis_3d_BillBoard_getMode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.BillBoard",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::BillBoard*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::BillBoard*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1576,7 +1576,7 @@ int lua_axis_3d_BillBoard_getMode(lua_State* tolua_S)
 int lua_axis_3d_BillBoard_setMode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::BillBoard* cobj = nullptr;
+    ax::BillBoard* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1588,7 +1588,7 @@ int lua_axis_3d_BillBoard_setMode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.BillBoard",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::BillBoard*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::BillBoard*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1601,7 +1601,7 @@ int lua_axis_3d_BillBoard_setMode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::BillBoard::Mode arg0;
+        ax::BillBoard::Mode arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.BillBoard:setMode");
         if(!ok)
@@ -1644,8 +1644,8 @@ int lua_axis_3d_BillBoard_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::BillBoard* ret = axis::BillBoard::create(arg0);
-            object_to_luaval<axis::BillBoard>(tolua_S, "ax.BillBoard",(axis::BillBoard*)ret);
+            ax::BillBoard* ret = ax::BillBoard::create(arg0);
+            object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
             return 1;
         }
     } while (0);
@@ -1657,11 +1657,11 @@ int lua_axis_3d_BillBoard_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::BillBoard::Mode arg1;
+            ax::BillBoard::Mode arg1;
             ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::BillBoard* ret = axis::BillBoard::create(arg0, arg1);
-            object_to_luaval<axis::BillBoard>(tolua_S, "ax.BillBoard",(axis::BillBoard*)ret);
+            ax::BillBoard* ret = ax::BillBoard::create(arg0, arg1);
+            object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
             return 1;
         }
     } while (0);
@@ -1670,8 +1670,8 @@ int lua_axis_3d_BillBoard_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::BillBoard* ret = axis::BillBoard::create();
-            object_to_luaval<axis::BillBoard>(tolua_S, "ax.BillBoard",(axis::BillBoard*)ret);
+            ax::BillBoard* ret = ax::BillBoard::create();
+            object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
             return 1;
         }
     } while (0);
@@ -1680,11 +1680,11 @@ int lua_axis_3d_BillBoard_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::BillBoard::Mode arg0;
+            ax::BillBoard::Mode arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::BillBoard* ret = axis::BillBoard::create(arg0);
-            object_to_luaval<axis::BillBoard>(tolua_S, "ax.BillBoard",(axis::BillBoard*)ret);
+            ax::BillBoard* ret = ax::BillBoard::create(arg0);
+            object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
             return 1;
         }
     } while (0);
@@ -1696,11 +1696,11 @@ int lua_axis_3d_BillBoard_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::BillBoard* ret = axis::BillBoard::create(arg0, arg1);
-            object_to_luaval<axis::BillBoard>(tolua_S, "ax.BillBoard",(axis::BillBoard*)ret);
+            ax::BillBoard* ret = ax::BillBoard::create(arg0, arg1);
+            object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
             return 1;
         }
     } while (0);
@@ -1712,14 +1712,14 @@ int lua_axis_3d_BillBoard_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::BillBoard::Mode arg2;
+            ax::BillBoard::Mode arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.BillBoard:create");
             if (!ok) { break; }
-            axis::BillBoard* ret = axis::BillBoard::create(arg0, arg1, arg2);
-            object_to_luaval<axis::BillBoard>(tolua_S, "ax.BillBoard",(axis::BillBoard*)ret);
+            ax::BillBoard* ret = ax::BillBoard::create(arg0, arg1, arg2);
+            object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
             return 1;
         }
     } while (0);
@@ -1749,30 +1749,30 @@ int lua_axis_3d_BillBoard_createWithTexture(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Texture2D* arg0;
-        ok &= luaval_to_object<axis::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.BillBoard:createWithTexture");
+        ax::Texture2D* arg0;
+        ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.BillBoard:createWithTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_BillBoard_createWithTexture'", nullptr);
             return 0;
         }
-        axis::BillBoard* ret = axis::BillBoard::createWithTexture(arg0);
-        object_to_luaval<axis::BillBoard>(tolua_S, "ax.BillBoard",(axis::BillBoard*)ret);
+        ax::BillBoard* ret = ax::BillBoard::createWithTexture(arg0);
+        object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Texture2D* arg0;
-        axis::BillBoard::Mode arg1;
-        ok &= luaval_to_object<axis::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.BillBoard:createWithTexture");
+        ax::Texture2D* arg0;
+        ax::BillBoard::Mode arg1;
+        ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.BillBoard:createWithTexture");
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.BillBoard:createWithTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_BillBoard_createWithTexture'", nullptr);
             return 0;
         }
-        axis::BillBoard* ret = axis::BillBoard::createWithTexture(arg0, arg1);
-        object_to_luaval<axis::BillBoard>(tolua_S, "ax.BillBoard",(axis::BillBoard*)ret);
+        ax::BillBoard* ret = ax::BillBoard::createWithTexture(arg0, arg1);
+        object_to_luaval<ax::BillBoard>(tolua_S, "ax.BillBoard",(ax::BillBoard*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.BillBoard:createWithTexture",argc, 1);
@@ -1786,7 +1786,7 @@ int lua_axis_3d_BillBoard_createWithTexture(lua_State* tolua_S)
 int lua_axis_3d_BillBoard_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::BillBoard* cobj = nullptr;
+    ax::BillBoard* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1803,7 +1803,7 @@ int lua_axis_3d_BillBoard_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_BillBoard_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::BillBoard();
+        cobj = new ax::BillBoard();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1838,7 +1838,7 @@ int lua_register_axis_3d_BillBoard(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_3d_BillBoard_create);
         tolua_function(tolua_S,"createWithTexture", lua_axis_3d_BillBoard_createWithTexture);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::BillBoard).name(); // rtti is literal storage
+    auto typeName = typeid(ax::BillBoard).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.BillBoard";
     g_typeCast[typeName] = "ax.BillBoard";
     return 1;
@@ -1847,7 +1847,7 @@ int lua_register_axis_3d_BillBoard(lua_State* tolua_S)
 int lua_axis_3d_Mesh_getMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1859,7 +1859,7 @@ int lua_axis_3d_Mesh_getMaterial(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1877,8 +1877,8 @@ int lua_axis_3d_Mesh_getMaterial(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_getMaterial'", nullptr);
             return 0;
         }
-        axis::Material* ret = cobj->getMaterial();
-        object_to_luaval<axis::Material>(tolua_S, "ax.Material",(axis::Material*)ret);
+        ax::Material* ret = cobj->getMaterial();
+        object_to_luaval<ax::Material>(tolua_S, "ax.Material",(ax::Material*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:getMaterial",argc, 0);
@@ -1894,7 +1894,7 @@ int lua_axis_3d_Mesh_getMaterial(lua_State* tolua_S)
 int lua_axis_3d_Mesh_getVertexSizeInBytes(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1906,7 +1906,7 @@ int lua_axis_3d_Mesh_getVertexSizeInBytes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1941,7 +1941,7 @@ int lua_axis_3d_Mesh_getVertexSizeInBytes(lua_State* tolua_S)
 int lua_axis_3d_Mesh_setProgramState(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1953,7 +1953,7 @@ int lua_axis_3d_Mesh_setProgramState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1966,9 +1966,9 @@ int lua_axis_3d_Mesh_setProgramState(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::backend::ProgramState* arg0;
+        ax::backend::ProgramState* arg0;
 
-        ok &= luaval_to_object<axis::backend::ProgramState>(tolua_S, 2, "axb.ProgramState",&arg0, "ax.Mesh:setProgramState");
+        ok &= luaval_to_object<ax::backend::ProgramState>(tolua_S, 2, "axb.ProgramState",&arg0, "ax.Mesh:setProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_setProgramState'", nullptr);
@@ -1991,7 +1991,7 @@ int lua_axis_3d_Mesh_setProgramState(lua_State* tolua_S)
 int lua_axis_3d_Mesh_setIndexFormat(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2003,7 +2003,7 @@ int lua_axis_3d_Mesh_setIndexFormat(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2016,7 +2016,7 @@ int lua_axis_3d_Mesh_setIndexFormat(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::backend::IndexFormat arg0;
+        ax::backend::IndexFormat arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Mesh:setIndexFormat");
         if(!ok)
@@ -2041,7 +2041,7 @@ int lua_axis_3d_Mesh_setIndexFormat(lua_State* tolua_S)
 int lua_axis_3d_Mesh_setMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2053,7 +2053,7 @@ int lua_axis_3d_Mesh_setMaterial(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2066,9 +2066,9 @@ int lua_axis_3d_Mesh_setMaterial(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Material* arg0;
+        ax::Material* arg0;
 
-        ok &= luaval_to_object<axis::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.Mesh:setMaterial");
+        ok &= luaval_to_object<ax::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.Mesh:setMaterial");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_setMaterial'", nullptr);
@@ -2091,7 +2091,7 @@ int lua_axis_3d_Mesh_setMaterial(lua_State* tolua_S)
 int lua_axis_3d_Mesh_getName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2103,7 +2103,7 @@ int lua_axis_3d_Mesh_getName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2138,7 +2138,7 @@ int lua_axis_3d_Mesh_getName(lua_State* tolua_S)
 int lua_axis_3d_Mesh_getMeshVertexAttribute(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2150,7 +2150,7 @@ int lua_axis_3d_Mesh_getMeshVertexAttribute(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2171,7 +2171,7 @@ int lua_axis_3d_Mesh_getMeshVertexAttribute(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_getMeshVertexAttribute'", nullptr);
             return 0;
         }
-        const axis::MeshVertexAttrib& ret = cobj->getMeshVertexAttribute(arg0);
+        const ax::MeshVertexAttrib& ret = cobj->getMeshVertexAttribute(arg0);
         mesh_vertex_attrib_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2188,7 +2188,7 @@ int lua_axis_3d_Mesh_getMeshVertexAttribute(lua_State* tolua_S)
 int lua_axis_3d_Mesh_calculateAABB(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2200,7 +2200,7 @@ int lua_axis_3d_Mesh_calculateAABB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2235,7 +2235,7 @@ int lua_axis_3d_Mesh_calculateAABB(lua_State* tolua_S)
 int lua_axis_3d_Mesh_draw(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2247,7 +2247,7 @@ int lua_axis_3d_Mesh_draw(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2260,16 +2260,16 @@ int lua_axis_3d_Mesh_draw(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 8) 
     {
-        axis::Renderer* arg0;
+        ax::Renderer* arg0;
         double arg1;
-        axis::Mat4 arg2;
+        ax::Mat4 arg2;
         unsigned int arg3;
         unsigned int arg4;
-        axis::Vec4 arg5;
+        ax::Vec4 arg5;
         bool arg6;
         bool arg7;
 
-        ok &= luaval_to_object<axis::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Mesh:draw");
+        ok &= luaval_to_object<ax::Renderer>(tolua_S, 2, "ax.Renderer",&arg0, "ax.Mesh:draw");
 
         ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.Mesh:draw");
 
@@ -2306,7 +2306,7 @@ int lua_axis_3d_Mesh_draw(lua_State* tolua_S)
 int lua_axis_3d_Mesh_getBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2318,7 +2318,7 @@ int lua_axis_3d_Mesh_getBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2336,7 +2336,7 @@ int lua_axis_3d_Mesh_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_getBlendFunc'", nullptr);
             return 0;
         }
-        const axis::BlendFunc& ret = cobj->getBlendFunc();
+        const ax::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2353,7 +2353,7 @@ int lua_axis_3d_Mesh_getBlendFunc(lua_State* tolua_S)
 int lua_axis_3d_Mesh_setName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2365,7 +2365,7 @@ int lua_axis_3d_Mesh_setName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2403,7 +2403,7 @@ int lua_axis_3d_Mesh_setName(lua_State* tolua_S)
 int lua_axis_3d_Mesh_setMeshIndexData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2415,7 +2415,7 @@ int lua_axis_3d_Mesh_setMeshIndexData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2428,9 +2428,9 @@ int lua_axis_3d_Mesh_setMeshIndexData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::MeshIndexData* arg0;
+        ax::MeshIndexData* arg0;
 
-        ok &= luaval_to_object<axis::MeshIndexData>(tolua_S, 2, "ax.MeshIndexData",&arg0, "ax.Mesh:setMeshIndexData");
+        ok &= luaval_to_object<ax::MeshIndexData>(tolua_S, 2, "ax.MeshIndexData",&arg0, "ax.Mesh:setMeshIndexData");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_setMeshIndexData'", nullptr);
@@ -2453,7 +2453,7 @@ int lua_axis_3d_Mesh_setMeshIndexData(lua_State* tolua_S)
 int lua_axis_3d_Mesh_getProgramState(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2465,7 +2465,7 @@ int lua_axis_3d_Mesh_getProgramState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2483,8 +2483,8 @@ int lua_axis_3d_Mesh_getProgramState(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_getProgramState'", nullptr);
             return 0;
         }
-        axis::backend::ProgramState* ret = cobj->getProgramState();
-        object_to_luaval<axis::backend::ProgramState>(tolua_S, "axb.ProgramState",(axis::backend::ProgramState*)ret);
+        ax::backend::ProgramState* ret = cobj->getProgramState();
+        object_to_luaval<ax::backend::ProgramState>(tolua_S, "axb.ProgramState",(ax::backend::ProgramState*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:getProgramState",argc, 0);
@@ -2500,7 +2500,7 @@ int lua_axis_3d_Mesh_getProgramState(lua_State* tolua_S)
 int lua_axis_3d_Mesh_getMeshVertexAttribCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2512,7 +2512,7 @@ int lua_axis_3d_Mesh_getMeshVertexAttribCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2547,7 +2547,7 @@ int lua_axis_3d_Mesh_getMeshVertexAttribCount(lua_State* tolua_S)
 int lua_axis_3d_Mesh_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2559,7 +2559,7 @@ int lua_axis_3d_Mesh_setBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2572,7 +2572,7 @@ int lua_axis_3d_Mesh_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::BlendFunc arg0;
+        ax::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "ax.Mesh:setBlendFunc");
         if(!ok)
@@ -2597,7 +2597,7 @@ int lua_axis_3d_Mesh_setBlendFunc(lua_State* tolua_S)
 int lua_axis_3d_Mesh_setSkin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2609,7 +2609,7 @@ int lua_axis_3d_Mesh_setSkin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2622,9 +2622,9 @@ int lua_axis_3d_Mesh_setSkin(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::MeshSkin* arg0;
+        ax::MeshSkin* arg0;
 
-        ok &= luaval_to_object<axis::MeshSkin>(tolua_S, 2, "ax.MeshSkin",&arg0, "ax.Mesh:setSkin");
+        ok &= luaval_to_object<ax::MeshSkin>(tolua_S, 2, "ax.MeshSkin",&arg0, "ax.Mesh:setSkin");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_setSkin'", nullptr);
@@ -2647,7 +2647,7 @@ int lua_axis_3d_Mesh_setSkin(lua_State* tolua_S)
 int lua_axis_3d_Mesh_isVisible(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2659,7 +2659,7 @@ int lua_axis_3d_Mesh_isVisible(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2694,7 +2694,7 @@ int lua_axis_3d_Mesh_isVisible(lua_State* tolua_S)
 int lua_axis_3d_Mesh_setVisible(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2706,7 +2706,7 @@ int lua_axis_3d_Mesh_setVisible(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Mesh*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2744,7 +2744,7 @@ int lua_axis_3d_Mesh_setVisible(lua_State* tolua_S)
 int lua_axis_3d_Mesh_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Mesh* cobj = nullptr;
+    ax::Mesh* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2761,7 +2761,7 @@ int lua_axis_3d_Mesh_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Mesh_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::Mesh();
+        cobj = new ax::Mesh();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -2810,7 +2810,7 @@ int lua_register_axis_3d_Mesh(lua_State* tolua_S)
         tolua_function(tolua_S,"isVisible",lua_axis_3d_Mesh_isVisible);
         tolua_function(tolua_S,"setVisible",lua_axis_3d_Mesh_setVisible);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::Mesh).name(); // rtti is literal storage
+    auto typeName = typeid(ax::Mesh).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Mesh";
     g_typeCast[typeName] = "ax.Mesh";
     return 1;
@@ -2819,7 +2819,7 @@ int lua_register_axis_3d_Mesh(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_removeAllBones(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2831,7 +2831,7 @@ int lua_axis_3d_Skeleton3D_removeAllBones(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2866,7 +2866,7 @@ int lua_axis_3d_Skeleton3D_removeAllBones(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_addBone(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2878,7 +2878,7 @@ int lua_axis_3d_Skeleton3D_addBone(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2891,9 +2891,9 @@ int lua_axis_3d_Skeleton3D_addBone(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Bone3D* arg0;
+        ax::Bone3D* arg0;
 
-        ok &= luaval_to_object<axis::Bone3D>(tolua_S, 2, "ax.Bone3D",&arg0, "ax.Skeleton3D:addBone");
+        ok &= luaval_to_object<ax::Bone3D>(tolua_S, 2, "ax.Bone3D",&arg0, "ax.Skeleton3D:addBone");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Skeleton3D_addBone'", nullptr);
@@ -2916,7 +2916,7 @@ int lua_axis_3d_Skeleton3D_addBone(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_getBoneByName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2928,7 +2928,7 @@ int lua_axis_3d_Skeleton3D_getBoneByName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2949,8 +2949,8 @@ int lua_axis_3d_Skeleton3D_getBoneByName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Skeleton3D_getBoneByName'", nullptr);
             return 0;
         }
-        axis::Bone3D* ret = cobj->getBoneByName(arg0);
-        object_to_luaval<axis::Bone3D>(tolua_S, "ax.Bone3D",(axis::Bone3D*)ret);
+        ax::Bone3D* ret = cobj->getBoneByName(arg0);
+        object_to_luaval<ax::Bone3D>(tolua_S, "ax.Bone3D",(ax::Bone3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Skeleton3D:getBoneByName",argc, 1);
@@ -2966,7 +2966,7 @@ int lua_axis_3d_Skeleton3D_getBoneByName(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_getRootBone(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2978,7 +2978,7 @@ int lua_axis_3d_Skeleton3D_getRootBone(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2999,8 +2999,8 @@ int lua_axis_3d_Skeleton3D_getRootBone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Skeleton3D_getRootBone'", nullptr);
             return 0;
         }
-        axis::Bone3D* ret = cobj->getRootBone(arg0);
-        object_to_luaval<axis::Bone3D>(tolua_S, "ax.Bone3D",(axis::Bone3D*)ret);
+        ax::Bone3D* ret = cobj->getRootBone(arg0);
+        object_to_luaval<ax::Bone3D>(tolua_S, "ax.Bone3D",(ax::Bone3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Skeleton3D:getRootBone",argc, 1);
@@ -3016,7 +3016,7 @@ int lua_axis_3d_Skeleton3D_getRootBone(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_updateBoneMatrix(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3028,7 +3028,7 @@ int lua_axis_3d_Skeleton3D_updateBoneMatrix(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3063,7 +3063,7 @@ int lua_axis_3d_Skeleton3D_updateBoneMatrix(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_getBoneByIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3075,7 +3075,7 @@ int lua_axis_3d_Skeleton3D_getBoneByIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3096,8 +3096,8 @@ int lua_axis_3d_Skeleton3D_getBoneByIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Skeleton3D_getBoneByIndex'", nullptr);
             return 0;
         }
-        axis::Bone3D* ret = cobj->getBoneByIndex(arg0);
-        object_to_luaval<axis::Bone3D>(tolua_S, "ax.Bone3D",(axis::Bone3D*)ret);
+        ax::Bone3D* ret = cobj->getBoneByIndex(arg0);
+        object_to_luaval<ax::Bone3D>(tolua_S, "ax.Bone3D",(ax::Bone3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Skeleton3D:getBoneByIndex",argc, 1);
@@ -3113,7 +3113,7 @@ int lua_axis_3d_Skeleton3D_getBoneByIndex(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_getRootCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3125,7 +3125,7 @@ int lua_axis_3d_Skeleton3D_getRootCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3160,7 +3160,7 @@ int lua_axis_3d_Skeleton3D_getRootCount(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_getBoneIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3172,7 +3172,7 @@ int lua_axis_3d_Skeleton3D_getBoneIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3185,9 +3185,9 @@ int lua_axis_3d_Skeleton3D_getBoneIndex(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Bone3D* arg0;
+        ax::Bone3D* arg0;
 
-        ok &= luaval_to_object<axis::Bone3D>(tolua_S, 2, "ax.Bone3D",&arg0, "ax.Skeleton3D:getBoneIndex");
+        ok &= luaval_to_object<ax::Bone3D>(tolua_S, 2, "ax.Bone3D",&arg0, "ax.Skeleton3D:getBoneIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Skeleton3D_getBoneIndex'", nullptr);
@@ -3210,7 +3210,7 @@ int lua_axis_3d_Skeleton3D_getBoneIndex(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_getBoneCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3222,7 +3222,7 @@ int lua_axis_3d_Skeleton3D_getBoneCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skeleton3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skeleton3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3257,7 +3257,7 @@ int lua_axis_3d_Skeleton3D_getBoneCount(lua_State* tolua_S)
 int lua_axis_3d_Skeleton3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skeleton3D* cobj = nullptr;
+    ax::Skeleton3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3274,7 +3274,7 @@ int lua_axis_3d_Skeleton3D_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Skeleton3D_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::Skeleton3D();
+        cobj = new ax::Skeleton3D();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -3314,7 +3314,7 @@ int lua_register_axis_3d_Skeleton3D(lua_State* tolua_S)
         tolua_function(tolua_S,"getBoneIndex",lua_axis_3d_Skeleton3D_getBoneIndex);
         tolua_function(tolua_S,"getBoneCount",lua_axis_3d_Skeleton3D_getBoneCount);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::Skeleton3D).name(); // rtti is literal storage
+    auto typeName = typeid(ax::Skeleton3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Skeleton3D";
     g_typeCast[typeName] = "ax.Skeleton3D";
     return 1;
@@ -3323,7 +3323,7 @@ int lua_register_axis_3d_Skeleton3D(lua_State* tolua_S)
 int lua_axis_3d_Skybox_reload(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skybox* cobj = nullptr;
+    ax::Skybox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3335,7 +3335,7 @@ int lua_axis_3d_Skybox_reload(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skybox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skybox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skybox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3370,7 +3370,7 @@ int lua_axis_3d_Skybox_reload(lua_State* tolua_S)
 int lua_axis_3d_Skybox_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skybox* cobj = nullptr;
+    ax::Skybox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3382,7 +3382,7 @@ int lua_axis_3d_Skybox_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skybox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skybox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skybox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3435,7 +3435,7 @@ int lua_axis_3d_Skybox_init(lua_State* tolua_S)
 int lua_axis_3d_Skybox_setTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skybox* cobj = nullptr;
+    ax::Skybox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3447,7 +3447,7 @@ int lua_axis_3d_Skybox_setTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Skybox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Skybox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Skybox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3460,9 +3460,9 @@ int lua_axis_3d_Skybox_setTexture(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::TextureCube* arg0;
+        ax::TextureCube* arg0;
 
-        ok &= luaval_to_object<axis::TextureCube>(tolua_S, 2, "ax.TextureCube",&arg0, "ax.Skybox:setTexture");
+        ok &= luaval_to_object<ax::TextureCube>(tolua_S, 2, "ax.TextureCube",&arg0, "ax.Skybox:setTexture");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Skybox_setTexture'", nullptr);
@@ -3518,8 +3518,8 @@ int lua_axis_3d_Skybox_create(lua_State* tolua_S)
             std::string_view arg5;
             ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "ax.Skybox:create");
             if (!ok) { break; }
-            axis::Skybox* ret = axis::Skybox::create(arg0, arg1, arg2, arg3, arg4, arg5);
-            object_to_luaval<axis::Skybox>(tolua_S, "ax.Skybox",(axis::Skybox*)ret);
+            ax::Skybox* ret = ax::Skybox::create(arg0, arg1, arg2, arg3, arg4, arg5);
+            object_to_luaval<ax::Skybox>(tolua_S, "ax.Skybox",(ax::Skybox*)ret);
             return 1;
         }
     } while (0);
@@ -3528,8 +3528,8 @@ int lua_axis_3d_Skybox_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::Skybox* ret = axis::Skybox::create();
-            object_to_luaval<axis::Skybox>(tolua_S, "ax.Skybox",(axis::Skybox*)ret);
+            ax::Skybox* ret = ax::Skybox::create();
+            object_to_luaval<ax::Skybox>(tolua_S, "ax.Skybox",(ax::Skybox*)ret);
             return 1;
         }
     } while (0);
@@ -3545,7 +3545,7 @@ int lua_axis_3d_Skybox_create(lua_State* tolua_S)
 int lua_axis_3d_Skybox_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Skybox* cobj = nullptr;
+    ax::Skybox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3562,7 +3562,7 @@ int lua_axis_3d_Skybox_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Skybox_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::Skybox();
+        cobj = new ax::Skybox();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -3597,7 +3597,7 @@ int lua_register_axis_3d_Skybox(lua_State* tolua_S)
         tolua_function(tolua_S,"setTexture",lua_axis_3d_Skybox_setTexture);
         tolua_function(tolua_S,"create", lua_axis_3d_Skybox_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::Skybox).name(); // rtti is literal storage
+    auto typeName = typeid(ax::Skybox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Skybox";
     g_typeCast[typeName] = "ax.Skybox";
     return 1;
@@ -3606,7 +3606,7 @@ int lua_register_axis_3d_Skybox(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_setCullFaceEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3618,7 +3618,7 @@ int lua_axis_3d_MeshRenderer_setCullFaceEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3656,7 +3656,7 @@ int lua_axis_3d_MeshRenderer_setCullFaceEnabled(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_setTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3665,7 +3665,7 @@ int lua_axis_3d_MeshRenderer_setTexture(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -3676,8 +3676,8 @@ int lua_axis_3d_MeshRenderer_setTexture(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::Texture2D* arg0;
-            ok &= luaval_to_object<axis::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.MeshRenderer:setTexture");
+            ax::Texture2D* arg0;
+            ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.MeshRenderer:setTexture");
 
             if (!ok) { break; }
             cobj->setTexture(arg0);
@@ -3711,7 +3711,7 @@ int lua_axis_3d_MeshRenderer_setTexture(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getLightMask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3723,7 +3723,7 @@ int lua_axis_3d_MeshRenderer_getLightMask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3758,7 +3758,7 @@ int lua_axis_3d_MeshRenderer_getLightMask(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3770,7 +3770,7 @@ int lua_axis_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3788,8 +3788,8 @@ int lua_axis_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getMaterial'", nullptr);
             return 0;
         }
-        axis::Material* ret = cobj->getMaterial();
-        object_to_luaval<axis::Material>(tolua_S, "ax.Material",(axis::Material*)ret);
+        ax::Material* ret = cobj->getMaterial();
+        object_to_luaval<ax::Material>(tolua_S, "ax.Material",(ax::Material*)ret);
         return 1;
     }
     if (argc == 1) 
@@ -3802,8 +3802,8 @@ int lua_axis_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getMaterial'", nullptr);
             return 0;
         }
-        axis::Material* ret = cobj->getMaterial(arg0);
-        object_to_luaval<axis::Material>(tolua_S, "ax.Material",(axis::Material*)ret);
+        ax::Material* ret = cobj->getMaterial(arg0);
+        object_to_luaval<ax::Material>(tolua_S, "ax.Material",(ax::Material*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getMaterial",argc, 0);
@@ -3819,7 +3819,7 @@ int lua_axis_3d_MeshRenderer_getMaterial(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_setWireframe(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3831,7 +3831,7 @@ int lua_axis_3d_MeshRenderer_setWireframe(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3869,7 +3869,7 @@ int lua_axis_3d_MeshRenderer_setWireframe(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_isWireframe(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3881,7 +3881,7 @@ int lua_axis_3d_MeshRenderer_isWireframe(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3916,7 +3916,7 @@ int lua_axis_3d_MeshRenderer_isWireframe(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_setCullFace(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3928,7 +3928,7 @@ int lua_axis_3d_MeshRenderer_setCullFace(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3941,7 +3941,7 @@ int lua_axis_3d_MeshRenderer_setCullFace(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::backend::CullMode arg0;
+        ax::backend::CullMode arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:setCullFace");
         if(!ok)
@@ -3966,7 +3966,7 @@ int lua_axis_3d_MeshRenderer_setCullFace(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getMeshes(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3978,7 +3978,7 @@ int lua_axis_3d_MeshRenderer_getMeshes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3996,7 +3996,7 @@ int lua_axis_3d_MeshRenderer_getMeshes(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getMeshes'", nullptr);
             return 0;
         }
-        const axis::Vector<axis::Mesh *>& ret = cobj->getMeshes();
+        const ax::Vector<ax::Mesh *>& ret = cobj->getMeshes();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4013,7 +4013,7 @@ int lua_axis_3d_MeshRenderer_getMeshes(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_removeAllAttachNode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4025,7 +4025,7 @@ int lua_axis_3d_MeshRenderer_removeAllAttachNode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4060,7 +4060,7 @@ int lua_axis_3d_MeshRenderer_removeAllAttachNode(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_setMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -4069,7 +4069,7 @@ int lua_axis_3d_MeshRenderer_setMaterial(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -4080,8 +4080,8 @@ int lua_axis_3d_MeshRenderer_setMaterial(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            axis::Material* arg0;
-            ok &= luaval_to_object<axis::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.MeshRenderer:setMaterial");
+            ax::Material* arg0;
+            ok &= luaval_to_object<ax::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.MeshRenderer:setMaterial");
 
             if (!ok) { break; }
             int arg1;
@@ -4096,8 +4096,8 @@ int lua_axis_3d_MeshRenderer_setMaterial(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::Material* arg0;
-            ok &= luaval_to_object<axis::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.MeshRenderer:setMaterial");
+            ax::Material* arg0;
+            ok &= luaval_to_object<ax::Material>(tolua_S, 2, "ax.Material",&arg0, "ax.MeshRenderer:setMaterial");
 
             if (!ok) { break; }
             cobj->setMaterial(arg0);
@@ -4119,7 +4119,7 @@ int lua_axis_3d_MeshRenderer_setMaterial(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getMesh(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4131,7 +4131,7 @@ int lua_axis_3d_MeshRenderer_getMesh(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4149,8 +4149,8 @@ int lua_axis_3d_MeshRenderer_getMesh(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getMesh'", nullptr);
             return 0;
         }
-        axis::Mesh* ret = cobj->getMesh();
-        object_to_luaval<axis::Mesh>(tolua_S, "ax.Mesh",(axis::Mesh*)ret);
+        ax::Mesh* ret = cobj->getMesh();
+        object_to_luaval<ax::Mesh>(tolua_S, "ax.Mesh",(ax::Mesh*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getMesh",argc, 0);
@@ -4166,7 +4166,7 @@ int lua_axis_3d_MeshRenderer_getMesh(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getMeshCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4178,7 +4178,7 @@ int lua_axis_3d_MeshRenderer_getMeshCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4213,7 +4213,7 @@ int lua_axis_3d_MeshRenderer_getMeshCount(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getMeshByIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4225,7 +4225,7 @@ int lua_axis_3d_MeshRenderer_getMeshByIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4246,8 +4246,8 @@ int lua_axis_3d_MeshRenderer_getMeshByIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getMeshByIndex'", nullptr);
             return 0;
         }
-        axis::Mesh* ret = cobj->getMeshByIndex(arg0);
-        object_to_luaval<axis::Mesh>(tolua_S, "ax.Mesh",(axis::Mesh*)ret);
+        ax::Mesh* ret = cobj->getMeshByIndex(arg0);
+        object_to_luaval<ax::Mesh>(tolua_S, "ax.Mesh",(ax::Mesh*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getMeshByIndex",argc, 1);
@@ -4263,7 +4263,7 @@ int lua_axis_3d_MeshRenderer_getMeshByIndex(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_isForceDepthWrite(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4275,7 +4275,7 @@ int lua_axis_3d_MeshRenderer_isForceDepthWrite(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4310,7 +4310,7 @@ int lua_axis_3d_MeshRenderer_isForceDepthWrite(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4322,7 +4322,7 @@ int lua_axis_3d_MeshRenderer_getBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4340,7 +4340,7 @@ int lua_axis_3d_MeshRenderer_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getBlendFunc'", nullptr);
             return 0;
         }
-        const axis::BlendFunc& ret = cobj->getBlendFunc();
+        const ax::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4357,7 +4357,7 @@ int lua_axis_3d_MeshRenderer_getBlendFunc(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_setLightMask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4369,7 +4369,7 @@ int lua_axis_3d_MeshRenderer_setLightMask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4407,7 +4407,7 @@ int lua_axis_3d_MeshRenderer_setLightMask(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getAttachNode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4419,7 +4419,7 @@ int lua_axis_3d_MeshRenderer_getAttachNode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4440,8 +4440,8 @@ int lua_axis_3d_MeshRenderer_getAttachNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getAttachNode'", nullptr);
             return 0;
         }
-        axis::AttachNode* ret = cobj->getAttachNode(arg0);
-        object_to_luaval<axis::AttachNode>(tolua_S, "ax.AttachNode",(axis::AttachNode*)ret);
+        ax::AttachNode* ret = cobj->getAttachNode(arg0);
+        object_to_luaval<ax::AttachNode>(tolua_S, "ax.AttachNode",(ax::AttachNode*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getAttachNode",argc, 1);
@@ -4457,7 +4457,7 @@ int lua_axis_3d_MeshRenderer_getAttachNode(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4469,7 +4469,7 @@ int lua_axis_3d_MeshRenderer_setBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4482,7 +4482,7 @@ int lua_axis_3d_MeshRenderer_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::BlendFunc arg0;
+        ax::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "ax.MeshRenderer:setBlendFunc");
         if(!ok)
@@ -4507,7 +4507,7 @@ int lua_axis_3d_MeshRenderer_setBlendFunc(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_genMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4519,7 +4519,7 @@ int lua_axis_3d_MeshRenderer_genMaterial(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4568,7 +4568,7 @@ int lua_axis_3d_MeshRenderer_genMaterial(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_removeAttachNode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4580,7 +4580,7 @@ int lua_axis_3d_MeshRenderer_removeAttachNode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4618,7 +4618,7 @@ int lua_axis_3d_MeshRenderer_removeAttachNode(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getSkeleton(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4630,7 +4630,7 @@ int lua_axis_3d_MeshRenderer_getSkeleton(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4648,8 +4648,8 @@ int lua_axis_3d_MeshRenderer_getSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getSkeleton'", nullptr);
             return 0;
         }
-        axis::Skeleton3D* ret = cobj->getSkeleton();
-        object_to_luaval<axis::Skeleton3D>(tolua_S, "ax.Skeleton3D",(axis::Skeleton3D*)ret);
+        ax::Skeleton3D* ret = cobj->getSkeleton();
+        object_to_luaval<ax::Skeleton3D>(tolua_S, "ax.Skeleton3D",(ax::Skeleton3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getSkeleton",argc, 0);
@@ -4665,7 +4665,7 @@ int lua_axis_3d_MeshRenderer_getSkeleton(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_setForceDepthWrite(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4677,7 +4677,7 @@ int lua_axis_3d_MeshRenderer_setForceDepthWrite(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4715,7 +4715,7 @@ int lua_axis_3d_MeshRenderer_setForceDepthWrite(lua_State* tolua_S)
 int lua_axis_3d_MeshRenderer_getMeshByName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4727,7 +4727,7 @@ int lua_axis_3d_MeshRenderer_getMeshByName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4748,8 +4748,8 @@ int lua_axis_3d_MeshRenderer_getMeshByName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRenderer_getMeshByName'", nullptr);
             return 0;
         }
-        axis::Mesh* ret = cobj->getMeshByName(arg0);
-        object_to_luaval<axis::Mesh>(tolua_S, "ax.Mesh",(axis::Mesh*)ret);
+        ax::Mesh* ret = cobj->getMeshByName(arg0);
+        object_to_luaval<ax::Mesh>(tolua_S, "ax.Mesh",(ax::Mesh*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getMeshByName",argc, 1);
@@ -4783,8 +4783,8 @@ int lua_axis_3d_MeshRenderer_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.MeshRenderer:create");
             if (!ok) { break; }
-            axis::MeshRenderer* ret = axis::MeshRenderer::create(arg0);
-            object_to_luaval<axis::MeshRenderer>(tolua_S, "ax.MeshRenderer",(axis::MeshRenderer*)ret);
+            ax::MeshRenderer* ret = ax::MeshRenderer::create(arg0);
+            object_to_luaval<ax::MeshRenderer>(tolua_S, "ax.MeshRenderer",(ax::MeshRenderer*)ret);
             return 1;
         }
     } while (0);
@@ -4793,8 +4793,8 @@ int lua_axis_3d_MeshRenderer_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::MeshRenderer* ret = axis::MeshRenderer::create();
-            object_to_luaval<axis::MeshRenderer>(tolua_S, "ax.MeshRenderer",(axis::MeshRenderer*)ret);
+            ax::MeshRenderer* ret = ax::MeshRenderer::create();
+            object_to_luaval<ax::MeshRenderer>(tolua_S, "ax.MeshRenderer",(ax::MeshRenderer*)ret);
             return 1;
         }
     } while (0);
@@ -4809,8 +4809,8 @@ int lua_axis_3d_MeshRenderer_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.MeshRenderer:create");
             if (!ok) { break; }
-            axis::MeshRenderer* ret = axis::MeshRenderer::create(arg0, arg1);
-            object_to_luaval<axis::MeshRenderer>(tolua_S, "ax.MeshRenderer",(axis::MeshRenderer*)ret);
+            ax::MeshRenderer* ret = ax::MeshRenderer::create(arg0, arg1);
+            object_to_luaval<ax::MeshRenderer>(tolua_S, "ax.MeshRenderer",(ax::MeshRenderer*)ret);
             return 1;
         }
     } while (0);
@@ -4860,7 +4860,7 @@ int lua_register_axis_3d_MeshRenderer(lua_State* tolua_S)
         tolua_function(tolua_S,"getMeshByName",lua_axis_3d_MeshRenderer_getMeshByName);
         tolua_function(tolua_S,"create", lua_axis_3d_MeshRenderer_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::MeshRenderer).name(); // rtti is literal storage
+    auto typeName = typeid(ax::MeshRenderer).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.MeshRenderer";
     g_typeCast[typeName] = "ax.MeshRenderer";
     return 1;
@@ -4869,7 +4869,7 @@ int lua_register_axis_3d_MeshRenderer(lua_State* tolua_S)
 int lua_axis_3d_MeshRendererCache_removeAllMeshRenderData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRendererCache* cobj = nullptr;
+    ax::MeshRendererCache* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4881,7 +4881,7 @@ int lua_axis_3d_MeshRendererCache_removeAllMeshRenderData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRendererCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRendererCache*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRendererCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4916,7 +4916,7 @@ int lua_axis_3d_MeshRendererCache_removeAllMeshRenderData(lua_State* tolua_S)
 int lua_axis_3d_MeshRendererCache_removeMeshRenderData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRendererCache* cobj = nullptr;
+    ax::MeshRendererCache* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4928,7 +4928,7 @@ int lua_axis_3d_MeshRendererCache_removeMeshRenderData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshRendererCache",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRendererCache*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshRendererCache*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4985,7 +4985,7 @@ int lua_axis_3d_MeshRendererCache_destroyInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRendererCache_destroyInstance'", nullptr);
             return 0;
         }
-        axis::MeshRendererCache::destroyInstance();
+        ax::MeshRendererCache::destroyInstance();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5019,8 +5019,8 @@ int lua_axis_3d_MeshRendererCache_getInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRendererCache_getInstance'", nullptr);
             return 0;
         }
-        axis::MeshRendererCache* ret = axis::MeshRendererCache::getInstance();
-        object_to_luaval<axis::MeshRendererCache>(tolua_S, "ax.MeshRendererCache",(axis::MeshRendererCache*)ret);
+        ax::MeshRendererCache* ret = ax::MeshRendererCache::getInstance();
+        object_to_luaval<ax::MeshRendererCache>(tolua_S, "ax.MeshRendererCache",(ax::MeshRendererCache*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshRendererCache:getInstance",argc, 0);
@@ -5034,7 +5034,7 @@ int lua_axis_3d_MeshRendererCache_getInstance(lua_State* tolua_S)
 int lua_axis_3d_MeshRendererCache_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshRendererCache* cobj = nullptr;
+    ax::MeshRendererCache* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5051,7 +5051,7 @@ int lua_axis_3d_MeshRendererCache_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshRendererCache_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::MeshRendererCache();
+        cobj = new ax::MeshRendererCache();
         tolua_pushusertype(tolua_S,(void*)cobj,"ax.MeshRendererCache");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
@@ -5084,7 +5084,7 @@ int lua_register_axis_3d_MeshRendererCache(lua_State* tolua_S)
         tolua_function(tolua_S,"destroyInstance", lua_axis_3d_MeshRendererCache_destroyInstance);
         tolua_function(tolua_S,"getInstance", lua_axis_3d_MeshRendererCache_getInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::MeshRendererCache).name(); // rtti is literal storage
+    auto typeName = typeid(ax::MeshRendererCache).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.MeshRendererCache";
     g_typeCast[typeName] = "ax.MeshRendererCache";
     return 1;
@@ -5093,7 +5093,7 @@ int lua_register_axis_3d_MeshRendererCache(lua_State* tolua_S)
 int lua_axis_3d_MeshMaterial_getMaterialType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::MeshMaterial* cobj = nullptr;
+    ax::MeshMaterial* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5105,7 +5105,7 @@ int lua_axis_3d_MeshMaterial_getMaterialType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshMaterial*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::MeshMaterial*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5161,8 +5161,8 @@ int lua_axis_3d_MeshMaterial_createWithFilename(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshMaterial_createWithFilename'", nullptr);
             return 0;
         }
-        axis::MeshMaterial* ret = axis::MeshMaterial::createWithFilename(arg0);
-        object_to_luaval<axis::MeshMaterial>(tolua_S, "ax.MeshMaterial",(axis::MeshMaterial*)ret);
+        ax::MeshMaterial* ret = ax::MeshMaterial::createWithFilename(arg0);
+        object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:createWithFilename",argc, 1);
@@ -5195,7 +5195,7 @@ int lua_axis_3d_MeshMaterial_releaseCachedMaterial(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshMaterial_releaseCachedMaterial'", nullptr);
             return 0;
         }
-        axis::MeshMaterial::releaseCachedMaterial();
+        ax::MeshMaterial::releaseCachedMaterial();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5225,7 +5225,7 @@ int lua_axis_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::MeshMaterial::createBuiltInMaterial();
+            ax::MeshMaterial::createBuiltInMaterial();
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -5235,14 +5235,14 @@ int lua_axis_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            axis::MeshMaterial::MaterialType arg0;
+            ax::MeshMaterial::MaterialType arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshMaterial:createBuiltInMaterial");
             if (!ok) { break; }
             bool arg1;
             ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.MeshMaterial:createBuiltInMaterial");
             if (!ok) { break; }
-            axis::MeshMaterial* ret = axis::MeshMaterial::createBuiltInMaterial(arg0, arg1);
-            object_to_luaval<axis::MeshMaterial>(tolua_S, "ax.MeshMaterial",(axis::MeshMaterial*)ret);
+            ax::MeshMaterial* ret = ax::MeshMaterial::createBuiltInMaterial(arg0, arg1);
+            object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
             return 1;
         }
     } while (0);
@@ -5277,7 +5277,7 @@ int lua_axis_3d_MeshMaterial_releaseBuiltInMaterial(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshMaterial_releaseBuiltInMaterial'", nullptr);
             return 0;
         }
-        axis::MeshMaterial::releaseBuiltInMaterial();
+        ax::MeshMaterial::releaseBuiltInMaterial();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -5306,15 +5306,15 @@ int lua_axis_3d_MeshMaterial_createWithProgramState(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::backend::ProgramState* arg0;
-        ok &= luaval_to_object<axis::backend::ProgramState>(tolua_S, 2, "axb.ProgramState",&arg0, "ax.MeshMaterial:createWithProgramState");
+        ax::backend::ProgramState* arg0;
+        ok &= luaval_to_object<ax::backend::ProgramState>(tolua_S, 2, "axb.ProgramState",&arg0, "ax.MeshMaterial:createWithProgramState");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_MeshMaterial_createWithProgramState'", nullptr);
             return 0;
         }
-        axis::MeshMaterial* ret = axis::MeshMaterial::createWithProgramState(arg0);
-        object_to_luaval<axis::MeshMaterial>(tolua_S, "ax.MeshMaterial",(axis::MeshMaterial*)ret);
+        ax::MeshMaterial* ret = ax::MeshMaterial::createWithProgramState(arg0);
+        object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:createWithProgramState",argc, 1);
@@ -5344,7 +5344,7 @@ int lua_register_axis_3d_MeshMaterial(lua_State* tolua_S)
         tolua_function(tolua_S,"releaseBuiltInMaterial", lua_axis_3d_MeshMaterial_releaseBuiltInMaterial);
         tolua_function(tolua_S,"createWithProgramState", lua_axis_3d_MeshMaterial_createWithProgramState);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::MeshMaterial).name(); // rtti is literal storage
+    auto typeName = typeid(ax::MeshMaterial).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.MeshMaterial";
     g_typeCast[typeName] = "ax.MeshMaterial";
     return 1;
@@ -5353,7 +5353,7 @@ int lua_register_axis_3d_MeshMaterial(lua_State* tolua_S)
 int lua_axis_3d_Terrain_initHeightMap(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5365,7 +5365,7 @@ int lua_axis_3d_Terrain_initHeightMap(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5403,7 +5403,7 @@ int lua_axis_3d_Terrain_initHeightMap(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setMaxDetailMapAmount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5415,7 +5415,7 @@ int lua_axis_3d_Terrain_setMaxDetailMapAmount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5453,7 +5453,7 @@ int lua_axis_3d_Terrain_setMaxDetailMapAmount(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setDrawWire(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5465,7 +5465,7 @@ int lua_axis_3d_Terrain_setDrawWire(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5503,7 +5503,7 @@ int lua_axis_3d_Terrain_setDrawWire(lua_State* tolua_S)
 int lua_axis_3d_Terrain_getHeightData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5515,7 +5515,7 @@ int lua_axis_3d_Terrain_getHeightData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5550,7 +5550,7 @@ int lua_axis_3d_Terrain_getHeightData(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setDetailMap(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5562,7 +5562,7 @@ int lua_axis_3d_Terrain_setDetailMap(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5576,7 +5576,7 @@ int lua_axis_3d_Terrain_setDetailMap(lua_State* tolua_S)
     if (argc == 2) 
     {
         unsigned int arg0;
-        axis::Terrain::DetailMap arg1;
+        ax::Terrain::DetailMap arg1;
 
         ok &= luaval_to_uint32(tolua_S, 2,&arg0, "ax.Terrain:setDetailMap");
 
@@ -5604,7 +5604,7 @@ int lua_axis_3d_Terrain_setDetailMap(lua_State* tolua_S)
 int lua_axis_3d_Terrain_resetHeightMap(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5616,7 +5616,7 @@ int lua_axis_3d_Terrain_resetHeightMap(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5654,7 +5654,7 @@ int lua_axis_3d_Terrain_resetHeightMap(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setLightDir(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5666,7 +5666,7 @@ int lua_axis_3d_Terrain_setLightDir(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5679,7 +5679,7 @@ int lua_axis_3d_Terrain_setLightDir(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec3 arg0;
+        ax::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Terrain:setLightDir");
         if(!ok)
@@ -5704,7 +5704,7 @@ int lua_axis_3d_Terrain_setLightDir(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setAlphaMap(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5716,7 +5716,7 @@ int lua_axis_3d_Terrain_setAlphaMap(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5729,9 +5729,9 @@ int lua_axis_3d_Terrain_setAlphaMap(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Texture2D* arg0;
+        ax::Texture2D* arg0;
 
-        ok &= luaval_to_object<axis::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.Terrain:setAlphaMap");
+        ok &= luaval_to_object<ax::Texture2D>(tolua_S, 2, "ax.Texture2D",&arg0, "ax.Terrain:setAlphaMap");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Terrain_setAlphaMap'", nullptr);
@@ -5754,7 +5754,7 @@ int lua_axis_3d_Terrain_setAlphaMap(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setSkirtHeightRatio(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5766,7 +5766,7 @@ int lua_axis_3d_Terrain_setSkirtHeightRatio(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5804,7 +5804,7 @@ int lua_axis_3d_Terrain_setSkirtHeightRatio(lua_State* tolua_S)
 int lua_axis_3d_Terrain_convertToTerrainSpace(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5816,7 +5816,7 @@ int lua_axis_3d_Terrain_convertToTerrainSpace(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5829,7 +5829,7 @@ int lua_axis_3d_Terrain_convertToTerrainSpace(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.Terrain:convertToTerrainSpace");
         if(!ok)
@@ -5837,7 +5837,7 @@ int lua_axis_3d_Terrain_convertToTerrainSpace(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Terrain_convertToTerrainSpace'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->convertToTerrainSpace(arg0);
+        ax::Vec2 ret = cobj->convertToTerrainSpace(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5854,7 +5854,7 @@ int lua_axis_3d_Terrain_convertToTerrainSpace(lua_State* tolua_S)
 int lua_axis_3d_Terrain_initTextures(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5866,7 +5866,7 @@ int lua_axis_3d_Terrain_initTextures(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5901,7 +5901,7 @@ int lua_axis_3d_Terrain_initTextures(lua_State* tolua_S)
 int lua_axis_3d_Terrain_initProperties(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5913,7 +5913,7 @@ int lua_axis_3d_Terrain_initProperties(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5948,7 +5948,7 @@ int lua_axis_3d_Terrain_initProperties(lua_State* tolua_S)
 int lua_axis_3d_Terrain_initWithTerrainData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5960,7 +5960,7 @@ int lua_axis_3d_Terrain_initWithTerrainData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5973,8 +5973,8 @@ int lua_axis_3d_Terrain_initWithTerrainData(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::Terrain::TerrainData arg0;
-        axis::Terrain::CrackFixedType arg1;
+        ax::Terrain::TerrainData arg0;
+        ax::Terrain::CrackFixedType arg1;
 
         #pragma warning NO CONVERSION TO NATIVE FOR TerrainData
 		ok = false;
@@ -6002,7 +6002,7 @@ int lua_axis_3d_Terrain_initWithTerrainData(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setLODDistance(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6014,7 +6014,7 @@ int lua_axis_3d_Terrain_setLODDistance(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6058,7 +6058,7 @@ int lua_axis_3d_Terrain_setLODDistance(lua_State* tolua_S)
 int lua_axis_3d_Terrain_getTerrainSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6070,7 +6070,7 @@ int lua_axis_3d_Terrain_getTerrainSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6088,7 +6088,7 @@ int lua_axis_3d_Terrain_getTerrainSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Terrain_getTerrainSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getTerrainSize();
+        ax::Vec2 ret = cobj->getTerrainSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6105,7 +6105,7 @@ int lua_axis_3d_Terrain_getTerrainSize(lua_State* tolua_S)
 int lua_axis_3d_Terrain_getNormal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6117,7 +6117,7 @@ int lua_axis_3d_Terrain_getNormal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6141,7 +6141,7 @@ int lua_axis_3d_Terrain_getNormal(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Terrain_getNormal'", nullptr);
             return 0;
         }
-        axis::Vec3 ret = cobj->getNormal(arg0, arg1);
+        ax::Vec3 ret = cobj->getNormal(arg0, arg1);
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6158,7 +6158,7 @@ int lua_axis_3d_Terrain_getNormal(lua_State* tolua_S)
 int lua_axis_3d_Terrain_reload(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6170,7 +6170,7 @@ int lua_axis_3d_Terrain_reload(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6205,7 +6205,7 @@ int lua_axis_3d_Terrain_reload(lua_State* tolua_S)
 int lua_axis_3d_Terrain_getImageHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6217,7 +6217,7 @@ int lua_axis_3d_Terrain_getImageHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6258,7 +6258,7 @@ int lua_axis_3d_Terrain_getImageHeight(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setLightMap(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6270,7 +6270,7 @@ int lua_axis_3d_Terrain_setLightMap(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6308,7 +6308,7 @@ int lua_axis_3d_Terrain_setLightMap(lua_State* tolua_S)
 int lua_axis_3d_Terrain_setIsEnableFrustumCull(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6320,7 +6320,7 @@ int lua_axis_3d_Terrain_setIsEnableFrustumCull(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6358,7 +6358,7 @@ int lua_axis_3d_Terrain_setIsEnableFrustumCull(lua_State* tolua_S)
 int lua_axis_3d_Terrain_getMinHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6370,7 +6370,7 @@ int lua_axis_3d_Terrain_getMinHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6405,7 +6405,7 @@ int lua_axis_3d_Terrain_getMinHeight(lua_State* tolua_S)
 int lua_axis_3d_Terrain_getMaxHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6417,7 +6417,7 @@ int lua_axis_3d_Terrain_getMaxHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Terrain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6452,7 +6452,7 @@ int lua_axis_3d_Terrain_getMaxHeight(lua_State* tolua_S)
 int lua_axis_3d_Terrain_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6469,7 +6469,7 @@ int lua_axis_3d_Terrain_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Terrain_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::Terrain();
+        cobj = new ax::Terrain();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -6522,7 +6522,7 @@ int lua_register_axis_3d_Terrain(lua_State* tolua_S)
         tolua_function(tolua_S,"getMinHeight",lua_axis_3d_Terrain_getMinHeight);
         tolua_function(tolua_S,"getMaxHeight",lua_axis_3d_Terrain_getMaxHeight);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::Terrain).name(); // rtti is literal storage
+    auto typeName = typeid(ax::Terrain).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Terrain";
     g_typeCast[typeName] = "ax.Terrain";
     return 1;
@@ -6531,7 +6531,7 @@ int lua_register_axis_3d_Terrain(lua_State* tolua_S)
 int lua_axis_3d_Bundle3D_load(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Bundle3D* cobj = nullptr;
+    ax::Bundle3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6543,7 +6543,7 @@ int lua_axis_3d_Bundle3D_load(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Bundle3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Bundle3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Bundle3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6581,7 +6581,7 @@ int lua_axis_3d_Bundle3D_load(lua_State* tolua_S)
 int lua_axis_3d_Bundle3D_loadSkinData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Bundle3D* cobj = nullptr;
+    ax::Bundle3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6593,7 +6593,7 @@ int lua_axis_3d_Bundle3D_loadSkinData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Bundle3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Bundle3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Bundle3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6607,7 +6607,7 @@ int lua_axis_3d_Bundle3D_loadSkinData(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::SkinData* arg1;
+        ax::SkinData* arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Bundle3D:loadSkinData");
 
@@ -6635,7 +6635,7 @@ int lua_axis_3d_Bundle3D_loadSkinData(lua_State* tolua_S)
 int lua_axis_3d_Bundle3D_clear(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Bundle3D* cobj = nullptr;
+    ax::Bundle3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6647,7 +6647,7 @@ int lua_axis_3d_Bundle3D_clear(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Bundle3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Bundle3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Bundle3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6682,7 +6682,7 @@ int lua_axis_3d_Bundle3D_clear(lua_State* tolua_S)
 int lua_axis_3d_Bundle3D_loadMaterials(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Bundle3D* cobj = nullptr;
+    ax::Bundle3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6694,7 +6694,7 @@ int lua_axis_3d_Bundle3D_loadMaterials(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Bundle3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Bundle3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Bundle3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6707,7 +6707,7 @@ int lua_axis_3d_Bundle3D_loadMaterials(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::MaterialDatas arg0;
+        ax::MaterialDatas arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR MaterialDatas
 		ok = false;
@@ -6733,7 +6733,7 @@ int lua_axis_3d_Bundle3D_loadMaterials(lua_State* tolua_S)
 int lua_axis_3d_Bundle3D_loadNodes(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Bundle3D* cobj = nullptr;
+    ax::Bundle3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6745,7 +6745,7 @@ int lua_axis_3d_Bundle3D_loadNodes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Bundle3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Bundle3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Bundle3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6758,7 +6758,7 @@ int lua_axis_3d_Bundle3D_loadNodes(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::NodeDatas arg0;
+        ax::NodeDatas arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR NodeDatas
 		ok = false;
@@ -6784,7 +6784,7 @@ int lua_axis_3d_Bundle3D_loadNodes(lua_State* tolua_S)
 int lua_axis_3d_Bundle3D_loadAnimationData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Bundle3D* cobj = nullptr;
+    ax::Bundle3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6796,7 +6796,7 @@ int lua_axis_3d_Bundle3D_loadAnimationData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Bundle3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Bundle3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Bundle3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6810,7 +6810,7 @@ int lua_axis_3d_Bundle3D_loadAnimationData(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::Animation3DData* arg1;
+        ax::Animation3DData* arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Bundle3D:loadAnimationData");
 
@@ -6859,7 +6859,7 @@ int lua_axis_3d_Bundle3D_parseSamplerAddressMode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Bundle3D_parseSamplerAddressMode'", nullptr);
             return 0;
         }
-        int ret = (int)axis::Bundle3D::parseSamplerAddressMode(arg0);
+        int ret = (int)ax::Bundle3D::parseSamplerAddressMode(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6888,14 +6888,14 @@ int lua_axis_3d_Bundle3D_destroyBundle(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Bundle3D* arg0;
-        ok &= luaval_to_object<axis::Bundle3D>(tolua_S, 2, "ax.Bundle3D",&arg0, "ax.Bundle3D:destroyBundle");
+        ax::Bundle3D* arg0;
+        ok &= luaval_to_object<ax::Bundle3D>(tolua_S, 2, "ax.Bundle3D",&arg0, "ax.Bundle3D:destroyBundle");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Bundle3D_destroyBundle'", nullptr);
             return 0;
         }
-        axis::Bundle3D::destroyBundle(arg0);
+        ax::Bundle3D::destroyBundle(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -6929,8 +6929,8 @@ int lua_axis_3d_Bundle3D_createBundle(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Bundle3D_createBundle'", nullptr);
             return 0;
         }
-        axis::Bundle3D* ret = axis::Bundle3D::createBundle();
-        object_to_luaval<axis::Bundle3D>(tolua_S, "ax.Bundle3D",(axis::Bundle3D*)ret);
+        ax::Bundle3D* ret = ax::Bundle3D::createBundle();
+        object_to_luaval<ax::Bundle3D>(tolua_S, "ax.Bundle3D",(ax::Bundle3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Bundle3D:createBundle",argc, 0);
@@ -6967,7 +6967,7 @@ int lua_axis_3d_Bundle3D_parseGLDataType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Bundle3D_parseGLDataType'", nullptr);
             return 0;
         }
-        int ret = (int)axis::Bundle3D::parseGLDataType(arg0, arg1);
+        int ret = (int)ax::Bundle3D::parseGLDataType(arg0, arg1);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6982,7 +6982,7 @@ int lua_axis_3d_Bundle3D_parseGLDataType(lua_State* tolua_S)
 int lua_axis_3d_Bundle3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Bundle3D* cobj = nullptr;
+    ax::Bundle3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6999,7 +6999,7 @@ int lua_axis_3d_Bundle3D_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_3d_Bundle3D_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::Bundle3D();
+        cobj = new ax::Bundle3D();
         tolua_pushusertype(tolua_S,(void*)cobj,"ax.Bundle3D");
         tolua_register_gc(tolua_S,lua_gettop(tolua_S));
         return 1;
@@ -7038,7 +7038,7 @@ int lua_register_axis_3d_Bundle3D(lua_State* tolua_S)
         tolua_function(tolua_S,"createBundle", lua_axis_3d_Bundle3D_createBundle);
         tolua_function(tolua_S,"parseGLDataType", lua_axis_3d_Bundle3D_parseGLDataType);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::Bundle3D).name(); // rtti is literal storage
+    auto typeName = typeid(ax::Bundle3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Bundle3D";
     g_typeCast[typeName] = "ax.Bundle3D";
     return 1;

@@ -121,7 +121,7 @@ Offset<Table> Particle3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void Particle3DReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* particle3DOptions)
+void Particle3DReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* particle3DOptions)
 {
     auto options = (Particle3DOptions*)particle3DOptions;
 

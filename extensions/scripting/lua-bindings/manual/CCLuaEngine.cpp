@@ -454,7 +454,7 @@ int LuaEngine::handleTouchEvent(void* data)
     Touch* touch = touchScriptData->touch;
     if (NULL != touch)
     {
-        const axis::Vec2 pt = Director::getInstance()->convertToGL(touch->getLocationInView());
+        const ax::Vec2 pt = Director::getInstance()->convertToGL(touch->getLocationInView());
         _stack->pushFloat(pt.x);
         _stack->pushFloat(pt.y);
         ret = _stack->executeFunctionByHandler(handler, 3);
@@ -508,7 +508,7 @@ int LuaEngine::handleTouchesEvent(void* data)
     int i = 1;
     for (auto& touch : touchesScriptData->touches)
     {
-        axis::Vec2 pt = pDirector->convertToGL(touch->getLocationInView());
+        ax::Vec2 pt = pDirector->convertToGL(touch->getLocationInView());
         lua_pushnumber(L, pt.x);
         lua_rawseti(L, -2, i++);
         lua_pushnumber(L, pt.y);

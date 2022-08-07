@@ -272,7 +272,7 @@ Offset<Table> TextFieldExReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     return *(Offset<Table>*)(&options);
 }
 
-void TextFieldExReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textFieldOptions)
+void TextFieldExReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textFieldOptions)
 {
     TextFieldEx** pTextField = (TextFieldEx**)(node);
     auto options             = (TextFieldExOptions*)textFieldOptions;

@@ -399,7 +399,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void UserCameraReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* userCameraDOptions)
+void UserCameraReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* userCameraDOptions)
 {
     auto options = (UserCameraOptions*)userCameraDOptions;
 

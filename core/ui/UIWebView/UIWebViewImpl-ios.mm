@@ -131,7 +131,7 @@
     }
     if (!self.wkWebView.superview)
     {
-        auto view     = axis::Director::getInstance()->getOpenGLView();
+        auto view     = ax::Director::getInstance()->getOpenGLView();
         auto eaglview = (CCEAGLView*)view->getEAGLView();
         [eaglview addSubview:self.wkWebView];
     }
@@ -443,7 +443,7 @@ void WebViewImpl::loadURL(std::string_view url, bool cleanCachedData)
 
 void WebViewImpl::loadFile(std::string_view fileName)
 {
-    auto fullPath = axis::FileUtils::getInstance()->fullPathForFilename(fileName);
+    auto fullPath = ax::FileUtils::getInstance()->fullPathForFilename(fileName);
     [_uiWebViewWrapper loadFile:fullPath];
 }
 
@@ -492,12 +492,12 @@ void WebViewImpl::setScalesPageToFit(const bool scalesPageToFit)
     [_uiWebViewWrapper setScalesPageToFit:scalesPageToFit];
 }
 
-void WebViewImpl::draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags)
+void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags)
 {
-    if (flags & axis::Node::FLAGS_TRANSFORM_DIRTY)
+    if (flags & ax::Node::FLAGS_TRANSFORM_DIRTY)
     {
 
-        auto director  = axis::Director::getInstance();
+        auto director  = ax::Director::getInstance();
         auto glView    = director->getOpenGLView();
         auto frameSize = glView->getFrameSize();
 
@@ -505,9 +505,9 @@ void WebViewImpl::draw(axis::Renderer* renderer, axis::Mat4 const& transform, ui
 
         auto winSize = director->getWinSize();
 
-        auto leftBottom = this->_webView->convertToWorldSpace(axis::Vec2::ZERO);
+        auto leftBottom = this->_webView->convertToWorldSpace(ax::Vec2::ZERO);
         auto rightTop   = this->_webView->convertToWorldSpace(
-              axis::Vec2(this->_webView->getContentSize().width, this->_webView->getContentSize().height));
+              ax::Vec2(this->_webView->getContentSize().width, this->_webView->getContentSize().height));
 
         auto x      = (frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * glView->getScaleX()) / scaleFactor;
         auto y      = (frameSize.height / 2 - (rightTop.y - winSize.height / 2) * glView->getScaleY()) / scaleFactor;

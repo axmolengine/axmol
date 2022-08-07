@@ -56,7 +56,7 @@ void SkeletonNodeReader::destroyInstance()
     AX_SAFE_DELETE(_instanceSkeletonNodeReader);
 }
 
-axis::Node* SkeletonNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+ax::Node* SkeletonNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
     auto bone = SkeletonNode::create();
 

@@ -46,7 +46,7 @@ extern bool AX_DLL cc_assert_script_compatible(const char* msg);
                     if (!(cond))                                              \
                     {                                                         \
                         if (msg && *msg && !cc_assert_script_compatible(msg)) \
-                            axis::log("Assert failed: %s", msg);           \
+                            ax::log("Assert failed: %s", msg);           \
                         AX_ASSERT(cond);                                      \
                     }                                                         \
                 } while (0)
@@ -74,12 +74,12 @@ extern bool AX_DLL cc_assert_script_compatible(const char* msg);
 /** @def AXRANDOM_MINUS1_1
  returns a random float between -1 and 1
  */
-#define AXRANDOM_MINUS1_1() axis::rand_minus1_1()
+#define AXRANDOM_MINUS1_1() ax::rand_minus1_1()
 
 /** @def AXRANDOM_0_1
  returns a random float between 0 and 1
  */
-#define AXRANDOM_0_1() axis::rand_0_1()
+#define AXRANDOM_0_1() ax::rand_0_1()
 
 /** @def AX_DEGREES_TO_RADIANS
  converts degrees to radians
@@ -97,8 +97,8 @@ extern bool AX_DLL cc_assert_script_compatible(const char* msg);
 /** @def AX_BLEND_SRC
 default gl blend src function. Compatible with premultiplied alpha images.
 */
-#define AX_BLEND_SRC axis::backend::BlendFactor::ONE
-#define AX_BLEND_DST axis::backend::BlendFactor::ONE_MINUS_SRC_ALPHA
+#define AX_BLEND_SRC ax::backend::BlendFactor::ONE
+#define AX_BLEND_DST ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA
 
 /** @def AX_NODE_DRAW_SETUP [DEPRECATED]
  Helpful macro that setups the GL server state, the correct GL program and sets the Model View Projection matrix
@@ -115,7 +115,7 @@ default gl blend src function. Compatible with premultiplied alpha images.
 #define AX_DIRECTOR_END()                                        \
     do                                                           \
     {                                                            \
-        Director* __director = axis::Director::getInstance(); \
+        Director* __director = ax::Director::getInstance(); \
         __director->end();                                       \
     } while (0)
 
@@ -123,7 +123,7 @@ default gl blend src function. Compatible with premultiplied alpha images.
 On Mac it returns 1;
 On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
 */
-#define AX_CONTENT_SCALE_FACTOR() axis::Director::getInstance()->getContentScaleFactor()
+#define AX_CONTENT_SCALE_FACTOR() ax::Director::getInstance()->getContentScaleFactor()
 
 /****************************/
 /** RETINA DISPLAY ENABLED **/
@@ -133,7 +133,7 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  Converts a rect in pixels to points
  */
 #define AX_RECT_PIXELS_TO_POINTS(__rect_in_pixels__)                           \
-    axis::Rect((__rect_in_pixels__).origin.x / AX_CONTENT_SCALE_FACTOR(),   \
+    ax::Rect((__rect_in_pixels__).origin.x / AX_CONTENT_SCALE_FACTOR(),   \
                   (__rect_in_pixels__).origin.y / AX_CONTENT_SCALE_FACTOR(),   \
                   (__rect_in_pixels__).size.width / AX_CONTENT_SCALE_FACTOR(), \
                   (__rect_in_pixels__).size.height / AX_CONTENT_SCALE_FACTOR())
@@ -142,7 +142,7 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  Converts a rect in points to pixels
  */
 #define AX_RECT_POINTS_TO_PIXELS(__rect_in_points_points__)                          \
-    axis::Rect((__rect_in_points_points__).origin.x* AX_CONTENT_SCALE_FACTOR(),   \
+    ax::Rect((__rect_in_points_points__).origin.x* AX_CONTENT_SCALE_FACTOR(),   \
                   (__rect_in_points_points__).origin.y* AX_CONTENT_SCALE_FACTOR(),   \
                   (__rect_in_points_points__).size.width* AX_CONTENT_SCALE_FACTOR(), \
                   (__rect_in_points_points__).size.height* AX_CONTENT_SCALE_FACTOR())
@@ -151,13 +151,13 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  Converts a rect in pixels to points
  */
 #define AX_POINT_PIXELS_TO_POINTS(__pixels__) \
-    axis::Vec2((__pixels__).x / AX_CONTENT_SCALE_FACTOR(), (__pixels__).y / AX_CONTENT_SCALE_FACTOR())
+    ax::Vec2((__pixels__).x / AX_CONTENT_SCALE_FACTOR(), (__pixels__).y / AX_CONTENT_SCALE_FACTOR())
 
 /** @def AX_POINT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
 #define AX_POINT_POINTS_TO_PIXELS(__points__) \
-    axis::Vec2((__points__).x* AX_CONTENT_SCALE_FACTOR(), (__points__).y* AX_CONTENT_SCALE_FACTOR())
+    ax::Vec2((__points__).x* AX_CONTENT_SCALE_FACTOR(), (__points__).y* AX_CONTENT_SCALE_FACTOR())
 
 /** @def AX_POINT_PIXELS_TO_POINTS
  Converts a rect in pixels to points
@@ -343,11 +343,11 @@ It should work same as apples CFSwapInt32LittleToHost(..)
  Increments the GL Draws counts by one.
  The number of calls per frame are displayed on the screen when the Director's stats are enabled.
  */
-#define AX_INCREMENT_GL_DRAWS(__n__) axis::Director::getInstance()->getRenderer()->addDrawnBatches(__n__)
+#define AX_INCREMENT_GL_DRAWS(__n__) ax::Director::getInstance()->getRenderer()->addDrawnBatches(__n__)
 #define AX_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(__drawcalls__, __vertices__) \
     do                                                                          \
     {                                                                           \
-        auto __renderer__ = axis::Director::getInstance()->getRenderer();    \
+        auto __renderer__ = ax::Director::getInstance()->getRenderer();    \
         __renderer__->addDrawnBatches(__drawcalls__);                           \
         __renderer__->addDrawnVertices(__vertices__);                           \
     } while (0)

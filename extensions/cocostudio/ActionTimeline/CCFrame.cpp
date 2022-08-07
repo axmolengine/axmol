@@ -688,7 +688,7 @@ void EventFrame::init()
 
 EventFrame::EventFrame() : _event(""), _action(nullptr) {}
 
-void EventFrame::setNode(axis::Node* node)
+void EventFrame::setNode(ax::Node* node)
 {
     Frame::setNode(node);
     _action = _timeline->getActionTimeline();

@@ -33,7 +33,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL ComAttribute : public axis::Component
+class CCS_DLL ComAttribute : public ax::Component
 {
     DECLARE_CLASS_COMPONENT_INFO
 public:
@@ -65,7 +65,7 @@ public:
     bool parse(std::string_view jsonFile);
 
 private:
-    axis::ValueMap _dict;
+    ax::ValueMap _dict;
     rapidjson::Document _doc;
 };
 

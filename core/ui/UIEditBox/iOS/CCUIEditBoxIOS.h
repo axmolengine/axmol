@@ -36,8 +36,8 @@
 @property(nonatomic, assign) void* editBox;
 @property(nonatomic, assign) NSString* text;
 @property(nonatomic, assign) CGRect frameRect;
-@property(nonatomic, assign) axis::ui::EditBox::InputFlag dataInputMode;
-@property(nonatomic, assign) axis::ui::EditBox::KeyboardReturnType keyboardReturnType;
+@property(nonatomic, assign) ax::ui::EditBox::InputFlag dataInputMode;
+@property(nonatomic, assign) ax::ui::EditBox::KeyboardReturnType keyboardReturnType;
 @property(nonatomic, readonly, getter=isEditState) BOOL editState;
 @property(nonatomic, readwrite) BOOL returnPressed;
 
@@ -45,12 +45,12 @@
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)distance;
 
 - (NSString*)getDefaultFontName;
-- (axis::ui::EditBoxDelegate::EditBoxEndAction)getEndAction;
+- (ax::ui::EditBoxDelegate::EditBoxEndAction)getEndAction;
 
-- (void)setInputMode:(axis::ui::EditBox::InputMode)inputMode;
-- (void)setInputFlag:(axis::ui::EditBox::InputFlag)flag;
-- (void)setReturnType:(axis::ui::EditBox::KeyboardReturnType)returnType;
-- (void)setTextHorizontalAlignment:(axis::TextHAlignment)alignment;
+- (void)setInputMode:(ax::ui::EditBox::InputMode)inputMode;
+- (void)setInputFlag:(ax::ui::EditBox::InputFlag)flag;
+- (void)setReturnType:(ax::ui::EditBox::KeyboardReturnType)returnType;
+- (void)setTextHorizontalAlignment:(ax::TextHAlignment)alignment;
 
 - (void)setPlaceHolder:(NSString*)text;
 - (void)setPlaceholderFont:(UIFont*)font;

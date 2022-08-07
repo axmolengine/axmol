@@ -33,7 +33,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL ComController : public axis::Component, public InputDelegate
+class CCS_DLL ComController : public ax::Component, public InputDelegate
 {
     DECLARE_CLASS_COMPONENT_INFO
 public:

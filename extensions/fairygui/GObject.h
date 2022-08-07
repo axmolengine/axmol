@@ -31,7 +31,7 @@ public:
     void setX(float value);
     float getY() const { return _position.y; };
     void setY(float value);
-    const axis::Vec2& getPosition() const { return _position; }
+    const ax::Vec2& getPosition() const { return _position; }
     void setPosition(float xv, float yv);
     float getXMin() const;
     void setXMin(float value);
@@ -45,13 +45,13 @@ public:
     void setWidth(float value) { setSize(value, _rawSize.height); }
     float getHeight() const { return _size.height; }
     void setHeight(float value) { setSize(_rawSize.width, value); }
-    const axis::Size& getSize() const { return _size; }
+    const ax::Size& getSize() const { return _size; }
     void setSize(float wv, float hv, bool ignorePivot = false);
 
     void center(bool restraint = false);
     void makeFullScreen();
 
-    const axis::Vec2& getPivot() const { return _pivot; }
+    const ax::Vec2& getPivot() const { return _pivot; }
     void setPivot(float xv, float yv, bool asAnchor = false);
     bool isPivotAsAnchor() const { return _pivotAsAnchor; }
 
@@ -59,7 +59,7 @@ public:
     void setScaleX(float value) { setScale(value, _scale.y); }
     float getScaleY() const { return _scale.y; }
     void setScaleY(float value) { setScale(_scale.x, value); }
-    const axis::Vec2& getScale() const { return _scale; }
+    const ax::Vec2& getScale() const { return _scale; }
     void setScale(float xv, float yv);
 
     float getSkewX() const { return _displayObject->getSkewX(); }
@@ -100,13 +100,13 @@ public:
 
     void* getData() const { return _data; };
     void setData(void* value) { _data = value; }
-    const axis::Value& getCustomData() const { return _customData; }
-    void setCustomData(const axis::Value& value) { _customData = value; }
+    const ax::Value& getCustomData() const { return _customData; }
+    void setCustomData(const ax::Value& value) { _customData = value; }
 
     bool isDraggable() const { return _draggable; }
     void setDraggable(bool value);
-    axis::Rect* getDragBounds() const { return _dragBounds; }
-    void setDragBounds(const axis::Rect& value);
+    ax::Rect* getDragBounds() const { return _dragBounds; }
+    void setDragBounds(const ax::Rect& value);
 
     void startDrag(int touchId = -1);
     void stopDrag();
@@ -115,11 +115,11 @@ public:
 
     PackageItem* getPackageItem() const { return _packageItem; }
 
-    axis::Vec2 globalToLocal(const axis::Vec2& pt);
-    axis::Rect globalToLocal(const axis::Rect& rect);
-    axis::Vec2 localToGlobal(const axis::Vec2& pt);
-    axis::Rect localToGlobal(const axis::Rect& rect);
-    axis::Rect transformRect(const axis::Rect& rect, GObject* targetSpace);
+    ax::Vec2 globalToLocal(const ax::Vec2& pt);
+    ax::Rect globalToLocal(const ax::Rect& rect);
+    ax::Vec2 localToGlobal(const ax::Vec2& pt);
+    ax::Rect localToGlobal(const ax::Rect& rect);
+    ax::Rect transformRect(const ax::Rect& rect, GObject* targetSpace);
 
     Relations* relations() { return _relations; }
     void addRelation(GObject* target, RelationType relationType, bool usePercent = false);
@@ -132,7 +132,7 @@ public:
 
     GComponent* getParent() const { return _parent; }
     GObject* findParent() const;
-    axis::Node* displayObject() const { return _displayObject; }
+    ax::Node* displayObject() const { return _displayObject; }
     GRoot* getRoot() const;
     bool onStage() const;
     void removeFromParent();
@@ -141,11 +141,11 @@ public:
     void addClickListener(const EventCallback& callback, const EventTag& tag) { addEventListener(UIEventType::Click, callback, tag); }
     void removeClickListener(const EventTag& tag) { removeEventListener(UIEventType::Click, tag); }
 
-    virtual axis::Value getProp(ObjectPropID propId);
-    virtual void setProp(ObjectPropID propId, const axis::Value& value);
+    virtual ax::Value getProp(ObjectPropID propId);
+    virtual void setProp(ObjectPropID propId, const ax::Value& value);
 
     virtual void constructFromResource();
-    virtual GObject* hitTest(const axis::Vec2& worldPoint, const axis::Camera* camera);
+    virtual GObject* hitTest(const ax::Vec2& worldPoint, const ax::Camera* camera);
 
     template <typename T>
     T* as();
@@ -154,10 +154,10 @@ public:
 
     std::string id;
     std::string name;
-    axis::Size sourceSize;
-    axis::Size initSize;
-    axis::Size minSize;
-    axis::Size maxSize;
+    ax::Size sourceSize;
+    ax::Size initSize;
+    ax::Size minSize;
+    ax::Size maxSize;
 
     //internal use
     bool _underConstruct;
@@ -166,7 +166,7 @@ public:
 
 protected:
     GComponent* _parent;
-    axis::Node* _displayObject;
+    ax::Node* _displayObject;
     PackageItem* _packageItem;
     int _sizeImplType;
     bool _touchDisabled;
@@ -193,11 +193,11 @@ protected:
 
     void setSizeDirectly(float wv, float hv);
 
-    axis::Vec2 _position;
-    axis::Size _size;
-    axis::Size _rawSize;
-    axis::Vec2 _pivot;
-    axis::Vec2 _scale;
+    ax::Vec2 _position;
+    ax::Size _size;
+    ax::Size _rawSize;
+    ax::Vec2 _pivot;
+    ax::Vec2 _scale;
     bool _pivotAsAnchor;
     float _alpha;
     float _rotation;
@@ -211,7 +211,7 @@ private:
     bool internalVisible2() const;
     bool internalVisible3() const;
     void updateGearFromRelations(int index, float dx, float dy);
-    void transformRectPoint(const axis::Vec2& pt, float rect[], GObject* targetSpace);
+    void transformRectPoint(const ax::Vec2& pt, float rect[], GObject* targetSpace);
 
     void initDrag();
     void dragBegin(int touchId);
@@ -234,9 +234,9 @@ private:
     Relations* _relations;
     GearBase* _gears[10];
     void* _data;
-    axis::Value _customData;
-    axis::Vec2 _dragTouchStartPos;
-    axis::Rect* _dragBounds;
+    ax::Value _customData;
+    ax::Vec2 _dragTouchStartPos;
+    ax::Rect* _dragBounds;
     bool _dragTesting;
     GTreeNode* _treeNode;
 

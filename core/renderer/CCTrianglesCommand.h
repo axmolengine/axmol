@@ -82,7 +82,7 @@ public:
      @param flags to indicate that the command is using 3D rendering or not.
      */
     void init(float globalOrder,
-              axis::Texture2D* texture,
+              ax::Texture2D* texture,
               const BlendFunc& blendType,
               const Triangles& triangles,
               const Mat4& mv,

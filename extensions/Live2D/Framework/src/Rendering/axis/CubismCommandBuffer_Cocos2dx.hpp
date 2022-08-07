@@ -40,9 +40,9 @@ USING_NS_AX;
 
 namespace Live2D { namespace Cubism { namespace Framework { namespace Rendering {
 
-static inline axis::Renderer* GetCocos2dRenderer()
+static inline ax::Renderer* GetCocos2dRenderer()
 {
-    return axis::Director::getInstance()->getRenderer();
+    return ax::Director::getInstance()->getRenderer();
 }
 
 class CubismCommandBuffer_Cocos2dx
@@ -57,13 +57,13 @@ public:
             DrawCommand();
             virtual ~DrawCommand();
 
-            axis::backend::BlendDescriptor* GetBlendDescriptor();
-            axis::PipelineDescriptor* GetPipelineDescriptor();
-            axis::CustomCommand* GetCommand();
+            ax::backend::BlendDescriptor* GetBlendDescriptor();
+            ax::PipelineDescriptor* GetPipelineDescriptor();
+            ax::CustomCommand* GetCommand();
 
         private:
             DrawCommand& operator=(const DrawCommand&);
-            axis::CustomCommand _command;
+            ax::CustomCommand _command;
         };
 
         DrawCommandBuffer();
@@ -160,7 +160,7 @@ private:
 
     backend::TextureBackend* _currentColorBuffer;
     OperationStateData _operationStateArray[OperationType_TypeMax];
-    axis::GroupCommand _groupCommand;
+    ax::GroupCommand _groupCommand;
 };
 
 }}}}

@@ -34,8 +34,8 @@
 #    include "scripting/lua-bindings/manual/CCLuaEngine.h"
 #    include "base/CCGameController.h"
 
-static void cloneEventListenerControllerHandler(const axis::EventListenerController* src,
-                                                axis::EventListenerController* dst,
+static void cloneEventListenerControllerHandler(const ax::EventListenerController* src,
+                                                ax::EventListenerController* dst,
                                                 ScriptHandlerMgr::HandlerType type)
 {
     if (nullptr == src || nullptr == dst)
@@ -51,40 +51,40 @@ static void cloneEventListenerControllerHandler(const axis::EventListenerControl
         {
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_CONNECTED:
         {
-            dst->onConnected = [=](axis::Controller* controller, Event* event) {
+            dst->onConnected = [=](ax::Controller* controller, Event* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_DISCONNECTED:
         {
-            dst->onDisconnected = [=](axis::Controller* controller, Event* event) {
+            dst->onDisconnected = [=](ax::Controller* controller, Event* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYDOWN:
         {
-            dst->onKeyDown = [=](axis::Controller* controller, int keyCode, Event* event) {
+            dst->onKeyDown = [=](ax::Controller* controller, int keyCode, Event* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYUP:
         {
-            dst->onKeyUp = [=](axis::Controller* controller, int keyCode, Event* event) {
+            dst->onKeyUp = [=](ax::Controller* controller, int keyCode, Event* event) {
 
             };
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_KEYREPEAT:
         {
-            dst->onKeyRepeat = [=](axis::Controller* controller, int keyCode, Event* event) {};
+            dst->onKeyRepeat = [=](ax::Controller* controller, int keyCode, Event* event) {};
         }
         break;
         case ScriptHandlerMgr::HandlerType::EVENT_CONTROLLER_AXIS:
         {
-            dst->onAxisEvent = [=](axis::Controller* controller, int keyCode, Event* event) {};
+            dst->onAxisEvent = [=](ax::Controller* controller, int keyCode, Event* event) {};
         }
         break;
         default:
@@ -99,14 +99,14 @@ static int tolua_axis_EventListenerController_clone(lua_State* tolua_S)
         return 0;
 
     int argc                               = 0;
-    axis::EventListenerController* self = nullptr;
+    ax::EventListenerController* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerController", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<axis::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -119,7 +119,7 @@ static int tolua_axis_EventListenerController_clone(lua_State* tolua_S)
 
     if (argc == 0)
     {
-        axis::EventListenerController* tolua_ret = axis::EventListenerController::create();
+        ax::EventListenerController* tolua_ret = ax::EventListenerController::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -154,14 +154,14 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
         return 0;
 
     int argc                               = 0;
-    axis::EventListenerController* self = nullptr;
+    ax::EventListenerController* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "ax.EventListenerController", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<axis::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::EventListenerController*>(tolua_tousertype(tolua_S, 1, 0));
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -195,7 +195,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onConnected = [=](axis::Controller* controller, Event* event) {
+            self->onConnected = [=](ax::Controller* controller, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
@@ -208,7 +208,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onDisconnected = [=](axis::Controller* controller, Event* event) {
+            self->onDisconnected = [=](ax::Controller* controller, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
                 int ID     = (event) ? (int)event->_ID : -1;
                 int* luaID = (event) ? &event->_luaID : NULL;
@@ -222,7 +222,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
 
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyDown = [=](axis::Controller* controller, int keyCode, Event* event) {
+            self->onKeyDown = [=](ax::Controller* controller, int keyCode, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
@@ -236,7 +236,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyUp = [=](axis::Controller* controller, int keyCode, Event* event) {
+            self->onKeyUp = [=](ax::Controller* controller, int keyCode, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
@@ -250,7 +250,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onKeyRepeat = [=](axis::Controller* controller, int keyCode, Event* event) {
+            self->onKeyRepeat = [=](ax::Controller* controller, int keyCode, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
@@ -264,7 +264,7 @@ static int tolua_axis_EventListenerController_registerScriptHandler(lua_State* t
         {
             ScriptHandlerMgr::getInstance()->addObjectHandler((void*)self, handler, type);
 
-            self->onAxisEvent = [=](axis::Controller* controller, int keyCode, Event* event) {
+            self->onAxisEvent = [=](ax::Controller* controller, int keyCode, Event* event) {
                 tolua_pushusertype(Ls, (void*)controller, "ax.Controller");
                 tolua_pushnumber(Ls, (lua_Number)keyCode);
                 int ID     = (event) ? (int)event->_ID : -1;
@@ -308,14 +308,14 @@ static int tolua_axis_Controller_getKeyStatus(lua_State* tolua_S)
         return 0;
 
     int argc                  = 0;
-    axis::Controller* self = nullptr;
+    ax::Controller* self = nullptr;
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
     if (!tolua_isusertype(tolua_S, 1, "ax.Controller", 0, &tolua_err))
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<axis::Controller*>(tolua_tousertype(tolua_S, 1, 0));
+    self = static_cast<ax::Controller*>(tolua_tousertype(tolua_S, 1, 0));
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -333,7 +333,7 @@ static int tolua_axis_Controller_getKeyStatus(lua_State* tolua_S)
             goto tolua_lerror;
 #    endif
         int keyCode                              = (int)tolua_tonumber(tolua_S, 2, 0);
-        axis::Controller::KeyStatus keyStatus = self->getKeyStatus(keyCode);
+        ax::Controller::KeyStatus keyStatus = self->getKeyStatus(keyCode);
 
         lua_newtable(tolua_S);                                /* L: table */
         lua_pushstring(tolua_S, "isPressed");                 /* L: table key */

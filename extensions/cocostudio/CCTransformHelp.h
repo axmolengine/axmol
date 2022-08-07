@@ -48,20 +48,20 @@ public:
     static void transformFromParentWithoutScale(BaseData& node, const BaseData& parentNode);
     static void transformToParentWithoutScale(BaseData& node, const BaseData& parentNode);
 
-    static void nodeToMatrix(const BaseData& _node, axis::AffineTransform& _matrix);
-    static void nodeToMatrix(const BaseData& node, axis::Mat4& matrix);
-    static void matrixToNode(const axis::AffineTransform& _matrix, BaseData& _node);
-    static void matrixToNode(const axis::Mat4& _matrix, BaseData& _node);
+    static void nodeToMatrix(const BaseData& _node, ax::AffineTransform& _matrix);
+    static void nodeToMatrix(const BaseData& node, ax::Mat4& matrix);
+    static void matrixToNode(const ax::AffineTransform& _matrix, BaseData& _node);
+    static void matrixToNode(const ax::Mat4& _matrix, BaseData& _node);
 
     static void nodeConcat(BaseData& target, BaseData& source);
     static void nodeSub(BaseData& target, BaseData& source);
 
 public:
-    static axis::AffineTransform helpMatrix1;
-    static axis::AffineTransform helpMatrix2;
+    static ax::AffineTransform helpMatrix1;
+    static ax::AffineTransform helpMatrix2;
 
-    static axis::Vec2 helpPoint1;
-    static axis::Vec2 helpPoint2;
+    static ax::Vec2 helpPoint1;
+    static ax::Vec2 helpPoint2;
 };
 
 }  // namespace cocostudio

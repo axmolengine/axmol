@@ -180,13 +180,13 @@ static int lua_axis_Extension_EventListenerAssetsManagerEx_create(lua_State* L)
             !toluafix_isfunction(L, 3, "LUA_FUNCTION", 0, &tolua_err))
             goto tolua_lerror;
 #endif
-        axis::extension::AssetsManagerEx* assetManager =
-            static_cast<axis::extension::AssetsManagerEx*>(tolua_tousertype(L, 2, nullptr));
+        ax::extension::AssetsManagerEx* assetManager =
+            static_cast<ax::extension::AssetsManagerEx*>(tolua_tousertype(L, 2, nullptr));
 
         LUA_FUNCTION handler = toluafix_ref_function(L, 3, 0);
 
-        axis::extension::EventListenerAssetsManagerEx* ret =
-            axis::extension::EventListenerAssetsManagerEx::create(assetManager, [=](EventAssetsManagerEx* event) {
+        ax::extension::EventListenerAssetsManagerEx* ret =
+            ax::extension::EventListenerAssetsManagerEx::create(assetManager, [=](EventAssetsManagerEx* event) {
                 auto stack = LuaEngine::getInstance()->getLuaStack();
                 int id     = event ? (int)event->_ID : -1;
                 int* luaID = event ? &event->_luaID : nullptr;
@@ -225,7 +225,7 @@ static void extendEventListenerAssetsManagerEx(lua_State* L)
 int lua_axis_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
 {
     int argc                        = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok                         = true;
 
 #if _AX_DEBUG >= 1
@@ -237,7 +237,7 @@ int lua_axis_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -258,7 +258,7 @@ int lua_axis_extension_ParticleSystem3D_getParticlePool(lua_State* tolua_S)
                         nullptr);
             return 0;
         }
-        const axis::ParticlePool& ret = cobj->getParticlePool();
+        const ax::ParticlePool& ret = cobj->getParticlePool();
         tolua_pushusertype(tolua_S, (void*)&ret, "ax.ParticlePool");
         return 1;
     }
@@ -288,7 +288,7 @@ static void extendParticleSystem3D(lua_State* tolua_S)
 int lua_axis_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
 {
     int argc                    = 0;
-    axis::ParticlePool* cobj = nullptr;
+    ax::ParticlePool* cobj = nullptr;
     bool ok                     = true;
 
 #if _AX_DEBUG >= 1
@@ -300,7 +300,7 @@ int lua_axis_extension_ParticlePool_getActiveDataList(lua_State* tolua_S)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticlePool*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::ParticlePool*)tolua_tousertype(tolua_S, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)

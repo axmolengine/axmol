@@ -378,7 +378,7 @@ std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret)
 jstring newStringUTFJNI(JNIEnv* env, std::string_view utf8Str, bool* ret)
 {
     std::u16string utf16Str;
-    bool flag = axis::StringUtils::UTF8ToUTF16(utf8Str, utf16Str);
+    bool flag = ax::StringUtils::UTF8ToUTF16(utf8Str, utf16Str);
 
     if (ret)
     {

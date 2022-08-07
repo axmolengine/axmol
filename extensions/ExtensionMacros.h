@@ -27,13 +27,13 @@
 #define __EXTENSIONMARCROS_H__
 
 #define NS_AX_EXT_BEGIN \
-    namespace axis   \
+    namespace axys   \
     {                   \
     namespace extension \
     {
 #define NS_AX_EXT_END \
     }                 \
     }
-#define USING_NS_AX_EXT using namespace axis::extension
+#define USING_NS_AX_EXT using namespace axys::extension
 
 #endif /* __EXTENSIONMARCROS_H__ */

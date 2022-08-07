@@ -43,7 +43,7 @@ public:
 
     Ref* createInstance();
 
-    void setCustomProps(std::string_view classType, axis::Ref* widget, const rapidjson::Value& customOptions);
+    void setCustomProps(std::string_view classType, ax::Ref* widget, const rapidjson::Value& customOptions);
 
 private:
     std::string _className;

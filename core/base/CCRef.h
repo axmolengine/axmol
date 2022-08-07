@@ -169,12 +169,12 @@ typedef void (Ref::*SEL_CallFuncO)(Ref*);
 typedef void (Ref::*SEL_MenuHandler)(Ref*);
 typedef void (Ref::*SEL_SCHEDULE)(float);
 
-#define AX_CALLFUNC_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFunc>(&_SELECTOR)
-#define AX_CALLFUNCN_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncN>(&_SELECTOR)
-#define AX_CALLFUNCND_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncND>(&_SELECTOR)
-#define AX_CALLFUNCO_SELECTOR(_SELECTOR) static_cast<axis::SEL_CallFuncO>(&_SELECTOR)
-#define AX_MENU_SELECTOR(_SELECTOR) static_cast<axis::SEL_MenuHandler>(&_SELECTOR)
-#define AX_SCHEDULE_SELECTOR(_SELECTOR) static_cast<axis::SEL_SCHEDULE>(&_SELECTOR)
+#define AX_CALLFUNC_SELECTOR(_SELECTOR) static_cast<ax::SEL_CallFunc>(&_SELECTOR)
+#define AX_CALLFUNCN_SELECTOR(_SELECTOR) static_cast<ax::SEL_CallFuncN>(&_SELECTOR)
+#define AX_CALLFUNCND_SELECTOR(_SELECTOR) static_cast<ax::SEL_CallFuncND>(&_SELECTOR)
+#define AX_CALLFUNCO_SELECTOR(_SELECTOR) static_cast<ax::SEL_CallFuncO>(&_SELECTOR)
+#define AX_MENU_SELECTOR(_SELECTOR) static_cast<ax::SEL_MenuHandler>(&_SELECTOR)
+#define AX_SCHEDULE_SELECTOR(_SELECTOR) static_cast<ax::SEL_SCHEDULE>(&_SELECTOR)
 
 NS_AX_END
 // end of base group

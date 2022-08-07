@@ -54,7 +54,7 @@ USING_NS_AX;
             (ps)->setUniform(__loc, &__v, sizeof(__v));           \
         } while (false)
 
-using namespace axis::ui;
+using namespace ax::ui;
 
 namespace
 {
@@ -325,7 +325,7 @@ VideoPlayer::VideoPlayer()
     }
     else
     {
-        axis::log("Create VideoPlayer backend failed, hr=%d", (int)hr);
+        ax::log("Create VideoPlayer backend failed, hr=%d", (int)hr);
     }
 }
 
@@ -390,7 +390,7 @@ void VideoPlayer::setStyle(StyleType style)
 
 void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    axis::ui::Widget::draw(renderer, transform, flags);
+    ax::ui::Widget::draw(renderer, transform, flags);
 
     auto pvd     = (PrivateVideoDescriptor*)_videoContext;  //
     auto vrender = pvd->_vrender;
@@ -635,7 +635,7 @@ bool VideoPlayer::isUserInputEnabled() const
 
 void VideoPlayer::setVisible(bool visible)
 {
-    axis::ui::Widget::setVisible(visible);
+    ax::ui::Widget::setVisible(visible);
 }
 
 void VideoPlayer::onEnter()
@@ -664,7 +664,7 @@ void VideoPlayer::onPlayEvent(int event)
     }
 }
 
-axis::ui::Widget* VideoPlayer::createCloneInstance()
+ax::ui::Widget* VideoPlayer::createCloneInstance()
 {
     return VideoPlayer::create();
 }

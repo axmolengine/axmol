@@ -43,8 +43,8 @@ enum MovementEventType
 class Armature;
 class Bone;
 
-typedef void (axis::Ref::*SEL_MovementEventCallFunc)(Armature*, MovementEventType, std::string_view);
-typedef void (axis::Ref::*SEL_FrameEventCallFunc)(Bone*, std::string_view, int, int);
+typedef void (ax::Ref::*SEL_MovementEventCallFunc)(Armature*, MovementEventType, std::string_view);
+typedef void (ax::Ref::*SEL_FrameEventCallFunc)(Bone*, std::string_view, int, int);
 
 #define movementEvent_selector(_SELECTOR) (cocostudio::SEL_MovementEventCallFunc)(&_SELECTOR)
 #define frameEvent_selector(_SELECTOR) (cocostudio::SEL_FrameEventCallFunc)(&_SELECTOR)
@@ -183,13 +183,13 @@ public:
      * Set armature's movement event callback function
      * To disconnect this event, just setMovementEventCallFunc(nullptr, nullptr);
      */
-    AX_DEPRECATED_ATTRIBUTE void setMovementEventCallFunc(axis::Ref* target, SEL_MovementEventCallFunc callFunc);
+    AX_DEPRECATED_ATTRIBUTE void setMovementEventCallFunc(ax::Ref* target, SEL_MovementEventCallFunc callFunc);
 
     /**
      * Set armature's frame event callback function
      * To disconnect this event, just setFrameEventCallFunc(nullptr, nullptr);
      */
-    AX_DEPRECATED_ATTRIBUTE void setFrameEventCallFunc(axis::Ref* target, SEL_FrameEventCallFunc callFunc);
+    AX_DEPRECATED_ATTRIBUTE void setFrameEventCallFunc(ax::Ref* target, SEL_FrameEventCallFunc callFunc);
 
     void setMovementEventCallFunc(
         std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)> listener);
@@ -298,7 +298,7 @@ protected:
     unsigned int _movementIndex;
     int _movementListDurationTo;
 
-    axis::Ref* _userObject;
+    ax::Ref* _userObject;
 
 protected:
     /**
@@ -318,8 +318,8 @@ protected:
      */
     SEL_FrameEventCallFunc _frameEventCallFunc;
 
-    axis::Ref* _movementEventTarget;
-    axis::Ref* _frameEventTarget;
+    ax::Ref* _movementEventTarget;
+    ax::Ref* _frameEventTarget;
 
     std::function<void(Armature* armature, MovementEventType movementType, std::string_view movementID)>
         _movementEventListener;

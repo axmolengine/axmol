@@ -13,15 +13,15 @@ class HtmlParseOptions
 {
 public:
     static bool defaultLinkUnderline;
-    static axis::Color3B defaultLinkColor;
+    static ax::Color3B defaultLinkColor;
 
     HtmlParseOptions();
 
     bool linkUnderline;
-    axis::Color3B linkColor;
+    ax::Color3B linkColor;
 };
 
-class HtmlParser : public axis::SAXDelegator
+class HtmlParser : public ax::SAXDelegator
 {
 public:
     static HtmlParser defaultParser;
@@ -36,8 +36,8 @@ public:
     void textHandler(void *ctx, const char *s, size_t len) override;
 
 private:
-    axis::ValueMap parseAttrs(const char ** attrs);
-    int attributeInt(const  axis::ValueMap& vm, const std::string& key, int defaultValue);
+    ax::ValueMap parseAttrs(const char ** attrs);
+    int attributeInt(const  ax::ValueMap& vm, const std::string& key, int defaultValue);
 
     void pushTextFormat();
     void popTextFormat();

@@ -83,10 +83,10 @@ public:
     ActionTimeline* loadAnimationActionWithContent(std::string_view fileName, std::string_view content);
 
     ActionTimeline* createActionWithFlatBuffersFile(std::string_view fileName);
-    ActionTimeline* createActionWithDataBuffer(axis::Data data, std::string_view fileName);
+    ActionTimeline* createActionWithDataBuffer(ax::Data data, std::string_view fileName);
 
     ActionTimeline* loadAnimationActionWithFlatBuffersFile(std::string_view fileName);
-    ActionTimeline* loadAnimationWithDataBuffer(const axis::Data& data, std::string_view fileName);
+    ActionTimeline* loadAnimationWithDataBuffer(const ax::Data& data, std::string_view fileName);
 
     ActionTimeline* createActionWithFlatBuffersForSimulator(std::string_view fileName);
 
@@ -122,14 +122,14 @@ protected:
     Frame* loadBlendFrameWithFlatBuffers(const flatbuffers::BlendFrame* flatbuffers);
     void loadEasingDataWithFlatBuffers(Frame* frame, const flatbuffers::EasingData* flatbuffers);
 
-    inline ActionTimeline* createActionWithDataBuffer(const axis::Data& data);
+    inline ActionTimeline* createActionWithDataBuffer(const ax::Data& data);
 
 protected:
     typedef std::function<Frame*(const rapidjson::Value& json)> FrameCreateFunc;
     typedef std::pair<std::string, FrameCreateFunc> Pair;
 
     hlookup::string_map<FrameCreateFunc> _funcs;
-    axis::StringMap<ActionTimeline*> _animationActions;
+    ax::StringMap<ActionTimeline*> _animationActions;
 };
 
 NS_TIMELINE_END

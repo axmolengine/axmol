@@ -55,7 +55,7 @@ void PUSineForceAffector::preUpdateAffector(float deltaTime)
 
         if (_frequencyMin != _frequencyMax)
         {
-            _frequency = axis::random(_frequencyMin, _frequencyMax);
+            _frequency = ax::random(_frequencyMin, _frequencyMax);
         }
     }
 }

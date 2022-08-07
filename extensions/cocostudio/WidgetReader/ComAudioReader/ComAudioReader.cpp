@@ -140,7 +140,7 @@ Offset<Table> ComAudioReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void ComAudioReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* comAudioOptions)
+void ComAudioReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* comAudioOptions)
 {
     auto options = (ComAudioOptions*)comAudioOptions;
 

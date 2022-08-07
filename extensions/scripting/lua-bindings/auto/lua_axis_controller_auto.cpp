@@ -7,7 +7,7 @@
 int lua_axis_controller_Controller_receiveExternalKeyEvent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Controller* cobj = nullptr;
+    ax::Controller* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19,7 +19,7 @@ int lua_axis_controller_Controller_receiveExternalKeyEvent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Controller",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Controller*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -60,7 +60,7 @@ int lua_axis_controller_Controller_receiveExternalKeyEvent(lua_State* tolua_S)
 int lua_axis_controller_Controller_getDeviceName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Controller* cobj = nullptr;
+    ax::Controller* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -72,7 +72,7 @@ int lua_axis_controller_Controller_getDeviceName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Controller",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Controller*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -107,7 +107,7 @@ int lua_axis_controller_Controller_getDeviceName(lua_State* tolua_S)
 int lua_axis_controller_Controller_isConnected(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Controller* cobj = nullptr;
+    ax::Controller* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -119,7 +119,7 @@ int lua_axis_controller_Controller_isConnected(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Controller",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Controller*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -154,7 +154,7 @@ int lua_axis_controller_Controller_isConnected(lua_State* tolua_S)
 int lua_axis_controller_Controller_getDeviceId(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Controller* cobj = nullptr;
+    ax::Controller* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -166,7 +166,7 @@ int lua_axis_controller_Controller_getDeviceId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Controller",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Controller*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -201,7 +201,7 @@ int lua_axis_controller_Controller_getDeviceId(lua_State* tolua_S)
 int lua_axis_controller_Controller_setTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Controller* cobj = nullptr;
+    ax::Controller* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -213,7 +213,7 @@ int lua_axis_controller_Controller_setTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Controller",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Controller*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -251,7 +251,7 @@ int lua_axis_controller_Controller_setTag(lua_State* tolua_S)
 int lua_axis_controller_Controller_getTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::Controller* cobj = nullptr;
+    ax::Controller* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -263,7 +263,7 @@ int lua_axis_controller_Controller_getTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Controller",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::Controller*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::Controller*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -317,7 +317,7 @@ int lua_axis_controller_Controller_startDiscoveryController(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_controller_Controller_startDiscoveryController'", nullptr);
             return 0;
         }
-        axis::Controller::startDiscoveryController();
+        ax::Controller::startDiscoveryController();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -351,7 +351,7 @@ int lua_axis_controller_Controller_stopDiscoveryController(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_controller_Controller_stopDiscoveryController'", nullptr);
             return 0;
         }
-        axis::Controller::stopDiscoveryController();
+        ax::Controller::stopDiscoveryController();
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -387,8 +387,8 @@ int lua_axis_controller_Controller_getControllerByDeviceId(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_controller_Controller_getControllerByDeviceId'", nullptr);
             return 0;
         }
-        axis::Controller* ret = axis::Controller::getControllerByDeviceId(arg0);
-        object_to_luaval<axis::Controller>(tolua_S, "ax.Controller",(axis::Controller*)ret);
+        ax::Controller* ret = ax::Controller::getControllerByDeviceId(arg0);
+        object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Controller:getControllerByDeviceId",argc, 1);
@@ -423,8 +423,8 @@ int lua_axis_controller_Controller_getControllerByTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_controller_Controller_getControllerByTag'", nullptr);
             return 0;
         }
-        axis::Controller* ret = axis::Controller::getControllerByTag(arg0);
-        object_to_luaval<axis::Controller>(tolua_S, "ax.Controller",(axis::Controller*)ret);
+        ax::Controller* ret = ax::Controller::getControllerByTag(arg0);
+        object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Controller:getControllerByTag",argc, 1);
@@ -458,7 +458,7 @@ int lua_register_axis_controller_Controller(lua_State* tolua_S)
         tolua_function(tolua_S,"getControllerByDeviceId", lua_axis_controller_Controller_getControllerByDeviceId);
         tolua_function(tolua_S,"getControllerByTag", lua_axis_controller_Controller_getControllerByTag);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::Controller).name(); // rtti is literal storage
+    auto typeName = typeid(ax::Controller).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Controller";
     g_typeCast[typeName] = "ax.Controller";
     return 1;
@@ -467,7 +467,7 @@ int lua_register_axis_controller_Controller(lua_State* tolua_S)
 int lua_axis_controller_EventController_getControllerEventType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventController* cobj = nullptr;
+    ax::EventController* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -479,7 +479,7 @@ int lua_axis_controller_EventController_getControllerEventType(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventController*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -514,7 +514,7 @@ int lua_axis_controller_EventController_getControllerEventType(lua_State* tolua_
 int lua_axis_controller_EventController_setConnectStatus(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventController* cobj = nullptr;
+    ax::EventController* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -526,7 +526,7 @@ int lua_axis_controller_EventController_setConnectStatus(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventController*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -564,7 +564,7 @@ int lua_axis_controller_EventController_setConnectStatus(lua_State* tolua_S)
 int lua_axis_controller_EventController_isConnected(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventController* cobj = nullptr;
+    ax::EventController* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -576,7 +576,7 @@ int lua_axis_controller_EventController_isConnected(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventController*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -611,7 +611,7 @@ int lua_axis_controller_EventController_isConnected(lua_State* tolua_S)
 int lua_axis_controller_EventController_setKeyCode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventController* cobj = nullptr;
+    ax::EventController* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -623,7 +623,7 @@ int lua_axis_controller_EventController_setKeyCode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventController*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -661,7 +661,7 @@ int lua_axis_controller_EventController_setKeyCode(lua_State* tolua_S)
 int lua_axis_controller_EventController_getController(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventController* cobj = nullptr;
+    ax::EventController* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -673,7 +673,7 @@ int lua_axis_controller_EventController_getController(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventController*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -691,8 +691,8 @@ int lua_axis_controller_EventController_getController(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_controller_EventController_getController'", nullptr);
             return 0;
         }
-        axis::Controller* ret = cobj->getController();
-        object_to_luaval<axis::Controller>(tolua_S, "ax.Controller",(axis::Controller*)ret);
+        ax::Controller* ret = cobj->getController();
+        object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventController:getController",argc, 0);
@@ -708,7 +708,7 @@ int lua_axis_controller_EventController_getController(lua_State* tolua_S)
 int lua_axis_controller_EventController_getKeyCode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventController* cobj = nullptr;
+    ax::EventController* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -720,7 +720,7 @@ int lua_axis_controller_EventController_getKeyCode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventController",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventController*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventController*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -755,7 +755,7 @@ int lua_axis_controller_EventController_getKeyCode(lua_State* tolua_S)
 int lua_axis_controller_EventController_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventController* cobj = nullptr;
+    ax::EventController* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -764,19 +764,19 @@ int lua_axis_controller_EventController_constructor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 3) {
-            axis::EventController::ControllerEventType arg0;
+            ax::EventController::ControllerEventType arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventController:EventController");
 
             if (!ok) { break; }
-            axis::Controller* arg1;
-            ok &= luaval_to_object<axis::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.EventController:EventController");
+            ax::Controller* arg1;
+            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.EventController:EventController");
 
             if (!ok) { break; }
             bool arg2;
             ok &= luaval_to_boolean(tolua_S, 4,&arg2, "ax.EventController:EventController");
 
             if (!ok) { break; }
-            cobj = new axis::EventController(arg0, arg1, arg2);
+            cobj = new ax::EventController(arg0, arg1, arg2);
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
@@ -787,19 +787,19 @@ int lua_axis_controller_EventController_constructor(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 3) {
-            axis::EventController::ControllerEventType arg0;
+            ax::EventController::ControllerEventType arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.EventController:EventController");
 
             if (!ok) { break; }
-            axis::Controller* arg1;
-            ok &= luaval_to_object<axis::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.EventController:EventController");
+            ax::Controller* arg1;
+            ok &= luaval_to_object<ax::Controller>(tolua_S, 3, "ax.Controller",&arg1, "ax.EventController:EventController");
 
             if (!ok) { break; }
             int arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventController:EventController");
 
             if (!ok) { break; }
-            cobj = new axis::EventController(arg0, arg1, arg2);
+            cobj = new ax::EventController(arg0, arg1, arg2);
             cobj->autorelease();
             int ID =  (int)cobj->_ID ;
             int* luaID =  &cobj->_luaID ;
@@ -838,7 +838,7 @@ int lua_register_axis_controller_EventController(lua_State* tolua_S)
         tolua_function(tolua_S,"getController",lua_axis_controller_EventController_getController);
         tolua_function(tolua_S,"getKeyCode",lua_axis_controller_EventController_getKeyCode);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::EventController).name(); // rtti is literal storage
+    auto typeName = typeid(ax::EventController).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventController";
     g_typeCast[typeName] = "ax.EventController";
     return 1;
@@ -866,8 +866,8 @@ int lua_axis_controller_EventListenerController_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_controller_EventListenerController_create'", nullptr);
             return 0;
         }
-        axis::EventListenerController* ret = axis::EventListenerController::create();
-        object_to_luaval<axis::EventListenerController>(tolua_S, "ax.EventListenerController",(axis::EventListenerController*)ret);
+        ax::EventListenerController* ret = ax::EventListenerController::create();
+        object_to_luaval<ax::EventListenerController>(tolua_S, "ax.EventListenerController",(ax::EventListenerController*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.EventListenerController:create",argc, 0);
@@ -892,7 +892,7 @@ int lua_register_axis_controller_EventListenerController(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"EventListenerController");
         tolua_function(tolua_S,"create", lua_axis_controller_EventListenerController_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::EventListenerController).name(); // rtti is literal storage
+    auto typeName = typeid(ax::EventListenerController).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerController";
     g_typeCast[typeName] = "ax.EventListenerController";
     return 1;

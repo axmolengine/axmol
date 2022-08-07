@@ -206,7 +206,7 @@ void DisplayManager::removeDisplay(int index)
     _decoDisplayList.erase(index);
 }
 
-const axis::Vector<DecorativeDisplay*>& DisplayManager::getDecorativeDisplayList() const
+const ax::Vector<DecorativeDisplay*>& DisplayManager::getDecorativeDisplayList() const
 {
     return _decoDisplayList;
 }

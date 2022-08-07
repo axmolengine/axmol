@@ -57,7 +57,7 @@ public:
         // The configuration files were parsed into C++ code with:
         // https://github.com/Rubonnek/retroarch-joypad-config-to-cpp-mapper
         // which provides the following mapping from the RetroArch
-        // configuration variables towards the axis::Controller::Key key
+        // configuration variables towards the ax::Controller::Key key
         // codes.  Hardware-wise, the mapping goes from a theoretical SNES
         // controller with extra joysticks and shoulder buttons, towards an
         // Xbox-like controller which is widely common on mobile phones.
@@ -4211,7 +4211,7 @@ public:
             return;
 
         // It's a new controller being connected.
-        auto controller         = new axis::Controller();
+        auto controller         = new ax::Controller();
         controller->_deviceId   = deviceId;
         controller->_deviceName = deviceName;
         Controller::s_allController.push_back(controller);
@@ -4395,7 +4395,7 @@ std::map<std::string, std::pair<std::unordered_map<int, int>, std::unordered_map
 
 void Controller::startDiscoveryController()
 {
-    // Check for existing josyticks and register them as axis::Controller:
+    // Check for existing josyticks and register them as ax::Controller:
     for (int deviceId = GLFW_JOYSTICK_1; deviceId <= GLFW_JOYSTICK_LAST; ++deviceId)
     {
         if (glfwJoystickPresent(deviceId))

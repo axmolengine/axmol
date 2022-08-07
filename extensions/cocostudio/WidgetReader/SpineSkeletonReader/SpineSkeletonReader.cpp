@@ -83,7 +83,7 @@ Offset<Table> SpineSkeletonReader::createOptionsWithFlatBuffers(pugi::xml_node o
     bool loop        = false;
     float timeScale  = 1.0f;
 
-    axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
+    ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
 
     // attributes
     auto attribute = objectData.first_attribute();
@@ -196,7 +196,7 @@ Offset<Table> SpineSkeletonReader::createOptionsWithFlatBuffers(pugi::xml_node o
     return *(Offset<Table>*)(&options);
 }
 
-void SpineSkeletonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* spriteOptions)
+void SpineSkeletonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* spriteOptions)
 {
     Node** ppResult = (Node**)(node);
 

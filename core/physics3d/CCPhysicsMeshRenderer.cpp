@@ -33,8 +33,8 @@ NS_AX_BEGIN
 
 PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
                                          Physics3DRigidBodyDes* rigidDes,
-                                         const axis::Vec3& translateInPhysics,
-                                         const axis::Quaternion& rotInPhsyics)
+                                         const ax::Vec3& translateInPhysics,
+                                         const ax::Quaternion& rotInPhsyics)
 {
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
@@ -52,8 +52,8 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
 
 PhysicsMeshRenderer* PhysicsMeshRenderer::createWithCollider(std::string_view modelPath,
                                                      Physics3DColliderDes* colliderDes,
-                                                     const axis::Vec3& translateInPhysics,
-                                                     const axis::Quaternion& rotInPhsyics)
+                                                     const ax::Vec3& translateInPhysics,
+                                                     const ax::Quaternion& rotInPhsyics)
 {
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))

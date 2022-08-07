@@ -115,7 +115,7 @@ Offset<Table> GameMapReader::createOptionsWithFlatBuffers(pugi::xml_node objectD
     return *(Offset<Table>*)(&options);
 }
 
-void GameMapReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* gameMapOptions)
+void GameMapReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* gameMapOptions)
 {
     auto options    = (GameMapOptions*)gameMapOptions;
     auto nodeReader = NodeReader::getInstance();

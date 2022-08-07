@@ -37,7 +37,7 @@ EventListenerAssetsManagerEx::EventListenerAssetsManagerEx()
 {}
 
 EventListenerAssetsManagerEx* EventListenerAssetsManagerEx::create(
-    axis::extension::AssetsManagerEx* AssetsManagerEx,
+    ax::extension::AssetsManagerEx* AssetsManagerEx,
     const std::function<void(EventAssetsManagerEx*)>& callback)
 {
     EventListenerAssetsManagerEx* ret = new EventListenerAssetsManagerEx();

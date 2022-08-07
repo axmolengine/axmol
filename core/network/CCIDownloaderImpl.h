@@ -34,7 +34,7 @@
 
 // #define AX_DOWNLOADER_DEBUG
 #if defined(AX_DOWNLOADER_DEBUG) || defined(_DEBUG)
-#    define DLLOG(format, ...) axis::log(format, ##__VA_ARGS__)
+#    define DLLOG(format, ...) ax::log(format, ##__VA_ARGS__)
 #else
 #    define DLLOG(...) \
         do             \

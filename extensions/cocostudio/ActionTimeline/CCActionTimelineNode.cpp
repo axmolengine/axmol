@@ -63,11 +63,11 @@ bool ActionTimelineNode::init(Node* root, ActionTimeline* action)
     return true;
 }
 
-void ActionTimelineNode::setRoot(axis::Node* root)
+void ActionTimelineNode::setRoot(ax::Node* root)
 {
     _root = root;
 }
-axis::Node* ActionTimelineNode::getRoot()
+ax::Node* ActionTimelineNode::getRoot()
 {
     return _root;
 }

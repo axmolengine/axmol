@@ -29,7 +29,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-#define MAX_LEN (axis::kMaxLogLen + 1)
+#define MAX_LEN (ax::kMaxLogLen + 1)
 
 void ccMessageBox(const char* pszMsg, const char* pszTitle)
 {

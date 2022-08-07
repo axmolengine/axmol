@@ -274,7 +274,7 @@ int astc_decompress_image(const uint8_t* in,
         benchmark_printer(const char* fmt, int w, int h, float den)
             : _fmt(fmt), _w(w), _h(h), _den(den), _start(yasio::highp_clock())
         {}
-        ~benchmark_printer() { axis::log(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den); }
+        ~benchmark_printer() { ax::log(_fmt, _w, _h, (yasio::highp_clock() - _start) / _den); }
         const char* _fmt;
         int _w, _h;
         float _den;

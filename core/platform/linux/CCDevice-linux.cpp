@@ -389,8 +389,8 @@ public:
         std::transform(lowerCasePath.begin(), lowerCasePath.end(), lowerCasePath.begin(), ::tolower);
         if (lowerCasePath.find(".ttf") != std::string::npos)
         {
-            fontPath        = axis::FileUtils::getInstance()->fullPathForFilename(fontPath);
-            auto fileStream = axis::FileUtils::getInstance()->openFileStream(fontPath, FileStream::Mode::READ);
+            fontPath        = ax::FileUtils::getInstance()->fullPathForFilename(fontPath);
+            auto fileStream = ax::FileUtils::getInstance()->openFileStream(fontPath, FileStream::Mode::READ);
             if (fileStream)
             {
                 fontCache.insert(std::pair<std::string, std::string>(family_name, fontPath));

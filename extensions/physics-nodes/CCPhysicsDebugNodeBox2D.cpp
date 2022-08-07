@@ -29,17 +29,17 @@ PhysicsDebugNodeBox2D::PhysicsDebugNodeBox2D()
 
 PhysicsDebugNodeBox2D::~PhysicsDebugNodeBox2D() {}
 
-axis::DrawNode* PhysicsDebugNodeBox2D::GetDrawNode()
+ax::DrawNode* PhysicsDebugNodeBox2D::GetDrawNode()
 {
     return drawBP;
 }
 
-void PhysicsDebugNodeBox2D::SetDrawNode(axis::DrawNode* drawNode)
+void PhysicsDebugNodeBox2D::SetDrawNode(ax::DrawNode* drawNode)
 {
     drawBP = drawNode;
 }
 
-axis::Vec2& PhysicsDebugNodeBox2D::GetDebugNodeOffset()
+ax::Vec2& PhysicsDebugNodeBox2D::GetDebugNodeOffset()
 {
     return debugNodeOffset;
 }

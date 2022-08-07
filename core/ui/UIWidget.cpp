@@ -770,9 +770,9 @@ bool Widget::onTouchBegan(Touch* touch, Event* /*unusedEvent*/)
     return true;
 }
 
-void Widget::propagateTouchEvent(axis::ui::Widget::TouchEventType event,
-                                 axis::ui::Widget* sender,
-                                 axis::Touch* touch)
+void Widget::propagateTouchEvent(ax::ui::Widget::TouchEventType event,
+                                 ax::ui::Widget* sender,
+                                 ax::Touch* touch)
 {
     Widget* widgetParent = getWidgetParent();
     if (widgetParent)
@@ -958,7 +958,7 @@ bool Widget::isClippingParentContainsPoint(const Vec2& pt)
     return true;
 }
 
-void Widget::interceptTouchEvent(axis::ui::Widget::TouchEventType event, axis::ui::Widget* sender, Touch* touch)
+void Widget::interceptTouchEvent(ax::ui::Widget::TouchEventType event, ax::ui::Widget* sender, Touch* touch)
 {
     Widget* widgetParent = getWidgetParent();
     if (widgetParent)
@@ -1344,7 +1344,7 @@ Widget* Widget::findNextFocusedWidget(FocusDirection direction, Widget* current)
     }
 }
 
-void Widget::dispatchFocusEvent(axis::ui::Widget* widgetLoseFocus, axis::ui::Widget* widgetGetFocus)
+void Widget::dispatchFocusEvent(ax::ui::Widget* widgetLoseFocus, ax::ui::Widget* widgetGetFocus)
 {
     // if the widgetLoseFocus doesn't get focus, it will use the previous focused widget instead
     if (widgetLoseFocus && !widgetLoseFocus->isFocused())

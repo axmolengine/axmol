@@ -54,7 +54,7 @@ void HttpCookie::readFile()
         VALUE_INDEX,
     };
 
-    std::string inString = axis::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
+    std::string inString = ax::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if (!inString.empty())
     {
         xsbase::fast_split(inString, '\n', [this](char* s, char* e) {

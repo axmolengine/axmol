@@ -252,7 +252,7 @@ public:
     /**
      * @js NA
      */
-    virtual void visit(axis::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    virtual void visit(ax::Renderer* renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
 
     /**
      * Set a callback to touch vent listener.

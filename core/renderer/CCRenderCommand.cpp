@@ -32,7 +32,7 @@ RenderCommand::RenderCommand() {}
 
 RenderCommand::~RenderCommand() {}
 
-void RenderCommand::init(float globalZOrder, const axis::Mat4& transform, unsigned int flags)
+void RenderCommand::init(float globalZOrder, const ax::Mat4& transform, unsigned int flags)
 {
     _globalOrder = globalZOrder;
     if (flags & Node::FLAGS_RENDER_AS_3D)

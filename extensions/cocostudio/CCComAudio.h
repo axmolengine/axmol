@@ -33,7 +33,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL ComAudio : public axis::Component, public axis::PlayableProtocol
+class CCS_DLL ComAudio : public ax::Component, public ax::PlayableProtocol
 {
     DECLARE_CLASS_COMPONENT_INFO
 public:

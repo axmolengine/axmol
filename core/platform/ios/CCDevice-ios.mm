@@ -65,7 +65,7 @@ static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedStr
     return [[attributedString copy] autorelease];
 }
 
-static CGFloat _calculateTextDrawStartHeight(axis::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
+static CGFloat _calculateTextDrawStartHeight(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
 {
     float startH = 0;
     // vertical alignment
@@ -191,7 +191,7 @@ static CGSize _calculateShrinkedSizeForString(NSAttributedString** str,
 
 #if !defined(AX_TARGET_OS_TVOS)
 @interface CCAccelerometerDispatcher : NSObject {
-    axis::Acceleration* _acceleration;
+    ax::Acceleration* _acceleration;
     CMMotionManager* _motionManager;
 }
 
@@ -220,7 +220,7 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 {
     if ((self = [super init]))
     {
-        _acceleration                              = new axis::Acceleration();
+        _acceleration                              = new ax::Acceleration();
         _motionManager                             = [[CMMotionManager alloc] init];
         _motionManager.accelerometerUpdateInterval = SENSOR_DELAY_GAME;
     }
@@ -297,8 +297,8 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
         NSAssert(false, @"unknown orientation");
     }
 
-    axis::EventAcceleration event(*_acceleration);
-    auto dispatcher = axis::Director::getInstance()->getEventDispatcher();
+    ax::EventAcceleration event(*_acceleration);
+    auto dispatcher = ax::Director::getInstance()->getEventDispatcher();
     dispatcher->dispatchEvent(&event);
 }
 @end
@@ -432,7 +432,7 @@ static id _createSystemFont(const char* fontName, int size)
 }
 
 static bool _initWithString(const char* text,
-                            axis::Device::TextAlign align,
+                            ax::Device::TextAlign align,
                             const char* fontName,
                             int size,
                             tImageInfo* info,

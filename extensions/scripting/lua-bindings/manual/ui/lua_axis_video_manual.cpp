@@ -34,7 +34,7 @@ static int lua_axis_video_VideoPlayer_addEventListener(lua_State* L)
 {
 
     int argc                       = 0;
-    axis::ui::VideoPlayer* self = nullptr;
+    ax::ui::VideoPlayer* self = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -42,7 +42,7 @@ static int lua_axis_video_VideoPlayer_addEventListener(lua_State* L)
         goto tolua_lerror;
 #    endif
 
-    self = static_cast<axis::ui::VideoPlayer*>(tolua_tousertype(L, 1, 0));
+    self = static_cast<ax::ui::VideoPlayer*>(tolua_tousertype(L, 1, 0));
 
 #    if _AX_DEBUG >= 1
     if (nullptr == self)
@@ -65,7 +65,7 @@ static int lua_axis_video_VideoPlayer_addEventListener(lua_State* L)
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
-        self->addEventListener([=](axis::Ref* ref, axis::ui::VideoPlayer::EventType eventType) {
+        self->addEventListener([=](ax::Ref* ref, ax::ui::VideoPlayer::EventType eventType) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
 
             stack->pushObject(ref, "ax.Ref");

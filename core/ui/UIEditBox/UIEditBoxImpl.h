@@ -98,7 +98,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags) = 0;
+    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) = 0;
     /**
      * @js NA
      * @lua NA

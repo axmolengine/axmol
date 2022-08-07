@@ -409,7 +409,7 @@ protected:
     float _lineWidth        = 0.0f;
     float _defaultLineWidth = 0.0f;
 
-    axis::any_buffer _abuf;
+    ax::any_buffer _abuf;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(DrawNode);

@@ -20,17 +20,17 @@ CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::~DrawCommand()
 {
 }
 
-axis::backend::BlendDescriptor* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetBlendDescriptor()
+ax::backend::BlendDescriptor* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetBlendDescriptor()
 {
     return &_command.getPipelineDescriptor().blendDescriptor;
 }
 
-axis::PipelineDescriptor* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetPipelineDescriptor()
+ax::PipelineDescriptor* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetPipelineDescriptor()
 {
     return &_command.getPipelineDescriptor();
 }
 
-axis::CustomCommand* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetCommand()
+ax::CustomCommand* CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand::GetCommand()
 {
     return &_command;
 }
@@ -52,13 +52,13 @@ void CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::CreateVertexBuffer(csmSize
     _vbStride = stride;
     _vbCount = count;
     _drawBuffer = static_cast<csmUint8*>(CSM_MALLOC(stride * count));
-    _drawCommandDraw.GetCommand()->createVertexBuffer(stride, count, axis::CustomCommand::BufferUsage::DYNAMIC);
+    _drawCommandDraw.GetCommand()->createVertexBuffer(stride, count, ax::CustomCommand::BufferUsage::DYNAMIC);
 }
 
 void CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::CreateIndexBuffer(csmSizeInt count)
 {
     _ibCount = count;
-    _drawCommandDraw.GetCommand()->createIndexBuffer(axis::backend::IndexFormat::U_SHORT, count, axis::CustomCommand::BufferUsage::DYNAMIC);
+    _drawCommandDraw.GetCommand()->createIndexBuffer(ax::backend::IndexFormat::U_SHORT, count, ax::CustomCommand::BufferUsage::DYNAMIC);
 }
 
 void CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::UpdateVertexBuffer(void* data, void* uvData, csmSizeInt count)
@@ -149,17 +149,17 @@ void CubismCommandBuffer_Cocos2dx::SetOperationEnable(OperationType operationTyp
         case OperationType_Culling:
             if (!enabled)
             {
-                GetCocos2dRenderer()->setCullMode(axis::CullMode::NONE);
+                GetCocos2dRenderer()->setCullMode(ax::CullMode::NONE);
             }
             else
             {
                 switch (_operationStateArray[operationType].Arg0.i32)
                 {
                 case CullType_Front:
-                    GetCocos2dRenderer()->setCullMode(axis::CullMode::FRONT);
+                    GetCocos2dRenderer()->setCullMode(ax::CullMode::FRONT);
                     break;
                 case CullType_Back:
-                    GetCocos2dRenderer()->setCullMode(axis::CullMode::BACK);
+                    GetCocos2dRenderer()->setCullMode(ax::CullMode::BACK);
                     break;
                 }
             }
@@ -195,11 +195,11 @@ void CubismCommandBuffer_Cocos2dx::SetWindingMode(WindingType windingType)
             switch (_operationStateArray[OperationType_Winding].Arg0.i32)
             {
             case WindingType_ClockWise:
-                GetCocos2dRenderer()->setWinding(axis::Winding::CLOCK_WISE);
+                GetCocos2dRenderer()->setWinding(ax::Winding::CLOCK_WISE);
                 break;
 
             case  WindingType_CounterClockWise:
-                GetCocos2dRenderer()->setWinding(axis::Winding::COUNTER_CLOCK_WISE);
+                GetCocos2dRenderer()->setWinding(ax::Winding::COUNTER_CLOCK_WISE);
                 break;
             }
         }
@@ -209,7 +209,7 @@ void CubismCommandBuffer_Cocos2dx::SetWindingMode(WindingType windingType)
 void CubismCommandBuffer_Cocos2dx::Clear(csmFloat32 r, csmFloat32 g, csmFloat32 b, csmFloat32 a)
 {
     // Add the callback command internally.
-    GetCocos2dRenderer()->clear(axis::ClearFlag::COLOR, axis::Color4F(r, g, b, a), 0.0f, 0, 0.0f);
+    GetCocos2dRenderer()->clear(ax::ClearFlag::COLOR, ax::Color4F(r, g, b, a), 0.0f, 0, 0.0f);
 }
 
 void CubismCommandBuffer_Cocos2dx::Viewport(csmFloat32 x, csmFloat32 y, csmFloat32 w, csmFloat32 h)
@@ -255,7 +255,7 @@ void CubismCommandBuffer_Cocos2dx::AddDrawCommand(DrawCommandBuffer::DrawCommand
 
 void CubismCommandBuffer_Cocos2dx::AddCommand(const std::function<void()>& fn)
 {
-    axis::CallbackCommand* command = GetCocos2dRenderer()->nextCallbackCommand();
+    ax::CallbackCommand* command = GetCocos2dRenderer()->nextCallbackCommand();
 
     command->init(0.0f);
     command->func = fn;

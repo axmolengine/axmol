@@ -775,7 +775,7 @@ protected:
     void computeAlignmentOffset();
     bool computeHorizontalKernings(const std::u32string& stringToRender);
 
-    void recordLetterInfo(const axis::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex);
+    void recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex);
     void recordPlaceholderInfo(int letterIndex, char32_t utf16Char);
 
     bool updateQuads();

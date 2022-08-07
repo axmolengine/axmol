@@ -98,7 +98,7 @@ void LoadingBar::initRenderer()
     _barRenderer->setAnchorPoint(Vec2(0.0f, 0.5f));
 }
 
-void LoadingBar::setDirection(axis::ui::LoadingBar::Direction direction)
+void LoadingBar::setDirection(ax::ui::LoadingBar::Direction direction)
 {
     if (_direction == direction)
     {

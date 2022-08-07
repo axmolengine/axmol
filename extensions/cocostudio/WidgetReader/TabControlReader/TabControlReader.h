@@ -29,7 +29,7 @@
 #include "WidgetReader/NodeReaderDefine.h"
 #include "WidgetReader/TabControlReader/CSTabControl_generated.h"
 
-class TabControlReader : public axis::Ref, public cocostudio::NodeReaderProtocol
+class TabControlReader : public ax::Ref, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -44,15 +44,15 @@ public:
         pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder) override;
 
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOption) override;
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOption) override;
 
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
 
 private:
     static TabControlReader* _tabReaderInstance;
 };
 
-class TabHeaderReader : public axis::Ref, public cocostudio::NodeReaderProtocol
+class TabHeaderReader : public ax::Ref, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -67,17 +67,17 @@ public:
         pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder) override;
 
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOption) override;
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOption) override;
 
     // CSArmatureNode
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
 
 private:
     static TabHeaderReader* _tabheaderReaderInstance;
     int getResourceType(std::string_view key);
 };
 
-class TabItemReader : public axis::Ref, public cocostudio::NodeReaderProtocol
+class TabItemReader : public ax::Ref, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -92,9 +92,9 @@ public:
         pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder);
 
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOption) override;
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOption) override;
 
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
 
     virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
         pugi::xml_node objectData,

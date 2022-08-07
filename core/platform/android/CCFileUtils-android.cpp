@@ -61,7 +61,7 @@ void FileUtilsAndroid::setassetmanager(AAssetManager* a)
         return;
     }
 
-    axis::FileUtilsAndroid::assetmanager = a;
+    ax::FileUtilsAndroid::assetmanager = a;
 }
 
 FileUtils* FileUtils::getInstance()

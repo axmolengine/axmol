@@ -946,7 +946,7 @@ public:
      *
      */
     template <typename _T>
-    inline static void sortNodes(axis::Vector<_T*>& nodes)
+    inline static void sortNodes(ax::Vector<_T*>& nodes)
     {
         static_assert(std::is_base_of<Node, _T>::value, "Node::sortNodes: Only accept derived of Node!");
 #if AX_64BITS

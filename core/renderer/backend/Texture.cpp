@@ -31,7 +31,7 @@ NS_AX_BACKEND_BEGIN
 
 TextureBackend::~TextureBackend() {}
 
-void TextureBackend::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int /*index*/)
+void TextureBackend::updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int /*index*/)
 {
     _bitsPerPixel  = PixelFormatUtils::getBitsPerPixel(descriptor.textureFormat);
     _textureType   = descriptor.textureType;

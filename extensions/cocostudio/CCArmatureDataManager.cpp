@@ -236,15 +236,15 @@ bool ArmatureDataManager::isAutoLoadSpriteFile()
     return _autoLoadSpriteFile;
 }
 
-const axis::StringMap<ArmatureData*>& ArmatureDataManager::getArmatureDatas() const
+const ax::StringMap<ArmatureData*>& ArmatureDataManager::getArmatureDatas() const
 {
     return _armarureDatas;
 }
-const axis::StringMap<AnimationData*>& ArmatureDataManager::getAnimationDatas() const
+const ax::StringMap<AnimationData*>& ArmatureDataManager::getAnimationDatas() const
 {
     return _animationDatas;
 }
-const axis::StringMap<TextureData*>& ArmatureDataManager::getTextureDatas() const
+const ax::StringMap<TextureData*>& ArmatureDataManager::getTextureDatas() const
 {
     return _textureDatas;
 }

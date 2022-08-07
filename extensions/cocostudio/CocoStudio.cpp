@@ -61,7 +61,7 @@ void destroyCocosStudio()
     UserCameraReader::destroyInstance();
     Particle3DReader::destroyInstance();
 
-    axis::CSLoader::destroyInstance();
+    ax::CSLoader::destroyInstance();
 
     ArmatureDataManager::destroyInstance();
     SceneReader::destroyInstance();

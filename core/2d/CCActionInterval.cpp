@@ -1433,7 +1433,7 @@ ResizeTo* ResizeTo::clone() const
     return a;
 }
 
-void ResizeTo::startWithTarget(axis::Node* target)
+void ResizeTo::startWithTarget(ax::Node* target)
 {
     ActionInterval::startWithTarget(target);
     _initialSize = target->getContentSize();
@@ -1451,7 +1451,7 @@ void ResizeTo::update(float time)
 
 bool ResizeTo::initWithDuration(float duration, const Vec2& final_size)
 {
-    if (axis::ActionInterval::initWithDuration(duration))
+    if (ax::ActionInterval::initWithDuration(duration))
     {
         _finalSize = final_size;
         return true;
@@ -2072,7 +2072,7 @@ FadeIn* FadeIn::clone() const
     return FadeIn::create(_duration);
 }
 
-void FadeIn::setReverseAction(axis::FadeTo* ac)
+void FadeIn::setReverseAction(ax::FadeTo* ac)
 {
     _reverseAction = ac;
 }
@@ -2084,7 +2084,7 @@ FadeTo* FadeIn::reverse() const
     return action;
 }
 
-void FadeIn::startWithTarget(axis::Node* target)
+void FadeIn::startWithTarget(ax::Node* target)
 {
     ActionInterval::startWithTarget(target);
 
@@ -2120,7 +2120,7 @@ FadeOut* FadeOut::clone() const
     return FadeOut::create(_duration);
 }
 
-void FadeOut::startWithTarget(axis::Node* target)
+void FadeOut::startWithTarget(ax::Node* target)
 {
     ActionInterval::startWithTarget(target);
 
@@ -2133,7 +2133,7 @@ void FadeOut::startWithTarget(axis::Node* target)
         _fromOpacity = target->getOpacity();
 }
 
-void FadeOut::setReverseAction(axis::FadeTo* ac)
+void FadeOut::setReverseAction(ax::FadeTo* ac)
 {
     _reverseAction = ac;
 }
@@ -2506,7 +2506,7 @@ bool Animate::initWithAnimation(Animation* animation)
     return false;
 }
 
-void Animate::setAnimation(axis::Animation* animation)
+void Animate::setAnimation(ax::Animation* animation)
 {
     if (_animation != animation)
     {

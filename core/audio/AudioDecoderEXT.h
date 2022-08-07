@@ -98,7 +98,7 @@ private:
     static SInt64 getSizeCallback(void* inClientData);
 
     ExtAudioFileRef _extRef;
-    std::unique_ptr<axis::FileStream> _fileStream;
+    std::unique_ptr<ax::FileStream> _fileStream;
     SInt64 _streamSize;
     AudioFileID _audioFileId;
 

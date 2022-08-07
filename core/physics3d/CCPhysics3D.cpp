@@ -40,19 +40,19 @@ AX_DLL const char* physics3dVersion()
 
 NS_AX_END
 
-axis::Vec3 convertbtVector3ToVec3(const btVector3& btVec3)
+ax::Vec3 convertbtVector3ToVec3(const btVector3& btVec3)
 {
-    return axis::Vec3(btVec3.x(), btVec3.y(), btVec3.z());
+    return ax::Vec3(btVec3.x(), btVec3.y(), btVec3.z());
 }
 
-btVector3 convertVec3TobtVector3(const axis::Vec3& vec3)
+btVector3 convertVec3TobtVector3(const ax::Vec3& vec3)
 {
     return btVector3(vec3.x, vec3.y, vec3.z);
 }
 
-axis::Mat4 convertbtTransformToMat4(const btTransform& btTrans)
+ax::Mat4 convertbtTransformToMat4(const btTransform& btTrans)
 {
-    axis::Mat4 mat;
+    ax::Mat4 mat;
     auto rot  = btTrans.getBasis();
     auto row  = rot.getRow(0);
     mat.m[0]  = row.getX();
@@ -74,19 +74,19 @@ axis::Mat4 convertbtTransformToMat4(const btTransform& btTrans)
     return mat;
 }
 
-btTransform convertMat4TobtTransform(const axis::Mat4& mat4)
+btTransform convertMat4TobtTransform(const ax::Mat4& mat4)
 {
     btTransform btTrans;
     btTrans.setFromOpenGLMatrix(mat4.m);
     return btTrans;
 }
 
-axis::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat)
+ax::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat)
 {
-    return axis::Quaternion(btQuat.x(), btQuat.y(), btQuat.z(), btQuat.w());
+    return ax::Quaternion(btQuat.x(), btQuat.y(), btQuat.z(), btQuat.w());
 }
 
-btQuaternion convertQuatTobtQuat(const axis::Quaternion& quat)
+btQuaternion convertQuatTobtQuat(const ax::Quaternion& quat)
 {
     return btQuaternion(quat.x, quat.y, quat.z, quat.w);
 }

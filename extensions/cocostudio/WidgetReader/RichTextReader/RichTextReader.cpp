@@ -76,7 +76,7 @@ Offset<Table> RichTextReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void RichTextReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* richTextOptions)
+void RichTextReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* richTextOptions)
 {
     auto ppnode  = (Node**)(node);
     auto options = (RichTextOptions*)richTextOptions;

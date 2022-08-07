@@ -35,7 +35,7 @@
 int lua_axis_navmesh_NavMeshAgent_move(lua_State* tolua_S)
 {
     int argc                    = 0;
-    axis::NavMeshAgent* cobj = nullptr;
+    ax::NavMeshAgent* cobj = nullptr;
     bool ok                     = true;
 
 #    if _AX_DEBUG >= 1
@@ -47,7 +47,7 @@ int lua_axis_navmesh_NavMeshAgent_move(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::NavMeshAgent*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::NavMeshAgent*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -60,7 +60,7 @@ int lua_axis_navmesh_NavMeshAgent_move(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 1)
     {
-        axis::Vec3 arg0;
+        ax::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.NavMeshAgent:move");
         if (!ok)
@@ -74,7 +74,7 @@ int lua_axis_navmesh_NavMeshAgent_move(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        axis::Vec3 arg0;
+        ax::Vec3 arg0;
         LUA_FUNCTION handler;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.NavMeshAgent:move");
@@ -92,10 +92,10 @@ int lua_axis_navmesh_NavMeshAgent_move(lua_State* tolua_S)
             tolua_error(tolua_S, "invalid arguments in function 'lua_axis_navmesh_NavMeshAgent_move'", nullptr);
             return 0;
         }
-        cobj->move(arg0, [=](axis::NavMeshAgent* agent, float totalTimeAfterMove) {
+        cobj->move(arg0, [=](ax::NavMeshAgent* agent, float totalTimeAfterMove) {
             auto stack = LuaEngine::getInstance()->getLuaStack();
             auto Ls    = stack->getLuaState();
-            object_to_luaval<axis::NavMeshAgent>(Ls, "ax.NavMeshAgent", (axis::NavMeshAgent*)agent);
+            object_to_luaval<ax::NavMeshAgent>(Ls, "ax.NavMeshAgent", (ax::NavMeshAgent*)agent);
             tolua_pushnumber(Ls, (lua_Number)totalTimeAfterMove);
             stack->executeFunctionByHandler(handler, 2);
         });

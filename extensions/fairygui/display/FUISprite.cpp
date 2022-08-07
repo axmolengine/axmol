@@ -484,7 +484,7 @@ Vec2 FUISprite::boundaryTexCoord(char index)
     return Vec2::ZERO;
 }
 
-void FUISprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
+void FUISprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
     if (_texture == _empty)
         return;

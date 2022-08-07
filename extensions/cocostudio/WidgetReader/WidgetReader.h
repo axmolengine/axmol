@@ -37,7 +37,7 @@ namespace cocostudio
 class CocoLoader;
 struct stExpCocoNode;
 
-class CCS_DLL WidgetReader : public axis::Ref, public WidgetReaderProtocol, public NodeReaderProtocol
+class CCS_DLL WidgetReader : public ax::Ref, public WidgetReaderProtocol, public NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -50,34 +50,34 @@ public:
     AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
-    virtual void setPropsFromJsonDictionary(axis::ui::Widget* widget, const rapidjson::Value& options);
+    virtual void setPropsFromJsonDictionary(ax::ui::Widget* widget, const rapidjson::Value& options);
 
-    virtual void setColorPropsFromJsonDictionary(axis::ui::Widget* widget, const rapidjson::Value& options);
+    virtual void setColorPropsFromJsonDictionary(ax::ui::Widget* widget, const rapidjson::Value& options);
 
-    virtual void setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
+    virtual void setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
 
     /* flatbuffers refactoring */
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* widgetOptions);
-    void setLayoutComponentPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* widgetOptions);
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* widgetOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* widgetOptions);
+    void setLayoutComponentPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* widgetOptions);
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* widgetOptions);
     /**/
 
 protected:
     std::string getResourcePath(const rapidjson::Value& dict,
                                 std::string_view key,
-                                axis::ui::Widget::TextureResType texType);
-    void setAnchorPointForWidget(axis::ui::Widget* widget, const rapidjson::Value& options);
+                                ax::ui::Widget::TextureResType texType);
+    void setAnchorPointForWidget(ax::ui::Widget* widget, const rapidjson::Value& options);
 
     std::string getResourcePath(CocoLoader* cocoLoader,
                                 stExpCocoNode* pCocoNode,
-                                axis::ui::Widget::TextureResType texType);
+                                ax::ui::Widget::TextureResType texType);
 
-    std::string getResourcePath(std::string_view path, axis::ui::Widget::TextureResType texType);
+    std::string getResourcePath(std::string_view path, ax::ui::Widget::TextureResType texType);
 
-    void beginSetBasicProperties(axis::ui::Widget* widget);
-    void endSetBasicProperties(axis::ui::Widget* widget);
+    void beginSetBasicProperties(ax::ui::Widget* widget);
+    void endSetBasicProperties(ax::ui::Widget* widget);
 
     std::function<int(std::string_view)> valueToInt;
     std::function<bool(std::string_view)> valueToBool;
@@ -89,11 +89,11 @@ protected:
     float _positionPercentY;
     float _width;
     float _height;
-    axis::Color3B _color;
+    ax::Color3B _color;
     int _opacity;
-    axis::Vec2 _position;
+    ax::Vec2 _position;
     bool _isAdaptScreen;
-    axis::Vec2 _originalAnchorPoint;
+    ax::Vec2 _originalAnchorPoint;
 };
 
 // property const define
@@ -241,7 +241,7 @@ extern const char* P_Path;
             else if (innerKey == P_Gravity)                                                         \
             {                                                                                       \
                 linearParameter->setGravity(                                                        \
-                    (axis::ui::LinearLayoutParameter::LinearGravity)valueToInt(innerValue));     \
+                    (ax::ui::LinearLayoutParameter::LinearGravity)valueToInt(innerValue));     \
             }                                                                                       \
             else if (innerKey == P_RelativeName)                                                    \
             {                                                                                       \
@@ -254,7 +254,7 @@ extern const char* P_Path;
             else if (innerKey == P_Align)                                                           \
             {                                                                                       \
                 relativeParameter->setAlign(                                                        \
-                    (axis::ui::RelativeLayoutParameter::RelativeAlign)valueToInt(innerValue));   \
+                    (ax::ui::RelativeLayoutParameter::RelativeAlign)valueToInt(innerValue));   \
             }                                                                                       \
             else if (innerKey == P_MarginLeft)                                                      \
             {                                                                                       \

@@ -194,7 +194,7 @@ private:
 
     std::string _downloadedVersion;
 
-    axis::network::Downloader* _downloader;
+    ax::network::Downloader* _downloader;
 
     unsigned int _connectionTimeout;
 

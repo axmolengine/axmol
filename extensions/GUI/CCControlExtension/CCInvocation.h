@@ -47,7 +47,7 @@ NS_AX_EXT_BEGIN
  * @{
  */
 
-#define cccontrol_selector(_SELECTOR) static_cast<axis::extension::Control::Handler>(&_SELECTOR)
+#define cccontrol_selector(_SELECTOR) static_cast<ax::extension::Control::Handler>(&_SELECTOR)
 
 class AX_EX_DLL Invocation : public Ref
 {

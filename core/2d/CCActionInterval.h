@@ -737,7 +737,7 @@ public:
     // Overrides
     //
     virtual ResizeTo* clone() const override;
-    void startWithTarget(axis::Node* target) override;
+    void startWithTarget(ax::Node* target) override;
     void update(float time) override;
 
     ResizeTo() {}

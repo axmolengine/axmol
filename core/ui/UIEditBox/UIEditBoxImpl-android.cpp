@@ -95,7 +95,7 @@ EditBoxImplAndroid::~EditBoxImplAndroid()
 
 void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 {
-    auto director  = axis::Director::getInstance();
+    auto director  = ax::Director::getInstance();
     auto glView    = director->getOpenGLView();
     auto frameSize = glView->getFrameSize();
 
@@ -117,13 +117,13 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 
 void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
 {
-    auto director            = axis::Director::getInstance();
+    auto director            = ax::Director::getInstance();
     auto glView              = director->getOpenGLView();
-    auto isFontFileExists    = axis::FileUtils::getInstance()->isFileExist(pFontName);
+    auto isFontFileExists    = ax::FileUtils::getInstance()->isFileExist(pFontName);
     std::string realFontPath = pFontName;
     if (isFontFileExists)
     {
-        realFontPath = axis::FileUtils::getInstance()->fullPathForFilename(pFontName);
+        realFontPath = ax::FileUtils::getInstance()->fullPathForFilename(pFontName);
         using namespace cxx17;  // for cxx17::string_view literal
         if (cxx20::starts_with(cxx17::string_view{realFontPath}, "assets/"_sv))
         {
@@ -171,7 +171,7 @@ void EditBoxImplAndroid::setNativeReturnType(EditBox::KeyboardReturnType returnT
     JniHelper::callStaticVoidMethod(editBoxClassName, "setReturnType", _editBoxIndex, static_cast<int>(returnType));
 }
 
-void EditBoxImplAndroid::setNativeTextHorizontalAlignment(axis::TextHAlignment alignment)
+void EditBoxImplAndroid::setNativeTextHorizontalAlignment(ax::TextHAlignment alignment)
 {
     JniHelper::callStaticVoidMethod(editBoxClassName, "setTextHorizontalAlignment", _editBoxIndex,
                                     static_cast<int>(alignment));
@@ -236,7 +236,7 @@ void editBoxEditingDidEnd(int index, std::string_view text, int action)
     if (it != s_allEditBoxes.end())
     {
         s_allEditBoxes[index]->editBoxEditingDidEnd(
-            text, static_cast<axis::ui::EditBoxDelegate::EditBoxEndAction>(action));
+            text, static_cast<ax::ui::EditBoxDelegate::EditBoxEndAction>(action));
     }
 }
 

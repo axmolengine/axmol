@@ -243,7 +243,7 @@ static NSFont* _createSystemFont(const char* fontName, int size)
     return font;
 }
 
-static CGFloat _calculateTextDrawStartHeight(axis::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
+static CGFloat _calculateTextDrawStartHeight(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
 {
     float startH = 0;
     // vertical alignment

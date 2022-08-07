@@ -186,7 +186,7 @@ void TabControl::setHeaderDockPlace(TabControl::Dock dockPlace)
     }
 }
 
-axis::Vec2 TabControl::getHeaderAnchorWithDock() const
+ax::Vec2 TabControl::getHeaderAnchorWithDock() const
 {
     Vec2 anpoint(.5f, .0f);
     switch (_headerDockPlace)

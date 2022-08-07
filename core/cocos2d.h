@@ -49,7 +49,7 @@ using Sprite3DMaterialCache = MeshMaterialCache;
 
 NS_AX_END
 
-namespace cocos2d = axis;
+namespace cocos2d = axys;
 
 #define USING_NS_CC USING_NS_AX
 

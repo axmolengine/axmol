@@ -63,7 +63,7 @@ struct DepthStencilDescriptor;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBuffer : public axis::Ref
+class CommandBuffer : public ax::Ref
 {
 public:
     /**

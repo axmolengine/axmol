@@ -516,7 +516,7 @@ EASEELASTIC_TEMPLATE_DECL_CLASS(EaseElasticInOut);
  @brief Ease Bezier
  @ingroup Actions
  */
-class AX_DLL EaseBezierAction : public axis::ActionEase
+class AX_DLL EaseBezierAction : public ax::ActionEase
 {
 public:
     /**
@@ -524,7 +524,7 @@ public:
      @param action The pointer of the inner action.
      @return A pointer of EaseBezierAction action. If creation failed, return nil.
     */
-    static EaseBezierAction* create(axis::ActionInterval* action);
+    static EaseBezierAction* create(ax::ActionInterval* action);
 
     virtual void update(float time) override;
     virtual EaseBezierAction* clone() const override;

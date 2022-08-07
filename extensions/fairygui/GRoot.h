@@ -18,7 +18,7 @@ public:
     GRoot();
     virtual ~GRoot();
 
-    static GRoot* create(axis::Scene* scene, int zOrder = 1000);
+    static GRoot* create(ax::Scene* scene, int zOrder = 1000);
     static GRoot* getInstance() { return _inst; }
 
     void showWindow(Window* win);
@@ -37,11 +37,11 @@ public:
     bool isModalWaiting();
 
     InputProcessor* getInputProcessor() const { return _inputProcessor; }
-    axis::Vec2 getTouchPosition(int touchId);
+    ax::Vec2 getTouchPosition(int touchId);
     GObject* getTouchTarget();
     
-    axis::Vec2 worldToRoot(const axis::Vec2 &pt);
-    axis::Vec2 rootToWorld(const axis::Vec2 &pt);
+    ax::Vec2 worldToRoot(const ax::Vec2 &pt);
+    ax::Vec2 rootToWorld(const ax::Vec2 &pt);
 
     void showPopup(GObject* popup);
     void showPopup(GObject* popup, GObject* target, PopupDirection dir);
@@ -50,7 +50,7 @@ public:
     void hidePopup();
     void hidePopup(GObject* popup);
     bool hasAnyPopup();
-    axis::Vec2 getPoupPosition(GObject* popup, GObject* target, PopupDirection dir);
+    ax::Vec2 getPoupPosition(GObject* popup, GObject* target, PopupDirection dir);
 
     void showTooltips(const std::string& msg);
     void showTooltipsWin(GObject* tooltipWin);
@@ -70,7 +70,7 @@ protected:
     virtual void onExit() override;
 
 private:
-    bool initWithScene(axis::Scene* scene, int zOrder);
+    bool initWithScene(ax::Scene* scene, int zOrder);
     void onWindowSizeChanged();
     void createModalLayer();
     void adjustModalLayer();
@@ -81,7 +81,7 @@ private:
 
     CALL_LATER_FUNC(GRoot, doShowTooltipsWin);
 
-    axis::EventListener* _windowSizeListener;
+    ax::EventListener* _windowSizeListener;
     InputProcessor* _inputProcessor;
 
     GGraph* _modalLayer;

@@ -42,7 +42,7 @@ NodeGrid* NodeGrid::create()
     return ret;
 }
 
-NodeGrid* NodeGrid::create(const axis::Rect& rect)
+NodeGrid* NodeGrid::create(const ax::Rect& rect)
 {
     NodeGrid* ret = NodeGrid::create();
     if (ret)

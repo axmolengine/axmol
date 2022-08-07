@@ -295,7 +295,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 
     FT_Done_Face(face);
 
-    axis::log("Init font '%s' failed, only unicode ttf/ttc was supported.", fontPath.data());
+    ax::log("Init font '%s' failed, only unicode ttf/ttc was supported.", fontPath.data());
     return false;
 }
 
@@ -394,11 +394,11 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
             char32_t ntcs[2] = {charCode, (char32_t)0};
             std::u32string_view charUTF32(ntcs, 1);
             std::string charUTF8;
-            axis::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
+            ax::StringUtils::UTF32ToUTF8(charUTF32, charUTF8);
 
             if (charUTF8 == "\n")
                 charUTF8 = "\\n";
-            axis::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
+            ax::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
                          charUTF8.c_str());
 
             if (_mssingGlyphCharacter != 0)
@@ -609,15 +609,15 @@ std::string_view FontFreeType::getGlyphCollection() const
     std::string_view glyphCollection;
     switch (_usedGlyphs)
     {
-    case axis::GlyphCollection::DYNAMIC:
+    case ax::GlyphCollection::DYNAMIC:
         break;
-    case axis::GlyphCollection::NEHE:
+    case ax::GlyphCollection::NEHE:
         glyphCollection = _glyphNEHE;
         break;
-    case axis::GlyphCollection::ASCII:
+    case ax::GlyphCollection::ASCII:
         glyphCollection = _glyphASCII;
         break;
-    case axis::GlyphCollection::CUSTOM:
+    case ax::GlyphCollection::CUSTOM:
         glyphCollection = _customGlyphs;
         break;
     default:

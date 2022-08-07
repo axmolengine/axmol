@@ -37,15 +37,15 @@ NS_AX_END  // namespace axis
 
 extern bool luaval_to_navmeshagentparam(lua_State* L,
                                         int lo,
-                                        axis::NavMeshAgentParam* outValue,
+                                        ax::NavMeshAgentParam* outValue,
                                         const char* funcName = "");
 extern bool luaval_to_offmeshlinkdata(lua_State* L,
                                       int lo,
-                                      axis::OffMeshLinkData* outValue,
+                                      ax::OffMeshLinkData* outValue,
                                       const char* funcName = "");
 
-extern void navmeshagentparam_to_luaval(lua_State* L, const axis::NavMeshAgentParam& inValue);
-extern void offmeshlinkdata_to_luaval(lua_State* L, const axis::OffMeshLinkData& inValue);
+extern void navmeshagentparam_to_luaval(lua_State* L, const ax::NavMeshAgentParam& inValue);
+extern void offmeshlinkdata_to_luaval(lua_State* L, const ax::OffMeshLinkData& inValue);
 
 #endif  // #if AX_USE_NAVMESH
 #endif  // __COCOS_SCRIPTING_LUA_BINDING_MANUAL_NAVMESH_LUA_NAVMESH_CONVERSIONS_H__

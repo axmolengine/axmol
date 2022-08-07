@@ -50,7 +50,7 @@
 
 using namespace ui;
 
-static int handleUIEvent(int handler, axis::Ref* sender, int eventType)
+static int handleUIEvent(int handler, ax::Ref* sender, int eventType)
 {
     LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
 
@@ -101,7 +101,7 @@ static int lua_axis_Widget_addTouchEventListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
         self->addTouchEventListener(
-            [=](axis::Ref* ref, Widget::TouchEventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
+            [=](ax::Ref* ref, Widget::TouchEventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
@@ -155,7 +155,7 @@ static int lua_axis_Widget_addClickEventListener(lua_State* L)
 
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
-        self->addClickEventListener([=](axis::Ref* sender) {
+        self->addClickEventListener([=](ax::Ref* sender) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
             stack->pushObject(sender, "ax.Ref");
             stack->executeFunctionByHandler(handler, 1);
@@ -224,7 +224,7 @@ static int lua_axis_CheckBox_addEventListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
         self->addEventListener(
-            [=](axis::Ref* ref, CheckBox::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
+            [=](ax::Ref* ref, CheckBox::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
@@ -428,7 +428,7 @@ static int lua_axis_Slider_addEventListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
         self->addEventListener(
-            [=](axis::Ref* ref, Slider::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
+            [=](ax::Ref* ref, Slider::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
@@ -492,7 +492,7 @@ static int lua_axis_TextField_addEventListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
         self->addEventListener(
-            [=](axis::Ref* ref, TextField::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
+            [=](ax::Ref* ref, TextField::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
@@ -554,7 +554,7 @@ static int lua_axis_PageView_addEventListener(lua_State* L)
         }
 #endif
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
-        auto pageViewHandler = [=](axis::Ref* ref, PageView::EventType eventType) {
+        auto pageViewHandler = [=](ax::Ref* ref, PageView::EventType eventType) {
             handleUIEvent(handler, ref, (int)eventType);
         };
         self->addEventListener((PageView::ccPageViewCallback)pageViewHandler);
@@ -621,7 +621,7 @@ static int lua_axis_ScrollView_addEventListener(lua_State* L)
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
         self->addEventListener(
-            [=](axis::Ref* ref, ScrollView::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
+            [=](ax::Ref* ref, ScrollView::EventType eventType) { handleUIEvent(handler, ref, (int)eventType); });
 
         ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
@@ -684,7 +684,7 @@ static int lua_axis_ListView_addEventListener(lua_State* L)
 #endif
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
-        auto listViewCallback = [=](axis::Ref* ref, ListView::EventType eventType) {
+        auto listViewCallback = [=](ax::Ref* ref, ListView::EventType eventType) {
             handleUIEvent(handler, ref, (int)eventType);
         };
         self->addEventListener((ui::ListView::ccListViewCallback)listViewCallback);
@@ -739,7 +739,7 @@ static int lua_axis_ListView_addScrollViewEventListener(lua_State* L)
 #endif
         LUA_FUNCTION handler = (toluafix_ref_function(L, 2, 0));
 
-        auto scrollViewCallback = [=](axis::Ref* ref, ui::ScrollView::EventType eventType) {
+        auto scrollViewCallback = [=](ax::Ref* ref, ui::ScrollView::EventType eventType) {
             handleUIEvent(handler, ref, (int)eventType);
         };
         self->addEventListener((ui::ScrollView::ccScrollViewCallback)scrollViewCallback);
@@ -1063,7 +1063,7 @@ static int tolua_axis_EventListenerFocus_create(lua_State* L)
 
     if (argc == 0)
     {
-        axis::EventListenerFocus* tolua_ret = axis::EventListenerFocus::create();
+        ax::EventListenerFocus* tolua_ret = ax::EventListenerFocus::create();
         if (nullptr == tolua_ret)
             return 0;
 
@@ -1094,7 +1094,7 @@ static void cloneFocusHandler(const EventListenerFocus* src, EventListenerFocus*
     if (0 != handler)
     {
         int newscriptHandler =
-            axis::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
+            ax::ScriptEngineManager::getInstance()->getScriptEngine()->reallocateScriptHandler(handler);
 
         ScriptHandlerMgr::getInstance()->addObjectHandler((void*)dst, newscriptHandler,
                                                           ScriptHandlerMgr::HandlerType::EVENT_FOCUS);
@@ -1138,7 +1138,7 @@ static int tolua_axis_EventListenerFocus_clone(lua_State* L)
 
     if (argc == 0)
     {
-        axis::EventListenerFocus* tolua_ret = axis::EventListenerFocus::create();
+        ax::EventListenerFocus* tolua_ret = ax::EventListenerFocus::create();
         if (nullptr == tolua_ret)
             return 0;
 

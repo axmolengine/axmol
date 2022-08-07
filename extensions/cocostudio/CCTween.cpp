@@ -31,7 +31,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-using axis::tweenfunc::Linear;
+using ax::tweenfunc::Linear;
 
 Tween* Tween::create(Bone* bone)
 {
@@ -270,7 +270,7 @@ void Tween::updateHandler()
         percent = updateFrameData(percent);
     }
 
-    if (_frameTweenEasing != ::axis::tweenfunc::TWEEN_EASING_MAX)
+    if (_frameTweenEasing != ::ax::tweenfunc::TWEEN_EASING_MAX)
     {
         tweenNodeTo(percent);
     }
@@ -391,7 +391,7 @@ float Tween::updateFrameData(float currentPercent)
          *  _toIndex is next index will play
          */
         long length                         = _movementBoneData->frameList.size();
-        axis::Vector<FrameData*>& frames = _movementBoneData->frameList;
+        ax::Vector<FrameData*>& frames = _movementBoneData->frameList;
 
         FrameData* from = nullptr;
         FrameData* to   = nullptr;
@@ -457,9 +457,9 @@ float Tween::updateFrameData(float currentPercent)
      *  If frame tween easing equal to TWEEN_EASING_MAX, then it will not do tween.
      */
     TweenType tweenType = (_frameTweenEasing != Linear) ? _frameTweenEasing : _tweenEasing;
-    if (tweenType != axis::tweenfunc::TWEEN_EASING_MAX && tweenType != Linear && !_passLastFrame)
+    if (tweenType != ax::tweenfunc::TWEEN_EASING_MAX && tweenType != Linear && !_passLastFrame)
     {
-        currentPercent = axis::tweenfunc::tweenTo(currentPercent, tweenType, _from->easingParams);
+        currentPercent = ax::tweenfunc::tweenTo(currentPercent, tweenType, _from->easingParams);
     }
 
     return currentPercent;

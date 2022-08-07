@@ -644,7 +644,7 @@ public:
     /**
      * Release all native refs for the given owner in script scope
      */
-    virtual void releaseAllNativeRefs(axis::Ref* /*owner*/) {}
+    virtual void releaseAllNativeRefs(ax::Ref* /*owner*/) {}
 
     /**
      * Remove script object,The specific meaning should refer to the ScriptType.

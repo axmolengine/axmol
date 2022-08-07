@@ -35,7 +35,7 @@ namespace backend
 {
 namespace PixelFormatUtils
 {
-typedef axis::backend::PixelFormat PixelFormat;
+typedef ax::backend::PixelFormat PixelFormat;
 
 struct PixelFormatDescriptor
 {

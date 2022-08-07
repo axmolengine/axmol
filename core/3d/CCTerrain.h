@@ -215,9 +215,9 @@ private:
             _texcoord = v2;
         }
         /*the vertex's attributes*/
-        axis::Vec3 _position;
-        axis::Tex2F _texcoord;
-        axis::Vec3 _normal;
+        ax::Vec3 _position;
+        ax::Tex2F _texcoord;
+        ax::Vec3 _normal;
     };
 
     struct AX_DLL QuadTree;
@@ -396,12 +396,12 @@ public:
     void setIsEnableFrustumCull(bool boolValue);
 
     /** set the alpha map*/
-    void setAlphaMap(axis::Texture2D* newAlphaMapTexture);
+    void setAlphaMap(ax::Texture2D* newAlphaMapTexture);
     /**set the Detail Map */
     void setDetailMap(unsigned int index, DetailMap detailMap);
 
     // Overrides, internal use only
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
     /**
      * Ray-Terrain intersection.
      * @return the intersection point
@@ -536,7 +536,7 @@ protected:
     Vec2 _chunkSize;
     bool _isEnableFrustumCull;
     int _maxDetailMapValue;
-    axis::Image* _heightMapImage;
+    ax::Image* _heightMapImage;
     Mat4 _oldCameraModelMatrix;
     Mat4 _terrainModelMatrix;
     float _maxHeight;

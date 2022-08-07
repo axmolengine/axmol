@@ -728,7 +728,7 @@ void Label::updateShaderProgram()
     {
         switch (_currLabelEffect)
         {
-        case axis::LabelEffect::NORMAL:
+        case ax::LabelEffect::NORMAL:
             if (_useDistanceField)
             {
                 programType = backend::ProgramType::LABEL_DISTANCE_NORMAL;
@@ -747,12 +747,12 @@ void Label::updateShaderProgram()
                 }
             }
             break;
-        case axis::LabelEffect::OUTLINE:
+        case ax::LabelEffect::OUTLINE:
         {
             programType = backend::ProgramType::LABLE_OUTLINE;
         }
         break;
-        case axis::LabelEffect::GLOW:
+        case ax::LabelEffect::GLOW:
             if (_useDistanceField)
             {
                 programType = backend::ProgramType::LABLE_DISTANCEFIELD_GLOW;
@@ -1525,9 +1525,9 @@ void Label::disableEffect(LabelEffect effect)
 {
     switch (effect)
     {
-    case axis::LabelEffect::NORMAL:
+    case ax::LabelEffect::NORMAL:
         break;
-    case axis::LabelEffect::OUTLINE:
+    case ax::LabelEffect::OUTLINE:
         if (_currLabelEffect == LabelEffect::OUTLINE)
         {
             if (_currentLabelType == LabelType::TTF)
@@ -1539,7 +1539,7 @@ void Label::disableEffect(LabelEffect effect)
             _contentDirty    = true;
         }
         break;
-    case axis::LabelEffect::SHADOW:
+    case ax::LabelEffect::SHADOW:
         if (_shadowEnabled)
         {
             _shadowEnabled = false;
@@ -1547,17 +1547,17 @@ void Label::disableEffect(LabelEffect effect)
             updateShaderProgram();
         }
         break;
-    case axis::LabelEffect::GLOW:
+    case ax::LabelEffect::GLOW:
         if (_currLabelEffect == LabelEffect::GLOW)
         {
             _currLabelEffect = LabelEffect::NORMAL;
             updateShaderProgram();
         }
         break;
-    case axis::LabelEffect::ITALICS:
+    case ax::LabelEffect::ITALICS:
         setRotationSkewX(0);
         break;
-    case axis::LabelEffect::BOLD:
+    case ax::LabelEffect::BOLD:
         if (_boldEnabled)
         {
             _boldEnabled = false;
@@ -1565,14 +1565,14 @@ void Label::disableEffect(LabelEffect effect)
             disableEffect(LabelEffect::SHADOW);
         }
         break;
-    case axis::LabelEffect::UNDERLINE:
+    case ax::LabelEffect::UNDERLINE:
         if (_underlineNode)
         {
             removeChild(_underlineNode);
             _underlineNode = nullptr;
         }
         break;
-    case axis::LabelEffect::STRIKETHROUGH:
+    case ax::LabelEffect::STRIKETHROUGH:
         _strikethroughEnabled = false;
         // since it is based on underline, disable it as well
         disableEffect(LabelEffect::UNDERLINE);
@@ -1937,7 +1937,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     if (_insideBounds)
 #endif
     {
-        axis::Mat4 matrixProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+        ax::Mat4 matrixProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
         if (!_shadowEnabled && (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::CHARMAP))
         {
             updateBlendState();
@@ -1960,7 +1960,7 @@ void Label::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
         }
         else
         {
-            axis::Mat4 matrixMVP = matrixProjection * transform;
+            ax::Mat4 matrixMVP = matrixProjection * transform;
 
             for (auto&& it : _letters)
             {
@@ -2388,7 +2388,7 @@ void Label::updateColor()
         color4.b *= _displayedOpacity / 255.0f;
     }
 
-    axis::TextureAtlas* textureAtlas;
+    ax::TextureAtlas* textureAtlas;
     V3F_C4B_T2F_Quad* quads;
     for (auto&& batchNode : _batchNodes)
     {

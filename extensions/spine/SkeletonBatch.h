@@ -39,9 +39,9 @@
 
 namespace spine {
     
-	struct SkeletonCommand : public axis::TrianglesCommand {
-		axis::backend::UniformLocation _locMVP;
-		axis::backend::UniformLocation _locTexture;
+	struct SkeletonCommand : public ax::TrianglesCommand {
+		ax::backend::UniformLocation _locMVP;
+		ax::backend::UniformLocation _locTexture;
 	};
 	
     class SP_API SkeletonBatch {
@@ -52,13 +52,13 @@ namespace spine {
         
         void update (float delta);
 		
-		axis::V3F_C4B_T2F* allocateVertices(uint32_t numVertices);
+		ax::V3F_C4B_T2F* allocateVertices(uint32_t numVertices);
 		void deallocateVertices(uint32_t numVertices);
 		unsigned short* allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numVertices);
-		axis::TrianglesCommand* addCommand(axis::Renderer* renderer, float globalOrder, axis::Texture2D* texture, axis::backend::ProgramState* programState, axis::BlendFunc blendType, const axis::TrianglesCommand::Triangles& triangles, const axis::Mat4& mv, uint32_t flags);
+		ax::TrianglesCommand* addCommand(ax::Renderer* renderer, float globalOrder, ax::Texture2D* texture, ax::backend::ProgramState* programState, ax::BlendFunc blendType, const ax::TrianglesCommand::Triangles& triangles, const ax::Mat4& mv, uint32_t flags);
         
-		axis::backend::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, axis::backend::ProgramState* programState);
+		ax::backend::ProgramState* updateCommandPipelinePS(SkeletonCommand* command, ax::backend::ProgramState* programState);
 
     protected:
 		SkeletonBatch ();
@@ -70,14 +70,14 @@ namespace spine {
 
 		SkeletonCommand* newCommand();
 	
-		axis::backend::ProgramState*                     _programState; // The default program state
+		ax::backend::ProgramState*                     _programState; // The default program state
 
 		// pool of commands
 		std::vector<SkeletonCommand*>                       _commandsPool;
 		uint32_t                                            _nextFreeCommand;
 		
 		// pool of vertices
-		std::vector<axis::V3F_C4B_T2F>                   _vertices;
+		std::vector<ax::V3F_C4B_T2F>                   _vertices;
 		uint32_t                                            _numVertices;
 		
 		// pool of indices

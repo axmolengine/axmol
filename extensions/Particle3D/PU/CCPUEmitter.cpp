@@ -785,21 +785,21 @@ void PUEmitter::initParticleColor(PUParticle3D* particle)
     if (_particleColorRangeSet)
     {
         if (_particleColorRangeStart.x < _particleColorRangeEnd.x)
-            particle->color.x = axis::random(_particleColorRangeStart.x, _particleColorRangeEnd.x);
+            particle->color.x = ax::random(_particleColorRangeStart.x, _particleColorRangeEnd.x);
         else
-            particle->color.x = axis::random(_particleColorRangeEnd.x, _particleColorRangeStart.x);
+            particle->color.x = ax::random(_particleColorRangeEnd.x, _particleColorRangeStart.x);
         if (_particleColorRangeStart.y < _particleColorRangeEnd.y)
-            particle->color.y = axis::random(_particleColorRangeStart.y, _particleColorRangeEnd.y);
+            particle->color.y = ax::random(_particleColorRangeStart.y, _particleColorRangeEnd.y);
         else
-            particle->color.y = axis::random(_particleColorRangeEnd.y, _particleColorRangeStart.y);
+            particle->color.y = ax::random(_particleColorRangeEnd.y, _particleColorRangeStart.y);
         if (_particleColorRangeStart.z < _particleColorRangeEnd.z)
-            particle->color.z = axis::random(_particleColorRangeStart.z, _particleColorRangeEnd.z);
+            particle->color.z = ax::random(_particleColorRangeStart.z, _particleColorRangeEnd.z);
         else
-            particle->color.z = axis::random(_particleColorRangeEnd.z, _particleColorRangeStart.z);
+            particle->color.z = ax::random(_particleColorRangeEnd.z, _particleColorRangeStart.z);
         if (_particleColorRangeStart.w < _particleColorRangeEnd.w)
-            particle->color.w = axis::random(_particleColorRangeStart.w, _particleColorRangeEnd.w);
+            particle->color.w = ax::random(_particleColorRangeStart.w, _particleColorRangeEnd.w);
         else
-            particle->color.w = axis::random(_particleColorRangeEnd.w, _particleColorRangeStart.w);
+            particle->color.w = ax::random(_particleColorRangeEnd.w, _particleColorRangeStart.w);
     }
     else
     {
@@ -814,7 +814,7 @@ void PUEmitter::initParticleTextureCoords(PUParticle3D* particle)
 {
     if (_particleTextureCoordsRangeSet)
     {
-        particle->textureCoordsCurrent = (unsigned short)axis::random(
+        particle->textureCoordsCurrent = (unsigned short)ax::random(
             (float)_particleTextureCoordsRangeStart, (float)_particleTextureCoordsRangeEnd + 0.999f);
     }
     else

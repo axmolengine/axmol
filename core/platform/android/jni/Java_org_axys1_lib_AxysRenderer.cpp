@@ -40,7 +40,7 @@ extern "C" {
 
 JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeRender(JNIEnv*, jclass)
 {
-    axis::Director::getInstance()->mainLoop();
+    ax::Director::getInstance()->mainLoop();
 }
 
 JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeOnPause(JNIEnv*, jclass)
@@ -48,8 +48,8 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeOnPause(JNIEnv*, jc
     if (Director::getInstance()->getOpenGLView())
     {
         Application::getInstance()->applicationDidEnterBackground();
-        axis::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
-        axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent);
+        ax::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&backgroundEvent);
     }
 }
 
@@ -63,8 +63,8 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeOnResume(JNIEnv*, j
         if (!firstTime)
             Application::getInstance()->applicationWillEnterForeground();
 
-        axis::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
-        axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
+        ax::EventCustom foregroundEvent(EVENT_COME_TO_FOREGROUND);
+        ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&foregroundEvent);
 
         firstTime = false;
     }
@@ -72,19 +72,19 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeOnResume(JNIEnv*, j
 
 JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeInsertText(JNIEnv* env, jclass, jstring text)
 {
-    std::string strValue = axis::StringUtils::getStringUTFCharsJNI(env, text);
+    std::string strValue = ax::StringUtils::getStringUTFCharsJNI(env, text);
     const char* pszText  = strValue.c_str();
-    axis::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
 }
 
 JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeDeleteBackward(JNIEnv*, jclass)
 {
-    axis::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
+    ax::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
 }
 
 JNIEXPORT jstring JNICALL Java_org_axys1_lib_AxysRenderer_nativeGetContentText(JNIEnv* env, jclass)
 {
-    auto pszText = axis::IMEDispatcher::sharedDispatcher()->getContentText();
-    return axis::StringUtils::newStringUTFJNI(env, pszText);
+    auto pszText = ax::IMEDispatcher::sharedDispatcher()->getContentText();
+    return ax::StringUtils::newStringUTFJNI(env, pszText);
 }
 }

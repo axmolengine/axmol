@@ -487,7 +487,7 @@ void Slider::updateVisualSlider()
     }
 }
 
-bool Slider::hitTest(const axis::Vec2& pt, const Camera* camera, Vec3* /*p*/) const
+bool Slider::hitTest(const ax::Vec2& pt, const Camera* camera, Vec3* /*p*/) const
 {
     Rect rect;
     rect.size = _slidBallNormalRenderer->getContentSize();

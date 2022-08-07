@@ -43,12 +43,12 @@ public:
     AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
-    virtual void setPropsFromJsonDictionary(axis::ui::Widget* widget, const rapidjson::Value& options);
-    virtual void setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
+    virtual void setPropsFromJsonDictionary(ax::ui::Widget* widget, const rapidjson::Value& options);
+    virtual void setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* sliderOptions);
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* sliderOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* sliderOptions);
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* sliderOptions);
 
     int getResourceType(std::string_view key);
 };

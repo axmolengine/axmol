@@ -123,7 +123,7 @@ public:
     virtual void setNativeInputMode(EditBox::InputMode inputMode)                    = 0;
     virtual void setNativeInputFlag(EditBox::InputFlag inputFlag)                    = 0;
     virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)         = 0;
-    virtual void setNativeTextHorizontalAlignment(axis::TextHAlignment alignment) = 0;
+    virtual void setNativeTextHorizontalAlignment(ax::TextHAlignment alignment) = 0;
     virtual void setNativeText(const char* pText)                                    = 0;
     virtual void setNativePlaceHolder(const char* pText)                             = 0;
     virtual void setNativeVisible(bool visible)                                      = 0;

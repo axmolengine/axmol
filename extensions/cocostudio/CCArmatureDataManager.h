@@ -43,7 +43,7 @@ struct RelativeData
 /**
  *    @brief    format and manage armature configuration and armature animation
  */
-class CCS_DLL ArmatureDataManager : public axis::Ref
+class CCS_DLL ArmatureDataManager : public ax::Ref
 {
 public:
     /** @deprecated Use getInstance() instead */
@@ -145,8 +145,8 @@ public:
      *            It will load data in a new thread
      */
     void addArmatureFileInfoAsync(std::string_view configFilePath,
-                                  axis::Ref* target,
-                                  axis::SEL_SCHEDULE selector);
+                                  ax::Ref* target,
+                                  ax::SEL_SCHEDULE selector);
 
     /**
      *    @brief    Add ArmatureFileInfo, it is managed by ArmatureDataManager.
@@ -160,8 +160,8 @@ public:
     void addArmatureFileInfoAsync(std::string_view imagePath,
                                   std::string_view plistPath,
                                   std::string_view configFilePath,
-                                  axis::Ref* target,
-                                  axis::SEL_SCHEDULE selector);
+                                  ax::Ref* target,
+                                  ax::SEL_SCHEDULE selector);
 
     /**
      *    @brief    Add sprite frame to CCSpriteFrameCache, it will save display name and it's relative image name
@@ -177,9 +177,9 @@ public:
      */
     bool isAutoLoadSpriteFile();
 
-    const axis::StringMap<ArmatureData*>& getArmatureDatas() const;
-    const axis::StringMap<AnimationData*>& getAnimationDatas() const;
-    const axis::StringMap<TextureData*>& getTextureDatas() const;
+    const ax::StringMap<ArmatureData*>& getArmatureDatas() const;
+    const ax::StringMap<AnimationData*>& getAnimationDatas() const;
+    const ax::StringMap<TextureData*>& getTextureDatas() const;
 
 public:
     void addRelativeData(std::string_view configFilePath);
@@ -191,21 +191,21 @@ private:
      *  @key    std::string
      *  @value    ArmatureData *
      */
-    axis::StringMap<ArmatureData*> _armarureDatas;
+    ax::StringMap<ArmatureData*> _armarureDatas;
 
     /**
      *    @brief    save animation datas
      *  @key    std::string
      *  @value    AnimationData *
      */
-    axis::StringMap<AnimationData*> _animationDatas;
+    ax::StringMap<AnimationData*> _animationDatas;
 
     /**
      *    @brief    save texture datas
      *  @key    std::string
      *  @value    TextureData *
      */
-    axis::StringMap<TextureData*> _textureDatas;
+    ax::StringMap<TextureData*> _textureDatas;
 
     bool _autoLoadSpriteFile;
 

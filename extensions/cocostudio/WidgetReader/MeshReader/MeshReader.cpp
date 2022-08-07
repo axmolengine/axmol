@@ -205,7 +205,7 @@ Offset<Table> MeshReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     return *(Offset<Table>*)(&options);
 }
 
-void MeshReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* sprite3DOptions)
+void MeshReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* sprite3DOptions)
 {
     MeshRenderer* mesh = static_cast<MeshRenderer*>(node);
 

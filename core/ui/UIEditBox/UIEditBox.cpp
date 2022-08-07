@@ -86,7 +86,7 @@ EditBox* EditBox::create(const Vec2& size,
 }
 
 EditBox* EditBox::create(const Vec2& size,
-                         axis::ui::Scale9Sprite* normalSprite,
+                         ax::ui::Scale9Sprite* normalSprite,
                          ui::Scale9Sprite* pressedSprite,
                          Scale9Sprite* disabledSprite)
 {

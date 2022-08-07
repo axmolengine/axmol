@@ -33,7 +33,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL ComAudioReader : public axis::Ref, public NodeReaderProtocol
+class CCS_DLL ComAudioReader : public ax::Ref, public NodeReaderProtocol
 {
 
 public:
@@ -47,9 +47,9 @@ public:
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* comAudioOptions);
-    axis::Component* createComAudioWithFlatBuffers(const flatbuffers::Table* comAudioOptions);
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* comAudioOptions);
+    ax::Component* createComAudioWithFlatBuffers(const flatbuffers::Table* comAudioOptions);
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions);
 };
 }  // namespace cocostudio
 

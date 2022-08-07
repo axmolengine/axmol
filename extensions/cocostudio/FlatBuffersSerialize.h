@@ -138,7 +138,7 @@ public:
 
     int getResourceType(std::string_view key);
     std::string getGUIClassName(std::string_view name);
-    std::string getWidgetReaderClassName(axis::ui::Widget* widget);
+    std::string getWidgetReaderClassName(ax::ui::Widget* widget);
 
     /* create flat buffers with XML */
     flatbuffers::FlatBufferBuilder* createFlatBuffersWithXMLFileForSimulator(std::string_view xmlFileName);

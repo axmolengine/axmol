@@ -43,7 +43,7 @@ private:
     float _scrollPerc;
     bool _fixedGripSize;
 
-    axis::Vec2 _dragOffset;
+    ax::Vec2 _dragOffset;
 };
 
 NS_FGUI_END

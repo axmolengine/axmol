@@ -69,7 +69,7 @@ private:
     SpriteFrameCacheHelper();
     ~SpriteFrameCacheHelper();
 
-    hlookup::string_map<std::vector<axis::SpriteFrame*>> _usingSpriteFrames;
+    hlookup::string_map<std::vector<ax::SpriteFrame*>> _usingSpriteFrames;
     static SpriteFrameCacheHelper* _spriteFrameCacheHelper;
 };
 

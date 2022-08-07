@@ -36,14 +36,14 @@
 
 #define DECLARE_CLASS_GUI_INFO                   \
 public:                                          \
-    static axis::ObjectFactory::TInfo __Type; \
-    static axis::Ref* createInstance();
+    static ax::ObjectFactory::TInfo __Type; \
+    static ax::Ref* createInstance();
 
 #define IMPLEMENT_CLASS_GUI_INFO(className)                                   \
-    axis::Ref* className::createInstance() { return className::create(); } \
-    axis::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
+    ax::Ref* className::createInstance() { return className::create(); } \
+    ax::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
-#define CREATE_CLASS_GUI_INFO(className) axis::ObjectFactory::TInfo(#className, &className::createInstance)
+#define CREATE_CLASS_GUI_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)
 
 //
 //// Reader macro
@@ -51,14 +51,14 @@ public:                                          \
 
 #define DECLARE_CLASS_WIDGET_READER_INFO         \
 public:                                          \
-    static axis::ObjectFactory::TInfo __Type; \
-    static axis::Ref* createInstance();
+    static ax::ObjectFactory::TInfo __Type; \
+    static ax::Ref* createInstance();
 
 #define IMPLEMENT_CLASS_WIDGET_READER_INFO(className)                              \
-    axis::Ref* className::createInstance() { return className::getInstance(); } \
-    axis::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
+    ax::Ref* className::createInstance() { return className::getInstance(); } \
+    ax::ObjectFactory::TInfo className::__Type(#className, &className::createInstance);
 
-#define CREATE_CLASS_WIDGET_READER_INFO(className) axis::ObjectFactory::TInfo(#className, &className::createInstance)
+#define CREATE_CLASS_WIDGET_READER_INFO(className) ax::ObjectFactory::TInfo(#className, &className::createInstance)
 
 #define AX_VIDEOPLAYER_DEBUG_DRAW 0
 

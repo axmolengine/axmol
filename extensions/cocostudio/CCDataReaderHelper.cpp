@@ -287,7 +287,7 @@ void DataReaderHelper::addDataFromFile(std::string_view filePath)
         basefilePath = filePath.substr(0, pos + 1);
     }
 
-    std::string fileExtension = axis::FileUtils::getInstance()->getFileExtension(filePath);
+    std::string fileExtension = ax::FileUtils::getInstance()->getFileExtension(filePath);
 
     // Read content from file
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filePath);
@@ -390,7 +390,7 @@ void DataReaderHelper::addDataFromFileAsync(std::string_view imagePath,
     data->imagePath = imagePath;
     data->plistPath = plistPath;
 
-    std::string fileExtension = axis::FileUtils::getInstance()->getFileExtension(filePath);
+    std::string fileExtension = ax::FileUtils::getInstance()->getFileExtension(filePath);
     std::string fullPath      = FileUtils::getInstance()->fullPathForFilename(filePath);
 
     bool isbinaryfilesrc = fileExtension == ".csb";
@@ -727,11 +727,11 @@ MovementData* DataReaderHelper::decodeMovement(pugi::xml_node& movementXML,
         if (_easing != FL_NAN)
         {
             int tweenEasing           = atoi(_easing.data());
-            movementData->tweenEasing = tweenEasing == 2 ? axis::tweenfunc::Sine_EaseInOut : (TweenType)tweenEasing;
+            movementData->tweenEasing = tweenEasing == 2 ? ax::tweenfunc::Sine_EaseInOut : (TweenType)tweenEasing;
         }
         else
         {
-            movementData->tweenEasing = axis::tweenfunc::Linear;
+            movementData->tweenEasing = ax::tweenfunc::Linear;
         }
     }
 
@@ -1006,11 +1006,11 @@ FrameData* DataReaderHelper::decodeFrame(pugi::xml_node& frameXML,
         {
             tweenEasing = atoi(_easing);
             frameData->tweenEasing =
-                tweenEasing == 2 ? axis::tweenfunc::Sine_EaseInOut : (axis::tweenfunc::TweenType)tweenEasing;
+                tweenEasing == 2 ? ax::tweenfunc::Sine_EaseInOut : (ax::tweenfunc::TweenType)tweenEasing;
         }
         else
         {
-            frameData->tweenEasing = axis::tweenfunc::Linear;
+            frameData->tweenEasing = ax::tweenfunc::Linear;
         }
     }
 
@@ -1418,7 +1418,7 @@ MovementData* DataReaderHelper::decodeMovement(const rapidjson::Value& json, Dat
         movementData->scale = DICTOOL->getFloatValue_json(json, A_MOVEMENT_SCALE, 1.0f);
     }
     movementData->tweenEasing =
-        (TweenType)(DICTOOL->getIntValue_json(json, A_TWEEN_EASING, axis::tweenfunc::Linear));
+        (TweenType)(DICTOOL->getIntValue_json(json, A_TWEEN_EASING, ax::tweenfunc::Linear));
 
     const char* name = DICTOOL->getStringValue_json(json, A_NAME);
     if (name != nullptr)
@@ -1515,7 +1515,7 @@ FrameData* DataReaderHelper::decodeFrame(const rapidjson::Value& json, DataInfo*
 
     decodeNode(frameData, json, dataInfo);
 
-    frameData->tweenEasing   = (TweenType)(DICTOOL->getIntValue_json(json, A_TWEEN_EASING, axis::tweenfunc::Linear));
+    frameData->tweenEasing   = (TweenType)(DICTOOL->getIntValue_json(json, A_TWEEN_EASING, ax::tweenfunc::Linear));
     frameData->displayIndex  = DICTOOL->getIntValue_json(json, A_DISPLAY_INDEX);
     frameData->blendFunc.src = utils::toBackendBlendFactor(
         DICTOOL->getIntValue_json(json, A_BLEND_SRC, utils::toGLBlendFactor(BlendFunc::ALPHA_PREMULTIPLIED.src)));
@@ -2086,7 +2086,7 @@ MovementData* DataReaderHelper::decodeMovement(CocoLoader* cocoLoader, stExpCoco
         }
         else if (key.compare(A_TWEEN_EASING) == 0)
         {
-            movementData->tweenEasing = axis::tweenfunc::Linear;
+            movementData->tweenEasing = ax::tweenfunc::Linear;
             if (str != nullptr)
             {
                 movementData->tweenEasing = (TweenType)(atoi(str));
@@ -2161,7 +2161,7 @@ MovementBoneData* DataReaderHelper::decodeMovementBone(CocoLoader* cocoLoader,
     if (dataInfo->cocoStudioVersion < VERSION_CHANGE_ROTATION_RANGE)
     {
         //! Change rotation range from (-180 -- 180) to (-infinity -- infinity)
-        axis::Vector<FrameData*> frames = movementBoneData->frameList;
+        ax::Vector<FrameData*> frames = movementBoneData->frameList;
 
         ssize_t imusone = 0;
         ssize_t i       = 0;
@@ -2217,7 +2217,7 @@ FrameData* DataReaderHelper::decodeFrame(CocoLoader* cocoLoader, stExpCocoNode* 
         str             = pFrameDataArray[i].GetValue(cocoLoader);
         if (key.compare(A_TWEEN_EASING) == 0)
         {
-            frameData->tweenEasing = axis::tweenfunc::Linear;
+            frameData->tweenEasing = ax::tweenfunc::Linear;
             if (str != nullptr)
             {
                 frameData->tweenEasing = (TweenType)(atoi(str));

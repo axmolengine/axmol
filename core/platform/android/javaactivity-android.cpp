@@ -81,29 +81,29 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 
 JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
 {
-    auto director = axis::Director::getInstance();
+    auto director = ax::Director::getInstance();
     auto glview   = director->getOpenGLView();
     if (!glview)
     {
-        glview = axis::GLViewImpl::create("Android app");
+        glview = ax::GLViewImpl::create("Android app");
         glview->setFrameSize(w, h);
         director->setOpenGLView(glview);
 
-        axis::Application::getInstance()->run();
+        ax::Application::getInstance()->run();
     }
     else
     {
-        axis::Director::getInstance()->resetMatrixStack();
-        axis::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
+        ax::Director::getInstance()->resetMatrixStack();
+        ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent);
         director->setGLDefaultValues();
-        axis::VolatileTextureMgr::reloadAllTextures();
+        ax::VolatileTextureMgr::reloadAllTextures();
     }
 }
 
 JNIEXPORT jintArray JNICALL Java_org_axys1_lib_AxysActivity_getGLContextAttrs(JNIEnv* env, jclass)
 {
-    axis::Application::getInstance()->initGLContextAttrs();
+    ax::Application::getInstance()->initGLContextAttrs();
     GLContextAttrs _glContextAttrs = GLView::getGLContextAttrs();
 
     int tmp[7] = {_glContextAttrs.redBits,           _glContextAttrs.greenBits, _glContextAttrs.blueBits,
@@ -118,6 +118,6 @@ JNIEXPORT jintArray JNICALL Java_org_axys1_lib_AxysActivity_getGLContextAttrs(JN
 
 JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
 {
-    axis::Application::getInstance()->applicationScreenSizeChanged(w, h);
+    ax::Application::getInstance()->applicationScreenSizeChanged(w, h);
 }
 }

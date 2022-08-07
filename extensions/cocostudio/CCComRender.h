@@ -32,7 +32,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL ComRender : public axis::Component
+class CCS_DLL ComRender : public ax::Component
 {
     DECLARE_CLASS_COMPONENT_INFO
 
@@ -40,7 +40,7 @@ public:
     const static std::string COMPONENT_NAME;
 
     static ComRender* create();
-    static ComRender* create(axis::Node* node, const char* comName);
+    static ComRender* create(ax::Node* node, const char* comName);
 
     /**
      * @js NA
@@ -63,13 +63,13 @@ public:
      */
     virtual void onRemove() override;
     virtual bool serialize(void* r) override;
-    virtual axis::Node* getNode();
-    virtual void setNode(axis::Node* node);
+    virtual ax::Node* getNode();
+    virtual void setNode(ax::Node* node);
     /**
      *  @js ctor
      */
     ComRender();
-    ComRender(axis::Node* node, const char* comName);
+    ComRender(ax::Node* node, const char* comName);
     /**
      * @js NA
      * @lua NA
@@ -79,7 +79,7 @@ public:
 private:
     bool readJson(std::string_view fileName, rapidjson::Document& doc);
 
-    axis::Node* _render;
+    ax::Node* _render;
 };
 
 }  // namespace cocostudio

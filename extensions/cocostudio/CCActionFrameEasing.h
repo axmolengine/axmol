@@ -58,7 +58,7 @@ enum FrameEasingType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionFrameEasing : public axis::Ref
+class CCS_DLL ActionFrameEasing : public ax::Ref
 {
 protected:
     FrameEasingType _type;

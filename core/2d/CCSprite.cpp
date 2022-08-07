@@ -245,7 +245,7 @@ bool Sprite::initWithSpriteFrame(SpriteFrame* spriteFrame)
     return ret;
 }
 
-bool Sprite::initWithPolygon(const axis::PolygonInfo& info)
+bool Sprite::initWithPolygon(const ax::PolygonInfo& info)
 {
     bool ret = false;
 
@@ -705,7 +705,7 @@ void Sprite::updatePoly()
     }
 }
 
-void Sprite::setCenterRectNormalized(const axis::Rect& rectTopLeft)
+void Sprite::setCenterRectNormalized(const ax::Rect& rectTopLeft)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {
@@ -761,7 +761,7 @@ void Sprite::setCenterRectNormalized(const axis::Rect& rectTopLeft)
     }
 }
 
-void Sprite::setCenterRect(const axis::Rect& rectInPoints)
+void Sprite::setCenterRect(const ax::Rect& rectInPoints)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {

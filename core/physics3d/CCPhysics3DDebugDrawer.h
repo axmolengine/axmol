@@ -55,7 +55,7 @@ public:
     Physics3DDebugDrawer();
     virtual ~Physics3DDebugDrawer();
 
-    void draw(axis::Renderer* renderer);
+    void draw(ax::Renderer* renderer);
 
     // override function
     virtual void drawLine(const btVector3& from, const btVector3& to, const btVector3& color) override;
@@ -79,16 +79,16 @@ protected:
 protected:
     struct V3F_V4F
     {
-        axis::Vec3 vertex;
-        axis::Vec4 color;
+        ax::Vec3 vertex;
+        ax::Vec4 color;
     };
 
     std::vector<V3F_V4F> _buffer;
-    axis::backend::UniformLocation _locMVP;
+    ax::backend::UniformLocation _locMVP;
 
-    axis::BlendFunc _blendFunc = BlendFunc::DISABLE;
-    axis::CustomCommand _customCommand;
-    axis::backend::ProgramState* _programState = nullptr;
+    ax::BlendFunc _blendFunc = BlendFunc::DISABLE;
+    ax::CustomCommand _customCommand;
+    ax::backend::ProgramState* _programState = nullptr;
 
     bool _dirty    = true;
     int _debugMode = DBG_DrawWireframe | DBG_DrawConstraints | DBG_DrawConstraintLimits;

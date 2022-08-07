@@ -250,7 +250,7 @@ unsigned int AutoPolygon::getSquareValue(unsigned int x, unsigned int y, const R
     return sv;
 }
 
-std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
+std::vector<ax::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
 {
     int stepx          = 0;
     int stepy          = 0;
@@ -265,7 +265,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
     std::vector<int> case6s;
     int i;
     std::vector<int>::iterator it;
-    std::vector<axis::Vec2> _points;
+    std::vector<ax::Vec2> _points;
     do
     {
         int sv = getSquareValue(curx, cury, rect, threshold);
@@ -416,7 +416,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
     return _points;
 }
 
-float AutoPolygon::perpendicularDistance(const axis::Vec2& i, const axis::Vec2& start, const axis::Vec2& end)
+float AutoPolygon::perpendicularDistance(const ax::Vec2& i, const ax::Vec2& start, const ax::Vec2& end)
 {
     float res;
     float slope;
@@ -438,7 +438,7 @@ float AutoPolygon::perpendicularDistance(const axis::Vec2& i, const axis::Vec2& 
     }
     return res;
 }
-std::vector<axis::Vec2> AutoPolygon::rdp(const std::vector<axis::Vec2>& v, float optimization)
+std::vector<ax::Vec2> AutoPolygon::rdp(const std::vector<ax::Vec2>& v, float optimization)
 {
     if (v.size() < 3)
         return v;
@@ -505,7 +505,7 @@ std::vector<Vec2> AutoPolygon::reduce(const std::vector<Vec2>& points, const Rec
     return result;
 }
 
-std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const axis::Rect& rect, float epsilon)
+std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax::Rect& rect, float epsilon)
 {
     auto size = points.size();
     // if there are less than 3 points, then we have nothing

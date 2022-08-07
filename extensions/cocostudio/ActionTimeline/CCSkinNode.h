@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 NS_TIMELINE_BEGIN
 
-typedef axis::Node SkinNode;
+typedef ax::Node SkinNode;
 
 NS_TIMELINE_END
 

@@ -38,7 +38,7 @@ struct stExpCocoNode;
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionNode : public axis::Ref
+class CCS_DLL ActionNode : public ax::Ref
 {
 public:
     /**
@@ -82,14 +82,14 @@ public:
      *
      * @param  node which will run a action
      */
-    void setObject(axis::Ref* node);
+    void setObject(ax::Ref* node);
 
     /**
      * Gets node which will run a action.
      *
      * @return  node which will run a action
      */
-    axis::Ref* getObject();
+    ax::Ref* getObject();
 
     /**
      * Insets a ActionFrame to ActionNode.
@@ -151,7 +151,7 @@ public:
     virtual void stopAction();
 
     /*init properties with a json dictionary*/
-    virtual void initWithDictionary(const rapidjson::Value& dic, axis::Ref* root);
+    virtual void initWithDictionary(const rapidjson::Value& dic, ax::Ref* root);
     virtual void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, Ref* root);
 
     /**
@@ -172,18 +172,18 @@ protected:
     float _fUnitTime;
 
     int _actionTag;
-    axis::Spawn* _actionSpawn;
-    axis::Action* _action;
-    axis::Ref* _object;
+    ax::Spawn* _actionSpawn;
+    ax::Action* _action;
+    ax::Ref* _object;
 
-    std::vector<axis::Vector<ActionFrame*>*> _frameArray;
+    std::vector<ax::Vector<ActionFrame*>*> _frameArray;
     int _frameArrayNum;
 
 protected:
-    virtual axis::Node* getActionNode();
-    virtual axis::Spawn* refreshActionProperty();
+    virtual ax::Node* getActionNode();
+    virtual ax::Spawn* refreshActionProperty();
     virtual void runAction();
-    virtual void initActionNodeFromRoot(axis::Ref* root);
+    virtual void initActionNodeFromRoot(ax::Ref* root);
     virtual void easingToFrame(float duration, float delayTime, ActionFrame* srcFrame, ActionFrame* destFrame);
 };
 

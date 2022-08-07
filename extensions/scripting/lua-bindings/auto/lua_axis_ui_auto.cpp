@@ -6,7 +6,7 @@
 int lua_axis_ui_LayoutParameter_clone(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutParameter* cobj = nullptr;
+    ax::ui::LayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18,7 +18,7 @@ int lua_axis_ui_LayoutParameter_clone(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36,8 +36,8 @@ int lua_axis_ui_LayoutParameter_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutParameter_clone'", nullptr);
             return 0;
         }
-        axis::ui::LayoutParameter* ret = cobj->clone();
-        object_to_luaval<axis::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(axis::ui::LayoutParameter*)ret);
+        ax::ui::LayoutParameter* ret = cobj->clone();
+        object_to_luaval<ax::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(ax::ui::LayoutParameter*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.LayoutParameter:clone",argc, 0);
@@ -53,7 +53,7 @@ int lua_axis_ui_LayoutParameter_clone(lua_State* tolua_S)
 int lua_axis_ui_LayoutParameter_getLayoutType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutParameter* cobj = nullptr;
+    ax::ui::LayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -65,7 +65,7 @@ int lua_axis_ui_LayoutParameter_getLayoutType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -100,7 +100,7 @@ int lua_axis_ui_LayoutParameter_getLayoutType(lua_State* tolua_S)
 int lua_axis_ui_LayoutParameter_createCloneInstance(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutParameter* cobj = nullptr;
+    ax::ui::LayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -112,7 +112,7 @@ int lua_axis_ui_LayoutParameter_createCloneInstance(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -130,8 +130,8 @@ int lua_axis_ui_LayoutParameter_createCloneInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutParameter_createCloneInstance'", nullptr);
             return 0;
         }
-        axis::ui::LayoutParameter* ret = cobj->createCloneInstance();
-        object_to_luaval<axis::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(axis::ui::LayoutParameter*)ret);
+        ax::ui::LayoutParameter* ret = cobj->createCloneInstance();
+        object_to_luaval<ax::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(ax::ui::LayoutParameter*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.LayoutParameter:createCloneInstance",argc, 0);
@@ -147,7 +147,7 @@ int lua_axis_ui_LayoutParameter_createCloneInstance(lua_State* tolua_S)
 int lua_axis_ui_LayoutParameter_copyProperties(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutParameter* cobj = nullptr;
+    ax::ui::LayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -159,7 +159,7 @@ int lua_axis_ui_LayoutParameter_copyProperties(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -172,9 +172,9 @@ int lua_axis_ui_LayoutParameter_copyProperties(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::LayoutParameter* arg0;
+        ax::ui::LayoutParameter* arg0;
 
-        ok &= luaval_to_object<axis::ui::LayoutParameter>(tolua_S, 2, "axui.LayoutParameter",&arg0, "axui.LayoutParameter:copyProperties");
+        ok &= luaval_to_object<ax::ui::LayoutParameter>(tolua_S, 2, "axui.LayoutParameter",&arg0, "axui.LayoutParameter:copyProperties");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutParameter_copyProperties'", nullptr);
@@ -216,8 +216,8 @@ int lua_axis_ui_LayoutParameter_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutParameter_create'", nullptr);
             return 0;
         }
-        axis::ui::LayoutParameter* ret = axis::ui::LayoutParameter::create();
-        object_to_luaval<axis::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(axis::ui::LayoutParameter*)ret);
+        ax::ui::LayoutParameter* ret = ax::ui::LayoutParameter::create();
+        object_to_luaval<ax::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(ax::ui::LayoutParameter*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.LayoutParameter:create",argc, 0);
@@ -231,7 +231,7 @@ int lua_axis_ui_LayoutParameter_create(lua_State* tolua_S)
 int lua_axis_ui_LayoutParameter_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutParameter* cobj = nullptr;
+    ax::ui::LayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -248,7 +248,7 @@ int lua_axis_ui_LayoutParameter_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutParameter_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::LayoutParameter();
+        cobj = new ax::ui::LayoutParameter();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -284,7 +284,7 @@ int lua_register_axis_ui_LayoutParameter(lua_State* tolua_S)
         tolua_function(tolua_S,"copyProperties",lua_axis_ui_LayoutParameter_copyProperties);
         tolua_function(tolua_S,"create", lua_axis_ui_LayoutParameter_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::LayoutParameter).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::LayoutParameter).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.LayoutParameter";
     g_typeCast[typeName] = "axui.LayoutParameter";
     return 1;
@@ -293,7 +293,7 @@ int lua_register_axis_ui_LayoutParameter(lua_State* tolua_S)
 int lua_axis_ui_LinearLayoutParameter_setGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LinearLayoutParameter* cobj = nullptr;
+    ax::ui::LinearLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -305,7 +305,7 @@ int lua_axis_ui_LinearLayoutParameter_setGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LinearLayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LinearLayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LinearLayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -318,7 +318,7 @@ int lua_axis_ui_LinearLayoutParameter_setGravity(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::LinearLayoutParameter::LinearGravity arg0;
+        ax::ui::LinearLayoutParameter::LinearGravity arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.LinearLayoutParameter:setGravity");
         if(!ok)
@@ -343,7 +343,7 @@ int lua_axis_ui_LinearLayoutParameter_setGravity(lua_State* tolua_S)
 int lua_axis_ui_LinearLayoutParameter_getGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LinearLayoutParameter* cobj = nullptr;
+    ax::ui::LinearLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -355,7 +355,7 @@ int lua_axis_ui_LinearLayoutParameter_getGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LinearLayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LinearLayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LinearLayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -409,8 +409,8 @@ int lua_axis_ui_LinearLayoutParameter_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LinearLayoutParameter_create'", nullptr);
             return 0;
         }
-        axis::ui::LinearLayoutParameter* ret = axis::ui::LinearLayoutParameter::create();
-        object_to_luaval<axis::ui::LinearLayoutParameter>(tolua_S, "axui.LinearLayoutParameter",(axis::ui::LinearLayoutParameter*)ret);
+        ax::ui::LinearLayoutParameter* ret = ax::ui::LinearLayoutParameter::create();
+        object_to_luaval<ax::ui::LinearLayoutParameter>(tolua_S, "axui.LinearLayoutParameter",(ax::ui::LinearLayoutParameter*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.LinearLayoutParameter:create",argc, 0);
@@ -424,7 +424,7 @@ int lua_axis_ui_LinearLayoutParameter_create(lua_State* tolua_S)
 int lua_axis_ui_LinearLayoutParameter_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LinearLayoutParameter* cobj = nullptr;
+    ax::ui::LinearLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -441,7 +441,7 @@ int lua_axis_ui_LinearLayoutParameter_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LinearLayoutParameter_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::LinearLayoutParameter();
+        cobj = new ax::ui::LinearLayoutParameter();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -475,7 +475,7 @@ int lua_register_axis_ui_LinearLayoutParameter(lua_State* tolua_S)
         tolua_function(tolua_S,"getGravity",lua_axis_ui_LinearLayoutParameter_getGravity);
         tolua_function(tolua_S,"create", lua_axis_ui_LinearLayoutParameter_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::LinearLayoutParameter).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::LinearLayoutParameter).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.LinearLayoutParameter";
     g_typeCast[typeName] = "axui.LinearLayoutParameter";
     return 1;
@@ -484,7 +484,7 @@ int lua_register_axis_ui_LinearLayoutParameter(lua_State* tolua_S)
 int lua_axis_ui_RelativeLayoutParameter_setAlign(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeLayoutParameter* cobj = nullptr;
+    ax::ui::RelativeLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -496,7 +496,7 @@ int lua_axis_ui_RelativeLayoutParameter_setAlign(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RelativeLayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -509,7 +509,7 @@ int lua_axis_ui_RelativeLayoutParameter_setAlign(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::RelativeLayoutParameter::RelativeAlign arg0;
+        ax::ui::RelativeLayoutParameter::RelativeAlign arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RelativeLayoutParameter:setAlign");
         if(!ok)
@@ -534,7 +534,7 @@ int lua_axis_ui_RelativeLayoutParameter_setAlign(lua_State* tolua_S)
 int lua_axis_ui_RelativeLayoutParameter_setRelativeToWidgetName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeLayoutParameter* cobj = nullptr;
+    ax::ui::RelativeLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -546,7 +546,7 @@ int lua_axis_ui_RelativeLayoutParameter_setRelativeToWidgetName(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"axui.RelativeLayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -584,7 +584,7 @@ int lua_axis_ui_RelativeLayoutParameter_setRelativeToWidgetName(lua_State* tolua
 int lua_axis_ui_RelativeLayoutParameter_getRelativeName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeLayoutParameter* cobj = nullptr;
+    ax::ui::RelativeLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -596,7 +596,7 @@ int lua_axis_ui_RelativeLayoutParameter_getRelativeName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RelativeLayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -631,7 +631,7 @@ int lua_axis_ui_RelativeLayoutParameter_getRelativeName(lua_State* tolua_S)
 int lua_axis_ui_RelativeLayoutParameter_getRelativeToWidgetName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeLayoutParameter* cobj = nullptr;
+    ax::ui::RelativeLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -643,7 +643,7 @@ int lua_axis_ui_RelativeLayoutParameter_getRelativeToWidgetName(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"axui.RelativeLayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -678,7 +678,7 @@ int lua_axis_ui_RelativeLayoutParameter_getRelativeToWidgetName(lua_State* tolua
 int lua_axis_ui_RelativeLayoutParameter_setRelativeName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeLayoutParameter* cobj = nullptr;
+    ax::ui::RelativeLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -690,7 +690,7 @@ int lua_axis_ui_RelativeLayoutParameter_setRelativeName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RelativeLayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -728,7 +728,7 @@ int lua_axis_ui_RelativeLayoutParameter_setRelativeName(lua_State* tolua_S)
 int lua_axis_ui_RelativeLayoutParameter_getAlign(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeLayoutParameter* cobj = nullptr;
+    ax::ui::RelativeLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -740,7 +740,7 @@ int lua_axis_ui_RelativeLayoutParameter_getAlign(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RelativeLayoutParameter",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RelativeLayoutParameter*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -794,8 +794,8 @@ int lua_axis_ui_RelativeLayoutParameter_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RelativeLayoutParameter_create'", nullptr);
             return 0;
         }
-        axis::ui::RelativeLayoutParameter* ret = axis::ui::RelativeLayoutParameter::create();
-        object_to_luaval<axis::ui::RelativeLayoutParameter>(tolua_S, "axui.RelativeLayoutParameter",(axis::ui::RelativeLayoutParameter*)ret);
+        ax::ui::RelativeLayoutParameter* ret = ax::ui::RelativeLayoutParameter::create();
+        object_to_luaval<ax::ui::RelativeLayoutParameter>(tolua_S, "axui.RelativeLayoutParameter",(ax::ui::RelativeLayoutParameter*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RelativeLayoutParameter:create",argc, 0);
@@ -809,7 +809,7 @@ int lua_axis_ui_RelativeLayoutParameter_create(lua_State* tolua_S)
 int lua_axis_ui_RelativeLayoutParameter_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeLayoutParameter* cobj = nullptr;
+    ax::ui::RelativeLayoutParameter* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -826,7 +826,7 @@ int lua_axis_ui_RelativeLayoutParameter_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RelativeLayoutParameter_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RelativeLayoutParameter();
+        cobj = new ax::ui::RelativeLayoutParameter();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -864,7 +864,7 @@ int lua_register_axis_ui_RelativeLayoutParameter(lua_State* tolua_S)
         tolua_function(tolua_S,"getAlign",lua_axis_ui_RelativeLayoutParameter_getAlign);
         tolua_function(tolua_S,"create", lua_axis_ui_RelativeLayoutParameter_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RelativeLayoutParameter).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RelativeLayoutParameter).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RelativeLayoutParameter";
     g_typeCast[typeName] = "axui.RelativeLayoutParameter";
     return 1;
@@ -873,7 +873,7 @@ int lua_register_axis_ui_RelativeLayoutParameter(lua_State* tolua_S)
 int lua_axis_ui_Widget_setLayoutComponentEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -885,7 +885,7 @@ int lua_axis_ui_Widget_setLayoutComponentEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -923,7 +923,7 @@ int lua_axis_ui_Widget_setLayoutComponentEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_setSizePercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -935,7 +935,7 @@ int lua_axis_ui_Widget_setSizePercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -948,7 +948,7 @@ int lua_axis_ui_Widget_setSizePercent(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Widget:setSizePercent");
         if(!ok)
@@ -973,7 +973,7 @@ int lua_axis_ui_Widget_setSizePercent(lua_State* tolua_S)
 int lua_axis_ui_Widget_getCustomSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -985,7 +985,7 @@ int lua_axis_ui_Widget_getCustomSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1003,7 +1003,7 @@ int lua_axis_ui_Widget_getCustomSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getCustomSize'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getCustomSize();
+        const ax::Vec2& ret = cobj->getCustomSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1020,7 +1020,7 @@ int lua_axis_ui_Widget_getCustomSize(lua_State* tolua_S)
 int lua_axis_ui_Widget_getLeftBoundary(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1032,7 +1032,7 @@ int lua_axis_ui_Widget_getLeftBoundary(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1067,7 +1067,7 @@ int lua_axis_ui_Widget_getLeftBoundary(lua_State* tolua_S)
 int lua_axis_ui_Widget_setFlippedX(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1079,7 +1079,7 @@ int lua_axis_ui_Widget_setFlippedX(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1117,7 +1117,7 @@ int lua_axis_ui_Widget_setFlippedX(lua_State* tolua_S)
 int lua_axis_ui_Widget_setCallbackName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1129,7 +1129,7 @@ int lua_axis_ui_Widget_setCallbackName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1167,7 +1167,7 @@ int lua_axis_ui_Widget_setCallbackName(lua_State* tolua_S)
 int lua_axis_ui_Widget_getVirtualRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1179,7 +1179,7 @@ int lua_axis_ui_Widget_getVirtualRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1197,8 +1197,8 @@ int lua_axis_ui_Widget_getVirtualRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getVirtualRenderer'", nullptr);
             return 0;
         }
-        axis::Node* ret = cobj->getVirtualRenderer();
-        object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+        ax::Node* ret = cobj->getVirtualRenderer();
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:getVirtualRenderer",argc, 0);
@@ -1214,7 +1214,7 @@ int lua_axis_ui_Widget_getVirtualRenderer(lua_State* tolua_S)
 int lua_axis_ui_Widget_setPropagateTouchEvents(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1226,7 +1226,7 @@ int lua_axis_ui_Widget_setPropagateTouchEvents(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1264,7 +1264,7 @@ int lua_axis_ui_Widget_setPropagateTouchEvents(lua_State* tolua_S)
 int lua_axis_ui_Widget_isUnifySizeEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1276,7 +1276,7 @@ int lua_axis_ui_Widget_isUnifySizeEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1311,7 +1311,7 @@ int lua_axis_ui_Widget_isUnifySizeEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_getSizePercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1323,7 +1323,7 @@ int lua_axis_ui_Widget_getSizePercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1341,7 +1341,7 @@ int lua_axis_ui_Widget_getSizePercent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getSizePercent'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getSizePercent();
+        const ax::Vec2& ret = cobj->getSizePercent();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1358,7 +1358,7 @@ int lua_axis_ui_Widget_getSizePercent(lua_State* tolua_S)
 int lua_axis_ui_Widget_setPositionPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1370,7 +1370,7 @@ int lua_axis_ui_Widget_setPositionPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1383,7 +1383,7 @@ int lua_axis_ui_Widget_setPositionPercent(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Widget:setPositionPercent");
         if(!ok)
@@ -1408,7 +1408,7 @@ int lua_axis_ui_Widget_setPositionPercent(lua_State* tolua_S)
 int lua_axis_ui_Widget_setSwallowTouches(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1420,7 +1420,7 @@ int lua_axis_ui_Widget_setSwallowTouches(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1458,7 +1458,7 @@ int lua_axis_ui_Widget_setSwallowTouches(lua_State* tolua_S)
 int lua_axis_ui_Widget_getLayoutSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1470,7 +1470,7 @@ int lua_axis_ui_Widget_getLayoutSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1488,7 +1488,7 @@ int lua_axis_ui_Widget_getLayoutSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getLayoutSize'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getLayoutSize();
+        const ax::Vec2& ret = cobj->getLayoutSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1505,7 +1505,7 @@ int lua_axis_ui_Widget_getLayoutSize(lua_State* tolua_S)
 int lua_axis_ui_Widget_setHighlighted(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1517,7 +1517,7 @@ int lua_axis_ui_Widget_setHighlighted(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1555,7 +1555,7 @@ int lua_axis_ui_Widget_setHighlighted(lua_State* tolua_S)
 int lua_axis_ui_Widget_setPositionType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1567,7 +1567,7 @@ int lua_axis_ui_Widget_setPositionType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1580,7 +1580,7 @@ int lua_axis_ui_Widget_setPositionType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Widget::PositionType arg0;
+        ax::ui::Widget::PositionType arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:setPositionType");
         if(!ok)
@@ -1605,7 +1605,7 @@ int lua_axis_ui_Widget_setPositionType(lua_State* tolua_S)
 int lua_axis_ui_Widget_isIgnoreContentAdaptWithSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1617,7 +1617,7 @@ int lua_axis_ui_Widget_isIgnoreContentAdaptWithSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1652,7 +1652,7 @@ int lua_axis_ui_Widget_isIgnoreContentAdaptWithSize(lua_State* tolua_S)
 int lua_axis_ui_Widget_getVirtualRendererSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1664,7 +1664,7 @@ int lua_axis_ui_Widget_getVirtualRendererSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1682,7 +1682,7 @@ int lua_axis_ui_Widget_getVirtualRendererSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getVirtualRendererSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getVirtualRendererSize();
+        ax::Vec2 ret = cobj->getVirtualRendererSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1699,7 +1699,7 @@ int lua_axis_ui_Widget_getVirtualRendererSize(lua_State* tolua_S)
 int lua_axis_ui_Widget_isHighlighted(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1711,7 +1711,7 @@ int lua_axis_ui_Widget_isHighlighted(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1746,7 +1746,7 @@ int lua_axis_ui_Widget_isHighlighted(lua_State* tolua_S)
 int lua_axis_ui_Widget_getLayoutParameter(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1758,7 +1758,7 @@ int lua_axis_ui_Widget_getLayoutParameter(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1776,8 +1776,8 @@ int lua_axis_ui_Widget_getLayoutParameter(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getLayoutParameter'", nullptr);
             return 0;
         }
-        axis::ui::LayoutParameter* ret = cobj->getLayoutParameter();
-        object_to_luaval<axis::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(axis::ui::LayoutParameter*)ret);
+        ax::ui::LayoutParameter* ret = cobj->getLayoutParameter();
+        object_to_luaval<ax::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(ax::ui::LayoutParameter*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:getLayoutParameter",argc, 0);
@@ -1793,7 +1793,7 @@ int lua_axis_ui_Widget_getLayoutParameter(lua_State* tolua_S)
 int lua_axis_ui_Widget_getPositionType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1805,7 +1805,7 @@ int lua_axis_ui_Widget_getPositionType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1840,7 +1840,7 @@ int lua_axis_ui_Widget_getPositionType(lua_State* tolua_S)
 int lua_axis_ui_Widget_getTopBoundary(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1852,7 +1852,7 @@ int lua_axis_ui_Widget_getTopBoundary(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1887,7 +1887,7 @@ int lua_axis_ui_Widget_getTopBoundary(lua_State* tolua_S)
 int lua_axis_ui_Widget_ignoreContentAdaptWithSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1899,7 +1899,7 @@ int lua_axis_ui_Widget_ignoreContentAdaptWithSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1937,7 +1937,7 @@ int lua_axis_ui_Widget_ignoreContentAdaptWithSize(lua_State* tolua_S)
 int lua_axis_ui_Widget_findNextFocusedWidget(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1949,7 +1949,7 @@ int lua_axis_ui_Widget_findNextFocusedWidget(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1962,19 +1962,19 @@ int lua_axis_ui_Widget_findNextFocusedWidget(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::ui::Widget::FocusDirection arg0;
-        axis::ui::Widget* arg1;
+        ax::ui::Widget::FocusDirection arg0;
+        ax::ui::Widget* arg1;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:findNextFocusedWidget");
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:findNextFocusedWidget");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:findNextFocusedWidget");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_findNextFocusedWidget'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->findNextFocusedWidget(arg0, arg1);
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->findNextFocusedWidget(arg0, arg1);
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:findNextFocusedWidget",argc, 2);
@@ -1990,7 +1990,7 @@ int lua_axis_ui_Widget_findNextFocusedWidget(lua_State* tolua_S)
 int lua_axis_ui_Widget_isEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2002,7 +2002,7 @@ int lua_axis_ui_Widget_isEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2037,7 +2037,7 @@ int lua_axis_ui_Widget_isEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_isFocused(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2049,7 +2049,7 @@ int lua_axis_ui_Widget_isFocused(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2084,7 +2084,7 @@ int lua_axis_ui_Widget_isFocused(lua_State* tolua_S)
 int lua_axis_ui_Widget_getTouchBeganPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2096,7 +2096,7 @@ int lua_axis_ui_Widget_getTouchBeganPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2114,7 +2114,7 @@ int lua_axis_ui_Widget_getTouchBeganPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getTouchBeganPosition'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getTouchBeganPosition();
+        const ax::Vec2& ret = cobj->getTouchBeganPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2131,7 +2131,7 @@ int lua_axis_ui_Widget_getTouchBeganPosition(lua_State* tolua_S)
 int lua_axis_ui_Widget_isTouchEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2143,7 +2143,7 @@ int lua_axis_ui_Widget_isTouchEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2178,7 +2178,7 @@ int lua_axis_ui_Widget_isTouchEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_getCallbackName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2190,7 +2190,7 @@ int lua_axis_ui_Widget_getCallbackName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2225,7 +2225,7 @@ int lua_axis_ui_Widget_getCallbackName(lua_State* tolua_S)
 int lua_axis_ui_Widget_getActionTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2237,7 +2237,7 @@ int lua_axis_ui_Widget_getActionTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2272,7 +2272,7 @@ int lua_axis_ui_Widget_getActionTag(lua_State* tolua_S)
 int lua_axis_ui_Widget_getWorldPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2284,7 +2284,7 @@ int lua_axis_ui_Widget_getWorldPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2302,7 +2302,7 @@ int lua_axis_ui_Widget_getWorldPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getWorldPosition'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getWorldPosition();
+        ax::Vec2 ret = cobj->getWorldPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2319,7 +2319,7 @@ int lua_axis_ui_Widget_getWorldPosition(lua_State* tolua_S)
 int lua_axis_ui_Widget_isFocusEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2331,7 +2331,7 @@ int lua_axis_ui_Widget_isFocusEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2366,7 +2366,7 @@ int lua_axis_ui_Widget_isFocusEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_setFocused(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2378,7 +2378,7 @@ int lua_axis_ui_Widget_setFocused(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2416,7 +2416,7 @@ int lua_axis_ui_Widget_setFocused(lua_State* tolua_S)
 int lua_axis_ui_Widget_setActionTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2428,7 +2428,7 @@ int lua_axis_ui_Widget_setActionTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2466,7 +2466,7 @@ int lua_axis_ui_Widget_setActionTag(lua_State* tolua_S)
 int lua_axis_ui_Widget_setTouchEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2478,7 +2478,7 @@ int lua_axis_ui_Widget_setTouchEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2516,7 +2516,7 @@ int lua_axis_ui_Widget_setTouchEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_setFlippedY(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2528,7 +2528,7 @@ int lua_axis_ui_Widget_setFlippedY(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2566,7 +2566,7 @@ int lua_axis_ui_Widget_setFlippedY(lua_State* tolua_S)
 int lua_axis_ui_Widget_setEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2578,7 +2578,7 @@ int lua_axis_ui_Widget_setEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2616,7 +2616,7 @@ int lua_axis_ui_Widget_setEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_getRightBoundary(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2628,7 +2628,7 @@ int lua_axis_ui_Widget_getRightBoundary(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2663,7 +2663,7 @@ int lua_axis_ui_Widget_getRightBoundary(lua_State* tolua_S)
 int lua_axis_ui_Widget_setBrightStyle(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2675,7 +2675,7 @@ int lua_axis_ui_Widget_setBrightStyle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2688,7 +2688,7 @@ int lua_axis_ui_Widget_setBrightStyle(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Widget::BrightStyle arg0;
+        ax::ui::Widget::BrightStyle arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:setBrightStyle");
         if(!ok)
@@ -2713,7 +2713,7 @@ int lua_axis_ui_Widget_setBrightStyle(lua_State* tolua_S)
 int lua_axis_ui_Widget_setLayoutParameter(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2725,7 +2725,7 @@ int lua_axis_ui_Widget_setLayoutParameter(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2738,9 +2738,9 @@ int lua_axis_ui_Widget_setLayoutParameter(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::LayoutParameter* arg0;
+        ax::ui::LayoutParameter* arg0;
 
-        ok &= luaval_to_object<axis::ui::LayoutParameter>(tolua_S, 2, "axui.LayoutParameter",&arg0, "axui.Widget:setLayoutParameter");
+        ok &= luaval_to_object<ax::ui::LayoutParameter>(tolua_S, 2, "axui.LayoutParameter",&arg0, "axui.Widget:setLayoutParameter");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_setLayoutParameter'", nullptr);
@@ -2763,7 +2763,7 @@ int lua_axis_ui_Widget_setLayoutParameter(lua_State* tolua_S)
 int lua_axis_ui_Widget_clone(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2775,7 +2775,7 @@ int lua_axis_ui_Widget_clone(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2793,8 +2793,8 @@ int lua_axis_ui_Widget_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_clone'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->clone();
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->clone();
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:clone",argc, 0);
@@ -2810,7 +2810,7 @@ int lua_axis_ui_Widget_clone(lua_State* tolua_S)
 int lua_axis_ui_Widget_setFocusEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2822,7 +2822,7 @@ int lua_axis_ui_Widget_setFocusEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2860,7 +2860,7 @@ int lua_axis_ui_Widget_setFocusEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_getBottomBoundary(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2872,7 +2872,7 @@ int lua_axis_ui_Widget_getBottomBoundary(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2907,7 +2907,7 @@ int lua_axis_ui_Widget_getBottomBoundary(lua_State* tolua_S)
 int lua_axis_ui_Widget_isBright(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2919,7 +2919,7 @@ int lua_axis_ui_Widget_isBright(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2954,7 +2954,7 @@ int lua_axis_ui_Widget_isBright(lua_State* tolua_S)
 int lua_axis_ui_Widget_dispatchFocusEvent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2966,7 +2966,7 @@ int lua_axis_ui_Widget_dispatchFocusEvent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2979,12 +2979,12 @@ int lua_axis_ui_Widget_dispatchFocusEvent(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::ui::Widget* arg0;
-        axis::ui::Widget* arg1;
+        ax::ui::Widget* arg0;
+        ax::ui::Widget* arg1;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Widget:dispatchFocusEvent");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Widget:dispatchFocusEvent");
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:dispatchFocusEvent");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:dispatchFocusEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_dispatchFocusEvent'", nullptr);
@@ -3007,7 +3007,7 @@ int lua_axis_ui_Widget_dispatchFocusEvent(lua_State* tolua_S)
 int lua_axis_ui_Widget_setUnifySizeEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3019,7 +3019,7 @@ int lua_axis_ui_Widget_setUnifySizeEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3057,7 +3057,7 @@ int lua_axis_ui_Widget_setUnifySizeEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_isPropagateTouchEvents(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3069,7 +3069,7 @@ int lua_axis_ui_Widget_isPropagateTouchEvents(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3104,7 +3104,7 @@ int lua_axis_ui_Widget_isPropagateTouchEvents(lua_State* tolua_S)
 int lua_axis_ui_Widget_hitTest(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3116,7 +3116,7 @@ int lua_axis_ui_Widget_hitTest(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3129,15 +3129,15 @@ int lua_axis_ui_Widget_hitTest(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 3) 
     {
-        axis::Vec2 arg0;
-        const axis::Camera* arg1;
-        axis::Vec3* arg2;
+        ax::Vec2 arg0;
+        const ax::Camera* arg1;
+        ax::Vec3* arg2;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Widget:hitTest");
 
-        ok &= luaval_to_object<const axis::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.Widget:hitTest");
+        ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.Widget:hitTest");
 
-        ok &= luaval_to_object<axis::Vec3>(tolua_S, 4, "ax.Vec3",&arg2, "axui.Widget:hitTest");
+        ok &= luaval_to_object<ax::Vec3>(tolua_S, 4, "ax.Vec3",&arg2, "axui.Widget:hitTest");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_hitTest'", nullptr);
@@ -3160,7 +3160,7 @@ int lua_axis_ui_Widget_hitTest(lua_State* tolua_S)
 int lua_axis_ui_Widget_isLayoutComponentEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3172,7 +3172,7 @@ int lua_axis_ui_Widget_isLayoutComponentEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3207,7 +3207,7 @@ int lua_axis_ui_Widget_isLayoutComponentEnabled(lua_State* tolua_S)
 int lua_axis_ui_Widget_requestFocus(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3219,7 +3219,7 @@ int lua_axis_ui_Widget_requestFocus(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3254,7 +3254,7 @@ int lua_axis_ui_Widget_requestFocus(lua_State* tolua_S)
 int lua_axis_ui_Widget_updateSizeAndPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -3263,7 +3263,7 @@ int lua_axis_ui_Widget_updateSizeAndPosition(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -3274,7 +3274,7 @@ int lua_axis_ui_Widget_updateSizeAndPosition(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::Vec2 arg0;
+            ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Widget:updateSizeAndPosition");
 
             if (!ok) { break; }
@@ -3305,7 +3305,7 @@ int lua_axis_ui_Widget_updateSizeAndPosition(lua_State* tolua_S)
 int lua_axis_ui_Widget_onFocusChange(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3317,7 +3317,7 @@ int lua_axis_ui_Widget_onFocusChange(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3330,12 +3330,12 @@ int lua_axis_ui_Widget_onFocusChange(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::ui::Widget* arg0;
-        axis::ui::Widget* arg1;
+        ax::ui::Widget* arg0;
+        ax::ui::Widget* arg1;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Widget:onFocusChange");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Widget:onFocusChange");
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:onFocusChange");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:onFocusChange");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_onFocusChange'", nullptr);
@@ -3358,7 +3358,7 @@ int lua_axis_ui_Widget_onFocusChange(lua_State* tolua_S)
 int lua_axis_ui_Widget_getTouchMovePosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3370,7 +3370,7 @@ int lua_axis_ui_Widget_getTouchMovePosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3388,7 +3388,7 @@ int lua_axis_ui_Widget_getTouchMovePosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getTouchMovePosition'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getTouchMovePosition();
+        const ax::Vec2& ret = cobj->getTouchMovePosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3405,7 +3405,7 @@ int lua_axis_ui_Widget_getTouchMovePosition(lua_State* tolua_S)
 int lua_axis_ui_Widget_getSizeType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3417,7 +3417,7 @@ int lua_axis_ui_Widget_getSizeType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3452,7 +3452,7 @@ int lua_axis_ui_Widget_getSizeType(lua_State* tolua_S)
 int lua_axis_ui_Widget_getCallbackType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3464,7 +3464,7 @@ int lua_axis_ui_Widget_getCallbackType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3499,7 +3499,7 @@ int lua_axis_ui_Widget_getCallbackType(lua_State* tolua_S)
 int lua_axis_ui_Widget_getTouchEndPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3511,7 +3511,7 @@ int lua_axis_ui_Widget_getTouchEndPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3529,7 +3529,7 @@ int lua_axis_ui_Widget_getTouchEndPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getTouchEndPosition'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getTouchEndPosition();
+        const ax::Vec2& ret = cobj->getTouchEndPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3546,7 +3546,7 @@ int lua_axis_ui_Widget_getTouchEndPosition(lua_State* tolua_S)
 int lua_axis_ui_Widget_getPositionPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3558,7 +3558,7 @@ int lua_axis_ui_Widget_getPositionPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3576,7 +3576,7 @@ int lua_axis_ui_Widget_getPositionPercent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getPositionPercent'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getPositionPercent();
+        const ax::Vec2& ret = cobj->getPositionPercent();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3593,7 +3593,7 @@ int lua_axis_ui_Widget_getPositionPercent(lua_State* tolua_S)
 int lua_axis_ui_Widget_propagateTouchEvent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3605,7 +3605,7 @@ int lua_axis_ui_Widget_propagateTouchEvent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3618,15 +3618,15 @@ int lua_axis_ui_Widget_propagateTouchEvent(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 3) 
     {
-        axis::ui::Widget::TouchEventType arg0;
-        axis::ui::Widget* arg1;
-        axis::Touch* arg2;
+        ax::ui::Widget::TouchEventType arg0;
+        ax::ui::Widget* arg1;
+        ax::Touch* arg2;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:propagateTouchEvent");
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:propagateTouchEvent");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:propagateTouchEvent");
 
-        ok &= luaval_to_object<axis::Touch>(tolua_S, 4, "ax.Touch",&arg2, "axui.Widget:propagateTouchEvent");
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 4, "ax.Touch",&arg2, "axui.Widget:propagateTouchEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_propagateTouchEvent'", nullptr);
@@ -3649,7 +3649,7 @@ int lua_axis_ui_Widget_propagateTouchEvent(lua_State* tolua_S)
 int lua_axis_ui_Widget_isFlippedX(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3661,7 +3661,7 @@ int lua_axis_ui_Widget_isFlippedX(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3696,7 +3696,7 @@ int lua_axis_ui_Widget_isFlippedX(lua_State* tolua_S)
 int lua_axis_ui_Widget_isFlippedY(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3708,7 +3708,7 @@ int lua_axis_ui_Widget_isFlippedY(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3743,7 +3743,7 @@ int lua_axis_ui_Widget_isFlippedY(lua_State* tolua_S)
 int lua_axis_ui_Widget_isClippingParentContainsPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3755,7 +3755,7 @@ int lua_axis_ui_Widget_isClippingParentContainsPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3768,7 +3768,7 @@ int lua_axis_ui_Widget_isClippingParentContainsPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Widget:isClippingParentContainsPoint");
         if(!ok)
@@ -3793,7 +3793,7 @@ int lua_axis_ui_Widget_isClippingParentContainsPoint(lua_State* tolua_S)
 int lua_axis_ui_Widget_setSizeType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3805,7 +3805,7 @@ int lua_axis_ui_Widget_setSizeType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3818,7 +3818,7 @@ int lua_axis_ui_Widget_setSizeType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Widget::SizeType arg0;
+        ax::ui::Widget::SizeType arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:setSizeType");
         if(!ok)
@@ -3843,7 +3843,7 @@ int lua_axis_ui_Widget_setSizeType(lua_State* tolua_S)
 int lua_axis_ui_Widget_interceptTouchEvent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3855,7 +3855,7 @@ int lua_axis_ui_Widget_interceptTouchEvent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3868,15 +3868,15 @@ int lua_axis_ui_Widget_interceptTouchEvent(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 3) 
     {
-        axis::ui::Widget::TouchEventType arg0;
-        axis::ui::Widget* arg1;
-        axis::Touch* arg2;
+        ax::ui::Widget::TouchEventType arg0;
+        ax::ui::Widget* arg1;
+        ax::Touch* arg2;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Widget:interceptTouchEvent");
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:interceptTouchEvent");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 3, "axui.Widget",&arg1, "axui.Widget:interceptTouchEvent");
 
-        ok &= luaval_to_object<axis::Touch>(tolua_S, 4, "ax.Touch",&arg2, "axui.Widget:interceptTouchEvent");
+        ok &= luaval_to_object<ax::Touch>(tolua_S, 4, "ax.Touch",&arg2, "axui.Widget:interceptTouchEvent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_interceptTouchEvent'", nullptr);
@@ -3899,7 +3899,7 @@ int lua_axis_ui_Widget_interceptTouchEvent(lua_State* tolua_S)
 int lua_axis_ui_Widget_setBright(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3911,7 +3911,7 @@ int lua_axis_ui_Widget_setBright(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3949,7 +3949,7 @@ int lua_axis_ui_Widget_setBright(lua_State* tolua_S)
 int lua_axis_ui_Widget_setCallbackType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3961,7 +3961,7 @@ int lua_axis_ui_Widget_setCallbackType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3999,7 +3999,7 @@ int lua_axis_ui_Widget_setCallbackType(lua_State* tolua_S)
 int lua_axis_ui_Widget_isSwallowTouches(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4011,7 +4011,7 @@ int lua_axis_ui_Widget_isSwallowTouches(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4067,7 +4067,7 @@ int lua_axis_ui_Widget_enableDpadNavigation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_enableDpadNavigation'", nullptr);
             return 0;
         }
-        axis::ui::Widget::enableDpadNavigation(arg0);
+        ax::ui::Widget::enableDpadNavigation(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -4101,8 +4101,8 @@ int lua_axis_ui_Widget_getCurrentFocusedWidget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_getCurrentFocusedWidget'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = axis::ui::Widget::getCurrentFocusedWidget();
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = ax::ui::Widget::getCurrentFocusedWidget();
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Widget:getCurrentFocusedWidget",argc, 0);
@@ -4135,8 +4135,8 @@ int lua_axis_ui_Widget_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_create'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = axis::ui::Widget::create();
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = ax::ui::Widget::create();
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Widget:create",argc, 0);
@@ -4150,7 +4150,7 @@ int lua_axis_ui_Widget_create(lua_State* tolua_S)
 int lua_axis_ui_Widget_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Widget* cobj = nullptr;
+    ax::ui::Widget* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4167,7 +4167,7 @@ int lua_axis_ui_Widget_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Widget_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::Widget();
+        cobj = new ax::ui::Widget();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -4266,7 +4266,7 @@ int lua_register_axis_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"getCurrentFocusedWidget", lua_axis_ui_Widget_getCurrentFocusedWidget);
         tolua_function(tolua_S,"create", lua_axis_ui_Widget_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::Widget).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::Widget).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.Widget";
     g_typeCast[typeName] = "axui.Widget";
     return 1;
@@ -4275,7 +4275,7 @@ int lua_register_axis_ui_Widget(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundColorVector(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4287,7 +4287,7 @@ int lua_axis_ui_Layout_setBackGroundColorVector(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4300,7 +4300,7 @@ int lua_axis_ui_Layout_setBackGroundColorVector(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColorVector");
         if(!ok)
@@ -4325,7 +4325,7 @@ int lua_axis_ui_Layout_setBackGroundColorVector(lua_State* tolua_S)
 int lua_axis_ui_Layout_setClippingType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4337,7 +4337,7 @@ int lua_axis_ui_Layout_setClippingType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4350,7 +4350,7 @@ int lua_axis_ui_Layout_setClippingType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Layout::ClippingType arg0;
+        ax::ui::Layout::ClippingType arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Layout:setClippingType");
         if(!ok)
@@ -4375,7 +4375,7 @@ int lua_axis_ui_Layout_setClippingType(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundColorType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4387,7 +4387,7 @@ int lua_axis_ui_Layout_setBackGroundColorType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4400,7 +4400,7 @@ int lua_axis_ui_Layout_setBackGroundColorType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Layout::BackGroundColorType arg0;
+        ax::ui::Layout::BackGroundColorType arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Layout:setBackGroundColorType");
         if(!ok)
@@ -4425,7 +4425,7 @@ int lua_axis_ui_Layout_setBackGroundColorType(lua_State* tolua_S)
 int lua_axis_ui_Layout_setLoopFocus(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4437,7 +4437,7 @@ int lua_axis_ui_Layout_setLoopFocus(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4475,7 +4475,7 @@ int lua_axis_ui_Layout_setLoopFocus(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundImageColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4487,7 +4487,7 @@ int lua_axis_ui_Layout_setBackGroundImageColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4500,7 +4500,7 @@ int lua_axis_ui_Layout_setBackGroundImageColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color3B arg0;
+        ax::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.Layout:setBackGroundImageColor");
         if(!ok)
@@ -4525,7 +4525,7 @@ int lua_axis_ui_Layout_setBackGroundImageColor(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundColorVector(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4537,7 +4537,7 @@ int lua_axis_ui_Layout_getBackGroundColorVector(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4555,7 +4555,7 @@ int lua_axis_ui_Layout_getBackGroundColorVector(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_getBackGroundColorVector'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getBackGroundColorVector();
+        const ax::Vec2& ret = cobj->getBackGroundColorVector();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4572,7 +4572,7 @@ int lua_axis_ui_Layout_getBackGroundColorVector(lua_State* tolua_S)
 int lua_axis_ui_Layout_getClippingType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4584,7 +4584,7 @@ int lua_axis_ui_Layout_getClippingType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4619,7 +4619,7 @@ int lua_axis_ui_Layout_getClippingType(lua_State* tolua_S)
 int lua_axis_ui_Layout_getRenderFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4631,7 +4631,7 @@ int lua_axis_ui_Layout_getRenderFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4649,7 +4649,7 @@ int lua_axis_ui_Layout_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_getRenderFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getRenderFile();
+        ax::ResourceData ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4666,7 +4666,7 @@ int lua_axis_ui_Layout_getRenderFile(lua_State* tolua_S)
 int lua_axis_ui_Layout_isLoopFocus(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4678,7 +4678,7 @@ int lua_axis_ui_Layout_isLoopFocus(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4713,7 +4713,7 @@ int lua_axis_ui_Layout_isLoopFocus(lua_State* tolua_S)
 int lua_axis_ui_Layout_removeBackGroundImage(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4725,7 +4725,7 @@ int lua_axis_ui_Layout_removeBackGroundImage(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4760,7 +4760,7 @@ int lua_axis_ui_Layout_removeBackGroundImage(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundColorOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4772,7 +4772,7 @@ int lua_axis_ui_Layout_getBackGroundColorOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4807,7 +4807,7 @@ int lua_axis_ui_Layout_getBackGroundColorOpacity(lua_State* tolua_S)
 int lua_axis_ui_Layout_isClippingEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4819,7 +4819,7 @@ int lua_axis_ui_Layout_isClippingEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4854,7 +4854,7 @@ int lua_axis_ui_Layout_isClippingEnabled(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundImageOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4866,7 +4866,7 @@ int lua_axis_ui_Layout_setBackGroundImageOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4904,7 +4904,7 @@ int lua_axis_ui_Layout_setBackGroundImageOpacity(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundImage(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4916,7 +4916,7 @@ int lua_axis_ui_Layout_setBackGroundImage(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4944,7 +4944,7 @@ int lua_axis_ui_Layout_setBackGroundImage(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Layout:setBackGroundImage");
 
@@ -4971,7 +4971,7 @@ int lua_axis_ui_Layout_setBackGroundImage(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -4980,7 +4980,7 @@ int lua_axis_ui_Layout_setBackGroundColor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -4991,11 +4991,11 @@ int lua_axis_ui_Layout_setBackGroundColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            axis::Color3B arg0;
+            ax::Color3B arg0;
             ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColor");
 
             if (!ok) { break; }
-            axis::Color3B arg1;
+            ax::Color3B arg1;
             ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.Layout:setBackGroundColor");
 
             if (!ok) { break; }
@@ -5007,7 +5007,7 @@ int lua_axis_ui_Layout_setBackGroundColor(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::Color3B arg0;
+            ax::Color3B arg0;
             ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.Layout:setBackGroundColor");
 
             if (!ok) { break; }
@@ -5030,7 +5030,7 @@ int lua_axis_ui_Layout_setBackGroundColor(lua_State* tolua_S)
 int lua_axis_ui_Layout_requestDoLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5042,7 +5042,7 @@ int lua_axis_ui_Layout_requestDoLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5077,7 +5077,7 @@ int lua_axis_ui_Layout_requestDoLayout(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundImageCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5089,7 +5089,7 @@ int lua_axis_ui_Layout_getBackGroundImageCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5107,7 +5107,7 @@ int lua_axis_ui_Layout_getBackGroundImageCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_getBackGroundImageCapInsets'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getBackGroundImageCapInsets();
+        const ax::Rect& ret = cobj->getBackGroundImageCapInsets();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5124,7 +5124,7 @@ int lua_axis_ui_Layout_getBackGroundImageCapInsets(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5136,7 +5136,7 @@ int lua_axis_ui_Layout_getBackGroundColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5154,7 +5154,7 @@ int lua_axis_ui_Layout_getBackGroundColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_getBackGroundColor'", nullptr);
             return 0;
         }
-        const axis::Color3B& ret = cobj->getBackGroundColor();
+        const ax::Color3B& ret = cobj->getBackGroundColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5171,7 +5171,7 @@ int lua_axis_ui_Layout_getBackGroundColor(lua_State* tolua_S)
 int lua_axis_ui_Layout_setClippingEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5183,7 +5183,7 @@ int lua_axis_ui_Layout_setClippingEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5221,7 +5221,7 @@ int lua_axis_ui_Layout_setClippingEnabled(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundImageColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5233,7 +5233,7 @@ int lua_axis_ui_Layout_getBackGroundImageColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5251,7 +5251,7 @@ int lua_axis_ui_Layout_getBackGroundImageColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_getBackGroundImageColor'", nullptr);
             return 0;
         }
-        const axis::Color3B& ret = cobj->getBackGroundImageColor();
+        const ax::Color3B& ret = cobj->getBackGroundImageColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5268,7 +5268,7 @@ int lua_axis_ui_Layout_getBackGroundImageColor(lua_State* tolua_S)
 int lua_axis_ui_Layout_isBackGroundImageScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5280,7 +5280,7 @@ int lua_axis_ui_Layout_isBackGroundImageScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5315,7 +5315,7 @@ int lua_axis_ui_Layout_isBackGroundImageScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundColorType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5327,7 +5327,7 @@ int lua_axis_ui_Layout_getBackGroundColorType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5362,7 +5362,7 @@ int lua_axis_ui_Layout_getBackGroundColorType(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundEndColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5374,7 +5374,7 @@ int lua_axis_ui_Layout_getBackGroundEndColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5392,7 +5392,7 @@ int lua_axis_ui_Layout_getBackGroundEndColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_getBackGroundEndColor'", nullptr);
             return 0;
         }
-        const axis::Color3B& ret = cobj->getBackGroundEndColor();
+        const ax::Color3B& ret = cobj->getBackGroundEndColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5409,7 +5409,7 @@ int lua_axis_ui_Layout_getBackGroundEndColor(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundColorOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5421,7 +5421,7 @@ int lua_axis_ui_Layout_setBackGroundColorOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5459,7 +5459,7 @@ int lua_axis_ui_Layout_setBackGroundColorOpacity(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundImageOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5471,7 +5471,7 @@ int lua_axis_ui_Layout_getBackGroundImageOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5506,7 +5506,7 @@ int lua_axis_ui_Layout_getBackGroundImageOpacity(lua_State* tolua_S)
 int lua_axis_ui_Layout_isPassFocusToChild(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5518,7 +5518,7 @@ int lua_axis_ui_Layout_isPassFocusToChild(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5553,7 +5553,7 @@ int lua_axis_ui_Layout_isPassFocusToChild(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundImageCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5565,7 +5565,7 @@ int lua_axis_ui_Layout_setBackGroundImageCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5578,7 +5578,7 @@ int lua_axis_ui_Layout_setBackGroundImageCapInsets(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Layout:setBackGroundImageCapInsets");
         if(!ok)
@@ -5603,7 +5603,7 @@ int lua_axis_ui_Layout_setBackGroundImageCapInsets(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundImageTextureSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5615,7 +5615,7 @@ int lua_axis_ui_Layout_getBackGroundImageTextureSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5633,7 +5633,7 @@ int lua_axis_ui_Layout_getBackGroundImageTextureSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_getBackGroundImageTextureSize'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getBackGroundImageTextureSize();
+        const ax::Vec2& ret = cobj->getBackGroundImageTextureSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5650,7 +5650,7 @@ int lua_axis_ui_Layout_getBackGroundImageTextureSize(lua_State* tolua_S)
 int lua_axis_ui_Layout_forceDoLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5662,7 +5662,7 @@ int lua_axis_ui_Layout_forceDoLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5697,7 +5697,7 @@ int lua_axis_ui_Layout_forceDoLayout(lua_State* tolua_S)
 int lua_axis_ui_Layout_getLayoutType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5709,7 +5709,7 @@ int lua_axis_ui_Layout_getLayoutType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5744,7 +5744,7 @@ int lua_axis_ui_Layout_getLayoutType(lua_State* tolua_S)
 int lua_axis_ui_Layout_setPassFocusToChild(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5756,7 +5756,7 @@ int lua_axis_ui_Layout_setPassFocusToChild(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5794,7 +5794,7 @@ int lua_axis_ui_Layout_setPassFocusToChild(lua_State* tolua_S)
 int lua_axis_ui_Layout_getBackGroundStartColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5806,7 +5806,7 @@ int lua_axis_ui_Layout_getBackGroundStartColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5824,7 +5824,7 @@ int lua_axis_ui_Layout_getBackGroundStartColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_getBackGroundStartColor'", nullptr);
             return 0;
         }
-        const axis::Color3B& ret = cobj->getBackGroundStartColor();
+        const ax::Color3B& ret = cobj->getBackGroundStartColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5841,7 +5841,7 @@ int lua_axis_ui_Layout_getBackGroundStartColor(lua_State* tolua_S)
 int lua_axis_ui_Layout_setBackGroundImageScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5853,7 +5853,7 @@ int lua_axis_ui_Layout_setBackGroundImageScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5891,7 +5891,7 @@ int lua_axis_ui_Layout_setBackGroundImageScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_Layout_setLayoutType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5903,7 +5903,7 @@ int lua_axis_ui_Layout_setLayoutType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Layout",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Layout*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5916,7 +5916,7 @@ int lua_axis_ui_Layout_setLayoutType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Layout::Type arg0;
+        ax::ui::Layout::Type arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Layout:setLayoutType");
         if(!ok)
@@ -5960,8 +5960,8 @@ int lua_axis_ui_Layout_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_create'", nullptr);
             return 0;
         }
-        axis::ui::Layout* ret = axis::ui::Layout::create();
-        object_to_luaval<axis::ui::Layout>(tolua_S, "axui.Layout",(axis::ui::Layout*)ret);
+        ax::ui::Layout* ret = ax::ui::Layout::create();
+        object_to_luaval<ax::ui::Layout>(tolua_S, "axui.Layout",(ax::ui::Layout*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Layout:create",argc, 0);
@@ -5994,8 +5994,8 @@ int lua_axis_ui_Layout_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::Layout::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::Layout::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Layout:createInstance",argc, 0);
@@ -6009,7 +6009,7 @@ int lua_axis_ui_Layout_createInstance(lua_State* tolua_S)
 int lua_axis_ui_Layout_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Layout* cobj = nullptr;
+    ax::ui::Layout* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6026,7 +6026,7 @@ int lua_axis_ui_Layout_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Layout_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::Layout();
+        cobj = new ax::ui::Layout();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -6093,7 +6093,7 @@ int lua_register_axis_ui_Layout(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_Layout_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_Layout_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::Layout).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::Layout).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.Layout";
     g_typeCast[typeName] = "axui.Layout";
     return 1;
@@ -6102,7 +6102,7 @@ int lua_register_axis_ui_Layout(lua_State* tolua_S)
 int lua_axis_ui_Button_getNormalTextureSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6114,7 +6114,7 @@ int lua_axis_ui_Button_getNormalTextureSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6132,7 +6132,7 @@ int lua_axis_ui_Button_getNormalTextureSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getNormalTextureSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getNormalTextureSize();
+        ax::Vec2 ret = cobj->getNormalTextureSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6149,7 +6149,7 @@ int lua_axis_ui_Button_getNormalTextureSize(lua_State* tolua_S)
 int lua_axis_ui_Button_getTitleText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6161,7 +6161,7 @@ int lua_axis_ui_Button_getTitleText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6196,7 +6196,7 @@ int lua_axis_ui_Button_getTitleText(lua_State* tolua_S)
 int lua_axis_ui_Button_setTitleLabel(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6208,7 +6208,7 @@ int lua_axis_ui_Button_setTitleLabel(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6221,9 +6221,9 @@ int lua_axis_ui_Button_setTitleLabel(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Label* arg0;
+        ax::Label* arg0;
 
-        ok &= luaval_to_object<axis::Label>(tolua_S, 2, "ax.Label",&arg0, "axui.Button:setTitleLabel");
+        ok &= luaval_to_object<ax::Label>(tolua_S, 2, "ax.Label",&arg0, "axui.Button:setTitleLabel");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_setTitleLabel'", nullptr);
@@ -6246,7 +6246,7 @@ int lua_axis_ui_Button_setTitleLabel(lua_State* tolua_S)
 int lua_axis_ui_Button_setTitleFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6258,7 +6258,7 @@ int lua_axis_ui_Button_setTitleFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6296,7 +6296,7 @@ int lua_axis_ui_Button_setTitleFontSize(lua_State* tolua_S)
 int lua_axis_ui_Button_resetPressedRender(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6308,7 +6308,7 @@ int lua_axis_ui_Button_resetPressedRender(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6343,7 +6343,7 @@ int lua_axis_ui_Button_resetPressedRender(lua_State* tolua_S)
 int lua_axis_ui_Button_setScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6355,7 +6355,7 @@ int lua_axis_ui_Button_setScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6393,7 +6393,7 @@ int lua_axis_ui_Button_setScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_Button_resetDisabledRender(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6405,7 +6405,7 @@ int lua_axis_ui_Button_resetDisabledRender(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6440,7 +6440,7 @@ int lua_axis_ui_Button_resetDisabledRender(lua_State* tolua_S)
 int lua_axis_ui_Button_getTitleRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6452,7 +6452,7 @@ int lua_axis_ui_Button_getTitleRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6470,8 +6470,8 @@ int lua_axis_ui_Button_getTitleRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getTitleRenderer'", nullptr);
             return 0;
         }
-        axis::Label* ret = cobj->getTitleRenderer();
-        object_to_luaval<axis::Label>(tolua_S, "ax.Label",(axis::Label*)ret);
+        ax::Label* ret = cobj->getTitleRenderer();
+        object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getTitleRenderer",argc, 0);
@@ -6487,7 +6487,7 @@ int lua_axis_ui_Button_getTitleRenderer(lua_State* tolua_S)
 int lua_axis_ui_Button_getRendererClicked(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6499,7 +6499,7 @@ int lua_axis_ui_Button_getRendererClicked(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6517,8 +6517,8 @@ int lua_axis_ui_Button_getRendererClicked(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getRendererClicked'", nullptr);
             return 0;
         }
-        axis::ui::Scale9Sprite* ret = cobj->getRendererClicked();
-        object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+        ax::ui::Scale9Sprite* ret = cobj->getRendererClicked();
+        object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getRendererClicked",argc, 0);
@@ -6534,7 +6534,7 @@ int lua_axis_ui_Button_getRendererClicked(lua_State* tolua_S)
 int lua_axis_ui_Button_getDisabledFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6546,7 +6546,7 @@ int lua_axis_ui_Button_getDisabledFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6564,7 +6564,7 @@ int lua_axis_ui_Button_getDisabledFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getDisabledFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getDisabledFile();
+        ax::ResourceData ret = cobj->getDisabledFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6581,7 +6581,7 @@ int lua_axis_ui_Button_getDisabledFile(lua_State* tolua_S)
 int lua_axis_ui_Button_getZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6593,7 +6593,7 @@ int lua_axis_ui_Button_getZoomScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6628,7 +6628,7 @@ int lua_axis_ui_Button_getZoomScale(lua_State* tolua_S)
 int lua_axis_ui_Button_getCapInsetsDisabledRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6640,7 +6640,7 @@ int lua_axis_ui_Button_getCapInsetsDisabledRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6658,7 +6658,7 @@ int lua_axis_ui_Button_getCapInsetsDisabledRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getCapInsetsDisabledRenderer'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsetsDisabledRenderer();
+        const ax::Rect& ret = cobj->getCapInsetsDisabledRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6675,7 +6675,7 @@ int lua_axis_ui_Button_getCapInsetsDisabledRenderer(lua_State* tolua_S)
 int lua_axis_ui_Button_setTitleColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6687,7 +6687,7 @@ int lua_axis_ui_Button_setTitleColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6700,7 +6700,7 @@ int lua_axis_ui_Button_setTitleColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color3B arg0;
+        ax::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.Button:setTitleColor");
         if(!ok)
@@ -6725,7 +6725,7 @@ int lua_axis_ui_Button_setTitleColor(lua_State* tolua_S)
 int lua_axis_ui_Button_getNormalFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6737,7 +6737,7 @@ int lua_axis_ui_Button_getNormalFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6755,7 +6755,7 @@ int lua_axis_ui_Button_getNormalFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getNormalFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getNormalFile();
+        ax::ResourceData ret = cobj->getNormalFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6772,7 +6772,7 @@ int lua_axis_ui_Button_getNormalFile(lua_State* tolua_S)
 int lua_axis_ui_Button_resetNormalRender(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6784,7 +6784,7 @@ int lua_axis_ui_Button_resetNormalRender(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6819,7 +6819,7 @@ int lua_axis_ui_Button_resetNormalRender(lua_State* tolua_S)
 int lua_axis_ui_Button_getRendererDisabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6831,7 +6831,7 @@ int lua_axis_ui_Button_getRendererDisabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6849,8 +6849,8 @@ int lua_axis_ui_Button_getRendererDisabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getRendererDisabled'", nullptr);
             return 0;
         }
-        axis::ui::Scale9Sprite* ret = cobj->getRendererDisabled();
-        object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+        ax::ui::Scale9Sprite* ret = cobj->getRendererDisabled();
+        object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getRendererDisabled",argc, 0);
@@ -6866,7 +6866,7 @@ int lua_axis_ui_Button_getRendererDisabled(lua_State* tolua_S)
 int lua_axis_ui_Button_setCapInsetsDisabledRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6878,7 +6878,7 @@ int lua_axis_ui_Button_setCapInsetsDisabledRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6891,7 +6891,7 @@ int lua_axis_ui_Button_setCapInsetsDisabledRenderer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Button:setCapInsetsDisabledRenderer");
         if(!ok)
@@ -6916,7 +6916,7 @@ int lua_axis_ui_Button_setCapInsetsDisabledRenderer(lua_State* tolua_S)
 int lua_axis_ui_Button_setCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6928,7 +6928,7 @@ int lua_axis_ui_Button_setCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6941,7 +6941,7 @@ int lua_axis_ui_Button_setCapInsets(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Button:setCapInsets");
         if(!ok)
@@ -6966,7 +6966,7 @@ int lua_axis_ui_Button_setCapInsets(lua_State* tolua_S)
 int lua_axis_ui_Button_loadTextureDisabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6978,7 +6978,7 @@ int lua_axis_ui_Button_loadTextureDisabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7006,7 +7006,7 @@ int lua_axis_ui_Button_loadTextureDisabled(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:loadTextureDisabled");
 
@@ -7033,7 +7033,7 @@ int lua_axis_ui_Button_loadTextureDisabled(lua_State* tolua_S)
 int lua_axis_ui_Button_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7045,7 +7045,7 @@ int lua_axis_ui_Button_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7112,7 +7112,7 @@ int lua_axis_ui_Button_init(lua_State* tolua_S)
         std::string_view arg0;
         std::string_view arg1;
         std::string_view arg2;
-        axis::ui::Widget::TextureResType arg3;
+        ax::ui::Widget::TextureResType arg3;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:init");
 
@@ -7143,7 +7143,7 @@ int lua_axis_ui_Button_init(lua_State* tolua_S)
 int lua_axis_ui_Button_setTitleText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7155,7 +7155,7 @@ int lua_axis_ui_Button_setTitleText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7193,7 +7193,7 @@ int lua_axis_ui_Button_setTitleText(lua_State* tolua_S)
 int lua_axis_ui_Button_setCapInsetsNormalRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7205,7 +7205,7 @@ int lua_axis_ui_Button_setCapInsetsNormalRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7218,7 +7218,7 @@ int lua_axis_ui_Button_setCapInsetsNormalRenderer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Button:setCapInsetsNormalRenderer");
         if(!ok)
@@ -7243,7 +7243,7 @@ int lua_axis_ui_Button_setCapInsetsNormalRenderer(lua_State* tolua_S)
 int lua_axis_ui_Button_loadTexturePressed(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7255,7 +7255,7 @@ int lua_axis_ui_Button_loadTexturePressed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7283,7 +7283,7 @@ int lua_axis_ui_Button_loadTexturePressed(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:loadTexturePressed");
 
@@ -7310,7 +7310,7 @@ int lua_axis_ui_Button_loadTexturePressed(lua_State* tolua_S)
 int lua_axis_ui_Button_setTitleFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7322,7 +7322,7 @@ int lua_axis_ui_Button_setTitleFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7360,7 +7360,7 @@ int lua_axis_ui_Button_setTitleFontName(lua_State* tolua_S)
 int lua_axis_ui_Button_getCapInsetsNormalRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7372,7 +7372,7 @@ int lua_axis_ui_Button_getCapInsetsNormalRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7390,7 +7390,7 @@ int lua_axis_ui_Button_getCapInsetsNormalRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getCapInsetsNormalRenderer'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsetsNormalRenderer();
+        const ax::Rect& ret = cobj->getCapInsetsNormalRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7407,7 +7407,7 @@ int lua_axis_ui_Button_getCapInsetsNormalRenderer(lua_State* tolua_S)
 int lua_axis_ui_Button_setTitleAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -7416,7 +7416,7 @@ int lua_axis_ui_Button_setTitleAlignment(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -7427,11 +7427,11 @@ int lua_axis_ui_Button_setTitleAlignment(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            axis::TextHAlignment arg0;
+            ax::TextHAlignment arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Button:setTitleAlignment");
 
             if (!ok) { break; }
-            axis::TextVAlignment arg1;
+            ax::TextVAlignment arg1;
             ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Button:setTitleAlignment");
 
             if (!ok) { break; }
@@ -7443,7 +7443,7 @@ int lua_axis_ui_Button_setTitleAlignment(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::TextHAlignment arg0;
+            ax::TextHAlignment arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Button:setTitleAlignment");
 
             if (!ok) { break; }
@@ -7466,7 +7466,7 @@ int lua_axis_ui_Button_setTitleAlignment(lua_State* tolua_S)
 int lua_axis_ui_Button_getCapInsetsPressedRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7478,7 +7478,7 @@ int lua_axis_ui_Button_getCapInsetsPressedRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7496,7 +7496,7 @@ int lua_axis_ui_Button_getCapInsetsPressedRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getCapInsetsPressedRenderer'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsetsPressedRenderer();
+        const ax::Rect& ret = cobj->getCapInsetsPressedRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7513,7 +7513,7 @@ int lua_axis_ui_Button_getCapInsetsPressedRenderer(lua_State* tolua_S)
 int lua_axis_ui_Button_loadTextures(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7525,7 +7525,7 @@ int lua_axis_ui_Button_loadTextures(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7578,7 +7578,7 @@ int lua_axis_ui_Button_loadTextures(lua_State* tolua_S)
         std::string_view arg0;
         std::string_view arg1;
         std::string_view arg2;
-        axis::ui::Widget::TextureResType arg3;
+        ax::ui::Widget::TextureResType arg3;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:loadTextures");
 
@@ -7609,7 +7609,7 @@ int lua_axis_ui_Button_loadTextures(lua_State* tolua_S)
 int lua_axis_ui_Button_isScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7621,7 +7621,7 @@ int lua_axis_ui_Button_isScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7656,7 +7656,7 @@ int lua_axis_ui_Button_isScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_Button_loadTextureNormal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7668,7 +7668,7 @@ int lua_axis_ui_Button_loadTextureNormal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7696,7 +7696,7 @@ int lua_axis_ui_Button_loadTextureNormal(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:loadTextureNormal");
 
@@ -7723,7 +7723,7 @@ int lua_axis_ui_Button_loadTextureNormal(lua_State* tolua_S)
 int lua_axis_ui_Button_setCapInsetsPressedRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7735,7 +7735,7 @@ int lua_axis_ui_Button_setCapInsetsPressedRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7748,7 +7748,7 @@ int lua_axis_ui_Button_setCapInsetsPressedRenderer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Button:setCapInsetsPressedRenderer");
         if(!ok)
@@ -7773,7 +7773,7 @@ int lua_axis_ui_Button_setCapInsetsPressedRenderer(lua_State* tolua_S)
 int lua_axis_ui_Button_getPressedFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7785,7 +7785,7 @@ int lua_axis_ui_Button_getPressedFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7803,7 +7803,7 @@ int lua_axis_ui_Button_getPressedFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getPressedFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getPressedFile();
+        ax::ResourceData ret = cobj->getPressedFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7820,7 +7820,7 @@ int lua_axis_ui_Button_getPressedFile(lua_State* tolua_S)
 int lua_axis_ui_Button_getTitleLabel(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7832,7 +7832,7 @@ int lua_axis_ui_Button_getTitleLabel(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7850,8 +7850,8 @@ int lua_axis_ui_Button_getTitleLabel(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getTitleLabel'", nullptr);
             return 0;
         }
-        axis::Label* ret = cobj->getTitleLabel();
-        object_to_luaval<axis::Label>(tolua_S, "ax.Label",(axis::Label*)ret);
+        ax::Label* ret = cobj->getTitleLabel();
+        object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getTitleLabel",argc, 0);
@@ -7867,7 +7867,7 @@ int lua_axis_ui_Button_getTitleLabel(lua_State* tolua_S)
 int lua_axis_ui_Button_getTitleFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7879,7 +7879,7 @@ int lua_axis_ui_Button_getTitleFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7914,7 +7914,7 @@ int lua_axis_ui_Button_getTitleFontSize(lua_State* tolua_S)
 int lua_axis_ui_Button_getRendererNormal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7926,7 +7926,7 @@ int lua_axis_ui_Button_getRendererNormal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7944,8 +7944,8 @@ int lua_axis_ui_Button_getRendererNormal(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getRendererNormal'", nullptr);
             return 0;
         }
-        axis::ui::Scale9Sprite* ret = cobj->getRendererNormal();
-        object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+        ax::ui::Scale9Sprite* ret = cobj->getRendererNormal();
+        object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Button:getRendererNormal",argc, 0);
@@ -7961,7 +7961,7 @@ int lua_axis_ui_Button_getRendererNormal(lua_State* tolua_S)
 int lua_axis_ui_Button_getTitleFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7973,7 +7973,7 @@ int lua_axis_ui_Button_getTitleFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8008,7 +8008,7 @@ int lua_axis_ui_Button_getTitleFontName(lua_State* tolua_S)
 int lua_axis_ui_Button_getTitleColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8020,7 +8020,7 @@ int lua_axis_ui_Button_getTitleColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8038,7 +8038,7 @@ int lua_axis_ui_Button_getTitleColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_getTitleColor'", nullptr);
             return 0;
         }
-        axis::Color3B ret = cobj->getTitleColor();
+        ax::Color3B ret = cobj->getTitleColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8055,7 +8055,7 @@ int lua_axis_ui_Button_getTitleColor(lua_State* tolua_S)
 int lua_axis_ui_Button_setPressedActionEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8067,7 +8067,7 @@ int lua_axis_ui_Button_setPressedActionEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8105,7 +8105,7 @@ int lua_axis_ui_Button_setPressedActionEnabled(lua_State* tolua_S)
 int lua_axis_ui_Button_setZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8117,7 +8117,7 @@ int lua_axis_ui_Button_setZoomScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Button",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Button*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Button*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8173,8 +8173,8 @@ int lua_axis_ui_Button_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Button:create");
             if (!ok) { break; }
-            axis::ui::Button* ret = axis::ui::Button::create(arg0);
-            object_to_luaval<axis::ui::Button>(tolua_S, "axui.Button",(axis::ui::Button*)ret);
+            ax::ui::Button* ret = ax::ui::Button::create(arg0);
+            object_to_luaval<ax::ui::Button>(tolua_S, "axui.Button",(ax::ui::Button*)ret);
             return 1;
         }
     } while (0);
@@ -8189,8 +8189,8 @@ int lua_axis_ui_Button_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.Button:create");
             if (!ok) { break; }
-            axis::ui::Button* ret = axis::ui::Button::create(arg0, arg1);
-            object_to_luaval<axis::ui::Button>(tolua_S, "axui.Button",(axis::ui::Button*)ret);
+            ax::ui::Button* ret = ax::ui::Button::create(arg0, arg1);
+            object_to_luaval<ax::ui::Button>(tolua_S, "axui.Button",(ax::ui::Button*)ret);
             return 1;
         }
     } while (0);
@@ -8208,8 +8208,8 @@ int lua_axis_ui_Button_create(lua_State* tolua_S)
             std::string_view arg2;
             ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.Button:create");
             if (!ok) { break; }
-            axis::ui::Button* ret = axis::ui::Button::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::Button>(tolua_S, "axui.Button",(axis::ui::Button*)ret);
+            ax::ui::Button* ret = ax::ui::Button::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::Button>(tolua_S, "axui.Button",(ax::ui::Button*)ret);
             return 1;
         }
     } while (0);
@@ -8227,11 +8227,11 @@ int lua_axis_ui_Button_create(lua_State* tolua_S)
             std::string_view arg2;
             ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.Button:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg3;
+            ax::ui::Widget::TextureResType arg3;
             ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.Button:create");
             if (!ok) { break; }
-            axis::ui::Button* ret = axis::ui::Button::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<axis::ui::Button>(tolua_S, "axui.Button",(axis::ui::Button*)ret);
+            ax::ui::Button* ret = ax::ui::Button::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::ui::Button>(tolua_S, "axui.Button",(ax::ui::Button*)ret);
             return 1;
         }
     } while (0);
@@ -8240,8 +8240,8 @@ int lua_axis_ui_Button_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::Button* ret = axis::ui::Button::create();
-            object_to_luaval<axis::ui::Button>(tolua_S, "axui.Button",(axis::ui::Button*)ret);
+            ax::ui::Button* ret = ax::ui::Button::create();
+            object_to_luaval<ax::ui::Button>(tolua_S, "axui.Button",(ax::ui::Button*)ret);
             return 1;
         }
     } while (0);
@@ -8276,8 +8276,8 @@ int lua_axis_ui_Button_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::Button::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::Button::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Button:createInstance",argc, 0);
@@ -8291,7 +8291,7 @@ int lua_axis_ui_Button_createInstance(lua_State* tolua_S)
 int lua_axis_ui_Button_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Button* cobj = nullptr;
+    ax::ui::Button* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8308,7 +8308,7 @@ int lua_axis_ui_Button_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Button_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::Button();
+        cobj = new ax::ui::Button();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -8380,7 +8380,7 @@ int lua_register_axis_ui_Button(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_Button_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_Button_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::Button).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::Button).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.Button";
     g_typeCast[typeName] = "axui.Button";
     return 1;
@@ -8389,7 +8389,7 @@ int lua_register_axis_ui_Button(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getCrossDisabledFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8401,7 +8401,7 @@ int lua_axis_ui_AbstractCheckButton_getCrossDisabledFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8419,7 +8419,7 @@ int lua_axis_ui_AbstractCheckButton_getCrossDisabledFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getCrossDisabledFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getCrossDisabledFile();
+        ax::ResourceData ret = cobj->getCrossDisabledFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8436,7 +8436,7 @@ int lua_axis_ui_AbstractCheckButton_getCrossDisabledFile(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getBackDisabledFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8448,7 +8448,7 @@ int lua_axis_ui_AbstractCheckButton_getBackDisabledFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8466,7 +8466,7 @@ int lua_axis_ui_AbstractCheckButton_getBackDisabledFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getBackDisabledFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getBackDisabledFile();
+        ax::ResourceData ret = cobj->getBackDisabledFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8483,7 +8483,7 @@ int lua_axis_ui_AbstractCheckButton_getBackDisabledFile(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_loadTextureBackGroundSelected(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8495,7 +8495,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGroundSelected(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8523,7 +8523,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGroundSelected(lua_State* tol
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureBackGroundSelected");
 
@@ -8550,7 +8550,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGroundSelected(lua_State* tol
 int lua_axis_ui_AbstractCheckButton_loadTextureBackGroundDisabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8562,7 +8562,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGroundDisabled(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8590,7 +8590,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGroundDisabled(lua_State* tol
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureBackGroundDisabled");
 
@@ -8617,7 +8617,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGroundDisabled(lua_State* tol
 int lua_axis_ui_AbstractCheckButton_getCrossNormalFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8629,7 +8629,7 @@ int lua_axis_ui_AbstractCheckButton_getCrossNormalFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8647,7 +8647,7 @@ int lua_axis_ui_AbstractCheckButton_getCrossNormalFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getCrossNormalFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getCrossNormalFile();
+        ax::ResourceData ret = cobj->getCrossNormalFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8664,7 +8664,7 @@ int lua_axis_ui_AbstractCheckButton_getCrossNormalFile(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_setSelected(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8676,7 +8676,7 @@ int lua_axis_ui_AbstractCheckButton_setSelected(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8714,7 +8714,7 @@ int lua_axis_ui_AbstractCheckButton_setSelected(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getBackPressedFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8726,7 +8726,7 @@ int lua_axis_ui_AbstractCheckButton_getBackPressedFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8744,7 +8744,7 @@ int lua_axis_ui_AbstractCheckButton_getBackPressedFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getBackPressedFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getBackPressedFile();
+        ax::ResourceData ret = cobj->getBackPressedFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8761,7 +8761,7 @@ int lua_axis_ui_AbstractCheckButton_getBackPressedFile(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getRendererFrontCrossDisabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8773,7 +8773,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererFrontCrossDisabled(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8791,8 +8791,8 @@ int lua_axis_ui_AbstractCheckButton_getRendererFrontCrossDisabled(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getRendererFrontCrossDisabled'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getRendererFrontCrossDisabled();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getRendererFrontCrossDisabled();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getRendererFrontCrossDisabled",argc, 0);
@@ -8808,7 +8808,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererFrontCrossDisabled(lua_State* tol
 int lua_axis_ui_AbstractCheckButton_getRendererBackground(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8820,7 +8820,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackground(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8838,8 +8838,8 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackground(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getRendererBackground'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getRendererBackground();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getRendererBackground();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getRendererBackground",argc, 0);
@@ -8855,7 +8855,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackground(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_loadTextureFrontCross(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8867,7 +8867,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureFrontCross(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8895,7 +8895,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureFrontCross(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureFrontCross");
 
@@ -8922,7 +8922,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureFrontCross(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getRendererBackgroundDisabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8934,7 +8934,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackgroundDisabled(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8952,8 +8952,8 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackgroundDisabled(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getRendererBackgroundDisabled'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getRendererBackgroundDisabled();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getRendererBackgroundDisabled();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getRendererBackgroundDisabled",argc, 0);
@@ -8969,7 +8969,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackgroundDisabled(lua_State* tol
 int lua_axis_ui_AbstractCheckButton_isSelected(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8981,7 +8981,7 @@ int lua_axis_ui_AbstractCheckButton_isSelected(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9016,7 +9016,7 @@ int lua_axis_ui_AbstractCheckButton_isSelected(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9028,7 +9028,7 @@ int lua_axis_ui_AbstractCheckButton_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9072,7 +9072,7 @@ int lua_axis_ui_AbstractCheckButton_init(lua_State* tolua_S)
         std::string_view arg2;
         std::string_view arg3;
         std::string_view arg4;
-        axis::ui::Widget::TextureResType arg5;
+        ax::ui::Widget::TextureResType arg5;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:init");
 
@@ -9107,7 +9107,7 @@ int lua_axis_ui_AbstractCheckButton_init(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getBackNormalFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9119,7 +9119,7 @@ int lua_axis_ui_AbstractCheckButton_getBackNormalFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9137,7 +9137,7 @@ int lua_axis_ui_AbstractCheckButton_getBackNormalFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getBackNormalFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getBackNormalFile();
+        ax::ResourceData ret = cobj->getBackNormalFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9154,7 +9154,7 @@ int lua_axis_ui_AbstractCheckButton_getBackNormalFile(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_loadTextures(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9166,7 +9166,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextures(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9210,7 +9210,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextures(lua_State* tolua_S)
         std::string_view arg2;
         std::string_view arg3;
         std::string_view arg4;
-        axis::ui::Widget::TextureResType arg5;
+        ax::ui::Widget::TextureResType arg5;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextures");
 
@@ -9245,7 +9245,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextures(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9257,7 +9257,7 @@ int lua_axis_ui_AbstractCheckButton_getZoomScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9292,7 +9292,7 @@ int lua_axis_ui_AbstractCheckButton_getZoomScale(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getRendererFrontCross(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9304,7 +9304,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererFrontCross(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9322,8 +9322,8 @@ int lua_axis_ui_AbstractCheckButton_getRendererFrontCross(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getRendererFrontCross'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getRendererFrontCross();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getRendererFrontCross();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getRendererFrontCross",argc, 0);
@@ -9339,7 +9339,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererFrontCross(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_getRendererBackgroundSelected(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9351,7 +9351,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackgroundSelected(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9369,8 +9369,8 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackgroundSelected(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_AbstractCheckButton_getRendererBackgroundSelected'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getRendererBackgroundSelected();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getRendererBackgroundSelected();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.AbstractCheckButton:getRendererBackgroundSelected",argc, 0);
@@ -9386,7 +9386,7 @@ int lua_axis_ui_AbstractCheckButton_getRendererBackgroundSelected(lua_State* tol
 int lua_axis_ui_AbstractCheckButton_loadTextureBackGround(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9398,7 +9398,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGround(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9426,7 +9426,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGround(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureBackGround");
 
@@ -9453,7 +9453,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureBackGround(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_setZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9465,7 +9465,7 @@ int lua_axis_ui_AbstractCheckButton_setZoomScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9503,7 +9503,7 @@ int lua_axis_ui_AbstractCheckButton_setZoomScale(lua_State* tolua_S)
 int lua_axis_ui_AbstractCheckButton_loadTextureFrontCrossDisabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::AbstractCheckButton* cobj = nullptr;
+    ax::ui::AbstractCheckButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9515,7 +9515,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureFrontCrossDisabled(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"axui.AbstractCheckButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::AbstractCheckButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9543,7 +9543,7 @@ int lua_axis_ui_AbstractCheckButton_loadTextureFrontCrossDisabled(lua_State* tol
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.AbstractCheckButton:loadTextureFrontCrossDisabled");
 
@@ -9601,7 +9601,7 @@ int lua_register_axis_ui_AbstractCheckButton(lua_State* tolua_S)
         tolua_function(tolua_S,"setZoomScale",lua_axis_ui_AbstractCheckButton_setZoomScale);
         tolua_function(tolua_S,"loadTextureFrontCrossDisabled",lua_axis_ui_AbstractCheckButton_loadTextureFrontCrossDisabled);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::AbstractCheckButton).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::AbstractCheckButton).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.AbstractCheckButton";
     g_typeCast[typeName] = "axui.AbstractCheckButton";
     return 1;
@@ -9610,7 +9610,7 @@ int lua_register_axis_ui_AbstractCheckButton(lua_State* tolua_S)
 int lua_axis_ui_CheckBox_addEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::CheckBox* cobj = nullptr;
+    ax::ui::CheckBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9622,7 +9622,7 @@ int lua_axis_ui_CheckBox_addEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.CheckBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::CheckBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::CheckBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9635,7 +9635,7 @@ int lua_axis_ui_CheckBox_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (axis::Ref *, axis::ui::CheckBox::EventType)> arg0;
+        std::function<void (ax::Ref *, ax::ui::CheckBox::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -9694,8 +9694,8 @@ int lua_axis_ui_CheckBox_create(lua_State* tolua_S)
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.CheckBox:create");
             if (!ok) { break; }
-            axis::ui::CheckBox* ret = axis::ui::CheckBox::create(arg0, arg1, arg2, arg3, arg4);
-            object_to_luaval<axis::ui::CheckBox>(tolua_S, "axui.CheckBox",(axis::ui::CheckBox*)ret);
+            ax::ui::CheckBox* ret = ax::ui::CheckBox::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<ax::ui::CheckBox>(tolua_S, "axui.CheckBox",(ax::ui::CheckBox*)ret);
             return 1;
         }
     } while (0);
@@ -9719,11 +9719,11 @@ int lua_axis_ui_CheckBox_create(lua_State* tolua_S)
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.CheckBox:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg5;
+            ax::ui::Widget::TextureResType arg5;
             ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.CheckBox:create");
             if (!ok) { break; }
-            axis::ui::CheckBox* ret = axis::ui::CheckBox::create(arg0, arg1, arg2, arg3, arg4, arg5);
-            object_to_luaval<axis::ui::CheckBox>(tolua_S, "axui.CheckBox",(axis::ui::CheckBox*)ret);
+            ax::ui::CheckBox* ret = ax::ui::CheckBox::create(arg0, arg1, arg2, arg3, arg4, arg5);
+            object_to_luaval<ax::ui::CheckBox>(tolua_S, "axui.CheckBox",(ax::ui::CheckBox*)ret);
             return 1;
         }
     } while (0);
@@ -9732,8 +9732,8 @@ int lua_axis_ui_CheckBox_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::CheckBox* ret = axis::ui::CheckBox::create();
-            object_to_luaval<axis::ui::CheckBox>(tolua_S, "axui.CheckBox",(axis::ui::CheckBox*)ret);
+            ax::ui::CheckBox* ret = ax::ui::CheckBox::create();
+            object_to_luaval<ax::ui::CheckBox>(tolua_S, "axui.CheckBox",(ax::ui::CheckBox*)ret);
             return 1;
         }
     } while (0);
@@ -9748,8 +9748,8 @@ int lua_axis_ui_CheckBox_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.CheckBox:create");
             if (!ok) { break; }
-            axis::ui::CheckBox* ret = axis::ui::CheckBox::create(arg0, arg1);
-            object_to_luaval<axis::ui::CheckBox>(tolua_S, "axui.CheckBox",(axis::ui::CheckBox*)ret);
+            ax::ui::CheckBox* ret = ax::ui::CheckBox::create(arg0, arg1);
+            object_to_luaval<ax::ui::CheckBox>(tolua_S, "axui.CheckBox",(ax::ui::CheckBox*)ret);
             return 1;
         }
     } while (0);
@@ -9764,11 +9764,11 @@ int lua_axis_ui_CheckBox_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.CheckBox:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg2;
+            ax::ui::Widget::TextureResType arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.CheckBox:create");
             if (!ok) { break; }
-            axis::ui::CheckBox* ret = axis::ui::CheckBox::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::CheckBox>(tolua_S, "axui.CheckBox",(axis::ui::CheckBox*)ret);
+            ax::ui::CheckBox* ret = ax::ui::CheckBox::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::CheckBox>(tolua_S, "axui.CheckBox",(ax::ui::CheckBox*)ret);
             return 1;
         }
     } while (0);
@@ -9803,8 +9803,8 @@ int lua_axis_ui_CheckBox_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_CheckBox_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::CheckBox::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::CheckBox::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.CheckBox:createInstance",argc, 0);
@@ -9818,7 +9818,7 @@ int lua_axis_ui_CheckBox_createInstance(lua_State* tolua_S)
 int lua_axis_ui_CheckBox_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::CheckBox* cobj = nullptr;
+    ax::ui::CheckBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9835,7 +9835,7 @@ int lua_axis_ui_CheckBox_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_CheckBox_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::CheckBox();
+        cobj = new ax::ui::CheckBox();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -9869,7 +9869,7 @@ int lua_register_axis_ui_CheckBox(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_CheckBox_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_CheckBox_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::CheckBox).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::CheckBox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.CheckBox";
     g_typeCast[typeName] = "axui.CheckBox";
     return 1;
@@ -9878,7 +9878,7 @@ int lua_register_axis_ui_CheckBox(lua_State* tolua_S)
 int lua_axis_ui_RadioButton_addEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButton* cobj = nullptr;
+    ax::ui::RadioButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9890,7 +9890,7 @@ int lua_axis_ui_RadioButton_addEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButton",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButton*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButton*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9903,7 +9903,7 @@ int lua_axis_ui_RadioButton_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (axis::ui::RadioButton *, axis::ui::RadioButton::EventType)> arg0;
+        std::function<void (ax::ui::RadioButton *, ax::ui::RadioButton::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -9962,8 +9962,8 @@ int lua_axis_ui_RadioButton_create(lua_State* tolua_S)
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RadioButton:create");
             if (!ok) { break; }
-            axis::ui::RadioButton* ret = axis::ui::RadioButton::create(arg0, arg1, arg2, arg3, arg4);
-            object_to_luaval<axis::ui::RadioButton>(tolua_S, "axui.RadioButton",(axis::ui::RadioButton*)ret);
+            ax::ui::RadioButton* ret = ax::ui::RadioButton::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
             return 1;
         }
     } while (0);
@@ -9987,11 +9987,11 @@ int lua_axis_ui_RadioButton_create(lua_State* tolua_S)
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.RadioButton:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg5;
+            ax::ui::Widget::TextureResType arg5;
             ok &= luaval_to_int32(tolua_S, 7,(int *)&arg5, "axui.RadioButton:create");
             if (!ok) { break; }
-            axis::ui::RadioButton* ret = axis::ui::RadioButton::create(arg0, arg1, arg2, arg3, arg4, arg5);
-            object_to_luaval<axis::ui::RadioButton>(tolua_S, "axui.RadioButton",(axis::ui::RadioButton*)ret);
+            ax::ui::RadioButton* ret = ax::ui::RadioButton::create(arg0, arg1, arg2, arg3, arg4, arg5);
+            object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
             return 1;
         }
     } while (0);
@@ -10000,8 +10000,8 @@ int lua_axis_ui_RadioButton_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::RadioButton* ret = axis::ui::RadioButton::create();
-            object_to_luaval<axis::ui::RadioButton>(tolua_S, "axui.RadioButton",(axis::ui::RadioButton*)ret);
+            ax::ui::RadioButton* ret = ax::ui::RadioButton::create();
+            object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
             return 1;
         }
     } while (0);
@@ -10016,8 +10016,8 @@ int lua_axis_ui_RadioButton_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.RadioButton:create");
             if (!ok) { break; }
-            axis::ui::RadioButton* ret = axis::ui::RadioButton::create(arg0, arg1);
-            object_to_luaval<axis::ui::RadioButton>(tolua_S, "axui.RadioButton",(axis::ui::RadioButton*)ret);
+            ax::ui::RadioButton* ret = ax::ui::RadioButton::create(arg0, arg1);
+            object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
             return 1;
         }
     } while (0);
@@ -10032,11 +10032,11 @@ int lua_axis_ui_RadioButton_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.RadioButton:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg2;
+            ax::ui::Widget::TextureResType arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.RadioButton:create");
             if (!ok) { break; }
-            axis::ui::RadioButton* ret = axis::ui::RadioButton::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::RadioButton>(tolua_S, "axui.RadioButton",(axis::ui::RadioButton*)ret);
+            ax::ui::RadioButton* ret = ax::ui::RadioButton::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
             return 1;
         }
     } while (0);
@@ -10071,8 +10071,8 @@ int lua_axis_ui_RadioButton_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RadioButton_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::RadioButton::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::RadioButton::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RadioButton:createInstance",argc, 0);
@@ -10086,7 +10086,7 @@ int lua_axis_ui_RadioButton_createInstance(lua_State* tolua_S)
 int lua_axis_ui_RadioButton_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButton* cobj = nullptr;
+    ax::ui::RadioButton* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10103,7 +10103,7 @@ int lua_axis_ui_RadioButton_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RadioButton_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RadioButton();
+        cobj = new ax::ui::RadioButton();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -10137,7 +10137,7 @@ int lua_register_axis_ui_RadioButton(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_RadioButton_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_RadioButton_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RadioButton).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RadioButton).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RadioButton";
     g_typeCast[typeName] = "axui.RadioButton";
     return 1;
@@ -10146,7 +10146,7 @@ int lua_register_axis_ui_RadioButton(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_removeRadioButton(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10158,7 +10158,7 @@ int lua_axis_ui_RadioButtonGroup_removeRadioButton(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10171,9 +10171,9 @@ int lua_axis_ui_RadioButtonGroup_removeRadioButton(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::RadioButton* arg0;
+        ax::ui::RadioButton* arg0;
 
-        ok &= luaval_to_object<axis::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:removeRadioButton");
+        ok &= luaval_to_object<ax::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:removeRadioButton");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RadioButtonGroup_removeRadioButton'", nullptr);
@@ -10196,7 +10196,7 @@ int lua_axis_ui_RadioButtonGroup_removeRadioButton(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_isAllowedNoSelection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10208,7 +10208,7 @@ int lua_axis_ui_RadioButtonGroup_isAllowedNoSelection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10243,7 +10243,7 @@ int lua_axis_ui_RadioButtonGroup_isAllowedNoSelection(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_getSelectedButtonIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10255,7 +10255,7 @@ int lua_axis_ui_RadioButtonGroup_getSelectedButtonIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10290,7 +10290,7 @@ int lua_axis_ui_RadioButtonGroup_getSelectedButtonIndex(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_setAllowedNoSelection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10302,7 +10302,7 @@ int lua_axis_ui_RadioButtonGroup_setAllowedNoSelection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10340,7 +10340,7 @@ int lua_axis_ui_RadioButtonGroup_setAllowedNoSelection(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_setSelectedButtonWithoutEvent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -10349,7 +10349,7 @@ int lua_axis_ui_RadioButtonGroup_setSelectedButtonWithoutEvent(lua_State* tolua_
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -10360,8 +10360,8 @@ int lua_axis_ui_RadioButtonGroup_setSelectedButtonWithoutEvent(lua_State* tolua_
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::ui::RadioButton* arg0;
-            ok &= luaval_to_object<axis::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:setSelectedButtonWithoutEvent");
+            ax::ui::RadioButton* arg0;
+            ok &= luaval_to_object<ax::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:setSelectedButtonWithoutEvent");
 
             if (!ok) { break; }
             cobj->setSelectedButtonWithoutEvent(arg0);
@@ -10395,7 +10395,7 @@ int lua_axis_ui_RadioButtonGroup_setSelectedButtonWithoutEvent(lua_State* tolua_
 int lua_axis_ui_RadioButtonGroup_addEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10407,7 +10407,7 @@ int lua_axis_ui_RadioButtonGroup_addEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10420,7 +10420,7 @@ int lua_axis_ui_RadioButtonGroup_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (axis::ui::RadioButton *, int, axis::ui::RadioButtonGroup::EventType)> arg0;
+        std::function<void (ax::ui::RadioButton *, int, ax::ui::RadioButtonGroup::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -10449,7 +10449,7 @@ int lua_axis_ui_RadioButtonGroup_addEventListener(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_removeAllRadioButtons(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10461,7 +10461,7 @@ int lua_axis_ui_RadioButtonGroup_removeAllRadioButtons(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10496,7 +10496,7 @@ int lua_axis_ui_RadioButtonGroup_removeAllRadioButtons(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_getRadioButtonByIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10508,7 +10508,7 @@ int lua_axis_ui_RadioButtonGroup_getRadioButtonByIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10529,8 +10529,8 @@ int lua_axis_ui_RadioButtonGroup_getRadioButtonByIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RadioButtonGroup_getRadioButtonByIndex'", nullptr);
             return 0;
         }
-        axis::ui::RadioButton* ret = cobj->getRadioButtonByIndex(arg0);
-        object_to_luaval<axis::ui::RadioButton>(tolua_S, "axui.RadioButton",(axis::ui::RadioButton*)ret);
+        ax::ui::RadioButton* ret = cobj->getRadioButtonByIndex(arg0);
+        object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RadioButtonGroup:getRadioButtonByIndex",argc, 1);
@@ -10546,7 +10546,7 @@ int lua_axis_ui_RadioButtonGroup_getRadioButtonByIndex(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_getNumberOfRadioButtons(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10558,7 +10558,7 @@ int lua_axis_ui_RadioButtonGroup_getNumberOfRadioButtons(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10593,7 +10593,7 @@ int lua_axis_ui_RadioButtonGroup_getNumberOfRadioButtons(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_addRadioButton(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10605,7 +10605,7 @@ int lua_axis_ui_RadioButtonGroup_addRadioButton(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10618,9 +10618,9 @@ int lua_axis_ui_RadioButtonGroup_addRadioButton(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::RadioButton* arg0;
+        ax::ui::RadioButton* arg0;
 
-        ok &= luaval_to_object<axis::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:addRadioButton");
+        ok &= luaval_to_object<ax::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:addRadioButton");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RadioButtonGroup_addRadioButton'", nullptr);
@@ -10643,7 +10643,7 @@ int lua_axis_ui_RadioButtonGroup_addRadioButton(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_setSelectedButton(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -10652,7 +10652,7 @@ int lua_axis_ui_RadioButtonGroup_setSelectedButton(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.RadioButtonGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RadioButtonGroup*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -10663,8 +10663,8 @@ int lua_axis_ui_RadioButtonGroup_setSelectedButton(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::ui::RadioButton* arg0;
-            ok &= luaval_to_object<axis::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:setSelectedButton");
+            ax::ui::RadioButton* arg0;
+            ok &= luaval_to_object<ax::ui::RadioButton>(tolua_S, 2, "axui.RadioButton",&arg0, "axui.RadioButtonGroup:setSelectedButton");
 
             if (!ok) { break; }
             cobj->setSelectedButton(arg0);
@@ -10717,8 +10717,8 @@ int lua_axis_ui_RadioButtonGroup_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RadioButtonGroup_create'", nullptr);
             return 0;
         }
-        axis::ui::RadioButtonGroup* ret = axis::ui::RadioButtonGroup::create();
-        object_to_luaval<axis::ui::RadioButtonGroup>(tolua_S, "axui.RadioButtonGroup",(axis::ui::RadioButtonGroup*)ret);
+        ax::ui::RadioButtonGroup* ret = ax::ui::RadioButtonGroup::create();
+        object_to_luaval<ax::ui::RadioButtonGroup>(tolua_S, "axui.RadioButtonGroup",(ax::ui::RadioButtonGroup*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RadioButtonGroup:create",argc, 0);
@@ -10732,7 +10732,7 @@ int lua_axis_ui_RadioButtonGroup_create(lua_State* tolua_S)
 int lua_axis_ui_RadioButtonGroup_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RadioButtonGroup* cobj = nullptr;
+    ax::ui::RadioButtonGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10749,7 +10749,7 @@ int lua_axis_ui_RadioButtonGroup_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RadioButtonGroup_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RadioButtonGroup();
+        cobj = new ax::ui::RadioButtonGroup();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -10792,7 +10792,7 @@ int lua_register_axis_ui_RadioButtonGroup(lua_State* tolua_S)
         tolua_function(tolua_S,"setSelectedButton",lua_axis_ui_RadioButtonGroup_setSelectedButton);
         tolua_function(tolua_S,"create", lua_axis_ui_RadioButtonGroup_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RadioButtonGroup).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RadioButtonGroup).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RadioButtonGroup";
     g_typeCast[typeName] = "axui.RadioButtonGroup";
     return 1;
@@ -10801,7 +10801,7 @@ int lua_register_axis_ui_RadioButtonGroup(lua_State* tolua_S)
 int lua_axis_ui_ImageView_getBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10813,7 +10813,7 @@ int lua_axis_ui_ImageView_getBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10831,7 +10831,7 @@ int lua_axis_ui_ImageView_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ImageView_getBlendFunc'", nullptr);
             return 0;
         }
-        const axis::BlendFunc& ret = cobj->getBlendFunc();
+        const ax::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10848,7 +10848,7 @@ int lua_axis_ui_ImageView_getBlendFunc(lua_State* tolua_S)
 int lua_axis_ui_ImageView_loadTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10860,7 +10860,7 @@ int lua_axis_ui_ImageView_loadTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10888,7 +10888,7 @@ int lua_axis_ui_ImageView_loadTexture(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.ImageView:loadTexture");
 
@@ -10915,7 +10915,7 @@ int lua_axis_ui_ImageView_loadTexture(lua_State* tolua_S)
 int lua_axis_ui_ImageView_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10927,7 +10927,7 @@ int lua_axis_ui_ImageView_setBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10940,7 +10940,7 @@ int lua_axis_ui_ImageView_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::BlendFunc arg0;
+        ax::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "axui.ImageView:setBlendFunc");
         if(!ok)
@@ -10965,7 +10965,7 @@ int lua_axis_ui_ImageView_setBlendFunc(lua_State* tolua_S)
 int lua_axis_ui_ImageView_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10977,7 +10977,7 @@ int lua_axis_ui_ImageView_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11005,7 +11005,7 @@ int lua_axis_ui_ImageView_init(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.ImageView:init");
 
@@ -11032,7 +11032,7 @@ int lua_axis_ui_ImageView_init(lua_State* tolua_S)
 int lua_axis_ui_ImageView_setScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11044,7 +11044,7 @@ int lua_axis_ui_ImageView_setScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11082,7 +11082,7 @@ int lua_axis_ui_ImageView_setScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_ImageView_setTextureRect(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11094,7 +11094,7 @@ int lua_axis_ui_ImageView_setTextureRect(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11107,7 +11107,7 @@ int lua_axis_ui_ImageView_setTextureRect(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.ImageView:setTextureRect");
         if(!ok)
@@ -11132,7 +11132,7 @@ int lua_axis_ui_ImageView_setTextureRect(lua_State* tolua_S)
 int lua_axis_ui_ImageView_setCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11144,7 +11144,7 @@ int lua_axis_ui_ImageView_setCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11157,7 +11157,7 @@ int lua_axis_ui_ImageView_setCapInsets(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.ImageView:setCapInsets");
         if(!ok)
@@ -11182,7 +11182,7 @@ int lua_axis_ui_ImageView_setCapInsets(lua_State* tolua_S)
 int lua_axis_ui_ImageView_getRenderFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11194,7 +11194,7 @@ int lua_axis_ui_ImageView_getRenderFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11212,7 +11212,7 @@ int lua_axis_ui_ImageView_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ImageView_getRenderFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getRenderFile();
+        ax::ResourceData ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11229,7 +11229,7 @@ int lua_axis_ui_ImageView_getRenderFile(lua_State* tolua_S)
 int lua_axis_ui_ImageView_getCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11241,7 +11241,7 @@ int lua_axis_ui_ImageView_getCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11259,7 +11259,7 @@ int lua_axis_ui_ImageView_getCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ImageView_getCapInsets'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsets();
+        const ax::Rect& ret = cobj->getCapInsets();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11276,7 +11276,7 @@ int lua_axis_ui_ImageView_getCapInsets(lua_State* tolua_S)
 int lua_axis_ui_ImageView_isScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11288,7 +11288,7 @@ int lua_axis_ui_ImageView_isScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ImageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ImageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11341,8 +11341,8 @@ int lua_axis_ui_ImageView_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.ImageView:create");
             if (!ok) { break; }
-            axis::ui::ImageView* ret = axis::ui::ImageView::create(arg0);
-            object_to_luaval<axis::ui::ImageView>(tolua_S, "axui.ImageView",(axis::ui::ImageView*)ret);
+            ax::ui::ImageView* ret = ax::ui::ImageView::create(arg0);
+            object_to_luaval<ax::ui::ImageView>(tolua_S, "axui.ImageView",(ax::ui::ImageView*)ret);
             return 1;
         }
     } while (0);
@@ -11354,11 +11354,11 @@ int lua_axis_ui_ImageView_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.ImageView:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg1;
+            ax::ui::Widget::TextureResType arg1;
             ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.ImageView:create");
             if (!ok) { break; }
-            axis::ui::ImageView* ret = axis::ui::ImageView::create(arg0, arg1);
-            object_to_luaval<axis::ui::ImageView>(tolua_S, "axui.ImageView",(axis::ui::ImageView*)ret);
+            ax::ui::ImageView* ret = ax::ui::ImageView::create(arg0, arg1);
+            object_to_luaval<ax::ui::ImageView>(tolua_S, "axui.ImageView",(ax::ui::ImageView*)ret);
             return 1;
         }
     } while (0);
@@ -11367,8 +11367,8 @@ int lua_axis_ui_ImageView_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::ImageView* ret = axis::ui::ImageView::create();
-            object_to_luaval<axis::ui::ImageView>(tolua_S, "axui.ImageView",(axis::ui::ImageView*)ret);
+            ax::ui::ImageView* ret = ax::ui::ImageView::create();
+            object_to_luaval<ax::ui::ImageView>(tolua_S, "axui.ImageView",(ax::ui::ImageView*)ret);
             return 1;
         }
     } while (0);
@@ -11403,8 +11403,8 @@ int lua_axis_ui_ImageView_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ImageView_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::ImageView::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::ImageView::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.ImageView:createInstance",argc, 0);
@@ -11418,7 +11418,7 @@ int lua_axis_ui_ImageView_createInstance(lua_State* tolua_S)
 int lua_axis_ui_ImageView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ImageView* cobj = nullptr;
+    ax::ui::ImageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11435,7 +11435,7 @@ int lua_axis_ui_ImageView_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ImageView_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::ImageView();
+        cobj = new ax::ui::ImageView();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -11478,7 +11478,7 @@ int lua_register_axis_ui_ImageView(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_ImageView_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_ImageView_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::ImageView).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::ImageView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.ImageView";
     g_typeCast[typeName] = "axui.ImageView";
     return 1;
@@ -11487,7 +11487,7 @@ int lua_register_axis_ui_ImageView(lua_State* tolua_S)
 int lua_axis_ui_Text_enableShadow(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11499,7 +11499,7 @@ int lua_axis_ui_Text_enableShadow(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11523,7 +11523,7 @@ int lua_axis_ui_Text_enableShadow(lua_State* tolua_S)
     }
     if (argc == 1) 
     {
-        axis::Color4B arg0;
+        ax::Color4B arg0;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableShadow");
         if(!ok)
@@ -11537,8 +11537,8 @@ int lua_axis_ui_Text_enableShadow(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        axis::Color4B arg0;
-        axis::Vec2 arg1;
+        ax::Color4B arg0;
+        ax::Vec2 arg1;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableShadow");
 
@@ -11554,8 +11554,8 @@ int lua_axis_ui_Text_enableShadow(lua_State* tolua_S)
     }
     if (argc == 3) 
     {
-        axis::Color4B arg0;
-        axis::Vec2 arg1;
+        ax::Color4B arg0;
+        ax::Vec2 arg1;
         int arg2;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableShadow");
@@ -11585,7 +11585,7 @@ int lua_axis_ui_Text_enableShadow(lua_State* tolua_S)
 int lua_axis_ui_Text_getFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11597,7 +11597,7 @@ int lua_axis_ui_Text_getFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11632,7 +11632,7 @@ int lua_axis_ui_Text_getFontSize(lua_State* tolua_S)
 int lua_axis_ui_Text_getString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11644,7 +11644,7 @@ int lua_axis_ui_Text_getString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11679,7 +11679,7 @@ int lua_axis_ui_Text_getString(lua_State* tolua_S)
 int lua_axis_ui_Text_disableEffect(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -11688,7 +11688,7 @@ int lua_axis_ui_Text_disableEffect(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -11699,7 +11699,7 @@ int lua_axis_ui_Text_disableEffect(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::LabelEffect arg0;
+            ax::LabelEffect arg0;
             ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Text:disableEffect");
 
             if (!ok) { break; }
@@ -11730,7 +11730,7 @@ int lua_axis_ui_Text_disableEffect(lua_State* tolua_S)
 int lua_axis_ui_Text_getLabelEffectType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11742,7 +11742,7 @@ int lua_axis_ui_Text_getLabelEffectType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11777,7 +11777,7 @@ int lua_axis_ui_Text_getLabelEffectType(lua_State* tolua_S)
 int lua_axis_ui_Text_getTextColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11789,7 +11789,7 @@ int lua_axis_ui_Text_getTextColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11807,7 +11807,7 @@ int lua_axis_ui_Text_getTextColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_getTextColor'", nullptr);
             return 0;
         }
-        const axis::Color4B& ret = cobj->getTextColor();
+        const ax::Color4B& ret = cobj->getTextColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11824,7 +11824,7 @@ int lua_axis_ui_Text_getTextColor(lua_State* tolua_S)
 int lua_axis_ui_Text_getBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11836,7 +11836,7 @@ int lua_axis_ui_Text_getBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11854,7 +11854,7 @@ int lua_axis_ui_Text_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_getBlendFunc'", nullptr);
             return 0;
         }
-        const axis::BlendFunc& ret = cobj->getBlendFunc();
+        const ax::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11871,7 +11871,7 @@ int lua_axis_ui_Text_getBlendFunc(lua_State* tolua_S)
 int lua_axis_ui_Text_setTextVerticalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11883,7 +11883,7 @@ int lua_axis_ui_Text_setTextVerticalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11896,7 +11896,7 @@ int lua_axis_ui_Text_setTextVerticalAlignment(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::TextVAlignment arg0;
+        ax::TextVAlignment arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Text:setTextVerticalAlignment");
         if(!ok)
@@ -11921,7 +11921,7 @@ int lua_axis_ui_Text_setTextVerticalAlignment(lua_State* tolua_S)
 int lua_axis_ui_Text_setFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11933,7 +11933,7 @@ int lua_axis_ui_Text_setFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11971,7 +11971,7 @@ int lua_axis_ui_Text_setFontName(lua_State* tolua_S)
 int lua_axis_ui_Text_setTouchScaleChangeEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11983,7 +11983,7 @@ int lua_axis_ui_Text_setTouchScaleChangeEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12021,7 +12021,7 @@ int lua_axis_ui_Text_setTouchScaleChangeEnabled(lua_State* tolua_S)
 int lua_axis_ui_Text_getShadowOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12033,7 +12033,7 @@ int lua_axis_ui_Text_getShadowOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12051,7 +12051,7 @@ int lua_axis_ui_Text_getShadowOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_getShadowOffset'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getShadowOffset();
+        ax::Vec2 ret = cobj->getShadowOffset();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12068,7 +12068,7 @@ int lua_axis_ui_Text_getShadowOffset(lua_State* tolua_S)
 int lua_axis_ui_Text_setString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12080,7 +12080,7 @@ int lua_axis_ui_Text_setString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12118,7 +12118,7 @@ int lua_axis_ui_Text_setString(lua_State* tolua_S)
 int lua_axis_ui_Text_getOutlineSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12130,7 +12130,7 @@ int lua_axis_ui_Text_getOutlineSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12165,7 +12165,7 @@ int lua_axis_ui_Text_getOutlineSize(lua_State* tolua_S)
 int lua_axis_ui_Text_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12177,7 +12177,7 @@ int lua_axis_ui_Text_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12221,7 +12221,7 @@ int lua_axis_ui_Text_init(lua_State* tolua_S)
 int lua_axis_ui_Text_getShadowBlurRadius(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12233,7 +12233,7 @@ int lua_axis_ui_Text_getShadowBlurRadius(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12268,7 +12268,7 @@ int lua_axis_ui_Text_getShadowBlurRadius(lua_State* tolua_S)
 int lua_axis_ui_Text_isTouchScaleChangeEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12280,7 +12280,7 @@ int lua_axis_ui_Text_isTouchScaleChangeEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12315,7 +12315,7 @@ int lua_axis_ui_Text_isTouchScaleChangeEnabled(lua_State* tolua_S)
 int lua_axis_ui_Text_getFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12327,7 +12327,7 @@ int lua_axis_ui_Text_getFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12362,7 +12362,7 @@ int lua_axis_ui_Text_getFontName(lua_State* tolua_S)
 int lua_axis_ui_Text_setTextAreaSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12374,7 +12374,7 @@ int lua_axis_ui_Text_setTextAreaSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12387,7 +12387,7 @@ int lua_axis_ui_Text_setTextAreaSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Text:setTextAreaSize");
         if(!ok)
@@ -12412,7 +12412,7 @@ int lua_axis_ui_Text_setTextAreaSize(lua_State* tolua_S)
 int lua_axis_ui_Text_getStringLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12424,7 +12424,7 @@ int lua_axis_ui_Text_getStringLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12459,7 +12459,7 @@ int lua_axis_ui_Text_getStringLength(lua_State* tolua_S)
 int lua_axis_ui_Text_getAutoRenderSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12471,7 +12471,7 @@ int lua_axis_ui_Text_getAutoRenderSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12489,7 +12489,7 @@ int lua_axis_ui_Text_getAutoRenderSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_getAutoRenderSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getAutoRenderSize();
+        ax::Vec2 ret = cobj->getAutoRenderSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12506,7 +12506,7 @@ int lua_axis_ui_Text_getAutoRenderSize(lua_State* tolua_S)
 int lua_axis_ui_Text_enableOutline(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12518,7 +12518,7 @@ int lua_axis_ui_Text_enableOutline(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12531,7 +12531,7 @@ int lua_axis_ui_Text_enableOutline(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color4B arg0;
+        ax::Color4B arg0;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableOutline");
         if(!ok)
@@ -12545,7 +12545,7 @@ int lua_axis_ui_Text_enableOutline(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        axis::Color4B arg0;
+        ax::Color4B arg0;
         int arg1;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableOutline");
@@ -12573,7 +12573,7 @@ int lua_axis_ui_Text_enableOutline(lua_State* tolua_S)
 int lua_axis_ui_Text_getEffectColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12585,7 +12585,7 @@ int lua_axis_ui_Text_getEffectColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12603,7 +12603,7 @@ int lua_axis_ui_Text_getEffectColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_getEffectColor'", nullptr);
             return 0;
         }
-        axis::Color4B ret = cobj->getEffectColor();
+        ax::Color4B ret = cobj->getEffectColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12620,7 +12620,7 @@ int lua_axis_ui_Text_getEffectColor(lua_State* tolua_S)
 int lua_axis_ui_Text_getType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12632,7 +12632,7 @@ int lua_axis_ui_Text_getType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12667,7 +12667,7 @@ int lua_axis_ui_Text_getType(lua_State* tolua_S)
 int lua_axis_ui_Text_getTextHorizontalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12679,7 +12679,7 @@ int lua_axis_ui_Text_getTextHorizontalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12714,7 +12714,7 @@ int lua_axis_ui_Text_getTextHorizontalAlignment(lua_State* tolua_S)
 int lua_axis_ui_Text_isShadowEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12726,7 +12726,7 @@ int lua_axis_ui_Text_isShadowEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12761,7 +12761,7 @@ int lua_axis_ui_Text_isShadowEnabled(lua_State* tolua_S)
 int lua_axis_ui_Text_setFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12773,7 +12773,7 @@ int lua_axis_ui_Text_setFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12811,7 +12811,7 @@ int lua_axis_ui_Text_setFontSize(lua_State* tolua_S)
 int lua_axis_ui_Text_getShadowColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12823,7 +12823,7 @@ int lua_axis_ui_Text_getShadowColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12841,7 +12841,7 @@ int lua_axis_ui_Text_getShadowColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_getShadowColor'", nullptr);
             return 0;
         }
-        axis::Color4B ret = cobj->getShadowColor();
+        ax::Color4B ret = cobj->getShadowColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12858,7 +12858,7 @@ int lua_axis_ui_Text_getShadowColor(lua_State* tolua_S)
 int lua_axis_ui_Text_setTextColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12870,7 +12870,7 @@ int lua_axis_ui_Text_setTextColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12883,7 +12883,7 @@ int lua_axis_ui_Text_setTextColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color4B arg0;
+        ax::Color4B arg0;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:setTextColor");
         if(!ok)
@@ -12908,7 +12908,7 @@ int lua_axis_ui_Text_setTextColor(lua_State* tolua_S)
 int lua_axis_ui_Text_enableGlow(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12920,7 +12920,7 @@ int lua_axis_ui_Text_enableGlow(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12933,7 +12933,7 @@ int lua_axis_ui_Text_enableGlow(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color4B arg0;
+        ax::Color4B arg0;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.Text:enableGlow");
         if(!ok)
@@ -12958,7 +12958,7 @@ int lua_axis_ui_Text_enableGlow(lua_State* tolua_S)
 int lua_axis_ui_Text_getLetter(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12970,7 +12970,7 @@ int lua_axis_ui_Text_getLetter(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12991,8 +12991,8 @@ int lua_axis_ui_Text_getLetter(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_getLetter'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getLetter(arg0);
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getLetter(arg0);
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Text:getLetter",argc, 1);
@@ -13008,7 +13008,7 @@ int lua_axis_ui_Text_getLetter(lua_State* tolua_S)
 int lua_axis_ui_Text_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13020,7 +13020,7 @@ int lua_axis_ui_Text_setBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13033,7 +13033,7 @@ int lua_axis_ui_Text_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::BlendFunc arg0;
+        ax::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "axui.Text:setBlendFunc");
         if(!ok)
@@ -13058,7 +13058,7 @@ int lua_axis_ui_Text_setBlendFunc(lua_State* tolua_S)
 int lua_axis_ui_Text_getTextVerticalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13070,7 +13070,7 @@ int lua_axis_ui_Text_getTextVerticalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13105,7 +13105,7 @@ int lua_axis_ui_Text_getTextVerticalAlignment(lua_State* tolua_S)
 int lua_axis_ui_Text_getTextAreaSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13117,7 +13117,7 @@ int lua_axis_ui_Text_getTextAreaSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13135,7 +13135,7 @@ int lua_axis_ui_Text_getTextAreaSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_getTextAreaSize'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getTextAreaSize();
+        const ax::Vec2& ret = cobj->getTextAreaSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -13152,7 +13152,7 @@ int lua_axis_ui_Text_getTextAreaSize(lua_State* tolua_S)
 int lua_axis_ui_Text_setTextHorizontalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13164,7 +13164,7 @@ int lua_axis_ui_Text_setTextHorizontalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Text",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Text*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Text*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13177,7 +13177,7 @@ int lua_axis_ui_Text_setTextHorizontalAlignment(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::TextHAlignment arg0;
+        ax::TextHAlignment arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Text:setTextHorizontalAlignment");
         if(!ok)
@@ -13226,8 +13226,8 @@ int lua_axis_ui_Text_create(lua_State* tolua_S)
             double arg2;
             ok &= luaval_to_number(tolua_S, 4,&arg2, "axui.Text:create");
             if (!ok) { break; }
-            axis::ui::Text* ret = axis::ui::Text::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::Text>(tolua_S, "axui.Text",(axis::ui::Text*)ret);
+            ax::ui::Text* ret = ax::ui::Text::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::Text>(tolua_S, "axui.Text",(ax::ui::Text*)ret);
             return 1;
         }
     } while (0);
@@ -13236,8 +13236,8 @@ int lua_axis_ui_Text_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::Text* ret = axis::ui::Text::create();
-            object_to_luaval<axis::ui::Text>(tolua_S, "axui.Text",(axis::ui::Text*)ret);
+            ax::ui::Text* ret = ax::ui::Text::create();
+            object_to_luaval<ax::ui::Text>(tolua_S, "axui.Text",(ax::ui::Text*)ret);
             return 1;
         }
     } while (0);
@@ -13272,8 +13272,8 @@ int lua_axis_ui_Text_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::Text::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::Text::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Text:createInstance",argc, 0);
@@ -13287,7 +13287,7 @@ int lua_axis_ui_Text_createInstance(lua_State* tolua_S)
 int lua_axis_ui_Text_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Text* cobj = nullptr;
+    ax::ui::Text* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13304,7 +13304,7 @@ int lua_axis_ui_Text_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Text_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::Text();
+        cobj = new ax::ui::Text();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -13371,7 +13371,7 @@ int lua_register_axis_ui_Text(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_Text_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_Text_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::Text).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::Text).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.Text";
     g_typeCast[typeName] = "axui.Text";
     return 1;
@@ -13380,7 +13380,7 @@ int lua_register_axis_ui_Text(lua_State* tolua_S)
 int lua_axis_ui_TextAtlas_getStringLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextAtlas* cobj = nullptr;
+    ax::ui::TextAtlas* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13392,7 +13392,7 @@ int lua_axis_ui_TextAtlas_getStringLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextAtlas",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13427,7 +13427,7 @@ int lua_axis_ui_TextAtlas_getStringLength(lua_State* tolua_S)
 int lua_axis_ui_TextAtlas_getString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextAtlas* cobj = nullptr;
+    ax::ui::TextAtlas* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13439,7 +13439,7 @@ int lua_axis_ui_TextAtlas_getString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextAtlas",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13474,7 +13474,7 @@ int lua_axis_ui_TextAtlas_getString(lua_State* tolua_S)
 int lua_axis_ui_TextAtlas_setString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextAtlas* cobj = nullptr;
+    ax::ui::TextAtlas* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13486,7 +13486,7 @@ int lua_axis_ui_TextAtlas_setString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextAtlas",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13524,7 +13524,7 @@ int lua_axis_ui_TextAtlas_setString(lua_State* tolua_S)
 int lua_axis_ui_TextAtlas_getRenderFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextAtlas* cobj = nullptr;
+    ax::ui::TextAtlas* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13536,7 +13536,7 @@ int lua_axis_ui_TextAtlas_getRenderFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextAtlas",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13554,7 +13554,7 @@ int lua_axis_ui_TextAtlas_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextAtlas_getRenderFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getRenderFile();
+        ax::ResourceData ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -13571,7 +13571,7 @@ int lua_axis_ui_TextAtlas_getRenderFile(lua_State* tolua_S)
 int lua_axis_ui_TextAtlas_setProperty(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextAtlas* cobj = nullptr;
+    ax::ui::TextAtlas* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13583,7 +13583,7 @@ int lua_axis_ui_TextAtlas_setProperty(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextAtlas",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13633,7 +13633,7 @@ int lua_axis_ui_TextAtlas_setProperty(lua_State* tolua_S)
 int lua_axis_ui_TextAtlas_adaptRenderers(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextAtlas* cobj = nullptr;
+    ax::ui::TextAtlas* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13645,7 +13645,7 @@ int lua_axis_ui_TextAtlas_adaptRenderers(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextAtlas",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextAtlas*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13710,8 +13710,8 @@ int lua_axis_ui_TextAtlas_create(lua_State* tolua_S)
             std::string_view arg4;
             ok &= luaval_to_std_string_view(tolua_S, 6,&arg4, "axui.TextAtlas:create");
             if (!ok) { break; }
-            axis::ui::TextAtlas* ret = axis::ui::TextAtlas::create(arg0, arg1, arg2, arg3, arg4);
-            object_to_luaval<axis::ui::TextAtlas>(tolua_S, "axui.TextAtlas",(axis::ui::TextAtlas*)ret);
+            ax::ui::TextAtlas* ret = ax::ui::TextAtlas::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<ax::ui::TextAtlas>(tolua_S, "axui.TextAtlas",(ax::ui::TextAtlas*)ret);
             return 1;
         }
     } while (0);
@@ -13720,8 +13720,8 @@ int lua_axis_ui_TextAtlas_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::TextAtlas* ret = axis::ui::TextAtlas::create();
-            object_to_luaval<axis::ui::TextAtlas>(tolua_S, "axui.TextAtlas",(axis::ui::TextAtlas*)ret);
+            ax::ui::TextAtlas* ret = ax::ui::TextAtlas::create();
+            object_to_luaval<ax::ui::TextAtlas>(tolua_S, "axui.TextAtlas",(ax::ui::TextAtlas*)ret);
             return 1;
         }
     } while (0);
@@ -13756,8 +13756,8 @@ int lua_axis_ui_TextAtlas_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextAtlas_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::TextAtlas::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::TextAtlas::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.TextAtlas:createInstance",argc, 0);
@@ -13771,7 +13771,7 @@ int lua_axis_ui_TextAtlas_createInstance(lua_State* tolua_S)
 int lua_axis_ui_TextAtlas_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextAtlas* cobj = nullptr;
+    ax::ui::TextAtlas* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13788,7 +13788,7 @@ int lua_axis_ui_TextAtlas_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextAtlas_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::TextAtlas();
+        cobj = new ax::ui::TextAtlas();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -13827,7 +13827,7 @@ int lua_register_axis_ui_TextAtlas(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_TextAtlas_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_TextAtlas_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::TextAtlas).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::TextAtlas).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.TextAtlas";
     g_typeCast[typeName] = "axui.TextAtlas";
     return 1;
@@ -13836,7 +13836,7 @@ int lua_register_axis_ui_TextAtlas(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_setPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13848,7 +13848,7 @@ int lua_axis_ui_LoadingBar_setPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13886,7 +13886,7 @@ int lua_axis_ui_LoadingBar_setPercent(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_loadTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13898,7 +13898,7 @@ int lua_axis_ui_LoadingBar_loadTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13926,7 +13926,7 @@ int lua_axis_ui_LoadingBar_loadTexture(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.LoadingBar:loadTexture");
 
@@ -13953,7 +13953,7 @@ int lua_axis_ui_LoadingBar_loadTexture(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_setDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -13965,7 +13965,7 @@ int lua_axis_ui_LoadingBar_setDirection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -13978,7 +13978,7 @@ int lua_axis_ui_LoadingBar_setDirection(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::LoadingBar::Direction arg0;
+        ax::ui::LoadingBar::Direction arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.LoadingBar:setDirection");
         if(!ok)
@@ -14003,7 +14003,7 @@ int lua_axis_ui_LoadingBar_setDirection(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_getRenderFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14015,7 +14015,7 @@ int lua_axis_ui_LoadingBar_getRenderFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14033,7 +14033,7 @@ int lua_axis_ui_LoadingBar_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LoadingBar_getRenderFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getRenderFile();
+        ax::ResourceData ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -14050,7 +14050,7 @@ int lua_axis_ui_LoadingBar_getRenderFile(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_setScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14062,7 +14062,7 @@ int lua_axis_ui_LoadingBar_setScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14100,7 +14100,7 @@ int lua_axis_ui_LoadingBar_setScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_setCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14112,7 +14112,7 @@ int lua_axis_ui_LoadingBar_setCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14125,7 +14125,7 @@ int lua_axis_ui_LoadingBar_setCapInsets(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.LoadingBar:setCapInsets");
         if(!ok)
@@ -14150,7 +14150,7 @@ int lua_axis_ui_LoadingBar_setCapInsets(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_getDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14162,7 +14162,7 @@ int lua_axis_ui_LoadingBar_getDirection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14197,7 +14197,7 @@ int lua_axis_ui_LoadingBar_getDirection(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_getCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14209,7 +14209,7 @@ int lua_axis_ui_LoadingBar_getCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14227,7 +14227,7 @@ int lua_axis_ui_LoadingBar_getCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LoadingBar_getCapInsets'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsets();
+        const ax::Rect& ret = cobj->getCapInsets();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -14244,7 +14244,7 @@ int lua_axis_ui_LoadingBar_getCapInsets(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_isScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14256,7 +14256,7 @@ int lua_axis_ui_LoadingBar_isScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14291,7 +14291,7 @@ int lua_axis_ui_LoadingBar_isScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_getPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14303,7 +14303,7 @@ int lua_axis_ui_LoadingBar_getPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LoadingBar",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LoadingBar*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14356,8 +14356,8 @@ int lua_axis_ui_LoadingBar_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.LoadingBar:create");
             if (!ok) { break; }
-            axis::ui::LoadingBar* ret = axis::ui::LoadingBar::create(arg0);
-            object_to_luaval<axis::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(axis::ui::LoadingBar*)ret);
+            ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create(arg0);
+            object_to_luaval<ax::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(ax::ui::LoadingBar*)ret);
             return 1;
         }
     } while (0);
@@ -14372,8 +14372,8 @@ int lua_axis_ui_LoadingBar_create(lua_State* tolua_S)
             double arg1;
             ok &= luaval_to_number(tolua_S, 3,&arg1, "axui.LoadingBar:create");
             if (!ok) { break; }
-            axis::ui::LoadingBar* ret = axis::ui::LoadingBar::create(arg0, arg1);
-            object_to_luaval<axis::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(axis::ui::LoadingBar*)ret);
+            ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create(arg0, arg1);
+            object_to_luaval<ax::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(ax::ui::LoadingBar*)ret);
             return 1;
         }
     } while (0);
@@ -14382,8 +14382,8 @@ int lua_axis_ui_LoadingBar_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::LoadingBar* ret = axis::ui::LoadingBar::create();
-            object_to_luaval<axis::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(axis::ui::LoadingBar*)ret);
+            ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create();
+            object_to_luaval<ax::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(ax::ui::LoadingBar*)ret);
             return 1;
         }
     } while (0);
@@ -14395,11 +14395,11 @@ int lua_axis_ui_LoadingBar_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.LoadingBar:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg1;
+            ax::ui::Widget::TextureResType arg1;
             ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.LoadingBar:create");
             if (!ok) { break; }
-            axis::ui::LoadingBar* ret = axis::ui::LoadingBar::create(arg0, arg1);
-            object_to_luaval<axis::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(axis::ui::LoadingBar*)ret);
+            ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create(arg0, arg1);
+            object_to_luaval<ax::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(ax::ui::LoadingBar*)ret);
             return 1;
         }
     } while (0);
@@ -14411,14 +14411,14 @@ int lua_axis_ui_LoadingBar_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.LoadingBar:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg1;
+            ax::ui::Widget::TextureResType arg1;
             ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.LoadingBar:create");
             if (!ok) { break; }
             double arg2;
             ok &= luaval_to_number(tolua_S, 4,&arg2, "axui.LoadingBar:create");
             if (!ok) { break; }
-            axis::ui::LoadingBar* ret = axis::ui::LoadingBar::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(axis::ui::LoadingBar*)ret);
+            ax::ui::LoadingBar* ret = ax::ui::LoadingBar::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::LoadingBar>(tolua_S, "axui.LoadingBar",(ax::ui::LoadingBar*)ret);
             return 1;
         }
     } while (0);
@@ -14453,8 +14453,8 @@ int lua_axis_ui_LoadingBar_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LoadingBar_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::LoadingBar::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::LoadingBar::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.LoadingBar:createInstance",argc, 0);
@@ -14468,7 +14468,7 @@ int lua_axis_ui_LoadingBar_createInstance(lua_State* tolua_S)
 int lua_axis_ui_LoadingBar_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LoadingBar* cobj = nullptr;
+    ax::ui::LoadingBar* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14485,7 +14485,7 @@ int lua_axis_ui_LoadingBar_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LoadingBar_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::LoadingBar();
+        cobj = new ax::ui::LoadingBar();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -14528,7 +14528,7 @@ int lua_register_axis_ui_LoadingBar(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_LoadingBar_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_LoadingBar_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::LoadingBar).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::LoadingBar).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.LoadingBar";
     g_typeCast[typeName] = "axui.LoadingBar";
     return 1;
@@ -14537,7 +14537,7 @@ int lua_register_axis_ui_LoadingBar(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToTop(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14549,7 +14549,7 @@ int lua_axis_ui_ScrollView_scrollToTop(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14590,7 +14590,7 @@ int lua_axis_ui_ScrollView_scrollToTop(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToPercentHorizontal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14602,7 +14602,7 @@ int lua_axis_ui_ScrollView_scrollToPercentHorizontal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14646,7 +14646,7 @@ int lua_axis_ui_ScrollView_scrollToPercentHorizontal(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14658,7 +14658,7 @@ int lua_axis_ui_ScrollView_setScrollBarOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14696,7 +14696,7 @@ int lua_axis_ui_ScrollView_setScrollBarOpacity(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14708,7 +14708,7 @@ int lua_axis_ui_ScrollView_setScrollBarEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14746,7 +14746,7 @@ int lua_axis_ui_ScrollView_setScrollBarEnabled(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_isInertiaScrollEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14758,7 +14758,7 @@ int lua_axis_ui_ScrollView_isInertiaScrollEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14793,7 +14793,7 @@ int lua_axis_ui_ScrollView_isInertiaScrollEnabled(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToBottom(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14805,7 +14805,7 @@ int lua_axis_ui_ScrollView_scrollToBottom(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14846,7 +14846,7 @@ int lua_axis_ui_ScrollView_scrollToBottom(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getScrolledPercentBothDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14858,7 +14858,7 @@ int lua_axis_ui_ScrollView_getScrolledPercentBothDirection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14876,7 +14876,7 @@ int lua_axis_ui_ScrollView_getScrolledPercentBothDirection(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_getScrolledPercentBothDirection'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getScrolledPercentBothDirection();
+        ax::Vec2 ret = cobj->getScrolledPercentBothDirection();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -14893,7 +14893,7 @@ int lua_axis_ui_ScrollView_getScrolledPercentBothDirection(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14905,7 +14905,7 @@ int lua_axis_ui_ScrollView_getDirection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14940,7 +14940,7 @@ int lua_axis_ui_ScrollView_getDirection(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -14952,7 +14952,7 @@ int lua_axis_ui_ScrollView_setScrollBarColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -14965,7 +14965,7 @@ int lua_axis_ui_ScrollView_setScrollBarColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color3B arg0;
+        ax::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarColor");
         if(!ok)
@@ -14990,7 +14990,7 @@ int lua_axis_ui_ScrollView_setScrollBarColor(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToBottomLeft(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15002,7 +15002,7 @@ int lua_axis_ui_ScrollView_scrollToBottomLeft(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15043,7 +15043,7 @@ int lua_axis_ui_ScrollView_scrollToBottomLeft(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getInnerContainer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15055,7 +15055,7 @@ int lua_axis_ui_ScrollView_getInnerContainer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15073,8 +15073,8 @@ int lua_axis_ui_ScrollView_getInnerContainer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_getInnerContainer'", nullptr);
             return 0;
         }
-        axis::ui::Layout* ret = cobj->getInnerContainer();
-        object_to_luaval<axis::ui::Layout>(tolua_S, "axui.Layout",(axis::ui::Layout*)ret);
+        ax::ui::Layout* ret = cobj->getInnerContainer();
+        object_to_luaval<ax::ui::Layout>(tolua_S, "axui.Layout",(ax::ui::Layout*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ScrollView:getInnerContainer",argc, 0);
@@ -15090,7 +15090,7 @@ int lua_axis_ui_ScrollView_getInnerContainer(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToBottom(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15102,7 +15102,7 @@ int lua_axis_ui_ScrollView_jumpToBottom(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15137,7 +15137,7 @@ int lua_axis_ui_ScrollView_jumpToBottom(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setInnerContainerPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15149,7 +15149,7 @@ int lua_axis_ui_ScrollView_setInnerContainerPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15162,7 +15162,7 @@ int lua_axis_ui_ScrollView_setInnerContainerPosition(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ScrollView:setInnerContainerPosition");
         if(!ok)
@@ -15187,7 +15187,7 @@ int lua_axis_ui_ScrollView_setInnerContainerPosition(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15199,7 +15199,7 @@ int lua_axis_ui_ScrollView_setDirection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15212,7 +15212,7 @@ int lua_axis_ui_ScrollView_setDirection(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::ScrollView::Direction arg0;
+        ax::ui::ScrollView::Direction arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.ScrollView:setDirection");
         if(!ok)
@@ -15237,7 +15237,7 @@ int lua_axis_ui_ScrollView_setDirection(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToTopLeft(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15249,7 +15249,7 @@ int lua_axis_ui_ScrollView_scrollToTopLeft(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15290,7 +15290,7 @@ int lua_axis_ui_ScrollView_scrollToTopLeft(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToTopRight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15302,7 +15302,7 @@ int lua_axis_ui_ScrollView_jumpToTopRight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15337,7 +15337,7 @@ int lua_axis_ui_ScrollView_jumpToTopRight(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToPercentBothDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15349,7 +15349,7 @@ int lua_axis_ui_ScrollView_scrollToPercentBothDirection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15362,7 +15362,7 @@ int lua_axis_ui_ScrollView_scrollToPercentBothDirection(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 3) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
         double arg1;
         bool arg2;
 
@@ -15393,7 +15393,7 @@ int lua_axis_ui_ScrollView_scrollToPercentBothDirection(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setInnerContainerSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15405,7 +15405,7 @@ int lua_axis_ui_ScrollView_setInnerContainerSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15418,7 +15418,7 @@ int lua_axis_ui_ScrollView_setInnerContainerSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ScrollView:setInnerContainerSize");
         if(!ok)
@@ -15443,7 +15443,7 @@ int lua_axis_ui_ScrollView_setInnerContainerSize(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getInnerContainerPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15455,7 +15455,7 @@ int lua_axis_ui_ScrollView_getInnerContainerPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15473,7 +15473,7 @@ int lua_axis_ui_ScrollView_getInnerContainerPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_getInnerContainerPosition'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getInnerContainerPosition();
+        const ax::Vec2& ret = cobj->getInnerContainerPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -15490,7 +15490,7 @@ int lua_axis_ui_ScrollView_getInnerContainerPosition(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToTop(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15502,7 +15502,7 @@ int lua_axis_ui_ScrollView_jumpToTop(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15537,7 +15537,7 @@ int lua_axis_ui_ScrollView_jumpToTop(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getScrolledPercentVertical(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15549,7 +15549,7 @@ int lua_axis_ui_ScrollView_getScrolledPercentVertical(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15584,7 +15584,7 @@ int lua_axis_ui_ScrollView_getScrolledPercentVertical(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_isBounceEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15596,7 +15596,7 @@ int lua_axis_ui_ScrollView_isBounceEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15631,7 +15631,7 @@ int lua_axis_ui_ScrollView_isBounceEnabled(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToPercentVertical(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15643,7 +15643,7 @@ int lua_axis_ui_ScrollView_jumpToPercentVertical(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15681,7 +15681,7 @@ int lua_axis_ui_ScrollView_jumpToPercentVertical(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_addEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15693,7 +15693,7 @@ int lua_axis_ui_ScrollView_addEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15706,7 +15706,7 @@ int lua_axis_ui_ScrollView_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (axis::Ref *, axis::ui::ScrollView::EventType)> arg0;
+        std::function<void (ax::Ref *, ax::ui::ScrollView::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -15735,7 +15735,7 @@ int lua_axis_ui_ScrollView_addEventListener(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarAutoHideTime(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15747,7 +15747,7 @@ int lua_axis_ui_ScrollView_setScrollBarAutoHideTime(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15785,7 +15785,7 @@ int lua_axis_ui_ScrollView_setScrollBarAutoHideTime(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_stopScroll(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15797,7 +15797,7 @@ int lua_axis_ui_ScrollView_stopScroll(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15832,7 +15832,7 @@ int lua_axis_ui_ScrollView_stopScroll(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarPositionFromCornerForHorizontal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15844,7 +15844,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCornerForHorizontal(lua_State
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15857,7 +15857,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCornerForHorizontal(lua_State
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarPositionFromCornerForHorizontal");
         if(!ok)
@@ -15882,7 +15882,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCornerForHorizontal(lua_State
 int lua_axis_ui_ScrollView_setInertiaScrollEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15894,7 +15894,7 @@ int lua_axis_ui_ScrollView_setInertiaScrollEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15932,7 +15932,7 @@ int lua_axis_ui_ScrollView_setInertiaScrollEnabled(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarAutoHideEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15944,7 +15944,7 @@ int lua_axis_ui_ScrollView_setScrollBarAutoHideEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -15982,7 +15982,7 @@ int lua_axis_ui_ScrollView_setScrollBarAutoHideEnabled(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getScrollBarColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -15994,7 +15994,7 @@ int lua_axis_ui_ScrollView_getScrollBarColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16012,7 +16012,7 @@ int lua_axis_ui_ScrollView_getScrollBarColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_getScrollBarColor'", nullptr);
             return 0;
         }
-        const axis::Color3B& ret = cobj->getScrollBarColor();
+        const ax::Color3B& ret = cobj->getScrollBarColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -16029,7 +16029,7 @@ int lua_axis_ui_ScrollView_getScrollBarColor(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToTopLeft(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16041,7 +16041,7 @@ int lua_axis_ui_ScrollView_jumpToTopLeft(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16076,7 +16076,7 @@ int lua_axis_ui_ScrollView_jumpToTopLeft(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_isScrollBarEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16088,7 +16088,7 @@ int lua_axis_ui_ScrollView_isScrollBarEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16123,7 +16123,7 @@ int lua_axis_ui_ScrollView_isScrollBarEnabled(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_isAutoScrolling(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16135,7 +16135,7 @@ int lua_axis_ui_ScrollView_isAutoScrolling(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16170,7 +16170,7 @@ int lua_axis_ui_ScrollView_isAutoScrolling(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToBottomRight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16182,7 +16182,7 @@ int lua_axis_ui_ScrollView_jumpToBottomRight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16217,7 +16217,7 @@ int lua_axis_ui_ScrollView_jumpToBottomRight(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setTouchTotalTimeThreshold(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16229,7 +16229,7 @@ int lua_axis_ui_ScrollView_setTouchTotalTimeThreshold(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16267,7 +16267,7 @@ int lua_axis_ui_ScrollView_setTouchTotalTimeThreshold(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getTouchTotalTimeThreshold(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16279,7 +16279,7 @@ int lua_axis_ui_ScrollView_getTouchTotalTimeThreshold(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16314,7 +16314,7 @@ int lua_axis_ui_ScrollView_getTouchTotalTimeThreshold(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForHorizontal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16326,7 +16326,7 @@ int lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForHorizontal(lua_State
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16344,7 +16344,7 @@ int lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForHorizontal(lua_State
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForHorizontal'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getScrollBarPositionFromCornerForHorizontal();
+        ax::Vec2 ret = cobj->getScrollBarPositionFromCornerForHorizontal();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -16361,7 +16361,7 @@ int lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForHorizontal(lua_State
 int lua_axis_ui_ScrollView_getScrolledPercentHorizontal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16373,7 +16373,7 @@ int lua_axis_ui_ScrollView_getScrolledPercentHorizontal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16408,7 +16408,7 @@ int lua_axis_ui_ScrollView_getScrolledPercentHorizontal(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setBounceEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16420,7 +16420,7 @@ int lua_axis_ui_ScrollView_setBounceEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16458,7 +16458,7 @@ int lua_axis_ui_ScrollView_setBounceEnabled(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_stopAutoScroll(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16470,7 +16470,7 @@ int lua_axis_ui_ScrollView_stopAutoScroll(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16505,7 +16505,7 @@ int lua_axis_ui_ScrollView_stopAutoScroll(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToTopRight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16517,7 +16517,7 @@ int lua_axis_ui_ScrollView_scrollToTopRight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16558,7 +16558,7 @@ int lua_axis_ui_ScrollView_scrollToTopRight(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_isScrolling(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16570,7 +16570,7 @@ int lua_axis_ui_ScrollView_isScrolling(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16605,7 +16605,7 @@ int lua_axis_ui_ScrollView_isScrolling(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToLeft(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16617,7 +16617,7 @@ int lua_axis_ui_ScrollView_scrollToLeft(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16658,7 +16658,7 @@ int lua_axis_ui_ScrollView_scrollToLeft(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToPercentBothDirection(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16670,7 +16670,7 @@ int lua_axis_ui_ScrollView_jumpToPercentBothDirection(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16683,7 +16683,7 @@ int lua_axis_ui_ScrollView_jumpToPercentBothDirection(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ScrollView:jumpToPercentBothDirection");
         if(!ok)
@@ -16708,7 +16708,7 @@ int lua_axis_ui_ScrollView_jumpToPercentBothDirection(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_stopOverallScroll(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16720,7 +16720,7 @@ int lua_axis_ui_ScrollView_stopOverallScroll(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16755,7 +16755,7 @@ int lua_axis_ui_ScrollView_stopOverallScroll(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToPercentVertical(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16767,7 +16767,7 @@ int lua_axis_ui_ScrollView_scrollToPercentVertical(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16811,7 +16811,7 @@ int lua_axis_ui_ScrollView_scrollToPercentVertical(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16823,7 +16823,7 @@ int lua_axis_ui_ScrollView_setScrollBarWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16861,7 +16861,7 @@ int lua_axis_ui_ScrollView_setScrollBarWidth(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getScrollBarOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16873,7 +16873,7 @@ int lua_axis_ui_ScrollView_getScrollBarOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16908,7 +16908,7 @@ int lua_axis_ui_ScrollView_getScrollBarOpacity(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToBottomRight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16920,7 +16920,7 @@ int lua_axis_ui_ScrollView_scrollToBottomRight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16961,7 +16961,7 @@ int lua_axis_ui_ScrollView_scrollToBottomRight(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarPositionFromCorner(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -16973,7 +16973,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCorner(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -16986,7 +16986,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCorner(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarPositionFromCorner");
         if(!ok)
@@ -17011,7 +17011,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCorner(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_setScrollBarPositionFromCornerForVertical(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17023,7 +17023,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCornerForVertical(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17036,7 +17036,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCornerForVertical(lua_State* 
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ScrollView:setScrollBarPositionFromCornerForVertical");
         if(!ok)
@@ -17061,7 +17061,7 @@ int lua_axis_ui_ScrollView_setScrollBarPositionFromCornerForVertical(lua_State* 
 int lua_axis_ui_ScrollView_getScrollBarAutoHideTime(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17073,7 +17073,7 @@ int lua_axis_ui_ScrollView_getScrollBarAutoHideTime(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17108,7 +17108,7 @@ int lua_axis_ui_ScrollView_getScrollBarAutoHideTime(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToLeft(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17120,7 +17120,7 @@ int lua_axis_ui_ScrollView_jumpToLeft(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17155,7 +17155,7 @@ int lua_axis_ui_ScrollView_jumpToLeft(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_scrollToRight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17167,7 +17167,7 @@ int lua_axis_ui_ScrollView_scrollToRight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17208,7 +17208,7 @@ int lua_axis_ui_ScrollView_scrollToRight(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForVertical(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17220,7 +17220,7 @@ int lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForVertical(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17238,7 +17238,7 @@ int lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForVertical(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForVertical'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getScrollBarPositionFromCornerForVertical();
+        ax::Vec2 ret = cobj->getScrollBarPositionFromCornerForVertical();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -17255,7 +17255,7 @@ int lua_axis_ui_ScrollView_getScrollBarPositionFromCornerForVertical(lua_State* 
 int lua_axis_ui_ScrollView_getScrollBarWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17267,7 +17267,7 @@ int lua_axis_ui_ScrollView_getScrollBarWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17302,7 +17302,7 @@ int lua_axis_ui_ScrollView_getScrollBarWidth(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_isScrollBarAutoHideEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17314,7 +17314,7 @@ int lua_axis_ui_ScrollView_isScrollBarAutoHideEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17349,7 +17349,7 @@ int lua_axis_ui_ScrollView_isScrollBarAutoHideEnabled(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToBottomLeft(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17361,7 +17361,7 @@ int lua_axis_ui_ScrollView_jumpToBottomLeft(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17396,7 +17396,7 @@ int lua_axis_ui_ScrollView_jumpToBottomLeft(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToRight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17408,7 +17408,7 @@ int lua_axis_ui_ScrollView_jumpToRight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17443,7 +17443,7 @@ int lua_axis_ui_ScrollView_jumpToRight(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_getInnerContainerSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17455,7 +17455,7 @@ int lua_axis_ui_ScrollView_getInnerContainerSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17473,7 +17473,7 @@ int lua_axis_ui_ScrollView_getInnerContainerSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_getInnerContainerSize'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getInnerContainerSize();
+        const ax::Vec2& ret = cobj->getInnerContainerSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -17490,7 +17490,7 @@ int lua_axis_ui_ScrollView_getInnerContainerSize(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_jumpToPercentHorizontal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17502,7 +17502,7 @@ int lua_axis_ui_ScrollView_jumpToPercentHorizontal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ScrollView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ScrollView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17559,8 +17559,8 @@ int lua_axis_ui_ScrollView_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_create'", nullptr);
             return 0;
         }
-        axis::ui::ScrollView* ret = axis::ui::ScrollView::create();
-        object_to_luaval<axis::ui::ScrollView>(tolua_S, "axui.ScrollView",(axis::ui::ScrollView*)ret);
+        ax::ui::ScrollView* ret = ax::ui::ScrollView::create();
+        object_to_luaval<ax::ui::ScrollView>(tolua_S, "axui.ScrollView",(ax::ui::ScrollView*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.ScrollView:create",argc, 0);
@@ -17593,8 +17593,8 @@ int lua_axis_ui_ScrollView_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::ScrollView::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::ScrollView::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.ScrollView:createInstance",argc, 0);
@@ -17608,7 +17608,7 @@ int lua_axis_ui_ScrollView_createInstance(lua_State* tolua_S)
 int lua_axis_ui_ScrollView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ScrollView* cobj = nullptr;
+    ax::ui::ScrollView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17625,7 +17625,7 @@ int lua_axis_ui_ScrollView_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ScrollView_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::ScrollView();
+        cobj = new ax::ui::ScrollView();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -17719,7 +17719,7 @@ int lua_register_axis_ui_ScrollView(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_ScrollView_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_ScrollView_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::ScrollView).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::ScrollView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.ScrollView";
     g_typeCast[typeName] = "axui.ScrollView";
     return 1;
@@ -17728,7 +17728,7 @@ int lua_register_axis_ui_ScrollView(lua_State* tolua_S)
 int lua_axis_ui_ListView_setGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17740,7 +17740,7 @@ int lua_axis_ui_ListView_setGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17753,7 +17753,7 @@ int lua_axis_ui_ListView_setGravity(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::ListView::Gravity arg0;
+        ax::ui::ListView::Gravity arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.ListView:setGravity");
         if(!ok)
@@ -17778,7 +17778,7 @@ int lua_axis_ui_ListView_setGravity(lua_State* tolua_S)
 int lua_axis_ui_ListView_removeLastItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17790,7 +17790,7 @@ int lua_axis_ui_ListView_removeLastItem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17825,7 +17825,7 @@ int lua_axis_ui_ListView_removeLastItem(lua_State* tolua_S)
 int lua_axis_ui_ListView_getLeftPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17837,7 +17837,7 @@ int lua_axis_ui_ListView_getLeftPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17872,7 +17872,7 @@ int lua_axis_ui_ListView_getLeftPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_getCenterItemInCurrentView(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17884,7 +17884,7 @@ int lua_axis_ui_ListView_getCenterItemInCurrentView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17902,8 +17902,8 @@ int lua_axis_ui_ListView_getCenterItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getCenterItemInCurrentView'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->getCenterItemInCurrentView();
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->getCenterItemInCurrentView();
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ListView:getCenterItemInCurrentView",argc, 0);
@@ -17919,7 +17919,7 @@ int lua_axis_ui_ListView_getCenterItemInCurrentView(lua_State* tolua_S)
 int lua_axis_ui_ListView_getCurSelectedIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17931,7 +17931,7 @@ int lua_axis_ui_ListView_getCurSelectedIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -17966,7 +17966,7 @@ int lua_axis_ui_ListView_getCurSelectedIndex(lua_State* tolua_S)
 int lua_axis_ui_ListView_getScrollDuration(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -17978,7 +17978,7 @@ int lua_axis_ui_ListView_getScrollDuration(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18013,7 +18013,7 @@ int lua_axis_ui_ListView_getScrollDuration(lua_State* tolua_S)
 int lua_axis_ui_ListView_getMagneticAllowedOutOfBoundary(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18025,7 +18025,7 @@ int lua_axis_ui_ListView_getMagneticAllowedOutOfBoundary(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18060,7 +18060,7 @@ int lua_axis_ui_ListView_getMagneticAllowedOutOfBoundary(lua_State* tolua_S)
 int lua_axis_ui_ListView_getItemsMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18072,7 +18072,7 @@ int lua_axis_ui_ListView_getItemsMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18107,7 +18107,7 @@ int lua_axis_ui_ListView_getItemsMargin(lua_State* tolua_S)
 int lua_axis_ui_ListView_scrollToItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -18116,7 +18116,7 @@ int lua_axis_ui_ListView_scrollToItem(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -18131,11 +18131,11 @@ int lua_axis_ui_ListView_scrollToItem(lua_State* tolua_S)
             ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.ListView:scrollToItem");
 
             if (!ok) { break; }
-            axis::Vec2 arg1;
+            ax::Vec2 arg1;
             ok &= luaval_to_vec2(tolua_S, 3, &arg1, "axui.ListView:scrollToItem");
 
             if (!ok) { break; }
-            axis::Vec2 arg2;
+            ax::Vec2 arg2;
             ok &= luaval_to_vec2(tolua_S, 4, &arg2, "axui.ListView:scrollToItem");
 
             if (!ok) { break; }
@@ -18155,11 +18155,11 @@ int lua_axis_ui_ListView_scrollToItem(lua_State* tolua_S)
             ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.ListView:scrollToItem");
 
             if (!ok) { break; }
-            axis::Vec2 arg1;
+            ax::Vec2 arg1;
             ok &= luaval_to_vec2(tolua_S, 3, &arg1, "axui.ListView:scrollToItem");
 
             if (!ok) { break; }
-            axis::Vec2 arg2;
+            ax::Vec2 arg2;
             ok &= luaval_to_vec2(tolua_S, 4, &arg2, "axui.ListView:scrollToItem");
 
             if (!ok) { break; }
@@ -18182,7 +18182,7 @@ int lua_axis_ui_ListView_scrollToItem(lua_State* tolua_S)
 int lua_axis_ui_ListView_jumpToItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18194,7 +18194,7 @@ int lua_axis_ui_ListView_jumpToItem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18208,8 +18208,8 @@ int lua_axis_ui_ListView_jumpToItem(lua_State* tolua_S)
     if (argc == 3) 
     {
         ssize_t arg0;
-        axis::Vec2 arg1;
-        axis::Vec2 arg2;
+        ax::Vec2 arg1;
+        ax::Vec2 arg2;
 
         ok &= luaval_to_ssize_t(tolua_S, 2, &arg0, "axui.ListView:jumpToItem");
 
@@ -18238,7 +18238,7 @@ int lua_axis_ui_ListView_jumpToItem(lua_State* tolua_S)
 int lua_axis_ui_ListView_setTopPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18250,7 +18250,7 @@ int lua_axis_ui_ListView_setTopPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18288,7 +18288,7 @@ int lua_axis_ui_ListView_setTopPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_getIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18300,7 +18300,7 @@ int lua_axis_ui_ListView_getIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18313,9 +18313,9 @@ int lua_axis_ui_ListView_getIndex(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.ListView:getIndex");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.ListView:getIndex");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getIndex'", nullptr);
@@ -18338,7 +18338,7 @@ int lua_axis_ui_ListView_getIndex(lua_State* tolua_S)
 int lua_axis_ui_ListView_pushBackCustomItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18350,7 +18350,7 @@ int lua_axis_ui_ListView_pushBackCustomItem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18363,9 +18363,9 @@ int lua_axis_ui_ListView_pushBackCustomItem(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.ListView:pushBackCustomItem");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.ListView:pushBackCustomItem");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_pushBackCustomItem'", nullptr);
@@ -18388,7 +18388,7 @@ int lua_axis_ui_ListView_pushBackCustomItem(lua_State* tolua_S)
 int lua_axis_ui_ListView_setCurSelectedIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18400,7 +18400,7 @@ int lua_axis_ui_ListView_setCurSelectedIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18438,7 +18438,7 @@ int lua_axis_ui_ListView_setCurSelectedIndex(lua_State* tolua_S)
 int lua_axis_ui_ListView_insertDefaultItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18450,7 +18450,7 @@ int lua_axis_ui_ListView_insertDefaultItem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18488,7 +18488,7 @@ int lua_axis_ui_ListView_insertDefaultItem(lua_State* tolua_S)
 int lua_axis_ui_ListView_setMagneticType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18500,7 +18500,7 @@ int lua_axis_ui_ListView_setMagneticType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18513,7 +18513,7 @@ int lua_axis_ui_ListView_setMagneticType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::ListView::MagneticType arg0;
+        ax::ui::ListView::MagneticType arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.ListView:setMagneticType");
         if(!ok)
@@ -18538,7 +18538,7 @@ int lua_axis_ui_ListView_setMagneticType(lua_State* tolua_S)
 int lua_axis_ui_ListView_setMagneticAllowedOutOfBoundary(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18550,7 +18550,7 @@ int lua_axis_ui_ListView_setMagneticAllowedOutOfBoundary(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18588,7 +18588,7 @@ int lua_axis_ui_ListView_setMagneticAllowedOutOfBoundary(lua_State* tolua_S)
 int lua_axis_ui_ListView_addEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18600,7 +18600,7 @@ int lua_axis_ui_ListView_addEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18613,7 +18613,7 @@ int lua_axis_ui_ListView_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (axis::Ref *, axis::ui::ListView::EventType)> arg0;
+        std::function<void (ax::Ref *, ax::ui::ListView::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -18642,7 +18642,7 @@ int lua_axis_ui_ListView_addEventListener(lua_State* tolua_S)
 int lua_axis_ui_ListView_doLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18654,7 +18654,7 @@ int lua_axis_ui_ListView_doLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18689,7 +18689,7 @@ int lua_axis_ui_ListView_doLayout(lua_State* tolua_S)
 int lua_axis_ui_ListView_getTopmostItemInCurrentView(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18701,7 +18701,7 @@ int lua_axis_ui_ListView_getTopmostItemInCurrentView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18719,8 +18719,8 @@ int lua_axis_ui_ListView_getTopmostItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getTopmostItemInCurrentView'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->getTopmostItemInCurrentView();
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->getTopmostItemInCurrentView();
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ListView:getTopmostItemInCurrentView",argc, 0);
@@ -18736,7 +18736,7 @@ int lua_axis_ui_ListView_getTopmostItemInCurrentView(lua_State* tolua_S)
 int lua_axis_ui_ListView_setPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18748,7 +18748,7 @@ int lua_axis_ui_ListView_setPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18795,7 +18795,7 @@ int lua_axis_ui_ListView_setPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_removeAllItems(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18807,7 +18807,7 @@ int lua_axis_ui_ListView_removeAllItems(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18842,7 +18842,7 @@ int lua_axis_ui_ListView_removeAllItems(lua_State* tolua_S)
 int lua_axis_ui_ListView_getRightPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18854,7 +18854,7 @@ int lua_axis_ui_ListView_getRightPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18889,7 +18889,7 @@ int lua_axis_ui_ListView_getRightPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_getBottommostItemInCurrentView(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18901,7 +18901,7 @@ int lua_axis_ui_ListView_getBottommostItemInCurrentView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18919,8 +18919,8 @@ int lua_axis_ui_ListView_getBottommostItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getBottommostItemInCurrentView'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->getBottommostItemInCurrentView();
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->getBottommostItemInCurrentView();
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ListView:getBottommostItemInCurrentView",argc, 0);
@@ -18936,7 +18936,7 @@ int lua_axis_ui_ListView_getBottommostItemInCurrentView(lua_State* tolua_S)
 int lua_axis_ui_ListView_getItems(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18948,7 +18948,7 @@ int lua_axis_ui_ListView_getItems(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -18966,7 +18966,7 @@ int lua_axis_ui_ListView_getItems(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getItems'", nullptr);
             return 0;
         }
-        axis::Vector<axis::ui::Widget *>& ret = cobj->getItems();
+        ax::Vector<ax::ui::Widget *>& ret = cobj->getItems();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -18983,7 +18983,7 @@ int lua_axis_ui_ListView_getItems(lua_State* tolua_S)
 int lua_axis_ui_ListView_getLeftmostItemInCurrentView(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18995,7 +18995,7 @@ int lua_axis_ui_ListView_getLeftmostItemInCurrentView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19013,8 +19013,8 @@ int lua_axis_ui_ListView_getLeftmostItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getLeftmostItemInCurrentView'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->getLeftmostItemInCurrentView();
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->getLeftmostItemInCurrentView();
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ListView:getLeftmostItemInCurrentView",argc, 0);
@@ -19030,7 +19030,7 @@ int lua_axis_ui_ListView_getLeftmostItemInCurrentView(lua_State* tolua_S)
 int lua_axis_ui_ListView_setItemsMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19042,7 +19042,7 @@ int lua_axis_ui_ListView_setItemsMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19080,7 +19080,7 @@ int lua_axis_ui_ListView_setItemsMargin(lua_State* tolua_S)
 int lua_axis_ui_ListView_getMagneticType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19092,7 +19092,7 @@ int lua_axis_ui_ListView_getMagneticType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19127,7 +19127,7 @@ int lua_axis_ui_ListView_getMagneticType(lua_State* tolua_S)
 int lua_axis_ui_ListView_getItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19139,7 +19139,7 @@ int lua_axis_ui_ListView_getItem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19160,8 +19160,8 @@ int lua_axis_ui_ListView_getItem(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getItem'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->getItem(arg0);
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->getItem(arg0);
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ListView:getItem",argc, 1);
@@ -19177,7 +19177,7 @@ int lua_axis_ui_ListView_getItem(lua_State* tolua_S)
 int lua_axis_ui_ListView_removeItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19189,7 +19189,7 @@ int lua_axis_ui_ListView_removeItem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19227,7 +19227,7 @@ int lua_axis_ui_ListView_removeItem(lua_State* tolua_S)
 int lua_axis_ui_ListView_getTopPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19239,7 +19239,7 @@ int lua_axis_ui_ListView_getTopPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19274,7 +19274,7 @@ int lua_axis_ui_ListView_getTopPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_pushBackDefaultItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19286,7 +19286,7 @@ int lua_axis_ui_ListView_pushBackDefaultItem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19321,7 +19321,7 @@ int lua_axis_ui_ListView_pushBackDefaultItem(lua_State* tolua_S)
 int lua_axis_ui_ListView_setLeftPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19333,7 +19333,7 @@ int lua_axis_ui_ListView_setLeftPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19371,7 +19371,7 @@ int lua_axis_ui_ListView_setLeftPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_getClosestItemToPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19383,7 +19383,7 @@ int lua_axis_ui_ListView_getClosestItemToPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19396,8 +19396,8 @@ int lua_axis_ui_ListView_getClosestItemToPosition(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ListView:getClosestItemToPosition");
 
@@ -19407,8 +19407,8 @@ int lua_axis_ui_ListView_getClosestItemToPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getClosestItemToPosition'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->getClosestItemToPosition(arg0, arg1);
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->getClosestItemToPosition(arg0, arg1);
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ListView:getClosestItemToPosition",argc, 2);
@@ -19424,7 +19424,7 @@ int lua_axis_ui_ListView_getClosestItemToPosition(lua_State* tolua_S)
 int lua_axis_ui_ListView_setBottomPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19436,7 +19436,7 @@ int lua_axis_ui_ListView_setBottomPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19474,7 +19474,7 @@ int lua_axis_ui_ListView_setBottomPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_setScrollDuration(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19486,7 +19486,7 @@ int lua_axis_ui_ListView_setScrollDuration(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19524,7 +19524,7 @@ int lua_axis_ui_ListView_setScrollDuration(lua_State* tolua_S)
 int lua_axis_ui_ListView_getClosestItemToPositionInCurrentView(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19536,7 +19536,7 @@ int lua_axis_ui_ListView_getClosestItemToPositionInCurrentView(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19549,8 +19549,8 @@ int lua_axis_ui_ListView_getClosestItemToPositionInCurrentView(lua_State* tolua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.ListView:getClosestItemToPositionInCurrentView");
 
@@ -19560,8 +19560,8 @@ int lua_axis_ui_ListView_getClosestItemToPositionInCurrentView(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getClosestItemToPositionInCurrentView'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->getClosestItemToPositionInCurrentView(arg0, arg1);
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->getClosestItemToPositionInCurrentView(arg0, arg1);
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ListView:getClosestItemToPositionInCurrentView",argc, 2);
@@ -19577,7 +19577,7 @@ int lua_axis_ui_ListView_getClosestItemToPositionInCurrentView(lua_State* tolua_
 int lua_axis_ui_ListView_getRightmostItemInCurrentView(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19589,7 +19589,7 @@ int lua_axis_ui_ListView_getRightmostItemInCurrentView(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19607,8 +19607,8 @@ int lua_axis_ui_ListView_getRightmostItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_getRightmostItemInCurrentView'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = cobj->getRightmostItemInCurrentView();
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = cobj->getRightmostItemInCurrentView();
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.ListView:getRightmostItemInCurrentView",argc, 0);
@@ -19624,7 +19624,7 @@ int lua_axis_ui_ListView_getRightmostItemInCurrentView(lua_State* tolua_S)
 int lua_axis_ui_ListView_setRightPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19636,7 +19636,7 @@ int lua_axis_ui_ListView_setRightPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19674,7 +19674,7 @@ int lua_axis_ui_ListView_setRightPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_setItemModel(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19686,7 +19686,7 @@ int lua_axis_ui_ListView_setItemModel(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19699,9 +19699,9 @@ int lua_axis_ui_ListView_setItemModel(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.ListView:setItemModel");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.ListView:setItemModel");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_setItemModel'", nullptr);
@@ -19724,7 +19724,7 @@ int lua_axis_ui_ListView_setItemModel(lua_State* tolua_S)
 int lua_axis_ui_ListView_getBottomPadding(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19736,7 +19736,7 @@ int lua_axis_ui_ListView_getBottomPadding(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19771,7 +19771,7 @@ int lua_axis_ui_ListView_getBottomPadding(lua_State* tolua_S)
 int lua_axis_ui_ListView_insertCustomItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19783,7 +19783,7 @@ int lua_axis_ui_ListView_insertCustomItem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.ListView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::ListView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::ListView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -19796,10 +19796,10 @@ int lua_axis_ui_ListView_insertCustomItem(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
         ssize_t arg1;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.ListView:insertCustomItem");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.ListView:insertCustomItem");
 
         ok &= luaval_to_ssize_t(tolua_S, 3, &arg1, "axui.ListView:insertCustomItem");
         if(!ok)
@@ -19843,8 +19843,8 @@ int lua_axis_ui_ListView_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_create'", nullptr);
             return 0;
         }
-        axis::ui::ListView* ret = axis::ui::ListView::create();
-        object_to_luaval<axis::ui::ListView>(tolua_S, "axui.ListView",(axis::ui::ListView*)ret);
+        ax::ui::ListView* ret = ax::ui::ListView::create();
+        object_to_luaval<ax::ui::ListView>(tolua_S, "axui.ListView",(ax::ui::ListView*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.ListView:create",argc, 0);
@@ -19877,8 +19877,8 @@ int lua_axis_ui_ListView_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::ListView::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::ListView::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.ListView:createInstance",argc, 0);
@@ -19892,7 +19892,7 @@ int lua_axis_ui_ListView_createInstance(lua_State* tolua_S)
 int lua_axis_ui_ListView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::ListView* cobj = nullptr;
+    ax::ui::ListView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19909,7 +19909,7 @@ int lua_axis_ui_ListView_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_ListView_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::ListView();
+        cobj = new ax::ui::ListView();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -19984,7 +19984,7 @@ int lua_register_axis_ui_ListView(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_ListView_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_ListView_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::ListView).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::ListView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.ListView";
     g_typeCast[typeName] = "axui.ListView";
     return 1;
@@ -19993,7 +19993,7 @@ int lua_register_axis_ui_ListView(lua_State* tolua_S)
 int lua_axis_ui_Slider_setPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20005,7 +20005,7 @@ int lua_axis_ui_Slider_setPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20043,7 +20043,7 @@ int lua_axis_ui_Slider_setPercent(lua_State* tolua_S)
 int lua_axis_ui_Slider_getMaxPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20055,7 +20055,7 @@ int lua_axis_ui_Slider_getMaxPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20090,7 +20090,7 @@ int lua_axis_ui_Slider_getMaxPercent(lua_State* tolua_S)
 int lua_axis_ui_Slider_loadSlidBallTextureNormal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20102,7 +20102,7 @@ int lua_axis_ui_Slider_loadSlidBallTextureNormal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20130,7 +20130,7 @@ int lua_axis_ui_Slider_loadSlidBallTextureNormal(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadSlidBallTextureNormal");
 
@@ -20157,7 +20157,7 @@ int lua_axis_ui_Slider_loadSlidBallTextureNormal(lua_State* tolua_S)
 int lua_axis_ui_Slider_loadProgressBarTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20169,7 +20169,7 @@ int lua_axis_ui_Slider_loadProgressBarTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20197,7 +20197,7 @@ int lua_axis_ui_Slider_loadProgressBarTexture(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadProgressBarTexture");
 
@@ -20224,7 +20224,7 @@ int lua_axis_ui_Slider_loadProgressBarTexture(lua_State* tolua_S)
 int lua_axis_ui_Slider_getBallNormalFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20236,7 +20236,7 @@ int lua_axis_ui_Slider_getBallNormalFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20254,7 +20254,7 @@ int lua_axis_ui_Slider_getBallNormalFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getBallNormalFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getBallNormalFile();
+        ax::ResourceData ret = cobj->getBallNormalFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20271,7 +20271,7 @@ int lua_axis_ui_Slider_getBallNormalFile(lua_State* tolua_S)
 int lua_axis_ui_Slider_getSlidBallDisabledRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20283,7 +20283,7 @@ int lua_axis_ui_Slider_getSlidBallDisabledRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20301,8 +20301,8 @@ int lua_axis_ui_Slider_getSlidBallDisabledRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getSlidBallDisabledRenderer'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getSlidBallDisabledRenderer();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getSlidBallDisabledRenderer();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getSlidBallDisabledRenderer",argc, 0);
@@ -20318,7 +20318,7 @@ int lua_axis_ui_Slider_getSlidBallDisabledRenderer(lua_State* tolua_S)
 int lua_axis_ui_Slider_setScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20330,7 +20330,7 @@ int lua_axis_ui_Slider_setScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20368,7 +20368,7 @@ int lua_axis_ui_Slider_setScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_Slider_getBallPressedFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20380,7 +20380,7 @@ int lua_axis_ui_Slider_getBallPressedFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20398,7 +20398,7 @@ int lua_axis_ui_Slider_getBallPressedFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getBallPressedFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getBallPressedFile();
+        ax::ResourceData ret = cobj->getBallPressedFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20415,7 +20415,7 @@ int lua_axis_ui_Slider_getBallPressedFile(lua_State* tolua_S)
 int lua_axis_ui_Slider_getZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20427,7 +20427,7 @@ int lua_axis_ui_Slider_getZoomScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20462,7 +20462,7 @@ int lua_axis_ui_Slider_getZoomScale(lua_State* tolua_S)
 int lua_axis_ui_Slider_setCapInsetProgressBarRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20474,7 +20474,7 @@ int lua_axis_ui_Slider_setCapInsetProgressBarRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20487,7 +20487,7 @@ int lua_axis_ui_Slider_setCapInsetProgressBarRenderer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Slider:setCapInsetProgressBarRenderer");
         if(!ok)
@@ -20512,7 +20512,7 @@ int lua_axis_ui_Slider_setCapInsetProgressBarRenderer(lua_State* tolua_S)
 int lua_axis_ui_Slider_loadSlidBallTextures(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20524,7 +20524,7 @@ int lua_axis_ui_Slider_loadSlidBallTextures(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20591,7 +20591,7 @@ int lua_axis_ui_Slider_loadSlidBallTextures(lua_State* tolua_S)
         std::string_view arg0;
         std::string_view arg1;
         std::string_view arg2;
-        axis::ui::Widget::TextureResType arg3;
+        ax::ui::Widget::TextureResType arg3;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadSlidBallTextures");
 
@@ -20622,7 +20622,7 @@ int lua_axis_ui_Slider_loadSlidBallTextures(lua_State* tolua_S)
 int lua_axis_ui_Slider_getSlidBallRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20634,7 +20634,7 @@ int lua_axis_ui_Slider_getSlidBallRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20652,8 +20652,8 @@ int lua_axis_ui_Slider_getSlidBallRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getSlidBallRenderer'", nullptr);
             return 0;
         }
-        axis::Node* ret = cobj->getSlidBallRenderer();
-        object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+        ax::Node* ret = cobj->getSlidBallRenderer();
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getSlidBallRenderer",argc, 0);
@@ -20669,7 +20669,7 @@ int lua_axis_ui_Slider_getSlidBallRenderer(lua_State* tolua_S)
 int lua_axis_ui_Slider_addEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20681,7 +20681,7 @@ int lua_axis_ui_Slider_addEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20694,7 +20694,7 @@ int lua_axis_ui_Slider_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (axis::Ref *, axis::ui::Slider::EventType)> arg0;
+        std::function<void (ax::Ref *, ax::ui::Slider::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -20723,7 +20723,7 @@ int lua_axis_ui_Slider_addEventListener(lua_State* tolua_S)
 int lua_axis_ui_Slider_setMaxPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20735,7 +20735,7 @@ int lua_axis_ui_Slider_setMaxPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20773,7 +20773,7 @@ int lua_axis_ui_Slider_setMaxPercent(lua_State* tolua_S)
 int lua_axis_ui_Slider_loadBarTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20785,7 +20785,7 @@ int lua_axis_ui_Slider_loadBarTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20813,7 +20813,7 @@ int lua_axis_ui_Slider_loadBarTexture(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadBarTexture");
 
@@ -20840,7 +20840,7 @@ int lua_axis_ui_Slider_loadBarTexture(lua_State* tolua_S)
 int lua_axis_ui_Slider_getProgressBarFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20852,7 +20852,7 @@ int lua_axis_ui_Slider_getProgressBarFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20870,7 +20870,7 @@ int lua_axis_ui_Slider_getProgressBarFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getProgressBarFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getProgressBarFile();
+        ax::ResourceData ret = cobj->getProgressBarFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20887,7 +20887,7 @@ int lua_axis_ui_Slider_getProgressBarFile(lua_State* tolua_S)
 int lua_axis_ui_Slider_getCapInsetsBarRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20899,7 +20899,7 @@ int lua_axis_ui_Slider_getCapInsetsBarRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20917,7 +20917,7 @@ int lua_axis_ui_Slider_getCapInsetsBarRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getCapInsetsBarRenderer'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsetsBarRenderer();
+        const ax::Rect& ret = cobj->getCapInsetsBarRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20934,7 +20934,7 @@ int lua_axis_ui_Slider_getCapInsetsBarRenderer(lua_State* tolua_S)
 int lua_axis_ui_Slider_updateVisualSlider(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20946,7 +20946,7 @@ int lua_axis_ui_Slider_updateVisualSlider(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -20981,7 +20981,7 @@ int lua_axis_ui_Slider_updateVisualSlider(lua_State* tolua_S)
 int lua_axis_ui_Slider_getCapInsetsProgressBarRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -20993,7 +20993,7 @@ int lua_axis_ui_Slider_getCapInsetsProgressBarRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21011,7 +21011,7 @@ int lua_axis_ui_Slider_getCapInsetsProgressBarRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getCapInsetsProgressBarRenderer'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsetsProgressBarRenderer();
+        const ax::Rect& ret = cobj->getCapInsetsProgressBarRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -21028,7 +21028,7 @@ int lua_axis_ui_Slider_getCapInsetsProgressBarRenderer(lua_State* tolua_S)
 int lua_axis_ui_Slider_getSlidBallPressedRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21040,7 +21040,7 @@ int lua_axis_ui_Slider_getSlidBallPressedRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21058,8 +21058,8 @@ int lua_axis_ui_Slider_getSlidBallPressedRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getSlidBallPressedRenderer'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getSlidBallPressedRenderer();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getSlidBallPressedRenderer();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getSlidBallPressedRenderer",argc, 0);
@@ -21075,7 +21075,7 @@ int lua_axis_ui_Slider_getSlidBallPressedRenderer(lua_State* tolua_S)
 int lua_axis_ui_Slider_loadSlidBallTexturePressed(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21087,7 +21087,7 @@ int lua_axis_ui_Slider_loadSlidBallTexturePressed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21115,7 +21115,7 @@ int lua_axis_ui_Slider_loadSlidBallTexturePressed(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadSlidBallTexturePressed");
 
@@ -21142,7 +21142,7 @@ int lua_axis_ui_Slider_loadSlidBallTexturePressed(lua_State* tolua_S)
 int lua_axis_ui_Slider_getBackFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21154,7 +21154,7 @@ int lua_axis_ui_Slider_getBackFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21172,7 +21172,7 @@ int lua_axis_ui_Slider_getBackFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getBackFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getBackFile();
+        ax::ResourceData ret = cobj->getBackFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -21189,7 +21189,7 @@ int lua_axis_ui_Slider_getBackFile(lua_State* tolua_S)
 int lua_axis_ui_Slider_isScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21201,7 +21201,7 @@ int lua_axis_ui_Slider_isScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21236,7 +21236,7 @@ int lua_axis_ui_Slider_isScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_Slider_getBallDisabledFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21248,7 +21248,7 @@ int lua_axis_ui_Slider_getBallDisabledFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21266,7 +21266,7 @@ int lua_axis_ui_Slider_getBallDisabledFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getBallDisabledFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getBallDisabledFile();
+        ax::ResourceData ret = cobj->getBallDisabledFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -21283,7 +21283,7 @@ int lua_axis_ui_Slider_getBallDisabledFile(lua_State* tolua_S)
 int lua_axis_ui_Slider_setCapInsetsBarRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21295,7 +21295,7 @@ int lua_axis_ui_Slider_setCapInsetsBarRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21308,7 +21308,7 @@ int lua_axis_ui_Slider_setCapInsetsBarRenderer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Slider:setCapInsetsBarRenderer");
         if(!ok)
@@ -21333,7 +21333,7 @@ int lua_axis_ui_Slider_setCapInsetsBarRenderer(lua_State* tolua_S)
 int lua_axis_ui_Slider_getPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21345,7 +21345,7 @@ int lua_axis_ui_Slider_getPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21380,7 +21380,7 @@ int lua_axis_ui_Slider_getPercent(lua_State* tolua_S)
 int lua_axis_ui_Slider_setCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21392,7 +21392,7 @@ int lua_axis_ui_Slider_setCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21405,7 +21405,7 @@ int lua_axis_ui_Slider_setCapInsets(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Slider:setCapInsets");
         if(!ok)
@@ -21430,7 +21430,7 @@ int lua_axis_ui_Slider_setCapInsets(lua_State* tolua_S)
 int lua_axis_ui_Slider_loadSlidBallTextureDisabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21442,7 +21442,7 @@ int lua_axis_ui_Slider_loadSlidBallTextureDisabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21470,7 +21470,7 @@ int lua_axis_ui_Slider_loadSlidBallTextureDisabled(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Slider:loadSlidBallTextureDisabled");
 
@@ -21497,7 +21497,7 @@ int lua_axis_ui_Slider_loadSlidBallTextureDisabled(lua_State* tolua_S)
 int lua_axis_ui_Slider_getSlidBallNormalRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21509,7 +21509,7 @@ int lua_axis_ui_Slider_getSlidBallNormalRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21527,8 +21527,8 @@ int lua_axis_ui_Slider_getSlidBallNormalRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_getSlidBallNormalRenderer'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getSlidBallNormalRenderer();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getSlidBallNormalRenderer();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Slider:getSlidBallNormalRenderer",argc, 0);
@@ -21544,7 +21544,7 @@ int lua_axis_ui_Slider_getSlidBallNormalRenderer(lua_State* tolua_S)
 int lua_axis_ui_Slider_setZoomScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21556,7 +21556,7 @@ int lua_axis_ui_Slider_setZoomScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Slider",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Slider*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Slider*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21615,8 +21615,8 @@ int lua_axis_ui_Slider_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.Slider:create");
             if (!ok) { break; }
-            axis::ui::Slider* ret = axis::ui::Slider::create(arg0, arg1);
-            object_to_luaval<axis::ui::Slider>(tolua_S, "axui.Slider",(axis::ui::Slider*)ret);
+            ax::ui::Slider* ret = ax::ui::Slider::create(arg0, arg1);
+            object_to_luaval<ax::ui::Slider>(tolua_S, "axui.Slider",(ax::ui::Slider*)ret);
             return 1;
         }
     } while (0);
@@ -21631,11 +21631,11 @@ int lua_axis_ui_Slider_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.Slider:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg2;
+            ax::ui::Widget::TextureResType arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.Slider:create");
             if (!ok) { break; }
-            axis::ui::Slider* ret = axis::ui::Slider::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::Slider>(tolua_S, "axui.Slider",(axis::ui::Slider*)ret);
+            ax::ui::Slider* ret = ax::ui::Slider::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::Slider>(tolua_S, "axui.Slider",(ax::ui::Slider*)ret);
             return 1;
         }
     } while (0);
@@ -21644,8 +21644,8 @@ int lua_axis_ui_Slider_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::Slider* ret = axis::ui::Slider::create();
-            object_to_luaval<axis::ui::Slider>(tolua_S, "axui.Slider",(axis::ui::Slider*)ret);
+            ax::ui::Slider* ret = ax::ui::Slider::create();
+            object_to_luaval<ax::ui::Slider>(tolua_S, "axui.Slider",(ax::ui::Slider*)ret);
             return 1;
         }
     } while (0);
@@ -21680,8 +21680,8 @@ int lua_axis_ui_Slider_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::Slider::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::Slider::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Slider:createInstance",argc, 0);
@@ -21695,7 +21695,7 @@ int lua_axis_ui_Slider_createInstance(lua_State* tolua_S)
 int lua_axis_ui_Slider_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Slider* cobj = nullptr;
+    ax::ui::Slider* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21712,7 +21712,7 @@ int lua_axis_ui_Slider_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Slider_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::Slider();
+        cobj = new ax::ui::Slider();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -21775,7 +21775,7 @@ int lua_register_axis_ui_Slider(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_Slider_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_Slider_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::Slider).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::Slider).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.Slider";
     g_typeCast[typeName] = "axui.Slider";
     return 1;
@@ -21784,7 +21784,7 @@ int lua_register_axis_ui_Slider(lua_State* tolua_S)
 int lua_axis_ui_TextField_setAttachWithIME(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21796,7 +21796,7 @@ int lua_axis_ui_TextField_setAttachWithIME(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21834,7 +21834,7 @@ int lua_axis_ui_TextField_setAttachWithIME(lua_State* tolua_S)
 int lua_axis_ui_TextField_getFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21846,7 +21846,7 @@ int lua_axis_ui_TextField_getFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21881,7 +21881,7 @@ int lua_axis_ui_TextField_getFontSize(lua_State* tolua_S)
 int lua_axis_ui_TextField_getString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21893,7 +21893,7 @@ int lua_axis_ui_TextField_getString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21928,7 +21928,7 @@ int lua_axis_ui_TextField_getString(lua_State* tolua_S)
 int lua_axis_ui_TextField_setPasswordStyleText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21940,7 +21940,7 @@ int lua_axis_ui_TextField_setPasswordStyleText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -21978,7 +21978,7 @@ int lua_axis_ui_TextField_setPasswordStyleText(lua_State* tolua_S)
 int lua_axis_ui_TextField_getDeleteBackward(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -21990,7 +21990,7 @@ int lua_axis_ui_TextField_getDeleteBackward(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22025,7 +22025,7 @@ int lua_axis_ui_TextField_getDeleteBackward(lua_State* tolua_S)
 int lua_axis_ui_TextField_getTextColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22037,7 +22037,7 @@ int lua_axis_ui_TextField_getTextColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22055,7 +22055,7 @@ int lua_axis_ui_TextField_getTextColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextField_getTextColor'", nullptr);
             return 0;
         }
-        const axis::Color4B& ret = cobj->getTextColor();
+        const ax::Color4B& ret = cobj->getTextColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -22072,7 +22072,7 @@ int lua_axis_ui_TextField_getTextColor(lua_State* tolua_S)
 int lua_axis_ui_TextField_detachWithIME(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22084,7 +22084,7 @@ int lua_axis_ui_TextField_detachWithIME(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22119,7 +22119,7 @@ int lua_axis_ui_TextField_detachWithIME(lua_State* tolua_S)
 int lua_axis_ui_TextField_getPlaceHolder(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22131,7 +22131,7 @@ int lua_axis_ui_TextField_getPlaceHolder(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22166,7 +22166,7 @@ int lua_axis_ui_TextField_getPlaceHolder(lua_State* tolua_S)
 int lua_axis_ui_TextField_getAttachWithIME(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22178,7 +22178,7 @@ int lua_axis_ui_TextField_getAttachWithIME(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22213,7 +22213,7 @@ int lua_axis_ui_TextField_getAttachWithIME(lua_State* tolua_S)
 int lua_axis_ui_TextField_setFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22225,7 +22225,7 @@ int lua_axis_ui_TextField_setFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22263,7 +22263,7 @@ int lua_axis_ui_TextField_setFontName(lua_State* tolua_S)
 int lua_axis_ui_TextField_getInsertText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22275,7 +22275,7 @@ int lua_axis_ui_TextField_getInsertText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22310,7 +22310,7 @@ int lua_axis_ui_TextField_getInsertText(lua_State* tolua_S)
 int lua_axis_ui_TextField_setInsertText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22322,7 +22322,7 @@ int lua_axis_ui_TextField_setInsertText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22360,7 +22360,7 @@ int lua_axis_ui_TextField_setInsertText(lua_State* tolua_S)
 int lua_axis_ui_TextField_setString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22372,7 +22372,7 @@ int lua_axis_ui_TextField_setString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22410,7 +22410,7 @@ int lua_axis_ui_TextField_setString(lua_State* tolua_S)
 int lua_axis_ui_TextField_getDetachWithIME(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22422,7 +22422,7 @@ int lua_axis_ui_TextField_getDetachWithIME(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22457,7 +22457,7 @@ int lua_axis_ui_TextField_getDetachWithIME(lua_State* tolua_S)
 int lua_axis_ui_TextField_setTextVerticalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22469,7 +22469,7 @@ int lua_axis_ui_TextField_setTextVerticalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22482,7 +22482,7 @@ int lua_axis_ui_TextField_setTextVerticalAlignment(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::TextVAlignment arg0;
+        ax::TextVAlignment arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TextField:setTextVerticalAlignment");
         if(!ok)
@@ -22507,7 +22507,7 @@ int lua_axis_ui_TextField_setTextVerticalAlignment(lua_State* tolua_S)
 int lua_axis_ui_TextField_addEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22519,7 +22519,7 @@ int lua_axis_ui_TextField_addEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22532,7 +22532,7 @@ int lua_axis_ui_TextField_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (axis::Ref *, axis::ui::TextField::EventType)> arg0;
+        std::function<void (ax::Ref *, ax::ui::TextField::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -22561,7 +22561,7 @@ int lua_axis_ui_TextField_addEventListener(lua_State* tolua_S)
 int lua_axis_ui_TextField_didNotSelectSelf(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22573,7 +22573,7 @@ int lua_axis_ui_TextField_didNotSelectSelf(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22608,7 +22608,7 @@ int lua_axis_ui_TextField_didNotSelectSelf(lua_State* tolua_S)
 int lua_axis_ui_TextField_getFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22620,7 +22620,7 @@ int lua_axis_ui_TextField_getFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22655,7 +22655,7 @@ int lua_axis_ui_TextField_getFontName(lua_State* tolua_S)
 int lua_axis_ui_TextField_setTextAreaSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22667,7 +22667,7 @@ int lua_axis_ui_TextField_setTextAreaSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22680,7 +22680,7 @@ int lua_axis_ui_TextField_setTextAreaSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.TextField:setTextAreaSize");
         if(!ok)
@@ -22705,7 +22705,7 @@ int lua_axis_ui_TextField_setTextAreaSize(lua_State* tolua_S)
 int lua_axis_ui_TextField_attachWithIME(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22717,7 +22717,7 @@ int lua_axis_ui_TextField_attachWithIME(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22752,7 +22752,7 @@ int lua_axis_ui_TextField_attachWithIME(lua_State* tolua_S)
 int lua_axis_ui_TextField_getStringLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22764,7 +22764,7 @@ int lua_axis_ui_TextField_getStringLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22799,7 +22799,7 @@ int lua_axis_ui_TextField_getStringLength(lua_State* tolua_S)
 int lua_axis_ui_TextField_getAutoRenderSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22811,7 +22811,7 @@ int lua_axis_ui_TextField_getAutoRenderSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22829,7 +22829,7 @@ int lua_axis_ui_TextField_getAutoRenderSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextField_getAutoRenderSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getAutoRenderSize();
+        ax::Vec2 ret = cobj->getAutoRenderSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -22846,7 +22846,7 @@ int lua_axis_ui_TextField_getAutoRenderSize(lua_State* tolua_S)
 int lua_axis_ui_TextField_setPasswordEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22858,7 +22858,7 @@ int lua_axis_ui_TextField_setPasswordEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22896,7 +22896,7 @@ int lua_axis_ui_TextField_setPasswordEnabled(lua_State* tolua_S)
 int lua_axis_ui_TextField_getPlaceHolderColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22908,7 +22908,7 @@ int lua_axis_ui_TextField_getPlaceHolderColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22926,7 +22926,7 @@ int lua_axis_ui_TextField_getPlaceHolderColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextField_getPlaceHolderColor'", nullptr);
             return 0;
         }
-        const axis::Color4B& ret = cobj->getPlaceHolderColor();
+        const ax::Color4B& ret = cobj->getPlaceHolderColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -22943,7 +22943,7 @@ int lua_axis_ui_TextField_getPlaceHolderColor(lua_State* tolua_S)
 int lua_axis_ui_TextField_getPasswordStyleText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -22955,7 +22955,7 @@ int lua_axis_ui_TextField_getPasswordStyleText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -22990,7 +22990,7 @@ int lua_axis_ui_TextField_getPasswordStyleText(lua_State* tolua_S)
 int lua_axis_ui_TextField_setMaxLengthEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23002,7 +23002,7 @@ int lua_axis_ui_TextField_setMaxLengthEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23040,7 +23040,7 @@ int lua_axis_ui_TextField_setMaxLengthEnabled(lua_State* tolua_S)
 int lua_axis_ui_TextField_isPasswordEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23052,7 +23052,7 @@ int lua_axis_ui_TextField_isPasswordEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23087,7 +23087,7 @@ int lua_axis_ui_TextField_isPasswordEnabled(lua_State* tolua_S)
 int lua_axis_ui_TextField_setDeleteBackward(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23099,7 +23099,7 @@ int lua_axis_ui_TextField_setDeleteBackward(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23137,7 +23137,7 @@ int lua_axis_ui_TextField_setDeleteBackward(lua_State* tolua_S)
 int lua_axis_ui_TextField_setCursorPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23149,7 +23149,7 @@ int lua_axis_ui_TextField_setCursorPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23187,7 +23187,7 @@ int lua_axis_ui_TextField_setCursorPosition(lua_State* tolua_S)
 int lua_axis_ui_TextField_getTextHorizontalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23199,7 +23199,7 @@ int lua_axis_ui_TextField_getTextHorizontalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23234,7 +23234,7 @@ int lua_axis_ui_TextField_getTextHorizontalAlignment(lua_State* tolua_S)
 int lua_axis_ui_TextField_setFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23246,7 +23246,7 @@ int lua_axis_ui_TextField_setFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23284,7 +23284,7 @@ int lua_axis_ui_TextField_setFontSize(lua_State* tolua_S)
 int lua_axis_ui_TextField_setPlaceHolder(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23296,7 +23296,7 @@ int lua_axis_ui_TextField_setPlaceHolder(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23334,7 +23334,7 @@ int lua_axis_ui_TextField_setPlaceHolder(lua_State* tolua_S)
 int lua_axis_ui_TextField_setCursorFromPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23346,7 +23346,7 @@ int lua_axis_ui_TextField_setCursorFromPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23359,12 +23359,12 @@ int lua_axis_ui_TextField_setCursorFromPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::Vec2 arg0;
-        const axis::Camera* arg1;
+        ax::Vec2 arg0;
+        const ax::Camera* arg1;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.TextField:setCursorFromPoint");
 
-        ok &= luaval_to_object<const axis::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.TextField:setCursorFromPoint");
+        ok &= luaval_to_object<const ax::Camera>(tolua_S, 3, "ax.Camera",&arg1, "axui.TextField:setCursorFromPoint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextField_setCursorFromPoint'", nullptr);
@@ -23387,7 +23387,7 @@ int lua_axis_ui_TextField_setCursorFromPoint(lua_State* tolua_S)
 int lua_axis_ui_TextField_setPlaceHolderColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -23396,7 +23396,7 @@ int lua_axis_ui_TextField_setPlaceHolderColor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -23407,7 +23407,7 @@ int lua_axis_ui_TextField_setPlaceHolderColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::Color4B arg0;
+            ax::Color4B arg0;
             ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.TextField:setPlaceHolderColor");
 
             if (!ok) { break; }
@@ -23419,7 +23419,7 @@ int lua_axis_ui_TextField_setPlaceHolderColor(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::Color3B arg0;
+            ax::Color3B arg0;
             ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.TextField:setPlaceHolderColor");
 
             if (!ok) { break; }
@@ -23442,7 +23442,7 @@ int lua_axis_ui_TextField_setPlaceHolderColor(lua_State* tolua_S)
 int lua_axis_ui_TextField_setTextHorizontalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23454,7 +23454,7 @@ int lua_axis_ui_TextField_setTextHorizontalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23467,7 +23467,7 @@ int lua_axis_ui_TextField_setTextHorizontalAlignment(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::TextHAlignment arg0;
+        ax::TextHAlignment arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TextField:setTextHorizontalAlignment");
         if(!ok)
@@ -23492,7 +23492,7 @@ int lua_axis_ui_TextField_setTextHorizontalAlignment(lua_State* tolua_S)
 int lua_axis_ui_TextField_setTextColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23504,7 +23504,7 @@ int lua_axis_ui_TextField_setTextColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23517,7 +23517,7 @@ int lua_axis_ui_TextField_setTextColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color4B arg0;
+        ax::Color4B arg0;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.TextField:setTextColor");
         if(!ok)
@@ -23542,7 +23542,7 @@ int lua_axis_ui_TextField_setTextColor(lua_State* tolua_S)
 int lua_axis_ui_TextField_setCursorChar(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23554,7 +23554,7 @@ int lua_axis_ui_TextField_setCursorChar(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23592,7 +23592,7 @@ int lua_axis_ui_TextField_setCursorChar(lua_State* tolua_S)
 int lua_axis_ui_TextField_getMaxLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23604,7 +23604,7 @@ int lua_axis_ui_TextField_getMaxLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23639,7 +23639,7 @@ int lua_axis_ui_TextField_getMaxLength(lua_State* tolua_S)
 int lua_axis_ui_TextField_isMaxLengthEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23651,7 +23651,7 @@ int lua_axis_ui_TextField_isMaxLengthEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23686,7 +23686,7 @@ int lua_axis_ui_TextField_isMaxLengthEnabled(lua_State* tolua_S)
 int lua_axis_ui_TextField_setDetachWithIME(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23698,7 +23698,7 @@ int lua_axis_ui_TextField_setDetachWithIME(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23736,7 +23736,7 @@ int lua_axis_ui_TextField_setDetachWithIME(lua_State* tolua_S)
 int lua_axis_ui_TextField_getTextVerticalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23748,7 +23748,7 @@ int lua_axis_ui_TextField_getTextVerticalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23783,7 +23783,7 @@ int lua_axis_ui_TextField_getTextVerticalAlignment(lua_State* tolua_S)
 int lua_axis_ui_TextField_setTouchAreaEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23795,7 +23795,7 @@ int lua_axis_ui_TextField_setTouchAreaEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23833,7 +23833,7 @@ int lua_axis_ui_TextField_setTouchAreaEnabled(lua_State* tolua_S)
 int lua_axis_ui_TextField_setMaxLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23845,7 +23845,7 @@ int lua_axis_ui_TextField_setMaxLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23883,7 +23883,7 @@ int lua_axis_ui_TextField_setMaxLength(lua_State* tolua_S)
 int lua_axis_ui_TextField_setCursorEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23895,7 +23895,7 @@ int lua_axis_ui_TextField_setCursorEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23933,7 +23933,7 @@ int lua_axis_ui_TextField_setCursorEnabled(lua_State* tolua_S)
 int lua_axis_ui_TextField_setTouchSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23945,7 +23945,7 @@ int lua_axis_ui_TextField_setTouchSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -23958,7 +23958,7 @@ int lua_axis_ui_TextField_setTouchSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.TextField:setTouchSize");
         if(!ok)
@@ -23983,7 +23983,7 @@ int lua_axis_ui_TextField_setTouchSize(lua_State* tolua_S)
 int lua_axis_ui_TextField_getTouchSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -23995,7 +23995,7 @@ int lua_axis_ui_TextField_getTouchSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextField",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextField*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24013,7 +24013,7 @@ int lua_axis_ui_TextField_getTouchSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextField_getTouchSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getTouchSize();
+        ax::Vec2 ret = cobj->getTouchSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24054,8 +24054,8 @@ int lua_axis_ui_TextField_create(lua_State* tolua_S)
             int arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.TextField:create");
             if (!ok) { break; }
-            axis::ui::TextField* ret = axis::ui::TextField::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::TextField>(tolua_S, "axui.TextField",(axis::ui::TextField*)ret);
+            ax::ui::TextField* ret = ax::ui::TextField::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::TextField>(tolua_S, "axui.TextField",(ax::ui::TextField*)ret);
             return 1;
         }
     } while (0);
@@ -24064,8 +24064,8 @@ int lua_axis_ui_TextField_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::TextField* ret = axis::ui::TextField::create();
-            object_to_luaval<axis::ui::TextField>(tolua_S, "axui.TextField",(axis::ui::TextField*)ret);
+            ax::ui::TextField* ret = ax::ui::TextField::create();
+            object_to_luaval<ax::ui::TextField>(tolua_S, "axui.TextField",(ax::ui::TextField*)ret);
             return 1;
         }
     } while (0);
@@ -24100,8 +24100,8 @@ int lua_axis_ui_TextField_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextField_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::TextField::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::TextField::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.TextField:createInstance",argc, 0);
@@ -24115,7 +24115,7 @@ int lua_axis_ui_TextField_createInstance(lua_State* tolua_S)
 int lua_axis_ui_TextField_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextField* cobj = nullptr;
+    ax::ui::TextField* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24132,7 +24132,7 @@ int lua_axis_ui_TextField_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextField_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::TextField();
+        cobj = new ax::ui::TextField();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -24211,7 +24211,7 @@ int lua_register_axis_ui_TextField(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_TextField_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_TextField_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::TextField).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::TextField).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.TextField";
     g_typeCast[typeName] = "axui.TextField";
     return 1;
@@ -24220,7 +24220,7 @@ int lua_register_axis_ui_TextField(lua_State* tolua_S)
 int lua_axis_ui_TextBMFont_getStringLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextBMFont* cobj = nullptr;
+    ax::ui::TextBMFont* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24232,7 +24232,7 @@ int lua_axis_ui_TextBMFont_getStringLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextBMFont",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24267,7 +24267,7 @@ int lua_axis_ui_TextBMFont_getStringLength(lua_State* tolua_S)
 int lua_axis_ui_TextBMFont_getString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextBMFont* cobj = nullptr;
+    ax::ui::TextBMFont* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24279,7 +24279,7 @@ int lua_axis_ui_TextBMFont_getString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextBMFont",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24314,7 +24314,7 @@ int lua_axis_ui_TextBMFont_getString(lua_State* tolua_S)
 int lua_axis_ui_TextBMFont_setString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextBMFont* cobj = nullptr;
+    ax::ui::TextBMFont* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24326,7 +24326,7 @@ int lua_axis_ui_TextBMFont_setString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextBMFont",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24364,7 +24364,7 @@ int lua_axis_ui_TextBMFont_setString(lua_State* tolua_S)
 int lua_axis_ui_TextBMFont_getRenderFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextBMFont* cobj = nullptr;
+    ax::ui::TextBMFont* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24376,7 +24376,7 @@ int lua_axis_ui_TextBMFont_getRenderFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextBMFont",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24394,7 +24394,7 @@ int lua_axis_ui_TextBMFont_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextBMFont_getRenderFile'", nullptr);
             return 0;
         }
-        axis::ResourceData ret = cobj->getRenderFile();
+        ax::ResourceData ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24411,7 +24411,7 @@ int lua_axis_ui_TextBMFont_getRenderFile(lua_State* tolua_S)
 int lua_axis_ui_TextBMFont_setFntFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextBMFont* cobj = nullptr;
+    ax::ui::TextBMFont* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24423,7 +24423,7 @@ int lua_axis_ui_TextBMFont_setFntFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextBMFont",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24461,7 +24461,7 @@ int lua_axis_ui_TextBMFont_setFntFile(lua_State* tolua_S)
 int lua_axis_ui_TextBMFont_resetRender(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextBMFont* cobj = nullptr;
+    ax::ui::TextBMFont* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24473,7 +24473,7 @@ int lua_axis_ui_TextBMFont_resetRender(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TextBMFont",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TextBMFont*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24529,8 +24529,8 @@ int lua_axis_ui_TextBMFont_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.TextBMFont:create");
             if (!ok) { break; }
-            axis::ui::TextBMFont* ret = axis::ui::TextBMFont::create(arg0, arg1);
-            object_to_luaval<axis::ui::TextBMFont>(tolua_S, "axui.TextBMFont",(axis::ui::TextBMFont*)ret);
+            ax::ui::TextBMFont* ret = ax::ui::TextBMFont::create(arg0, arg1);
+            object_to_luaval<ax::ui::TextBMFont>(tolua_S, "axui.TextBMFont",(ax::ui::TextBMFont*)ret);
             return 1;
         }
     } while (0);
@@ -24539,8 +24539,8 @@ int lua_axis_ui_TextBMFont_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::TextBMFont* ret = axis::ui::TextBMFont::create();
-            object_to_luaval<axis::ui::TextBMFont>(tolua_S, "axui.TextBMFont",(axis::ui::TextBMFont*)ret);
+            ax::ui::TextBMFont* ret = ax::ui::TextBMFont::create();
+            object_to_luaval<ax::ui::TextBMFont>(tolua_S, "axui.TextBMFont",(ax::ui::TextBMFont*)ret);
             return 1;
         }
     } while (0);
@@ -24575,8 +24575,8 @@ int lua_axis_ui_TextBMFont_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextBMFont_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::TextBMFont::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::TextBMFont::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.TextBMFont:createInstance",argc, 0);
@@ -24590,7 +24590,7 @@ int lua_axis_ui_TextBMFont_createInstance(lua_State* tolua_S)
 int lua_axis_ui_TextBMFont_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TextBMFont* cobj = nullptr;
+    ax::ui::TextBMFont* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24607,7 +24607,7 @@ int lua_axis_ui_TextBMFont_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TextBMFont_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::TextBMFont();
+        cobj = new ax::ui::TextBMFont();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -24646,7 +24646,7 @@ int lua_register_axis_ui_TextBMFont(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_TextBMFont_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_TextBMFont_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::TextBMFont).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::TextBMFont).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.TextBMFont";
     g_typeCast[typeName] = "axui.TextBMFont";
     return 1;
@@ -24655,7 +24655,7 @@ int lua_register_axis_ui_TextBMFont(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorSpaceBetweenIndexNodes(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24667,7 +24667,7 @@ int lua_axis_ui_PageView_setIndicatorSpaceBetweenIndexNodes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24705,7 +24705,7 @@ int lua_axis_ui_PageView_setIndicatorSpaceBetweenIndexNodes(lua_State* tolua_S)
 int lua_axis_ui_PageView_insertPage(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24717,7 +24717,7 @@ int lua_axis_ui_PageView_insertPage(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24730,10 +24730,10 @@ int lua_axis_ui_PageView_insertPage(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
         int arg1;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.PageView:insertPage");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.PageView:insertPage");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.PageView:insertPage");
         if(!ok)
@@ -24758,7 +24758,7 @@ int lua_axis_ui_PageView_insertPage(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorIndexNodesOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24770,7 +24770,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24808,7 +24808,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesOpacity(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorSelectedIndexOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24820,7 +24820,7 @@ int lua_axis_ui_PageView_setIndicatorSelectedIndexOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24858,7 +24858,7 @@ int lua_axis_ui_PageView_setIndicatorSelectedIndexOpacity(lua_State* tolua_S)
 int lua_axis_ui_PageView_removeAllPages(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24870,7 +24870,7 @@ int lua_axis_ui_PageView_removeAllPages(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24905,7 +24905,7 @@ int lua_axis_ui_PageView_removeAllPages(lua_State* tolua_S)
 int lua_axis_ui_PageView_setAutoScrollStopEpsilon(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24917,7 +24917,7 @@ int lua_axis_ui_PageView_setAutoScrollStopEpsilon(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -24955,7 +24955,7 @@ int lua_axis_ui_PageView_setAutoScrollStopEpsilon(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorIndexNodesScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -24967,7 +24967,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25005,7 +25005,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesScale(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25017,7 +25017,7 @@ int lua_axis_ui_PageView_setIndicatorEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25055,7 +25055,7 @@ int lua_axis_ui_PageView_setIndicatorEnabled(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorSelectedIndexColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25067,7 +25067,7 @@ int lua_axis_ui_PageView_setIndicatorSelectedIndexColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25080,7 +25080,7 @@ int lua_axis_ui_PageView_setIndicatorSelectedIndexColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color3B arg0;
+        ax::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.PageView:setIndicatorSelectedIndexColor");
         if(!ok)
@@ -25105,7 +25105,7 @@ int lua_axis_ui_PageView_setIndicatorSelectedIndexColor(lua_State* tolua_S)
 int lua_axis_ui_PageView_addEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25117,7 +25117,7 @@ int lua_axis_ui_PageView_addEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25130,7 +25130,7 @@ int lua_axis_ui_PageView_addEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (axis::Ref *, axis::ui::PageView::EventType)> arg0;
+        std::function<void (ax::Ref *, ax::ui::PageView::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -25159,7 +25159,7 @@ int lua_axis_ui_PageView_addEventListener(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25171,7 +25171,7 @@ int lua_axis_ui_PageView_getIndicatorPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25189,7 +25189,7 @@ int lua_axis_ui_PageView_getIndicatorPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_getIndicatorPosition'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getIndicatorPosition();
+        const ax::Vec2& ret = cobj->getIndicatorPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25206,7 +25206,7 @@ int lua_axis_ui_PageView_getIndicatorPosition(lua_State* tolua_S)
 int lua_axis_ui_PageView_setCurrentPageIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25218,7 +25218,7 @@ int lua_axis_ui_PageView_setCurrentPageIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25256,7 +25256,7 @@ int lua_axis_ui_PageView_setCurrentPageIndex(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorIndexNodesColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25268,7 +25268,7 @@ int lua_axis_ui_PageView_getIndicatorIndexNodesColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25286,7 +25286,7 @@ int lua_axis_ui_PageView_getIndicatorIndexNodesColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_getIndicatorIndexNodesColor'", nullptr);
             return 0;
         }
-        const axis::Color3B& ret = cobj->getIndicatorIndexNodesColor();
+        const ax::Color3B& ret = cobj->getIndicatorIndexNodesColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25303,7 +25303,7 @@ int lua_axis_ui_PageView_getIndicatorIndexNodesColor(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorSelectedIndexColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25315,7 +25315,7 @@ int lua_axis_ui_PageView_getIndicatorSelectedIndexColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25333,7 +25333,7 @@ int lua_axis_ui_PageView_getIndicatorSelectedIndexColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_getIndicatorSelectedIndexColor'", nullptr);
             return 0;
         }
-        const axis::Color3B& ret = cobj->getIndicatorSelectedIndexColor();
+        const ax::Color3B& ret = cobj->getIndicatorSelectedIndexColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25350,7 +25350,7 @@ int lua_axis_ui_PageView_getIndicatorSelectedIndexColor(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorIndexNodesScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25362,7 +25362,7 @@ int lua_axis_ui_PageView_getIndicatorIndexNodesScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25397,7 +25397,7 @@ int lua_axis_ui_PageView_getIndicatorIndexNodesScale(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25409,7 +25409,7 @@ int lua_axis_ui_PageView_setIndicatorPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25422,7 +25422,7 @@ int lua_axis_ui_PageView_setIndicatorPosition(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.PageView:setIndicatorPosition");
         if(!ok)
@@ -25447,7 +25447,7 @@ int lua_axis_ui_PageView_setIndicatorPosition(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorSelectedIndexOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25459,7 +25459,7 @@ int lua_axis_ui_PageView_getIndicatorSelectedIndexOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25494,7 +25494,7 @@ int lua_axis_ui_PageView_getIndicatorSelectedIndexOpacity(lua_State* tolua_S)
 int lua_axis_ui_PageView_scrollToPage(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -25503,7 +25503,7 @@ int lua_axis_ui_PageView_scrollToPage(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -25553,7 +25553,7 @@ int lua_axis_ui_PageView_scrollToPage(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25565,7 +25565,7 @@ int lua_axis_ui_PageView_setIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25578,7 +25578,7 @@ int lua_axis_ui_PageView_setIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.PageView:setIndicatorPositionAsAnchorPoint");
         if(!ok)
@@ -25603,7 +25603,7 @@ int lua_axis_ui_PageView_setIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
 int lua_axis_ui_PageView_scrollToItem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -25612,7 +25612,7 @@ int lua_axis_ui_PageView_scrollToItem(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -25662,7 +25662,7 @@ int lua_axis_ui_PageView_scrollToItem(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorIndexNodesColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25674,7 +25674,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25687,7 +25687,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color3B arg0;
+        ax::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.PageView:setIndicatorIndexNodesColor");
         if(!ok)
@@ -25712,7 +25712,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesColor(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorIndexNodesOpacity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25724,7 +25724,7 @@ int lua_axis_ui_PageView_getIndicatorIndexNodesOpacity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25759,7 +25759,7 @@ int lua_axis_ui_PageView_getIndicatorIndexNodesOpacity(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25771,7 +25771,7 @@ int lua_axis_ui_PageView_getIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25789,7 +25789,7 @@ int lua_axis_ui_PageView_getIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_getIndicatorPositionAsAnchorPoint'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getIndicatorPositionAsAnchorPoint();
+        const ax::Vec2& ret = cobj->getIndicatorPositionAsAnchorPoint();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25806,7 +25806,7 @@ int lua_axis_ui_PageView_getIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
 int lua_axis_ui_PageView_getCurrentPageIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25818,7 +25818,7 @@ int lua_axis_ui_PageView_getCurrentPageIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25853,7 +25853,7 @@ int lua_axis_ui_PageView_getCurrentPageIndex(lua_State* tolua_S)
 int lua_axis_ui_PageView_removePage(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25865,7 +25865,7 @@ int lua_axis_ui_PageView_removePage(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25878,9 +25878,9 @@ int lua_axis_ui_PageView_removePage(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.PageView:removePage");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.PageView:removePage");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_removePage'", nullptr);
@@ -25903,7 +25903,7 @@ int lua_axis_ui_PageView_removePage(lua_State* tolua_S)
 int lua_axis_ui_PageView_setIndicatorIndexNodesTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25915,7 +25915,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -25943,7 +25943,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesTexture(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.PageView:setIndicatorIndexNodesTexture");
 
@@ -25970,7 +25970,7 @@ int lua_axis_ui_PageView_setIndicatorIndexNodesTexture(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -25982,7 +25982,7 @@ int lua_axis_ui_PageView_getIndicatorEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -26017,7 +26017,7 @@ int lua_axis_ui_PageView_getIndicatorEnabled(lua_State* tolua_S)
 int lua_axis_ui_PageView_removePageAtIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26029,7 +26029,7 @@ int lua_axis_ui_PageView_removePageAtIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -26067,7 +26067,7 @@ int lua_axis_ui_PageView_removePageAtIndex(lua_State* tolua_S)
 int lua_axis_ui_PageView_getIndicatorSpaceBetweenIndexNodes(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26079,7 +26079,7 @@ int lua_axis_ui_PageView_getIndicatorSpaceBetweenIndexNodes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -26114,7 +26114,7 @@ int lua_axis_ui_PageView_getIndicatorSpaceBetweenIndexNodes(lua_State* tolua_S)
 int lua_axis_ui_PageView_addPage(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26126,7 +26126,7 @@ int lua_axis_ui_PageView_addPage(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.PageView",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::PageView*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::PageView*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -26139,9 +26139,9 @@ int lua_axis_ui_PageView_addPage(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
 
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.PageView:addPage");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.PageView:addPage");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_addPage'", nullptr);
@@ -26183,8 +26183,8 @@ int lua_axis_ui_PageView_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_create'", nullptr);
             return 0;
         }
-        axis::ui::PageView* ret = axis::ui::PageView::create();
-        object_to_luaval<axis::ui::PageView>(tolua_S, "axui.PageView",(axis::ui::PageView*)ret);
+        ax::ui::PageView* ret = ax::ui::PageView::create();
+        object_to_luaval<ax::ui::PageView>(tolua_S, "axui.PageView",(ax::ui::PageView*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.PageView:create",argc, 0);
@@ -26217,8 +26217,8 @@ int lua_axis_ui_PageView_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_createInstance'", nullptr);
             return 0;
         }
-        axis::Ref* ret = axis::ui::PageView::createInstance();
-        object_to_luaval<axis::Ref>(tolua_S, "ax.Ref",(axis::Ref*)ret);
+        ax::Ref* ret = ax::ui::PageView::createInstance();
+        object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.PageView:createInstance",argc, 0);
@@ -26232,7 +26232,7 @@ int lua_axis_ui_PageView_createInstance(lua_State* tolua_S)
 int lua_axis_ui_PageView_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::PageView* cobj = nullptr;
+    ax::ui::PageView* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26249,7 +26249,7 @@ int lua_axis_ui_PageView_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_PageView_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::PageView();
+        cobj = new ax::ui::PageView();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -26312,7 +26312,7 @@ int lua_register_axis_ui_PageView(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_PageView_create);
         tolua_function(tolua_S,"createInstance", lua_axis_ui_PageView_createInstance);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::PageView).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::PageView).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.PageView";
     g_typeCast[typeName] = "axui.PageView";
     return 1;
@@ -26346,7 +26346,7 @@ int lua_axis_ui_Helper_getSubStringOfUTF8String(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Helper_getSubStringOfUTF8String'", nullptr);
             return 0;
         }
-        std::string ret = axis::ui::Helper::getSubStringOfUTF8String(arg0, arg1, arg2);
+        std::string ret = ax::ui::Helper::getSubStringOfUTF8String(arg0, arg1, arg2);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -26375,14 +26375,14 @@ int lua_axis_ui_Helper_convertBoundingBoxToScreen(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Node* arg0;
-        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "ax.Node",&arg0, "axui.Helper:convertBoundingBoxToScreen");
+        ax::Node* arg0;
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "axui.Helper:convertBoundingBoxToScreen");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Helper_convertBoundingBoxToScreen'", nullptr);
             return 0;
         }
-        axis::Rect ret = axis::ui::Helper::convertBoundingBoxToScreen(arg0);
+        ax::Rect ret = ax::ui::Helper::convertBoundingBoxToScreen(arg0);
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -26418,7 +26418,7 @@ int lua_axis_ui_Helper_changeLayoutSystemActiveState(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Helper_changeLayoutSystemActiveState'", nullptr);
             return 0;
         }
-        axis::ui::Helper::changeLayoutSystemActiveState(arg0);
+        ax::ui::Helper::changeLayoutSystemActiveState(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -26447,17 +26447,17 @@ int lua_axis_ui_Helper_seekActionWidgetByActionTag(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
         int arg1;
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Helper:seekActionWidgetByActionTag");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Helper:seekActionWidgetByActionTag");
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Helper:seekActionWidgetByActionTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Helper_seekActionWidgetByActionTag'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = axis::ui::Helper::seekActionWidgetByActionTag(arg0, arg1);
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = ax::ui::Helper::seekActionWidgetByActionTag(arg0, arg1);
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Helper:seekActionWidgetByActionTag",argc, 2);
@@ -26485,17 +26485,17 @@ int lua_axis_ui_Helper_seekWidgetByName(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
         std::string_view arg1;
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Helper:seekWidgetByName");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Helper:seekWidgetByName");
         ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.Helper:seekWidgetByName");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Helper_seekWidgetByName'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = axis::ui::Helper::seekWidgetByName(arg0, arg1);
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = ax::ui::Helper::seekWidgetByName(arg0, arg1);
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Helper:seekWidgetByName",argc, 2);
@@ -26523,17 +26523,17 @@ int lua_axis_ui_Helper_seekWidgetByTag(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        axis::ui::Widget* arg0;
+        ax::ui::Widget* arg0;
         int arg1;
-        ok &= luaval_to_object<axis::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Helper:seekWidgetByTag");
+        ok &= luaval_to_object<ax::ui::Widget>(tolua_S, 2, "axui.Widget",&arg0, "axui.Helper:seekWidgetByTag");
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.Helper:seekWidgetByTag");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Helper_seekWidgetByTag'", nullptr);
             return 0;
         }
-        axis::ui::Widget* ret = axis::ui::Helper::seekWidgetByTag(arg0, arg1);
-        object_to_luaval<axis::ui::Widget>(tolua_S, "axui.Widget",(axis::ui::Widget*)ret);
+        ax::ui::Widget* ret = ax::ui::Helper::seekWidgetByTag(arg0, arg1);
+        object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.Helper:seekWidgetByTag",argc, 2);
@@ -26561,8 +26561,8 @@ int lua_axis_ui_Helper_restrictCapInsetRect(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        axis::Rect arg0;
-        axis::Vec2 arg1;
+        ax::Rect arg0;
+        ax::Vec2 arg1;
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Helper:restrictCapInsetRect");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "axui.Helper:restrictCapInsetRect");
         if(!ok)
@@ -26570,7 +26570,7 @@ int lua_axis_ui_Helper_restrictCapInsetRect(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Helper_restrictCapInsetRect'", nullptr);
             return 0;
         }
-        axis::Rect ret = axis::ui::Helper::restrictCapInsetRect(arg0, arg1);
+        ax::Rect ret = ax::ui::Helper::restrictCapInsetRect(arg0, arg1);
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -26599,14 +26599,14 @@ int lua_axis_ui_Helper_doLayout(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Node* arg0;
-        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "ax.Node",&arg0, "axui.Helper:doLayout");
+        ax::Node* arg0;
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "axui.Helper:doLayout");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Helper_doLayout'", nullptr);
             return 0;
         }
-        axis::ui::Helper::doLayout(arg0);
+        ax::ui::Helper::doLayout(arg0);
         lua_settop(tolua_S, 1);
         return 1;
     }
@@ -26639,7 +26639,7 @@ int lua_register_axis_ui_Helper(lua_State* tolua_S)
         tolua_function(tolua_S,"restrictCapInsetRect", lua_axis_ui_Helper_restrictCapInsetRect);
         tolua_function(tolua_S,"doLayout", lua_axis_ui_Helper_doLayout);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::Helper).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::Helper).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.Helper";
     g_typeCast[typeName] = "axui.Helper";
     return 1;
@@ -26648,7 +26648,7 @@ int lua_register_axis_ui_Helper(lua_State* tolua_S)
 int lua_axis_ui_RichElement_equalType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElement* cobj = nullptr;
+    ax::ui::RichElement* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26660,7 +26660,7 @@ int lua_axis_ui_RichElement_equalType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElement",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElement*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElement*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -26673,7 +26673,7 @@ int lua_axis_ui_RichElement_equalType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::RichElement::Type arg0;
+        ax::ui::RichElement::Type arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElement:equalType");
         if(!ok)
@@ -26698,7 +26698,7 @@ int lua_axis_ui_RichElement_equalType(lua_State* tolua_S)
 int lua_axis_ui_RichElement_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElement* cobj = nullptr;
+    ax::ui::RichElement* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26710,7 +26710,7 @@ int lua_axis_ui_RichElement_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElement",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElement*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElement*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -26724,7 +26724,7 @@ int lua_axis_ui_RichElement_init(lua_State* tolua_S)
     if (argc == 3) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElement:init");
@@ -26754,7 +26754,7 @@ int lua_axis_ui_RichElement_init(lua_State* tolua_S)
 int lua_axis_ui_RichElement_setColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElement* cobj = nullptr;
+    ax::ui::RichElement* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26766,7 +26766,7 @@ int lua_axis_ui_RichElement_setColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElement",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElement*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElement*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -26779,7 +26779,7 @@ int lua_axis_ui_RichElement_setColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color3B arg0;
+        ax::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.RichElement:setColor");
         if(!ok)
@@ -26804,7 +26804,7 @@ int lua_axis_ui_RichElement_setColor(lua_State* tolua_S)
 int lua_axis_ui_RichElement_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElement* cobj = nullptr;
+    ax::ui::RichElement* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26821,7 +26821,7 @@ int lua_axis_ui_RichElement_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElement_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RichElement();
+        cobj = new ax::ui::RichElement();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -26855,7 +26855,7 @@ int lua_register_axis_ui_RichElement(lua_State* tolua_S)
         tolua_function(tolua_S,"init",lua_axis_ui_RichElement_init);
         tolua_function(tolua_S,"setColor",lua_axis_ui_RichElement_setColor);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RichElement).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RichElement).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RichElement";
     g_typeCast[typeName] = "axui.RichElement";
     return 1;
@@ -26864,7 +26864,7 @@ int lua_register_axis_ui_RichElement(lua_State* tolua_S)
 int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementText* cobj = nullptr;
+    ax::ui::RichElementText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -26876,7 +26876,7 @@ int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElementText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElementText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElementText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -26890,7 +26890,7 @@ int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 8) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
@@ -26925,14 +26925,14 @@ int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 9) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
@@ -26963,14 +26963,14 @@ int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 10) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
@@ -27004,16 +27004,16 @@ int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 11) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
-        axis::Color3B arg10;
+        ax::Color3B arg10;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
@@ -27048,17 +27048,17 @@ int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 12) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
-        axis::Color3B arg10;
-        axis::Vec2 arg11;
+        ax::Color3B arg10;
+        ax::Vec2 arg11;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
@@ -27095,17 +27095,17 @@ int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 13) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
-        axis::Color3B arg10;
-        axis::Vec2 arg11;
+        ax::Color3B arg10;
+        ax::Vec2 arg11;
         int arg12;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
@@ -27145,19 +27145,19 @@ int lua_axis_ui_RichElementText_init(lua_State* tolua_S)
     if (argc == 14) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
-        axis::Color3B arg10;
-        axis::Vec2 arg11;
+        ax::Color3B arg10;
+        ax::Vec2 arg11;
         int arg12;
-        axis::Color3B arg13;
+        ax::Color3B arg13;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:init");
 
@@ -27223,7 +27223,7 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
     if (argc == 6)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
@@ -27239,14 +27239,14 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     if (argc == 7)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
@@ -27264,14 +27264,14 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     if (argc == 8)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
@@ -27291,21 +27291,21 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     if (argc == 9)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
@@ -27320,21 +27320,21 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     if (argc == 10)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
@@ -27351,23 +27351,23 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     if (argc == 11)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
-        axis::Color3B arg10;
+        ax::Color3B arg10;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
@@ -27384,24 +27384,24 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     if (argc == 12)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
-        axis::Color3B arg10;
-        axis::Vec2 arg11;
+        ax::Color3B arg10;
+        ax::Vec2 arg11;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
@@ -27419,24 +27419,24 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     if (argc == 13)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
-        axis::Color3B arg10;
-        axis::Vec2 arg11;
+        ax::Color3B arg10;
+        ax::Vec2 arg11;
         int arg12;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
@@ -27456,26 +27456,26 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     if (argc == 14)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
         double arg5;
         unsigned int arg6;
         std::string_view arg7;
-        axis::Color3B arg8;
+        ax::Color3B arg8;
         int arg9;
-        axis::Color3B arg10;
-        axis::Vec2 arg11;
+        ax::Color3B arg10;
+        ax::Vec2 arg11;
         int arg12;
-        axis::Color3B arg13;
+        ax::Color3B arg13;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementText:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementText:create");
         ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementText:create");
@@ -27495,8 +27495,8 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementText* ret = axis::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
-        object_to_luaval<axis::ui::RichElementText>(tolua_S, "axui.RichElementText",(axis::ui::RichElementText*)ret);
+        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+        object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementText:create",argc, 6);
@@ -27510,7 +27510,7 @@ int lua_axis_ui_RichElementText_create(lua_State* tolua_S)
 int lua_axis_ui_RichElementText_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementText* cobj = nullptr;
+    ax::ui::RichElementText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -27527,7 +27527,7 @@ int lua_axis_ui_RichElementText_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementText_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RichElementText();
+        cobj = new ax::ui::RichElementText();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -27560,7 +27560,7 @@ int lua_register_axis_ui_RichElementText(lua_State* tolua_S)
         tolua_function(tolua_S,"init",lua_axis_ui_RichElementText_init);
         tolua_function(tolua_S,"create", lua_axis_ui_RichElementText_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RichElementText).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RichElementText).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RichElementText";
     g_typeCast[typeName] = "axui.RichElementText";
     return 1;
@@ -27569,7 +27569,7 @@ int lua_register_axis_ui_RichElementText(lua_State* tolua_S)
 int lua_axis_ui_RichElementImage_setHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementImage* cobj = nullptr;
+    ax::ui::RichElementImage* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -27581,7 +27581,7 @@ int lua_axis_ui_RichElementImage_setHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -27619,7 +27619,7 @@ int lua_axis_ui_RichElementImage_setHeight(lua_State* tolua_S)
 int lua_axis_ui_RichElementImage_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementImage* cobj = nullptr;
+    ax::ui::RichElementImage* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -27631,7 +27631,7 @@ int lua_axis_ui_RichElementImage_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -27645,7 +27645,7 @@ int lua_axis_ui_RichElementImage_init(lua_State* tolua_S)
     if (argc == 4) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
 
@@ -27668,7 +27668,7 @@ int lua_axis_ui_RichElementImage_init(lua_State* tolua_S)
     if (argc == 5) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
@@ -27694,11 +27694,11 @@ int lua_axis_ui_RichElementImage_init(lua_State* tolua_S)
     if (argc == 6) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
-        axis::ui::Widget::TextureResType arg5;
+        ax::ui::Widget::TextureResType arg5;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:init");
 
@@ -27733,7 +27733,7 @@ int lua_axis_ui_RichElementImage_init(lua_State* tolua_S)
 int lua_axis_ui_RichElementImage_setWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementImage* cobj = nullptr;
+    ax::ui::RichElementImage* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -27745,7 +27745,7 @@ int lua_axis_ui_RichElementImage_setWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -27783,7 +27783,7 @@ int lua_axis_ui_RichElementImage_setWidth(lua_State* tolua_S)
 int lua_axis_ui_RichElementImage_setUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementImage* cobj = nullptr;
+    ax::ui::RichElementImage* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -27795,7 +27795,7 @@ int lua_axis_ui_RichElementImage_setUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -27848,7 +27848,7 @@ int lua_axis_ui_RichElementImage_create(lua_State* tolua_S)
     if (argc == 4)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
@@ -27860,14 +27860,14 @@ int lua_axis_ui_RichElementImage_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementImage_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementImage* ret = axis::ui::RichElementImage::create(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(axis::ui::RichElementImage*)ret);
+        ax::ui::RichElementImage* ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
         return 1;
     }
     if (argc == 5)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
@@ -27881,18 +27881,18 @@ int lua_axis_ui_RichElementImage_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementImage_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementImage* ret = axis::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4);
-        object_to_luaval<axis::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(axis::ui::RichElementImage*)ret);
+        ax::ui::RichElementImage* ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4);
+        object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
         return 1;
     }
     if (argc == 6)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         std::string_view arg3;
         std::string_view arg4;
-        axis::ui::Widget::TextureResType arg5;
+        ax::ui::Widget::TextureResType arg5;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementImage:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementImage:create");
         ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementImage:create");
@@ -27904,8 +27904,8 @@ int lua_axis_ui_RichElementImage_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementImage_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementImage* ret = axis::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4, arg5);
-        object_to_luaval<axis::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(axis::ui::RichElementImage*)ret);
+        ax::ui::RichElementImage* ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4, arg5);
+        object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementImage:create",argc, 4);
@@ -27919,7 +27919,7 @@ int lua_axis_ui_RichElementImage_create(lua_State* tolua_S)
 int lua_axis_ui_RichElementImage_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementImage* cobj = nullptr;
+    ax::ui::RichElementImage* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -27936,7 +27936,7 @@ int lua_axis_ui_RichElementImage_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementImage_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RichElementImage();
+        cobj = new ax::ui::RichElementImage();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -27972,7 +27972,7 @@ int lua_register_axis_ui_RichElementImage(lua_State* tolua_S)
         tolua_function(tolua_S,"setUrl",lua_axis_ui_RichElementImage_setUrl);
         tolua_function(tolua_S,"create", lua_axis_ui_RichElementImage_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RichElementImage).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RichElementImage).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RichElementImage";
     g_typeCast[typeName] = "axui.RichElementImage";
     return 1;
@@ -27981,7 +27981,7 @@ int lua_register_axis_ui_RichElementImage(lua_State* tolua_S)
 int lua_axis_ui_RichElementCustomNode_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementCustomNode* cobj = nullptr;
+    ax::ui::RichElementCustomNode* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -27993,7 +27993,7 @@ int lua_axis_ui_RichElementCustomNode_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichElementCustomNode",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichElementCustomNode*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichElementCustomNode*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28007,9 +28007,9 @@ int lua_axis_ui_RichElementCustomNode_init(lua_State* tolua_S)
     if (argc == 4) 
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
-        axis::Node* arg3;
+        ax::Node* arg3;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:init");
 
@@ -28017,7 +28017,7 @@ int lua_axis_ui_RichElementCustomNode_init(lua_State* tolua_S)
 
         ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementCustomNode:init");
 
-        ok &= luaval_to_object<axis::Node>(tolua_S, 5, "ax.Node",&arg3, "axui.RichElementCustomNode:init");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 5, "ax.Node",&arg3, "axui.RichElementCustomNode:init");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementCustomNode_init'", nullptr);
@@ -28055,20 +28055,20 @@ int lua_axis_ui_RichElementCustomNode_create(lua_State* tolua_S)
     if (argc == 4)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
-        axis::Node* arg3;
+        ax::Node* arg3;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementCustomNode:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementCustomNode:create");
         ok &= luaval_to_uint16(tolua_S, 4,&arg2, "axui.RichElementCustomNode:create");
-        ok &= luaval_to_object<axis::Node>(tolua_S, 5, "ax.Node",&arg3, "axui.RichElementCustomNode:create");
+        ok &= luaval_to_object<ax::Node>(tolua_S, 5, "ax.Node",&arg3, "axui.RichElementCustomNode:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementCustomNode_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementCustomNode* ret = axis::ui::RichElementCustomNode::create(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::ui::RichElementCustomNode>(tolua_S, "axui.RichElementCustomNode",(axis::ui::RichElementCustomNode*)ret);
+        ax::ui::RichElementCustomNode* ret = ax::ui::RichElementCustomNode::create(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::ui::RichElementCustomNode>(tolua_S, "axui.RichElementCustomNode",(ax::ui::RichElementCustomNode*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementCustomNode:create",argc, 4);
@@ -28082,7 +28082,7 @@ int lua_axis_ui_RichElementCustomNode_create(lua_State* tolua_S)
 int lua_axis_ui_RichElementCustomNode_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementCustomNode* cobj = nullptr;
+    ax::ui::RichElementCustomNode* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28099,7 +28099,7 @@ int lua_axis_ui_RichElementCustomNode_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementCustomNode_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RichElementCustomNode();
+        cobj = new ax::ui::RichElementCustomNode();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -28132,7 +28132,7 @@ int lua_register_axis_ui_RichElementCustomNode(lua_State* tolua_S)
         tolua_function(tolua_S,"init",lua_axis_ui_RichElementCustomNode_init);
         tolua_function(tolua_S,"create", lua_axis_ui_RichElementCustomNode_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RichElementCustomNode).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RichElementCustomNode).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RichElementCustomNode";
     g_typeCast[typeName] = "axui.RichElementCustomNode";
     return 1;
@@ -28156,7 +28156,7 @@ int lua_axis_ui_RichElementNewLine_create(lua_State* tolua_S)
     if (argc == 3)
     {
         int arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         uint16_t arg2;
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichElementNewLine:create");
         ok &= luaval_to_color3b(tolua_S, 3, &arg1, "axui.RichElementNewLine:create");
@@ -28166,8 +28166,8 @@ int lua_axis_ui_RichElementNewLine_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementNewLine_create'", nullptr);
             return 0;
         }
-        axis::ui::RichElementNewLine* ret = axis::ui::RichElementNewLine::create(arg0, arg1, arg2);
-        object_to_luaval<axis::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(axis::ui::RichElementNewLine*)ret);
+        ax::ui::RichElementNewLine* ret = ax::ui::RichElementNewLine::create(arg0, arg1, arg2);
+        object_to_luaval<ax::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(ax::ui::RichElementNewLine*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichElementNewLine:create",argc, 3);
@@ -28181,7 +28181,7 @@ int lua_axis_ui_RichElementNewLine_create(lua_State* tolua_S)
 int lua_axis_ui_RichElementNewLine_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichElementNewLine* cobj = nullptr;
+    ax::ui::RichElementNewLine* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28198,7 +28198,7 @@ int lua_axis_ui_RichElementNewLine_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichElementNewLine_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RichElementNewLine();
+        cobj = new ax::ui::RichElementNewLine();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -28230,7 +28230,7 @@ int lua_register_axis_ui_RichElementNewLine(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_axis_ui_RichElementNewLine_constructor);
         tolua_function(tolua_S,"create", lua_axis_ui_RichElementNewLine_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RichElementNewLine).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RichElementNewLine).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RichElementNewLine";
     g_typeCast[typeName] = "axui.RichElementNewLine";
     return 1;
@@ -28239,7 +28239,7 @@ int lua_register_axis_ui_RichElementNewLine(lua_State* tolua_S)
 int lua_axis_ui_RichText_insertElement(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28251,7 +28251,7 @@ int lua_axis_ui_RichText_insertElement(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28264,10 +28264,10 @@ int lua_axis_ui_RichText_insertElement(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::ui::RichElement* arg0;
+        ax::ui::RichElement* arg0;
         int arg1;
 
-        ok &= luaval_to_object<axis::ui::RichElement>(tolua_S, 2, "axui.RichElement",&arg0, "axui.RichText:insertElement");
+        ok &= luaval_to_object<ax::ui::RichElement>(tolua_S, 2, "axui.RichElement",&arg0, "axui.RichText:insertElement");
 
         ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "axui.RichText:insertElement");
         if(!ok)
@@ -28292,7 +28292,7 @@ int lua_axis_ui_RichText_insertElement(lua_State* tolua_S)
 int lua_axis_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28304,7 +28304,7 @@ int lua_axis_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28332,7 +28332,7 @@ int lua_axis_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
     if (argc == 2) 
     {
         bool arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextOutline");
 
@@ -28349,7 +28349,7 @@ int lua_axis_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
     if (argc == 3) 
     {
         bool arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
         int arg2;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextOutline");
@@ -28379,7 +28379,7 @@ int lua_axis_ui_RichText_setAnchorTextOutline(lua_State* tolua_S)
 int lua_axis_ui_RichText_getFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28391,7 +28391,7 @@ int lua_axis_ui_RichText_getFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28426,7 +28426,7 @@ int lua_axis_ui_RichText_getFontSize(lua_State* tolua_S)
 int lua_axis_ui_RichText_pushBackElement(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28438,7 +28438,7 @@ int lua_axis_ui_RichText_pushBackElement(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28451,9 +28451,9 @@ int lua_axis_ui_RichText_pushBackElement(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::RichElement* arg0;
+        ax::ui::RichElement* arg0;
 
-        ok &= luaval_to_object<axis::ui::RichElement>(tolua_S, 2, "axui.RichElement",&arg0, "axui.RichText:pushBackElement");
+        ok &= luaval_to_object<ax::ui::RichElement>(tolua_S, 2, "axui.RichElement",&arg0, "axui.RichText:pushBackElement");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_pushBackElement'", nullptr);
@@ -28476,7 +28476,7 @@ int lua_axis_ui_RichText_pushBackElement(lua_State* tolua_S)
 int lua_axis_ui_RichText_setAnchorTextBold(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28488,7 +28488,7 @@ int lua_axis_ui_RichText_setAnchorTextBold(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28526,7 +28526,7 @@ int lua_axis_ui_RichText_setAnchorTextBold(lua_State* tolua_S)
 int lua_axis_ui_RichText_getAnchorFontColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28538,7 +28538,7 @@ int lua_axis_ui_RichText_getAnchorFontColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28573,7 +28573,7 @@ int lua_axis_ui_RichText_getAnchorFontColor(lua_State* tolua_S)
 int lua_axis_ui_RichText_getAnchorTextShadowBlurRadius(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28585,7 +28585,7 @@ int lua_axis_ui_RichText_getAnchorTextShadowBlurRadius(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28620,7 +28620,7 @@ int lua_axis_ui_RichText_getAnchorTextShadowBlurRadius(lua_State* tolua_S)
 int lua_axis_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28632,7 +28632,7 @@ int lua_axis_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28660,7 +28660,7 @@ int lua_axis_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
     if (argc == 2) 
     {
         bool arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
 
@@ -28677,8 +28677,8 @@ int lua_axis_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
     if (argc == 3) 
     {
         bool arg0;
-        axis::Color3B arg1;
-        axis::Vec2 arg2;
+        ax::Color3B arg1;
+        ax::Vec2 arg2;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
 
@@ -28697,8 +28697,8 @@ int lua_axis_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
     if (argc == 4) 
     {
         bool arg0;
-        axis::Color3B arg1;
-        axis::Vec2 arg2;
+        ax::Color3B arg1;
+        ax::Vec2 arg2;
         int arg3;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextShadow");
@@ -28730,7 +28730,7 @@ int lua_axis_ui_RichText_setAnchorTextShadow(lua_State* tolua_S)
 int lua_axis_ui_RichText_isAnchorTextItalicEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28742,7 +28742,7 @@ int lua_axis_ui_RichText_isAnchorTextItalicEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28777,7 +28777,7 @@ int lua_axis_ui_RichText_isAnchorTextItalicEnabled(lua_State* tolua_S)
 int lua_axis_ui_RichText_setAnchorFontColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28789,7 +28789,7 @@ int lua_axis_ui_RichText_setAnchorFontColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28827,7 +28827,7 @@ int lua_axis_ui_RichText_setAnchorFontColor(lua_State* tolua_S)
 int lua_axis_ui_RichText_setFontFace(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28839,7 +28839,7 @@ int lua_axis_ui_RichText_setFontFace(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28877,7 +28877,7 @@ int lua_axis_ui_RichText_setFontFace(lua_State* tolua_S)
 int lua_axis_ui_RichText_setAnchorTextGlow(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28889,7 +28889,7 @@ int lua_axis_ui_RichText_setAnchorTextGlow(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28917,7 +28917,7 @@ int lua_axis_ui_RichText_setAnchorTextGlow(lua_State* tolua_S)
     if (argc == 2) 
     {
         bool arg0;
-        axis::Color3B arg1;
+        ax::Color3B arg1;
 
         ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axui.RichText:setAnchorTextGlow");
 
@@ -28944,7 +28944,7 @@ int lua_axis_ui_RichText_setAnchorTextGlow(lua_State* tolua_S)
 int lua_axis_ui_RichText_getHorizontalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -28956,7 +28956,7 @@ int lua_axis_ui_RichText_getHorizontalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -28991,7 +28991,7 @@ int lua_axis_ui_RichText_getHorizontalAlignment(lua_State* tolua_S)
 int lua_axis_ui_RichText_setHorizontalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29003,7 +29003,7 @@ int lua_axis_ui_RichText_setHorizontalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29016,7 +29016,7 @@ int lua_axis_ui_RichText_setHorizontalAlignment(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::RichText::HorizontalAlignment arg0;
+        ax::ui::RichText::HorizontalAlignment arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichText:setHorizontalAlignment");
         if(!ok)
@@ -29041,7 +29041,7 @@ int lua_axis_ui_RichText_setHorizontalAlignment(lua_State* tolua_S)
 int lua_axis_ui_RichText_setAnchorTextDel(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29053,7 +29053,7 @@ int lua_axis_ui_RichText_setAnchorTextDel(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29091,7 +29091,7 @@ int lua_axis_ui_RichText_setAnchorTextDel(lua_State* tolua_S)
 int lua_axis_ui_RichText_getAnchorTextOutlineColor3B(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29103,7 +29103,7 @@ int lua_axis_ui_RichText_getAnchorTextOutlineColor3B(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29121,7 +29121,7 @@ int lua_axis_ui_RichText_getAnchorTextOutlineColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_getAnchorTextOutlineColor3B'", nullptr);
             return 0;
         }
-        axis::Color3B ret = cobj->getAnchorTextOutlineColor3B();
+        ax::Color3B ret = cobj->getAnchorTextOutlineColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -29138,7 +29138,7 @@ int lua_axis_ui_RichText_getAnchorTextOutlineColor3B(lua_State* tolua_S)
 int lua_axis_ui_RichText_stringWithColor4B(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29150,7 +29150,7 @@ int lua_axis_ui_RichText_stringWithColor4B(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29163,7 +29163,7 @@ int lua_axis_ui_RichText_stringWithColor4B(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color4B arg0;
+        ax::Color4B arg0;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.RichText:stringWithColor4B");
         if(!ok)
@@ -29188,7 +29188,7 @@ int lua_axis_ui_RichText_stringWithColor4B(lua_State* tolua_S)
 int lua_axis_ui_RichText_initWithXML(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29200,7 +29200,7 @@ int lua_axis_ui_RichText_initWithXML(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29214,7 +29214,7 @@ int lua_axis_ui_RichText_initWithXML(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ValueMap arg1;
+        ax::ValueMap arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichText:initWithXML");
 
@@ -29231,7 +29231,7 @@ int lua_axis_ui_RichText_initWithXML(lua_State* tolua_S)
     if (argc == 3) 
     {
         std::string_view arg0;
-        axis::ValueMap arg1;
+        ax::ValueMap arg1;
         std::function<void (std::string_view)> arg2;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichText:initWithXML");
@@ -29265,7 +29265,7 @@ int lua_axis_ui_RichText_initWithXML(lua_State* tolua_S)
 int lua_axis_ui_RichText_getAnchorFontColor3B(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29277,7 +29277,7 @@ int lua_axis_ui_RichText_getAnchorFontColor3B(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29295,7 +29295,7 @@ int lua_axis_ui_RichText_getAnchorFontColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_getAnchorFontColor3B'", nullptr);
             return 0;
         }
-        axis::Color3B ret = cobj->getAnchorFontColor3B();
+        ax::Color3B ret = cobj->getAnchorFontColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -29312,7 +29312,7 @@ int lua_axis_ui_RichText_getAnchorFontColor3B(lua_State* tolua_S)
 int lua_axis_ui_RichText_formatText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29324,7 +29324,7 @@ int lua_axis_ui_RichText_formatText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29373,7 +29373,7 @@ int lua_axis_ui_RichText_formatText(lua_State* tolua_S)
 int lua_axis_ui_RichText_getAnchorTextGlowColor3B(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29385,7 +29385,7 @@ int lua_axis_ui_RichText_getAnchorTextGlowColor3B(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29403,7 +29403,7 @@ int lua_axis_ui_RichText_getAnchorTextGlowColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_getAnchorTextGlowColor3B'", nullptr);
             return 0;
         }
-        axis::Color3B ret = cobj->getAnchorTextGlowColor3B();
+        ax::Color3B ret = cobj->getAnchorTextGlowColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -29420,7 +29420,7 @@ int lua_axis_ui_RichText_getAnchorTextGlowColor3B(lua_State* tolua_S)
 int lua_axis_ui_RichText_openUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29432,7 +29432,7 @@ int lua_axis_ui_RichText_openUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29470,7 +29470,7 @@ int lua_axis_ui_RichText_openUrl(lua_State* tolua_S)
 int lua_axis_ui_RichText_getFontFace(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29482,7 +29482,7 @@ int lua_axis_ui_RichText_getFontFace(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29517,7 +29517,7 @@ int lua_axis_ui_RichText_getFontFace(lua_State* tolua_S)
 int lua_axis_ui_RichText_setFontColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29529,7 +29529,7 @@ int lua_axis_ui_RichText_setFontColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29567,7 +29567,7 @@ int lua_axis_ui_RichText_setFontColor(lua_State* tolua_S)
 int lua_axis_ui_RichText_isAnchorTextGlowEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29579,7 +29579,7 @@ int lua_axis_ui_RichText_isAnchorTextGlowEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29614,7 +29614,7 @@ int lua_axis_ui_RichText_isAnchorTextGlowEnabled(lua_State* tolua_S)
 int lua_axis_ui_RichText_getDefaults(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29626,7 +29626,7 @@ int lua_axis_ui_RichText_getDefaults(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29644,7 +29644,7 @@ int lua_axis_ui_RichText_getDefaults(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_getDefaults'", nullptr);
             return 0;
         }
-        axis::ValueMap ret = cobj->getDefaults();
+        ax::ValueMap ret = cobj->getDefaults();
         ccvaluemap_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -29661,7 +29661,7 @@ int lua_axis_ui_RichText_getDefaults(lua_State* tolua_S)
 int lua_axis_ui_RichText_isAnchorTextUnderlineEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29673,7 +29673,7 @@ int lua_axis_ui_RichText_isAnchorTextUnderlineEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29708,7 +29708,7 @@ int lua_axis_ui_RichText_isAnchorTextUnderlineEnabled(lua_State* tolua_S)
 int lua_axis_ui_RichText_getFontColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29720,7 +29720,7 @@ int lua_axis_ui_RichText_getFontColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29755,7 +29755,7 @@ int lua_axis_ui_RichText_getFontColor(lua_State* tolua_S)
 int lua_axis_ui_RichText_isAnchorTextShadowEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29767,7 +29767,7 @@ int lua_axis_ui_RichText_isAnchorTextShadowEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29802,7 +29802,7 @@ int lua_axis_ui_RichText_isAnchorTextShadowEnabled(lua_State* tolua_S)
 int lua_axis_ui_RichText_getAnchorTextOutlineSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29814,7 +29814,7 @@ int lua_axis_ui_RichText_getAnchorTextOutlineSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29849,7 +29849,7 @@ int lua_axis_ui_RichText_getAnchorTextOutlineSize(lua_State* tolua_S)
 int lua_axis_ui_RichText_setVerticalSpace(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29861,7 +29861,7 @@ int lua_axis_ui_RichText_setVerticalSpace(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29899,7 +29899,7 @@ int lua_axis_ui_RichText_setVerticalSpace(lua_State* tolua_S)
 int lua_axis_ui_RichText_isAnchorTextDelEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29911,7 +29911,7 @@ int lua_axis_ui_RichText_isAnchorTextDelEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29946,7 +29946,7 @@ int lua_axis_ui_RichText_isAnchorTextDelEnabled(lua_State* tolua_S)
 int lua_axis_ui_RichText_setDefaults(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -29958,7 +29958,7 @@ int lua_axis_ui_RichText_setDefaults(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -29971,7 +29971,7 @@ int lua_axis_ui_RichText_setDefaults(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ValueMap arg0;
+        ax::ValueMap arg0;
 
         ok &= luaval_to_ccvaluemap(tolua_S, 2, &arg0, "axui.RichText:setDefaults");
         if(!ok)
@@ -29996,7 +29996,7 @@ int lua_axis_ui_RichText_setDefaults(lua_State* tolua_S)
 int lua_axis_ui_RichText_setWrapMode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30008,7 +30008,7 @@ int lua_axis_ui_RichText_setWrapMode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30021,7 +30021,7 @@ int lua_axis_ui_RichText_setWrapMode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::RichText::WrapMode arg0;
+        ax::ui::RichText::WrapMode arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichText:setWrapMode");
         if(!ok)
@@ -30046,7 +30046,7 @@ int lua_axis_ui_RichText_setWrapMode(lua_State* tolua_S)
 int lua_axis_ui_RichText_setFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30058,7 +30058,7 @@ int lua_axis_ui_RichText_setFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30096,7 +30096,7 @@ int lua_axis_ui_RichText_setFontSize(lua_State* tolua_S)
 int lua_axis_ui_RichText_removeElement(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -30105,7 +30105,7 @@ int lua_axis_ui_RichText_removeElement(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -30116,8 +30116,8 @@ int lua_axis_ui_RichText_removeElement(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::ui::RichElement* arg0;
-            ok &= luaval_to_object<axis::ui::RichElement>(tolua_S, 2, "axui.RichElement",&arg0, "axui.RichText:removeElement");
+            ax::ui::RichElement* arg0;
+            ok &= luaval_to_object<ax::ui::RichElement>(tolua_S, 2, "axui.RichElement",&arg0, "axui.RichText:removeElement");
 
             if (!ok) { break; }
             cobj->removeElement(arg0);
@@ -30151,7 +30151,7 @@ int lua_axis_ui_RichText_removeElement(lua_State* tolua_S)
 int lua_axis_ui_RichText_setAnchorTextItalic(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30163,7 +30163,7 @@ int lua_axis_ui_RichText_setAnchorTextItalic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30201,7 +30201,7 @@ int lua_axis_ui_RichText_setAnchorTextItalic(lua_State* tolua_S)
 int lua_axis_ui_RichText_getAnchorTextShadowOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30213,7 +30213,7 @@ int lua_axis_ui_RichText_getAnchorTextShadowOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30231,7 +30231,7 @@ int lua_axis_ui_RichText_getAnchorTextShadowOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_getAnchorTextShadowOffset'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getAnchorTextShadowOffset();
+        ax::Vec2 ret = cobj->getAnchorTextShadowOffset();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -30248,7 +30248,7 @@ int lua_axis_ui_RichText_getAnchorTextShadowOffset(lua_State* tolua_S)
 int lua_axis_ui_RichText_isAnchorTextBoldEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30260,7 +30260,7 @@ int lua_axis_ui_RichText_isAnchorTextBoldEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30295,7 +30295,7 @@ int lua_axis_ui_RichText_isAnchorTextBoldEnabled(lua_State* tolua_S)
 int lua_axis_ui_RichText_getAnchorTextShadowColor3B(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30307,7 +30307,7 @@ int lua_axis_ui_RichText_getAnchorTextShadowColor3B(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30325,7 +30325,7 @@ int lua_axis_ui_RichText_getAnchorTextShadowColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_getAnchorTextShadowColor3B'", nullptr);
             return 0;
         }
-        axis::Color3B ret = cobj->getAnchorTextShadowColor3B();
+        ax::Color3B ret = cobj->getAnchorTextShadowColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -30342,7 +30342,7 @@ int lua_axis_ui_RichText_getAnchorTextShadowColor3B(lua_State* tolua_S)
 int lua_axis_ui_RichText_stringWithColor3B(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30354,7 +30354,7 @@ int lua_axis_ui_RichText_stringWithColor3B(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30367,7 +30367,7 @@ int lua_axis_ui_RichText_stringWithColor3B(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color3B arg0;
+        ax::Color3B arg0;
 
         ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.RichText:stringWithColor3B");
         if(!ok)
@@ -30392,7 +30392,7 @@ int lua_axis_ui_RichText_stringWithColor3B(lua_State* tolua_S)
 int lua_axis_ui_RichText_isAnchorTextOutlineEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30404,7 +30404,7 @@ int lua_axis_ui_RichText_isAnchorTextOutlineEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30439,7 +30439,7 @@ int lua_axis_ui_RichText_isAnchorTextOutlineEnabled(lua_State* tolua_S)
 int lua_axis_ui_RichText_getFontColor3B(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30451,7 +30451,7 @@ int lua_axis_ui_RichText_getFontColor3B(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30469,7 +30469,7 @@ int lua_axis_ui_RichText_getFontColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_getFontColor3B'", nullptr);
             return 0;
         }
-        axis::Color3B ret = cobj->getFontColor3B();
+        ax::Color3B ret = cobj->getFontColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -30486,7 +30486,7 @@ int lua_axis_ui_RichText_getFontColor3B(lua_State* tolua_S)
 int lua_axis_ui_RichText_getWrapMode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30498,7 +30498,7 @@ int lua_axis_ui_RichText_getWrapMode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30533,7 +30533,7 @@ int lua_axis_ui_RichText_getWrapMode(lua_State* tolua_S)
 int lua_axis_ui_RichText_setAnchorTextUnderline(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30545,7 +30545,7 @@ int lua_axis_ui_RichText_setAnchorTextUnderline(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30583,7 +30583,7 @@ int lua_axis_ui_RichText_setAnchorTextUnderline(lua_State* tolua_S)
 int lua_axis_ui_RichText_color3BWithString(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30595,7 +30595,7 @@ int lua_axis_ui_RichText_color3BWithString(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30616,7 +30616,7 @@ int lua_axis_ui_RichText_color3BWithString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_color3BWithString'", nullptr);
             return 0;
         }
-        axis::Color3B ret = cobj->color3BWithString(arg0);
+        ax::Color3B ret = cobj->color3BWithString(arg0);
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -30652,8 +30652,8 @@ int lua_axis_ui_RichText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_create'", nullptr);
             return 0;
         }
-        axis::ui::RichText* ret = axis::ui::RichText::create();
-        object_to_luaval<axis::ui::RichText>(tolua_S, "axui.RichText",(axis::ui::RichText*)ret);
+        ax::ui::RichText* ret = ax::ui::RichText::create();
+        object_to_luaval<ax::ui::RichText>(tolua_S, "axui.RichText",(ax::ui::RichText*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichText:create",argc, 0);
@@ -30682,7 +30682,7 @@ int lua_axis_ui_RichText_createWithXML(lua_State* tolua_S)
     if (argc == 2)
     {
         std::string_view arg0;
-        axis::ValueMap arg1;
+        ax::ValueMap arg1;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichText:createWithXML");
         ok &= luaval_to_ccvaluemap(tolua_S, 3, &arg1, "axui.RichText:createWithXML");
         if(!ok)
@@ -30690,14 +30690,14 @@ int lua_axis_ui_RichText_createWithXML(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_createWithXML'", nullptr);
             return 0;
         }
-        axis::ui::RichText* ret = axis::ui::RichText::createWithXML(arg0, arg1);
-        object_to_luaval<axis::ui::RichText>(tolua_S, "axui.RichText",(axis::ui::RichText*)ret);
+        ax::ui::RichText* ret = ax::ui::RichText::createWithXML(arg0, arg1);
+        object_to_luaval<ax::ui::RichText>(tolua_S, "axui.RichText",(ax::ui::RichText*)ret);
         return 1;
     }
     if (argc == 3)
     {
         std::string_view arg0;
-        axis::ValueMap arg1;
+        ax::ValueMap arg1;
         std::function<void (std::string_view)> arg2;
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichText:createWithXML");
         ok &= luaval_to_ccvaluemap(tolua_S, 3, &arg1, "axui.RichText:createWithXML");
@@ -30711,8 +30711,8 @@ int lua_axis_ui_RichText_createWithXML(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_createWithXML'", nullptr);
             return 0;
         }
-        axis::ui::RichText* ret = axis::ui::RichText::createWithXML(arg0, arg1, arg2);
-        object_to_luaval<axis::ui::RichText>(tolua_S, "axui.RichText",(axis::ui::RichText*)ret);
+        ax::ui::RichText* ret = ax::ui::RichText::createWithXML(arg0, arg1, arg2);
+        object_to_luaval<ax::ui::RichText>(tolua_S, "axui.RichText",(ax::ui::RichText*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.RichText:createWithXML",argc, 2);
@@ -30726,7 +30726,7 @@ int lua_axis_ui_RichText_createWithXML(lua_State* tolua_S)
 int lua_axis_ui_RichText_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RichText* cobj = nullptr;
+    ax::ui::RichText* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30743,7 +30743,7 @@ int lua_axis_ui_RichText_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RichText_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RichText();
+        cobj = new ax::ui::RichText();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -30822,7 +30822,7 @@ int lua_register_axis_ui_RichText(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_RichText_create);
         tolua_function(tolua_S,"createWithXML", lua_axis_ui_RichText_createWithXML);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RichText).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RichText).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RichText";
     g_typeCast[typeName] = "axui.RichText";
     return 1;
@@ -30831,7 +30831,7 @@ int lua_register_axis_ui_RichText(lua_State* tolua_S)
 int lua_axis_ui_HBox_initWithSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::HBox* cobj = nullptr;
+    ax::ui::HBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30843,7 +30843,7 @@ int lua_axis_ui_HBox_initWithSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.HBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::HBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::HBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -30856,7 +30856,7 @@ int lua_axis_ui_HBox_initWithSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.HBox:initWithSize");
         if(!ok)
@@ -30896,11 +30896,11 @@ int lua_axis_ui_HBox_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::Vec2 arg0;
+            ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.HBox:create");
             if (!ok) { break; }
-            axis::ui::HBox* ret = axis::ui::HBox::create(arg0);
-            object_to_luaval<axis::ui::HBox>(tolua_S, "axui.HBox",(axis::ui::HBox*)ret);
+            ax::ui::HBox* ret = ax::ui::HBox::create(arg0);
+            object_to_luaval<ax::ui::HBox>(tolua_S, "axui.HBox",(ax::ui::HBox*)ret);
             return 1;
         }
     } while (0);
@@ -30909,8 +30909,8 @@ int lua_axis_ui_HBox_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::HBox* ret = axis::ui::HBox::create();
-            object_to_luaval<axis::ui::HBox>(tolua_S, "axui.HBox",(axis::ui::HBox*)ret);
+            ax::ui::HBox* ret = ax::ui::HBox::create();
+            object_to_luaval<ax::ui::HBox>(tolua_S, "axui.HBox",(ax::ui::HBox*)ret);
             return 1;
         }
     } while (0);
@@ -30926,7 +30926,7 @@ int lua_axis_ui_HBox_create(lua_State* tolua_S)
 int lua_axis_ui_HBox_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::HBox* cobj = nullptr;
+    ax::ui::HBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30943,7 +30943,7 @@ int lua_axis_ui_HBox_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_HBox_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::HBox();
+        cobj = new ax::ui::HBox();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -30976,7 +30976,7 @@ int lua_register_axis_ui_HBox(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_axis_ui_HBox_initWithSize);
         tolua_function(tolua_S,"create", lua_axis_ui_HBox_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::HBox).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::HBox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.HBox";
     g_typeCast[typeName] = "axui.HBox";
     return 1;
@@ -30985,7 +30985,7 @@ int lua_register_axis_ui_HBox(lua_State* tolua_S)
 int lua_axis_ui_VBox_initWithSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::VBox* cobj = nullptr;
+    ax::ui::VBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -30997,7 +30997,7 @@ int lua_axis_ui_VBox_initWithSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.VBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::VBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::VBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31010,7 +31010,7 @@ int lua_axis_ui_VBox_initWithSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.VBox:initWithSize");
         if(!ok)
@@ -31050,11 +31050,11 @@ int lua_axis_ui_VBox_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::Vec2 arg0;
+            ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.VBox:create");
             if (!ok) { break; }
-            axis::ui::VBox* ret = axis::ui::VBox::create(arg0);
-            object_to_luaval<axis::ui::VBox>(tolua_S, "axui.VBox",(axis::ui::VBox*)ret);
+            ax::ui::VBox* ret = ax::ui::VBox::create(arg0);
+            object_to_luaval<ax::ui::VBox>(tolua_S, "axui.VBox",(ax::ui::VBox*)ret);
             return 1;
         }
     } while (0);
@@ -31063,8 +31063,8 @@ int lua_axis_ui_VBox_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::VBox* ret = axis::ui::VBox::create();
-            object_to_luaval<axis::ui::VBox>(tolua_S, "axui.VBox",(axis::ui::VBox*)ret);
+            ax::ui::VBox* ret = ax::ui::VBox::create();
+            object_to_luaval<ax::ui::VBox>(tolua_S, "axui.VBox",(ax::ui::VBox*)ret);
             return 1;
         }
     } while (0);
@@ -31080,7 +31080,7 @@ int lua_axis_ui_VBox_create(lua_State* tolua_S)
 int lua_axis_ui_VBox_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::VBox* cobj = nullptr;
+    ax::ui::VBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31097,7 +31097,7 @@ int lua_axis_ui_VBox_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_VBox_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::VBox();
+        cobj = new ax::ui::VBox();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -31130,7 +31130,7 @@ int lua_register_axis_ui_VBox(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_axis_ui_VBox_initWithSize);
         tolua_function(tolua_S,"create", lua_axis_ui_VBox_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::VBox).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::VBox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.VBox";
     g_typeCast[typeName] = "axui.VBox";
     return 1;
@@ -31139,7 +31139,7 @@ int lua_register_axis_ui_VBox(lua_State* tolua_S)
 int lua_axis_ui_RelativeBox_initWithSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeBox* cobj = nullptr;
+    ax::ui::RelativeBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31151,7 +31151,7 @@ int lua_axis_ui_RelativeBox_initWithSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.RelativeBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::RelativeBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::RelativeBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31164,7 +31164,7 @@ int lua_axis_ui_RelativeBox_initWithSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.RelativeBox:initWithSize");
         if(!ok)
@@ -31204,11 +31204,11 @@ int lua_axis_ui_RelativeBox_create(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::Vec2 arg0;
+            ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.RelativeBox:create");
             if (!ok) { break; }
-            axis::ui::RelativeBox* ret = axis::ui::RelativeBox::create(arg0);
-            object_to_luaval<axis::ui::RelativeBox>(tolua_S, "axui.RelativeBox",(axis::ui::RelativeBox*)ret);
+            ax::ui::RelativeBox* ret = ax::ui::RelativeBox::create(arg0);
+            object_to_luaval<ax::ui::RelativeBox>(tolua_S, "axui.RelativeBox",(ax::ui::RelativeBox*)ret);
             return 1;
         }
     } while (0);
@@ -31217,8 +31217,8 @@ int lua_axis_ui_RelativeBox_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::RelativeBox* ret = axis::ui::RelativeBox::create();
-            object_to_luaval<axis::ui::RelativeBox>(tolua_S, "axui.RelativeBox",(axis::ui::RelativeBox*)ret);
+            ax::ui::RelativeBox* ret = ax::ui::RelativeBox::create();
+            object_to_luaval<ax::ui::RelativeBox>(tolua_S, "axui.RelativeBox",(ax::ui::RelativeBox*)ret);
             return 1;
         }
     } while (0);
@@ -31234,7 +31234,7 @@ int lua_axis_ui_RelativeBox_create(lua_State* tolua_S)
 int lua_axis_ui_RelativeBox_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::RelativeBox* cobj = nullptr;
+    ax::ui::RelativeBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31251,7 +31251,7 @@ int lua_axis_ui_RelativeBox_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_RelativeBox_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::RelativeBox();
+        cobj = new ax::ui::RelativeBox();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -31284,7 +31284,7 @@ int lua_register_axis_ui_RelativeBox(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSize",lua_axis_ui_RelativeBox_initWithSize);
         tolua_function(tolua_S,"create", lua_axis_ui_RelativeBox_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::RelativeBox).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::RelativeBox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.RelativeBox";
     g_typeCast[typeName] = "axui.RelativeBox";
     return 1;
@@ -31293,7 +31293,7 @@ int lua_register_axis_ui_RelativeBox(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -31302,7 +31302,7 @@ int lua_axis_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -31313,11 +31313,11 @@ int lua_axis_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 6) {
-            axis::Sprite* arg0;
-            ok &= luaval_to_object<axis::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:updateWithSprite");
+            ax::Sprite* arg0;
+            ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
@@ -31325,15 +31325,15 @@ int lua_axis_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
-            axis::Vec2 arg3;
+            ax::Vec2 arg3;
             ok &= luaval_to_vec2(tolua_S, 5, &arg3, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
-            axis::Vec2 arg4;
+            ax::Vec2 arg4;
             ok &= luaval_to_vec2(tolua_S, 6, &arg4, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
-            axis::Rect arg5;
+            ax::Rect arg5;
             ok &= luaval_to_rect(tolua_S, 7, &arg5, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
@@ -31345,11 +31345,11 @@ int lua_axis_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 4) {
-            axis::Sprite* arg0;
-            ok &= luaval_to_object<axis::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:updateWithSprite");
+            ax::Sprite* arg0;
+            ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
@@ -31357,7 +31357,7 @@ int lua_axis_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
-            axis::Rect arg3;
+            ax::Rect arg3;
             ok &= luaval_to_rect(tolua_S, 5, &arg3, "axui.Scale9Sprite:updateWithSprite");
 
             if (!ok) { break; }
@@ -31380,7 +31380,7 @@ int lua_axis_ui_Scale9Sprite_updateWithSprite(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_resizableSpriteWithCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31392,7 +31392,7 @@ int lua_axis_ui_Scale9Sprite_resizableSpriteWithCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31405,7 +31405,7 @@ int lua_axis_ui_Scale9Sprite_resizableSpriteWithCapInsets(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Scale9Sprite:resizableSpriteWithCapInsets");
         if(!ok)
@@ -31413,8 +31413,8 @@ int lua_axis_ui_Scale9Sprite_resizableSpriteWithCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Scale9Sprite_resizableSpriteWithCapInsets'", nullptr);
             return 0;
         }
-        axis::ui::Scale9Sprite* ret = cobj->resizableSpriteWithCapInsets(arg0);
-        object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+        ax::ui::Scale9Sprite* ret = cobj->resizableSpriteWithCapInsets(arg0);
+        object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Scale9Sprite:resizableSpriteWithCapInsets",argc, 1);
@@ -31430,7 +31430,7 @@ int lua_axis_ui_Scale9Sprite_resizableSpriteWithCapInsets(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31442,7 +31442,7 @@ int lua_axis_ui_Scale9Sprite_getCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31460,7 +31460,7 @@ int lua_axis_ui_Scale9Sprite_getCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Scale9Sprite_getCapInsets'", nullptr);
             return 0;
         }
-        axis::Rect ret = cobj->getCapInsets();
+        ax::Rect ret = cobj->getCapInsets();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -31477,7 +31477,7 @@ int lua_axis_ui_Scale9Sprite_getCapInsets(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setState(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31489,7 +31489,7 @@ int lua_axis_ui_Scale9Sprite_setState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31502,7 +31502,7 @@ int lua_axis_ui_Scale9Sprite_setState(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Scale9Sprite::State arg0;
+        ax::ui::Scale9Sprite::State arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Scale9Sprite:setState");
         if(!ok)
@@ -31527,7 +31527,7 @@ int lua_axis_ui_Scale9Sprite_setState(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setInsetBottom(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31539,7 +31539,7 @@ int lua_axis_ui_Scale9Sprite_setInsetBottom(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31577,7 +31577,7 @@ int lua_axis_ui_Scale9Sprite_setInsetBottom(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_initWithSpriteFrameName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31589,7 +31589,7 @@ int lua_axis_ui_Scale9Sprite_initWithSpriteFrameName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31603,7 +31603,7 @@ int lua_axis_ui_Scale9Sprite_initWithSpriteFrameName(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::Rect arg1;
+        ax::Rect arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Scale9Sprite:initWithSpriteFrameName");
 
@@ -31630,7 +31630,7 @@ int lua_axis_ui_Scale9Sprite_initWithSpriteFrameName(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getSprite(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31642,7 +31642,7 @@ int lua_axis_ui_Scale9Sprite_getSprite(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31660,8 +31660,8 @@ int lua_axis_ui_Scale9Sprite_getSprite(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Scale9Sprite_getSprite'", nullptr);
             return 0;
         }
-        axis::Sprite* ret = cobj->getSprite();
-        object_to_luaval<axis::Sprite>(tolua_S, "ax.Sprite",(axis::Sprite*)ret);
+        ax::Sprite* ret = cobj->getSprite();
+        object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Scale9Sprite:getSprite",argc, 0);
@@ -31677,7 +31677,7 @@ int lua_axis_ui_Scale9Sprite_getSprite(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setInsetTop(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31689,7 +31689,7 @@ int lua_axis_ui_Scale9Sprite_setInsetTop(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31727,7 +31727,7 @@ int lua_axis_ui_Scale9Sprite_setInsetTop(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setRenderingType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31739,7 +31739,7 @@ int lua_axis_ui_Scale9Sprite_setRenderingType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31752,7 +31752,7 @@ int lua_axis_ui_Scale9Sprite_setRenderingType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Scale9Sprite::RenderingType arg0;
+        ax::ui::Scale9Sprite::RenderingType arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.Scale9Sprite:setRenderingType");
         if(!ok)
@@ -31777,7 +31777,7 @@ int lua_axis_ui_Scale9Sprite_setRenderingType(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -31786,7 +31786,7 @@ int lua_axis_ui_Scale9Sprite_init(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -31797,15 +31797,15 @@ int lua_axis_ui_Scale9Sprite_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 3) {
-            axis::Sprite* arg0;
-            ok &= luaval_to_object<axis::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
+            ax::Sprite* arg0;
+            ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
-            axis::Rect arg2;
+            ax::Rect arg2;
             ok &= luaval_to_rect(tolua_S, 4, &arg2, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
@@ -31817,11 +31817,11 @@ int lua_axis_ui_Scale9Sprite_init(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 4) {
-            axis::Sprite* arg0;
-            ok &= luaval_to_object<axis::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
+            ax::Sprite* arg0;
+            ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
@@ -31829,7 +31829,7 @@ int lua_axis_ui_Scale9Sprite_init(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
-            axis::Rect arg3;
+            ax::Rect arg3;
             ok &= luaval_to_rect(tolua_S, 5, &arg3, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
@@ -31841,11 +31841,11 @@ int lua_axis_ui_Scale9Sprite_init(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 6) {
-            axis::Sprite* arg0;
-            ok &= luaval_to_object<axis::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
+            ax::Sprite* arg0;
+            ok &= luaval_to_object<ax::Sprite>(tolua_S, 2, "ax.Sprite",&arg0, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
@@ -31853,15 +31853,15 @@ int lua_axis_ui_Scale9Sprite_init(lua_State* tolua_S)
             ok &= luaval_to_boolean(tolua_S, 4,&arg2, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
-            axis::Vec2 arg3;
+            ax::Vec2 arg3;
             ok &= luaval_to_vec2(tolua_S, 5, &arg3, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
-            axis::Vec2 arg4;
+            ax::Vec2 arg4;
             ok &= luaval_to_vec2(tolua_S, 6, &arg4, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
-            axis::Rect arg5;
+            ax::Rect arg5;
             ok &= luaval_to_rect(tolua_S, 7, &arg5, "axui.Scale9Sprite:init");
 
             if (!ok) { break; }
@@ -31884,7 +31884,7 @@ int lua_axis_ui_Scale9Sprite_init(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setPreferredSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31896,7 +31896,7 @@ int lua_axis_ui_Scale9Sprite_setPreferredSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31909,7 +31909,7 @@ int lua_axis_ui_Scale9Sprite_setPreferredSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.Scale9Sprite:setPreferredSize");
         if(!ok)
@@ -31934,7 +31934,7 @@ int lua_axis_ui_Scale9Sprite_setPreferredSize(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_copyTo(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31946,7 +31946,7 @@ int lua_axis_ui_Scale9Sprite_copyTo(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -31959,9 +31959,9 @@ int lua_axis_ui_Scale9Sprite_copyTo(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::Scale9Sprite* arg0;
+        ax::ui::Scale9Sprite* arg0;
 
-        ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 2, "axui.Scale9Sprite",&arg0, "axui.Scale9Sprite:copyTo");
+        ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 2, "axui.Scale9Sprite",&arg0, "axui.Scale9Sprite:copyTo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Scale9Sprite_copyTo'", nullptr);
@@ -31984,7 +31984,7 @@ int lua_axis_ui_Scale9Sprite_copyTo(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setSpriteFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -31996,7 +31996,7 @@ int lua_axis_ui_Scale9Sprite_setSpriteFrame(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32009,10 +32009,10 @@ int lua_axis_ui_Scale9Sprite_setSpriteFrame(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::SpriteFrame* arg0;
-        axis::Rect arg1;
+        ax::SpriteFrame* arg0;
+        ax::Rect arg1;
 
-        ok &= luaval_to_object<axis::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "axui.Scale9Sprite:setSpriteFrame");
+        ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "axui.Scale9Sprite:setSpriteFrame");
 
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:setSpriteFrame");
         if(!ok)
@@ -32037,7 +32037,7 @@ int lua_axis_ui_Scale9Sprite_setSpriteFrame(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getState(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32049,7 +32049,7 @@ int lua_axis_ui_Scale9Sprite_getState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32084,7 +32084,7 @@ int lua_axis_ui_Scale9Sprite_getState(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getInsetBottom(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32096,7 +32096,7 @@ int lua_axis_ui_Scale9Sprite_getInsetBottom(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32131,7 +32131,7 @@ int lua_axis_ui_Scale9Sprite_getInsetBottom(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32143,7 +32143,7 @@ int lua_axis_ui_Scale9Sprite_setScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32181,7 +32181,7 @@ int lua_axis_ui_Scale9Sprite_setScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_isScale9Enabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32193,7 +32193,7 @@ int lua_axis_ui_Scale9Sprite_isScale9Enabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32228,7 +32228,7 @@ int lua_axis_ui_Scale9Sprite_isScale9Enabled(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_resetRender(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32240,7 +32240,7 @@ int lua_axis_ui_Scale9Sprite_resetRender(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32275,7 +32275,7 @@ int lua_axis_ui_Scale9Sprite_resetRender(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getRenderingType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32287,7 +32287,7 @@ int lua_axis_ui_Scale9Sprite_getRenderingType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32322,7 +32322,7 @@ int lua_axis_ui_Scale9Sprite_getRenderingType(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getInsetRight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32334,7 +32334,7 @@ int lua_axis_ui_Scale9Sprite_getInsetRight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32369,7 +32369,7 @@ int lua_axis_ui_Scale9Sprite_getInsetRight(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getOriginalSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32381,7 +32381,7 @@ int lua_axis_ui_Scale9Sprite_getOriginalSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32399,7 +32399,7 @@ int lua_axis_ui_Scale9Sprite_getOriginalSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Scale9Sprite_getOriginalSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getOriginalSize();
+        ax::Vec2 ret = cobj->getOriginalSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -32416,7 +32416,7 @@ int lua_axis_ui_Scale9Sprite_getOriginalSize(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_initWithFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -32425,7 +32425,7 @@ int lua_axis_ui_Scale9Sprite_initWithFile(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -32436,7 +32436,7 @@ int lua_axis_ui_Scale9Sprite_initWithFile(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            axis::Rect arg0;
+            ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Scale9Sprite:initWithFile");
 
             if (!ok) { break; }
@@ -32456,11 +32456,11 @@ int lua_axis_ui_Scale9Sprite_initWithFile(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Scale9Sprite:initWithFile");
 
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:initWithFile");
 
             if (!ok) { break; }
-            axis::Rect arg2;
+            ax::Rect arg2;
             ok &= luaval_to_rect(tolua_S, 4, &arg2, "axui.Scale9Sprite:initWithFile");
 
             if (!ok) { break; }
@@ -32483,7 +32483,7 @@ int lua_axis_ui_Scale9Sprite_initWithFile(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getInsetTop(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32495,7 +32495,7 @@ int lua_axis_ui_Scale9Sprite_getInsetTop(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32530,7 +32530,7 @@ int lua_axis_ui_Scale9Sprite_getInsetTop(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setInsetLeft(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32542,7 +32542,7 @@ int lua_axis_ui_Scale9Sprite_setInsetLeft(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32580,7 +32580,7 @@ int lua_axis_ui_Scale9Sprite_setInsetLeft(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_initWithSpriteFrame(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32592,7 +32592,7 @@ int lua_axis_ui_Scale9Sprite_initWithSpriteFrame(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32605,10 +32605,10 @@ int lua_axis_ui_Scale9Sprite_initWithSpriteFrame(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::SpriteFrame* arg0;
-        axis::Rect arg1;
+        ax::SpriteFrame* arg0;
+        ax::Rect arg1;
 
-        ok &= luaval_to_object<axis::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "axui.Scale9Sprite:initWithSpriteFrame");
+        ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "axui.Scale9Sprite:initWithSpriteFrame");
 
         ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:initWithSpriteFrame");
         if(!ok)
@@ -32633,7 +32633,7 @@ int lua_axis_ui_Scale9Sprite_initWithSpriteFrame(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getPreferredSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32645,7 +32645,7 @@ int lua_axis_ui_Scale9Sprite_getPreferredSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32663,7 +32663,7 @@ int lua_axis_ui_Scale9Sprite_getPreferredSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Scale9Sprite_getPreferredSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getPreferredSize();
+        ax::Vec2 ret = cobj->getPreferredSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -32680,7 +32680,7 @@ int lua_axis_ui_Scale9Sprite_getPreferredSize(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32692,7 +32692,7 @@ int lua_axis_ui_Scale9Sprite_setCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32705,7 +32705,7 @@ int lua_axis_ui_Scale9Sprite_setCapInsets(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Scale9Sprite:setCapInsets");
         if(!ok)
@@ -32730,7 +32730,7 @@ int lua_axis_ui_Scale9Sprite_setCapInsets(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_getInsetLeft(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32742,7 +32742,7 @@ int lua_axis_ui_Scale9Sprite_getInsetLeft(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32777,7 +32777,7 @@ int lua_axis_ui_Scale9Sprite_getInsetLeft(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_setInsetRight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -32789,7 +32789,7 @@ int lua_axis_ui_Scale9Sprite_setInsetRight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.Scale9Sprite",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::Scale9Sprite*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -32845,14 +32845,14 @@ int lua_axis_ui_Scale9Sprite_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Scale9Sprite:create");
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:create");
             if (!ok) { break; }
-            axis::Rect arg2;
+            ax::Rect arg2;
             ok &= luaval_to_rect(tolua_S, 4, &arg2, "axui.Scale9Sprite:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -32861,8 +32861,8 @@ int lua_axis_ui_Scale9Sprite_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::create();
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::create();
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -32871,14 +32871,14 @@ int lua_axis_ui_Scale9Sprite_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            axis::Rect arg0;
+            ax::Rect arg0;
             ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.Scale9Sprite:create");
             if (!ok) { break; }
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.Scale9Sprite:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::create(arg0, arg1);
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::create(arg0, arg1);
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -32890,11 +32890,11 @@ int lua_axis_ui_Scale9Sprite_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Scale9Sprite:create");
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::create(arg0, arg1);
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::create(arg0, arg1);
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -32906,8 +32906,8 @@ int lua_axis_ui_Scale9Sprite_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Scale9Sprite:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::create(arg0);
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::create(arg0);
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -32941,11 +32941,11 @@ int lua_axis_ui_Scale9Sprite_createWithSpriteFrameName(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Scale9Sprite:createWithSpriteFrameName");
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:createWithSpriteFrameName");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::createWithSpriteFrameName(arg0, arg1);
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::createWithSpriteFrameName(arg0, arg1);
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -32957,8 +32957,8 @@ int lua_axis_ui_Scale9Sprite_createWithSpriteFrameName(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.Scale9Sprite:createWithSpriteFrameName");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::createWithSpriteFrameName(arg0);
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::createWithSpriteFrameName(arg0);
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -32989,14 +32989,14 @@ int lua_axis_ui_Scale9Sprite_createWithSpriteFrame(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            axis::SpriteFrame* arg0;
-            ok &= luaval_to_object<axis::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "axui.Scale9Sprite:createWithSpriteFrame");
+            ax::SpriteFrame* arg0;
+            ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "axui.Scale9Sprite:createWithSpriteFrame");
             if (!ok) { break; }
-            axis::Rect arg1;
+            ax::Rect arg1;
             ok &= luaval_to_rect(tolua_S, 3, &arg1, "axui.Scale9Sprite:createWithSpriteFrame");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::createWithSpriteFrame(arg0, arg1);
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::createWithSpriteFrame(arg0, arg1);
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -33005,11 +33005,11 @@ int lua_axis_ui_Scale9Sprite_createWithSpriteFrame(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::SpriteFrame* arg0;
-            ok &= luaval_to_object<axis::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "axui.Scale9Sprite:createWithSpriteFrame");
+            ax::SpriteFrame* arg0;
+            ok &= luaval_to_object<ax::SpriteFrame>(tolua_S, 2, "ax.SpriteFrame",&arg0, "axui.Scale9Sprite:createWithSpriteFrame");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* ret = axis::ui::Scale9Sprite::createWithSpriteFrame(arg0);
-            object_to_luaval<axis::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(axis::ui::Scale9Sprite*)ret);
+            ax::ui::Scale9Sprite* ret = ax::ui::Scale9Sprite::createWithSpriteFrame(arg0);
+            object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
             return 1;
         }
     } while (0);
@@ -33025,7 +33025,7 @@ int lua_axis_ui_Scale9Sprite_createWithSpriteFrame(lua_State* tolua_S)
 int lua_axis_ui_Scale9Sprite_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::Scale9Sprite* cobj = nullptr;
+    ax::ui::Scale9Sprite* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33042,7 +33042,7 @@ int lua_axis_ui_Scale9Sprite_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_Scale9Sprite_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::Scale9Sprite();
+        cobj = new ax::ui::Scale9Sprite();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -33105,7 +33105,7 @@ int lua_register_axis_ui_Scale9Sprite(lua_State* tolua_S)
         tolua_function(tolua_S,"createWithSpriteFrameName", lua_axis_ui_Scale9Sprite_createWithSpriteFrameName);
         tolua_function(tolua_S,"createWithSpriteFrame", lua_axis_ui_Scale9Sprite_createWithSpriteFrame);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::Scale9Sprite).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::Scale9Sprite).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.Scale9Sprite";
     g_typeCast[typeName] = "axui.Scale9Sprite";
     return 1;
@@ -33114,7 +33114,7 @@ int lua_register_axis_ui_Scale9Sprite(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33126,7 +33126,7 @@ int lua_axis_ui_EditBox_getFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33161,7 +33161,7 @@ int lua_axis_ui_EditBox_getFontSize(lua_State* tolua_S)
 int lua_axis_ui_EditBox_keyboardDidShow(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33173,7 +33173,7 @@ int lua_axis_ui_EditBox_keyboardDidShow(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33186,7 +33186,7 @@ int lua_axis_ui_EditBox_keyboardDidShow(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::IMEKeyboardNotificationInfo arg0;
+        ax::IMEKeyboardNotificationInfo arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR IMEKeyboardNotificationInfo
 		ok = false;
@@ -33212,7 +33212,7 @@ int lua_axis_ui_EditBox_keyboardDidShow(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setMaxLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33224,7 +33224,7 @@ int lua_axis_ui_EditBox_setMaxLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33262,7 +33262,7 @@ int lua_axis_ui_EditBox_setMaxLength(lua_State* tolua_S)
 int lua_axis_ui_EditBox_openKeyboard(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33274,7 +33274,7 @@ int lua_axis_ui_EditBox_openKeyboard(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33309,7 +33309,7 @@ int lua_axis_ui_EditBox_openKeyboard(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33321,7 +33321,7 @@ int lua_axis_ui_EditBox_setFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33359,7 +33359,7 @@ int lua_axis_ui_EditBox_setFontSize(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33371,7 +33371,7 @@ int lua_axis_ui_EditBox_getText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33406,7 +33406,7 @@ int lua_axis_ui_EditBox_getText(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getInputMode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33418,7 +33418,7 @@ int lua_axis_ui_EditBox_getInputMode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33453,7 +33453,7 @@ int lua_axis_ui_EditBox_getInputMode(lua_State* tolua_S)
 int lua_axis_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -33462,7 +33462,7 @@ int lua_axis_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -33473,12 +33473,12 @@ int lua_axis_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg1;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:initWithSizeAndBackgroundSprite");
+            ax::ui::Scale9Sprite* arg1;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
             bool ret = cobj->initWithSizeAndBackgroundSprite(arg0, arg1);
@@ -33489,7 +33489,7 @@ int lua_axis_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 2) {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
@@ -33505,7 +33505,7 @@ int lua_axis_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 3) {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
@@ -33513,7 +33513,7 @@ int lua_axis_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg2;
+            ax::ui::Widget::TextureResType arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
@@ -33525,20 +33525,20 @@ int lua_axis_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 4) {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg1;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:initWithSizeAndBackgroundSprite");
+            ax::ui::Scale9Sprite* arg1;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg2;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 4, "axui.Scale9Sprite",&arg2, "axui.EditBox:initWithSizeAndBackgroundSprite");
+            ax::ui::Scale9Sprite* arg2;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 4, "axui.Scale9Sprite",&arg2, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg3;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 5, "axui.Scale9Sprite",&arg3, "axui.EditBox:initWithSizeAndBackgroundSprite");
+            ax::ui::Scale9Sprite* arg3;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 5, "axui.Scale9Sprite",&arg3, "axui.EditBox:initWithSizeAndBackgroundSprite");
 
             if (!ok) { break; }
             bool ret = cobj->initWithSizeAndBackgroundSprite(arg0, arg1, arg2, arg3);
@@ -33560,7 +33560,7 @@ int lua_axis_ui_EditBox_initWithSizeAndBackgroundSprite(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getPlaceholderFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33572,7 +33572,7 @@ int lua_axis_ui_EditBox_getPlaceholderFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33607,7 +33607,7 @@ int lua_axis_ui_EditBox_getPlaceholderFontName(lua_State* tolua_S)
 int lua_axis_ui_EditBox_keyboardDidHide(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33619,7 +33619,7 @@ int lua_axis_ui_EditBox_keyboardDidHide(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33632,7 +33632,7 @@ int lua_axis_ui_EditBox_keyboardDidHide(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::IMEKeyboardNotificationInfo arg0;
+        ax::IMEKeyboardNotificationInfo arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR IMEKeyboardNotificationInfo
 		ok = false;
@@ -33658,7 +33658,7 @@ int lua_axis_ui_EditBox_keyboardDidHide(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setPlaceholderFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33670,7 +33670,7 @@ int lua_axis_ui_EditBox_setPlaceholderFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33708,7 +33708,7 @@ int lua_axis_ui_EditBox_setPlaceholderFontName(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getPlaceholderFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33720,7 +33720,7 @@ int lua_axis_ui_EditBox_getPlaceholderFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33755,7 +33755,7 @@ int lua_axis_ui_EditBox_getPlaceholderFontSize(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getCapInsetsDisabledRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33767,7 +33767,7 @@ int lua_axis_ui_EditBox_getCapInsetsDisabledRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33785,7 +33785,7 @@ int lua_axis_ui_EditBox_getCapInsetsDisabledRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_EditBox_getCapInsetsDisabledRenderer'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsetsDisabledRenderer();
+        const ax::Rect& ret = cobj->getCapInsetsDisabledRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -33802,7 +33802,7 @@ int lua_axis_ui_EditBox_getCapInsetsDisabledRenderer(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getPlaceHolder(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33814,7 +33814,7 @@ int lua_axis_ui_EditBox_getPlaceHolder(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33849,7 +33849,7 @@ int lua_axis_ui_EditBox_getPlaceHolder(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33861,7 +33861,7 @@ int lua_axis_ui_EditBox_setFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33899,7 +33899,7 @@ int lua_axis_ui_EditBox_setFontName(lua_State* tolua_S)
 int lua_axis_ui_EditBox_registerScriptEditBoxHandler(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33911,7 +33911,7 @@ int lua_axis_ui_EditBox_registerScriptEditBoxHandler(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33949,7 +33949,7 @@ int lua_axis_ui_EditBox_registerScriptEditBoxHandler(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setCapInsetsDisabledRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -33961,7 +33961,7 @@ int lua_axis_ui_EditBox_setCapInsetsDisabledRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -33974,7 +33974,7 @@ int lua_axis_ui_EditBox_setCapInsetsDisabledRenderer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.EditBox:setCapInsetsDisabledRenderer");
         if(!ok)
@@ -33999,7 +33999,7 @@ int lua_axis_ui_EditBox_setCapInsetsDisabledRenderer(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setPlaceholderFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34011,7 +34011,7 @@ int lua_axis_ui_EditBox_setPlaceholderFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34049,7 +34049,7 @@ int lua_axis_ui_EditBox_setPlaceholderFontSize(lua_State* tolua_S)
 int lua_axis_ui_EditBox_loadTextureDisabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34061,7 +34061,7 @@ int lua_axis_ui_EditBox_loadTextureDisabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34089,7 +34089,7 @@ int lua_axis_ui_EditBox_loadTextureDisabled(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:loadTextureDisabled");
 
@@ -34116,7 +34116,7 @@ int lua_axis_ui_EditBox_loadTextureDisabled(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setInputMode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34128,7 +34128,7 @@ int lua_axis_ui_EditBox_setInputMode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34141,7 +34141,7 @@ int lua_axis_ui_EditBox_setInputMode(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::EditBox::InputMode arg0;
+        ax::ui::EditBox::InputMode arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setInputMode");
         if(!ok)
@@ -34166,7 +34166,7 @@ int lua_axis_ui_EditBox_setInputMode(lua_State* tolua_S)
 int lua_axis_ui_EditBox_unregisterScriptEditBoxHandler(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34178,7 +34178,7 @@ int lua_axis_ui_EditBox_unregisterScriptEditBoxHandler(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34213,7 +34213,7 @@ int lua_axis_ui_EditBox_unregisterScriptEditBoxHandler(lua_State* tolua_S)
 int lua_axis_ui_EditBox_keyboardWillShow(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34225,7 +34225,7 @@ int lua_axis_ui_EditBox_keyboardWillShow(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34238,7 +34238,7 @@ int lua_axis_ui_EditBox_keyboardWillShow(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::IMEKeyboardNotificationInfo arg0;
+        ax::IMEKeyboardNotificationInfo arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR IMEKeyboardNotificationInfo
 		ok = false;
@@ -34264,7 +34264,7 @@ int lua_axis_ui_EditBox_keyboardWillShow(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setPlaceholderFontColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -34273,7 +34273,7 @@ int lua_axis_ui_EditBox_setPlaceholderFontColor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -34284,7 +34284,7 @@ int lua_axis_ui_EditBox_setPlaceholderFontColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::Color4B arg0;
+            ax::Color4B arg0;
             ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.EditBox:setPlaceholderFontColor");
 
             if (!ok) { break; }
@@ -34296,7 +34296,7 @@ int lua_axis_ui_EditBox_setPlaceholderFontColor(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::Color3B arg0;
+            ax::Color3B arg0;
             ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.EditBox:setPlaceholderFontColor");
 
             if (!ok) { break; }
@@ -34319,7 +34319,7 @@ int lua_axis_ui_EditBox_setPlaceholderFontColor(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getReturnType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34331,7 +34331,7 @@ int lua_axis_ui_EditBox_getReturnType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34366,7 +34366,7 @@ int lua_axis_ui_EditBox_getReturnType(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setFontColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -34375,7 +34375,7 @@ int lua_axis_ui_EditBox_setFontColor(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -34386,7 +34386,7 @@ int lua_axis_ui_EditBox_setFontColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::Color4B arg0;
+            ax::Color4B arg0;
             ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.EditBox:setFontColor");
 
             if (!ok) { break; }
@@ -34398,7 +34398,7 @@ int lua_axis_ui_EditBox_setFontColor(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::Color3B arg0;
+            ax::Color3B arg0;
             ok &= luaval_to_color3b(tolua_S, 2, &arg0, "axui.EditBox:setFontColor");
 
             if (!ok) { break; }
@@ -34421,7 +34421,7 @@ int lua_axis_ui_EditBox_setFontColor(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34433,7 +34433,7 @@ int lua_axis_ui_EditBox_getFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34468,7 +34468,7 @@ int lua_axis_ui_EditBox_getFontName(lua_State* tolua_S)
 int lua_axis_ui_EditBox_keyboardWillHide(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34480,7 +34480,7 @@ int lua_axis_ui_EditBox_keyboardWillHide(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34493,7 +34493,7 @@ int lua_axis_ui_EditBox_keyboardWillHide(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::IMEKeyboardNotificationInfo arg0;
+        ax::IMEKeyboardNotificationInfo arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR IMEKeyboardNotificationInfo
 		ok = false;
@@ -34519,7 +34519,7 @@ int lua_axis_ui_EditBox_keyboardWillHide(lua_State* tolua_S)
 int lua_axis_ui_EditBox_closeKeyboard(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34531,7 +34531,7 @@ int lua_axis_ui_EditBox_closeKeyboard(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34566,7 +34566,7 @@ int lua_axis_ui_EditBox_closeKeyboard(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setCapInsetsNormalRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34578,7 +34578,7 @@ int lua_axis_ui_EditBox_setCapInsetsNormalRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34591,7 +34591,7 @@ int lua_axis_ui_EditBox_setCapInsetsNormalRenderer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.EditBox:setCapInsetsNormalRenderer");
         if(!ok)
@@ -34616,7 +34616,7 @@ int lua_axis_ui_EditBox_setCapInsetsNormalRenderer(lua_State* tolua_S)
 int lua_axis_ui_EditBox_loadTexturePressed(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34628,7 +34628,7 @@ int lua_axis_ui_EditBox_loadTexturePressed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34656,7 +34656,7 @@ int lua_axis_ui_EditBox_loadTexturePressed(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:loadTexturePressed");
 
@@ -34683,7 +34683,7 @@ int lua_axis_ui_EditBox_loadTexturePressed(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getFontColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34695,7 +34695,7 @@ int lua_axis_ui_EditBox_getFontColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34713,7 +34713,7 @@ int lua_axis_ui_EditBox_getFontColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_EditBox_getFontColor'", nullptr);
             return 0;
         }
-        const axis::Color4B& ret = cobj->getFontColor();
+        const ax::Color4B& ret = cobj->getFontColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -34730,7 +34730,7 @@ int lua_axis_ui_EditBox_getFontColor(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getInputFlag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34742,7 +34742,7 @@ int lua_axis_ui_EditBox_getInputFlag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34777,7 +34777,7 @@ int lua_axis_ui_EditBox_getInputFlag(lua_State* tolua_S)
 int lua_axis_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34789,7 +34789,7 @@ int lua_axis_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34802,7 +34802,7 @@ int lua_axis_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::Size arg0;
+        ax::Size arg0;
         std::string_view arg1;
 
         ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndTexture");
@@ -34819,7 +34819,7 @@ int lua_axis_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
     }
     if (argc == 3) 
     {
-        axis::Size arg0;
+        ax::Size arg0;
         std::string_view arg1;
         std::string_view arg2;
 
@@ -34839,7 +34839,7 @@ int lua_axis_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
     }
     if (argc == 4) 
     {
-        axis::Size arg0;
+        ax::Size arg0;
         std::string_view arg1;
         std::string_view arg2;
         std::string_view arg3;
@@ -34862,11 +34862,11 @@ int lua_axis_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
     }
     if (argc == 5) 
     {
-        axis::Size arg0;
+        ax::Size arg0;
         std::string_view arg1;
         std::string_view arg2;
         std::string_view arg3;
-        axis::ui::Widget::TextureResType arg4;
+        ax::ui::Widget::TextureResType arg4;
 
         ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:initWithSizeAndTexture");
 
@@ -34899,7 +34899,7 @@ int lua_axis_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getTextHorizontalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34911,7 +34911,7 @@ int lua_axis_ui_EditBox_getTextHorizontalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34946,7 +34946,7 @@ int lua_axis_ui_EditBox_getTextHorizontalAlignment(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getCapInsetsNormalRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -34958,7 +34958,7 @@ int lua_axis_ui_EditBox_getCapInsetsNormalRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -34976,7 +34976,7 @@ int lua_axis_ui_EditBox_getCapInsetsNormalRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_EditBox_getCapInsetsNormalRenderer'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsetsNormalRenderer();
+        const ax::Rect& ret = cobj->getCapInsetsNormalRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -34993,7 +34993,7 @@ int lua_axis_ui_EditBox_getCapInsetsNormalRenderer(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getCapInsetsPressedRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35005,7 +35005,7 @@ int lua_axis_ui_EditBox_getCapInsetsPressedRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35023,7 +35023,7 @@ int lua_axis_ui_EditBox_getCapInsetsPressedRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_EditBox_getCapInsetsPressedRenderer'", nullptr);
             return 0;
         }
-        const axis::Rect& ret = cobj->getCapInsetsPressedRenderer();
+        const ax::Rect& ret = cobj->getCapInsetsPressedRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -35040,7 +35040,7 @@ int lua_axis_ui_EditBox_getCapInsetsPressedRenderer(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getScriptEditBoxHandler(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35052,7 +35052,7 @@ int lua_axis_ui_EditBox_getScriptEditBoxHandler(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35087,7 +35087,7 @@ int lua_axis_ui_EditBox_getScriptEditBoxHandler(lua_State* tolua_S)
 int lua_axis_ui_EditBox_loadTextures(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35099,7 +35099,7 @@ int lua_axis_ui_EditBox_loadTextures(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35152,7 +35152,7 @@ int lua_axis_ui_EditBox_loadTextures(lua_State* tolua_S)
         std::string_view arg0;
         std::string_view arg1;
         std::string_view arg2;
-        axis::ui::Widget::TextureResType arg3;
+        ax::ui::Widget::TextureResType arg3;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:loadTextures");
 
@@ -35183,7 +35183,7 @@ int lua_axis_ui_EditBox_loadTextures(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setPlaceHolder(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35195,7 +35195,7 @@ int lua_axis_ui_EditBox_setPlaceHolder(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35233,7 +35233,7 @@ int lua_axis_ui_EditBox_setPlaceHolder(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setInputFlag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35245,7 +35245,7 @@ int lua_axis_ui_EditBox_setInputFlag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35258,7 +35258,7 @@ int lua_axis_ui_EditBox_setInputFlag(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::EditBox::InputFlag arg0;
+        ax::ui::EditBox::InputFlag arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setInputFlag");
         if(!ok)
@@ -35283,7 +35283,7 @@ int lua_axis_ui_EditBox_setInputFlag(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setReturnType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35295,7 +35295,7 @@ int lua_axis_ui_EditBox_setReturnType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35308,7 +35308,7 @@ int lua_axis_ui_EditBox_setReturnType(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::EditBox::KeyboardReturnType arg0;
+        ax::ui::EditBox::KeyboardReturnType arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setReturnType");
         if(!ok)
@@ -35333,7 +35333,7 @@ int lua_axis_ui_EditBox_setReturnType(lua_State* tolua_S)
 int lua_axis_ui_EditBox_loadTextureNormal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35345,7 +35345,7 @@ int lua_axis_ui_EditBox_loadTextureNormal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35373,7 +35373,7 @@ int lua_axis_ui_EditBox_loadTextureNormal(lua_State* tolua_S)
     if (argc == 2) 
     {
         std::string_view arg0;
-        axis::ui::Widget::TextureResType arg1;
+        ax::ui::Widget::TextureResType arg1;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.EditBox:loadTextureNormal");
 
@@ -35400,7 +35400,7 @@ int lua_axis_ui_EditBox_loadTextureNormal(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getMaxLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35412,7 +35412,7 @@ int lua_axis_ui_EditBox_getMaxLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35447,7 +35447,7 @@ int lua_axis_ui_EditBox_getMaxLength(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setCapInsetsPressedRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35459,7 +35459,7 @@ int lua_axis_ui_EditBox_setCapInsetsPressedRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35472,7 +35472,7 @@ int lua_axis_ui_EditBox_setCapInsetsPressedRenderer(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.EditBox:setCapInsetsPressedRenderer");
         if(!ok)
@@ -35497,7 +35497,7 @@ int lua_axis_ui_EditBox_setCapInsetsPressedRenderer(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35509,7 +35509,7 @@ int lua_axis_ui_EditBox_setText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35547,7 +35547,7 @@ int lua_axis_ui_EditBox_setText(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setPlaceholderFont(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35559,7 +35559,7 @@ int lua_axis_ui_EditBox_setPlaceholderFont(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35600,7 +35600,7 @@ int lua_axis_ui_EditBox_setPlaceholderFont(lua_State* tolua_S)
 int lua_axis_ui_EditBox_getPlaceholderFontColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35612,7 +35612,7 @@ int lua_axis_ui_EditBox_getPlaceholderFontColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35630,7 +35630,7 @@ int lua_axis_ui_EditBox_getPlaceholderFontColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_EditBox_getPlaceholderFontColor'", nullptr);
             return 0;
         }
-        const axis::Color4B& ret = cobj->getPlaceholderFontColor();
+        const ax::Color4B& ret = cobj->getPlaceholderFontColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -35647,7 +35647,7 @@ int lua_axis_ui_EditBox_getPlaceholderFontColor(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setCapInsets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35659,7 +35659,7 @@ int lua_axis_ui_EditBox_setCapInsets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35672,7 +35672,7 @@ int lua_axis_ui_EditBox_setCapInsets(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Rect arg0;
+        ax::Rect arg0;
 
         ok &= luaval_to_rect(tolua_S, 2, &arg0, "axui.EditBox:setCapInsets");
         if(!ok)
@@ -35697,7 +35697,7 @@ int lua_axis_ui_EditBox_setCapInsets(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setFont(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35709,7 +35709,7 @@ int lua_axis_ui_EditBox_setFont(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35750,7 +35750,7 @@ int lua_axis_ui_EditBox_setFont(lua_State* tolua_S)
 int lua_axis_ui_EditBox_setTextHorizontalAlignment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35762,7 +35762,7 @@ int lua_axis_ui_EditBox_setTextHorizontalAlignment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.EditBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::EditBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -35775,7 +35775,7 @@ int lua_axis_ui_EditBox_setTextHorizontalAlignment(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::TextHAlignment arg0;
+        ax::TextHAlignment arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.EditBox:setTextHorizontalAlignment");
         if(!ok)
@@ -35815,17 +35815,17 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:create");
             if (!ok) { break; }
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg2;
+            ax::ui::Widget::TextureResType arg2;
             ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::EditBox* ret = axis::ui::EditBox::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::EditBox>(tolua_S, "axui.EditBox",(axis::ui::EditBox*)ret);
+            ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
             return 1;
         }
     } while (0);
@@ -35834,14 +35834,14 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg1;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:create");
+            ax::ui::Scale9Sprite* arg1;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::EditBox* ret = axis::ui::EditBox::create(arg0, arg1);
-            object_to_luaval<axis::ui::EditBox>(tolua_S, "axui.EditBox",(axis::ui::EditBox*)ret);
+            ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1);
+            object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
             return 1;
         }
     } while (0);
@@ -35850,17 +35850,17 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg1;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:create");
+            ax::ui::Scale9Sprite* arg1;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg2;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 4, "axui.Scale9Sprite",&arg2, "axui.EditBox:create");
+            ax::ui::Scale9Sprite* arg2;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 4, "axui.Scale9Sprite",&arg2, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::EditBox* ret = axis::ui::EditBox::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::EditBox>(tolua_S, "axui.EditBox",(axis::ui::EditBox*)ret);
+            ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
             return 1;
         }
     } while (0);
@@ -35869,20 +35869,20 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
     {
         if (argc == 4)
         {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg1;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:create");
+            ax::ui::Scale9Sprite* arg1;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 3, "axui.Scale9Sprite",&arg1, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg2;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 4, "axui.Scale9Sprite",&arg2, "axui.EditBox:create");
+            ax::ui::Scale9Sprite* arg2;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 4, "axui.Scale9Sprite",&arg2, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::Scale9Sprite* arg3;
-            ok &= luaval_to_object<axis::ui::Scale9Sprite>(tolua_S, 5, "axui.Scale9Sprite",&arg3, "axui.EditBox:create");
+            ax::ui::Scale9Sprite* arg3;
+            ok &= luaval_to_object<ax::ui::Scale9Sprite>(tolua_S, 5, "axui.Scale9Sprite",&arg3, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::EditBox* ret = axis::ui::EditBox::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<axis::ui::EditBox>(tolua_S, "axui.EditBox",(axis::ui::EditBox*)ret);
+            ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
             return 1;
         }
     } while (0);
@@ -35891,14 +35891,14 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:create");
             if (!ok) { break; }
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::EditBox* ret = axis::ui::EditBox::create(arg0, arg1);
-            object_to_luaval<axis::ui::EditBox>(tolua_S, "axui.EditBox",(axis::ui::EditBox*)ret);
+            ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1);
+            object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
             return 1;
         }
     } while (0);
@@ -35907,7 +35907,7 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:create");
             if (!ok) { break; }
             std::string_view arg1;
@@ -35916,8 +35916,8 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
             std::string_view arg2;
             ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::EditBox* ret = axis::ui::EditBox::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::EditBox>(tolua_S, "axui.EditBox",(axis::ui::EditBox*)ret);
+            ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
             return 1;
         }
     } while (0);
@@ -35926,7 +35926,7 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
     {
         if (argc == 4)
         {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:create");
             if (!ok) { break; }
             std::string_view arg1;
@@ -35938,8 +35938,8 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
             std::string_view arg3;
             ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::EditBox* ret = axis::ui::EditBox::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<axis::ui::EditBox>(tolua_S, "axui.EditBox",(axis::ui::EditBox*)ret);
+            ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
             return 1;
         }
     } while (0);
@@ -35948,7 +35948,7 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
     {
         if (argc == 5)
         {
-            axis::Size arg0;
+            ax::Size arg0;
             ok &= luaval_to_size(tolua_S, 2, &arg0, "axui.EditBox:create");
             if (!ok) { break; }
             std::string_view arg1;
@@ -35960,11 +35960,11 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
             std::string_view arg3;
             ok &= luaval_to_std_string_view(tolua_S, 5,&arg3, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg4;
+            ax::ui::Widget::TextureResType arg4;
             ok &= luaval_to_int32(tolua_S, 6,(int *)&arg4, "axui.EditBox:create");
             if (!ok) { break; }
-            axis::ui::EditBox* ret = axis::ui::EditBox::create(arg0, arg1, arg2, arg3, arg4);
-            object_to_luaval<axis::ui::EditBox>(tolua_S, "axui.EditBox",(axis::ui::EditBox*)ret);
+            ax::ui::EditBox* ret = ax::ui::EditBox::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<ax::ui::EditBox>(tolua_S, "axui.EditBox",(ax::ui::EditBox*)ret);
             return 1;
         }
     } while (0);
@@ -35980,7 +35980,7 @@ int lua_axis_ui_EditBox_create(lua_State* tolua_S)
 int lua_axis_ui_EditBox_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::EditBox* cobj = nullptr;
+    ax::ui::EditBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -35997,7 +35997,7 @@ int lua_axis_ui_EditBox_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_EditBox_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::EditBox();
+        cobj = new ax::ui::EditBox();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -36079,7 +36079,7 @@ int lua_register_axis_ui_EditBox(lua_State* tolua_S)
         tolua_function(tolua_S,"setTextHorizontalAlignment",lua_axis_ui_EditBox_setTextHorizontalAlignment);
         tolua_function(tolua_S,"create", lua_axis_ui_EditBox_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::EditBox).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::EditBox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.EditBox";
     g_typeCast[typeName] = "axui.EditBox";
     return 1;
@@ -36088,7 +36088,7 @@ int lua_register_axis_ui_EditBox(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setStretchWidthEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36100,7 +36100,7 @@ int lua_axis_ui_LayoutComponent_setStretchWidthEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36138,7 +36138,7 @@ int lua_axis_ui_LayoutComponent_setStretchWidthEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPercentWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36150,7 +36150,7 @@ int lua_axis_ui_LayoutComponent_setPercentWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36188,7 +36188,7 @@ int lua_axis_ui_LayoutComponent_setPercentWidth(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getAnchorPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36200,7 +36200,7 @@ int lua_axis_ui_LayoutComponent_getAnchorPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36218,7 +36218,7 @@ int lua_axis_ui_LayoutComponent_getAnchorPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutComponent_getAnchorPosition'", nullptr);
             return 0;
         }
-        const axis::Point& ret = cobj->getAnchorPosition();
+        const ax::Point& ret = cobj->getAnchorPosition();
         point_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -36235,7 +36235,7 @@ int lua_axis_ui_LayoutComponent_getAnchorPosition(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPositionPercentXEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36247,7 +36247,7 @@ int lua_axis_ui_LayoutComponent_setPositionPercentXEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36285,7 +36285,7 @@ int lua_axis_ui_LayoutComponent_setPositionPercentXEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setStretchHeightEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36297,7 +36297,7 @@ int lua_axis_ui_LayoutComponent_setStretchHeightEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36335,7 +36335,7 @@ int lua_axis_ui_LayoutComponent_setStretchHeightEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setActiveEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36347,7 +36347,7 @@ int lua_axis_ui_LayoutComponent_setActiveEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36385,7 +36385,7 @@ int lua_axis_ui_LayoutComponent_setActiveEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getRightMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36397,7 +36397,7 @@ int lua_axis_ui_LayoutComponent_getRightMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36432,7 +36432,7 @@ int lua_axis_ui_LayoutComponent_getRightMargin(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36444,7 +36444,7 @@ int lua_axis_ui_LayoutComponent_getSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36462,7 +36462,7 @@ int lua_axis_ui_LayoutComponent_getSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutComponent_getSize'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getSize();
+        const ax::Vec2& ret = cobj->getSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -36479,7 +36479,7 @@ int lua_axis_ui_LayoutComponent_getSize(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setAnchorPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36491,7 +36491,7 @@ int lua_axis_ui_LayoutComponent_setAnchorPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36504,7 +36504,7 @@ int lua_axis_ui_LayoutComponent_setAnchorPosition(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Point arg0;
+        ax::Point arg0;
 
         ok &= luaval_to_point(tolua_S, 2, &arg0, "axui.LayoutComponent:setAnchorPosition");
         if(!ok)
@@ -36529,7 +36529,7 @@ int lua_axis_ui_LayoutComponent_setAnchorPosition(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_refreshLayout(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36541,7 +36541,7 @@ int lua_axis_ui_LayoutComponent_refreshLayout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36576,7 +36576,7 @@ int lua_axis_ui_LayoutComponent_refreshLayout(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_isPercentWidthEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36588,7 +36588,7 @@ int lua_axis_ui_LayoutComponent_isPercentWidthEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36623,7 +36623,7 @@ int lua_axis_ui_LayoutComponent_isPercentWidthEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setVerticalEdge(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36635,7 +36635,7 @@ int lua_axis_ui_LayoutComponent_setVerticalEdge(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36648,7 +36648,7 @@ int lua_axis_ui_LayoutComponent_setVerticalEdge(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::LayoutComponent::VerticalEdge arg0;
+        ax::ui::LayoutComponent::VerticalEdge arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.LayoutComponent:setVerticalEdge");
         if(!ok)
@@ -36673,7 +36673,7 @@ int lua_axis_ui_LayoutComponent_setVerticalEdge(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getTopMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36685,7 +36685,7 @@ int lua_axis_ui_LayoutComponent_getTopMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36720,7 +36720,7 @@ int lua_axis_ui_LayoutComponent_getTopMargin(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setSizeWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36732,7 +36732,7 @@ int lua_axis_ui_LayoutComponent_setSizeWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36770,7 +36770,7 @@ int lua_axis_ui_LayoutComponent_setSizeWidth(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getPercentContentSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36782,7 +36782,7 @@ int lua_axis_ui_LayoutComponent_getPercentContentSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36800,7 +36800,7 @@ int lua_axis_ui_LayoutComponent_getPercentContentSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutComponent_getPercentContentSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getPercentContentSize();
+        ax::Vec2 ret = cobj->getPercentContentSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -36817,7 +36817,7 @@ int lua_axis_ui_LayoutComponent_getPercentContentSize(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getVerticalEdge(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36829,7 +36829,7 @@ int lua_axis_ui_LayoutComponent_getVerticalEdge(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36864,7 +36864,7 @@ int lua_axis_ui_LayoutComponent_getVerticalEdge(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPercentWidthEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36876,7 +36876,7 @@ int lua_axis_ui_LayoutComponent_setPercentWidthEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36914,7 +36914,7 @@ int lua_axis_ui_LayoutComponent_setPercentWidthEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_isStretchWidthEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36926,7 +36926,7 @@ int lua_axis_ui_LayoutComponent_isStretchWidthEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -36961,7 +36961,7 @@ int lua_axis_ui_LayoutComponent_isStretchWidthEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setLeftMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -36973,7 +36973,7 @@ int lua_axis_ui_LayoutComponent_setLeftMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37011,7 +37011,7 @@ int lua_axis_ui_LayoutComponent_setLeftMargin(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getSizeWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37023,7 +37023,7 @@ int lua_axis_ui_LayoutComponent_getSizeWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37058,7 +37058,7 @@ int lua_axis_ui_LayoutComponent_getSizeWidth(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPositionPercentYEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37070,7 +37070,7 @@ int lua_axis_ui_LayoutComponent_setPositionPercentYEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37108,7 +37108,7 @@ int lua_axis_ui_LayoutComponent_setPositionPercentYEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getSizeHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37120,7 +37120,7 @@ int lua_axis_ui_LayoutComponent_getSizeHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37155,7 +37155,7 @@ int lua_axis_ui_LayoutComponent_getSizeHeight(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getPositionPercentY(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37167,7 +37167,7 @@ int lua_axis_ui_LayoutComponent_getPositionPercentY(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37202,7 +37202,7 @@ int lua_axis_ui_LayoutComponent_getPositionPercentY(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getPositionPercentX(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37214,7 +37214,7 @@ int lua_axis_ui_LayoutComponent_getPositionPercentX(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37249,7 +37249,7 @@ int lua_axis_ui_LayoutComponent_getPositionPercentX(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setTopMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37261,7 +37261,7 @@ int lua_axis_ui_LayoutComponent_setTopMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37299,7 +37299,7 @@ int lua_axis_ui_LayoutComponent_setTopMargin(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getPercentHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37311,7 +37311,7 @@ int lua_axis_ui_LayoutComponent_getPercentHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37346,7 +37346,7 @@ int lua_axis_ui_LayoutComponent_getPercentHeight(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getUsingPercentContentSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37358,7 +37358,7 @@ int lua_axis_ui_LayoutComponent_getUsingPercentContentSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37393,7 +37393,7 @@ int lua_axis_ui_LayoutComponent_getUsingPercentContentSize(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPositionPercentY(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37405,7 +37405,7 @@ int lua_axis_ui_LayoutComponent_setPositionPercentY(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37443,7 +37443,7 @@ int lua_axis_ui_LayoutComponent_setPositionPercentY(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPositionPercentX(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37455,7 +37455,7 @@ int lua_axis_ui_LayoutComponent_setPositionPercentX(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37493,7 +37493,7 @@ int lua_axis_ui_LayoutComponent_setPositionPercentX(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setRightMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37505,7 +37505,7 @@ int lua_axis_ui_LayoutComponent_setRightMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37543,7 +37543,7 @@ int lua_axis_ui_LayoutComponent_setRightMargin(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_isPositionPercentYEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37555,7 +37555,7 @@ int lua_axis_ui_LayoutComponent_isPositionPercentYEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37590,7 +37590,7 @@ int lua_axis_ui_LayoutComponent_isPositionPercentYEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPercentHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37602,7 +37602,7 @@ int lua_axis_ui_LayoutComponent_setPercentHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37640,7 +37640,7 @@ int lua_axis_ui_LayoutComponent_setPercentHeight(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPercentOnlyEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37652,7 +37652,7 @@ int lua_axis_ui_LayoutComponent_setPercentOnlyEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37690,7 +37690,7 @@ int lua_axis_ui_LayoutComponent_setPercentOnlyEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setHorizontalEdge(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37702,7 +37702,7 @@ int lua_axis_ui_LayoutComponent_setHorizontalEdge(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37715,7 +37715,7 @@ int lua_axis_ui_LayoutComponent_setHorizontalEdge(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::LayoutComponent::HorizontalEdge arg0;
+        ax::ui::LayoutComponent::HorizontalEdge arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.LayoutComponent:setHorizontalEdge");
         if(!ok)
@@ -37740,7 +37740,7 @@ int lua_axis_ui_LayoutComponent_setHorizontalEdge(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37752,7 +37752,7 @@ int lua_axis_ui_LayoutComponent_setPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37765,7 +37765,7 @@ int lua_axis_ui_LayoutComponent_setPosition(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Point arg0;
+        ax::Point arg0;
 
         ok &= luaval_to_point(tolua_S, 2, &arg0, "axui.LayoutComponent:setPosition");
         if(!ok)
@@ -37790,7 +37790,7 @@ int lua_axis_ui_LayoutComponent_setPosition(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setUsingPercentContentSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37802,7 +37802,7 @@ int lua_axis_ui_LayoutComponent_setUsingPercentContentSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37840,7 +37840,7 @@ int lua_axis_ui_LayoutComponent_setUsingPercentContentSize(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getLeftMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37852,7 +37852,7 @@ int lua_axis_ui_LayoutComponent_getLeftMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37887,7 +37887,7 @@ int lua_axis_ui_LayoutComponent_getLeftMargin(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37899,7 +37899,7 @@ int lua_axis_ui_LayoutComponent_getPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37917,7 +37917,7 @@ int lua_axis_ui_LayoutComponent_getPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutComponent_getPosition'", nullptr);
             return 0;
         }
-        const axis::Point& ret = cobj->getPosition();
+        const ax::Point& ret = cobj->getPosition();
         point_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -37934,7 +37934,7 @@ int lua_axis_ui_LayoutComponent_getPosition(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setSizeHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37946,7 +37946,7 @@ int lua_axis_ui_LayoutComponent_setSizeHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -37984,7 +37984,7 @@ int lua_axis_ui_LayoutComponent_setSizeHeight(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_isPositionPercentXEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -37996,7 +37996,7 @@ int lua_axis_ui_LayoutComponent_isPositionPercentXEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38031,7 +38031,7 @@ int lua_axis_ui_LayoutComponent_isPositionPercentXEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getBottomMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38043,7 +38043,7 @@ int lua_axis_ui_LayoutComponent_getBottomMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38078,7 +38078,7 @@ int lua_axis_ui_LayoutComponent_getBottomMargin(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPercentHeightEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38090,7 +38090,7 @@ int lua_axis_ui_LayoutComponent_setPercentHeightEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38128,7 +38128,7 @@ int lua_axis_ui_LayoutComponent_setPercentHeightEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setPercentContentSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38140,7 +38140,7 @@ int lua_axis_ui_LayoutComponent_setPercentContentSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38153,7 +38153,7 @@ int lua_axis_ui_LayoutComponent_setPercentContentSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.LayoutComponent:setPercentContentSize");
         if(!ok)
@@ -38178,7 +38178,7 @@ int lua_axis_ui_LayoutComponent_setPercentContentSize(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_isPercentHeightEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38190,7 +38190,7 @@ int lua_axis_ui_LayoutComponent_isPercentHeightEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38225,7 +38225,7 @@ int lua_axis_ui_LayoutComponent_isPercentHeightEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getPercentWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38237,7 +38237,7 @@ int lua_axis_ui_LayoutComponent_getPercentWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38272,7 +38272,7 @@ int lua_axis_ui_LayoutComponent_getPercentWidth(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_getHorizontalEdge(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38284,7 +38284,7 @@ int lua_axis_ui_LayoutComponent_getHorizontalEdge(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38319,7 +38319,7 @@ int lua_axis_ui_LayoutComponent_getHorizontalEdge(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_isStretchHeightEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38331,7 +38331,7 @@ int lua_axis_ui_LayoutComponent_isStretchHeightEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38366,7 +38366,7 @@ int lua_axis_ui_LayoutComponent_isStretchHeightEnabled(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setBottomMargin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38378,7 +38378,7 @@ int lua_axis_ui_LayoutComponent_setBottomMargin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38416,7 +38416,7 @@ int lua_axis_ui_LayoutComponent_setBottomMargin(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_setSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38428,7 +38428,7 @@ int lua_axis_ui_LayoutComponent_setSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.LayoutComponent",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::LayoutComponent*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38441,7 +38441,7 @@ int lua_axis_ui_LayoutComponent_setSize(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "axui.LayoutComponent:setSize");
         if(!ok)
@@ -38485,8 +38485,8 @@ int lua_axis_ui_LayoutComponent_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutComponent_create'", nullptr);
             return 0;
         }
-        axis::ui::LayoutComponent* ret = axis::ui::LayoutComponent::create();
-        object_to_luaval<axis::ui::LayoutComponent>(tolua_S, "axui.LayoutComponent",(axis::ui::LayoutComponent*)ret);
+        ax::ui::LayoutComponent* ret = ax::ui::LayoutComponent::create();
+        object_to_luaval<ax::ui::LayoutComponent>(tolua_S, "axui.LayoutComponent",(ax::ui::LayoutComponent*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.LayoutComponent:create",argc, 0);
@@ -38514,15 +38514,15 @@ int lua_axis_ui_LayoutComponent_bindLayoutComponent(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Node* arg0;
-        ok &= luaval_to_object<axis::Node>(tolua_S, 2, "ax.Node",&arg0, "axui.LayoutComponent:bindLayoutComponent");
+        ax::Node* arg0;
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "axui.LayoutComponent:bindLayoutComponent");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutComponent_bindLayoutComponent'", nullptr);
             return 0;
         }
-        axis::ui::LayoutComponent* ret = axis::ui::LayoutComponent::bindLayoutComponent(arg0);
-        object_to_luaval<axis::ui::LayoutComponent>(tolua_S, "axui.LayoutComponent",(axis::ui::LayoutComponent*)ret);
+        ax::ui::LayoutComponent* ret = ax::ui::LayoutComponent::bindLayoutComponent(arg0);
+        object_to_luaval<ax::ui::LayoutComponent>(tolua_S, "axui.LayoutComponent",(ax::ui::LayoutComponent*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.LayoutComponent:bindLayoutComponent",argc, 1);
@@ -38536,7 +38536,7 @@ int lua_axis_ui_LayoutComponent_bindLayoutComponent(lua_State* tolua_S)
 int lua_axis_ui_LayoutComponent_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::LayoutComponent* cobj = nullptr;
+    ax::ui::LayoutComponent* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38553,7 +38553,7 @@ int lua_axis_ui_LayoutComponent_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_LayoutComponent_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ui::LayoutComponent();
+        cobj = new ax::ui::LayoutComponent();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -38635,7 +38635,7 @@ int lua_register_axis_ui_LayoutComponent(lua_State* tolua_S)
         tolua_function(tolua_S,"create", lua_axis_ui_LayoutComponent_create);
         tolua_function(tolua_S,"bindLayoutComponent", lua_axis_ui_LayoutComponent_bindLayoutComponent);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::LayoutComponent).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::LayoutComponent).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.LayoutComponent";
     g_typeCast[typeName] = "axui.LayoutComponent";
     return 1;
@@ -38644,7 +38644,7 @@ int lua_register_axis_ui_LayoutComponent(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_getIndexInTabControl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38656,7 +38656,7 @@ int lua_axis_ui_TabHeader_getIndexInTabControl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38691,7 +38691,7 @@ int lua_axis_ui_TabHeader_getIndexInTabControl(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_getTitleText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38703,7 +38703,7 @@ int lua_axis_ui_TabHeader_getTitleText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38738,7 +38738,7 @@ int lua_axis_ui_TabHeader_getTitleText(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_setTitleFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38750,7 +38750,7 @@ int lua_axis_ui_TabHeader_setTitleFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38788,7 +38788,7 @@ int lua_axis_ui_TabHeader_setTitleFontSize(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_setTitleFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38800,7 +38800,7 @@ int lua_axis_ui_TabHeader_setTitleFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38838,7 +38838,7 @@ int lua_axis_ui_TabHeader_setTitleFontName(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_getTitleFontSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38850,7 +38850,7 @@ int lua_axis_ui_TabHeader_getTitleFontSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38885,7 +38885,7 @@ int lua_axis_ui_TabHeader_getTitleFontSize(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_getTitleFontName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38897,7 +38897,7 @@ int lua_axis_ui_TabHeader_getTitleFontName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38932,7 +38932,7 @@ int lua_axis_ui_TabHeader_getTitleFontName(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_getTitleColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38944,7 +38944,7 @@ int lua_axis_ui_TabHeader_getTitleColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -38962,7 +38962,7 @@ int lua_axis_ui_TabHeader_getTitleColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TabHeader_getTitleColor'", nullptr);
             return 0;
         }
-        const axis::Color4B& ret = cobj->getTitleColor();
+        const ax::Color4B& ret = cobj->getTitleColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -38979,7 +38979,7 @@ int lua_axis_ui_TabHeader_getTitleColor(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_getTitleRenderer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -38991,7 +38991,7 @@ int lua_axis_ui_TabHeader_getTitleRenderer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39009,8 +39009,8 @@ int lua_axis_ui_TabHeader_getTitleRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TabHeader_getTitleRenderer'", nullptr);
             return 0;
         }
-        axis::Label* ret = cobj->getTitleRenderer();
-        object_to_luaval<axis::Label>(tolua_S, "ax.Label",(axis::Label*)ret);
+        ax::Label* ret = cobj->getTitleRenderer();
+        object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabHeader:getTitleRenderer",argc, 0);
@@ -39026,7 +39026,7 @@ int lua_axis_ui_TabHeader_getTitleRenderer(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_setTitleText(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39038,7 +39038,7 @@ int lua_axis_ui_TabHeader_setTitleText(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39076,7 +39076,7 @@ int lua_axis_ui_TabHeader_setTitleText(lua_State* tolua_S)
 int lua_axis_ui_TabHeader_setTitleColor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabHeader* cobj = nullptr;
+    ax::ui::TabHeader* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39088,7 +39088,7 @@ int lua_axis_ui_TabHeader_setTitleColor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabHeader",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabHeader*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39101,7 +39101,7 @@ int lua_axis_ui_TabHeader_setTitleColor(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Color4B arg0;
+        ax::Color4B arg0;
 
         ok &=luaval_to_color4b(tolua_S, 2, &arg0, "axui.TabHeader:setTitleColor");
         if(!ok)
@@ -39150,8 +39150,8 @@ int lua_axis_ui_TabHeader_create(lua_State* tolua_S)
             std::string_view arg2;
             ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.TabHeader:create");
             if (!ok) { break; }
-            axis::ui::TabHeader* ret = axis::ui::TabHeader::create(arg0, arg1, arg2);
-            object_to_luaval<axis::ui::TabHeader>(tolua_S, "axui.TabHeader",(axis::ui::TabHeader*)ret);
+            ax::ui::TabHeader* ret = ax::ui::TabHeader::create(arg0, arg1, arg2);
+            object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
             return 1;
         }
     } while (0);
@@ -39169,11 +39169,11 @@ int lua_axis_ui_TabHeader_create(lua_State* tolua_S)
             std::string_view arg2;
             ok &= luaval_to_std_string_view(tolua_S, 4,&arg2, "axui.TabHeader:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg3;
+            ax::ui::Widget::TextureResType arg3;
             ok &= luaval_to_int32(tolua_S, 5,(int *)&arg3, "axui.TabHeader:create");
             if (!ok) { break; }
-            axis::ui::TabHeader* ret = axis::ui::TabHeader::create(arg0, arg1, arg2, arg3);
-            object_to_luaval<axis::ui::TabHeader>(tolua_S, "axui.TabHeader",(axis::ui::TabHeader*)ret);
+            ax::ui::TabHeader* ret = ax::ui::TabHeader::create(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
             return 1;
         }
     } while (0);
@@ -39182,8 +39182,8 @@ int lua_axis_ui_TabHeader_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::ui::TabHeader* ret = axis::ui::TabHeader::create();
-            object_to_luaval<axis::ui::TabHeader>(tolua_S, "axui.TabHeader",(axis::ui::TabHeader*)ret);
+            ax::ui::TabHeader* ret = ax::ui::TabHeader::create();
+            object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
             return 1;
         }
     } while (0);
@@ -39210,8 +39210,8 @@ int lua_axis_ui_TabHeader_create(lua_State* tolua_S)
             std::string_view arg5;
             ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axui.TabHeader:create");
             if (!ok) { break; }
-            axis::ui::TabHeader* ret = axis::ui::TabHeader::create(arg0, arg1, arg2, arg3, arg4, arg5);
-            object_to_luaval<axis::ui::TabHeader>(tolua_S, "axui.TabHeader",(axis::ui::TabHeader*)ret);
+            ax::ui::TabHeader* ret = ax::ui::TabHeader::create(arg0, arg1, arg2, arg3, arg4, arg5);
+            object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
             return 1;
         }
     } while (0);
@@ -39238,11 +39238,11 @@ int lua_axis_ui_TabHeader_create(lua_State* tolua_S)
             std::string_view arg5;
             ok &= luaval_to_std_string_view(tolua_S, 7,&arg5, "axui.TabHeader:create");
             if (!ok) { break; }
-            axis::ui::Widget::TextureResType arg6;
+            ax::ui::Widget::TextureResType arg6;
             ok &= luaval_to_int32(tolua_S, 8,(int *)&arg6, "axui.TabHeader:create");
             if (!ok) { break; }
-            axis::ui::TabHeader* ret = axis::ui::TabHeader::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-            object_to_luaval<axis::ui::TabHeader>(tolua_S, "axui.TabHeader",(axis::ui::TabHeader*)ret);
+            ax::ui::TabHeader* ret = ax::ui::TabHeader::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
             return 1;
         }
     } while (0);
@@ -39279,7 +39279,7 @@ int lua_register_axis_ui_TabHeader(lua_State* tolua_S)
         tolua_function(tolua_S,"setTitleColor",lua_axis_ui_TabHeader_setTitleColor);
         tolua_function(tolua_S,"create", lua_axis_ui_TabHeader_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::TabHeader).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::TabHeader).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.TabHeader";
     g_typeCast[typeName] = "axui.TabHeader";
     return 1;
@@ -39288,7 +39288,7 @@ int lua_register_axis_ui_TabHeader(lua_State* tolua_S)
 int lua_axis_ui_TabControl_setHeaderWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39300,7 +39300,7 @@ int lua_axis_ui_TabControl_setHeaderWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39338,7 +39338,7 @@ int lua_axis_ui_TabControl_setHeaderWidth(lua_State* tolua_S)
 int lua_axis_ui_TabControl_removeTab(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39350,7 +39350,7 @@ int lua_axis_ui_TabControl_removeTab(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39388,7 +39388,7 @@ int lua_axis_ui_TabControl_removeTab(lua_State* tolua_S)
 int lua_axis_ui_TabControl_getTabCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39400,7 +39400,7 @@ int lua_axis_ui_TabControl_getTabCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39435,7 +39435,7 @@ int lua_axis_ui_TabControl_getTabCount(lua_State* tolua_S)
 int lua_axis_ui_TabControl_getHeaderDockPlace(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39447,7 +39447,7 @@ int lua_axis_ui_TabControl_getHeaderDockPlace(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39482,7 +39482,7 @@ int lua_axis_ui_TabControl_getHeaderDockPlace(lua_State* tolua_S)
 int lua_axis_ui_TabControl_getSelectedTabIndex(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39494,7 +39494,7 @@ int lua_axis_ui_TabControl_getSelectedTabIndex(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39529,7 +39529,7 @@ int lua_axis_ui_TabControl_getSelectedTabIndex(lua_State* tolua_S)
 int lua_axis_ui_TabControl_insertTab(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39541,7 +39541,7 @@ int lua_axis_ui_TabControl_insertTab(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39555,14 +39555,14 @@ int lua_axis_ui_TabControl_insertTab(lua_State* tolua_S)
     if (argc == 3) 
     {
         int arg0;
-        axis::ui::TabHeader* arg1;
-        axis::ui::Layout* arg2;
+        ax::ui::TabHeader* arg1;
+        ax::ui::Layout* arg2;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TabControl:insertTab");
 
-        ok &= luaval_to_object<axis::ui::TabHeader>(tolua_S, 3, "axui.TabHeader",&arg1, "axui.TabControl:insertTab");
+        ok &= luaval_to_object<ax::ui::TabHeader>(tolua_S, 3, "axui.TabHeader",&arg1, "axui.TabControl:insertTab");
 
-        ok &= luaval_to_object<axis::ui::Layout>(tolua_S, 4, "axui.Layout",&arg2, "axui.TabControl:insertTab");
+        ok &= luaval_to_object<ax::ui::Layout>(tolua_S, 4, "axui.Layout",&arg2, "axui.TabControl:insertTab");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TabControl_insertTab'", nullptr);
@@ -39585,7 +39585,7 @@ int lua_axis_ui_TabControl_insertTab(lua_State* tolua_S)
 int lua_axis_ui_TabControl_ignoreHeadersTextureSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39597,7 +39597,7 @@ int lua_axis_ui_TabControl_ignoreHeadersTextureSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39635,7 +39635,7 @@ int lua_axis_ui_TabControl_ignoreHeadersTextureSize(lua_State* tolua_S)
 int lua_axis_ui_TabControl_getHeaderWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39647,7 +39647,7 @@ int lua_axis_ui_TabControl_getHeaderWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39682,7 +39682,7 @@ int lua_axis_ui_TabControl_getHeaderWidth(lua_State* tolua_S)
 int lua_axis_ui_TabControl_setHeaderDockPlace(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39694,7 +39694,7 @@ int lua_axis_ui_TabControl_setHeaderDockPlace(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39707,7 +39707,7 @@ int lua_axis_ui_TabControl_setHeaderDockPlace(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::ui::TabControl::Dock arg0;
+        ax::ui::TabControl::Dock arg0;
 
         ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.TabControl:setHeaderDockPlace");
         if(!ok)
@@ -39732,7 +39732,7 @@ int lua_axis_ui_TabControl_setHeaderDockPlace(lua_State* tolua_S)
 int lua_axis_ui_TabControl_setSelectTab(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -39741,7 +39741,7 @@ int lua_axis_ui_TabControl_setSelectTab(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -39752,8 +39752,8 @@ int lua_axis_ui_TabControl_setSelectTab(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 1) {
-            axis::ui::TabHeader* arg0;
-            ok &= luaval_to_object<axis::ui::TabHeader>(tolua_S, 2, "axui.TabHeader",&arg0, "axui.TabControl:setSelectTab");
+            ax::ui::TabHeader* arg0;
+            ok &= luaval_to_object<ax::ui::TabHeader>(tolua_S, 2, "axui.TabHeader",&arg0, "axui.TabControl:setSelectTab");
 
             if (!ok) { break; }
             cobj->setSelectTab(arg0);
@@ -39787,7 +39787,7 @@ int lua_axis_ui_TabControl_setSelectTab(lua_State* tolua_S)
 int lua_axis_ui_TabControl_getTabHeader(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39799,7 +39799,7 @@ int lua_axis_ui_TabControl_getTabHeader(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39820,8 +39820,8 @@ int lua_axis_ui_TabControl_getTabHeader(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TabControl_getTabHeader'", nullptr);
             return 0;
         }
-        axis::ui::TabHeader* ret = cobj->getTabHeader(arg0);
-        object_to_luaval<axis::ui::TabHeader>(tolua_S, "axui.TabHeader",(axis::ui::TabHeader*)ret);
+        ax::ui::TabHeader* ret = cobj->getTabHeader(arg0);
+        object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabControl:getTabHeader",argc, 1);
@@ -39837,7 +39837,7 @@ int lua_axis_ui_TabControl_getTabHeader(lua_State* tolua_S)
 int lua_axis_ui_TabControl_isIgnoreHeadersTextureSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39849,7 +39849,7 @@ int lua_axis_ui_TabControl_isIgnoreHeadersTextureSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39884,7 +39884,7 @@ int lua_axis_ui_TabControl_isIgnoreHeadersTextureSize(lua_State* tolua_S)
 int lua_axis_ui_TabControl_setTabChangedEventListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39896,7 +39896,7 @@ int lua_axis_ui_TabControl_setTabChangedEventListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39909,7 +39909,7 @@ int lua_axis_ui_TabControl_setTabChangedEventListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<void (int, axis::ui::TabControl::EventType)> arg0;
+        std::function<void (int, ax::ui::TabControl::EventType)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -39938,7 +39938,7 @@ int lua_axis_ui_TabControl_setTabChangedEventListener(lua_State* tolua_S)
 int lua_axis_ui_TabControl_setHeaderSelectedZoom(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -39950,7 +39950,7 @@ int lua_axis_ui_TabControl_setHeaderSelectedZoom(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -39988,7 +39988,7 @@ int lua_axis_ui_TabControl_setHeaderSelectedZoom(lua_State* tolua_S)
 int lua_axis_ui_TabControl_setHeaderHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -40000,7 +40000,7 @@ int lua_axis_ui_TabControl_setHeaderHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -40038,7 +40038,7 @@ int lua_axis_ui_TabControl_setHeaderHeight(lua_State* tolua_S)
 int lua_axis_ui_TabControl_indexOfTabHeader(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -40050,7 +40050,7 @@ int lua_axis_ui_TabControl_indexOfTabHeader(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -40063,9 +40063,9 @@ int lua_axis_ui_TabControl_indexOfTabHeader(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        const axis::ui::TabHeader* arg0;
+        const ax::ui::TabHeader* arg0;
 
-        ok &= luaval_to_object<const axis::ui::TabHeader>(tolua_S, 2, "axui.TabHeader",&arg0, "axui.TabControl:indexOfTabHeader");
+        ok &= luaval_to_object<const ax::ui::TabHeader>(tolua_S, 2, "axui.TabHeader",&arg0, "axui.TabControl:indexOfTabHeader");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TabControl_indexOfTabHeader'", nullptr);
@@ -40088,7 +40088,7 @@ int lua_axis_ui_TabControl_indexOfTabHeader(lua_State* tolua_S)
 int lua_axis_ui_TabControl_getTabContainer(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -40100,7 +40100,7 @@ int lua_axis_ui_TabControl_getTabContainer(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -40121,8 +40121,8 @@ int lua_axis_ui_TabControl_getTabContainer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TabControl_getTabContainer'", nullptr);
             return 0;
         }
-        axis::ui::Layout* ret = cobj->getTabContainer(arg0);
-        object_to_luaval<axis::ui::Layout>(tolua_S, "axui.Layout",(axis::ui::Layout*)ret);
+        ax::ui::Layout* ret = cobj->getTabContainer(arg0);
+        object_to_luaval<ax::ui::Layout>(tolua_S, "axui.Layout",(ax::ui::Layout*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.TabControl:getTabContainer",argc, 1);
@@ -40138,7 +40138,7 @@ int lua_axis_ui_TabControl_getTabContainer(lua_State* tolua_S)
 int lua_axis_ui_TabControl_getHeaderSelectedZoom(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -40150,7 +40150,7 @@ int lua_axis_ui_TabControl_getHeaderSelectedZoom(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -40185,7 +40185,7 @@ int lua_axis_ui_TabControl_getHeaderSelectedZoom(lua_State* tolua_S)
 int lua_axis_ui_TabControl_getHeaderHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ui::TabControl* cobj = nullptr;
+    ax::ui::TabControl* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -40197,7 +40197,7 @@ int lua_axis_ui_TabControl_getHeaderHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"axui.TabControl",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ui::TabControl*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -40251,8 +40251,8 @@ int lua_axis_ui_TabControl_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_ui_TabControl_create'", nullptr);
             return 0;
         }
-        axis::ui::TabControl* ret = axis::ui::TabControl::create();
-        object_to_luaval<axis::ui::TabControl>(tolua_S, "axui.TabControl",(axis::ui::TabControl*)ret);
+        ax::ui::TabControl* ret = ax::ui::TabControl::create();
+        object_to_luaval<ax::ui::TabControl>(tolua_S, "axui.TabControl",(ax::ui::TabControl*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "axui.TabControl:create",argc, 0);
@@ -40296,7 +40296,7 @@ int lua_register_axis_ui_TabControl(lua_State* tolua_S)
         tolua_function(tolua_S,"getHeaderHeight",lua_axis_ui_TabControl_getHeaderHeight);
         tolua_function(tolua_S,"create", lua_axis_ui_TabControl_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ui::TabControl).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ui::TabControl).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axui.TabControl";
     g_typeCast[typeName] = "axui.TabControl";
     return 1;

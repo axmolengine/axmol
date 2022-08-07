@@ -165,7 +165,7 @@ void Material::draw(MeshCommand* meshCommands,
     }
 }
 
-void Material::setTarget(axis::Node* target)
+void Material::setTarget(ax::Node* target)
 {
     _target = target;
 }

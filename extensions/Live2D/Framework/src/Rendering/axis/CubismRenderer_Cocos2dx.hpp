@@ -244,15 +244,15 @@ private:
     */
     struct CubismShaderSet
     {
-        axis::backend::Program* ShaderProgram;               ///< シェーダプログラムのアドレス
+        ax::backend::Program* ShaderProgram;               ///< シェーダプログラムのアドレス
         unsigned int AttributePositionLocation;   ///< シェーダプログラムに渡す変数のアドレス(Position)
         unsigned int AttributeTexCoordLocation;   ///< シェーダプログラムに渡す変数のアドレス(TexCoord)
-        axis::backend::UniformLocation UniformMatrixLocation;        ///< シェーダプログラムに渡す変数のアドレス(Matrix)
-        axis::backend::UniformLocation UniformClipMatrixLocation;    ///< シェーダプログラムに渡す変数のアドレス(ClipMatrix)
-        axis::backend::UniformLocation SamplerTexture0Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture0)
-        axis::backend::UniformLocation SamplerTexture1Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture1)
-        axis::backend::UniformLocation UniformBaseColorLocation;     ///< シェーダプログラムに渡す変数のアドレス(BaseColor)
-        axis::backend::UniformLocation UnifromChannelFlagLocation;   ///< シェーダプログラムに渡す変数のアドレス(ChannelFlag)
+        ax::backend::UniformLocation UniformMatrixLocation;        ///< シェーダプログラムに渡す変数のアドレス(Matrix)
+        ax::backend::UniformLocation UniformClipMatrixLocation;    ///< シェーダプログラムに渡す変数のアドレス(ClipMatrix)
+        ax::backend::UniformLocation SamplerTexture0Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture0)
+        ax::backend::UniformLocation SamplerTexture1Location;      ///< シェーダプログラムに渡す変数のアドレス(Texture1)
+        ax::backend::UniformLocation UniformBaseColorLocation;     ///< シェーダプログラムに渡す変数のアドレス(BaseColor)
+        ax::backend::UniformLocation UnifromChannelFlagLocation;   ///< シェーダプログラムに渡す変数のアドレス(ChannelFlag)
     };
 
     /**
@@ -280,7 +280,7 @@ private:
      * @param[in]   matrix4x4             ->  Model-View-Projection行列
      * @param[in]   invertedMask           ->  マスクを反転して使用するフラグ
      */
-    void SetupShaderProgram(CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand* drawCommand, CubismRenderer_Cocos2dx* renderer, axis::Texture2D* texture
+    void SetupShaderProgram(CubismCommandBuffer_Cocos2dx::DrawCommandBuffer::DrawCommand* drawCommand, CubismRenderer_Cocos2dx* renderer, ax::Texture2D* texture
                             , csmInt32 vertexCount, csmFloat32* vertexArray
                             , csmFloat32* uvArray, csmFloat32 opacity
                             , CubismRenderer::CubismBlendMode colorBlendMode
@@ -306,7 +306,7 @@ private:
      *
      * @return  シェーダプログラムのアドレス
      */
-    axis::backend::Program* LoadShaderProgram(const csmChar* vertShaderSrc, const csmChar* fragShaderSrc);
+    ax::backend::Program* LoadShaderProgram(const csmChar* vertShaderSrc, const csmChar* fragShaderSrc);
 
 #ifdef CSM_TARGET_ANDROID_ES2
 public:
@@ -361,12 +361,12 @@ private:
     csmBool _lastBlend;                   ///< モデル描画直前のGL_SCISSOR_TESTパラメータ
     csmBool _lastStencilTest;             ///< モデル描画直前のGL_STENCIL_TESTパラメータ
     csmBool _lastDepthTest;               ///< モデル描画直前のGL_DEPTH_TESTパラメータ
-    axis::CullMode _lastCullFace;                ///< モデル描画直前のGL_CULL_FACEパラメータ
-    axis::Winding _lastWinding;
+    ax::CullMode _lastCullFace;                ///< モデル描画直前のGL_CULL_FACEパラメータ
+    ax::Winding _lastWinding;
     backend::TextureBackend* _lastColorBuffer;                         ///< モデル描画直前のフレームバッファ
     backend::TextureBackend* _lastDepthBuffer;
     backend::TextureBackend* _lastStencilBuffer;
-    axis::RenderTargetFlag _lastRenderTargetFlag;
+    ax::RenderTargetFlag _lastRenderTargetFlag;
     backend::RenderTarget* _lastRenderTarget;
     csmRectF _lastViewport;                 ///< モデル描画直前のビューポート
 };
@@ -398,14 +398,14 @@ public:
      * @param[in]   texture     ->  バックエンドテクスチャ
      *
      */
-    void BindTexture(csmUint32 modelTextureNo, axis::Texture2D* texture);
+    void BindTexture(csmUint32 modelTextureNo, ax::Texture2D* texture);
 
     /**
      * @brief   OpenGLにバインドされたテクスチャのリストを取得する
      *
      * @return  テクスチャのアドレスのリスト
      */
-    const csmMap<csmInt32, axis::Texture2D*>& GetBindedTextures() const;
+    const csmMap<csmInt32, ax::Texture2D*>& GetBindedTextures() const;
 
     /**
      * @brief  クリッピングマスクバッファのサイズを設定する<br>
@@ -548,7 +548,7 @@ private:
     CubismClippingContext* GetClippingContextBufferForDraw() const;
 
 
-    csmMap<csmInt32, axis::Texture2D*>            _textures;                      ///< モデルが参照するテクスチャとレンダラでバインドしているテクスチャとのマップ
+    csmMap<csmInt32, ax::Texture2D*>            _textures;                      ///< モデルが参照するテクスチャとレンダラでバインドしているテクスチャとのマップ
     csmVector<csmInt32>                 _sortedDrawableIndexList;       ///< 描画オブジェクトのインデックスを描画順に並べたリスト
     CubismRendererProfile_Cocos2dx     _rendererProfile;               ///< OpenGLのステートを保持するオブジェクト
     CubismClippingManager_Cocos2dx*    _clippingManager;               ///< クリッピングマスク管理オブジェクト

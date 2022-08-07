@@ -184,7 +184,7 @@ void ColliderDetector::addContourData(ContourData* contourData)
 #endif
 }
 
-void ColliderDetector::addContourDataList(axis::Vector<ContourData*>& contourDataList)
+void ColliderDetector::addContourDataList(ax::Vector<ContourData*>& contourDataList)
 {
     for (const auto& contourData : contourDataList)
     {
@@ -279,7 +279,7 @@ bool ColliderDetector::getActive()
     return _active;
 }
 
-const axis::Vector<ColliderBody*>& ColliderDetector::getColliderBodyList()
+const ax::Vector<ColliderBody*>& ColliderDetector::getColliderBodyList()
 {
     return _colliderBodyList;
 }
@@ -342,10 +342,10 @@ void ColliderDetector::updateTransform(Mat4& t)
 #endif
 
         unsigned long num              = contourData->vertexList.size();
-        std::vector<axis::Vec2>& vs = contourData->vertexList;
+        std::vector<ax::Vec2>& vs = contourData->vertexList;
 
 #if ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-        std::vector<axis::Vec2>& cvs = colliderBody->_calculatedVertexList;
+        std::vector<ax::Vec2>& cvs = colliderBody->_calculatedVertexList;
 #endif
 
         for (unsigned long i = 0; i < num; i++)

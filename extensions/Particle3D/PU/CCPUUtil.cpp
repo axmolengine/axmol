@@ -29,7 +29,7 @@
 
 NS_AX_BEGIN
 
-axis::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= Vec3::ZERO*/)
+ax::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= Vec3::ZERO*/)
 {
     Vec3 newUp;
 
@@ -83,7 +83,7 @@ axis::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*
     //}
 }
 
-axis::Vec3 PUUtil::perpendicular(const Vec3& src)
+ax::Vec3 PUUtil::perpendicular(const Vec3& src)
 {
     // static const float fSquareZero = (float)(1e-06 * 1e-06);
 

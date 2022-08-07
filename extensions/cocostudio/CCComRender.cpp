@@ -44,7 +44,7 @@ ComRender::ComRender() : _render(nullptr)
     _name = COMPONENT_NAME;
 }
 
-ComRender::ComRender(axis::Node* node, const char* comName)
+ComRender::ComRender(ax::Node* node, const char* comName)
 {
     if (node != nullptr)
     {
@@ -91,12 +91,12 @@ void ComRender::onRemove()
     }
 }
 
-axis::Node* ComRender::getNode()
+ax::Node* ComRender::getNode()
 {
     return _render;
 }
 
-void ComRender::setNode(axis::Node* node)
+void ComRender::setNode(ax::Node* node)
 {
     if (_render != nullptr)
     {
@@ -163,11 +163,11 @@ bool ComRender::serialize(void* r)
 
         if (file != nullptr)
         {
-            filePath.assign(axis::FileUtils::getInstance()->fullPathForFilename(file));
+            filePath.assign(ax::FileUtils::getInstance()->fullPathForFilename(file));
         }
         if (plist != nullptr)
         {
-            plistPath.assign(axis::FileUtils::getInstance()->fullPathForFilename(plist));
+            plistPath.assign(ax::FileUtils::getInstance()->fullPathForFilename(plist));
         }
         if (resType == 0)
         {
@@ -304,7 +304,7 @@ bool ComRender::serialize(void* r)
                 std::string fileExtension = FileUtils::getInstance()->getFileExtension(filePath);
                 if (fileExtension == ".json" || fileExtension == ".exportjson")
                 {
-                    axis::ui::Widget* widget = GUIReader::getInstance()->widgetFromJsonFile(filePath.c_str());
+                    ax::ui::Widget* widget = GUIReader::getInstance()->widgetFromJsonFile(filePath.c_str());
                     _render                     = widget;
                     _render->retain();
 
@@ -312,7 +312,7 @@ bool ComRender::serialize(void* r)
                 }
                 else if (fileExtension == ".csb")
                 {
-                    axis::ui::Widget* widget = GUIReader::getInstance()->widgetFromBinaryFile(filePath.c_str());
+                    ax::ui::Widget* widget = GUIReader::getInstance()->widgetFromBinaryFile(filePath.c_str());
                     _render                     = widget;
                     _render->retain();
 
@@ -369,7 +369,7 @@ ComRender* ComRender::create()
     return ret;
 }
 
-ComRender* ComRender::create(axis::Node* node, const char* comName)
+ComRender* ComRender::create(ax::Node* node, const char* comName)
 {
     ComRender* ret = new ComRender(node, comName);
     if (ret->init())

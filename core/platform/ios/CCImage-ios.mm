@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-bool axis::Image::saveToFile(std::string_view filename, bool isToRGB)
+bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
 {
     // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
     if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))

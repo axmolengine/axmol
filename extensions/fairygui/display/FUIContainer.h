@@ -13,20 +13,20 @@ class RectClippingSupport
 public:
     RectClippingSupport();
 
-    axis::Rect _clippingRegion;
+    ax::Rect _clippingRegion;
     bool _clippingEnabled;
     bool _scissorOldState;
-    axis::Rect _clippingOldRect;
-    axis::Rect _clippingRect;
+    ax::Rect _clippingOldRect;
+    ax::Rect _clippingRect;
     bool _clippingRectDirty;
 
 #if COCOS2D_VERSION >= 0x00040000
-    axis::GroupCommand _groupCommand;
-    //axis::CallbackCommand _beforeVisitCmdScissor;
-    //axis::CallbackCommand _afterVisitCmdScissor;
+    ax::GroupCommand _groupCommand;
+    //ax::CallbackCommand _beforeVisitCmdScissor;
+    //ax::CallbackCommand _afterVisitCmdScissor;
 #else
-    axis::CustomCommand _beforeVisitCmdScissor;
-    axis::CustomCommand _afterVisitCmdScissor;
+    ax::CustomCommand _beforeVisitCmdScissor;
+    ax::CustomCommand _afterVisitCmdScissor;
 #endif
 };
 
@@ -35,23 +35,23 @@ class StencilClippingSupport
 public:
     StencilClippingSupport();
 
-    axis::Node* _stencil;
-    axis::StencilStateManager* _stencilStateManager;
-    axis::GroupCommand _groupCommand;
+    ax::Node* _stencil;
+    ax::StencilStateManager* _stencilStateManager;
+    ax::GroupCommand _groupCommand;
 #if COCOS2D_VERSION >= 0x00040000
-    axis::backend::ProgramState* _originStencilProgram;
-    //axis::CallbackCommand _beforeVisitCmd;
-    //axis::CallbackCommand _afterDrawStencilCmd;
-    //axis::CallbackCommand _afterVisitCmd;
+    ax::backend::ProgramState* _originStencilProgram;
+    //ax::CallbackCommand _beforeVisitCmd;
+    //ax::CallbackCommand _afterDrawStencilCmd;
+    //ax::CallbackCommand _afterVisitCmd;
 #else
-    axis::GLProgram* _originStencilProgram;
-    axis::CustomCommand _beforeVisitCmd;
-    axis::CustomCommand _afterDrawStencilCmd;
-    axis::CustomCommand _afterVisitCmd;
+    ax::GLProgram* _originStencilProgram;
+    ax::CustomCommand _beforeVisitCmd;
+    ax::CustomCommand _afterDrawStencilCmd;
+    ax::CustomCommand _afterVisitCmd;
 #endif
 };
 
-class FUIContainer : public axis::Node
+class FUIContainer : public ax::Node
 {
 public:
     FUIContainer();
@@ -61,11 +61,11 @@ public:
 
     bool isClippingEnabled() const;
     void setClippingEnabled(bool value);
-    const axis::Rect& getClippingRegion() const;
-    void setClippingRegion(const axis::Rect& clippingRegion);
+    const ax::Rect& getClippingRegion() const;
+    void setClippingRegion(const ax::Rect& clippingRegion);
 
-    axis::Node* getStencil() const;
-    void setStencil(axis::Node* stencil);
+    ax::Node* getStencil() const;
+    void setStencil(ax::Node* stencil);
     float getAlphaThreshold() const;
     void setAlphaThreshold(float alphaThreshold);
     bool isInverted() const;
@@ -75,7 +75,7 @@ public:
     void onEnterTransitionDidFinish() override;
     void onExitTransitionDidStart() override;
     void onExit() override;
-    void visit(axis::Renderer *renderer, const axis::Mat4 &parentTransform, uint32_t parentFlags) override;
+    void visit(ax::Renderer *renderer, const ax::Mat4 &parentTransform, uint32_t parentFlags) override;
     void setCameraMask(unsigned short mask, bool applyChildren = true) override;
     void setGlobalZOrder(float globalZOrder) override;
 
@@ -83,27 +83,27 @@ public:
 private:
     void onBeforeVisitScissor();
     void onAfterVisitScissor();
-    const axis::Rect& getClippingRect();
+    const ax::Rect& getClippingRect();
 
     RectClippingSupport* _rectClippingSupport;
     StencilClippingSupport* _stencilClippingSupport;
     
 #if COCOS2D_VERSION >= 0x00040000
-    void setProgramStateRecursively(Node* node, axis::backend::ProgramState* programState);
+    void setProgramStateRecursively(Node* node, ax::backend::ProgramState* programState);
     void restoreAllProgramStates();
     
-    std::unordered_map<Node*, axis::backend::ProgramState*> _originalStencilProgramState;
+    std::unordered_map<Node*, ax::backend::ProgramState*> _originalStencilProgramState;
 #endif
 };
 
 //internal use
-class FUIInnerContainer : public axis::Node
+class FUIInnerContainer : public ax::Node
 {
 public:
     CREATE_FUNC(FUIInnerContainer);
 
-    void setPosition2(const axis::Vec2 &position) { setPosition(position.x, _parent->getContentSize().height - position.y); }
-    axis::Vec2 getPosition2() { return axis::Vec2(_position.x, _parent->getContentSize().height - _position.y); }
+    void setPosition2(const ax::Vec2 &position) { setPosition(position.x, _parent->getContentSize().height - position.y); }
+    ax::Vec2 getPosition2() { return ax::Vec2(_position.x, _parent->getContentSize().height - _position.y); }
     void setPosition2(float x, float y) { setPosition(x, _parent->getContentSize().height - y); }
     void  setPositionY2(float y) { setPositionY(_parent->getContentSize().height - y); }
     float getPositionY2(void) const { return  _parent->getContentSize().height - _position.y; }

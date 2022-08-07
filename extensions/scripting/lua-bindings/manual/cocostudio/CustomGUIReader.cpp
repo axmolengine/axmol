@@ -86,7 +86,7 @@ void CustomGUIReader::init(std::string& className, int createFunc, int setPropsF
 }
 
 void CustomGUIReader::setCustomProps(std::string_view classType,
-                                     axis::Ref* widget,
+                                     ax::Ref* widget,
                                      const rapidjson::Value& customOptions)
 {
     if (_setPropsFunc != 0)

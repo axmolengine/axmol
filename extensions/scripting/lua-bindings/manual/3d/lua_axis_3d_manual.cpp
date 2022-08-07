@@ -33,7 +33,7 @@
 int lua_axis_3d_MeshRenderer_getAABB(lua_State* L)
 {
     int argc                = 0;
-    axis::MeshRenderer* cobj = nullptr;
+    ax::MeshRenderer* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -44,7 +44,7 @@ int lua_axis_3d_MeshRenderer_getAABB(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::MeshRenderer*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::MeshRenderer*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -57,8 +57,8 @@ int lua_axis_3d_MeshRenderer_getAABB(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 0)
     {
-        axis::AABB* ret = const_cast<axis::AABB*>(&(cobj->getAABB()));
-        object_to_luaval<axis::AABB>(L, "ax.AABB", (axis::AABB*)ret);
+        ax::AABB* ret = const_cast<ax::AABB*>(&(cobj->getAABB()));
+        object_to_luaval<ax::AABB>(L, "ax.AABB", (ax::AABB*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:getAABB", argc, 0);
@@ -107,9 +107,9 @@ int lua_axis_3d_MeshRenderer_createAsync(lua_State* L)
 #endif
             LUA_FUNCTION handler = toluafix_ref_function(L, 4, 0);
 
-            axis::MeshRenderer::createAsync(
+            ax::MeshRenderer::createAsync(
                 modelPath, texturePath,
-                [=](axis::MeshRenderer* mesh, void* callbackparam) {
+                [=](ax::MeshRenderer* mesh, void* callbackparam) {
                     auto stack = LuaEngine::getInstance()->getLuaStack();
                     int id     = (mesh) ? (int)mesh->_ID : -1;
                     int* luaID = (mesh) ? &mesh->_luaID : nullptr;
@@ -140,9 +140,9 @@ int lua_axis_3d_MeshRenderer_createAsync(lua_State* L)
 #endif
             LUA_FUNCTION handler = toluafix_ref_function(L, 3, 0);
 
-            axis::MeshRenderer::createAsync(
+            ax::MeshRenderer::createAsync(
                 modelPath,
-                [=](axis::MeshRenderer* mesh, void* callbackparam) {
+                [=](ax::MeshRenderer* mesh, void* callbackparam) {
                     auto stack = LuaEngine::getInstance()->getLuaStack();
                     int id     = (mesh) ? (int)mesh->_ID : -1;
                     int* luaID = (mesh) ? &mesh->_luaID : nullptr;
@@ -177,7 +177,7 @@ static void extendMeshRenderer(lua_State* L)
     lua_pop(L, 1);
 }
 
-bool luaval_to_terraindata(lua_State* L, int lo, axis::Terrain::TerrainData* outValue, const char* funcName = "")
+bool luaval_to_terraindata(lua_State* L, int lo, ax::Terrain::TerrainData* outValue, const char* funcName = "")
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -202,7 +202,7 @@ bool luaval_to_terraindata(lua_State* L, int lo, axis::Terrain::TerrainData* out
         }
         else
         {
-            outValue->_chunkSize = axis::Size(32, 32);
+            outValue->_chunkSize = ax::Size(32, 32);
         }
         lua_pop(L, 1);
 
@@ -266,7 +266,7 @@ bool luaval_to_terraindata(lua_State* L, int lo, axis::Terrain::TerrainData* out
     return ok;
 }
 
-void terraindata_to_luaval(lua_State* L, const axis::Terrain::TerrainData& inValue)
+void terraindata_to_luaval(lua_State* L, const ax::Terrain::TerrainData& inValue)
 {
     if (nullptr == L)
         return;
@@ -345,21 +345,21 @@ int lua_axis_3d_Terrain_create(lua_State* L)
 
     if (argc == 1)
     {
-        axis::Terrain::TerrainData arg0;
+        ax::Terrain::TerrainData arg0;
         ok &= luaval_to_terraindata(L, 2, &arg0);
         if (!ok)
         {
             tolua_error(L, "invalid arguments in function 'lua_axis_3d_Terrain_create'", nullptr);
             return 0;
         }
-        axis::Terrain* ret = axis::Terrain::create(arg0);
-        object_to_luaval<axis::Terrain>(L, "ax.Terrain", (axis::Terrain*)ret);
+        ax::Terrain* ret = ax::Terrain::create(arg0);
+        object_to_luaval<ax::Terrain>(L, "ax.Terrain", (ax::Terrain*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Terrain::TerrainData arg0;
-        axis::Terrain::CrackFixedType arg1;
+        ax::Terrain::TerrainData arg0;
+        ax::Terrain::CrackFixedType arg1;
 
         ok &= luaval_to_terraindata(L, 2, &arg0);
         ok &= luaval_to_int32(L, 3, (int*)&arg1, "ax.Terrain:create");
@@ -368,8 +368,8 @@ int lua_axis_3d_Terrain_create(lua_State* L)
             tolua_error(L, "invalid arguments in function 'lua_axis_3d_Terrain_create'", nullptr);
             return 0;
         }
-        axis::Terrain* ret = axis::Terrain::create(arg0, arg1);
-        object_to_luaval<axis::Terrain>(L, "ax.Terrain", (axis::Terrain*)ret);
+        ax::Terrain* ret = ax::Terrain::create(arg0, arg1);
+        object_to_luaval<ax::Terrain>(L, "ax.Terrain", (ax::Terrain*)ret);
         return 1;
     }
     luaL_error(L, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Terrain:create", argc, 1);
@@ -384,7 +384,7 @@ tolua_lerror:
 int lua_axis_3d_Terrain_getHeight(lua_State* L)
 {
     int argc               = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok                = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -394,7 +394,7 @@ int lua_axis_3d_Terrain_getHeight(lua_State* L)
     if (!tolua_isusertype(L, 1, "ax.Terrain", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::Terrain*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::Terrain*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -407,7 +407,7 @@ int lua_axis_3d_Terrain_getHeight(lua_State* L)
     {
         if (argc == 1)
         {
-            axis::Vec2 arg0;
+            ax::Vec2 arg0;
             ok &= luaval_to_vec2(L, 2, &arg0, "ax.Terrain:getHeight");
 
             if (!ok)
@@ -424,15 +424,15 @@ int lua_axis_3d_Terrain_getHeight(lua_State* L)
     {
         if (argc == 2)
         {
-            axis::Vec2 arg0;
+            ax::Vec2 arg0;
             ok &= luaval_to_vec2(L, 2, &arg0, "ax.Terrain:getHeight");
 
             if (!ok)
             {
                 break;
             }
-            axis::Vec3* arg1;
-            ok &= luaval_to_object<axis::Vec3>(L, 3, "ax.Vec3", &arg1, "ax.Terrain:getHeight");
+            ax::Vec3* arg1;
+            ok &= luaval_to_object<ax::Vec3>(L, 3, "ax.Vec3", &arg1, "ax.Terrain:getHeight");
 
             if (!ok)
             {
@@ -487,7 +487,7 @@ int lua_axis_3d_Terrain_getHeight(lua_State* L)
             {
                 break;
             }
-            axis::Vec3 arg2;
+            ax::Vec3 arg2;
             ok &= luaval_to_vec3(L, 4, &arg2);
 
             if (!ok)
@@ -515,7 +515,7 @@ tolua_lerror:
 int lua_axis_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
 {
     int argc               = 0;
-    axis::Terrain* cobj = nullptr;
+    ax::Terrain* cobj = nullptr;
     bool ok                = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -525,7 +525,7 @@ int lua_axis_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S, 1, "ax.Terrain", 0, &tolua_err))
         goto tolua_lerror;
 #endif
-    cobj = (axis::Terrain*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::Terrain*)tolua_tousertype(tolua_S, 1, 0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -538,14 +538,14 @@ int lua_axis_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            axis::Ray* arg0 = nullptr;
-            ok &= luaval_to_object<axis::Ray>(tolua_S, 2, "ax.Ray", &arg0, "ax.Terrain:getIntersectionPoint");
+            ax::Ray* arg0 = nullptr;
+            ok &= luaval_to_object<ax::Ray>(tolua_S, 2, "ax.Ray", &arg0, "ax.Terrain:getIntersectionPoint");
 
             if (!ok)
             {
                 break;
             }
-            axis::Vec3 arg1;
+            ax::Vec3 arg1;
             ok &= luaval_to_vec3(tolua_S, 3, &arg1, "ax.Terrain:getIntersectionPoint");
 
             if (!ok)
@@ -563,14 +563,14 @@ int lua_axis_3d_Terrain_getIntersectionPoint(lua_State* tolua_S)
     {
         if (argc == 1)
         {
-            axis::Ray* arg0;
-            ok &= luaval_to_object<axis::Ray>(tolua_S, 2, "ax.Ray", &arg0, "ax.Terrain:getIntersectionPoint");
+            ax::Ray* arg0;
+            ok &= luaval_to_object<ax::Ray>(tolua_S, 2, "ax.Ray", &arg0, "ax.Terrain:getIntersectionPoint");
 
             if (!ok)
             {
                 break;
             }
-            axis::Vec3 ret = cobj->getIntersectionPoint(*arg0);
+            ax::Vec3 ret = cobj->getIntersectionPoint(*arg0);
             vec3_to_luaval(tolua_S, ret);
             return 1;
         }
@@ -627,7 +627,7 @@ int lua_axis_3d_Bundle3D_getTrianglesList(lua_State* L)
             return 0;
         }
 
-        std::vector<axis::Vec3> ret = axis::Bundle3D::getTrianglesList(arg0);
+        std::vector<ax::Vec3> ret = ax::Bundle3D::getTrianglesList(arg0);
         std_vector_vec3_to_luaval(L, ret);
         return 1;
     }
@@ -665,7 +665,7 @@ static int register_all_axis_3d_manual(lua_State* L)
 int lua_axis_3d_AABB_reset(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if _AX_DEBUG >= 1
@@ -677,7 +677,7 @@ int lua_axis_3d_AABB_reset(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::AABB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -709,7 +709,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_set(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if _AX_DEBUG >= 1
@@ -721,7 +721,7 @@ int lua_axis_3d_AABB_set(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::AABB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -734,8 +734,8 @@ int lua_axis_3d_AABB_set(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 2)
     {
-        axis::Vec3 arg0;
-        axis::Vec3 arg1;
+        ax::Vec3 arg0;
+        ax::Vec3 arg1;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "ax.AABB:set");
 
@@ -758,7 +758,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_transform(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if _AX_DEBUG >= 1
@@ -770,7 +770,7 @@ int lua_axis_3d_AABB_transform(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::AABB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -783,7 +783,7 @@ int lua_axis_3d_AABB_transform(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        axis::Mat4 arg0;
+        ax::Mat4 arg0;
 
         ok &= luaval_to_mat4(L, 2, &arg0, "ax.AABB:transform");
         if (!ok)
@@ -804,7 +804,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_getCenter(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if _AX_DEBUG >= 1
@@ -816,7 +816,7 @@ int lua_axis_3d_AABB_getCenter(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::AABB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -831,7 +831,7 @@ int lua_axis_3d_AABB_getCenter(lua_State* L)
     {
         if (!ok)
             return 0;
-        axis::Vec3 ret = cobj->getCenter();
+        ax::Vec3 ret = cobj->getCenter();
         vec3_to_luaval(L, ret);
         return 1;
     }
@@ -848,7 +848,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_isEmpty(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if _AX_DEBUG >= 1
@@ -860,7 +860,7 @@ int lua_axis_3d_AABB_isEmpty(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::AABB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -892,7 +892,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_getCorners(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if _AX_DEBUG >= 1
@@ -904,7 +904,7 @@ int lua_axis_3d_AABB_getCorners(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::AABB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -917,9 +917,9 @@ int lua_axis_3d_AABB_getCorners(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        axis::Vec3* arg0;
+        ax::Vec3* arg0;
 
-        ok &= luaval_to_object<axis::Vec3>(L, 2, "ax.Vec3", &arg0, "ax.AABB:getCorners");
+        ok &= luaval_to_object<ax::Vec3>(L, 2, "ax.Vec3", &arg0, "ax.AABB:getCorners");
         if (!ok)
             return 0;
         cobj->getCorners(arg0);
@@ -938,7 +938,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_updateMinMax(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if _AX_DEBUG >= 1
@@ -950,7 +950,7 @@ int lua_axis_3d_AABB_updateMinMax(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::AABB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -963,10 +963,10 @@ int lua_axis_3d_AABB_updateMinMax(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 2)
     {
-        const axis::Vec3* arg0;
+        const ax::Vec3* arg0;
         ssize_t arg1;
 
-        ok &= luaval_to_object<const axis::Vec3>(L, 2, "ax.Vec3", &arg0, "ax.AABB:updateMinMax");
+        ok &= luaval_to_object<const ax::Vec3>(L, 2, "ax.Vec3", &arg0, "ax.AABB:updateMinMax");
 
         ok &= luaval_to_ssize_t(L, 3, &arg1, "ax.AABB:updateMinMax");
         if (!ok)
@@ -987,7 +987,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_containPoint(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 
 #if _AX_DEBUG >= 1
@@ -999,7 +999,7 @@ int lua_axis_3d_AABB_containPoint(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::AABB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -1012,7 +1012,7 @@ int lua_axis_3d_AABB_containPoint(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        axis::Vec3 arg0;
+        ax::Vec3 arg0;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "ax.AABB:containPoint");
         if (!ok)
@@ -1034,7 +1034,7 @@ tolua_lerror:
 int lua_axis_3d_AABB_constructor(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* cobj = nullptr;
+    ax::AABB* cobj = nullptr;
     bool ok             = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1045,21 +1045,21 @@ int lua_axis_3d_AABB_constructor(lua_State* L)
     {
         if (argc == 2)
         {
-            axis::Vec3 arg0;
+            ax::Vec3 arg0;
             ok &= luaval_to_vec3(L, 2, &arg0, "ax.AABB:AABB");
 
             if (!ok)
             {
                 break;
             }
-            axis::Vec3 arg1;
+            ax::Vec3 arg1;
             ok &= luaval_to_vec3(L, 3, &arg1, "ax.AABB:AABB");
 
             if (!ok)
             {
                 break;
             }
-            cobj = new axis::AABB(arg0, arg1);
+            cobj = new ax::AABB(arg0, arg1);
             tolua_pushusertype(L, (void*)cobj, "ax.AABB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1070,7 +1070,7 @@ int lua_axis_3d_AABB_constructor(lua_State* L)
     {
         if (argc == 0)
         {
-            cobj = new axis::AABB();
+            cobj = new ax::AABB();
             tolua_pushusertype(L, (void*)cobj, "ax.AABB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1089,7 +1089,7 @@ int lua_axis_3d_AABB_constructor(lua_State* L)
 
 int lua_axis_3d_get_AABB_min(lua_State* L)
 {
-    axis::AABB* self = nullptr;
+    ax::AABB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1097,7 +1097,7 @@ int lua_axis_3d_get_AABB_min(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    self = (ax::AABB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1118,7 +1118,7 @@ tolua_lerror:
 int lua_axis_3d_set_AABB_min(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* self = nullptr;
+    ax::AABB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1126,7 +1126,7 @@ int lua_axis_3d_set_AABB_min(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    self = (ax::AABB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1158,7 +1158,7 @@ tolua_lerror:
 
 int lua_axis_3d_get_AABB_max(lua_State* L)
 {
-    axis::AABB* self = nullptr;
+    ax::AABB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1166,7 +1166,7 @@ int lua_axis_3d_get_AABB_max(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    self = (ax::AABB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1187,7 +1187,7 @@ tolua_lerror:
 int lua_axis_3d_set_AABB_max(lua_State* L)
 {
     int argc            = 0;
-    axis::AABB* self = nullptr;
+    ax::AABB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1195,7 +1195,7 @@ int lua_axis_3d_set_AABB_max(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    self = (ax::AABB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1227,7 +1227,7 @@ tolua_lerror:
 
 int lua_axis_3d_AABB_finalize(lua_State* L)
 {
-    axis::AABB* self = (axis::AABB*)tolua_tousertype(L, 1, 0);
+    ax::AABB* self = (ax::AABB*)tolua_tousertype(L, 1, 0);
     AX_SAFE_DELETE(self);
     return 0;
 }
@@ -1250,7 +1250,7 @@ int lua_register_axis_3d_AABB(lua_State* L)
     tolua_function(L, "updateMinMax", lua_axis_3d_AABB_updateMinMax);
     tolua_function(L, "containPoint", lua_axis_3d_AABB_containPoint);
     tolua_endmodule(L);
-    auto typeName                                    = typeid(axis::AABB).name();
+    auto typeName                                    = typeid(ax::AABB).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AABB";
     g_typeCast[typeName]                             = "ax.AABB";
     return 1;
@@ -1259,7 +1259,7 @@ int lua_register_axis_3d_AABB(lua_State* L)
 int lua_axis_3d_OBB_reset(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* cobj = nullptr;
+    ax::OBB* cobj = nullptr;
     bool ok            = true;
 
 #if _AX_DEBUG >= 1
@@ -1271,7 +1271,7 @@ int lua_axis_3d_OBB_reset(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::OBB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -1303,7 +1303,7 @@ tolua_lerror:
 int lua_axis_3d_OBB_set(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* cobj = nullptr;
+    ax::OBB* cobj = nullptr;
     bool ok            = true;
 
 #if _AX_DEBUG >= 1
@@ -1315,7 +1315,7 @@ int lua_axis_3d_OBB_set(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::OBB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -1328,11 +1328,11 @@ int lua_axis_3d_OBB_set(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 5)
     {
-        axis::Vec3 arg0;
-        axis::Vec3 arg1;
-        axis::Vec3 arg2;
-        axis::Vec3 arg3;
-        axis::Vec3 arg4;
+        ax::Vec3 arg0;
+        ax::Vec3 arg1;
+        ax::Vec3 arg2;
+        ax::Vec3 arg3;
+        ax::Vec3 arg4;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "ax.OBB:set");
 
@@ -1361,7 +1361,7 @@ tolua_lerror:
 int lua_axis_3d_OBB_transform(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* cobj = nullptr;
+    ax::OBB* cobj = nullptr;
     bool ok            = true;
 
 #if _AX_DEBUG >= 1
@@ -1373,7 +1373,7 @@ int lua_axis_3d_OBB_transform(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::OBB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -1386,7 +1386,7 @@ int lua_axis_3d_OBB_transform(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        axis::Mat4 arg0;
+        ax::Mat4 arg0;
 
         ok &= luaval_to_mat4(L, 2, &arg0, "ax.OBB:transform");
         if (!ok)
@@ -1408,7 +1408,7 @@ tolua_lerror:
 int lua_axis_3d_OBB_containPoint(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* cobj = nullptr;
+    ax::OBB* cobj = nullptr;
     bool ok            = true;
 
 #if _AX_DEBUG >= 1
@@ -1420,7 +1420,7 @@ int lua_axis_3d_OBB_containPoint(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::OBB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -1433,7 +1433,7 @@ int lua_axis_3d_OBB_containPoint(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        axis::Vec3 arg0;
+        ax::Vec3 arg0;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "ax.OBB:containPoint");
         if (!ok)
@@ -1456,7 +1456,7 @@ tolua_lerror:
 int lua_axis_3d_OBB_constructor(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* cobj = nullptr;
+    ax::OBB* cobj = nullptr;
     bool ok            = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1467,14 +1467,14 @@ int lua_axis_3d_OBB_constructor(lua_State* L)
     {
         if (argc == 1)
         {
-            axis::AABB* arg0;
-            ok &= luaval_to_object<axis::AABB>(L, 2, "ax.AABB", &arg0, "ax.OBB:OBB");
+            ax::AABB* arg0;
+            ok &= luaval_to_object<ax::AABB>(L, 2, "ax.AABB", &arg0, "ax.OBB:OBB");
 
             if (!ok)
             {
                 break;
             }
-            cobj = new axis::OBB(*arg0);
+            cobj = new ax::OBB(*arg0);
             tolua_pushusertype(L, (void*)cobj, "ax.OBB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1485,7 +1485,7 @@ int lua_axis_3d_OBB_constructor(lua_State* L)
     {
         if (argc == 0)
         {
-            cobj = new axis::OBB();
+            cobj = new ax::OBB();
             tolua_pushusertype(L, (void*)cobj, "ax.OBB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1496,8 +1496,8 @@ int lua_axis_3d_OBB_constructor(lua_State* L)
     {
         if (argc == 2)
         {
-            const axis::Vec3* arg0;
-            ok &= luaval_to_object<const axis::Vec3>(L, 2, "ax.Vec3", &arg0, "ax.OBB:OBB");
+            const ax::Vec3* arg0;
+            ok &= luaval_to_object<const ax::Vec3>(L, 2, "ax.Vec3", &arg0, "ax.OBB:OBB");
 
             if (!ok)
             {
@@ -1510,7 +1510,7 @@ int lua_axis_3d_OBB_constructor(lua_State* L)
             {
                 break;
             }
-            cobj = new axis::OBB(arg0, arg1);
+            cobj = new ax::OBB(arg0, arg1);
             tolua_pushusertype(L, (void*)cobj, "ax.OBB");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -1530,7 +1530,7 @@ int lua_axis_3d_OBB_constructor(lua_State* L)
 int lua_axis_3d_OBB_intersects(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
     bool ok            = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1538,7 +1538,7 @@ int lua_axis_3d_OBB_intersects(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1549,8 +1549,8 @@ int lua_axis_3d_OBB_intersects(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (1 == argc)
     {
-        axis::OBB* arg0;
-        ok &= luaval_to_object<axis::OBB>(L, 2, "ax.OBB", &arg0, "ax.OBB:intersects");
+        ax::OBB* arg0;
+        ok &= luaval_to_object<ax::OBB>(L, 2, "ax.OBB", &arg0, "ax.OBB:intersects");
 
         if (!ok)
             return 0;
@@ -1570,7 +1570,7 @@ tolua_lerror:
 
 int lua_axis_3d_get_OBB_center(lua_State* L)
 {
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1578,7 +1578,7 @@ int lua_axis_3d_get_OBB_center(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1599,7 +1599,7 @@ tolua_lerror:
 int lua_axis_3d_set_OBB_center(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1607,7 +1607,7 @@ int lua_axis_3d_set_OBB_center(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1639,7 +1639,7 @@ tolua_lerror:
 
 int lua_axis_3d_get_OBB_xAxis(lua_State* L)
 {
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1647,7 +1647,7 @@ int lua_axis_3d_get_OBB_xAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1668,7 +1668,7 @@ tolua_lerror:
 int lua_axis_3d_set_OBB_xAxis(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1676,7 +1676,7 @@ int lua_axis_3d_set_OBB_xAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1708,7 +1708,7 @@ tolua_lerror:
 
 int lua_axis_3d_get_OBB_yAxis(lua_State* L)
 {
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1716,7 +1716,7 @@ int lua_axis_3d_get_OBB_yAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1737,7 +1737,7 @@ tolua_lerror:
 int lua_axis_3d_set_OBB_yAxis(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1745,7 +1745,7 @@ int lua_axis_3d_set_OBB_yAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1777,7 +1777,7 @@ tolua_lerror:
 
 int lua_axis_3d_get_OBB_zAxis(lua_State* L)
 {
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1785,7 +1785,7 @@ int lua_axis_3d_get_OBB_zAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1806,7 +1806,7 @@ tolua_lerror:
 int lua_axis_3d_set_OBB_zAxis(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1814,7 +1814,7 @@ int lua_axis_3d_set_OBB_zAxis(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1846,7 +1846,7 @@ tolua_lerror:
 
 int lua_axis_3d_get_OBB_extents(lua_State* L)
 {
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1854,7 +1854,7 @@ int lua_axis_3d_get_OBB_extents(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1875,7 +1875,7 @@ tolua_lerror:
 int lua_axis_3d_set_OBB_extents(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* self = nullptr;
+    ax::OBB* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1883,7 +1883,7 @@ int lua_axis_3d_set_OBB_extents(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    self = (ax::OBB*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -1916,7 +1916,7 @@ tolua_lerror:
 int lua_axis_3d_OBB_getCorners(lua_State* L)
 {
     int argc           = 0;
-    axis::OBB* cobj = nullptr;
+    ax::OBB* cobj = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1927,7 +1927,7 @@ int lua_axis_3d_OBB_getCorners(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::OBB*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -1940,7 +1940,7 @@ int lua_axis_3d_OBB_getCorners(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        axis::Vec3* arg0;
+        ax::Vec3* arg0;
 #if _AX_DEBUG >= 1
         if (!tolua_istable(L, 2, 0, &tolua_err))
             goto tolua_lerror;
@@ -1953,14 +1953,14 @@ int lua_axis_3d_OBB_getCorners(lua_State* L)
             return 0;
         }
 
-        arg0 = new axis::Vec3[len];
+        arg0 = new ax::Vec3[len];
         for (int i = 1; i <= len; i++)
         {
             lua_pushnumber(L, i);
             lua_gettable(L, 2);
             if (lua_isnil(L, -1))
             {
-                arg0[i - 1] = axis::Vec3(0, 0, 0);
+                arg0[i - 1] = ax::Vec3(0, 0, 0);
             }
             else
             {
@@ -1996,7 +1996,7 @@ tolua_lerror:
 
 int lua_axis_3d_OBB_finalize(lua_State* L)
 {
-    axis::OBB* self = (axis::OBB*)tolua_tousertype(L, 1, 0);
+    ax::OBB* self = (ax::OBB*)tolua_tousertype(L, 1, 0);
     AX_SAFE_DELETE(self);
     return 0;
 }
@@ -2020,7 +2020,7 @@ int lua_register_axis_3d_OBB(lua_State* L)
     tolua_function(L, "intersects", lua_axis_3d_OBB_intersects);
     tolua_function(L, "getCorners", lua_axis_3d_OBB_getCorners);
     tolua_endmodule(L);
-    auto typeName                                    = typeid(axis::OBB).name();
+    auto typeName                                    = typeid(ax::OBB).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.OBB";
     g_typeCast[typeName]                             = "ax.OBB";
     return 1;
@@ -2029,7 +2029,7 @@ int lua_register_axis_3d_OBB(lua_State* L)
 int lua_axis_3d_Ray_set(lua_State* L)
 {
     int argc           = 0;
-    axis::Ray* cobj = nullptr;
+    ax::Ray* cobj = nullptr;
     bool ok            = true;
 
 #if _AX_DEBUG >= 1
@@ -2041,7 +2041,7 @@ int lua_axis_3d_Ray_set(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Ray*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::Ray*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -2054,8 +2054,8 @@ int lua_axis_3d_Ray_set(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 2)
     {
-        axis::Vec3 arg0;
-        axis::Vec3 arg1;
+        ax::Vec3 arg0;
+        ax::Vec3 arg1;
 
         ok &= luaval_to_vec3(L, 2, &arg0, "ax.Ray:set");
 
@@ -2078,7 +2078,7 @@ tolua_lerror:
 int lua_axis_3d_Ray_transform(lua_State* L)
 {
     int argc           = 0;
-    axis::Ray* cobj = nullptr;
+    ax::Ray* cobj = nullptr;
     bool ok            = true;
 
 #if _AX_DEBUG >= 1
@@ -2090,7 +2090,7 @@ int lua_axis_3d_Ray_transform(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    cobj = (axis::Ray*)tolua_tousertype(L, 1, 0);
+    cobj = (ax::Ray*)tolua_tousertype(L, 1, 0);
 
 #if _AX_DEBUG >= 1
     if (!cobj)
@@ -2103,7 +2103,7 @@ int lua_axis_3d_Ray_transform(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (argc == 1)
     {
-        axis::Mat4 arg0;
+        ax::Mat4 arg0;
 
         ok &= luaval_to_mat4(L, 2, &arg0, "ax.Ray:transform");
         if (!ok)
@@ -2125,7 +2125,7 @@ tolua_lerror:
 int lua_axis_3d_Ray_intersects(lua_State* L)
 {
     int argc           = 0;
-    axis::Ray* self = nullptr;
+    ax::Ray* self = nullptr;
     bool ok            = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2133,7 +2133,7 @@ int lua_axis_3d_Ray_intersects(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
+    self = (ax::Ray*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2144,8 +2144,8 @@ int lua_axis_3d_Ray_intersects(lua_State* L)
     argc = lua_gettop(L) - 1;
     if (1 == argc)
     {
-        axis::OBB* arg0 = nullptr;
-        ok &= luaval_to_object<axis::OBB>(L, 2, "ax.OBB", &arg0, "ax.Ray:intersects");
+        ax::OBB* arg0 = nullptr;
+        ok &= luaval_to_object<ax::OBB>(L, 2, "ax.OBB", &arg0, "ax.Ray:intersects");
 
         if (!ok)
             return 0;
@@ -2168,7 +2168,7 @@ tolua_lerror:
 int lua_axis_3d_Ray_constructor(lua_State* L)
 {
     int argc           = 0;
-    axis::Ray* cobj = nullptr;
+    ax::Ray* cobj = nullptr;
     bool ok            = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2179,21 +2179,21 @@ int lua_axis_3d_Ray_constructor(lua_State* L)
     {
         if (argc == 2)
         {
-            axis::Vec3 arg0;
+            ax::Vec3 arg0;
             ok &= luaval_to_vec3(L, 2, &arg0, "ax.Ray:Ray");
 
             if (!ok)
             {
                 break;
             }
-            axis::Vec3 arg1;
+            ax::Vec3 arg1;
             ok &= luaval_to_vec3(L, 3, &arg1, "ax.Ray:Ray");
 
             if (!ok)
             {
                 break;
             }
-            cobj = new axis::Ray(arg0, arg1);
+            cobj = new ax::Ray(arg0, arg1);
             tolua_pushusertype(L, (void*)cobj, "ax.Ray");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -2204,7 +2204,7 @@ int lua_axis_3d_Ray_constructor(lua_State* L)
     {
         if (argc == 0)
         {
-            cobj = new axis::Ray();
+            cobj = new ax::Ray();
             tolua_pushusertype(L, (void*)cobj, "ax.Ray");
             tolua_register_gc(L, lua_gettop(L));
             return 1;
@@ -2223,7 +2223,7 @@ int lua_axis_3d_Ray_constructor(lua_State* L)
 
 int lua_axis_3d_get_Ray_origin(lua_State* L)
 {
-    axis::Ray* self = nullptr;
+    ax::Ray* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2231,7 +2231,7 @@ int lua_axis_3d_get_Ray_origin(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
+    self = (ax::Ray*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2252,7 +2252,7 @@ tolua_lerror:
 int lua_axis_3d_set_Ray_origin(lua_State* L)
 {
     int argc           = 0;
-    axis::Ray* self = nullptr;
+    ax::Ray* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2260,7 +2260,7 @@ int lua_axis_3d_set_Ray_origin(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
+    self = (ax::Ray*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2292,7 +2292,7 @@ tolua_lerror:
 
 int lua_axis_3d_get_Ray_direction(lua_State* L)
 {
-    axis::Ray* self = nullptr;
+    ax::Ray* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2300,7 +2300,7 @@ int lua_axis_3d_get_Ray_direction(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
+    self = (ax::Ray*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2321,7 +2321,7 @@ tolua_lerror:
 int lua_axis_3d_set_Ray_direction(lua_State* L)
 {
     int argc           = 0;
-    axis::Ray* self = nullptr;
+    ax::Ray* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -2329,7 +2329,7 @@ int lua_axis_3d_set_Ray_direction(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::Ray*)tolua_tousertype(L, 1, 0);
+    self = (ax::Ray*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -2361,7 +2361,7 @@ tolua_lerror:
 
 int lua_axis_3d_Ray_finalize(lua_State* L)
 {
-    axis::Ray* self = (axis::Ray*)tolua_tousertype(L, 1, 0);
+    ax::Ray* self = (ax::Ray*)tolua_tousertype(L, 1, 0);
     AX_SAFE_DELETE(self);
     return 0;
 }
@@ -2379,7 +2379,7 @@ int lua_register_axis_3d_Ray(lua_State* L)
     tolua_function(L, "transform", lua_axis_3d_Ray_transform);
     tolua_function(L, "intersects", lua_axis_3d_Ray_intersects);
     tolua_endmodule(L);
-    auto typeName                                    = typeid(axis::Ray).name();
+    auto typeName                                    = typeid(ax::Ray).name();
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Ray";
     g_typeCast[typeName]                             = "ax.Ray";
     return 1;

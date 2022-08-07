@@ -43,7 +43,7 @@ class Scale9Sprite;
 /**
  * @brief A widget to display images.
  */
-class AX_GUI_DLL ImageView : public Widget, public axis::BlendProtocol
+class AX_GUI_DLL ImageView : public Widget, public ax::BlendProtocol
 {
 
     DECLARE_CLASS_GUI_INFO

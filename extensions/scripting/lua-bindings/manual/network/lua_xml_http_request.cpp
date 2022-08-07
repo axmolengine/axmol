@@ -39,9 +39,9 @@
 #include "yasio/detail/byte_buffer.hpp"
 
 USING_NS_AX;
-using namespace axis::network;
+using namespace ax::network;
 
-class LuaMinXmlHttpRequest : public axis::Ref
+class LuaMinXmlHttpRequest : public ax::Ref
 {
 public:
     enum class ResponseType
@@ -75,7 +75,7 @@ public:
     inline void setReadyState(int readyState) { _readyState = readyState; }
     inline int getReadyState() const { return _readyState; }
 
-    inline axis::network::HttpRequest* getHttpRequest() const { return _httpRequest; }
+    inline ax::network::HttpRequest* getHttpRequest() const { return _httpRequest; }
     inline std::string_view getStatusText() const { return _statusText; }
 
     inline void setStatus(int status) { _status = status; }
@@ -206,7 +206,7 @@ void LuaMinXmlHttpRequest::_setHttpRequestHeader()
 void LuaMinXmlHttpRequest::_sendRequest()
 {
     _httpRequest->setResponseCallback(
-        [this](axis::network::HttpClient* sender, axis::network::HttpResponse* response) {
+        [this](ax::network::HttpClient* sender, ax::network::HttpResponse* response) {
             if (_isAborted)
                 return;
 
@@ -227,15 +227,15 @@ void LuaMinXmlHttpRequest::_sendRequest()
                     _statusText.clear();
                 }
                 // TODO: call back lua function
-                int handler = axis::ScriptHandlerMgr::getInstance()->getObjectHandler(
-                    (void*)this, axis::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+                int handler = ax::ScriptHandlerMgr::getInstance()->getObjectHandler(
+                    (void*)this, ax::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
 
                 if (0 != handler)
                 {
                     AXLOG("come in handler, handler is %d", handler);
-                    axis::CommonScriptData data(handler, "");
-                    axis::ScriptEvent event(axis::ScriptEventType::kCommonEvent, (void*)&data);
-                    axis::ScriptEngineManager::sendEventToLua(event);
+                    ax::CommonScriptData data(handler, "");
+                    ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
+                    ax::ScriptEngineManager::sendEventToLua(event);
                 }
                 return;
             }
@@ -259,14 +259,14 @@ void LuaMinXmlHttpRequest::_sendRequest()
             }
 
             // TODO: call back lua function
-            int handler = axis::ScriptHandlerMgr::getInstance()->getObjectHandler(
-                (void*)this, axis::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+            int handler = ax::ScriptHandlerMgr::getInstance()->getObjectHandler(
+                (void*)this, ax::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
 
             if (0 != handler)
             {
-                axis::CommonScriptData data(handler, "");
-                axis::ScriptEvent event(axis::ScriptEventType::kCommonEvent, (void*)&data);
-                axis::ScriptEngineManager::sendEventToLua(event);
+                ax::CommonScriptData data(handler, "");
+                ax::ScriptEvent event(ax::ScriptEventType::kCommonEvent, (void*)&data);
+                ax::ScriptEngineManager::sendEventToLua(event);
             }
             release();
         });
@@ -1102,8 +1102,8 @@ static int lua_axis_XMLHttpRequest_registerScriptHandler(lua_State* L)
 #endif
 
         int handler = (toluafix_ref_function(L, 2, 0));
-        axis::ScriptHandlerMgr::getInstance()->addObjectHandler(
-            (void*)self, handler, axis::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+        ax::ScriptHandlerMgr::getInstance()->addObjectHandler(
+            (void*)self, handler, ax::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
         return 0;
     }
 
@@ -1144,8 +1144,8 @@ static int lua_axis_XMLHttpRequest_unregisterScriptHandler(lua_State* L)
 
     if (0 == argc)
     {
-        axis::ScriptHandlerMgr::getInstance()->removeObjectHandler(
-            (void*)self, axis::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
+        ax::ScriptHandlerMgr::getInstance()->removeObjectHandler(
+            (void*)self, ax::ScriptHandlerMgr::HandlerType::XMLHTTPREQUEST_READY_STATE_CHANGE);
 
         return 0;
     }

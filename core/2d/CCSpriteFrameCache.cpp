@@ -207,7 +207,7 @@ void SpriteFrameCache::removeSpriteFramesFromFileContent(std::string_view plist_
 
 void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
 {
-    if (dictionary["frames"].getType() != axis::Value::Type::MAP)
+    if (dictionary["frames"].getType() != ax::Value::Type::MAP)
         return;
 
     const auto& framesDict = dictionary["frames"].asValueMap();

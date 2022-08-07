@@ -39,7 +39,7 @@
 #include "renderer/backend/ProgramStateRegistry.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace ax::ui;
 
 Scale9Sprite* Scale9Sprite::create()
 {
@@ -531,7 +531,7 @@ void Scale9Sprite::setupSlice9(Texture2D* texture, const Rect& capInsets)
     }
 }
 
-void Scale9Sprite::setCapInsets(const axis::Rect& insetsCopy)
+void Scale9Sprite::setCapInsets(const ax::Rect& insetsCopy)
 {
     Rect insets = insetsCopy;
 

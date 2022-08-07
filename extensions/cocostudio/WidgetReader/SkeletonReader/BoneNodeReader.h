@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "WidgetReader/NodeReaderProtocol.h"
 #include "WidgetReader/NodeReaderDefine.h"
 
-class BoneNodeReader : public axis::Ref, public cocostudio::NodeReaderProtocol
+class BoneNodeReader : public ax::Ref, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -44,9 +44,9 @@ public:
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
         pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder) override;
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* boneOptions) override;
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* boneOptions) override;
 
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
 };
 
 #endif /* defined(__BONENODEREADER_H_) */

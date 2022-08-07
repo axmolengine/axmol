@@ -1451,12 +1451,12 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, std::string_view fr
     return false;
 }
 
-bool ParticleSystem::addAnimationIndex(axis::SpriteFrame* frame)
+bool ParticleSystem::addAnimationIndex(ax::SpriteFrame* frame)
 {
     return addAnimationIndex(_animIndexCount, frame);
 }
 
-bool ParticleSystem::addAnimationIndex(unsigned short index, axis::SpriteFrame* frame)
+bool ParticleSystem::addAnimationIndex(unsigned short index, ax::SpriteFrame* frame)
 {
     if (frame)
     {
@@ -1468,7 +1468,7 @@ bool ParticleSystem::addAnimationIndex(unsigned short index, axis::SpriteFrame* 
     return false;
 }
 
-bool ParticleSystem::addAnimationIndex(unsigned short index, axis::Rect rect, bool rotated)
+bool ParticleSystem::addAnimationIndex(unsigned short index, ax::Rect rect, bool rotated)
 {
     auto iter = _animationIndices.find(index);
     if (iter == _animationIndices.end())

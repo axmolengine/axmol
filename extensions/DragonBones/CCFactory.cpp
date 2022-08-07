@@ -22,41 +22,41 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
         if (textureAtlas != nullptr)
         {
             static_cast<CCTextureAtlasData*>(textureAtlasData)
-                ->setRenderTexture(static_cast<axis::Texture2D*>(textureAtlas));
+                ->setRenderTexture(static_cast<ax::Texture2D*>(textureAtlas));
         }
         else
         {
-            const auto textureCache = axis::Director::getInstance()->getTextureCache();
+            const auto textureCache = ax::Director::getInstance()->getTextureCache();
             auto texture            = textureCache->getTextureForKey(textureAtlasData->imagePath);
             if (texture == nullptr)
             {
-                const auto defaultPixelFormat = axis::Texture2D::getDefaultAlphaPixelFormat();
+                const auto defaultPixelFormat = ax::Texture2D::getDefaultAlphaPixelFormat();
                 auto pixelFormat              = defaultPixelFormat;
 #if COCOS2D_VERSION >= 0x00040000
                 switch (textureAtlasData->format)
                 {
                 case TextureFormat::RGBA8888:
-                    pixelFormat = axis::backend::PixelFormat::RGBA8;
+                    pixelFormat = ax::backend::PixelFormat::RGBA8;
                     break;
 
                 case TextureFormat::BGRA8888:
-                    pixelFormat = axis::backend::PixelFormat::BGRA8;
+                    pixelFormat = ax::backend::PixelFormat::BGRA8;
                     break;
 
                 case TextureFormat::RGBA4444:
-                    pixelFormat = axis::backend::PixelFormat::RGBA4;
+                    pixelFormat = ax::backend::PixelFormat::RGBA4;
                     break;
 
                 case TextureFormat::RGB888:
-                    pixelFormat = axis::backend::PixelFormat::RGB8;
+                    pixelFormat = ax::backend::PixelFormat::RGB8;
                     break;
 
                 case TextureFormat::RGB565:
-                    pixelFormat = axis::backend::PixelFormat::RGB565;
+                    pixelFormat = ax::backend::PixelFormat::RGB565;
                     break;
 
                 case TextureFormat::RGBA5551:
-                    pixelFormat = axis::backend::PixelFormat::RGB5A1;
+                    pixelFormat = ax::backend::PixelFormat::RGB5A1;
                     break;
 
                 case TextureFormat::DEFAULT:
@@ -67,27 +67,27 @@ TextureAtlasData* CCFactory::_buildTextureAtlasData(TextureAtlasData* textureAtl
                 switch (textureAtlasData->format)
                 {
                 case TextureFormat::RGBA8888:
-                    pixelFormat = axis::Texture2D::PixelFormat::RGBA8;
+                    pixelFormat = ax::Texture2D::PixelFormat::RGBA8;
                     break;
 
                 case TextureFormat::BGRA8888:
-                    pixelFormat = axis::Texture2D::PixelFormat::BGRA8;
+                    pixelFormat = ax::Texture2D::PixelFormat::BGRA8;
                     break;
 
                 case TextureFormat::RGBA4444:
-                    pixelFormat = axis::Texture2D::PixelFormat::RGBA4;
+                    pixelFormat = ax::Texture2D::PixelFormat::RGBA4;
                     break;
 
                 case TextureFormat::RGB888:
-                    pixelFormat = axis::Texture2D::PixelFormat::RGB8;
+                    pixelFormat = ax::Texture2D::PixelFormat::RGB8;
                     break;
 
                 case TextureFormat::RGB565:
-                    pixelFormat = axis::Texture2D::PixelFormat::RGB565;
+                    pixelFormat = ax::Texture2D::PixelFormat::RGB565;
                     break;
 
                 case TextureFormat::RGBA5551:
-                    pixelFormat = axis::Texture2D::PixelFormat::RGB5A1;
+                    pixelFormat = ax::Texture2D::PixelFormat::RGB5A1;
                     break;
 
                 case TextureFormat::DEFAULT:
@@ -131,7 +131,7 @@ Slot* CCFactory::_buildSlot(const BuildArmaturePackage& dataPackage, const SlotD
 
     rawDisplay->setCascadeOpacityEnabled(true);
     rawDisplay->setCascadeColorEnabled(true);
-    rawDisplay->setAnchorPoint(axis::Vec2::ZERO);
+    rawDisplay->setAnchorPoint(ax::Vec2::ZERO);
     rawDisplay->setLocalZOrder(slotData->zOrder);
 
     slot->init(slotData, armature, rawDisplay, rawDisplay);
@@ -150,24 +150,24 @@ DragonBonesData* CCFactory::loadDragonBonesData(std::string_view filePath, std::
         }
     }
 
-    const auto fullpath = axis::FileUtils::getInstance()->fullPathForFilename(filePath);
-    if (axis::FileUtils::getInstance()->isFileExist(filePath))
+    const auto fullpath = ax::FileUtils::getInstance()->fullPathForFilename(filePath);
+    if (ax::FileUtils::getInstance()->isFileExist(filePath))
     {
         const auto pos = fullpath.find(".json");
 
         if (pos != std::string::npos)
         {
-            const auto data = axis::FileUtils::getInstance()->getStringFromFile(filePath);
+            const auto data = ax::FileUtils::getInstance()->getStringFromFile(filePath);
 
             return parseDragonBonesData(data.c_str(), name, scale);
         }
         else
         {
 #if COCOS2D_VERSION >= 0x00031200
-            axis::Data cocos2dData;
-            axis::FileUtils::getInstance()->getContents(fullpath, &cocos2dData);
+            ax::Data cocos2dData;
+            ax::FileUtils::getInstance()->getContents(fullpath, &cocos2dData);
 #else
-            const auto cocos2dData = axis::FileUtils::getInstance()->getDataFromFile(fullpath);
+            const auto cocos2dData = ax::FileUtils::getInstance()->getDataFromFile(fullpath);
 #endif
             const auto binary = (unsigned char*)malloc(sizeof(unsigned char) * cocos2dData.getSize());
             memcpy(binary, cocos2dData.getBytes(), cocos2dData.getSize());
@@ -182,8 +182,8 @@ DragonBonesData* CCFactory::loadDragonBonesData(std::string_view filePath, std::
 
 TextureAtlasData* CCFactory::loadTextureAtlasData(std::string_view filePath, std::string_view name, float scale)
 {
-    _prevPath       = axis::FileUtils::getInstance()->fullPathForFilename(filePath);
-    const auto data = axis::FileUtils::getInstance()->getStringFromFile(_prevPath);
+    _prevPath       = ax::FileUtils::getInstance()->fullPathForFilename(filePath);
+    const auto data = ax::FileUtils::getInstance()->getStringFromFile(_prevPath);
     if (data.empty())
     {
         return nullptr;
@@ -208,12 +208,12 @@ CCArmatureDisplay* CCFactory::buildArmatureDisplay(std::string_view armatureName
     return nullptr;
 }
 
-axis::Sprite* CCFactory::getTextureDisplay(std::string_view textureName, std::string_view dragonBonesName) const
+ax::Sprite* CCFactory::getTextureDisplay(std::string_view textureName, std::string_view dragonBonesName) const
 {
     const auto textureData = static_cast<CCTextureData*>(_getTextureData(dragonBonesName, textureName));
     if (textureData != nullptr && textureData->spriteFrame != nullptr)
     {
-        const auto display = axis::Sprite::createWithSpriteFrame(textureData->spriteFrame);
+        const auto display = ax::Sprite::createWithSpriteFrame(textureData->spriteFrame);
         return display;
     }
 

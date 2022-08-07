@@ -170,7 +170,7 @@ Rect NinePatchImageParser::parseCapInset() const
     return capInsets;
 }
 
-void NinePatchImageParser::setSpriteFrameInfo(Image* image, const axis::Rect& frameRect, bool rotated)
+void NinePatchImageParser::setSpriteFrameInfo(Image* image, const ax::Rect& frameRect, bool rotated)
 {
     this->_image = image;
     AXASSERT(image->getPixelFormat() == backend::PixelFormat::RGBA8,

@@ -31,7 +31,7 @@
 
 static int lua_get_AudioProfile_name(lua_State* L)
 {
-    axis::AudioProfile* self = nullptr;
+    ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -39,7 +39,7 @@ static int lua_get_AudioProfile_name(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
+    self = (ax::AudioProfile*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -61,7 +61,7 @@ tolua_lerror:
 static int lua_set_AudioProfile_name(lua_State* L)
 {
     int argc                    = 0;
-    axis::AudioProfile* self = nullptr;
+    ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -69,7 +69,7 @@ static int lua_set_AudioProfile_name(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
+    self = (ax::AudioProfile*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -101,7 +101,7 @@ tolua_lerror:
 
 static int lua_get_AudioProfile_maxInstances(lua_State* L)
 {
-    axis::AudioProfile* self = nullptr;
+    ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -109,7 +109,7 @@ static int lua_get_AudioProfile_maxInstances(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
+    self = (ax::AudioProfile*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -131,7 +131,7 @@ tolua_lerror:
 static int lua_set_AudioProfile_maxInstances(lua_State* L)
 {
     int argc                    = 0;
-    axis::AudioProfile* self = nullptr;
+    ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -139,7 +139,7 @@ static int lua_set_AudioProfile_maxInstances(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
+    self = (ax::AudioProfile*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -171,7 +171,7 @@ tolua_lerror:
 
 static int lua_get_AudioProfile_minDelay(lua_State* L)
 {
-    axis::AudioProfile* self = nullptr;
+    ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -179,7 +179,7 @@ static int lua_get_AudioProfile_minDelay(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
+    self = (ax::AudioProfile*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -201,7 +201,7 @@ tolua_lerror:
 static int lua_set_AudioProfile_minDelay(lua_State* L)
 {
     int argc                    = 0;
-    axis::AudioProfile* self = nullptr;
+    ax::AudioProfile* self = nullptr;
 
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -209,7 +209,7 @@ static int lua_set_AudioProfile_minDelay(lua_State* L)
         goto tolua_lerror;
 #endif
 
-    self = (axis::AudioProfile*)tolua_tousertype(L, 1, 0);
+    self = (ax::AudioProfile*)tolua_tousertype(L, 1, 0);
 #if _AX_DEBUG >= 1
     if (nullptr == self)
     {
@@ -269,7 +269,7 @@ int lua_axis_audioengine_AudioEngine_setFinishCallback(lua_State* tolua_S)
 
         LUA_FUNCTION handler = (toluafix_ref_function(tolua_S, 3, 0));
 
-        axis::AudioEngine::setFinishCallback(arg0, [=](int audioID, std::string_view filePath) {
+        ax::AudioEngine::setFinishCallback(arg0, [=](int audioID, std::string_view filePath) {
             LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
 
             stack->pushInt(audioID);

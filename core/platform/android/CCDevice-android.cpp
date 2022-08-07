@@ -195,7 +195,7 @@ JNIEXPORT void JNICALL
 Java_org_axys1_lib_AxysBitmap_nativeInitBitmapDC(JNIEnv* env, jclass, jint width, jint height, jbyteArray pixels)
 {
     int size                    = width * height * 4;
-    axis::BitmapDC& bitmapDC = axis::sharedBitmapDC();
+    ax::BitmapDC& bitmapDC = ax::sharedBitmapDC();
     bitmapDC._width             = width;
     bitmapDC._height            = height;
     bitmapDC._data              = (unsigned char*)malloc(sizeof(unsigned char) * size);

@@ -47,7 +47,7 @@
 int lua_axis_physics_PhysicsBody_getJoints(lua_State* tolua_S)
 {
     int argc                   = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok                    = true;
 
 #    if _AX_DEBUG >= 1
@@ -59,7 +59,7 @@ int lua_axis_physics_PhysicsBody_getJoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -113,7 +113,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsWorld_getScene(lua_State* tolua_S)
 {
     int argc                    = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -124,7 +124,7 @@ int lua_axis_physics_PhysicsWorld_getScene(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -137,7 +137,7 @@ int lua_axis_physics_PhysicsWorld_getScene(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        axis::Scene& ret = cobj->getScene();
+        ax::Scene& ret = cobj->getScene();
         do
         {
             auto className = getLuaTypeName<Ref>(&ret, "ax.Scene");
@@ -163,7 +163,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
 {
     int argc                    = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok                     = true;
 
 #    if _AX_DEBUG >= 1
@@ -175,7 +175,7 @@ int lua_axis_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -188,14 +188,14 @@ int lua_axis_physics_PhysicsWorld_rayCast(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 3)
     {
-        std::function<bool(axis::PhysicsWorld&, const axis::PhysicsRayCastInfo&, void*)> arg0;
-        axis::Vec2 arg1;
-        axis::Vec2 arg2;
+        std::function<bool(ax::PhysicsWorld&, const ax::PhysicsRayCastInfo&, void*)> arg0;
+        ax::Vec2 arg1;
+        ax::Vec2 arg2;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler, stack](axis::PhysicsWorld& world, const axis::PhysicsRayCastInfo& info,
+            arg0 = [handler, stack](ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info,
                              void* data) -> bool {
                 
                 auto Ls    = stack->getLuaState();
@@ -230,7 +230,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
 {
     int argc                    = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok                     = true;
 
 #    if _AX_DEBUG >= 1
@@ -242,7 +242,7 @@ int lua_axis_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -255,13 +255,13 @@ int lua_axis_physics_PhysicsWorld_queryRect(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 2)
     {
-        std::function<bool(axis::PhysicsWorld&, axis::PhysicsShape&, void*)> arg0;
-        axis::Rect arg1;
+        std::function<bool(ax::PhysicsWorld&, ax::PhysicsShape&, void*)> arg0;
+        ax::Rect arg1;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler,stack](axis::PhysicsWorld& world, axis::PhysicsShape& shape, void* data) -> bool {
+            arg0 = [handler,stack](ax::PhysicsWorld& world, ax::PhysicsShape& shape, void* data) -> bool {
                
                 auto Ls    = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
@@ -295,7 +295,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
 {
     int argc                    = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok                     = true;
 
 #    if _AX_DEBUG >= 1
@@ -307,7 +307,7 @@ int lua_axis_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -320,13 +320,13 @@ int lua_axis_physics_PhysicsWorld_queryPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 2)
     {
-        std::function<bool(axis::PhysicsWorld&, axis::PhysicsShape&, void*)> arg0;
-        axis::Vec2 arg1;
+        std::function<bool(ax::PhysicsWorld&, ax::PhysicsShape&, void*)> arg0;
+        ax::Vec2 arg1;
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 2, 0);
         auto stack           = LuaEngine::getInstance()->getLuaStack();
         do
         {
-            arg0 = [handler,stack](axis::PhysicsWorld& world, axis::PhysicsShape& shape, void* data) -> bool {
+            arg0 = [handler,stack](ax::PhysicsWorld& world, ax::PhysicsShape& shape, void* data) -> bool {
                 auto Ls    = stack->getLuaState();
                 tolua_pushusertype(Ls, (void*)(&world), getLuaTypeName(&world, "ax.PhysicsWorld"));
                 toluafix_pushusertype_ccobject(Ls, shape._ID, &shape._luaID, (void*)(&shape), "ax.PhysicsShape");
@@ -374,7 +374,7 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0 = nullptr;
+        ax::Vec2* arg0 = nullptr;
         int arg1            = 0;
         do
         {
@@ -389,7 +389,7 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createPolygon(arg0, arg1);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createPolygon(arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -408,9 +408,9 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsBody:createPolygon");
@@ -425,7 +425,7 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createPolygon(arg0, arg1, arg2);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createPolygon(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -445,10 +445,10 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::PhysicsMaterial arg2;
-        axis::Vec2 arg3;
+        ax::PhysicsMaterial arg2;
+        ax::Vec2 arg3;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsBody:createPolygon");
@@ -464,7 +464,7 @@ int lua_axis_physics_PhysicsBody_createPolygon(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createPolygon(arg0, arg1, arg2, arg3);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createPolygon(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -508,7 +508,7 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1;
         do
         {
@@ -523,7 +523,7 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgePolygon(arg0, arg1);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgePolygon(arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -542,9 +542,9 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsBody:createEdgePolygon");
@@ -559,7 +559,7 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgePolygon(arg0, arg1, arg2);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgePolygon(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -578,9 +578,9 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         double arg3;
         do
         {
@@ -597,7 +597,7 @@ int lua_axis_physics_PhysicsBody_createEdgePolygon(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgePolygon(arg0, arg1, arg2, arg3);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgePolygon(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -641,7 +641,7 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1;
         do
         {
@@ -656,7 +656,7 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeChain(arg0, arg1);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeChain(arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -675,9 +675,9 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsBody:createEdgeChain");
@@ -692,7 +692,7 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeChain(arg0, arg1, arg2);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeChain(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -711,9 +711,9 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
     }
     if (argc == 3)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         double arg3;
         do
         {
@@ -730,7 +730,7 @@ int lua_axis_physics_PhysicsBody_createEdgeChain(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeChain(arg0, arg1, arg2, arg3);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeChain(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg0);
         do
         {
@@ -774,7 +774,7 @@ int lua_axis_physics_PhysicsShape_recenterPoints(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
         do
         {
@@ -789,7 +789,7 @@ int lua_axis_physics_PhysicsShape_recenterPoints(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShape::recenterPoints(arg0, arg1);
+        ax::PhysicsShape::recenterPoints(arg0, arg1);
         vec2_array_to_luaval(tolua_S, arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
 
@@ -797,9 +797,9 @@ int lua_axis_physics_PhysicsShape_recenterPoints(lua_State* tolua_S)
     }
     if (argc == 2)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::Vec2 arg2;
+        ax::Vec2 arg2;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsShape:recenterPoints");
@@ -814,7 +814,7 @@ int lua_axis_physics_PhysicsShape_recenterPoints(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShape::recenterPoints(arg0, arg1, arg2);
+        ax::PhysicsShape::recenterPoints(arg0, arg1, arg2);
         vec2_array_to_luaval(tolua_S, arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
         return 1;
@@ -846,7 +846,7 @@ int lua_axis_physics_PhysicsShape_getPolygonCenter(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
         do
         {
@@ -861,7 +861,7 @@ int lua_axis_physics_PhysicsShape_getPolygonCenter(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::Vec2 ret = axis::PhysicsShape::getPolygonCenter(arg0, arg1);
+        ax::Vec2 ret = ax::PhysicsShape::getPolygonCenter(arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
@@ -878,7 +878,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsShapeBox_getPoints(lua_State* tolua_S)
 {
     int argc                       = 0;
-    axis::PhysicsShapeBox* cobj = nullptr;
+    ax::PhysicsShapeBox* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -889,7 +889,7 @@ int lua_axis_physics_PhysicsShapeBox_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsShapeBox*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsShapeBox*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -902,7 +902,7 @@ int lua_axis_physics_PhysicsShapeBox_getPoints(lua_State* tolua_S)
     argc = lua_gettop(tolua_S) - 1;
     if (argc == 0)
     {
-        axis::Vec2 arg0[4];
+        ax::Vec2 arg0[4];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, 4);
         return 1;
@@ -921,7 +921,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsShapePolygon_getPoints(lua_State* tolua_S)
 {
     int argc                           = 0;
-    axis::PhysicsShapePolygon* cobj = nullptr;
+    ax::PhysicsShapePolygon* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -932,7 +932,7 @@ int lua_axis_physics_PhysicsShapePolygon_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsShapePolygon*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsShapePolygon*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -946,7 +946,7 @@ int lua_axis_physics_PhysicsShapePolygon_getPoints(lua_State* tolua_S)
     if (argc == 0)
     {
         int count           = cobj->getPointsCount();
-        axis::Vec2* arg0 = new axis::Vec2[count];
+        ax::Vec2* arg0 = new ax::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
         AX_SAFE_DELETE_ARRAY(arg0);
@@ -981,7 +981,7 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
         do
         {
@@ -997,17 +997,17 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapePolygon* ret = axis::PhysicsShapePolygon::create(arg0, arg1);
+        ax::PhysicsShapePolygon* ret = ax::PhysicsShapePolygon::create(arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
-                                                       (axis::PhysicsShapePolygon*)ret);
+        object_to_luaval<ax::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
+                                                       (ax::PhysicsShapePolygon*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsShapePolygon:create");
@@ -1022,18 +1022,18 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapePolygon* ret = axis::PhysicsShapePolygon::create(arg0, arg1, arg2);
+        ax::PhysicsShapePolygon* ret = ax::PhysicsShapePolygon::create(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
-                                                       (axis::PhysicsShapePolygon*)ret);
+        object_to_luaval<ax::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
+                                                       (ax::PhysicsShapePolygon*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::PhysicsMaterial arg2;
-        axis::Vec2 arg3;
+        ax::PhysicsMaterial arg2;
+        ax::Vec2 arg3;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsShapePolygon:create");
@@ -1049,10 +1049,10 @@ int lua_axis_physics_PhysicsShapePolygon_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapePolygon* ret = axis::PhysicsShapePolygon::create(arg0, arg1, arg2, arg3);
+        ax::PhysicsShapePolygon* ret = ax::PhysicsShapePolygon::create(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
-                                                       (axis::PhysicsShapePolygon*)ret);
+        object_to_luaval<ax::PhysicsShapePolygon>(tolua_S, "ax.PhysicsShapePolygon",
+                                                       (ax::PhysicsShapePolygon*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);
@@ -1081,7 +1081,7 @@ int lua_axis_physics_PhysicsShapePolygon_calculateArea(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
         do
         {
@@ -1096,7 +1096,7 @@ int lua_axis_physics_PhysicsShapePolygon_calculateArea(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        double ret = axis::PhysicsShapePolygon::calculateArea(arg0, arg1);
+        double ret = ax::PhysicsShapePolygon::calculateArea(arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         return 1;
@@ -1128,7 +1128,7 @@ int lua_axis_physics_PhysicsShapePolygon_calculateMoment(lua_State* tolua_S)
     if (argc == 2)
     {
         double arg0;
-        axis::Vec2* arg1;
+        ax::Vec2* arg1;
         int arg2 = 0;
         ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PhysicsShapePolygon:calculateMoment");
         do
@@ -1144,7 +1144,7 @@ int lua_axis_physics_PhysicsShapePolygon_calculateMoment(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
-        double ret = axis::PhysicsShapePolygon::calculateMoment(arg0, arg1, arg2);
+        double ret = ax::PhysicsShapePolygon::calculateMoment(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg1);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         return 1;
@@ -1152,9 +1152,9 @@ int lua_axis_physics_PhysicsShapePolygon_calculateMoment(lua_State* tolua_S)
     if (argc == 2)
     {
         double arg0;
-        axis::Vec2* arg1;
+        ax::Vec2* arg1;
         int arg2 = 0;
-        axis::Vec2 arg3;
+        ax::Vec2 arg3;
         ok &= luaval_to_number(tolua_S, 2, &arg0, "ax.PhysicsShapePolygon:calculateMoment");
         do
         {
@@ -1170,7 +1170,7 @@ int lua_axis_physics_PhysicsShapePolygon_calculateMoment(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg1);
             return 0;
         }
-        double ret = axis::PhysicsShapePolygon::calculateMoment(arg0, arg1, arg2, arg3);
+        double ret = ax::PhysicsShapePolygon::calculateMoment(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg1);
         tolua_pushnumber(tolua_S, (lua_Number)ret);
         return 1;
@@ -1187,7 +1187,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsShapeEdgeBox_getPoints(lua_State* tolua_S)
 {
     int argc                           = 0;
-    axis::PhysicsShapeEdgeBox* cobj = nullptr;
+    ax::PhysicsShapeEdgeBox* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1198,7 +1198,7 @@ int lua_axis_physics_PhysicsShapeEdgeBox_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsShapeEdgeBox*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsShapeEdgeBox*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -1212,7 +1212,7 @@ int lua_axis_physics_PhysicsShapeEdgeBox_getPoints(lua_State* tolua_S)
     if (argc == 0)
     {
         int count           = cobj->getPointsCount();
-        axis::Vec2* arg0 = new axis::Vec2[count];
+        ax::Vec2* arg0 = new ax::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
         AX_SAFE_DELETE_ARRAY(arg0);
@@ -1232,7 +1232,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsShapeEdgePolygon_getPoints(lua_State* tolua_S)
 {
     int argc                               = 0;
-    axis::PhysicsShapeEdgePolygon* cobj = nullptr;
+    ax::PhysicsShapeEdgePolygon* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1243,7 +1243,7 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsShapeEdgePolygon*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsShapeEdgePolygon*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -1258,7 +1258,7 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_getPoints(lua_State* tolua_S)
     if (argc == 0)
     {
         int count           = cobj->getPointsCount();
-        axis::Vec2* arg0 = new axis::Vec2[count];
+        ax::Vec2* arg0 = new ax::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
         AX_SAFE_DELETE_ARRAY(arg0);
@@ -1278,7 +1278,7 @@ tolua_lerror:
 int lua_axis_physics_PhysicsShapeEdgeChain_getPoints(lua_State* tolua_S)
 {
     int argc                             = 0;
-    axis::PhysicsShapeEdgeChain* cobj = nullptr;
+    ax::PhysicsShapeEdgeChain* cobj = nullptr;
 
 #    if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -1289,7 +1289,7 @@ int lua_axis_physics_PhysicsShapeEdgeChain_getPoints(lua_State* tolua_S)
         goto tolua_lerror;
 #    endif
 
-    cobj = (axis::PhysicsShapeEdgeChain*)tolua_tousertype(tolua_S, 1, 0);
+    cobj = (ax::PhysicsShapeEdgeChain*)tolua_tousertype(tolua_S, 1, 0);
 
 #    if _AX_DEBUG >= 1
     if (!cobj)
@@ -1303,7 +1303,7 @@ int lua_axis_physics_PhysicsShapeEdgeChain_getPoints(lua_State* tolua_S)
     if (argc == 0)
     {
         int count           = cobj->getPointsCount();
-        axis::Vec2* arg0 = new axis::Vec2[count];
+        ax::Vec2* arg0 = new ax::Vec2[count];
         cobj->getPoints(arg0);
         vec2_array_to_luaval(tolua_S, arg0, count);
         AX_SAFE_DELETE_ARRAY(arg0);
@@ -1448,7 +1448,7 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
         do
         {
@@ -1463,17 +1463,17 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapeEdgePolygon* ret = axis::PhysicsShapeEdgePolygon::create(arg0, arg1);
+        ax::PhysicsShapeEdgePolygon* ret = ax::PhysicsShapeEdgePolygon::create(arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
-                                                           (axis::PhysicsShapeEdgePolygon*)ret);
+        object_to_luaval<ax::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
+                                                           (ax::PhysicsShapeEdgePolygon*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsShapeEdgePolygon:create");
@@ -1488,17 +1488,17 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapeEdgePolygon* ret = axis::PhysicsShapeEdgePolygon::create(arg0, arg1, arg2);
+        ax::PhysicsShapeEdgePolygon* ret = ax::PhysicsShapeEdgePolygon::create(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
-                                                           (axis::PhysicsShapeEdgePolygon*)ret);
+        object_to_luaval<ax::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
+                                                           (ax::PhysicsShapeEdgePolygon*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         double arg3;
         do
         {
@@ -1515,10 +1515,10 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapeEdgePolygon* ret = axis::PhysicsShapeEdgePolygon::create(arg0, arg1, arg2, arg3);
+        ax::PhysicsShapeEdgePolygon* ret = ax::PhysicsShapeEdgePolygon::create(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
-                                                           (axis::PhysicsShapeEdgePolygon*)ret);
+        object_to_luaval<ax::PhysicsShapeEdgePolygon>(tolua_S, "ax.PhysicsShapeEdgePolygon",
+                                                           (ax::PhysicsShapeEdgePolygon*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);
@@ -1548,7 +1548,7 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
         do
         {
@@ -1563,17 +1563,17 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapeEdgeChain* ret = axis::PhysicsShapeEdgeChain::create(arg0, arg1);
+        ax::PhysicsShapeEdgeChain* ret = ax::PhysicsShapeEdgeChain::create(arg0, arg1);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
-                                                         (axis::PhysicsShapeEdgeChain*)ret);
+        object_to_luaval<ax::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
+                                                         (ax::PhysicsShapeEdgeChain*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         do
         {
             ok = luaval_to_array_of_vec2(tolua_S, 2, &arg0, &arg1, "ax.PhysicsShapeEdgeChain:create");
@@ -1588,17 +1588,17 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapeEdgeChain* ret = axis::PhysicsShapeEdgeChain::create(arg0, arg1, arg2);
+        ax::PhysicsShapeEdgeChain* ret = ax::PhysicsShapeEdgeChain::create(arg0, arg1, arg2);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
-                                                         (axis::PhysicsShapeEdgeChain*)ret);
+        object_to_luaval<ax::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
+                                                         (ax::PhysicsShapeEdgeChain*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2* arg0;
+        ax::Vec2* arg0;
         int arg1 = 0;
-        axis::PhysicsMaterial arg2;
+        ax::PhysicsMaterial arg2;
         double arg3;
         do
         {
@@ -1615,10 +1615,10 @@ int lua_axis_physics_PhysicsShapeEdgeChain_create(lua_State* tolua_S)
             AX_SAFE_DELETE_ARRAY(arg0);
             return 0;
         }
-        axis::PhysicsShapeEdgeChain* ret = axis::PhysicsShapeEdgeChain::create(arg0, arg1, arg2, arg3);
+        ax::PhysicsShapeEdgeChain* ret = ax::PhysicsShapeEdgeChain::create(arg0, arg1, arg2, arg3);
         AX_SAFE_DELETE_ARRAY(arg0);
-        object_to_luaval<axis::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
-                                                         (axis::PhysicsShapeEdgeChain*)ret);
+        object_to_luaval<ax::PhysicsShapeEdgeChain>(tolua_S, "ax.PhysicsShapeEdgeChain",
+                                                         (ax::PhysicsShapeEdgeChain*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "create", argc, 2);

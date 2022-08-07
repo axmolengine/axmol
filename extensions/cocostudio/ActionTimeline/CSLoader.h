@@ -79,12 +79,12 @@ public:
 
     void init();
 
-    static axis::Node* createNode(std::string_view filename);
-    static axis::Node* createNode(std::string_view filename, const ccNodeLoadCallback& callback);
-    static axis::Node* createNode(const Data& data);
-    static axis::Node* createNode(const Data& data, const ccNodeLoadCallback& callback);
-    static axis::Node* createNodeWithVisibleSize(std::string_view filename);
-    static axis::Node* createNodeWithVisibleSize(std::string_view filename, const ccNodeLoadCallback& callback);
+    static ax::Node* createNode(std::string_view filename);
+    static ax::Node* createNode(std::string_view filename, const ccNodeLoadCallback& callback);
+    static ax::Node* createNode(const Data& data);
+    static ax::Node* createNode(const Data& data, const ccNodeLoadCallback& callback);
+    static ax::Node* createNodeWithVisibleSize(std::string_view filename);
+    static ax::Node* createNodeWithVisibleSize(std::string_view filename, const ccNodeLoadCallback& callback);
 
     static cocostudio::timeline::ActionTimeline* createTimeline(std::string_view filename);
     static cocostudio::timeline::ActionTimeline* createTimeline(const Data& data, std::string_view filename);
@@ -95,9 +95,9 @@ public:
     startIndex, int endIndex, bool loop);
      */
 
-    axis::Node* createNodeFromJson(std::string_view filename);
-    axis::Node* loadNodeWithFile(std::string_view fileName);
-    axis::Node* loadNodeWithContent(std::string_view content);
+    ax::Node* createNodeFromJson(std::string_view filename);
+    ax::Node* loadNodeWithFile(std::string_view fileName);
+    ax::Node* loadNodeWithContent(std::string_view content);
 
     void setRecordJsonPath(bool record) { _recordJsonPath = record; }
     bool isRecordJsonPath() const { return _recordJsonPath; }
@@ -105,60 +105,60 @@ public:
     void setJsonPath(std::string jsonPath) { _jsonPath = jsonPath; }
     std::string getJsonPath() const { return _jsonPath; }
 
-    axis::Node* createNodeWithFlatBuffersFile(std::string_view filename);
-    axis::Node* nodeWithFlatBuffersFile(std::string_view fileName);
-    axis::Node* nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree);
+    ax::Node* createNodeWithFlatBuffersFile(std::string_view filename);
+    ax::Node* nodeWithFlatBuffersFile(std::string_view fileName);
+    ax::Node* nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree);
 
     bool bindCallback(std::string_view callbackName,
                       std::string_view callbackType,
-                      axis::ui::Widget* sender,
-                      axis::Node* handler);
+                      ax::ui::Widget* sender,
+                      ax::Node* handler);
 
     void registReaderObject(std::string_view className, ObjectFactory::Instance ins);
 
-    axis::Node* createNodeWithFlatBuffersForSimulator(std::string_view filename);
-    axis::Node* nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nodetree);
+    ax::Node* createNodeWithFlatBuffersForSimulator(std::string_view filename);
+    ax::Node* nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nodetree);
 
 protected:
-    axis::Node* createNodeWithFlatBuffersFile(std::string_view filename, const ccNodeLoadCallback& callback);
-    axis::Node* nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeLoadCallback& callback);
-    axis::Node* nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const ccNodeLoadCallback& callback);
+    ax::Node* createNodeWithFlatBuffersFile(std::string_view filename, const ccNodeLoadCallback& callback);
+    ax::Node* nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeLoadCallback& callback);
+    ax::Node* nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const ccNodeLoadCallback& callback);
 
-    axis::Node* loadNode(const rapidjson::Value& json);
+    ax::Node* loadNode(const rapidjson::Value& json);
 
-    void locateNodeWithMulresPosition(axis::Node* node, const rapidjson::Value& json);
+    void locateNodeWithMulresPosition(ax::Node* node, const rapidjson::Value& json);
 
-    void initNode(axis::Node* node, const rapidjson::Value& json);
+    void initNode(ax::Node* node, const rapidjson::Value& json);
 
     // load nodes
-    axis::Node* loadSimpleNode(const rapidjson::Value& json);
-    axis::Node* loadSubGraph(const rapidjson::Value& json);
-    axis::Node* loadSprite(const rapidjson::Value& json);
-    axis::Node* loadParticle(const rapidjson::Value& json);
-    axis::Node* loadTMXTiledMap(const rapidjson::Value& json);
+    ax::Node* loadSimpleNode(const rapidjson::Value& json);
+    ax::Node* loadSubGraph(const rapidjson::Value& json);
+    ax::Node* loadSprite(const rapidjson::Value& json);
+    ax::Node* loadParticle(const rapidjson::Value& json);
+    ax::Node* loadTMXTiledMap(const rapidjson::Value& json);
 
     // load gui
-    axis::Node* loadWidget(const rapidjson::Value& json);
+    ax::Node* loadWidget(const rapidjson::Value& json);
 
     // load component
-    axis::Component* loadComponent(const rapidjson::Value& json);
-    axis::Component* loadComAudio(const rapidjson::Value& json);
+    ax::Component* loadComponent(const rapidjson::Value& json);
+    ax::Component* loadComAudio(const rapidjson::Value& json);
 
     bool isWidget(std::string_view type);
     bool isCustomWidget(std::string_view type);
 
     std::string_view getGUIClassName(std::string_view name);
-    std::string_view getWidgetReaderClassName(axis::ui::Widget* widget);
+    std::string_view getWidgetReaderClassName(ax::ui::Widget* widget);
 
-    inline void reconstructNestNode(axis::Node* node);
+    inline void reconstructNestNode(ax::Node* node);
     static inline std::string_view getExtentionName(std::string_view name);
 
-    typedef std::function<axis::Node*(const rapidjson::Value& json)> NodeCreateFunc;
+    typedef std::function<ax::Node*(const rapidjson::Value& json)> NodeCreateFunc;
     typedef std::pair<std::string, NodeCreateFunc> Pair;
 
     std::unordered_map<std::string, NodeCreateFunc> _funcs;
 
-    typedef std::function<axis::Component*(const rapidjson::Value& json)> ComponentCreateFunc;
+    typedef std::function<ax::Component*(const rapidjson::Value& json)> ComponentCreateFunc;
     typedef std::pair<std::string, ComponentCreateFunc> ComponentPair;
 
     std::unordered_map<std::string, ComponentCreateFunc> _componentFuncs;
@@ -170,7 +170,7 @@ protected:
     std::string _monoCocos2dxVersion;
 
     Node* _rootNode;
-    axis::Vector<axis::Node*> _callbackHandlers;
+    ax::Vector<ax::Node*> _callbackHandlers;
 
     std::string _csBuildID;
 };

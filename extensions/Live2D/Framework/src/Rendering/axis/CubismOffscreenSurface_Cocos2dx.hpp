@@ -83,7 +83,7 @@ public:
      *  @param  displayBufferHeight    作成するバッファ高さ
      *  @param  colorBuffer            0以外の場合、ピクセル格納領域としてcolorBufferを使用する
      */
-    csmBool CreateOffscreenFrame(csmUint32 displayBufferWidth, csmUint32 displayBufferHeight, axis::RenderTexture* renderTexture = NULL);
+    csmBool CreateOffscreenFrame(csmUint32 displayBufferWidth, csmUint32 displayBufferHeight, ax::RenderTexture* renderTexture = NULL);
 
     /**
      * @brief   CubismOffscreenFrameの削除
@@ -93,7 +93,7 @@ public:
     /**
      * @brief   カラーバッファメンバーへのアクセッサ
      */
-    axis::Texture2D* GetColorBuffer() const;
+    ax::Texture2D* GetColorBuffer() const;
 
     /**
      * @brief   バッファ幅取得
@@ -113,7 +113,7 @@ public:
     csmBool IsValid() const;
 
 private:
-    axis::RenderTexture*      _renderTexture;         ///< レンダリングターゲットとしてのアドレス
+    ax::RenderTexture*      _renderTexture;         ///< レンダリングターゲットとしてのアドレス
     backend::TextureBackend*          _colorBuffer;
     csmBool _isInheritedRenderTexture;
 

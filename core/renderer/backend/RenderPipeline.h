@@ -40,7 +40,7 @@ class RenderTarget;
 /**
  * Render pipeline
  */
-class RenderPipeline : public axis::Ref
+class RenderPipeline : public ax::Ref
 {
 public:
     virtual void update(const RenderTarget*, const PipelineDescriptor& pipelineDescirptor) = 0;

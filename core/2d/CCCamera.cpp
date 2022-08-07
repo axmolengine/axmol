@@ -407,12 +407,12 @@ void Camera::applyZoom()
 {
     switch (_projectionType)
     {
-    case axis::Director::Projection::_2D:
+    case ax::Director::Projection::_2D:
     {
         Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
         break;
     }
-    case axis::Director::Projection::_3D:
+    case ax::Director::Projection::_3D:
     {
         // Push the far plane farther the more we zoom out.
         if (_zoomFactorFarPlane * _zoomFactor > _farPlane)

@@ -6,7 +6,7 @@
 int lua_axis_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -18,7 +18,7 @@ int lua_axis_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -56,7 +56,7 @@ int lua_axis_extension_AssetsManager_setStoragePath(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -68,7 +68,7 @@ int lua_axis_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -106,7 +106,7 @@ int lua_axis_extension_AssetsManager_setPackageUrl(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -118,7 +118,7 @@ int lua_axis_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -153,7 +153,7 @@ int lua_axis_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -165,7 +165,7 @@ int lua_axis_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -200,7 +200,7 @@ int lua_axis_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_update(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -212,7 +212,7 @@ int lua_axis_extension_AssetsManager_update(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -247,7 +247,7 @@ int lua_axis_extension_AssetsManager_update(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -259,7 +259,7 @@ int lua_axis_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -297,7 +297,7 @@ int lua_axis_extension_AssetsManager_setConnectionTimeout(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -309,7 +309,7 @@ int lua_axis_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -347,7 +347,7 @@ int lua_axis_extension_AssetsManager_setVersionFileUrl(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -359,7 +359,7 @@ int lua_axis_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -394,7 +394,7 @@ int lua_axis_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -406,7 +406,7 @@ int lua_axis_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -441,7 +441,7 @@ int lua_axis_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_getVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -453,7 +453,7 @@ int lua_axis_extension_AssetsManager_getVersion(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -488,7 +488,7 @@ int lua_axis_extension_AssetsManager_getVersion(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -500,7 +500,7 @@ int lua_axis_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -535,7 +535,7 @@ int lua_axis_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -547,7 +547,7 @@ int lua_axis_extension_AssetsManager_deleteVersion(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManager",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManager*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -625,8 +625,8 @@ int lua_axis_extension_AssetsManager_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManager_create'", nullptr);
             return 0;
         }
-        axis::extension::AssetsManager* ret = axis::extension::AssetsManager::create(arg0, arg1, arg2, arg3, arg4, arg5);
-        object_to_luaval<axis::extension::AssetsManager>(tolua_S, "ax.AssetsManager",(axis::extension::AssetsManager*)ret);
+        ax::extension::AssetsManager* ret = ax::extension::AssetsManager::create(arg0, arg1, arg2, arg3, arg4, arg5);
+        object_to_luaval<ax::extension::AssetsManager>(tolua_S, "ax.AssetsManager",(ax::extension::AssetsManager*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AssetsManager:create",argc, 6);
@@ -640,7 +640,7 @@ int lua_axis_extension_AssetsManager_create(lua_State* tolua_S)
 int lua_axis_extension_AssetsManager_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManager* cobj = nullptr;
+    ax::extension::AssetsManager* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -657,7 +657,7 @@ int lua_axis_extension_AssetsManager_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManager_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::AssetsManager();
+        cobj = new ax::extension::AssetsManager();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -674,7 +674,7 @@ int lua_axis_extension_AssetsManager_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManager_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::AssetsManager(arg0);
+        cobj = new ax::extension::AssetsManager(arg0);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -694,7 +694,7 @@ int lua_axis_extension_AssetsManager_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManager_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::AssetsManager(arg0, arg1);
+        cobj = new ax::extension::AssetsManager(arg0, arg1);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -717,7 +717,7 @@ int lua_axis_extension_AssetsManager_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManager_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::AssetsManager(arg0, arg1, arg2);
+        cobj = new ax::extension::AssetsManager(arg0, arg1, arg2);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -761,7 +761,7 @@ int lua_register_axis_extension_AssetsManager(lua_State* tolua_S)
         tolua_function(tolua_S,"deleteVersion",lua_axis_extension_AssetsManager_deleteVersion);
         tolua_function(tolua_S,"create", lua_axis_extension_AssetsManager_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::extension::AssetsManager).name(); // rtti is literal storage
+    auto typeName = typeid(ax::extension::AssetsManager).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AssetsManager";
     g_typeCast[typeName] = "ax.AssetsManager";
     return 1;
@@ -770,7 +770,7 @@ int lua_register_axis_extension_AssetsManager(lua_State* tolua_S)
 int lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -782,7 +782,7 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -800,8 +800,8 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx'", nullptr);
             return 0;
         }
-        axis::extension::AssetsManagerEx* ret = cobj->getAssetsManagerEx();
-        object_to_luaval<axis::extension::AssetsManagerEx>(tolua_S, "ax.AssetsManagerEx",(axis::extension::AssetsManagerEx*)ret);
+        ax::extension::AssetsManagerEx* ret = cobj->getAssetsManagerEx();
+        object_to_luaval<ax::extension::AssetsManagerEx>(tolua_S, "ax.AssetsManagerEx",(ax::extension::AssetsManagerEx*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.EventAssetsManagerEx:getAssetsManagerEx",argc, 0);
@@ -817,7 +817,7 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_
 int lua_axis_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -829,7 +829,7 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -864,7 +864,7 @@ int lua_axis_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
 int lua_axis_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -876,7 +876,7 @@ int lua_axis_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -911,7 +911,7 @@ int lua_axis_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
 int lua_axis_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -923,7 +923,7 @@ int lua_axis_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -958,7 +958,7 @@ int lua_axis_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
 int lua_axis_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -970,7 +970,7 @@ int lua_axis_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1005,7 +1005,7 @@ int lua_axis_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
 int lua_axis_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1017,7 +1017,7 @@ int lua_axis_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1052,7 +1052,7 @@ int lua_axis_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
 int lua_axis_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1064,7 +1064,7 @@ int lua_axis_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1099,7 +1099,7 @@ int lua_axis_extension_EventAssetsManagerEx_getEventCode(lua_State* tolua_S)
 int lua_axis_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1111,7 +1111,7 @@ int lua_axis_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1146,7 +1146,7 @@ int lua_axis_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
 int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1159,12 +1159,12 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     if (argc == 3) 
     {
         std::string_view arg0;
-        axis::extension::AssetsManagerEx* arg1;
-        axis::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::extension::AssetsManagerEx* arg1;
+        ax::extension::EventAssetsManagerEx::EventCode arg2;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<axis::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
         if(!ok)
@@ -1172,7 +1172,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::EventAssetsManagerEx(arg0, arg1, arg2);
+        cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1182,13 +1182,13 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     if (argc == 4) 
     {
         std::string_view arg0;
-        axis::extension::AssetsManagerEx* arg1;
-        axis::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::extension::AssetsManagerEx* arg1;
+        ax::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<axis::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1198,7 +1198,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3);
+        cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1208,14 +1208,14 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     if (argc == 5) 
     {
         std::string_view arg0;
-        axis::extension::AssetsManagerEx* arg1;
-        axis::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::extension::AssetsManagerEx* arg1;
+        ax::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<axis::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1227,7 +1227,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4);
+        cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1237,15 +1237,15 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     if (argc == 6) 
     {
         std::string_view arg0;
-        axis::extension::AssetsManagerEx* arg1;
-        axis::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::extension::AssetsManagerEx* arg1;
+        ax::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
         std::string_view arg5;
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<axis::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1259,7 +1259,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5);
+        cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1269,8 +1269,8 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     if (argc == 7) 
     {
         std::string_view arg0;
-        axis::extension::AssetsManagerEx* arg1;
-        axis::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::extension::AssetsManagerEx* arg1;
+        ax::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
         std::string_view arg5;
@@ -1278,7 +1278,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<axis::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1294,7 +1294,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1304,8 +1304,8 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     if (argc == 8) 
     {
         std::string_view arg0;
-        axis::extension::AssetsManagerEx* arg1;
-        axis::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::extension::AssetsManagerEx* arg1;
+        ax::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
         std::string_view arg5;
@@ -1314,7 +1314,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<axis::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1332,7 +1332,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1342,8 +1342,8 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
     if (argc == 9) 
     {
         std::string_view arg0;
-        axis::extension::AssetsManagerEx* arg1;
-        axis::extension::EventAssetsManagerEx::EventCode arg2;
+        ax::extension::AssetsManagerEx* arg1;
+        ax::extension::EventAssetsManagerEx::EventCode arg2;
         double arg3;
         double arg4;
         std::string_view arg5;
@@ -1353,7 +1353,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
 
         ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
-        ok &= luaval_to_object<axis::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
+        ok &= luaval_to_object<ax::extension::AssetsManagerEx>(tolua_S, 3, "ax.AssetsManagerEx",&arg1, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
         ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.EventAssetsManagerEx:EventAssetsManagerEx");
 
@@ -1373,7 +1373,7 @@ int lua_axis_extension_EventAssetsManagerEx_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        cobj = new ax::extension::EventAssetsManagerEx(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -1412,7 +1412,7 @@ int lua_register_axis_extension_EventAssetsManagerEx(lua_State* tolua_S)
         tolua_function(tolua_S,"getEventCode",lua_axis_extension_EventAssetsManagerEx_getEventCode);
         tolua_function(tolua_S,"getPercent",lua_axis_extension_EventAssetsManagerEx_getPercent);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::extension::EventAssetsManagerEx).name(); // rtti is literal storage
+    auto typeName = typeid(ax::extension::EventAssetsManagerEx).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventAssetsManagerEx";
     g_typeCast[typeName] = "ax.EventAssetsManagerEx";
     return 1;
@@ -1421,7 +1421,7 @@ int lua_register_axis_extension_EventAssetsManagerEx(lua_State* tolua_S)
 int lua_axis_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::Manifest* cobj = nullptr;
+    ax::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1433,7 +1433,7 @@ int lua_axis_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1468,7 +1468,7 @@ int lua_axis_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
 int lua_axis_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::Manifest* cobj = nullptr;
+    ax::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1480,7 +1480,7 @@ int lua_axis_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1515,7 +1515,7 @@ int lua_axis_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
 int lua_axis_extension_Manifest_isLoaded(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::Manifest* cobj = nullptr;
+    ax::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1527,7 +1527,7 @@ int lua_axis_extension_Manifest_isLoaded(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1562,7 +1562,7 @@ int lua_axis_extension_Manifest_isLoaded(lua_State* tolua_S)
 int lua_axis_extension_Manifest_getPackageUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::Manifest* cobj = nullptr;
+    ax::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1574,7 +1574,7 @@ int lua_axis_extension_Manifest_getPackageUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1609,7 +1609,7 @@ int lua_axis_extension_Manifest_getPackageUrl(lua_State* tolua_S)
 int lua_axis_extension_Manifest_getVersion(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::Manifest* cobj = nullptr;
+    ax::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1621,7 +1621,7 @@ int lua_axis_extension_Manifest_getVersion(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1656,7 +1656,7 @@ int lua_axis_extension_Manifest_getVersion(lua_State* tolua_S)
 int lua_axis_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::Manifest* cobj = nullptr;
+    ax::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1668,7 +1668,7 @@ int lua_axis_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1703,7 +1703,7 @@ int lua_axis_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
 int lua_axis_extension_Manifest_getSearchPaths(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::Manifest* cobj = nullptr;
+    ax::extension::Manifest* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1715,7 +1715,7 @@ int lua_axis_extension_Manifest_getSearchPaths(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.Manifest",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::Manifest*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1767,7 +1767,7 @@ int lua_register_axis_extension_Manifest(lua_State* tolua_S)
         tolua_function(tolua_S,"getVersionFileUrl",lua_axis_extension_Manifest_getVersionFileUrl);
         tolua_function(tolua_S,"getSearchPaths",lua_axis_extension_Manifest_getSearchPaths);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::extension::Manifest).name(); // rtti is literal storage
+    auto typeName = typeid(ax::extension::Manifest).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Manifest";
     g_typeCast[typeName] = "ax.Manifest";
     return 1;
@@ -1776,7 +1776,7 @@ int lua_register_axis_extension_Manifest(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_getState(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1788,7 +1788,7 @@ int lua_axis_extension_AssetsManagerEx_getState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1823,7 +1823,7 @@ int lua_axis_extension_AssetsManagerEx_getState(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1835,7 +1835,7 @@ int lua_axis_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1870,7 +1870,7 @@ int lua_axis_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1882,7 +1882,7 @@ int lua_axis_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1917,7 +1917,7 @@ int lua_axis_extension_AssetsManagerEx_checkUpdate(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1929,7 +1929,7 @@ int lua_axis_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1942,7 +1942,7 @@ int lua_axis_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        std::function<bool (std::string_view, axis::extension::ManifestAsset)> arg0;
+        std::function<bool (std::string_view, ax::extension::ManifestAsset)> arg0;
 
         do {
 			// Lambda binding for lua is not supported.
@@ -1971,7 +1971,7 @@ int lua_axis_extension_AssetsManagerEx_setVerifyCallback(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1983,7 +1983,7 @@ int lua_axis_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2018,7 +2018,7 @@ int lua_axis_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_update(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2030,7 +2030,7 @@ int lua_axis_extension_AssetsManagerEx_update(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2065,7 +2065,7 @@ int lua_axis_extension_AssetsManagerEx_update(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2077,7 +2077,7 @@ int lua_axis_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2119,7 +2119,7 @@ int lua_axis_extension_AssetsManagerEx_setVersionCompareHandle(lua_State* tolua_
 int lua_axis_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2131,7 +2131,7 @@ int lua_axis_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2169,7 +2169,7 @@ int lua_axis_extension_AssetsManagerEx_setMaxConcurrentTask(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2181,7 +2181,7 @@ int lua_axis_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2199,8 +2199,8 @@ int lua_axis_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManagerEx_getLocalManifest'", nullptr);
             return 0;
         }
-        const axis::extension::Manifest* ret = cobj->getLocalManifest();
-        object_to_luaval<axis::extension::Manifest>(tolua_S, "ax.Manifest",(axis::extension::Manifest*)ret);
+        const ax::extension::Manifest* ret = cobj->getLocalManifest();
+        object_to_luaval<ax::extension::Manifest>(tolua_S, "ax.Manifest",(ax::extension::Manifest*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getLocalManifest",argc, 0);
@@ -2216,7 +2216,7 @@ int lua_axis_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2228,7 +2228,7 @@ int lua_axis_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2246,8 +2246,8 @@ int lua_axis_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManagerEx_getRemoteManifest'", nullptr);
             return 0;
         }
-        const axis::extension::Manifest* ret = cobj->getRemoteManifest();
-        object_to_luaval<axis::extension::Manifest>(tolua_S, "ax.Manifest",(axis::extension::Manifest*)ret);
+        const ax::extension::Manifest* ret = cobj->getRemoteManifest();
+        object_to_luaval<ax::extension::Manifest>(tolua_S, "ax.Manifest",(ax::extension::Manifest*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.AssetsManagerEx:getRemoteManifest",argc, 0);
@@ -2263,7 +2263,7 @@ int lua_axis_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2275,7 +2275,7 @@ int lua_axis_extension_AssetsManagerEx_downloadFailedAssets(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.AssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::AssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2333,8 +2333,8 @@ int lua_axis_extension_AssetsManagerEx_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManagerEx_create'", nullptr);
             return 0;
         }
-        axis::extension::AssetsManagerEx* ret = axis::extension::AssetsManagerEx::create(arg0, arg1);
-        object_to_luaval<axis::extension::AssetsManagerEx>(tolua_S, "ax.AssetsManagerEx",(axis::extension::AssetsManagerEx*)ret);
+        ax::extension::AssetsManagerEx* ret = ax::extension::AssetsManagerEx::create(arg0, arg1);
+        object_to_luaval<ax::extension::AssetsManagerEx>(tolua_S, "ax.AssetsManagerEx",(ax::extension::AssetsManagerEx*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AssetsManagerEx:create",argc, 2);
@@ -2348,7 +2348,7 @@ int lua_axis_extension_AssetsManagerEx_create(lua_State* tolua_S)
 int lua_axis_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::AssetsManagerEx* cobj = nullptr;
+    ax::extension::AssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2371,7 +2371,7 @@ int lua_axis_extension_AssetsManagerEx_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_AssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::AssetsManagerEx(arg0, arg1);
+        cobj = new ax::extension::AssetsManagerEx(arg0, arg1);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -2414,7 +2414,7 @@ int lua_register_axis_extension_AssetsManagerEx(lua_State* tolua_S)
         tolua_function(tolua_S,"downloadFailedAssets",lua_axis_extension_AssetsManagerEx_downloadFailedAssets);
         tolua_function(tolua_S,"create", lua_axis_extension_AssetsManagerEx_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::extension::AssetsManagerEx).name(); // rtti is literal storage
+    auto typeName = typeid(ax::extension::AssetsManagerEx).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.AssetsManagerEx";
     g_typeCast[typeName] = "ax.AssetsManagerEx";
     return 1;
@@ -2423,7 +2423,7 @@ int lua_register_axis_extension_AssetsManagerEx(lua_State* tolua_S)
 int lua_axis_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventListenerAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventListenerAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2435,7 +2435,7 @@ int lua_axis_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.EventListenerAssetsManagerEx",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::extension::EventListenerAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::extension::EventListenerAssetsManagerEx*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2448,10 +2448,10 @@ int lua_axis_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        const axis::extension::AssetsManagerEx* arg0;
-        std::function<void (axis::extension::EventAssetsManagerEx *)> arg1;
+        const ax::extension::AssetsManagerEx* arg0;
+        std::function<void (ax::extension::EventAssetsManagerEx *)> arg1;
 
-        ok &= luaval_to_object<const axis::extension::AssetsManagerEx>(tolua_S, 2, "ax.AssetsManagerEx",&arg0, "ax.EventListenerAssetsManagerEx:init");
+        ok &= luaval_to_object<const ax::extension::AssetsManagerEx>(tolua_S, 2, "ax.AssetsManagerEx",&arg0, "ax.EventListenerAssetsManagerEx:init");
 
         do {
 			// Lambda binding for lua is not supported.
@@ -2480,7 +2480,7 @@ int lua_axis_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
 int lua_axis_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::extension::EventListenerAssetsManagerEx* cobj = nullptr;
+    ax::extension::EventListenerAssetsManagerEx* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2497,7 +2497,7 @@ int lua_axis_extension_EventListenerAssetsManagerEx_constructor(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_EventListenerAssetsManagerEx_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::extension::EventListenerAssetsManagerEx();
+        cobj = new ax::extension::EventListenerAssetsManagerEx();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -2529,7 +2529,7 @@ int lua_register_axis_extension_EventListenerAssetsManagerEx(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_axis_extension_EventListenerAssetsManagerEx_constructor);
         tolua_function(tolua_S,"init",lua_axis_extension_EventListenerAssetsManagerEx_init);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::extension::EventListenerAssetsManagerEx).name(); // rtti is literal storage
+    auto typeName = typeid(ax::extension::EventListenerAssetsManagerEx).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerAssetsManagerEx";
     g_typeCast[typeName] = "ax.EventListenerAssetsManagerEx";
     return 1;
@@ -2538,7 +2538,7 @@ int lua_register_axis_extension_EventListenerAssetsManagerEx(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_removeAffector(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2550,7 +2550,7 @@ int lua_axis_extension_ParticleSystem3D_removeAffector(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2588,7 +2588,7 @@ int lua_axis_extension_ParticleSystem3D_removeAffector(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_resumeParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2600,7 +2600,7 @@ int lua_axis_extension_ParticleSystem3D_resumeParticleSystem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2635,7 +2635,7 @@ int lua_axis_extension_ParticleSystem3D_resumeParticleSystem(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_removeAllAffector(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2647,7 +2647,7 @@ int lua_axis_extension_ParticleSystem3D_removeAllAffector(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2682,7 +2682,7 @@ int lua_axis_extension_ParticleSystem3D_removeAllAffector(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_addAffector(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2694,7 +2694,7 @@ int lua_axis_extension_ParticleSystem3D_addAffector(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2707,9 +2707,9 @@ int lua_axis_extension_ParticleSystem3D_addAffector(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Particle3DAffector* arg0;
+        ax::Particle3DAffector* arg0;
 
-        ok &= luaval_to_object<axis::Particle3DAffector>(tolua_S, 2, "ax.Particle3DAffector",&arg0, "ax.ParticleSystem3D:addAffector");
+        ok &= luaval_to_object<ax::Particle3DAffector>(tolua_S, 2, "ax.Particle3DAffector",&arg0, "ax.ParticleSystem3D:addAffector");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_ParticleSystem3D_addAffector'", nullptr);
@@ -2732,7 +2732,7 @@ int lua_axis_extension_ParticleSystem3D_addAffector(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_startParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2744,7 +2744,7 @@ int lua_axis_extension_ParticleSystem3D_startParticleSystem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2779,7 +2779,7 @@ int lua_axis_extension_ParticleSystem3D_startParticleSystem(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_isEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2791,7 +2791,7 @@ int lua_axis_extension_ParticleSystem3D_isEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2826,7 +2826,7 @@ int lua_axis_extension_ParticleSystem3D_isEnabled(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2838,7 +2838,7 @@ int lua_axis_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2856,8 +2856,8 @@ int lua_axis_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_ParticleSystem3D_getRender'", nullptr);
             return 0;
         }
-        axis::Particle3DRender* ret = cobj->getRender();
-        object_to_luaval<axis::Particle3DRender>(tolua_S, "ax.Particle3DRender",(axis::Particle3DRender*)ret);
+        ax::Particle3DRender* ret = cobj->getRender();
+        object_to_luaval<ax::Particle3DRender>(tolua_S, "ax.Particle3DRender",(ax::Particle3DRender*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ParticleSystem3D:getRender",argc, 0);
@@ -2873,7 +2873,7 @@ int lua_axis_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_setEmitter(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2885,7 +2885,7 @@ int lua_axis_extension_ParticleSystem3D_setEmitter(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2898,9 +2898,9 @@ int lua_axis_extension_ParticleSystem3D_setEmitter(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Particle3DEmitter* arg0;
+        ax::Particle3DEmitter* arg0;
 
-        ok &= luaval_to_object<axis::Particle3DEmitter>(tolua_S, 2, "ax.Particle3DEmitter",&arg0, "ax.ParticleSystem3D:setEmitter");
+        ok &= luaval_to_object<ax::Particle3DEmitter>(tolua_S, 2, "ax.Particle3DEmitter",&arg0, "ax.ParticleSystem3D:setEmitter");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_ParticleSystem3D_setEmitter'", nullptr);
@@ -2923,7 +2923,7 @@ int lua_axis_extension_ParticleSystem3D_setEmitter(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_isKeepLocal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2935,7 +2935,7 @@ int lua_axis_extension_ParticleSystem3D_isKeepLocal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2970,7 +2970,7 @@ int lua_axis_extension_ParticleSystem3D_isKeepLocal(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_setEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2982,7 +2982,7 @@ int lua_axis_extension_ParticleSystem3D_setEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3020,7 +3020,7 @@ int lua_axis_extension_ParticleSystem3D_setEnabled(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_getParticleQuota(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3032,7 +3032,7 @@ int lua_axis_extension_ParticleSystem3D_getParticleQuota(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3067,7 +3067,7 @@ int lua_axis_extension_ParticleSystem3D_getParticleQuota(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3079,7 +3079,7 @@ int lua_axis_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3097,7 +3097,7 @@ int lua_axis_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_ParticleSystem3D_getBlendFunc'", nullptr);
             return 0;
         }
-        const axis::BlendFunc& ret = cobj->getBlendFunc();
+        const ax::BlendFunc& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3114,7 +3114,7 @@ int lua_axis_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_pauseParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3126,7 +3126,7 @@ int lua_axis_extension_ParticleSystem3D_pauseParticleSystem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3161,7 +3161,7 @@ int lua_axis_extension_ParticleSystem3D_pauseParticleSystem(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_getState(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3173,7 +3173,7 @@ int lua_axis_extension_ParticleSystem3D_getState(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3208,7 +3208,7 @@ int lua_axis_extension_ParticleSystem3D_getState(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_getAliveParticleCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3220,7 +3220,7 @@ int lua_axis_extension_ParticleSystem3D_getAliveParticleCount(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3255,7 +3255,7 @@ int lua_axis_extension_ParticleSystem3D_getAliveParticleCount(lua_State* tolua_S
 int lua_axis_extension_ParticleSystem3D_setParticleQuota(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3267,7 +3267,7 @@ int lua_axis_extension_ParticleSystem3D_setParticleQuota(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3305,7 +3305,7 @@ int lua_axis_extension_ParticleSystem3D_setParticleQuota(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_setBlendFunc(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3317,7 +3317,7 @@ int lua_axis_extension_ParticleSystem3D_setBlendFunc(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3330,7 +3330,7 @@ int lua_axis_extension_ParticleSystem3D_setBlendFunc(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::BlendFunc arg0;
+        ax::BlendFunc arg0;
 
         ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "ax.ParticleSystem3D:setBlendFunc");
         if(!ok)
@@ -3355,7 +3355,7 @@ int lua_axis_extension_ParticleSystem3D_setBlendFunc(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_setRender(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3367,7 +3367,7 @@ int lua_axis_extension_ParticleSystem3D_setRender(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3380,9 +3380,9 @@ int lua_axis_extension_ParticleSystem3D_setRender(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Particle3DRender* arg0;
+        ax::Particle3DRender* arg0;
 
-        ok &= luaval_to_object<axis::Particle3DRender>(tolua_S, 2, "ax.Particle3DRender",&arg0, "ax.ParticleSystem3D:setRender");
+        ok &= luaval_to_object<ax::Particle3DRender>(tolua_S, 2, "ax.Particle3DRender",&arg0, "ax.ParticleSystem3D:setRender");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_ParticleSystem3D_setRender'", nullptr);
@@ -3405,7 +3405,7 @@ int lua_axis_extension_ParticleSystem3D_setRender(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_stopParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3417,7 +3417,7 @@ int lua_axis_extension_ParticleSystem3D_stopParticleSystem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3452,7 +3452,7 @@ int lua_axis_extension_ParticleSystem3D_stopParticleSystem(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_setKeepLocal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3464,7 +3464,7 @@ int lua_axis_extension_ParticleSystem3D_setKeepLocal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.ParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::ParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3502,7 +3502,7 @@ int lua_axis_extension_ParticleSystem3D_setKeepLocal(lua_State* tolua_S)
 int lua_axis_extension_ParticleSystem3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::ParticleSystem3D* cobj = nullptr;
+    ax::ParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3519,7 +3519,7 @@ int lua_axis_extension_ParticleSystem3D_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_ParticleSystem3D_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::ParticleSystem3D();
+        cobj = new ax::ParticleSystem3D();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -3570,7 +3570,7 @@ int lua_register_axis_extension_ParticleSystem3D(lua_State* tolua_S)
         tolua_function(tolua_S,"stopParticleSystem",lua_axis_extension_ParticleSystem3D_stopParticleSystem);
         tolua_function(tolua_S,"setKeepLocal",lua_axis_extension_ParticleSystem3D_setKeepLocal);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::ParticleSystem3D).name(); // rtti is literal storage
+    auto typeName = typeid(ax::ParticleSystem3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ParticleSystem3D";
     g_typeCast[typeName] = "ax.ParticleSystem3D";
     return 1;
@@ -3579,7 +3579,7 @@ int lua_register_axis_extension_ParticleSystem3D(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3591,7 +3591,7 @@ int lua_axis_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3629,7 +3629,7 @@ int lua_axis_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_getParticleSystemScaleVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3641,7 +3641,7 @@ int lua_axis_extension_PUParticleSystem3D_getParticleSystemScaleVelocity(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3676,7 +3676,7 @@ int lua_axis_extension_PUParticleSystem3D_getParticleSystemScaleVelocity(lua_Sta
 int lua_axis_extension_PUParticleSystem3D_setEmittedSystemQuota(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3688,7 +3688,7 @@ int lua_axis_extension_PUParticleSystem3D_setEmittedSystemQuota(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3726,7 +3726,7 @@ int lua_axis_extension_PUParticleSystem3D_setEmittedSystemQuota(lua_State* tolua
 int lua_axis_extension_PUParticleSystem3D_getDefaultDepth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3738,7 +3738,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultDepth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3773,7 +3773,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultDepth(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_getEmittedSystemQuota(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3785,7 +3785,7 @@ int lua_axis_extension_PUParticleSystem3D_getEmittedSystemQuota(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3820,7 +3820,7 @@ int lua_axis_extension_PUParticleSystem3D_getEmittedSystemQuota(lua_State* tolua
 int lua_axis_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3832,7 +3832,7 @@ int lua_axis_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lua_St
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3873,7 +3873,7 @@ int lua_axis_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lua_St
 int lua_axis_extension_PUParticleSystem3D_clearAllParticles(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3885,7 +3885,7 @@ int lua_axis_extension_PUParticleSystem3D_clearAllParticles(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3920,7 +3920,7 @@ int lua_axis_extension_PUParticleSystem3D_clearAllParticles(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3932,7 +3932,7 @@ int lua_axis_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3967,7 +3967,7 @@ int lua_axis_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_calulateRotationOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3979,7 +3979,7 @@ int lua_axis_extension_PUParticleSystem3D_calulateRotationOffset(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4014,7 +4014,7 @@ int lua_axis_extension_PUParticleSystem3D_calulateRotationOffset(lua_State* tolu
 int lua_axis_extension_PUParticleSystem3D_getMaxVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4026,7 +4026,7 @@ int lua_axis_extension_PUParticleSystem3D_getMaxVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4061,7 +4061,7 @@ int lua_axis_extension_PUParticleSystem3D_getMaxVelocity(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_forceUpdate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4073,7 +4073,7 @@ int lua_axis_extension_PUParticleSystem3D_forceUpdate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4111,7 +4111,7 @@ int lua_axis_extension_PUParticleSystem3D_forceUpdate(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_getTimeElapsedSinceStart(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4123,7 +4123,7 @@ int lua_axis_extension_PUParticleSystem3D_getTimeElapsedSinceStart(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4158,7 +4158,7 @@ int lua_axis_extension_PUParticleSystem3D_getTimeElapsedSinceStart(lua_State* to
 int lua_axis_extension_PUParticleSystem3D_removeAllBehaviourTemplate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4170,7 +4170,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllBehaviourTemplate(lua_State* 
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4205,7 +4205,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllBehaviourTemplate(lua_State* 
 int lua_axis_extension_PUParticleSystem3D_getEmittedEmitterQuota(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4217,7 +4217,7 @@ int lua_axis_extension_PUParticleSystem3D_getEmittedEmitterQuota(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4252,7 +4252,7 @@ int lua_axis_extension_PUParticleSystem3D_getEmittedEmitterQuota(lua_State* tolu
 int lua_axis_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4264,7 +4264,7 @@ int lua_axis_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4277,10 +4277,10 @@ int lua_axis_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::PUEmitter* arg0;
+        ax::PUEmitter* arg0;
         unsigned int arg1;
 
-        ok &= luaval_to_object<axis::PUEmitter>(tolua_S, 2, "ax.PUEmitter",&arg0, "ax.PUParticleSystem3D:forceEmission");
+        ok &= luaval_to_object<ax::PUEmitter>(tolua_S, 2, "ax.PUEmitter",&arg0, "ax.PUParticleSystem3D:forceEmission");
 
         ok &= luaval_to_uint32(tolua_S, 3,&arg1, "ax.PUParticleSystem3D:forceEmission");
         if(!ok)
@@ -4305,7 +4305,7 @@ int lua_axis_extension_PUParticleSystem3D_forceEmission(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_addListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4317,7 +4317,7 @@ int lua_axis_extension_PUParticleSystem3D_addListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4330,9 +4330,9 @@ int lua_axis_extension_PUParticleSystem3D_addListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PUListener* arg0;
+        ax::PUListener* arg0;
 
-        ok &= luaval_to_object<axis::PUListener>(tolua_S, 2, "ax.PUListener",&arg0, "ax.PUParticleSystem3D:addListener");
+        ok &= luaval_to_object<ax::PUListener>(tolua_S, 2, "ax.PUListener",&arg0, "ax.PUParticleSystem3D:addListener");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_addListener'", nullptr);
@@ -4355,7 +4355,7 @@ int lua_axis_extension_PUParticleSystem3D_addListener(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_isMarkedForEmission(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4367,7 +4367,7 @@ int lua_axis_extension_PUParticleSystem3D_isMarkedForEmission(lua_State* tolua_S
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4402,7 +4402,7 @@ int lua_axis_extension_PUParticleSystem3D_isMarkedForEmission(lua_State* tolua_S
 int lua_axis_extension_PUParticleSystem3D_getDefaultWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4414,7 +4414,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4449,7 +4449,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultWidth(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_setEmittedEmitterQuota(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4461,7 +4461,7 @@ int lua_axis_extension_PUParticleSystem3D_setEmittedEmitterQuota(lua_State* tolu
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4499,7 +4499,7 @@ int lua_axis_extension_PUParticleSystem3D_setEmittedEmitterQuota(lua_State* tolu
 int lua_axis_extension_PUParticleSystem3D_setMarkedForEmission(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4511,7 +4511,7 @@ int lua_axis_extension_PUParticleSystem3D_setMarkedForEmission(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4549,7 +4549,7 @@ int lua_axis_extension_PUParticleSystem3D_setMarkedForEmission(lua_State* tolua_
 int lua_axis_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4561,7 +4561,7 @@ int lua_axis_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4579,8 +4579,8 @@ int lua_axis_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_clone'", nullptr);
             return 0;
         }
-        axis::PUParticleSystem3D* ret = cobj->clone();
-        object_to_luaval<axis::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(axis::PUParticleSystem3D*)ret);
+        ax::PUParticleSystem3D* ret = cobj->clone();
+        object_to_luaval<ax::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(ax::PUParticleSystem3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:clone",argc, 0);
@@ -4596,7 +4596,7 @@ int lua_axis_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_addEmitter(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4608,7 +4608,7 @@ int lua_axis_extension_PUParticleSystem3D_addEmitter(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4621,9 +4621,9 @@ int lua_axis_extension_PUParticleSystem3D_addEmitter(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PUEmitter* arg0;
+        ax::PUEmitter* arg0;
 
-        ok &= luaval_to_object<axis::PUEmitter>(tolua_S, 2, "ax.PUEmitter",&arg0, "ax.PUParticleSystem3D:addEmitter");
+        ok &= luaval_to_object<ax::PUEmitter>(tolua_S, 2, "ax.PUEmitter",&arg0, "ax.PUParticleSystem3D:addEmitter");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_addEmitter'", nullptr);
@@ -4646,7 +4646,7 @@ int lua_axis_extension_PUParticleSystem3D_addEmitter(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4658,7 +4658,7 @@ int lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4671,9 +4671,9 @@ int lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate(lua_State* tolua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PUBehaviour* arg0;
+        ax::PUBehaviour* arg0;
 
-        ok &= luaval_to_object<axis::PUBehaviour>(tolua_S, 2, "ax.PUBehaviour",&arg0, "ax.PUParticleSystem3D:addBehaviourTemplate");
+        ok &= luaval_to_object<ax::PUBehaviour>(tolua_S, 2, "ax.PUBehaviour",&arg0, "ax.PUParticleSystem3D:addBehaviourTemplate");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate'", nullptr);
@@ -4696,7 +4696,7 @@ int lua_axis_extension_PUParticleSystem3D_addBehaviourTemplate(lua_State* tolua_
 int lua_axis_extension_PUParticleSystem3D_setDefaultWidth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4708,7 +4708,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultWidth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4746,7 +4746,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultWidth(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_copyAttributesTo(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4758,7 +4758,7 @@ int lua_axis_extension_PUParticleSystem3D_copyAttributesTo(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4771,9 +4771,9 @@ int lua_axis_extension_PUParticleSystem3D_copyAttributesTo(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PUParticleSystem3D* arg0;
+        ax::PUParticleSystem3D* arg0;
 
-        ok &= luaval_to_object<axis::PUParticleSystem3D>(tolua_S, 2, "ax.PUParticleSystem3D",&arg0, "ax.PUParticleSystem3D:copyAttributesTo");
+        ok &= luaval_to_object<ax::PUParticleSystem3D>(tolua_S, 2, "ax.PUParticleSystem3D",&arg0, "ax.PUParticleSystem3D:copyAttributesTo");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_copyAttributesTo'", nullptr);
@@ -4796,7 +4796,7 @@ int lua_axis_extension_PUParticleSystem3D_copyAttributesTo(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_setMaterialName(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4808,7 +4808,7 @@ int lua_axis_extension_PUParticleSystem3D_setMaterialName(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4846,7 +4846,7 @@ int lua_axis_extension_PUParticleSystem3D_setMaterialName(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4858,7 +4858,7 @@ int lua_axis_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4876,8 +4876,8 @@ int lua_axis_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_getParentParticleSystem'", nullptr);
             return 0;
         }
-        axis::PUParticleSystem3D* ret = cobj->getParentParticleSystem();
-        object_to_luaval<axis::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(axis::PUParticleSystem3D*)ret);
+        ax::PUParticleSystem3D* ret = cobj->getParentParticleSystem();
+        object_to_luaval<ax::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(ax::PUParticleSystem3D*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PUParticleSystem3D:getParentParticleSystem",argc, 0);
@@ -4893,7 +4893,7 @@ int lua_axis_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tol
 int lua_axis_extension_PUParticleSystem3D_removeListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4905,7 +4905,7 @@ int lua_axis_extension_PUParticleSystem3D_removeListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4918,9 +4918,9 @@ int lua_axis_extension_PUParticleSystem3D_removeListener(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PUListener* arg0;
+        ax::PUListener* arg0;
 
-        ok &= luaval_to_object<axis::PUListener>(tolua_S, 2, "ax.PUListener",&arg0, "ax.PUParticleSystem3D:removeListener");
+        ok &= luaval_to_object<ax::PUListener>(tolua_S, 2, "ax.PUListener",&arg0, "ax.PUParticleSystem3D:removeListener");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_removeListener'", nullptr);
@@ -4943,7 +4943,7 @@ int lua_axis_extension_PUParticleSystem3D_removeListener(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_setMaxVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4955,7 +4955,7 @@ int lua_axis_extension_PUParticleSystem3D_setMaxVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4993,7 +4993,7 @@ int lua_axis_extension_PUParticleSystem3D_setMaxVelocity(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_getDefaultHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5005,7 +5005,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5040,7 +5040,7 @@ int lua_axis_extension_PUParticleSystem3D_getDefaultHeight(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5052,7 +5052,7 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5070,7 +5070,7 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_getDerivedPosition'", nullptr);
             return 0;
         }
-        axis::Vec3 ret = cobj->getDerivedPosition();
+        ax::Vec3 ret = cobj->getDerivedPosition();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5087,7 +5087,7 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_rotationOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5099,7 +5099,7 @@ int lua_axis_extension_PUParticleSystem3D_rotationOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5112,7 +5112,7 @@ int lua_axis_extension_PUParticleSystem3D_rotationOffset(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec3 arg0;
+        ax::Vec3 arg0;
 
         ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.PUParticleSystem3D:rotationOffset");
         if(!ok)
@@ -5137,7 +5137,7 @@ int lua_axis_extension_PUParticleSystem3D_rotationOffset(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_removeAllEmitter(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5149,7 +5149,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllEmitter(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5184,7 +5184,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllEmitter(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_setParticleSystemScaleVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5196,7 +5196,7 @@ int lua_axis_extension_PUParticleSystem3D_setParticleSystemScaleVelocity(lua_Sta
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5234,7 +5234,7 @@ int lua_axis_extension_PUParticleSystem3D_setParticleSystemScaleVelocity(lua_Sta
 int lua_axis_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5246,7 +5246,7 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5264,7 +5264,7 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_getDerivedScale'", nullptr);
             return 0;
         }
-        axis::Vec3 ret = cobj->getDerivedScale();
+        ax::Vec3 ret = cobj->getDerivedScale();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5281,7 +5281,7 @@ int lua_axis_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_setDefaultHeight(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5293,7 +5293,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultHeight(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5331,7 +5331,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultHeight(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_removeAllListener(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5343,7 +5343,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllListener(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5378,7 +5378,7 @@ int lua_axis_extension_PUParticleSystem3D_removeAllListener(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5390,7 +5390,7 @@ int lua_axis_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5428,7 +5428,7 @@ int lua_axis_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5440,7 +5440,7 @@ int lua_axis_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5453,7 +5453,7 @@ int lua_axis_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PUParticle3D* arg0;
+        ax::PUParticle3D* arg0;
 
         #pragma warning NO CONVERSION TO NATIVE FOR PUParticle3D*
 		ok = false;
@@ -5479,7 +5479,7 @@ int lua_axis_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_removerAllObserver(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5491,7 +5491,7 @@ int lua_axis_extension_PUParticleSystem3D_removerAllObserver(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5526,7 +5526,7 @@ int lua_axis_extension_PUParticleSystem3D_removerAllObserver(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_setDefaultDepth(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5538,7 +5538,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultDepth(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5576,7 +5576,7 @@ int lua_axis_extension_PUParticleSystem3D_setDefaultDepth(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_addObserver(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5588,7 +5588,7 @@ int lua_axis_extension_PUParticleSystem3D_addObserver(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PUParticleSystem3D",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PUParticleSystem3D*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5601,9 +5601,9 @@ int lua_axis_extension_PUParticleSystem3D_addObserver(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PUObserver* arg0;
+        ax::PUObserver* arg0;
 
-        ok &= luaval_to_object<axis::PUObserver>(tolua_S, 2, "ax.PUObserver",&arg0, "ax.PUParticleSystem3D:addObserver");
+        ok &= luaval_to_object<ax::PUObserver>(tolua_S, 2, "ax.PUObserver",&arg0, "ax.PUParticleSystem3D:addObserver");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_addObserver'", nullptr);
@@ -5644,8 +5644,8 @@ int lua_axis_extension_PUParticleSystem3D_create(lua_State* tolua_S)
             std::string_view arg0;
             ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.PUParticleSystem3D:create");
             if (!ok) { break; }
-            axis::PUParticleSystem3D* ret = axis::PUParticleSystem3D::create(arg0);
-            object_to_luaval<axis::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(axis::PUParticleSystem3D*)ret);
+            ax::PUParticleSystem3D* ret = ax::PUParticleSystem3D::create(arg0);
+            object_to_luaval<ax::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(ax::PUParticleSystem3D*)ret);
             return 1;
         }
     } while (0);
@@ -5654,8 +5654,8 @@ int lua_axis_extension_PUParticleSystem3D_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::PUParticleSystem3D* ret = axis::PUParticleSystem3D::create();
-            object_to_luaval<axis::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(axis::PUParticleSystem3D*)ret);
+            ax::PUParticleSystem3D* ret = ax::PUParticleSystem3D::create();
+            object_to_luaval<ax::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(ax::PUParticleSystem3D*)ret);
             return 1;
         }
     } while (0);
@@ -5670,8 +5670,8 @@ int lua_axis_extension_PUParticleSystem3D_create(lua_State* tolua_S)
             std::string_view arg1;
             ok &= luaval_to_std_string_view(tolua_S, 3,&arg1, "ax.PUParticleSystem3D:create");
             if (!ok) { break; }
-            axis::PUParticleSystem3D* ret = axis::PUParticleSystem3D::create(arg0, arg1);
-            object_to_luaval<axis::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(axis::PUParticleSystem3D*)ret);
+            ax::PUParticleSystem3D* ret = ax::PUParticleSystem3D::create(arg0, arg1);
+            object_to_luaval<ax::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(ax::PUParticleSystem3D*)ret);
             return 1;
         }
     } while (0);
@@ -5687,7 +5687,7 @@ int lua_axis_extension_PUParticleSystem3D_create(lua_State* tolua_S)
 int lua_axis_extension_PUParticleSystem3D_constructor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PUParticleSystem3D* cobj = nullptr;
+    ax::PUParticleSystem3D* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5704,7 +5704,7 @@ int lua_axis_extension_PUParticleSystem3D_constructor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_extension_PUParticleSystem3D_constructor'", nullptr);
             return 0;
         }
-        cobj = new axis::PUParticleSystem3D();
+        cobj = new ax::PUParticleSystem3D();
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;
@@ -5778,7 +5778,7 @@ int lua_register_axis_extension_PUParticleSystem3D(lua_State* tolua_S)
         tolua_function(tolua_S,"addObserver",lua_axis_extension_PUParticleSystem3D_addObserver);
         tolua_function(tolua_S,"create", lua_axis_extension_PUParticleSystem3D_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PUParticleSystem3D).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PUParticleSystem3D).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PUParticleSystem3D";
     g_typeCast[typeName] = "ax.PUParticleSystem3D";
     return 1;

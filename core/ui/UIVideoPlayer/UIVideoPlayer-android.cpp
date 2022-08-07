@@ -95,7 +95,7 @@ void setUserInputEnabledJNI(int index, bool enableInput)
 
 //-----------------------------------------------------------------------------------------------------------
 
-using namespace axis::ui;
+using namespace ax::ui;
 
 static std::unordered_map<int, VideoPlayer*> s_allVideoPlayers;
 
@@ -160,11 +160,11 @@ void VideoPlayer::setStyle(StyleType style)
 
 void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    axis::ui::Widget::draw(renderer, transform, flags);
+    ax::ui::Widget::draw(renderer, transform, flags);
 
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {
-        auto uiRect = axis::ui::Helper::convertBoundingBoxToScreen(this);
+        auto uiRect = ax::ui::Helper::convertBoundingBoxToScreen(this);
         JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect", _videoPlayerIndex, (int)uiRect.origin.x,
                                         (int)uiRect.origin.y, (int)uiRect.size.width, (int)uiRect.size.height);
     }
@@ -262,7 +262,7 @@ bool VideoPlayer::isUserInputEnabled() const
 
 void VideoPlayer::setVisible(bool visible)
 {
-    axis::ui::Widget::setVisible(visible);
+    ax::ui::Widget::setVisible(visible);
 
     if (!visible || isRunning())
     {
@@ -315,7 +315,7 @@ void VideoPlayer::onPlayEvent(int event)
     }
 }
 
-axis::ui::Widget* VideoPlayer::createCloneInstance()
+ax::ui::Widget* VideoPlayer::createCloneInstance()
 {
     return VideoPlayer::create();
 }

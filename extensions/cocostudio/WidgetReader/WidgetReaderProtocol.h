@@ -53,12 +53,12 @@ class CCS_DLL WidgetReaderProtocol
 {
 public:
     virtual ~WidgetReaderProtocol();
-    virtual void setPropsFromJsonDictionary(axis::ui::Widget* widget, const rapidjson::Value& options)          = 0;
-    virtual void setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) = 0;
+    virtual void setPropsFromJsonDictionary(ax::ui::Widget* widget, const rapidjson::Value& options)          = 0;
+    virtual void setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) = 0;
     virtual void setPropsFromProtocolBuffers(
-        axis::ui::Widget* widget,
+        ax::ui::Widget* widget,
         const protocolbuffers::NodeTree& nodeTree);  // cocos2d-x-3.3rc1@libccs19 spec
-    virtual void setPropsFromXML(axis::ui::Widget* widget,
+    virtual void setPropsFromXML(ax::ui::Widget* widget,
                                  pugi::xml_node objectData);  // cocos2d-x-3.3rc1@libccs19 spec
 };
 }  // namespace cocostudio

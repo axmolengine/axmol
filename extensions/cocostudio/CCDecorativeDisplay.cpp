@@ -65,7 +65,7 @@ bool DecorativeDisplay::init()
     return true;
 }
 
-void DecorativeDisplay::setDisplay(axis::Node* display)
+void DecorativeDisplay::setDisplay(ax::Node* display)
 {
     if (_display != display)
     {

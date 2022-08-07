@@ -62,7 +62,7 @@
         namespace axis    \
         {
 #    define NS_AX_MATH_END }
-#    define USING_NS_AX_MATH using namespace axis
+#    define USING_NS_AX_MATH using namespace axys
 #else
 #    define NS_AX_MATH_BEGIN
 #    define NS_AX_MATH_END

@@ -275,7 +275,7 @@ protected:
 
     // all descendants: children, grand children, etc...
     // There is not need to retain/release these objects, since they are already retained by _children
-    // So, using std::vector<Sprite*> is slightly faster than using axis::Array for this particular case
+    // So, using std::vector<Sprite*> is slightly faster than using ax::Array for this particular case
     std::vector<Sprite*> _descendants;
 };
 

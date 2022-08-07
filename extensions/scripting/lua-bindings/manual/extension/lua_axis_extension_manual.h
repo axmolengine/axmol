@@ -33,8 +33,8 @@
  */
 
 /**
- * Call this function can import the lua bindings for classes in the `axis::extension` namespace like
- * axis::extension::Control, axis::extension::ControlHuePicker, and so on. After registering, we could call the
+ * Call this function can import the lua bindings for classes in the `ax::extension` namespace like
+ * ax::extension::Control, ax::extension::ControlHuePicker, and so on. After registering, we could call the
  * related cocosbuilder code conveniently in the lua.eg,.ax.Control:create(). If you don't want to use the extension
  * module in the lua, you only don't call this registering function. If you don't register the extension module, the
  * package size would become smaller . The current mechanism,this registering function is called in the

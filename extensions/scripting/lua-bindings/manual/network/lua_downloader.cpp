@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <sstream>
 
 USING_NS_AX;
-using namespace axis::network;
+using namespace ax::network;
 
 static int get_field_int(lua_State* L, const char* field, int def)
 {
@@ -329,7 +329,7 @@ static int lua_downloader_tostring(lua_State* L)
 
 static const struct luaL_Reg downloaderStaticFns[] = {{"new", lua_downloader_new},
                                                       /*
-                                                       * axis::Downloader is not a subclass of axis::Ref,
+                                                       * ax::Downloader is not a subclass of ax::Ref,
                                                        * `create()` is not provided.
                                                        */
                                                       //{ "create", lua_downloader_new },

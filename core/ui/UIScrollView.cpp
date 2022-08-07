@@ -1576,7 +1576,7 @@ void ScrollView::removeScrollBar()
     }
 }
 
-Widget* ScrollView::findNextFocusedWidget(axis::ui::Widget::FocusDirection direction, axis::ui::Widget* current)
+Widget* ScrollView::findNextFocusedWidget(ax::ui::Widget::FocusDirection direction, ax::ui::Widget* current)
 {
     if (this->getLayoutType() == Layout::Type::VERTICAL || this->getLayoutType() == Layout::Type::HORIZONTAL)
     {

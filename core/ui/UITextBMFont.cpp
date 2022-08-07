@@ -69,7 +69,7 @@ TextBMFont* TextBMFont::create(std::string_view text, std::string_view filename)
 
 void TextBMFont::initRenderer()
 {
-    _labelBMFontRenderer = axis::Label::create();
+    _labelBMFontRenderer = ax::Label::create();
     addProtectedChild(_labelBMFontRenderer, LABELBMFONT_RENDERER_Z, -1);
 }
 

@@ -144,7 +144,7 @@ void Helper::changeLayoutSystemActiveState(bool bActive)
 {
     _activeLayout = bActive;
 }
-void Helper::doLayout(axis::Node* rootNode)
+void Helper::doLayout(ax::Node* rootNode)
 {
     if (!_activeLayout)
     {
@@ -164,7 +164,7 @@ void Helper::doLayout(axis::Node* rootNode)
     }
 }
 
-Rect Helper::restrictCapInsetRect(const axis::Rect& capInsets, const Vec2& textureSize)
+Rect Helper::restrictCapInsetRect(const ax::Rect& capInsets, const Vec2& textureSize)
 {
     float x      = capInsets.origin.x;
     float y      = capInsets.origin.y;

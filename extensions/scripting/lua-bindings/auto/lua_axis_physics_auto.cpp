@@ -7,7 +7,7 @@
 int lua_axis_physics_PhysicsShape_getFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -19,7 +19,7 @@ int lua_axis_physics_PhysicsShape_getFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -54,7 +54,7 @@ int lua_axis_physics_PhysicsShape_getFriction(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setGroup(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -66,7 +66,7 @@ int lua_axis_physics_PhysicsShape_setGroup(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -104,7 +104,7 @@ int lua_axis_physics_PhysicsShape_setGroup(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setDensity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -116,7 +116,7 @@ int lua_axis_physics_PhysicsShape_setDensity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -154,7 +154,7 @@ int lua_axis_physics_PhysicsShape_setDensity(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getMass(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -166,7 +166,7 @@ int lua_axis_physics_PhysicsShape_getMass(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -201,7 +201,7 @@ int lua_axis_physics_PhysicsShape_getMass(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -213,7 +213,7 @@ int lua_axis_physics_PhysicsShape_getMaterial(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -231,7 +231,7 @@ int lua_axis_physics_PhysicsShape_getMaterial(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShape_getMaterial'", nullptr);
             return 0;
         }
-        const axis::PhysicsMaterial& ret = cobj->getMaterial();
+        const ax::PhysicsMaterial& ret = cobj->getMaterial();
         physics_material_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -248,7 +248,7 @@ int lua_axis_physics_PhysicsShape_getMaterial(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setSensor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -260,7 +260,7 @@ int lua_axis_physics_PhysicsShape_setSensor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -298,7 +298,7 @@ int lua_axis_physics_PhysicsShape_setSensor(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getCollisionBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -310,7 +310,7 @@ int lua_axis_physics_PhysicsShape_getCollisionBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -345,7 +345,7 @@ int lua_axis_physics_PhysicsShape_getCollisionBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getArea(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -357,7 +357,7 @@ int lua_axis_physics_PhysicsShape_getArea(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -392,7 +392,7 @@ int lua_axis_physics_PhysicsShape_getArea(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setCategoryBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -404,7 +404,7 @@ int lua_axis_physics_PhysicsShape_setCategoryBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -442,7 +442,7 @@ int lua_axis_physics_PhysicsShape_setCategoryBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getGroup(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -454,7 +454,7 @@ int lua_axis_physics_PhysicsShape_getGroup(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -489,7 +489,7 @@ int lua_axis_physics_PhysicsShape_getGroup(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setMoment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -501,7 +501,7 @@ int lua_axis_physics_PhysicsShape_setMoment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -539,7 +539,7 @@ int lua_axis_physics_PhysicsShape_setMoment(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_containsPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -551,7 +551,7 @@ int lua_axis_physics_PhysicsShape_containsPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -564,7 +564,7 @@ int lua_axis_physics_PhysicsShape_containsPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShape:containsPoint");
         if(!ok)
@@ -589,7 +589,7 @@ int lua_axis_physics_PhysicsShape_containsPoint(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getCategoryBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -601,7 +601,7 @@ int lua_axis_physics_PhysicsShape_getCategoryBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -636,7 +636,7 @@ int lua_axis_physics_PhysicsShape_getCategoryBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_isSensor(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -648,7 +648,7 @@ int lua_axis_physics_PhysicsShape_isSensor(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -683,7 +683,7 @@ int lua_axis_physics_PhysicsShape_isSensor(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getType(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -695,7 +695,7 @@ int lua_axis_physics_PhysicsShape_getType(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -730,7 +730,7 @@ int lua_axis_physics_PhysicsShape_getType(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getContactTestBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -742,7 +742,7 @@ int lua_axis_physics_PhysicsShape_getContactTestBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -777,7 +777,7 @@ int lua_axis_physics_PhysicsShape_getContactTestBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getCenter(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -789,7 +789,7 @@ int lua_axis_physics_PhysicsShape_getCenter(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -807,7 +807,7 @@ int lua_axis_physics_PhysicsShape_getCenter(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShape_getCenter'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getCenter();
+        ax::Vec2 ret = cobj->getCenter();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -824,7 +824,7 @@ int lua_axis_physics_PhysicsShape_getCenter(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getDensity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -836,7 +836,7 @@ int lua_axis_physics_PhysicsShape_getDensity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -871,7 +871,7 @@ int lua_axis_physics_PhysicsShape_getDensity(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setMass(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -883,7 +883,7 @@ int lua_axis_physics_PhysicsShape_setMass(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -921,7 +921,7 @@ int lua_axis_physics_PhysicsShape_setMass(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -933,7 +933,7 @@ int lua_axis_physics_PhysicsShape_getTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -968,7 +968,7 @@ int lua_axis_physics_PhysicsShape_getTag(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_calculateDefaultMoment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -980,7 +980,7 @@ int lua_axis_physics_PhysicsShape_calculateDefaultMoment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1015,7 +1015,7 @@ int lua_axis_physics_PhysicsShape_calculateDefaultMoment(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setCollisionBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1027,7 +1027,7 @@ int lua_axis_physics_PhysicsShape_setCollisionBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1065,7 +1065,7 @@ int lua_axis_physics_PhysicsShape_setCollisionBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getMoment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1077,7 +1077,7 @@ int lua_axis_physics_PhysicsShape_getMoment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1112,7 +1112,7 @@ int lua_axis_physics_PhysicsShape_getMoment(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1124,7 +1124,7 @@ int lua_axis_physics_PhysicsShape_getOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1142,7 +1142,7 @@ int lua_axis_physics_PhysicsShape_getOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShape_getOffset'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getOffset();
+        ax::Vec2 ret = cobj->getOffset();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1159,7 +1159,7 @@ int lua_axis_physics_PhysicsShape_getOffset(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1171,7 +1171,7 @@ int lua_axis_physics_PhysicsShape_getRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1206,7 +1206,7 @@ int lua_axis_physics_PhysicsShape_getRestitution(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1218,7 +1218,7 @@ int lua_axis_physics_PhysicsShape_setFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1256,7 +1256,7 @@ int lua_axis_physics_PhysicsShape_setFriction(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setMaterial(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1268,7 +1268,7 @@ int lua_axis_physics_PhysicsShape_setMaterial(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1281,7 +1281,7 @@ int lua_axis_physics_PhysicsShape_setMaterial(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PhysicsMaterial arg0;
+        ax::PhysicsMaterial arg0;
 
         ok &= luaval_to_physics_material(tolua_S, 2, &arg0, "ax.PhysicsShape:setMaterial");
         if(!ok)
@@ -1306,7 +1306,7 @@ int lua_axis_physics_PhysicsShape_setMaterial(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1318,7 +1318,7 @@ int lua_axis_physics_PhysicsShape_setTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1356,7 +1356,7 @@ int lua_axis_physics_PhysicsShape_setTag(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setContactTestBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1368,7 +1368,7 @@ int lua_axis_physics_PhysicsShape_setContactTestBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1406,7 +1406,7 @@ int lua_axis_physics_PhysicsShape_setContactTestBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_setRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1418,7 +1418,7 @@ int lua_axis_physics_PhysicsShape_setRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1456,7 +1456,7 @@ int lua_axis_physics_PhysicsShape_setRestitution(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShape_getBody(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShape* cobj = nullptr;
+    ax::PhysicsShape* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1468,7 +1468,7 @@ int lua_axis_physics_PhysicsShape_getBody(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShape",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShape*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1486,8 +1486,8 @@ int lua_axis_physics_PhysicsShape_getBody(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShape_getBody'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = cobj->getBody();
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = cobj->getBody();
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsShape:getBody",argc, 0);
@@ -1544,7 +1544,7 @@ int lua_register_axis_physics_PhysicsShape(lua_State* tolua_S)
         tolua_function(tolua_S,"setRestitution",lua_axis_physics_PhysicsShape_setRestitution);
         tolua_function(tolua_S,"getBody",lua_axis_physics_PhysicsShape_getBody);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsShape).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsShape).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsShape";
     g_typeCast[typeName] = "ax.PhysicsShape";
     return 1;
@@ -1553,7 +1553,7 @@ int lua_register_axis_physics_PhysicsShape(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShapeCircle_getRadius(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShapeCircle* cobj = nullptr;
+    ax::PhysicsShapeCircle* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1565,7 +1565,7 @@ int lua_axis_physics_PhysicsShapeCircle_getRadius(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShapeCircle",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShapeCircle*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShapeCircle*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1621,14 +1621,14 @@ int lua_axis_physics_PhysicsShapeCircle_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeCircle_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeCircle* ret = axis::PhysicsShapeCircle::create(arg0);
-        object_to_luaval<axis::PhysicsShapeCircle>(tolua_S, "ax.PhysicsShapeCircle",(axis::PhysicsShapeCircle*)ret);
+        ax::PhysicsShapeCircle* ret = ax::PhysicsShapeCircle::create(arg0);
+        object_to_luaval<ax::PhysicsShapeCircle>(tolua_S, "ax.PhysicsShapeCircle",(ax::PhysicsShapeCircle*)ret);
         return 1;
     }
     if (argc == 2)
     {
         double arg0;
-        axis::PhysicsMaterial arg1;
+        ax::PhysicsMaterial arg1;
         ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PhysicsShapeCircle:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsShapeCircle:create");
         if(!ok)
@@ -1636,15 +1636,15 @@ int lua_axis_physics_PhysicsShapeCircle_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeCircle_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeCircle* ret = axis::PhysicsShapeCircle::create(arg0, arg1);
-        object_to_luaval<axis::PhysicsShapeCircle>(tolua_S, "ax.PhysicsShapeCircle",(axis::PhysicsShapeCircle*)ret);
+        ax::PhysicsShapeCircle* ret = ax::PhysicsShapeCircle::create(arg0, arg1);
+        object_to_luaval<ax::PhysicsShapeCircle>(tolua_S, "ax.PhysicsShapeCircle",(ax::PhysicsShapeCircle*)ret);
         return 1;
     }
     if (argc == 3)
     {
         double arg0;
-        axis::PhysicsMaterial arg1;
-        axis::Vec2 arg2;
+        ax::PhysicsMaterial arg1;
+        ax::Vec2 arg2;
         ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PhysicsShapeCircle:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsShapeCircle:create");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsShapeCircle:create");
@@ -1653,8 +1653,8 @@ int lua_axis_physics_PhysicsShapeCircle_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeCircle_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeCircle* ret = axis::PhysicsShapeCircle::create(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsShapeCircle>(tolua_S, "ax.PhysicsShapeCircle",(axis::PhysicsShapeCircle*)ret);
+        ax::PhysicsShapeCircle* ret = ax::PhysicsShapeCircle::create(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsShapeCircle>(tolua_S, "ax.PhysicsShapeCircle",(ax::PhysicsShapeCircle*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsShapeCircle:create",argc, 1);
@@ -1689,7 +1689,7 @@ int lua_axis_physics_PhysicsShapeCircle_calculateArea(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeCircle_calculateArea'", nullptr);
             return 0;
         }
-        double ret = axis::PhysicsShapeCircle::calculateArea(arg0);
+        double ret = ax::PhysicsShapeCircle::calculateArea(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1727,7 +1727,7 @@ int lua_axis_physics_PhysicsShapeCircle_calculateMoment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeCircle_calculateMoment'", nullptr);
             return 0;
         }
-        double ret = axis::PhysicsShapeCircle::calculateMoment(arg0, arg1);
+        double ret = ax::PhysicsShapeCircle::calculateMoment(arg0, arg1);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1735,7 +1735,7 @@ int lua_axis_physics_PhysicsShapeCircle_calculateMoment(lua_State* tolua_S)
     {
         double arg0;
         double arg1;
-        axis::Vec2 arg2;
+        ax::Vec2 arg2;
         ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PhysicsShapeCircle:calculateMoment");
         ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.PhysicsShapeCircle:calculateMoment");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsShapeCircle:calculateMoment");
@@ -1744,7 +1744,7 @@ int lua_axis_physics_PhysicsShapeCircle_calculateMoment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeCircle_calculateMoment'", nullptr);
             return 0;
         }
-        double ret = axis::PhysicsShapeCircle::calculateMoment(arg0, arg1, arg2);
+        double ret = ax::PhysicsShapeCircle::calculateMoment(arg0, arg1, arg2);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1773,7 +1773,7 @@ int lua_register_axis_physics_PhysicsShapeCircle(lua_State* tolua_S)
         tolua_function(tolua_S,"calculateArea", lua_axis_physics_PhysicsShapeCircle_calculateArea);
         tolua_function(tolua_S,"calculateMoment", lua_axis_physics_PhysicsShapeCircle_calculateMoment);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsShapeCircle).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsShapeCircle).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsShapeCircle";
     g_typeCast[typeName] = "ax.PhysicsShapeCircle";
     return 1;
@@ -1782,7 +1782,7 @@ int lua_register_axis_physics_PhysicsShapeCircle(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShapePolygon_getPointsCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShapePolygon* cobj = nullptr;
+    ax::PhysicsShapePolygon* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1794,7 +1794,7 @@ int lua_axis_physics_PhysicsShapePolygon_getPointsCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShapePolygon",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShapePolygon*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShapePolygon*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1829,7 +1829,7 @@ int lua_axis_physics_PhysicsShapePolygon_getPointsCount(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShapePolygon_getPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShapePolygon* cobj = nullptr;
+    ax::PhysicsShapePolygon* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1841,7 +1841,7 @@ int lua_axis_physics_PhysicsShapePolygon_getPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShapePolygon",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShapePolygon*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShapePolygon*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1862,7 +1862,7 @@ int lua_axis_physics_PhysicsShapePolygon_getPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapePolygon_getPoint'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getPoint(arg0);
+        ax::Vec2 ret = cobj->getPoint(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1891,7 +1891,7 @@ int lua_register_axis_physics_PhysicsShapePolygon(lua_State* tolua_S)
         tolua_function(tolua_S,"getPointsCount",lua_axis_physics_PhysicsShapePolygon_getPointsCount);
         tolua_function(tolua_S,"getPoint",lua_axis_physics_PhysicsShapePolygon_getPoint);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsShapePolygon).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsShapePolygon).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsShapePolygon";
     g_typeCast[typeName] = "ax.PhysicsShapePolygon";
     return 1;
@@ -1900,7 +1900,7 @@ int lua_register_axis_physics_PhysicsShapePolygon(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShapeBox_getSize(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShapeBox* cobj = nullptr;
+    ax::PhysicsShapeBox* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -1912,7 +1912,7 @@ int lua_axis_physics_PhysicsShapeBox_getSize(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShapeBox",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShapeBox*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShapeBox*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -1930,7 +1930,7 @@ int lua_axis_physics_PhysicsShapeBox_getSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeBox_getSize'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getSize();
+        ax::Vec2 ret = cobj->getSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1961,21 +1961,21 @@ int lua_axis_physics_PhysicsShapeBox_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeBox:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeBox_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeBox* ret = axis::PhysicsShapeBox::create(arg0);
-        object_to_luaval<axis::PhysicsShapeBox>(tolua_S, "ax.PhysicsShapeBox",(axis::PhysicsShapeBox*)ret);
+        ax::PhysicsShapeBox* ret = ax::PhysicsShapeBox::create(arg0);
+        object_to_luaval<ax::PhysicsShapeBox>(tolua_S, "ax.PhysicsShapeBox",(ax::PhysicsShapeBox*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsShapeBox:create");
         if(!ok)
@@ -1983,15 +1983,15 @@ int lua_axis_physics_PhysicsShapeBox_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeBox_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeBox* ret = axis::PhysicsShapeBox::create(arg0, arg1);
-        object_to_luaval<axis::PhysicsShapeBox>(tolua_S, "ax.PhysicsShapeBox",(axis::PhysicsShapeBox*)ret);
+        ax::PhysicsShapeBox* ret = ax::PhysicsShapeBox::create(arg0, arg1);
+        object_to_luaval<ax::PhysicsShapeBox>(tolua_S, "ax.PhysicsShapeBox",(ax::PhysicsShapeBox*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
-        axis::Vec2 arg2;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
+        ax::Vec2 arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsShapeBox:create");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsShapeBox:create");
@@ -2000,15 +2000,15 @@ int lua_axis_physics_PhysicsShapeBox_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeBox_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeBox* ret = axis::PhysicsShapeBox::create(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsShapeBox>(tolua_S, "ax.PhysicsShapeBox",(axis::PhysicsShapeBox*)ret);
+        ax::PhysicsShapeBox* ret = ax::PhysicsShapeBox::create(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsShapeBox>(tolua_S, "ax.PhysicsShapeBox",(ax::PhysicsShapeBox*)ret);
         return 1;
     }
     if (argc == 4)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
-        axis::Vec2 arg2;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
+        ax::Vec2 arg2;
         double arg3;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsShapeBox:create");
@@ -2019,8 +2019,8 @@ int lua_axis_physics_PhysicsShapeBox_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeBox_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeBox* ret = axis::PhysicsShapeBox::create(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsShapeBox>(tolua_S, "ax.PhysicsShapeBox",(axis::PhysicsShapeBox*)ret);
+        ax::PhysicsShapeBox* ret = ax::PhysicsShapeBox::create(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsShapeBox>(tolua_S, "ax.PhysicsShapeBox",(ax::PhysicsShapeBox*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsShapeBox:create",argc, 1);
@@ -2046,7 +2046,7 @@ int lua_register_axis_physics_PhysicsShapeBox(lua_State* tolua_S)
         tolua_function(tolua_S,"getSize",lua_axis_physics_PhysicsShapeBox_getSize);
         tolua_function(tolua_S,"create", lua_axis_physics_PhysicsShapeBox_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsShapeBox).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsShapeBox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsShapeBox";
     g_typeCast[typeName] = "ax.PhysicsShapeBox";
     return 1;
@@ -2055,7 +2055,7 @@ int lua_register_axis_physics_PhysicsShapeBox(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShapeEdgeSegment_getPointB(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShapeEdgeSegment* cobj = nullptr;
+    ax::PhysicsShapeEdgeSegment* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2067,7 +2067,7 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_getPointB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShapeEdgeSegment",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShapeEdgeSegment*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShapeEdgeSegment*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2085,7 +2085,7 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_getPointB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeSegment_getPointB'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getPointB();
+        ax::Vec2 ret = cobj->getPointB();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2102,7 +2102,7 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_getPointB(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShapeEdgeSegment_getPointA(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShapeEdgeSegment* cobj = nullptr;
+    ax::PhysicsShapeEdgeSegment* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2114,7 +2114,7 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_getPointA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShapeEdgeSegment",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShapeEdgeSegment*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShapeEdgeSegment*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2132,7 +2132,7 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_getPointA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeSegment_getPointA'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getPointA();
+        ax::Vec2 ret = cobj->getPointA();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2163,8 +2163,8 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_create(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeEdgeSegment:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsShapeEdgeSegment:create");
         if(!ok)
@@ -2172,15 +2172,15 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeSegment_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeEdgeSegment* ret = axis::PhysicsShapeEdgeSegment::create(arg0, arg1);
-        object_to_luaval<axis::PhysicsShapeEdgeSegment>(tolua_S, "ax.PhysicsShapeEdgeSegment",(axis::PhysicsShapeEdgeSegment*)ret);
+        ax::PhysicsShapeEdgeSegment* ret = ax::PhysicsShapeEdgeSegment::create(arg0, arg1);
+        object_to_luaval<ax::PhysicsShapeEdgeSegment>(tolua_S, "ax.PhysicsShapeEdgeSegment",(ax::PhysicsShapeEdgeSegment*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
-        axis::PhysicsMaterial arg2;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
+        ax::PhysicsMaterial arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeEdgeSegment:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsShapeEdgeSegment:create");
         ok &= luaval_to_physics_material(tolua_S, 4, &arg2, "ax.PhysicsShapeEdgeSegment:create");
@@ -2189,15 +2189,15 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeSegment_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeEdgeSegment* ret = axis::PhysicsShapeEdgeSegment::create(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsShapeEdgeSegment>(tolua_S, "ax.PhysicsShapeEdgeSegment",(axis::PhysicsShapeEdgeSegment*)ret);
+        ax::PhysicsShapeEdgeSegment* ret = ax::PhysicsShapeEdgeSegment::create(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsShapeEdgeSegment>(tolua_S, "ax.PhysicsShapeEdgeSegment",(ax::PhysicsShapeEdgeSegment*)ret);
         return 1;
     }
     if (argc == 4)
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
-        axis::PhysicsMaterial arg2;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
+        ax::PhysicsMaterial arg2;
         double arg3;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeEdgeSegment:create");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsShapeEdgeSegment:create");
@@ -2208,8 +2208,8 @@ int lua_axis_physics_PhysicsShapeEdgeSegment_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeSegment_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeEdgeSegment* ret = axis::PhysicsShapeEdgeSegment::create(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsShapeEdgeSegment>(tolua_S, "ax.PhysicsShapeEdgeSegment",(axis::PhysicsShapeEdgeSegment*)ret);
+        ax::PhysicsShapeEdgeSegment* ret = ax::PhysicsShapeEdgeSegment::create(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsShapeEdgeSegment>(tolua_S, "ax.PhysicsShapeEdgeSegment",(ax::PhysicsShapeEdgeSegment*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsShapeEdgeSegment:create",argc, 2);
@@ -2236,7 +2236,7 @@ int lua_register_axis_physics_PhysicsShapeEdgeSegment(lua_State* tolua_S)
         tolua_function(tolua_S,"getPointA",lua_axis_physics_PhysicsShapeEdgeSegment_getPointA);
         tolua_function(tolua_S,"create", lua_axis_physics_PhysicsShapeEdgeSegment_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsShapeEdgeSegment).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsShapeEdgeSegment).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsShapeEdgeSegment";
     g_typeCast[typeName] = "ax.PhysicsShapeEdgeSegment";
     return 1;
@@ -2245,7 +2245,7 @@ int lua_register_axis_physics_PhysicsShapeEdgeSegment(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShapeEdgePolygon_getPointsCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShapeEdgePolygon* cobj = nullptr;
+    ax::PhysicsShapeEdgePolygon* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2257,7 +2257,7 @@ int lua_axis_physics_PhysicsShapeEdgePolygon_getPointsCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShapeEdgePolygon",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShapeEdgePolygon*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShapeEdgePolygon*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2303,7 +2303,7 @@ int lua_register_axis_physics_PhysicsShapeEdgePolygon(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PhysicsShapeEdgePolygon");
         tolua_function(tolua_S,"getPointsCount",lua_axis_physics_PhysicsShapeEdgePolygon_getPointsCount);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsShapeEdgePolygon).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsShapeEdgePolygon).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsShapeEdgePolygon";
     g_typeCast[typeName] = "ax.PhysicsShapeEdgePolygon";
     return 1;
@@ -2326,21 +2326,21 @@ int lua_axis_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeEdgeBox:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeBox_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeEdgeBox* ret = axis::PhysicsShapeEdgeBox::create(arg0);
-        object_to_luaval<axis::PhysicsShapeEdgeBox>(tolua_S, "ax.PhysicsShapeEdgeBox",(axis::PhysicsShapeEdgeBox*)ret);
+        ax::PhysicsShapeEdgeBox* ret = ax::PhysicsShapeEdgeBox::create(arg0);
+        object_to_luaval<ax::PhysicsShapeEdgeBox>(tolua_S, "ax.PhysicsShapeEdgeBox",(ax::PhysicsShapeEdgeBox*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsShapeEdgeBox:create");
         if(!ok)
@@ -2348,14 +2348,14 @@ int lua_axis_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeBox_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeEdgeBox* ret = axis::PhysicsShapeEdgeBox::create(arg0, arg1);
-        object_to_luaval<axis::PhysicsShapeEdgeBox>(tolua_S, "ax.PhysicsShapeEdgeBox",(axis::PhysicsShapeEdgeBox*)ret);
+        ax::PhysicsShapeEdgeBox* ret = ax::PhysicsShapeEdgeBox::create(arg0, arg1);
+        object_to_luaval<ax::PhysicsShapeEdgeBox>(tolua_S, "ax.PhysicsShapeEdgeBox",(ax::PhysicsShapeEdgeBox*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
         double arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsShapeEdgeBox:create");
@@ -2365,16 +2365,16 @@ int lua_axis_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeBox_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeEdgeBox* ret = axis::PhysicsShapeEdgeBox::create(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsShapeEdgeBox>(tolua_S, "ax.PhysicsShapeEdgeBox",(axis::PhysicsShapeEdgeBox*)ret);
+        ax::PhysicsShapeEdgeBox* ret = ax::PhysicsShapeEdgeBox::create(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsShapeEdgeBox>(tolua_S, "ax.PhysicsShapeEdgeBox",(ax::PhysicsShapeEdgeBox*)ret);
         return 1;
     }
     if (argc == 4)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
         double arg2;
-        axis::Vec2 arg3;
+        ax::Vec2 arg3;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsShapeEdgeBox:create");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsShapeEdgeBox:create");
@@ -2384,8 +2384,8 @@ int lua_axis_physics_PhysicsShapeEdgeBox_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsShapeEdgeBox_create'", nullptr);
             return 0;
         }
-        axis::PhysicsShapeEdgeBox* ret = axis::PhysicsShapeEdgeBox::create(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsShapeEdgeBox>(tolua_S, "ax.PhysicsShapeEdgeBox",(axis::PhysicsShapeEdgeBox*)ret);
+        ax::PhysicsShapeEdgeBox* ret = ax::PhysicsShapeEdgeBox::create(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsShapeEdgeBox>(tolua_S, "ax.PhysicsShapeEdgeBox",(ax::PhysicsShapeEdgeBox*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsShapeEdgeBox:create",argc, 1);
@@ -2410,7 +2410,7 @@ int lua_register_axis_physics_PhysicsShapeEdgeBox(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PhysicsShapeEdgeBox");
         tolua_function(tolua_S,"create", lua_axis_physics_PhysicsShapeEdgeBox_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsShapeEdgeBox).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsShapeEdgeBox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsShapeEdgeBox";
     g_typeCast[typeName] = "ax.PhysicsShapeEdgeBox";
     return 1;
@@ -2419,7 +2419,7 @@ int lua_register_axis_physics_PhysicsShapeEdgeBox(lua_State* tolua_S)
 int lua_axis_physics_PhysicsShapeEdgeChain_getPointsCount(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsShapeEdgeChain* cobj = nullptr;
+    ax::PhysicsShapeEdgeChain* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2431,7 +2431,7 @@ int lua_axis_physics_PhysicsShapeEdgeChain_getPointsCount(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsShapeEdgeChain",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsShapeEdgeChain*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsShapeEdgeChain*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2477,7 +2477,7 @@ int lua_register_axis_physics_PhysicsShapeEdgeChain(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"PhysicsShapeEdgeChain");
         tolua_function(tolua_S,"getPointsCount",lua_axis_physics_PhysicsShapeEdgeChain_getPointsCount);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsShapeEdgeChain).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsShapeEdgeChain).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsShapeEdgeChain";
     g_typeCast[typeName] = "ax.PhysicsShapeEdgeChain";
     return 1;
@@ -2486,7 +2486,7 @@ int lua_register_axis_physics_PhysicsShapeEdgeChain(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_isGravityEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2498,7 +2498,7 @@ int lua_axis_physics_PhysicsBody_isGravityEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2533,7 +2533,7 @@ int lua_axis_physics_PhysicsBody_isGravityEnabled(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_resetForces(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2545,7 +2545,7 @@ int lua_axis_physics_PhysicsBody_resetForces(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2580,7 +2580,7 @@ int lua_axis_physics_PhysicsBody_resetForces(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getVelocityLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2592,7 +2592,7 @@ int lua_axis_physics_PhysicsBody_getVelocityLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2627,7 +2627,7 @@ int lua_axis_physics_PhysicsBody_getVelocityLimit(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setGroup(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2639,7 +2639,7 @@ int lua_axis_physics_PhysicsBody_setGroup(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2677,7 +2677,7 @@ int lua_axis_physics_PhysicsBody_setGroup(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getMass(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2689,7 +2689,7 @@ int lua_axis_physics_PhysicsBody_getMass(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2724,7 +2724,7 @@ int lua_axis_physics_PhysicsBody_getMass(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getCollisionBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2736,7 +2736,7 @@ int lua_axis_physics_PhysicsBody_getCollisionBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2771,7 +2771,7 @@ int lua_axis_physics_PhysicsBody_getCollisionBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getRotationOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2783,7 +2783,7 @@ int lua_axis_physics_PhysicsBody_getRotationOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2818,7 +2818,7 @@ int lua_axis_physics_PhysicsBody_getRotationOffset(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getRotation(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2830,7 +2830,7 @@ int lua_axis_physics_PhysicsBody_getRotation(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2865,7 +2865,7 @@ int lua_axis_physics_PhysicsBody_getRotation(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getMoment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2877,7 +2877,7 @@ int lua_axis_physics_PhysicsBody_getMoment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2912,7 +2912,7 @@ int lua_axis_physics_PhysicsBody_getMoment(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2924,7 +2924,7 @@ int lua_axis_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -2937,7 +2937,7 @@ int lua_axis_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:applyImpulse");
         if(!ok)
@@ -2951,8 +2951,8 @@ int lua_axis_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:applyImpulse");
 
@@ -2979,7 +2979,7 @@ int lua_axis_physics_PhysicsBody_applyImpulse(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setRotationOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -2991,7 +2991,7 @@ int lua_axis_physics_PhysicsBody_setRotationOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3029,7 +3029,7 @@ int lua_axis_physics_PhysicsBody_setRotationOffset(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_applyForce(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3041,7 +3041,7 @@ int lua_axis_physics_PhysicsBody_applyForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3054,7 +3054,7 @@ int lua_axis_physics_PhysicsBody_applyForce(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:applyForce");
         if(!ok)
@@ -3068,8 +3068,8 @@ int lua_axis_physics_PhysicsBody_applyForce(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:applyForce");
 
@@ -3096,7 +3096,7 @@ int lua_axis_physics_PhysicsBody_applyForce(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_addShape(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3108,7 +3108,7 @@ int lua_axis_physics_PhysicsBody_addShape(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3121,24 +3121,24 @@ int lua_axis_physics_PhysicsBody_addShape(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PhysicsShape* arg0;
+        ax::PhysicsShape* arg0;
 
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.PhysicsBody:addShape");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.PhysicsBody:addShape");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_addShape'", nullptr);
             return 0;
         }
-        axis::PhysicsShape* ret = cobj->addShape(arg0);
-        object_to_luaval<axis::PhysicsShape>(tolua_S, "ax.PhysicsShape",(axis::PhysicsShape*)ret);
+        ax::PhysicsShape* ret = cobj->addShape(arg0);
+        object_to_luaval<ax::PhysicsShape>(tolua_S, "ax.PhysicsShape",(ax::PhysicsShape*)ret);
         return 1;
     }
     if (argc == 2) 
     {
-        axis::PhysicsShape* arg0;
+        ax::PhysicsShape* arg0;
         bool arg1;
 
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.PhysicsBody:addShape");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.PhysicsBody:addShape");
 
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.PhysicsBody:addShape");
         if(!ok)
@@ -3146,8 +3146,8 @@ int lua_axis_physics_PhysicsBody_addShape(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_addShape'", nullptr);
             return 0;
         }
-        axis::PhysicsShape* ret = cobj->addShape(arg0, arg1);
-        object_to_luaval<axis::PhysicsShape>(tolua_S, "ax.PhysicsShape",(axis::PhysicsShape*)ret);
+        ax::PhysicsShape* ret = cobj->addShape(arg0, arg1);
+        object_to_luaval<ax::PhysicsShape>(tolua_S, "ax.PhysicsShape",(ax::PhysicsShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:addShape",argc, 1);
@@ -3163,7 +3163,7 @@ int lua_axis_physics_PhysicsBody_addShape(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_applyTorque(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3175,7 +3175,7 @@ int lua_axis_physics_PhysicsBody_applyTorque(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3213,7 +3213,7 @@ int lua_axis_physics_PhysicsBody_applyTorque(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getAngularVelocityLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3225,7 +3225,7 @@ int lua_axis_physics_PhysicsBody_getAngularVelocityLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3260,7 +3260,7 @@ int lua_axis_physics_PhysicsBody_getAngularVelocityLimit(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setAngularVelocityLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3272,7 +3272,7 @@ int lua_axis_physics_PhysicsBody_setAngularVelocityLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3310,7 +3310,7 @@ int lua_axis_physics_PhysicsBody_setAngularVelocityLimit(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3322,7 +3322,7 @@ int lua_axis_physics_PhysicsBody_getVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3340,7 +3340,7 @@ int lua_axis_physics_PhysicsBody_getVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getVelocity'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getVelocity();
+        ax::Vec2 ret = cobj->getVelocity();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3357,7 +3357,7 @@ int lua_axis_physics_PhysicsBody_getVelocity(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getLinearDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3369,7 +3369,7 @@ int lua_axis_physics_PhysicsBody_getLinearDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3404,7 +3404,7 @@ int lua_axis_physics_PhysicsBody_getLinearDamping(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_removeAllShapes(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3416,7 +3416,7 @@ int lua_axis_physics_PhysicsBody_removeAllShapes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3465,7 +3465,7 @@ int lua_axis_physics_PhysicsBody_removeAllShapes(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setAngularDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3477,7 +3477,7 @@ int lua_axis_physics_PhysicsBody_setAngularDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3515,7 +3515,7 @@ int lua_axis_physics_PhysicsBody_setAngularDamping(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setVelocityLimit(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3527,7 +3527,7 @@ int lua_axis_physics_PhysicsBody_setVelocityLimit(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3565,7 +3565,7 @@ int lua_axis_physics_PhysicsBody_setVelocityLimit(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setResting(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3577,7 +3577,7 @@ int lua_axis_physics_PhysicsBody_setResting(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3615,7 +3615,7 @@ int lua_axis_physics_PhysicsBody_setResting(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getPositionOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3627,7 +3627,7 @@ int lua_axis_physics_PhysicsBody_getPositionOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3645,7 +3645,7 @@ int lua_axis_physics_PhysicsBody_getPositionOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getPositionOffset'", nullptr);
             return 0;
         }
-        const axis::Vec2& ret = cobj->getPositionOffset();
+        const ax::Vec2& ret = cobj->getPositionOffset();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3662,7 +3662,7 @@ int lua_axis_physics_PhysicsBody_getPositionOffset(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setCategoryBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3674,7 +3674,7 @@ int lua_axis_physics_PhysicsBody_setCategoryBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3712,7 +3712,7 @@ int lua_axis_physics_PhysicsBody_setCategoryBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3724,7 +3724,7 @@ int lua_axis_physics_PhysicsBody_getWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3742,8 +3742,8 @@ int lua_axis_physics_PhysicsBody_getWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getWorld'", nullptr);
             return 0;
         }
-        axis::PhysicsWorld* ret = cobj->getWorld();
-        object_to_luaval<axis::PhysicsWorld>(tolua_S, "ax.PhysicsWorld",(axis::PhysicsWorld*)ret);
+        ax::PhysicsWorld* ret = cobj->getWorld();
+        object_to_luaval<ax::PhysicsWorld>(tolua_S, "ax.PhysicsWorld",(ax::PhysicsWorld*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:getWorld",argc, 0);
@@ -3759,7 +3759,7 @@ int lua_axis_physics_PhysicsBody_getWorld(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getAngularVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3771,7 +3771,7 @@ int lua_axis_physics_PhysicsBody_getAngularVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3806,7 +3806,7 @@ int lua_axis_physics_PhysicsBody_getAngularVelocity(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getPosition(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3818,7 +3818,7 @@ int lua_axis_physics_PhysicsBody_getPosition(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3836,7 +3836,7 @@ int lua_axis_physics_PhysicsBody_getPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getPosition'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getPosition();
+        ax::Vec2 ret = cobj->getPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3853,7 +3853,7 @@ int lua_axis_physics_PhysicsBody_getPosition(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setGravityEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3865,7 +3865,7 @@ int lua_axis_physics_PhysicsBody_setGravityEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3903,7 +3903,7 @@ int lua_axis_physics_PhysicsBody_setGravityEnable(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getGroup(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3915,7 +3915,7 @@ int lua_axis_physics_PhysicsBody_getGroup(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -3950,7 +3950,7 @@ int lua_axis_physics_PhysicsBody_getGroup(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setMoment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -3962,7 +3962,7 @@ int lua_axis_physics_PhysicsBody_setMoment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4000,7 +4000,7 @@ int lua_axis_physics_PhysicsBody_setMoment(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4012,7 +4012,7 @@ int lua_axis_physics_PhysicsBody_getTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4047,7 +4047,7 @@ int lua_axis_physics_PhysicsBody_getTag(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_local2World(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4059,7 +4059,7 @@ int lua_axis_physics_PhysicsBody_local2World(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4072,7 +4072,7 @@ int lua_axis_physics_PhysicsBody_local2World(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:local2World");
         if(!ok)
@@ -4080,7 +4080,7 @@ int lua_axis_physics_PhysicsBody_local2World(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_local2World'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->local2World(arg0);
+        ax::Vec2 ret = cobj->local2World(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4097,7 +4097,7 @@ int lua_axis_physics_PhysicsBody_local2World(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getCategoryBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4109,7 +4109,7 @@ int lua_axis_physics_PhysicsBody_getCategoryBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4144,7 +4144,7 @@ int lua_axis_physics_PhysicsBody_getCategoryBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setDynamic(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4156,7 +4156,7 @@ int lua_axis_physics_PhysicsBody_setDynamic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4194,7 +4194,7 @@ int lua_axis_physics_PhysicsBody_setDynamic(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getFirstShape(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4206,7 +4206,7 @@ int lua_axis_physics_PhysicsBody_getFirstShape(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4224,8 +4224,8 @@ int lua_axis_physics_PhysicsBody_getFirstShape(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getFirstShape'", nullptr);
             return 0;
         }
-        axis::PhysicsShape* ret = cobj->getFirstShape();
-        object_to_luaval<axis::PhysicsShape>(tolua_S, "ax.PhysicsShape",(axis::PhysicsShape*)ret);
+        ax::PhysicsShape* ret = cobj->getFirstShape();
+        object_to_luaval<ax::PhysicsShape>(tolua_S, "ax.PhysicsShape",(ax::PhysicsShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:getFirstShape",argc, 0);
@@ -4241,7 +4241,7 @@ int lua_axis_physics_PhysicsBody_getFirstShape(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getShapes(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4253,7 +4253,7 @@ int lua_axis_physics_PhysicsBody_getShapes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4271,7 +4271,7 @@ int lua_axis_physics_PhysicsBody_getShapes(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getShapes'", nullptr);
             return 0;
         }
-        const axis::Vector<axis::PhysicsShape *>& ret = cobj->getShapes();
+        const ax::Vector<ax::PhysicsShape *>& ret = cobj->getShapes();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4288,7 +4288,7 @@ int lua_axis_physics_PhysicsBody_getShapes(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getContactTestBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4300,7 +4300,7 @@ int lua_axis_physics_PhysicsBody_getContactTestBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4335,7 +4335,7 @@ int lua_axis_physics_PhysicsBody_getContactTestBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setAngularVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4347,7 +4347,7 @@ int lua_axis_physics_PhysicsBody_setAngularVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4385,7 +4385,7 @@ int lua_axis_physics_PhysicsBody_setAngularVelocity(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_world2Local(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4397,7 +4397,7 @@ int lua_axis_physics_PhysicsBody_world2Local(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4410,7 +4410,7 @@ int lua_axis_physics_PhysicsBody_world2Local(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:world2Local");
         if(!ok)
@@ -4418,7 +4418,7 @@ int lua_axis_physics_PhysicsBody_world2Local(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_world2Local'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->world2Local(arg0);
+        ax::Vec2 ret = cobj->world2Local(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4435,7 +4435,7 @@ int lua_axis_physics_PhysicsBody_world2Local(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_removeShape(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -4444,7 +4444,7 @@ int lua_axis_physics_PhysicsBody_removeShape(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -4483,8 +4483,8 @@ int lua_axis_physics_PhysicsBody_removeShape(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::PhysicsShape* arg0;
-            ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.PhysicsBody:removeShape");
+            ax::PhysicsShape* arg0;
+            ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.PhysicsBody:removeShape");
 
             if (!ok) { break; }
             cobj->removeShape(arg0);
@@ -4495,8 +4495,8 @@ int lua_axis_physics_PhysicsBody_removeShape(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 2) {
-            axis::PhysicsShape* arg0;
-            ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.PhysicsBody:removeShape");
+            ax::PhysicsShape* arg0;
+            ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.PhysicsBody:removeShape");
 
             if (!ok) { break; }
             bool arg1;
@@ -4522,7 +4522,7 @@ int lua_axis_physics_PhysicsBody_removeShape(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setMass(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4534,7 +4534,7 @@ int lua_axis_physics_PhysicsBody_setMass(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4572,7 +4572,7 @@ int lua_axis_physics_PhysicsBody_setMass(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_addMoment(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4584,7 +4584,7 @@ int lua_axis_physics_PhysicsBody_addMoment(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4622,7 +4622,7 @@ int lua_axis_physics_PhysicsBody_addMoment(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4634,7 +4634,7 @@ int lua_axis_physics_PhysicsBody_setVelocity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4647,7 +4647,7 @@ int lua_axis_physics_PhysicsBody_setVelocity(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:setVelocity");
         if(!ok)
@@ -4672,7 +4672,7 @@ int lua_axis_physics_PhysicsBody_setVelocity(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setLinearDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4684,7 +4684,7 @@ int lua_axis_physics_PhysicsBody_setLinearDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4722,7 +4722,7 @@ int lua_axis_physics_PhysicsBody_setLinearDamping(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setCollisionBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4734,7 +4734,7 @@ int lua_axis_physics_PhysicsBody_setCollisionBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4772,7 +4772,7 @@ int lua_axis_physics_PhysicsBody_setCollisionBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setPositionOffset(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4784,7 +4784,7 @@ int lua_axis_physics_PhysicsBody_setPositionOffset(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4797,7 +4797,7 @@ int lua_axis_physics_PhysicsBody_setPositionOffset(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:setPositionOffset");
         if(!ok)
@@ -4822,7 +4822,7 @@ int lua_axis_physics_PhysicsBody_setPositionOffset(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setRotationEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4834,7 +4834,7 @@ int lua_axis_physics_PhysicsBody_setRotationEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4872,7 +4872,7 @@ int lua_axis_physics_PhysicsBody_setRotationEnable(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_isRotationEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4884,7 +4884,7 @@ int lua_axis_physics_PhysicsBody_isRotationEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4919,7 +4919,7 @@ int lua_axis_physics_PhysicsBody_isRotationEnabled(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getCPBody(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4931,7 +4931,7 @@ int lua_axis_physics_PhysicsBody_getCPBody(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -4966,7 +4966,7 @@ int lua_axis_physics_PhysicsBody_getCPBody(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getAngularDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -4978,7 +4978,7 @@ int lua_axis_physics_PhysicsBody_getAngularDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5013,7 +5013,7 @@ int lua_axis_physics_PhysicsBody_getAngularDamping(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5025,7 +5025,7 @@ int lua_axis_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5038,7 +5038,7 @@ int lua_axis_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:getVelocityAtLocalPoint");
         if(!ok)
@@ -5046,7 +5046,7 @@ int lua_axis_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getVelocityAtLocalPoint'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getVelocityAtLocalPoint(arg0);
+        ax::Vec2 ret = cobj->getVelocityAtLocalPoint(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5063,7 +5063,7 @@ int lua_axis_physics_PhysicsBody_getVelocityAtLocalPoint(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_isResting(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5075,7 +5075,7 @@ int lua_axis_physics_PhysicsBody_isResting(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5110,7 +5110,7 @@ int lua_axis_physics_PhysicsBody_isResting(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_addMass(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5122,7 +5122,7 @@ int lua_axis_physics_PhysicsBody_addMass(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5160,7 +5160,7 @@ int lua_axis_physics_PhysicsBody_addMass(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getShape(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5172,7 +5172,7 @@ int lua_axis_physics_PhysicsBody_getShape(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5193,8 +5193,8 @@ int lua_axis_physics_PhysicsBody_getShape(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getShape'", nullptr);
             return 0;
         }
-        axis::PhysicsShape* ret = cobj->getShape(arg0);
-        object_to_luaval<axis::PhysicsShape>(tolua_S, "ax.PhysicsShape",(axis::PhysicsShape*)ret);
+        ax::PhysicsShape* ret = cobj->getShape(arg0);
+        object_to_luaval<ax::PhysicsShape>(tolua_S, "ax.PhysicsShape",(ax::PhysicsShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:getShape",argc, 1);
@@ -5210,7 +5210,7 @@ int lua_axis_physics_PhysicsBody_getShape(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5222,7 +5222,7 @@ int lua_axis_physics_PhysicsBody_setTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5260,7 +5260,7 @@ int lua_axis_physics_PhysicsBody_setTag(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5272,7 +5272,7 @@ int lua_axis_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5285,7 +5285,7 @@ int lua_axis_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:getVelocityAtWorldPoint");
         if(!ok)
@@ -5293,7 +5293,7 @@ int lua_axis_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getVelocityAtWorldPoint'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getVelocityAtWorldPoint(arg0);
+        ax::Vec2 ret = cobj->getVelocityAtWorldPoint(arg0);
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5310,7 +5310,7 @@ int lua_axis_physics_PhysicsBody_getVelocityAtWorldPoint(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_setContactTestBitmask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5322,7 +5322,7 @@ int lua_axis_physics_PhysicsBody_setContactTestBitmask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5360,7 +5360,7 @@ int lua_axis_physics_PhysicsBody_setContactTestBitmask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_removeFromWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5372,7 +5372,7 @@ int lua_axis_physics_PhysicsBody_removeFromWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5407,7 +5407,7 @@ int lua_axis_physics_PhysicsBody_removeFromWorld(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_isDynamic(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5419,7 +5419,7 @@ int lua_axis_physics_PhysicsBody_isDynamic(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5454,7 +5454,7 @@ int lua_axis_physics_PhysicsBody_isDynamic(lua_State* tolua_S)
 int lua_axis_physics_PhysicsBody_getNode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsBody* cobj = nullptr;
+    ax::PhysicsBody* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5466,7 +5466,7 @@ int lua_axis_physics_PhysicsBody_getNode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsBody",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsBody*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5484,8 +5484,8 @@ int lua_axis_physics_PhysicsBody_getNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_getNode'", nullptr);
             return 0;
         }
-        axis::Node* ret = cobj->getNode();
-        object_to_luaval<axis::Node>(tolua_S, "ax.Node",(axis::Node*)ret);
+        ax::Node* ret = cobj->getNode();
+        object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsBody:getNode",argc, 0);
@@ -5515,21 +5515,21 @@ int lua_axis_physics_PhysicsBody_createBox(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createBox");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createBox'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createBox(arg0);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createBox(arg0);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsBody:createBox");
         if(!ok)
@@ -5537,15 +5537,15 @@ int lua_axis_physics_PhysicsBody_createBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createBox'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createBox(arg0, arg1);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createBox(arg0, arg1);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
-        axis::Vec2 arg2;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
+        ax::Vec2 arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsBody:createBox");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsBody:createBox");
@@ -5554,8 +5554,8 @@ int lua_axis_physics_PhysicsBody_createBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createBox'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createBox(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createBox(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsBody:createBox",argc, 1);
@@ -5583,8 +5583,8 @@ int lua_axis_physics_PhysicsBody_createEdgeSegment(lua_State* tolua_S)
 
     if (argc == 2)
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createEdgeSegment");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsBody:createEdgeSegment");
         if(!ok)
@@ -5592,15 +5592,15 @@ int lua_axis_physics_PhysicsBody_createEdgeSegment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createEdgeSegment'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeSegment(arg0, arg1);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeSegment(arg0, arg1);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
-        axis::PhysicsMaterial arg2;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
+        ax::PhysicsMaterial arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createEdgeSegment");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsBody:createEdgeSegment");
         ok &= luaval_to_physics_material(tolua_S, 4, &arg2, "ax.PhysicsBody:createEdgeSegment");
@@ -5609,15 +5609,15 @@ int lua_axis_physics_PhysicsBody_createEdgeSegment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createEdgeSegment'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeSegment(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeSegment(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 4)
     {
-        axis::Vec2 arg0;
-        axis::Vec2 arg1;
-        axis::PhysicsMaterial arg2;
+        ax::Vec2 arg0;
+        ax::Vec2 arg1;
+        ax::PhysicsMaterial arg2;
         double arg3;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createEdgeSegment");
         ok &= luaval_to_vec2(tolua_S, 3, &arg1, "ax.PhysicsBody:createEdgeSegment");
@@ -5628,8 +5628,8 @@ int lua_axis_physics_PhysicsBody_createEdgeSegment(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createEdgeSegment'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeSegment(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeSegment(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsBody:createEdgeSegment",argc, 2);
@@ -5661,8 +5661,8 @@ int lua_axis_physics_PhysicsBody_create(lua_State* tolua_S)
             double arg0;
             ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PhysicsBody:create");
             if (!ok) { break; }
-            axis::PhysicsBody* ret = axis::PhysicsBody::create(arg0);
-            object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+            ax::PhysicsBody* ret = ax::PhysicsBody::create(arg0);
+            object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
             return 1;
         }
     } while (0);
@@ -5671,8 +5671,8 @@ int lua_axis_physics_PhysicsBody_create(lua_State* tolua_S)
     {
         if (argc == 0)
         {
-            axis::PhysicsBody* ret = axis::PhysicsBody::create();
-            object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+            ax::PhysicsBody* ret = ax::PhysicsBody::create();
+            object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
             return 1;
         }
     } while (0);
@@ -5687,8 +5687,8 @@ int lua_axis_physics_PhysicsBody_create(lua_State* tolua_S)
             double arg1;
             ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.PhysicsBody:create");
             if (!ok) { break; }
-            axis::PhysicsBody* ret = axis::PhysicsBody::create(arg0, arg1);
-            object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+            ax::PhysicsBody* ret = ax::PhysicsBody::create(arg0, arg1);
+            object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
             return 1;
         }
     } while (0);
@@ -5718,21 +5718,21 @@ int lua_axis_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
 
     if (argc == 1)
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createEdgeBox");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createEdgeBox'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeBox(arg0);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeBox(arg0);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 2)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createEdgeBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsBody:createEdgeBox");
         if(!ok)
@@ -5740,14 +5740,14 @@ int lua_axis_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createEdgeBox'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeBox(arg0, arg1);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeBox(arg0, arg1);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 3)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
         double arg2;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createEdgeBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsBody:createEdgeBox");
@@ -5757,16 +5757,16 @@ int lua_axis_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createEdgeBox'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeBox(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeBox(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 4)
     {
-        axis::Vec2 arg0;
-        axis::PhysicsMaterial arg1;
+        ax::Vec2 arg0;
+        ax::PhysicsMaterial arg1;
         double arg2;
-        axis::Vec2 arg3;
+        ax::Vec2 arg3;
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsBody:createEdgeBox");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsBody:createEdgeBox");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsBody:createEdgeBox");
@@ -5776,8 +5776,8 @@ int lua_axis_physics_PhysicsBody_createEdgeBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createEdgeBox'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createEdgeBox(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createEdgeBox(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsBody:createEdgeBox",argc, 1);
@@ -5812,14 +5812,14 @@ int lua_axis_physics_PhysicsBody_createCircle(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createCircle'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createCircle(arg0);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createCircle(arg0);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 2)
     {
         double arg0;
-        axis::PhysicsMaterial arg1;
+        ax::PhysicsMaterial arg1;
         ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PhysicsBody:createCircle");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsBody:createCircle");
         if(!ok)
@@ -5827,15 +5827,15 @@ int lua_axis_physics_PhysicsBody_createCircle(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createCircle'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createCircle(arg0, arg1);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createCircle(arg0, arg1);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     if (argc == 3)
     {
         double arg0;
-        axis::PhysicsMaterial arg1;
-        axis::Vec2 arg2;
+        ax::PhysicsMaterial arg1;
+        ax::Vec2 arg2;
         ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.PhysicsBody:createCircle");
         ok &= luaval_to_physics_material(tolua_S, 3, &arg1, "ax.PhysicsBody:createCircle");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsBody:createCircle");
@@ -5844,8 +5844,8 @@ int lua_axis_physics_PhysicsBody_createCircle(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsBody_createCircle'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = axis::PhysicsBody::createCircle(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = ax::PhysicsBody::createCircle(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsBody:createCircle",argc, 1);
@@ -5934,7 +5934,7 @@ int lua_register_axis_physics_PhysicsBody(lua_State* tolua_S)
         tolua_function(tolua_S,"createEdgeBox", lua_axis_physics_PhysicsBody_createEdgeBox);
         tolua_function(tolua_S,"createCircle", lua_axis_physics_PhysicsBody_createCircle);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsBody).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsBody).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsBody";
     g_typeCast[typeName] = "ax.PhysicsBody";
     return 1;
@@ -5943,7 +5943,7 @@ int lua_register_axis_physics_PhysicsBody(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContact_getContactData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -5955,7 +5955,7 @@ int lua_axis_physics_PhysicsContact_getContactData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -5973,7 +5973,7 @@ int lua_axis_physics_PhysicsContact_getContactData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsContact_getContactData'", nullptr);
             return 0;
         }
-        const axis::PhysicsContactData* ret = cobj->getContactData();
+        const ax::PhysicsContactData* ret = cobj->getContactData();
         physics_contactdata_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5990,7 +5990,7 @@ int lua_axis_physics_PhysicsContact_getContactData(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContact_getEventCode(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6002,7 +6002,7 @@ int lua_axis_physics_PhysicsContact_getEventCode(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6037,7 +6037,7 @@ int lua_axis_physics_PhysicsContact_getEventCode(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContact_getPreContactData(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6049,7 +6049,7 @@ int lua_axis_physics_PhysicsContact_getPreContactData(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6067,7 +6067,7 @@ int lua_axis_physics_PhysicsContact_getPreContactData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsContact_getPreContactData'", nullptr);
             return 0;
         }
-        const axis::PhysicsContactData* ret = cobj->getPreContactData();
+        const ax::PhysicsContactData* ret = cobj->getPreContactData();
         physics_contactdata_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6084,7 +6084,7 @@ int lua_axis_physics_PhysicsContact_getPreContactData(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContact_getShapeA(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6096,7 +6096,7 @@ int lua_axis_physics_PhysicsContact_getShapeA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6114,8 +6114,8 @@ int lua_axis_physics_PhysicsContact_getShapeA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsContact_getShapeA'", nullptr);
             return 0;
         }
-        axis::PhysicsShape* ret = cobj->getShapeA();
-        object_to_luaval<axis::PhysicsShape>(tolua_S, "ax.PhysicsShape",(axis::PhysicsShape*)ret);
+        ax::PhysicsShape* ret = cobj->getShapeA();
+        object_to_luaval<ax::PhysicsShape>(tolua_S, "ax.PhysicsShape",(ax::PhysicsShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsContact:getShapeA",argc, 0);
@@ -6131,7 +6131,7 @@ int lua_axis_physics_PhysicsContact_getShapeA(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContact_getShapeB(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContact* cobj = nullptr;
+    ax::PhysicsContact* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6143,7 +6143,7 @@ int lua_axis_physics_PhysicsContact_getShapeB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContact",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContact*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6161,8 +6161,8 @@ int lua_axis_physics_PhysicsContact_getShapeB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsContact_getShapeB'", nullptr);
             return 0;
         }
-        axis::PhysicsShape* ret = cobj->getShapeB();
-        object_to_luaval<axis::PhysicsShape>(tolua_S, "ax.PhysicsShape",(axis::PhysicsShape*)ret);
+        ax::PhysicsShape* ret = cobj->getShapeB();
+        object_to_luaval<ax::PhysicsShape>(tolua_S, "ax.PhysicsShape",(ax::PhysicsShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsContact:getShapeB",argc, 0);
@@ -6193,7 +6193,7 @@ int lua_register_axis_physics_PhysicsContact(lua_State* tolua_S)
         tolua_function(tolua_S,"getShapeA",lua_axis_physics_PhysicsContact_getShapeA);
         tolua_function(tolua_S,"getShapeB",lua_axis_physics_PhysicsContact_getShapeB);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsContact).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsContact).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsContact";
     g_typeCast[typeName] = "ax.PhysicsContact";
     return 1;
@@ -6202,7 +6202,7 @@ int lua_register_axis_physics_PhysicsContact(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContactPreSolve_getFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6214,7 +6214,7 @@ int lua_axis_physics_PhysicsContactPreSolve_getFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6249,7 +6249,7 @@ int lua_axis_physics_PhysicsContactPreSolve_getFriction(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContactPreSolve_getRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6261,7 +6261,7 @@ int lua_axis_physics_PhysicsContactPreSolve_getRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6296,7 +6296,7 @@ int lua_axis_physics_PhysicsContactPreSolve_getRestitution(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContactPreSolve_setFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6308,7 +6308,7 @@ int lua_axis_physics_PhysicsContactPreSolve_setFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6346,7 +6346,7 @@ int lua_axis_physics_PhysicsContactPreSolve_setFriction(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContactPreSolve_ignore(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6358,7 +6358,7 @@ int lua_axis_physics_PhysicsContactPreSolve_ignore(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6393,7 +6393,7 @@ int lua_axis_physics_PhysicsContactPreSolve_ignore(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContactPreSolve_getSurfaceVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6405,7 +6405,7 @@ int lua_axis_physics_PhysicsContactPreSolve_getSurfaceVelocity(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6423,7 +6423,7 @@ int lua_axis_physics_PhysicsContactPreSolve_getSurfaceVelocity(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsContactPreSolve_getSurfaceVelocity'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getSurfaceVelocity();
+        ax::Vec2 ret = cobj->getSurfaceVelocity();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6440,7 +6440,7 @@ int lua_axis_physics_PhysicsContactPreSolve_getSurfaceVelocity(lua_State* tolua_
 int lua_axis_physics_PhysicsContactPreSolve_setSurfaceVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6452,7 +6452,7 @@ int lua_axis_physics_PhysicsContactPreSolve_setSurfaceVelocity(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6465,7 +6465,7 @@ int lua_axis_physics_PhysicsContactPreSolve_setSurfaceVelocity(lua_State* tolua_
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsContactPreSolve:setSurfaceVelocity");
         if(!ok)
@@ -6490,7 +6490,7 @@ int lua_axis_physics_PhysicsContactPreSolve_setSurfaceVelocity(lua_State* tolua_
 int lua_axis_physics_PhysicsContactPreSolve_setRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPreSolve* cobj = nullptr;
+    ax::PhysicsContactPreSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6502,7 +6502,7 @@ int lua_axis_physics_PhysicsContactPreSolve_setRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPreSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPreSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6557,7 +6557,7 @@ int lua_register_axis_physics_PhysicsContactPreSolve(lua_State* tolua_S)
         tolua_function(tolua_S,"setSurfaceVelocity",lua_axis_physics_PhysicsContactPreSolve_setSurfaceVelocity);
         tolua_function(tolua_S,"setRestitution",lua_axis_physics_PhysicsContactPreSolve_setRestitution);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsContactPreSolve).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsContactPreSolve).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsContactPreSolve";
     g_typeCast[typeName] = "ax.PhysicsContactPreSolve";
     return 1;
@@ -6566,7 +6566,7 @@ int lua_register_axis_physics_PhysicsContactPreSolve(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContactPostSolve_getFriction(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPostSolve* cobj = nullptr;
+    ax::PhysicsContactPostSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6578,7 +6578,7 @@ int lua_axis_physics_PhysicsContactPostSolve_getFriction(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPostSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6613,7 +6613,7 @@ int lua_axis_physics_PhysicsContactPostSolve_getFriction(lua_State* tolua_S)
 int lua_axis_physics_PhysicsContactPostSolve_getSurfaceVelocity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPostSolve* cobj = nullptr;
+    ax::PhysicsContactPostSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6625,7 +6625,7 @@ int lua_axis_physics_PhysicsContactPostSolve_getSurfaceVelocity(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPostSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6643,7 +6643,7 @@ int lua_axis_physics_PhysicsContactPostSolve_getSurfaceVelocity(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsContactPostSolve_getSurfaceVelocity'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getSurfaceVelocity();
+        ax::Vec2 ret = cobj->getSurfaceVelocity();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6660,7 +6660,7 @@ int lua_axis_physics_PhysicsContactPostSolve_getSurfaceVelocity(lua_State* tolua
 int lua_axis_physics_PhysicsContactPostSolve_getRestitution(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsContactPostSolve* cobj = nullptr;
+    ax::PhysicsContactPostSolve* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6672,7 +6672,7 @@ int lua_axis_physics_PhysicsContactPostSolve_getRestitution(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsContactPostSolve",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsContactPostSolve*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6720,7 +6720,7 @@ int lua_register_axis_physics_PhysicsContactPostSolve(lua_State* tolua_S)
         tolua_function(tolua_S,"getSurfaceVelocity",lua_axis_physics_PhysicsContactPostSolve_getSurfaceVelocity);
         tolua_function(tolua_S,"getRestitution",lua_axis_physics_PhysicsContactPostSolve_getRestitution);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsContactPostSolve).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsContactPostSolve).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsContactPostSolve";
     g_typeCast[typeName] = "ax.PhysicsContactPostSolve";
     return 1;
@@ -6748,8 +6748,8 @@ int lua_axis_physics_EventListenerPhysicsContact_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_EventListenerPhysicsContact_create'", nullptr);
             return 0;
         }
-        axis::EventListenerPhysicsContact* ret = axis::EventListenerPhysicsContact::create();
-        object_to_luaval<axis::EventListenerPhysicsContact>(tolua_S, "ax.EventListenerPhysicsContact",(axis::EventListenerPhysicsContact*)ret);
+        ax::EventListenerPhysicsContact* ret = ax::EventListenerPhysicsContact::create();
+        object_to_luaval<ax::EventListenerPhysicsContact>(tolua_S, "ax.EventListenerPhysicsContact",(ax::EventListenerPhysicsContact*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.EventListenerPhysicsContact:create",argc, 0);
@@ -6774,7 +6774,7 @@ int lua_register_axis_physics_EventListenerPhysicsContact(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"EventListenerPhysicsContact");
         tolua_function(tolua_S,"create", lua_axis_physics_EventListenerPhysicsContact_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::EventListenerPhysicsContact).name(); // rtti is literal storage
+    auto typeName = typeid(ax::EventListenerPhysicsContact).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerPhysicsContact";
     g_typeCast[typeName] = "ax.EventListenerPhysicsContact";
     return 1;
@@ -6783,7 +6783,7 @@ int lua_register_axis_physics_EventListenerPhysicsContact(lua_State* tolua_S)
 int lua_axis_physics_EventListenerPhysicsContactWithBodies_hitTest(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventListenerPhysicsContactWithBodies* cobj = nullptr;
+    ax::EventListenerPhysicsContactWithBodies* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6795,7 +6795,7 @@ int lua_axis_physics_EventListenerPhysicsContactWithBodies_hitTest(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.EventListenerPhysicsContactWithBodies",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventListenerPhysicsContactWithBodies*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventListenerPhysicsContactWithBodies*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6808,12 +6808,12 @@ int lua_axis_physics_EventListenerPhysicsContactWithBodies_hitTest(lua_State* to
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::PhysicsShape* arg0;
-        axis::PhysicsShape* arg1;
+        ax::PhysicsShape* arg0;
+        ax::PhysicsShape* arg1;
 
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.EventListenerPhysicsContactWithBodies:hitTest");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.EventListenerPhysicsContactWithBodies:hitTest");
 
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 3, "ax.PhysicsShape",&arg1, "ax.EventListenerPhysicsContactWithBodies:hitTest");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 3, "ax.PhysicsShape",&arg1, "ax.EventListenerPhysicsContactWithBodies:hitTest");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_EventListenerPhysicsContactWithBodies_hitTest'", nullptr);
@@ -6850,17 +6850,17 @@ int lua_axis_physics_EventListenerPhysicsContactWithBodies_create(lua_State* tol
 
     if (argc == 2)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.EventListenerPhysicsContactWithBodies:create");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.EventListenerPhysicsContactWithBodies:create");
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.EventListenerPhysicsContactWithBodies:create");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.EventListenerPhysicsContactWithBodies:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_EventListenerPhysicsContactWithBodies_create'", nullptr);
             return 0;
         }
-        axis::EventListenerPhysicsContactWithBodies* ret = axis::EventListenerPhysicsContactWithBodies::create(arg0, arg1);
-        object_to_luaval<axis::EventListenerPhysicsContactWithBodies>(tolua_S, "ax.EventListenerPhysicsContactWithBodies",(axis::EventListenerPhysicsContactWithBodies*)ret);
+        ax::EventListenerPhysicsContactWithBodies* ret = ax::EventListenerPhysicsContactWithBodies::create(arg0, arg1);
+        object_to_luaval<ax::EventListenerPhysicsContactWithBodies>(tolua_S, "ax.EventListenerPhysicsContactWithBodies",(ax::EventListenerPhysicsContactWithBodies*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.EventListenerPhysicsContactWithBodies:create",argc, 2);
@@ -6886,7 +6886,7 @@ int lua_register_axis_physics_EventListenerPhysicsContactWithBodies(lua_State* t
         tolua_function(tolua_S,"hitTest",lua_axis_physics_EventListenerPhysicsContactWithBodies_hitTest);
         tolua_function(tolua_S,"create", lua_axis_physics_EventListenerPhysicsContactWithBodies_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::EventListenerPhysicsContactWithBodies).name(); // rtti is literal storage
+    auto typeName = typeid(ax::EventListenerPhysicsContactWithBodies).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerPhysicsContactWithBodies";
     g_typeCast[typeName] = "ax.EventListenerPhysicsContactWithBodies";
     return 1;
@@ -6895,7 +6895,7 @@ int lua_register_axis_physics_EventListenerPhysicsContactWithBodies(lua_State* t
 int lua_axis_physics_EventListenerPhysicsContactWithShapes_hitTest(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventListenerPhysicsContactWithShapes* cobj = nullptr;
+    ax::EventListenerPhysicsContactWithShapes* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -6907,7 +6907,7 @@ int lua_axis_physics_EventListenerPhysicsContactWithShapes_hitTest(lua_State* to
     if (!tolua_isusertype(tolua_S,1,"ax.EventListenerPhysicsContactWithShapes",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventListenerPhysicsContactWithShapes*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventListenerPhysicsContactWithShapes*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -6920,12 +6920,12 @@ int lua_axis_physics_EventListenerPhysicsContactWithShapes_hitTest(lua_State* to
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::PhysicsShape* arg0;
-        axis::PhysicsShape* arg1;
+        ax::PhysicsShape* arg0;
+        ax::PhysicsShape* arg1;
 
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.EventListenerPhysicsContactWithShapes:hitTest");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.EventListenerPhysicsContactWithShapes:hitTest");
 
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 3, "ax.PhysicsShape",&arg1, "ax.EventListenerPhysicsContactWithShapes:hitTest");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 3, "ax.PhysicsShape",&arg1, "ax.EventListenerPhysicsContactWithShapes:hitTest");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_EventListenerPhysicsContactWithShapes_hitTest'", nullptr);
@@ -6962,17 +6962,17 @@ int lua_axis_physics_EventListenerPhysicsContactWithShapes_create(lua_State* tol
 
     if (argc == 2)
     {
-        axis::PhysicsShape* arg0;
-        axis::PhysicsShape* arg1;
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.EventListenerPhysicsContactWithShapes:create");
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 3, "ax.PhysicsShape",&arg1, "ax.EventListenerPhysicsContactWithShapes:create");
+        ax::PhysicsShape* arg0;
+        ax::PhysicsShape* arg1;
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.EventListenerPhysicsContactWithShapes:create");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 3, "ax.PhysicsShape",&arg1, "ax.EventListenerPhysicsContactWithShapes:create");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_EventListenerPhysicsContactWithShapes_create'", nullptr);
             return 0;
         }
-        axis::EventListenerPhysicsContactWithShapes* ret = axis::EventListenerPhysicsContactWithShapes::create(arg0, arg1);
-        object_to_luaval<axis::EventListenerPhysicsContactWithShapes>(tolua_S, "ax.EventListenerPhysicsContactWithShapes",(axis::EventListenerPhysicsContactWithShapes*)ret);
+        ax::EventListenerPhysicsContactWithShapes* ret = ax::EventListenerPhysicsContactWithShapes::create(arg0, arg1);
+        object_to_luaval<ax::EventListenerPhysicsContactWithShapes>(tolua_S, "ax.EventListenerPhysicsContactWithShapes",(ax::EventListenerPhysicsContactWithShapes*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.EventListenerPhysicsContactWithShapes:create",argc, 2);
@@ -6998,7 +6998,7 @@ int lua_register_axis_physics_EventListenerPhysicsContactWithShapes(lua_State* t
         tolua_function(tolua_S,"hitTest",lua_axis_physics_EventListenerPhysicsContactWithShapes_hitTest);
         tolua_function(tolua_S,"create", lua_axis_physics_EventListenerPhysicsContactWithShapes_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::EventListenerPhysicsContactWithShapes).name(); // rtti is literal storage
+    auto typeName = typeid(ax::EventListenerPhysicsContactWithShapes).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerPhysicsContactWithShapes";
     g_typeCast[typeName] = "ax.EventListenerPhysicsContactWithShapes";
     return 1;
@@ -7007,7 +7007,7 @@ int lua_register_axis_physics_EventListenerPhysicsContactWithShapes(lua_State* t
 int lua_axis_physics_EventListenerPhysicsContactWithGroup_hitTest(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::EventListenerPhysicsContactWithGroup* cobj = nullptr;
+    ax::EventListenerPhysicsContactWithGroup* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7019,7 +7019,7 @@ int lua_axis_physics_EventListenerPhysicsContactWithGroup_hitTest(lua_State* tol
     if (!tolua_isusertype(tolua_S,1,"ax.EventListenerPhysicsContactWithGroup",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::EventListenerPhysicsContactWithGroup*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::EventListenerPhysicsContactWithGroup*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7032,12 +7032,12 @@ int lua_axis_physics_EventListenerPhysicsContactWithGroup_hitTest(lua_State* tol
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        axis::PhysicsShape* arg0;
-        axis::PhysicsShape* arg1;
+        ax::PhysicsShape* arg0;
+        ax::PhysicsShape* arg1;
 
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.EventListenerPhysicsContactWithGroup:hitTest");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 2, "ax.PhysicsShape",&arg0, "ax.EventListenerPhysicsContactWithGroup:hitTest");
 
-        ok &= luaval_to_object<axis::PhysicsShape>(tolua_S, 3, "ax.PhysicsShape",&arg1, "ax.EventListenerPhysicsContactWithGroup:hitTest");
+        ok &= luaval_to_object<ax::PhysicsShape>(tolua_S, 3, "ax.PhysicsShape",&arg1, "ax.EventListenerPhysicsContactWithGroup:hitTest");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_EventListenerPhysicsContactWithGroup_hitTest'", nullptr);
@@ -7081,8 +7081,8 @@ int lua_axis_physics_EventListenerPhysicsContactWithGroup_create(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_EventListenerPhysicsContactWithGroup_create'", nullptr);
             return 0;
         }
-        axis::EventListenerPhysicsContactWithGroup* ret = axis::EventListenerPhysicsContactWithGroup::create(arg0);
-        object_to_luaval<axis::EventListenerPhysicsContactWithGroup>(tolua_S, "ax.EventListenerPhysicsContactWithGroup",(axis::EventListenerPhysicsContactWithGroup*)ret);
+        ax::EventListenerPhysicsContactWithGroup* ret = ax::EventListenerPhysicsContactWithGroup::create(arg0);
+        object_to_luaval<ax::EventListenerPhysicsContactWithGroup>(tolua_S, "ax.EventListenerPhysicsContactWithGroup",(ax::EventListenerPhysicsContactWithGroup*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.EventListenerPhysicsContactWithGroup:create",argc, 1);
@@ -7108,7 +7108,7 @@ int lua_register_axis_physics_EventListenerPhysicsContactWithGroup(lua_State* to
         tolua_function(tolua_S,"hitTest",lua_axis_physics_EventListenerPhysicsContactWithGroup_hitTest);
         tolua_function(tolua_S,"create", lua_axis_physics_EventListenerPhysicsContactWithGroup_create);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::EventListenerPhysicsContactWithGroup).name(); // rtti is literal storage
+    auto typeName = typeid(ax::EventListenerPhysicsContactWithGroup).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.EventListenerPhysicsContactWithGroup";
     g_typeCast[typeName] = "ax.EventListenerPhysicsContactWithGroup";
     return 1;
@@ -7117,7 +7117,7 @@ int lua_register_axis_physics_EventListenerPhysicsContactWithGroup(lua_State* to
 int lua_axis_physics_PhysicsJoint_getBodyA(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7129,7 +7129,7 @@ int lua_axis_physics_PhysicsJoint_getBodyA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7147,8 +7147,8 @@ int lua_axis_physics_PhysicsJoint_getBodyA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJoint_getBodyA'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = cobj->getBodyA();
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = cobj->getBodyA();
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJoint:getBodyA",argc, 0);
@@ -7164,7 +7164,7 @@ int lua_axis_physics_PhysicsJoint_getBodyA(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_getBodyB(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7176,7 +7176,7 @@ int lua_axis_physics_PhysicsJoint_getBodyB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7194,8 +7194,8 @@ int lua_axis_physics_PhysicsJoint_getBodyB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJoint_getBodyB'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = cobj->getBodyB();
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = cobj->getBodyB();
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJoint:getBodyB",argc, 0);
@@ -7211,7 +7211,7 @@ int lua_axis_physics_PhysicsJoint_getBodyB(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_getMaxForce(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7223,7 +7223,7 @@ int lua_axis_physics_PhysicsJoint_getMaxForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7258,7 +7258,7 @@ int lua_axis_physics_PhysicsJoint_getMaxForce(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_setMaxForce(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7270,7 +7270,7 @@ int lua_axis_physics_PhysicsJoint_setMaxForce(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7308,7 +7308,7 @@ int lua_axis_physics_PhysicsJoint_setMaxForce(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_isEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7320,7 +7320,7 @@ int lua_axis_physics_PhysicsJoint_isEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7355,7 +7355,7 @@ int lua_axis_physics_PhysicsJoint_isEnabled(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_setEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7367,7 +7367,7 @@ int lua_axis_physics_PhysicsJoint_setEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7405,7 +7405,7 @@ int lua_axis_physics_PhysicsJoint_setEnable(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_setCollisionEnable(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7417,7 +7417,7 @@ int lua_axis_physics_PhysicsJoint_setCollisionEnable(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7455,7 +7455,7 @@ int lua_axis_physics_PhysicsJoint_setCollisionEnable(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_getWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7467,7 +7467,7 @@ int lua_axis_physics_PhysicsJoint_getWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7485,8 +7485,8 @@ int lua_axis_physics_PhysicsJoint_getWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJoint_getWorld'", nullptr);
             return 0;
         }
-        axis::PhysicsWorld* ret = cobj->getWorld();
-        object_to_luaval<axis::PhysicsWorld>(tolua_S, "ax.PhysicsWorld",(axis::PhysicsWorld*)ret);
+        ax::PhysicsWorld* ret = cobj->getWorld();
+        object_to_luaval<ax::PhysicsWorld>(tolua_S, "ax.PhysicsWorld",(ax::PhysicsWorld*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsJoint:getWorld",argc, 0);
@@ -7502,7 +7502,7 @@ int lua_axis_physics_PhysicsJoint_getWorld(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_setTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7514,7 +7514,7 @@ int lua_axis_physics_PhysicsJoint_setTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7552,7 +7552,7 @@ int lua_axis_physics_PhysicsJoint_setTag(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_removeFormWorld(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7564,7 +7564,7 @@ int lua_axis_physics_PhysicsJoint_removeFormWorld(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7599,7 +7599,7 @@ int lua_axis_physics_PhysicsJoint_removeFormWorld(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_isCollisionEnabled(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7611,7 +7611,7 @@ int lua_axis_physics_PhysicsJoint_isCollisionEnabled(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7646,7 +7646,7 @@ int lua_axis_physics_PhysicsJoint_isCollisionEnabled(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJoint_getTag(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJoint* cobj = nullptr;
+    ax::PhysicsJoint* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7658,7 +7658,7 @@ int lua_axis_physics_PhysicsJoint_getTag(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJoint",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJoint*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7715,7 +7715,7 @@ int lua_register_axis_physics_PhysicsJoint(lua_State* tolua_S)
         tolua_function(tolua_S,"isCollisionEnabled",lua_axis_physics_PhysicsJoint_isCollisionEnabled);
         tolua_function(tolua_S,"getTag",lua_axis_physics_PhysicsJoint_getTag);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJoint).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJoint).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJoint";
     g_typeCast[typeName] = "ax.PhysicsJoint";
     return 1;
@@ -7724,7 +7724,7 @@ int lua_register_axis_physics_PhysicsJoint(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointFixed_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointFixed* cobj = nullptr;
+    ax::PhysicsJointFixed* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7736,7 +7736,7 @@ int lua_axis_physics_PhysicsJointFixed_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointFixed",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointFixed*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointFixed*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7785,19 +7785,19 @@ int lua_axis_physics_PhysicsJointFixed_construct(lua_State* tolua_S)
 
     if (argc == 3)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
-        axis::Vec2 arg2;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointFixed:construct");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointFixed:construct");
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
+        ax::Vec2 arg2;
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointFixed:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointFixed:construct");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointFixed:construct");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointFixed_construct'", nullptr);
             return 0;
         }
-        axis::PhysicsJointFixed* ret = axis::PhysicsJointFixed::construct(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsJointFixed>(tolua_S, "ax.PhysicsJointFixed",(axis::PhysicsJointFixed*)ret);
+        ax::PhysicsJointFixed* ret = ax::PhysicsJointFixed::construct(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsJointFixed>(tolua_S, "ax.PhysicsJointFixed",(ax::PhysicsJointFixed*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointFixed:construct",argc, 3);
@@ -7823,7 +7823,7 @@ int lua_register_axis_physics_PhysicsJointFixed(lua_State* tolua_S)
         tolua_function(tolua_S,"createConstraints",lua_axis_physics_PhysicsJointFixed_createConstraints);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointFixed_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointFixed).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointFixed).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointFixed";
     g_typeCast[typeName] = "ax.PhysicsJointFixed";
     return 1;
@@ -7832,7 +7832,7 @@ int lua_register_axis_physics_PhysicsJointFixed(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_setAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7844,7 +7844,7 @@ int lua_axis_physics_PhysicsJointLimit_setAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7857,7 +7857,7 @@ int lua_axis_physics_PhysicsJointLimit_setAnchr2(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsJointLimit:setAnchr2");
         if(!ok)
@@ -7882,7 +7882,7 @@ int lua_axis_physics_PhysicsJointLimit_setAnchr2(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_setAnchr1(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7894,7 +7894,7 @@ int lua_axis_physics_PhysicsJointLimit_setAnchr1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7907,7 +7907,7 @@ int lua_axis_physics_PhysicsJointLimit_setAnchr1(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsJointLimit:setAnchr1");
         if(!ok)
@@ -7932,7 +7932,7 @@ int lua_axis_physics_PhysicsJointLimit_setAnchr1(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_setMax(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7944,7 +7944,7 @@ int lua_axis_physics_PhysicsJointLimit_setMax(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -7982,7 +7982,7 @@ int lua_axis_physics_PhysicsJointLimit_setMax(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_getAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -7994,7 +7994,7 @@ int lua_axis_physics_PhysicsJointLimit_getAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8012,7 +8012,7 @@ int lua_axis_physics_PhysicsJointLimit_getAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointLimit_getAnchr2'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getAnchr2();
+        ax::Vec2 ret = cobj->getAnchr2();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8029,7 +8029,7 @@ int lua_axis_physics_PhysicsJointLimit_getAnchr2(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_getAnchr1(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8041,7 +8041,7 @@ int lua_axis_physics_PhysicsJointLimit_getAnchr1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8059,7 +8059,7 @@ int lua_axis_physics_PhysicsJointLimit_getAnchr1(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointLimit_getAnchr1'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getAnchr1();
+        ax::Vec2 ret = cobj->getAnchr1();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8076,7 +8076,7 @@ int lua_axis_physics_PhysicsJointLimit_getAnchr1(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8088,7 +8088,7 @@ int lua_axis_physics_PhysicsJointLimit_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8123,7 +8123,7 @@ int lua_axis_physics_PhysicsJointLimit_createConstraints(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_getMin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8135,7 +8135,7 @@ int lua_axis_physics_PhysicsJointLimit_getMin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8170,7 +8170,7 @@ int lua_axis_physics_PhysicsJointLimit_getMin(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_getMax(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8182,7 +8182,7 @@ int lua_axis_physics_PhysicsJointLimit_getMax(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8217,7 +8217,7 @@ int lua_axis_physics_PhysicsJointLimit_getMax(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointLimit_setMin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointLimit* cobj = nullptr;
+    ax::PhysicsJointLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8229,7 +8229,7 @@ int lua_axis_physics_PhysicsJointLimit_setMin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8282,16 +8282,16 @@ int lua_axis_physics_PhysicsJointLimit_construct(lua_State* tolua_S)
     {
         if (argc == 6)
         {
-            axis::PhysicsBody* arg0;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointLimit:construct");
+            ax::PhysicsBody* arg0;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
-            axis::PhysicsBody* arg1;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointLimit:construct");
+            ax::PhysicsBody* arg1;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
-            axis::Vec2 arg2;
+            ax::Vec2 arg2;
             ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
-            axis::Vec2 arg3;
+            ax::Vec2 arg3;
             ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
             double arg4;
@@ -8300,8 +8300,8 @@ int lua_axis_physics_PhysicsJointLimit_construct(lua_State* tolua_S)
             double arg5;
             ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
-            axis::PhysicsJointLimit* ret = axis::PhysicsJointLimit::construct(arg0, arg1, arg2, arg3, arg4, arg5);
-            object_to_luaval<axis::PhysicsJointLimit>(tolua_S, "ax.PhysicsJointLimit",(axis::PhysicsJointLimit*)ret);
+            ax::PhysicsJointLimit* ret = ax::PhysicsJointLimit::construct(arg0, arg1, arg2, arg3, arg4, arg5);
+            object_to_luaval<ax::PhysicsJointLimit>(tolua_S, "ax.PhysicsJointLimit",(ax::PhysicsJointLimit*)ret);
             return 1;
         }
     } while (0);
@@ -8310,20 +8310,20 @@ int lua_axis_physics_PhysicsJointLimit_construct(lua_State* tolua_S)
     {
         if (argc == 4)
         {
-            axis::PhysicsBody* arg0;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointLimit:construct");
+            ax::PhysicsBody* arg0;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
-            axis::PhysicsBody* arg1;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointLimit:construct");
+            ax::PhysicsBody* arg1;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
-            axis::Vec2 arg2;
+            ax::Vec2 arg2;
             ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
-            axis::Vec2 arg3;
+            ax::Vec2 arg3;
             ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointLimit:construct");
             if (!ok) { break; }
-            axis::PhysicsJointLimit* ret = axis::PhysicsJointLimit::construct(arg0, arg1, arg2, arg3);
-            object_to_luaval<axis::PhysicsJointLimit>(tolua_S, "ax.PhysicsJointLimit",(axis::PhysicsJointLimit*)ret);
+            ax::PhysicsJointLimit* ret = ax::PhysicsJointLimit::construct(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::PhysicsJointLimit>(tolua_S, "ax.PhysicsJointLimit",(ax::PhysicsJointLimit*)ret);
             return 1;
         }
     } while (0);
@@ -8359,7 +8359,7 @@ int lua_register_axis_physics_PhysicsJointLimit(lua_State* tolua_S)
         tolua_function(tolua_S,"setMin",lua_axis_physics_PhysicsJointLimit_setMin);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointLimit_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointLimit).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointLimit).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointLimit";
     g_typeCast[typeName] = "ax.PhysicsJointLimit";
     return 1;
@@ -8368,7 +8368,7 @@ int lua_register_axis_physics_PhysicsJointLimit(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointPin_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointPin* cobj = nullptr;
+    ax::PhysicsJointPin* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8380,7 +8380,7 @@ int lua_axis_physics_PhysicsJointPin_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointPin",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointPin*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointPin*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8430,20 +8430,20 @@ int lua_axis_physics_PhysicsJointPin_construct(lua_State* tolua_S)
     {
         if (argc == 4)
         {
-            axis::PhysicsBody* arg0;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointPin:construct");
+            ax::PhysicsBody* arg0;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointPin:construct");
             if (!ok) { break; }
-            axis::PhysicsBody* arg1;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointPin:construct");
+            ax::PhysicsBody* arg1;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointPin:construct");
             if (!ok) { break; }
-            axis::Vec2 arg2;
+            ax::Vec2 arg2;
             ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointPin:construct");
             if (!ok) { break; }
-            axis::Vec2 arg3;
+            ax::Vec2 arg3;
             ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointPin:construct");
             if (!ok) { break; }
-            axis::PhysicsJointPin* ret = axis::PhysicsJointPin::construct(arg0, arg1, arg2, arg3);
-            object_to_luaval<axis::PhysicsJointPin>(tolua_S, "ax.PhysicsJointPin",(axis::PhysicsJointPin*)ret);
+            ax::PhysicsJointPin* ret = ax::PhysicsJointPin::construct(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::PhysicsJointPin>(tolua_S, "ax.PhysicsJointPin",(ax::PhysicsJointPin*)ret);
             return 1;
         }
     } while (0);
@@ -8452,17 +8452,17 @@ int lua_axis_physics_PhysicsJointPin_construct(lua_State* tolua_S)
     {
         if (argc == 3)
         {
-            axis::PhysicsBody* arg0;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointPin:construct");
+            ax::PhysicsBody* arg0;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointPin:construct");
             if (!ok) { break; }
-            axis::PhysicsBody* arg1;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointPin:construct");
+            ax::PhysicsBody* arg1;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointPin:construct");
             if (!ok) { break; }
-            axis::Vec2 arg2;
+            ax::Vec2 arg2;
             ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointPin:construct");
             if (!ok) { break; }
-            axis::PhysicsJointPin* ret = axis::PhysicsJointPin::construct(arg0, arg1, arg2);
-            object_to_luaval<axis::PhysicsJointPin>(tolua_S, "ax.PhysicsJointPin",(axis::PhysicsJointPin*)ret);
+            ax::PhysicsJointPin* ret = ax::PhysicsJointPin::construct(arg0, arg1, arg2);
+            object_to_luaval<ax::PhysicsJointPin>(tolua_S, "ax.PhysicsJointPin",(ax::PhysicsJointPin*)ret);
             return 1;
         }
     } while (0);
@@ -8490,7 +8490,7 @@ int lua_register_axis_physics_PhysicsJointPin(lua_State* tolua_S)
         tolua_function(tolua_S,"createConstraints",lua_axis_physics_PhysicsJointPin_createConstraints);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointPin_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointPin).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointPin).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointPin";
     g_typeCast[typeName] = "ax.PhysicsJointPin";
     return 1;
@@ -8499,7 +8499,7 @@ int lua_register_axis_physics_PhysicsJointPin(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointDistance_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointDistance* cobj = nullptr;
+    ax::PhysicsJointDistance* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8511,7 +8511,7 @@ int lua_axis_physics_PhysicsJointDistance_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointDistance",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8546,7 +8546,7 @@ int lua_axis_physics_PhysicsJointDistance_createConstraints(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointDistance_setDistance(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointDistance* cobj = nullptr;
+    ax::PhysicsJointDistance* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8558,7 +8558,7 @@ int lua_axis_physics_PhysicsJointDistance_setDistance(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointDistance",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8596,7 +8596,7 @@ int lua_axis_physics_PhysicsJointDistance_setDistance(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointDistance_getDistance(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointDistance* cobj = nullptr;
+    ax::PhysicsJointDistance* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8608,7 +8608,7 @@ int lua_axis_physics_PhysicsJointDistance_getDistance(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointDistance",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointDistance*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8657,12 +8657,12 @@ int lua_axis_physics_PhysicsJointDistance_construct(lua_State* tolua_S)
 
     if (argc == 4)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
-        axis::Vec2 arg2;
-        axis::Vec2 arg3;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointDistance:construct");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointDistance:construct");
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
+        ax::Vec2 arg2;
+        ax::Vec2 arg3;
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointDistance:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointDistance:construct");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointDistance:construct");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointDistance:construct");
         if(!ok)
@@ -8670,8 +8670,8 @@ int lua_axis_physics_PhysicsJointDistance_construct(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointDistance_construct'", nullptr);
             return 0;
         }
-        axis::PhysicsJointDistance* ret = axis::PhysicsJointDistance::construct(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsJointDistance>(tolua_S, "ax.PhysicsJointDistance",(axis::PhysicsJointDistance*)ret);
+        ax::PhysicsJointDistance* ret = ax::PhysicsJointDistance::construct(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsJointDistance>(tolua_S, "ax.PhysicsJointDistance",(ax::PhysicsJointDistance*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointDistance:construct",argc, 4);
@@ -8699,7 +8699,7 @@ int lua_register_axis_physics_PhysicsJointDistance(lua_State* tolua_S)
         tolua_function(tolua_S,"getDistance",lua_axis_physics_PhysicsJointDistance_getDistance);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointDistance_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointDistance).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointDistance).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointDistance";
     g_typeCast[typeName] = "ax.PhysicsJointDistance";
     return 1;
@@ -8708,7 +8708,7 @@ int lua_register_axis_physics_PhysicsJointDistance(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_setAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8720,7 +8720,7 @@ int lua_axis_physics_PhysicsJointSpring_setAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8733,7 +8733,7 @@ int lua_axis_physics_PhysicsJointSpring_setAnchr2(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsJointSpring:setAnchr2");
         if(!ok)
@@ -8758,7 +8758,7 @@ int lua_axis_physics_PhysicsJointSpring_setAnchr2(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_setAnchr1(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8770,7 +8770,7 @@ int lua_axis_physics_PhysicsJointSpring_setAnchr1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8783,7 +8783,7 @@ int lua_axis_physics_PhysicsJointSpring_setAnchr1(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsJointSpring:setAnchr1");
         if(!ok)
@@ -8808,7 +8808,7 @@ int lua_axis_physics_PhysicsJointSpring_setAnchr1(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_getDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8820,7 +8820,7 @@ int lua_axis_physics_PhysicsJointSpring_getDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8855,7 +8855,7 @@ int lua_axis_physics_PhysicsJointSpring_getDamping(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_setStiffness(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8867,7 +8867,7 @@ int lua_axis_physics_PhysicsJointSpring_setStiffness(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8905,7 +8905,7 @@ int lua_axis_physics_PhysicsJointSpring_setStiffness(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_getRestLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8917,7 +8917,7 @@ int lua_axis_physics_PhysicsJointSpring_getRestLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8952,7 +8952,7 @@ int lua_axis_physics_PhysicsJointSpring_getRestLength(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_getAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -8964,7 +8964,7 @@ int lua_axis_physics_PhysicsJointSpring_getAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -8982,7 +8982,7 @@ int lua_axis_physics_PhysicsJointSpring_getAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointSpring_getAnchr2'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getAnchr2();
+        ax::Vec2 ret = cobj->getAnchr2();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8999,7 +8999,7 @@ int lua_axis_physics_PhysicsJointSpring_getAnchr2(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_getAnchr1(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9011,7 +9011,7 @@ int lua_axis_physics_PhysicsJointSpring_getAnchr1(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9029,7 +9029,7 @@ int lua_axis_physics_PhysicsJointSpring_getAnchr1(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointSpring_getAnchr1'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getAnchr1();
+        ax::Vec2 ret = cobj->getAnchr1();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9046,7 +9046,7 @@ int lua_axis_physics_PhysicsJointSpring_getAnchr1(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_getStiffness(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9058,7 +9058,7 @@ int lua_axis_physics_PhysicsJointSpring_getStiffness(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9093,7 +9093,7 @@ int lua_axis_physics_PhysicsJointSpring_getStiffness(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9105,7 +9105,7 @@ int lua_axis_physics_PhysicsJointSpring_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9140,7 +9140,7 @@ int lua_axis_physics_PhysicsJointSpring_createConstraints(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_setRestLength(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9152,7 +9152,7 @@ int lua_axis_physics_PhysicsJointSpring_setRestLength(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9190,7 +9190,7 @@ int lua_axis_physics_PhysicsJointSpring_setRestLength(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointSpring_setDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointSpring* cobj = nullptr;
+    ax::PhysicsJointSpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9202,7 +9202,7 @@ int lua_axis_physics_PhysicsJointSpring_setDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointSpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointSpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9254,14 +9254,14 @@ int lua_axis_physics_PhysicsJointSpring_construct(lua_State* tolua_S)
 
     if (argc == 6)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
-        axis::Vec2 arg2;
-        axis::Vec2 arg3;
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
+        ax::Vec2 arg2;
+        ax::Vec2 arg3;
         double arg4;
         double arg5;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointSpring:construct");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointSpring:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointSpring:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointSpring:construct");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointSpring:construct");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointSpring:construct");
         ok &= luaval_to_number(tolua_S, 6,&arg4, "ax.PhysicsJointSpring:construct");
@@ -9271,8 +9271,8 @@ int lua_axis_physics_PhysicsJointSpring_construct(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointSpring_construct'", nullptr);
             return 0;
         }
-        axis::PhysicsJointSpring* ret = axis::PhysicsJointSpring::construct(arg0, arg1, arg2, arg3, arg4, arg5);
-        object_to_luaval<axis::PhysicsJointSpring>(tolua_S, "ax.PhysicsJointSpring",(axis::PhysicsJointSpring*)ret);
+        ax::PhysicsJointSpring* ret = ax::PhysicsJointSpring::construct(arg0, arg1, arg2, arg3, arg4, arg5);
+        object_to_luaval<ax::PhysicsJointSpring>(tolua_S, "ax.PhysicsJointSpring",(ax::PhysicsJointSpring*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointSpring:construct",argc, 6);
@@ -9308,7 +9308,7 @@ int lua_register_axis_physics_PhysicsJointSpring(lua_State* tolua_S)
         tolua_function(tolua_S,"setDamping",lua_axis_physics_PhysicsJointSpring_setDamping);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointSpring_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointSpring).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointSpring).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointSpring";
     g_typeCast[typeName] = "ax.PhysicsJointSpring";
     return 1;
@@ -9317,7 +9317,7 @@ int lua_register_axis_physics_PhysicsJointSpring(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGroove_setAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9329,7 +9329,7 @@ int lua_axis_physics_PhysicsJointGroove_setAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9342,7 +9342,7 @@ int lua_axis_physics_PhysicsJointGroove_setAnchr2(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsJointGroove:setAnchr2");
         if(!ok)
@@ -9367,7 +9367,7 @@ int lua_axis_physics_PhysicsJointGroove_setAnchr2(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGroove_setGrooveA(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9379,7 +9379,7 @@ int lua_axis_physics_PhysicsJointGroove_setGrooveA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9392,7 +9392,7 @@ int lua_axis_physics_PhysicsJointGroove_setGrooveA(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsJointGroove:setGrooveA");
         if(!ok)
@@ -9417,7 +9417,7 @@ int lua_axis_physics_PhysicsJointGroove_setGrooveA(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGroove_setGrooveB(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9429,7 +9429,7 @@ int lua_axis_physics_PhysicsJointGroove_setGrooveB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9442,7 +9442,7 @@ int lua_axis_physics_PhysicsJointGroove_setGrooveB(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsJointGroove:setGrooveB");
         if(!ok)
@@ -9467,7 +9467,7 @@ int lua_axis_physics_PhysicsJointGroove_setGrooveB(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGroove_getGrooveA(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9479,7 +9479,7 @@ int lua_axis_physics_PhysicsJointGroove_getGrooveA(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9497,7 +9497,7 @@ int lua_axis_physics_PhysicsJointGroove_getGrooveA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointGroove_getGrooveA'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getGrooveA();
+        ax::Vec2 ret = cobj->getGrooveA();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9514,7 +9514,7 @@ int lua_axis_physics_PhysicsJointGroove_getGrooveA(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGroove_getGrooveB(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9526,7 +9526,7 @@ int lua_axis_physics_PhysicsJointGroove_getGrooveB(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9544,7 +9544,7 @@ int lua_axis_physics_PhysicsJointGroove_getGrooveB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointGroove_getGrooveB'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getGrooveB();
+        ax::Vec2 ret = cobj->getGrooveB();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9561,7 +9561,7 @@ int lua_axis_physics_PhysicsJointGroove_getGrooveB(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGroove_getAnchr2(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9573,7 +9573,7 @@ int lua_axis_physics_PhysicsJointGroove_getAnchr2(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9591,7 +9591,7 @@ int lua_axis_physics_PhysicsJointGroove_getAnchr2(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointGroove_getAnchr2'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getAnchr2();
+        ax::Vec2 ret = cobj->getAnchr2();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9608,7 +9608,7 @@ int lua_axis_physics_PhysicsJointGroove_getAnchr2(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGroove_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGroove* cobj = nullptr;
+    ax::PhysicsJointGroove* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9620,7 +9620,7 @@ int lua_axis_physics_PhysicsJointGroove_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGroove",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGroove*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9669,13 +9669,13 @@ int lua_axis_physics_PhysicsJointGroove_construct(lua_State* tolua_S)
 
     if (argc == 5)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
-        axis::Vec2 arg2;
-        axis::Vec2 arg3;
-        axis::Vec2 arg4;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointGroove:construct");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointGroove:construct");
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
+        ax::Vec2 arg2;
+        ax::Vec2 arg3;
+        ax::Vec2 arg4;
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointGroove:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointGroove:construct");
         ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.PhysicsJointGroove:construct");
         ok &= luaval_to_vec2(tolua_S, 5, &arg3, "ax.PhysicsJointGroove:construct");
         ok &= luaval_to_vec2(tolua_S, 6, &arg4, "ax.PhysicsJointGroove:construct");
@@ -9684,8 +9684,8 @@ int lua_axis_physics_PhysicsJointGroove_construct(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointGroove_construct'", nullptr);
             return 0;
         }
-        axis::PhysicsJointGroove* ret = axis::PhysicsJointGroove::construct(arg0, arg1, arg2, arg3, arg4);
-        object_to_luaval<axis::PhysicsJointGroove>(tolua_S, "ax.PhysicsJointGroove",(axis::PhysicsJointGroove*)ret);
+        ax::PhysicsJointGroove* ret = ax::PhysicsJointGroove::construct(arg0, arg1, arg2, arg3, arg4);
+        object_to_luaval<ax::PhysicsJointGroove>(tolua_S, "ax.PhysicsJointGroove",(ax::PhysicsJointGroove*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointGroove:construct",argc, 5);
@@ -9717,7 +9717,7 @@ int lua_register_axis_physics_PhysicsJointGroove(lua_State* tolua_S)
         tolua_function(tolua_S,"createConstraints",lua_axis_physics_PhysicsJointGroove_createConstraints);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointGroove_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointGroove).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointGroove).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointGroove";
     g_typeCast[typeName] = "ax.PhysicsJointGroove";
     return 1;
@@ -9726,7 +9726,7 @@ int lua_register_axis_physics_PhysicsJointGroove(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotarySpring_getDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9738,7 +9738,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_getDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9773,7 +9773,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_getDamping(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotarySpring_setRestAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9785,7 +9785,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_setRestAngle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9823,7 +9823,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_setRestAngle(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotarySpring_getStiffness(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9835,7 +9835,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_getStiffness(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9870,7 +9870,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_getStiffness(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotarySpring_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9882,7 +9882,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_createConstraints(lua_State* tolua
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9917,7 +9917,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_createConstraints(lua_State* tolua
 int lua_axis_physics_PhysicsJointRotarySpring_setStiffness(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9929,7 +9929,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_setStiffness(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -9967,7 +9967,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_setStiffness(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotarySpring_setDamping(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -9979,7 +9979,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_setDamping(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10017,7 +10017,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_setDamping(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotarySpring_getRestAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotarySpring* cobj = nullptr;
+    ax::PhysicsJointRotarySpring* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10029,7 +10029,7 @@ int lua_axis_physics_PhysicsJointRotarySpring_getRestAngle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotarySpring",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotarySpring*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10078,12 +10078,12 @@ int lua_axis_physics_PhysicsJointRotarySpring_construct(lua_State* tolua_S)
 
     if (argc == 4)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotarySpring:construct");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotarySpring:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotarySpring:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotarySpring:construct");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRotarySpring:construct");
         ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRotarySpring:construct");
         if(!ok)
@@ -10091,8 +10091,8 @@ int lua_axis_physics_PhysicsJointRotarySpring_construct(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointRotarySpring_construct'", nullptr);
             return 0;
         }
-        axis::PhysicsJointRotarySpring* ret = axis::PhysicsJointRotarySpring::construct(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsJointRotarySpring>(tolua_S, "ax.PhysicsJointRotarySpring",(axis::PhysicsJointRotarySpring*)ret);
+        ax::PhysicsJointRotarySpring* ret = ax::PhysicsJointRotarySpring::construct(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsJointRotarySpring>(tolua_S, "ax.PhysicsJointRotarySpring",(ax::PhysicsJointRotarySpring*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointRotarySpring:construct",argc, 4);
@@ -10124,7 +10124,7 @@ int lua_register_axis_physics_PhysicsJointRotarySpring(lua_State* tolua_S)
         tolua_function(tolua_S,"getRestAngle",lua_axis_physics_PhysicsJointRotarySpring_getRestAngle);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointRotarySpring_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointRotarySpring).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointRotarySpring).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointRotarySpring";
     g_typeCast[typeName] = "ax.PhysicsJointRotarySpring";
     return 1;
@@ -10133,7 +10133,7 @@ int lua_register_axis_physics_PhysicsJointRotarySpring(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotaryLimit_getMax(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10145,7 +10145,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_getMax(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10180,7 +10180,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_getMax(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotaryLimit_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10192,7 +10192,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_createConstraints(lua_State* tolua_
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10227,7 +10227,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_createConstraints(lua_State* tolua_
 int lua_axis_physics_PhysicsJointRotaryLimit_setMin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10239,7 +10239,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_setMin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10277,7 +10277,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_setMin(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotaryLimit_setMax(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10289,7 +10289,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_setMax(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10327,7 +10327,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_setMax(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRotaryLimit_getMin(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRotaryLimit* cobj = nullptr;
+    ax::PhysicsJointRotaryLimit* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10339,7 +10339,7 @@ int lua_axis_physics_PhysicsJointRotaryLimit_getMin(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRotaryLimit",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRotaryLimit*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10389,14 +10389,14 @@ int lua_axis_physics_PhysicsJointRotaryLimit_construct(lua_State* tolua_S)
     {
         if (argc == 2)
         {
-            axis::PhysicsBody* arg0;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotaryLimit:construct");
+            ax::PhysicsBody* arg0;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotaryLimit:construct");
             if (!ok) { break; }
-            axis::PhysicsBody* arg1;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotaryLimit:construct");
+            ax::PhysicsBody* arg1;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotaryLimit:construct");
             if (!ok) { break; }
-            axis::PhysicsJointRotaryLimit* ret = axis::PhysicsJointRotaryLimit::construct(arg0, arg1);
-            object_to_luaval<axis::PhysicsJointRotaryLimit>(tolua_S, "ax.PhysicsJointRotaryLimit",(axis::PhysicsJointRotaryLimit*)ret);
+            ax::PhysicsJointRotaryLimit* ret = ax::PhysicsJointRotaryLimit::construct(arg0, arg1);
+            object_to_luaval<ax::PhysicsJointRotaryLimit>(tolua_S, "ax.PhysicsJointRotaryLimit",(ax::PhysicsJointRotaryLimit*)ret);
             return 1;
         }
     } while (0);
@@ -10405,11 +10405,11 @@ int lua_axis_physics_PhysicsJointRotaryLimit_construct(lua_State* tolua_S)
     {
         if (argc == 4)
         {
-            axis::PhysicsBody* arg0;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotaryLimit:construct");
+            ax::PhysicsBody* arg0;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRotaryLimit:construct");
             if (!ok) { break; }
-            axis::PhysicsBody* arg1;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotaryLimit:construct");
+            ax::PhysicsBody* arg1;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRotaryLimit:construct");
             if (!ok) { break; }
             double arg2;
             ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRotaryLimit:construct");
@@ -10417,8 +10417,8 @@ int lua_axis_physics_PhysicsJointRotaryLimit_construct(lua_State* tolua_S)
             double arg3;
             ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRotaryLimit:construct");
             if (!ok) { break; }
-            axis::PhysicsJointRotaryLimit* ret = axis::PhysicsJointRotaryLimit::construct(arg0, arg1, arg2, arg3);
-            object_to_luaval<axis::PhysicsJointRotaryLimit>(tolua_S, "ax.PhysicsJointRotaryLimit",(axis::PhysicsJointRotaryLimit*)ret);
+            ax::PhysicsJointRotaryLimit* ret = ax::PhysicsJointRotaryLimit::construct(arg0, arg1, arg2, arg3);
+            object_to_luaval<ax::PhysicsJointRotaryLimit>(tolua_S, "ax.PhysicsJointRotaryLimit",(ax::PhysicsJointRotaryLimit*)ret);
             return 1;
         }
     } while (0);
@@ -10450,7 +10450,7 @@ int lua_register_axis_physics_PhysicsJointRotaryLimit(lua_State* tolua_S)
         tolua_function(tolua_S,"getMin",lua_axis_physics_PhysicsJointRotaryLimit_getMin);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointRotaryLimit_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointRotaryLimit).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointRotaryLimit).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointRotaryLimit";
     g_typeCast[typeName] = "ax.PhysicsJointRotaryLimit";
     return 1;
@@ -10459,7 +10459,7 @@ int lua_register_axis_physics_PhysicsJointRotaryLimit(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRatchet_getAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10471,7 +10471,7 @@ int lua_axis_physics_PhysicsJointRatchet_getAngle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10506,7 +10506,7 @@ int lua_axis_physics_PhysicsJointRatchet_getAngle(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10518,7 +10518,7 @@ int lua_axis_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10556,7 +10556,7 @@ int lua_axis_physics_PhysicsJointRatchet_setAngle(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRatchet_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10568,7 +10568,7 @@ int lua_axis_physics_PhysicsJointRatchet_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10603,7 +10603,7 @@ int lua_axis_physics_PhysicsJointRatchet_createConstraints(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRatchet_setPhase(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10615,7 +10615,7 @@ int lua_axis_physics_PhysicsJointRatchet_setPhase(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10653,7 +10653,7 @@ int lua_axis_physics_PhysicsJointRatchet_setPhase(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRatchet_getPhase(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10665,7 +10665,7 @@ int lua_axis_physics_PhysicsJointRatchet_getPhase(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10700,7 +10700,7 @@ int lua_axis_physics_PhysicsJointRatchet_getPhase(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRatchet_setRatchet(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10712,7 +10712,7 @@ int lua_axis_physics_PhysicsJointRatchet_setRatchet(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10750,7 +10750,7 @@ int lua_axis_physics_PhysicsJointRatchet_setRatchet(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointRatchet_getRatchet(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointRatchet* cobj = nullptr;
+    ax::PhysicsJointRatchet* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10762,7 +10762,7 @@ int lua_axis_physics_PhysicsJointRatchet_getRatchet(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointRatchet",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointRatchet*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10811,12 +10811,12 @@ int lua_axis_physics_PhysicsJointRatchet_construct(lua_State* tolua_S)
 
     if (argc == 4)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRatchet:construct");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRatchet:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointRatchet:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointRatchet:construct");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointRatchet:construct");
         ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointRatchet:construct");
         if(!ok)
@@ -10824,8 +10824,8 @@ int lua_axis_physics_PhysicsJointRatchet_construct(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointRatchet_construct'", nullptr);
             return 0;
         }
-        axis::PhysicsJointRatchet* ret = axis::PhysicsJointRatchet::construct(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsJointRatchet>(tolua_S, "ax.PhysicsJointRatchet",(axis::PhysicsJointRatchet*)ret);
+        ax::PhysicsJointRatchet* ret = ax::PhysicsJointRatchet::construct(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsJointRatchet>(tolua_S, "ax.PhysicsJointRatchet",(ax::PhysicsJointRatchet*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointRatchet:construct",argc, 4);
@@ -10857,7 +10857,7 @@ int lua_register_axis_physics_PhysicsJointRatchet(lua_State* tolua_S)
         tolua_function(tolua_S,"getRatchet",lua_axis_physics_PhysicsJointRatchet_getRatchet);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointRatchet_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointRatchet).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointRatchet).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointRatchet";
     g_typeCast[typeName] = "ax.PhysicsJointRatchet";
     return 1;
@@ -10866,7 +10866,7 @@ int lua_register_axis_physics_PhysicsJointRatchet(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGear_setRatio(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10878,7 +10878,7 @@ int lua_axis_physics_PhysicsJointGear_setRatio(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10916,7 +10916,7 @@ int lua_axis_physics_PhysicsJointGear_setRatio(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGear_getPhase(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10928,7 +10928,7 @@ int lua_axis_physics_PhysicsJointGear_getPhase(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -10963,7 +10963,7 @@ int lua_axis_physics_PhysicsJointGear_getPhase(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGear_setPhase(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -10975,7 +10975,7 @@ int lua_axis_physics_PhysicsJointGear_setPhase(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11013,7 +11013,7 @@ int lua_axis_physics_PhysicsJointGear_setPhase(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGear_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11025,7 +11025,7 @@ int lua_axis_physics_PhysicsJointGear_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11060,7 +11060,7 @@ int lua_axis_physics_PhysicsJointGear_createConstraints(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointGear_getRatio(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointGear* cobj = nullptr;
+    ax::PhysicsJointGear* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11072,7 +11072,7 @@ int lua_axis_physics_PhysicsJointGear_getRatio(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointGear",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointGear*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11121,12 +11121,12 @@ int lua_axis_physics_PhysicsJointGear_construct(lua_State* tolua_S)
 
     if (argc == 4)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
         double arg2;
         double arg3;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointGear:construct");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointGear:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointGear:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointGear:construct");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointGear:construct");
         ok &= luaval_to_number(tolua_S, 5,&arg3, "ax.PhysicsJointGear:construct");
         if(!ok)
@@ -11134,8 +11134,8 @@ int lua_axis_physics_PhysicsJointGear_construct(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointGear_construct'", nullptr);
             return 0;
         }
-        axis::PhysicsJointGear* ret = axis::PhysicsJointGear::construct(arg0, arg1, arg2, arg3);
-        object_to_luaval<axis::PhysicsJointGear>(tolua_S, "ax.PhysicsJointGear",(axis::PhysicsJointGear*)ret);
+        ax::PhysicsJointGear* ret = ax::PhysicsJointGear::construct(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::PhysicsJointGear>(tolua_S, "ax.PhysicsJointGear",(ax::PhysicsJointGear*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointGear:construct",argc, 4);
@@ -11165,7 +11165,7 @@ int lua_register_axis_physics_PhysicsJointGear(lua_State* tolua_S)
         tolua_function(tolua_S,"getRatio",lua_axis_physics_PhysicsJointGear_getRatio);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointGear_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointGear).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointGear).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointGear";
     g_typeCast[typeName] = "ax.PhysicsJointGear";
     return 1;
@@ -11174,7 +11174,7 @@ int lua_register_axis_physics_PhysicsJointGear(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointMotor_setRate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointMotor* cobj = nullptr;
+    ax::PhysicsJointMotor* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11186,7 +11186,7 @@ int lua_axis_physics_PhysicsJointMotor_setRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointMotor",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11224,7 +11224,7 @@ int lua_axis_physics_PhysicsJointMotor_setRate(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointMotor_getRate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointMotor* cobj = nullptr;
+    ax::PhysicsJointMotor* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11236,7 +11236,7 @@ int lua_axis_physics_PhysicsJointMotor_getRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointMotor",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11271,7 +11271,7 @@ int lua_axis_physics_PhysicsJointMotor_getRate(lua_State* tolua_S)
 int lua_axis_physics_PhysicsJointMotor_createConstraints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsJointMotor* cobj = nullptr;
+    ax::PhysicsJointMotor* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11283,7 +11283,7 @@ int lua_axis_physics_PhysicsJointMotor_createConstraints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsJointMotor",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsJointMotor*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11332,19 +11332,19 @@ int lua_axis_physics_PhysicsJointMotor_construct(lua_State* tolua_S)
 
     if (argc == 3)
     {
-        axis::PhysicsBody* arg0;
-        axis::PhysicsBody* arg1;
+        ax::PhysicsBody* arg0;
+        ax::PhysicsBody* arg1;
         double arg2;
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointMotor:construct");
-        ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointMotor:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsJointMotor:construct");
+        ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 3, "ax.PhysicsBody",&arg1, "ax.PhysicsJointMotor:construct");
         ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.PhysicsJointMotor:construct");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsJointMotor_construct'", nullptr);
             return 0;
         }
-        axis::PhysicsJointMotor* ret = axis::PhysicsJointMotor::construct(arg0, arg1, arg2);
-        object_to_luaval<axis::PhysicsJointMotor>(tolua_S, "ax.PhysicsJointMotor",(axis::PhysicsJointMotor*)ret);
+        ax::PhysicsJointMotor* ret = ax::PhysicsJointMotor::construct(arg0, arg1, arg2);
+        object_to_luaval<ax::PhysicsJointMotor>(tolua_S, "ax.PhysicsJointMotor",(ax::PhysicsJointMotor*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.PhysicsJointMotor:construct",argc, 3);
@@ -11372,7 +11372,7 @@ int lua_register_axis_physics_PhysicsJointMotor(lua_State* tolua_S)
         tolua_function(tolua_S,"createConstraints",lua_axis_physics_PhysicsJointMotor_createConstraints);
         tolua_function(tolua_S,"construct", lua_axis_physics_PhysicsJointMotor_construct);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsJointMotor).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsJointMotor).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsJointMotor";
     g_typeCast[typeName] = "ax.PhysicsJointMotor";
     return 1;
@@ -11381,7 +11381,7 @@ int lua_register_axis_physics_PhysicsJointMotor(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11393,7 +11393,7 @@ int lua_axis_physics_PhysicsWorld_setGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11406,7 +11406,7 @@ int lua_axis_physics_PhysicsWorld_setGravity(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsWorld:setGravity");
         if(!ok)
@@ -11431,7 +11431,7 @@ int lua_axis_physics_PhysicsWorld_setGravity(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11443,7 +11443,7 @@ int lua_axis_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11461,7 +11461,7 @@ int lua_axis_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsWorld_getAllBodies'", nullptr);
             return 0;
         }
-        const axis::Vector<axis::PhysicsBody *>& ret = cobj->getAllBodies();
+        const ax::Vector<ax::PhysicsBody *>& ret = cobj->getAllBodies();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11478,7 +11478,7 @@ int lua_axis_physics_PhysicsWorld_getAllBodies(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setFixedUpdateRate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11490,7 +11490,7 @@ int lua_axis_physics_PhysicsWorld_setFixedUpdateRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11528,7 +11528,7 @@ int lua_axis_physics_PhysicsWorld_setFixedUpdateRate(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setSubsteps(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11540,7 +11540,7 @@ int lua_axis_physics_PhysicsWorld_setSubsteps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11578,7 +11578,7 @@ int lua_axis_physics_PhysicsWorld_setSubsteps(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setAutoStep(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11590,7 +11590,7 @@ int lua_axis_physics_PhysicsWorld_setAutoStep(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11628,7 +11628,7 @@ int lua_axis_physics_PhysicsWorld_setAutoStep(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11640,7 +11640,7 @@ int lua_axis_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11653,9 +11653,9 @@ int lua_axis_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PhysicsJoint* arg0;
+        ax::PhysicsJoint* arg0;
 
-        ok &= luaval_to_object<axis::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:addJoint");
+        ok &= luaval_to_object<ax::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:addJoint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsWorld_addJoint'", nullptr);
@@ -11678,7 +11678,7 @@ int lua_axis_physics_PhysicsWorld_addJoint(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11690,7 +11690,7 @@ int lua_axis_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11739,7 +11739,7 @@ int lua_axis_physics_PhysicsWorld_removeAllJoints(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getDebugDrawMask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11751,7 +11751,7 @@ int lua_axis_physics_PhysicsWorld_getDebugDrawMask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11786,7 +11786,7 @@ int lua_axis_physics_PhysicsWorld_getDebugDrawMask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setPreUpdateCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11798,7 +11798,7 @@ int lua_axis_physics_PhysicsWorld_setPreUpdateCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11840,7 +11840,7 @@ int lua_axis_physics_PhysicsWorld_setPreUpdateCallback(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_isAutoStep(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11852,7 +11852,7 @@ int lua_axis_physics_PhysicsWorld_isAutoStep(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11887,7 +11887,7 @@ int lua_axis_physics_PhysicsWorld_isAutoStep(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setPostUpdateCallback(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -11899,7 +11899,7 @@ int lua_axis_physics_PhysicsWorld_setPostUpdateCallback(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -11941,7 +11941,7 @@ int lua_axis_physics_PhysicsWorld_setPostUpdateCallback(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
@@ -11950,7 +11950,7 @@ int lua_axis_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 #if _AX_DEBUG >= 1
     if (!cobj)
     {
@@ -11973,8 +11973,8 @@ int lua_axis_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            axis::PhysicsBody* arg0;
-            ok &= luaval_to_object<axis::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsWorld:removeBody");
+            ax::PhysicsBody* arg0;
+            ok &= luaval_to_object<ax::PhysicsBody>(tolua_S, 2, "ax.PhysicsBody",&arg0, "ax.PhysicsWorld:removeBody");
 
             if (!ok) { break; }
             cobj->removeBody(arg0);
@@ -11996,7 +11996,7 @@ int lua_axis_physics_PhysicsWorld_removeBody(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12008,7 +12008,7 @@ int lua_axis_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12021,9 +12021,9 @@ int lua_axis_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::PhysicsJoint* arg0;
+        ax::PhysicsJoint* arg0;
 
-        ok &= luaval_to_object<axis::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:removeJoint");
+        ok &= luaval_to_object<ax::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:removeJoint");
         if(!ok)
         {
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsWorld_removeJoint'", nullptr);
@@ -12035,10 +12035,10 @@ int lua_axis_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
     }
     if (argc == 2) 
     {
-        axis::PhysicsJoint* arg0;
+        ax::PhysicsJoint* arg0;
         bool arg1;
 
-        ok &= luaval_to_object<axis::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:removeJoint");
+        ok &= luaval_to_object<ax::PhysicsJoint>(tolua_S, 2, "ax.PhysicsJoint",&arg0, "ax.PhysicsWorld:removeJoint");
 
         ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.PhysicsWorld:removeJoint");
         if(!ok)
@@ -12063,7 +12063,7 @@ int lua_axis_physics_PhysicsWorld_removeJoint(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12075,7 +12075,7 @@ int lua_axis_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12088,7 +12088,7 @@ int lua_axis_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsWorld:getShapes");
         if(!ok)
@@ -12096,7 +12096,7 @@ int lua_axis_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsWorld_getShapes'", nullptr);
             return 0;
         }
-        axis::Vector<axis::PhysicsShape *> ret = cobj->getShapes(arg0);
+        ax::Vector<ax::PhysicsShape *> ret = cobj->getShapes(arg0);
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12113,7 +12113,7 @@ int lua_axis_physics_PhysicsWorld_getShapes(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_step(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12125,7 +12125,7 @@ int lua_axis_physics_PhysicsWorld_step(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12163,7 +12163,7 @@ int lua_axis_physics_PhysicsWorld_step(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setDebugDrawMask(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12175,7 +12175,7 @@ int lua_axis_physics_PhysicsWorld_setDebugDrawMask(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12213,7 +12213,7 @@ int lua_axis_physics_PhysicsWorld_setDebugDrawMask(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getGravity(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12225,7 +12225,7 @@ int lua_axis_physics_PhysicsWorld_getGravity(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12243,7 +12243,7 @@ int lua_axis_physics_PhysicsWorld_getGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsWorld_getGravity'", nullptr);
             return 0;
         }
-        axis::Vec2 ret = cobj->getGravity();
+        ax::Vec2 ret = cobj->getGravity();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12260,7 +12260,7 @@ int lua_axis_physics_PhysicsWorld_getGravity(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setUpdateRate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12272,7 +12272,7 @@ int lua_axis_physics_PhysicsWorld_setUpdateRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12310,7 +12310,7 @@ int lua_axis_physics_PhysicsWorld_setUpdateRate(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getFixedUpdateRate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12322,7 +12322,7 @@ int lua_axis_physics_PhysicsWorld_getFixedUpdateRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12357,7 +12357,7 @@ int lua_axis_physics_PhysicsWorld_getFixedUpdateRate(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getSubsteps(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12369,7 +12369,7 @@ int lua_axis_physics_PhysicsWorld_getSubsteps(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12404,7 +12404,7 @@ int lua_axis_physics_PhysicsWorld_getSubsteps(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getSpeed(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12416,7 +12416,7 @@ int lua_axis_physics_PhysicsWorld_getSpeed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12451,7 +12451,7 @@ int lua_axis_physics_PhysicsWorld_getSpeed(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getUpdateRate(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12463,7 +12463,7 @@ int lua_axis_physics_PhysicsWorld_getUpdateRate(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12498,7 +12498,7 @@ int lua_axis_physics_PhysicsWorld_getUpdateRate(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_removeAllBodies(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12510,7 +12510,7 @@ int lua_axis_physics_PhysicsWorld_removeAllBodies(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12545,7 +12545,7 @@ int lua_axis_physics_PhysicsWorld_removeAllBodies(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_setSpeed(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12557,7 +12557,7 @@ int lua_axis_physics_PhysicsWorld_setSpeed(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12595,7 +12595,7 @@ int lua_axis_physics_PhysicsWorld_setSpeed(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getShape(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12607,7 +12607,7 @@ int lua_axis_physics_PhysicsWorld_getShape(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12620,7 +12620,7 @@ int lua_axis_physics_PhysicsWorld_getShape(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 1) 
     {
-        axis::Vec2 arg0;
+        ax::Vec2 arg0;
 
         ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.PhysicsWorld:getShape");
         if(!ok)
@@ -12628,8 +12628,8 @@ int lua_axis_physics_PhysicsWorld_getShape(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsWorld_getShape'", nullptr);
             return 0;
         }
-        axis::PhysicsShape* ret = cobj->getShape(arg0);
-        object_to_luaval<axis::PhysicsShape>(tolua_S, "ax.PhysicsShape",(axis::PhysicsShape*)ret);
+        ax::PhysicsShape* ret = cobj->getShape(arg0);
+        object_to_luaval<ax::PhysicsShape>(tolua_S, "ax.PhysicsShape",(ax::PhysicsShape*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:getShape",argc, 1);
@@ -12645,7 +12645,7 @@ int lua_axis_physics_PhysicsWorld_getShape(lua_State* tolua_S)
 int lua_axis_physics_PhysicsWorld_getBody(lua_State* tolua_S)
 {
     int argc = 0;
-    axis::PhysicsWorld* cobj = nullptr;
+    ax::PhysicsWorld* cobj = nullptr;
     bool ok  = true;
 
 #if _AX_DEBUG >= 1
@@ -12657,7 +12657,7 @@ int lua_axis_physics_PhysicsWorld_getBody(lua_State* tolua_S)
     if (!tolua_isusertype(tolua_S,1,"ax.PhysicsWorld",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    cobj = (axis::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
+    cobj = (ax::PhysicsWorld*)tolua_tousertype(tolua_S,1,0);
 
 #if _AX_DEBUG >= 1
     if (!cobj) 
@@ -12678,8 +12678,8 @@ int lua_axis_physics_PhysicsWorld_getBody(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axis_physics_PhysicsWorld_getBody'", nullptr);
             return 0;
         }
-        axis::PhysicsBody* ret = cobj->getBody(arg0);
-        object_to_luaval<axis::PhysicsBody>(tolua_S, "ax.PhysicsBody",(axis::PhysicsBody*)ret);
+        ax::PhysicsBody* ret = cobj->getBody(arg0);
+        object_to_luaval<ax::PhysicsBody>(tolua_S, "ax.PhysicsBody",(ax::PhysicsBody*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.PhysicsWorld:getBody",argc, 1);
@@ -12731,7 +12731,7 @@ int lua_register_axis_physics_PhysicsWorld(lua_State* tolua_S)
         tolua_function(tolua_S,"getShape",lua_axis_physics_PhysicsWorld_getShape);
         tolua_function(tolua_S,"getBody",lua_axis_physics_PhysicsWorld_getBody);
     tolua_endmodule(tolua_S);
-    auto typeName = typeid(axis::PhysicsWorld).name(); // rtti is literal storage
+    auto typeName = typeid(ax::PhysicsWorld).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.PhysicsWorld";
     g_typeCast[typeName] = "ax.PhysicsWorld";
     return 1;

@@ -220,7 +220,7 @@ static std::string getUriStringFromArgs(ArgType* args)
 static std::string getDataURI(std::string_view data, std::string_view mime_type)
 {
     char* encodedData;
-    axis::base64Encode(reinterpret_cast<const unsigned char*>(data.data()), static_cast<unsigned>(data.size()),
+    ax::base64Encode(reinterpret_cast<const unsigned char*>(data.data()), static_cast<unsigned>(data.size()),
                           &encodedData);
     return std::string{"data:"}.append(mime_type).append(";base64,").append(utils::urlEncode(encodedData));
 }
@@ -788,7 +788,7 @@ void WebViewImpl::draw(Renderer* renderer, Mat4 const& transform, uint32_t flags
 {
     if (_createSucceeded && (flags & Node::FLAGS_TRANSFORM_DIRTY))
     {
-        const auto uiRect = axis::ui::Helper::convertBoundingBoxToScreen(_webView);
+        const auto uiRect = ax::ui::Helper::convertBoundingBoxToScreen(_webView);
         _systemWebControl->setWebViewRect(static_cast<int>(uiRect.origin.x), static_cast<int>(uiRect.origin.y),
                                           static_cast<int>(uiRect.size.width), static_cast<int>(uiRect.size.height));
     }
@@ -832,7 +832,7 @@ bool Win32WebControl::s_isInitialized = false;
 void Win32WebControl::lazyInit()
 {
     // reset the main windows style so that its drawing does not cover the webview sub window
-    auto hwnd        = axis::Director::getInstance()->getOpenGLView()->getWin32Window();
+    auto hwnd        = ax::Director::getInstance()->getOpenGLView()->getWin32Window();
     const auto style = GetWindowLong(hwnd, GWL_STYLE);
     SetWindowLong(hwnd, GWL_STYLE, style | WS_CLIPCHILDREN);
 
@@ -855,7 +855,7 @@ bool Win32WebControl::createWebView(const std::function<bool(std::string_view)>&
     bool ret = false;
     do
     {
-        HWND hwnd           = axis::Director::getInstance()->getOpenGLView()->getWin32Window();
+        HWND hwnd           = ax::Director::getInstance()->getOpenGLView()->getWin32Window();
         HINSTANCE hInstance = GetModuleHandle(nullptr);
         WNDCLASSEX wc;
         ZeroMemory(&wc, sizeof(WNDCLASSEX));
@@ -991,7 +991,7 @@ void Win32WebControl::loadURL(std::string_view url, bool cleanCachedData)
 
 void Win32WebControl::loadFile(std::string_view filePath)
 {
-    auto fullPath = axis::FileUtils::getInstance()->fullPathForFilename(filePath);
+    auto fullPath = ax::FileUtils::getInstance()->fullPathForFilename(filePath);
     if (fullPath.find("file:///") != 0)
     {
         if (fullPath[0] == '/')

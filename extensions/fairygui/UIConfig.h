@@ -24,7 +24,7 @@ public:
     static int touchScrollSensitivity;
     static int defaultComboBoxVisibleItemCount;
     static std::string globalModalWaiting;
-    static axis::Color4F modalLayerColor;
+    static ax::Color4F modalLayerColor;
     static std::string tooltipsWin;
     static bool bringWindowToFrontOnClick;
     static std::string windowModalWaiting;

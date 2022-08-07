@@ -117,7 +117,7 @@ Offset<Table> ProjectNodeReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     return *(Offset<Table>*)(&options);
 }
 
-void ProjectNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* projectNodeOptions)
+void ProjectNodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* projectNodeOptions)
 {
     auto options = (ProjectNodeOptions*)projectNodeOptions;
 

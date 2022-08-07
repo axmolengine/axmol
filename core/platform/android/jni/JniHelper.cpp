@@ -44,12 +44,12 @@ jclass _getClassID(const char* className)
         return nullptr;
     }
 
-    JNIEnv* env = axis::JniHelper::getEnv();
+    JNIEnv* env = ax::JniHelper::getEnv();
 
     jstring _jstrClassName = env->NewStringUTF(className);
 
-    jclass _clazz = (jclass)env->CallObjectMethod(axis::JniHelper::classloader,
-                                                  axis::JniHelper::loadclassMethod_methodID, _jstrClassName);
+    jclass _clazz = (jclass)env->CallObjectMethod(ax::JniHelper::classloader,
+                                                  ax::JniHelper::loadclassMethod_methodID, _jstrClassName);
 
     if (nullptr == _clazz)
     {
@@ -64,7 +64,7 @@ jclass _getClassID(const char* className)
 
 void _detachCurrentThread(void* a)
 {
-    axis::JniHelper::getJavaVM()->DetachCurrentThread();
+    ax::JniHelper::getJavaVM()->DetachCurrentThread();
 }
 
 NS_AX_BEGIN
@@ -151,7 +151,7 @@ bool JniHelper::setClassLoaderFrom(jobject activityinstance)
         return false;
     }
 
-    jobject _c = axis::JniHelper::getEnv()->CallObjectMethod(activityinstance, _getclassloaderMethod.methodID);
+    jobject _c = ax::JniHelper::getEnv()->CallObjectMethod(activityinstance, _getclassloaderMethod.methodID);
 
     if (nullptr == _c)
     {
@@ -165,9 +165,9 @@ bool JniHelper::setClassLoaderFrom(jobject activityinstance)
         return false;
     }
 
-    JniHelper::classloader              = axis::JniHelper::getEnv()->NewGlobalRef(_c);
+    JniHelper::classloader              = ax::JniHelper::getEnv()->NewGlobalRef(_c);
     JniHelper::loadclassMethod_methodID = _m.methodID;
-    JniHelper::_activity                = axis::JniHelper::getEnv()->NewGlobalRef(activityinstance);
+    JniHelper::_activity                = ax::JniHelper::getEnv()->NewGlobalRef(activityinstance);
     if (JniHelper::classloaderCallback != nullptr)
     {
         JniHelper::classloaderCallback();
@@ -306,24 +306,24 @@ std::string JniHelper::jstring2string(jstring jstr)
         return "";
     }
 
-    std::string strValue = axis::StringUtils::getStringUTFCharsJNI(env, jstr);
+    std::string strValue = ax::StringUtils::getStringUTFCharsJNI(env, jstr);
 
     return strValue;
 }
 
-jstring JniHelper::convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, const char* x)
+jstring JniHelper::convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, const char* x)
 {
-    jstring ret = axis::StringUtils::newStringUTFJNI(t.env, x ? x : "");
+    jstring ret = ax::StringUtils::newStringUTFJNI(t.env, x ? x : "");
     localRefs[t.env].push_back(ret);
     return ret;
 }
 
-jstring JniHelper::convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, std::string_view x)
+jstring JniHelper::convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, std::string_view x)
 {
     return convert(localRefs, t, x.data());
 }
 
-jstring JniHelper::convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, const std::string& x)
+jstring JniHelper::convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, const std::string& x)
 {
     return convert(localRefs, t, x.c_str());
 }

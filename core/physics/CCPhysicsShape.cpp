@@ -805,7 +805,7 @@ Vec2 PhysicsShapeEdgePolygon::getCenter()
     return center;
 }
 
-void PhysicsShapeEdgePolygon::getPoints(axis::Vec2* outPoints) const
+void PhysicsShapeEdgePolygon::getPoints(ax::Vec2* outPoints) const
 {
     int i = 0;
     for (auto&& shape : _cpShapes)

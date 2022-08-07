@@ -318,7 +318,7 @@ struct NodeDatas
  */
 struct MeshData
 {
-    using IndexArray = ::axis::IndexArray;
+    using IndexArray = ::ax::IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;

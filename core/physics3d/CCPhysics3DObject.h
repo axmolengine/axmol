@@ -100,7 +100,7 @@ public:
     Physics3DWorld* getPhysicsWorld() const { return _physicsWorld; }
 
     /** Get the world matrix of Physics3DObject. */
-    virtual axis::Mat4 getWorldTransform() const = 0;
+    virtual ax::Mat4 getWorldTransform() const = 0;
 
     /** Set the collision callback function. */
     void setCollisionCallback(const CollisionCallbackFunc& func) { _collisionCallbackFunc = func; };
@@ -137,9 +137,9 @@ protected:
 struct AX_DLL Physics3DRigidBodyDes
 {
     float mass;                  // Note: mass equals zero means static, default 0
-    axis::Vec3 localInertia;  // default (0, 0, 0)
+    ax::Vec3 localInertia;  // default (0, 0, 0)
     Physics3DShape* shape;
-    axis::Mat4 originalTransform;
+    ax::Mat4 originalTransform;
     bool disableSleep;  // it is always active if disabled
 
     Physics3DRigidBodyDes() : mass(0.f), localInertia(0.f, 0.f, 0.f), shape(nullptr), disableSleep(false) {}
@@ -169,35 +169,35 @@ public:
      * @param   force the value of the force
      * @param   rel_pos the position of the force
      */
-    void applyForce(const axis::Vec3& force, const axis::Vec3& rel_pos);
+    void applyForce(const ax::Vec3& force, const ax::Vec3& rel_pos);
 
     /**
      * Apply a central force.
      *
      * @param   force the value of the force
      */
-    void applyCentralForce(const axis::Vec3& force);
+    void applyCentralForce(const ax::Vec3& force);
 
     /**
      * Apply a central impulse.
      *
      * @param   impulse the value of the impulse
      */
-    void applyCentralImpulse(const axis::Vec3& impulse);
+    void applyCentralImpulse(const ax::Vec3& impulse);
 
     /**
      * Apply a torque.
      *
      * @param   torque the value of the torque
      */
-    void applyTorque(const axis::Vec3& torque);
+    void applyTorque(const ax::Vec3& torque);
 
     /**
      * Apply a torque impulse.
      *
      * @param   torque the value of the torque
      */
-    void applyTorqueImpulse(const axis::Vec3& torque);
+    void applyTorqueImpulse(const ax::Vec3& torque);
 
     /**
      * Apply a impulse.
@@ -205,43 +205,43 @@ public:
      * @param   impulse the value of the impulse
      * @param   rel_pos the position of the impulse
      */
-    void applyImpulse(const axis::Vec3& impulse, const axis::Vec3& rel_pos);
+    void applyImpulse(const ax::Vec3& impulse, const ax::Vec3& rel_pos);
 
     /** Damps the velocity, using the given linearDamping and angularDamping. */
     void applyDamping(float timeStep);
 
     /** Set the linear velocity. */
-    void setLinearVelocity(const axis::Vec3& lin_vel);
+    void setLinearVelocity(const ax::Vec3& lin_vel);
 
     /** Get the linear velocity. */
-    axis::Vec3 getLinearVelocity() const;
+    ax::Vec3 getLinearVelocity() const;
 
     /** Set the linear factor. */
-    void setLinearFactor(const axis::Vec3& linearFactor);
+    void setLinearFactor(const ax::Vec3& linearFactor);
 
     /** Get the linear factor. */
-    axis::Vec3 getLinearFactor() const;
+    ax::Vec3 getLinearFactor() const;
 
     /** Set the angular factor. */
-    void setAngularFactor(const axis::Vec3& angFac);
+    void setAngularFactor(const ax::Vec3& angFac);
 
     /** Set the angular factor, use unified factor. */
     void setAngularFactor(float angFac);
 
     /** Get the angular factor. */
-    axis::Vec3 getAngularFactor() const;
+    ax::Vec3 getAngularFactor() const;
 
     /** Set the angular velocity. */
-    void setAngularVelocity(const axis::Vec3& ang_vel);
+    void setAngularVelocity(const ax::Vec3& ang_vel);
 
     /** Get the angular velocity. */
-    axis::Vec3 getAngularVelocity() const;
+    ax::Vec3 getAngularVelocity() const;
 
     /** Set the center of mass. */
-    void setCenterOfMassTransform(const axis::Mat4& xform);
+    void setCenterOfMassTransform(const ax::Mat4& xform);
 
     /** Get the center of mass. */
-    axis::Mat4 getCenterOfMassTransform() const;
+    ax::Mat4 getCenterOfMassTransform() const;
 
     /** Set linear damping and angular damping. */
     void setDamping(float lin_damping, float ang_damping);
@@ -253,28 +253,28 @@ public:
     float getAngularDamping() const;
 
     /** Set the acceleration. */
-    void setGravity(const axis::Vec3& acceleration);
+    void setGravity(const ax::Vec3& acceleration);
 
     /** Get the acceleration. */
-    axis::Vec3 getGravity() const;
+    ax::Vec3 getGravity() const;
 
     /** Set the inverse of local inertia. */
-    void setInvInertiaDiagLocal(const axis::Vec3& diagInvInertia);
+    void setInvInertiaDiagLocal(const ax::Vec3& diagInvInertia);
 
     /** Get the inverse of local inertia. */
-    axis::Vec3 getInvInertiaDiagLocal() const;
+    ax::Vec3 getInvInertiaDiagLocal() const;
 
     /** Set mass and inertia. */
-    void setMassProps(float mass, const axis::Vec3& inertia);
+    void setMassProps(float mass, const ax::Vec3& inertia);
 
     /** Get inverse of mass. */
     float getInvMass() const;
 
     /** Get total force. */
-    axis::Vec3 getTotalForce() const;
+    ax::Vec3 getTotalForce() const;
 
     /** Get total torque. */
-    axis::Vec3 getTotalTorque() const;
+    ax::Vec3 getTotalTorque() const;
 
     /** Set restitution. */
     void setRestitution(float rest);
@@ -320,7 +320,7 @@ public:
     bool isKinematic() const;
 
     /** override. */
-    virtual axis::Mat4 getWorldTransform() const override;
+    virtual ax::Mat4 getWorldTransform() const override;
 
     /** Get constraint by index. */
     Physics3DConstraint* getConstraint(unsigned int idx) const;
@@ -354,7 +354,7 @@ struct AX_DLL Physics3DColliderDes
     /**shape pointer*/
     Physics3DShape* shape;
     /**original world Transform*/
-    axis::Mat4 originalTransform;
+    ax::Mat4 originalTransform;
     /**Is collider a trigger?*/
     bool isTrigger;
     /**the friction*/
@@ -472,7 +472,7 @@ public:
     float getCcdSweptSphereRadius() const;
 
     /** override. */
-    virtual axis::Mat4 getWorldTransform() const;
+    virtual ax::Mat4 getWorldTransform() const;
 
     /** Set a callback when trigger enter. */
     std::function<void(Physics3DObject* otherObject)> onTriggerEnter;

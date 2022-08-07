@@ -55,10 +55,10 @@ class AX_EX_DLL ControlButton : public Control
 {
 public:
     static ControlButton* create();
-    static ControlButton* create(axis::ui::Scale9Sprite* sprite);
-    static ControlButton* create(Node* label, axis::ui::Scale9Sprite* backgroundSprite);
+    static ControlButton* create(ax::ui::Scale9Sprite* sprite);
+    static ControlButton* create(Node* label, ax::ui::Scale9Sprite* backgroundSprite);
     static ControlButton* create(std::string_view title, std::string_view fontName, float fontSize);
-    static ControlButton* create(Node* label, axis::ui::Scale9Sprite* backgroundSprite, bool adjustBackGroundSize);
+    static ControlButton* create(Node* label, ax::ui::Scale9Sprite* backgroundSprite, bool adjustBackGroundSize);
 
     virtual void needsLayout() override;
 
@@ -149,7 +149,7 @@ public:
      * @param state The state that uses the background sprite. Possible values are
      * described in "CCControlState".
      */
-    virtual axis::ui::Scale9Sprite* getBackgroundSpriteForState(State state);
+    virtual ax::ui::Scale9Sprite* getBackgroundSpriteForState(State state);
 
     /**
      * Sets the background sprite to use for the specified button state.
@@ -158,7 +158,7 @@ public:
      * @param state The state that uses the specified image. The values are described
      * in "CCControlState".
      */
-    virtual void setBackgroundSpriteForState(axis::ui::Scale9Sprite* sprite, State state);
+    virtual void setBackgroundSpriteForState(ax::ui::Scale9Sprite* sprite, State state);
 
     /**
      * Sets the background spriteFrame to use for the specified button state.
@@ -203,9 +203,9 @@ public:
 
     virtual bool init() override;
     virtual bool initWithLabelAndBackgroundSprite(Node* label,
-                                                  axis::ui::Scale9Sprite* backgroundSprite,
+                                                  ax::ui::Scale9Sprite* backgroundSprite,
                                                   bool adjustBackGroundSize);
-    virtual bool initWithBackgroundSprite(axis::ui::Scale9Sprite* sprite);
+    virtual bool initWithBackgroundSprite(ax::ui::Scale9Sprite* sprite);
     virtual bool initWithTitleAndFontNameAndFontSize(std::string_view title, std::string_view fontName, float fontSize);
 
 protected:
@@ -223,7 +223,7 @@ protected:
     AX_SYNTHESIZE_RETAIN(Node*, _titleLabel, TitleLabel);
 
     /** The current background sprite. */
-    AX_SYNTHESIZE_RETAIN(axis::ui::Scale9Sprite*, _backgroundSprite, BackgroundSprite);
+    AX_SYNTHESIZE_RETAIN(ax::ui::Scale9Sprite*, _backgroundSprite, BackgroundSprite);
 
     /** The preferred size of the button, if label is larger it will be expanded. */
     AX_PROPERTY_PASS_BY_REF(Size, _preferredSize, PreferredSize);
@@ -239,7 +239,7 @@ protected:
     std::unordered_map<int, Color3B> _titleColorDispatchTable;
 
     Map<int, Node*> _titleLabelDispatchTable;
-    Map<int, axis::ui::Scale9Sprite*> _backgroundSpriteDispatchTable;
+    Map<int, ax::ui::Scale9Sprite*> _backgroundSpriteDispatchTable;
 
     /* Define the button margin for Top/Bottom edge */
     AX_SYNTHESIZE_READONLY(int, _marginV, VerticalMargin);

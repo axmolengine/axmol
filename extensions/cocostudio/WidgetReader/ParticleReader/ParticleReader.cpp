@@ -76,7 +76,7 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
     std::string plistFile;
     int resourceType = 0;
 
-    axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
+    ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
 
     // child elements
     auto child = objectData.first_child();
@@ -144,7 +144,7 @@ Offset<Table> ParticleReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void ParticleReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* particleOptions)
+void ParticleReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* particleOptions)
 {
     auto particle = dynamic_cast<ParticleSystemQuad*>(node);
     auto options  = (ParticleSystemOptions*)particleOptions;
@@ -152,7 +152,7 @@ void ParticleReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers
     auto f_blendFunc = options->blendFunc();
     if (particle && f_blendFunc)
     {
-        axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
+        ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
         blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
         blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
         particle->setBlendFunc(blendFunc);

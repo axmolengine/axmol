@@ -44,20 +44,20 @@ NS_AX_BEGIN
 /**
  * @brief Convenient class to create a rigid body with a MeshRenderer
  */
-class AX_DLL PhysicsMeshRenderer : public axis::MeshRenderer
+class AX_DLL PhysicsMeshRenderer : public ax::MeshRenderer
 {
 public:
     /** creates a PhysicsMeshRenderer */
     static PhysicsMeshRenderer* create(std::string_view modelPath,
                                    Physics3DRigidBodyDes* rigidDes,
-                                   const axis::Vec3& translateInPhysics = axis::Vec3::ZERO,
-                                   const axis::Quaternion& rotInPhsyics = axis::Quaternion::ZERO);
+                                   const ax::Vec3& translateInPhysics = ax::Vec3::ZERO,
+                                   const ax::Quaternion& rotInPhsyics = ax::Quaternion::ZERO);
 
     /** creates a PhysicsMeshRenderer with a collider */
     static PhysicsMeshRenderer* createWithCollider(std::string_view modelPath,
                                                Physics3DColliderDes* colliderDes,
-                                               const axis::Vec3& translateInPhysics = axis::Vec3::ZERO,
-                                               const axis::Quaternion& rotInPhsyics = axis::Quaternion::ZERO);
+                                               const ax::Vec3& translateInPhysics = ax::Vec3::ZERO,
+                                               const ax::Quaternion& rotInPhsyics = ax::Quaternion::ZERO);
 
     /** Get the Physics3DObject. */
     Physics3DObject* getPhysicsObj() const;

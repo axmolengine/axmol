@@ -279,9 +279,9 @@ private:
     Type _type;
 };
 
-inline const axis::Value& optValue(const ValueMap& dictionary, std::string_view key)
+inline const ax::Value& optValue(const ValueMap& dictionary, std::string_view key)
 {
-    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : axis::Value::Null;
+    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : ax::Value::Null;
 }
 
 /** @} */

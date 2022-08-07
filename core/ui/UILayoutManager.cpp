@@ -213,7 +213,7 @@ RelativeLayoutManager* RelativeLayoutManager::create()
     return ret;
 }
 
-Vector<Widget*> RelativeLayoutManager::getAllWidgets(axis::ui::LayoutProtocol* layout)
+Vector<Widget*> RelativeLayoutManager::getAllWidgets(ax::ui::LayoutProtocol* layout)
 {
     Vector<Node*> container = layout->getLayoutElements();
     Vector<Widget*> widgetChildren;

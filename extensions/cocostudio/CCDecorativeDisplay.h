@@ -44,7 +44,7 @@ namespace cocostudio
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL DecorativeDisplay : public axis::Ref
+class CCS_DLL DecorativeDisplay : public ax::Ref
 {
 public:
     static DecorativeDisplay* create();
@@ -55,8 +55,8 @@ public:
 
     virtual bool init();
 
-    virtual void setDisplay(axis::Node* display);
-    virtual axis::Node* getDisplay() const { return _display; }
+    virtual void setDisplay(ax::Node* display);
+    virtual ax::Node* getDisplay() const { return _display; }
 
     virtual void setDisplayData(DisplayData* data)
     {
@@ -82,7 +82,7 @@ public:
     virtual ColliderDetector* getColliderDetector() const { return _colliderDetector; }
 #endif
 protected:
-    axis::Node* _display;
+    ax::Node* _display;
     DisplayData* _displayData;
 
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX

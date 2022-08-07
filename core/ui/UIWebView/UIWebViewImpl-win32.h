@@ -56,11 +56,11 @@ namespace ui
 class WebViewImpl
 {
 public:
-    WebViewImpl(axis::ui::WebView* webView);
+    WebViewImpl(ax::ui::WebView* webView);
     virtual ~WebViewImpl();
 
     void setJavascriptInterfaceScheme(std::string_view scheme);
-    void loadData(const axis::Data& data,
+    void loadData(const ax::Data& data,
                   std::string_view MIMEType,
                   std::string_view encoding,
                   std::string_view baseURL);
@@ -76,7 +76,7 @@ public:
     void evaluateJS(std::string_view js);
     void setScalesPageToFit(const bool scalesPageToFit);
 
-    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags);
+    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags);
     virtual void setVisible(bool visible);
 
     void setBounces(bool bounces);

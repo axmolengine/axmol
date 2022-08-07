@@ -31,7 +31,7 @@
 NS_AX_EXT_BEGIN
 
 EventAssetsManagerEx::EventAssetsManagerEx(std::string_view eventName,
-                                           axis::extension::AssetsManagerEx* manager,
+                                           ax::extension::AssetsManagerEx* manager,
                                            const EventCode& code,
                                            float percent /* = 0 */,
                                            float percentByFile /* = 0*/,
