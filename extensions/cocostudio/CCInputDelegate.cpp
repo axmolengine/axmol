@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -55,32 +55,32 @@ InputDelegate::~InputDelegate(void)
     Device::setAccelerometerEnabled(false);
 }
 
-void InputDelegate::didAccelerate(axis::Acceleration* /*accelerationValue*/) {}
+void InputDelegate::didAccelerate(ax::Acceleration* /*accelerationValue*/) {}
 
-bool InputDelegate::ccTouchBegan(axis::Touch* /*touch*/, axis::Event* /*event*/)
+bool InputDelegate::ccTouchBegan(ax::Touch* /*touch*/, ax::Event* /*event*/)
 {
     return false;
 }
 
-void InputDelegate::ccTouchMoved(axis::Touch* /*touch*/, axis::Event* /*event*/) {}
+void InputDelegate::ccTouchMoved(ax::Touch* /*touch*/, ax::Event* /*event*/) {}
 
-void InputDelegate::ccTouchEnded(axis::Touch* /*touch*/, axis::Event* /*event*/) {}
+void InputDelegate::ccTouchEnded(ax::Touch* /*touch*/, ax::Event* /*event*/) {}
 
-void InputDelegate::ccTouchCancelled(axis::Touch* /*touch*/, axis::Event* /*event*/) {}
+void InputDelegate::ccTouchCancelled(ax::Touch* /*touch*/, ax::Event* /*event*/) {}
 
-void InputDelegate::ccTouchesBegan(axis::__Set* /*touches*/, axis::Event* /*event*/) {}
+void InputDelegate::ccTouchesBegan(ax::__Set* /*touches*/, ax::Event* /*event*/) {}
 
-void InputDelegate::ccTouchesMoved(axis::__Set* /*touches*/, axis::Event* /*event*/) {}
+void InputDelegate::ccTouchesMoved(ax::__Set* /*touches*/, ax::Event* /*event*/) {}
 
-void InputDelegate::ccTouchesEnded(axis::__Set* /*touches*/, axis::Event* /*event*/) {}
+void InputDelegate::ccTouchesEnded(ax::__Set* /*touches*/, ax::Event* /*event*/) {}
 
-void InputDelegate::ccTouchesCancelled(axis::__Set* /*touches*/, axis::Event* /*event*/) {}
+void InputDelegate::ccTouchesCancelled(ax::__Set* /*touches*/, ax::Event* /*event*/) {}
 
-void InputDelegate::onAcceleration(axis::Acceleration* /*acc*/, axis::Event* /*event*/) {}
+void InputDelegate::onAcceleration(ax::Acceleration* /*acc*/, ax::Event* /*event*/) {}
 
-void InputDelegate::onKeyPressed(axis::EventKeyboard::KeyCode /*keyCode*/, axis::Event* /*event*/) {}
+void InputDelegate::onKeyPressed(ax::EventKeyboard::KeyCode /*keyCode*/, ax::Event* /*event*/) {}
 
-void InputDelegate::onKeyReleased(axis::EventKeyboard::KeyCode /*keyCode*/, axis::Event* /*event*/) {}
+void InputDelegate::onKeyReleased(ax::EventKeyboard::KeyCode /*keyCode*/, ax::Event* /*event*/) {}
 
 bool InputDelegate::onTouchBegan(Touch* /*pTouch*/, Event* /*pEvent*/)
 {

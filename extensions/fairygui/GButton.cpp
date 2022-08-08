@@ -68,7 +68,7 @@ void GButton::setSelectedIcon(const std::string& value)
         _iconObject->setIcon((_selected && _selectedIcon.length() > 0) ? _selectedIcon : _icon);
 }
 
-axis::Color3B GButton::getTitleColor() const
+ax::Color3B GButton::getTitleColor() const
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -77,7 +77,7 @@ axis::Color3B GButton::getTitleColor() const
         return Color3B::BLACK;
 }
 
-void GButton::setTitleColor(const axis::Color3B& value)
+void GButton::setTitleColor(const ax::Color3B& value)
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -217,7 +217,7 @@ GTextField* GButton::getTextField() const
         return nullptr;
 }
 
-axis::Value GButton::getProp(ObjectPropID propId)
+ax::Value GButton::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -240,7 +240,7 @@ axis::Value GButton::getProp(ObjectPropID propId)
     }
 }
 
-void GButton::setProp(ObjectPropID propId, const axis::Value& value)
+void GButton::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {

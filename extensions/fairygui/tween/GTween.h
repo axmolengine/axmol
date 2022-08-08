@@ -14,20 +14,20 @@ class GTween
 {
 public:
     static GTweener* to(float startValue, float endValue, float duration);
-    static GTweener* to(const axis::Vec2& startValue, const axis::Vec2& endValue, float duration);
-    static GTweener* to(const axis::Vec3& startValue, const axis::Vec3& endValue, float duration);
-    static GTweener* to(const axis::Vec4& startValue, const axis::Vec4& endValue, float duration);
-    static GTweener* to(const axis::Color4B& startValue, const axis::Color4B& endValue, float duration);
+    static GTweener* to(const ax::Vec2& startValue, const ax::Vec2& endValue, float duration);
+    static GTweener* to(const ax::Vec3& startValue, const ax::Vec3& endValue, float duration);
+    static GTweener* to(const ax::Vec4& startValue, const ax::Vec4& endValue, float duration);
+    static GTweener* to(const ax::Color4B& startValue, const ax::Color4B& endValue, float duration);
     static GTweener* toDouble(double startValue, double endValue, float duration);
     static GTweener* delayedCall(float delay);
-    static GTweener* shake(const axis::Vec2& startValue, float amplitude, float duration);
-    static bool isTweening(axis::Ref* target);
-    static bool isTweening(axis::Ref* target, TweenPropType propType);
-    static void kill(axis::Ref* target);
-    static void kill(axis::Ref* target, bool complete);
-    static void kill(axis::Ref* target, TweenPropType propType, bool complete);
-    static GTweener* getTween(axis::Ref* target);
-    static GTweener* getTween(axis::Ref* target, TweenPropType propType);
+    static GTweener* shake(const ax::Vec2& startValue, float amplitude, float duration);
+    static bool isTweening(ax::Ref* target);
+    static bool isTweening(ax::Ref* target, TweenPropType propType);
+    static void kill(ax::Ref* target);
+    static void kill(ax::Ref* target, bool complete);
+    static void kill(ax::Ref* target, TweenPropType propType, bool complete);
+    static GTweener* getTween(ax::Ref* target);
+    static GTweener* getTween(ax::Ref* target, TweenPropType propType);
     static void clean();
 };
 

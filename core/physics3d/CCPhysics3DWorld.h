@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -62,11 +62,11 @@ class Renderer;
 struct AX_DLL Physics3DWorldDes
 {
     bool isDebugDrawEnabled;  // using physics debug draw?, false by default
-    axis::Vec3 gravity;    // gravity, (0, -9.8, 0)
+    ax::Vec3 gravity;    // gravity, (0, -9.8, 0)
     Physics3DWorldDes()
     {
         isDebugDrawEnabled = false;
-        gravity            = axis::Vec3(0.f, -9.8f, 0.f);
+        gravity            = ax::Vec3(0.f, -9.8f, 0.f);
     }
 };
 
@@ -81,8 +81,8 @@ class AX_DLL Physics3DWorld : public Ref
 public:
     struct HitResult
     {
-        axis::Vec3 hitPosition;
-        axis::Vec3 hitNormal;
+        ax::Vec3 hitPosition;
+        ax::Vec3 hitNormal;
         Physics3DObject* hitObj;
     };
 
@@ -127,7 +127,7 @@ public:
     bool isDebugDrawEnabled() const;
 
     /** Internal method, the updater of debug drawing, need called each frame. */
-    void debugDraw(axis::Renderer* renderer);
+    void debugDraw(ax::Renderer* renderer);
 
     /** Get the list of Physics3DObjects. */
     const std::vector<Physics3DObject*>& getPhysicsObjects() const { return _objects; }
@@ -138,12 +138,12 @@ public:
      * @param endPos The end position of ray.
      * @param result the result of ray cast.
      */
-    bool rayCast(const axis::Vec3& startPos, const axis::Vec3& endPos, HitResult* result);
+    bool rayCast(const ax::Vec3& startPos, const ax::Vec3& endPos, HitResult* result);
 
     /** Performs a swept shape cast on all objects in the Physics3DWorld. */
     bool sweepShape(Physics3DShape* shape,
-                    const axis::Mat4& startTransform,
-                    const axis::Mat4& endTransform,
+                    const ax::Mat4& startTransform,
+                    const ax::Mat4& endTransform,
                     HitResult* result);
 
     Physics3DWorld();

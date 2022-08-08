@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ THE SOFTWARE.
 #include <sstream>
 
 USING_NS_AX;
-using namespace axis::network;
+using namespace ax::network;
 
 static int get_field_int(lua_State* L, const char* field, int def)
 {
@@ -182,23 +182,23 @@ static int lua_downloader_createDownloadFileTask(lua_State* L)
         return 0;
     }
 
-    url         = axislua_tosv(L, 2);
-    storagePath = axislua_tosv(L, 3);
+    url         = axlua_tosv(L, 2);
+    storagePath = axlua_tosv(L, 3);
     if (argc > 2)
-        identifier = axislua_tosv(L, 4);
+        identifier = axlua_tosv(L, 4);
 
     std::string_view md5checksum = ""sv;
     std::string_view cacertPath  = ""sv;
     bool background = false;
 
     if (argc > 3)
-        md5checksum = axislua_tosv(L, 5);
+        md5checksum = axlua_tosv(L, 5);
 
     if (argc > 4)
         background = lua_toboolean(L, 6);
 
     if (argc > 5)
-        cacertPath = axislua_tosv(L, 7);
+        cacertPath = axlua_tosv(L, 7);
 
     auto tsk = d->createDownloadFileTask(url, storagePath, identifier, md5checksum, background, cacertPath);
 
@@ -329,7 +329,7 @@ static int lua_downloader_tostring(lua_State* L)
 
 static const struct luaL_Reg downloaderStaticFns[] = {{"new", lua_downloader_new},
                                                       /*
-                                                       * axis::Downloader is not a subclass of axis::Ref,
+                                                       * ax::Downloader is not a subclass of ax::Ref,
                                                        * `create()` is not provided.
                                                        */
                                                       //{ "create", lua_downloader_new },

@@ -21,8 +21,8 @@ public:
     FlipType getFlip() const;
     void setFlip(FlipType value);
 
-    axis::Color3B getColor() const;
-    void setColor(const axis::Color3B& value);
+    ax::Color3B getColor() const;
+    void setColor(const ax::Color3B& value);
 
     FillMethod getFillMethod() const;
     void setFillMethod(FillMethod value);
@@ -38,8 +38,8 @@ public:
 
     virtual void constructFromResource() override;
 
-    virtual axis::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
+    virtual ax::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const ax::Value& value) override;
 
 protected:
     virtual void handleInit() override;

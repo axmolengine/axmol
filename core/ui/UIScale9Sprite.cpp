@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@
 #include "renderer/backend/ProgramStateRegistry.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace ax::ui;
 
 Scale9Sprite* Scale9Sprite::create()
 {
@@ -427,7 +427,7 @@ void Scale9Sprite::copyTo(Scale9Sprite* copy) const
 
     copy->setRenderingType(_renderingType);
     copy->setScale9Enabled(isScale9Enabled());
-    // setStretchEnabled after setScale9Enabled, fix issue: https://github.com/axis-project/axis/issues/491
+    // setStretchEnabled after setScale9Enabled, fix issue: https://github.com/axys1/axys/issues/491
     copy->setStretchEnabled(isStretchEnabled());
     copy->_isPatch9    = _isPatch9;
     copy->_brightState = _brightState;
@@ -531,7 +531,7 @@ void Scale9Sprite::setupSlice9(Texture2D* texture, const Rect& capInsets)
     }
 }
 
-void Scale9Sprite::setCapInsets(const axis::Rect& insetsCopy)
+void Scale9Sprite::setCapInsets(const ax::Rect& insetsCopy)
 {
     Rect insets = insetsCopy;
 

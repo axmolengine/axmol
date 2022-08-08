@@ -115,14 +115,14 @@ void GTextInput::setTextFieldText()
         _input->setText(_text);
 }
 
-void GTextInput::editBoxReturn(axis::ui::EditBox * editBox)
+void GTextInput::editBoxReturn(ax::ui::EditBox * editBox)
 {
     //found that this will trigger even when focus is lost
     //if (isSingleLine())
     // dispatchEvent(UIEventType::Submit);
 }
 
-void GTextInput::editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view /*text*/)
+void GTextInput::editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view /*text*/)
 {
     _text.clear();
     _text.append(_input->getText());

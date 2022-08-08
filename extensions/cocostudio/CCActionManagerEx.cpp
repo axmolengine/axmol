@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -63,7 +63,7 @@ void ActionManagerEx::initWithDictionary(const char* jsonName, const rapidjson::
     this->_studioVersionNumber = version;
     ssize_t pos                = path.find_last_of("/");
     std::string fileName       = path.substr(pos + 1, path.length());
-    axis::Vector<ActionObject*> actionList;
+    ax::Vector<ActionObject*> actionList;
     int actionCount = DICTOOL->getArrayCount_json(dic, "actionlist");
     for (int i = 0; i < actionCount; i++)
     {
@@ -77,14 +77,14 @@ void ActionManagerEx::initWithDictionary(const char* jsonName, const rapidjson::
 }
 
 void ActionManagerEx::initWithBinary(const char* file,
-                                     axis::Ref* root,
+                                     ax::Ref* root,
                                      CocoLoader* cocoLoader,
                                      stExpCocoNode* pCocoNode)
 {
     std::string path     = file;
     ssize_t pos          = path.find_last_of("/");
     std::string fileName = path.substr(pos + 1, path.length());
-    axis::Vector<ActionObject*> actionList;
+    ax::Vector<ActionObject*> actionList;
 
     stExpCocoNode* stChildArray = pCocoNode->GetChildArray(cocoLoader);
     stExpCocoNode* actionNode   = nullptr;
@@ -169,7 +169,7 @@ void ActionManagerEx::releaseActions()
 {
     for (auto&& iter : _actionDic)
     {
-        axis::Vector<ActionObject*> objList = iter.second;
+        ax::Vector<ActionObject*> objList = iter.second;
         ssize_t listCount                      = objList.size();
         for (ssize_t i = 0; i < listCount; i++)
         {

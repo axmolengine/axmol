@@ -1,21 +1,21 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# axis "compile" plugin
+# axys "compile" plugin
 #
 # Copyright 2013 (C) Luis Parravicini
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-"compile" plugin for axis command line tool
+"compile" plugin for axys command line tool
 '''
 
 __docformat__ = 'restructuredtext'
 
 import multiprocessing
-import axis
+import axys
 from MultiLanguage import MultiLanguage
-import axis_project
+import axys_project
 import os
 import re
 import sys
@@ -24,7 +24,7 @@ import json
 from . import build_web
 import utils
 
-class CCPluginCompile(axis.CCPlugin):
+class CCPluginCompile(axys.CCPlugin):
     """
     compiles a project
     """
@@ -215,7 +215,7 @@ class CCPluginCompile(axis.CCPlugin):
         if check_value in right_values:
             return check_value
         else:
-            raise axis.CCPluginError(error_msg, axis.CCPluginError.ERROR_WRONG_ARGS)
+            raise axys.CCPluginError(error_msg, axys.CCPluginError.ERROR_WRONG_ARGS)
 
     def get_num_of_cpu(self):
         try:
@@ -291,7 +291,7 @@ class CCPluginCompile(axis.CCPlugin):
             open_file = None
             changed = False
             if key_of_copy is not None:
-                if axis.dict_contains(cfg_info, key_of_copy):
+                if axys.dict_contains(cfg_info, key_of_copy):
                     src_list = cfg_info[key_of_copy]
                     ret_list = self._convert_cfg_list(src_list, build_cfg_dir)
                     cfg_info[CCPluginCompile.CFG_KEY_COPY_RESOURCES] = ret_list
@@ -299,7 +299,7 @@ class CCPluginCompile(axis.CCPlugin):
                     changed = True
 
             if key_of_must_copy is not None:
-                if axis.dict_contains(cfg_info, key_of_must_copy):
+                if axys.dict_contains(cfg_info, key_of_must_copy):
                     src_list = cfg_info[key_of_must_copy]
                     ret_list = self._convert_cfg_list(src_list, build_cfg_dir)
                     cfg_info[CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES] = ret_list
@@ -432,8 +432,8 @@ class CCPluginCompile(axis.CCPlugin):
         return ret
 
     def get_engine_version_num(self):
-        # 1. get engine version from .axisproj.json
-        engine_ver_str = self._project.get_proj_config(axis_project.Project.KEY_ENGINE_VERSION)
+        # 1. get engine version from .axproj.json
+        engine_ver_str = self._project.get_proj_config(axys_project.Project.KEY_ENGINE_VERSION)
 
         # 2. engine version is not found. find from source file
         if engine_ver_str is None:
@@ -444,7 +444,7 @@ class CCPluginCompile(axis.CCPlugin):
         if engine_ver_str is None:
             return None
 
-        version_pattern = r'axis-([\d]+)\.([\d]+)'
+        version_pattern = r'axys-([\d]+)\.([\d]+)'
         match = re.match(version_pattern, engine_ver_str)
         if match:
             return ((int)(match.group(1)), (int)(match.group(2)))
@@ -465,20 +465,20 @@ class CCPluginCompile(axis.CCPlugin):
 
 
         ide_name = 'Android Studio'
-        axis.Logging.info(MultiLanguage.get_string('COMPILE_INFO_ANDROID_PROJPATH_FMT', (ide_name, project_android_dir)))
+        axys.Logging.info(MultiLanguage.get_string('COMPILE_INFO_ANDROID_PROJPATH_FMT', (ide_name, project_android_dir)))
 
         # Check whether the gradle of the project is support ndk or not
         # Get the engine version of the project
         engine_version_num = self.get_engine_version_num()
         if engine_version_num is None:
-            raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_UNKNOWN_ENGINE_VERSION'))
+            raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_UNKNOWN_ENGINE_VERSION'))
 
         # Gradle supports NDK build from engine 3.15
         main_ver = engine_version_num[0]
         minor_ver = engine_version_num[1]
-        print("axis version: " + str(main_ver) + ";minor_ver=" + str(minor_ver))
+        print("axys version: " + str(main_ver) + ";minor_ver=" + str(minor_ver))
 
-        # axis always support ndk
+        # axys always support ndk
         gradle_support_ndk = True
             
 
@@ -499,7 +499,7 @@ class CCPluginCompile(axis.CCPlugin):
         if not self._project._is_script_project() or self._project._is_native_support():
             if self._build_type != "none" and not gradle_support_ndk:
                 # build native code
-                axis.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_NATIVE'))
+                axys.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_NATIVE'))
                 ndk_build_param = [
                     "-j%s" % self._jobs
                 ]
@@ -512,7 +512,7 @@ class CCPluginCompile(axis.CCPlugin):
                     toolchain_param = "NDK_TOOLCHAIN=%s" % self.ndk_toolchain
                     ndk_build_param.append(toolchain_param)
 
-                self._project.invoke_custom_step_script(axis_project.Project.CUSTOM_STEP_PRE_NDK_BUILD, target_platform, args_ndk_copy)
+                self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_PRE_NDK_BUILD, target_platform, args_ndk_copy)
 
                 modify_mk = False
                 app_mk = os.path.join(project_android_dir, "app/jni/Application.mk")
@@ -536,8 +536,8 @@ class CCPluginCompile(axis.CCPlugin):
                     if e.__class__.__name__ == 'CCPluginError':
                         raise e
                     else:
-                        raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NDK_BUILD_FAILED'),
-                                                  axis.CCPluginError.ERROR_BUILD_FAILED)
+                        raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NDK_BUILD_FAILED'),
+                                                  axys.CCPluginError.ERROR_BUILD_FAILED)
                 finally:
                     # roll-back the Application.mk
                     if modify_mk:
@@ -545,15 +545,15 @@ class CCPluginCompile(axis.CCPlugin):
                         f.write(mk_content)
                         f.close()
 
-                self._project.invoke_custom_step_script(axis_project.Project.CUSTOM_STEP_POST_NDK_BUILD, target_platform, args_ndk_copy)
+                self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_POST_NDK_BUILD, target_platform, args_ndk_copy)
 
         # build apk
         if not self._no_apk:
-            axis.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_APK'))
+            axys.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_APK'))
         self.apk_path = builder.do_build_apk(build_mode, self._no_apk, self._no_sign, output_dir, self._custom_step_args, self._ap, self)
         self.android_package, self.android_activity = builder.get_apk_info()
 
-        axis.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_SUCCEED'))
+        axys.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_SUCCEED'))
 
     def _remove_res(self, target_path):
         build_cfg_dir = self._build_cfg_path()
@@ -563,7 +563,7 @@ class CCPluginCompile(axis.CCPlugin):
             open_file = open(cfg_file)
             cfg_info = json.load(open_file)
             open_file.close()
-            if axis.dict_contains(cfg_info, "remove_res"):
+            if axys.dict_contains(cfg_info, "remove_res"):
                 remove_list = cfg_info["remove_res"]
                 for f in remove_list:
                     res = os.path.join(target_path, f)
@@ -662,8 +662,8 @@ class CCPluginCompile(axis.CCPlugin):
                 # Have specified VS version
                 if specify_vs_ver < min_ver:
                     # Specified version is lower than required, raise error
-                    raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_LOW_VS_VER'),
-                                              axis.CCPluginError.ERROR_WRONG_ARGS)
+                    raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_LOW_VS_VER'),
+                                              axys.CCPluginError.ERROR_WRONG_ARGS)
                 else:
                     # Get the specified VS
                     commandPath = utils.get_devenv_path(specify_vs_ver)
@@ -685,12 +685,12 @@ class CCPluginCompile(axis.CCPlugin):
                 if specify_vs_ver in required_versions:
                     commandPath = utils.get_devenv_path(specify_vs_ver)
                 else:
-                    raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_WRONG_VS_VER_FMT', specify_vs_ver),
-                                              axis.CCPluginError.ERROR_WRONG_ARGS)
+                    raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_WRONG_VS_VER_FMT', specify_vs_ver),
+                                              axys.CCPluginError.ERROR_WRONG_ARGS)
 
         if commandPath is None:
             message = MultiLanguage.get_string('COMPILE_ERROR_VS_NOT_FOUND')
-            raise axis.CCPluginError(message, axis.CCPluginError.ERROR_TOOLS_NOT_FOUND)
+            raise axys.CCPluginError(message, axys.CCPluginError.ERROR_TOOLS_NOT_FOUND)
 
         return (needUpgrade, commandPath)
 
@@ -748,7 +748,7 @@ class CCPluginCompile(axis.CCPlugin):
 
 
         # call closure compiler
-        ant_root = axis.check_environment_variable('ANT_ROOT')
+        ant_root = axys.check_environment_variable('ANT_ROOT')
         ant_path = os.path.join(ant_root, 'ant')
         self._run_cmd("%s -f %s" % (ant_path, os.path.join(publish_dir, 'build.xml')))
 
@@ -762,7 +762,7 @@ class CCPluginCompile(axis.CCPlugin):
                 smFile.close()
 
             dir_to_replace = project_dir
-            if axis.os_is_win32():
+            if axys.os_is_win32():
                 dir_to_replace = project_dir.replace('\\', '\\\\')
             smContent = smContent.replace(dir_to_replace, os.path.relpath(project_dir, publish_dir))
             smContent = smContent.replace(realEngineDir, os.path.relpath(realEngineDir, publish_dir))
@@ -803,7 +803,7 @@ class CCPluginCompile(axis.CCPlugin):
             shutil.copytree(src_dir, dst_dir)
         else:
             for cfg in cfg_obj.copy_res:
-                axis.copy_files_with_config(cfg, project_dir, publish_dir)
+                axys.copy_files_with_config(cfg, project_dir, publish_dir)
 
         # copy to the output directory if necessary
         pub_dir = os.path.normcase(publish_dir)
@@ -813,27 +813,27 @@ class CCPluginCompile(axis.CCPlugin):
                 "from" : pub_dir,
                 "to" : out_dir
             }
-            axis.copy_files_with_config(cpy_cfg, pub_dir, out_dir)
+            axys.copy_files_with_config(cpy_cfg, pub_dir, out_dir)
 
     def check_platform(self, platform):
         if platform == 'mac':
-            if not self._platforms.is_mac_active() or not axis.os_is_mac:
-                raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_MAC'),
-                                          axis.CCPluginError.ERROR_WRONG_ARGS)
+            if not self._platforms.is_mac_active() or not axys.os_is_mac:
+                raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_MAC'),
+                                          axys.CCPluginError.ERROR_WRONG_ARGS)
 
         if platform == 'ios':
-            if not self._platforms.is_ios_active() or not axis.os_is_mac:
-                raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_MAC'),
-                                          axis.CCPluginError.ERROR_WRONG_ARGS)
+            if not self._platforms.is_ios_active() or not axys.os_is_mac:
+                raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_MAC'),
+                                          axys.CCPluginError.ERROR_WRONG_ARGS)
 
         if platform == 'win32':
-            if not self._platforms.is_win32_active or not axis.os_is_win32:
-                raise axis.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_WIN'),
-                                          axis.CCPluginError.ERROR_WRONG_ARGS)
+            if not self._platforms.is_win32_active or not axys.os_is_win32:
+                raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_WIN'),
+                                          axys.CCPluginError.ERROR_WRONG_ARGS)
         
         if platform == 'linux':
             if not self._platforms.is_linux_active():
-                raise axis.CCPluginError("Please build on linux")
+                raise axys.CCPluginError("Please build on linux")
 
     def compile_script(self, script_path, platform):
         """
@@ -887,7 +887,7 @@ class CCPluginCompile(axis.CCPlugin):
                     self.project_name = re.search('APP_NAME ([^\)]+)\)', line, re.IGNORECASE).group(1)
                     break
             if hasattr(self, 'project_name') == False:
-	            raise axis.CCPluginError("Couldn't find APP_NAME in CMakeLists.txt")
+	            raise axys.CCPluginError("Couldn't find APP_NAME in CMakeLists.txt")
 
         if cfg_obj.build_dir is not None:
             build_dir = os.path.join(project_dir, cfg_obj.build_dir)
@@ -899,7 +899,7 @@ class CCPluginCompile(axis.CCPlugin):
 
         # compile codes
         build_mode = 'Debug' if self._is_debug_mode() else 'Release'
-        with axis.pushd(build_dir):
+        with axys.pushd(build_dir):
             # iOS need to generate Xcode project file first
             if platform == 'ios':
                 engine_dir = self.get_engine_dir()
@@ -921,10 +921,10 @@ class CCPluginCompile(axis.CCPlugin):
                             self._run_cmd('cmake %s -G "%s"' % 
                                 (os.path.relpath(cmakefile_dir, build_dir), generator))
                     else:
-                        axis.Logging.warning(MultiLanguage.get_string("COMPILE_VS_VERSION_NOT_REGISTER") % (ret[2]))
+                        axys.Logging.warning(MultiLanguage.get_string("COMPILE_VS_VERSION_NOT_REGISTER") % (ret[2]))
                         self._run_cmd('cmake %s' % os.path.relpath(cmakefile_dir, build_dir) )
                 else:
-                    axis.Logging.warning(MultiLanguage.get_string("COMPILE_VS_VERSION"))
+                    axys.Logging.warning(MultiLanguage.get_string("COMPILE_VS_VERSION"))
                     self._run_cmd('cmake %s' % os.path.relpath(cmakefile_dir, build_dir) )
             else:
                 self._run_cmd('cmake %s' % os.path.relpath(cmakefile_dir, build_dir) )
@@ -946,7 +946,7 @@ class CCPluginCompile(axis.CCPlugin):
         if os.path.exists(os.path.join(result_dir, build_mode)):
             result_dir = os.path.join(result_dir, build_mode)
 
-        axis.copy_files_in_dir(result_dir, output_dir)
+        axys.copy_files_in_dir(result_dir, output_dir)
 
         self.run_root = output_dir
 
@@ -964,21 +964,21 @@ class CCPluginCompile(axis.CCPlugin):
         if platform == 'mac':
             script_resource_path = os.path.join(self.app_path, 'Contents/Resources/src')
 
-        axis.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_SUCCEED'))
+        axys.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_SUCCEED'))
 
     def _get_build_cfg(self):
         build_cfg_dir = self._build_cfg_path()
         build_cfg = os.path.join(build_cfg_dir, CCPluginCompile.BUILD_CONFIG_FILE)
         if not os.path.exists(build_cfg):
             message = MultiLanguage.get_string('COMPILE_ERROR_FILE_NOT_FOUND_FMT', build_cfg)
-            raise axis.CCPluginError(message, axis.CCPluginError.ERROR_PATH_NOT_FOUND)
+            raise axys.CCPluginError(message, axys.CCPluginError.ERROR_PATH_NOT_FOUND)
         f = open(build_cfg)
         return json.load(f)
 
     def _copy_resources(self, dst_path):
         data = self._get_build_cfg()
 
-        if axis.dict_contains(data, CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES):
+        if axys.dict_contains(data, CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES):
             if self._no_res:
                 fileList = data[CCPluginCompile.CFG_KEY_MUST_COPY_RESOURCES]
             else:
@@ -987,7 +987,7 @@ class CCPluginCompile(axis.CCPlugin):
             fileList = data[CCPluginCompile.CFG_KEY_COPY_RESOURCES]
 
         for cfg in fileList:
-            axis.copy_files_with_config(cfg, self._build_cfg_path(), dst_path)
+            axys.copy_files_with_config(cfg, self._build_cfg_path(), dst_path)
 
     def checkFileByExtention(self, ext, path):
         filelist = os.listdir(path)
@@ -999,7 +999,7 @@ class CCPluginCompile(axis.CCPlugin):
 
     def run(self, argv, dependencies):
         self.parse_args(argv)
-        axis.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_MODE_FMT', self._mode))
+        axys.Logging.info(MultiLanguage.get_string('COMPILE_INFO_BUILD_MODE_FMT', self._mode))
         self._update_build_cfg()
 
         target_platform = self._platforms.get_current_platform()
@@ -1008,16 +1008,16 @@ class CCPluginCompile(axis.CCPlugin):
         language = self._project.get_language()
         action_str = 'compile_%s' % language
         target_str = 'compile_for_%s' % target_platform
-        axis.DataStatistic.stat_event('compile', action_str, target_str)
+        axys.DataStatistic.stat_event('compile', action_str, target_str)
 
         # invoke the custom step: pre-build
-        self._project.invoke_custom_step_script(axis_project.Project.CUSTOM_STEP_PRE_BUILD, target_platform, args_build_copy)
+        self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_PRE_BUILD, target_platform, args_build_copy)
 
         self.build_web()
         self.build(target_platform)
 
         # invoke the custom step: post-build
-        self._project.invoke_custom_step_script(axis_project.Project.CUSTOM_STEP_POST_BUILD, target_platform, args_build_copy)
+        self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_POST_BUILD, target_platform, args_build_copy)
 
         if len(self.end_warning) > 0:
-            axis.Logging.warning(self.end_warning)
+            axys.Logging.warning(self.end_warning)

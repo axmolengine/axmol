@@ -165,7 +165,7 @@ void FUIRichText::applyTextFormat()
     _formatTextDirty = true;
 }
 
-void FUIRichText::setOverflow(axis::Label::Overflow overflow)
+void FUIRichText::setOverflow(ax::Label::Overflow overflow)
 {
     if (_overflow != overflow)
     {
@@ -196,12 +196,12 @@ void FUIRichText::setAnchorTextUnderline(bool enable)
     }
 }
 
-const axis::Color3B& FUIRichText::getAnchorFontColor()
+const ax::Color3B& FUIRichText::getAnchorFontColor()
 {
     return _parseOptions.linkColor;
 }
 
-void FUIRichText::setAnchorFontColor(const axis::Color3B & color)
+void FUIRichText::setAnchorFontColor(const ax::Color3B & color)
 {
     _parseOptions.linkColor = color;
     _formatTextDirty = true;
@@ -221,7 +221,7 @@ HtmlObject* FUIRichText::getControl(const std::string& name) const
     return nullptr;
 }
 
-const char* FUIRichText::hitTestLink(const axis::Vec2 & worldPoint)
+const char* FUIRichText::hitTestLink(const ax::Vec2 & worldPoint)
 {
     Rect rect;
     for (auto &child : _children)
@@ -237,7 +237,7 @@ const char* FUIRichText::hitTestLink(const axis::Vec2 & worldPoint)
     return nullptr;
 }
 
-void FUIRichText::visit(axis::Renderer * renderer, const axis::Mat4 & parentTransform, uint32_t parentFlags)
+void FUIRichText::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransform, uint32_t parentFlags)
 {
     if (_visible)
         formatText();
@@ -369,7 +369,7 @@ void FUIRichText::handleTextRenderer(HtmlElement* element, const std::string& te
     }
 }
 
-int FUIRichText::findSplitPositionForWord(axis::Label* label, const std::string& text)
+int FUIRichText::findSplitPositionForWord(ax::Label* label, const std::string& text)
 {
     auto originalLeftSpaceWidth = _leftSpaceWidth + label->getContentSize().width;
 
@@ -517,7 +517,7 @@ void FUIRichText::formarRenderers()
     _renderers.clear();
 }
 
-void FUIRichText::doHorizontalAlignment(const std::vector<axis::Node*>& row, float rowWidth) {
+void FUIRichText::doHorizontalAlignment(const std::vector<ax::Node*>& row, float rowWidth) {
     if (_textFormat.align != TextHAlignment::LEFT) {
         const auto diff = stripTrailingWhitespace(row);
         const auto leftOver = _dimensions.width - (rowWidth + diff);

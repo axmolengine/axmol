@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 
 #include "extensions/GUI/CCControlExtension/CCControl.h"
-#include "scripting/lua-bindings/manual/base/lua_axis_base_manual.hpp"
-#include "scripting/lua-bindings/manual/extension/lua_axis_extension_manual.h"
-#include "scripting/lua-bindings/manual/cocostudio/lua_axis_cocostudio_manual.hpp"
-#include "scripting/lua-bindings/manual/ui/lua_axis_ui_manual.hpp"
+#include "scripting/lua-bindings/manual/base/axlua_base_manual.hpp"
+#include "scripting/lua-bindings/manual/extension/axlua_extension_manual.h"
+#include "scripting/lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
+#include "scripting/lua-bindings/manual/ui/axlua_ui_manual.hpp"
 #include "2d/CCMenuItem.h"
 #include "base/CCDirector.h"
 #include "base/CCEventCustom.h"
@@ -454,7 +454,7 @@ int LuaEngine::handleTouchEvent(void* data)
     Touch* touch = touchScriptData->touch;
     if (NULL != touch)
     {
-        const axis::Vec2 pt = Director::getInstance()->convertToGL(touch->getLocationInView());
+        const ax::Vec2 pt = Director::getInstance()->convertToGL(touch->getLocationInView());
         _stack->pushFloat(pt.x);
         _stack->pushFloat(pt.y);
         ret = _stack->executeFunctionByHandler(handler, 3);
@@ -508,7 +508,7 @@ int LuaEngine::handleTouchesEvent(void* data)
     int i = 1;
     for (auto& touch : touchesScriptData->touches)
     {
-        axis::Vec2 pt = pDirector->convertToGL(touch->getLocationInView());
+        ax::Vec2 pt = pDirector->convertToGL(touch->getLocationInView());
         lua_pushnumber(L, pt.x);
         lua_rawseti(L, -2, i++);
         lua_pushnumber(L, pt.y);

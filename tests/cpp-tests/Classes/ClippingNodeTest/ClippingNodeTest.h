@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ namespace backend
 {
 class ProgramState;
 }
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 DEFINE_TEST_SUITE(ClippingNodeTests);
 
@@ -168,7 +168,7 @@ private:
     axis::Vec2 _lastPoint;
 };
 
-//#if AXIS_DEBUG > 1
+//#if _AX_DEBUG > 1
 
 class RawStencilBufferTest : public BaseClippingNodeTest
 {
@@ -261,7 +261,7 @@ public:
     virtual std::string subtitle() const override;
 };
 
-//#endif //AXIS_DEBUG > 1
+//#endif //_AX_DEBUG > 1
 
 class ClippingToRenderTextureTest : public BaseClippingNodeTest
 {

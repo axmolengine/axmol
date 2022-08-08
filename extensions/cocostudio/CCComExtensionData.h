@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ class ActionTimelineData;
 
 namespace cocostudio
 {
-class CCS_DLL ComExtensionData : public axis::Component
+class CCS_DLL ComExtensionData : public ax::Component
 {
     DECLARE_CLASS_COMPONENT_INFO
 public:

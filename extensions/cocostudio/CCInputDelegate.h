@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -60,104 +60,104 @@ public:
     virtual void setAccelerometerEnabled(bool value);
     virtual bool isKeypadEnabled() const;
     virtual void setKeypadEnabled(bool value);
-    virtual void setTouchMode(axis::Touch::DispatchMode mode);
-    virtual axis::Touch::DispatchMode getTouchMode() const;
+    virtual void setTouchMode(ax::Touch::DispatchMode mode);
+    virtual ax::Touch::DispatchMode getTouchMode() const;
     virtual void setTouchPriority(int priority);
     virtual int getTouchPriority() const;
     /** @deprecated Please override onAcceleration */
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual void didAccelerate(axis::Acceleration* accelerationValue) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void didAccelerate(ax::Acceleration* accelerationValue) final;
     // Deprecated touch callbacks.
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual bool ccTouchBegan(axis::Touch* touch, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual bool ccTouchBegan(ax::Touch* touch, ax::Event* event) final;
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchMoved(axis::Touch* touch, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchMoved(ax::Touch* touch, ax::Event* event) final;
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchEnded(axis::Touch* touch, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchEnded(ax::Touch* touch, ax::Event* event) final;
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchCancelled(axis::Touch* touch, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchCancelled(ax::Touch* touch, ax::Event* event) final;
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesBegan(axis::__Set* touches, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesBegan(ax::__Set* touches, ax::Event* event) final;
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesMoved(axis::__Set* touches, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesMoved(ax::__Set* touches, ax::Event* event) final;
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesEnded(axis::__Set* touches, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesEnded(ax::__Set* touches, ax::Event* event) final;
     /**
      * @js NA
      */
-    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesCancelled(axis::__Set* touches, axis::Event* event) final;
+    AX_DEPRECATED_ATTRIBUTE virtual void ccTouchesCancelled(ax::__Set* touches, ax::Event* event) final;
     /**
      * @js NA
      */
-    virtual void onAcceleration(axis::Acceleration* acc, axis::Event* event);
+    virtual void onAcceleration(ax::Acceleration* acc, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onKeyPressed(axis::EventKeyboard::KeyCode keyCode, axis::Event* event);
+    virtual void onKeyPressed(ax::EventKeyboard::KeyCode keyCode, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onKeyReleased(axis::EventKeyboard::KeyCode keyCode, axis::Event* event);
+    virtual void onKeyReleased(ax::EventKeyboard::KeyCode keyCode, ax::Event* event);
     /**
      * @js NA
      */
-    virtual bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    virtual bool onTouchBegan(ax::Touch* touch, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchMoved(axis::Touch* touch, axis::Event* event);
+    virtual void onTouchMoved(ax::Touch* touch, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchEnded(axis::Touch* touch, axis::Event* event);
+    virtual void onTouchEnded(ax::Touch* touch, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchCancelled(axis::Touch* touch, axis::Event* event);
+    virtual void onTouchCancelled(ax::Touch* touch, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     /**
      * @js NA
      */
-    virtual void onTouchesCancelled(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesCancelled(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
     bool _touchEnabled;
-    axis::EventListener* _touchListener;
+    ax::EventListener* _touchListener;
     bool _accelerometerEnabled;
-    axis::EventListener* _accelerometerListener;
+    ax::EventListener* _accelerometerListener;
     bool _keypadEnabled;
-    axis::EventListener* _keyboardListener;
+    ax::EventListener* _keyboardListener;
 
 private:
     int _touchPriority;
-    axis::Touch::DispatchMode _touchMode;
+    ax::Touch::DispatchMode _touchMode;
 };
 
 }  // namespace cocostudio

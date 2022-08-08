@@ -2,7 +2,7 @@
  Copyright (c) 2018-2020 HALX99.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -258,4 +258,4 @@ bool AudioDecoderWav::seek(uint32_t frameOffset)
     auto offset = framesToBytes(frameOffset);
     return wav_seek(&_wavf, offset) == offset;
 }
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

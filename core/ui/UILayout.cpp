@@ -3,7 +3,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1105,7 +1105,7 @@ float Layout::calculateNearestDistance(Widget* baseWidget)
     return distance;
 }
 
-float Layout::calculateFarthestDistance(axis::ui::Widget* baseWidget)
+float Layout::calculateFarthestDistance(ax::ui::Widget* baseWidget)
 {
     float distance = -FLT_MAX;
 
@@ -1205,7 +1205,7 @@ int Layout::findNearestChildWidgetIndex(FocusDirection direction, Widget* baseWi
     return 0;
 }
 
-int Layout::findFarthestChildWidgetIndex(FocusDirection direction, axis::ui::Widget* baseWidget)
+int Layout::findFarthestChildWidgetIndex(FocusDirection direction, ax::ui::Widget* baseWidget)
 {
     if (baseWidget == nullptr || baseWidget == this)
     {
@@ -1358,7 +1358,7 @@ void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
     }
 }
 
-Widget* Layout::passFocusToChild(FocusDirection dir, axis::ui::Widget* current)
+Widget* Layout::passFocusToChild(FocusDirection dir, ax::ui::Widget* current)
 {
     if (checkFocusEnabledChild())
     {

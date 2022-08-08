@@ -6,7 +6,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -678,7 +678,7 @@ bool Texture2D::isContain9PatchInfo() const
     return nullptr != _ninePatchInfo;
 }
 
-const Rect& Texture2D::getSpriteFrameCapInset(axis::SpriteFrame* spriteFrame) const
+const Rect& Texture2D::getSpriteFrameCapInset(ax::SpriteFrame* spriteFrame) const
 {
     AXASSERT(_ninePatchInfo != nullptr,
              "Can't get the sprite frame capInset when the texture contains no 9-patch info.");
@@ -733,7 +733,7 @@ void Texture2D::initProgram()
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     // create program state
     auto* program      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE);
-    _programState      = new axis::backend::ProgramState(program);
+    _programState      = new ax::backend::ProgramState(program);
     _mvpMatrixLocation = _programState->getUniformLocation("u_MVPMatrix");
     _textureLocation   = _programState->getUniformLocation("u_tex0");
 

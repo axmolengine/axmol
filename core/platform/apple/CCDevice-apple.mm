@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ NSMutableParagraphStyle* _calculateParagraphStyle(bool enableWrap, int overflow)
     return paragraphStyle;
 }
 
-NSTextAlignment _calculateTextAlignment(axis::Device::TextAlign align)
+NSTextAlignment _calculateTextAlignment(ax::Device::TextAlign align)
 {
     unsigned uHoriFlag      = (int)align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag)   ? NSTextAlignmentRight
@@ -61,7 +61,7 @@ NSTextAlignment _calculateTextAlignment(axis::Device::TextAlign align)
     return nsAlign;
 }
 
-CGFloat _calculateTextDrawStartWidth(axis::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
+CGFloat _calculateTextDrawStartWidth(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
 {
     CGFloat xPadding   = 0;
     unsigned uHoriFlag = (int)align & 0x0f;

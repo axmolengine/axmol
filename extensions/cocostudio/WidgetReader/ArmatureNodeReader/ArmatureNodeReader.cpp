@@ -129,7 +129,7 @@ Offset<Table> ArmatureNodeReader::createOptionsWithFlatBuffers(pugi::xml_node ob
     return *(Offset<Table>*)(&options);
 }
 
-void ArmatureNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
+void ArmatureNodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOptions)
 {
     Node** ppResult = (Node**)(node);
     auto options    = (flatbuffers::CSArmatureNodeOption*)nodeOptions;
@@ -215,7 +215,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuf
     }
 }
 
-axis::Node* ArmatureNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+ax::Node* ArmatureNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
     Node* node = nullptr;  // auto node = Armature::create();
 

@@ -4,7 +4,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ class HttpClient;
  * @since v2.0.2.
  * @lua NA
  */
-class AX_DLL HttpResponse : public axis::Ref
+class AX_DLL HttpResponse : public ax::Ref
 {
     friend class HttpClient;
 
@@ -85,9 +85,9 @@ public:
     /**
      * Override autorelease method to prevent developers from calling it.
      * If this method is called , it would trigger AXASSERT.
-     * @return axis::Ref* always return nullptr.
+     * @return ax::Ref* always return nullptr.
      */
-    axis::Ref* autorelease()
+    ax::Ref* autorelease()
     {
         AXASSERT(false,
                  "HttpResponse is used between network thread and ui thread \

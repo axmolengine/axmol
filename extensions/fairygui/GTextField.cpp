@@ -35,7 +35,7 @@ void GTextField::setUBBEnabled(bool value)
     }
 }
 
-void GTextField::setColor(const axis::Color3B& value)
+void GTextField::setColor(const ax::Color3B& value)
 {
     TextFormat* tf = getTextFormat();
     if (tf->color != value)
@@ -55,7 +55,7 @@ void GTextField::setFontSize(float value)
     }
 }
 
-void GTextField::setOutlineColor(const axis::Color3B& value)
+void GTextField::setOutlineColor(const ax::Color3B& value)
 {
     TextFormat* tf = getTextFormat();
     if (tf->outlineColor != value)
@@ -65,7 +65,7 @@ void GTextField::setOutlineColor(const axis::Color3B& value)
     }
 }
 
-void GTextField::setTemplateVars(axis::ValueMap* value)
+void GTextField::setTemplateVars(ax::ValueMap* value)
 {
     if (_templateVars == nullptr && value == nullptr)
         return;
@@ -75,17 +75,17 @@ void GTextField::setTemplateVars(axis::ValueMap* value)
     else
     {
         if (_templateVars == nullptr)
-            _templateVars = new axis::ValueMap();
+            _templateVars = new ax::ValueMap();
         *_templateVars = *value;
     }
 
     flushVars();
 }
 
-GTextField* GTextField::setVar(const std::string& name, const axis::Value& value)
+GTextField* GTextField::setVar(const std::string& name, const ax::Value& value)
 {
     if (_templateVars == nullptr)
-        _templateVars = new axis::ValueMap();
+        _templateVars = new ax::ValueMap();
 
     (*_templateVars)[name] = value;
 
@@ -102,7 +102,7 @@ void GTextField::updateSize()
 {
 }
 
-axis::Value GTextField::getProp(ObjectPropID propId)
+ax::Value GTextField::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -117,7 +117,7 @@ axis::Value GTextField::getProp(ObjectPropID propId)
     }
 }
 
-void GTextField::setProp(ObjectPropID propId, const axis::Value& value)
+void GTextField::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {
@@ -175,7 +175,7 @@ void GTextField::setup_beforeAdd(ByteBuffer* buffer, int beginPos)
     }
 
     if (buffer->readBool())
-        _templateVars = new axis::ValueMap();
+        _templateVars = new ax::ValueMap();
 }
 
 void GTextField::setup_afterAdd(ByteBuffer* buffer, int beginPos)

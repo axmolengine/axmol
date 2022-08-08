@@ -2,7 +2,7 @@
  Copyright (c) 2014 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -205,7 +205,7 @@ Offset<Table> MeshReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     return *(Offset<Table>*)(&options);
 }
 
-void MeshReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* sprite3DOptions)
+void MeshReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* sprite3DOptions)
 {
     MeshRenderer* mesh = static_cast<MeshRenderer*>(node);
 

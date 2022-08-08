@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ namespace cocostudio
 class CocoLoader;
 struct stExpCocoNode;
 
-class CCS_DLL ActionManagerEx : public axis::Ref
+class CCS_DLL ActionManagerEx : public ax::Ref
 {
 public:
     /**
@@ -96,7 +96,7 @@ public:
      *
      * @param func ui action call back
      */
-    ActionObject* playActionByName(const char* jsonName, const char* actionName, axis::CallFunc* func);
+    ActionObject* playActionByName(const char* jsonName, const char* actionName, ax::CallFunc* func);
 
     /**
      * Stop an Action with a name.
@@ -122,7 +122,7 @@ public:
     int getStudioVersionNumber() const;
 
 protected:
-    std::unordered_map<std::string, axis::Vector<ActionObject*>> _actionDic;
+    std::unordered_map<std::string, ax::Vector<ActionObject*>> _actionDic;
     int _studioVersionNumber;
 };
 

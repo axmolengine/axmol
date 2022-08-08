@@ -3,7 +3,7 @@
  Copyright (c) 2020 C4games Ltd.
  Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ NS_AX_BACKEND_BEGIN
 
 TextureBackend::~TextureBackend() {}
 
-void TextureBackend::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int /*index*/)
+void TextureBackend::updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int /*index*/)
 {
     _bitsPerPixel  = PixelFormatUtils::getBitsPerPixel(descriptor.textureFormat);
     _textureType   = descriptor.textureType;

@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +97,7 @@ inline double random(double min, double max)
  */
 inline int random()
 {
-    return axis::random(0, RAND_MAX);
+    return ax::random(0, RAND_MAX);
 };
 
 /**
@@ -112,7 +112,7 @@ inline float rand_minus1_1()
     // be seeded using std::srand()
     return ((std::rand() / (float)RAND_MAX) * 2) - 1;
 
-    //    return axis::random(-1.f, 1.f);
+    //    return ax::random(-1.f, 1.f);
 };
 
 /**
@@ -127,7 +127,7 @@ inline float rand_0_1()
     // be seeded using std::srand()
     return std::rand() / (float)RAND_MAX;
 
-    //    return axis::random(0.f, 1.f);
+    //    return ax::random(0.f, 1.f);
 };
 
 NS_AX_END

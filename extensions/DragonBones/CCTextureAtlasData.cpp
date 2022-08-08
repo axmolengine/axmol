@@ -17,7 +17,7 @@ TextureData* CCTextureAtlasData::createTexture() const
     return BaseObject::borrowObject<CCTextureData>();
 }
 
-void CCTextureAtlasData::setRenderTexture(axis::Texture2D* value)
+void CCTextureAtlasData::setRenderTexture(ax::Texture2D* value)
 {
     if (_renderTexture == value)
     {
@@ -36,12 +36,12 @@ void CCTextureAtlasData::setRenderTexture(axis::Texture2D* value)
 
             if (textureData->spriteFrame == nullptr)
             {
-                axis::Rect rect(textureData->region.x, textureData->region.y,
+                ax::Rect rect(textureData->region.x, textureData->region.y,
                                    textureData->rotated ? textureData->region.height : textureData->region.width,
                                    textureData->rotated ? textureData->region.width : textureData->region.height);
-                axis::Vec2 offset(0.0f, 0.0f);
-                axis::Size originSize(rect.size.width, rect.size.height);
-                textureData->spriteFrame = axis::SpriteFrame::createWithTexture(
+                ax::Vec2 offset(0.0f, 0.0f);
+                ax::Size originSize(rect.size.width, rect.size.height);
+                textureData->spriteFrame = ax::SpriteFrame::createWithTexture(
                     _renderTexture, rect, textureData->rotated, offset, originSize);  // TODO multiply textureAtlas
                 textureData->spriteFrame->retain();
             }

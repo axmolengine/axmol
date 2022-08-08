@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -70,7 +70,7 @@ public:
      * create box shape
      * @param extent The extent of sphere.
      */
-    static Physics3DShape* createBox(const axis::Vec3& extent);
+    static Physics3DShape* createBox(const ax::Vec3& extent);
 
     /**
      * create sphere shape
@@ -97,14 +97,14 @@ public:
      * @param points The vertices of convex hull
      * @param numPoints The number of vertices.
      */
-    static Physics3DShape* createConvexHull(const axis::Vec3* points, int numPoints);
+    static Physics3DShape* createConvexHull(const ax::Vec3* points, int numPoints);
 
     /**
      * create mesh
      * @param triangles The pointer of triangle list
      * @param numTriangles The number of triangles.
      */
-    static Physics3DShape* createMesh(const axis::Vec3* triangles, int numTriangles);
+    static Physics3DShape* createMesh(const ax::Vec3* triangles, int numTriangles);
 
     /**
      * create heightfield
@@ -138,12 +138,12 @@ public:
     Physics3DShape();
     ~Physics3DShape();
 
-    bool initBox(const axis::Vec3& ext);
+    bool initBox(const ax::Vec3& ext);
     bool initSphere(float radius);
     bool initCylinder(float radius, float height);
     bool initCapsule(float radius, float height);
-    bool initConvexHull(const axis::Vec3* points, int numPoints);
-    bool initMesh(const axis::Vec3* triangles, int numTriangles);
+    bool initConvexHull(const ax::Vec3* points, int numPoints);
+    bool initMesh(const ax::Vec3* triangles, int numTriangles);
     bool initHeightfield(int heightStickWidth,
                          int heightStickLength,
                          const void* heightfieldData,

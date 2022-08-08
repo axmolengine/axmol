@@ -182,7 +182,7 @@ void FUILabel::updateBMFontScale()
     }
 }
 
-void FUILabel::setUnderlineColor(const axis::Color3B& value)
+void FUILabel::setUnderlineColor(const ax::Color3B& value)
 {
     //NOT IMPLEMENTED
 }

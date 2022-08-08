@@ -2,7 +2,7 @@
 Copyright (c) 2015-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -83,7 +83,7 @@ bool Terrain::initWithTerrainData(TerrainData& parameter, CrackFixedType fixedTy
     return initResult;
 }
 
-void axis::Terrain::setLightMap(std::string_view fileName)
+void ax::Terrain::setLightMap(std::string_view fileName)
 {
     AX_SAFE_RELEASE(_lightMap);
     auto image = new Image();
@@ -98,7 +98,7 @@ void axis::Terrain::setLightMap(std::string_view fileName)
     _lightMap->setTexParameters(tRepeatParams);
 }
 
-void axis::Terrain::setLightDir(const Vec3& lightDir)
+void ax::Terrain::setLightDir(const Vec3& lightDir)
 {
     _lightDir = lightDir;
 }
@@ -118,7 +118,7 @@ bool Terrain::initProperties()
     return true;
 }
 
-void Terrain::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
+void Terrain::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
     auto modelMatrix = getNodeToWorldTransform();
     if (memcmp(&modelMatrix, &_terrainModelMatrix, sizeof(Mat4)) != 0)
@@ -493,7 +493,7 @@ Terrain::~Terrain()
 #endif
 }
 
-axis::Vec3 Terrain::getNormal(int pixel_x, int pixel_y) const
+ax::Vec3 Terrain::getNormal(int pixel_x, int pixel_y) const
 {
     float a = getImageHeight(pixel_x, pixel_y) * getScaleY();
     float b = getImageHeight(pixel_x, pixel_y + 1) * getScaleY();
@@ -507,7 +507,7 @@ axis::Vec3 Terrain::getNormal(int pixel_x, int pixel_y) const
     return normal;
 }
 
-axis::Vec3 Terrain::getIntersectionPoint(const Ray& ray) const
+ax::Vec3 Terrain::getIntersectionPoint(const Ray& ray) const
 {
     Vec3 collisionPoint;
     if (getIntersectionPoint(ray, collisionPoint))
@@ -587,7 +587,7 @@ void Terrain::setMaxDetailMapAmount(int max_value)
     _maxDetailMapValue = max_value;
 }
 
-axis::Vec2 Terrain::convertToTerrainSpace(const Vec2& worldSpaceXZ) const
+ax::Vec2 Terrain::convertToTerrainSpace(const Vec2& worldSpaceXZ) const
 {
     Vec2 pos(worldSpaceXZ.x, worldSpaceXZ.y);
 
@@ -640,7 +640,7 @@ float Terrain::getMaxHeight()
     return _maxHeight;
 }
 
-axis::AABB Terrain::getAABB()
+ax::AABB Terrain::getAABB()
 {
     return _quadRoot->_worldSpaceAABB;
 }
@@ -665,14 +665,14 @@ std::vector<float> Terrain::getHeightData() const
     return data;
 }
 
-Terrain::Chunk* axis::Terrain::getChunkByIndex(int x, int y) const
+Terrain::Chunk* ax::Terrain::getChunkByIndex(int x, int y) const
 {
     if (x < 0 || y < 0 || x >= MAX_CHUNKES || y >= MAX_CHUNKES)
         return nullptr;
     return _chunkesArray[y][x];
 }
 
-void Terrain::setAlphaMap(axis::Texture2D* newAlphaMapTexture)
+void Terrain::setAlphaMap(ax::Texture2D* newAlphaMapTexture)
 {
     AX_SAFE_RETAIN(newAlphaMapTexture);
     AX_SAFE_RELEASE(_alphaMap);
@@ -1748,7 +1748,7 @@ Terrain::Triangle::Triangle(const Vec3& p1, const Vec3& p2, const Vec3& p3)
     _p3 = p3;
 }
 
-void Terrain::Triangle::transform(const axis::Mat4& matrix)
+void Terrain::Triangle::transform(const ax::Mat4& matrix)
 {
     matrix.transformPoint(&_p1);
     matrix.transformPoint(&_p2);

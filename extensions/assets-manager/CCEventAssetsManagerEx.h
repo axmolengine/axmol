@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ NS_AX_EXT_BEGIN
 
 class AssetsManagerEx;
 
-class AX_EX_DLL EventAssetsManagerEx : public axis::EventCustom
+class AX_EX_DLL EventAssetsManagerEx : public ax::EventCustom
 {
 public:
     friend class AssetsManagerEx;
@@ -66,7 +66,7 @@ public:
 
     std::string getAssetId() const { return _assetId; }
 
-    axis::extension::AssetsManagerEx* getAssetsManagerEx() const { return _manager; }
+    ax::extension::AssetsManagerEx* getAssetsManagerEx() const { return _manager; }
 
     float getPercent() const { return _percent; }
 
@@ -74,7 +74,7 @@ public:
 
     /** Constructor */
     EventAssetsManagerEx(std::string_view eventName,
-                         axis::extension::AssetsManagerEx* manager,
+                         ax::extension::AssetsManagerEx* manager,
                          const EventCode& code,
                          float percent            = 0,
                          float percentByFile      = 0,
@@ -86,7 +86,7 @@ public:
 private:
     EventCode _code;
 
-    axis::extension::AssetsManagerEx* _manager;
+    ax::extension::AssetsManagerEx* _manager;
 
     std::string _message;
 

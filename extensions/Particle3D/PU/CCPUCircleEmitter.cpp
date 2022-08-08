@@ -3,7 +3,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -122,7 +122,7 @@ void PUCircleEmitter::initParticlePosition(PUParticle3D* particle)
     if (_random)
     {
         // Choose a random position on the circle.
-        angle = axis::random(0.0, M_PI * 2.0);
+        angle = ax::random(0.0, M_PI * 2.0);
     }
     else
     {
@@ -193,7 +193,7 @@ PUCircleEmitter* PUCircleEmitter::create()
     return pe;
 }
 
-axis::Quaternion PUCircleEmitter::getRotationTo(const Vec3& src,
+ax::Quaternion PUCircleEmitter::getRotationTo(const Vec3& src,
                                                    const Vec3& dest,
                                                    const Vec3& fallbackAxis /*= Vec3::ZERO*/) const
 {

@@ -6,7 +6,7 @@
 
 NS_FGUI_BEGIN
 
-class FUISprite : public axis::Sprite
+class FUISprite : public ax::Sprite
 {
 public:
     FUISprite();
@@ -15,7 +15,7 @@ public:
     CREATE_FUNC(FUISprite);
 
     void clearContent();
-    void setScale9Grid(axis::Rect* value);
+    void setScale9Grid(ax::Rect* value);
     void setGrayed(bool value);
 
     FillMethod getFillMethod() const { return _fillMethod; }
@@ -33,17 +33,17 @@ public:
     bool isScaleByTile() const { return _scaleByTile; }
     void setScaleByTile(bool value);
 
-    virtual void setContentSize(const axis::Size& size) override;
+    virtual void setContentSize(const ax::Size& size) override;
 
 protected:
-    virtual void draw(axis::Renderer *renderer, const axis::Mat4 &transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer *renderer, const ax::Mat4 &transform, uint32_t flags) override;
 
-    axis::Tex2F textureCoordFromAlphaPoint(axis::Vec2 alpha);
-    axis::Vec3 vertexFromAlphaPoint(axis::Vec2 alpha);
+    ax::Tex2F textureCoordFromAlphaPoint(ax::Vec2 alpha);
+    ax::Vec3 vertexFromAlphaPoint(ax::Vec2 alpha);
     void updateBar(void);
     void updateRadial(void);
     virtual void updateColor(void) override;
-    axis::Vec2 boundaryTexCoord(char index);
+    ax::Vec2 boundaryTexCoord(char index);
 
     void setupFill();
 
@@ -54,11 +54,11 @@ private:
     bool _fillClockwise;
     bool _scaleByTile;
     int _vertexDataCount;
-    axis::TrianglesCommand::Triangles _fillTriangles;
-    axis::V3F_C4B_T2F *_vertexData;
+    ax::TrianglesCommand::Triangles _fillTriangles;
+    ax::V3F_C4B_T2F *_vertexData;
     unsigned short *_vertexIndex;
     
-    static axis::Texture2D* _empty;
+    static ax::Texture2D* _empty;
 };
 
 NS_FGUI_END

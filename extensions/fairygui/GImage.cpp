@@ -49,12 +49,12 @@ void GImage::handleGrayedChanged()
     ((FUISprite*)_content)->setGrayed(_finalGrayed);
 }
 
-axis::Color3B GImage::getColor() const
+ax::Color3B GImage::getColor() const
 {
     return _content->getColor();
 }
 
-void GImage::setColor(const axis::Color3B& value)
+void GImage::setColor(const ax::Color3B& value)
 {
     _content->setColor(value);
 }
@@ -99,7 +99,7 @@ void GImage::setFillAmount(float value)
     _content->setFillAmount(value);
 }
 
-axis::Value GImage::getProp(ObjectPropID propId)
+ax::Value GImage::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -110,7 +110,7 @@ axis::Value GImage::getProp(ObjectPropID propId)
     }
 }
 
-void GImage::setProp(ObjectPropID propId, const axis::Value& value)
+void GImage::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {

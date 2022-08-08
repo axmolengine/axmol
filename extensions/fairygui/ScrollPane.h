@@ -17,7 +17,7 @@ class EventContext;
 class ByteBuffer;
 class GTweener;
 
-class ScrollPane : public axis::Ref
+class ScrollPane : public ax::Ref
 {
 public:
     ScrollPane(GComponent* owner);
@@ -78,7 +78,7 @@ public:
     void scrollTop(bool ani = false);
     void scrollBottom(bool ani = false);
     void scrollToView(GObject* obj, bool ani = false, bool setFirst = false);
-    void scrollToView(const axis::Rect& rect, bool ani = false, bool setFirst = false);
+    void scrollToView(const ax::Rect& rect, bool ani = false, bool setFirst = false);
     bool isChildInView(GObject* obj) const;
 
     int getPageX() const;
@@ -89,8 +89,8 @@ public:
     float getScrollingPosX() const;
     float getScrollingPosY() const;
 
-    const axis::Size& getContentSize() const { return _contentSize; }
-    const axis::Size& getViewSize() const { return _viewSize; }
+    const ax::Size& getContentSize() const { return _contentSize; }
+    const ax::Size& getViewSize() const { return _viewSize; }
 
     void lockHeader(int size);
     void lockFooter(int size);
@@ -111,7 +111,7 @@ private:
     void handleControllerChanged(GController* c);
     void updatePageController();
 
-    GObject* hitTest(const axis::Vec2& pt, const axis::Camera* camera);
+    GObject* hitTest(const ax::Vec2& pt, const ax::Camera* camera);
 
     void posChanged(bool ani);
     CALL_LATER_FUNC(ScrollPane, refresh);
@@ -123,12 +123,12 @@ private:
 
     float getLoopPartSize(float division, int axis);
     bool loopCheckingCurrent();
-    void loopCheckingTarget(axis::Vec2& endPos);
-    void loopCheckingTarget(axis::Vec2& endPos, int axis);
+    void loopCheckingTarget(ax::Vec2& endPos);
+    void loopCheckingTarget(ax::Vec2& endPos, int axis);
     void loopCheckingNewPos(float& value, int axis);
-    void alignPosition(axis::Vec2& pos, bool inertialScrolling);
+    void alignPosition(ax::Vec2& pos, bool inertialScrolling);
     float alignByPage(float pos, int axis, bool inertialScrolling);
-    axis::Vec2 updateTargetAndDuration(const axis::Vec2& orignPos);
+    ax::Vec2 updateTargetAndDuration(const ax::Vec2& orignPos);
     float updateTargetAndDuration(float pos, int axis);
     void fixDuration(int axis, float oldChange);
     void startTween(int type);
@@ -170,16 +170,16 @@ private:
     float _xPos;
     float _yPos;
 
-    axis::Size _viewSize;
-    axis::Size _contentSize;
-    axis::Size _overlapSize;
-    axis::Size _pageSize;
+    ax::Size _viewSize;
+    ax::Size _contentSize;
+    ax::Size _overlapSize;
+    ax::Size _pageSize;
 
-    axis::Vec2 _containerPos;
-    axis::Vec2 _beginTouchPos;
-    axis::Vec2 _lastTouchPos;
-    axis::Vec2 _lastTouchGlobalPos;
-    axis::Vec2 _velocity;
+    ax::Vec2 _containerPos;
+    ax::Vec2 _beginTouchPos;
+    ax::Vec2 _lastTouchPos;
+    ax::Vec2 _lastTouchGlobalPos;
+    ax::Vec2 _velocity;
     float _velocityScale;
     clock_t _lastMoveTime;
     bool _dragged;
@@ -192,10 +192,10 @@ private:
     int _footerLockedSize;
 
     int _tweening;
-    axis::Vec2 _tweenStart;
-    axis::Vec2 _tweenChange;
-    axis::Vec2 _tweenTime;
-    axis::Vec2 _tweenDuration;
+    ax::Vec2 _tweenStart;
+    ax::Vec2 _tweenChange;
+    ax::Vec2 _tweenTime;
+    ax::Vec2 _tweenDuration;
 
     GComponent* _owner;
     FUIContainer* _maskContainer;

@@ -9,7 +9,7 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 
 SpineSkeletonDataCache::SpineSkeletonDataCache()
 {
-    _reportError = &axis::log;
+    _reportError = &ax::log;
 }
 
 void SpineSkeletonDataCache::setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...))
@@ -41,7 +41,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
     spine::AttachmentLoader* loader   = nullptr;
     bool ok                           = false;
 
-    auto fileExtension = axis::FileUtils::getInstance()->getFileExtension(dataFile);
+    auto fileExtension = ax::FileUtils::getInstance()->getFileExtension(dataFile);
 
     static spine::Cocos2dTextureLoader s_textureLoader;
 
@@ -142,7 +142,7 @@ SpineSkeletonDataCache* SpineSkeletonDataCache::getInstance()
 
 SpineSkeletonDataCache::SpineSkeletonDataCache()
 {
-    _reportError = &axis::log;
+    _reportError = &ax::log;
 }
 
 void SpineSkeletonDataCache::setErrorReportFunc(void (*errorfunc)(const char* pszFormat, ...))
@@ -174,7 +174,7 @@ SpineSkeletonDataCache::SkeletonData* SpineSkeletonDataCache::addData(const char
     spAttachmentLoader* loader   = nullptr;
     bool ok                      = false;
 
-    auto fileExtension = axis::FileUtils::getInstance()->getFileExtension(dataFile);
+    auto fileExtension = ax::FileUtils::getInstance()->getFileExtension(dataFile);
 
     do
     {

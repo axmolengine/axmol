@@ -58,7 +58,7 @@ void GLoader::setURL(const std::string& value)
     updateGear(7);
 }
 
-void GLoader::setAlign(axis::TextHAlignment value)
+void GLoader::setAlign(ax::TextHAlignment value)
 {
     if (_align != value)
     {
@@ -67,7 +67,7 @@ void GLoader::setAlign(axis::TextHAlignment value)
     }
 }
 
-void GLoader::setVerticalAlign(axis::TextVAlignment value)
+void GLoader::setVerticalAlign(ax::TextVAlignment value)
 {
     if (_verticalAlign != value)
     {
@@ -103,17 +103,17 @@ void GLoader::setShrinkOnly(bool value)
     }
 }
 
-const axis::Size & GLoader::getContentSize()
+const ax::Size & GLoader::getContentSize()
 {
     return _content->getContentSize();
 }
 
-axis::Color3B GLoader::getColor() const
+ax::Color3B GLoader::getColor() const
 {
     return _content->getColor();
 }
 
-void GLoader::setColor(const axis::Color3B& value)
+void GLoader::setColor(const ax::Color3B& value)
 {
     _content->setColor(value);
 }
@@ -288,11 +288,11 @@ void GLoader::loadExternal()
         onExternalLoadFailed();
 }
 
-void GLoader::freeExternal(axis::SpriteFrame* spriteFrame)
+void GLoader::freeExternal(ax::SpriteFrame* spriteFrame)
 {
 }
 
-void GLoader::onExternalLoadSuccess(axis::SpriteFrame* spriteFrame)
+void GLoader::onExternalLoadSuccess(ax::SpriteFrame* spriteFrame)
 {
     _contentStatus = 4;
     _content->setSpriteFrame(spriteFrame);
@@ -501,7 +501,7 @@ void GLoader::handleGrayedChanged()
         _content2->setGrayed(_finalGrayed);
 }
 
-axis::Value GLoader::getProp(ObjectPropID propId)
+ax::Value GLoader::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -521,7 +521,7 @@ axis::Value GLoader::getProp(ObjectPropID propId)
     }
 }
 
-void GLoader::setProp(ObjectPropID propId, const axis::Value& value)
+void GLoader::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {

@@ -426,7 +426,7 @@ void GObject::setDraggable(bool value)
     }
 }
 
-void GObject::setDragBounds(const axis::Rect& value)
+void GObject::setDragBounds(const ax::Rect& value)
 {
     if (_dragBounds == nullptr)
         _dragBounds = new Rect();
@@ -464,7 +464,7 @@ Vec2 GObject::localToGlobal(const Vec2& pt)
     return UIRoot->worldToRoot(pt2);
 }
 
-axis::Rect GObject::localToGlobal(const axis::Rect& rect)
+ax::Rect GObject::localToGlobal(const ax::Rect& rect)
 {
     Rect ret;
     Vec2 v = localToGlobal(rect.origin);
@@ -489,7 +489,7 @@ Vec2 GObject::globalToLocal(const Vec2& pt)
     return pt2;
 }
 
-axis::Rect GObject::globalToLocal(const axis::Rect& rect)
+ax::Rect GObject::globalToLocal(const ax::Rect& rect)
 {
     Rect ret;
     Vec2 v = globalToLocal(rect.origin);
@@ -501,7 +501,7 @@ axis::Rect GObject::globalToLocal(const axis::Rect& rect)
     return ret;
 }
 
-axis::Rect GObject::transformRect(const axis::Rect& rect, GObject* targetSpace)
+ax::Rect GObject::transformRect(const ax::Rect& rect, GObject* targetSpace)
 {
     if (targetSpace == this)
         return rect;
@@ -672,7 +672,7 @@ void GObject::removeFromParent()
         _parent->removeChild(this);
 }
 
-axis::Value GObject::getProp(ObjectPropID propId)
+ax::Value GObject::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -685,7 +685,7 @@ axis::Value GObject::getProp(ObjectPropID propId)
     }
 }
 
-void GObject::setProp(ObjectPropID propId, const axis::Value& value)
+void GObject::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {

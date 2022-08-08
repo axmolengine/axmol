@@ -37,11 +37,11 @@ public:
     int getLineGap() const { return _lineGap; }
     void setLineGap(int value);
 
-    axis::TextHAlignment getAlign() const { return _align; }
-    void setAlign(axis::TextHAlignment value);
+    ax::TextHAlignment getAlign() const { return _align; }
+    void setAlign(ax::TextHAlignment value);
 
-    axis::TextVAlignment getVerticalAlign() const { return _verticalAlign; }
-    void setVerticalAlign(axis::TextVAlignment value);
+    ax::TextVAlignment getVerticalAlign() const { return _verticalAlign; }
+    void setVerticalAlign(ax::TextVAlignment value);
 
     bool getAutoResizeItem() const { return _autoResizeItem; }
     void setAutoResizeItem(bool value);
@@ -50,10 +50,10 @@ public:
     void setSelectionMode(ListSelectionMode value) { _selectionMode = value; }
 
     GObjectPool* getItemPool() const { return _pool; }
-    GObject* getFromPool() { return getFromPool(axis::STD_STRING_EMPTY); }
+    GObject* getFromPool() { return getFromPool(ax::STD_STRING_EMPTY); }
     GObject* getFromPool(const std::string& url);
     void returnToPool(GObject* obj);
-    GObject* addItemFromPool() { return addItemFromPool(axis::STD_STRING_EMPTY); }
+    GObject* addItemFromPool() { return addItemFromPool(ax::STD_STRING_EMPTY); }
     GObject* addItemFromPool(const std::string& url);
 
     GObject* addChildAt(GObject* child, int index) override;
@@ -96,7 +96,7 @@ public:
     int childIndexToItemIndex(int index);
     int itemIndexToChildIndex(int index);
 
-    virtual axis::Vec2 getSnappingPosition(const axis::Vec2& pt) override;
+    virtual ax::Vec2 getSnappingPosition(const ax::Vec2& pt) override;
 
     ListItemRenderer itemRenderer;
     ListItemProvider itemProvider;
@@ -149,8 +149,8 @@ private:
     int _columnCount;
     int _lineGap;
     int _columnGap;
-    axis::TextHAlignment _align;
-    axis::TextVAlignment _verticalAlign;
+    ax::TextHAlignment _align;
+    ax::TextVAlignment _verticalAlign;
     bool _autoResizeItem;
     ListSelectionMode _selectionMode;
     std::string _defaultItem;
@@ -168,14 +168,14 @@ private:
     int _firstIndex;        //the top left index
     int _curLineItemCount;  //item count in one line
     int _curLineItemCount2; //item count in vertical direction,only pagination layout
-    axis::Vec2 _itemSize;
+    ax::Vec2 _itemSize;
     int _virtualListChanged; //1-content changed, 2-size changed
     bool _eventLocked;
     uint32_t _itemInfoVer;
 
     struct ItemInfo
     {
-        axis::Vec2 size;
+        ax::Vec2 size;
         GObject* obj;
         uint32_t updateFlag;
         bool selected;

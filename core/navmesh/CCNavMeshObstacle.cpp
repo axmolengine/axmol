@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,7 @@ NavMeshObstacle::NavMeshObstacle()
     : _radius(0.0f), _height(0.0f), _syncFlag(NODE_AND_NODE), _obstacleID(-1), _tileCache(nullptr)
 {}
 
-axis::NavMeshObstacle::~NavMeshObstacle() {}
+ax::NavMeshObstacle::~NavMeshObstacle() {}
 
 bool NavMeshObstacle::initWith(float radius, float height)
 {
@@ -65,21 +65,21 @@ bool NavMeshObstacle::initWith(float radius, float height)
     return true;
 }
 
-void axis::NavMeshObstacle::removeFrom(dtTileCache* /*tileCache*/)
+void ax::NavMeshObstacle::removeFrom(dtTileCache* /*tileCache*/)
 {
     _tileCache->removeObstacle(_obstacleID);
     _tileCache  = nullptr;
     _obstacleID = -1;
 }
 
-void axis::NavMeshObstacle::addTo(dtTileCache* tileCache)
+void ax::NavMeshObstacle::addTo(dtTileCache* tileCache)
 {
     _tileCache = tileCache;
     Mat4 mat   = _owner->getNodeToWorldTransform();
     _tileCache->addObstacle(&mat.m[12], _radius, _height, &_obstacleID);
 }
 
-void axis::NavMeshObstacle::onExit()
+void ax::NavMeshObstacle::onExit()
 {
     if (_obstacleID == -1)
         return;
@@ -91,7 +91,7 @@ void axis::NavMeshObstacle::onExit()
     }
 }
 
-void axis::NavMeshObstacle::onEnter()
+void ax::NavMeshObstacle::onEnter()
 {
     if (_obstacleID != -1)
         return;
@@ -103,13 +103,13 @@ void axis::NavMeshObstacle::onEnter()
     }
 }
 
-void axis::NavMeshObstacle::postUpdate(float /*delta*/)
+void ax::NavMeshObstacle::postUpdate(float /*delta*/)
 {
     if ((_syncFlag & OBSTACLE_TO_NODE) != 0)
         syncToNode();
 }
 
-void axis::NavMeshObstacle::preUpdate(float /*delta*/)
+void ax::NavMeshObstacle::preUpdate(float /*delta*/)
 {
     if ((_syncFlag & NODE_TO_OBSTACLE) != 0)
         syncToObstacle();
@@ -133,12 +133,12 @@ void NavMeshObstacle::syncToNode()
     }
 }
 
-void axis::NavMeshObstacle::setRadius(float radius)
+void ax::NavMeshObstacle::setRadius(float radius)
 {
     _radius = radius;
 }
 
-void axis::NavMeshObstacle::setHeight(float height)
+void ax::NavMeshObstacle::setHeight(float height)
 {
     _height = height;
 }

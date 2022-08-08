@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@
 // No Available on tvOS
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS && !defined(AX_TARGET_OS_TVOS)
 
-using namespace axis::ui;
+using namespace ax::ui;
 //-------------------------------------------------------------------------------------
 
 #    include "platform/ios/CCEAGLView-ios.h"
@@ -176,7 +176,7 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
     [self setUserInteractionEnabled:_userInteractionEnabled];
     [self showPlaybackControls:_showPlaybackControls];
 
-    auto view     = axis::Director::getInstance()->getOpenGLView();
+    auto view     = ax::Director::getInstance()->getOpenGLView();
     auto eaglview = (CCEAGLView*)view->getEAGLView();
     [eaglview addSubview:self.playerController.view];
     [self registerPlayerEventListener];
@@ -343,7 +343,7 @@ void VideoPlayer::setPlayRate(float fRate) {}
 
 void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    axis::ui::Widget::draw(renderer, transform, flags);
+    ax::ui::Widget::draw(renderer, transform, flags);
 
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {
@@ -450,7 +450,7 @@ bool VideoPlayer::isUserInputEnabled() const
 
 void VideoPlayer::setVisible(bool visible)
 {
-    axis::ui::Widget::setVisible(visible);
+    ax::ui::Widget::setVisible(visible);
 
     if (!visible)
     {
@@ -499,7 +499,7 @@ void VideoPlayer::onPlayEvent(int event)
     }
 }
 
-axis::ui::Widget* VideoPlayer::createCloneInstance()
+ax::ui::Widget* VideoPlayer::createCloneInstance()
 {
     return VideoPlayer::create();
 }

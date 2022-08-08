@@ -4,7 +4,7 @@
  Copyright (c) 2013-2015 zilongshanren
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@
 
 #    import "ui/UIEditBox/iOS/CCUIEditBoxIOS.h"
 
-#    define getEditBoxImplIOS() ((axis::ui::EditBoxImplIOS*)_editBox)
+#    define getEditBoxImplIOS() ((ax::ui::EditBoxImplIOS*)_editBox)
 
 NS_AX_BEGIN
 
@@ -62,11 +62,11 @@ EditBoxImplIOS::~EditBoxImplIOS()
 
 void EditBoxImplIOS::createNativeControl(const Rect& frame)
 {
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glview = ax::Director::getInstance()->getOpenGLView();
 
     Rect rect(0, 0, frame.size.width * glview->getScaleX(), frame.size.height * glview->getScaleY());
 
-    float factor = axis::Director::getInstance()->getContentScaleFactor();
+    float factor = ax::Director::getInstance()->getContentScaleFactor();
 
     rect.size.width /= factor;
     rect.size.height /= factor;
@@ -153,7 +153,7 @@ void EditBoxImplIOS::setNativeReturnType(EditBox::KeyboardReturnType returnType)
     [_systemControl setReturnType:returnType];
 }
 
-void EditBoxImplIOS::setNativeTextHorizontalAlignment(axis::TextHAlignment alignment)
+void EditBoxImplIOS::setNativeTextHorizontalAlignment(ax::TextHAlignment alignment)
 {
     [_systemControl setTextHorizontalAlignment:alignment];
 }
@@ -179,7 +179,7 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
-    auto glview          = axis::Director::getInstance()->getOpenGLView();
+    auto glview          = ax::Director::getInstance()->getOpenGLView();
     CCEAGLView* eaglview = (CCEAGLView*)glview->getEAGLView();
 
     float factor = eaglview.contentScaleFactor;
@@ -208,13 +208,13 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     AXASSERT(fontName != nullptr, "fontName can't be nullptr");
-    CCEAGLView* eaglview = static_cast<CCEAGLView*>(axis::Director::getInstance()->getOpenGLView()->getEAGLView());
+    CCEAGLView* eaglview = static_cast<CCEAGLView*>(ax::Director::getInstance()->getOpenGLView()->getEAGLView());
     float retinaFactor   = eaglview.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
 
     fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
 
-    auto glview       = axis::Director::getInstance()->getOpenGLView();
+    auto glview       = ax::Director::getInstance()->getOpenGLView();
     float scaleFactor = glview->getScaleX();
 
     if (fontSize == -1)

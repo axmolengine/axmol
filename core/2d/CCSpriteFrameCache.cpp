@@ -7,7 +7,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -207,7 +207,7 @@ void SpriteFrameCache::removeSpriteFramesFromFileContent(std::string_view plist_
 
 void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
 {
-    if (dictionary["frames"].getType() != axis::Value::Type::MAP)
+    if (dictionary["frames"].getType() != ax::Value::Type::MAP)
         return;
 
     const auto& framesDict = dictionary["frames"].asValueMap();

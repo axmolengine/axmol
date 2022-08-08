@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 zilongshanren
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -45,8 +45,8 @@
 @property(nonatomic, readonly, getter=isEditState) BOOL editState;
 @property(nonatomic, assign) void* editBox;
 @property(nonatomic, assign) NSRect frameRect;
-@property(nonatomic, assign) axis::ui::EditBox::InputFlag dataInputMode;
-@property(nonatomic, assign) axis::ui::EditBox::KeyboardReturnType keyboardReturnType;
+@property(nonatomic, assign) ax::ui::EditBox::InputFlag dataInputMode;
+@property(nonatomic, assign) ax::ui::EditBox::KeyboardReturnType keyboardReturnType;
 
 - (instancetype)initWithFrame:(NSRect)frameRect editBox:(void*)editBox;
 - (void)setMaxLength:(int)maxLength;
@@ -56,12 +56,12 @@
 - (void)closeKeyboard;
 
 - (NSString*)getDefaultFontName;
-- (axis::ui::EditBoxDelegate::EditBoxEndAction)getEndAction:(NSNotification*)notification;
+- (ax::ui::EditBoxDelegate::EditBoxEndAction)getEndAction:(NSNotification*)notification;
 
-- (void)setInputMode:(axis::ui::EditBox::InputMode)inputMode;
-- (void)setInputFlag:(axis::ui::EditBox::InputFlag)inputFlag;
-- (void)setReturnType:(axis::ui::EditBox::KeyboardReturnType)returnType;
-- (void)setTextHorizontalAlignment:(axis::TextHAlignment)alignment;
+- (void)setInputMode:(ax::ui::EditBox::InputMode)inputMode;
+- (void)setInputFlag:(ax::ui::EditBox::InputFlag)inputFlag;
+- (void)setReturnType:(ax::ui::EditBox::KeyboardReturnType)returnType;
+- (void)setTextHorizontalAlignment:(ax::TextHAlignment)alignment;
 - (void)setPlaceHolder:(const char*)text;
 - (void)setVisible:(BOOL)visible;
 - (void)setTextColor:(NSColor*)color;

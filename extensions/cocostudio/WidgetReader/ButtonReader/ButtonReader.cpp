@@ -64,7 +64,7 @@ void ButtonReader::destroyInstance()
     AX_SAFE_DELETE(instanceButtonReader);
 }
 
-void ButtonReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void ButtonReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     WidgetReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
 
@@ -241,7 +241,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     bool isLocalized = false;
     int fontSize     = 14;
     std::string fontName;
-    axis::Size scale9Size;
+    ax::Size scale9Size;
     Color4B textColor(255, 255, 255, 255);
 
     std::string normalPath;
@@ -668,7 +668,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     return *(Offset<Table>*)(&options);
 }
 
-void ButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* buttonOptions)
+void ButtonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* buttonOptions)
 {
     Button* button = static_cast<Button*>(node);
 
@@ -950,7 +950,7 @@ void ButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
 
     button->setBright(displaystate);
 
-    auto labelRenderer = dynamic_cast<axis::Label*>(button->getTitleRenderer());
+    auto labelRenderer = dynamic_cast<ax::Label*>(button->getTitleRenderer());
     if (labelRenderer != nullptr)
     {
         if (options->boldEnabled())

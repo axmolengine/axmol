@@ -117,7 +117,7 @@ void GRichTextField::handleSizeChanged()
     }
 }
 
-GObject* GRichTextField::hitTest(const axis::Vec2& worldPoint, const axis::Camera* camera)
+GObject* GRichTextField::hitTest(const ax::Vec2& worldPoint, const ax::Camera* camera)
 {
     const std::vector<HtmlObject*>& objs = _richText->getControls();
     for (auto &obj : objs)

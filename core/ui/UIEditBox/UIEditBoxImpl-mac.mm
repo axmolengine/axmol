@@ -3,7 +3,7 @@
  Copyright (c) 2012 Jozef Pridavok
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -55,13 +55,13 @@ EditBoxImplMac::~EditBoxImplMac()
     [_sysEdit release];
 }
 
-void EditBoxImplMac::createNativeControl(const axis::Rect& frame)
+void EditBoxImplMac::createNativeControl(const ax::Rect& frame)
 {
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glview = ax::Director::getInstance()->getOpenGLView();
     Size size   = frame.size;
     NSRect rect = NSMakeRect(0, 0, size.width * glview->getScaleX(), size.height * glview->getScaleY());
 
-    float factor = axis::Director::getInstance()->getContentScaleFactor();
+    float factor = ax::Director::getInstance()->getContentScaleFactor();
 
     rect.size.width /= factor;
     rect.size.height /= factor;
@@ -75,7 +75,7 @@ NSFont* EditBoxImplMac::constructFont(const char* fontName, int fontSize)
     NSString* fntName  = [NSString stringWithUTF8String:fontName];
     fntName            = [[fntName lastPathComponent] stringByDeletingPathExtension];
     float retinaFactor = _inRetinaMode ? 2.0f : 1.0f;
-    auto glview        = axis::Director::getInstance()->getOpenGLView();
+    auto glview        = ax::Director::getInstance()->getOpenGLView();
     float scaleFactor  = glview->getScaleX();
 
     if (fontSize == -1)
@@ -123,7 +123,7 @@ void EditBoxImplMac::setNativePlaceholderFont(const char* pFontName, int fontSiz
     [_sysEdit setPlaceholderFont:textFont];
 }
 
-void EditBoxImplMac::setNativeFontColor(const axis::Color4B& color)
+void EditBoxImplMac::setNativeFontColor(const ax::Color4B& color)
 {
     NSColor* newColor = [NSColor colorWithCalibratedRed:color.r / 255.0f
                                                   green:color.g / 255.0f
@@ -133,7 +133,7 @@ void EditBoxImplMac::setNativeFontColor(const axis::Color4B& color)
     [_sysEdit setTextColor:newColor];
 }
 
-void EditBoxImplMac::setNativePlaceholderFontColor(const axis::Color4B& color)
+void EditBoxImplMac::setNativePlaceholderFontColor(const ax::Color4B& color)
 {
     NSColor* newColor = [NSColor colorWithCalibratedRed:color.r / 255.f
                                                   green:color.g / 255.f
@@ -165,7 +165,7 @@ void EditBoxImplMac::setNativeReturnType(EditBox::KeyboardReturnType returnType)
     [_sysEdit setReturnType:returnType];
 }
 
-void EditBoxImplMac::setNativeTextHorizontalAlignment(axis::TextHAlignment alignment)
+void EditBoxImplMac::setNativeTextHorizontalAlignment(ax::TextHAlignment alignment)
 {
     [_sysEdit setTextHorizontalAlignment:alignment];
 }
@@ -191,7 +191,7 @@ void EditBoxImplMac::setNativeVisible(bool visible)
     [_sysEdit setVisible:visible];
 }
 
-void EditBoxImplMac::updateNativeFrame(const axis::Rect& rect)
+void EditBoxImplMac::updateNativeFrame(const ax::Rect& rect)
 {
     GLView* eglView = Director::getInstance()->getOpenGLView();
     auto frameSize  = eglView->getFrameSize();

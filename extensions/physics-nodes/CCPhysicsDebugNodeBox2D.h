@@ -53,12 +53,12 @@ public:
     void DrawPoint(const b2Vec2& p, float size, const b2Color& color) override;
 
     // axis stuffs
-    axis::DrawNode* GetDrawNode();
-    void SetDrawNode(axis::DrawNode* drawNode);
-    axis::Vec2& GetDebugNodeOffset();
+    ax::DrawNode* GetDrawNode();
+    void SetDrawNode(ax::DrawNode* drawNode);
+    ax::Vec2& GetDebugNodeOffset();
 
-    axis::DrawNode* drawBP = NULL;  // axis "interface"!
-    axis::Vec2 debugNodeOffset;
+    ax::DrawNode* drawBP = NULL;  // axis "interface"!
+    ax::Vec2 debugNodeOffset;
     float mRatio;
 
 private:

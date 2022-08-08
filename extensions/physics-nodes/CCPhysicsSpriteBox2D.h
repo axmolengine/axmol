@@ -129,7 +129,7 @@ protected:
     float _PTMRatio;
 
     // Event for update synchronise physic transform
-    axis::EventListenerCustom* _syncTransform;
+    ax::EventListenerCustom* _syncTransform;
 };
 
 NS_AX_EXT_END

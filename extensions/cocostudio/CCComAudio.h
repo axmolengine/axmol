@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL ComAudio : public axis::Component, public axis::PlayableProtocol
+class CCS_DLL ComAudio : public ax::Component, public ax::PlayableProtocol
 {
     DECLARE_CLASS_COMPONENT_INFO
 public:

@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -688,7 +688,7 @@ void EventFrame::init()
 
 EventFrame::EventFrame() : _event(""), _action(nullptr) {}
 
-void EventFrame::setNode(axis::Node* node)
+void EventFrame::setNode(ax::Node* node)
 {
     Frame::setNode(node);
     _action = _timeline->getActionTimeline();

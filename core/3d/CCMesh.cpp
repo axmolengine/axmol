@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -347,7 +347,7 @@ void Mesh::setMaterial(Material* material)
             int i = 0;
             for (auto&& pass : technique->getPasses())
             {
-#ifdef AXIS_DEBUG
+#ifdef _AX_DEBUG
                 // make it crashed when missing attribute data
                 if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {

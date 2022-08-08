@@ -14,7 +14,7 @@
 #include "ActionTimeline/CCSkeletonNode.h"
 
 // x-studio spec, csb batch load support, assets hook functions.
-static bool onLoadObjectAssetDummy(axis::Node*, axis::ResourceData& assets, int index)
+static bool onLoadObjectAssetDummy(ax::Node*, ax::ResourceData& assets, int index)
 {
     return false;
 }
@@ -25,19 +25,19 @@ static _T* object_create_func()
     return _T::create();
 }
 
-static axis::Node* createArmatureNode()
+static ax::Node* createArmatureNode()
 {
     return cocostudio::Armature::create();
 }
 
-static axis::ParticleSystemQuad* createParticleSystemQuad(std::string_view path)
+static ax::ParticleSystemQuad* createParticleSystemQuad(std::string_view path)
 {
-    return axis::ParticleSystemQuad::create(path);
+    return ax::ParticleSystemQuad::create(path);
 }
 
-static axis::Node* createNestingNode(std::string)
+static ax::Node* createNestingNode(std::string)
 {
-    return axis::Node::create();
+    return ax::Node::create();
 }
 
 static void onLoadSpriteFramesWithFileDummy(std::string&) {}
@@ -53,44 +53,44 @@ void NodeReaderProtocol::setCurrentCustomClassName(const char* className){};
 NS_AX_BEGIN
 namespace wext
 {
-bool (*onBeforeLoadObjectAsset)(axis::Node*,
-                                axis::ResourceData& assets,
+bool (*onBeforeLoadObjectAsset)(ax::Node*,
+                                ax::ResourceData& assets,
                                 int index /*= 0*/)                     = &onLoadObjectAssetDummy;
-bool (*onAfterLoadObjectAsset)(axis::Node*,
-                               axis::ResourceData& assets,
+bool (*onAfterLoadObjectAsset)(ax::Node*,
+                               ax::ResourceData& assets,
                                int index /*= 0*/)                      = &onLoadObjectAssetDummy;
 void (*onLoadSpriteFramesWithFile)(std::string& file)                  = nullptr;
 void (*onNestingNodeLoading)(std::string_view filePath)                = nullptr;
-void (*onNestingNodeLoaded)(axis::Node*, std::string_view filePath) = nullptr;
-axis::Node* (*aNode)();
-axis::ui::Widget* (*aWidget)();
-axis::Sprite* (*aSprite)();
-axis::ui::ImageView* (*aImageView)();
-axis::ui::Button* (*aButton)();
-axis::ui::CheckBox* (*aCheckBox)();
-axis::ui::Slider* (*aSlider)();
-axis::ui::LoadingBar* (*aLoadingBar)();
-axis::ui::Text* (*aText)();
-axis::ui::TextField* (*aTextField)();
-axis::ui::TextAtlas* (*aTextAtlas)();
-axis::ui::TextBMFont* (*aTextBMFont)();
-axis::ui::Layout* (*aLayout)();
-axis::ui::ScrollView* (*aScrollView)();
-axis::ui::ListView* (*aListView)();
-axis::ui::PageView* (*aPageView)();
-axis::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
-axis::Node* (*aArmatureNode)();
+void (*onNestingNodeLoaded)(ax::Node*, std::string_view filePath) = nullptr;
+ax::Node* (*aNode)();
+ax::ui::Widget* (*aWidget)();
+ax::Sprite* (*aSprite)();
+ax::ui::ImageView* (*aImageView)();
+ax::ui::Button* (*aButton)();
+ax::ui::CheckBox* (*aCheckBox)();
+ax::ui::Slider* (*aSlider)();
+ax::ui::LoadingBar* (*aLoadingBar)();
+ax::ui::Text* (*aText)();
+ax::ui::TextField* (*aTextField)();
+ax::ui::TextAtlas* (*aTextAtlas)();
+ax::ui::TextBMFont* (*aTextBMFont)();
+ax::ui::Layout* (*aLayout)();
+ax::ui::ScrollView* (*aScrollView)();
+ax::ui::ListView* (*aListView)();
+ax::ui::PageView* (*aPageView)();
+ax::ParticleSystemQuad* (*aParticleSystemQuad)(std::string_view);
+ax::Node* (*aArmatureNode)();
 cocostudio::timeline::SkeletonNode* (*aSkeletonNode)();
 cocostudio::timeline::BoneNode* (*aBoneNode)();
-axis::Node* (*aNestingNode)(std::string);
+ax::Node* (*aNestingNode)(std::string);
 
 // 3d stubs
-axis::Node* (*aNode3D)();
-axis::Node* (*aGameNode3D)();
-axis::Node* (*aLight3D)();
-axis::Camera* (*aCamera)();
-axis::MeshRenderer* (*aSprite3D)();
-axis::Node* (*aParticleSystem3D)();
+ax::Node* (*aNode3D)();
+ax::Node* (*aGameNode3D)();
+ax::Node* (*aLight3D)();
+ax::Camera* (*aCamera)();
+ax::MeshRenderer* (*aSprite3D)();
+ax::Node* (*aParticleSystem3D)();
 
 void resetReaderAllHooks()
 {
@@ -126,28 +126,28 @@ void resetReaderAllHooks()
 static uint8_t _AUTO_INIT_VARS = (resetReaderAllHooks(), 0);
 } // namespace wext
 
-NS_AX_END // namespace axis
+NS_AX_END // namespace axys
 
-axis::ResourceData axis::wext::makeResourceData(const flatbuffers::ResourceData* orig)
+ax::ResourceData ax::wext::makeResourceData(const flatbuffers::ResourceData* orig)
 {
-    axis::ResourceData fileData;
+    ax::ResourceData fileData;
     fileData.file  = orig->path()->c_str();
     fileData.plist = orig->plistFile()->c_str();
     fileData.type  = orig->resourceType();
     return fileData;
 }
 
-axis::ResourceData axis::wext::makeResourceData(std::string_view path, int type)
+ax::ResourceData ax::wext::makeResourceData(std::string_view path, int type)
 {
-    axis::ResourceData fileData;
+    ax::ResourceData fileData;
     fileData.file = path;
     fileData.type = type;
     return fileData;
 }
 
-axis::ResourceData axis::wext::makeResourceData(std::string&& path, int type)
+ax::ResourceData ax::wext::makeResourceData(std::string&& path, int type)
 {
-    axis::ResourceData fileData;
+    ax::ResourceData fileData;
     fileData.file = std::move(path);
     fileData.type = type;
     return fileData;

@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -138,7 +138,7 @@ public:
 
     int getResourceType(std::string_view key);
     std::string getGUIClassName(std::string_view name);
-    std::string getWidgetReaderClassName(axis::ui::Widget* widget);
+    std::string getWidgetReaderClassName(ax::ui::Widget* widget);
 
     /* create flat buffers with XML */
     flatbuffers::FlatBufferBuilder* createFlatBuffersWithXMLFileForSimulator(std::string_view xmlFileName);

@@ -4,7 +4,7 @@
  Copyright (c) 2019-2020 simdsoft, @HALX99
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -96,7 +96,7 @@
 
 #include <fstream>
 
-using namespace axis::ui;
+using namespace ax::ui;
 using namespace cocostudio;
 using namespace cocostudio::timeline;
 /* peterson */
@@ -866,7 +866,7 @@ Component* CSLoader::loadComAudio(const rapidjson::Value& json)
     return audio;
 }
 
-axis::Node* CSLoader::createNode(const Data& data)
+ax::Node* CSLoader::createNode(const Data& data)
 {
     return createNode(data, nullptr);
 }
@@ -939,7 +939,7 @@ Node* CSLoader::createNode(const Data& data, const ccNodeLoadCallback& callback)
                          "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
                          ") and the reader build id in your axis(", loader->_csBuildID.c_str(),
                          ") are not match.\n", "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                         "https://github.com/axis-project/axis", " and replace it in your axis")
+                         "https://github.com/axys1/axys", " and replace it in your axis")
                          .c_str());
         }
 
@@ -975,7 +975,7 @@ Node* CSLoader::createNodeWithFlatBuffersFile(std::string_view filename, const c
     return node;
 }
 
-inline void CSLoader::reconstructNestNode(axis::Node* node)
+inline void CSLoader::reconstructNestNode(ax::Node* node)
 {
     /* To reconstruct nest node as WidgetCallBackHandlerProtocol. */
     auto callbackHandler = dynamic_cast<WidgetCallBackHandlerProtocol*>(node);
@@ -1056,7 +1056,7 @@ Node* CSLoader::nodeWithFlatBuffersFile(std::string_view fileName, const ccNodeL
                      "%s%s%s%s%s%s%s%s%s%s", "The reader build id of your Cocos exported file(", csBuildId->c_str(),
                      ") and the reader build id in your axis(", _csBuildID.c_str(), ") are not match.\n",
                      "Please get the correct reader(build id ", csBuildId->c_str(), ")from ",
-                     "https://github.com/axis-project/axis", " and replace it in your axis")
+                     "https://github.com/axys1/axys", " and replace it in your axis")
                      .c_str());
 
         if (readerVersion < writterVersion)
@@ -1250,8 +1250,8 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
 
 bool CSLoader::bindCallback(std::string_view callbackName,
                             std::string_view callbackType,
-                            axis::ui::Widget* sender,
-                            axis::Node* handler)
+                            ax::ui::Widget* sender,
+                            ax::Node* handler)
 {
     if (callbackName.empty())
         return false;

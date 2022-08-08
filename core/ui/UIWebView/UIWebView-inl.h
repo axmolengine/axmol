@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,7 @@ void WebView::setJavascriptInterfaceScheme(std::string_view scheme)
     _impl->setJavascriptInterfaceScheme(scheme);
 }
 
-void WebView::loadData(const axis::Data& data,
+void WebView::loadData(const ax::Data& data,
                        std::string_view MIMEType,
                        std::string_view encoding,
                        std::string_view baseURL)
@@ -126,9 +126,9 @@ void WebView::setScalesPageToFit(bool const scalesPageToFit)
     _impl->setScalesPageToFit(scalesPageToFit);
 }
 
-void WebView::draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags)
+void WebView::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags)
 {
-    axis::ui::Widget::draw(renderer, transform, flags);
+    ax::ui::Widget::draw(renderer, transform, flags);
     _impl->draw(renderer, transform, flags);
 }
 
@@ -176,7 +176,7 @@ void WebView::setBounces(bool bounces)
     _impl->setBounces(bounces);
 }
 
-axis::ui::Widget* WebView::createCloneInstance()
+ax::ui::Widget* WebView::createCloneInstance()
 {
     return WebView::create();
 }
@@ -235,6 +235,6 @@ WebView::ccWebViewCallback WebView::getOnJSCallback() const
 }
 
 }  // namespace ui
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 /// @endcond

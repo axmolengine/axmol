@@ -46,7 +46,7 @@ void GComboBox::setTitle(const std::string& value)
     updateGear(6);
 }
 
-const axis::Color3B GComboBox::getTitleColor() const
+const ax::Color3B GComboBox::getTitleColor() const
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -55,7 +55,7 @@ const axis::Color3B GComboBox::getTitleColor() const
         return Color3B::BLACK;
 }
 
-void GComboBox::setTitleColor(const axis::Color3B& value)
+void GComboBox::setTitleColor(const ax::Color3B& value)
 {
     GTextField* tf = getTextField();
     if (tf)
@@ -251,7 +251,7 @@ GTextField* GComboBox::getTextField() const
         return nullptr;
 }
 
-axis::Value GComboBox::getProp(ObjectPropID propId)
+ax::Value GComboBox::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -272,7 +272,7 @@ axis::Value GComboBox::getProp(ObjectPropID propId)
     }
 }
 
-void GComboBox::setProp(ObjectPropID propId, const axis::Value& value)
+void GComboBox::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {

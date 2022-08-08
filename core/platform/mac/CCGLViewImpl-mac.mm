@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -888,14 +888,14 @@ void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int act
     {
         EventMouse event(EventMouse::MouseEventType::MOUSE_DOWN);
         event.setCursorPosition(cursorX, cursorY);
-        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(button));
+        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(button));
         Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     }
     else if (GLFW_RELEASE == action)
     {
         EventMouse event(EventMouse::MouseEventType::MOUSE_UP);
         event.setCursorPosition(cursorX, cursorY);
-        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(button));
+        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(button));
         Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     }
 }
@@ -931,15 +931,15 @@ void GLViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
     // Set current button
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
     {
-        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_LEFT));
+        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_LEFT));
     }
     else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
     {
-        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_RIGHT));
+        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_RIGHT));
     }
     else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
     {
-        event.setMouseButton(static_cast<axis::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_MIDDLE));
+        event.setMouseButton(static_cast<ax::EventMouse::MouseButton>(GLFW_MOUSE_BUTTON_MIDDLE));
     }
     event.setCursorPosition(cursorX, cursorY);
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
@@ -1063,4 +1063,4 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
     }
 }
 
-NS_AX_END  // end of namespace axis;
+NS_AX_END  // end of namespace axys;

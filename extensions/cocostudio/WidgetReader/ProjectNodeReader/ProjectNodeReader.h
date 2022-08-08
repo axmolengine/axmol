@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@
 
 namespace cocostudio
 {
-class CCS_DLL ProjectNodeReader : public axis::Ref, public NodeReaderProtocol
+class CCS_DLL ProjectNodeReader : public ax::Ref, public NodeReaderProtocol
 {
 
 public:
@@ -46,8 +46,8 @@ public:
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
 
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* projectNodeOptions);
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* projectNodeOptions);
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions);
 };
 }  // namespace cocostudio
 

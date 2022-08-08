@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,8 @@ NS_AX_BEGIN
 
 PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
                                          Physics3DRigidBodyDes* rigidDes,
-                                         const axis::Vec3& translateInPhysics,
-                                         const axis::Quaternion& rotInPhsyics)
+                                         const ax::Vec3& translateInPhysics,
+                                         const ax::Quaternion& rotInPhsyics)
 {
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
@@ -52,8 +52,8 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
 
 PhysicsMeshRenderer* PhysicsMeshRenderer::createWithCollider(std::string_view modelPath,
                                                      Physics3DColliderDes* colliderDes,
-                                                     const axis::Vec3& translateInPhysics,
-                                                     const axis::Quaternion& rotInPhsyics)
+                                                     const ax::Vec3& translateInPhysics,
+                                                     const ax::Quaternion& rotInPhsyics)
 {
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))

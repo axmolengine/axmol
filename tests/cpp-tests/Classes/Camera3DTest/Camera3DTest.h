@@ -2,7 +2,7 @@
 Copyright (c) 2013 cocos2d-x.org
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ THE SOFTWARE.
 NS_AX_BEGIN
 class MeshRenderer;
 class Delay;
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 enum State
 {

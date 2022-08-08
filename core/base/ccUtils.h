@@ -5,7 +5,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd
 Copyright (c) 2021 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -76,7 +76,7 @@ namespace utils
 AX_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
 
 /** Capture a specific Node.
- * @param startNode specify the snapshot Node. It should be axis::Scene
+ * @param startNode specify the snapshot Node. It should be ax::Scene
  * @param scale
  * @returns: return a Image, then can call saveToFile to save the image as "xxx.png or xxx.jpg".
  * @since v4.0 with axis
@@ -258,7 +258,7 @@ AX_DLL void killCurrentProcess();
 * Create a Game Object, like CREATE_FUNC, but more powerful
 
 * @return  Returns a RefPtr<T> game object
-* @remark  Auto manage axis::Ref reference count, use std::unique_ptr
+* @remark  Auto manage ax::Ref reference count, use std::unique_ptr
 * @limition  The init function finit must be public
 */
 template <typename T, typename F, typename... Ts>
@@ -276,7 +276,7 @@ static RefPtr<T> makeInstance(F&& memf, Ts&&... args)
 * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage axis::Ref reference count, use std::unique_ptr
+* @remark  Auto manage ax::Ref reference count, use std::unique_ptr
 * @limition  The init function finit must be public
 */
 template <typename T>
@@ -289,7 +289,7 @@ inline static RefPtr<T> makeInstance()
 * Create a Game Object, like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage axis::Ref reference count, use AutoReleasePool
+* @remark  Auto manage ax::Ref reference count, use AutoReleasePool
 * @limition The init function finit must be public
 */
 template <typename T, typename F, typename... Ts>
@@ -310,13 +310,13 @@ inline T* createInstance(F&& finit, Ts&&... args)
 * Create a Game Object with 'bool T::init()', like CREATE_FUNC, but more powerful
 
 * @return  Returns a autorelease game object
-* @remark  Auto manage axis::Ref reference count, use AutoReleasePool
+* @remark  Auto manage ax::Ref reference count, use AutoReleasePool
 * @limition  The init function finit must be public
 */
 template <typename T>
 inline T* createInstance()
 {
-    return ::axis::utils::createInstance<T>(&T::init);
+    return ::ax::utils::createInstance<T>(&T::init);
 }
 
 /**

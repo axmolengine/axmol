@@ -30,7 +30,7 @@ DRAGONBONES_NAMESPACE_BEGIN
 /**
  * @inheritDoc
  */
-class CCArmatureDisplay : public axis::Node, public virtual IArmatureProxy
+class CCArmatureDisplay : public ax::Node, public virtual IArmatureProxy
 {
     DRAGONBONES_DISALLOW_COPY_AND_ASSIGN(CCArmatureDisplay)
 
@@ -46,7 +46,7 @@ public:
 protected:
     bool _debugDraw;
     Armature* _armature;
-    axis::EventDispatcher* _dispatcher;
+    ax::EventDispatcher* _dispatcher;
 
 public:
     CCArmatureDisplay()
@@ -57,7 +57,7 @@ public:
         , _armature(nullptr)
         , _dispatcher(nullptr)
     {
-        _dispatcher = new axis::EventDispatcher();
+        _dispatcher = new ax::EventDispatcher();
         setEventDispatcher(_dispatcher);
         // _dispatcher->setEnabled(true);
     }
@@ -108,12 +108,12 @@ public:
     /**
      * @inheritDoc
      */
-    virtual axis::Rect getBoundingBox() const override;
+    virtual ax::Rect getBoundingBox() const override;
 };
 /**
  * @internal
  */
-class DBCCSprite : public axis::Sprite
+class DBCCSprite : public ax::Sprite
 {
     DRAGONBONES_DISALLOW_COPY_AND_ASSIGN(DBCCSprite)
 
@@ -126,17 +126,17 @@ protected:
     /**
      * Modify for polyInfo rect
      */
-    bool _checkVisibility(const axis::Mat4& transform, const axis::Size& size, const axis::Rect& rect);
+    bool _checkVisibility(const ax::Mat4& transform, const ax::Size& size, const ax::Rect& rect);
 
 public:
     /**
      * Modify for polyInfo rect
      */
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
     /**
      * Modify for cocos2dx 3.7, 3.8, 3.9
      */
-    axis::PolygonInfo& getPolygonInfoModify();
+    ax::PolygonInfo& getPolygonInfoModify();
 };
 
 DRAGONBONES_NAMESPACE_END

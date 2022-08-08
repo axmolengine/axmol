@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -74,7 +74,7 @@ Offset<Table> SingleNodeReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void SingleNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* singleNodeOptions)
+void SingleNodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* singleNodeOptions)
 {
     auto options = (SingleNodeOptions*)(singleNodeOptions);
 

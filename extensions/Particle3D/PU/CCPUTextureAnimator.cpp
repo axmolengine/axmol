@@ -3,7 +3,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -111,7 +111,7 @@ void PUTextureAnimator::initParticleForEmission(PUParticle3D* particle)
     if (_startRandom)
     {
         particle->textureCoordsCurrent =
-            (unsigned short)axis::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
+            (unsigned short)ax::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
     }
     else
     {
@@ -213,7 +213,7 @@ void PUTextureAnimator::determineNextTextureCoords(PUParticle3D* visualParticle)
     {
         // Generate a random texcoord index
         visualParticle->textureCoordsCurrent =
-            (unsigned short)axis::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
+            (unsigned short)ax::random((float)_textureCoordsStart, (float)_textureCoordsEnd + 0.999f);
     }
     break;
     }

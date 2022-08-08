@@ -8,7 +8,7 @@
 
 NS_FGUI_BEGIN
 
-class GTextInput : public GTextField, axis::ui::EditBoxDelegate
+class GTextInput : public GTextField, ax::ui::EditBoxDelegate
 {
 public:
     GTextInput();
@@ -35,8 +35,8 @@ protected:
 
     virtual void setTextFieldText() override;
 
-    virtual void editBoxReturn(axis::ui::EditBox* editBox) override;
-    virtual void editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxReturn(ax::ui::EditBox* editBox) override;
+    virtual void editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view text) override;
 
 private:
     FUIInput* _input;

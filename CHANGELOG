@@ -1,4 +1,4 @@
-axis-1.0  ??
+axys-1.0  ??
 
 - [HIGHLIGHT] Add Particle System Animations, Alpha Masks & Improvements, thanks to @DelinWorks
 - [HIGHLIGHT] Imporve text rendering
@@ -31,7 +31,7 @@ axis-1.0  ??
 - [HIGHLIGHT] Add extension 'Live2D' support
 - [HIGHLIGHT] Use curl for transferring data with URL syntax
 - [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
-- [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `axis-project/buildware`
+- [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `axys1/buildware`
 - [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
 - [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reduce memory cost when load large .ttf font file
 - [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs
@@ -651,7 +651,7 @@ cocos2d-x-3.12 Jul 06 2016
 [REFINE]        Web: Separate ccui.ListView event callback from ccui.ScrollView for its own events
 
 [FIX]           Android: fix compiling error if using NDK r11+
-[FIX]           Android: package name is `libcocos2dx` instead of application name if building with Android Studio
+[FIX]           Android: package name is `libaxys1` instead of application name if building with Android Studio
 [FIX]           Audio: AudioEngine can not work if the file path contains not ascii code on iOS
 [FIX]           Audio: SimpleAudioEngine::playEffect() doesn't work correctly on Linux
 [FIX]           AssetsManager: can not work

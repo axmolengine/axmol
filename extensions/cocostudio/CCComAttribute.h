@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL ComAttribute : public axis::Component
+class CCS_DLL ComAttribute : public ax::Component
 {
     DECLARE_CLASS_COMPONENT_INFO
 public:
@@ -65,7 +65,7 @@ public:
     bool parse(std::string_view jsonFile);
 
 private:
-    axis::ValueMap _dict;
+    ax::ValueMap _dict;
     rapidjson::Document _doc;
 };
 

@@ -122,7 +122,7 @@ void GList::setColumnGap(int value)
     }
 }
 
-void GList::setAlign(axis::TextHAlignment value)
+void GList::setAlign(ax::TextHAlignment value)
 {
     if (_align != value)
     {
@@ -133,7 +133,7 @@ void GList::setAlign(axis::TextHAlignment value)
     }
 }
 
-void GList::setVerticalAlign(axis::TextVAlignment value)
+void GList::setVerticalAlign(ax::TextVAlignment value)
 {
     if (_verticalAlign != value)
     {
@@ -1113,7 +1113,7 @@ void GList::refreshVirtualList()
     setVirtualListChangedFlag(false);
 }
 
-axis::Vec2 GList::getSnappingPosition(const axis::Vec2& pt)
+ax::Vec2 GList::getSnappingPosition(const ax::Vec2& pt)
 {
     if (_virtual)
     {

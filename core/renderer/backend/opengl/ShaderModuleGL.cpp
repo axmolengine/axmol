@@ -2,7 +2,7 @@
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -63,12 +63,12 @@ void ShaderModuleGL::compileShader(ShaderStage stage, std::string_view source)
         {
             yasio::sbyte_buffer errorLog{static_cast<size_t>(logLength), std::true_type{}};
             glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.data());
-            axis::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.data(),
+            ax::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.data(),
                          source.data());
         }
         else
         {
-            axis::log("cocos2d: ERROR: Failed to compile shader without errors.");
+            ax::log("cocos2d: ERROR: Failed to compile shader without errors.");
         }
 
         deleteShader();

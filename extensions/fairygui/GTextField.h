@@ -29,25 +29,25 @@ public:
     virtual TextFormat* getTextFormat() const = 0;
     virtual void applyTextFormat() = 0;
 
-    virtual const axis::Size& getTextSize() { return _displayObject->getContentSize(); }
+    virtual const ax::Size& getTextSize() { return _displayObject->getContentSize(); }
 
-    axis::Color3B getColor() const { return getTextFormat()->color; }
-    void setColor(const axis::Color3B& value);
+    ax::Color3B getColor() const { return getTextFormat()->color; }
+    void setColor(const ax::Color3B& value);
 
     float getFontSize() const { return getTextFormat()->fontSize; }
     void setFontSize(float value);
 
-    axis::Color3B getOutlineColor() const { return getTextFormat()->outlineColor; }
-    void setOutlineColor(const axis::Color3B& value);
+    ax::Color3B getOutlineColor() const { return getTextFormat()->outlineColor; }
+    void setOutlineColor(const ax::Color3B& value);
 
-    axis::ValueMap* getTemplateVars() { return _templateVars; }
-    void setTemplateVars(axis::ValueMap* value);
+    ax::ValueMap* getTemplateVars() { return _templateVars; }
+    void setTemplateVars(ax::ValueMap* value);
 
-    GTextField* setVar(const std::string& name, const axis::Value& value);
+    GTextField* setVar(const std::string& name, const ax::Value& value);
     void flushVars();
 
-    virtual axis::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
+    virtual ax::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const ax::Value& value) override;
 
 protected:
     virtual void setTextFieldText() = 0;
@@ -61,7 +61,7 @@ protected:
     std::string _text;
     bool _ubbEnabled;
     AutoSizeType _autoSize;
-    axis::ValueMap* _templateVars;
+    ax::ValueMap* _templateVars;
 };
 
 class GBasicTextField : public GTextField

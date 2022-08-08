@@ -15,17 +15,17 @@ public:
 
     CREATE_FUNC(GGraph);
 
-    void drawRect(float aWidth, float aHeight, int lineSize, const axis::Color4F& lineColor, const axis::Color4F& fillColor);
-    void drawEllipse(float aWidth, float aHeight, int lineSize, const axis::Color4F& lineColor, const axis::Color4F& fillColor);
-    void drawPolygon(int lineSize, const axis::Color4F& lineColor, const axis::Color4F& fillColor, const axis::Vec2* points, int count);
-    void drawRegularPolygon(int lineSize, const axis::Color4F& lineColor, const axis::Color4F& fillColor, int sides, float startAngle = 0, const float* distances = nullptr, int distanceCount = 0);
+    void drawRect(float aWidth, float aHeight, int lineSize, const ax::Color4F& lineColor, const ax::Color4F& fillColor);
+    void drawEllipse(float aWidth, float aHeight, int lineSize, const ax::Color4F& lineColor, const ax::Color4F& fillColor);
+    void drawPolygon(int lineSize, const ax::Color4F& lineColor, const ax::Color4F& fillColor, const ax::Vec2* points, int count);
+    void drawRegularPolygon(int lineSize, const ax::Color4F& lineColor, const ax::Color4F& fillColor, int sides, float startAngle = 0, const float* distances = nullptr, int distanceCount = 0);
     bool isEmpty() const { return _type == 0; }
 
-    axis::Color3B getColor() const;
-    void setColor(const axis::Color3B& value);
+    ax::Color3B getColor() const;
+    void setColor(const ax::Color3B& value);
 
-    virtual axis::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
+    virtual ax::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const ax::Value& value) override;
 
 protected:
     virtual void handleInit() override;
@@ -36,17 +36,17 @@ private:
     void updateShape();
 
     int _type;
-    axis::Color4F _lineColor;
-    axis::Color4F _fillColor;
+    ax::Color4F _lineColor;
+    ax::Color4F _fillColor;
     int _lineSize;
     float* _cornerRadius;
-    std::vector<axis::Vec2>* _polygonPoints;
+    std::vector<ax::Vec2>* _polygonPoints;
     float _polygonPointOffset;
     int _sides;
     float _startAngle;
     std::vector<float>* _distances;
 
-    axis::DrawNode* _shape;
+    ax::DrawNode* _shape;
 };
 
 NS_FGUI_END
