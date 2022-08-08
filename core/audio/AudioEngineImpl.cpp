@@ -816,7 +816,7 @@ void AudioEngineImpl::_updatePlayers(bool forStop)
             {
                 /// ###IMPORTANT: don't call immidiately, because at callback, user-end may play a new audio
                 /// cause _audioPlayers' iterator goan to invalid.
-                _finishCallbacks.push_back([finishCallback = std::move(player->_finishCallbak), audioID,
+                _finishCallbacks.emplace_back([finishCallback = std::move(player->_finishCallbak), audioID,
                                             filePath = std::move(filePath)]() { finishCallback(audioID, filePath); });
             }
             // clear cache when audio player finsihed properly

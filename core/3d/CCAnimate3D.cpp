@@ -406,7 +406,7 @@ void Animate3D::update(float t)
                             eventInfo->target   = _target;
                             eventInfo->frame    = keyFrame.first;
                             eventInfo->userInfo = &_keyFrameUserInfos[keyFrame.first];
-                            eventInfos.push_back(eventInfo);
+                            eventInfos.emplace_back(eventInfo);
                             frameEvent->setUserData((void*)eventInfo);
                         }
                     }

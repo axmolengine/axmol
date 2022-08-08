@@ -210,7 +210,7 @@ bool Physics3DShape::initCompoundShape(const std::vector<std::pair<Physics3DShap
     {
         compound->addChildShape(convertMat4TobtTransform(iter.second), iter.first->getbtShape());
         AX_SAFE_RETAIN(iter.first);
-        _compoundChildShapes.push_back(iter.first);
+        _compoundChildShapes.emplace_back(iter.first);
     }
     _btShape = compound;
     return true;

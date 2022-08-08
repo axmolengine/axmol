@@ -129,7 +129,7 @@ void Physics3DWorld::addPhysics3DObject(Physics3DObject* physicsObj)
     auto it = std::find(_objects.begin(), _objects.end(), physicsObj);
     if (it == _objects.end())
     {
-        _objects.push_back(physicsObj);
+        _objects.emplace_back(physicsObj);
         physicsObj->retain();
         if (physicsObj->getObjType() == Physics3DObject::PhysicsObjType::RIGID_BODY)
         {
@@ -200,7 +200,7 @@ void Physics3DWorld::addPhysics3DConstraint(Physics3DConstraint* constraint, boo
     }
     _btPhyiscsWorld->addConstraint(constraint->getbtContraint(), disableCollisionsBetweenLinkedObjs);
 
-    _constraints.push_back(constraint);
+    _constraints.emplace_back(constraint);
     constraint->retain();
 }
 
@@ -369,7 +369,7 @@ void Physics3DWorld::collisionChecking()
                         convertbtVector3ToVec3(pt.m_localPointA), convertbtVector3ToVec3(pt.m_positionWorldOnA),
                         convertbtVector3ToVec3(pt.m_localPointB), convertbtVector3ToVec3(pt.m_positionWorldOnB),
                         convertbtVector3ToVec3(pt.m_normalWorldOnB)};
-                    ci.collisionPointList.push_back(cp);
+                    ci.collisionPointList.emplace_back(cp);
                 }
 
                 if (poA->needCollisionCallback())

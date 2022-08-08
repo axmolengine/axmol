@@ -110,7 +110,7 @@ void getChildMap(std::map<int, std::vector<int>>& map, SkinData* skinData, const
     if (parent_name_index < 0)
     {
         skinData->addNodeBoneNames(parent_name);
-        skinData->nodeBoneOriginMatrices.push_back(transform);
+        skinData->nodeBoneOriginMatrices.emplace_back(transform);
         parent_name_index = skinData->getBoneNameIndex(parent_name);
     }
     else if (parent_name_index < static_cast<int>(skinData->skinBoneNames.size()))
@@ -139,7 +139,7 @@ void getChildMap(std::map<int, std::vector<int>>& map, SkinData* skinData, const
             child_name_index = skinData->getBoneNameIndex(child_name);
         }
 
-        map[parent_name_index].push_back(child_name_index);
+        map[parent_name_index].emplace_back(child_name_index);
 
         getChildMap(map, skinData, child);
     }
@@ -241,10 +241,10 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             tex.wrapT    = backend::SamplerAddressMode::CLAMP_TO_EDGE;
 
             sprintf(str, "%d", ++i);
-            materialdata.textures.push_back(tex);
+            materialdata.textures.emplace_back(tex);
             materialdata.id = str;
             material.name   = str;
-            materialdatas.materials.push_back(materialdata);
+            materialdatas.materials.emplace_back(materialdata);
         }
 
         // convert mesh
@@ -259,41 +259,41 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             if (mesh.positions.size())
             {
                 attrib.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
-                meshdata->attribs.push_back(attrib);
+                meshdata->attribs.emplace_back(attrib);
             }
             bool hasnormal = false, hastex = false;
             if (mesh.normals.size())
             {
                 hasnormal           = true;
                 attrib.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
-                meshdata->attribs.push_back(attrib);
+                meshdata->attribs.emplace_back(attrib);
             }
             if (mesh.texcoords.size())
             {
                 hastex              = true;
                 attrib.type         = parseGLDataType("GL_FLOAT", 2);
                 attrib.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
-                meshdata->attribs.push_back(attrib);
+                meshdata->attribs.emplace_back(attrib);
             }
 
             auto vertexNum = mesh.positions.size() / 3;
             for (unsigned int k = 0; k < vertexNum; ++k)
             {
-                meshdata->vertex.push_back(mesh.positions[k * 3]);
-                meshdata->vertex.push_back(mesh.positions[k * 3 + 1]);
-                meshdata->vertex.push_back(mesh.positions[k * 3 + 2]);
+                meshdata->vertex.emplace_back(mesh.positions[k * 3]);
+                meshdata->vertex.emplace_back(mesh.positions[k * 3 + 1]);
+                meshdata->vertex.emplace_back(mesh.positions[k * 3 + 2]);
 
                 if (hasnormal)
                 {
-                    meshdata->vertex.push_back(mesh.normals[k * 3]);
-                    meshdata->vertex.push_back(mesh.normals[k * 3 + 1]);
-                    meshdata->vertex.push_back(mesh.normals[k * 3 + 2]);
+                    meshdata->vertex.emplace_back(mesh.normals[k * 3]);
+                    meshdata->vertex.emplace_back(mesh.normals[k * 3 + 1]);
+                    meshdata->vertex.emplace_back(mesh.normals[k * 3 + 2]);
                 }
 
                 if (hastex)
                 {
-                    meshdata->vertex.push_back(mesh.texcoords[k * 2]);
-                    meshdata->vertex.push_back(mesh.texcoords[k * 2 + 1]);
+                    meshdata->vertex.emplace_back(mesh.texcoords[k * 2]);
+                    meshdata->vertex.emplace_back(mesh.texcoords[k * 2 + 1]);
                 }
             }
 
@@ -303,9 +303,9 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             {
                 int id     = mesh.material_ids[k];
                 size_t idx = k * 3;
-                subMeshMap[id].push_back(mesh.indices[idx]);
-                subMeshMap[id].push_back(mesh.indices[idx + 1]);
-                subMeshMap[id].push_back(mesh.indices[idx + 2]);
+                subMeshMap[id].emplace_back(mesh.indices[idx]);
+                subMeshMap[id].emplace_back(mesh.indices[idx + 1]);
+                subMeshMap[id].emplace_back(mesh.indices[idx + 2]);
             }
 
             auto node = new NodeData();
@@ -313,18 +313,18 @@ bool Bundle3D::loadObj(MeshDatas& meshdatas,
             for (auto&& submesh : subMeshMap)
             {
                 auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(submesh.second));
-                meshdata->subMeshAABB.push_back(
+                meshdata->subMeshAABB.emplace_back(
                     calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
                 sprintf(str, "%d", ++i);
-                meshdata->subMeshIds.push_back(str);
+                meshdata->subMeshIds.emplace_back(str);
 
                 auto modelnode        = new ModelData();
                 modelnode->materialId = submesh.first == -1 ? "" : materials[submesh.first].name;
                 modelnode->subMeshId  = str;
-                node->modelNodeDatas.push_back(modelnode);
+                node->modelNodeDatas.emplace_back(modelnode);
             }
-            nodedatas.nodes.push_back(node);
-            meshdatas.meshDatas.push_back(meshdata);
+            nodedatas.nodes.emplace_back(node);
+            meshdatas.meshDatas.emplace_back(meshdata);
         }
 
         return true;
@@ -449,7 +449,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
         {
             IndexArray indexArray{};
             std::string meshPartid = _binaryReader.readString();
-            meshData->subMeshIds.push_back(meshPartid);
+            meshData->subMeshIds.emplace_back(meshPartid);
             unsigned int nIndexCount;
             if (_binaryReader.read(&nIndexCount, 4, 1) != 1)
             {
@@ -464,7 +464,7 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
             }
             auto& storedIndices = meshData->subMeshIndices.emplace_back(std::move(indexArray));
             meshData->numIndex = (int)meshData->subMeshIndices.size();
-            // meshData->subMeshAABB.push_back(calculateAABB(meshData->vertex, meshData->getPerVertexSize(),
+            // meshData->subMeshAABB.emplace_back(calculateAABB(meshData->vertex, meshData->getPerVertexSize(),
             // indexArray));
             if (_version != "0.3" && _version != "0.4" && _version != "0.5")
             {
@@ -475,15 +475,15 @@ bool Bundle3D::loadMeshDatasBinary(MeshDatas& meshdatas)
                     AXLOG("warning: Failed to read meshdata: aabb '%s'.", _path.c_str());
                     goto FAILED;
                 } 
-                meshData->subMeshAABB.push_back(AABB(Vec3(aabb[0], aabb[1], aabb[2]), Vec3(aabb[3], aabb[4], aabb[5])));
+                meshData->subMeshAABB.emplace_back(AABB(Vec3(aabb[0], aabb[1], aabb[2]), Vec3(aabb[3], aabb[4], aabb[5])));
             }
             else
             {
-                meshData->subMeshAABB.push_back(
+                meshData->subMeshAABB.emplace_back(
                     calculateAABB(meshData->vertex, meshData->getPerVertexSize(), storedIndices));
             }
         }
-        meshdatas.meshDatas.push_back(meshData);
+        meshdatas.meshDatas.emplace_back(meshData);
     }
     return true;
 
@@ -568,7 +568,7 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         }
         meshVertexAttribute.vertexAttrib = usage;
 
-        meshdata->attribs.push_back(meshVertexAttribute);
+        meshdata->attribs.emplace_back(meshVertexAttribute);
     }
 
     // Read vertex data
@@ -609,10 +609,10 @@ bool Bundle3D::loadMeshDatasBinary_0_1(MeshDatas& meshdatas)
         }
 
         auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
-        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
+        meshdata->subMeshAABB.emplace_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
     }
 
-    meshdatas.meshDatas.push_back(meshdata);
+    meshdatas.meshDatas.emplace_back(meshdata);
     return true;
 }
 
@@ -682,7 +682,7 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         }
         meshVertexAttribute.vertexAttrib = usage;
 
-        meshdata->attribs.push_back(meshVertexAttribute);
+        meshdata->attribs.emplace_back(meshVertexAttribute);
     }
 
     // Read vertex data
@@ -730,10 +730,10 @@ bool Bundle3D::loadMeshDatasBinary_0_2(MeshDatas& meshdatas)
         }
 
         auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
-        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
+        meshdata->subMeshAABB.emplace_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
     }
 
-    meshdatas.meshDatas.push_back(meshdata);
+    meshdatas.meshDatas.emplace_back(meshdata);
 
     return true;
 }
@@ -770,7 +770,7 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
         meshData->vertexSizeInFloat                    = mesh_data_vertex_array_size;
         for (rapidjson::SizeType i = 0; i < mesh_data_vertex_array_size; ++i)
         {
-            meshData->vertex.push_back(mesh_data_vertex_array[i].GetFloat());
+            meshData->vertex.emplace_back(mesh_data_vertex_array[i].GetFloat());
         }
         // mesh part
         ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -779,12 +779,12 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
         {
             IndexArray indexArray{};
             const rapidjson::Value& mesh_part = mesh_part_array[i];
-            meshData->subMeshIds.push_back(mesh_part[ID].GetString());
+            meshData->subMeshIds.emplace_back(mesh_part[ID].GetString());
             // index_number
             const rapidjson::Value& indices_val_array = mesh_part[INDICES];
             for (rapidjson::SizeType j = 0, indices_val_array_size = indices_val_array.Size();
                  j < indices_val_array_size; ++j)
-                indexArray.push_back((unsigned short)indices_val_array[j].GetUint());
+                indexArray.emplace_back((unsigned short)indices_val_array[j].GetUint());
 
             auto& storedIndices = meshData->subMeshIndices.emplace_back(std::move(indexArray));
             meshData->numIndex = (int)meshData->subMeshIndices.size();
@@ -800,20 +800,20 @@ bool Bundle3D::loadMeshDatasJson(MeshDatas& meshdatas)
                     Vec3 max(mesh_part_aabb[(rapidjson::SizeType)3].GetFloat(),
                              mesh_part_aabb[(rapidjson::SizeType)4].GetFloat(),
                              mesh_part_aabb[(rapidjson::SizeType)5].GetFloat());
-                    meshData->subMeshAABB.push_back(AABB(min, max));
+                    meshData->subMeshAABB.emplace_back(AABB(min, max));
                 }
                 else
                 {
-                    meshData->subMeshAABB.push_back(
+                    meshData->subMeshAABB.emplace_back(
                         calculateAABB(meshData->vertex, meshData->getPerVertexSize(), storedIndices));
                 }
             }
             else
             {
-                meshData->subMeshAABB.push_back(calculateAABB(meshData->vertex, meshData->getPerVertexSize(), storedIndices));
+                meshData->subMeshAABB.emplace_back(calculateAABB(meshData->vertex, meshData->getPerVertexSize(), storedIndices));
             }
         }
-        meshdatas.meshDatas.push_back(meshData);
+        meshdatas.meshDatas.emplace_back(meshData);
     }
     return true;
 }
@@ -828,8 +828,8 @@ bool Bundle3D::loadNodes(NodeDatas& nodedatas)
             auto modelnode        = new ModelData();
             modelnode->materialId = "";
             modelnode->subMeshId  = "";
-            node->modelNodeDatas.push_back(modelnode);
-            nodedatas.nodes.push_back(node);
+            node->modelNodeDatas.emplace_back(modelnode);
+            nodedatas.nodes.emplace_back(node);
             return true;
         }
 
@@ -858,18 +858,18 @@ bool Bundle3D::loadNodes(NodeDatas& nodedatas)
             auto parent          = nodeDatas[it.first];
             for (const auto& child : children)
             {
-                parent->children.push_back(nodeDatas[child]);
+                parent->children.emplace_back(nodeDatas[child]);
             }
         }
-        nodedatas.skeleton.push_back(nodeDatas[skinData.rootBoneIndex]);
+        nodedatas.skeleton.emplace_back(nodeDatas[skinData.rootBoneIndex]);
         auto node              = new NodeData();
         auto modelnode         = new ModelData();
         modelnode->materialId  = "";
         modelnode->subMeshId   = "";
         modelnode->bones       = skinData.skinBoneNames;
         modelnode->invBindPose = skinData.inverseBindPoseMatrices;
-        node->modelNodeDatas.push_back(modelnode);
-        nodedatas.nodes.push_back(node);
+        node->modelNodeDatas.emplace_back(modelnode);
+        nodedatas.nodes.emplace_back(node);
         delete[] nodeDatas;
     }
     else
@@ -959,9 +959,9 @@ bool Bundle3D::loadMaterialsBinary(MaterialDatas& materialdatas)
             textureData.type  = parseGLTextureType(_binaryReader.readString());
             textureData.wrapS = parseSamplerAddressMode(_binaryReader.readString());
             textureData.wrapT = parseSamplerAddressMode(_binaryReader.readString());
-            materialData.textures.push_back(textureData);
+            materialData.textures.emplace_back(textureData);
         }
-        materialdatas.materials.push_back(materialData);
+        materialdatas.materials.emplace_back(materialData);
     }
     return true;
 }
@@ -983,8 +983,8 @@ bool Bundle3D::loadMaterialsBinary_0_1(MaterialDatas& materialdatas)
     textureData.filename = texturePath.empty() ? texturePath : _modelPath + texturePath;
     textureData.type     = NTextureData::Usage::Diffuse;
     textureData.id       = "";
-    materialData.textures.push_back(textureData);
-    materialdatas.materials.push_back(materialData);
+    materialData.textures.emplace_back(textureData);
+    materialdatas.materials.emplace_back(materialData);
     return true;
 }
 
@@ -1011,8 +1011,8 @@ bool Bundle3D::loadMaterialsBinary_0_2(MaterialDatas& materialdatas)
         textureData.filename = texturePath.empty() ? texturePath : _modelPath + texturePath;
         textureData.type     = NTextureData::Usage::Diffuse;
         textureData.id       = "";
-        materialData.textures.push_back(textureData);
-        materialdatas.materials.push_back(materialData);
+        materialData.textures.emplace_back(textureData);
+        materialdatas.materials.emplace_back(materialData);
     }
     return true;
 }
@@ -1054,10 +1054,10 @@ bool Bundle3D::loadMaterialsJson(MaterialDatas& materialdatas)
                 textureData.type                    = parseGLTextureType(texture_val["type"].GetString());
                 textureData.wrapS                   = parseSamplerAddressMode(texture_val["wrapModeU"].GetString());
                 textureData.wrapT                   = parseSamplerAddressMode(texture_val["wrapModeV"].GetString());
-                materialData.textures.push_back(textureData);
+                materialData.textures.emplace_back(textureData);
             }
         }
-        materialdatas.materials.push_back(materialData);
+        materialdatas.materials.emplace_back(materialData);
     }
     return true;
 }
@@ -1192,8 +1192,8 @@ bool Bundle3D::loadMeshDataJson_0_1(MeshDatas& meshdatas)
         indices.at<uint16_t>(i) = (unsigned short)indices_val_array[i].GetUint();
 
     auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
-    meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
-    meshdatas.meshDatas.push_back(meshdata);
+    meshdata->subMeshAABB.emplace_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
+    meshdatas.meshDatas.emplace_back(meshdata);
     return true;
 }
 
@@ -1246,9 +1246,9 @@ bool Bundle3D::loadMeshDataJson_0_2(MeshDatas& meshdatas)
             indices.at<uint16_t>(j) = (unsigned short)indices_val_array[j].GetUint();
 
         auto& storedIndices = meshdata->subMeshIndices.emplace_back(std::move(indices));
-        meshdata->subMeshAABB.push_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
+        meshdata->subMeshAABB.emplace_back(calculateAABB(meshdata->vertex, meshdata->getPerVertexSize(), storedIndices));
     }
-    meshdatas.meshDatas.push_back(meshdata);
+    meshdatas.meshDatas.emplace_back(meshdata);
     return true;
 }
 
@@ -1278,7 +1278,7 @@ bool Bundle3D::loadSkinDataJson(SkinData* skindata)
         {
             mat_bind_pos.m[j] = bind_pos[j].GetFloat();
         }
-        skindata->inverseBindPoseMatrices.push_back(mat_bind_pos);
+        skindata->inverseBindPoseMatrices.emplace_back(mat_bind_pos);
     }
 
     // set root bone information
@@ -1322,13 +1322,13 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
     for (unsigned int i = 0; i < boneNum; ++i)
     {
         std::string skinBoneName = _binaryReader.readString();
-        skindata->skinBoneNames.push_back(skinBoneName);
+        skindata->skinBoneNames.emplace_back(skinBoneName);
         if (!_binaryReader.readMatrix(bindpos))
         {
             AXLOG("warning: Failed to load SkinData: bindpos '%s'.", _path.c_str());
             return false;
         }
-        skindata->inverseBindPoseMatrices.push_back(bindpos);
+        skindata->inverseBindPoseMatrices.emplace_back(bindpos);
     }
 
     skindata->skinBoneOriginMatrices.resize(boneNum);
@@ -1342,7 +1342,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
     {
         skindata->addNodeBoneNames(boneName);
         rootIndex = skindata->getBoneNameIndex(boneName);
-        skindata->nodeBoneOriginMatrices.push_back(bindShape);
+        skindata->nodeBoneOriginMatrices.emplace_back(bindShape);
     }
     else
     {
@@ -1373,7 +1373,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
         {
             skindata->addNodeBoneNames(id);
             index = skindata->getBoneNameIndex(id);
-            skindata->nodeBoneOriginMatrices.push_back(transform);
+            skindata->nodeBoneOriginMatrices.emplace_back(transform);
         }
         else
         {
@@ -1387,7 +1387,7 @@ bool Bundle3D::loadSkinDataBinary(SkinData* skindata)
             parentIndex = skindata->getBoneNameIndex(parentid);
         }
 
-        skindata->boneChild[parentIndex].push_back(index);
+        skindata->boneChild[parentIndex].emplace_back(index);
     }
 
     return true;
@@ -1413,8 +1413,8 @@ bool Bundle3D::loadMaterialDataJson_0_1(MaterialDatas& materialdatas)
             textureData.filename = filename.empty() ? filename : _modelPath + filename;
             textureData.type     = NTextureData::Usage::Diffuse;
             textureData.id       = "";
-            materialData.textures.push_back(textureData);
-            materialdatas.materials.push_back(materialData);
+            materialData.textures.emplace_back(textureData);
+            materialdatas.materials.emplace_back(materialData);
         }
     }
 
@@ -1438,9 +1438,9 @@ bool Bundle3D::loadMaterialDataJson_0_2(MaterialDatas& materialdatas)
         textureData.filename = filename.empty() ? filename : _modelPath + filename;
         textureData.type     = NTextureData::Usage::Diffuse;
         textureData.id       = "";
-        materialData.textures.push_back(textureData);
+        materialData.textures.emplace_back(textureData);
     }
-    materialdatas.materials.push_back(materialData);
+    materialdatas.materials.emplace_back(materialData);
     return true;
 }
 
@@ -1520,7 +1520,7 @@ bool Bundle3D::loadAnimationDataJson(std::string_view id, Animation3DData* anima
                     float keytime                                     = bone_keyframe[KEYTIME].GetFloat();
                     Vec3 val(bone_keyframe_translation[(rapidjson::SizeType)0].GetFloat(),
                              bone_keyframe_translation[1].GetFloat(), bone_keyframe_translation[2].GetFloat());
-                    animationdata->_translationKeys[bone_name].push_back(Animation3DData::Vec3Key(keytime, val));
+                    animationdata->_translationKeys[bone_name].emplace_back(Animation3DData::Vec3Key(keytime, val));
                 }
 
                 if (bone_keyframe.HasMember(ROTATION))
@@ -1530,7 +1530,7 @@ bool Bundle3D::loadAnimationDataJson(std::string_view id, Animation3DData* anima
                     Quaternion val                                 = Quaternion(
                                                         bone_keyframe_rotation[(rapidjson::SizeType)0].GetFloat(), bone_keyframe_rotation[1].GetFloat(),
                                                         bone_keyframe_rotation[2].GetFloat(), bone_keyframe_rotation[3].GetFloat());
-                    animationdata->_rotationKeys[bone_name].push_back(Animation3DData::QuatKey(keytime, val));
+                    animationdata->_rotationKeys[bone_name].emplace_back(Animation3DData::QuatKey(keytime, val));
                 }
 
                 if (bone_keyframe.HasMember(SCALE))
@@ -1539,7 +1539,7 @@ bool Bundle3D::loadAnimationDataJson(std::string_view id, Animation3DData* anima
                     float keytime                               = bone_keyframe[KEYTIME].GetFloat();
                     Vec3 val(bone_keyframe_scale[(rapidjson::SizeType)0].GetFloat(), bone_keyframe_scale[1].GetFloat(),
                              bone_keyframe_scale[2].GetFloat());
-                    animationdata->_scaleKeys[bone_name].push_back(Animation3DData::Vec3Key(keytime, val));
+                    animationdata->_scaleKeys[bone_name].emplace_back(Animation3DData::Vec3Key(keytime, val));
                 }
             }
         }
@@ -1642,7 +1642,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
                         AXLOG("warning: Failed to read AnimationData: rotate '%s'.", _path.c_str());
                         return false;
                     }
-                    animationdata->_rotationKeys[boneName].push_back(Animation3DData::QuatKey(keytime, rotate));
+                    animationdata->_rotationKeys[boneName].emplace_back(Animation3DData::QuatKey(keytime, rotate));
                 }
 
                 // scale
@@ -1658,7 +1658,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
                         AXLOG("warning: Failed to read AnimationData: scale '%s'.", _path.c_str());
                         return false;
                     }
-                    animationdata->_scaleKeys[boneName].push_back(Animation3DData::Vec3Key(keytime, scale));
+                    animationdata->_scaleKeys[boneName].emplace_back(Animation3DData::Vec3Key(keytime, scale));
                 }
 
                 // translation
@@ -1674,7 +1674,7 @@ bool Bundle3D::loadAnimationDataBinary(std::string_view id, Animation3DData* ani
                         AXLOG("warning: Failed to read AnimationData: position '%s'.", _path.c_str());
                         return false;
                     }
-                    animationdata->_translationKeys[boneName].push_back(Animation3DData::Vec3Key(keytime, position));
+                    animationdata->_translationKeys[boneName].emplace_back(Animation3DData::Vec3Key(keytime, position));
                 }
             }
         }
@@ -1709,9 +1709,9 @@ bool Bundle3D::loadNodesJson(NodeDatas& nodedatas)
 
         bool isSkeleton = jnode[SKELETON].GetBool();
         if (isSkeleton)
-            nodedatas.skeleton.push_back(nodedata);
+            nodedatas.skeleton.emplace_back(nodedata);
         else
-            nodedatas.nodes.push_back(nodedata);
+            nodedatas.nodes.emplace_back(nodedata);
     }
     return true;
 }
@@ -1771,7 +1771,7 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
                         return nullptr;
                     }
 
-                    modelnodedata->bones.push_back(bone[NODE].GetString());
+                    modelnodedata->bones.emplace_back(bone[NODE].GetString());
 
                     Mat4 invbindpos;
                     const rapidjson::Value& jinvbindpos = bone[TRANSFORM];
@@ -1782,13 +1782,13 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
                     }
 
                     // invbindpos.inverse();
-                    modelnodedata->invBindPose.push_back(invbindpos);
+                    modelnodedata->invBindPose.emplace_back(invbindpos);
                 }
 
                 if (bones.Size() > 0)
                     isSkin = true;
             }
-            nodedata->modelNodeDatas.push_back(modelnodedata);
+            nodedata->modelNodeDatas.emplace_back(modelnodedata);
         }
     }
 
@@ -1818,7 +1818,7 @@ NodeData* Bundle3D::parseNodesRecursivelyJson(const rapidjson::Value& jvalue, bo
             const rapidjson::Value& child = children[i];
 
             NodeData* tempdata = parseNodesRecursivelyJson(child, singleSprite);
-            nodedata->children.push_back(tempdata);
+            nodedata->children.emplace_back(tempdata);
         }
     }
     return nodedata;
@@ -1843,9 +1843,9 @@ bool Bundle3D::loadNodesBinary(NodeDatas& nodedatas)
         NodeData* nodedata = parseNodesRecursivelyBinary(skeleton, nodeSize == 1);
 
         if (skeleton)
-            nodedatas.skeleton.push_back(nodedata);
+            nodedatas.skeleton.emplace_back(nodedata);
         else
-            nodedatas.nodes.push_back(nodedata);
+            nodedatas.nodes.emplace_back(nodedata);
     }
     return true;
 }
@@ -1914,7 +1914,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                 for (unsigned int j = 0; j < bonesSize; ++j)
                 {
                     std::string name = _binaryReader.readString();
-                    modelnodedata->bones.push_back(name);
+                    modelnodedata->bones.emplace_back(name);
 
                     Mat4 invbindpos;
                     if (!_binaryReader.readMatrix(invbindpos.m))
@@ -1924,7 +1924,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                         return nullptr;
                     }
 
-                    modelnodedata->invBindPose.push_back(invbindpos);
+                    modelnodedata->invBindPose.emplace_back(invbindpos);
                 }
                 isSkin = true;
             }
@@ -1957,7 +1957,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
                     }
                 }
             }
-            nodedata->modelNodeDatas.push_back(modelnodedata);
+            nodedata->modelNodeDatas.emplace_back(modelnodedata);
         }
     }
 
@@ -1991,7 +1991,7 @@ NodeData* Bundle3D::parseNodesRecursivelyBinary(bool& skeleton, bool singleSprit
         for (unsigned int i = 0; i < childrenSize; ++i)
         {
             NodeData* tempdata = parseNodesRecursivelyBinary(skeleton, singleSprite);
-            nodedata->children.push_back(tempdata);
+            nodedata->children.emplace_back(tempdata);
         }
     }
     return nodedata;
@@ -2303,7 +2303,7 @@ std::vector<Vec3> Bundle3D::getTrianglesList(std::string_view path)
         for (const auto& indices : iter->subMeshIndices)
         {
             indices.for_each([&](unsigned int ind) {
-                trianglesList.push_back(Vec3(iter->vertex[ind * preVertexSize], iter->vertex[ind * preVertexSize + 1],
+                trianglesList.emplace_back(Vec3(iter->vertex[ind * preVertexSize], iter->vertex[ind * preVertexSize + 1],
                                              iter->vertex[ind * preVertexSize + 2]));
             });
         }

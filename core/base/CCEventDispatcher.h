@@ -223,7 +223,7 @@ protected:
         size_t size() const;
         bool empty() const;
 
-        void push_back(EventListener* item);
+        void emplace_back(EventListener* item);
         void clearSceneGraphListeners();
         void clearFixedListeners();
         void clear();

@@ -117,10 +117,10 @@ bool Animation3D::init(const Animation3DData& data)
         std::vector<float> values;
         for (const auto& keyIter : iter.second)
         {
-            keys.push_back(keyIter._time);
-            values.push_back(keyIter._key.x);
-            values.push_back(keyIter._key.y);
-            values.push_back(keyIter._key.z);
+            keys.emplace_back(keyIter._time);
+            values.emplace_back(keyIter._key.x);
+            values.emplace_back(keyIter._key.y);
+            values.emplace_back(keyIter._key.z);
         }
 
         curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0], (int)keys.size());
@@ -143,11 +143,11 @@ bool Animation3D::init(const Animation3DData& data)
         std::vector<float> values;
         for (const auto& keyIter : iter.second)
         {
-            keys.push_back(keyIter._time);
-            values.push_back(keyIter._key.x);
-            values.push_back(keyIter._key.y);
-            values.push_back(keyIter._key.z);
-            values.push_back(keyIter._key.w);
+            keys.emplace_back(keyIter._time);
+            values.emplace_back(keyIter._key.x);
+            values.emplace_back(keyIter._key.y);
+            values.emplace_back(keyIter._key.z);
+            values.emplace_back(keyIter._key.w);
         }
 
         curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0], (int)keys.size());
@@ -170,10 +170,10 @@ bool Animation3D::init(const Animation3DData& data)
         std::vector<float> values;
         for (const auto& keyIter : iter.second)
         {
-            keys.push_back(keyIter._time);
-            values.push_back(keyIter._key.x);
-            values.push_back(keyIter._key.y);
-            values.push_back(keyIter._key.z);
+            keys.emplace_back(keyIter._time);
+            values.emplace_back(keyIter._key.x);
+            values.emplace_back(keyIter._key.y);
+            values.emplace_back(keyIter._key.z);
         }
 
         curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0], (int)keys.size());

@@ -58,7 +58,7 @@ AutoreleasePool::~AutoreleasePool()
 
 void AutoreleasePool::addObject(Ref* object)
 {
-    _managedObjectArray.push_back(object);
+    _managedObjectArray.emplace_back(object);
 }
 
 void AutoreleasePool::clear()
@@ -157,7 +157,7 @@ bool PoolManager::isObjectInPools(Ref* obj) const
 
 void PoolManager::push(AutoreleasePool* pool)
 {
-    _releasePoolStack.push_back(pool);
+    _releasePoolStack.emplace_back(pool);
 }
 
 void PoolManager::pop()

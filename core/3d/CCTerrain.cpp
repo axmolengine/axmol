@@ -393,7 +393,7 @@ void Terrain::loadVertices()
                                height,                                                                   // y
                                i * _terrainData._mapScale - _imageHeight / 2 * _terrainData._mapScale);  // z
             v._texcoord = Tex2F(j * 1.0 / _imageWidth, i * 1.0 / _imageHeight);
-            _vertices.push_back(v);
+            _vertices.emplace_back(v);
 
             // update the min & max height;
             if (height > _maxHeight)
@@ -414,13 +414,13 @@ void Terrain::calculateNormal()
         {
 
             int nLocIndex = i * _imageWidth + j;
-            _indices.push_back(nLocIndex);
-            _indices.push_back(nLocIndex + _imageWidth);
-            _indices.push_back(nLocIndex + 1);
+            _indices.emplace_back(nLocIndex);
+            _indices.emplace_back(nLocIndex + _imageWidth);
+            _indices.emplace_back(nLocIndex + 1);
 
-            _indices.push_back(nLocIndex + 1);
-            _indices.push_back(nLocIndex + _imageWidth);
-            _indices.push_back(nLocIndex + _imageWidth + 1);
+            _indices.emplace_back(nLocIndex + 1);
+            _indices.emplace_back(nLocIndex + _imageWidth);
+            _indices.emplace_back(nLocIndex + _imageWidth + 1);
         }
     }
     for (size_t i = 0, size = _indices.size(); i < size; i += 3)
@@ -740,7 +740,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLOD(int neighborLod[4], int selfLod,
 
     AX_SAFE_RELEASE_NULL(lodIndices._chunkIndices._indexBuffer);
     lodIndices._chunkIndices._indexBuffer = buffer;
-    this->_chunkLodIndicesSet.push_back(lodIndices);
+    this->_chunkLodIndicesSet.emplace_back(lodIndices);
     return lodIndices._chunkIndices;
 }
 
@@ -778,7 +778,7 @@ Terrain::ChunkIndices Terrain::insertIndicesLODSkirt(int selfLod, uint16_t* indi
 
     AX_SAFE_RELEASE_NULL(skirtIndices._chunkIndices._indexBuffer);
     skirtIndices._chunkIndices._indexBuffer = buffer;
-    this->_chunkLodIndicesSkirtSet.push_back(skirtIndices);
+    this->_chunkLodIndicesSkirtSet.emplace_back(skirtIndices);
     return skirtIndices._chunkIndices;
 }
 
@@ -997,7 +997,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
                 if (j >= imgWidth)
                     break;
                 auto v = _terrain->_vertices[i * imgWidth + j];
-                _originalVertices.push_back(v);
+                _originalVertices.emplace_back(v);
             }
         }
         // add four skirts
@@ -1009,7 +1009,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
         {
             auto v = _terrain->_vertices[i * imgWidth + _size.width * (n + 1)];
             v._position.y -= skirtHeight;
-            _originalVertices.push_back(v);
+            _originalVertices.emplace_back(v);
         }
 
         //#2
@@ -1018,7 +1018,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
         {
             auto v = _terrain->_vertices[_size.height * (m + 1) * imgWidth + j];
             v._position.y -= skirtHeight;
-            _originalVertices.push_back(v);
+            _originalVertices.emplace_back(v);
         }
 
         //#3
@@ -1027,7 +1027,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
         {
             auto v = _terrain->_vertices[i * imgWidth + _size.width * n];
             v._position.y -= skirtHeight;
-            _originalVertices.push_back(v);
+            _originalVertices.emplace_back(v);
         }
 
         //#4
@@ -1037,7 +1037,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
             auto v = _terrain->_vertices[_size.height * m * imgWidth + j];
             v._position.y -= skirtHeight;
             // v.position.y = -5;
-            _originalVertices.push_back(v);
+            _originalVertices.emplace_back(v);
         }
     }
     break;
@@ -1052,7 +1052,7 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
                 if (j >= imgWidth)
                     break;
                 auto v = _terrain->_vertices[i * imgWidth + j];
-                _originalVertices.push_back(v);
+                _originalVertices.emplace_back(v);
             }
         }
     }
@@ -1071,8 +1071,8 @@ void Terrain::Chunk::generate(int imgWidth, int imageHei, int m, int n, const un
                        _originalVertices[nLocIndex + 1 * (_size.width + 1)]._position,
                        _originalVertices[nLocIndex + 1 * (_size.width + 1) + 1]._position);
 
-            _trianglesList.push_back(a);
-            _trianglesList.push_back(b);
+            _trianglesList.emplace_back(a);
+            _trianglesList.emplace_back(b);
         }
     }
 
@@ -1169,13 +1169,13 @@ void Terrain::Chunk::updateIndicesLOD()
             for (int j = step; j < gridX - step; j += step)
             {
                 int nLocIndex = i * (gridX + 1) + j;
-                _lod[_currentLod]._indices.push_back(nLocIndex);
-                _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-                _lod[_currentLod]._indices.push_back(nLocIndex + step);
+                _lod[_currentLod]._indices.emplace_back(nLocIndex);
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
 
-                _lod[_currentLod]._indices.push_back(nLocIndex + step);
-                _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-                _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1) + step);
             }
         }
         // fix T-crack
@@ -1184,17 +1184,17 @@ void Terrain::Chunk::updateIndicesLOD()
         {
             for (int i = 0; i < gridY; i += next_step)
             {
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back((i + next_step) * (gridX + 1));
 
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back((i + next_step) * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1) + step);
 
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back((i + next_step) * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back((i + next_step) * (gridX + 1) + step);
             }
         }
         else
@@ -1207,13 +1207,13 @@ void Terrain::Chunk::updateIndicesLOD()
                 start += step;
             for (int i = start; i < end; i += step)
             {
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1));
 
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + step);
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1));
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1) + step);
             }
         }
 
@@ -1221,17 +1221,17 @@ void Terrain::Chunk::updateIndicesLOD()
         {
             for (int i = 0; i < gridY; i += next_step)
             {
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1) + gridX - step);
 
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.emplace_back((i + next_step) * (gridX + 1) + gridX - step);
 
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + next_step) * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.emplace_back((i + next_step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.emplace_back((i + next_step) * (gridX + 1) + gridX);
             }
         }
         else
@@ -1244,73 +1244,73 @@ void Terrain::Chunk::updateIndicesLOD()
                 start += step;
             for (int i = start; i < end; i += step)
             {
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1) + gridX - step);
 
-                _lod[_currentLod]._indices.push_back(i * (gridX + 1) + gridX);
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX - step);
-                _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.emplace_back(i * (gridX + 1) + gridX);
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1) + gridX - step);
+                _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1) + gridX);
             }
         }
         if (_front && _front->_currentLod > _currentLod)  // front
         {
             for (int i = 0; i < gridX; i += next_step)
             {
-                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back((gridY - step) * (gridX + 1) + i);
+                _lod[_currentLod]._indices.emplace_back(gridY * (gridX + 1) + i);
+                _lod[_currentLod]._indices.emplace_back((gridY - step) * (gridX + 1) + i + step);
 
-                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i + next_step);
+                _lod[_currentLod]._indices.emplace_back((gridY - step) * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back(gridY * (gridX + 1) + i);
+                _lod[_currentLod]._indices.emplace_back(gridY * (gridX + 1) + i + next_step);
 
-                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i + next_step);
-                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + next_step);
+                _lod[_currentLod]._indices.emplace_back((gridY - step) * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back(gridY * (gridX + 1) + i + next_step);
+                _lod[_currentLod]._indices.emplace_back((gridY - step) * (gridX + 1) + i + next_step);
             }
         }
         else
         {
             for (int i = step; i < gridX - step; i += step)
             {
-                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back((gridY - step) * (gridX + 1) + i);
+                _lod[_currentLod]._indices.emplace_back(gridY * (gridX + 1) + i);
+                _lod[_currentLod]._indices.emplace_back((gridY - step) * (gridX + 1) + i + step);
 
-                _lod[_currentLod]._indices.push_back((gridY - step) * (gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(gridY * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back((gridY - step) * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back(gridY * (gridX + 1) + i);
+                _lod[_currentLod]._indices.emplace_back(gridY * (gridX + 1) + i + step);
             }
         }
         if (_back && _back->_currentLod > _currentLod)  // back
         {
             for (int i = 0; i < gridX; i += next_step)
             {
-                _lod[_currentLod]._indices.push_back(i);
-                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back(i);
+                _lod[_currentLod]._indices.emplace_back(step * (gridX + 1) + i);
+                _lod[_currentLod]._indices.emplace_back(step * (gridX + 1) + i + step);
 
-                _lod[_currentLod]._indices.push_back(i);
-                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(i + next_step);
+                _lod[_currentLod]._indices.emplace_back(i);
+                _lod[_currentLod]._indices.emplace_back(step * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back(i + next_step);
 
-                _lod[_currentLod]._indices.push_back(i + next_step);
-                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + next_step);
+                _lod[_currentLod]._indices.emplace_back(i + next_step);
+                _lod[_currentLod]._indices.emplace_back(step * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back(step * (gridX + 1) + i + next_step);
             }
         }
         else
         {
             for (int i = step; i < gridX - step; i += step)
             {
-                _lod[_currentLod]._indices.push_back(i);
-                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i);
-                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back(i);
+                _lod[_currentLod]._indices.emplace_back(step * (gridX + 1) + i);
+                _lod[_currentLod]._indices.emplace_back(step * (gridX + 1) + i + step);
 
-                _lod[_currentLod]._indices.push_back(i);
-                _lod[_currentLod]._indices.push_back(step * (gridX + 1) + i + step);
-                _lod[_currentLod]._indices.push_back(i + step);
+                _lod[_currentLod]._indices.emplace_back(i);
+                _lod[_currentLod]._indices.emplace_back(step * (gridX + 1) + i + step);
+                _lod[_currentLod]._indices.emplace_back(i + step);
             }
         }
 
@@ -1327,13 +1327,13 @@ void Terrain::Chunk::updateIndicesLOD()
             {
 
                 int nLocIndex = i * (gridX + 1) + j;
-                _lod[_currentLod]._indices.push_back(nLocIndex);
-                _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-                _lod[_currentLod]._indices.push_back(nLocIndex + step);
+                _lod[_currentLod]._indices.emplace_back(nLocIndex);
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
 
-                _lod[_currentLod]._indices.push_back(nLocIndex + step);
-                _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-                _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1) + step);
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1));
+                _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1) + step);
             }
         }
         _chunkIndices = _terrain->insertIndicesLOD(currentNeighborLOD, _currentLod, &_lod[_currentLod]._indices[0],
@@ -1346,7 +1346,7 @@ void Terrain::Chunk::calculateAABB()
     std::vector<Vec3> pos;
     for (size_t i = 0, size = _originalVertices.size(); i < size; ++i)
     {
-        pos.push_back(_originalVertices[i]._position);
+        pos.emplace_back(_originalVertices[i]._position);
     }
     _aabb.updateMinMax(&pos[0], pos.size());
 }
@@ -1460,13 +1460,13 @@ void Terrain::Chunk::updateIndicesLODSkirt()
         for (int j = 0; j < gridX; j += step)
         {
             int nLocIndex = i * (gridX + 1) + j;
-            _lod[_currentLod]._indices.push_back(nLocIndex);
-            _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-            _lod[_currentLod]._indices.push_back(nLocIndex + step);
+            _lod[_currentLod]._indices.emplace_back(nLocIndex);
+            _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1));
+            _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
 
-            _lod[_currentLod]._indices.push_back(nLocIndex + step);
-            _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-            _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1) + step);
+            _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
+            _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1));
+            _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1) + step);
         }
     }
     // add skirt
@@ -1474,52 +1474,52 @@ void Terrain::Chunk::updateIndicesLODSkirt()
     for (int i = 0; i < gridY; i += step)
     {
         int nLocIndex = i * (gridX + 1) + gridX;
-        _lod[_currentLod]._indices.push_back(nLocIndex);
-        _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-        _lod[_currentLod]._indices.push_back((gridY + 1) * (gridX + 1) + i);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1));
+        _lod[_currentLod]._indices.emplace_back((gridY + 1) * (gridX + 1) + i);
 
-        _lod[_currentLod]._indices.push_back((gridY + 1) * (gridX + 1) + i);
-        _lod[_currentLod]._indices.push_back(nLocIndex + step * (gridX + 1));
-        _lod[_currentLod]._indices.push_back((gridY + 1) * (gridX + 1) + i + step);
+        _lod[_currentLod]._indices.emplace_back((gridY + 1) * (gridX + 1) + i);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex + step * (gridX + 1));
+        _lod[_currentLod]._indices.emplace_back((gridY + 1) * (gridX + 1) + i + step);
     }
 
     //#2
     for (int j = 0; j < gridX; j += step)
     {
         int nLocIndex = (gridY) * (gridX + 1) + j;
-        _lod[_currentLod]._indices.push_back(nLocIndex);
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[1] + j);
-        _lod[_currentLod]._indices.push_back(nLocIndex + step);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex);
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[1] + j);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
 
-        _lod[_currentLod]._indices.push_back(nLocIndex + step);
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[1] + j);
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[1] + j + step);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[1] + j);
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[1] + j + step);
     }
 
     //#3
     for (int i = 0; i < gridY; i += step)
     {
         int nLocIndex = i * (gridX + 1);
-        _lod[_currentLod]._indices.push_back(nLocIndex);
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[2] + i);
-        _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1));
+        _lod[_currentLod]._indices.emplace_back(nLocIndex);
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[2] + i);
+        _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1));
 
-        _lod[_currentLod]._indices.push_back((i + step) * (gridX + 1));
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[2] + i);
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[2] + i + step);
+        _lod[_currentLod]._indices.emplace_back((i + step) * (gridX + 1));
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[2] + i);
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[2] + i + step);
     }
 
     //#4
     for (int j = 0; j < gridX; j += step)
     {
         int nLocIndex = j;
-        _lod[_currentLod]._indices.push_back(nLocIndex + step);
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[3] + j);
-        _lod[_currentLod]._indices.push_back(nLocIndex);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[3] + j);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex);
 
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[3] + j + step);
-        _lod[_currentLod]._indices.push_back(_terrain->_skirtVerticesOffset[3] + j);
-        _lod[_currentLod]._indices.push_back(nLocIndex + step);
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[3] + j + step);
+        _lod[_currentLod]._indices.emplace_back(_terrain->_skirtVerticesOffset[3] + j);
+        _lod[_currentLod]._indices.emplace_back(nLocIndex + step);
     }
 
     _chunkIndices = _terrain->insertIndicesLODSkirt(_currentLod, &_lod[_currentLod]._indices[0],

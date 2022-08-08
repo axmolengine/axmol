@@ -218,9 +218,9 @@ void TextureCache::addImageAsync(std::string_view path,
     AsyncStruct* data = new AsyncStruct(fullpath, callback, callbackKey);
 
     // add async struct into queue
-    _asyncStructQueue.push_back(data);
+    _asyncStructQueue.emplace_back(data);
     std::unique_lock<std::mutex> ul(_requestMutex);
-    _requestQueue.push_back(data);
+    _requestQueue.emplace_back(data);
     _sleepCondition.notify_one();
 }
 
@@ -293,7 +293,7 @@ void TextureCache::loadImage()
         }
         // push the asyncStruct to response queue
         _responseMutex.lock();
-        _responseQueue.push_back(asyncStruct);
+        _responseQueue.emplace_back(asyncStruct);
         _responseMutex.unlock();
     }
 }
@@ -774,7 +774,7 @@ VolatileTexture* VolatileTextureMgr::findVolotileTexture(Texture2D* tt)
     if (!vt)
     {
         vt = new VolatileTexture(tt);
-        _textures.push_back(vt);
+        _textures.emplace_back(vt);
     }
 
     return vt;

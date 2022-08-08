@@ -504,7 +504,7 @@ void Camera::setScene(Scene* scene)
             auto it       = std::find(cameras.begin(), cameras.end(), this);
             if (it == cameras.end())
             {
-                _scene->_cameras.push_back(this);
+                _scene->_cameras.emplace_back(this);
                 // notify scene that the camera order is dirty
                 _scene->setCameraOrderDirty();
             }

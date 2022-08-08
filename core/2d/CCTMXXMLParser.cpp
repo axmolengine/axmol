@@ -516,7 +516,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         dict["rotation"] = attributeDict["rotation"].asDouble();
 
         // Add the object to the objectGroup
-        objectGroup->getObjects().push_back(Value(dict));
+        objectGroup->getObjects().emplace_back(Value(dict));
 
         // The parent element is now "object"
         tmxMapInfo->setParentElement(TMXPropertyObject);
@@ -608,7 +608,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
                 }
 
                 // add to points array
-                pointsArray.push_back(Value(pointDict));
+                pointsArray.emplace_back(Value(pointDict));
             }
 
             dict["points"] = Value(pointsArray);
@@ -653,7 +653,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
                 }
 
                 // add to points array
-                pointsArray.push_back(Value(pointDict));
+                pointsArray.emplace_back(Value(pointDict));
             }
 
             dict["polylinePoints"] = Value(pointsArray);
@@ -745,7 +745,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                 istringstream rowstr(sRow);
                 while (getline(rowstr, sGID, ','))
                 {
-                    gidTokens.push_back(sGID);
+                    gidTokens.emplace_back(sGID);
                 }
             }
 

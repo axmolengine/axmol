@@ -96,7 +96,7 @@ void PointArray::setControlPoints(vector<Vec2> controlPoints)
 
 void PointArray::addControlPoint(const Vec2& controlPoint)
 {
-    _controlPoints.push_back(controlPoint);
+    _controlPoints.emplace_back(controlPoint);
 }
 
 void PointArray::insertControlPoint(const Vec2& controlPoint, ssize_t index)
@@ -132,7 +132,7 @@ PointArray* PointArray::reverse() const
     newArray.reserve(_controlPoints.size());
     for (auto iter = _controlPoints.rbegin(), iterRend = _controlPoints.rend(); iter != iterRend; ++iter)
     {
-        newArray.push_back(*iter);
+        newArray.emplace_back(*iter);
     }
     PointArray* config = PointArray::create(0);
     config->setControlPoints(std::move(newArray));

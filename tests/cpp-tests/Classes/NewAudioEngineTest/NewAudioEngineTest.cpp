@@ -1205,7 +1205,7 @@ void AudioPlayInFinishedCB::doPlay(std::string_view filename)
 
 void AudioPlayInFinishedCB::playMusic(std::string_view filename)
 {
-    _playList.push_back(std::string{filename});
+    _playList.emplace_back(std::string{filename});
     if (_playList.size() == 1)
     {
         doPlay(filename);

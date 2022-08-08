@@ -895,7 +895,7 @@ void MyXMLVisitor::textHandler(void* /*ctx*/, const char* str, size_t len)
 
 void MyXMLVisitor::pushBackFontElement(const MyXMLVisitor::Attributes& attribs)
 {
-    _fontElements.push_back(attribs);
+    _fontElements.emplace_back(attribs);
 }
 
 void MyXMLVisitor::popBackFontElement()
