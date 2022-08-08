@@ -53,8 +53,8 @@ class TValue_Shake : public TValueBase
 public:
     float amplitude;
     float duration;
-    axis::Vec2 lastOffset;
-    axis::Vec2 offset;
+    ax::Vec2 lastOffset;
+    ax::Vec2 offset;
 };
 
 class TValue_Text : public TValueBase
@@ -75,12 +75,12 @@ public:
     bool b3;
 
     TValue();
-    axis::Vec2 getVec2() const;
-    void setVec2(const axis::Vec2& value);
-    axis::Vec4 getVec4() const;
-    void setVec4(const axis::Vec4& value);
-    axis::Color4B getColor() const;
-    void setColor(const axis::Color4B& value);
+    ax::Vec2 getVec2() const;
+    void setVec2(const ax::Vec2& value);
+    ax::Vec4 getVec4() const;
+    void setVec4(const ax::Vec4& value);
+    ax::Color4B getColor() const;
+    void setColor(const ax::Color4B& value);
 };
 
 TValue::TValue()
@@ -90,23 +90,23 @@ TValue::TValue()
     b3 = false;
 }
 
-axis::Vec2 TValue::getVec2() const
+ax::Vec2 TValue::getVec2() const
 {
-    return axis::Vec2(f1, f2);
+    return ax::Vec2(f1, f2);
 }
 
-void TValue::setVec2(const axis::Vec2& value)
+void TValue::setVec2(const ax::Vec2& value)
 {
     f1 = value.x;
     f2 = value.y;
 }
 
-axis::Vec4 TValue::getVec4() const
+ax::Vec4 TValue::getVec4() const
 {
-    return axis::Vec4(f1, f2, f3, f4);
+    return ax::Vec4(f1, f2, f3, f4);
 }
 
-void TValue::setVec4(const axis::Vec4& value)
+void TValue::setVec4(const ax::Vec4& value)
 {
     f1 = value.x;
     f2 = value.y;
@@ -114,12 +114,12 @@ void TValue::setVec4(const axis::Vec4& value)
     f4 = value.w;
 }
 
-axis::Color4B TValue::getColor() const
+ax::Color4B TValue::getColor() const
 {
-    return axis::Color4B(f1, f2, f3, f4);
+    return ax::Color4B(f1, f2, f3, f4);
 }
 
-void TValue::setColor(const axis::Color4B& value)
+void TValue::setColor(const ax::Color4B& value)
 {
     f1 = value.r;
     f2 = value.g;

@@ -4,7 +4,7 @@
  Copyright (c) 2013-2015 zilongshanren
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -123,7 +123,7 @@ public:
     virtual void setNativeInputMode(EditBox::InputMode inputMode)                    = 0;
     virtual void setNativeInputFlag(EditBox::InputFlag inputFlag)                    = 0;
     virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)         = 0;
-    virtual void setNativeTextHorizontalAlignment(axis::TextHAlignment alignment) = 0;
+    virtual void setNativeTextHorizontalAlignment(ax::TextHAlignment alignment) = 0;
     virtual void setNativeText(const char* pText)                                    = 0;
     virtual void setNativePlaceHolder(const char* pText)                             = 0;
     virtual void setNativeVisible(bool visible)                                      = 0;

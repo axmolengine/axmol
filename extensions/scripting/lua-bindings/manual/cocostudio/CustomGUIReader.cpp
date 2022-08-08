@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -86,7 +86,7 @@ void CustomGUIReader::init(std::string& className, int createFunc, int setPropsF
 }
 
 void CustomGUIReader::setCustomProps(std::string_view classType,
-                                     axis::Ref* widget,
+                                     ax::Ref* widget,
                                      const rapidjson::Value& customOptions)
 {
     if (_setPropsFunc != 0)

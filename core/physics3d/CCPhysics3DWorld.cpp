@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -285,8 +285,8 @@ void Physics3DWorld::debugDraw(Renderer* renderer)
     }
 }
 
-bool Physics3DWorld::rayCast(const axis::Vec3& startPos,
-                             const axis::Vec3& endPos,
+bool Physics3DWorld::rayCast(const ax::Vec3& startPos,
+                             const ax::Vec3& endPos,
                              Physics3DWorld::HitResult* result)
 {
     auto btStart = convertVec3TobtVector3(startPos);
@@ -305,8 +305,8 @@ bool Physics3DWorld::rayCast(const axis::Vec3& startPos,
 }
 
 bool Physics3DWorld::sweepShape(Physics3DShape* shape,
-                                const axis::Mat4& startTransform,
-                                const axis::Mat4& endTransform,
+                                const ax::Mat4& startTransform,
+                                const ax::Mat4& endTransform,
                                 Physics3DWorld::HitResult* result)
 {
     AX_ASSERT(shape->getShapeType() != Physics3DShape::ShapeType::HEIGHT_FIELD &&

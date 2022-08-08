@@ -4,7 +4,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@
 #include "2d/CCFontAtlas.h"
 #if AX_TARGET_PLATFORM != AX_PLATFORM_WIN32 && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include "platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
+#    include "platform/android/jni/Java_org_axys1_lib_AxysHelper.h"
 #endif
 #include <algorithm>
 #include "2d/CCFontFreeType.h"

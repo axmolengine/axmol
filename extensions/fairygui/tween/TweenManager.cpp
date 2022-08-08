@@ -50,7 +50,7 @@ GTweener* TweenManager::createTween()
     return tweener;
 }
 
-bool TweenManager::isTweening(axis::Ref* target, TweenPropType propType)
+bool TweenManager::isTweening(ax::Ref* target, TweenPropType propType)
 {
     if (target == nullptr)
         return false;
@@ -66,7 +66,7 @@ bool TweenManager::isTweening(axis::Ref* target, TweenPropType propType)
     return false;
 }
 
-bool TweenManager::killTweens(axis::Ref* target, TweenPropType propType, bool completed)
+bool TweenManager::killTweens(ax::Ref* target, TweenPropType propType, bool completed)
 {
     if (target == nullptr)
         return false;
@@ -87,7 +87,7 @@ bool TweenManager::killTweens(axis::Ref* target, TweenPropType propType, bool co
     return flag;
 }
 
-GTweener* TweenManager::getTween(axis::Ref* target, TweenPropType propType)
+GTweener* TweenManager::getTween(ax::Ref* target, TweenPropType propType)
 {
     if (target == nullptr)
         return nullptr;
@@ -173,11 +173,11 @@ void TweenManager::init()
         _activeTweens = new GTweener*[_arrayLength];
     }
 
-    axis::Director::getInstance()->getScheduler()->scheduleUpdate(&tweenEngine, INT_MIN + 10, false);
-    axis::Director::getInstance()->getEventDispatcher()->addCustomEventListener(axis::Director::EVENT_RESET, &reset);
+    ax::Director::getInstance()->getScheduler()->scheduleUpdate(&tweenEngine, INT_MIN + 10, false);
+    ax::Director::getInstance()->getEventDispatcher()->addCustomEventListener(ax::Director::EVENT_RESET, &reset);
 }
 
-void TweenManager::reset(axis::EventCustom*)
+void TweenManager::reset(ax::EventCustom*)
 {
     int cnt = _totalActiveTweens;
     for (int i = 0; i < cnt; i++)

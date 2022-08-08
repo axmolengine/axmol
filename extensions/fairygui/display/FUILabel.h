@@ -7,7 +7,7 @@
 
 NS_FGUI_BEGIN
 
-class FUILabel : public axis::Label
+class FUILabel : public ax::Label
 {
 public:
     FUILabel();
@@ -21,9 +21,9 @@ public:
     TextFormat* getTextFormat() const { return _textFormat; }
     void applyTextFormat();
 
-    void setUnderlineColor(const axis::Color3B& value);
+    void setUnderlineColor(const ax::Color3B& value);
 
-    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, const axis::Vec2& imageOffset = axis::Vec2::ZERO, float fontSize = 0) override;
+    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, const ax::Vec2& imageOffset = ax::Vec2::ZERO, float fontSize = 0) override;
 
     void setGrayed(bool value);
 protected:

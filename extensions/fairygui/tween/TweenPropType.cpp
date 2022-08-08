@@ -65,7 +65,7 @@ void TweenPropTypeUtils::setProps(GObject * target, TweenPropType propType, cons
     }
 }
 
-void TweenPropTypeUtils::setProps(axis::Node * target, TweenPropType propType, const TweenValue & value)
+void TweenPropTypeUtils::setProps(ax::Node * target, TweenPropType propType, const TweenValue & value)
 {
     switch (propType)
     {

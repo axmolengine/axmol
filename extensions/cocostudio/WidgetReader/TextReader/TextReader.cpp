@@ -49,7 +49,7 @@ void TextReader::destroyInstance()
     AX_SAFE_DELETE(instanceTextReader);
 }
 
-void TextReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void TextReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -428,7 +428,7 @@ Offset<Table> TextReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     return *(Offset<Table>*)(&options);
 }
 
-void TextReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textOptions)
+void TextReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textOptions)
 {
     Text* label  = static_cast<Text*>(node);
     auto options = (TextOptions*)textOptions;
@@ -533,7 +533,7 @@ void TextReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Ta
         label->setContentSize(contentSize);
     }
 
-    auto labelRenderer = dynamic_cast<axis::Label*>(label->getVirtualRenderer());
+    auto labelRenderer = dynamic_cast<ax::Label*>(label->getVirtualRenderer());
     if (options->boldEnabled())
         labelRenderer->enableBold();
     if (options->underlineEnabled())

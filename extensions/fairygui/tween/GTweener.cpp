@@ -84,12 +84,12 @@ GTweener* GTweener::setTargetAny(void* value)
     return this;
 }
 
-GTweener* GTweener::setTarget(axis::Ref* value)
+GTweener* GTweener::setTarget(ax::Ref* value)
 {
     return setTarget(value, TweenPropType::None);
 }
 
-GTweener* GTweener::setTarget(axis::Ref* target, TweenPropType propType)
+GTweener* GTweener::setTarget(ax::Ref* target, TweenPropType propType)
 {
     AX_SAFE_RELEASE(_refTarget);
     _target = _refTarget = target;
@@ -191,7 +191,7 @@ GTweener* GTweener::_to(float start, float end, float duration)
     return this;
 }
 
-GTweener* GTweener::_to(const axis::Vec2& start, const axis::Vec2& end, float duration)
+GTweener* GTweener::_to(const ax::Vec2& start, const ax::Vec2& end, float duration)
 {
     _valueSize = 2;
     startValue.setVec2(start);
@@ -201,7 +201,7 @@ GTweener* GTweener::_to(const axis::Vec2& start, const axis::Vec2& end, float du
     return this;
 }
 
-GTweener* GTweener::_to(const axis::Vec3& start, const axis::Vec3& end, float duration)
+GTweener* GTweener::_to(const ax::Vec3& start, const ax::Vec3& end, float duration)
 {
     _valueSize = 3;
     startValue.setVec3(start);
@@ -211,7 +211,7 @@ GTweener* GTweener::_to(const axis::Vec3& start, const axis::Vec3& end, float du
     return this;
 }
 
-GTweener* GTweener::_to(const axis::Vec4& start, const axis::Vec4& end, float duration)
+GTweener* GTweener::_to(const ax::Vec4& start, const ax::Vec4& end, float duration)
 {
     _valueSize = 4;
     startValue.setVec4(start);
@@ -221,7 +221,7 @@ GTweener* GTweener::_to(const axis::Vec4& start, const axis::Vec4& end, float du
     return this;
 }
 
-GTweener* GTweener::_to(const axis::Color4B& start, const axis::Color4B& end, float duration)
+GTweener* GTweener::_to(const ax::Color4B& start, const ax::Color4B& end, float duration)
 {
     _valueSize = 4;
     startValue.setColor(start);
@@ -241,7 +241,7 @@ GTweener* GTweener::_to(double start, double end, float duration)
     return this;
 }
 
-GTweener* GTweener::_shake(const axis::Vec2& start, float amplitude, float duration)
+GTweener* GTweener::_shake(const ax::Vec2& start, float amplitude, float duration)
 {
     _valueSize = 6;
     startValue.setVec2(start);

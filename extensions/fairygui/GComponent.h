@@ -33,7 +33,7 @@ public:
     GObject* getChildByPath(const std::string& path) const;
     GObject* getChildInGroup(const GGroup* group, const std::string& name) const;
     GObject* getChildById(const std::string& id) const;
-    const axis::Vector<GObject*>& getChildren() const { return _children; }
+    const ax::Vector<GObject*>& getChildren() const { return _children; }
 
     int getChildIndex(const GObject* child) const;
     void setChildIndex(GObject* child, int index);
@@ -50,14 +50,14 @@ public:
     void addController(GController* c);
     GController* getControllerAt(int index) const;
     GController* getController(const std::string& name) const;
-    const axis::Vector<GController*>& getControllers() const { return _controllers; }
+    const ax::Vector<GController*>& getControllers() const { return _controllers; }
     void removeController(GController* c);
     void applyController(GController* c);
     void applyAllControllers();
 
     Transition* getTransition(const std::string& name) const;
     Transition* getTransitionAt(int index) const;
-    const axis::Vector<Transition*>& getTransitions() const { return _transitions; }
+    const ax::Vector<Transition*>& getTransitions() const { return _transitions; }
 
     bool getOpaque() const { return _opaque; }
     void setOpaque(bool value);
@@ -70,8 +70,8 @@ public:
     int getApexIndex() const { return _apexIndex; }
     void setApexIndex(int value);
 
-    axis::Node* getMask() const;
-    void setMask(axis::Node* value, bool inverted = false);
+    ax::Node* getMask() const;
+    void setMask(ax::Node* value, bool inverted = false);
 
     IHitTest* getHitArea() const { return _hitArea; }
     void setHitArea(IHitTest* value);
@@ -86,8 +86,8 @@ public:
     void setBoundsChangedFlag();
     void ensureBoundsCorrect();
 
-    virtual GObject* hitTest(const axis::Vec2& worldPoint, const axis::Camera* camera) override;
-    virtual axis::Vec2 getSnappingPosition(const axis::Vec2& pt);
+    virtual GObject* hitTest(const ax::Vec2& worldPoint, const ax::Camera* camera) override;
+    virtual ax::Vec2 getSnappingPosition(const ax::Vec2& pt);
 
     //internal use
     void childSortingOrderChanged(GObject* child, int oldValue, int newValue);
@@ -117,13 +117,13 @@ protected:
     void setupOverflow(OverflowType overflow);
     void setupScroll(ByteBuffer* buffer);
 
-    axis::Vector<GObject*> _children;
-    axis::Vector<GController*> _controllers;
-    axis::Vector<Transition*> _transitions;
+    ax::Vector<GObject*> _children;
+    ax::Vector<GController*> _controllers;
+    ax::Vector<Transition*> _transitions;
     FUIInnerContainer* _container;
     ScrollPane* _scrollPane;
     Margin _margin;
-    axis::Vec2 _alignOffset;
+    ax::Vec2 _alignOffset;
     ChildrenRenderOrder _childrenRenderOrder;
     int _apexIndex;
     bool _boundsChanged;

@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -73,7 +73,7 @@ int LZ4Compressor::maxCompressedSize(const int bufferSize)
     return LZ4_compressBound(bufferSize);
 }
 
-dtStatus axis::LZ4Compressor::decompress(const unsigned char* compressed,
+dtStatus ax::LZ4Compressor::decompress(const unsigned char* compressed,
                                             const int compressedSize,
                                             unsigned char* buffer,
                                             const int maxBufferSize,
@@ -83,7 +83,7 @@ dtStatus axis::LZ4Compressor::decompress(const unsigned char* compressed,
     return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
 }
 
-dtStatus axis::LZ4Compressor::compress(const unsigned char* buffer,
+dtStatus ax::LZ4Compressor::compress(const unsigned char* buffer,
                                           const int bufferSize,
                                           unsigned char* compressed,
                                           const int maxCompressedSize,

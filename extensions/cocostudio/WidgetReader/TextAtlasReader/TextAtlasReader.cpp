@@ -45,7 +45,7 @@ void TextAtlasReader::destroyInstance()
     AX_SAFE_DELETE(instanceTextAtlasReader);
 }
 
-void TextAtlasReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void TextAtlasReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -220,7 +220,7 @@ Offset<Table> TextAtlasReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     return *(Offset<Table>*)(&options);
 }
 
-void TextAtlasReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textAtlasOptions)
+void TextAtlasReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textAtlasOptions)
 {
     TextAtlas* labelAtlas = static_cast<TextAtlas*>(node);
     auto options          = (TextAtlasOptions*)textAtlasOptions;

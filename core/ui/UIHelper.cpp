@@ -2,7 +2,7 @@
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -144,7 +144,7 @@ void Helper::changeLayoutSystemActiveState(bool bActive)
 {
     _activeLayout = bActive;
 }
-void Helper::doLayout(axis::Node* rootNode)
+void Helper::doLayout(ax::Node* rootNode)
 {
     if (!_activeLayout)
     {
@@ -164,7 +164,7 @@ void Helper::doLayout(axis::Node* rootNode)
     }
 }
 
-Rect Helper::restrictCapInsetRect(const axis::Rect& capInsets, const Vec2& textureSize)
+Rect Helper::restrictCapInsetRect(const ax::Rect& capInsets, const Vec2& textureSize)
 {
     float x      = capInsets.origin.x;
     float y      = capInsets.origin.y;

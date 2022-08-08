@@ -3,7 +3,7 @@ Copyright (c) 2014-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -2320,7 +2320,7 @@ Bundle3D::~Bundle3D()
     clear();
 }
 
-axis::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
+ax::AABB Bundle3D::calculateAABB(const std::vector<float>& vertex,
                                       int stride,
                                       const IndexArray& indices)
 {

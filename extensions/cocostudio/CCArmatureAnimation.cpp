@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -185,7 +185,7 @@ void ArmatureAnimation::play(std::string_view animationName, int durationTo, int
 
     int durationTween = _movementData->durationTween == 0 ? _rawDuration : _movementData->durationTween;
 
-    axis::tweenfunc::TweenType tweenEasing = _movementData->tweenEasing;
+    ax::tweenfunc::TweenType tweenEasing = _movementData->tweenEasing;
     loop                                      = (loop < 0) ? _movementData->loop : loop;
 
     _onMovementList = false;

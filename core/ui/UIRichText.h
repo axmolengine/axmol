@@ -2,7 +2,7 @@
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -527,7 +527,7 @@ public:
     std::string getFontFace();               /*!< return the current font face */
     void setAnchorFontColor(std::string_view color); /*!< Set the font color of a-tag. @param face the font color. */
     std::string getAnchorFontColor();                /*!< return the current font color of a-tag */
-    axis::Color3B getAnchorFontColor3B();         /*!< return the current font color of a-tag */
+    ax::Color3B getAnchorFontColor3B();         /*!< return the current font color of a-tag */
     void setAnchorTextBold(bool enable);             /*!< enable bold text of a-tag */
     bool isAnchorTextBoldEnabled();                  /*!< valid style is bold text of a-tag? */
     void setAnchorTextItalic(bool enable);           /*!< enable italic text of a-tag */
@@ -556,9 +556,9 @@ public:
     void setDefaults(const ValueMap& defaults); /*!< set the default values */
     ValueMap getDefaults() const;               /*!< returns the default values */
 
-    axis::Color3B color3BWithString(std::string_view color);     /*!< convert a color string into a Color3B. */
-    std::string stringWithColor3B(const axis::Color3B& color3b); /*!< convert a Color3B into a color string. */
-    std::string stringWithColor4B(const axis::Color4B& color4b); /*!< convert a Color4B into a color string. */
+    ax::Color3B color3BWithString(std::string_view color);     /*!< convert a color string into a Color3B. */
+    std::string stringWithColor3B(const ax::Color3B& color3b); /*!< convert a Color3B into a color string. */
+    std::string stringWithColor4B(const ax::Color4B& color4b); /*!< convert a Color4B into a color string. */
 
     /**
      * @brief add a callback to own tag.

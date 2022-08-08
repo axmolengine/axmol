@@ -45,7 +45,7 @@ void CheckBoxReader::destroyInstance()
     AX_SAFE_DELETE(instanceCheckBoxReader);
 }
 
-void CheckBoxReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void CheckBoxReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
 
     CheckBox* checkBox = static_cast<CheckBox*>(widget);
@@ -425,7 +425,7 @@ Offset<Table> CheckBoxReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)&options;
 }
 
-void CheckBoxReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* checkBoxOptions)
+void CheckBoxReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* checkBoxOptions)
 {
 
     auto options = (CheckBoxOptions*)checkBoxOptions;

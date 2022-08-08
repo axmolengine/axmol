@@ -49,7 +49,7 @@ void ImageViewReader::destroyInstance()
     AX_SAFE_DELETE(instanceImageViewReader);
 }
 
-void ImageViewReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void ImageViewReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     WidgetReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
 
@@ -154,7 +154,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
 
     bool scale9Enabled = false;
     Rect capInsets;
-    axis::Size scale9Size;
+    ax::Size scale9Size;
 
     std::string path;
     std::string plistFile;
@@ -271,7 +271,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     return *(Offset<Table>*)(&options);
 }
 
-void ImageViewReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* imageViewOptions)
+void ImageViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* imageViewOptions)
 {
     ImageView* imageView = static_cast<ImageView*>(node);
     auto options         = (ImageViewOptions*)imageViewOptions;

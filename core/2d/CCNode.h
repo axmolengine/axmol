@@ -7,7 +7,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -946,7 +946,7 @@ public:
      *
      */
     template <typename _T>
-    inline static void sortNodes(axis::Vector<_T*>& nodes)
+    inline static void sortNodes(ax::Vector<_T*>& nodes)
     {
         static_assert(std::is_base_of<Node, _T>::value, "Node::sortNodes: Only accept derived of Node!");
 #if AX_64BITS

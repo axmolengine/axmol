@@ -17,7 +17,7 @@ public:
 
     GLoader* getAgent() const { return _agent; }
     bool isDragging() const { return _agent->getParent() != nullptr; }
-    void startDrag(const std::string& icon, const axis::Value& sourceData = axis::Value::Null, int touchPointID = -1);
+    void startDrag(const std::string& icon, const ax::Value& sourceData = ax::Value::Null, int touchPointID = -1);
     void cancel();
 
 private:
@@ -26,7 +26,7 @@ private:
     static DragDropManager* _inst;
 
     GLoader* _agent;
-    axis::Value _sourceData;
+    ax::Value _sourceData;
 };
 
 NS_FGUI_END

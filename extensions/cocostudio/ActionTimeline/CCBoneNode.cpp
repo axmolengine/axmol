@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2015-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -71,8 +71,8 @@ bool BoneNode::init()
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program =
-        axis::backend::Program::getBuiltinProgram(axis::backend::ProgramType::POSITION_COLOR);  // TODO: noMVP?
-    setProgramState(new axis::backend::ProgramState(program), false);
+        ax::backend::Program::getBuiltinProgram(ax::backend::ProgramType::POSITION_COLOR);  // TODO: noMVP?
+    setProgramState(new ax::backend::ProgramState(program), false);
     pipelineDescriptor.programState = _programState;
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix"sv);
@@ -82,27 +82,27 @@ bool BoneNode::init()
     auto iter                 = attributeInfo.find("a_position"sv);
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_position"sv, iter->second.location, axis::backend::VertexFormat::FLOAT3, 0,
+        vertexLayout->setAttribute("a_position"sv, iter->second.location, ax::backend::VertexFormat::FLOAT3, 0,
                                    false);
     }
     iter = attributeInfo.find("a_color"sv);
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_color"sv, iter->second.location, axis::backend::VertexFormat::FLOAT4,
+        vertexLayout->setAttribute("a_color"sv, iter->second.location, ax::backend::VertexFormat::FLOAT4,
                                    3 * sizeof(float), false);
     }
     vertexLayout->setLayout(7 * sizeof(float));
 
-    _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 4, axis::CustomCommand::BufferUsage::DYNAMIC);
-    _customCommand.createIndexBuffer(axis::CustomCommand::IndexFormat::U_SHORT, 6,
-                                     axis::CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 4, ax::CustomCommand::BufferUsage::DYNAMIC);
+    _customCommand.createIndexBuffer(ax::CustomCommand::IndexFormat::U_SHORT, 6,
+                                     ax::CustomCommand::BufferUsage::STATIC);
     unsigned short indices[6] = {0, 1, 2, 0, 2, 3};
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
 
     return true;
 }
 
-void BoneNode::addChild(axis::Node* child, int localZOrder, int tag)
+void BoneNode::addChild(ax::Node* child, int localZOrder, int tag)
 {
     addToChildrenListHelper(child);
     Node::addChild(child, localZOrder, tag);
@@ -136,7 +136,7 @@ void BoneNode::addSkin(SkinNode* skin, bool display)
 void BoneNode::removeChild(Node* child, bool cleanup /* = true */)
 {
     ssize_t index = _children.getIndex(child);
-    if (index != axis::AX_INVALID_INDEX)
+    if (index != ax::AX_INVALID_INDEX)
     {
         removeFromChildrenListHelper(child);
         Node::removeChild(child, cleanup);
@@ -255,9 +255,9 @@ void BoneNode::displaySkin(std::string_view skinName, bool hideOthers)
     }
 }
 
-axis::Vector<SkinNode*> BoneNode::getVisibleSkins() const
+ax::Vector<SkinNode*> BoneNode::getVisibleSkins() const
 {
-    axis::Vector<SkinNode*> displayingSkins;
+    ax::Vector<SkinNode*> displayingSkins;
     for (const auto& boneskin : _boneSkins)
     {
         if (boneskin->isVisible())
@@ -268,19 +268,19 @@ axis::Vector<SkinNode*> BoneNode::getVisibleSkins() const
     return displayingSkins;
 }
 
-axis::Rect BoneNode::getBoundingBox() const
+ax::Rect BoneNode::getBoundingBox() const
 {
-    axis::Rect boundingBox = getVisibleSkinsRect();
+    ax::Rect boundingBox = getVisibleSkinsRect();
     return RectApplyAffineTransform(boundingBox, this->getNodeToParentAffineTransform());
 }
 
-axis::Rect BoneNode::getVisibleSkinsRect() const
+ax::Rect BoneNode::getVisibleSkinsRect() const
 {
     float minx, miny, maxx, maxy = 0;
     minx = miny = maxx = maxy;
     bool first         = true;
 
-    axis::Rect displayRect = axis::Rect(0, 0, 0, 0);
+    ax::Rect displayRect = ax::Rect(0, 0, 0, 0);
     if (_isRackShow && _rootSkeleton != nullptr && _rootSkeleton->_isRackShow)
     {
         maxx  = _rackLength;
@@ -290,8 +290,8 @@ axis::Rect BoneNode::getVisibleSkinsRect() const
 
     for (const auto& skin : _boneSkins)
     {
-        axis::Rect r = skin->getBoundingBox();
-        if (!skin->isVisible() || r.equals(axis::Rect::ZERO))
+        ax::Rect r = skin->getBoundingBox();
+        if (!skin->isVisible() || r.equals(ax::Rect::ZERO))
             continue;
 
         if (first)
@@ -315,7 +315,7 @@ axis::Rect BoneNode::getVisibleSkinsRect() const
     return displayRect;
 }
 
-void BoneNode::setBlendFunc(const axis::BlendFunc& blendFunc)
+void BoneNode::setBlendFunc(const ax::BlendFunc& blendFunc)
 {
     if (_blendFunc != blendFunc)
     {
@@ -350,13 +350,13 @@ void BoneNode::setDebugDrawEnabled(bool isDebugDraw)
     _isRackShow = isDebugDraw;
 }
 
-void BoneNode::setDebugDrawColor(const axis::Color4F& color)
+void BoneNode::setDebugDrawColor(const ax::Color4F& color)
 {
     _rackColor = color;
     updateColor();
 }
 
-void BoneNode::visit(axis::Renderer* renderer, const axis::Mat4& parentTransform, uint32_t parentFlags)
+void BoneNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -369,8 +369,8 @@ void BoneNode::visit(axis::Renderer* renderer, const axis::Mat4& parentTransform
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
     bool visibleByCamera = isVisitableByVisitingCamera();
     bool isdebugdraw     = visibleByCamera && _isRackShow && nullptr == _rootSkeleton;
@@ -407,7 +407,7 @@ void BoneNode::visit(axis::Renderer* renderer, const axis::Mat4& parentTransform
         this->draw(renderer, _modelViewTransform, flags);
     }
 
-    _director->popMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
@@ -415,15 +415,15 @@ void BoneNode::visit(axis::Renderer* renderer, const axis::Mat4& parentTransform
     // _orderOfArrival = 0;
 }
 
-void BoneNode::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
+void BoneNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
 
 #ifdef AX_STUDIO_ENABLED_VIEW
 // TODO
-//     glVertexAttribPointer(axis::GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, _noMVPVertices);
-//     glVertexAttribPointer(axis::GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, _squareColors);
+//     glVertexAttribPointer(ax::GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, _noMVPVertices);
+//     glVertexAttribPointer(ax::GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, _squareColors);
 //
 //     glEnable(GL_LINE_SMOOTH);
 //     glHint(GL_LINE_SMOOTH_HINT, GL_DONT_CARE);
@@ -433,13 +433,13 @@ void BoneNode::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint3
 
     for (int i = 0; i < 4; ++i)
     {
-        axis::Vec4 pos;
+        ax::Vec4 pos;
         pos.x = _squareVertices[i].x;
         pos.y = _squareVertices[i].y;
         pos.z = _positionZ;
         pos.w = 1;
         _modelViewTransform.transformVector(&pos);
-        _vertexData[i].noMVPVertices = axis::Vec3(pos.x, pos.y, pos.z) / pos.w;
+        _vertexData[i].noMVPVertices = ax::Vec3(pos.x, pos.y, pos.z) / pos.w;
     }
     _customCommand.updateVertexBuffer(_vertexData, sizeof(_vertexData));
 
@@ -474,7 +474,7 @@ void BoneNode::updateColor()
     _transformUpdated = _transformDirty = _inverseDirty = _contentSizeDirty = true;
 }
 
-void BoneNode::updateDisplayedColor(const axis::Color3B& /*parentColor*/)
+void BoneNode::updateDisplayedColor(const ax::Color3B& /*parentColor*/)
 {
     if (_cascadeColorEnabled)
     {
@@ -508,13 +508,13 @@ void BoneNode::disableCascadeColor()
 {
     for (const auto& child : _boneSkins)
     {
-        child->updateDisplayedColor(axis::Color3B::WHITE);
+        child->updateDisplayedColor(ax::Color3B::WHITE);
     }
 }
 
-axis::Vector<BoneNode*> BoneNode::getAllSubBones() const
+ax::Vector<BoneNode*> BoneNode::getAllSubBones() const
 {
-    axis::Vector<BoneNode*> allBones;
+    ax::Vector<BoneNode*> allBones;
     std::stack<BoneNode*> boneStack;  // for avoid recursive
     for (const auto& bone : _childBones)
     {
@@ -535,10 +535,10 @@ axis::Vector<BoneNode*> BoneNode::getAllSubBones() const
     return allBones;
 }
 
-axis::Vector<SkinNode*> BoneNode::getAllSubSkins() const
+ax::Vector<SkinNode*> BoneNode::getAllSubSkins() const
 {
     auto allbones = getAllSubBones();
-    axis::Vector<SkinNode*> allskins;
+    ax::Vector<SkinNode*> allskins;
     for (const auto& bone : allbones)
     {
         for (const auto& skin : bone->getSkins())
@@ -565,7 +565,7 @@ SkeletonNode* BoneNode::getRootSkeletonNode() const
 }
 
 #ifdef AX_STUDIO_ENABLED_VIEW
-bool BoneNode::isPointOnRack(const axis::Vec2& bonePoint)
+bool BoneNode::isPointOnRack(const ax::Vec2& bonePoint)
 {
 
     if (bonePoint.x >= 0.0f && bonePoint.y >= _squareVertices[0].y && bonePoint.x <= _rackLength &&
@@ -594,16 +594,16 @@ void BoneNode::batchBoneDrawToSkeleton(BoneNode* bone) const
         return;
     }
 
-    axis::Vec3 vpos[4];
+    ax::Vec3 vpos[4];
     for (int i = 0; i < 4; i++)
     {
-        axis::Vec4 pos;
+        ax::Vec4 pos;
         pos.x = bone->_squareVertices[i].x;
         pos.y = bone->_squareVertices[i].y;
         pos.z = bone->_positionZ;
         pos.w = 1;
         bone->_modelViewTransform.transformVector(&pos);  // call after visit
-        vpos[i] = axis::Vec3(pos.x, pos.y, pos.z) / pos.w;
+        vpos[i] = ax::Vec3(pos.x, pos.y, pos.z) / pos.w;
     }
 
     int count = bone->_rootSkeleton->_batchedVeticesCount;
@@ -620,7 +620,7 @@ void BoneNode::batchBoneDrawToSkeleton(BoneNode* bone) const
 }
 
 // call after self visit
-void BoneNode::visitSkins(axis::Renderer* renderer, BoneNode* bone) const
+void BoneNode::visitSkins(ax::Renderer* renderer, BoneNode* bone) const
 {
     // quick return if not visible. children won't be drawn.
     if (!bone->_visible)
@@ -631,8 +631,8 @@ void BoneNode::visitSkins(axis::Renderer* renderer, BoneNode* bone) const
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, bone->_modelViewTransform);
+    _director->pushMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, bone->_modelViewTransform);
 
     if (!bone->_boneSkins.empty())
     {
@@ -641,7 +641,7 @@ void BoneNode::visitSkins(axis::Renderer* renderer, BoneNode* bone) const
             (*it)->visit(renderer, bone->_modelViewTransform, true);
     }
 
-    _director->popMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
@@ -725,13 +725,13 @@ void BoneNode::setVisible(bool visible)
     }
 }
 
-void BoneNode::setContentSize(const axis::Size& contentSize)
+void BoneNode::setContentSize(const ax::Size& contentSize)
 {
     Node::setContentSize(contentSize);
     updateVertices();
 }
 
-void BoneNode::setAnchorPoint(const axis::Vec2& anchorPoint)
+void BoneNode::setAnchorPoint(const ax::Vec2& anchorPoint)
 {
     Node::setAnchorPoint(anchorPoint);
     updateVertices();

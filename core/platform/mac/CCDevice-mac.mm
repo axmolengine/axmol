@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -243,7 +243,7 @@ static NSFont* _createSystemFont(const char* fontName, int size)
     return font;
 }
 
-static CGFloat _calculateTextDrawStartHeight(axis::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
+static CGFloat _calculateTextDrawStartHeight(ax::Device::TextAlign align, CGSize realDimensions, CGSize dimensions)
 {
     float startH = 0;
     // vertical alignment

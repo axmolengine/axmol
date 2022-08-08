@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -63,11 +63,11 @@ bool ActionTimelineNode::init(Node* root, ActionTimeline* action)
     return true;
 }
 
-void ActionTimelineNode::setRoot(axis::Node* root)
+void ActionTimelineNode::setRoot(ax::Node* root)
 {
     _root = root;
 }
-axis::Node* ActionTimelineNode::getRoot()
+ax::Node* ActionTimelineNode::getRoot()
 {
     return _root;
 }

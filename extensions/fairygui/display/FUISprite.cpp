@@ -100,7 +100,7 @@ void FUISprite::setScaleByTile(bool value)
 
 void FUISprite::setGrayed(bool value)
 {
-#if defined(AXIS_VERSION)
+#if defined(AXYS_VERSION)
     Sprite::setProgramState(value ? backend::ProgramType::GRAY_SCALE : backend::ProgramType::POSITION_TEXTURE_COLOR);
 #elif COCOS2D_VERSION >= 0x00040000
     auto isETC1 = getTexture() && getTexture()->getAlphaTextureName();
@@ -484,7 +484,7 @@ Vec2 FUISprite::boundaryTexCoord(char index)
     return Vec2::ZERO;
 }
 
-void FUISprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
+void FUISprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
     if (_texture == _empty)
         return;

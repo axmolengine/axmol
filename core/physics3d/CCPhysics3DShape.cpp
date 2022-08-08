@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ Physics3DShape::~Physics3DShape()
 #        endif
 }
 
-Physics3DShape* Physics3DShape::createBox(const axis::Vec3& extent)
+Physics3DShape* Physics3DShape::createBox(const ax::Vec3& extent)
 {
     auto shape = new Physics3DShape();
     shape->initBox(extent);
@@ -89,7 +89,7 @@ Physics3DShape* Physics3DShape::createCapsule(float radius, float height)
     return shape;
 }
 
-Physics3DShape* Physics3DShape::createConvexHull(const axis::Vec3* points, int numPoints)
+Physics3DShape* Physics3DShape::createConvexHull(const ax::Vec3* points, int numPoints)
 {
     auto shape = new Physics3DShape();
     shape->initConvexHull(points, numPoints);
@@ -97,7 +97,7 @@ Physics3DShape* Physics3DShape::createConvexHull(const axis::Vec3* points, int n
     return shape;
 }
 
-Physics3DShape* Physics3DShape::createMesh(const axis::Vec3* triangles, int numTriangles)
+Physics3DShape* Physics3DShape::createMesh(const ax::Vec3* triangles, int numTriangles)
 {
     auto shape = new Physics3DShape();
     shape->initMesh(triangles, numTriangles);
@@ -130,7 +130,7 @@ Physics3DShape* Physics3DShape::createCompoundShape(const std::vector<std::pair<
     return shape;
 }
 
-bool Physics3DShape::initBox(const axis::Vec3& ext)
+bool Physics3DShape::initBox(const ax::Vec3& ext)
 {
     _shapeType = ShapeType::BOX;
     _btShape   = new btBoxShape(convertVec3TobtVector3(ext * 0.5f));
@@ -145,7 +145,7 @@ bool Physics3DShape::initSphere(float radius)
 bool Physics3DShape::initCylinder(float radius, float height)
 {
     _shapeType = ShapeType::CYLINDER;
-    _btShape   = new btCylinderShape(convertVec3TobtVector3(axis::Vec3(radius, height, radius) * 0.5f));
+    _btShape   = new btCylinderShape(convertVec3TobtVector3(ax::Vec3(radius, height, radius) * 0.5f));
     return true;
 }
 bool Physics3DShape::initCapsule(float radius, float height)
@@ -155,14 +155,14 @@ bool Physics3DShape::initCapsule(float radius, float height)
     return true;
 }
 
-bool Physics3DShape::initConvexHull(const axis::Vec3* points, int numPoints)
+bool Physics3DShape::initConvexHull(const ax::Vec3* points, int numPoints)
 {
     _shapeType = ShapeType::CONVEX;
-    _btShape   = new btConvexHullShape((btScalar*)points, numPoints, sizeof(axis::Vec3));
+    _btShape   = new btConvexHullShape((btScalar*)points, numPoints, sizeof(ax::Vec3));
     return true;
 }
 
-bool Physics3DShape::initMesh(const axis::Vec3* triangles, int numTriangles)
+bool Physics3DShape::initMesh(const ax::Vec3* triangles, int numTriangles)
 {
     _shapeType = ShapeType::MESH;
     auto mesh  = new btTriangleMesh(false);

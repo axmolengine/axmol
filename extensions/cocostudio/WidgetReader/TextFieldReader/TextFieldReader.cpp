@@ -49,7 +49,7 @@ void TextFieldReader::destroyInstance()
     AX_SAFE_DELETE(instanceTextFieldReader);
 }
 
-void TextFieldReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void TextFieldReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -260,7 +260,7 @@ Offset<Table> TextFieldReader::createOptionsWithFlatBuffers(pugi::xml_node objec
     return *(Offset<Table>*)(&options);
 }
 
-void TextFieldReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textFieldOptions)
+void TextFieldReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textFieldOptions)
 {
     TextField* textField = static_cast<TextField*>(node);
     auto options         = (TextFieldOptions*)textFieldOptions;

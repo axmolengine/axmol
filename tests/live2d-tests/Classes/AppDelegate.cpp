@@ -17,7 +17,7 @@
 
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
-using namespace axis::experimental;
+using namespace axys::experimental;
 #elif USE_SIMPLE_AUDIO_ENGINE
 #include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;

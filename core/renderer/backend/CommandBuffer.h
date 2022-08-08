@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -63,7 +63,7 @@ struct DepthStencilDescriptor;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBuffer : public axis::Ref
+class CommandBuffer : public ax::Ref
 {
 public:
     /**

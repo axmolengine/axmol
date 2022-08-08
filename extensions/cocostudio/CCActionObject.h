@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,7 @@ struct stExpCocoNode;
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionObject : public axis::Ref
+class CCS_DLL ActionObject : public ax::Ref
 {
 public:
     /**
@@ -133,7 +133,7 @@ public:
      *
      * @param func Action Call Back
      */
-    void play(axis::CallFunc* func);
+    void play(ax::CallFunc* func);
 
     /**
      * Pause the action.
@@ -163,9 +163,9 @@ public:
     void updateToFrameByTime(float fTime);
 
     /*init properties with a json dictionary*/
-    void initWithDictionary(const rapidjson::Value& dic, axis::Ref* root);
+    void initWithDictionary(const rapidjson::Value& dic, ax::Ref* root);
 
-    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, axis::Ref* root);
+    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, ax::Ref* root);
 
     /*scheduler update function*/
     void simulationActionUpdate(float dt);
@@ -175,15 +175,15 @@ protected:
     bool valueToBool(std::string_view value);
     float valueToFloat(std::string_view value);
 
-    axis::Vector<ActionNode*> _actionNodeList;
+    ax::Vector<ActionNode*> _actionNodeList;
     std::string _name;
     bool _loop;
     bool _bPause;
     bool _bPlaying;
     float _fUnitTime;
     float _currentTime;
-    axis::Scheduler* _pScheduler;
-    axis::CallFunc* _CallBack;
+    ax::Scheduler* _pScheduler;
+    ax::CallFunc* _CallBack;
     float _fTotalTime;
 };
 

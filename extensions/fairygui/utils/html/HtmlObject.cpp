@@ -15,7 +15,7 @@ std::string HtmlObject::selectResource;
 bool HtmlObject::usePool = true;
 
 GObjectPool HtmlObject::objectPool;
-axis::Vector<GObject*> HtmlObject::loaderPool;
+ax::Vector<GObject*> HtmlObject::loaderPool;
 
 HtmlObject::HtmlObject() :_ui(nullptr), _hidden(false)
 {

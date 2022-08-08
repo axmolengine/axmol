@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -144,7 +144,7 @@ public:
      * @param pivotPointInA local pivot point in A's local space
      * @return created constraint
      */
-    static Physics3DPointToPointConstraint* create(Physics3DRigidBody* rbA, const axis::Vec3& pivotPointInA);
+    static Physics3DPointToPointConstraint* create(Physics3DRigidBody* rbA, const ax::Vec3& pivotPointInA);
 
     /**
      * create point to point constraint, make the local pivot points of 2 rigid bodies match in worldspace.
@@ -156,36 +156,36 @@ public:
      */
     static Physics3DPointToPointConstraint* create(Physics3DRigidBody* rbA,
                                                    Physics3DRigidBody* rbB,
-                                                   const axis::Vec3& pivotPointInA,
-                                                   const axis::Vec3& pivotPointInB);
+                                                   const ax::Vec3& pivotPointInA,
+                                                   const ax::Vec3& pivotPointInB);
 
     /**
      * set pivot point in A's local space
      */
-    void setPivotPointInA(const axis::Vec3& pivotA);
+    void setPivotPointInA(const ax::Vec3& pivotA);
 
     /**
      * set pivot point in B's local space
      */
-    void setPivotPointInB(const axis::Vec3& pivotB);
+    void setPivotPointInB(const ax::Vec3& pivotB);
 
     /**
      * get pivot point in A's local space
      */
-    axis::Vec3 getPivotPointInA() const;
+    ax::Vec3 getPivotPointInA() const;
 
     /**
      * get pivot point in B's local space
      */
-    axis::Vec3 getPivotPointInB() const;
+    ax::Vec3 getPivotPointInB() const;
 
     Physics3DPointToPointConstraint();
     virtual ~Physics3DPointToPointConstraint();
-    bool init(Physics3DRigidBody* rbA, const axis::Vec3& pivotPointInA);
+    bool init(Physics3DRigidBody* rbA, const ax::Vec3& pivotPointInA);
     bool init(Physics3DRigidBody* rbA,
               Physics3DRigidBody* rbB,
-              const axis::Vec3& pivotPointInA,
-              const axis::Vec3& pivotPointInB);
+              const ax::Vec3& pivotPointInA,
+              const ax::Vec3& pivotPointInB);
 };
 
 /**
@@ -203,7 +203,7 @@ public:
      * @param useReferenceFrameA use frame A as reference
      */
     static Physics3DHingeConstraint* create(Physics3DRigidBody* rbA,
-                                            const axis::Mat4& rbAFrame,
+                                            const ax::Mat4& rbAFrame,
                                             bool useReferenceFrameA = false);
 
     /**
@@ -214,8 +214,8 @@ public:
      * @param useReferenceFrameA use frame A as reference
      */
     static Physics3DHingeConstraint* create(Physics3DRigidBody* rbA,
-                                            const axis::Vec3& pivotInA,
-                                            const axis::Vec3& axisInA,
+                                            const ax::Vec3& pivotInA,
+                                            const ax::Vec3& axisInA,
                                             bool useReferenceFrameA = false);
 
     /**
@@ -230,10 +230,10 @@ public:
      */
     static Physics3DHingeConstraint* create(Physics3DRigidBody* rbA,
                                             Physics3DRigidBody* rbB,
-                                            const axis::Vec3& pivotInA,
-                                            const axis::Vec3& pivotInB,
-                                            axis::Vec3& axisInA,
-                                            axis::Vec3& axisInB,
+                                            const ax::Vec3& pivotInA,
+                                            const ax::Vec3& pivotInB,
+                                            ax::Vec3& axisInA,
+                                            ax::Vec3& axisInB,
                                             bool useReferenceFrameA = false);
 
     /**
@@ -246,24 +246,24 @@ public:
      */
     static Physics3DHingeConstraint* create(Physics3DRigidBody* rbA,
                                             Physics3DRigidBody* rbB,
-                                            const axis::Mat4& rbAFrame,
-                                            const axis::Mat4& rbBFrame,
+                                            const ax::Mat4& rbAFrame,
+                                            const ax::Mat4& rbBFrame,
                                             bool useReferenceFrameA = false);
 
     /**
      * get rigid body A's frame offset
      */
-    axis::Mat4 getFrameOffsetA() const;
+    ax::Mat4 getFrameOffsetA() const;
 
     /**
      * get rigid body B's frame offset
      */
-    axis::Mat4 getFrameOffsetB() const;
+    ax::Mat4 getFrameOffsetB() const;
 
     /**
      * set frames for rigid body A and B
      */
-    void setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB);
+    void setFrames(const ax::Mat4& frameA, const ax::Mat4& frameB);
 
     /**
      * set angular only
@@ -282,7 +282,7 @@ public:
     /**
      * set motor target
      */
-    void setMotorTarget(const axis::Quaternion& qAinB, float dt);
+    void setMotorTarget(const ax::Quaternion& qAinB, float dt);
     /** set motor target */
     void setMotorTarget(float targetAngle, float dt);
 
@@ -293,7 +293,7 @@ public:
                   float _biasFactor       = 0.3f,
                   float _relaxationFactor = 1.0f);
     /**set axis*/
-    void setAxis(const axis::Vec3& axisInA);
+    void setAxis(const ax::Vec3& axisInA);
     /**get lower limit*/
     float getLowerLimit() const;
     /**get upper limit*/
@@ -301,12 +301,12 @@ public:
     /**get hinge angle*/
     float getHingeAngle() const;
     /**get hinge angle*/
-    float getHingeAngle(const axis::Mat4& transA, const axis::Mat4& transB);
+    float getHingeAngle(const ax::Mat4& transA, const ax::Mat4& transB);
 
     /**get A's frame */
-    axis::Mat4 getAFrame() const;
+    ax::Mat4 getAFrame() const;
     /**get B's frame*/
-    axis::Mat4 getBFrame() const;
+    ax::Mat4 getBFrame() const;
     /**get angular only*/
     bool getAngularOnly() const;
     /**get enable angular motor*/
@@ -347,14 +347,14 @@ public:
      */
     static Physics3DSliderConstraint* create(Physics3DRigidBody* rbA,
                                              Physics3DRigidBody* rbB,
-                                             const axis::Mat4& frameInA,
-                                             const axis::Mat4& frameInB,
+                                             const ax::Mat4& frameInA,
+                                             const ax::Mat4& frameInB,
                                              bool useLinearReferenceFrameA);
 
     /**get A's frame offset*/
-    axis::Mat4 getFrameOffsetA() const;
+    ax::Mat4 getFrameOffsetA() const;
     /**get B's frame offset*/
-    axis::Mat4 getFrameOffsetB() const;
+    ax::Mat4 getFrameOffsetB() const;
     /**get lower linear limit*/
     float getLowerLinLimit() const;
     /**set lower linear limit*/
@@ -432,7 +432,7 @@ public:
     void setUseFrameOffset(bool frameOffsetOnOff);
 
     /**set frames for rigid body A and B*/
-    void setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB);
+    void setFrames(const ax::Mat4& frameA, const ax::Mat4& frameB);
 
     Physics3DSliderConstraint() { _type = ConstraintType::SLIDER; }
     virtual ~Physics3DSliderConstraint() {}
@@ -449,7 +449,7 @@ public:
      * rbA rigid body A
      * frameA A's local frame
      */
-    static Physics3DConeTwistConstraint* create(Physics3DRigidBody* rbA, const axis::Mat4& frameA);
+    static Physics3DConeTwistConstraint* create(Physics3DRigidBody* rbA, const ax::Mat4& frameA);
     /**
      * create cone twist constraint
      * rbA rigid body A
@@ -459,8 +459,8 @@ public:
      */
     static Physics3DConeTwistConstraint* create(Physics3DRigidBody* rbA,
                                                 Physics3DRigidBody* rbB,
-                                                const axis::Mat4& frameA,
-                                                const axis::Mat4& frameB);
+                                                const ax::Mat4& frameA,
+                                                const ax::Mat4& frameB);
 
     /**
      * set limits
@@ -482,9 +482,9 @@ public:
                   float relaxationFactor = 1.0f);
 
     /**get A's frame*/
-    axis::Mat4 getAFrame() const;
+    ax::Mat4 getAFrame() const;
     /**get B's frame*/
-    axis::Mat4 getBFrame() const;
+    ax::Mat4 getBFrame() const;
 
     /**get swing span1*/
     float getSwingSpan1() const;
@@ -520,16 +520,16 @@ public:
     void setMotorTargetInConstraintSpace(const btQuaternion& q);
 
     /**get point for angle*/
-    axis::Vec3 GetPointForAngle(float fAngleInRadians, float fLength) const;
+    ax::Vec3 GetPointForAngle(float fAngleInRadians, float fLength) const;
 
     /**set A and B's frame*/
-    virtual void setFrames(const axis::Mat4& frameA, const axis::Mat4& frameB);
+    virtual void setFrames(const ax::Mat4& frameA, const ax::Mat4& frameB);
 
     /**get A's frame offset*/
-    axis::Mat4 getFrameOffsetA() const;
+    ax::Mat4 getFrameOffsetA() const;
 
     /**get B's frame offset*/
-    axis::Mat4 getFrameOffsetB() const;
+    ax::Mat4 getFrameOffsetB() const;
 
     Physics3DConeTwistConstraint() { _type = ConstraintType::CONE_TWIST; }
     virtual ~Physics3DConeTwistConstraint() {}
@@ -557,8 +557,8 @@ public:
      */
     static Physics3D6DofConstraint* create(Physics3DRigidBody* rbA,
                                            Physics3DRigidBody* rbB,
-                                           const axis::Mat4& frameInA,
-                                           const axis::Mat4& frameInB,
+                                           const ax::Mat4& frameInA,
+                                           const ax::Mat4& frameInB,
                                            bool useLinearReferenceFrameA);
 
     /**
@@ -568,32 +568,32 @@ public:
      * @param useLinearReferenceFrameB use fixed frame B for linear limits
      */
     static Physics3D6DofConstraint* create(Physics3DRigidBody* rbB,
-                                           const axis::Mat4& frameInB,
+                                           const ax::Mat4& frameInB,
                                            bool useLinearReferenceFrameB);
 
     /**set linear lower limit*/
-    void setLinearLowerLimit(const axis::Vec3& linearLower);
+    void setLinearLowerLimit(const ax::Vec3& linearLower);
 
     /**get linear lower limit*/
-    axis::Vec3 getLinearLowerLimit() const;
+    ax::Vec3 getLinearLowerLimit() const;
 
     /**set linear upper limit*/
-    void setLinearUpperLimit(const axis::Vec3& linearUpper);
+    void setLinearUpperLimit(const ax::Vec3& linearUpper);
 
     /**get linear upper limit*/
-    axis::Vec3 getLinearUpperLimit() const;
+    ax::Vec3 getLinearUpperLimit() const;
 
     /**set angular lower limit*/
-    void setAngularLowerLimit(const axis::Vec3& angularLower);
+    void setAngularLowerLimit(const ax::Vec3& angularLower);
 
     /**get angular lower limit*/
-    axis::Vec3 getAngularLowerLimit() const;
+    ax::Vec3 getAngularLowerLimit() const;
 
     /**set angular upper limit*/
-    void setAngularUpperLimit(const axis::Vec3& angularUpper);
+    void setAngularUpperLimit(const ax::Vec3& angularUpper);
 
     /**get angular upper limit*/
-    axis::Vec3 getAngularUpperLimit() const;
+    ax::Vec3 getAngularUpperLimit() const;
 
     /**
      * is limited?

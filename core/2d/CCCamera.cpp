@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -407,12 +407,12 @@ void Camera::applyZoom()
 {
     switch (_projectionType)
     {
-    case axis::Director::Projection::_2D:
+    case ax::Director::Projection::_2D:
     {
         Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
         break;
     }
-    case axis::Director::Projection::_3D:
+    case ax::Director::Projection::_3D:
     {
         // Push the far plane farther the more we zoom out.
         if (_zoomFactorFarPlane * _zoomFactor > _farPlane)

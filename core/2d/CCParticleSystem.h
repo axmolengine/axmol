@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -80,7 +80,7 @@ struct EmissionShape
 struct ParticleEmissionMaskDescriptor
 {
     Vec2 size;
-    std::vector<axis::Vec2> points;
+    std::vector<ax::Vec2> points;
 };
 
 /** @struct ParticleAnimationDescriptor
@@ -99,7 +99,7 @@ Structure that contains frame description
 */
 struct ParticleFrameDescriptor
 {
-    axis::Rect rect;
+    ax::Rect rect;
     bool isRotated;
 };
 
@@ -239,7 +239,7 @@ public:
  * Particle emission mask cache.
  * @since axis-1.0.0b8
  */
-class AX_DLL ParticleEmissionMaskCache : public axis::Ref
+class AX_DLL ParticleEmissionMaskCache : public ax::Ref
 {
 public:
     static ParticleEmissionMaskCache* getInstance();
@@ -1144,7 +1144,7 @@ public:
      *
      * @return Returns true of the index was successfully found and added. Otherwise, false
      */
-    bool addAnimationIndex(axis::SpriteFrame* frame);
+    bool addAnimationIndex(ax::SpriteFrame* frame);
 
     /** Add a particle animation index based on tex coords spicified using a sprite frame.
      * you can specify which index you want to override in this function
@@ -1154,7 +1154,7 @@ public:
      *
      * @return Returns true of the index was successfully found and added. Otherwise, false
      */
-    bool addAnimationIndex(unsigned short index, axis::SpriteFrame* frame);
+    bool addAnimationIndex(unsigned short index, ax::SpriteFrame* frame);
 
     /** Add a particle animation index based on tex coords spicified.
      * you can specify which index you want to override in this function
@@ -1165,13 +1165,13 @@ public:
      *
      * @return Returns true of the index was successfully found and added. Otherwise, false
      */
-    bool addAnimationIndex(unsigned short index, axis::Rect rect, bool rotated = false);
+    bool addAnimationIndex(unsigned short index, ax::Rect rect, bool rotated = false);
 
     /** You can specify what rect is used if an index in an animation descriptor wasn't found.
      *
      * @param rect Rect containting data about tex coords in pixels
      */
-    void setRectForUndefinedIndices(axis::Rect rect) { _undefinedIndexRect = rect; };
+    void setRectForUndefinedIndices(ax::Rect rect) { _undefinedIndexRect = rect; };
 
     /** Add a particle animation descriptor with an index.
      *
@@ -1647,7 +1647,7 @@ protected:
     /** Wether the animation goes with the time scale of the system or is independent. */
     bool _animationTimescaleInd;
     /** A rect that is used instead when an index is not found */
-    axis::Rect _undefinedIndexRect;
+    ax::Rect _undefinedIndexRect;
     /** does FlippedY variance of each particle */
     int _yCoordFlipped;
 

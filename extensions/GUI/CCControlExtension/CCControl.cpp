@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * https://axis-project.github.io/
+ * https://axys1.github.io/
  *
  * Copyright 2011 Yannick Loriot.
  * http://yannickloriot.com
@@ -118,9 +118,9 @@ void Control::sendActionsForControlEvents(EventType controlEvents)
                 invocation->invoke(this);
             }
 #if AX_ENABLE_SCRIPT_BINDING
-            axis::BasicScriptData data(this, (void*)&controlEvents);
-            axis::ScriptEvent event(axis::kControlEvent, (void*)&data);
-            auto scriptEngine = axis::ScriptEngineManager::getInstance()->getScriptEngine();
+            ax::BasicScriptData data(this, (void*)&controlEvents);
+            ax::ScriptEvent event(ax::kControlEvent, (void*)&data);
+            auto scriptEngine = ax::ScriptEngineManager::getInstance()->getScriptEngine();
             if (scriptEngine)
                 scriptEngine->sendEvent(event);
 #endif

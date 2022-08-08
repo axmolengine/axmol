@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -334,7 +334,7 @@ Offset<Table> Node3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     return *(Offset<Table>*)(&options);
 }
 
-void Node3DReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* node3DOptions)
+void Node3DReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* node3DOptions)
 {
     auto options = (Node3DOption*)node3DOptions;
 

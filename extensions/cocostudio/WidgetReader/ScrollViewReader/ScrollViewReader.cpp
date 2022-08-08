@@ -44,7 +44,7 @@ void ScrollViewReader::destroyInstance()
     AX_SAFE_DELETE(instanceScrollViewReader);
 }
 
-void ScrollViewReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void ScrollViewReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     // TODO: need to refactor...
     LayoutReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
@@ -393,7 +393,7 @@ Offset<Table> ScrollViewReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void ScrollViewReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* scrollViewOptions)
+void ScrollViewReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* scrollViewOptions)
 {
     ScrollView* scrollView = static_cast<ScrollView*>(node);
     auto options           = (ScrollViewOptions*)scrollViewOptions;

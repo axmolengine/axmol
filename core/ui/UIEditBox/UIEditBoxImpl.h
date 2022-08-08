@@ -3,7 +3,7 @@
  Copyright (c) 2012 James Chen
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -98,7 +98,7 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags) = 0;
+    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) = 0;
     /**
      * @js NA
      * @lua NA
@@ -118,6 +118,6 @@ protected:
 extern EditBoxImpl* __createSystemEditBox(EditBox* pEditBox);
 
 }  // namespace ui
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 #endif /* __UIEditBoxIMPL_H__ */

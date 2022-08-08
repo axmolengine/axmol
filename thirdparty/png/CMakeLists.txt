@@ -3,7 +3,7 @@ set(lib_name png)
 set(target_name ${lib_name})
 
 project(${lib_name})
-include(../cmake/AxisThirdpartyConfig.cmake)
+include(../cmake/AXConfigThirdparty.cmake)
 
 set(${target_name}_src
     png.c

@@ -2,7 +2,7 @@
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ namespace ui
 /**
  *  For creating a system font or a TTF font Text
  */
-class AX_GUI_DLL Text : public Widget, public axis::BlendProtocol
+class AX_GUI_DLL Text : public Widget, public ax::BlendProtocol
 {
 
     DECLARE_CLASS_GUI_INFO

@@ -29,12 +29,12 @@ Color4B ToolSet::hexToColor(const char* str)
     }
 }
 
-axis::Color3B ToolSet::intToColor(unsigned int rgb)
+ax::Color3B ToolSet::intToColor(unsigned int rgb)
 {
     return Color3B((rgb >> 16) & 0xFF, (rgb >> 8) & 0xFF, rgb & 0xFF);
 }
 
-unsigned int ToolSet::colorToInt(const axis::Color3B& color)
+unsigned int ToolSet::colorToInt(const ax::Color3B& color)
 {
     return (color.r << 16) + (color.g << 8) + color.b;
 }

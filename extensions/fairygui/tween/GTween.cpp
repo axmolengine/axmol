@@ -9,22 +9,22 @@ GTweener* GTween::to(float startValue, float endValue, float duration)
     return TweenManager::createTween()->_to(startValue, endValue, duration);
 }
 
-GTweener* GTween::to(const axis::Vec2& startValue, const axis::Vec2 & endValue, float duration)
+GTweener* GTween::to(const ax::Vec2& startValue, const ax::Vec2 & endValue, float duration)
 {
     return TweenManager::createTween()->_to(startValue, endValue, duration);
 }
 
-GTweener* GTween::to(const axis::Vec3& startValue, const axis::Vec3 & endValue, float duration)
+GTweener* GTween::to(const ax::Vec3& startValue, const ax::Vec3 & endValue, float duration)
 {
     return TweenManager::createTween()->_to(startValue, endValue, duration);
 }
 
-GTweener* GTween::to(const axis::Vec4& startValue, const axis::Vec4 & endValue, float duration)
+GTweener* GTween::to(const ax::Vec4& startValue, const ax::Vec4 & endValue, float duration)
 {
     return TweenManager::createTween()->_to(startValue, endValue, duration);
 }
 
-GTweener* GTween::to(const axis::Color4B& startValue, const axis::Color4B & endValue, float duration)
+GTweener* GTween::to(const ax::Color4B& startValue, const ax::Color4B & endValue, float duration)
 {
     return TweenManager::createTween()->_to(startValue, endValue, duration);
 }
@@ -39,42 +39,42 @@ GTweener* GTween::delayedCall(float delay)
     return TweenManager::createTween()->setDelay(delay);
 }
 
-GTweener* GTween::shake(const axis::Vec2& startValue, float amplitude, float duration)
+GTweener* GTween::shake(const ax::Vec2& startValue, float amplitude, float duration)
 {
     return TweenManager::createTween()->_shake(startValue, amplitude, duration);
 }
 
-bool GTween::isTweening(axis::Ref * target)
+bool GTween::isTweening(ax::Ref * target)
 {
     return TweenManager::isTweening(target, TweenPropType::None);
 }
 
-bool GTween::isTweening(axis::Ref * target, TweenPropType propType)
+bool GTween::isTweening(ax::Ref * target, TweenPropType propType)
 {
     return TweenManager::isTweening(target, propType);
 }
 
-void GTween::kill(axis::Ref * target)
+void GTween::kill(ax::Ref * target)
 {
     TweenManager::killTweens(target, TweenPropType::None, false);
 }
 
-void GTween::kill(axis::Ref * target, bool complete)
+void GTween::kill(ax::Ref * target, bool complete)
 {
     TweenManager::killTweens(target, TweenPropType::None, complete);
 }
 
-void GTween::kill(axis::Ref * target, TweenPropType propType, bool complete)
+void GTween::kill(ax::Ref * target, TweenPropType propType, bool complete)
 {
     TweenManager::killTweens(target, propType, complete);
 }
 
-GTweener* GTween::getTween(axis::Ref * target)
+GTweener* GTween::getTween(ax::Ref * target)
 {
     return TweenManager::getTween(target, TweenPropType::None);
 }
 
-GTweener* GTween::getTween(axis::Ref * target, TweenPropType propType)
+GTweener* GTween::getTween(ax::Ref * target, TweenPropType propType)
 {
     return TweenManager::getTween(target, propType);
 }

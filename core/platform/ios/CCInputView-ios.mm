@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2019 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -98,7 +98,7 @@ THE SOFTWARE.
         [self.myMarkedText release];
         self.myMarkedText = nil;
     }
-    axis::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
+    ax::IMEDispatcher::sharedDispatcher()->dispatchDeleteBackward();
 }
 
 - (void)insertText:(nonnull NSString*)text
@@ -109,7 +109,7 @@ THE SOFTWARE.
         self.myMarkedText = nil;
     }
     const char* pszText = [text cStringUsingEncoding:NSUTF8StringEncoding];
-    axis::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
 }
 
 - (NSWritingDirection)baseWritingDirectionForPosition:(nonnull UITextPosition*)position
@@ -251,7 +251,7 @@ THE SOFTWARE.
         return;
     }
     const char* pszText = [self.myMarkedText cStringUsingEncoding:NSUTF8StringEncoding];
-    axis::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
+    ax::IMEDispatcher::sharedDispatcher()->dispatchInsertText(pszText, strlen(pszText));
     [self.myMarkedText release];
     self.myMarkedText = nil;
 }

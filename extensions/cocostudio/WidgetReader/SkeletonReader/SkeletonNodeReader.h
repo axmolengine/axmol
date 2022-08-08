@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2015-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,6 @@ public:
     AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;
 };
 #endif  //_SKELETONNODEREADER_H_

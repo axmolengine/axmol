@@ -8,7 +8,7 @@
 
 NS_FGUI_BEGIN
 
-class FUIInput : public axis::ui::EditBox
+class FUIInput : public ax::ui::EditBox
 {
 public:
     static FUIInput* create();
@@ -36,7 +36,7 @@ public:
 private:
     void continueInit();
 
-    void _touchDownAction(axis::Ref *sender, axis::ui::Widget::TouchEventType controlEvent);
+    void _touchDownAction(ax::Ref *sender, ax::ui::Widget::TouchEventType controlEvent);
 
     TextFormat* _textFormat;
     bool _password;

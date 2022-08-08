@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,11 +53,11 @@ public:
 
     static void addArmatureDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData);
     static void createArmatureDisplay(Bone* bone, DecorativeDisplay* decoDisplay);
-    static void updateArmatureDisplay(Bone* bone, axis::Node* display, float dt);
+    static void updateArmatureDisplay(Bone* bone, ax::Node* display, float dt);
 
     static void addParticleDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData);
     static void createParticleDisplay(Bone* bone, DecorativeDisplay* decoDisplay);
-    static void updateParticleDisplay(Bone* bone, axis::Node* display, float dt);
+    static void updateParticleDisplay(Bone* bone, ax::Node* display, float dt);
 };
 
 }  // namespace cocostudio

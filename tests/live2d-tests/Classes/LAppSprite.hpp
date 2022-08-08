@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Rendering/axis/CubismRenderer_Cocos2dx.hpp"
-#include "Rendering/axis/CubismCommandBuffer_Cocos2dx.hpp"
+#include "Rendering/axys/CubismRenderer_Cocos2dx.hpp"
+#include "Rendering/axys/CubismCommandBuffer_Cocos2dx.hpp"
 #include "cocos2d.h"
 
 USING_NS_AX;

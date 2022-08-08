@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,7 @@ enum FrameEasingType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionFrameEasing : public axis::Ref
+class CCS_DLL ActionFrameEasing : public ax::Ref
 {
 protected:
     FrameEasingType _type;

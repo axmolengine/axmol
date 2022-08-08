@@ -7,7 +7,7 @@
 
 NS_FGUI_BEGIN
 
-class IUISource : public axis::Ref
+class IUISource : public ax::Ref
 {
 public:
     virtual const std::string& getFileName() = 0;
@@ -89,7 +89,7 @@ private:
     GObject* _contentArea;
     bool _modal;
     bool _bringToFontOnClick;
-    axis::Vector<IUISource*> _uiSources;
+    ax::Vector<IUISource*> _uiSources;
     bool _inited;
     bool _loading;
 };

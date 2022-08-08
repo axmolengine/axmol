@@ -3,7 +3,7 @@
  Copyright (c) 2020 C4games Ltd
  Copyright (c) 2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -496,7 +496,7 @@ void convertBGRA8ToRGBA8(const unsigned char* data, size_t dataLen, unsigned cha
 // converter function end
 //////////////////////////////////////////////////////////////////////////
 
-axis::backend::PixelFormat convertL8ToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertL8ToFormat(const unsigned char* data,
                                                 size_t dataLen,
                                                 PixelFormat format,
                                                 unsigned char** outData,
@@ -556,7 +556,7 @@ axis::backend::PixelFormat convertL8ToFormat(const unsigned char* data,
     return format;
 }
 
-axis::backend::PixelFormat convertLA8ToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertLA8ToFormat(const unsigned char* data,
                                                  size_t dataLen,
                                                  PixelFormat format,
                                                  unsigned char** outData,
@@ -617,7 +617,7 @@ axis::backend::PixelFormat convertLA8ToFormat(const unsigned char* data,
     return format;
 }
 
-axis::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
                                                   size_t dataLen,
                                                   PixelFormat format,
                                                   unsigned char** outData,
@@ -677,7 +677,7 @@ axis::backend::PixelFormat convertRGB8ToFormat(const unsigned char* data,
     return format;
 }
 
-axis::backend::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
                                                    size_t dataLen,
                                                    PixelFormat format,
                                                    unsigned char** outData,
@@ -739,7 +739,7 @@ axis::backend::PixelFormat convertRGBA8ToFormat(const unsigned char* data,
     return format;
 }
 
-axis::backend::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
                                                     size_t dataLen,
                                                     PixelFormat format,
                                                     unsigned char** outData,
@@ -773,7 +773,7 @@ axis::backend::PixelFormat convertRGB5A1ToFormat(const unsigned char* data,
     return format;
 }
 
-axis::backend::PixelFormat convertRGB565ToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertRGB565ToFormat(const unsigned char* data,
                                                     size_t dataLen,
                                                     PixelFormat format,
                                                     unsigned char** outData,
@@ -807,7 +807,7 @@ axis::backend::PixelFormat convertRGB565ToFormat(const unsigned char* data,
     return format;
 }
 
-axis::backend::PixelFormat convertA8ToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertA8ToFormat(const unsigned char* data,
                                                 size_t dataLen,
                                                 PixelFormat format,
                                                 unsigned char** outData,
@@ -837,7 +837,7 @@ axis::backend::PixelFormat convertA8ToFormat(const unsigned char* data,
     return format;
 }
 
-axis::backend::PixelFormat convertRGBA4ToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertRGBA4ToFormat(const unsigned char* data,
                                                    size_t dataLen,
                                                    PixelFormat format,
                                                    unsigned char** outData,
@@ -908,7 +908,7 @@ PixelFormat convertBGRA8ToFormat(const unsigned char* data,
  rgba(1) -> 12345678
 
  */
-axis::backend::PixelFormat convertDataToFormat(const unsigned char* data,
+ax::backend::PixelFormat convertDataToFormat(const unsigned char* data,
                                                   size_t dataLen,
                                                   PixelFormat originFormat,
                                                   PixelFormat format,

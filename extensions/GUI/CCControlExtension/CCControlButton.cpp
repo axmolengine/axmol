@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * https://axis-project.github.io/
+ * https://axys1.github.io/
  *
  * Copyright 2011 Yannick Loriot.
  * http://yannickloriot.com
@@ -64,7 +64,7 @@ ControlButton::~ControlButton()
 bool ControlButton::init()
 {
     return this->initWithLabelAndBackgroundSprite(Label::createWithSystemFont("", "Helvetica", 12),
-                                                  axis::ui::Scale9Sprite::create(), true);
+                                                  ax::ui::Scale9Sprite::create(), true);
 }
 
 bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
@@ -123,7 +123,7 @@ bool ControlButton::initWithLabelAndBackgroundSprite(Node* node,
     }
 }
 
-ControlButton* ControlButton::create(Node* label, axis::ui::Scale9Sprite* backgroundSprite)
+ControlButton* ControlButton::create(Node* label, ax::ui::Scale9Sprite* backgroundSprite)
 {
     ControlButton* pRet = new ControlButton();
     pRet->initWithLabelAndBackgroundSprite(label, backgroundSprite, true);
@@ -132,7 +132,7 @@ ControlButton* ControlButton::create(Node* label, axis::ui::Scale9Sprite* backgr
 }
 
 ControlButton* ControlButton::create(Node* label,
-                                     axis::ui::Scale9Sprite* backgroundSprite,
+                                     ax::ui::Scale9Sprite* backgroundSprite,
                                      bool adjustBackGroundSize)
 {
     ControlButton* pRet = new ControlButton();
@@ -146,7 +146,7 @@ bool ControlButton::initWithTitleAndFontNameAndFontSize(std::string_view title,
                                                         float fontSize)
 {
     return initWithLabelAndBackgroundSprite(Label::createWithSystemFont(title, fontName, fontSize),
-                                            axis::ui::Scale9Sprite::create(), true);
+                                            ax::ui::Scale9Sprite::create(), true);
 }
 
 ControlButton* ControlButton::create(std::string_view title, std::string_view fontName, float fontSize)
@@ -157,13 +157,13 @@ ControlButton* ControlButton::create(std::string_view title, std::string_view fo
     return pRet;
 }
 
-bool ControlButton::initWithBackgroundSprite(axis::ui::Scale9Sprite* sprite)
+bool ControlButton::initWithBackgroundSprite(ax::ui::Scale9Sprite* sprite)
 {
     Label* label = Label::createWithSystemFont("", "Arial", 30);  //
     return initWithLabelAndBackgroundSprite(label, sprite, false);
 }
 
-ControlButton* ControlButton::create(axis::ui::Scale9Sprite* sprite)
+ControlButton* ControlButton::create(ax::ui::Scale9Sprite* sprite)
 {
     ControlButton* pRet = new ControlButton();
     pRet->initWithBackgroundSprite(sprite);

@@ -87,7 +87,7 @@ private:
     GObject* _owner;
     WeakPtr _target;
     std::vector<RelationDef> _defs;
-    axis::Vec4 _targetData;
+    ax::Vec4 _targetData;
 };
 
 NS_FGUI_END

@@ -25,7 +25,7 @@ void CCArmatureDisplay::dbInit(Armature* armature)
 
 void CCArmatureDisplay::dbClear()
 {
-    setEventDispatcher(axis::Director::getInstance()->getEventDispatcher());
+    setEventDispatcher(ax::Director::getInstance()->getEventDispatcher());
 
     _armature = nullptr;
     AX_SAFE_RELEASE(_dispatcher);
@@ -58,7 +58,7 @@ void CCArmatureDisplay::dbUpdate()
 
 void CCArmatureDisplay::addDBEventListener(std::string_view type, const std::function<void(EventObject*)>& callback)
 {
-    auto lambda = [callback](axis::EventCustom* event) -> void {
+    auto lambda = [callback](ax::EventCustom* event) -> void {
         callback(static_cast<EventObject*>(event->getUserData()));
     };
     _dispatcher->addCustomEventListener(type, lambda);
@@ -75,7 +75,7 @@ void CCArmatureDisplay::removeDBEventListener(std::string_view type, const std::
     _dispatcher->removeCustomEventListeners(type);
 }
 
-axis::Rect CCArmatureDisplay::getBoundingBox() const
+ax::Rect CCArmatureDisplay::getBoundingBox() const
 {
     auto isFirst = true;
     float minX   = 0.0f;
@@ -109,9 +109,9 @@ axis::Rect CCArmatureDisplay::getBoundingBox() const
         }
     }
 
-    axis::Rect rect(minX, minY, maxX - minX, maxY - minY);
+    ax::Rect rect(minX, minY, maxX - minX, maxY - minY);
 
-    return axis::RectApplyTransform(rect, getNodeToParentTransform());
+    return ax::RectApplyTransform(rect, getNodeToParentTransform());
 }
 
 DBCCSprite* DBCCSprite::create()
@@ -130,26 +130,26 @@ DBCCSprite* DBCCSprite::create()
     return sprite;
 }
 
-bool DBCCSprite::_checkVisibility(const axis::Mat4& transform, const axis::Size& size, const axis::Rect& rect)
+bool DBCCSprite::_checkVisibility(const ax::Mat4& transform, const ax::Size& size, const ax::Rect& rect)
 {
-    auto scene = axis::Director::getInstance()->getRunningScene();
+    auto scene = ax::Director::getInstance()->getRunningScene();
 
     // If draw to Rendertexture, return true directly.
     //  only cull the default camera. The culling algorithm is valid for default camera.
-    if (!scene || (scene && scene->getDefaultCamera() != axis::Camera::getVisitingCamera()))
+    if (!scene || (scene && scene->getDefaultCamera() != ax::Camera::getVisitingCamera()))
         return true;
 
-    auto director = axis::Director::getInstance();
-    axis::Rect visiableRect(director->getVisibleOrigin(), director->getVisibleSize());
+    auto director = ax::Director::getInstance();
+    ax::Rect visiableRect(director->getVisibleOrigin(), director->getVisibleSize());
 
     // transform center point to screen space
     float hSizeX = size.width / 2;
     float hSizeY = size.height / 2;
 
-    axis::Vec3 v3p(hSizeX, hSizeY, 0);
+    ax::Vec3 v3p(hSizeX, hSizeY, 0);
 
     transform.transformPoint(&v3p);
-    axis::Vec2 v2p = axis::Camera::getVisitingCamera()->projectGL(v3p);
+    ax::Vec2 v2p = ax::Camera::getVisitingCamera()->projectGL(v3p);
 
     // convert content size to world coordinates
     float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]),
@@ -166,7 +166,7 @@ bool DBCCSprite::_checkVisibility(const axis::Mat4& transform, const axis::Size&
     return ret;
 }
 
-void DBCCSprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
+void DBCCSprite::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
 #if AX_USE_CULLING
 #    if COCOS2D_VERSION >= 0x00031400
@@ -176,8 +176,8 @@ void DBCCSprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uin
 #    endif
 
     // Don't do calculate the culling if the transform was not updated
-    auto visitingCamera = axis::Camera::getVisitingCamera();
-    auto defaultCamera  = axis::Camera::getDefaultCamera();
+    auto visitingCamera = ax::Camera::getVisitingCamera();
+    auto defaultCamera  = ax::Camera::getDefaultCamera();
     if (visitingCamera == defaultCamera)
     {
         _insideBounds = ((flags & FLAGS_TRANSFORM_DIRTY) || visitingCamera->isViewProjectionUpdated())
@@ -210,21 +210,21 @@ void DBCCSprite::draw(axis::Renderer* renderer, const axis::Mat4& transform, uin
             // draw 3 lines
             auto from = verts[indices[i * 3]].vertices;
             auto to   = verts[indices[i * 3 + 1]].vertices;
-            _debugDrawNode->drawLine(axis::Vec2(from.x, from.y), axis::Vec2(to.x, to.y), axis::Color4F::WHITE);
+            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color4F::WHITE);
 
             from = verts[indices[i * 3 + 1]].vertices;
             to   = verts[indices[i * 3 + 2]].vertices;
-            _debugDrawNode->drawLine(axis::Vec2(from.x, from.y), axis::Vec2(to.x, to.y), axis::Color4F::WHITE);
+            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color4F::WHITE);
 
             from = verts[indices[i * 3 + 2]].vertices;
             to   = verts[indices[i * 3]].vertices;
-            _debugDrawNode->drawLine(axis::Vec2(from.x, from.y), axis::Vec2(to.x, to.y), axis::Color4F::WHITE);
+            _debugDrawNode->drawLine(ax::Vec2(from.x, from.y), ax::Vec2(to.x, to.y), ax::Color4F::WHITE);
         }
 #endif  // AX_SPRITE_DEBUG_DRAW
     }
 }
 
-axis::PolygonInfo& DBCCSprite::getPolygonInfoModify()
+ax::PolygonInfo& DBCCSprite::getPolygonInfoModify()
 {
     return _polyInfo;
 }

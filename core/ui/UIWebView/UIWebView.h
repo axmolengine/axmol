@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ class WebViewImpl;
  * It's mean WebView displays web pages above all graphical elements of cocos2d-x.
  * @js NA
  */
-class AX_GUI_DLL WebView : public axis::ui::Widget
+class AX_GUI_DLL WebView : public ax::ui::Widget
 {
 public:
     /**
@@ -71,7 +71,7 @@ public:
      * @param encoding The encoding of the data.
      * @param baseURL The base URL for the content.
      */
-    void loadData(const axis::Data& data,
+    void loadData(const ax::Data& data,
                   std::string_view MIMEType,
                   std::string_view encoding,
                   std::string_view baseURL);
@@ -206,7 +206,7 @@ public:
      */
     void setBounces(bool bounce);
 
-    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags) override;
 
     /**
      * Toggle visibility of WebView.
@@ -236,7 +236,7 @@ public:
     virtual ~WebView();
 
 protected:
-    virtual axis::ui::Widget* createCloneInstance() override;
+    virtual ax::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
 
     std::function<bool(WebView* sender, std::string_view url)> _onShouldStartLoading = nullptr;
@@ -250,7 +250,7 @@ private:
 };
 
 }  // namespace ui
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 #endif
 

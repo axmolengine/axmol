@@ -7,7 +7,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -457,7 +457,7 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
     return texture;
 }
 
-void TextureCache::parseNinePatchImage(axis::Image* image, axis::Texture2D* texture, std::string_view path)
+void TextureCache::parseNinePatchImage(ax::Image* image, ax::Texture2D* texture, std::string_view path)
 {
     if (NinePatchImageParser::isNinePatchImage(path))
     {
@@ -629,7 +629,7 @@ Texture2D* TextureCache::getTextureForKey(std::string_view textureKeyName) const
     return nullptr;
 }
 
-std::string TextureCache::getTextureFilePath(axis::Texture2D* texture) const
+std::string TextureCache::getTextureFilePath(ax::Texture2D* texture) const
 {
     for (auto&& item : _textures)
     {

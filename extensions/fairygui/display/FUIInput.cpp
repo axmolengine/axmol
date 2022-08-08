@@ -81,7 +81,7 @@ void FUIInput::openKeyboard()
 #if COCOS2D_VERSION >= 0x00031700
     EditBox::openKeyboard();
 #else
-    touchDownAction(this, axis::ui::Widget::TouchEventType::ENDED);
+    touchDownAction(this, ax::ui::Widget::TouchEventType::ENDED);
 #endif
 }
 
@@ -94,7 +94,7 @@ void FUIInput::continueInit()
     this->addTouchEventListener(AX_CALLBACK_2(FUIInput::_touchDownAction, this));
 }
 
-void FUIInput::_touchDownAction(axis::Ref *sender, axis::ui::Widget::TouchEventType controlEvent)
+void FUIInput::_touchDownAction(ax::Ref *sender, ax::ui::Widget::TouchEventType controlEvent)
 {
     //do nothing
 }

@@ -3,7 +3,7 @@ set(lib_name luajit)
 set(target_name ${lib_name})
 project(${lib_name})
 
-include(../../cmake/AxisThirdpartyConfig.cmake)
+include(../../cmake/AXConfigThirdparty.cmake)
 
 if(WINDOWS)
   add_library(${target_name} SHARED IMPORTED GLOBAL)

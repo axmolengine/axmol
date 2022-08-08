@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2015-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ public:
     /**
      *get All bones in this skeleton, <bone's name, BoneNode>
      */
-    const axis::StringMap<BoneNode*>& getAllSubBonesMap() const;
+    const ax::StringMap<BoneNode*>& getAllSubBonesMap() const;
 
     /**
      *@brief: change displays
@@ -70,7 +70,7 @@ public:
      */
     void addSkinGroup(std::string groupName, hlookup::string_map<std::string> boneSkinNameMap);
 
-    axis::Rect getBoundingBox() const override;
+    ax::Rect getBoundingBox() const override;
 
     SkeletonNode();
     virtual ~SkeletonNode();
@@ -80,22 +80,22 @@ protected:
     virtual void updateVertices() override;
     virtual void updateColor() override;
 
-    virtual void visit(axis::Renderer* renderer,
-                       const axis::Mat4& parentTransform,
+    virtual void visit(ax::Renderer* renderer,
+                       const ax::Mat4& parentTransform,
                        uint32_t parentFlags) override;
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:
-    axis::StringMap<BoneNode*> _subBonesMap;
+    ax::StringMap<BoneNode*> _subBonesMap;
 
 private:
     struct VertexData
     {
-        axis::Vec3 vertex;
-        axis::Color4F color;
+        ax::Vec3 vertex;
+        ax::Color4F color;
     };
 
-    axis::Vec2 _squareVertices[8];
+    ax::Vec2 _squareVertices[8];
     VertexData _vertexData[8];
 
     hlookup::string_map<hlookup::string_map<std::string>>
@@ -104,7 +104,7 @@ private:
 
     void checkSubBonesDirty();
     // for draw skins as ordered bones' local z
-    axis::Vector<BoneNode*> _subOrderedAllBones;
+    ax::Vector<BoneNode*> _subOrderedAllBones;
     void updateOrderedAllbones();
     void sortOrderedAllBones();
     // for batch draw sub bones
@@ -112,7 +112,7 @@ private:
     bool _subBonesOrderDirty;
     std::vector<VertexData> _batchedBoneVertexData;
     int _batchedVeticesCount;
-    axis::CustomCommand _batchBoneCommand;
+    ax::CustomCommand _batchBoneCommand;
 
     void batchDrawAllSubBones();
 };

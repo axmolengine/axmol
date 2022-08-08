@@ -7,7 +7,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -187,7 +187,7 @@ Node::~Node()
 
     _eventDispatcher->removeEventListenersForTarget(this);
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && _AX_DEBUG > 0
     _eventDispatcher->debugCheckNodeHasNoEventListenersOnDestruction(this);
 #endif
 

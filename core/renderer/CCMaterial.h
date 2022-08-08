@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -147,13 +147,13 @@ public:
      * Set material primitive draw type
      * @param primitive Primitive draw type
      */
-    void setPrimitiveType(axis::backend::PrimitiveType primitive) { _drawPrimitive = primitive; }
+    void setPrimitiveType(ax::backend::PrimitiveType primitive) { _drawPrimitive = primitive; }
 
     /**
      * Get material primitive draw type
      * @return Primitive draw type
      */
-    axis::backend::PrimitiveType getPrimitiveType() const { return _drawPrimitive; }
+    ax::backend::PrimitiveType getPrimitiveType() const { return _drawPrimitive; }
 
     /**
      * Enable material transparent rendering.
@@ -213,8 +213,8 @@ protected:
     bool _isTransparent = false;  // is this mesh transparent.
     bool _force2DQueue = false;   // render meshes using this material in 2D render queue.
 
-    axis::backend::PrimitiveType _drawPrimitive =
-        axis::backend::PrimitiveType::TRIANGLE;  // primitive draw type for meshes
+    ax::backend::PrimitiveType _drawPrimitive =
+        ax::backend::PrimitiveType::TRIANGLE;  // primitive draw type for meshes
 };
 
 NS_AX_END

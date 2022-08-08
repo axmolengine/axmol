@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -956,7 +956,7 @@ void DownloaderCURL::startTask(std::shared_ptr<DownloadTask>& task)
     }
     else
     {
-        axis::log("DownloaderCURL createTask fail, error: %d, detail: %s", coTask->_errCode,
+        ax::log("DownloaderCURL createTask fail, error: %d, detail: %s", coTask->_errCode,
                      coTask->_errDescription.c_str());
         task.reset();
     }
@@ -1137,4 +1137,4 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 }
 
 }  // namespace network
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

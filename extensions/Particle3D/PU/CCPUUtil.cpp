@@ -3,7 +3,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@
 
 NS_AX_BEGIN
 
-axis::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= Vec3::ZERO*/)
+ax::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*= Vec3::ZERO*/)
 {
     Vec3 newUp;
 
@@ -83,7 +83,7 @@ axis::Vec3 PUUtil::randomDeviant(const Vec3& src, float angle, const Vec3& up /*
     //}
 }
 
-axis::Vec3 PUUtil::perpendicular(const Vec3& src)
+ax::Vec3 PUUtil::perpendicular(const Vec3& src)
 {
     // static const float fSquareZero = (float)(1e-06 * 1e-06);
 

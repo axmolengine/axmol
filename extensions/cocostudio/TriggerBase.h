@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,17 +33,17 @@ THE SOFTWARE.
 
 #define DECLARE_CLASS_INFO                     \
 public:                                        \
-    static axis::ObjectFactory::TInfo Type; \
-    static axis::Ref* createInstance(void);
+    static ax::ObjectFactory::TInfo Type; \
+    static ax::Ref* createInstance(void);
 
 #define IMPLEMENT_CLASS_INFO(className)           \
-    axis::Ref* className::createInstance(void) \
+    ax::Ref* className::createInstance(void) \
     {                                             \
         auto ret = new className;                 \
         ret->autorelease();                       \
         return ret;                               \
     }                                             \
-    axis::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
+    ax::ObjectFactory::TInfo className::Type(#className, &className::createInstance);
 
 void CCS_DLL sendEvent(unsigned int event);
 

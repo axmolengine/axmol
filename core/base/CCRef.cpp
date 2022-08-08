@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2017 Chukong Technologies
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -91,7 +91,7 @@ void Ref::release()
 
     if (_referenceCount == 0)
     {
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
         auto poolManager = PoolManager::getInstance();
         if (!poolManager->getCurrentPool()->isClearing() && poolManager->isObjectInPools(this))
         {

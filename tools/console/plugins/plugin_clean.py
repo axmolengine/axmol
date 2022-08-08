@@ -1,13 +1,13 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# axis "clean" plugin
+# axys "clean" plugin
 #
 # Author: Luis Parravicini
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-"clean" plugin for axis command line tool
+"clean" plugin for axys command line tool
 '''
 
 __docformat__ = 'restructuredtext'
@@ -15,10 +15,10 @@ __docformat__ = 'restructuredtext'
 import os
 import shutil
 
-import axis
+import axys
 from plugin_dist import CCPluginDist
 
-class CCPluginClean(axis.CCPlugin):
+class CCPluginClean(axys.CCPlugin):
     """
     cleans a project
     """
@@ -36,10 +36,10 @@ class CCPluginClean(axis.CCPlugin):
             return
         project_dir = self._platforms.project_path()
 
-        axis.Logging.info("cleaning native")
+        axys.Logging.info("cleaning native")
         obj_path = os.path.join(project_dir, 'obj')
         self._rmdir(obj_path)
-        axis.Logging.info("cleaning java")
+        axys.Logging.info("cleaning java")
         self._run_cmd("cd \"%s\" && ant clean" % project_dir)
 
     def clean_ios(self):
@@ -47,7 +47,7 @@ class CCPluginClean(axis.CCPlugin):
             return
         project_dir = self._platforms.project_path()
 
-        axis.Logging.info("removing intermediate files")
+        axys.Logging.info("removing intermediate files")
         self._run_cmd("cd \"%s\" && xcodebuild clean" % project_dir)
         self._rmdir(CCPluginDist.target_path(project_dir))
 
@@ -56,7 +56,7 @@ class CCPluginClean(axis.CCPlugin):
             try:
                 shutil.rmtree(path)
             except OSError as e:
-                raise axis.CCPluginError("Error removing directory: " + str(e.args))
+                raise axys.CCPluginError("Error removing directory: " + str(e.args))
 
 
     def run(self, argv, dependencies):

@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -57,12 +57,12 @@ NS_AX_END
 #        include "bullet/BulletCollision/CollisionDispatch/btGhostObject.h"
 
 // convert between cocos and bullet
-axis::Vec3 convertbtVector3ToVec3(const btVector3& btVec3);
-btVector3 convertVec3TobtVector3(const axis::Vec3& vec3);
-axis::Mat4 convertbtTransformToMat4(const btTransform& btTrans);
-btTransform convertMat4TobtTransform(const axis::Mat4& mat4);
-axis::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat);
-btQuaternion convertQuatTobtQuat(const axis::Quaternion& quat);
+ax::Vec3 convertbtVector3ToVec3(const btVector3& btVec3);
+btVector3 convertVec3TobtVector3(const ax::Vec3& vec3);
+ax::Mat4 convertbtTransformToMat4(const btTransform& btTrans);
+btTransform convertMat4TobtTransform(const ax::Mat4& mat4);
+ax::Quaternion convertbtQuatToQuat(const btQuaternion& btQuat);
+btQuaternion convertQuatTobtQuat(const ax::Quaternion& quat);
 
 #    endif  // AX_ENABLE_BULLET_INTEGRATION
 

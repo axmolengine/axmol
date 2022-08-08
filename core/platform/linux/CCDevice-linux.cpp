@@ -3,7 +3,7 @@ Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -389,8 +389,8 @@ public:
         std::transform(lowerCasePath.begin(), lowerCasePath.end(), lowerCasePath.begin(), ::tolower);
         if (lowerCasePath.find(".ttf") != std::string::npos)
         {
-            fontPath        = axis::FileUtils::getInstance()->fullPathForFilename(fontPath);
-            auto fileStream = axis::FileUtils::getInstance()->openFileStream(fontPath, FileStream::Mode::READ);
+            fontPath        = ax::FileUtils::getInstance()->fullPathForFilename(fontPath);
+            auto fileStream = ax::FileUtils::getInstance()->openFileStream(fontPath, FileStream::Mode::READ);
             if (fileStream)
             {
                 fontCache.insert(std::pair<std::string, std::string>(family_name, fontPath));

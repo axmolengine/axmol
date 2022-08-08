@@ -65,7 +65,7 @@ void LayoutReader::destroyInstance()
     AX_SAFE_DELETE(instanceLayoutReader);
 }
 
-void LayoutReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void LayoutReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     WidgetReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
 
@@ -541,7 +541,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     return *(Offset<Table>*)(&options);
 }
 
-void LayoutReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* layoutOptions)
+void LayoutReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* layoutOptions)
 {
     Layout* panel = static_cast<Layout*>(node);
     auto options  = (PanelOptions*)layoutOptions;

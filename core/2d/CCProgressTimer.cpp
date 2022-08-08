@@ -5,7 +5,7 @@ Copyright (c) 2013-2017 Chukong Technologies Inc
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ const char kProgressTextureCoords = 0x4b;
 
 namespace
 {
-backend::ProgramState* initPipelineDescriptor(axis::CustomCommand& command,
+backend::ProgramState* initPipelineDescriptor(ax::CustomCommand& command,
                                               bool ridal,
                                               backend::UniformLocation& locMVP,
                                               backend::UniformLocation& locTexture)
@@ -615,7 +615,7 @@ void ProgressTimer::draw(Renderer* renderer, const Mat4& transform, uint32_t fla
     if (_vertexData.empty() || !_sprite)
         return;
 
-    const axis::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const ax::Mat4& projectionMat = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     Mat4 finalMat                      = projectionMat * transform;
     _programState->setUniform(_locMVP1, finalMat.m, sizeof(finalMat.m));
     _programState->setTexture(_locTex1, 0, _sprite->getTexture()->getBackendTexture());

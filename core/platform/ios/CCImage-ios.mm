@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-bool axis::Image::saveToFile(std::string_view filename, bool isToRGB)
+bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
 {
     // only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 uncompressed data
     if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))

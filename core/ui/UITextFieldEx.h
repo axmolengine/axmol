@@ -16,7 +16,7 @@ namespace ui
 /**
 @brief  A extension implementation of ui::TextField
 */
-class AX_DLL TextFieldEx : public axis::Node, public IMEDelegate
+class AX_DLL TextFieldEx : public ax::Node, public IMEDelegate
 {
 public:
     /**
@@ -185,7 +185,7 @@ protected:
 
     int _fontType;
 
-    axis::stimer::TIMER_ID _continuousTouchDelayTimerID;
+    ax::stimer::TIMER_ID _continuousTouchDelayTimerID;
     float _continuousTouchDelayTime;
     std::function<void(const Point& worldPoint)> _continuousTouchCallback;
 

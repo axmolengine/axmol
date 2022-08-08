@@ -294,7 +294,7 @@ Offset<Table> RadioButtonReader::createOptionsWithFlatBuffers(pugi::xml_node obj
     return *(Offset<Table>*)&options;
 }
 
-void RadioButtonReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* radioButtonOptions)
+void RadioButtonReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* radioButtonOptions)
 {
     auto options = (RadioButtonOptions*)radioButtonOptions;
 

@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ class Physics3DWorld;
 
 /** @brief Physics3DComponent: A component with 3D physics, you can add a rigid body to it, and then add this component
  * to a node, the node will move and rotate with this rigid body */
-class AX_DLL Physics3DComponent : public axis::Component
+class AX_DLL Physics3DComponent : public ax::Component
 {
     friend class Physics3DWorld;
 
@@ -74,8 +74,8 @@ public:
      * @return created Physics3DComponent
      */
     static Physics3DComponent* create(Physics3DObject* physicsObj,
-                                      const axis::Vec3& translateInPhysics = axis::Vec3::ZERO,
-                                      const axis::Quaternion& rotInPhsyics = axis::Quaternion::ZERO);
+                                      const ax::Vec3& translateInPhysics = ax::Vec3::ZERO,
+                                      const ax::Quaternion& rotInPhsyics = ax::Quaternion::ZERO);
 
     /**
      * set Physics object to the component
@@ -108,7 +108,7 @@ public:
     /**
      * The node's transform in physics object space
      */
-    void setTransformInPhysics(const axis::Vec3& translateInPhysics, const axis::Quaternion& rotInPhsyics);
+    void setTransformInPhysics(const ax::Vec3& translateInPhysics, const ax::Quaternion& rotInPhsyics);
 
     /**
      * synchronization between node and physics is time consuming, you can skip some synchronization using this function
@@ -132,8 +132,8 @@ protected:
 
     void postSimulate();
 
-    axis::Mat4 _transformInPhysics;  // transform in physics space
-    axis::Mat4 _invTransformInPhysics;
+    ax::Mat4 _transformInPhysics;  // transform in physics space
+    ax::Mat4 _invTransformInPhysics;
 
     Physics3DObject* _physics3DObj;
     PhysicsSyncFlag _syncFlag;

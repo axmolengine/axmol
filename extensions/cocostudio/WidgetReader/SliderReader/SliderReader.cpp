@@ -49,7 +49,7 @@ void SliderReader::destroyInstance()
     AX_SAFE_DELETE(instanceSliderReader);
 }
 
-void SliderReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void SliderReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     this->beginSetBasicProperties(widget);
 
@@ -437,7 +437,7 @@ Offset<Table> SliderReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     return *(Offset<Table>*)(&options);
 }
 
-void SliderReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* sliderOptions)
+void SliderReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* sliderOptions)
 {
     Slider* slider = static_cast<Slider*>(node);
 

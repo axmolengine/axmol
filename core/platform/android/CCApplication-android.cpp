@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ extern "C" size_t __ctype_get_mb_cur_max(void)
 }
 #endif
 
-static const char* helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
+static const char* helperClassName = "org.axys1.lib.AxysHelper";
 
 NS_AX_BEGIN
 
@@ -75,7 +75,7 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    JniHelper::callStaticVoidMethod("org/cocos2dx/lib/Cocos2dxRenderer", "setAnimationInterval", interval);
+    JniHelper::callStaticVoidMethod("org/axys1/lib/AxysRenderer", "setAnimationInterval", interval);
 }
 
 //////////////////////////////////////////////////////////////////////////

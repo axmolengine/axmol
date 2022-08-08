@@ -2,7 +2,7 @@
 Copyright (c) 2010 cocos2d-x.org
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,20 +34,20 @@ USING_NS_AX;
 
 extern "C" {
 JNIEXPORT void JNICALL
-Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
+Java_org_axys1_lib_AxysRenderer_nativeTouchesBegin(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
-    axis::Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &idlong, &x, &y);
+    ax::Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &idlong, &x, &y);
 }
 
 JNIEXPORT void JNICALL
-Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
+Java_org_axys1_lib_AxysRenderer_nativeTouchesEnd(JNIEnv*, jclass, jint id, jfloat x, jfloat y)
 {
     intptr_t idlong = id;
-    axis::Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &idlong, &x, &y);
+    ax::Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &idlong, &x, &y);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesMove(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeTouchesMove(JNIEnv* env,
                                                                                 jclass,
                                                                                 jintArray ids,
                                                                                 jfloatArray xs,
@@ -66,10 +66,10 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesMove(
     for (int i = 0; i < size; i++)
         idlong[i] = id[i];
 
-    axis::Director::getInstance()->getOpenGLView()->handleTouchesMove(size, idlong, x, y);
+    ax::Director::getInstance()->getOpenGLView()->handleTouchesMove(size, idlong, x, y);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCancel(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeTouchesCancel(JNIEnv* env,
                                                                                   jclass,
                                                                                   jintArray ids,
                                                                                   jfloatArray xs,
@@ -88,7 +88,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCance
     for (int i = 0; i < size; i++)
         idlong[i] = id[i];
 
-    axis::Director::getInstance()->getOpenGLView()->handleTouchesCancel(size, idlong, x, y);
+    ax::Director::getInstance()->getOpenGLView()->handleTouchesCancel(size, idlong, x, y);
 }
 
 #define KEYCODE_BACK 0x04
@@ -101,20 +101,20 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeTouchesCance
 #define KEYCODE_PLAY 0x7e
 #define KEYCODE_DPAD_CENTER 0x17
 
-static std::unordered_map<int, axis::EventKeyboard::KeyCode> g_keyCodeMap = {
-    {KEYCODE_BACK, axis::EventKeyboard::KeyCode::KEY_ESCAPE},
-    {KEYCODE_MENU, axis::EventKeyboard::KeyCode::KEY_MENU},
-    {KEYCODE_DPAD_UP, axis::EventKeyboard::KeyCode::KEY_DPAD_UP},
-    {KEYCODE_DPAD_DOWN, axis::EventKeyboard::KeyCode::KEY_DPAD_DOWN},
-    {KEYCODE_DPAD_LEFT, axis::EventKeyboard::KeyCode::KEY_DPAD_LEFT},
-    {KEYCODE_DPAD_RIGHT, axis::EventKeyboard::KeyCode::KEY_DPAD_RIGHT},
-    {KEYCODE_ENTER, axis::EventKeyboard::KeyCode::KEY_ENTER},
-    {KEYCODE_PLAY, axis::EventKeyboard::KeyCode::KEY_PLAY},
-    {KEYCODE_DPAD_CENTER, axis::EventKeyboard::KeyCode::KEY_DPAD_CENTER},
+static std::unordered_map<int, ax::EventKeyboard::KeyCode> g_keyCodeMap = {
+    {KEYCODE_BACK, ax::EventKeyboard::KeyCode::KEY_ESCAPE},
+    {KEYCODE_MENU, ax::EventKeyboard::KeyCode::KEY_MENU},
+    {KEYCODE_DPAD_UP, ax::EventKeyboard::KeyCode::KEY_DPAD_UP},
+    {KEYCODE_DPAD_DOWN, ax::EventKeyboard::KeyCode::KEY_DPAD_DOWN},
+    {KEYCODE_DPAD_LEFT, ax::EventKeyboard::KeyCode::KEY_DPAD_LEFT},
+    {KEYCODE_DPAD_RIGHT, ax::EventKeyboard::KeyCode::KEY_DPAD_RIGHT},
+    {KEYCODE_ENTER, ax::EventKeyboard::KeyCode::KEY_ENTER},
+    {KEYCODE_PLAY, ax::EventKeyboard::KeyCode::KEY_PLAY},
+    {KEYCODE_DPAD_CENTER, ax::EventKeyboard::KeyCode::KEY_DPAD_CENTER},
 
 };
 
-JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeKeyEvent(JNIEnv*,
+JNIEXPORT jboolean JNICALL Java_org_axys1_lib_AxysRenderer_nativeKeyEvent(JNIEnv*,
                                                                                  jclass,
                                                                                  jint keyCode,
                                                                                  jboolean isPressed)
@@ -125,9 +125,9 @@ JNIEXPORT jboolean JNICALL Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeKeyEvent
         return JNI_FALSE;
     }
 
-    axis::EventKeyboard::KeyCode cocos2dKey = g_keyCodeMap.at(keyCode);
-    axis::EventKeyboard event(cocos2dKey, isPressed);
-    axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    ax::EventKeyboard::KeyCode cocos2dKey = g_keyCodeMap.at(keyCode);
+    ax::EventKeyboard event(cocos2dKey, isPressed);
+    ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
     return JNI_TRUE;
 }
 }

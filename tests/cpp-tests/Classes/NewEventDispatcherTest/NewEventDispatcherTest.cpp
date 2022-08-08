@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -1571,7 +1571,7 @@ private:
 
 DanglingNodePointersTest::DanglingNodePointersTest()
 {
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && AXIS_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && _AX_DEBUG > 0
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size size   = Director::getInstance()->getVisibleSize();
 
@@ -1619,11 +1619,11 @@ std::string DanglingNodePointersTest::title() const
 
 std::string DanglingNodePointersTest::subtitle() const
 {
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && AXIS_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1 && _AX_DEBUG > 0
     return "Tap the square - should not crash!";
 #else
     return "For test to work, must be compiled with:\n"
-           "AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1\n&& AXIS_DEBUG > 0";
+           "AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS == 1\n&& _AX_DEBUG > 0";
 #endif
 }
 

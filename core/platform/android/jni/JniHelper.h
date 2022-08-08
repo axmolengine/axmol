@@ -4,7 +4,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axis-project.github.io
+https://axys1.github.io
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -103,9 +103,9 @@ public:
     template <typename... Ts>
     static void callStaticVoidMethod(const char* className, const char* methodName, Ts&&... xs)
     {
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<void(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             t.env->CallStaticVoidMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -126,9 +126,9 @@ public:
     static bool callStaticBooleanMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jboolean jret = JNI_FALSE;
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jboolean(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jret = t.env->CallStaticBooleanMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -150,9 +150,9 @@ public:
     static int callStaticIntMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jint ret = 0;
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jint(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticIntMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -174,9 +174,9 @@ public:
     static float callStaticFloatMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jfloat ret = 0.0;
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jfloat(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticFloatMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -198,9 +198,9 @@ public:
     static float* callStaticFloatArrayMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         static float ret[32];
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jfloat>(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jfloatArray array =
@@ -234,9 +234,9 @@ public:
     static int* callStaticIntArrayMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         static int ret[32];
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jint>(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jintArray array =
@@ -270,9 +270,9 @@ public:
     static Vec3 callStaticVec3Method(const char* className, const char* methodName, Ts&&... xs)
     {
         Vec3 ret;
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::Array<jfloat>(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jfloatArray array =
@@ -304,9 +304,9 @@ public:
     static double callStaticDoubleMethod(const char* className, const char* methodName, Ts&&... xs)
     {
         jdouble ret = 0.0;
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jdouble(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             ret = t.env->CallStaticDoubleMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
@@ -329,13 +329,13 @@ public:
     {
         std::string ret;
 
-        axis::JniMethodInfo t;
+        ax::JniMethodInfo t;
         const char* signature = jni::TypeSignature<jni::String(std::decay_t<Ts>...)>{}();
-        if (axis::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
         {
             LocalRefMapType localRefs;
             jstring jret = (jstring)t.env->CallStaticObjectMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
-            ret          = axis::JniHelper::jstring2string(jret);
+            ret          = ax::JniHelper::jstring2string(jret);
             t.env->DeleteLocalRef(t.classID);
             t.env->DeleteLocalRef(jret);
             deleteLocalRefs(t.env, localRefs);
@@ -359,47 +359,47 @@ private:
 
     static jobject _activity;
 
-    static jstring convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, const char* x);
+    static jstring convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, const char* x);
 
-    static jstring convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, std::string_view x);
+    static jstring convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, std::string_view x);
 
-    static jstring convert(LocalRefMapType& localRefs, axis::JniMethodInfo& t, const std::string& x);
+    static jstring convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, const std::string& x);
 
-    inline static jint convert(LocalRefMapType&, axis::JniMethodInfo&, int32_t value)
+    inline static jint convert(LocalRefMapType&, ax::JniMethodInfo&, int32_t value)
     {
         return static_cast<jint>(value);
     }
-    inline static jlong convert(LocalRefMapType&, axis::JniMethodInfo&, int64_t value)
+    inline static jlong convert(LocalRefMapType&, ax::JniMethodInfo&, int64_t value)
     {
         return static_cast<jlong>(value);
     }
-    inline static jfloat convert(LocalRefMapType&, axis::JniMethodInfo&, float value)
+    inline static jfloat convert(LocalRefMapType&, ax::JniMethodInfo&, float value)
     {
         return static_cast<jfloat>(value);
     }
-    inline static jdouble convert(LocalRefMapType&, axis::JniMethodInfo&, double value)
+    inline static jdouble convert(LocalRefMapType&, ax::JniMethodInfo&, double value)
     {
         return static_cast<jdouble>(value);
     }
-    inline static jboolean convert(LocalRefMapType&, axis::JniMethodInfo&, bool value)
+    inline static jboolean convert(LocalRefMapType&, ax::JniMethodInfo&, bool value)
     {
         return static_cast<jboolean>(value);
     }
-    inline static jbyte convert(LocalRefMapType&, axis::JniMethodInfo&, int8_t value)
+    inline static jbyte convert(LocalRefMapType&, ax::JniMethodInfo&, int8_t value)
     {
         return static_cast<jbyte>(value);
     }
-    inline static jchar convert(LocalRefMapType&, axis::JniMethodInfo&, uint8_t value)
+    inline static jchar convert(LocalRefMapType&, ax::JniMethodInfo&, uint8_t value)
     {
         return static_cast<jchar>(value);
     }
-    inline static jshort convert(LocalRefMapType&, axis::JniMethodInfo&, int16_t value)
+    inline static jshort convert(LocalRefMapType&, ax::JniMethodInfo&, int16_t value)
     {
         return static_cast<jshort>(value);
     }
 
     template <typename T>
-    static T convert(LocalRefMapType& localRefs, axis::JniMethodInfo&, T x)
+    static T convert(LocalRefMapType& localRefs, ax::JniMethodInfo&, T x)
     {
         return x;
     }

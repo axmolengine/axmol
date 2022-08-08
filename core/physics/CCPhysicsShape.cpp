@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -805,7 +805,7 @@ Vec2 PhysicsShapeEdgePolygon::getCenter()
     return center;
 }
 
-void PhysicsShapeEdgePolygon::getPoints(axis::Vec2* outPoints) const
+void PhysicsShapeEdgePolygon::getPoints(ax::Vec2* outPoints) const
 {
     int i = 0;
     for (auto&& shape : _cpShapes)

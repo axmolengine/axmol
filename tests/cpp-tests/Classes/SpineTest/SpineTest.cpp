@@ -72,7 +72,7 @@ SpineTests::SpineTests()
     ADD_TEST_CASE(SpineboyExample);
     ADD_TEST_CASE(TankExample);
 
-#ifdef AXIS_DEBUG
+#ifdef _AX_DEBUG
     debugExtension = new DebugExtension(SpineExtension::getInstance());
 #endif
 }
@@ -82,7 +82,7 @@ SpineTests::~SpineTests()
     FileUtils::getInstance()->setSearchPaths(_searchPaths);
     SkeletonBatch::destroyInstance();
     SkeletonTwoColorBatch::destroyInstance();
-#ifdef AXIS_DEBUG
+#ifdef _AX_DEBUG
     debugExtension->reportLeaks();
     delete debugExtension;
 #endif

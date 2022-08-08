@@ -90,7 +90,7 @@ void GMovieClip::setFlip(FlipType value)
     _content->setFlippedY(value == FlipType::VERTICAL || value == FlipType::BOTH);
 }
 
-void GMovieClip::setColor(const axis::Color3B& value)
+void GMovieClip::setColor(const ax::Color3B& value)
 {
     _content->setColor(value);
 }
@@ -102,7 +102,7 @@ void GMovieClip::handleGrayedChanged()
     ((FUISprite*)_content)->setGrayed(_finalGrayed);
 }
 
-axis::Value GMovieClip::getProp(ObjectPropID propId)
+ax::Value GMovieClip::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -119,7 +119,7 @@ axis::Value GMovieClip::getProp(ObjectPropID propId)
     }
 }
 
-void GMovieClip::setProp(ObjectPropID propId, const axis::Value& value)
+void GMovieClip::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {
@@ -195,7 +195,7 @@ ActionMovieClip::~ActionMovieClip()
     AX_SAFE_RELEASE(_animation);
 }
 
-ActionMovieClip* ActionMovieClip::create(axis::Animation* animation, float repeatDelay, bool swing)
+ActionMovieClip* ActionMovieClip::create(ax::Animation* animation, float repeatDelay, bool swing)
 {
     ActionMovieClip* action = new ActionMovieClip();
     action->setAnimation(animation, repeatDelay, swing);
@@ -417,7 +417,7 @@ void ActionMovieClip::setPlaySettings(int start, int end, int times, int endAt, 
     setFrame(start);
 }
 
-void ActionMovieClip::setAnimation(axis::Animation* animation, float repeatDelay, bool swing)
+void ActionMovieClip::setAnimation(ax::Animation* animation, float repeatDelay, bool swing)
 {
     if (_animation != animation)
     {

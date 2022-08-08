@@ -8,11 +8,11 @@ fi
 
 sed -i .bak '/AX_DEPRECATED_ATTRIBUTE AX_DLL/,/NS_AX_END/d' ../../core/base/ccUTF8.h
 
-version=`grep -e 'return' ../../core/axis.cpp | awk '{print substr($3,0,length($3)-2)}'`
+version=`grep -e 'return' ../../core/axys.cpp | awk '{print substr($3,0,length($3)-2)}'`
 echo $version
 
 cd ../../docs
-#we should  read axis.cpp and retrieve the version number
+#we should  read axys.cpp and retrieve the version number
 sed -i .bak "s/3\.0/${version}/g" doxygen.config
 
 doxygen ${CONFIG_NAME}.config

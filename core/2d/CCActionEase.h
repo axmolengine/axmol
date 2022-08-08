@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -516,7 +516,7 @@ EASEELASTIC_TEMPLATE_DECL_CLASS(EaseElasticInOut);
  @brief Ease Bezier
  @ingroup Actions
  */
-class AX_DLL EaseBezierAction : public axis::ActionEase
+class AX_DLL EaseBezierAction : public ax::ActionEase
 {
 public:
     /**
@@ -524,7 +524,7 @@ public:
      @param action The pointer of the inner action.
      @return A pointer of EaseBezierAction action. If creation failed, return nil.
     */
-    static EaseBezierAction* create(axis::ActionInterval* action);
+    static EaseBezierAction* create(ax::ActionInterval* action);
 
     virtual void update(float time) override;
     virtual EaseBezierAction* clone() const override;

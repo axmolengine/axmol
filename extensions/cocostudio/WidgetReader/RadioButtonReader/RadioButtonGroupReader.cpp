@@ -77,7 +77,7 @@ Offset<Table> RadioButtonGroupReader::createOptionsWithFlatBuffers(pugi::xml_nod
     return *(Offset<Table>*)(&options);
 }
 
-void RadioButtonGroupReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* params)
+void RadioButtonGroupReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* params)
 {
     auto radioButtonGroup = static_cast<ui::RadioButtonGroup*>(node);
     auto options          = (RadioButtonGroupOptions*)params;

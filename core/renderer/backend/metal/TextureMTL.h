@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -168,7 +168,7 @@ public:
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index = 0) override;
+    virtual void updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index = 0) override;
 
     int getCount() const override { return _textureInfo._maxIdx + 1; }
 
@@ -226,7 +226,7 @@ public:
      * Update texture description.
      * @param descriptor Specifies texture and sampler descriptor.
      */
-    virtual void updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index = 0) override;
+    virtual void updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index = 0) override;
 
     int getCount() const override { return _textureInfo._maxIdx + 1; }
 

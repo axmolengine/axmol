@@ -3,7 +3,7 @@
     {
         "common": [
             {
-                "from" : "bin/axis.ini",
+                "from" : "bin/axys.ini",
                 "to": ""
             },
             {
@@ -77,7 +77,7 @@
     },
     "modify_config" : [
         {
-            "file_path" : "axis.ini",
+            "file_path" : "axys.ini",
             "pattern": "plugins=.*",
             "replace_string": "plugins=\n"
         }

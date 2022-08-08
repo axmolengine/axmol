@@ -3,7 +3,7 @@ set(lib_name webp)
 set(target_name ${lib_name})
 
 project(${lib_name})
-include(../cmake/AxisThirdpartyConfig.cmake)
+include(../cmake/AXConfigThirdparty.cmake)
 
 FILE(GLOB_RECURSE ${target_name}_src *.h;*.c)
 

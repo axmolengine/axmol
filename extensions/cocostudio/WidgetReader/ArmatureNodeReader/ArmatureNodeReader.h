@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2014 cocos2d-x.org
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ instance->registReaderObject("ArmatureNodeReader", (ObjectFactory::Instance)Cust
 *
 *
 *****************************************/
-class ArmatureNodeReader : public axis::Ref, public cocostudio::NodeReaderProtocol
+class ArmatureNodeReader : public ax::Ref, public cocostudio::NodeReaderProtocol
 {
     DECLARE_CLASS_NODE_READER_INFO
 
@@ -53,10 +53,10 @@ public:
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
         pugi::xml_node objectData,
         flatbuffers::FlatBufferBuilder* builder) override;
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* textBMFontOptions) override;
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* textBMFontOptions) override;
 
     // CSArmatureNode
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
 
 private:
     std::string getArmatureName(std::string_view exporJsonPath);

@@ -8,7 +8,7 @@ set(target_name ${lib_name})
 
 project(${lib_name})
 
-include(../../cmake/AxisThirdpartyConfig.cmake)
+include(../../cmake/AXConfigThirdparty.cmake)
 
 aux_source_directory(${LUA_SRC_PATH} LUA_CORE)
 list(REMOVE_ITEM LUA_CORE ${LUA_SRC_PATH}/lua.c ${LUA_SRC_PATH}/luac.c)
