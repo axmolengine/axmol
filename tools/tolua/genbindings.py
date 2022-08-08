@@ -26,7 +26,9 @@ def _check_ndk_root_env():
                     break
             break
 
-        if ANDROID_NDK == None: raise
+        if ANDROID_NDK == None:
+            ANDROID_NDK = os.environ['ANDROID_NDK']
+            if not os.path.isdir(ANDROID_NDK): raise
 
     except Exception:
         print("The ndk-r19c not installed in '{0}{1}ndk', please install via cmdline-tools/bin/sdkmanager --verbose --sdk_root=D:\\dev\\adt\\sdk \"ndk;19.2.5345600\"".format(sdkRoot, os.path.sep))
