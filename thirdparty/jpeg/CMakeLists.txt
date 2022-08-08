@@ -4,7 +4,7 @@ set(target_name dep_${lib_name})
 
 project(${lib_name})
 
-include(../cmake/AxisThirdpartyConfig.cmake)
+include(../cmake/AXConfigThirdparty.cmake)
 
 add_library(${target_name} STATIC IMPORTED GLOBAL)
 

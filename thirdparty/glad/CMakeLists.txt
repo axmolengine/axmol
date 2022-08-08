@@ -4,7 +4,7 @@ set(target_name ${lib_name})
 
 project(${target_name})
 
-include(../cmake/AxisThirdpartyConfig.cmake)
+include(../cmake/AXConfigThirdparty.cmake)
 
 add_library(${target_name}
       ${${target_name}_src}

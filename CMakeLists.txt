@@ -43,7 +43,7 @@ set(CMAKE_MODULE_PATH ${AXYS_ROOT_PATH}/cmake/Modules/)
 include(PreventInSourceBuilds)
 
 # works before build libaxis
-include(AxisBuildSet)
+include(AXBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
 option(AX_BUILD_EXAMPLES "Build examples" ON)

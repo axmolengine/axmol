@@ -52,7 +52,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
 
     set(CMAKE_MODULE_PATH ${AXYS_ROOT_PATH}/cmake/Modules/)
 
-    include(AxisBuildSet)
+    include(AXBuildSet)
     set(_AX_USE_PREBUILT FALSE)
     if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${AXYS_ROOT_PATH}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
@@ -198,9 +198,9 @@ if (AX_WITH_YAML_CPP)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows only
-    include(${AXYS_ROOT_PATH}/cmake/Modules/AxisConfigDefine.cmake)
+    include(${AXYS_ROOT_PATH}/cmake/Modules/AXConfigDefine.cmake)
     use_ax_compile_define(${APP_NAME})
 
-    include(${AXYS_ROOT_PATH}/cmake/Modules/AxisLinkHelpers.cmake)
+    include(${AXYS_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
     axis_link_cxx_prebuilt(${APP_NAME} ${AXYS_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

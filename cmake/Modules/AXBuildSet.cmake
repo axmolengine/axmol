@@ -35,15 +35,15 @@ option(AX_ENABLE_EXT_LUA "Build lua libraries" OFF)
 set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
 
 # include helper functions
-include(AxisBuildHelpers)
+include(AXBuildHelpers)
 
 # set common compiler options
 # add target compile define function
 # add target compile options function
-include(AxisConfigDefine)
+include(AXConfigDefine)
 
 # config libraries dependence
-include(AxisConfigDepend)
+include(AXConfigDepend)
 
 if(COCOS_COMMAND)
     get_filename_component(axis_console_dir ${COCOS_COMMAND} DIRECTORY)

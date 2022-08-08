@@ -42,7 +42,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     endif()
     set(CMAKE_MODULE_PATH ${AXYS_ROOT_PATH}/cmake/Modules/)
 
-    include(AxisBuildSet)
+    include(AXBuildSet)
     add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
 endif()
 

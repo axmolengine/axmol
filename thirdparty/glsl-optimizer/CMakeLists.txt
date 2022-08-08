@@ -4,7 +4,7 @@ set(target_name dep_${lib_name})
 
 project(${lib_name})
 
-include(../cmake/AxisThirdpartyConfig.cmake)
+include(../cmake/AXConfigThirdparty.cmake)
 
 add_library(dep_glcpp_library STATIC IMPORTED GLOBAL)
 add_library(dep_glsl_optimizer STATIC IMPORTED GLOBAL)
