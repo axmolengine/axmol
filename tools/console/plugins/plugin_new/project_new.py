@@ -408,7 +408,7 @@ class TPCreator(object):
 
         self.tp_name = tp_name
         self.tp_dir = tp_dir
-        self.tp_json = 'axys1-template.json'
+        self.tp_json = 'axproj-template.json'
 
         # search in 'template_metadata' first
         tp_json_path = os.path.join(tp_dir, 'template_metadata', self.tp_json)

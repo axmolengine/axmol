@@ -9,7 +9,7 @@ class Project(object):
     LUA = 'lua'
     JS = 'js'
 
-    CONFIG = '.axysproj.json'
+    CONFIG = '.axproj.json'
 
     KEY_PROJ_TYPE = 'project_type'
     KEY_HAS_NATIVE = 'has_native'

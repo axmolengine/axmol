@@ -432,7 +432,7 @@ class CCPluginCompile(axys.CCPlugin):
         return ret
 
     def get_engine_version_num(self):
-        # 1. get engine version from .axysproj.json
+        # 1. get engine version from .axproj.json
         engine_ver_str = self._project.get_proj_config(axys_project.Project.KEY_ENGINE_VERSION)
 
         # 2. engine version is not found. find from source file

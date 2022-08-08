@@ -237,7 +237,7 @@ class TemplateGenerator(axys.CCPlugin):
             if not re.match(".*-template-binary", name):
                 continue
 
-            cfg_path = os.path.join(fullPath, ".axysproj.json")
+            cfg_path = os.path.join(fullPath, ".axproj.json")
             cfg_info = {}
             if os.path.exists(cfg_path):
                 f = open(cfg_path)
