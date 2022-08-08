@@ -309,7 +309,7 @@ void Physics3DRigidBody::addConstraint(Physics3DConstraint* constraint)
     auto iter = std::find(_constraintList.begin(), _constraintList.end(), constraint);
     if (iter == _constraintList.end())
     {
-        _constraintList.push_back(constraint);
+        _constraintList.emplace_back(constraint);
         constraint->retain();
     }
 }

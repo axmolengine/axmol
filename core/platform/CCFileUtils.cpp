@@ -169,7 +169,7 @@ public:
             if (SAX_ARRAY == preState)
             {
                 // add a new dictionary into the array
-                _curArray->push_back(Value(ValueMap()));
+                _curArray->emplace_back(Value(ValueMap()));
                 _curDict = &(_curArray->rbegin())->asValueMap();
             }
             else if (SAX_DICT == preState)
@@ -224,7 +224,7 @@ public:
             {
                 AXASSERT(!_arrayStack.empty(), "The state is wrong!");
                 ValueVector* preArray = _arrayStack.top();
-                preArray->push_back(Value(ValueVector()));
+                preArray->emplace_back(Value(ValueVector()));
                 _curArray = &(_curArray->rbegin())->asValueVector();
             }
             // record the array state
@@ -263,7 +263,7 @@ public:
         {
             if (SAX_ARRAY == curState)
             {
-                _curArray->push_back(Value(true));
+                _curArray->emplace_back(Value(true));
             }
             else if (SAX_DICT == curState)
             {
@@ -274,7 +274,7 @@ public:
         {
             if (SAX_ARRAY == curState)
             {
-                _curArray->push_back(Value(false));
+                _curArray->emplace_back(Value(false));
             }
             else if (SAX_DICT == curState)
             {
@@ -286,11 +286,11 @@ public:
             if (SAX_ARRAY == curState)
             {
                 if (sName == "string"sv)
-                    _curArray->push_back(Value(_curValue));
+                    _curArray->emplace_back(Value(_curValue));
                 else if (sName == "integer"sv)
-                    _curArray->push_back(Value(atoi(_curValue.c_str())));
+                    _curArray->emplace_back(Value(atoi(_curValue.c_str())));
                 else
-                    _curArray->push_back(Value(std::atof(_curValue.c_str())));
+                    _curArray->emplace_back(Value(std::atof(_curValue.c_str())));
             }
             else if (SAX_DICT == curState)
             {
@@ -531,7 +531,7 @@ bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string
 bool FileUtils::init()
 {
     DECLARE_GUARD;
-    _searchPathArray.push_back(_defaultResRootPath);
+    _searchPathArray.emplace_back(_defaultResRootPath);
     _searchResolutionsOrderArray.emplace_back("");
     return true;
 }
@@ -801,12 +801,12 @@ void FileUtils::setSearchResolutionsOrder(const std::vector<std::string>& search
             resolutionDirectory += "/";
         }
 
-        _searchResolutionsOrderArray.push_back(resolutionDirectory);
+        _searchResolutionsOrderArray.emplace_back(resolutionDirectory);
     }
 
     if (!existDefault)
     {
-        _searchResolutionsOrderArray.push_back("");
+        _searchResolutionsOrderArray.emplace_back("");
     }
 }
 
@@ -825,7 +825,7 @@ void FileUtils::addSearchResolutionsOrder(std::string_view order, const bool fro
     }
     else
     {
-        _searchResolutionsOrderArray.push_back(resOrder);
+        _searchResolutionsOrderArray.emplace_back(resOrder);
     }
 }
 
@@ -905,13 +905,13 @@ void FileUtils::setSearchPaths(const std::vector<std::string>& searchPaths)
         {
             existDefaultRootPath = true;
         }
-        _searchPathArray.push_back(fullPath);
+        _searchPathArray.emplace_back(fullPath);
     }
 
     if (!existDefaultRootPath)
     {
         // AXLOG("Default root path doesn't exist, adding it.");
-        _searchPathArray.push_back(_defaultResRootPath);
+        _searchPathArray.emplace_back(_defaultResRootPath);
     }
 }
 
@@ -935,8 +935,8 @@ void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
     }
     else
     {
-        _originalSearchPaths.push_back(std::string{searchpath});
-        _searchPathArray.push_back(std::move(path));
+        _originalSearchPaths.emplace_back(std::string{searchpath});
+        _searchPathArray.emplace_back(std::move(path));
     }
 }
 
@@ -1261,14 +1261,14 @@ bool FileUtils::createDirectory(std::string_view path) const
         {
             subpath = path.substr(start, found - start + 1);
             if (!subpath.empty())
-                dirs.push_back(std::string{subpath});
+                dirs.emplace_back(std::string{subpath});
             start = found + 1;
             found = path.find_first_of("/\\", start);
             if (found == std::string::npos)
             {
                 if (start < path.length())
                 {
-                    dirs.push_back(std::string{path.substr(start)});
+                    dirs.emplace_back(std::string{path.substr(start)});
                 }
                 break;
             }

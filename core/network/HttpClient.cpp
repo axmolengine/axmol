@@ -130,7 +130,7 @@ HttpClient::HttpClient()
 
     for (int i = 0; i < HttpClient::MAX_CHANNELS; ++i)
     {
-        _availChannelQueue.unsafe_push_back(i);
+        _availChannelQueue.unsafe_emplace_back(i);
     }
 
     _scheduler->schedule([=](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
@@ -235,7 +235,7 @@ void HttpClient::processResponse(HttpResponse* response, std::string_view url)
     }
     else
     {
-        _pendingResponseQueue.push_back(response);
+        _pendingResponseQueue.emplace_back(response);
     }
 }
 
@@ -468,7 +468,7 @@ void HttpClient::finishResponse(HttpResponse* response)
         if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
             invokeResposneCallbackAndRelease(response);
         else
-            _finishedResponseQueue.push_back(response);
+            _finishedResponseQueue.emplace_back(response);
     }
     else
     {

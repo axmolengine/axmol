@@ -62,7 +62,7 @@ int GroupCommandManager::getGroupID()
 void GroupCommandManager::releaseGroupID(int groupID)
 {
     _groupMapping[groupID] = false;
-    _unusedIDs.push_back(groupID);
+    _unusedIDs.emplace_back(groupID);
 }
 
 GroupCommand::GroupCommand()

@@ -69,7 +69,7 @@ VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, P
     if (b->init(meshIndexData, pass, command))
     {
         b->autorelease();
-        __vertexAttribBindingCache.push_back(b);
+        __vertexAttribBindingCache.emplace_back(b);
     }
 
     return b;

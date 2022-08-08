@@ -692,8 +692,8 @@ void TestWriteValueMap::onEnter()
     valueMap["data1"] = Value("string in array");
 
     ValueVector arrayInMap;
-    arrayInMap.push_back(Value("string 0 in arrayInMap"));
-    arrayInMap.push_back(Value("string 1 in arrayInMap"));
+    arrayInMap.emplace_back(Value("string 0 in arrayInMap"));
+    arrayInMap.emplace_back(Value("string 1 in arrayInMap"));
     valueMap["data2"] = arrayInMap;
 
     // add boolean to the plist
@@ -789,30 +789,30 @@ void TestWriteValueVector::onEnter()
     ValueMap mapInArray;
     mapInArray["string1"] = "string in dictInArray key 0";
     mapInArray["string2"] = "string in dictInArray key 1";
-    array.push_back(Value(mapInArray));
+    array.emplace_back(Value(mapInArray));
 
-    array.push_back(Value("string in array"));
+    array.emplace_back(Value("string in array"));
 
     ValueVector arrayInArray;
-    arrayInArray.push_back(Value("string 0 in arrayInArray"));
-    arrayInArray.push_back(Value("string 1 in arrayInArray"));
-    array.push_back(Value(arrayInArray));
+    arrayInArray.emplace_back(Value("string 0 in arrayInArray"));
+    arrayInArray.emplace_back(Value("string 1 in arrayInArray"));
+    array.emplace_back(Value(arrayInArray));
 
     // add boolean to the plist
     auto booleanObject = Value(true);
-    array.push_back(booleanObject);
+    array.emplace_back(booleanObject);
 
     // add integer to the plist
     auto intObject = Value(1024);
-    array.push_back(intObject);
+    array.emplace_back(intObject);
 
     // add float to the plist
     auto floatObject = Value(1024.1024f);
-    array.push_back(floatObject);
+    array.emplace_back(floatObject);
 
     // add double to the plist
     auto doubleObject = Value(1024.123);
-    array.push_back(doubleObject);
+    array.emplace_back(doubleObject);
 
     // end with /
     std::string writablePath = FileUtils::getInstance()->getWritablePath();

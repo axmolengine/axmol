@@ -886,7 +886,7 @@ void CameraCullingDemo::addMeshCallback(Ref* sender)
             auto sprite = MeshRenderer::create("MeshRendererTest/orc.c3b");
             sprite->setPosition3D(Vec3(x * 30.0f, 0.0f, z * 30.0f));
             sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-            _objects.push_back(sprite);
+            _objects.emplace_back(sprite);
             _layer3D->addChild(sprite);
         }
     }
@@ -915,7 +915,7 @@ void CameraCullingDemo::delMeshCallback(Ref* sender)
         {
             auto sprite = MeshRenderer::create("MeshRendererTest/orc.c3b");
             sprite->setPosition3D(Vec3(x * 30.0f, 0.0f, z * 30.0f));
-            _objects.push_back(sprite);
+            _objects.emplace_back(sprite);
             _layer3D->addChild(sprite);
         }
     }

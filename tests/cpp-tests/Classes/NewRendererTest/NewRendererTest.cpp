@@ -511,7 +511,7 @@ void SpriteCreation::doTest()
             delete sprite;
             break;
         }
-        spriteCache.push_back(sprite);
+        spriteCache.emplace_back(sprite);
     }
 
     auto creationDuration = perf.endTick(KEY_CREATION);

@@ -543,7 +543,7 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
         // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
         // m_nsmoothPath++;
 
-        pathPoints.push_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
+        pathPoints.emplace_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
         nsmoothPath++;
 
         // Move towards target a small advancement at a time until target reached or
@@ -597,7 +597,7 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
                 {
                     // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
                     // m_nsmoothPath++;
-                    pathPoints.push_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
+                    pathPoints.emplace_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
                     nsmoothPath++;
                 }
                 break;
@@ -628,14 +628,14 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
                     {
                         // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], startPos);
                         // m_nsmoothPath++;
-                        pathPoints.push_back(Vec3(startPos[0], startPos[1], startPos[2]));
+                        pathPoints.emplace_back(Vec3(startPos[0], startPos[1], startPos[2]));
                         nsmoothPath++;
                         // Hack to make the dotted path not visible during off-mesh connection.
                         if (nsmoothPath & 1)
                         {
                             // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], startPos);
                             // m_nsmoothPath++;
-                            pathPoints.push_back(Vec3(startPos[0], startPos[1], startPos[2]));
+                            pathPoints.emplace_back(Vec3(startPos[0], startPos[1], startPos[2]));
                             nsmoothPath++;
                         }
                     }
@@ -653,7 +653,7 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
                 // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
                 // m_nsmoothPath++;
 
-                pathPoints.push_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
+                pathPoints.emplace_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
                 nsmoothPath++;
             }
         }

@@ -2499,7 +2499,7 @@ bool Animate::initWithAnimation(Animation* animation)
         {
             float value = (accumUnitsOfTime * newUnitOfTimeValue) / singleDuration;
             accumUnitsOfTime += frame->getDelayUnits();
-            _splitTimes->push_back(value);
+            _splitTimes->emplace_back(value);
         }
         return true;
     }

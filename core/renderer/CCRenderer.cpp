@@ -66,16 +66,16 @@ static bool compare3DCommand(RenderCommand* a, RenderCommand* b)
 // queue
 RenderQueue::RenderQueue() {}
 
-void RenderQueue::push_back(RenderCommand* command)
+void RenderQueue::emplace_back(RenderCommand* command)
 {
     float z = command->getGlobalOrder();
     if (z < 0)
     {
-        _commands[QUEUE_GROUP::GLOBALZ_NEG].push_back(command);
+        _commands[QUEUE_GROUP::GLOBALZ_NEG].emplace_back(command);
     }
     else if (z > 0)
     {
-        _commands[QUEUE_GROUP::GLOBALZ_POS].push_back(command);
+        _commands[QUEUE_GROUP::GLOBALZ_POS].emplace_back(command);
     }
     else
     {
@@ -83,16 +83,16 @@ void RenderQueue::push_back(RenderCommand* command)
         {
             if (command->isTransparent())
             {
-                _commands[QUEUE_GROUP::TRANSPARENT_3D].push_back(command);
+                _commands[QUEUE_GROUP::TRANSPARENT_3D].emplace_back(command);
             }
             else
             {
-                _commands[QUEUE_GROUP::OPAQUE_3D].push_back(command);
+                _commands[QUEUE_GROUP::OPAQUE_3D].emplace_back(command);
             }
         }
         else
         {
-            _commands[QUEUE_GROUP::GLOBALZ_ZERO].push_back(command);
+            _commands[QUEUE_GROUP::GLOBALZ_ZERO].emplace_back(command);
         }
     }
 }
@@ -167,7 +167,7 @@ Renderer::Renderer()
     _commandGroupStack.push(DEFAULT_RENDER_QUEUE);
 
     RenderQueue defaultRenderQueue;
-    _renderGroups.push_back(defaultRenderQueue);
+    _renderGroups.emplace_back(defaultRenderQueue);
     _queuedTriangleCommands.reserve(BATCH_TRIAGCOMMAND_RESERVED_SIZE);
 
     // for the batched TriangleCommand
@@ -238,7 +238,7 @@ void Renderer::addCommand(RenderCommand* command, int renderQueueID)
     AXASSERT(renderQueueID >= 0, "Invalid render queue");
     AXASSERT(command->getType() != RenderCommand::Type::UNKNOWN_COMMAND, "Invalid Command Type");
 
-    _renderGroups[renderQueueID].push_back(command);
+    _renderGroups[renderQueueID].emplace_back(command);
 }
 
 void Renderer::pushGroup(int renderQueueID)
@@ -256,7 +256,7 @@ void Renderer::popGroup()
 int Renderer::createRenderQueue()
 {
     RenderQueue newRenderQueue;
-    _renderGroups.push_back(newRenderQueue);
+    _renderGroups.emplace_back(newRenderQueue);
     return (int)_renderGroups.size() - 1;
 }
 
@@ -307,7 +307,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
         }
 
         // queue it
-        _queuedTriangleCommands.push_back(cmd);
+        _queuedTriangleCommands.emplace_back(cmd);
 #ifdef AX_USE_METAL
         _queuedIndexCount += cmd->getIndexCount();
         _queuedVertexCount += cmd->getVertexCount();
@@ -330,7 +330,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
     case RenderCommand::Type::CALLBACK_COMMAND:
         flush();
         static_cast<CallbackCommand*>(command)->execute();
-        _callbackCommandsPool.push_back(static_cast<CallbackCommand*>(command));
+        _callbackCommandsPool.emplace_back(static_cast<CallbackCommand*>(command));
         break;
     default:
         assert(false);
@@ -1017,8 +1017,8 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
     free(tmpData);
 #endif
 
-    _vertexBufferPool.push_back(vertexBuffer);
-    _indexBufferPool.push_back(indexBuffer);
+    _vertexBufferPool.emplace_back(vertexBuffer);
+    _indexBufferPool.emplace_back(indexBuffer);
 }
 
 void Renderer::pushStateBlock()

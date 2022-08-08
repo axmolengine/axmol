@@ -1367,7 +1367,7 @@ void ParticleSystem::setMultiAnimationRandom()
 {
     _randomAnimations.clear();
     for (auto&& a : _animations)
-        _randomAnimations.push_back(a.first);
+        _randomAnimations.emplace_back(a.first);
 }
 
 void ParticleSystem::setAnimationIndicesAtlas()
