@@ -72,13 +72,13 @@ void PURibbonTrail::addNode(Node* n)
     // get chain index
     size_t chainIndex = _freeChains.back();
     _freeChains.pop_back();
-    _nodeToChainSegment.push_back(chainIndex);
+    _nodeToChainSegment.emplace_back(chainIndex);
     _nodeToSegMap[n] = chainIndex;
 
     // initialise the chain
     resetTrail(chainIndex, n);
 
-    _nodeList.push_back(n);
+    _nodeList.emplace_back(n);
     // n->setListener(this);
 }
 //-----------------------------------------------------------------------
@@ -104,7 +104,7 @@ void PURibbonTrail::removeNode(Node* n)
         size_t chainIndex = *mi;
         PUBillboardChain::clearChain(chainIndex);
         // mark as free now
-        _freeChains.push_back(chainIndex);
+        _freeChains.emplace_back(chainIndex);
         // n->setListener(0);
         _nodeList.erase(i);
         _nodeToChainSegment.erase(mi);

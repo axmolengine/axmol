@@ -51,7 +51,7 @@ const std::vector<Vec3>& PUPositionEmitter::getPositions() const
 //-----------------------------------------------------------------------
 void PUPositionEmitter::addPosition(const Vec3& position)
 {
-    _positionList.push_back(position);
+    _positionList.emplace_back(position);
 }
 //-----------------------------------------------------------------------
 void PUPositionEmitter::notifyStart()

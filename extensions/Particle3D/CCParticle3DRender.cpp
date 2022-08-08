@@ -314,7 +314,7 @@ void Particle3DModelRender::render(Renderer* renderer, const Mat4& transform, Pa
             }
             mesh->setTexture(_texFile);
             mesh->retain();
-            _meshList.push_back(mesh);
+            _meshList.emplace_back(mesh);
         }
         if (!_meshList.empty())
         {

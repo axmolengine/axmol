@@ -941,8 +941,8 @@ void ActionTimelineCache::loadEasingDataWithFlatBuffers(cocostudio::timeline::Fr
         std::vector<float> easings;
         for (auto it = points->begin(); it != points->end(); ++it)
         {
-            easings.push_back(it->x());
-            easings.push_back(it->y());
+            easings.emplace_back(it->x());
+            easings.emplace_back(it->y());
         }
         frame->setEasingParams(easings);
     }

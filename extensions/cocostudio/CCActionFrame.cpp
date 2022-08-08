@@ -85,7 +85,7 @@ void ActionFrame::setEasingParameter(std::vector<float>& parameter)
 
     for (size_t i = 0; i < parameter.size(); i++)
     {
-        _Parameter.push_back(parameter[i]);
+        _Parameter.emplace_back(parameter[i]);
     }
 }
 

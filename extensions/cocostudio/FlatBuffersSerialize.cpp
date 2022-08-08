@@ -292,7 +292,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithOpaque(void* opaque, s
                 while (animationinfoElement)
                 {
                     auto animationinfo = thiz->createAnimationInfo(animationinfoElement);
-                    animationInfos.push_back(animationinfo);
+                    animationInfos.emplace_back(animationinfo);
                     animationinfoElement = animationinfoElement.next_sibling();
                 }
             }
@@ -393,7 +393,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
 
                 if (attriname == "ctype")
                 {
-                    children.push_back(createNodeTree(child, value));
+                    children.emplace_back(createNodeTree(child, value));
 
                     bHasType = true;
                     break;
@@ -404,7 +404,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTree(pugi::xml_node objectData,
 
             if (!bHasType)
             {
-                children.push_back(createNodeTree(child, "NodeObjectData"));
+                children.emplace_back(createNodeTree(child, "NodeObjectData"));
             }
 
             child = child.next_sibling();
@@ -588,7 +588,7 @@ Offset<NodeAction> FlatBuffersSerialize::createNodeAction(pugi::xml_node objectD
     while (timelineElement)
     {
         auto timeLine = createTimeLine(timelineElement);
-        timelines.push_back(timeLine);
+        timelines.emplace_back(timeLine);
 
         timelineElement = timelineElement.next_sibling();
     }
@@ -772,7 +772,7 @@ Offset<TimeLine> FlatBuffersSerialize::createTimeLine(pugi::xml_node objectData)
                                           blendFrame);
         }
 
-        frames.push_back(frame);
+        frames.emplace_back(frame);
 
         frameElement = frameElement.next_sibling();
     }
@@ -970,7 +970,7 @@ Offset<flatbuffers::TextureFrame> FlatBuffersSerialize::createTextureFrame(pugi:
 
         if (resourceType == 1)
         {
-            _textures.push_back(_builder->CreateString(texture));
+            _textures.emplace_back(_builder->CreateString(texture));
         }
 
         child = child.next_sibling();
@@ -1221,7 +1221,7 @@ flatbuffers::Offset<flatbuffers::EasingData> FlatBuffersSerialize::createEasingD
                 attribute = attribute.next_attribute();
             }
             flatbuffers::FVec2 f_PointF(pointF.x, pointF.y);
-            points.push_back(f_PointF);
+            points.emplace_back(f_PointF);
 
             PointF = PointF.next_sibling();
         }
@@ -1339,7 +1339,7 @@ FlatBufferBuilder* FlatBuffersSerialize::createFlatBuffersWithXMLFileForSimulato
                 while (animationinfoElement)
                 {
                     auto animationinfo = createAnimationInfo(animationinfoElement);
-                    animationInfos.push_back(animationinfo);
+                    animationInfos.emplace_back(animationinfo);
                     animationinfoElement = animationinfoElement.next_sibling();
                 }
             }
@@ -1426,7 +1426,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
 
                 if (attriname == "ctype")
                 {
-                    children.push_back(createNodeTreeForSimulator(child, value));
+                    children.emplace_back(createNodeTreeForSimulator(child, value));
 
                     bHasType = true;
                     break;
@@ -1437,7 +1437,7 @@ Offset<NodeTree> FlatBuffersSerialize::createNodeTreeForSimulator(pugi::xml_node
 
             if (!bHasType)
             {
-                children.push_back(createNodeTreeForSimulator(child, "NodeObjectData"sv));
+                children.emplace_back(createNodeTreeForSimulator(child, "NodeObjectData"sv));
             }
 
             child = child.next_sibling();
@@ -1576,7 +1576,7 @@ std::string FlatBuffersSerialize::serializeFlatBuffersWithXMLFileForLanguageData
 
         Offset<flatbuffers::LanguageItem> langItem =
             CreateLanguageItem(*_builder, _builder->CreateString(key), _builder->CreateString(text));
-        langItemList.push_back(langItem);
+        langItemList.emplace_back(langItem);
 
         element = element.next_sibling();
     }

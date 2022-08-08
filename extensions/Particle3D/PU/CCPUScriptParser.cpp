@@ -100,7 +100,7 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                         temp->token = (*i)->lexeme.substr(1, token->lexeme.size() - 2);
                     else
                         temp->token = (*i)->lexeme;
-                    node->children.push_back(temp);
+                    node->children.emplace_back(temp);
 
                     // The second-next token is the source
                     ++i;
@@ -119,7 +119,7 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                     else
                         temp->token = (*i)->lexeme;
 
-                    node->children.push_back(temp);
+                    node->children.emplace_back(temp);
 
                     // Consume all the newlines
                     i = skipNewlines(i, end);
@@ -128,12 +128,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                     if (parent)
                     {
                         node->parent = parent;
-                        parent->children.push_back(node);
+                        parent->children.emplace_back(node);
                     }
                     else
                     {
                         node->parent = 0;
-                        nodes.push_back(node);
+                        nodes.emplace_back(node);
                     }
                     node = nullptr;
                 }
@@ -157,7 +157,7 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                     temp->line           = (*i)->line;
                     temp->type           = CNT_VARIABLE;
                     temp->token          = (*i)->lexeme;
-                    node->children.push_back(temp);
+                    node->children.emplace_back(temp);
 
                     // The next token is the assignment
                     ++i;
@@ -174,7 +174,7 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                         temp->token = (*i)->lexeme.substr(1, (*i)->lexeme.size() - 2);
                     else
                         temp->token = (*i)->lexeme;
-                    node->children.push_back(temp);
+                    node->children.emplace_back(temp);
 
                     // Consume all the newlines
                     i = skipNewlines(i, end);
@@ -183,12 +183,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                     if (parent)
                     {
                         node->parent = parent;
-                        parent->children.push_back(node);
+                        parent->children.emplace_back(node);
                     }
                     else
                     {
                         node->parent = 0;
-                        nodes.push_back(node);
+                        nodes.emplace_back(node);
                     }
                     node = nullptr;
                 }
@@ -207,12 +207,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                     if (parent)
                     {
                         node->parent = parent;
-                        parent->children.push_back(node);
+                        parent->children.emplace_back(node);
                     }
                     else
                     {
                         node->parent = 0;
-                        nodes.push_back(node);
+                        nodes.emplace_back(node);
                     }
 
                     // Set the parent
@@ -243,12 +243,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                 if (parent)
                 {
                     node->parent = parent;
-                    parent->children.push_back(node);
+                    parent->children.emplace_back(node);
                 }
                 else
                 {
                     node->parent = 0;
-                    nodes.push_back(node);
+                    nodes.emplace_back(node);
                 }
 
                 // Move up another level
@@ -298,7 +298,7 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                     tempNode->line           = (*j)->line;
                     tempNode->type           = (*j)->type == TID_WORD ? CNT_WORD : CNT_QUOTE;
                     tempNode->parent         = node;
-                    node->children.push_back(tempNode);
+                    node->children.emplace_back(tempNode);
                     ++j;
                 }
 
@@ -310,12 +310,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                 if (parent)
                 {
                     node->parent = parent;
-                    parent->children.push_back(node);
+                    parent->children.emplace_back(node);
                 }
                 else
                 {
                     node->parent = 0;
-                    nodes.push_back(node);
+                    nodes.emplace_back(node);
                 }
                 node = nullptr;
             }
@@ -334,12 +334,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                 if (parent)
                 {
                     node->parent = parent;
-                    parent->children.push_back(node);
+                    parent->children.emplace_back(node);
                 }
                 else
                 {
                     node->parent = 0;
-                    nodes.push_back(node);
+                    nodes.emplace_back(node);
                 }
 
                 // Set the parent
@@ -373,12 +373,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                 if (parent)
                 {
                     node->parent = parent;
-                    parent->children.push_back(node);
+                    parent->children.emplace_back(node);
                 }
                 else
                 {
                     node->parent = 0;
-                    nodes.push_back(node);
+                    nodes.emplace_back(node);
                 }
 
                 // Move up another level
@@ -400,12 +400,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                 if (parent)
                 {
                     node->parent = parent;
-                    parent->children.push_back(node);
+                    parent->children.emplace_back(node);
                 }
                 else
                 {
                     node->parent = 0;
-                    nodes.push_back(node);
+                    nodes.emplace_back(node);
                 }
                 node = nullptr;
             }
@@ -421,12 +421,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                 if (parent)
                 {
                     node->parent = parent;
-                    parent->children.push_back(node);
+                    parent->children.emplace_back(node);
                 }
                 else
                 {
                     node->parent = 0;
-                    nodes.push_back(node);
+                    nodes.emplace_back(node);
                 }
                 node = nullptr;
             }
@@ -442,12 +442,12 @@ void PUScriptParser::parse(PUConcreteNodeList& nodes, const PUScriptTokenList& t
                 if (parent)
                 {
                     node->parent = parent;
-                    parent->children.push_back(node);
+                    parent->children.emplace_back(node);
                 }
                 else
                 {
                     node->parent = 0;
-                    nodes.push_back(node);
+                    nodes.emplace_back(node);
                 }
                 node = nullptr;
             }
@@ -500,7 +500,7 @@ void PUScriptParser::parseChunk(PUConcreteNodeList& nodes, const PUScriptTokenLi
         }
 
         if (node != nullptr)
-            nodes.push_back(node);
+            nodes.emplace_back(node);
     }
 }
 

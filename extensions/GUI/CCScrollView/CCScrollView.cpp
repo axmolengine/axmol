@@ -713,7 +713,7 @@ bool ScrollView::onTouchBegan(Touch* touch, Event* /*event*/)
 
     if (std::find(_touches.begin(), _touches.end(), touch) == _touches.end())
     {
-        _touches.push_back(touch);
+        _touches.emplace_back(touch);
     }
 
     if (_touches.size() == 1)

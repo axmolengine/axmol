@@ -1231,7 +1231,7 @@ void AssetsManagerEx::batchDownload()
             _sizeCollected++;
         }
 
-        _queue.push_back(iter.first);
+        _queue.emplace_back(iter.first);
     }
     // All collected, enable total size
     if (_sizeCollected == _totalToDownload)
