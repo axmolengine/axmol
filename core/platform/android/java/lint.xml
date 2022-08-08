@@ -4,7 +4,7 @@
         <ignore path="src/org/cocos2dx/lib/GameControllerHelper.java" />
     </issue>
     <issue id="NewApi">
-        <ignore path="src/org/cocos2dx/lib/Cocos2dxActivity.java" />
+        <ignore path="src/org/cocos2dx/lib/AxysActivity.java" />
         <ignore path="src/org/cocos2dx/lib/GameControllerHelper.java" />
     </issue>
 </lint>

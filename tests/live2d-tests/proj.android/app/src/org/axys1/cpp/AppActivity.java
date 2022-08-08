@@ -31,7 +31,7 @@ import android.os.Build;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
-public class AppActivity extends Cocos2dxActivity {
+public class AppActivity extends AxysActivity {
     static {
         // DNT remove, some android simulator require explicit load shared libraries, otherwise will crash
         SharedLoader.load();

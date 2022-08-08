@@ -29,7 +29,7 @@ import android.os.Bundle;
 import org.axys1.lib.AxysActivity;
 import org.axys1.lib.SharedLoader;
 
-public class AppActivity extends Cocos2dxActivity {
+public class AppActivity extends AxysActivity {
     static {
         SharedLoader.load();
     }

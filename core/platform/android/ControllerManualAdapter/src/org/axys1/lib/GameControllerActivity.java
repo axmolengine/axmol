@@ -36,7 +36,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.util.Log;
 
-public abstract class GameControllerActivity extends Cocos2dxActivity implements InputDeviceListener {
+public abstract class GameControllerActivity extends AxysActivity implements InputDeviceListener {
     // ===========================================================
     // Constants
     // ===========================================================

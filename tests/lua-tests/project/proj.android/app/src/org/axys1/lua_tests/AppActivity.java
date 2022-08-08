@@ -30,7 +30,7 @@ import org.axys1.lib.AxysActivity;
 import org.axys1.lib.SharedLoader;
 import org.axys1.lib.AxysGLSurfaceView;
 
-public class AppActivity extends Cocos2dxActivity{
+public class AppActivity extends AxysActivity{
     static {
         // DNT remove, some android simulator require explicit load shared libraries, otherwise will crash
         SharedLoader.load();

@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher">
         
-        <!-- Tell Cocos2dxActivity the name of our .so -->
+        <!-- Tell AxysActivity the name of our .so -->
 		<meta-data android:name="android.app.lib_name"
 				   android:value="lua_tests" />
 		
