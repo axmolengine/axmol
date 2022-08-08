@@ -25,7 +25,7 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-# this CMakeLists is to generate Axis Engine Library
+# this CMakeLists is to generate Axys Engine Library
 # build axys
 # build axlua if AX_ENABLE_EXT_LUA=ON
 

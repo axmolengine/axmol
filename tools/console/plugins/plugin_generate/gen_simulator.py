@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #-*- coding: UTF-8 -*-
 # ----------------------------------------------------------------------------
-# Generate Axis Simulator
+# Generate Axys Simulator
 #
 # Copyright 2015 (C) zhangbin
 #
