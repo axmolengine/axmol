@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/platform/android/jni/AxisLuaJavaBridge.h"
+#include "scripting/lua-bindings/manual/platform/android/jni/AxysLuaJavaBridge.h"
 
 #if defined(__ANDROID__)
 #    include <android/log.h>
@@ -31,7 +31,7 @@
 
 #    include "base/ccUTF8.h"
 
-#    define LOG_TAG "Cocos2dxLuaJavaBridge_java"
+#    define LOG_TAG "AxysLuaJavaBridge_java"
 #    define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 extern "C" {
