@@ -314,7 +314,7 @@ std::string JniHelper::jstring2string(jstring jstr)
 jstring JniHelper::convert(LocalRefMapType& localRefs, ax::JniMethodInfo& t, const char* x)
 {
     jstring ret = ax::StringUtils::newStringUTFJNI(t.env, x ? x : "");
-    localRefs[t.env].push_back(ret);
+    localRefs[t.env].emplace_back(ret);
     return ret;
 }
 

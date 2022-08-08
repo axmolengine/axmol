@@ -238,7 +238,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
         ret = _audioEngineImpl->play2d(filePath, loop, volume);
         if (ret != INVALID_AUDIO_ID)
         {
-            _audioPathIDMap[filePath.data()].push_back(ret);
+            _audioPathIDMap[filePath.data()].emplace_back(ret);
             auto it = _audioPathIDMap.find(filePath);
 
             auto& audioRef    = _audioIDInfoMap[ret];
@@ -249,7 +249,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
             if (profileHelper)
             {
                 profileHelper->lastPlayTime = utils::gettime();
-                profileHelper->audioIDs.push_back(ret);
+                profileHelper->audioIDs.emplace_back(ret);
             }
             audioRef.profileHelper = profileHelper;
         }

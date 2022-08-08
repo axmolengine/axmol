@@ -384,7 +384,7 @@ public:
         else
         {
             std::lock_guard<std::mutex> lock(_requestMutex);
-            _requestQueue.push_back(task);
+            _requestQueue.emplace_back(task);
         }
     }
 
@@ -437,7 +437,7 @@ public:
         for (auto&& task : _processSet)
         {
             if (!task->background)
-                outList.push_back(task);
+                outList.emplace_back(task);
         }
     }
 
@@ -824,7 +824,7 @@ private:
                         else
                         {
                             std::lock_guard<std::mutex> lock(_finishedMutex);
-                            _finishedQueue.push_back(task);
+                            _finishedQueue.emplace_back(task);
                         }
                     }
                 } while (m);

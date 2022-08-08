@@ -187,7 +187,7 @@ public:
 
             for (const auto& iter : _data)
             {
-                keys.push_back(iter.first);
+                keys.emplace_back(iter.first);
             }
         }
         return keys;
@@ -206,7 +206,7 @@ public:
             {
                 if (iter.second == object)
                 {
-                    keys.push_back(iter.first);
+                    keys.emplace_back(iter.first);
                 }
             }
         }

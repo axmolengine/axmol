@@ -1367,7 +1367,7 @@ void SchedulerRemoveEntryWhileUpdate::onEnter()
             nextObj = _testvector[i - 1];
         }
         auto obj = new TestClass(i, nextObj, getScheduler());
-        _testvector.push_back(obj);
+        _testvector.emplace_back(obj);
         getScheduler()->scheduleUpdate(obj, 500 - i, false);
     }
 }

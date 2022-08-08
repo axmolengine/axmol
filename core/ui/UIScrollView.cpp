@@ -947,10 +947,10 @@ void ScrollView::gatherTouchMove(const Vec2& delta)
         _touchMoveDisplacements.pop_front();
         _touchMoveTimeDeltas.pop_front();
     }
-    _touchMoveDisplacements.push_back(delta);
+    _touchMoveDisplacements.emplace_back(delta);
 
     long long timestamp = utils::getTimeInMilliseconds();
-    _touchMoveTimeDeltas.push_back((timestamp - _touchMovePreviousTimestamp) / 1000.0f);
+    _touchMoveTimeDeltas.emplace_back((timestamp - _touchMovePreviousTimestamp) / 1000.0f);
     _touchMovePreviousTimestamp = timestamp;
 }
 

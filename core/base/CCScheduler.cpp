@@ -557,7 +557,7 @@ void Scheduler::removeUpdateFromHash(struct _listEntry* entry)
         else
         {
             element->entry->markedForDeletion = true;
-            _updateDeleteVector.push_back(element->entry);
+            _updateDeleteVector.emplace_back(element->entry);
         }
 
         // hash entry
@@ -815,7 +815,7 @@ void Scheduler::resumeTargets(const std::set<void*>& targetsToResume)
 void Scheduler::performFunctionInCocosThread(std::function<void()> function)
 {
     std::lock_guard<std::mutex> lock(_performMutex);
-    _functionsToPerform.push_back(std::move(function));
+    _functionsToPerform.emplace_back(std::move(function));
 }
 
 void Scheduler::removeAllFunctionsToBePerformedInCocosThread()

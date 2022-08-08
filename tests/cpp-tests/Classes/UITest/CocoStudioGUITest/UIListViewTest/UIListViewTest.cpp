@@ -79,7 +79,7 @@ bool UIListViewTest_Vertical::init()
         for (int i = 0; i < _totalCount; ++i)
         {
             std::string ccstr = StringUtils::format("listview_item_%d", i);
-            _array.push_back(ccstr);
+            _array.emplace_back(ccstr);
         }
 
         // Create the list view ex
@@ -329,7 +329,7 @@ bool UIListViewTest_Horizontal::init()
         for (int i = 0; i < _totalCount; ++i)
         {
             std::string ccstr = StringUtils::format("listview_item_%d", i);
-            _array.push_back(ccstr);
+            _array.emplace_back(ccstr);
         }
 
         // Create the list view ex

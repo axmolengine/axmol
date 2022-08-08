@@ -47,9 +47,9 @@ static inline void split(std::string_view src, std::string_view token, strArray&
     {
         nend = src.find(token, nbegin);
         if (nend == std::string::npos)
-            vect.push_back(std::string{src.substr(nbegin, src.length() - nbegin)});
+            vect.emplace_back(std::string{src.substr(nbegin, src.length() - nbegin)});
         else
-            vect.push_back(std::string{src.substr(nbegin, nend - nbegin)});
+            vect.emplace_back(std::string{src.substr(nbegin, nend - nbegin)});
         nbegin = nend + tokenSize;
     }
 }

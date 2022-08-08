@@ -39,15 +39,15 @@ public:
     /** Const iterator, can be used to loop the Vector. */
     using const_iterator = typename std::deque<_Ty>::const_iterator;
 
-    void push_back(_Ty&& value)
+    void emplace_back(_Ty&& value)
     {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
-        queue_.push_back(std::forward<_Ty>(value));
+        queue_.emplace_back(std::forward<_Ty>(value));
     }
-    void push_back(const _Ty& value)
+    void emplace_back(const _Ty& value)
     {
         std::lock_guard<std::recursive_mutex> lck(this->mtx_);
-        queue_.push_back(value);
+        queue_.emplace_back(value);
     }
     _Ty& front()
     {
@@ -90,8 +90,8 @@ public:
     void lock() { this->mtx_.lock(); }
     void unlock() { this->mtx_.unlock(); }
 
-    void unsafe_push_back(_Ty&& value) { queue_.push_back(std::forward<_Ty>(value)); }
-    void unsafe_push_back(const _Ty& value) { queue_.push_back(value); }
+    void unsafe_emplace_back(_Ty&& value) { queue_.emplace_back(std::forward<_Ty>(value)); }
+    void unsafe_emplace_back(const _Ty& value) { queue_.emplace_back(value); }
     _Ty& unsafe_front() { return queue_.front(); }
     void unsafe_pop_front() { queue_.pop_front(); }
     void unsafe_push_front(_Ty&& value) { queue_.push_font(std::forward<_Ty>(value)); }

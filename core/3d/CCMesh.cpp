@@ -169,20 +169,20 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     {
         perVertexSizeInFloat += 3;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
-        attribs.push_back(att);
+        attribs.emplace_back(att);
     }
     if (normals.size())
     {
         perVertexSizeInFloat += 3;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
-        attribs.push_back(att);
+        attribs.emplace_back(att);
     }
     if (texs.size())
     {
         perVertexSizeInFloat += 2;
         att.type         = backend::VertexFormat::FLOAT2;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
-        attribs.push_back(att);
+        attribs.emplace_back(att);
     }
 
     bool hasNormal   = (normals.size() != 0);
@@ -191,21 +191,21 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     size_t vertexNum = positions.size() / 3;
     for (size_t i = 0; i < vertexNum; i++)
     {
-        vertices.push_back(positions[i * 3]);
-        vertices.push_back(positions[i * 3 + 1]);
-        vertices.push_back(positions[i * 3 + 2]);
+        vertices.emplace_back(positions[i * 3]);
+        vertices.emplace_back(positions[i * 3 + 1]);
+        vertices.emplace_back(positions[i * 3 + 2]);
 
         if (hasNormal)
         {
-            vertices.push_back(normals[i * 3]);
-            vertices.push_back(normals[i * 3 + 1]);
-            vertices.push_back(normals[i * 3 + 2]);
+            vertices.emplace_back(normals[i * 3]);
+            vertices.emplace_back(normals[i * 3 + 1]);
+            vertices.emplace_back(normals[i * 3 + 2]);
         }
 
         if (hasTexCoord)
         {
-            vertices.push_back(texs[i * 2]);
-            vertices.push_back(texs[i * 2 + 1]);
+            vertices.emplace_back(texs[i * 2]);
+            vertices.emplace_back(texs[i * 2 + 1]);
         }
     }
     return create(vertices, perVertexSizeInFloat, indices, attribs);
@@ -219,8 +219,8 @@ Mesh* Mesh::create(const std::vector<float>& vertices,
     MeshData meshdata;
     meshdata.attribs = attribs;
     meshdata.vertex  = vertices;
-    meshdata.subMeshIndices.push_back(indices);
-    meshdata.subMeshIds.push_back("");
+    meshdata.subMeshIndices.emplace_back(indices);
+    meshdata.subMeshIds.emplace_back("");
     auto meshvertexdata = MeshVertexData::create(meshdata, indices.format());
     auto indexData      = meshvertexdata->getMeshIndexDataByIndex(0);
 

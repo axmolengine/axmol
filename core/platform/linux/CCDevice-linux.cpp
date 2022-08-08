@@ -203,7 +203,7 @@ public:
             {
                 currentLine.calculateWidth();
                 iMaxLineWidth = max(iMaxLineWidth, currentLine.lineWidth);
-                textLines.push_back(currentLine);
+                textLines.emplace_back(currentLine);
                 currentLine.reset();
                 prevGlyphIndex       = 0;
                 prevCharacter        = 0;
@@ -277,7 +277,7 @@ public:
                         }
                         currentLine.calculateWidth();
                         iMaxLineWidth = max(iMaxLineWidth, currentLine.lineWidth);
-                        textLines.push_back(currentLine);
+                        textLines.emplace_back(currentLine);
                         currentLine.reset();
                         currentPaintPosition = 0;
                         for (auto& glyph : tempGlyphs)
@@ -288,7 +288,7 @@ public:
                                 glyph.kerning        = 0;
                             }
                             glyph.paintPosition = currentPaintPosition + glyph.bearingX + glyph.kerning;
-                            currentLine.glyphs.push_back(glyph);
+                            currentLine.glyphs.emplace_back(glyph);
                             currentPaintPosition += glyph.kerning + glyph.horizAdvance;
                         }
                     }
@@ -299,7 +299,7 @@ public:
                         glyph.kerning        = 0;
                         currentLine.calculateWidth();
                         iMaxLineWidth = max(iMaxLineWidth, currentLine.lineWidth);
-                        textLines.push_back(currentLine);
+                        textLines.emplace_back(currentLine);
                         currentLine.reset();
                     }
 
@@ -320,7 +320,7 @@ public:
                 currentPaintPosition = -glyph.bearingX;
             }
             glyph.paintPosition = currentPaintPosition + glyph.bearingX + glyph.kerning;
-            currentLine.glyphs.push_back(glyph);
+            currentLine.glyphs.emplace_back(glyph);
             currentPaintPosition += glyph.kerning + glyph.horizAdvance;
         }
 
@@ -328,7 +328,7 @@ public:
         {
             currentLine.calculateWidth();
             iMaxLineWidth = max(iMaxLineWidth, currentLine.lineWidth);
-            textLines.push_back(currentLine);
+            textLines.emplace_back(currentLine);
         }
         return true;
     }

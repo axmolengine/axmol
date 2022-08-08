@@ -306,7 +306,7 @@ public:
     void pushBack(T object)
     {
         AXASSERT(object != nullptr, "The object should not be nullptr");
-        _data.push_back(object);
+        _data.emplace_back(object);
         object->retain();
     }
 
@@ -315,7 +315,7 @@ public:
     {
         for (const auto& obj : other)
         {
-            _data.push_back(obj);
+            _data.emplace_back(obj);
             obj->retain();
         }
     }

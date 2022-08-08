@@ -154,8 +154,8 @@ bool PhysicsJoint::init(ax::PhysicsBody* a, ax::PhysicsBody* b)
 
         _bodyA = a;
         _bodyB = b;
-        _bodyA->_joints.push_back(this);
-        _bodyB->_joints.push_back(this);
+        _bodyA->_joints.emplace_back(this);
+        _bodyB->_joints.emplace_back(this);
 
         return true;
     } while (false);
@@ -275,12 +275,12 @@ bool PhysicsJointFixed::createConstraints()
         // add a pivot joint to fixed two body together
         auto joint = cpPivotJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), PhysicsHelper::vec22cpv(_anchr));
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         // add a gear joint to make two body have the same rotation.
         joint = cpGearJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), 0, 1);
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         _collisionEnable = false;
 
@@ -338,7 +338,7 @@ bool PhysicsJointPin::createConstraints()
         }
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -382,7 +382,7 @@ bool PhysicsJointLimit::createConstraints()
                                      PhysicsHelper::vec22cpv(_anchr2), _min, _max);
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -460,7 +460,7 @@ bool PhysicsJointDistance::createConstraints()
         auto joint = cpPinJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), PhysicsHelper::vec22cpv(_anchr1),
                                    PhysicsHelper::vec22cpv(_anchr2));
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -512,7 +512,7 @@ bool PhysicsJointSpring::createConstraints()
                                        _stiffness, _damping);
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -604,7 +604,7 @@ bool PhysicsJointGroove::createConstraints()
                                       PhysicsHelper::vec22cpv(_grooveB), PhysicsHelper::vec22cpv(_anchr2));
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -672,7 +672,7 @@ bool PhysicsJointRotarySpring::createConstraints()
                                              _bodyB->getRotation() - _bodyA->getRotation(), _stiffness, _damping);
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -741,7 +741,7 @@ bool PhysicsJointRotaryLimit::createConstraints()
         auto joint = cpRotaryLimitJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), _min, _max);
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -795,7 +795,7 @@ bool PhysicsJointRatchet::createConstraints()
             cpRatchetJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), _phase, PhysicsHelper::cpfloat2float(_ratchet));
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -859,7 +859,7 @@ bool PhysicsJointGear::createConstraints()
         auto joint = cpGearJointNew(_bodyA->getCPBody(), _bodyB->getCPBody(), _phase, _ratio);
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);
@@ -911,7 +911,7 @@ bool PhysicsJointMotor::createConstraints()
         auto joint = cpSimpleMotorNew(_bodyA->getCPBody(), _bodyB->getCPBody(), _rate);
 
         AX_BREAK_IF(joint == nullptr);
-        _cpConstraints.push_back(joint);
+        _cpConstraints.emplace_back(joint);
 
         return true;
     } while (false);

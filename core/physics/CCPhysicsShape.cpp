@@ -144,7 +144,7 @@ void PhysicsShape::addShape(cpShape* shape)
     {
         cpShapeSetUserData(shape, this);
         cpShapeSetFilter(shape, cpShapeFilterNew(_group, CP_ALL_CATEGORIES, CP_ALL_CATEGORIES));
-        _cpShapes.push_back(shape);
+        _cpShapes.emplace_back(shape);
     }
 }
 

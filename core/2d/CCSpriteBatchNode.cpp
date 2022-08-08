@@ -614,7 +614,7 @@ void SpriteBatchNode::appendChild(Sprite* sprite)
         increaseAtlasCapacity();
     }
 
-    _descendants.push_back(sprite);
+    _descendants.emplace_back(sprite);
     int index = static_cast<int>(_descendants.size() - 1);
 
     sprite->setAtlasIndex(index);

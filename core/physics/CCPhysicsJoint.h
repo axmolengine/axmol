@@ -113,7 +113,7 @@ protected:
 
     bool initJoint();
 
-    void delay(const DelayTask& task) { _delayTasks.push_back(task); }
+    void delay(const DelayTask& task) { _delayTasks.emplace_back(task); }
 
     void flushDelayTasks();
 

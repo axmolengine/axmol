@@ -44,13 +44,13 @@ void Label::computeAlignmentOffset()
     case ax::TextHAlignment::CENTER:
         for (auto&& lineWidth : _linesWidth)
         {
-            _linesOffsetX.push_back((_contentSize.width - lineWidth) / 2.f);
+            _linesOffsetX.emplace_back((_contentSize.width - lineWidth) / 2.f);
         }
         break;
     case ax::TextHAlignment::RIGHT:
         for (auto&& lineWidth : _linesWidth)
         {
-            _linesOffsetX.push_back(_contentSize.width - lineWidth);
+            _linesOffsetX.emplace_back(_contentSize.width - lineWidth);
         }
         break;
     default:
@@ -174,7 +174,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
         char32_t character = _utf32Text[index];
         if (character == StringUtils::UnicodeCharacters::NewLine)
         {
-            _linesWidth.push_back(letterRight);
+            _linesWidth.emplace_back(letterRight);
             letterRight = 0.f;
             lineIndex++;
             nextTokenX = 0.f;
@@ -222,7 +222,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
                 letterX + letterDef.width * _bmfontScale > _maxLineWidth && !StringUtils::isUnicodeSpace(character) &&
                 nextChangeSize)
             {
-                _linesWidth.push_back(letterRight - whitespaceWidth);
+                _linesWidth.emplace_back(letterRight - whitespaceWidth);
                 nextWhitespaceWidth = 0.f;
                 letterRight         = 0.f;
                 lineIndex++;
@@ -282,12 +282,12 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
 
     if (_linesWidth.empty())
     {
-        _linesWidth.push_back(letterRight);
+        _linesWidth.emplace_back(letterRight);
         longestLine = letterRight;
     }
     else
     {
-        _linesWidth.push_back(letterRight - nextWhitespaceWidth);
+        _linesWidth.emplace_back(letterRight - nextWhitespaceWidth);
         for (auto&& lineWidth : _linesWidth)
         {
             if (longestLine < lineWidth)
@@ -426,7 +426,7 @@ void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int lett
     if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
     {
         LetterInfo tmpInfo;
-        _lettersInfo.push_back(tmpInfo);
+        _lettersInfo.emplace_back(tmpInfo);
     }
     _lettersInfo[letterIndex].lineIndex  = lineIndex;
     _lettersInfo[letterIndex].utf32Char  = utf32Char;
@@ -441,7 +441,7 @@ void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
     if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
     {
         LetterInfo tmpInfo;
-        _lettersInfo.push_back(tmpInfo);
+        _lettersInfo.emplace_back(tmpInfo);
     }
     _lettersInfo[letterIndex].utf32Char = utf32Char;
     _lettersInfo[letterIndex].valid     = false;

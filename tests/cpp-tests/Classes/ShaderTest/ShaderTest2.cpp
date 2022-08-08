@@ -109,7 +109,7 @@ public:
         effect->retain();
         effect->setTarget(this);
 
-        _effects.push_back(std::make_tuple(order, effect, QuadCommand()));
+        _effects.emplace_back(std::make_tuple(order, effect, QuadCommand()));
 
         std::sort(std::begin(_effects), std::end(_effects), tuple_sort);
     }
