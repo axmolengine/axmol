@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -87,7 +87,7 @@ protected:
 #endif
 };
 
-class CCS_DLL ColliderBody : public axis::Ref
+class CCS_DLL ColliderBody : public ax::Ref
 {
 public:
     ColliderBody(ContourData* contourData);
@@ -107,7 +107,7 @@ public:
     virtual void setShape(cpShape* shape) { _shape = shape; }
     virtual cpShape* getShape() const { return _shape; }
 #elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-    virtual const std::vector<axis::Vec2>& getCalculatedVertexList() const { return _calculatedVertexList; }
+    virtual const std::vector<ax::Vec2>& getCalculatedVertexList() const { return _calculatedVertexList; }
 #endif
 
 private:
@@ -118,7 +118,7 @@ private:
     cpShape* _shape;
     ColliderFilter* _filter;
 #elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-    std::vector<axis::Vec2> _calculatedVertexList;
+    std::vector<ax::Vec2> _calculatedVertexList;
 #endif
 
     ContourData* _contourData;
@@ -131,7 +131,7 @@ private:
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ColliderDetector : public axis::Ref
+class CCS_DLL ColliderDetector : public ax::Ref
 {
 public:
     static ColliderDetector* create();
@@ -152,17 +152,17 @@ public:
     virtual bool init(Bone* bone);
 
     void addContourData(ContourData* contourData);
-    void addContourDataList(axis::Vector<ContourData*>& contourDataList);
+    void addContourDataList(ax::Vector<ContourData*>& contourDataList);
 
     void removeContourData(ContourData* contourData);
     void removeAll();
 
-    void updateTransform(axis::Mat4& t);
+    void updateTransform(ax::Mat4& t);
 
     void setActive(bool active);
     bool getActive();
 
-    const axis::Vector<ColliderBody*>& getColliderBodyList();
+    const ax::Vector<ColliderBody*>& getColliderBodyList();
 
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
     virtual void setColliderFilter(ColliderFilter* filter);
@@ -180,7 +180,7 @@ public:
     virtual cpBody* getBody() const;
 #endif
 protected:
-    axis::Vector<ColliderBody*> _colliderBodyList;
+    ax::Vector<ColliderBody*> _colliderBodyList;
 
     Bone* _bone;
 

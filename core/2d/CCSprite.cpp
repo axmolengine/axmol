@@ -7,7 +7,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -130,7 +130,7 @@ Sprite* Sprite::createWithSpriteFrameName(std::string_view spriteFrameName)
 {
     SpriteFrame* frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
 
-#if AXIS_DEBUG > 0
+#if _AX_DEBUG > 0
     char msg[256] = {0};
     sprintf(msg, "Invalid spriteFrameName: %s", spriteFrameName.data());
     AXASSERT(frame != nullptr, msg);
@@ -245,7 +245,7 @@ bool Sprite::initWithSpriteFrame(SpriteFrame* spriteFrame)
     return ret;
 }
 
-bool Sprite::initWithPolygon(const axis::PolygonInfo& info)
+bool Sprite::initWithPolygon(const ax::PolygonInfo& info)
 {
     bool ret = false;
 
@@ -705,7 +705,7 @@ void Sprite::updatePoly()
     }
 }
 
-void Sprite::setCenterRectNormalized(const axis::Rect& rectTopLeft)
+void Sprite::setCenterRectNormalized(const ax::Rect& rectTopLeft)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {
@@ -761,7 +761,7 @@ void Sprite::setCenterRectNormalized(const axis::Rect& rectTopLeft)
     }
 }
 
-void Sprite::setCenterRect(const axis::Rect& rectInPoints)
+void Sprite::setCenterRect(const ax::Rect& rectInPoints)
 {
     if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9)
     {

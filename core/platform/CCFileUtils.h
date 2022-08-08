@@ -3,7 +3,7 @@ Copyright (c) 2010-2013 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -187,7 +187,7 @@ public:
      *      - does not truncate the string when '\0' is found (returned string of getContents may have '\0' in the
      * middle.).
      *
-     *  The template version of can accept axis::Data, std::basic_string and std::vector.
+     *  The template version of can accept ax::Data, std::basic_string and std::vector.
      *
      *  @code
      *  std::string sbuf;

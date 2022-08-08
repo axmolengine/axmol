@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -111,8 +111,6 @@ static Texture2D* getDummyTexture()
 Mesh::Mesh()
     : _skin(nullptr)
     , _visible(true)
-    , _isTransparent(false)
-    , _force2DQueue(false)
     , meshIndexFormat(CustomCommand::IndexFormat::U_SHORT)
     , _meshIndexData(nullptr)
     , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
@@ -171,20 +169,20 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     {
         perVertexSizeInFloat += 3;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
-        attribs.push_back(att);
+        attribs.emplace_back(att);
     }
     if (normals.size())
     {
         perVertexSizeInFloat += 3;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
-        attribs.push_back(att);
+        attribs.emplace_back(att);
     }
     if (texs.size())
     {
         perVertexSizeInFloat += 2;
         att.type         = backend::VertexFormat::FLOAT2;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
-        attribs.push_back(att);
+        attribs.emplace_back(att);
     }
 
     bool hasNormal   = (normals.size() != 0);
@@ -193,21 +191,21 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     size_t vertexNum = positions.size() / 3;
     for (size_t i = 0; i < vertexNum; i++)
     {
-        vertices.push_back(positions[i * 3]);
-        vertices.push_back(positions[i * 3 + 1]);
-        vertices.push_back(positions[i * 3 + 2]);
+        vertices.emplace_back(positions[i * 3]);
+        vertices.emplace_back(positions[i * 3 + 1]);
+        vertices.emplace_back(positions[i * 3 + 2]);
 
         if (hasNormal)
         {
-            vertices.push_back(normals[i * 3]);
-            vertices.push_back(normals[i * 3 + 1]);
-            vertices.push_back(normals[i * 3 + 2]);
+            vertices.emplace_back(normals[i * 3]);
+            vertices.emplace_back(normals[i * 3 + 1]);
+            vertices.emplace_back(normals[i * 3 + 2]);
         }
 
         if (hasTexCoord)
         {
-            vertices.push_back(texs[i * 2]);
-            vertices.push_back(texs[i * 2 + 1]);
+            vertices.emplace_back(texs[i * 2]);
+            vertices.emplace_back(texs[i * 2 + 1]);
         }
     }
     return create(vertices, perVertexSizeInFloat, indices, attribs);
@@ -221,8 +219,8 @@ Mesh* Mesh::create(const std::vector<float>& vertices,
     MeshData meshdata;
     meshdata.attribs = attribs;
     meshdata.vertex  = vertices;
-    meshdata.subMeshIndices.push_back(indices);
-    meshdata.subMeshIds.push_back("");
+    meshdata.subMeshIndices.emplace_back(indices);
+    meshdata.subMeshIds.emplace_back("");
     auto meshvertexdata = MeshVertexData::create(meshdata, indices.format());
     auto indexData      = meshvertexdata->getMeshIndexDataByIndex(0);
 
@@ -349,7 +347,7 @@ void Mesh::setMaterial(Material* material)
             int i = 0;
             for (auto&& pass : technique->getPasses())
             {
-#ifdef AXIS_DEBUG
+#ifdef _AX_DEBUG
                 // make it crashed when missing attribute data
                 if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {
@@ -390,12 +388,13 @@ void Mesh::draw(Renderer* renderer,
                 uint32_t flags,
                 unsigned int lightMask,
                 const Vec4& color,
-                bool forceDepthWrite)
+                bool forceDepthWrite,
+                bool wireframe)
 {
     if (!isVisible())
         return;
 
-    bool isTransparent = (_isTransparent || color.w < 1.f);
+    bool isTransparent = (_material->isTransparent() || color.w < 1.f);
     float globalZ      = isTransparent ? 0 : globalZOrder;
     if (isTransparent)
         flags |= Node::FLAGS_RENDER_AS_3D;
@@ -415,8 +414,6 @@ void Mesh::draw(Renderer* renderer,
         _material->getStateBlock().setDepthWrite(false);
     else
         _material->getStateBlock().setDepthWrite(true);
-
-    _material->getStateBlock().setBlend(_force2DQueue || isTransparent);
 
     // set default uniforms for Mesh
     // 'u_color' and others
@@ -441,7 +438,8 @@ void Mesh::draw(Renderer* renderer,
         command.init(globalZ, transform);
         command.setSkipBatching(isTransparent);
         command.setTransparent(isTransparent);
-        command.set3D(!_force2DQueue);
+        command.set3D(!_material->isForce2DQueue());
+        command.setWireframe(wireframe);
     }
 
     _meshIndexData->setPrimitiveType(_material->_drawPrimitive);

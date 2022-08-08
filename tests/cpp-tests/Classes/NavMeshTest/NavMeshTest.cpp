@@ -3,7 +3,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -195,7 +195,7 @@ void NavMeshBaseTestDemo::createAgent(const Vec3& pos)
         animate->setSpeed(0);
     }
 
-    _agents.push_back(std::make_pair(agent, animate));
+    _agents.emplace_back(std::make_pair(agent, animate));
 }
 
 void NavMeshBaseTestDemo::createObstacle(const Vec3& pos)

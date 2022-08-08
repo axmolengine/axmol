@@ -4,7 +4,7 @@
  Copyright (c) 2013-2015 zilongshanren
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -213,7 +213,7 @@ void EditBoxImplCommon::setMaxLength(int maxLength)
     this->setNativeMaxLength(maxLength);
 }
 
-void EditBoxImplCommon::setTextHorizontalAlignment(axis::TextHAlignment alignment)
+void EditBoxImplCommon::setTextHorizontalAlignment(ax::TextHAlignment alignment)
 {
     _alignment = alignment;
     this->setNativeTextHorizontalAlignment(alignment);
@@ -357,7 +357,7 @@ void EditBoxImplCommon::onEndEditing(std::string_view /*text*/)
 void EditBoxImplCommon::editBoxEditingDidBegin()
 {
     // LOGD("textFieldShouldBeginEditing...");
-    axis::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
+    ax::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
 
     if (pDelegate != nullptr)
     {
@@ -367,9 +367,9 @@ void EditBoxImplCommon::editBoxEditingDidBegin()
 #if AX_ENABLE_SCRIPT_BINDING
     if (NULL != _editBox && 0 != _editBox->getScriptEditBoxHandler())
     {
-        axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "began", _editBox);
-        axis::ScriptEvent event(axis::kCommonEvent, (void*)&data);
-        axis::ScriptEngineManager::sendEventToLua(event);
+        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "began", _editBox);
+        ax::ScriptEvent event(ax::kCommonEvent, (void*)&data);
+        ax::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 }
@@ -379,7 +379,7 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
     // LOGD("textFieldShouldEndEditing...");
     _text = text;
 
-    axis::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
+    ax::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
     if (pDelegate != nullptr)
     {
         pDelegate->editBoxEditingDidEndWithAction(_editBox, action);
@@ -389,13 +389,13 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
 #if AX_ENABLE_SCRIPT_BINDING
     if (_editBox != nullptr && 0 != _editBox->getScriptEditBoxHandler())
     {
-        axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "ended", _editBox);
-        axis::ScriptEvent event(axis::kCommonEvent, (void*)&data);
-        axis::ScriptEngineManager::sendEventToLua(event);
+        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "ended", _editBox);
+        ax::ScriptEvent event(ax::kCommonEvent, (void*)&data);
+        ax::ScriptEngineManager::sendEventToLua(event);
         memset(data.eventName, 0, sizeof(data.eventName));
         strncpy(data.eventName, "return", sizeof(data.eventName));
         event.data = (void*)&data;
-        axis::ScriptEngineManager::sendEventToLua(event);
+        ax::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 
@@ -408,7 +408,7 @@ void EditBoxImplCommon::editBoxEditingDidEnd(std::string_view text, EditBoxDeleg
 void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 {
     // LOGD("editBoxTextChanged...");
-    axis::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
+    ax::ui::EditBoxDelegate* pDelegate = _editBox->getDelegate();
     _text                                   = text;
     if (pDelegate != nullptr)
     {
@@ -418,9 +418,9 @@ void EditBoxImplCommon::editBoxEditingChanged(std::string_view text)
 #if AX_ENABLE_SCRIPT_BINDING
     if (NULL != _editBox && 0 != _editBox->getScriptEditBoxHandler())
     {
-        axis::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "changed", _editBox);
-        axis::ScriptEvent event(axis::kCommonEvent, (void*)&data);
-        axis::ScriptEngineManager::sendEventToLua(event);
+        ax::CommonScriptData data(_editBox->getScriptEditBoxHandler(), "changed", _editBox);
+        ax::ScriptEvent event(ax::kCommonEvent, (void*)&data);
+        ax::ScriptEngineManager::sendEventToLua(event);
     }
 #endif
 }

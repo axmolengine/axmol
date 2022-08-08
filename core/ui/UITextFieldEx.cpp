@@ -8,14 +8,14 @@
 #include "base/CCDirector.h"
 
 /// cocos2d singleton objects
-#define CCDIRECTOR axis::Director::getInstance()
+#define CCDIRECTOR ax::Director::getInstance()
 #define CCRUNONGL CCDIRECTOR->getScheduler()->performFunctionInCocosThread
 #define CCEVENTMGR CCDIRECTOR->getEventDispatcher()
 #define CCSCHTASKS CCDIRECTOR->getScheduler()
 #define CCACTIONMGR CCDIRECTOR->getActionManager()
-#define CCFILEUTILS axis::FileUtils::getInstance()
-#define CCAUDIO axis::SimpleAudioEngine::getInstance()
-#define CCAPP axis::CCApplication::getInstance()
+#define CCFILEUTILS ax::FileUtils::getInstance()
+#define CCAUDIO ax::SimpleAudioEngine::getInstance()
+#define CCAPP ax::CCApplication::getInstance()
 
 NS_AX_BEGIN
 
@@ -51,15 +51,15 @@ static bool engine_inj_checkVisibility(Node* theNode)
     return visible;
 }
 
-static bool engine_inj_containsTouchPoint(axis::Node* target, axis::Touch* touch)
+static bool engine_inj_containsTouchPoint(ax::Node* target, ax::Touch* touch)
 {
     assert(target != nullptr);
 
-    axis::Point pt = target->convertTouchToNodeSpace(touch);
+    ax::Point pt = target->convertTouchToNodeSpace(touch);
 
     const Vec2& size = target->getContentSize();
 
-    axis::Rect rc(0, 0, size.width, size.height);
+    ax::Rect rc(0, 0, size.width, size.height);
 
     bool contains = (rc.containsPoint(pt));
 
@@ -67,13 +67,13 @@ static bool engine_inj_containsTouchPoint(axis::Node* target, axis::Touch* touch
     return contains;
 }
 
-static bool engine_inj_containsPoint(axis::Node* target, const axis::Vec2& worldPoint)
+static bool engine_inj_containsPoint(ax::Node* target, const ax::Vec2& worldPoint)
 {
-    axis::Point pt = target->convertToNodeSpace(worldPoint);
+    ax::Point pt = target->convertToNodeSpace(worldPoint);
 
     const Vec2& size = target->getContentSize();
 
-    axis::Rect rc(0, 0, size.width, size.height);
+    ax::Rect rc(0, 0, size.width, size.height);
 
     bool contains = (rc.containsPoint(pt));
 
@@ -906,7 +906,7 @@ void TextFieldEx::__initCursor(int height, int width, const Color4B& color)
     this->addChild(this->cursor);
 
     this->cursor->setPosition(Point(0, this->getContentSize().height / 2));
-    // nodes_layout::setNodeLB(this->cursor, axis::Point::ZERO);
+    // nodes_layout::setNodeLB(this->cursor, ax::Point::ZERO);
 
     /*CCAction* blink = CCRepeatForever::create(
         (CCActionInterval *)CCSequence::create(CCFadeOut::create(0.25f),

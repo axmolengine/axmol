@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -129,7 +129,7 @@ void Physics3DWorld::addPhysics3DObject(Physics3DObject* physicsObj)
     auto it = std::find(_objects.begin(), _objects.end(), physicsObj);
     if (it == _objects.end())
     {
-        _objects.push_back(physicsObj);
+        _objects.emplace_back(physicsObj);
         physicsObj->retain();
         if (physicsObj->getObjType() == Physics3DObject::PhysicsObjType::RIGID_BODY)
         {
@@ -200,7 +200,7 @@ void Physics3DWorld::addPhysics3DConstraint(Physics3DConstraint* constraint, boo
     }
     _btPhyiscsWorld->addConstraint(constraint->getbtContraint(), disableCollisionsBetweenLinkedObjs);
 
-    _constraints.push_back(constraint);
+    _constraints.emplace_back(constraint);
     constraint->retain();
 }
 
@@ -285,8 +285,8 @@ void Physics3DWorld::debugDraw(Renderer* renderer)
     }
 }
 
-bool Physics3DWorld::rayCast(const axis::Vec3& startPos,
-                             const axis::Vec3& endPos,
+bool Physics3DWorld::rayCast(const ax::Vec3& startPos,
+                             const ax::Vec3& endPos,
                              Physics3DWorld::HitResult* result)
 {
     auto btStart = convertVec3TobtVector3(startPos);
@@ -305,8 +305,8 @@ bool Physics3DWorld::rayCast(const axis::Vec3& startPos,
 }
 
 bool Physics3DWorld::sweepShape(Physics3DShape* shape,
-                                const axis::Mat4& startTransform,
-                                const axis::Mat4& endTransform,
+                                const ax::Mat4& startTransform,
+                                const ax::Mat4& endTransform,
                                 Physics3DWorld::HitResult* result)
 {
     AX_ASSERT(shape->getShapeType() != Physics3DShape::ShapeType::HEIGHT_FIELD &&
@@ -369,7 +369,7 @@ void Physics3DWorld::collisionChecking()
                         convertbtVector3ToVec3(pt.m_localPointA), convertbtVector3ToVec3(pt.m_positionWorldOnA),
                         convertbtVector3ToVec3(pt.m_localPointB), convertbtVector3ToVec3(pt.m_positionWorldOnB),
                         convertbtVector3ToVec3(pt.m_normalWorldOnB)};
-                    ci.collisionPointList.push_back(cp);
+                    ci.collisionPointList.emplace_back(cp);
                 }
 
                 if (poA->needCollisionCallback())

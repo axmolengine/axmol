@@ -3,7 +3,7 @@
 NS_FGUI_BEGIN
 USING_NS_AX;
 
-static std::vector<axis::Vec3> splinePoints;
+static std::vector<ax::Vec3> splinePoints;
 
 GPathPoint::GPathPoint(const Vec3& pos)
 {
@@ -189,7 +189,7 @@ float GPath::getSegmentLength(int segmentIndex)
 }
 
 void GPath::getPointsInSegment(int segmentIndex, float t0, float t1,
-                               std::vector<axis::Vec3>& points, std::vector<float>* ts, float pointDensity)
+                               std::vector<ax::Vec3>& points, std::vector<float>* ts, float pointDensity)
 {
     if (ts != nullptr)
         ts->push_back(t0);
@@ -236,7 +236,7 @@ void GPath::getPointsInSegment(int segmentIndex, float t0, float t1,
         ts->push_back(t1);
 }
 
-void GPath::getAllPoints(std::vector<axis::Vec3>& points, float pointDensity)
+void GPath::getAllPoints(std::vector<ax::Vec3>& points, float pointDensity)
 {
     int cnt = (int)_segments.size();
     for (int i = 0; i < cnt; i++)

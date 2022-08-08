@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ namespace cocostudio
 
 class Armature;
 
-class CCS_DLL Bone : public axis::Node
+class CCS_DLL Bone : public ax::Node
 {
 public:
     /**
@@ -90,7 +90,7 @@ public:
      */
     void addDisplay(DisplayData* displayData, int index);
 
-    void addDisplay(axis::Node* display, int index);
+    void addDisplay(ax::Node* display, int index);
 
     void removeDisplay(int index);
 
@@ -139,7 +139,7 @@ public:
 
     void update(float delta) override;
 
-    void updateDisplayedColor(const axis::Color3B& parentColor) override;
+    void updateDisplayedColor(const ax::Color3B& parentColor) override;
     void updateDisplayedOpacity(uint8_t parentOpacity) override;
 
     //! Update color to render display
@@ -158,10 +158,10 @@ public:
     virtual void setTransformDirty(bool dirty) { _boneTransformDirty = dirty; }
     virtual bool isTransformDirty() { return _boneTransformDirty; }
 
-    virtual axis::Mat4 getNodeToArmatureTransform() const;
-    virtual axis::Mat4 getNodeToWorldTransform() const override;
+    virtual ax::Mat4 getNodeToArmatureTransform() const;
+    virtual ax::Mat4 getNodeToWorldTransform() const override;
 
-    axis::Node* getDisplayRenderNode();
+    ax::Node* getDisplayRenderNode();
     DisplayType getDisplayRenderNodeType();
 
     /*
@@ -199,8 +199,8 @@ public:
     /*
      * Set blend function
      */
-    virtual void setBlendFunc(const axis::BlendFunc& blendFunc);
-    virtual axis::BlendFunc getBlendFunc(void) { return _blendFunc; }
+    virtual void setBlendFunc(const ax::BlendFunc& blendFunc);
+    virtual ax::BlendFunc getBlendFunc(void) { return _blendFunc; }
 
     /*
      * Set if blend function is dirty
@@ -235,7 +235,7 @@ protected:
      */
     bool _ignoreMovementBoneData;
 
-    axis::BlendFunc _blendFunc;
+    ax::BlendFunc _blendFunc;
     bool _blendDirty;
 
     Tween* _tween;  //! Calculate tween effect
@@ -247,7 +247,7 @@ protected:
     bool _boneTransformDirty;  //! Whether or not transform dirty
 
     //! self Transform, use this to change display's state
-    axis::Mat4 _worldTransform;
+    ax::Mat4 _worldTransform;
 
     BaseData* _worldInfo;
 

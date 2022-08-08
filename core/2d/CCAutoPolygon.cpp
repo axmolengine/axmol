@@ -5,7 +5,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -250,7 +250,7 @@ unsigned int AutoPolygon::getSquareValue(unsigned int x, unsigned int y, const R
     return sv;
 }
 
-std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
+std::vector<ax::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& start, float threshold)
 {
     int stepx          = 0;
     int stepy          = 0;
@@ -265,7 +265,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
     std::vector<int> case6s;
     int i;
     std::vector<int>::iterator it;
-    std::vector<axis::Vec2> _points;
+    std::vector<ax::Vec2> _points;
     do
     {
         int sv = getSquareValue(curx, cury, rect, threshold);
@@ -355,7 +355,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
                 // not found, we go up, and add to case9s;
                 stepx = 0;
                 stepy = -1;
-                case9s.push_back(i);
+                case9s.emplace_back(i);
             }
             break;
         case 6:
@@ -382,7 +382,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
                 // not found, we go up, and add to case9s;
                 stepx = 1;
                 stepy = 0;
-                case6s.push_back(i);
+                case6s.emplace_back(i);
             }
             break;
         default:
@@ -400,7 +400,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
         }
         else
         {
-            _points.push_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor,
+            _points.emplace_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor,
                                    (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
         }
 
@@ -408,7 +408,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
         prevx = stepx;
         prevy = stepy;
 
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
         const auto totalPixel = _width * _height;
         AXASSERT(count <= totalPixel, "oh no, marching square cannot find starting position");
 #endif
@@ -416,7 +416,7 @@ std::vector<axis::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& s
     return _points;
 }
 
-float AutoPolygon::perpendicularDistance(const axis::Vec2& i, const axis::Vec2& start, const axis::Vec2& end)
+float AutoPolygon::perpendicularDistance(const ax::Vec2& i, const ax::Vec2& start, const ax::Vec2& end)
 {
     float res;
     float slope;
@@ -438,7 +438,7 @@ float AutoPolygon::perpendicularDistance(const axis::Vec2& i, const axis::Vec2& 
     }
     return res;
 }
-std::vector<axis::Vec2> AutoPolygon::rdp(const std::vector<axis::Vec2>& v, float optimization)
+std::vector<ax::Vec2> AutoPolygon::rdp(const std::vector<ax::Vec2>& v, float optimization)
 {
     if (v.size() < 3)
         return v;
@@ -471,8 +471,8 @@ std::vector<axis::Vec2> AutoPolygon::rdp(const std::vector<axis::Vec2>& v, float
     else
     {
         std::vector<Vec2> ret;
-        ret.push_back(v.front());
-        ret.push_back(v.back());
+        ret.emplace_back(v.front());
+        ret.emplace_back(v.back());
         return ret;
     }
 }
@@ -505,7 +505,7 @@ std::vector<Vec2> AutoPolygon::reduce(const std::vector<Vec2>& points, const Rec
     return result;
 }
 
-std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const axis::Rect& rect, float epsilon)
+std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax::Rect& rect, float epsilon)
 {
     auto size = points.size();
     // if there are less than 3 points, then we have nothing
@@ -545,11 +545,11 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const axi
     cl.AddPath(p->Contour, ClipperLib::ptSubject, true);
     // create the clipping rect
     ClipperLib::Path clamp;
-    clamp.push_back(ClipperLib::IntPoint(0, 0));
-    clamp.push_back(ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION), 0));
-    clamp.push_back(ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION),
+    clamp.emplace_back(ClipperLib::IntPoint(0, 0));
+    clamp.emplace_back(ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION), 0));
+    clamp.emplace_back(ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION),
                                          static_cast<ClipperLib::cInt>(rect.size.height / _scaleFactor * PRECISION)));
-    clamp.push_back(
+    clamp.emplace_back(
         ClipperLib::IntPoint(0, static_cast<ClipperLib::cInt>(rect.size.height / _scaleFactor * PRECISION)));
     cl.AddPath(clamp, ClipperLib::ptClip, true);
     cl.Execute(ClipperLib::ctIntersection, out);
@@ -562,7 +562,7 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const axi
     }
     for (const auto& pt : p2->Contour)
     {
-        outPoints.push_back(Vec2(pt.X / PRECISION, pt.Y / PRECISION));
+        outPoints.emplace_back(Vec2(pt.X / PRECISION, pt.Y / PRECISION));
     }
     return outPoints;
 }
@@ -579,7 +579,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     for (const auto& pt : points)
     {
         p2t::Point* p = new p2t::Point(pt.x, pt.y);
-        p2points.push_back(p);
+        p2points.emplace_back(p);
     }
     p2t::CDT cdt(p2points);
     cdt.Triangulate();
@@ -612,7 +612,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
             if (found)
             {
                 // if we found the same vertex, don't add to verts, but use the same vertex with indices
-                indices.push_back(j);
+                indices.emplace_back(j);
                 idx++;
             }
             else
@@ -621,8 +621,8 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
                 auto c4b         = Color4B::WHITE;
                 auto t2f         = Tex2F(0, 0);  // don't worry about tex coords now, we calculate that later
                 V3F_C4B_T2F vert = {v3, c4b, t2f};
-                verts.push_back(vert);
-                indices.push_back(vdx);
+                verts.emplace_back(vert);
+                indices.emplace_back(vdx);
                 idx++;
                 vdx++;
             }

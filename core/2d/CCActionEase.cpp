@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ void ActionEase::startWithTarget(Node* target)
     }
     else
     {
-        axis::log("ActionEase::startWithTarget error: target or _inner is nullptr!");
+        ax::log("ActionEase::startWithTarget error: target or _inner is nullptr!");
     }
 }
 
@@ -135,7 +135,7 @@ bool EaseRateAction::initWithAction(ActionInterval* action, float rate)
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
 #define EASE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME)         \
-    CLASSNAME* CLASSNAME::create(axis::ActionInterval* action)            \
+    CLASSNAME* CLASSNAME::create(ax::ActionInterval* action)            \
     {                                                                        \
         CLASSNAME* ease = new CLASSNAME();                                   \
         if (ease->initWithAction(action))                                    \
@@ -186,7 +186,7 @@ EASE_TEMPLATE_IMPL(EaseCubicActionInOut, tweenfunc::cubicEaseInOut, EaseCubicAct
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
 #define EASERATE_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC)                               \
-    CLASSNAME* CLASSNAME::create(axis::ActionInterval* action, float rate)       \
+    CLASSNAME* CLASSNAME::create(ax::ActionInterval* action, float rate)       \
     {                                                                               \
         CLASSNAME* ease = new CLASSNAME();                                          \
         if (ease->initWithAction(action, rate))                                     \
@@ -229,7 +229,7 @@ bool EaseElastic::initWithAction(ActionInterval* action, float period /* = 0.3f*
 // issue #16159 [https://github.com/cocos2d/cocos2d-x/pull/16159] for further info
 //
 #define EASEELASTIC_TEMPLATE_IMPL(CLASSNAME, TWEEN_FUNC, REVERSE_CLASSNAME)                 \
-    CLASSNAME* CLASSNAME::create(axis::ActionInterval* action, float period /* = 0.3f*/) \
+    CLASSNAME* CLASSNAME::create(ax::ActionInterval* action, float period /* = 0.3f*/) \
     {                                                                                       \
         CLASSNAME* ease = new CLASSNAME();                                                  \
         if (ease->initWithAction(action, period))                                           \
@@ -255,7 +255,7 @@ EASEELASTIC_TEMPLATE_IMPL(EaseElasticInOut, tweenfunc::elasticEaseInOut, EaseEla
 // EaseBezierAction
 //
 
-EaseBezierAction* EaseBezierAction::create(axis::ActionInterval* action)
+EaseBezierAction* EaseBezierAction::create(ax::ActionInterval* action)
 {
     EaseBezierAction* ret = new EaseBezierAction();
     if (ret->initWithAction(action))

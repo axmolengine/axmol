@@ -8,35 +8,35 @@ TweenValue::TweenValue():x(0),y(0),z(0),w(0),d(0)
 {
 }
 
-axis::Vec2 TweenValue::getVec2() const
+ax::Vec2 TweenValue::getVec2() const
 {
-    return axis::Vec2(x, y);
+    return ax::Vec2(x, y);
 }
 
-void TweenValue::setVec2(const axis::Vec2 & value)
+void TweenValue::setVec2(const ax::Vec2 & value)
 {
     x = value.x;
     y = value.y;
 }
 
-axis::Vec3 TweenValue::getVec3() const
+ax::Vec3 TweenValue::getVec3() const
 {
-    return axis::Vec3(x, y, z);
+    return ax::Vec3(x, y, z);
 }
 
-void TweenValue::setVec3(const axis::Vec3 & value)
+void TweenValue::setVec3(const ax::Vec3 & value)
 {
     x = value.x;
     y = value.y;
     z = value.z;
 }
 
-axis::Vec4 TweenValue::getVec4() const
+ax::Vec4 TweenValue::getVec4() const
 {
-    return axis::Vec4(x, y, z, w);
+    return ax::Vec4(x, y, z, w);
 }
 
-void TweenValue::setVec4(const axis::Vec4 & value)
+void TweenValue::setVec4(const ax::Vec4 & value)
 {
     x = value.x;
     y = value.y;
@@ -44,12 +44,12 @@ void TweenValue::setVec4(const axis::Vec4 & value)
     w = value.w;
 }
 
-axis::Color4B TweenValue::getColor() const
+ax::Color4B TweenValue::getColor() const
 {
-    return axis::Color4B(x, y, z, w);
+    return ax::Color4B(x, y, z, w);
 }
 
-void TweenValue::setColor(const axis::Color4B & value)
+void TweenValue::setColor(const ax::Color4B & value)
 {
     x = value.r;
     y = value.g;

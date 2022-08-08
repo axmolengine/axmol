@@ -2,7 +2,7 @@
  Copyright (c) 2014 cocos2d-x.org
  Author: Jeff Wang <wohaaitinciu@gmail.com>
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@
 
 #include "platform/CCPlatformMacros.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(AXIS_HAVE_WEBVIEW2)
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(_AX_HAVE_WEBVIEW2)
 
 #    include <string>
 #    include "CCStdC.h"
@@ -44,7 +44,7 @@ namespace ui
 class WebView;
 }
 
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 class Win32WebControl;
 
@@ -56,11 +56,11 @@ namespace ui
 class WebViewImpl
 {
 public:
-    WebViewImpl(axis::ui::WebView* webView);
+    WebViewImpl(ax::ui::WebView* webView);
     virtual ~WebViewImpl();
 
     void setJavascriptInterfaceScheme(std::string_view scheme);
-    void loadData(const axis::Data& data,
+    void loadData(const ax::Data& data,
                   std::string_view MIMEType,
                   std::string_view encoding,
                   std::string_view baseURL);
@@ -76,7 +76,7 @@ public:
     void evaluateJS(std::string_view js);
     void setScalesPageToFit(const bool scalesPageToFit);
 
-    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags);
+    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags);
     virtual void setVisible(bool visible);
 
     void setBounces(bool bounces);
@@ -90,7 +90,7 @@ private:
     WebView* _webView;
 };
 }  // namespace ui
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 

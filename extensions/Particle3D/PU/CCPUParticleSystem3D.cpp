@@ -3,7 +3,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -841,7 +841,7 @@ bool PUParticleSystem3D::isExpired(PUParticle3D* particle, float timeElapsed)
     return expired;
 }
 
-axis::Vec3 PUParticleSystem3D::getDerivedPosition()
+ax::Vec3 PUParticleSystem3D::getDerivedPosition()
 {
     // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Vec3::ZERO;
     // if (_keepLocal) return Vec3::ZERO;
@@ -856,7 +856,7 @@ axis::Vec3 PUParticleSystem3D::getDerivedPosition()
     }
 }
 
-axis::Quaternion PUParticleSystem3D::getDerivedOrientation()
+ax::Quaternion PUParticleSystem3D::getDerivedOrientation()
 {
     // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Quaternion();
     // if (_keepLocal) return Quaternion();
@@ -873,7 +873,7 @@ axis::Quaternion PUParticleSystem3D::getDerivedOrientation()
     }
 }
 
-axis::Vec3 PUParticleSystem3D::getDerivedScale()
+ax::Vec3 PUParticleSystem3D::getDerivedScale()
 {
     // if (_parentParticleSystem && _parentParticleSystem->isKeepLocal()) return Vec3::ONE;
     // if (_keepLocal) return Vec3::ONE;

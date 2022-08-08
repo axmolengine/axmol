@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -165,7 +165,7 @@ void Material::draw(MeshCommand* meshCommands,
     }
 }
 
-void Material::setTarget(axis::Node* target)
+void Material::setTarget(ax::Node* target)
 {
     _target = target;
 }
@@ -504,6 +504,18 @@ void Material::setName(std::string_view name)
 std::string Material::getName() const
 {
     return _name;
+}
+
+void Material::setTransparent(bool value)
+{
+    _isTransparent = value;
+    getStateBlock().setBlend(_force2DQueue || _isTransparent);
+}
+
+void Material::setForce2DQueue(bool value)
+{
+    _force2DQueue = value;
+    getStateBlock().setBlend(_force2DQueue || _isTransparent);
 }
 
 Material::Material() : _name(""), _currentTechnique(nullptr), _target(nullptr) {}

@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -224,7 +224,8 @@ public:
               uint32_t flags,
               unsigned int lightMask,
               const Vec4& color,
-              bool forceDepthWrite);
+              bool forceDepthWrite,
+              bool wireframe);
 
     /**skin setter*/
     void setSkin(MeshSkin* skin);
@@ -239,11 +240,6 @@ public:
      */
     void calculateAABB();
 
-    /**
-     * force set this Mesh renderer to 2D render queue
-     */
-    void setForce2DQueue(bool force2D) { _force2DQueue = force2D; }
-
     std::string getTextureFileName() { return _texFile; }
 
     Mesh();
@@ -257,8 +253,7 @@ protected:
     std::map<NTextureData::Usage, Texture2D*> _textures;  // textures that submesh is using
     MeshSkin* _skin;                                      // skin
     bool _visible;                                        // is the submesh visible
-    bool _isTransparent;  // is this mesh transparent, it is a property of material in fact
-    bool _force2DQueue;   // add this mesh to 2D render queue
+
     CustomCommand::IndexFormat meshIndexFormat;
 
     std::string _name;

@@ -5,7 +5,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@
 
 NS_AX_BEGIN
 
-static const char* editBoxClassName = "org.cocos2dx.lib.Cocos2dxEditBoxHelper";
+static const char* editBoxClassName = "org.axys1.lib.AxysEditBoxHelper";
 
 namespace ui
 {
@@ -53,12 +53,12 @@ static void editBoxEditingDidBegin(int index);
 static void editBoxEditingDidChanged(int index, std::string_view text);
 static void editBoxEditingDidEnd(int index, std::string_view text, int action);
 extern "C" {
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditingDidBegin(JNIEnv*, jclass, jint index)
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysEditBoxHelper_editBoxEditingDidBegin(JNIEnv*, jclass, jint index)
 {
     editBoxEditingDidBegin(index);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditingChanged(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysEditBoxHelper_editBoxEditingChanged(JNIEnv* env,
                                                                                          jclass,
                                                                                          jint index,
                                                                                          jstring text)
@@ -67,7 +67,7 @@ JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditin
     editBoxEditingDidChanged(index, textString);
 }
 
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxEditBoxHelper_editBoxEditingDidEnd(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysEditBoxHelper_editBoxEditingDidEnd(JNIEnv* env,
                                                                                         jclass,
                                                                                         jint index,
                                                                                         jstring text,
@@ -95,7 +95,7 @@ EditBoxImplAndroid::~EditBoxImplAndroid()
 
 void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 {
-    auto director  = axis::Director::getInstance();
+    auto director  = ax::Director::getInstance();
     auto glView    = director->getOpenGLView();
     auto frameSize = glView->getFrameSize();
 
@@ -117,13 +117,13 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 
 void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
 {
-    auto director            = axis::Director::getInstance();
+    auto director            = ax::Director::getInstance();
     auto glView              = director->getOpenGLView();
-    auto isFontFileExists    = axis::FileUtils::getInstance()->isFileExist(pFontName);
+    auto isFontFileExists    = ax::FileUtils::getInstance()->isFileExist(pFontName);
     std::string realFontPath = pFontName;
     if (isFontFileExists)
     {
-        realFontPath = axis::FileUtils::getInstance()->fullPathForFilename(pFontName);
+        realFontPath = ax::FileUtils::getInstance()->fullPathForFilename(pFontName);
         using namespace cxx17;  // for cxx17::string_view literal
         if (cxx20::starts_with(cxx17::string_view{realFontPath}, "assets/"_sv))
         {
@@ -171,7 +171,7 @@ void EditBoxImplAndroid::setNativeReturnType(EditBox::KeyboardReturnType returnT
     JniHelper::callStaticVoidMethod(editBoxClassName, "setReturnType", _editBoxIndex, static_cast<int>(returnType));
 }
 
-void EditBoxImplAndroid::setNativeTextHorizontalAlignment(axis::TextHAlignment alignment)
+void EditBoxImplAndroid::setNativeTextHorizontalAlignment(ax::TextHAlignment alignment)
 {
     JniHelper::callStaticVoidMethod(editBoxClassName, "setTextHorizontalAlignment", _editBoxIndex,
                                     static_cast<int>(alignment));
@@ -236,7 +236,7 @@ void editBoxEditingDidEnd(int index, std::string_view text, int action)
     if (it != s_allEditBoxes.end())
     {
         s_allEditBoxes[index]->editBoxEditingDidEnd(
-            text, static_cast<axis::ui::EditBoxDelegate::EditBoxEndAction>(action));
+            text, static_cast<ax::ui::EditBoxDelegate::EditBoxEndAction>(action));
     }
 }
 

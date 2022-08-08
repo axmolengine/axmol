@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ typedef struct AnimationInfo
 } AnimationClip;
 
 #if 0
-class CCS_DLL ActionTimelineData : public axis::Ref
+class CCS_DLL ActionTimelineData : public ax::Ref
 {
 public:
     static ActionTimelineData* create(int actionTag);
@@ -66,7 +66,7 @@ protected:
 };
 #endif
 
-class CCS_DLL ActionTimeline : public axis::Action, public axis::PlayableProtocol
+class CCS_DLL ActionTimeline : public ax::Action, public ax::PlayableProtocol
 {
 public:
     friend class Frame;
@@ -145,7 +145,7 @@ public:
     virtual void addTimeline(Timeline* timeline);
     virtual void removeTimeline(Timeline* timeline);
 
-    virtual const axis::Vector<Timeline*>& getTimelines() const { return _timelineList; }
+    virtual const ax::Vector<Timeline*>& getTimelines() const { return _timelineList; }
 
     /** AnimationInfo*/
     virtual void addAnimationInfo(const AnimationInfo& animationInfo);
@@ -190,7 +190,7 @@ public:
     virtual ActionTimeline* reverse() const override { return nullptr; }
 
     virtual void step(float delta) override;
-    virtual void startWithTarget(axis::Node* target) override;
+    virtual void startWithTarget(ax::Node* target) override;
     virtual bool isDone() const override { return false; }
 
     /// @{
@@ -209,8 +209,8 @@ protected:
     /** emit frame event, call it when enter a frame*/
     virtual void emitFrameEvent(Frame* frame);
 
-    std::map<int, axis::Vector<Timeline*>> _timelineMap;
-    axis::Vector<Timeline*> _timelineList;
+    std::map<int, ax::Vector<Timeline*>> _timelineMap;
+    ax::Vector<Timeline*> _timelineList;
 
     int _duration;
     double _time;

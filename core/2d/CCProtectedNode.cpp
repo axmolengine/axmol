@@ -6,7 +6,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -64,12 +64,12 @@ void ProtectedNode::cleanup()
         child->cleanup();
 }
 
-void ProtectedNode::addProtectedChild(axis::Node* child)
+void ProtectedNode::addProtectedChild(ax::Node* child)
 {
     addProtectedChild(child, child->getLocalZOrder(), child->getTag());
 }
 
-void ProtectedNode::addProtectedChild(axis::Node* child, int localZOrder)
+void ProtectedNode::addProtectedChild(ax::Node* child, int localZOrder)
 {
     addProtectedChild(child, localZOrder, child->getTag());
 }
@@ -132,7 +132,7 @@ Node* ProtectedNode::getProtectedChildByTag(int tag)
  * If a class want's to extend the 'removeChild' behavior it only needs
  * to override this method
  */
-void ProtectedNode::removeProtectedChild(axis::Node* child, bool cleanup)
+void ProtectedNode::removeProtectedChild(ax::Node* child, bool cleanup)
 {
     // explicit nil handling
     if (_protectedChildren.empty())
@@ -228,7 +228,7 @@ void ProtectedNode::removeProtectedChildByTag(int tag, bool cleanup)
 }
 
 // helper used by reorderChild & add
-void ProtectedNode::insertProtectedChild(axis::Node* child, int z)
+void ProtectedNode::insertProtectedChild(ax::Node* child, int z)
 {
 #if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
@@ -251,7 +251,7 @@ void ProtectedNode::sortAllProtectedChildren()
     }
 }
 
-void ProtectedNode::reorderProtectedChild(axis::Node* child, int localZOrder)
+void ProtectedNode::reorderProtectedChild(ax::Node* child, int localZOrder)
 {
     AXASSERT(child != nullptr, "Child must be non-nil");
     _reorderProtectedChildDirty = true;

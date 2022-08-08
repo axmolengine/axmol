@@ -9,11 +9,11 @@ NS_FGUI_BEGIN
 class ToolSet
 {
 public:
-    static axis::Color4B hexToColor(const char* str);
-    static axis::Color3B intToColor(unsigned int rgb);
-    static unsigned int colorToInt(const axis::Color3B& color);
+    static ax::Color4B hexToColor(const char* str);
+    static ax::Color3B intToColor(unsigned int rgb);
+    static unsigned int colorToInt(const ax::Color3B& color);
 
-    static axis::Rect intersection(const axis::Rect& rect1, const axis::Rect& rect2);
+    static ax::Rect intersection(const ax::Rect& rect1, const ax::Rect& rect2);
     static int findInStringArray(const std::vector<std::string>& arr, const std::string& str);
 
     static bool isFileExist(const std::string& fileName);

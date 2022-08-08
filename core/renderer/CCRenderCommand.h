@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -92,6 +92,10 @@ public:
     void set3D(bool value) { _is3D = value; }
     /**Get the depth by current model view matrix.*/
     float getDepth() const { return _depth; }
+    /**Whether the command should be rendered in wireframe mode.*/
+    bool isWireframe() const { return _isWireframe; }
+    /**Set wireframe render mode for this command.*/
+    void setWireframe(bool value) { _isWireframe = value; }
     /// Can use the result to change the descriptor content.
     inline PipelineDescriptor& getPipelineDescriptor() { return _pipelineDescriptor; }
 
@@ -123,8 +127,11 @@ protected:
     /** Is the command been rendered on 3D pass. */
     bool _is3D = false;
 
-    /** Depth from the model view matrix.*/
+    /** Depth from the model view matrix. */
     float _depth = 0.f;
+
+    /** Polygon render mode set to LINE, which represents wireframe mode. */
+    bool _isWireframe = false;
 
     Mat4 _mv;
 

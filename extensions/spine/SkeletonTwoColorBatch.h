@@ -39,10 +39,10 @@
 
 namespace spine {
 	struct V3F_C4B_C4B_T2F {
-		axis::Vec3 position;
-		axis::Color4B color;
-		axis::Color4B color2;
-		axis::Tex2F texCoords;
+		ax::Vec3 position;
+		ax::Color4B color;
+		ax::Color4B color2;
+		ax::Tex2F texCoords;
 	};
 	
 	struct TwoColorTriangles {
@@ -52,21 +52,21 @@ namespace spine {
 		int indexCount;
 	};
 	
-	class SP_API TwoColorTrianglesCommand : public axis::CustomCommand {
+	class SP_API TwoColorTrianglesCommand : public ax::CustomCommand {
 	public:
 		TwoColorTrianglesCommand();
 		
 		~TwoColorTrianglesCommand();
 
-        void init(float globalOrder, axis::Texture2D* texture, axis::backend::ProgramState* programState, axis::BlendFunc blendType, const TwoColorTriangles& triangles, const axis::Mat4& mv, uint32_t flags);
+        void init(float globalOrder, ax::Texture2D* texture, ax::backend::ProgramState* programState, ax::BlendFunc blendType, const TwoColorTriangles& triangles, const ax::Mat4& mv, uint32_t flags);
 
-        void updateCommandPipelineDescriptor(axis::backend::ProgramState* programState);
+        void updateCommandPipelineDescriptor(ax::backend::ProgramState* programState);
 
-        inline axis::backend::TextureBackend* getTexture() const { return _texture; }
+        inline ax::backend::TextureBackend* getTexture() const { return _texture; }
 
-        void draw(axis::Renderer *renderer);
+        void draw(ax::Renderer *renderer);
 
-        void updateVertexAndIndexBuffer(axis::Renderer *renderer, V3F_C4B_C4B_T2F *vertices, int verticesSize, uint16_t *indices, int indicesSize);
+        void updateVertexAndIndexBuffer(ax::Renderer *renderer, V3F_C4B_C4B_T2F *vertices, int verticesSize, uint16_t *indices, int indicesSize);
 		
 		inline uint32_t getMaterialID() const { return _materialID; }
 		
@@ -80,9 +80,9 @@ namespace spine {
 		
 		inline const unsigned short* getIndices() const { return _triangles.indices; }
 		
-		inline axis::BlendFunc getBlendType() const { return _blendType; }
+		inline ax::BlendFunc getBlendType() const { return _blendType; }
 		
-		inline const axis::Mat4& getModelView() const { return _mv; }
+		inline const ax::Mat4& getModelView() const { return _mv; }
 		
 		void setForceFlush (bool forceFlush) { _forceFlush = forceFlush; }
 		
@@ -94,14 +94,14 @@ namespace spine {
 
 
         void *_prog = nullptr;
-        axis::backend::TextureBackend    *_texture       = nullptr;
-        axis::backend::ProgramState      *_programState  = nullptr;
-        axis::backend::UniformLocation   _locPMatrix;
-        axis::backend::UniformLocation   _locTexture;
+        ax::backend::TextureBackend    *_texture       = nullptr;
+        ax::backend::ProgramState      *_programState  = nullptr;
+        ax::backend::UniformLocation   _locPMatrix;
+        ax::backend::UniformLocation   _locTexture;
 
-		axis::BlendFunc  _blendType;
+		ax::BlendFunc  _blendType;
 		TwoColorTriangles   _triangles;
-		axis::Mat4       _mv;
+		ax::Mat4       _mv;
 		bool                _forceFlush;
 	};
 
@@ -119,11 +119,11 @@ namespace spine {
 		unsigned short* allocateIndices(uint32_t numIndices);
 		void deallocateIndices(uint32_t numIndices);
 
-        TwoColorTrianglesCommand* addCommand(axis::Renderer* renderer, float globalOrder, axis::Texture2D* texture, axis::backend::ProgramState* programState, axis::BlendFunc blendType, const TwoColorTriangles& triangles, const axis::Mat4& mv, uint32_t flags);
+        TwoColorTrianglesCommand* addCommand(ax::Renderer* renderer, float globalOrder, ax::Texture2D* texture, ax::backend::ProgramState* programState, ax::BlendFunc blendType, const TwoColorTriangles& triangles, const ax::Mat4& mv, uint32_t flags);
 
-        void batch(axis::Renderer* renderer, TwoColorTrianglesCommand* command);
+        void batch(ax::Renderer* renderer, TwoColorTrianglesCommand* command);
 
-        void flush(axis::Renderer* renderer, TwoColorTrianglesCommand* materialCommand);
+        void flush(ax::Renderer* renderer, TwoColorTrianglesCommand* materialCommand);
 
 		uint32_t getNumBatches () { return _numBatches; };
 		

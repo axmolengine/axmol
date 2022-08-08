@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -132,7 +132,7 @@ bool EventDispatcher::EventListenerVector::empty() const
            (_fixedListeners == nullptr || _fixedListeners->empty());
 }
 
-void EventDispatcher::EventListenerVector::push_back(EventListener* listener)
+void EventDispatcher::EventListenerVector::emplace_back(EventListener* listener)
 {
 #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS
     AXASSERT(_sceneGraphListeners == nullptr ||
@@ -151,7 +151,7 @@ void EventDispatcher::EventListenerVector::push_back(EventListener* listener)
             _sceneGraphListeners->reserve(100);
         }
 
-        _sceneGraphListeners->push_back(listener);
+        _sceneGraphListeners->emplace_back(listener);
     }
     else
     {
@@ -161,7 +161,7 @@ void EventDispatcher::EventListenerVector::push_back(EventListener* listener)
             _fixedListeners->reserve(100);
         }
 
-        _fixedListeners->push_back(listener);
+        _fixedListeners->emplace_back(listener);
     }
 }
 
@@ -236,7 +236,7 @@ void EventDispatcher::visitTarget(Node* node, bool isRootNode)
 
         if (_nodeListenersMap.find(node) != _nodeListenersMap.end())
         {
-            _globalZOrderNodeMap[node->getGlobalZOrder()].push_back(node);
+            _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
         }
 
         for (; i < childrenCount; i++)
@@ -250,7 +250,7 @@ void EventDispatcher::visitTarget(Node* node, bool isRootNode)
     {
         if (_nodeListenersMap.find(node) != _nodeListenersMap.end())
         {
-            _globalZOrderNodeMap[node->getGlobalZOrder()].push_back(node);
+            _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
         }
     }
 
@@ -261,7 +261,7 @@ void EventDispatcher::visitTarget(Node* node, bool isRootNode)
 
         for (const auto& e : _globalZOrderNodeMap)
         {
-            globalZOrders.push_back(e.first);
+            globalZOrders.emplace_back(e.first);
         }
 
         std::stable_sort(globalZOrders.begin(), globalZOrders.end(),
@@ -405,7 +405,7 @@ void EventDispatcher::associateNodeAndEventListener(Node* node, EventListener* l
         _nodeListenersMap.emplace(node, listeners);
     }
 
-    listeners->push_back(listener);
+    listeners->emplace_back(listener);
 }
 
 void EventDispatcher::dissociateNodeAndEventListener(Node* node, EventListener* listener)
@@ -437,7 +437,7 @@ void EventDispatcher::addEventListener(EventListener* listener)
     }
     else
     {
-        _toAddedListeners.push_back(listener);
+        _toAddedListeners.emplace_back(listener);
     }
 #if AX_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
@@ -465,7 +465,7 @@ void EventDispatcher::forceAddEventListener(EventListener* listener)
         listeners = itr->second;
     }
 
-    listeners->push_back(listener);
+    listeners->emplace_back(listener);
 
     if (listener->getFixedPriority() == 0)
     {
@@ -502,7 +502,7 @@ void EventDispatcher::addEventListenerWithSceneGraphPriority(EventListener* list
     addEventListener(listener);
 }
 
-#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
+#if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && _AX_DEBUG > 0
 
 void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
 {
@@ -559,7 +559,7 @@ void EventDispatcher::debugCheckNodeHasNoEventListenersOnDestruction(Node* node)
     }
 }
 
-#endif  // #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && AXIS_DEBUG > 0
+#endif  // #if AX_NODE_DEBUG_VERIFY_EVENT_LISTENERS && _AX_DEBUG > 0
 
 void EventDispatcher::addEventListenerWithFixedPriority(EventListener* listener, int fixedPriority)
 {
@@ -623,7 +623,7 @@ void EventDispatcher::removeEventListener(EventListener* listener)
                 }
                 else
                 {
-                    _toRemovedListeners.push_back(l);
+                    _toRemovedListeners.emplace_back(l);
                 }
 
                 isFound = true;
@@ -831,7 +831,7 @@ void EventDispatcher::dispatchTouchEventToListeners(EventListenerVector* listene
             {
                 if (l->isEnabled() && !l->isPaused() && l->isRegistered())
                 {
-                    sceneListeners.push_back(l);
+                    sceneListeners.emplace_back(l);
                 }
             }
             // second, for all camera call all listeners
@@ -993,7 +993,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
                         isClaimed = listener->onTouchBegan(touches, event);
                         if (isClaimed && listener->_isRegistered)
                         {
-                            listener->_claimedTouches.push_back(touches);
+                            listener->_claimedTouches.emplace_back(touches);
                         }
                     }
                 }
@@ -1497,7 +1497,7 @@ void EventDispatcher::removeAllEventListeners()
         }
         else
         {
-            types.push_back(e.first);
+            types.emplace_back(e.first);
         }
     }
 

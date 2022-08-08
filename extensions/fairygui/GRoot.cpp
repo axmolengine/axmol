@@ -7,7 +7,7 @@ NS_FGUI_BEGIN
 USING_NS_AX;
 
 #if COCOS2D_VERSION < 0x00040000
-using namespace axis::experimental;
+using namespace ax::experimental;
 #endif
 
 GRoot* GRoot::_inst = nullptr;
@@ -216,7 +216,7 @@ bool GRoot::isModalWaiting()
     return (_modalWaitPane != nullptr) && _modalWaitPane->onStage();
 }
 
-axis::Vec2 GRoot::getTouchPosition(int touchId)
+ax::Vec2 GRoot::getTouchPosition(int touchId)
 {
     return _inputProcessor->getTouchPosition(touchId);
 }
@@ -226,16 +226,16 @@ GObject* GRoot::getTouchTarget()
     return _inputProcessor->getRecentInput()->getTarget();
 }
 
-axis::Vec2 GRoot::worldToRoot(const axis::Vec2 &pt)
+ax::Vec2 GRoot::worldToRoot(const ax::Vec2 &pt)
 {
-    axis::Vec2 pos = _displayObject->convertToNodeSpace(pt);
+    ax::Vec2 pos = _displayObject->convertToNodeSpace(pt);
     pos.y = getHeight() - pos.y;
     return pos;
 }
 
-axis::Vec2 GRoot::rootToWorld(const axis::Vec2 &pt)
+ax::Vec2 GRoot::rootToWorld(const ax::Vec2 &pt)
 {
-    axis::Vec2 pos = pt;
+    ax::Vec2 pos = pt;
     pos.y = getHeight() - pos.y;
     pos = _displayObject->convertToWorldSpace(pos);
     return pos;
@@ -377,7 +377,7 @@ bool GRoot::hasAnyPopup()
     return !_popupStack.empty();
 }
 
-axis::Vec2 GRoot::getPoupPosition(GObject* popup, GObject* target, PopupDirection dir)
+ax::Vec2 GRoot::getPoupPosition(GObject* popup, GObject* target, PopupDirection dir)
 {
     Vec2 pos;
     Vec2 size;
@@ -524,7 +524,7 @@ void GRoot::onExit()
         _inst = nullptr;
 }
 
-bool GRoot::initWithScene(axis::Scene* scene, int zOrder)
+bool GRoot::initWithScene(ax::Scene* scene, int zOrder)
 {
     if (!GComponent::init())
         return false;
@@ -547,7 +547,7 @@ bool GRoot::initWithScene(axis::Scene* scene, int zOrder)
 
 void GRoot::onWindowSizeChanged()
 {
-    const axis::Size& rs = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
+    const ax::Size& rs = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
     setSize(rs.width, rs.height);
 
     updateContentScaleLevel();

@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -38,19 +38,19 @@ void Label::computeAlignmentOffset()
     _linesOffsetX.clear();
     switch (_hAlignment)
     {
-    case axis::TextHAlignment::LEFT:
+    case ax::TextHAlignment::LEFT:
         _linesOffsetX.assign(_numberOfLines, 0);
         break;
-    case axis::TextHAlignment::CENTER:
+    case ax::TextHAlignment::CENTER:
         for (auto&& lineWidth : _linesWidth)
         {
-            _linesOffsetX.push_back((_contentSize.width - lineWidth) / 2.f);
+            _linesOffsetX.emplace_back((_contentSize.width - lineWidth) / 2.f);
         }
         break;
-    case axis::TextHAlignment::RIGHT:
+    case ax::TextHAlignment::RIGHT:
         for (auto&& lineWidth : _linesWidth)
         {
-            _linesOffsetX.push_back(_contentSize.width - lineWidth);
+            _linesOffsetX.emplace_back(_contentSize.width - lineWidth);
         }
         break;
     default:
@@ -59,13 +59,13 @@ void Label::computeAlignmentOffset()
 
     switch (_vAlignment)
     {
-    case axis::TextVAlignment::TOP:
+    case ax::TextVAlignment::TOP:
         _letterOffsetY = _contentSize.height;
         break;
-    case axis::TextVAlignment::CENTER:
+    case ax::TextVAlignment::CENTER:
         _letterOffsetY = (_contentSize.height + _textDesiredHeight) / 2.f;
         break;
-    case axis::TextVAlignment::BOTTOM:
+    case ax::TextVAlignment::BOTTOM:
         _letterOffsetY = _textDesiredHeight;
         break;
     default:
@@ -174,7 +174,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
         char32_t character = _utf32Text[index];
         if (character == StringUtils::UnicodeCharacters::NewLine)
         {
-            _linesWidth.push_back(letterRight);
+            _linesWidth.emplace_back(letterRight);
             letterRight = 0.f;
             lineIndex++;
             nextTokenX = 0.f;
@@ -222,7 +222,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
                 letterX + letterDef.width * _bmfontScale > _maxLineWidth && !StringUtils::isUnicodeSpace(character) &&
                 nextChangeSize)
             {
-                _linesWidth.push_back(letterRight - whitespaceWidth);
+                _linesWidth.emplace_back(letterRight - whitespaceWidth);
                 nextWhitespaceWidth = 0.f;
                 letterRight         = 0.f;
                 lineIndex++;
@@ -282,12 +282,12 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
 
     if (_linesWidth.empty())
     {
-        _linesWidth.push_back(letterRight);
+        _linesWidth.emplace_back(letterRight);
         longestLine = letterRight;
     }
     else
     {
-        _linesWidth.push_back(letterRight - nextWhitespaceWidth);
+        _linesWidth.emplace_back(letterRight - nextWhitespaceWidth);
         for (auto&& lineWidth : _linesWidth)
         {
             if (longestLine < lineWidth)
@@ -421,12 +421,12 @@ void Label::shrinkLabelToContentSize(const std::function<bool(void)>& lambda)
     }
 }
 
-void Label::recordLetterInfo(const axis::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex)
+void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex)
 {
     if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
     {
         LetterInfo tmpInfo;
-        _lettersInfo.push_back(tmpInfo);
+        _lettersInfo.emplace_back(tmpInfo);
     }
     _lettersInfo[letterIndex].lineIndex  = lineIndex;
     _lettersInfo[letterIndex].utf32Char  = utf32Char;
@@ -441,7 +441,7 @@ void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
     if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
     {
         LetterInfo tmpInfo;
-        _lettersInfo.push_back(tmpInfo);
+        _lettersInfo.emplace_back(tmpInfo);
     }
     _lettersInfo[letterIndex].utf32Char = utf32Char;
     _lettersInfo[letterIndex].valid     = false;

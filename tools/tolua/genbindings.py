@@ -17,9 +17,19 @@ def _check_ndk_root_env():
     '''
 
     try:
-        ANDROID_NDK = os.environ['ANDROID_NDK']
+
+        sdkRoot = os.environ['ANDROID_SDK_ROOT']
+        for _, ndkVers, _ in os.walk("{0}{1}ndk".format(sdkRoot, os.path.sep)):
+            for ndkVer in ndkVers:
+                if (ndkVer == '19.2.5345600'):
+                    ANDROID_NDK = "{0}{1}ndk{1}{2}".format(sdkRoot, os.path.sep, ndkVer)
+                    break
+            break
+
+        if ANDROID_NDK == None: raise
+
     except Exception:
-        print("ANDROID_NDK not defined. Please define ANDROID_NDK in your environment.")
+        print("The ndk-r19c not installed in '{0}{1}ndk', please install via cmdline-tools/bin/sdkmanager --verbose --sdk_root=D:\\dev\\adt\\sdk \"ndk;19.2.5345600\"".format(sdkRoot, os.path.sep))
         sys.exit(1)
 
     return ANDROID_NDK
@@ -164,7 +174,7 @@ def main():
 
 
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-    axis_root = os.path.abspath(os.path.join(project_root, ''))
+    axys_root = os.path.abspath(os.path.join(project_root, ''))
     cxx_generator_root = os.path.abspath(os.path.join(project_root, 'tools/bindings-generator'))
 
     extraFlags = _defaultIncludePath()
@@ -180,7 +190,7 @@ def main():
     config.set('DEFAULT', 'androidndkdir', ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
     config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
-    config.set('DEFAULT', 'axisdir', axis_root)
+    config.set('DEFAULT', 'axysdir', axys_root)
     config.set('DEFAULT', 'cxxgeneratordir', cxx_generator_root)
     config.set('DEFAULT', 'extra_flags', extraFlags)
 
@@ -205,21 +215,21 @@ def main():
         output_dir = '%s/extensions/scripting/lua-bindings/auto' % project_root
 
         cmd_args = {
-                    'axis_base.ini' : ('axis_base', 'lua_axis_base_auto'), \
-                    'axis_backend.ini' : ('axis_backend', 'lua_axis_backend_auto'), \
-                    'axis_extension.ini' : ('axis_extension', 'lua_axis_extension_auto'), \
-                    'axis_ui.ini' : ('axis_ui', 'lua_axis_ui_auto'), \
-                    'axis_studio.ini' : ('axis_studio', 'lua_axis_studio_auto'), \
-                    'axis_spine.ini' : ('axis_spine', 'lua_axis_spine_auto'), \
-                    'axis_physics.ini' : ('axis_physics', 'lua_axis_physics_auto'), \
-                    'axis_video.ini' : ('axis_video', 'lua_axis_video_auto'), \
-                    'axis_controller.ini' : ('axis_controller', 'lua_axis_controller_auto'), \
-                    'axis_3d.ini': ('axis_3d', 'lua_axis_3d_auto'), \
-                    'axis_audioengine.ini': ('axis_audioengine', 'lua_axis_audioengine_auto'), \
-                    'axis_csloader.ini' : ('axis_csloader', 'lua_axis_csloader_auto'), \
-                    'axis_webview.ini' : ('axis_webview', 'lua_axis_webview_auto'), \
-                    'axis_physics3d.ini' : ('axis_physics3d', 'lua_axis_physics3d_auto'), \
-                    'axis_navmesh.ini' : ('axis_navmesh', 'lua_axis_navmesh_auto'), \
+                    'axys_base.ini' : ('axys_base', 'axlua_base_auto'), \
+                    'axys_backend.ini' : ('axys_backend', 'axlua_backend_auto'), \
+                    'axys_extension.ini' : ('axys_extension', 'axlua_extension_auto'), \
+                    'axys_ui.ini' : ('axys_ui', 'axlua_ui_auto'), \
+                    'axys_studio.ini' : ('axys_studio', 'axlua_studio_auto'), \
+                    'axys_spine.ini' : ('axys_spine', 'axlua_spine_auto'), \
+                    'axys_physics.ini' : ('axys_physics', 'axlua_physics_auto'), \
+                    'axys_video.ini' : ('axys_video', 'axlua_video_auto'), \
+                    'axys_controller.ini' : ('axys_controller', 'axlua_controller_auto'), \
+                    'axys_3d.ini': ('axys_3d', 'axlua_3d_auto'), \
+                    'axys_audioengine.ini': ('axys_audioengine', 'axlua_audioengine_auto'), \
+                    'axys_csloader.ini' : ('axys_csloader', 'axlua_csloader_auto'), \
+                    'axys_webview.ini' : ('axys_webview', 'axlua_webview_auto'), \
+                    'axys_physics3d.ini' : ('axys_physics3d', 'axlua_physics3d_auto'), \
+                    'axys_navmesh.ini' : ('axys_navmesh', 'axlua_navmesh_auto'), \
                     }
         target = 'lua'
         generator_py = '%s/generator.py' % cxx_generator_root

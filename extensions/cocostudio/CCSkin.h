@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL Skin : public axis::Sprite
+class CCS_DLL Skin : public ax::Sprite
 {
 public:
     static Skin* create();
@@ -54,10 +54,10 @@ public:
     void updateArmatureTransform();
     void updateTransform() override;
 
-    axis::Mat4 getNodeToWorldTransform() const override;
-    axis::Mat4 getNodeToWorldTransformAR() const;
+    ax::Mat4 getNodeToWorldTransform() const override;
+    ax::Mat4 getNodeToWorldTransformAR() const;
 
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
     /**
      *  @js NA
@@ -79,9 +79,9 @@ protected:
     BaseData _skinData;
     Bone* _bone;
     Armature* _armature;
-    axis::Mat4 _skinTransform;
+    ax::Mat4 _skinTransform;
     std::string _displayName;
-    axis::QuadCommand _quadCommand;  // quad command
+    ax::QuadCommand _quadCommand;  // quad command
 };
 
 }  // namespace cocostudio

@@ -4,7 +4,7 @@
   Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
   Copyright (c) 2017 Wilson E. Alvarez <wilson.e.alvarez1@gmail.com>
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -57,7 +57,7 @@ public:
         // The configuration files were parsed into C++ code with:
         // https://github.com/Rubonnek/retroarch-joypad-config-to-cpp-mapper
         // which provides the following mapping from the RetroArch
-        // configuration variables towards the axis::Controller::Key key
+        // configuration variables towards the ax::Controller::Key key
         // codes.  Hardware-wise, the mapping goes from a theoretical SNES
         // controller with extra joysticks and shoulder buttons, towards an
         // Xbox-like controller which is widely common on mobile phones.
@@ -4211,10 +4211,10 @@ public:
             return;
 
         // It's a new controller being connected.
-        auto controller         = new axis::Controller();
+        auto controller         = new ax::Controller();
         controller->_deviceId   = deviceId;
         controller->_deviceName = deviceName;
-        Controller::s_allController.push_back(controller);
+        Controller::s_allController.emplace_back(controller);
 
         // Check if we already have an available input controller profile. If so, attach it it to the controller.
         for (const auto& it : s_controllerProfiles)
@@ -4229,7 +4229,7 @@ public:
 // Show a one-time warning in debug mode for every button that's currently not matched in the input profile.
 // This will let the developers know that the mapping must be included in the constructor of ControllerImpl located
 // above.
-#    ifdef AXIS_DEBUG
+#    ifdef _AX_DEBUG
                 int count;
                 glfwGetJoystickButtons(deviceId, &count);
                 for (int i = 0; i < count; ++i)
@@ -4265,7 +4265,7 @@ public:
         }
 
 // Show a warning if the controller input profile is non-existent:
-#    ifdef AXIS_DEBUG
+#    ifdef _AX_DEBUG
         if (controller->_buttonInputMap.empty())
         {
             AXLOG("ControllerImpl: Could not find a button input map for controller: %s", deviceName.data());
@@ -4332,7 +4332,7 @@ public:
         {
             ControllerImpl::getInstance()->onDisconnected(deviceId);
         }
-#    ifdef AXIS_DEBUG
+#    ifdef _AX_DEBUG
         else
         {
             AXLOG("ControllerImpl: Unhandled GLFW joystick event: %d", event);
@@ -4395,7 +4395,7 @@ std::map<std::string, std::pair<std::unordered_map<int, int>, std::unordered_map
 
 void Controller::startDiscoveryController()
 {
-    // Check for existing josyticks and register them as axis::Controller:
+    // Check for existing josyticks and register them as ax::Controller:
     for (int deviceId = GLFW_JOYSTICK_1; deviceId <= GLFW_JOYSTICK_LAST; ++deviceId)
     {
         if (glfwJoystickPresent(deviceId))

@@ -2,7 +2,7 @@
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,8 +37,8 @@ NS_AX_BEGIN
 class AX_DLL ObjectFactory
 {
 public:
-    typedef axis::Ref* (*Instance)(void);
-    typedef std::function<axis::Ref*(void)> InstanceFunc;
+    typedef ax::Ref* (*Instance)(void);
+    typedef std::function<ax::Ref*(void)> InstanceFunc;
     struct AX_DLL TInfo
     {
         TInfo();
@@ -55,7 +55,7 @@ public:
 
     static ObjectFactory* getInstance();
     static void destroyInstance();
-    axis::Ref* createObject(std::string_view name);
+    ax::Ref* createObject(std::string_view name);
 
     void registerType(const TInfo& t);
     void removeAll();

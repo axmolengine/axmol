@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2015-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -52,8 +52,8 @@ bool SkeletonNode::init()
     // init _customCommand
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program =
-        axis::backend::Program::getBuiltinProgram(axis::backend::ProgramType::POSITION_COLOR);  // TODO: noMVP?
-    setProgramState(new axis::backend::ProgramState(program), false);
+        ax::backend::Program::getBuiltinProgram(ax::backend::ProgramType::POSITION_COLOR);  // TODO: noMVP?
+    setProgramState(new ax::backend::ProgramState(program), false);
     pipelineDescriptor.programState = _programState;
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix");
@@ -63,20 +63,20 @@ bool SkeletonNode::init()
     auto iter                 = attributeInfo.find("a_position");
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_position", iter->second.location, axis::backend::VertexFormat::FLOAT3, 0,
+        vertexLayout->setAttribute("a_position", iter->second.location, ax::backend::VertexFormat::FLOAT3, 0,
                                    false);
     }
     iter = attributeInfo.find("a_color");
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_color", iter->second.location, axis::backend::VertexFormat::FLOAT4,
+        vertexLayout->setAttribute("a_color", iter->second.location, ax::backend::VertexFormat::FLOAT4,
                                    3 * sizeof(float), false);
     }
     vertexLayout->setLayout(7 * sizeof(float));
 
-    _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 8, axis::CustomCommand::BufferUsage::DYNAMIC);
-    _customCommand.createIndexBuffer(axis::CustomCommand::IndexFormat::U_SHORT, 12,
-                                     axis::CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 8, ax::CustomCommand::BufferUsage::DYNAMIC);
+    _customCommand.createIndexBuffer(ax::CustomCommand::IndexFormat::U_SHORT, 12,
+                                     ax::CustomCommand::BufferUsage::STATIC);
     unsigned short indices[12] = {0, 1, 2, 1, 3, 2, 4, 5, 6, 5, 7, 6};
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
 
@@ -87,13 +87,13 @@ bool SkeletonNode::init()
     return true;
 }
 
-axis::Rect SkeletonNode::getBoundingBox() const
+ax::Rect SkeletonNode::getBoundingBox() const
 {
     float minx, miny, maxx, maxy = 0;
     minx = miny = maxx        = maxy;
-    axis::Rect boundingBox = getVisibleSkinsRect();
+    ax::Rect boundingBox = getVisibleSkinsRect();
     bool first                = true;
-    if (!boundingBox.equals(axis::Rect::ZERO))
+    if (!boundingBox.equals(ax::Rect::ZERO))
     {
         minx  = boundingBox.getMinX();
         miny  = boundingBox.getMinY();
@@ -104,9 +104,9 @@ axis::Rect SkeletonNode::getBoundingBox() const
     auto allbones = getAllSubBones();
     for (const auto& bone : allbones)
     {
-        axis::Rect r = RectApplyAffineTransform(bone->getVisibleSkinsRect(),
+        ax::Rect r = RectApplyAffineTransform(bone->getVisibleSkinsRect(),
                                                    bone->getNodeToParentAffineTransform(bone->getRootSkeletonNode()));
-        if (r.equals(axis::Rect::ZERO))
+        if (r.equals(ax::Rect::ZERO))
             continue;
 
         if (first)
@@ -178,7 +178,7 @@ void SkeletonNode::updateColor()
     _transformUpdated = _transformDirty = _inverseDirty = _contentSizeDirty = true;
 }
 
-void SkeletonNode::visit(axis::Renderer* renderer, const axis::Mat4& parentTransform, uint32_t parentFlags)
+void SkeletonNode::visit(ax::Renderer* renderer, const ax::Mat4& parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -191,8 +191,8 @@ void SkeletonNode::visit(axis::Renderer* renderer, const axis::Mat4& parentTrans
     // IMPORTANT:
     // To ease the migration to v3.0, we still support the Mat4 stack,
     // but it is deprecated and your code should not rely on it
-    _director->pushMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    _director->loadMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
+    _director->pushMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->loadMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
     int i = 0;
     if (!_children.empty())
@@ -227,26 +227,26 @@ void SkeletonNode::visit(axis::Renderer* renderer, const axis::Mat4& parentTrans
         renderer->addCommand(&_batchBoneCommand);
         batchDrawAllSubBones();
     }
-    _director->popMatrix(axis::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    _director->popMatrix(ax::MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     // FIX ME: Why need to set _orderOfArrival to 0??
     // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
     // reset for next frame
     // _orderOfArrival = 0;
 }
 
-void SkeletonNode::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
+void SkeletonNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
     for (int i = 0; i < 8; ++i)
     {
-        axis::Vec4 pos;
+        ax::Vec4 pos;
         pos.x = _squareVertices[i].x;
         pos.y = _squareVertices[i].y;
         pos.z = _positionZ;
         pos.w = 1;
         _modelViewTransform.transformVector(&pos);
-        _vertexData[i].vertex = axis::Vec3(pos.x, pos.y, pos.z) / pos.w;
+        _vertexData[i].vertex = ax::Vec3(pos.x, pos.y, pos.z) / pos.w;
     }
     _customCommand.updateVertexBuffer(_vertexData, sizeof(_vertexData));
 
@@ -265,7 +265,7 @@ void SkeletonNode::batchDrawAllSubBones()
     }
 
     _batchBoneCommand.createVertexBuffer(sizeof(VertexData), _batchedVeticesCount,
-                                         axis::CustomCommand::BufferUsage::DYNAMIC);
+                                         ax::CustomCommand::BufferUsage::DYNAMIC);
     _batchBoneCommand.updateVertexBuffer(_batchedBoneVertexData.data(), sizeof(VertexData) * _batchedVeticesCount);
 
 #ifdef AX_STUDIO_ENABLED_VIEW
@@ -291,8 +291,8 @@ void SkeletonNode::batchDrawAllSubBones()
         *indices++ = i + 2;
         *indices++ = i + 3;
     }
-    _batchBoneCommand.createIndexBuffer(axis::CustomCommand::IndexFormat::U_SHORT, _batchedVeticesCount,
-                                        axis::CustomCommand::BufferUsage::DYNAMIC);
+    _batchBoneCommand.createIndexBuffer(ax::CustomCommand::IndexFormat::U_SHORT, _batchedVeticesCount,
+                                        ax::CustomCommand::BufferUsage::DYNAMIC);
     _batchBoneCommand.updateIndexBuffer(indices, sizeof(unsigned short) * _batchedVeticesCount);
     free(indices);
 #endif  // AX_STUDIO_ENABLED_VIEW
@@ -327,7 +327,7 @@ BoneNode* SkeletonNode::getBoneNode(std::string_view boneName)
     return nullptr;
 }
 
-const axis::StringMap<BoneNode*>& SkeletonNode::getAllSubBonesMap() const
+const ax::StringMap<BoneNode*>& SkeletonNode::getAllSubBonesMap() const
 {
     return _subBonesMap;
 }

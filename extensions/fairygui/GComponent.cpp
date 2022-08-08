@@ -535,12 +535,12 @@ void GComponent::setApexIndex(int value)
     }
 }
 
-axis::Node* GComponent::getMask() const
+ax::Node* GComponent::getMask() const
 {
     return ((FUIContainer*)_displayObject)->getStencil();
 }
 
-void GComponent::setMask(axis::Node* value, bool inverted)
+void GComponent::setMask(ax::Node* value, bool inverted)
 {
     if (_maskOwner)
     {
@@ -831,7 +831,7 @@ void GComponent::buildNativeDisplayList()
     }
 }
 
-axis::Vec2 GComponent::getSnappingPosition(const axis::Vec2& pt)
+ax::Vec2 GComponent::getSnappingPosition(const ax::Vec2& pt)
 {
     int cnt = (int)_children.size();
     if (cnt == 0)

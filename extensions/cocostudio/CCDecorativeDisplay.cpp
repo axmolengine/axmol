@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +65,7 @@ bool DecorativeDisplay::init()
     return true;
 }
 
-void DecorativeDisplay::setDisplay(axis::Node* display)
+void DecorativeDisplay::setDisplay(ax::Node* display)
 {
     if (_display != display)
     {

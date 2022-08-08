@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ public:
 
     void setJavascriptInterfaceScheme(std::string_view scheme);
 
-    void loadData(const axis::Data& data,
+    void loadData(const ax::Data& data,
                   std::string_view MIMEType,
                   std::string_view encoding,
                   std::string_view baseURL);
@@ -82,7 +82,7 @@ public:
 
     void setScalesPageToFit(const bool scalesPageToFit);
 
-    virtual void draw(axis::Renderer* renderer, axis::Mat4 const& transform, uint32_t flags);
+    virtual void draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32_t flags);
 
     virtual void setVisible(bool visible);
 
@@ -100,6 +100,6 @@ private:
 };
 
 }  // namespace ui
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 /// @endcond

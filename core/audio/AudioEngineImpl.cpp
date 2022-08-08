@@ -4,7 +4,7 @@
  Copyright (c) 2018-2020 HALX99.
  Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -816,7 +816,7 @@ void AudioEngineImpl::_updatePlayers(bool forStop)
             {
                 /// ###IMPORTANT: don't call immidiately, because at callback, user-end may play a new audio
                 /// cause _audioPlayers' iterator goan to invalid.
-                _finishCallbacks.push_back([finishCallback = std::move(player->_finishCallbak), audioID,
+                _finishCallbacks.emplace_back([finishCallback = std::move(player->_finishCallbak), audioID,
                                             filePath = std::move(filePath)]() { finishCallback(audioID, filePath); });
             }
             // clear cache when audio player finsihed properly

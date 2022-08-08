@@ -2,7 +2,7 @@
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -403,12 +403,12 @@ const Color4B& TextField::getPlaceHolderColor() const
     return _textFieldRenderer->getColorSpaceHolder();
 }
 
-void TextField::setPlaceHolderColor(const axis::Color3B& color)
+void TextField::setPlaceHolderColor(const ax::Color3B& color)
 {
     _textFieldRenderer->setColorSpaceHolder(color);
 }
 
-void TextField::setPlaceHolderColor(const axis::Color4B& color)
+void TextField::setPlaceHolderColor(const ax::Color4B& color)
 {
     _textFieldRenderer->setColorSpaceHolder(color);
 }
@@ -418,7 +418,7 @@ const Color4B& TextField::getTextColor() const
     return _textFieldRenderer->getTextColor();
 }
 
-void TextField::setTextColor(const axis::Color4B& textColor)
+void TextField::setTextColor(const ax::Color4B& textColor)
 {
     _textFieldRenderer->setTextColor(textColor);
 }

@@ -4,7 +4,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -339,14 +339,14 @@ bool FileUtilsWin32::createDirectory(std::string_view dirPath) const
         {
             subpath = path.substr(start, found - start + 1);
             if (!subpath.empty())
-                dirs.push_back(subpath);
+                dirs.emplace_back(subpath);
             start = found + 1;
             found = path.find_first_of(L"/\\", start);
             if (found == std::wstring::npos)
             {
                 if (start < path.length())
                 {
-                    dirs.push_back(path.substr(start));
+                    dirs.emplace_back(path.substr(start));
                 }
                 break;
             }

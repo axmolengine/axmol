@@ -49,7 +49,7 @@ void LoadingBarReader::destroyInstance()
     AX_SAFE_DELETE(instanceLoadingBar);
 }
 
-void LoadingBarReader::setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
+void LoadingBarReader::setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* cocoNode)
 {
     WidgetReader::setPropsFromBinary(widget, cocoLoader, cocoNode);
 
@@ -223,7 +223,7 @@ Offset<Table> LoadingBarReader::createOptionsWithFlatBuffers(pugi::xml_node obje
     return *(Offset<Table>*)(&options);
 }
 
-void LoadingBarReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* loadingBarOptions)
+void LoadingBarReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* loadingBarOptions)
 {
     LoadingBar* loadingBar = static_cast<LoadingBar*>(node);
 

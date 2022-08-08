@@ -3,7 +3,7 @@ Copyright (c) 2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -886,7 +886,7 @@ void CameraCullingDemo::addMeshCallback(Ref* sender)
             auto sprite = MeshRenderer::create("MeshRendererTest/orc.c3b");
             sprite->setPosition3D(Vec3(x * 30.0f, 0.0f, z * 30.0f));
             sprite->setRotation3D(Vec3(0.0f, 180.0f, 0.0f));
-            _objects.push_back(sprite);
+            _objects.emplace_back(sprite);
             _layer3D->addChild(sprite);
         }
     }
@@ -915,7 +915,7 @@ void CameraCullingDemo::delMeshCallback(Ref* sender)
         {
             auto sprite = MeshRenderer::create("MeshRendererTest/orc.c3b");
             sprite->setPosition3D(Vec3(x * 30.0f, 0.0f, z * 30.0f));
-            _objects.push_back(sprite);
+            _objects.emplace_back(sprite);
             _layer3D->addChild(sprite);
         }
     }

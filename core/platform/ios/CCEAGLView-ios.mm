@@ -201,7 +201,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         metalLayer.device          = device;
         metalLayer.pixelFormat     = MTLPixelFormatBGRA8Unorm;
         metalLayer.framebufferOnly = YES;
-        axis::backend::DeviceMTL::setCAMetalLayer(metalLayer);
+        ax::backend::DeviceMTL::setCAMetalLayer(metalLayer);
 #else
         pixelformat_        = format;
         depthFormat_        = depth;
@@ -305,14 +305,14 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 - (void)layoutSubviews
 {
-    if (!axis::Director::getInstance()->isValid())
+    if (!ax::Director::getInstance()->isValid())
         return;
 
 #if defined(AX_USE_METAL)
     size_ = [self bounds].size;
     size_.width *= self.contentScaleFactor;
     size_.height *= self.contentScaleFactor;
-    axis::backend::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
+    ax::backend::UtilsMTL::resizeDefaultAttachmentTexture(size_.width, size_.height);
 #else
     [renderer_ resizeFromLayer:(CAEAGLLayer*)self.layer];
     size_ = [renderer_ backingSize];
@@ -320,16 +320,16 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     // Issue #914 #924
     //     Director *director = [Director sharedDirector];
     //     [director reshapeProjection:size_];
-    axis::Size size;
+    ax::Size size;
     size.width  = size_.width;
     size.height = size_.height;
-    // axis::Director::getInstance()->reshapeProjection(size);
+    // ax::Director::getInstance()->reshapeProjection(size);
 #endif
 
     // Avoid flicker. Issue #350
     if ([NSThread isMainThread])
     {
-        axis::Director::getInstance()->drawScene();
+        ax::Director::getInstance()->drawScene();
     }
 }
 
@@ -388,7 +388,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         //         AXLOG(@"cocos2d: Failed to swap renderbuffer in %s\n", __FUNCTION__);
     }
 
-#    if AXIS_DEBUG
+#    if _AX_DEBUG
     CHECK_GL_ERROR();
 #    endif
 
@@ -464,7 +464,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glview = ax::Director::getInstance()->getOpenGLView();
     glview->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
 }
 
@@ -499,7 +499,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glview = ax::Director::getInstance()->getOpenGLView();
     glview->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
 }
 
@@ -524,7 +524,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glview = ax::Director::getInstance()->getOpenGLView();
     glview->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
 }
 
@@ -549,7 +549,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glview = ax::Director::getInstance()->getOpenGLView();
     glview->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
 }
 
@@ -572,12 +572,12 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     [UIView setAnimationDuration:duration];
     [UIView setAnimationBeginsFromCurrentState:YES];
 
-    // NSLog(@"[animation] dis = %f, scale = %f \n", dis, axis::GLView::getInstance()->getScaleY());
+    // NSLog(@"[animation] dis = %f, scale = %f \n", dis, ax::GLView::getInstance()->getScaleY());
 
     if (dis < 0.0f)
         dis = 0.0f;
 
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glview = ax::Director::getInstance()->getOpenGLView();
     dis *= glview->getScaleY();
 
     dis /= self.contentScaleFactor;
@@ -718,7 +718,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         break;
     }
 
-    auto glview  = axis::Director::getInstance()->getOpenGLView();
+    auto glview  = ax::Director::getInstance()->getOpenGLView();
     float scaleX = glview->getScaleX();
     float scaleY = glview->getScaleY();
 
@@ -742,12 +742,12 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     end   = CGRectApplyAffineTransform(end,
                                        CGAffineTransformScale(CGAffineTransformIdentity, 1.0f / scaleX, 1.0f / scaleY));
 
-    axis::IMEKeyboardNotificationInfo notiInfo;
-    notiInfo.begin    = axis::Rect(begin.origin.x, begin.origin.y, begin.size.width, begin.size.height);
-    notiInfo.end      = axis::Rect(end.origin.x, end.origin.y, end.size.width, end.size.height);
+    ax::IMEKeyboardNotificationInfo notiInfo;
+    notiInfo.begin    = ax::Rect(begin.origin.x, begin.origin.y, begin.size.width, begin.size.height);
+    notiInfo.end      = ax::Rect(end.origin.x, end.origin.y, end.size.width, end.size.height);
     notiInfo.duration = (float)aniDuration;
 
-    axis::IMEDispatcher* dispatcher = axis::IMEDispatcher::sharedDispatcher();
+    ax::IMEDispatcher* dispatcher = ax::IMEDispatcher::sharedDispatcher();
     if (UIKeyboardWillShowNotification == type)
     {
         dispatcher->dispatchKeyboardWillShow(notiInfo);

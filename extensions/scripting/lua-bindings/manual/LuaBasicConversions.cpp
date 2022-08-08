@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@
 std::unordered_map<uintptr_t, const char*> g_luaType;
 std::unordered_map<cxx17::string_view, const char*> g_typeCast;
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName)
 {
     if (NULL == L || NULL == err || NULL == msg || 0 == strlen(msg))
@@ -93,7 +93,7 @@ bool luaval_to_ushort(lua_State* L, int lo, unsigned short* outValue, const char
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -117,7 +117,7 @@ bool luaval_to_float(lua_State* L, int lo, float* outValue, const char* funcName
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -141,7 +141,7 @@ bool luaval_to_int32(lua_State* L, int lo, int* outValue, const char* funcName)
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -181,7 +181,7 @@ bool luaval_to_uint32(lua_State* L, int lo, unsigned int* outValue, const char* 
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -205,7 +205,7 @@ bool luaval_to_uint16(lua_State* L, int lo, uint16_t* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -229,7 +229,7 @@ bool luaval_to_boolean(lua_State* L, int lo, bool* outValue, const char* funcNam
     tolua_Error tolua_err;
     if (!tolua_isboolean(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -253,7 +253,7 @@ bool luaval_to_number(lua_State* L, int lo, double* outValue, const char* funcNa
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -277,7 +277,7 @@ bool luaval_to_long_long(lua_State* L, int lo, long long* outValue, const char* 
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -301,7 +301,7 @@ bool luaval_to_std_string(lua_State* L, int lo, std::string* outValue, const cha
     tolua_Error tolua_err;
     if (!tolua_iscppstring(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -327,7 +327,7 @@ bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValu
     tolua_Error tolua_err;
     if (!tolua_iscppstring(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -343,7 +343,7 @@ bool luaval_to_std_string_view(lua_State* L, int lo, cxx17::string_view* outValu
     return ok;
 }
 
-bool luaval_to_vec2(lua_State* L, int lo, axis::Vec2* outValue, const char* funcName)
+bool luaval_to_vec2(lua_State* L, int lo, ax::Vec2* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -353,7 +353,7 @@ bool luaval_to_vec2(lua_State* L, int lo, axis::Vec2* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -392,7 +392,7 @@ bool luaval_to_vec2(lua_State* L, int lo, axis::Vec2* outValue, const char* func
     return ok;
 }
 
-bool luaval_to_vec3(lua_State* L, int lo, axis::Vec3* outValue, const char* funcName)
+bool luaval_to_vec3(lua_State* L, int lo, ax::Vec3* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -402,7 +402,7 @@ bool luaval_to_vec3(lua_State* L, int lo, axis::Vec3* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -428,7 +428,7 @@ bool luaval_to_vec3(lua_State* L, int lo, axis::Vec3* outValue, const char* func
     return ok;
 }
 
-bool luaval_to_vec4(lua_State* L, int lo, axis::Vec4* outValue, const char* funcName)
+bool luaval_to_vec4(lua_State* L, int lo, ax::Vec4* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -438,7 +438,7 @@ bool luaval_to_vec4(lua_State* L, int lo, axis::Vec4* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -469,7 +469,7 @@ bool luaval_to_vec4(lua_State* L, int lo, axis::Vec4* outValue, const char* func
     return ok;
 }
 
-bool luaval_to_blendfunc(lua_State* L, int lo, axis::BlendFunc* outValue, const char* funcName)
+bool luaval_to_blendfunc(lua_State* L, int lo, ax::BlendFunc* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -479,7 +479,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, axis::BlendFunc* outValue, const 
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -491,7 +491,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, axis::BlendFunc* outValue, const 
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
-            outValue->src = static_cast<axis::backend::BlendFactor>(lua_tointeger(L, -1));
+            outValue->src = static_cast<ax::backend::BlendFactor>(lua_tointeger(L, -1));
         }
         lua_pop(L, 1);
 
@@ -499,7 +499,7 @@ bool luaval_to_blendfunc(lua_State* L, int lo, axis::BlendFunc* outValue, const 
         lua_gettable(L, lo);
         if (!lua_isnil(L, -1))
         {
-            outValue->dst = static_cast<axis::backend::BlendFactor>(lua_tointeger(L, -1));
+            outValue->dst = static_cast<ax::backend::BlendFactor>(lua_tointeger(L, -1));
         }
         lua_pop(L, 1);
     }
@@ -517,7 +517,7 @@ bool luaval_to_physics_material(lua_State* L, int lo, PhysicsMaterial* outValue,
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#    if AXIS_DEBUG >= 1
+#    if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #    endif
         ok = false;
@@ -554,7 +554,7 @@ bool luaval_to_ssize_t(lua_State* L, int lo, ssize_t* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -578,7 +578,7 @@ bool luaval_to_size_t(lua_State* L, int lo, size_t* outValue, const char* funcNa
     tolua_Error tolua_err;
     if (!tolua_isnumber(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -602,7 +602,7 @@ bool luaval_to_size(lua_State* L, int lo, Size* outValue, const char* funcName)
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -634,7 +634,7 @@ bool luaval_to_rect(lua_State* L, int lo, Rect* outValue, const char* funcName)
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -676,7 +676,7 @@ bool luaval_to_color4b(lua_State* L, int lo, Color4B* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -718,7 +718,7 @@ bool luaval_to_color4f(lua_State* L, int lo, Color4F* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -760,7 +760,7 @@ bool luaval_to_color3b(lua_State* L, int lo, Color3B* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -797,7 +797,7 @@ bool luaval_to_affinetransform(lua_State* L, int lo, AffineTransform* outValue, 
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1003,7 +1003,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
         }
         lua_pop(L, 1);
     }
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
     else
     {
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
@@ -1013,7 +1013,7 @@ bool luaval_to_fontdefinition(lua_State* L, int lo, FontDefinition* outValue, co
     return ok;
 }
 
-bool luaval_to_ttfconfig(lua_State* L, int lo, axis::TTFConfig* outValue, const char* funcName)
+bool luaval_to_ttfconfig(lua_State* L, int lo, ax::TTFConfig* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1023,7 +1023,7 @@ bool luaval_to_ttfconfig(lua_State* L, int lo, axis::TTFConfig* outValue, const 
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1068,7 +1068,7 @@ bool luaval_to_ttfconfig(lua_State* L, int lo, axis::TTFConfig* outValue, const 
     return false;
 }
 
-bool luaval_to_mat4(lua_State* L, int lo, axis::Mat4* outValue, const char* funcName)
+bool luaval_to_mat4(lua_State* L, int lo, ax::Mat4* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1078,7 +1078,7 @@ bool luaval_to_mat4(lua_State* L, int lo, axis::Mat4* outValue, const char* func
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
         ok = false;
 #endif
@@ -1114,7 +1114,7 @@ bool luaval_to_mat4(lua_State* L, int lo, axis::Mat4* outValue, const char* func
     return ok;
 }
 
-bool luaval_to_array_of_vec2(lua_State* L, int lo, axis::Vec2** points, int* numPoints, const char* funcName)
+bool luaval_to_array_of_vec2(lua_State* L, int lo, ax::Vec2** points, int* numPoints, const char* funcName)
 {
     if (NULL == L)
         return false;
@@ -1125,7 +1125,7 @@ bool luaval_to_array_of_vec2(lua_State* L, int lo, axis::Vec2** points, int* num
 
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1136,7 +1136,7 @@ bool luaval_to_array_of_vec2(lua_State* L, int lo, axis::Vec2** points, int* num
         size_t len = lua_objlen(L, lo);
         if (len > 0)
         {
-            axis::Vec2* array = (axis::Vec2*)new Vec2[len];
+            ax::Vec2* array = (ax::Vec2*)new Vec2[len];
             if (NULL == array)
                 return false;
             for (size_t i = 0; i < len; ++i)
@@ -1145,7 +1145,7 @@ bool luaval_to_array_of_vec2(lua_State* L, int lo, axis::Vec2** points, int* num
                 lua_gettable(L, lo);
                 if (!tolua_istable(L, -1, 0, &tolua_err))
                 {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
                     luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
                     lua_pop(L, 1);
@@ -1169,7 +1169,7 @@ bool luaval_to_array_of_vec2(lua_State* L, int lo, axis::Vec2** points, int* num
     return ok;
 }
 
-bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, axis::ValueVector* ret)
+bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* ret)
 {
     if (nullptr == L || argc == 0)
         return false;
@@ -1228,7 +1228,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, axis::ValueVector
     return true;
 }
 
-bool luaval_to_ccvalue(lua_State* L, int lo, axis::Value* ret, const char* funcName)
+bool luaval_to_ccvalue(lua_State* L, int lo, ax::Value* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1284,7 +1284,7 @@ bool luaval_to_ccvalue(lua_State* L, int lo, axis::Value* ret, const char* funcN
 
     return ok;
 }
-bool luaval_to_ccvaluemap(lua_State* L, int lo, axis::ValueMap* ret, const char* funcName)
+bool luaval_to_ccvaluemap(lua_State* L, int lo, ax::ValueMap* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1293,7 +1293,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, axis::ValueMap* ret, const char*
     bool ok = true;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1371,7 +1371,7 @@ bool luaval_to_ccvaluemap(lua_State* L, int lo, axis::ValueMap* ret, const char*
 
     return ok;
 }
-bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, axis::ValueMapIntKey* ret, const char* funcName)
+bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, ax::ValueMapIntKey* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1380,7 +1380,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, axis::ValueMapIntKey* ret,
     bool ok = true;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1459,7 +1459,7 @@ bool luaval_to_ccvaluemapintkey(lua_State* L, int lo, axis::ValueMapIntKey* ret,
 
     return ok;
 }
-bool luaval_to_ccvaluevector(lua_State* L, int lo, axis::ValueVector* ret, const char* funcName)
+bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret)
         return false;
@@ -1468,7 +1468,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, axis::ValueVector* ret, const
     bool ok = true;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1550,7 +1550,7 @@ bool luaval_to_std_vector_string(lua_State* L, int lo, std::vector<std::string>*
     bool ok = true;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1591,7 +1591,7 @@ bool luaval_to_std_vector_string_view(lua_State* L, int lo, std::vector<std::str
     bool ok = true;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1632,7 +1632,7 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
     bool ok = true;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1661,7 +1661,7 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
     return ok;
 }
 
-bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, axis::MeshVertexAttrib* ret, const char* funcName)
+bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, ax::MeshVertexAttrib* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -1671,7 +1671,7 @@ bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, axis::MeshVertexAttrib* 
 
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1704,7 +1704,7 @@ bool luaval_to_std_vector_float(lua_State* L, int lo, std::vector<float>* ret, c
 
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1743,7 +1743,7 @@ bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned shor
 
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1772,7 +1772,7 @@ bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned shor
     return ok;
 }
 
-bool luaval_to_quaternion(lua_State* L, int lo, axis::Quaternion* outValue, const char* funcName)
+bool luaval_to_quaternion(lua_State* L, int lo, ax::Quaternion* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1782,7 +1782,7 @@ bool luaval_to_quaternion(lua_State* L, int lo, axis::Quaternion* outValue, cons
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1813,7 +1813,7 @@ bool luaval_to_quaternion(lua_State* L, int lo, axis::Quaternion* outValue, cons
     return ok;
 }
 
-bool luaval_to_texparams(lua_State* L, int lo, axis::Texture2D::TexParams* outValue, const char* funcName)
+bool luaval_to_texparams(lua_State* L, int lo, ax::Texture2D::TexParams* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1823,7 +1823,7 @@ bool luaval_to_texparams(lua_State* L, int lo, axis::Texture2D::TexParams* outVa
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1854,7 +1854,7 @@ bool luaval_to_texparams(lua_State* L, int lo, axis::Texture2D::TexParams* outVa
     return ok;
 }
 
-bool luaval_to_tex2f(lua_State* L, int lo, axis::Tex2F* outValue, const char* funcName)
+bool luaval_to_tex2f(lua_State* L, int lo, ax::Tex2F* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1864,7 +1864,7 @@ bool luaval_to_tex2f(lua_State* L, int lo, axis::Tex2F* outValue, const char* fu
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1885,7 +1885,7 @@ bool luaval_to_tex2f(lua_State* L, int lo, axis::Tex2F* outValue, const char* fu
     return ok;
 }
 
-bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, axis::V3F_C4B_T2F* outValue, const char* funcName)
+bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, ax::V3F_C4B_T2F* outValue, const char* funcName)
 {
     if (nullptr == L || nullptr == outValue)
         return false;
@@ -1895,7 +1895,7 @@ bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, axis::V3F_C4B_T2F* outValue, co
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1952,7 +1952,7 @@ bool luaval_to_v3f_c4b_t2f(lua_State* L, int lo, axis::V3F_C4B_T2F* outValue, co
     return ok;
 }
 
-bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<axis::Vec2>* ret, const char* funcName)
+bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -1962,7 +1962,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<axis::Vec2>* re
 
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -1971,7 +1971,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<axis::Vec2>* re
     if (ok)
     {
         size_t len = lua_objlen(L, lo);
-        axis::Vec2 value;
+        ax::Vec2 value;
         for (size_t i = 0; i < len; i++)
         {
             lua_pushnumber(L, i + 1);
@@ -1995,7 +1995,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<axis::Vec2>* re
     return ok;
 }
 
-bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<axis::Vec3>* ret, const char* funcName)
+bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret, const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
         return false;
@@ -2005,7 +2005,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<axis::Vec3>* re
 
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -2014,7 +2014,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<axis::Vec3>* re
     if (ok)
     {
         size_t len = lua_objlen(L, lo);
-        axis::Vec3 value;
+        ax::Vec3 value;
         for (size_t i = 0; i < len; i++)
         {
             lua_pushnumber(L, i + 1);
@@ -2040,7 +2040,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<axis::Vec3>* re
 
 bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
                                       int lo,
-                                      std::vector<axis::V3F_C4B_T2F>* ret,
+                                      std::vector<ax::V3F_C4B_T2F>* ret,
                                       const char* funcName)
 {
     if (nullptr == L || nullptr == ret || lua_gettop(L) < lo)
@@ -2051,7 +2051,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
 
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -2060,7 +2060,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
     if (ok)
     {
         size_t len = lua_objlen(L, lo);
-        axis::V3F_C4B_T2F value;
+        ax::V3F_C4B_T2F value;
         for (size_t i = 0; i < len; i++)
         {
             lua_pushnumber(L, i + 1);
@@ -2083,7 +2083,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
     return ok;
 }
 
-void vec2_array_to_luaval(lua_State* L, const axis::Vec2* points, int count)
+void vec2_array_to_luaval(lua_State* L, const ax::Vec2* points, int count)
 {
     if (NULL == L)
         return;
@@ -2137,7 +2137,7 @@ static int vec2_newindex(lua_State* L)
     return 0;
 }
 
-int vec2_to_luaval(lua_State* L, const axis::Vec2& vec2)
+int vec2_to_luaval(lua_State* L, const ax::Vec2& vec2)
 {
     lua_createtable(L, 2, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec2.x); /* L: table key value*/
@@ -2181,7 +2181,7 @@ static int vec3_newindex(lua_State* L)
     return 0;
 }
 
-int vec3_to_luaval(lua_State* L, const axis::Vec3& vec3)
+int vec3_to_luaval(lua_State* L, const ax::Vec3& vec3)
 {
     lua_createtable(L, 3, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec3.x); /* L: table key value*/
@@ -2227,7 +2227,7 @@ static int vec4_newindex(lua_State* L)
     return 0;
 }
 
-int vec4_to_luaval(lua_State* L, const axis::Vec4& vec4)
+int vec4_to_luaval(lua_State* L, const ax::Vec4& vec4)
 {
     lua_createtable(L, 4, 0);              /* L: table */
     lua_pushnumber(L, (lua_Number)vec4.x); /* L: table key value*/
@@ -2503,7 +2503,7 @@ void fontdefinition_to_luaval(lua_State* L, const FontDefinition& inValue)
     lua_rawset(L, -3);                                          /* table[key] = value, L: table */
 }
 
-void ccvalue_to_luaval(lua_State* L, const axis::Value& inValue)
+void ccvalue_to_luaval(lua_State* L, const ax::Value& inValue)
 {
     const Value& obj = inValue;
     switch (obj.getTypeFamily())
@@ -2534,7 +2534,7 @@ void ccvalue_to_luaval(lua_State* L, const axis::Value& inValue)
         break;
     }
 }
-void ccvaluemap_to_luaval(lua_State* L, const axis::ValueMap& inValue)
+void ccvaluemap_to_luaval(lua_State* L, const ax::ValueMap& inValue)
 {
     lua_newtable(L);
 
@@ -2602,7 +2602,7 @@ void ccvaluemap_to_luaval(lua_State* L, const axis::ValueMap& inValue)
         }
     }
 }
-void ccvaluemapintkey_to_luaval(lua_State* L, const axis::ValueMapIntKey& inValue)
+void ccvaluemapintkey_to_luaval(lua_State* L, const ax::ValueMapIntKey& inValue)
 {
     lua_newtable(L);
 
@@ -2674,7 +2674,7 @@ void ccvaluemapintkey_to_luaval(lua_State* L, const axis::ValueMapIntKey& inValu
         }
     }
 }
-void ccvaluevector_to_luaval(lua_State* L, const axis::ValueVector& inValue)
+void ccvaluevector_to_luaval(lua_State* L, const ax::ValueVector& inValue)
 {
     lua_newtable(L);
 
@@ -2749,7 +2749,7 @@ void ccvaluevector_to_luaval(lua_State* L, const axis::ValueVector& inValue)
     }
 }
 
-void mat4_to_luaval(lua_State* L, const axis::Mat4& mat)
+void mat4_to_luaval(lua_State* L, const ax::Mat4& mat)
 {
     if (nullptr == L)
         return;
@@ -2766,7 +2766,7 @@ void mat4_to_luaval(lua_State* L, const axis::Mat4& mat)
     }
 }
 
-void blendfunc_to_luaval(lua_State* L, const axis::BlendFunc& func)
+void blendfunc_to_luaval(lua_State* L, const ax::BlendFunc& func)
 {
     if (nullptr == L)
         return;
@@ -2781,7 +2781,7 @@ void blendfunc_to_luaval(lua_State* L, const axis::BlendFunc& func)
     lua_rawset(L, -3);
 }
 
-void ttfconfig_to_luaval(lua_State* L, const axis::TTFConfig& config)
+void ttfconfig_to_luaval(lua_State* L, const ax::TTFConfig& config)
 {
     if (nullptr == L)
         return;
@@ -2813,7 +2813,7 @@ void ttfconfig_to_luaval(lua_State* L, const axis::TTFConfig& config)
     lua_rawset(L, -3);
 }
 
-void mesh_vertex_attrib_to_luaval(lua_State* L, const axis::MeshVertexAttrib& inValue)
+void mesh_vertex_attrib_to_luaval(lua_State* L, const ax::MeshVertexAttrib& inValue)
 {
     if (nullptr == L)
         return;
@@ -2902,7 +2902,7 @@ void ccvector_ushort_to_luaval(lua_State* L, const std::vector<unsigned short>& 
     }
 }
 
-void quaternion_to_luaval(lua_State* L, const axis::Quaternion& inValue)
+void quaternion_to_luaval(lua_State* L, const ax::Quaternion& inValue)
 {
     if (NULL == L)
         return;
@@ -2922,7 +2922,7 @@ void quaternion_to_luaval(lua_State* L, const axis::Quaternion& inValue)
     lua_rawset(L, -3);
 }
 
-void texParams_to_luaval(lua_State* L, const axis::Texture2D::TexParams& inValue)
+void texParams_to_luaval(lua_State* L, const ax::Texture2D::TexParams& inValue)
 {
     if (nullptr == L)
         return;
@@ -2943,7 +2943,7 @@ void texParams_to_luaval(lua_State* L, const axis::Texture2D::TexParams& inValue
     lua_rawset(L, -3);
 }
 
-void std_vector_vec3_to_luaval(lua_State* L, const std::vector<axis::Vec3>& inValue)
+void std_vector_vec3_to_luaval(lua_State* L, const std::vector<ax::Vec3>& inValue)
 {
     if (nullptr == L)
         return;
@@ -2951,7 +2951,7 @@ void std_vector_vec3_to_luaval(lua_State* L, const std::vector<axis::Vec3>& inVa
     lua_newtable(L);
 
     int index = 1;
-    for (const axis::Vec3& value : inValue)
+    for (const ax::Vec3& value : inValue)
     {
         lua_pushnumber(L, (lua_Number)index);
         vec3_to_luaval(L, value);
@@ -2984,7 +2984,7 @@ bool luaval_to_std_map_string_string(lua_State* L, int lo, hlookup::string_map<s
     bool ok = true;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;
@@ -3016,23 +3016,23 @@ bool luaval_to_std_map_string_string(lua_State* L, int lo, hlookup::string_map<s
     return ok;
 }
 
-bool luaval_to_node(lua_State* L, int lo, const char* type, axis::Node** node)
+bool luaval_to_node(lua_State* L, int lo, const char* type, ax::Node** node)
 {
-    return luaval_to_object<axis::Node>(L, lo, type, node);
+    return luaval_to_object<ax::Node>(L, lo, type, node);
 }
 
-void node_to_luaval(lua_State* L, const char* type, axis::Node* node)
+void node_to_luaval(lua_State* L, const char* type, ax::Node* node)
 {
-    object_to_luaval<axis::Node>(L, type, node);
+    object_to_luaval<ax::Node>(L, type, node);
 }
 
-bool luaval_to_vertexLayout(lua_State* L, int pos, axis::backend::VertexLayout& outLayout, const char* message)
+bool luaval_to_vertexLayout(lua_State* L, int pos, ax::backend::VertexLayout& outLayout, const char* message)
 {
     if (L == nullptr)
         return false;
 
-    axis::backend::VertexLayout* tmp = nullptr;
-    auto ret = luaval_to_object<axis::backend::VertexLayout>(L, pos, "ax.VertexLayout", &tmp, message);
+    ax::backend::VertexLayout* tmp = nullptr;
+    auto ret = luaval_to_object<ax::backend::VertexLayout>(L, pos, "ax.VertexLayout", &tmp, message);
     if (!tmp)
     {
         return false;
@@ -3043,7 +3043,7 @@ bool luaval_to_vertexLayout(lua_State* L, int pos, axis::backend::VertexLayout& 
 
 bool luaval_to_samplerDescriptor(lua_State* L,
                                  int pos,
-                                 axis::backend::SamplerDescriptor& output,
+                                 ax::backend::SamplerDescriptor& output,
                                  const char* message)
 {
     if (L == nullptr)
@@ -3053,7 +3053,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.magFilter = static_cast<axis::backend::SamplerFilter>(lua_tointeger(L, -1));
+        output.magFilter = static_cast<ax::backend::SamplerFilter>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3061,7 +3061,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.minFilter = static_cast<axis::backend::SamplerFilter>(lua_tointeger(L, -1));
+        output.minFilter = static_cast<ax::backend::SamplerFilter>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3069,7 +3069,7 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.sAddressMode = static_cast<axis::backend::SamplerAddressMode>(lua_tointeger(L, -1));
+        output.sAddressMode = static_cast<ax::backend::SamplerAddressMode>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
@@ -3077,14 +3077,14 @@ bool luaval_to_samplerDescriptor(lua_State* L,
     lua_gettable(L, pos);
     if (!lua_isnil(L, -1))
     {
-        output.tAddressMode = static_cast<axis::backend::SamplerAddressMode>(lua_tointeger(L, -1));
+        output.tAddressMode = static_cast<ax::backend::SamplerAddressMode>(lua_tointeger(L, -1));
     }
     lua_pop(L, 1);
 
     return true;
 }
 
-bool luaval_to_uniformLocation(lua_State* L, int pos, axis::backend::UniformLocation& loc, const char* message)
+bool luaval_to_uniformLocation(lua_State* L, int pos, ax::backend::UniformLocation& loc, const char* message)
 {
     if (L == nullptr)
         return false;
@@ -3110,12 +3110,12 @@ bool luaval_to_uniformLocation(lua_State* L, int pos, axis::backend::UniformLoca
     {
         AXASSERT(false, "invalidate UniformLocation value");
     }
-    loc.shaderStage = static_cast<axis::backend::ShaderStage>(lua_tointeger(L, -1));
+    loc.shaderStage = static_cast<ax::backend::ShaderStage>(lua_tointeger(L, -1));
     lua_pop(L, 1);
     return true;
 }
 
-void uniformLocation_to_luaval(lua_State* L, const axis::backend::UniformLocation& loc)
+void uniformLocation_to_luaval(lua_State* L, const ax::backend::UniformLocation& loc)
 {
     if (L == nullptr)
         return;
@@ -3136,7 +3136,7 @@ void uniformLocation_to_luaval(lua_State* L, const axis::backend::UniformLocatio
     lua_rawset(L, -3);
 }
 
-void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<axis::backend::AttributeBindInfo>& attrs)
+void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::backend::AttributeBindInfo>& attrs)
 {
     if (L == nullptr)
         return;
@@ -3171,7 +3171,7 @@ void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<axis:
     }
 }
 
-void resourceData_to_luaval(lua_State* L, const axis::ResourceData& data)
+void resourceData_to_luaval(lua_State* L, const ax::ResourceData& data)
 {
     if (L == nullptr)
         return;

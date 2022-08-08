@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -36,9 +36,9 @@ USING_NS_AX;
 
 // Enable log on Debug version
 #ifndef NDEBUG
-#    define AXIS_DEBUG 1
+#    define _AX_DEBUG 1
 #else
-#    define AXIS_DEBUG 0
+#    define _AX_DEBUG 0
 #endif
 
 AppDelegate::AppDelegate() : _testController(nullptr) {}
@@ -99,19 +99,19 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     if (screenSize.height > 320)
     {
-        searchPaths.push_back("hd");
-        searchPaths.push_back("ccs-res/hd");
-        searchPaths.push_back("ccs-res");
-        searchPaths.push_back("Manifests");
+        searchPaths.emplace_back("hd");
+        searchPaths.emplace_back("ccs-res/hd");
+        searchPaths.emplace_back("ccs-res");
+        searchPaths.emplace_back("Manifests");
         director->setContentScaleFactor(resourceSize.height / designSize.height);
 
-        searchPaths.push_back("hd/ActionTimeline");
+        searchPaths.emplace_back("hd/ActionTimeline");
     }
     else
     {
-        searchPaths.push_back("ccs-res");
+        searchPaths.emplace_back("ccs-res");
 
-        searchPaths.push_back("ActionTimeline");
+        searchPaths.emplace_back("ActionTimeline");
     }
 
     fileUtils->setSearchPaths(searchPaths);

@@ -33,8 +33,8 @@ CMDLINETOOLS_REV = "8512546"
 NDK_VER = "23.2.8568313" # "r23c LTS"
 
 # ANDROID_NDK = os.path.join(ROOT_DIR, "android-ndk-" + NDK_VER)
-ANDROID_SDK = os.path.join(ROOT_DIR, "android-sdk")
-ANDROID_NDK = os.path.join(ANDROID_SDK, "ndk/" + NDK_VER)
+ANDROID_SDK_ROOT = os.path.join(ROOT_DIR, "android-sdk")
+ANDROID_NDK = os.path.join(ANDROID_SDK_ROOT, "ndk/" + NDK_VER)
 SDK_MANAGER = os.path.join(ROOT_DIR, "cmdline-tools/bin/sdkmanager")
 SYSTEM = platform.system().lower()
 if SYSTEM == "windows":
@@ -95,15 +95,15 @@ def install_android_cmdline_tools():
 @retry(Exception, tries=5, delay=1, backoff=1)
 def install_android_sdk():
     # list packages
-    run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK)
+    run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK_ROOT)
     
-    switches = " --verbose --sdk_root=" + ANDROID_SDK + " "
+    switches = " --verbose --sdk_root=" + ANDROID_SDK_ROOT + " "
     cmd_base = SDK_MANAGER + switches
     packages = [
         'platform-tools',
         'cmdline-tools;latest',
         'platforms;android-33',
-        'build-tools;33.0.0',
+        'build-tools;30.0.3', # match with AGP 7.2.0: https://developer.android.com/studio/releases/gradle-plugin
         'cmake;3.22.1',
         'ndk;' + NDK_VER
     ]
@@ -115,17 +115,15 @@ def install_android_sdk():
 def export_environment(ndk_only):
     with open(os.path.join(ROOT_DIR, "environment.sh"), "a") as myfile:
         if not ndk_only:
-            myfile.write("export ANDROID_SDK=" + ANDROID_SDK + "\n")
-            myfile.write("export ANDROID_HOME=" + ANDROID_SDK + "\n")
-            myfile.write("export ANDROID_SDK_ROOT=" + ANDROID_SDK + "\n")
-        myfile.write("export ANDROID_NDK=" + ANDROID_NDK + "\n")
+            myfile.write("export ANDROID_SDK_ROOT=" + ANDROID_SDK_ROOT + "\n") # refer to: https://developer.android.google.cn/studio/command-line/variables
+            myfile.write("export ANDROID_HOME=" + ANDROID_SDK_ROOT + "\n") # github action has ANDROID_HOME=/usr/local/lib/android/sdk
+        myfile.write("export ANDROID_NDK=" + ANDROID_NDK + "\n") # for lua binding generator
 
     with open(os.path.join(ROOT_DIR, "environment.ps1"), "a") as myfile:
         if not ndk_only:
-            myfile.write("$env:ANDROID_SDK=\"" + ANDROID_SDK + "\"\n")
-            myfile.write("$env:ANDROID_HOME=\"" + ANDROID_SDK + "\"\n")
-            myfile.write("$env:ANDROID_SDK_ROOT=\"" + ANDROID_SDK + "\"\n")
-        myfile.write("$env:ANDROID_NDK=\"" + ANDROID_NDK + "\"\n")
+            myfile.write("$env:ANDROID_SDK_ROOT=\"" + ANDROID_SDK_ROOT + "\"\n")
+            myfile.write("$env:ANDROID_HOME=\"" + ANDROID_SDK_ROOT + "\"\n")
+        myfile.write("$env:ANDROID_NDK=\"" + ANDROID_NDK + "\"\n") # for lua binding generator
 
 def main(ndk_only):
     install_android_cmdline_tools()

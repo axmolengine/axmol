@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -110,7 +110,7 @@ bool GLViewImpl::isOpenGLReady()
 
 void GLViewImpl::end()
 {
-    JniHelper::callStaticVoidMethod("org.cocos2dx.lib.Cocos2dxHelper", "terminateProcess");
+    JniHelper::callStaticVoidMethod("org.axys1.lib.AxysHelper", "terminateProcess");
 }
 
 void GLViewImpl::swapBuffers() {}
@@ -119,11 +119,11 @@ void GLViewImpl::setIMEKeyboardState(bool bOpen)
 {
     if (bOpen)
     {
-        JniHelper::callStaticVoidMethod("org.cocos2dx.lib.Cocos2dxGLSurfaceView", "openIMEKeyboard");
+        JniHelper::callStaticVoidMethod("org.axys1.lib.AxysGLSurfaceView", "openIMEKeyboard");
     }
     else
     {
-        JniHelper::callStaticVoidMethod("org.cocos2dx.lib.Cocos2dxGLSurfaceView", "closeIMEKeyboard");
+        JniHelper::callStaticVoidMethod("org.axys1.lib.AxysGLSurfaceView", "closeIMEKeyboard");
     }
 }
 
@@ -143,9 +143,9 @@ Rect GLViewImpl::getSafeAreaRect() const
     float marginX = DEFAULT_MARGIN_ANDROID / _scaleX;
     float marginY = DEFAULT_MARGIN_ANDROID / _scaleY;
 
-    bool isScreenRound   = JniHelper::callStaticBooleanMethod("org/cocos2dx/lib/Cocos2dxHelper", "isScreenRound");
-    bool hasSoftKeys     = JniHelper::callStaticBooleanMethod("org/cocos2dx/lib/Cocos2dxHelper", "hasSoftKeys");
-    bool isCutoutEnabled = JniHelper::callStaticBooleanMethod("org/cocos2dx/lib/Cocos2dxHelper", "isCutoutEnabled");
+    bool isScreenRound   = JniHelper::callStaticBooleanMethod("org/axys1/lib/AxysHelper", "isScreenRound");
+    bool hasSoftKeys     = JniHelper::callStaticBooleanMethod("org/axys1/lib/AxysHelper", "hasSoftKeys");
+    bool isCutoutEnabled = JniHelper::callStaticBooleanMethod("org/axys1/lib/AxysHelper", "isCutoutEnabled");
 
     if (isScreenRound)
     {
@@ -204,7 +204,7 @@ Rect GLViewImpl::getSafeAreaRect() const
     {
         // screen with enabled cutout area (ex. Google Pixel 3 XL, Huawei P20, Asus ZenFone 5, etc)
         static int* safeInsets =
-            JniHelper::callStaticIntArrayMethod("org/cocos2dx/lib/Cocos2dxHelper", "getSafeInsets");
+            JniHelper::callStaticIntArrayMethod("org/axys1/lib/AxysHelper", "getSafeInsets");
         if (safeInsets != nullptr)
         {
             float safeInsetBottom = safeInsets[0] / _scaleY;

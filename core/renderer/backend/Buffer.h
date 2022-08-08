@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ NS_AX_BEGIN
 
 class MeshVertexData;
 class MeshIndexData;
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 NS_AX_BACKEND_BEGIN
 
@@ -44,7 +44,7 @@ NS_AX_BACKEND_BEGIN
 /**
  * @brief Used to store vertex and index data data.
  */
-class Buffer : public axis::Ref
+class Buffer : public ax::Ref
 {
 public:
     /**

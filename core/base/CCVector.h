@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2017 Chukong Technologies
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -110,7 +110,7 @@ public:
     /** Constructor. */
     Vector<T>() : _data()
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector<T>!");
     }
 
     /**
@@ -119,7 +119,7 @@ public:
      */
     explicit Vector<T>(ssize_t capacity) : _data()
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector<T>!");
         AXLOGINFO("In the default constructor with capacity of Vector.");
         reserve(capacity);
     }
@@ -143,7 +143,7 @@ public:
     /** Copy constructor. */
     Vector<T>(const Vector<T>& other)
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector<T>!");
         AXLOGINFO("In the copy constructor!");
         _data = other._data;
         addRefForAllObjects();
@@ -152,7 +152,7 @@ public:
     /** Constructor with std::move semantic. */
     Vector<T>(Vector<T>&& other)
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for axis::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector<T>!");
         AXLOGINFO("In the move constructor of Vector!");
         _data = std::move(other._data);
     }
@@ -306,7 +306,7 @@ public:
     void pushBack(T object)
     {
         AXASSERT(object != nullptr, "The object should not be nullptr");
-        _data.push_back(object);
+        _data.emplace_back(object);
         object->retain();
     }
 
@@ -315,7 +315,7 @@ public:
     {
         for (const auto& obj : other)
         {
-            _data.push_back(obj);
+            _data.emplace_back(obj);
             obj->retain();
         }
     }

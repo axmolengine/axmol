@@ -30,11 +30,11 @@ private:
     class GearColorValue
     {
     public:
-        axis::Color3B color;
-        axis::Color3B outlineColor;
+        ax::Color3B color;
+        ax::Color3B outlineColor;
 
         GearColorValue();
-        GearColorValue(const axis::Color3B& color, const axis::Color3B& outlineColor);
+        GearColorValue(const ax::Color3B& color, const ax::Color3B& outlineColor);
     };
 
     std::unordered_map<std::string, GearColorValue> _storage;

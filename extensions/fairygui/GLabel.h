@@ -26,16 +26,16 @@ public:
     virtual const std::string& getIcon() const override;
     virtual void setIcon(const std::string& value) override;
 
-    axis::Color3B getTitleColor() const;
-    void setTitleColor(const axis::Color3B& value);
+    ax::Color3B getTitleColor() const;
+    void setTitleColor(const ax::Color3B& value);
 
     int getTitleFontSize() const;
     void setTitleFontSize(int value);
 
     GTextField* getTextField() const;
 
-    virtual axis::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
+    virtual ax::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const ax::Value& value) override;
 
 protected:
     virtual void constructExtension(ByteBuffer* buffer) override;

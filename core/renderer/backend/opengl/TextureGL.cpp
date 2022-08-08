@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -149,7 +149,7 @@ Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor)
 #endif
 }
 
-void Texture2DGL::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index)
+void Texture2DGL::updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index)
 {
     TextureBackend::updateTextureDescriptor(descriptor, index);
 
@@ -327,7 +327,7 @@ TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
     CHECK_GL_ERROR_DEBUG();
 }
 
-void TextureCubeGL::updateTextureDescriptor(const axis::backend::TextureDescriptor& descriptor, int index)
+void TextureCubeGL::updateTextureDescriptor(const ax::backend::TextureDescriptor& descriptor, int index)
 {
     backend::TextureCubemapBackend::updateTextureDescriptor(descriptor, index);
 

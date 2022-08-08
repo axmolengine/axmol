@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -193,14 +193,14 @@ void Director::setDefaultValues()
     Configuration* conf = Configuration::getInstance();
 
     // default FPS
-    float fps             = conf->getValue("axis.fps", Value(kDefaultFPS)).asFloat();
+    float fps             = conf->getValue("axys.fps", Value(kDefaultFPS)).asFloat();
     _oldAnimationInterval = _animationInterval = 1.0f / fps;
 
     // Display FPS
-    _statsDisplay = conf->getValue("axis.display_fps", Value(false)).asBool();
+    _statsDisplay = conf->getValue("axys.display_fps", Value(false)).asBool();
 
     // GL projection
-    std::string projection = conf->getValue("axis.gl.projection", Value("3d")).asString();
+    std::string projection = conf->getValue("axys.gl.projection", Value("3d")).asString();
     if (projection == "3d")
         _projection = Projection::_3D;
     else if (projection == "2d")
@@ -211,7 +211,7 @@ void Director::setDefaultValues()
         AXASSERT(false, "Invalid projection value");
 
     // Default pixel format for PNG images with alpha
-    std::string pixel_format = conf->getValue("axis.texture.pixel_format_for_png", Value("rgba8888")).asString();
+    std::string pixel_format = conf->getValue("axys.texture.pixel_format_for_png", Value("rgba8888")).asString();
     if (pixel_format == "rgba8888")
         Texture2D::setDefaultAlphaPixelFormat(backend::PixelFormat::RGBA8);
     else if (pixel_format == "rgba4444")
@@ -225,16 +225,16 @@ void Director::setDefaultValues()
     */
 
     // PVR v2 has alpha premultiplied ?
-    bool pvr_alpha_premultiplied = conf->getValue("axis.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
+    bool pvr_alpha_premultiplied = conf->getValue("axys.texture.pvrv2_has_alpha_premultiplied", Value(false)).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::PVR, pvr_alpha_premultiplied);
 
     // ASTC has alpha premultiplied ?
-    bool astc_alpha_premultiplied = conf->getValue("axis.texture.astc_has_pma", Value{true}).asBool();
+    bool astc_alpha_premultiplied = conf->getValue("axys.texture.astc_has_pma", Value{true}).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ASTC, astc_alpha_premultiplied);
 
     // ETC2 has alpha premultiplied ?
     // Note: no suitable tools(etc2comp, Mali Texture Compression Tool, PVRTexTool) support do PMA currently, so set etc2 PMA default to `false`
-    bool etc2_alpha_premultiplied = conf->getValue("axis.texture.etc2_has_pma", Value{false}).asBool();
+    bool etc2_alpha_premultiplied = conf->getValue("axys.texture.etc2_has_pma", Value{false}).asBool();
     Image::setCompressedImagesHavePMA(Image::CompressedImagePMAFlag::ETC2, etc2_alpha_premultiplied);
 }
 
@@ -358,7 +358,7 @@ void Director::calculateDeltaTime()
         _deltaTime = MAX(0, _deltaTime);
     }
 
-#if AXIS_DEBUG
+#if _AX_DEBUG
     // If we are debugging our code, prevent big delta time
     if (_deltaTime > 0.2f)
     {
@@ -973,7 +973,7 @@ void Director::reset()
     if (_eventDispatcher)
         _eventDispatcher->dispatchEvent(_eventResetDirector);
 
-    // Fix github issue: https://github.com/axis-project/axis/issues/550
+    // Fix github issue: https://github.com/axys1/axys/issues/550
     // !!!The AudioEngine hold scheduler must end before Director destroyed, otherwise, just lead app crash
     AudioEngine::end();
 

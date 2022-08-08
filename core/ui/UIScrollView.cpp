@@ -2,7 +2,7 @@
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -947,10 +947,10 @@ void ScrollView::gatherTouchMove(const Vec2& delta)
         _touchMoveDisplacements.pop_front();
         _touchMoveTimeDeltas.pop_front();
     }
-    _touchMoveDisplacements.push_back(delta);
+    _touchMoveDisplacements.emplace_back(delta);
 
     long long timestamp = utils::getTimeInMilliseconds();
-    _touchMoveTimeDeltas.push_back((timestamp - _touchMovePreviousTimestamp) / 1000.0f);
+    _touchMoveTimeDeltas.emplace_back((timestamp - _touchMovePreviousTimestamp) / 1000.0f);
     _touchMovePreviousTimestamp = timestamp;
 }
 
@@ -1576,7 +1576,7 @@ void ScrollView::removeScrollBar()
     }
 }
 
-Widget* ScrollView::findNextFocusedWidget(axis::ui::Widget::FocusDirection direction, axis::ui::Widget* current)
+Widget* ScrollView::findNextFocusedWidget(ax::ui::Widget::FocusDirection direction, ax::ui::Widget* current)
 {
     if (this->getLayoutType() == Layout::Type::VERTICAL || this->getLayoutType() == Layout::Type::HORIZONTAL)
     {

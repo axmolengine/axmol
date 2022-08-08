@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ NS_AX_BEGIN
 
 AutoreleasePool::AutoreleasePool()
     : _name("")
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     , _isClearing(false)
 #endif
 {
@@ -40,7 +40,7 @@ AutoreleasePool::AutoreleasePool()
 
 AutoreleasePool::AutoreleasePool(std::string_view name)
     : _name(name)
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     , _isClearing(false)
 #endif
 {
@@ -58,12 +58,12 @@ AutoreleasePool::~AutoreleasePool()
 
 void AutoreleasePool::addObject(Ref* object)
 {
-    _managedObjectArray.push_back(object);
+    _managedObjectArray.emplace_back(object);
 }
 
 void AutoreleasePool::clear()
 {
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     _isClearing = true;
 #endif
     std::vector<Ref*> releasings;
@@ -72,7 +72,7 @@ void AutoreleasePool::clear()
     {
         obj->release();
     }
-#if defined(AXIS_DEBUG) && (AXIS_DEBUG > 0)
+#if defined(_AX_DEBUG) && (_AX_DEBUG > 0)
     _isClearing = false;
 #endif
 }
@@ -157,7 +157,7 @@ bool PoolManager::isObjectInPools(Ref* obj) const
 
 void PoolManager::push(AutoreleasePool* pool)
 {
-    _releasePoolStack.push_back(pool);
+    _releasePoolStack.emplace_back(pool);
 }
 
 void PoolManager::pop()

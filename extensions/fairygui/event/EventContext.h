@@ -17,7 +17,7 @@ public:
     ~EventContext();
 
     int getType() const { return _type; }
-    axis::Ref* getSender() const { return _sender; }
+    ax::Ref* getSender() const { return _sender; }
     InputEvent* getInput() const { return _inputEvent; }
     void stopPropagation() { _isStopped = true; }
     void preventDefault() { _defaultPrevented = true; }
@@ -25,13 +25,13 @@ public:
     void captureTouch() { _touchCapture = 1; }
     void uncaptureTouch() { _touchCapture = 2; }
 
-    const axis::Value& getDataValue() const { return _dataValue; }
+    const ax::Value& getDataValue() const { return _dataValue; }
     void* getData() const { return _data; }
 
 private:
-    axis::Ref* _sender;
+    ax::Ref* _sender;
     InputEvent* _inputEvent;
-    axis::Value _dataValue;
+    ax::Value _dataValue;
     void* _data;
     bool _isStopped;
     bool _defaultPrevented;

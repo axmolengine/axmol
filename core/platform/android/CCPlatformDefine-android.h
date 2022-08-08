@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,14 +32,14 @@ THE SOFTWARE.
 #define AX_NO_MESSAGE_PSEUDOASSERT(cond)                                                                             \
     if (!(cond))                                                                                                     \
     {                                                                                                                \
-        __android_log_print(ANDROID_LOG_ERROR, "cocos2d-x assert", "%s function:%s line:%d", __FILE__, __FUNCTION__, \
+        __android_log_print(ANDROID_LOG_ERROR, "axys assert", "%s function:%s line:%d", __FILE__, __FUNCTION__, \
                             __LINE__);                                                                               \
     }
 
 #define AX_MESSAGE_PSEUDOASSERT(cond, msg)                                                                      \
     if (!(cond))                                                                                                \
     {                                                                                                           \
-        __android_log_print(ANDROID_LOG_ERROR, "cocos2d-x assert", "file:%s function:%s line:%d, %s", __FILE__, \
+        __android_log_print(ANDROID_LOG_ERROR, "axys assert", "file:%s function:%s line:%d, %s", __FILE__, \
                             __FUNCTION__, __LINE__, msg);                                                       \
     }
 

@@ -8,10 +8,10 @@ set(${target_name}_src
   javaactivity-android.cpp
   jni/JniHelper.cpp
   jni/TouchesJni.cpp
-  jni/Java_org_cocos2dx_lib_Cocos2dxAccelerometer.cpp
-  jni/Java_org_cocos2dx_lib_Cocos2dxBitmap.cpp
-  jni/Java_org_cocos2dx_lib_Cocos2dxHelper.cpp
-  jni/Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp
+  jni/Java_org_axys1_lib_AxysAccelerometer.cpp
+  jni/Java_org_axys1_lib_AxysBitmap.cpp
+  jni/Java_org_axys1_lib_AxysHelper.cpp
+  jni/Java_org_axys1_lib_AxysRenderer.cpp
 )
 
 add_library(${target_name} STATIC

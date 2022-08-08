@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013 cocos2d-x.org
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ NS_TIMELINE_BEGIN
 class Timeline;
 class ActionTimeline;
 
-class CCS_DLL Frame : public axis::Ref
+class CCS_DLL Frame : public ax::Ref
 {
 public:
     virtual void setFrameIndex(unsigned int frameIndex) { _frameIndex = frameIndex; }
@@ -48,14 +48,14 @@ public:
     virtual void setTimeline(Timeline* timeline) { _timeline = timeline; }
     virtual Timeline* getTimeline() const { return _timeline; }
 
-    virtual void setNode(axis::Node* node) { _node = node; }
-    virtual axis::Node* getNode() const { return _node; }
+    virtual void setNode(ax::Node* node) { _node = node; }
+    virtual ax::Node* getNode() const { return _node; }
 
     virtual void setTween(bool tween) { _tween = tween; }
     virtual bool isTween() const { return _tween; }
 
-    virtual void setTweenType(const axis::tweenfunc::TweenType& tweenType) { _tweenType = tweenType; }
-    virtual axis::tweenfunc::TweenType getTweenType() const { return _tweenType; }
+    virtual void setTweenType(const ax::tweenfunc::TweenType& tweenType) { _tweenType = tweenType; }
+    virtual ax::tweenfunc::TweenType getTweenType() const { return _tweenType; }
 
     // !to make easing with params, need setTweenType(TweenType::CUSTOM_EASING)
     virtual void setEasingParams(const std::vector<float>& easingParams);
@@ -84,10 +84,10 @@ protected:
     bool _tween;
     bool _enterWhenPassed;
 
-    axis::tweenfunc::TweenType _tweenType;
+    ax::tweenfunc::TweenType _tweenType;
     std::vector<float> _easingParam;
     Timeline* _timeline;
-    axis::Node* _node;
+    ax::Node* _node;
 };
 
 class CCS_DLL VisibleFrame : public Frame
@@ -114,7 +114,7 @@ public:
 
     TextureFrame();
 
-    virtual void setNode(axis::Node* node) override;
+    virtual void setNode(ax::Node* node) override;
 
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
@@ -123,7 +123,7 @@ public:
     inline std::string_view getTextureName() const { return _textureName; }
 
 protected:
-    axis::Sprite* _sprite;
+    ax::Sprite* _sprite;
     std::string _textureName;
 };
 
@@ -196,8 +196,8 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setPosition(const axis::Point& position) { _position = position; }
-    inline axis::Point getPosition() const { return _position; }
+    inline void setPosition(const ax::Point& position) { _position = position; }
+    inline ax::Point getPosition() const { return _position; }
 
     inline void setX(float x) { _position.x = x; }
     inline void setY(float y) { _position.y = y; }
@@ -208,7 +208,7 @@ public:
 protected:
     virtual void onApply(float percent) override;
 
-    axis::Point _position;
+    ax::Point _position;
     float _betweenX;
     float _betweenY;
 };
@@ -254,14 +254,14 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setAnchorPoint(const axis::Point& point) { _anchorPoint = point; }
-    inline axis::Point getAnchorPoint() const { return _anchorPoint; }
+    inline void setAnchorPoint(const ax::Point& point) { _anchorPoint = point; }
+    inline ax::Point getAnchorPoint() const { return _anchorPoint; }
 
 protected:
     virtual void onApply(float percent) override;
 
-    axis::Vec2 _betweenAnchorPoint;
-    axis::Vec2 _anchorPoint;
+    ax::Vec2 _betweenAnchorPoint;
+    ax::Vec2 _anchorPoint;
 };
 
 enum InnerActionType
@@ -320,14 +320,14 @@ public:
     AX_DEPRECATED_ATTRIBUTE inline void setAlpha(uint8_t alpha) { _alpha = alpha; }
     AX_DEPRECATED_ATTRIBUTE inline uint8_t getAlpha() const { return _alpha; }
 
-    inline void setColor(const axis::Color3B& color) { _color = color; }
-    inline axis::Color3B getColor() const { return _color; }
+    inline void setColor(const ax::Color3B& color) { _color = color; }
+    inline ax::Color3B getColor() const { return _color; }
 
 protected:
     virtual void onApply(float percent) override;
 
     uint8_t _alpha;
-    axis::Color3B _color;
+    ax::Color3B _color;
 
     int _betweenRed;
     int _betweenGreen;
@@ -361,7 +361,7 @@ public:
 
     EventFrame();
 
-    virtual void setNode(axis::Node* node) override;
+    virtual void setNode(ax::Node* node) override;
 
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
@@ -401,11 +401,11 @@ public:
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline axis::BlendFunc getBlendFunc() const { return _blendFunc; }
-    inline void setBlendFunc(axis::BlendFunc blendFunc) { _blendFunc = blendFunc; }
+    inline ax::BlendFunc getBlendFunc() const { return _blendFunc; }
+    inline void setBlendFunc(ax::BlendFunc blendFunc) { _blendFunc = blendFunc; }
 
 protected:
-    axis::BlendFunc _blendFunc;
+    ax::BlendFunc _blendFunc;
 };
 
 class CCS_DLL PlayableFrame : public Frame

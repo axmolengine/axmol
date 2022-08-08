@@ -1,25 +1,19 @@
-import org.gradle.internal.os.OperatingSystem
-import java.nio.file.Paths
-import java.nio.file.Files
-
 apply plugin: 'com.android.application'
-apply from: project(':libcocos2dx').projectDir.toString() + "/axistools.gradle"
+apply from: project(':libaxys1').projectDir.toString() + "/axutils.gradle"
 
 android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
 
-    // setup ndk
-    def ndkInfo = axistools.findNDK(project)
-    ndkVersion = ndkInfo[0]
-    if(ndkInfo[1]) {
-        ndkPath = ndkInfo[1]
+    // Setup native build tools: ndk & cmake
+    def nbtInfo = axutils.findNativeBuildTools(project)
+    ndkVersion = nbtInfo[0]
+    if(nbtInfo[1]) {
+        ndkPath = nbtInfo[1]
     }
-
-    // setup cmake
-    def cmakeVer = axistools.findCMake(project)
+    def cmakeVer = nbtInfo[2]
 
     defaultConfig {
-        applicationId "org.cocos2dx.fairygui_tests"
+        applicationId "org.axys1.fairygui_tests"
         minSdkVersion PROP_MIN_SDK_VERSION
         targetSdkVersion PROP_TARGET_SDK_VERSION
         versionCode 1
@@ -109,7 +103,7 @@ android.applicationVariants.all { variant ->
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':libcocos2dx')
+    implementation project(':libaxys1')
 }
 
 project.afterEvaluate {

@@ -4,7 +4,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -378,7 +378,7 @@ std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret)
 jstring newStringUTFJNI(JNIEnv* env, std::string_view utf8Str, bool* ret)
 {
     std::u16string utf16Str;
-    bool flag = axis::StringUtils::UTF8ToUTF16(utf8Str, utf16Str);
+    bool flag = ax::StringUtils::UTF8ToUTF16(utf8Str, utf16Str);
 
     if (ret)
     {
@@ -490,7 +490,7 @@ void StringUTF8::replace(std::string_view newStr)
             charUTF8._char.append((char*)sequenceUtf8, lengthChar);
             sequenceUtf8 += lengthChar;
 
-            _str.push_back(charUTF8);
+            _str.emplace_back(charUTF8);
         }
     }
 }

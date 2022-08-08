@@ -21,13 +21,13 @@ public:
 
     void reset();
 
-    axis::Touch* touch;
-    axis::Vec2 pos;
+    ax::Touch* touch;
+    ax::Vec2 pos;
     int touchId;
     int clickCount;
     int mouseWheelDelta;
-    axis::EventMouse::MouseButton button;
-    axis::Vec2 downPos;
+    ax::EventMouse::MouseButton button;
+    ax::Vec2 downPos;
     bool began;
     bool clickCancelled;
     clock_t lastClickTime;
@@ -86,7 +86,7 @@ InputProcessor::~InputProcessor()
         delete ti;
 }
 
-axis::Vec2 InputProcessor::getTouchPosition(int touchId)
+ax::Vec2 InputProcessor::getTouchPosition(int touchId)
 {
     for (auto &ti : _touches)
     {
@@ -315,17 +315,17 @@ void InputProcessor::disableDefaultTouchEvent()
     _owner->displayObject()->getEventDispatcher()->removeEventListener(_touchListener);
 }
 
-bool InputProcessor::touchDown(axis::Touch *touch, axis::Event *event)
+bool InputProcessor::touchDown(ax::Touch *touch, ax::Event *event)
 {
     return onTouchBegan(touch, event);
 }
 
-void InputProcessor::touchMove(axis::Touch *touch, axis::Event *event)
+void InputProcessor::touchMove(ax::Touch *touch, ax::Event *event)
 {
     onTouchMoved(touch, event);
 }
 
-void InputProcessor::touchUp(axis::Touch *touch, axis::Event *event)
+void InputProcessor::touchUp(ax::Touch *touch, ax::Event *event)
 {
     onTouchEnded(touch, event);
 }
@@ -523,7 +523,7 @@ void InputProcessor::onTouchCancelled(Touch* touch, Event* /*unusedEvent*/)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseDown(axis::EventMouse * event)
+void InputProcessor::onMouseDown(ax::EventMouse * event)
 {
     if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
         return;
@@ -553,7 +553,7 @@ void InputProcessor::onMouseDown(axis::EventMouse * event)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseUp(axis::EventMouse * event)
+void InputProcessor::onMouseUp(ax::EventMouse * event)
 {
     if (event->getMouseButton() == EventMouse::MouseButton::BUTTON_LEFT)
         return;
@@ -617,7 +617,7 @@ void InputProcessor::onMouseUp(axis::EventMouse * event)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseMove(axis::EventMouse * event)
+void InputProcessor::onMouseMove(ax::EventMouse * event)
 {
     TouchInfo* ti = getTouch(0);
     Vec2 npos = UIRoot->worldToRoot(Vec2(event->getCursorX(), event->getCursorY()));
@@ -666,7 +666,7 @@ void InputProcessor::onMouseMove(axis::EventMouse * event)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onMouseScroll(axis::EventMouse * event)
+void InputProcessor::onMouseScroll(ax::EventMouse * event)
 {
     auto camera = Camera::getVisitingCamera();
     Vec2 pt(event->getCursorX(), event->getCursorY());
@@ -688,7 +688,7 @@ void InputProcessor::onMouseScroll(axis::EventMouse * event)
     _activeProcessor = nullptr;
 }
 
-void InputProcessor::onKeyDown(axis::EventKeyboard::KeyCode keyCode, axis::Event * event)
+void InputProcessor::onKeyDown(ax::EventKeyboard::KeyCode keyCode, ax::Event * event)
 {
     if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_CTRL || keyCode == EventKeyboard::KeyCode::KEY_RIGHT_CTRL)
         _keyModifiers |= 1;
@@ -702,7 +702,7 @@ void InputProcessor::onKeyDown(axis::EventKeyboard::KeyCode keyCode, axis::Event
     _recentInput._target->dispatchEvent(UIEventType::KeyDown);
 }
 
-void InputProcessor::onKeyUp(axis::EventKeyboard::KeyCode keyCode, axis::Event *)
+void InputProcessor::onKeyUp(ax::EventKeyboard::KeyCode keyCode, ax::Event *)
 {
     if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_CTRL || keyCode == EventKeyboard::KeyCode::KEY_RIGHT_CTRL)
         _keyModifiers &= ~1;

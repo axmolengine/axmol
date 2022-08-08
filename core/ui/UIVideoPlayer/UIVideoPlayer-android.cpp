@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@
 
 //-----------------------------------------------------------------------------------------------------------
 
-static const char* videoHelperClassName = "org.cocos2dx.lib.Cocos2dxVideoHelper";
+static const char* videoHelperClassName = "org.axys1.lib.AxysVideoHelper";
 
 USING_NS_AX;
 
@@ -48,7 +48,7 @@ static void executeVideoCallback(int index, int event);
 #    define QUIT_FULLSCREEN 1000
 
 extern "C" {
-JNIEXPORT void JNICALL Java_org_cocos2dx_lib_Cocos2dxVideoHelper_nativeExecuteVideoCallback(JNIEnv*,
+JNIEXPORT void JNICALL Java_org_axys1_lib_AxysVideoHelper_nativeExecuteVideoCallback(JNIEnv*,
                                                                                             jclass,
                                                                                             jint index,
                                                                                             jint event)
@@ -95,7 +95,7 @@ void setUserInputEnabledJNI(int index, bool enableInput)
 
 //-----------------------------------------------------------------------------------------------------------
 
-using namespace axis::ui;
+using namespace ax::ui;
 
 static std::unordered_map<int, VideoPlayer*> s_allVideoPlayers;
 
@@ -160,11 +160,11 @@ void VideoPlayer::setStyle(StyleType style)
 
 void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
-    axis::ui::Widget::draw(renderer, transform, flags);
+    ax::ui::Widget::draw(renderer, transform, flags);
 
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {
-        auto uiRect = axis::ui::Helper::convertBoundingBoxToScreen(this);
+        auto uiRect = ax::ui::Helper::convertBoundingBoxToScreen(this);
         JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect", _videoPlayerIndex, (int)uiRect.origin.x,
                                         (int)uiRect.origin.y, (int)uiRect.size.width, (int)uiRect.size.height);
     }
@@ -262,7 +262,7 @@ bool VideoPlayer::isUserInputEnabled() const
 
 void VideoPlayer::setVisible(bool visible)
 {
-    axis::ui::Widget::setVisible(visible);
+    ax::ui::Widget::setVisible(visible);
 
     if (!visible || isRunning())
     {
@@ -315,7 +315,7 @@ void VideoPlayer::onPlayEvent(int event)
     }
 }
 
-axis::ui::Widget* VideoPlayer::createCloneInstance()
+ax::ui::Widget* VideoPlayer::createCloneInstance()
 {
     return VideoPlayer::create();
 }

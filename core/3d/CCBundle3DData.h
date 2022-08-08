@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -104,7 +104,7 @@ public:
 
     /** Pushes back a value. */
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
-    void push_back(const _Ty& val)
+    void emplace_back(const _Ty& val)
     {
         assert(_stride == sizeof(_Ty));
         _buffer.insert(_buffer.end(), &val, &val + 1);
@@ -318,7 +318,7 @@ struct NodeDatas
  */
 struct MeshData
 {
-    using IndexArray = ::axis::IndexArray;
+    using IndexArray = ::ax::IndexArray;
     std::vector<float> vertex;
     int vertexSizeInFloat;
     std::vector<IndexArray> subMeshIndices;
@@ -408,14 +408,14 @@ struct SkinData
     {
         auto it = std::find(skinBoneNames.begin(), skinBoneNames.end(), name);
         if (it == skinBoneNames.end())
-            skinBoneNames.push_back(std::string{name});
+            skinBoneNames.emplace_back(std::string{name});
     }
 
     void addNodeBoneNames(std::string_view name)
     {
         auto it = std::find(nodeBoneNames.begin(), nodeBoneNames.end(), name);
         if (it == nodeBoneNames.end())
-            nodeBoneNames.push_back(std::string{name});
+            nodeBoneNames.emplace_back(std::string{name});
     }
 
     int getSkinBoneNameIndex(std::string_view name) const

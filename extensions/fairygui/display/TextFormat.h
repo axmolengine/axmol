@@ -24,22 +24,22 @@ public:
 
     std::string face;
     float fontSize;
-    axis::Color3B color;
+    ax::Color3B color;
     bool bold;
     bool italics;
     bool underline;
     int lineSpacing;
     int letterSpacing;
-    axis::TextHAlignment align;
-    axis::TextVAlignment verticalAlign;
+    ax::TextHAlignment align;
+    ax::TextVAlignment verticalAlign;
 
     int effect;
-    axis::Color3B outlineColor;
+    ax::Color3B outlineColor;
     int outlineSize;
-    axis::Color3B shadowColor;
-    axis::Size shadowOffset;
+    ax::Color3B shadowColor;
+    ax::Size shadowOffset;
     int shadowBlurRadius;
-    axis::Color3B glowColor;
+    ax::Color3B glowColor;
 
     //internal use
     bool _hasColor;

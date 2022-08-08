@@ -4,7 +4,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ extern "C" {
 #include "lauxlib.h"
 }
 
-#include "scripting/lua-bindings/manual/AxisLuaLoader.h"
+#include "scripting/lua-bindings/manual/AxluaLoader.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 #    include "scripting/lua-bindings/manual/platform/ios/CCLuaObjcBridge.h"
@@ -46,12 +46,12 @@ extern "C" {
 #endif
 
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/auto/lua_axis_base_auto.hpp"
-#include "scripting/lua-bindings/manual/base/lua_axis_base_manual.hpp"
+#include "scripting/lua-bindings/auto/axlua_base_auto.hpp"
+#include "scripting/lua-bindings/manual/base/axlua_base_manual.hpp"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/auto/lua_axis_physics_auto.hpp"
-#include "scripting/lua-bindings/manual/physics/lua_axis_physics_manual.hpp"
-#include "scripting/lua-bindings/auto/lua_axis_backend_auto.hpp"
+#include "scripting/lua-bindings/auto/axlua_physics_auto.hpp"
+#include "scripting/lua-bindings/manual/physics/axlua_physics_manual.hpp"
+#include "scripting/lua-bindings/auto/axlua_backend_auto.hpp"
 #include "base/ZipUtils.h"
 #include "platform/CCFileUtils.h"
 
@@ -144,19 +144,19 @@ bool LuaStack::init()
     luaL_register(_state, "_G", global_functions);
 
     g_luaType.clear();
-    register_all_axis_base(_state);
-    register_all_axis_backend(_state);
-    register_all_axis_manual(_state);
-    register_all_axis_module_manual(_state);
-    register_all_axis_math_manual(_state);
-    register_all_axis_shaders_manual(_state);
-    register_all_axis_bytearray_manual(_state);
+    register_all_axys_base(_state);
+    register_all_axys_backend(_state);
+    register_all_axys_manual(_state);
+    register_all_axys_module_manual(_state);
+    register_all_axys_math_manual(_state);
+    register_all_axys_shaders_manual(_state);
+    register_all_axys_bytearray_manual(_state);
 
     tolua_luanode_open(_state);
     register_luanode_manual(_state);
 #if AX_USE_PHYSICS
-    register_all_axis_physics(_state);
-    register_all_axis_physics_manual(_state);
+    register_all_axys_physics(_state);
+    register_all_axys_physics_manual(_state);
 #endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
@@ -170,7 +170,7 @@ bool LuaStack::init()
     tolua_script_handler_mgr_open(_state);
 
     // add cocos2dx loader
-    addLuaLoader(axis_lua_loader);
+    addLuaLoader(axlua_loader);
 
     return true;
 }
@@ -712,7 +712,7 @@ int LuaStack::luaLoadBuffer(lua_State* L, const char* chunk, int chunkSize, cons
     skipBOM(chunk, chunkSize);
     r = luaL_loadbuffer(L, chunk, chunkSize, chunkName);
 
-#if defined(AXIS_DEBUG) && AXIS_DEBUG > 0
+#if defined(_AX_DEBUG) && _AX_DEBUG > 0
     if (r)
     {
         switch (r)

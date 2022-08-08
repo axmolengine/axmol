@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) simdsoft.com, @HALX99.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -81,10 +81,10 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     std::string plistFile;
     int resourceType           = 0;
     bool intelliShadingEnabled = false;
-    axis::Vec3 hsv;
-    axis::Vec3 filter;
+    ax::Vec3 hsv;
+    ax::Vec3 filter;
 
-    axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
+    ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
 
     // attributes
     auto attribute = objectData.first_attribute();
@@ -225,7 +225,7 @@ Offset<Table> SpriteReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
     return *(Offset<Table>*)(&options);
 }
 
-void SpriteReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* spriteOptions)
+void SpriteReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* spriteOptions)
 {
     Sprite* sprite = static_cast<Sprite*>(node);
     auto options   = (SpriteOptions*)spriteOptions;
@@ -290,7 +290,7 @@ void SpriteReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::
     auto f_blendFunc = options->blendFunc();
     if (f_blendFunc)
     {
-        axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
+        ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
         blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
         blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
         sprite->setBlendFunc(blendFunc);

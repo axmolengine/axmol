@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -99,37 +99,37 @@ void Physics3DRigidBody::setActive(bool active)
     }
 }
 
-void Physics3DRigidBody::applyForce(const axis::Vec3& force, const axis::Vec3& rel_pos)
+void Physics3DRigidBody::applyForce(const ax::Vec3& force, const ax::Vec3& rel_pos)
 {
     _btRigidBody->applyForce(convertVec3TobtVector3(force), convertVec3TobtVector3(rel_pos));
 }
 
-void Physics3DRigidBody::setLinearVelocity(const axis::Vec3& lin_vel)
+void Physics3DRigidBody::setLinearVelocity(const ax::Vec3& lin_vel)
 {
     _btRigidBody->setLinearVelocity(convertVec3TobtVector3(lin_vel));
 }
 
-void Physics3DRigidBody::applyCentralForce(const axis::Vec3& force)
+void Physics3DRigidBody::applyCentralForce(const ax::Vec3& force)
 {
     _btRigidBody->applyCentralForce(convertVec3TobtVector3(force));
 }
 
-void Physics3DRigidBody::applyCentralImpulse(const axis::Vec3& impulse)
+void Physics3DRigidBody::applyCentralImpulse(const ax::Vec3& impulse)
 {
     _btRigidBody->applyCentralImpulse(convertVec3TobtVector3(impulse));
 }
 
-void Physics3DRigidBody::applyTorque(const axis::Vec3& torque)
+void Physics3DRigidBody::applyTorque(const ax::Vec3& torque)
 {
     _btRigidBody->applyTorque(convertVec3TobtVector3(torque));
 }
 
-void Physics3DRigidBody::applyTorqueImpulse(const axis::Vec3& torque)
+void Physics3DRigidBody::applyTorqueImpulse(const ax::Vec3& torque)
 {
     _btRigidBody->applyTorqueImpulse(convertVec3TobtVector3(torque));
 }
 
-void Physics3DRigidBody::applyImpulse(const axis::Vec3& impulse, const axis::Vec3& rel_pos)
+void Physics3DRigidBody::applyImpulse(const ax::Vec3& impulse, const ax::Vec3& rel_pos)
 {
     _btRigidBody->applyImpulse(convertVec3TobtVector3(impulse), convertVec3TobtVector3(rel_pos));
 }
@@ -139,22 +139,22 @@ void Physics3DRigidBody::applyDamping(float timeStep)
     _btRigidBody->applyDamping(timeStep);
 }
 
-axis::Vec3 Physics3DRigidBody::getLinearVelocity() const
+ax::Vec3 Physics3DRigidBody::getLinearVelocity() const
 {
     return convertbtVector3ToVec3(_btRigidBody->getLinearVelocity());
 }
 
-void Physics3DRigidBody::setLinearFactor(const axis::Vec3& linearFactor)
+void Physics3DRigidBody::setLinearFactor(const ax::Vec3& linearFactor)
 {
     _btRigidBody->setLinearFactor(convertVec3TobtVector3(linearFactor));
 }
 
-axis::Vec3 Physics3DRigidBody::getLinearFactor() const
+ax::Vec3 Physics3DRigidBody::getLinearFactor() const
 {
     return convertbtVector3ToVec3(_btRigidBody->getLinearFactor());
 }
 
-void Physics3DRigidBody::setAngularFactor(const axis::Vec3& angFac)
+void Physics3DRigidBody::setAngularFactor(const ax::Vec3& angFac)
 {
     _btRigidBody->setAngularFactor(convertVec3TobtVector3(angFac));
 }
@@ -164,27 +164,27 @@ void Physics3DRigidBody::setAngularFactor(float angFac)
     _btRigidBody->setAngularFactor(angFac);
 }
 
-axis::Vec3 Physics3DRigidBody::getAngularFactor() const
+ax::Vec3 Physics3DRigidBody::getAngularFactor() const
 {
     return convertbtVector3ToVec3(_btRigidBody->getAngularFactor());
 }
 
-void Physics3DRigidBody::setAngularVelocity(const axis::Vec3& ang_vel)
+void Physics3DRigidBody::setAngularVelocity(const ax::Vec3& ang_vel)
 {
     _btRigidBody->setAngularVelocity(convertVec3TobtVector3(ang_vel));
 }
 
-axis::Vec3 Physics3DRigidBody::getAngularVelocity() const
+ax::Vec3 Physics3DRigidBody::getAngularVelocity() const
 {
     return convertbtVector3ToVec3(_btRigidBody->getAngularVelocity());
 }
 
-void Physics3DRigidBody::setCenterOfMassTransform(const axis::Mat4& xform)
+void Physics3DRigidBody::setCenterOfMassTransform(const ax::Mat4& xform)
 {
     _btRigidBody->setCenterOfMassTransform(convertMat4TobtTransform(xform));
 }
 
-axis::Mat4 Physics3DRigidBody::getCenterOfMassTransform() const
+ax::Mat4 Physics3DRigidBody::getCenterOfMassTransform() const
 {
     return convertbtTransformToMat4(_btRigidBody->getCenterOfMassTransform());
 }
@@ -204,27 +204,27 @@ float Physics3DRigidBody::getAngularDamping() const
     return _btRigidBody->getAngularDamping();
 }
 
-void Physics3DRigidBody::setGravity(const axis::Vec3& acceleration)
+void Physics3DRigidBody::setGravity(const ax::Vec3& acceleration)
 {
     _btRigidBody->setGravity(convertVec3TobtVector3(acceleration));
 }
 
-axis::Vec3 Physics3DRigidBody::getGravity() const
+ax::Vec3 Physics3DRigidBody::getGravity() const
 {
     return convertbtVector3ToVec3(_btRigidBody->getGravity());
 }
 
-void Physics3DRigidBody::setInvInertiaDiagLocal(const axis::Vec3& diagInvInertia)
+void Physics3DRigidBody::setInvInertiaDiagLocal(const ax::Vec3& diagInvInertia)
 {
     _btRigidBody->setInvInertiaDiagLocal(convertVec3TobtVector3(diagInvInertia));
 }
 
-axis::Vec3 Physics3DRigidBody::getInvInertiaDiagLocal() const
+ax::Vec3 Physics3DRigidBody::getInvInertiaDiagLocal() const
 {
     return convertbtVector3ToVec3(_btRigidBody->getInvInertiaDiagLocal());
 }
 
-void Physics3DRigidBody::setMassProps(float mass, const axis::Vec3& inertia)
+void Physics3DRigidBody::setMassProps(float mass, const ax::Vec3& inertia)
 {
     _btRigidBody->setMassProps(mass, convertVec3TobtVector3(inertia));
 }
@@ -234,12 +234,12 @@ float Physics3DRigidBody::getInvMass() const
     return _btRigidBody->getInvMass();
 }
 
-axis::Vec3 Physics3DRigidBody::getTotalForce() const
+ax::Vec3 Physics3DRigidBody::getTotalForce() const
 {
     return convertbtVector3ToVec3(_btRigidBody->getTotalForce());
 }
 
-axis::Vec3 Physics3DRigidBody::getTotalTorque() const
+ax::Vec3 Physics3DRigidBody::getTotalTorque() const
 {
     return convertbtVector3ToVec3(_btRigidBody->getTotalTorque());
 }
@@ -309,7 +309,7 @@ void Physics3DRigidBody::addConstraint(Physics3DConstraint* constraint)
     auto iter = std::find(_constraintList.begin(), _constraintList.end(), constraint);
     if (iter == _constraintList.end())
     {
-        _constraintList.push_back(constraint);
+        _constraintList.emplace_back(constraint);
         constraint->retain();
     }
 }
@@ -341,7 +341,7 @@ unsigned int Physics3DRigidBody::getConstraintCount() const
     return (unsigned int)_constraintList.size();
 }
 
-axis::Mat4 Physics3DRigidBody::getWorldTransform() const
+ax::Mat4 Physics3DRigidBody::getWorldTransform() const
 {
     const auto& transform = _btRigidBody->getWorldTransform();
     return convertbtTransformToMat4(transform);
@@ -544,7 +544,7 @@ bool Physics3DCollider::init(Physics3DColliderDes* info)
     return true;
 }
 
-axis::Mat4 Physics3DCollider::getWorldTransform() const
+ax::Mat4 Physics3DCollider::getWorldTransform() const
 {
     return convertbtTransformToMat4(_btGhostObject->getWorldTransform());
 }

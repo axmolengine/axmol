@@ -2,7 +2,7 @@
 Copyright (c) 2015-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,8 +51,8 @@ bool Physics3DComponent::init()
 }
 
 Physics3DComponent* Physics3DComponent::create(Physics3DObject* physicsObj,
-                                               const axis::Vec3& translateInPhysics,
-                                               const axis::Quaternion& rotInPhsyics)
+                                               const ax::Vec3& translateInPhysics,
+                                               const ax::Quaternion& rotInPhsyics)
 {
     auto ret = new Physics3DComponent();
     if (ret->init())
@@ -162,8 +162,8 @@ void Physics3DComponent::postSimulate()
     }
 }
 
-void Physics3DComponent::setTransformInPhysics(const axis::Vec3& translateInPhysics,
-                                               const axis::Quaternion& rotInPhsyics)
+void Physics3DComponent::setTransformInPhysics(const ax::Vec3& translateInPhysics,
+                                               const ax::Quaternion& rotInPhsyics)
 {
     Mat4::createRotation(rotInPhsyics, &_transformInPhysics);
     _transformInPhysics.m[12] = translateInPhysics.x;

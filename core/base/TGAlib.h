@@ -3,7 +3,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ void tgaRGBtogreyscale(tImageTGA* info);
 /// releases the memory used for the image
 void tgaDestroy(tImageTGA* info);
 
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys
 
 /// @endcond
 #endif  // __SUPPORT_DATA_SUPPORT_TGALIB_H__

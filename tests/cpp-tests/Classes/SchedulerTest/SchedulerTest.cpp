@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@
 
 USING_NS_AX;
 USING_NS_AX_EXT;
-using namespace axis::ui;
+using namespace axys::ui;
 
 enum
 {
@@ -1367,7 +1367,7 @@ void SchedulerRemoveEntryWhileUpdate::onEnter()
             nextObj = _testvector[i - 1];
         }
         auto obj = new TestClass(i, nextObj, getScheduler());
-        _testvector.push_back(obj);
+        _testvector.emplace_back(obj);
         getScheduler()->scheduleUpdate(obj, 500 - i, false);
     }
 }

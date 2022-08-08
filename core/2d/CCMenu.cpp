@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -347,7 +347,7 @@ void Menu::alignItemsInColumns(int columns, va_list args)
     ValueVector rows;
     while (columns)
     {
-        rows.push_back(Value(columns));
+        rows.emplace_back(Value(columns));
         columns = va_arg(args, int);
     }
     alignItemsInColumnsWithArray(rows);
@@ -439,7 +439,7 @@ void Menu::alignItemsInRows(int rows, va_list args)
     ValueVector array;
     while (rows)
     {
-        array.push_back(Value(rows));
+        array.emplace_back(Value(rows));
         rows = va_arg(args, int);
     }
     alignItemsInRowsWithArray(array);
@@ -475,8 +475,8 @@ void Menu::alignItemsInRowsWithArray(const ValueVector& columns)
 
         if (rowsOccupied >= columnRows)
         {
-            columnWidths.push_back(columnWidth);
-            columnHeights.push_back(columnHeight);
+            columnWidths.emplace_back(columnWidth);
+            columnHeights.emplace_back(columnHeight);
             width += columnWidth + 10;
 
             rowsOccupied = 0;

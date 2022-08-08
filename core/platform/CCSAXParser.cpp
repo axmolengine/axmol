@@ -47,13 +47,13 @@ public:
             _curEleName = xsxml::string_view(name, size);
         };
         _sax3Handler.xml_attr_cb = [=](const char* name, size_t, const char* value, size_t) {
-            _curEleAttrs.push_back(name);
-            _curEleAttrs.push_back(value);
+            _curEleAttrs.emplace_back(name);
+            _curEleAttrs.emplace_back(value);
         };
         _sax3Handler.xml_end_attr_cb = [=]() {
             if (!_curEleAttrs.empty())
             {
-                _curEleAttrs.push_back(nullptr);
+                _curEleAttrs.emplace_back(nullptr);
                 SAXParser::startElement(_ccsaxParserImp, (const AX_XML_CHAR*)_curEleName.c_str(),
                                         (const AX_XML_CHAR**)&_curEleAttrs[0]);
                 _curEleAttrs.clear();

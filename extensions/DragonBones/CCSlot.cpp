@@ -14,19 +14,19 @@ void CCSlot::_onClear()
 
 void CCSlot::_initDisplay(void* value, bool isRetain)
 {
-    const auto renderDisplay = static_cast<axis::Node*>(value);
+    const auto renderDisplay = static_cast<ax::Node*>(value);
     renderDisplay->retain();
 }
 
 void CCSlot::_disposeDisplay(void* value, bool isRelease)
 {
-    const auto renderDisplay = static_cast<axis::Node*>(value);
+    const auto renderDisplay = static_cast<ax::Node*>(value);
     renderDisplay->release();
 }
 
 void CCSlot::_onUpdateDisplay()
 {
-    _renderDisplay = static_cast<axis::Node*>(_display != nullptr ? _display : _rawDisplay);
+    _renderDisplay = static_cast<ax::Node*>(_display != nullptr ? _display : _rawDisplay);
 }
 
 void CCSlot::_addDisplay()
@@ -39,7 +39,7 @@ void CCSlot::_replaceDisplay(void* value, bool isArmatureDisplay)
 {
     const auto container = static_cast<CCArmatureDisplay*>(_armature->getDisplay());
     const auto prevDisplay =
-        isArmatureDisplay ? static_cast<axis::Node*>(value) : static_cast<axis::Node*>(value);
+        isArmatureDisplay ? static_cast<ax::Node*>(value) : static_cast<ax::Node*>(value);
     container->addChild(_renderDisplay, prevDisplay->getLocalZOrder());
     container->removeChild(prevDisplay);
     _textureScale = 1.0f;
@@ -92,9 +92,9 @@ void CCSlot::_updateFrame()
 
                 const auto& region           = currentTextureData->region;
                 const auto& textureAtlasSize = currentTextureData->spriteFrame->getTexture()->getContentSizeInPixels();
-                auto vertices                = new axis::V3F_C4B_T2F[vertexCount];  // does cocos2dx release it?
+                auto vertices                = new ax::V3F_C4B_T2F[vertexCount];  // does cocos2dx release it?
                 auto vertexIndices           = new unsigned short[triangleCount * 3];  // does cocos2dx release it?
-                axis::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);
+                ax::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);
 
                 for (std::size_t i = 0, l = vertexCount * 2; i < l; i += 2)
                 {
@@ -103,7 +103,7 @@ void CCSlot::_updateFrame()
                     const auto y  = floatArray[vertexOffset + i + 1];
                     auto u        = floatArray[uvOffset + i];
                     auto v        = floatArray[uvOffset + i + 1];
-                    axis::V3F_C4B_T2F vertexData;
+                    ax::V3F_C4B_T2F vertexData;
                     vertexData.vertices.set(x, -y, 0.0f);
 
                     if (currentTextureData->rotated)
@@ -117,7 +117,7 @@ void CCSlot::_updateFrame()
                         vertexData.texCoords.v = (region.y + v * region.height) / textureAtlasSize.height;
                     }
 
-                    vertexData.colors = axis::Color4B::WHITE;
+                    vertexData.colors = ax::Color4B::WHITE;
                     vertices[iH]      = vertexData;
 
                     if (boundsRect.origin.x > x)
@@ -153,7 +153,7 @@ void CCSlot::_updateFrame()
                 _textureScale = 1.0f;
                 frameDisplay->setSpriteFrame(currentTextureData->spriteFrame);  // polygonInfo will be override
 
-                axis::PolygonInfo polygonInfo;
+                ax::PolygonInfo polygonInfo;
                 auto& triangles       = polygonInfo.triangles;
                 triangles.verts       = vertices;
                 triangles.indices     = vertexIndices;
@@ -183,7 +183,7 @@ void CCSlot::_updateFrame()
             else  // Normal texture.
             {
                 const auto scale = currentTextureData->parent->scale * _armature->_armatureData->scale;
-                _textureScale    = scale * axis::Director::getInstance()->getContentScaleFactor();
+                _textureScale    = scale * ax::Director::getInstance()->getContentScaleFactor();
                 frameDisplay->setSpriteFrame(currentTextureData->spriteFrame);  // polygonInfo will be override
             }
 
@@ -196,7 +196,7 @@ void CCSlot::_updateFrame()
     }
 
     frameDisplay->setTexture(nullptr);
-    frameDisplay->setTextureRect(axis::Rect::ZERO);
+    frameDisplay->setTextureRect(ax::Rect::ZERO);
     frameDisplay->setPosition(0.0f, 0.0f);
     frameDisplay->setVisible(false);
 }
@@ -213,7 +213,7 @@ void CCSlot::_updateMesh()
     const auto textureData = static_cast<CCTextureData*>(_textureData);
     const auto meshDisplay = static_cast<DBCCSprite*>(_renderDisplay);
     const auto vertices    = meshDisplay->getPolygonInfoModify().triangles.verts;
-    axis::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);
+    ax::Rect boundsRect(999999.0f, 999999.0f, -999999.0f, -999999.0f);
 
     if (!textureData || meshDisplay->getSpriteFrame() != textureData->spriteFrame)
     {
@@ -361,7 +361,7 @@ void CCSlot::_updateMesh()
 
 void CCSlot::_updateTransform()
 {
-    static axis::Mat4 transform;
+    static ax::Mat4 transform;
     transform.m[0] = globalTransformMatrix.a;
     transform.m[1] = globalTransformMatrix.b;
     transform.m[4] = -globalTransformMatrix.c;
@@ -401,7 +401,7 @@ void CCSlot::_updateTransform()
 
 void CCSlot::_identityTransform()
 {
-    static axis::Mat4 transform;
+    static ax::Mat4 transform;
     transform.m[0]  = 1.0f;
     transform.m[1]  = 0.0f;
     transform.m[4]  = -0.0f;
@@ -419,13 +419,13 @@ void CCSlot::_updateVisible()
 
 void CCSlot::_updateBlendMode()
 {
-    axis::Sprite* spriteDisplay = dynamic_cast<axis::Sprite*>(_renderDisplay);
+    ax::Sprite* spriteDisplay = dynamic_cast<ax::Sprite*>(_renderDisplay);
     if (spriteDisplay)
     {
         switch (_blendMode)
         {
         case BlendMode::Normal:
-            // spriteDisplay->setBlendFunc(axis::BlendFunc::DISABLE);
+            // spriteDisplay->setBlendFunc(ax::BlendFunc::DISABLE);
             break;
 
         case BlendMode::Add:
@@ -434,15 +434,15 @@ void CCSlot::_updateBlendMode()
             if (texture && texture->hasPremultipliedAlpha())
             {
 #if COCOS2D_VERSION >= 0x00040000
-                axis::BlendFunc blendFunc = {axis::backend::BlendFactor::ONE, axis::backend::BlendFactor::ONE};
+                ax::BlendFunc blendFunc = {ax::backend::BlendFactor::ONE, ax::backend::BlendFactor::ONE};
 #else
-                axis::BlendFunc blendFunc = {GL_ONE, GL_ONE};
+                ax::BlendFunc blendFunc = {GL_ONE, GL_ONE};
 #endif
                 spriteDisplay->setBlendFunc(blendFunc);
             }
             else
             {
-                spriteDisplay->setBlendFunc(axis::BlendFunc::ADDITIVE);
+                spriteDisplay->setBlendFunc(ax::BlendFunc::ADDITIVE);
             }
             break;
         }
@@ -465,7 +465,7 @@ void CCSlot::_updateColor()
 {
     _renderDisplay->setOpacity(_colorTransform.alphaMultiplier * 255.0f);
 
-    static axis::Color3B helpColor;
+    static ax::Color3B helpColor;
     helpColor.r = _colorTransform.redMultiplier * 255.0f;
     helpColor.g = _colorTransform.greenMultiplier * 255.0f;
     helpColor.b = _colorTransform.blueMultiplier * 255.0f;

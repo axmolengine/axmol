@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 zilongshanren
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@
 #include "ui/UIEditBox/Mac/CCUIPasswordTextField.h"
 #include "ui/UIEditBox/Mac/CCUIMultilineTextField.h"
 
-#define getEditBoxImplMac() ((axis::ui::EditBoxImplMac*)_editBox)
+#define getEditBoxImplMac() ((ax::ui::EditBoxImplMac*)_editBox)
 
 @implementation UIEditBoxImplMac
 
@@ -45,8 +45,8 @@
         self.frameRect = frameRect;
 
         self.editBox            = editBox;
-        self.dataInputMode      = axis::ui::EditBox::InputFlag::LOWERCASE_ALL_CHARACTERS;
-        self.keyboardReturnType = axis::ui::EditBox::KeyboardReturnType::DEFAULT;
+        self.dataInputMode      = ax::ui::EditBox::InputFlag::LOWERCASE_ALL_CHARACTERS;
+        self.keyboardReturnType = ax::ui::EditBox::KeyboardReturnType::DEFAULT;
 
         [self createMultiLineTextField];
     }
@@ -131,7 +131,7 @@
 
 - (NSWindow*)window
 {
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glview = ax::Director::getInstance()->getOpenGLView();
     return glview->getCocoaWindow();
 }
 
@@ -150,7 +150,7 @@
 
     auto editbox = getEditBoxImplMac()->getEditBox();
     auto oldPos  = editbox->getPosition();
-    editbox->setPosition(oldPos + axis::Vec2(10, 20));
+    editbox->setPosition(oldPos + ax::Vec2(10, 20));
     editbox->setPosition(oldPos);
 }
 
@@ -201,10 +201,10 @@
     return self.textInput.ccui_font.fontName ?: @"";
 }
 
-- (void)setInputMode:(axis::ui::EditBox::InputMode)inputMode
+- (void)setInputMode:(ax::ui::EditBox::InputMode)inputMode
 {
     // multiline input
-    if (inputMode == axis::ui::EditBox::InputMode::ANY)
+    if (inputMode == ax::ui::EditBox::InputMode::ANY)
     {
         if (![self.textInput isKindOfClass:[NSTextView class]])
         {
@@ -213,7 +213,7 @@
     }
     else
     {
-        if (self.dataInputMode != axis::ui::EditBox::InputFlag::PASSWORD)
+        if (self.dataInputMode != ax::ui::EditBox::InputFlag::PASSWORD)
         {
             if (![self.textInput isKindOfClass:[NSTextField class]])
             {
@@ -223,43 +223,43 @@
     }
 }
 
-- (void)setInputFlag:(axis::ui::EditBox::InputFlag)inputFlag
+- (void)setInputFlag:(ax::ui::EditBox::InputFlag)inputFlag
 {
     if (self.dataInputMode == inputFlag)
     {
         return;
     }
 
-    if (self.dataInputMode == axis::ui::EditBox::InputFlag::PASSWORD &&
-        inputFlag != axis::ui::EditBox::InputFlag::PASSWORD)
+    if (self.dataInputMode == ax::ui::EditBox::InputFlag::PASSWORD &&
+        inputFlag != ax::ui::EditBox::InputFlag::PASSWORD)
     {
         [self createSingleLineTextField];
     }
 
-    if (self.dataInputMode != axis::ui::EditBox::InputFlag::PASSWORD &&
-        inputFlag == axis::ui::EditBox::InputFlag::PASSWORD)
+    if (self.dataInputMode != ax::ui::EditBox::InputFlag::PASSWORD &&
+        inputFlag == ax::ui::EditBox::InputFlag::PASSWORD)
     {
         [self createPasswordTextField];
     }
 
     switch (inputFlag)
     {
-    case axis::ui::EditBox::InputFlag::PASSWORD:
+    case ax::ui::EditBox::InputFlag::PASSWORD:
         self.dataInputMode = inputFlag;
         break;
-    case axis::ui::EditBox::InputFlag::INITIAL_CAPS_WORD:
+    case ax::ui::EditBox::InputFlag::INITIAL_CAPS_WORD:
         AXLOG("INITIAL_CAPS_WORD not implemented");
         break;
-    case axis::ui::EditBox::InputFlag::INITIAL_CAPS_SENTENCE:
+    case ax::ui::EditBox::InputFlag::INITIAL_CAPS_SENTENCE:
         AXLOG("INITIAL_CAPS_SENTENCE not implemented");
         break;
-    case axis::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS:
+    case ax::ui::EditBox::InputFlag::INITIAL_CAPS_ALL_CHARACTERS:
         AXLOG("INITIAL_CAPS_ALL_CHARACTERS not implemented");
         break;
-    case axis::ui::EditBox::InputFlag::SENSITIVE:
+    case ax::ui::EditBox::InputFlag::SENSITIVE:
         AXLOG("SENSITIVE not implemented");
         break;
-    case axis::ui::EditBox::InputFlag::LOWERCASE_ALL_CHARACTERS:
+    case ax::ui::EditBox::InputFlag::LOWERCASE_ALL_CHARACTERS:
         AXLOG("LOWERCASE_ALL_CHARACTERS not implemented");
         break;
     default:
@@ -267,18 +267,18 @@
     }
 }
 
-- (void)setReturnType:(axis::ui::EditBox::KeyboardReturnType)returnType
+- (void)setReturnType:(ax::ui::EditBox::KeyboardReturnType)returnType
 {
     AXLOG("setReturnType not implemented");
 }
 
-- (void)setTextHorizontalAlignment:(axis::TextHAlignment)alignment
+- (void)setTextHorizontalAlignment:(ax::TextHAlignment)alignment
 {
     // swizzle center & right, for some reason they're backwards on !TARGET_OS_IPHONE
-    if (alignment == axis::TextHAlignment::CENTER)
-        alignment = axis::TextHAlignment::RIGHT;
-    else if (alignment == axis::TextHAlignment::RIGHT)
-        alignment = axis::TextHAlignment::CENTER;
+    if (alignment == ax::TextHAlignment::CENTER)
+        alignment = ax::TextHAlignment::RIGHT;
+    else if (alignment == ax::TextHAlignment::RIGHT)
+        alignment = ax::TextHAlignment::CENTER;
     self.textInput.ccui_alignment = static_cast<NSTextAlignment>(alignment);
 }
 
@@ -335,21 +335,21 @@
     getEditBoxImplMac()->editBoxEditingDidEnd([self getText], [self getEndAction:notification]);
 }
 
-- (axis::ui::EditBoxDelegate::EditBoxEndAction)getEndAction:(NSNotification*)notification
+- (ax::ui::EditBoxDelegate::EditBoxEndAction)getEndAction:(NSNotification*)notification
 {
-    auto type                  = axis::ui::EditBoxDelegate::EditBoxEndAction::UNKNOWN;
+    auto type                  = ax::ui::EditBoxDelegate::EditBoxEndAction::UNKNOWN;
     NSUInteger reasonForEnding = [[[notification userInfo] objectForKey:@"NSTextMovement"] unsignedIntValue];
     if (reasonForEnding == NSTabTextMovement)
     {
-        type = axis::ui::EditBoxDelegate::EditBoxEndAction::TAB_TO_NEXT;
+        type = ax::ui::EditBoxDelegate::EditBoxEndAction::TAB_TO_NEXT;
     }
     else if (reasonForEnding == NSBacktabTextMovement)
     {
-        type = axis::ui::EditBoxDelegate::EditBoxEndAction::TAB_TO_PREVIOUS;
+        type = ax::ui::EditBoxDelegate::EditBoxEndAction::TAB_TO_PREVIOUS;
     }
     else if (reasonForEnding == NSReturnTextMovement)
     {
-        type = axis::ui::EditBoxDelegate::EditBoxEndAction::RETURN;
+        type = ax::ui::EditBoxDelegate::EditBoxEndAction::RETURN;
     }
     return type;
 }

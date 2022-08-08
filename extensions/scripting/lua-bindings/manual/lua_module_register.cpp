@@ -3,7 +3,7 @@
  Copyright (c) 2020 C4games Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,15 +27,15 @@
 
 #include "scripting/lua-bindings/manual/lua_module_register.h"
 
-#include "scripting/lua-bindings/manual/network/lua_axis_network_manual.h"
-#include "scripting/lua-bindings/manual/cocostudio/lua_axis_cocostudio_manual.hpp"
-#include "scripting/lua-bindings/manual/extension/lua_axis_extension_manual.h"
-#include "scripting/lua-bindings/manual/ui/lua_axis_ui_manual.hpp"
-#include "scripting/lua-bindings/manual/spine/lua_axis_spine_manual.hpp"
-#include "scripting/lua-bindings/manual/3d/lua_axis_3d_manual.h"
-#include "scripting/lua-bindings/manual/audioengine/lua_axis_audioengine_manual.h"
-#include "scripting/lua-bindings/manual/physics3d/lua_axis_physics3d_manual.h"
-#include "scripting/lua-bindings/manual/navmesh/lua_axis_navmesh_manual.h"
+#include "scripting/lua-bindings/manual/network/axlua_network_manual.h"
+#include "scripting/lua-bindings/manual/cocostudio/axlua_cocostudio_manual.hpp"
+#include "scripting/lua-bindings/manual/extension/axlua_extension_manual.h"
+#include "scripting/lua-bindings/manual/ui/axlua_ui_manual.hpp"
+#include "scripting/lua-bindings/manual/spine/axlua_spine_manual.hpp"
+#include "scripting/lua-bindings/manual/3d/axlua_3d_manual.h"
+#include "scripting/lua-bindings/manual/audioengine/axlua_audioengine_manual.h"
+#include "scripting/lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
+#include "scripting/lua-bindings/manual/navmesh/axlua_navmesh_manual.h"
 #include "lua_cjson.h"
 #include "yasio/bindings/yasio_cclua.hpp"
 

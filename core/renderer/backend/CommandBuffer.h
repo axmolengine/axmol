@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -63,7 +63,7 @@ struct DepthStencilDescriptor;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBuffer : public axis::Ref
+class CommandBuffer : public ax::Ref
 {
 public:
     /**
@@ -153,7 +153,10 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count) = 0;
+    virtual void drawArrays(PrimitiveType primitiveType,
+                            std::size_t start,
+                            std::size_t count,
+                            bool wireframe = false) = 0;
 
     /**
      * Draw primitives with an index list.
@@ -167,7 +170,8 @@ public:
     virtual void drawElements(PrimitiveType primitiveType,
                               IndexFormat indexType,
                               std::size_t count,
-                              std::size_t offset) = 0;
+                              std::size_t offset,
+                              bool wireframe = false) = 0;
 
     /**
      * Do some resources release.

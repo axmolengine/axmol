@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -236,7 +236,7 @@ void ComponentLua::storeLuaTable()
     lua_pop(l, 1);         // stack: table_return_from_lua
 
     // add table's elements to userdata's metatable
-    object_to_luaval<axis::ComponentLua>(l, "ax.ComponentLua", this);  // stack: table_return_from_lua userdata
+    object_to_luaval<ax::ComponentLua>(l, "ax.ComponentLua", this);  // stack: table_return_from_lua userdata
     lua_getmetatable(l, -1);                                              // stack: table_return_from_lua userdata mt
     lua_remove(l, -2);                                                    // stack: table_return_from_lua mt
     lua_pushnil(l);                                                       // stack: table_return_from_lua mt nil
@@ -268,7 +268,7 @@ void ComponentLua::removeLuaTable()
 void ComponentLua::getUserData()
 {
     lua_State* l = LuaEngine::getInstance()->getLuaStack()->getLuaState();
-    object_to_luaval<axis::ComponentLua>(l, "ax.ComponentLua", this);
+    object_to_luaval<ax::ComponentLua>(l, "ax.ComponentLua", this);
 }
 
 NS_AX_END

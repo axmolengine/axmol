@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@
  */
 
 // The application will come to foreground.
-// This message is posted in core/platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp.
+// This message is posted in core/platform/android/jni/Java_org_axys1_lib_AxysRenderer.cpp.
 #define EVENT_COME_TO_FOREGROUND "event_come_to_foreground"
 
 // The renderer[android:GLSurfaceView.Renderer  WP8:Cocos2dRenderer] was recreated.
@@ -43,7 +43,7 @@
 
 // The application will come to background.
 // This message is used for doing something before coming to background, such as save RenderTexture.
-// This message is posted in core/platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp and
+// This message is posted in core/platform/android/jni/Java_org_axys1_lib_AxysRenderer.cpp and
 // cocos\platform\wp8-xaml\cpp\Cocos2dRenderer.cpp.
 #define EVENT_COME_TO_BACKGROUND "event_come_to_background"
 

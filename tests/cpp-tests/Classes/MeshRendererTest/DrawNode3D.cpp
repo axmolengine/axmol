@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -167,8 +167,8 @@ void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color
         col,
     };
 
-    _bufferLines.push_back(a);
-    _bufferLines.push_back(b);
+    _bufferLines.emplace_back(a);
+    _bufferLines.emplace_back(b);
 
     _isDirty = true;
 }

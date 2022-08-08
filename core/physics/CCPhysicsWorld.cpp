@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -699,7 +699,7 @@ void PhysicsWorld::removeJoint(PhysicsJoint* joint, bool destroy)
                 return;
             if (std::find(_delayRemoveJoints.rbegin(), _delayRemoveJoints.rend(), joint) == _delayRemoveJoints.rend())
             {
-                _delayRemoveJoints.push_back(joint);
+                _delayRemoveJoints.emplace_back(joint);
             }
         }
         else
@@ -721,7 +721,7 @@ void PhysicsWorld::updateJoints()
         joint->_world = this;
         if (joint->initJoint())
         {
-            _joints.push_back(joint);
+            _joints.emplace_back(joint);
         }
         else
         {
@@ -772,7 +772,7 @@ void PhysicsWorld::addJoint(PhysicsJoint* joint)
 
         if (std::find(_delayAddJoints.begin(), _delayAddJoints.end(), joint) == _delayAddJoints.end())
         {
-            _delayAddJoints.push_back(joint);
+            _delayAddJoints.emplace_back(joint);
         }
     }
 }

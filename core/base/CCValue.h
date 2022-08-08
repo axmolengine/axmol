@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -279,9 +279,9 @@ private:
     Type _type;
 };
 
-inline const axis::Value& optValue(const ValueMap& dictionary, std::string_view key)
+inline const ax::Value& optValue(const ValueMap& dictionary, std::string_view key)
 {
-    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : axis::Value::Null;
+    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : ax::Value::Null;
 }
 
 /** @} */

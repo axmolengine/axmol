@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io
+ https://axys1.github.io
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@
 #include "platform/CCSAXParser.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace ax::ui;
 
 class ListenerComponent : public Component
 {
@@ -65,7 +65,7 @@ public:
     {
         setName(ListenerComponent::COMPONENT_NAME);
 
-        _touchListener                 = axis::EventListenerTouchAllAtOnce::create();
+        _touchListener                 = ax::EventListenerTouchAllAtOnce::create();
         _touchListener->onTouchesEnded = AX_CALLBACK_2(ListenerComponent::onTouchesEnded, this);
 
         Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_touchListener, _parent);
@@ -235,7 +235,7 @@ void RichElementImage::setUrl(std::string_view url)
 RichElementCustomNode* RichElementCustomNode::create(int tag,
                                                      const Color3B& color,
                                                      uint8_t opacity,
-                                                     axis::Node* customNode)
+                                                     ax::Node* customNode)
 {
     RichElementCustomNode* element = new RichElementCustomNode();
     if (element->init(tag, color, opacity, customNode))
@@ -247,7 +247,7 @@ RichElementCustomNode* RichElementCustomNode::create(int tag,
     return nullptr;
 }
 
-bool RichElementCustomNode::init(int tag, const Color3B& color, uint8_t opacity, axis::Node* customNode)
+bool RichElementCustomNode::init(int tag, const Color3B& color, uint8_t opacity, ax::Node* customNode)
 {
     if (RichElement::init(tag, color, opacity))
     {
@@ -895,7 +895,7 @@ void MyXMLVisitor::textHandler(void* /*ctx*/, const char* str, size_t len)
 
 void MyXMLVisitor::pushBackFontElement(const MyXMLVisitor::Attributes& attribs)
 {
-    _fontElements.push_back(attribs);
+    _fontElements.emplace_back(attribs);
 }
 
 void MyXMLVisitor::popBackFontElement()
@@ -1106,7 +1106,7 @@ RichText::HorizontalAlignment RichText::getHorizontalAlignment() const
     return static_cast<RichText::HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt());
 }
 
-void RichText::setHorizontalAlignment(axis::ui::RichText::HorizontalAlignment a)
+void RichText::setHorizontalAlignment(ax::ui::RichText::HorizontalAlignment a)
 {
     if (static_cast<RichText::HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt()) != a)
     {
@@ -1125,7 +1125,7 @@ std::string RichText::getFontColor()
     return _defaults.at(KEY_FONT_COLOR_STRING).asString();
 }
 
-axis::Color3B RichText::getFontColor3B()
+ax::Color3B RichText::getFontColor3B()
 {
     return color3BWithString(getFontColor());
 }
@@ -1160,7 +1160,7 @@ std::string RichText::getAnchorFontColor()
     return _defaults.at(KEY_ANCHOR_FONT_COLOR_STRING).asString();
 }
 
-axis::Color3B RichText::getAnchorFontColor3B()
+ax::Color3B RichText::getAnchorFontColor3B()
 {
     return color3BWithString(getAnchorFontColor());
 }
@@ -1399,7 +1399,7 @@ ValueMap RichText::getDefaults() const
     return defaults;
 }
 
-axis::Color3B RichText::color3BWithString(std::string_view color)
+ax::Color3B RichText::color3BWithString(std::string_view color)
 {
     if (color.length() == 4)
     {
@@ -1425,7 +1425,7 @@ axis::Color3B RichText::color3BWithString(std::string_view color)
     return Color3B::WHITE;
 }
 
-std::string RichText::stringWithColor3B(const axis::Color3B& color3b)
+std::string RichText::stringWithColor3B(const ax::Color3B& color3b)
 {
     int r = color3b.r;
     int g = color3b.g;
@@ -1435,7 +1435,7 @@ std::string RichText::stringWithColor3B(const axis::Color3B& color3b)
     return std::string(buf, 7);
 }
 
-std::string RichText::stringWithColor4B(const axis::Color4B& color4b)
+std::string RichText::stringWithColor4B(const ax::Color4B& color4b)
 {
     int r = color4b.r;
     int g = color4b.g;
@@ -1915,7 +1915,7 @@ void RichText::handleImageRenderer(std::string_view filePath,
     }
 }
 
-void RichText::handleCustomRenderer(axis::Node* renderer)
+void RichText::handleCustomRenderer(ax::Node* renderer)
 {
     Vec2 imgSize = renderer->getContentSize();
     _leftSpaceWidth -= imgSize.width;
@@ -2048,7 +2048,7 @@ float getPaddingAmount(const RichText::HorizontalAlignment alignment, const floa
 }
 }  // namespace
 
-void RichText::doHorizontalAlignment(const Vector<axis::Node*>& row, float rowWidth)
+void RichText::doHorizontalAlignment(const Vector<ax::Node*>& row, float rowWidth)
 {
     const auto alignment = static_cast<HorizontalAlignment>(_defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt());
     if (alignment != HorizontalAlignment::LEFT)
@@ -2076,7 +2076,7 @@ void rtrim(std::string& s)
 }
 }  // namespace
 
-float RichText::stripTrailingWhitespace(const Vector<axis::Node*>& row)
+float RichText::stripTrailingWhitespace(const Vector<ax::Node*>& row)
 {
     if (!row.empty())
     {
@@ -2100,7 +2100,7 @@ void RichText::adaptRenderers()
     this->formatText();
 }
 
-void RichText::pushToContainer(axis::Node* renderer)
+void RichText::pushToContainer(ax::Node* renderer)
 {
     if (_elementRenders.empty())
     {

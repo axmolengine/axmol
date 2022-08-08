@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -226,7 +226,7 @@ BoneData* ArmatureData::getBoneData(std::string_view boneName)
 FrameData::FrameData(void)
     : frameID(0)
     , duration(1)
-    , tweenEasing(axis::tweenfunc::Linear)
+    , tweenEasing(ax::tweenfunc::Linear)
     , easingParamNumber(0)
     , easingParams(nullptr)
     , isTween(true)
@@ -297,7 +297,7 @@ MovementData::MovementData(void)
     , durationTo(0)
     , durationTween(0)
     , loop(true)
-    , tweenEasing(axis::tweenfunc::Linear)
+    , tweenEasing(ax::tweenfunc::Linear)
 {}
 
 MovementData::~MovementData(void) {}

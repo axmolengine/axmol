@@ -163,7 +163,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
     Version 3 with TexturePacker 4.0 polygon mesh packing
     */
 
-    if (dictionary["frames"].getType() != axis::Value::Type::MAP)
+    if (dictionary["frames"].getType() != ax::Value::Type::MAP)
         return;
 
     auto spriteSheet    = std::make_shared<SpriteSheet>();
@@ -264,7 +264,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
                 auto oneAlias = value.asString();
                 if (std::find(frameAliases.begin(), frameAliases.end(), oneAlias) == frameAliases.end())
                 {
-                    frameAliases.push_back(std::move(oneAlias));
+                    frameAliases.emplace_back(std::move(oneAlias));
                 }
                 else
                 {
@@ -279,7 +279,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
 
             if (frameDict.find("vertices") != frameDict.end())
             {
-                using axis::utils::parseIntegerList;
+                using ax::utils::parseIntegerList;
                 auto vertices   = parseIntegerList(optValue(frameDict, "vertices"sv).asString());
                 auto verticesUV = parseIntegerList(optValue(frameDict, "verticesUV"sv).asString());
                 auto indices    = parseIntegerList(optValue(frameDict, "triangles"sv).asString());
@@ -462,7 +462,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
                 auto oneAlias = value.asString();
                 if (std::find(frameAliases.begin(), frameAliases.end(), oneAlias) == frameAliases.end())
                 {
-                    frameAliases.push_back(std::move(oneAlias));
+                    frameAliases.emplace_back(std::move(oneAlias));
                 }
                 else
                 {

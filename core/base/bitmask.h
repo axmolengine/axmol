@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2020 C4games Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Purpose: Make bitmask operators could be use at different namespace,
           the other implementation CCEnumClass.h can't handle.

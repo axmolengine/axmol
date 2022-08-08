@@ -20,7 +20,7 @@ public:
     static bool usePool;
 
     static GObjectPool objectPool;
-    static axis::Vector<GObject*> loaderPool;
+    static ax::Vector<GObject*> loaderPool;
 
     HtmlObject();
     virtual ~HtmlObject();

@@ -1516,7 +1516,7 @@ static void AddRendererCommand(const std::function<void()>& f)
     //bd->CallbackCommands.push_back(cmd);
 }
 
-static void ImGui_ImplAxis_SaveRenderState(axis::Renderer* renderer)
+static void ImGui_ImplAxis_SaveRenderState(ax::Renderer* renderer)
 {
     AddRendererCommand([renderer]() {
         auto bd                          = ImGui_ImplGlfw_GetBackendData();
@@ -1528,7 +1528,7 @@ static void ImGui_ImplAxis_SaveRenderState(axis::Renderer* renderer)
     });
 }
 
-static void ImGui_ImplAxis_SetupRenderState(axis::Renderer* renderer,
+static void ImGui_ImplAxis_SetupRenderState(ax::Renderer* renderer,
                                             ImDrawData* draw_data,
                                             int fb_width,
                                             int fb_height)
@@ -1549,7 +1549,7 @@ static void ImGui_ImplAxis_SetupRenderState(axis::Renderer* renderer,
     Mat4::createOrthographicOffCenter(L, R, B, T, -1.f, 1.f, &bd->Projection);
 }
 
-static void ImGui_ImplAxis_RestoreRenderState(axis::Renderer* renderer)
+static void ImGui_ImplAxis_RestoreRenderState(ax::Renderer* renderer)
 {
     AddRendererCommand([renderer]() {
         auto bd = ImGui_ImplGlfw_GetBackendData();

@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -290,7 +290,7 @@ void NavMesh::dtDraw()
     _debugDraw.depthMask(true);
 }
 
-void axis::NavMesh::drawOffMeshConnections()
+void ax::NavMesh::drawOffMeshConnections()
 {
     unsigned int conColor  = duRGBA(192, 0, 128, 192);
     unsigned int baseColor = duRGBA(0, 0, 0, 64);
@@ -317,7 +317,7 @@ void axis::NavMesh::drawOffMeshConnections()
     _debugDraw.end();
 }
 
-void axis::NavMesh::drawObstacles()
+void ax::NavMesh::drawObstacles()
 {
     // Draw obstacles
     for (auto&& iter : _obstacleList)
@@ -345,7 +345,7 @@ void axis::NavMesh::drawObstacles()
     }
 }
 
-void axis::NavMesh::drawAgents()
+void ax::NavMesh::drawAgents()
 {
     for (auto&& iter : _agentList)
     {
@@ -509,7 +509,7 @@ void NavMesh::update(float dt)
     }
 }
 
-void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec3>& pathPoints)
+void ax::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec3>& pathPoints)
 {
     static const int MAX_POLYS  = 256;
     static const int MAX_SMOOTH = 2048;
@@ -543,7 +543,7 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
         // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
         // m_nsmoothPath++;
 
-        pathPoints.push_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
+        pathPoints.emplace_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
         nsmoothPath++;
 
         // Move towards target a small advancement at a time until target reached or
@@ -597,7 +597,7 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
                 {
                     // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
                     // m_nsmoothPath++;
-                    pathPoints.push_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
+                    pathPoints.emplace_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
                     nsmoothPath++;
                 }
                 break;
@@ -628,14 +628,14 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
                     {
                         // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], startPos);
                         // m_nsmoothPath++;
-                        pathPoints.push_back(Vec3(startPos[0], startPos[1], startPos[2]));
+                        pathPoints.emplace_back(Vec3(startPos[0], startPos[1], startPos[2]));
                         nsmoothPath++;
                         // Hack to make the dotted path not visible during off-mesh connection.
                         if (nsmoothPath & 1)
                         {
                             // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], startPos);
                             // m_nsmoothPath++;
-                            pathPoints.push_back(Vec3(startPos[0], startPos[1], startPos[2]));
+                            pathPoints.emplace_back(Vec3(startPos[0], startPos[1], startPos[2]));
                             nsmoothPath++;
                         }
                     }
@@ -653,7 +653,7 @@ void axis::NavMesh::findPath(const Vec3& start, const Vec3& end, std::vector<Vec
                 // dtVcopy(&m_smoothPath[m_nsmoothPath * 3], iterPos);
                 // m_nsmoothPath++;
 
-                pathPoints.push_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
+                pathPoints.emplace_back(Vec3(iterPos[0], iterPos[1], iterPos[2]));
                 nsmoothPath++;
             }
         }

@@ -11,7 +11,7 @@ LOCAL_SRC_FILES := \
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/.. 
 
 LOCAL_C_INCLUDES := $(LOCAL_EXPORT_C_INCLUDES) \
-                    $(LOCAL_PATH)/../../../frameworks/axis/core \
-                    $(LOCAL_PATH)/../../../frameworks/axis/thirdparty
+                    $(LOCAL_PATH)/../../../frameworks/axys/core \
+                    $(LOCAL_PATH)/../../../frameworks/axys/thirdparty
 
 include $(BUILD_STATIC_LIBRARY)

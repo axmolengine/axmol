@@ -3,7 +3,7 @@
  Copyright (c) 2012 James Chen
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -86,7 +86,7 @@ EditBox* EditBox::create(const Vec2& size,
 }
 
 EditBox* EditBox::create(const Vec2& size,
-                         axis::ui::Scale9Sprite* normalSprite,
+                         ax::ui::Scale9Sprite* normalSprite,
                          ui::Scale9Sprite* pressedSprite,
                          Scale9Sprite* disabledSprite)
 {

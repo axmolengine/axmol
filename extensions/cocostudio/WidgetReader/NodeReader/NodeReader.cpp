@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -431,7 +431,7 @@ Offset<Table> NodeReader::createOptionsWithFlatBuffers(pugi::xml_node objectData
     return *(Offset<Table>*)(&options);
 }
 
-void NodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
+void NodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOptions)
 {
     auto options = (WidgetOptions*)(nodeOptions);
 
@@ -501,7 +501,7 @@ void NodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Ta
     setLayoutComponentPropsWithFlatBuffers(node, nodeOptions);
 }
 
-void NodeReader::setLayoutComponentPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
+void NodeReader::setLayoutComponentPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOptions)
 {
     auto layoutComponentTable = ((WidgetOptions*)nodeOptions)->layoutComponent();
     if (!layoutComponentTable)

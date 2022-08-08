@@ -42,7 +42,7 @@
             ]
          },
          "project_replace_package_name":{
-            "src_package_name":"org.cocos2dx.hellocpp",
+            "src_package_name":"org.axys1.hellocpp",
             "files":[
                "proj.android/AndroidManifest.xml"
             ]
@@ -54,13 +54,13 @@
             ]
          },
          "project_replace_mac_bundleid": {
-            "src_bundle_id": "org.cocos2dx.hellocpp",
+            "src_bundle_id": "org.axys1.hellocpp",
             "files": [
                "proj.ios_mac/mac/Info.plist"
             ]
          },
          "project_replace_ios_bundleid": {
-            "src_bundle_id": "org.cocos2dx.hellocpp",
+            "src_bundle_id": "org.axys1.hellocpp",
             "files": [
                "proj.ios_mac/ios/Info.plist"
             ]

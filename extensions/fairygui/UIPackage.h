@@ -11,7 +11,7 @@ NS_FGUI_BEGIN
 struct AtlasSprite;
 class ByteBuffer;
 
-class UIPackage : public axis::Ref
+class UIPackage : public ax::Ref
 {
 public:
     UIPackage();
@@ -29,7 +29,7 @@ public:
     static std::string normalizeURL(const std::string& url);
     static void* getItemAsset(const std::string& pkgName, const std::string& resName, PackageItemType type = PackageItemType::UNKNOWN);
     static void* getItemAssetByURL(std::string_view url, PackageItemType type = PackageItemType::UNKNOWN);
-    static axis::Texture2D* getEmptyTexture() { return _emptyTexture; }
+    static ax::Texture2D* getEmptyTexture() { return _emptyTexture; }
 
     const std::string& getId() const { return _id; }
     const std::string& getName() const { return _name; }
@@ -50,7 +50,7 @@ private:
     bool loadPackage(ByteBuffer* buffer);
     void loadAtlas(PackageItem* item);
     AtlasSprite* getSprite(const std::string& spriteId);
-    axis::SpriteFrame* createSpriteTexture(AtlasSprite* sprite);
+    ax::SpriteFrame* createSpriteTexture(AtlasSprite* sprite);
     void loadImage(PackageItem* item);
     void loadMovieClip(PackageItem* item);
     void loadFont(PackageItem* item);
@@ -79,7 +79,7 @@ private:
     static std::unordered_map<std::string, std::string> _vars;
     static std::string _branch;
 
-    static axis::Texture2D* _emptyTexture;
+    static ax::Texture2D* _emptyTexture;
 
     friend class PackageItem;
 };

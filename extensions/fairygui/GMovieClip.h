@@ -31,16 +31,16 @@ public:
     FlipType getFlip() const;
     void setFlip(FlipType value);
 
-    axis::Color3B getColor() const { return _content->getColor(); }
-    void setColor(const axis::Color3B& value);
+    ax::Color3B getColor() const { return _content->getColor(); }
+    void setColor(const ax::Color3B& value);
 
     //from start to end(-1 means ending) repeat times(0 means infinite loop) when all is over, stopping at endAt(-1 means same value of end)
     void setPlaySettings(int start = 0, int end = -1, int times = 0, int endAt = -1, std::function<void()> completeCallback = nullptr);
 
     virtual void constructFromResource() override;
 
-    virtual axis::Value getProp(ObjectPropID propId) override;
-    virtual void setProp(ObjectPropID propId, const axis::Value& value) override;
+    virtual ax::Value getProp(ObjectPropID propId) override;
+    virtual void setProp(ObjectPropID propId, const ax::Value& value) override;
 
 protected:
     virtual void handleInit() override;
@@ -48,21 +48,21 @@ protected:
     virtual void handleGrayedChanged() override;
 
 private:
-    axis::Sprite* _content;
+    ax::Sprite* _content;
     ActionMovieClip* _playAction;
     bool _playing;
 };
 
-class ActionMovieClip : public axis::Action
+class ActionMovieClip : public ax::Action
 {
 public:
-    static ActionMovieClip* create(axis::Animation *animation, float repeatDelay = 0, bool swing =false);
+    static ActionMovieClip* create(ax::Animation *animation, float repeatDelay = 0, bool swing =false);
     ActionMovieClip();
     ~ActionMovieClip();
 
     virtual bool isDone() const override;
     virtual void step(float dt) override;
-    virtual void startWithTarget(axis::Node *target) override;
+    virtual void startWithTarget(ax::Node *target) override;
     virtual ActionMovieClip* reverse() const override;
     virtual ActionMovieClip* clone() const override;
 
@@ -75,12 +75,12 @@ public:
     void advance(float time);
 
     void setPlaySettings(int start, int end, int times, int endAt, std::function<void()> completeCallback = nullptr);
-    void setAnimation(axis::Animation *animation, float repeatDelay = 0, bool swing = false);
+    void setAnimation(ax::Animation *animation, float repeatDelay = 0, bool swing = false);
 
 private:
     void drawFrame();
 
-    axis::Animation* _animation;
+    ax::Animation* _animation;
     int _frame;
     float _frameElapsed;
     int _repeatedCount;

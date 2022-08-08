@@ -5,7 +5,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -557,7 +557,7 @@ void Scheduler::removeUpdateFromHash(struct _listEntry* entry)
         else
         {
             element->entry->markedForDeletion = true;
-            _updateDeleteVector.push_back(element->entry);
+            _updateDeleteVector.emplace_back(element->entry);
         }
 
         // hash entry
@@ -815,7 +815,7 @@ void Scheduler::resumeTargets(const std::set<void*>& targetsToResume)
 void Scheduler::performFunctionInCocosThread(std::function<void()> function)
 {
     std::lock_guard<std::mutex> lock(_performMutex);
-    _functionsToPerform.push_back(std::move(function));
+    _functionsToPerform.emplace_back(std::move(function));
 }
 
 void Scheduler::removeAllFunctionsToBePerformedInCocosThread()

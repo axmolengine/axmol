@@ -2,7 +2,7 @@
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -52,11 +52,11 @@ const char* SceneReader::sceneReaderVersion()
     return "1.0.0.0";
 }
 
-axis::Node* SceneReader::createNodeWithSceneFile(
+ax::Node* SceneReader::createNodeWithSceneFile(
     std::string_view fileName,
     AttachComponentType attachComponent /*= AttachComponentType::EMPTY_NODE*/)
 {
-    std::string fileExtension = axis::FileUtils::getInstance()->getFileExtension(fileName);
+    std::string fileExtension = ax::FileUtils::getInstance()->getFileExtension(fileName);
     if (fileExtension == ".json")
     {
         _node = nullptr;
@@ -209,7 +209,7 @@ Node* SceneReader::nodeByTag(Node* parent, int tag)
     return _retNode;
 }
 
-axis::Component* SceneReader::createComponent(std::string_view classname)
+ax::Component* SceneReader::createComponent(std::string_view classname)
 {
     std::string name = this->getComponentClassName(classname);
     Ref* object      = ObjectFactory::getInstance()->createObject(name);
@@ -249,7 +249,7 @@ std::string SceneReader::getComponentClassName(std::string_view name)
 }
 
 Node* SceneReader::createObject(const rapidjson::Value& dict,
-                                axis::Node* parent,
+                                ax::Node* parent,
                                 AttachComponentType attachComponent)
 {
     const char* className = DICTOOL->getStringValue_json(dict, "classname");
@@ -352,9 +352,9 @@ Node* SceneReader::createObject(const rapidjson::Value& dict,
     return nullptr;
 }
 
-axis::Node* SceneReader::createObject(CocoLoader* cocoLoader,
+ax::Node* SceneReader::createObject(CocoLoader* cocoLoader,
                                          stExpCocoNode* cocoNode,
-                                         axis::Node* parent,
+                                         ax::Node* parent,
                                          AttachComponentType attachComponent)
 {
     stExpCocoNode* pNodeArray = cocoNode->GetChildArray(cocoLoader);
@@ -455,7 +455,7 @@ axis::Node* SceneReader::createObject(CocoLoader* cocoLoader,
     return nullptr;
 }
 
-void SceneReader::setTarget(const std::function<void(axis::Ref* obj, void* doc)>& selector)
+void SceneReader::setTarget(const std::function<void(ax::Ref* obj, void* doc)>& selector)
 {
     _fnSelector = selector;
 }
@@ -473,7 +473,7 @@ Node* SceneReader::getNodeByTag(int nTag)
     return nodeByTag(_node, nTag);
 }
 
-void SceneReader::setPropertyFromJsonDict(const rapidjson::Value& root, axis::Node* node)
+void SceneReader::setPropertyFromJsonDict(const rapidjson::Value& root, ax::Node* node)
 {
     float x = DICTOOL->getFloatValue_json(root, "x");
     float y = DICTOOL->getFloatValue_json(root, "y");
@@ -500,7 +500,7 @@ void SceneReader::setPropertyFromJsonDict(const rapidjson::Value& root, axis::No
     node->setName(sName);
 }
 
-void SceneReader::setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, axis::Node* node)
+void SceneReader::setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, ax::Node* node)
 {
     stExpCocoNode* stChildArray = cocoNode->GetChildArray(cocoLoader);
 

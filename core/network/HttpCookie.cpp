@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ void HttpCookie::readFile()
         VALUE_INDEX,
     };
 
-    std::string inString = axis::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
+    std::string inString = ax::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if (!inString.empty())
     {
         xsbase::fast_split(inString, '\n', [this](char* s, char* e) {
@@ -91,7 +91,7 @@ void HttpCookie::readFile()
                 ++count;
             });
             if (count >= 7)
-                _cookies.push_back(std::move(cookieInfo));
+                _cookies.emplace_back(std::move(cookieInfo));
         });
     }
 }
@@ -122,7 +122,7 @@ void HttpCookie::updateOrAddCookie(CookieInfo* cookie)
             return;
         }
     }
-    _cookies.push_back(std::move(*cookie));
+    _cookies.emplace_back(std::move(*cookie));
 }
 
 std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)

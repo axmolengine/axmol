@@ -2,7 +2,7 @@
 Copyright (c) 2015-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -66,7 +66,7 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
     auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
 
     float length                 = 0;
-    axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
+    ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
 
     auto attribute = objectData.first_attribute();
     while (attribute)
@@ -116,7 +116,7 @@ Offset<Table> BoneNodeReader::createOptionsWithFlatBuffers(pugi::xml_node object
     return *(Offset<Table>*)(&options);
 }
 
-void BoneNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* nodeOptions)
+void BoneNodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* nodeOptions)
 {
 
     auto* bone   = static_cast<BoneNode*>(node);
@@ -128,14 +128,14 @@ void BoneNodeReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers
     auto f_blendFunc = options->blendFunc();
     if (f_blendFunc)
     {
-        axis::BlendFunc blendFunc = axis::BlendFunc::ALPHA_PREMULTIPLIED;
+        ax::BlendFunc blendFunc = ax::BlendFunc::ALPHA_PREMULTIPLIED;
         blendFunc.src                = utils::toBackendBlendFactor(f_blendFunc->src());
         blendFunc.dst                = utils::toBackendBlendFactor(f_blendFunc->dst());
         bone->setBlendFunc(blendFunc);
     }
 }
 
-axis::Node* BoneNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
+ax::Node* BoneNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
     auto bone = BoneNode::create();
 

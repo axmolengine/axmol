@@ -6,7 +6,7 @@
 
 NS_AX_BACKEND_BEGIN
 
-class RenderTarget : public axis::Ref
+class RenderTarget : public ax::Ref
 {
 public:
     struct RenderBuffer

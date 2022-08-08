@@ -30,7 +30,7 @@ class TweenPropTypeUtils
 {
 public:
     static void setProps(GObject* target, TweenPropType propType, const TweenValue& value);
-    static void setProps(axis::Node* target, TweenPropType propType, const TweenValue& value);
+    static void setProps(ax::Node* target, TweenPropType propType, const TweenValue& value);
 };
 
 

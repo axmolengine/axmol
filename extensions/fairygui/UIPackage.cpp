@@ -643,7 +643,7 @@ void UIPackage::loadAtlas(PackageItem* item)
             return;
         }
 
-#if defined(AXIS_VERSION)
+#if defined(AXYS_VERSION)
         if(image->getFileType() == Image::Format::ETC1)
             tex->updateWithImage(image, Texture2D::getDefaultAlphaPixelFormat(), 1);
 #else
@@ -769,7 +769,7 @@ void UIPackage::loadFont(PackageItem* item)
 {
     item->bitmapFont = BitmapFont::create();
     auto bitmapFont  = item->bitmapFont;
-#if defined(AXIS_VERSION)
+#if defined(AXYS_VERSION)
     auto fontAtlas = bitmapFont->resetFontAtlas(bitmapFont->newFontAtlas());
 #else
     auto fontAtlas = bitmapFont->resetFontAtlas(bitmapFont->createFontAtlas());

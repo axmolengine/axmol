@@ -3,7 +3,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -81,7 +81,7 @@ struct ReferencedObject
 };
 
 /**
- * Wrapper class which maintains a strong reference to a cocos2dx axis::Ref* type object.
+ * Wrapper class which maintains a strong reference to a cocos2dx ax::Ref* type object.
  * Similar in concept to a boost smart pointer.
  *
  * Enables the use of the RAII idiom with Cocos2dx objects and helps automate some of the more
@@ -232,12 +232,12 @@ public:
      * where the RefPtr<T> has the initial ownership of the object.
      *
      * E.G:
-     *      RefPtr<axis::Image> image;
-     *      image.weakAssign(new axis::Image());
+     *      RefPtr<ax::Image> image;
+     *      image.weakAssign(new ax::Image());
      *
      * Instead of:
-     *      RefPtr<axis::Image> image;
-     *      image = new axis::Image();
+     *      RefPtr<ax::Image> image;
+     *      image = new ax::Image();
      *      image->release();               // Required because new'd object already has a reference count of '1'.
      */
     void weakAssign(const RefPtr<T>& other)
@@ -249,7 +249,7 @@ public:
 private:
     T* _ptr;
 
-    // NOTE: We can ensure T is derived from axis::Ref at compile time here.
+    // NOTE: We can ensure T is derived from ax::Ref at compile time here.
     static_assert(std::is_base_of<Ref, typename std::remove_const<T>::type>::value, "T must be derived from Ref");
 };
 

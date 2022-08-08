@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -511,7 +511,7 @@ void SpriteCreation::doTest()
             delete sprite;
             break;
         }
-        spriteCache.push_back(sprite);
+        spriteCache.emplace_back(sprite);
     }
 
     auto creationDuration = perf.endTick(KEY_CREATION);
@@ -573,7 +573,7 @@ std::string SpriteCreation::title() const
 
 std::string SpriteCreation::subtitle() const
 {
-#if defined(AXIS_DEBUG) && AXIS_DEBUG == 1
+#if defined(_AX_DEBUG) && _AX_DEBUG == 1
     return "In debug mode";
 #else
     return "In release mode";
@@ -1068,7 +1068,7 @@ std::string NonBatchSprites::title() const
 
 std::string NonBatchSprites::subtitle() const
 {
-#if defined(AXIS_DEBUG) && AXIS_DEBUG == 1
+#if defined(_AX_DEBUG) && _AX_DEBUG == 1
     return "DEBUG: simulate lots of sprites, drop to 30 fps";
 #else
     return "RELEASE: simulate lots of sprites, drop to 30 fps";

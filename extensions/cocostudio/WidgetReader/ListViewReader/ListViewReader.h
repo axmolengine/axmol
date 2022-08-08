@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,12 +43,12 @@ public:
     AX_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
 
-    virtual void setPropsFromJsonDictionary(axis::ui::Widget* widget, const rapidjson::Value& options);
-    virtual void setPropsFromBinary(axis::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
+    virtual void setPropsFromJsonDictionary(ax::ui::Widget* widget, const rapidjson::Value& options);
+    virtual void setPropsFromBinary(ax::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(pugi::xml_node objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder);
-    void setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* listViewOptions);
-    axis::Node* createNodeWithFlatBuffers(const flatbuffers::Table* listViewOptions);
+    void setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* listViewOptions);
+    ax::Node* createNodeWithFlatBuffers(const flatbuffers::Table* listViewOptions);
 
     int getResourceType(std::string_view key);
 };

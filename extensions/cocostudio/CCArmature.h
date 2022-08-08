@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,9 +67,9 @@ AX_DEPRECATED_ATTRIBUTE typedef Bone CCBone;
 AX_DEPRECATED_ATTRIBUTE typedef ArmatureAnimation CCArmatureAnimation;
 AX_DEPRECATED_ATTRIBUTE typedef Armature CCArmature;
 AX_DEPRECATED_ATTRIBUTE typedef ArmatureDataManager CCArmatureDataManager;
-AX_DEPRECATED_ATTRIBUTE typedef axis::tweenfunc::TweenType CCTweenType;
+AX_DEPRECATED_ATTRIBUTE typedef ax::tweenfunc::TweenType CCTweenType;
 
-class CCS_DLL Armature : public axis::Node, public axis::BlendProtocol
+class CCS_DLL Armature : public ax::Node, public ax::BlendProtocol
 {
 
 public:
@@ -144,12 +144,12 @@ public:
      * Get Armature's bone dictionary
      * @return Armature's bone dictionary
      */
-    const axis::StringMap<Bone*>& getBoneDic() const;
+    const ax::StringMap<Bone*>& getBoneDic() const;
 
     /**
      * This boundingBox will calculate all bones' boundingBox every time
      */
-    virtual axis::Rect getBoundingBox() const override;
+    virtual ax::Rect getBoundingBox() const override;
 
     Bone* getBoneAtPoint(float x, float y) const;
 
@@ -158,34 +158,34 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual void visit(axis::Renderer* renderer,
-                       const axis::Mat4& parentTransform,
+    virtual void visit(ax::Renderer* renderer,
+                       const ax::Mat4& parentTransform,
                        uint32_t parentFlags) override;
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
     virtual void update(float dt) override;
 
     virtual void onEnter() override;
     virtual void onExit() override;
 
-    virtual const axis::Mat4& getNodeToParentTransform() const override;
+    virtual const ax::Mat4& getNodeToParentTransform() const override;
     /**
      *  @js NA
      *  @lua NA
      */
-    inline void setBlendFunc(const axis::BlendFunc& blendFunc) override { _blendFunc = blendFunc; }
+    inline void setBlendFunc(const ax::BlendFunc& blendFunc) override { _blendFunc = blendFunc; }
     /**
      *  @js NA
      *  @lua NA
      */
-    inline const axis::BlendFunc& getBlendFunc() const override { return _blendFunc; }
+    inline const ax::BlendFunc& getBlendFunc() const override { return _blendFunc; }
 
     /**
      * Set contentsize and Calculate anchor point.
      */
     virtual void updateOffsetPoint();
-    virtual void setAnchorPoint(const axis::Vec2& point) override;
-    virtual const axis::Vec2& getAnchorPointInPoints() const override;
-    virtual const axis::Vec2& getOffsetPoints() const;
+    virtual void setAnchorPoint(const ax::Vec2& point) override;
+    virtual const ax::Vec2& getAnchorPointInPoints() const override;
+    virtual const ax::Vec2& getOffsetPoints() const;
 
     virtual void setAnimation(ArmatureAnimation* animation);
     virtual ArmatureAnimation* getAnimation() const;
@@ -258,16 +258,16 @@ protected:
 
     mutable bool _armatureTransformDirty;
 
-    axis::StringMap<Bone*>
+    ax::StringMap<Bone*>
         _boneDic;  //! The dictionary of the bones, include all bones in the armature, no matter it is the direct bone
                    //! or the indirect bone. It is different from m_pChindren.
 
-    axis::Vector<Bone*> _topBoneList;
+    ax::Vector<Bone*> _topBoneList;
 
-    axis::BlendFunc _blendFunc;  //! It's required for CCTextureProtocol inheritance
+    ax::BlendFunc _blendFunc;  //! It's required for CCTextureProtocol inheritance
 
-    axis::Vec2 _offsetPoint;
-    axis::Vec2 _realAnchorPointInPoints;
+    ax::Vec2 _offsetPoint;
+    ax::Vec2 _realAnchorPointInPoints;
 
     ArmatureAnimation* _animation;
 

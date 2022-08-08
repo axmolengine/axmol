@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ THE SOFTWARE.
 namespace cocostudio
 {
 
-class CCS_DLL BaseTriggerCondition : public axis::Ref
+class CCS_DLL BaseTriggerCondition : public ax::Ref
 {
 protected:
     BaseTriggerCondition(void);
@@ -46,7 +46,7 @@ public:
     virtual void removeAll();
 };
 
-class CCS_DLL BaseTriggerAction : public axis::Ref
+class CCS_DLL BaseTriggerAction : public ax::Ref
 {
 protected:
     BaseTriggerAction(void);
@@ -60,7 +60,7 @@ public:
     virtual void removeAll();
 };
 
-class CCS_DLL TriggerObj : public axis::Ref
+class CCS_DLL TriggerObj : public ax::Ref
 {
 public:
     TriggerObj(void);
@@ -77,11 +77,11 @@ public:
     void setEnabled(bool enabled);
 
 private:
-    axis::Vector<BaseTriggerCondition*> _cons;
-    axis::Vector<BaseTriggerAction*> _acts;
+    ax::Vector<BaseTriggerCondition*> _cons;
+    ax::Vector<BaseTriggerAction*> _acts;
     unsigned int _id;
     bool _enabled;
-    axis::Vector<axis::EventListenerCustom*> _listeners;
+    ax::Vector<ax::EventListenerCustom*> _listeners;
 };
 
 }  // namespace cocostudio

@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -115,4 +115,4 @@ bool AudioDecoderOgg::seek(uint32_t frameOffset)
 {
     return 0 == ov_pcm_seek(&_vf, frameOffset);
 }
-NS_AX_END  // namespace axis
+NS_AX_END  // namespace axys

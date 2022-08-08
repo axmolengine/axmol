@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -63,7 +63,7 @@ void QuadCommand::reIndex(int indicesCount)
 
         AXLOG("cocos2d: QuadCommand: resizing index size from [%d] to [%d]", __indexCapacity, indicesCount);
 
-        _ownedIndices.push_back(__indices);
+        _ownedIndices.emplace_back(__indices);
         __indices       = new uint16_t[indicesCount];
         __indexCapacity = indicesCount;
     }

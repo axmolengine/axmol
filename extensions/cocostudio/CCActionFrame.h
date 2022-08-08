@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -94,7 +94,7 @@ enum class FrameEaseType
  *  @js NA
  *  @lua NA
  */
-class CCS_DLL ActionFrame : public axis::Ref
+class CCS_DLL ActionFrame : public ax::Ref
 {
 
 public:
@@ -171,7 +171,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getAction(float duration);
+    virtual ax::ActionInterval* getAction(float duration);
     /**
      * Gets the ActionInterval of ActionFrame.
      *
@@ -181,7 +181,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
+    virtual ax::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
 
     /**
      *Set the ActionInterval easing parameter.
@@ -199,7 +199,7 @@ protected:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getEasingAction(axis::ActionInterval* action);
+    virtual ax::ActionInterval* getEasingAction(ax::ActionInterval* action);
 
 protected:
     int _frameType;
@@ -231,14 +231,14 @@ public:
      *
      * @param the move action position.
      */
-    void setPosition(axis::Vec2 pos);
+    void setPosition(ax::Vec2 pos);
 
     /**
      * Gets the move action position.
      *
      * @return the move action position.
      */
-    axis::Vec2 getPosition();
+    ax::Vec2 getPosition();
 
     /**
      * Gets the ActionInterval of ActionFrame.
@@ -247,10 +247,10 @@ public:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getAction(float duration);
+    virtual ax::ActionInterval* getAction(float duration);
 
 protected:
-    axis::Vec2 _position;
+    ax::Vec2 _position;
 };
 
 /**
@@ -305,7 +305,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getAction(float duration);
+    virtual ax::ActionInterval* getAction(float duration);
 
 protected:
     float _scaleX;
@@ -349,7 +349,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getAction(float duration);
+    virtual ax::ActionInterval* getAction(float duration);
     /**
      * Gets the ActionInterval of ActionFrame.
      *
@@ -359,7 +359,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
+    virtual ax::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
 
 public:
     float _rotation;
@@ -402,7 +402,7 @@ public:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getAction(float duration);
+    virtual ax::ActionInterval* getAction(float duration);
 
 protected:
     float _opacity;
@@ -430,14 +430,14 @@ public:
      *
      * @param ccolor the tint action color
      */
-    void setColor(axis::Color3B ccolor);
+    void setColor(ax::Color3B ccolor);
 
     /**
      * Gets the tint action color.
      *
      * @return the tint action color.
      */
-    axis::Color3B getColor();
+    ax::Color3B getColor();
 
     /**
      * Gets the ActionInterval of ActionFrame.
@@ -446,10 +446,10 @@ public:
      *
      * @return ActionInterval
      */
-    virtual axis::ActionInterval* getAction(float duration);
+    virtual ax::ActionInterval* getAction(float duration);
 
 protected:
-    axis::Color3B _color;
+    ax::Color3B _color;
 };
 
 }  // namespace cocostudio

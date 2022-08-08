@@ -38,11 +38,11 @@ namespace spine {
 
 class SP_API AttachmentVertices {
 public:
-	AttachmentVertices (axis::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
+	AttachmentVertices (ax::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
 	virtual ~AttachmentVertices ();
 
-	axis::Texture2D* _texture;
-	axis::TrianglesCommand::Triangles* _triangles;
+	ax::Texture2D* _texture;
+	ax::TrianglesCommand::Triangles* _triangles;
 };
 
 }

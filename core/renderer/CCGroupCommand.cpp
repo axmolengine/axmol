@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -62,7 +62,7 @@ int GroupCommandManager::getGroupID()
 void GroupCommandManager::releaseGroupID(int groupID)
 {
     _groupMapping[groupID] = false;
-    _unusedIDs.push_back(groupID);
+    _unusedIDs.emplace_back(groupID);
 }
 
 GroupCommand::GroupCommand()

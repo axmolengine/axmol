@@ -27,10 +27,9 @@ THE SOFTWARE.
 
 '''
 This script will install environment variables needed to by axis. It will set these envrironment variables:
-* AXIS_CONSOLE_ROOT: used to run axis console tools
-* ANDROID_NDK: used to build android native codes
-* ANDROID_SDK: used to generate applicatoin on Android through commands
-* AXIS_ROOT: path where axis is installed
+* AXYS_CONSOLE_ROOT: used to run axis console tools
+* ANDROID_SDK_ROOT: used to generate applicatoin on Android through commands
+* AXYS_ROOT: path where axis is installed
 
 On Max OS X, when start a shell, it will read these files and execute commands in sequence:
 
@@ -63,11 +62,10 @@ from time import time
 from time import sleep
 from os.path import dirname
 
-AXIS_ROOT = 'AXIS_ROOT'
-AXIS_CONSOLE_ROOT = 'AXIS_CONSOLE_ROOT'
+AXYS_ROOT = 'AXYS_ROOT'
+AXYS_CONSOLE_ROOT = 'AXYS_CONSOLE_ROOT'
 
-ANDROID_NDK = 'ANDROID_NDK'
-ANDROID_SDK = 'ANDROID_SDK'
+ANDROID_SDK_ROOT = 'ANDROID_SDK_ROOT'
 
 def _check_python_version():
     major_ver = sys.version_info[0]
@@ -194,7 +192,7 @@ class SetEnvVar(object):
         file.write('\n# Add environment variable %s for axis\n' % key)
         file.write('export %s="%s"\n' % (key, value))
         file.write('export PATH=$%s:$PATH\n' % key)
-        if key == ANDROID_SDK:
+        if key == ANDROID_SDK_ROOT:
             file.write(
                 'export PATH=$%s/tools:$%s/platform-tools:$PATH\n' % (key, key))
         file.close()
@@ -280,73 +278,10 @@ class SetEnvVar(object):
         ret.rstrip(" \t")
         return ret
 
-# python on linux doesn't include Tkinter model, so let user input in terminal
-#         if self._isLinux():
-#             input_value = raw_input('Couldn\'t find the "%s" envrironment variable. Please enter it: ' % sys_var)
-#         else:
-
-# pop up a window to let user select path for ndk root
-#             import Tkinter
-#             import tkFileDialog
-
-#             self.tmp_input_value = None
-
-#             root = Tkinter.Tk()
-
-#             if sys_var == ANDROID_NDK:
-#                 root.wm_title('Set ANDROID_NDK')
-#             else:
-#                 root.wm_title('Set ANDROID_SDK')
-
-#             def callback():
-#                 self.tmp_input_value = tkFileDialog.askdirectory()
-#                 root.destroy()
-
-#             if sys_var == ANDROID_NDK:
-#                 label_content = 'Select path for Android NDK:'
-#                 label_help = """
-# The Android NDK is needed to develop games for Android.
-# For further information, go to:
-# http://developer.android.com/tools/sdk/ndk/index.html.
-
-# You can safely skip this step now. You can set the ANDROID_NDK later.
-#                 """
-
-#             if sys_var == ANDROID_SDK:
-#                 label_content = 'Select path for Android SDK'
-#                 label_help = """
-# The Android SDK is needed to develop games for Android.
-# For further information, go to:
-# https://developer.android.com/tools/sdk/ndk/index.html.
-
-# You can safely skip this step now. You can set the ANDROID_SDK later.
-#                 """
-
-#             Tkinter.Label(root, text=label_help).pack()
-#             Tkinter.Button(root, text=label_content, command=callback).pack()
-#             self._center(root)
-#             root.mainloop()
-
-#             input_value = self.tmp_input_value
-#             self.tmp_input_value = None
-
-#         return input_value
-
-# display a window in center and put it on top
-#     def _center(self, win):
-#         win.update_idletasks()
-#         width = win.winfo_width()
-#         height = win.winfo_height()
-#         x = (win.winfo_screenwidth() / 2) - (width / 2)
-#         y = (win.winfo_screenheight() / 2) - (height / 2)
-#         win.geometry('{}x{}+{}+{}'.format(width, height, x, y))
-#         win.wm_attributes('-topmost', 1)
 
     def _check_valid(self, var_name, value):
         ret = False
-        if var_name == ANDROID_NDK:
-            ret = self._is_ndk_root_valid(value)
-        elif var_name == ANDROID_SDK:
+        if var_name == ANDROID_SDK_ROOT:
             ret = self._is_android_sdk_root_valid(value)
         else:
             ret = False
@@ -355,21 +290,7 @@ class SetEnvVar(object):
             print(
                 '    ->Error: "%s" is not a valid path of %s. Ignoring it.' % (value, var_name))
 
-        return ret
-
-    def _is_ndk_root_valid(self, ndk_root):
-        if not ndk_root:
-            return False
-
-        if self._isWindows():
-            ndk_build_path = os.path.join(ndk_root, 'ndk-build.cmd')
-        else:
-            ndk_build_path = os.path.join(ndk_root, 'ndk-build')
-
-        if os.path.isfile(ndk_build_path):
-            return True
-        else:
-            return False
+        return retf
 
     def _is_android_sdk_root_valid(self, android_sdk_root):
         if not android_sdk_root:
@@ -454,17 +375,17 @@ class SetEnvVar(object):
             print("  ->Add directory \"%s\" into PATH failed!\n" % add_dir)
 
     def set_console_root(self):
-        print("->Check environment variable %s" % AXIS_CONSOLE_ROOT)
+        print("->Check environment variable %s" % AXYS_CONSOLE_ROOT)
         axis_console_root = os.path.join(
             self.current_absolute_path, 'tools', 'console', 'bin')
-        old_dir = self._find_environment_variable(AXIS_CONSOLE_ROOT)
+        old_dir = self._find_environment_variable(AXYS_CONSOLE_ROOT)
         if old_dir is None:
             # add environment variable
             if self._isWindows():
                 self.set_windows_path(axis_console_root)
 
             self._set_environment_variable(
-                AXIS_CONSOLE_ROOT, axis_console_root)
+                AXYS_CONSOLE_ROOT, axis_console_root)
         else:
             if old_dir == axis_console_root:
                 # is same with before, nothing to do
@@ -475,20 +396,20 @@ class SetEnvVar(object):
                 self.remove_dir_from_win_path(old_dir)
                 self.set_windows_path(axis_console_root)
 
-            self._force_update_env(AXIS_CONSOLE_ROOT, axis_console_root)
+            self._force_update_env(AXYS_CONSOLE_ROOT, axis_console_root)
 
     def set_axis_root(self):
-        print("->Check environment variable %s" % AXIS_ROOT)
+        print("->Check environment variable %s" % AXYS_ROOT)
         axis_root = self.current_absolute_path
-        old_dir = self._find_environment_variable(AXIS_ROOT)
+        old_dir = self._find_environment_variable(AXYS_ROOT)
         if old_dir is None:
             # add environment variable
-            self._set_environment_variable(AXIS_ROOT, axis_root)
+            self._set_environment_variable(AXYS_ROOT, axis_root)
         else:
             if old_dir == axis_root:
                 # is same with before, nothing to do
                 return
-            self._force_update_env(AXIS_ROOT, axis_root)
+            self._force_update_env(AXYS_ROOT, axis_root)
 
     def _force_update_unix_env(self, var_name, value):
         import re
@@ -555,9 +476,6 @@ class SetEnvVar(object):
     def _get_androidsdk_path(self):
         return self._get_sdkpath_for_cmd("android")
 
-    def _get_ndkbuild_path(self):
-        return self._get_sdkpath_for_cmd("ndk-build", False)
-
     def _get_sdkpath_for_cmd(self, cmd, has_bin_folder=True):
         ret = None
         print("  ->Search for command " + cmd + " in system...")
@@ -581,9 +499,7 @@ class SetEnvVar(object):
         return ret
 
     def _find_value_from_sys(self, var_name):
-        if var_name == ANDROID_NDK:
-            return self._get_ndkbuild_path()
-        elif var_name == ANDROID_SDK:
+        if var_name == ANDROID_SDK_ROOT:
             return self._get_androidsdk_path()
         else:
             return None
@@ -639,7 +555,7 @@ class SetEnvVar(object):
         else:
             return SetEnvVar.RESULT_DO_NOTHING
 
-    def set_environment_variables(self, ndk_root, android_sdk_root, quiet):
+    def set_environment_variables(self, android_sdk_root, quiet):
 
         print('\nSetting up axis...')
 
@@ -655,8 +571,7 @@ class SetEnvVar(object):
             print('->Configuration for Android platform only, you can also skip and manually edit "%s"\n' %
                   self.file_used_for_setup)
         if(quiet) :
-            ndk_ret = self.set_variable(ANDROID_NDK, ndk_root)
-            sdk_ret = self.set_variable(ANDROID_SDK, android_sdk_root)
+            sdk_ret = self.set_variable(ANDROID_SDK_ROOT, android_sdk_root)
 
         # tip the backup file
         if (self.backup_file is not None) and (os.path.exists(self.backup_file)):
@@ -773,12 +688,10 @@ if __name__ == '__main__':
         exit()
 
     parser = OptionParser()
-    parser.add_option(
-        '-n', '--ndkroot', dest='ndk_root', help='directory of ndk root')
     parser.add_option('-a', '--androidsdkroot',
                       dest='android_sdk_root', help='directory of android sdk root')
     parser.add_option(
-        '-q', '--quiet', dest='quiet',action="store_false", default = True, help='setup without setting NDK,SDK')
+        '-q', '--quiet', dest='quiet',action="store_false", default = True, help='setup without setting SDK')
     opts, args = parser.parse_args()
 
     # set environment variables
@@ -789,8 +702,7 @@ if __name__ == '__main__':
         else:
             import _winreg
 
-    env.set_environment_variables(
-        opts.ndk_root, opts.android_sdk_root, opts.quiet)
+    env.set_environment_variables(opts.android_sdk_root, opts.quiet)
 
     if env._isWindows():
         import ctypes

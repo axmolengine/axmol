@@ -4,7 +4,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2019-2020 simdsoft, @HALX99
 Copyright (c) 2021 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -452,7 +452,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationActionWithFlatBuffersFile(std:
     return action;
 }
 
-ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const axis::Data& data, std::string_view fileName)
+ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const ax::Data& data, std::string_view fileName)
 {
     // if already exists an action with filename, then return this action
     ActionTimeline* action = _animationActions.at(fileName);
@@ -469,7 +469,7 @@ ActionTimeline* ActionTimelineCache::loadAnimationWithDataBuffer(const axis::Dat
     return action;
 }
 
-ActionTimeline* ActionTimelineCache::createActionWithDataBuffer(const axis::Data& data)
+ActionTimeline* ActionTimelineCache::createActionWithDataBuffer(const ax::Data& data)
 {
     auto csparsebinary = GetCSParseBinary(data.getBytes());
 
@@ -904,7 +904,7 @@ Frame* ActionTimelineCache::loadInnerActionFrameWithFlatBuffers(const flatbuffer
 Frame* ActionTimelineCache::loadBlendFrameWithFlatBuffers(const flatbuffers::BlendFrame* flatbuffers)
 {
     BlendFuncFrame* frame = BlendFuncFrame::create();
-    axis::BlendFunc blend;
+    ax::BlendFunc blend;
     blend.src = backend::BlendFactor::ONE;
     blend.dst = backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
     if (nullptr != flatbuffers->blendFunc())
@@ -934,7 +934,7 @@ void ActionTimelineCache::loadEasingDataWithFlatBuffers(cocostudio::timeline::Fr
                                                         const flatbuffers::EasingData* flatbuffers)
 {
     int type = flatbuffers->type();
-    frame->setTweenType((axis::tweenfunc::TweenType)type);
+    frame->setTweenType((ax::tweenfunc::TweenType)type);
     auto points = flatbuffers->points();
     if (points)
     {

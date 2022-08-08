@@ -2,7 +2,7 @@
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -139,7 +139,7 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count) override;
+    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe = false) override;
 
     /**
      * Draw primitives with an index list.
@@ -153,7 +153,8 @@ public:
     virtual void drawElements(PrimitiveType primitiveType,
                               IndexFormat indexType,
                               std::size_t count,
-                              std::size_t offset) override;
+                              std::size_t offset,
+                              bool wireframe = false) override;
 
     /**
      * Do some resources release.

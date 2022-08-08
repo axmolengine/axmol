@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -74,7 +74,7 @@ public:
         //            return;
         //        }
 
-        _freePool.push_back(ptr);
+        _freePool.emplace_back(ptr);
         //_usedPool.erase(ptr);
     }
 
@@ -83,10 +83,10 @@ private:
     {
         static const int COMMANDS_ALLOCATE_BLOCK_SIZE = 32;
         T* commands                                   = new T[COMMANDS_ALLOCATE_BLOCK_SIZE];
-        _allocatedPoolBlocks.push_back(commands);
+        _allocatedPoolBlocks.emplace_back(commands);
         for (int index = 0; index < COMMANDS_ALLOCATE_BLOCK_SIZE; ++index)
         {
-            _freePool.push_back(commands + index);
+            _freePool.emplace_back(commands + index);
         }
     }
 

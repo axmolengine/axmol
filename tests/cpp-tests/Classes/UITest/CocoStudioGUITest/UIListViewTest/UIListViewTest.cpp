@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 #include "UIListViewTest.h"
 
 USING_NS_AX;
-using namespace axis::ui;
+using namespace axys::ui;
 
 const char* font_UIListViewTest = "fonts/Marker Felt.ttf";
 
@@ -79,7 +79,7 @@ bool UIListViewTest_Vertical::init()
         for (int i = 0; i < _totalCount; ++i)
         {
             std::string ccstr = StringUtils::format("listview_item_%d", i);
-            _array.push_back(ccstr);
+            _array.emplace_back(ccstr);
         }
 
         // Create the list view ex
@@ -329,7 +329,7 @@ bool UIListViewTest_Horizontal::init()
         for (int i = 0; i < _totalCount; ++i)
         {
             std::string ccstr = StringUtils::format("listview_item_%d", i);
-            _array.push_back(ccstr);
+            _array.emplace_back(ccstr);
         }
 
         // Create the list view ex

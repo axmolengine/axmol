@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 #include "scripting/lua-bindings/manual/cocostudio/lua-cocostudio-conversions.h"
 #include "ActionTimeline/CCActionTimeline.h"
 
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
 extern void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName);
 #endif
 
@@ -40,7 +40,7 @@ bool luaval_to_animationInfo(lua_State* L, int lo, cocostudio::timeline::Animati
     tolua_Error tolua_err;
     if (!tolua_istable(L, lo, 0, &tolua_err))
     {
-#if AXIS_DEBUG >= 1
+#if _AX_DEBUG >= 1
         luaval_to_native_err(L, "#ferror:", &tolua_err, funcName);
 #endif
         ok = false;

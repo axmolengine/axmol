@@ -5,7 +5,7 @@
 
 NS_FGUI_BEGIN
 
-//copy from axis::ui::Margin
+//copy from ax::ui::Margin
 class Margin
 {
 public:

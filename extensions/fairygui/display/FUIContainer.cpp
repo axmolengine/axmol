@@ -99,7 +99,7 @@ void FUIContainer::setClippingRegion(const Rect & clippingRegion)
     _rectClippingSupport->_clippingRegion = clippingRegion;
 }
 
-axis::Node * FUIContainer::getStencil() const
+ax::Node * FUIContainer::getStencil() const
 {
     if (_stencilClippingSupport != nullptr)
         return _stencilClippingSupport->_stencil;
@@ -107,7 +107,7 @@ axis::Node * FUIContainer::getStencil() const
         return nullptr;
 }
 
-void FUIContainer::setStencil(axis::Node * stencil)
+void FUIContainer::setStencil(ax::Node * stencil)
 {
     if (_stencilClippingSupport == nullptr)
     {
@@ -368,7 +368,7 @@ const Rect& FUIContainer::getClippingRect()
     return _rectClippingSupport->_clippingRect;
 }
 
-void FUIContainer::visit(axis::Renderer * renderer, const axis::Mat4 & parentTransform, uint32_t parentFlags)
+void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransform, uint32_t parentFlags)
 {
     if (_stencilClippingSupport != nullptr)
     {

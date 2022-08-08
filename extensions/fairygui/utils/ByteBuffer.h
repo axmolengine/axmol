@@ -39,7 +39,7 @@ public:
     bool readS(std::string& result);
     const std::string* readSP();
     void writeS(const std::string& value);
-    axis::Color4B readColor();
+    ax::Color4B readColor();
     ByteBuffer* readBuffer();
     bool seek(int indexTablePos, int blockIndex);
 

@@ -57,7 +57,7 @@ void GLoader3D::setURL(const std::string& value)
     updateGear(7);
 }
 
-void GLoader3D::setAlign(axis::TextHAlignment value)
+void GLoader3D::setAlign(ax::TextHAlignment value)
 {
     if (_align != value)
     {
@@ -66,7 +66,7 @@ void GLoader3D::setAlign(axis::TextHAlignment value)
     }
 }
 
-void GLoader3D::setVerticalAlign(axis::TextVAlignment value)
+void GLoader3D::setVerticalAlign(ax::TextVAlignment value)
 {
     if (_verticalAlign != value)
     {
@@ -102,12 +102,12 @@ void GLoader3D::setShrinkOnly(bool value)
     }
 }
 
-axis::Color3B GLoader3D::getColor() const
+ax::Color3B GLoader3D::getColor() const
 {
     return _color;
 }
 
-void GLoader3D::setColor(const axis::Color3B& value)
+void GLoader3D::setColor(const ax::Color3B& value)
 {
     _color = value;
     if (_content != nullptr)
@@ -155,7 +155,7 @@ void GLoader3D::setLoop(bool value)
     onChange();
 }
 
-void GLoader3D::setContent(axis::Node* value)
+void GLoader3D::setContent(ax::Node* value)
 {
     setURL(STD_STRING_EMPTY);
 
@@ -292,11 +292,11 @@ void GLoader3D::loadExternal()
 {
 }
 
-void GLoader3D::freeExternal(axis::SpriteFrame* spriteFrame)
+void GLoader3D::freeExternal(ax::SpriteFrame* spriteFrame)
 {
 }
 
-void GLoader3D::onExternalLoadSuccess(axis::SpriteFrame* spriteFrame)
+void GLoader3D::onExternalLoadSuccess(ax::SpriteFrame* spriteFrame)
 {
 }
 
@@ -422,7 +422,7 @@ void GLoader3D::handleGrayedChanged()
     GObject::handleGrayedChanged();
 }
 
-axis::Value GLoader3D::getProp(ObjectPropID propId)
+ax::Value GLoader3D::getProp(ObjectPropID propId)
 {
     switch (propId)
     {
@@ -439,7 +439,7 @@ axis::Value GLoader3D::getProp(ObjectPropID propId)
     }
 }
 
-void GLoader3D::setProp(ObjectPropID propId, const axis::Value& value)
+void GLoader3D::setProp(ObjectPropID propId, const ax::Value& value)
 {
     switch (propId)
     {

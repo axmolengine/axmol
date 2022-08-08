@@ -2,7 +2,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@
 #include "yasio/detail/byte_buffer.hpp"
 
 USING_NS_AX;
-using namespace axis::network;
+using namespace axys::network;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    if defined(__arm64__)
@@ -511,9 +511,9 @@ void TemplateMapTest::onEnter()
     AXASSERT(mapForErase.size() == 18, "mapForErase's size is 18.");
 
     std::vector<std::string> itemsToRemove;
-    itemsToRemove.push_back("2");
-    itemsToRemove.push_back("3");
-    itemsToRemove.push_back("4");
+    itemsToRemove.emplace_back("2");
+    itemsToRemove.emplace_back("3");
+    itemsToRemove.emplace_back("4");
     mapForErase.erase(itemsToRemove);
     AXASSERT(mapForErase.size() == 15, "mapForErase's size is 15.");
 
@@ -612,9 +612,9 @@ void ValueTest::onEnter()
 
     auto createValueVector = [&]() {
         ValueVector ret;
-        ret.push_back(v1);
-        ret.push_back(v2);
-        ret.push_back(v3);
+        ret.emplace_back(v1);
+        ret.emplace_back(v2);
+        ret.emplace_back(v3);
         return ret;
     };
 
@@ -710,10 +710,10 @@ static void doUTFConversion()
 
     //---------------------------
     std::vector<char16_t> vec2(vec1);
-    vec2.push_back(0x2009);
-    vec2.push_back(0x2009);
-    vec2.push_back(0x2009);
-    vec2.push_back(0x2009);
+    vec2.emplace_back(0x2009);
+    vec2.emplace_back(0x2009);
+    vec2.emplace_back(0x2009);
+    vec2.emplace_back(0x2009);
 
     std::vector<char16_t> vec3(vec2);
     StringUtils::trimUTF16Vector(vec2);
@@ -1432,7 +1432,7 @@ namespace UnitTest
 }  // namespace UnitTest
 
 // I know the next line looks ugly, but it's a way to test MathUtil. :)
-using namespace UnitTest::axis;
+using namespace UnitTest::axys;
 
 static void __checkMathUtilResult(const char* description, const float* a1, const float* a2, int size)
 {

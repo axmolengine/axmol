@@ -7,7 +7,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
 Copyright (c) 2011 HKASoftware
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -369,7 +369,7 @@ void FastTMXLayer::setupTiles()
                 {
                     if (_tileSet->_animationInfo.find(gid) != _tileSet->_animationInfo.end())
                     {
-                        _animTileCoord[gid].push_back(Vec2(newX, y));
+                        _animTileCoord[gid].emplace_back(Vec2(newX, y));
                     }
                 }
             }

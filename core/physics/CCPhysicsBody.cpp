@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,7 @@ static void internalBodyUpdateVelocity(cpBody* body, cpVect gravity, cpFloat dam
     cpAssertSoft(body->m > 0.0f && body->i > 0.0f,
                  "Body's mass and moment must be positive to simulate. (Mass: %f Moment: f)", body->m, body->i);
 
-    axis::PhysicsBody* physicsBody = static_cast<axis::PhysicsBody*>(body->userData);
+    ax::PhysicsBody* physicsBody = static_cast<ax::PhysicsBody*>(body->userData);
 
     if (physicsBody->isGravityEnabled())
         body->v =

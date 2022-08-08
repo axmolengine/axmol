@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014 cocos2d-x.org
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -151,7 +151,7 @@ Offset<Table> Light3DReader::createOptionsWithFlatBuffers(pugi::xml_node objectD
     return *(Offset<Table>*)(&options);
 }
 
-void Light3DReader::setPropsWithFlatBuffers(axis::Node* node, const flatbuffers::Table* light3DOptions)
+void Light3DReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Table* light3DOptions)
 {
     auto options      = (Sprite3DOptions*)light3DOptions;
     auto node3DReader = Node3DReader::getInstance();
@@ -173,17 +173,17 @@ Node* Light3DReader::createNodeWithFlatBuffers(const flatbuffers::Table* light3D
     bool enabled     = (options->enabled() != 0);
     switch (type)
     {
-    case axis::LightType::DIRECTIONAL:
+    case ax::LightType::DIRECTIONAL:
         light = DirectionLight::create(Vec3::UNIT_Z, Color3B::WHITE);
         break;
-    case axis::LightType::POINT:
+    case ax::LightType::POINT:
         light = PointLight::create(Vec3::ZERO, Color3B::WHITE, range);
         break;
-    case axis::LightType::SPOT:
+    case ax::LightType::SPOT:
         light =
             SpotLight::create(Vec3::UNIT_Z, Vec3::ZERO, Color3B::WHITE, 0, AX_DEGREES_TO_RADIANS(outerAngle), range);
         break;
-    case axis::LightType::AMBIENT:
+    case ax::LightType::AMBIENT:
         light = AmbientLight::create(Color3B::WHITE);
         break;
     default:

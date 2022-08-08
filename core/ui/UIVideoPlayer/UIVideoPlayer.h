@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ namespace ui
  * It's mean VideoPlayer displays a video file above all graphical elements of cocos2d-x.
  * @js NA
  */
-class VideoPlayer : public axis::ui::Widget
+class VideoPlayer : public ax::ui::Widget
 {
 public:
     /**
@@ -244,7 +244,7 @@ public:
     virtual ~VideoPlayer();
 
 protected:
-    virtual axis::ui::Widget* createCloneInstance() override;
+    virtual ax::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW

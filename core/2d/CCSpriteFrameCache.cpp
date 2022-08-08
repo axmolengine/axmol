@@ -7,7 +7,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axis-project.github.io/
+https://axys1.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -156,7 +156,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
         auto* spriteFrame = iter.second;
         if (spriteFrame->getReferenceCount() == 1)
         {
-            toRemoveFrames.push_back(iter.first);
+            toRemoveFrames.emplace_back(iter.first);
             spriteFrame->getTexture()->removeSpriteFrameCapInset(spriteFrame);
             AXLOG("cocos2d: SpriteFrameCache: removing unused frame: %s", iter.first.c_str());
             removed = true;
@@ -207,7 +207,7 @@ void SpriteFrameCache::removeSpriteFramesFromFileContent(std::string_view plist_
 
 void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
 {
-    if (dictionary["frames"].getType() != axis::Value::Type::MAP)
+    if (dictionary["frames"].getType() != ax::Value::Type::MAP)
         return;
 
     const auto& framesDict = dictionary["frames"].asValueMap();
@@ -217,7 +217,7 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
     {
         if (findFrame(iter.first))
         {
-            keysToRemove.push_back(iter.first);
+            keysToRemove.emplace_back(iter.first);
         }
     }
 
@@ -234,7 +234,7 @@ void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
         auto* frame = findFrame(key);
         if (frame && (frame->getTexture() == texture))
         {
-            keysToRemove.push_back(key);
+            keysToRemove.emplace_back(key);
         }
     }
 

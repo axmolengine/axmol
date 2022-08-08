@@ -31,8 +31,8 @@ private:
     void onTweenUpdate(GTweener* tweener);
     void onTweenComplete();
 
-    std::unordered_map<std::string, axis::Vec4> _storage;
-    axis::Vec4 _default;
+    std::unordered_map<std::string, ax::Vec4> _storage;
+    ax::Vec4 _default;
 };
 
 NS_FGUI_END

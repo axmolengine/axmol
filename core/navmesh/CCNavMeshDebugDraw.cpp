@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -83,7 +83,7 @@ void NavMeshDebugDraw::vertex(const float x, const float y, const float z, unsig
     if (!_currentPrimitive)
         return;
     V3F_C4F vertex = {Vec3(x, y, z), getColor(color)};
-    _vertices.push_back(vertex);
+    _vertices.emplace_back(vertex);
     _dirtyBuffer = true;
 }
 
@@ -123,7 +123,7 @@ void NavMeshDebugDraw::end()
     if (!_currentPrimitive)
         return;
     _currentPrimitive->end = _vertices.size();
-    _primitiveList.push_back(_currentPrimitive);
+    _primitiveList.emplace_back(_currentPrimitive);
     _currentPrimitive = nullptr;
 }
 

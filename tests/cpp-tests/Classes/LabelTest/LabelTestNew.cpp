@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -621,9 +621,9 @@ bool LabelFNTMultiLineAlignment::init()
     lineBreaks->setTag(LineBreaks);
     mixed->setTag(Mixed);
 
-    _menuItems.push_back(longSentences);
-    _menuItems.push_back(lineBreaks);
-    _menuItems.push_back(mixed);
+    _menuItems.emplace_back(longSentences);
+    _menuItems.emplace_back(lineBreaks);
+    _menuItems.emplace_back(mixed);
 
     MenuItemFont::setFontSize(30);
 

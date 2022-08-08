@@ -15,7 +15,7 @@ from set_framework_helper import SetFrameworkHelper
 
 def get_engine_of_project(project):
     ver_str = None
-    x_ver_file = os.path.join(project["path"], 'frameworks/cocos2d-x/core/axis.cpp')
+    x_ver_file = os.path.join(project["path"], 'frameworks/cocos2d-x/core/axys.cpp')
     pattern = r".*return[ \t]+\"cocos2d-x (.*)\";"
 
     f = open(x_ver_file)

@@ -2,7 +2,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 #include <string>
 
 USING_NS_AX;
-using namespace axis::network;
+using namespace axys::network;
 
 #define CHROME_UA                                                                                                   \
     "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 " \
@@ -254,7 +254,7 @@ void HttpClientTest::onMenuPutTestClicked(Ref* sender)
         request->setUrl("https://httpbin.org/put");
         request->setRequestType(HttpRequest::Type::PUT);
         std::vector<std::string> headers;
-        headers.push_back("Content-Type: application/json; charset=utf-8");
+        headers.emplace_back("Content-Type: application/json; charset=utf-8");
         request->setHeaders(headers);
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 

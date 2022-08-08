@@ -2,7 +2,7 @@
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axis-project.github.io/
+ https://axys1.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ NS_AX_EXT_BEGIN
 
 using namespace std;
 USING_NS_AX;
-using namespace axis::network;
+using namespace ax::network;
 
 #define KEY_OF_VERSION "current-version-code"
 #define KEY_OF_DOWNLOADED_VERSION "downloaded-version-code"
