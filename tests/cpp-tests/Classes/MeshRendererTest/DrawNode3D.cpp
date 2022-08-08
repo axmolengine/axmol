@@ -167,8 +167,8 @@ void DrawNode3D::drawLine(const Vec3& from, const Vec3& to, const Color4F& color
         col,
     };
 
-    _bufferLines.push_back(a);
-    _bufferLines.push_back(b);
+    _bufferLines.emplace_back(a);
+    _bufferLines.emplace_back(b);
 
     _isDirty = true;
 }

@@ -934,7 +934,7 @@ std::vector<Mesh*> MeshRenderer::getMeshArrayByName(std::string_view name) const
     for (const auto& it : _meshes)
     {
         if (it->getName() == name)
-            meshes.push_back(it);
+            meshes.emplace_back(it);
     }
     return meshes;
 }

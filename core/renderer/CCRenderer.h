@@ -92,7 +92,7 @@ public:
     /**Constructor.*/
     RenderQueue();
     /**Push a renderCommand into current renderqueue.*/
-    void push_back(RenderCommand* command);
+    void emplace_back(RenderCommand* command);
     /**Return the number of render commands.*/
     ssize_t size() const;
     /**Sort the render commands.*/

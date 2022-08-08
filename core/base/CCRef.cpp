@@ -178,7 +178,7 @@ static void trackRef(Ref* ref)
     AXASSERT(ref, "Invalid parameter, ref should not be null!");
 
     // Create memory allocation record.
-    __refAllocationList.push_back(ref);
+    __refAllocationList.emplace_back(ref);
 }
 
 static void untrackRef(Ref* ref)

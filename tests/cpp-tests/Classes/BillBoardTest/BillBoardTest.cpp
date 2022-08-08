@@ -133,7 +133,7 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
         billboard->setScale(0.5f);
         billboard->setPosition3D(Vec3(0.0f, 0.0f, rand_minus1_1() * 150.0f));
         billboard->setOpacity(static_cast<uint8_t>(AXRANDOM_0_1() * 128 + 128));
-        _billboards.push_back(billboard);
+        _billboards.emplace_back(billboard);
         layer->addChild(billboard);
         _layerBillBoard->addChild(layer);
         layer->runAction(RepeatForever::create(RotateBy::create(AXRANDOM_0_1() * 10, Vec3(0.0f, 45.0f, 0.0f))));
@@ -147,8 +147,8 @@ BillBoardTest::BillBoardTest() : _camera(nullptr)
         auto billboard2 = BillBoard::create("Images/r2.png");
         billboard2->setPosition3D(Vec3(0.0f, 0.0f, 100.0f));
         billboard->addChild(billboard2);
-        _billboards.push_back(billboard);
-        _billboards.push_back(billboard2);
+        _billboards.emplace_back(billboard);
+        _billboards.emplace_back(billboard2);
 
         auto mesh = MeshRenderer::create("MeshRendererTest/orc.c3t");
         mesh->setScale(2.0f);
@@ -241,7 +241,7 @@ void BillBoardTest::addNewBillBoardWithCoords(Vec3 p)
         billboard->setOpacity(static_cast<uint8_t>(AXRANDOM_0_1() * 128 + 128));
 
         _layerBillBoard->addChild(billboard);
-        _billboards.push_back(billboard);
+        _billboards.emplace_back(billboard);
     }
 }
 void BillBoardTest::addNewAniBillBoardWithCoords(Vec3 p)
@@ -267,7 +267,7 @@ void BillBoardTest::addNewAniBillBoardWithCoords(Vec3 p)
         auto action = Animate::create(animation);
         billboardAni->runAction(RepeatForever::create(action));
         billboardAni->setOpacity(static_cast<uint8_t>(AXRANDOM_0_1() * 128 + 128));
-        _billboards.push_back(billboardAni);
+        _billboards.emplace_back(billboardAni);
     }
 }
 void BillBoardTest::update(float dt) {}

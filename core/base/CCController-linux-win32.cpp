@@ -4214,7 +4214,7 @@ public:
         auto controller         = new ax::Controller();
         controller->_deviceId   = deviceId;
         controller->_deviceName = deviceName;
-        Controller::s_allController.push_back(controller);
+        Controller::s_allController.emplace_back(controller);
 
         // Check if we already have an available input controller profile. If so, attach it it to the controller.
         for (const auto& it : s_controllerProfiles)

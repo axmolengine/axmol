@@ -63,7 +63,7 @@ public:
         auto controller         = new ax::Controller();
         controller->_deviceId   = deviceId;
         controller->_deviceName = deviceName;
-        Controller::s_allController.push_back(controller);
+        Controller::s_allController.emplace_back(controller);
 
         controller->onConnected();
     }

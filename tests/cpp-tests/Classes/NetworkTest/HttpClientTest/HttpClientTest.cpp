@@ -254,7 +254,7 @@ void HttpClientTest::onMenuPutTestClicked(Ref* sender)
         request->setUrl("https://httpbin.org/put");
         request->setRequestType(HttpRequest::Type::PUT);
         std::vector<std::string> headers;
-        headers.push_back("Content-Type: application/json; charset=utf-8");
+        headers.emplace_back("Content-Type: application/json; charset=utf-8");
         request->setHeaders(headers);
         request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
 

@@ -204,7 +204,7 @@ std::vector<Node*> findChildren(const Node& node, std::string_view name)
     std::vector<Node*> vec;
 
     node.enumerateChildren(name, [&vec](Node* nodeFound) -> bool {
-        vec.push_back(nodeFound);
+        vec.emplace_back(nodeFound);
         return false;
     });
 
@@ -673,7 +673,7 @@ std::vector<int> parseIntegerList(std::string_view intsString)
                 errno = 0;
                 AXLOGWARN("%s contains out of range integers", intsString.data());
             }
-            result.push_back(static_cast<int>(i));
+            result.emplace_back(static_cast<int>(i));
             cStr = endptr;
         }
     }

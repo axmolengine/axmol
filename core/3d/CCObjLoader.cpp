@@ -343,21 +343,21 @@ static unsigned int updateVertex(std::map<vertex_index, unsigned int>& vertexCac
 
     assert(in_positions.size() > (unsigned int)(3 * i.v_idx + 2));
 
-    positions.push_back(in_positions[3 * i.v_idx + 0]);
-    positions.push_back(in_positions[3 * i.v_idx + 1]);
-    positions.push_back(in_positions[3 * i.v_idx + 2]);
+    positions.emplace_back(in_positions[3 * i.v_idx + 0]);
+    positions.emplace_back(in_positions[3 * i.v_idx + 1]);
+    positions.emplace_back(in_positions[3 * i.v_idx + 2]);
 
     if (i.vn_idx >= 0)
     {
-        normals.push_back(in_normals[3 * i.vn_idx + 0]);
-        normals.push_back(in_normals[3 * i.vn_idx + 1]);
-        normals.push_back(in_normals[3 * i.vn_idx + 2]);
+        normals.emplace_back(in_normals[3 * i.vn_idx + 0]);
+        normals.emplace_back(in_normals[3 * i.vn_idx + 1]);
+        normals.emplace_back(in_normals[3 * i.vn_idx + 2]);
     }
 
     if (i.vt_idx >= 0)
     {
-        texcoords.push_back(in_texcoords[2 * i.vt_idx + 0]);
-        texcoords.push_back(in_texcoords[2 * i.vt_idx + 1]);
+        texcoords.emplace_back(in_texcoords[2 * i.vt_idx + 0]);
+        texcoords.emplace_back(in_texcoords[2 * i.vt_idx + 1]);
     }
 
     unsigned int idx = static_cast<unsigned int>(positions.size() / 3 - 1);
@@ -427,11 +427,11 @@ static bool exportFaceGroupToShape(shape_t& shape,
             unsigned int v2 = updateVertex(vertexCache, shape.mesh.positions, shape.mesh.normals, shape.mesh.texcoords,
                                            in_positions, in_normals, in_texcoords, i2);
 
-            shape.mesh.indices.push_back(v0);
-            shape.mesh.indices.push_back(v1);
-            shape.mesh.indices.push_back(v2);
+            shape.mesh.indices.emplace_back(v0);
+            shape.mesh.indices.emplace_back(v1);
+            shape.mesh.indices.emplace_back(v2);
 
-            shape.mesh.material_ids.push_back(material_id);
+            shape.mesh.material_ids.emplace_back(material_id);
         }
     }
 
@@ -507,7 +507,7 @@ std::string LoadMtl(std::map<std::string, int>& material_map,
             if (!material.name.empty())
             {
                 material_map.insert(std::pair<std::string, int>(material.name, static_cast<int>(materials.size())));
-                materials.push_back(material);
+                materials.emplace_back(material);
             }
 
             // initial temporary material
@@ -676,7 +676,7 @@ std::string LoadMtl(std::map<std::string, int>& material_map,
     }
     // flush last material.
     material_map.insert(std::pair<std::string, int>(material.name, static_cast<int>(materials.size())));
-    materials.push_back(material);
+    materials.emplace_back(material);
 
     return err.str();
 }
@@ -800,9 +800,9 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             token += 2;
             float x, y, z;
             parseFloat3(x, y, z, token);
-            v.push_back(x);
-            v.push_back(y);
-            v.push_back(z);
+            v.emplace_back(x);
+            v.emplace_back(y);
+            v.emplace_back(z);
             continue;
         }
 
@@ -812,9 +812,9 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             token += 3;
             float x, y, z;
             parseFloat3(x, y, z, token);
-            vn.push_back(x);
-            vn.push_back(y);
-            vn.push_back(z);
+            vn.emplace_back(x);
+            vn.emplace_back(y);
+            vn.emplace_back(z);
             continue;
         }
 
@@ -824,8 +824,8 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             token += 3;
             float x, y;
             parseFloat2(x, y, token);
-            vt.push_back(x);
-            vt.push_back(y);
+            vt.emplace_back(x);
+            vt.emplace_back(y);
             continue;
         }
 
@@ -842,12 +842,12 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             while (!isNewLine(token[0]))
             {
                 vertex_index vi = parseTriple(token, first, second, third);
-                face.push_back(vi);
+                face.emplace_back(vi);
                 size_t n = strspn(token, " \t\r");
                 token += n;
             }
 
-            faceGroup.push_back(face);
+            faceGroup.emplace_back(face);
 
             continue;
         }
@@ -868,7 +868,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt, faceGroup, material, name, true);
             if (ret)
             {
-                shapes.push_back(shape);
+                shapes.emplace_back(shape);
             }
             shape = shape_t();
             faceGroup.clear();
@@ -915,7 +915,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt, faceGroup, material, name, true);
             if (ret)
             {
-                shapes.push_back(shape);
+                shapes.emplace_back(shape);
             }
 
             shape = shape_t();
@@ -927,7 +927,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             while (!isNewLine(token[0]))
             {
                 std::string str = parseString(token);
-                names.push_back(str);
+                names.emplace_back(str);
                 token += strspn(token, " \t\r");  // skip tag
             }
 
@@ -954,7 +954,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt, faceGroup, material, name, true);
             if (ret)
             {
-                shapes.push_back(shape);
+                shapes.emplace_back(shape);
             }
 
             // material = -1;
@@ -980,7 +980,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
     bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt, faceGroup, material, name, true);
     if (ret)
     {
-        shapes.push_back(shape);
+        shapes.emplace_back(shape);
     }
     faceGroup.clear();  // for safety
 

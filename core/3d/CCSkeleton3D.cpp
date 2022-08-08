@@ -121,7 +121,7 @@ void Bone3D::setAnimationValue(float* trans, float* rot, float* scale, void* tag
     state.weight = weight;
     state.tag    = tag;
 
-    _blendStates.push_back(state);
+    _blendStates.emplace_back(state);
 }
 
 void Bone3D::clearBoneBlendState()

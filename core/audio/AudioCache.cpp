@@ -349,7 +349,7 @@ void AudioCache::addPlayCallback(const std::function<void()>& callback)
     {
     case State::INITIAL:
     case State::LOADING:
-        _playCallbacks.push_back(callback);
+        _playCallbacks.emplace_back(callback);
         break;
 
     case State::READY:
@@ -383,7 +383,7 @@ void AudioCache::addLoadCallback(const std::function<void(bool)>& callback)
     {
     case State::INITIAL:
     case State::LOADING:
-        _loadCallbacks.push_back(callback);
+        _loadCallbacks.emplace_back(callback);
         break;
 
     case State::READY:

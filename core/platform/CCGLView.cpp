@@ -73,7 +73,7 @@ static std::vector<Touch*> getAllTouchesVector()
     {
         if (temp & 0x00000001)
         {
-            ret.push_back(g_touches[i]);
+            ret.emplace_back(g_touches[i]);
         }
         temp >>= 1;
     }
@@ -324,7 +324,7 @@ void GLView::handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[])
             AXLOGINFO("x = %f y = %f", touch->getLocationInView().x, touch->getLocationInView().y);
 
             g_touchIdReorderMap.emplace(id, unusedIndex);
-            touchEvent._touches.push_back(touch);
+            touchEvent._touches.emplace_back(touch);
         }
     }
 
@@ -375,7 +375,7 @@ void GLView::handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], 
             touch->setTouchInfo(iter->second, (x - _viewPortRect.origin.x) / _scaleX,
                                 (y - _viewPortRect.origin.y) / _scaleY, force, maxForce);
 
-            touchEvent._touches.push_back(touch);
+            touchEvent._touches.emplace_back(touch);
         }
         else
         {
@@ -428,7 +428,7 @@ void GLView::handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode,
             touch->setTouchInfo(iter->second, (x - _viewPortRect.origin.x) / _scaleX,
                                 (y - _viewPortRect.origin.y) / _scaleY);
 
-            touchEvent._touches.push_back(touch);
+            touchEvent._touches.emplace_back(touch);
 
             g_touches[iter->second] = nullptr;
             removeUsedIndexBit(iter->second);

@@ -264,7 +264,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
                 auto oneAlias = value.asString();
                 if (std::find(frameAliases.begin(), frameAliases.end(), oneAlias) == frameAliases.end())
                 {
-                    frameAliases.push_back(std::move(oneAlias));
+                    frameAliases.emplace_back(std::move(oneAlias));
                 }
                 else
                 {
@@ -462,7 +462,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
                 auto oneAlias = value.asString();
                 if (std::find(frameAliases.begin(), frameAliases.end(), oneAlias) == frameAliases.end())
                 {
-                    frameAliases.push_back(std::move(oneAlias));
+                    frameAliases.emplace_back(std::move(oneAlias));
                 }
                 else
                 {

@@ -369,7 +369,7 @@ void FastTMXLayer::setupTiles()
                 {
                     if (_tileSet->_animationInfo.find(gid) != _tileSet->_animationInfo.end())
                     {
-                        _animTileCoord[gid].push_back(Vec2(newX, y));
+                        _animTileCoord[gid].emplace_back(Vec2(newX, y));
                     }
                 }
             }

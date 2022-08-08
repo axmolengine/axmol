@@ -621,9 +621,9 @@ bool LabelFNTMultiLineAlignment::init()
     lineBreaks->setTag(LineBreaks);
     mixed->setTag(Mixed);
 
-    _menuItems.push_back(longSentences);
-    _menuItems.push_back(lineBreaks);
-    _menuItems.push_back(mixed);
+    _menuItems.emplace_back(longSentences);
+    _menuItems.emplace_back(lineBreaks);
+    _menuItems.emplace_back(mixed);
 
     MenuItemFont::setFontSize(30);
 

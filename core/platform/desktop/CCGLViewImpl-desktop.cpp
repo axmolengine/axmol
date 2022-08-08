@@ -609,7 +609,7 @@ void GLViewImpl::setIcon(const std::vector<std::string_view>& filelist) const
         Image* icon = new Image();
         if (icon->initWithImageFile(filename))
         {
-            icons.push_back(icon);
+            icons.emplace_back(icon);
         }
         else
         {

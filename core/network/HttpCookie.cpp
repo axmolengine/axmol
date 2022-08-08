@@ -91,7 +91,7 @@ void HttpCookie::readFile()
                 ++count;
             });
             if (count >= 7)
-                _cookies.push_back(std::move(cookieInfo));
+                _cookies.emplace_back(std::move(cookieInfo));
         });
     }
 }
@@ -122,7 +122,7 @@ void HttpCookie::updateOrAddCookie(CookieInfo* cookie)
             return;
         }
     }
-    _cookies.push_back(std::move(*cookie));
+    _cookies.emplace_back(std::move(*cookie));
 }
 
 std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)
