@@ -442,7 +442,7 @@ void TestController::logEx(const char* format, ...)
     strcat(buff, "\n");
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "cocos2d-x debug info", "%s", buff);
+    __android_log_print(ANDROID_LOG_DEBUG, "axys debug info", "%s", buff);
 
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     WCHAR wszBuf[1024] = {0};

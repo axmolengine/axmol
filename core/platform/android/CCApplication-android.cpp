@@ -75,7 +75,7 @@ int Application::run()
 
 void Application::setAnimationInterval(float interval)
 {
-    JniHelper::callStaticVoidMethod("org/cocos2dx/lib/Cocos2dxRenderer", "setAnimationInterval", interval);
+    JniHelper::callStaticVoidMethod("org/axys1/lib/AxysRenderer", "setAnimationInterval", interval);
 }
 
 //////////////////////////////////////////////////////////////////////////

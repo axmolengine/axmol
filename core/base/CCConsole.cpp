@@ -59,7 +59,7 @@
 #include "base/ccUTF8.h"
 
 // !FIXME: the previous version of ax::log not thread safe
-// since axis make it multi-threading safe by default
+// since axys make it multi-threading safe by default
 #if !defined(AX_LOG_MULTITHREAD)
 #    define AX_LOG_MULTITHREAD 1
 #endif
@@ -131,7 +131,7 @@ void log(const char* format, ...)
     va_end(args);
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "axis debug info", "%s", buf.c_str());
+    __android_log_print(ANDROID_LOG_DEBUG, "axys debug info", "%s", buf.c_str());
 
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     buf.push_back('\n');
