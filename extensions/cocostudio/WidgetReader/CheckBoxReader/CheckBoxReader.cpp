@@ -261,7 +261,7 @@ Offset<Table> CheckBoxReader::createOptionsWithFlatBuffers(pugi::xml_node object
             if (backgroundboxResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
         else if (name == "PressedBackFileData")
@@ -296,7 +296,7 @@ Offset<Table> CheckBoxReader::createOptionsWithFlatBuffers(pugi::xml_node object
             if (backGroundBoxSelectedResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
         else if (name == "NodeNormalFileData")
@@ -331,7 +331,7 @@ Offset<Table> CheckBoxReader::createOptionsWithFlatBuffers(pugi::xml_node object
             if (frontCrossResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
         else if (name == "DisableBackFileData")
@@ -366,7 +366,7 @@ Offset<Table> CheckBoxReader::createOptionsWithFlatBuffers(pugi::xml_node object
             if (backGroundBoxDisabledResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
         else if (name == "NodeDisableFileData")
@@ -401,7 +401,7 @@ Offset<Table> CheckBoxReader::createOptionsWithFlatBuffers(pugi::xml_node object
             if (frontCrossDisabledResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
 

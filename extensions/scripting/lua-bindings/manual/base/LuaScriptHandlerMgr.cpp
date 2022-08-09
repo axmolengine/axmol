@@ -143,7 +143,7 @@ void ScriptHandlerMgr::addObjectHandler(void* object, int handler, ScriptHandler
         vecHandlers = iter->second;
 
     HandlerPair eventHanler = std::make_pair(handlerType, handler);
-    vecHandlers.push_back(eventHanler);
+    vecHandlers.emplace_back(eventHanler);
     _mapObjectHandlers[object] = vecHandlers;
 }
 void ScriptHandlerMgr::removeObjectHandler(void* object, ScriptHandlerMgr::HandlerType handlerType)
@@ -221,7 +221,7 @@ ScriptHandlerMgr::HandlerType ScriptHandlerMgr::addCustomHandler(void* object, i
     assert(handlerType <= HandlerType::EVENT_CUSTOM_ENDED);
 
     HandlerPair eventHanler = std::make_pair(handlerType, handler);
-    vecHandlers.push_back(eventHanler);
+    vecHandlers.emplace_back(eventHanler);
     _mapObjectHandlers[object] = vecHandlers;
 
     return handlerType;

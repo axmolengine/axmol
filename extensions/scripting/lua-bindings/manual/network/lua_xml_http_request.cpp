@@ -191,7 +191,7 @@ void LuaMinXmlHttpRequest::_setHttpRequestHeader()
 
     for (auto it = _requestHeader.begin(); it != _requestHeader.end(); ++it)
     {
-        header.push_back(it->first + ": " + it->second);
+        header.emplace_back(it->first + ": " + it->second);
     }
 
     if (!header.empty())
@@ -709,7 +709,7 @@ static int lua_get_XMLHttpRequest_response(lua_State* L)
         for (size_t i = 0; i < self->getDataSize(); i++)
         {
             LuaValue value = LuaValue::intValue(tmpData[i]);
-            array.push_back(value);
+            array.emplace_back(value);
         }
 
         pStack->pushLuaValueArray(array);

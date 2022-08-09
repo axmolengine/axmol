@@ -680,7 +680,7 @@ int axlua_physics3d_Physics3DShape_createCompoundShape(lua_State* L)
                     luaval_to_mat4(L, lua_gettop(L), &mat);
                     lua_pop(L, 1);
 
-                    shapes.push_back(std::make_pair(shape, mat));
+                    shapes.emplace_back(std::make_pair(shape, mat));
                 }
                 lua_pop(L, 1);
             }

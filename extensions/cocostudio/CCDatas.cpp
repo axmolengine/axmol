@@ -319,7 +319,7 @@ AnimationData::~AnimationData(void) {}
 void AnimationData::addMovement(MovementData* movData)
 {
     movementDataDic.insert(movData->name, movData);
-    movementNames.push_back(movData->name);
+    movementNames.emplace_back(movData->name);
 }
 
 MovementData* AnimationData::getMovement(std::string_view movementName)
@@ -343,7 +343,7 @@ bool ContourData::init()
 
 void ContourData::addVertex(Vec2& vertex)
 {
-    vertexList.push_back(vertex);
+    vertexList.emplace_back(vertex);
 }
 
 TextureData::TextureData() : height(0.0f), width(0.0f), pivotX(0.5f), pivotY(0.5f), name("") {}

@@ -57,7 +57,7 @@ PUSimpleSpline::~PUSimpleSpline() {}
 //---------------------------------------------------------------------
 void PUSimpleSpline::addPoint(const Vec3& p)
 {
-    _points.push_back(p);
+    _points.emplace_back(p);
     if (_autoCalc)
     {
         recalcTangents();

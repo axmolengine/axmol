@@ -120,7 +120,7 @@ void ParticleSystem3D::addAffector(Particle3DAffector* affector)
     {
         affector->_particleSystem = this;
         affector->retain();
-        _affectors.push_back(affector);
+        _affectors.emplace_back(affector);
     }
 }
 

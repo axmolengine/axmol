@@ -454,7 +454,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             if (disabledResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
         else if (name == "PressedFileData")
@@ -489,7 +489,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             if (pressedResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
         else if (name == "NormalFileData")
@@ -524,7 +524,7 @@ Offset<Table> ButtonReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             if (normalResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
         else if (name == "FontResource")

@@ -44,7 +44,7 @@ void PUParticleSystem3DTranslator::translate(PUScriptCompiler* compiler, PUAbstr
 
     //// Create a particle system with the given name
     //_system = PUParticleSystem3D::create();
-    // PUParticleSystem3DBuilder::Instance()->PUParticleSystem3DList.push_back(_system);
+    // PUParticleSystem3DBuilder::Instance()->PUParticleSystem3DList.emplace_back(_system);
     // if (!mSystem)
     //{
     //	return;

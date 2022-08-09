@@ -518,7 +518,7 @@ Offset<Table> LayoutReader::createOptionsWithFlatBuffers(pugi::xml_node objectDa
             if (resourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
 

@@ -1186,7 +1186,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
                 ValueMap dictVal;
                 if (luaval_to_ccvaluemap(L, i + 2, &dictVal))
                 {
-                    ret->push_back(Value(dictVal));
+                    ret->emplace_back(Value(dictVal));
                 }
             }
             else
@@ -1195,7 +1195,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
                 ValueVector arrVal;
                 if (luaval_to_ccvaluevector(L, i + 2, &arrVal))
                 {
-                    ret->push_back(Value(arrVal));
+                    ret->emplace_back(Value(arrVal));
                 }
             }
         }
@@ -1204,7 +1204,7 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
             std::string stringValue = "";
             if (luaval_to_std_string(L, i + 2, &stringValue))
             {
-                ret->push_back(Value(stringValue));
+                ret->emplace_back(Value(stringValue));
             }
         }
         else if (lua_isboolean(L, i + 2))
@@ -1212,12 +1212,12 @@ bool luavals_variadic_to_ccvaluevector(lua_State* L, int argc, ax::ValueVector* 
             bool boolVal = false;
             if (luaval_to_boolean(L, i + 2, &boolVal))
             {
-                ret->push_back(Value(boolVal));
+                ret->emplace_back(Value(boolVal));
             }
         }
         else if (lua_type(L, i + 2) == LUA_TNUMBER)
         {
-            ret->push_back(Value(tolua_tonumber(L, i + 2, 0)));
+            ret->emplace_back(Value(tolua_tonumber(L, i + 2, 0)));
         }
         else
         {
@@ -1497,7 +1497,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const c
                     ValueMap dictVal;
                     if (luaval_to_ccvaluemap(L, lua_gettop(L), &dictVal))
                     {
-                        ret->push_back(Value(dictVal));
+                        ret->emplace_back(Value(dictVal));
                     }
                 }
                 else
@@ -1506,7 +1506,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const c
                     ValueVector arrVal;
                     if (luaval_to_ccvaluevector(L, lua_gettop(L), &arrVal))
                     {
-                        ret->push_back(Value(arrVal));
+                        ret->emplace_back(Value(arrVal));
                     }
                 }
             }
@@ -1515,7 +1515,7 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const c
                 std::string stringValue = "";
                 if (luaval_to_std_string(L, -1, &stringValue))
                 {
-                    ret->push_back(Value(stringValue));
+                    ret->emplace_back(Value(stringValue));
                 }
             }
             else if (lua_type(L, -1) == LUA_TBOOLEAN)
@@ -1523,12 +1523,12 @@ bool luaval_to_ccvaluevector(lua_State* L, int lo, ax::ValueVector* ret, const c
                 bool boolVal = false;
                 if (luaval_to_boolean(L, -1, &boolVal))
                 {
-                    ret->push_back(Value(boolVal));
+                    ret->emplace_back(Value(boolVal));
                 }
             }
             else if (lua_type(L, -1) == LUA_TNUMBER)
             {
-                ret->push_back(Value(tolua_tonumber(L, -1, 0)));
+                ret->emplace_back(Value(tolua_tonumber(L, -1, 0)));
             }
             else
             {
@@ -1568,7 +1568,7 @@ bool luaval_to_std_vector_string(lua_State* L, int lo, std::vector<std::string>*
             {
                 ok = luaval_to_std_string(L, -1, &value);
                 if (ok)
-                    ret->push_back(value);
+                    ret->emplace_back(value);
             }
             else
             {
@@ -1609,7 +1609,7 @@ bool luaval_to_std_vector_string_view(lua_State* L, int lo, std::vector<std::str
             {
                 ok = luaval_to_std_string_view(L, -1, &value);
                 if (ok)
-                    ret->push_back(value);
+                    ret->emplace_back(value);
             }
             else
             {
@@ -1647,7 +1647,7 @@ bool luaval_to_std_vector_int(lua_State* L, int lo, std::vector<int>* ret, const
             lua_gettable(L, lo);
             if (lua_isnumber(L, -1))
             {
-                ret->push_back((int)tolua_tonumber(L, -1, 0));
+                ret->emplace_back((int)tolua_tonumber(L, -1, 0));
             }
             else
             {
@@ -1719,7 +1719,7 @@ bool luaval_to_std_vector_float(lua_State* L, int lo, std::vector<float>* ret, c
             lua_gettable(L, lo);
             if (lua_isnumber(L, -1))
             {
-                ret->push_back((float)tolua_tonumber(L, -1, 0));
+                ret->emplace_back((float)tolua_tonumber(L, -1, 0));
             }
             else
             {
@@ -1758,7 +1758,7 @@ bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned shor
             lua_gettable(L, lo);
             if (lua_isnumber(L, -1))
             {
-                ret->push_back((unsigned short)tolua_tonumber(L, -1, 0));
+                ret->emplace_back((unsigned short)tolua_tonumber(L, -1, 0));
             }
             else
             {
@@ -1981,7 +1981,7 @@ bool luaval_to_std_vector_vec2(lua_State* L, int lo, std::vector<ax::Vec2>* ret,
                 ok &= luaval_to_vec2(L, lua_gettop(L), &value);
                 if (ok)
                 {
-                    ret->push_back(value);
+                    ret->emplace_back(value);
                 }
             }
             else
@@ -2024,7 +2024,7 @@ bool luaval_to_std_vector_vec3(lua_State* L, int lo, std::vector<ax::Vec3>* ret,
                 ok &= luaval_to_vec3(L, lua_gettop(L), &value);
                 if (ok)
                 {
-                    ret->push_back(value);
+                    ret->emplace_back(value);
                 }
             }
             else
@@ -2070,7 +2070,7 @@ bool luaval_to_std_vector_v3f_c4b_t2f(lua_State* L,
                 ok &= luaval_to_v3f_c4b_t2f(L, lua_gettop(L), &value);
                 if (ok)
                 {
-                    ret->push_back(value);
+                    ret->emplace_back(value);
                 }
             }
             else

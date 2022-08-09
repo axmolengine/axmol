@@ -253,7 +253,7 @@ Offset<Table> ImageViewReader::createOptionsWithFlatBuffers(pugi::xml_node objec
             if (resourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(texture));
+                fbs->_textures.emplace_back(builder->CreateString(texture));
             }
         }
 

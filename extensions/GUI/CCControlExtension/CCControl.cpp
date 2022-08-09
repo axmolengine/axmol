@@ -210,7 +210,7 @@ void Control::removeTargetWithActionForControlEvent(Ref* target, Handler action,
             // Remove the corresponding invocation object
             if (shouldBeRemoved)
             {
-                tobeRemovedInvocations.push_back(invocation);
+                tobeRemovedInvocations.emplace_back(invocation);
             }
         }
 
