@@ -581,7 +581,7 @@ int lua_cocos2dx_DrawNode3D_drawCube(lua_State* L)
             }
 #endif
             // arg0[i] = vec3;
-            arg0.push_back(vec3);
+            arg0.emplace_back(vec3);
             lua_pop(L, 1);
         }
 
