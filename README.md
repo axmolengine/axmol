@@ -171,4 +171,4 @@ https://github.com/axys1/axys/discussions/411
 
 ### The axys Active Stats
 
-![Alt](https://repobeats.axiom.co/api/embed/e46f10898672224fde3b102d81a28482164faf2e.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/aa26c65937eedb5f5f210673a7349e2def8cdc7f.svg "Repobeats analytics image")
