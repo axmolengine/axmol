@@ -169,7 +169,7 @@ PUDynamicAttributeCurved::PUDynamicAttributeCurved(const PUDynamicAttributeCurve
     // Copy controlpoints
     for (const auto& controlPoint : dynamicAttributeCurved._controlPoints)
     {
-        _controlPoints.push_back(controlPoint);
+        _controlPoints.emplace_back(controlPoint);
     }
     processControlPoints();
 }
@@ -232,7 +232,7 @@ float PUDynamicAttributeCurved::getValue(float x)
 //-----------------------------------------------------------------------
 void PUDynamicAttributeCurved::addControlPoint(float x, float y)
 {
-    _controlPoints.push_back(Vec2(x, y));
+    _controlPoints.emplace_back(Vec2(x, y));
 }
 //-----------------------------------------------------------------------
 const PUDynamicAttributeCurved::ControlPointList& PUDynamicAttributeCurved::getControlPoints() const
@@ -314,7 +314,7 @@ void PUDynamicAttributeCurved::copyAttributesTo(PUDynamicAttribute* dynamicAttri
     for (it = _controlPoints.begin(); it != itEnd; ++it)
     {
         Vec2 controlPoint = *it;
-        dynAttr->_controlPoints.push_back(controlPoint);
+        dynAttr->_controlPoints.emplace_back(controlPoint);
     }
     dynAttr->processControlPoints();
 }

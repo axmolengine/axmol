@@ -166,7 +166,7 @@ void PUAffector::addEmitterToExclude(std::string_view emitterName)
     auto iter = std::find(_excludedEmitters.begin(), _excludedEmitters.end(), emitterName);
     if (iter == _excludedEmitters.end())
     {
-        _excludedEmitters.push_back(std::string{emitterName});
+        _excludedEmitters.emplace_back(std::string{emitterName});
     }
 }
 

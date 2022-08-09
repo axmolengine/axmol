@@ -122,7 +122,7 @@ void ArmatureDataManager::addArmatureData(std::string_view id,
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
-        data->armatures.push_back(std::string{id});
+        data->armatures.emplace_back(std::string{id});
     }
 
     _armarureDatas.insert(id, armatureData);
@@ -144,7 +144,7 @@ void ArmatureDataManager::addAnimationData(std::string_view id,
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
-        data->animations.push_back(std::string{id});
+        data->animations.emplace_back(std::string{id});
     }
 
     _animationDatas.insert(id, animationData);
@@ -164,7 +164,7 @@ void ArmatureDataManager::addTextureData(std::string_view id, TextureData* textu
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
-        data->textures.push_back(std::string{id});
+        data->textures.emplace_back(std::string{id});
     }
 
     _textureDatas.insert(id, textureData);
@@ -226,7 +226,7 @@ void ArmatureDataManager::addSpriteFrameFromFile(std::string_view plistPath,
 {
     if (RelativeData* data = getRelativeData(configFilePath))
     {
-        data->plistFiles.push_back(std::string{plistPath});
+        data->plistFiles.emplace_back(std::string{plistPath});
     }
     SpriteFrameCacheHelper::getInstance()->addSpriteFrameFromFile(plistPath, imagePath);
 }

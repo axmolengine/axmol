@@ -277,7 +277,7 @@ void Manifest::genResumeAssetsList(DownloadUnits* units) const
 std::vector<std::string> Manifest::getSearchPaths() const
 {
     std::vector<std::string> searchPaths;
-    searchPaths.push_back(_manifestRoot);
+    searchPaths.emplace_back(_manifestRoot);
 
     for (int i = (int)_searchPaths.size() - 1; i >= 0; i--)
     {
@@ -285,7 +285,7 @@ std::vector<std::string> Manifest::getSearchPaths() const
         if (!path.empty() && path[path.size() - 1] != '/')
             path.push_back('/');
         path = _manifestRoot + path;
-        searchPaths.push_back(path);
+        searchPaths.emplace_back(path);
     }
     return searchPaths;
 }
@@ -489,7 +489,7 @@ void Manifest::loadVersion(const rapidjson::Document& json)
                 {
                     version = itr->value.GetString();
                 }
-                _groups.push_back(group);
+                _groups.emplace_back(group);
                 _groupVer.emplace(group, version);
             }
         }

@@ -384,7 +384,7 @@ const PUTriangle::PositionAndNormal MeshInfo::getRandomPositionAndNormal(const s
 //		t.calculateSquareSurface();
 //		t.calculateSurfaceNormal();
 //		t.calculateEdgeNormals();
-//		_triangles.push_back(t);
+//		_triangles.emplace_back(t);
 //	}
 //
 //	// Delete intermediate arrays

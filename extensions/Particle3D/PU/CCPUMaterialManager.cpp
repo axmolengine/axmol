@@ -113,7 +113,7 @@ void PUMaterialCache::addMaterial(PUMaterial* material)
     }
 
     material->retain();
-    _materialMap.push_back(material);
+    _materialMap.emplace_back(material);
 }
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)

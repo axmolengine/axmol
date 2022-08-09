@@ -277,7 +277,7 @@ void PUScriptLexer::setToken(std::string_view lexeme, int line, std::string_view
     }
 
     if (!ignore)
-        tokens->push_back(token);
+        tokens->emplace_back(token);
 }
 
 bool PUScriptLexer::isWhitespace(char c) const
