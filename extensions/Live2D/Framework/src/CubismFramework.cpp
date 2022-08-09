@@ -228,7 +228,7 @@ void* CubismFramework::Allocate(csmSizeType size, const csmChar* fileName, csmIn
 
     if (s_allocationList)
     {
-        s_allocationList->emplace_back(address);
+        s_allocationList->push_back(address);
     }
 
     return address;
@@ -242,7 +242,7 @@ void* CubismFramework::AllocateAligned(csmSizeType size, csmUint32 alignment, co
 
     if (s_allocationList)
     {
-        s_allocationList->emplace_back(address);
+        s_allocationList->push_back(address);
     }
 
     return address;
