@@ -34,13 +34,13 @@ curl -L "https://dl.google.com/android/repository/android-ndk-r19c-windows-x86_6
 Expand-Archive -Path android-ndk-r19c-windows-x86_64.zip -DestinationPath .\
 ls
 $ndk_root=(Resolve-Path .\android-ndk-r19c).Path
-$env:ANDROID_NDK=$ndk_root
+# $env:ANDROID_NDK=$ndk_root
 
 
 ## run genbindings.py
 pwd
 cd ..\tools\tolua
-python genbindings.py
+python genbindings.py --ndk_root "$ndk_root"
 
 $env:Path = $storedEnvPath
 cd ..\..
