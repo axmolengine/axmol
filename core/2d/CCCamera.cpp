@@ -42,37 +42,7 @@ Viewport Camera::_defaultViewport;
 Camera* Camera::create()
 {
     Camera* camera = new Camera();
-
-    auto& size = Director::getInstance()->getWinSize();
-    switch (Director::getInstance()->getProjection())
-    {
-        case Director::Projection::_2D:
-        {
-            camera->_zoomFactor  = 1.0F;
-            camera->_fieldOfView = 60.0F;
-            camera->_nearPlane  = -1024.0F;
-            camera->_farPlane   =  1024.0F;
-            camera->setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
-            camera->setRotation3D(Vec3(0.f, 0.f, 0.f));
-            break;
-        }
-
-        case Director::Projection::_3D:
-        {
-            float zeye           = Director::getInstance()->getZEye();
-            camera->_zoomFactor  = 1.0F;
-            camera->_fieldOfView = 60.0F;
-            camera->_nearPlane   = 0.5F;
-            camera->_farPlane    = zeye + size.height / 2.0f;
-            Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
-                up(0.0f, 1.0f, 0.0f);
-            camera->setPosition3D(eye);
-            camera->lookAt(center, up);
-            break;
-        }
-    }
-
-    camera->updateTransform();
+    camera->initCamera();
     camera->autorelease();
     camera->setDepth(0);
 
@@ -219,6 +189,40 @@ void Camera::setAdditionalProjection(const Mat4& mat)
 {
     _projection = mat * _projection;
     getViewProjectionMatrix();
+}
+
+void Camera::initCamera()
+{
+    auto& size = _director->getWinSize();
+    switch (_director->getProjection())
+    {
+        case Director::Projection::_2D:
+        {
+            _zoomFactor  = 1.0F;
+            _fieldOfView = 60.0F;
+            _nearPlane   = -1024.0F;
+            _farPlane    = 1024.0F;
+            setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
+            setRotation3D(Vec3(0.f, 0.f, 0.f));
+            break;
+        }
+
+        case Director::Projection::_3D:
+        {
+            float zeye   = _director->getZEye();
+            _zoomFactor  = 1.0F;
+            _fieldOfView = 60.0F;
+            _nearPlane   = 0.5F;
+            _farPlane    = zeye + size.height / 2.0f;
+            Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
+                up(0.0f, 1.0f, 0.0f);
+            setPosition3D(eye);
+            lookAt(center, up);
+            break;
+        }
+    }
+
+    updateTransform();
 }
 
 void Camera::updateTransform()

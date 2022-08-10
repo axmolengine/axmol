@@ -344,8 +344,12 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
+    /** Init camera with default properties */
+    void initCamera();
+
     /** Update the camera transformations */
     void updateTransform() override;
+
     bool initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
     bool initOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
     void applyViewport();
