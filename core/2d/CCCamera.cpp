@@ -42,7 +42,7 @@ Viewport Camera::_defaultViewport;
 Camera* Camera::create()
 {
     Camera* camera = new Camera();
-    camera->initCamera();
+    camera->init();
     camera->autorelease();
     camera->setDepth(0);
 
@@ -52,9 +52,6 @@ Camera* Camera::create()
 Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane)
 {
     auto ret = new Camera();
-    ret->_fieldOfView = fieldOfView;
-    ret->_nearPlane   = nearPlane;
-    ret->_farPlane    = farPlane;
     ret->initPerspective(fieldOfView, aspectRatio, nearPlane, farPlane);
     ret->autorelease();
     return ret;
@@ -63,10 +60,6 @@ Camera* Camera::createPerspective(float fieldOfView, float aspectRatio, float ne
 Camera* Camera::createOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane)
 {
     auto ret = new Camera();
-    ret->_zoom[0]   = zoomX;
-    ret->_zoom[1]   = zoomY;
-    ret->_nearPlane = nearPlane;
-    ret->_farPlane  = farPlane;
     ret->initOrthographic(zoomX, zoomY, nearPlane, farPlane);
     ret->autorelease();
     return ret;
@@ -191,7 +184,7 @@ void Camera::setAdditionalProjection(const Mat4& mat)
     getViewProjectionMatrix();
 }
 
-void Camera::initCamera()
+bool Camera::init()
 {
     auto& size = _director->getWinSize();
     switch (_director->getProjection())
@@ -223,6 +216,8 @@ void Camera::initCamera()
     }
 
     updateTransform();
+
+    return true;
 }
 
 void Camera::updateTransform()

@@ -345,7 +345,7 @@ public:
     void setAdditionalProjection(const Mat4& mat);
 
     /** Init camera with default properties */
-    void initCamera();
+    bool init() override;
 
     /** Update camera transformations */
     void updateTransform() override;
