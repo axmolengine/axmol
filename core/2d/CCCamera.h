@@ -347,7 +347,7 @@ public:
     /** Init camera with default properties */
     void initCamera();
 
-    /** Update the camera transformations */
+    /** Update camera transformations */
     void updateTransform() override;
 
     bool initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
