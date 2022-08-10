@@ -225,7 +225,7 @@ void Camera::updateTransform()
 {
     auto& size = _director->getWinSize();
     // create default camera
-    switch (Director::getInstance()->getProjection())
+    switch (_director->getProjection())
     {
         case Director::Projection::_2D:
         {
@@ -408,7 +408,7 @@ void Camera::setZoom(float factor)
 
 void Camera::applyZoom()
 {
-    switch (Director::getInstance()->getProjection())
+    switch (_director->getProjection())
     {
     case ax::Director::Projection::_2D:
     {
