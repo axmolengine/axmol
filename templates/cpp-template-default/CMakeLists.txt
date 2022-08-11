@@ -71,7 +71,7 @@ set(GAME_RES_FOLDER
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
     )
 if(APPLE OR WINDOWS)
-    cocos_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
 # add cross-platforms source files and header files 
@@ -160,7 +160,7 @@ target_include_directories(${APP_NAME}
 )
 
 # mark app resources
-setup_cocos_app_config(${APP_NAME})
+setup_ax_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
@@ -177,13 +177,13 @@ if(APPLE)
     #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
 elseif(WINDOWS)
     if(NOT _AX_USE_PREBUILT)
-        cocos_copy_target_dll(${APP_NAME})
+        ax_copy_target_dll(${APP_NAME})
     endif()
 endif()
 
 if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
-    cocos_get_resource_path(APP_RES_DIR ${APP_NAME})
-    cocos_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
+    ax_get_resource_path(APP_RES_DIR ${APP_NAME})
+    ax_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 elseif(WINDOWS)
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
     if(NOT DEFINED BUILD_ENGINE_DONE)
@@ -202,5 +202,5 @@ if (_AX_USE_PREBUILT) # support windows only
     use_ax_compile_define(${APP_NAME})
 
     include(${AXYS_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
-    axis_link_cxx_prebuilt(${APP_NAME} ${AXYS_ROOT_PATH} ${AX_PREBUILT_DIR})
+    ax_link_cxx_prebuilt(${APP_NAME} ${AXYS_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

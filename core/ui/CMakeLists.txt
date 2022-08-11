@@ -1,32 +1,32 @@
 if(WINDOWS)
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
-        set(COCOS_UI_SPECIFIC_HEADER
+        set(_AX_UI_SPECIFIC_HEADER
             ui/UIEditBox/UIEditBoxImpl-win32.h
             ui/UIWebView/UIWebViewImpl-win32.h
             ui/UIWebView/UIWebView.h
             
             )
-        set(COCOS_UI_SPECIFIC_SRC
+        set(_AX_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
             ui/UIWebView/UIWebViewImpl-win32.cpp
             ui/UIWebView/UIWebView.cpp
             )
     else()
-        set(COCOS_UI_SPECIFIC_HEADER
+        set(_AX_UI_SPECIFIC_HEADER
             ui/UIEditBox/UIEditBoxImpl-win32.h
             )
-        set(COCOS_UI_SPECIFIC_SRC
+        set(_AX_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
             )
     endif()
     
     if (AX_ENABLE_MFMEDIA)
-        set(COCOS_UI_SPECIFIC_HEADER ${COCOS_UI_SPECIFIC_HEADER}
+        set(_AX_UI_SPECIFIC_HEADER ${_AX_UI_SPECIFIC_HEADER}
             ui/UIVideoPlayer/MFUtils.h
             ui/UIVideoPlayer/MFMediaPlayer.h
             ui/UIVideoPlayer/UIVideoPlayer.h
             )
-        set(COCOS_UI_SPECIFIC_SRC ${COCOS_UI_SPECIFIC_SRC}
+        set(_AX_UI_SPECIFIC_SRC ${_AX_UI_SPECIFIC_SRC}
             ui/UIVideoPlayer/MFUtils.cpp
             ui/UIVideoPlayer/MFMediaPlayer.cpp
             ui/UIVideoPlayer/UIVideoPlayer-win.cpp
@@ -34,7 +34,7 @@ if(WINDOWS)
     endif()
 elseif(APPLE)
     if(MACOSX)
-        set(COCOS_UI_SPECIFIC_HEADER
+        set(_AX_UI_SPECIFIC_HEADER
             ui/UIEditBox/UIEditBoxImpl-mac.h
             ui/UIEditBox/Mac/CCUIPasswordTextField.h
             ui/UIEditBox/Mac/CCUIMultilineTextField.h
@@ -43,7 +43,7 @@ elseif(APPLE)
             ui/UIEditBox/Mac/CCUISingleLineTextField.h
             ui/UIEditBox/Mac/CCUITextFieldFormatter.h
             )
-        set(COCOS_UI_SPECIFIC_SRC
+        set(_AX_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-mac.mm
             ui/UIEditBox/Mac/CCUIEditBoxMac.mm
             ui/UIEditBox/Mac/CCUIMultilineTextField.m
@@ -52,7 +52,7 @@ elseif(APPLE)
             ui/UIEditBox/Mac/CCUITextFieldFormatter.m
             )
     elseif(IOS)
-        set(COCOS_UI_SPECIFIC_HEADER
+        set(_AX_UI_SPECIFIC_HEADER
             ui/UIWebView/UIWebView.h
             ui/UIVideoPlayer/UIVideoPlayer.h
             ui/UIWebView/UIWebViewImpl-ios.h
@@ -64,7 +64,7 @@ elseif(APPLE)
             ui/UIEditBox/iOS/UITextField+CCUITextInput.h
             ui/UIEditBox/iOS/CCUISingleLineTextField.h
             )
-        set(COCOS_UI_SPECIFIC_SRC
+        set(_AX_UI_SPECIFIC_SRC
             ui/UIWebView/UIWebView.mm
             ui/UIVideoPlayer/UIVideoPlayer-ios.mm
             ui/UIWebView/UIWebViewImpl-ios.mm
@@ -77,20 +77,20 @@ elseif(APPLE)
             )
     endif()
 elseif(LINUX)
-    set(COCOS_UI_SPECIFIC_HEADER
+    set(_AX_UI_SPECIFIC_HEADER
         ui/UIEditBox/UIEditBoxImpl-linux.h
         )
-    set(COCOS_UI_SPECIFIC_SRC
+    set(_AX_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-linux.cpp
         )
 elseif(ANDROID)
-    set(COCOS_UI_SPECIFIC_HEADER
+    set(_AX_UI_SPECIFIC_HEADER
         ui/UIWebView/UIWebView.h
         ui/UIVideoPlayer/UIVideoPlayer.h
         ui/UIWebView/UIWebViewImpl-android.h
         ui/UIEditBox/UIEditBoxImpl-android.h
         )
-    set(COCOS_UI_SPECIFIC_SRC
+    set(_AX_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-android.cpp
         ui/UIVideoPlayer/UIVideoPlayer-android.cpp
         ui/UIWebView/UIWebViewImpl-android.cpp
@@ -99,8 +99,8 @@ elseif(ANDROID)
         )
 endif()
 
-set(COCOS_UI_HEADER
-    ${COCOS_UI_SPECIFIC_HEADER}
+set(_AX_UI_HEADER
+    ${_AX_UI_SPECIFIC_HEADER}
     ui/CocosGUI.h
     ui/GUIDefine.h
     ui/GUIExport.h
@@ -135,8 +135,8 @@ set(COCOS_UI_HEADER
     ui/UIWidget.h
     )
 
-set(COCOS_UI_SRC
-    ${COCOS_UI_SPECIFIC_SRC}
+set(_AX_UI_SRC
+    ${_AX_UI_SPECIFIC_SRC}
     ui/CocosGUI.cpp
     ui/UIButton.cpp
     ui/UIAbstractCheckButton.cpp
