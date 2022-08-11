@@ -568,7 +568,8 @@ Label::~Label()
     AX_SAFE_RELEASE_NULL(_textSprite);
     AX_SAFE_RELEASE_NULL(_shadowNode);
 
-    _localizer->release();
+    if (_localizer)
+        _localizer->release();
 }
 
 void Label::reset()
@@ -788,8 +789,11 @@ void Label::updateBatchCommand(Label::BatchCommand& batch)
 
 void Label::setLocalizationHandler(LocalizationHandler* handler)
 {
-    _localizer = handler;
-    handler->retain();
+    if (handler)
+    {
+        _localizer = handler;
+        handler->retain();
+    }
 }
 
 void Label::updateUniformLocations()

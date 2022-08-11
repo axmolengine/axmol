@@ -123,7 +123,7 @@ class LocalizationHandler : public axys::Ref
 public:
     static LocalizationHandler* create()
     {
-        auto ret     = new LocalizationHandler();
+        auto ret = new LocalizationHandler();
         ret->autorelease();
         return ret;
     }
