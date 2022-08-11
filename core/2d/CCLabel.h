@@ -113,6 +113,32 @@ class TextureAtlas;
  * - http://www.angelcode.com/products/bmfont/ (Free, Windows only)
  * @js NA
  */
+
+class AX_DLL Label;
+
+typedef std::function<std::string_view(axys::Label*, std::string_view)> LocalizationCallback;
+
+class LocalizationHandler : public axys::Ref
+{
+public:
+    static LocalizationHandler* create()
+    {
+        auto ret     = new LocalizationHandler();
+        ret->autorelease();
+        return ret;
+    }
+
+    static LocalizationHandler* create(LocalizationCallback filter)
+    {
+        auto ret = new LocalizationHandler();
+        ret->_filter = filter;
+        ret->autorelease();
+        return ret;
+    }
+
+    LocalizationCallback _filter;
+};
+
 class AX_DLL Label : public Node, public LabelProtocol, public BlendProtocol
 {
 public:
@@ -725,6 +751,8 @@ public:
                      TextHAlignment hAlignment = TextHAlignment::LEFT,
                      int maxLineWidth          = 0);
 
+    void setLocalizationHandler(LocalizationHandler* handler);
+
 protected:
     struct LetterInfo
     {
@@ -918,6 +946,8 @@ protected:
     backend::UniformLocation _textColorLocation;
     backend::UniformLocation _effectColorLocation;
     backend::UniformLocation _effectTypeLocation;
+
+    LocalizationHandler* _localizer = nullptr;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Label);

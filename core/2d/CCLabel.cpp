@@ -567,6 +567,8 @@ Label::~Label()
 
     AX_SAFE_RELEASE_NULL(_textSprite);
     AX_SAFE_RELEASE_NULL(_shadowNode);
+
+    _localizer->release();
 }
 
 void Label::reset()
@@ -784,6 +786,12 @@ void Label::updateBatchCommand(Label::BatchCommand& batch)
     batch.setProgramState(_programState);
 }
 
+void Label::setLocalizationHandler(LocalizationHandler* handler)
+{
+    _localizer = handler;
+    handler->retain();
+}
+
 void Label::updateUniformLocations()
 {
     _mvpMatrixLocation   = _programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
@@ -953,6 +961,9 @@ bool Label::setBMFontFilePath(std::string_view bmfontFilePath, const Vec2& image
 
 void Label::setString(std::string_view text)
 {
+    if (_localizer)
+        text = _localizer->_filter(this, text);
+
     if (text.compare(_utf8Text))
     {
         _utf8Text     = text;
