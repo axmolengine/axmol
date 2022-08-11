@@ -7,5 +7,5 @@ add_library(${target_name}
         ${ASSETS_MANAGER_HEADER} 
         ${ASSETS_MANAGER_SOURCE})
 
-setup_cocos_extension_config(${target_name})
+setup_ax_extension_config(${target_name})
 

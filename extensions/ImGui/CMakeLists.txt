@@ -68,4 +68,4 @@ add_library(${target_name} STATIC
         ${HEADER} 
         ${SOURCE})
 
-setup_cocos_extension_config(${target_name})
+setup_ax_extension_config(${target_name})

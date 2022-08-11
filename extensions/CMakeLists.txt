@@ -28,7 +28,7 @@ if(BUILD_SHARED_LIBS)
   cmake_policy(SET CMP0079 NEW)
 endif()
 
-function(setup_cocos_extension_config target_name)
+function(setup_ax_extension_config target_name)
     set(options DNTLINK opt_DNTLINK)
     cmake_parse_arguments(opt "" "${options}" ""
                           "" ${ARGN} )
@@ -59,7 +59,7 @@ function(setup_cocos_extension_config target_name)
   endif()
   
   if(XCODE OR VS)
-    cocos_mark_code_files("${target_name}")
+    ax_mark_code_files("${target_name}")
   endif()
 
 endfunction()

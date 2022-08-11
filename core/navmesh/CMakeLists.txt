@@ -1,4 +1,4 @@
-set(COCOS_NAVMESH_HEADER
+set(_AX_NAVMESH_HEADER
     navmesh/CCNavMeshAgent.h
     navmesh/CCNavMeshObstacle.h
     navmesh/CCNavMeshUtils.h
@@ -6,7 +6,7 @@ set(COCOS_NAVMESH_HEADER
     navmesh/CCNavMesh.h
     )
 
-set(COCOS_NAVMESH_SRC
+set(_AX_NAVMESH_SRC
     navmesh/CCNavMesh.cpp
     navmesh/CCNavMeshAgent.cpp
     navmesh/CCNavMeshDebugDraw.cpp

@@ -12,4 +12,4 @@ add_library(${target_name}
 
 target_include_directories(${target_name} INTERFACE ${CMAKE_CURRENT_LIST_DIR})
         
-setup_cocos_extension_config(${target_name})
+setup_ax_extension_config(${target_name})

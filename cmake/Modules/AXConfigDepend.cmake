@@ -1,4 +1,4 @@
-macro(axis_depend)
+macro(ax_depend)
     # confim the libs, prepare to link
     set(PLATFORM_SPECIFIC_LIBS)
 
@@ -10,14 +10,14 @@ macro(axis_depend)
         # need review those libs: X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m
         list(APPEND PLATFORM_SPECIFIC_LIBS dl X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m bsd)
         # use older cmake style on below linux libs
-        cocos_find_package(Fontconfig FONTCONFIG REQUIRED)	
-        cocos_find_package(GTK3 GTK3 REQUIRED)
-        # cocos_find_package(ZLIB ZLIB REQUIRED)
-        # cocos_find_package(PNG PNG REQUIRED)
-        # cocos_find_package(GLEW GLEW REQUIRED)
-        cocos_find_package(OpenGL OPENGL REQUIRED)
-        # cocos_find_package(CURL CURL REQUIRED)
-        # cocos_find_package(SQLite3 SQLITE3 REQUIRED)
+        ax_find_package(Fontconfig FONTCONFIG REQUIRED)	
+        ax_find_package(GTK3 GTK3 REQUIRED)
+        # ax_find_package(ZLIB ZLIB REQUIRED)
+        # ax_find_package(PNG PNG REQUIRED)
+        # ax_find_package(GLEW GLEW REQUIRED)
+        ax_find_package(OpenGL OPENGL REQUIRED)
+        # ax_find_package(CURL CURL REQUIRED)
+        # ax_find_package(SQLite3 SQLITE3 REQUIRED)
         set(CMAKE_THREAD_PREFER_PTHREAD TRUE)	
         find_package(Threads REQUIRED)	
         set(THREADS_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
@@ -31,7 +31,7 @@ macro(axis_depend)
         find_library(QUARTZCORE_LIBRARY QuartzCore)
         find_library(GAMECONTROLLER_LIBRARY GameController)
         find_library(METAL_LIBRARY Metal)
-        set(COCOS_APPLE_LIBS
+        set(_AX_APPLE_LIBS
             ${AUDIOTOOLBOX_LIBRARY}
             ${QUARTZCORE_LIBRARY}
             ${FOUNDATION_LIBRARY}
@@ -41,9 +41,9 @@ macro(axis_depend)
 
         if(NOT AX_USE_ALSOFT)
             find_library(OPENAL_LIBRARY OpenAL)
-            set(COCOS_APPLE_LIBS 
+            set(_AX_APPLE_LIBS 
             ${OPENAL_LIBRARY}
-            ${COCOS_APPLE_LIBS}
+            ${_AX_APPLE_LIBS}
             )
         endif()
             
@@ -64,7 +64,7 @@ macro(axis_depend)
                  ${OPENGL_LIBRARY}
                  ${APPLICATIONSERVICES_LIBRARY}
                  ${IOKIT_LIBRARY}
-                 ${COCOS_APPLE_LIBS}
+                 ${_AX_APPLE_LIBS}
                  ${APPKIT_LIBRARY}
                  #${ICONV_LIBRARY}
                  ${AUDIOUNIT_LIBRARY}
@@ -96,7 +96,7 @@ macro(axis_depend)
                  ${CORE_GRAPHICS_LIBRARY}
                  ${AV_FOUNDATION_LIBRARY}
                  ${WEBKIT_LIBRARY}
-                 ${COCOS_APPLE_LIBS}
+                 ${_AX_APPLE_LIBS}
                  ${ZLIB}
                  #${ICONVLIB}
                  )
@@ -105,21 +105,21 @@ macro(axis_depend)
 endmacro()
 
 macro(use_ax_depend target)
-    axis_depend()
+    ax_depend()
     foreach(platform_lib ${PLATFORM_SPECIFIC_LIBS})
         target_link_libraries(${target} ${platform_lib})
     endforeach()
 
     if(LINUX)
-        cocos_use_pkg(${target} FONTCONFIG)
-        cocos_use_pkg(${target} GTK3)
-        #cocos_use_pkg(${target} ZLIB)
-        #cocos_use_pkg(${target} PNG)
-        #cocos_use_pkg(${target} GLEW)
-        cocos_use_pkg(${target} OPENGL)
-        #cocos_use_pkg(${target} CURL)
-        cocos_use_pkg(${target} THREADS)
-        #cocos_use_pkg(${target} SQLITE3)
+        ax_use_pkg(${target} FONTCONFIG)
+        ax_use_pkg(${target} GTK3)
+        #ax_use_pkg(${target} ZLIB)
+        #ax_use_pkg(${target} PNG)
+        #ax_use_pkg(${target} GLEW)
+        ax_use_pkg(${target} OPENGL)
+        #ax_use_pkg(${target} CURL)
+        ax_use_pkg(${target} THREADS)
+        #ax_use_pkg(${target} SQLITE3)
     endif()
 endmacro()
 

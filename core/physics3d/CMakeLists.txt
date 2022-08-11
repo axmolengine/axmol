@@ -1,4 +1,4 @@
-set(COCOS_PHYSICS3D_HEADER
+set(_AX_PHYSICS3D_HEADER
     physics3d/CCPhysics3DConstraint.h
     physics3d/CCPhysics3DShape.h
     physics3d/CCPhysics3D.h
@@ -9,7 +9,7 @@ set(COCOS_PHYSICS3D_HEADER
     physics3d/CCPhysics3DDebugDrawer.h
     )
 
-set(COCOS_PHYSICS3D_SRC
+set(_AX_PHYSICS3D_SRC
     physics3d/CCPhysics3D.cpp
     physics3d/CCPhysics3DComponent.cpp
     physics3d/CCPhysics3DConstraint.cpp
