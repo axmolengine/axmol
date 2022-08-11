@@ -107,7 +107,6 @@ bool FileUtilsAndroid::init()
 
 bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
 {
-
     DECLARE_GUARD;
 
     if (strFilePath.empty())
@@ -118,10 +117,9 @@ bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
     bool bFound = false;
 
     // Check whether file exists in apk.
+    const char* s = strFilePath.data();
     if (strFilePath[0] != '/')
     {
-        const char* s = strFilePath.data();
-
         // Found "assets/" at the beginning of the path and we don't want it
         if (strFilePath.find(_defaultResRootPath) == 0)
             s += _defaultResRootPath.length();
@@ -146,9 +144,12 @@ bool FileUtilsAndroid::isFileExistInternal(std::string_view strFilePath) const
     }
     else
     {
-        struct stat st;
-        if (::stat(strFilePath.data(), &st) == 0)
-            bFound = S_ISREG(st.st_mode);
+        FILE *fp = fopen(s, "r");
+        if (fp)
+        {
+            bFound = true;
+            fclose(fp);
+        }
     }
     return bFound;
 }
