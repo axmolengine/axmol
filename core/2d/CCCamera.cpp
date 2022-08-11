@@ -42,9 +42,8 @@ Viewport Camera::_defaultViewport;
 Camera* Camera::create()
 {
     Camera* camera = new Camera();
-    camera->init();
+    camera->initDefault();
     camera->autorelease();
-    camera->setDepth(0);
 
     return camera;
 }
@@ -74,8 +73,6 @@ Camera* Camera::getDefaultCamera()
     AXASSERT(scene, "Scene is not done initializing, please use this->_defaultCamera instead.");
 
     return scene->getDefaultCamera();
-
-    return nullptr;
 }
 
 const Viewport& Camera::getDefaultViewport()
@@ -184,7 +181,7 @@ void Camera::setAdditionalProjection(const Mat4& mat)
     getViewProjectionMatrix();
 }
 
-bool Camera::init()
+void Camera::initDefault()
 {
     auto& size = _director->getWinSize();
     switch (_director->getProjection())
@@ -195,6 +192,7 @@ bool Camera::init()
             _fieldOfView = 60.0F;
             _nearPlane   = -1024.0F;
             _farPlane    = 1024.0F;
+            initOrthographic(size.width, size.height, _nearPlane, _farPlane);
             setPosition3D(Vec3(size.width / 2.0F, size.height / 2.0F, 0.f));
             setRotation3D(Vec3(0.f, 0.f, 0.f));
             break;
@@ -207,32 +205,32 @@ bool Camera::init()
             _fieldOfView = 60.0F;
             _nearPlane   = 0.5F;
             _farPlane    = zeye + size.height / 2.0f;
+            initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
             Vec3 eye(size.width / 2.0f, size.height / 2.0f, zeye), center(size.width / 2.0f, size.height / 2.0f, 0.0f),
                 up(0.0f, 1.0f, 0.0f);
             setPosition3D(eye);
             lookAt(center, up);
+            _eyeZdistance = eye.z;
             break;
         }
     }
 
-    updateTransform();
-
-    return true;
+    setDepth(0);
 }
 
 void Camera::updateTransform()
 {
     auto& size = _director->getWinSize();
     // create default camera
-    switch (_director->getProjection())
+    switch (_type)
     {
-        case Director::Projection::_2D:
+        case Type::ORTHOGRAPHIC:
         {
             initOrthographic(size.width, size.height, _nearPlane, _farPlane);
             break;
         }
 
-        case Director::Projection::_3D:
+        case Type::PERSPECTIVE:
         {
             float zeye = _director->getZEye();
             initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
