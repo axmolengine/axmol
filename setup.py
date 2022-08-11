@@ -290,7 +290,7 @@ class SetEnvVar(object):
             print(
                 '    ->Error: "%s" is not a valid path of %s. Ignoring it.' % (value, var_name))
 
-        return retf
+        return ret
 
     def _is_android_sdk_root_valid(self, android_sdk_root):
         if not android_sdk_root:
