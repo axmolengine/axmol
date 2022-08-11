@@ -273,7 +273,7 @@ static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 			of the mantissa is set.)
 		*/
 		p = (inp - 1) & UINT32_C(0x800000);	/* zero if INF, nonzero if NaN. */
-		return ((inp + vlx) >> 13) | (p >> 14);
+		return static_cast<sf16>(((inp + vlx) >> 13) | (p >> 14));
 		/*
 			positive, exponent = 0, round-mode == UP; need to check whether number actually is 0.
 			If it is, then return 0, else return 1 (the smallest representable nonzero number)
@@ -283,7 +283,7 @@ static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 			-inp will set the MSB if the input number is nonzero.
 			Thus (-inp) >> 31 will turn into 0 if the input number is 0 and 1 otherwise.
 		*/
-		return static_cast<uint32_t>((-static_cast<int32_t>(inp))) >> 31;
+		return static_cast<sf16>(static_cast<uint32_t>((-static_cast<int32_t>(inp))) >> 31);
 
 		/*
 			negative, exponent = , round-mode == DOWN, need to check whether number is
@@ -296,7 +296,7 @@ static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 			the MSB set if it isn't. We then right-shift the value by 31 places to
 			get a value that is 0 if the input is -0.0 and 1 otherwise.
 		*/
-		return ((vlx - inp) >> 31) + UINT32_C(0x8000);
+		return static_cast<sf16>(((vlx - inp) >> 31) + UINT32_C(0x8000));
 
 		/*
 			for all other cases involving underflow/overflow, we don't need to
@@ -330,7 +330,7 @@ static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 	case 47:
 	case 48:
 	case 49:
-		return vlx;
+		return static_cast<sf16>(vlx);
 
 		/*
 			for normal numbers, 'vlx' is the difference between the FP32 value of a number and the
@@ -349,14 +349,14 @@ static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 	case 36:
 	case 37:
 	case 39:
-		return (inp + vlx) >> 13;
+		return static_cast<sf16>((inp + vlx) >> 13);
 
 		/* normal number, round-to-nearest-even. */
 	case 33:
 	case 38:
 		p = inp + vlx;
 		p += (inp >> 13) & 1;
-		return p >> 13;
+		return static_cast<sf16>(p >> 13);
 
 		/*
 			the various denormal cases. These are not expected to be common, so their performance is a bit
@@ -371,22 +371,22 @@ static sf16 sf32_to_sf16(sf32 inp, roundmode rmode)
 	case 27:
 		/* denormal, round towards zero. */
 		p = 126 - ((inp >> 23) & 0xFF);
-		return (((inp & UINT32_C(0x7FFFFF)) + UINT32_C(0x800000)) >> p) | vlx;
+		return static_cast<sf16>((((inp & UINT32_C(0x7FFFFF)) + UINT32_C(0x800000)) >> p) | vlx);
 	case 20:
 	case 26:
 		/* denormal, round away from zero. */
 		p = 126 - ((inp >> 23) & 0xFF);
-		return rtup_shift32((inp & UINT32_C(0x7FFFFF)) + UINT32_C(0x800000), p) | vlx;
+		return static_cast<sf16>(rtup_shift32((inp & UINT32_C(0x7FFFFF)) + UINT32_C(0x800000), p) | vlx);
 	case 24:
 	case 29:
 		/* denormal, round to nearest-away */
 		p = 126 - ((inp >> 23) & 0xFF);
-		return rtna_shift32((inp & UINT32_C(0x7FFFFF)) + UINT32_C(0x800000), p) | vlx;
+		return static_cast<sf16>(rtna_shift32((inp & UINT32_C(0x7FFFFF)) + UINT32_C(0x800000), p) | vlx);
 	case 23:
 	case 28:
 		/* denormal, round to nearest-even. */
 		p = 126 - ((inp >> 23) & 0xFF);
-		return rtne_shift32((inp & UINT32_C(0x7FFFFF)) + UINT32_C(0x800000), p) | vlx;
+		return static_cast<sf16>(rtne_shift32((inp & UINT32_C(0x7FFFFF)) + UINT32_C(0x800000), p) | vlx);
 	}
 
 	return 0;

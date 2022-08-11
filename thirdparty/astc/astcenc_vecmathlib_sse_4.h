@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2019-2021 Arm Limited
+// Copyright 2019-2022 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -412,7 +412,7 @@ ASTCENC_SIMD_INLINE vmask4 operator~(vmask4 a)
  */
 ASTCENC_SIMD_INLINE unsigned int mask(vmask4 a)
 {
-	return _mm_movemask_ps(a.m);
+	return static_cast<unsigned int>(_mm_movemask_ps(a.m));
 }
 
 // ============================================================================
@@ -801,7 +801,7 @@ ASTCENC_SIMD_INLINE vfloat4 round(vfloat4 a)
 	return vfloat4(_mm_round_ps(a.m, flags));
 #else
 	__m128 v = a.m;
-	__m128 neg_zero = _mm_castsi128_ps(_mm_set1_epi32(0x80000000));
+	__m128 neg_zero = _mm_castsi128_ps(_mm_set1_epi32(static_cast<int>(0x80000000)));
 	__m128 no_fraction = _mm_set1_ps(8388608.0f);
 	__m128 abs_mask = _mm_castsi128_ps(_mm_set1_epi32(0x7FFFFFFF));
 	__m128 sign = _mm_and_ps(v, neg_zero);
@@ -980,10 +980,10 @@ ASTCENC_SIMD_INLINE vfloat4 float16_to_float(vint4 a)
 	return vfloat4(f32);
 #else
 	return vfloat4(
-		sf16_to_float(a.lane<0>()),
-		sf16_to_float(a.lane<1>()),
-		sf16_to_float(a.lane<2>()),
-		sf16_to_float(a.lane<3>()));
+		sf16_to_float(static_cast<uint16_t>(a.lane<0>())),
+		sf16_to_float(static_cast<uint16_t>(a.lane<1>())),
+		sf16_to_float(static_cast<uint16_t>(a.lane<2>())),
+		sf16_to_float(static_cast<uint16_t>(a.lane<3>())));
 #endif
 }
 
@@ -993,7 +993,7 @@ ASTCENC_SIMD_INLINE vfloat4 float16_to_float(vint4 a)
 ASTCENC_SIMD_INLINE float float16_to_float(uint16_t a)
 {
 #if ASTCENC_F16C >= 1
-	__m128i packed = _mm_set1_epi16(a);
+	__m128i packed = _mm_set1_epi16(static_cast<short>(a));
 	__m128 f32 = _mm_cvtph_ps(packed);
 	return _mm_cvtss_f32(f32);
 #else
@@ -1023,6 +1023,177 @@ ASTCENC_SIMD_INLINE vint4 float_as_int(vfloat4 a)
 ASTCENC_SIMD_INLINE vfloat4 int_as_float(vint4 v)
 {
 	return vfloat4(_mm_castsi128_ps(v.m));
+}
+
+/**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(vint4 t0, vint4& t0p)
+{
+	t0p = t0;
+}
+
+/**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(vint4 t0, vint4 t1, vint4& t0p, vint4& t1p)
+{
+#if ASTCENC_SSE >= 30
+	t0p = t0;
+	t1p = t0 ^ t1;
+#else
+	t0p = t0;
+	t1p = t1;
+#endif
+}
+
+/**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(
+	vint4 t0, vint4 t1, vint4 t2, vint4 t3,
+	vint4& t0p, vint4& t1p, vint4& t2p, vint4& t3p)
+{
+#if ASTCENC_SSE >= 30
+	t0p = t0;
+	t1p = t0 ^ t1;
+	t2p = t1 ^ t2;
+	t3p = t2 ^ t3;
+#else
+	t0p = t0;
+	t1p = t1;
+	t2p = t2;
+	t3p = t3;
+#endif
+}
+
+/**
+ * @brief Perform an 8-bit 16-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 idx)
+{
+#if ASTCENC_SSE >= 30
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	__m128i idxx = _mm_or_si128(idx.m, _mm_set1_epi32(static_cast<int>(0xFFFFFF00)));
+
+	__m128i result = _mm_shuffle_epi8(t0.m, idxx);
+	return vint4(result);
+#else
+	alignas(ASTCENC_VECALIGN) uint8_t table[16];
+	storea(t0, reinterpret_cast<int*>(table +  0));
+
+	return vint4(table[idx.lane<0>()],
+	             table[idx.lane<1>()],
+	             table[idx.lane<2>()],
+	             table[idx.lane<3>()]);
+#endif
+}
+
+/**
+ * @brief Perform an 8-bit 32-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 t1, vint4 idx)
+{
+#if ASTCENC_SSE >= 30
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	__m128i idxx = _mm_or_si128(idx.m, _mm_set1_epi32(static_cast<int>(0xFFFFFF00)));
+
+	__m128i result = _mm_shuffle_epi8(t0.m, idxx);
+	idxx = _mm_sub_epi8(idxx, _mm_set1_epi8(16));
+
+	__m128i result2 = _mm_shuffle_epi8(t1.m, idxx);
+	result = _mm_xor_si128(result, result2);
+
+	return vint4(result);
+#else
+	alignas(ASTCENC_VECALIGN) uint8_t table[32];
+	storea(t0, reinterpret_cast<int*>(table +  0));
+	storea(t1, reinterpret_cast<int*>(table + 16));
+
+	return vint4(table[idx.lane<0>()],
+	             table[idx.lane<1>()],
+	             table[idx.lane<2>()],
+	             table[idx.lane<3>()]);
+#endif
+}
+
+/**
+ * @brief Perform an 8-bit 64-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 t1, vint4 t2, vint4 t3, vint4 idx)
+{
+#if ASTCENC_SSE >= 30
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	__m128i idxx = _mm_or_si128(idx.m, _mm_set1_epi32(static_cast<int>(0xFFFFFF00)));
+
+	__m128i result = _mm_shuffle_epi8(t0.m, idxx);
+	idxx = _mm_sub_epi8(idxx, _mm_set1_epi8(16));
+
+	__m128i result2 = _mm_shuffle_epi8(t1.m, idxx);
+	result = _mm_xor_si128(result, result2);
+	idxx = _mm_sub_epi8(idxx, _mm_set1_epi8(16));
+
+	result2 = _mm_shuffle_epi8(t2.m, idxx);
+	result = _mm_xor_si128(result, result2);
+	idxx = _mm_sub_epi8(idxx, _mm_set1_epi8(16));
+
+	result2 = _mm_shuffle_epi8(t3.m, idxx);
+	result = _mm_xor_si128(result, result2);
+
+	return vint4(result);
+#else
+	alignas(ASTCENC_VECALIGN) uint8_t table[64];
+	storea(t0, reinterpret_cast<int*>(table +  0));
+	storea(t1, reinterpret_cast<int*>(table + 16));
+	storea(t2, reinterpret_cast<int*>(table + 32));
+	storea(t3, reinterpret_cast<int*>(table + 48));
+
+	return vint4(table[idx.lane<0>()],
+	             table[idx.lane<1>()],
+	             table[idx.lane<2>()],
+	             table[idx.lane<3>()]);
+#endif
+}
+
+/**
+ * @brief Return a vector of interleaved RGBA data.
+ *
+ * Input vectors have the value stored in the bottom 8 bits of each lane,
+ * with high  bits set to zero.
+ *
+ * Output vector stores a single RGBA texel packed in each lane.
+ */
+ASTCENC_SIMD_INLINE vint4 interleave_rgba8(vint4 r, vint4 g, vint4 b, vint4 a)
+{
+// Workaround an XCode compiler internal fault; note is slower than slli_epi32
+// so we should revert this when we get the opportunity
+#if defined(__APPLE__)
+	__m128i value = r.m;
+	value = _mm_add_epi32(value, _mm_bslli_si128(g.m, 1));
+	value = _mm_add_epi32(value, _mm_bslli_si128(b.m, 2));
+	value = _mm_add_epi32(value, _mm_bslli_si128(a.m, 3));
+	return vint4(value);
+#else
+	__m128i value = r.m;
+	value = _mm_add_epi32(value, _mm_slli_epi32(g.m,  8));
+	value = _mm_add_epi32(value, _mm_slli_epi32(b.m, 16));
+	value = _mm_add_epi32(value, _mm_slli_epi32(a.m, 24));
+	return vint4(value);
+#endif
+}
+
+/**
+ * @brief Store a vector, skipping masked lanes.
+ *
+ * All masked lanes must be at the end of vector, after all non-masked lanes.
+ */
+ASTCENC_SIMD_INLINE void store_lanes_masked(int* base, vint4 data, vmask4 mask)
+{
+#if ASTCENC_AVX >= 2
+	_mm_maskstore_epi32(base, _mm_castps_si128(mask.m), data.m);
+#else
+	_mm_maskmoveu_si128(data.m, _mm_castps_si128(mask.m), reinterpret_cast<char*>(base));
+#endif
 }
 
 #if defined(ASTCENC_NO_INVARIANCE) && (ASTCENC_SSE >= 41)

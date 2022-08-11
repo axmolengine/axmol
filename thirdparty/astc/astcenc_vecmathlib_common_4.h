@@ -373,6 +373,17 @@ ASTCENC_SIMD_INLINE void print(vint4 a)
 }
 
 /**
+ * @brief Debug function to print a vector of ints.
+ */
+ASTCENC_SIMD_INLINE void printx(vint4 a)
+{
+	alignas(16) int v[4];
+	storea(a, v);
+	printf("v4_i32:\n  %08x %08x %08x %08x\n",
+	       v[0], v[1], v[2], v[3]);
+}
+
+/**
  * @brief Debug function to print a vector of floats.
  */
 ASTCENC_SIMD_INLINE void print(vfloat4 a)

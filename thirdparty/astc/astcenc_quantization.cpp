@@ -453,7 +453,7 @@ const uint8_t color_unquant_tables[17][256] {
 	}
 };
 
-// The quant_mode_table[integercount/2][bits] gives us the quantization level for a given integer
+// The quant_mode_table[integer_count/2][bits] gives us the quantization level for a given integer
 // count and number of bits that the integer may fit into.
 const int8_t quant_mode_table[10][128] {
     {

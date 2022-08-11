@@ -204,7 +204,7 @@ struct vint4
 	{
 		uint32x2_t t8 {};
 		// Cast is safe - NEON loads are allowed to be unaligned
-		t8 = vld1_lane_u32((const uint32_t*)p, t8, 0);
+		t8 = vld1_lane_u32(reinterpret_cast<const uint32_t*>(p), t8, 0);
 		uint16x4_t t16 = vget_low_u16(vmovl_u8(vreinterpret_u8_u32(t8)));
 		m = vreinterpretq_s32_u32(vmovl_u16(t16));
 	}
@@ -283,7 +283,7 @@ struct vint4
 	 */
 	static ASTCENC_SIMD_INLINE vint4 lane_id()
 	{
-		alignas(ASTCENC_VECALIGN) static const int data[4] { 0, 1, 2, 3 };
+		alignas(16) static const int data[4] { 0, 1, 2, 3 };
 		return vint4(vld1q_s32(data));
 	}
 
@@ -344,6 +344,14 @@ struct vmask4
 
 		int32x4_t ms = vld1q_s32(v);
 		m = vreinterpretq_u32_s32(ms);
+	}
+
+	/**
+	 * @brief Get the scalar from a single lane.
+	 */
+	template <int32_t l> ASTCENC_SIMD_INLINE uint32_t lane() const
+	{
+		return vgetq_lane_s32(m, l);
 	}
 
 	/**
@@ -582,7 +590,7 @@ ASTCENC_SIMD_INLINE void store(vint4 a, int* p)
  */
 ASTCENC_SIMD_INLINE void store_nbytes(vint4 a, uint8_t* p)
 {
-	vst1q_lane_s32((int32_t*)p, a.m, 0);
+	vst1q_lane_s32(reinterpret_cast<int32_t*>(p), a.m, 0);
 }
 
 /**
@@ -874,7 +882,7 @@ ASTCENC_SIMD_INLINE vint4 float_to_float16(vfloat4 a)
 static inline uint16_t float_to_float16(float a)
 {
 	vfloat4 av(a);
-	return float_to_float16(av).lane<0>();
+	return static_cast<uint16_t>(float_to_float16(av).lane<0>());
 }
 
 /**
@@ -922,6 +930,120 @@ ASTCENC_SIMD_INLINE vint4 float_as_int(vfloat4 a)
 ASTCENC_SIMD_INLINE vfloat4 int_as_float(vint4 v)
 {
 	return vfloat4(vreinterpretq_f32_s32(v.m));
+}
+
+/**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(vint4 t0, vint4& t0p)
+{
+	t0p = t0;
+}
+
+
+/**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(vint4 t0, vint4 t1, vint4& t0p, vint4& t1p)
+{
+	t0p = t0;
+	t1p = t1;
+}
+
+/**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(
+	vint4 t0, vint4 t1, vint4 t2, vint4 t3,
+	vint4& t0p, vint4& t1p, vint4& t2p, vint4& t3p)
+{
+	t0p = t0;
+	t1p = t1;
+	t2p = t2;
+	t3p = t3;
+}
+
+/**
+ * @brief Perform an 8-bit 16-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 idx)
+{
+	int8x16_t table { t0.m };
+
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	int32x4_t idx_masked = vorrq_s32(idx.m, vdupq_n_s32(0xFFFFFF00));
+	int8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
+
+	return vint4(vqtbl1q_s8(table, idx_bytes));
+}
+
+/**
+ * @brief Perform an 8-bit 32-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 t1, vint4 idx)
+{
+	int8x16x2_t table { t0.m, t1.m };
+
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	int32x4_t idx_masked = vorrq_s32(idx.m, vdupq_n_s32(0xFFFFFF00));
+	int8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
+
+	return vint4(vqtbl2q_s8(table, idx_bytes));
+}
+
+/**
+ * @brief Perform an 8-bit 64-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 t1, vint4 t2, vint4 t3, vint4 idx)
+{
+	int8x16x4_t table { t0.m, t1.m, t2.m, t3.m };
+
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	int32x4_t idx_masked = vorrq_s32(idx.m, vdupq_n_s32(0xFFFFFF00));
+	int8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
+
+	return vint4(vqtbl4q_s8(table, idx_bytes));
+}
+
+/**
+ * @brief Return a vector of interleaved RGBA data.
+ *
+ * Input vectors have the value stored in the bottom 8 bits of each lane,
+ * with high  bits set to zero.
+ *
+ * Output vector stores a single RGBA texel packed in each lane.
+ */
+ASTCENC_SIMD_INLINE vint4 interleave_rgba8(vint4 r, vint4 g, vint4 b, vint4 a)
+{
+	return r + lsl<8>(g) + lsl<16>(b) + lsl<24>(a);
+}
+
+/**
+ * @brief Store a vector, skipping masked lanes.
+ *
+ * All masked lanes must be at the end of vector, after all non-masked lanes.
+ */
+ASTCENC_SIMD_INLINE void store_lanes_masked(int* base, vint4 data, vmask4 mask)
+{
+	if (mask.lane<3>())
+	{
+		store(data, base);
+	}
+	else if(mask.lane<2>())
+	{
+		base[0] = data.lane<0>();
+		base[1] = data.lane<1>();
+		base[2] = data.lane<2>();
+	}
+	else if(mask.lane<1>())
+	{
+		base[0] = data.lane<0>();
+		base[1] = data.lane<1>();
+	}
+	else if(mask.lane<0>())
+	{
+		base[0] = data.lane<0>();
+	}
 }
 
 #define ASTCENC_USE_NATIVE_POPCOUNT 1

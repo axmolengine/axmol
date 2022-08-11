@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2019-2021 Arm Limited
+// Copyright 2019-2022 Arm Limited
 // Copyright 2008 Jose Fonseca
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -60,10 +60,13 @@
 
 #if !defined(__clang__) && defined(_MSC_VER)
 	#define ASTCENC_SIMD_INLINE __forceinline
+	#define ASTCENC_NO_INLINE
 #elif defined(__GNUC__) && !defined(__clang__)
 	#define ASTCENC_SIMD_INLINE __attribute__((always_inline)) inline
+	#define ASTCENC_NO_INLINE __attribute__ ((noinline))
 #else
 	#define ASTCENC_SIMD_INLINE __attribute__((always_inline, nodebug)) inline
+	#define ASTCENC_NO_INLINE __attribute__ ((noinline))
 #endif
 
 #if ASTCENC_AVX >= 2
@@ -160,7 +163,7 @@
  */
 ASTCENC_SIMD_INLINE unsigned int round_down_to_simd_multiple_8(unsigned int count)
 {
-	return count & ~(8 - 1);
+	return count & static_cast<unsigned int>(~(8 - 1));
 }
 
 /**
@@ -172,7 +175,7 @@ ASTCENC_SIMD_INLINE unsigned int round_down_to_simd_multiple_8(unsigned int coun
  */
 ASTCENC_SIMD_INLINE unsigned int round_down_to_simd_multiple_4(unsigned int count)
 {
-	return count & ~(4 - 1);
+	return count & static_cast<unsigned int>(~(4 - 1));
 }
 
 /**
@@ -186,7 +189,7 @@ ASTCENC_SIMD_INLINE unsigned int round_down_to_simd_multiple_4(unsigned int coun
  */
 ASTCENC_SIMD_INLINE unsigned int round_down_to_simd_multiple_vla(unsigned int count)
 {
-	return count & ~(ASTCENC_SIMD_WIDTH - 1);
+	return count & static_cast<unsigned int>(~(ASTCENC_SIMD_WIDTH - 1));
 }
 
 /**
@@ -200,7 +203,7 @@ ASTCENC_SIMD_INLINE unsigned int round_down_to_simd_multiple_vla(unsigned int co
  */
 ASTCENC_SIMD_INLINE unsigned int round_up_to_simd_multiple_vla(unsigned int count)
 {
-	int multiples = (count + ASTCENC_SIMD_WIDTH - 1) / ASTCENC_SIMD_WIDTH;
+	unsigned int multiples = (count + ASTCENC_SIMD_WIDTH - 1) / ASTCENC_SIMD_WIDTH;
 	return multiples * ASTCENC_SIMD_WIDTH;
 }
 
@@ -219,7 +222,7 @@ ASTCENC_SIMD_INLINE vfloat change_sign(vfloat a, vfloat b)
 /**
  * @brief Return fast, but approximate, vector atan(x).
  *
- * Max error of this implementaiton is 0.004883.
+ * Max error of this implementation is 0.004883.
  */
 ASTCENC_SIMD_INLINE vfloat atan(vfloat x)
 {
@@ -507,7 +510,7 @@ static ASTCENC_SIMD_INLINE vfloat4 frexp(vfloat4 a, vint4& exp)
 	exp = (lsr<23>(ai) & 0xFF) - 126;
 
 	// Extract and unbias the mantissa
-	vint4 manti = (ai & 0x807FFFFF) | 0x3F000000;
+	vint4 manti = (ai &  static_cast<int>(0x807FFFFF)) | 0x3F000000;
 	return int_as_float(manti);
 }
 

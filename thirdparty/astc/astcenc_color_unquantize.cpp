@@ -50,10 +50,10 @@ static ASTCENC_SIMD_INLINE vint4 unquant_color(
  * @param value         The value to convert. This may be outside of the 0-255 range and will be
  *                      clamped before the value is looked up.
  *
- * @return The encoded quantized value. These are not necessarily in the order; the compressor
+ * @return The encoded quantized value. These are not necessarily in order; the compressor
  *         scrambles the values slightly to make hardware implementation easier.
  */
-static inline int unquant_color(
+static inline uint8_t unquant_color(
 	quant_method quant_level,
 	int value
 ) {

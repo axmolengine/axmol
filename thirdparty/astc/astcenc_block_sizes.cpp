@@ -802,8 +802,8 @@ static void construct_dt_entry_2d(
 	assert(maxprec_1plane >= 0 || maxprec_2planes >= 0);
 	bsd.decimation_modes[index].maxprec_1plane = static_cast<int8_t>(maxprec_1plane);
 	bsd.decimation_modes[index].maxprec_2planes = static_cast<int8_t>(maxprec_2planes);
-	bsd.decimation_modes[index].ref_1_plane = 0;
-	bsd.decimation_modes[index].ref_2_planes = 0;
+	bsd.decimation_modes[index].refprec_1_plane = 0;
+	bsd.decimation_modes[index].refprec_2_planes = 0;
 }
 
 /**
@@ -949,22 +949,23 @@ static void construct_block_size_descriptor_2d(
 			}
 
 			auto& bm = bsd.block_modes[packed_bm_idx];
-			auto& dm = bsd.decimation_modes[decimation_mode];
-
-			if (is_dual_plane)
-			{
-				dm.ref_2_planes = 1;
-			}
-			else
-			{
-				dm.ref_1_plane = 1;
-			}
 
 			bm.decimation_mode = static_cast<uint8_t>(decimation_mode);
 			bm.quant_mode = static_cast<uint8_t>(quant_mode);
 			bm.is_dual_plane = static_cast<uint8_t>(is_dual_plane);
 			bm.weight_bits = static_cast<uint8_t>(weight_bits);
 			bm.mode_index = static_cast<uint16_t>(i);
+
+			auto& dm = bsd.decimation_modes[decimation_mode];
+
+			if (is_dual_plane)
+			{
+				dm.set_ref_2_plane(bm.get_weight_quant_mode());
+			}
+			else
+			{
+				dm.set_ref_1_plane(bm.get_weight_quant_mode());
+			}
 
 			bsd.block_mode_packed_index[i] = static_cast<uint16_t>(packed_bm_idx);
 
@@ -994,8 +995,8 @@ static void construct_block_size_descriptor_2d(
 	{
 		bsd.decimation_modes[i].maxprec_1plane = -1;
 		bsd.decimation_modes[i].maxprec_2planes = -1;
-		bsd.decimation_modes[i].ref_1_plane = 0;
-		bsd.decimation_modes[i].ref_2_planes = 0;
+		bsd.decimation_modes[i].refprec_1_plane = 0;
+		bsd.decimation_modes[i].refprec_2_planes = 0;
 	}
 
 	// Determine the texels to use for kmeans clustering.
@@ -1080,8 +1081,8 @@ static void construct_block_size_descriptor_3d(
 
 				bsd.decimation_modes[decimation_mode_count].maxprec_1plane = static_cast<int8_t>(maxprec_1plane);
 				bsd.decimation_modes[decimation_mode_count].maxprec_2planes = static_cast<int8_t>(maxprec_2planes);
-				bsd.decimation_modes[decimation_mode_count].ref_1_plane = maxprec_1plane == -1 ? 0 : 1;
-				bsd.decimation_modes[decimation_mode_count].ref_2_planes = maxprec_2planes == -1 ? 0 : 1;
+				bsd.decimation_modes[decimation_mode_count].refprec_1_plane = maxprec_1plane == -1 ? 0 : 0xFFFF;
+				bsd.decimation_modes[decimation_mode_count].refprec_2_planes = maxprec_2planes == -1 ? 0 : 0xFFFF;
 				decimation_mode_count++;
 			}
 		}
@@ -1092,15 +1093,14 @@ static void construct_block_size_descriptor_3d(
 	{
 		bsd.decimation_modes[i].maxprec_1plane = -1;
 		bsd.decimation_modes[i].maxprec_2planes = -1;
-		bsd.decimation_modes[i].ref_1_plane = 0;
-		bsd.decimation_modes[i].ref_2_planes = 0;
+		bsd.decimation_modes[i].refprec_1_plane = 0;
+		bsd.decimation_modes[i].refprec_2_planes = 0;
 	}
 
 	bsd.decimation_mode_count_always = 0; // Skipped for 3D modes
 	bsd.decimation_mode_count_selected = decimation_mode_count;
 	bsd.decimation_mode_count_all = decimation_mode_count;
 
-	// Construct the list of block formats
 	// Construct the list of block formats referencing the decimation tables
 
 	// Clear the list to a known-bad value

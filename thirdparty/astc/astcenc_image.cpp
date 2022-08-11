@@ -143,12 +143,12 @@ static vfloat4 encode_texel_lns(
 	vmask4 lns_mask
 ) {
 	vfloat4 datav_unorm = data * 65535.0f;
-	vfloat4 datav_lns   = float_to_lns(data);
+	vfloat4 datav_lns = float_to_lns(data);
 	return select(datav_unorm, datav_lns, lns_mask);
 }
 
 /* See header for documentation. */
-void fetch_image_block(
+void load_image_block(
 	astcenc_profile decode_mode,
 	const astcenc_image& img,
 	image_block& blk,
@@ -265,7 +265,7 @@ void fetch_image_block(
 }
 
 /* See header for documentation. */
-void fetch_image_block_fast_ldr(
+void load_image_block_fast_ldr(
 	astcenc_profile decode_mode,
 	const astcenc_image& img,
 	image_block& blk,
@@ -332,7 +332,7 @@ void fetch_image_block_fast_ldr(
 }
 
 /* See header for documentation. */
-void write_image_block(
+void store_image_block(
 	astcenc_image& img,
 	const image_block& blk,
 	const block_size_descriptor& bsd,
@@ -341,24 +341,21 @@ void write_image_block(
 	unsigned int zpos,
 	const astcenc_swizzle& swz
 ) {
-	unsigned int xsize = img.dim_x;
-	unsigned int ysize = img.dim_y;
-	unsigned int zsize = img.dim_z;
-
+	unsigned int x_size = img.dim_x;
 	unsigned int x_start = xpos;
-	unsigned int x_end = std::min(xsize, xpos + bsd.xdim);
-	unsigned int x_nudge = bsd.xdim - (x_end - x_start);
+	unsigned int x_end = astc::min(x_size, xpos + bsd.xdim);
+	unsigned int x_count = x_end - x_start;
+	unsigned int x_nudge = bsd.xdim - x_count;
 
+	unsigned int y_size = img.dim_y;
 	unsigned int y_start = ypos;
-	unsigned int y_end = std::min(ysize, ypos + bsd.ydim);
-	unsigned int y_nudge = (bsd.ydim - (y_end - y_start)) * bsd.xdim;
+	unsigned int y_end = astc::min(y_size, ypos + bsd.ydim);
+	unsigned int y_count = y_end - y_start;
+	unsigned int y_nudge = (bsd.ydim - y_count) * bsd.xdim;
 
+	unsigned int z_size = img.dim_z;
 	unsigned int z_start = zpos;
-	unsigned int z_end = std::min(zsize, zpos + bsd.zdim);
-
-	float data[7];
-	data[ASTCENC_SWZ_0] = 0.0f;
-	data[ASTCENC_SWZ_1] = 1.0f;
+	unsigned int z_end = astc::min(z_size, zpos + bsd.zdim);
 
 	// True if any non-identity swizzle
 	bool needs_swz = (swz.r != ASTCENC_SWZ_R) || (swz.g != ASTCENC_SWZ_G) ||
@@ -378,47 +375,68 @@ void write_image_block(
 
 			for (unsigned int y = y_start; y < y_end; y++)
 			{
-				for (unsigned int x = x_start; x < x_end; x++)
-				{
-					vint4 colori = vint4::zero();
+				uint8_t* data8_row = data8 + (4 * x_size * y) + (4 * x_start);
 
-					// Errors are NaN encoded - convert to magenta error color
-					if (blk.data_r[idx] != blk.data_r[idx])
+				for (unsigned int x = 0; x < x_count; x += ASTCENC_SIMD_WIDTH)
+				{
+					unsigned int max_texels = ASTCENC_SIMD_WIDTH;
+					unsigned int used_texels = astc::min(x_count - x, max_texels);
+
+					// Unaligned load as rows are not always SIMD_WIDTH long
+					vfloat data_r(blk.data_r + idx);
+					vfloat data_g(blk.data_g + idx);
+					vfloat data_b(blk.data_b + idx);
+					vfloat data_a(blk.data_a + idx);
+
+					vint data_ri = float_to_int_rtn(min(data_r, 1.0f) * 255.0f);
+					vint data_gi = float_to_int_rtn(min(data_g, 1.0f) * 255.0f);
+					vint data_bi = float_to_int_rtn(min(data_b, 1.0f) * 255.0f);
+					vint data_ai = float_to_int_rtn(min(data_a, 1.0f) * 255.0f);
+
+					if (needs_swz)
 					{
-						colori = vint4(0xFF, 0x00, 0xFF, 0xFF);
-					}
-					else if (needs_swz)
-					{
-						data[ASTCENC_SWZ_R] = blk.data_r[idx];
-						data[ASTCENC_SWZ_G] = blk.data_g[idx];
-						data[ASTCENC_SWZ_B] = blk.data_b[idx];
-						data[ASTCENC_SWZ_A] = blk.data_a[idx];
+						vint swizzle_table[7];
+						swizzle_table[ASTCENC_SWZ_0] = vint(0);
+						swizzle_table[ASTCENC_SWZ_1] = vint(255);
+						swizzle_table[ASTCENC_SWZ_R] = data_ri;
+						swizzle_table[ASTCENC_SWZ_G] = data_gi;
+						swizzle_table[ASTCENC_SWZ_B] = data_bi;
+						swizzle_table[ASTCENC_SWZ_A] = data_ai;
 
 						if (needs_z)
 						{
-							float xcoord = (data[0] * 2.0f) - 1.0f;
-							float ycoord = (data[3] * 2.0f) - 1.0f;
-							float zcoord = 1.0f - xcoord * xcoord - ycoord * ycoord;
-							if (zcoord < 0.0f)
-							{
-								zcoord = 0.0f;
-							}
-							data[ASTCENC_SWZ_Z] = (astc::sqrt(zcoord) * 0.5f) + 0.5f;
+							vfloat data_x = (data_r * vfloat(2.0f)) - vfloat(1.0f);
+							vfloat data_y = (data_a * vfloat(2.0f)) - vfloat(1.0f);
+							vfloat data_z = vfloat(1.0f) - (data_x * data_x) - (data_y * data_y);
+							data_z = max(data_z, 0.0f);
+							data_z = (sqrt(data_z) * vfloat(0.5f)) + vfloat(0.5f);
+
+							swizzle_table[ASTCENC_SWZ_Z] = float_to_int_rtn(min(data_z, 1.0f) * 255.0f);
 						}
 
-						vfloat4 color = vfloat4(data[swz.r], data[swz.g], data[swz.b], data[swz.a]);
-						colori = float_to_int_rtn(min(color, 1.0f) * 255.0f);
+						data_ri = swizzle_table[swz.r];
+						data_gi = swizzle_table[swz.g];
+						data_bi = swizzle_table[swz.b];
+						data_ai = swizzle_table[swz.a];
 					}
-					else
+
+					// Errors are NaN encoded - convert to magenta error color
+					// Branch is OK here - it is almost never true so predicts well
+					vmask nan_mask = data_r != data_r;
+					if (any(nan_mask))
 					{
-						vfloat4 color = blk.texel(idx);
-						colori = float_to_int_rtn(min(color, 1.0f) * 255.0f);
+						data_ri = select(data_ri, vint(0xFF), nan_mask);
+						data_gi = select(data_gi, vint(0x00), nan_mask);
+						data_bi = select(data_bi, vint(0xFF), nan_mask);
+						data_ai = select(data_ai, vint(0xFF), nan_mask);
 					}
 
-					colori = pack_low_bytes(colori);
-					store_nbytes(colori, data8 + (4 * xsize * y) + (4 * x    ));
+					vint data_rgbai = interleave_rgba8(data_ri, data_gi, data_bi, data_ai);
+					vmask store_mask = vint::lane_id() < vint(used_texels);
+					store_lanes_masked(reinterpret_cast<int*>(data8_row), data_rgbai, store_mask);
 
-					idx++;
+					data8_row += ASTCENC_SIMD_WIDTH * 4;
+					idx += used_texels;
 				}
 				idx += x_nudge;
 			}
@@ -434,13 +452,18 @@ void write_image_block(
 
 			for (unsigned int y = y_start; y < y_end; y++)
 			{
-				for (unsigned int x = x_start; x < x_end; x++)
+				uint16_t* data16_row = data16 + (4 * x_size * y) + (4 * x_start);
+
+				for (unsigned int x = 0; x < x_count; x++)
 				{
 					vint4 color;
 
 					// NaNs are handled inline - no need to special case
 					if (needs_swz)
 					{
+						float data[7];
+						data[ASTCENC_SWZ_0] = 0.0f;
+						data[ASTCENC_SWZ_1] = 1.0f;
 						data[ASTCENC_SWZ_R] = blk.data_r[idx];
 						data[ASTCENC_SWZ_G] = blk.data_g[idx];
 						data[ASTCENC_SWZ_B] = blk.data_b[idx];
@@ -467,11 +490,12 @@ void write_image_block(
 						color = float_to_float16(colorf);
 					}
 
-					data16[(4 * xsize * y) + (4 * x    )] = static_cast<uint16_t>(color.lane<0>());
-					data16[(4 * xsize * y) + (4 * x + 1)] = static_cast<uint16_t>(color.lane<1>());
-					data16[(4 * xsize * y) + (4 * x + 2)] = static_cast<uint16_t>(color.lane<2>());
-					data16[(4 * xsize * y) + (4 * x + 3)] = static_cast<uint16_t>(color.lane<3>());
-
+					// TODO: Vectorize with store N shorts?
+					data16_row[0] = static_cast<uint16_t>(color.lane<0>());
+					data16_row[1] = static_cast<uint16_t>(color.lane<1>());
+					data16_row[2] = static_cast<uint16_t>(color.lane<2>());
+					data16_row[3] = static_cast<uint16_t>(color.lane<3>());
+					data16_row += 4;
 					idx++;
 				}
 				idx += x_nudge;
@@ -490,13 +514,18 @@ void write_image_block(
 
 			for (unsigned int y = y_start; y < y_end; y++)
 			{
-				for (unsigned int x = x_start; x < x_end; x++)
+				float* data32_row = data32 + (4 * x_size * y) + (4 * x_start);
+
+				for (unsigned int x = 0; x < x_count; x++)
 				{
 					vfloat4 color = blk.texel(idx);
 
 					// NaNs are handled inline - no need to special case
 					if (needs_swz)
 					{
+						float data[7];
+						data[ASTCENC_SWZ_0] = 0.0f;
+						data[ASTCENC_SWZ_1] = 1.0f;
 						data[ASTCENC_SWZ_R] = color.lane<0>();
 						data[ASTCENC_SWZ_G] = color.lane<1>();
 						data[ASTCENC_SWZ_B] = color.lane<2>();
@@ -517,8 +546,8 @@ void write_image_block(
 						color = vfloat4(data[swz.r], data[swz.g], data[swz.b], data[swz.a]);
 					}
 
-					store(color, data32 + (4 * xsize * y) + (4 * x    ));
-
+					store(color, data32_row);
+					data32_row += 4;
 					idx++;
 				}
 				idx += x_nudge;
