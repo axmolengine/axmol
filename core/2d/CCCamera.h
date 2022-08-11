@@ -344,8 +344,9 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
-    /** Init camera with default properties */
-    bool init() override;
+    /** Init default camera with director current projection, 
+    !!!Note: Must invoke this function again when director projection or winsize changed */
+    void initDefault();
 
     /** Update camera transformations */
     void updateTransform() override;

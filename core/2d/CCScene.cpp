@@ -160,7 +160,7 @@ void Scene::onProjectionChanged(EventCustom* /*event*/)
 {
     if (_defaultCamera)
     {
-        _defaultCamera->updateTransform();
+        _defaultCamera->initDefault();
     }
 }
 
