@@ -789,11 +789,9 @@ void Label::updateBatchCommand(Label::BatchCommand& batch)
 
 void Label::setLocalizationHandler(LocalizationHandler* handler)
 {
+    _localizer = handler;
     if (handler)
-    {
-        _localizer = handler;
         handler->retain();
-    }
 }
 
 void Label::updateUniformLocations()
