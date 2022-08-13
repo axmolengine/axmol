@@ -75,7 +75,7 @@ jobs:
 
   build-osx:
     name: build-osx
-    runs-on: macos-latest
+    runs-on: macos-12
     strategy:
       matrix:
         arch:
