@@ -92,7 +92,7 @@
 
 ## jpeg-turbo
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: 2.1.3
+- Version: 2.1.4
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
