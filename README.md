@@ -31,6 +31,7 @@
 * Bugfixes ASAP
   
 ### Highlighted Features
+* Add apple M1 support, contributed by @pietpukkel
 * Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axys1/axys/issues/564)
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
