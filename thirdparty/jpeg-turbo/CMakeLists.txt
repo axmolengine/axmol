@@ -1,5 +1,5 @@
 
-set(lib_name jpeg)
+set(lib_name jpeg-turbo)
 set(target_name dep_${lib_name})
 
 project(${lib_name})

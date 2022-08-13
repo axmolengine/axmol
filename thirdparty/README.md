@@ -90,7 +90,7 @@
 - Version: v4.0.0
 - License: MIT-like
 
-## jpeg (libjpeg-turbo)
+## jpeg-turbo
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
 - Version: 2.1.3
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
