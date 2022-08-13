@@ -29,9 +29,13 @@
 * C++ 17
 * Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
+
+### Thirdparty
+
+* All thirdparty prebuilt libs are built from https://github.com/axys1/buildware via github actions automatically.
   
 ### Highlighted Features
-* Add apple M1 support, contributed by @pietpukkel
+* Add apple M1, android x64 support, contributed by @pietpukkel
 * Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axys1/axys/issues/564)
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
