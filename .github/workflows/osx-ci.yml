@@ -33,7 +33,6 @@ jobs:
     env:
       BUILD_ARCH: ${{ matrix.arch }}
 
-
     steps:
     - uses: actions/checkout@v2
       with:
