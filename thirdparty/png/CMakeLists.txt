@@ -28,7 +28,7 @@ if(WIN32)
         intel/intel_init.c
         intel/filter_sse2_intrinsics.c
     )
-elseif(ANDROID OR APPLE)
+elseif(ANDROID OR IOS)
         set(${target_name}_src ${${target_name}_src}
             arm/arm_init.c
             arm/filter_neon.S
