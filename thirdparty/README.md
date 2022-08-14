@@ -75,7 +75,7 @@
 - Version: git df8d7bc on 31 Dec 2021 (4398)
 - License: zlib
 
-## glsl-optimizer
+## glsl-optimizer (Apple Metal Render backend only)
 - Upstream: https://github.com/aras-p/glsl-optimizer
 - Version: git d78c3d2
 - License: MIT
