@@ -55,6 +55,7 @@ jobs:
           - armeabi-v7a
           - arm64-v8a
           - x86
+          - x86_64
     env:
       GH_OS_NAME: linux
       BUILD_TARGET: android
@@ -74,10 +75,16 @@ jobs:
 
   build-osx:
     name: build-osx
-    runs-on: macos-latest
+    runs-on: macos-12
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - arm64
     env:
       GH_OS_NAME: osx
       BUILD_TARGET: osx
+      BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
         with:

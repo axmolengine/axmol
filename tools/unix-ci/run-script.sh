@@ -43,7 +43,7 @@ function build_osx()
 
     cd $AXYS_ROOT
     mkdir -p build
-    cmake -S . -B build -GXcode -DAX_ENABLE_EXT_IMGUI=ON -DAX_USE_ALSOFT=ON
+    cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=$BUILD_ARCH -DAX_ENABLE_EXT_IMGUI=ON -DAX_USE_ALSOFT=ON
     cmake --build build --config Release --target cpp_tests -- -quiet
 
     exit 0
