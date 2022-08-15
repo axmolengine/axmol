@@ -25,36 +25,6 @@
 #include <assert.h>
 
 /**
- * @brief Compute a vector of texel weights by interpolating the decimated weight grid.
- *
- * @param base_texel_index   The first texel to get; N (SIMD width) consecutive texels are loaded.
- * @param di                 The weight grid decimation to use.
- * @param weights            The raw weights.
- *
- * @return The undecimated weight for N (SIMD width) texels.
- */
-static vint compute_value_of_texel_weight_int_vla(
-	int base_texel_index,
-	const decimation_info& di,
-	const int* weights
-) {
-	vint summed_value(8);
-	vint weight_count(di.texel_weight_count + base_texel_index);
-	int max_weight_count = hmax(weight_count).lane<0>();
-
-	promise(max_weight_count > 0);
-	for (int i = 0; i < max_weight_count; i++)
-	{
-		vint texel_weights(di.texel_weights_4t[i] + base_texel_index);
-		vint texel_weights_int(di.texel_weights_int_4t[i] + base_texel_index);
-
-		summed_value += gatheri(weights, texel_weights) * texel_weights_int;
-	}
-
-	return lsr<4>(summed_value);
-}
-
-/**
  * @brief Compute the integer linear interpolation of two color endpoints.
  *
  * @param decode_mode   The ASTC profile (linear or sRGB)
@@ -127,43 +97,74 @@ void unpack_weights(
 	const symbolic_compressed_block& scb,
 	const decimation_info& di,
 	bool is_dual_plane,
-	quant_method quant_level,
 	int weights_plane1[BLOCK_MAX_TEXELS],
 	int weights_plane2[BLOCK_MAX_TEXELS]
 ) {
-	// First, unquantize the weights ...
-	int uq_plane1_weights[BLOCK_MAX_WEIGHTS];
-	int uq_plane2_weights[BLOCK_MAX_WEIGHTS];
-	unsigned int weight_count = di.weight_count;
-
-	const quantization_and_transfer_table *qat = &(quant_and_xfer_tables[quant_level]);
-
-	// Second, undecimate the weights ...
 	// Safe to overshoot as all arrays are allocated to full size
 	if (!is_dual_plane)
 	{
-		for (unsigned int i = 0; i < weight_count; i++)
-		{
-			uq_plane1_weights[i] = qat->unquantized_value[scb.weights[i]];
-		}
+		// Build full 64-entry weight lookup table
+		vint4 tab0(reinterpret_cast<const int*>(scb.weights +  0));
+		vint4 tab1(reinterpret_cast<const int*>(scb.weights + 16));
+		vint4 tab2(reinterpret_cast<const int*>(scb.weights + 32));
+		vint4 tab3(reinterpret_cast<const int*>(scb.weights + 48));
+
+		vint tab0p, tab1p, tab2p, tab3p;
+		vtable_prepare(tab0, tab1, tab2, tab3, tab0p, tab1p, tab2p, tab3p);
 
 		for (unsigned int i = 0; i < bsd.texel_count; i += ASTCENC_SIMD_WIDTH)
 		{
-			store(compute_value_of_texel_weight_int_vla(i, di, uq_plane1_weights), weights_plane1 + i);
+			vint summed_value(8);
+			vint weight_count(di.texel_weight_count + i);
+			int max_weight_count = hmax(weight_count).lane<0>();
+
+			promise(max_weight_count > 0);
+			for (int j = 0; j < max_weight_count; j++)
+			{
+				vint texel_weights(di.texel_weights_4t[j] + i);
+				vint texel_weights_int(di.texel_weights_int_4t[j] + i);
+
+				summed_value += vtable_8bt_32bi(tab0p, tab1p, tab2p, tab3p, texel_weights) * texel_weights_int;
+			}
+
+			store(lsr<4>(summed_value), weights_plane1 + i);
 		}
 	}
 	else
 	{
-		for (unsigned int i = 0; i < weight_count; i++)
-		{
-			uq_plane1_weights[i] = qat->unquantized_value[scb.weights[i]];
-			uq_plane2_weights[i] = qat->unquantized_value[scb.weights[i + WEIGHTS_PLANE2_OFFSET]];
-		}
+		// Build a 32-entry weight lookup table per plane
+		// Plane 1
+		vint4 tab0_plane1(reinterpret_cast<const int*>(scb.weights +  0));
+		vint4 tab1_plane1(reinterpret_cast<const int*>(scb.weights + 16));
+		vint tab0_plane1p, tab1_plane1p;
+		vtable_prepare(tab0_plane1, tab1_plane1, tab0_plane1p, tab1_plane1p);
+
+		// Plane 2
+		vint4 tab0_plane2(reinterpret_cast<const int*>(scb.weights + 32));
+		vint4 tab1_plane2(reinterpret_cast<const int*>(scb.weights + 48));
+		vint tab0_plane2p, tab1_plane2p;
+		vtable_prepare(tab0_plane2, tab1_plane2, tab0_plane2p, tab1_plane2p);
 
 		for (unsigned int i = 0; i < bsd.texel_count; i += ASTCENC_SIMD_WIDTH)
 		{
-			store(compute_value_of_texel_weight_int_vla(i, di, uq_plane1_weights), weights_plane1 + i);
-			store(compute_value_of_texel_weight_int_vla(i, di, uq_plane2_weights), weights_plane2 + i);
+			vint sum_plane1(8);
+			vint sum_plane2(8);
+
+			vint weight_count(di.texel_weight_count + i);
+			int max_weight_count = hmax(weight_count).lane<0>();
+
+			promise(max_weight_count > 0);
+			for (int j = 0; j < max_weight_count; j++)
+			{
+				vint texel_weights(di.texel_weights_4t[j] + i);
+				vint texel_weights_int(di.texel_weights_int_4t[j] + i);
+
+				sum_plane1 += vtable_8bt_32bi(tab0_plane1p, tab1_plane1p, texel_weights) * texel_weights_int;
+				sum_plane2 += vtable_8bt_32bi(tab0_plane2p, tab1_plane2p, texel_weights) * texel_weights_int;
+			}
+
+			store(lsr<4>(sum_plane1), weights_plane1 + i);
+			store(lsr<4>(sum_plane2), weights_plane2 + i);
 		}
 	}
 }
@@ -277,12 +278,12 @@ void decompress_symbolic_block(
 	const auto& bm = bsd.get_block_mode(scb.block_mode);
 	const auto& di = bsd.get_decimation_info(bm.decimation_mode);
 
-	int is_dual_plane = bm.is_dual_plane;
+	bool is_dual_plane = static_cast<bool>(bm.is_dual_plane);
 
 	// Unquantize and undecimate the weights
 	int plane1_weights[BLOCK_MAX_TEXELS];
 	int plane2_weights[BLOCK_MAX_TEXELS];
-	unpack_weights(bsd, scb, di, is_dual_plane, bm.get_weight_quant_mode(), plane1_weights, plane2_weights);
+	unpack_weights(bsd, scb, di, is_dual_plane, plane1_weights, plane2_weights);
 
 	// Now that we have endpoint colors and weights, we can unpack texel colors
 	int plane2_component = is_dual_plane ? scb.plane2_component : -1;
@@ -347,7 +348,7 @@ float compute_symbolic_block_difference_2plane(
 	// Unquantize and undecimate the weights
 	int plane1_weights[BLOCK_MAX_TEXELS];
 	int plane2_weights[BLOCK_MAX_TEXELS];
-	unpack_weights(bsd, scb, di, true, bm.get_weight_quant_mode(), plane1_weights, plane2_weights);
+	unpack_weights(bsd, scb, di, true, plane1_weights, plane2_weights);
 
 	vmask4 plane2_mask = vint4::lane_id() == vint4(scb.plane2_component);
 
@@ -443,7 +444,7 @@ float compute_symbolic_block_difference_1plane(
 
 	// Unquantize and undecimate the weights
 	int plane1_weights[BLOCK_MAX_TEXELS];
-	unpack_weights(bsd, scb, di, false, bm.get_weight_quant_mode(), plane1_weights, nullptr);
+	unpack_weights(bsd, scb, di, false, plane1_weights, nullptr);
 
 	vfloat4 summa = vfloat4::zero();
 	for (unsigned int i = 0; i < partition_count; i++)
@@ -535,7 +536,7 @@ float compute_symbolic_block_difference_1plane_1partition(
 
 	// Unquantize and undecimate the weights
 	alignas(ASTCENC_VECALIGN) int plane1_weights[BLOCK_MAX_TEXELS];
-	unpack_weights(bsd, scb, di, false, bm.get_weight_quant_mode(), plane1_weights, nullptr);
+	unpack_weights(bsd, scb, di, false, plane1_weights, nullptr);
 
 	// Decode the color endpoints for this partition
 	vint4 ep0;

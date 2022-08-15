@@ -1,4 +1,4 @@
-set(COCOS_PHYSICS_HEADER
+set(_AX_PHYSICS_HEADER
     physics/CCPhysicsContact.h
     physics/CCPhysicsWorld.h
     physics/CCPhysicsBody.h
@@ -8,7 +8,7 @@ set(COCOS_PHYSICS_HEADER
     physics/CCPhysicsJoint.h
     )
 
-set(COCOS_PHYSICS_SRC
+set(_AX_PHYSICS_SRC
     physics/CCPhysicsBody.cpp
     physics/CCPhysicsContact.cpp
     physics/CCPhysicsJoint.cpp

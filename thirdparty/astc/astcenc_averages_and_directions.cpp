@@ -822,17 +822,17 @@ void compute_error_squared_rgba(
 		for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
 		{
 			vmask mask = lane_ids < vint(texel_count);
-			vint texel_idxs(&(texel_indexes[i]));
+			vint texel_idxs(texel_indexes + i);
 
 			vfloat data_r = gatherf(blk.data_r, texel_idxs);
 			vfloat data_g = gatherf(blk.data_g, texel_idxs);
 			vfloat data_b = gatherf(blk.data_b, texel_idxs);
 			vfloat data_a = gatherf(blk.data_a, texel_idxs);
 
-			vfloat uncor_param  = (data_r * l_uncor_bs0)
-			                    + (data_g * l_uncor_bs1)
-			                    + (data_b * l_uncor_bs2)
-			                    + (data_a * l_uncor_bs3);
+			vfloat uncor_param = (data_r * l_uncor_bs0)
+			                   + (data_g * l_uncor_bs1)
+			                   + (data_b * l_uncor_bs2)
+			                   + (data_a * l_uncor_bs3);
 
 			uncor_loparamv = min(uncor_param, uncor_loparamv);
 			uncor_hiparamv = max(uncor_param, uncor_hiparamv);
@@ -961,15 +961,15 @@ void compute_error_squared_rgb(
 		for (unsigned int i = 0; i < texel_count; i += ASTCENC_SIMD_WIDTH)
 		{
 			vmask mask = lane_ids < vint(texel_count);
-			vint texel_idxs(&(texel_indexes[i]));
+			vint texel_idxs(texel_indexes + i);
 
 			vfloat data_r = gatherf(blk.data_r, texel_idxs);
 			vfloat data_g = gatherf(blk.data_g, texel_idxs);
 			vfloat data_b = gatherf(blk.data_b, texel_idxs);
 
-			vfloat uncor_param  = (data_r * l_uncor_bs0)
-			                    + (data_g * l_uncor_bs1)
-			                    + (data_b * l_uncor_bs2);
+			vfloat uncor_param = (data_r * l_uncor_bs0)
+			                   + (data_g * l_uncor_bs1)
+			                   + (data_b * l_uncor_bs2);
 
 			uncor_loparamv = min(uncor_param, uncor_loparamv);
 			uncor_hiparamv = max(uncor_param, uncor_hiparamv);

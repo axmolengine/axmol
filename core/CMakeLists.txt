@@ -80,39 +80,39 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
-set(COCOS_HEADER axys.h
-    ${COCOS_2D_HEADER}
-    ${COCOS_3D_HEADER}
-    ${COCOS_PLATFORM_HEADER}
-    ${COCOS_PHYSICS_HEADER}
-    ${COCOS_PHYSICS3D_HEADER}
-    ${COCOS_MATH_HEADER}
-    ${COCOS_NAVMESH_HEADER}
-    ${COCOS_RENDERER_HEADER}
-    ${COCOS_BASE_HEADER}
-    ${COCOS_AUDIO_HEADER}
-    ${COCOS_UI_HEADER}
-    ${COCOS_NETWORK_HEADER}
+set(_AX_HEADER axys.h
+    ${_AX_2D_HEADER}
+    ${_AX_3D_HEADER}
+    ${_AX_PLATFORM_HEADER}
+    ${_AX_PHYSICS_HEADER}
+    ${_AX_PHYSICS3D_HEADER}
+    ${_AX_MATH_HEADER}
+    ${_AX_NAVMESH_HEADER}
+    ${_AX_RENDERER_HEADER}
+    ${_AX_BASE_HEADER}
+    ${_AX_AUDIO_HEADER}
+    ${_AX_UI_HEADER}
+    ${_AX_NETWORK_HEADER}
     )
 
-set(COCOS_SRC axys.cpp
-    ${COCOS_2D_SRC}
-    ${COCOS_3D_SRC}
-    ${COCOS_PLATFORM_SRC}
-    ${COCOS_PHYSICS_SRC}
-    ${COCOS_PHYSICS3D_SRC}
-    ${COCOS_MATH_SRC}
-    ${COCOS_NAVMESH_SRC}
-    ${COCOS_RENDERER_SRC}
-    ${COCOS_BASE_SRC}
-    ${COCOS_AUDIO_SRC}
-    ${COCOS_UI_SRC}
-    ${COCOS_NETWORK_SRC}
+set(_AX_SRC axys.cpp
+    ${_AX_2D_SRC}
+    ${_AX_3D_SRC}
+    ${_AX_PLATFORM_SRC}
+    ${_AX_PHYSICS_SRC}
+    ${_AX_PHYSICS3D_SRC}
+    ${_AX_MATH_SRC}
+    ${_AX_NAVMESH_SRC}
+    ${_AX_RENDERER_SRC}
+    ${_AX_BASE_SRC}
+    ${_AX_AUDIO_SRC}
+    ${_AX_UI_SRC}
+    ${_AX_NETWORK_SRC}
     )
 
-list(APPEND COCOS_SRC ${COCOS_HEADER})
+list(APPEND _AX_SRC ${_AX_HEADER})
 
-add_library(${_AX_CORE_LIB} ${COCOS_SRC})
+add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
 # use thirdparty libs
 add_subdirectory(${AXYS_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
@@ -154,7 +154,7 @@ set_target_properties(${_AX_CORE_LIB}
 # endif()
 
 if(XCODE OR VS)
-    cocos_mark_code_files("${_AX_CORE_LIB}")
+    ax_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
 if(WINDOWS)
@@ -165,7 +165,7 @@ if(WINDOWS)
         set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
     endif()
     # compile c as c++. needed for precompiled header
-    set_source_files_properties(${COCOS_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
+    set_source_files_properties(${_AX_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
     
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 

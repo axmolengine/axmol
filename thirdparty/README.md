@@ -6,7 +6,7 @@
 
 ## astc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 3.7
+- Version: 4.0.0
 - License: Apache-2.0
 
 ## Box2D
@@ -75,7 +75,7 @@
 - Version: git df8d7bc on 31 Dec 2021 (4398)
 - License: zlib
 
-## glsl-optimizer
+## glsl-optimizer (Apple Metal Render backend only)
 - Upstream: https://github.com/aras-p/glsl-optimizer
 - Version: git d78c3d2
 - License: MIT
@@ -90,9 +90,9 @@
 - Version: v4.0.0
 - License: MIT-like
 
-## jpeg (libjpeg-turbo)
+## jpeg-turbo
 - Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
-- Version: 2.1.3
+- Version: 2.1.4
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp

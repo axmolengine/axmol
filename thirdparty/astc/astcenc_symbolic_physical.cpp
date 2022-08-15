@@ -151,26 +151,43 @@ void symbolic_to_physical(
 	const auto& di = bsd.get_decimation_info(bm.decimation_mode);
 	int weight_count = di.weight_count;
 	quant_method weight_quant_method = bm.get_weight_quant_mode();
+	float weight_quant_levels = static_cast<float>(get_quant_level(weight_quant_method));
 	int is_dual_plane = bm.is_dual_plane;
+
+	const auto& qat = quant_and_xfer_tables[weight_quant_method];
 
 	int real_weight_count = is_dual_plane ? 2 * weight_count : weight_count;
 
 	int bits_for_weights = get_ise_sequence_bitcount(real_weight_count, weight_quant_method);
 
+	uint8_t weights[64];
 	if (is_dual_plane)
 	{
-		uint8_t weights[64];
 		for (int i = 0; i < weight_count; i++)
 		{
-			weights[2 * i] = scb.weights[i];
-			weights[2 * i + 1] = scb.weights[i + WEIGHTS_PLANE2_OFFSET];
+			float uqw = static_cast<float>(scb.weights[i]);
+			float qw = (uqw / 64.0f) * (weight_quant_levels - 1.0f);
+			int qwi = static_cast<int>(qw + 0.5f);
+			weights[2 * i] = qat.scramble_map[qwi];
+
+			uqw = static_cast<float>(scb.weights[i + WEIGHTS_PLANE2_OFFSET]);
+			qw = (uqw / 64.0f) * (weight_quant_levels - 1.0f);
+			qwi = static_cast<int>(qw + 0.5f);
+			weights[2 * i + 1] = qat.scramble_map[qwi];
 		}
-		encode_ise(weight_quant_method, real_weight_count, weights, weightbuf, 0);
 	}
 	else
 	{
-		encode_ise(weight_quant_method, weight_count, scb.weights, weightbuf, 0);
+		for (int i = 0; i < weight_count; i++)
+		{
+			float uqw = static_cast<float>(scb.weights[i]);
+			float qw = (uqw / 64.0f) * (weight_quant_levels - 1.0f);
+			int qwi = static_cast<int>(qw + 0.5f);
+			weights[i] = qat.scramble_map[qwi];
+		}
 	}
+
+	encode_ise(weight_quant_method, real_weight_count, weights, weightbuf, 0);
 
 	for (int i = 0; i < 16; i++)
 	{
@@ -371,19 +388,25 @@ void physical_to_symbolic(
 
 	int below_weights_pos = 128 - bits_for_weights;
 
+	uint8_t indices[64];
+	const auto& qat = quant_and_xfer_tables[weight_quant_method];
+
+	decode_ise(weight_quant_method, real_weight_count, bswapped, indices, 0);
+
 	if (is_dual_plane)
 	{
-		uint8_t indices[64];
-		decode_ise(weight_quant_method, real_weight_count, bswapped, indices, 0);
 		for (int i = 0; i < weight_count; i++)
 		{
-			scb.weights[i] = indices[2 * i];
-			scb.weights[i + WEIGHTS_PLANE2_OFFSET] = indices[2 * i + 1];
+			scb.weights[i] = qat.unscramble_and_unquant_map[indices[2 * i]];
+			scb.weights[i + WEIGHTS_PLANE2_OFFSET] = qat.unscramble_and_unquant_map[indices[2 * i + 1]];
 		}
 	}
 	else
 	{
-		decode_ise(weight_quant_method, weight_count, bswapped, scb.weights, 0);
+		for (int i = 0; i < weight_count; i++)
+		{
+			scb.weights[i] = qat.unscramble_and_unquant_map[indices[i]];
+		}
 	}
 
 	if (is_dual_plane && partition_count == 4)

@@ -88833,56 +88833,6 @@ int lua_axys_base_Camera_getBackgroundBrush(lua_State* tolua_S)
 
     return 0;
 }
-int lua_axys_base_Camera_setAspectRatio(lua_State* tolua_S)
-{
-    int argc = 0;
-    axys::Camera* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (axys::Camera*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axys_base_Camera_setAspectRatio'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        double arg0;
-
-        ok &= luaval_to_number(tolua_S, 2,&arg0, "ax.Camera:setAspectRatio");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_axys_base_Camera_setAspectRatio'", nullptr);
-            return 0;
-        }
-        cobj->setAspectRatio(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:setAspectRatio",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_axys_base_Camera_setAspectRatio'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_axys_base_Camera_setFarPlane(lua_State* tolua_S)
 {
     int argc = 0;
@@ -89207,8 +89157,8 @@ int lua_axys_base_Camera_initDefault(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_axys_base_Camera_initDefault'", nullptr);
             return 0;
         }
-        bool ret = cobj->initDefault();
-        tolua_pushboolean(tolua_S,(bool)ret);
+        cobj->initDefault();
+        lua_settop(tolua_S, 1);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:initDefault",argc, 0);
@@ -89267,53 +89217,6 @@ int lua_axys_base_Camera_setNearPlane(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axys_base_Camera_setNearPlane'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_axys_base_Camera_getAspectRatio(lua_State* tolua_S)
-{
-    int argc = 0;
-    axys::Camera* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (axys::Camera*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axys_base_Camera_getAspectRatio'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_axys_base_Camera_getAspectRatio'", nullptr);
-            return 0;
-        }
-        double ret = cobj->getAspectRatio();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:getAspectRatio",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_axys_base_Camera_getAspectRatio'.",&tolua_err);
 #endif
 
     return 0;
@@ -89761,53 +89664,6 @@ int lua_axys_base_Camera_isVisibleInFrustum(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_axys_base_Camera_isVisibleInFrustum'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_axys_base_Camera_applyCustomProperties(lua_State* tolua_S)
-{
-    int argc = 0;
-    axys::Camera* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (axys::Camera*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_axys_base_Camera_applyCustomProperties'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_axys_base_Camera_applyCustomProperties'", nullptr);
-            return 0;
-        }
-        cobj->applyCustomProperties();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:applyCustomProperties",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_axys_base_Camera_applyCustomProperties'.",&tolua_err);
 #endif
 
     return 0;
@@ -90621,7 +90477,6 @@ int lua_register_axys_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"lookAt",lua_axys_base_Camera_lookAt);
         tolua_function(tolua_S,"apply",lua_axys_base_Camera_apply);
         tolua_function(tolua_S,"getBackgroundBrush",lua_axys_base_Camera_getBackgroundBrush);
-        tolua_function(tolua_S,"setAspectRatio",lua_axys_base_Camera_setAspectRatio);
         tolua_function(tolua_S,"setFarPlane",lua_axys_base_Camera_setFarPlane);
         tolua_function(tolua_S,"getProjectionMatrix",lua_axys_base_Camera_getProjectionMatrix);
         tolua_function(tolua_S,"isBrushValid",lua_axys_base_Camera_isBrushValid);
@@ -90630,7 +90485,6 @@ int lua_register_axys_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"setAdditionalProjection",lua_axys_base_Camera_setAdditionalProjection);
         tolua_function(tolua_S,"initDefault",lua_axys_base_Camera_initDefault);
         tolua_function(tolua_S,"setNearPlane",lua_axys_base_Camera_setNearPlane);
-        tolua_function(tolua_S,"getAspectRatio",lua_axys_base_Camera_getAspectRatio);
         tolua_function(tolua_S,"applyZoom",lua_axys_base_Camera_applyZoom);
         tolua_function(tolua_S,"setFOV",lua_axys_base_Camera_setFOV);
         tolua_function(tolua_S,"getCameraFlag",lua_axys_base_Camera_getCameraFlag);
@@ -90640,7 +90494,6 @@ int lua_register_axys_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"getRenderOrder",lua_axys_base_Camera_getRenderOrder);
         tolua_function(tolua_S,"projectGL",lua_axys_base_Camera_projectGL);
         tolua_function(tolua_S,"isVisibleInFrustum",lua_axys_base_Camera_isVisibleInFrustum);
-        tolua_function(tolua_S,"applyCustomProperties",lua_axys_base_Camera_applyCustomProperties);
         tolua_function(tolua_S,"setDepth",lua_axys_base_Camera_setDepth);
         tolua_function(tolua_S,"setScene",lua_axys_base_Camera_setScene);
         tolua_function(tolua_S,"getFOV",lua_axys_base_Camera_getFOV);

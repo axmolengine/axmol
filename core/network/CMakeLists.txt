@@ -1,4 +1,4 @@
-set(COCOS_NETWORK_HEADER
+set(_AX_NETWORK_HEADER
     network/CCDownloader-curl.h
     network/CCIDownloaderImpl.h
     network/CCDownloader.h
@@ -9,7 +9,7 @@ set(COCOS_NETWORK_HEADER
     network/HttpCookie.h
     )
 
-set(COCOS_NETWORK_SRC
+set(_AX_NETWORK_SRC
     network/HttpClient.cpp
     network/CCDownloader.cpp
     network/CCDownloader-curl.cpp

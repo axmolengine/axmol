@@ -276,8 +276,8 @@ void PURibbonTrailRender::prepare()
             _childNode->addChild(node);
             PURibbonTrailVisualData* visualData = new PURibbonTrailVisualData(node, _trail);
             visualData->index                   = i;
-            _allVisualData.push_back(visualData);  // Managed by this renderer
-            _visualData.push_back(visualData);     // Used to assign to a particle
+            _allVisualData.emplace_back(visualData);  // Managed by this renderer
+            _visualData.emplace_back(visualData);     // Used to assign to a particle
             if (_randomInitialColor)
             {
                 _trail->setInitialColour(i, AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());

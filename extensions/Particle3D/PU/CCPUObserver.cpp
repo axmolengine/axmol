@@ -140,7 +140,7 @@ PUEventHandler* PUObserver::createEventHandler(std::string_view eventHandlerType
 void PUObserver::addEventHandler(PUEventHandler* eventHandler)
 {
     eventHandler->retain();
-    _eventHandlers.push_back(eventHandler);
+    _eventHandlers.emplace_back(eventHandler);
     eventHandler->setParentObserver(this);
     eventHandler->notifyRescaled(_observerScale);
 }

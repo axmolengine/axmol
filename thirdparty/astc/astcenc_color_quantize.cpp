@@ -47,7 +47,7 @@
  * @param value         The value to convert. This may be outside of the 0-255 range and will be
  *                      clamped before the value is looked up.
  *
- * @return The encoded quantized value. These are not necessarily in the order; the compressor
+ * @return The encoded quantized value. These are not necessarily in order; the compressor
  *         scrambles the values slightly to make hardware implementation easier.
  */
 static inline int quant_color_clamp(
@@ -65,10 +65,10 @@ static inline int quant_color_clamp(
  * @param value         The value to convert. This may be outside of the 0-255 range and will be
  *                      clamped before the value is looked up.
  *
- * @return The encoded quantized value. These are not necessarily in the order; the compressor
+ * @return The encoded quantized value. These are not necessarily in order; the compressor
  *         scrambles the values slightly to make hardware implementation easier.
  */
-static inline int quant_color(
+static inline uint8_t quant_color(
 	quant_method quant_level,
 	int value
 ) {
@@ -81,10 +81,10 @@ static inline int quant_color(
  * @param quant_level   The quantization level to use.
  * @param value         The value to convert.
  *
- * @return The encoded quantized value. These are not necessarily in the order; the compressor
+ * @return The encoded quantized value. These are not necessarily in order; the compressor
  *         scrambles the values slightly to make hardware implementation easier.
  */
-static inline int unquant_color(
+static inline uint8_t unquant_color(
 	quant_method quant_level,
 	int value
 ) {

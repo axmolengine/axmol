@@ -50,13 +50,13 @@ PUAbstractNode* PUObjectAbstractNode::clone() const
     {
         PUAbstractNode* newNode = (PUAbstractNode*)((*i)->clone());
         newNode->parent         = (PUAbstractNode*)node;
-        node->children.push_back(newNode);
+        node->children.emplace_back(newNode);
     }
     for (PUAbstractNodeList::const_iterator i = values.begin(); i != values.end(); ++i)
     {
         PUAbstractNode* newNode = (PUAbstractNode*)((*i)->clone());
         newNode->parent         = (PUAbstractNode*)node;
-        node->values.push_back(newNode);
+        node->values.emplace_back(newNode);
     }
     node->_env = _env;
     return (PUAbstractNode*)node;
@@ -136,7 +136,7 @@ PUAbstractNode* PUPropertyAbstractNode::clone() const
     {
         PUAbstractNode* newNode = (PUAbstractNode*)((*i)->clone());
         newNode->parent         = (PUAbstractNode*)node;
-        node->values.push_back(newNode);
+        node->values.emplace_back(newNode);
     }
     return (PUAbstractNode*)node;
 }
@@ -312,10 +312,10 @@ void PUScriptCompiler::visit(PUConcreteNode* node)
             impl->abstract             = false;
 
             std::list<PUConcreteNode*> temp;
-            temp.push_back(node);
+            temp.emplace_back(node);
             for (const auto& child : node->children)
             {
-                temp.push_back(child);
+                temp.emplace_back(child);
             }
 
             // add brance type//
@@ -337,7 +337,7 @@ void PUScriptCompiler::visit(PUConcreteNode* node)
                 atom->line               = (*iter1)->line;
                 atom->type               = ANT_ATOM;
                 atom->value              = (*iter1)->token;
-                impl->values.push_back(atom);
+                impl->values.emplace_back(atom);
                 ++iter1;
             }
 
@@ -381,17 +381,17 @@ void PUScriptCompiler::visit(PUConcreteNode* node)
             {
                 PUPropertyAbstractNode* impl = reinterpret_cast<PUPropertyAbstractNode*>(_current);
                 // PUAtomAbstractNode* assd = dynamic_cast<PUAtomAbstractNode*>(asn);
-                impl->values.push_back(asn);
+                impl->values.emplace_back(asn);
             }
             else
             {
                 PUObjectAbstractNode* impl = reinterpret_cast<PUObjectAbstractNode*>(_current);
-                impl->children.push_back(asn);
+                impl->children.emplace_back(asn);
             }
         }
         else
         {
-            _nodes->push_back(asn);
+            _nodes->emplace_back(asn);
         }
     }
 }

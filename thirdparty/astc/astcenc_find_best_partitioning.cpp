@@ -49,12 +49,12 @@
 #include "astcenc_internal.h"
 
 /**
- * @brief Pick some initital kmeans cluster centers.
+ * @brief Pick some initial kmeans cluster centers.
  *
  * @param      blk               The image block color data to compress.
  * @param      texel_count       The number of texels in the block.
  * @param      partition_count   The number of partitions in the block.
- * @param[out] cluster_centers   The initital partition cluster center colors.
+ * @param[out] cluster_centers   The initial partition cluster center colors.
  */
 static void kmeans_init(
 	const image_block& blk,
@@ -561,13 +561,13 @@ void find_best_partition_candidates(
 				uncor_lines[j].b = normalize_safe(pm.dir, unit4());
 
 				uncor_plines[j].amod = uncor_lines[j].a - uncor_lines[j].b * dot(uncor_lines[j].a, uncor_lines[j].b);
-				uncor_plines[j].bs   = uncor_lines[j].b;
+				uncor_plines[j].bs = uncor_lines[j].b;
 
 				samec_lines[j].a = vfloat4::zero();
 				samec_lines[j].b = normalize_safe(pm.avg, unit4());
 
 				samec_plines[j].amod = vfloat4::zero();
-				samec_plines[j].bs   = samec_lines[j].b;
+				samec_plines[j].bs = samec_lines[j].b;
 			}
 
 			float uncor_error = 0.0f;

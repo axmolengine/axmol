@@ -4,6 +4,7 @@
 # Android ndk version must be ndk-r9b.
 
 
+import argparse
 import sys
 import os, os.path
 import shutil
@@ -11,6 +12,7 @@ import subprocess
 import re
 from contextlib import contextmanager
 
+g_ndk_root = None
 
 def _check_ndk_root_env():
     ''' Checking the environment ANDROID_NDK, which will be used for building
@@ -18,7 +20,9 @@ def _check_ndk_root_env():
 
     try:
 
-        sdkRoot = os.environ['ANDROID_SDK_ROOT']
+        ANDROID_NDK = None
+
+        sdkRoot = os.environ.get('ANDROID_SDK_ROOT', None)
         for _, ndkVers, _ in os.walk("{0}{1}ndk".format(sdkRoot, os.path.sep)):
             for ndkVer in ndkVers:
                 if (ndkVer == '19.2.5345600'):
@@ -26,11 +30,11 @@ def _check_ndk_root_env():
                     break
             break
 
-        if ANDROID_NDK == None: raise
+        if ANDROID_NDK == None:
+            ANDROID_NDK = os.environ.get('ANDROID_NDK', None)
 
-    except Exception:
-        print("The ndk-r19c not installed in '{0}{1}ndk', please install via cmdline-tools/bin/sdkmanager --verbose --sdk_root=D:\\dev\\adt\\sdk \"ndk;19.2.5345600\"".format(sdkRoot, os.path.sep))
-        sys.exit(1)
+    except:
+        print('Exception occurred when check_ndk_root_env!')
 
     return ANDROID_NDK
 
@@ -69,12 +73,13 @@ def _find_all_files_match(dir, cond, all):
 
 
 def _find_toolchain_include_path():
+    global g_ndk_root
     '''
     Search gcc prebuilt include path
     for instance: "$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64/lib/gcc/arm-linux-androideabi/4.9.x/include"
     '''
     foundFiles = []
-    _find_all_files_match(os.path.join(_check_ndk_root_env(), "toolchains"), lambda x : os.path.basename(x) == "stdarg.h" and "arm-linux-androideabi" in x , foundFiles)
+    _find_all_files_match(os.path.join(g_ndk_root, "toolchains"), lambda x : os.path.basename(x) == "stdarg.h" and "arm-linux-androideabi" in x , foundFiles)
     if len(foundFiles) == 0:
         return ""
     else:
@@ -85,7 +90,8 @@ def _find_llvm_include_path():
     Search llvm prebuilt include path.
     for instance: "$ANDROID_NDK/toolchains/llvm/prebuilt/windows-x86_64/lib64/clang/6.0.2/include"
     '''
-    versionFile = _find_first_file_in_dir(_check_ndk_root_env(), "AndroidVersion.txt")
+    global g_ndk_root
+    versionFile = _find_first_file_in_dir(g_ndk_root, "AndroidVersion.txt")
     if versionFile is None:
         return ""
     versionDir = os.path.dirname(versionFile)
@@ -121,12 +127,19 @@ def _run_cmd(command):
         raise CmdError(message)
 
 def main():
+    global g_ndk_root
 
     cur_platform= '??'
     llvm_path = '??'
-    ndk_root = _check_ndk_root_env()
+    if (g_ndk_root == None or not os.path.isdir(g_ndk_root)):
+        g_ndk_root = _check_ndk_root_env()
+
+    if not os.path.isdir(g_ndk_root): 
+        print("The ndk-r19c root not specified, please specifiy via --ndk_root '/path/to/ndk'")
+        sys.exit(1)
+
     # del the " in the path
-    ndk_root = re.sub(r"\"", "", ndk_root)
+    g_ndk_root = re.sub(r"\"", "", g_ndk_root)
     python_bin = _check_python_bin_env()
 
     platform = sys.platform
@@ -141,11 +154,11 @@ def main():
         sys.exit(1)
 
     x86_llvm_path = ""
-    x64_llvm_path = os.path.abspath(os.path.join(ndk_root, 'toolchains/llvm/prebuilt', '%s-%s' % (cur_platform, 'x86_64')))
+    x64_llvm_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/llvm/prebuilt', '%s-%s' % (cur_platform, 'x86_64')))
     if not os.path.exists(x64_llvm_path):
-        x86_llvm_path = os.path.abspath(os.path.join(ndk_root, 'toolchains/llvm/prebuilt', '%s' % (cur_platform)))
+        x86_llvm_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/llvm/prebuilt', '%s' % (cur_platform)))
     if not os.path.exists(x86_llvm_path):
-        x86_llvm_path = os.path.abspath(os.path.join(ndk_root, 'toolchains/llvm/prebuilt', '%s-%s' % (cur_platform, 'x86')))
+        x86_llvm_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/llvm/prebuilt', '%s-%s' % (cur_platform, 'x86')))
 
     if os.path.isdir(x64_llvm_path):
         llvm_path = x64_llvm_path
@@ -157,11 +170,11 @@ def main():
         sys.exit(1)
 
     x86_gcc_toolchain_path = ""
-    x64_gcc_toolchain_path = os.path.abspath(os.path.join(ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86_64')))
+    x64_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86_64')))
     if not os.path.exists(x64_gcc_toolchain_path):
-        x86_gcc_toolchain_path = os.path.abspath(os.path.join(ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s' % (cur_platform)))
+        x86_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s' % (cur_platform)))
     if not os.path.exists(x86_gcc_toolchain_path):
-        x86_gcc_toolchain_path = os.path.abspath(os.path.join(ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86')))
+        x86_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86')))
 
     if os.path.isdir(x64_gcc_toolchain_path):
         gcc_toolchain_path = x64_gcc_toolchain_path
@@ -187,7 +200,7 @@ def main():
         import ConfigParser
         config = ConfigParser.ConfigParser()
     
-    config.set('DEFAULT', 'androidndkdir', ndk_root)
+    config.set('DEFAULT', 'androidndkdir', g_ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
     config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
     config.set('DEFAULT', 'axysdir', axys_root)
@@ -257,4 +270,8 @@ def main():
 
 # -------------- main --------------
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Install android sdk/ndk')
+    parser.add_argument("--ndk_root", help="Specificy ndk root")
+    args = parser.parse_args()
+    g_ndk_root = args.ndk_root
     main()

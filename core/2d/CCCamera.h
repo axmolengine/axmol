@@ -235,20 +235,6 @@ public:
     int getRenderOrder() const;
 
     /**
-     * Gets the aspect ratio of the camera if the projection mode is 3D.
-     * 
-     * @since axis-1.0.0b8
-     */
-    float getAspectRatio() const { return _fieldOfView; }
-
-    /**
-     * Sets the aspect ratio of the camera if the projection mode is 3D.
-     * 
-     * @since axis-1.0.0b8
-     */
-    void setAspectRatio(float ratio);
-
-    /**
      * Gets the field of view of the camera if the projection mode is 3D.
      * 
      * @since axis-1.0.0b8
@@ -310,13 +296,6 @@ public:
      */
     void applyZoom();
 
-    /**
-     Apply the fov, near far planes and aspect values non-destructively.
-     * 
-     * @since axis-1.0.0b8
-     */
-    void applyCustomProperties();
-
     // override
     virtual void onEnter() override;
     virtual void onExit() override;
@@ -365,8 +344,13 @@ public:
      * WP8*/
     void setAdditionalProjection(const Mat4& mat);
 
-    /** Initialize the camera with default properties */
-    bool initDefault();
+    /** Init default camera with director current projection, 
+    !!!Note: Must invoke this function again when director projection or winsize changed */
+    void initDefault();
+
+    /** Update camera transformations */
+    void updateTransform() override;
+
     bool initPerspective(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
     bool initOrthographic(float zoomX, float zoomY, float nearPlane, float farPlane);
     void applyViewport();
@@ -386,7 +370,6 @@ protected:
     Camera::Type _type;
     float _fieldOfView                = 0.f;
     float _zoom[2]                    = {0.f};
-    float _aspectRatio                = 0.f;
     float _nearPlane                  = 0.f;
     float _farPlane                   = 0.f;
     mutable bool _viewProjectionDirty = true;
@@ -396,14 +379,11 @@ protected:
     mutable bool _frustumDirty = true;
     int8_t _depth = -1;  // camera depth, the depth of camera with CameraFlag::DEFAULT flag is 0 by default, a camera
                          // with larger depth is drawn on top of camera with smaller depth
-    Director::Projection _projectionType;
 
     float _eyeZdistance; // Z eye projection distance for 2D in 3D projection.
     float _zoomFactor; // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
     float _zoomFactorFarPlane;
     float _zoomFactorNearPlane;
-
-    bool  _isCameraInitialized;
 
     CameraBackgroundBrush* _clearBrush = nullptr;  // brush used to clear the back ground
 };

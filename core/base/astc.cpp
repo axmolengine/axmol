@@ -243,7 +243,7 @@ private:
 
                     decompress_symbolic_block(ASTCENC_PRF_LDR, bsd, x * block_x, y * block_y, z * block_z, scb, blk);
 
-                    write_image_block(image_out, blk, bsd, x * block_x, y * block_y, z * block_z, swz_decode);
+                    store_image_block(image_out, blk, bsd, x * block_x, y * block_y, z * block_z, swz_decode);
                 }
 
                 decompress_pm.complete_task_assignment(count);

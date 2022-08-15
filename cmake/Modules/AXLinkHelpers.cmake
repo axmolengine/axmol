@@ -14,7 +14,7 @@ endif()
 
 message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
 
-function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
+function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
             PRIVATE AX_STATIC=1
@@ -82,38 +82,38 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     # Linking engine and thirdparty libs
     target_link_libraries(${APP_NAME}
-        spine.lib
-        particle3d.lib
-        assets-manager.lib
-        cocostudio.lib
-        DragonBones.lib
-        axis.lib
-        box2d.lib
-        chipmunk.lib
-        freetype.lib
-        zlib.lib
-        recast.lib
-        bullet.lib
-        jpeg-static.lib
-        libcrypto.lib
-        libssl.lib
-        webp.lib
-        pugixml.lib
-        xxhash.lib
-        lz4.lib
-        clipper.lib
-        ConvertUTF.lib
-        poly2tri.lib
-        astc.lib
-        libcurl_imp.lib
-        OpenAL32.lib
-        ogg.lib
-        glad.lib
-        glfw.lib
-        png.lib
-        unzip.lib
-        llhttp.lib
-        physics-nodes.lib
+        spine
+        particle3d
+        assets-manager
+        cocostudio
+        DragonBones
+        axys
+        box2d
+        chipmunk
+        freetype
+        zlib
+        recast
+        bullet
+        jpeg-static
+        libcrypto
+        libssl
+        webp
+        pugixml
+        xxhash
+        lz4
+        clipper
+        ConvertUTF
+        poly2tri
+        astc
+        libcurl_imp
+        OpenAL32
+        ogg
+        glad
+        glfw
+        png
+        unzip
+        llhttp
+        physics-nodes
     )
 
     # Copy dlls to app bin dir
@@ -147,7 +147,7 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         if(CMAKE_GENERATOR STREQUAL "Ninja")
             target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
             target_include_directories(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/include)
-            add_custom_command(TARGET ${cocos_target} POST_BUILD
+            add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
                 $<TARGET_FILE_DIR:${APP_NAME}>
@@ -156,10 +156,10 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
         endif()
     endif()
-endfunction(axis_link_cxx_prebuilt)
+endfunction(ax_link_cxx_prebuilt)
 
-function(axis_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
-    axis_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
+function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
+    ax_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
 
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
@@ -171,4 +171,4 @@ function(axis_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"
          $<TARGET_FILE_DIR:${APP_NAME}>)
-endfunction(axis_link_lua_prebuilt)
+endfunction(ax_link_lua_prebuilt)

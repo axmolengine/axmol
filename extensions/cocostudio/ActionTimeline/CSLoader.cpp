@@ -1192,7 +1192,7 @@ Node* CSLoader::nodeWithFlatBuffers(const flatbuffers::NodeTree* nodetree, const
                 _rootNode = _callbackHandlers.back();
             }
             /**/
-            //        _loadingNodeParentHierarchy.push_back(node);
+            //        _loadingNodeParentHierarchy.emplace_back(node);
         }
 
         // If node is invalid, there is no necessity to process children of node.
@@ -1522,7 +1522,7 @@ Node* CSLoader::nodeWithFlatBuffersForSimulator(const flatbuffers::NodeTree* nod
         {
             _rootNode = node;
         }
-        //        _loadingNodeParentHierarchy.push_back(node);
+        //        _loadingNodeParentHierarchy.emplace_back(node);
     }
 
     // If node is invalid, there is no necessity to process children of node.

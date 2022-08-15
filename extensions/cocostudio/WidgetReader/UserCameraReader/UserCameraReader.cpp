@@ -220,7 +220,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (leftResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(leftPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(leftPlistFile));
             }
         }
         else if (name == "RightImage")
@@ -251,7 +251,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (rightResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(rightPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(rightPlistFile));
             }
         }
         else if (name == "UpImage")
@@ -282,7 +282,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (upResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(upPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(upPlistFile));
             }
         }
         else if (name == "DownImage")
@@ -313,7 +313,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (downResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(downPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(downPlistFile));
             }
         }
         else if (name == "ForwardImage")
@@ -344,7 +344,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (forwardResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(forwardPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(forwardPlistFile));
             }
         }
         else if (name == "BackImage")
@@ -375,7 +375,7 @@ Offset<Table> UserCameraReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (backResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(backPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(backPlistFile));
             }
         }
 

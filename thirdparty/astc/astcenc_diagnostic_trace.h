@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2021 Arm Limited
+// Copyright 2021-2022 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -148,7 +148,7 @@ public:
 	 *
 	 * @return The current leaf node stack depth.
 	 */
-	int get_depth();
+	size_t get_depth();
 
 	/**
 	 * @brief The file stream to write to.

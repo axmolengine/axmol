@@ -126,7 +126,7 @@ ax::Node* SceneReader::createNodeWithSceneFile(
                                 }
                                 else
                                 {
-                                    _vecComs.push_back(pCom);
+                                    _vecComs.emplace_back(pCom);
                                 }
                             }
                             else
@@ -284,7 +284,7 @@ Node* SceneReader::createObject(const rapidjson::Value& dict,
                     ComRender* tRender = dynamic_cast<ComRender*>(com);
                     if (tRender == nullptr)
                     {
-                        vecComs.push_back(com);
+                        vecComs.emplace_back(com);
                     }
                     else
                     {
@@ -306,7 +306,7 @@ Node* SceneReader::createObject(const rapidjson::Value& dict,
                 gb = Node::create();
                 if (render != nullptr)
                 {
-                    vecComs.push_back(render);
+                    vecComs.emplace_back(render);
                 }
             }
             else
@@ -401,7 +401,7 @@ ax::Node* SceneReader::createObject(CocoLoader* cocoLoader,
                     }
                     else
                     {
-                        _vecComs.push_back(pCom);
+                        _vecComs.emplace_back(pCom);
                     }
                 }
                 else
@@ -423,7 +423,7 @@ ax::Node* SceneReader::createObject(CocoLoader* cocoLoader,
                 gb = Node::create();
                 if (pRender != nullptr)
                 {
-                    _vecComs.push_back(pRender);
+                    _vecComs.emplace_back(pRender);
                 }
             }
             else

@@ -188,7 +188,7 @@ bool LuaJavaBridge::CallInfo::validateMethodSig()
             return false;
 
         m_argumentsCount++;
-        m_argumentsType.push_back(type);
+        m_argumentsType.emplace_back(type);
         pos++;
     }
 

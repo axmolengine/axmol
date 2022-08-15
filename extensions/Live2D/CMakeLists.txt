@@ -42,6 +42,6 @@ else()
     target_link_libraries(${LIB_NAME} Live2DCubismCore)
 endif()
 
-setup_cocos_extension_config(${LIB_NAME})
+setup_ax_extension_config(${LIB_NAME})
 
 unset(LIB_NAME)

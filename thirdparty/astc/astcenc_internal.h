@@ -129,11 +129,26 @@ static constexpr float ERROR_CALC_DEFAULT { 1e30f };
 static constexpr unsigned int TUNE_MIN_TEXELS_MODE0_FASTPATH { 24 };
 
 /**
- * @brief The maximum number of candidate encodings tested for each encoding mode..
+ * @brief The maximum number of candidate encodings tested for each encoding mode.
  *
  * This can be dynamically reduced by the compression quality preset.
  */
 static constexpr unsigned int TUNE_MAX_TRIAL_CANDIDATES { 4 };
+
+/**
+ * @brief The maximum quant level using full angular endpoint search method.
+ *
+ * The angular endpoint search is used to find the min/max weight that should
+ * be used for a given quantization level. It is effective but expensive, so
+ * we only use it where it has the most value - low quant levels with wide
+ * spacing. It is used below TUNE_MAX_ANGULAR_QUANT (inclusive). Above this we
+ * assume the min weight is 0.0f, and the max weight is 1.0f.
+ *
+ * Note the angular algorithm is vectorized, and using QUANT_12 exactly fills
+ * one 8-wide vector. Decreasing by one doesn't buy much performance, and
+ * increasing by one is disproportionately expensive.
+ */
+static constexpr unsigned int TUNE_MAX_ANGULAR_QUANT { 7 }; /* QUANT_12 */
 
 
 static_assert((BLOCK_MAX_TEXELS % ASTCENC_SIMD_WIDTH) == 0,
@@ -219,7 +234,7 @@ private:
 	/** @brief True if the stage term() step has been executed. */
 	bool m_term_done;
 
-	/** @brief Contition variable for tracking stage processing completion. */
+	/** @brief Condition variable for tracking stage processing completion. */
 	std::condition_variable m_complete;
 
 	/** @brief Number of tasks started, but not necessarily finished. */
@@ -241,7 +256,7 @@ public:
 	/**
 	 * @brief Reset the tracker for a new processing batch.
 	 *
-	 * This must be called from single-threaded code before starting the multi-threaded procesing
+	 * This must be called from single-threaded code before starting the multi-threaded processing
 	 * operations.
 	 */
 	void reset()
@@ -347,8 +362,8 @@ public:
 	 * @brief Trigger the pipeline stage term step.
 	 *
 	 * This can be called from multi-threaded code. The first thread to hit this will process the
-	 * thread termintion. Caller must have called @c wait() prior to calling this function to ensure
-	 * that processing is complete.
+	 * work pool termination. Caller must have called @c wait() prior to calling this function to
+	 * ensure that processing is complete.
 	 *
 	 * @param term_func   Callable which executes the stage termination.
 	 */
@@ -483,10 +498,10 @@ struct partition_lines3
 	/** @brief Line for correlated chroma, passing though the origin. */
 	line3 samec_line;
 
-	/** @brief Postprocessed line for uncorrelated chroma. */
+	/** @brief Post-processed line for uncorrelated chroma. */
 	processed_line3 uncor_pline;
 
-	/** @brief Postprocessed line for correlated chroma, passing though the origin. */
+	/** @brief Post-processed line for correlated chroma, passing though the origin. */
 	processed_line3 samec_pline;
 
 	/** @brief The length of the line for uncorrelated chroma. */
@@ -530,7 +545,7 @@ struct partition_info
 /**
  * @brief The weight grid information for a single decimation pattern.
  *
- * ASTC can store one weight per texel, but is also capable of storing lower resoution weight grids
+ * ASTC can store one weight per texel, but is also capable of storing lower resolution weight grids
  * that are interpolated during decompression to assign a with to a texel. Storing fewer weights
  * can free up a substantial amount of bits that we can then spend on more useful things, such as
  * more accurate endpoints and weights, or additional partitions.
@@ -634,11 +649,61 @@ struct decimation_mode
 	/** @brief The max weight precision for 2 planes, or -1 if not supported. */
 	int8_t maxprec_2planes;
 
-	/** @brief Was this actually referenced by an active 1 plane mode? */
-	uint8_t ref_1_plane;
+	/**
+	 * @brief Bitvector indicating weight quant modes used by active 1 plane block modes.
+	 *
+	 * Bit 0 = QUANT_2, Bit 1 = QUANT_3, etc.
+	 */
+	uint16_t refprec_1_plane;
 
-	/** @brief Was this actually referenced by an active 2 plane mode? */
-	uint8_t ref_2_planes;
+	/**
+	 * @brief Bitvector indicating weight quant methods used by active 2 plane block modes.
+	 *
+	 * Bit 0 = QUANT_2, Bit 1 = QUANT_3, etc.
+	 */
+	uint16_t refprec_2_planes;
+
+	/**
+	 * @brief Set a 1 plane weight quant as active.
+	 *
+	 * @param weight_quant   The quant method to set.
+	 */
+	void set_ref_1_plane(quant_method weight_quant)
+	{
+		refprec_1_plane |= (1 << weight_quant);
+	}
+
+	/**
+	 * @brief Test if this mode is active below a given 1 plane weight quant (inclusive).
+	 *
+	 * @param max_weight_quant   The max quant method to test.
+	 */
+	bool is_ref_1_plane(quant_method max_weight_quant) const
+	{
+		uint16_t mask = static_cast<uint16_t>((1 << (max_weight_quant + 1)) - 1);
+		return (refprec_1_plane & mask) != 0;
+	}
+
+	/**
+	 * @brief Set a 2 plane weight quant as active.
+	 *
+	 * @param weight_quant   The quant method to set.
+	 */
+	void set_ref_2_plane(quant_method weight_quant)
+	{
+		refprec_2_planes |= static_cast<uint16_t>(1 << weight_quant);
+	}
+
+	/**
+	 * @brief Test if this mode is active below a given 2 plane weight quant (inclusive).
+	 *
+	 * @param max_weight_quant   The max quant method to test.
+	 */
+	bool is_ref_2_plane(quant_method max_weight_quant) const
+	{
+		uint16_t mask = static_cast<uint16_t>((1 << (max_weight_quant + 1)) - 1);
+		return (refprec_2_planes & mask) != 0;
+	}
 };
 
 /**
@@ -649,7 +714,7 @@ struct decimation_mode
  * modes will be unused (too many weights for the current block size or disabled by heuristics). The
  * actual number of weights stored is @c decimation_mode_count, and the @c decimation_modes and
  * @c decimation_tables arrays store the active modes contiguously at the start of the array. These
- * entries are not stored in any particuar order.
+ * entries are not stored in any particular order.
  *
  * The block mode tables store the unpacked block mode settings. Block modes are stored in the
  * compressed block as an 11 bit field, but for any given block size and set of compressor
@@ -1078,7 +1143,7 @@ struct encoding_choice_errors
 	/** @brief Can we use delta offset encoding? */
 	bool can_offset_encode;
 
-	/** @brief CAn we use blue contraction encoding? */
+	/** @brief Can we use blue contraction encoding? */
 	bool can_blue_contract;
 };
 
@@ -1093,47 +1158,37 @@ struct alignas(ASTCENC_VECALIGN) compression_working_buffers
 	/** @brief Ideal endpoints and weights for plane 2. */
 	endpoints_and_weights ei2;
 
-	/** @brief Ideal decimated endpoints and weights for plane 1. */
-	endpoints_and_weights eix1[WEIGHTS_MAX_DECIMATION_MODES];
-
-	/** @brief Ideal decimated endpoints and weights for plane 2. */
-	endpoints_and_weights eix2[WEIGHTS_MAX_DECIMATION_MODES];
+	/**
+	 * @brief Decimated ideal weight values in the ~0-1 range.
+	 *
+	 * Note that values can be slightly below zero or higher than one due to
+	 * endpoint extents being inside the ideal color representation.
+	 *
+	 * For two planes, second plane starts at @c WEIGHTS_PLANE2_OFFSET offsets.
+	 */
+	alignas(ASTCENC_VECALIGN) float dec_weights_ideal[WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
 
 	/**
-	 * @brief Decimated ideal weight values.
+	 * @brief Decimated quantized weight values in the unquantized 0-64 range.
 	 *
-	 * For two plane encodings, second plane weights start at @c WEIGHTS_PLANE2_OFFSET offsets.
+	 * For two planes, second plane starts at @c WEIGHTS_PLANE2_OFFSET offsets.
 	 */
-	alignas(ASTCENC_VECALIGN) float dec_weights_ideal_value[WEIGHTS_MAX_DECIMATION_MODES * BLOCK_MAX_WEIGHTS];
-
-	/**
-	 * @brief Decimated and quantized weight values stored in the unpacked quantized weight range.
-	 *
-	 * For two plane encodings, second plane weights start at @c WEIGHTS_PLANE2_OFFSET offsets.
-	 */
-	alignas(ASTCENC_VECALIGN) float dec_weights_quant_uvalue[WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
-
-	/**
-	 * @brief Decimated and quantized weight values stored in the packed quantized weight range.
-	 *
-	 * For two plane encodings, second plane weights start at @c WEIGHTS_PLANE2_OFFSET offsets.
-	 */
-	alignas(ASTCENC_VECALIGN) uint8_t dec_weights_quant_pvalue[WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
+	uint8_t dec_weights_uquant[WEIGHTS_MAX_BLOCK_MODES * BLOCK_MAX_WEIGHTS];
 
 	/** @brief Error of the best encoding combination for each block mode. */
 	alignas(ASTCENC_VECALIGN) float errors_of_best_combination[WEIGHTS_MAX_BLOCK_MODES];
 
 	/** @brief The best color quant for each block mode. */
-	alignas(ASTCENC_VECALIGN) quant_method best_quant_levels[WEIGHTS_MAX_BLOCK_MODES];
+	uint8_t best_quant_levels[WEIGHTS_MAX_BLOCK_MODES];
 
 	/** @brief The best color quant for each block mode if modes are the same and we have spare bits. */
-	quant_method best_quant_levels_mod[WEIGHTS_MAX_BLOCK_MODES];
+	uint8_t best_quant_levels_mod[WEIGHTS_MAX_BLOCK_MODES];
 
 	/** @brief The best endpoint format for each partition. */
-	int best_ep_formats[WEIGHTS_MAX_BLOCK_MODES][BLOCK_MAX_PARTITIONS];
+	uint8_t best_ep_formats[WEIGHTS_MAX_BLOCK_MODES][BLOCK_MAX_PARTITIONS];
 
 	/** @brief The total bit storage needed for quantized weights for each block mode. */
-	int qwt_bitcounts[WEIGHTS_MAX_BLOCK_MODES];
+	int8_t qwt_bitcounts[WEIGHTS_MAX_BLOCK_MODES];
 
 	/** @brief The cumulative error for quantized weights for each block mode. */
 	float qwt_errors[WEIGHTS_MAX_BLOCK_MODES];
@@ -1145,10 +1200,10 @@ struct alignas(ASTCENC_VECALIGN) compression_working_buffers
 	float weight_high_value1[WEIGHTS_MAX_BLOCK_MODES];
 
 	/** @brief The low weight value in plane 1 for each quant level and decimation mode. */
-	float weight_low_values1[WEIGHTS_MAX_DECIMATION_MODES][12];
+	float weight_low_values1[WEIGHTS_MAX_DECIMATION_MODES][TUNE_MAX_ANGULAR_QUANT + 1];
 
 	/** @brief The high weight value in plane 1 for each quant level and decimation mode. */
-	float weight_high_values1[WEIGHTS_MAX_DECIMATION_MODES][12];
+	float weight_high_values1[WEIGHTS_MAX_DECIMATION_MODES][TUNE_MAX_ANGULAR_QUANT + 1];
 
 	/** @brief The low weight value in plane 2 for each block mode. */
 	float weight_low_value2[WEIGHTS_MAX_BLOCK_MODES];
@@ -1157,10 +1212,10 @@ struct alignas(ASTCENC_VECALIGN) compression_working_buffers
 	float weight_high_value2[WEIGHTS_MAX_BLOCK_MODES];
 
 	/** @brief The low weight value in plane 2 for each quant level and decimation mode. */
-	float weight_low_values2[WEIGHTS_MAX_DECIMATION_MODES][12];
+	float weight_low_values2[WEIGHTS_MAX_DECIMATION_MODES][TUNE_MAX_ANGULAR_QUANT + 1];
 
 	/** @brief The high weight value in plane 2 for each quant level and decimation mode. */
-	float weight_high_values2[WEIGHTS_MAX_DECIMATION_MODES][12];
+	float weight_high_values2[WEIGHTS_MAX_DECIMATION_MODES][TUNE_MAX_ANGULAR_QUANT + 1];
 };
 
 struct dt_init_working_buffers
@@ -1185,33 +1240,30 @@ struct dt_init_working_buffers
  * floating-point weight. For each quantized weight, the corresponding unquantized values. For each
  * quantized weight, a previous-value and a next-value.
 */
-struct quantization_and_transfer_table
+struct quant_and_transfer_table
 {
-	/** @brief The quantization level used */
+	/** @brief The quantization level used. */
 	quant_method method;
 
 	/** @brief The unscrambled unquantized value. */
-	float unquantized_value_unsc[33];
+	int8_t quant_to_unquant[32];
 
-	/** @brief The scrambling order: value[map[i]] == value_unsc[i] */
-	int32_t scramble_map[32];
+	/** @brief The scrambling order: scrambled_quant = map[unscrambled_quant]. */
+	int8_t scramble_map[32];
 
-	/** @brief The scrambled unquantized values. */
-	uint8_t unquantized_value[32];
+	/** @brief The unscrambling order: unscrambled_unquant = map[scrambled_quant]. */
+	int8_t unscramble_and_unquant_map[32];
 
 	/**
 	 * @brief A table of previous-and-next weights, indexed by the current unquantized value.
 	 *  * bits 7:0 = previous-index, unquantized
 	 *  * bits 15:8 = next-index, unquantized
-	 *  * bits 23:16 = previous-index, quantized
-	 *  * bits 31:24 = next-index, quantized
 	 */
-	uint32_t prev_next_values[65];
+	uint16_t prev_next_values[65];
 };
 
-
 /** @brief The precomputed quant and transfer table. */
-extern const quantization_and_transfer_table quant_and_xfer_tables[12];
+extern const quant_and_transfer_table quant_and_xfer_tables[12];
 
 /** @brief The block is an error block, and will return error color or NaN. */
 static constexpr uint8_t SYM_BTYPE_ERROR { 0 };
@@ -1244,7 +1296,6 @@ struct symbolic_compressed_block
 	uint8_t color_formats_matched;
 
 	/** @brief The plane 2 color component, or -1 if single plane; valid for @c NONCONST blocks. */
-	// Try unsigned sentintel to avoid signext on load
 	int8_t plane2_component;
 
 	/** @brief The block mode; valid for @c NONCONST blocks. */
@@ -1272,6 +1323,10 @@ struct symbolic_compressed_block
 	};
 
 	/** @brief The quantized and decimated weights.
+	 *
+	 * Weights are stored in the 0-64 unpacked range allowing them to be used
+	 * directly in encoding passes without per-use unpacking. Packing happens
+	 * when converting to/from the physical bitstream encoding.
 	 *
 	 * If dual plane, the second plane starts at @c weights[WEIGHTS_PLANE2_OFFSET].
 	 */
@@ -1350,7 +1405,6 @@ struct avg_args
 	/** @brief The arguments for the nested variance computation. */
 	pixel_region_args arg;
 
-	// The above has a reference to the image altread?
 	/** @brief The image X dimensions. */
 	unsigned int img_size_x;
 
@@ -1396,7 +1450,7 @@ struct astcenc_context
 	 */
 
 	/** @brief The input image alpha channel averages table, may be @c nullptr if not needed. */
-	float *input_alpha_averages;
+	float* input_alpha_averages;
 
 	/** @brief The scratch working buffers, one per thread (see @c thread_count). */
 	compression_working_buffers* working_buffers;
@@ -1481,7 +1535,7 @@ void init_partition_tables(
  *
  * @return The unpacked table.
  */
-const float *get_2d_percentile_table(
+const float* get_2d_percentile_table(
 	unsigned int xdim,
 	unsigned int ydim);
 
@@ -1529,7 +1583,7 @@ extern const uint8_t color_unquant_tables[17][256];
 /**
  * @brief The precomputed quant mode storage table.
  *
- * Indexing by [integercount/2][bits] gives us the quantization level for a given integer count and
+ * Indexing by [integer_count/2][bits] gives us the quantization level for a given integer count and
  * number of compressed storage bits. Returns -1 for cases where the requested integer count cannot
  * ever fit in the supplied storage size.
  */
@@ -1560,11 +1614,11 @@ void encode_ise(
  * Note that BISE input strings are not a whole number of bytes in length, and ASTC can start
  * strings at arbitrary bit offsets in the encoded data.
  *
- * @param         quant_level      The BISE alphabet size.
- * @param         character_count  The number of characters in the string.
- * @param         input_data       The packed string.
- * @param[in,out] output_data      The output storage, one byte per character.
- * @param         bit_offset       The starting offset in the output storage.
+ * @param         quant_level       The BISE alphabet size.
+ * @param         character_count   The number of characters in the string.
+ * @param         input_data        The packed string.
+ * @param[in,out] output_data       The output storage, one byte per character.
+ * @param         bit_offset        The starting offset in the output storage.
  */
 void decode_ise(
 	quant_method quant_level,
@@ -1714,7 +1768,7 @@ void compute_error_squared_rgba(
  *
  * On return the @c best_partitions list will contain the two best partition
  * candidates; one assuming data has uncorrelated chroma and one assuming the
- * data has corelated chroma. The best candidate is returned first in the list.
+ * data has correlated chroma. The best candidate is returned first in the list.
  *
  * @param      bsd                        The block size information.
  * @param      blk                        The image block color data to compress.
@@ -1770,7 +1824,7 @@ void compute_averages(
 	const avg_args& ag);
 
 /**
- * @brief Fetch a single image block from the input image.
+ * @brief Load a single image block from the input image.
  *
  * @param      decode_mode   The compression color profile.
  * @param      img           The input image data.
@@ -1781,7 +1835,7 @@ void compute_averages(
  * @param      zpos          The block Z coordinate in the input image.
  * @param      swz           The swizzle to apply on load.
  */
-void fetch_image_block(
+void load_image_block(
 	astcenc_profile decode_mode,
 	const astcenc_image& img,
 	image_block& blk,
@@ -1792,7 +1846,7 @@ void fetch_image_block(
 	const astcenc_swizzle& swz);
 
 /**
- * @brief Fetch a single image block from the input image.
+ * @brief Load a single image block from the input image.
  *
  * This specialized variant can be used only if the block is 2D LDR U8 data,
  * with no swizzle.
@@ -1806,7 +1860,7 @@ void fetch_image_block(
  * @param      zpos          The block Z coordinate in the input image.
  * @param      swz           The swizzle to apply on load.
  */
-void fetch_image_block_fast_ldr(
+void load_image_block_fast_ldr(
 	astcenc_profile decode_mode,
 	const astcenc_image& img,
 	image_block& blk,
@@ -1817,17 +1871,17 @@ void fetch_image_block_fast_ldr(
 	const astcenc_swizzle& swz);
 
 /**
- * @brief Write a single image block from the output image.
+ * @brief Store a single image block to the output image.
  *
- * @param[out] img           The input image data.
- * @param      blk           The image block to populate.
- * @param      bsd           The block size information.
- * @param      xpos          The block X coordinate in the input image.
- * @param      ypos          The block Y coordinate in the input image.
- * @param      zpos          The block Z coordinate in the input image.
- * @param      swz           The swizzle to apply on store.
+ * @param[out] img    The output image data.
+ * @param      blk    The image block to export.
+ * @param      bsd    The block size information.
+ * @param      xpos   The block X coordinate in the input image.
+ * @param      ypos   The block Y coordinate in the input image.
+ * @param      zpos   The block Z coordinate in the input image.
+ * @param      swz    The swizzle to apply on store.
  */
-void write_image_block(
+void store_image_block(
 	astcenc_image& img,
 	const image_block& blk,
 	const block_size_descriptor& bsd,
@@ -1887,14 +1941,12 @@ void compute_ideal_colors_and_weights_2planes(
  * Then, set step size to <some initial value> and attempt one step towards the original ideal
  * weight if it helps to reduce error.
  *
- * @param      eai_in                   The non-decimated endpoints and weights.
- * @param      eai_out                  A copy of eai_in we can modify later for refinement.
+ * @param      ei                       The non-decimated endpoints and weights.
  * @param      di                       The selected weight decimation.
  * @param[out] dec_weight_ideal_value   The ideal values for the decimated weight set.
  */
 void compute_ideal_weights_for_decimation(
-	const endpoints_and_weights& eai_in,
-	endpoints_and_weights& eai_out,
+	const endpoints_and_weights& ei,
 	const decimation_info& di,
 	float* dec_weight_ideal_value);
 
@@ -1909,7 +1961,7 @@ void compute_ideal_weights_for_decimation(
  * @param      high_bound                The highest weight allowed.
  * @param      dec_weight_ideal_value    The ideal weight set.
  * @param[out] dec_weight_quant_uvalue   The output quantized weight as a float.
- * @param[out] dec_weight_quant_pvalue   The output quantized weight as encoded int.
+ * @param[out] dec_weight_uquant         The output quantized weight as encoded int.
  * @param      quant_level               The desired weight quant level.
  */
 void compute_quantized_weights_for_decimation(
@@ -1918,120 +1970,8 @@ void compute_quantized_weights_for_decimation(
 	float high_bound,
 	const float* dec_weight_ideal_value,
 	float* dec_weight_quant_uvalue,
-	uint8_t* dec_weight_quant_pvalue,
+	uint8_t* dec_weight_uquant,
 	quant_method quant_level);
-
-/**
- * @brief Compute the infilled weight for a texel index in a decimated grid.
- *
- * @param di        The weight grid decimation to use.
- * @param weights   The decimated weight values to use.
- * @param index     The texel index to interpolate.
- *
- * @return The interpolated weight for the given texel.
- */
-static inline float bilinear_infill(
-	const decimation_info& di,
-	const float* weights,
-	unsigned int index
-) {
-	return (weights[di.texel_weights_4t[0][index]] * di.texel_weights_float_4t[0][index] +
-	        weights[di.texel_weights_4t[1][index]] * di.texel_weights_float_4t[1][index]) +
-	       (weights[di.texel_weights_4t[2][index]] * di.texel_weights_float_4t[2][index] +
-	        weights[di.texel_weights_4t[3][index]] * di.texel_weights_float_4t[3][index]);
-}
-
-/**
- * @brief Compute the infilled weight for a texel index in a decimated grid.
- *
- * This is specialized version which computes only two weights per texel for
- * encodings that are only decimated in a single axis.
- *
- * @param di        The weight grid decimation to use.
- * @param weights   The decimated weight values to use.
- * @param index     The texel index to interpolate.
- *
- * @return The interpolated weight for the given texel.
- */
-static inline float bilinear_infill_2(
-	const decimation_info& di,
-	const float* weights,
-	unsigned int index
-) {
-	return (weights[di.texel_weights_4t[0][index]] * di.texel_weights_float_4t[0][index] +
-	        weights[di.texel_weights_4t[1][index]] * di.texel_weights_float_4t[1][index]);
-}
-
-
-/**
- * @brief Compute the infilled weight for N texel indices in a decimated grid.
- *
- * @param di        The weight grid decimation to use.
- * @param weights   The decimated weight values to use.
- * @param index     The first texel index to interpolate.
- *
- * @return The interpolated weight for the given set of SIMD_WIDTH texels.
- */
-static inline vfloat bilinear_infill_vla(
-	const decimation_info& di,
-	const float* weights,
-	unsigned int index
-) {
-	// Load the bilinear filter texel weight indexes in the decimated grid
-	vint weight_idx0 = vint(di.texel_weights_4t[0] + index);
-	vint weight_idx1 = vint(di.texel_weights_4t[1] + index);
-	vint weight_idx2 = vint(di.texel_weights_4t[2] + index);
-	vint weight_idx3 = vint(di.texel_weights_4t[3] + index);
-
-	// Load the bilinear filter weights from the decimated grid
-	vfloat weight_val0 = gatherf(weights, weight_idx0);
-	vfloat weight_val1 = gatherf(weights, weight_idx1);
-	vfloat weight_val2 = gatherf(weights, weight_idx2);
-	vfloat weight_val3 = gatherf(weights, weight_idx3);
-
-	// Load the weight contribution factors for each decimated weight
-	vfloat tex_weight_float0 = loada(di.texel_weights_float_4t[0] + index);
-	vfloat tex_weight_float1 = loada(di.texel_weights_float_4t[1] + index);
-	vfloat tex_weight_float2 = loada(di.texel_weights_float_4t[2] + index);
-	vfloat tex_weight_float3 = loada(di.texel_weights_float_4t[3] + index);
-
-	// Compute the bilinear interpolation to generate the per-texel weight
-	return (weight_val0 * tex_weight_float0 + weight_val1 * tex_weight_float1) +
-	       (weight_val2 * tex_weight_float2 + weight_val3 * tex_weight_float3);
-}
-
-/**
- * @brief Compute the infilled weight for N texel indices in a decimated grid.
- *
- * This is specialized version which computes only two weights per texel for
- * encodings that are only decimated in a single axis.
- *
- * @param di        The weight grid decimation to use.
- * @param weights   The decimated weight values to use.
- * @param index     The first texel index to interpolate.
- *
- * @return The interpolated weight for the given set of SIMD_WIDTH texels.
- */
-static inline vfloat bilinear_infill_vla_2(
-	const decimation_info& di,
-	const float* weights,
-	unsigned int index
-) {
-	// Load the bilinear filter texel weight indexes in the decimated grid
-	vint weight_idx0 = vint(di.texel_weights_4t[0] + index);
-	vint weight_idx1 = vint(di.texel_weights_4t[1] + index);
-
-	// Load the bilinear filter weights from the decimated grid
-	vfloat weight_val0 = gatherf(weights, weight_idx0);
-	vfloat weight_val1 = gatherf(weights, weight_idx1);
-
-	// Load the weight contribution factors for each decimated weight
-	vfloat tex_weight_float0 = loada(di.texel_weights_float_4t[0] + index);
-	vfloat tex_weight_float1 = loada(di.texel_weights_float_4t[1] + index);
-
-	// Compute the bilinear interpolation to generate the per-texel weight
-	return (weight_val0 * tex_weight_float0 + weight_val1 * tex_weight_float1);
-}
 
 /**
  * @brief Compute the error of a decimated weight set for 1 plane.
@@ -2124,11 +2064,13 @@ void unpack_color_endpoints(
 /**
  * @brief Unpack a set of quantized and decimated weights.
  *
+ * TODO: Can we skip this for non-decimated weights now that the @c scb is
+ * already storing unquantized weights?
+ *
  * @param      bsd              The block size information.
  * @param      scb              The symbolic compressed encoding.
  * @param      di               The weight grid decimation table.
  * @param      is_dual_plane    @c true if this is a dual plane block, @c false otherwise.
- * @param      quant_level      The weight quantization level.
  * @param[out] weights_plane1   The output array for storing the plane 1 weights.
  * @param[out] weights_plane2   The output array for storing the plane 2 weights.
  */
@@ -2137,7 +2079,6 @@ void unpack_weights(
 	const symbolic_compressed_block& scb,
 	const decimation_info& di,
 	bool is_dual_plane,
-	quant_method quant_level,
 	int weights_plane1[BLOCK_MAX_TEXELS],
 	int weights_plane2[BLOCK_MAX_TEXELS]);
 
@@ -2168,12 +2109,12 @@ unsigned int compute_ideal_endpoint_formats(
 	const partition_info& pi,
 	const image_block& blk,
 	const endpoints& ep,
-	const int* qwt_bitcounts,
+	const int8_t* qwt_bitcounts,
 	const float* qwt_errors,
 	unsigned int tune_candidate_limit,
 	unsigned int start_block_mode,
 	unsigned int end_block_mode,
-	int partition_format_specifiers[TUNE_MAX_TRIAL_CANDIDATES][BLOCK_MAX_PARTITIONS],
+	uint8_t partition_format_specifiers[TUNE_MAX_TRIAL_CANDIDATES][BLOCK_MAX_PARTITIONS],
 	int block_mode[TUNE_MAX_TRIAL_CANDIDATES],
 	quant_method quant_level[TUNE_MAX_TRIAL_CANDIDATES],
 	quant_method quant_level_mod[TUNE_MAX_TRIAL_CANDIDATES],
@@ -2188,8 +2129,7 @@ unsigned int compute_ideal_endpoint_formats(
  * @param         blk                        The image block color data to compress.
  * @param         pi                         The partition info for the current trial.
  * @param         di                         The weight grid decimation table.
- * @param         weight_quant_mode          The weight grid quantization level.
- * @param         dec_weights_quant_pvalue   The quantized weight set.
+ * @param         dec_weights_uquant   The quantized weight set.
  * @param[in,out] ep                         The color endpoints (modifed in place).
  * @param[out]    rgbs_vectors               The RGB+scale vectors for LDR blocks.
  * @param[out]    rgbo_vectors               The RGB+offset vectors for HDR blocks.
@@ -2198,8 +2138,7 @@ void recompute_ideal_colors_1plane(
 	const image_block& blk,
 	const partition_info& pi,
 	const decimation_info& di,
-	int weight_quant_mode,
-	const uint8_t* dec_weights_quant_pvalue,
+	const uint8_t* dec_weights_uquant,
 	endpoints& ep,
 	vfloat4 rgbs_vectors[BLOCK_MAX_PARTITIONS],
 	vfloat4 rgbo_vectors[BLOCK_MAX_PARTITIONS]);
@@ -2213,9 +2152,8 @@ void recompute_ideal_colors_1plane(
  * @param         blk                               The image block color data to compress.
  * @param         bsd                               The block_size descriptor.
  * @param         di                                The weight grid decimation table.
- * @param         weight_quant_mode                 The weight grid quantization level.
- * @param         dec_weights_quant_pvalue_plane1   The quantized weight set for plane 1.
- * @param         dec_weights_quant_pvalue_plane2   The quantized weight set for plane 2.
+ * @param         dec_weights_uquant_plane1   The quantized weight set for plane 1.
+ * @param         dec_weights_uquant_plane2   The quantized weight set for plane 2.
  * @param[in,out] ep                                The color endpoints (modifed in place).
  * @param[out]    rgbs_vector                       The RGB+scale color for LDR blocks.
  * @param[out]    rgbo_vector                       The RGB+offset color for HDR blocks.
@@ -2225,9 +2163,8 @@ void recompute_ideal_colors_2planes(
 	const image_block& blk,
 	const block_size_descriptor& bsd,
 	const decimation_info& di,
-	int weight_quant_mode,
-	const uint8_t* dec_weights_quant_pvalue_plane1,
-	const uint8_t* dec_weights_quant_pvalue_plane2,
+	const uint8_t* dec_weights_uquant_plane1,
+	const uint8_t* dec_weights_uquant_plane2,
 	endpoints& ep,
 	vfloat4& rgbs_vector,
 	vfloat4& rgbo_vector,
@@ -2245,6 +2182,7 @@ void prepare_angular_tables();
  * @param      only_always               Only consider block modes that are always enabled.
  * @param      bsd                       The block size descriptor for the current trial.
  * @param      dec_weight_ideal_value    The ideal decimated unquantized weight values.
+ * @param      max_weight_quant          The maximum block mode weight quantization allowed.
  * @param[out] tmpbuf                    Preallocated scratch buffers for the compressor.
  */
 void compute_angular_endpoints_1plane(
@@ -2252,6 +2190,7 @@ void compute_angular_endpoints_1plane(
 	bool only_always,
 	const block_size_descriptor& bsd,
 	const float* dec_weight_ideal_value,
+	unsigned int max_weight_quant,
 	compression_working_buffers& tmpbuf);
 
 /**
@@ -2260,12 +2199,14 @@ void compute_angular_endpoints_1plane(
  * @param      tune_low_weight_limit     Weight count cutoff below which we use simpler searches.
  * @param      bsd                       The block size descriptor for the current trial.
  * @param      dec_weight_ideal_value    The ideal decimated unquantized weight values.
+ * @param      max_weight_quant          The maximum block mode weight quantization allowed.
  * @param[out] tmpbuf                    Preallocated scratch buffers for the compressor.
  */
 void compute_angular_endpoints_2planes(
 	unsigned int tune_low_weight_limit,
 	const block_size_descriptor& bsd,
 	const float* dec_weight_ideal_value,
+	unsigned int max_weight_quant,
 	compression_working_buffers& tmpbuf);
 
 /* ============================================================================
@@ -2472,6 +2413,20 @@ void aligned_free(T* ptr)
 #else
 	free(reinterpret_cast<void*>(ptr));
 #endif
+}
+
+static inline void dump_weights(const char* label, uint8_t* weights, int weight_count)
+{
+	printf("%s\n", label);
+	vint lane = vint::lane_id();
+	for (int i = 0; i < weight_count; i += ASTCENC_SIMD_WIDTH)
+	{
+		vmask mask = lane < vint(weight_count);
+		vint val(weights + i);
+		val = select(vint::zero(), val, mask);
+		print(val);
+		lane += vint(ASTCENC_SIMD_WIDTH);
+	}
 }
 
 #endif

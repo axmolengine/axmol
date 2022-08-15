@@ -184,7 +184,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (leftResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(leftPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(leftPlistFile));
             }
         }
         else if (childName == "RightImage")
@@ -215,7 +215,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (rightResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(rightPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(rightPlistFile));
             }
         }
         else if (childName == "UpImage")
@@ -246,7 +246,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (upResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(upPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(upPlistFile));
             }
         }
         else if (childName == "DownImage")
@@ -277,7 +277,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (downResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(downPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(downPlistFile));
             }
         }
         else if (childName == "ForwardImage")
@@ -308,7 +308,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (forwardResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(forwardPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(forwardPlistFile));
             }
         }
         else if (childName == "BackImage")
@@ -339,7 +339,7 @@ Offset<Table> GameNode3DReader::createOptionsWithFlatBuffers(pugi::xml_node obje
             if (backResourceType == 1)
             {
                 FlatBuffersSerialize* fbs = FlatBuffersSerialize::getInstance();
-                fbs->_textures.push_back(builder->CreateString(backPlistFile));
+                fbs->_textures.emplace_back(builder->CreateString(backPlistFile));
             }
         }
 

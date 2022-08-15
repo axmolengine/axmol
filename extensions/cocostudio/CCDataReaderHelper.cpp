@@ -276,7 +276,7 @@ void DataReaderHelper::addDataFromFile(std::string_view filePath)
             return;
         }
     }
-    _configFileList.push_back(std::string{filePath});
+    _configFileList.emplace_back(std::string{filePath});
 
     //! find the base file path
     std::string basefilePath;
@@ -342,7 +342,7 @@ void DataReaderHelper::addDataFromFileAsync(std::string_view imagePath,
             return;
         }
     }
-    _configFileList.push_back(std::string{filePath});
+    _configFileList.emplace_back(std::string{filePath});
 
     //! find the base file path
     std::string basefilePath;
@@ -814,7 +814,7 @@ MovementBoneData* DataReaderHelper::decodeMovementBone(pugi::xml_node& movBoneXm
         parentFrameXML = parentXml.child(FRAME);
         while (parentFrameXML)
         {
-            parentXmlList.push_back(parentFrameXML);
+            parentXmlList.emplace_back(parentFrameXML);
             parentFrameXML = parentFrameXML.next_sibling(FRAME);
         }
 
@@ -1101,7 +1101,7 @@ ContourData* DataReaderHelper::decodeContour(pugi::xml_node& contourXML, DataInf
         pugiext::query_attribute(vertexDataXML, A_Y, &vertex.y);
 
         vertex.y = -vertex.y;
-        contourData->vertexList.push_back(vertex);
+        contourData->vertexList.emplace_back(vertex);
 
         vertexDataXML = vertexDataXML.next_sibling(CONTOUR_VERTEX);
     }
@@ -1596,7 +1596,7 @@ ContourData* DataReaderHelper::decodeContour(const rapidjson::Value& json)
         vertex.x = DICTOOL->getFloatValue_json(dic, A_X);
         vertex.y = DICTOOL->getFloatValue_json(dic, A_Y);
 
-        contourData->vertexList.push_back(vertex);
+        contourData->vertexList.emplace_back(vertex);
     }
 
     return contourData;
@@ -2395,7 +2395,7 @@ ContourData* DataReaderHelper::decodeContour(CocoLoader* cocoLoader, stExpCocoNo
                 Vec2 vertex;
                 vertex.x = utils::atof(pVerTexPoint[0].GetValue(cocoLoader));
                 vertex.y = utils::atof(pVerTexPoint[1].GetValue(cocoLoader));
-                contourData->vertexList.push_back(vertex);
+                contourData->vertexList.emplace_back(vertex);
             }
             break;
         }

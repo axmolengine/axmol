@@ -149,7 +149,7 @@ void PUBeamRender::particleExpired(PUParticleSystem3D* /*particleSystem*/, PUPar
         PUParticle3DBeamVisualData* beamRendererVisualData =
             static_cast<PUParticle3DBeamVisualData*>(particle->visualData);
         beamRendererVisualData->setVisible(false, 0);  // PU 1.4
-        _visualData.push_back(beamRendererVisualData);
+        _visualData.emplace_back(beamRendererVisualData);
         particle->visualData = nullptr;
     }
 }
@@ -279,8 +279,8 @@ void PUBeamRender::prepare()
             visualData->half[numDev].setZero();
             visualData->destinationHalf[numDev].setZero();
         }
-        _allVisualData.push_back(visualData);  // Managed by this renderer
-        _visualData.push_back(visualData);     // Used to assign to a particle
+        _allVisualData.emplace_back(visualData);  // Managed by this renderer
+        _visualData.emplace_back(visualData);     // Used to assign to a particle
     }
 }
 
