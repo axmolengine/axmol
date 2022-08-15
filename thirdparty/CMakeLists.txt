@@ -242,6 +242,9 @@ if(AX_ENABLE_EXT_LUA)
     set_property(TARGET thirdparty APPEND PROPERTY 
         AX_LUA_DEPEND ${AX_LUA_ENGINE} tolua lua-cjson
     )
+    if (AX_USE_LUAJIT)
+        target_compile_definitions(lua-cjson PRIVATE USING_LUAJIT=1)
+    endif()
 endif()
 
 if(AX_WITH_CURL)
