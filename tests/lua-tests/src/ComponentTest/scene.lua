@@ -1,4 +1,4 @@
-require "cocos.init"
+require "axys.init"
 require "ComponentTest/gameoverscene"
 
 local scene = {
