@@ -29,30 +29,30 @@ printInfo("")
 printInfo("# DEBUG                        = " .. DEBUG)
 printInfo("#")
 
-device     = require("axys.framework.device")
-display    = require("axys.framework.display")
-transition = require("axys.framework.transition")
+device     = require("cocos.framework.device")
+display    = require("cocos.framework.display")
+transition = require("cocos.framework.transition")
 
-require("axys.framework.extends.NodeEx")
-require("axys.framework.extends.SpriteEx")
-require("axys.framework.extends.LayerEx")
-require("axys.framework.extends.MenuEx")
+require("cocos.framework.extends.NodeEx")
+require("cocos.framework.extends.SpriteEx")
+require("cocos.framework.extends.LayerEx")
+require("cocos.framework.extends.MenuEx")
 
 if ccui then
-require("axys.framework.extends.UIWidget")
-require("axys.framework.extends.UICheckBox")
-require("axys.framework.extends.UIEditBox")
-require("axys.framework.extends.UIListView")
-require("axys.framework.extends.UIPageView")
-require("axys.framework.extends.UIScrollView")
-require("axys.framework.extends.UISlider")
-require("axys.framework.extends.UITextField")
+require("cocos.framework.extends.UIWidget")
+require("cocos.framework.extends.UICheckBox")
+require("cocos.framework.extends.UIEditBox")
+require("cocos.framework.extends.UIListView")
+require("cocos.framework.extends.UIPageView")
+require("cocos.framework.extends.UIScrollView")
+require("cocos.framework.extends.UISlider")
+require("cocos.framework.extends.UITextField")
 end
 
-require("axys.framework.package_support")
+require("cocos.framework.package_support")
 
 -- register the build-in packages
-cc.register("event", require("axys.framework.components.event"))
+cc.register("event", require("cocos.framework.components.event"))
 
 -- export global variable
 local __g = _G

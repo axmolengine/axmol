@@ -454,30 +454,73 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
 
     MyXMLVisitor::setTagDescription("img", false, [](const ValueMap& tagAttrValueMap) {
         // supported attributes:
-        // src, height, width
+        // src, height, width, scaleX, scaleY, scale
         std::string src;
         int height                     = -1;
         int width                      = -1;
+        float scaleX                   = 1.f;
+        float scaleY                   = 1.f;
         Widget::TextureResType resType = Widget::TextureResType::LOCAL;
 
-        if (tagAttrValueMap.find("src") != tagAttrValueMap.end())
+        auto it = tagAttrValueMap.find("src");
+        if (it != tagAttrValueMap.end())
         {
-            src = tagAttrValueMap.at("src").asString();
+            src = it->second.asString();
         }
-        if (tagAttrValueMap.find("height") != tagAttrValueMap.end())
+
+        it = tagAttrValueMap.find("height");
+        if (it != tagAttrValueMap.end())
         {
-            height = tagAttrValueMap.at("height").asInt();
+            auto str = it->second.asStringRef();
+            if (str[str.length() - 1] == '%')
+            {
+                scaleY = std::atoi(str.data()) / 100.f;
+            }
+            else
+            {
+                height = it->second.asInt();
+            }
         }
-        if (tagAttrValueMap.find("width") != tagAttrValueMap.end())
+
+        it = tagAttrValueMap.find("width");
+        if (it != tagAttrValueMap.end())
         {
-            width = tagAttrValueMap.at("width").asInt();
+            auto str = it->second.asStringRef();
+            if (str[str.length() - 1] == '%')
+            {
+                scaleX = std::atoi(str.data()) / 100.f;
+            }
+            else
+            {
+                width = it->second.asInt();
+            }
         }
-        if (tagAttrValueMap.find("type") != tagAttrValueMap.end())
+
+        it = tagAttrValueMap.find("scaleX");
+        if (it != tagAttrValueMap.end())
+        {
+            scaleX = it->second.asFloat();
+        }
+
+        it = tagAttrValueMap.find("scaleY");
+        if (it != tagAttrValueMap.end())
+        {
+            scaleY = it->second.asFloat();
+        }
+
+        it = tagAttrValueMap.find("scale");
+        if (it != tagAttrValueMap.end())
+        {
+            scaleX = scaleY = it->second.asFloat();
+        }
+
+        it = tagAttrValueMap.find("type");
+        if (it != tagAttrValueMap.end())
         {
             // texture type
             // 0: normal file path
             // 1: sprite frame name
-            int type = tagAttrValueMap.at("type").asInt();
+            int type = it->second.asInt();
             resType  = type == 0 ? Widget::TextureResType::LOCAL : Widget::TextureResType::PLIST;
         }
 
@@ -485,10 +528,13 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         if (src.length())
         {
             elementImg = RichElementImage::create(0, Color3B::WHITE, 255, src, "", resType);
-            if (0 <= height)
+            if (height >= 0)
                 elementImg->setHeight(height);
-            if (0 <= width)
+            if (width >= 0)
                 elementImg->setWidth(width);
+
+            elementImg->setScaleX(scaleX);
+            elementImg->setScaleY(scaleY);
         }
         return make_pair(ValueMap(), elementImg);
     });
@@ -1462,7 +1508,7 @@ void RichText::openUrl(std::string_view url)
     {
         _handleOpenUrl(url);
     }
-    else
+    else if (!url.empty())
     {
         Application::getInstance()->openURL(url);
     }
@@ -1542,9 +1588,15 @@ void RichText::formatText(bool force)
                     {
                         auto currentSize = elementRenderer->getContentSize();
                         if (elmtImage->_width != -1)
-                            elementRenderer->setScaleX(elmtImage->_width / currentSize.width);
+                            elementRenderer->setScaleX((elmtImage->_width / currentSize.width) * elmtImage->_scaleX);
+                        else
+                            elementRenderer->setScaleX(elmtImage->_scaleX);
+
                         if (elmtImage->_height != -1)
-                            elementRenderer->setScaleY(elmtImage->_height / currentSize.height);
+                            elementRenderer->setScaleY((elmtImage->_height / currentSize.height) * elmtImage->_scaleY);
+                        else
+                            elementRenderer->setScaleY(elmtImage->_scaleY);
+
                         elementRenderer->setContentSize(Vec2(currentSize.width * elementRenderer->getScaleX(),
                                                              currentSize.height * elementRenderer->getScaleY()));
                         elementRenderer->addComponent(
@@ -1598,7 +1650,8 @@ void RichText::formatText(bool force)
                 {
                     RichElementImage* elmtImage = static_cast<RichElementImage*>(element);
                     handleImageRenderer(elmtImage->_filePath, elmtImage->_textureType, elmtImage->_color,
-                                        elmtImage->_opacity, elmtImage->_width, elmtImage->_height, elmtImage->_url);
+                                        elmtImage->_opacity, elmtImage->_width, elmtImage->_height, elmtImage->_url,
+                                        elmtImage->_scaleX, elmtImage->_scaleY);
                     break;
                 }
                 case RichElement::Type::CUSTOM:
@@ -1891,7 +1944,9 @@ void RichText::handleImageRenderer(std::string_view filePath,
                                    uint8_t /*opacity*/,
                                    int width,
                                    int height,
-                                   std::string_view url)
+                                   std::string_view url,
+                                   float scaleX,
+                                   float scaleY)
 {
     Sprite* imageRenderer;
     if (textureType == Widget::TextureResType::LOCAL)
@@ -1906,6 +1961,10 @@ void RichText::handleImageRenderer(std::string_view filePath,
             imageRenderer->setScaleX(width / currentSize.width);
         if (height != -1)
             imageRenderer->setScaleY(height / currentSize.height);
+
+        imageRenderer->setScaleX(imageRenderer->getScaleX() * scaleX);
+        imageRenderer->setScaleY(imageRenderer->getScaleY() * scaleY);
+
         imageRenderer->setContentSize(
             Vec2(currentSize.width * imageRenderer->getScaleX(), currentSize.height * imageRenderer->getScaleY()));
         imageRenderer->setScale(1.f, 1.f);
