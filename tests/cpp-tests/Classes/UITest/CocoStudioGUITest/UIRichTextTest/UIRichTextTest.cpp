@@ -882,6 +882,7 @@ bool UIRichTextXMLImg::init()
             "Image with width/height: <img src='cocosui/sliderballnormal.png' width='30' height='30' /> and "
             "Image with scaleX/scaleY: <img src='cocosui/sliderballnormal.png' scaleX='3' scaleY='3' /> and "
             "Image with width%/height%: <img src='cocosui/sliderballnormal.png' width='150%' height='150%' /> and "
+            "Image with empty width/height%: <img src='cocosui/sliderballnormal.png' width='' height='150%' /> and "
             "Image with scale: <img src='cocosui/sliderballnormal.png' scale='3.5' /> and "
             "Image with w/h/sX/sY: <img src='cocosui/sliderballnormal.png' width='30' height='30' scaleX='0.5' scaleY='0.5' /> and "
             "goes text again");

@@ -472,7 +472,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         if (it != tagAttrValueMap.end())
         {
             auto str = it->second.asStringRef();
-            if (str[str.length() - 1] == '%')
+            if (!str.empty() && str[str.length() - 1] == '%')
             {
                 scaleY = std::atoi(str.data()) / 100.f;
             }
@@ -486,7 +486,7 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         if (it != tagAttrValueMap.end())
         {
             auto str = it->second.asStringRef();
-            if (str[str.length() - 1] == '%')
+            if (!str.empty() && str[str.length() - 1] == '%')
             {
                 scaleX = std::atoi(str.data()) / 100.f;
             }
