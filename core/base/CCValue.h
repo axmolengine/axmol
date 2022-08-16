@@ -281,7 +281,8 @@ private:
 
 inline const ax::Value& optValue(const ValueMap& dictionary, std::string_view key)
 {
-    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : ax::Value::Null;
+    auto iter = dictionary.find(key);
+    return iter != dictionary.cend() ? iter->second : ax::Value::Null;
 }
 
 /** @} */

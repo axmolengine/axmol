@@ -4,7 +4,7 @@ end
 
 local json = require 'cjson'
 
-require "cocos.cocostudio.StudioConstants"
+require "axys.cocostudio.StudioConstants"
 
 function ccs.sendTriggerEvent(event)
     local triggerObjArr = ccs.TriggerMng.getInstance():get(event)

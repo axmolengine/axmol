@@ -878,20 +878,11 @@ bool UIRichTextXMLImg::init()
 
         // RichText
         _richText = RichText::createWithXML(
-            "Image: <img src='cocosui/sliderballnormal.png'/> and this is text again."
-            "Image with width/height: <img src='cocosui/sliderballnormal.png' width='30' height='30' /> and "
-            "Image with scaleX/scaleY: <img src='cocosui/sliderballnormal.png' scaleX='3' scaleY='3' /> and "
-            "Image with width%/height%: <img src='cocosui/sliderballnormal.png' width='150%' height='150%' /> and "
-            "Image with scale: <img src='cocosui/sliderballnormal.png' scale='3.5' /> and "
-            "Image with w/h/sX/sY: <img src='cocosui/sliderballnormal.png' width='30' height='30' scaleX='0.5' scaleY='0.5' /> and "
+            "you should see an image here: <img src='cocosui/sliderballnormal.png'/> and this is text again. and this "
+            "is the same image, but bigger: <img src='cocosui/sliderballnormal.png' width='30' height='30' /> and here "
             "goes text again");
         _richText->ignoreContentAdaptWithSize(false);
-
-#ifdef AX_PLATFORM_PC
-        _richText->setContentSize(Size(290, 290));
-#else
         _richText->setContentSize(Size(100, 100));
-#endif
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
         _richText->setLocalZOrder(10);
