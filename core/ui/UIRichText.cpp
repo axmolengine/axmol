@@ -471,13 +471,29 @@ MyXMLVisitor::MyXMLVisitor(RichText* richText) : _fontElements(20), _richText(ri
         it = tagAttrValueMap.find("height");
         if (it != tagAttrValueMap.end())
         {
-            height = it->second.asInt();
+            auto str = it->second.asStringRef();
+            if (str[str.length() - 1] == '%')
+            {
+                scaleY = std::atoi(str.data()) / 100.f;
+            }
+            else
+            {
+                height = it->second.asInt();
+            }
         }
 
         it = tagAttrValueMap.find("width");
         if (it != tagAttrValueMap.end())
         {
-            width = it->second.asInt();
+            auto str = it->second.asStringRef();
+            if (str[str.length() - 1] == '%')
+            {
+                scaleX = std::atoi(str.data()) / 100.f;
+            }
+            else
+            {
+                width = it->second.asInt();
+            }
         }
 
         it = tagAttrValueMap.find("scaleX");
