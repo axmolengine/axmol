@@ -38,7 +38,7 @@ const ValueMapIntKey ValueMapIntKeyNull;
 
 const Value Value::Null;
 
-const std::string Value::EmptyString;
+const std::string Value::NullString;
 
 Value::Value() : _type(Type::NONE)
 {
@@ -773,7 +773,7 @@ std::string_view Value::asStringRef() const
 {
     if (_type == Type::STRING)
         return *_field.strVal;
-    return Value::EmptyString;
+    return Value::NullString;
 }
 
 ValueVector& Value::asValueVector()

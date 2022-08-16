@@ -58,7 +58,7 @@ class AX_DLL Value
 public:
     /** A predefined Value that has not value. */
     static const Value Null;
-    static const std::string EmptyString;
+    static const std::string NullString;
 
     /** Default constructor. */
     Value();
@@ -192,7 +192,7 @@ public:
     /** to as a string value. Will convert to string if possible, or will trigger assert error. */
     std::string asString() const;
 
-    /** Gets as a string value reference without conversion, if value type is not string will return ""sv */
+    /** Gets as a string value reference without conversion, if value type is not string will return "" */
     std::string_view asStringRef() const;
 
     /** Gets as a ValueVector reference. Will convert to ValueVector if possible, or will trigger assert error. */
@@ -281,8 +281,7 @@ private:
 
 inline const ax::Value& optValue(const ValueMap& dictionary, std::string_view key)
 {
-    auto iter = dictionary.find(key);
-    return iter != dictionary.cend() ? iter->second : ax::Value::Null;
+    return dictionary.find(key) != dictionary.cend() ? dictionary.at(key) : ax::Value::Null;
 }
 
 /** @} */
