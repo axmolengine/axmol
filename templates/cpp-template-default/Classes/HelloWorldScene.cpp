@@ -46,9 +46,9 @@ bool HelloWorld::init()
         return false;
     }
 
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    auto origin      = Director::getInstance()->getVisibleOrigin();
-    auto safeArea    = Director::getInstance()->getSafeAreaRect();
+    auto visibleSize = _director->getVisibleSize();
+    auto origin      = _director->getVisibleOrigin();
+    auto safeArea    = _director->getSafeAreaRect();
     auto safeOrigin  = safeArea.origin;
 
     /////////////////////////////
@@ -122,10 +122,10 @@ bool HelloWorld::init()
 void HelloWorld::menuCloseCallback(Ref* sender)
 {
     // Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
+    _director->end();
 
     /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use
-     * Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm
+     * _director->end() as given above,instead trigger a custom event created in RootViewController.mm
      * as below*/
 
     // EventCustom customEndEvent("game_scene_close_event");

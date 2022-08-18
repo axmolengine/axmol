@@ -29,8 +29,13 @@
 * C++ 17
 * Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
+
+### Thirdparty
+
+* All thirdparty prebuilt libs are built from https://github.com/axys1/buildware via github actions automatically.
   
 ### Highlighted Features
+* Add apple M1, android x64 support, contributed by @pietpukkel
 * Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axys1/axys/issues/564)
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
@@ -129,17 +134,19 @@ See [windows workflow guide](https://github.com/axys1/axys/issues/564)
   .\gradlew.bat assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
   ```
 
-#### iOS
+#### iOS and macOS
   1. Ensure xcode12+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. Execute the following command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  
-     - for arm64:  
+     - for ios arm64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXYS_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
-     - for armv7,arm64 combined:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXYS_ROOT/cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
-     - for simulator x86_64:  
+     - for ios simulator x86_64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXYS_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
+     - for macos x86_64(Intel)
+     `cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=x86_64`
+     - for macos arm64(M1)
+     `cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=arm64`
 
   4. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  
