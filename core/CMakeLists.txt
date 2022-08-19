@@ -160,7 +160,7 @@ endif()
 if(WINDOWS)
     # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
     if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        target_sources(${_AX_CORE_LIB} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
+        target_sources(${_AX_CORE_LIB} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
         set_target_properties(${_AX_CORE_LIB} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
         set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
     endif()
