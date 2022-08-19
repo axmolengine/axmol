@@ -213,11 +213,11 @@ function(ax_copy_target_dll ax_target)
     # copy thirdparty dlls to target bin dir
     # copy_thirdparty_dlls(${ax_target} $<TARGET_FILE_DIR:${ax_target}>)
     if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+        set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
     endif()
     add_custom_command(TARGET ${ax_target} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/bin/${THIRD_PARTY_ARCH}OpenAL32.dll"
+        "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
          $<TARGET_FILE_DIR:${ax_target}>)
 
     # Copy windows angle binaries
@@ -241,11 +241,11 @@ endfunction()
 function(ax_copy_lua_dlls ax_target)
     if(NOT AX_USE_LUAJIT)
         if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-            set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+            set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
         endif()
         add_custom_command(TARGET ${ax_target} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"
+            "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
              $<TARGET_FILE_DIR:${ax_target}>)
     endif()
 endfunction()
