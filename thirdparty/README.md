@@ -133,7 +133,7 @@
 
 ## lz4
 - [![Upstream](https://img.shields.io/github/v/release/lz4/lz4?label=Upstream)](https://github.com/lz4/lz4)
-- Version: git 1.9.3-bdc9d3b (2541)
+- Version: 1.9.4
 - License: BSD 2-Clause
 
 ## minimp3
