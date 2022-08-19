@@ -64,7 +64,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE ${AX_ROOT_DIR}/extensions/fairygui
         PRIVATE ${AX_ROOT_DIR}/extensions/GUI
         PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg/include
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/include
     )
@@ -72,7 +72,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     target_link_directories(${APP_NAME}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg/prebuilt/windows/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/windows/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib/Debug
     )
