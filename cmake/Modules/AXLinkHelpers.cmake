@@ -9,7 +9,9 @@ else()
 endif()
 
 if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-    set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+    set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
+else()
+    set(BUILD_CONFIG_DIR "")
 endif()
 
 message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
@@ -39,16 +41,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE ${AX_ROOT_DIR}/thirdparty/box2d/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/chipmunk/include
         PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/engine/thirdparty/freetype/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/recast/..
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/bullet/.
         PRIVATE ${AX_ROOT_DIR}/thirdparty/webp/src/webp
         PRIVATE ${AX_ROOT_DIR}/thirdparty/pugixml
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/xxhash/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/lz4/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/clipper/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/ConvertUTF/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/poly2tri/..
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/astc/..
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/xxhash
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/ConvertUTF
         PRIVATE ${AX_ROOT_DIR}/thirdparty/openal/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/ogg/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/glad/include
@@ -69,12 +65,13 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/include
     )
 
+    SET (CONFIGURATION_SUBFOLDER "")
     target_link_directories(${APP_NAME}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/windows/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib/Debug
+        PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib  # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
     )
 
     # Linking OS libs
@@ -129,7 +126,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
         "${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}/libcurl.dll"
         "${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}/zlib1.dll"
-        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${THIRD_PARTY_ARCH}OpenAL32.dll"
+        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
         $<TARGET_FILE_DIR:${APP_NAME}>)
 
     # Copy windows angle binaries
@@ -169,6 +166,6 @@ function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     target_link_libraries(${APP_NAME} axlua lua-cjson tolua plainlua)
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"
+        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
          $<TARGET_FILE_DIR:${APP_NAME}>)
 endfunction(ax_link_lua_prebuilt)
