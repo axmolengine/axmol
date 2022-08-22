@@ -96,6 +96,10 @@ if (NOT DEFINED ISA_SIMD)
                     return (int)*(double*)&m;
                 }" ASTC_HAVE_SSE2_INTRINSICS)
         endif()
+        
+        ### restore CMAKE_REQUIRED_FLAGS
+        set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+        unset(OLD_REQUIRED_FLAGS) 
 
         ### Checking ARM SIMD neon
         check_include_file(arm_neon.h ASTC_HAVE_ARM_NEON_H)
@@ -110,10 +114,6 @@ if (NOT DEFINED ISA_SIMD)
                         return vgetq_lane_s32(ret4, 0);
                     }" ASTC_HAVE_NEON_INTRINSICS)
         endif()
-
-        ### restore CMAKE_REQUIRED_FLAGS
-        set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-        unset(OLD_REQUIRED_FLAGS) 
     else()
         message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build x86 target")
     endif()
