@@ -40,6 +40,11 @@
 - Version: 6.4.2
 - License: BSL-1.0
 
+## Clipper2
+- Upstream: https://github.com/AngusJohnson/Clipper2
+- Version: 1.0.3
+- License: BSL-1.0
+
 ## ConvertUTF
 - Upstream: https://github.com/llvm/llvm-project
 - Version: git 2946cd7 without LLVM-specific wrappers of the functions
