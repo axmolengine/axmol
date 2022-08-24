@@ -236,8 +236,11 @@ void SpritePolygonTest2::initSprites()
     auto s        = Director::getInstance()->getWinSize();
     auto offset   = Vec2(0.15 * s.width, 0);
     auto filename = s_pathGrossini;
-    Rect head     = Rect(30, 25, 25, 25);
 
+    // Fix for issue #231  Rect have to be adapt to the 2.0/"ContentScaleFactor()" 
+    auto a    = 2.0 / Director::getInstance()->getContentScaleFactor();
+    Rect head = Rect(30 * a, 25 * a, 25 * a, 25 * a);
+ 
     // Sprite
     auto pinfo     = AutoPolygon::generatePolygon(filename, head);
     _polygonSprite = Sprite::create(pinfo);
