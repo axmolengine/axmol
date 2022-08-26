@@ -31,8 +31,10 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "renderer/CCTextureCache.h"
 #include "clipper/clipper.hpp"
+#include "Clipper2Lib/clipper.h"
 #include <algorithm>
 #include <math.h>
+#include <time.h>
 
 USING_NS_AX;
 
@@ -204,8 +206,10 @@ Vec2 AutoPolygon::findFirstNoneTransparentPixel(const Rect& rect, float threshol
         for (i.x = rect.origin.x; i.x < rect.origin.x + rect.size.width; i.x++)
         {
             auto alpha = getAlphaByPos(i);
+    //        AXLOG("---\n%s %c", __FUNCTION__, alpha);
             if (alpha > threshold)
             {
+    //            AXLOG("FOUND:  %s %c", __FUNCTION__, alpha);
                 found = true;
                 break;
             }
@@ -401,7 +405,7 @@ std::vector<ax::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& sta
         else
         {
             _points.emplace_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor,
-                                   (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
+                                      (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
         }
 
         count++;
@@ -507,6 +511,7 @@ std::vector<Vec2> AutoPolygon::reduce(const std::vector<Vec2>& points, const Rec
 
 std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax::Rect& rect, float epsilon)
 {
+//    return points;
     auto size = points.size();
     // if there are less than 3 points, then we have nothing
     if (size < 3)
@@ -517,11 +522,19 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     ClipperLib::Path subj;
     ClipperLib::PolyTree solution;
     ClipperLib::PolyTree out;
+    AXLOG("================= AutoPolygon::expand\n{");
     for (const auto& pt : points)
     {
         subj << ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(pt.x * PRECISION),
                                      static_cast<ClipperLib::cInt>(pt.y * PRECISION));
+
+  //       AXLOG("{ %f, %f },", pt.x * PRECISION, pt.y * PRECISION);
     }
+    AXLOG("}");
+
+          AXLOG("points.size():    %i", points.size());
+
+
     ClipperLib::ClipperOffset co;
     co.AddPath(subj, ClipperLib::jtMiter, ClipperLib::etClosedPolygon);
     co.Execute(solution, epsilon * PRECISION);
@@ -546,9 +559,11 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     // create the clipping rect
     ClipperLib::Path clamp;
     clamp.emplace_back(ClipperLib::IntPoint(0, 0));
-    clamp.emplace_back(ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION), 0));
-    clamp.emplace_back(ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION),
-                                         static_cast<ClipperLib::cInt>(rect.size.height / _scaleFactor * PRECISION)));
+    clamp.emplace_back(
+        ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION), 0));
+    clamp.emplace_back(
+        ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION),
+                             static_cast<ClipperLib::cInt>(rect.size.height / _scaleFactor * PRECISION)));
     clamp.emplace_back(
         ClipperLib::IntPoint(0, static_cast<ClipperLib::cInt>(rect.size.height / _scaleFactor * PRECISION)));
     cl.AddPath(clamp, ClipperLib::ptClip, true);
@@ -564,7 +579,124 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     {
         outPoints.emplace_back(Vec2(pt.X / PRECISION, pt.Y / PRECISION));
     }
+    AXLOG("outPoints.size():    %i", outPoints.size());
+
     return outPoints;
+}
+
+std::vector<Vec2> AutoPolygon::expand2(const std::vector<Vec2>& points, const ax::Rect& rect, float epsilon)
+{
+    //auto size = points.size();
+    //// if there are less than 3 points, then we have nothing
+    //if (size < 3)
+    //{
+    //    log("AUTOPOLYGON: cannot expand points for %s with less than 3 points, e: %f", _filename.c_str(), epsilon);
+    //    return std::vector<Vec2>();
+    //}
+
+    //Clipper2Lib::Path64 su;
+    //// ClipperLib::Path subj;
+    //// ClipperLib::PolyTree solution;
+    //// ClipperLib::PolyTree out;
+    //for (const auto& pt : points)
+    //{
+    //    // subj << ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(pt.x * PRECISION),
+    //    //                             static_cast<ClipperLib::cInt>(pt.y * PRECISION));
+
+    //    su.emplace_back(pt * PRECISION);
+    //}
+
+
+    /*
+
+    Clipper2Lib::Paths64 subject, clip, solution;
+    subject.push_back(Clipper2Lib::MakePath("100, 50, 10, 79, 65, 2, 65, 98, 10, 21"));
+    clip.push_back(Clipper2Lib::MakePath("98, 63, 4, 68, 77, 8, 52, 100, 19, 12"));
+    solution = Clipper2Lib::Intersect(subject, clip, Clipper2Lib::FillRule::NonZero);
+
+    auto draw4Clipper = DrawNode::create();
+    draw4Clipper->setPosition(200, 200);
+    addChild(draw4Clipper);
+
+    Vec2 vertices1[] = {{100, 50}, {10, 79}, {65, 2}, {65, 98}, {10, 21}};
+    draw4Clipper->drawPoly(vertices1, 5, true, Color4F::YELLOW);
+    Vec2 vertices2[] = {{98, 63}, {4, 68}, {77, 8}, {52, 100}, {19, 12}};
+    draw4Clipper->drawPoly(vertices2, 5, true, Color4F::ORANGE);
+
+    auto drawIntersect = DrawNode::create();
+    drawIntersect->setPosition(200, 200);
+    addChild(drawIntersect, 5);
+    for (size_t i = 0; i < solution.size(); ++i)
+    {
+        Vec2* outPoints = nullptr;
+        for (size_t j = 0; j < solution[i].size(); ++j)
+        {
+            if (!outPoints)
+            {
+                outPoints = new Vec2[solution[i].size()];
+            }
+            outPoints[j] = Vec2(solution[i][j].x, solution[i][j].y);
+        }
+        drawIntersect->drawSolidPoly(outPoints, solution[i].size(), Color4B::GREEN);
+    }
+
+     */
+
+    // ClipperLib::ClipperOffset co;
+    // co.AddPath(subj, ClipperLib::jtMiter, ClipperLib::etClosedPolygon);
+    // co.Execute(solution, epsilon * PRECISION);
+
+    //Clipper2Lib::ClipperOffset co;
+    //co.AddPath(su, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon);
+    //const auto outputs = co.Execute(epsilon * PRECISION);
+
+    //// ClipperLib::PolyNode* p = solution.GetFirst();
+    //Clipper2Lib::PolyPath64* p;
+    //if (!p)
+    //{
+    //    log("AUTOPOLYGON: Clipper failed to expand the points");
+    //    return points;
+    //}
+    //int i = 0;
+    //while (p[i++].IsHole())
+    //{
+    //    //    p = p->GetNext();
+    //    // p[i++].IsHole;//       = p[i++];
+    //}
+    // turn the result into simply polygon (AKA, fix overlap)
+
+    // clamp into the specified rect
+    // ClipperLib::Clipper cl;
+    // cl.StrictlySimple(true);
+    // cl.AddPath(p, ClipperLib::ptSubject, true);
+
+ //   Clipper2Lib::Clipper64 cl;
+ // //  cl.AddSubject(p);  //cl.AddPath(p, ClipperLib::ptSubject, true);
+ //   //   // create the clipping rect
+ //   Clipper2Lib::Paths64 clamp;
+ //   clamp.emplace_back(Clipper2Lib::Point64(0, 0));
+ ////   clamp.emplace_back(Clipper2Lib::Point64(rect.size.width / _scaleFactor * PRECISION, 0));
+ //   clamp.emplace_back(Clipper2Lib::Point64(rect.size.width / _scaleFactor * PRECISION, rect.size.height / _scaleFactor * PRECISION));
+ ////   clamp.emplace_back(Clipper2Lib::Point64(0, rect.size.height / _scaleFactor * PRECISION));
+ //   cl.AddClip(clamp);
+
+ //   Clipper2Lib::PolyTree64 out;
+ //   cl.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::Positive, out);
+
+   std::vector<Vec2> outPoints;
+ ////   Clipper2Lib::PolyPath64& p2 = out;
+ ////   i                           = 0;
+ ////   while (p2.IsHole())
+ ////   {
+ ////       p2[i++];
+ ////   }
+ ////   for (auto pt : p2)
+ ////   {
+ ////       Clipper2Lib::Point64 point;
+ ////       Clipper2Lib::PointInPolygon(point, pt->Polygon());
+ ////       outPoints.emplace_back(Vec2(point.x / PRECISION, point.y / PRECISION));
+ ////   }
+   return outPoints;
 }
 
 TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& points)
@@ -701,21 +833,57 @@ Rect AutoPolygon::getRealRect(const Rect& rect)
 
 PolygonInfo AutoPolygon::generateTriangles(const Rect& rect, float epsilon, float threshold)
 {
+
+    AXLOG("PolygonInfo AutoPolygon::generateTriangles");
     Rect realRect = getRealRect(rect);
     auto p        = trace(realRect, threshold);
+    AXLOG("trace: %i ", p.size());
     p             = reduce(p, realRect, epsilon);
+    clock_t start = clock();
+    AXLOG("reduce: %i %i", p.size(), start);
     p             = expand(p, realRect, epsilon);
+    AXLOG("expand: %i %i", p.size(), clock() - start);
     auto tri      = triangulate(p);
     calculateUV(realRect, tri.verts, tri.vertCount);
     PolygonInfo ret;
     ret.triangles = tri;
     ret.setFilename(_filename);
     ret.setRect(realRect);
+    AXLOG("ret.setVertices: %i ", p.size());
+
+
+    ret.setVertices(p);
     return ret;
 }
 
+
 PolygonInfo AutoPolygon::generatePolygon(std::string_view filename, const Rect& rect, float epsilon, float threshold)
 {
-    AutoPolygon ap(filename);
-    return ap.generateTriangles(rect, epsilon, threshold);
+        AutoPolygon ap(filename);
+        return ap.generateTriangles(rect, epsilon, threshold);
 }
+
+
+
+//PolygonInfo AutoPolygon::generateTriangles2(const Rect& rect, float epsilon, float threshold)
+//{
+//    Rect realRect = getRealRect(rect);
+//    auto p        = trace(realRect, threshold);
+//    p             = reduce(p, realRect, epsilon);
+//    p             = expand(p, realRect, epsilon);
+//    auto tri      = triangulate(p);
+//    calculateUV(realRect, tri.verts, tri.vertCount);
+//    PolygonInfo ret;
+//    ret.triangles = tri;
+//    ret.setFilename(_filename);
+//    ret.setRect(realRect);
+//    return ret;
+//}
+
+
+//
+//PolygonInfo AutoPolygon::generatePolygon2(std::string_view filename, const Rect& rect, float epsilon, float threshold)
+//{
+//    AutoPolygon ap(filename);
+//    return ap.generateTriangles(rect, epsilon, threshold);
+//}

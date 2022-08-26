@@ -119,14 +119,19 @@ public:
     void setRect(const Rect& rect) { _rect = rect; }
     std::string_view getFilename() const { return _filename; }
     void setFilename(std::string_view filename) { _filename = filename; }
+    void setVertices(const std::vector<ax::Vec2> vertices) { 
+         AXLOG("====setVertices: %i ", vertices.size());
+        _vertices = vertices; }
 
     // FIXME: this should be a property, not a public ivar
     TrianglesCommand::Triangles triangles;
+    std::vector<ax::Vec2> _vertices;
 
 protected:
     bool _isVertsOwner;
     Rect _rect;
     std::string _filename;
+
 
 private:
     void releaseVertsAndIndices();
@@ -196,6 +201,7 @@ public:
      * @endcode
      */
     std::vector<Vec2> expand(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
+    std::vector<Vec2> expand2(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
 
     /**
      * Triangulate the input points into triangles for rendering
@@ -239,6 +245,7 @@ public:
      * @endcode
      */
     PolygonInfo generateTriangles(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
+    PolygonInfo generateTriangles2(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
 
     /**
      * a helper function, packing autoPolygon creation, trace, reduce, expand, triangulate and calculate uv in one
@@ -255,6 +262,11 @@ public:
      * @endcode
      */
     static PolygonInfo generatePolygon(std::string_view filename,
+                                       const Rect& rect = Rect::ZERO,
+                                       float epsilon    = 2.0f,
+                                       float threshold  = 0.05f);
+
+    static PolygonInfo generatePolygon2(std::string_view filename,
                                        const Rect& rect = Rect::ZERO,
                                        float epsilon    = 2.0f,
                                        float threshold  = 0.05f);

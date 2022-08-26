@@ -616,7 +616,7 @@ void DrawNode::drawPolygon(const Vec2* verts,
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle* cursor    = triangles;
 
-    for (int i = 0; i < count - 2; i++)
+    for (int i = 0; i < count ; i++)
     {
         V2F_C4B_T2F_Triangle tmp = {
             {verts[0], fillColor, v2ToTex2F(Vec2::ZERO)},
@@ -688,8 +688,7 @@ void DrawNode::drawPolygon(const Vec2* verts,
 void DrawNode::drawSolidRect(const Vec2& origin, const Vec2& destination, const Color4B& color)
 {
     Vec2 vertices[] = {origin, Vec2(destination.x, origin.y), destination, Vec2(origin.x, destination.y)};
-
-    drawSolidPoly(vertices, 4, color);
+    drawPolygon(vertices, 4, color, 0.0, Color4B());
 }
 
 void DrawNode::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, const Color4B& color)
@@ -746,7 +745,7 @@ void DrawNode::drawSolidCircle(const Vec2& center,
         vertices[i].y = k;
     }
 
-    drawSolidPoly(vertices, segments, color);
+    drawPolygon(vertices, segments, color, 0.0, Color4B());
 }
 
 void DrawNode::drawSolidCircle(const Vec2& center,

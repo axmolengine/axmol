@@ -47,7 +47,7 @@
 
 #    pragma comment(lib, "user32.lib")
 #    pragma comment(lib, "Shlwapi.lib")
-
+ 
 // Edge/Chromium headers and libs
 #    include "WebView2.h"
 #    pragma comment(lib, "ole32.lib")

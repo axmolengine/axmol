@@ -27,11 +27,18 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "clipper.h"
 
 class HelloWorld : public axis::Scene
 {
 public:
     virtual bool init() override;
+
+    void test(Clipper2Lib::Paths64 solution,
+              ax::Vec2 pos      = ax::Vec2(0, 0),
+              float scaleFactor = 1.0f,
+              ax::Color4F color = ax::Color4F::GREEN);
+    void BigOne();
 
     // a selector callback
     void menuCloseCallback(Ref* sender);

@@ -60,7 +60,8 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-static Size resourceSize(960, 640);
+//static Size resourceSize(960, 640);
+static Size resourceSize(1280, 720) ;
 static Size designSize(480, 320);
 
 
