@@ -766,6 +766,18 @@ void SpritePolygonTestNoCrash::initSprites()
     sprite->addChild(spDrawNode);
     _drawNodes.pushBack(spDrawNode);
 
+    auto pinfo1  = AutoPolygon::generatePolygon2("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
+    auto sprite1 = Sprite::create(pinfo1);
+    addChild(sprite1);
+    sprite1->setPosition(100, s.height / 2);
+
+    // DrawNode
+    auto spDrawNode1 = DrawNode::create();
+    spDrawNode1->setTag(sprite1->getTag());
+    spDrawNode1->clear();
+    sprite1->addChild(spDrawNode1);
+    _drawNodes.pushBack(spDrawNode1);
+
     updateDrawNode();
 }
 
