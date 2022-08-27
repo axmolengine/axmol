@@ -206,10 +206,8 @@ Vec2 AutoPolygon::findFirstNoneTransparentPixel(const Rect& rect, float threshol
         for (i.x = rect.origin.x; i.x < rect.origin.x + rect.size.width; i.x++)
         {
             auto alpha = getAlphaByPos(i);
-    //        AXLOG("---\n%s %c", __FUNCTION__, alpha);
             if (alpha > threshold)
             {
-    //            AXLOG("FOUND:  %s %c", __FUNCTION__, alpha);
                 found = true;
                 break;
             }
@@ -404,8 +402,7 @@ std::vector<ax::Vec2> AutoPolygon::marchSquare(const Rect& rect, const Vec2& sta
         }
         else
         {
-            _points.emplace_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor,
-                                      (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
+            _points.emplace_back(Vec2((float)(curx - rect.origin.x) / _scaleFactor, (float)(rect.size.height - cury + rect.origin.y) / _scaleFactor));
         }
 
         count++;
