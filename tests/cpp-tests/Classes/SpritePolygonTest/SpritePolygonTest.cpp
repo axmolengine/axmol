@@ -125,87 +125,38 @@ void SpritePolygonTestCase::updateDrawNode()
             const auto count   = polygoninfo.triangles.indexCount / 3;
             const auto indices = polygoninfo.triangles.indices;
             const auto verts   = polygoninfo.triangles.verts;
-           polygoninfo._vertices;
+        //    const auto vertices = polygoninfo._vertices;
 
-            Clipper2Lib::Paths64 subject, clip, solution;
-            Clipper2Lib::Path64 vertices;
 
+
+            Vec2* vertices = new Vec2[polygoninfo._vertices.size()];
             for (ssize_t i = 0; i < count; i++)
             {
                 // draw 3 lines
                 Vec3 from = verts[indices[i * 3]].vertices;
                 Vec3 to   = verts[indices[i * 3 + 1]].vertices;
                 drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::BLUE);
-         //       vertices.push_back(Clipper2Lib::Point64(from.x, from.y));
-          //      vertices.push_back(Clipper2Lib::Point64(to.x, to.y));
+
 
                 from = verts[indices[i * 3 + 1]].vertices;
                 to   = verts[indices[i * 3 + 2]].vertices;
                 drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::GREEN);
-        //        vertices.push_back(Clipper2Lib::Point64(from.x, from.y));
-        //       vertices.push_back(Clipper2Lib::Point64(to.x, to.y));
 
                 from = verts[indices[i * 3 + 2]].vertices;
                 to   = verts[indices[i * 3]].vertices;
                 drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::RED);
-          //      vertices.push_back(Clipper2Lib::Point64(from.x, from.y));
-          //    vertices.push_back(Clipper2Lib::Point64(to.x, to.y));
             }
 
+            //auto drawPolyFalse = DrawNode::create();
+            //drawPolyFalse->setPosition(Vec2(200, 100));
+            //addChild(drawPolyFalse, 0);
 
-
-            for (auto ve : polygoninfo._vertices)
-            {
-                vertices.push_back(Clipper2Lib::Point64(ve.x, ve.y));
-            }
-
-
-
-            subject.push_back(vertices);
-            solution = Clipper2Lib::Intersect(subject, subject, Clipper2Lib::FillRule::NonZero);
-
-            float scaleFactor = 1.0;
-            int yPos          = 0;
-            for (size_t i = 0; i < solution.size(); i++)
-            {
-                Vec2* outPoints = nullptr;
-                AXLOG("{");
-                for (size_t j = 0; j < solution[i].size(); j++)
-                {
-                    if (!outPoints)
-                    {
-                        outPoints = new Vec2[solution[i].size() + 1];
-                    }
-                    outPoints[j] = Vec2(solution[i][j].x * scaleFactor, solution[i][j].y * scaleFactor);
-                    AXLOG("{ %f, %f},", outPoints[j].x, outPoints[j].y);
-                }
-                outPoints[solution[i].size()] = Vec2(solution[i][0].x * scaleFactor, solution[i][0].y * scaleFactor);
-                AXLOG("}");
-
-                yPos = 30;
-
-                auto drawPolygon = DrawNode::create();
-                drawPolygon->setPosition(50, yPos);
-                addChild(drawPolygon, 0);
-                drawPolygon->drawPolygon(outPoints, solution[i].size(), Color4B(254, 201, 181, 200), 1,
-                                         Color4B(248, 237, 237, 200));
-
-                //auto drawSolidPoly = DrawNode::create();
-                //drawSolidPoly->setPosition(300, yPos);
-                //addChild(drawSolidPoly, 5);
-                //drawSolidPoly->drawSolidPoly(outPoints, solution[i].size(), Color4B::GREEN);
-
-                //auto drawPolyFalse = DrawNode::create();
-                //drawPolyFalse->setPosition(550, yPos);
-                //addChild(drawPolyFalse, 0);
-                //drawPolyFalse->drawPoly(outPoints, solution[i].size(), false, Color4F::ORANGE);
-
-                //auto drawPolyTrue = DrawNode::create();
-                //drawPolyTrue->setPosition(800, yPos);
-                //addChild(drawPolyTrue, 0);
-                //drawPolyTrue->drawPoly(outPoints, solution[i].size(), true, Color4F::ORANGE);
-            }
-
+            //for (size_t i = 0; i < count; i++)
+            //{
+            //    vertices[i] = {polygoninfo._vertices[i].x, polygoninfo._vertices[i].y};
+       
+            //}
+            //drawPolyFalse->drawPoly(vertices, count, false, Color4F::ORANGE);
         }
     }
 }
@@ -755,9 +706,10 @@ void SpritePolygonTestNoCrash::initSprites()
 {
     auto s      = Director::getInstance()->getWinSize();
     auto pinfo  = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
+    //auto pinfo  = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect(50,50,100,100), 0.5);
     auto sprite = Sprite::create(pinfo);
     addChild(sprite);
-    sprite->setPosition(s.width / 2, s.height / 2);
+    sprite->setPosition(s.width / 2+100, s.height / 2);
 
     // DrawNode
     auto spDrawNode = DrawNode::create();
@@ -766,7 +718,8 @@ void SpritePolygonTestNoCrash::initSprites()
     sprite->addChild(spDrawNode);
     _drawNodes.pushBack(spDrawNode);
 
-    auto pinfo1  = AutoPolygon::generatePolygon2("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
+    auto pinfo1  = AutoPolygon::generatePolygon1("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
+  //  auto pinfo1  = AutoPolygon::generatePolygon1("Images/sprite_polygon_crash.png", Rect(50, 50, 100, 100), 0.5);
     auto sprite1 = Sprite::create(pinfo1);
     addChild(sprite1);
     sprite1->setPosition(100, s.height / 2);
@@ -906,16 +859,16 @@ void Issue14017Test::initSprites()
 {
     auto s        = Director::getInstance()->getWinSize();
     auto offset   = Vec2(0.15 * s.width, 0);
-    auto filename = "Images/bug14017_filled.png";
-
-    filename = "Images/poly_test_textures.png";
-    filename = "Images/test_image.png";
-    filename = "Images/hole_effect.png";
-    filename = "Images/Pea.png";
-    filename = "Images/test_polygon.png";
+    auto filename = "Images/bug14017.png";
+    //filename = "Images/bug14017_filled.png";
+    //filename = "Images/poly_test_textures.png";
+    //filename = "Images/test_image.png";
+    //filename = "Images/hole_effect.png";
+    //filename = "Images/Pea.png";
+    //filename = "Images/test_polygon.png";
 
     // Sprite
-    auto pinfo     = AutoPolygon::generatePolygon(filename);
+    auto pinfo     = AutoPolygon::generatePolygon1(filename);
     _polygonSprite = Sprite::create(pinfo);
     _polygonSprite->setTag(101);
     addChild(_polygonSprite);

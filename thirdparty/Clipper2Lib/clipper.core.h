@@ -1,7 +1,7 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Version   :  Clipper2 - ver.1.0.0                                            *
-* Date      :  3 August 2022                                                   *
+* Version   :  Clipper2 - ver.1.0.3                                            *
+* Date      :  26 August 2022                                                  *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2022                                         *
 * Purpose   :  Core Clipper Library structures and functions                   *
@@ -23,18 +23,25 @@ namespace Clipper2Lib
 
 	static double const PI = 3.141592653589793238;
 
+	//By far the most widely used filling rules for polygons are EvenOdd
+	//and NonZero, sometimes called Alternate and Winding respectively.
+	//https://en.wikipedia.org/wiki/Nonzero-rule
+	enum class FillRule { EvenOdd, NonZero, Positive, Negative };
+	
 // Point ------------------------------------------------------------------------
 
 template <typename T>
 struct Point {
 	T x;
 	T y;
+#ifdef USINGZ
+	int64_t z;
+#endif
 
 	template <typename T2>
-	//inline 
-		void Init(const T2 x_ = 0, const T2 y_ = 0)
+	inline void Init(const T2 x_ = 0, const T2 y_ = 0)
 	{
-		if (std::numeric_limits<T>::is_integer &&
+		if constexpr (std::numeric_limits<T>::is_integer &&
 			!std::numeric_limits<T2>::is_integer)
 		{
 			x = static_cast<T>(std::round(x_));
@@ -44,19 +51,18 @@ struct Point {
 		{
 			x = static_cast<T>(x_);
 			y = static_cast<T>(y_);
-		}
+		}		
 	}
 
 #ifdef USINGZ
-	T z;
 
 	explicit Point() : x(0), y(0), z(0) {};
 
 	template <typename T2>
-	explicit Point(const T2 x_ = 0, const T2 y_ = 0)
+	explicit Point(const T2 x_= 0, const T2 y_ = 0, const int64_t z_ = 0)
 	{
 		Init(x_, y_);
-		z = 0;
+		z = z_;
 	}
 
 	template <typename T2>
@@ -65,6 +71,12 @@ struct Point {
 		Init(p.x, p.y);
 		z = 0;
 	}
+
+	Point operator * (const double scale) const
+	{
+		return Point(x * scale, y * scale, z);
+	}
+
 
 	friend std::ostream& operator<<(std::ostream& os, const Point& point)
 	{
@@ -82,6 +94,11 @@ struct Point {
 	template <typename T2>
 	explicit Point<T>(const Point<T2>& p) { Init(p.x, p.y); }
 
+	Point operator * (const double scale) const
+	{
+		return Point(x * scale, y * scale);
+	}
+
 	friend std::ostream& operator<<(std::ostream& os, const Point& point)
 	{
 		os << point.x << "," << point.y << " ";
@@ -98,11 +115,6 @@ struct Point {
 	friend bool operator!=(const Point& a, const Point& b)
 	{
 		return !(a == b);
-	}
-
-	Point operator * (const double scale) const
-	{
-		return Point(x * scale, y * scale);
 	}
 
 	inline Point<T> operator-() const
@@ -162,8 +174,13 @@ inline Path<T1> ScalePath(const Path<T2>& path, double scale)
 {
 	Path<T1> result;
 	result.reserve(path.size());
-	for (const Point<T2> pt : path)
-		result.push_back(Point<T1>(pt.x * scale, pt.y * scale));
+#ifdef USINGZ
+	for (const Point<T2>& pt : path)
+		result.emplace_back(Point<T1>(pt.x * scale, pt.y * scale, pt.z));
+#else
+	for (const Point<T2>& pt : path)
+		result.emplace_back(Point<T1>(pt.x * scale, pt.y * scale));
+#endif
 	return result;
 }
 
@@ -173,7 +190,7 @@ inline Paths<T1> ScalePaths(const Paths<T2>& paths, double scale)
 	Paths<T1> result;
 	result.reserve(paths.size());
 	for (const Path<T2>& path : paths)
-		result.push_back(ScalePath<T1, T2>(path, scale));
+		result.emplace_back(ScalePath<T1, T2>(path, scale));
 	return result;
 }
 
@@ -238,13 +255,13 @@ inline Path<T> StripNearEqual(const Path<T>& path,
 	result.reserve(path.size());
 	typename Path<T>::const_iterator path_iter = path.cbegin();
 	Point<T> first_pt = *path_iter++, last_pt = first_pt;
-	result.push_back(first_pt);
+	result.emplace_back(first_pt);
 	for (; path_iter != path.cend(); ++path_iter)
 	{
 		if (!NearEqual(*path_iter, last_pt, max_dist_sqrd))
 		{
 			last_pt = *path_iter;
-			result.push_back(last_pt);
+			result.emplace_back(last_pt);
 		}
 	}
 	if (!is_closed_path) return result;
@@ -262,7 +279,7 @@ inline Paths<T> StripNearEqual(const Paths<T>& paths,
 	for (typename Paths<T>::const_iterator paths_citer = paths.cbegin();
 		paths_citer != paths.cend(); ++paths_citer)
 	{
-		result.push_back(StripNearEqual(*paths_citer, max_dist_sqrd, is_closed_path));
+		result.emplace_back(StripNearEqual(*paths_citer, max_dist_sqrd, is_closed_path));
 	}
 	return result;
 }
@@ -275,13 +292,13 @@ inline Path<T> StripDuplicates(const Path<T>& path, bool is_closed_path)
 	result.reserve(path.size());
 	typename Path<T>::const_iterator path_iter = path.cbegin();
 	Point<T> first_pt = *path_iter++, last_pt = first_pt;
-	result.push_back(first_pt);
+	result.emplace_back(first_pt);
 	for (; path_iter != path.cend(); ++path_iter)
 	{
 		if (*path_iter != last_pt)
 		{
 			last_pt = *path_iter;
-			result.push_back(last_pt);
+			result.emplace_back(last_pt);
 		}
 	}
 	if (!is_closed_path) return result;
@@ -297,7 +314,7 @@ inline Paths<T> StripDuplicates(const Paths<T>& paths, bool is_closed_path)
 	for (typename Paths<T>::const_iterator paths_citer = paths.cbegin();
 		paths_citer != paths.cend(); ++paths_citer)
 	{
-		result.push_back(StripDuplicates(*paths_citer, is_closed_path));
+		result.emplace_back(StripDuplicates(*paths_citer, is_closed_path));
 	}
 	return result;
 }

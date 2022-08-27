@@ -1,7 +1,7 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Version   :  Clipper2 - ver.1.0.0                                            *
-* Date      :  10 August 2022                                                  *
+* Version   :  Clipper2 - ver.1.0.3                                            *
+* Date      :  26 August 2022                                                  *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2022                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -609,16 +609,16 @@ namespace Clipper2Lib {
 #ifdef USINGZ
 	void ClipperBase::SetZ(const Active& e1, const Active& e2, Point64& ip)
 	{
-		if (!zfill_func_) return;
-		//prioritize subject vertices over clip vertices
-		//and pass the subject vertices before clip vertices in the callback
+		if (!zCallback_) return;
+		// prioritize subject over clip vertices by passing 
+		// subject vertices before clip vertices in the callback
 		if (GetPolyType(e1) == PathType::Subject)
 		{
 			if (ip == e1.bot) ip.z = e1.bot.z;
 			else if (ip == e1.top) ip.z = e1.top.z;
 			else if (ip == e2.bot) ip.z = e2.bot.z;
 			else if (ip == e2.top) ip.z = e2.top.z;
-			zfill_func_(e1.bot, e1.top, e2.bot, e2.top, ip);
+			zCallback_(e1.bot, e1.top, e2.bot, e2.top, ip);
 		}
 		else
 		{
@@ -626,16 +626,15 @@ namespace Clipper2Lib {
 			else if (ip == e2.top) ip.z = e2.top.z;
 			else if (ip == e1.bot) ip.z = e1.bot.z;
 			else if (ip == e1.top) ip.z = e1.top.z;
-			zfill_func_(e2.bot, e2.top, e1.bot, e1.top, ip);
+			zCallback_(e2.bot, e2.top, e1.bot, e1.top, ip);
 		}
 	}
-
 #endif
 
 	void ClipperBase::AddPath(const Path64& path, PathType polytype, bool is_open)
 	{
 		Paths64 tmp;
-		tmp.push_back(path);
+		tmp.emplace_back(path);
 		AddPaths(tmp, polytype, is_open);
 	}
 
@@ -792,7 +791,7 @@ namespace Clipper2Lib {
 		if ((VertexFlags::LocalMin & vert.flags) != VertexFlags::None) return;
 
 		vert.flags = (vert.flags | VertexFlags::LocalMin);
-		minima_list_.push_back(new LocalMinima(&vert, polytype, is_open));
+		minima_list_.emplace_back(new LocalMinima(&vert, polytype, is_open));
 	}
 
 	bool ClipperBase::IsContributingClosed(const Active & e) const
@@ -1271,7 +1270,7 @@ namespace Clipper2Lib {
 	{
 		OutRec* outrec = new OutRec();
 		outrec->idx = (unsigned)outrec_list_.size();
-		outrec_list_.push_back(outrec);
+		outrec_list_.emplace_back(outrec);
 		outrec->pts = nullptr;
 		outrec->polypath = nullptr;
 		e1.outrec = outrec;
@@ -1516,8 +1515,8 @@ namespace Clipper2Lib {
 			splitOp->pt, splitOp->next->pt, nextNextOp->pt, ipD);
 		Point64 ip = Point64(ipD);
 #ifdef USINGZ
-		if (zfill_func_)
-			zfill_func_(prevOp->pt, splitOp->pt, splitOp->next->pt, nextNextOp->pt, ip);
+		if (zCallback_)
+			zCallback_(prevOp->pt, splitOp->pt, splitOp->next->pt, nextNextOp->pt, ip);
 #endif
 		double area1 = Area(outRecOp);
 		double area2 = AreaTriangle(ip, splitOp->pt, splitOp->next->pt);
@@ -1545,7 +1544,7 @@ namespace Clipper2Lib {
 		{
 			OutRec* newOutRec = new OutRec();
 			newOutRec->idx = outrec_list_.size();
-			outrec_list_.push_back(newOutRec);
+			outrec_list_.emplace_back(newOutRec);
 			newOutRec->owner = prevOp->outrec->owner;
 			newOutRec->polypath = nullptr;
 			splitOp->outrec = newOutRec;
@@ -1643,13 +1642,13 @@ namespace Clipper2Lib {
 		{
 			OutRec* newOr = new OutRec();
 			newOr->idx = outrec_list_.size();
-			outrec_list_.push_back(newOr);
+			outrec_list_.emplace_back(newOr);
 			newOr->polypath = nullptr;
 
 			if (using_polytree_)
 			{
 				if (!outrec.splits) outrec.splits = new OutRecList();
-				outrec.splits->push_back(newOr);
+				outrec.splits->emplace_back(newOr);
 			}
 
 			if (std::abs(area1) >= std::abs(area2))
@@ -1678,7 +1677,7 @@ namespace Clipper2Lib {
 	{
 		OutRec* outrec = new OutRec();
 		outrec->idx = outrec_list_.size();
-		outrec_list_.push_back(outrec);
+		outrec_list_.emplace_back(outrec);
 		outrec->owner = nullptr;
 		outrec->is_open = true;
 		outrec->pts = nullptr;
@@ -1783,7 +1782,7 @@ namespace Clipper2Lib {
 			{
 				OutPt* resultOp = AddOutPt(*edge_o, pt);
 #ifdef USINGZ
-				if (zfill_func_) SetZ(e1, e2, resultOp->pt);
+				if (zCallback_) SetZ(e1, e2, resultOp->pt);
 #endif
 				if (IsFront(*edge_o)) edge_o->outrec->front_edge = nullptr;
 				else edge_o->outrec->back_edge = nullptr;
@@ -1893,7 +1892,7 @@ namespace Clipper2Lib {
 			{
 				resultOp = AddLocalMaxPoly(e1, e2, pt);
 #ifdef USINGZ
-				if (zfill_func_ && resultOp) SetZ(e1, e2, resultOp->pt);
+				if (zCallback_ && resultOp) SetZ(e1, e2, resultOp->pt);
 #endif
 			}
 			else if (IsFront(e1) || (e1.outrec == e2.outrec))
@@ -1905,8 +1904,8 @@ namespace Clipper2Lib {
 				resultOp = AddLocalMaxPoly(e1, e2, pt);
 				OutPt* op2 = AddLocalMinPoly(e1, e2, pt);
 #ifdef USINGZ
-				if (zfill_func_ && resultOp) SetZ(e1, e2, resultOp->pt);
-				if (zfill_func_) SetZ(e1, e2, op2->pt);
+				if (zCallback_ && resultOp) SetZ(e1, e2, resultOp->pt);
+				if (zCallback_) SetZ(e1, e2, op2->pt);
 #endif
 				if (resultOp && resultOp->pt == op2->pt &&
 					!IsHorizontal(e1) && !IsHorizontal(e2) &&
@@ -1918,7 +1917,7 @@ namespace Clipper2Lib {
 				resultOp = AddOutPt(e1, pt);
 #ifdef USINGZ
 				OutPt* op2 = AddOutPt(e2, pt);
-				if (zfill_func_)
+				if (zCallback_)
 				{
 					SetZ(e1, e2, resultOp->pt);
 					SetZ(e1, e2, op2->pt);
@@ -1933,7 +1932,7 @@ namespace Clipper2Lib {
 		{
 			resultOp = AddOutPt(e1, pt);
 #ifdef USINGZ
-			if (zfill_func_) SetZ(e1, e2, resultOp->pt);
+			if (zCallback_) SetZ(e1, e2, resultOp->pt);
 #endif
 			SwapOutrecs(e1, e2);
 		}
@@ -1941,7 +1940,7 @@ namespace Clipper2Lib {
 		{
 			resultOp = AddOutPt(e2, pt);
 #ifdef USINGZ
-			if (zfill_func_) SetZ(e1, e2, resultOp->pt);
+			if (zCallback_) SetZ(e1, e2, resultOp->pt);
 #endif
 			SwapOutrecs(e1, e2);
 		}
@@ -1973,7 +1972,7 @@ namespace Clipper2Lib {
 			{
 				resultOp = AddLocalMinPoly(e1, e2, pt, false);
 #ifdef USINGZ
-				if (zfill_func_) SetZ(e1, e2, resultOp->pt);
+				if (zCallback_) SetZ(e1, e2, resultOp->pt);
 #endif
 			}
 			else if (old_e1_windcnt == 1 && old_e2_windcnt == 1)
@@ -2001,7 +2000,7 @@ namespace Clipper2Lib {
 					break;
 				}
 #ifdef USINGZ
-				if (resultOp && zfill_func_) SetZ(e1, e2, resultOp->pt);
+				if (resultOp && zCallback_) SetZ(e1, e2, resultOp->pt);
 #endif
 			}
 		}
@@ -2148,7 +2147,7 @@ namespace Clipper2Lib {
 				pt.x = e2.curr_x;
 		}
 
-		intersect_nodes_.push_back(IntersectNode(&e1, &e2, pt));
+		intersect_nodes_.emplace_back(IntersectNode(&e1, &e2, pt));
 	}
 
 
@@ -2930,7 +2929,7 @@ namespace Clipper2Lib {
 
 		Joiner* j = new Joiner(op1, op2, nullptr);
 		j->idx = static_cast<int>(joiner_list_.size());
-		joiner_list_.push_back(j);
+		joiner_list_.emplace_back(j);
 	}
 
 
@@ -3316,14 +3315,14 @@ namespace Clipper2Lib {
 			lastPt = op->pt;
 			op2 = op->next;
 		}
-		path.push_back(lastPt);
+		path.emplace_back(lastPt);
 
 		while (op2 != op)
 		{
 			if (op2->pt != lastPt)
 			{
 				lastPt = op2->pt;
-				path.push_back(lastPt);
+				path.emplace_back(lastPt);
 			}
 			if (reverse) 
 				op2 = op2->prev;
@@ -3435,7 +3434,6 @@ namespace Clipper2Lib {
 			if (!outrec->owner) return true; // true or false
 			is_inside_owner_bounds = outrec->owner->bounds.Contains(outrec->bounds);
 		}
-		return true; // true or false (the return value only matters inside recursion)
 	}
 
 
@@ -3453,7 +3451,7 @@ namespace Clipper2Lib {
 			{
 				Path64 path;
 				if (BuildPath(outrec->pts, ReverseSolution, true, path))
-					open_paths.push_back(path);
+					open_paths.emplace_back(path);
 				continue;
 			}
 
