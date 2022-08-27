@@ -211,7 +211,7 @@ target_link_libraries(thirdparty lz4)
 configure_target_outdir(lz4)
 
 if(AX_WITH_CLIPPER2)
-    add_subdirectory(Clipper2Lib)
+    add_subdirectory(clipper2)
     target_link_libraries(thirdparty clipper2)
     configure_target_outdir(clipper2)
 endif(AX_WITH_CLIPPER2)
