@@ -125,9 +125,6 @@ void SpritePolygonTestCase::updateDrawNode()
             const auto count   = polygoninfo.triangles.indexCount / 3;
             const auto indices = polygoninfo.triangles.indices;
             const auto verts   = polygoninfo.triangles.verts;
-        //    const auto vertices = polygoninfo._vertices;
-
-
 
             Vec2* vertices = new Vec2[polygoninfo._vertices.size()];
             for (ssize_t i = 0; i < count; i++)
@@ -146,17 +143,6 @@ void SpritePolygonTestCase::updateDrawNode()
                 to   = verts[indices[i * 3]].vertices;
                 drawnode->drawLine(Vec2(from.x, from.y), Vec2(to.x, to.y), Color4F::RED);
             }
-
-            //auto drawPolyFalse = DrawNode::create();
-            //drawPolyFalse->setPosition(Vec2(200, 100));
-            //addChild(drawPolyFalse, 0);
-
-            //for (size_t i = 0; i < count; i++)
-            //{
-            //    vertices[i] = {polygoninfo._vertices[i].x, polygoninfo._vertices[i].y};
-       
-            //}
-            //drawPolyFalse->drawPoly(vertices, count, false, Color4F::ORANGE);
         }
     }
 }
@@ -706,7 +692,6 @@ void SpritePolygonTestNoCrash::initSprites()
 {
     auto s      = Director::getInstance()->getWinSize();
     auto pinfo  = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
-    //auto pinfo  = AutoPolygon::generatePolygon("Images/sprite_polygon_crash.png", Rect(50,50,100,100), 0.5);
     auto sprite = Sprite::create(pinfo);
     addChild(sprite);
     sprite->setPosition(s.width / 2+100, s.height / 2);
@@ -717,19 +702,6 @@ void SpritePolygonTestNoCrash::initSprites()
     spDrawNode->clear();
     sprite->addChild(spDrawNode);
     _drawNodes.pushBack(spDrawNode);
-
-    auto pinfo1  = AutoPolygon::generatePolygon1("Images/sprite_polygon_crash.png", Rect::ZERO, 0.5);
-  //  auto pinfo1  = AutoPolygon::generatePolygon1("Images/sprite_polygon_crash.png", Rect(50, 50, 100, 100), 0.5);
-    auto sprite1 = Sprite::create(pinfo1);
-    addChild(sprite1);
-    sprite1->setPosition(100, s.height / 2);
-
-    // DrawNode
-    auto spDrawNode1 = DrawNode::create();
-    spDrawNode1->setTag(sprite1->getTag());
-    spDrawNode1->clear();
-    sprite1->addChild(spDrawNode1);
-    _drawNodes.pushBack(spDrawNode1);
 
     updateDrawNode();
 }

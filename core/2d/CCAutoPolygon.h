@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2022      @aismann; Peter Eismann, Germany; dreifrankensoft
 
 https://axys1.github.io/
 
@@ -119,21 +120,14 @@ public:
     void setRect(const Rect& rect) { _rect = rect; }
     std::string_view getFilename() const { return _filename; }
     void setFilename(std::string_view filename) { _filename = filename; }
-    void setVertices(const std::vector<ax::Vec2> vertices)
-    { 
-         AXLOG("====setVertices: %i ", vertices.size());
-        _vertices = vertices; 
-    }
 
     // FIXME: this should be a property, not a public ivar
     TrianglesCommand::Triangles triangles;
-    std::vector<ax::Vec2> _vertices;
 
 protected:
     bool _isVertsOwner;
     Rect _rect;
     std::string _filename;
-
 
 private:
     void releaseVertsAndIndices();
@@ -202,10 +196,6 @@ public:
      * std::vector<Vec2> expanded = ap.expand(inputPoints, rect, 2.0);
      * @endcode
      */
-
-    //  Clipper1 still available for crosscheck
-    std::vector<Vec2> expand1(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
-    // Clipper2 the new default 
     std::vector<Vec2> expand(const std::vector<Vec2>& points, const Rect& rect, float epsilon);
 
     /**
@@ -249,11 +239,6 @@ public:
      * PolygonInfo with different settings auto sp2 = Sprite::create(myInfo2);
      * @endcode
      */
-
-    
-    //  Clipper1 still available for crosscheck
-    PolygonInfo generateTriangles1(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
-    // Clipper2 the new default 
     PolygonInfo generateTriangles(const Rect& rect = Rect::ZERO, float epsilon = 2.0f, float threshold = 0.05f);
 
     /**
@@ -270,18 +255,7 @@ public:
      * auto sp = Sprite::create(AutoPolygon::generatePolygon("grossini.png"));
      * @endcode
      */
-
-    //  Clipper1 still available for crosscheck
-    static PolygonInfo generatePolygon1(std::string_view filename,
-                                       const Rect& rect = Rect::ZERO,
-                                       float epsilon    = 2.0f,
-                                       float threshold  = 0.05f);
-
-    // Clipper2 the new default 
-    static PolygonInfo generatePolygon(std::string_view filename,
-                                       const Rect& rect = Rect::ZERO,
-                                       float epsilon    = 2.0f,
-                                       float threshold  = 0.05f);
+    static PolygonInfo generatePolygon(std::string_view filename, const Rect& rect = Rect::ZERO, float epsilon = 2.0f,  float threshold = 0.05f);
 
 protected:
     Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);

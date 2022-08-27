@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2022      @aismann; Peter Eismann, Germany; dreifrankensoft
 
 https://axys1.github.io/
 
@@ -509,73 +510,6 @@ std::vector<Vec2> AutoPolygon::reduce(const std::vector<Vec2>& points, const Rec
     return result;
 }
 
-std::vector<Vec2> AutoPolygon::expand1(const std::vector<Vec2>& points, const ax::Rect& rect, float epsilon)
-{
-    auto size = points.size();
-    // if there are less than 3 points, then we have nothing
-    if (size < 3)
-    {
-        log("AUTOPOLYGON: cannot expand points for %s with less than 3 points, e: %f", _filename.c_str(), epsilon);
-        return std::vector<Vec2>();
-    }
-    ClipperLib::Path subj;
-    ClipperLib::PolyTree solution;
-    ClipperLib::PolyTree out;
-    for (const auto& pt : points)
-    {
-        subj << ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(pt.x * PRECISION),
-                                     static_cast<ClipperLib::cInt>(pt.y * PRECISION));
-    }
-
-    ClipperLib::ClipperOffset co;
-    co.AddPath(subj, ClipperLib::jtMiter, ClipperLib::etClosedPolygon);
-    co.Execute(solution, epsilon * PRECISION);
-
-    ClipperLib::PolyNode* p = solution.GetFirst();
-    if (!p)
-    {
-        log("AUTOPOLYGON: Clipper failed to expand the points");
-        return points;
-    }
-    while (p->IsHole())
-    {
-        AXLOG("Clipper1 detect a hole!");
-        p = p->GetNext();
-    }
-
-    // turn the result into simply polygon (AKA, fix overlap)
-    // clamp into the specified rect
-    ClipperLib::Clipper cl;
-    cl.StrictlySimple(true);
-    cl.AddPath(p->Contour, ClipperLib::ptSubject, true);
-    // create the clipping rect
-    ClipperLib::Path clamp;
-    clamp.emplace_back(ClipperLib::IntPoint(0, 0));
-    clamp.emplace_back(
-        ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION), 0));
-    clamp.emplace_back(
-        ClipperLib::IntPoint(static_cast<ClipperLib::cInt>(rect.size.width / _scaleFactor * PRECISION),
-                             static_cast<ClipperLib::cInt>(rect.size.height / _scaleFactor * PRECISION)));
-    clamp.emplace_back(
-        ClipperLib::IntPoint(0, static_cast<ClipperLib::cInt>(rect.size.height / _scaleFactor * PRECISION)));
-    cl.AddPath(clamp, ClipperLib::ptClip, true);
-    cl.Execute(ClipperLib::ctIntersection, out);
-
-    std::vector<Vec2> outPoints;
-    ClipperLib::PolyNode* p2 = out.GetFirst();
-    while (p2->IsHole())
-    {
-        AXLOG("Clipper1 detect a hole!");
-        p2 = p2->GetNext();
-    }
-    for (const auto& pt : p2->Contour)
-    {
-        outPoints.emplace_back(Vec2(pt.X / PRECISION, pt.Y / PRECISION));
-    }
-
-    return outPoints;
-}
-
 std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax::Rect& rect, float epsilon)
 {
     // if there are less than 3 points, then we have nothing
@@ -595,9 +529,8 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
 
     if (!Clipper2Lib::IsPositive(result))
     {
-        AXLOG("#################  Clipper2 detect a hole!");
         log("AUTOPOLYGON: cannot expand points for %s detect a hole!, e: %f", _filename.c_str(), epsilon);
-       // return std::vector<Vec2>();
+        return std::vector<Vec2>();
     }
 
     Clipper2Lib::ClipperOffset co;
@@ -612,7 +545,6 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     Clipper2Lib::Paths64 clamps;
     Clipper2Lib::PolyTree64 out;
 
-  //  cl.StrictlySimple(true);
     cl.AddSubject(solution);
 
     // create the clipping rect
@@ -776,33 +708,12 @@ Rect AutoPolygon::getRealRect(const Rect& rect)
     return realRect;
 }
 
-PolygonInfo AutoPolygon::generateTriangles1(const Rect& rect, float epsilon, float threshold)
-{
-    Rect realRect = getRealRect(rect);
-    auto p        = trace(realRect, threshold);
-    AXLOG("trace  p.size: %i", p.size());
-    p = reduce(p, realRect, epsilon);
-    AXLOG("reduce  p.size: %i", p.size());
-    p = expand1(p, realRect, epsilon);
-    AXLOG("expand1  p.size: %i", p.size());
-    auto tri      = triangulate(p);
-    calculateUV(realRect, tri.verts, tri.vertCount);
-    PolygonInfo ret;
-    ret.triangles = tri;
-    ret.setFilename(_filename);
-    ret.setRect(realRect);
-    return ret;
-}
-
 PolygonInfo AutoPolygon::generateTriangles(const Rect& rect, float epsilon, float threshold)
 {
     Rect realRect = getRealRect(rect);
     auto p        = trace(realRect, threshold);
-    AXLOG("trace  p.size: %i", p.size());
     p             = reduce(p, realRect, epsilon);
-    AXLOG("reduce  p.size: %i", p.size());
     p             = expand(p, realRect, epsilon);
-    AXLOG("expand  p.size: %i", p.size());
     auto tri      = triangulate(p);
     calculateUV(realRect, tri.verts, tri.vertCount);
     PolygonInfo ret;
@@ -813,23 +724,8 @@ PolygonInfo AutoPolygon::generateTriangles(const Rect& rect, float epsilon, floa
     return ret;
 }
 
-PolygonInfo AutoPolygon::generatePolygon1(std::string_view filename, const Rect& rect, float epsilon, float threshold)
-{
-    clock_t start = clock();
-    AXLOG("----START CLIPPER1------------------");
-    AutoPolygon ap(filename);
-    PolygonInfo polyInfo = ap.generateTriangles1(rect, epsilon, threshold);
-    AXLOG("----END Duration: %i", clock() - start);
-    return polyInfo;
-}
-
 PolygonInfo AutoPolygon::generatePolygon(std::string_view filename, const Rect& rect, float epsilon, float threshold)
 {
-    generatePolygon1( filename, rect,  epsilon,  threshold);
-    clock_t start = clock();
-    AXLOG("----START CLIPPER2------------------");
     AutoPolygon ap(filename);
-    PolygonInfo polyInfo = ap.generateTriangles(rect, epsilon, threshold);
-    AXLOG("----END Duration: %i", clock() - start);
-    return polyInfo;
+    return ap.generateTriangles(rect, epsilon, threshold);
 }
