@@ -862,7 +862,7 @@ int register_physics3d_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
-        register_all_axys_physics3d(L);
+        register_all_ax_physics3d(L);
         register_all_physics3d_manual(L);
     }
     lua_pop(L, 1);

@@ -30,7 +30,7 @@
 # build axlua if AX_ENABLE_EXT_LUA=ON
 
 # The version number
-set(AXYS_VERSION 1.0)
+set(_AX_VERSION 1.0)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axys CACHE INTERNAL "The axys core lib name" )
@@ -48,7 +48,7 @@ if (NOT DEFINED AX_ENABLE_MFMEDIA)
     set(AX_ENABLE_MFMEDIA TRUE CACHE INTERNAL "Enabling microsoft media foundation for windows video player" )
 endif()
 
-project(axys_libs)
+project(ax_libs)
 
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
@@ -115,7 +115,7 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
 # use thirdparty libs
-add_subdirectory(${AXYS_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
+add_subdirectory(${_AX_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${_AX_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
@@ -126,17 +126,17 @@ use_ax_compile_options(${_AX_CORE_LIB})
 use_ax_depend(${_AX_CORE_LIB})
 
 target_include_directories(${_AX_CORE_LIB}
-    PUBLIC ${AXYS_ROOT_PATH}
-    PUBLIC ${AXYS_ROOT_PATH}/thirdparty
-    PUBLIC ${AXYS_ROOT_PATH}/extensions
-    PUBLIC ${AXYS_ROOT_PATH}/core
-    PUBLIC ${AXYS_ROOT_PATH}/core/platform
+    PUBLIC ${_AX_ROOT_PATH}
+    PUBLIC ${_AX_ROOT_PATH}/thirdparty
+    PUBLIC ${_AX_ROOT_PATH}/extensions
+    PUBLIC ${_AX_ROOT_PATH}/core
+    PUBLIC ${_AX_ROOT_PATH}/core/platform
 
-    INTERFACE ${AXYS_ROOT_PATH}/thirdparty
-    INTERFACE ${AXYS_ROOT_PATH}/extensions
-    INTERFACE ${AXYS_ROOT_PATH}/core/base
-    INTERFACE ${AXYS_ROOT_PATH}/core/audio
-    INTERFACE ${AXYS_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
+    INTERFACE ${_AX_ROOT_PATH}/thirdparty
+    INTERFACE ${_AX_ROOT_PATH}/extensions
+    INTERFACE ${_AX_ROOT_PATH}/core/base
+    INTERFACE ${_AX_ROOT_PATH}/core/audio
+    INTERFACE ${_AX_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
 )
 
 set_target_properties(${_AX_CORE_LIB}
@@ -144,13 +144,13 @@ set_target_properties(${_AX_CORE_LIB}
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-                      VERSION "${AXYS_VERSION}"
+                      VERSION "${_AX_VERSION}"
                       FOLDER "Internal"
                       )
 
 ## Lua bindings lib
 # if(AX_ENABLE_EXT_LUA)
-#     add_subdirectory(${AXYS_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
+#     add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
 # endif()
 
 if(XCODE OR VS)
@@ -169,7 +169,7 @@ if(WINDOWS)
     
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
-            PATHS ${AXYS_ROOT_PATH}/tools/external/nuget)
+            PATHS ${_AX_ROOT_PATH}/tools/external/nuget)
             
         if(NOT NUGET_EXE)
             message("NUGET.EXE not found.")
@@ -190,7 +190,7 @@ if(WINDOWS)
 endif()
 
 # engine extensions
-add_subdirectory(${AXYS_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
+add_subdirectory(${_AX_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
     target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)

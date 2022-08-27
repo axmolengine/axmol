@@ -32,4 +32,4 @@ extern "C" {
 }
 #endif
 
-TOLUA_API int register_all_axys_webview_manual(lua_State* L);
+TOLUA_API int register_all_ax_webview_manual(lua_State* L);

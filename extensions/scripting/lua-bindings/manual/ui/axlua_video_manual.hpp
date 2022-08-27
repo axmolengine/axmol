@@ -26,4 +26,4 @@
 
 #include "tolua++.h"
 
-TOLUA_API int register_all_axys_video_manual(lua_State* L);
+TOLUA_API int register_all_ax_video_manual(lua_State* L);

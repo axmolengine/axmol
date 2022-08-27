@@ -32,7 +32,7 @@
 NS_AX_BEGIN
 class BillBoard;
 class Camera;
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 class BillBoardRotationTest : public TestCase
 {

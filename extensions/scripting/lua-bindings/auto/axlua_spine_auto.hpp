@@ -1,10 +1,10 @@
 #include "base/ccConfig.h"
-#ifndef __axys_spine_h__
-#define __axys_spine_h__
+#ifndef __ax_spine_h__
+#define __ax_spine_h__
 
 #include "tolua++.h"
 
-int register_all_axys_spine(lua_State* tolua_S);
+int register_all_ax_spine(lua_State* tolua_S);
 
 
 
@@ -63,4 +63,4 @@ int register_all_axys_spine(lua_State* tolua_S);
 
 
 
-#endif // __axys_spine_h__
+#endif // __ax_spine_h__

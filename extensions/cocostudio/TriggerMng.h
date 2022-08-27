@@ -29,7 +29,7 @@ THE SOFTWARE.
 NS_AX_BEGIN
 class EventDispatcher;
 class EventListener;
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 namespace cocostudio
 {

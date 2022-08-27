@@ -358,3 +358,25 @@ THE SOFTWARE.
 #ifndef AX_META_TEXTURES
 #    define AX_META_TEXTURES 2
 #endif
+
+/// @name namespace ax
+/// @{
+#ifdef __cplusplus
+#    define NS_AX_BEGIN   \
+        namespace ax \
+        {
+#    define NS_AX_END }
+#    define USING_NS_AX using namespace ax
+#    define NS_AX ::ax
+#else
+#    define NS_AX_BEGIN
+#    define NS_AX_END
+#    define USING_NS_AX
+#    define NS_AX
+#endif
+
+namespace ax {}
+namespace axis = ax; // DEPRECATED
+namespace axys = ax; // DEPRECATED
+//  end of namespace group
+/// @}

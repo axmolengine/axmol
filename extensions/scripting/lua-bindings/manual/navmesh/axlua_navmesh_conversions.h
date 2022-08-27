@@ -22,8 +22,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef __SCRIPTING_LUA_BINDING_MANUAL_NAVMESH_LUA_AXYS_NAVMESH_CONVERSIONS_H__
-#define __SCRIPTING_LUA_BINDING_MANUAL_NAVMESH_LUA_AXYS_NAVMESH_CONVERSIONS_H__
+#ifndef __SCRIPTING_AXLUA_NAVMESH_CONVERSIONS_H__
+#define __SCRIPTING_AXLUA_NAVMESH_CONVERSIONS_H__
 
 #if AX_USE_NAVMESH
 
@@ -33,7 +33,7 @@
 NS_AX_BEGIN
 struct NavMeshAgentParam;
 struct OffMeshLinkData;
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 extern bool luaval_to_navmeshagentparam(lua_State* L,
                                         int lo,

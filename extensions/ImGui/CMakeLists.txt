@@ -36,8 +36,8 @@ set(SOURCE
 #~ if(AX_ENABLE_EXT_LUA)
 #~     include_directories(
 #~         lua-bindings
-#~         ${AXYS_ROOT_PATH}/thirdparty/lua/luajit/include
-#~         ${AXYS_ROOT_PATH}/thirdparty/lua/tolua
+#~         ${_AX_ROOT_PATH}/thirdparty/lua/luajit/include
+#~         ${_AX_ROOT_PATH}/thirdparty/lua/tolua
 #~     )
 #~     list(APPEND HEADER
 #~         lua-bindings/imgui_lua.hpp

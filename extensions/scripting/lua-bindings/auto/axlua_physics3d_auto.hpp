@@ -1,11 +1,11 @@
 #include "base/ccConfig.h"
 #if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
-#ifndef __axys_physics3d_h__
-#define __axys_physics3d_h__
+#ifndef __ax_physics3d_h__
+#define __ax_physics3d_h__
 
 #include "tolua++.h"
 
-int register_all_axys_physics3d(lua_State* tolua_S);
+int register_all_ax_physics3d(lua_State* tolua_S);
 
 
 
@@ -259,5 +259,5 @@ int register_all_axys_physics3d(lua_State* tolua_S);
 
 
 
-#endif // __axys_physics3d_h__
+#endif // __ax_physics3d_h__
 #endif //#if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION

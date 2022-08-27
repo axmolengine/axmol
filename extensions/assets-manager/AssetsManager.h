@@ -43,7 +43,7 @@ namespace network
 class Downloader;
 }
 
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 NS_AX_EXT_BEGIN
 

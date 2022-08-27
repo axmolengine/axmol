@@ -22,8 +22,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#ifndef SCRIPTING_LUA_BINDINGS_LUA_AXYS_SPINE_MANUAL_H
-#define SCRIPTING_LUA_BINDINGS_LUA_AXYS_SPINE_MANUAL_H
+#ifndef SCRIPTING_AXLUA_SPINE_MANUAL_H
+#define SCRIPTING_AXLUA_SPINE_MANUAL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 /// @cond
-TOLUA_API int register_all_axys_spine_manual(lua_State* L);
+TOLUA_API int register_all_ax_spine_manual(lua_State* L);
 /// @endcond
 
 /**

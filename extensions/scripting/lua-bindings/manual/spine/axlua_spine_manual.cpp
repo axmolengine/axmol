@@ -485,7 +485,7 @@ static void extendCCSkeletonAnimation(lua_State* L)
     g_typeCast[typeName]                             = "sp.SkeletonAnimation";
 }
 
-int register_all_axys_spine_manual(lua_State* L)
+int register_all_ax_spine_manual(lua_State* L)
 {
     if (nullptr == L)
         return 0;
@@ -500,8 +500,8 @@ int register_spine_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
-        register_all_axys_spine(L);
-        register_all_axys_spine_manual(L);
+        register_all_ax_spine(L);
+        register_all_ax_spine_manual(L);
     }
     lua_pop(L, 1);
 

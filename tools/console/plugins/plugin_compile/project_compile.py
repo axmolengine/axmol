@@ -15,7 +15,7 @@ __docformat__ = 'restructuredtext'
 import multiprocessing
 import axys
 from MultiLanguage import MultiLanguage
-import axys_project
+import ax_project
 import os
 import re
 import sys
@@ -433,7 +433,7 @@ class CCPluginCompile(axys.CCPlugin):
 
     def get_engine_version_num(self):
         # 1. get engine version from .axproj.json
-        engine_ver_str = self._project.get_proj_config(axys_project.Project.KEY_ENGINE_VERSION)
+        engine_ver_str = self._project.get_proj_config(ax_project.Project.KEY_ENGINE_VERSION)
 
         # 2. engine version is not found. find from source file
         if engine_ver_str is None:
@@ -512,7 +512,7 @@ class CCPluginCompile(axys.CCPlugin):
                     toolchain_param = "NDK_TOOLCHAIN=%s" % self.ndk_toolchain
                     ndk_build_param.append(toolchain_param)
 
-                self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_PRE_NDK_BUILD, target_platform, args_ndk_copy)
+                self._project.invoke_custom_step_script(ax_project.Project.CUSTOM_STEP_PRE_NDK_BUILD, target_platform, args_ndk_copy)
 
                 modify_mk = False
                 app_mk = os.path.join(project_android_dir, "app/jni/Application.mk")
@@ -545,7 +545,7 @@ class CCPluginCompile(axys.CCPlugin):
                         f.write(mk_content)
                         f.close()
 
-                self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_POST_NDK_BUILD, target_platform, args_ndk_copy)
+                self._project.invoke_custom_step_script(ax_project.Project.CUSTOM_STEP_POST_NDK_BUILD, target_platform, args_ndk_copy)
 
         # build apk
         if not self._no_apk:
@@ -1011,13 +1011,13 @@ class CCPluginCompile(axys.CCPlugin):
         axys.DataStatistic.stat_event('compile', action_str, target_str)
 
         # invoke the custom step: pre-build
-        self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_PRE_BUILD, target_platform, args_build_copy)
+        self._project.invoke_custom_step_script(ax_project.Project.CUSTOM_STEP_PRE_BUILD, target_platform, args_build_copy)
 
         self.build_web()
         self.build(target_platform)
 
         # invoke the custom step: post-build
-        self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_POST_BUILD, target_platform, args_build_copy)
+        self._project.invoke_custom_step_script(ax_project.Project.CUSTOM_STEP_POST_BUILD, target_platform, args_build_copy)
 
         if len(self.end_warning) > 0:
             axys.Logging.warning(self.end_warning)
