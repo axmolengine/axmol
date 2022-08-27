@@ -34,7 +34,6 @@ THE SOFTWARE.
 #include "Clipper2Lib/clipper.h"
 #include <algorithm>
 #include <math.h>
-#include <time.h>
 
 USING_NS_AX;
 
