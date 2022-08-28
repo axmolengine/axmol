@@ -35,9 +35,9 @@
 - Version: git 7.0.3-0cb05e7 {until Dec 16, 2021}
 - License: MIT
 
-## Clipper
-- Upstream: https://sourceforge.net/projects/polyclipping/files/
-- Version: 6.4.2
+## Clipper2
+- Upstream: https://github.com/AngusJohnson/Clipper2
+- Version: 1.0.3
 - License: BSL-1.0
 
 ## ConvertUTF

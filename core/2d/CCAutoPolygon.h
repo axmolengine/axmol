@@ -4,6 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2022      @aismann; Peter Eismann, Germany; dreifrankensoft
 
 https://axys1.github.io/
 
@@ -254,10 +255,10 @@ public:
      * auto sp = Sprite::create(AutoPolygon::generatePolygon("grossini.png"));
      * @endcode
      */
-    static PolygonInfo generatePolygon(std::string_view filename,
-                                       const Rect& rect = Rect::ZERO,
-                                       float epsilon    = 2.0f,
-                                       float threshold  = 0.05f);
+    static PolygonInfo generatePolygon(std::string_view filename, 
+                                       const Rect& rect = Rect::ZERO, 
+                                       float epsilon = 2.0f,  
+                                       float threshold = 0.05f);
 
 protected:
     Vec2 findFirstNoneTransparentPixel(const Rect& rect, float threshold);
