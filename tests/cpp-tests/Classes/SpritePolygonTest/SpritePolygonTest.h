@@ -51,6 +51,7 @@ class SpritePolygonTestDemo : public SpritePolygonTestCase
 {
 protected:
     axis::Sprite* _polygonSprite;
+    axis::Sprite* _polygonSprite_fix;
     axis::Sprite* _normalSprite;
     virtual bool init() override;
     virtual void initSprites(){};
@@ -220,6 +221,44 @@ public:
     CREATE_FUNC(Issue14017Test);
     Issue14017Test();
     virtual void initSprites() override;
+};
+
+class SpritePolygonTestPerformance : public SpritePolygonTestDemo
+{
+public:
+    CREATE_FUNC(SpritePolygonTestPerformance);
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    virtual void update(float dt) override;
+
+protected:
+    SpritePolygonTestPerformance();
+
+    void createSprite();
+
+    virtual ~SpritePolygonTestPerformance();
+    class Ticker
+    {
+    public:
+        Ticker(int m) : _max(m) {}
+        void hit() { _cnt += 1; }
+        void cancel() { _cnt = 0; }
+        bool ok() { return _cnt >= _max; }
+
+    private:
+        int _cnt = 0;
+        int _max = 0;
+    };
+    Node* _spritesAnchor       = nullptr;
+    int _spriteIndex           = 0;
+    float _maDt                = 1.0f / 60.0f;
+    float _rmaDt               = 1.0f / 60.0f;
+    const float DEST_DT_30FPS  = 1.0f / 30.0f;
+    axis::Label* _totalSprites = nullptr;
+    Ticker _contSlow           = Ticker(20);
+    Ticker _contFast           = Ticker(2);
+    Ticker _around30fps        = Ticker(60 * 3);
 };
 
 #endif /* defined(__cocos2d_tests__SpritePolygonTest__) */
