@@ -912,30 +912,16 @@ SpritePolygonTestPerformance::SpritePolygonTestPerformance()
 
 void SpritePolygonTestPerformance::createSprite()
 {
-    static bool ttt     = true;
+    static PolygonInfo pinfo;
     Size s         = Director::getInstance()->getWinSize();
-    Sprite* sprite = nullptr;
-    auto filename  = "Images/grossini_dance_01.png";
-    //if (_spriteIndex % 2 == 0)
-    //{
-    //    filename = "Images/grossini_dance_01.png";
-    //}
 
-    // Sprite
-    if (!_isDebugDraw)
+    if (pinfo.getFilename() == "")
     {
-        auto pinfo = AutoPolygon::generatePolygon(filename);
-        sprite     = Sprite::create(pinfo);
-#if defined(_AX_DEBUG) && _AX_DEBUG == 1
-        this->subtitle().assign("DEBUG: simulate lots of AutoPolygon, drop to 30 fps");
-#else
-         this->subtitle().assign("RELEASE: simulate lots of AutoPolygon, drop to 30 fps");
-#endif
+        pinfo = AutoPolygon::generatePolygon("Images/grossini_dance_01.png");
     }
-    else
-    {
-        sprite = Sprite::create(filename);
-    }
+
+    // AutoPolygonSprite
+    auto sprite = Sprite::create(pinfo);
 
     float x = ((float)std::rand()) / RAND_MAX;
     float y = ((float)std::rand()) / RAND_MAX;
@@ -945,7 +931,7 @@ void SpritePolygonTestPerformance::createSprite()
 
     _spriteIndex++;
     std::stringstream ss;
-    ss << _spriteIndex << " sprites";
+    ss << _spriteIndex << " AutoPolygonSprite";
     _totalSprites->setString(ss.str());
 }
 
@@ -1004,8 +990,8 @@ std::string SpritePolygonTestPerformance::title() const
 std::string SpritePolygonTestPerformance::subtitle() const
 {
 #if defined(_AX_DEBUG) && _AX_DEBUG == 1
-    return "DEBUG: simulate lots of sprites, drop to 30 fps";
+    return "DEBUG: simulate lots of AutoPolygonSprites, drop to 30 fps";
 #else
-    return "RELEASE: simulate lots of sprites, drop to 30 fps";
+    return "RELEASE: simulate lots of AutoPolygonSprites, drop to 30 fps";
 #endif
 }
