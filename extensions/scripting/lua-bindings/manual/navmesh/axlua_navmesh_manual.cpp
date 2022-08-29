@@ -140,7 +140,7 @@ int register_navmesh_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
-        register_all_axys_navmesh(L);
+        register_all_ax_navmesh(L);
         register_all_navmesh_manual(L);
     }
     lua_pop(L, 1);

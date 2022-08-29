@@ -32,7 +32,7 @@ namespace backend
 {
 class ProgramState;
 }
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 DEFINE_TEST_SUITE(ClippingNodeTests);
 

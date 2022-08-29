@@ -30,7 +30,7 @@
 #include "yasio/detail/byte_buffer.hpp"
 
 USING_NS_AX;
-using namespace axys::network;
+using namespace ax::network;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    if defined(__arm64__)
@@ -1432,7 +1432,7 @@ namespace UnitTest
 }  // namespace UnitTest
 
 // I know the next line looks ugly, but it's a way to test MathUtil. :)
-using namespace UnitTest::axys;
+using namespace UnitTest::ax;
 
 static void __checkMathUtilResult(const char* description, const float* a1, const float* a2, int size)
 {

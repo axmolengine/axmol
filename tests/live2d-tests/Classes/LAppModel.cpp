@@ -29,11 +29,11 @@ using namespace Csm;
 using namespace Csm::Constant;
 using namespace Csm::DefaultParameterId;
 using namespace LAppDefine;
-using namespace axys::backend;
+using namespace ax::backend;
 
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
-using namespace axys::experimental;
+using namespace ax::experimental;
 #elif USE_SIMPLE_AUDIO_ENGINE
 #include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;

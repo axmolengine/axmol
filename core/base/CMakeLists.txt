@@ -125,7 +125,7 @@ set(_AX_BASE_SRC
     base/atitc.cpp
     base/base64.cpp
     base/ccCArray.cpp
-    base/ccFPSImages.c
+    base/ccFPSImages.cpp
     base/ccRandom.cpp
     base/ccTypes.cpp
     base/ccUTF8.cpp
