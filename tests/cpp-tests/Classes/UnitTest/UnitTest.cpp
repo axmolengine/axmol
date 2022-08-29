@@ -1432,7 +1432,7 @@ namespace UnitTest
 }  // namespace UnitTest
 
 // I know the next line looks ugly, but it's a way to test MathUtil. :)
-using namespace UnitTest::axys;
+using namespace UnitTest::ax;
 
 static void __checkMathUtilResult(const char* description, const float* a1, const float* a2, int size)
 {
