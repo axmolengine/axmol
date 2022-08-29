@@ -9,7 +9,7 @@ import shutil
 from optparse import OptionParser
 import axys
 from MultiLanguage import MultiLanguage
-import ax_project
+import axys_project
 import json
 import re
 from xml.dom import minidom
@@ -639,7 +639,7 @@ class AndroidBuilder(object):
             shutil.rmtree(assets_dir)
 
         # generate parameters for custom steps
-        target_platform = ax_project.Platforms.ANDROID
+        target_platform = axys_project.Platforms.ANDROID
         cur_custom_step_args = custom_step_args.copy()
         cur_custom_step_args["assets-dir"] = assets_dir
 
@@ -647,14 +647,14 @@ class AndroidBuilder(object):
         os.mkdir(assets_dir)
  
         # invoke custom step : pre copy assets
-        self._project.invoke_custom_step_script(ax_project.Project.CUSTOM_STEP_PRE_COPY_ASSETS, target_platform, cur_custom_step_args)
+        self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_PRE_COPY_ASSETS, target_platform, cur_custom_step_args)
 
         # copy resources
         for cfg in res_files:
             axys.copy_files_with_config(cfg, app_android_root, assets_dir)
 
         # invoke custom step : post copy assets
-        self._project.invoke_custom_step_script(ax_project.Project.CUSTOM_STEP_POST_COPY_ASSETS, target_platform, cur_custom_step_args)
+        self._project.invoke_custom_step_script(axys_project.Project.CUSTOM_STEP_POST_COPY_ASSETS, target_platform, cur_custom_step_args)
 
     def get_apk_info(self):
         manifest_path = os.path.join(self.app_android_root, 'app')

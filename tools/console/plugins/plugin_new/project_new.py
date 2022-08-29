@@ -17,7 +17,7 @@ import sys
 import json
 import shutil
 import axys
-import ax_project
+import axys_project
 import re
 import utils
 from collections import OrderedDict
@@ -29,9 +29,9 @@ from MultiLanguage import MultiLanguage
 class CCPluginNew(axys.CCPlugin):
 
     DEFAULT_PROJ_NAME = {
-        ax_project.Project.CPP: 'MyCppGame',
-        ax_project.Project.LUA: 'MyLuaGame',
-        ax_project.Project.JS: 'MyJSGame'
+        axys_project.Project.CPP: 'MyCppGame',
+        axys_project.Project.LUA: 'MyLuaGame',
+        axys_project.Project.JS: 'MyJSGame'
     }
 
     @staticmethod
@@ -223,7 +223,7 @@ class CCPluginNew(axys.CCPlugin):
         creator.do_default_step()
 
         data = None
-        cfg_path = os.path.join(self._projdir, ax_project.Project.CONFIG)
+        cfg_path = os.path.join(self._projdir, axys_project.Project.CONFIG)
         if os.path.isfile(cfg_path):
             f = open(cfg_path)
             data = json.load(f)
@@ -232,26 +232,26 @@ class CCPluginNew(axys.CCPlugin):
         if data is None:
             data = {}
 
-        if ax_project.Project.KEY_PROJ_TYPE not in data:
-            data[ax_project.Project.KEY_PROJ_TYPE] = self._lang
+        if axys_project.Project.KEY_PROJ_TYPE not in data:
+            data[axys_project.Project.KEY_PROJ_TYPE] = self._lang
 
         # script project may add native support
-        if self._lang in (ax_project.Project.LUA, ax_project.Project.JS):
+        if self._lang in (axys_project.Project.LUA, axys_project.Project.JS):
             # REMOVE the option --no-native. Because it's added for Cocos Code IDE.
             # It will cause confusion: https://github.com/cocos2d/cocos2d-console/issues/401
             # if self._other_opts.no_native is not self._other_opts.no_native:
             #     creator.do_other_step('do_add_native_support')
-            #     data[ax_project.Project.KEY_HAS_NATIVE] = True
+            #     data[axys_project.Project.KEY_HAS_NATIVE] = True
             # else:
-            #     data[ax_project.Project.KEY_HAS_NATIVE] = False
+            #     data[axys_project.Project.KEY_HAS_NATIVE] = False
             creator.do_other_step('do_add_native_support')
-            data[ax_project.Project.KEY_HAS_NATIVE] = True
+            data[axys_project.Project.KEY_HAS_NATIVE] = True
 
         # record the engine version if not predefined
-        if not (ax_project.Project.KEY_ENGINE_VERSION in data):
+        if not (axys_project.Project.KEY_ENGINE_VERSION in data):
             engine_version = utils.get_engine_version(self._cocosroot)
             if engine_version is not None:
-                data[ax_project.Project.KEY_ENGINE_VERSION] = engine_version
+                data[axys_project.Project.KEY_ENGINE_VERSION] = engine_version
 
         # if --portrait is specified, change the orientation
         if self._other_opts.portrait:
