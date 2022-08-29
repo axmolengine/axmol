@@ -370,7 +370,7 @@ static void extendController(lua_State* L)
     lua_pop(L, 1);
 }
 
-int register_all_axys_controller_manual(lua_State* L)
+int register_all_ax_controller_manual(lua_State* L)
 {
     if (nullptr == L)
         return 0;

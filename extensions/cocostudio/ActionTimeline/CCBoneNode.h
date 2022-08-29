@@ -37,7 +37,7 @@ namespace backend
 {
 class ProgramState;
 }
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 NS_TIMELINE_BEGIN
 

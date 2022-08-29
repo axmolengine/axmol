@@ -42,7 +42,7 @@ class Director;
 class Touch;
 class Event;
 class EventListenerTouchOneByOne;
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 class TestController
 {

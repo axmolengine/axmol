@@ -235,6 +235,6 @@ WebView::ccWebViewCallback WebView::getOnJSCallback() const
 }
 
 }  // namespace ui
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 /// @endcond

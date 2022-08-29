@@ -26,7 +26,7 @@
 #pragma once
 
 #define NS_AX_BACKEND_BEGIN \
-    namespace axys    \
+    namespace ax    \
     {                    \
     namespace backend    \
     {

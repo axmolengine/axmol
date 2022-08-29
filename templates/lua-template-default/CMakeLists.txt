@@ -42,28 +42,28 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
         configure_file("${CMAKE_CURRENT_SOURCE_DIR}/run.bat.in" "${CMAKE_CURRENT_SOURCE_DIR}/run.bat" @ONLY)
     endif()
 
-    set(AXYS_ROOT "$ENV{AXYS_ROOT}")
+    set(_AX_ROOT "$ENV{AX_ROOT}")
 
-    if(NOT (AXYS_ROOT STREQUAL ""))
-        set(AXYS_ROOT_PATH "${AXYS_ROOT}")
-        file(TO_CMAKE_PATH ${AXYS_ROOT_PATH} AXYS_ROOT_PATH) # string(REPLACE "\\" "/" AXYS_ROOT_PATH ${AXYS_ROOT_PATH})
-        message(STATUS "Using system env var AXYS_ROOT=${AXYS_ROOT}")
+    if(NOT (_AX_ROOT STREQUAL ""))
+        set(_AX_ROOT_PATH "${_AX_ROOT}")
+        file(TO_CMAKE_PATH ${_AX_ROOT_PATH} _AX_ROOT_PATH) # string(REPLACE "\\" "/" _AX_ROOT_PATH ${_AX_ROOT_PATH})
+        message(STATUS "Using system env var _AX_ROOT=${_AX_ROOT}")
     else()
-        message(FATAL_ERROR "Please run setup.py add system env var 'AXYS_ROOT' to specific the engine root")
+        message(FATAL_ERROR "Please run setup.py add system env var '_AX_ROOT' to specific the engine root")
     endif()
 
-    set(CMAKE_MODULE_PATH ${AXYS_ROOT_PATH}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 
     include(AXBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
     
     set(_AX_USE_PREBUILT FALSE)
-    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${AXYS_ROOT_PATH}/${AX_PREBUILT_DIR})
+    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${_AX_ROOT_PATH}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
     endif()
 
     if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
+        add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
     endif()
 endif()
 
@@ -77,7 +77,7 @@ set(res_src_folders
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     )
 set(res_script_folders
-    "${AXYS_ROOT_PATH}/extensions/scripting/lua-bindings/script"
+    "${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/script"
     )
 if(APPLE OR VS)
     ax_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
@@ -151,9 +151,9 @@ else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
     
     # whole archive for jni
-    add_subdirectory(${AXYS_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
+    add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
-    add_subdirectory(${AXYS_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
+    add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
 
     config_android_shared_libs("org.axys1.lib" "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src/proj.android/app/src")
@@ -207,14 +207,14 @@ endif()
 
 # The optional thirdparties(not dependent by engine)
 if (AX_WITH_YAML_CPP)
-    target_include_directories(${APP_NAME} PRIVATE ${AXYS_ROOT_PATH}/thirdparty/yaml-cpp/include)
+    target_include_directories(${APP_NAME} PRIVATE ${_AX_ROOT_PATH}/thirdparty/yaml-cpp/include)
     target_link_libraries(${APP_NAME} yaml-cpp)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows only
-    include(${AXYS_ROOT_PATH}/cmake/Modules/AXConfigDefine.cmake)
+    include(${_AX_ROOT_PATH}/cmake/Modules/AXConfigDefine.cmake)
     use_ax_compile_define(${APP_NAME})
 
-    include(${AXYS_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
-    ax_link_lua_prebuilt(${APP_NAME} ${AXYS_ROOT_PATH} ${AX_PREBUILT_DIR})
+    include(${_AX_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
+    ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

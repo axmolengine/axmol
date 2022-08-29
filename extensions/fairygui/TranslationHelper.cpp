@@ -1,7 +1,7 @@
 #include "TranslationHelper.h"
 #include "PackageItem.h"
 #include "UIPackage.h"
-#if defined(AXYS_VERSION)
+#if defined(AX_VERSION)
 #include "pugixml/pugixml.hpp"
 #else
 #include "tinyxml2/tinyxml2.h"
@@ -21,7 +21,7 @@ void TranslationHelper::loadFromXML(const char* xmlString, size_t nBytes)
 {
     TranslationHelper::strings.clear();
 
-#if defined(AXYS_VERSION)
+#if defined(AX_VERSION)
     pugi::xml_document doc;
     if (doc.load_buffer(xmlString, nBytes)) {
         auto root = doc.document_element();

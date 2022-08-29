@@ -651,7 +651,7 @@ void extendBundle3D(lua_State* L)
     lua_pop(L, 1);
 }
 
-static int register_all_axys_3d_manual(lua_State* L)
+static int register_all_ax_3d_manual(lua_State* L)
 {
     if (nullptr == L)
         return 0;
@@ -2402,8 +2402,8 @@ int register_cocos3d_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
-        register_all_axys_3d(L);
-        register_all_axys_3d_manual(L);
+        register_all_ax_3d(L);
+        register_all_ax_3d_manual(L);
         register_all_cocos3d_manual_class(L);
     }
     lua_pop(L, 1);

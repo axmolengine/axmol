@@ -7372,7 +7372,7 @@ static void extendAutoPolygon(lua_State* tolua_S)
 //    lua_pop(tolua_S, 1);
 //}
 
-int register_all_axys_manual(lua_State* tolua_S)
+int register_all_ax_manual(lua_State* tolua_S)
 {
     if (NULL == tolua_S)
         return 0;
@@ -7523,7 +7523,7 @@ tolua_lerror:
 #endif
 }
 
-int register_all_axys_module_manual(lua_State* tolua_S)
+int register_all_ax_module_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -8219,7 +8219,7 @@ static int tolua_cocos2d_Vec4_new(lua_State* L)
                                   static_cast<float>(lua_tonumber(L, 3)), static_cast<float>(lua_tonumber(L, 4))});
 }
 
-int register_all_axys_math_manual(lua_State* tolua_S)
+int register_all_ax_math_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -8243,7 +8243,7 @@ int register_all_axys_math_manual(lua_State* tolua_S)
     return 0;
 }
 
-int register_all_axys_shaders_manual(lua_State* tolua_S)
+int register_all_ax_shaders_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -8641,7 +8641,7 @@ tolua_lerror:
 #endif
 }
 
-int register_all_axys_bytearray_manual(lua_State* tolua_S)
+int register_all_ax_bytearray_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;

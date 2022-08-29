@@ -16,11 +16,11 @@ endif()
 
 find_program(PYTHON_COMMAND NAMES python3 python2 python)
 find_program(_AX_COMMAND NAME axis
-    PATHS ${AXYS_ROOT_PATH}/tools/axis-console/bin $ENV{AXYS_CONSOLE_ROOT})
+    PATHS ${_AX_ROOT_PATH}/tools/axis-console/bin $ENV{_AX_CONSOLE_ROOT})
 
 message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
 message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
-message(STATUS "AXYS_ROOT_PATH:" ${AXYS_ROOT_PATH})
+message(STATUS "_AX_ROOT_PATH:" ${_AX_ROOT_PATH})
 message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
 # delete binary dir if you hope a full clean re-build
 message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})

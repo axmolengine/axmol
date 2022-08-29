@@ -77,4 +77,4 @@ protected:
     friend class AudioDecoderManager;
 };
 
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
