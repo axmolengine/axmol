@@ -34,7 +34,6 @@ DrawPrimitivesTests::DrawPrimitivesTests()
 {
     ADD_TEST_CASE(DrawNodeTest);
     ADD_TEST_CASE(Issue11942Test);
-    ADD_TEST_CASE(Issue829Test);
 }
 
 string DrawPrimitivesBaseTest::title() const
@@ -238,53 +237,4 @@ string Issue11942Test::title() const
 string Issue11942Test::subtitle() const
 {
     return "drawCircle() with width";
-}
-
-Issue829Test::Issue829Test()
-{
-ax::Vec2 vertices[] = {
-                    {0, 0},
-                    {50.000000000, 20.000000000},
-                    {100.000000000, 0.000000},
-                    {80.000000000, 50.000000},
-                    {100.0000000, 100.0000000},
-                    {50.0000000, 80.0000000},
-                    {0.000000, 100.000000},
-                    {20.000000, 50.000000},
-                    {0, 0}};
-
-    {
-        auto drawNode1 = DrawNode::create();
-        drawNode1->drawPoly(vertices, sizeof(vertices) / sizeof(vertices[0]), false, Color4F(1.0f, 1.0f, 1.0f, 1));
-        drawNode1->setPosition(10, 100);
-        addChild(drawNode1);
-    }
-    {
-        auto drawNode1_1 = DrawNode::create();
-        drawNode1_1->drawPoly(vertices, sizeof(vertices) / sizeof(vertices[0]), true, Color4F(1.0f, 1.0f, 1.0f, 1));
-        drawNode1_1->setPosition(120, 100);
-        addChild(drawNode1_1);
-    }
-    {
-        auto drawNode2 = DrawNode::create();
-        drawNode2->drawSolidPoly(vertices, sizeof(vertices) / sizeof(vertices[0]), Color4F(1.0f, 1.0f, 1.0f, 1));
-        drawNode2->setPosition(230, 100);
-        addChild(drawNode2);
-    }
-    {
-        auto drawNode3 = DrawNode::create();
-        drawNode3->drawPolygon(vertices, sizeof(vertices) / sizeof(vertices[0]), Color4F(1.0f, 1.0f, 1.0f, 1), 4, Color4F(0.0f, 0.0f, 1.0f, 0.5f));
-        drawNode3->setPosition(350, 100);
-        addChild(drawNode3);
-    }
-}
-
-string Issue829Test::title() const
-{
-    return "GitHub Issue #829";
-}
-
-string Issue829Test::subtitle() const
-{
-    return "DrawNode::draw*Poly* draw incorrect geometry";
 }

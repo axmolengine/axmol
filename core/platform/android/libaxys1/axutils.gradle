@@ -147,7 +147,6 @@ class axutils {
 
         // Collect ndkDirs for search
         for(ver in verList){
-            if (ver.startsWith('.')) continue
             ndkDirs.add("${sdkRoot}${File.separator}ndk${File.separator}${ver}")
         }
 
@@ -199,7 +198,6 @@ class axutils {
 
         // Collect cmakeBinDirs for search
         for(ver in verList){
-            if (ver.startsWith('.')) continue
             cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + ver + File.separator + "bin"
             if(new File(cmakeBinDir).isDirectory()) {
                 cmakeBinDirs.add(cmakeBinDir)

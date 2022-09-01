@@ -221,7 +221,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
     if (elementName == "map")
     {
         std::string version = attributeDict["version"].asString();
-        AXLOG("cocos2d: TMXFormat: TMX version: %s", version.c_str());
+        AXLOG("axys: TMXFormat: TMX version: %s", version.c_str());
 
         std::string orientationStr = attributeDict["orientation"].asString();
         if (orientationStr == "orthogonal")
@@ -242,7 +242,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         }
         else
         {
-            AXLOG("cocos2d: TMXFomat: Unsupported orientation: %d", tmxMapInfo->getOrientation());
+            AXLOG("axys: TMXFomat: Unsupported orientation: %d", tmxMapInfo->getOrientation());
         }
 
         std::string staggerAxisStr = attributeDict["staggeraxis"].asString();
@@ -694,7 +694,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                 base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(), &buffer);
             if (!buffer)
             {
-                AXLOG("cocos2d: TiledMap: decode data error");
+                AXLOG("axys: TiledMap: decode data error");
                 return;
             }
 
@@ -713,7 +713,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
 
                 if (!deflated)
                 {
-                    AXLOG("cocos2d: TiledMap: inflate data error");
+                    AXLOG("axys: TiledMap: inflate data error");
                     return;
                 }
 
@@ -753,7 +753,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             buffer = (unsigned char*)malloc(gidTokens.size() * 4);
             if (!buffer)
             {
-                AXLOG("cocos2d: TiledMap: CSV buffer not allocated.");
+                AXLOG("axys: TiledMap: CSV buffer not allocated.");
                 return;
             }
 
