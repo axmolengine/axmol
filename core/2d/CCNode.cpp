@@ -1094,7 +1094,7 @@ void Node::removeChildByTag(int tag, bool cleanup /* = true */)
 
     if (child == nullptr)
     {
-        AXLOG("cocos2d: removeChildByTag(tag = %d): child not found!", tag);
+        AXLOG("axys: removeChildByTag(tag = %d): child not found!", tag);
     }
     else
     {
@@ -1110,7 +1110,7 @@ void Node::removeChildByName(std::string_view name, bool cleanup)
 
     if (child == nullptr)
     {
-        AXLOG("cocos2d: removeChildByName(name = %s): child not found!", name.data());
+        AXLOG("axys: removeChildByName(name = %s): child not found!", name.data());
     }
     else
     {

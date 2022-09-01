@@ -219,7 +219,7 @@ void ProtectedNode::removeProtectedChildByTag(int tag, bool cleanup)
 
     if (child == nullptr)
     {
-        AXLOG("cocos2d: removeChildByTag(tag = %d): child not found!", tag);
+        AXLOG("axys: removeChildByTag(tag = %d): child not found!", tag);
     }
     else
     {

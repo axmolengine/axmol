@@ -130,7 +130,7 @@ void TileMapAtlas::setTile(const Color3B& tile, const Vec2& position)
     Color3B value = ptr[(unsigned int)(position.x + position.y * _TGAInfo->width)];
     if (value.r == 0)
     {
-        AXLOG("cocos2d: Value.r must be non 0.");
+        AXLOG("axys: Value.r must be non 0.");
     }
     else
     {

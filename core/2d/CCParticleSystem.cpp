@@ -662,7 +662,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                 _yCoordFlipped = optValue(dictionary, "yCoordFlipped").asInt(1);
 
                 if (!this->_texture)
-                    AXLOGWARN("cocos2d: Warning: ParticleSystemQuad system without a texture");
+                    AXLOGWARN("axys: Warning: ParticleSystemQuad system without a texture");
             }
             ret = true;
         }

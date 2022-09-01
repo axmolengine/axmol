@@ -693,7 +693,7 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
             }
             else
             {
-                AXLOG("cocos2d: unsupported image format!");
+                AXLOG("axys: unsupported image format!");
             }
 
             free(tgaData);
@@ -1370,27 +1370,27 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     bool flipped                       = (flags & (unsigned int)PVR2TextureFlag::VerticalFlip) ? true : false;
     if (flipped)
     {
-        AXLOG("cocos2d: WARNING: Image is flipped. Regenerate it using PVRTexTool");
+        AXLOG("axys: WARNING: Image is flipped. Regenerate it using PVRTexTool");
     }
 
     if (!configuration->supportsNPOT() && (static_cast<int>(header->width) != ccNextPOT(header->width) ||
                                            static_cast<int>(header->height) != ccNextPOT(header->height)))
     {
-        AXLOG("cocos2d: ERROR: Loading an NPOT texture (%dx%d) but is not supported on this device", header->width,
+        AXLOG("axys: ERROR: Loading an NPOT texture (%dx%d) but is not supported on this device", header->width,
               header->height);
         return false;
     }
 
     if (!testFormatForPvr2TCSupport(formatFlags))
     {
-        AXLOG("cocos2d: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
+        AXLOG("axys: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
               (int)formatFlags);
         return false;
     }
 
     if (v2_pixel_formathash.find(formatFlags) == v2_pixel_formathash.end())
     {
-        AXLOG("cocos2d: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
+        AXLOG("axys: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
               (int)formatFlags);
         return false;
     }
@@ -1400,7 +1400,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
     int bpp          = info.bpp;
     if (!bpp)
     {
-        AXLOG("cocos2d: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
+        AXLOG("axys: WARNING: Unsupported PVR Pixel Format: 0x%02X. Re-encode it with a OpenGL pixel format variant",
               (int)formatFlags);
         return false;
     }
@@ -1430,7 +1430,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR2TexturePixelFormat::PVRTC2BPP_RGBA:
             if (!Configuration::getInstance()->supportsPVRTC())
             {
-                AXLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
+                AXLOG("axys: Hardware PVR decoder not present. Using software decoder");
                 _unpack                            = true;
                 _mipmaps[_numberOfMipmaps].len     = width * height * 4;
                 _mipmaps[_numberOfMipmaps].address = (uint8_t*)malloc(width * height * 4);
@@ -1444,7 +1444,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR2TexturePixelFormat::PVRTC4BPP_RGBA:
             if (!Configuration::getInstance()->supportsPVRTC())
             {
-                AXLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
+                AXLOG("axys: Hardware PVR decoder not present. Using software decoder");
                 _unpack                            = true;
                 _mipmaps[_numberOfMipmaps].len     = width * height * 4;
                 _mipmaps[_numberOfMipmaps].address = (uint8_t*)malloc(width * height * 4);
@@ -1458,7 +1458,7 @@ bool Image::initWithPVRv2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR2TexturePixelFormat::BGRA8888:
             if (!Configuration::getInstance()->supportsBGRA8888())
             {
-                AXLOG("cocos2d: Image. BGRA8888 not supported on this device");
+                AXLOG("axys: Image. BGRA8888 not supported on this device");
                 return false;
             }
         default:
@@ -1522,7 +1522,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     // validate version
     if (AX_SWAP_INT32_BIG_TO_HOST(header->version) != 0x50565203)
     {
-        AXLOG("cocos2d: WARNING: pvr file version mismatch");
+        AXLOG("axys: WARNING: pvr file version mismatch");
         return false;
     }
 
@@ -1595,7 +1595,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR3TexturePixelFormat::PVRTC2BPP_RGBA:
             if (!Configuration::getInstance()->supportsPVRTC())
             {
-                AXLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
+                AXLOG("axys: Hardware PVR decoder not present. Using software decoder");
                 _unpack             = true;
                 _mipmaps[i].len     = width * height * 4;
                 _mipmaps[i].address = (uint8_t*)malloc(width * height * 4);
@@ -1610,7 +1610,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR3TexturePixelFormat::PVRTC4BPP_RGBA:
             if (!Configuration::getInstance()->supportsPVRTC())
             {
-                AXLOG("cocos2d: Hardware PVR decoder not present. Using software decoder");
+                AXLOG("axys: Hardware PVR decoder not present. Using software decoder");
                 _unpack             = true;
                 _mipmaps[i].len     = width * height * 4;
                 _mipmaps[i].address = (uint8_t*)malloc(width * height * 4);
@@ -1624,7 +1624,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR3TexturePixelFormat::ETC1:
             if (!Configuration::getInstance()->supportsETC1())
             {
-                AXLOG("cocos2d: Hardware ETC1 decoder not present. Using software decoder");
+                AXLOG("axys: Hardware ETC1 decoder not present. Using software decoder");
                 const int bytePerPixel = 4;
                 _unpack                = true;
                 _mipmaps[i].len        = width * height * bytePerPixel;
@@ -1642,7 +1642,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
         case PVR3TexturePixelFormat::BGRA8888:
             if (!Configuration::getInstance()->supportsBGRA8888())
             {
-                AXLOG("cocos2d: Image. BGRA8888 not supported on this device");
+                AXLOG("axys: Image. BGRA8888 not supported on this device");
                 return false;
             }
         default:
@@ -1735,7 +1735,7 @@ bool Image::initWithETCData(uint8_t* data, ssize_t dataLen, bool ownData)
     }
     else
     {
-        AXLOG("cocos2d: Hardware ETC1 decoder not present. Using software decoder");
+        AXLOG("axys: Hardware ETC1 decoder not present. Using software decoder");
 
         _dataLen = _width * _height * 4;
         _data    = static_cast<uint8_t*>(malloc(_dataLen));
@@ -1800,7 +1800,7 @@ bool Image::initWithETC2Data(uint8_t* data, ssize_t dataLen, bool ownData)
         }
         else
         {
-            AXLOG("cocos2d: Hardware ETC2 decoder not present. Using software decoder");
+            AXLOG("axys: Hardware ETC2 decoder not present. Using software decoder");
 
             // if device do not support ETC2, decode texture by software
             // etc2_decode_image always decode to RGBA8888
@@ -1848,7 +1848,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
 
         if (block_x < 4 || block_y < 4)
         {
-            AXLOG("cocos2d: The ASTC block with and height should be >= 4");
+            AXLOG("axys: The ASTC block with and height should be >= 4");
             break;
         }
 
@@ -1887,7 +1887,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
         }
         else
         {
-            AXLOG("cocos2d: Hardware ASTC decoder not present. Using software decoder");
+            AXLOG("axys: Hardware ASTC decoder not present. Using software decoder");
 
             _dataLen = _width * _height * 4;
             _data    = static_cast<uint8_t*>(malloc(_dataLen));
@@ -1998,7 +1998,7 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
         else
         {  // if it is not gles or device do not support S3TC, decode texture by software
 
-            AXLOG("cocos2d: Hardware S3TC decoder not present. Using software decoder");
+            AXLOG("axys: Hardware S3TC decoder not present. Using software decoder");
 
             int bytePerPixel    = 4;
             unsigned int stride = width * bytePerPixel;
@@ -2093,7 +2093,7 @@ bool Image::initWithATITCData(uint8_t* data, ssize_t dataLen, bool ownData)
     else  // decompressed data length
     {     /* if it is not gles or device do not support ATITC, decode texture by software */
 
-        AXLOG("cocos2d: Hardware ATITC decoder not present. Using software decoder");
+        AXLOG("axys: Hardware ATITC decoder not present. Using software decoder");
 
         _pixelFormat = backend::PixelFormat::RGBA8;
 
@@ -2221,7 +2221,7 @@ bool Image::saveToFile(std::string_view filename, bool isToRGB)
     }
     else
     {
-        AXLOG("cocos2d: Image: saveToFile no support file extension(only .png or .jpg) for file: %s", filename.data());
+        AXLOG("axys: Image: saveToFile no support file extension(only .png or .jpg) for file: %s", filename.data());
         return false;
     }
 }
