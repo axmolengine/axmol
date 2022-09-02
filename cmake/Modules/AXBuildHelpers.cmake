@@ -232,11 +232,13 @@ function(ax_copy_target_dll ax_target)
     endif()
 
     # Copy webview2 for ninja
-    if(CMAKE_GENERATOR STREQUAL "Ninja")
-        add_custom_command(TARGET ${ax_target} POST_BUILD
-           COMMAND ${CMAKE_COMMAND} -E copy_if_different
-           "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
-           $<TARGET_FILE_DIR:${ax_target}>)
+    if(AX_ENABLE_MSEDGE_WEBVIEW2)
+        if(CMAKE_GENERATOR STREQUAL "Ninja")
+            add_custom_command(TARGET ${ax_target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+            $<TARGET_FILE_DIR:${ax_target}>)
+        endif()
     endif()
 endfunction()
 
