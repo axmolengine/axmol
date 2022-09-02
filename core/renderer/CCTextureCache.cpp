@@ -362,7 +362,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
             else
             {
                 texture = nullptr;
-                AXLOG("cocos2d: failed to call TextureCache::addImageAsync(%s)", asyncStruct->filename.c_str());
+                AXLOG("axys: failed to call TextureCache::addImageAsync(%s)", asyncStruct->filename.c_str());
             }
         }
 
@@ -445,7 +445,7 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
             }
             else
             {
-                AXLOG("cocos2d: Couldn't create texture for file:%s in TextureCache", path.data());
+                AXLOG("axys: Couldn't create texture for file:%s in TextureCache", path.data());
                 AX_SAFE_RELEASE(texture);
                 texture = nullptr;
             }
@@ -497,7 +497,7 @@ Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelForma
         {
             AX_SAFE_RELEASE(texture);
             texture = nullptr;
-            AXLOG("cocos2d: initWithImage failed!");
+            AXLOG("axys: initWithImage failed!");
         }
 
     } while (0);
@@ -565,7 +565,7 @@ void TextureCache::removeUnusedTextures()
         Texture2D* tex = it->second;
         if (tex->getReferenceCount() == 1)
         {
-            AXLOG("cocos2d: TextureCache: removing unused texture: %s", it->first.c_str());
+            AXLOG("axys: TextureCache: removing unused texture: %s", it->first.c_str());
 
             tex->release();
             it = _textures.erase(it);

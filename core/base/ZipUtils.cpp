@@ -211,7 +211,7 @@ int ZipUtils::inflateMemoryWithHint(unsigned char* in,
             /* not enough memory, ouch */
             if (!*out)
             {
-                AXLOG("cocos2d: ZipUtils: realloc failed");
+                AXLOG("axys: ZipUtils: realloc failed");
                 inflateEnd(&d_stream);
                 return Z_MEM_ERROR;
             }
@@ -236,19 +236,19 @@ ssize_t ZipUtils::inflateMemoryWithHint(unsigned char* in, ssize_t inLength, uns
     {
         if (err == Z_MEM_ERROR)
         {
-            AXLOG("cocos2d: ZipUtils: Out of memory while decompressing map data!");
+            AXLOG("axys: ZipUtils: Out of memory while decompressing map data!");
         }
         else if (err == Z_VERSION_ERROR)
         {
-            AXLOG("cocos2d: ZipUtils: Incompatible zlib version!");
+            AXLOG("axys: ZipUtils: Incompatible zlib version!");
         }
         else if (err == Z_DATA_ERROR)
         {
-            AXLOG("cocos2d: ZipUtils: Incorrect zlib compressed data!");
+            AXLOG("axys: ZipUtils: Incorrect zlib compressed data!");
         }
         else
         {
-            AXLOG("cocos2d: ZipUtils: Unknown error while decompressing map data!");
+            AXLOG("axys: ZipUtils: Unknown error while decompressing map data!");
         }
 
         if (*out)
@@ -279,7 +279,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
     gzFile inFile = gzopen(path, "rb");
     if (inFile == nullptr)
     {
-        AXLOG("cocos2d: ZipUtils: error open gzip file: %s", path);
+        AXLOG("axys: ZipUtils: error open gzip file: %s", path);
         return -1;
     }
 
@@ -290,7 +290,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
     *out = (unsigned char*)malloc(bufferSize);
     if (*out == NULL)
     {
-        AXLOG("cocos2d: ZipUtils: out of memory");
+        AXLOG("axys: ZipUtils: out of memory");
         return -1;
     }
 
@@ -299,7 +299,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
         len = gzread(inFile, *out + offset, bufferSize);
         if (len < 0)
         {
-            AXLOG("cocos2d: ZipUtils: error in gzread");
+            AXLOG("axys: ZipUtils: error in gzread");
             free(*out);
             *out = nullptr;
             return -1;
@@ -323,7 +323,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
 
         if (!tmp)
         {
-            AXLOG("cocos2d: ZipUtils: out of memory");
+            AXLOG("axys: ZipUtils: out of memory");
             free(*out);
             *out = nullptr;
             return -1;
@@ -334,7 +334,7 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
 
     if (gzclose(inFile) != Z_OK)
     {
-        AXLOG("cocos2d: ZipUtils: gzclose failed");
+        AXLOG("axys: ZipUtils: gzclose failed");
     }
 
     return offset;
@@ -347,7 +347,7 @@ bool ZipUtils::isCCZFile(const char* path)
 
     if (compressedData.isNull())
     {
-        AXLOG("cocos2d: ZipUtils: loading file failed");
+        AXLOG("axys: ZipUtils: loading file failed");
         return false;
     }
 
@@ -373,7 +373,7 @@ bool ZipUtils::isGZipFile(const char* path)
 
     if (compressedData.isNull())
     {
-        AXLOG("cocos2d: ZipUtils: loading file failed");
+        AXLOG("axys: ZipUtils: loading file failed");
         return false;
     }
 
@@ -401,14 +401,14 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
         unsigned int version = AX_SWAP_INT16_BIG_TO_HOST(header->version);
         if (version > 2)
         {
-            AXLOG("cocos2d: Unsupported CCZ header format");
+            AXLOG("axys: Unsupported CCZ header format");
             return -1;
         }
 
         // verify compression format
         if (AX_SWAP_INT16_BIG_TO_HOST(header->compression_type) != CCZ_COMPRESSION_ZLIB)
         {
-            AXLOG("cocos2d: CCZ Unsupported compression method");
+            AXLOG("axys: CCZ Unsupported compression method");
             return -1;
         }
     }
@@ -421,14 +421,14 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
         unsigned int version = AX_SWAP_INT16_BIG_TO_HOST(header->version);
         if (version > 0)
         {
-            AXLOG("cocos2d: Unsupported CCZ header format");
+            AXLOG("axys: Unsupported CCZ header format");
             return -1;
         }
 
         // verify compression format
         if (AX_SWAP_INT16_BIG_TO_HOST(header->compression_type) != CCZ_COMPRESSION_ZLIB)
         {
-            AXLOG("cocos2d: CCZ Unsupported compression method");
+            AXLOG("axys: CCZ Unsupported compression method");
             return -1;
         }
 
@@ -445,14 +445,14 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
 
         if (calculated != required)
         {
-            AXLOG("cocos2d: Can't decrypt image file. Is the decryption key valid?");
+            AXLOG("axys: Can't decrypt image file. Is the decryption key valid?");
             return -1;
         }
 #endif
     }
     else
     {
-        AXLOG("cocos2d: Invalid CCZ file");
+        AXLOG("axys: Invalid CCZ file");
         return -1;
     }
 
@@ -461,7 +461,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
     *out = (unsigned char*)malloc(len);
     if (!*out)
     {
-        AXLOG("cocos2d: CCZ: Failed to allocate memory for texture");
+        AXLOG("axys: CCZ: Failed to allocate memory for texture");
         return -1;
     }
 
@@ -471,7 +471,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
 
     if (ret != Z_OK)
     {
-        AXLOG("cocos2d: CCZ: Failed to uncompress data");
+        AXLOG("axys: CCZ: Failed to uncompress data");
         free(*out);
         *out = nullptr;
         return -1;
@@ -489,7 +489,7 @@ int ZipUtils::inflateCCZFile(const char* path, unsigned char** out)
 
     if (compressedData.isNull())
     {
-        AXLOG("cocos2d: Error loading CCZ compressed file");
+        AXLOG("axys: Error loading CCZ compressed file");
         return -1;
     }
 
