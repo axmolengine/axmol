@@ -95,7 +95,7 @@ void ShaderCache::removeUnusedShader()
         auto shaderModule = iter->second;
         if (shaderModule->getReferenceCount() == 1)
         {
-            //            AXLOG("axys: TextureCache: removing unused program");
+            //            AXLOG("cocos2d: TextureCache: removing unused program");
             shaderModule->release();
             iter = _cachedShaders.erase(iter);
         }

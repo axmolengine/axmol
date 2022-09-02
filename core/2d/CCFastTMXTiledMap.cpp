@@ -148,7 +148,7 @@ TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMap
     }
 
     // If all the tiles are 0, return empty tileset
-    AXLOG("axys: Warning: TMX Layer '%s' has no tiles", layerInfo->_name.c_str());
+    AXLOG("cocos2d: Warning: TMX Layer '%s' has no tiles", layerInfo->_name.c_str());
     return nullptr;
 }
 

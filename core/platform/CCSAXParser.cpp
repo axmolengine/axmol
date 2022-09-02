@@ -132,7 +132,7 @@ bool SAXParser::parseIntrusive(char* xmlData, size_t dataLength)
     }
     catch (xsxml::parse_error& e)
     {
-        AXLOG("axys: SAXParser: Error parsing xml: %s at %s", e.what(), e.where<char>());
+        AXLOG("cocos2d: SAXParser: Error parsing xml: %s at %s", e.what(), e.where<char>());
         return false;
     }
 

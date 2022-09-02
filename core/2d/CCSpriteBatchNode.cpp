@@ -458,13 +458,13 @@ void SpriteBatchNode::increaseAtlasCapacity()
     // this is likely computationally expensive
     ssize_t quantity = (_textureAtlas->getCapacity() + 1) * 4 / 3;
 
-    AXLOG("axys: SpriteBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
+    AXLOG("cocos2d: SpriteBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
           static_cast<int>(_textureAtlas->getCapacity()), static_cast<int>(quantity));
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
         // serious problems
-        AXLOGWARN("axys: WARNING: Not enough memory to resize the atlas");
+        AXLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
         AXASSERT(false, "Not enough memory to resize the atlas");
     }
 }
@@ -477,7 +477,7 @@ void SpriteBatchNode::reserveCapacity(ssize_t newCapacity)
     if (!_textureAtlas->resizeCapacity(newCapacity))
     {
         // serious problems
-        AXLOGWARN("axys: WARNING: Not enough memory to resize the atlas");
+        AXLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
         AXASSERT(false, "Not enough memory to resize the atlas");
     }
 }

@@ -377,7 +377,7 @@ void MeshMaterialCache::removeUnusedMeshMaterial()
         auto value = it->second;
         if (value->getReferenceCount() == 1)
         {
-            AXLOG("axys: MeshMaterialCache: removing unused mesh renderer materials.");
+            AXLOG("cocos2d: MeshMaterialCache: removing unused mesh renderer materials.");
 
             value->release();
             it = _materials.erase(it);

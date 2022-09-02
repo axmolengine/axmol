@@ -210,7 +210,7 @@ void AnimationCache::addAnimationsWithDictionary(const ValueMap& dictionary, std
     auto anisItr = dictionary.find("animations");
     if (anisItr == dictionary.end())
     {
-        AXLOG("axys: AnimationCache: No animations were found in provided dictionary.");
+        AXLOG("cocos2d: AnimationCache: No animations were found in provided dictionary.");
         return;
     }
 

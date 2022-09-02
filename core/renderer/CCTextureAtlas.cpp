@@ -134,7 +134,7 @@ bool TextureAtlas::initWithFile(std::string_view file, ssize_t capacity)
     }
     else
     {
-        AXLOG("axys: Could not open file: %s", file.data());
+        AXLOG("cocos2d: Could not open file: %s", file.data());
         return false;
     }
 }
@@ -159,7 +159,7 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
 
     if (!(_quads && _indices) && _capacity > 0)
     {
-        // AXLOG("axys: TextureAtlas: not enough memory");
+        // AXLOG("cocos2d: TextureAtlas: not enough memory");
         AX_SAFE_FREE(_quads);
         AX_SAFE_FREE(_indices);
 
@@ -398,7 +398,7 @@ bool TextureAtlas::resizeCapacity(ssize_t newCapacity)
 
     if (!(tmpQuads && tmpIndices))
     {
-        AXLOG("axys: TextureAtlas: not enough memory");
+        AXLOG("cocos2d: TextureAtlas: not enough memory");
         AX_SAFE_FREE(tmpQuads);
         AX_SAFE_FREE(tmpIndices);
         AX_SAFE_FREE(_quads);

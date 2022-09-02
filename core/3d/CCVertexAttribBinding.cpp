@@ -149,13 +149,13 @@ void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
     auto v = getVertexAttribValue(name);
     if (v)
     {
-        // AXLOG("axys: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
+        // AXLOG("cocos2d: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
         _vertexLayout->setAttribute(name, v->location, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else
     {
-        // AXLOG("axys: warning: Attribute not found: %s", name.c_str());
+        // AXLOG("cocos2d: warning: Attribute not found: %s", name.c_str());
     }
 }
 

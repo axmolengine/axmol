@@ -92,7 +92,7 @@ static int lua_cocos2dx_deleteDownloadDir(lua_State* L)
 
 #if AX_TARGET_OS_TVOS
         // Not implemented. "system" is not present on tvOS
-        AXLOG("'lua_axysx_deleteDownloadDir' not implemented on tvOS");
+        AXLOG("'lua_cocos2dx_deleteDownloadDir' not implemented on tvOS");
         return 0;
 #endif
 

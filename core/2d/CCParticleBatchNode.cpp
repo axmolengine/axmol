@@ -481,13 +481,13 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
 
 void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
 {
-    AXLOG("axys: ParticleBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
+    AXLOG("cocos2d: ParticleBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
           (int)_textureAtlas->getCapacity(), (int)quantity);
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
         // serious problems
-        AXLOGWARN("axys: WARNING: Not enough memory to resize the atlas");
+        AXLOGWARN("cocos2d: WARNING: Not enough memory to resize the atlas");
         AXASSERT(false, "XXX: ParticleBatchNode #increaseAtlasCapacity SHALL handle this assert");
     }
 }

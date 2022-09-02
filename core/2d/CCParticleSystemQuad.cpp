@@ -819,7 +819,7 @@ bool ParticleSystemQuad::allocMemory()
 
     if (!_quads || !_indices)
     {
-        AXLOG("axys: Particle system: not enough memory");
+        AXLOG("cocos2d: Particle system: not enough memory");
         AX_SAFE_FREE(_quads);
         AX_SAFE_FREE(_indices);
 
