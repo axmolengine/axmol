@@ -241,7 +241,7 @@ void ProgramCache::removeUnusedProgram()
         auto program = iter->second;
         if (program->getReferenceCount() == 1)
         {
-            //            AXLOG("cocos2d: TextureCache: removing unused program");
+            //            AXLOG("axys: TextureCache: removing unused program");
             program->release();
             iter = _cachedPrograms.erase(iter);
         }
