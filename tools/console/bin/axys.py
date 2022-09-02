@@ -372,7 +372,7 @@ class DataStatistic(object):
             new_line = re.sub('enable_stat[ \t]*=(.*)$', new_str, line)
             new_lines.append(new_line)
 
-        f = open(ini_file, 'w')
+        f = open(ini_file, 'w', newline='\n')
         f.writelines(new_lines)
         f.close()
 
