@@ -4,7 +4,7 @@ if(WINDOWS)
             ui/UIEditBox/UIEditBoxImpl-win32.h
             ui/UIWebView/UIWebViewImpl-win32.h
             ui/UIWebView/UIWebView.h
-            
+
             )
         set(_AX_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
@@ -19,7 +19,7 @@ if(WINDOWS)
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
             )
     endif()
-    
+
     if (AX_ENABLE_MFMEDIA)
         set(_AX_UI_SPECIFIC_HEADER ${_AX_UI_SPECIFIC_HEADER}
             ui/UIVideoPlayer/MFUtils.h
@@ -52,29 +52,51 @@ elseif(APPLE)
             ui/UIEditBox/Mac/CCUITextFieldFormatter.m
             )
     elseif(IOS)
-        set(_AX_UI_SPECIFIC_HEADER
-            ui/UIWebView/UIWebView.h
-            ui/UIVideoPlayer/UIVideoPlayer.h
-            ui/UIWebView/UIWebViewImpl-ios.h
-            ui/UIEditBox/UIEditBoxImpl-ios.h
-            ui/UIEditBox/iOS/CCUIEditBoxIOS.h
-            ui/UIEditBox/iOS/CCUIMultilineTextField.h
-            ui/UIEditBox/iOS/CCUITextInput.h
-            ui/UIEditBox/iOS/UITextView+CCUITextInput.h
-            ui/UIEditBox/iOS/UITextField+CCUITextInput.h
-            ui/UIEditBox/iOS/CCUISingleLineTextField.h
-            )
-        set(_AX_UI_SPECIFIC_SRC
-            ui/UIWebView/UIWebView.mm
-            ui/UIVideoPlayer/UIVideoPlayer-ios.mm
-            ui/UIWebView/UIWebViewImpl-ios.mm
-            ui/UIEditBox/UIEditBoxImpl-ios.mm
-            ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
-            ui/UIEditBox/iOS/CCUIMultilineTextField.mm
-            ui/UIEditBox/iOS/CCUISingleLineTextField.mm
-            ui/UIEditBox/iOS/UITextField+CCUITextInput.mm
-            ui/UIEditBox/iOS/UITextView+CCUITextInput.mm
-            )
+        if (TVOS)
+            set(_AX_UI_SPECIFIC_HEADER
+                ui/UIVideoPlayer/UIVideoPlayer.h
+                ui/UIEditBox/UIEditBoxImpl-ios.h
+                ui/UIEditBox/iOS/CCUIEditBoxIOS.h
+                ui/UIEditBox/iOS/CCUIMultilineTextField.h
+                ui/UIEditBox/iOS/CCUITextInput.h
+                ui/UIEditBox/iOS/UITextView+CCUITextInput.h
+                ui/UIEditBox/iOS/UITextField+CCUITextInput.h
+                ui/UIEditBox/iOS/CCUISingleLineTextField.h
+                )
+            set(_AX_UI_SPECIFIC_SRC
+                ui/UIVideoPlayer/UIVideoPlayer-ios.mm
+                ui/UIEditBox/UIEditBoxImpl-ios.mm
+                ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
+                ui/UIEditBox/iOS/CCUIMultilineTextField.mm
+                ui/UIEditBox/iOS/CCUISingleLineTextField.mm
+                ui/UIEditBox/iOS/UITextField+CCUITextInput.mm
+                ui/UIEditBox/iOS/UITextView+CCUITextInput.mm
+                )
+        else()
+            set(_AX_UI_SPECIFIC_HEADER
+                ui/UIWebView/UIWebView.h
+                ui/UIVideoPlayer/UIVideoPlayer.h
+                ui/UIWebView/UIWebViewImpl-ios.h
+                ui/UIEditBox/UIEditBoxImpl-ios.h
+                ui/UIEditBox/iOS/CCUIEditBoxIOS.h
+                ui/UIEditBox/iOS/CCUIMultilineTextField.h
+                ui/UIEditBox/iOS/CCUITextInput.h
+                ui/UIEditBox/iOS/UITextView+CCUITextInput.h
+                ui/UIEditBox/iOS/UITextField+CCUITextInput.h
+                ui/UIEditBox/iOS/CCUISingleLineTextField.h
+                )
+            set(_AX_UI_SPECIFIC_SRC
+                ui/UIWebView/UIWebView.mm
+                ui/UIVideoPlayer/UIVideoPlayer-ios.mm
+                ui/UIWebView/UIWebViewImpl-ios.mm
+                ui/UIEditBox/UIEditBoxImpl-ios.mm
+                ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
+                ui/UIEditBox/iOS/CCUIMultilineTextField.mm
+                ui/UIEditBox/iOS/CCUISingleLineTextField.mm
+                ui/UIEditBox/iOS/UITextField+CCUITextInput.mm
+                ui/UIEditBox/iOS/UITextView+CCUITextInput.mm
+                )
+        endif()
     endif()
 elseif(LINUX)
     set(_AX_UI_SPECIFIC_HEADER

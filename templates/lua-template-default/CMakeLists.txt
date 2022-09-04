@@ -35,7 +35,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
     endif()
-    
+
     # config quick starter batch script run.bat for windows
     if(WIN32)
         file(RELATIVE_PATH CMAKE_BUILD_RELATIVE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
@@ -56,7 +56,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
 
     include(AXBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
-    
+
     set(_AX_USE_PREBUILT FALSE)
     if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${_AX_ROOT_PATH}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
@@ -149,7 +149,7 @@ if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SRC})
 else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
-    
+
     # whole archive for jni
     add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
@@ -179,8 +179,13 @@ if(APPLE)
             LINK_FLAGS "-pagezero_size 10000 -image_base 100000000"
         )
     elseif(IOS)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/Info.plist")
-        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+        if(TVOS)
+            set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/Info.plist")
+            set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
+        else()
+            set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/Info.plist")
+            set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
+        endif()
         set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
         set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     endif()

@@ -55,9 +55,8 @@ function build_ios()
 
     cd $AX_ROOT
 
-    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DAX_USE_ALSOFT=ON
-    # cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0   # too much logs on console when "cmake --build ."
-    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64 -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=9.0 -DAX_USE_ALSOFT=ON
+    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)"
 
     exit 0
 }
@@ -67,20 +66,20 @@ function build_android()
     # print jdk detail
     echo "JAVA_HOME=$JAVA_HOME"
     java -version
-    
+
     # Build all samples
     echo "Building Android samples ..."
     source ../environment.sh
 
     # build fairygui_tests
     pushd $AX_ROOT/tests/fairygui-tests/proj.android
-    
+
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
     popd
 
     # build cpp_tests
     pushd $AX_ROOT/tests/cpp-tests/proj.android
-    
+
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
     popd
 }
@@ -88,7 +87,7 @@ function build_android()
 function run_build()
 {
     echo "Building..."
-    
+
     if [ $BUILD_TARGET == 'osx' ]; then
         set -x
         build_osx

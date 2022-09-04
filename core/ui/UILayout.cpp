@@ -320,9 +320,9 @@ void Layout::stencilClippingVisit(Renderer* renderer, const Mat4& parentTransfor
 
 void Layout::onBeforeVisitScissor()
 {
-    auto glview = _director->getOpenGLView();
+    auto glView = _director->getOpenGLView();
     // apply scissor test
-    _scissorOldState = glview->isScissorEnabled();
+    _scissorOldState = glView->isScissorEnabled();
     if (false == _scissorOldState)
     {
         auto renderer = _director->getRenderer();
@@ -331,10 +331,10 @@ void Layout::onBeforeVisitScissor()
 
     // apply scissor box
     Rect clippingRect = getClippingRect();
-    _clippingOldRect  = glview->getScissorRect();
+    _clippingOldRect  = glView->getScissorRect();
     if (false == _clippingOldRect.equals(clippingRect))
     {
-        glview->setScissorInPoints(clippingRect.origin.x, clippingRect.origin.y, clippingRect.size.width,
+        glView->setScissorInPoints(clippingRect.origin.x, clippingRect.origin.y, clippingRect.size.width,
                                    clippingRect.size.height);
     }
 }
@@ -346,8 +346,8 @@ void Layout::onAfterVisitScissor()
         // revert scissor box
         if (false == _clippingOldRect.equals(_clippingRect))
         {
-            auto glview = _director->getOpenGLView();
-            glview->setScissorInPoints(_clippingOldRect.origin.x, _clippingOldRect.origin.y,
+            auto glView = _director->getOpenGLView();
+            glView->setScissorInPoints(_clippingOldRect.origin.x, _clippingOldRect.origin.y,
                                        _clippingOldRect.size.width, _clippingOldRect.size.height);
         }
     }

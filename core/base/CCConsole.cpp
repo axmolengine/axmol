@@ -1323,10 +1323,10 @@ void Console::commandResolutionSubCommandEmpty(socket_native_type fd, std::strin
     auto director        = Director::getInstance();
     Vec2 points          = director->getWinSize();
     Vec2 pixels          = director->getWinSizeInPixels();
-    auto glview          = director->getOpenGLView();
-    Vec2 design          = glview->getDesignResolutionSize();
-    ResolutionPolicy res = glview->getResolutionPolicy();
-    Rect visibleRect     = glview->getVisibleRect();
+    auto glView          = director->getOpenGLView();
+    Vec2 design          = glView->getDesignResolutionSize();
+    ResolutionPolicy res = glView->getResolutionPolicy();
+    Rect visibleRect     = glView->getVisibleRect();
 
     Console::Utility::mydprintf(fd,
                                 "Window size:\n"
