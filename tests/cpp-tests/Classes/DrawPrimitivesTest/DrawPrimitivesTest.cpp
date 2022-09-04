@@ -25,6 +25,7 @@
 #include "DrawPrimitivesTest.h"
 #include "renderer/CCRenderer.h"
 #include "renderer/CCCustomCommand.h"
+#include <stdlib.h>
 
 USING_NS_AX;
 
@@ -242,7 +243,6 @@ string Issue11942Test::subtitle() const
 
 Issue829Test::Issue829Test()
 {
-
     Vec2 vertices0[] = {{50.0, 20.0}, {100.0, 0.0}, {80.0, 50.0}, {100.0, 100.0},
                         {50.0, 80.0}, {0.0, 100.0}, {20.0, 50.0}, {0, 0}};
 
