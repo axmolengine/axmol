@@ -25,7 +25,6 @@
 #include "DrawPrimitivesTest.h"
 #include "renderer/CCRenderer.h"
 #include "renderer/CCCustomCommand.h"
-#include <stdlib.h>
 
 USING_NS_AX;
 
@@ -321,10 +320,9 @@ Issue829Test::Issue829Test()
 
 void Issue829Test::drawDirection(const Vec2* vec, const int size, Vec2 offset)
 {
-    char buffer[20];
     for (size_t i = 0; i < size; i++)
     {
-        auto label = Label::createWithTTF(itoa(i, buffer, 10), "fonts/Marker Felt.ttf", 10);
+        auto label = Label::createWithTTF(std::to_string(i).c_str(), "fonts/Marker Felt.ttf", 10);
         this->addChild(label);
         label->setPosition(vec[i] + offset);
     }
