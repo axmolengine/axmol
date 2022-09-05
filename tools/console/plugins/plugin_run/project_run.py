@@ -62,7 +62,7 @@ class CCPluginRun(axys.CCPlugin):
                           help=MultiLanguage.get_string('RUN_ARG_WORKING_DIR'))
 
         group = parser.add_argument_group(MultiLanguage.get_string('RUN_ARG_GROUP_IOS'))
-        group.add_argument("-sdk", dest="use_sdk", metavar="USE_SDK", nargs='?', default='iphonesimulator',
+        group.add_argument("-sdk", dest="use_sdk", metavar="USE_SDK", nargs='?', default='',
                           help=MultiLanguage.get_string('RUN_ARG_IOS_SDK'))
 
     def _check_custom_options(self, args):

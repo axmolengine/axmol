@@ -113,11 +113,21 @@ elseif(APPLE)
              ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/AppController.h
              ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/RootViewController.h
              )
-        set(APP_UI_RES
-            ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreen.storyboard
-            ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreenBackground.png
-            ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/Images.xcassets
+
+        if (TVOS)
+            set(APP_UI_RES
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreenBackground.png
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/LaunchScreen.storyboard
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/Images.xcassets
             )
+        else()
+            set(APP_UI_RES
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreenBackground.png
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/Images.xcassets
+            )
+        endif()
+
         list(APPEND GAME_SOURCE
              ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/main.m
              ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/AppController.mm

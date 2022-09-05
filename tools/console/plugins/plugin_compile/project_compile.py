@@ -107,7 +107,7 @@ class CCPluginCompile(axys.CCPlugin):
         group = parser.add_argument_group(MultiLanguage.get_string('COMPILE_ARG_GROUP_IOS'))
         group.add_argument("--sign-identity", dest="sign_id",
                            help=MultiLanguage.get_string('COMPILE_ARG_IOS_SIGN'))
-        group.add_argument("-sdk", dest="use_sdk", metavar="USE_SDK", nargs='?', default='iphonesimulator',
+        group.add_argument("-sdk", dest="use_sdk", metavar="USE_SDK", nargs='?', default='',
                            help=MultiLanguage.get_string('COMPILE_ARG_IOS_SDK'))
 
         group = parser.add_argument_group(MultiLanguage.get_string('COMPILE_ARG_GROUP_LUA_JS'))
@@ -189,7 +189,13 @@ class CCPluginCompile(axys.CCPlugin):
                 self._output_dir = os.path.abspath(args.output_dir)
 
         self._sign_id = args.sign_id
-        self._use_sdk = args.use_sdk
+
+        if args.platform == "ios" and args.use_sdk == "":
+            self._use_sdk = "iphonesimulator"
+        elif args.platform == "tvos" and args.use_sdk == "":
+            self._use_sdk = "appletvsimulator"
+        else:
+            self._use_sdk = args.use_sdk
 
         if self._project._is_lua_project():
             self._lua_encrypt = args.lua_encrypt
