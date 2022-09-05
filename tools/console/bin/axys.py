@@ -746,6 +746,8 @@ def get_xcode_version():
     xcode = None
     version = None
     for line in child.stdout:
+        line = line.decode('utf8')
+
         if 'Xcode' in line:
             xcode, version = str.split(line, ' ')
 

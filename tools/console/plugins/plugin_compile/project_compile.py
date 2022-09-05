@@ -257,6 +257,8 @@ class CCPluginCompile(axys.CCPlugin):
             ret = self._platforms.project_path()
         elif self._platforms.is_ios_active():
             ret = os.path.join(self._platforms.project_path(), "ios")
+        elif self._platforms.is_tvos_active():
+            ret = os.path.join(self._platforms.project_path(), "tvos")
         elif self._platforms.is_mac_active():
             ret = os.path.join(self._platforms.project_path(), "mac")
         else:
@@ -480,7 +482,7 @@ class CCPluginCompile(axys.CCPlugin):
 
         # axys always support ndk
         gradle_support_ndk = True
-            
+
 
         if(sys.version_info.major >= 3):
             from .build_android import AndroidBuilder
@@ -793,7 +795,7 @@ class CCPluginCompile(axys.CCPlugin):
         indexHtmlOutputFile = open(os.path.join(publish_dir, "index.html"), "w")
         indexHtmlOutputFile.write(indexContent)
         indexHtmlOutputFile.close()
-        
+
         # copy res dir
         if cfg_obj.copy_res is None:
             dst_dir = os.path.join(publish_dir, 'res')
@@ -826,11 +828,16 @@ class CCPluginCompile(axys.CCPlugin):
                 raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_MAC'),
                                           axys.CCPluginError.ERROR_WRONG_ARGS)
 
+        if platform == 'tvos':
+            if not self._platforms.is_tvos_active() or not axys.os_is_mac:
+                raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_MAC'),
+                                          axys.CCPluginError.ERROR_WRONG_ARGS)
+
         if platform == 'win32':
             if not self._platforms.is_win32_active or not axys.os_is_win32:
                 raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_BUILD_ON_WIN'),
                                           axys.CCPluginError.ERROR_WRONG_ARGS)
-        
+
         if platform == 'linux':
             if not self._platforms.is_linux_active():
                 raise axys.CCPluginError("Please build on linux")
@@ -852,12 +859,12 @@ class CCPluginCompile(axys.CCPlugin):
                 self.compile_lua_scripts(script_path, folder_64bit, True)
 
             if build_32bit:
-                self.compile_lua_scripts(script_path, script_path, False) 
+                self.compile_lua_scripts(script_path, script_path, False)
 
             # mac only support 64bit, so should remove .lua files not int folder_64bit
             if platform == 'mac' and self._compile_script:
                 self._remove_file_with_ext(script_path, '.lua')
-        
+
         # self.compile_js_script(path)
 
         # if only support 64bit, then move to
@@ -903,7 +910,11 @@ class CCPluginCompile(axys.CCPlugin):
             # iOS need to generate Xcode project file first
             if platform == 'ios':
                 engine_dir = self.get_engine_dir()
-                self._run_cmd('cmake %s -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=%s' % 
+                self._run_cmd('cmake %s -GXcode -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=%s' %
+                              ( os.path.relpath(cmakefile_dir, build_dir), self._use_sdk ) )
+            elif platform == 'tvos':
+                engine_dir = self.get_engine_dir()
+                self._run_cmd('cmake %s -GXcode -DCMAKE_SYSTEM_NAME=tvOS -DCMAKE_OSX_SYSROOT=%s' %
                               ( os.path.relpath(cmakefile_dir, build_dir), self._use_sdk ) )
             elif platform == 'mac':
                 self._run_cmd('cmake -GXcode %s' % os.path.relpath(cmakefile_dir, build_dir))
@@ -915,10 +926,10 @@ class CCPluginCompile(axys.CCPlugin):
                     if generator is not None:
                         if ver_num >= 16:
                             # for vs2019 x64 is the default target
-                            self._run_cmd('cmake %s -G "%s" -A win32' % 
+                            self._run_cmd('cmake %s -G "%s" -A win32' %
                                 (os.path.relpath(cmakefile_dir, build_dir), generator))
-                        else: 
-                            self._run_cmd('cmake %s -G "%s"' % 
+                        else:
+                            self._run_cmd('cmake %s -G "%s"' %
                                 (os.path.relpath(cmakefile_dir, build_dir), generator))
                     else:
                         axys.Logging.warning(MultiLanguage.get_string("COMPILE_VS_VERSION_NOT_REGISTER") % (ret[2]))
@@ -951,7 +962,7 @@ class CCPluginCompile(axys.CCPlugin):
         self.run_root = output_dir
 
         # set application path and application name
-        if platform == 'mac' or platform == 'ios':
+        if platform == 'mac' or platform == 'ios' or platform == 'tvos':
             self.app_path = os.path.join(output_dir, self.project_name + '.app')
         else:
             self.app_path = output_dir
