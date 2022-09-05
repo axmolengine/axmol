@@ -12,7 +12,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     set(_AX_ROOT "$ENV{AX_ROOT}")
     if(NOT (_AX_ROOT STREQUAL ""))
         set(_AX_ROOT_PATH "${_AX_ROOT}")
-        file(TO_CMAKE_PATH ${_AX_ROOT_PATH} _AX_ROOT_PATH) # string(REPLACE "\\" "/" _AX_ROOT_PATH ${_AX_ROOT_PATH})        
+        file(TO_CMAKE_PATH ${_AX_ROOT_PATH} _AX_ROOT_PATH) # string(REPLACE "\\" "/" _AX_ROOT_PATH ${_AX_ROOT_PATH})
         message(STATUS "Using system env var _AX_ROOT=${_AX_ROOT}")
     else()
         message(FATAL_ERROR "Please run setup.py add system env var 'AX_ROOT' to specific the engine root")
@@ -79,11 +79,21 @@ elseif(APPLE)
              proj.ios_mac/ios/LuaObjectCBridgeTest.h
              proj.ios_mac/ios/RootViewController.h
              )
-        set(APP_UI_RES
-            proj.ios_mac/ios/LaunchScreen.storyboard
-            proj.ios_mac/ios/LaunchScreenBackground.png
-            proj.ios_mac/ios/Images.xcassets
-            )
+
+        if (TVOS)
+            set(APP_UI_RES
+                proj.ios_mac/ios/LaunchScreenBackground.png
+                proj.ios_mac/ios/targets/tvos/LaunchScreen.storyboard
+                proj.ios_mac/ios/targets/tvos/Images.xcassets
+                )
+        else()
+            set(APP_UI_RES
+                proj.ios_mac/ios/LaunchScreenBackground.png
+                proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard
+                proj.ios_mac/ios/targets/ios/Images.xcassets
+                )
+        endif()
+
         list(APPEND GAME_SOURCE
              proj.ios_mac/ios/main.m
              proj.ios_mac/ios/LuaObjectCBridgeTest.mm
@@ -152,8 +162,13 @@ if(APPLE)
         set_target_properties(${APP_NAME} PROPERTIES
             LINK_FLAGS "-pagezero_size 10000 -image_base 100000000"
         )
+    elseif(TVOS)
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}//proj.ios_mac/ios/targets/tvos/Info.plist")
+        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
+        set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
+        set_xcode_property(${APP_NAME} CODE_SIGN_IDENTIFY "iPhone Developer")
     elseif(IOS)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/Info.plist")
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}//proj.ios_mac/ios/targets/ios/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
         set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
         set_xcode_property(${APP_NAME} CODE_SIGN_IDENTIFY "iPhone Developer")
