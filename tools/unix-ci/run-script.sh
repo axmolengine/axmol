@@ -61,6 +61,18 @@ function build_ios()
     exit 0
 }
 
+function build_tvos()
+{
+    NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
+
+    cd $AX_ROOT
+
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=9.0 -DAX_USE_ALSOFT=ON
+    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=tvOS Simulator,name=Apple TV Simulator"
+
+    exit 0
+}
+
 function build_android()
 {
     # print jdk detail
@@ -95,6 +107,12 @@ function run_build()
     fi
 
     if [ $BUILD_TARGET == 'ios' ]; then
+        set -x
+        build_ios
+        exit 0
+    fi
+
+    if [ $BUILD_TARGET == 'tvos' ]; then
         set -x
         build_ios
         exit 0
