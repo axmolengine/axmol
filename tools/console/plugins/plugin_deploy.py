@@ -62,6 +62,14 @@ class CCPluginDeploy(axys.CCPlugin):
         self._iosapp_path = compile_dep.app_path
         self._use_sdk = compile_dep._use_sdk
 
+    def deploy_tvos(self, dependencies):
+        if not self._platforms.is_tvos_active():
+            return
+
+        compile_dep = dependencies['compile']
+        self._tvosapp_path = compile_dep.app_path
+        self._use_sdk = compile_dep._use_sdk
+
     def deploy_mac(self, dependencies):
         if not self._platforms.is_mac_active():
             return
@@ -88,7 +96,7 @@ class CCPluginDeploy(axys.CCPlugin):
 
     def find_xap_deploy_tool(self):
         if(sys.version_info.major >= 3):
-            import winreg 
+            import winreg
         else:
             import _winreg as winreg
         import re
@@ -185,6 +193,7 @@ class CCPluginDeploy(axys.CCPlugin):
         self.parse_args(argv)
         axys.Logging.info(MultiLanguage.get_string('DEPLOY_INFO_MODE_FMT', self._mode))
         self.deploy_ios(dependencies)
+        self.deploy_tvos(dependencies)
         self.deploy_mac(dependencies)
         self.deploy_android(dependencies)
         self.deploy_web(dependencies)

@@ -41,9 +41,9 @@ bool Bug14327Layer::init()
 {
     if (BugsTestBase::init())
     {
-        auto glview        = Director::getInstance()->getOpenGLView();
-        auto visibleOrigin = glview->getVisibleOrigin();
-        auto visibleSize   = glview->getVisibleSize();
+        auto glView        = Director::getInstance()->getOpenGLView();
+        auto visibleOrigin = glView->getVisibleOrigin();
+        auto visibleSize   = glView->getVisibleSize();
 
         auto pBg = Sprite::create("Images/HelloWorld.png");
         pBg->setPosition(Vec2(visibleOrigin.x + visibleSize.width / 2, visibleOrigin.y + visibleSize.height / 2));

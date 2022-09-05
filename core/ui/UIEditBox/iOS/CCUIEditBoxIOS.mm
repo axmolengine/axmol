@@ -320,9 +320,9 @@
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)distance
 {
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglview = (CCEAGLView*)view->getEAGLView();
+    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
 
-    [eaglview doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
+    [eaglView doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
 }
 
 - (void)updateFrame:(CGRect)rect
@@ -337,9 +337,9 @@
 - (void)openKeyboard
 {
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglview = (CCEAGLView*)view->getEAGLView();
+    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
 
-    [eaglview addSubview:self.textInput];
+    [eaglView addSubview:self.textInput];
     [self.textInput becomeFirstResponder];
 }
 
@@ -362,9 +362,9 @@
 - (void)animationSelector
 {
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglview = (CCEAGLView*)view->getEAGLView();
+    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
 
-    [eaglview doAnimationWhenAnotherEditBeClicked];
+    [eaglView doAnimationWhenAnotherEditBeClicked];
 }
 
 #pragma mark - UITextView delegate methods
@@ -376,9 +376,9 @@
     _returnPressed = NO;
 
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglview = (CCEAGLView*)view->getEAGLView();
+    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
 
-    if ([eaglview isKeyboardShown])
+    if ([eaglView isKeyboardShown])
     {
         [self performSelector:@selector(animationSelector) withObject:nil afterDelay:0.0f];
     }
@@ -469,9 +469,9 @@
     _returnPressed = NO;
 
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglview = (CCEAGLView*)view->getEAGLView();
+    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
 
-    if ([eaglview isKeyboardShown])
+    if ([eaglView isKeyboardShown])
     {
         [self performSelector:@selector(animationSelector) withObject:nil afterDelay:0.0f];
     }

@@ -90,10 +90,10 @@ int Application::run()
     }
 
     auto director = Director::getInstance();
-    auto glview   = director->getOpenGLView();
+    auto glView   = director->getOpenGLView();
 
-    // Retain glview to avoid glview being released in the while loop
-    glview->retain();
+    // Retain glView to avoid glView being released in the while loop
+    glView->retain();
 
     LONGLONG interval = 0LL;
     LONG waitMS       = 0L;
@@ -101,7 +101,7 @@ int Application::run()
     LARGE_INTEGER freq;
     QueryPerformanceFrequency(&freq);
 
-    while (!glview->windowShouldClose())
+    while (!glView->windowShouldClose())
     {
         QueryPerformanceCounter(&nNow);
         interval = nNow.QuadPart - nLast.QuadPart;
@@ -109,7 +109,7 @@ int Application::run()
         {
             nLast.QuadPart = nNow.QuadPart;
             director->mainLoop();
-            glview->pollEvents();
+            glView->pollEvents();
         }
         else
         {
@@ -125,13 +125,13 @@ int Application::run()
     }
 
     // Director should still do a cleanup if the window was closed manually.
-    if (glview->isOpenGLReady())
+    if (glView->isOpenGLReady())
     {
         director->end();
         director->mainLoop();
         director = nullptr;
     }
-    glview->release();
+    glView->release();
 
     ///////////////////////////////////////////////////////////////////////////
     /////////////// restoring timer resolution

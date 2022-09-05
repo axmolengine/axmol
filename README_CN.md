@@ -86,12 +86,20 @@
   2. 执行如下命令确保cmake能成功生成xcode工程:  
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. 生成xcode工程, 进入axys根目录执行如下命令之一:  
-     - for arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
-     - for armv7,arm64 combined:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
-     - for simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64```
+     - for ios arm64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=OS64```
+     - for ios armv7,arm64 combined:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=OS```
+     - for ios simulator x86_64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64```
+     - for tvos arm64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=TVOS```
+     - for tvos simulator x86_64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS```
+     - for macos x86_64(Intel)
+     ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=x86_64```
+     - for macos arm64(M1)
+     ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=arm64```
 
   4. 之后就可以用xcode打开, 选择cpp-tests编译运行
 

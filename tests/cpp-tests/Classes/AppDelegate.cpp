@@ -73,15 +73,15 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    auto glview   = director->getOpenGLView();
-    if (!glview)
+    auto glView   = director->getOpenGLView();
+    if (!glView)
     {
         std::string title = "Cpp Tests";
 #ifndef NDEBUG
         title += " *Debug*",
 #endif
-            glview = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
-        director->setOpenGLView(glview);
+            glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
+        director->setOpenGLView(glView);
     }
 
     director->setStatsDisplay(true);
@@ -92,7 +92,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 #endif
 
-    auto screenSize = glview->getFrameSize();
+    auto screenSize = glView->getFrameSize();
 
     auto fileUtils = FileUtils::getInstance();
     std::vector<std::string> searchPaths;
@@ -116,7 +116,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     fileUtils->setSearchPaths(searchPaths);
 
-    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
 
     // Enable Remote Console
     auto console = director->getConsole();

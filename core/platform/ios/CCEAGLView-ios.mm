@@ -464,8 +464,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glview = ax::Director::getInstance()->getOpenGLView();
-    glview->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
+    auto glView = ax::Director::getInstance()->getOpenGLView();
+    glView->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
 }
 
 - (void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
@@ -499,8 +499,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glview = ax::Director::getInstance()->getOpenGLView();
-    glview->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
+    auto glView = ax::Director::getInstance()->getOpenGLView();
+    glView->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
 }
 
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
@@ -524,8 +524,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glview = ax::Director::getInstance()->getOpenGLView();
-    glview->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
+    auto glView = ax::Director::getInstance()->getOpenGLView();
+    glView->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
 }
 
 - (void)touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
@@ -549,8 +549,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glview = ax::Director::getInstance()->getOpenGLView();
-    glview->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
+    auto glView = ax::Director::getInstance()->getOpenGLView();
+    glView->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
 }
 
 - (void)showKeyboard
@@ -577,8 +577,8 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if (dis < 0.0f)
         dis = 0.0f;
 
-    auto glview = ax::Director::getInstance()->getOpenGLView();
-    dis *= glview->getScaleY();
+    auto glView = ax::Director::getInstance()->getOpenGLView();
+    dis *= glView->getScaleY();
 
     dis /= self.contentScaleFactor;
 
@@ -666,6 +666,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
 
 - (void)onUIKeyboardNotification:(NSNotification*)notif
 {
+#if !defined(AX_TARGET_OS_TVOS)
     NSString* type = notif.name;
 
     NSDictionary* info = [notif userInfo];
@@ -718,9 +719,9 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         break;
     }
 
-    auto glview  = ax::Director::getInstance()->getOpenGLView();
-    float scaleX = glview->getScaleX();
-    float scaleY = glview->getScaleY();
+    auto glView  = ax::Director::getInstance()->getOpenGLView();
+    float scaleX = glView->getScaleX();
+    float scaleY = glView->getScaleY();
 
     // Convert to pixel coordinate
     begin = CGRectApplyAffineTransform(
@@ -728,7 +729,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
     end = CGRectApplyAffineTransform(
         end, CGAffineTransformScale(CGAffineTransformIdentity, self.contentScaleFactor, self.contentScaleFactor));
 
-    float offestY = glview->getViewPortRect().origin.y;
+    float offestY = glView->getViewPortRect().origin.y;
     if (offestY < 0.0f)
     {
         begin.origin.y += offestY;
@@ -766,6 +767,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         self.isKeyboardShown = NO;
         dispatcher->dispatchKeyboardDidHide(notiInfo);
     }
+#endif
 }
 
 // Close the keyboard opened by EditBox

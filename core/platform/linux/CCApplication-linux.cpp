@@ -61,17 +61,17 @@ int Application::run()
     std::chrono::steady_clock::time_point lastTime{};
 
     auto director = Director::getInstance();
-    auto glview   = director->getOpenGLView();
+    auto glView   = director->getOpenGLView();
 
-    // Retain glview to avoid glview being released in the while loop
-    glview->retain();
+    // Retain glView to avoid glView being released in the while loop
+    glView->retain();
 
-    while (!glview->windowShouldClose())
+    while (!glView->windowShouldClose())
     {
         lastTime = std::chrono::steady_clock::now();
 
         director->mainLoop();
-        glview->pollEvents();
+        glView->pollEvents();
 
         auto interval = std::chrono::steady_clock::now() - lastTime;
         if (interval < _animationInterval)
@@ -89,13 +89,13 @@ int Application::run()
      *  when we want to close the window, we should call Director::end();
      *  then call Director::mainLoop to do release of internal resources
      */
-    if (glview->isOpenGLReady())
+    if (glView->isOpenGLReady())
     {
         director->end();
         director->mainLoop();
         director = nullptr;
     }
-    glview->release();
+    glView->release();
     return EXIT_SUCCESS;
 }
 

@@ -132,8 +132,8 @@
     if (!self.wkWebView.superview)
     {
         auto view     = ax::Director::getInstance()->getOpenGLView();
-        auto eaglview = (CCEAGLView*)view->getEAGLView();
-        [eaglview addSubview:self.wkWebView];
+        auto eaglView = (CCEAGLView*)view->getEAGLView();
+        [eaglView addSubview:self.wkWebView];
     }
 }
 

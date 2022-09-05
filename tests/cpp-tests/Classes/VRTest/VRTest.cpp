@@ -48,16 +48,16 @@ VRTest1::VRTest1()
     addChild(image);
 
     auto button = MenuItemFont::create("Enable / Disable VR", [](Ref* ref) {
-        auto glview = Director::getInstance()->getOpenGLView();
-        auto vrimpl = glview->getVR();
+        auto glView = Director::getInstance()->getOpenGLView();
+        auto vrimpl = glView->getVR();
         if (vrimpl)
         {
-            glview->setVR(nullptr);
+            glView->setVR(nullptr);
         }
         else
         {
             auto genericvr = new VRGenericRenderer;
-            glview->setVR(genericvr);
+            glView->setVR(genericvr);
         }
     });
     button->setFontSizeObj(16);

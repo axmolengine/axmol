@@ -192,6 +192,7 @@ class Project(object):
 class Platforms(object):
     ANDROID = 'android'
     IOS = 'ios'
+    TVOS = 'tvos'
     MAC = 'mac'
     WEB = 'web'
     WIN32 = 'win32'
@@ -200,6 +201,7 @@ class Platforms(object):
     CFG_CLASS_MAP = {
         ANDROID : "axys_project.AndroidConfig",
         IOS : "axys_project.iOSConfig",
+        TVOS : "axys_project.tvOSConfig",
         MAC : "axys_project.MacConfig",
         WEB : "axys_project.WebConfig",
         WIN32 : "axys_project.Win32Config",
@@ -234,7 +236,7 @@ class Platforms(object):
         ret = []
         platforms_for_os = {
             "linux" : [ Platforms.WEB, Platforms.LINUX, Platforms.ANDROID ],
-            "mac" : [ Platforms.WEB, Platforms.IOS, Platforms.MAC, Platforms.ANDROID ],
+            "mac" : [ Platforms.WEB, Platforms.IOS, Platforms.TVOS, Platforms.MAC, Platforms.ANDROID ],
             "win32" : [ Platforms.WEB, Platforms.WIN32, Platforms.ANDROID ]
         }
         for p in platforms:
@@ -254,7 +256,7 @@ class Platforms(object):
         # generate the platform list for different projects
         if self._project._is_lua_project():
             if self._project._is_native_support():
-                platform_list = [ Platforms.ANDROID, Platforms.WIN32, Platforms.IOS, Platforms.MAC, Platforms.LINUX ]
+                platform_list = [ Platforms.ANDROID, Platforms.WIN32, Platforms.IOS, Platforms.TVOS, Platforms.MAC, Platforms.LINUX ]
             else:
                 if self._project.has_android_libs():
                     platform_list = [ Platforms.ANDROID ]
@@ -262,14 +264,14 @@ class Platforms(object):
                     platform_list = []
         elif self._project._is_js_project():
             if self._project._is_native_support():
-                platform_list = [ Platforms.ANDROID, Platforms.WIN32, Platforms.IOS, Platforms.MAC, Platforms.WEB, Platforms.LINUX ]
+                platform_list = [ Platforms.ANDROID, Platforms.WIN32, Platforms.IOS, Platforms.TVOS, Platforms.MAC, Platforms.WEB, Platforms.LINUX ]
             else:
                 if self._project.has_android_libs():
                     platform_list = [ Platforms.ANDROID, Platforms.WEB ]
                 else:
                     platform_list = [ Platforms.WEB ]
         elif self._project._is_cpp_project():
-            platform_list = [ Platforms.ANDROID, Platforms.WIN32, Platforms.IOS, Platforms.MAC, Platforms.LINUX ]
+            platform_list = [ Platforms.ANDROID, Platforms.WIN32, Platforms.IOS, Platforms.TVOS, Platforms.MAC, Platforms.LINUX ]
 
         # filter the available platform list
         platform_list = self._filter_platforms(platform_list)
@@ -290,7 +292,7 @@ class Platforms(object):
 
             if proj_dir is not None:
                 cfg_obj.proj_path = os.path.join(root_path, proj_dir)
-                
+
             if cfg_obj._is_available():
                 self._available_platforms[p] = cfg_obj
 
@@ -313,6 +315,9 @@ class Platforms(object):
 
     def is_ios_active(self):
         return self._current == Platforms.IOS
+
+    def is_tvos_active(self):
+        return self._current == Platforms.TVOS
 
     def is_mac_active(self):
         return self._current == Platforms.MAC
@@ -448,6 +453,15 @@ class MacConfig(LinuxConfig):
 class iOSConfig(LinuxConfig):
     def _use_default(self):
         super(iOSConfig, self)._use_default()
+
+        if self._is_script:
+            self.proj_path = os.path.join(self._proj_root_path, "frameworks", "runtime-src", "proj.ios_mac")
+        else:
+            self.proj_path = os.path.join(self._proj_root_path, "proj.ios_mac")
+
+class tvOSConfig(LinuxConfig):
+    def _use_default(self):
+        super(tvOSConfig, self)._use_default()
 
         if self._is_script:
             self.proj_path = os.path.join(self._proj_root_path, "frameworks", "runtime-src", "proj.ios_mac")

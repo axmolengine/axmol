@@ -57,7 +57,7 @@ function install_environement()
 
         sudo apt-get install nasm
         nasm -v
-        
+
         if [ "$BUILD_TARGET" == "linux" ]; then
             install_linux_environment
         fi
@@ -70,7 +70,7 @@ function install_environement()
     if [ "$GH_OS_NAME" == "osx" ]; then
         brew install nasm
         nasm -v
-        
+
         install_python_module_for_osx
     fi
 }
