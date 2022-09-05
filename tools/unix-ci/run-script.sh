@@ -114,7 +114,7 @@ function run_build()
 
     if [ $BUILD_TARGET == 'tvos' ]; then
         set -x
-        build_ios
+        build_tvos
         exit 0
     fi
 
