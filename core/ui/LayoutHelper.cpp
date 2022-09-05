@@ -907,9 +907,9 @@ void LayoutHelper::VisibleRect::lazyInit()
     if (s_ScreenVisibleRect.size.width == 0.0f && s_ScreenVisibleRect.size.height == 0.0f)
     {
         auto director = Director::getInstance();
-        auto glview   = director->getOpenGLView();
+        auto glView   = director->getOpenGLView();
 
-        if (glview->getResolutionPolicy() == ResolutionPolicy::NO_BORDER)
+        if (glView->getResolutionPolicy() == ResolutionPolicy::NO_BORDER)
         {
             s_ScreenVisibleRect.origin = director->getVisibleOrigin();
             s_ScreenVisibleRect.size   = director->getVisibleSize();

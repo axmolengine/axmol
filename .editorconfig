@@ -1,0 +1,38 @@
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.py]
+indent_style = space
+indent_size = 4
+
+[{*[Mm]akefile*,*.mak,*.mk,depend}]
+indent_style = tab
+
+[*.{bat, cmd, cmd.*}]
+end_of_line = crlf
+indent_style = space
+indent_size = 4
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[*.md]
+indent_size = 4
+trim_trailing_whitespace = false
+
+[*.gemspec]
+indent_size = 2
+
+[*.rb]
+indent_size = 2
+
+[*.bat]
+end_of_line = crlf

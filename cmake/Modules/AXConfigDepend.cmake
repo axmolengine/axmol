@@ -74,32 +74,41 @@ macro(ax_depend)
         elseif(IOS)
             # Locate system libraries on iOS
             find_library(UIKIT_LIBRARY UIKit)
-            find_library(OPENGLES_LIBRARY OpenGLES)
-            find_library(CORE_MOTION_LIBRARY CoreMotion)
+            find_library(OPENGLES_LIBRARY OpenGLES)            
             find_library(AVKIT_LIBRARY AVKit)
             find_library(CORE_MEDIA_LIBRARY CoreMedia)
             find_library(CORE_TEXT_LIBRARY CoreText)
             find_library(SECURITY_LIBRARY Security)
             find_library(CORE_GRAPHICS_LIBRARY CoreGraphics)
             find_library(AV_FOUNDATION_LIBRARY AVFoundation)
-            find_library(WEBKIT_LIBRARY WebKit)
             find_library(ZLIB z)
             #find_library(ICONVLIB iconv)
+
+            if(NOT TVOS)
+                find_library(CORE_MOTION_LIBRARY CoreMotion)
+                find_library(WEBKIT_LIBRARY WebKit)
+            endif()
+            
             list(APPEND PLATFORM_SPECIFIC_LIBS
                  ${UIKIT_LIBRARY}
                  ${OPENGLES_LIBRARY}
-                 ${CORE_MOTION_LIBRARY}
                  ${AVKIT_LIBRARY}
                  ${CORE_MEDIA_LIBRARY}
                  ${CORE_TEXT_LIBRARY}
                  ${SECURITY_LIBRARY}
                  ${CORE_GRAPHICS_LIBRARY}
                  ${AV_FOUNDATION_LIBRARY}
-                 ${WEBKIT_LIBRARY}
                  ${_AX_APPLE_LIBS}
                  ${ZLIB}
                  #${ICONVLIB}
                  )
+
+            if(NOT TVOS)
+                list(APPEND PLATFORM_SPECIFIC_LIBS
+                    ${CORE_MOTION_LIBRARY}
+                    ${WEBKIT_LIBRARY}
+                )
+            endif()
         endif()
     endif()
 endmacro()

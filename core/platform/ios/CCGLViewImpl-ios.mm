@@ -37,10 +37,10 @@ void* GLViewImpl::_pixelFormat      = kEAGLColorFormatRGB565;
 int GLViewImpl::_depthFormat        = GL_DEPTH_COMPONENT16;
 int GLViewImpl::_multisamplingCount = 0;
 
-GLViewImpl* GLViewImpl::createWithEAGLView(void* eaglview)
+GLViewImpl* GLViewImpl::createWithEAGLView(void* eaglView)
 {
     auto ret = new GLViewImpl;
-    if (ret->initWithEAGLView(eaglview))
+    if (ret->initWithEAGLView(eaglView))
     {
         ret->autorelease();
         return ret;
@@ -122,18 +122,18 @@ GLViewImpl::GLViewImpl() {}
 
 GLViewImpl::~GLViewImpl()
 {
-    // CCEAGLView *glview = (CCEAGLView*) _eaglview;
-    //[glview release];
+    // CCEAGLView *glView = (CCEAGLView*) _eaglView;
+    //[glView release];
 }
 
-bool GLViewImpl::initWithEAGLView(void* eaglview)
+bool GLViewImpl::initWithEAGLView(void* eaglView)
 {
-    _eaglview          = eaglview;
-    CCEAGLView* glview = (CCEAGLView*)_eaglview;
+    _eaglView          = eaglView;
+    CCEAGLView* glView = (CCEAGLView*)_eaglView;
 
-    _screenSize.width = _designResolutionSize.width = [glview getWidth];
-    _screenSize.height = _designResolutionSize.height = [glview getHeight];
-    //    _scaleX = _scaleY = [glview contentScaleFactor];
+    _screenSize.width = _designResolutionSize.width = [glView getWidth];
+    _screenSize.height = _designResolutionSize.height = [glView getHeight];
+    //    _scaleX = _scaleY = [glView contentScaleFactor];
 
     return true;
 }
@@ -142,7 +142,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float
 {
     CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     convertAttrs();
-    CCEAGLView* eaglview = [CCEAGLView viewWithFrame:r
+    CCEAGLView* eaglView = [CCEAGLView viewWithFrame:r
                                          pixelFormat:(NSString*)_pixelFormat
                                          depthFormat:_depthFormat
                                   preserveBackbuffer:NO
@@ -152,14 +152,14 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float
 
     // Not available on tvOS
 #if !defined(AX_TARGET_OS_TVOS)
-    [eaglview setMultipleTouchEnabled:YES];
+    [eaglView setMultipleTouchEnabled:YES];
 #endif
 
-    _screenSize.width = _designResolutionSize.width = [eaglview getWidth];
-    _screenSize.height = _designResolutionSize.height = [eaglview getHeight];
-    //    _scaleX = _scaleY = [eaglview contentScaleFactor];
+    _screenSize.width = _designResolutionSize.width = [eaglView getWidth];
+    _screenSize.height = _designResolutionSize.height = [eaglView getHeight];
+    //    _scaleX = _scaleY = [eaglView contentScaleFactor];
 
-    _eaglview = eaglview;
+    _eaglView = eaglView;
 
     return true;
 }
@@ -178,7 +178,7 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
 
 bool GLViewImpl::isOpenGLReady()
 {
-    return _eaglview != nullptr;
+    return _eaglView != nullptr;
 }
 
 bool GLViewImpl::setContentScaleFactor(float contentScaleFactor)
@@ -186,17 +186,17 @@ bool GLViewImpl::setContentScaleFactor(float contentScaleFactor)
     AX_ASSERT(_resolutionPolicy == ResolutionPolicy::UNKNOWN);  // cannot enable retina mode
     _scaleX = _scaleY = contentScaleFactor;
 
-    CCEAGLView* eaglview = (CCEAGLView*)_eaglview;
-    [eaglview setNeedsLayout];
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
+    [eaglView setNeedsLayout];
 
     return true;
 }
 
 float GLViewImpl::getContentScaleFactor() const
 {
-    CCEAGLView* eaglview = (CCEAGLView*)_eaglview;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
 
-    float scaleFactor = [eaglview contentScaleFactor];
+    float scaleFactor = [eaglView contentScaleFactor];
 
     //    AXASSERT(scaleFactor == _scaleX == _scaleY, "Logic error in GLView::getContentScaleFactor");
 
@@ -208,36 +208,36 @@ void GLViewImpl::end()
     [CCDirectorCaller destroy];
 
     // destroy EAGLView
-    CCEAGLView* eaglview = (CCEAGLView*)_eaglview;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
 
-    [eaglview removeFromSuperview];
-    //[eaglview release];
+    [eaglView removeFromSuperview];
+    //[eaglView release];
     release();
 }
 
 void GLViewImpl::swapBuffers()
 {
-    CCEAGLView* eaglview = (CCEAGLView*)_eaglview;
-    [eaglview swapBuffers];
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
+    [eaglView swapBuffers];
 }
 
 void GLViewImpl::setIMEKeyboardState(bool open)
 {
-    CCEAGLView* eaglview = (CCEAGLView*)_eaglview;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
 
     if (open)
     {
-        [eaglview showKeyboard];
+        [eaglView showKeyboard];
     }
     else
     {
-        [eaglview hideKeyboard];
+        [eaglView hideKeyboard];
     }
 }
 
 Rect GLViewImpl::getSafeAreaRect() const
 {
-    CCEAGLView* eaglview = (CCEAGLView*)_eaglview;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
     float version = [[UIDevice currentDevice].systemVersion floatValue];
@@ -245,14 +245,14 @@ Rect GLViewImpl::getSafeAreaRect() const
     {
 #    pragma clang diagnostic push
 #    pragma clang diagnostic ignored "-Wpartial-availability"
-        UIEdgeInsets safeAreaInsets = eaglview.safeAreaInsets;
+        UIEdgeInsets safeAreaInsets = eaglView.safeAreaInsets;
 #    pragma clang diagnostic pop
 
         // Multiply contentScaleFactor since safeAreaInsets return points.
-        safeAreaInsets.left *= eaglview.contentScaleFactor;
-        safeAreaInsets.right *= eaglview.contentScaleFactor;
-        safeAreaInsets.top *= eaglview.contentScaleFactor;
-        safeAreaInsets.bottom *= eaglview.contentScaleFactor;
+        safeAreaInsets.left *= eaglView.contentScaleFactor;
+        safeAreaInsets.right *= eaglView.contentScaleFactor;
+        safeAreaInsets.top *= eaglView.contentScaleFactor;
+        safeAreaInsets.bottom *= eaglView.contentScaleFactor;
 
         // Get leftBottom and rightTop point in UI coordinates
         Vec2 leftBottom = Vec2(safeAreaInsets.left, _screenSize.height - safeAreaInsets.bottom);

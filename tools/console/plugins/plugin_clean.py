@@ -51,6 +51,15 @@ class CCPluginClean(axys.CCPlugin):
         self._run_cmd("cd \"%s\" && xcodebuild clean" % project_dir)
         self._rmdir(CCPluginDist.target_path(project_dir))
 
+    def clean_tvos(self):
+        if not self._platforms.is_tvos_active():
+            return
+        project_dir = self._platforms.project_path()
+
+        axys.Logging.info("removing intermediate files")
+        self._run_cmd("cd \"%s\" && xcodebuild clean" % project_dir)
+        self._rmdir(CCPluginDist.target_path(project_dir))
+
     def _rmdir(self, path):
         if os.path.exists(path):
             try:
@@ -63,3 +72,4 @@ class CCPluginClean(axys.CCPlugin):
         self.parse_args(argv)
         self.clean_android()
         self.clean_ios()
+        self.clean_tvos()

@@ -54,7 +54,9 @@ customization that is not appropriate for viewDidLoad.
                                      numberOfSamples:axis::GLViewImpl::_multisamplingCount];
 
     // Enable or disable multiple touches
+#if !defined(AX_TARGET_OS_TVOS)
     [eaglView setMultipleTouchEnabled:NO];
+#endif
 
     // Set EAGLView as view of RootViewController
     self.view = eaglView;
@@ -93,15 +95,15 @@ customization that is not appropriate for viewDidLoad.
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-    auto glview = axis::Director::getInstance()->getOpenGLView();
+    auto glView = axis::Director::getInstance()->getOpenGLView();
 
-    if (glview)
+    if (glView)
     {
-        CCEAGLView* eaglview = (__bridge CCEAGLView*)glview->getEAGLView();
+        CCEAGLView* eaglView = (__bridge CCEAGLView*)glView->getEAGLView();
 
-        if (eaglview)
+        if (eaglView)
         {
-            CGSize s = CGSizeMake([eaglview getWidth], [eaglview getHeight]);
+            CGSize s = CGSizeMake([eaglView getWidth], [eaglView getHeight]);
             axis::Application::getInstance()->applicationScreenSizeChanged((int)s.width, (int)s.height);
         }
     }

@@ -38,11 +38,17 @@ class CCPluginDist(axys.CCPlugin):
             else:
                 self._provisioning = options.provisioning
 
+        if self._platforms.is_tvos_active():
+            if not options.provisioning:
+                raise axys.CCPluginError("Provisioning profile is needed")
+            else:
+                self._provisioning = options.provisioning
+
     def _add_custom_options(self, parser):
         parser.add_option("-f", "--provisioning",
                           dest="provisioning",
                           help="provisioning profile to use (needed for iOS distribution)")
-        
+
     def dist_android(self):
         if not self._platforms.is_android_active():
             return
@@ -60,16 +66,36 @@ class CCPluginDist(axys.CCPlugin):
         schemes = match.group(1).split()
         if len(schemes) == 0:
             raise axys.CCPluginError("Couldn't find a scheme")
-        
+
         return schemes[0]
 
 
     @staticmethod
     def target_path(project_dir):
         return os.path.join(project_dir, '..', 'target')
-        
+
     def dist_ios(self):
         if not self._platforms.is_ios_active():
+            return
+        project_dir = self._platforms.project_path()
+
+        scheme = self._find_ios_scheme(project_dir)
+        axys.Logging.info("using scheme %s" % scheme)
+
+        archive_path = os.path.join(CCPluginDist.target_path(project_dir), scheme + '.xcarchive')
+        axys.Logging.info("archiving")
+        self._run_cmd("cd '%s' && xcodebuild -scheme '%s' -archivePath '%s' archive" % (project_dir, scheme, archive_path))
+
+        axys.Logging.info("exporting archive")
+        ipa_path = os.path.join(os.path.dirname(archive_path), scheme + '.ipa')
+        if os.path.exists(ipa_path):
+            os.remove(ipa_path)
+        self._run_cmd("cd '%s' && xcodebuild -exportArchive -exportFormat IPA -archivePath '%s' -exportPath '%s' -exportProvisioningProfile '%s'" % (project_dir, archive_path, ipa_path, self._provisioning))
+        axys.Logging.info("\nThe ipa was created at:\n%s" % os.path.abspath(ipa_path))
+        axys.Logging.info("\nNow you can use 'Application Loader' to submit the .ipa\n")
+
+    def dist_tvos(self):
+        if not self._platforms.is_tvos_active():
             return
         project_dir = self._platforms.project_path()
 
@@ -92,3 +118,4 @@ class CCPluginDist(axys.CCPlugin):
         self.parse_args(argv)
         self.dist_android()
         self.dist_ios()
+        self.dist_tvos()

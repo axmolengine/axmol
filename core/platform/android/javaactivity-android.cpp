@@ -82,12 +82,12 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
 {
     auto director = ax::Director::getInstance();
-    auto glview   = director->getOpenGLView();
-    if (!glview)
+    auto glView   = director->getOpenGLView();
+    if (!glView)
     {
-        glview = ax::GLViewImpl::create("Android app");
-        glview->setFrameSize(w, h);
-        director->setOpenGLView(glview);
+        glView = ax::GLViewImpl::create("Android app");
+        glView->setFrameSize(w, h);
+        director->setOpenGLView(glView);
 
         ax::Application::getInstance()->run();
     }

@@ -62,9 +62,9 @@ EditBoxImplIOS::~EditBoxImplIOS()
 
 void EditBoxImplIOS::createNativeControl(const Rect& frame)
 {
-    auto glview = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getOpenGLView();
 
-    Rect rect(0, 0, frame.size.width * glview->getScaleX(), frame.size.height * glview->getScaleY());
+    Rect rect(0, 0, frame.size.width * glView->getScaleX(), frame.size.height * glView->getScaleY());
 
     float factor = ax::Director::getInstance()->getContentScaleFactor();
 
@@ -179,10 +179,10 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
-    auto glview          = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglview = (CCEAGLView*)glview->getEAGLView();
+    auto glView          = ax::Director::getInstance()->getOpenGLView();
+    CCEAGLView* eaglView = (CCEAGLView*)glView->getEAGLView();
 
-    float factor = eaglview.contentScaleFactor;
+    float factor = eaglView.contentScaleFactor;
 
     [_systemControl updateFrame:CGRectMake(rect.origin.x / factor, rect.origin.y / factor, rect.size.width / factor,
                                            rect.size.height / factor)];
@@ -208,14 +208,14 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     AXASSERT(fontName != nullptr, "fontName can't be nullptr");
-    CCEAGLView* eaglview = static_cast<CCEAGLView*>(ax::Director::getInstance()->getOpenGLView()->getEAGLView());
-    float retinaFactor   = eaglview.contentScaleFactor;
+    CCEAGLView* eaglView = static_cast<CCEAGLView*>(ax::Director::getInstance()->getOpenGLView()->getEAGLView());
+    float retinaFactor   = eaglView.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
 
     fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
 
-    auto glview       = ax::Director::getInstance()->getOpenGLView();
-    float scaleFactor = glview->getScaleX();
+    auto glView       = ax::Director::getInstance()->getOpenGLView();
+    float scaleFactor = glView->getScaleX();
 
     if (fontSize == -1)
     {

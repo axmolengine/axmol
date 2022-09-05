@@ -96,7 +96,7 @@ def install_android_cmdline_tools():
 def install_android_sdk():
     # list packages
     run_with_yes(SDK_MANAGER + " --list --sdk_root=" + ANDROID_SDK_ROOT)
-    
+
     switches = " --verbose --sdk_root=" + ANDROID_SDK_ROOT + " "
     cmd_base = SDK_MANAGER + switches
     packages = [

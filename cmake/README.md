@@ -50,7 +50,7 @@ open mac-build/axys.xcodeproj
 ```sh
 cd axys
 mkdir ios-build
-cmake -B ios-build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake
+cmake -B ios-build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=OS64
 open ios-build/axys.xcodeproj
 ```
 

@@ -273,7 +273,7 @@ void FUIContainer::onExit()
 
     if (_stencilClippingSupport != nullptr && _stencilClippingSupport->_stencil != nullptr)
         _stencilClippingSupport->_stencil->onExit();
-    
+
     Node::onExit();
 }
 
@@ -310,8 +310,8 @@ void FUIContainer::restoreAllProgramStates()
 
 void FUIContainer::onBeforeVisitScissor()
 {
-    auto glview = Director::getInstance()->getOpenGLView();
-    _rectClippingSupport->_scissorOldState = glview->isScissorEnabled();
+    auto glView = Director::getInstance()->getOpenGLView();
+    _rectClippingSupport->_scissorOldState = glView->isScissorEnabled();
     Rect clippingRect = getClippingRect();
     if (false == _rectClippingSupport->_scissorOldState)
     {
@@ -323,11 +323,11 @@ void FUIContainer::onBeforeVisitScissor()
     }
     else
     {
-        _rectClippingSupport->_clippingOldRect = glview->getScissorRect();
+        _rectClippingSupport->_clippingOldRect = glView->getScissorRect();
         clippingRect = ToolSet::intersection(clippingRect, _rectClippingSupport->_clippingOldRect);
     }
 
-    glview->setScissorInPoints(clippingRect.origin.x,
+    glView->setScissorInPoints(clippingRect.origin.x,
         clippingRect.origin.y,
         clippingRect.size.width,
         clippingRect.size.height);
@@ -337,8 +337,8 @@ void FUIContainer::onAfterVisitScissor()
 {
     if (_rectClippingSupport->_scissorOldState)
     {
-        auto glview = Director::getInstance()->getOpenGLView();
-        glview->setScissorInPoints(_rectClippingSupport->_clippingOldRect.origin.x,
+        auto glView = Director::getInstance()->getOpenGLView();
+        glView->setScissorInPoints(_rectClippingSupport->_clippingOldRect.origin.x,
             _rectClippingSupport->_clippingOldRect.origin.y,
             _rectClippingSupport->_clippingOldRect.size.width,
             _rectClippingSupport->_clippingOldRect.size.height);
