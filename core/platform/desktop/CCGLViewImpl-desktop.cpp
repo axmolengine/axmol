@@ -137,9 +137,9 @@ private:
 };
 GLViewImpl* GLFWEventHandler::_view = nullptr;
 
-const std::string GLViewImpl::EVENT_WINDOW_RESIZED   = "glView_window_resized";
-const std::string GLViewImpl::EVENT_WINDOW_FOCUSED   = "glView_window_focused";
-const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED = "glView_window_unfocused";
+const std::string GLViewImpl::EVENT_WINDOW_RESIZED   = "glview_window_resized";
+const std::string GLViewImpl::EVENT_WINDOW_FOCUSED   = "glview_window_focused";
+const std::string GLViewImpl::EVENT_WINDOW_UNFOCUSED = "glview_window_unfocused";
 
 ////////////////////////////////////////////////////
 
