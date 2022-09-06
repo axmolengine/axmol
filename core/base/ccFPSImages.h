@@ -29,17 +29,9 @@ THE SOFTWARE.
 
 /// @cond DO_NOT_SHOW
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #if !AX_STRIP_FPS
 extern unsigned char cc_fps_images_png[];
 extern unsigned int cc_fps_images_len(void);
-#endif
-
-#ifdef __cplusplus
-}
 #endif
 
 /// @endcond

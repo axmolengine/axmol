@@ -1,6 +1,6 @@
 import java.nio.file.Paths
 include ':libaxys1'
-project(':libaxys1').projectDir = new File(Paths.get("${System.env.AXYS_ROOT}/core/platform/android/libaxys1").toUri())
+project(':libaxys1').projectDir = new File(Paths.get("${System.env.AX_ROOT}/core/platform/android/libaxys1").toUri())
 include ':HelloCpp'
 project(':HelloCpp').projectDir = new File(settingsDir, 'app')
 rootProject.name = "HelloCpp"

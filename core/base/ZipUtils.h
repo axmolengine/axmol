@@ -337,7 +337,7 @@ private:
     ZipFilePrivate* _data;
 };
 
-NS_AX_END // end of namespace axys
+NS_AX_END // end of namespace ax
 
 // end group
 /// @}

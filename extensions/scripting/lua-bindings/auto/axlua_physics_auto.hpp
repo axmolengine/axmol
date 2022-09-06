@@ -1,11 +1,11 @@
 #include "base/ccConfig.h"
 #if AX_USE_PHYSICS
-#ifndef __axys_physics_h__
-#define __axys_physics_h__
+#ifndef __ax_physics_h__
+#define __ax_physics_h__
 
 #include "tolua++.h"
 
-int register_all_axys_physics(lua_State* tolua_S);
+int register_all_ax_physics(lua_State* tolua_S);
 
 
 
@@ -276,5 +276,5 @@ int register_all_axys_physics(lua_State* tolua_S);
 
 
 
-#endif // __axys_physics_h__
+#endif // __ax_physics_h__
 #endif //#if AX_USE_PHYSICS

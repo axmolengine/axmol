@@ -35,35 +35,35 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
     endif()
-    
+
     # config quick starter batch script run.bat for windows
     if(WIN32)
         file(RELATIVE_PATH CMAKE_BUILD_RELATIVE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
         configure_file("${CMAKE_CURRENT_SOURCE_DIR}/run.bat.in" "${CMAKE_CURRENT_SOURCE_DIR}/run.bat" @ONLY)
     endif()
 
-    set(AXYS_ROOT "$ENV{AXYS_ROOT}")
+    set(_AX_ROOT "$ENV{AX_ROOT}")
 
-    if(NOT (AXYS_ROOT STREQUAL ""))
-        set(AXYS_ROOT_PATH "${AXYS_ROOT}")
-        file(TO_CMAKE_PATH ${AXYS_ROOT_PATH} AXYS_ROOT_PATH) # string(REPLACE "\\" "/" AXYS_ROOT_PATH ${AXYS_ROOT_PATH})
-        message(STATUS "Using system env var AXYS_ROOT=${AXYS_ROOT}")
+    if(NOT (_AX_ROOT STREQUAL ""))
+        set(_AX_ROOT_PATH "${_AX_ROOT}")
+        file(TO_CMAKE_PATH ${_AX_ROOT_PATH} _AX_ROOT_PATH) # string(REPLACE "\\" "/" _AX_ROOT_PATH ${_AX_ROOT_PATH})
+        message(STATUS "Using system env var _AX_ROOT=${_AX_ROOT}")
     else()
-        message(FATAL_ERROR "Please run setup.py add system env var 'AXYS_ROOT' to specific the engine root")
+        message(FATAL_ERROR "Please run setup.py add system env var 'AX_ROOT' to specific the engine root")
     endif()
 
-    set(CMAKE_MODULE_PATH ${AXYS_ROOT_PATH}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 
     include(AXBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
-    
+
     set(_AX_USE_PREBUILT FALSE)
-    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${AXYS_ROOT_PATH}/${AX_PREBUILT_DIR})
+    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${_AX_ROOT_PATH}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
     endif()
 
     if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
+        add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
     endif()
 endif()
 
@@ -77,7 +77,7 @@ set(res_src_folders
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     )
 set(res_script_folders
-    "${AXYS_ROOT_PATH}/extensions/scripting/lua-bindings/script"
+    "${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/script"
     )
 if(APPLE OR VS)
     ax_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
@@ -113,11 +113,21 @@ elseif(APPLE)
              ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/AppController.h
              ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/RootViewController.h
              )
-        set(APP_UI_RES
-            ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreen.storyboard
-            ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreenBackground.png
-            ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/Images.xcassets
+
+        if (TVOS)
+            set(APP_UI_RES
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreenBackground.png
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/LaunchScreen.storyboard
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/Images.xcassets
             )
+        else()
+            set(APP_UI_RES
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreenBackground.png
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard
+                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/Images.xcassets
+            )
+        endif()
+
         list(APPEND GAME_SOURCE
              ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/main.m
              ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/AppController.mm
@@ -149,11 +159,11 @@ if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SRC})
 else()
     add_library(${APP_NAME} SHARED ${APP_SRC})
-    
+
     # whole archive for jni
-    add_subdirectory(${AXYS_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
+    add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
-    add_subdirectory(${AXYS_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
+    add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
 
     config_android_shared_libs("org.axys1.lib" "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src/proj.android/app/src")
@@ -178,8 +188,13 @@ if(APPLE)
         set_target_properties(${APP_NAME} PROPERTIES
             LINK_FLAGS "-pagezero_size 10000 -image_base 100000000"
         )
+    elseif(TVOS)
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/Info.plist")
+        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
+        set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
+        set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     elseif(IOS)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/Info.plist")
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
         set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
         set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
@@ -207,14 +222,14 @@ endif()
 
 # The optional thirdparties(not dependent by engine)
 if (AX_WITH_YAML_CPP)
-    target_include_directories(${APP_NAME} PRIVATE ${AXYS_ROOT_PATH}/thirdparty/yaml-cpp/include)
+    target_include_directories(${APP_NAME} PRIVATE ${_AX_ROOT_PATH}/thirdparty/yaml-cpp/include)
     target_link_libraries(${APP_NAME} yaml-cpp)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows only
-    include(${AXYS_ROOT_PATH}/cmake/Modules/AXConfigDefine.cmake)
+    include(${_AX_ROOT_PATH}/cmake/Modules/AXConfigDefine.cmake)
     use_ax_compile_define(${APP_NAME})
 
-    include(${AXYS_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
-    ax_link_lua_prebuilt(${APP_NAME} ${AXYS_ROOT_PATH} ${AX_PREBUILT_DIR})
+    include(${_AX_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
+    ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()

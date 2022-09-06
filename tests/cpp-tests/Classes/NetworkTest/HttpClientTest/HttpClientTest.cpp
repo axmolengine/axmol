@@ -27,7 +27,7 @@
 #include <string>
 
 USING_NS_AX;
-using namespace axys::network;
+using namespace ax::network;
 
 #define CHROME_UA                                                                                                   \
     "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 " \

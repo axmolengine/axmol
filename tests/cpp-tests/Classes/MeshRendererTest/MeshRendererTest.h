@@ -36,7 +36,7 @@ class Ray;
 class DrawNode3D;
 class GLProgramState;
 class MotionStreak3D;
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 DEFINE_TEST_SUITE(MeshRendererTests);
 
@@ -465,7 +465,7 @@ protected:
 NS_AX_BEGIN
 class TextureCube;
 class Skybox;
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 class MeshRendererCubeMapTest : public MeshRendererTestDemo
 {

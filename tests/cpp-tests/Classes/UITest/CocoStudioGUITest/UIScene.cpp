@@ -29,7 +29,7 @@
 #include "CocosGUIScene.h"
 
 USING_NS_AX;
-using namespace axys::ui;
+using namespace ax::ui;
 
 UIScene::UIScene() : _uiLayer(nullptr), _sceneTitle(nullptr) {}
 

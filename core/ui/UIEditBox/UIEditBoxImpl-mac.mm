@@ -57,9 +57,9 @@ EditBoxImplMac::~EditBoxImplMac()
 
 void EditBoxImplMac::createNativeControl(const ax::Rect& frame)
 {
-    auto glview = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getOpenGLView();
     Size size   = frame.size;
-    NSRect rect = NSMakeRect(0, 0, size.width * glview->getScaleX(), size.height * glview->getScaleY());
+    NSRect rect = NSMakeRect(0, 0, size.width * glView->getScaleX(), size.height * glView->getScaleY());
 
     float factor = ax::Director::getInstance()->getContentScaleFactor();
 
@@ -75,8 +75,8 @@ NSFont* EditBoxImplMac::constructFont(const char* fontName, int fontSize)
     NSString* fntName  = [NSString stringWithUTF8String:fontName];
     fntName            = [[fntName lastPathComponent] stringByDeletingPathExtension];
     float retinaFactor = _inRetinaMode ? 2.0f : 1.0f;
-    auto glview        = ax::Director::getInstance()->getOpenGLView();
-    float scaleFactor  = glview->getScaleX();
+    auto glView        = ax::Director::getInstance()->getOpenGLView();
+    float scaleFactor  = glView->getScaleX();
 
     if (fontSize == -1)
     {

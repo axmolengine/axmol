@@ -297,7 +297,7 @@ int register_audioengine_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
-        register_all_axys_audioengine(L);
+        register_all_ax_audioengine(L);
         if (L)
         {
             lua_pushstring(L, "ax.AudioProfile");

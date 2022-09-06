@@ -44,7 +44,7 @@ namespace ui
 class WebView;
 }
 
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 class Win32WebControl;
 
@@ -90,7 +90,7 @@ private:
     WebView* _webView;
 };
 }  // namespace ui
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 

@@ -1137,4 +1137,4 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 }
 
 }  // namespace network
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax

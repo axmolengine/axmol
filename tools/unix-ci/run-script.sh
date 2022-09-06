@@ -4,7 +4,7 @@
 set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-AXYS_ROOT="$DIR"/../..
+AX_ROOT="$DIR"/../..
 CPU_CORES=4
 
 function do_retry()
@@ -30,7 +30,7 @@ function do_retry()
 function build_linux()
 {
     # source ../environment.sh
-    cd $AXYS_ROOT
+    cd $AX_ROOT
     set -x
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release -DAX_ENABLE_EXT_IMGUI=ON
     cmake --build build --target cpp_tests -- -j `nproc`
@@ -41,7 +41,7 @@ function build_osx()
 {
     NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
 
-    cd $AXYS_ROOT
+    cd $AX_ROOT
     mkdir -p build
     cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=$BUILD_ARCH -DAX_ENABLE_EXT_IMGUI=ON -DAX_USE_ALSOFT=ON
     cmake --build build --config Release --target cpp_tests -- -quiet
@@ -53,11 +53,22 @@ function build_ios()
 {
     NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
 
-    cd $AXYS_ROOT
+    cd $AX_ROOT
 
-    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -DAX_USE_ALSOFT=ON
-    # cmake .. -GXcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DCMAKE_SYSTEM_NAME=iOS -DPLATFORM=OS -DENABLE_ARC=0   # too much logs on console when "cmake --build ."
-    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)" 
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64 -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=9.0 -DAX_USE_ALSOFT=ON
+    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)"
+
+    exit 0
+}
+
+function build_tvos()
+{
+    NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
+
+    cd $AX_ROOT
+
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=9.0 -DAX_USE_ALSOFT=ON
+    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=tvOS Simulator,name=Apple TV Simulator"
 
     exit 0
 }
@@ -67,20 +78,20 @@ function build_android()
     # print jdk detail
     echo "JAVA_HOME=$JAVA_HOME"
     java -version
-    
+
     # Build all samples
     echo "Building Android samples ..."
     source ../environment.sh
 
     # build fairygui_tests
-    pushd $AXYS_ROOT/tests/fairygui-tests/proj.android
-    
+    pushd $AX_ROOT/tests/fairygui-tests/proj.android
+
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
     popd
 
     # build cpp_tests
-    pushd $AXYS_ROOT/tests/cpp-tests/proj.android
-    
+    pushd $AX_ROOT/tests/cpp-tests/proj.android
+
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
     popd
 }
@@ -88,7 +99,7 @@ function build_android()
 function run_build()
 {
     echo "Building..."
-    
+
     if [ $BUILD_TARGET == 'osx' ]; then
         set -x
         build_osx
@@ -98,6 +109,12 @@ function run_build()
     if [ $BUILD_TARGET == 'ios' ]; then
         set -x
         build_ios
+        exit 0
+    fi
+
+    if [ $BUILD_TARGET == 'tvos' ]; then
+        set -x
+        build_tvos
         exit 0
     fi
 

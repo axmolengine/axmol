@@ -126,7 +126,7 @@ void resetReaderAllHooks()
 static uint8_t _AUTO_INIT_VARS = (resetReaderAllHooks(), 0);
 } // namespace wext
 
-NS_AX_END // namespace axys
+NS_AX_END // namespace ax
 
 ax::ResourceData ax::wext::makeResourceData(const flatbuffers::ResourceData* orig)
 {

@@ -95,7 +95,8 @@
         "project_replace_ios_bundleid": {
             "src_bundle_id": "org.axys1.hellolua",
             "files": [
-                "frameworks/runtime-src/proj.ios_mac/ios/Info.plist"
+                "frameworks/runtime-src/proj.ios_mac/ios/targets/ios/Info.plist",
+                "frameworks/runtime-src/proj.ios_mac/ios/targets/tvos/Info.plist"
             ]
         }
     },
@@ -116,12 +117,12 @@
                "replace_string": "height = 960,"
             },
             {
-               "file_path": "frameworks/runtime-src/proj.ios_mac/ios/Info.plist",
+               "file_path": "frameworks/runtime-src/proj.ios_mac/ios/targets/ios/Info.plist",
                "pattern": "UIInterfaceOrientationLandscapeRight",
                "replace_string": "UIInterfaceOrientationPortrait"
             },
             {
-               "file_path": "frameworks/runtime-src/proj.ios_mac/ios/Info.plist",
+               "file_path": "frameworks/runtime-src/proj.ios_mac/ios/targets/ios/Info.plist",
                "pattern": "UIInterfaceOrientationLandscapeLeft",
                "replace_string": "UIInterfaceOrientationPortraitUpsideDown"
             },

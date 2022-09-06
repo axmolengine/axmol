@@ -55,7 +55,9 @@ static AppDelegate s_sharedApplication;
 
     // Use RootViewController to manage CCEAGLView
     _viewController                       = [[RootViewController alloc] init];
+#if !defined(AX_TARGET_OS_TVOS)
     _viewController.wantsFullScreenLayout = YES;
+#endif
 
     // Set RootViewController to window
     if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
@@ -71,7 +73,9 @@ static AppDelegate s_sharedApplication;
 
     [window makeKeyAndVisible];
 
+#if !defined(AX_TARGET_OS_TVOS)
     [[UIApplication sharedApplication] setStatusBarHidden:true];
+#endif
 
     // Launching the app with the arguments -NSAllowsDefaultLineBreakStrategy NO to force back to the old behavior.
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 13.0f)
@@ -80,8 +84,8 @@ static AppDelegate s_sharedApplication;
     }
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
-    axis::GLView* glview = axis::GLViewImpl::createWithEAGLView((__bridge void*)_viewController.view);
-    axis::Director::getInstance()->setOpenGLView(glview);
+    axis::GLView* glView = axis::GLViewImpl::createWithEAGLView((__bridge void*)_viewController.view);
+    axis::Director::getInstance()->setOpenGLView(glView);
 
     // run the cocos2d-x game scene
     app->run();

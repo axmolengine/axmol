@@ -367,4 +367,4 @@ void WebViewImpl::setBounces(bool bounces)
     // empty function as this was mainly a fix for iOS
 }
 }  // namespace ui
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax

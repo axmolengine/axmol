@@ -57,3 +57,15 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+
+class Issue829Test : public DrawPrimitivesBaseTest
+{
+public:
+    CREATE_FUNC(Issue829Test);
+
+    Issue829Test();
+    void drawDirection(const ax::Vec2* vec, const int size, ax::Vec2 offset);
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};

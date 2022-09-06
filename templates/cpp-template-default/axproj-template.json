@@ -39,7 +39,8 @@
          "project_replace_ios_bundleid": {
             "src_bundle_id": "org.axys1.hellocpp",
             "files": [
-               "proj.ios_mac/ios/Info.plist"
+               "proj.ios_mac/ios/targets/ios/Info.plist",
+               "proj.ios_mac/ios/targets/tvos/Info.plist"
             ]
          }
       },
@@ -51,12 +52,12 @@
                "replace_string": "static cocos2d::Size \\1 = cocos2d::Size(\\3, \\2)"
             },
             {
-               "file_path": "proj.ios_mac/ios/Info.plist",
+               "file_path": "proj.ios_mac/ios/targets/ios/Info.plist",
                "pattern": "UIInterfaceOrientationLandscapeRight",
                "replace_string": "UIInterfaceOrientationPortrait"
             },
             {
-               "file_path": "proj.ios_mac/ios/Info.plist",
+               "file_path": "proj.ios_mac/ios/targets/ios/Info.plist",
                "pattern": "UIInterfaceOrientationLandscapeLeft",
                "replace_string": "UIInterfaceOrientationPortraitUpsideDown"
             },

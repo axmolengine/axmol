@@ -29,7 +29,7 @@
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
-TOLUA_API int register_all_axys_controller_manual(lua_State* L);
+TOLUA_API int register_all_ax_controller_manual(lua_State* L);
 
 #endif //#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 

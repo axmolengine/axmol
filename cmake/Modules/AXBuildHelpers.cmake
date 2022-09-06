@@ -17,7 +17,7 @@ function(ax_copy_target_res ax_target)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET SYNC_RESOURCE-${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E echo "    copying to ${link_folder_abs}"
-            COMMAND ${PYTHON_COMMAND} ARGS ${AXYS_ROOT_PATH}/cmake/scripts/sync_folder.py
+            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
                 -s ${cc_folder} -d ${link_folder_abs}
         )
     endforeach()
@@ -49,18 +49,18 @@ function(ax_copy_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PYTHON_COMMAND} ARGS ${AXYS_ROOT_PATH}/cmake/scripts/sync_folder.py
+            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
                 -s ${src_dir} -d ${dst_dir} -m $<CONFIG>
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${AXYS_ROOT_PATH}/cmake/scripts/sync_folder.py
+                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${AXYS_ROOT_PATH}/cmake/scripts/sync_folder.py
+                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
                     -s ${src_dir} -d ${dst_dir} -m ${CMAKE_BUILD_TYPE}
             )
         endif()
@@ -213,39 +213,43 @@ function(ax_copy_target_dll ax_target)
     # copy thirdparty dlls to target bin dir
     # copy_thirdparty_dlls(${ax_target} $<TARGET_FILE_DIR:${ax_target}>)
     if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+        set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
     endif()
     add_custom_command(TARGET ${ax_target} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/bin/${THIRD_PARTY_ARCH}OpenAL32.dll"
+        "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
          $<TARGET_FILE_DIR:${ax_target}>)
 
     # Copy windows angle binaries
-    add_custom_command(TARGET ${ax_target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${AXYS_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
-        ${AXYS_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
-        ${AXYS_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
-        $<TARGET_FILE_DIR:${ax_target}>
-    )
+    if (AX_USE_COMPAT_GL)
+        add_custom_command(TARGET ${ax_target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
+            $<TARGET_FILE_DIR:${ax_target}>
+        )
+    endif()
 
     # Copy webview2 for ninja
-    if(CMAKE_GENERATOR STREQUAL "Ninja")
-        add_custom_command(TARGET ${ax_target} POST_BUILD
-           COMMAND ${CMAKE_COMMAND} -E copy_if_different
-           "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
-           $<TARGET_FILE_DIR:${ax_target}>)
+    if(AX_ENABLE_MSEDGE_WEBVIEW2)
+        if(CMAKE_GENERATOR STREQUAL "Ninja")
+            add_custom_command(TARGET ${ax_target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+            $<TARGET_FILE_DIR:${ax_target}>)
+        endif()
     endif()
 endfunction()
 
 function(ax_copy_lua_dlls ax_target)
     if(NOT AX_USE_LUAJIT)
         if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-            set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+            set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
         endif()
         add_custom_command(TARGET ${ax_target} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"
+            "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
              $<TARGET_FILE_DIR:${ax_target}>)
     endif()
 endfunction()

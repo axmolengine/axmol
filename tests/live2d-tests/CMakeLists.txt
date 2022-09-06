@@ -34,19 +34,19 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
     endif()
 
-    set(AXYS_ROOT "$ENV{AXYS_ROOT}")
-    if(NOT (AXYS_ROOT STREQUAL ""))
-        set(AXYS_ROOT_PATH "${AXYS_ROOT}")
-        file(TO_CMAKE_PATH ${AXYS_ROOT_PATH} AXYS_ROOT_PATH) # string(REPLACE "\\" "/" AXYS_ROOT_PATH ${AXYS_ROOT_PATH})
-        message(STATUS "Using system env var AXYS_ROOT=${AXYS_ROOT}")
+    set(_AX_ROOT "$ENV{AX_ROOT}")
+    if(NOT (_AX_ROOT STREQUAL ""))
+        set(_AX_ROOT_PATH "${_AX_ROOT}")
+        file(TO_CMAKE_PATH ${_AX_ROOT_PATH} _AX_ROOT_PATH) # string(REPLACE "\\" "/" _AX_ROOT_PATH ${_AX_ROOT_PATH})
+        message(STATUS "Using system env var _AX_ROOT=${_AX_ROOT}")
     else()
-        set(AXYS_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+        set(_AX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../..)
     endif()
 
-    set(CMAKE_MODULE_PATH ${AXYS_ROOT_PATH}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 
     include(AXBuildSet)
-    add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
+    add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
 endif()
 
 # record sources, headers, resources...
@@ -88,11 +88,21 @@ elseif(APPLE)
              proj.ios_mac/ios/AppController.h
              proj.ios_mac/ios/RootViewController.h
              )
-        set(APP_UI_RES
-            proj.ios_mac/ios/LaunchScreen.storyboard
-            proj.ios_mac/ios/LaunchScreenBackground.png
-            proj.ios_mac/ios/Images.xcassets
-            )
+
+        if (TVOS)
+            set(APP_UI_RES
+                proj.ios_mac/ios/LaunchScreenBackground.png
+                proj.ios_mac/ios/targets/tvos/LaunchScreen.storyboard
+                proj.ios_mac/ios/targets/tvos/Images.xcassets
+                )
+        else()
+            set(APP_UI_RES
+                proj.ios_mac/ios/LaunchScreenBackground.png
+                proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard
+                proj.ios_mac/ios/targets/ios/Images.xcassets
+                )
+        endif()
+
         list(APPEND GAME_SOURCE
              proj.ios_mac/ios/main.m
              proj.ios_mac/ios/AppController.mm
@@ -124,7 +134,7 @@ if(NOT ANDROID)
 else()
     add_library(${APP_NAME} SHARED ${all_code_files})
     # whole archive for jni
-    add_subdirectory(${AXYS_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
+    add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
     config_android_shared_libs("org.axys1.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
@@ -133,7 +143,7 @@ target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
 target_include_directories(${APP_NAME}
         PRIVATE Classes
-        PRIVATE ${AXYS_ROOT_PATH}/core/audio
+        PRIVATE ${_AX_ROOT_PATH}/core/audio
 )
 
 # mark app resources
@@ -145,8 +155,11 @@ if(APPLE)
 
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")
+    elseif(TVOS)
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}//proj.ios_mac/ios/targets/tvos/Info.plist")
+        set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
     elseif(IOS)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/Info.plist")
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}//proj.ios_mac/ios/targets/ios/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
     endif()
 

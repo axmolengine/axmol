@@ -35,9 +35,9 @@
 - Version: git 7.0.3-0cb05e7 {until Dec 16, 2021}
 - License: MIT
 
-## Clipper
-- Upstream: https://sourceforge.net/projects/polyclipping/files/
-- Version: 6.4.2
+## Clipper2
+- Upstream: https://github.com/AngusJohnson/Clipper2
+- Version: 1.0.3
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -133,7 +133,7 @@
 
 ## lz4
 - [![Upstream](https://img.shields.io/github/v/release/lz4/lz4?label=Upstream)](https://github.com/lz4/lz4)
-- Version: git 1.9.3-bdc9d3b (2541)
+- Version: 1.9.4
 - License: BSD 2-Clause
 
 ## minimp3

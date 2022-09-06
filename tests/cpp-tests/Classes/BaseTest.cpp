@@ -155,14 +155,14 @@ void TestList::runThisTest()
      * otherwise, the layout will incorrect
      */
 
-    GLViewImpl* glview = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    GLViewImpl* glView = (GLViewImpl*)Director::getInstance()->getOpenGLView();
 #if defined(AX_PLATFORM_PC)
     Size resourceSize(960, 640);
-    glview->setWindowed(resourceSize.width, resourceSize.height);
+    glView->setWindowed(resourceSize.width, resourceSize.height);
 #endif
 
     Size designSize(480, 320);
-    glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
 
     auto director = Director::getInstance();
     auto scene    = Scene::create();
