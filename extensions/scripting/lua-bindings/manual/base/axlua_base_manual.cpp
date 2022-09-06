@@ -7444,6 +7444,7 @@ static int tolua_cocos2d_utils_captureNode(lua_State* tolua_S)
         LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 3, 0);
 
         float scale = 1.0f;
+        tolua_Error tolua_err;
         if (tolua_isnumber(tolua_S, 4, 0, &tolua_err))
         {
             scale = tolua_tonumber(tolua_S, 4, 1.0);
