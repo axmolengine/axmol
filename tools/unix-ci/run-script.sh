@@ -58,7 +58,7 @@ function build_ios()
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64 -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=9.0 -DAX_USE_ALSOFT=ON
     cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)"
 
-    exit 0
+    #exit 0
 }
 
 function build_tvos()
@@ -70,7 +70,7 @@ function build_tvos()
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=9.0 -DAX_USE_ALSOFT=ON
     cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=tvOS Simulator,name=Apple TV Simulator"
 
-    exit 0
+    #exit 0
 }
 
 function build_android()
