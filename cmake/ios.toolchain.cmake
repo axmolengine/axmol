@@ -92,7 +92,7 @@
 #
 # ENABLE_BITCODE: (ON|OFF) Enables or disables bitcode support. Default ON
 #
-# ENABLE_ARC: (ON|OFF) Enables or disables ARC support. Default ON (ARC enabled by default)
+# ENABLE_ARC: (ON|OFF) Enables or disables ARC support. Default OFF (ARC disabled by default)
 #
 # ENABLE_VISIBILITY: (ON|OFF) Enables or disables symbol visibility support. Default OFF (visibility hidden by default)
 #
