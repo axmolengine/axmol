@@ -527,8 +527,8 @@ set(ENABLE_BITCODE_INT ${ENABLE_BITCODE} CACHE BOOL
 # Use ARC or not
 if(NOT DEFINED ENABLE_ARC)
   # Unless specified, enable ARC support by default
-  set(ENABLE_ARC ON)
-  message(STATUS "[DEFAULTS] Enabling ARC support by default. ENABLE_ARC not provided!")
+  set(ENABLE_ARC OFF)
+  message(STATUS "[DEFAULTS] Disabling ARC support by default. ENABLE_ARC not provided!")
 endif()
 set(ENABLE_ARC_INT ${ENABLE_ARC} CACHE BOOL "Whether or not to enable ARC" FORCE)
 # Use hidden visibility or not
