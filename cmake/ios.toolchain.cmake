@@ -540,9 +540,9 @@ endif()
 set(ENABLE_VISIBILITY_INT ${ENABLE_VISIBILITY} CACHE BOOL "Whether or not to hide symbols from the dynamic linker (-fvisibility=hidden)" FORCE)
 # Set strict compiler checks or not
 if(NOT DEFINED ENABLE_STRICT_TRY_COMPILE)
-  # Unless specified, disable strict try_compile()
-  set(ENABLE_STRICT_TRY_COMPILE OFF)
-  message(STATUS "[DEFAULTS] Using NON-strict compiler checks by default. ENABLE_STRICT_TRY_COMPILE not provided!")
+  # Unless specified, enable strict try_compile()
+  set(ENABLE_STRICT_TRY_COMPILE ON)
+  message(STATUS "[DEFAULTS] Using strict compiler checks by default to avoid dynamic link issue. ENABLE_STRICT_TRY_COMPILE not provided!")
 endif()
 set(ENABLE_STRICT_TRY_COMPILE_INT ${ENABLE_STRICT_TRY_COMPILE} CACHE BOOL
         "Whether or not to use strict compiler checks" FORCE)
