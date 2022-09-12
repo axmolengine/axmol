@@ -133,9 +133,9 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (AX_USE_COMPAT_GL)
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
+            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libGLESv2.dll
+            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libEGL.dll
+            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/d3dcompiler_47.dll
             $<TARGET_FILE_DIR:${APP_NAME}>
         )
     endif()

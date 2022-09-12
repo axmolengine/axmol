@@ -1,7 +1,7 @@
 # The axys thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: git 2.1-e37380e (18155) on branch `chromium/4951` @Google Chrome 101.0.4951.41
+- Version: git 2.1.19119 on branch `chromium/5195` @Google Chrome 105.0.5195.102
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.84.0
+- Version: 7.85.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
