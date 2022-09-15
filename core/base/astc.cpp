@@ -19,7 +19,7 @@
 #include <vector>
 #include <deque>
 #include "astc/astcenc.h"
-#include "astc/astcenc_internal.h"
+#include "astc/astcenc_internal_entry.h"
 #include "yasio/detail/utils.hpp"
 
 #define ASTCDEC_NO_CONTEXT 1
