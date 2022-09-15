@@ -6,7 +6,7 @@
 
 ## astc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.0.0
+- Version: 4.1.0
 - License: Apache-2.0
 
 ## Box2D
@@ -52,12 +52,12 @@
 
 ## flatbuffers
 - [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
-- Version: 2.0.0
+- Version: 2.0.8
 - License: Apache-2.0
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 9.0.0
+- Version: 9.1.0
 - License: MIT
 
 ## FreeType
@@ -102,7 +102,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 6.0.7
+- Version: 6.0.9
 - License: MIT
 
 ## lua
@@ -216,7 +216,7 @@
 
 ## webp
 - [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
-- Version: 1.2.2
+- Version: 1.2.4
 - License: Google Inc
 
 ## xsbase

@@ -364,6 +364,14 @@ struct vmask4
 	}
 
 	/**
+	 * @brief Get the scalar value of a single lane.
+	 */
+	template <int l> ASTCENC_SIMD_INLINE float lane() const
+	{
+		return _mm_cvtss_f32(_mm_shuffle_ps(m, m, l));
+	}
+
+	/**
 	 * @brief The vector ...
 	 */
 	__m128 m;
@@ -1192,7 +1200,27 @@ ASTCENC_SIMD_INLINE void store_lanes_masked(int* base, vint4 data, vmask4 mask)
 #if ASTCENC_AVX >= 2
 	_mm_maskstore_epi32(base, _mm_castps_si128(mask.m), data.m);
 #else
-	_mm_maskmoveu_si128(data.m, _mm_castps_si128(mask.m), reinterpret_cast<char*>(base));
+	// Note - we cannot use _mm_maskmoveu_si128 as the underlying hardware doesn't guarantee
+	// fault suppression on masked lanes so we can get page faults at the end of an image.
+	if (mask.lane<3>() != 0.0f)
+	{
+		store(data, base);
+	}
+	else if(mask.lane<2>() != 0.0f)
+	{
+		base[0] = data.lane<0>();
+		base[1] = data.lane<1>();
+		base[2] = data.lane<2>();
+	}
+	else if(mask.lane<1>() != 0.0f)
+	{
+		base[0] = data.lane<0>();
+		base[1] = data.lane<1>();
+	}
+	else if(mask.lane<0>() != 0.0f)
+	{
+		base[0] = data.lane<0>();
+	}
 #endif
 }
 

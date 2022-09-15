@@ -517,7 +517,7 @@ static void compute_color_error_for_every_integer_count_and_quant_level(
 			best_error[i][1] = ERROR_CALC_DEFAULT;
 			best_error[i][0] = ERROR_CALC_DEFAULT;
 
-			format_of_choice[i][3] = encode_hdr_alpha ? FMT_HDR_RGBA : FMT_HDR_RGB_LDR_ALPHA;
+			format_of_choice[i][3] = static_cast<uint8_t>(encode_hdr_alpha ? FMT_HDR_RGBA : FMT_HDR_RGB_LDR_ALPHA);
 			format_of_choice[i][2] = FMT_HDR_RGB;
 			format_of_choice[i][1] = FMT_HDR_RGB_SCALE;
 			format_of_choice[i][0] = FMT_HDR_LUMINANCE_LARGE_RANGE;
@@ -537,7 +537,7 @@ static void compute_color_error_for_every_integer_count_and_quant_level(
 
 			float full_hdr_rgba_error = rgba_quantization_error + rgb_range_error + alpha_range_error;
 			best_error[i][3] = full_hdr_rgba_error;
-			format_of_choice[i][3] = encode_hdr_alpha ? FMT_HDR_RGBA : FMT_HDR_RGB_LDR_ALPHA;
+			format_of_choice[i][3] = static_cast<uint8_t>(encode_hdr_alpha ? FMT_HDR_RGBA : FMT_HDR_RGB_LDR_ALPHA);
 
 			// For 6 integers, we have one HDR-RGB encoding
 			float full_hdr_rgb_error = (rgb_quantization_error * mode11mult) + rgb_range_error + eci.alpha_drop_error;
