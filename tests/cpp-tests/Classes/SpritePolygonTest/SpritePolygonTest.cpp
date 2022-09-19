@@ -103,7 +103,7 @@ bool SpritePolygonTestCase::init()
             auto menu = Menu::create(menuItem, nullptr);
             menu->setPosition(Vec2::ZERO);
             menuItem->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-            menuItem->setPosition(VisibleRect::leftBottom() + Vec2(0.0f, VisibleRect::leftTop().y -10));
+            menuItem->setPosition(VisibleRect::leftBottom() + Vec2(0.0f, VisibleRect::leftTop().y/4));
             this->addChild(menu, 9999);
         }
         return true;
