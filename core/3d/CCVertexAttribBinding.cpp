@@ -82,7 +82,7 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
 
     auto programState = pass->getProgramState();
 
-    _vertexLayout = programState->getVertexLayout();
+    // _vertexLayout = programState->getVertexLayout();
 
     _meshIndexData = meshIndexData;
     _meshIndexData->retain();
@@ -103,7 +103,7 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
         offset += meshattribute.getAttribSizeBytes();
     }
 
-    _vertexLayout->setLayout(offset);
+    _programState->setVertexStride(offset);
 
     AXASSERT(offset == meshVertexData->getSizePerVertex(), "vertex layout mismatch!");
 
@@ -150,7 +150,7 @@ void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
     if (v)
     {
         // AXLOG("axys: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
-        _vertexLayout->setAttribute(name, v->location, type, offset, normalized);
+        _programState->setVertexAttrib(name, v->location, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else

@@ -191,6 +191,8 @@ bool ProgramState::init(Program* program)
 {
     AX_SAFE_RETAIN(program);
     _program                 = program;
+    _vertexLayout            = program->getVertexLayout();
+    _ownVertexLayout         = false;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
     _vertexUniformBuffer     = (char*)calloc(1, _vertexUniformBufferSize);
 #ifdef AX_USE_METAL
@@ -242,6 +244,9 @@ ProgramState::~ProgramState()
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
+
+    if (_ownVertexLayout)
+        CC_SAFE_DELETE(_vertexLayout);
 }
 
 ProgramState* ProgramState::clone() const
@@ -250,7 +255,9 @@ ProgramState* ProgramState::clone() const
     cp->_vertexTextureInfos   = _vertexTextureInfos;
     cp->_fragmentTextureInfos = _fragmentTextureInfos;
     memcpy(cp->_vertexUniformBuffer, _vertexUniformBuffer, _vertexUniformBufferSize);
-    cp->_vertexLayout = _vertexLayout;
+
+    cp->_ownVertexLayout = _ownVertexLayout;
+    cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : new VertexLayout(*_vertexLayout);
 #ifdef AX_USE_METAL
     memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
 #endif
@@ -402,6 +409,37 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
         memcpy(_fragmentUniformBuffer + location, data, size);
     }
 #endif
+}
+
+void ProgramState::setVertexAttrib(std::string_view name,
+    std::size_t index,
+    VertexFormat format,
+    std::size_t offset,
+    bool needToBeNormallized)
+{
+    ensureVertexLayoutMutable();
+
+    _vertexLayout->setAttribute(name, index, format, offset, needToBeNormallized);
+}
+
+void ProgramState::setVertexStride(uint32_t stride)
+{
+    ensureVertexLayoutMutable();
+    _vertexLayout->setStride(stride);
+}
+
+void ProgramState::setVertexLayout(const VertexLayout& vertexLayout) {
+    ensureVertexLayoutMutable();
+    *_vertexLayout = vertexLayout;
+}
+
+void ProgramState::ensureVertexLayoutMutable()
+{
+    if (!_ownVertexLayout)
+    {
+        _vertexLayout = new VertexLayout();
+        _ownVertexLayout = true;
+    }
 }
 
 void ProgramState::updateUniformID(int uniformID)

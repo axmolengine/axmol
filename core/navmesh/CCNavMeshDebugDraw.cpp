@@ -41,13 +41,6 @@ NavMeshDebugDraw::NavMeshDebugDraw()
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
     _programState = new backend::ProgramState(program);
     _locMVP       = _programState->getUniformLocation("u_MVPMatrix");
-
-    auto vertexLayout = _programState->getVertexLayout();
-    vertexLayout->setAttribute("a_position", _programState->getAttributeLocation("a_position"),
-                               backend::VertexFormat::FLOAT3, offsetof(V3F_C4F, position), false);
-    vertexLayout->setAttribute("a_color", _programState->getAttributeLocation("a_color"), backend::VertexFormat::FLOAT4,
-                               offsetof(V3F_C4F, color), false);
-    vertexLayout->setLayout(sizeof(V3F_C4F));
 }
 
 void NavMeshDebugDraw::initCustomCommand(CustomCommand& command)

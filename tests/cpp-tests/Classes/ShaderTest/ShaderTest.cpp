@@ -104,11 +104,11 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
     // init custom command
     auto layout     = _programState->getVertexLayout();
     auto attrPosLoc = _programState->getAttributeLocation("a_position");
-    layout->setAttribute("a_position", attrPosLoc, backend::VertexFormat::FLOAT2, 0, false);
+    _programState->setVertexAttrib("a_position", attrPosLoc, backend::VertexFormat::FLOAT2, 0, false);
 
     float w = SIZE_X, h = SIZE_Y;
     Vec2 vertices[6] = {Vec2(0.0f, 0.0f), Vec2(w, 0.0f), Vec2(w, h), Vec2(0.0f, 0.0f), Vec2(0.0f, h), Vec2(w, h)};
-    layout->setLayout(sizeof(Vec2));
+    _programState->setVertexStride(sizeof(Vec2));
 
     /*
      * TODO: the Y-coordinate of subclasses are flipped in metal

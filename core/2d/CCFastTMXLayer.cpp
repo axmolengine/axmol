@@ -459,27 +459,7 @@ void FastTMXLayer::updatePrimitives()
                 auto programState = new backend::ProgramState(program);
                 pipelineDescriptor.programState = programState;
             }
-            auto vertexLayout         = pipelineDescriptor.programState->getVertexLayout();
-            const auto& attributeInfo = pipelineDescriptor.programState->getProgram()->getActiveAttributes();
-            auto iterAttribute        = attributeInfo.find("a_position");
-            if (iterAttribute != attributeInfo.end())
-            {
-                vertexLayout->setAttribute("a_position", iterAttribute->second.location, backend::VertexFormat::FLOAT3,
-                                           0, false);
-            }
-            iterAttribute = attributeInfo.find("a_texCoord");
-            if (iterAttribute != attributeInfo.end())
-            {
-                vertexLayout->setAttribute("a_texCoord", iterAttribute->second.location, backend::VertexFormat::FLOAT2,
-                                           offsetof(V3F_C4B_T2F, texCoords), false);
-            }
-            iterAttribute = attributeInfo.find("a_color");
-            if (iterAttribute != attributeInfo.end())
-            {
-                vertexLayout->setAttribute("a_color", iterAttribute->second.location, backend::VertexFormat::UBYTE4,
-                                           offsetof(V3F_C4B_T2F, colors), true);
-            }
-            vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
+
             _mvpMatrixLocaiton = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
             _textureLocation   = pipelineDescriptor.programState->getUniformLocation("u_tex0");
             pipelineDescriptor.programState->setTexture(_textureLocation, 0, _texture->getBackendTexture());
