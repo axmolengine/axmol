@@ -246,7 +246,7 @@ ProgramState::~ProgramState()
 #endif
 
     if (_ownVertexLayout)
-        CC_SAFE_DELETE(_vertexLayout);
+        AX_SAFE_DELETE(_vertexLayout);
 }
 
 ProgramState* ProgramState::clone() const
