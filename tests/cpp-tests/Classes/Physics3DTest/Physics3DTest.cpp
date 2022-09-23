@@ -700,7 +700,7 @@ bool Physics3DCollisionCallbackDemo::init()
         Physics3DRigidBodyDes rbDes;
 
         float scale = 2.0f;
-        std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("MeshRendererTest/boss.c3b");
+        std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList("MeshRendererTest/boss.obj");
         for (auto&& it : trianglesList)
         {
             it *= scale;
@@ -710,7 +710,7 @@ bool Physics3DCollisionCallbackDemo::init()
         rbDes.shape = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
         auto rigidBody = Physics3DRigidBody::create(&rbDes);
         auto component = Physics3DComponent::create(rigidBody);
-        auto mesh = MeshRenderer::create("MeshRendererTest/boss.c3b");
+        auto mesh = MeshRenderer::create("MeshRendererTest/boss.obj", "MeshRendererTest/boss.png");
         mesh->addComponent(component);
         mesh->setRotation3D(Vec3(-90.0f, 0.0f, 0.0f));
         mesh->setScale(scale);
@@ -727,7 +727,7 @@ bool Physics3DCollisionCallbackDemo::init()
                     ps->setPosition3D(ci.collisionPointList[0].worldPositionOnB);
                     ps->setScale(0.05f);
                     ps->startParticleSystem();
-                    ps->setCameraMask(2);
+                    ps->setCameraMask((unsigned short)CameraFlag::USER1);
                     this->addChild(ps);
                     ps->runAction(Sequence::create(DelayTime::create(1.0f),
                                                    CallFunc::create([=]() { ps->removeFromParent(); }), nullptr));

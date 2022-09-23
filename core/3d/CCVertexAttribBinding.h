@@ -117,7 +117,6 @@ private:
 
     MeshIndexData* _meshIndexData;
     backend::ProgramState* _programState;
-    std::shared_ptr<backend::VertexLayout> _vertexLayout = std::make_shared<backend::VertexLayout>();
     hlookup::string_map<backend::AttributeBindInfo> _attributes;
     uint32_t _vertexAttribsFlags;
 };

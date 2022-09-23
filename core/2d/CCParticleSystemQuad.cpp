@@ -56,27 +56,6 @@ ParticleSystemQuad::ParticleSystemQuad()
 
     _mvpMatrixLocaiton = pipelinePS->getUniformLocation("u_MVPMatrix");
     _textureLocation   = pipelinePS->getUniformLocation("u_tex0");
-
-    auto vertexLayout         = pipelinePS->getVertexLayout();
-    const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
-    }
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
-                                   offsetof(V3F_C4B_T2F, texCoords), false);
-    }
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
-                                   offsetof(V3F_C4B_T2F, colors), true);
-    }
-    vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
 }
 
 ParticleSystemQuad::~ParticleSystemQuad()

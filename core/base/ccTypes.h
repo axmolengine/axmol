@@ -390,6 +390,26 @@ struct AX_DLL V3F_C4F
     Color4F colors;
 };
 
+struct V3F_C4B
+{
+    Vec3 vertices;
+    Color4B colors;
+};
+
+struct V3F_T2F_C4F
+{
+    Vec3 position;
+    Vec2 uv;
+    Vec4 color;
+};
+
+struct V3F_T2F_N3F
+{
+    Vec3 position;
+    Tex2F texcoord;
+    Vec3 normal;
+};
+
 /** @struct V2F_C4B_T2F_Triangle
  * A Triangle of V2F_C4B_T2F.
  */

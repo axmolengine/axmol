@@ -37,6 +37,7 @@
 NS_AX_BACKEND_BEGIN
 
 class ShaderModule;
+class VertexLayout;
 
 /**
  * @addtogroup _backend
@@ -49,6 +50,7 @@ class ShaderModule;
 class AX_DLL Program : public Ref
 {
 public:
+    ~Program();
     /**
      * Get engine built-in program.
      * @param type Specifies the built-in program type.
@@ -146,6 +148,8 @@ public:
      */
     void setProgramType(uint32_t type);
 
+    inline VertexLayout* getVertexLayout() const { return _vertexLayout; }
+
 protected:
     /**
      * @param vs Specifes the vertex shader source.
@@ -185,6 +189,7 @@ protected:
 
     std::string _vertexShader;                            ///< Vertex shader.
     std::string _fragmentShader;                          ///< Fragment shader.
+    VertexLayout* _vertexLayout = nullptr;
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
 };
 

@@ -63,15 +63,15 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
     }
 
     // attribute属性を登録
-    programState->getVertexLayout()->setAttribute("position", _program->getAttributeLocation("position"), backend::VertexFormat::FLOAT2, 0, false);
-    programState->getVertexLayout()->setAttribute("uv", _program->getAttributeLocation("uv"), backend::VertexFormat::FLOAT2, sizeof(float) * 2, false);
+    programState->setVertexAttrib("position", _program->getAttributeLocation("position"), backend::VertexFormat::FLOAT2, 0, false);
+    programState->setVertexAttrib("uv", _program->getAttributeLocation("uv"), backend::VertexFormat::FLOAT2, sizeof(float) * 2, false);
 
     // uniform属性の登録
     programState->setTexture(_program->getUniformLocation("texture"), 0, texture);
 
     programState->setUniform(_program->getUniformLocation("baseColor"), _spriteColor, sizeof(float) * 4);
 
-    programState->getVertexLayout()->setLayout(sizeof(float) * 4);
+    programState->setVertexStride(sizeof(float) * 4);
 
     blendDescriptor->sourceRGBBlendFactor = axis::backend::BlendFactor::ONE;
     blendDescriptor->destinationRGBBlendFactor = axis::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;

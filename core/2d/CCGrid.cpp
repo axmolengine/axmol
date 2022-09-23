@@ -120,15 +120,15 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     auto iter                 = attributeInfo.find("a_position");
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
+        _programState->setVertexAttrib("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
     }
     iter = attributeInfo.find("a_texCoord");
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, texcoordOffset,
+        _programState->setVertexAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, texcoordOffset,
                                    false);
     }
-    vertexLayout->setLayout(totalSize);
+    _programState->setVertexStride(totalSize);
 
     calculateVertexPoints();
     updateBlendState();

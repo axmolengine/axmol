@@ -125,6 +125,7 @@ static const char* ATTRIBUTE_NAME_TEXCOORD  = "a_texCoord";
 static const char* ATTRIBUTE_NAME_TEXCOORD1 = "a_texCoord1";
 static const char* ATTRIBUTE_NAME_TEXCOORD2 = "a_texCoord2";
 static const char* ATTRIBUTE_NAME_TEXCOORD3 = "a_texCoord3";
+static const char* ATTRIBUTE_NAME_NORMAL    = "a_normal";
 
 /**
  * @brief a structor to store blend descriptor
