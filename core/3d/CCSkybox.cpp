@@ -68,7 +68,6 @@ bool Skybox::init()
     setProgramState(new backend::ProgramState(program), false);
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    auto layout              = _programState->getVertexLayout();
 
     pipelineDescriptor.programState = _programState;
     // disable blend

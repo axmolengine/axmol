@@ -80,13 +80,9 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
 
     AXASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid arguments");
 
-    auto programState = pass->getProgramState();
-
-    // _vertexLayout = programState->getVertexLayout();
-
     _meshIndexData = meshIndexData;
     _meshIndexData->retain();
-    _programState = programState;
+    _programState = pass->getProgramState();
     _programState->retain();
 
     auto meshVertexData = meshIndexData->getMeshVertexData();

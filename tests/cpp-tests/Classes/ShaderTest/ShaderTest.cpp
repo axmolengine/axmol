@@ -102,7 +102,6 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
     setAnchorPoint(Vec2(0.5f, 0.5f));
 
     // init custom command
-    auto layout     = _programState->getVertexLayout();
     auto attrPosLoc = _programState->getAttributeLocation("a_position");
     _programState->setVertexAttrib("a_position", attrPosLoc, backend::VertexFormat::FLOAT2, 0, false);
 
