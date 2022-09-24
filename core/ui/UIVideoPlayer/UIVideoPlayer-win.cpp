@@ -433,7 +433,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
                     programCache->registerCustomProgramFactory(
                         VIDEO_PROGRAM_ID, positionTextureColor_vert,
                         std::string{pvd->_sampleFormat == VideoSampleFormat::NV12 ? NV12_FRAG : YUY2_FRAG},
-                        backend::VertexLayoutHelper::setupForSprite);
+                        backend::VertexLayoutHelper::setupSprite);
                     auto program = programCache->getCustomProgram(VIDEO_PROGRAM_ID);
                     pvd->_vrender->setProgramState(new backend::ProgramState(program), false);
                     break;

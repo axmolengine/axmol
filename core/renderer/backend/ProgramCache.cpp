@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://axys1.github.io/
 
@@ -82,8 +83,9 @@ ProgramCache::~ProgramCache()
 /*
  * shader vertex layout setup functions
  */
-void VertexLayoutHelper::setupForDummy(Program*) {}
-void VertexLayoutHelper::setupForTexture(Program* program) {
+void VertexLayoutHelper::setupDummy(Program*) {}
+void VertexLayoutHelper::setupTexture(Program* program)
+{
     auto vertexLayout = program->getVertexLayout();
 
     /// a_position
@@ -98,7 +100,7 @@ void VertexLayoutHelper::setupForTexture(Program* program) {
     vertexLayout->setStride(4 * sizeof(float));
 }
 
-void VertexLayoutHelper::setupForSprite(Program* program)
+void VertexLayoutHelper::setupSprite(Program* program)
 {
     auto vertexLayout = program->getVertexLayout();
 
@@ -117,52 +119,39 @@ void VertexLayoutHelper::setupForSprite(Program* program)
     vertexLayout->setStride(sizeof(V3F_C4B_T2F));
 }
 
-void VertexLayoutHelper::setupForDrawNode(Program* program)
+void VertexLayoutHelper::setupDrawNode(Program* program)
 {
     auto vertexLayout = program->getVertexLayout();
 
-    const auto&& attributeInfo = program->getActiveAttributes();
-    auto iter                  = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
-    }
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
+                               program->getAttributeLocation(backend::Attribute::POSITION),
+                               backend::VertexFormat::FLOAT2, 0, false);
 
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
-                                   offsetof(V2F_C4B_T2F, texCoords), false);
-    }
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD,
+                               program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                               backend::VertexFormat::FLOAT2, offsetof(V2F_C4B_T2F, texCoords), false);
 
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
-                                   offsetof(V2F_C4B_T2F, colors), true);
-    }
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+                               backend::VertexFormat::UBYTE4, offsetof(V2F_C4B_T2F, colors), true);
+
     vertexLayout->setStride(sizeof(V2F_C4B_T2F));
 }
 
-void VertexLayoutHelper::setupForDrawNode3D(Program* program)
+void VertexLayoutHelper::setupDrawNode3D(Program* program)
 {
     auto vertexLayout = program->getVertexLayout();
 
-    const auto&& attributeInfo = program->getActiveAttributes();
-    auto iter                  = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
-    }
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4, sizeof(Vec3), true);
-    }
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
+                               program->getAttributeLocation(backend::Attribute::POSITION),
+                               backend::VertexFormat::FLOAT3, 0, false);
+
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+                               backend::VertexFormat::UBYTE4, sizeof(Vec3), true);
+
     vertexLayout->setStride(sizeof(V3F_C4B));
 }
 
-void VertexLayoutHelper::setupForSkyBox(Program* program)
+void VertexLayoutHelper::setupSkyBox(Program* program)
 {
     auto vertexLayout = program->getVertexLayout();
     auto attrNameLoc  = program->getAttributeLocation(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION);
@@ -171,61 +160,56 @@ void VertexLayoutHelper::setupForSkyBox(Program* program)
     vertexLayout->setStride(sizeof(Vec3));
 }
 
-void VertexLayoutHelper::setupForPU3D(Program* program)
+void VertexLayoutHelper::setupPU3D(Program* program)
 {
-    auto vertexLayout          = program->getVertexLayout();
-    const auto&& attributeInfo = program->getActiveAttributes();
-    auto iter                  = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3,
-                                   offsetof(V3F_T2F_C4F, position), false);
-    }
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
-                                   offsetof(V3F_T2F_C4F, uv), false);
-    }
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::FLOAT4,
-                                   offsetof(V3F_T2F_C4F, color), false);
-    }
+    auto vertexLayout = program->getVertexLayout();
+
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
+                               program->getAttributeLocation(backend::Attribute::POSITION),
+                               backend::VertexFormat::FLOAT3, offsetof(V3F_T2F_C4F, position), false);
+
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD,
+                               program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                               backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4F, uv), false);
+
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
+                               backend::VertexFormat::FLOAT4, offsetof(V3F_T2F_C4F, color), false);
+
     vertexLayout->setStride(sizeof(V3F_T2F_C4F));
 }
 
-void VertexLayoutHelper::setupForPos(Program* program)
+void VertexLayoutHelper::setupPos(Program* program)
 {
-    auto vertexLayout          = program->getVertexLayout();
+    auto vertexLayout = program->getVertexLayout();
     vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
                                program->getAttributeLocation(backend::Attribute::POSITION),
                                backend::VertexFormat::FLOAT2, 0, false);
     vertexLayout->setStride(sizeof(Vec2));
 }
 
-void VertexLayoutHelper::setupForPosColor(Program* program)
+void VertexLayoutHelper::setupPosColor(Program* program)
 {
     auto vertexLayout = program->getVertexLayout();
     vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
                                program->getAttributeLocation(backend::Attribute::POSITION),
                                backend::VertexFormat::FLOAT3, 0, false);
-    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR,
-                               program->getAttributeLocation(backend::Attribute::COLOR),
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, colors), false);
     vertexLayout->setStride(sizeof(V3F_C4F));
-    
 }
 
-void VertexLayoutHelper::setupForTerrain3D(Program* program) {
+void VertexLayoutHelper::setupTerrain3D(Program* program)
+{
     auto vertexLayout = program->getVertexLayout();
-    vertexLayout->setAttribute("a_position", program->getAttributeLocation(backend::Attribute::POSITION),
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
+                               program->getAttributeLocation(backend::Attribute::POSITION),
                                backend::VertexFormat::FLOAT3, 0, false);
-    vertexLayout->setAttribute("a_texCoord", program->getAttributeLocation(backend::Attribute::TEXCOORD),
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD,
+                               program->getAttributeLocation(backend::Attribute::TEXCOORD),
                                backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_N3F, texcoord), false);
-    vertexLayout->setAttribute("a_normal",program->getAttributeLocation(backend::Attribute::NORMAL), backend::VertexFormat::FLOAT3,
-                                    offsetof(V3F_T2F_N3F, normal), false);
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_NORMAL,
+                               program->getAttributeLocation(backend::Attribute::NORMAL), backend::VertexFormat::FLOAT3,
+                               offsetof(V3F_T2F_N3F, normal), false);
     vertexLayout->setStride(sizeof(V3F_T2F_N3F));
 }
 
@@ -234,74 +218,73 @@ void VertexLayoutHelper::setupForTerrain3D(Program* program) {
 bool ProgramCache::init()
 {
     registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR, positionTextureColor_vert, positionTextureColor_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::DUAL_SAMPLER, positionTextureColor_vert, dualSampler_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::LABEL_DISTANCE_NORMAL, positionTextureColor_vert, label_distanceNormal_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::LABEL_NORMAL, positionTextureColor_vert, label_normal_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::LABLE_OUTLINE, positionTextureColor_vert, labelOutline_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::LABLE_DISTANCEFIELD_GLOW, positionTextureColor_vert,
-                           labelDistanceFieldGlow_frag, VertexLayoutHelper::setupForSprite);
+                           labelDistanceFieldGlow_frag, VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::POSITION_COLOR_LENGTH_TEXTURE, positionColorLengthTexture_vert,
-                           positionColorLengthTexture_frag, VertexLayoutHelper::setupForDrawNode);
+                           positionColorLengthTexture_frag, VertexLayoutHelper::setupDrawNode);
     registerProgramFactory(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE, positionColorTextureAsPointsize_vert,
-                           positionColor_frag, VertexLayoutHelper::setupForDrawNode);
+                           positionColor_frag, VertexLayoutHelper::setupDrawNode);
     registerProgramFactory(ProgramType::POSITION_COLOR, positionColor_vert, positionColor_frag,
-                           VertexLayoutHelper::setupForPosColor);
+                           VertexLayoutHelper::setupPosColor);
     registerProgramFactory(ProgramType::LAYER_RADIA_GRADIENT, position_vert, layer_radialGradient_frag,
-                           VertexLayoutHelper::setupForPos);
+                           VertexLayoutHelper::setupPos);
     registerProgramFactory(ProgramType::POSITION_TEXTURE, positionTexture_vert, positionTexture_frag,
-                           VertexLayoutHelper::setupForTexture);
+                           VertexLayoutHelper::setupTexture);
     registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert,
-                           positionTextureColorAlphaTest_frag, VertexLayoutHelper::setupForSprite);
+                           positionTextureColorAlphaTest_frag, VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag,
-                           VertexLayoutHelper::setupForPos);
+                           VertexLayoutHelper::setupPos);
     registerProgramFactory(ProgramType::DUAL_SAMPLER_GRAY, positionTextureColor_vert, dualSampler_gray_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::GRAY_SCALE, positionTextureColor_vert, grayScale_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::LINE_COLOR_3D, lineColor3D_vert, lineColor3D_frag,
-                           VertexLayoutHelper::setupForDrawNode3D);
+                           VertexLayoutHelper::setupDrawNode3D);
     registerProgramFactory(ProgramType::CAMERA_CLEAR, cameraClear_vert, cameraClear_frag,
-                           VertexLayoutHelper::setupForSprite);
-    registerProgramFactory(ProgramType::SKYBOX_3D, CC3D_skybox_vert, CC3D_skybox_frag,
-                           VertexLayoutHelper::setupForSkyBox);
+                           VertexLayoutHelper::setupSprite);
+    registerProgramFactory(ProgramType::SKYBOX_3D, CC3D_skybox_vert, CC3D_skybox_frag, VertexLayoutHelper::setupSkyBox);
     registerProgramFactory(ProgramType::SKINPOSITION_TEXTURE_3D, CC3D_skinPositionTexture_vert, CC3D_colorTexture_frag,
-                           VertexLayoutHelper::setupForDummy);
+                           VertexLayoutHelper::setupDummy);
     auto lightDef = getShaderMacrosForLight();
     registerProgramFactory(ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D, lightDef + CC3D_skinPositionNormalTexture_vert,
-                           lightDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupForDummy);
+                           lightDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
     registerProgramFactory(ProgramType::POSITION_NORMAL_TEXTURE_3D, lightDef + CC3D_positionNormalTexture_vert,
-                           lightDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupForDummy);
+                           lightDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
     registerProgramFactory(ProgramType::POSITION_TEXTURE_3D, CC3D_positionTexture_vert, CC3D_colorTexture_frag,
-                           VertexLayoutHelper::setupForDummy);
+                           VertexLayoutHelper::setupDummy);
     registerProgramFactory(ProgramType::POSITION_3D, CC3D_positionTexture_vert, CC3D_color_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::POSITION_NORMAL_3D, lightDef + CC3D_positionNormalTexture_vert,
-                           lightDef + CC3D_colorNormal_frag, VertexLayoutHelper::setupForDummy);
+                           lightDef + CC3D_colorNormal_frag, VertexLayoutHelper::setupDummy);
     const char* normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
     registerProgramFactory(ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D,
                            lightDef + normalMapDef + CC3D_positionNormalTexture_vert,
-                           lightDef + normalMapDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupForDummy);
+                           lightDef + normalMapDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
     registerProgramFactory(ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D,
                            lightDef + normalMapDef + CC3D_skinPositionNormalTexture_vert,
-                           lightDef + normalMapDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupForDummy);
+                           lightDef + normalMapDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
     registerProgramFactory(ProgramType::TERRAIN_3D, CC3D_terrain_vert, CC3D_terrain_frag,
-                           VertexLayoutHelper::setupForTerrain3D);
+                           VertexLayoutHelper::setupTerrain3D);
     registerProgramFactory(ProgramType::PARTICLE_TEXTURE_3D, CC3D_particle_vert, CC3D_particleTexture_frag,
-                           VertexLayoutHelper::setupForPU3D);
+                           VertexLayoutHelper::setupPU3D);
     registerProgramFactory(ProgramType::PARTICLE_COLOR_3D, CC3D_particle_vert, CC3D_particleColor_frag,
-                           VertexLayoutHelper::setupForPU3D);
+                           VertexLayoutHelper::setupPU3D);
     registerProgramFactory(ProgramType::QUAD_COLOR_2D, CC2D_quadColor_vert, CC2D_quadColor_frag,
-                           VertexLayoutHelper::setupForDummy);
+                           VertexLayoutHelper::setupDummy);
     registerProgramFactory(ProgramType::QUAD_TEXTURE_2D, CC2D_quadTexture_vert, CC2D_quadTexture_frag,
-                           VertexLayoutHelper::setupForDummy);
-    registerProgramFactory(ProgramType::HSV, positionTextureColor_vert, hsv_frag, VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupDummy);
+    registerProgramFactory(ProgramType::HSV, positionTextureColor_vert, hsv_frag, VertexLayoutHelper::setupSprite);
     registerProgramFactory(ProgramType::HSV_DUAL_SAMPLER, positionTextureColor_vert, dualSampler_hsv_frag,
-                           VertexLayoutHelper::setupForSprite);
+                           VertexLayoutHelper::setupSprite);
 
     // The builtin dual sampler shader registry
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR,
@@ -362,20 +345,20 @@ Program* ProgramCache::addProgram(uint32_t internalType) const
 void ProgramCache::registerCustomProgramFactory(uint32_t type,
                                                 std::string vertShaderSource,
                                                 std::string fragShaderSource,
-                                                std::function<void(Program*)> cbSetupLayout)
+                                                std::function<void(Program*)> fnSetupLayout)
 {
     auto internalType = ProgramType::CUSTOM_PROGRAM | type;
     registerProgramFactory(internalType, std::move(vertShaderSource), std::move(fragShaderSource),
-                           std::move(cbSetupLayout));
+                           std::move(fnSetupLayout));
 }
 
 void ProgramCache::registerProgramFactory(uint32_t internalType,
                                           std::string&& vertShaderSource,
                                           std::string&& fragShaderSource,
-                                          std::function<void(Program*)> cbSetupLayout)
+                                          std::function<void(Program*)> fnSetupLayout)
 {
     auto constructProgram = [vsrc = std::move(vertShaderSource), fsrc = std::move(fragShaderSource),
-                             setupLayout = std::move(cbSetupLayout)]() {
+                             setupLayout = std::move(fnSetupLayout)]() {
         auto program = backend::Device::getInstance()->newProgram(vsrc, fsrc);
         setupLayout(program);
         return program;
