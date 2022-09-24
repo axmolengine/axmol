@@ -221,20 +221,18 @@ bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned in
     return true;
 }
 
-const hlookup::string_map<AttributeBindInfo> ProgramGL::getActiveAttributes() const
+const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() const
 {
-    hlookup::string_map<AttributeBindInfo> attributes;
-
-    if (!_program)
-        return attributes;
+    if (!_program || !_activeAttribs.empty())
+        return _activeAttribs;
 
     GLint numOfActiveAttributes = 0;
     glGetProgramiv(_program, GL_ACTIVE_ATTRIBUTES, &numOfActiveAttributes);
 
     if (numOfActiveAttributes <= 0)
-        return attributes;
+        return _activeAttribs;
 
-    attributes.reserve(numOfActiveAttributes);
+    _activeAttribs.reserve(numOfActiveAttributes);
 
     int MAX_ATTRIBUTE_NAME_LENGTH = 256;
     std::vector<char> attrName(MAX_ATTRIBUTE_NAME_LENGTH + 1);
@@ -253,10 +251,10 @@ const hlookup::string_map<AttributeBindInfo> ProgramGL::getActiveAttributes() co
         info.type          = attrType;
         info.size          = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
         CHECK_GL_ERROR_DEBUG();
-        attributes[info.attributeName] = info;
+        _activeAttribs[info.attributeName] = info;
     }
 
-    return attributes;
+    return _activeAttribs;
 }
 
 void ProgramGL::computeUniformInfos()

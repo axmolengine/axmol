@@ -101,7 +101,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const hlookup::string_map<AttributeBindInfo> getActiveAttributes() const = 0;
+    virtual const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const = 0;
 
     /**
      * Get vertex shader.

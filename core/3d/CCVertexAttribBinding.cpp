@@ -31,7 +31,7 @@ NS_AX_BEGIN
 
 static std::vector<VertexAttribBinding*> __vertexAttribBindingCache;
 
-VertexAttribBinding::VertexAttribBinding() : _meshIndexData(nullptr), _programState(nullptr), _attributes() {}
+VertexAttribBinding::VertexAttribBinding() : _meshIndexData(nullptr), _programState(nullptr) {}
 
 VertexAttribBinding::~VertexAttribBinding()
 {
@@ -45,7 +45,6 @@ VertexAttribBinding::~VertexAttribBinding()
 
     AX_SAFE_RELEASE(_meshIndexData);
     AX_SAFE_RELEASE(_programState);
-    _attributes.clear();
 }
 
 VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
@@ -115,23 +114,21 @@ void VertexAttribBinding::parseAttributes()
 {
     AXASSERT(_programState, "invalid glprogram");
 
-    _attributes.clear();
     _vertexAttribsFlags = 0;
-
-    auto program = _programState->getProgram();
-    _attributes  = program->getActiveAttributes();
 }
 
 bool VertexAttribBinding::hasAttribute(const shaderinfos::VertexKey& key) const
 {
     auto& name = shaderinfos::getAttributeName(key);
-    return _attributes.find(name) != _attributes.end();
+    auto& attributes = _programState->getProgram()->getActiveAttributes();
+    return attributes.find(name) != attributes.end();
 }
 
-backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(std::string_view name)
+const backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(std::string_view name)
 {
-    const auto itr = _attributes.find(name);
-    if (itr != _attributes.end())
+    auto& attributes = _programState->getProgram()->getActiveAttributes();
+    const auto itr = attributes.find(name);
+    if (itr != attributes.end())
         return &itr->second;
     return nullptr;
 }
