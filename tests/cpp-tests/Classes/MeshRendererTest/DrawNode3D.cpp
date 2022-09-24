@@ -82,7 +82,6 @@ bool DrawNode3D::init()
     _customCommand.setBeforeCallback(AX_CALLBACK_0(DrawNode3D::onBeforeDraw, this));
     _customCommand.setAfterCallback(AX_CALLBACK_0(DrawNode3D::onAfterDraw, this));
 
-    auto layout = _programStateLine->getVertexLayout();
 #define INITIAL_VERTEX_BUFFER_LENGTH 512
 
     ensureCapacity(INITIAL_VERTEX_BUFFER_LENGTH);
