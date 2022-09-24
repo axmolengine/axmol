@@ -389,15 +389,6 @@ LayerRadialGradient::LayerRadialGradient()
     _radiusLocation     = pipelinePS->getUniformLocation("u_radius");
     _expandLocation     = pipelinePS->getUniformLocation("u_expand");
 
-    auto vertexLayout         = pipelinePS->getVertexLayout();
-    const auto& attributeInfo = pipelinePS->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
-    }
-    vertexLayout->setLayout(sizeof(_vertices[0]));
-
     _customCommand.createVertexBuffer(sizeof(_vertices[0]), sizeof(_vertices) / sizeof(_vertices[0]),
                                       CustomCommand::BufferUsage::STATIC);
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);

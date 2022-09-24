@@ -214,27 +214,6 @@ bool Particle3DQuadRender::initQuadRender(std::string_view texFile)
 
     auto& pipelineDescriptor        = _meshCommand.getPipelineDescriptor();
     pipelineDescriptor.programState = _programState;
-    auto layout                     = _programState->getVertexLayout();
-    const auto& attributeInfo       = _programState->getProgram()->getActiveAttributes();
-    auto iter                       = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        layout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3,
-                             offsetof(posuvcolor, position), false);
-    }
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
-    {
-        layout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
-                             offsetof(posuvcolor, uv), false);
-    }
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        layout->setAttribute("a_color", iter->second.location, backend::VertexFormat::FLOAT4,
-                             offsetof(posuvcolor, color), false);
-    }
-    layout->setLayout(sizeof(posuvcolor));
 
     _locColor   = _programState->getUniformLocation("u_color");
     _locPMatrix = _programState->getUniformLocation("u_PMatrix");

@@ -34,6 +34,8 @@
 
 #include "Enums.h"
 
+using namespace std::string_view_literals;
+
 NS_AX_BACKEND_BEGIN
 
 inline TargetBufferFlags getMRTColorFlag(size_t index) noexcept
@@ -109,22 +111,23 @@ struct AttributeBindInfo
 };
 
 /// built-in uniform name
-static const char* UNIFORM_NAME_MVP_MATRIX   = "u_MVPMatrix";
-static const char* UNIFORM_NAME_TEXTURE      = "u_tex0";
-static const char* UNIFORM_NAME_TEXTURE1     = "u_tex1";
-static const char* UNIFORM_NAME_TEXTURE2     = "u_tex2";
-static const char* UNIFORM_NAME_TEXTURE3     = "u_tex3";
-static const char* UNIFORM_NAME_TEXT_COLOR   = "u_textColor";
-static const char* UNIFORM_NAME_EFFECT_COLOR = "u_effectColor";
-static const char* UNIFORM_NAME_EFFECT_TYPE  = "u_effectType";
+static constexpr auto UNIFORM_NAME_MVP_MATRIX   = "u_MVPMatrix"sv;
+static constexpr auto UNIFORM_NAME_TEXTURE      = "u_tex0"sv;
+static constexpr auto UNIFORM_NAME_TEXTURE1     = "u_tex1"sv;
+static constexpr auto UNIFORM_NAME_TEXTURE2     = "u_tex2"sv;
+static constexpr auto UNIFORM_NAME_TEXTURE3     = "u_tex3"sv;
+static constexpr auto UNIFORM_NAME_TEXT_COLOR   = "u_textColor"sv;
+static constexpr auto UNIFORM_NAME_EFFECT_COLOR = "u_effectColor"sv;
+static constexpr auto UNIFORM_NAME_EFFECT_TYPE  = "u_effectType"sv;
 
 /// built-in attribute name
-static const char* ATTRIBUTE_NAME_POSITION  = "a_position";
-static const char* ATTRIBUTE_NAME_COLOR     = "a_color";
-static const char* ATTRIBUTE_NAME_TEXCOORD  = "a_texCoord";
-static const char* ATTRIBUTE_NAME_TEXCOORD1 = "a_texCoord1";
-static const char* ATTRIBUTE_NAME_TEXCOORD2 = "a_texCoord2";
-static const char* ATTRIBUTE_NAME_TEXCOORD3 = "a_texCoord3";
+static constexpr auto ATTRIBUTE_NAME_POSITION  = "a_position"sv;
+static constexpr auto ATTRIBUTE_NAME_COLOR     = "a_color"sv;
+static constexpr auto ATTRIBUTE_NAME_TEXCOORD  = "a_texCoord"sv;
+static constexpr auto ATTRIBUTE_NAME_TEXCOORD1 = "a_texCoord1"sv;
+static constexpr auto ATTRIBUTE_NAME_TEXCOORD2 = "a_texCoord2"sv;
+static constexpr auto ATTRIBUTE_NAME_TEXCOORD3 = "a_texCoord3"sv;
+static constexpr auto ATTRIBUTE_NAME_NORMAL    = "a_normal"sv;
 
 /**
  * @brief a structor to store blend descriptor

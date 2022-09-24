@@ -94,7 +94,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    const hlookup::string_map<AttributeBindInfo> getActiveAttributes() const override;
+    const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const override;
 
     /**
      * Get maximum vertex location.
