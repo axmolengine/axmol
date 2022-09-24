@@ -155,51 +155,51 @@ void ProgramGL::computeLocations()
     //    std::fill(_builtinUniformLocation, _builtinUniformLocation + UNIFORM_MAX, -1);
 
     /// a_position
-    auto location                                  = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION);
+    auto location                                  = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION.data());
     _builtinAttributeLocation[Attribute::POSITION] = location;
 
     /// a_color
-    location                                    = glGetAttribLocation(_program, ATTRIBUTE_NAME_COLOR);
+    location                                    = glGetAttribLocation(_program, ATTRIBUTE_NAME_COLOR.data());
     _builtinAttributeLocation[Attribute::COLOR] = location;
 
     /// a_texCoord
-    location                                       = glGetAttribLocation(_program, ATTRIBUTE_NAME_TEXCOORD);
+    location                                       = glGetAttribLocation(_program, ATTRIBUTE_NAME_TEXCOORD.data());
     _builtinAttributeLocation[Attribute::TEXCOORD] = location;
 
     // a_normal
-    location                                     = glGetAttribLocation(_program, ATTRIBUTE_NAME_NORMAL);
+    location                                     = glGetAttribLocation(_program, ATTRIBUTE_NAME_NORMAL.data());
     _builtinAttributeLocation[Attribute::NORMAL] = location;
 
     /// u_MVPMatrix
-    location                                                 = glGetUniformLocation(_program, UNIFORM_NAME_MVP_MATRIX);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_MVP_MATRIX.data());
     _builtinUniformLocation[Uniform::MVP_MATRIX].location[0] = location;
     _builtinUniformLocation[Uniform::MVP_MATRIX].location[1] =
         _activeUniformInfos[UNIFORM_NAME_MVP_MATRIX].bufferOffset;
 
     /// u_textColor
-    location                                                 = glGetUniformLocation(_program, UNIFORM_NAME_TEXT_COLOR);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_TEXT_COLOR.data());
     _builtinUniformLocation[Uniform::TEXT_COLOR].location[0] = location;
     _builtinUniformLocation[Uniform::TEXT_COLOR].location[1] =
         _activeUniformInfos[UNIFORM_NAME_TEXT_COLOR].bufferOffset;
 
     /// u_effectColor
-    location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_COLOR);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_COLOR.data());
     _builtinUniformLocation[Uniform::EFFECT_COLOR].location[0] = location;
     _builtinUniformLocation[Uniform::EFFECT_COLOR].location[1] =
         _activeUniformInfos[UNIFORM_NAME_EFFECT_COLOR].bufferOffset;
 
     /// u_effectType
-    location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_TYPE);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_TYPE.data());
     _builtinUniformLocation[Uniform::EFFECT_TYPE].location[0] = location;
     _builtinUniformLocation[Uniform::EFFECT_TYPE].location[1] =
         _activeUniformInfos[UNIFORM_NAME_EFFECT_TYPE].bufferOffset;
 
     /// u_tex0
-    location                                              = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE);
+    location                                              = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE.data());
     _builtinUniformLocation[Uniform::TEXTURE].location[0] = location;
 
     /// u_tex1
-    location                                               = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1.data());
     _builtinUniformLocation[Uniform::TEXTURE1].location[0] = location;
 }
 

@@ -1,5 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://axys1.github.io/
 
@@ -42,16 +43,16 @@ NS_AX_BACKEND_BEGIN
 
 struct AX_DLL VertexLayoutHelper
 {
-    static void setupForDummy(Program*);
-    static void setupForPos(Program*);
-    static void setupForTexture(Program*);
-    static void setupForSprite(Program*);
-    static void setupForDrawNode(Program*);
-    static void setupForDrawNode3D(Program*);
-    static void setupForSkyBox(Program*);
-    static void setupForPU3D(Program*);
-    static void setupForPosColor(Program*);
-    static void setupForTerrain3D(Program*);
+    static void setupDummy(Program*);
+    static void setupPos(Program*);
+    static void setupTexture(Program*);
+    static void setupSprite(Program*);
+    static void setupDrawNode(Program*);
+    static void setupDrawNode3D(Program*);
+    static void setupSkyBox(Program*);
+    static void setupPU3D(Program*);
+    static void setupPosColor(Program*);
+    static void setupTerrain3D(Program*);
 };
 
 /**
@@ -76,7 +77,7 @@ public:
     void registerCustomProgramFactory(uint32_t type,
                                       std::string vertShaderSource,
                                       std::string fragShaderSource,
-                                      std::function<void(Program*)> cbSetupLayout = VertexLayoutHelper::setupForDummy);
+                                      std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
 
     /**
      * Remove a program object from cache.
@@ -106,7 +107,7 @@ protected:
     void registerProgramFactory(uint32_t internalType,
                                 std::string&& vertShaderSource,
                                 std::string&& fragShaderSource,
-                                std::function<void(Program*)> cbSetupLayout);
+                                std::function<void(Program*)> fnSetupLayout);
     Program* addProgram(uint32_t internalType) const;
 
     std::function<Program*()> _builtinFactories[(int)ProgramType::BUILTIN_COUNT];
