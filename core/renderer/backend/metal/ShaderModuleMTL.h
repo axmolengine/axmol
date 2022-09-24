@@ -83,7 +83,7 @@ public:
      * Get active attribute informations.
      * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
      */
-    inline const hlookup::string_map<AttributeBindInfo> getAttributeInfo() const { return _attributeInfo; }
+    inline const hlookup::string_map<AttributeBindInfo>& getAttributeInfo() const { return _attributeInfo; }
 
     /**
      * Get uniform location by engine built-in uniform enum name.

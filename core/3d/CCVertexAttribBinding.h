@@ -112,12 +112,11 @@ private:
                                 bool normalized,
                                 int offset,
                                 int flag);
-    backend::AttributeBindInfo* getVertexAttribValue(std::string_view name);
+    const backend::AttributeBindInfo* getVertexAttribValue(std::string_view name);
     void parseAttributes();
 
     MeshIndexData* _meshIndexData;
     backend::ProgramState* _programState;
-    hlookup::string_map<backend::AttributeBindInfo> _attributes;
     uint32_t _vertexAttribsFlags;
 };
 
