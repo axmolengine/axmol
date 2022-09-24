@@ -92,7 +92,7 @@ Bone::~Bone(void)
 
 bool Bone::init()
 {
-    return Bone::init(nullptr);
+    return Bone::init(hlookup::empty_sv);
 }
 
 bool Bone::init(std::string_view name)
