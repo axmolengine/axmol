@@ -37,6 +37,7 @@
 NS_AX_BACKEND_BEGIN
 
 class ShaderModule;
+class VertexLayout;
 
 /**
  * @addtogroup _backend
@@ -49,6 +50,7 @@ class ShaderModule;
 class AX_DLL Program : public Ref
 {
 public:
+    ~Program();
     /**
      * Get engine built-in program.
      * @param type Specifies the built-in program type.
@@ -99,7 +101,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const hlookup::string_map<AttributeBindInfo> getActiveAttributes() const = 0;
+    virtual const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const = 0;
 
     /**
      * Get vertex shader.
@@ -146,6 +148,8 @@ public:
      */
     void setProgramType(uint32_t type);
 
+    inline VertexLayout* getVertexLayout() const { return _vertexLayout; }
+
 protected:
     /**
      * @param vs Specifes the vertex shader source.
@@ -185,6 +189,7 @@ protected:
 
     std::string _vertexShader;                            ///< Vertex shader.
     std::string _fragmentShader;                          ///< Fragment shader.
+    VertexLayout* _vertexLayout = nullptr;
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
 };
 

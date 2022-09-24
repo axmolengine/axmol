@@ -797,27 +797,6 @@ void Terrain::onEnter()
 
 void Terrain::cacheUniformAttribLocation()
 {
-    auto vertexLayout         = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
-    }
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
-                                   offsetof(TerrainVertexData, _texcoord), false);
-    }
-    iter = attributeInfo.find("a_normal");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_normal", iter->second.location, backend::VertexFormat::FLOAT3,
-                                   offsetof(TerrainVertexData, _normal), false);
-    }
-    vertexLayout->setLayout(sizeof(TerrainVertexData));
-
     _alphaMapLocation.reset();
     for (int i = 0; i < 4; ++i)
     {

@@ -72,6 +72,7 @@ ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentSha
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadProgram(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
+    setupVertexLayout();
 }
 
 ProgramGL::~ProgramGL()
@@ -154,48 +155,57 @@ void ProgramGL::computeLocations()
     //    std::fill(_builtinUniformLocation, _builtinUniformLocation + UNIFORM_MAX, -1);
 
     /// a_position
-    auto location                                  = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION);
+    auto location                                  = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION.data());
     _builtinAttributeLocation[Attribute::POSITION] = location;
 
     /// a_color
-    location                                    = glGetAttribLocation(_program, ATTRIBUTE_NAME_COLOR);
+    location                                    = glGetAttribLocation(_program, ATTRIBUTE_NAME_COLOR.data());
     _builtinAttributeLocation[Attribute::COLOR] = location;
 
     /// a_texCoord
-    location                                       = glGetAttribLocation(_program, ATTRIBUTE_NAME_TEXCOORD);
+    location                                       = glGetAttribLocation(_program, ATTRIBUTE_NAME_TEXCOORD.data());
     _builtinAttributeLocation[Attribute::TEXCOORD] = location;
 
+    // a_normal
+    location                                     = glGetAttribLocation(_program, ATTRIBUTE_NAME_NORMAL.data());
+    _builtinAttributeLocation[Attribute::NORMAL] = location;
+
     /// u_MVPMatrix
-    location                                                 = glGetUniformLocation(_program, UNIFORM_NAME_MVP_MATRIX);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_MVP_MATRIX.data());
     _builtinUniformLocation[Uniform::MVP_MATRIX].location[0] = location;
     _builtinUniformLocation[Uniform::MVP_MATRIX].location[1] =
         _activeUniformInfos[UNIFORM_NAME_MVP_MATRIX].bufferOffset;
 
     /// u_textColor
-    location                                                 = glGetUniformLocation(_program, UNIFORM_NAME_TEXT_COLOR);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_TEXT_COLOR.data());
     _builtinUniformLocation[Uniform::TEXT_COLOR].location[0] = location;
     _builtinUniformLocation[Uniform::TEXT_COLOR].location[1] =
         _activeUniformInfos[UNIFORM_NAME_TEXT_COLOR].bufferOffset;
 
     /// u_effectColor
-    location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_COLOR);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_COLOR.data());
     _builtinUniformLocation[Uniform::EFFECT_COLOR].location[0] = location;
     _builtinUniformLocation[Uniform::EFFECT_COLOR].location[1] =
         _activeUniformInfos[UNIFORM_NAME_EFFECT_COLOR].bufferOffset;
 
     /// u_effectType
-    location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_TYPE);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_EFFECT_TYPE.data());
     _builtinUniformLocation[Uniform::EFFECT_TYPE].location[0] = location;
     _builtinUniformLocation[Uniform::EFFECT_TYPE].location[1] =
         _activeUniformInfos[UNIFORM_NAME_EFFECT_TYPE].bufferOffset;
 
     /// u_tex0
-    location                                              = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE);
+    location                                              = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE.data());
     _builtinUniformLocation[Uniform::TEXTURE].location[0] = location;
 
     /// u_tex1
-    location                                               = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1);
+    location = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1.data());
     _builtinUniformLocation[Uniform::TEXTURE1].location[0] = location;
+}
+
+void ProgramGL::setupVertexLayout()
+{
+    _vertexLayout = new VertexLayout();
 }
 
 bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned int& location) const
@@ -211,20 +221,18 @@ bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned in
     return true;
 }
 
-const hlookup::string_map<AttributeBindInfo> ProgramGL::getActiveAttributes() const
+const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() const
 {
-    hlookup::string_map<AttributeBindInfo> attributes;
-
-    if (!_program)
-        return attributes;
+    if (!_program || !_activeAttribs.empty())
+        return _activeAttribs;
 
     GLint numOfActiveAttributes = 0;
     glGetProgramiv(_program, GL_ACTIVE_ATTRIBUTES, &numOfActiveAttributes);
 
     if (numOfActiveAttributes <= 0)
-        return attributes;
+        return _activeAttribs;
 
-    attributes.reserve(numOfActiveAttributes);
+    _activeAttribs.reserve(numOfActiveAttributes);
 
     int MAX_ATTRIBUTE_NAME_LENGTH = 256;
     std::vector<char> attrName(MAX_ATTRIBUTE_NAME_LENGTH + 1);
@@ -243,10 +251,10 @@ const hlookup::string_map<AttributeBindInfo> ProgramGL::getActiveAttributes() co
         info.type          = attrType;
         info.size          = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
         CHECK_GL_ERROR_DEBUG();
-        attributes[info.attributeName] = info;
+        _activeAttribs[info.attributeName] = info;
     }
 
-    return attributes;
+    return _activeAttribs;
 }
 
 void ProgramGL::computeUniformInfos()

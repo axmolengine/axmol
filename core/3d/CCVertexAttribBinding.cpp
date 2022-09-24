@@ -31,7 +31,7 @@ NS_AX_BEGIN
 
 static std::vector<VertexAttribBinding*> __vertexAttribBindingCache;
 
-VertexAttribBinding::VertexAttribBinding() : _meshIndexData(nullptr), _programState(nullptr), _attributes() {}
+VertexAttribBinding::VertexAttribBinding() : _meshIndexData(nullptr), _programState(nullptr) {}
 
 VertexAttribBinding::~VertexAttribBinding()
 {
@@ -45,7 +45,6 @@ VertexAttribBinding::~VertexAttribBinding()
 
     AX_SAFE_RELEASE(_meshIndexData);
     AX_SAFE_RELEASE(_programState);
-    _attributes.clear();
 }
 
 VertexAttribBinding* VertexAttribBinding::create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand* command)
@@ -80,13 +79,9 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
 
     AXASSERT(meshIndexData && pass && pass->getProgramState(), "Invalid arguments");
 
-    auto programState = pass->getProgramState();
-
-    _vertexLayout = programState->getVertexLayout();
-
     _meshIndexData = meshIndexData;
     _meshIndexData->retain();
-    _programState = programState;
+    _programState = pass->getProgramState();
     _programState->retain();
 
     auto meshVertexData = meshIndexData->getMeshVertexData();
@@ -103,7 +98,7 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
         offset += meshattribute.getAttribSizeBytes();
     }
 
-    _vertexLayout->setLayout(offset);
+    _programState->setVertexStride(offset);
 
     AXASSERT(offset == meshVertexData->getSizePerVertex(), "vertex layout mismatch!");
 
@@ -119,23 +114,21 @@ void VertexAttribBinding::parseAttributes()
 {
     AXASSERT(_programState, "invalid glprogram");
 
-    _attributes.clear();
     _vertexAttribsFlags = 0;
-
-    auto program = _programState->getProgram();
-    _attributes  = program->getActiveAttributes();
 }
 
 bool VertexAttribBinding::hasAttribute(const shaderinfos::VertexKey& key) const
 {
     auto& name = shaderinfos::getAttributeName(key);
-    return _attributes.find(name) != _attributes.end();
+    auto& attributes = _programState->getProgram()->getActiveAttributes();
+    return attributes.find(name) != attributes.end();
 }
 
-backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(std::string_view name)
+const backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(std::string_view name)
 {
-    const auto itr = _attributes.find(name);
-    if (itr != _attributes.end())
+    auto& attributes = _programState->getProgram()->getActiveAttributes();
+    const auto itr = attributes.find(name);
+    if (itr != attributes.end())
         return &itr->second;
     return nullptr;
 }
@@ -150,7 +143,7 @@ void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
     if (v)
     {
         // AXLOG("axys: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
-        _vertexLayout->setAttribute(name, v->location, type, offset, normalized);
+        _programState->setVertexAttrib(name, v->location, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else

@@ -1350,9 +1350,9 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         programState->setTexture(shaderSet->SamplerTexture0Location, 0, texture->getBackendTexture());
 
         // 頂点配列の設定
-        programState->getVertexLayout()->setAttribute("a_position", shaderSet->AttributePositionLocation, ax::backend::VertexFormat::FLOAT2, 0, false);
+        programState->setVertexAttrib("a_position", shaderSet->AttributePositionLocation, ax::backend::VertexFormat::FLOAT2, 0, false);
         // テクスチャ頂点の設定
-        programState->getVertexLayout()->setAttribute("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::backend::VertexFormat::FLOAT2, sizeof(csmFloat32) * 2, false);
+        programState->setVertexAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::backend::VertexFormat::FLOAT2, sizeof(csmFloat32) * 2, false);
 
         // チャンネル
         const csmInt32 channelNo = renderer->GetClippingContextBufferForMask()->_layoutChannelNo;
@@ -1417,9 +1417,9 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         }
 
         // 頂点配列の設定
-        programState->getVertexLayout()->setAttribute("a_position", shaderSet->AttributePositionLocation, ax::backend::VertexFormat::FLOAT2, 0, false);
+        programState->setVertexAttrib("a_position", shaderSet->AttributePositionLocation, ax::backend::VertexFormat::FLOAT2, 0, false);
         // テクスチャ頂点の設定
-        programState->getVertexLayout()->setAttribute("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::backend::VertexFormat::FLOAT2, sizeof(csmFloat32) * 2, false);
+        programState->setVertexAttrib("a_texCoord", shaderSet->AttributeTexCoordLocation, ax::backend::VertexFormat::FLOAT2, sizeof(csmFloat32) * 2, false);
 
         if (masked)
         {
@@ -1450,7 +1450,7 @@ void CubismShader_Cocos2dx::SetupShaderProgram(CubismCommandBuffer_Cocos2dx::Dra
         programState->setUniform(shaderSet->UniformBaseColorLocation, base, sizeof(float) * 4);
     }
 
-    programState->getVertexLayout()->setLayout(sizeof(csmFloat32) * 4);
+    programState->setVertexStride(sizeof(csmFloat32) * 4);
     blendDescriptor->blendEnabled = true;
     pipelineDescriptor->programState = programState;
 }

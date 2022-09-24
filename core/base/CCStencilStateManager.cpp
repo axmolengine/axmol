@@ -40,15 +40,6 @@ StencilStateManager::StencilStateManager()
     _programState                   = new backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
 
-    auto vertexLayout         = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
-    }
-    vertexLayout->setLayout(2 * sizeof(float));
-
     _mvpMatrixLocaiton    = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _colorUniformLocation = pipelineDescriptor.programState->getUniformLocation("u_color");
 

@@ -56,27 +56,16 @@ backend::ProgramState* initPipelineDescriptor(ax::CustomCommand& command,
     AX_SAFE_RELEASE(pipelieDescriptor.programState);
     pipelieDescriptor.programState = programState;
 
-    // set vertexLayout according to V2F_C4B_T2F structure
-    auto vertexLayout         = programState->getVertexLayout();
-    const auto& attributeInfo = programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
-    }
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
+    // set custom vertexLayout according to V2F_C4B_T2F structure
+    programState->setVertexAttrib("a_position", program->getAttributeLocation(backend::Attribute::POSITION),
+                                  backend::VertexFormat::FLOAT2, 0, false);
+    programState->setVertexAttrib("a_texCoord", program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                                  backend::VertexFormat::FLOAT2,
                                    offsetof(V2F_C4B_T2F, texCoords), false);
-    }
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
+    programState->setVertexAttrib("a_color", program->getAttributeLocation(backend::Attribute::COLOR),
+                                  backend::VertexFormat::UBYTE4,
                                    offsetof(V2F_C4B_T2F, colors), true);
-    }
-    vertexLayout->setLayout(sizeof(V2F_C4B_T2F));
+    programState->setVertexStride(sizeof(V2F_C4B_T2F));
 
     if (ridal)
     {

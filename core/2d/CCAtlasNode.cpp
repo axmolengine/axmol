@@ -100,24 +100,6 @@ bool AtlasNode::setProgramState(backend::ProgramState* programState, bool needsR
         pipelineDescriptor.programState = _programState;
         _mvpMatrixLocation              = _programState->getUniformLocation("u_MVPMatrix");
 
-        auto vertexLayout = _programState->getVertexLayout();
-        // a_position
-        vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
-                                   _programState->getAttributeLocation(backend::Attribute::POSITION),
-                                   backend::VertexFormat::FLOAT3, 0, false);
-
-        // a_texCoord
-        vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                   _programState->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                   backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), false);
-
-        // a_color
-        vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR,
-                                   _programState->getAttributeLocation(backend::Attribute::COLOR),
-                                   backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors), true);
-
-        vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
-
         updateProgramStateTexture(_textureAtlas->getTexture());
         return true;
     }
