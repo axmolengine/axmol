@@ -1921,7 +1921,7 @@ def main():
                 'clang_args': (config.get(s, 'extra_arguments', 0, dict(userconfig.items('DEFAULT'))) or "").split(" "),
                 'target': os.path.join(workingdir, "targets", t),
                 'outdir': outdir,
-                'search_paths': os.path.abspath(os.path.join(userconfig.get('DEFAULT', 'axysdir'), 'core')) + ";" + os.path.abspath(os.path.join(userconfig.get('DEFAULT', 'axysdir'), 'extensions')),
+                'search_paths': os.path.abspath(os.path.join(userconfig.get('DEFAULT', 'axdir'), 'core')) + ";" + os.path.abspath(os.path.join(userconfig.get('DEFAULT', 'axdir'), 'extensions')),
                 'remove_prefix': config.get(s, 'remove_prefix'),
                 'target_ns': config.get(s, 'target_namespace'),
                 'cpp_ns': config.get(s, 'cpp_namespace').split(' ') if config.has_option(s, 'cpp_namespace') else None,
