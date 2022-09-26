@@ -170,7 +170,6 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
 
     auto program = backend::Program::getBuiltinProgram(programType);
     pipelinePS   = new backend::ProgramState(program);
-    setVertexLayout(cmd);
     cmd.setPrimitiveType(primitiveType);
     cmd.setDrawType(drawType);
 }
@@ -179,10 +178,6 @@ void DrawNode::freeShaderInternal(CustomCommand& cmd)
 {
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE_NULL(pipelinePS);
-}
-
-void DrawNode::setVertexLayout(CustomCommand& cmd)
-{
 }
 
 void DrawNode::updateBlendState(CustomCommand& cmd)
