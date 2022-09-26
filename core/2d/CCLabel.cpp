@@ -674,10 +674,6 @@ static Texture2D* _getTexture(Label* label)
     return texture;
 }
 
-void Label::setVertexLayout()
-{
-}
-
 bool Label::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
     if (Node::setProgramState(programState, needsRetain))
@@ -689,7 +685,6 @@ bool Label::setProgramState(backend::ProgramState* programState, bool needsRetai
         }
 
         auto& quadPipeline = _quadCommand.getPipelineDescriptor();
-        setVertexLayout();
         quadPipeline.programState = _programState;
         return true;
     }
@@ -758,7 +753,6 @@ void Label::updateShaderProgram()
     }
 
     auto& quadPipeline = _quadCommand.getPipelineDescriptor();
-    setVertexLayout();
     quadPipeline.programState = _programState;
 }
 
