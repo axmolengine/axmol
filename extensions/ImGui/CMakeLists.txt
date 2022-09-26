@@ -5,7 +5,7 @@ include_directories(imgui)
 set(HEADER
     ImGuiPresenter.h
     # CCImGuiColorTextEdit.h
-    imgui_impl_axys.h
+    imgui_impl_ax.h
     imgui/imconfig.h
     imgui/imgui.h
     imgui/imgui_internal.h
@@ -21,7 +21,7 @@ set(HEADER
 set(SOURCE
     ImGuiPresenter.cpp
     # CCImGuiColorTextEdit.cpp
-    imgui_impl_axys.cpp
+    imgui_impl_ax.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_draw.cpp

@@ -1,6 +1,6 @@
 #include "ImGuiPresenter.h"
 #include <assert.h>
-#include "imgui_impl_axys.h"
+#include "imgui_impl_ax.h"
 #include "imgui_internal.h"
 
 // TODO: mac metal
@@ -199,9 +199,9 @@ void ImGuiPresenter::init()
 
     auto window = static_cast<GLViewImpl*>(Director::getInstance()->getOpenGLView())->getWindow();
     ImGui_ImplGlfw_InitForAxys(window, true);
-    ImGui_ImplAxys_Init();
+    ImGui_ImplAx_Init();
 
-    ImGui_ImplAxys_SetCustomFontLoader(&ImGuiPresenter::loadCustomFonts, this);
+    ImGui_ImplAx_SetCustomFontLoader(&ImGuiPresenter::loadCustomFonts, this);
 
     ImGui::StyleColorsClassic();
 
@@ -216,8 +216,8 @@ void ImGuiPresenter::cleanup()
     eventDispatcher->removeCustomEventListeners(Director::EVENT_AFTER_VISIT);
     eventDispatcher->removeCustomEventListeners(Director::EVENT_BEFORE_DRAW);
 
-    ImGui_ImplAxys_SetCustomFontLoader(nullptr, nullptr);
-    ImGui_ImplAxys_Shutdown();
+    ImGui_ImplAx_SetCustomFontLoader(nullptr, nullptr);
+    ImGui_ImplAx_Shutdown();
     ImGui_ImplGlfw_Shutdown();
 
     AX_SAFE_RELEASE_NULL(_fontsTexture);
@@ -283,7 +283,7 @@ float ImGuiPresenter::scaleAllByDPI(float userScale)
         }
 
         // Destory font informations, let implcocos2dx recreate at newFrame
-        ImGui_ImplAxys_SetDeviceObjectsDirty();
+        ImGui_ImplAx_SetDeviceObjectsDirty();
 
         ImGui::GetStyle().ScaleAllSizes(zoomFactor);
 
@@ -298,7 +298,7 @@ void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, CHS_GLYP
     if (FileUtils::getInstance()->isFileExistInternal(fontFile))
     {
         if (_fontsInfoMap.emplace(fontFile, FontInfo{fontSize, glyphRange}).second)
-            ImGui_ImplAxys_SetDeviceObjectsDirty();
+            ImGui_ImplAx_SetDeviceObjectsDirty();
     }
 }
 
@@ -307,7 +307,7 @@ void ImGuiPresenter::removeFont(std::string_view fontFile)
     auto count = _fontsInfoMap.size();
     _fontsInfoMap.erase(fontFile);
     if (count != _fontsInfoMap.size())
-        ImGui_ImplAxys_SetDeviceObjectsDirty();
+        ImGui_ImplAx_SetDeviceObjectsDirty();
 }
 
 void ImGuiPresenter::clearFonts()
@@ -315,7 +315,7 @@ void ImGuiPresenter::clearFonts()
     bool haveCustomFonts = !_fontsInfoMap.empty();
     _fontsInfoMap.clear();
     if (haveCustomFonts)
-        ImGui_ImplAxys_SetDeviceObjectsDirty();
+        ImGui_ImplAx_SetDeviceObjectsDirty();
 
     // auto drawData = ImGui::GetDrawData();
     // if(drawData) drawData->Clear();
@@ -339,12 +339,12 @@ void ImGuiPresenter::beginFrame()
     if (!_renderPiplines.empty())
     {
         // create frame
-        ImGui_ImplAxys_NewFrame();
+        ImGui_ImplAx_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
         // move to endFrame?
-        _fontsTexture = (Texture2D*)ImGui_ImplAxys_GetFontsTexture();
+        _fontsTexture = (Texture2D*)ImGui_ImplAx_GetFontsTexture();
         assert(_fontsTexture != nullptr);
         _fontsTexture->retain();
 
@@ -367,9 +367,9 @@ void ImGuiPresenter::endFrame()
 
         auto drawData = ImGui::GetDrawData();
         if (drawData)
-            ImGui_ImplAxys_RenderDrawData(drawData);
+            ImGui_ImplAx_RenderDrawData(drawData);
 
-        ImGui_ImplAxys_RenderPlatform();
+        ImGui_ImplAx_RenderPlatform();
         --_beginFrames;
 
         AX_SAFE_RELEASE_NULL(_fontsTexture);
