@@ -43,14 +43,14 @@ add_library(${target_name} STATIC
 
 # target_compile_definitions(${target_name}
 #            PUBLIC ASTCENC_DECOMPRESS_ONLY)
-            
+
 if (NOT DEFINED ISA_SIMD)
     ### check -msse2 flag
 
     set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
     if(MSVC)
         set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} /WX")
-        check_c_compiler_flag("/arch:SSE2" ASTC_HAVE_SSE2_SWITCH)  
+        check_c_compiler_flag("/arch:SSE2" ASTC_HAVE_SSE2_SWITCH)
     else()
         set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
         check_c_compiler_flag(-msse2 ASTC_HAVE_SSE2_SWITCH)
@@ -60,7 +60,7 @@ if (NOT DEFINED ISA_SIMD)
     endif()
     ### end check -msse2 flag
 
-    if (NOT (ARCH_ALIAS STREQUAL "x86"))
+    if (NOT (ARCH_ALIAS STREQUAL "x86") AND NOT TVOS)
         # Checking intel SIMD Intrinsics
         if(APPLE)
             set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
@@ -92,10 +92,14 @@ if (NOT DEFINED ISA_SIMD)
                 #include <stdint.h>
                 int main()
                 {
-                    __m128d m = _mm_set_sd(0.0); 
+                    __m128d m = _mm_set_sd(0.0);
                     return (int)*(double*)&m;
                 }" ASTC_HAVE_SSE2_INTRINSICS)
         endif()
+
+        ### restore CMAKE_REQUIRED_FLAGS
+        set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+        unset(OLD_REQUIRED_FLAGS)
 
         ### Checking ARM SIMD neon
         check_include_file(arm_neon.h ASTC_HAVE_ARM_NEON_H)
@@ -110,10 +114,6 @@ if (NOT DEFINED ISA_SIMD)
                         return vgetq_lane_s32(ret4, 0);
                     }" ASTC_HAVE_NEON_INTRINSICS)
         endif()
-
-        ### restore CMAKE_REQUIRED_FLAGS
-        set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-        unset(OLD_REQUIRED_FLAGS) 
     else()
         message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build x86 target")
     endif()
@@ -131,7 +131,7 @@ if (NOT DEFINED ISA_SIMD)
         set(ISA_SIMD "neon")
     else()
         set(ISA_SIMD "none")
-    endif() 
+    endif()
 
     message(AUTHOR_WARNING "ISA_SIMD=${ISA_SIMD},ASTC_HAVE_AVX2_INTRINSICS=${ASTC_HAVE_AVX2_INTRINSICS},ASTC_HAVE_SSE42_INTRINSICS=${ASTC_HAVE_SSE42_INTRINSICS},ASTC_HAVE_SSE41_INTRINSICS=${ASTC_HAVE_SSE41_INTRINSICS},ASTC_HAVE_SSE2_INTRINSICS=${ASTC_HAVE_SSE2_INTRINSICS},ASTC_HAVE_NEON_INTRINSICS=${ASTC_HAVE_NEON_INTRINSICS}")
 endif()

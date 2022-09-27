@@ -9,12 +9,14 @@ else()
 endif()
 
 if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-    set(THIRD_PARTY_ARCH "\$\(Configuration\)/")
+    set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
+else()
+    set(BUILD_CONFIG_DIR "")
 endif()
 
 message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
 
-function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
+function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
             PRIVATE AX_STATIC=1
@@ -39,16 +41,10 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE ${AX_ROOT_DIR}/thirdparty/box2d/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/chipmunk/include
         PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/engine/thirdparty/freetype/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/recast/..
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/bullet/.
         PRIVATE ${AX_ROOT_DIR}/thirdparty/webp/src/webp
         PRIVATE ${AX_ROOT_DIR}/thirdparty/pugixml
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/xxhash/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/lz4/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/clipper/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/ConvertUTF/.
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/poly2tri/..
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/astc/..
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/xxhash
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/ConvertUTF
         PRIVATE ${AX_ROOT_DIR}/thirdparty/openal/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/ogg/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/glad/include
@@ -64,17 +60,18 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         PRIVATE ${AX_ROOT_DIR}/extensions/fairygui
         PRIVATE ${AX_ROOT_DIR}/extensions/GUI
         PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/include
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg/include
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/include
         PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/include
     )
 
+    SET (CONFIGURATION_SUBFOLDER "")
     target_link_directories(${APP_NAME}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg/prebuilt/windows/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/windows/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib/Debug
+        PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib  # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
     )
 
     # Linking OS libs
@@ -82,38 +79,38 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     # Linking engine and thirdparty libs
     target_link_libraries(${APP_NAME}
-        spine.lib
-        particle3d.lib
-        assets-manager.lib
-        cocostudio.lib
-        DragonBones.lib
-        axis.lib
-        box2d.lib
-        chipmunk.lib
-        freetype.lib
-        zlib.lib
-        recast.lib
-        bullet.lib
-        jpeg-static.lib
-        libcrypto.lib
-        libssl.lib
-        webp.lib
-        pugixml.lib
-        xxhash.lib
-        lz4.lib
-        clipper.lib
-        ConvertUTF.lib
-        poly2tri.lib
-        astc.lib
-        libcurl_imp.lib
-        OpenAL32.lib
-        ogg.lib
-        glad.lib
-        glfw.lib
-        png.lib
-        unzip.lib
-        llhttp.lib
-        physics-nodes.lib
+        spine
+        particle3d
+        assets-manager
+        cocostudio
+        DragonBones
+        axys
+        box2d
+        chipmunk
+        freetype
+        zlib
+        recast
+        bullet
+        jpeg-static
+        libcrypto
+        libssl
+        webp
+        pugixml
+        xxhash
+        lz4
+        clipper2
+        ConvertUTF
+        poly2tri
+        astc
+        libcurl_imp
+        OpenAL32
+        ogg
+        glad
+        glfw
+        png
+        unzip
+        llhttp
+        physics-nodes
     )
 
     # Copy dlls to app bin dir
@@ -129,16 +126,16 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
         "${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}/libcurl.dll"
         "${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}/zlib1.dll"
-        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${THIRD_PARTY_ARCH}OpenAL32.dll"
+        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
         $<TARGET_FILE_DIR:${APP_NAME}>)
 
     # Copy windows angle binaries
     if (AX_USE_COMPAT_GL)
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/libGLESv2.dll
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/libEGL.dll
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${ARCH_ALIAS}/d3dcompiler_47.dll
+            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libGLESv2.dll
+            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libEGL.dll
+            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/d3dcompiler_47.dll
             $<TARGET_FILE_DIR:${APP_NAME}>
         )
     endif()
@@ -147,7 +144,7 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         if(CMAKE_GENERATOR STREQUAL "Ninja")
             target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
             target_include_directories(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/include)
-            add_custom_command(TARGET ${cocos_target} POST_BUILD
+            add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
                 $<TARGET_FILE_DIR:${APP_NAME}>
@@ -156,10 +153,10 @@ function(axis_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
         endif()
     endif()
-endfunction(axis_link_cxx_prebuilt)
+endfunction(ax_link_cxx_prebuilt)
 
-function(axis_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
-    axis_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
+function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
+    ax_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
 
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
@@ -169,6 +166,6 @@ function(axis_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     target_link_libraries(${APP_NAME} axlua lua-cjson tolua plainlua)
     add_custom_command(TARGET ${APP_NAME} POST_BUILD
        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${THIRD_PARTY_ARCH}plainlua.dll"
+        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
          $<TARGET_FILE_DIR:${APP_NAME}>)
-endfunction(axis_link_lua_prebuilt)
+endfunction(ax_link_lua_prebuilt)

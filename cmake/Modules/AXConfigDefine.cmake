@@ -38,6 +38,11 @@ elseif(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
     set(APPLE TRUE)
     set(IOS TRUE)
     set(PLATFORM_FOLDER ios)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "tvOS")
+    set(APPLE TRUE)
+    set(IOS TRUE)
+    set(TVOS TRUE)
+    set(PLATFORM_FOLDER tvos)
 else()
     message(FATAL_ERROR "Unsupported platform, CMake will exit")
     return()
@@ -58,7 +63,7 @@ define_property(TARGET
     PROPERTY AX_LUA_DEPEND
     BRIEF_DOCS "axis lua depend libs"
     FULL_DOCS "use to save depend libs of axis lua project"
-) 
+)
 
 # config c standard
 if (NOT WINDOWS)
@@ -110,21 +115,29 @@ endif()
 # Set macro definitions for special platforms
 function(use_ax_compile_define target)
     target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:_AX_DEBUG=1>)
-    
+
     # !important axis not use double precision
     # target_compile_definitions(${target} PUBLIC CP_USE_CGTYPES=0)
     # target_compile_definitions(${target} PUBLIC CP_USE_DOUBLES=0)
-    
+
     if(APPLE)
         target_compile_definitions(${target} PUBLIC __APPLE__)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
         if(AX_USE_COMPAT_GL)
-            target_compile_definitions(${target} 
-                PUBLIC AX_USE_COMPAT_GL=1 
+            target_compile_definitions(${target}
+                PUBLIC AX_USE_COMPAT_GL=1
                 PUBLIC GL_SILENCE_DEPRECATION=1
             )
         endif()
-        
+
+        if(IOS)
+            if(TVOS)
+                target_compile_definitions(${target} PUBLIC AX_TARGET_OS_TVOS)
+            else()
+                target_compile_definitions(${target} PUBLIC AX_TARGET_OS_IPHONE)
+            endif()
+        endif()
+
     elseif(LINUX)
         target_compile_definitions(${target} PUBLIC LINUX)
         target_compile_definitions(${target} PUBLIC _GNU_SOURCE)
@@ -135,7 +148,7 @@ function(use_ax_compile_define target)
         if(AX_USE_COMPAT_GL)
             target_compile_definitions(${target} PUBLIC AX_USE_COMPAT_GL=1)
         endif()
-        target_compile_definitions(${target} 
+        target_compile_definitions(${target}
             PUBLIC WIN32
             PUBLIC _WIN32
             PUBLIC _WINDOWS
@@ -146,7 +159,7 @@ function(use_ax_compile_define target)
             # PUBLIC GLAD_GLAPI_EXPORT
         )
         if(BUILD_SHARED_LIBS)
-            target_compile_definitions(${target} 
+            target_compile_definitions(${target}
                 PRIVATE _USRDLL
                 PRIVATE _USEGUIDLL # ui
             )

@@ -77,22 +77,6 @@ bool BoneNode::init()
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix"sv);
 
-    auto vertexLayout         = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position"sv);
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position"sv, iter->second.location, ax::backend::VertexFormat::FLOAT3, 0,
-                                   false);
-    }
-    iter = attributeInfo.find("a_color"sv);
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_color"sv, iter->second.location, ax::backend::VertexFormat::FLOAT4,
-                                   3 * sizeof(float), false);
-    }
-    vertexLayout->setLayout(7 * sizeof(float));
-
     _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 4, ax::CustomCommand::BufferUsage::DYNAMIC);
     _customCommand.createIndexBuffer(ax::CustomCommand::IndexFormat::U_SHORT, 6,
                                      ax::CustomCommand::BufferUsage::STATIC);

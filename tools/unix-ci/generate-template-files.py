@@ -162,7 +162,7 @@ class CocosFileList:
 if __name__ == '__main__':
 
     cocos_root =os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    cocos_file_path =os.path.abspath(os.path.join(cocos_root, "templates", "axys_files.json"))
+    cocos_file_path =os.path.abspath(os.path.join(cocos_root, "templates", "ax_files.json"))
     cocos_file_ingore =os.path.abspath(os.path.join(os.path.dirname(__file__), "config.gitignore"))
     # print ("begin list files")
     cocosObj = CocosFileList()

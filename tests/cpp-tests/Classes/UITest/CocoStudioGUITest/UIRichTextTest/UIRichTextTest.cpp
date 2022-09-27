@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "cocostudio/CCArmature.h"
 
 USING_NS_AX;
-using namespace axys::ui;
+using namespace ax::ui;
 
 UIRichTextTests::UIRichTextTests()
 {

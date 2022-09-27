@@ -24,7 +24,7 @@
 #include <new>
 
 #include "astcenc.h"
-#include "astcenc_internal.h"
+#include "astcenc_internal_entry.h"
 #include "astcenc_diagnostic_trace.h"
 
 /**
@@ -62,13 +62,13 @@ struct astcenc_preset_config
 static const std::array<astcenc_preset_config, 5> preset_configs_high {{
 	{
 		ASTCENC_PRE_FASTEST,
-		2, 8, 42, 2, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 25
+		2, 10, 43, 2, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 25
 	}, {
 		ASTCENC_PRE_FAST,
-		3, 12, 55, 3, 3, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.65f, 20
+		3, 14, 55, 3, 3, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.65f, 20
 	}, {
 		ASTCENC_PRE_MEDIUM,
-		4, 26, 76, 3, 3 , 95.0f, 70.0f, 2.5f, 2.5f, 1.2f, 1.25f, 0.85f, 16
+		4, 28, 76, 3, 3, 95.0f, 70.0f, 2.5f, 2.5f, 1.2f, 1.25f, 0.85f, 16
 	}, {
 		ASTCENC_PRE_THOROUGH,
 		4, 76, 93, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 0.95f, 12
@@ -78,7 +78,6 @@ static const std::array<astcenc_preset_config, 5> preset_configs_high {{
 	}
 }};
 
-
 /**
  * @brief The static quality presets that are built-in for medium bandwidth
  * presets (25 <= x < 64 texels per block).
@@ -86,13 +85,13 @@ static const std::array<astcenc_preset_config, 5> preset_configs_high {{
 static const std::array<astcenc_preset_config, 5> preset_configs_mid {{
 	{
 		ASTCENC_PRE_FASTEST,
-		2, 8, 40, 2, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 20
+		2, 10, 43, 2, 2, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 20
 	}, {
 		ASTCENC_PRE_FAST,
-		3, 12, 55, 3, 3, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 16
+		3, 15, 55, 3, 3, 85.2f, 63.2f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 16
 	}, {
 		ASTCENC_PRE_MEDIUM,
-		4, 26, 76, 3, 3, 95.0f, 70.0f, 3.0f, 3.0f, 1.2f, 1.25f, 0.75f, 14
+		4, 30, 76, 3, 3, 95.0f, 70.0f, 3.0f, 3.0f, 1.2f, 1.25f, 0.75f, 14
 	}, {
 		ASTCENC_PRE_THOROUGH,
 		4, 76, 93, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 0.95f, 10
@@ -110,13 +109,13 @@ static const std::array<astcenc_preset_config, 5> preset_configs_mid {{
 static const std::array<astcenc_preset_config, 5> preset_configs_low {{
 	{
 		ASTCENC_PRE_FASTEST,
-		2, 6, 38, 2, 2, 85.0f, 63.0f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 20
+		2, 10, 40, 2, 2, 85.0f, 63.0f, 3.5f, 3.5f, 1.0f, 1.0f, 0.5f, 20
 	}, {
 		ASTCENC_PRE_FAST,
-		3, 10, 53, 3, 3, 85.0f, 63.0f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 16
+		2, 15, 55, 3, 3, 85.0f, 63.0f, 3.5f, 3.5f, 1.0f, 1.1f, 0.5f, 16
 	}, {
 		ASTCENC_PRE_MEDIUM,
-		3, 26, 76, 3, 3, 95.0f, 70.0f, 3.5f, 3.5f, 1.2f, 1.25f, 0.65f, 12
+		3, 30, 76, 3, 3, 95.0f, 70.0f, 3.5f, 3.5f, 1.2f, 1.25f, 0.65f, 12
 	}, {
 		ASTCENC_PRE_THOROUGH,
 		4, 75, 92, 4, 4, 105.0f, 77.0f, 10.0f, 10.0f, 2.5f, 1.25f, 0.85f, 10
@@ -655,7 +654,7 @@ astcenc_error astcenc_config_init(
 		//
 		// ... but we scale these up to keep a better balance between color and alpha. Note
 		// that if the content is using alpha we'd recommend using the -a option to weight
-		// the color conribution by the alpha transparency.
+		// the color contribution by the alpha transparency.
 		if (flags & ASTCENC_FLG_USE_PERCEPTUAL)
 		{
 			config.cw_r_weight = 0.30f * 2.25f;
@@ -702,7 +701,8 @@ astcenc_error astcenc_context_alloc(
 	}
 #endif
 
-	astcenc_context* ctx = new astcenc_context;
+	astcenc_context* ctxo = new astcenc_context;
+	astcenc_contexti* ctx = &ctxo->context;
 	ctx->thread_count = thread_count;
 	ctx->config = config;
 	ctx->working_buffers = nullptr;
@@ -719,7 +719,7 @@ astcenc_error astcenc_context_alloc(
 	}
 
 	ctx->bsd = aligned_malloc<block_size_descriptor>(sizeof(block_size_descriptor), ASTCENC_VECALIGN);
-	bool can_omit_modes = config.flags & ASTCENC_FLG_SELF_DECOMPRESS_ONLY;
+	bool can_omit_modes = static_cast<bool>(config.flags & ASTCENC_FLG_SELF_DECOMPRESS_ONLY);
 	init_block_size_descriptor(config.block_x, config.block_y, config.block_z,
 	                           can_omit_modes,
 	                           config.tune_partition_count_limit,
@@ -747,7 +747,7 @@ astcenc_error astcenc_context_alloc(
 		if (!ctx->working_buffers)
 		{
 			aligned_free<block_size_descriptor>(ctx->bsd);
-			delete ctx;
+			delete ctxo;
 			*context = nullptr;
 			return ASTCENC_ERR_OUT_OF_MEM;
 		}
@@ -766,7 +766,7 @@ astcenc_error astcenc_context_alloc(
 	trace_add_data("block_z", config.block_z);
 #endif
 
-	*context = ctx;
+	*context = ctxo;
 
 #if !defined(ASTCENC_DECOMPRESS_ONLY)
 	prepare_angular_tables();
@@ -777,16 +777,17 @@ astcenc_error astcenc_context_alloc(
 
 /* See header dor documentation. */
 void astcenc_context_free(
-	astcenc_context* ctx
+	astcenc_context* ctxo
 ) {
-	if (ctx)
+	if (ctxo)
 	{
+		astcenc_contexti* ctx = &ctxo->context;
 		aligned_free<compression_working_buffers>(ctx->working_buffers);
 		aligned_free<block_size_descriptor>(ctx->bsd);
 #if defined(ASTCENC_DIAGNOSTICS)
 		delete ctx->trace_log;
 #endif
-		delete ctx;
+		delete ctxo;
 	}
 }
 
@@ -795,19 +796,20 @@ void astcenc_context_free(
 /**
  * @brief Compress an image, after any preflight has completed.
  *
- * @param[out] ctx            The compressor context.
+ * @param[out] ctxo           The compressor context.
  * @param      thread_index   The thread index.
  * @param      image          The intput image.
  * @param      swizzle        The input swizzle.
  * @param[out] buffer         The output array for the compressed data.
  */
 static void compress_image(
-	astcenc_context& ctx,
+	astcenc_context& ctxo,
 	unsigned int thread_index,
 	const astcenc_image& image,
 	const astcenc_swizzle& swizzle,
 	uint8_t* buffer
 ) {
+	astcenc_contexti& ctx = ctxo.context;
 	const block_size_descriptor& bsd = *ctx.bsd;
 	astcenc_profile decode_mode = ctx.config.profile;
 
@@ -816,7 +818,7 @@ static void compress_image(
 	int block_x = bsd.xdim;
 	int block_y = bsd.ydim;
 	int block_z = bsd.zdim;
-	blk.texel_count = block_x * block_y * block_z;
+	blk.texel_count = static_cast<uint8_t>(block_x * block_y * block_z);
 
 	int dim_x = image.dim_x;
 	int dim_y = image.dim_y;
@@ -840,8 +842,7 @@ static void compress_image(
 	auto& temp_buffers = ctx.working_buffers[thread_index];
 
 	// Only the first thread actually runs the initializer
-	ctx.manage_compress.init(block_count);
-
+	ctxo.manage_compress.init(block_count);
 
 	// Determine if we can use an optimized load function
 	bool needs_swz = (swizzle.r != ASTCENC_SWZ_R) || (swizzle.g != ASTCENC_SWZ_G) ||
@@ -853,17 +854,17 @@ static void compress_image(
 	bool use_fast_load = !needs_swz && !needs_hdr &&
 	                     block_z == 1 && image.data_type == ASTCENC_TYPE_U8;
 
-	auto load_func = fetch_image_block;
+	auto load_func = load_image_block;
 	if (use_fast_load)
 	{
-		load_func = fetch_image_block_fast_ldr;
+		load_func = load_image_block_fast_ldr;
 	}
 
 	// All threads run this processing loop until there is no work remaining
 	while (true)
 	{
 		unsigned int count;
-		unsigned int base = ctx.manage_compress.get_task_assignment(16, count);
+		unsigned int base = ctxo.manage_compress.get_task_assignment(16, count);
 		if (!count)
 		{
 			break;
@@ -918,6 +919,18 @@ static void compress_image(
 			if (use_full_block)
 			{
 				load_func(decode_mode, image, blk, bsd, x * block_x, y * block_y, z * block_z, swizzle);
+
+				// Scale RGB error contribution by the maximum alpha in the block
+				// This encourages preserving alpha accuracy in regions with high
+				// transparency, and can buy up to 0.5 dB PSNR.
+				if (ctx.config.flags & ASTCENC_FLG_USE_ALPHA_WEIGHT)
+				{
+					float alpha_scale = blk.data_max.lane<3>() * (1.0f / 65535.0f);
+					blk.channel_weight = vfloat4(ctx.config.cw_r_weight * alpha_scale,
+					                             ctx.config.cw_g_weight * alpha_scale,
+					                             ctx.config.cw_b_weight * alpha_scale,
+					                             ctx.config.cw_a_weight);
+				}
 			}
 			// Apply alpha scale RDO - substitute constant color block
 			else
@@ -935,15 +948,77 @@ static void compress_image(
 			compress_block(ctx, blk, *pcb, temp_buffers);
 		}
 
-		ctx.manage_compress.complete_task_assignment(count);
+		ctxo.manage_compress.complete_task_assignment(count);
 	}
+}
+
+/**
+ * @brief Compute regional averages in an image.
+ *
+ * This function can be called by multiple threads, but only after a single
+ * thread calls the setup function @c init_compute_averages().
+ *
+ * Results are written back into @c img->input_alpha_averages.
+ *
+ * @param[out] ctx   The context.
+ * @param      ag    The average and variance arguments created during setup.
+ */
+static void compute_averages(
+	astcenc_context& ctx,
+	const avg_args &ag
+) {
+	pixel_region_args arg = ag.arg;
+	arg.work_memory = new vfloat4[ag.work_memory_size];
+
+	int size_x = ag.img_size_x;
+	int size_y = ag.img_size_y;
+	int size_z = ag.img_size_z;
+
+	int step_xy = ag.blk_size_xy;
+	int step_z = ag.blk_size_z;
+
+	int y_tasks = (size_y + step_xy - 1) / step_xy;
+
+	// All threads run this processing loop until there is no work remaining
+	while (true)
+	{
+		unsigned int count;
+		unsigned int base = ctx.manage_avg.get_task_assignment(16, count);
+		if (!count)
+		{
+			break;
+		}
+
+		for (unsigned int i = base; i < base + count; i++)
+		{
+			int z = (i / (y_tasks)) * step_z;
+			int y = (i - (z * y_tasks)) * step_xy;
+
+			arg.size_z = astc::min(step_z, size_z - z);
+			arg.offset_z = z;
+
+			arg.size_y = astc::min(step_xy, size_y - y);
+			arg.offset_y = y;
+
+			for (int x = 0; x < size_x; x += step_xy)
+			{
+				arg.size_x = astc::min(step_xy, size_x - x);
+				arg.offset_x = x;
+				compute_pixel_region_variance(ctx.context, arg);
+			}
+		}
+
+		ctx.manage_avg.complete_task_assignment(count);
+	}
+
+	delete[] arg.work_memory;
 }
 
 #endif
 
 /* See header for documentation. */
 astcenc_error astcenc_compress_image(
-	astcenc_context* ctx,
+	astcenc_context* ctxo,
 	astcenc_image* imagep,
 	const astcenc_swizzle* swizzle,
 	uint8_t* data_out,
@@ -951,7 +1026,7 @@ astcenc_error astcenc_compress_image(
 	unsigned int thread_index
 ) {
 #if defined(ASTCENC_DECOMPRESS_ONLY)
-	(void)ctx;
+	(void)ctxo;
 	(void)imagep;
 	(void)swizzle;
 	(void)data_out;
@@ -959,6 +1034,7 @@ astcenc_error astcenc_compress_image(
 	(void)thread_index;
 	return ASTCENC_ERR_BAD_CONTEXT;
 #else
+	astcenc_contexti* ctx = &ctxo->context;
 	astcenc_error status;
 	astcenc_image& image = *imagep;
 
@@ -996,7 +1072,7 @@ astcenc_error astcenc_compress_image(
 	// If context thread count is one then implicitly reset
 	if (ctx->thread_count == 1)
 	{
-		astcenc_compress_reset(ctx);
+		astcenc_compress_reset(ctxo);
 	}
 
 	if (ctx->config.a_scale_radius != 0)
@@ -1014,19 +1090,19 @@ astcenc_error astcenc_compress_image(
 		};
 
 		// Only the first thread actually runs the initializer
-		ctx->manage_avg.init(init_avg);
+		ctxo->manage_avg.init(init_avg);
 
 		// All threads will enter this function and dynamically grab work
-		compute_averages(*ctx, ctx->avg_preprocess_args);
+		compute_averages(*ctxo, ctx->avg_preprocess_args);
 	}
 
 	// Wait for compute_averages to complete before compressing
-	ctx->manage_avg.wait();
+	ctxo->manage_avg.wait();
 
-	compress_image(*ctx, thread_index, image, *swizzle, data_out);
+	compress_image(*ctxo, thread_index, image, *swizzle, data_out);
 
 	// Wait for compress to complete before freeing memory
-	ctx->manage_compress.wait();
+	ctxo->manage_compress.wait();
 
 	auto term_compress = [ctx]() {
 		delete[] ctx->input_alpha_averages;
@@ -1034,7 +1110,7 @@ astcenc_error astcenc_compress_image(
 	};
 
 	// Only the first thread to arrive actually runs the term
-	ctx->manage_compress.term(term_compress);
+	ctxo->manage_compress.term(term_compress);
 
 	return ASTCENC_SUCCESS;
 #endif
@@ -1042,26 +1118,27 @@ astcenc_error astcenc_compress_image(
 
 /* See header for documentation. */
 astcenc_error astcenc_compress_reset(
-	astcenc_context* ctx
+	astcenc_context* ctxo
 ) {
 #if defined(ASTCENC_DECOMPRESS_ONLY)
-	(void)ctx;
+	(void)ctxo;
 	return ASTCENC_ERR_BAD_CONTEXT;
 #else
+	astcenc_contexti* ctx = &ctxo->context;
 	if (ctx->config.flags & ASTCENC_FLG_DECOMPRESS_ONLY)
 	{
 		return ASTCENC_ERR_BAD_CONTEXT;
 	}
 
-	ctx->manage_avg.reset();
-	ctx->manage_compress.reset();
+	ctxo->manage_avg.reset();
+	ctxo->manage_compress.reset();
 	return ASTCENC_SUCCESS;
 #endif
 }
 
 /* See header for documentation. */
 astcenc_error astcenc_decompress_image(
-	astcenc_context* ctx,
+	astcenc_context* ctxo,
 	const uint8_t* data,
 	size_t data_len,
 	astcenc_image* image_outp,
@@ -1070,6 +1147,7 @@ astcenc_error astcenc_decompress_image(
 ) {
 	astcenc_error status;
 	astcenc_image& image_out = *image_outp;
+	astcenc_contexti* ctx = &ctxo->context;
 
 	// Today this doesn't matter (working set on stack) but might in future ...
 	if (thread_index >= ctx->thread_count)
@@ -1102,22 +1180,22 @@ astcenc_error astcenc_decompress_image(
 	}
 
 	image_block blk;
-	blk.texel_count = block_x * block_y * block_z;
+	blk.texel_count = static_cast<uint8_t>(block_x * block_y * block_z);
 
 	// If context thread count is one then implicitly reset
 	if (ctx->thread_count == 1)
 	{
-		astcenc_decompress_reset(ctx);
+		astcenc_decompress_reset(ctxo);
 	}
 
 	// Only the first thread actually runs the initializer
-	ctx->manage_decompress.init(zblocks * yblocks * xblocks);
+	ctxo->manage_decompress.init(zblocks * yblocks * xblocks);
 
 	// All threads run this processing loop until there is no work remaining
 	while (true)
 	{
 		unsigned int count;
-		unsigned int base = ctx->manage_decompress.get_task_assignment(128, count);
+		unsigned int base = ctxo->manage_decompress.get_task_assignment(128, count);
 		if (!count)
 		{
 			break;
@@ -1143,11 +1221,11 @@ astcenc_error astcenc_decompress_image(
 			                          x * block_x, y * block_y, z * block_z,
 			                          scb, blk);
 
-			write_image_block(image_out, blk, *ctx->bsd,
+			store_image_block(image_out, blk, *ctx->bsd,
 			                  x * block_x, y * block_y, z * block_z, *swizzle);
 		}
 
-		ctx->manage_decompress.complete_task_assignment(count);
+		ctxo->manage_decompress.complete_task_assignment(count);
 	}
 
 	return ASTCENC_SUCCESS;
@@ -1155,24 +1233,26 @@ astcenc_error astcenc_decompress_image(
 
 /* See header for documentation. */
 astcenc_error astcenc_decompress_reset(
-	astcenc_context* ctx
+	astcenc_context* ctxo
 ) {
-	ctx->manage_decompress.reset();
+	ctxo->manage_decompress.reset();
 	return ASTCENC_SUCCESS;
 }
 
 /* See header for documentation. */
 astcenc_error astcenc_get_block_info(
-	astcenc_context* ctx,
+	astcenc_context* ctxo,
 	const uint8_t data[16],
 	astcenc_block_info* info
 ) {
 #if defined(ASTCENC_DECOMPRESS_ONLY)
-	(void)ctx;
+	(void)ctxo;
 	(void)data;
 	(void)info;
 	return ASTCENC_ERR_BAD_CONTEXT;
 #else
+	astcenc_contexti* ctx = &ctxo->context;
+
 	// Decode the compressed data into a symbolic form
 	const physical_compressed_block&pcb = *reinterpret_cast<const physical_compressed_block*>(data);
 	symbolic_compressed_block scb;
@@ -1260,7 +1340,7 @@ astcenc_error astcenc_get_block_info(
 	int weight_plane1[BLOCK_MAX_TEXELS];
 	int weight_plane2[BLOCK_MAX_TEXELS];
 
-	unpack_weights(bsd, scb, di, bm.is_dual_plane, bm.get_weight_quant_mode(), weight_plane1, weight_plane2);
+	unpack_weights(bsd, scb, di, bm.is_dual_plane, weight_plane1, weight_plane2);
 	for (unsigned int i = 0; i < bsd.texel_count; i++)
 	{
 		info->weight_values_plane1[i] = static_cast<float>(weight_plane1[i]) * (1.0f / WEIGHTS_TEXEL_SUM);

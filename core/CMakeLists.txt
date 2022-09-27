@@ -30,7 +30,7 @@
 # build axlua if AX_ENABLE_EXT_LUA=ON
 
 # The version number
-set(AXYS_VERSION 1.0)
+set(_AX_VERSION 1.0)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axys CACHE INTERNAL "The axys core lib name" )
@@ -48,7 +48,7 @@ if (NOT DEFINED AX_ENABLE_MFMEDIA)
     set(AX_ENABLE_MFMEDIA TRUE CACHE INTERNAL "Enabling microsoft media foundation for windows video player" )
 endif()
 
-project(axys_libs)
+project(ax_libs)
 
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
@@ -80,42 +80,42 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
-set(COCOS_HEADER axys.h
-    ${COCOS_2D_HEADER}
-    ${COCOS_3D_HEADER}
-    ${COCOS_PLATFORM_HEADER}
-    ${COCOS_PHYSICS_HEADER}
-    ${COCOS_PHYSICS3D_HEADER}
-    ${COCOS_MATH_HEADER}
-    ${COCOS_NAVMESH_HEADER}
-    ${COCOS_RENDERER_HEADER}
-    ${COCOS_BASE_HEADER}
-    ${COCOS_AUDIO_HEADER}
-    ${COCOS_UI_HEADER}
-    ${COCOS_NETWORK_HEADER}
+set(_AX_HEADER axys.h
+    ${_AX_2D_HEADER}
+    ${_AX_3D_HEADER}
+    ${_AX_PLATFORM_HEADER}
+    ${_AX_PHYSICS_HEADER}
+    ${_AX_PHYSICS3D_HEADER}
+    ${_AX_MATH_HEADER}
+    ${_AX_NAVMESH_HEADER}
+    ${_AX_RENDERER_HEADER}
+    ${_AX_BASE_HEADER}
+    ${_AX_AUDIO_HEADER}
+    ${_AX_UI_HEADER}
+    ${_AX_NETWORK_HEADER}
     )
 
-set(COCOS_SRC axys.cpp
-    ${COCOS_2D_SRC}
-    ${COCOS_3D_SRC}
-    ${COCOS_PLATFORM_SRC}
-    ${COCOS_PHYSICS_SRC}
-    ${COCOS_PHYSICS3D_SRC}
-    ${COCOS_MATH_SRC}
-    ${COCOS_NAVMESH_SRC}
-    ${COCOS_RENDERER_SRC}
-    ${COCOS_BASE_SRC}
-    ${COCOS_AUDIO_SRC}
-    ${COCOS_UI_SRC}
-    ${COCOS_NETWORK_SRC}
+set(_AX_SRC axys.cpp
+    ${_AX_2D_SRC}
+    ${_AX_3D_SRC}
+    ${_AX_PLATFORM_SRC}
+    ${_AX_PHYSICS_SRC}
+    ${_AX_PHYSICS3D_SRC}
+    ${_AX_MATH_SRC}
+    ${_AX_NAVMESH_SRC}
+    ${_AX_RENDERER_SRC}
+    ${_AX_BASE_SRC}
+    ${_AX_AUDIO_SRC}
+    ${_AX_UI_SRC}
+    ${_AX_NETWORK_SRC}
     )
 
-list(APPEND COCOS_SRC ${COCOS_HEADER})
+list(APPEND _AX_SRC ${_AX_HEADER})
 
-add_library(${_AX_CORE_LIB} ${COCOS_SRC})
+add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
 # use thirdparty libs
-add_subdirectory(${AXYS_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
+add_subdirectory(${_AX_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${_AX_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
@@ -126,17 +126,17 @@ use_ax_compile_options(${_AX_CORE_LIB})
 use_ax_depend(${_AX_CORE_LIB})
 
 target_include_directories(${_AX_CORE_LIB}
-    PUBLIC ${AXYS_ROOT_PATH}
-    PUBLIC ${AXYS_ROOT_PATH}/thirdparty
-    PUBLIC ${AXYS_ROOT_PATH}/extensions
-    PUBLIC ${AXYS_ROOT_PATH}/core
-    PUBLIC ${AXYS_ROOT_PATH}/core/platform
+    PUBLIC ${_AX_ROOT_PATH}
+    PUBLIC ${_AX_ROOT_PATH}/thirdparty
+    PUBLIC ${_AX_ROOT_PATH}/extensions
+    PUBLIC ${_AX_ROOT_PATH}/core
+    PUBLIC ${_AX_ROOT_PATH}/core/platform
 
-    INTERFACE ${AXYS_ROOT_PATH}/thirdparty
-    INTERFACE ${AXYS_ROOT_PATH}/extensions
-    INTERFACE ${AXYS_ROOT_PATH}/core/base
-    INTERFACE ${AXYS_ROOT_PATH}/core/audio
-    INTERFACE ${AXYS_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
+    INTERFACE ${_AX_ROOT_PATH}/thirdparty
+    INTERFACE ${_AX_ROOT_PATH}/extensions
+    INTERFACE ${_AX_ROOT_PATH}/core/base
+    INTERFACE ${_AX_ROOT_PATH}/core/audio
+    INTERFACE ${_AX_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
 )
 
 set_target_properties(${_AX_CORE_LIB}
@@ -144,32 +144,32 @@ set_target_properties(${_AX_CORE_LIB}
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                       RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-                      VERSION "${AXYS_VERSION}"
+                      VERSION "${_AX_VERSION}"
                       FOLDER "Internal"
                       )
 
 ## Lua bindings lib
 # if(AX_ENABLE_EXT_LUA)
-#     add_subdirectory(${AXYS_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
+#     add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
 # endif()
 
 if(XCODE OR VS)
-    cocos_mark_code_files("${_AX_CORE_LIB}")
+    ax_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
 if(WINDOWS)
     # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
     if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        target_sources(${_AX_CORE_LIB} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
+        target_sources(${_AX_CORE_LIB} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
         set_target_properties(${_AX_CORE_LIB} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
         set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
     endif()
     # compile c as c++. needed for precompiled header
-    set_source_files_properties(${COCOS_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
+    set_source_files_properties(${_AX_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
     
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
-            PATHS ${AXYS_ROOT_PATH}/tools/external/nuget)
+            PATHS ${_AX_ROOT_PATH}/tools/external/nuget)
             
         if(NOT NUGET_EXE)
             message("NUGET.EXE not found.")
@@ -190,7 +190,7 @@ if(WINDOWS)
 endif()
 
 # engine extensions
-add_subdirectory(${AXYS_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
+add_subdirectory(${_AX_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
     target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)

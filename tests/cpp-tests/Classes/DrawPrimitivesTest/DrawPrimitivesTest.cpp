@@ -34,6 +34,7 @@ DrawPrimitivesTests::DrawPrimitivesTests()
 {
     ADD_TEST_CASE(DrawNodeTest);
     ADD_TEST_CASE(Issue11942Test);
+    ADD_TEST_CASE(Issue829Test);
 }
 
 string DrawPrimitivesBaseTest::title() const
@@ -237,4 +238,102 @@ string Issue11942Test::title() const
 string Issue11942Test::subtitle() const
 {
     return "drawCircle() with width";
+}
+
+Issue829Test::Issue829Test()
+{
+    Vec2 vertices0[] = {{50.0, 20.0}, {100.0, 0.0}, {80.0, 50.0}, {100.0, 100.0},
+                        {50.0, 80.0}, {0.0, 100.0}, {20.0, 50.0}, {0, 0}};
+
+    Vec2 vertices4[] = {{362, 148}, {326, 241}, {295, 219}, {258, 88}, {440, 129},
+                        {370, 196}, {372, 275}, {348, 257}, {364, 148}};
+
+    Vec2* ver[] = {vertices0, vertices4};
+
+    DrawNode* drawNode[sizeof(ver) + 1];
+    for (int i = 0; i < sizeof(ver); i++)
+    {
+        drawNode[i] = DrawNode::create();
+        addChild(drawNode[i]);
+    }
+
+    drawNode[0]->drawPolygon(vertices0, sizeof(vertices0) / sizeof(vertices0[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 3,
+                             Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+    drawNode[0]->setPosition({20, 200});
+    drawDirection(vertices0, sizeof(vertices0) / sizeof(vertices0[0]), drawNode[0]->getPosition());
+
+    drawNode[4]->drawPolygon(vertices4, sizeof(vertices4) / sizeof(vertices4[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 3,
+                             Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+    drawNode[4]->setPosition({-70, -20});
+    drawDirection(vertices4, sizeof(vertices4) / sizeof(vertices4[0]), drawNode[4]->getPosition());
+
+    {
+        const float o = 80;
+        const float w = 20;
+        const float h = 50;
+        {  // star
+            auto drawNode1 = DrawNode::create();
+            addChild(drawNode1);
+            drawNode1->setPosition(300, 100);
+            Vec2 star[] = {
+                Vec2(o, o),
+                Vec2(o + w, o - h),
+                Vec2(o + w * 2, o),  // lower spike
+                Vec2(o + w * 2 + h, o + w),
+                Vec2(o + w * 2, o + w * 2),  // right spike
+                Vec2(o + w, o + w * 2 + h),
+                Vec2(o, o + w * 2),  // top spike
+                Vec2(o - h, o + w),  // left spike
+            };
+
+            drawNode1->drawPolygon(star, sizeof(star) / sizeof(star[0]), Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1,
+                                   Color4F(0.0f, 0.0f, 1.0f, 1.0f));
+
+            drawDirection(star, sizeof(star) / sizeof(star[0]), drawNode1->getPosition());
+        }
+
+        {  // wrong order
+            auto drawNode1 = DrawNode::create();
+            addChild(drawNode1);
+            drawNode1->setPosition(-80, 20);
+            Vec2 wrongOrder[] = {Vec2(o + w, o - h), Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w),
+                                 Vec2(o + w * 2, o + w * 2)};
+
+            drawNode1->drawPolygon(wrongOrder, sizeof(wrongOrder) / sizeof(wrongOrder[0]),
+                                   Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1, Color4F(1.0f, 0.0f, 0.0f, 1.0f));
+
+            drawDirection(wrongOrder, sizeof(wrongOrder) / sizeof(wrongOrder[0]), drawNode1->getPosition());
+        }
+        {  // correct order
+            Vec2 correctOrder[] = {Vec2(o + w * 2, o), Vec2(o + w * 2 + h, o + w), Vec2(o + w * 2, o + w * 2),
+                                   Vec2(o + w, o - h)};
+            auto drawNode2      = DrawNode::create();
+            addChild(drawNode2);
+            drawNode2->setPosition({-10, 20});
+            drawNode2->drawPolygon(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]),
+                                   Color4F(0.0f, 0.0f, 0.7f, 0.5f), 1, Color4F(0.0f, 1.0f, 0.0f, 1.0f));
+
+            drawDirection(correctOrder, sizeof(correctOrder) / sizeof(correctOrder[0]), drawNode2->getPosition());
+        }
+    }
+}
+
+void Issue829Test::drawDirection(const Vec2* vec, const int size, Vec2 offset)
+{
+    for (size_t i = 0; i < size; i++)
+    {
+        auto label = Label::createWithTTF(std::to_string(i).c_str(), "fonts/Marker Felt.ttf", 10);
+        this->addChild(label);
+        label->setPosition(vec[i] + offset);
+    }
+}
+
+string Issue829Test::title() const
+{
+    return "GitHub Issue #829";
+}
+
+string Issue829Test::subtitle() const
+{
+    return "Red polygon has wrong order!";
 }

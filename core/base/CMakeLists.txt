@@ -1,20 +1,20 @@
 
 if(APPLE)
-    set(COCOS_BASE_SPECIFIC_SRC
+    set(_AX_BASE_SPECIFIC_SRC
         base/CCController-apple.mm
         )
 
 elseif(ANDROID)
-    set(COCOS_BASE_SPECIFIC_SRC
+    set(_AX_BASE_SPECIFIC_SRC
         base/CCController-android.cpp
         )
 elseif(LINUX OR WINDOWS)
-    set(COCOS_BASE_SPECIFIC_SRC
+    set(_AX_BASE_SPECIFIC_SRC
         base/CCController-linux-win32.cpp
         )
 endif()
 
-set(COCOS_BASE_HEADER
+set(_AX_BASE_HEADER
     base/astc.h
     base/pvr.h
     base/format.h
@@ -82,7 +82,7 @@ set(COCOS_BASE_HEADER
     base/CCIMEDispatcher.h
     )
 
-set(COCOS_BASE_SRC
+set(_AX_BASE_SRC
     base/CCAsyncTaskPool.cpp
     base/CCAutoreleasePool.cpp
     base/CCConfiguration.cpp
@@ -125,7 +125,7 @@ set(COCOS_BASE_SRC
     base/atitc.cpp
     base/base64.cpp
     base/ccCArray.cpp
-    base/ccFPSImages.c
+    base/ccFPSImages.cpp
     base/ccRandom.cpp
     base/ccTypes.cpp
     base/ccUTF8.cpp
@@ -136,5 +136,5 @@ set(COCOS_BASE_SRC
     base/pvr.cpp
     base/s3tc.cpp
     base/astc.cpp
-    ${COCOS_BASE_SPECIFIC_SRC}
+    ${_AX_BASE_SPECIFIC_SRC}
     )

@@ -118,6 +118,6 @@ protected:
 extern EditBoxImpl* __createSystemEditBox(EditBox* pEditBox);
 
 }  // namespace ui
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 #endif /* __UIEditBoxIMPL_H__ */

@@ -27,13 +27,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __AXYS_H__
-#define __AXYS_H__
+#ifndef __AX_H__
+#define __AX_H__
 
 // 0x00 HI ME LO
 // 00   03 08 00
 
-#define AXYS_VERSION 0x00010000
+#define AX_VERSION 0x00010000
 
 //
 // all cocos2d include files
@@ -276,4 +276,4 @@ AX_DLL const char* axysVersion();
 
 NS_AX_END
 
-#endif  // __AXYS_H__
+#endif  // __AX_H__

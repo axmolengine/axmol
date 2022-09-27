@@ -25,6 +25,8 @@
 #include "SpritePolygonTest.h"
 #include "../testResource.h"
 #include "ui/CocosGUI.h"
+#include <chrono>
+#include <sstream>
 
 USING_NS_AX;
 
@@ -42,6 +44,7 @@ SpritePolygonTest::SpritePolygonTest()
     ADD_TEST_CASE(SpritePolygonTestAutoPolyIsland);
     ADD_TEST_CASE(SpritePolygonTestFrameAnim);
     ADD_TEST_CASE(Issue14017Test);
+    ADD_TEST_CASE(SpritePolygonTestPerformance);   
 }
 
 SpritePolygonTestCase::SpritePolygonTestCase()
@@ -100,7 +103,7 @@ bool SpritePolygonTestCase::init()
             auto menu = Menu::create(menuItem, nullptr);
             menu->setPosition(Vec2::ZERO);
             menuItem->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-            menuItem->setPosition(VisibleRect::leftBottom() + Vec2(0.0f, VisibleRect::leftTop().y / 4));
+            menuItem->setPosition(VisibleRect::leftBottom() + Vec2(0.0f, VisibleRect::leftTop().y/4));
             this->addChild(menu, 9999);
         }
         return true;
@@ -147,6 +150,7 @@ bool SpritePolygonTestDemo::init()
     if (SpritePolygonTestCase::init())
     {
         _polygonSprite = nullptr;
+        _polygonSprite_fix = nullptr;
         initSprites();
         initTouches();
         return true;
@@ -236,8 +240,11 @@ void SpritePolygonTest2::initSprites()
     auto s        = Director::getInstance()->getWinSize();
     auto offset   = Vec2(0.15 * s.width, 0);
     auto filename = s_pathGrossini;
-    Rect head     = Rect(30, 25, 25, 25);
 
+    // Fix for issue #231  Rect have to be adapt to the 2.0/"ContentScaleFactor()" 
+    auto a    = 2.0 / Director::getInstance()->getContentScaleFactor();
+    Rect head = Rect(30 * a, 25 * a, 25 * a, 25 * a);
+ 
     // Sprite
     auto pinfo     = AutoPolygon::generatePolygon(filename, head);
     _polygonSprite = Sprite::create(pinfo);
@@ -816,21 +823,28 @@ void SpritePolygonTestFrameAnim::initSprites()
 Issue14017Test::Issue14017Test()
 {
     _title    = "Issue 14017";
-    _subtitle = "Autopolygon around the banana";
+    _subtitle = "Image has artefacts (image on the right is 'cleaned')";
 }
 
 void Issue14017Test::initSprites()
 {
     auto s        = Director::getInstance()->getWinSize();
-    auto offset   = Vec2(0.15 * s.width, 0);
+    auto offset   = Vec2(0.3 * s.width, 0);
     auto filename = "Images/bug14017.png";
+    auto filename_fix = "Images/bug14017_fix.png";
 
     // Sprite
     auto pinfo     = AutoPolygon::generatePolygon(filename);
     _polygonSprite = Sprite::create(pinfo);
     _polygonSprite->setTag(101);
     addChild(_polygonSprite);
-    _polygonSprite->setPosition(Vec2(s) / 2 + offset);
+    _polygonSprite->setPosition(Vec2(s) / 2);
+
+    auto pinfo_fix = AutoPolygon::generatePolygon(filename_fix);
+    _polygonSprite_fix = Sprite::create(pinfo_fix);
+    _polygonSprite_fix->setTag(102);
+    addChild(_polygonSprite_fix);
+    _polygonSprite_fix->setPosition(Vec2(s) / 2 + offset);
 
     _normalSprite = Sprite::create(filename);
     _normalSprite->setTag(100);
@@ -850,6 +864,12 @@ void Issue14017Test::initSprites()
     _polygonSprite->addChild(sppDrawNode);
     _drawNodes.pushBack(sppDrawNode);
 
+    auto spppDrawNode = DrawNode::create();
+    spppDrawNode->setTag(_polygonSprite_fix->getTag());
+    spppDrawNode->clear();
+    _polygonSprite_fix->addChild(spppDrawNode);
+    _drawNodes.pushBack(spppDrawNode);
+
     // Label
     TTFConfig ttfConfig("fonts/arial.ttf", 8);
     std::string temp = "Sprite:\nPixels drawn: ";
@@ -864,5 +884,114 @@ void Issue14017Test::initSprites()
     _polygonSprite->addChild(sppArea);
     sppArea->setAnchorPoint(Vec2(0, 1));
 
+    temp           = "SpritePolygon:\nPixels drawn: ";
+    auto vertCount1 = "\nverts:" + Value((int)pinfo_fix.getVertCount()).asString();
+    auto spppArea   = Label::createWithTTF(ttfConfig, temp + Value((int)pinfo_fix.getArea()).asString() + vertCount1);
+    _polygonSprite_fix->addChild(spppArea);
+    spppArea->setAnchorPoint(Vec2(0, 1));
+
     updateDrawNode();
+}
+
+SpritePolygonTestPerformance::SpritePolygonTestPerformance()
+{
+    Size s         = Director::getInstance()->getWinSize();
+    _spritesAnchor = Node::create();
+    _spritesAnchor->setPosition(0, 0);
+    addChild(_spritesAnchor);
+
+    _totalSprites = Label::createWithTTF(TTFConfig("fonts/arial.ttf"), "sprites");
+    _totalSprites->setColor(Color3B::YELLOW);
+    _totalSprites->enableOutline(Color4B::RED, 2);
+    _totalSprites->setPosition(s.width / 2, s.height / 2);
+
+    addChild(_totalSprites);
+
+    scheduleUpdate();
+}
+
+void SpritePolygonTestPerformance::createSprite()
+{
+    static PolygonInfo pinfo;
+    Size s         = Director::getInstance()->getWinSize();
+
+    if (pinfo.getFilename() == "")
+    {
+        pinfo = AutoPolygon::generatePolygon("Images/grossini_dance_01.png");
+    }
+
+    // AutoPolygonSprite
+    auto sprite = Sprite::create(pinfo);
+
+    float x = ((float)std::rand()) / RAND_MAX;
+    float y = ((float)std::rand()) / RAND_MAX;
+
+    sprite->setPosition(Vec2(x * s.width, y * s.height));
+    _spritesAnchor->addChild(sprite);
+
+    _spriteIndex++;
+    std::stringstream ss;
+    ss << _spriteIndex << " AutoPolygonSprite";
+    _totalSprites->setString(ss.str());
+}
+
+void SpritePolygonTestPerformance::update(float dt)
+{
+
+    if (dt <= 1.0f / 28.0f && dt >= 1.0f / 31.0f)
+    {
+        _around30fps.hit();
+    }
+    else
+    {
+        _around30fps.cancel();
+    }
+
+    _maDt  = 0.7f * _maDt + 0.3f * dt;
+    _rmaDt = 0.5f * _rmaDt + 0.5f * dt;
+    if (_maDt <= DEST_DT_30FPS)
+    {
+        _contSlow.cancel();
+        _contFast.hit();
+        if (_contFast.ok())
+        {
+            auto t2    = DEST_DT_30FPS - _rmaDt;
+            auto delta = (int)(t2 / _rmaDt * _spriteIndex * 0.1);
+            delta      = std::min(20, std::max(1, delta));
+            for (int i = 0; i < delta; i++)
+            {
+                createSprite();
+            }
+        }
+    }
+    else
+    {
+        _contSlow.hit();
+        _contFast.cancel();
+    }
+
+    if (_contSlow.ok() || _around30fps.ok())
+    {
+        unscheduleUpdate();
+        std::stringstream ss;
+        ss << _spriteIndex << " sprites, DONE!";
+        _totalSprites->setString(ss.str());
+        _totalSprites->setScale(1.2);
+    }
+}
+
+SpritePolygonTestPerformance::~SpritePolygonTestPerformance() {}
+
+std::string SpritePolygonTestPerformance::title() const
+{
+    return "SpritePolygonTestPerformance";
+}
+
+std::string SpritePolygonTestPerformance::subtitle() const
+{
+#if defined(_AX_DEBUG) && _AX_DEBUG == 1
+    return "DEBUG: simulate lots of AutoPolygonSprites, drop to 30 fps";
+#else
+    return "RELEASE: simulate lots of AutoPolygonSprites, drop to 30 fps";
+#endif
 }

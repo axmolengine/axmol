@@ -596,7 +596,7 @@ void Director::setProjection(Projection projection)
 
     if (size.width == 0 || size.height == 0)
     {
-        AXLOGERROR("cocos2d: warning, Director::setProjection() failed because size is 0");
+        AXLOGERROR("axys: warning, Director::setProjection() failed because size is 0");
         return;
     }
 
@@ -638,7 +638,7 @@ void Director::setProjection(Projection projection)
         break;
 
     default:
-        AXLOG("cocos2d: Director: unrecognized projection");
+        AXLOG("axys: Director: unrecognized projection");
         break;
     }
 

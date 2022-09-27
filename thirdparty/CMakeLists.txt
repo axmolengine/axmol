@@ -19,7 +19,7 @@ option(AX_WITH_JPEG "Build with internal jpeg support" ON)
 option(AX_WITH_OPENSSL "Build with internal openssl support" ON)
 option(AX_WITH_WEBP "Build with internal webp support" ON)
 option(AX_WITH_PUGIXML "Build with internal pugixml support" ON)
-option(AX_WITH_CLIPPER "Build with internal clipper support" ON)
+option(AX_WITH_CLIPPER2 "Build with internal Clipper2 support" ON)
 option(AX_WITH_CONVERTUTF "Build with internal ConvertUTF support" ON)
 option(AX_WITH_POLY2TRI "Build with internal poly2tri support" ON)
 option(AX_WITH_ZLIB "Build with internal zlib support" ON)
@@ -79,10 +79,29 @@ add_subdirectory(fmt EXCLUDE_FROM_ALL)
 target_link_libraries(thirdparty fmt-header-only)
 
 # bellow are non header only libs
+
+# cpufeatures
+if(ANDROID)
+    add_subdirectory(android-specific/cpufeatures)
+endif()
+
 add_subdirectory(zlib)
 target_link_libraries(thirdparty 
     dep_zlib
 )
+
+# libpng
+add_subdirectory(png)
+target_include_directories(png PRIVATE "zlib/include")
+if(ANDROID)
+    target_include_directories(png PRIVATE ${cpufeatures_include_dir})
+    target_link_libraries(png INTERFACE cpufeatures)
+endif()
+target_link_libraries(thirdparty png)
+configure_target_outdir(png)
+
+set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/png" CACHE STRING "png include dir" FORCE)
+set(PNG_LIBRARY "png" CACHE STRING "png include dir" FORCE)
 
 if(AX_WITH_BOX2D)
     set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests" FORCE)
@@ -121,6 +140,8 @@ if(AX_WITH_FREETYPE)
         set(FT_WITH_ZLIB ON CACHE BOOL "Use system zlib instead of internal library." FORCE)
         set(DISABLE_FORCE_DEBUG_POSTFIX ON CACHE BOOL "" FORCE)
         set(SKIP_INSTALL_ALL TRUE CACHE BOOL "Skip freetype instal." FORCE)
+        set(FT_DISABLE_HARFBUZZ TRUE CACHE BOOL "Disable HarfBuzz." FORCE)
+        set(FT_DISABLE_BROTLI TRUE CACHE BOOL "Disable Brotli." FORCE)
         add_subdirectory(freetype)
         target_link_libraries(thirdparty freetype)
         configure_target_outdir(freetype)
@@ -146,7 +167,7 @@ if(AX_WITH_JPEG)
     # set(JTURBO_BUILD_TESTS FALSE CACHE BOOL "Build TurboJPEG tests and examples" FORCE)
     # set(JTURBO_BUILD_BINARIES FALSE CACHE BOOL "Build TurboJPEG binaries" FORCE)
     # set(WITH_CRT_DLL TRUE CACHE BOOL "Build TurboJPEG with crt dll" FORCE)
-    add_subdirectory(jpeg)
+    add_subdirectory(jpeg-turbo)
     # configure_target_outdir(jpeg)
     # configure_target_outdir(simd)
     # if(TARGET simd-objs)
@@ -155,7 +176,7 @@ if(AX_WITH_JPEG)
     # if(TARGET jsimdcfg)
     #     configure_target_outdir(jsimdcfg)
     # endif()
-    target_link_libraries(thirdparty dep_jpeg)
+    target_link_libraries(thirdparty dep_jpeg-turbo)
     # target_include_directories(thirdparty INTERFACE 
     #   "${CMAKE_CURRENT_LIST_DIR}/jpeg" 
     #   "${JPEG_CONFIG_OUT_DIR}")
@@ -189,11 +210,11 @@ add_subdirectory(lz4)
 target_link_libraries(thirdparty lz4)
 configure_target_outdir(lz4)
 
-if(AX_WITH_CLIPPER)
-    add_subdirectory(clipper)
-    target_link_libraries(thirdparty clipper)
-    configure_target_outdir(clipper)
-endif(AX_WITH_CLIPPER)
+if(AX_WITH_CLIPPER2)
+    add_subdirectory(clipper2)
+    target_link_libraries(thirdparty clipper2)
+    configure_target_outdir(clipper2)
+endif(AX_WITH_CLIPPER2)
 if(AX_WITH_CONVERTUTF)
     add_subdirectory(ConvertUTF)
     target_link_libraries(thirdparty ConvertUTF)
@@ -221,6 +242,9 @@ if(AX_ENABLE_EXT_LUA)
     set_property(TARGET thirdparty APPEND PROPERTY 
         AX_LUA_DEPEND ${AX_LUA_ENGINE} tolua lua-cjson
     )
+    if (AX_USE_LUAJIT)
+        target_compile_definitions(lua-cjson PRIVATE USING_LUAJIT=1)
+    endif()
 endif()
 
 if(AX_WITH_CURL)
@@ -230,13 +254,6 @@ if(AX_WITH_CURL)
     endif()
     target_link_libraries(thirdparty libcurl)
 endif(AX_WITH_CURL)
-
-if(ANDROID)
-    add_subdirectory(android-specific/cpufeatures)
-    # target_link_libraries(thirdparty 
-    #     cpufeatures 
-    # )
-endif()
 
 # The openal-soft(LGPL 2.1)
 if(AX_WITH_ALSOFT)
@@ -281,16 +298,6 @@ if(WINDOWS OR MACOSX OR LINUX)
     endif()
     target_include_directories(thirdparty PUBLIC "glfw/include/GLFW")
 endif()
-
-# libpng
-add_subdirectory(png)
-target_include_directories(png PRIVATE "zlib/include")
-if(ANDROID)
-    target_include_directories(png PRIVATE ${cpufeatures_include_dir})
-    target_link_libraries(png INTERFACE cpufeatures)
-endif()
-target_link_libraries(thirdparty png)
-configure_target_outdir(png)
 
 # unzip depend on zlib
 if(AX_WITH_UNZIP)

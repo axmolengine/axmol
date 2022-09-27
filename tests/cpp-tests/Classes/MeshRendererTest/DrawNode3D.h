@@ -90,11 +90,6 @@ protected:
     void onBeforeDraw();
     void onAfterDraw();
 
-    struct V3F_C4B
-    {
-        axis::Vec3 vertices;
-        Color4B colors;
-    };
     void ensureCapacity(int count);
 
     BlendFunc _blendFunc;

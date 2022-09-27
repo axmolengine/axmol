@@ -40,9 +40,9 @@ static const float BOUNCE_BACK_DURATION                    = 1.0f;
 
 static float convertDistanceFromPointToInch(const Vec2& dis)
 {
-    auto glview    = Director::getInstance()->getOpenGLView();
+    auto glView    = Director::getInstance()->getOpenGLView();
     int dpi        = Device::getDPI();
-    float distance = Vec2(dis.x * glview->getScaleX() / dpi, dis.y * glview->getScaleY() / dpi).getLength();
+    float distance = Vec2(dis.x * glView->getScaleX() / dpi, dis.y * glView->getScaleY() / dpi).getLength();
     return distance;
 }
 

@@ -463,6 +463,112 @@ tolua_lerror:
     return 0;
 }
 
+
+static int axlua_spine_SkeletonAnimation_getBoundingBox(lua_State* tolua_S)
+{
+    spine::SkeletonAnimation* cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S, 1, 0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_spine_SkeletonAnimation_getBoundingBox'", nullptr);
+        return 0;
+    }
+#endif
+    Rect rect = cobj->getBoundingBox();
+    // return a table
+    lua_newtable(tolua_S);
+    lua_pushstring(tolua_S, "x");
+    lua_pushnumber(tolua_S, rect.origin.x);
+    lua_rawset(tolua_S, -3);
+    lua_pushstring(tolua_S, "y");
+    lua_pushnumber(tolua_S, rect.origin.y);
+    lua_rawset(tolua_S, -3);
+    lua_pushstring(tolua_S, "width");
+    lua_pushnumber(tolua_S, rect.size.width);
+    lua_rawset(tolua_S, -3);
+    lua_pushstring(tolua_S, "height");
+    lua_pushnumber(tolua_S, rect.size.height);
+    lua_rawset(tolua_S, -3);
+    return 1;
+}
+
+static int axlua_spine_SkeletonAnimation_findBone(lua_State* tolua_S)
+{
+    int argc                       = 0;
+    spine::SkeletonAnimation* cobj = nullptr;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_isusertype(tolua_S, 1, "sp.SkeletonAnimation", 0, &tolua_err))
+        goto tolua_lerror;
+#endif
+
+    cobj = (spine::SkeletonAnimation*)tolua_tousertype(tolua_S, 1, 0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S, "invalid 'cobj' in function 'axlua_spine_SkeletonAnimation_findBone'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+    if (argc == 1)
+    {
+        const char* arg0 = lua_tostring(tolua_S, 2);
+        if (!arg0)
+        {
+            tolua_error(tolua_S, "sp.SkeletonAnimation:findBone arg 1 must string", nullptr);
+            return 0;
+        }
+
+        auto bone = cobj->findBone(arg0);
+
+        lua_newtable(tolua_S);
+
+        if (NULL != bone)
+        {
+            lua_pushstring(tolua_S, "x");
+            lua_pushnumber(tolua_S, bone->getX());
+            lua_rawset(tolua_S, -3); /* bone.x */
+
+            lua_pushstring(tolua_S, "y");
+            lua_pushnumber(tolua_S, bone->getY());
+            lua_rawset(tolua_S, -3); /* bone.y */
+
+            lua_pushstring(tolua_S, "rotation");
+            lua_pushnumber(tolua_S, bone->getRotation());
+            lua_rawset(tolua_S, -3); /* bone.rotation */
+
+            lua_pushstring(tolua_S, "scaleX");
+            lua_pushnumber(tolua_S, bone->getScaleX());
+            lua_rawset(tolua_S, -3); /* bone.scaleX */
+            lua_pushstring(tolua_S, "scaleY");
+            lua_pushnumber(tolua_S, bone->getScaleY());
+            lua_rawset(tolua_S, -3); /* bone.scaleY */
+
+            lua_pushstring(tolua_S, "worldX");
+            lua_pushnumber(tolua_S, bone->getWorldX());
+            lua_rawset(tolua_S, -3); /* bone.worldX */
+            lua_pushstring(tolua_S, "worldY");
+            lua_pushnumber(tolua_S, bone->getWorldY());
+            lua_rawset(tolua_S, -3); /* bone.worldY */
+        }
+        return 1;
+    }
+    luaL_error(tolua_S, "findBone has wrong number of arguments: %d, was expecting %d \n", argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'axlua_spine_SkeletonAnimation_findBone'.", &tolua_err);
+#endif
+
+    return 0;
+}
+
 static void extendCCSkeletonAnimation(lua_State* L)
 {
     lua_pushstring(L, "sp.SkeletonAnimation");
@@ -475,6 +581,8 @@ static void extendCCSkeletonAnimation(lua_State* L)
                        tolua_Cocos2d_CCSkeletonAnimation_unregisterSpineEventHandler00);
         tolua_function(L, "addAnimation", axlua_spine_SkeletonAnimation_addAnimation);
         tolua_function(L, "setAnimation", axlua_spine_SkeletonAnimation_setAnimation);
+        tolua_function(L, "findBone", axlua_spine_SkeletonAnimation_findBone);
+        tolua_function(L, "getBoundingBox", axlua_spine_SkeletonAnimation_getBoundingBox);
     }
     lua_pop(L, 1);
 
@@ -485,7 +593,7 @@ static void extendCCSkeletonAnimation(lua_State* L)
     g_typeCast[typeName]                             = "sp.SkeletonAnimation";
 }
 
-int register_all_axys_spine_manual(lua_State* L)
+int register_all_ax_spine_manual(lua_State* L)
 {
     if (nullptr == L)
         return 0;
@@ -500,8 +608,8 @@ int register_spine_module(lua_State* L)
     lua_getglobal(L, "_G");
     if (lua_istable(L, -1))  // stack:...,_G,
     {
-        register_all_axys_spine(L);
-        register_all_axys_spine_manual(L);
+        register_all_ax_spine(L);
+        register_all_ax_spine_manual(L);
     }
     lua_pop(L, 1);
 

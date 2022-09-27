@@ -61,7 +61,7 @@ void QuadCommand::reIndex(int indicesCount)
         indicesCount *= 1.25;
         indicesCount = std::min(indicesCount, 65536);
 
-        AXLOG("cocos2d: QuadCommand: resizing index size from [%d] to [%d]", __indexCapacity, indicesCount);
+        AXLOG("axys: QuadCommand: resizing index size from [%d] to [%d]", __indexCapacity, indicesCount);
 
         _ownedIndices.emplace_back(__indices);
         __indices       = new uint16_t[indicesCount];

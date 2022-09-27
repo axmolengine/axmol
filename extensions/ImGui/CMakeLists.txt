@@ -5,7 +5,7 @@ include_directories(imgui)
 set(HEADER
     ImGuiPresenter.h
     # CCImGuiColorTextEdit.h
-    imgui_impl_axys.h
+    imgui_impl_ax.h
     imgui/imconfig.h
     imgui/imgui.h
     imgui/imgui_internal.h
@@ -21,7 +21,7 @@ set(HEADER
 set(SOURCE
     ImGuiPresenter.cpp
     # CCImGuiColorTextEdit.cpp
-    imgui_impl_axys.cpp
+    imgui_impl_ax.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_draw.cpp
@@ -36,8 +36,8 @@ set(SOURCE
 #~ if(AX_ENABLE_EXT_LUA)
 #~     include_directories(
 #~         lua-bindings
-#~         ${AXYS_ROOT_PATH}/thirdparty/lua/luajit/include
-#~         ${AXYS_ROOT_PATH}/thirdparty/lua/tolua
+#~         ${_AX_ROOT_PATH}/thirdparty/lua/luajit/include
+#~         ${_AX_ROOT_PATH}/thirdparty/lua/tolua
 #~     )
 #~     list(APPEND HEADER
 #~         lua-bindings/imgui_lua.hpp
@@ -68,4 +68,4 @@ add_library(${target_name} STATIC
         ${HEADER} 
         ${SOURCE})
 
-setup_cocos_extension_config(${target_name})
+setup_ax_extension_config(${target_name})

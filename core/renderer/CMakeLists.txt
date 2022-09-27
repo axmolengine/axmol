@@ -1,4 +1,4 @@
-set(COCOS_RENDERER_HEADER
+set(_AX_RENDERER_HEADER
     renderer/CCCallbackCommand.h
     renderer/CCCustomCommand.h
     renderer/CCGroupCommand.h
@@ -41,7 +41,7 @@ set(COCOS_RENDERER_HEADER
     renderer/backend/DeviceInfo.h
     )
 
-set(COCOS_RENDERER_SRC
+set(_AX_RENDERER_SRC
     renderer/CCCallbackCommand.cpp
     renderer/CCCustomCommand.cpp
     renderer/CCGroupCommand.cpp
@@ -79,7 +79,7 @@ set(COCOS_RENDERER_SRC
 
 if(ANDROID OR WINDOWS OR LINUX OR AX_USE_COMPAT_GL) 
 
-list(APPEND COCOS_RENDERER_HEADER
+list(APPEND _AX_RENDERER_HEADER
     renderer/backend/opengl/BufferGL.h
     renderer/backend/opengl/CommandBufferGL.h
     renderer/backend/opengl/DepthStencilStateGL.h
@@ -93,7 +93,7 @@ list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/opengl/RenderTargetGL.h
 )
 
-list(APPEND COCOS_RENDERER_SRC
+list(APPEND _AX_RENDERER_SRC
     renderer/backend/opengl/BufferGL.cpp
     renderer/backend/opengl/CommandBufferGL.cpp
     renderer/backend/opengl/DepthStencilStateGL.cpp
@@ -109,7 +109,7 @@ list(APPEND COCOS_RENDERER_SRC
 
 else()
 
-list(APPEND COCOS_RENDERER_HEADER
+list(APPEND _AX_RENDERER_HEADER
     renderer/backend/metal/BufferMTL.h
     renderer/backend/metal/BufferManager.h
     renderer/backend/metal/CommandBufferMTL.h
@@ -124,7 +124,7 @@ list(APPEND COCOS_RENDERER_HEADER
     renderer/backend/metal/DeviceInfoMTL.h
 )
 
-list(APPEND COCOS_RENDERER_SRC
+list(APPEND _AX_RENDERER_SRC
     renderer/backend/metal/BufferMTL.mm
     renderer/backend/metal/BufferManager.mm
     renderer/backend/metal/CommandBufferMTL.mm

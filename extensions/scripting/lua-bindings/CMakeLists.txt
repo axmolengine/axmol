@@ -1,4 +1,4 @@
-set(cocos_root ${AXYS_ROOT_PATH})
+set(ax_root ${_AX_ROOT_PATH})
 
 set(lua_bindings_manual_headers
     manual/CCComponentLua.h
@@ -165,18 +165,18 @@ endif()
 set(lua_bindings_files
     ${lua_bindings_manual_files}
     ${lua_bindings_auto_files}
-    ${COCOS_DEPRECATED_SRC}
+    ${_AX_DEPRECATED_SRC}
     )
 set(lua_bindings_headers
     ${lua_bindings_manual_headers}
     ${lua_bindings_auto_headers}
-    ${COCOS_DEPRECATED_HEADER}
+    ${_AX_DEPRECATED_HEADER}
     )
 
 set(lua_bindings_files
     ${lua_bindings_files}
-    "${cocos_root}/thirdparty/yasio/bindings/lyasio.cpp"
-    "${cocos_root}/thirdparty/yasio/bindings/yasio_cclua.cpp")
+    "${ax_root}/thirdparty/yasio/bindings/lyasio.cpp"
+    "${ax_root}/thirdparty/yasio/bindings/yasio_cclua.cpp")
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
@@ -194,13 +194,13 @@ get_target_property(lua_ext_depend thirdparty AX_LUA_DEPEND)
 target_link_libraries(${_AX_LUA_LIB} ${lua_ext_depend})
 
 target_include_directories(${_AX_LUA_LIB}
-    PUBLIC ${cocos_root}/thirdparty/lua
+    PUBLIC ${ax_root}/thirdparty/lua
     PRIVATE manual/platform/android
     PRIVATE manual/platform/android/jni
-    PRIVATE ${cocos_root}/extensions/spine/runtime/include
-    PRIVATE ${cocos_root}/extensions/cocostudio
-    INTERFACE ${cocos_root}/extensions/scripting/lua-bindings/manual
-    PRIVATE ${cocos_root}/extensions/spine/runtime/include
+    PRIVATE ${ax_root}/extensions/spine/runtime/include
+    PRIVATE ${ax_root}/extensions/cocostudio
+    INTERFACE ${ax_root}/extensions/scripting/lua-bindings/manual
+    PRIVATE ${ax_root}/extensions/spine/runtime/include
 )
 
 if(WINDOWS)
@@ -210,8 +210,8 @@ endif()
 if(AX_ENABLE_MSEDGE_WEBVIEW2)
 endif()
 
-axis_config_pred(${_AX_LUA_LIB} AX_ENABLE_MFMEDIA)
-axis_config_pred(${_AX_LUA_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_MFMEDIA)
+ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
 set_target_properties(${_AX_LUA_LIB}
                       PROPERTIES
@@ -221,6 +221,6 @@ set_target_properties(${_AX_LUA_LIB}
                       )
 
 if(XCODE OR VS)
-    cocos_mark_code_files("${_AX_LUA_LIB}")
+    ax_mark_code_files("${_AX_LUA_LIB}")
 endif()
 

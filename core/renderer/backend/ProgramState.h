@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://axys1.github.io/
 
@@ -292,7 +292,7 @@ public:
      */
     void setParameterAutoBinding(std::string_view uniformName, std::string_view autoBinding);
 
-    inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
+    inline const VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
     /**
      * Gets uniformID, it's part of materialID for batch draw
@@ -308,7 +308,19 @@ public:
      */
     void updateUniformID(int uniformID = -1);
 
+    void setVertexAttrib(std::string_view name,
+                         std::size_t index,
+                         VertexFormat format,
+                         std::size_t offset,
+                         bool needToBeNormallized);
+    void setVertexStride(uint32_t stride);
+
+    void setVertexLayout(const VertexLayout& vertexLayout);
+
 protected:
+
+    void ensureVertexLayoutMutable();
+
     /**
      * Set the vertex uniform data.
      * @param location Specifies the uniform location.
@@ -392,7 +404,8 @@ protected:
     std::unordered_map<std::string, std::string> _autoBindings;
 
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
-    std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
+    VertexLayout* _vertexLayout = nullptr;
+    bool _ownVertexLayout = false;
 
     uint32_t _uniformID = 0;
 #ifdef AX_USE_METAL

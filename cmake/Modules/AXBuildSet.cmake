@@ -7,7 +7,7 @@ set(CMAKE_DEBUG_TARGET_PROPERTIES
     # POSITION_INDEPENDENT_CODE
 )
 
-# some useful variables for every one cocos project
+# some useful variables for every one axys project
 set(ENGINE_BINARY_PATH ${PROJECT_BINARY_DIR}/engine)
 
 if(CMAKE_TOOLCHAIN_FILE)
@@ -15,18 +15,18 @@ if(CMAKE_TOOLCHAIN_FILE)
 endif()
 
 find_program(PYTHON_COMMAND NAMES python3 python2 python)
-find_program(COCOS_COMMAND NAME axis
-    PATHS ${AXYS_ROOT_PATH}/tools/axis-console/bin $ENV{AXYS_CONSOLE_ROOT})
+find_program(_AX_COMMAND NAME axis
+    PATHS ${_AX_ROOT_PATH}/tools/axis-console/bin $ENV{_AX_CONSOLE_ROOT})
 
 message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
 message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
-message(STATUS "AXYS_ROOT_PATH:" ${AXYS_ROOT_PATH})
+message(STATUS "_AX_ROOT_PATH:" ${_AX_ROOT_PATH})
 message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
 # delete binary dir if you hope a full clean re-build
 message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})
 message(STATUS "ENGINE_BINARY_PATH:" ${ENGINE_BINARY_PATH})
 message(STATUS "PYTHON_PATH:"  ${PYTHON_COMMAND})
-message(STATUS "COCOS_COMMAND_PATH:"  ${COCOS_COMMAND})
+message(STATUS "_AX_COMMAND_PATH:"  ${_AX_COMMAND})
 message(STATUS "HOST_SYSTEM:" ${CMAKE_HOST_SYSTEM_NAME})
 # the default behavior of build module
 option(AX_ENABLE_EXT_LUA "Build lua libraries" OFF)
@@ -45,9 +45,9 @@ include(AXConfigDefine)
 # config libraries dependence
 include(AXConfigDepend)
 
-if(COCOS_COMMAND)
-    get_filename_component(axis_console_dir ${COCOS_COMMAND} DIRECTORY)
-    set(_AX_LUAJIT_ROOT ${axis_console_dir}/../plugins/plugin_luacompile/bin)
+if(_AX_COMMAND)
+    get_filename_component(ax_console_dir ${_AX_COMMAND} DIRECTORY)
+    set(_AX_LUAJIT_ROOT ${ax_console_dir}/../plugins/plugin_luacompile/bin)
     message(STATUS "_AX_LUAJIT_ROOT:" ${_AX_LUAJIT_ROOT})
     if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")
         find_program(LUAJIT32_COMMAND NAMES luajit-win32 PATHS ${_AX_LUAJIT_ROOT}/32bit NO_SYSTEM_ENVIRONMENT_PATH)

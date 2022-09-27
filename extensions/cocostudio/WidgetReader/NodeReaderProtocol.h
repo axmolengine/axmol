@@ -178,6 +178,6 @@ CCS_DLL extern ax::MeshRenderer* (*aSprite3D)();
 CCS_DLL extern ax::Node* (*aParticleSystem3D)();
 }  // namespace wext
 
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 #endif /* defined(__cocos2d_libs__NodeReaderProtocol__) */

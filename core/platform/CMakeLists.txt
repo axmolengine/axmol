@@ -24,7 +24,7 @@
 
 if(ANDROID)
     # refer to target: core/platform/android/CMakeLists.txt
-    set(COCOS_PLATFORM_SPECIFIC_SRC
+    set(_AX_PLATFORM_SPECIFIC_SRC
         platform/android/CCApplication-android.cpp
         platform/android/CCCommon-android.cpp
         platform/android/CCGLViewImpl-android.cpp
@@ -32,7 +32,7 @@ if(ANDROID)
         platform/android/CCEnhanceAPI-android.cpp
     )
 elseif(WINDOWS)
-    set(COCOS_PLATFORM_SPECIFIC_HEADER
+    set(_AX_PLATFORM_SPECIFIC_HEADER
         platform/win32/compat/stdint.h
         platform/win32/CCApplication-win32.h
         platform/win32/inet_pton_mingw.h
@@ -42,7 +42,7 @@ elseif(WINDOWS)
         platform/win32/CCPlatformDefine-win32.h
         platform/desktop/CCGLViewImpl-desktop.h
         )
-    set(COCOS_PLATFORM_SPECIFIC_SRC
+    set(_AX_PLATFORM_SPECIFIC_SRC
         platform/win32/CCStdC-win32.cpp
         platform/win32/CCFileUtils-win32.cpp
         platform/win32/CCCommon-win32.cpp
@@ -53,25 +53,25 @@ elseif(WINDOWS)
         )
 
 elseif(APPLE)
-    set(COCOS_PLATFORM_SPECIFIC_HEADER
+    set(_AX_PLATFORM_SPECIFIC_HEADER
         platform/apple/CCFileUtils-apple.h
         platform/apple/CCDevice-apple.h
         )
-    set(COCOS_PLATFORM_SPECIFIC_SRC
+    set(_AX_PLATFORM_SPECIFIC_SRC
         platform/apple/CCFileUtils-apple.mm
         platform/apple/CCDevice-apple.mm
         )
     if(MACOSX)
-        set(COCOS_PLATFORM_SPECIFIC_HEADER
-            ${COCOS_PLATFORM_SPECIFIC_HEADER}
+        set(_AX_PLATFORM_SPECIFIC_HEADER
+            ${_AX_PLATFORM_SPECIFIC_HEADER}
             platform/mac/CCStdC-mac.h
             platform/mac/CCGLViewImpl-mac.h
             platform/mac/CCPlatformDefine-mac.h
             platform/mac/CCApplication-mac.h
            # platform/desktop/CCGLViewImpl-desktop.h
             )
-        set(COCOS_PLATFORM_SPECIFIC_SRC
-            ${COCOS_PLATFORM_SPECIFIC_SRC}
+        set(_AX_PLATFORM_SPECIFIC_SRC
+            ${_AX_PLATFORM_SPECIFIC_SRC}
             platform/mac/CCApplication-mac.mm
             platform/mac/CCGLViewImpl-mac.mm
             platform/mac/CCCommon-mac.mm
@@ -79,8 +79,8 @@ elseif(APPLE)
            # platform/desktop/CCGLViewImpl-desktop.cpp
             )
     elseif(IOS)
-        set(COCOS_PLATFORM_SPECIFIC_HEADER
-            ${COCOS_PLATFORM_SPECIFIC_HEADER}
+        set(_AX_PLATFORM_SPECIFIC_HEADER
+            ${_AX_PLATFORM_SPECIFIC_HEADER}
             platform/ios/CCApplication-ios.h
             platform/ios/CCDirectorCaller-ios.h
             platform/ios/CCEAGLView-ios.h
@@ -89,8 +89,8 @@ elseif(APPLE)
             platform/ios/CCStdC-ios.h
             platform/ios/CCInputView-ios.h
             )
-        set(COCOS_PLATFORM_SPECIFIC_SRC
-            ${COCOS_PLATFORM_SPECIFIC_SRC}
+        set(_AX_PLATFORM_SPECIFIC_SRC
+            ${_AX_PLATFORM_SPECIFIC_SRC}
             platform/ios/CCApplication-ios.mm
             platform/ios/CCCommon-ios.mm
             platform/ios/CCDevice-ios.mm
@@ -102,16 +102,16 @@ elseif(APPLE)
             )
 
         if(NOT AX_USE_COMPAT_GL)
-            set(COCOS_PLATFORM_SPECIFIC_HEADER
-                ${COCOS_PLATFORM_SPECIFIC_HEADER}
+            set(_AX_PLATFORM_SPECIFIC_HEADER
+                ${_AX_PLATFORM_SPECIFIC_HEADER}
                 platform/ios/CCES2Renderer-ios.h
                 platform/ios/CCES2Renderer-ios.h
                 platform/ios/CCESRenderer-ios.h
                 platform/ios/CCGL-ios.h
                 platform/ios/OpenGL_Internal-ios.h
             )
-            set(COCOS_PLATFORM_SPECIFIC_SRC
-                ${COCOS_PLATFORM_SPECIFIC_SRC}
+            set(_AX_PLATFORM_SPECIFIC_SRC
+                ${_AX_PLATFORM_SPECIFIC_SRC}
                 platform/ios/CCES2Renderer-ios.m
             )
         endif()
@@ -127,7 +127,7 @@ elseif(LINUX)
         )
     endif(NOT CMAKE_CROSSCOMPILING)
 
-    set(COCOS_PLATFORM_SPECIFIC_HEADER
+    set(_AX_PLATFORM_SPECIFIC_HEADER
         platform/linux/CCApplication-linux.h
         platform/linux/CCGL-linux.h
         platform/linux/CCStdC-linux.h
@@ -135,7 +135,7 @@ elseif(LINUX)
         platform/linux/CCPlatformDefine-linux.h
         platform/desktop/CCGLViewImpl-desktop.h
         )
-    set(COCOS_PLATFORM_SPECIFIC_SRC
+    set(_AX_PLATFORM_SPECIFIC_SRC
         platform/linux/CCFileUtils-linux.cpp
         platform/linux/CCCommon-linux.cpp
         platform/linux/CCApplication-linux.cpp
@@ -144,8 +144,8 @@ elseif(LINUX)
         )
 endif()
 
-set(COCOS_PLATFORM_HEADER
-    ${COCOS_PLATFORM_SPECIFIC_HEADER}
+set(_AX_PLATFORM_HEADER
+    ${_AX_PLATFORM_SPECIFIC_HEADER}
     platform/CCApplication.h
     platform/CCApplicationProtocol.h
     platform/CCCommon.h
@@ -163,8 +163,8 @@ set(COCOS_PLATFORM_HEADER
     platform/CCPosixFileStream.h
     )
 
-set(COCOS_PLATFORM_SRC
-    ${COCOS_PLATFORM_SPECIFIC_SRC}
+set(_AX_PLATFORM_SRC
+    ${_AX_PLATFORM_SPECIFIC_SRC}
     platform/CCSAXParser.cpp
     platform/CCGLView.cpp
     platform/CCFileUtils.cpp

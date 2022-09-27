@@ -1,4 +1,4 @@
-set(COCOS_MATH_HEADER
+set(_AX_MATH_HEADER
     math/Vec2.h
     math/Mat3.h
     math/Mat4.h
@@ -15,7 +15,7 @@ set(COCOS_MATH_HEADER
     math/FastRNG.h
     )
 
-set(COCOS_MATH_SRC
+set(_AX_MATH_SRC
     math/CCAffineTransform.cpp
     math/CCVertex.cpp
     math/Mat3.cpp

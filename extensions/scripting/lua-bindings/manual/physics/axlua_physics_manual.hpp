@@ -38,7 +38,7 @@ extern "C" {
 
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
-int register_all_axys_physics_manual(lua_State* tolua_S);
+int register_all_ax_physics_manual(lua_State* tolua_S);
 
 #endif // AX_USE_PHYSICS
 

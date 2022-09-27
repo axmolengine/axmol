@@ -177,8 +177,8 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
     [self showPlaybackControls:_showPlaybackControls];
 
     auto view     = ax::Director::getInstance()->getOpenGLView();
-    auto eaglview = (CCEAGLView*)view->getEAGLView();
-    [eaglview addSubview:self.playerController.view];
+    auto eaglView = (CCEAGLView*)view->getEAGLView();
+    [eaglView addSubview:self.playerController.view];
     [self registerPlayerEventListener];
 }
 

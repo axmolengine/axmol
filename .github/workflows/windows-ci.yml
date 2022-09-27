@@ -17,7 +17,7 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
-    runs-on: windows-2019
+    runs-on: windows-latest
     strategy:
       matrix:
         arch:
@@ -34,7 +34,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2
 
-    - uses: ilammy/msvc-dev-cmd@v1.10.0
+    - uses: ilammy/msvc-dev-cmd@v1.11.0
       with: 
         arch: ${{ env.BUILD_ARCH }}
 

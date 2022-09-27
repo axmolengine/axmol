@@ -87,7 +87,7 @@ SkeletonBatch::~SkeletonBatch () {
 backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* command, backend::ProgramState* programState)
 {
 	auto& currentState = command->getPipelineDescriptor().programState;
-#if defined(AXYS_VERSION)
+#if defined(AX_VERSION)
 	if(currentState == nullptr || currentState->getProgram() != programState->getProgram() || currentState->getUniformID() != programState->getUniformID()) {
 #else
 	if(currentState == nullptr || currentState->getProgram() != programState->getProgram()) {
@@ -95,16 +95,6 @@ backend::ProgramState* SkeletonBatch::updateCommandPipelinePS(SkeletonCommand* c
 		AX_SAFE_RELEASE(currentState);
 		currentState = programState->clone();
 		
-		auto vertexLayout = currentState->getVertexLayout();
-        auto locPosition  = currentState->getAttributeLocation(backend::ATTRIBUTE_NAME_POSITION);
-        auto locTexcoord  = currentState->getAttributeLocation(backend::ATTRIBUTE_NAME_TEXCOORD);
-        auto locColor     = currentState->getAttributeLocation(backend::ATTRIBUTE_NAME_COLOR);
-		vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION, locPosition, backend::VertexFormat::FLOAT3, offsetof(V3F_C4B_T2F, vertices), false);
-		vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR, locColor, backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors), true);
-		vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD, locTexcoord, backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), false);
-		vertexLayout->setLayout(sizeof(_vertices[0]));
-
-
 		command->_locMVP     = currentState->getUniformLocation(backend::UNIFORM_NAME_MVP_MATRIX);
         command->_locTexture = currentState->getUniformLocation(backend::UNIFORM_NAME_TEXTURE);
 	}

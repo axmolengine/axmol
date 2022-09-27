@@ -1,4 +1,4 @@
-set(COCOS_2D_HEADER
+set(_AX_2D_HEADER
 
     2d/CCActionPageTurn3D.h
     2d/CCActionTween.h
@@ -70,7 +70,7 @@ set(COCOS_2D_HEADER
     2d/CCPlistSpriteSheetLoader.h
     )
 
-set(COCOS_2D_SRC
+set(_AX_2D_SRC
 
     2d/CCActionCamera.cpp
     2d/CCActionCatmullRom.cpp

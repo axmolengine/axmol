@@ -24,10 +24,17 @@
 
 #include "Program.h"
 #include "ProgramCache.h"
+#include "VertexLayout.h"
 
 NS_AX_BACKEND_BEGIN
 
-Program::Program(std::string_view vs, std::string_view fs) : _vertexShader(vs), _fragmentShader(fs) {}
+Program::Program(std::string_view vs, std::string_view fs)
+    : _vertexShader(vs), _fragmentShader(fs), _vertexLayout(new VertexLayout())
+{}
+
+Program::~Program() {
+    delete _vertexLayout;
+}
 
 void Program::setProgramType(uint32_t type)
 {

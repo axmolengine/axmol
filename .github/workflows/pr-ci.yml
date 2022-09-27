@@ -5,7 +5,7 @@ on:
     paths-ignore:
       - '**.md'
       - 'docs/**'
-      
+
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -48,13 +48,14 @@ jobs:
 
   build-android:
     name: build-android
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         arch:
           - armeabi-v7a
           - arm64-v8a
           - x86
+          - x86_64
     env:
       GH_OS_NAME: linux
       BUILD_TARGET: android
@@ -74,19 +75,30 @@ jobs:
 
   build-osx:
     name: build-osx
-    runs-on: macos-latest
+    runs-on: macos-12
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - arm64
     env:
       GH_OS_NAME: osx
       BUILD_TARGET: osx
+      BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+      # since github latest macos-latest(220807) env(3.24.0) break our ci, so we set cmake version explicit
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.12
+        with:
+          cmake-version: '3.23.3'
       - name: Build
         run: |
           tools/unix-ci/before-install.sh
           tools/unix-ci/run-script.sh
- 
+
   build-ios:
     name: build-ios
     runs-on: macos-latest
@@ -97,6 +109,31 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+      # since github latest macos-latest(220807) env(3.24.0) break our ci, so we set cmake version explicit
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.12
+        with:
+          cmake-version: '3.23.3'
+      - name: Build
+        run: |
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
+
+  build-tvos:
+    name: build-tvos
+    runs-on: macos-latest
+    env:
+      GH_OS_NAME: osx
+      BUILD_TARGET: tvos
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+      # since github latest macos-latest(220807) env(3.24.0) break our ci, so we set cmake version explicit
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.12
+        with:
+          cmake-version: '3.23.3'
       - name: Build
         run: |
           tools/unix-ci/before-install.sh

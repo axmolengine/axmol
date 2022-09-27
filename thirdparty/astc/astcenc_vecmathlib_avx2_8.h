@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2019-2021 Arm Limited
+// Copyright 2019-2022 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -35,6 +35,9 @@
 #endif
 
 #include <cstdio>
+
+// Define convenience intrinsics that are missing on older compilers
+#define astcenc_mm256_set_m128i(m, n) _mm256_insertf128_si256(_mm256_castsi128_si256((n)), (m), 1)
 
 // ============================================================================
 // vfloat8 data type
@@ -340,9 +343,9 @@ ASTCENC_SIMD_INLINE vmask8 operator~(vmask8 a)
  *
  * bit0 = lane 0
  */
-ASTCENC_SIMD_INLINE unsigned mask(vmask8 a)
+ASTCENC_SIMD_INLINE unsigned int mask(vmask8 a)
 {
-	return _mm256_movemask_ps(a.m);
+	return static_cast<unsigned int>(_mm256_movemask_ps(a.m));
 }
 
 /**
@@ -354,7 +357,7 @@ ASTCENC_SIMD_INLINE bool any(vmask8 a)
 }
 
 /**
- * @brief True if any lanes are enabled, false otherwise.
+ * @brief True if all lanes are enabled, false otherwise.
  */
 ASTCENC_SIMD_INLINE bool all(vmask8 a)
 {
@@ -462,6 +465,14 @@ ASTCENC_SIMD_INLINE vmask8 operator>(vint8 a, vint8 b)
 }
 
 /**
+ * @brief Logical shift left.
+ */
+template <int s> ASTCENC_SIMD_INLINE vint8 lsl(vint8 a)
+{
+	return vint8(_mm256_slli_epi32(a.m, s));
+}
+
+/**
  * @brief Arithmetic shift right.
  */
 template <int s> ASTCENC_SIMD_INLINE vint8 asr(vint8 a)
@@ -503,16 +514,13 @@ ASTCENC_SIMD_INLINE vint8 hmin(vint8 a)
 	m = _mm_min_epi32(m, _mm_shuffle_epi32(m, _MM_SHUFFLE(0,0,0,1)));
 	m = _mm_shuffle_epi32(m, _MM_SHUFFLE(0,0,0,0));
 
-	// This is the most logical implementation, but the convenience intrinsic
-	// is missing on older compilers (supported in g++ 9 and clang++ 9).
-	//__m256i r = _mm256_set_m128i(m, m)
-	__m256i r = _mm256_insertf128_si256(_mm256_castsi128_si256(m), m, 1);
+	__m256i r = astcenc_mm256_set_m128i(m, m);
 	vint8 vmin(r);
 	return vmin;
 }
 
 /**
- * @brief Return the horizontal minimum of a vector.
+ * @brief Return the horizontal maximum of a vector.
  */
 ASTCENC_SIMD_INLINE vint8 hmax(vint8 a)
 {
@@ -521,10 +529,7 @@ ASTCENC_SIMD_INLINE vint8 hmax(vint8 a)
 	m = _mm_max_epi32(m, _mm_shuffle_epi32(m, _MM_SHUFFLE(0,0,0,1)));
 	m = _mm_shuffle_epi32(m, _MM_SHUFFLE(0,0,0,0));
 
-	// This is the most logical implementation, but the convenience intrinsic
-	// is missing on older compilers (supported in g++ 9 and clang++ 9).
-	//__m256i r = _mm256_set_m128i(m, m)
-	__m256i r = _mm256_insertf128_si256(_mm256_castsi128_si256(m), m, 1);
+	__m256i r = astcenc_mm256_set_m128i(m, m);
 	vint8 vmax(r);
 	return vmax;
 }
@@ -578,10 +583,7 @@ ASTCENC_SIMD_INLINE vint8 pack_low_bytes(vint8 v)
 	__m128i a1 = _mm256_extracti128_si256(a, 1);
 	__m128i b = _mm_unpacklo_epi32(a0, a1);
 
-	// This is the most logical implementation, but the convenience intrinsic
-	// is missing on older compilers (supported in g++ 9 and clang++ 9).
-	//__m256i r = _mm256_set_m128i(b, b)
-	__m256i r = _mm256_insertf128_si256(_mm256_castsi128_si256(b), b, 1);
+	__m256i r = astcenc_mm256_set_m128i(b, b);
 	return vint8(r);
 }
 
@@ -732,6 +734,16 @@ ASTCENC_SIMD_INLINE vfloat8 min(vfloat8 a, vfloat8 b)
 }
 
 /**
+ * @brief Return the min vector of a vector and a scalar.
+ *
+ * If either lane value is NaN, @c b will be returned for that lane.
+ */
+ASTCENC_SIMD_INLINE vfloat8 min(vfloat8 a, float b)
+{
+	return min(a, vfloat8(b));
+}
+
+/**
  * @brief Return the max vector of two vectors.
  *
  * If either lane value is NaN, @c b will be returned for that lane.
@@ -739,6 +751,16 @@ ASTCENC_SIMD_INLINE vfloat8 min(vfloat8 a, vfloat8 b)
 ASTCENC_SIMD_INLINE vfloat8 max(vfloat8 a, vfloat8 b)
 {
 	return vfloat8(_mm256_max_ps(a.m, b.m));
+}
+
+/**
+ * @brief Return the max vector of a vector and a scalar.
+ *
+ * If either lane value is NaN, @c b will be returned for that lane.
+ */
+ASTCENC_SIMD_INLINE vfloat8 max(vfloat8 a, float b)
+{
+	return max(a, vfloat8(b));
 }
 
 /**
@@ -805,13 +827,13 @@ ASTCENC_SIMD_INLINE vfloat8 hmin(vfloat8 a)
 {
 	__m128 vlow = _mm256_castps256_ps128(a.m);
 	__m128 vhigh = _mm256_extractf128_ps(a.m, 1);
-	vlow  = _mm_min_ps(vlow, vhigh);
+	vlow = _mm_min_ps(vlow, vhigh);
 
 	// First do an horizontal reduction.
 	__m128 shuf = _mm_shuffle_ps(vlow, vlow, _MM_SHUFFLE(2, 3, 0, 1));
 	__m128 mins = _mm_min_ps(vlow, shuf);
-	shuf        = _mm_movehl_ps(shuf, mins);
-	mins        = _mm_min_ss(mins, shuf);
+	shuf = _mm_movehl_ps(shuf, mins);
+	mins = _mm_min_ss(mins, shuf);
 
 	// This is the most logical implementation, but the convenience intrinsic
 	// is missing on older compilers (supported in g++ 9 and clang++ 9).
@@ -836,13 +858,13 @@ ASTCENC_SIMD_INLINE vfloat8 hmax(vfloat8 a)
 {
 	__m128 vlow = _mm256_castps256_ps128(a.m);
 	__m128 vhigh = _mm256_extractf128_ps(a.m, 1);
-	vhigh  = _mm_max_ps(vlow, vhigh);
+	vhigh = _mm_max_ps(vlow, vhigh);
 
 	// First do an horizontal reduction.
 	__m128 shuf = _mm_shuffle_ps(vhigh, vhigh, _MM_SHUFFLE(2, 3, 0, 1));
 	__m128 maxs = _mm_max_ps(vhigh, shuf);
-	shuf        = _mm_movehl_ps(shuf,maxs);
-	maxs        = _mm_max_ss(maxs, shuf);
+	shuf = _mm_movehl_ps(shuf,maxs);
+	maxs = _mm_max_ss(maxs, shuf);
 
 	// This is the most logical implementation, but the convenience intrinsic
 	// is missing on older compilers (supported in g++ 9 and clang++ 9).
@@ -973,6 +995,16 @@ ASTCENC_SIMD_INLINE vint8 float_to_int(vfloat8 a)
 }
 
 /**
+ * @brief Return a integer value for a float vector, using round-to-nearest.
+ */
+ASTCENC_SIMD_INLINE vint8 float_to_int_rtn(vfloat8 a)
+{
+	a = round(a);
+	return vint8(_mm256_cvttps_epi32(a.m));
+}
+
+
+/**
  * @brief Return a float value for an integer vector.
  */
 ASTCENC_SIMD_INLINE vfloat8 int_to_float(vint8 a)
@@ -1005,6 +1037,126 @@ ASTCENC_SIMD_INLINE vfloat8 int_as_float(vint8 a)
 }
 
 /**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(vint4 t0, vint8& t0p)
+{
+	// AVX2 duplicates the table within each 128-bit lane
+	__m128i t0n = t0.m;
+	t0p = vint8(astcenc_mm256_set_m128i(t0n, t0n));
+}
+
+/**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(vint4 t0, vint4 t1, vint8& t0p, vint8& t1p)
+{
+	// AVX2 duplicates the table within each 128-bit lane
+	__m128i t0n = t0.m;
+	t0p = vint8(astcenc_mm256_set_m128i(t0n, t0n));
+
+	__m128i t1n = _mm_xor_si128(t0.m, t1.m);
+	t1p = vint8(astcenc_mm256_set_m128i(t1n, t1n));
+}
+
+/**
+ * @brief Prepare a vtable lookup table for use with the native SIMD size.
+ */
+ASTCENC_SIMD_INLINE void vtable_prepare(
+	vint4 t0, vint4 t1, vint4 t2, vint4 t3,
+	vint8& t0p, vint8& t1p, vint8& t2p, vint8& t3p)
+{
+	// AVX2 duplicates the table within each 128-bit lane
+	__m128i t0n = t0.m;
+	t0p = vint8(astcenc_mm256_set_m128i(t0n, t0n));
+
+	__m128i t1n = _mm_xor_si128(t0.m, t1.m);
+	t1p = vint8(astcenc_mm256_set_m128i(t1n, t1n));
+
+	__m128i t2n = _mm_xor_si128(t1.m, t2.m);
+	t2p = vint8(astcenc_mm256_set_m128i(t2n, t2n));
+
+	__m128i t3n = _mm_xor_si128(t2.m, t3.m);
+	t3p = vint8(astcenc_mm256_set_m128i(t3n, t3n));
+}
+
+/**
+ * @brief Perform an 8-bit 16-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint8 vtable_8bt_32bi(vint8 t0, vint8 idx)
+{
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	__m256i idxx = _mm256_or_si256(idx.m, _mm256_set1_epi32(static_cast<int>(0xFFFFFF00)));
+
+	__m256i result = _mm256_shuffle_epi8(t0.m, idxx);
+	return vint8(result);
+}
+
+/**
+ * @brief Perform an 8-bit 32-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint8 vtable_8bt_32bi(vint8 t0, vint8 t1, vint8 idx)
+{
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	__m256i idxx = _mm256_or_si256(idx.m, _mm256_set1_epi32(static_cast<int>(0xFFFFFF00)));
+
+	__m256i result = _mm256_shuffle_epi8(t0.m, idxx);
+	idxx = _mm256_sub_epi8(idxx, _mm256_set1_epi8(16));
+
+	__m256i result2 = _mm256_shuffle_epi8(t1.m, idxx);
+	result = _mm256_xor_si256(result, result2);
+	return vint8(result);
+}
+
+/**
+ * @brief Perform an 8-bit 64-entry table lookup, with 32-bit indexes.
+ */
+ASTCENC_SIMD_INLINE vint8 vtable_8bt_32bi(vint8 t0, vint8 t1, vint8 t2, vint8 t3, vint8 idx)
+{
+	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	__m256i idxx = _mm256_or_si256(idx.m, _mm256_set1_epi32(static_cast<int>(0xFFFFFF00)));
+
+	__m256i result = _mm256_shuffle_epi8(t0.m, idxx);
+	idxx = _mm256_sub_epi8(idxx, _mm256_set1_epi8(16));
+
+	__m256i result2 = _mm256_shuffle_epi8(t1.m, idxx);
+	result = _mm256_xor_si256(result, result2);
+	idxx = _mm256_sub_epi8(idxx, _mm256_set1_epi8(16));
+
+	result2 = _mm256_shuffle_epi8(t2.m, idxx);
+	result = _mm256_xor_si256(result, result2);
+	idxx = _mm256_sub_epi8(idxx, _mm256_set1_epi8(16));
+
+	result2 = _mm256_shuffle_epi8(t3.m, idxx);
+	result = _mm256_xor_si256(result, result2);
+
+	return vint8(result);
+}
+
+/**
+ * @brief Return a vector of interleaved RGBA data.
+ *
+ * Input vectors have the value stored in the bottom 8 bits of each lane,
+ * with high  bits set to zero.
+ *
+ * Output vector stores a single RGBA texel packed in each lane.
+ */
+ASTCENC_SIMD_INLINE vint8 interleave_rgba8(vint8 r, vint8 g, vint8 b, vint8 a)
+{
+	return r + lsl<8>(g) + lsl<16>(b) + lsl<24>(a);
+}
+
+/**
+ * @brief Store a vector, skipping masked lanes.
+ *
+ * All masked lanes must be at the end of vector, after all non-masked lanes.
+ */
+ASTCENC_SIMD_INLINE void store_lanes_masked(int* base, vint8 data, vmask8 mask)
+{
+	_mm256_maskstore_epi32(base, _mm256_castps_si256(mask.m), data.m);
+}
+
+/**
  * @brief Debug function to print a vector of ints.
  */
 ASTCENC_SIMD_INLINE void print(vint8 a)
@@ -1012,6 +1164,17 @@ ASTCENC_SIMD_INLINE void print(vint8 a)
 	alignas(ASTCENC_VECALIGN) int v[8];
 	storea(a, v);
 	printf("v8_i32:\n  %8d %8d %8d %8d %8d %8d %8d %8d\n",
+	       v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7]);
+}
+
+/**
+ * @brief Debug function to print a vector of ints.
+ */
+ASTCENC_SIMD_INLINE void printx(vint8 a)
+{
+	alignas(ASTCENC_VECALIGN) int v[8];
+	storea(a, v);
+	printf("v8_i32:\n  %08x %08x %08x %08x %08x %08x %08x %08x\n",
 	       v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7]);
 }
 

@@ -13,6 +13,7 @@
 [![Windows Build Status](https://github.com/axys1/axys/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/axys1/axys/actions/workflows/windows-ci.yml)
 [![Android Build Status](https://github.com/axys1/axys/workflows/android/badge.svg)](https://github.com/axys1/axys/actions?query=workflow%3Aandroid)
 [![iOS Build Status](https://github.com/axys1/axys/workflows/ios/badge.svg)](https://github.com/axys1/axys/actions?query=workflow%3Aios)
+[![tvOS Build Status](https://github.com/axys1/axys/workflows/tvos/badge.svg)](https://github.com/axys1/axys/actions?query=workflow%3Atvos)
 [![Linux Build Status](https://github.com/axys1/axys/workflows/linux/badge.svg)](https://github.com/axys1/axys/actions?query=workflow%3Alinux)
 [![macOS Build Status](https://github.com/axys1/axys/workflows/osx/badge.svg)](https://github.com/axys1/axys/actions?query=workflow%3Aosx)  
 
@@ -29,8 +30,13 @@
 * C++ 17
 * Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
+
+### Thirdparty
+
+* All thirdparty prebuilt libs are built from https://github.com/axys1/buildware via github actions automatically.
   
 ### Highlighted Features
+* Add apple M1, android x64 support, contributed by @pietpukkel
 * Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axys1/axys/issues/564)
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
@@ -41,14 +47,14 @@
   * Extensions having own license as part of there package.
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enabling it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even though it was marked as deprecated, but still available.
+  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios/tvos, even though it was marked as deprecated, but still available.
 * Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
 * Modularize all optional extensions, move from engine core folder to an extensions folder
 * Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
 * Use a modern GL loader ```Glad```
 * Google [angle](https://github.com/google/angle) renderer backend support
 * C++ 17 standard
-* IOS SDK 9.0 as minimal deployment
+* IOS/TVOS SDK 9.0 as minimal deployment
 * Use fast pugixml
 * Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
 * Use SAX parser for all plist files
@@ -129,22 +135,30 @@ See [windows workflow guide](https://github.com/axys1/axys/issues/564)
   .\gradlew.bat assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=arm64-v8a --parallel --info
   ```
 
-#### iOS
+#### iOS, tvOS and macOS
   1. Ensure xcode12+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. Execute the following command   
   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
   3. Generate xcode project  
-     - for arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXYS_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=arm64```
-     - for armv7,arm64 combined:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXYS_ROOT/cmake/ios.mini.cmake "-DCMAKE_OSX_ARCHITECTURES=armv7;arm64"```
-     - for simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AXYS_ROOT/cmake/ios.mini.cmake -DCMAKE_OSX_ARCHITECTURES=x86_64``` 
+     - for ios arm64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=OS64```
+     - for ios armv7,arm64 combined:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=OS```
+     - for ios simulator x86_64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64```
+     - for tvos arm64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=TVOS```
+     - for tvos simulator x86_64:  
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS```
+     - for macos x86_64(Intel)
+     ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=x86_64```
+     - for macos arm64(M1)
+     ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=arm64```
 
   4. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
   5. Notes  
-     - **The code signing is required to run the ios app on your device, just change the bundle identifier until the auto manage signing is solved**  
-     - **axys only provides armv7, arm64, x86_64 prebuilt libraries for ios**
+     - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
+     - **axys only provides armv7, arm64, x86_64 prebuilt libraries for ios/tvos**
 
 ### New Project
 - Cpp: `axys new -p org.axys1.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`

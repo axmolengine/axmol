@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2021 Arm Limited
+// Copyright 2021-2022 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -32,7 +32,7 @@
 static TraceLog* g_TraceLog = nullptr;
 
 /** @brief The JSON indentation level. */
-static const int g_trace_indent = 2;
+static const size_t g_trace_indent = 2;
 
 TraceLog::TraceLog(
 	const char* file_name):
@@ -55,7 +55,7 @@ TraceNode* TraceLog::get_current_leaf()
 }
 
 /* See header for documentation. */
-int TraceLog::get_depth()
+size_t TraceLog::get_depth()
 {
 	return m_stack.size();
 }
@@ -82,12 +82,12 @@ TraceNode::TraceNode(
 	vsnprintf (buffer, bufsz, format, args);
 	va_end (args);
 
-	// Guarantee there is a nul termintor
+	// Guarantee there is a nul terminator
 	buffer[bufsz - 1] = 0;
 
 	// Generate the node
 	TraceNode* parent = g_TraceLog->get_current_leaf();
-	int depth = g_TraceLog->get_depth();
+	size_t depth = g_TraceLog->get_depth();
 	g_TraceLog->m_stack.push_back(this);
 
 	bool comma = parent && parent->m_attrib_count;
@@ -108,8 +108,8 @@ TraceNode::TraceNode(
 		out << '\n';
 	}
 
-	int out_indent = (depth * 2) * g_trace_indent;
-	int in_indent = (depth * 2 + 1) * g_trace_indent;
+	size_t out_indent = (depth * 2) * g_trace_indent;
+	size_t in_indent = (depth * 2 + 1) * g_trace_indent;
 
 	std::string out_indents("");
 	if (out_indent)
@@ -131,8 +131,8 @@ void TraceNode::add_attrib(
 ) {
 	(void)type;
 
-	int depth = g_TraceLog->get_depth();
-	int indent = (depth * 2) * g_trace_indent;
+	size_t depth = g_TraceLog->get_depth();
+	size_t indent = (depth * 2) * g_trace_indent;
 	auto& out = g_TraceLog->m_file;
 	bool comma = m_attrib_count;
 	m_attrib_count++;
@@ -154,9 +154,9 @@ TraceNode::~TraceNode()
 	g_TraceLog->m_stack.pop_back();
 
 	auto& out = g_TraceLog->m_file;
-	int depth = g_TraceLog->get_depth();
-	int out_indent = (depth * 2) * g_trace_indent;
-	int in_indent = (depth * 2 + 1) * g_trace_indent;
+	size_t depth = g_TraceLog->get_depth();
+	size_t out_indent = (depth * 2) * g_trace_indent;
+	size_t in_indent = (depth * 2 + 1) * g_trace_indent;
 
 	std::string out_indents("");
 	if (out_indent)
@@ -189,7 +189,7 @@ void trace_add_data(
 	vsnprintf (buffer, bufsz, format, args);
 	va_end (args);
 
-	// Guarantee there is a nul termintor
+	// Guarantee there is a nul terminator
 	buffer[bufsz - 1] = 0;
 
 	std::string value = "\"" + std::string(buffer) + "\"";

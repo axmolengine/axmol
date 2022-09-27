@@ -36,8 +36,8 @@ if(XCODE)
 endif()
 
 # axys root path
-set(AXYS_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-set(CMAKE_MODULE_PATH ${AXYS_ROOT_PATH}/cmake/Modules/)
+set(_AX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 
 # prevent in-source-build
 include(PreventInSourceBuilds)
@@ -50,30 +50,30 @@ option(AX_BUILD_EXAMPLES "Build examples" ON)
 
 set(AX_ENABLE_EXT_LUA ON) 
 
-add_subdirectory(${AXYS_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
+add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
 
 # prevent tests project to build "axys/core" again
 set(BUILD_ENGINE_DONE ON)
 
 if(AX_BUILD_TESTS)
     # add cpp-template-default into project(axys) for tmp test
-    add_subdirectory(${AXYS_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
+    add_subdirectory(${_AX_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
 
 	# add cpp tests default
-    add_subdirectory(${AXYS_ROOT_PATH}/tests/cpp-tests ${ENGINE_BINARY_PATH}/tests/cpp-tests)
+    add_subdirectory(${_AX_ROOT_PATH}/tests/cpp-tests ${ENGINE_BINARY_PATH}/tests/cpp-tests)
     
 	# add fairygui tests when fairygui extension is enabled
     if(AX_ENABLE_EXT_FAIRYGUI)
-      add_subdirectory(${AXYS_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
+      add_subdirectory(${_AX_ROOT_PATH}/tests/fairygui-tests ${ENGINE_BINARY_PATH}/tests/fairygui-tests)
     endif()
     
     if(AX_ENABLE_EXT_LIVE2D)
-      add_subdirectory(${AXYS_ROOT_PATH}/tests/live2d-tests ${ENGINE_BINARY_PATH}/tests/live2d-tests)
+      add_subdirectory(${_AX_ROOT_PATH}/tests/live2d-tests ${ENGINE_BINARY_PATH}/tests/live2d-tests)
     endif()
 
     if(AX_ENABLE_EXT_LUA)
-      add_subdirectory(${AXYS_ROOT_PATH}/templates/lua-template-default ${ENGINE_BINARY_PATH}/tests/HelloLua)
-      add_subdirectory(${AXYS_ROOT_PATH}/tests/lua-tests/project ${ENGINE_BINARY_PATH}/tests/lua-test)
+      add_subdirectory(${_AX_ROOT_PATH}/templates/lua-template-default ${ENGINE_BINARY_PATH}/tests/HelloLua)
+      add_subdirectory(${_AX_ROOT_PATH}/tests/lua-tests/project ${ENGINE_BINARY_PATH}/tests/lua-test)
     endif(AX_ENABLE_EXT_LUA)
 
 endif()

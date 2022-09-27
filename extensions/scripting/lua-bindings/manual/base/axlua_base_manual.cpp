@@ -7372,7 +7372,7 @@ static void extendAutoPolygon(lua_State* tolua_S)
 //    lua_pop(tolua_S, 1);
 //}
 
-int register_all_axys_manual(lua_State* tolua_S)
+int register_all_ax_manual(lua_State* tolua_S)
 {
     if (NULL == tolua_S)
         return 0;
@@ -7429,6 +7429,49 @@ int register_all_axys_manual(lua_State* tolua_S)
     extendPolygonInfo(tolua_S);
     extendRenderTexture(tolua_S);
     return 0;
+}
+
+static int tolua_cocos2d_utils_captureNode(lua_State* tolua_S)
+{
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+    if (!tolua_istable(tolua_S, 1, 0, &tolua_err) || !tolua_isusertype(tolua_S, 2, "ax.Node", 0, &tolua_err) || !toluafix_isfunction(tolua_S, 3, "LUA_FUNCTION", 0, &tolua_err))
+        goto tolua_lerror;
+    else
+#endif
+    {
+        ax::Node* node       = static_cast<Node*>(tolua_tousertype(tolua_S, 2, nullptr));
+        LUA_FUNCTION handler = toluafix_ref_function(tolua_S, 3, 0);
+
+        float scale = 1.0f;
+        tolua_Error tolua_err;
+        if (tolua_isnumber(tolua_S, 4, 0, &tolua_err))
+        {
+            scale = tolua_tonumber(tolua_S, 4, 1.0);
+        }
+
+        ax::utils::captureNode(node,
+           [=](RefPtr<Image> image) {
+                auto stack = LuaEngine::getInstance()->getLuaStack();
+                auto Ls    = stack->getLuaState();
+
+                if (image == nullptr)
+                    stack->pushNil();
+                else
+                    stack->pushObject(image, "ax.Image");
+
+                stack->executeFunctionByHandler(handler, 1);
+                stack->removeScriptHandler(handler);
+            },
+            scale);
+
+        return 0;
+    }
+#if _AX_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S, "#ferror in function 'tolua_cocos2d_utils_captureScreen'.", &tolua_err);
+    return 0;
+#endif
 }
 
 static int tolua_cocos2d_utils_captureScreen(lua_State* tolua_S)
@@ -7523,7 +7566,7 @@ tolua_lerror:
 #endif
 }
 
-int register_all_axys_module_manual(lua_State* tolua_S)
+int register_all_ax_module_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -7533,6 +7576,7 @@ int register_all_axys_module_manual(lua_State* tolua_S)
     tolua_beginmodule(tolua_S, "ax");
     tolua_module(tolua_S, "utils", 0);
     tolua_beginmodule(tolua_S, "utils");
+    tolua_function(tolua_S, "captureNode", tolua_cocos2d_utils_captureNode);
     tolua_function(tolua_S, "captureScreen", tolua_cocos2d_utils_captureScreen);
     tolua_function(tolua_S, "findChildren", tolua_cocos2d_utils_findChildren);
     tolua_function(tolua_S, "findChild", tolua_cocos2d_utils_findChild);
@@ -8219,7 +8263,7 @@ static int tolua_cocos2d_Vec4_new(lua_State* L)
                                   static_cast<float>(lua_tonumber(L, 3)), static_cast<float>(lua_tonumber(L, 4))});
 }
 
-int register_all_axys_math_manual(lua_State* tolua_S)
+int register_all_ax_math_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -8243,7 +8287,7 @@ int register_all_axys_math_manual(lua_State* tolua_S)
     return 0;
 }
 
-int register_all_axys_shaders_manual(lua_State* tolua_S)
+int register_all_ax_shaders_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;
@@ -8641,7 +8685,7 @@ tolua_lerror:
 #endif
 }
 
-int register_all_axys_bytearray_manual(lua_State* tolua_S)
+int register_all_ax_bytearray_manual(lua_State* tolua_S)
 {
     if (nullptr == tolua_S)
         return 0;

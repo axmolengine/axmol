@@ -46,7 +46,7 @@ TOLUA_API int register_extension_module(lua_State* tolua_S);
 /// @}
 
 /// @cond
-TOLUA_API int register_all_axys_extension_manual(lua_State* tolua_S);
+TOLUA_API int register_all_ax_extension_manual(lua_State* tolua_S);
 /// @endcond
 
 struct LuaAssetsManagerEventData

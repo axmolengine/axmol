@@ -254,6 +254,13 @@ void ShaderModuleMTL::setBuiltinAttributeLocation()
     {
         _attributeLocation[Attribute::TEXCOORD] = iter->second.location;
     }
+
+    /// a_normal
+    iter = _attributeInfo.find(ATTRIBUTE_NAME_NORMAL);
+    if (iter != _attributeInfo.end())
+    {
+        _attributeLocation[Attribute::NORMAL] = iter->second.location;
+    }
 }
 
 void ShaderModuleMTL::parseTexture(id<MTLDevice> mtlDevice, glslopt_shader* shader)

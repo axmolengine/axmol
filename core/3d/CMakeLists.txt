@@ -1,4 +1,4 @@
-set(COCOS_3D_HEADER
+set(_AX_3D_HEADER
 
     3d/CCBillBoard.h
     3d/CCFrustum.h
@@ -28,7 +28,7 @@ set(COCOS_3D_HEADER
     3d/CC3DProgramInfo.h
     )
 
-set(COCOS_3D_SRC
+set(_AX_3D_SRC
 
     3d/CCAABB.cpp
     3d/CCAnimate3D.cpp

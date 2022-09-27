@@ -28,4 +28,4 @@
 
 ## The options for axys apps
 
-- AX_PREBUILT_DIR: specific the prebuilt dir (relative to `AXYS_ROOT`), it's very useful for fast linking apps with prebuilt engine libs
+- AX_PREBUILT_DIR: specific the prebuilt dir (relative to `AX_ROOT`), it's very useful for fast linking apps with prebuilt engine libs

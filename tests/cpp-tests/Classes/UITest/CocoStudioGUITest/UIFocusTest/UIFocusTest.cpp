@@ -33,7 +33,7 @@
 #include "UIFocusTest.h"
 
 USING_NS_AX;
-using namespace axys::ui;
+using namespace ax::ui;
 
 UIFocusTests::UIFocusTests()
 {

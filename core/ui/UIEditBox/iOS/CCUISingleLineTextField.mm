@@ -76,9 +76,9 @@
 
 - (CGRect)textRectForBounds:(CGRect)bounds
 {
-    auto glview = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getOpenGLView();
 
-    float padding = AX_EDIT_BOX_PADDING * glview->getScaleX() / glview->getContentScaleFactor();
+    float padding = AX_EDIT_BOX_PADDING * glView->getScaleX() / glView->getContentScaleFactor();
     return CGRectInset(bounds, padding, padding);
 }
 

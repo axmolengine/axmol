@@ -105,28 +105,6 @@ Copyright (c) 2021 Bytedance Inc.
 
 // Generic macros
 
-/// @name namespace axys
-/// @{
-#ifdef __cplusplus
-#    define NS_AX_BEGIN   \
-        namespace axys \
-        {
-#    define NS_AX_END }
-#    define USING_NS_AX using namespace axys
-#    define NS_AX ::axys
-#else
-#    define NS_AX_BEGIN
-#    define NS_AX_END
-#    define USING_NS_AX
-#    define NS_AX
-#endif
-
-namespace axys {}
-namespace axis = axys;
-namespace ax = axys;
-//  end of namespace group
-/// @}
-
 /** @def AX_PROPERTY_READONLY
  * It is used to declare a protected variable. We can use getter to read the variable.
  *

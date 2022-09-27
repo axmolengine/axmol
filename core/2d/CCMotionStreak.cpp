@@ -234,26 +234,26 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool nee
         _mvpMatrixLocaiton = _programState->getUniformLocation("u_MVPMatrix");
         _textureLocation   = _programState->getUniformLocation("u_tex0");
 
-        auto vertexLayout         = _programState->getVertexLayout();
+        // setup custom vertex layout for V2F_T2F_C4B
         const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
         auto iter                 = attributeInfo.find("a_position");
         if (iter != attributeInfo.end())
         {
-            vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
+           _programState->setVertexAttrib("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
         }
         iter = attributeInfo.find("a_texCoord");
         if (iter != attributeInfo.end())
         {
-            vertexLayout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
-                                       2 * sizeof(float), false);
+           _programState->setVertexAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
+                                      2 * sizeof(float), false);
         }
         iter = attributeInfo.find("a_color");
         if (iter != attributeInfo.end())
         {
-            vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
-                                       4 * sizeof(float), true);
+           _programState->setVertexAttrib("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
+                                      4 * sizeof(float), true);
         }
-        vertexLayout->setLayout(4 * sizeof(float) + 4 * sizeof(uint8_t));
+        _programState->setVertexStride(4 * sizeof(float) + 4 * sizeof(uint8_t));
 
         updateProgramStateTexture(_texture);
         return true;

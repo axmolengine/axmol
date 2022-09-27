@@ -50,8 +50,8 @@ void ccMessageBox(const char* msg, const char* title)
     [alert setInformativeText:tmpTitle];
     [alert setAlertStyle:NSAlertStyleWarning];
 
-    auto glview = Director::getInstance()->getOpenGLView();
-    id window   = glview->getCocoaWindow();
+    auto glView = Director::getInstance()->getOpenGLView();
+    id window   = glView->getCocoaWindow();
     [alert beginSheetModalForWindow:window completionHandler:nil];
 }
 

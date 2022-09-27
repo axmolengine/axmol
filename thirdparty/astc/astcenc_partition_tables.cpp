@@ -316,7 +316,7 @@ static bool generate_one_partition_info_entry(
 	}
 
 	// Populate the partition index
-	pi.partition_index = partition_index;
+	pi.partition_index = static_cast<uint16_t>(partition_index);
 
 	// Populate the coverage bitmaps for 2/3/4 partitions
 	uint64_t* bitmaps { nullptr };
@@ -429,7 +429,7 @@ static void build_partition_table_for_one_partition_count(
 			{
 				if (x == 0)
 				{
-					bsd.partitioning_packed_index[partition_count - 2][i] = next_index;
+					bsd.partitioning_packed_index[partition_count - 2][i] = static_cast<uint16_t>(next_index);
 					bsd.partitioning_count_selected[partition_count - 1]++;
 					bsd.partitioning_count_all[partition_count - 1]++;
 					build[i] = 1;
@@ -440,7 +440,7 @@ static void build_partition_table_for_one_partition_count(
 			{
 				if (x == 1)
 				{
-					bsd.partitioning_packed_index[partition_count - 2][i] = next_index;
+					bsd.partitioning_packed_index[partition_count - 2][i] = static_cast<uint16_t>(next_index);
 					bsd.partitioning_count_all[partition_count - 1]++;
 					partitioning_valid[partition_count - 2][next_index] = 255;
 					next_index++;

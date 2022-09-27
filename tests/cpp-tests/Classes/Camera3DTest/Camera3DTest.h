@@ -36,7 +36,7 @@ THE SOFTWARE.
 NS_AX_BEGIN
 class MeshRenderer;
 class Delay;
-NS_AX_END  // namespace axys
+NS_AX_END  // namespace ax
 
 enum State
 {

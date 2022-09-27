@@ -187,7 +187,7 @@ def main():
 
 
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
-    axys_root = os.path.abspath(os.path.join(project_root, ''))
+    ax_root = os.path.abspath(os.path.join(project_root, ''))
     cxx_generator_root = os.path.abspath(os.path.join(project_root, 'tools/bindings-generator'))
 
     extraFlags = _defaultIncludePath()
@@ -203,7 +203,7 @@ def main():
     config.set('DEFAULT', 'androidndkdir', g_ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
     config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
-    config.set('DEFAULT', 'axysdir', axys_root)
+    config.set('DEFAULT', 'axdir', ax_root)
     config.set('DEFAULT', 'cxxgeneratordir', cxx_generator_root)
     config.set('DEFAULT', 'extra_flags', extraFlags)
 
@@ -228,21 +228,21 @@ def main():
         output_dir = '%s/extensions/scripting/lua-bindings/auto' % project_root
 
         cmd_args = {
-                    'axys_base.ini' : ('axys_base', 'axlua_base_auto'), \
-                    'axys_backend.ini' : ('axys_backend', 'axlua_backend_auto'), \
-                    'axys_extension.ini' : ('axys_extension', 'axlua_extension_auto'), \
-                    'axys_ui.ini' : ('axys_ui', 'axlua_ui_auto'), \
-                    'axys_studio.ini' : ('axys_studio', 'axlua_studio_auto'), \
-                    'axys_spine.ini' : ('axys_spine', 'axlua_spine_auto'), \
-                    'axys_physics.ini' : ('axys_physics', 'axlua_physics_auto'), \
-                    'axys_video.ini' : ('axys_video', 'axlua_video_auto'), \
-                    'axys_controller.ini' : ('axys_controller', 'axlua_controller_auto'), \
-                    'axys_3d.ini': ('axys_3d', 'axlua_3d_auto'), \
-                    'axys_audioengine.ini': ('axys_audioengine', 'axlua_audioengine_auto'), \
-                    'axys_csloader.ini' : ('axys_csloader', 'axlua_csloader_auto'), \
-                    'axys_webview.ini' : ('axys_webview', 'axlua_webview_auto'), \
-                    'axys_physics3d.ini' : ('axys_physics3d', 'axlua_physics3d_auto'), \
-                    'axys_navmesh.ini' : ('axys_navmesh', 'axlua_navmesh_auto'), \
+                    'ax_base.ini' : ('ax_base', 'axlua_base_auto'), \
+                    'ax_backend.ini' : ('ax_backend', 'axlua_backend_auto'), \
+                    'ax_extension.ini' : ('ax_extension', 'axlua_extension_auto'), \
+                    'ax_ui.ini' : ('ax_ui', 'axlua_ui_auto'), \
+                    'ax_studio.ini' : ('ax_studio', 'axlua_studio_auto'), \
+                    'ax_spine.ini' : ('ax_spine', 'axlua_spine_auto'), \
+                    'ax_physics.ini' : ('ax_physics', 'axlua_physics_auto'), \
+                    'ax_video.ini' : ('ax_video', 'axlua_video_auto'), \
+                    'ax_controller.ini' : ('ax_controller', 'axlua_controller_auto'), \
+                    'ax_3d.ini': ('ax_3d', 'axlua_3d_auto'), \
+                    'ax_audioengine.ini': ('ax_audioengine', 'axlua_audioengine_auto'), \
+                    'ax_csloader.ini' : ('ax_csloader', 'axlua_csloader_auto'), \
+                    'ax_webview.ini' : ('ax_webview', 'axlua_webview_auto'), \
+                    'ax_physics3d.ini' : ('ax_physics3d', 'axlua_physics3d_auto'), \
+                    'ax_navmesh.ini' : ('ax_navmesh', 'axlua_navmesh_auto'), \
                     }
         target = 'lua'
         generator_py = '%s/generator.py' % cxx_generator_root
