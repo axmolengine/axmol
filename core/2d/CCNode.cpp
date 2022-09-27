@@ -1956,9 +1956,8 @@ bool Node::addComponent(Component* component)
 
     const auto added = _componentContainer->add(component);
     if (added && _running)
-    {
         component->onEnter();
-    }
+
     return added;
 }
 
