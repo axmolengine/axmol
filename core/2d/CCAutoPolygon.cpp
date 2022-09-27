@@ -519,7 +519,7 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
 
     for (auto&& pt:points)
     {
-        result.push_back(Clipper2Lib::Point64(pt.x * PRECISION, pt.y * PRECISION));
+        result.emplace_back(Clipper2Lib::Point64(pt.x * PRECISION, pt.y * PRECISION));
     }
 
     if (!Clipper2Lib::IsPositive(result))
@@ -548,7 +548,7 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     clamp.emplace_back(Clipper2Lib::Point64(int(rect.size.width / _scaleFactor * PRECISION),
                                             int(rect.size.height / _scaleFactor * PRECISION)));
     clamp.emplace_back(Clipper2Lib::Point64(0, int(rect.size.height / _scaleFactor * PRECISION)));
-    clamps.push_back(clamp);
+    clamps.emplace_back(std::move(clamp));
     cl.AddClip(clamps);
     cl.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, out);
 

@@ -99,17 +99,9 @@ static void brent_kung_prefix_sum(
 	} while (lc_stride > 2);
 }
 
-/**
- * @brief Compute averages for a pixel region.
- *
- * The routine computes both in a single pass, using a summed-area table to decouple the running
- * time from the averaging/variance kernel size.
- *
- * @param[out] ctx   The compressor context storing the output data.
- * @param      arg   The input parameter structure.
- */
-static void compute_pixel_region_variance(
-	astcenc_context& ctx,
+/* See header for documentation. */
+void compute_pixel_region_variance(
+	astcenc_contexti& ctx,
 	const pixel_region_args& arg
 ) {
 	// Unpack the memory structure into local variables
@@ -425,57 +417,6 @@ static void compute_pixel_region_variance(
 			}
 		}
 	}
-}
-
-void compute_averages(
-	astcenc_context& ctx,
-	const avg_args &ag
-) {
-	pixel_region_args arg = ag.arg;
-	arg.work_memory = new vfloat4[ag.work_memory_size];
-
-	int size_x = ag.img_size_x;
-	int size_y = ag.img_size_y;
-	int size_z = ag.img_size_z;
-
-	int step_xy = ag.blk_size_xy;
-	int step_z = ag.blk_size_z;
-
-	int y_tasks = (size_y + step_xy - 1) / step_xy;
-
-	// All threads run this processing loop until there is no work remaining
-	while (true)
-	{
-		unsigned int count;
-		unsigned int base = ctx.manage_avg.get_task_assignment(16, count);
-		if (!count)
-		{
-			break;
-		}
-
-		for (unsigned int i = base; i < base + count; i++)
-		{
-			int z = (i / (y_tasks)) * step_z;
-			int y = (i - (z * y_tasks)) * step_xy;
-
-			arg.size_z = astc::min(step_z, size_z - z);
-			arg.offset_z = z;
-
-			arg.size_y = astc::min(step_xy, size_y - y);
-			arg.offset_y = y;
-
-			for (int x = 0; x < size_x; x += step_xy)
-			{
-				arg.size_x = astc::min(step_xy, size_x - x);
-				arg.offset_x = x;
-				compute_pixel_region_variance(ctx, arg);
-			}
-		}
-
-		ctx.manage_avg.complete_task_assignment(count);
-	}
-
-	delete[] arg.work_memory;
 }
 
 /* See header for documentation. */

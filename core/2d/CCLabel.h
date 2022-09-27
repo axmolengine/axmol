@@ -801,7 +801,6 @@ protected:
     virtual void updateColor() override;
 
     void updateUniformLocations();
-    void setVertexLayout();
     void updateBlendState();
     void updateEffectUniforms(BatchCommand& batch,
                               TextureAtlas* textureAtlas,

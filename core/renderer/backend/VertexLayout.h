@@ -64,6 +64,7 @@ public:
     };
 
     VertexLayout() = default;
+    VertexLayout(const VertexLayout&) = default;
 
     /**
      * Set attribute values to name.
@@ -84,7 +85,7 @@ public:
      * Set stride of vertices.
      * @param stride Specifies the distance between the data of two vertices, in bytes.
      */
-    void setLayout(std::size_t stride);
+    void setStride(std::size_t stride);
 
     /**
      * Get the distance between the data of two vertices, in bytes.

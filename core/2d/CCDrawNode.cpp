@@ -170,7 +170,6 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
 
     auto program = backend::Program::getBuiltinProgram(programType);
     pipelinePS   = new backend::ProgramState(program);
-    setVertexLayout(cmd);
     cmd.setPrimitiveType(primitiveType);
     cmd.setDrawType(drawType);
 }
@@ -179,33 +178,6 @@ void DrawNode::freeShaderInternal(CustomCommand& cmd)
 {
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE_NULL(pipelinePS);
-}
-
-void DrawNode::setVertexLayout(CustomCommand& cmd)
-{
-    auto* programState        = cmd.getPipelineDescriptor().programState;
-    auto layout               = programState->getVertexLayout();
-    const auto& attributeInfo = programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        layout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
-    }
-
-    iter = attributeInfo.find("a_texCoord");
-    if (iter != attributeInfo.end())
-    {
-        layout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
-                             offsetof(V2F_C4B_T2F, texCoords), false);
-    }
-
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        layout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
-                             offsetof(V2F_C4B_T2F, colors), true);
-    }
-    layout->setLayout(sizeof(V2F_C4B_T2F));
 }
 
 void DrawNode::updateBlendState(CustomCommand& cmd)

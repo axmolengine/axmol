@@ -351,7 +351,7 @@ struct vmask4
 	 */
 	template <int32_t l> ASTCENC_SIMD_INLINE uint32_t lane() const
 	{
-		return vgetq_lane_s32(m, l);
+		return vgetq_lane_u32(m, l);
 	}
 
 	/**
@@ -968,13 +968,15 @@ ASTCENC_SIMD_INLINE void vtable_prepare(
  */
 ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 idx)
 {
-	int8x16_t table { t0.m };
+	int8x16_t table {
+		vreinterpretq_s8_s32(t0.m)
+	};
 
-	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	// Set index byte above max index for unused bytes so table lookup returns zero
 	int32x4_t idx_masked = vorrq_s32(idx.m, vdupq_n_s32(0xFFFFFF00));
-	int8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
+	uint8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
 
-	return vint4(vqtbl1q_s8(table, idx_bytes));
+	return vint4(vreinterpretq_s32_s8(vqtbl1q_s8(table, idx_bytes)));
 }
 
 /**
@@ -982,13 +984,16 @@ ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 idx)
  */
 ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 t1, vint4 idx)
 {
-	int8x16x2_t table { t0.m, t1.m };
+	int8x16x2_t table {
+		vreinterpretq_s8_s32(t0.m),
+		vreinterpretq_s8_s32(t1.m)
+	};
 
-	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	// Set index byte above max index for unused bytes so table lookup returns zero
 	int32x4_t idx_masked = vorrq_s32(idx.m, vdupq_n_s32(0xFFFFFF00));
-	int8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
+	uint8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
 
-	return vint4(vqtbl2q_s8(table, idx_bytes));
+	return vint4(vreinterpretq_s32_s8(vqtbl2q_s8(table, idx_bytes)));
 }
 
 /**
@@ -996,13 +1001,18 @@ ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 t1, vint4 idx)
  */
 ASTCENC_SIMD_INLINE vint4 vtable_8bt_32bi(vint4 t0, vint4 t1, vint4 t2, vint4 t3, vint4 idx)
 {
-	int8x16x4_t table { t0.m, t1.m, t2.m, t3.m };
+	int8x16x4_t table {
+		vreinterpretq_s8_s32(t0.m),
+		vreinterpretq_s8_s32(t1.m),
+		vreinterpretq_s8_s32(t2.m),
+		vreinterpretq_s8_s32(t3.m)
+	};
 
-	// Set index byte MSB to 1 for unused bytes so shuffle returns zero
+	// Set index byte above max index for unused bytes so table lookup returns zero
 	int32x4_t idx_masked = vorrq_s32(idx.m, vdupq_n_s32(0xFFFFFF00));
-	int8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
+	uint8x16_t idx_bytes = vreinterpretq_u8_s32(idx_masked);
 
-	return vint4(vqtbl4q_s8(table, idx_bytes));
+	return vint4(vreinterpretq_s32_s8(vqtbl4q_s8(table, idx_bytes)));
 }
 
 /**

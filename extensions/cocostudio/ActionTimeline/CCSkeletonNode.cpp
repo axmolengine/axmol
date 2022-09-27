@@ -58,22 +58,6 @@ bool SkeletonNode::init()
 
     _mvpLocation = _programState->getUniformLocation("u_MVPMatrix");
 
-    auto vertexLayout         = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
-    auto iter                 = attributeInfo.find("a_position");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_position", iter->second.location, ax::backend::VertexFormat::FLOAT3, 0,
-                                   false);
-    }
-    iter = attributeInfo.find("a_color");
-    if (iter != attributeInfo.end())
-    {
-        vertexLayout->setAttribute("a_color", iter->second.location, ax::backend::VertexFormat::FLOAT4,
-                                   3 * sizeof(float), false);
-    }
-    vertexLayout->setLayout(7 * sizeof(float));
-
     _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 8, ax::CustomCommand::BufferUsage::DYNAMIC);
     _customCommand.createIndexBuffer(ax::CustomCommand::IndexFormat::U_SHORT, 12,
                                      ax::CustomCommand::BufferUsage::STATIC);

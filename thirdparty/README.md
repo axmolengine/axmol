@@ -1,12 +1,12 @@
 # The axys thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: git 2.1-e37380e (18155) on branch `chromium/4951` @Google Chrome 101.0.4951.41
+- Version: git 2.1.19119 on branch `chromium/5195` @Google Chrome 105.0.5195.102
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.0.0
+- Version: 4.1.0
 - License: Apache-2.0
 
 ## Box2D
@@ -36,8 +36,9 @@
 - License: MIT
 
 ## Clipper2
-- Upstream: https://github.com/AngusJohnson/Clipper2
-- Version: 1.0.3
+- [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
+- Upstream: 
+- Version: 1.0.4
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -47,17 +48,17 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.84.0
+- Version: 7.85.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
 - [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
-- Version: 2.0.0
+- Version: 2.0.8
 - License: Apache-2.0
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 9.0.0
+- Version: 9.1.0
 - License: MIT
 
 ## FreeType
@@ -102,7 +103,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 6.0.7
+- Version: 6.0.10
 - License: MIT
 
 ## lua
@@ -216,7 +217,7 @@
 
 ## webp
 - [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
-- Version: 1.2.2
+- Version: 1.2.4
 - License: Google Inc
 
 ## xsbase

@@ -1954,7 +1954,11 @@ bool Node::addComponent(Component* component)
     // should enable schedule update, then all components can receive this call back
     scheduleUpdate();
 
-    return _componentContainer->add(component);
+    const auto added = _componentContainer->add(component);
+    if (added && _running)
+        component->onEnter();
+
+    return added;
 }
 
 bool Node::removeComponent(std::string_view name)

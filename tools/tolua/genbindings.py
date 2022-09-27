@@ -203,7 +203,7 @@ def main():
     config.set('DEFAULT', 'androidndkdir', g_ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
     config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
-    config.set('DEFAULT', 'axysdir', ax_root)
+    config.set('DEFAULT', 'axdir', ax_root)
     config.set('DEFAULT', 'cxxgeneratordir', cxx_generator_root)
     config.set('DEFAULT', 'extra_flags', extraFlags)
 

@@ -128,7 +128,7 @@ public:
      * Get active vertex attributes.
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
-    virtual const hlookup::string_map<AttributeBindInfo> getActiveAttributes() const override;
+    virtual const hlookup::string_map<AttributeBindInfo>& getActiveAttributes() const override;
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
@@ -156,6 +156,7 @@ private:
     bool getAttributeLocation(std::string_view attributeName, unsigned int& location) const;
     void computeUniformInfos();
     void computeLocations();
+    void setupVertexLayout();
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     virtual void reloadProgram();
     virtual int getMappedLocation(int location) const override;
@@ -172,6 +173,7 @@ private:
 
     std::vector<AttributeInfo> _attributeInfos;
     hlookup::string_map<UniformInfo> _activeUniformInfos;
+    mutable hlookup::string_map<AttributeBindInfo> _activeAttribs;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     std::unordered_map<std::string, int>
         _originalUniformLocations;  ///< record the uniform location when shader was first created.

@@ -92,7 +92,7 @@
 #
 # ENABLE_BITCODE: (ON|OFF) Enables or disables bitcode support. Default ON
 #
-# ENABLE_ARC: (ON|OFF) Enables or disables ARC support. Default ON (ARC enabled by default)
+# ENABLE_ARC: (ON|OFF) Enables or disables ARC support. Default OFF (ARC disabled by default)
 #
 # ENABLE_VISIBILITY: (ON|OFF) Enables or disables symbol visibility support. Default OFF (visibility hidden by default)
 #
@@ -527,8 +527,8 @@ set(ENABLE_BITCODE_INT ${ENABLE_BITCODE} CACHE BOOL
 # Use ARC or not
 if(NOT DEFINED ENABLE_ARC)
   # Unless specified, enable ARC support by default
-  set(ENABLE_ARC ON)
-  message(STATUS "[DEFAULTS] Enabling ARC support by default. ENABLE_ARC not provided!")
+  set(ENABLE_ARC OFF)
+  message(STATUS "[DEFAULTS] Disabling ARC support by default. ENABLE_ARC not provided!")
 endif()
 set(ENABLE_ARC_INT ${ENABLE_ARC} CACHE BOOL "Whether or not to enable ARC" FORCE)
 # Use hidden visibility or not
@@ -540,9 +540,9 @@ endif()
 set(ENABLE_VISIBILITY_INT ${ENABLE_VISIBILITY} CACHE BOOL "Whether or not to hide symbols from the dynamic linker (-fvisibility=hidden)" FORCE)
 # Set strict compiler checks or not
 if(NOT DEFINED ENABLE_STRICT_TRY_COMPILE)
-  # Unless specified, disable strict try_compile()
+  # Unless specified, enable strict try_compile()
   set(ENABLE_STRICT_TRY_COMPILE ON)
-  message(STATUS "[DEFAULTS] Using strict compiler checks by default. ENABLE_STRICT_TRY_COMPILE not provided!")
+  message(STATUS "[DEFAULTS] Using strict compiler checks by default to avoid dynamic link issue. ENABLE_STRICT_TRY_COMPILE not provided!")
 endif()
 set(ENABLE_STRICT_TRY_COMPILE_INT ${ENABLE_STRICT_TRY_COMPILE} CACHE BOOL
         "Whether or not to use strict compiler checks" FORCE)

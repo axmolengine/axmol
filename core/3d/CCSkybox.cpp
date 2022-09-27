@@ -68,19 +68,10 @@ bool Skybox::init()
     setProgramState(new backend::ProgramState(program), false);
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
-    auto layout              = _programState->getVertexLayout();
 
     pipelineDescriptor.programState = _programState;
     // disable blend
     pipelineDescriptor.blendDescriptor.blendEnabled = false;
-    const auto& attributeInfo                       = _programState->getProgram()->getActiveAttributes();
-    const auto& iter = attributeInfo.find(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION);
-    if (iter != attributeInfo.end())
-    {
-        layout->setAttribute(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION, iter->second.location,
-                             backend::VertexFormat::FLOAT3, 0, false);
-    }
-    layout->setLayout(sizeof(Vec3));
 
     _uniformColorLoc     = _programState->getUniformLocation("u_color");
     _uniformCameraRotLoc = _programState->getUniformLocation("u_cameraRot");
