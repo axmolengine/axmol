@@ -928,6 +928,18 @@ void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
         path += "/";
     }
 
+    auto it = std::find(_searchPathArray.begin(), _searchPathArray.end(), path);
+    if (it != _searchPathArray.end())
+    {
+        _searchPathArray.erase(it);
+
+        auto itOrigin = std::find(_originalSearchPaths.begin(), _originalSearchPaths.end(), std::string{searchpath});
+        if (itOrigin != _originalSearchPaths.end())
+        {
+            _originalSearchPaths.erase(itOrigin);
+        }
+    }
+
     if (front)
     {
         _originalSearchPaths.insert(_originalSearchPaths.begin(), std::string{searchpath});
