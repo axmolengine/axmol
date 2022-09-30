@@ -169,6 +169,7 @@ See [windows workflow guide](https://github.com/axys1/axys/issues/564)
 - https://github.com/solan-solan/HeightMap/tree/smooth_lod_passing
 - https://github.com/wzhengsen/StarryX
 - https://github.com/aismann/SimpleSnake
+- https://github.com/aismann/game-controller-test
 - https://github.com/EugenyN/TanksKombat
 
 ### Notes
