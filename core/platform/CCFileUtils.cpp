@@ -940,7 +940,7 @@ void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
             _originalSearchPaths.erase(itOrigin);
         }
     }
-#endif  // !AX_NO_DUP_SEARCH_PATH
+#endif  // AX_NO_DUP_SEARCH_PATH
 
     if (front)
     {
