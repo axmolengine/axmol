@@ -6,11 +6,11 @@ struct GLFWwindow;
 typedef void (*ImGuiImplCocos2dxLoadFontFun)(void* userdata);
 
 /// ImGui glfw APIs
-IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAxys(GLFWwindow* window, bool install_callbacks);
+IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAx(GLFWwindow* window, bool install_callbacks);
 IMGUI_IMPL_API void ImGui_ImplGlfw_Shutdown();
 IMGUI_IMPL_API void ImGui_ImplGlfw_NewFrame();
 
-/// ImGui axys render APIs
+/// ImGui axmol render APIs
 IMGUI_IMPL_API void ImGui_ImplAx_Init();
 IMGUI_IMPL_API void ImGui_ImplAx_Shutdown();
 IMGUI_IMPL_API void ImGui_ImplAx_NewFrame();

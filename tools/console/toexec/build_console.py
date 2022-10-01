@@ -1,13 +1,13 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# build_console: Build axys-console into executable binary file with PyInstaller
+# build_console: Build axmol-console into executable binary file with PyInstaller
 #
 # Author: Bin Zhang
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-Build axys-console into executable binary file with PyInstaller
+Build axmol-console into executable binary file with PyInstaller
 '''
 
 import os
@@ -42,7 +42,7 @@ class Builder(object):
     KEY_MODIFY_CONFIG = "modify_config"
     KEY_HIDDEN_IMPORT = "hidden_import"
 
-    ENTRANCE_FILE = "bin/axys.py"
+    ENTRANCE_FILE = "bin/axmol.py"
 
     CMD_FORMAT = 'pyinstaller -F %s %s --distpath "%s" --specpath "%s" --workpath "%s" --clean -y "%s"'
 
@@ -166,7 +166,7 @@ class Builder(object):
         # get the runtime-hook parameter
         _cp = ConfigParser.ConfigParser(allow_no_value=True)
         _cp.optionxform = str
-        _cp.read(os.path.join(self.src_path, "bin/axys.ini"))
+        _cp.read(os.path.join(self.src_path, "bin/axmol.ini"))
 
         runtime_hook_param = ""
         hidden_import_param = ""
@@ -217,8 +217,8 @@ class Builder(object):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(description="Generate executable file for axys-console by PyInstaller.")
-    parser.add_argument('-s', '--src-path', dest='src_path', help='Specify the path of axys-console.')
+    parser = ArgumentParser(description="Generate executable file for axmol-console by PyInstaller.")
+    parser.add_argument('-s', '--src-path', dest='src_path', help='Specify the path of axmol-console.')
     parser.add_argument('-d', '--dst-path', dest='dst_path', help='Specify the path of output.')
     (args, unknown) = parser.parse_known_args()
 

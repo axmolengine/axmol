@@ -4,7 +4,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "yasio/cxx17/string_view.hpp"
 
-static const char* helperClassName = "org.axys1.lib.AxysHelper";
+static const char* helperClassName = "org.axmol.lib.AxmolEngine";
 
 NS_AX_BEGIN
 
@@ -78,7 +78,7 @@ public:
                                        const FontDefinition& textDefinition)
     {
         JniMethodInfo methodInfo;
-        if (!JniHelper::getStaticMethodInfo(methodInfo, "org.axys1.lib.AxysBitmap",
+        if (!JniHelper::getStaticMethodInfo(methodInfo, "org.axmol.lib.BitmapHelper",
                                             "createTextBitmapShadowStroke",
                                             "([BLjava/lang/String;IIIIIIIIZFFFFZIIIIFZI)Z"))
         {
@@ -105,7 +105,7 @@ public:
 
         /**create bitmap
          * this method call Cococs2dx.createBitmap()(java code) to create the bitmap, the java code
-         * will call Java_org_axys1_lib_AxysBitmap_nativeInitBitmapDC() to init the width, height
+         * will call Java_org_axmol_lib_BitmapHelper_nativeInitBitmapDC() to init the width, height
          * and data.
          * use this approach to decrease the jni call number
          */
@@ -192,7 +192,7 @@ extern "C" {
  * this method is called by java code to init width, height and pixels data
  */
 JNIEXPORT void JNICALL
-Java_org_axys1_lib_AxysBitmap_nativeInitBitmapDC(JNIEnv* env, jclass, jint width, jint height, jbyteArray pixels)
+Java_org_axmol_lib_BitmapHelper_nativeInitBitmapDC(JNIEnv* env, jclass, jint width, jint height, jbyteArray pixels)
 {
     int size                    = width * height * 4;
     ax::BitmapDC& bitmapDC = ax::sharedBitmapDC();

@@ -6,9 +6,9 @@ target_sources(${LIB_NAME}
 
 if(NOT DEFINED FRAMEWORK_SOURCE)
   message(WARNING
-    "[${LIB_NAME}] Set 'FRAMEWORK_SOURCE' variable to 'axys' when using axys rendering."
+    "[${LIB_NAME}] Set 'FRAMEWORK_SOURCE' variable to 'axmol' when using axmol rendering."
   )
-  set(FRAMEWORK_SOURCE axys)
+  set(FRAMEWORK_SOURCE axmol)
 endif()
 
 # # Add specified rendering directory.

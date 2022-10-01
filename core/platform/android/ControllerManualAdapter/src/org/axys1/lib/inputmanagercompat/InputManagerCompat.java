@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.axys1.lib.inputmanagercompat;
+package org.axmol.lib.inputmanagercompat;
 
 import android.content.Context;
 import android.os.Build;

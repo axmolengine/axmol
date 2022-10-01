@@ -84,7 +84,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         assets-manager
         cocostudio
         DragonBones
-        axys
+        axmol
         box2d
         chipmunk
         freetype

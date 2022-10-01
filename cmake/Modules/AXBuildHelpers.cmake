@@ -316,7 +316,7 @@ function(source_group_single_file single_file)
     source_group("${ide_file_group}" FILES ${single_file})
 endfunction()
 
-# setup a axys application
+# setup a ax application
 function(setup_ax_app_config app_name)
     # put all output app into bin/${app_name}
     set_target_properties(${app_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${app_name}")

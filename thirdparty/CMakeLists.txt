@@ -127,7 +127,7 @@ if(AX_WITH_CHIPMUNK)
       INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/chipmunk/include"
     )
     
-    # !important axys not use double precision
+    # !important axmol not use double precision
     target_compile_definitions(chipmunk PUBLIC CP_USE_CGTYPES=0)
     target_compile_definitions(chipmunk PUBLIC CP_USE_DOUBLES=0)
 

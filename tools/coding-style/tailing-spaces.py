@@ -41,7 +41,7 @@ def fixone(src):
 def lint(root):
   print('Checking tailing whitespaces in: %s' % root)
   dirs = [
-    os.path.join(root, 'axys'),
+    os.path.join(root, 'axmol'),
     os.path.join(root, 'extensions'),
     os.path.join(root, 'templates'),
     os.path.join(root, 'tests'),
