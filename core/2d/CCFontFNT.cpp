@@ -4,7 +4,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -156,7 +156,7 @@ std::set<unsigned int>* BMFontConfiguration::parseConfigFile(std::string_view co
     }
     if (data[0] == 0)
     {
-        AXLOG("axys: Error parsing FNTfile %s", controlFile.data());
+        AXLOG("axmol: Error parsing FNTfile %s", controlFile.data());
         return nullptr;
     }
     auto contents = data.c_str();
@@ -429,7 +429,7 @@ void BMFontConfiguration::parseInfoArguments(const char* line)
     // padding
     sscanf(strstr(line, "padding=") + 8, "%d,%d,%d,%d", &_padding.top, &_padding.right, &_padding.bottom,
            &_padding.left);
-    // AXLOG("axys: padding: %d,%d,%d,%d", _padding.left, _padding.top, _padding.right, _padding.bottom);
+    // AXLOG("axmol: padding: %d,%d,%d,%d", _padding.left, _padding.top, _padding.right, _padding.bottom);
 }
 
 void BMFontConfiguration::parseCommonArguments(const char* line)

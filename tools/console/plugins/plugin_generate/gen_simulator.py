@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #-*- coding: UTF-8 -*-
 # ----------------------------------------------------------------------------
-# Generate Axys Simulator
+# Generate axmol Simulator
 #
 # Copyright 2015 (C) zhangbin
 #
@@ -14,19 +14,19 @@ import shutil
 import string
 import sys
 
-import axys
+import axmol
 from MultiLanguage import MultiLanguage
 import utils
 
 from datetime import date
-from axys import CCPluginError, Logging
+from axmol import CCPluginError, Logging
 from argparse import ArgumentParser
 
-class SimulatorCompiler(axys.CCPlugin):
+class SimulatorCompiler(axmol.CCPlugin):
     SIMULATOR_PROJ_PATH = 'tools/simulator'
     SIMULATOR_SLN_PATH = "frameworks/runtime-src/proj.win32/simulator.sln"
     SIMULATOR_XCODE_PATH = "frameworks/runtime-src/proj.ios_mac/simulator.xcodeproj"
-    COCOS_CMD_PATH = 'tools/console/bin/axys'
+    COCOS_CMD_PATH = 'tools/console/bin/axmol'
 
     DEFAULT_OUTPUT_FOLDER_NAME = 'simulator'
 
@@ -39,7 +39,7 @@ class SimulatorCompiler(axys.CCPlugin):
         return MultiLanguage.get_string('GEN_SIM_BRIEF')
 
     def parse_args(self, argv):
-        parser = ArgumentParser(prog="axys %s" % self.__class__.plugin_name(),
+        parser = ArgumentParser(prog="axmol %s" % self.__class__.plugin_name(),
                                 description=self.__class__.brief_description())
         parser.add_argument('-c', '--clean', dest='do_clean', action='store_true',
                             help=MultiLanguage.get_string('GEN_SIM_ARG_CLEAN'))
@@ -170,9 +170,9 @@ class SimulatorCompiler(axys.CCPlugin):
             "_WINDOWS":"_WINDOWS;_AX_DEBUG=1",
         }
 
-        if axys.os_is_mac():
+        if axmol.os_is_mac():
             return osx_keyword
-        if axys.os_is_win32():
+        if axmol.os_is_win32():
             return win_keyword
 
         return {}
@@ -183,7 +183,7 @@ class SimulatorCompiler(axys.CCPlugin):
     def get_depend_project_file_list(self):
         file_list = []
 
-        if axys.os_is_mac() and (self.build_mac or self.build_ios):
+        if axmol.os_is_mac() and (self.build_mac or self.build_ios):
             IOS_MAC_PROJECT_SUFFIX = "project.pbxproj"
             IOS_MAC_PROJECT_REFERENCES_TAG = 'ProjectRef ='
             IOS_MAC_PROJECT_NAME_RE = r'\w+.xcodeproj'
@@ -211,7 +211,7 @@ class SimulatorCompiler(axys.CCPlugin):
                     match_str = match_str.replace('"', "")
                     file_list.append(os.path.join(simulator_mac_project_path, match_str, IOS_MAC_PROJECT_SUFFIX))
 
-        if axys.os_is_win32() and self.build_android:
+        if axmol.os_is_win32() and self.build_android:
             WIN32_PROJECT_TAG = "Project(\""
             project_file_path = os.path.join(self.simulator_abs_path, SimulatorCompiler.SIMULATOR_SLN_PATH)
             simulator_win32_project_path = os.path.dirname(project_file_path)
@@ -308,13 +308,13 @@ class SimulatorCompiler(axys.CCPlugin):
         self.build_log += MultiLanguage.get_string('GEN_SIM_BUILD_SUCCESS_FMT', ('Android', self.mode))
 
     def do_compile(self):
-        if axys.os_is_mac():
+        if axmol.os_is_mac():
             if self.build_mac:
                 self.compile_for_osx()
             if self.build_ios:
                 self.compile_for_ios()
 
-        if axys.os_is_win32():
+        if axmol.os_is_win32():
             if self.build_win:
                 self.compile_for_win32()
 
@@ -329,7 +329,7 @@ class SimulatorCompiler(axys.CCPlugin):
     def update_bundle_version(self):
         build_date = date.today().strftime("%Y%m%d")
 
-        if axys.os_is_mac() and self.build_mac:
+        if axmol.os_is_mac() and self.build_mac:
             # mac
             info_plist_path = os.path.join(self.simulator_abs_path, "frameworks/runtime-src/proj.ios_mac/mac/Info.plist")
             info_plist_content = self.get_content_from_file(info_plist_path)
@@ -346,7 +346,7 @@ class SimulatorCompiler(axys.CCPlugin):
                 keyword_map = { build_date_tag : "<string>%s</string>" % self.engine_version }
                 self.replace_keyword_with_file(info_plist_path, keyword_map)
 
-        if axys.os_is_win32() and self.build_win:
+        if axmol.os_is_win32() and self.build_win:
             # win32
             game_rc_path = os.path.join(self.simulator_abs_path,"frameworks/runtime-src/proj.win32/game.rc")
             game_rc_content = self.get_content_from_file(game_rc_path)
@@ -388,10 +388,10 @@ class SimulatorCompiler(axys.CCPlugin):
 
         # backup some files
         modify_files = self.get_depend_project_file_list()
-        if axys.os_is_mac() and self.build_mac:
+        if axmol.os_is_mac() and self.build_mac:
             modify_files.append(os.path.join(self.simulator_abs_path, 'frameworks/runtime-src/proj.ios_mac/mac/Info.plist'))
 
-        if axys.os_is_win32() and self.build_win:
+        if axmol.os_is_win32() and self.build_win:
             modify_files.append(os.path.join(self.simulator_abs_path, 'frameworks/runtime-src/proj.win32/game.rc'))
 
         self.backup_files(modify_files)

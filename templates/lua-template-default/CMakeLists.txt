@@ -2,7 +2,7 @@
 # Copyright (c) 2013-2014 cocos2d-x.org
 # Copyright (c) 2021-2022 Bytedance Inc.
 #
-# https://axys1.github.io
+# https://axmolengine.github.io/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -63,7 +63,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
     endif()
 
     if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
+        add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
     endif()
 endif()
 
@@ -84,7 +84,7 @@ if(APPLE OR VS)
     ax_mark_multi_resources(res_src RES_TO "Resources/src" FOLDERS ${res_src_folders})
     set(cc_common_res ${res_res} ${res_src})
     if (NOT _AX_TOP_LEVEL_APP)
-        ax_mark_multi_resources(res_script RES_TO "Resources/src/axys" FOLDERS ${res_script_folders})
+        ax_mark_multi_resources(res_script RES_TO "Resources/src/axmol" FOLDERS ${res_script_folders})
         set(cc_common_res ${cc_common_res} ${res_script})
     endif()
 endif()
@@ -166,7 +166,7 @@ else()
     add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
 
-    config_android_shared_libs("org.axys1.lib" "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src/proj.android/app/src")
+    config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src/proj.android/app/src")
 endif()
 
 if (NOT _AX_USE_PREBUILT)
@@ -180,7 +180,7 @@ setup_ax_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
-    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axys1.hellolua")
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axmol.hellolua")
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES
                               MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/mac/Info.plist"
@@ -210,10 +210,10 @@ if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
     ax_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR}/res FOLDERS ${res_res_folders})
     ax_copy_lua_scripts(${APP_NAME} ${res_src_folders} ${APP_RES_DIR}/src )
-    ax_copy_lua_scripts(${APP_NAME} ${res_script_folders} ${APP_RES_DIR}/src/axys)
+    ax_copy_lua_scripts(${APP_NAME} ${res_script_folders} ${APP_RES_DIR}/src/axmol)
 elseif(WINDOWS)
     set(my_res_folder "${CMAKE_CURRENT_SOURCE_DIR}")
-    ax_copy_lua_scripts(${APP_NAME} ${res_script_folders} "${my_res_folder}/src/axys")
+    ax_copy_lua_scripts(${APP_NAME} ${res_script_folders} "${my_res_folder}/src/axmol")
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${my_res_folder}")
     if(NOT DEFINED BUILD_ENGINE_DONE)
         set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})

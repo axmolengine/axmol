@@ -6,7 +6,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -754,7 +754,7 @@ void ParticleSystemQuad::setTotalParticles(int tp)
         initIndices();
         //        setupVBO();
 
-        // fixed https://axys1.github.io//issues/3990
+        // fixed https://axmolengine.github.io//issues/3990
         // Updates texture coords.
         updateTexCoords();
     }
@@ -798,7 +798,7 @@ bool ParticleSystemQuad::allocMemory()
 
     if (!_quads || !_indices)
     {
-        AXLOG("axys: Particle system: not enough memory");
+        AXLOG("axmol: Particle system: not enough memory");
         AX_SAFE_FREE(_quads);
         AX_SAFE_FREE(_indices);
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import os
 import json
-import axys
+import axmol
 from MultiLanguage import MultiLanguage
 import sys
 import subprocess
@@ -28,8 +28,8 @@ def check_jdk_version():
     child.wait()
 
     if jdk_version is None:
-        raise axys.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NO_VALID_JDK'),
-                                  axys.CCPluginError.ERROR_TOOLS_NOT_FOUND)
+        raise axmol.CCPluginError(MultiLanguage.get_string('COMPILE_ERROR_NO_VALID_JDK'),
+                                  axmol.CCPluginError.ERROR_TOOLS_NOT_FOUND)
 
     return jdk_version
 

@@ -53,7 +53,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 
 * Add a Renderer for Cocos2d-x v4.0.
-* Implement a function to get the correct value when the time axys of the Bezier handle cannot be linear.
+* Implement a function to get the correct value when the time axmol of the Bezier handle cannot be linear.
 * Add an argument to the function `SetClippingMaskBufferSize` to set the height and width of the clipping mask buffer.
 
 ### Changed

@@ -2,7 +2,7 @@
 # Copyright (c) 2013-2014 cocos2d-x.org
 # Copyright (c) 2021-2022 Bytedance Inc.
 #
-# https://axys1.github.io
+# https://axmolengine.github.io/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 
     include(AXBuildSet)
-    add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
+    add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
 endif()
 
 # record sources, headers, resources...
@@ -136,7 +136,7 @@ else()
     # whole archive for jni
     add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
-    config_android_shared_libs("org.axys1.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
+    config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
 target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
@@ -151,7 +151,7 @@ setup_ax_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
-    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axys1.live2d-tests")
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axmol.live2d-tests")
 
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")

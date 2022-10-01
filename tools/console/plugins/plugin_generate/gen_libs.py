@@ -8,14 +8,14 @@ import json
 import utils
 from . import gen_prebuilt_mk
 
-import axys
+import axmol
 from MultiLanguage import MultiLanguage
 
-from axys import CCPluginError
-from axys import Logging
+from axmol import CCPluginError
+from axmol import Logging
 from argparse import ArgumentParser
 
-class LibsCompiler(axys.CCPlugin):
+class LibsCompiler(axmol.CCPlugin):
     CFG_FILE = 'configs/gen_libs_config.json'
 
     KEY_LIBS_OUTPUT = 'libs_output_dir'
@@ -165,11 +165,11 @@ class LibsCompiler(axys.CCPlugin):
         if self.clean:
             self.clean_libs()
 
-        if axys.os_is_mac():
+        if axmol.os_is_mac():
             if self.build_mac or self.build_ios:
                 self.compile_mac_ios()
 
-        if axys.os_is_win32():
+        if axmol.os_is_win32():
             if self.build_win:
                 self.compile_win()
 
@@ -367,13 +367,13 @@ class LibsCompiler(axys.CCPlugin):
                     "*.a$"
                 ]
             }
-            axys.copy_files_with_config(copy_cfg, obj_dir, android_out_dir)
+            axmol.copy_files_with_config(copy_cfg, obj_dir, android_out_dir)
 
         if not self.disable_strip:
             # strip the android libs
             ndk_root = os.environ["ANDROID_NDK"]
-            if axys.os_is_win32():
-                if axys.os_is_32bit_windows():
+            if axmol.os_is_win32():
+                if axmol.os_is_32bit_windows():
                     check_bits = [ "", "-x86_64" ]
                 else:
                     check_bits = [ "-x86_64", "" ]
@@ -385,13 +385,13 @@ class LibsCompiler(axys.CCPlugin):
                     if os.path.isdir(check_path):
                         sys_folder_name = check_folder_name
                         break
-            elif axys.os_is_mac():
+            elif axmol.os_is_mac():
                 sys_folder_name = "darwin-x86_64"
             else:
                 sys_folder_name = "linux-x86_64"
 
             # set strip execute file name
-            if axys.os_is_win32():
+            if axmol.os_is_win32():
                 strip_execute_name = "strip.exe"
             else:
                 strip_execute_name = "strip"
@@ -418,10 +418,10 @@ class LibsCompiler(axys.CCPlugin):
 
         engine_dir = self.repo_x
         console_dir = os.path.join(engine_dir, CONSOLE_PATH)
-        if axys.os_is_win32():
-            cmd_path = os.path.join(console_dir, "axys.bat")
+        if axmol.os_is_win32():
+            cmd_path = os.path.join(console_dir, "axmol.bat")
         else:
-            cmd_path = os.path.join(console_dir, "axys")
+            cmd_path = os.path.join(console_dir, "axmol")
 
         return cmd_path
 
@@ -429,7 +429,7 @@ class LibsCompiler(axys.CCPlugin):
         if not os.path.isdir(folder):
             return
 
-        if axys.os_is_win32():
+        if axmol.os_is_win32():
             for name in os.listdir(folder):
                 basename, ext = os.path.splitext(name)
                 if ext == ".a":

@@ -2,7 +2,7 @@
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -213,7 +213,7 @@ bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned in
     GLint loc = glGetAttribLocation(_program, attributeName.data());
     if (-1 == loc)
     {
-        AXLOG("axys: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.data());
+        AXLOG("axmol: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.data());
         return false;
     }
 

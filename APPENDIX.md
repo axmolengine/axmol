@@ -7,15 +7,15 @@
   - Use class PhysicsSpriteBox2D 
   
 - **Box2D-optimized** (This project is currently in alpha)
-  - axys add Box2D-optimized for your own tests 
-  - Use cmake option: OPT_BOX2D_OPTIMIZED=ON to enable it on "axys\thirdparty\CMakeLists.txt")
+  - axmol add Box2D-optimized for your own tests 
+  - Use cmake option: OPT_BOX2D_OPTIMIZED=ON to enable it on "axmol\thirdparty\CMakeLists.txt")
 
   
-- **axys 2D physics integration API** (Cpp Test: Node: Physics)
+- **axmol 2D physics integration API** (Cpp Test: Node: Physics)
   - It using Chipmunk2D as internal 2D physics engine
 
 - **Outdated/Abandom/Cocos2d-x**:
-  - class PhysicsSprite: Be only part of the axys for backwards compatibility with Cocos2d-x.
+  - class PhysicsSprite: Be only part of the axmol for backwards compatibility with Cocos2d-x.
 Use AX_ENABLE_BOX2D_INTEGRATION 1 (using Box2D) or AX_ENABLE_CHIPMUNK_INTEGRATION 1 (using Chipmunk2D)
 
 ## Chipmunk2D-/Box2D - Testbeds:

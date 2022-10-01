@@ -1,23 +1,23 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# axys "install" plugin
+# axmol "install" plugin
 #
 # Copyright 2013 (C) Luis Parravicini
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-"install" plugin for axys command line tool
+"install" plugin for axmol command line tool
 '''
 
 __docformat__ = 'restructuredtext'
 
 import os
-import axys
+import axmol
 from MultiLanguage import MultiLanguage
 
 
-class CCPluginDeploy(axys.CCPlugin):
+class CCPluginDeploy(axmol.CCPlugin):
     """
     Install a project
     """
@@ -100,7 +100,7 @@ class CCPluginDeploy(axys.CCPlugin):
         else:
             import _winreg as winreg
         import re
-        if axys.os_is_32bit_windows():
+        if axmol.os_is_32bit_windows():
             reg_flag_list = [ winreg.KEY_WOW64_32KEY ]
         else:
             reg_flag_list = [ winreg.KEY_WOW64_64KEY, winreg.KEY_WOW64_32KEY ]
@@ -110,7 +110,7 @@ class CCPluginDeploy(axys.CCPlugin):
         find_major = -1
         find_minor = -1
         for reg_flag in reg_flag_list:
-            axys.Logging.info(MultiLanguage.get_string('DEPLOY_INFO_FIND_XAP_FMT',
+            axmol.Logging.info(MultiLanguage.get_string('DEPLOY_INFO_FIND_XAP_FMT',
                                                         ("32bit" if reg_flag == winreg.KEY_WOW64_32KEY else "64bit")))
             try:
                 wp = winreg.OpenKey(
@@ -162,18 +162,18 @@ class CCPluginDeploy(axys.CCPlugin):
         if not self._platforms.is_android_active():
             return
 
-        axys.Logging.info(MultiLanguage.get_string('DEPLOY_INFO_INSTALLING_APK'))
+        axmol.Logging.info(MultiLanguage.get_string('DEPLOY_INFO_INSTALLING_APK'))
 
         compile_dep = dependencies['compile']
         self.package = compile_dep.android_package
         self.activity = compile_dep.android_activity
         apk_path = compile_dep.apk_path
-        sdk_root = axys.check_environment_variable('ANDROID_SDK_ROOT')
-        adb_path = axys.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
+        sdk_root = axmol.check_environment_variable('ANDROID_SDK_ROOT')
+        adb_path = axmol.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
 
         if not self._no_uninstall:
             # do uninstall only when that app is installed
-            if axys.app_is_installed(adb_path, self.package):
+            if axmol.app_is_installed(adb_path, self.package):
                 adb_uninstall = "%s uninstall %s" % (adb_path, self.package)
                 self._run_cmd(adb_uninstall)
 
@@ -191,7 +191,7 @@ class CCPluginDeploy(axys.CCPlugin):
 
     def run(self, argv, dependencies):
         self.parse_args(argv)
-        axys.Logging.info(MultiLanguage.get_string('DEPLOY_INFO_MODE_FMT', self._mode))
+        axmol.Logging.info(MultiLanguage.get_string('DEPLOY_INFO_MODE_FMT', self._mode))
         self.deploy_ios(dependencies)
         self.deploy_tvos(dependencies)
         self.deploy_mac(dependencies)

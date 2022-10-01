@@ -294,7 +294,7 @@ Unnamed namespaces in `.cpp` files are encouraged. With named namespaces, choose
 Namespaces subdivide the global scope into distinct, named scopes, and so are useful for preventing name collisions in the global scope.
 
 **Pros:**
-Namespaces provide a (hierarchical) axys of naming, in addition to the (also hierarchical) name axys provided by classes.
+Namespaces provide a (hierarchical) axmol of naming, in addition to the (also hierarchical) name axmol provided by classes.
 
 For example, if two different projects have a class Foo in the global scope, these symbols may collide at compile time or at runtime. If each project places their code in a namespace, project1::Foo and project2::Foo are now distinct symbols that do not collide.
 
@@ -310,7 +310,7 @@ inline namespace Y {
 The expressions `X::Y::foo()` and `X::foo()` are interchangeable. Inline namespaces are primarily intended for ABI compatibility across versions. 
 
 **Cons:**
-Namespaces can be confusing, because they provide an additional (hierarchical) axys of naming, in addition to the (also hierarchical) name axys provided by classes.
+Namespaces can be confusing, because they provide an additional (hierarchical) axmol of naming, in addition to the (also hierarchical) name axmol provided by classes.
 
 Inline namespaces, in particular, can be confusing because names aren't actually restricted to the namespace where they are declared. They are only useful as part of some larger versioning policy. 
 

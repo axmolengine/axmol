@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply from: project(':libaxys1').projectDir.toString() + "/axutils.gradle"
+apply from: project(':libaxmol').projectDir.toString() + "/axutils.gradle"
 
 android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
@@ -13,7 +13,7 @@ android {
     def cmakeVer = nbtInfo[2]
 
     defaultConfig {
-        applicationId "org.axys1.cpp_tests"
+        applicationId "org.axmol.cpp_tests"
         minSdkVersion PROP_MIN_SDK_VERSION
         targetSdkVersion PROP_TARGET_SDK_VERSION
         versionCode 1
@@ -101,7 +101,7 @@ android.applicationVariants.all { variant ->
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':libaxys1')
+    implementation project(':libaxmol')
 }
 
 project.afterEvaluate {

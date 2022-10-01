@@ -5,7 +5,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -134,7 +134,7 @@ bool TextureAtlas::initWithFile(std::string_view file, ssize_t capacity)
     }
     else
     {
-        AXLOG("axys: Could not open file: %s", file.data());
+        AXLOG("axmol: Could not open file: %s", file.data());
         return false;
     }
 }
@@ -159,7 +159,7 @@ bool TextureAtlas::initWithTexture(Texture2D* texture, ssize_t capacity)
 
     if (!(_quads && _indices) && _capacity > 0)
     {
-        // AXLOG("axys: TextureAtlas: not enough memory");
+        // AXLOG("axmol: TextureAtlas: not enough memory");
         AX_SAFE_FREE(_quads);
         AX_SAFE_FREE(_indices);
 
@@ -398,7 +398,7 @@ bool TextureAtlas::resizeCapacity(ssize_t newCapacity)
 
     if (!(tmpQuads && tmpIndices))
     {
-        AXLOG("axys: TextureAtlas: not enough memory");
+        AXLOG("axmol: TextureAtlas: not enough memory");
         AX_SAFE_FREE(tmpQuads);
         AX_SAFE_FREE(tmpIndices);
         AX_SAFE_FREE(_quads);

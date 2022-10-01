@@ -1,13 +1,13 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# axys "clean" plugin
+# axmol "clean" plugin
 #
 # Author: Luis Parravicini
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-"clean" plugin for axys command line tool
+"clean" plugin for axmol command line tool
 '''
 
 __docformat__ = 'restructuredtext'
@@ -15,10 +15,10 @@ __docformat__ = 'restructuredtext'
 import os
 import shutil
 
-import axys
+import axmol
 from plugin_dist import CCPluginDist
 
-class CCPluginClean(axys.CCPlugin):
+class CCPluginClean(axmol.CCPlugin):
     """
     cleans a project
     """
@@ -36,10 +36,10 @@ class CCPluginClean(axys.CCPlugin):
             return
         project_dir = self._platforms.project_path()
 
-        axys.Logging.info("cleaning native")
+        axmol.Logging.info("cleaning native")
         obj_path = os.path.join(project_dir, 'obj')
         self._rmdir(obj_path)
-        axys.Logging.info("cleaning java")
+        axmol.Logging.info("cleaning java")
         self._run_cmd("cd \"%s\" && ant clean" % project_dir)
 
     def clean_ios(self):
@@ -47,7 +47,7 @@ class CCPluginClean(axys.CCPlugin):
             return
         project_dir = self._platforms.project_path()
 
-        axys.Logging.info("removing intermediate files")
+        axmol.Logging.info("removing intermediate files")
         self._run_cmd("cd \"%s\" && xcodebuild clean" % project_dir)
         self._rmdir(CCPluginDist.target_path(project_dir))
 
@@ -56,7 +56,7 @@ class CCPluginClean(axys.CCPlugin):
             return
         project_dir = self._platforms.project_path()
 
-        axys.Logging.info("removing intermediate files")
+        axmol.Logging.info("removing intermediate files")
         self._run_cmd("cd \"%s\" && xcodebuild clean" % project_dir)
         self._rmdir(CCPluginDist.target_path(project_dir))
 
@@ -65,7 +65,7 @@ class CCPluginClean(axys.CCPlugin):
             try:
                 shutil.rmtree(path)
             except OSError as e:
-                raise axys.CCPluginError("Error removing directory: " + str(e.args))
+                raise axmol.CCPluginError("Error removing directory: " + str(e.args))
 
 
     def run(self, argv, dependencies):

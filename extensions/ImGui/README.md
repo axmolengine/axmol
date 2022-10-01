@@ -1,4 +1,4 @@
-# The ImGui extension for axys
+# The ImGui extension for axmol
 Sync from https://github.com/Xrysnow/cocos2d-x-imgui and do a little changes
 
 ## Improvements

@@ -2,7 +2,7 @@
 Copyright (c) 2010-2013 cocos2d-x.org
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  ****************************************************************************/
-package org.axys1.lib;
+package org.axmol.lib;
 
 import java.lang.reflect.Method;
 
-import org.axys1.lib.GameControllerDelegate.ControllerEventListener;
-import org.axys1.lib.inputmanagercompat.InputManagerCompat;
-import org.axys1.lib.inputmanagercompat.InputManagerCompat.InputDeviceListener;
-import org.axys1.lib.AxysActivity;
+import org.axmol.lib.GameControllerDelegate.ControllerEventListener;
+import org.axmol.lib.inputmanagercompat.InputManagerCompat;
+import org.axmol.lib.inputmanagercompat.InputManagerCompat.InputDeviceListener;
+import org.axmol.lib.AxmolActivity;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.util.Log;
 
-public abstract class GameControllerActivity extends AxysActivity implements InputDeviceListener {
+public abstract class GameControllerActivity extends AxmolActivity implements InputDeviceListener {
     // ===========================================================
     // Constants
     // ===========================================================
@@ -70,19 +70,19 @@ public abstract class GameControllerActivity extends AxysActivity implements Inp
                 if (mControllerMoga != null) {
                     return;
                 }
-                controllerDelegate = loader.loadClass("org.axys1.lib.GameControllerMoga");
+                controllerDelegate = loader.loadClass("org.axmol.lib.GameControllerMoga");
             } else if (driveType == DRIVERTYPE_NIBIRU) {
                 if (mControllerNibiru != null) {
                     mControllerNibiru.onCreate(sGameControllerActivity);
                     mControllerNibiru.onResume();
                     return;
                 }
-                controllerDelegate = loader.loadClass("org.axys1.lib.GameControllerNibiru");
+                controllerDelegate = loader.loadClass("org.axmol.lib.GameControllerNibiru");
             } else if (driveType == DRIVERTYPE_OUYA) {
                 if (mControllerOuya != null) {
                     return;
                 }
-                controllerDelegate = loader.loadClass("org.axys1.lib.GameControllerOuya");
+                controllerDelegate = loader.loadClass("org.axmol.lib.GameControllerOuya");
             }
             
             GameControllerDelegate instance = (GameControllerDelegate)controllerDelegate.newInstance();         

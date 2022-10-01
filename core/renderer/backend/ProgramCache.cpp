@@ -2,7 +2,7 @@
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -405,7 +405,7 @@ void ProgramCache::removeUnusedProgram()
         auto program = iter->second;
         if (program->getReferenceCount() == 1)
         {
-            //            AXLOG("axys: TextureCache: removing unused program");
+            //            AXLOG("axmol: TextureCache: removing unused program");
             program->release();
             iter = _cachedPrograms.erase(iter);
         }

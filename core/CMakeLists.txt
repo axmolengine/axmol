@@ -4,7 +4,7 @@
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
 # Copyright (c) 2021-2022 Bytedance Inc.
 # 
-# https://axys1.github.io/
+# https://axmolengine.github.io/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +25,15 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-# this CMakeLists is to generate Axys Engine Library
-# build axys
+# this CMakeLists is to generate Axmol Engine Library
+# build ax
 # build axlua if AX_ENABLE_EXT_LUA=ON
 
 # The version number
 set(_AX_VERSION 1.0)
 
 if(NOT DEFINED _AX_CORE_LIB)
-    set(_AX_CORE_LIB axys CACHE INTERNAL "The axys core lib name" )
+    set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
 endif()
 
 if (NOT DEFINED AX_USE_COMPAT_GL)
@@ -80,7 +80,7 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
-set(_AX_HEADER axys.h
+set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
     ${_AX_3D_HEADER}
     ${_AX_PLATFORM_HEADER}
@@ -95,7 +95,7 @@ set(_AX_HEADER axys.h
     ${_AX_NETWORK_HEADER}
     )
 
-set(_AX_SRC axys.cpp
+set(_AX_SRC axmol.cpp
     ${_AX_2D_SRC}
     ${_AX_3D_SRC}
     ${_AX_PLATFORM_SRC}

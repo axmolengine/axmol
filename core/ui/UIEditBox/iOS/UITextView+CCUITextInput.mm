@@ -2,7 +2,7 @@
  Copyright (c) 2015 Mazyad Alabduljaleel
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

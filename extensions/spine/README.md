@@ -1,9 +1,9 @@
-# spine 3.6~4.1 for axys
+# spine 3.6~4.1 for axmol
 
 ## Usage
-1. Delete all files of folder ```axys/extensions/spine```
-2. Switch to branch `spinexx` then copy `spine-axys/spine` to ```axys/extensions/spine```
+1. Delete all files of folder ```axmol/extensions/spine```
+2. Switch to branch `spinexx` then copy `spine-axmol/spine` to ```axmol/extensions/spine```
 
 ## References
-* axys: https://github.com/axys1/axys
+* axmol: https://github.com/axmolengine/axmol
 * spine-runtimes: https://github.com/EsotericSoftware/spine-runtimes

@@ -180,7 +180,7 @@ set(lua_bindings_files
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
-set(_AX_LUA_LIB axlua CACHE INTERNAL "The AXYS lua bindings lib name" )
+set(_AX_LUA_LIB axlua CACHE INTERNAL "The axmol lua bindings lib name" )
 
 add_library(${_AX_LUA_LIB} STATIC ${lua_bindings_files})
 target_link_libraries(${_AX_LUA_LIB} ${_AX_CORE_LIB})
