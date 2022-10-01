@@ -165,12 +165,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 - Lua: `axmol new -p org.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
 ### Some interesting related projects based on axmol
-
-- https://github.com/solan-solan/HeightMap/tree/smooth_lod_passing
-- https://github.com/wzhengsen/StarryX
-- https://github.com/aismann/SimpleSnake
-- https://github.com/aismann/game-controller-test
-- https://github.com/EugenyN/TanksKombat
+https://github.com/axmolengine/axmol/discussions/694
 
 ### Notes
   * ThreadLocalStorage (TLS) 
