@@ -711,7 +711,7 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
 
     if (isPopupNotify())
     {
-        AXLOG("axys: fullPathForFilename: No file found at %s. Possible missing file.", filename.data());
+        AXLOG("axmol: fullPathForFilename: No file found at %s. Possible missing file.", filename.data());
     }
 
     // The file wasn't found, return empty string.
@@ -762,7 +762,7 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 
     if (isPopupNotify())
     {
-        AXLOG("axys: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
+        AXLOG("axmol: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
     }
 
     // The file wasn't found, return empty string.

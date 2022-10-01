@@ -28,7 +28,7 @@
 #include "2d/CCFontAtlas.h"
 #if AX_TARGET_PLATFORM != AX_PLATFORM_WIN32 && AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include "platform/android/jni/Java_org_axys1_lib_AxysHelper.h"
+#    include "platform/android/jni/Java_org_axmol_lib_AxmolEngine.h"
 #endif
 #include <algorithm>
 #include "2d/CCFontFreeType.h"
