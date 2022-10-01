@@ -26,7 +26,7 @@ void PlistSpriteSheetLoader::load(std::string_view filePath, SpriteFrameCache& c
     if (fullPath.empty())
     {
         // return if plist file doesn't exist
-        AXLOG("axys: SpriteFrameCache: can not find %s", filePath.data());
+        AXLOG("axmol: SpriteFrameCache: can not find %s", filePath.data());
         return;
     }
 
@@ -61,7 +61,7 @@ void PlistSpriteSheetLoader::load(std::string_view filePath, SpriteFrameCache& c
         // append .png
         texturePath = texturePath.append(".png");
 
-        AXLOG("axys: SpriteFrameCache: Trying to use file %s as texture", texturePath.c_str());
+        AXLOG("axmol: SpriteFrameCache: Trying to use file %s as texture", texturePath.c_str());
     }
     addSpriteFramesWithDictionary(dict, texturePath, filePath, cache);
 }
@@ -143,7 +143,7 @@ void PlistSpriteSheetLoader::reload(std::string_view filePath, SpriteFrameCache&
     }
     else
     {
-        AXLOG("axys: SpriteFrameCache: Couldn't load texture");
+        AXLOG("axmol: SpriteFrameCache: Couldn't load texture");
     }
 }
 
@@ -268,7 +268,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dictionary,
                 }
                 else
                 {
-                    AXLOGWARN("axys: WARNING: an alias with name %s already exists", oneAlias.c_str());
+                    AXLOGWARN("axmol: WARNING: an alias with name %s already exists", oneAlias.c_str());
                 }
             }
 
@@ -367,7 +367,7 @@ void PlistSpriteSheetLoader::addSpriteFramesWithDictionary(ValueMap& dict,
     }
     else
     {
-        AXLOG("axys: SpriteFrameCache: Couldn't load texture");
+        AXLOG("axmol: SpriteFrameCache: Couldn't load texture");
     }
 }
 
@@ -466,7 +466,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
                 }
                 else
                 {
-                    AXLOGWARN("axys: WARNING: an alias with name %s already exists", oneAlias.c_str());
+                    AXLOGWARN("axmol: WARNING: an alias with name %s already exists", oneAlias.c_str());
                 }
             }
 

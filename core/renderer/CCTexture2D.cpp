@@ -6,7 +6,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -193,7 +193,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
 {
     if (image == nullptr)
     {
-        AXLOG("axys: Texture2D. Can't create Texture. UIImage is nil");
+        AXLOG("axmol: Texture2D. Can't create Texture. UIImage is nil");
         return false;
     }
 
@@ -208,7 +208,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     int maxTextureSize = conf->getMaxTextureSize();
     if (imageWidth > maxTextureSize || imageHeight > maxTextureSize)
     {
-        AXLOG("axys: WARNING: Image (%u x %u) is bigger than the supported %u x %u", imageWidth, imageHeight,
+        AXLOG("axmol: WARNING: Image (%u x %u) is bigger than the supported %u x %u", imageWidth, imageHeight,
               maxTextureSize, maxTextureSize);
         return false;
     }
@@ -244,7 +244,7 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     {
         if (renderFormat != image->getPixelFormat())
         {
-            AXLOG("axys: WARNING: This image has more than 1 mipmaps and we will not convert the data format");
+            AXLOG("axmol: WARNING: This image has more than 1 mipmaps and we will not convert the data format");
         }
 
         // pixel format of data is not converted, renderFormat can be different from pixelFormat
@@ -300,14 +300,14 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
 
     if (mipmapsNum <= 0)
     {
-        AXLOG("axys: WARNING: mipmap number is less than 1");
+        AXLOG("axmol: WARNING: mipmap number is less than 1");
         return false;
     }
 
     auto& pfd = backend::PixelFormatUtils::getFormatDescriptor(pixelFormat);
     if (!pfd.bpp)
     {
-        AXLOG("axys: WARNING: unsupported pixelformat: %x", (uint32_t)pixelFormat);
+        AXLOG("axmol: WARNING: unsupported pixelformat: %x", (uint32_t)pixelFormat);
 #ifdef AX_USE_METAL
         AXASSERT(false, "pixeformat not found in _pixelFormatInfoTables, register required!");
 #endif
@@ -320,7 +320,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         !Configuration::getInstance()->supportsETC2() && !Configuration::getInstance()->supportsS3TC() &&
         !Configuration::getInstance()->supportsASTC() && !Configuration::getInstance()->supportsATITC())
     {
-        AXLOG("axys: WARNING: PVRTC/ETC images are not supported");
+        AXLOG("axmol: WARNING: PVRTC/ETC images are not supported");
         return false;
     }
 
@@ -446,7 +446,7 @@ bool Texture2D::initWithImage(Image* image, backend::PixelFormat format)
 {
     if (image == nullptr)
     {
-        AXLOG("axys: Texture2D. Can't create Texture. UIImage is nil");
+        AXLOG("axmol: Texture2D. Can't create Texture. UIImage is nil");
         return false;
     }
 

@@ -9,7 +9,7 @@
  * Copyright (c) 2020-2021 C4games Ltd.
  * Copyright (c) 2021 Bytedance Inc.
  *
- * https://axys1.github.io/
+ * https://axmolengine.github.io/
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -460,13 +460,13 @@ void ParticleBatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t
 
 void ParticleBatchNode::increaseAtlasCapacityTo(ssize_t quantity)
 {
-    AXLOG("axys: ParticleBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
+    AXLOG("axmol: ParticleBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
           (int)_textureAtlas->getCapacity(), (int)quantity);
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
         // serious problems
-        AXLOGWARN("axys: WARNING: Not enough memory to resize the atlas");
+        AXLOGWARN("axmol: WARNING: Not enough memory to resize the atlas");
         AXASSERT(false, "XXX: ParticleBatchNode #increaseAtlasCapacity SHALL handle this assert");
     }
 }

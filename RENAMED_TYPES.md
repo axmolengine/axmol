@@ -1,4 +1,4 @@
-axys-1.0 ??
+axmol-1.0 ??
 
 ### Classes & Structs
 * ```RngSeed``` => ```FastRNG``` UNDER ```math/FastRNG.h```

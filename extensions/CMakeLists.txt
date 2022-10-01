@@ -1,5 +1,5 @@
 
-# default value for axys extensions modules to Build
+# default value for axmol extensions modules to Build
 # currently 7 extensions
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
@@ -127,4 +127,4 @@ if(AX_ENABLE_EXT_LUA)
   add_subdirectory(scripting/lua-bindings)
 endif()
 
-message(STATUS "Enabled axys extensions:${_AX_EXTENSION_LIBS}")
+message(STATUS "Enabled ${_AX_CORE_LIB} extensions:${_AX_EXTENSION_LIBS}")

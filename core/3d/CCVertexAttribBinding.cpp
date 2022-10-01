@@ -142,13 +142,13 @@ void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
     auto v = getVertexAttribValue(name);
     if (v)
     {
-        // AXLOG("axys: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
+        // AXLOG("axmol: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
         _programState->setVertexAttrib(name, v->location, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else
     {
-        // AXLOG("axys: warning: Attribute not found: %s", name.c_str());
+        // AXLOG("axmol: warning: Attribute not found: %s", name.c_str());
     }
 }
 

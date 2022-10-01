@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ OpenURLTest::OpenURLTest()
 
 void OpenURLTest::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
-    Application::getInstance()->openURL("https://axys1.github.io/");
+    Application::getInstance()->openURL("https://axmolengine.github.io/");
 }
 
 OpenURLTest::~OpenURLTest()

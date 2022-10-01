@@ -1,20 +1,20 @@
 #!/usr/bin/python
 # ----------------------------------------------------------------------------
-# axys "install" plugin
+# axmol "install" plugin
 #
 # Authr: Luis Parravicini
 #
 # License: MIT
 # ----------------------------------------------------------------------------
 '''
-"run" plugin for axys command line tool
+"run" plugin for axmol command line tool
 '''
 
 __docformat__ = 'restructuredtext'
 
 import sys
 import os
-import axys
+import axmol
 from MultiLanguage import MultiLanguage
 import webbrowser
 import threading
@@ -26,7 +26,7 @@ if(sys.version_info.major >= 3):
 else:
     import BaseHTTPServer
 
-class CCPluginRun(axys.CCPlugin):
+class CCPluginRun(axmol.CCPlugin):
     """
     Compiles a project and runs it on the target
     """
@@ -76,7 +76,7 @@ class CCPluginRun(axys.CCPlugin):
 
     def get_ios_sim_name(self):
         # get the version of xcodebuild
-        ver = axys.get_xcode_version()
+        ver = axmol.get_xcode_version()
         match = re.match(r'(\d+).*', ver)
         ret = None
         if match:
@@ -90,7 +90,7 @@ class CCPluginRun(axys.CCPlugin):
 
     def get_tvos_sim_name(self):
         # get the version of xcodebuild
-        ver = axys.get_xcode_version()
+        ver = axmol.get_xcode_version()
         match = re.match(r'(\d+).*', ver)
         ret = None
         if match:
@@ -152,7 +152,7 @@ class CCPluginRun(axys.CCPlugin):
                         phoneType = tmpType
 
         if ret is None:
-            raise axys.CCPluginError('Get simulator failed!')
+            raise axmol.CCPluginError('Get simulator failed!')
 
         print('Using simulator: %s' % retName)
         return ret
@@ -189,7 +189,7 @@ class CCPluginRun(axys.CCPlugin):
                     retName = name.strip()
 
         if ret is None:
-            raise axys.CCPluginError('Get simulator failed!')
+            raise axmol.CCPluginError('Get simulator failed!')
 
         print('Using simulator: %s' % retName)
         return ret
@@ -205,13 +205,13 @@ class CCPluginRun(axys.CCPlugin):
                 ret = jsonObj['CFBundleIdentifier']
 
         if ret is None:
-            raise axys.CCPluginError('Get the bundle ID of app %s failed' % app_path)
+            raise axmol.CCPluginError('Get the bundle ID of app %s failed' % app_path)
 
         return ret
 
     def _run_ios_app(self, ios_app_path):
-        if not axys.os_is_mac():
-            raise axys.CCPluginError('Now only support run iOS simulator on Mac OS')
+        if not axmol.os_is_mac():
+            raise axmol.CCPluginError('Now only support run iOS simulator on Mac OS')
 
         # get bundle id
         bundle_id = self._get_bundle_id(ios_app_path)
@@ -221,8 +221,8 @@ class CCPluginRun(axys.CCPlugin):
 
         try:
             # run the simulator
-            xcode_version = axys.get_xcode_version()
-            xcode9_and_upper = axys.version_compare(xcode_version,">=",9)
+            xcode_version = axmol.get_xcode_version()
+            xcode9_and_upper = axmol.version_compare(xcode_version,">=",9)
             if xcode9_and_upper:
                 self._run_cmd('xcrun simctl boot "%s"' % simulator_id)
                 self._run_cmd('open `xcode-select -p`/Applications/Simulator.app')
@@ -243,7 +243,7 @@ class CCPluginRun(axys.CCPlugin):
 
         deploy_dep = dependencies['deploy']
         if deploy_dep._use_sdk == 'iphoneos':
-            axys.Logging.warning(MultiLanguage.get_string('RUN_WARNING_IOS_FOR_DEVICE_FMT', os.path.dirname(deploy_dep._iosapp_path)))
+            axmol.Logging.warning(MultiLanguage.get_string('RUN_WARNING_IOS_FOR_DEVICE_FMT', os.path.dirname(deploy_dep._iosapp_path)))
         else:
             ios_sim_name = self.get_ios_sim_name()
             if ios_sim_name is None:
@@ -263,11 +263,11 @@ class CCPluginRun(axys.CCPlugin):
         if not self._platforms.is_ios_active():
             return
 
-        axys.Logging.warning('Do not support running on iOS devices.')
+        axmol.Logging.warning('Do not support running on iOS devices.')
 
     def _run_tvos_app(self, tvos_app_path):
-        if not axys.os_is_mac():
-            raise axys.CCPluginError('Now only support run tvOS simulator on Mac OS')
+        if not axmol.os_is_mac():
+            raise axmol.CCPluginError('Now only support run tvOS simulator on Mac OS')
 
         # get bundle id
         bundle_id = self._get_bundle_id(tvos_app_path)
@@ -277,8 +277,8 @@ class CCPluginRun(axys.CCPlugin):
 
         try:
             # run the simulator
-            xcode_version = axys.get_xcode_version()
-            xcode9_and_upper = axys.version_compare(xcode_version,">=",9)
+            xcode_version = axmol.get_xcode_version()
+            xcode9_and_upper = axmol.version_compare(xcode_version,">=",9)
             if xcode9_and_upper:
                 self._run_cmd('xcrun simctl boot "%s"' % simulator_id)
                 self._run_cmd('open `xcode-select -p`/Applications/Simulator.app')
@@ -299,7 +299,7 @@ class CCPluginRun(axys.CCPlugin):
 
         deploy_dep = dependencies['deploy']
         if deploy_dep._use_sdk == 'appletvos':
-            axys.Logging.warning(MultiLanguage.get_string('RUN_WARNING_IOS_FOR_DEVICE_FMT', os.path.dirname(deploy_dep._tvosapp_path)))
+            axmol.Logging.warning(MultiLanguage.get_string('RUN_WARNING_IOS_FOR_DEVICE_FMT', os.path.dirname(deploy_dep._tvosapp_path)))
         else:
             tvos_sim_name = self.get_tvos_sim_name()
             if tvos_sim_name is None:
@@ -319,7 +319,7 @@ class CCPluginRun(axys.CCPlugin):
         if not self._platforms.is_tvos_active():
             return
 
-        axys.Logging.warning('Do not support running on tvOS devices.')
+        axmol.Logging.warning('Do not support running on tvOS devices.')
 
     def _run_with_desktop_options(self, cmd):
         if self._no_console:
@@ -340,8 +340,8 @@ class CCPluginRun(axys.CCPlugin):
         if not self._platforms.is_android_active():
             return
 
-        sdk_root = axys.check_environment_variable('ANDROID_SDK_ROOT')
-        adb_path = axys.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
+        sdk_root = axmol.check_environment_variable('ANDROID_SDK_ROOT')
+        adb_path = axmol.CMDRunner.convert_path_to_cmd(os.path.join(sdk_root, 'platform-tools', 'adb'))
         deploy_dep = dependencies['deploy']
         startapp = "%s shell am start -n \"%s/%s\"" % (adb_path, deploy_dep.package, deploy_dep.activity)
         self._run_cmd(startapp)
@@ -352,7 +352,7 @@ class CCPluginRun(axys.CCPlugin):
             threading.Event().wait(1)
             webbrowser.open_new(url)
         else:
-            if axys.os_is_mac():
+            if axmol.os_is_mac():
                 if self._param is None:
                     url_cmd = "open -a \"%s\" \"%s\"" % (self._browser, url)
                 else:
@@ -395,18 +395,18 @@ class CCPluginRun(axys.CCPlugin):
             i += 1
             server_address = (host, port)
             try:
-                axys.Logging.info(MultiLanguage.get_string('RUN_INFO_HOST_PORT_FMT', (host, port)))
+                axmol.Logging.info(MultiLanguage.get_string('RUN_INFO_HOST_PORT_FMT', (host, port)))
                 httpd = ServerClass(server_address, HandlerClass)
             except Exception as e:
                 httpd = None
-                axys.Logging.warning(MultiLanguage.get_string('RUN_WARNING_SERVER_FAILED_FMT', (host, port, e)))
+                axmol.Logging.warning(MultiLanguage.get_string('RUN_WARNING_SERVER_FAILED_FMT', (host, port, e)))
 
             if httpd is not None:
                 break
 
         if httpd is None:
-            raise axys.CCPluginError(MultiLanguage.get_string('RUN_ERROR_START_SERVER_FAILED'),
-                                      axys.CCPluginError.ERROR_OTHERS)
+            raise axmol.CCPluginError(MultiLanguage.get_string('RUN_ERROR_START_SERVER_FAILED'),
+                                      axmol.CCPluginError.ERROR_OTHERS)
 
         from threading import Thread
         sub_url = deploy_dep.sub_url
@@ -415,8 +415,8 @@ class CCPluginRun(axys.CCPlugin):
         thread.start()
 
         sa = httpd.socket.getsockname()
-        with axys.pushd(run_root):
-            axys.Logging.info(MultiLanguage.get_string('RUN_INFO_SERVING_FMT', (sa[0], sa[1])))
+        with axmol.pushd(run_root):
+            axmol.Logging.info(MultiLanguage.get_string('RUN_INFO_SERVING_FMT', (sa[0], sa[1])))
             httpd.serve_forever()
 
     def run_win32(self, dependencies):
@@ -426,7 +426,7 @@ class CCPluginRun(axys.CCPlugin):
         deploy_dep = dependencies['deploy']
         run_root = deploy_dep.run_root
         exe = deploy_dep.project_name
-        with axys.pushd(run_root):
+        with axmol.pushd(run_root):
             self._run_with_desktop_options(os.path.join(run_root, exe))
 
     def run_linux(self, dependencies):
@@ -436,7 +436,7 @@ class CCPluginRun(axys.CCPlugin):
         deploy_dep = dependencies['deploy']
         run_root = deploy_dep.run_root
         exe = deploy_dep.project_name
-        with axys.pushd(run_root):
+        with axmol.pushd(run_root):
             self._run_with_desktop_options(os.path.join(run_root, exe))
 
     def run_tizen(self, dependencies):
@@ -445,8 +445,8 @@ class CCPluginRun(axys.CCPlugin):
 
         deploy_dep = dependencies['deploy']
         tizen_packageid = deploy_dep.tizen_packageid
-        tizen_studio_path = axys.check_environment_variable("TIZEN_STUDIO_HOME")
-        tizen_cmd_path = axys.CMDRunner.convert_path_to_cmd(os.path.join(tizen_studio_path, "tools", "ide", "bin", "tizen"))
+        tizen_studio_path = axmol.check_environment_variable("TIZEN_STUDIO_HOME")
+        tizen_cmd_path = axmol.CMDRunner.convert_path_to_cmd(os.path.join(tizen_studio_path, "tools", "ide", "bin", "tizen"))
 
         startapp = "%s run -p %s" % (tizen_cmd_path, tizen_packageid)
         self._run_cmd(startapp)
@@ -454,7 +454,7 @@ class CCPluginRun(axys.CCPlugin):
 
     def run(self, argv, dependencies):
         self.parse_args(argv)
-        axys.Logging.info(MultiLanguage.get_string('RUN_INFO_START_APP'))
+        axmol.Logging.info(MultiLanguage.get_string('RUN_INFO_START_APP'))
         self.run_android_device(dependencies)
         self.run_ios_sim(dependencies)
         # self.run_ios_device()

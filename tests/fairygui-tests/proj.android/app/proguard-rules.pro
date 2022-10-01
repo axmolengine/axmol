@@ -17,8 +17,8 @@
 #}
 
 # Proguard Cocos2d-x for release
--keep public class org.axys1.** { *; }
--dontwarn org.axys1.**
+-keep public class org.axmol.** { *; }
+-dontwarn org.axmol.**
 -keep public class com.chukong.** { *; }
 -dontwarn com.chukong.**
 -keep public class com.huawei.android.** { *; }

@@ -9,7 +9,7 @@
 #define __SAMPLE_SCENE_H__
 
 #include "cocos2d.h"
-#include <Rendering/axys/CubismOffscreenSurface_Cocos2dx.hpp>
+#include <Rendering/axmol/CubismOffscreenSurface_Cocos2dx.hpp>
 
 class LAppView;
 

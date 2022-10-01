@@ -3,7 +3,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) Bytedance Inc.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -79,7 +79,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
     return JNI_VERSION_1_4;
 }
 
-JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
 {
     auto director = ax::Director::getInstance();
     auto glView   = director->getOpenGLView();
@@ -101,7 +101,7 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeInit(JNIEnv*, jclas
     }
 }
 
-JNIEXPORT jintArray JNICALL Java_org_axys1_lib_AxysActivity_getGLContextAttrs(JNIEnv* env, jclass)
+JNIEXPORT jintArray JNICALL Java_org_axmol_lib_AxmolActivity_getGLContextAttrs(JNIEnv* env, jclass)
 {
     ax::Application::getInstance()->initGLContextAttrs();
     GLContextAttrs _glContextAttrs = GLView::getGLContextAttrs();
@@ -116,7 +116,7 @@ JNIEXPORT jintArray JNICALL Java_org_axys1_lib_AxysActivity_getGLContextAttrs(JN
     return glContextAttrsJava;
 }
 
-JNIEXPORT void JNICALL Java_org_axys1_lib_AxysRenderer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnSurfaceChanged(JNIEnv*, jclass, jint w, jint h)
 {
     ax::Application::getInstance()->applicationScreenSizeChanged(w, h);
 }

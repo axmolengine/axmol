@@ -199,3 +199,10 @@ tools/external/
 
 # ignore lua-tests res folder which is copy from cpp-tests
 tests/lua-tests/res/
+
+extensions/libeditor
+extensions/libccs30
+extensions/libccs21
+extensions/libccs20
+extensions/libccs19
+

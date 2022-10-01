@@ -20,4 +20,4 @@
 #}
 -libraryjars com.bda.controller.jar
 -dontwarn com.bda.controller.*
--keep class org.axys1.lib.*{*;}
+-keep class org.axmol.lib.*{*;}

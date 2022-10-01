@@ -11,10 +11,10 @@ else {
     ENGINE_ROOT = settingsDir.getPath() + "/../../.."
 }
 
-def ENGINE_JAVA_LIBPATH = ENGINE_ROOT + '/core/platform/android/libaxys1';
+def ENGINE_JAVA_LIBPATH = ENGINE_ROOT + '/core/platform/android/libaxmol';
 
-include ':libaxys1'
-project(':libaxys1').projectDir = new File(ENGINE_JAVA_LIBPATH)
+include ':libaxmol'
+project(':libaxmol').projectDir = new File(ENGINE_JAVA_LIBPATH)
 include ':FairyGUITests'
 project(':FairyGUITests').projectDir = new File(settingsDir, 'app')
 rootProject.name = "fairygui-tests"

@@ -5,7 +5,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020-2021 C4games Ltd
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-extern const char* axysVersion();
+extern const char* axmolVersion();
 
 Configuration* Configuration::s_sharedConfiguration = nullptr;
 
@@ -66,24 +66,24 @@ Configuration::Configuration()
 
 bool Configuration::init()
 {
-    _valueDict["axys.version"] = Value(axysVersion());
+    _valueDict["axmol.version"] = Value(axmolVersion());
 
 #if AX_ENABLE_PROFILERS
-    _valueDict["axys.compiled_with_profiler"] = Value(true);
+    _valueDict["axmol.compiled_with_profiler"] = Value(true);
 #else
-    _valueDict["axys.compiled_with_profiler"]       = Value(false);
+    _valueDict["axmol.compiled_with_profiler"]       = Value(false);
 #endif
 
 #if AX_ENABLE_GL_STATE_CACHE == 0
-    _valueDict["axys.compiled_with_gl_state_cache"] = Value(false);
+    _valueDict["axmol.compiled_with_gl_state_cache"] = Value(false);
 #else
-    _valueDict["axys.compiled_with_gl_state_cache"] = Value(true);
+    _valueDict["axmol.compiled_with_gl_state_cache"] = Value(true);
 #endif
 
 #if _AX_DEBUG
-    _valueDict["axys.build_type"] = Value("DEBUG");
+    _valueDict["axmol.build_type"] = Value("DEBUG");
 #else
-    _valueDict["axys.build_type"]                   = Value("RELEASE");
+    _valueDict["axmol.build_type"]                   = Value("RELEASE");
 #endif
 
     return true;
@@ -383,25 +383,25 @@ void Configuration::loadConfigFile(std::string_view filename)
     }
 
     // light info
-    std::string name = "axys.3d.max_dir_light_in_shader";
+    std::string name = "axmol.3d.max_dir_light_in_shader";
     if (_valueDict.find(name) != _valueDict.end())
         _maxDirLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxDirLightInShader);
 
-    name = "axys.3d.max_point_light_in_shader";
+    name = "axmol.3d.max_point_light_in_shader";
     if (_valueDict.find(name) != _valueDict.end())
         _maxPointLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxPointLightInShader);
 
-    name = "axys.3d.max_spot_light_in_shader";
+    name = "axmol.3d.max_spot_light_in_shader";
     if (_valueDict.find(name) != _valueDict.end())
         _maxSpotLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxSpotLightInShader);
 
-    name = "axys.3d.animate_quality";
+    name = "axmol.3d.animate_quality";
     if (_valueDict.find(name) != _valueDict.end())
         _animate3DQuality = (Animate3DQuality)_valueDict[name].asInt();
     else

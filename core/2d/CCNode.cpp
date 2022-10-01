@@ -7,7 +7,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1094,7 +1094,7 @@ void Node::removeChildByTag(int tag, bool cleanup /* = true */)
 
     if (child == nullptr)
     {
-        AXLOG("axys: removeChildByTag(tag = %d): child not found!", tag);
+        AXLOG("axmol: removeChildByTag(tag = %d): child not found!", tag);
     }
     else
     {
@@ -1110,7 +1110,7 @@ void Node::removeChildByName(std::string_view name, bool cleanup)
 
     if (child == nullptr)
     {
-        AXLOG("axys: removeChildByName(name = %s): child not found!", name.data());
+        AXLOG("axmol: removeChildByName(name = %s): child not found!", name.data());
     }
     else
     {
