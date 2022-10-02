@@ -1,0 +1,28 @@
+# Blender 3.3.0 MTL File: 'lowpoly_tree_SketchFab.blend.blend'
+# www.blender.org
+
+newmtl Branches0025_1_S
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.500000
+Tr 0.5
+illum 6
+map_Kd Branches0025_1_S.png
+map_d Branches0025_1_S.png
+
+newmtl bark.001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.132911 0.132911 0.132911
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.500000
+Tr 0.5
+illum 6
+map_Kd baketree.png
+map_d baketree.png
