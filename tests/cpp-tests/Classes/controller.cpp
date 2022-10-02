@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -442,7 +442,7 @@ void TestController::logEx(const char* format, ...)
     strcat(buff, "\n");
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "axys debug info", "%s", buff);
+    __android_log_print(ANDROID_LOG_DEBUG, "axmol debug info", "%s", buff);
 
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     WCHAR wszBuf[1024] = {0};

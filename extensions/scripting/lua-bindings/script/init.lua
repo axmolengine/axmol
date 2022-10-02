@@ -43,9 +43,9 @@ ccexp = axexp
 ccui = axui
 ccb = axb
 
-require "axys.cocos2d.Cocos2d"
-require "axys.cocos2d.Cocos2dConstants"
-require "axys.cocos2d.functions"
+require "axmol.cocos2d.Cocos2d"
+require "axmol.cocos2d.Cocos2dConstants"
+require "axmol.cocos2d.functions"
 
 __G__TRACKBACK__ = function(msg)
     local msg = debug.traceback(msg, 3)
@@ -55,57 +55,57 @@ end
 
 -- cocosstudio
 if nil ~= ccs then
-    require "axys.cocostudio.CocoStudio"
+    require "axmol.cocostudio.CocoStudio"
 end
 -- ui
 if nil ~= ccui then
-    require "axys.ui.GuiConstants"
+    require "axmol.ui.GuiConstants"
 end
 
 -- extensions
-require "axys.extension.ExtensionConstants"
+require "axmol.extension.ExtensionConstants"
 -- network
-require "axys.network.NetworkConstants"
+require "axmol.network.NetworkConstants"
 -- Spine
 if nil ~= sp then
-    require "axys.spine.SpineConstants"
+    require "axmol.spine.SpineConstants"
 end
 
--- require "axys.cocos2d.deprecated"
+-- require "axmol.cocos2d.deprecated"
 
 -- Lua extensions
-require "axys.cocos2d.bitExtend"
+require "axmol.cocos2d.bitExtend"
 
 -- CCLuaEngine
--- require "axys.cocos2d.DeprecatedCocos2dClass"
--- require "axys.cocos2d.DeprecatedCocos2dEnum"
--- require "axys.cocos2d.DeprecatedCocos2dFunc"
+-- require "axmol.cocos2d.DeprecatedCocos2dClass"
+-- require "axmol.cocos2d.DeprecatedCocos2dEnum"
+-- require "axmol.cocos2d.DeprecatedCocos2dFunc"
 
 -- register_cocostudio_module
 -- if nil ~= ccs then
---     require "axys.cocostudio.DeprecatedCocoStudioClass"
---     require "axys.cocostudio.DeprecatedCocoStudioFunc"
+--     require "axmol.cocostudio.DeprecatedCocoStudioClass"
+--     require "axmol.cocostudio.DeprecatedCocoStudioFunc"
 -- end
 
 -- register_extension_module
--- require "axys.extension.DeprecatedExtensionClass"
--- require "axys.extension.DeprecatedExtensionEnum"
--- require "axys.extension.DeprecatedExtensionFunc"
+-- require "axmol.extension.DeprecatedExtensionClass"
+-- require "axmol.extension.DeprecatedExtensionEnum"
+-- require "axmol.extension.DeprecatedExtensionFunc"
 
 -- register_network_module
--- require "axys.network.DeprecatedNetworkClass"
--- require "axys.network.DeprecatedNetworkEnum"
--- require "axys.network.DeprecatedNetworkFunc"
+-- require "axmol.network.DeprecatedNetworkClass"
+-- require "axmol.network.DeprecatedNetworkEnum"
+-- require "axmol.network.DeprecatedNetworkFunc"
 
 -- register_ui_module
 -- if nil ~= ccui then
---     require "axys.ui.DeprecatedUIEnum"
---     require "axys.ui.DeprecatedUIFunc"
+--     require "axmol.ui.DeprecatedUIEnum"
+--     require "axmol.ui.DeprecatedUIFunc"
 -- end
 
 -- physics3d
-require "axys.physics3d.physics3d-constants"
+require "axmol.physics3d.physics3d-constants"
 
 if AX_USE_FRAMEWORK then
-    require "axys.framework.init"
+    require "axmol.framework.init"
 end

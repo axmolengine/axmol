@@ -4,7 +4,7 @@
  Copyright (c) 2020 C4games Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,7 @@
 #include "base/ccUTF8.h"
 
 // !FIXME: the previous version of ax::log not thread safe
-// since axys make it multi-threading safe by default
+// since axmol make it multi-threading safe by default
 #if !defined(AX_LOG_MULTITHREAD)
 #    define AX_LOG_MULTITHREAD 1
 #endif
@@ -70,7 +70,7 @@
 
 NS_AX_BEGIN
 
-extern const char* axysVersion(void);
+extern const char* axmolVersion(void);
 
 #define PROMPT "> "
 #define DEFAULT_COMMAND_SEPARATOR '|'
@@ -131,7 +131,7 @@ void log(const char* format, ...)
     va_end(args);
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-    __android_log_print(ANDROID_LOG_DEBUG, "axys debug info", "%s", buf.c_str());
+    __android_log_print(ANDROID_LOG_DEBUG, "axmol debug info", "%s", buf.c_str());
 
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
     buf.push_back('\n');
@@ -1562,7 +1562,7 @@ void Console::commandUpload(socket_native_type fd)
 
 void Console::commandVersion(socket_native_type fd, std::string_view /*args*/)
 {
-    Console::Utility::mydprintf(fd, "%s\n", axysVersion());
+    Console::Utility::mydprintf(fd, "%s\n", axmolVersion());
 }
 
 // helper free functions

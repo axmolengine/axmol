@@ -6,7 +6,7 @@ project(${target_name})
 
 set(${target_name}_src
   ../manual/platform/android/CCLuaJavaBridge.cpp
-  ../manual/platform/android/jni/AxysLuaJavaBridge.cpp
+  ../manual/platform/android/jni/LuaBridge.cpp
 )
 
 add_library(${target_name} STATIC

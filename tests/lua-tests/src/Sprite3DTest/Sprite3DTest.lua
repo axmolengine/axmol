@@ -1,4 +1,4 @@
-require "axys.3d.3dConstants"
+require "axmol.3d.3dConstants"
 
 local size = cc.Director:getInstance():getWinSize()
 local scheduler = cc.Director:getInstance():getScheduler()

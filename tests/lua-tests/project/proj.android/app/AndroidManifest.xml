@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.axys1.lua_tests"
+    package="org.axmol.lua_tests"
     android:installLocation="auto">
 
     <uses-feature android:glEsVersion="0x00020000" />
@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher">
         
-        <!-- Tell AxysActivity the name of our .so -->
+        <!-- Tell AxmolActivity the name of our .so -->
 		<meta-data android:name="android.app.lib_name"
 				   android:value="lua_tests" />
 		

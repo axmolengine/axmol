@@ -10,7 +10,7 @@
 Get the multi-language strings for console.
 '''
 
-import axys
+import axmol
 import os
 import sys
 import json
@@ -35,7 +35,7 @@ class MultiLanguage(object):
         ret = []
         if info is not None:
             for key in info.keys():
-                if axys.isunicode(key):
+                if axmol.isunicode(key):
                     ret.append(key.encode('utf-8'))
 
         return ret
@@ -56,12 +56,12 @@ class MultiLanguage(object):
             if isinstance(fmt_value, tuple):
                 dst_values = []
                 for value in fmt_value:
-                    if axys.isunicode(value):
+                    if axmol.isunicode(value):
                         dst_values.append(value.encode(cls.get_instance().get_encoding()))
                     else:
                         dst_values.append(value)
                 ret = fmt % tuple(dst_values)
-            elif axys.isunicode(fmt_value):
+            elif axmol.isunicode(fmt_value):
                 ret = fmt % fmt_value.encode(cls.get_instance().get_encoding())
             else:
                 ret = fmt % fmt_value
@@ -147,7 +147,7 @@ class MultiLanguage(object):
         if (self.cfg_info is not None) and (self.cfg_info.has_key(lang)):
             self.cur_lang_strings = self.cfg_info[lang]
         else:
-            axys.Logging.warning(MultiLanguage.get_string('COCOS_WARNING_LANG_NOT_SUPPORT_FMT', lang))
+            axmol.Logging.warning(MultiLanguage.get_string('COCOS_WARNING_LANG_NOT_SUPPORT_FMT', lang))
 
     def get_encoding(self):
         return self.encoding
@@ -160,6 +160,6 @@ class MultiLanguage(object):
         else:
             ret= key
 
-        ret = axys.transcode(ret, self.encoding)
+        ret = axmol.transcode(ret, self.encoding)
 
         return ret

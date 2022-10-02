@@ -4,7 +4,7 @@
 import os
 import sys
 import shutil
-import axys
+import axmol
 import re
 
 if sys.platform == 'win32':
@@ -22,7 +22,7 @@ VS_VERSION_MAP = {
 }
 
 def get_msbuild_path(vs_version):
-    if not axys.os_is_win32():
+    if not axmol.os_is_win32():
         return None
 
     if isinstance(vs_version, int):
@@ -40,7 +40,7 @@ def get_msbuild_path(vs_version):
 
     # If the system is 64bit, find VS in both 32bit & 64bit registry
     # If the system is 32bit, only find VS in 32bit registry
-    if axys.os_is_32bit_windows():
+    if axmol.os_is_32bit_windows():
         reg_flag_list = [ winreg.KEY_WOW64_32KEY ]
     else:
         reg_flag_list = [ winreg.KEY_WOW64_64KEY, winreg.KEY_WOW64_32KEY ]
@@ -69,7 +69,7 @@ def get_msbuild_path(vs_version):
     return msbuild_path
 
 def get_devenv_path(vs_version):
-    if not axys.os_is_win32():
+    if not axmol.os_is_win32():
         return None
 
     if isinstance(vs_version, int):
@@ -87,7 +87,7 @@ def get_devenv_path(vs_version):
 
     # If the system is 64bit, find VS in both 32bit & 64bit registry
     # If the system is 32bit, only find VS in 32bit registry
-    if axys.os_is_32bit_windows():
+    if axmol.os_is_32bit_windows():
         reg_flag_list = [ winreg.KEY_WOW64_32KEY ]
     else:
         reg_flag_list = [ winreg.KEY_WOW64_64KEY, winreg.KEY_WOW64_32KEY ]
@@ -123,12 +123,12 @@ def get_devenv_path(vs_version):
 def get_vs_versions():
     # Get the VS versions
     ret = []
-    if not axys.os_is_win32():
+    if not axmol.os_is_win32():
         return ret
 
     # If the system is 64bit, find VS in both 32bit & 64bit registry
     # If the system is 32bit, only find VS in 32bit registry
-    if axys.os_is_32bit_windows():
+    if axmol.os_is_32bit_windows():
         reg_flag_list = [ winreg.KEY_WOW64_32KEY ]
     else:
         reg_flag_list = [ winreg.KEY_WOW64_64KEY, winreg.KEY_WOW64_32KEY ]
@@ -166,7 +166,7 @@ def get_vs_versions():
 
 def get_newest_msbuild(min_ver=None):
     versions = get_vs_versions()
-    cmp = axys.version_compare
+    cmp = axmol.version_compare
     if isinstance(min_ver, int) and min_ver in VS_VERSION_MAP.keys():
         # value of min_ver is int. such as : 2013, 2015
         min_ver = VS_VERSION_MAP[min_ver]
@@ -187,7 +187,7 @@ def get_newest_msbuild(min_ver=None):
 
 def get_newest_devenv(min_ver=None):
     versions = get_vs_versions()
-    cmp = axys.version_compare
+    cmp = axmol.version_compare
 
     if min_ver is None: 
         # mininal required version "Visual Studio 14 2015"
@@ -237,11 +237,11 @@ def get_newest_devenv(min_ver=None):
 def rmdir(folder):
     if os.path.exists(folder):
         if sys.platform == 'win32':
-            axys.CMDRunner.run_cmd("rd /s/q \"%s\"" % folder, verbose=True)
+            axmol.CMDRunner.run_cmd("rd /s/q \"%s\"" % folder, verbose=True)
         else:
             shutil.rmtree(folder)
 
-VERSION_FILE_PATH = 'core/axys.cpp'
+VERSION_FILE_PATH = 'core/axmol.cpp'
 VERSION_PATTERN = r".*return[ \t]+\"(.*)\";"
 def get_engine_version(engine_path):
     ret = None

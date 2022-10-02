@@ -29,30 +29,30 @@ printInfo("")
 printInfo("# DEBUG                        = " .. DEBUG)
 printInfo("#")
 
-device     = require("axys.framework.device")
-display    = require("axys.framework.display")
-transition = require("axys.framework.transition")
+device     = require("axmol.framework.device")
+display    = require("axmol.framework.display")
+transition = require("axmol.framework.transition")
 
-require("axys.framework.extends.NodeEx")
-require("axys.framework.extends.SpriteEx")
-require("axys.framework.extends.LayerEx")
-require("axys.framework.extends.MenuEx")
+require("axmol.framework.extends.NodeEx")
+require("axmol.framework.extends.SpriteEx")
+require("axmol.framework.extends.LayerEx")
+require("axmol.framework.extends.MenuEx")
 
 if ccui then
-require("axys.framework.extends.UIWidget")
-require("axys.framework.extends.UICheckBox")
-require("axys.framework.extends.UIEditBox")
-require("axys.framework.extends.UIListView")
-require("axys.framework.extends.UIPageView")
-require("axys.framework.extends.UIScrollView")
-require("axys.framework.extends.UISlider")
-require("axys.framework.extends.UITextField")
+require("axmol.framework.extends.UIWidget")
+require("axmol.framework.extends.UICheckBox")
+require("axmol.framework.extends.UIEditBox")
+require("axmol.framework.extends.UIListView")
+require("axmol.framework.extends.UIPageView")
+require("axmol.framework.extends.UIScrollView")
+require("axmol.framework.extends.UISlider")
+require("axmol.framework.extends.UITextField")
 end
 
-require("axys.framework.package_support")
+require("axmol.framework.package_support")
 
 -- register the build-in packages
-cc.register("event", require("axys.framework.components.event"))
+cc.register("event", require("axmol.framework.components.event"))
 
 -- export global variable
 local __g = _G

@@ -1,4 +1,4 @@
-require "axys.3d.3dConstants"
+require "axmol.3d.3dConstants"
 
 ----------------------------------------
 ----TerrainSimple

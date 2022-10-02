@@ -20,7 +20,7 @@
 #define LOG_TAG "CCEnhanceAPI_android Debug"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
-#define CLASS_NAME "org.axys1.lib.AxysHelper"
+#define CLASS_NAME "org.axmol.lib.AxmolEngine"
 
 // FIXME: using ndk-r10c will cause the next function could not be found. It may be a bug of ndk-r10c.
 // Here is the workaround method to fix the problem.

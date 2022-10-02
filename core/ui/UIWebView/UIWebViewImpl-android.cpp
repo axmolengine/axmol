@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@
 #include "ui/UIHelper.h"
 #include "yasio/cxx17/string_view.hpp"
 
-static const char* className = "org.axys1.lib.AxysWebViewHelper";
+static const char* className = "org.axmol.lib.WebViewHelper";
 
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "", __VA_ARGS__)
 
@@ -86,7 +86,7 @@ extern "C" {
  * Method:    shouldStartLoading
  * Signature: (ILjava/lang/String;)Z
  */
-JNIEXPORT jboolean JNICALL Java_org_axys1_lib_AxysWebViewHelper_shouldStartLoading(JNIEnv* env,
+JNIEXPORT jboolean JNICALL Java_org_axmol_lib_WebViewHelper_shouldStartLoading(JNIEnv* env,
                                                                                           jclass,
                                                                                           jint index,
                                                                                           jstring jurl)
@@ -102,7 +102,7 @@ JNIEXPORT jboolean JNICALL Java_org_axys1_lib_AxysWebViewHelper_shouldStartLoadi
  * Method:    didFinishLoading
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_org_axys1_lib_AxysWebViewHelper_didFinishLoading(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axmol_lib_WebViewHelper_didFinishLoading(JNIEnv* env,
                                                                                     jclass,
                                                                                     jint index,
                                                                                     jstring jurl)
@@ -119,7 +119,7 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysWebViewHelper_didFinishLoading(JNI
  * Method:    didFailLoading
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_org_axys1_lib_AxysWebViewHelper_didFailLoading(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axmol_lib_WebViewHelper_didFailLoading(JNIEnv* env,
                                                                                   jclass,
                                                                                   jint index,
                                                                                   jstring jurl)
@@ -136,7 +136,7 @@ JNIEXPORT void JNICALL Java_org_axys1_lib_AxysWebViewHelper_didFailLoading(JNIEn
  * Method:    onJsCallback
  * Signature: (ILjava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_org_axys1_lib_AxysWebViewHelper_onJsCallback(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axmol_lib_WebViewHelper_onJsCallback(JNIEnv* env,
                                                                                 jclass,
                                                                                 jint index,
                                                                                 jstring jmessage)

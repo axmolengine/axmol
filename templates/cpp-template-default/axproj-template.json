@@ -18,7 +18,7 @@
             ]
          },
          "project_replace_package_name":{
-            "src_package_name":"org.axys1.hellocpp",
+            "src_package_name":"org.axmol.hellocpp",
             "files":[
                "proj.android/app/build.gradle",
                "proj.android/app/AndroidManifest.xml"
@@ -31,13 +31,13 @@
             ]
          },
          "project_replace_mac_bundleid": {
-            "src_bundle_id": "org.axys1.hellocpp",
+            "src_bundle_id": "org.axmol.hellocpp",
             "files": [
                "proj.ios_mac/mac/Info.plist"
             ]
          },
          "project_replace_ios_bundleid": {
-            "src_bundle_id": "org.axys1.hellocpp",
+            "src_bundle_id": "org.axmol.hellocpp",
             "files": [
                "proj.ios_mac/ios/targets/ios/Info.plist",
                "proj.ios_mac/ios/targets/tvos/Info.plist"

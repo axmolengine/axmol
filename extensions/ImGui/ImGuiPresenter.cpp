@@ -198,7 +198,7 @@ void ImGuiPresenter::init()
     }
 
     auto window = static_cast<GLViewImpl*>(Director::getInstance()->getOpenGLView())->getWindow();
-    ImGui_ImplGlfw_InitForAxys(window, true);
+    ImGui_ImplGlfw_InitForAx(window, true);
     ImGui_ImplAx_Init();
 
     ImGui_ImplAx_SetCustomFontLoader(&ImGuiPresenter::loadCustomFonts, this);

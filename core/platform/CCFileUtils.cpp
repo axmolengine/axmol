@@ -4,7 +4,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -711,7 +711,7 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
 
     if (isPopupNotify())
     {
-        AXLOG("axys: fullPathForFilename: No file found at %s. Possible missing file.", filename.data());
+        AXLOG("axmol: fullPathForFilename: No file found at %s. Possible missing file.", filename.data());
     }
 
     // The file wasn't found, return empty string.
@@ -762,7 +762,7 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 
     if (isPopupNotify())
     {
-        AXLOG("axys: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
+        AXLOG("axmol: fullPathForDirectory: No directory found at %s. Possible missing directory.", dir.data());
     }
 
     // The file wasn't found, return empty string.
@@ -927,6 +927,20 @@ void FileUtils::addSearchPath(std::string_view searchpath, const bool front)
     {
         path += "/";
     }
+
+#ifdef AX_NO_DUP_SEARCH_PATH
+    auto it = std::find(_searchPathArray.begin(), _searchPathArray.end(), path);
+    if (it != _searchPathArray.end())
+    {
+        _searchPathArray.erase(it);
+
+        auto itOrigin = std::find(_originalSearchPaths.begin(), _originalSearchPaths.end(), std::string{searchpath});
+        if (itOrigin != _originalSearchPaths.end())
+        {
+            _originalSearchPaths.erase(itOrigin);
+        }
+    }
+#endif  // AX_NO_DUP_SEARCH_PATH
 
     if (front)
     {

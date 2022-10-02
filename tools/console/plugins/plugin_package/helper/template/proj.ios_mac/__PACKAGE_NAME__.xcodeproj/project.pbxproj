@@ -201,7 +201,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../frameworks/axys/core $(SRCROOT)/../../../frameworks/axys/extensions $(SRCROOT)/../../../frameworks/axys/external";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../frameworks/axmol/core $(SRCROOT)/../../../frameworks/axmol/extensions $(SRCROOT)/../../../frameworks/axmol/external";
 				VALID_ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 			};
 			name = Debug;
@@ -240,7 +240,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../frameworks/axys/core $(SRCROOT)/../../../frameworks/axys/extensions $(SRCROOT)/../../../frameworks/axys/thirdparty";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../frameworks/axmol/core $(SRCROOT)/../../../frameworks/axmol/extensions $(SRCROOT)/../../../frameworks/axmol/thirdparty";
 				VALID_ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 			};
 			name = Release;
@@ -251,7 +251,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "__PACKAGE_NAME__ MAC";
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../frameworks/axys/thirdparty/glfw3/include/mac";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../frameworks/axmol/thirdparty/glfw3/include/mac";
 			};
 			name = Debug;
 		};
@@ -261,7 +261,7 @@
 				CLANG_WARN__ARC_BRIDGE_CAST_NONARC = YES;
 				EXECUTABLE_PREFIX = lib;
 				PRODUCT_NAME = "__PACKAGE_NAME__ MAC";
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../frameworks/axys/thirdparty/glfw3/include/mac";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../frameworks/axmol/thirdparty/glfw3/include/mac";
 			};
 			name = Release;
 		};
@@ -277,7 +277,7 @@
 				);
 				PRODUCT_NAME = "__PACKAGE_NAME__ IOS";
 				SDKROOT = iphoneos8.1;
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../frameworks/axys/thirdparty/curl/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../frameworks/axmol/thirdparty/curl/include/ios";
 			};
 			name = Debug;
 		};
@@ -293,7 +293,7 @@
 				);
 				PRODUCT_NAME = "__PACKAGE_NAME__ IOS";
 				SDKROOT = iphoneos8.1;
-				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../frameworks/axys/thirdparty/curl/include/ios";
+				USER_HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/../../../frameworks/axmol/thirdparty/curl/include/ios";
 			};
 			name = Release;
 		};

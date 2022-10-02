@@ -3,7 +3,7 @@
     {
         "common": [
             {
-                "from" : "bin/axys.ini",
+                "from" : "bin/axmol.ini",
                 "to": ""
             },
             {
@@ -77,7 +77,7 @@
     },
     "modify_config" : [
         {
-            "file_path" : "axys.ini",
+            "file_path" : "axmol.ini",
             "pattern": "plugins=.*",
             "replace_string": "plugins=\n"
         }

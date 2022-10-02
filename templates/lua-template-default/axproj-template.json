@@ -69,7 +69,7 @@
             ]
         },
         "project_replace_package_name": {
-            "src_package_name": "org.axys1.hellolua",
+            "src_package_name": "org.axmol.hellolua",
             "files": [
                 "frameworks/runtime-src/proj.android/app/build.gradle",
                 "frameworks/runtime-src/proj.android/app/AndroidManifest.xml"            ]
@@ -81,13 +81,13 @@
             ]
         },
         "project_replace_mac_bundleid": {
-            "src_bundle_id": "org.axys1.hellolua",
+            "src_bundle_id": "org.axmol.hellolua",
             "files": [
                 "frameworks/runtime-src/proj.ios_mac/mac/Info.plist"
             ]
         },
         "project_replace_ios_bundleid": {
-            "src_bundle_id": "org.axys1.hellolua",
+            "src_bundle_id": "org.axmol.hellolua",
             "files": [
                 "frameworks/runtime-src/proj.ios_mac/ios/targets/ios/Info.plist",
                 "frameworks/runtime-src/proj.ios_mac/ios/targets/tvos/Info.plist"

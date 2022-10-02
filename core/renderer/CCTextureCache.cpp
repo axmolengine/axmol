@@ -7,7 +7,7 @@ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -362,7 +362,7 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
             else
             {
                 texture = nullptr;
-                AXLOG("axys: failed to call TextureCache::addImageAsync(%s)", asyncStruct->filename.c_str());
+                AXLOG("axmol: failed to call TextureCache::addImageAsync(%s)", asyncStruct->filename.c_str());
             }
         }
 
@@ -445,7 +445,7 @@ Texture2D* TextureCache::addImage(std::string_view path, PixelFormat format)
             }
             else
             {
-                AXLOG("axys: Couldn't create texture for file:%s in TextureCache", path.data());
+                AXLOG("axmol: Couldn't create texture for file:%s in TextureCache", path.data());
                 AX_SAFE_RELEASE(texture);
                 texture = nullptr;
             }
@@ -497,7 +497,7 @@ Texture2D* TextureCache::addImage(Image* image, std::string_view key, PixelForma
         {
             AX_SAFE_RELEASE(texture);
             texture = nullptr;
-            AXLOG("axys: initWithImage failed!");
+            AXLOG("axmol: initWithImage failed!");
         }
 
     } while (0);
@@ -565,7 +565,7 @@ void TextureCache::removeUnusedTextures()
         Texture2D* tex = it->second;
         if (tex->getReferenceCount() == 1)
         {
-            AXLOG("axys: TextureCache: removing unused texture: %s", it->first.c_str());
+            AXLOG("axmol: TextureCache: removing unused texture: %s", it->first.c_str());
 
             tex->release();
             it = _textures.erase(it);

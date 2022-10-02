@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2012 cocos2d-x.org
- * https://axys1.github.io/
+ * https://axmolengine.github.io/
  *
  * Copyright 2011 Yannick Loriot.
  * http://yannickloriot.com
