@@ -26,9 +26,9 @@
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
-#include "axmol.h"
+#include "cocos2d.h"
 
-class HelloWorld : public ax::Scene
+class HelloWorld : public axis::Scene
 {
 public:
     virtual bool init() override;
