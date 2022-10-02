@@ -286,7 +286,7 @@ std::string Physics3DConstraintDemo::subtitle() const
 
 std::string Physics3DKinematicDemo::subtitle() const
 {
-    return "Physics3D Kinematic + #879";
+    return "Physics3D Kinematic";
 }
 
 bool Physics3DKinematicDemo::init()
@@ -308,32 +308,6 @@ bool Physics3DKinematicDemo::init()
     floor->syncNodeToPhysics();
     // static object sync is not needed
     floor->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::NONE);
-
-    // Issue #879 STARTS BELOW
-    {
-        Physics3DRigidBodyDes rbDes;
-        std::string tree1 = "MeshRendererTest/tree-model/tree1.obj";
-
-        float scale = 12.0f;
-        std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList(tree1);
-        for (auto& it : trianglesList)
-        {
-            it *= scale;
-        }
-
-        rbDes.mass = 0.0f;
-        rbDes.shape = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
-        auto rigidBody = Physics3DRigidBody::create(&rbDes);
-        auto component = Physics3DComponent::create(rigidBody);
-        auto sprite = Sprite3D::create(tree1);
-        sprite->addComponent(component);
-        sprite->setPosition3D(Vec3(20.0f, 0.0f, 0.0f));
-        sprite->setScale(scale);
-        sprite->setCameraMask((unsigned short)CameraFlag::USER1);
-        this->addChild(sprite);
-    }
-    // Issue #879 ENDS HERE
-
 
     // create Kinematics
     for (unsigned int i = 0; i < 3; ++i)
