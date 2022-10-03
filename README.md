@@ -97,9 +97,9 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
      - for 64 bit Visual Studio 2022:
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
-     
-     - C++20 for 32/64 bit Visual Studio 2022:
+     - C++20 support: 32 bit Visual Studio 2022:
      ```cmake -B build_C++20 -DCXX_STD=20 -G "Visual Studio 17 2022" -A Win32```
+     - C++20 support: 64 bit Visual Studio 2022:
      ```cmake -B build_C++20 -DCXX_STD=20 -G "Visual Studio 17 2022" -A x64```
   
   Build excecutable in a command line (e.g. cpp-tests):
