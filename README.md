@@ -27,7 +27,7 @@
 **[简体中文](README_CN.md)**
   
 ### Purpose Summary
-* C++ 17/20 (C++20 VS2022 8=64bit Windows11 tested)
+* C++ 17/20 (C++20 VS2022 64bit Windows 11 tested)
 * Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
 
@@ -53,7 +53,7 @@
 * Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
 * Use a modern GL loader ```Glad```
 * Google [angle](https://github.com/google/angle) renderer backend support
-* C++ 17/20 standard
+* C++ 17/20
 * IOS/TVOS SDK 9.0 as minimal deployment
 * Use fast pugixml
 * Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
@@ -104,6 +104,8 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   
   Build excecutable in a command line (e.g. cpp-tests):
     ```msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount```
+  Build with C++20 as standart 
+    ```msbuild .\build_C++20\axmol.sln -target:cpp_tests -maxCpuCount```
     
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
 See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
