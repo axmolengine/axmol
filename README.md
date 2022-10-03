@@ -27,7 +27,7 @@
 **[简体中文](README_CN.md)**
   
 ### Purpose Summary
-* C++ 17
+* C++ 17/20 (C++20 VS2022 8=64bit Windows11 tested)
 * Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
 
@@ -53,7 +53,7 @@
 * Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
 * Use a modern GL loader ```Glad```
 * Google [angle](https://github.com/google/angle) renderer backend support
-* C++ 17 standard
+* C++ 17/20 standard
 * IOS/TVOS SDK 9.0 as minimal deployment
 * Use fast pugixml
 * Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
@@ -97,6 +97,10 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
      - for 64 bit Visual Studio 2022:
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
+     
+     - C++20 for 32/64 bit Visual Studio 2022:
+     ```cmake -B build_C++20 -DCXX_STD=20 -G "Visual Studio 17 2022" -A Win32```
+     ```cmake -B build_C++20 -DCXX_STD=20 -G "Visual Studio 17 2022" -A x64```
   
   Build excecutable in a command line (e.g. cpp-tests):
     ```msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount```
