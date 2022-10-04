@@ -20,7 +20,7 @@
 #include <functional>
 #include "clipper.core.h"
 
-namespace Clipper2Lib {
+namespace Clipper2Lib { 
 
 	struct Scanline;
 	struct IntersectNode;

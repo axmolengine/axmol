@@ -12,7 +12,7 @@
 #include "clipper.h"
 #include "clipper.offset.h"
 
-namespace Clipper2Lib {
+namespace Clipper2Lib { 
 
 const double default_arc_tolerance = 0.25;
 const double floating_point_tolerance = 1e-12;

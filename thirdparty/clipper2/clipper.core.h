@@ -18,7 +18,7 @@
 #include <iostream>
 #include <algorithm>
 
-namespace Clipper2Lib 
+namespace Clipper2Lib
 {
 
 	static double const PI = 3.141592653589793238;

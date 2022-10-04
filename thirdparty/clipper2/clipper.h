@@ -19,7 +19,7 @@
 #include "clipper.offset.h"
 #include "clipper.minkowski.h"
 
-namespace Clipper2Lib 
+namespace Clipper2Lib
 {
 
   static const Rect64 MaxInvalidRect64 = Rect64(

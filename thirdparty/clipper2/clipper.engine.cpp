@@ -16,7 +16,7 @@
 #include <algorithm>
 #include "clipper.engine.h"
 
-namespace Clipper2Lib {
+namespace Clipper2Lib { 
 
 	static const double FloatingPointTolerance = 1.0e-12;
 	static const Rect64 invalid_rect = Rect64(
