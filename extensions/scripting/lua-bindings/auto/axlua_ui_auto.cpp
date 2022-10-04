@@ -27616,6 +27616,206 @@ int lua_ax_ui_RichElementImage_setHeight(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_ui_RichElementImage_setScaleY(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichElementImage* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setScaleY'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScaleY");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScaleY'", nullptr);
+            return 0;
+        }
+        cobj->setScaleY(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setScaleY",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setScaleY'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_RichElementImage_setScaleX(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichElementImage* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setScaleX'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScaleX");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScaleX'", nullptr);
+            return 0;
+        }
+        cobj->setScaleX(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setScaleX",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setScaleX'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_RichElementImage_setUrl(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichElementImage* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setUrl'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichElementImage:setUrl");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setUrl'", nullptr);
+            return 0;
+        }
+        cobj->setUrl(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setUrl",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setUrl'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_RichElementImage_setScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichElementImage* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScale'", nullptr);
+            return 0;
+        }
+        cobj->setScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setScale",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
 {
     int argc = 0;
@@ -27780,56 +27980,6 @@ int lua_ax_ui_RichElementImage_setWidth(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichElementImage_setUrl(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ui::RichElementImage* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setUrl'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichElementImage:setUrl");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setUrl'", nullptr);
-            return 0;
-        }
-        cobj->setUrl(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setUrl",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setUrl'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -27967,9 +28117,12 @@ int lua_register_ax_ui_RichElementImage(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"RichElementImage");
         tolua_function(tolua_S,"new",lua_ax_ui_RichElementImage_constructor);
         tolua_function(tolua_S,"setHeight",lua_ax_ui_RichElementImage_setHeight);
+        tolua_function(tolua_S,"setScaleY",lua_ax_ui_RichElementImage_setScaleY);
+        tolua_function(tolua_S,"setScaleX",lua_ax_ui_RichElementImage_setScaleX);
+        tolua_function(tolua_S,"setUrl",lua_ax_ui_RichElementImage_setUrl);
+        tolua_function(tolua_S,"setScale",lua_ax_ui_RichElementImage_setScale);
         tolua_function(tolua_S,"init",lua_ax_ui_RichElementImage_init);
         tolua_function(tolua_S,"setWidth",lua_ax_ui_RichElementImage_setWidth);
-        tolua_function(tolua_S,"setUrl",lua_ax_ui_RichElementImage_setUrl);
         tolua_function(tolua_S,"create", lua_ax_ui_RichElementImage_create);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::ui::RichElementImage).name(); // rtti is literal storage
