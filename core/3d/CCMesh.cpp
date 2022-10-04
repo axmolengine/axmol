@@ -528,8 +528,11 @@ void Mesh::bindMeshCommand()
 {
     if (_material && _meshIndexData)
     {
-        _material->getStateBlock().setCullFace(true);
-        _material->getStateBlock().setDepthTest(true);
+        auto& stateBlock = _material->getStateBlock();
+        stateBlock.setCullFace(true);
+        stateBlock.setDepthTest(true);
+        if (_blend.src != backend::BlendFactor::ONE && _blend.dst != backend::BlendFactor::ONE)
+            stateBlock.setBlend(true);
     }
 }
 
