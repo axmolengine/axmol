@@ -101,10 +101,10 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
      
      b) C++20
-     - add ```-DCXX_STD=20``` for C++20 on a line above like:    
-       cmake -B build ```-DCXX_STD=20``` -G "Visual Studio 17 2022" -A x64
+     - add ```-DCXX_STD=20``` for C++20 on your command line like:    
+       cmake -S . -B build ```-DCXX_STD=20``` -G "Visual Studio 17 2022" -A x64
   
-  4. Build excecutable in a command line (e.g. cpp-tests):
+  4. Build excecutable in a command line (e.g. cpp-tests):  
     ```msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount```
     
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
