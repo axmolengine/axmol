@@ -17,7 +17,7 @@
 [![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)
 [![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)  
 
-**This is another more radical fork of *Cocos2d-x-4.0*, it has Full Support OpenAL for all platforms, single texture multi GPU texture handler, C++ 17 and more! (see 'Highlighted Features' for more info).**  
+**This is another more radical fork of *Cocos2d-x-4.0*, it has Full Support OpenAL for all platforms, single texture multi GPU texture handler, C++ 17/20 and more! (see 'Highlighted Features' for more info).**  
 
 ### View code with vscode online: 
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/axmolengine/axmol)
@@ -27,7 +27,7 @@
 **[简体中文](README_CN.md)**
   
 ### Purpose Summary
-* C++ 17
+* C++ 17/20 (C++20 VS2022 64bit Windows 11 tested)
 * Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
 
@@ -53,7 +53,7 @@
 * Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
 * Use a modern GL loader ```Glad```
 * Google [angle](https://github.com/google/angle) renderer backend support
-* C++ 17 standard
+* C++ 17/20
 * IOS/TVOS SDK 9.0 as minimal deployment
 * Use fast pugixml
 * Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
@@ -97,9 +97,15 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
      - for 64 bit Visual Studio 2022:
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
+     - C++20 support: 32 bit Visual Studio 2022:
+     ```cmake -B build_C++20 -DCXX_STD=20 -G "Visual Studio 17 2022" -A Win32```
+     - C++20 support: 64 bit Visual Studio 2022:
+     ```cmake -B build_C++20 -DCXX_STD=20 -G "Visual Studio 17 2022" -A x64```
   
   Build excecutable in a command line (e.g. cpp-tests):
     ```msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount```
+  Build with C++20 as standart 
+    ```msbuild .\build_C++20\axmol.sln -target:cpp_tests -maxCpuCount```
     
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
 See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
