@@ -90,7 +90,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   
        ```cd axmol ```
   
-     a) C++ 20:
+     a) C++ 17:
      - for 32 bit Visual Studio 2019:
      ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
      - for 64 bit Visual Studio 2019:
@@ -100,9 +100,9 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
      - for 64 bit Visual Studio 2022:
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
      
-     b) C++17
-     - add ```-DCXX_STD=17``` for C++17 on your command line like:    
-       cmake -S . -B build ```-DCXX_STD=17``` -G "Visual Studio 17 2022" -A x64
+     b) C++20
+     - add ```-DCXX_STD=20``` for C++20 on your command line like:    
+       cmake -S . -B build ```-DCXX_STD=20``` -G "Visual Studio 17 2022" -A x64
   
   4. Build excecutable in a command line (e.g. cpp-tests):  
     ```msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount```
