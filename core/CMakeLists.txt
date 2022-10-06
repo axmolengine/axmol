@@ -157,7 +157,7 @@ if(XCODE OR VS)
     ax_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
-target_precompile_headers(${_AX_CORE_LIB} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/precheader.h")
+target_precompile_headers(${_AX_CORE_LIB} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/precheader.h>")
     
 if(WINDOWS)
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
