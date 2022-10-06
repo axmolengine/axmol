@@ -29,6 +29,7 @@ function do_retry()
 
 function build_linux()
 {
+    # source ../environment.sh
     cd $AX_ROOT
     set -x
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release -DAX_ENABLE_EXT_IMGUI=ON
@@ -80,6 +81,7 @@ function build_android()
 
     # Build all samples
     echo "Building Android samples ..."
+    source ../environment.sh
 
     # build fairygui_tests
     pushd $AX_ROOT/tests/fairygui-tests/proj.android
