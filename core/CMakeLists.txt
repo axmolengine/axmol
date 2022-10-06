@@ -157,9 +157,7 @@ if(XCODE OR VS)
     ax_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
-target_precompile_headers(${_AX_CORE_LIB} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/precheader.h")
-# compile c as c++. needed for precompiled header
-set_source_files_properties(${_AX_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
+target_precompile_headers(${_AX_CORE_LIB} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/precheader.h")
     
 if(WINDOWS)
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
