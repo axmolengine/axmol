@@ -596,5 +596,5 @@ elseif(WINDOWS)
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
 endif()
 
-target_precompile_headers(${APP_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.h")
+target_precompile_headers(${APP_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.h>")
 
