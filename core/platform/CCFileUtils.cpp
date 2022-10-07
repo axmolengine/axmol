@@ -55,17 +55,17 @@ THE SOFTWARE.
 
 #include "base/filesystem.h"
 
-#    if defined(_WIN32)
+#if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
     return stdfs::path{ntcvt::from_chars(pathSV)};
 }
-#    else
+#else
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
     return stdfs::path{pathSV};
 }
-#    endif
+#endif
 
 NS_AX_BEGIN
 
@@ -1141,17 +1141,16 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
         const auto isDir = entry.is_directory();
         if (isDir || entry.is_regular_file())
         {
-#    if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#        if defined(__cpp_lib_char8_t)
-            std::u8string u8path = entry.path().u8string();
-            std::string pathStr  = {u8path.begin(), u8path.end()};
-#        else
-            std::string pathStr = entry.path().u8string();
-#        endif
-            std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#    if defined(__cpp_lib_char8_t)
+            auto&& pathStr = (std::string &&)(entry.path().u8string());
 #    else
-            std::string pathStr = entry.path().string();
+            auto&& pathStr = entry.path().u8string();
 #    endif
+            std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
+#else
+            std::string pathStr = entry.path().string();
+#endif
             if (isDir)
                 pathStr += '/';
             files.emplace_back(std::move(pathStr));
@@ -1173,17 +1172,16 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
         const auto isDir = entry.is_directory();
         if (isDir || entry.is_regular_file())
         {
-#    if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#        if defined(__cpp_lib_char8_t)
-            std::u8string u8path = entry.path().u8string();
-            std::string pathStr  = {u8path.begin(), u8path.end()};
-#        else
-            std::string pathStr = entry.path().u8string();
-#        endif
-            std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#    if defined(__cpp_lib_char8_t)
+            auto&& pathStr = (std::string &&)(entry.path().u8string());
 #    else
-            std::string pathStr = entry.path().string();
+            auto&& pathStr = entry.path().u8string();
 #    endif
+            std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
+#else
+            std::string pathStr = entry.path().string();
+#endif
             if (isDir)
                 pathStr += '/';
             files->emplace_back(std::move(pathStr));
