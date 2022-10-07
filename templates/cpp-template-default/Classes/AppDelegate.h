@@ -26,10 +26,10 @@
 #ifndef _APP_DELEGATE_H_
 #define _APP_DELEGATE_H_
 
-#include "axmol.h"
+#include "cocos2d.h"
 
 /**
-@brief    The axmol Application.
+@brief    The cocos2d Application.
 
 Private inheritance here hides part of interface from Director.
 */
