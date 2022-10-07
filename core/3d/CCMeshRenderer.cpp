@@ -520,6 +520,7 @@ void MeshRenderer::genMaterial(bool useLight)
         if (oldmaterial)
         {
             material->setStateBlock(oldmaterial->getStateBlock());
+            material->setTransparent(oldmaterial->isTransparent());
         }
 
         if (material->getReferenceCount() == 1)
