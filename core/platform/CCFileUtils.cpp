@@ -1142,11 +1142,7 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
         if (isDir || entry.is_regular_file())
         {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    if defined(__cpp_lib_char8_t)
             auto&& pathStr = (std::string &&)(entry.path().u8string());
-#    else
-            auto&& pathStr = entry.path().u8string();
-#    endif
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
 #else
             std::string pathStr = entry.path().string();
@@ -1173,11 +1169,7 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
         if (isDir || entry.is_regular_file())
         {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    if defined(__cpp_lib_char8_t)
             auto&& pathStr = (std::string &&)(entry.path().u8string());
-#    else
-            auto&& pathStr = entry.path().u8string();
-#    endif
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
 #else
             std::string pathStr = entry.path().string();
