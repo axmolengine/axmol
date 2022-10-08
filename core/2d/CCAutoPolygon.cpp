@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "clipper2/clipper.h"
 #include <algorithm>
 #include <math.h>
+#include "base/pod_vector.h"
 
 USING_NS_AX;
 
@@ -579,20 +580,28 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
         log("AUTOPOLYGON: cannot triangulate %s with less than 3 points", _filename.c_str());
         return TrianglesCommand::Triangles();
     }
+
+
+    std::vector<p2t::Point> p2pointsStorage;
+    p2pointsStorage.reserve(points.size());
     std::vector<p2t::Point*> p2points;
-    for (const auto& pt : points)
+    p2points.reserve(points.size());
+    for (size_t i = 0; i < points.size(); ++i)
     {
-        p2t::Point* p = new p2t::Point(pt.x, pt.y);
-        p2points.emplace_back(p);
+        auto& pt = points[i];
+        p2points.emplace_back(&p2pointsStorage.emplace_back((double)pt.x, (double)pt.y));
     }
+
     p2t::CDT cdt(p2points);
     cdt.Triangulate();
     std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
 
     // we won't know the size of verts and indices until we process all of the triangles!
-    std::vector<V3F_C4B_T2F> verts;
-    std::vector<unsigned short> indices;
-
+    size_t indicesCount        = tris.size() * 3;
+    ax::pod_vector<V3F_C4B_T2F> vertsBuf;  
+    vertsBuf.reserve(indicesCount / 2);
+    unsigned short* indicesBuf = new unsigned short[indicesCount];
+    
     unsigned short idx = 0;
     unsigned short vdx = 0;
 
@@ -607,7 +616,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
             auto length = vdx;
             for (j = 0; j < length; j++)
             {
-                if (verts[j].vertices == v3)
+                if (vertsBuf[j].vertices == v3)
                 {
                     found = true;
                     break;
@@ -616,38 +625,25 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
             if (found)
             {
                 // if we found the same vertex, don't add to verts, but use the same vertex with indices
-                indices.emplace_back(j);
-                idx++;
+                indicesBuf[idx++] = j;
             }
             else
             {
                 // vert does not exist yet, so we need to create a new one,
                 auto c4b         = Color4B::WHITE;
                 auto t2f         = Tex2F(0, 0);  // don't worry about tex coords now, we calculate that later
-                V3F_C4B_T2F vert = {v3, c4b, t2f};
-                verts.emplace_back(vert);
-                indices.emplace_back(vdx);
-                idx++;
-                vdx++;
+
+                indicesBuf[idx++] = vdx++;
+
+                vertsBuf.emplace(v3, c4b, t2f);
             }
         }
     }
-    for (auto&& j : p2points)
-    {
-        delete j;
-    };
-
-    // now that we know the size of verts and indices we can create the buffers
-    V3F_C4B_T2F* vertsBuf = new V3F_C4B_T2F[verts.size()];
-    memcpy(vertsBuf, verts.data(), verts.size() * sizeof(V3F_C4B_T2F));
-
-    unsigned short* indicesBuf = new unsigned short[indices.size()];
-    memcpy(indicesBuf, indices.data(), indices.size() * sizeof(short));
 
     // Triangles should really use std::vector and not arrays for verts and indices.
     // Then the above memcpy would not be necessary
-    TrianglesCommand::Triangles triangles = {vertsBuf, indicesBuf, (unsigned int)verts.size(),
-                                             (unsigned int)indices.size()};
+    TrianglesCommand::Triangles triangles = {vertsBuf.release_pointer(), indicesBuf, (unsigned int)vdx,
+                                             (unsigned int)idx};
     return triangles;
 }
 
