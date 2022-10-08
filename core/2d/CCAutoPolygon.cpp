@@ -597,7 +597,6 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     cdt.Triangulate();
     std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
 
-    // we won't know the size of verts and indices until we process all of the triangles!
     size_t indicesCount        = tris.size() * 3;
     ax::pod_vector<V3F_C4B_T2F> vertsBuf;  
     vertsBuf.reserve(indicesCount / 2);
@@ -636,13 +635,12 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
 
                 indicesBuf[idx++] = vdx++;
 
-                vertsBuf.emplace({v3, c4b, t2f});
+                vertsBuf.emplace(V3F_C4B_T2F{v3, c4b, t2f});
             }
         }
     }
 
-    // Triangles should really use std::vector and not arrays for verts and indices.
-    // Then the above memcpy would not be necessary
+    // Good concept: the pod_vector support release internal buffer ownership
     TrianglesCommand::Triangles triangles = {vertsBuf.release_pointer(), indicesBuf, (unsigned int)vdx,
                                              (unsigned int)idx};
     return triangles;
