@@ -1142,6 +1142,16 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
         if (isDir || entry.is_regular_file())
         {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+            /*
+            * Because the object memory model of std::u8string is identical to std::string
+            * so we use force cast to std::string without `memory alloc & copy`, the ASM code will be:
+            *   00F03204  lea         eax,[ebp-28h]  
+            *   00F03207  lea         ecx,[edi+20h]  
+            *   00F0320A  push        eax  
+            *   008E320B  call        std::filesystem::path::u8string (08E1C40h)  
+            *   008E3210  mov         esi,eax  
+            *   008E3212  mov         byte ptr [ebp-4],6
+            */
             auto&& pathStr = (std::string &&)(entry.path().u8string());
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
 #else
