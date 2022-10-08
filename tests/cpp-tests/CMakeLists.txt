@@ -112,7 +112,6 @@ list(APPEND GAME_HEADER
      Classes/ParallaxTest/ParallaxTest.h
      Classes/testBasic.h
      Classes/ZwoptexTest/ZwoptexTest.h
-     Classes/precheader.h
      Classes/CurlTest/CurlTest.h
      Classes/UnitTest/UnitTest.h
 #    Classes/UnitTest/RefPtrTest.h
