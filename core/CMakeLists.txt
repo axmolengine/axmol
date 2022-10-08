@@ -158,7 +158,7 @@ if(XCODE OR VS)
 endif()
 
 if(NOT IOS)
-    message("CMake target_precompile_headers")
+    message("CMake ${_AX_CORE_LIB} target_precompile_headers")
     target_precompile_headers(${_AX_CORE_LIB} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>")
 endif()
 
