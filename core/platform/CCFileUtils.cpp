@@ -55,17 +55,17 @@ THE SOFTWARE.
 
 #include "base/filesystem.h"
 
-#    if defined(_WIN32)
+#if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
     return stdfs::path{ntcvt::from_chars(pathSV)};
 }
-#    else
+#else
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
     return stdfs::path{pathSV};
 }
-#    endif
+#endif
 
 NS_AX_BEGIN
 
@@ -1141,17 +1141,22 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
         const auto isDir = entry.is_directory();
         if (isDir || entry.is_regular_file())
         {
-#    if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#        if defined(__cpp_lib_char8_t)
-            std::u8string u8path = entry.path().u8string();
-            std::string pathStr  = {u8path.begin(), u8path.end()};
-#        else
-            std::string pathStr = entry.path().u8string();
-#        endif
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+            /*
+            * Because the object memory model of std::u8string is identical to std::string
+            * so we use force cast to std::string without `memory alloc & copy`, the ASM code will be:
+            *   00F03204  lea         eax,[ebp-28h]  
+            *   00F03207  lea         ecx,[edi+20h]  
+            *   00F0320A  push        eax  
+            *   008E320B  call        std::filesystem::path::u8string (08E1C40h)  
+            *   008E3210  mov         esi,eax  
+            *   008E3212  mov         byte ptr [ebp-4],6
+            */
+            auto&& pathStr = (std::string &&)(entry.path().u8string());
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
-#    else
+#else
             std::string pathStr = entry.path().string();
-#    endif
+#endif
             if (isDir)
                 pathStr += '/';
             files.emplace_back(std::move(pathStr));
@@ -1173,17 +1178,12 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
         const auto isDir = entry.is_directory();
         if (isDir || entry.is_regular_file())
         {
-#    if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#        if defined(__cpp_lib_char8_t)
-            std::u8string u8path = entry.path().u8string();
-            std::string pathStr  = {u8path.begin(), u8path.end()};
-#        else
-            std::string pathStr = entry.path().u8string();
-#        endif
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+            auto&& pathStr = (std::string &&)(entry.path().u8string());
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
-#    else
+#else
             std::string pathStr = entry.path().string();
-#    endif
+#endif
             if (isDir)
                 pathStr += '/';
             files->emplace_back(std::move(pathStr));

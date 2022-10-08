@@ -43,9 +43,9 @@ ccexp = axexp
 ccui = axui
 ccb = axb
 
-require "axmol.cocos2d.Cocos2d"
-require "axmol.cocos2d.Cocos2dConstants"
-require "axmol.cocos2d.functions"
+require "axmol.core.Axmol"
+require "axmol.core.Constants"
+require "axmol.core.functions"
 
 __G__TRACKBACK__ = function(msg)
     local msg = debug.traceback(msg, 3)
@@ -71,37 +71,8 @@ if nil ~= sp then
     require "axmol.spine.SpineConstants"
 end
 
--- require "axmol.cocos2d.deprecated"
-
 -- Lua extensions
-require "axmol.cocos2d.bitExtend"
-
--- CCLuaEngine
--- require "axmol.cocos2d.DeprecatedCocos2dClass"
--- require "axmol.cocos2d.DeprecatedCocos2dEnum"
--- require "axmol.cocos2d.DeprecatedCocos2dFunc"
-
--- register_cocostudio_module
--- if nil ~= ccs then
---     require "axmol.cocostudio.DeprecatedCocoStudioClass"
---     require "axmol.cocostudio.DeprecatedCocoStudioFunc"
--- end
-
--- register_extension_module
--- require "axmol.extension.DeprecatedExtensionClass"
--- require "axmol.extension.DeprecatedExtensionEnum"
--- require "axmol.extension.DeprecatedExtensionFunc"
-
--- register_network_module
--- require "axmol.network.DeprecatedNetworkClass"
--- require "axmol.network.DeprecatedNetworkEnum"
--- require "axmol.network.DeprecatedNetworkFunc"
-
--- register_ui_module
--- if nil ~= ccui then
---     require "axmol.ui.DeprecatedUIEnum"
---     require "axmol.ui.DeprecatedUIFunc"
--- end
+require "axmol.core.bitExtend"
 
 -- physics3d
 require "axmol.physics3d.physics3d-constants"
