@@ -157,10 +157,10 @@ if(XCODE OR VS)
     ax_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
-if(NOT IOS)
+#if(NOT IOS)
     message("CMake ${_AX_CORE_LIB} target_precompile_headers")
     target_precompile_headers(${_AX_CORE_LIB} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>")
-endif()
+#endif()
 
 if(WINDOWS)
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
