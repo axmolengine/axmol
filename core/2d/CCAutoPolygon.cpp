@@ -5,6 +5,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2022      @aismann; Peter Eismann, Germany; dreifrankensoft
+Copyright (c) 2022 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -635,7 +636,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
 
                 indicesBuf[idx++] = vdx++;
 
-                vertsBuf.emplace(v3, c4b, t2f);
+                vertsBuf.emplace({v3, c4b, t2f});
             }
         }
     }
