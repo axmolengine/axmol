@@ -157,16 +157,10 @@ if(XCODE OR VS)
     ax_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
+message("CMake ${_AX_CORE_LIB} target_precompile_headers")
+target_precompile_headers(${_AX_CORE_LIB} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>")
+
 if(WINDOWS)
-    # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
-    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        target_sources(${_AX_CORE_LIB} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
-        set_target_properties(${_AX_CORE_LIB} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
-        set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
-    endif()
-    # compile c as c++. needed for precompiled header
-    set_source_files_properties(${_AX_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
-    
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
             PATHS ${_AX_ROOT_PATH}/tools/external/nuget)
