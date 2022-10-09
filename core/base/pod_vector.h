@@ -1,8 +1,12 @@
 /****************************************************************************
+ Copyright (c) Microsoft Corporation.
+ 
+ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
  Copyright (c) 2022 Bytedance Inc.
 
  https://axmolengine.github.io/
-
+ 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
@@ -25,140 +29,185 @@
    a. only accept pod type
    b. support release memory ownership with `release_pointer`
    c. support pod_allocater with C(realloc) or C++(new/delete)
-   b. resize operation no fill
+
+Copy of https://github.com/microsoft/STL/blob/main/stl/inc/vector but for pod types and only provide 'emplace_back'
+
 */
 #pragma once
 #include <string.h>
 #include <utility>
 #include <new>
 #include <type_traits>
+#include <stdexcept>
 
 namespace ax
 {
-
 template <typename _Ty, bool /*_use_crt_alloc*/ = false>
-struct pod_allocator
-{
-    static void* reallocate(void* old_block, size_t old_count, size_t new_count)
-    {
-        if (old_count != new_count)
-        {
-            void* new_block = nullptr;
-            if (new_count)
-            {
-                new_block = ::operator new(new_count * sizeof(_Ty));
-                if (old_block)
-                    memcpy(new_block, old_block, (std::min)(old_count, new_count) * sizeof(_Ty));
-            }
-
-            ::operator delete(old_block);
-            return new_block;
-        }
-        return old_block;
-    }
+struct pod_allocator {
+  static _Ty* allocate(size_t count) { return (_Ty*)new uint8_t[count * sizeof(_Ty)]; }
+  static void deallocate(_Ty* pBlock) { delete[] (uint8_t*)pBlock; }
 };
 
 template <typename _Ty>
 struct pod_allocator<_Ty, true>
 {
-    static void* reallocate(void* old_block, size_t /*old_count*/, size_t new_count)
-    {
-        return ::realloc(old_block, new_count * sizeof(_Ty));
-    }
-};
+  static _Ty* allocate(size_t count) { return malloc(count * sizeof(_Ty)); }
+   static void deallocate(_Ty* pBlock) { free(pBlock); }
+ };
 
-template <typename _Ty,
-          typename _Alty                                               = pod_allocator<_Ty>,
+template <typename _Ty, typename _Alty = pod_allocator<_Ty>,
           std::enable_if_t<std::is_trivially_destructible_v<_Ty>, int> = 0>
-class pod_vector
-{
+class pod_vector {
 public:
-    using pointer                            = _Ty*;
-    using value_type                         = _Ty;
-    pod_vector()                             = default;
-    pod_vector(pod_vector const&)            = delete;
-    pod_vector& operator=(pod_vector const&) = delete;
 
-    pod_vector(pod_vector&& o) noexcept
-    {
-        std::swap(_Myfirst, o._Myfirst);
-        std::swap(_Mylast, o._Mylast);
-        std::swap(_Myend, o._Myend);
+  using pointer                            = _Ty*;
+  using value_type                         = _Ty;
+  using size_type                          = size_t;
+  pod_vector()                             = default;
+  pod_vector(pod_vector const&)            = delete;
+  pod_vector& operator=(pod_vector const&) = delete;
+
+  pod_vector(pod_vector&& o) noexcept
+  {
+    std::swap(_Myfirst, o._Myfirst);
+    std::swap(_Mylast, o._Mylast);
+    std::swap(_Myend, o._Myend);
+  }
+  pod_vector& operator=(pod_vector&& o) noexcept
+  {
+    std::swap(_Myfirst, o._Myfirst);
+    std::swap(_Mylast, o._Mylast);
+    std::swap(_Myend, o._Myend);
+    return *this;
+  }
+
+  ~pod_vector() { _Tidy(); }
+
+  template <typename... _Valty>
+  _Ty& emplace_back(_Valty&&... _Val) noexcept
+  {
+    if (_Mylast != _Myend)
+      return *new (_Mylast++) _Ty(std::forward<_Valty>(_Val)...);
+
+    return *_Emplace_back_reallocate(std::forward<_Valty>(_Val)...);
+  }
+
+  void reserve(size_t new_cap)
+  {
+    if (new_cap > this->capacity())
+      _Reallocate_exactly(new_cap);
+  }
+
+  _Ty& operator[](size_t idx) { return _Myfirst[idx]; }
+  const _Ty& operator[](size_t idx) const { return _Myfirst[idx]; }
+
+  size_t capacity() const noexcept { return _Myend - _Myfirst; }
+  size_t size() const noexcept { return _Mylast - _Myfirst; }
+  size_type max_size() const noexcept { return (std::numeric_limits<ptrdiff_t>::max)(); }
+  void clear() noexcept { _Mylast = _Myfirst; }
+
+  void shrink_to_fit()
+  { // reduce capacity to size, provide strong guarantee
+    const pointer _Oldlast = _Mylast;
+    if (_Oldlast != _Myend)
+    { // something to do
+      const pointer _Oldfirst = _Myfirst;
+      if (_Oldfirst == _Oldlast)
+        _Tidy();
+      else
+        _Reallocate_exactly(static_cast<size_type>(_Oldlast - _Oldfirst));
     }
-    pod_vector& operator=(pod_vector&& o) noexcept
-    {
-        std::swap(_Myfirst, o._Myfirst);
-        std::swap(_Mylast, o._Mylast);
-        std::swap(_Myend, o._Myend);
-        return *this;
-    }
+  }
 
-    ~pod_vector() { shrink_to_fit(0); }
-
-    template <typename... _Args>
-    _Ty& emplace(_Args&&... args) noexcept
-    {
-        return *new (resize(this->size() + 1)) _Ty(std::forward<_Args>(args)...);
-    }
-
-    void reserve(size_t new_cap)
-    {
-        if (this->capacity() < new_cap)
-        {
-            auto cur_size = this->size();
-            _Reallocate_exactly(new_cap);
-            _Mylast = _Myfirst + cur_size;
-        }
-    }
-
-    // return address of new last element
-    pointer resize(size_t new_size)
-    {
-        auto old_cap = this->capacity();
-        if (old_cap < new_size)
-            _Reallocate_exactly((std::max)(old_cap + old_cap / 2, new_size));
-        _Mylast = _Myfirst + new_size;
-        return _Mylast - 1;
-    }
-
-    _Ty& operator[](size_t idx) { return _Myfirst[idx]; }
-    const _Ty& operator[](size_t idx) const { return _Myfirst[idx]; }
-
-    size_t capacity() const noexcept { return _Myend - _Myfirst; }
-    size_t size() const noexcept { return _Mylast - _Myfirst; }
-    void clear() noexcept { _Mylast = _Myfirst; }
-
-    void shrink_to_fit() { shrink_to_fit(this->size()); }
-    void shrink_to_fit(size_t new_size)
-    {
-        if (this->capacity() != new_size)
-            _Reallocate_exactly(new_size);
-        _Mylast = _Myfirst + new_size;
-    }
-
-    // release memmory ownership
-    pointer release_pointer() noexcept
-    {
-        auto ptr = _Myfirst;
-        memset(this, 0, sizeof(*this));
-        return ptr;
-    }
+  // release memmory ownership
+  pointer release_pointer() noexcept
+  {
+    auto ptr = _Myfirst;
+    memset(this, 0, sizeof(*this));
+    return ptr;
+  }
 
 private:
-    void _Reallocate_exactly(size_t new_cap)
+  template <class... _Valty>
+  pointer _Emplace_back_reallocate(_Valty&&... _Val)
+  {
+    const auto _Oldsize  = static_cast<size_type>(_Mylast - _Myfirst);
+
+    if (_Oldsize == max_size())
     {
-        auto new_block = (pointer)_Alty::reallocate(_Myfirst, _Myend - _Myfirst, new_cap);
-        if (new_block || 0 == new_cap)
-        {
-            _Myfirst = new_block;
-            _Myend   = _Myfirst + new_cap;
-        }
-        else
-            throw std::bad_alloc{};
+      throw std::length_error("pod_vector too long");
     }
 
-    pointer _Myfirst = nullptr;
-    pointer _Mylast  = nullptr;
-    pointer _Myend   = nullptr;
+    const size_type _Newsize     = _Oldsize + 1;
+    const size_type _Newcapacity = _Calculate_growth(_Newsize);
+
+    const pointer _Newvec           = _Alty::allocate(_Newcapacity);
+    const pointer _Constructed_last = _Newvec + _Oldsize + 1;
+    pointer _Constructed_first      = _Constructed_last;
+
+    new ((void*)(_Newvec + _Oldsize)) _Ty(std::forward<_Valty>(_Val)...);
+    _Constructed_first = _Newvec + _Oldsize;
+
+    // at back, provide strong guarantee
+    std::move(_Myfirst, _Mylast, _Newvec);
+
+    _Change_array(_Newvec, _Newsize, _Newcapacity);
+    return _Newvec + _Oldsize;
+  }
+
+  void _Reallocate_exactly(size_t _Newcapacity)
+  {
+    const auto _Size = static_cast<size_type>(_Mylast - _Myfirst);
+
+    const pointer _Newvec = _Alty::allocate(_Newcapacity);
+
+    std::copy(_Myfirst, _Mylast, _Newvec);
+
+    _Change_array(_Newvec, _Size, _Newcapacity);
+  }
+
+  void _Change_array(const pointer _Newvec, const size_type _Newsize, const size_type _Newcapacity)
+  {
+    if (_Myfirst)
+      _Alty::deallocate(_Myfirst /*, static_cast<size_type>(_Myend - _Myfirst)*/);
+
+    _Myfirst = _Newvec;
+    _Mylast  = _Newvec + _Newsize;
+    _Myend   = _Newvec + _Newcapacity;
+  }
+
+  size_type _Calculate_growth(const size_type _Newsize) const
+  {
+    // given _Oldcapacity and _Newsize, calculate geometric growth
+    const size_type _Oldcapacity = capacity();
+    const auto _Max              = max_size();
+
+    if (_Oldcapacity > _Max - _Oldcapacity / 2)
+      return _Max; // geometric growth would overflow
+
+    const size_type _Geometric = _Oldcapacity + (_Oldcapacity >> 1);
+
+    if (_Geometric < _Newsize)
+      return _Newsize; // geometric growth would be insufficient
+
+    return _Geometric; // geometric growth is sufficient
+  }
+
+
+  void _Tidy() noexcept
+  { // free all storage
+    if (_Myfirst)
+    { // destroy and deallocate old array
+      _Alty::deallocate(_Myfirst/*, static_cast<size_type>(_Myend - _Myfirst)*/);
+
+      _Myfirst = nullptr;
+      _Mylast  = nullptr;
+      _Myend   = nullptr;
+    }
+  }
+
+  pointer _Myfirst = nullptr;
+  pointer _Mylast  = nullptr;
+  pointer _Myend   = nullptr;
 };
-}  // namespace ax
+} // namespace ax
