@@ -5,6 +5,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2022      @aismann; Peter Eismann, Germany; dreifrankensoft
+Copyright (c) 2022 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -579,12 +580,18 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
         log("AUTOPOLYGON: cannot triangulate %s with less than 3 points", _filename.c_str());
         return TrianglesCommand::Triangles();
     }
+
+
+    std::vector<p2t::Point> p2pointsStorage;
+    p2pointsStorage.reserve(points.size());
     std::vector<p2t::Point*> p2points;
-    for (const auto& pt : points)
+    p2points.reserve(points.size());
+    for (size_t i = 0; i < points.size(); ++i)
     {
-        p2t::Point* p = new p2t::Point(pt.x, pt.y);
-        p2points.emplace_back(p);
+        auto& pt = points[i];
+        p2points.emplace_back(&p2pointsStorage.emplace_back((double)pt.x, (double)pt.y));
     }
+
     p2t::CDT cdt(p2points);
     cdt.Triangulate();
     std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
@@ -632,10 +639,6 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
             }
         }
     }
-    for (auto&& j : p2points)
-    {
-        delete j;
-    };
 
     // now that we know the size of verts and indices we can create the buffers
     V3F_C4B_T2F* vertsBuf = new V3F_C4B_T2F[verts.size()];
