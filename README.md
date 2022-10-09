@@ -27,7 +27,7 @@
 **[简体中文](README_CN.md)**
   
 ### Purpose Summary
-* C++ 17/20 (C++20 VS2022 64bit Windows 11 tested)
+* C++ 17/20
 * Focuses on native game dev (easy to use, fast deployment, intuitive)
 * Bugfixes ASAP
 
@@ -88,7 +88,9 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   2. Install Visual Studio 2019/2022 (it's recommended that you only use these versions)  
   3. Execute the following commands in a command line (Console, Window Terminal or Powershell)
   
-     ```cd axmol ```
+       ```cd axmol ```
+  
+     a) C++ 20:
      - for 32 bit Visual Studio 2019:
      ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
      - for 64 bit Visual Studio 2019:
@@ -97,15 +99,13 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
      - for 64 bit Visual Studio 2022:
      ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
-     - C++20 support: 32 bit Visual Studio 2022:
-     ```cmake -B build_C++20 -DCXX_STD=20 -G "Visual Studio 17 2022" -A Win32```
-     - C++20 support: 64 bit Visual Studio 2022:
-     ```cmake -B build_C++20 -DCXX_STD=20 -G "Visual Studio 17 2022" -A x64```
+     
+     b) C++17
+     - add ```-DCXX_STD=17``` for C++17 on your command line like:    
+       cmake -S . -B build ```-DCXX_STD=17``` -G "Visual Studio 17 2022" -A x64
   
-  Build excecutable in a command line (e.g. cpp-tests):
+  4. Build excecutable in a command line (e.g. cpp-tests):  
     ```msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount```
-  Build with C++20 as standart 
-    ```msbuild .\build_C++20\axmol.sln -target:cpp_tests -maxCpuCount```
     
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
 See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)

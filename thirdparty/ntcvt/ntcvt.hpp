@@ -57,15 +57,21 @@ public:
   }
 };
 
-template <typename _Elem> static _Elem* prepare(std::basic_string<_Elem>& str, size_t size)
+template <typename _Cont> inline
+auto prepare(_Cont& str, size_t size)
 {
+  using _Elem = typename _Cont::value_type;
   intrusive_string<_Elem>& helper = (intrusive_string<_Elem>&)str;
   return helper.resize_nofill(size);
 }
 #if defined(_AFX)
-template <typename _Elem> _Elem* prepare(CStringT<_Elem, StrTraitMFC_DLL<_Elem>>& str, size_t size)
-{
-  return str.GetBufferSetLength(static_cast<int>(size));
+template <> inline
+auto prepare<CStringW>(CStringW& str, size_t size) {
+    return str.GetBufferSetLength(static_cast<int>(size));
+}
+template <> inline
+auto prepare<CStringA>(CStringA& str, size_t size) {
+    return str.GetBufferSetLength(static_cast<int>(size));
 }
 #endif
 } // namespace buffer_traits
