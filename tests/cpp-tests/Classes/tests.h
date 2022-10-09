@@ -119,7 +119,7 @@
 #include "ZwoptexTest/ZwoptexTest.h"
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include "ImGuiTest/ImGuiTest.h"
 #endif
 #endif
