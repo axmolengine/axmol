@@ -112,7 +112,6 @@ list(APPEND GAME_HEADER
      Classes/ParallaxTest/ParallaxTest.h
      Classes/testBasic.h
      Classes/ZwoptexTest/ZwoptexTest.h
-     Classes/precheader.h
      Classes/CurlTest/CurlTest.h
      Classes/UnitTest/UnitTest.h
 #    Classes/UnitTest/RefPtrTest.h
@@ -596,11 +595,8 @@ elseif(WINDOWS)
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
 endif()
 
-if(WINDOWS)
-    # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
-    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        target_sources(${APP_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp")
-        set_target_properties(${APP_NAME} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
-        set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
-    endif()
+if(NOT IOS)
+    message("CMake ${APP_NAME} target_precompile_headers reuse from ${_AX_CORE_LIB}")
+    target_precompile_headers(${APP_NAME} REUSE_FROM ${_AX_CORE_LIB})
 endif()
+
