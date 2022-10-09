@@ -52,20 +52,8 @@ public:
     /**The structure of Triangles. */
     struct Triangles
     {
-        Triangles(V3F_C4B_T2F* _verts, unsigned short* _indices, unsigned int _vertCount, unsigned int _indexCount)
-            : verts(_verts), indices(_indices), vertCount(_vertCount), indexCount(_indexCount)
-        {}
-
-        Triangles() {}
-
-        /**Vertex data pointer.*/
-        V3F_C4B_T2F* verts = nullptr;
-        /**Index data pointer.*/
-        unsigned short* indices = nullptr;
-        /**The number of vertices.*/
-        unsigned int vertCount = 0;
-        /**The number of indices.*/
-        unsigned int indexCount = 0;
+        std::vector<V3F_C4B_T2F> verts;
+        std::vector<short> indices;
     };
 
     /**Constructor.*/
