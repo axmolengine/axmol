@@ -1,14 +1,16 @@
 #pragma once
 #include "imgui.h"
+#include "platform/CCGLView.h"
 
-struct GLFWwindow;
+struct ANativeWindow;
+struct AInputEvent;
 
 typedef void (*ImGuiImplCocos2dxLoadFontFun)(void* userdata);
 
 /// ImGui glfw APIs
-IMGUI_IMPL_API bool ImGui_ImplGlfw_InitForAx(GLFWwindow* window, bool install_callbacks);
-IMGUI_IMPL_API void ImGui_ImplGlfw_Shutdown();
-IMGUI_IMPL_API void ImGui_ImplGlfw_NewFrame();
+IMGUI_IMPL_API bool ImGui_ImplAndroid_InitForAx(ax::GLView* window, bool install_callbacks);
+IMGUI_IMPL_API void ImGui_ImplAndroid_Shutdown();
+IMGUI_IMPL_API void ImGui_ImplAndroid_NewFrame();
 
 /// ImGui axmol render APIs
 IMGUI_IMPL_API void ImGui_ImplAx_Init();

@@ -45,6 +45,8 @@ public:
     float scaleAllByDPI(float userScale);
     float getContentZoomFactor() const { return _contentZoomFactor; }
 
+    void setViewResolution(float width, float height);
+
     /// <summary>
     /// Add ImGui font with contentZoomFactor
     /// </summary>

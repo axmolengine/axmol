@@ -1296,7 +1296,7 @@ void ImGui_ImplAx_Shutdown()
     ImGui_ImplAx_DestroyDeviceObjects();
 }
 
-IMGUI_IMPL_API void ImGui_ImplAx_NewFrame() { 
+IMGUI_IMPL_API void ImGui_ImplAx_NewFrame() {
     auto bd = ImGui_ImplGlfw_GetBackendData();
 	//bd->CallbackCommands.clear();
     bd->CustomCommands.clear();
@@ -1328,6 +1328,13 @@ IMGUI_IMPL_API void ImGui_ImplAx_SetDeviceObjectsDirty()
 {
     auto bd                    = ImGui_ImplGlfw_GetBackendData();
     bd->FontDeviceObjectsDirty = true;
+}
+
+IMGUI_IMPL_API void ImGui_ImplAx_SetViewResolution(float width, float height)
+{
+    // Resize (expand) window
+    auto* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    view->setWindowed(width, height);
 }
 
 static void ImGui_ImplAx_CreateWindow(ImGuiViewport* viewport)

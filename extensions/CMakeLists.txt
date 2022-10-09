@@ -18,7 +18,7 @@ option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 
-if(WINDOWS OR MACOSX OR LINUX)
+if(WINDOWS OR MACOSX OR LINUX OR ANDROID)
   option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
 else()
   set(AX_ENABLE_EXT_IMGUI OFF)
