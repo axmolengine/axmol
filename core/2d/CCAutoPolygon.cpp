@@ -35,7 +35,6 @@ THE SOFTWARE.
 #include "clipper2/clipper.h"
 #include <algorithm>
 #include <math.h>
-#include "base/pod_vector.h"
 
 USING_NS_AX;
 
