@@ -91,6 +91,17 @@ static ImGui_ImplAndroid_Data* ImGui_ImplAndroid_GetBackendData()
 // Forward Declarations
 static void ImGui_ImplAndroid_ShutdownPlatformInterface();
 
+static ax::Vec2 convertToUICoordinates(const Vec2& pos)
+{
+    auto* bd = ImGui_ImplAndroid_GetBackendData();
+    ImGuiIO& io = ImGui::GetIO();
+    auto origin = bd->Window->getVisibleOrigin();
+    auto uiX = ((pos.x - origin.x) * bd->Window->getScaleX()) / io.DisplayFramebufferScale.x;
+    auto uiY = ((pos.y - origin.y) * bd->Window->getScaleY()) / io.DisplayFramebufferScale.y;
+
+    return Vec2(uiX, uiY);
+}
+
 // Functions
 static bool ImGui_ImplAndroid_Init(GLView* window, bool install_callbacks)
 {
@@ -124,14 +135,9 @@ static bool ImGui_ImplAndroid_Init(GLView* window, bool install_callbacks)
     touchListener->onTouchBegan = [](Touch* touch, Event* /*event*/) -> bool {
         ImGuiIO& io = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location = touch->getLocationInView();
-        auto origin = bd->Window->getVisibleOrigin();
-        auto realX = location.x * bd->Window->getScaleX();
-        auto realY = (location.y - origin.y) * bd->Window->getScaleY();
-        realX /= io.DisplayFramebufferScale.x;
-        realY /= io.DisplayFramebufferScale.y;
-        io.AddMousePosEvent(realX, realY);
-        bd->LastValidMousePos = ImVec2(realX, realY);
+        auto location = convertToUICoordinates(touch->getLocationInView());
+        io.AddMousePosEvent(location.x, location.y);
+        bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, true);
 
         // We can't check if we're actually hovering over a ImGui element, since the
@@ -143,41 +149,26 @@ static bool ImGui_ImplAndroid_Init(GLView* window, bool install_callbacks)
     touchListener->onTouchMoved = [](Touch* touch, Event* /*event*/) {
         ImGuiIO& io = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location = touch->getLocationInView();
-        auto origin = bd->Window->getVisibleOrigin();
-        auto realX = location.x * bd->Window->getScaleX();
-        auto realY = (location.y - origin.y) * bd->Window->getScaleY();
-        realX /= io.DisplayFramebufferScale.x;
-        realY /= io.DisplayFramebufferScale.y;
-        io.AddMousePosEvent(realX, realY);
-        bd->LastValidMousePos = ImVec2(realX, realY);;
+        auto location = convertToUICoordinates(touch->getLocationInView());
+        io.AddMousePosEvent(location.x, location.y);
+        bd->LastValidMousePos = ImVec2(location.x, location.y);
     };
 
     touchListener->onTouchEnded = [](Touch* touch, Event* /*event*/) {
         ImGuiIO& io = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location = touch->getLocationInView();
-        auto origin = bd->Window->getVisibleOrigin();
-        auto realX = location.x * bd->Window->getScaleX();
-        auto realY = (location.y - origin.y) * bd->Window->getScaleY();
-        realX /= io.DisplayFramebufferScale.x;
-        realY /= io.DisplayFramebufferScale.y;
-        io.AddMousePosEvent(realX, realY);
-        bd->LastValidMousePos = ImVec2(realX, realY);;
+        auto location = convertToUICoordinates(touch->getLocationInView());
+        io.AddMousePosEvent(location.x, location.y);
+        bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);
     };
 
     touchListener->onTouchCancelled = [](Touch* touch, Event* /*event*/) {
         ImGuiIO& io = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
-        auto location = touch->getLocationInView();
-        auto origin = bd->Window->getVisibleOrigin();
-        auto realX = location.x * bd->Window->getScaleX();
-        auto realY = (location.y - origin.y) * bd->Window->getScaleY();
-        realX /= io.DisplayFramebufferScale.x;
-        realY /= io.DisplayFramebufferScale.y;
-        io.AddMousePosEvent(realX, realY);
-        bd->LastValidMousePos = ImVec2(realX, realY);
+        auto location = convertToUICoordinates(touch->getLocationInView());
+        io.AddMousePosEvent(location.x, location.y);
+        bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);
     };
 
