@@ -84,7 +84,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   2. Run ```python setup.py```, restart the console after it has finished for environment variables to take effect
 
 #### Windows (64/32 bit  Visual Studio 2019/2022)
-  1. Install [CMake](https://cmake.org/) 3.14+  
+  1. Install [CMake](https://cmake.org/)  3.22.1+  
   2. Install Visual Studio 2019/2022 (it's recommended that you only use these versions)  
   3. Execute the following commands in a command line (Console, Window Terminal or Powershell)
   
