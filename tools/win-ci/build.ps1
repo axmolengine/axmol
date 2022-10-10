@@ -11,6 +11,6 @@ cmake -S . -B build_$BUILD_ARCH $CONFIG_ALL_OPTIONS -Thost=x64 -DAX_ENABLE_EXT_I
 
 cmake --build build_$BUILD_ARCH --config Release --target cpp_tests
 
-if ( !(env:PULL_REQUEST -eq 'yes') ) {
+if ( !($env:PULL_REQUEST -eq 'yes') ) {
     cmake --build build_$BUILD_ARCH --config Release --target lua_tests
 }
