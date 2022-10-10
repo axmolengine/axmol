@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "renderer/CCRenderer.h"
 #include "renderer/ccShaders.h"
 #include "renderer/backend/ProgramState.h"
+#include "yasio/detail/byte_buffer.hpp"
 
 NS_AX_BEGIN
 
@@ -120,9 +121,7 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     _colorPointer = (uint8_t*)malloc(sizeof(uint8_t) * 4 * _vertexCount);
     _customCommand.createVertexBuffer(VERTEX_SIZE, _vertexCount, CustomCommand::BufferUsage::DYNAMIC);
 
-    std::vector<uint8_t> zeros;
-    zeros.resize(VERTEX_SIZE * _vertexCount);
-    std::fill(zeros.begin(), zeros.end(), 0);
+    yasio::byte_buffer zeros(VERTEX_SIZE * _vertexCount, (uint8_t)0, std::true_type{});
     _customCommand.updateVertexBuffer(zeros.data(), zeros.size());
 
     setTexture(texture);

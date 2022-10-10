@@ -207,7 +207,7 @@ protected:
     // weak reference
     Node* _target = nullptr;
 
-    std::unordered_map<std::string, int> _textureSlots;
+    hlookup::string_map<int> _textureSlots;
     int _textureSlotIndex = 0;
 
     bool _isTransparent = false;  // is this mesh transparent.

@@ -30,6 +30,7 @@
 #include "base/CCDirector.h"
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
+#include "base/axstd.h"
 #include "renderer/backend/opengl/UtilsGL.h"
 #include "yasio/detail/byte_buffer.hpp"
 
@@ -234,8 +235,8 @@ const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() c
 
     _activeAttribs.reserve(numOfActiveAttributes);
 
-    int MAX_ATTRIBUTE_NAME_LENGTH = 256;
-    std::vector<char> attrName(MAX_ATTRIBUTE_NAME_LENGTH + 1);
+    int MAX_ATTRIBUTE_NAME_LENGTH = 255;
+    auto attrName                 = axstd::make_unique_for_overwrite<char[]>(MAX_ATTRIBUTE_NAME_LENGTH + 1);
 
     GLint attrNameLen = 0;
     GLenum attrType;
@@ -244,9 +245,9 @@ const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() c
 
     for (int i = 0; i < numOfActiveAttributes; i++)
     {
-        glGetActiveAttrib(_program, i, MAX_ATTRIBUTE_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.data());
+        glGetActiveAttrib(_program, i, MAX_ATTRIBUTE_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.get());
         CHECK_GL_ERROR_DEBUG();
-        info.attributeName = std::string(attrName.data(), attrName.data() + attrNameLen);
+        info.attributeName = std::string(attrName.get(), attrName.get() + attrNameLen);
         info.location      = glGetAttribLocation(_program, info.attributeName.c_str());
         info.type          = attrType;
         info.size          = UtilsGL::getGLDataTypeSize(attrType) * attrSize;

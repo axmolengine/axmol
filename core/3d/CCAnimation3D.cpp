@@ -101,7 +101,8 @@ Animation3D::Curve::~Curve()
 bool Animation3D::init(const Animation3DData& data)
 {
     _duration = data._totalTime;
-
+    std::vector<float> keys;
+    std::vector<float> values;
     for (const auto& iter : data._translationKeys)
     {
         Curve* curve = _boneCurves[iter.first];
@@ -113,8 +114,11 @@ bool Animation3D::init(const Animation3DData& data)
 
         if (iter.second.empty())
             continue;
-        std::vector<float> keys;
-        std::vector<float> values;
+
+        keys.clear();
+        values.clear();
+        keys.reserve(iter.second.size());
+        values.reserve(iter.second.size() * 3);
         for (const auto& keyIter : iter.second)
         {
             keys.emplace_back(keyIter._time);
@@ -128,6 +132,7 @@ bool Animation3D::init(const Animation3DData& data)
             curve->translateCurve->retain();
     }
 
+    
     for (const auto& iter : data._rotationKeys)
     {
         Curve* curve = _boneCurves[iter.first];
@@ -139,8 +144,11 @@ bool Animation3D::init(const Animation3DData& data)
 
         if (iter.second.empty())
             continue;
-        std::vector<float> keys;
-        std::vector<float> values;
+
+        keys.clear();
+        values.clear();
+        keys.reserve(iter.second.size());
+        values.reserve(iter.second.size() * 4);
         for (const auto& keyIter : iter.second)
         {
             keys.emplace_back(keyIter._time);
@@ -155,6 +163,7 @@ bool Animation3D::init(const Animation3DData& data)
             curve->rotCurve->retain();
     }
 
+   
     for (const auto& iter : data._scaleKeys)
     {
         Curve* curve = _boneCurves[iter.first];
@@ -166,8 +175,11 @@ bool Animation3D::init(const Animation3DData& data)
 
         if (iter.second.empty())
             continue;
-        std::vector<float> keys;
-        std::vector<float> values;
+
+        keys.clear();
+        values.clear();
+        keys.reserve(iter.second.size());
+        values.reserve(iter.second.size() * 3);
         for (const auto& keyIter : iter.second)
         {
             keys.emplace_back(keyIter._time);

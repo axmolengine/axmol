@@ -1323,6 +1323,7 @@ void Terrain::Chunk::updateIndicesLOD()
 void Terrain::Chunk::calculateAABB()
 {
     std::vector<Vec3> pos;
+    pos.reserve(_originalVertices.size());
     for (size_t i = 0, size = _originalVertices.size(); i < size; ++i)
     {
         pos.emplace_back(_originalVertices[i]._position);
