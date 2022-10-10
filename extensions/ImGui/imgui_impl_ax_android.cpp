@@ -6,6 +6,8 @@
 #include <android/input.h>
 #include <android/keycodes.h>
 #include <android/log.h>
+#include <imgui_internal.h>
+#include "base/CCIMEDelegate.h"
 
 USING_NS_AX;
 using namespace backend;
@@ -20,7 +22,35 @@ using namespace backend;
 #endif
 #endif
 
-// GLFW
+// Text handling
+class KeyboardInputDelegate : public IMEDelegate
+{
+protected:
+    bool canAttachWithIME() override
+    {
+        return true;
+    }
+
+    bool canDetachWithIME() override
+    {
+        return true;
+    }
+
+    void controlKey(EventKeyboard::KeyCode keyCode) override
+    {
+        // Not handled at the moment
+    }
+
+    void insertText(const char* text, size_t len) override
+    {
+        ImGuiIO& io = ImGui::GetIO();
+        for (int i = 0; i < len && text[i] != 0; ++i)
+        {
+            io.AddInputCharacter(text[i]);
+        }
+    }
+};
+
 
 // Android data
 static char                                     g_LogTag[] = "ImGuiAndroid";
@@ -80,6 +110,8 @@ struct ImGui_ImplAndroid_Data
 
     SavedRenderStateData SavedRenderState{};
     Vec2 ViewResolution = Vec2(1920, 1080);
+
+    KeyboardInputDelegate KeyboardInputDelegate;
 };
 
 // Backend data stored in io.BackendPlatformUserData to allow support for multiple Dear ImGui contexts
@@ -132,13 +164,19 @@ static bool ImGui_ImplAndroid_Init(GLView* window, bool install_callbacks)
     touchListener->retain();
     bd->TouchListener = touchListener;
 
-    touchListener->onTouchBegan = [](Touch* touch, Event* /*event*/) -> bool {
+    touchListener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
         ImGuiIO& io = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
         auto location = convertToUICoordinates(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, true);
+
+        ImGui::UpdateHoveredWindowAndCaptureFlags();
+        if (ImGui::GetIO().WantCaptureMouse)
+        {
+            event->stopPropagation();
+        }
 
         // We can't check if we're actually hovering over a ImGui element, since the
         // AddMousePosEvent is not instant, it's queued. So, just return true here
@@ -154,13 +192,24 @@ static bool ImGui_ImplAndroid_Init(GLView* window, bool install_callbacks)
         bd->LastValidMousePos = ImVec2(location.x, location.y);
     };
 
-    touchListener->onTouchEnded = [](Touch* touch, Event* /*event*/) {
+    touchListener->onTouchEnded = [](Touch* touch, Event* event) {
         ImGuiIO& io = ImGui::GetIO();
         ImGui_ImplAndroid_Data* bd = ImGui_ImplAndroid_GetBackendData();
         auto location = convertToUICoordinates(touch->getLocationInView());
         io.AddMousePosEvent(location.x, location.y);
         bd->LastValidMousePos = ImVec2(location.x, location.y);
         io.AddMouseButtonEvent(0, false);
+
+        if (ImGui::GetIO().WantTextInput)
+        {
+            bd->KeyboardInputDelegate.attachWithIME();
+            bd->Window->setIMEKeyboardState(true);
+        }
+        else
+        {
+            bd->KeyboardInputDelegate.detachWithIME();
+            bd->Window->setIMEKeyboardState(false);
+        }
     };
 
     touchListener->onTouchCancelled = [](Touch* touch, Event* /*event*/) {
