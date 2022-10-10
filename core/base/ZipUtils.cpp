@@ -756,7 +756,7 @@ bool ZipFile::fileExists(std::string_view fileName) const
     return ret;
 }
 
-std::vector<std::string_view> ZipFile::listFiles(std::string_view pathname) const
+std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
 {
 
     // filter files which `filename.startsWith(pathname)`
@@ -787,7 +787,7 @@ std::vector<std::string_view> ZipFile::listFiles(std::string_view pathname) cons
         }
     }
 
-    return std::vector<std::string_view>{fileSet.begin(), fileSet.end()};
+    return std::vector<std::string>{fileSet.begin(), fileSet.end()};
 }
 
 unsigned char* ZipFile::getFileData(std::string_view fileName, ssize_t* size)
