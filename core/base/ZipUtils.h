@@ -279,7 +279,7 @@ public:
      * @param dirname
      * @return
      */
-    std::vector<std::string_view> listFiles(std::string_view pathname) const;
+    std::vector<std::string> listFiles(std::string_view pathname) const;
 
     /**
      * Get resource file data from a zip file.
