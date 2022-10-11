@@ -596,7 +596,9 @@ elseif(WINDOWS)
 endif()
 
 if(NOT IOS)
-    message("CMake ${APP_NAME} target_precompile_headers reuse from ${_AX_CORE_LIB}")
-    target_precompile_headers(${APP_NAME} REUSE_FROM ${_AX_CORE_LIB})
+    message("CMake ${APP_NAME} target_precompile_headers")
+    target_precompile_headers(${APP_NAME} PRIVATE 
+      "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>"
+    )
 endif()
 
