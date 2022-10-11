@@ -26,6 +26,7 @@
 #include "3d/CCAnimation3D.h"
 #include "3d/CCBundle3D.h"
 #include "platform/CCFileUtils.h"
+#include "base/axstd.h"
 
 NS_AX_BEGIN
 
@@ -117,24 +118,11 @@ bool Animation3D::init(const Animation3DData& data)
             if (iter.second.empty())
                 continue;
 
-            // resize still with zero filled which is not needs at here
-            // some follow concepts needs standardized in the future, may be c++23
-            //  - resize_and_overwrite:
-            //    - https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p1072r10.html
-            //  - boost vector resize with init behavior parameter
-            //    - https://github.com/boostorg/container/blob/develop/include/boost/container/vector.hpp
-            //  - pod_vector
-            //    - https://stackoverflow.com/questions/15219984/using-vectorchar-as-a-buffer-without-initializing-it-on-resize/15220853#15220853
-            //    - https://github.com/yasio/yasio/blob/perftest/tests/perf/pod_vector.h
-            keys.resize(iter.second.size());
-            values.resize(iter.second.size());
 
-            std::transform(iter.second.begin(), iter.second.end(), keys.begin(),
-                           [](const auto& keyIter) { return keyIter._time; });
-
-            std::transform(iter.second.begin(), iter.second.end(), values.begin(),
-                           [](const auto& keyIter) { return keyIter._key; });
-
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
+                                        [](const auto& keyIter) { return keyIter._time; });
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), values,
+                                        [](const auto& keyIter) { return keyIter._key; });
 
             curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
             if (curve->translateCurve)
@@ -157,24 +145,10 @@ bool Animation3D::init(const Animation3DData& data)
             if (iter.second.empty())
                 continue;
 
-            // resize still with zero filled which is not needs at here
-            // some follow concepts needs standardized in the future, may be c++23
-            //  - resize_and_overwrite:
-            //    - https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p1072r10.html
-            //  - boost vector resize with init behavior parameter
-            //    - https://github.com/boostorg/container/blob/develop/include/boost/container/vector.hpp
-            //  - pod_vector
-            //    -
-            //    https://stackoverflow.com/questions/15219984/using-vectorchar-as-a-buffer-without-initializing-it-on-resize/15220853#15220853
-            //    - https://github.com/yasio/yasio/blob/perftest/tests/perf/pod_vector.h
-            keys.resize(iter.second.size());
-            values.resize(iter.second.size());
-
-            std::transform(iter.second.begin(), iter.second.end(), keys.begin(),
-                           [](const auto& keyIter) { return keyIter._time; });
-
-            std::transform(iter.second.begin(), iter.second.end(), values.begin(),
-                           [](const auto& keyIter) { return keyIter._key; });
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
+                                        [](const auto& keyIter) { return keyIter._time; });
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), values,
+                                        [](const auto& keyIter) { return keyIter._key; });
 
             curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0].x, (int)keys.size());
             if (curve->rotCurve)
@@ -197,24 +171,10 @@ bool Animation3D::init(const Animation3DData& data)
             if (iter.second.empty())
                 continue;
 
-            // resize still with zero filled which is not needs at here
-            // some follow concepts needs standardized in the future, may be c++23
-            //  - resize_and_overwrite:
-            //    - https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p1072r10.html
-            //  - boost vector resize with init behavior parameter
-            //    - https://github.com/boostorg/container/blob/develop/include/boost/container/vector.hpp
-            //  - pod_vector
-            //    -
-            //    https://stackoverflow.com/questions/15219984/using-vectorchar-as-a-buffer-without-initializing-it-on-resize/15220853#15220853
-            //    - https://github.com/yasio/yasio/blob/perftest/tests/perf/pod_vector.h
-            keys.resize(iter.second.size());
-            values.resize(iter.second.size());
-
-            std::transform(iter.second.begin(), iter.second.end(), keys.begin(),
-                           [](const auto& keyIter) { return keyIter._time; });
-
-            std::transform(iter.second.begin(), iter.second.end(), values.begin(),
-                           [](const auto& keyIter) { return keyIter._key; });
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
+                                        [](const auto& keyIter) { return keyIter._time; });
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), values,
+                                        [](const auto& keyIter) { return keyIter._key; });
 
             curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
             if (curve->scaleCurve)
