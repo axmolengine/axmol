@@ -465,7 +465,7 @@ void HttpClient::finishResponse(HttpResponse* response)
 
     if (!syncState)
     {
-        if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId())
+        if (_dispatchOnWorkThread || std::this_thread::get_id() == Director::getInstance()->getAxmolThreadId())
             invokeResposneCallbackAndRelease(response);
         else
             _finishedResponseQueue.emplace_back(response);
