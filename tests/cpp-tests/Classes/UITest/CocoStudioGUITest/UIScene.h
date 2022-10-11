@@ -26,7 +26,7 @@
 #ifndef __TestCpp__UIScene__
 #define __TestCpp__UIScene__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "extensions/cocos-ext.h"
 #include "ui/CocosGUI.h"
 #include "BaseTest.h"

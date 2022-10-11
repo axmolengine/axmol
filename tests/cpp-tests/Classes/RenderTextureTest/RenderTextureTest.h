@@ -25,7 +25,7 @@
 #ifndef _RENDERTEXTURE_TEST_H_
 #define _RENDERTEXTURE_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "renderer/backend/DepthStencilState.h"
 #include "../BaseTest.h"
 

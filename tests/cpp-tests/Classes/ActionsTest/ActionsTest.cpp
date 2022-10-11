@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #include "ActionsTest.h"
 #include "../testResource.h"
-#include "cocos2d.h"
+#include "axmol.h"
 #include "ui/CocosGUI.h"
 
 #include "renderer/CCRenderer.h"

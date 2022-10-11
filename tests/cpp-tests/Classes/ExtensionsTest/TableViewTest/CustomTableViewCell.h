@@ -25,7 +25,7 @@
 #ifndef __CUSTOMTABELVIEWCELL_H__
 #define __CUSTOMTABELVIEWCELL_H__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "extensions/cocos-ext.h"
 #include "GUI/CCControlExtension/CCControlExtensions.h"
 #include "GUI/CCScrollView/CCScrollView.h"

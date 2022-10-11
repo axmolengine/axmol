@@ -25,7 +25,7 @@
 #ifndef _EFFECT_ADVANCED_TEST_H_
 #define _EFFECT_ADVANCED_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(EffectAdvanceTests);

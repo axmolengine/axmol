@@ -26,7 +26,7 @@
 #ifndef _CPPTESTS_BASETEST_H__
 #define _CPPTESTS_BASETEST_H__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "extensions/cocos-ext.h"
 #include "GUI/CCControlExtension/CCControlExtensions.h"
 #include "GUI/CCScrollView/CCScrollView.h"

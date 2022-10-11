@@ -30,7 +30,7 @@
 #include <spine/spine-cocos2dx.h>
 
 #include "../testResource.h"
-#include "cocos2d.h"
+#include "axmol.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_AX;

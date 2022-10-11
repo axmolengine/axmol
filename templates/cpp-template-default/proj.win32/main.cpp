@@ -24,7 +24,7 @@
 
 #include "main.h"
 #include "AppDelegate.h"
-#include "cocos2d.h"
+#include "axmol.h"
 
 USING_NS_AX;
 
