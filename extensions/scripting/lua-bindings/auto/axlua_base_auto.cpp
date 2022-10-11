@@ -14637,6 +14637,53 @@ int lua_ax_base_Director_pause(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Director_getAxmolThreadId(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getAxmolThreadId'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getAxmolThreadId'", nullptr);
+            return 0;
+        }
+        const std::__thread_id& ret = cobj->getAxmolThreadId();
+        object_to_luaval<std::__thread_id&>(tolua_S, "std::__thread_id",(std::__thread_id&)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getAxmolThreadId",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getAxmolThreadId'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Director_setEventDispatcher(lua_State* tolua_S)
 {
     int argc = 0;
@@ -17929,6 +17976,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"Director");
         tolua_function(tolua_S,"pause",lua_ax_base_Director_pause);
+        tolua_function(tolua_S,"getAxmolThreadId",lua_ax_base_Director_getAxmolThreadId);
         tolua_function(tolua_S,"setEventDispatcher",lua_ax_base_Director_setEventDispatcher);
         tolua_function(tolua_S,"setContentScaleFactor",lua_ax_base_Director_setContentScaleFactor);
         tolua_function(tolua_S,"getDeltaTime",lua_ax_base_Director_getDeltaTime);
