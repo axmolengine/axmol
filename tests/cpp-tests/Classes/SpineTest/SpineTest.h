@@ -26,7 +26,7 @@
 #ifndef _SPINETEST_H_
 #define _SPINETEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 #include <spine/spine-cocos2dx.h>
 

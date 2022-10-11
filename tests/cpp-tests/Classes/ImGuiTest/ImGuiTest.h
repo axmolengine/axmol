@@ -27,7 +27,7 @@
 #ifndef _IMGUIEXT_TEST_H_
 #define _IMGUIEXT_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)

@@ -25,7 +25,7 @@
 #ifndef _PADDLE_H_
 #define _PADDLE_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 
 typedef enum tagPaddleState
 {
