@@ -27,7 +27,7 @@
 #ifndef _MENU_TEST_H_
 #define _MENU_TEST_H_
 
-////----#include "cocos2d.h"
+////----#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(MenuTests);

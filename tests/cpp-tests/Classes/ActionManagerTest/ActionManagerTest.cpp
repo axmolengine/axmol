@@ -24,7 +24,7 @@
 
 #include "ActionManagerTest.h"
 #include "../testResource.h"
-#include "cocos2d.h"
+#include "axmol.h"
 
 USING_NS_AX;
 

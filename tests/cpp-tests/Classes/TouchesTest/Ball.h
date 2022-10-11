@@ -25,7 +25,7 @@
 #ifndef _BALL_H_
 #define _BALL_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 
 class Paddle;
 

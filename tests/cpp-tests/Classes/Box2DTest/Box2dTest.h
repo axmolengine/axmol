@@ -26,7 +26,7 @@
 #ifndef _BOX2D_TEST_H_
 #define _BOX2D_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
 #include "extensions/cocos-ext.h"

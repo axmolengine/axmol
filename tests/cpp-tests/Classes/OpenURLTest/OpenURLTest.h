@@ -25,7 +25,7 @@
 #ifndef _OPEN_URL_TEST_H_
 #define _OPEN_URL_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(OpenURLTests);

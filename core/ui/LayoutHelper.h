@@ -12,7 +12,7 @@
 #ifndef _LAYOUTHELPER_H_
 #    define _LAYOUTHELPER_H_
 
-#    include "cocos2d.h"
+#    include "axmol.h"
 #    include "base/ccMacros.h"
 
 // f(x) = s * a + x

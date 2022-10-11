@@ -25,7 +25,7 @@
 #ifndef _SCENE_TEST_H_
 #define _SCENE_TEST_H_
 
-////----#include "cocos2d.h"
+////----#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(SceneTests);

@@ -27,7 +27,7 @@
 #ifndef _APP_DELEGATE_H_
 #define _APP_DELEGATE_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 
 class TestController;
 /**
