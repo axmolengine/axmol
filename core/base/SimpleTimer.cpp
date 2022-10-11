@@ -1,7 +1,7 @@
 #include "SimpleTimer.h"
 #include "yasio/detail/object_pool.hpp"
 #include "yasio/detail/ref_ptr.hpp"
-#include "cocos2d.h"
+#include "axmol.h"
 
 #define STIMER_DEFINE_REFERENCE_CLASS    \
 private:                                 \

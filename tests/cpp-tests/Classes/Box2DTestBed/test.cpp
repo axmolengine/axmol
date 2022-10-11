@@ -20,7 +20,7 @@
 #include "tests/settings.h"
 
 #include "extensions/cocos-ext.h"
-#include "cocos2d.h"
+#include "axmol.h"
 
 #include <stdio.h>
 
