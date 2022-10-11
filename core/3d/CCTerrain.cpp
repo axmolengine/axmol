@@ -1322,12 +1322,19 @@ void Terrain::Chunk::updateIndicesLOD()
 
 void Terrain::Chunk::calculateAABB()
 {
-    std::vector<Vec3> pos;
-    pos.reserve(_originalVertices.size());
-    for (size_t i = 0, size = _originalVertices.size(); i < size; ++i)
-    {
-        pos.emplace_back(_originalVertices[i]._position);
-    }
+    // resize still with zero filled which is not needs at here
+    // some follow concepts needs standardized in the future, may be c++23
+    //  - resize_and_overwrite:
+    //    - https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p1072r10.html
+    //  - boost vector resize with init behavior parameter
+    //    - https://github.com/boostorg/container/blob/develop/include/boost/container/vector.hpp
+    //  - pod_vector
+    //    -
+    //    https://stackoverflow.com/questions/15219984/using-vectorchar-as-a-buffer-without-initializing-it-on-resize/15220853#15220853
+    //    - https://github.com/yasio/yasio/blob/perftest/tests/perf/pod_vector.h
+    std::vector<Vec3> pos(_originalVertices.size());
+    std::transform(_originalVertices.begin(), _originalVertices.end(), pos.begin(),
+                   [](const auto& it) { return it._position; });
     _aabb.updateMinMax(&pos[0], pos.size());
 }
 
