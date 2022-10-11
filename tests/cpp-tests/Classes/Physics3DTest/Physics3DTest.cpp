@@ -325,10 +325,10 @@ bool Physics3DKinematicDemo::init()
         rbDes.shape = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
         auto rigidBody = Physics3DRigidBody::create(&rbDes);
         auto component = Physics3DComponent::create(rigidBody);
-        auto sprite = Sprite3D::create(tree1);
+        auto sprite = MeshRenderer::create(tree1);
         sprite->addComponent(component);
-        static_cast<Sprite3D*>(sprite->getChildren().at(1))->getMaterial(0)->setTransparent(true);
-        static_cast<Sprite3D*>(sprite->getChildren().at(1))->getMaterial(0)->getStateBlock().setCullFaceSide(CullFaceSide::NONE);
+        static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0)->setTransparent(true);
+        static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0)->getStateBlock().setCullFaceSide(CullFaceSide::NONE);
         sprite->setCameraMask((unsigned short)CameraFlag::USER1 | (unsigned short)CameraFlag::USER2 | (unsigned short)CameraFlag::USER3);
         sprite->setPosition3D(Vec3(20.0f, 0.0f, 0.0f));
         sprite->setScale(scale);
