@@ -32,7 +32,6 @@
 #include "base/CCEventType.h"
 #include "base/axstd.h"
 #include "renderer/backend/opengl/UtilsGL.h"
-#include "yasio/detail/byte_buffer.hpp"
 
 NS_AX_BACKEND_BEGIN
 
@@ -139,9 +138,9 @@ void ProgramGL::compileProgram()
         glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
         if (errorInfoLen > 1)
         {
-            yasio::sbyte_buffer errorInfo{static_cast<size_t>(errorInfoLen), std::true_type{}};
-            glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.data());
-            log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.data());
+            auto errorInfo = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
+            glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
+            log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.get());
         }
         else
             log("cocos2d: ERROR: %s: failed to link program ", __FUNCTION__);
