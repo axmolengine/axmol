@@ -159,7 +159,7 @@ endif()
 
 message("CMake ${_AX_CORE_LIB} target_precompile_headers")
 target_precompile_headers(${_AX_CORE_LIB} PRIVATE 
-  "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>"
+  "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
 )
 
 if(WINDOWS)

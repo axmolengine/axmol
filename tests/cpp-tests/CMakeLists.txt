@@ -598,7 +598,7 @@ endif()
 if(NOT IOS)
     message("CMake ${APP_NAME} target_precompile_headers")
     target_precompile_headers(${APP_NAME} PRIVATE 
-      "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>"
+      "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
     )
 endif()
 
