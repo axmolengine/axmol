@@ -977,7 +977,7 @@ void TestIsFileExistAsync::onEnter()
     auto sharedFileUtils = FileUtils::getInstance();
 
     sharedFileUtils->isFileExist("Images/grossini.png", [=](bool isExist) {
-        AXASSERT(std::this_thread::get_id() == Director::getInstance()->getCocos2dThreadId(),
+        AXASSERT(std::this_thread::get_id() == Director::getInstance()->getAxmolThreadId(),
                  "Callback should be on cocos thread");
         auto label = Label::createWithSystemFont(
             isExist ? "Images/grossini.png exists" : "Images/grossini.png doesn't exist", "", 20);
