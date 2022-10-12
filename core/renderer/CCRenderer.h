@@ -32,6 +32,7 @@
 #include "platform/CCPlatformMacros.h"
 #include "renderer/CCRenderCommand.h"
 #include "renderer/backend/Types.h"
+#include "renderer/backend/ProgramManager.h"
 
 /**
  * @addtogroup renderer

@@ -142,7 +142,7 @@ void ShaderNode::loadShaderVertex(std::string_view vert, std::string_view frag)
         std::string vertexFilePath = fileUtiles->fullPathForFilename(vert);
         vertSource                 = fileUtiles->getStringFromFile(vertexFilePath);
     }
-    auto program      = backend::Device::getInstance()->newProgram(vertSource.c_str(), fragSource.c_str());
+    auto program      = ProgramManager::newProgram(vertSource, fragSource, VertexLayoutHelper::setupSprite);
     auto programState = new backend::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
@@ -451,7 +451,7 @@ void SpriteBlur::initProgram()
     std::string fragSource = FileUtils::getInstance()->getStringFromFile(
         FileUtils::getInstance()->fullPathForFilename("Shaders/example_Blur.fsh"));
 
-    auto program      = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.data());
+    auto program      = ProgramManager::newProgram(positionTextureColor_vert, fragSource, VertexLayoutHelper::setupSprite);
     auto programState = new backend::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
@@ -584,7 +584,7 @@ bool ShaderRetroEffect::init()
             FileUtils::getInstance()->fullPathForFilename("Shaders/example_HorizontalColor.fsh"));
         char* fragSource = (char*)fragStr.c_str();
 
-        auto program  = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource);
+        auto program  = ProgramManager::newProgram(positionTextureColor_vert, fragSource, VertexLayoutHelper::setupSprite);
         auto p        = new backend::ProgramState(program);
         auto director = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
@@ -767,7 +767,7 @@ bool ShaderMultiTexture::init()
         auto* fu            = FileUtils::getInstance();
         auto vertexShader   = fu->getStringFromFile("Shaders/example_MultiTexture.vsh");
         auto fragmentShader = fu->getStringFromFile("Shaders/example_MultiTexture.fsh");
-        auto program        = backend::Device::getInstance()->newProgram(vertexShader.c_str(), fragmentShader.c_str());
+        auto program        = ProgramManager::newProgram(vertexShader, fragmentShader, VertexLayoutHelper::setupSprite);
         auto programState   = new backend::ProgramState(program);
         _sprite->setProgramState(programState);
 

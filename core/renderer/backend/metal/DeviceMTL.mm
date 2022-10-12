@@ -35,6 +35,8 @@
 
 #include "base/ccMacros.h"
 
+#include "renderer/backend/ProgramManager.h"
+
 NS_AX_BACKEND_BEGIN
 
 CAMetalLayer* DeviceMTL::_metalLayer            = nil;
@@ -80,7 +82,7 @@ DeviceMTL::DeviceMTL()
 
 DeviceMTL::~DeviceMTL()
 {
-    ProgramCache::destroyInstance();
+    ProgramManager::destroyInstance();
     delete _deviceInfo;
     _deviceInfo = nullptr;
 }

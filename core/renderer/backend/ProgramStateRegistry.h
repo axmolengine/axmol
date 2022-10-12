@@ -9,12 +9,13 @@
 #include <unordered_map>
 
 NS_AX_BACKEND_BEGIN
+
 /**
  * @addtogroup _backend
  * @{
  * #todo: Rename to ProgramStateRegistry
  */
-class ProgramStateRegistry : public Ref
+class AX_DLL ProgramStateRegistry : public Ref
 {
 public:
     /** returns the shared instance */
