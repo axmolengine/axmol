@@ -46,6 +46,7 @@ class RenderPass;
 class RenderTarget;
 
 class ProgramManager;
+class Program;
 
 /**
  * @addtogroup _backend
