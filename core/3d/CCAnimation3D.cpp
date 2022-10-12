@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022  Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -27,6 +28,8 @@
 #include "3d/CCBundle3D.h"
 #include "platform/CCFileUtils.h"
 #include "base/axstd.h"
+
+#include "base/benchmark.h"
 
 NS_AX_BEGIN
 
@@ -104,8 +107,9 @@ bool Animation3D::init(const Animation3DData& data)
     _duration = data._totalTime;
 
     {
-        std::vector<float> keys;
-        std::vector<Vec3> values;
+        BENCHMARK(Animation3D_init_1);
+        axstd::pod_vector<float> keys;
+        axstd::pod_vector<Vec3> values;
         for (const auto& iter : data._translationKeys)
         {
             Curve* curve = _boneCurves[iter.first];
@@ -131,8 +135,9 @@ bool Animation3D::init(const Animation3DData& data)
     }
 
     {
-        std::vector<float> keys;
-        std::vector<Quaternion> values;
+        BENCHMARK(Animation3D_init_2);
+        axstd::pod_vector<float> keys;
+        axstd::pod_vector<Quaternion> values;
         for (const auto& iter : data._rotationKeys)
         {
             Curve* curve = _boneCurves[iter.first];
@@ -157,8 +162,9 @@ bool Animation3D::init(const Animation3DData& data)
     }
 
     {
-        std::vector<float> keys;
-        std::vector<Vec3> values;
+        BENCHMARK(Animation3D_init_3);
+        axstd::pod_vector<float> keys;
+        axstd::pod_vector<Vec3> values;
         for (const auto& iter : data._scaleKeys)
         {
             Curve* curve = _boneCurves[iter.first];

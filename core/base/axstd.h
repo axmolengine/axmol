@@ -2,6 +2,7 @@
 
 #include <type_traits>
 #include <memory>
+#include "pod_vector.h"
 
 namespace axstd
 {
@@ -39,10 +40,10 @@ inline auto resize_and_transform(const _InIt _First, const _InIt _Last, _OutCont
     return std::transform(_First, _Last, _Dest.begin(), _Func);
 }
 template <class _Ty, class _InIt, class _Fn>
-inline std::vector<_Ty> transform_from(const _InIt _First, const _InIt _Last, _Fn _Func)
+inline pod_vector<_Ty> pod_vector_from(const _InIt _First, const _InIt _Last, _Fn _Func)
 {
     auto count = std::distance(_First, _Last);
-    std::vector<_Ty> dest(static_cast<size_t>(count));
+    pod_vector<_Ty> dest(static_cast<size_t>(count));
     std::transform(_First, _Last, dest.begin(), _Func);
     return dest;
 }

@@ -1323,7 +1323,7 @@ void Terrain::Chunk::updateIndicesLOD()
 
 void Terrain::Chunk::calculateAABB()
 {
-    auto pos = axstd::transform_from<Vec3>(_originalVertices.begin(), _originalVertices.end(),
+    auto pos = axstd::pod_vector_from<Vec3>(_originalVertices.begin(), _originalVertices.end(),
                    [](const auto& it) { return it._position; });
     _aabb.updateMinMax(&pos[0], pos.size());
 }
