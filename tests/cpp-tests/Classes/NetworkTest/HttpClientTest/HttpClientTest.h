@@ -25,7 +25,7 @@
 #ifndef __HTTP_CLIENT_H__
 #define __HTTP_CLIENT_H__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "extensions/cocos-ext.h"
 #include "network/HttpClient.h"
 #include "BaseTest.h"

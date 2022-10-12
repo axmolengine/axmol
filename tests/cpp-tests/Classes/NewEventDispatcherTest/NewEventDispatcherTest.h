@@ -33,7 +33,7 @@
 #ifndef __samples__NewEventDispatcherTest__
 #define __samples__NewEventDispatcherTest__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(EventDispatcherTests);

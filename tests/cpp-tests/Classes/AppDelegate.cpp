@@ -27,7 +27,7 @@
 #include <string>
 #include "AppDelegate.h"
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "controller.h"
 // #include "extensions/cocostudio/CocoStudio.h"
 #include "extensions/cocos-ext.h"

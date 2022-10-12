@@ -26,7 +26,7 @@
 #include "ShaderTest2.h"
 #include "ShaderTest.h"
 #include "../testResource.h"
-#include "cocos2d.h"
+#include "axmol.h"
 #include "renderer/backend/Device.h"
 #include <tuple>
 
