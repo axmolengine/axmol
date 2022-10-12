@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -39,6 +40,7 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::create(std::string_view modelPath,
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
     {
+        ret->setModelTexture(modelPath, hlookup::empty_sv);
         auto obj               = Physics3DRigidBody::create(rigidDes);
         ret->_physicsComponent = Physics3DComponent::create(obj, translateInPhysics, rotInPhsyics);
         ret->addComponent(ret->_physicsComponent);
@@ -58,6 +60,7 @@ PhysicsMeshRenderer* PhysicsMeshRenderer::createWithCollider(std::string_view mo
     auto ret = new PhysicsMeshRenderer();
     if (ret->initWithFile(modelPath))
     {
+        ret->setModelTexture(modelPath, hlookup::empty_sv);
         auto obj               = Physics3DCollider::create(colliderDes);
         ret->_physicsComponent = Physics3DComponent::create(obj, translateInPhysics, rotInPhsyics);
         ret->addComponent(ret->_physicsComponent);

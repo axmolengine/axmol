@@ -2,6 +2,7 @@
  Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -33,8 +34,8 @@
 USING_NS_AX_EXT;
 USING_NS_AX;
 
-std::string boss[] = {"MeshRendererTest/boss.c3b",
-                      "MeshRendererTest/boss.obj"};
+static const std::string_view boss[] = {"MeshRendererTest/boss.c3b", "MeshRendererTest/boss.obj"};
+static const int boss_count          = sizeof(boss) / sizeof(boss[0]);
 
 enum
 {
@@ -662,7 +663,7 @@ bool Physics3DTerrainDemo::init()
 
     // create mesh
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < boss_count; i++)
     {
         std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList(boss[i]);
 
@@ -733,7 +734,7 @@ bool Physics3DCollisionCallbackDemo::init()
         return false;
 
     {
-        for (size_t i = 0; i < 2; i++)
+        for (size_t i = 0; i < boss_count; i++)
         {
             Physics3DRigidBodyDes rbDes;
 
