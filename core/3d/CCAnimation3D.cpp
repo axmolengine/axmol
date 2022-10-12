@@ -29,8 +29,6 @@
 #include "platform/CCFileUtils.h"
 #include "base/axstd.h"
 
-#include "base/benchmark.h"
-
 NS_AX_BEGIN
 
 Animation3D* Animation3D::create(std::string_view fileName, std::string_view animationName)
@@ -107,7 +105,6 @@ bool Animation3D::init(const Animation3DData& data)
     _duration = data._totalTime;
 
     {
-        BENCHMARK(Animation3D_init_1);
         axstd::pod_vector<float> keys;
         axstd::pod_vector<Vec3> values;
         for (const auto& iter : data._translationKeys)
@@ -135,7 +132,6 @@ bool Animation3D::init(const Animation3DData& data)
     }
 
     {
-        BENCHMARK(Animation3D_init_2);
         axstd::pod_vector<float> keys;
         axstd::pod_vector<Quaternion> values;
         for (const auto& iter : data._rotationKeys)
@@ -162,7 +158,6 @@ bool Animation3D::init(const Animation3DData& data)
     }
 
     {
-        BENCHMARK(Animation3D_init_3);
         axstd::pod_vector<float> keys;
         axstd::pod_vector<Vec3> values;
         for (const auto& iter : data._scaleKeys)
