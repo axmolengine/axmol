@@ -2405,6 +2405,11 @@ void color4f_to_luaval(lua_State* L, const Color4F& color)
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
 }
 
+void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value) {
+    auto threadHash = std::hash<std::thread::id>{}(value);
+    lua_pushinteger(L, threadHash);
+}
+
 void color3b_to_luaval(lua_State* L, const Color3B& color)
 {
     if (NULL == L)

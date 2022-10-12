@@ -96,6 +96,7 @@ conversions:
     "long long": "tolua_pushnumber(tolua_S,(lua_Number)${in_value})"
     "string": "lua_pushlstring(tolua_S,${in_value}.c_str(),${in_value}.length())"
     "string_view": "lua_pushlstring(tolua_S,${in_value}.data(),${in_value}.length())"
+    "__thread_id": "std_thread_id_to_luaval(tolua_S, ${in_value})"
     "char*": "tolua_pushstring(tolua_S,(const char*)${in_value})"
     "String*": "tolua_pushstring(tolua_S, ${in_value}->getCString())"
     bool: "tolua_pushboolean(tolua_S,(bool)${in_value})"

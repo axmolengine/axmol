@@ -39,7 +39,7 @@ int lua_ax_csloader_CSLoader_createNodeFromJson(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_createNodeFromJson'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->createNodeFromJson(arg0);
+        auto&& ret = cobj->createNodeFromJson(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -89,7 +89,7 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersFile'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->createNodeWithFlatBuffersFile(arg0);
+        auto&& ret = cobj->createNodeWithFlatBuffersFile(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -139,7 +139,7 @@ int lua_ax_csloader_CSLoader_loadNodeWithFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_loadNodeWithFile'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->loadNodeWithFile(arg0);
+        auto&& ret = cobj->loadNodeWithFile(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -198,7 +198,7 @@ int lua_ax_csloader_CSLoader_bindCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_bindCallback'", nullptr);
             return 0;
         }
-        bool ret = cobj->bindCallback(arg0, arg1, arg2, arg3);
+        auto&& ret = cobj->bindCallback(arg0, arg1, arg2, arg3);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -345,7 +345,7 @@ int lua_ax_csloader_CSLoader_loadNodeWithContent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_loadNodeWithContent'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->loadNodeWithContent(arg0);
+        auto&& ret = cobj->loadNodeWithContent(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -392,7 +392,7 @@ int lua_ax_csloader_CSLoader_isRecordJsonPath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_isRecordJsonPath'", nullptr);
             return 0;
         }
-        bool ret = cobj->isRecordJsonPath();
+        auto&& ret = cobj->isRecordJsonPath();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -439,7 +439,7 @@ int lua_ax_csloader_CSLoader_getJsonPath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_getJsonPath'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getJsonPath();
+        auto&& ret = cobj->getJsonPath();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -539,7 +539,7 @@ int lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_createNodeWithFlatBuffersForSimulator'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->createNodeWithFlatBuffersForSimulator(arg0);
+        auto&& ret = cobj->createNodeWithFlatBuffersForSimulator(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -664,7 +664,7 @@ int lua_ax_csloader_CSLoader_getInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_csloader_CSLoader_getInstance'", nullptr);
             return 0;
         }
-        ax::CSLoader* ret = ax::CSLoader::getInstance();
+        auto&& ret = ax::CSLoader::getInstance();
         object_to_luaval<ax::CSLoader>(tolua_S, "ax.CSLoader",(ax::CSLoader*)ret);
         return 1;
     }
