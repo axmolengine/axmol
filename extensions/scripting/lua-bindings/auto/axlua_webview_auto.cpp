@@ -86,7 +86,7 @@ int lua_ax_webview_WebView_canGoBack(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_canGoBack'", nullptr);
             return 0;
         }
-        bool ret = cobj->canGoBack();
+        auto&& ret = cobj->canGoBack();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -600,7 +600,7 @@ int lua_ax_webview_WebView_getOnJSCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_getOnJSCallback'", nullptr);
             return 0;
         }
-        ax::ui::WebView::ccWebViewCallback ret = cobj->getOnJSCallback();
+        auto&& ret = cobj->getOnJSCallback();
         #pragma warning NO CONVERSION FROM NATIVE FOR std::function;
         return 1;
     }
@@ -647,7 +647,7 @@ int lua_ax_webview_WebView_canGoForward(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_canGoForward'", nullptr);
             return 0;
         }
-        bool ret = cobj->canGoForward();
+        auto&& ret = cobj->canGoForward();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -741,7 +741,7 @@ int lua_ax_webview_WebView_getOpacityWebView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_getOpacityWebView'", nullptr);
             return 0;
         }
-        double ret = cobj->getOpacityWebView();
+        auto&& ret = cobj->getOpacityWebView();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -874,7 +874,7 @@ int lua_ax_webview_WebView_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_webview_WebView_create'", nullptr);
             return 0;
         }
-        ax::ui::WebView* ret = ax::ui::WebView::create();
+        auto&& ret = ax::ui::WebView::create();
         object_to_luaval<ax::ui::WebView>(tolua_S, "axui.WebView",(ax::ui::WebView*)ret);
         return 1;
     }

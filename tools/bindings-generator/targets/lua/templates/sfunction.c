@@ -57,7 +57,7 @@ int ${signature_name}(lua_State* tolua_S)
             #if $ret_type.is_enum
         int ret = (int)${namespaced_class_name}::${func_name}($arg_list);
             #else
-        ${ret_type.get_whole_name($generator)} ret = ${namespaced_class_name}::${func_name}($arg_list);
+        auto&& ret = ${namespaced_class_name}::${func_name}($arg_list);
         #end if
         ${ret_type.from_native({"generator": $generator,
                                 "in_value": "ret",

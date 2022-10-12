@@ -81,7 +81,7 @@ int lua_ax_audioengine_AudioEngine_lazyInit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_lazyInit'", nullptr);
             return 0;
         }
-        bool ret = ax::AudioEngine::lazyInit();
+        auto&& ret = ax::AudioEngine::lazyInit();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -119,7 +119,7 @@ int lua_ax_audioengine_AudioEngine_setCurrentTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setCurrentTime'", nullptr);
             return 0;
         }
-        bool ret = ax::AudioEngine::setCurrentTime(arg0, arg1);
+        auto&& ret = ax::AudioEngine::setCurrentTime(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -155,7 +155,7 @@ int lua_ax_audioengine_AudioEngine_getVolume(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getVolume'", nullptr);
             return 0;
         }
-        double ret = ax::AudioEngine::getVolume(arg0);
+        auto&& ret = ax::AudioEngine::getVolume(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -329,7 +329,7 @@ int lua_ax_audioengine_AudioEngine_getMaxAudioInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getMaxAudioInstance'", nullptr);
             return 0;
         }
-        int ret = ax::AudioEngine::getMaxAudioInstance();
+        auto&& ret = ax::AudioEngine::getMaxAudioInstance();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -363,7 +363,7 @@ int lua_ax_audioengine_AudioEngine_isEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_isEnabled'", nullptr);
             return 0;
         }
-        bool ret = ax::AudioEngine::isEnabled();
+        auto&& ret = ax::AudioEngine::isEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -399,7 +399,7 @@ int lua_ax_audioengine_AudioEngine_getCurrentTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getCurrentTime'", nullptr);
             return 0;
         }
-        double ret = ax::AudioEngine::getCurrentTime(arg0);
+        auto&& ret = ax::AudioEngine::getCurrentTime(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -435,7 +435,7 @@ int lua_ax_audioengine_AudioEngine_setMaxAudioInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_setMaxAudioInstance'", nullptr);
             return 0;
         }
-        bool ret = ax::AudioEngine::setMaxAudioInstance(arg0);
+        auto&& ret = ax::AudioEngine::setMaxAudioInstance(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -471,7 +471,7 @@ int lua_ax_audioengine_AudioEngine_isLoop(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_isLoop'", nullptr);
             return 0;
         }
-        bool ret = ax::AudioEngine::isLoop(arg0);
+        auto&& ret = ax::AudioEngine::isLoop(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -704,7 +704,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_play2d'", nullptr);
             return 0;
         }
-        int ret = ax::AudioEngine::play2d(arg0);
+        auto&& ret = ax::AudioEngine::play2d(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -719,7 +719,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_play2d'", nullptr);
             return 0;
         }
-        int ret = ax::AudioEngine::play2d(arg0, arg1);
+        auto&& ret = ax::AudioEngine::play2d(arg0, arg1);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -736,7 +736,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_play2d'", nullptr);
             return 0;
         }
-        int ret = ax::AudioEngine::play2d(arg0, arg1, arg2);
+        auto&& ret = ax::AudioEngine::play2d(arg0, arg1, arg2);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -755,7 +755,7 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_play2d'", nullptr);
             return 0;
         }
-        int ret = ax::AudioEngine::play2d(arg0, arg1, arg2, arg3);
+        auto&& ret = ax::AudioEngine::play2d(arg0, arg1, arg2, arg3);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -933,7 +933,7 @@ int lua_ax_audioengine_AudioEngine_getDuration(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getDuration'", nullptr);
             return 0;
         }
-        double ret = ax::AudioEngine::getDuration(arg0);
+        auto&& ret = ax::AudioEngine::getDuration(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1005,7 +1005,7 @@ int lua_ax_audioengine_AudioEngine_getDefaultProfile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getDefaultProfile'", nullptr);
             return 0;
         }
-        ax::AudioProfile* ret = ax::AudioEngine::getDefaultProfile();
+        auto&& ret = ax::AudioEngine::getDefaultProfile();
         object_to_luaval<ax::AudioProfile>(tolua_S, "ax.AudioProfile",(ax::AudioProfile*)ret);
         return 1;
     }
@@ -1087,7 +1087,7 @@ int lua_ax_audioengine_AudioEngine_getPlayingAudioCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_getPlayingAudioCount'", nullptr);
             return 0;
         }
-        int ret = ax::AudioEngine::getPlayingAudioCount();
+        auto&& ret = ax::AudioEngine::getPlayingAudioCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }

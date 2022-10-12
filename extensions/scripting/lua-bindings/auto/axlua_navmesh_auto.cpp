@@ -182,7 +182,7 @@ int lua_ax_navmesh_NavMeshAgent_getSeparationWeight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getSeparationWeight'", nullptr);
             return 0;
         }
-        double ret = cobj->getSeparationWeight();
+        auto&& ret = cobj->getSeparationWeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -279,7 +279,7 @@ int lua_ax_navmesh_NavMeshAgent_getCurrentVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getCurrentVelocity'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getCurrentVelocity();
+        auto&& ret = cobj->getCurrentVelocity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -373,7 +373,7 @@ int lua_ax_navmesh_NavMeshAgent_isOnOffMeshLink(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_isOnOffMeshLink'", nullptr);
             return 0;
         }
-        bool ret = cobj->isOnOffMeshLink();
+        auto&& ret = cobj->isOnOffMeshLink();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -517,7 +517,7 @@ int lua_ax_navmesh_NavMeshAgent_getUserData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getUserData'", nullptr);
             return 0;
         }
-        void* ret = cobj->getUserData();
+        auto&& ret = cobj->getUserData();
         #pragma warning NO CONVERSION FROM NATIVE FOR void*;
         return 1;
     }
@@ -614,7 +614,7 @@ int lua_ax_navmesh_NavMeshAgent_getHeight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getHeight'", nullptr);
             return 0;
         }
-        double ret = cobj->getHeight();
+        auto&& ret = cobj->getHeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -661,7 +661,7 @@ int lua_ax_navmesh_NavMeshAgent_getMaxSpeed(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getMaxSpeed'", nullptr);
             return 0;
         }
-        double ret = cobj->getMaxSpeed();
+        auto&& ret = cobj->getMaxSpeed();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -708,7 +708,7 @@ int lua_ax_navmesh_NavMeshAgent_getCurrentOffMeshLinkData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getCurrentOffMeshLinkData'", nullptr);
             return 0;
         }
-        ax::OffMeshLinkData ret = cobj->getCurrentOffMeshLinkData();
+        auto&& ret = cobj->getCurrentOffMeshLinkData();
         offmeshlinkdata_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -755,7 +755,7 @@ int lua_ax_navmesh_NavMeshAgent_getRadius(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getRadius'", nullptr);
             return 0;
         }
-        double ret = cobj->getRadius();
+        auto&& ret = cobj->getRadius();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1093,7 +1093,7 @@ int lua_ax_navmesh_NavMeshAgent_getMaxAcceleration(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getMaxAcceleration'", nullptr);
             return 0;
         }
-        double ret = cobj->getMaxAcceleration();
+        auto&& ret = cobj->getMaxAcceleration();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1241,7 +1241,7 @@ int lua_ax_navmesh_NavMeshAgent_getObstacleAvoidanceType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getObstacleAvoidanceType'", nullptr);
             return 0;
         }
-        uint16_t ret = cobj->getObstacleAvoidanceType();
+        auto&& ret = cobj->getObstacleAvoidanceType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1288,7 +1288,7 @@ int lua_ax_navmesh_NavMeshAgent_getVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getVelocity'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getVelocity();
+        auto&& ret = cobj->getVelocity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1424,7 +1424,7 @@ int lua_ax_navmesh_NavMeshAgent_getNavMeshAgentComponentName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_getNavMeshAgentComponentName'", nullptr);
             return 0;
         }
-        std::string_view ret = ax::NavMeshAgent::getNavMeshAgentComponentName();
+        auto&& ret = ax::NavMeshAgent::getNavMeshAgentComponentName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -1460,7 +1460,7 @@ int lua_ax_navmesh_NavMeshAgent_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshAgent_create'", nullptr);
             return 0;
         }
-        ax::NavMeshAgent* ret = ax::NavMeshAgent::create(arg0);
+        auto&& ret = ax::NavMeshAgent::create(arg0);
         object_to_luaval<ax::NavMeshAgent>(tolua_S, "ax.NavMeshAgent",(ax::NavMeshAgent*)ret);
         return 1;
     }
@@ -1646,7 +1646,7 @@ int lua_ax_navmesh_NavMeshObstacle_initWith(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshObstacle_initWith'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWith(arg0, arg1);
+        auto&& ret = cobj->initWith(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1787,7 +1787,7 @@ int lua_ax_navmesh_NavMeshObstacle_getHeight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshObstacle_getHeight'", nullptr);
             return 0;
         }
-        double ret = cobj->getHeight();
+        auto&& ret = cobj->getHeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1884,7 +1884,7 @@ int lua_ax_navmesh_NavMeshObstacle_getRadius(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshObstacle_getRadius'", nullptr);
             return 0;
         }
-        double ret = cobj->getRadius();
+        auto&& ret = cobj->getRadius();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1924,7 +1924,7 @@ int lua_ax_navmesh_NavMeshObstacle_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshObstacle_create'", nullptr);
             return 0;
         }
-        ax::NavMeshObstacle* ret = ax::NavMeshObstacle::create(arg0, arg1);
+        auto&& ret = ax::NavMeshObstacle::create(arg0, arg1);
         object_to_luaval<ax::NavMeshObstacle>(tolua_S, "ax.NavMeshObstacle",(ax::NavMeshObstacle*)ret);
         return 1;
     }
@@ -1958,7 +1958,7 @@ int lua_ax_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMeshObstacle_getNavMeshObstacleComponentName'", nullptr);
             return 0;
         }
-        std::string_view ret = ax::NavMeshObstacle::getNavMeshObstacleComponentName();
+        auto&& ret = ax::NavMeshObstacle::getNavMeshObstacleComponentName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -2219,7 +2219,7 @@ int lua_ax_navmesh_NavMesh_isDebugDrawEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMesh_isDebugDrawEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isDebugDrawEnabled();
+        auto&& ret = cobj->isDebugDrawEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2459,7 +2459,7 @@ int lua_ax_navmesh_NavMesh_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_navmesh_NavMesh_create'", nullptr);
             return 0;
         }
-        ax::NavMesh* ret = ax::NavMesh::create(arg0, arg1);
+        auto&& ret = ax::NavMesh::create(arg0, arg1);
         object_to_luaval<ax::NavMesh>(tolua_S, "ax.NavMesh",(ax::NavMesh*)ret);
         return 1;
     }
