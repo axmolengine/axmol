@@ -73,7 +73,7 @@ public:
     pod_vector(pod_vector const&)            = delete;
     pod_vector& operator=(pod_vector const&) = delete;
 
-    pod_vector(pod_vector&& o) noexcept : _Myfirst(o._Myfirst), _Mylast(o._Mylast), _Myend(o._Myend) 
+    pod_vector(pod_vector&& o) noexcept : _Myfirst(o._Myfirst), _Mylast(o._Mylast), _Myend(o._Myend)
     {
         o._Myfirst = nullptr;
         o._Mylast  = nullptr;
@@ -109,7 +109,12 @@ public:
             _Reallocate_exactly(new_cap);
     }
 
-    void resize(size_t new_size) { resize_fit(new_size); }
+    void resize(size_t new_size)
+    {
+        if (this->capacity() < new_size)
+            _Reallocate_exactly(_Calculate_growth(new_size));
+        _Mylast = _Myfirst + new_size;
+    }
 
     void resize_fit(size_t new_size)
     {
