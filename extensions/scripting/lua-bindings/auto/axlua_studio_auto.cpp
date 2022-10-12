@@ -97,7 +97,7 @@ int lua_ax_studio_ActionFrame_getFrameType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFrame_getFrameType'", nullptr);
             return 0;
         }
-        int ret = cobj->getFrameType();
+        auto&& ret = cobj->getFrameType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -244,7 +244,7 @@ int lua_ax_studio_ActionFrame_getFrameTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFrame_getFrameTime'", nullptr);
             return 0;
         }
-        double ret = cobj->getFrameTime();
+        auto&& ret = cobj->getFrameTime();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -291,7 +291,7 @@ int lua_ax_studio_ActionFrame_getFrameIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFrame_getFrameIndex'", nullptr);
             return 0;
         }
-        int ret = cobj->getFrameIndex();
+        auto&& ret = cobj->getFrameIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -488,7 +488,7 @@ int lua_ax_studio_ActionFrame_getEasingType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFrame_getEasingType'", nullptr);
             return 0;
         }
-        int ret = cobj->getEasingType();
+        auto&& ret = cobj->getEasingType();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -655,7 +655,7 @@ int lua_ax_studio_ActionMoveFrame_getAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionMoveFrame_getAction'", nullptr);
             return 0;
         }
-        ax::ActionInterval* ret = cobj->getAction(arg0);
+        auto&& ret = cobj->getAction(arg0);
         object_to_luaval<ax::ActionInterval>(tolua_S, "ax.ActionInterval",(ax::ActionInterval*)ret);
         return 1;
     }
@@ -702,7 +702,7 @@ int lua_ax_studio_ActionMoveFrame_getPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionMoveFrame_getPosition'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getPosition();
+        auto&& ret = cobj->getPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -909,7 +909,7 @@ int lua_ax_studio_ActionScaleFrame_getScaleY(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionScaleFrame_getScaleY'", nullptr);
             return 0;
         }
-        double ret = cobj->getScaleY();
+        auto&& ret = cobj->getScaleY();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -956,7 +956,7 @@ int lua_ax_studio_ActionScaleFrame_getScaleX(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionScaleFrame_getScaleX'", nullptr);
             return 0;
         }
-        double ret = cobj->getScaleX();
+        auto&& ret = cobj->getScaleX();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1006,7 +1006,7 @@ int lua_ax_studio_ActionScaleFrame_getAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionScaleFrame_getAction'", nullptr);
             return 0;
         }
-        ax::ActionInterval* ret = cobj->getAction(arg0);
+        auto&& ret = cobj->getAction(arg0);
         object_to_luaval<ax::ActionInterval>(tolua_S, "ax.ActionInterval",(ax::ActionInterval*)ret);
         return 1;
     }
@@ -1224,7 +1224,7 @@ int lua_ax_studio_ActionRotationFrame_getRotation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionRotationFrame_getRotation'", nullptr);
             return 0;
         }
-        double ret = cobj->getRotation();
+        auto&& ret = cobj->getRotation();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1331,7 +1331,7 @@ int lua_ax_studio_ActionFadeFrame_getOpacity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFadeFrame_getOpacity'", nullptr);
             return 0;
         }
-        int ret = cobj->getOpacity();
+        auto&& ret = cobj->getOpacity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1381,7 +1381,7 @@ int lua_ax_studio_ActionFadeFrame_getAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionFadeFrame_getAction'", nullptr);
             return 0;
         }
-        ax::ActionInterval* ret = cobj->getAction(arg0);
+        auto&& ret = cobj->getAction(arg0);
         object_to_luaval<ax::ActionInterval>(tolua_S, "ax.ActionInterval",(ax::ActionInterval*)ret);
         return 1;
     }
@@ -1538,7 +1538,7 @@ int lua_ax_studio_ActionTintFrame_getColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTintFrame_getColor'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->getColor();
+        auto&& ret = cobj->getColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1588,7 +1588,7 @@ int lua_ax_studio_ActionTintFrame_getAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTintFrame_getAction'", nullptr);
             return 0;
         }
-        ax::ActionInterval* ret = cobj->getAction(arg0);
+        auto&& ret = cobj->getAction(arg0);
         object_to_luaval<ax::ActionInterval>(tolua_S, "ax.ActionInterval",(ax::ActionInterval*)ret);
         return 1;
     }
@@ -1942,7 +1942,7 @@ int lua_ax_studio_ActionObject_getTotalTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_getTotalTime'", nullptr);
             return 0;
         }
-        double ret = cobj->getTotalTime();
+        auto&& ret = cobj->getTotalTime();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1989,7 +1989,7 @@ int lua_ax_studio_ActionObject_getName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_getName'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getName();
+        auto&& ret = cobj->getName();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -2134,7 +2134,7 @@ int lua_ax_studio_ActionObject_getCurrentTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_getCurrentTime'", nullptr);
             return 0;
         }
-        double ret = cobj->getCurrentTime();
+        auto&& ret = cobj->getCurrentTime();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2231,7 +2231,7 @@ int lua_ax_studio_ActionObject_getLoop(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_getLoop'", nullptr);
             return 0;
         }
-        bool ret = cobj->getLoop();
+        auto&& ret = cobj->getLoop();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2328,7 +2328,7 @@ int lua_ax_studio_ActionObject_getUnitTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_getUnitTime'", nullptr);
             return 0;
         }
-        double ret = cobj->getUnitTime();
+        auto&& ret = cobj->getUnitTime();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2375,7 +2375,7 @@ int lua_ax_studio_ActionObject_isPlaying(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionObject_isPlaying'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPlaying();
+        auto&& ret = cobj->isPlaying();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2652,7 +2652,7 @@ int lua_ax_studio_ActionManagerEx_stopActionByName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionManagerEx_stopActionByName'", nullptr);
             return 0;
         }
-        cocostudio::ActionObject* ret = cobj->stopActionByName(arg0, arg1);
+        auto&& ret = cobj->stopActionByName(arg0, arg1);
         object_to_luaval<cocostudio::ActionObject>(tolua_S, "ccs.ActionObject",(cocostudio::ActionObject*)ret);
         return 1;
     }
@@ -2705,7 +2705,7 @@ int lua_ax_studio_ActionManagerEx_getActionByName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionManagerEx_getActionByName'", nullptr);
             return 0;
         }
-        cocostudio::ActionObject* ret = cobj->getActionByName(arg0, arg1);
+        auto&& ret = cobj->getActionByName(arg0, arg1);
         object_to_luaval<cocostudio::ActionObject>(tolua_S, "ccs.ActionObject",(cocostudio::ActionObject*)ret);
         return 1;
     }
@@ -2752,7 +2752,7 @@ int lua_ax_studio_ActionManagerEx_getStudioVersionNumber(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionManagerEx_getStudioVersionNumber'", nullptr);
             return 0;
         }
-        int ret = cobj->getStudioVersionNumber();
+        auto&& ret = cobj->getStudioVersionNumber();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2936,7 +2936,7 @@ int lua_ax_studio_ActionManagerEx_getInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionManagerEx_getInstance'", nullptr);
             return 0;
         }
-        cocostudio::ActionManagerEx* ret = cocostudio::ActionManagerEx::getInstance();
+        auto&& ret = cocostudio::ActionManagerEx::getInstance();
         object_to_luaval<cocostudio::ActionManagerEx>(tolua_S, "ccs.ActionManagerEx",(cocostudio::ActionManagerEx*)ret);
         return 1;
     }
@@ -3007,7 +3007,7 @@ int lua_ax_studio_BaseData_getColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BaseData_getColor'", nullptr);
             return 0;
         }
-        ax::Color4B ret = cobj->getColor();
+        auto&& ret = cobj->getColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3093,7 +3093,7 @@ int lua_ax_studio_BaseData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BaseData_create'", nullptr);
             return 0;
         }
-        cocostudio::BaseData* ret = cocostudio::BaseData::create();
+        auto&& ret = cocostudio::BaseData::create();
         object_to_luaval<cocostudio::BaseData>(tolua_S, "ccs.BaseData",(cocostudio::BaseData*)ret);
         return 1;
     }
@@ -3239,7 +3239,7 @@ int lua_ax_studio_DisplayData_changeDisplayToTexture(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayData_changeDisplayToTexture'", nullptr);
             return 0;
         }
-        std::string ret = cocostudio::DisplayData::changeDisplayToTexture(arg0);
+        auto&& ret = cocostudio::DisplayData::changeDisplayToTexture(arg0);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -3273,7 +3273,7 @@ int lua_ax_studio_DisplayData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayData_create'", nullptr);
             return 0;
         }
-        cocostudio::DisplayData* ret = cocostudio::DisplayData::create();
+        auto&& ret = cocostudio::DisplayData::create();
         object_to_luaval<cocostudio::DisplayData>(tolua_S, "ccs.DisplayData",(cocostudio::DisplayData*)ret);
         return 1;
     }
@@ -3417,7 +3417,7 @@ int lua_ax_studio_SpriteDisplayData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SpriteDisplayData_create'", nullptr);
             return 0;
         }
-        cocostudio::SpriteDisplayData* ret = cocostudio::SpriteDisplayData::create();
+        auto&& ret = cocostudio::SpriteDisplayData::create();
         object_to_luaval<cocostudio::SpriteDisplayData>(tolua_S, "ccs.SpriteDisplayData",(cocostudio::SpriteDisplayData*)ret);
         return 1;
     }
@@ -3510,7 +3510,7 @@ int lua_ax_studio_ArmatureDisplayData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDisplayData_create'", nullptr);
             return 0;
         }
-        cocostudio::ArmatureDisplayData* ret = cocostudio::ArmatureDisplayData::create();
+        auto&& ret = cocostudio::ArmatureDisplayData::create();
         object_to_luaval<cocostudio::ArmatureDisplayData>(tolua_S, "ccs.ArmatureDisplayData",(cocostudio::ArmatureDisplayData*)ret);
         return 1;
     }
@@ -3602,7 +3602,7 @@ int lua_ax_studio_ParticleDisplayData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ParticleDisplayData_create'", nullptr);
             return 0;
         }
-        cocostudio::ParticleDisplayData* ret = cocostudio::ParticleDisplayData::create();
+        auto&& ret = cocostudio::ParticleDisplayData::create();
         object_to_luaval<cocostudio::ParticleDisplayData>(tolua_S, "ccs.ParticleDisplayData",(cocostudio::ParticleDisplayData*)ret);
         return 1;
     }
@@ -3708,7 +3708,7 @@ int lua_ax_studio_BoneData_getDisplayData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneData_getDisplayData'", nullptr);
             return 0;
         }
-        cocostudio::DisplayData* ret = cobj->getDisplayData(arg0);
+        auto&& ret = cobj->getDisplayData(arg0);
         object_to_luaval<cocostudio::DisplayData>(tolua_S, "ccs.DisplayData",(cocostudio::DisplayData*)ret);
         return 1;
     }
@@ -3755,7 +3755,7 @@ int lua_ax_studio_BoneData_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneData_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init();
+        auto&& ret = cobj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3841,7 +3841,7 @@ int lua_ax_studio_BoneData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneData_create'", nullptr);
             return 0;
         }
-        cocostudio::BoneData* ret = cocostudio::BoneData::create();
+        auto&& ret = cocostudio::BoneData::create();
         object_to_luaval<cocostudio::BoneData>(tolua_S, "ccs.BoneData",(cocostudio::BoneData*)ret);
         return 1;
     }
@@ -3997,7 +3997,7 @@ int lua_ax_studio_ArmatureData_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureData_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init();
+        auto&& ret = cobj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4047,7 +4047,7 @@ int lua_ax_studio_ArmatureData_getBoneData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureData_getBoneData'", nullptr);
             return 0;
         }
-        cocostudio::BoneData* ret = cobj->getBoneData(arg0);
+        auto&& ret = cobj->getBoneData(arg0);
         object_to_luaval<cocostudio::BoneData>(tolua_S, "ccs.BoneData",(cocostudio::BoneData*)ret);
         return 1;
     }
@@ -4083,7 +4083,7 @@ int lua_ax_studio_ArmatureData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureData_create'", nullptr);
             return 0;
         }
-        cocostudio::ArmatureData* ret = cocostudio::ArmatureData::create();
+        auto&& ret = cocostudio::ArmatureData::create();
         object_to_luaval<cocostudio::ArmatureData>(tolua_S, "ccs.ArmatureData",(cocostudio::ArmatureData*)ret);
         return 1;
     }
@@ -4228,7 +4228,7 @@ int lua_ax_studio_FrameData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_FrameData_create'", nullptr);
             return 0;
         }
-        cocostudio::FrameData* ret = cocostudio::FrameData::create();
+        auto&& ret = cocostudio::FrameData::create();
         object_to_luaval<cocostudio::FrameData>(tolua_S, "ccs.FrameData",(cocostudio::FrameData*)ret);
         return 1;
     }
@@ -4332,7 +4332,7 @@ int lua_ax_studio_MovementBoneData_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_MovementBoneData_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init();
+        auto&& ret = cobj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4382,7 +4382,7 @@ int lua_ax_studio_MovementBoneData_getFrameData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_MovementBoneData_getFrameData'", nullptr);
             return 0;
         }
-        cocostudio::FrameData* ret = cobj->getFrameData(arg0);
+        auto&& ret = cobj->getFrameData(arg0);
         object_to_luaval<cocostudio::FrameData>(tolua_S, "ccs.FrameData",(cocostudio::FrameData*)ret);
         return 1;
     }
@@ -4468,7 +4468,7 @@ int lua_ax_studio_MovementBoneData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_MovementBoneData_create'", nullptr);
             return 0;
         }
-        cocostudio::MovementBoneData* ret = cocostudio::MovementBoneData::create();
+        auto&& ret = cocostudio::MovementBoneData::create();
         object_to_luaval<cocostudio::MovementBoneData>(tolua_S, "ccs.MovementBoneData",(cocostudio::MovementBoneData*)ret);
         return 1;
     }
@@ -4577,7 +4577,7 @@ int lua_ax_studio_MovementData_getMovementBoneData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_MovementData_getMovementBoneData'", nullptr);
             return 0;
         }
-        cocostudio::MovementBoneData* ret = cobj->getMovementBoneData(arg0);
+        auto&& ret = cobj->getMovementBoneData(arg0);
         object_to_luaval<cocostudio::MovementBoneData>(tolua_S, "ccs.MovementBoneData",(cocostudio::MovementBoneData*)ret);
         return 1;
     }
@@ -4663,7 +4663,7 @@ int lua_ax_studio_MovementData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_MovementData_create'", nullptr);
             return 0;
         }
-        cocostudio::MovementData* ret = cocostudio::MovementData::create();
+        auto&& ret = cocostudio::MovementData::create();
         object_to_luaval<cocostudio::MovementData>(tolua_S, "ccs.MovementData",(cocostudio::MovementData*)ret);
         return 1;
     }
@@ -4771,7 +4771,7 @@ int lua_ax_studio_AnimationData_getMovement(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_AnimationData_getMovement'", nullptr);
             return 0;
         }
-        cocostudio::MovementData* ret = cobj->getMovement(arg0);
+        auto&& ret = cobj->getMovement(arg0);
         object_to_luaval<cocostudio::MovementData>(tolua_S, "ccs.MovementData",(cocostudio::MovementData*)ret);
         return 1;
     }
@@ -4818,7 +4818,7 @@ int lua_ax_studio_AnimationData_getMovementCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_AnimationData_getMovementCount'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getMovementCount();
+        auto&& ret = cobj->getMovementCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4904,7 +4904,7 @@ int lua_ax_studio_AnimationData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_AnimationData_create'", nullptr);
             return 0;
         }
-        cocostudio::AnimationData* ret = cocostudio::AnimationData::create();
+        auto&& ret = cocostudio::AnimationData::create();
         object_to_luaval<cocostudio::AnimationData>(tolua_S, "ccs.AnimationData",(cocostudio::AnimationData*)ret);
         return 1;
     }
@@ -5010,7 +5010,7 @@ int lua_ax_studio_ContourData_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ContourData_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init();
+        auto&& ret = cobj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5096,7 +5096,7 @@ int lua_ax_studio_ContourData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ContourData_create'", nullptr);
             return 0;
         }
-        cocostudio::ContourData* ret = cocostudio::ContourData::create();
+        auto&& ret = cocostudio::ContourData::create();
         object_to_luaval<cocostudio::ContourData>(tolua_S, "ccs.ContourData",(cocostudio::ContourData*)ret);
         return 1;
     }
@@ -5204,7 +5204,7 @@ int lua_ax_studio_TextureData_getContourData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_TextureData_getContourData'", nullptr);
             return 0;
         }
-        cocostudio::ContourData* ret = cobj->getContourData(arg0);
+        auto&& ret = cobj->getContourData(arg0);
         object_to_luaval<cocostudio::ContourData>(tolua_S, "ccs.ContourData",(cocostudio::ContourData*)ret);
         return 1;
     }
@@ -5251,7 +5251,7 @@ int lua_ax_studio_TextureData_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_TextureData_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init();
+        auto&& ret = cobj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5337,7 +5337,7 @@ int lua_ax_studio_TextureData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_TextureData_create'", nullptr);
             return 0;
         }
-        cocostudio::TextureData* ret = cocostudio::TextureData::create();
+        auto&& ret = cocostudio::TextureData::create();
         object_to_luaval<cocostudio::TextureData>(tolua_S, "ccs.TextureData",(cocostudio::TextureData*)ret);
         return 1;
     }
@@ -5443,7 +5443,7 @@ int lua_ax_studio_Tween_getAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Tween_getAnimation'", nullptr);
             return 0;
         }
-        cocostudio::ArmatureAnimation* ret = cobj->getAnimation();
+        auto&& ret = cobj->getAnimation();
         object_to_luaval<cocostudio::ArmatureAnimation>(tolua_S, "ccs.ArmatureAnimation",(cocostudio::ArmatureAnimation*)ret);
         return 1;
     }
@@ -5655,7 +5655,7 @@ int lua_ax_studio_Tween_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Tween_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0);
+        auto&& ret = cobj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5743,7 +5743,7 @@ int lua_ax_studio_Tween_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Tween_create'", nullptr);
             return 0;
         }
-        cocostudio::Tween* ret = cocostudio::Tween::create(arg0);
+        auto&& ret = cocostudio::Tween::create(arg0);
         object_to_luaval<cocostudio::Tween>(tolua_S, "ccs.Tween",(cocostudio::Tween*)ret);
         return 1;
     }
@@ -5852,7 +5852,7 @@ int lua_ax_studio_DisplayManager_getDisplayRenderNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_getDisplayRenderNode'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getDisplayRenderNode();
+        auto&& ret = cobj->getDisplayRenderNode();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -5899,7 +5899,7 @@ int lua_ax_studio_DisplayManager_getAnchorPointInPoints(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_getAnchorPointInPoints'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getAnchorPointInPoints();
+        auto&& ret = cobj->getAnchorPointInPoints();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6096,7 +6096,7 @@ int lua_ax_studio_DisplayManager_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0);
+        auto&& ret = cobj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -6143,7 +6143,7 @@ int lua_ax_studio_DisplayManager_getContentSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_getContentSize'", nullptr);
             return 0;
         }
-        ax::Size ret = cobj->getContentSize();
+        auto&& ret = cobj->getContentSize();
         size_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6190,7 +6190,7 @@ int lua_ax_studio_DisplayManager_getBoundingBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_getBoundingBox'", nullptr);
             return 0;
         }
-        ax::Rect ret = cobj->getBoundingBox();
+        auto&& ret = cobj->getBoundingBox();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6465,7 +6465,7 @@ int lua_ax_studio_DisplayManager_isForceChangeDisplay(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_isForceChangeDisplay'", nullptr);
             return 0;
         }
-        bool ret = cobj->isForceChangeDisplay();
+        auto&& ret = cobj->isForceChangeDisplay();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -6512,7 +6512,7 @@ int lua_ax_studio_DisplayManager_getCurrentDisplayIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_getCurrentDisplayIndex'", nullptr);
             return 0;
         }
-        int ret = cobj->getCurrentDisplayIndex();
+        auto&& ret = cobj->getCurrentDisplayIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6559,7 +6559,7 @@ int lua_ax_studio_DisplayManager_getAnchorPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_getAnchorPoint'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getAnchorPoint();
+        auto&& ret = cobj->getAnchorPoint();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6606,7 +6606,7 @@ int lua_ax_studio_DisplayManager_getDecorativeDisplayList(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_getDecorativeDisplayList'", nullptr);
             return 0;
         }
-        const ax::Vector<cocostudio::DecorativeDisplay *>& ret = cobj->getDecorativeDisplayList();
+        auto&& ret = cobj->getDecorativeDisplayList();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6653,7 +6653,7 @@ int lua_ax_studio_DisplayManager_isVisible(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_isVisible'", nullptr);
             return 0;
         }
-        bool ret = cobj->isVisible();
+        auto&& ret = cobj->isVisible();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -6741,7 +6741,7 @@ int lua_ax_studio_DisplayManager_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_DisplayManager_create'", nullptr);
             return 0;
         }
-        cocostudio::DisplayManager* ret = cocostudio::DisplayManager::create(arg0);
+        auto&& ret = cocostudio::DisplayManager::create(arg0);
         object_to_luaval<cocostudio::DisplayManager>(tolua_S, "ccs.DisplayManager",(cocostudio::DisplayManager*)ret);
         return 1;
     }
@@ -6862,7 +6862,7 @@ int lua_ax_studio_Bone_isTransformDirty(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_isTransformDirty'", nullptr);
             return 0;
         }
-        bool ret = cobj->isTransformDirty();
+        auto&& ret = cobj->isTransformDirty();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -6959,7 +6959,7 @@ int lua_ax_studio_Bone_isIgnoreMovementBoneData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_isIgnoreMovementBoneData'", nullptr);
             return 0;
         }
-        bool ret = cobj->isIgnoreMovementBoneData();
+        auto&& ret = cobj->isIgnoreMovementBoneData();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7053,7 +7053,7 @@ int lua_ax_studio_Bone_getDisplayRenderNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getDisplayRenderNode'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getDisplayRenderNode();
+        auto&& ret = cobj->getDisplayRenderNode();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -7100,7 +7100,7 @@ int lua_ax_studio_Bone_isBlendDirty(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_isBlendDirty'", nullptr);
             return 0;
         }
-        bool ret = cobj->isBlendDirty();
+        auto&& ret = cobj->isBlendDirty();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7197,7 +7197,7 @@ int lua_ax_studio_Bone_getWorldInfo(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getWorldInfo'", nullptr);
             return 0;
         }
-        cocostudio::BaseData* ret = cobj->getWorldInfo();
+        auto&& ret = cobj->getWorldInfo();
         object_to_luaval<cocostudio::BaseData>(tolua_S, "ccs.BaseData",(cocostudio::BaseData*)ret);
         return 1;
     }
@@ -7244,7 +7244,7 @@ int lua_ax_studio_Bone_getTween(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getTween'", nullptr);
             return 0;
         }
-        cocostudio::Tween* ret = cobj->getTween();
+        auto&& ret = cobj->getTween();
         object_to_luaval<cocostudio::Tween>(tolua_S, "ccs.Tween",(cocostudio::Tween*)ret);
         return 1;
     }
@@ -7291,7 +7291,7 @@ int lua_ax_studio_Bone_getParentBone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getParentBone'", nullptr);
             return 0;
         }
-        cocostudio::Bone* ret = cobj->getParentBone();
+        auto&& ret = cobj->getParentBone();
         object_to_luaval<cocostudio::Bone>(tolua_S, "ccs.Bone",(cocostudio::Bone*)ret);
         return 1;
     }
@@ -7585,7 +7585,7 @@ int lua_ax_studio_Bone_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0);
+        auto&& ret = cobj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7745,7 +7745,7 @@ int lua_ax_studio_Bone_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getBlendFunc'", nullptr);
             return 0;
         }
-        ax::BlendFunc ret = cobj->getBlendFunc();
+        auto&& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7842,7 +7842,7 @@ int lua_ax_studio_Bone_getColliderDetector(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getColliderDetector'", nullptr);
             return 0;
         }
-        cocostudio::ColliderDetector* ret = cobj->getColliderDetector();
+        auto&& ret = cobj->getColliderDetector();
         object_to_luaval<cocostudio::ColliderDetector>(tolua_S, "ccs.ColliderDetector",(cocostudio::ColliderDetector*)ret);
         return 1;
     }
@@ -7889,7 +7889,7 @@ int lua_ax_studio_Bone_getChildArmature(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getChildArmature'", nullptr);
             return 0;
         }
-        cocostudio::Armature* ret = cobj->getChildArmature();
+        auto&& ret = cobj->getChildArmature();
         object_to_luaval<cocostudio::Armature>(tolua_S, "ccs.Armature",(cocostudio::Armature*)ret);
         return 1;
     }
@@ -7936,7 +7936,7 @@ int lua_ax_studio_Bone_getTweenData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getTweenData'", nullptr);
             return 0;
         }
-        cocostudio::FrameData* ret = cobj->getTweenData();
+        auto&& ret = cobj->getTweenData();
         object_to_luaval<cocostudio::FrameData>(tolua_S, "ccs.FrameData",(cocostudio::FrameData*)ret);
         return 1;
     }
@@ -8292,7 +8292,7 @@ int lua_ax_studio_Bone_getNodeToArmatureTransform(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getNodeToArmatureTransform'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getNodeToArmatureTransform();
+        auto&& ret = cobj->getNodeToArmatureTransform();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8339,7 +8339,7 @@ int lua_ax_studio_Bone_getDisplayManager(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getDisplayManager'", nullptr);
             return 0;
         }
-        cocostudio::DisplayManager* ret = cobj->getDisplayManager();
+        auto&& ret = cobj->getDisplayManager();
         object_to_luaval<cocostudio::DisplayManager>(tolua_S, "ccs.DisplayManager",(cocostudio::DisplayManager*)ret);
         return 1;
     }
@@ -8386,7 +8386,7 @@ int lua_ax_studio_Bone_getArmature(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getArmature'", nullptr);
             return 0;
         }
-        cocostudio::Armature* ret = cobj->getArmature();
+        auto&& ret = cobj->getArmature();
         object_to_luaval<cocostudio::Armature>(tolua_S, "ccs.Armature",(cocostudio::Armature*)ret);
         return 1;
     }
@@ -8433,7 +8433,7 @@ int lua_ax_studio_Bone_getBoneData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_getBoneData'", nullptr);
             return 0;
         }
-        cocostudio::BoneData* ret = cobj->getBoneData();
+        auto&& ret = cobj->getBoneData();
         object_to_luaval<cocostudio::BoneData>(tolua_S, "ccs.BoneData",(cocostudio::BoneData*)ret);
         return 1;
     }
@@ -8605,7 +8605,7 @@ int lua_ax_studio_BatchNode_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BatchNode_create'", nullptr);
             return 0;
         }
-        cocostudio::BatchNode* ret = cocostudio::BatchNode::create();
+        auto&& ret = cocostudio::BatchNode::create();
         object_to_luaval<cocostudio::BatchNode>(tolua_S, "ccs.BatchNode",(cocostudio::BatchNode*)ret);
         return 1;
     }
@@ -8670,7 +8670,7 @@ int lua_ax_studio_ArmatureAnimation_getSpeedScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_getSpeedScale'", nullptr);
             return 0;
         }
-        double ret = cobj->getSpeedScale();
+        auto&& ret = cobj->getSpeedScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9041,7 +9041,7 @@ int lua_ax_studio_ArmatureAnimation_getAnimationData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_getAnimationData'", nullptr);
             return 0;
         }
-        cocostudio::AnimationData* ret = cobj->getAnimationData();
+        auto&& ret = cobj->getAnimationData();
         object_to_luaval<cocostudio::AnimationData>(tolua_S, "ccs.AnimationData",(cocostudio::AnimationData*)ret);
         return 1;
     }
@@ -9141,7 +9141,7 @@ int lua_ax_studio_ArmatureAnimation_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0);
+        auto&& ret = cobj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -9275,7 +9275,7 @@ int lua_ax_studio_ArmatureAnimation_getMovementCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_getMovementCount'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getMovementCount();
+        auto&& ret = cobj->getMovementCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9409,7 +9409,7 @@ int lua_ax_studio_ArmatureAnimation_getCurrentMovementID(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_getCurrentMovementID'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getCurrentMovementID();
+        auto&& ret = cobj->getCurrentMovementID();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -9447,7 +9447,7 @@ int lua_ax_studio_ArmatureAnimation_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureAnimation_create'", nullptr);
             return 0;
         }
-        cocostudio::ArmatureAnimation* ret = cocostudio::ArmatureAnimation::create(arg0);
+        auto&& ret = cocostudio::ArmatureAnimation::create(arg0);
         object_to_luaval<cocostudio::ArmatureAnimation>(tolua_S, "ccs.ArmatureAnimation",(cocostudio::ArmatureAnimation*)ret);
         return 1;
     }
@@ -9799,7 +9799,7 @@ int lua_ax_studio_ArmatureDataManager_getTextureDatas(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_getTextureDatas'", nullptr);
             return 0;
         }
-        const ax::Map<std::string, cocostudio::TextureData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getTextureDatas();
+        auto&& ret = cobj->getTextureDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9849,7 +9849,7 @@ int lua_ax_studio_ArmatureDataManager_getTextureData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_getTextureData'", nullptr);
             return 0;
         }
-        cocostudio::TextureData* ret = cobj->getTextureData(arg0);
+        auto&& ret = cobj->getTextureData(arg0);
         object_to_luaval<cocostudio::TextureData>(tolua_S, "ccs.TextureData",(cocostudio::TextureData*)ret);
         return 1;
     }
@@ -9899,7 +9899,7 @@ int lua_ax_studio_ArmatureDataManager_getArmatureData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_getArmatureData'", nullptr);
             return 0;
         }
-        cocostudio::ArmatureData* ret = cobj->getArmatureData(arg0);
+        auto&& ret = cobj->getArmatureData(arg0);
         object_to_luaval<cocostudio::ArmatureData>(tolua_S, "ccs.ArmatureData",(cocostudio::ArmatureData*)ret);
         return 1;
     }
@@ -9949,7 +9949,7 @@ int lua_ax_studio_ArmatureDataManager_getAnimationData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_getAnimationData'", nullptr);
             return 0;
         }
-        cocostudio::AnimationData* ret = cobj->getAnimationData(arg0);
+        auto&& ret = cobj->getAnimationData(arg0);
         object_to_luaval<cocostudio::AnimationData>(tolua_S, "ccs.AnimationData",(cocostudio::AnimationData*)ret);
         return 1;
     }
@@ -10069,7 +10069,7 @@ int lua_ax_studio_ArmatureDataManager_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init();
+        auto&& ret = cobj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -10166,7 +10166,7 @@ int lua_ax_studio_ArmatureDataManager_getArmatureDatas(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_getArmatureDatas'", nullptr);
             return 0;
         }
-        const ax::Map<std::string, cocostudio::ArmatureData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getArmatureDatas();
+        auto&& ret = cobj->getArmatureDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10316,7 +10316,7 @@ int lua_ax_studio_ArmatureDataManager_getRelativeData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_getRelativeData'", nullptr);
             return 0;
         }
-        cocostudio::RelativeData* ret = cobj->getRelativeData(arg0);
+        auto&& ret = cobj->getRelativeData(arg0);
         #pragma warning NO CONVERSION FROM NATIVE FOR RelativeData*;
         return 1;
     }
@@ -10436,7 +10436,7 @@ int lua_ax_studio_ArmatureDataManager_getAnimationDatas(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_getAnimationDatas'", nullptr);
             return 0;
         }
-        const ax::Map<std::string, cocostudio::AnimationData *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getAnimationDatas();
+        auto&& ret = cobj->getAnimationDatas();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10483,7 +10483,7 @@ int lua_ax_studio_ArmatureDataManager_isAutoLoadSpriteFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_isAutoLoadSpriteFile'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAutoLoadSpriteFile();
+        auto&& ret = cobj->isAutoLoadSpriteFile();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -10626,7 +10626,7 @@ int lua_ax_studio_ArmatureDataManager_getInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ArmatureDataManager_getInstance'", nullptr);
             return 0;
         }
-        cocostudio::ArmatureDataManager* ret = cocostudio::ArmatureDataManager::getInstance();
+        auto&& ret = cocostudio::ArmatureDataManager::getInstance();
         object_to_luaval<cocostudio::ArmatureDataManager>(tolua_S, "ccs.ArmatureDataManager",(cocostudio::ArmatureDataManager*)ret);
         return 1;
     }
@@ -10714,7 +10714,7 @@ int lua_ax_studio_Armature_getBone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getBone'", nullptr);
             return 0;
         }
-        cocostudio::Bone* ret = cobj->getBone(arg0);
+        auto&& ret = cobj->getBone(arg0);
         object_to_luaval<cocostudio::Bone>(tolua_S, "ccs.Bone",(cocostudio::Bone*)ret);
         return 1;
     }
@@ -10870,7 +10870,7 @@ int lua_ax_studio_Armature_getBoneAtPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getBoneAtPoint'", nullptr);
             return 0;
         }
-        cocostudio::Bone* ret = cobj->getBoneAtPoint(arg0, arg1);
+        auto&& ret = cobj->getBoneAtPoint(arg0, arg1);
         object_to_luaval<cocostudio::Bone>(tolua_S, "ccs.Bone",(cocostudio::Bone*)ret);
         return 1;
     }
@@ -10917,7 +10917,7 @@ int lua_ax_studio_Armature_getArmatureTransformDirty(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getArmatureTransformDirty'", nullptr);
             return 0;
         }
-        bool ret = cobj->getArmatureTransformDirty();
+        auto&& ret = cobj->getArmatureTransformDirty();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -11061,7 +11061,7 @@ int lua_ax_studio_Armature_getParentBone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getParentBone'", nullptr);
             return 0;
         }
-        cocostudio::Bone* ret = cobj->getParentBone();
+        auto&& ret = cobj->getParentBone();
         object_to_luaval<cocostudio::Bone>(tolua_S, "ccs.Bone",(cocostudio::Bone*)ret);
         return 1;
     }
@@ -11161,7 +11161,7 @@ int lua_ax_studio_Armature_getBatchNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getBatchNode'", nullptr);
             return 0;
         }
-        cocostudio::BatchNode* ret = cobj->getBatchNode();
+        auto&& ret = cobj->getBatchNode();
         object_to_luaval<cocostudio::BatchNode>(tolua_S, "ccs.BatchNode",(cocostudio::BatchNode*)ret);
         return 1;
     }
@@ -11367,7 +11367,7 @@ int lua_ax_studio_Armature_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getBlendFunc'", nullptr);
             return 0;
         }
-        const ax::BlendFunc& ret = cobj->getBlendFunc();
+        auto&& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11517,7 +11517,7 @@ int lua_ax_studio_Armature_getArmatureData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getArmatureData'", nullptr);
             return 0;
         }
-        cocostudio::ArmatureData* ret = cobj->getArmatureData();
+        auto&& ret = cobj->getArmatureData();
         object_to_luaval<cocostudio::ArmatureData>(tolua_S, "ccs.ArmatureData",(cocostudio::ArmatureData*)ret);
         return 1;
     }
@@ -11564,7 +11564,7 @@ int lua_ax_studio_Armature_getVersion(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getVersion'", nullptr);
             return 0;
         }
-        double ret = cobj->getVersion();
+        auto&& ret = cobj->getVersion();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11611,7 +11611,7 @@ int lua_ax_studio_Armature_getAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getAnimation'", nullptr);
             return 0;
         }
-        cocostudio::ArmatureAnimation* ret = cobj->getAnimation();
+        auto&& ret = cobj->getAnimation();
         object_to_luaval<cocostudio::ArmatureAnimation>(tolua_S, "ccs.ArmatureAnimation",(cocostudio::ArmatureAnimation*)ret);
         return 1;
     }
@@ -11658,7 +11658,7 @@ int lua_ax_studio_Armature_getOffsetPoints(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getOffsetPoints'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getOffsetPoints();
+        auto&& ret = cobj->getOffsetPoints();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11755,7 +11755,7 @@ int lua_ax_studio_Armature_getBoneDic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Armature_getBoneDic'", nullptr);
             return 0;
         }
-        const ax::Map<std::string, cocostudio::Bone *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getBoneDic();
+        auto&& ret = cobj->getBoneDic();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11943,7 +11943,7 @@ int lua_ax_studio_Skin_getBone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Skin_getBone'", nullptr);
             return 0;
         }
-        cocostudio::Bone* ret = cobj->getBone();
+        auto&& ret = cobj->getBone();
         object_to_luaval<cocostudio::Bone>(tolua_S, "ccs.Bone",(cocostudio::Bone*)ret);
         return 1;
     }
@@ -11990,7 +11990,7 @@ int lua_ax_studio_Skin_getNodeToWorldTransformAR(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Skin_getNodeToWorldTransformAR'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getNodeToWorldTransformAR();
+        auto&& ret = cobj->getNodeToWorldTransformAR();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12037,7 +12037,7 @@ int lua_ax_studio_Skin_getDisplayName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Skin_getDisplayName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getDisplayName();
+        auto&& ret = cobj->getDisplayName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -12217,7 +12217,7 @@ int lua_ax_studio_Skin_createWithSpriteFrameName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Skin_createWithSpriteFrameName'", nullptr);
             return 0;
         }
-        cocostudio::Skin* ret = cocostudio::Skin::createWithSpriteFrameName(arg0);
+        auto&& ret = cocostudio::Skin::createWithSpriteFrameName(arg0);
         object_to_luaval<cocostudio::Skin>(tolua_S, "ccs.Skin",(cocostudio::Skin*)ret);
         return 1;
     }
@@ -12329,7 +12329,7 @@ int lua_ax_studio_ComAttribute_getFloat(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getFloat'", nullptr);
             return 0;
         }
-        double ret = cobj->getFloat(arg0);
+        auto&& ret = cobj->getFloat(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12346,7 +12346,7 @@ int lua_ax_studio_ComAttribute_getFloat(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getFloat'", nullptr);
             return 0;
         }
-        double ret = cobj->getFloat(arg0, arg1);
+        auto&& ret = cobj->getFloat(arg0, arg1);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12396,7 +12396,7 @@ int lua_ax_studio_ComAttribute_getString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getString'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getString(arg0);
+        auto&& ret = cobj->getString(arg0);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -12413,7 +12413,7 @@ int lua_ax_studio_ComAttribute_getString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getString'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getString(arg0, arg1);
+        auto&& ret = cobj->getString(arg0, arg1);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -12569,7 +12569,7 @@ int lua_ax_studio_ComAttribute_getBool(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getBool'", nullptr);
             return 0;
         }
-        bool ret = cobj->getBool(arg0);
+        auto&& ret = cobj->getBool(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12586,7 +12586,7 @@ int lua_ax_studio_ComAttribute_getBool(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getBool'", nullptr);
             return 0;
         }
-        bool ret = cobj->getBool(arg0, arg1);
+        auto&& ret = cobj->getBool(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12689,7 +12689,7 @@ int lua_ax_studio_ComAttribute_parse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_parse'", nullptr);
             return 0;
         }
-        bool ret = cobj->parse(arg0);
+        auto&& ret = cobj->parse(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12739,7 +12739,7 @@ int lua_ax_studio_ComAttribute_getInt(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getInt'", nullptr);
             return 0;
         }
-        int ret = cobj->getInt(arg0);
+        auto&& ret = cobj->getInt(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12756,7 +12756,7 @@ int lua_ax_studio_ComAttribute_getInt(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_getInt'", nullptr);
             return 0;
         }
-        int ret = cobj->getInt(arg0, arg1);
+        auto&& ret = cobj->getInt(arg0, arg1);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12845,7 +12845,7 @@ int lua_ax_studio_ComAttribute_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_create'", nullptr);
             return 0;
         }
-        cocostudio::ComAttribute* ret = cocostudio::ComAttribute::create();
+        auto&& ret = cocostudio::ComAttribute::create();
         object_to_luaval<cocostudio::ComAttribute>(tolua_S, "ccs.ComAttribute",(cocostudio::ComAttribute*)ret);
         return 1;
     }
@@ -12879,7 +12879,7 @@ int lua_ax_studio_ComAttribute_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAttribute_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = cocostudio::ComAttribute::createInstance();
+        auto&& ret = cocostudio::ComAttribute::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -13001,7 +13001,7 @@ int lua_ax_studio_ComAudio_getEffectsVolume(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_getEffectsVolume'", nullptr);
             return 0;
         }
-        double ret = cobj->getEffectsVolume();
+        auto&& ret = cobj->getEffectsVolume();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -13098,7 +13098,7 @@ int lua_ax_studio_ComAudio_getBackgroundMusicVolume(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_getBackgroundMusicVolume'", nullptr);
             return 0;
         }
-        double ret = cobj->getBackgroundMusicVolume();
+        auto&& ret = cobj->getBackgroundMusicVolume();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -13145,7 +13145,7 @@ int lua_ax_studio_ComAudio_willPlayBackgroundMusic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_willPlayBackgroundMusic'", nullptr);
             return 0;
         }
-        bool ret = cobj->willPlayBackgroundMusic();
+        auto&& ret = cobj->willPlayBackgroundMusic();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -13387,7 +13387,7 @@ int lua_ax_studio_ComAudio_isBackgroundMusicPlaying(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_isBackgroundMusicPlaying'", nullptr);
             return 0;
         }
-        bool ret = cobj->isBackgroundMusicPlaying();
+        auto&& ret = cobj->isBackgroundMusicPlaying();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -13434,7 +13434,7 @@ int lua_ax_studio_ComAudio_isLoop(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_isLoop'", nullptr);
             return 0;
         }
-        bool ret = cobj->isLoop();
+        auto&& ret = cobj->isLoop();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -14247,7 +14247,7 @@ int lua_ax_studio_ComAudio_getFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_getFile'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getFile();
+        auto&& ret = cobj->getFile();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -14333,7 +14333,7 @@ int lua_ax_studio_ComAudio_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_create'", nullptr);
             return 0;
         }
-        cocostudio::ComAudio* ret = cocostudio::ComAudio::create();
+        auto&& ret = cocostudio::ComAudio::create();
         object_to_luaval<cocostudio::ComAudio>(tolua_S, "ccs.ComAudio",(cocostudio::ComAudio*)ret);
         return 1;
     }
@@ -14367,7 +14367,7 @@ int lua_ax_studio_ComAudio_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComAudio_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = cocostudio::ComAudio::createInstance();
+        auto&& ret = cocostudio::ComAudio::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -14450,7 +14450,7 @@ int lua_ax_studio_ComController_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComController_create'", nullptr);
             return 0;
         }
-        cocostudio::ComController* ret = cocostudio::ComController::create();
+        auto&& ret = cocostudio::ComController::create();
         object_to_luaval<cocostudio::ComController>(tolua_S, "ccs.ComController",(cocostudio::ComController*)ret);
         return 1;
     }
@@ -14484,7 +14484,7 @@ int lua_ax_studio_ComController_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComController_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = cocostudio::ComController::createInstance();
+        auto&& ret = cocostudio::ComController::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -14638,7 +14638,7 @@ int lua_ax_studio_ComRender_getNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComRender_getNode'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getNode();
+        auto&& ret = cobj->getNode();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -14722,7 +14722,7 @@ int lua_ax_studio_ComRender_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComRender_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = cocostudio::ComRender::createInstance();
+        auto&& ret = cocostudio::ComRender::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -14843,7 +14843,7 @@ int lua_ax_studio_GUIReader_widgetFromJsonFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_GUIReader_widgetFromJsonFile'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->widgetFromJsonFile(arg0);
+        auto&& ret = cobj->widgetFromJsonFile(arg0);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -14890,7 +14890,7 @@ int lua_ax_studio_GUIReader_getFilePath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_GUIReader_getFilePath'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getFilePath();
+        auto&& ret = cobj->getFilePath();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -14940,7 +14940,7 @@ int lua_ax_studio_GUIReader_widgetFromBinaryFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_GUIReader_widgetFromBinaryFile'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->widgetFromBinaryFile(arg0);
+        auto&& ret = cobj->widgetFromBinaryFile(arg0);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -14990,7 +14990,7 @@ int lua_ax_studio_GUIReader_getVersionInteger(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_GUIReader_getVersionInteger'", nullptr);
             return 0;
         }
-        int ret = cobj->getVersionInteger(arg0);
+        auto&& ret = cobj->getVersionInteger(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -15060,7 +15060,7 @@ int lua_ax_studio_GUIReader_getInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_GUIReader_getInstance'", nullptr);
             return 0;
         }
-        cocostudio::GUIReader* ret = cocostudio::GUIReader::getInstance();
+        auto&& ret = cocostudio::GUIReader::getInstance();
         object_to_luaval<cocostudio::GUIReader>(tolua_S, "ccs.GUIReader",(cocostudio::GUIReader*)ret);
         return 1;
     }
@@ -15188,7 +15188,7 @@ int lua_ax_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SceneReader_createNodeWithSceneFile'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->createNodeWithSceneFile(arg0);
+        auto&& ret = cobj->createNodeWithSceneFile(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -15205,7 +15205,7 @@ int lua_ax_studio_SceneReader_createNodeWithSceneFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SceneReader_createNodeWithSceneFile'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->createNodeWithSceneFile(arg0, arg1);
+        auto&& ret = cobj->createNodeWithSceneFile(arg0, arg1);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -15302,7 +15302,7 @@ int lua_ax_studio_SceneReader_getNodeByTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SceneReader_getNodeByTag'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getNodeByTag(arg0);
+        auto&& ret = cobj->getNodeByTag(arg0);
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -15372,7 +15372,7 @@ int lua_ax_studio_SceneReader_sceneReaderVersion(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SceneReader_sceneReaderVersion'", nullptr);
             return 0;
         }
-        const char* ret = cocostudio::SceneReader::sceneReaderVersion();
+        auto&& ret = cocostudio::SceneReader::sceneReaderVersion();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -15406,7 +15406,7 @@ int lua_ax_studio_SceneReader_getInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SceneReader_getInstance'", nullptr);
             return 0;
         }
-        cocostudio::SceneReader* ret = cocostudio::SceneReader::getInstance();
+        auto&& ret = cocostudio::SceneReader::getInstance();
         object_to_luaval<cocostudio::SceneReader>(tolua_S, "ccs.SceneReader",(cocostudio::SceneReader*)ret);
         return 1;
     }
@@ -15480,7 +15480,7 @@ int lua_ax_studio_ActionTimelineCache_createActionFromJson(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineCache_createActionFromJson'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->createActionFromJson(arg0);
+        auto&& ret = cobj->createActionFromJson(arg0);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -15530,7 +15530,7 @@ int lua_ax_studio_ActionTimelineCache_createActionWithFlatBuffersFile(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineCache_createActionWithFlatBuffersFile'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->createActionWithFlatBuffersFile(arg0);
+        auto&& ret = cobj->createActionWithFlatBuffersFile(arg0);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -15580,7 +15580,7 @@ int lua_ax_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile(lua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineCache_loadAnimationActionWithFlatBuffersFile'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->loadAnimationActionWithFlatBuffersFile(arg0);
+        auto&& ret = cobj->loadAnimationActionWithFlatBuffersFile(arg0);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -15633,7 +15633,7 @@ int lua_ax_studio_ActionTimelineCache_createActionFromContent(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineCache_createActionFromContent'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->createActionFromContent(arg0, arg1);
+        auto&& ret = cobj->createActionFromContent(arg0, arg1);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -15780,7 +15780,7 @@ int lua_ax_studio_ActionTimelineCache_loadAnimationActionWithContent(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineCache_loadAnimationActionWithContent'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->loadAnimationActionWithContent(arg0, arg1);
+        auto&& ret = cobj->loadAnimationActionWithContent(arg0, arg1);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -15830,7 +15830,7 @@ int lua_ax_studio_ActionTimelineCache_loadAnimationActionWithFile(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineCache_loadAnimationActionWithFile'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->loadAnimationActionWithFile(arg0);
+        auto&& ret = cobj->loadAnimationActionWithFile(arg0);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -15930,7 +15930,7 @@ int lua_ax_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator(lu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineCache_createActionWithFlatBuffersForSimulator'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->createActionWithFlatBuffersForSimulator(arg0);
+        auto&& ret = cobj->createActionWithFlatBuffersForSimulator(arg0);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -16002,7 +16002,7 @@ int lua_ax_studio_ActionTimelineCache_createAction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineCache_createAction'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cocostudio::timeline::ActionTimelineCache::createAction(arg0);
+        auto&& ret = cocostudio::timeline::ActionTimelineCache::createAction(arg0);
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -16078,7 +16078,7 @@ int lua_ax_studio_Frame_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_clone'", nullptr);
             return 0;
         }
-        cocostudio::timeline::Frame* ret = cobj->clone();
+        auto&& ret = cobj->clone();
         object_to_luaval<cocostudio::timeline::Frame>(tolua_S, "ccs.Frame",(cocostudio::timeline::Frame*)ret);
         return 1;
     }
@@ -16275,7 +16275,7 @@ int lua_ax_studio_Frame_isEnterWhenPassed(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_isEnterWhenPassed'", nullptr);
             return 0;
         }
-        bool ret = cobj->isEnterWhenPassed();
+        auto&& ret = cobj->isEnterWhenPassed();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -16369,7 +16369,7 @@ int lua_ax_studio_Frame_getEasingParams(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_getEasingParams'", nullptr);
             return 0;
         }
-        const std::vector<float>& ret = cobj->getEasingParams();
+        auto&& ret = cobj->getEasingParams();
         ccvector_float_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -16466,7 +16466,7 @@ int lua_ax_studio_Frame_getFrameIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_getFrameIndex'", nullptr);
             return 0;
         }
-        unsigned int ret = cobj->getFrameIndex();
+        auto&& ret = cobj->getFrameIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -16563,7 +16563,7 @@ int lua_ax_studio_Frame_isTween(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_isTween'", nullptr);
             return 0;
         }
-        bool ret = cobj->isTween();
+        auto&& ret = cobj->isTween();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -16710,7 +16710,7 @@ int lua_ax_studio_Frame_getTimeline(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_getTimeline'", nullptr);
             return 0;
         }
-        cocostudio::timeline::Timeline* ret = cobj->getTimeline();
+        auto&& ret = cobj->getTimeline();
         object_to_luaval<cocostudio::timeline::Timeline>(tolua_S, "ccs.Timeline",(cocostudio::timeline::Timeline*)ret);
         return 1;
     }
@@ -16757,7 +16757,7 @@ int lua_ax_studio_Frame_getNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Frame_getNode'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getNode();
+        auto&& ret = cobj->getNode();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -16838,7 +16838,7 @@ int lua_ax_studio_VisibleFrame_isVisible(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_VisibleFrame_isVisible'", nullptr);
             return 0;
         }
-        bool ret = cobj->isVisible();
+        auto&& ret = cobj->isVisible();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -16924,7 +16924,7 @@ int lua_ax_studio_VisibleFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_VisibleFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::VisibleFrame* ret = cocostudio::timeline::VisibleFrame::create();
+        auto&& ret = cocostudio::timeline::VisibleFrame::create();
         object_to_luaval<cocostudio::timeline::VisibleFrame>(tolua_S, "ccs.VisibleFrame",(cocostudio::timeline::VisibleFrame*)ret);
         return 1;
     }
@@ -17029,7 +17029,7 @@ int lua_ax_studio_TextureFrame_getTextureName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_TextureFrame_getTextureName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getTextureName();
+        auto&& ret = cobj->getTextureName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -17115,7 +17115,7 @@ int lua_ax_studio_TextureFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_TextureFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::TextureFrame* ret = cocostudio::timeline::TextureFrame::create();
+        auto&& ret = cocostudio::timeline::TextureFrame::create();
         object_to_luaval<cocostudio::timeline::TextureFrame>(tolua_S, "ccs.TextureFrame",(cocostudio::timeline::TextureFrame*)ret);
         return 1;
     }
@@ -17270,7 +17270,7 @@ int lua_ax_studio_RotationFrame_getRotation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_RotationFrame_getRotation'", nullptr);
             return 0;
         }
-        double ret = cobj->getRotation();
+        auto&& ret = cobj->getRotation();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17306,7 +17306,7 @@ int lua_ax_studio_RotationFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_RotationFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::RotationFrame* ret = cocostudio::timeline::RotationFrame::create();
+        auto&& ret = cocostudio::timeline::RotationFrame::create();
         object_to_luaval<cocostudio::timeline::RotationFrame>(tolua_S, "ccs.RotationFrame",(cocostudio::timeline::RotationFrame*)ret);
         return 1;
     }
@@ -17411,7 +17411,7 @@ int lua_ax_studio_SkewFrame_getSkewY(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SkewFrame_getSkewY'", nullptr);
             return 0;
         }
-        double ret = cobj->getSkewY();
+        auto&& ret = cobj->getSkewY();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17558,7 +17558,7 @@ int lua_ax_studio_SkewFrame_getSkewX(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SkewFrame_getSkewX'", nullptr);
             return 0;
         }
-        double ret = cobj->getSkewX();
+        auto&& ret = cobj->getSkewX();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17594,7 +17594,7 @@ int lua_ax_studio_SkewFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SkewFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::SkewFrame* ret = cocostudio::timeline::SkewFrame::create();
+        auto&& ret = cocostudio::timeline::SkewFrame::create();
         object_to_luaval<cocostudio::timeline::SkewFrame>(tolua_S, "ccs.SkewFrame",(cocostudio::timeline::SkewFrame*)ret);
         return 1;
     }
@@ -17690,7 +17690,7 @@ int lua_ax_studio_RotationSkewFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_RotationSkewFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::RotationSkewFrame* ret = cocostudio::timeline::RotationSkewFrame::create();
+        auto&& ret = cocostudio::timeline::RotationSkewFrame::create();
         object_to_luaval<cocostudio::timeline::RotationSkewFrame>(tolua_S, "ccs.RotationSkewFrame",(cocostudio::timeline::RotationSkewFrame*)ret);
         return 1;
     }
@@ -17793,7 +17793,7 @@ int lua_ax_studio_PositionFrame_getX(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_PositionFrame_getX'", nullptr);
             return 0;
         }
-        double ret = cobj->getX();
+        auto&& ret = cobj->getX();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17840,7 +17840,7 @@ int lua_ax_studio_PositionFrame_getY(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_PositionFrame_getY'", nullptr);
             return 0;
         }
-        double ret = cobj->getY();
+        auto&& ret = cobj->getY();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -18037,7 +18037,7 @@ int lua_ax_studio_PositionFrame_getPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_PositionFrame_getPosition'", nullptr);
             return 0;
         }
-        ax::Point ret = cobj->getPosition();
+        auto&& ret = cobj->getPosition();
         point_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -18073,7 +18073,7 @@ int lua_ax_studio_PositionFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_PositionFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::PositionFrame* ret = cocostudio::timeline::PositionFrame::create();
+        auto&& ret = cocostudio::timeline::PositionFrame::create();
         object_to_luaval<cocostudio::timeline::PositionFrame>(tolua_S, "ccs.PositionFrame",(cocostudio::timeline::PositionFrame*)ret);
         return 1;
     }
@@ -18282,7 +18282,7 @@ int lua_ax_studio_ScaleFrame_getScaleY(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ScaleFrame_getScaleY'", nullptr);
             return 0;
         }
-        double ret = cobj->getScaleY();
+        auto&& ret = cobj->getScaleY();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -18329,7 +18329,7 @@ int lua_ax_studio_ScaleFrame_getScaleX(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ScaleFrame_getScaleX'", nullptr);
             return 0;
         }
-        double ret = cobj->getScaleX();
+        auto&& ret = cobj->getScaleX();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -18415,7 +18415,7 @@ int lua_ax_studio_ScaleFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ScaleFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ScaleFrame* ret = cocostudio::timeline::ScaleFrame::create();
+        auto&& ret = cocostudio::timeline::ScaleFrame::create();
         object_to_luaval<cocostudio::timeline::ScaleFrame>(tolua_S, "ccs.ScaleFrame",(cocostudio::timeline::ScaleFrame*)ret);
         return 1;
     }
@@ -18573,7 +18573,7 @@ int lua_ax_studio_AnchorPointFrame_getAnchorPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_AnchorPointFrame_getAnchorPoint'", nullptr);
             return 0;
         }
-        ax::Point ret = cobj->getAnchorPoint();
+        auto&& ret = cobj->getAnchorPoint();
         point_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -18609,7 +18609,7 @@ int lua_ax_studio_AnchorPointFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_AnchorPointFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::AnchorPointFrame* ret = cocostudio::timeline::AnchorPointFrame::create();
+        auto&& ret = cocostudio::timeline::AnchorPointFrame::create();
         object_to_luaval<cocostudio::timeline::AnchorPointFrame>(tolua_S, "ccs.AnchorPointFrame",(cocostudio::timeline::AnchorPointFrame*)ret);
         return 1;
     }
@@ -18714,7 +18714,7 @@ int lua_ax_studio_InnerActionFrame_getEndFrameIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_getEndFrameIndex'", nullptr);
             return 0;
         }
-        int ret = cobj->getEndFrameIndex();
+        auto&& ret = cobj->getEndFrameIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -18761,7 +18761,7 @@ int lua_ax_studio_InnerActionFrame_getStartFrameIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_getStartFrameIndex'", nullptr);
             return 0;
         }
-        int ret = cobj->getStartFrameIndex();
+        auto&& ret = cobj->getStartFrameIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -19055,7 +19055,7 @@ int lua_ax_studio_InnerActionFrame_getSingleFrameIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_getSingleFrameIndex'", nullptr);
             return 0;
         }
-        int ret = cobj->getSingleFrameIndex();
+        auto&& ret = cobj->getSingleFrameIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -19191,7 +19191,7 @@ int lua_ax_studio_InnerActionFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_InnerActionFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::InnerActionFrame* ret = cocostudio::timeline::InnerActionFrame::create();
+        auto&& ret = cocostudio::timeline::InnerActionFrame::create();
         object_to_luaval<cocostudio::timeline::InnerActionFrame>(tolua_S, "ccs.InnerActionFrame",(cocostudio::timeline::InnerActionFrame*)ret);
         return 1;
     }
@@ -19304,7 +19304,7 @@ int lua_ax_studio_ColorFrame_getColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ColorFrame_getColor'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->getColor();
+        auto&& ret = cobj->getColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -19390,7 +19390,7 @@ int lua_ax_studio_ColorFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ColorFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ColorFrame* ret = cocostudio::timeline::ColorFrame::create();
+        auto&& ret = cocostudio::timeline::ColorFrame::create();
         object_to_luaval<cocostudio::timeline::ColorFrame>(tolua_S, "ccs.ColorFrame",(cocostudio::timeline::ColorFrame*)ret);
         return 1;
     }
@@ -19495,7 +19495,7 @@ int lua_ax_studio_AlphaFrame_getAlpha(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_AlphaFrame_getAlpha'", nullptr);
             return 0;
         }
-        uint16_t ret = cobj->getAlpha();
+        auto&& ret = cobj->getAlpha();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -19581,7 +19581,7 @@ int lua_ax_studio_AlphaFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_AlphaFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::AlphaFrame* ret = cocostudio::timeline::AlphaFrame::create();
+        auto&& ret = cocostudio::timeline::AlphaFrame::create();
         object_to_luaval<cocostudio::timeline::AlphaFrame>(tolua_S, "ccs.AlphaFrame",(cocostudio::timeline::AlphaFrame*)ret);
         return 1;
     }
@@ -19783,7 +19783,7 @@ int lua_ax_studio_EventFrame_getEvent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_EventFrame_getEvent'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getEvent();
+        auto&& ret = cobj->getEvent();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -19819,7 +19819,7 @@ int lua_ax_studio_EventFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_EventFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::EventFrame* ret = cocostudio::timeline::EventFrame::create();
+        auto&& ret = cocostudio::timeline::EventFrame::create();
         object_to_luaval<cocostudio::timeline::EventFrame>(tolua_S, "ccs.EventFrame",(cocostudio::timeline::EventFrame*)ret);
         return 1;
     }
@@ -19925,7 +19925,7 @@ int lua_ax_studio_ZOrderFrame_getZOrder(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ZOrderFrame_getZOrder'", nullptr);
             return 0;
         }
-        int ret = cobj->getZOrder();
+        auto&& ret = cobj->getZOrder();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -20011,7 +20011,7 @@ int lua_ax_studio_ZOrderFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ZOrderFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ZOrderFrame* ret = cocostudio::timeline::ZOrderFrame::create();
+        auto&& ret = cocostudio::timeline::ZOrderFrame::create();
         object_to_luaval<cocostudio::timeline::ZOrderFrame>(tolua_S, "ccs.ZOrderFrame",(cocostudio::timeline::ZOrderFrame*)ret);
         return 1;
     }
@@ -20116,7 +20116,7 @@ int lua_ax_studio_BlendFuncFrame_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BlendFuncFrame_getBlendFunc'", nullptr);
             return 0;
         }
-        ax::BlendFunc ret = cobj->getBlendFunc();
+        auto&& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20202,7 +20202,7 @@ int lua_ax_studio_BlendFuncFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BlendFuncFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::BlendFuncFrame* ret = cocostudio::timeline::BlendFuncFrame::create();
+        auto&& ret = cocostudio::timeline::BlendFuncFrame::create();
         object_to_luaval<cocostudio::timeline::BlendFuncFrame>(tolua_S, "ccs.BlendFuncFrame",(cocostudio::timeline::BlendFuncFrame*)ret);
         return 1;
     }
@@ -20357,7 +20357,7 @@ int lua_ax_studio_PlayableFrame_getPlayableAct(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_PlayableFrame_getPlayableAct'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getPlayableAct();
+        auto&& ret = cobj->getPlayableAct();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -20393,7 +20393,7 @@ int lua_ax_studio_PlayableFrame_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_PlayableFrame_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::PlayableFrame* ret = cocostudio::timeline::PlayableFrame::create();
+        auto&& ret = cocostudio::timeline::PlayableFrame::create();
         object_to_luaval<cocostudio::timeline::PlayableFrame>(tolua_S, "ccs.PlayableFrame",(cocostudio::timeline::PlayableFrame*)ret);
         return 1;
     }
@@ -20498,7 +20498,7 @@ int lua_ax_studio_Timeline_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_clone'", nullptr);
             return 0;
         }
-        cocostudio::timeline::Timeline* ret = cobj->clone();
+        auto&& ret = cobj->clone();
         object_to_luaval<cocostudio::timeline::Timeline>(tolua_S, "ccs.Timeline",(cocostudio::timeline::Timeline*)ret);
         return 1;
     }
@@ -20645,7 +20645,7 @@ int lua_ax_studio_Timeline_getActionTimeline(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_getActionTimeline'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->getActionTimeline();
+        auto&& ret = cobj->getActionTimeline();
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -20845,7 +20845,7 @@ int lua_ax_studio_Timeline_getFrames(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_getFrames'", nullptr);
             return 0;
         }
-        const ax::Vector<cocostudio::timeline::Frame *>& ret = cobj->getFrames();
+        auto&& ret = cobj->getFrames();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20892,7 +20892,7 @@ int lua_ax_studio_Timeline_getActionTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_getActionTag'", nullptr);
             return 0;
         }
-        int ret = cobj->getActionTag();
+        auto&& ret = cobj->getActionTag();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -20939,7 +20939,7 @@ int lua_ax_studio_Timeline_getNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_getNode'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getNode();
+        auto&& ret = cobj->getNode();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -21125,7 +21125,7 @@ int lua_ax_studio_Timeline_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Timeline_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::Timeline* ret = cocostudio::timeline::Timeline::create();
+        auto&& ret = cocostudio::timeline::Timeline::create();
         object_to_luaval<cocostudio::timeline::Timeline>(tolua_S, "ccs.Timeline",(cocostudio::timeline::Timeline*)ret);
         return 1;
     }
@@ -21294,7 +21294,7 @@ int lua_ax_studio_ActionTimelineData_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineData_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0);
+        auto&& ret = cobj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -21341,7 +21341,7 @@ int lua_ax_studio_ActionTimelineData_getActionTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineData_getActionTag'", nullptr);
             return 0;
         }
-        int ret = cobj->getActionTag();
+        auto&& ret = cobj->getActionTag();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -21379,7 +21379,7 @@ int lua_ax_studio_ActionTimelineData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineData_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimelineData* ret = cocostudio::timeline::ActionTimelineData::create(arg0);
+        auto&& ret = cocostudio::timeline::ActionTimelineData::create(arg0);
         object_to_luaval<cocostudio::timeline::ActionTimelineData>(tolua_S, "ccs.ActionTimelineData",(cocostudio::timeline::ActionTimelineData*)ret);
         return 1;
     }
@@ -21639,7 +21639,7 @@ int lua_ax_studio_ActionTimeline_getCurrentFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_getCurrentFrame'", nullptr);
             return 0;
         }
-        int ret = cobj->getCurrentFrame();
+        auto&& ret = cobj->getCurrentFrame();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -21686,7 +21686,7 @@ int lua_ax_studio_ActionTimeline_getStartFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_getStartFrame'", nullptr);
             return 0;
         }
-        int ret = cobj->getStartFrame();
+        auto&& ret = cobj->getStartFrame();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -21827,7 +21827,7 @@ int lua_ax_studio_ActionTimeline_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init();
+        auto&& ret = cobj->init();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -22025,7 +22025,7 @@ int lua_ax_studio_ActionTimeline_getTimelines(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_getTimelines'", nullptr);
             return 0;
         }
-        const ax::Vector<cocostudio::timeline::Timeline *>& ret = cobj->getTimelines();
+        auto&& ret = cobj->getTimelines();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -22128,7 +22128,7 @@ int lua_ax_studio_ActionTimeline_getAnimationInfo(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_getAnimationInfo'", nullptr);
             return 0;
         }
-        const cocostudio::timeline::AnimationInfo& ret = cobj->getAnimationInfo(arg0);
+        auto&& ret = cobj->getAnimationInfo(arg0);
         animationInfo_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -22332,7 +22332,7 @@ int lua_ax_studio_ActionTimeline_getTimeSpeed(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_getTimeSpeed'", nullptr);
             return 0;
         }
-        double ret = cobj->getTimeSpeed();
+        auto&& ret = cobj->getTimeSpeed();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -22429,7 +22429,7 @@ int lua_ax_studio_ActionTimeline_getDuration(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_getDuration'", nullptr);
             return 0;
         }
-        int ret = cobj->getDuration();
+        auto&& ret = cobj->getDuration();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -22526,7 +22526,7 @@ int lua_ax_studio_ActionTimeline_isPlaying(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_isPlaying'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPlaying();
+        auto&& ret = cobj->isPlaying();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -22729,7 +22729,7 @@ int lua_ax_studio_ActionTimeline_IsAnimationInfoExists(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_IsAnimationInfoExists'", nullptr);
             return 0;
         }
-        bool ret = cobj->IsAnimationInfoExists(arg0);
+        auto&& ret = cobj->IsAnimationInfoExists(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -22776,7 +22776,7 @@ int lua_ax_studio_ActionTimeline_getEndFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_getEndFrame'", nullptr);
             return 0;
         }
-        int ret = cobj->getEndFrame();
+        auto&& ret = cobj->getEndFrame();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -23062,7 +23062,7 @@ int lua_ax_studio_ActionTimeline_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimeline_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cocostudio::timeline::ActionTimeline::create();
+        auto&& ret = cocostudio::timeline::ActionTimeline::create();
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -23196,7 +23196,7 @@ int lua_ax_studio_ActionTimelineNode_getRoot(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineNode_getRoot'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getRoot();
+        auto&& ret = cobj->getRoot();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -23243,7 +23243,7 @@ int lua_ax_studio_ActionTimelineNode_getActionTimeline(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineNode_getActionTimeline'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimeline* ret = cobj->getActionTimeline();
+        auto&& ret = cobj->getActionTimeline();
         object_to_luaval<cocostudio::timeline::ActionTimeline>(tolua_S, "ccs.ActionTimeline",(cocostudio::timeline::ActionTimeline*)ret);
         return 1;
     }
@@ -23346,7 +23346,7 @@ int lua_ax_studio_ActionTimelineNode_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineNode_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1);
+        auto&& ret = cobj->init(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -23436,7 +23436,7 @@ int lua_ax_studio_ActionTimelineNode_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ActionTimelineNode_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::ActionTimelineNode* ret = cocostudio::timeline::ActionTimelineNode::create(arg0, arg1);
+        auto&& ret = cocostudio::timeline::ActionTimelineNode::create(arg0, arg1);
         object_to_luaval<cocostudio::timeline::ActionTimelineNode>(tolua_S, "ccs.ActionTimelineNode",(cocostudio::timeline::ActionTimelineNode*)ret);
         return 1;
     }
@@ -23544,7 +23544,7 @@ int lua_ax_studio_BoneNode_getDebugDrawWidth(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getDebugDrawWidth'", nullptr);
             return 0;
         }
-        double ret = cobj->getDebugDrawWidth();
+        auto&& ret = cobj->getDebugDrawWidth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -23638,7 +23638,7 @@ int lua_ax_studio_BoneNode_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getBlendFunc'", nullptr);
             return 0;
         }
-        const ax::BlendFunc& ret = cobj->getBlendFunc();
+        auto&& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23685,7 +23685,7 @@ int lua_ax_studio_BoneNode_getAllSubBones(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getAllSubBones'", nullptr);
             return 0;
         }
-        ax::Vector<cocostudio::timeline::BoneNode *> ret = cobj->getAllSubBones();
+        auto&& ret = cobj->getAllSubBones();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23832,7 +23832,7 @@ int lua_ax_studio_BoneNode_getVisibleSkinsRect(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getVisibleSkinsRect'", nullptr);
             return 0;
         }
-        ax::Rect ret = cobj->getVisibleSkinsRect();
+        auto&& ret = cobj->getVisibleSkinsRect();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23879,7 +23879,7 @@ int lua_ax_studio_BoneNode_getAllSubSkins(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getAllSubSkins'", nullptr);
             return 0;
         }
-        ax::Vector<ax::Node *> ret = cobj->getAllSubSkins();
+        auto&& ret = cobj->getAllSubSkins();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -23989,7 +23989,7 @@ int lua_ax_studio_BoneNode_isDebugDrawEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_isDebugDrawEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isDebugDrawEnabled();
+        auto&& ret = cobj->isDebugDrawEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -24103,7 +24103,7 @@ int lua_ax_studio_BoneNode_getRootSkeletonNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getRootSkeletonNode'", nullptr);
             return 0;
         }
-        cocostudio::timeline::SkeletonNode* ret = cobj->getRootSkeletonNode();
+        auto&& ret = cobj->getRootSkeletonNode();
         object_to_luaval<cocostudio::timeline::SkeletonNode>(tolua_S, "ccs.SkeletonNode",(cocostudio::timeline::SkeletonNode*)ret);
         return 1;
     }
@@ -24247,7 +24247,7 @@ int lua_ax_studio_BoneNode_getVisibleSkins(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getVisibleSkins'", nullptr);
             return 0;
         }
-        ax::Vector<ax::Node *> ret = cobj->getVisibleSkins();
+        auto&& ret = cobj->getVisibleSkins();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24344,7 +24344,7 @@ int lua_ax_studio_BoneNode_getDebugDrawLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getDebugDrawLength'", nullptr);
             return 0;
         }
-        double ret = cobj->getDebugDrawLength();
+        auto&& ret = cobj->getDebugDrawLength();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -24441,7 +24441,7 @@ int lua_ax_studio_BoneNode_getDebugDrawColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_BoneNode_getDebugDrawColor'", nullptr);
             return 0;
         }
-        ax::Color4F ret = cobj->getDebugDrawColor();
+        auto&& ret = cobj->getDebugDrawColor();
         color4f_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24613,7 +24613,7 @@ int lua_ax_studio_SkeletonNode_getBoneNode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SkeletonNode_getBoneNode'", nullptr);
             return 0;
         }
-        cocostudio::timeline::BoneNode* ret = cobj->getBoneNode(arg0);
+        auto&& ret = cobj->getBoneNode(arg0);
         object_to_luaval<cocostudio::timeline::BoneNode>(tolua_S, "ccs.BoneNode",(cocostudio::timeline::BoneNode*)ret);
         return 1;
     }
@@ -24768,7 +24768,7 @@ int lua_ax_studio_SkeletonNode_getAllSubBonesMap(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SkeletonNode_getAllSubBonesMap'", nullptr);
             return 0;
         }
-        const ax::Map<std::string, cocostudio::timeline::BoneNode *, hlookup::string_hash, hlookup::equal_to>& ret = cobj->getAllSubBonesMap();
+        auto&& ret = cobj->getAllSubBonesMap();
         ccmap_string_key_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24804,7 +24804,7 @@ int lua_ax_studio_SkeletonNode_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_SkeletonNode_create'", nullptr);
             return 0;
         }
-        cocostudio::timeline::SkeletonNode* ret = cocostudio::timeline::SkeletonNode::create();
+        auto&& ret = cocostudio::timeline::SkeletonNode::create();
         object_to_luaval<cocostudio::timeline::SkeletonNode>(tolua_S, "ccs.SkeletonNode",(cocostudio::timeline::SkeletonNode*)ret);
         return 1;
     }
@@ -24961,7 +24961,7 @@ int lua_ax_studio_ComExtensionData_getCustomProperty(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComExtensionData_getCustomProperty'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getCustomProperty();
+        auto&& ret = cobj->getCustomProperty();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -25008,7 +25008,7 @@ int lua_ax_studio_ComExtensionData_getActionTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComExtensionData_getActionTag'", nullptr);
             return 0;
         }
-        int ret = cobj->getActionTag();
+        auto&& ret = cobj->getActionTag();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -25094,7 +25094,7 @@ int lua_ax_studio_ComExtensionData_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComExtensionData_create'", nullptr);
             return 0;
         }
-        cocostudio::ComExtensionData* ret = cocostudio::ComExtensionData::create();
+        auto&& ret = cocostudio::ComExtensionData::create();
         object_to_luaval<cocostudio::ComExtensionData>(tolua_S, "ccs.ComExtensionData",(cocostudio::ComExtensionData*)ret);
         return 1;
     }
@@ -25128,7 +25128,7 @@ int lua_ax_studio_ComExtensionData_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_ComExtensionData_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = cocostudio::ComExtensionData::createInstance();
+        auto&& ret = cocostudio::ComExtensionData::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
