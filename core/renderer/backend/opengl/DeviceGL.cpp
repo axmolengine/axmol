@@ -33,6 +33,8 @@
 #include "DeviceInfoGL.h"
 #include "RenderTargetGL.h"
 
+#include "renderer/backend/ProgramManager.h"
+
 NS_AX_BACKEND_BEGIN
 
 Device* Device::getInstance()
@@ -57,7 +59,7 @@ DeviceGL::DeviceGL()
 
 DeviceGL::~DeviceGL()
 {
-    ProgramCache::destroyInstance();
+    ProgramManager::destroyInstance();
     delete _deviceInfo;
     _deviceInfo = nullptr;
 }

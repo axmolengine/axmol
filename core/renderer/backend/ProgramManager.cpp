@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ProgramCache.h"
+#include "ProgramManager.h"
 #include "Device.h"
 #include "ShaderModule.h"
 #include "renderer/ccShaders.h"
@@ -50,34 +50,44 @@ std::string getShaderMacrosForLight()
 }
 }  // namespace
 
-ProgramCache* ProgramCache::_sharedProgramCache = nullptr;
+ProgramManager* ProgramManager::_sharedProgramManager = nullptr;
 
-ProgramCache* ProgramCache::getInstance()
+Program* ProgramManager::newProgram(std::string_view vertShaderSource,
+                                           std::string_view fragShaderSource,
+                                           std::function<void(Program*)> fnSetupLayout)
 {
-    if (!_sharedProgramCache)
+    auto program = Device::getInstance()->newProgram(vertShaderSource, fragShaderSource);
+    if (program)
+        fnSetupLayout(program);
+    return program;
+}
+
+ProgramManager* ProgramManager::getInstance()
+{
+    if (!_sharedProgramManager)
     {
-        _sharedProgramCache = new ProgramCache();
-        if (!_sharedProgramCache->init())
+        _sharedProgramManager = new ProgramManager();
+        if (!_sharedProgramManager->init())
         {
-            AX_SAFE_DELETE(_sharedProgramCache);
+            AX_SAFE_DELETE(_sharedProgramManager);
         }
     }
-    return _sharedProgramCache;
+    return _sharedProgramManager;
 }
 
-void ProgramCache::destroyInstance()
+void ProgramManager::destroyInstance()
 {
-    AX_SAFE_RELEASE_NULL(_sharedProgramCache);
+    AX_SAFE_RELEASE_NULL(_sharedProgramManager);
 }
 
-ProgramCache::~ProgramCache()
+ProgramManager::~ProgramManager()
 {
     for (auto&& program : _cachedPrograms)
     {
         AX_SAFE_RELEASE(program.second);
     }
-    AXLOGINFO("deallocing ProgramCache: %p", this);
-    ShaderCache::destroyInstance();
+    AXLOGINFO("deallocing ProgramManager: %p", this);
+    backend::ShaderCache::destroyInstance();
 }
 
 /*
@@ -215,7 +225,7 @@ void VertexLayoutHelper::setupTerrain3D(Program* program)
 
 // ### end of vertex layout setup functions
 
-bool ProgramCache::init()
+bool ProgramManager::init()
 {
     registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR, positionTextureColor_vert, positionTextureColor_frag,
                            VertexLayoutHelper::setupSprite);
@@ -299,12 +309,12 @@ bool ProgramCache::init()
     return true;
 }
 
-backend::Program* ProgramCache::getCustomProgram(uint32_t type) const
+Program* ProgramManager::getCustomProgram(uint32_t type) const
 {
     return getBuiltinProgram(type | ProgramType::CUSTOM_PROGRAM);
 }
 
-backend::Program* ProgramCache::getBuiltinProgram(uint32_t type) const
+Program* ProgramManager::getBuiltinProgram(uint32_t type) const
 {
     auto iter = _cachedPrograms.find(type);
     if (iter != _cachedPrograms.end())
@@ -313,7 +323,7 @@ backend::Program* ProgramCache::getBuiltinProgram(uint32_t type) const
     return addProgram(type);
 }
 
-Program* ProgramCache::addProgram(uint32_t internalType) const
+Program* ProgramManager::addProgram(uint32_t internalType) const
 {
     Program* program = nullptr;
     if (internalType < ProgramType::BUILTIN_COUNT)
@@ -342,7 +352,7 @@ Program* ProgramCache::addProgram(uint32_t internalType) const
     return program;
 }
 
-void ProgramCache::registerCustomProgramFactory(uint32_t type,
+void ProgramManager::registerCustomProgramFactory(uint32_t type,
                                                 std::string vertShaderSource,
                                                 std::string fragShaderSource,
                                                 std::function<void(Program*)> fnSetupLayout)
@@ -352,7 +362,7 @@ void ProgramCache::registerCustomProgramFactory(uint32_t type,
                            std::move(fnSetupLayout));
 }
 
-void ProgramCache::registerProgramFactory(uint32_t internalType,
+void ProgramManager::registerProgramFactory(uint32_t internalType,
                                           std::string&& vertShaderSource,
                                           std::string&& fragShaderSource,
                                           std::function<void(Program*)> fnSetupLayout)
@@ -378,7 +388,7 @@ void ProgramCache::registerProgramFactory(uint32_t internalType,
     }
 }
 
-void ProgramCache::removeProgram(backend::Program* program)
+void ProgramManager::removeProgram(Program* program)
 {
     if (!program)
     {
@@ -398,7 +408,7 @@ void ProgramCache::removeProgram(backend::Program* program)
     }
 }
 
-void ProgramCache::removeUnusedProgram()
+void ProgramManager::removeUnusedProgram()
 {
     for (auto iter = _cachedPrograms.cbegin(); iter != _cachedPrograms.cend();)
     {
@@ -416,7 +426,7 @@ void ProgramCache::removeUnusedProgram()
     }
 }
 
-void ProgramCache::removeAllPrograms()
+void ProgramManager::removeAllPrograms()
 {
     ProgramStateRegistry::getInstance()->clearPrograms();
     for (auto&& program : _cachedPrograms)

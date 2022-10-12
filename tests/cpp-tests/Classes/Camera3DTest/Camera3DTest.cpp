@@ -1255,7 +1255,7 @@ void FogTestDemo::onEnter()
 
     auto vertexSource = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.vert");
     auto fragSource   = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.frag");
-    auto program      = backend::Device::getInstance()->newProgram(vertexSource, fragSource);
+    auto program      = ProgramManager::newProgram(vertexSource, fragSource);
     _programState1    = new backend::ProgramState(program);
     _programState2    = new backend::ProgramState(program);
     AX_SAFE_RELEASE(program);
@@ -1305,7 +1305,7 @@ void FogTestDemo::onEnter()
 
         auto vertexSource = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.vert");
         auto fragSource   = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.frag");
-        auto program      = backend::Device::getInstance()->newProgram(vertexSource, fragSource);
+        auto program      = ProgramManager::newProgram(vertexSource, fragSource);
         _programState1    = new backend::ProgramState(program);
         _programState2    = new backend::ProgramState(program);
 
