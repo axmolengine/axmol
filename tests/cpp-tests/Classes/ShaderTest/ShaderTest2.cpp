@@ -190,7 +190,7 @@ bool Effect::initProgramState(std::string_view fragmentFilename)
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     _fragSource = fragSource;
 #endif
-    auto program      = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
+    auto program      = ProgramManager::newProgram(positionTextureColor_vert, fragSource, VertexLayoutHelper::setupSprite);
     auto programState = new backend::ProgramState(program);
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(program);

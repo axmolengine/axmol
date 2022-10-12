@@ -29,7 +29,6 @@
 #include "RenderPassDescriptor.h"
 #include "Texture.h"
 #include "DepthStencilState.h"
-#include "ProgramCache.h"
 #include "ShaderCache.h"
 #include "DeviceInfo.h"
 
@@ -46,6 +45,8 @@ class RenderPipeline;
 class RenderPass;
 class RenderTarget;
 
+class ProgramManager;
+
 /**
  * @addtogroup _backend
  * @{
@@ -57,7 +58,7 @@ class RenderTarget;
 class AX_DLL Device : public ax::Ref
 {
 public:
-    friend class ProgramCache;
+    friend class ProgramManager;
     friend class ShaderCache;
 
     /**

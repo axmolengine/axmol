@@ -60,7 +60,6 @@ THE SOFTWARE.
 #include "base/CCAsyncTaskPool.h"
 #include "base/ObjectFactory.h"
 #include "platform/CCApplication.h"
-#include "renderer/backend/ProgramCache.h"
 #include "audio/AudioEngine.h"
 
 #if AX_ENABLE_SCRIPT_BINDING
@@ -1031,7 +1030,7 @@ void Director::reset()
     SpriteFrameCache::destroyInstance();
     FileUtils::destroyInstance();
     AsyncTaskPool::destroyInstance();
-    backend::ProgramCache::destroyInstance();
+    backend::ProgramManager::destroyInstance();
 
     // cocos2d-x specific data structures
     UserDefault::destroyInstance();
