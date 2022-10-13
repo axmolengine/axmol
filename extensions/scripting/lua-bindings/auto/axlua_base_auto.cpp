@@ -30310,8 +30310,8 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 1) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getNamespace"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getNamespace");
 
             if (!ok) { break; }
             ax::Properties* ret = cobj->getNamespace(arg0);
@@ -30322,8 +30322,8 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 2) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getNamespace"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getNamespace");
 
             if (!ok) { break; }
             bool arg1;
@@ -30338,8 +30338,8 @@ int lua_ax_base_Properties_getNamespace(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 3) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Properties:getNamespace"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Properties:getNamespace");
 
             if (!ok) { break; }
             bool arg1;
@@ -30400,7 +30400,7 @@ int lua_ax_base_Properties_getId(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getId();
-        tolua_pushstring(tolua_S,(const char*)ret);
+        lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Properties:getId",argc, 0);
