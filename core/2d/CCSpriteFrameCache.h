@@ -274,7 +274,7 @@ protected:
 
     /** Delete a list of frames from cache, rebuild index
      */
-    bool eraseFrames(const std::vector<std::string>& frame);
+    bool eraseFrames(const std::vector<std::string_view>& frame);
     /** Delete frame from index and SpriteFrame is kept.
      */
     bool removeSpriteSheet(std::string_view spriteSheetFileName);

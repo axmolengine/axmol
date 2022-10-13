@@ -226,7 +226,7 @@ public:
      *
      * @return A properties object with the given ID or name.
      */
-    Properties* getNamespace(const char* id, bool searchNames = false, bool recurse = true) const;
+    Properties* getNamespace(std::string_view id, bool searchNames = false, bool recurse = true) const;
 
     /**
      * Get the name of this Property's namespace.
@@ -241,7 +241,7 @@ public:
      *
      * @return The ID of this Property's namespace.
      */
-    const char* getId() const;
+    std::string_view getId() const;
 
     /**
      * Check if a property with the given name is specified in this Properties object.
@@ -569,7 +569,7 @@ private:
     bool eof();
 
     // Called after createNonRefCounted(); copies info from parents into derived namespaces.
-    void resolveInheritance(const char* id = NULL);
+    void resolveInheritance(std::string_view id = std::string_view{});
 
     // Called by resolveInheritance().
     void mergeWith(Properties* overrides);

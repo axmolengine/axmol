@@ -762,7 +762,7 @@ std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
     // filter files which `filename.startsWith(pathname)`
     // then make each path unique
 
-    std::set<std::string> fileSet;
+    std::set<std::string_view> fileSet;
     ZipFilePrivate::FileListContainer::const_iterator it  = _data->fileList.begin();
     ZipFilePrivate::FileListContainer::const_iterator end = _data->fileList.end();
     // ensure pathname ends with `/` as a directory
@@ -777,12 +777,12 @@ std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
             auto pos = suffix.find('/');
             if (pos == std::string::npos)
             {
-                fileSet.insert(std::string{suffix});
+                fileSet.insert(suffix);
             }
             else
             {
                 // fileSet.insert(parts[0] + "/");
-                fileSet.insert(std::string{suffix.substr(0, pos + 1)});
+                fileSet.insert(suffix.substr(0, pos + 1));
             }
         }
     }
