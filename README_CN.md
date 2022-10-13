@@ -12,17 +12,29 @@
 [![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)  
 
 
-**这是另外一个基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++17...**
+**Axmol - X分子引擎，基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++17/20...**
   
 **[English](README.md)**
-  
+
+### 关于预编译库
+
+- 所有预编译库均通过[buildware](https://github.com/axmolengine/buildware)使用GitHub Actions自动构建
+- 预编译库支持架构
+  - windows: x86,x64
+  - linux: x64
+  - macos: x64, arm64(M1芯片)
+  - android: armv7, arm64, x86, x64
+  - ios: arm64, x64
+  - tvos: arm64, x64
+
 ### 宗旨:
-* C++17
-* Focus on native game dev only
+* C++17/20
+* 专注C++
 * Fix bugs ASAP
 * Review PR ASAP
   
 ### 主要特性:
+* 增加tvos支持
 * 增强Windows下工作流，支持链接引擎预编译库, 用法请查看: [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 * Windows 视频播放支持
 * Windows x64编译支持
@@ -35,7 +47,7 @@
 * AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
 * 使用现代化的GL加载器glad代替glew
 * 增加google angle渲染后端支持
-* C++最低标准要求: C++17
+* C++最低标准要求: C++17/20
 * 设置ios下最低目标平台为ios9.0
 * 使用更快的xml解析库pugixml代替tinyxml2
 * Downloader全平台统一实现，均基于curl
@@ -57,8 +69,8 @@
   3. 执行```python setup.py```后重启控制台
 
 #### Windows
-  1. 安装CMake，要求3.14以上  
-  2. 确保 Visual Studio 2019 已正确安装
+  1. 安装CMake，要求3.22以上  
+  2. 确保 Visual Studio 2019/2022 已正确安装
   3. 执行下面的命令
   ```bat
   cd axmol
@@ -113,7 +125,7 @@
 ### 注意
   * ThreadLocalStorage线程本地存储
     - ios x86 simulator ios>=10 and axmol no longer provide x86 libraries
-    - ios x64 or devices(armv7,arm64) ios sdk>=9.0
+    - ios x64 or devices arm64 ios sdk>=9.0
     - the openal-soft maintained by kcat use TLS
 
 ### QQ交流群
