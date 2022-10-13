@@ -1358,11 +1358,11 @@ inline bool operator>=(const basic_string_view<_CharT, _Traits>& lhs,
 //-----------------------------------------------------------------
 // FNV1a hash from msvc++
 #  if YASIO__64BITS
-static constexpr size_t _FNV_offset_basis = 14695981039346656037ULL;
-static constexpr size_t _FNV_prime        = 1099511628211ULL;
+static YASIO__CONSTEXPR size_t _FNV_offset_basis = 14695981039346656037ULL;
+static YASIO__CONSTEXPR size_t _FNV_prime = 1099511628211ULL;
 #  else  /* defined(_M_X64), etc. */
-static constexpr size_t _FNV_offset_basis = 2166136261U;
-static constexpr size_t _FNV_prime        = 16777619U;
+static YASIO__CONSTEXPR size_t _FNV_offset_basis = 2166136261U;
+static YASIO__CONSTEXPR size_t _FNV_prime = 16777619U;
 #  endif /* defined(_M_X64), etc. */
 inline size_t _FNV1a_hash(const void* _First, size_t _Count)
 { // FNV-1a hash function for bytes in [_First, _First+_Count)
@@ -1396,7 +1396,7 @@ template <class _Elem> struct hash<cxx17::basic_string_view<_Elem>>
 } // namespace std
 #endif
 
-#if YASIO__HAS_FULL_CXX11
+#if YASIO__HAS_CXX14
 namespace cxx17
 {
 // basic_string_view LITERALS

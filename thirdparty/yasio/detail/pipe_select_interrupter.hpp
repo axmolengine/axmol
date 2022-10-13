@@ -98,6 +98,8 @@ private:
       ::fcntl(write_descriptor_, F_SETFD, FD_CLOEXEC);
 #endif // defined(FD_CLOEXEC)
     }
+    else
+      yasio__throw_error(errno, "pipe_select_interrupter");
   }
 
   // Close the descriptors.

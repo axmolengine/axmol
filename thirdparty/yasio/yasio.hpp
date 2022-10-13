@@ -1237,7 +1237,7 @@ private:
 }; // io_service
 
 } // namespace inet
-#if !YASIO__HAS_NS_INLINE
+#if !YASIO__HAS_CXX11
 using namespace yasio::inet;
 #endif
 } /* namespace yasio */

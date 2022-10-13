@@ -23,10 +23,8 @@
 #if YASIO__HAS_CXX17 && !defined(__APPLE__)
 #  include <shared_mutex>
 #else
-#  include <system_error>
 #  include <mutex>
 #  include <condition_variable>
-#  define yaso__throw_error(e) YASIO__THROW0(std::system_error(std::make_error_code(e), ""))
 namespace cxx17
 {
 // CLASS TEMPLATE shared_mutex
@@ -205,7 +203,7 @@ public:
   void unlock()
   { // try to unlock the mutex
     if (!_Pmtx || !_Owns)
-      yaso__throw_error(std::errc::operation_not_permitted);
+      yasio__throw_error0(std::errc::operation_not_permitted);
 
     _Pmtx->unlock_shared();
     _Owns = false;
@@ -240,10 +238,10 @@ private:
   void _Validate() const
   { // check if the mutex can be locked
     if (!_Pmtx)
-      yaso__throw_error(std::errc::operation_not_permitted);
+      yasio__throw_error0(std::errc::operation_not_permitted);
 
     if (_Owns)
-      yaso__throw_error(std::errc::resource_deadlock_would_occur);
+      yasio__throw_error0(std::errc::resource_deadlock_would_occur);
   }
 };
 } // namespace cxx17
