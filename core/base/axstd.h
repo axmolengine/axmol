@@ -22,7 +22,7 @@ inline std::unique_ptr<_Ty> make_unique_for_overwrite(const size_t _Size)
     return std::unique_ptr<_Ty>(new _Elem[_Size]);
 }
 
-// resize still with zero filled which is not needs at here
+// If the _OutCont is `std::vector`, the resize still with zero filled which is not needs at here
 // some follow concepts needs standardized in the future, may be c++23
 //  - resize_and_overwrite:
 //    - https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p1072r10.html
