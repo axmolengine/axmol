@@ -51,7 +51,7 @@ const int PhysicsWorld::DEBUGDRAW_JOINT   = 0x02;
 const int PhysicsWorld::DEBUGDRAW_CONTACT = 0x04;
 const int PhysicsWorld::DEBUGDRAW_ALL     = DEBUGDRAW_SHAPE | DEBUGDRAW_JOINT | DEBUGDRAW_CONTACT;
 
-const float _debugDrawThickness = 0.5f; // thickness of the DebugDraw lines, circles, dots, polygons
+const float _debugDrawThickness = 0.5f;  // thickness of the DebugDraw lines, circles, dots, polygons
 
 namespace
 {
@@ -349,11 +349,11 @@ bool PhysicsWorld::collisionBeginCallback(PhysicsContact& contact)
 {
     bool ret = true;
 
-    PhysicsShape* shapeA               = contact.getShapeA();
-    PhysicsShape* shapeB               = contact.getShapeB();
-    PhysicsBody* bodyA                 = shapeA->getBody();
-    PhysicsBody* bodyB                 = shapeB->getBody();
-    std::vector<PhysicsJoint*> jointsA = bodyA->getJoints();
+    PhysicsShape* shapeA = contact.getShapeA();
+    PhysicsShape* shapeB = contact.getShapeB();
+    PhysicsBody* bodyA   = shapeA->getBody();
+    PhysicsBody* bodyB   = shapeB->getBody();
+    auto&& jointsA       = bodyA->getJoints();
 
     // check the joint is collision enable or not
     for (PhysicsJoint* joint : jointsA)

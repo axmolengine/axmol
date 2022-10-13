@@ -148,7 +148,7 @@ void SpriteFrameCache::removeSpriteFrames()
 void SpriteFrameCache::removeUnusedSpriteFrames()
 {
     auto removed = false;
-    std::vector<std::string> toRemoveFrames;
+    std::vector<std::string_view> toRemoveFrames;
 
     const auto& frames = getSpriteFrames();
     for (auto&& iter : frames)
@@ -211,7 +211,7 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
         return;
 
     const auto& framesDict = dictionary["frames"].asValueMap();
-    std::vector<std::string> keysToRemove;
+    std::vector<std::string_view> keysToRemove;
 
     for (const auto& iter : framesDict)
     {
@@ -226,7 +226,7 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
 
 void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
 {
-    std::vector<std::string> keysToRemove;
+    std::vector<std::string_view> keysToRemove;
 
     for (auto&& iter : getSpriteFrames())
     {
@@ -321,7 +321,7 @@ bool SpriteFrameCache::eraseFrame(std::string_view frameName)
     return false;
 }
 
-bool SpriteFrameCache::eraseFrames(const std::vector<std::string>& frames)
+bool SpriteFrameCache::eraseFrames(const std::vector<std::string_view>& frames)
 {
     auto ret = false;
     for (const auto& frame : frames)

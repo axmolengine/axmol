@@ -958,8 +958,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
     bool isNeedsMutableSet = (oneByOneListeners && allAtOnceListeners);
 
     const std::vector<Touch*>& originalTouches = event->getTouches();
-    std::vector<Touch*> mutableTouches(originalTouches.size());
-    std::copy(originalTouches.begin(), originalTouches.end(), mutableTouches.begin());
+    auto mutableTouches = originalTouches;
 
     //
     // process the target handlers 1st
@@ -1486,7 +1485,7 @@ void EventDispatcher::removeCustomEventListeners(std::string_view customEventNam
 void EventDispatcher::removeAllEventListeners()
 {
     bool cleanMap = true;
-    std::vector<EventListener::ListenerID> types;
+    std::vector<std::string_view> types;
     types.reserve(_listenerMap.size());
 
     for (const auto& e : _listenerMap)

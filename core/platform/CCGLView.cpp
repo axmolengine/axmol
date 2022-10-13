@@ -69,6 +69,7 @@ static std::vector<Touch*> getAllTouchesVector()
     int i;
     int temp = g_indexBitsUsed;
 
+    ret.reserve(EventTouch::MAX_TOUCHES);
     for (i = 0; i < EventTouch::MAX_TOUCHES; i++)
     {
         if (temp & 0x00000001)
