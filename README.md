@@ -68,7 +68,7 @@
   * Chipmunk2D 
 * Supported 3D physics engines:
   * Bullet Physics SDK
-* **ImGui 1.88 integrated, easy to write game embedded tools, very easy to use, read [ImGui](extensions/ImGui/README.md) for more info**
+* **ImGui 1.87 integrated, easy to write game embedded tools, very easy to use, read [ImGui](extensions/ImGui/README.md) for more info**
 
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
