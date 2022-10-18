@@ -41,11 +41,11 @@ public:
     // CREATE_NODE(IntervalLayer);
 
 protected:
-    axis::Label* _label0;
-    axis::Label* _label1;
-    axis::Label* _label2;
-    axis::Label* _label3;
-    axis::Label* _label4;
+    ax::Label* _label0;
+    ax::Label* _label1;
+    ax::Label* _label2;
+    ax::Label* _label3;
+    ax::Label* _label4;
 
     float _time0, _time1, _time2, _time3, _time4;
 };

@@ -41,9 +41,9 @@ public:
     virtual void onEnter() override;
 
 protected:
-    axis::Layer* _uiLayer;
-    axis::ui::Layout* _widget;
-    axis::ui::Text* _sceneTitle;
+    ax::Layer* _uiLayer;
+    ax::ui::Layout* _widget;
+    ax::ui::Text* _sceneTitle;
 };
 
 #endif /* defined(__TestCpp__UIScene__) */

@@ -52,23 +52,23 @@ public:
     // overrides
     virtual bool init() override;
     virtual void update(float delta) override;
-    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
     void initScene();
-    void createAgent(const axis::Vec3& pos);
-    void createObstacle(const axis::Vec3& pos);
-    void moveAgents(const axis::Vec3& des);
-    virtual void touchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event){};
-    virtual void touchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event){};
-    virtual void touchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event){};
+    void createAgent(const ax::Vec3& pos);
+    void createObstacle(const ax::Vec3& pos);
+    void moveAgents(const ax::Vec3& des);
+    virtual void touchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event){};
+    virtual void touchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event){};
+    virtual void touchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event){};
 
 protected:
-    axis::Camera* _camera;
+    ax::Camera* _camera;
     float _angle;
-    std::vector<std::pair<axis::NavMeshAgent*, axis::Animate3D*>> _agents;
+    std::vector<std::pair<ax::NavMeshAgent*, ax::Animate3D*>> _agents;
     bool _needMoveAgents;
 };
 
@@ -87,12 +87,12 @@ public:
     virtual void onEnter() override;
 
 protected:
-    virtual void touchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) override{};
-    virtual void touchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event) override{};
-    virtual void touchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
+    virtual void touchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) override{};
+    virtual void touchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event) override{};
+    virtual void touchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
 
 protected:
-    axis::Label* _debugLabel;
+    ax::Label* _debugLabel;
 };
 
 class NavMeshAdvanceTestDemo : public NavMeshBaseTestDemo
@@ -110,14 +110,14 @@ public:
     virtual void onEnter() override;
 
 protected:
-    virtual void touchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) override{};
-    virtual void touchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event) override{};
-    virtual void touchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
+    virtual void touchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) override{};
+    virtual void touchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event) override{};
+    virtual void touchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
 
 protected:
-    axis::Label* _obstacleLabel;
-    axis::Label* _agentLabel;
-    axis::Label* _debugLabel;
+    ax::Label* _obstacleLabel;
+    ax::Label* _agentLabel;
+    ax::Label* _debugLabel;
 };
 
 #endif

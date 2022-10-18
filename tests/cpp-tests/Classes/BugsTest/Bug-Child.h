@@ -43,15 +43,15 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "BugChild"; }
 
-    void switchChild(axis::Ref* sender);
+    void switchChild(ax::Ref* sender);
 
 protected:
-    axis::Sprite* parent1;
-    axis::Sprite* parent2;
+    ax::Sprite* parent1;
+    ax::Sprite* parent2;
 
-    axis::Sprite* child;
+    ax::Sprite* child;
 
-    axis::Menu* menu;
+    ax::Menu* menu;
 };
 
 class BugCameraMask : public BugsTestBase
@@ -62,10 +62,10 @@ public:
     virtual bool init() override;
     virtual std::string title() const override { return "BugCameraMask"; }
 
-    void switchSpriteFlag(axis::Ref* sender);
+    void switchSpriteFlag(ax::Ref* sender);
     void updateSpriteMaskLabel();
     Node* _sprite;
-    axis::Label* _spriteMaskLabel;
+    ax::Label* _spriteMaskLabel;
 };
 
 #endif /* defined(__Bug_Child__) */

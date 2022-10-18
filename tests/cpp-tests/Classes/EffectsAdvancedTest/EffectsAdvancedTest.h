@@ -33,13 +33,13 @@ DEFINE_TEST_SUITE(EffectAdvanceTests);
 class EffectAdvanceBaseTest : public TestCase
 {
 protected:
-    axis::TextureAtlas* _atlas;
+    ax::TextureAtlas* _atlas;
 
     std::string _title;
 
-    axis::Node* _bgNode;
-    axis::Node* _target1;
-    axis::Node* _target2;
+    ax::Node* _bgNode;
+    ax::Node* _target1;
+    ax::Node* _target2;
 
 public:
     virtual void onEnter() override;

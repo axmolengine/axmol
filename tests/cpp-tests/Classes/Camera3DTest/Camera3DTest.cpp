@@ -409,8 +409,8 @@ void Camera3DTestDemo::addNewSpriteWithCoords(Vec3 p,
     }
     mesh->setScale(scale);
 }
-void Camera3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, axis::Event* event) {}
-void Camera3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
+void Camera3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, ax::Event* event) {}
+void Camera3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
 {
     if (touches.size() == 1)
     {
@@ -489,7 +489,7 @@ void Camera3DTestDemo::updateState(float elapsedTime)
         }
     }
 }
-void Camera3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event)
+void Camera3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event)
 {
     for (auto& item : touches)
     {
@@ -528,7 +528,7 @@ void Camera3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, axis::
         }
     }
 }
-void onTouchesCancelled(const std::vector<Touch*>& touches, axis::Event* event) {}
+void onTouchesCancelled(const std::vector<Touch*>& touches, ax::Event* event) {}
 void Camera3DTestDemo::updateCamera(float fDelta)
 {
     if (_mesh)
@@ -1118,7 +1118,7 @@ void CameraArcBallDemo::onTouchsMoved(const std::vector<Touch*>& touchs, Event* 
     }
 }
 
-void CameraArcBallDemo::calculateArcBall(axis::Vec3& axis, float& angle, float p1x, float p1y, float p2x, float p2y)
+void CameraArcBallDemo::calculateArcBall(ax::Vec3& axis, float& angle, float p1x, float p1y, float p2x, float p2y)
 {
     Mat4 rotation_matrix;
     Mat4::createRotation(_rotationQuat, &rotation_matrix);
@@ -1379,7 +1379,7 @@ void FogTestDemo::onExit()
 
 void FogTestDemo::update(float dt) {}
 
-void FogTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
+void FogTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
 {
     if (touches.size() == 1)
     {

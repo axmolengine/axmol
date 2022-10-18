@@ -44,7 +44,7 @@ public:
     virtual std::string title() const override;
     virtual void onExit() override;
 
-    virtual void onBackCallback(axis::Ref* sender) override;
+    virtual void onBackCallback(ax::Ref* sender) override;
 
 protected:
     std::shared_ptr<bool> _isDestroyed;
@@ -74,7 +74,7 @@ private:
     void* _timeSlider;
     bool _updateTimeSlider;
     bool _isStopped;
-    axis::Label* _playOverLabel;
+    ax::Label* _playOverLabel;
 };
 
 class AudioWavTest : public AudioEngineTestDemo
@@ -96,7 +96,7 @@ private:
     int _curIndex = -1;
     std::vector<std::string> _wavFiles;
 
-    axis::Label* _stateLabel = nullptr;
+    ax::Label* _stateLabel = nullptr;
 };
 
 class PlaySimultaneouslyTest : public AudioEngineTestDemo
@@ -135,10 +135,10 @@ public:
 private:
     static const int FILE_COUNT = 2;
     std::string _files[FILE_COUNT];
-    axis::AudioProfile _audioProfile;
+    ax::AudioProfile _audioProfile;
 
     int _audioCount;
-    axis::Label* _showLabel;
+    ax::Label* _showLabel;
     float _time;
     float _minDelay;
     void* _timeSlider;

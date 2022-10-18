@@ -41,20 +41,20 @@ public:
 //
 class EffectSprite;
 
-class Effect : public axis::Ref
+class Effect : public ax::Ref
 {
 public:
-    axis::backend::ProgramState* getProgramState() const { return _programState; }
+    ax::backend::ProgramState* getProgramState() const { return _programState; }
     virtual void setTarget(EffectSprite* sprite) {}
 
 protected:
     bool initProgramState(std::string_view fragmentFilename);
     Effect();
     virtual ~Effect();
-    axis::backend::ProgramState* _programState = nullptr;
+    ax::backend::ProgramState* _programState = nullptr;
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     std::string _fragSource;
-    axis::EventListenerCustom* _backgroundListener;
+    ax::EventListenerCustom* _backgroundListener;
 #endif
 };
 
@@ -68,7 +68,7 @@ public:
 
 protected:
     ssize_t _vectorIndex;
-    axis::Vector<Effect*> _effects;
+    ax::Vector<Effect*> _effects;
     EffectSprite* _sprite;
 };
 
@@ -81,14 +81,14 @@ public:
     virtual std::string subtitle() const { return "Sprite Lamp effects"; }
     // callback
 public:
-    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* unused_event);
-    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* unused_event);
-    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* unused_event);
+    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* unused_event);
+    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* unused_event);
+    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* unused_event);
 
 protected:
     EffectSprite* _sprite;
     Effect* _effect;
-    axis::Sprite* _lightSprite;
+    ax::Sprite* _lightSprite;
 };
 
 #endif

@@ -38,7 +38,7 @@ class TestSuite;
 /**
  * Each test case should inherit from TestCase, and add to a TestSuite object.
  */
-class TestCase : public axis::Scene
+class TestCase : public ax::Scene
 {
 public:
     /** TestCase test type.*/
@@ -73,10 +73,10 @@ public:
     virtual std::string getActualOutput() const { return ""; }
 
     /** Callback functions.*/
-    virtual void restartTestCallback(axis::Ref* sender);
-    virtual void nextTestCallback(axis::Ref* sender);
-    virtual void priorTestCallback(axis::Ref* sender);
-    virtual void onBackCallback(axis::Ref* sender);
+    virtual void restartTestCallback(ax::Ref* sender);
+    virtual void nextTestCallback(ax::Ref* sender);
+    virtual void priorTestCallback(ax::Ref* sender);
+    virtual void onBackCallback(ax::Ref* sender);
 
     /**
      * You should NEVER call this method, unless you know what you are doing.
@@ -93,19 +93,19 @@ public:
     void setTestCaseName(std::string_view name) { _testCaseName = name; }
     std::string getTestCaseName() const { return _testCaseName; }
 
-    const axis::Label* getSubtitleLable() const { return _subtitleLabel; }
-    const axis::MenuItemImage* getRestartTestItem() const { return _restartTestItem; }
+    const ax::Label* getSubtitleLable() const { return _subtitleLabel; }
+    const ax::MenuItemImage* getRestartTestItem() const { return _restartTestItem; }
 
     virtual void onEnter() override;
     virtual bool init() override;
 
 protected:
-    axis::MenuItemImage* _priorTestItem;
-    axis::MenuItemImage* _restartTestItem;
-    axis::MenuItemImage* _nextTestItem;
+    ax::MenuItemImage* _priorTestItem;
+    ax::MenuItemImage* _restartTestItem;
+    ax::MenuItemImage* _nextTestItem;
 
-    axis::Label* _titleLabel;
-    axis::Label* _subtitleLabel;
+    ax::Label* _titleLabel;
+    ax::Label* _subtitleLabel;
 
 private:
     TestSuite* _testSuite;
@@ -121,7 +121,7 @@ private:
  *
  * @note You should not inherit from TestBase directly.
  */
-class TestBase : public axis::Ref
+class TestBase : public ax::Ref
 {
 public:
     virtual ~TestBase();
@@ -162,7 +162,7 @@ class TestController;
 class TestSuite : public TestBase
 {
 public:
-    void addTestCase(std::string_view testName, std::function<axis::Scene*()> callback);
+    void addTestCase(std::string_view testName, std::function<ax::Scene*()> callback);
 
     virtual void restartCurrTest();
     virtual void enterNextTest();
@@ -172,7 +172,7 @@ public:
     virtual void runThisTest() override;
 
 private:
-    std::vector<std::function<axis::Scene*()>> _testCallbacks;
+    std::vector<std::function<ax::Scene*()>> _testCallbacks;
 
     int _currTestIndex;
     friend class TestController;
@@ -184,8 +184,8 @@ class TestCustomTableView;
  * An instance of TestList is a means for displaying hierarchical lists of TestSuite.
  */
 class TestList : public TestBase,
-                 public axis::extension::TableViewDataSource,
-                 public axis::extension::TableViewDelegate
+                 public ax::extension::TableViewDataSource,
+                 public ax::extension::TableViewDelegate
 {
 public:
     TestList();
@@ -195,15 +195,15 @@ public:
 
     virtual void runThisTest() override;
 
-    virtual void tableCellTouched(axis::extension::TableView* table,
-                                  axis::extension::TableViewCell* cell) override;
-    virtual axis::extension::TableViewCell* tableCellAtIndex(axis::extension::TableView* table,
+    virtual void tableCellTouched(ax::extension::TableView* table,
+                                  ax::extension::TableViewCell* cell) override;
+    virtual ax::extension::TableViewCell* tableCellAtIndex(ax::extension::TableView* table,
                                                                 ssize_t idx) override;
-    virtual axis::Size tableCellSizeForIndex(axis::extension::TableView* table, ssize_t idx) override;
-    virtual ssize_t numberOfCellsInTableView(axis::extension::TableView* table) override;
+    virtual ax::Size tableCellSizeForIndex(ax::extension::TableView* table, ssize_t idx) override;
+    virtual ssize_t numberOfCellsInTableView(ax::extension::TableView* table) override;
 
-    virtual void scrollViewDidScroll(axis::extension::ScrollView* view) override {}
-    virtual void scrollViewDidZoom(axis::extension::ScrollView* view) override {}
+    virtual void scrollViewDidScroll(ax::extension::ScrollView* view) override {}
+    virtual void scrollViewDidZoom(ax::extension::ScrollView* view) override {}
 
     void deatchTableView();
 
@@ -211,7 +211,7 @@ private:
     std::vector<std::function<TestBase*()>> _testCallbacks;
     bool _cellTouchEnabled;
     bool _shouldRestoreTableOffset;
-    axis::Vec2 _tableOffset;
+    ax::Vec2 _tableOffset;
     friend class TestController;
     TestCustomTableView* _tableView{};
 };
@@ -238,15 +238,15 @@ private:
  * BaseTest is retained for compatibility with older versions.
  * @warning It should soon be removed.
  */
-class BaseTest : public axis::Layer
+class BaseTest : public ax::Layer
 {
 public:
     virtual std::string title() const { return ""; }
     virtual std::string subtitle() const { return ""; }
 
-    virtual void restartCallback(axis::Ref* sender) {}
-    virtual void nextCallback(axis::Ref* sender) {}
-    virtual void backCallback(axis::Ref* sender) {}
+    virtual void restartCallback(ax::Ref* sender) {}
+    virtual void nextCallback(ax::Ref* sender) {}
+    virtual void backCallback(ax::Ref* sender) {}
 
     virtual void onEnter() override {}
     virtual void onExit() override {}

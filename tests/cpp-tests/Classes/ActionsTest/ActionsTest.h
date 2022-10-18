@@ -34,9 +34,9 @@ DEFINE_TEST_SUITE(ActionsTests);
 class ActionsDemo : public TestCase
 {
 protected:
-    axis::Sprite* _grossini;
-    axis::Sprite* _tamara;
-    axis::Sprite* _kathia;
+    ax::Sprite* _grossini;
+    ax::Sprite* _tamara;
+    ax::Sprite* _kathia;
 
 public:
     virtual void onEnter() override;
@@ -184,7 +184,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::EventListenerCustom* _frameDisplayedListener;
+    ax::EventListenerCustom* _frameDisplayedListener;
 };
 
 class ActionSequence : public ActionsDemo
@@ -402,9 +402,9 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual void addNewSpriteWithCoords(axis::Vec2 p);
-    virtual void runActionsInSprite(axis::Sprite* sprite);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void addNewSpriteWithCoords(ax::Vec2 p);
+    virtual void runActionsInSprite(ax::Sprite* sprite);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
 class ActionMoveStacked : public ActionStacked
@@ -413,7 +413,7 @@ public:
     CREATE_FUNC(ActionMoveStacked);
 
     virtual std::string title() const override;
-    virtual void runActionsInSprite(axis::Sprite* sprite) override;
+    virtual void runActionsInSprite(ax::Sprite* sprite) override;
 };
 
 class ActionMoveJumpStacked : public ActionStacked
@@ -422,7 +422,7 @@ public:
     CREATE_FUNC(ActionMoveJumpStacked);
 
     virtual std::string title() const override;
-    virtual void runActionsInSprite(axis::Sprite* sprite) override;
+    virtual void runActionsInSprite(ax::Sprite* sprite) override;
 };
 
 class ActionMoveBezierStacked : public ActionStacked
@@ -431,7 +431,7 @@ public:
     CREATE_FUNC(ActionMoveBezierStacked);
 
     virtual std::string title() const override;
-    virtual void runActionsInSprite(axis::Sprite* sprite) override;
+    virtual void runActionsInSprite(ax::Sprite* sprite) override;
 };
 
 class ActionCatmullRomStacked : public ActionsDemo
@@ -468,7 +468,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::Sprite* _spriteTmp;
+    ax::Sprite* _spriteTmp;
 };
 
 class Issue1305_2 : public ActionsDemo
@@ -513,7 +513,7 @@ public:
     virtual void onEnter() override;
     virtual std::string subtitle() const override;
     virtual std::string title() const override;
-    void logSprRotation(axis::Sprite* sender);
+    void logSprRotation(ax::Sprite* sender);
 };
 
 class Issue1398 : public ActionsDemo
@@ -580,7 +580,7 @@ public:
     virtual std::string title() const override;
 
 private:
-    axis::Vector<Node*> _pausedTargets;
+    ax::Vector<Node*> _pausedTargets;
 };
 
 class ActionResize : public ActionsDemo
@@ -637,8 +637,8 @@ public:
     virtual void onExit() override;
 
 private:
-    axis::ActionManager* _manager;
-    axis::Node* _target;
+    ax::ActionManager* _manager;
+    ax::Node* _target;
 };
 
 class Issue18003 : public ActionsDemo
@@ -651,8 +651,8 @@ public:
     virtual void onExit() override;
 
 private:
-    axis::ActionManager* _manager;
-    axis::Node* _target;
+    ax::ActionManager* _manager;
+    ax::Node* _target;
 };
 
 #endif

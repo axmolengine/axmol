@@ -115,8 +115,8 @@ public:
     void DrawAABB(b2AABB* aabb, const b2Color& color);
     void Flush();
 
-    axis::extension::PhysicsDebugNodeBox2D g_debugDraw;
-    axis::DrawNode* debugDrawNode;
+    ax::extension::PhysicsDebugNodeBox2D g_debugDraw;
+    ax::DrawNode* debugDrawNode;
     std::string debugString = "";
 
     b2World* m_world;

@@ -74,9 +74,9 @@ bool UIImageViewTest::init()
     return false;
 }
 
-void UIImageViewTest::printWidgetResources(axis::Ref* sender)
+void UIImageViewTest::printWidgetResources(ax::Ref* sender)
 {
-    axis::ResourceData textureFile = _image->getRenderFile();
+    ax::ResourceData textureFile = _image->getRenderFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 

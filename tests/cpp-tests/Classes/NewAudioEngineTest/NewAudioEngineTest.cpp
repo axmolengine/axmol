@@ -62,7 +62,7 @@ AudioEngineTests::AudioEngineTests()
 namespace
 {
 
-class TextButton : public axis::Label
+class TextButton : public ax::Label
 {
 public:
     static TextButton* create(std::string_view text, const std::function<void(TextButton*)>& onTriggered)
@@ -213,7 +213,7 @@ std::string AudioEngineTestDemo::title() const
     return "New Audio Engine Test";
 }
 
-void AudioEngineTestDemo::onBackCallback(axis::Ref* sender)
+void AudioEngineTestDemo::onBackCallback(ax::Ref* sender)
 {
     AudioEngine::end();
     TestCase::onBackCallback(sender);
@@ -897,7 +897,7 @@ bool AudioPerformanceTest::init()
             unschedule("test");
             schedule(
                 [audioFiles](float dt) {
-                    int index = axis::random(0, (int)(audioFiles.size() - 1));
+                    int index = ax::random(0, (int)(audioFiles.size() - 1));
                     AX_PROFILER_START("play2d");
                     AudioEngine::play2d(audioFiles[index]);
                     AX_PROFILER_STOP("play2d");

@@ -27,7 +27,7 @@
 
 #include "axmol.h"
 
-class QuestionContainerSprite : public axis::Sprite
+class QuestionContainerSprite : public ax::Sprite
 {
 public:
     virtual bool init() override;

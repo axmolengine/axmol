@@ -88,7 +88,7 @@ TextureCacheTest::TextureCacheTest() : _numberOfSprites(20), _numberOfLoadedSpri
                                                               AX_CALLBACK_1(TextureCacheTest::loadingCallBack, this));
 }
 
-void TextureCacheTest::loadingCallBack(axis::Texture2D* texture)
+void TextureCacheTest::loadingCallBack(ax::Texture2D* texture)
 {
     ++_numberOfLoadedSprites;
     char tmp[10];

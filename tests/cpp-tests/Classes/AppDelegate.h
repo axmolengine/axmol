@@ -35,7 +35,7 @@ class TestController;
 
 Private inheritance here hides part of interface from Director.
 */
-class AppDelegate : private axis::Application
+class AppDelegate : private ax::Application
 {
 public:
     AppDelegate();
@@ -44,7 +44,7 @@ public:
     virtual void initGLContextAttrs();
 
     /**
-    @brief    Implement Director and axis::Scene* init code here.
+    @brief    Implement Director and ax::Scene* init code here.
     @return true    Initialize success, app continue.
     @return false   Initialize failed, app terminate.
     */

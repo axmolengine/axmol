@@ -238,10 +238,10 @@ void BasicsScene::playDragDrop()
 void BasicsScene::playProgress()
 {
     GComponent* obj = _demoObjects.at("ProgressBar");
-    axis::Director::getInstance()->getScheduler()->schedule(
+    ax::Director::getInstance()->getScheduler()->schedule(
         AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this, 0.02f, false);
     obj->addEventListener(UIEventType::Exit, [this](EventContext*) {
-        axis::Director::getInstance()->getScheduler()->unschedule(AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this);
+        ax::Director::getInstance()->getScheduler()->unschedule(AX_SCHEDULE_SELECTOR(BasicsScene::onPlayProgress), this);
     });
 }
 

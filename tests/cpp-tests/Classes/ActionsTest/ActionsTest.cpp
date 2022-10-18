@@ -1663,7 +1663,7 @@ void Issue1305::onEnter()
 
 void Issue1305::log(Node* sender)
 {
-    axis::log("This message SHALL ONLY appear when the sprite is added to the scene, NOT BEFORE");
+    ax::log("This message SHALL ONLY appear when the sprite is added to the scene, NOT BEFORE");
 }
 
 void Issue1305::onExit()
@@ -2140,11 +2140,11 @@ void ActionResize::onEnter()
     imageViewResize->setContentSize(Size(50.0f, 40.0f));
     imageViewResize->setPosition(Vec2((widgetSize.width / 2.0f) + offset.x, (widgetSize.height / 2.0f) + offset.y));
 
-    auto resizeDown = axis::ResizeTo::create(2.8f, Size(50.0f, 40.0f));
-    auto resizeUp   = axis::ResizeTo::create(2.8f, Size(300.0f, 40.0f));
+    auto resizeDown = ax::ResizeTo::create(2.8f, Size(50.0f, 40.0f));
+    auto resizeUp   = ax::ResizeTo::create(2.8f, Size(300.0f, 40.0f));
 
-    auto resizeByDown = axis::ResizeBy::create(1.8f, Size(0.0f, -30.0f));
-    auto resizeByUp   = axis::ResizeBy::create(1.8f, Size(0.0f, 30.0f));
+    auto resizeByDown = ax::ResizeBy::create(1.8f, Size(0.0f, -30.0f));
+    auto resizeByUp   = ax::ResizeBy::create(1.8f, Size(0.0f, 30.0f));
     addChild(imageViewResize);
     auto rep = RepeatForever::create(Sequence::create(resizeUp, resizeDown, resizeByDown, resizeByUp, nullptr));
     imageViewResize->runAction(rep);
@@ -2155,11 +2155,11 @@ void ActionResize::onEnter()
     imageViewScale->setContentSize(Size(50.0f, 40.0f));
     imageViewScale->setPosition(Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f));
 
-    auto scaleDownScale = axis::ScaleTo::create(2.8f, 1.0f);
-    auto scaleUpScale   = axis::ScaleTo::create(2.8f, 6.0f, 1.0f);
+    auto scaleDownScale = ax::ScaleTo::create(2.8f, 1.0f);
+    auto scaleUpScale   = ax::ScaleTo::create(2.8f, 6.0f, 1.0f);
 
-    auto scaleByDownScale = axis::ScaleBy::create(1.8f, 1.0f, 0.25f);
-    auto scaleByUpScale   = axis::ScaleBy::create(1.8f, 1.0f, 4.0f);
+    auto scaleByDownScale = ax::ScaleBy::create(1.8f, 1.0f, 0.25f);
+    auto scaleByUpScale   = ax::ScaleBy::create(1.8f, 1.0f, 4.0f);
     addChild(imageViewScale);
     auto rep2 = RepeatForever::create(
         Sequence::create(scaleUpScale, scaleDownScale, scaleByDownScale, scaleByUpScale, nullptr));
@@ -2227,8 +2227,8 @@ void Issue14936_1::onEnter()
     ActionsDemo::onEnter();
     centerSprites(0);
 
-    auto origin      = axis::Director::getInstance()->getVisibleOrigin();
-    auto visibleSize = axis::Director::getInstance()->getVisibleSize();
+    auto origin      = ax::Director::getInstance()->getVisibleOrigin();
+    auto visibleSize = ax::Director::getInstance()->getVisibleSize();
 
     _count = 0;
 
@@ -2256,8 +2256,8 @@ void Issue14936_2::onEnter()
     ActionsDemo::onEnter();
     centerSprites(0);
 
-    auto origin      = axis::Director::getInstance()->getVisibleOrigin();
-    auto visibleSize = axis::Director::getInstance()->getVisibleSize();
+    auto origin      = ax::Director::getInstance()->getVisibleOrigin();
+    auto visibleSize = ax::Director::getInstance()->getVisibleSize();
 
     _count            = 0;
     auto counterLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 16.0f);
@@ -2303,21 +2303,21 @@ void SequenceWithFinalInstant::onEnter()
 {
     TestCase::onEnter();
 
-    _manager = new axis::ActionManager();
+    _manager = new ax::ActionManager();
 
-    _target = axis::Node::create();
+    _target = ax::Node::create();
     _target->setActionManager(_manager);
     _target->retain();
     _target->onEnter();
 
     bool called(false);
     const auto f([&called]() -> void {
-        axis::log("Callback called.");
+        ax::log("Callback called.");
         called = true;
     });
 
     const auto action =
-        axis::Sequence::create(axis::DelayTime::create(0.05f), axis::CallFunc::create(f), nullptr);
+        ax::Sequence::create(ax::DelayTime::create(0.05f), ax::CallFunc::create(f), nullptr);
 
     _target->runAction(action);
     _manager->update(0);

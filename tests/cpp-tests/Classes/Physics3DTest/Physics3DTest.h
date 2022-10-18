@@ -60,16 +60,16 @@ public:
     virtual std::string subtitle() const override;
     virtual void update(float delta) override;
 
-    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
-    void shootBox(const axis::Vec3& des);
+    void shootBox(const ax::Vec3& des);
 
 protected:
     std::string _title;
-    axis::Camera* _camera = nullptr;
+    ax::Camera* _camera = nullptr;
     float _angle             = 0.f;
     bool _needShootBox       = false;
 };
@@ -97,12 +97,12 @@ public:
 
     virtual bool init() override;
 
-    virtual void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
-    virtual void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
-    virtual void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event) override;
+    virtual void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
+    virtual void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
+    virtual void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event) override;
 
 protected:
-    axis::Physics3DConstraint* _constraint;  // for picking
+    ax::Physics3DConstraint* _constraint;  // for picking
     float _pickingDistance;                     // picking distance
 };
 

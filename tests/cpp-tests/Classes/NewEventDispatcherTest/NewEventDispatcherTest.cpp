@@ -1707,7 +1707,7 @@ Issue8194::Issue8194()
 #define tagB 101
     // dispatch custom event in another custom event, make the custom event "Issue8194" take effect immediately
     _listener =
-        getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, [this](axis::EventCustom* event) {
+        getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_UPDATE, [this](ax::EventCustom* event) {
             if (nodesAdded)
             {
                 // AXLOG("Fire Issue8194 Event");
@@ -1728,8 +1728,8 @@ Issue8194::Issue8194()
         auto nodeA = Node::create();
         addChild(nodeA, 1, tagA);
 
-        axis::EventListenerCustom* listenerA =
-            axis::EventListenerCustom::create("Issue8194", [&](axis::EventCustom* event) {
+        ax::EventListenerCustom* listenerA =
+            ax::EventListenerCustom::create("Issue8194", [&](ax::EventCustom* event) {
                 _subtitleLabel->setString("Bug has been fixed.");
                 event->stopPropagation();
             });
@@ -1739,8 +1739,8 @@ Issue8194::Issue8194()
         auto nodeB = Node::create();
         addChild(nodeB, -1, tagB);
 
-        axis::EventListenerCustom* listenerB =
-            axis::EventListenerCustom::create("Issue8194", [&](axis::EventCustom* event) {
+        ax::EventListenerCustom* listenerB =
+            ax::EventListenerCustom::create("Issue8194", [&](ax::EventCustom* event) {
                 _subtitleLabel->setString("Bug exist yet.");
                 event->stopPropagation();
             });
@@ -1778,7 +1778,7 @@ Issue9898::Issue9898()
     auto nodeA = Node::create();
     addChild(nodeA);
 
-    _listener = axis::EventListenerCustom::create("Issue9898", [&](axis::EventCustom* event) {
+    _listener = ax::EventListenerCustom::create("Issue9898", [&](ax::EventCustom* event) {
         _eventDispatcher->removeEventListener(_listener);
         _eventDispatcher->dispatchCustomEvent("Issue9898");
     });

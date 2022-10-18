@@ -78,7 +78,7 @@ std::string TerrainSimple::subtitle() const
     return "Drag to walkThru";
 }
 
-void TerrainSimple::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void TerrainSimple::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     float delta           = Director::getInstance()->getDeltaTime();
     auto touch            = touches[0];
@@ -168,9 +168,9 @@ TerrainWalkThru::TerrainWalkThru()
     addChild(_terrain);
 }
 
-void TerrainWalkThru::onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) {}
+void TerrainWalkThru::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) {}
 
-void TerrainWalkThru::onTouchesEnd(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void TerrainWalkThru::onTouchesEnd(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     auto touch    = touches[0];
     auto location = touch->getLocationInView();
@@ -372,7 +372,7 @@ std::string TerrainWithLightMap::subtitle() const
 {
     return "Drag to walkThru";
 }
-void TerrainWithLightMap::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void TerrainWithLightMap::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     float delta           = Director::getInstance()->getDeltaTime();
     auto touch            = touches[0];

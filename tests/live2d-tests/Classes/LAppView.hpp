@@ -16,7 +16,7 @@
 #include <vector>
 #include "LAppLive2DManager.hpp"
 
-class LAppView : public axis::DrawNode
+class LAppView : public ax::DrawNode
 {
 public:
     LAppView();
@@ -25,12 +25,12 @@ public:
     virtual void onEnter();
     virtual void onExit();
 
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags);
-    void onDraw(const axis::Mat4& transform, uint32_t flags);
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags);
+    void onDraw(const ax::Mat4& transform, uint32_t flags);
 
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
     void updateViewMatrix(float dx, float dy, float cx, float cy, float scale);
     float transformViewX(float deviceX);

@@ -32,7 +32,7 @@
  * TestScene is retained for compatibility with older versions.
  * @warning It should soon be removed.
  */
-class TestScene : public axis::Scene
+class TestScene : public ax::Scene
 {
 public:
     TestScene(bool bPortrait = false, bool physics = false) {}

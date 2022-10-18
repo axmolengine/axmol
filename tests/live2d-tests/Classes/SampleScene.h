@@ -13,10 +13,10 @@
 
 class LAppView;
 
-class SampleScene : public axis::Scene
+class SampleScene : public ax::Scene
 {
 public:
-    static axis::Scene* createScene();
+    static ax::Scene* createScene();
 
     static SampleScene* getInstance();
 
@@ -27,8 +27,8 @@ public:
     virtual void onExit() override;
 
     // a selector callback
-    void menuCloseCallback(axis::Ref* pSender);
-    void menuChangeCallback(axis::Ref* pSender);
+    void menuCloseCallback(ax::Ref* pSender);
+    void menuChangeCallback(ax::Ref* pSender);
 
     // implement the "static create()" method manually
     CREATE_FUNC(SampleScene);
@@ -39,8 +39,8 @@ public:
 private:
     LAppView* _pView;
 
-    axis::MenuItemImage* _changeItem;
-    axis::MenuItemImage* _closeItem;
+    ax::MenuItemImage* _changeItem;
+    ax::MenuItemImage* _closeItem;
 };
 
 #endif // __SAMPLE_SCENE_H__

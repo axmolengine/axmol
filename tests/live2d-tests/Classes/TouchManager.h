@@ -53,7 +53,7 @@ public:
 
     void touchesBegan(float deviceX, float deviceY);
     void touchesBegan(float deviceX1, float deviceY1, float deviceX2, float deviceY2);
-    void touchesMoved(axis::Point touches[], int num);
+    void touchesMoved(ax::Point touches[], int num);
     void touchesMoved(float deviceX, float deviceY);
     void touchesMoved(float deviceX1, float deviceY1, float deviceX2, float deviceY2);
     float getFlickDistance();

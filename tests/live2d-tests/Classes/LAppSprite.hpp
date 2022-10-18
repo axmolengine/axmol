@@ -71,6 +71,6 @@ private:
 
     float _spriteColor[4];  ///< 表示カラー
 
-    axis::backend::Program* _program;
+    ax::backend::Program* _program;
 };
 
