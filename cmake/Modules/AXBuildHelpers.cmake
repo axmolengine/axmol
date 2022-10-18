@@ -491,7 +491,7 @@ function(ax_use_pkg target pkg)
 
 endfunction()
 
-# The axis preprocessors config helper macro
+# The axmol preprocessors config helper macro
 macro(ax_config_pred target_name pred)
     if(${pred})
         target_compile_definitions(${target_name} PUBLIC ${pred}=1)

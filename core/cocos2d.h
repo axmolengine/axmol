@@ -38,7 +38,7 @@ NS_AX_BEGIN
 
 AX_DLL const char* cocos2dVersion();
 
-/** Backward compatibility with old axis projects */
+/** Backward compatibility with old axmol projects */
 
 using Sprite3D              = MeshRenderer;
 using Sprite3DMaterial      = MeshMaterial;

@@ -119,7 +119,7 @@ enum class AnchorPreset
 /**
  * Particle emission shapes.
  * Supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha emission mask
- * @since axis-1.0.0b8
+ * @since axmol-1.0.0b8
  */
 enum class EmissionShapeType
 {
