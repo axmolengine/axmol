@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -162,33 +162,39 @@ Mesh* Mesh::create(const std::vector<float>& positions,
     int perVertexSizeInFloat = 0;
     std::vector<float> vertices;
     std::vector<MeshVertexAttrib> attribs;
+    
     MeshVertexAttrib att;
     att.type = backend::VertexFormat::FLOAT3;
 
-    if (positions.size())
+    attribs.reserve(3);
+
+    size_t hasNormal   = 0;
+    size_t hasTexCoord = 0;
+    if (!positions.empty())
     {
         perVertexSizeInFloat += 3;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_POSITION;
         attribs.emplace_back(att);
     }
-    if (normals.size())
+    if (!normals.empty())
     {
         perVertexSizeInFloat += 3;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL;
         attribs.emplace_back(att);
+        hasNormal = 1;
     }
-    if (texs.size())
+    if (!texs.empty())
     {
         perVertexSizeInFloat += 2;
         att.type         = backend::VertexFormat::FLOAT2;
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
         attribs.emplace_back(att);
+        hasTexCoord = 1;
     }
 
-    bool hasNormal   = (normals.size() != 0);
-    bool hasTexCoord = (texs.size() != 0);
     // position, normal, texCoordinate into _vertexs
     size_t vertexNum = positions.size() / 3;
+    vertices.reserve(positions.size() + hasNormal * 3 + hasTexCoord * 2);
     for (size_t i = 0; i < vertexNum; i++)
     {
         vertices.emplace_back(positions[i * 3]);
@@ -341,8 +347,8 @@ void Mesh::setMaterial(Material* material)
         {
             // allocate MeshCommand vector for technique
             // allocate MeshCommand for each pass
-            _meshCommands[technique->getName()] = std::vector<MeshCommand>(technique->getPasses().size());
             auto& list                          = _meshCommands[technique->getName()];
+            list.resize(technique->getPasses().size());
 
             int i = 0;
             for (auto&& pass : technique->getPasses())
@@ -528,8 +534,11 @@ void Mesh::bindMeshCommand()
 {
     if (_material && _meshIndexData)
     {
-        _material->getStateBlock().setCullFace(true);
-        _material->getStateBlock().setDepthTest(true);
+        auto& stateBlock = _material->getStateBlock();
+        stateBlock.setCullFace(true);
+        stateBlock.setDepthTest(true);
+        if (_blend.src != backend::BlendFactor::ONE && _blend.dst != backend::BlendFactor::ONE)
+            stateBlock.setBlend(true);
     }
 }
 

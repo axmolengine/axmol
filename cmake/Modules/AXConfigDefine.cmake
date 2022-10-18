@@ -77,7 +77,7 @@ endif()
 
 # config c++ standard
 if(NOT DEFINED CXX_STD)
-    set(CXX_STD 17)
+    set(CXX_STD 20)
 endif()
 message(STATUS "CXX_STD=${CXX_STD}")
 set(CMAKE_CXX_STANDARD ${CXX_STD})
@@ -91,7 +91,7 @@ endif()
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 
 # set hash style to both for android old device compatible
-# see also: https://github.com/axys1/axys/discussions/614
+# see also: https://github.com/axmolengine/axmol/discussions/614
 if (ANDROID)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
 endif()

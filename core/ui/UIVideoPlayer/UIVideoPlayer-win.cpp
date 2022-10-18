@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@
 #    include "platform/CCFileUtils.h"
 #    include "ui/UIHelper.h"
 #    include "ui/UIVideoPlayer/MFMediaPlayer.h"
-#    include "renderer/backend/ProgramCache.h"
 #    include "yasio/detail/byte_buffer.hpp"
 #    include "ntcvt/ntcvt.hpp"
 #    include "ui/LayoutHelper.h"
@@ -414,7 +413,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
             {
                 pvd->_vtexture = new Texture2D();
 
-                auto programCache = backend::ProgramCache::getInstance();
+                auto programManager = ProgramManager::getInstance();
 
                 auto& sampleOutFormat = pvd->_vplayer->GetVideoOutputFormat();
 
@@ -430,11 +429,11 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
                 case VideoSampleFormat::YUY2:
                 case VideoSampleFormat::NV12:
                 {
-                    programCache->registerCustomProgramFactory(
+                    programManager->registerCustomProgramFactory(
                         VIDEO_PROGRAM_ID, positionTextureColor_vert,
                         std::string{pvd->_sampleFormat == VideoSampleFormat::NV12 ? NV12_FRAG : YUY2_FRAG},
-                        backend::VertexLayoutHelper::setupSprite);
-                    auto program = programCache->getCustomProgram(VIDEO_PROGRAM_ID);
+                        VertexLayoutHelper::setupSprite);
+                    auto program = programManager->getCustomProgram(VIDEO_PROGRAM_ID);
                     pvd->_vrender->setProgramState(new backend::ProgramState(program), false);
                     break;
                 }

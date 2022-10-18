@@ -4,7 +4,7 @@
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
 # Copyright (c) 2021-2022 Bytedance Inc.
 # 
-# https://axys1.github.io/
+# https://axmolengine.github.io/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +25,15 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-# this CMakeLists is to generate Axys Engine Library
-# build axys
+# this CMakeLists is to generate Axmol Engine Library
+# build ax
 # build axlua if AX_ENABLE_EXT_LUA=ON
 
 # The version number
 set(_AX_VERSION 1.0)
 
 if(NOT DEFINED _AX_CORE_LIB)
-    set(_AX_CORE_LIB axys CACHE INTERNAL "The axys core lib name" )
+    set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
 endif()
 
 if (NOT DEFINED AX_USE_COMPAT_GL)
@@ -80,7 +80,7 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
-set(_AX_HEADER axys.h
+set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
     ${_AX_3D_HEADER}
     ${_AX_PLATFORM_HEADER}
@@ -95,7 +95,7 @@ set(_AX_HEADER axys.h
     ${_AX_NETWORK_HEADER}
     )
 
-set(_AX_SRC axys.cpp
+set(_AX_SRC axmol.cpp
     ${_AX_2D_SRC}
     ${_AX_3D_SRC}
     ${_AX_PLATFORM_SRC}
@@ -157,16 +157,12 @@ if(XCODE OR VS)
     ax_mark_code_files("${_AX_CORE_LIB}")
 endif()
 
+message("CMake ${_AX_CORE_LIB} target_precompile_headers")
+target_precompile_headers(${_AX_CORE_LIB} PRIVATE 
+  "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
+)
+
 if(WINDOWS)
-    # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
-    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        target_sources(${_AX_CORE_LIB} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
-        set_target_properties(${_AX_CORE_LIB} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
-        set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
-    endif()
-    # compile c as c++. needed for precompiled header
-    set_source_files_properties(${_AX_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
-    
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
             PATHS ${_AX_ROOT_PATH}/tools/external/nuget)
@@ -193,6 +189,7 @@ endif()
 add_subdirectory(${_AX_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
+    target_sources(${_AX_CORE_LIB} PRIVATE ./axmol.natvis)
     target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)
     target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
     target_compile_options(${_AX_CORE_LIB} PUBLIC "/Zm2000")

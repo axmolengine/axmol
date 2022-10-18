@@ -6,7 +6,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021-2022 Bytedance Inc.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ THE SOFTWARE.
 #ifndef __COCOS2D_H__
 #define __COCOS2D_H__
 
-#include "axys.h"
+#include "axmol.h"
 
 #define COCOS2D_VERSION 0x00040000
 
@@ -49,7 +49,7 @@ using Sprite3DMaterialCache = MeshMaterialCache;
 
 NS_AX_END
 
-namespace cocos2d = axys;
+namespace cocos2d = ax;
 
 #define USING_NS_CC USING_NS_AX
 

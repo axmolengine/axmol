@@ -260,6 +260,20 @@ def normalize_type_str(s, depth=1):
         else:
             return 'cxx17::string_view'
 
+    if sections[0] == 'const std::__thread_id' or sections[0] == 'const __thread_id':
+        last_section = sections[len(sections) - 1]
+        if last_section == '&' or last_section == '*' or last_section.startswith('::'):
+            return 'const std::thread::id' + last_section
+        else:
+            return 'const std::thread::id'
+
+    elif sections[0] == 'std::__thread_id' or sections[0] == '__thread_id':
+        last_section = sections[len(sections) - 1]
+        if last_section == '&' or last_section == '*' or last_section.startswith('::'):
+            return 'std::thread::id' + last_section
+        else:
+            return 'std::thread::id'       
+
     for i in range(1, section_len):
         sections[i] = normalize_type_str(sections[i], depth+1)
 
@@ -480,6 +494,7 @@ class NativeType(object):
                 and not nt.namespaced_name.startswith('std::basic_string') \
                 and not nt.namespaced_name.startswith('std::string_view') \
                 and not nt.namespaced_name.startswith('std::basic_string_view') \
+                and not nt.namespaced_name.startswith('std::__thread_id') \
                 and not nt.namespaced_name.startswith('cxx17::string_view') \
                 and not nt.namespaced_name.startswith('cxx17::basic_string_view'):
                 nt.is_object = True

@@ -36,7 +36,7 @@ int lua_ax_ui_LayoutParameter_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutParameter_clone'", nullptr);
             return 0;
         }
-        ax::ui::LayoutParameter* ret = cobj->clone();
+        auto&& ret = cobj->clone();
         object_to_luaval<ax::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(ax::ui::LayoutParameter*)ret);
         return 1;
     }
@@ -130,7 +130,7 @@ int lua_ax_ui_LayoutParameter_createCloneInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutParameter_createCloneInstance'", nullptr);
             return 0;
         }
-        ax::ui::LayoutParameter* ret = cobj->createCloneInstance();
+        auto&& ret = cobj->createCloneInstance();
         object_to_luaval<ax::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(ax::ui::LayoutParameter*)ret);
         return 1;
     }
@@ -216,7 +216,7 @@ int lua_ax_ui_LayoutParameter_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutParameter_create'", nullptr);
             return 0;
         }
-        ax::ui::LayoutParameter* ret = ax::ui::LayoutParameter::create();
+        auto&& ret = ax::ui::LayoutParameter::create();
         object_to_luaval<ax::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(ax::ui::LayoutParameter*)ret);
         return 1;
     }
@@ -409,7 +409,7 @@ int lua_ax_ui_LinearLayoutParameter_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LinearLayoutParameter_create'", nullptr);
             return 0;
         }
-        ax::ui::LinearLayoutParameter* ret = ax::ui::LinearLayoutParameter::create();
+        auto&& ret = ax::ui::LinearLayoutParameter::create();
         object_to_luaval<ax::ui::LinearLayoutParameter>(tolua_S, "axui.LinearLayoutParameter",(ax::ui::LinearLayoutParameter*)ret);
         return 1;
     }
@@ -614,7 +614,7 @@ int lua_ax_ui_RelativeLayoutParameter_getRelativeName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RelativeLayoutParameter_getRelativeName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getRelativeName();
+        auto&& ret = cobj->getRelativeName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -661,7 +661,7 @@ int lua_ax_ui_RelativeLayoutParameter_getRelativeToWidgetName(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RelativeLayoutParameter_getRelativeToWidgetName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getRelativeToWidgetName();
+        auto&& ret = cobj->getRelativeToWidgetName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -794,7 +794,7 @@ int lua_ax_ui_RelativeLayoutParameter_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RelativeLayoutParameter_create'", nullptr);
             return 0;
         }
-        ax::ui::RelativeLayoutParameter* ret = ax::ui::RelativeLayoutParameter::create();
+        auto&& ret = ax::ui::RelativeLayoutParameter::create();
         object_to_luaval<ax::ui::RelativeLayoutParameter>(tolua_S, "axui.RelativeLayoutParameter",(ax::ui::RelativeLayoutParameter*)ret);
         return 1;
     }
@@ -1003,7 +1003,7 @@ int lua_ax_ui_Widget_getCustomSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getCustomSize'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getCustomSize();
+        auto&& ret = cobj->getCustomSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1050,7 +1050,7 @@ int lua_ax_ui_Widget_getLeftBoundary(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getLeftBoundary'", nullptr);
             return 0;
         }
-        double ret = cobj->getLeftBoundary();
+        auto&& ret = cobj->getLeftBoundary();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1197,7 +1197,7 @@ int lua_ax_ui_Widget_getVirtualRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getVirtualRenderer'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getVirtualRenderer();
+        auto&& ret = cobj->getVirtualRenderer();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -1294,7 +1294,7 @@ int lua_ax_ui_Widget_isUnifySizeEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isUnifySizeEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isUnifySizeEnabled();
+        auto&& ret = cobj->isUnifySizeEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1341,7 +1341,7 @@ int lua_ax_ui_Widget_getSizePercent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getSizePercent'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getSizePercent();
+        auto&& ret = cobj->getSizePercent();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1488,7 +1488,7 @@ int lua_ax_ui_Widget_getLayoutSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getLayoutSize'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getLayoutSize();
+        auto&& ret = cobj->getLayoutSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1635,7 +1635,7 @@ int lua_ax_ui_Widget_isIgnoreContentAdaptWithSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isIgnoreContentAdaptWithSize'", nullptr);
             return 0;
         }
-        bool ret = cobj->isIgnoreContentAdaptWithSize();
+        auto&& ret = cobj->isIgnoreContentAdaptWithSize();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1682,7 +1682,7 @@ int lua_ax_ui_Widget_getVirtualRendererSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getVirtualRendererSize'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getVirtualRendererSize();
+        auto&& ret = cobj->getVirtualRendererSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1729,7 +1729,7 @@ int lua_ax_ui_Widget_isHighlighted(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isHighlighted'", nullptr);
             return 0;
         }
-        bool ret = cobj->isHighlighted();
+        auto&& ret = cobj->isHighlighted();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1776,7 +1776,7 @@ int lua_ax_ui_Widget_getLayoutParameter(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getLayoutParameter'", nullptr);
             return 0;
         }
-        ax::ui::LayoutParameter* ret = cobj->getLayoutParameter();
+        auto&& ret = cobj->getLayoutParameter();
         object_to_luaval<ax::ui::LayoutParameter>(tolua_S, "axui.LayoutParameter",(ax::ui::LayoutParameter*)ret);
         return 1;
     }
@@ -1870,7 +1870,7 @@ int lua_ax_ui_Widget_getTopBoundary(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getTopBoundary'", nullptr);
             return 0;
         }
-        double ret = cobj->getTopBoundary();
+        auto&& ret = cobj->getTopBoundary();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1973,7 +1973,7 @@ int lua_ax_ui_Widget_findNextFocusedWidget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_findNextFocusedWidget'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->findNextFocusedWidget(arg0, arg1);
+        auto&& ret = cobj->findNextFocusedWidget(arg0, arg1);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -2020,7 +2020,7 @@ int lua_ax_ui_Widget_isEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isEnabled();
+        auto&& ret = cobj->isEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2067,7 +2067,7 @@ int lua_ax_ui_Widget_isFocused(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isFocused'", nullptr);
             return 0;
         }
-        bool ret = cobj->isFocused();
+        auto&& ret = cobj->isFocused();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2114,7 +2114,7 @@ int lua_ax_ui_Widget_getTouchBeganPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getTouchBeganPosition'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getTouchBeganPosition();
+        auto&& ret = cobj->getTouchBeganPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2161,7 +2161,7 @@ int lua_ax_ui_Widget_isTouchEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isTouchEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isTouchEnabled();
+        auto&& ret = cobj->isTouchEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2208,7 +2208,7 @@ int lua_ax_ui_Widget_getCallbackName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getCallbackName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getCallbackName();
+        auto&& ret = cobj->getCallbackName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -2255,7 +2255,7 @@ int lua_ax_ui_Widget_getActionTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getActionTag'", nullptr);
             return 0;
         }
-        int ret = cobj->getActionTag();
+        auto&& ret = cobj->getActionTag();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2302,7 +2302,7 @@ int lua_ax_ui_Widget_getWorldPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getWorldPosition'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getWorldPosition();
+        auto&& ret = cobj->getWorldPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2349,7 +2349,7 @@ int lua_ax_ui_Widget_isFocusEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isFocusEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isFocusEnabled();
+        auto&& ret = cobj->isFocusEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2646,7 +2646,7 @@ int lua_ax_ui_Widget_getRightBoundary(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getRightBoundary'", nullptr);
             return 0;
         }
-        double ret = cobj->getRightBoundary();
+        auto&& ret = cobj->getRightBoundary();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2793,7 +2793,7 @@ int lua_ax_ui_Widget_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_clone'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->clone();
+        auto&& ret = cobj->clone();
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -2890,7 +2890,7 @@ int lua_ax_ui_Widget_getBottomBoundary(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getBottomBoundary'", nullptr);
             return 0;
         }
-        double ret = cobj->getBottomBoundary();
+        auto&& ret = cobj->getBottomBoundary();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2937,7 +2937,7 @@ int lua_ax_ui_Widget_isBright(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isBright'", nullptr);
             return 0;
         }
-        bool ret = cobj->isBright();
+        auto&& ret = cobj->isBright();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3087,7 +3087,7 @@ int lua_ax_ui_Widget_isPropagateTouchEvents(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isPropagateTouchEvents'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPropagateTouchEvents();
+        auto&& ret = cobj->isPropagateTouchEvents();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3143,7 +3143,7 @@ int lua_ax_ui_Widget_hitTest(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_hitTest'", nullptr);
             return 0;
         }
-        bool ret = cobj->hitTest(arg0, arg1, arg2);
+        auto&& ret = cobj->hitTest(arg0, arg1, arg2);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3190,7 +3190,7 @@ int lua_ax_ui_Widget_isLayoutComponentEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isLayoutComponentEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isLayoutComponentEnabled();
+        auto&& ret = cobj->isLayoutComponentEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3388,7 +3388,7 @@ int lua_ax_ui_Widget_getTouchMovePosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getTouchMovePosition'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getTouchMovePosition();
+        auto&& ret = cobj->getTouchMovePosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3482,7 +3482,7 @@ int lua_ax_ui_Widget_getCallbackType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getCallbackType'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getCallbackType();
+        auto&& ret = cobj->getCallbackType();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -3529,7 +3529,7 @@ int lua_ax_ui_Widget_getTouchEndPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getTouchEndPosition'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getTouchEndPosition();
+        auto&& ret = cobj->getTouchEndPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3576,7 +3576,7 @@ int lua_ax_ui_Widget_getPositionPercent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getPositionPercent'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getPositionPercent();
+        auto&& ret = cobj->getPositionPercent();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3679,7 +3679,7 @@ int lua_ax_ui_Widget_isFlippedX(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isFlippedX'", nullptr);
             return 0;
         }
-        bool ret = cobj->isFlippedX();
+        auto&& ret = cobj->isFlippedX();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3726,7 +3726,7 @@ int lua_ax_ui_Widget_isFlippedY(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isFlippedY'", nullptr);
             return 0;
         }
-        bool ret = cobj->isFlippedY();
+        auto&& ret = cobj->isFlippedY();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3776,7 +3776,7 @@ int lua_ax_ui_Widget_isClippingParentContainsPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isClippingParentContainsPoint'", nullptr);
             return 0;
         }
-        bool ret = cobj->isClippingParentContainsPoint(arg0);
+        auto&& ret = cobj->isClippingParentContainsPoint(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4029,7 +4029,7 @@ int lua_ax_ui_Widget_isSwallowTouches(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_isSwallowTouches'", nullptr);
             return 0;
         }
-        bool ret = cobj->isSwallowTouches();
+        auto&& ret = cobj->isSwallowTouches();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4101,7 +4101,7 @@ int lua_ax_ui_Widget_getCurrentFocusedWidget(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getCurrentFocusedWidget'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = ax::ui::Widget::getCurrentFocusedWidget();
+        auto&& ret = ax::ui::Widget::getCurrentFocusedWidget();
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -4135,7 +4135,7 @@ int lua_ax_ui_Widget_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_create'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = ax::ui::Widget::create();
+        auto&& ret = ax::ui::Widget::create();
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -4555,7 +4555,7 @@ int lua_ax_ui_Layout_getBackGroundColorVector(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundColorVector'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getBackGroundColorVector();
+        auto&& ret = cobj->getBackGroundColorVector();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4649,7 +4649,7 @@ int lua_ax_ui_Layout_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getRenderFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getRenderFile();
+        auto&& ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -4696,7 +4696,7 @@ int lua_ax_ui_Layout_isLoopFocus(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_isLoopFocus'", nullptr);
             return 0;
         }
-        bool ret = cobj->isLoopFocus();
+        auto&& ret = cobj->isLoopFocus();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4790,7 +4790,7 @@ int lua_ax_ui_Layout_getBackGroundColorOpacity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundColorOpacity'", nullptr);
             return 0;
         }
-        uint16_t ret = cobj->getBackGroundColorOpacity();
+        auto&& ret = cobj->getBackGroundColorOpacity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4837,7 +4837,7 @@ int lua_ax_ui_Layout_isClippingEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_isClippingEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isClippingEnabled();
+        auto&& ret = cobj->isClippingEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5107,7 +5107,7 @@ int lua_ax_ui_Layout_getBackGroundImageCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundImageCapInsets'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getBackGroundImageCapInsets();
+        auto&& ret = cobj->getBackGroundImageCapInsets();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5154,7 +5154,7 @@ int lua_ax_ui_Layout_getBackGroundColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundColor'", nullptr);
             return 0;
         }
-        const ax::Color3B& ret = cobj->getBackGroundColor();
+        auto&& ret = cobj->getBackGroundColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5251,7 +5251,7 @@ int lua_ax_ui_Layout_getBackGroundImageColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundImageColor'", nullptr);
             return 0;
         }
-        const ax::Color3B& ret = cobj->getBackGroundImageColor();
+        auto&& ret = cobj->getBackGroundImageColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5298,7 +5298,7 @@ int lua_ax_ui_Layout_isBackGroundImageScale9Enabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_isBackGroundImageScale9Enabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isBackGroundImageScale9Enabled();
+        auto&& ret = cobj->isBackGroundImageScale9Enabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5392,7 +5392,7 @@ int lua_ax_ui_Layout_getBackGroundEndColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundEndColor'", nullptr);
             return 0;
         }
-        const ax::Color3B& ret = cobj->getBackGroundEndColor();
+        auto&& ret = cobj->getBackGroundEndColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5489,7 +5489,7 @@ int lua_ax_ui_Layout_getBackGroundImageOpacity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundImageOpacity'", nullptr);
             return 0;
         }
-        uint16_t ret = cobj->getBackGroundImageOpacity();
+        auto&& ret = cobj->getBackGroundImageOpacity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5536,7 +5536,7 @@ int lua_ax_ui_Layout_isPassFocusToChild(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_isPassFocusToChild'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPassFocusToChild();
+        auto&& ret = cobj->isPassFocusToChild();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5633,7 +5633,7 @@ int lua_ax_ui_Layout_getBackGroundImageTextureSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundImageTextureSize'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getBackGroundImageTextureSize();
+        auto&& ret = cobj->getBackGroundImageTextureSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5824,7 +5824,7 @@ int lua_ax_ui_Layout_getBackGroundStartColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_getBackGroundStartColor'", nullptr);
             return 0;
         }
-        const ax::Color3B& ret = cobj->getBackGroundStartColor();
+        auto&& ret = cobj->getBackGroundStartColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5960,7 +5960,7 @@ int lua_ax_ui_Layout_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_create'", nullptr);
             return 0;
         }
-        ax::ui::Layout* ret = ax::ui::Layout::create();
+        auto&& ret = ax::ui::Layout::create();
         object_to_luaval<ax::ui::Layout>(tolua_S, "axui.Layout",(ax::ui::Layout*)ret);
         return 1;
     }
@@ -5994,7 +5994,7 @@ int lua_ax_ui_Layout_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Layout_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::Layout::createInstance();
+        auto&& ret = ax::ui::Layout::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -6132,7 +6132,7 @@ int lua_ax_ui_Button_getNormalTextureSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getNormalTextureSize'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getNormalTextureSize();
+        auto&& ret = cobj->getNormalTextureSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6179,7 +6179,7 @@ int lua_ax_ui_Button_getTitleText(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getTitleText'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getTitleText();
+        auto&& ret = cobj->getTitleText();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -6470,7 +6470,7 @@ int lua_ax_ui_Button_getTitleRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getTitleRenderer'", nullptr);
             return 0;
         }
-        ax::Label* ret = cobj->getTitleRenderer();
+        auto&& ret = cobj->getTitleRenderer();
         object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
         return 1;
     }
@@ -6517,7 +6517,7 @@ int lua_ax_ui_Button_getRendererClicked(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getRendererClicked'", nullptr);
             return 0;
         }
-        ax::ui::Scale9Sprite* ret = cobj->getRendererClicked();
+        auto&& ret = cobj->getRendererClicked();
         object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
         return 1;
     }
@@ -6564,7 +6564,7 @@ int lua_ax_ui_Button_getDisabledFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getDisabledFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getDisabledFile();
+        auto&& ret = cobj->getDisabledFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6611,7 +6611,7 @@ int lua_ax_ui_Button_getZoomScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getZoomScale'", nullptr);
             return 0;
         }
-        double ret = cobj->getZoomScale();
+        auto&& ret = cobj->getZoomScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6658,7 +6658,7 @@ int lua_ax_ui_Button_getCapInsetsDisabledRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getCapInsetsDisabledRenderer'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsetsDisabledRenderer();
+        auto&& ret = cobj->getCapInsetsDisabledRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6755,7 +6755,7 @@ int lua_ax_ui_Button_getNormalFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getNormalFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getNormalFile();
+        auto&& ret = cobj->getNormalFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6849,7 +6849,7 @@ int lua_ax_ui_Button_getRendererDisabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getRendererDisabled'", nullptr);
             return 0;
         }
-        ax::ui::Scale9Sprite* ret = cobj->getRendererDisabled();
+        auto&& ret = cobj->getRendererDisabled();
         object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
         return 1;
     }
@@ -7066,7 +7066,7 @@ int lua_ax_ui_Button_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0);
+        auto&& ret = cobj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7083,7 +7083,7 @@ int lua_ax_ui_Button_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1);
+        auto&& ret = cobj->init(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7103,7 +7103,7 @@ int lua_ax_ui_Button_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2);
+        auto&& ret = cobj->init(arg0, arg1, arg2);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7126,7 +7126,7 @@ int lua_ax_ui_Button_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7390,7 +7390,7 @@ int lua_ax_ui_Button_getCapInsetsNormalRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getCapInsetsNormalRenderer'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsetsNormalRenderer();
+        auto&& ret = cobj->getCapInsetsNormalRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7496,7 +7496,7 @@ int lua_ax_ui_Button_getCapInsetsPressedRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getCapInsetsPressedRenderer'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsetsPressedRenderer();
+        auto&& ret = cobj->getCapInsetsPressedRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7639,7 +7639,7 @@ int lua_ax_ui_Button_isScale9Enabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_isScale9Enabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isScale9Enabled();
+        auto&& ret = cobj->isScale9Enabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7803,7 +7803,7 @@ int lua_ax_ui_Button_getPressedFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getPressedFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getPressedFile();
+        auto&& ret = cobj->getPressedFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7850,7 +7850,7 @@ int lua_ax_ui_Button_getTitleLabel(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getTitleLabel'", nullptr);
             return 0;
         }
-        ax::Label* ret = cobj->getTitleLabel();
+        auto&& ret = cobj->getTitleLabel();
         object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
         return 1;
     }
@@ -7897,7 +7897,7 @@ int lua_ax_ui_Button_getTitleFontSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getTitleFontSize'", nullptr);
             return 0;
         }
-        double ret = cobj->getTitleFontSize();
+        auto&& ret = cobj->getTitleFontSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7944,7 +7944,7 @@ int lua_ax_ui_Button_getRendererNormal(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getRendererNormal'", nullptr);
             return 0;
         }
-        ax::ui::Scale9Sprite* ret = cobj->getRendererNormal();
+        auto&& ret = cobj->getRendererNormal();
         object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
         return 1;
     }
@@ -7991,7 +7991,7 @@ int lua_ax_ui_Button_getTitleFontName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getTitleFontName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getTitleFontName();
+        auto&& ret = cobj->getTitleFontName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -8038,7 +8038,7 @@ int lua_ax_ui_Button_getTitleColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_getTitleColor'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->getTitleColor();
+        auto&& ret = cobj->getTitleColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8276,7 +8276,7 @@ int lua_ax_ui_Button_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Button_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::Button::createInstance();
+        auto&& ret = ax::ui::Button::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -8419,7 +8419,7 @@ int lua_ax_ui_AbstractCheckButton_getCrossDisabledFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getCrossDisabledFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getCrossDisabledFile();
+        auto&& ret = cobj->getCrossDisabledFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8466,7 +8466,7 @@ int lua_ax_ui_AbstractCheckButton_getBackDisabledFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getBackDisabledFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getBackDisabledFile();
+        auto&& ret = cobj->getBackDisabledFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8647,7 +8647,7 @@ int lua_ax_ui_AbstractCheckButton_getCrossNormalFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getCrossNormalFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getCrossNormalFile();
+        auto&& ret = cobj->getCrossNormalFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8744,7 +8744,7 @@ int lua_ax_ui_AbstractCheckButton_getBackPressedFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getBackPressedFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getBackPressedFile();
+        auto&& ret = cobj->getBackPressedFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -8791,7 +8791,7 @@ int lua_ax_ui_AbstractCheckButton_getRendererFrontCrossDisabled(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getRendererFrontCrossDisabled'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getRendererFrontCrossDisabled();
+        auto&& ret = cobj->getRendererFrontCrossDisabled();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -8838,7 +8838,7 @@ int lua_ax_ui_AbstractCheckButton_getRendererBackground(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getRendererBackground'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getRendererBackground();
+        auto&& ret = cobj->getRendererBackground();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -8952,7 +8952,7 @@ int lua_ax_ui_AbstractCheckButton_getRendererBackgroundDisabled(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getRendererBackgroundDisabled'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getRendererBackgroundDisabled();
+        auto&& ret = cobj->getRendererBackgroundDisabled();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -8999,7 +8999,7 @@ int lua_ax_ui_AbstractCheckButton_isSelected(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_isSelected'", nullptr);
             return 0;
         }
-        bool ret = cobj->isSelected();
+        auto&& ret = cobj->isSelected();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -9061,7 +9061,7 @@ int lua_ax_ui_AbstractCheckButton_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -9090,7 +9090,7 @@ int lua_ax_ui_AbstractCheckButton_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -9137,7 +9137,7 @@ int lua_ax_ui_AbstractCheckButton_getBackNormalFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getBackNormalFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getBackNormalFile();
+        auto&& ret = cobj->getBackNormalFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -9275,7 +9275,7 @@ int lua_ax_ui_AbstractCheckButton_getZoomScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getZoomScale'", nullptr);
             return 0;
         }
-        double ret = cobj->getZoomScale();
+        auto&& ret = cobj->getZoomScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9322,7 +9322,7 @@ int lua_ax_ui_AbstractCheckButton_getRendererFrontCross(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getRendererFrontCross'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getRendererFrontCross();
+        auto&& ret = cobj->getRendererFrontCross();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -9369,7 +9369,7 @@ int lua_ax_ui_AbstractCheckButton_getRendererBackgroundSelected(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_AbstractCheckButton_getRendererBackgroundSelected'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getRendererBackgroundSelected();
+        auto&& ret = cobj->getRendererBackgroundSelected();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -9803,7 +9803,7 @@ int lua_ax_ui_CheckBox_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_CheckBox_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::CheckBox::createInstance();
+        auto&& ret = ax::ui::CheckBox::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -10071,7 +10071,7 @@ int lua_ax_ui_RadioButton_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RadioButton_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::RadioButton::createInstance();
+        auto&& ret = ax::ui::RadioButton::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -10226,7 +10226,7 @@ int lua_ax_ui_RadioButtonGroup_isAllowedNoSelection(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RadioButtonGroup_isAllowedNoSelection'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAllowedNoSelection();
+        auto&& ret = cobj->isAllowedNoSelection();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -10273,7 +10273,7 @@ int lua_ax_ui_RadioButtonGroup_getSelectedButtonIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RadioButtonGroup_getSelectedButtonIndex'", nullptr);
             return 0;
         }
-        int ret = cobj->getSelectedButtonIndex();
+        auto&& ret = cobj->getSelectedButtonIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10529,7 +10529,7 @@ int lua_ax_ui_RadioButtonGroup_getRadioButtonByIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RadioButtonGroup_getRadioButtonByIndex'", nullptr);
             return 0;
         }
-        ax::ui::RadioButton* ret = cobj->getRadioButtonByIndex(arg0);
+        auto&& ret = cobj->getRadioButtonByIndex(arg0);
         object_to_luaval<ax::ui::RadioButton>(tolua_S, "axui.RadioButton",(ax::ui::RadioButton*)ret);
         return 1;
     }
@@ -10576,7 +10576,7 @@ int lua_ax_ui_RadioButtonGroup_getNumberOfRadioButtons(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RadioButtonGroup_getNumberOfRadioButtons'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getNumberOfRadioButtons();
+        auto&& ret = cobj->getNumberOfRadioButtons();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10717,7 +10717,7 @@ int lua_ax_ui_RadioButtonGroup_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RadioButtonGroup_create'", nullptr);
             return 0;
         }
-        ax::ui::RadioButtonGroup* ret = ax::ui::RadioButtonGroup::create();
+        auto&& ret = ax::ui::RadioButtonGroup::create();
         object_to_luaval<ax::ui::RadioButtonGroup>(tolua_S, "axui.RadioButtonGroup",(ax::ui::RadioButtonGroup*)ret);
         return 1;
     }
@@ -10831,7 +10831,7 @@ int lua_ax_ui_ImageView_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_getBlendFunc'", nullptr);
             return 0;
         }
-        const ax::BlendFunc& ret = cobj->getBlendFunc();
+        auto&& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10998,7 +10998,7 @@ int lua_ax_ui_ImageView_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0);
+        auto&& ret = cobj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -11015,7 +11015,7 @@ int lua_ax_ui_ImageView_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1);
+        auto&& ret = cobj->init(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -11212,7 +11212,7 @@ int lua_ax_ui_ImageView_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_getRenderFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getRenderFile();
+        auto&& ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11259,7 +11259,7 @@ int lua_ax_ui_ImageView_getCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_getCapInsets'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsets();
+        auto&& ret = cobj->getCapInsets();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11306,7 +11306,7 @@ int lua_ax_ui_ImageView_isScale9Enabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_isScale9Enabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isScale9Enabled();
+        auto&& ret = cobj->isScale9Enabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -11403,7 +11403,7 @@ int lua_ax_ui_ImageView_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ImageView_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::ImageView::createInstance();
+        auto&& ret = ax::ui::ImageView::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -11615,7 +11615,7 @@ int lua_ax_ui_Text_getFontSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getFontSize'", nullptr);
             return 0;
         }
-        double ret = cobj->getFontSize();
+        auto&& ret = cobj->getFontSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11662,7 +11662,7 @@ int lua_ax_ui_Text_getString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getString'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getString();
+        auto&& ret = cobj->getString();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -11807,7 +11807,7 @@ int lua_ax_ui_Text_getTextColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getTextColor'", nullptr);
             return 0;
         }
-        const ax::Color4B& ret = cobj->getTextColor();
+        auto&& ret = cobj->getTextColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11854,7 +11854,7 @@ int lua_ax_ui_Text_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getBlendFunc'", nullptr);
             return 0;
         }
-        const ax::BlendFunc& ret = cobj->getBlendFunc();
+        auto&& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12051,7 +12051,7 @@ int lua_ax_ui_Text_getShadowOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getShadowOffset'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getShadowOffset();
+        auto&& ret = cobj->getShadowOffset();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12148,7 +12148,7 @@ int lua_ax_ui_Text_getOutlineSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getOutlineSize'", nullptr);
             return 0;
         }
-        int ret = cobj->getOutlineSize();
+        auto&& ret = cobj->getOutlineSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12204,7 +12204,7 @@ int lua_ax_ui_Text_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2);
+        auto&& ret = cobj->init(arg0, arg1, arg2);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12251,7 +12251,7 @@ int lua_ax_ui_Text_getShadowBlurRadius(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getShadowBlurRadius'", nullptr);
             return 0;
         }
-        double ret = cobj->getShadowBlurRadius();
+        auto&& ret = cobj->getShadowBlurRadius();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12298,7 +12298,7 @@ int lua_ax_ui_Text_isTouchScaleChangeEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_isTouchScaleChangeEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isTouchScaleChangeEnabled();
+        auto&& ret = cobj->isTouchScaleChangeEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12345,7 +12345,7 @@ int lua_ax_ui_Text_getFontName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getFontName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getFontName();
+        auto&& ret = cobj->getFontName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -12442,7 +12442,7 @@ int lua_ax_ui_Text_getStringLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getStringLength'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getStringLength();
+        auto&& ret = cobj->getStringLength();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -12489,7 +12489,7 @@ int lua_ax_ui_Text_getAutoRenderSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getAutoRenderSize'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getAutoRenderSize();
+        auto&& ret = cobj->getAutoRenderSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12603,7 +12603,7 @@ int lua_ax_ui_Text_getEffectColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getEffectColor'", nullptr);
             return 0;
         }
-        ax::Color4B ret = cobj->getEffectColor();
+        auto&& ret = cobj->getEffectColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12744,7 +12744,7 @@ int lua_ax_ui_Text_isShadowEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_isShadowEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isShadowEnabled();
+        auto&& ret = cobj->isShadowEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12841,7 +12841,7 @@ int lua_ax_ui_Text_getShadowColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getShadowColor'", nullptr);
             return 0;
         }
-        ax::Color4B ret = cobj->getShadowColor();
+        auto&& ret = cobj->getShadowColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12991,7 +12991,7 @@ int lua_ax_ui_Text_getLetter(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getLetter'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getLetter(arg0);
+        auto&& ret = cobj->getLetter(arg0);
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -13135,7 +13135,7 @@ int lua_ax_ui_Text_getTextAreaSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_getTextAreaSize'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getTextAreaSize();
+        auto&& ret = cobj->getTextAreaSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -13272,7 +13272,7 @@ int lua_ax_ui_Text_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Text_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::Text::createInstance();
+        auto&& ret = ax::ui::Text::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -13410,7 +13410,7 @@ int lua_ax_ui_TextAtlas_getStringLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextAtlas_getStringLength'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getStringLength();
+        auto&& ret = cobj->getStringLength();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -13457,7 +13457,7 @@ int lua_ax_ui_TextAtlas_getString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextAtlas_getString'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getString();
+        auto&& ret = cobj->getString();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -13554,7 +13554,7 @@ int lua_ax_ui_TextAtlas_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextAtlas_getRenderFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getRenderFile();
+        auto&& ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -13756,7 +13756,7 @@ int lua_ax_ui_TextAtlas_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextAtlas_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::TextAtlas::createInstance();
+        auto&& ret = ax::ui::TextAtlas::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -14033,7 +14033,7 @@ int lua_ax_ui_LoadingBar_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_getRenderFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getRenderFile();
+        auto&& ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -14227,7 +14227,7 @@ int lua_ax_ui_LoadingBar_getCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_getCapInsets'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsets();
+        auto&& ret = cobj->getCapInsets();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -14274,7 +14274,7 @@ int lua_ax_ui_LoadingBar_isScale9Enabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_isScale9Enabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isScale9Enabled();
+        auto&& ret = cobj->isScale9Enabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -14321,7 +14321,7 @@ int lua_ax_ui_LoadingBar_getPercent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_getPercent'", nullptr);
             return 0;
         }
-        double ret = cobj->getPercent();
+        auto&& ret = cobj->getPercent();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -14453,7 +14453,7 @@ int lua_ax_ui_LoadingBar_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LoadingBar_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::LoadingBar::createInstance();
+        auto&& ret = ax::ui::LoadingBar::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -14776,7 +14776,7 @@ int lua_ax_ui_ScrollView_isInertiaScrollEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_isInertiaScrollEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isInertiaScrollEnabled();
+        auto&& ret = cobj->isInertiaScrollEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -14876,7 +14876,7 @@ int lua_ax_ui_ScrollView_getScrolledPercentBothDirection(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrolledPercentBothDirection'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getScrolledPercentBothDirection();
+        auto&& ret = cobj->getScrolledPercentBothDirection();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -15073,7 +15073,7 @@ int lua_ax_ui_ScrollView_getInnerContainer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getInnerContainer'", nullptr);
             return 0;
         }
-        ax::ui::Layout* ret = cobj->getInnerContainer();
+        auto&& ret = cobj->getInnerContainer();
         object_to_luaval<ax::ui::Layout>(tolua_S, "axui.Layout",(ax::ui::Layout*)ret);
         return 1;
     }
@@ -15473,7 +15473,7 @@ int lua_ax_ui_ScrollView_getInnerContainerPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getInnerContainerPosition'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getInnerContainerPosition();
+        auto&& ret = cobj->getInnerContainerPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -15567,7 +15567,7 @@ int lua_ax_ui_ScrollView_getScrolledPercentVertical(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrolledPercentVertical'", nullptr);
             return 0;
         }
-        double ret = cobj->getScrolledPercentVertical();
+        auto&& ret = cobj->getScrolledPercentVertical();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -15614,7 +15614,7 @@ int lua_ax_ui_ScrollView_isBounceEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_isBounceEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isBounceEnabled();
+        auto&& ret = cobj->isBounceEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -16012,7 +16012,7 @@ int lua_ax_ui_ScrollView_getScrollBarColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrollBarColor'", nullptr);
             return 0;
         }
-        const ax::Color3B& ret = cobj->getScrollBarColor();
+        auto&& ret = cobj->getScrollBarColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -16106,7 +16106,7 @@ int lua_ax_ui_ScrollView_isScrollBarEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_isScrollBarEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isScrollBarEnabled();
+        auto&& ret = cobj->isScrollBarEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -16153,7 +16153,7 @@ int lua_ax_ui_ScrollView_isAutoScrolling(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_isAutoScrolling'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAutoScrolling();
+        auto&& ret = cobj->isAutoScrolling();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -16297,7 +16297,7 @@ int lua_ax_ui_ScrollView_getTouchTotalTimeThreshold(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getTouchTotalTimeThreshold'", nullptr);
             return 0;
         }
-        double ret = cobj->getTouchTotalTimeThreshold();
+        auto&& ret = cobj->getTouchTotalTimeThreshold();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -16344,7 +16344,7 @@ int lua_ax_ui_ScrollView_getScrollBarPositionFromCornerForHorizontal(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrollBarPositionFromCornerForHorizontal'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getScrollBarPositionFromCornerForHorizontal();
+        auto&& ret = cobj->getScrollBarPositionFromCornerForHorizontal();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -16391,7 +16391,7 @@ int lua_ax_ui_ScrollView_getScrolledPercentHorizontal(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrolledPercentHorizontal'", nullptr);
             return 0;
         }
-        double ret = cobj->getScrolledPercentHorizontal();
+        auto&& ret = cobj->getScrolledPercentHorizontal();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -16588,7 +16588,7 @@ int lua_ax_ui_ScrollView_isScrolling(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_isScrolling'", nullptr);
             return 0;
         }
-        bool ret = cobj->isScrolling();
+        auto&& ret = cobj->isScrolling();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -16891,7 +16891,7 @@ int lua_ax_ui_ScrollView_getScrollBarOpacity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrollBarOpacity'", nullptr);
             return 0;
         }
-        uint16_t ret = cobj->getScrollBarOpacity();
+        auto&& ret = cobj->getScrollBarOpacity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17091,7 +17091,7 @@ int lua_ax_ui_ScrollView_getScrollBarAutoHideTime(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrollBarAutoHideTime'", nullptr);
             return 0;
         }
-        double ret = cobj->getScrollBarAutoHideTime();
+        auto&& ret = cobj->getScrollBarAutoHideTime();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17238,7 +17238,7 @@ int lua_ax_ui_ScrollView_getScrollBarPositionFromCornerForVertical(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrollBarPositionFromCornerForVertical'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getScrollBarPositionFromCornerForVertical();
+        auto&& ret = cobj->getScrollBarPositionFromCornerForVertical();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -17285,7 +17285,7 @@ int lua_ax_ui_ScrollView_getScrollBarWidth(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getScrollBarWidth'", nullptr);
             return 0;
         }
-        double ret = cobj->getScrollBarWidth();
+        auto&& ret = cobj->getScrollBarWidth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17332,7 +17332,7 @@ int lua_ax_ui_ScrollView_isScrollBarAutoHideEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_isScrollBarAutoHideEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isScrollBarAutoHideEnabled();
+        auto&& ret = cobj->isScrollBarAutoHideEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -17473,7 +17473,7 @@ int lua_ax_ui_ScrollView_getInnerContainerSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_getInnerContainerSize'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getInnerContainerSize();
+        auto&& ret = cobj->getInnerContainerSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -17559,7 +17559,7 @@ int lua_ax_ui_ScrollView_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_create'", nullptr);
             return 0;
         }
-        ax::ui::ScrollView* ret = ax::ui::ScrollView::create();
+        auto&& ret = ax::ui::ScrollView::create();
         object_to_luaval<ax::ui::ScrollView>(tolua_S, "axui.ScrollView",(ax::ui::ScrollView*)ret);
         return 1;
     }
@@ -17593,7 +17593,7 @@ int lua_ax_ui_ScrollView_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ScrollView_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::ScrollView::createInstance();
+        auto&& ret = ax::ui::ScrollView::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -17855,7 +17855,7 @@ int lua_ax_ui_ListView_getLeftPadding(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getLeftPadding'", nullptr);
             return 0;
         }
-        double ret = cobj->getLeftPadding();
+        auto&& ret = cobj->getLeftPadding();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17902,7 +17902,7 @@ int lua_ax_ui_ListView_getCenterItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getCenterItemInCurrentView'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->getCenterItemInCurrentView();
+        auto&& ret = cobj->getCenterItemInCurrentView();
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -17949,7 +17949,7 @@ int lua_ax_ui_ListView_getCurSelectedIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getCurSelectedIndex'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getCurSelectedIndex();
+        auto&& ret = cobj->getCurSelectedIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17996,7 +17996,7 @@ int lua_ax_ui_ListView_getScrollDuration(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getScrollDuration'", nullptr);
             return 0;
         }
-        double ret = cobj->getScrollDuration();
+        auto&& ret = cobj->getScrollDuration();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -18043,7 +18043,7 @@ int lua_ax_ui_ListView_getMagneticAllowedOutOfBoundary(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getMagneticAllowedOutOfBoundary'", nullptr);
             return 0;
         }
-        bool ret = cobj->getMagneticAllowedOutOfBoundary();
+        auto&& ret = cobj->getMagneticAllowedOutOfBoundary();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -18090,7 +18090,7 @@ int lua_ax_ui_ListView_getItemsMargin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getItemsMargin'", nullptr);
             return 0;
         }
-        double ret = cobj->getItemsMargin();
+        auto&& ret = cobj->getItemsMargin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -18321,7 +18321,7 @@ int lua_ax_ui_ListView_getIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getIndex'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getIndex(arg0);
+        auto&& ret = cobj->getIndex(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -18719,7 +18719,7 @@ int lua_ax_ui_ListView_getTopmostItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getTopmostItemInCurrentView'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->getTopmostItemInCurrentView();
+        auto&& ret = cobj->getTopmostItemInCurrentView();
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -18872,7 +18872,7 @@ int lua_ax_ui_ListView_getRightPadding(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getRightPadding'", nullptr);
             return 0;
         }
-        double ret = cobj->getRightPadding();
+        auto&& ret = cobj->getRightPadding();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -18919,7 +18919,7 @@ int lua_ax_ui_ListView_getBottommostItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getBottommostItemInCurrentView'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->getBottommostItemInCurrentView();
+        auto&& ret = cobj->getBottommostItemInCurrentView();
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -18966,7 +18966,7 @@ int lua_ax_ui_ListView_getItems(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getItems'", nullptr);
             return 0;
         }
-        ax::Vector<ax::ui::Widget *>& ret = cobj->getItems();
+        auto&& ret = cobj->getItems();
         ccvector_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -19013,7 +19013,7 @@ int lua_ax_ui_ListView_getLeftmostItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getLeftmostItemInCurrentView'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->getLeftmostItemInCurrentView();
+        auto&& ret = cobj->getLeftmostItemInCurrentView();
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -19160,7 +19160,7 @@ int lua_ax_ui_ListView_getItem(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getItem'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->getItem(arg0);
+        auto&& ret = cobj->getItem(arg0);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -19257,7 +19257,7 @@ int lua_ax_ui_ListView_getTopPadding(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getTopPadding'", nullptr);
             return 0;
         }
-        double ret = cobj->getTopPadding();
+        auto&& ret = cobj->getTopPadding();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -19407,7 +19407,7 @@ int lua_ax_ui_ListView_getClosestItemToPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getClosestItemToPosition'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->getClosestItemToPosition(arg0, arg1);
+        auto&& ret = cobj->getClosestItemToPosition(arg0, arg1);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -19560,7 +19560,7 @@ int lua_ax_ui_ListView_getClosestItemToPositionInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getClosestItemToPositionInCurrentView'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->getClosestItemToPositionInCurrentView(arg0, arg1);
+        auto&& ret = cobj->getClosestItemToPositionInCurrentView(arg0, arg1);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -19607,7 +19607,7 @@ int lua_ax_ui_ListView_getRightmostItemInCurrentView(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getRightmostItemInCurrentView'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = cobj->getRightmostItemInCurrentView();
+        auto&& ret = cobj->getRightmostItemInCurrentView();
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -19754,7 +19754,7 @@ int lua_ax_ui_ListView_getBottomPadding(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_getBottomPadding'", nullptr);
             return 0;
         }
-        double ret = cobj->getBottomPadding();
+        auto&& ret = cobj->getBottomPadding();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -19843,7 +19843,7 @@ int lua_ax_ui_ListView_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_create'", nullptr);
             return 0;
         }
-        ax::ui::ListView* ret = ax::ui::ListView::create();
+        auto&& ret = ax::ui::ListView::create();
         object_to_luaval<ax::ui::ListView>(tolua_S, "axui.ListView",(ax::ui::ListView*)ret);
         return 1;
     }
@@ -19877,7 +19877,7 @@ int lua_ax_ui_ListView_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_ListView_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::ListView::createInstance();
+        auto&& ret = ax::ui::ListView::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -20073,7 +20073,7 @@ int lua_ax_ui_Slider_getMaxPercent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getMaxPercent'", nullptr);
             return 0;
         }
-        int ret = cobj->getMaxPercent();
+        auto&& ret = cobj->getMaxPercent();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -20254,7 +20254,7 @@ int lua_ax_ui_Slider_getBallNormalFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getBallNormalFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getBallNormalFile();
+        auto&& ret = cobj->getBallNormalFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20301,7 +20301,7 @@ int lua_ax_ui_Slider_getSlidBallDisabledRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getSlidBallDisabledRenderer'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getSlidBallDisabledRenderer();
+        auto&& ret = cobj->getSlidBallDisabledRenderer();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -20398,7 +20398,7 @@ int lua_ax_ui_Slider_getBallPressedFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getBallPressedFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getBallPressedFile();
+        auto&& ret = cobj->getBallPressedFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20445,7 +20445,7 @@ int lua_ax_ui_Slider_getZoomScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getZoomScale'", nullptr);
             return 0;
         }
-        double ret = cobj->getZoomScale();
+        auto&& ret = cobj->getZoomScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -20652,7 +20652,7 @@ int lua_ax_ui_Slider_getSlidBallRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getSlidBallRenderer'", nullptr);
             return 0;
         }
-        ax::Node* ret = cobj->getSlidBallRenderer();
+        auto&& ret = cobj->getSlidBallRenderer();
         object_to_luaval<ax::Node>(tolua_S, "ax.Node",(ax::Node*)ret);
         return 1;
     }
@@ -20870,7 +20870,7 @@ int lua_ax_ui_Slider_getProgressBarFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getProgressBarFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getProgressBarFile();
+        auto&& ret = cobj->getProgressBarFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -20917,7 +20917,7 @@ int lua_ax_ui_Slider_getCapInsetsBarRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getCapInsetsBarRenderer'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsetsBarRenderer();
+        auto&& ret = cobj->getCapInsetsBarRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -21011,7 +21011,7 @@ int lua_ax_ui_Slider_getCapInsetsProgressBarRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getCapInsetsProgressBarRenderer'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsetsProgressBarRenderer();
+        auto&& ret = cobj->getCapInsetsProgressBarRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -21058,7 +21058,7 @@ int lua_ax_ui_Slider_getSlidBallPressedRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getSlidBallPressedRenderer'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getSlidBallPressedRenderer();
+        auto&& ret = cobj->getSlidBallPressedRenderer();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -21172,7 +21172,7 @@ int lua_ax_ui_Slider_getBackFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getBackFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getBackFile();
+        auto&& ret = cobj->getBackFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -21219,7 +21219,7 @@ int lua_ax_ui_Slider_isScale9Enabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_isScale9Enabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isScale9Enabled();
+        auto&& ret = cobj->isScale9Enabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -21266,7 +21266,7 @@ int lua_ax_ui_Slider_getBallDisabledFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getBallDisabledFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getBallDisabledFile();
+        auto&& ret = cobj->getBallDisabledFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -21363,7 +21363,7 @@ int lua_ax_ui_Slider_getPercent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getPercent'", nullptr);
             return 0;
         }
-        int ret = cobj->getPercent();
+        auto&& ret = cobj->getPercent();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -21527,7 +21527,7 @@ int lua_ax_ui_Slider_getSlidBallNormalRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_getSlidBallNormalRenderer'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getSlidBallNormalRenderer();
+        auto&& ret = cobj->getSlidBallNormalRenderer();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -21680,7 +21680,7 @@ int lua_ax_ui_Slider_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Slider_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::Slider::createInstance();
+        auto&& ret = ax::ui::Slider::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -21864,7 +21864,7 @@ int lua_ax_ui_TextField_getFontSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getFontSize'", nullptr);
             return 0;
         }
-        int ret = cobj->getFontSize();
+        auto&& ret = cobj->getFontSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -21911,7 +21911,7 @@ int lua_ax_ui_TextField_getString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getString'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getString();
+        auto&& ret = cobj->getString();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -22008,7 +22008,7 @@ int lua_ax_ui_TextField_getDeleteBackward(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getDeleteBackward'", nullptr);
             return 0;
         }
-        bool ret = cobj->getDeleteBackward();
+        auto&& ret = cobj->getDeleteBackward();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -22055,7 +22055,7 @@ int lua_ax_ui_TextField_getTextColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getTextColor'", nullptr);
             return 0;
         }
-        const ax::Color4B& ret = cobj->getTextColor();
+        auto&& ret = cobj->getTextColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -22149,7 +22149,7 @@ int lua_ax_ui_TextField_getPlaceHolder(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getPlaceHolder'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getPlaceHolder();
+        auto&& ret = cobj->getPlaceHolder();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -22196,7 +22196,7 @@ int lua_ax_ui_TextField_getAttachWithIME(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getAttachWithIME'", nullptr);
             return 0;
         }
-        bool ret = cobj->getAttachWithIME();
+        auto&& ret = cobj->getAttachWithIME();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -22293,7 +22293,7 @@ int lua_ax_ui_TextField_getInsertText(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getInsertText'", nullptr);
             return 0;
         }
-        bool ret = cobj->getInsertText();
+        auto&& ret = cobj->getInsertText();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -22440,7 +22440,7 @@ int lua_ax_ui_TextField_getDetachWithIME(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getDetachWithIME'", nullptr);
             return 0;
         }
-        bool ret = cobj->getDetachWithIME();
+        auto&& ret = cobj->getDetachWithIME();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -22638,7 +22638,7 @@ int lua_ax_ui_TextField_getFontName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getFontName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getFontName();
+        auto&& ret = cobj->getFontName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -22782,7 +22782,7 @@ int lua_ax_ui_TextField_getStringLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getStringLength'", nullptr);
             return 0;
         }
-        int ret = cobj->getStringLength();
+        auto&& ret = cobj->getStringLength();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -22829,7 +22829,7 @@ int lua_ax_ui_TextField_getAutoRenderSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getAutoRenderSize'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getAutoRenderSize();
+        auto&& ret = cobj->getAutoRenderSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -22926,7 +22926,7 @@ int lua_ax_ui_TextField_getPlaceHolderColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getPlaceHolderColor'", nullptr);
             return 0;
         }
-        const ax::Color4B& ret = cobj->getPlaceHolderColor();
+        auto&& ret = cobj->getPlaceHolderColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -22973,7 +22973,7 @@ int lua_ax_ui_TextField_getPasswordStyleText(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getPasswordStyleText'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getPasswordStyleText();
+        auto&& ret = cobj->getPasswordStyleText();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -23070,7 +23070,7 @@ int lua_ax_ui_TextField_isPasswordEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_isPasswordEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPasswordEnabled();
+        auto&& ret = cobj->isPasswordEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -23622,7 +23622,7 @@ int lua_ax_ui_TextField_getMaxLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getMaxLength'", nullptr);
             return 0;
         }
-        int ret = cobj->getMaxLength();
+        auto&& ret = cobj->getMaxLength();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -23669,7 +23669,7 @@ int lua_ax_ui_TextField_isMaxLengthEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_isMaxLengthEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isMaxLengthEnabled();
+        auto&& ret = cobj->isMaxLengthEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -24013,7 +24013,7 @@ int lua_ax_ui_TextField_getTouchSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_getTouchSize'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getTouchSize();
+        auto&& ret = cobj->getTouchSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24100,7 +24100,7 @@ int lua_ax_ui_TextField_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextField_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::TextField::createInstance();
+        auto&& ret = ax::ui::TextField::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -24250,7 +24250,7 @@ int lua_ax_ui_TextBMFont_getStringLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextBMFont_getStringLength'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getStringLength();
+        auto&& ret = cobj->getStringLength();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -24297,7 +24297,7 @@ int lua_ax_ui_TextBMFont_getString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextBMFont_getString'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getString();
+        auto&& ret = cobj->getString();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -24394,7 +24394,7 @@ int lua_ax_ui_TextBMFont_getRenderFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextBMFont_getRenderFile'", nullptr);
             return 0;
         }
-        ax::ResourceData ret = cobj->getRenderFile();
+        auto&& ret = cobj->getRenderFile();
         resourceData_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -24575,7 +24575,7 @@ int lua_ax_ui_TextBMFont_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TextBMFont_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::TextBMFont::createInstance();
+        auto&& ret = ax::ui::TextBMFont::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -25189,7 +25189,7 @@ int lua_ax_ui_PageView_getIndicatorPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorPosition'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getIndicatorPosition();
+        auto&& ret = cobj->getIndicatorPosition();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25286,7 +25286,7 @@ int lua_ax_ui_PageView_getIndicatorIndexNodesColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorIndexNodesColor'", nullptr);
             return 0;
         }
-        const ax::Color3B& ret = cobj->getIndicatorIndexNodesColor();
+        auto&& ret = cobj->getIndicatorIndexNodesColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25333,7 +25333,7 @@ int lua_ax_ui_PageView_getIndicatorSelectedIndexColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorSelectedIndexColor'", nullptr);
             return 0;
         }
-        const ax::Color3B& ret = cobj->getIndicatorSelectedIndexColor();
+        auto&& ret = cobj->getIndicatorSelectedIndexColor();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25380,7 +25380,7 @@ int lua_ax_ui_PageView_getIndicatorIndexNodesScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorIndexNodesScale'", nullptr);
             return 0;
         }
-        double ret = cobj->getIndicatorIndexNodesScale();
+        auto&& ret = cobj->getIndicatorIndexNodesScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -25477,7 +25477,7 @@ int lua_ax_ui_PageView_getIndicatorSelectedIndexOpacity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorSelectedIndexOpacity'", nullptr);
             return 0;
         }
-        uint16_t ret = cobj->getIndicatorSelectedIndexOpacity();
+        auto&& ret = cobj->getIndicatorSelectedIndexOpacity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -25742,7 +25742,7 @@ int lua_ax_ui_PageView_getIndicatorIndexNodesOpacity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorIndexNodesOpacity'", nullptr);
             return 0;
         }
-        uint16_t ret = cobj->getIndicatorIndexNodesOpacity();
+        auto&& ret = cobj->getIndicatorIndexNodesOpacity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -25789,7 +25789,7 @@ int lua_ax_ui_PageView_getIndicatorPositionAsAnchorPoint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorPositionAsAnchorPoint'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getIndicatorPositionAsAnchorPoint();
+        auto&& ret = cobj->getIndicatorPositionAsAnchorPoint();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -25836,7 +25836,7 @@ int lua_ax_ui_PageView_getCurrentPageIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getCurrentPageIndex'", nullptr);
             return 0;
         }
-        ssize_t ret = cobj->getCurrentPageIndex();
+        auto&& ret = cobj->getCurrentPageIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -26000,7 +26000,7 @@ int lua_ax_ui_PageView_getIndicatorEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->getIndicatorEnabled();
+        auto&& ret = cobj->getIndicatorEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -26097,7 +26097,7 @@ int lua_ax_ui_PageView_getIndicatorSpaceBetweenIndexNodes(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_getIndicatorSpaceBetweenIndexNodes'", nullptr);
             return 0;
         }
-        double ret = cobj->getIndicatorSpaceBetweenIndexNodes();
+        auto&& ret = cobj->getIndicatorSpaceBetweenIndexNodes();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -26183,7 +26183,7 @@ int lua_ax_ui_PageView_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_create'", nullptr);
             return 0;
         }
-        ax::ui::PageView* ret = ax::ui::PageView::create();
+        auto&& ret = ax::ui::PageView::create();
         object_to_luaval<ax::ui::PageView>(tolua_S, "axui.PageView",(ax::ui::PageView*)ret);
         return 1;
     }
@@ -26217,7 +26217,7 @@ int lua_ax_ui_PageView_createInstance(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_PageView_createInstance'", nullptr);
             return 0;
         }
-        ax::Ref* ret = ax::ui::PageView::createInstance();
+        auto&& ret = ax::ui::PageView::createInstance();
         object_to_luaval<ax::Ref>(tolua_S, "ax.Ref",(ax::Ref*)ret);
         return 1;
     }
@@ -26346,7 +26346,7 @@ int lua_ax_ui_Helper_getSubStringOfUTF8String(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_getSubStringOfUTF8String'", nullptr);
             return 0;
         }
-        std::string ret = ax::ui::Helper::getSubStringOfUTF8String(arg0, arg1, arg2);
+        auto&& ret = ax::ui::Helper::getSubStringOfUTF8String(arg0, arg1, arg2);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -26382,7 +26382,7 @@ int lua_ax_ui_Helper_convertBoundingBoxToScreen(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_convertBoundingBoxToScreen'", nullptr);
             return 0;
         }
-        ax::Rect ret = ax::ui::Helper::convertBoundingBoxToScreen(arg0);
+        auto&& ret = ax::ui::Helper::convertBoundingBoxToScreen(arg0);
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -26456,7 +26456,7 @@ int lua_ax_ui_Helper_seekActionWidgetByActionTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_seekActionWidgetByActionTag'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = ax::ui::Helper::seekActionWidgetByActionTag(arg0, arg1);
+        auto&& ret = ax::ui::Helper::seekActionWidgetByActionTag(arg0, arg1);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -26494,7 +26494,7 @@ int lua_ax_ui_Helper_seekWidgetByName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_seekWidgetByName'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = ax::ui::Helper::seekWidgetByName(arg0, arg1);
+        auto&& ret = ax::ui::Helper::seekWidgetByName(arg0, arg1);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -26532,7 +26532,7 @@ int lua_ax_ui_Helper_seekWidgetByTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_seekWidgetByTag'", nullptr);
             return 0;
         }
-        ax::ui::Widget* ret = ax::ui::Helper::seekWidgetByTag(arg0, arg1);
+        auto&& ret = ax::ui::Helper::seekWidgetByTag(arg0, arg1);
         object_to_luaval<ax::ui::Widget>(tolua_S, "axui.Widget",(ax::ui::Widget*)ret);
         return 1;
     }
@@ -26570,7 +26570,7 @@ int lua_ax_ui_Helper_restrictCapInsetRect(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Helper_restrictCapInsetRect'", nullptr);
             return 0;
         }
-        ax::Rect ret = ax::ui::Helper::restrictCapInsetRect(arg0, arg1);
+        auto&& ret = ax::ui::Helper::restrictCapInsetRect(arg0, arg1);
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -26681,7 +26681,7 @@ int lua_ax_ui_RichElement_equalType(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElement_equalType'", nullptr);
             return 0;
         }
-        bool ret = cobj->equalType(arg0);
+        auto&& ret = cobj->equalType(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -26737,7 +26737,7 @@ int lua_ax_ui_RichElement_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElement_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2);
+        auto&& ret = cobj->init(arg0, arg1, arg2);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -26918,7 +26918,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -26956,7 +26956,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -26997,7 +26997,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -27041,7 +27041,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -27088,7 +27088,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -27138,7 +27138,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -27191,7 +27191,7 @@ int lua_ax_ui_RichElementText_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -27239,7 +27239,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27264,7 +27264,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27291,7 +27291,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27320,7 +27320,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27351,7 +27351,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27384,7 +27384,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27419,7 +27419,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27456,7 +27456,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27495,7 +27495,7 @@ int lua_ax_ui_RichElementText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementText* ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+        auto&& ret = ax::ui::RichElementText::create(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
         object_to_luaval<ax::ui::RichElementText>(tolua_S, "axui.RichElementText",(ax::ui::RichElementText*)ret);
         return 1;
     }
@@ -27616,6 +27616,206 @@ int lua_ax_ui_RichElementImage_setHeight(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_ui_RichElementImage_setScaleY(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichElementImage* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setScaleY'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScaleY");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScaleY'", nullptr);
+            return 0;
+        }
+        cobj->setScaleY(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setScaleY",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setScaleY'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_RichElementImage_setScaleX(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichElementImage* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setScaleX'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScaleX");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScaleX'", nullptr);
+            return 0;
+        }
+        cobj->setScaleX(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setScaleX",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setScaleX'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_RichElementImage_setUrl(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichElementImage* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setUrl'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichElementImage:setUrl");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setUrl'", nullptr);
+            return 0;
+        }
+        cobj->setUrl(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setUrl",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setUrl'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_RichElementImage_setScale(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichElementImage* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setScale'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "axui.RichElementImage:setScale");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setScale'", nullptr);
+            return 0;
+        }
+        cobj->setScale(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setScale",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setScale'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
 {
     int argc = 0;
@@ -27661,7 +27861,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -27687,7 +27887,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -27716,7 +27916,7 @@ int lua_ax_ui_RichElementImage_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3, arg4, arg5);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -27780,56 +27980,6 @@ int lua_ax_ui_RichElementImage_setWidth(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_RichElementImage_setUrl(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ui::RichElementImage* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axui.RichElementImage",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::ui::RichElementImage*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichElementImage_setUrl'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichElementImage:setUrl");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_setUrl'", nullptr);
-            return 0;
-        }
-        cobj->setUrl(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichElementImage:setUrl",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichElementImage_setUrl'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -27860,7 +28010,7 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementImage* ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3);
+        auto&& ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
         return 1;
     }
@@ -27881,7 +28031,7 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementImage* ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4);
+        auto&& ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4);
         object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
         return 1;
     }
@@ -27904,7 +28054,7 @@ int lua_ax_ui_RichElementImage_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementImage_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementImage* ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4, arg5);
+        auto&& ret = ax::ui::RichElementImage::create(arg0, arg1, arg2, arg3, arg4, arg5);
         object_to_luaval<ax::ui::RichElementImage>(tolua_S, "axui.RichElementImage",(ax::ui::RichElementImage*)ret);
         return 1;
     }
@@ -27967,9 +28117,12 @@ int lua_register_ax_ui_RichElementImage(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"RichElementImage");
         tolua_function(tolua_S,"new",lua_ax_ui_RichElementImage_constructor);
         tolua_function(tolua_S,"setHeight",lua_ax_ui_RichElementImage_setHeight);
+        tolua_function(tolua_S,"setScaleY",lua_ax_ui_RichElementImage_setScaleY);
+        tolua_function(tolua_S,"setScaleX",lua_ax_ui_RichElementImage_setScaleX);
+        tolua_function(tolua_S,"setUrl",lua_ax_ui_RichElementImage_setUrl);
+        tolua_function(tolua_S,"setScale",lua_ax_ui_RichElementImage_setScale);
         tolua_function(tolua_S,"init",lua_ax_ui_RichElementImage_init);
         tolua_function(tolua_S,"setWidth",lua_ax_ui_RichElementImage_setWidth);
-        tolua_function(tolua_S,"setUrl",lua_ax_ui_RichElementImage_setUrl);
         tolua_function(tolua_S,"create", lua_ax_ui_RichElementImage_create);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::ui::RichElementImage).name(); // rtti is literal storage
@@ -28023,7 +28176,7 @@ int lua_ax_ui_RichElementCustomNode_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementCustomNode_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1, arg2, arg3);
+        auto&& ret = cobj->init(arg0, arg1, arg2, arg3);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -28067,7 +28220,7 @@ int lua_ax_ui_RichElementCustomNode_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementCustomNode_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementCustomNode* ret = ax::ui::RichElementCustomNode::create(arg0, arg1, arg2, arg3);
+        auto&& ret = ax::ui::RichElementCustomNode::create(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::ui::RichElementCustomNode>(tolua_S, "axui.RichElementCustomNode",(ax::ui::RichElementCustomNode*)ret);
         return 1;
     }
@@ -28166,7 +28319,7 @@ int lua_ax_ui_RichElementNewLine_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichElementNewLine_create'", nullptr);
             return 0;
         }
-        ax::ui::RichElementNewLine* ret = ax::ui::RichElementNewLine::create(arg0, arg1, arg2);
+        auto&& ret = ax::ui::RichElementNewLine::create(arg0, arg1, arg2);
         object_to_luaval<ax::ui::RichElementNewLine>(tolua_S, "axui.RichElementNewLine",(ax::ui::RichElementNewLine*)ret);
         return 1;
     }
@@ -28409,7 +28562,7 @@ int lua_ax_ui_RichText_getFontSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getFontSize'", nullptr);
             return 0;
         }
-        double ret = cobj->getFontSize();
+        auto&& ret = cobj->getFontSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -28556,7 +28709,7 @@ int lua_ax_ui_RichText_getAnchorFontColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorFontColor'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getAnchorFontColor();
+        auto&& ret = cobj->getAnchorFontColor();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -28603,7 +28756,7 @@ int lua_ax_ui_RichText_getAnchorTextShadowBlurRadius(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextShadowBlurRadius'", nullptr);
             return 0;
         }
-        int ret = cobj->getAnchorTextShadowBlurRadius();
+        auto&& ret = cobj->getAnchorTextShadowBlurRadius();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -28760,7 +28913,7 @@ int lua_ax_ui_RichText_isAnchorTextItalicEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_isAnchorTextItalicEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAnchorTextItalicEnabled();
+        auto&& ret = cobj->isAnchorTextItalicEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -29121,7 +29274,7 @@ int lua_ax_ui_RichText_getAnchorTextOutlineColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextOutlineColor3B'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->getAnchorTextOutlineColor3B();
+        auto&& ret = cobj->getAnchorTextOutlineColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -29171,7 +29324,7 @@ int lua_ax_ui_RichText_stringWithColor4B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_stringWithColor4B'", nullptr);
             return 0;
         }
-        std::string ret = cobj->stringWithColor4B(arg0);
+        auto&& ret = cobj->stringWithColor4B(arg0);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -29224,7 +29377,7 @@ int lua_ax_ui_RichText_initWithXML(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_initWithXML'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithXML(arg0, arg1);
+        auto&& ret = cobj->initWithXML(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -29248,7 +29401,7 @@ int lua_ax_ui_RichText_initWithXML(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_initWithXML'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithXML(arg0, arg1, arg2);
+        auto&& ret = cobj->initWithXML(arg0, arg1, arg2);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -29295,7 +29448,7 @@ int lua_ax_ui_RichText_getAnchorFontColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorFontColor3B'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->getAnchorFontColor3B();
+        auto&& ret = cobj->getAnchorFontColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -29403,7 +29556,7 @@ int lua_ax_ui_RichText_getAnchorTextGlowColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextGlowColor3B'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->getAnchorTextGlowColor3B();
+        auto&& ret = cobj->getAnchorTextGlowColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -29500,7 +29653,7 @@ int lua_ax_ui_RichText_getFontFace(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getFontFace'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getFontFace();
+        auto&& ret = cobj->getFontFace();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -29597,7 +29750,7 @@ int lua_ax_ui_RichText_isAnchorTextGlowEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_isAnchorTextGlowEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAnchorTextGlowEnabled();
+        auto&& ret = cobj->isAnchorTextGlowEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -29644,7 +29797,7 @@ int lua_ax_ui_RichText_getDefaults(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getDefaults'", nullptr);
             return 0;
         }
-        ax::ValueMap ret = cobj->getDefaults();
+        auto&& ret = cobj->getDefaults();
         ccvaluemap_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -29691,7 +29844,7 @@ int lua_ax_ui_RichText_isAnchorTextUnderlineEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_isAnchorTextUnderlineEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAnchorTextUnderlineEnabled();
+        auto&& ret = cobj->isAnchorTextUnderlineEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -29738,7 +29891,7 @@ int lua_ax_ui_RichText_getFontColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getFontColor'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getFontColor();
+        auto&& ret = cobj->getFontColor();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -29785,7 +29938,7 @@ int lua_ax_ui_RichText_isAnchorTextShadowEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_isAnchorTextShadowEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAnchorTextShadowEnabled();
+        auto&& ret = cobj->isAnchorTextShadowEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -29832,7 +29985,7 @@ int lua_ax_ui_RichText_getAnchorTextOutlineSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextOutlineSize'", nullptr);
             return 0;
         }
-        int ret = cobj->getAnchorTextOutlineSize();
+        auto&& ret = cobj->getAnchorTextOutlineSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -29929,7 +30082,7 @@ int lua_ax_ui_RichText_isAnchorTextDelEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_isAnchorTextDelEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAnchorTextDelEnabled();
+        auto&& ret = cobj->isAnchorTextDelEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -30231,7 +30384,7 @@ int lua_ax_ui_RichText_getAnchorTextShadowOffset(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextShadowOffset'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getAnchorTextShadowOffset();
+        auto&& ret = cobj->getAnchorTextShadowOffset();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -30278,7 +30431,7 @@ int lua_ax_ui_RichText_isAnchorTextBoldEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_isAnchorTextBoldEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAnchorTextBoldEnabled();
+        auto&& ret = cobj->isAnchorTextBoldEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -30325,7 +30478,7 @@ int lua_ax_ui_RichText_getAnchorTextShadowColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getAnchorTextShadowColor3B'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->getAnchorTextShadowColor3B();
+        auto&& ret = cobj->getAnchorTextShadowColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -30375,7 +30528,7 @@ int lua_ax_ui_RichText_stringWithColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_stringWithColor3B'", nullptr);
             return 0;
         }
-        std::string ret = cobj->stringWithColor3B(arg0);
+        auto&& ret = cobj->stringWithColor3B(arg0);
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -30422,7 +30575,7 @@ int lua_ax_ui_RichText_isAnchorTextOutlineEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_isAnchorTextOutlineEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isAnchorTextOutlineEnabled();
+        auto&& ret = cobj->isAnchorTextOutlineEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -30469,7 +30622,7 @@ int lua_ax_ui_RichText_getFontColor3B(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getFontColor3B'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->getFontColor3B();
+        auto&& ret = cobj->getFontColor3B();
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -30616,7 +30769,7 @@ int lua_ax_ui_RichText_color3BWithString(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_color3BWithString'", nullptr);
             return 0;
         }
-        ax::Color3B ret = cobj->color3BWithString(arg0);
+        auto&& ret = cobj->color3BWithString(arg0);
         color3b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -30652,7 +30805,7 @@ int lua_ax_ui_RichText_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_create'", nullptr);
             return 0;
         }
-        ax::ui::RichText* ret = ax::ui::RichText::create();
+        auto&& ret = ax::ui::RichText::create();
         object_to_luaval<ax::ui::RichText>(tolua_S, "axui.RichText",(ax::ui::RichText*)ret);
         return 1;
     }
@@ -30690,7 +30843,7 @@ int lua_ax_ui_RichText_createWithXML(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_createWithXML'", nullptr);
             return 0;
         }
-        ax::ui::RichText* ret = ax::ui::RichText::createWithXML(arg0, arg1);
+        auto&& ret = ax::ui::RichText::createWithXML(arg0, arg1);
         object_to_luaval<ax::ui::RichText>(tolua_S, "axui.RichText",(ax::ui::RichText*)ret);
         return 1;
     }
@@ -30711,7 +30864,7 @@ int lua_ax_ui_RichText_createWithXML(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_createWithXML'", nullptr);
             return 0;
         }
-        ax::ui::RichText* ret = ax::ui::RichText::createWithXML(arg0, arg1, arg2);
+        auto&& ret = ax::ui::RichText::createWithXML(arg0, arg1, arg2);
         object_to_luaval<ax::ui::RichText>(tolua_S, "axui.RichText",(ax::ui::RichText*)ret);
         return 1;
     }
@@ -30864,7 +31017,7 @@ int lua_ax_ui_HBox_initWithSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_HBox_initWithSize'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSize(arg0);
+        auto&& ret = cobj->initWithSize(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -31018,7 +31171,7 @@ int lua_ax_ui_VBox_initWithSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_VBox_initWithSize'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSize(arg0);
+        auto&& ret = cobj->initWithSize(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -31172,7 +31325,7 @@ int lua_ax_ui_RelativeBox_initWithSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RelativeBox_initWithSize'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSize(arg0);
+        auto&& ret = cobj->initWithSize(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -31413,7 +31566,7 @@ int lua_ax_ui_Scale9Sprite_resizableSpriteWithCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_resizableSpriteWithCapInsets'", nullptr);
             return 0;
         }
-        ax::ui::Scale9Sprite* ret = cobj->resizableSpriteWithCapInsets(arg0);
+        auto&& ret = cobj->resizableSpriteWithCapInsets(arg0);
         object_to_luaval<ax::ui::Scale9Sprite>(tolua_S, "axui.Scale9Sprite",(ax::ui::Scale9Sprite*)ret);
         return 1;
     }
@@ -31460,7 +31613,7 @@ int lua_ax_ui_Scale9Sprite_getCapInsets(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_getCapInsets'", nullptr);
             return 0;
         }
-        ax::Rect ret = cobj->getCapInsets();
+        auto&& ret = cobj->getCapInsets();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -31613,7 +31766,7 @@ int lua_ax_ui_Scale9Sprite_initWithSpriteFrameName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_initWithSpriteFrameName'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSpriteFrameName(arg0, arg1);
+        auto&& ret = cobj->initWithSpriteFrameName(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -31660,7 +31813,7 @@ int lua_ax_ui_Scale9Sprite_getSprite(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_getSprite'", nullptr);
             return 0;
         }
-        ax::Sprite* ret = cobj->getSprite();
+        auto&& ret = cobj->getSprite();
         object_to_luaval<ax::Sprite>(tolua_S, "ax.Sprite",(ax::Sprite*)ret);
         return 1;
     }
@@ -32114,7 +32267,7 @@ int lua_ax_ui_Scale9Sprite_getInsetBottom(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_getInsetBottom'", nullptr);
             return 0;
         }
-        double ret = cobj->getInsetBottom();
+        auto&& ret = cobj->getInsetBottom();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -32211,7 +32364,7 @@ int lua_ax_ui_Scale9Sprite_isScale9Enabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_isScale9Enabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isScale9Enabled();
+        auto&& ret = cobj->isScale9Enabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -32352,7 +32505,7 @@ int lua_ax_ui_Scale9Sprite_getInsetRight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_getInsetRight'", nullptr);
             return 0;
         }
-        double ret = cobj->getInsetRight();
+        auto&& ret = cobj->getInsetRight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -32399,7 +32552,7 @@ int lua_ax_ui_Scale9Sprite_getOriginalSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_getOriginalSize'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getOriginalSize();
+        auto&& ret = cobj->getOriginalSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -32513,7 +32666,7 @@ int lua_ax_ui_Scale9Sprite_getInsetTop(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_getInsetTop'", nullptr);
             return 0;
         }
-        double ret = cobj->getInsetTop();
+        auto&& ret = cobj->getInsetTop();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -32616,7 +32769,7 @@ int lua_ax_ui_Scale9Sprite_initWithSpriteFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_initWithSpriteFrame'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSpriteFrame(arg0, arg1);
+        auto&& ret = cobj->initWithSpriteFrame(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -32663,7 +32816,7 @@ int lua_ax_ui_Scale9Sprite_getPreferredSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_getPreferredSize'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getPreferredSize();
+        auto&& ret = cobj->getPreferredSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -32760,7 +32913,7 @@ int lua_ax_ui_Scale9Sprite_getInsetLeft(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Scale9Sprite_getInsetLeft'", nullptr);
             return 0;
         }
-        double ret = cobj->getInsetLeft();
+        auto&& ret = cobj->getInsetLeft();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -33144,7 +33297,7 @@ int lua_ax_ui_EditBox_getFontSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getFontSize'", nullptr);
             return 0;
         }
-        int ret = cobj->getFontSize();
+        auto&& ret = cobj->getFontSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -33389,7 +33542,7 @@ int lua_ax_ui_EditBox_getText(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getText'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getText();
+        auto&& ret = cobj->getText();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -33590,7 +33743,7 @@ int lua_ax_ui_EditBox_getPlaceholderFontName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getPlaceholderFontName'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getPlaceholderFontName();
+        auto&& ret = cobj->getPlaceholderFontName();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -33738,7 +33891,7 @@ int lua_ax_ui_EditBox_getPlaceholderFontSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getPlaceholderFontSize'", nullptr);
             return 0;
         }
-        int ret = cobj->getPlaceholderFontSize();
+        auto&& ret = cobj->getPlaceholderFontSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -33785,7 +33938,7 @@ int lua_ax_ui_EditBox_getCapInsetsDisabledRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getCapInsetsDisabledRenderer'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsetsDisabledRenderer();
+        auto&& ret = cobj->getCapInsetsDisabledRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -33832,7 +33985,7 @@ int lua_ax_ui_EditBox_getPlaceHolder(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getPlaceHolder'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getPlaceHolder();
+        auto&& ret = cobj->getPlaceHolder();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -34451,7 +34604,7 @@ int lua_ax_ui_EditBox_getFontName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getFontName'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getFontName();
+        auto&& ret = cobj->getFontName();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -34713,7 +34866,7 @@ int lua_ax_ui_EditBox_getFontColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getFontColor'", nullptr);
             return 0;
         }
-        const ax::Color4B& ret = cobj->getFontColor();
+        auto&& ret = cobj->getFontColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -34813,7 +34966,7 @@ int lua_ax_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_initWithSizeAndTexture'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSizeAndTexture(arg0, arg1);
+        auto&& ret = cobj->initWithSizeAndTexture(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -34833,7 +34986,7 @@ int lua_ax_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_initWithSizeAndTexture'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSizeAndTexture(arg0, arg1, arg2);
+        auto&& ret = cobj->initWithSizeAndTexture(arg0, arg1, arg2);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -34856,7 +35009,7 @@ int lua_ax_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_initWithSizeAndTexture'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSizeAndTexture(arg0, arg1, arg2, arg3);
+        auto&& ret = cobj->initWithSizeAndTexture(arg0, arg1, arg2, arg3);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -34882,7 +35035,7 @@ int lua_ax_ui_EditBox_initWithSizeAndTexture(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_initWithSizeAndTexture'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithSizeAndTexture(arg0, arg1, arg2, arg3, arg4);
+        auto&& ret = cobj->initWithSizeAndTexture(arg0, arg1, arg2, arg3, arg4);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -34976,7 +35129,7 @@ int lua_ax_ui_EditBox_getCapInsetsNormalRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getCapInsetsNormalRenderer'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsetsNormalRenderer();
+        auto&& ret = cobj->getCapInsetsNormalRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -35023,7 +35176,7 @@ int lua_ax_ui_EditBox_getCapInsetsPressedRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getCapInsetsPressedRenderer'", nullptr);
             return 0;
         }
-        const ax::Rect& ret = cobj->getCapInsetsPressedRenderer();
+        auto&& ret = cobj->getCapInsetsPressedRenderer();
         rect_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -35070,7 +35223,7 @@ int lua_ax_ui_EditBox_getScriptEditBoxHandler(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getScriptEditBoxHandler'", nullptr);
             return 0;
         }
-        int ret = cobj->getScriptEditBoxHandler();
+        auto&& ret = cobj->getScriptEditBoxHandler();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -35430,7 +35583,7 @@ int lua_ax_ui_EditBox_getMaxLength(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getMaxLength'", nullptr);
             return 0;
         }
-        int ret = cobj->getMaxLength();
+        auto&& ret = cobj->getMaxLength();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -35630,7 +35783,7 @@ int lua_ax_ui_EditBox_getPlaceholderFontColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_EditBox_getPlaceholderFontColor'", nullptr);
             return 0;
         }
-        const ax::Color4B& ret = cobj->getPlaceholderFontColor();
+        auto&& ret = cobj->getPlaceholderFontColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -36218,7 +36371,7 @@ int lua_ax_ui_LayoutComponent_getAnchorPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getAnchorPosition'", nullptr);
             return 0;
         }
-        const ax::Point& ret = cobj->getAnchorPosition();
+        auto&& ret = cobj->getAnchorPosition();
         point_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -36415,7 +36568,7 @@ int lua_ax_ui_LayoutComponent_getRightMargin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getRightMargin'", nullptr);
             return 0;
         }
-        double ret = cobj->getRightMargin();
+        auto&& ret = cobj->getRightMargin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -36462,7 +36615,7 @@ int lua_ax_ui_LayoutComponent_getSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getSize'", nullptr);
             return 0;
         }
-        const ax::Vec2& ret = cobj->getSize();
+        auto&& ret = cobj->getSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -36606,7 +36759,7 @@ int lua_ax_ui_LayoutComponent_isPercentWidthEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_isPercentWidthEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPercentWidthEnabled();
+        auto&& ret = cobj->isPercentWidthEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -36703,7 +36856,7 @@ int lua_ax_ui_LayoutComponent_getTopMargin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getTopMargin'", nullptr);
             return 0;
         }
-        double ret = cobj->getTopMargin();
+        auto&& ret = cobj->getTopMargin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -36800,7 +36953,7 @@ int lua_ax_ui_LayoutComponent_getPercentContentSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getPercentContentSize'", nullptr);
             return 0;
         }
-        ax::Vec2 ret = cobj->getPercentContentSize();
+        auto&& ret = cobj->getPercentContentSize();
         vec2_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -36944,7 +37097,7 @@ int lua_ax_ui_LayoutComponent_isStretchWidthEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_isStretchWidthEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isStretchWidthEnabled();
+        auto&& ret = cobj->isStretchWidthEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -37041,7 +37194,7 @@ int lua_ax_ui_LayoutComponent_getSizeWidth(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getSizeWidth'", nullptr);
             return 0;
         }
-        double ret = cobj->getSizeWidth();
+        auto&& ret = cobj->getSizeWidth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -37138,7 +37291,7 @@ int lua_ax_ui_LayoutComponent_getSizeHeight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getSizeHeight'", nullptr);
             return 0;
         }
-        double ret = cobj->getSizeHeight();
+        auto&& ret = cobj->getSizeHeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -37185,7 +37338,7 @@ int lua_ax_ui_LayoutComponent_getPositionPercentY(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getPositionPercentY'", nullptr);
             return 0;
         }
-        double ret = cobj->getPositionPercentY();
+        auto&& ret = cobj->getPositionPercentY();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -37232,7 +37385,7 @@ int lua_ax_ui_LayoutComponent_getPositionPercentX(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getPositionPercentX'", nullptr);
             return 0;
         }
-        double ret = cobj->getPositionPercentX();
+        auto&& ret = cobj->getPositionPercentX();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -37329,7 +37482,7 @@ int lua_ax_ui_LayoutComponent_getPercentHeight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getPercentHeight'", nullptr);
             return 0;
         }
-        double ret = cobj->getPercentHeight();
+        auto&& ret = cobj->getPercentHeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -37376,7 +37529,7 @@ int lua_ax_ui_LayoutComponent_getUsingPercentContentSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getUsingPercentContentSize'", nullptr);
             return 0;
         }
-        bool ret = cobj->getUsingPercentContentSize();
+        auto&& ret = cobj->getUsingPercentContentSize();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -37573,7 +37726,7 @@ int lua_ax_ui_LayoutComponent_isPositionPercentYEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_isPositionPercentYEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPositionPercentYEnabled();
+        auto&& ret = cobj->isPositionPercentYEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -37870,7 +38023,7 @@ int lua_ax_ui_LayoutComponent_getLeftMargin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getLeftMargin'", nullptr);
             return 0;
         }
-        double ret = cobj->getLeftMargin();
+        auto&& ret = cobj->getLeftMargin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -37917,7 +38070,7 @@ int lua_ax_ui_LayoutComponent_getPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getPosition'", nullptr);
             return 0;
         }
-        const ax::Point& ret = cobj->getPosition();
+        auto&& ret = cobj->getPosition();
         point_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -38014,7 +38167,7 @@ int lua_ax_ui_LayoutComponent_isPositionPercentXEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_isPositionPercentXEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPositionPercentXEnabled();
+        auto&& ret = cobj->isPositionPercentXEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -38061,7 +38214,7 @@ int lua_ax_ui_LayoutComponent_getBottomMargin(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getBottomMargin'", nullptr);
             return 0;
         }
-        double ret = cobj->getBottomMargin();
+        auto&& ret = cobj->getBottomMargin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -38208,7 +38361,7 @@ int lua_ax_ui_LayoutComponent_isPercentHeightEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_isPercentHeightEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPercentHeightEnabled();
+        auto&& ret = cobj->isPercentHeightEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -38255,7 +38408,7 @@ int lua_ax_ui_LayoutComponent_getPercentWidth(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_getPercentWidth'", nullptr);
             return 0;
         }
-        double ret = cobj->getPercentWidth();
+        auto&& ret = cobj->getPercentWidth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -38349,7 +38502,7 @@ int lua_ax_ui_LayoutComponent_isStretchHeightEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_isStretchHeightEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isStretchHeightEnabled();
+        auto&& ret = cobj->isStretchHeightEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -38485,7 +38638,7 @@ int lua_ax_ui_LayoutComponent_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_create'", nullptr);
             return 0;
         }
-        ax::ui::LayoutComponent* ret = ax::ui::LayoutComponent::create();
+        auto&& ret = ax::ui::LayoutComponent::create();
         object_to_luaval<ax::ui::LayoutComponent>(tolua_S, "axui.LayoutComponent",(ax::ui::LayoutComponent*)ret);
         return 1;
     }
@@ -38521,7 +38674,7 @@ int lua_ax_ui_LayoutComponent_bindLayoutComponent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_LayoutComponent_bindLayoutComponent'", nullptr);
             return 0;
         }
-        ax::ui::LayoutComponent* ret = ax::ui::LayoutComponent::bindLayoutComponent(arg0);
+        auto&& ret = ax::ui::LayoutComponent::bindLayoutComponent(arg0);
         object_to_luaval<ax::ui::LayoutComponent>(tolua_S, "axui.LayoutComponent",(ax::ui::LayoutComponent*)ret);
         return 1;
     }
@@ -38674,7 +38827,7 @@ int lua_ax_ui_TabHeader_getIndexInTabControl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabHeader_getIndexInTabControl'", nullptr);
             return 0;
         }
-        int ret = cobj->getIndexInTabControl();
+        auto&& ret = cobj->getIndexInTabControl();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -38721,7 +38874,7 @@ int lua_ax_ui_TabHeader_getTitleText(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabHeader_getTitleText'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getTitleText();
+        auto&& ret = cobj->getTitleText();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -38868,7 +39021,7 @@ int lua_ax_ui_TabHeader_getTitleFontSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabHeader_getTitleFontSize'", nullptr);
             return 0;
         }
-        double ret = cobj->getTitleFontSize();
+        auto&& ret = cobj->getTitleFontSize();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -38915,7 +39068,7 @@ int lua_ax_ui_TabHeader_getTitleFontName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabHeader_getTitleFontName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getTitleFontName();
+        auto&& ret = cobj->getTitleFontName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -38962,7 +39115,7 @@ int lua_ax_ui_TabHeader_getTitleColor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabHeader_getTitleColor'", nullptr);
             return 0;
         }
-        const ax::Color4B& ret = cobj->getTitleColor();
+        auto&& ret = cobj->getTitleColor();
         color4b_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -39009,7 +39162,7 @@ int lua_ax_ui_TabHeader_getTitleRenderer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabHeader_getTitleRenderer'", nullptr);
             return 0;
         }
-        ax::Label* ret = cobj->getTitleRenderer();
+        auto&& ret = cobj->getTitleRenderer();
         object_to_luaval<ax::Label>(tolua_S, "ax.Label",(ax::Label*)ret);
         return 1;
     }
@@ -39418,7 +39571,7 @@ int lua_ax_ui_TabControl_getTabCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getTabCount'", nullptr);
             return 0;
         }
-        unsigned int ret = cobj->getTabCount();
+        auto&& ret = cobj->getTabCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -39512,7 +39665,7 @@ int lua_ax_ui_TabControl_getSelectedTabIndex(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getSelectedTabIndex'", nullptr);
             return 0;
         }
-        int ret = cobj->getSelectedTabIndex();
+        auto&& ret = cobj->getSelectedTabIndex();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -39665,7 +39818,7 @@ int lua_ax_ui_TabControl_getHeaderWidth(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getHeaderWidth'", nullptr);
             return 0;
         }
-        double ret = cobj->getHeaderWidth();
+        auto&& ret = cobj->getHeaderWidth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -39820,7 +39973,7 @@ int lua_ax_ui_TabControl_getTabHeader(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getTabHeader'", nullptr);
             return 0;
         }
-        ax::ui::TabHeader* ret = cobj->getTabHeader(arg0);
+        auto&& ret = cobj->getTabHeader(arg0);
         object_to_luaval<ax::ui::TabHeader>(tolua_S, "axui.TabHeader",(ax::ui::TabHeader*)ret);
         return 1;
     }
@@ -39867,7 +40020,7 @@ int lua_ax_ui_TabControl_isIgnoreHeadersTextureSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_isIgnoreHeadersTextureSize'", nullptr);
             return 0;
         }
-        bool ret = cobj->isIgnoreHeadersTextureSize();
+        auto&& ret = cobj->isIgnoreHeadersTextureSize();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -40071,7 +40224,7 @@ int lua_ax_ui_TabControl_indexOfTabHeader(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_indexOfTabHeader'", nullptr);
             return 0;
         }
-        int ret = cobj->indexOfTabHeader(arg0);
+        auto&& ret = cobj->indexOfTabHeader(arg0);
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -40121,7 +40274,7 @@ int lua_ax_ui_TabControl_getTabContainer(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getTabContainer'", nullptr);
             return 0;
         }
-        ax::ui::Layout* ret = cobj->getTabContainer(arg0);
+        auto&& ret = cobj->getTabContainer(arg0);
         object_to_luaval<ax::ui::Layout>(tolua_S, "axui.Layout",(ax::ui::Layout*)ret);
         return 1;
     }
@@ -40168,7 +40321,7 @@ int lua_ax_ui_TabControl_getHeaderSelectedZoom(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getHeaderSelectedZoom'", nullptr);
             return 0;
         }
-        double ret = cobj->getHeaderSelectedZoom();
+        auto&& ret = cobj->getHeaderSelectedZoom();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -40215,7 +40368,7 @@ int lua_ax_ui_TabControl_getHeaderHeight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_getHeaderHeight'", nullptr);
             return 0;
         }
-        int ret = cobj->getHeaderHeight();
+        auto&& ret = cobj->getHeaderHeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -40251,7 +40404,7 @@ int lua_ax_ui_TabControl_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_TabControl_create'", nullptr);
             return 0;
         }
-        ax::ui::TabControl* ret = ax::ui::TabControl::create();
+        auto&& ret = ax::ui::TabControl::create();
         object_to_luaval<ax::ui::TabControl>(tolua_S, "axui.TabControl",(ax::ui::TabControl*)ret);
         return 1;
     }

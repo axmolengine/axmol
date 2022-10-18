@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -119,7 +119,7 @@
 #include "ZwoptexTest/ZwoptexTest.h"
 #include "SpriteFrameCacheTest/SpriteFrameCacheTest.h"
 #include "ZipTest/ZipTests.h"
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include "ImGuiTest/ImGuiTest.h"
 #endif
 #endif

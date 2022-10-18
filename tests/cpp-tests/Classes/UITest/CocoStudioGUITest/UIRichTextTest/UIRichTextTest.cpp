@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -878,11 +878,21 @@ bool UIRichTextXMLImg::init()
 
         // RichText
         _richText = RichText::createWithXML(
-            "you should see an image here: <img src='cocosui/sliderballnormal.png'/> and this is text again. and this "
-            "is the same image, but bigger: <img src='cocosui/sliderballnormal.png' width='30' height='30' /> and here "
+            "Image: <img src='cocosui/sliderballnormal.png'/> and this is text again."
+            "Image with width/height: <img src='cocosui/sliderballnormal.png' width='30' height='30' /> and "
+            "Image with scaleX/scaleY: <img src='cocosui/sliderballnormal.png' scaleX='3' scaleY='3' /> and "
+            "Image with width%/height%: <img src='cocosui/sliderballnormal.png' width='150%' height='150%' /> and "
+            "Image with empty width/height%: <img src='cocosui/sliderballnormal.png' width='' height='150%' /> and "
+            "Image with scale: <img src='cocosui/sliderballnormal.png' scale='3.5' /> and "
+            "Image with w/h/sX/sY: <img src='cocosui/sliderballnormal.png' width='30' height='30' scaleX='0.5' scaleY='0.5' /> and "
             "goes text again");
         _richText->ignoreContentAdaptWithSize(false);
+
+#ifdef AX_PLATFORM_PC
+        _richText->setContentSize(Size(290, 290));
+#else
         _richText->setContentSize(Size(100, 100));
+#endif
 
         _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
         _richText->setLocalZOrder(10);

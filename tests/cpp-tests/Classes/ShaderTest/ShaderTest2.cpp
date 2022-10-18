@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 #include "ShaderTest2.h"
 #include "ShaderTest.h"
 #include "../testResource.h"
-#include "cocos2d.h"
+#include "axmol.h"
 #include "renderer/backend/Device.h"
 #include <tuple>
 
@@ -190,7 +190,7 @@ bool Effect::initProgramState(std::string_view fragmentFilename)
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     _fragSource = fragSource;
 #endif
-    auto program      = backend::Device::getInstance()->newProgram(positionTextureColor_vert, fragSource.c_str());
+    auto program      = ProgramManager::newProgram(positionTextureColor_vert, fragSource, VertexLayoutHelper::setupSprite);
     auto programState = new backend::ProgramState(program);
     AX_SAFE_RELEASE(_programState);
     AX_SAFE_RELEASE(program);

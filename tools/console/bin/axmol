@@ -1,0 +1,18 @@
+#!/bin/bash -l
+
+AXMOL_CONSOLE_BIN_DIRECTORY=$(dirname "$0")
+AXMOL_CONSOLE_BIN_DIRECTORY=$(cd "$AXMOL_CONSOLE_BIN_DIRECTORY" && pwd -P)
+
+if hash python3 2>/dev/null; then
+    PYTHON=python3
+elif hash python2 2>/dev/null; then
+    PYTHON=python2
+elif hash python 2>/dev/null; then
+    PYTHON=python
+else
+    echo "Python 2+ required."
+    exit 1
+fi
+
+$PYTHON "$AXMOL_CONSOLE_BIN_DIRECTORY/axmol.py" "$@"
+

@@ -202,7 +202,7 @@ template <> struct convert_traits<host_convert_tag> {
   static int fromint(int value, int) { return value; }
 };
 } // namespace endian
-#if !YASIO__HAS_NS_INLINE
+#if !YASIO__HAS_CXX11
 using namespace yasio::endian;
 #endif
 

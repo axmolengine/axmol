@@ -30,7 +30,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 
     include(AXBuildSet)
-    add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
+    add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
 endif()
 
 # record sources, headers, resources...
@@ -112,7 +112,6 @@ list(APPEND GAME_HEADER
      Classes/ParallaxTest/ParallaxTest.h
      Classes/testBasic.h
      Classes/ZwoptexTest/ZwoptexTest.h
-     Classes/precheader.h
      Classes/CurlTest/CurlTest.h
      Classes/UnitTest/UnitTest.h
 #    Classes/UnitTest/RefPtrTest.h
@@ -553,7 +552,7 @@ else()
     add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 
-    config_android_shared_libs("org.axys1.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
+    config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
 target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
@@ -571,7 +570,7 @@ setup_ax_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
-    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axys1.cpp-tests")
+    set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axmol.cpp-tests")
 
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.mac/Info.plist")
@@ -596,11 +595,10 @@ elseif(WINDOWS)
     set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
 endif()
 
-if(WINDOWS)
-    # precompiled header. Compilation time speedup ~4x, but don't know how Ninja to support PCH yet and needs help from someone.
-    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
-        target_sources(${APP_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp")
-        set_target_properties(${APP_NAME} PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
-        set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/Classes/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
-    endif()
+if(NOT IOS)
+    message("CMake ${APP_NAME} target_precompile_headers")
+    target_precompile_headers(${APP_NAME} PRIVATE 
+      "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
+    )
 endif()
+

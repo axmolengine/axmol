@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 #ifndef _NODE_TEST_H_
 #define _NODE_TEST_H_
 
-////----#include "cocos2d.h"
+////----#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(CocosNodeTests);

@@ -2,7 +2,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ JNITest::JNITest()
     checkLabel->setPosition(VisibleRect::center());
     addChild(checkLabel);
 
-    const char* classPath = "org.axys1.cpp_tests.JNITest";
+    const char* classPath = "org.axmol.cpp_tests.JNITest";
 
     JniHelper::callStaticVoidMethod(classPath, "voidMethod1");
 

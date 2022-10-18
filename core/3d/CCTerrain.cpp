@@ -2,7 +2,7 @@
 Copyright (c) 2015-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,7 @@ USING_NS_AX;
 #include "renderer/backend/Buffer.h"
 #include "base/CCDirector.h"
 #include "base/ccTypes.h"
+#include "base/axstd.h"
 #include "base/CCEventType.h"
 #include "2d/CCCamera.h"
 #include "platform/CCImage.h"
@@ -1322,11 +1323,8 @@ void Terrain::Chunk::updateIndicesLOD()
 
 void Terrain::Chunk::calculateAABB()
 {
-    std::vector<Vec3> pos;
-    for (size_t i = 0, size = _originalVertices.size(); i < size; ++i)
-    {
-        pos.emplace_back(_originalVertices[i]._position);
-    }
+    auto pos = axstd::pod_vector_from<Vec3>(_originalVertices.begin(), _originalVertices.end(),
+                   [](const auto& it) { return it._position; });
     _aabb.updateMinMax(&pos[0], pos.size());
 }
 

@@ -4,7 +4,7 @@
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
 # Copyright (c) 2021-2022 Bytedance Inc.
 #
-# https://axys1.github.io/
+# https://axmolengine.github.io/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -29,13 +29,13 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(axys)
+project(axmol)
 
 if(XCODE)
     set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
 endif()
 
-# axys root path
+# ax root path
 set(_AX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 
@@ -50,13 +50,13 @@ option(AX_BUILD_EXAMPLES "Build examples" ON)
 
 set(AX_ENABLE_EXT_LUA ON) 
 
-add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axys/core)
+add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
 
-# prevent tests project to build "axys/core" again
+# prevent tests project to build "axmol/core" again
 set(BUILD_ENGINE_DONE ON)
 
 if(AX_BUILD_TESTS)
-    # add cpp-template-default into project(axys) for tmp test
+    # add cpp-template-default into project(axmol) for tmp test
     add_subdirectory(${_AX_ROOT_PATH}/templates/cpp-template-default ${ENGINE_BINARY_PATH}/tests/HelloCpp)
 
 	# add cpp tests default

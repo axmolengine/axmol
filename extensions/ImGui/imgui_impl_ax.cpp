@@ -101,7 +101,7 @@ using namespace backend;
 #define GLFW_HAS_GAMEPAD_API          (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3300) // 3.3+ glfwGetGamepadState() new api
 #define GLFW_HAS_GET_KEY_NAME         (GLFW_VERSION_MAJOR * 1000 + GLFW_VERSION_MINOR * 100 >= 3200) // 3.2+ glfwGetKeyName()
 
-// axys spec data
+// axmol spec data
 constexpr IndexFormat IMGUI_INDEX_FORMAT = sizeof(ImDrawIdx) == 2 ? IndexFormat::U_SHORT : IndexFormat::U_INT;
 
 struct ProgramInfoData
@@ -125,7 +125,7 @@ struct SavedRenderStateData
     bool scissorTest{};
     bool depthTest{};
 };
-// end of axys spec
+// end of axmol spec
 
 
 // GLFW data
@@ -160,7 +160,7 @@ struct ImGui_ImplGlfw_Data
 
     // ImGui_ImplGlfw_Data()   { memset(this, 0, sizeof(*this)); }
 
-    // axys spec data
+    // axmol spec data
     std::chrono::steady_clock::time_point LastFrameTime{};
 
     ImGuiImplCocos2dxLoadFontFun LoadCustomFont = nullptr;
@@ -1185,7 +1185,7 @@ static void ImGui_ImplGlfw_ShutdownPlatformInterface()
 #endif
 
 
-////////////////////////// axys spec /////////////////////////
+////////////////////////// axmol spec /////////////////////////
 
 #define AX_PTR_CAST(v, pointer_type) reinterpret_cast<pointer_type>(v)
 
@@ -1197,18 +1197,18 @@ static void ImGui_ImplGlfw_ShutdownPlatformInterface()
 
 enum
 {
-    GlfwClientApi_Axys = 0xadee,
+    GlfwClientApi_Axmol = 0xadee,
 };
 
-// axys spec
-bool ImGui_ImplGlfw_InitForAxys(GLFWwindow* window, bool install_callbacks)
+// axmol spec
+bool ImGui_ImplGlfw_InitForAx(GLFWwindow* window, bool install_callbacks)
 {
-    return ImGui_ImplGlfw_Init(window, install_callbacks, (GlfwClientApi)GlfwClientApi_Axys);
+    return ImGui_ImplGlfw_Init(window, install_callbacks, (GlfwClientApi)GlfwClientApi_Axmol);
 }
 
 struct ImGui_ImplAx_Data
 {
-    // axys spec data
+    // axmol spec data
 
     ImGuiImplCocos2dxLoadFontFun LoadCustomFont = nullptr;
     void* LoadCustomFontUserData                = nullptr;
@@ -1281,10 +1281,10 @@ void ImGui_ImplAx_Init()
     auto bd                    = ImGui_ImplGlfw_GetBackendData();
     auto& io                   = ImGui::GetIO();
     io.BackendRendererUserData = (void*)bd;
-    io.BackendRendererName     = "imgui_impl_axys";
+    io.BackendRendererName     = "imgui_impl_axmol";
     io.BackendFlags |=
         ImGuiBackendFlags_RendererHasViewports;  // We can create multi-viewports on the Renderer side (optional)
-    // axys spec: disable auto load and save
+    // axmol spec: disable auto load and save
     io.IniFilename = nullptr;
 
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -1296,7 +1296,7 @@ void ImGui_ImplAx_Shutdown()
     ImGui_ImplAx_DestroyDeviceObjects();
 }
 
-IMGUI_IMPL_API void ImGui_ImplAx_NewFrame() { 
+IMGUI_IMPL_API void ImGui_ImplAx_NewFrame() {
     auto bd = ImGui_ImplGlfw_GetBackendData();
 	//bd->CallbackCommands.clear();
     bd->CustomCommands.clear();
@@ -1330,13 +1330,20 @@ IMGUI_IMPL_API void ImGui_ImplAx_SetDeviceObjectsDirty()
     bd->FontDeviceObjectsDirty = true;
 }
 
+IMGUI_IMPL_API void ImGui_ImplAx_SetViewResolution(float width, float height)
+{
+    // Resize (expand) window
+    auto* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    view->setWindowed(width, height);
+}
+
 static void ImGui_ImplAx_CreateWindow(ImGuiViewport* viewport)
 {
     ImGui_ImplGlfw_Data* bd         = ImGui_ImplGlfw_GetBackendData();
     ImGui_ImplGlfw_ViewportData* vd = IM_NEW(ImGui_ImplGlfw_ViewportData)();
     viewport->PlatformUserData      = vd;
 
-    const bool multi_viewport_enabled = !!(ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable);  // axys spec
+    const bool multi_viewport_enabled = !!(ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable);  // axmol spec
 
     // GLFW 3.2 unfortunately always set focus on glfwCreateWindow() if GLFW_VISIBLE is set, regardless of GLFW_FOCUSED
     // With GLFW 3.3, the hint GLFW_FOCUS_ON_SHOW fixes this problem

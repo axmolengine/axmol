@@ -7,7 +7,7 @@ Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2021 Bytedance Inc.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -436,13 +436,13 @@ void SpriteBatchNode::increaseAtlasCapacity()
     // this is likely computationally expensive
     ssize_t quantity = (_textureAtlas->getCapacity() + 1) * 4 / 3;
 
-    AXLOG("axys: SpriteBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
+    AXLOG("axmol: SpriteBatchNode: resizing TextureAtlas capacity from [%d] to [%d].",
           static_cast<int>(_textureAtlas->getCapacity()), static_cast<int>(quantity));
 
     if (!_textureAtlas->resizeCapacity(quantity))
     {
         // serious problems
-        AXLOGWARN("axys: WARNING: Not enough memory to resize the atlas");
+        AXLOGWARN("axmol: WARNING: Not enough memory to resize the atlas");
         AXASSERT(false, "Not enough memory to resize the atlas");
     }
 }
@@ -455,7 +455,7 @@ void SpriteBatchNode::reserveCapacity(ssize_t newCapacity)
     if (!_textureAtlas->resizeCapacity(newCapacity))
     {
         // serious problems
-        AXLOGWARN("axys: WARNING: Not enough memory to resize the atlas");
+        AXLOGWARN("axmol: WARNING: Not enough memory to resize the atlas");
         AXASSERT(false, "Not enough memory to resize the atlas");
     }
 }

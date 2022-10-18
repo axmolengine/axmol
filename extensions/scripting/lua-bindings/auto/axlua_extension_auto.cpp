@@ -136,7 +136,7 @@ int lua_ax_extension_AssetsManager_checkUpdate(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_checkUpdate'", nullptr);
             return 0;
         }
-        bool ret = cobj->checkUpdate();
+        auto&& ret = cobj->checkUpdate();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -183,7 +183,7 @@ int lua_ax_extension_AssetsManager_getStoragePath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_getStoragePath'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getStoragePath();
+        auto&& ret = cobj->getStoragePath();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -377,7 +377,7 @@ int lua_ax_extension_AssetsManager_getPackageUrl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_getPackageUrl'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getPackageUrl();
+        auto&& ret = cobj->getPackageUrl();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -424,7 +424,7 @@ int lua_ax_extension_AssetsManager_getConnectionTimeout(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_getConnectionTimeout'", nullptr);
             return 0;
         }
-        unsigned int ret = cobj->getConnectionTimeout();
+        auto&& ret = cobj->getConnectionTimeout();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -471,7 +471,7 @@ int lua_ax_extension_AssetsManager_getVersion(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_getVersion'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getVersion();
+        auto&& ret = cobj->getVersion();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -518,7 +518,7 @@ int lua_ax_extension_AssetsManager_getVersionFileUrl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_getVersionFileUrl'", nullptr);
             return 0;
         }
-        const char* ret = cobj->getVersionFileUrl();
+        auto&& ret = cobj->getVersionFileUrl();
         tolua_pushstring(tolua_S,(const char*)ret);
         return 1;
     }
@@ -625,7 +625,7 @@ int lua_ax_extension_AssetsManager_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManager_create'", nullptr);
             return 0;
         }
-        ax::extension::AssetsManager* ret = ax::extension::AssetsManager::create(arg0, arg1, arg2, arg3, arg4, arg5);
+        auto&& ret = ax::extension::AssetsManager::create(arg0, arg1, arg2, arg3, arg4, arg5);
         object_to_luaval<ax::extension::AssetsManager>(tolua_S, "ax.AssetsManager",(ax::extension::AssetsManager*)ret);
         return 1;
     }
@@ -800,7 +800,7 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_getAssetsManagerEx'", nullptr);
             return 0;
         }
-        ax::extension::AssetsManagerEx* ret = cobj->getAssetsManagerEx();
+        auto&& ret = cobj->getAssetsManagerEx();
         object_to_luaval<ax::extension::AssetsManagerEx>(tolua_S, "ax.AssetsManagerEx",(ax::extension::AssetsManagerEx*)ret);
         return 1;
     }
@@ -847,7 +847,7 @@ int lua_ax_extension_EventAssetsManagerEx_getAssetId(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_getAssetId'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getAssetId();
+        auto&& ret = cobj->getAssetId();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -894,7 +894,7 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLECode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_getCURLECode'", nullptr);
             return 0;
         }
-        int ret = cobj->getCURLECode();
+        auto&& ret = cobj->getCURLECode();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -941,7 +941,7 @@ int lua_ax_extension_EventAssetsManagerEx_getMessage(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_getMessage'", nullptr);
             return 0;
         }
-        std::string ret = cobj->getMessage();
+        auto&& ret = cobj->getMessage();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -988,7 +988,7 @@ int lua_ax_extension_EventAssetsManagerEx_getCURLMCode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_getCURLMCode'", nullptr);
             return 0;
         }
-        int ret = cobj->getCURLMCode();
+        auto&& ret = cobj->getCURLMCode();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1035,7 +1035,7 @@ int lua_ax_extension_EventAssetsManagerEx_getPercentByFile(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_getPercentByFile'", nullptr);
             return 0;
         }
-        double ret = cobj->getPercentByFile();
+        auto&& ret = cobj->getPercentByFile();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1129,7 +1129,7 @@ int lua_ax_extension_EventAssetsManagerEx_getPercent(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventAssetsManagerEx_getPercent'", nullptr);
             return 0;
         }
-        double ret = cobj->getPercent();
+        auto&& ret = cobj->getPercent();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1451,7 +1451,7 @@ int lua_ax_extension_Manifest_getManifestFileUrl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_Manifest_getManifestFileUrl'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getManifestFileUrl();
+        auto&& ret = cobj->getManifestFileUrl();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -1498,7 +1498,7 @@ int lua_ax_extension_Manifest_isVersionLoaded(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_Manifest_isVersionLoaded'", nullptr);
             return 0;
         }
-        bool ret = cobj->isVersionLoaded();
+        auto&& ret = cobj->isVersionLoaded();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1545,7 +1545,7 @@ int lua_ax_extension_Manifest_isLoaded(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_Manifest_isLoaded'", nullptr);
             return 0;
         }
-        bool ret = cobj->isLoaded();
+        auto&& ret = cobj->isLoaded();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1592,7 +1592,7 @@ int lua_ax_extension_Manifest_getPackageUrl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_Manifest_getPackageUrl'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getPackageUrl();
+        auto&& ret = cobj->getPackageUrl();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -1639,7 +1639,7 @@ int lua_ax_extension_Manifest_getVersion(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_Manifest_getVersion'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getVersion();
+        auto&& ret = cobj->getVersion();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -1686,7 +1686,7 @@ int lua_ax_extension_Manifest_getVersionFileUrl(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_Manifest_getVersionFileUrl'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getVersionFileUrl();
+        auto&& ret = cobj->getVersionFileUrl();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -1733,7 +1733,7 @@ int lua_ax_extension_Manifest_getSearchPaths(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_Manifest_getSearchPaths'", nullptr);
             return 0;
         }
-        std::vector<std::string> ret = cobj->getSearchPaths();
+        auto&& ret = cobj->getSearchPaths();
         ccvector_std_string_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1853,7 +1853,7 @@ int lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_getMaxConcurrentTask'", nullptr);
             return 0;
         }
-        const int ret = cobj->getMaxConcurrentTask();
+        auto&& ret = cobj->getMaxConcurrentTask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2001,7 +2001,7 @@ int lua_ax_extension_AssetsManagerEx_getStoragePath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_getStoragePath'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getStoragePath();
+        auto&& ret = cobj->getStoragePath();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -2199,7 +2199,7 @@ int lua_ax_extension_AssetsManagerEx_getLocalManifest(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_getLocalManifest'", nullptr);
             return 0;
         }
-        const ax::extension::Manifest* ret = cobj->getLocalManifest();
+        auto&& ret = cobj->getLocalManifest();
         object_to_luaval<ax::extension::Manifest>(tolua_S, "ax.Manifest",(ax::extension::Manifest*)ret);
         return 1;
     }
@@ -2246,7 +2246,7 @@ int lua_ax_extension_AssetsManagerEx_getRemoteManifest(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_getRemoteManifest'", nullptr);
             return 0;
         }
-        const ax::extension::Manifest* ret = cobj->getRemoteManifest();
+        auto&& ret = cobj->getRemoteManifest();
         object_to_luaval<ax::extension::Manifest>(tolua_S, "ax.Manifest",(ax::extension::Manifest*)ret);
         return 1;
     }
@@ -2333,7 +2333,7 @@ int lua_ax_extension_AssetsManagerEx_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_AssetsManagerEx_create'", nullptr);
             return 0;
         }
-        ax::extension::AssetsManagerEx* ret = ax::extension::AssetsManagerEx::create(arg0, arg1);
+        auto&& ret = ax::extension::AssetsManagerEx::create(arg0, arg1);
         object_to_luaval<ax::extension::AssetsManagerEx>(tolua_S, "ax.AssetsManagerEx",(ax::extension::AssetsManagerEx*)ret);
         return 1;
     }
@@ -2463,7 +2463,7 @@ int lua_ax_extension_EventListenerAssetsManagerEx_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_EventListenerAssetsManagerEx_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0, arg1);
+        auto&& ret = cobj->init(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2809,7 +2809,7 @@ int lua_ax_extension_ParticleSystem3D_isEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_isEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isEnabled();
+        auto&& ret = cobj->isEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2856,7 +2856,7 @@ int lua_ax_extension_ParticleSystem3D_getRender(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_getRender'", nullptr);
             return 0;
         }
-        ax::Particle3DRender* ret = cobj->getRender();
+        auto&& ret = cobj->getRender();
         object_to_luaval<ax::Particle3DRender>(tolua_S, "ax.Particle3DRender",(ax::Particle3DRender*)ret);
         return 1;
     }
@@ -2953,7 +2953,7 @@ int lua_ax_extension_ParticleSystem3D_isKeepLocal(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_isKeepLocal'", nullptr);
             return 0;
         }
-        bool ret = cobj->isKeepLocal();
+        auto&& ret = cobj->isKeepLocal();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3050,7 +3050,7 @@ int lua_ax_extension_ParticleSystem3D_getParticleQuota(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_getParticleQuota'", nullptr);
             return 0;
         }
-        unsigned int ret = cobj->getParticleQuota();
+        auto&& ret = cobj->getParticleQuota();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3097,7 +3097,7 @@ int lua_ax_extension_ParticleSystem3D_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_getBlendFunc'", nullptr);
             return 0;
         }
-        const ax::BlendFunc& ret = cobj->getBlendFunc();
+        auto&& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3238,7 +3238,7 @@ int lua_ax_extension_ParticleSystem3D_getAliveParticleCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_ParticleSystem3D_getAliveParticleCount'", nullptr);
             return 0;
         }
-        int ret = cobj->getAliveParticleCount();
+        auto&& ret = cobj->getAliveParticleCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3612,7 +3612,7 @@ int lua_ax_extension_PUParticleSystem3D_initWithFilePath(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_initWithFilePath'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithFilePath(arg0);
+        auto&& ret = cobj->initWithFilePath(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3659,7 +3659,7 @@ int lua_ax_extension_PUParticleSystem3D_getParticleSystemScaleVelocity(lua_State
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getParticleSystemScaleVelocity'", nullptr);
             return 0;
         }
-        double ret = cobj->getParticleSystemScaleVelocity();
+        auto&& ret = cobj->getParticleSystemScaleVelocity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3756,7 +3756,7 @@ int lua_ax_extension_PUParticleSystem3D_getDefaultDepth(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getDefaultDepth'", nullptr);
             return 0;
         }
-        double ret = cobj->getDefaultDepth();
+        auto&& ret = cobj->getDefaultDepth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3803,7 +3803,7 @@ int lua_ax_extension_PUParticleSystem3D_getEmittedSystemQuota(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getEmittedSystemQuota'", nullptr);
             return 0;
         }
-        unsigned int ret = cobj->getEmittedSystemQuota();
+        auto&& ret = cobj->getEmittedSystemQuota();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3856,7 +3856,7 @@ int lua_ax_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_initWithFilePathAndMaterialPath'", nullptr);
             return 0;
         }
-        bool ret = cobj->initWithFilePathAndMaterialPath(arg0, arg1);
+        auto&& ret = cobj->initWithFilePathAndMaterialPath(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -3950,7 +3950,7 @@ int lua_ax_extension_PUParticleSystem3D_getMaterialName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getMaterialName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getMaterialName();
+        auto&& ret = cobj->getMaterialName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -4044,7 +4044,7 @@ int lua_ax_extension_PUParticleSystem3D_getMaxVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getMaxVelocity'", nullptr);
             return 0;
         }
-        double ret = cobj->getMaxVelocity();
+        auto&& ret = cobj->getMaxVelocity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4141,7 +4141,7 @@ int lua_ax_extension_PUParticleSystem3D_getTimeElapsedSinceStart(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getTimeElapsedSinceStart'", nullptr);
             return 0;
         }
-        double ret = cobj->getTimeElapsedSinceStart();
+        auto&& ret = cobj->getTimeElapsedSinceStart();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4235,7 +4235,7 @@ int lua_ax_extension_PUParticleSystem3D_getEmittedEmitterQuota(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getEmittedEmitterQuota'", nullptr);
             return 0;
         }
-        unsigned int ret = cobj->getEmittedEmitterQuota();
+        auto&& ret = cobj->getEmittedEmitterQuota();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4385,7 +4385,7 @@ int lua_ax_extension_PUParticleSystem3D_isMarkedForEmission(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_isMarkedForEmission'", nullptr);
             return 0;
         }
-        bool ret = cobj->isMarkedForEmission();
+        auto&& ret = cobj->isMarkedForEmission();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4432,7 +4432,7 @@ int lua_ax_extension_PUParticleSystem3D_getDefaultWidth(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getDefaultWidth'", nullptr);
             return 0;
         }
-        double ret = cobj->getDefaultWidth();
+        auto&& ret = cobj->getDefaultWidth();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -4579,7 +4579,7 @@ int lua_ax_extension_PUParticleSystem3D_clone(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_clone'", nullptr);
             return 0;
         }
-        ax::PUParticleSystem3D* ret = cobj->clone();
+        auto&& ret = cobj->clone();
         object_to_luaval<ax::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(ax::PUParticleSystem3D*)ret);
         return 1;
     }
@@ -4876,7 +4876,7 @@ int lua_ax_extension_PUParticleSystem3D_getParentParticleSystem(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getParentParticleSystem'", nullptr);
             return 0;
         }
-        ax::PUParticleSystem3D* ret = cobj->getParentParticleSystem();
+        auto&& ret = cobj->getParentParticleSystem();
         object_to_luaval<ax::PUParticleSystem3D>(tolua_S, "ax.PUParticleSystem3D",(ax::PUParticleSystem3D*)ret);
         return 1;
     }
@@ -5023,7 +5023,7 @@ int lua_ax_extension_PUParticleSystem3D_getDefaultHeight(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getDefaultHeight'", nullptr);
             return 0;
         }
-        double ret = cobj->getDefaultHeight();
+        auto&& ret = cobj->getDefaultHeight();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5070,7 +5070,7 @@ int lua_ax_extension_PUParticleSystem3D_getDerivedPosition(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getDerivedPosition'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getDerivedPosition();
+        auto&& ret = cobj->getDerivedPosition();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5264,7 +5264,7 @@ int lua_ax_extension_PUParticleSystem3D_getDerivedScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_getDerivedScale'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getDerivedScale();
+        auto&& ret = cobj->getDerivedScale();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5411,7 +5411,7 @@ int lua_ax_extension_PUParticleSystem3D_initSystem(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_initSystem'", nullptr);
             return 0;
         }
-        bool ret = cobj->initSystem(arg0);
+        auto&& ret = cobj->initSystem(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5462,7 +5462,7 @@ int lua_ax_extension_PUParticleSystem3D_makeParticleLocal(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_extension_PUParticleSystem3D_makeParticleLocal'", nullptr);
             return 0;
         }
-        bool ret = cobj->makeParticleLocal(arg0);
+        auto&& ret = cobj->makeParticleLocal(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }

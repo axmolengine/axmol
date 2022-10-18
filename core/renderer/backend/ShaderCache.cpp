@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ ShaderCache::~ShaderCache()
     {
         AX_SAFE_RELEASE(shaderModule.second);
     }
-    AXLOGINFO("deallocing ProgramCache: %p", this);
+    AXLOGINFO("deallocing ShaderCache: %p", this);
 }
 
 bool ShaderCache::init()
@@ -95,7 +95,7 @@ void ShaderCache::removeUnusedShader()
         auto shaderModule = iter->second;
         if (shaderModule->getReferenceCount() == 1)
         {
-            //            AXLOG("axys: TextureCache: removing unused program");
+            //            AXLOG("axmol: TextureCache: removing unused program");
             shaderModule->release();
             iter = _cachedShaders.erase(iter);
         }

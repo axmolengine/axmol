@@ -1,4 +1,4 @@
-require "axys.spine.SpineConstants"
+require "axmol.spine.SpineConstants"
 
 local SpineTestLayerNormal = class("SpineTestLayerNormal",function()
     return cc.Layer:create()

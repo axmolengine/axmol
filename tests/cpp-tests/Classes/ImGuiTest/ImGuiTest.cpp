@@ -6,7 +6,7 @@
 USING_NS_AX;
 USING_NS_AX_EXT;
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 static bool show_test_window    = true;
 static bool show_another_window = true;
@@ -14,11 +14,7 @@ static ImVec4 clear_color       = ImColor(114, 144, 154);
 
 ImGuiTests::ImGuiTests()
 {
-    // Resize (expand) window
-    static Size resourceSize(1280, 720);
-    auto director    = Director::getInstance();
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-    view->setWindowed(resourceSize.width, resourceSize.height);
+    ImGuiPresenter::getInstance()->setViewResolution(1280, 720);
 
     ADD_TEST_CASE(ImGuiTest);
 }

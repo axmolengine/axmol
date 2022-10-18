@@ -3,7 +3,7 @@ Copyright (c) 2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1255,7 +1255,7 @@ void FogTestDemo::onEnter()
 
     auto vertexSource = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.vert");
     auto fragSource   = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.frag");
-    auto program      = backend::Device::getInstance()->newProgram(vertexSource, fragSource);
+    auto program      = ProgramManager::newProgram(vertexSource, fragSource);
     _programState1    = new backend::ProgramState(program);
     _programState2    = new backend::ProgramState(program);
     AX_SAFE_RELEASE(program);
@@ -1305,7 +1305,7 @@ void FogTestDemo::onEnter()
 
         auto vertexSource = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.vert");
         auto fragSource   = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.frag");
-        auto program      = backend::Device::getInstance()->newProgram(vertexSource, fragSource);
+        auto program      = ProgramManager::newProgram(vertexSource, fragSource);
         _programState1    = new backend::ProgramState(program);
         _programState2    = new backend::ProgramState(program);
 

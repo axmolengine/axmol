@@ -3,7 +3,7 @@
  Copyright (c) 2020 C4games Ltd
  Copyright (c) 2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,10 @@
 #ifndef _IMGUIEXT_TEST_H_
 #define _IMGUIEXT_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 DEFINE_TEST_SUITE(ImGuiTests);
 

@@ -5,7 +5,6 @@ include_directories(imgui)
 set(HEADER
     ImGuiPresenter.h
     # CCImGuiColorTextEdit.h
-    imgui_impl_ax.h
     imgui/imconfig.h
     imgui/imgui.h
     imgui/imgui_internal.h
@@ -21,7 +20,6 @@ set(HEADER
 set(SOURCE
     ImGuiPresenter.cpp
     # CCImGuiColorTextEdit.cpp
-    imgui_impl_ax.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_draw.cpp
@@ -32,6 +30,14 @@ set(SOURCE
     #~ implot/implot.cpp
     #~ implot/implot_demo.cpp
 )
+
+if(ANDROID)
+    list(APPEND HEADER imgui_impl_ax_android.cpp)
+    list(APPEND SOURCE imgui_impl_ax_android.h)
+else()
+    list(APPEND HEADER imgui_impl_ax.cpp)
+    list(APPEND SOURCE imgui_impl_ax.h)
+endif()
 
 #~ if(AX_ENABLE_EXT_LUA)
 #~     include_directories(
@@ -64,8 +70,8 @@ set(SOURCE
 #~     )
 #~ endif()
 
-add_library(${target_name} STATIC 
-        ${HEADER} 
+add_library(${target_name} STATIC
+        ${HEADER}
         ${SOURCE})
 
 setup_ax_extension_config(${target_name})

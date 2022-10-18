@@ -1,6 +1,6 @@
-# The axys CMake options
+# The axmol CMake options
 
-## The options for axys engine
+## The options for axmol engine
 - AX_BUILD_TESTS: whether build test porojects: cpp-tests, lua-tests, fairygui-tests, default: `TRUE`
 - AX_ENABLE_XXX for core feature: 
   - AX_ENABLE_MSEDGE_WEBVIEW2: whether enable msedge webview2, default: `TRUE`
@@ -26,6 +26,6 @@
   - AX_ENABLE_EXT_LIVE2D: the imgui extension, only support PC platforms, default: `FALSE` 
 - AX_WITH_XXX: usually user don't need care it
 
-## The options for axys apps
+## The options for axmol apps
 
 - AX_PREBUILT_DIR: specific the prebuilt dir (relative to `AX_ROOT`), it's very useful for fast linking apps with prebuilt engine libs

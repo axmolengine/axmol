@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -427,7 +427,7 @@ void Scale9Sprite::copyTo(Scale9Sprite* copy) const
 
     copy->setRenderingType(_renderingType);
     copy->setScale9Enabled(isScale9Enabled());
-    // setStretchEnabled after setScale9Enabled, fix issue: https://github.com/axys1/axys/issues/491
+    // setStretchEnabled after setScale9Enabled, fix issue: https://github.com/axmolengine/axmol/issues/491
     copy->setStretchEnabled(isStretchEnabled());
     copy->_isPatch9    = _isPatch9;
     copy->_brightState = _brightState;

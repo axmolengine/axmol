@@ -3,7 +3,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@
 #include <spine/spine-cocos2dx.h>
 
 #include "../testResource.h"
-#include "cocos2d.h"
+#include "axmol.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_AX;
@@ -482,7 +482,7 @@ static void printProperties(Properties* properties, int indent)
 {
     // Print the name and ID of the current namespace.
     const char* spacename = properties->getNamespace();
-    const char* id        = properties->getId();
+    const char* id        = properties->getId().data();
     char chindent[64];
     int i = 0;
     for (i = 0; i < indent * 2; i++)

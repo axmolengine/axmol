@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -2403,6 +2403,11 @@ void color4f_to_luaval(lua_State* L, const Color4F& color)
     lua_pushstring(L, "a");              /* L: table key */
     lua_pushnumber(L, (lua_Number)color.a); /* L: table key value*/
     lua_rawset(L, -3);                   /* table[key] = value, L: table */
+}
+
+void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value) {
+    auto threadHash = std::hash<std::thread::id>{}(value);
+    lua_pushinteger(L, threadHash);
 }
 
 void color3b_to_luaval(lua_State* L, const Color3B& color)

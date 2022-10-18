@@ -2,7 +2,7 @@
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -262,7 +262,7 @@ bool Material::parsePass(Technique* technique, Properties* passProperties)
 // cocos2d-x doesn't support Samplers yet. But will be added soon
 bool Material::parseSampler(backend::ProgramState* programState, Properties* samplerProperties)
 {
-    AXASSERT(samplerProperties->getId(), "Sampler must have an id. The id is the uniform name");
+    AXASSERT(!samplerProperties->getId().empty(), "Sampler must have an id. The id is the uniform name");
 
     // required
     auto filename = samplerProperties->getString("path");

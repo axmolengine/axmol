@@ -1,7 +1,7 @@
 /****************************************************************************
  * Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 #include "platform/CCPlatformConfig.h"
 #include "extensions/cocos-ext.h"
 #include "ImGui/ImGuiPresenter.h"
-#include "cocos2d.h"
+#include "axmol.h"
 
 #include "Box2DTestBed.h"
 #include "tests/test.h"

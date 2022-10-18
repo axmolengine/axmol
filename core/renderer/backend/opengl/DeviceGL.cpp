@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,8 @@
 #include "DeviceInfoGL.h"
 #include "RenderTargetGL.h"
 
+#include "renderer/backend/ProgramManager.h"
+
 NS_AX_BACKEND_BEGIN
 
 Device* Device::getInstance()
@@ -57,7 +59,7 @@ DeviceGL::DeviceGL()
 
 DeviceGL::~DeviceGL()
 {
-    ProgramCache::destroyInstance();
+    ProgramManager::destroyInstance();
     delete _deviceInfo;
     _deviceInfo = nullptr;
 }

@@ -6,7 +6,7 @@
  Copyright (c) 2017-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -488,10 +488,11 @@ public:
     void resetMatrixStack();
 
     /**
-     * returns the cocos2d thread id.
-     Useful to know if certain code is already running on the cocos2d thread
+     * returns the axmol thread id.
+     Useful to know if certain code is already running on the axmol thread
      */
-    const std::thread::id& getCocos2dThreadId() const { return _cocos2d_thread_id; }
+    const std::thread::id& getCocos2dThreadId() const { return getAxmolThreadId(); } 
+    const std::thread::id& getAxmolThreadId() const { return _axmol_thread_id; }
 
     /** Enable node tree children indexer map, the concept is like database INDEX
      * Notes:
@@ -644,8 +645,8 @@ protected:
 
     bool _childrenIndexerEnabled = false;
 
-    /* cocos2d thread id */
-    std::thread::id _cocos2d_thread_id;
+    /* axmol thread id */
+    std::thread::id _axmol_thread_id;
 
     // GLView will recreate stats labels to fit visible rect
     friend class GLView;

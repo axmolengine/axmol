@@ -2,7 +2,7 @@
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -30,8 +30,8 @@
 #include "base/CCDirector.h"
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventType.h"
+#include "base/axstd.h"
 #include "renderer/backend/opengl/UtilsGL.h"
-#include "yasio/detail/byte_buffer.hpp"
 
 NS_AX_BACKEND_BEGIN
 
@@ -138,9 +138,9 @@ void ProgramGL::compileProgram()
         glGetProgramiv(_program, GL_INFO_LOG_LENGTH, &errorInfoLen);
         if (errorInfoLen > 1)
         {
-            yasio::sbyte_buffer errorInfo{static_cast<size_t>(errorInfoLen), std::true_type{}};
-            glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.data());
-            log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.data());
+            auto errorInfo = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
+            glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
+            log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.get());
         }
         else
             log("cocos2d: ERROR: %s: failed to link program ", __FUNCTION__);
@@ -213,7 +213,7 @@ bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned in
     GLint loc = glGetAttribLocation(_program, attributeName.data());
     if (-1 == loc)
     {
-        AXLOG("axys: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.data());
+        AXLOG("axmol: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.data());
         return false;
     }
 
@@ -234,8 +234,8 @@ const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() c
 
     _activeAttribs.reserve(numOfActiveAttributes);
 
-    int MAX_ATTRIBUTE_NAME_LENGTH = 256;
-    std::vector<char> attrName(MAX_ATTRIBUTE_NAME_LENGTH + 1);
+    int MAX_ATTRIBUTE_NAME_LENGTH = 255;
+    auto attrName                 = axstd::make_unique_for_overwrite<char[]>(MAX_ATTRIBUTE_NAME_LENGTH + 1);
 
     GLint attrNameLen = 0;
     GLenum attrType;
@@ -244,9 +244,9 @@ const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() c
 
     for (int i = 0; i < numOfActiveAttributes; i++)
     {
-        glGetActiveAttrib(_program, i, MAX_ATTRIBUTE_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.data());
+        glGetActiveAttrib(_program, i, MAX_ATTRIBUTE_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.get());
         CHECK_GL_ERROR_DEBUG();
-        info.attributeName = std::string(attrName.data(), attrName.data() + attrNameLen);
+        info.attributeName = std::string(attrName.get(), attrName.get() + attrNameLen);
         info.location      = glGetAttribLocation(_program, info.attributeName.c_str());
         info.type          = attrType;
         info.size          = UtilsGL::getGLDataTypeSize(attrType) * attrSize;

@@ -1,6 +1,6 @@
 import java.nio.file.Paths
-include ':libaxys1'
-project(':libaxys1').projectDir = new File(Paths.get("${System.env.AX_ROOT}/core/platform/android/libaxys1").toUri())
+include ':libaxmol'
+project(':libaxmol').projectDir = new File(Paths.get("${System.env.AX_ROOT}/core/platform/android/libaxmol").toUri())
 include ':Live2dTests'
 project(':Live2dTests').projectDir = new File(settingsDir, 'app')
 rootProject.name = "live2d-tests"

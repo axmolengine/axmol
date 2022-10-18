@@ -2,7 +2,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 @aismann; Peter Eismann, Germany; dreifrankensoft
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 #ifndef _BOX2D_TEST_H_
 #define _BOX2D_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
 #include "extensions/cocos-ext.h"

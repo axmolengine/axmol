@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "Program.h"
-#include "ProgramCache.h"
+#include "ProgramManager.h"
 #include "VertexLayout.h"
 
 NS_AX_BACKEND_BEGIN
@@ -43,7 +43,7 @@ void Program::setProgramType(uint32_t type)
 
 Program* Program::getBuiltinProgram(uint32_t type)
 {
-    return ProgramCache::getInstance()->getBuiltinProgram(type);
+    return ProgramManager::getInstance()->getBuiltinProgram(type);
 }
 
 NS_AX_BACKEND_END

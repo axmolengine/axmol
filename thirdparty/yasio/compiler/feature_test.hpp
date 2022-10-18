@@ -28,26 +28,30 @@ SOFTWARE.
 #ifndef YASIO__FEATURE_TEST_HPP
 #define YASIO__FEATURE_TEST_HPP
 
-// Tests whether compiler has fully c++11 support
+// Includes msvc basic system headers for compiler feature tests
 // About preprocessor '_MSC_VER', please see:
 // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=vs-2019
-#if defined(_MSC_VER)
-#  if _MSC_VER < 1900
-#    define noexcept throw()
-#    define YASIO__HAS_FULL_CXX11 0
-#  else
-#    define YASIO__HAS_FULL_CXX11 1
-#    if _MSC_VER > 1900 // VS2017 or later
-#      include <vcruntime.h>
-#      include <sdkddkver.h>
-#    endif
-#  endif
+#if defined(_MSC_VER) && _MSC_VER > 1900
+#  include <vcruntime.h>
+#  include <sdkddkver.h>
+#endif
+
+// Tests whether compiler has(fully) c++11 support and keywords workaround for msvc
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#  define YASIO__HAS_CXX11 1
+#  define YASIO__NS_INLINE inline
+#  define YASIO__CONSTEXPR constexpr
+#  define YASIO__NOEXCEPT noexcept
 #else
-#  define YASIO__HAS_FULL_CXX11 1
+#  define YASIO__HAS_CXX11 0
+#  define YASIO__NS_INLINE
+#  define YASIO__CONSTEXPR const
+#  define YASIO__NOEXCEPT throw()
 #endif
 
 // Tests whether compiler has c++14 support
-#if (defined(__cplusplus) && __cplusplus >= 201402L) || (defined(_MSC_VER) && _MSC_VER >= 1900 && (defined(_MSVC_LANG) && (_MSVC_LANG >= 201402L)))
+#if (defined(__cplusplus) && __cplusplus >= 201402L) || \
+    (defined(_MSC_VER) && _MSC_VER >= 1900 && (defined(_MSVC_LANG) && (_MSVC_LANG >= 201402L)))
 #  ifndef YASIO_HAS_CXX14
 #    define YASIO__HAS_CXX14 1
 #  endif // C++14 features macro
@@ -57,8 +61,10 @@ SOFTWARE.
 #endif
 
 // Tests whether compiler has c++17 support
-#if (defined(__cplusplus) && __cplusplus >= 201703L) ||                                                                                                        \
-    (defined(_MSC_VER) && _MSC_VER > 1900 && ((defined(_HAS_CXX17) && _HAS_CXX17 == 1) || (defined(_MSVC_LANG) && (_MSVC_LANG > 201402L))))
+#if (defined(__cplusplus) && __cplusplus >= 201703L) || \
+    (defined(_MSC_VER) && _MSC_VER > 1900 &&            \
+     ((defined(_HAS_CXX17) && _HAS_CXX17 == 1) ||       \
+      (defined(_MSVC_LANG) && (_MSVC_LANG > 201402L))))
 #  ifndef YASIO_HAS_CXX17
 #    define YASIO__HAS_CXX17 1
 #  endif // C++17 features macro
@@ -68,27 +74,16 @@ SOFTWARE.
 #endif
 
 // Tests whether compiler has c++20 support
-#if (defined(__cplusplus) && __cplusplus > 201703L) ||                                                                                                         \
-    (defined(_MSC_VER) && _MSC_VER > 1900 && ((defined(_HAS_CXX20) && _HAS_CXX20 == 1) || (defined(_MSVC_LANG) && (_MSVC_LANG > 201703L))))
+#if (defined(__cplusplus) && __cplusplus > 201703L) || \
+    (defined(_MSC_VER) && _MSC_VER > 1900 &&           \
+     ((defined(_HAS_CXX20) && _HAS_CXX20 == 1) ||      \
+      (defined(_MSVC_LANG) && (_MSVC_LANG > 201703L))))
 #  ifndef YASIO__HAS_CXX20
 #    define YASIO__HAS_CXX20 1
 #  endif // C++20 features macro
 #endif   // C++20 features check
 #if !defined(YASIO__HAS_CXX20)
 #  define YASIO__HAS_CXX20 0
-#endif
-
-// Workaround for compiler without fully c++11 support, such as vs2013
-#if YASIO__HAS_FULL_CXX11
-#  define YASIO__HAS_NS_INLINE 1
-#  define YASIO__NS_INLINE inline
-#else
-#  define YASIO__HAS_NS_INLINE 0
-#  define YASIO__NS_INLINE
-#  if defined(constexpr)
-#    undef constexpr
-#  endif
-#  define constexpr const
 #endif
 
 // Unix domain socket feature test
@@ -108,7 +103,8 @@ SOFTWARE.
 // Tests whether current OS is BSD-like system for process common BSD socket behaviors
 #if !defined(_WIN32) && !defined(__linux__)
 #  include <sys/param.h>
-#  if defined(BSD) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__)
+#  if defined(BSD) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || \
+      defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__)
 #    define YASIO__OS_BSD_LIKE 1
 #  else
 #    define YASIO__OS_BSD_LIKE 0
@@ -132,7 +128,8 @@ SOFTWARE.
 #endif
 
 // 64bits Sense Macros
-#if defined(_M_X64) || defined(_WIN64) || defined(__LP64__) || defined(_LP64) || defined(__x86_64) || defined(__arm64__) || defined(__aarch64__)
+#if defined(_M_X64) || defined(_WIN64) || defined(__LP64__) || defined(_LP64) || \
+    defined(__x86_64) || defined(__arm64__) || defined(__aarch64__)
 #  define YASIO__64BITS 1
 #else
 #  define YASIO__64BITS 0
@@ -150,6 +147,11 @@ SOFTWARE.
 #  define YASIO__THROW(x, retval) return (retval)
 #  define YASIO__THROW0(x) return
 #endif
+
+#include <system_error>
+#define yasio__throw_error(ec, what) \
+  YASIO__THROW0(std::system_error(std::error_code{(int)ec, std::system_category()}, what))
+#define yasio__throw_error0(ec) yasio__throw_error(ec, "")
 
 // Compatibility with non-clang compilers...
 #ifndef __has_attribute

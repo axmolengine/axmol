@@ -3,7 +3,7 @@
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@
 
 //-----------------------------------------------------------------------------------------------------------
 
-static const char* videoHelperClassName = "org.axys1.lib.AxysVideoHelper";
+static const char* videoHelperClassName = "org.axmol.lib.VideoHelper";
 
 USING_NS_AX;
 
@@ -48,7 +48,7 @@ static void executeVideoCallback(int index, int event);
 #    define QUIT_FULLSCREEN 1000
 
 extern "C" {
-JNIEXPORT void JNICALL Java_org_axys1_lib_AxysVideoHelper_nativeExecuteVideoCallback(JNIEnv*,
+JNIEXPORT void JNICALL Java_org_axmol_lib_VideoHelper_nativeExecuteVideoCallback(JNIEnv*,
                                                                                             jclass,
                                                                                             jint index,
                                                                                             jint event)

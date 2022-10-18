@@ -18,6 +18,9 @@ set(_AX_RENDERER_HEADER
     renderer/CCTextureCube.h
     renderer/CCTrianglesCommand.h
     renderer/ccShaders.h
+    
+    renderer/backend/ProgramManager.h
+    renderer/backend/ProgramStateRegistry.h
 
     renderer/backend/Backend.h
     renderer/backend/Buffer.h
@@ -25,7 +28,7 @@ set(_AX_RENDERER_HEADER
     renderer/backend/DepthStencilState.h
     renderer/backend/Device.h
     renderer/backend/Program.h
-    renderer/backend/ProgramCache.h
+    
     renderer/backend/Macros.h
     renderer/backend/RenderPassDescriptor.h
     renderer/backend/RenderPipeline.h
@@ -36,7 +39,6 @@ set(_AX_RENDERER_HEADER
     renderer/backend/Enums.h
     renderer/backend/VertexLayout.h
     renderer/backend/ProgramState.h
-    renderer/backend/ProgramStateRegistry.h
     renderer/backend/ShaderCache.h
     renderer/backend/DeviceInfo.h
     )
@@ -60,6 +62,9 @@ set(_AX_RENDERER_SRC
     renderer/CCTrianglesCommand.cpp
     renderer/ccShaders.cpp
     renderer/CCColorizer.cpp
+    
+    renderer/backend/ProgramManager.cpp
+    renderer/backend/ProgramStateRegistry.cpp
 
     renderer/backend/CommandBuffer.cpp
     renderer/backend/DepthStencilState.cpp
@@ -69,10 +74,8 @@ set(_AX_RENDERER_SRC
     renderer/backend/PixelFormatUtils.cpp
     renderer/backend/Types.cpp
     renderer/backend/VertexLayout.cpp
-    renderer/backend/ProgramCache.cpp
     renderer/backend/Program.cpp
     renderer/backend/ProgramState.cpp
-    renderer/backend/ProgramStateRegistry.cpp
     renderer/backend/ShaderCache.cpp
     renderer/backend/RenderPassDescriptor.cpp
     )

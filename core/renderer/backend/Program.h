@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,7 @@ NS_AX_BACKEND_BEGIN
 
 class ShaderModule;
 class VertexLayout;
+class ProgramManager;
 
 /**
  * @addtogroup _backend
@@ -185,7 +186,7 @@ protected:
     virtual const std::unordered_map<std::string, int> getAllUniformsLocation() const = 0;
     friend class ProgramState;
 #endif
-    friend class ProgramCache;
+    friend class ProgramManager;
 
     std::string _vertexShader;                            ///< Vertex shader.
     std::string _fragmentShader;                          ///< Fragment shader.

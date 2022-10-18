@@ -1,10 +1,10 @@
-# axys-console
+# axmol-console
 
 
-## Vision of axys-console
+## Vision of axmol-console
 
 
-A command line tool that lets you create, run, publish, debug, etc… your game. It is the swiss-army knife for axys.
+A command line tool that lets you create, run, publish, debug, etc… your game. It is the swiss-army knife for axmol.
 
 This command line tool is in its early stages.
 
@@ -13,12 +13,12 @@ Examples:
 ```
 # starts a new project called "My Game" for multi-platform
 
-$ axys new MyGame -l cpp -p org.axys1.mygame
+$ axmol new MyGame -l cpp -p org.axmol.mygame
 
 $ cd MyGame
 
 # Will deploy the project to device and run it
-$ axys run -p android
+$ axmol run -p android
 
 
 ```
@@ -27,25 +27,25 @@ $ axys run -p android
 
 ## Internals
 
-`axys.py` is an script whose only responsability is to call its plugins.
-`axys.bat` will invoke `axys.py` on windows
-`axys` will invoke `axys.py` on Mac OS X and linux
+`axmol.py` is an script whose only responsability is to call its plugins.
+`axmol.bat` will invoke `axmol.py` on windows
+`axmol` will invoke `axmol.py` on Mac OS X and linux
 
 To get a list of all the registered plugins:
 
 ```
-$ axys
+$ axmol
 ```
 
 To run the "new" plugin:
 
 ```
-$ axys new
+$ axmol new
 ``` 
 
 ## Adding a new plugin to the console
 
-You have to edit `bin/axys.ini`, and add the class name of your new plugin there. Let's say that you want to add a plugin that deploys the project:
+You have to edit `bin/axmol.ini`, and add the class name of your new plugin there. Let's say that you want to add a plugin that deploys the project:
 
 
 ```
@@ -106,21 +106,21 @@ The usage of `build_console.py`:
 ```
 usage: build_console.py [-h] [-s SRC_PATH] [-d DST_PATH]
 
-Generate executable file for axys-console by PyInstaller.
+Generate executable file for axmol-console by PyInstaller.
 
 optional arguments:
   -h, --help            show this help message and exit
   -s SRC_PATH, --src-path SRC_PATH
-                        Specify the path of axys-console.
+                        Specify the path of axmol-console.
   -d DST_PATH, --dst-path DST_PATH
                         Specify the path of output.
 ```
 
 ## Using the Executable
 
-The generated executable files can replace the source code of axys-console.
+The generated executable files can replace the source code of axmol-console.
 
-To fit the limitation of the axys-console implementation. The generated executable files should located at `ENGINE_PATH/tools/console/bin`.
+To fit the limitation of the axmol-console implementation. The generated executable files should located at `ENGINE_PATH/tools/console/bin`.
 
 Then you can use the executable file as same as the source code.
 

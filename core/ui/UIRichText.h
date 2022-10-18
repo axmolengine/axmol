@@ -2,7 +2,7 @@
  Copyright (c) 2013 cocos2d-x.org
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -268,6 +268,9 @@ public:
 
     void setWidth(int width);
     void setHeight(int height);
+    inline void setScale(float scale) { _scaleX = _scaleY = scale; }
+    inline void setScaleX(float scaleX) { _scaleX = scaleX; }
+    inline void setScaleY(float scaleY) { _scaleY = scaleY; }
     void setUrl(std::string_view url);
 
 protected:
@@ -277,6 +280,8 @@ protected:
     friend class RichText;
     int _width;
     int _height;
+    float _scaleX;
+    float _scaleY;
     std::string _url; /*!< attributes of anchor tag */
 };
 
@@ -527,7 +532,7 @@ public:
     std::string getFontFace();               /*!< return the current font face */
     void setAnchorFontColor(std::string_view color); /*!< Set the font color of a-tag. @param face the font color. */
     std::string getAnchorFontColor();                /*!< return the current font color of a-tag */
-    ax::Color3B getAnchorFontColor3B();         /*!< return the current font color of a-tag */
+    ax::Color3B getAnchorFontColor3B();              /*!< return the current font color of a-tag */
     void setAnchorTextBold(bool enable);             /*!< enable bold text of a-tag */
     bool isAnchorTextBoldEnabled();                  /*!< valid style is bold text of a-tag? */
     void setAnchorTextItalic(bool enable);           /*!< enable italic text of a-tag */
@@ -613,7 +618,9 @@ protected:
                              uint8_t opacity,
                              int width,
                              int height,
-                             std::string_view url);
+                             std::string_view url,
+                             float scaleX = 1.f,
+                             float scaleY = 1.f);
     void handleCustomRenderer(Node* renderer);
     void formatRenderers();
     void addNewLine();

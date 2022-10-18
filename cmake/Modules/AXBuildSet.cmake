@@ -7,7 +7,7 @@ set(CMAKE_DEBUG_TARGET_PROPERTIES
     # POSITION_INDEPENDENT_CODE
 )
 
-# some useful variables for every one axys project
+# some useful variables for every one ax project
 set(ENGINE_BINARY_PATH ${PROJECT_BINARY_DIR}/engine)
 
 if(CMAKE_TOOLCHAIN_FILE)

@@ -1,6 +1,10 @@
 #include "ImGuiPresenter.h"
 #include <assert.h>
-#include "imgui_impl_ax.h"
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+    #include "imgui_impl_ax_android.h"
+#else
+    #include "imgui_impl_ax.h"
+#endif
 #include "imgui_internal.h"
 
 // TODO: mac metal
@@ -197,8 +201,12 @@ void ImGuiPresenter::init()
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+    ImGui_ImplAndroid_InitForAx(Director::getInstance()->getOpenGLView(), true);
+#else
     auto window = static_cast<GLViewImpl*>(Director::getInstance()->getOpenGLView())->getWindow();
-    ImGui_ImplGlfw_InitForAxys(window, true);
+    ImGui_ImplGlfw_InitForAx(window, true);
+#endif
     ImGui_ImplAx_Init();
 
     ImGui_ImplAx_SetCustomFontLoader(&ImGuiPresenter::loadCustomFonts, this);
@@ -218,7 +226,11 @@ void ImGuiPresenter::cleanup()
 
     ImGui_ImplAx_SetCustomFontLoader(nullptr, nullptr);
     ImGui_ImplAx_Shutdown();
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+    ImGui_ImplAndroid_Shutdown();
+#else
     ImGui_ImplGlfw_Shutdown();
+#endif
 
     AX_SAFE_RELEASE_NULL(_fontsTexture);
 
@@ -265,9 +277,12 @@ void ImGuiPresenter::loadCustomFonts(void* ud)
 
 float ImGuiPresenter::scaleAllByDPI(float userScale)
 {
-    // Gets scale
     float xscale = 1.0f;
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
+    // Gets scale
     glfwGetMonitorContentScale(glfwGetPrimaryMonitor(), &xscale, nullptr);
+#endif
+
     auto zoomFactor = userScale * xscale;
 
     auto imFonts = ImGui::GetIO().Fonts;
@@ -291,6 +306,11 @@ float ImGuiPresenter::scaleAllByDPI(float userScale)
     }
 
     return zoomFactor;
+}
+
+void ImGuiPresenter::setViewResolution(float width, float height)
+{
+    ImGui_ImplAx_SetViewResolution(width, height);
 }
 
 void ImGuiPresenter::addFont(std::string_view fontFile, float fontSize, CHS_GLYPH_RANGE glyphRange)
@@ -340,7 +360,11 @@ void ImGuiPresenter::beginFrame()
     {
         // create frame
         ImGui_ImplAx_NewFrame();
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+        ImGui_ImplAndroid_NewFrame();
+#else
         ImGui_ImplGlfw_NewFrame();
+#endif
         ImGui::NewFrame();
 
         // move to endFrame?

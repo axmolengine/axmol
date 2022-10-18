@@ -2,8 +2,9 @@
  Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +34,8 @@
 USING_NS_AX_EXT;
 USING_NS_AX;
 
-std::string boss[] = {"MeshRendererTest/boss.c3b",
-                      "MeshRendererTest/boss.obj"};
+static const std::string_view boss[] = {"MeshRendererTest/boss.c3b", "MeshRendererTest/boss.obj"};
+static const int boss_count          = sizeof(boss) / sizeof(boss[0]);
 
 enum
 {
@@ -286,7 +287,7 @@ std::string Physics3DConstraintDemo::subtitle() const
 
 std::string Physics3DKinematicDemo::subtitle() const
 {
-    return "Physics3D Kinematic";
+    return "Physics3D Kinematic + #879";
 }
 
 bool Physics3DKinematicDemo::init()
@@ -308,6 +309,34 @@ bool Physics3DKinematicDemo::init()
     floor->syncNodeToPhysics();
     // static object sync is not needed
     floor->setSyncFlag(Physics3DComponent::PhysicsSyncFlag::NONE);
+
+    // Issue #879 STARTS BELOW
+    {
+        Physics3DRigidBodyDes rbDes;
+        std::string tree1 = "MeshRendererTest/tree-model/tree1.obj";
+
+        float scale = 12.0f;
+        std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList(tree1);
+        for (auto& it : trianglesList)
+        {
+            it *= scale;
+        }
+
+        rbDes.mass = 0.0f;
+        rbDes.shape = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
+        auto rigidBody = Physics3DRigidBody::create(&rbDes);
+        auto component = Physics3DComponent::create(rigidBody);
+        auto sprite = MeshRenderer::create(tree1);
+        sprite->addComponent(component);
+        static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0)->setTransparent(true);
+        static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0)->getStateBlock().setCullFaceSide(CullFaceSide::NONE);
+        sprite->setCameraMask((unsigned short)CameraFlag::USER1 | (unsigned short)CameraFlag::USER2 | (unsigned short)CameraFlag::USER3);
+        sprite->setPosition3D(Vec3(20.0f, 0.0f, 0.0f));
+        sprite->setScale(scale);
+        this->addChild(sprite);
+    }
+    // Issue #879 ENDS HERE
+
 
     // create Kinematics
     for (unsigned int i = 0; i < 3; ++i)
@@ -634,7 +663,7 @@ bool Physics3DTerrainDemo::init()
 
     // create mesh
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < boss_count; i++)
     {
         std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList(boss[i]);
 
@@ -705,7 +734,7 @@ bool Physics3DCollisionCallbackDemo::init()
         return false;
 
     {
-        for (size_t i = 0; i < 2; i++)
+        for (size_t i = 0; i < boss_count; i++)
         {
             Physics3DRigidBodyDes rbDes;
 

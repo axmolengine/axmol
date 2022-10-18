@@ -4,7 +4,7 @@
  Copyright (c) 2020 C4games Ltd.
  Copyright (c) 2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -147,7 +147,7 @@ void RenderQueue::realloc(size_t reserveSize)
 {
     for (int i = 0; i < QUEUE_GROUP::QUEUE_COUNT; ++i)
     {
-        _commands[i] = std::vector<RenderCommand*>();
+        _commands[i].clear();
         _commands[i].reserve(reserveSize);
     }
 }
@@ -166,8 +166,7 @@ Renderer::Renderer()
 
     _commandGroupStack.push(DEFAULT_RENDER_QUEUE);
 
-    RenderQueue defaultRenderQueue;
-    _renderGroups.emplace_back(defaultRenderQueue);
+    _renderGroups.emplace_back();
     _queuedTriangleCommands.reserve(BATCH_TRIAGCOMMAND_RESERVED_SIZE);
 
     // for the batched TriangleCommand

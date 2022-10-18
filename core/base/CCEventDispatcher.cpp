@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -958,8 +958,7 @@ void EventDispatcher::dispatchTouchEvent(EventTouch* event)
     bool isNeedsMutableSet = (oneByOneListeners && allAtOnceListeners);
 
     const std::vector<Touch*>& originalTouches = event->getTouches();
-    std::vector<Touch*> mutableTouches(originalTouches.size());
-    std::copy(originalTouches.begin(), originalTouches.end(), mutableTouches.begin());
+    auto mutableTouches = originalTouches;
 
     //
     // process the target handlers 1st
@@ -1486,7 +1485,7 @@ void EventDispatcher::removeCustomEventListeners(std::string_view customEventNam
 void EventDispatcher::removeAllEventListeners()
 {
     bool cleanMap = true;
-    std::vector<EventListener::ListenerID> types;
+    std::vector<std::string_view> types;
     types.reserve(_listenerMap.size());
 
     for (const auto& e : _listenerMap)

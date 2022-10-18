@@ -1,5 +1,5 @@
 require "config"
-require "axys.init"
+require "axmol.init"
 
 local function main()
     require("app.MyApp"):create():run()

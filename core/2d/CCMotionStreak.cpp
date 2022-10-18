@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -120,10 +120,8 @@ bool MotionStreak::initWithFade(float fade, float minSeg, float stroke, const Co
     _colorPointer = (uint8_t*)malloc(sizeof(uint8_t) * 4 * _vertexCount);
     _customCommand.createVertexBuffer(VERTEX_SIZE, _vertexCount, CustomCommand::BufferUsage::DYNAMIC);
 
-    std::vector<uint8_t> zeros;
-    zeros.resize(VERTEX_SIZE * _vertexCount);
-    std::fill(zeros.begin(), zeros.end(), 0);
-    _customCommand.updateVertexBuffer(zeros.data(), zeros.size());
+    auto zeros = std::make_unique<uint8_t[]>(VERTEX_SIZE * _vertexCount);
+    _customCommand.updateVertexBuffer(zeros.get(), VERTEX_SIZE * _vertexCount);
 
     setTexture(texture);
     setColor(color);

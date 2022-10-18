@@ -7,7 +7,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -148,7 +148,7 @@ void SpriteFrameCache::removeSpriteFrames()
 void SpriteFrameCache::removeUnusedSpriteFrames()
 {
     auto removed = false;
-    std::vector<std::string> toRemoveFrames;
+    std::vector<std::string_view> toRemoveFrames;
 
     const auto& frames = getSpriteFrames();
     for (auto&& iter : frames)
@@ -158,7 +158,7 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
         {
             toRemoveFrames.emplace_back(iter.first);
             spriteFrame->getTexture()->removeSpriteFrameCapInset(spriteFrame);
-            AXLOG("axys: SpriteFrameCache: removing unused frame: %s", iter.first.c_str());
+            AXLOG("axmol: SpriteFrameCache: removing unused frame: %s", iter.first.c_str());
             removed = true;
         }
     }
@@ -184,7 +184,7 @@ void SpriteFrameCache::removeSpriteFramesFromFile(std::string_view atlasPath)
     // auto dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
     // if (dict.empty())
     //{
-    //     AXLOG("axys:SpriteFrameCache:removeSpriteFramesFromFile: create dict by %s fail.",plist.c_str());
+    //     AXLOG("axmol:SpriteFrameCache:removeSpriteFramesFromFile: create dict by %s fail.",plist.c_str());
     //     return;
     // }
     // removeSpriteFramesFromDictionary(dict);
@@ -199,7 +199,7 @@ void SpriteFrameCache::removeSpriteFramesFromFileContent(std::string_view plist_
         FileUtils::getInstance()->getValueMapFromData(plist_content.data(), static_cast<int>(plist_content.size()));
     if (dict.empty())
     {
-        AXLOG("axys:SpriteFrameCache:removeSpriteFramesFromFileContent: create dict by fail.");
+        AXLOG("axmol:SpriteFrameCache:removeSpriteFramesFromFileContent: create dict by fail.");
         return;
     }
     removeSpriteFramesFromDictionary(dict);
@@ -211,7 +211,7 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
         return;
 
     const auto& framesDict = dictionary["frames"].asValueMap();
-    std::vector<std::string> keysToRemove;
+    std::vector<std::string_view> keysToRemove;
 
     for (const auto& iter : framesDict)
     {
@@ -226,7 +226,7 @@ void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
 
 void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
 {
-    std::vector<std::string> keysToRemove;
+    std::vector<std::string_view> keysToRemove;
 
     for (auto&& iter : getSpriteFrames())
     {
@@ -246,7 +246,7 @@ SpriteFrame* SpriteFrameCache::getSpriteFrameByName(std::string_view name)
     auto* frame = findFrame(name);
     if (!frame)
     {
-        AXLOG("axys: SpriteFrameCache: Frame '%s' isn't found", name.data());
+        AXLOG("axmol: SpriteFrameCache: Frame '%s' isn't found", name.data());
     }
     return frame;
 }
@@ -321,7 +321,7 @@ bool SpriteFrameCache::eraseFrame(std::string_view frameName)
     return false;
 }
 
-bool SpriteFrameCache::eraseFrames(const std::vector<std::string>& frames)
+bool SpriteFrameCache::eraseFrames(const std::vector<std::string_view>& frames)
 {
     auto ret = false;
     for (const auto& frame : frames)

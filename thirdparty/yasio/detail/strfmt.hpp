@@ -144,8 +144,8 @@ inline std::basic_string<_Elem, _Traits, _Alloc> basic_strfmt(size_t n, const _E
   return buf;
 }
 
-static auto constexpr strfmt = basic_strfmt<char>;
-static auto constexpr wcsfmt = basic_strfmt<wchar_t>;
+static auto YASIO__CONSTEXPR strfmt = basic_strfmt<char>;
+static auto YASIO__CONSTEXPR wcsfmt = basic_strfmt<wchar_t>;
 
 } // namespace yasio
 

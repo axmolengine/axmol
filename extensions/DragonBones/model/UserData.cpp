@@ -1,4 +1,4 @@
-﻿#include "UserData.h"
+#include "UserData.h"
 
 DRAGONBONES_NAMESPACE_BEGIN
 
@@ -36,7 +36,7 @@ float UserData::getFloat(unsigned index) const
 
 std::string UserData::getString(unsigned index) const
 {
-    return index < strings.size() ? strings[index] : 0;
+    return index < strings.size() ? strings[index] : std::string{};
 }
 
 void ActionData::_onClear()

@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,6 @@
 #include "RenderPassDescriptor.h"
 #include "Texture.h"
 #include "DepthStencilState.h"
-#include "ProgramCache.h"
 #include "ShaderCache.h"
 #include "DeviceInfo.h"
 
@@ -46,6 +45,9 @@ class RenderPipeline;
 class RenderPass;
 class RenderTarget;
 
+class ProgramManager;
+class Program;
+
 /**
  * @addtogroup _backend
  * @{
@@ -57,7 +59,7 @@ class RenderTarget;
 class AX_DLL Device : public ax::Ref
 {
 public:
-    friend class ProgramCache;
+    friend class ProgramManager;
     friend class ShaderCache;
 
     /**

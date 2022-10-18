@@ -1,8 +1,9 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -64,27 +65,23 @@ MeshRenderer* MeshRenderer::create()
 
 MeshRenderer* MeshRenderer::create(std::string_view modelPath)
 {
-    AXASSERT(modelPath.length() >= 4, "Invalid filename.");
-
-    auto mesh = new MeshRenderer();
-    if (mesh->initWithFile(modelPath))
-    {
-        mesh->_contentSize = mesh->getBoundingBox().size;
-        mesh->autorelease();
-        return mesh;
-    }
-    AX_SAFE_DELETE(mesh);
-    return nullptr;
+    return create(modelPath, hlookup::empty_sv);
 }
+
 MeshRenderer* MeshRenderer::create(std::string_view modelPath, std::string_view texturePath)
 {
-    auto mesh = create(modelPath);
-    if (mesh)
-    {
-        mesh->setTexture(texturePath);
-    }
+    AXASSERT(modelPath.length() >= 4, "Invalid filename.");
 
-    return mesh;
+    auto meshRenderer = new MeshRenderer();
+    if (meshRenderer->initWithFile(modelPath))
+    {
+        meshRenderer->setModelTexture(modelPath, texturePath);
+        meshRenderer->_contentSize = meshRenderer->getBoundingBox().size;
+        meshRenderer->autorelease();
+        return meshRenderer;
+    }
+    AX_SAFE_DELETE(meshRenderer);
+    return nullptr;
 }
 
 void MeshRenderer::createAsync(std::string_view modelPath,
@@ -99,30 +96,29 @@ void MeshRenderer::createAsync(std::string_view modelPath,
                            const std::function<void(MeshRenderer*, void*)>& callback,
                            void* callbackparam)
 {
-    MeshRenderer* mesh = new MeshRenderer();
-    if (mesh->loadFromCache(modelPath))
+    MeshRenderer* meshRenderer = new MeshRenderer();
+    if (meshRenderer->loadFromCache(modelPath))
     {
-        mesh->autorelease();
-        if (!texturePath.empty())
-            mesh->setTexture(texturePath);
-        callback(mesh, callbackparam);
+        meshRenderer->autorelease();
+        meshRenderer->setModelTexture(modelPath, texturePath);
+        callback(meshRenderer, callbackparam);
         return;
     }
 
-    mesh->_asyncLoadParam.afterLoadCallback   = callback;
-    mesh->_asyncLoadParam.texPath             = texturePath;
-    mesh->_asyncLoadParam.modelPath           = modelPath;
-    mesh->_asyncLoadParam.modelFullPath       = FileUtils::getInstance()->fullPathForFilename(modelPath);
-    mesh->_asyncLoadParam.callbackParam       = callbackparam;
-    mesh->_asyncLoadParam.materialdatas       = new MaterialDatas();
-    mesh->_asyncLoadParam.meshdatas           = new MeshDatas();
-    mesh->_asyncLoadParam.nodeDatas           = new NodeDatas();
+    meshRenderer->_asyncLoadParam.afterLoadCallback = callback;
+    meshRenderer->_asyncLoadParam.texPath             = texturePath;
+    meshRenderer->_asyncLoadParam.modelPath           = modelPath;
+    meshRenderer->_asyncLoadParam.modelFullPath       = FileUtils::getInstance()->fullPathForFilename(modelPath);
+    meshRenderer->_asyncLoadParam.callbackParam       = callbackparam;
+    meshRenderer->_asyncLoadParam.materialdatas       = new MaterialDatas();
+    meshRenderer->_asyncLoadParam.meshdatas           = new MeshDatas();
+    meshRenderer->_asyncLoadParam.nodeDatas           = new NodeDatas();
     AsyncTaskPool::getInstance()->enqueue(
-        AsyncTaskPool::TaskType::TASK_IO, AX_CALLBACK_1(MeshRenderer::afterAsyncLoad, mesh),
-        (void*)(&mesh->_asyncLoadParam), [mesh]() {
-            mesh->_asyncLoadParam.result =
-                mesh->loadFromFile(mesh->_asyncLoadParam.modelFullPath, mesh->_asyncLoadParam.nodeDatas,
-                                     mesh->_asyncLoadParam.meshdatas, mesh->_asyncLoadParam.materialdatas);
+        AsyncTaskPool::TaskType::TASK_IO, AX_CALLBACK_1(MeshRenderer::afterAsyncLoad, meshRenderer),
+        (void*)(&meshRenderer->_asyncLoadParam), [meshRenderer]() {
+            auto& loadParam                      = meshRenderer->_asyncLoadParam;
+            loadParam.result = meshRenderer->loadFromFile(loadParam.modelFullPath, loadParam.nodeDatas,
+                                                          loadParam.meshdatas, loadParam.materialdatas);
         });
 }
 
@@ -169,10 +165,7 @@ void MeshRenderer::afterAsyncLoad(void* param)
             AX_SAFE_DELETE(materialdatas);
             AX_SAFE_DELETE(nodeDatas);
 
-            if (asyncParam->texPath != "")
-            {
-                setTexture(asyncParam->texPath);
-            }
+            setModelTexture(asyncParam->modelPath, asyncParam->texPath);
         }
         else
         {
@@ -272,13 +265,14 @@ bool MeshRenderer::loadFromFile(std::string_view path,
 MeshRenderer::MeshRenderer()
     : _skeleton(nullptr)
     , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
-    , _aabbDirty(true)
     , _lightMask(-1)
+    , _aabbDirty(true)
     , _shaderUsingLight(false)
     , _forceDepthWrite(false)
     , _wireframe(false)
     , _usingAutogeneratedGLProgram(true)
     , _transparentMaterialHint(false)
+    , _meshTextureHint(0)
 {}
 
 MeshRenderer::~MeshRenderer()
@@ -381,16 +375,16 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata, ModelData
     meshRenderer->setName(nodedata->id);
     auto mesh = Mesh::create(nodedata->id, getMeshIndexData(modeldata->subMeshId));
 
-    if (_skeleton && modeldata->bones.size())
+    if (_skeleton && !modeldata->bones.empty())
     {
         auto skin = MeshSkin::create(_skeleton, modeldata->bones, modeldata->invBindPose);
         mesh->setSkin(skin);
     }
 
-    if (modeldata->materialId == "" && materialdatas.materials.size())
+    if (modeldata->materialId.empty() && !materialdatas.materials.empty())
     {
         const NTextureData* textureData = materialdatas.materials[0].getTextureData(NTextureData::Usage::Diffuse);
-        mesh->setTexture(textureData->filename);
+        setMeshTexture(mesh, textureData->filename);
     }
     else
     {
@@ -400,7 +394,7 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata, ModelData
             const NTextureData* textureData = materialData->getTextureData(NTextureData::Usage::Diffuse);
             if (textureData)
             {
-                mesh->setTexture(textureData->filename);
+                setMeshTexture(mesh, textureData->filename);
                 auto tex = mesh->getTexture();
                 if (tex)
                 {
@@ -416,7 +410,7 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata, ModelData
             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
             if (textureData)
             {
-                auto tex = _director->getTextureCache()->addImage(textureData->filename);
+                auto tex = setMeshTexture(mesh, textureData->filename, NTextureData::Usage::Normal);
                 if (tex)
                 {
                     Texture2D::TexParams texParams;
@@ -426,7 +420,6 @@ MeshRenderer* MeshRenderer::createMeshRendererNode(NodeData* nodedata, ModelData
                     texParams.tAddressMode = textureData->wrapT;
                     tex->setTexParameters(texParams);
                 }
-                mesh->setTexture(tex, NTextureData::Usage::Normal);
             }
         }
     }
@@ -520,6 +513,7 @@ void MeshRenderer::genMaterial(bool useLight)
         if (oldmaterial)
         {
             material->setStateBlock(oldmaterial->getStateBlock());
+            material->setTransparent(oldmaterial->isTransparent());
         }
 
         if (material->getReferenceCount() == 1)
@@ -555,7 +549,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                     {
                         const NTextureData* textureData =
                             materialdatas.materials[0].getTextureData(NTextureData::Usage::Diffuse);
-                        mesh->setTexture(textureData->filename);
+                        setMeshTexture(mesh, textureData->filename);
                     }
                     else
                     {
@@ -566,7 +560,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                                 materialData->getTextureData(NTextureData::Usage::Diffuse);
                             if (textureData)
                             {
-                                mesh->setTexture(textureData->filename);
+                                setMeshTexture(mesh, textureData->filename);
                                 auto tex = mesh->getTexture();
                                 if (tex)
                                 {
@@ -582,7 +576,7 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                             textureData = materialData->getTextureData(NTextureData::Usage::Normal);
                             if (textureData)
                             {
-                                auto tex = _director->getTextureCache()->addImage(textureData->filename);
+                                auto tex = setMeshTexture(mesh, textureData->filename, NTextureData::Usage::Normal);
                                 if (tex)
                                 {
                                     Texture2D::TexParams texParams;
@@ -592,7 +586,6 @@ void MeshRenderer::createNode(NodeData* nodedata, Node* root, const MaterialData
                                     texParams.tAddressMode = textureData->wrapT;
                                     tex->setTexParameters(texParams);
                                 }
-                                mesh->setTexture(tex, NTextureData::Usage::Normal);
                             }
                         }
                     }
@@ -672,6 +665,31 @@ void MeshRenderer::addMesh(Mesh* mesh)
     auto meshVertex = mesh->getMeshIndexData()->_vertexData;
     _meshVertexDatas.pushBack(meshVertex);
     _meshes.pushBack(mesh);
+}
+
+Texture2D* MeshRenderer::setMeshTexture(Mesh* mesh, std::string_view texPath, NTextureData::Usage usage)
+{
+    auto tex = _director->getTextureCache()->addImage(texPath);
+    mesh->setTexture(texPath, usage);
+    if (tex)
+        ++_meshTextureHint;
+    return tex;
+}
+
+void MeshRenderer::setModelTexture(std::string_view modelPath, std::string_view texturePath) {
+    if (!texturePath.empty())
+        setTexture(texturePath);
+    else if (!_meshTextureHint)
+    {
+        auto pos = modelPath.find_last_of('.');
+        if (pos != std::string_view::npos)
+        {
+            std::string modelTexPath{modelPath};
+            modelTexPath.resize(pos);
+            modelTexPath.append(".png"sv);
+            setTexture(modelTexPath);
+        }
+    }
 }
 
 void MeshRenderer::setTexture(std::string_view texFile)

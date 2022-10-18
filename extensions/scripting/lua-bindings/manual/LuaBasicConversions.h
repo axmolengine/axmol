@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
- https://axys1.github.io/
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -47,6 +47,7 @@
 #include "ui/GUIDefine.h"
 
 #include "yasio/cxx17/string_view.hpp"
+#include <thread>
 
 USING_NS_AX;
 
@@ -969,6 +970,9 @@ extern void color4b_to_luaval(lua_State* L, const Color4B& cc);
  * @param cc a ax::Color4F object.
  */
 extern void color4f_to_luaval(lua_State* L, const Color4F& cc);
+
+void std_thread_id_to_luaval(lua_State* L, const std::thread::id& value);
+
 #if AX_USE_PHYSICS
 
 /**

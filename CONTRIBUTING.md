@@ -1,4 +1,4 @@
-# Contributing to axys
+# Contributing to axmol
 
 
 ## For general questions
@@ -6,14 +6,14 @@
 
 You can ask general questions by using:
 
--   Forum (preferred way): https://github.com/axys1/axys/discussions
+-   Forum (preferred way): https://github.com/axmolengine/axmol/discussions
 
 ## Reporting bugs
 
-To report bugs, please use the [Issue Tracker](https://github.com/axys1/axys/issues)
+To report bugs, please use the [Issue Tracker](https://github.com/axmolengine/axmol/issues)
 
 Steps to report a bug:
-* Open the [url](https://github.com/axys1/axys/issues/new)
+* Open the [url](https://github.com/axmolengine/axmol/issues/new)
 * Add all the needed information to reproduce the bug, the information include
     * engine version
     * steps to reproduce the bug
@@ -27,11 +27,11 @@ If you want to contribute code, please follow these steps:
 
 (If you are new to git and/or GitHub, you should read [Pro Git](http://progit.org/book/) , especially the section on [Contributing to a project:Small/Large Public Project](http://progit.org/book/ch5-2.html#public_small_project) )
 
--   Download the latest axys develop branch from github:
+-   Download the latest axmol develop branch from github:
 
 ```
-$ git clone git://github.com/axys1/axys.git
-$ cd axys
+$ git clone git://github.com/axmolengine/axmol.git
+$ cd axmol
 $ git checkout dev
 ```
 
@@ -39,7 +39,7 @@ $ git checkout dev
 -   Commit your changes in your own repository
 -   Create a new branch with your patch: `$ git checkout -b my_fix_branch`
 -   Push your new branch to your public repository
--   Send a “pull request” to user “axys”
+-   Send a “pull request” to user “axmol”
 -   It must be _complete_. See the definition below
 -   It must follow the _Releases_ rules. See the definition below
 
@@ -47,7 +47,7 @@ $ git checkout dev
 
 The patch must be _complete_. And by that, we mean:
 
--   For C++ code follow the [axys C++ Coding Style][1]
+-   For C++ code follow the [axmol C++ Coding Style][1]
 -   For Python code follow the [PEP8 guidelines][3]
 -   Describe what the patch does
 -   Include test cases if applicable

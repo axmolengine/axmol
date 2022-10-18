@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
- https://axys1.github.io/
+ https://axmolengine.github.io/
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-package org.axys1.lib;
+package org.axmol.lib;
 
 
-import org.axys1.lib.GameControllerDelegate;
+import org.axmol.lib.GameControllerDelegate;
 
 import tv.ouya.console.api.OuyaController;
 import android.content.Context;

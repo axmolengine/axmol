@@ -90,7 +90,7 @@ int lua_ax_controller_Controller_getDeviceName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_getDeviceName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getDeviceName();
+        auto&& ret = cobj->getDeviceName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -137,7 +137,7 @@ int lua_ax_controller_Controller_isConnected(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_isConnected'", nullptr);
             return 0;
         }
-        bool ret = cobj->isConnected();
+        auto&& ret = cobj->isConnected();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -184,7 +184,7 @@ int lua_ax_controller_Controller_getDeviceId(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_getDeviceId'", nullptr);
             return 0;
         }
-        int ret = cobj->getDeviceId();
+        auto&& ret = cobj->getDeviceId();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -281,7 +281,7 @@ int lua_ax_controller_Controller_getTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_getTag'", nullptr);
             return 0;
         }
-        int ret = cobj->getTag();
+        auto&& ret = cobj->getTag();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -387,7 +387,7 @@ int lua_ax_controller_Controller_getControllerByDeviceId(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_getControllerByDeviceId'", nullptr);
             return 0;
         }
-        ax::Controller* ret = ax::Controller::getControllerByDeviceId(arg0);
+        auto&& ret = ax::Controller::getControllerByDeviceId(arg0);
         object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
         return 1;
     }
@@ -423,7 +423,7 @@ int lua_ax_controller_Controller_getControllerByTag(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_Controller_getControllerByTag'", nullptr);
             return 0;
         }
-        ax::Controller* ret = ax::Controller::getControllerByTag(arg0);
+        auto&& ret = ax::Controller::getControllerByTag(arg0);
         object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
         return 1;
     }
@@ -594,7 +594,7 @@ int lua_ax_controller_EventController_isConnected(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_isConnected'", nullptr);
             return 0;
         }
-        bool ret = cobj->isConnected();
+        auto&& ret = cobj->isConnected();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -691,7 +691,7 @@ int lua_ax_controller_EventController_getController(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_getController'", nullptr);
             return 0;
         }
-        ax::Controller* ret = cobj->getController();
+        auto&& ret = cobj->getController();
         object_to_luaval<ax::Controller>(tolua_S, "ax.Controller",(ax::Controller*)ret);
         return 1;
     }
@@ -738,7 +738,7 @@ int lua_ax_controller_EventController_getKeyCode(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventController_getKeyCode'", nullptr);
             return 0;
         }
-        int ret = cobj->getKeyCode();
+        auto&& ret = cobj->getKeyCode();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -866,7 +866,7 @@ int lua_ax_controller_EventListenerController_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_controller_EventListenerController_create'", nullptr);
             return 0;
         }
-        ax::EventListenerController* ret = ax::EventListenerController::create();
+        auto&& ret = ax::EventListenerController::create();
         object_to_luaval<ax::EventListenerController>(tolua_S, "ax.EventListenerController",(ax::EventListenerController*)ret);
         return 1;
     }
