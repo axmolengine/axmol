@@ -71,7 +71,7 @@ namespace utils
  * @param filename specify a filename where the snapshot is stored. This parameter can be either an absolute path or a
  * simple base filename ("hello.png" etc.), don't use a relative path containing directory names.("mydir/hello.png"
  * etc.).
- * @since v4.0 with axis
+ * @since v4.0 with axmol
  */
 AX_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
 
@@ -79,7 +79,7 @@ AX_DLL void captureScreen(std::function<void(RefPtr<Image>)> imageCallback);
  * @param startNode specify the snapshot Node. It should be ax::Scene
  * @param scale
  * @returns: return a Image, then can call saveToFile to save the image as "xxx.png or xxx.jpg".
- * @since v4.0 with axis
+ * @since v4.0 with axmol
  */
 AX_DLL void captureNode(Node* startNode, std::function<void(RefPtr<Image>)> imageCallback, float scale = 1.0f);
 
