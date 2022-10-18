@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axys1.github.io/
+https://axmolengine.github.io/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,8 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <string>
 #include <sstream>
+
+#include "scripting/lua-bindings/manual/CCLuaEngine.h"
 
 USING_NS_AX;
 using namespace ax::network;
@@ -217,7 +219,7 @@ static int lua_downloader_setOnFileTaskSuccess(lua_State* L)
     luaL_argcheck(L, lua_isfunction(L, 2), 2, "should be a function");
     saveCallback(L, d, "setOnFileTaskSuccess");
 
-    d->setOnFileTaskSuccess([d, L](const DownloadTask& task) {
+    d->setOnFileTaskSuccess([d, L = LuaEngine::getInstance()->getLuaStack()->getLuaState()](const DownloadTask& task) {
         int ret = getCallback(L, d, "setOnFileTaskSuccess");  // stack callbackfn
         if (ret)
         {
@@ -249,7 +251,7 @@ static int lua_downloader_setOnTaskProgress(lua_State* L)
     luaL_argcheck(L, lua_isfunction(L, 2), 2, "should be a function");
     saveCallback(L, d, "setOnTaskProgress");
 
-    d->setOnTaskProgress([d, L](const DownloadTask& task) {
+    d->setOnTaskProgress([d, L = LuaEngine::getInstance()->getLuaStack()->getLuaState()](const DownloadTask& task) {
         int ret = getCallback(L, d, "setOnTaskProgress");  // stack callbackfn
         if (ret)
         {
@@ -284,7 +286,8 @@ static int lua_downloader_setOnTaskError(lua_State* L)
     luaL_argcheck(L, lua_isfunction(L, 2), 2, "should be a function");
     saveCallback(L, d, "setOnTaskError");
 
-    d->setOnTaskError([d, L](const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorSt) {
+    d->setOnTaskError([d, L = LuaEngine::getInstance()->getLuaStack()->getLuaState()](
+                          const DownloadTask& task, int errorCode, int errorCodeInternal, std::string_view errorSt) {
         int ret = getCallback(L, d, "setOnTaskError");  // stack callbackfn
         if (ret)
         {
