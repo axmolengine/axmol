@@ -855,7 +855,7 @@ void LayerRadialGradientTest::onEnter()
     addChild(listview);
 }
 
-axis::ui::Slider* LayerRadialGradientTest::createSlider()
+ax::ui::Slider* LayerRadialGradientTest::createSlider()
 {
     auto slider = ui::Slider::create();
     slider->setTouchEnabled(true);
@@ -870,18 +870,18 @@ axis::ui::Slider* LayerRadialGradientTest::createSlider()
     return slider;
 }
 
-void LayerRadialGradientTest::listviewCallback(axis::Ref* sender, axis::ui::ListView::EventType type)
+void LayerRadialGradientTest::listviewCallback(ax::Ref* sender, ax::ui::ListView::EventType type)
 {
     // clear all text to white
-    auto listview = static_cast<axis::ui::ListView*>(sender);
+    auto listview = static_cast<ax::ui::ListView*>(sender);
     for (auto&& item : listview->getItems())
-        static_cast<axis::ui::Text*>(item)->setColor(axis::Color3B::WHITE);
+        static_cast<ax::ui::Text*>(item)->setColor(ax::Color3B::WHITE);
 
     _currentSeletedItemIndex = (int)listview->getCurSelectedIndex();
-    listview->getItem(_currentSeletedItemIndex)->setColor(axis::Color3B::RED);
+    listview->getItem(_currentSeletedItemIndex)->setColor(ax::Color3B::RED);
 
     int percent = 100;
-    auto slider = static_cast<axis::ui::Slider*>(getChildByTag(101));
+    auto slider = static_cast<ax::ui::Slider*>(getChildByTag(101));
     switch (_currentSeletedItemIndex)
     {
     case 0:
@@ -910,9 +910,9 @@ void LayerRadialGradientTest::listviewCallback(axis::Ref* sender, axis::ui::List
     }
 }
 
-void LayerRadialGradientTest::sliderCallback(axis::Ref* sender, axis::ui::Slider::EventType type)
+void LayerRadialGradientTest::sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType type)
 {
-    auto slider   = static_cast<axis::ui::Slider*>(sender);
+    auto slider   = static_cast<ax::ui::Slider*>(sender);
     float percent = slider->getPercent() / 100.f;
     switch (_currentSeletedItemIndex)
     {
@@ -946,32 +946,32 @@ void LayerRadialGradientTest::sliderCallback(axis::Ref* sender, axis::ui::Slider
     }
 }
 
-axis::ui::ListView* LayerRadialGradientTest::createListView()
+ax::ui::ListView* LayerRadialGradientTest::createListView()
 {
-    auto listview = axis::ui::ListView::create();
+    auto listview = ax::ui::ListView::create();
 
-    auto scale = axis::ui::Text::create();
+    auto scale = ax::ui::Text::create();
     scale->setString("scale[0-2]");
-    scale->setColor(axis::Color3B::RED);  // default seleted item
+    scale->setColor(ax::Color3B::RED);  // default seleted item
     scale->setTouchEnabled(true);
     listview->pushBackCustomItem(scale);
 
-    auto skewx = axis::ui::Text::create();
+    auto skewx = ax::ui::Text::create();
     skewx->setString("skewx[0-90]");
     skewx->setTouchEnabled(true);
     listview->pushBackCustomItem(skewx);
 
-    auto skewy = axis::ui::Text::create();
+    auto skewy = ax::ui::Text::create();
     skewy->setString("skewy[0-90]");
     skewy->setTouchEnabled(true);
     listview->pushBackCustomItem(skewy);
 
-    auto expand = axis::ui::Text::create();
+    auto expand = ax::ui::Text::create();
     expand->setString("expand[0-1]");
     expand->setTouchEnabled(true);
     listview->pushBackCustomItem(expand);
 
-    auto radius = axis::ui::Text::create();
+    auto radius = ax::ui::Text::create();
     radius->setString("radius[0-300]");
     radius->setTouchEnabled(true);
     listview->pushBackCustomItem(radius);

@@ -37,22 +37,22 @@ public:
 
     virtual bool init() override;
 
-    void menuCloseCallback(axis::Ref* sender);
+    void menuCloseCallback(ax::Ref* sender);
 
-    void menuRatioCallback(axis::Ref* sender);
-    void menuResourceVideoCallback(axis::Ref* sender);
-    void menuOnlineVideoCallback(axis::Ref* sender);
+    void menuRatioCallback(ax::Ref* sender);
+    void menuResourceVideoCallback(ax::Ref* sender);
+    void menuOnlineVideoCallback(ax::Ref* sender);
 
-    void menuFullScreenCallback(axis::Ref* sender);
-    void menuPauseCallback(axis::Ref* sender);
-    void menuResumeCallback(axis::Ref* sender);
-    void menuStopCallback(axis::Ref* sender);
-    void menuHintCallback(axis::Ref* sender);
-    void menuLoopCallback(axis::Ref* sender);
+    void menuFullScreenCallback(ax::Ref* sender);
+    void menuPauseCallback(ax::Ref* sender);
+    void menuResumeCallback(ax::Ref* sender);
+    void menuStopCallback(ax::Ref* sender);
+    void menuHintCallback(ax::Ref* sender);
+    void menuLoopCallback(ax::Ref* sender);
 
-    void sliderCallback(axis::Ref* sender, axis::ui::Slider::EventType eventType);
+    void sliderCallback(ax::Ref* sender, ax::ui::Slider::EventType eventType);
 
-    void videoEventCallback(axis::Ref* sender, axis::ui::VideoPlayer::EventType eventType);
+    void videoEventCallback(ax::Ref* sender, ax::ui::VideoPlayer::EventType eventType);
 
     void onEnter() override;
     void onExit() override;
@@ -61,10 +61,10 @@ private:
     void createVideo();
     void createSlider();
 
-    axis::ui::VideoPlayer* _videoPlayer = nullptr;
-    axis::Label* _videoStateLabel;
-    axis::Label* _loopStatusLabel;
-    axis::Rect _visibleRect;
+    ax::ui::VideoPlayer* _videoPlayer = nullptr;
+    ax::Label* _videoStateLabel;
+    ax::Label* _loopStatusLabel;
+    ax::Rect _visibleRect;
 };
 
 class SimpleVideoPlayerTest : public UIScene
@@ -76,9 +76,9 @@ public:
 
     virtual bool init() override;
 
-    void menuCloseCallback(axis::Ref* sender);
-    void switchStyleCallback(axis::Ref* sender);
-    void switchUserInputCallback(axis::Ref* sender);
+    void menuCloseCallback(ax::Ref* sender);
+    void switchStyleCallback(ax::Ref* sender);
+    void switchUserInputCallback(ax::Ref* sender);
 
     void onEnter() override;
     void onExit() override;
@@ -86,14 +86,14 @@ public:
 private:
     void createVideo();
 
-    axis::Rect _visibleRect;
-    axis::ui::VideoPlayer* _videoPlayer = nullptr;
+    ax::Rect _visibleRect;
+    ax::ui::VideoPlayer* _videoPlayer = nullptr;
 
-    axis::MenuItemFont* _switchUserInputEnabled;
-    axis::MenuItemFont* _switchStyle;
+    ax::MenuItemFont* _switchUserInputEnabled;
+    ax::MenuItemFont* _switchStyle;
 
     bool _userInputEnabled;
-    axis::ui::VideoPlayer::StyleType _style;
+    ax::ui::VideoPlayer::StyleType _style;
 
     void updateButtonsTexts();
 };

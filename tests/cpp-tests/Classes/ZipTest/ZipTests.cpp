@@ -50,7 +50,7 @@ static void unzipTest(Label* label,
 {
 
     auto fu = FileUtils::getInstance();
-    axis::Data origContent;
+    ax::Data origContent;
     const int BUFF_SIZE = 1024;
     char* buff          = nullptr;
     std::vector<char> fileData;

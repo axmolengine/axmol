@@ -150,6 +150,6 @@ private:
     LAppSprite* _sprite;                        ///< テクスチャの単純描画クラス
     Csm::Rendering::CubismOffscreenFrame_Cocos2dx* _renderBuffer;   ///< モードによってはCubismモデル結果をこっちにレンダリング
     float _clearColor[4];                       ///< レンダリングターゲットのクリアカラー
-    axis::backend::Program* _program;
+    ax::backend::Program* _program;
 
 };

@@ -774,7 +774,7 @@ void LAppModel::MakeRenderingTarget()
         Size visibleSize = Director::getInstance()->getVisibleSize();
         Point origin = Director::getInstance()->getVisibleOrigin();
 
-        _renderSprite = RenderTexture::create(frameW, frameH, axis::backend::PixelFormat::RGBA8);
+        _renderSprite = RenderTexture::create(frameW, frameH, ax::backend::PixelFormat::RGBA8);
         _renderSprite->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
         _renderSprite->getSprite()->getTexture()->setAntiAliasTexParameters();
         _renderSprite->getSprite()->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
@@ -785,11 +785,11 @@ void LAppModel::MakeRenderingTarget()
 
         // _renderSpriteのテクスチャを作成する
         _renderSprite->getSprite()->getTexture()->setTexParameters(
-          axis::Texture2D::TexParams(
-            axis::backend::SamplerFilter::LINEAR,                    // MagFilter
-            axis::backend::SamplerFilter::LINEAR,                    // MinFilter
-            axis::backend::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
-            axis::backend::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
+          ax::Texture2D::TexParams(
+            ax::backend::SamplerFilter::LINEAR,                    // MagFilter
+            ax::backend::SamplerFilter::LINEAR,                    // MinFilter
+            ax::backend::SamplerAddressMode::CLAMP_TO_EDGE,      // AddressingMode S
+            ax::backend::SamplerAddressMode::CLAMP_TO_EDGE       // AddressingMode T
           )
         );
 

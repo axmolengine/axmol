@@ -45,7 +45,7 @@ public:
     virtual std::string title() const override;
     virtual void onEnter() override;
 
-    axis::Node* _background;
+    ax::Node* _background;
 };
 
 class TextureETC1Alpha : public TextureDemo
@@ -57,10 +57,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(axis::Vec2 p);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void addNewSpriteWithCoords(ax::Vec2 p);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    axis::Node* _background;
+    ax::Node* _background;
 };
 
 class TextureETC2 : public TextureDemo
@@ -73,9 +73,9 @@ public:
     virtual std::string subtitle() const override;
 
     void addNewSpriteWithCoords();
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    axis::Node* _background;
+    ax::Node* _background;
 };
 
 class TextureBMP : public TextureDemo
@@ -86,8 +86,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(axis::Vec2 p);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void addNewSpriteWithCoords(ax::Vec2 p);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
 class TextureTGA : public TextureDemo
@@ -460,7 +460,7 @@ public:
 
     virtual float getDuration() const override { return 5.0f; }
     void loadImages(float dt);
-    void imageLoaded(axis::Texture2D* texture);
+    void imageLoaded(ax::Texture2D* texture);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
@@ -515,12 +515,12 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:
-    void onDraw(const axis::Mat4& transform, uint32_t flags);
+    void onDraw(const ax::Mat4& transform, uint32_t flags);
 
-    axis::Texture2D *_tex1, *_Tex2F;
+    ax::Texture2D *_tex1, *_Tex2F;
 };
 
 class TextureDrawInRect : public TextureDemo
@@ -531,12 +531,12 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:
-    void onDraw(const axis::Mat4& transform, uint32_t flags);
+    void onDraw(const ax::Mat4& transform, uint32_t flags);
 
-    axis::Texture2D *_tex1, *_Tex2F;
+    ax::Texture2D *_tex1, *_Tex2F;
 };
 
 class TextureMemoryAlloc : public TextureDemo
@@ -546,11 +546,11 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void updateImage(axis::Ref* sender);
-    void changeBackgroundVisible(axis::Ref* sender);
+    void updateImage(ax::Ref* sender);
+    void changeBackgroundVisible(ax::Ref* sender);
 
 private:
-    axis::Sprite* _background;
+    ax::Sprite* _background;
 };
 
 class TexturePVRv3Premult : public TextureDemo
@@ -562,7 +562,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void transformSprite(axis::Sprite* sprite);
+    void transformSprite(ax::Sprite* sprite);
 };
 
 // S3TC Dxt1 texture format test

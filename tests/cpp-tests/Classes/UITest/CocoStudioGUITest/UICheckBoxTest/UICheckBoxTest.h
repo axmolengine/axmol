@@ -39,13 +39,13 @@ public:
     ~UICheckBoxTest();
 
     virtual bool init() override;
-    void selectedEvent(axis::Ref* sender, axis::ui::CheckBox::EventType type);
+    void selectedEvent(ax::Ref* sender, ax::ui::CheckBox::EventType type);
 
-    void printWidgetResources(axis::Ref* sender);
+    void printWidgetResources(ax::Ref* sender);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
-    axis::ui::CheckBox* _checkBox;
+    ax::ui::Text* _displayValueLabel;
+    ax::ui::CheckBox* _checkBox;
 };
 
 class UICheckBoxDefaultBehaviorTest : public UIScene
@@ -59,7 +59,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UICheckBoxCopyTest : public UIScene
@@ -73,6 +73,6 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 #endif /* defined(__TestCpp__UICheckBoxTest__) */

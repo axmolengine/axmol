@@ -301,7 +301,7 @@ bool SpritePolygonTestSlider::init()
 void SpritePolygonTestSlider::initSliders()
 {
     auto vsize                  = Director::getInstance()->getVisibleSize();
-    axis::ui::Slider* slider = axis::ui::Slider::create();
+    ax::ui::Slider* slider = ax::ui::Slider::create();
     slider->loadBarTexture("cocosui/sliderTrack.png");
     slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
@@ -328,11 +328,11 @@ void SpritePolygonTestSlider::makeSprites(const std::string* list, const int cou
     }
 }
 
-void SpritePolygonTestSlider::changeEpsilon(axis::Ref* pSender, axis::ui::Slider::EventType type)
+void SpritePolygonTestSlider::changeEpsilon(ax::Ref* pSender, ax::ui::Slider::EventType type)
 {
-    if (type == axis::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
-        axis::ui::Slider* slider = dynamic_cast<axis::ui::Slider*>(pSender);
+        ax::ui::Slider* slider = dynamic_cast<ax::ui::Slider*>(pSender);
         float epsilon               = powf(slider->getPercent() / 100.0, 2) * 19.0f + 1.0f;
         for (auto&&child : _children)
         {
@@ -350,7 +350,7 @@ void SpritePolygonTestSlider::changeEpsilon(axis::Ref* pSender, axis::ui::Slider
     }
 }
 
-void SpritePolygonTestSlider::updateLabel(const axis::Sprite* sp, const PolygonInfo& pinfo)
+void SpritePolygonTestSlider::updateLabel(const ax::Sprite* sp, const PolygonInfo& pinfo)
 {
     Label* label  = (Label*)(sp->getChildByName(sp->getName()));
     auto filename = sp->getName();

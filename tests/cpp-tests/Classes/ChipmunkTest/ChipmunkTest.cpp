@@ -84,7 +84,7 @@ ChipmunkTest::ChipmunkTest()
 #endif
     addChild(parent, 0, kTagParentNode);
 
-    addNewSpriteAtPosition(axis::Vec2(200.0f, 200.0f));
+    addNewSpriteAtPosition(ax::Vec2(200.0f, 200.0f));
 
     // menu for debug layer
     MenuItemFont::setFontSize(18);
@@ -202,7 +202,7 @@ void ChipmunkTest::reset(Ref* sender)
     getTestSuite()->restartCurrTest();
 }
 
-void ChipmunkTest::addNewSpriteAtPosition(axis::Vec2 pos)
+void ChipmunkTest::addNewSpriteAtPosition(ax::Vec2 pos)
 {
     int posx, posy;
 
@@ -232,7 +232,7 @@ void ChipmunkTest::addNewSpriteAtPosition(axis::Vec2 pos)
     cpShapeSetFriction(shape, 0.5f);
     cpSpaceAddShape(_space, shape);
 
-    auto sprite = PhysicsSpriteChipmunk2D::createWithTexture(_spriteTexture, axis::Rect(posx, posy, 85, 121));
+    auto sprite = PhysicsSpriteChipmunk2D::createWithTexture(_spriteTexture, ax::Rect(posx, posy, 85, 121));
     parent->addChild(sprite);
 
     sprite->setCPBody(body);
@@ -268,7 +268,7 @@ void ChipmunkTest::onAcceleration(Acceleration* acc, Event* event)
     prevX = accelX;
     prevY = accelY;
 
-    auto v = axis::Vec2(accelX, accelY);
+    auto v = ax::Vec2(accelX, accelY);
     v      = v * 200;
     cpSpaceSetGravity(_space, cpv(v.x, v.y));
 }

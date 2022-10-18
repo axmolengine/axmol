@@ -204,10 +204,10 @@ private:
     const Csm::CubismId* _idParamEyeBallY;          ///< パラメータID: ParamEyeBallXY
 
     Csm::Rendering::CubismOffscreenFrame_Cocos2dx*  _renderBuffer;  ///< モードによってはCubismOffscreenFrameのテクスチャを描画
-    axis::RenderTexture* _renderSprite;          ///< _renderBufferを描画するスプライト
+    ax::RenderTexture* _renderSprite;          ///< _renderBufferを描画するスプライト
     float _clearColor[4];                           ///< _renderBufferをクリアする際の色
-    Csm::csmVector<axis::Texture2D*> _loadedTextures;
-    axis::GroupCommand _groupCommand;
+    Csm::csmVector<ax::Texture2D*> _loadedTextures;
+    ax::GroupCommand _groupCommand;
 };
 
 

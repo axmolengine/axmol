@@ -6,7 +6,7 @@
 
 USING_NS_FGUI;
 
-class DemoScene : public axis::Scene
+class DemoScene : public ax::Scene
 {
 public:
     bool init();

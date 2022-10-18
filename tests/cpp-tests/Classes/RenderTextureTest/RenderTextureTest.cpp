@@ -85,17 +85,17 @@ std::string RenderTextureSave::subtitle() const
     return "Press 'Save Image' to create an snapshot of the render texture";
 }
 
-void RenderTextureSave::clearImage(axis::Ref* sender)
+void RenderTextureSave::clearImage(ax::Ref* sender)
 {
     _target->clear(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1());
 }
 
-void RenderTextureSave::clearImageTransparent(axis::Ref* sender)
+void RenderTextureSave::clearImageTransparent(ax::Ref* sender)
 {
     _target->clear(0, 0, 0, 0);
 }
 
-void RenderTextureSave::saveImageWithPremultipliedAlpha(axis::Ref* sender)
+void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Ref* sender)
 {
     static int counter = 0;
 
@@ -120,7 +120,7 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(axis::Ref* sender)
     counter++;
 }
 
-void RenderTextureSave::saveImageWithNonPremultipliedAlpha(axis::Ref* sender)
+void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Ref* sender)
 {
     static int counter = 0;
 
@@ -146,7 +146,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(axis::Ref* sender)
     counter++;
 }
 
-void RenderTextureSave::addImage(axis::Ref* sender)
+void RenderTextureSave::addImage(ax::Ref* sender)
 {
     auto s = Director::getInstance()->getWinSize();
 

@@ -70,7 +70,7 @@ void ConfigurationQuery::onEnter()
 {
     ConfigurationBase::onEnter();
 
-    log("cocos2d version: %s", Configuration::getInstance()->getValue("axis.version").asString().c_str());
+    log("cocos2d version: %s", Configuration::getInstance()->getValue("axmol.version").asString().c_str());
     log("OpenGL version: %s", Configuration::getInstance()->getValue("gl.version").asString().c_str());
 }
 

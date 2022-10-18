@@ -32,25 +32,25 @@
 
 typedef struct tagResource
 {
-    axis::CCSize size;
+    ax::CCSize size;
     char directory[100];
 } Resource;
 
-static Resource smallResource = {axis::CCSizeMake(480, 320), "iphone"};
-static Resource mediumResource = {axis::CCSizeMake(1024, 768), "ipad"};
-static Resource largeResource = {axis::CCSizeMake(2048, 1536), "ipadhd"};
+static Resource smallResource = {ax::CCSizeMake(480, 320), "iphone"};
+static Resource mediumResource = {ax::CCSizeMake(1024, 768), "ipad"};
+static Resource largeResource = {ax::CCSizeMake(2048, 1536), "ipadhd"};
 
 #if (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_480X320)
-static axis::CCSize designResolutionSize = axis::CCSizeMake(480, 320);
+static ax::CCSize designResolutionSize = ax::CCSizeMake(480, 320);
 #elif (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_1024X768)
-static axis::CCSize designResolutionSize = axis::CCSizeMake(1024, 768);
+static ax::CCSize designResolutionSize = ax::CCSizeMake(1024, 768);
 #elif (TARGET_DESIGN_RESOLUTION_SIZE == DESIGN_RESOLUTION_2048X1536)
-static axis::CCSize designResolutionSize = axis::CCSizeMake(2048, 1536);
+static ax::CCSize designResolutionSize = ax::CCSizeMake(2048, 1536);
 #else
 #error unknown target design resolution!
 #endif
 
 // The font size 24 is designed for small resolution, so we should change it to fit for current design resolution
-#define TITLE_FONT_SIZE  (axis::CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width / smallResource.size.width * 24)
+#define TITLE_FONT_SIZE  (ax::CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width / smallResource.size.width * 24)
 
 #endif /* __APPMACROS_H__ */

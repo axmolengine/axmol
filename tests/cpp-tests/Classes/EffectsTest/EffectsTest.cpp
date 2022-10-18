@@ -60,7 +60,7 @@ Shaky3DDemo::Shaky3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* Shaky3DDemo::createEffect(float t)
+ax::ActionInterval* Shaky3DDemo::createEffect(float t)
 {
     return Shaky3D::create(t, Size(15, 10), 5, false);
 }
@@ -71,12 +71,12 @@ Waves3DDemo::Waves3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* Waves3DDemo::createEffect(float t)
+ax::ActionInterval* Waves3DDemo::createEffect(float t)
 {
     return Waves3D::create(t, Size(15, 10), 5, 40);
 }
 
-axis::ActionInterval* FlipX3DDemo::createEffect(float t)
+ax::ActionInterval* FlipX3DDemo::createEffect(float t)
 {
     auto flipx      = FlipX3D::create(t);
     auto flipx_back = flipx->reverse();
@@ -90,7 +90,7 @@ FlipX3DDemo::FlipX3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* FlipY3DDemo::createEffect(float t)
+ax::ActionInterval* FlipY3DDemo::createEffect(float t)
 {
     auto flipy      = FlipY3D::create(t);
     auto flipy_back = flipy->reverse();
@@ -105,7 +105,7 @@ FlipY3DDemo::FlipY3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* Lens3DDemo::createEffect(float t)
+ax::ActionInterval* Lens3DDemo::createEffect(float t)
 {
     auto size = Director::getInstance()->getWinSize();
     return Lens3D::create(t, Size(15, 10), Vec2(size.width / 2, size.height / 2), 240);
@@ -117,7 +117,7 @@ Lens3DDemo::Lens3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* Ripple3DDemo::createEffect(float t)
+ax::ActionInterval* Ripple3DDemo::createEffect(float t)
 {
     auto size = Director::getInstance()->getWinSize();
     return Ripple3D::create(t, Size(32, 24), Vec2(size.width / 2, size.height / 2), 240, 4, 160);
@@ -129,7 +129,7 @@ Ripple3DDemo::Ripple3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* LiquidDemo::createEffect(float t)
+ax::ActionInterval* LiquidDemo::createEffect(float t)
 {
     return Liquid::create(t, Size(16, 12), 4, 20);
 }
@@ -140,7 +140,7 @@ LiquidDemo::LiquidDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* WavesDemo::createEffect(float t)
+ax::ActionInterval* WavesDemo::createEffect(float t)
 {
     return Waves::create(t, Size(16, 12), 4, 20, true, true);
 }
@@ -151,7 +151,7 @@ WavesDemo::WavesDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* TwirlDemo::createEffect(float t)
+ax::ActionInterval* TwirlDemo::createEffect(float t)
 {
     auto size = Director::getInstance()->getWinSize();
     return Twirl::create(t, Size(12, 8), Vec2(size.width / 2, size.height / 2), 1, 2.5f);
@@ -163,7 +163,7 @@ TwirlDemo::TwirlDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* ShakyTiles3DDemo::createEffect(float t)
+ax::ActionInterval* ShakyTiles3DDemo::createEffect(float t)
 {
     return ShakyTiles3D::create(t, Size(16, 12), 5, false);
 }
@@ -174,7 +174,7 @@ ShakyTiles3DDemo::ShakyTiles3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* ShatteredTiles3DDemo::createEffect(float t)
+ax::ActionInterval* ShatteredTiles3DDemo::createEffect(float t)
 {
     return ShatteredTiles3D::create(t, Size(16, 12), 5, false);
 }
@@ -185,7 +185,7 @@ ShatteredTiles3DDemo::ShatteredTiles3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* ShuffleTilesDemo::createEffect(float t)
+ax::ActionInterval* ShuffleTilesDemo::createEffect(float t)
 {
     auto shuffle      = ShuffleTiles::create(t, Size(16, 12), 25);
     auto shuffle_back = shuffle->reverse();
@@ -200,7 +200,7 @@ ShuffleTilesDemo::ShuffleTilesDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* FadeOutTRTilesDemo::createEffect(float t)
+ax::ActionInterval* FadeOutTRTilesDemo::createEffect(float t)
 {
     auto fadeout = FadeOutTRTiles::create(t, Size(16, 12));
     auto back    = fadeout->reverse();
@@ -215,7 +215,7 @@ FadeOutTRTilesDemo::FadeOutTRTilesDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* FadeOutBLTilesDemo::createEffect(float t)
+ax::ActionInterval* FadeOutBLTilesDemo::createEffect(float t)
 {
     auto fadeout = FadeOutBLTiles::create(t, Size(16, 12));
     auto back    = fadeout->reverse();
@@ -230,7 +230,7 @@ FadeOutBLTilesDemo::FadeOutBLTilesDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* FadeOutUpTilesDemo::createEffect(float t)
+ax::ActionInterval* FadeOutUpTilesDemo::createEffect(float t)
 {
     auto fadeout = FadeOutUpTiles::create(t, Size(16, 12));
     auto back    = fadeout->reverse();
@@ -245,7 +245,7 @@ FadeOutUpTilesDemo::FadeOutUpTilesDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* FadeOutDownTilesDemo::createEffect(float t)
+ax::ActionInterval* FadeOutDownTilesDemo::createEffect(float t)
 {
     auto fadeout = FadeOutDownTiles::create(t, Size(16, 12));
     auto back    = fadeout->reverse();
@@ -260,7 +260,7 @@ FadeOutDownTilesDemo::FadeOutDownTilesDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* TurnOffTilesDemo::createEffect(float t)
+ax::ActionInterval* TurnOffTilesDemo::createEffect(float t)
 {
     auto fadeout = TurnOffTiles::create(t, Size(48, 32), 25);
     auto back    = fadeout->reverse();
@@ -275,7 +275,7 @@ TurnOffTilesDemo::TurnOffTilesDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* WavesTiles3DDemo::createEffect(float t)
+ax::ActionInterval* WavesTiles3DDemo::createEffect(float t)
 {
     return WavesTiles3D::create(t, Size(15, 10), 4, 120);
 }
@@ -286,7 +286,7 @@ WavesTiles3DDemo::WavesTiles3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* JumpTiles3DDemo::createEffect(float t)
+ax::ActionInterval* JumpTiles3DDemo::createEffect(float t)
 {
     return JumpTiles3D::create(t, Size(15, 10), 2, 30);
 }
@@ -297,7 +297,7 @@ JumpTiles3DDemo::JumpTiles3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* SplitRowsDemo::createEffect(float t)
+ax::ActionInterval* SplitRowsDemo::createEffect(float t)
 {
     return SplitRows::create(t, 9);
 }
@@ -308,7 +308,7 @@ SplitRowsDemo::SplitRowsDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* SplitColsDemo::createEffect(float t)
+ax::ActionInterval* SplitColsDemo::createEffect(float t)
 {
     return SplitCols::create(t, 9);
 }
@@ -319,7 +319,7 @@ SplitColsDemo::SplitColsDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* PageTurn3DDemo::createEffect(float t)
+ax::ActionInterval* PageTurn3DDemo::createEffect(float t)
 {
     return PageTurn3D::create(t, Size(15, 10));
 }
@@ -330,7 +330,7 @@ PageTurn3DDemo::PageTurn3DDemo()
     _subtitle = "";
 }
 
-axis::ActionInterval* PageTurn3DRectDemo::createEffect(float t)
+ax::ActionInterval* PageTurn3DRectDemo::createEffect(float t)
 {
     return PageTurn3D::create(t, Size(15, 10));
 }

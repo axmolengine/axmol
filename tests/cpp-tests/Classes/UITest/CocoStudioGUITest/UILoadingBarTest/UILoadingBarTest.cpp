@@ -126,9 +126,9 @@ void UILoadingBarTest_Left::update(float delta)
     loadingBarCopy->setPercent(_count);
 }
 
-void UILoadingBarTest_Left::printWidgetResources(axis::Ref* sender)
+void UILoadingBarTest_Left::printWidgetResources(ax::Ref* sender)
 {
-    axis::ResourceData textureFile = _loadingBar->getRenderFile();
+    ax::ResourceData textureFile = _loadingBar->getRenderFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 

@@ -46,7 +46,7 @@ extern TestEntry g_testEntries[MAX_TESTS];
 
 int RegisterTest(const char* category, const char* name, TestCreateFcn* fcn);
 
-class Box2DTestBed : public TestCase, axis::Layer
+class Box2DTestBed : public TestCase, ax::Layer
 {
 public:
     static Box2DTestBed* createWithEntryID(int entryId);
@@ -66,20 +66,20 @@ public:
 
     bool initWithEntryID(int entryId);
 
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
-    void onTouchMoved(axis::Touch* touch, axis::Event* event);
-    void onTouchEnded(axis::Touch* touch, axis::Event* event);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchMoved(ax::Touch* touch, ax::Event* event);
+    void onTouchEnded(ax::Touch* touch, ax::Event* event);
 
-    void onKeyPressed(axis::EventKeyboard::KeyCode code, axis::Event* event);
-    void onKeyReleased(axis::EventKeyboard::KeyCode code, axis::Event* event);
+    void onKeyPressed(ax::EventKeyboard::KeyCode code, ax::Event* event);
+    void onKeyReleased(ax::EventKeyboard::KeyCode code, ax::Event* event);
 
-    void onMouseDown(axis::Event* event);
-    void onMouseUp(axis::Event* event);
-    void onMouseMove(axis::Event* event);
-    void onMouseScroll(axis::Event* event);
+    void onMouseDown(ax::Event* event);
+    void onMouseUp(ax::Event* event);
+    void onMouseMove(ax::Event* event);
+    void onMouseScroll(ax::Event* event);
 
-    axis::EventListenerTouchOneByOne* _touchListener;
-    axis::EventListenerKeyboard* _keyboardListener;
+    ax::EventListenerTouchOneByOne* _touchListener;
+    ax::EventListenerKeyboard* _keyboardListener;
 
     TestEntry* m_entry;
     Test* m_test;
@@ -87,15 +87,15 @@ public:
 
 private:
     b2World* world;
-    axis::Texture2D* _spriteTexture;
+    ax::Texture2D* _spriteTexture;
 
     b2Vec2 pos;
     b2Vec2 oldPos;
     bool button[2];
 
     // Debug stuff
-    axis::DrawNode* debugDrawNode;
-    axis::extension::PhysicsDebugNodeBox2D g_debugDraw;
+    ax::DrawNode* debugDrawNode;
+    ax::extension::PhysicsDebugNodeBox2D g_debugDraw;
 };
 
 #endif

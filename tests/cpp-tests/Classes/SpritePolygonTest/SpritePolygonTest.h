@@ -36,7 +36,7 @@ protected:
     std::string _subtitle;
     bool _isDebugDraw;
     bool _isNeedDebugMenu;
-    axis::Vector<axis::DrawNode*> _drawNodes;
+    ax::Vector<ax::DrawNode*> _drawNodes;
     virtual std::string title() const override { return _title; };
     virtual std::string subtitle() const override { return _subtitle; };
     virtual bool init() override;
@@ -50,9 +50,9 @@ protected:
 class SpritePolygonTestDemo : public SpritePolygonTestCase
 {
 protected:
-    axis::Sprite* _polygonSprite;
-    axis::Sprite* _polygonSprite_fix;
-    axis::Sprite* _normalSprite;
+    ax::Sprite* _polygonSprite;
+    ax::Sprite* _polygonSprite_fix;
+    ax::Sprite* _normalSprite;
     virtual bool init() override;
     virtual void initSprites(){};
     void initTouches();
@@ -77,15 +77,15 @@ public:
 class SpritePolygonTestSlider : public SpritePolygonTestCase
 {
 protected:
-    axis::Label* _epsilonLabel;
+    ax::Label* _epsilonLabel;
     int _tagIndex;
-    axis::Sprite* makeSprite(std::string_view filename, const axis::Vec2& pos);
+    ax::Sprite* makeSprite(std::string_view filename, const ax::Vec2& pos);
     virtual bool init() override;
     void initSliders();
     virtual void initSprites(){};
     void makeSprites(const std::string* list, const int count, const float y);
-    void changeEpsilon(Ref* pSender, axis::ui::Slider::EventType type);
-    void updateLabel(const axis::Sprite* sp, const axis::PolygonInfo& pinfo);
+    void changeEpsilon(Ref* pSender, ax::ui::Slider::EventType type);
+    void updateLabel(const ax::Sprite* sp, const ax::PolygonInfo& pinfo);
 };
 
 class SpritePolygonTest3 : public SpritePolygonTestSlider
@@ -114,11 +114,11 @@ protected:
     virtual bool init() override;
     void initTouch();
     void loadDefaultSprites();
-    void addSpritePolygon(const axis::Vec2& pos);
+    void addSpritePolygon(const ax::Vec2& pos);
     void update(float dt) override;
 
 private:
-    axis::PolygonInfo _polygonInfo;
+    ax::PolygonInfo _polygonInfo;
     int _tagIndex;
 };
 
@@ -134,7 +134,7 @@ protected:
     int _triCount;
     int _pixelCount;
     float _elapsedTime;
-    axis::Label* _perfLabel;
+    ax::Label* _perfLabel;
     int _continuousLowDt;
     float _continuousHighDtTime;
     float _waitingTime;
@@ -167,8 +167,8 @@ public:
     SpritePolygonPerformanceTestDynamic();
 
 protected:
-    axis::Sprite* makeSprite() override;
-    axis::PolygonInfo _pinfo;
+    ax::Sprite* makeSprite() override;
+    ax::PolygonInfo _pinfo;
     virtual void initIncrementStats() override;
 };
 
@@ -179,7 +179,7 @@ public:
     SpritePerformanceTestDynamic();
 
 protected:
-    virtual axis::Sprite* makeSprite() override;
+    virtual ax::Sprite* makeSprite() override;
     virtual void initIncrementStats() override;
 };
 
@@ -255,7 +255,7 @@ protected:
     float _maDt                = 1.0f / 60.0f;
     float _rmaDt               = 1.0f / 60.0f;
     const float DEST_DT_30FPS  = 1.0f / 30.0f;
-    axis::Label* _totalSprites = nullptr;
+    ax::Label* _totalSprites = nullptr;
     Ticker _contSlow           = Ticker(20);
     Ticker _contFast           = Ticker(2);
     Ticker _around30fps        = Ticker(60 * 3);

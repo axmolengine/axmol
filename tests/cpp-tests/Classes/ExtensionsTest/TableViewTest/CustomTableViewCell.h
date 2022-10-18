@@ -31,10 +31,10 @@
 #include "GUI/CCScrollView/CCScrollView.h"
 #include "GUI/CCScrollView/CCTableView.h"
 
-class CustomTableViewCell : public axis::extension::TableViewCell
+class CustomTableViewCell : public ax::extension::TableViewCell
 {
 public:
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 };
 
 #endif /* __CUSTOMTABELVIEWCELL_H__ */

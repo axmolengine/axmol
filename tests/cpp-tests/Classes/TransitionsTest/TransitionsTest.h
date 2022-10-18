@@ -37,7 +37,7 @@ public:
     CREATE_FUNC(TransitionsTest);
 };
 
-class TestLayer1 : public axis::Layer
+class TestLayer1 : public ax::Layer
 {
 public:
     static TestLayer1* create(std::string_view transitionName);
@@ -53,7 +53,7 @@ public:
     virtual void onExit() override;
 };
 
-class TestLayer2 : public axis::Layer
+class TestLayer2 : public ax::Layer
 {
 public:
     static TestLayer2* create(std::string_view transitionName);

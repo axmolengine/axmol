@@ -38,12 +38,12 @@ public:
     UISliderTest();
     ~UISliderTest();
     virtual bool init() override;
-    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
-    void printWidgetResources(axis::Ref* sender);
+    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
+    void printWidgetResources(ax::Ref* sender);
 
 protected:
-    axis::ui::TextBMFont* _displayValueLabel;
-    axis::ui::Slider* _slider;
+    ax::ui::TextBMFont* _displayValueLabel;
+    ax::ui::Slider* _slider;
 };
 
 class UISliderTest_Scale9 : public UIScene
@@ -54,10 +54,10 @@ public:
     UISliderTest_Scale9();
     ~UISliderTest_Scale9();
     virtual bool init() override;
-    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
+    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UISliderTest_Scale9_State_Change : public UIScene
@@ -68,10 +68,10 @@ public:
     UISliderTest_Scale9_State_Change();
     ~UISliderTest_Scale9_State_Change();
     virtual bool init() override;
-    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
+    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UISliderNormalDefaultTest : public UIScene
@@ -84,7 +84,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UISliderDisabledDefaultTest : public UIScene
@@ -97,7 +97,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UISliderNewEventCallbackTest : public UIScene
@@ -110,7 +110,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UISliderIssue12249Test : public UIScene
@@ -121,9 +121,9 @@ public:
     UISliderIssue12249Test();
     ~UISliderIssue12249Test();
     virtual bool init() override;
-    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
+    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
 
 protected:
-    axis::ui::TextBMFont* _displayValueLabel;
+    ax::ui::TextBMFont* _displayValueLabel;
 };
 #endif /* defined(__TestCpp__UISliderTest__) */

@@ -40,7 +40,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewTest_Horizontal : public UIScene
@@ -53,7 +53,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewTest_Both : public UIScene
@@ -66,7 +66,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewTest_ScrollToPercentBothDirection : public UIScene
@@ -79,7 +79,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewTest_ScrollToPercentBothDirection_Bounce : public UIScene
@@ -92,7 +92,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewNestTest : public UIScene
@@ -105,7 +105,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewRotated : public UIScene
@@ -118,7 +118,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewDisableTest : public UIScene
@@ -131,7 +131,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewInnerSize : public UIScene
@@ -144,7 +144,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewTestEvents : public UIScene
@@ -156,7 +156,7 @@ public:
     virtual bool init() override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UIScrollViewStopScrollingTest : public UIScene
@@ -170,8 +170,8 @@ public:
     virtual void update(float dt) override;
 
 protected:
-    axis::ui::Text* _displayValueLabel;
-    axis::ui::ScrollView* _scrollView;
+    ax::ui::Text* _displayValueLabel;
+    ax::ui::ScrollView* _scrollView;
     float _remainingTime;
 };
 #endif /* defined(__TestCpp__UIScrollViewTest__) */

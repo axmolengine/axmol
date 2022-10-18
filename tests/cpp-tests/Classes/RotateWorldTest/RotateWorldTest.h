@@ -37,14 +37,14 @@ public:
     virtual bool init() override;
 };
 
-class SpriteLayer : public axis::Layer
+class SpriteLayer : public ax::Layer
 {
 public:
     virtual void onEnter() override;
     CREATE_FUNC(SpriteLayer)
 };
 
-class TestLayer : public axis::Layer
+class TestLayer : public ax::Layer
 {
 public:
     virtual void onEnter() override;
@@ -52,7 +52,7 @@ public:
     CREATE_FUNC(TestLayer)
 };
 
-class RotateWorldMainLayer : public axis::Layer
+class RotateWorldMainLayer : public ax::Layer
 {
 public:
     virtual void onEnter() override;

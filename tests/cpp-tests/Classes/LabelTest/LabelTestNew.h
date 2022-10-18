@@ -170,22 +170,22 @@ public:
     void snapArrowsToEdge();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void stringChanged(axis::Ref* sender);
-    void alignmentChanged(axis::Ref* sender);
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void selectAlignmentItem(axis::MenuItemFont* item);
-    void selectSentenceItem(axis::MenuItemFont* item);
-    virtual std::string getItemString(axis::MenuItemFont* item);
+    void stringChanged(ax::Ref* sender);
+    void alignmentChanged(ax::Ref* sender);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void selectAlignmentItem(ax::MenuItemFont* item);
+    void selectSentenceItem(ax::MenuItemFont* item);
+    virtual std::string getItemString(ax::MenuItemFont* item);
 
 protected:
-    axis::Label* _label      = nullptr;
-    axis::Sprite* _arrowsBar = nullptr;
-    axis::Sprite* _arrows    = nullptr;
-    std::vector<axis::MenuItemFont*> _menuItems;
-    axis::MenuItemFont* _lastSentenceItem  = nullptr;
-    axis::MenuItemFont* _lastAlignmentItem = nullptr;
+    ax::Label* _label      = nullptr;
+    ax::Sprite* _arrowsBar = nullptr;
+    ax::Sprite* _arrows    = nullptr;
+    std::vector<ax::MenuItemFont*> _menuItems;
+    ax::MenuItemFont* _lastSentenceItem  = nullptr;
+    ax::MenuItemFont* _lastAlignmentItem = nullptr;
     bool _drag                                = false;
 };
 
@@ -198,7 +198,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual std::string getItemString(axis::MenuItemFont* item) override;
+    virtual std::string getItemString(ax::MenuItemFont* item) override;
 };
 
 class LabelFNTUNICODELanguages : public AtlasDemoNew
@@ -286,13 +286,13 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    void setAlignmentLeft(axis::Ref* sender);
-    void setAlignmentCenter(axis::Ref* sender);
-    void setAlignmentRight(axis::Ref* sender);
+    void setAlignmentLeft(ax::Ref* sender);
+    void setAlignmentCenter(ax::Ref* sender);
+    void setAlignmentRight(ax::Ref* sender);
     void updateAlignment();
 
-    axis::Label* _label;
-    axis::TextHAlignment _horizAlign;
+    ax::Label* _label;
+    ax::TextHAlignment _horizAlign;
 };
 
 class LabelTTFEmoji : public AtlasDemoNew
@@ -374,13 +374,13 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
+    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
 
 private:
-    axis::Label* shadowLabelOutline;
-    axis::Label* shadowLabelTTF;
-    axis::Label* shadowLabelGrow;
-    axis::Label* shadowLabelBMFont;
+    ax::Label* shadowLabelOutline;
+    ax::Label* shadowLabelTTF;
+    ax::Label* shadowLabelGrow;
+    ax::Label* shadowLabelBMFont;
 };
 
 class LabelCharMapTest : public AtlasDemoNew
@@ -459,14 +459,14 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    void setAlignmentLeft(axis::Ref* sender);
-    void setAlignmentCenter(axis::Ref* sender);
-    void setAlignmentRight(axis::Ref* sender);
-    void setAlignmentTop(axis::Ref* sender);
-    void setAlignmentMiddle(axis::Ref* sender);
-    void setAlignmentBottom(axis::Ref* sender);
+    void setAlignmentLeft(ax::Ref* sender);
+    void setAlignmentCenter(ax::Ref* sender);
+    void setAlignmentRight(ax::Ref* sender);
+    void setAlignmentTop(ax::Ref* sender);
+    void setAlignmentMiddle(ax::Ref* sender);
+    void setAlignmentBottom(ax::Ref* sender);
 
-    axis::Label* _label;
+    ax::Label* _label;
 };
 
 class LabelIssue4428Test : public AtlasDemoNew
@@ -501,10 +501,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
+    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
 
 private:
-    axis::Label* label;
+    ax::Label* label;
 };
 
 class LabelAdditionalKerningTest : public AtlasDemoNew
@@ -517,10 +517,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type);
+    void sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type);
 
 private:
-    axis::Label* label;
+    ax::Label* label;
 };
 
 class LabelIssue8492Test : public AtlasDemoNew
@@ -704,27 +704,27 @@ class LabelLayoutBaseTest : public AtlasDemoNew
 {
 public:
     LabelLayoutBaseTest();
-    void updateDrawNodeSize(const axis::Size& drawNodeSize);
-    axis::extension::ControlStepper* makeControlStepper();
-    void valueChanged(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
+    void updateDrawNodeSize(const ax::Size& drawNodeSize);
+    ax::extension::ControlStepper* makeControlStepper();
+    void valueChanged(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
 
 protected:
-    void setAlignmentLeft(axis::Ref* sender);
-    void setAlignmentCenter(axis::Ref* sender);
-    void setAlignmentRight(axis::Ref* sender);
-    void setAlignmentTop(axis::Ref* sender);
-    void setAlignmentMiddle(axis::Ref* sender);
-    void setAlignmentBottom(axis::Ref* sender);
+    void setAlignmentLeft(ax::Ref* sender);
+    void setAlignmentCenter(ax::Ref* sender);
+    void setAlignmentRight(ax::Ref* sender);
+    void setAlignmentTop(ax::Ref* sender);
+    void setAlignmentMiddle(ax::Ref* sender);
+    void setAlignmentBottom(ax::Ref* sender);
 
-    void initWrapOption(const axis::Size& size);
-    void initToggleLabelTypeOption(const axis::Size& size);
-    void initAlignmentOption(const axis::Size& size);
-    void initFontSizeChange(const axis::Size& size);
-    void initSliders(const axis::Size& size);
-    void initTestLabel(const axis::Size& size);
-    void initDrawNode(const axis::Size& size);
-    axis::DrawNode* _drawNode;
-    axis::Label* _label;
+    void initWrapOption(const ax::Size& size);
+    void initToggleLabelTypeOption(const ax::Size& size);
+    void initAlignmentOption(const ax::Size& size);
+    void initFontSizeChange(const ax::Size& size);
+    void initSliders(const ax::Size& size);
+    void initTestLabel(const ax::Size& size);
+    void initDrawNode(const ax::Size& size);
+    ax::DrawNode* _drawNode;
+    ax::Label* _label;
     int _labelType;
 };
 
@@ -801,7 +801,7 @@ public:
 
     LabelToggleTypeTest();
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(axis::ui::RadioButton* radioButton, axis::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -814,7 +814,7 @@ public:
 
     LabelSystemFontTest();
     void initToggleCheckboxes();
-    void onChangedRadioButtonSelect(axis::ui::RadioButton* radioButton, axis::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
@@ -861,8 +861,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    axis::Label* _label1a;
-    axis::Label* _label2a;
+    ax::Label* _label1a;
+    ax::Label* _label2a;
 };
 
 class LabelBold : public AtlasDemoNew
@@ -874,8 +874,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    axis::Label* _label1a;
-    axis::Label* _label2a;
+    ax::Label* _label1a;
+    ax::Label* _label2a;
 };
 
 class LabelUnderline : public AtlasDemoNew
@@ -887,8 +887,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    axis::Label* _label1a;
-    axis::Label* _label2a;
+    ax::Label* _label1a;
+    ax::Label* _label2a;
 };
 
 class LabelUnderlineMultiline : public AtlasDemoNew
@@ -900,8 +900,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    axis::Label* _label1a;
-    axis::Label* _label2a;
+    ax::Label* _label1a;
+    ax::Label* _label2a;
 };
 
 class LabelStrikethrough : public AtlasDemoNew
@@ -913,8 +913,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    axis::Label* _label1a;
-    axis::Label* _label2a;
+    ax::Label* _label1a;
+    ax::Label* _label2a;
 };
 
 class LabelLocalizationTest : public AtlasDemoNew
@@ -923,13 +923,13 @@ public:
     CREATE_FUNC(LabelLocalizationTest);
 
     LabelLocalizationTest();
-    void onChangedRadioButtonSelect(axis::ui::RadioButton* radioButton, axis::ui::RadioButton::EventType type);
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    axis::Label* _label1;
-    axis::Label* _label2;
+    ax::Label* _label1;
+    ax::Label* _label2;
     cocostudio::ILocalizationManager* _localizationJson;
     cocostudio::ILocalizationManager* _localizationBin;
 };
@@ -1027,7 +1027,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    static void setLetterColors(axis::Label* label, const axis::Color3B& color);
+    static void setLetterColors(ax::Label* label, const ax::Color3B& color);
 };
 
 #endif

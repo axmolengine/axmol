@@ -5,10 +5,10 @@
 
 USING_NS_AX;
 
-static axis::Size designResolutionSize = axis::Size(1136, 640);
-static axis::Size smallResolutionSize = axis::Size(480, 320);
-static axis::Size mediumResolutionSize = axis::Size(1024, 768);
-static axis::Size largeResolutionSize = axis::Size(2048, 1536);
+static ax::Size designResolutionSize = ax::Size(1136, 640);
+static ax::Size smallResolutionSize = ax::Size(480, 320);
+static ax::Size mediumResolutionSize = ax::Size(1024, 768);
+static ax::Size largeResolutionSize = ax::Size(2048, 1536);
 
 AppDelegate::AppDelegate()
 {
@@ -42,7 +42,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glView = director->getOpenGLView();
     if (!glView) {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-        glView = GLViewImpl::createWithRect("Examples", axis::Rect(0, 0, 1280, 720));
+        glView = GLViewImpl::createWithRect("Examples", ax::Rect(0, 0, 1280, 720));
 #else
         glView = GLViewImpl::create("Examples");
 #endif

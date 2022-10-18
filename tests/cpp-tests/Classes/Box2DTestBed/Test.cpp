@@ -28,7 +28,7 @@ USING_NS_AX;
 USING_NS_AX_EXT;
 
 #if defined(AX_PLATFORM_PC)
-extern axis::Label* labelDebugDraw;
+extern ax::Label* labelDebugDraw;
 #endif
 
 void DestructionListener::SayGoodbye(b2Joint* joint)

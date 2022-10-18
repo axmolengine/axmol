@@ -554,13 +554,13 @@ void SpriteCreation::doTest()
     spriteCache.clear();
 }
 
-void SpriteCreation::addSpritesCallback(axis::Ref*)
+void SpriteCreation::addSpritesCallback(ax::Ref*)
 {
     updateSpriteCountLabel(totalSprites + suggestDelta);
     doTest();
 }
 
-void SpriteCreation::delSpritesCallback(axis::Ref*)
+void SpriteCreation::delSpritesCallback(ax::Ref*)
 {
     updateSpriteCountLabel(totalSprites - suggestDelta);
     doTest();
@@ -754,7 +754,7 @@ void CaptureNodeTest::onCaptured(Ref*)
 BugAutoCulling::BugAutoCulling()
 {
     Size s       = Director::getInstance()->getWinSize();
-    auto fastmap = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
+    auto fastmap = ax::FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
     this->addChild(fastmap);
     for (int i = 0; i < 30; i++)
     {
@@ -856,7 +856,7 @@ RendererUniformBatch::RendererUniformBatch()
     }
 }
 
-axis::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
+ax::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
 {
     auto programState =
         new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::BLUR));
@@ -877,7 +877,7 @@ axis::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
     return programState;
 }
 
-axis::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
+ax::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
 {
     auto programState =
         new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
