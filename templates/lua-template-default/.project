@@ -7,7 +7,7 @@
 	<buildSpec>
 	</buildSpec>
 	<natures>
-		<nature>org.ccdt.axisproj</nature>
+		<nature>org.ccdt.axproj</nature>
 		<nature>org.eclipse.koneki.ldt.nature</nature>
 	</natures>
 </projectDescription>
