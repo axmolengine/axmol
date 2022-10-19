@@ -4,25 +4,25 @@
 <dict>
 	<key>data</key>
 	<dict>
-		<key>axis.fps</key>
+		<key>axmol.fps</key>
 		<integer>60</integer>
-		<key>axis.display_fps</key>
+		<key>axmol.display_fps</key>
 		<true/>
-		<key>axis.gl.projection</key>
+		<key>axmol.gl.projection</key>
 		<string>3d</string>
-		<key>axis.texture.pixel_format_for_png</key>
+		<key>axmol.texture.pixel_format_for_png</key>
 		<string>rgba8888</string>
-		<key>axis.texture.pvrv2_has_alpha_premultiplied</key>
+		<key>axmol.texture.pvrv2_has_alpha_premultiplied</key>
 		<false/>
-		<key>axis.testcpp.autorun</key>
+		<key>axmol.testcpp.autorun</key>
 		<false/>
-		<key>axis.3d.max_dir_light_in_shader</key>
+		<key>axmol.3d.max_dir_light_in_shader</key>
 		<integer>1</integer>
-		<key>axis.3d.max_point_light_in_shader</key>
+		<key>axmol.3d.max_point_light_in_shader</key>
 		<integer>1</integer>
-		<key>axis.3d.max_spot_light_in_shader</key>
+		<key>axmol.3d.max_spot_light_in_shader</key>
 		<integer>1</integer>
-		<key>axis.3d.animate_quality</key>
+		<key>axmol.3d.animate_quality</key>
 		<integer>2</integer>
 	</dict>
 	<key>metadata</key>

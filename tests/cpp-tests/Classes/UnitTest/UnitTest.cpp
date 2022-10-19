@@ -771,7 +771,7 @@ void UIHelperSubStringTest::onEnter()
 {
     UnitTestDemo::onEnter();
 
-    using axis::ui::Helper;
+    using ax::ui::Helper;
     {
         // Trivial case
         std::string source = "abcdefghij";
@@ -884,7 +884,7 @@ void ParseIntegerListTest::onEnter()
     UnitTestDemo::onEnter();
 
     {
-        using axis::utils::parseIntegerList;
+        using ax::utils::parseIntegerList;
 
         std::vector<int> res1{};
         EXPECT_EQ(res1, parseIntegerList(""));

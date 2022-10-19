@@ -44,12 +44,12 @@ protected:
     virtual void onExit() override;
 
 private:
-    axis::Sprite* sprite1;
-    axis::Sprite* sprite2;
-    axis::Sprite* sprite3;
-    axis::Sprite* sprite4;
+    ax::Sprite* sprite1;
+    ax::Sprite* sprite2;
+    ax::Sprite* sprite3;
+    ax::Sprite* sprite4;
 
-    axis::Director::Projection _projection = axis::Director::Projection::_3D;
+    ax::Director::Projection _projection = ax::Director::Projection::_3D;
 };
 
 #endif /* defined(__cocos2d_tests__Bug_12847__) */

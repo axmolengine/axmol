@@ -74,9 +74,9 @@ bool UIImageViewTest::init()
     return false;
 }
 
-void UIImageViewTest::printWidgetResources(axis::Ref* sender)
+void UIImageViewTest::printWidgetResources(ax::Ref* sender)
 {
-    axis::ResourceData textureFile = _image->getRenderFile();
+    ax::ResourceData textureFile = _image->getRenderFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 
@@ -299,7 +299,7 @@ bool UIImageViewIssue12249Test::init()
 
         ImageView* imageView2 = ImageView::create();
         imageView2->setScale9Enabled(true);
-        imageView2->loadTexture("blocks9r.png", Widget::TextureResType::PLIST);
+        imageView2->loadTexture("blocks9ss/blocks9r.png", Widget::TextureResType::PLIST);
         imageView2->setContentSize(Size(250, imageView2->getContentSize().height * 2));
         imageView2->setFlippedX(true);
         imageView2->setScale(0.5);

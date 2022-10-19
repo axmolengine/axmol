@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include <string>
 #include <ctype.h>
 
+#include "base/axstd.h"
 #include "base/ccConfig.h"  // AX_USE_JPEG, AX_USE_WEBP
 
 #define STBI_NO_JPEG
@@ -454,7 +455,7 @@ static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t leng
 }  // namespace
 
 /*
- * Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and axis only support pvrtc and etc1
+ * Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and axmol only support pvrtc and etc1
  * see: https://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
  */
 static backend::PixelFormat getDevicePVRPixelFormat(backend::PixelFormat format)
@@ -2003,7 +2004,7 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
             int bytePerPixel    = 4;
             unsigned int stride = width * bytePerPixel;
 
-            std::vector<uint8_t> decodeImageData(stride * height);
+            auto decodeImageData = axstd::make_unique_for_overwrite<uint8_t[]>(stride * height);
             if (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC)
             {
                 s3tc_decode(pixelData + encodeOffset, &decodeImageData[0], width, height, S3TCDecodeFlag::DXT1);

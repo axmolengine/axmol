@@ -34,9 +34,9 @@ DEFINE_TEST_SUITE(ActionsEaseTests);
 class EaseSpriteDemo : public TestCase
 {
 protected:
-    axis::Sprite* _grossini;
-    axis::Sprite* _tamara;
-    axis::Sprite* _kathia;
+    ax::Sprite* _grossini;
+    ax::Sprite* _tamara;
+    ax::Sprite* _kathia;
 
     std::string _title;
 

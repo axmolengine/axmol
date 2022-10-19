@@ -25,16 +25,16 @@
 #ifndef __CUSTOMTABELVIEWCELL_H__
 #define __CUSTOMTABELVIEWCELL_H__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "extensions/cocos-ext.h"
 #include "GUI/CCControlExtension/CCControlExtensions.h"
 #include "GUI/CCScrollView/CCScrollView.h"
 #include "GUI/CCScrollView/CCTableView.h"
 
-class CustomTableViewCell : public axis::extension::TableViewCell
+class CustomTableViewCell : public ax::extension::TableViewCell
 {
 public:
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 };
 
 #endif /* __CUSTOMTABELVIEWCELL_H__ */

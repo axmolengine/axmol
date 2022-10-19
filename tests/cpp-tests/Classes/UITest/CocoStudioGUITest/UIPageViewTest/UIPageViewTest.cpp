@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "UIPageViewTest.h"
-#include "cocos2d.h"
+#include "axmol.h"
 
 USING_NS_AX;
 using namespace ax::ui;
@@ -104,7 +104,7 @@ bool UIPageViewTest::init()
         pageView->removeItem(0);
         pageView->scrollToItem(pageCount - 2);
 
-        axis::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
+        ax::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
 
         pageView->setIndicatorIndexNodesOpacity(255);
 

@@ -158,7 +158,9 @@ if(XCODE OR VS)
 endif()
 
 message("CMake ${_AX_CORE_LIB} target_precompile_headers")
-target_precompile_headers(${_AX_CORE_LIB} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:cocos2d.h>")
+target_precompile_headers(${_AX_CORE_LIB} PRIVATE 
+  "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
+)
 
 if(WINDOWS)
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
@@ -187,6 +189,7 @@ endif()
 add_subdirectory(${_AX_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
+    target_sources(${_AX_CORE_LIB} PRIVATE ./axmol.natvis)
     target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/yasio/yasio.natvis)
     target_sources(${_AX_CORE_LIB} PRIVATE ../thirdparty/robin-map/tsl-robin-map.natvis)
     target_compile_options(${_AX_CORE_LIB} PUBLIC "/Zm2000")

@@ -103,7 +103,7 @@ bool UIFocusTestBase::init()
     return false;
 }
 
-void UIFocusTestBase::onImageViewClicked(axis::Ref* ref, Widget::TouchEventType touchType)
+void UIFocusTestBase::onImageViewClicked(ax::Ref* ref, Widget::TouchEventType touchType)
 {
     if (touchType == Widget::TouchEventType::ENDED)
     {
@@ -123,33 +123,33 @@ void UIFocusTestBase::onImageViewClicked(axis::Ref* ref, Widget::TouchEventType 
 
 void UIFocusTestBase::onLeftKeyPressed()
 {
-    axis::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_LEFT;
-    axis::EventKeyboard event(cocos2dKey, false);
-    axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_LEFT;
+    ax::EventKeyboard event(cocos2dKey, false);
+    ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onRightKeyPressed()
 {
-    axis::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_RIGHT;
-    axis::EventKeyboard event(cocos2dKey, false);
-    axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_RIGHT;
+    ax::EventKeyboard event(cocos2dKey, false);
+    ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onUpKeyPressed()
 {
-    axis::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_UP;
-    axis::EventKeyboard event(cocos2dKey, false);
-    axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_UP;
+    ax::EventKeyboard event(cocos2dKey, false);
+    ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
 void UIFocusTestBase::onDownKeyPressed()
 {
-    axis::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_DOWN;
-    axis::EventKeyboard event(cocos2dKey, false);
-    axis::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
+    ax::EventKeyboard::KeyCode cocos2dKey = EventKeyboard::KeyCode::KEY_DPAD_DOWN;
+    ax::EventKeyboard event(cocos2dKey, false);
+    ax::Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void UIFocusTestBase::onFocusChanged(axis::ui::Widget* widgetLostFocus, axis::ui::Widget* widgetGetFocus)
+void UIFocusTestBase::onFocusChanged(ax::ui::Widget* widgetLostFocus, ax::ui::Widget* widgetGetFocus)
 {
     if (widgetGetFocus && widgetGetFocus->isFocusEnabled())
     {
@@ -211,7 +211,7 @@ bool UIFocusTestHorizontal::init()
     return false;
 }
 
-void UIFocusTestHorizontal::toggleFocusLoop(axis::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestHorizontal::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -271,7 +271,7 @@ bool UIFocusTestVertical::init()
     return false;
 }
 
-void UIFocusTestVertical::toggleFocusLoop(axis::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestVertical::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -367,7 +367,7 @@ bool UIFocusTestNestedLayout1::init()
     return false;
 }
 
-void UIFocusTestNestedLayout1::toggleFocusLoop(axis::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestNestedLayout1::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -463,7 +463,7 @@ bool UIFocusTestNestedLayout2::init()
     return false;
 }
 
-void UIFocusTestNestedLayout2::toggleFocusLoop(axis::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestNestedLayout2::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {
@@ -564,7 +564,7 @@ bool UIFocusTestNestedLayout3::init()
     return false;
 }
 
-void UIFocusTestNestedLayout3::toggleFocusLoop(axis::Ref* pObjc, Widget::TouchEventType type)
+void UIFocusTestNestedLayout3::toggleFocusLoop(ax::Ref* pObjc, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {

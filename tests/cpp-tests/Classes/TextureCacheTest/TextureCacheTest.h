@@ -25,7 +25,7 @@
 #ifndef _TEXTURECACHE_TEST_H_
 #define _TEXTURECACHE_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(TextureCacheTests);
@@ -38,13 +38,13 @@ public:
     TextureCacheTest();
 
     void addSprite();
-    void loadingCallBack(axis::Texture2D* texture);
+    void loadingCallBack(ax::Texture2D* texture);
 
     virtual float getDuration() const override { return 3.5f; }
 
 private:
-    axis::Label* _labelLoading;
-    axis::Label* _labelPercent;
+    ax::Label* _labelLoading;
+    ax::Label* _labelPercent;
     int _numberOfSprites;
     int _numberOfLoadedSprites;
 };
@@ -57,8 +57,8 @@ public:
     TextureCacheUnbindTest();
 
 private:
-    void textureLoadedA(axis::Texture2D* texture);
-    void textureLoadedB(axis::Texture2D* texture);
+    void textureLoadedA(ax::Texture2D* texture);
+    void textureLoadedB(ax::Texture2D* texture);
 };
 
 #endif  // _TEXTURECACHE_TEST_H_

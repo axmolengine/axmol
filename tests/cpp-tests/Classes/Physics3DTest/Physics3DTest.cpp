@@ -2,6 +2,7 @@
  Copyright (c) 2012 cocos2d-x.org
  Copyright (c) 2015-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -33,8 +34,8 @@
 USING_NS_AX_EXT;
 USING_NS_AX;
 
-std::string boss[] = {"MeshRendererTest/boss.c3b",
-                      "MeshRendererTest/boss.obj"};
+static const std::string_view boss[] = {"MeshRendererTest/boss.c3b", "MeshRendererTest/boss.obj"};
+static const int boss_count          = sizeof(boss) / sizeof(boss[0]);
 
 enum
 {
@@ -51,7 +52,7 @@ enum
 #define ARRAY_SIZE_Y 3
 #define ARRAY_SIZE_Z 4
 
-static axis::Scene* physicsScene = nullptr;
+static ax::Scene* physicsScene = nullptr;
 
 Physics3DTests::Physics3DTests()
 {
@@ -142,13 +143,13 @@ bool Physics3DTestDemo::init()
     return false;
 }
 
-void Physics3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, axis::Event* event)
+void Physics3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, ax::Event* event)
 {
     _needShootBox = true;
     event->stopPropagation();
 }
 
-void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
+void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
 {
     if (touches.size() && _camera)
     {
@@ -167,7 +168,7 @@ void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis:
     }
 }
 
-void Physics3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event)
+void Physics3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event)
 {
     if (!_needShootBox)
         return;
@@ -190,7 +191,7 @@ void Physics3DTestDemo::update(float /*delta*/) {}
 
 Physics3DTestDemo::~Physics3DTestDemo() {}
 
-void Physics3DTestDemo::shootBox(const axis::Vec3& des)
+void Physics3DTestDemo::shootBox(const ax::Vec3& des)
 {
     Physics3DRigidBodyDes rbDes;
     Vec3 linearVel = des - _camera->getPosition3D();
@@ -325,10 +326,10 @@ bool Physics3DKinematicDemo::init()
         rbDes.shape = Physics3DShape::createMesh(&trianglesList[0], (int)trianglesList.size() / 3);
         auto rigidBody = Physics3DRigidBody::create(&rbDes);
         auto component = Physics3DComponent::create(rigidBody);
-        auto sprite = Sprite3D::create(tree1);
+        auto sprite = MeshRenderer::create(tree1);
         sprite->addComponent(component);
-        static_cast<Sprite3D*>(sprite->getChildren().at(1))->getMaterial(0)->setTransparent(true);
-        static_cast<Sprite3D*>(sprite->getChildren().at(1))->getMaterial(0)->getStateBlock().setCullFaceSide(CullFaceSide::NONE);
+        static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0)->setTransparent(true);
+        static_cast<MeshRenderer*>(sprite->getChildren().at(1))->getMaterial(0)->getStateBlock().setCullFaceSide(CullFaceSide::NONE);
         sprite->setCameraMask((unsigned short)CameraFlag::USER1 | (unsigned short)CameraFlag::USER2 | (unsigned short)CameraFlag::USER3);
         sprite->setPosition3D(Vec3(20.0f, 0.0f, 0.0f));
         sprite->setScale(scale);
@@ -533,7 +534,7 @@ bool Physics3DConstraintDemo::init()
     return true;
 }
 
-void Physics3DConstraintDemo::onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void Physics3DConstraintDemo::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     // ray trace
     if (_camera)
@@ -565,7 +566,7 @@ void Physics3DConstraintDemo::onTouchesBegan(const std::vector<axis::Touch*>& to
     Physics3DTestDemo::onTouchesBegan(touches, event);
     _needShootBox = false;
 }
-void Physics3DConstraintDemo::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void Physics3DConstraintDemo::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     if (_constraint)
     {
@@ -585,7 +586,7 @@ void Physics3DConstraintDemo::onTouchesMoved(const std::vector<axis::Touch*>& to
     }
     Physics3DTestDemo::onTouchesMoved(touches, event);
 }
-void Physics3DConstraintDemo::onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void Physics3DConstraintDemo::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     if (_constraint)
     {
@@ -662,7 +663,7 @@ bool Physics3DTerrainDemo::init()
 
     // create mesh
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < boss_count; i++)
     {
         std::vector<Vec3> trianglesList = Bundle3D::getTrianglesList(boss[i]);
 
@@ -733,7 +734,7 @@ bool Physics3DCollisionCallbackDemo::init()
         return false;
 
     {
-        for (size_t i = 0; i < 2; i++)
+        for (size_t i = 0; i < boss_count; i++)
         {
             Physics3DRigidBodyDes rbDes;
 

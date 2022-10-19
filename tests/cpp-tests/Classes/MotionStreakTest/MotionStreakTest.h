@@ -39,17 +39,17 @@ public:
     virtual std::string subtitle() const override;
     virtual void onEnter() override;
 
-    void modeCallback(axis::Ref* sender);
+    void modeCallback(ax::Ref* sender);
 
 protected:
-    axis::MotionStreak* _streak;
+    ax::MotionStreak* _streak;
 };
 
 class MotionStreakTest1 : public MotionStreakTest
 {
 protected:
-    axis::Node* _root;
-    axis::Node* _target;
+    ax::Node* _root;
+    ax::Node* _target;
 
 public:
     CREATE_FUNC(MotionStreakTest1);
@@ -61,13 +61,13 @@ public:
 class MotionStreakTest2 : public MotionStreakTest
 {
 protected:
-    axis::Node* _root;
-    axis::Node* _target;
+    ax::Node* _root;
+    ax::Node* _target;
 
 public:
     CREATE_FUNC(MotionStreakTest2);
     virtual void onEnter() override;
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -83,7 +83,7 @@ public:
     virtual void update(float dt) override;
 
 private:
-    axis::Vec2 _center;
+    ax::Vec2 _center;
     float _radius;
     float _angle;
 };

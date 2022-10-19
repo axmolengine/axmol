@@ -236,7 +236,7 @@ bool UIRadioButtonTwoGroupsTest::init()
 
 void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* radioButton,
                                                             int index,
-                                                            axis::ui::RadioButtonGroup::EventType type)
+                                                            ax::ui::RadioButtonGroup::EventType type)
 {
     AXASSERT(index == _radioButtonGroups[0]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = StringUtils::format("RadioButtonGroup1 : %d", index);
@@ -246,7 +246,7 @@ void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup1(RadioButton* radioBu
 
 void UIRadioButtonTwoGroupsTest::onChangedRadioButtonGroup2(RadioButton* radioButton,
                                                             int index,
-                                                            axis::ui::RadioButtonGroup::EventType type)
+                                                            ax::ui::RadioButtonGroup::EventType type)
 {
     AXASSERT(index == _radioButtonGroups[1]->getSelectedButtonIndex(), "The two indexes must match!");
     auto text = StringUtils::format("RadioButtonGroup2 : %d", index);

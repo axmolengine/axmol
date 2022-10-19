@@ -43,7 +43,7 @@ private:
     PopupMenu* _pm;
     GComponent* _popupCom;
 
-    axis::Map<std::string, GComponent*> _demoObjects;
+    ax::Map<std::string, GComponent*> _demoObjects;
 
 };
 

@@ -20,7 +20,7 @@
 #include "tests/settings.h"
 
 #include "extensions/cocos-ext.h"
-#include "cocos2d.h"
+#include "axmol.h"
 
 #include <stdio.h>
 
@@ -28,7 +28,7 @@ USING_NS_AX;
 USING_NS_AX_EXT;
 
 #if defined(AX_PLATFORM_PC)
-extern axis::Label* labelDebugDraw;
+extern ax::Label* labelDebugDraw;
 #endif
 
 void DestructionListener::SayGoodbye(b2Joint* joint)

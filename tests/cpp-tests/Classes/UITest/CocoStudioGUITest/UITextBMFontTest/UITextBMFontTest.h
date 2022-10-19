@@ -36,10 +36,10 @@ public:
     CREATE_FUNC(UITextBMFontTest)
 
     virtual bool init() override;
-    void printWidgetResources(axis::Ref* sender);
+    void printWidgetResources(ax::Ref* sender);
 
 protected:
-    axis::ui::TextBMFont* _textBMFont;
+    ax::ui::TextBMFont* _textBMFont;
 };
 
 #endif /* defined(__TestCpp__UITextBMFontTest__) */

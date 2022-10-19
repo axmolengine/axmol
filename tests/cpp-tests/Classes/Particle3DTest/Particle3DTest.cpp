@@ -90,9 +90,9 @@ bool Particle3DTestDemo::init()
     return true;
 }
 
-void Particle3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, axis::Event* event) {}
+void Particle3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, ax::Event* event) {}
 
-void Particle3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
+void Particle3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
 {
     if (touches.size())
     {
@@ -105,7 +105,7 @@ void Particle3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis
     }
 }
 
-void Particle3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event) {}
+void Particle3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event) {}
 
 Particle3DTestDemo::Particle3DTestDemo(void) : _angle(0.0f) {}
 

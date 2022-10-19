@@ -8,7 +8,7 @@
 
 Private inheritance here hides part of interface from Director.
 */
-class  AppDelegate : private axis::Application
+class  AppDelegate : private ax::Application
 {
 public:
     AppDelegate();

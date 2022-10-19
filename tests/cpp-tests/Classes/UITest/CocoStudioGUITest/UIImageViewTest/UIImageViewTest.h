@@ -37,10 +37,10 @@ public:
 
     virtual bool init() override;
 
-    void printWidgetResources(axis::Ref* sender);
+    void printWidgetResources(ax::Ref* sender);
 
 protected:
-    axis::ui::ImageView* _image;
+    ax::ui::ImageView* _image;
 };
 
 class UIImageViewTest_Scale9 : public UIScene

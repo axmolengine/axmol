@@ -145,6 +145,8 @@ private:
         ::fcntl(write_descriptor_, F_SETFL, O_NONBLOCK);
         ::fcntl(write_descriptor_, F_SETFD, FD_CLOEXEC);
       }
+      else
+        yasio__throw_error(errno, "eventfd_select_interrupter");
     }
   }
 

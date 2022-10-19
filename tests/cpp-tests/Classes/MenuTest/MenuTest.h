@@ -27,7 +27,7 @@
 #ifndef _MENU_TEST_H_
 #define _MENU_TEST_H_
 
-////----#include "cocos2d.h"
+////----#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(MenuTests);
@@ -40,39 +40,39 @@ public:
     virtual bool init() override;
 };
 
-class MenuLayerMainMenu : public axis::Layer
+class MenuLayerMainMenu : public ax::Layer
 {
 protected:
-    axis::MenuItem* _disabledItem;
-    axis::EventListenerTouchOneByOne* _touchListener;
+    ax::MenuItem* _disabledItem;
+    ax::EventListenerTouchOneByOne* _touchListener;
 
 public:
     MenuLayerMainMenu();
     ~MenuLayerMainMenu();
 
 public:
-    bool touchBegan(axis::Touch* touch, axis::Event* event);
-    void touchEnded(axis::Touch* touch, axis::Event* event);
-    void touchCancelled(axis::Touch* touch, axis::Event* event);
-    void touchMoved(axis::Touch* touch, axis::Event* event);
+    bool touchBegan(ax::Touch* touch, ax::Event* event);
+    void touchEnded(ax::Touch* touch, ax::Event* event);
+    void touchCancelled(ax::Touch* touch, ax::Event* event);
+    void touchMoved(ax::Touch* touch, ax::Event* event);
 
     void allowTouches(float dt);
-    void menuCallback(axis::Ref* sender);
-    void menuCallbackConfig(axis::Ref* sender);
-    void menuCallbackDisabled(axis::Ref* sender);
-    void menuCallback2(axis::Ref* sender);
-    void menuCallbackPriorityTest(axis::Ref* sender);
-    void menuCallbackBugsTest(axis::Ref* pSender);
-    void onQuit(axis::Ref* sender);
-    void menuMovingCallback(axis::Ref* pSender);
+    void menuCallback(ax::Ref* sender);
+    void menuCallbackConfig(ax::Ref* sender);
+    void menuCallbackDisabled(ax::Ref* sender);
+    void menuCallback2(ax::Ref* sender);
+    void menuCallbackPriorityTest(ax::Ref* sender);
+    void menuCallbackBugsTest(ax::Ref* pSender);
+    void onQuit(ax::Ref* sender);
+    void menuMovingCallback(ax::Ref* pSender);
 
     // CREATE_NODE(MenuLayer1);
 };
 
-class MenuLayer2 : public axis::Layer
+class MenuLayer2 : public ax::Layer
 {
 protected:
-    axis::Vec2 _centeredMenu;
+    ax::Vec2 _centeredMenu;
     bool _alignedH;
 
     void alignMenusH();
@@ -82,56 +82,56 @@ public:
     MenuLayer2();
     ~MenuLayer2();
 
-    void menuCallback(axis::Ref* sender);
-    void menuCallbackOpacity(axis::Ref* sender);
-    void menuCallbackAlign(axis::Ref* sender);
+    void menuCallback(ax::Ref* sender);
+    void menuCallbackOpacity(ax::Ref* sender);
+    void menuCallbackAlign(ax::Ref* sender);
 
     // CREATE_NODE(MenuLayer2);
 };
 
-class MenuLayer3 : public axis::Layer
+class MenuLayer3 : public ax::Layer
 {
 protected:
-    axis::MenuItem* _disabledItem;
+    ax::MenuItem* _disabledItem;
 
 public:
     MenuLayer3();
     ~MenuLayer3();
 };
 
-class MenuLayer4 : public axis::Layer
+class MenuLayer4 : public ax::Layer
 {
 public:
     MenuLayer4();
     ~MenuLayer4();
 
-    void menuCallback(axis::Ref* sender);
-    void backCallback(axis::Ref* sender);
+    void menuCallback(ax::Ref* sender);
+    void backCallback(ax::Ref* sender);
 };
 
-class BugsTest : public axis::Layer
+class BugsTest : public ax::Layer
 {
 public:
     BugsTest();
 
-    void issue1410MenuCallback(axis::Ref* pSender);
-    void issue1410v2MenuCallback(axis::Ref* pSender);
-    void backMenuCallback(axis::Ref* pSender);
+    void issue1410MenuCallback(ax::Ref* pSender);
+    void issue1410v2MenuCallback(ax::Ref* pSender);
+    void backMenuCallback(ax::Ref* pSender);
 };
 
-class RemoveMenuItemWhenMove : public axis::Layer
+class RemoveMenuItemWhenMove : public ax::Layer
 {
 public:
     RemoveMenuItemWhenMove();
     ~RemoveMenuItemWhenMove();
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
-    void onTouchMoved(axis::Touch* touch, axis::Event* event);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchMoved(ax::Touch* touch, ax::Event* event);
 
-    void goBack(axis::Ref* pSender);
+    void goBack(ax::Ref* pSender);
 
 private:
-    axis::MenuItemFont* item;
-    axis::EventListenerTouchOneByOne* _touchListener;
+    ax::MenuItemFont* item;
+    ax::EventListenerTouchOneByOne* _touchListener;
 };
 
 #endif

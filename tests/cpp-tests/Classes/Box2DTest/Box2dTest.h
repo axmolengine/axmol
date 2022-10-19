@@ -26,7 +26,7 @@
 #ifndef _BOX2D_TEST_H_
 #define _BOX2D_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
 #include "extensions/cocos-ext.h"
@@ -47,18 +47,18 @@ public:
     void initPhysics();
     void createResetButton();
 
-    void addNewSpriteAtPosition(axis::Vec2 p);
+    void addNewSpriteAtPosition(ax::Vec2 p);
     void update(float dt) override;
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void toggleDebugCallback(axis::Ref* sender);
+    void toggleDebugCallback(ax::Ref* sender);
 
 private:
     b2World* world;
 
-    axis::Texture2D* _spriteTexture;
-    axis::DrawNode* drawBox2D;
-    axis::extension::PhysicsDebugNodeBox2D g_debugDraw;
+    ax::Texture2D* _spriteTexture;
+    ax::DrawNode* drawBox2D;
+    ax::extension::PhysicsDebugNodeBox2D g_debugDraw;
     bool showDebugDraw = true;
 };
 

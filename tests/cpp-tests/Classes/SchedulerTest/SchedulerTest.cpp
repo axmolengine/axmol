@@ -1004,7 +1004,7 @@ public:
 
     ~TestNode2()
     {
-        axis::log("Delete TestNode (should not crash)");
+        ax::log("Delete TestNode (should not crash)");
         this->unscheduleAllCallbacks();
     }
 
@@ -1383,7 +1383,7 @@ void SchedulerRemoveEntryWhileUpdate::onExit()
     SchedulerTestLayer::onExit();
 }
 
-SchedulerRemoveEntryWhileUpdate::TestClass::TestClass(int index, TestClass* nextObj, axis::Scheduler* scheduler)
+SchedulerRemoveEntryWhileUpdate::TestClass::TestClass(int index, TestClass* nextObj, ax::Scheduler* scheduler)
     : _nextObj(nextObj), _index(index), _scheduler(scheduler)
 {}
 
@@ -1446,7 +1446,7 @@ void SchedulerRemoveSelectorDuringCall::callback(float)
 {
     if (!_scheduled)
     {
-        axis::log("Error: unscheduled callback must not be called.");
+        ax::log("Error: unscheduled callback must not be called.");
         return;
     }
 

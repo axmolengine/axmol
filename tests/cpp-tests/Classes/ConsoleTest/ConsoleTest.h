@@ -52,7 +52,7 @@ protected:
     ConsoleCustomCommand();
     virtual ~ConsoleCustomCommand();
 
-    axis::Console* _console;
+    ax::Console* _console;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(ConsoleCustomCommand);

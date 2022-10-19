@@ -27,7 +27,7 @@
 #ifndef _NODE_TEST_H_
 #define _NODE_TEST_H_
 
-////----#include "cocos2d.h"
+////----#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(CocosNodeTests);
@@ -41,7 +41,7 @@ protected:
     TestCocosNodeDemo();
     virtual ~TestCocosNodeDemo();
 
-    axis::Director::Projection _preProjection;
+    ax::Director::Projection _preProjection;
 };
 
 class NodeTest2 : public TestCocosNodeDemo
@@ -208,8 +208,8 @@ public:
 protected:
     CameraTest1();
 
-    axis::Sprite* _sprite1;
-    axis::Sprite* _sprite2;
+    ax::Sprite* _sprite1;
+    ax::Sprite* _sprite2;
 };
 
 class CameraTest2 : public TestCocosNodeDemo
@@ -224,15 +224,15 @@ public:
 protected:
     CameraTest2();
 
-    axis::Sprite* _sprite1;
-    axis::Sprite* _sprite2;
+    ax::Sprite* _sprite1;
+    ax::Sprite* _sprite2;
 };
 
 class ConvertToNode : public TestCocosNodeDemo
 {
 public:
     CREATE_FUNC(ConvertToNode);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
@@ -273,7 +273,7 @@ public:
 
 protected:
     NodeGlobalZValueTest();
-    axis::Sprite* _sprite;
+    ax::Sprite* _sprite;
 };
 
 class NodeNormalizedPositionTest1 : public TestCocosNodeDemo
@@ -298,7 +298,7 @@ protected:
     NodeNormalizedPositionTest2();
 
     void update(float dt) override;
-    axis::Size _copyContentSize;
+    ax::Size _copyContentSize;
     float _accum;
 };
 
@@ -314,7 +314,7 @@ protected:
 
     void update(float dt) override;
     float _accum;
-    axis::Sprite* sprite;
+    ax::Sprite* sprite;
 };
 
 class NodeNameTest : public TestCocosNodeDemo

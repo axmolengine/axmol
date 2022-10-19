@@ -69,12 +69,12 @@ public:
 private:
     struct Locations
     {
-        Locations(axis::backend::ProgramState* ps, axis::backend::UniformLocation loc)
+        Locations(ax::backend::ProgramState* ps, ax::backend::UniformLocation loc)
             : programState(ps), location(loc)
         {}
 
-        axis::backend::ProgramState* programState = nullptr;
-        axis::backend::UniformLocation location;
+        ax::backend::ProgramState* programState = nullptr;
+        ax::backend::UniformLocation location;
     };
     std::vector<Locations> timeUniforms;
 };
@@ -94,9 +94,9 @@ public:
     void updateUniformTime(float);
 
 private:
-    axis::backend::UniformLocation _locationTime;
+    ax::backend::UniformLocation _locationTime;
     EffectAutoBindingResolver* _resolver               = nullptr;
-    axis::backend::ProgramState* _noiseProgramState = nullptr;
+    ax::backend::ProgramState* _noiseProgramState = nullptr;
 };
 
 class Material_setTechnique : public MaterialSystemBaseTest
@@ -110,7 +110,7 @@ public:
 private:
     void changeMaterial(float dt);
 
-    axis::MeshRenderer* _mesh;
+    ax::MeshRenderer* _mesh;
     int _techniqueState;
 };
 

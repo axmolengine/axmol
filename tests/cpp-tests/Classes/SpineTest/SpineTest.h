@@ -26,7 +26,7 @@
 #ifndef _SPINETEST_H_
 #define _SPINETEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 #include <spine/spine-cocos2dx.h>
 
@@ -103,7 +103,7 @@ public:
     virtual bool init();
 
 private:
-    axis::Vec2 position;
+    ax::Vec2 position;
 };
 
 class MixAndMatchExample : public SpineTestLayer
@@ -144,7 +144,7 @@ public:
 
 private:
     spine::SkeletonRenderer* frontNode;
-    axis::DrawNode* betweenNode;
+    ax::DrawNode* betweenNode;
 };
 
 class SpineboyExample : public SpineTestLayer

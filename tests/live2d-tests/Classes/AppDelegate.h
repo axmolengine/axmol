@@ -20,7 +20,7 @@
 
 Private inheritance here hides part of interface from Director.
 */
-class AppDelegate : private axis::Application
+class AppDelegate : private ax::Application
 {
 public:
     AppDelegate();
@@ -48,7 +48,7 @@ public:
     virtual void applicationWillEnterForeground();
 
 private:
-    axis::EventListenerCustom* _recreatedEventlistener;
+    ax::EventListenerCustom* _recreatedEventlistener;
 
     LAppAllocator _cubismAllocator;
     Csm::CubismFramework::Option _cubismOption;

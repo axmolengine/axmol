@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(SpriteFrameCacheTests);
@@ -41,10 +41,10 @@ public:
     SpriteFrameCachePixelFormatTest();
 
 private:
-    void loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat);
 
 private:
-    axis::Label* infoLabel;
+    ax::Label* infoLabel;
 };
 
 class SpriteFrameCacheLoadMultipleTimes : public TestCase
@@ -58,7 +58,7 @@ public:
     SpriteFrameCacheLoadMultipleTimes();
 
 private:
-    void loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat);
 };
 
 class SpriteFrameCacheFullCheck : public TestCase
@@ -72,7 +72,7 @@ public:
     SpriteFrameCacheFullCheck();
 
 private:
-    void loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat);
 };
 
 class SpriteFrameCacheJsonAtlasTest : public TestCase
@@ -87,7 +87,7 @@ public:
     ~SpriteFrameCacheJsonAtlasTest() override;
 
 private:
-    void loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat);
+    void loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat);
 
-    axis::Label* infoLabel;
+    ax::Label* infoLabel;
 };

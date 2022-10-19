@@ -74,14 +74,14 @@ private:
 
 NewRendererTests::NewRendererTests()
 {
-    auto programCache = backend::ProgramCache::getInstance();
-    programCache->registerCustomProgramFactory(CustomProgramType::BLUR, positionTextureColor_vert,
+    auto programManager = ProgramManager::getInstance();
+    programManager->registerCustomProgramFactory(CustomProgramType::BLUR, positionTextureColor_vert,
                                                FileUtils::getInstance()->getStringFromFile("Shaders/example_Blur.fsh"),
-                                               backend::VertexLayoutHelper::setupSprite);
-    programCache->registerCustomProgramFactory(
+                                               VertexLayoutHelper::setupSprite);
+    programManager->registerCustomProgramFactory(
         CustomProgramType::SEPIA, positionTextureColor_vert,
                                                FileUtils::getInstance()->getStringFromFile("Shaders/example_Sepia.fsh"),
-                                               backend::VertexLayoutHelper::setupSprite);
+                                               VertexLayoutHelper::setupSprite);
 
     ADD_TEST_CASE(NewSpriteTest);
     ADD_TEST_CASE(GroupCommandTest);
@@ -554,13 +554,13 @@ void SpriteCreation::doTest()
     spriteCache.clear();
 }
 
-void SpriteCreation::addSpritesCallback(axis::Ref*)
+void SpriteCreation::addSpritesCallback(ax::Ref*)
 {
     updateSpriteCountLabel(totalSprites + suggestDelta);
     doTest();
 }
 
-void SpriteCreation::delSpritesCallback(axis::Ref*)
+void SpriteCreation::delSpritesCallback(ax::Ref*)
 {
     updateSpriteCountLabel(totalSprites - suggestDelta);
     doTest();
@@ -754,7 +754,7 @@ void CaptureNodeTest::onCaptured(Ref*)
 BugAutoCulling::BugAutoCulling()
 {
     Size s       = Director::getInstance()->getWinSize();
-    auto fastmap = axis::FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
+    auto fastmap = ax::FastTMXTiledMap::create("TileMaps/orthogonal-test2.tmx");
     this->addChild(fastmap);
     for (int i = 0; i < 30; i++)
     {
@@ -856,10 +856,10 @@ RendererUniformBatch::RendererUniformBatch()
     }
 }
 
-axis::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
+ax::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
 {
     auto programState =
-        new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::BLUR));
+        new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::BLUR));
     programState->autorelease();
 
     backend::UniformLocation loc = programState->getUniformLocation("resolution");
@@ -877,10 +877,10 @@ axis::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
     return programState;
 }
 
-axis::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
+ax::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
 {
     auto programState =
-        new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
+        new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
 
     // programState->updateUniformID();
 
@@ -933,7 +933,7 @@ RendererUniformBatch2::RendererUniformBatch2()
 backend::ProgramState* RendererUniformBatch2::createBlurProgramState()
 {
     auto programState =
-        new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::BLUR));
+        new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::BLUR));
 
     backend::UniformLocation loc = programState->getUniformLocation("resolution");
     auto resolution              = Vec2(85, 121);
@@ -953,7 +953,7 @@ backend::ProgramState* RendererUniformBatch2::createBlurProgramState()
 backend::ProgramState* RendererUniformBatch2::createSepiaProgramState()
 {
     auto programState =
-        new backend::ProgramState(backend::ProgramCache::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
+        new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
     programState->autorelease();
     return programState;
 }

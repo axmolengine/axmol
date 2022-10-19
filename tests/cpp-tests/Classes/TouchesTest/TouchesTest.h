@@ -39,12 +39,12 @@ public:
 
 class Ball;
 class Paddle;
-class PongLayer : public axis::Layer
+class PongLayer : public ax::Layer
 {
 private:
     Ball* _ball;
-    axis::Vector<Paddle*> _paddles;
-    axis::Vec2 _ballStartingVelocity;
+    ax::Vector<Paddle*> _paddles;
+    ax::Vec2 _ballStartingVelocity;
 
 public:
     CREATE_FUNC(PongLayer);
@@ -63,15 +63,15 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
     ForceTouchTest();
     virtual ~ForceTouchTest();
 
-    axis::Label* _infoLabel;
+    ax::Label* _infoLabel;
 };
 
 #endif

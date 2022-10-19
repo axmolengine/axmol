@@ -32,7 +32,7 @@ DEFINE_TEST_SUITE(ActionManagerTests);
 class ActionManagerTest : public TestCase
 {
 protected:
-    axis::TextureAtlas* _atlas;
+    ax::TextureAtlas* _atlas;
 
     std::string _title;
 

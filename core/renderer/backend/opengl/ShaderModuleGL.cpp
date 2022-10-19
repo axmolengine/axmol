@@ -27,7 +27,7 @@
 
 #include "platform/CCPlatformMacros.h"
 #include "base/ccMacros.h"
-#include "yasio/detail/byte_buffer.hpp"
+#include "base/axstd.h"
 
 NS_AX_BACKEND_BEGIN
 
@@ -61,9 +61,9 @@ void ShaderModuleGL::compileShader(ShaderStage stage, std::string_view source)
 
         if (logLength > 1)
         {
-            yasio::sbyte_buffer errorLog{static_cast<size_t>(logLength), std::true_type{}};
-            glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.data());
-            ax::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.data(),
+            auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
+            glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.get());
+            ax::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.get(),
                          source.data());
         }
         else

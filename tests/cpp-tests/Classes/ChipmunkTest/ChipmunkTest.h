@@ -29,7 +29,7 @@
 #ifndef __CHIPMUNKTEST_H__
 #define __CHIPMUNKTEST_H__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "chipmunk/chipmunk.h"
 #include "../BaseTest.h"
 #include "extensions/cocos-ext.h"
@@ -44,17 +44,17 @@ public:
     void onEnter() override;
     void initPhysics();
     void createResetButton();
-    void reset(axis::Ref* sender);
+    void reset(ax::Ref* sender);
 
-    void addNewSpriteAtPosition(axis::Vec2 p);
+    void addNewSpriteAtPosition(ax::Vec2 p);
     void update(float dt) override;
-    void toggleDebugCallback(axis::Ref* sender);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    virtual void onAcceleration(axis::Acceleration* acc, axis::Event* event);
+    void toggleDebugCallback(ax::Ref* sender);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    virtual void onAcceleration(ax::Acceleration* acc, ax::Event* event);
 
 private:
-    axis::Texture2D* _spriteTexture;                           // weak ref
-    axis::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
+    ax::Texture2D* _spriteTexture;                           // weak ref
+    ax::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
 
     cpSpace* _space;  // strong ref
     cpShape* _walls[4];

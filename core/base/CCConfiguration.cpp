@@ -99,13 +99,13 @@ std::string Configuration::getInfo() const
     // And Dump some warnings as well
 #if AX_ENABLE_PROFILERS
     AXLOG(
-        "cocos2d: **** WARNING **** AX_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
+        "axmol: **** WARNING **** AX_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from "
         "ccConfig.h)\n");
 #endif
 
 #if AX_ENABLE_GL_STATE_CACHE == 0
     AXLOG(
-        "cocos2d: **** WARNING **** AX_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
+        "axmol: **** WARNING **** AX_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from "
         "ccConfig.h)\n");
 #endif
 

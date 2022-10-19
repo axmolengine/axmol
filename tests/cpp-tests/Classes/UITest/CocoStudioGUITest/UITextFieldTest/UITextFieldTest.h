@@ -38,10 +38,10 @@ public:
     UITextFieldTest();
     ~UITextFieldTest();
     virtual bool init() override;
-    void textFieldEvent(axis::Ref* sender, axis::ui::TextField::EventType type);
+    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UITextFieldTest_MaxLength : public UIScene
@@ -52,10 +52,10 @@ public:
     UITextFieldTest_MaxLength();
     ~UITextFieldTest_MaxLength();
     virtual bool init() override;
-    void textFieldEvent(axis::Ref* sender, axis::ui::TextField::EventType type);
+    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UITextFieldTest_Password : public UIScene
@@ -66,10 +66,10 @@ public:
     UITextFieldTest_Password();
     ~UITextFieldTest_Password();
     virtual bool init() override;
-    void textFieldEvent(axis::Ref* sender, axis::ui::TextField::EventType type);
+    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UITextFieldTest_LineWrap : public UIScene
@@ -80,10 +80,10 @@ public:
     UITextFieldTest_LineWrap();
     ~UITextFieldTest_LineWrap();
     virtual bool init() override;
-    void textFieldEvent(axis::Ref* sender, axis::ui::TextField::EventType type);
+    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UITextFieldTest_TrueTypeFont : public UIScene
@@ -94,10 +94,10 @@ public:
     UITextFieldTest_TrueTypeFont();
     ~UITextFieldTest_TrueTypeFont();
     virtual bool init() override;
-    void textFieldEvent(axis::Ref* sender, axis::ui::TextField::EventType type);
+    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UITextFieldTest_BMFont : public UIScene
@@ -108,10 +108,10 @@ public:
     UITextFieldTest_BMFont();
     ~UITextFieldTest_BMFont();
     virtual bool init() override;
-    void textFieldEvent(axis::Ref* sender, axis::ui::TextField::EventType type);
+    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 
 class UITextFieldTest_PlaceHolderColor : public UIScene
@@ -122,9 +122,9 @@ public:
     UITextFieldTest_PlaceHolderColor();
     ~UITextFieldTest_PlaceHolderColor();
     virtual bool init() override;
-    void textFieldEvent(axis::Ref* sender, axis::ui::TextField::EventType type);
+    void textFieldEvent(ax::Ref* sender, ax::ui::TextField::EventType type);
 
 protected:
-    axis::ui::Text* _displayValueLabel;
+    ax::ui::Text* _displayValueLabel;
 };
 #endif /* defined(__TestCpp__UITextFieldTest__) */

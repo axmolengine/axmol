@@ -26,7 +26,7 @@
 #ifndef _SPRITE_TEST_H_
 #define _SPRITE_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 #include <string>
 
@@ -48,8 +48,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewSpriteWithCoords(axis::Vec2 p);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void addNewSpriteWithCoords(ax::Vec2 p);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
 class SpriteBatchNode1 : public SpriteTestDemo
@@ -57,8 +57,8 @@ class SpriteBatchNode1 : public SpriteTestDemo
 public:
     CREATE_FUNC(SpriteBatchNode1);
     SpriteBatchNode1();
-    void addNewSpriteWithCoords(axis::Vec2 p);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void addNewSpriteWithCoords(ax::Vec2 p);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
@@ -151,13 +151,13 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void reorderSprite(float dt);
-    axis::Sprite* makeSpriteZ(int aZ);
+    ax::Sprite* makeSpriteZ(int aZ);
 
 private:
-    axis::SpriteBatchNode* batchNode;
-    axis::Sprite* sprite1;
-    axis::Sprite* sprite2;
-    axis::Sprite* sprite3;
+    ax::SpriteBatchNode* batchNode;
+    ax::Sprite* sprite1;
+    ax::Sprite* sprite2;
+    ax::Sprite* sprite3;
 };
 
 class SpriteBatchNodeReorderIssue767 : public SpriteTestDemo
@@ -293,14 +293,14 @@ public:
     SpriteNewTexture();
     virtual ~SpriteNewTexture();
     void addNewSprite();
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
 protected:
     bool _usingTexture1;
-    axis::Texture2D* _texture1;
-    axis::Texture2D* _texture2;
+    ax::Texture2D* _texture1;
+    ax::Texture2D* _texture2;
 };
 
 class SpriteBatchNodeNewTexture : public SpriteTestDemo
@@ -310,13 +310,13 @@ public:
     SpriteBatchNodeNewTexture();
     virtual ~SpriteBatchNodeNewTexture();
     void addNewSprite();
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
 protected:
-    axis::Texture2D* _texture1;
-    axis::Texture2D* _texture2;
+    ax::Texture2D* _texture1;
+    ax::Texture2D* _texture2;
 };
 
 class SpriteFrameTest : public SpriteTestDemo
@@ -332,8 +332,8 @@ public:
     void flipSprites(float dt);
 
 private:
-    axis::Sprite* _sprite1;
-    axis::Sprite* _sprite2;
+    ax::Sprite* _sprite1;
+    ax::Sprite* _sprite2;
     int _counter;
 };
 
@@ -655,12 +655,12 @@ public:
     void reorderSprite(float dt);
 
 private:
-    axis::Node* _node;
-    axis::Sprite* _sprite1;
-    axis::Sprite* _sprite2;
-    axis::Sprite* _sprite3;
-    axis::Sprite* _sprite4;
-    axis::Sprite* _sprite5;
+    ax::Node* _node;
+    ax::Sprite* _sprite1;
+    ax::Sprite* _sprite2;
+    ax::Sprite* _sprite3;
+    ax::Sprite* _sprite4;
+    ax::Sprite* _sprite5;
 };
 
 class SpriteBatchNodeReorderSameIndex : public SpriteTestDemo
@@ -674,12 +674,12 @@ public:
     void reorderSprite(float dt);
 
 private:
-    axis::SpriteBatchNode* _batchNode;
-    axis::Sprite* _sprite1;
-    axis::Sprite* _sprite2;
-    axis::Sprite* _sprite3;
-    axis::Sprite* _sprite4;
-    axis::Sprite* _sprite5;
+    ax::SpriteBatchNode* _batchNode;
+    ax::Sprite* _sprite1;
+    ax::Sprite* _sprite2;
+    ax::Sprite* _sprite3;
+    ax::Sprite* _sprite4;
+    ax::Sprite* _sprite5;
 };
 
 class SpriteBatchNodeReorderOneChild : public SpriteTestDemo
@@ -691,8 +691,8 @@ public:
     virtual std::string title() const override;
 
 private:
-    axis::SpriteBatchNode* _batchNode;
-    axis::Sprite* _reorderSprite;
+    ax::SpriteBatchNode* _batchNode;
+    ax::Sprite* _reorderSprite;
 };
 
 class SpriteBatchNodeSkewNegativeScaleChildren : public SpriteTestDemo
@@ -791,10 +791,10 @@ public:
     virtual std::string subtitle() const override { return "Rotation should based on the anchor point"; };
 
 protected:
-    axis::Sprite* sprite1;
-    axis::Sprite* sprite2;
+    ax::Sprite* sprite1;
+    ax::Sprite* sprite2;
 
-    axis::Vec3 rotation;
+    ax::Vec3 rotation;
 };
 
 class SpriteSlice9Test1 : public SpriteTestDemo
@@ -844,7 +844,7 @@ public:
     virtual void update(float dt) override;
 
 private:
-    axis::Sprite* _sprites[3];
+    ax::Sprite* _sprites[3];
     float _elapsed;
 };
 
@@ -859,7 +859,7 @@ public:
     virtual void update(float dt) override;
 
 private:
-    axis::Sprite* _sprites[3];
+    ax::Sprite* _sprites[3];
     float _elapsed;
 };
 
@@ -920,10 +920,10 @@ public:
 
 protected:
     float _accum;
-    axis::Sprite* _s1;
-    axis::Sprite* _s2;
-    axis::Sprite* _s3;
-    axis::Sprite* _s4;
+    ax::Sprite* _s1;
+    ax::Sprite* _s2;
+    ax::Sprite* _s3;
+    ax::Sprite* _s4;
 };
 
 #endif

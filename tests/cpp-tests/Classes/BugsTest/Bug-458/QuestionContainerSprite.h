@@ -25,9 +25,9 @@
 #ifndef __QUESTION_CONTAINER_SPRITE_H__
 #define __QUESTION_CONTAINER_SPRITE_H__
 
-#include "cocos2d.h"
+#include "axmol.h"
 
-class QuestionContainerSprite : public axis::Sprite
+class QuestionContainerSprite : public ax::Sprite
 {
 public:
     virtual bool init() override;

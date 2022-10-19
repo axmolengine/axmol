@@ -54,7 +54,7 @@ ShaderCache::~ShaderCache()
     {
         AX_SAFE_RELEASE(shaderModule.second);
     }
-    AXLOGINFO("deallocing ProgramCache: %p", this);
+    AXLOGINFO("deallocing ShaderCache: %p", this);
 }
 
 bool ShaderCache::init()

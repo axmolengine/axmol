@@ -37,7 +37,7 @@ int lua_ax_physics3d_Physics3DShape_getbtShape(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_getbtShape'", nullptr);
             return 0;
         }
-        btCollisionShape* ret = cobj->getbtShape();
+        auto&& ret = cobj->getbtShape();
         object_to_luaval<btCollisionShape>(tolua_S, "btCollisionShape",(btCollisionShape*)ret);
         return 1;
     }
@@ -87,7 +87,7 @@ int lua_ax_physics3d_Physics3DShape_initSphere(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initSphere'", nullptr);
             return 0;
         }
-        bool ret = cobj->initSphere(arg0);
+        auto&& ret = cobj->initSphere(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -137,7 +137,7 @@ int lua_ax_physics3d_Physics3DShape_initBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initBox'", nullptr);
             return 0;
         }
-        bool ret = cobj->initBox(arg0);
+        auto&& ret = cobj->initBox(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -190,7 +190,7 @@ int lua_ax_physics3d_Physics3DShape_initCapsule(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initCapsule'", nullptr);
             return 0;
         }
-        bool ret = cobj->initCapsule(arg0, arg1);
+        auto&& ret = cobj->initCapsule(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -243,7 +243,7 @@ int lua_ax_physics3d_Physics3DShape_initCylinder(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_initCylinder'", nullptr);
             return 0;
         }
-        bool ret = cobj->initCylinder(arg0, arg1);
+        auto&& ret = cobj->initCylinder(arg0, arg1);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -328,7 +328,7 @@ int lua_ax_physics3d_Physics3DShape_createBox(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createBox'", nullptr);
             return 0;
         }
-        ax::Physics3DShape* ret = ax::Physics3DShape::createBox(arg0);
+        auto&& ret = ax::Physics3DShape::createBox(arg0);
         object_to_luaval<ax::Physics3DShape>(tolua_S, "ax.Physics3DShape",(ax::Physics3DShape*)ret);
         return 1;
     }
@@ -366,7 +366,7 @@ int lua_ax_physics3d_Physics3DShape_createCylinder(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createCylinder'", nullptr);
             return 0;
         }
-        ax::Physics3DShape* ret = ax::Physics3DShape::createCylinder(arg0, arg1);
+        auto&& ret = ax::Physics3DShape::createCylinder(arg0, arg1);
         object_to_luaval<ax::Physics3DShape>(tolua_S, "ax.Physics3DShape",(ax::Physics3DShape*)ret);
         return 1;
     }
@@ -404,7 +404,7 @@ int lua_ax_physics3d_Physics3DShape_createConvexHull(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createConvexHull'", nullptr);
             return 0;
         }
-        ax::Physics3DShape* ret = ax::Physics3DShape::createConvexHull(arg0, arg1);
+        auto&& ret = ax::Physics3DShape::createConvexHull(arg0, arg1);
         object_to_luaval<ax::Physics3DShape>(tolua_S, "ax.Physics3DShape",(ax::Physics3DShape*)ret);
         return 1;
     }
@@ -442,7 +442,7 @@ int lua_ax_physics3d_Physics3DShape_createCapsule(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createCapsule'", nullptr);
             return 0;
         }
-        ax::Physics3DShape* ret = ax::Physics3DShape::createCapsule(arg0, arg1);
+        auto&& ret = ax::Physics3DShape::createCapsule(arg0, arg1);
         object_to_luaval<ax::Physics3DShape>(tolua_S, "ax.Physics3DShape",(ax::Physics3DShape*)ret);
         return 1;
     }
@@ -478,7 +478,7 @@ int lua_ax_physics3d_Physics3DShape_createSphere(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DShape_createSphere'", nullptr);
             return 0;
         }
-        ax::Physics3DShape* ret = ax::Physics3DShape::createSphere(arg0);
+        auto&& ret = ax::Physics3DShape::createSphere(arg0);
         object_to_luaval<ax::Physics3DShape>(tolua_S, "ax.Physics3DShape",(ax::Physics3DShape*)ret);
         return 1;
     }
@@ -642,7 +642,7 @@ int lua_ax_physics3d_Physics3DObject_getUserData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getUserData'", nullptr);
             return 0;
         }
-        void* ret = cobj->getUserData();
+        auto&& ret = cobj->getUserData();
         #pragma warning NO CONVERSION FROM NATIVE FOR void*;
         return 1;
     }
@@ -786,7 +786,7 @@ int lua_ax_physics3d_Physics3DObject_getWorldTransform(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getWorldTransform'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getWorldTransform();
+        auto&& ret = cobj->getWorldTransform();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -833,7 +833,7 @@ int lua_ax_physics3d_Physics3DObject_getPhysicsWorld(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getPhysicsWorld'", nullptr);
             return 0;
         }
-        ax::Physics3DWorld* ret = cobj->getPhysicsWorld();
+        auto&& ret = cobj->getPhysicsWorld();
         object_to_luaval<ax::Physics3DWorld>(tolua_S, "ax.Physics3DWorld",(ax::Physics3DWorld*)ret);
         return 1;
     }
@@ -930,7 +930,7 @@ int lua_ax_physics3d_Physics3DObject_getCollisionCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getCollisionCallback'", nullptr);
             return 0;
         }
-        const std::function<void (const ax::Physics3DCollisionInfo &)>& ret = cobj->getCollisionCallback();
+        auto&& ret = cobj->getCollisionCallback();
         #pragma warning NO CONVERSION FROM NATIVE FOR std::function;
         return 1;
     }
@@ -977,7 +977,7 @@ int lua_ax_physics3d_Physics3DObject_getMask(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_getMask'", nullptr);
             return 0;
         }
-        unsigned int ret = cobj->getMask();
+        auto&& ret = cobj->getMask();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1024,7 +1024,7 @@ int lua_ax_physics3d_Physics3DObject_needCollisionCallback(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DObject_needCollisionCallback'", nullptr);
             return 0;
         }
-        bool ret = cobj->needCollisionCallback();
+        auto&& ret = cobj->needCollisionCallback();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1150,7 +1150,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getFriction'", nullptr);
             return 0;
         }
-        double ret = cobj->getFriction();
+        auto&& ret = cobj->getFriction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1302,7 +1302,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRigidBody(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getRigidBody'", nullptr);
             return 0;
         }
-        btRigidBody* ret = cobj->getRigidBody();
+        auto&& ret = cobj->getRigidBody();
         object_to_luaval<btRigidBody>(tolua_S, "btRigidBody",(btRigidBody*)ret);
         return 1;
     }
@@ -1349,7 +1349,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getTotalForce(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getTotalForce'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getTotalForce();
+        auto&& ret = cobj->getTotalForce();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1396,7 +1396,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraintCount(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraintCount'", nullptr);
             return 0;
         }
-        unsigned int ret = cobj->getConstraintCount();
+        auto&& ret = cobj->getConstraintCount();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1752,7 +1752,7 @@ int lua_ax_physics3d_Physics3DRigidBody_isKinematic(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_isKinematic'", nullptr);
             return 0;
         }
-        bool ret = cobj->isKinematic();
+        auto&& ret = cobj->isKinematic();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1949,7 +1949,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getCcdMotionThreshold'", nullptr);
             return 0;
         }
-        double ret = cobj->getCcdMotionThreshold();
+        auto&& ret = cobj->getCcdMotionThreshold();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1996,7 +1996,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearFactor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearFactor'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getLinearFactor();
+        auto&& ret = cobj->getLinearFactor();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2093,7 +2093,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularVelocity'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getAngularVelocity();
+        auto&& ret = cobj->getAngularVelocity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2144,7 +2144,7 @@ int lua_ax_physics3d_Physics3DRigidBody_init(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_init'", nullptr);
             return 0;
         }
-        bool ret = cobj->init(arg0);
+        auto&& ret = cobj->init(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -2391,7 +2391,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearVelocity'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getLinearVelocity();
+        auto&& ret = cobj->getLinearVelocity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2641,7 +2641,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getGravity'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getGravity();
+        auto&& ret = cobj->getGravity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2688,7 +2688,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRollingFriction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getRollingFriction'", nullptr);
             return 0;
         }
-        double ret = cobj->getRollingFriction();
+        auto&& ret = cobj->getRollingFriction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2890,7 +2890,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getTotalTorque(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getTotalTorque'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getTotalTorque();
+        auto&& ret = cobj->getTotalTorque();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -2937,7 +2937,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getInvMass(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getInvMass'", nullptr);
             return 0;
         }
-        double ret = cobj->getInvMass();
+        auto&& ret = cobj->getInvMass();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -2987,7 +2987,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getConstraint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getConstraint'", nullptr);
             return 0;
         }
-        ax::Physics3DConstraint* ret = cobj->getConstraint(arg0);
+        auto&& ret = cobj->getConstraint(arg0);
         object_to_luaval<ax::Physics3DConstraint>(tolua_S, "ax.Physics3DConstraint",(ax::Physics3DConstraint*)ret);
         return 1;
     }
@@ -3034,7 +3034,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getRestitution(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getRestitution'", nullptr);
             return 0;
         }
-        double ret = cobj->getRestitution();
+        auto&& ret = cobj->getRestitution();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3081,7 +3081,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getCcdSweptSphereRadius'", nullptr);
             return 0;
         }
-        double ret = cobj->getCcdSweptSphereRadius();
+        auto&& ret = cobj->getCcdSweptSphereRadius();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3128,7 +3128,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getHitFraction(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getHitFraction'", nullptr);
             return 0;
         }
-        double ret = cobj->getHitFraction();
+        auto&& ret = cobj->getHitFraction();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3175,7 +3175,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularDamping'", nullptr);
             return 0;
         }
-        double ret = cobj->getAngularDamping();
+        auto&& ret = cobj->getAngularDamping();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3222,7 +3222,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getInvInertiaDiagLocal'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getInvInertiaDiagLocal();
+        auto&& ret = cobj->getInvInertiaDiagLocal();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3269,7 +3269,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getCenterOfMassTransform'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getCenterOfMassTransform();
+        auto&& ret = cobj->getCenterOfMassTransform();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3316,7 +3316,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getAngularFactor(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getAngularFactor'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getAngularFactor();
+        auto&& ret = cobj->getAngularFactor();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -3463,7 +3463,7 @@ int lua_ax_physics3d_Physics3DRigidBody_getLinearDamping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DRigidBody_getLinearDamping'", nullptr);
             return 0;
         }
-        double ret = cobj->getLinearDamping();
+        auto&& ret = cobj->getLinearDamping();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -3760,7 +3760,7 @@ int lua_ax_physics3d_Physics3DComponent_getPhysics3DObject(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_getPhysics3DObject'", nullptr);
             return 0;
         }
-        ax::Physics3DObject* ret = cobj->getPhysics3DObject();
+        auto&& ret = cobj->getPhysics3DObject();
         object_to_luaval<ax::Physics3DObject>(tolua_S, "ax.Physics3DObject",(ax::Physics3DObject*)ret);
         return 1;
     }
@@ -3896,7 +3896,7 @@ int lua_ax_physics3d_Physics3DComponent_getPhysics3DComponentName(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DComponent_getPhysics3DComponentName'", nullptr);
             return 0;
         }
-        std::string& ret = ax::Physics3DComponent::getPhysics3DComponentName();
+        auto&& ret = ax::Physics3DComponent::getPhysics3DComponentName();
         lua_pushlstring(tolua_S,ret.c_str(),ret.length());
         return 1;
     }
@@ -4099,7 +4099,7 @@ int lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_PhysicsMeshRenderer_getPhysicsObj'", nullptr);
             return 0;
         }
-        ax::Physics3DObject* ret = cobj->getPhysicsObj();
+        auto&& ret = cobj->getPhysicsObj();
         object_to_luaval<ax::Physics3DObject>(tolua_S, "ax.Physics3DObject",(ax::Physics3DObject*)ret);
         return 1;
     }
@@ -4357,7 +4357,7 @@ int lua_ax_physics3d_Physics3DWorld_needCollisionChecking(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_needCollisionChecking'", nullptr);
             return 0;
         }
-        bool ret = cobj->needCollisionChecking();
+        auto&& ret = cobj->needCollisionChecking();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4545,7 +4545,7 @@ int lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_isDebugDrawEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isDebugDrawEnabled();
+        auto&& ret = cobj->isDebugDrawEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -4639,7 +4639,7 @@ int lua_ax_physics3d_Physics3DWorld_getGravity(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DWorld_getGravity'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getGravity();
+        auto&& ret = cobj->getGravity();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5175,7 +5175,7 @@ int lua_ax_physics3d_Physics3DConstraint_getUserData(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getUserData'", nullptr);
             return 0;
         }
-        void* ret = cobj->getUserData();
+        auto&& ret = cobj->getUserData();
         #pragma warning NO CONVERSION FROM NATIVE FOR void*;
         return 1;
     }
@@ -5222,7 +5222,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getBreakingImpulse'", nullptr);
             return 0;
         }
-        double ret = cobj->getBreakingImpulse();
+        auto&& ret = cobj->getBreakingImpulse();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5269,7 +5269,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBodyA(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getBodyA'", nullptr);
             return 0;
         }
-        ax::Physics3DRigidBody* ret = cobj->getBodyA();
+        auto&& ret = cobj->getBodyA();
         object_to_luaval<ax::Physics3DRigidBody>(tolua_S, "ax.Physics3DRigidBody",(ax::Physics3DRigidBody*)ret);
         return 1;
     }
@@ -5316,7 +5316,7 @@ int lua_ax_physics3d_Physics3DConstraint_isEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_isEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isEnabled();
+        auto&& ret = cobj->isEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -5363,7 +5363,7 @@ int lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations(lua_Stat
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getOverrideNumSolverIterations'", nullptr);
             return 0;
         }
-        int ret = cobj->getOverrideNumSolverIterations();
+        auto&& ret = cobj->getOverrideNumSolverIterations();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -5410,7 +5410,7 @@ int lua_ax_physics3d_Physics3DConstraint_getBodyB(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getBodyB'", nullptr);
             return 0;
         }
-        ax::Physics3DRigidBody* ret = cobj->getBodyB();
+        auto&& ret = cobj->getBodyB();
         object_to_luaval<ax::Physics3DRigidBody>(tolua_S, "ax.Physics3DRigidBody",(ax::Physics3DRigidBody*)ret);
         return 1;
     }
@@ -5605,7 +5605,7 @@ int lua_ax_physics3d_Physics3DConstraint_getbtContraint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConstraint_getbtContraint'", nullptr);
             return 0;
         }
-        btTypedConstraint* ret = cobj->getbtContraint();
+        auto&& ret = cobj->getbtContraint();
         object_to_luaval<btTypedConstraint>(tolua_S, "btTypedConstraint",(btTypedConstraint*)ret);
         return 1;
     }
@@ -5683,7 +5683,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInA'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getPivotPointInA();
+        auto&& ret = cobj->getPivotPointInA();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -5730,7 +5730,7 @@ int lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DPointToPointConstraint_getPivotPointInB'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getPivotPointInB();
+        auto&& ret = cobj->getPivotPointInB();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6126,7 +6126,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity(lua_State* 
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getMotorTargetVelosity'", nullptr);
             return 0;
         }
-        double ret = cobj->getMotorTargetVelosity();
+        auto&& ret = cobj->getMotorTargetVelosity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6173,7 +6173,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getFrameOffsetA();
+        auto&& ret = cobj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6220,7 +6220,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getFrameOffsetB();
+        auto&& ret = cobj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6373,7 +6373,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getUpperLimit'", nullptr);
             return 0;
         }
-        double ret = cobj->getUpperLimit();
+        auto&& ret = cobj->getUpperLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6420,7 +6420,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getMaxMotorImpulse'", nullptr);
             return 0;
         }
-        double ret = cobj->getMaxMotorImpulse();
+        auto&& ret = cobj->getMaxMotorImpulse();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6467,7 +6467,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getLowerLimit'", nullptr);
             return 0;
         }
-        double ret = cobj->getLowerLimit();
+        auto&& ret = cobj->getLowerLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -6564,7 +6564,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getEnableAngularMotor'", nullptr);
             return 0;
         }
-        bool ret = cobj->getEnableAngularMotor();
+        auto&& ret = cobj->getEnableAngularMotor();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -6661,7 +6661,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getBFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getBFrame'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getBFrame();
+        auto&& ret = cobj->getBFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -6761,7 +6761,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getUseFrameOffset'", nullptr);
             return 0;
         }
-        bool ret = cobj->getUseFrameOffset();
+        auto&& ret = cobj->getUseFrameOffset();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -6980,7 +6980,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getAngularOnly'", nullptr);
             return 0;
         }
-        bool ret = cobj->getAngularOnly();
+        auto&& ret = cobj->getAngularOnly();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -7077,7 +7077,7 @@ int lua_ax_physics3d_Physics3DHingeConstraint_getAFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DHingeConstraint_getAFrame'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getAFrame();
+        auto&& ret = cobj->getAFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7456,7 +7456,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getDampingLimAng();
+        auto&& ret = cobj->getDampingLimAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7603,7 +7603,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLinearPos'", nullptr);
             return 0;
         }
-        double ret = cobj->getLinearPos();
+        auto&& ret = cobj->getLinearPos();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7650,7 +7650,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getFrameOffsetA();
+        auto&& ret = cobj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7697,7 +7697,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getFrameOffsetB();
+        auto&& ret = cobj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -7794,7 +7794,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getDampingDirAng();
+        auto&& ret = cobj->getDampingDirAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7841,7 +7841,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getRestitutionLimLin();
+        auto&& ret = cobj->getRestitutionLimLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -7888,7 +7888,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getSoftnessOrthoAng();
+        auto&& ret = cobj->getSoftnessOrthoAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8035,7 +8035,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getAngularPos'", nullptr);
             return 0;
         }
-        double ret = cobj->getAngularPos();
+        auto&& ret = cobj->getAngularPos();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8232,7 +8232,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUpperAngLimit'", nullptr);
             return 0;
         }
-        double ret = cobj->getUpperAngLimit();
+        auto&& ret = cobj->getUpperAngLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8279,7 +8279,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingDirLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getDampingDirLin();
+        auto&& ret = cobj->getDampingDirLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8326,7 +8326,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getSoftnessDirAng();
+        auto&& ret = cobj->getSoftnessDirAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8373,7 +8373,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getPoweredAngMotor'", nullptr);
             return 0;
         }
-        bool ret = cobj->getPoweredAngMotor();
+        auto&& ret = cobj->getPoweredAngMotor();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -8620,7 +8620,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionLimAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getRestitutionLimAng();
+        auto&& ret = cobj->getRestitutionLimAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8667,7 +8667,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUseFrameOffset'", nullptr);
             return 0;
         }
-        bool ret = cobj->getUseFrameOffset();
+        auto&& ret = cobj->getUseFrameOffset();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -8714,7 +8714,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessOrthoLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getSoftnessOrthoLin();
+        auto&& ret = cobj->getSoftnessOrthoLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8761,7 +8761,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getDampingOrthoAng();
+        auto&& ret = cobj->getDampingOrthoAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8908,7 +8908,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getRestitutionDirLin();
+        auto&& ret = cobj->getRestitutionDirLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -8955,7 +8955,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity(lua_Sta
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getTargetLinMotorVelocity'", nullptr);
             return 0;
         }
-        double ret = cobj->getTargetLinMotorVelocity();
+        auto&& ret = cobj->getTargetLinMotorVelocity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9002,7 +9002,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLowerLinLimit'", nullptr);
             return 0;
         }
-        double ret = cobj->getLowerLinLimit();
+        auto&& ret = cobj->getLowerLinLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9049,7 +9049,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getSoftnessLimLin();
+        auto&& ret = cobj->getSoftnessLimLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9196,7 +9196,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getPoweredLinMotor'", nullptr);
             return 0;
         }
-        bool ret = cobj->getPoweredLinMotor();
+        auto&& ret = cobj->getPoweredLinMotor();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -9396,7 +9396,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getRestitutionOrthoAng();
+        auto&& ret = cobj->getRestitutionOrthoAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9443,7 +9443,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getMaxAngMotorForce'", nullptr);
             return 0;
         }
-        double ret = cobj->getMaxAngMotorForce();
+        auto&& ret = cobj->getMaxAngMotorForce();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9490,7 +9490,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingOrthoLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getDampingOrthoLin();
+        auto&& ret = cobj->getDampingOrthoLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9537,7 +9537,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUpperLinLimit'", nullptr);
             return 0;
         }
-        double ret = cobj->getUpperLinLimit();
+        auto&& ret = cobj->getUpperLinLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9634,7 +9634,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin(lua_State*
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionOrthoLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getRestitutionOrthoLin();
+        auto&& ret = cobj->getRestitutionOrthoLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9731,7 +9731,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessLimAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getSoftnessLimAng();
+        auto&& ret = cobj->getSoftnessLimAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9828,7 +9828,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getDampingLimLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getDampingLimLin();
+        auto&& ret = cobj->getDampingLimLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9875,7 +9875,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getLowerAngLimit'", nullptr);
             return 0;
         }
-        double ret = cobj->getLowerAngLimit();
+        auto&& ret = cobj->getLowerAngLimit();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9922,7 +9922,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng(lua_State* t
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getRestitutionDirAng'", nullptr);
             return 0;
         }
-        double ret = cobj->getRestitutionDirAng();
+        auto&& ret = cobj->getRestitutionDirAng();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -9969,7 +9969,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity(lua_Sta
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getTargetAngMotorVelocity'", nullptr);
             return 0;
         }
-        double ret = cobj->getTargetAngMotorVelocity();
+        auto&& ret = cobj->getTargetAngMotorVelocity();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10066,7 +10066,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getMaxLinMotorForce'", nullptr);
             return 0;
         }
-        double ret = cobj->getMaxLinMotorForce();
+        auto&& ret = cobj->getMaxLinMotorForce();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10363,7 +10363,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getSoftnessDirLin'", nullptr);
             return 0;
         }
-        double ret = cobj->getSoftnessDirLin();
+        auto&& ret = cobj->getSoftnessDirLin();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10460,7 +10460,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA(lua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_getUseLinearReferenceFrameA'", nullptr);
             return 0;
         }
-        bool ret = cobj->getUseLinearReferenceFrameA();
+        auto&& ret = cobj->getUseLinearReferenceFrameA();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -10506,7 +10506,7 @@ int lua_ax_physics3d_Physics3DSliderConstraint_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DSliderConstraint_create'", nullptr);
             return 0;
         }
-        ax::Physics3DSliderConstraint* ret = ax::Physics3DSliderConstraint::create(arg0, arg1, arg2, arg3, arg4);
+        auto&& ret = ax::Physics3DSliderConstraint::create(arg0, arg1, arg2, arg3, arg4);
         object_to_luaval<ax::Physics3DSliderConstraint>(tolua_S, "ax.Physics3DSliderConstraint",(ax::Physics3DSliderConstraint*)ret);
         return 1;
     }
@@ -10673,7 +10673,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getBFrame'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getBFrame();
+        auto&& ret = cobj->getBFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10770,7 +10770,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetB'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getFrameOffsetB();
+        auto&& ret = cobj->getFrameOffsetB();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10817,7 +10817,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFrameOffsetA'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getFrameOffsetA();
+        auto&& ret = cobj->getFrameOffsetA();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -10864,7 +10864,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getFixThresh'", nullptr);
             return 0;
         }
-        double ret = cobj->getFixThresh();
+        auto&& ret = cobj->getFixThresh();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10911,7 +10911,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan2'", nullptr);
             return 0;
         }
-        double ret = cobj->getSwingSpan2();
+        auto&& ret = cobj->getSwingSpan2();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -10958,7 +10958,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getSwingSpan1'", nullptr);
             return 0;
         }
-        double ret = cobj->getSwingSpan1();
+        auto&& ret = cobj->getSwingSpan1();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11108,7 +11108,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle(lua_State* tolua
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistAngle'", nullptr);
             return 0;
         }
-        double ret = cobj->getTwistAngle();
+        auto&& ret = cobj->getTwistAngle();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11161,7 +11161,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle(lua_State* to
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_GetPointForAngle'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->GetPointForAngle(arg0, arg1);
+        auto&& ret = cobj->GetPointForAngle(arg0, arg1);
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11258,7 +11258,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getTwistSpan'", nullptr);
             return 0;
         }
-        double ret = cobj->getTwistSpan();
+        auto&& ret = cobj->getTwistSpan();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -11489,7 +11489,7 @@ int lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3DConeTwistConstraint_getAFrame'", nullptr);
             return 0;
         }
-        ax::Mat4 ret = cobj->getAFrame();
+        auto&& ret = cobj->getAFrame();
         mat4_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11771,7 +11771,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getLinearLowerLimit'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getLinearLowerLimit();
+        auto&& ret = cobj->getLinearLowerLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11818,7 +11818,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getAngularUpperLimit'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getAngularUpperLimit();
+        auto&& ret = cobj->getAngularUpperLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -11865,7 +11865,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset(lua_State* tolua_
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getUseFrameOffset'", nullptr);
             return 0;
         }
-        bool ret = cobj->getUseFrameOffset();
+        auto&& ret = cobj->getUseFrameOffset();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -11912,7 +11912,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit(lua_State* tolu
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getLinearUpperLimit'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getLinearUpperLimit();
+        auto&& ret = cobj->getLinearUpperLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -12012,7 +12012,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_isLimited(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_isLimited'", nullptr);
             return 0;
         }
-        bool ret = cobj->isLimited(arg0);
+        auto&& ret = cobj->isLimited(arg0);
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -12159,7 +12159,7 @@ int lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit(lua_State* tol
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_physics3d_Physics3D6DofConstraint_getAngularLowerLimit'", nullptr);
             return 0;
         }
-        ax::Vec3 ret = cobj->getAngularLowerLimit();
+        auto&& ret = cobj->getAngularLowerLimit();
         vec3_to_luaval(tolua_S, ret);
         return 1;
     }

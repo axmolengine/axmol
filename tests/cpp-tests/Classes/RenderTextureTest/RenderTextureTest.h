@@ -25,7 +25,7 @@
 #ifndef _RENDERTEXTURE_TEST_H_
 #define _RENDERTEXTURE_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "renderer/backend/DepthStencilState.h"
 #include "../BaseTest.h"
 
@@ -42,16 +42,16 @@ public:
     ~RenderTextureSave();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void clearImage(axis::Ref* pSender);
-    void clearImageTransparent(axis::Ref* sender);
-    void saveImageWithPremultipliedAlpha(axis::Ref* pSender);
-    void saveImageWithNonPremultipliedAlpha(axis::Ref* pSender);
-    void addImage(axis::Ref* sender);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void clearImage(ax::Ref* pSender);
+    void clearImageTransparent(ax::Ref* sender);
+    void saveImageWithPremultipliedAlpha(ax::Ref* pSender);
+    void saveImageWithNonPremultipliedAlpha(ax::Ref* pSender);
+    void addImage(ax::Ref* sender);
 
 private:
-    axis::RenderTexture* _target;
-    axis::Vector<axis::Sprite*> _brushs;
+    ax::RenderTexture* _target;
+    ax::Vector<ax::Sprite*> _brushs;
 };
 
 class RenderTextureIssue937 : public RenderTextureTest
@@ -69,26 +69,26 @@ public:
     CREATE_FUNC(RenderTextureZbuffer);
     RenderTextureZbuffer();
 
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
     void renderScreenShot();
 
 private:
-    axis::SpriteBatchNode* mgr;
+    ax::SpriteBatchNode* mgr;
 
-    axis::Sprite* sp1;
-    axis::Sprite* sp2;
-    axis::Sprite* sp3;
-    axis::Sprite* sp4;
-    axis::Sprite* sp5;
-    axis::Sprite* sp6;
-    axis::Sprite* sp7;
-    axis::Sprite* sp8;
-    axis::Sprite* sp9;
+    ax::Sprite* sp1;
+    ax::Sprite* sp2;
+    ax::Sprite* sp3;
+    ax::Sprite* sp4;
+    ax::Sprite* sp5;
+    ax::Sprite* sp6;
+    ax::Sprite* sp7;
+    ax::Sprite* sp8;
+    ax::Sprite* sp9;
 };
 
 class RenderTextureTestDepthStencil : public RenderTextureTest
@@ -99,28 +99,28 @@ public:
     virtual ~RenderTextureTestDepthStencil();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 private:
-//    axis::CallbackCommand _renderCmds[4];
+//    ax::CallbackCommand _renderCmds[4];
     void onBeforeClear();
     void onBeforeStencil();
     void onBeforeDraw();
     void onAfterDraw();
 
 private:
-    axis::Renderer* _renderer;
-    axis::backend::DepthStencilDescriptor _dsDesc;
-    axis::RenderTexture* _rtx;
-    axis::Sprite* _spriteDS;
-    axis::Sprite* _spriteDraw;
+    ax::Renderer* _renderer;
+    ax::backend::DepthStencilDescriptor _dsDesc;
+    ax::RenderTexture* _rtx;
+    ax::Sprite* _spriteDS;
+    ax::Sprite* _spriteDraw;
 };
 
 class RenderTextureTargetNode : public RenderTextureTest
 {
 private:
-    axis::Sprite *sprite1, *sprite2;
-    axis::RenderTexture* renderTexture;
+    ax::Sprite *sprite1, *sprite2;
+    ax::RenderTexture* renderTexture;
 
 public:
     CREATE_FUNC(RenderTextureTargetNode);
@@ -130,7 +130,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void touched(axis::Ref* sender);
+    void touched(ax::Ref* sender);
 };
 
 class RenderTexturePartTest : public RenderTextureTest
@@ -143,34 +143,34 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::RenderTexture* _rend;
-    axis::Sprite* _spriteDraw;
+    ax::RenderTexture* _rend;
+    ax::Sprite* _spriteDraw;
 };
 
 class SpriteRenderTextureBug : public RenderTextureTest
 {
 public:
-    class SimpleSprite : public axis::Sprite
+    class SimpleSprite : public ax::Sprite
     {
     public:
-        static SimpleSprite* create(const char* filename, const axis::Rect& rect);
+        static SimpleSprite* create(const char* filename, const ax::Rect& rect);
         SimpleSprite();
         ~SimpleSprite();
-        virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags);
+        virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags);
 
     public:
-        axis::RenderTexture* _rt;
+        ax::RenderTexture* _rt;
     };
 
 public:
     CREATE_FUNC(SpriteRenderTextureBug);
     SpriteRenderTextureBug();
 
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    SimpleSprite* addNewSpriteWithCoords(const axis::Vec2& p);
+    SimpleSprite* addNewSpriteWithCoords(const ax::Vec2& p);
 };
 
 class Issue16113Test : public RenderTextureTest

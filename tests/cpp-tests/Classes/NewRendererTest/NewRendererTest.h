@@ -25,7 +25,7 @@
 #ifndef __NewRendererTest_H_
 #define __NewRendererTest_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
 #define kTagSpriteBatchNode 100
@@ -53,7 +53,7 @@ public:
 
     void createSpriteTest();
     void createNewSpriteTest();
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
     NewSpriteTest();
@@ -80,16 +80,16 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
     NewClippingNodeTest();
     virtual ~NewClippingNodeTest();
 
     bool _scrolling;
-    axis::Vec2 _lastPoint;
+    ax::Vec2 _lastPoint;
 };
 
 class NewDrawNodeTest : public MultiSceneTest
@@ -114,9 +114,9 @@ public:
 protected:
     NewCullingTest();
     virtual ~NewCullingTest();
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
-    void onTouchMoved(axis::Touch* touch, axis::Event* event);
-    axis::Vec2 _lastPos;
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchMoved(ax::Touch* touch, ax::Event* event);
+    ax::Vec2 _lastPos;
 };
 
 class SpriteCreation : public MultiSceneTest
@@ -136,9 +136,9 @@ public:
 protected:
     int totalSprites                = 1000;
     int suggestDelta                = 100;
-    axis::Label* _labelSpriteNum = nullptr;
-    axis::Label* labelCreate     = nullptr;
-    axis::Label* labelDestory    = nullptr;
+    ax::Label* _labelSpriteNum = nullptr;
+    ax::Label* labelCreate     = nullptr;
+    ax::Label* labelDestory    = nullptr;
     SpriteCreation();
     virtual ~SpriteCreation();
 };
@@ -168,7 +168,7 @@ protected:
     CaptureScreenTest();
     ~CaptureScreenTest();
 
-    void onCaptured(axis::Ref*);
+    void onCaptured(ax::Ref*);
     void afterCaptured(bool succeed, std::string_view outputFile);
 
     std::string _filename;
@@ -187,7 +187,7 @@ protected:
     CaptureNodeTest();
     ~CaptureNodeTest();
 
-    void onCaptured(axis::Ref*);
+    void onCaptured(ax::Ref*);
 
     std::string _filename;
 };
@@ -224,8 +224,8 @@ public:
 protected:
     RendererUniformBatch();
 
-    axis::backend::ProgramState* createBlurProgramState();
-    axis::backend::ProgramState* createSepiaProgramState();
+    ax::backend::ProgramState* createBlurProgramState();
+    ax::backend::ProgramState* createSepiaProgramState();
 };
 
 class RendererUniformBatch2 : public MultiSceneTest
@@ -238,8 +238,8 @@ public:
 protected:
     RendererUniformBatch2();
 
-    axis::backend::ProgramState* createBlurProgramState();
-    axis::backend::ProgramState* createSepiaProgramState();
+    ax::backend::ProgramState* createBlurProgramState();
+    ax::backend::ProgramState* createSepiaProgramState();
 };
 
 class NonBatchSprites : public MultiSceneTest
@@ -274,7 +274,7 @@ protected:
     float _maDt                   = 1.0f / 60.0f;
     float _rmaDt                  = 1.0f / 60.0f;
     const float DEST_DT_30FPS     = 1.0f / 30.0f;
-    axis::Label* _totalSprites = nullptr;
+    ax::Label* _totalSprites = nullptr;
     Ticker _contSlow              = Ticker(20);
     Ticker _contFast              = Ticker(2);
     Ticker _around30fps           = Ticker(60 * 3);

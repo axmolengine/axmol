@@ -37,7 +37,7 @@ public:
 
     AssetsManagerExLoaderScene(int testIndex);
 
-    void startDownloadCallback(axis::Ref* sender);
+    void startDownloadCallback(ax::Ref* sender);
 
     virtual std::string title() const override;
 
@@ -46,12 +46,12 @@ public:
 
 private:
     int _testIndex;
-    axis::Layer* _loadLayer;
-    axis::Menu* _downloadMenu;
+    ax::Layer* _loadLayer;
+    ax::Menu* _downloadMenu;
 
-    axis::extension::AssetsManagerEx* _am;
-    axis::Label* _progress;
-    axis::extension::EventListenerAssetsManagerEx* _amListener;
+    ax::extension::AssetsManagerEx* _am;
+    ax::Label* _progress;
+    ax::extension::EventListenerAssetsManagerEx* _amListener;
 
     void onLoadEnd();
 };

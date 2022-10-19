@@ -30,44 +30,44 @@
 
 DEFINE_TEST_SUITE(UIEditBoxTests);
 
-class UIEditBoxTest : public UIScene, public axis::ui::EditBoxDelegate
+class UIEditBoxTest : public UIScene, public ax::ui::EditBoxDelegate
 {
 public:
     CREATE_FUNC(UIEditBoxTest);
 
     virtual bool init() override;
 
-    virtual void editBoxEditingDidBegin(axis::ui::EditBox* editBox) override;
-    virtual void editBoxEditingDidEndWithAction(axis::ui::EditBox* editBox,
-                                                axis::ui::EditBoxDelegate::EditBoxEndAction action) override;
-    virtual void editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view text) override;
-    virtual void editBoxReturn(axis::ui::EditBox* editBox) override;
+    virtual void editBoxEditingDidBegin(ax::ui::EditBox* editBox) override;
+    virtual void editBoxEditingDidEndWithAction(ax::ui::EditBox* editBox,
+                                                ax::ui::EditBoxDelegate::EditBoxEndAction action) override;
+    virtual void editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxReturn(ax::ui::EditBox* editBox) override;
 
 protected:
-    axis::Label* _TTFShowEditReturn;
-    axis::ui::EditBox* _editName;
-    axis::ui::EditBox* _editPassword;
-    axis::ui::EditBox* _editEmail;
-    axis::Node* _editEmailParent;
+    ax::Label* _TTFShowEditReturn;
+    ax::ui::EditBox* _editName;
+    ax::ui::EditBox* _editPassword;
+    ax::ui::EditBox* _editEmail;
+    ax::Node* _editEmailParent;
 };
 
-class UIEditBoxTestToggleVisibility : public UIScene, public axis::ui::EditBoxDelegate
+class UIEditBoxTestToggleVisibility : public UIScene, public ax::ui::EditBoxDelegate
 {
 public:
     CREATE_FUNC(UIEditBoxTestToggleVisibility);
 
     virtual bool init() override;
 
-    virtual void editBoxEditingDidBegin(axis::ui::EditBox* editBox) override;
-    virtual void editBoxTextChanged(axis::ui::EditBox* editBox, std::string_view text) override;
-    virtual void editBoxReturn(axis::ui::EditBox* editBox) override;
+    virtual void editBoxEditingDidBegin(ax::ui::EditBox* editBox) override;
+    virtual void editBoxTextChanged(ax::ui::EditBox* editBox, std::string_view text) override;
+    virtual void editBoxReturn(ax::ui::EditBox* editBox) override;
 
 protected:
-    axis::Label* _TTFShowEditReturn;
-    axis::ui::EditBox* _editName;
-    axis::ui::EditBox* _editPassword;
-    axis::ui::EditBox* _editEmail;
-    axis::Node* _editEmailParent;
+    ax::Label* _TTFShowEditReturn;
+    ax::ui::EditBox* _editName;
+    ax::ui::EditBox* _editPassword;
+    ax::ui::EditBox* _editEmail;
+    ax::Node* _editEmailParent;
 };
 
 class UIEditBoxTestTextHorizontalAlignment : public UIScene

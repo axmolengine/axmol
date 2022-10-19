@@ -147,13 +147,13 @@ void UIButtonTest::touchEvent(Ref* pSender, Widget::TouchEventType type)
     }
 }
 
-void UIButtonTest::printWidgetResources(axis::Ref* sender)
+void UIButtonTest::printWidgetResources(ax::Ref* sender)
 {
-    axis::ResourceData normalFileName = _button->getNormalFile();
+    ax::ResourceData normalFileName = _button->getNormalFile();
     AXLOG("normalFileName  Name : %s, Type: %d", normalFileName.file.c_str(), normalFileName.type);
-    axis::ResourceData clickedFileName = _button->getPressedFile();
+    ax::ResourceData clickedFileName = _button->getPressedFile();
     AXLOG("clickedFileName  Name : %s, Type: %d", clickedFileName.file.c_str(), clickedFileName.type);
-    axis::ResourceData disabledFileName = _button->getDisabledFile();
+    ax::ResourceData disabledFileName = _button->getDisabledFile();
     AXLOG("disabledFileName  Name : %s, Type: %d", disabledFileName.file.c_str(), disabledFileName.type);
 }
 

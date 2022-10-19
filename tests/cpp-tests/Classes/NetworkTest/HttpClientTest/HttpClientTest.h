@@ -25,7 +25,7 @@
 #ifndef __HTTP_CLIENT_H__
 #define __HTTP_CLIENT_H__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "extensions/cocos-ext.h"
 #include "network/HttpClient.h"
 #include "BaseTest.h"
@@ -41,19 +41,19 @@ public:
     virtual ~HttpClientTest();
 
     // Menu Callbacks
-    void onMenuGetTestClicked(axis::Ref* sender);
-    void onMenuPostTestClicked(axis::Ref* sender);
-    void onMenuPostBinaryTestClicked(axis::Ref* sender);
-    void onMenuPutTestClicked(axis::Ref* sender);
-    void onMenuDeleteTestClicked(axis::Ref* sender);
+    void onMenuGetTestClicked(ax::Ref* sender);
+    void onMenuPostTestClicked(ax::Ref* sender);
+    void onMenuPostBinaryTestClicked(ax::Ref* sender);
+    void onMenuPutTestClicked(ax::Ref* sender);
+    void onMenuDeleteTestClicked(ax::Ref* sender);
 
     // Http Response Callback
-    void onHttpRequestCompleted(axis::network::HttpClient* sender, axis::network::HttpResponse* response);
+    void onHttpRequestCompleted(ax::network::HttpClient* sender, ax::network::HttpResponse* response);
 
     virtual std::string title() const override { return "Http Request Test"; }
 
 private:
-    axis::Label* _labelStatusCode;
+    ax::Label* _labelStatusCode;
 };
 
 class HttpClientClearRequestsTest : public TestCase
@@ -65,19 +65,19 @@ public:
     virtual ~HttpClientClearRequestsTest();
 
     // Menu Callbacks
-    void onMenuCancelAllClicked(axis::Ref* sender);
-    void onMenuCancelSomeClicked(axis::Ref* sender);
+    void onMenuCancelAllClicked(ax::Ref* sender);
+    void onMenuCancelSomeClicked(ax::Ref* sender);
 
     // Http Response Callback
-    void onHttpRequestCompleted(axis::network::HttpClient* sender, axis::network::HttpResponse* response);
+    void onHttpRequestCompleted(ax::network::HttpClient* sender, ax::network::HttpResponse* response);
 
     virtual std::string title() const override { return "Http Request Test"; }
 
 private:
     int _totalExpectedRequests;
     int _totalProcessedRequests;
-    axis::Label* _labelTrakingData;
-    axis::Label* _labelStatusCode;
+    ax::Label* _labelTrakingData;
+    ax::Label* _labelStatusCode;
 };
 
 #endif  //__HTTPREQUESTHTTP_H

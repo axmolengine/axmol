@@ -57,15 +57,15 @@ public:
     virtual std::string subtitle() const override;
     virtual void setup() override;
 
-    virtual axis::Action* actionRotate();
-    virtual axis::Action* actionScale();
+    virtual ax::Action* actionRotate();
+    virtual ax::Action* actionScale();
 
-    virtual axis::DrawNode* shape();
-    virtual axis::Sprite* grossini();
+    virtual ax::DrawNode* shape();
+    virtual ax::Sprite* grossini();
 
-    virtual axis::Node* stencil();
-    virtual axis::ClippingNode* clipper();
-    virtual axis::Node* content();
+    virtual ax::Node* stencil();
+    virtual ax::ClippingNode* clipper();
+    virtual ax::Node* content();
 };
 
 class ShapeTest : public BasicTest
@@ -76,8 +76,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    virtual axis::Node* stencil() override;
-    virtual axis::Node* content() override;
+    virtual ax::Node* stencil() override;
+    virtual ax::Node* content() override;
 };
 
 class ShapeInvertedTest : public ShapeTest
@@ -87,7 +87,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual axis::ClippingNode* clipper() override;
+    virtual ax::ClippingNode* clipper() override;
 };
 
 class SpriteTest : public BasicTest
@@ -98,9 +98,9 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    virtual axis::Node* stencil() override;
-    virtual axis::ClippingNode* clipper() override;
-    virtual axis::Node* content() override;
+    virtual ax::Node* stencil() override;
+    virtual ax::ClippingNode* clipper() override;
+    virtual ax::Node* content() override;
 };
 
 class SpriteNoAlphaTest : public SpriteTest
@@ -110,7 +110,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual axis::ClippingNode* clipper() override;
+    virtual ax::ClippingNode* clipper() override;
 };
 
 class SpriteInvertedTest : public SpriteTest
@@ -120,7 +120,7 @@ public:
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    virtual axis::ClippingNode* clipper() override;
+    virtual ax::ClippingNode* clipper() override;
 };
 
 class NestedTest : public BaseClippingNodeTest
@@ -142,13 +142,13 @@ public:
     virtual void setup() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void pokeHoleAtPoint(axis::Vec2 point);
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void pokeHoleAtPoint(ax::Vec2 point);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 private:
-    axis::ClippingNode* _outerClipper;
-    axis::Node* _holes;
-    axis::Node* _holesStencil;
+    ax::ClippingNode* _outerClipper;
+    ax::Node* _holes;
+    ax::Node* _holesStencil;
 };
 
 class ScrollViewDemo : public BaseClippingNodeTest
@@ -159,13 +159,13 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void setup() override;
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 private:
     bool _scrolling;
-    axis::Vec2 _lastPoint;
+    ax::Vec2 _lastPoint;
 };
 
 //#if _AX_DEBUG > 1
@@ -180,7 +180,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void setup() override;
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
     virtual void setupStencilForClippingOnPlane(int plane);
     virtual void setupStencilForDrawingOnPlane(int plane);
@@ -190,13 +190,13 @@ protected:
     void onBeforeDrawSprite(int planeIndex);
     void initCommands();
 
-    std::vector<axis::CustomCommand> _renderCmds;
-//    axis::CallbackCommand _enableStencilCallback;
-//    axis::CallbackCommand _disableStencilCallback;
-    axis::Vector<axis::Sprite*> _sprites;
-    axis::Vector<axis::Sprite*> _spritesStencil;
-    axis::backend::UniformLocation _locColor;
-    axis::backend::UniformLocation _locMVPMatrix;
+    std::vector<ax::CustomCommand> _renderCmds;
+//    ax::CallbackCommand _enableStencilCallback;
+//    ax::CallbackCommand _disableStencilCallback;
+    ax::Vector<ax::Sprite*> _sprites;
+    ax::Vector<ax::Sprite*> _spritesStencil;
+    ax::backend::UniformLocation _locColor;
+    ax::backend::UniformLocation _locMVPMatrix;
 };
 
 class RawStencilBufferTest2 : public RawStencilBufferTest
@@ -235,7 +235,7 @@ public:
     virtual void setupStencilForDrawingOnPlane(int plane) override;
 
 private:
-    axis::backend::UniformLocation _alphaMVPMatrix;
+    ax::backend::UniformLocation _alphaMVPMatrix;
 };
 
 class RawStencilBufferTest5 : public RawStencilBufferTestAlphaTest

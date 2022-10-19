@@ -69,10 +69,10 @@ public:
 
     CREATE_FUNC(UILayoutTest_BackGroundImage);
 
-    void printWidgetResources(axis::Ref* sender);
+    void printWidgetResources(ax::Ref* sender);
 
 protected:
-    axis::ui::Layout* _layout;
+    ax::ui::Layout* _layout;
 };
 
 class UILayoutTest_BackGroundImage_Scale9 : public UIScene
@@ -141,10 +141,10 @@ public:
     CREATE_FUNC(UILayoutComponentTest);
 
     virtual bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::LayerColor* _baseLayer;
+    ax::LayerColor* _baseLayer;
 };
 
 class UILayoutComponent_Berth_Test : public UILayoutComponentTest

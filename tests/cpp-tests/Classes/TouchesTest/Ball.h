@@ -25,30 +25,30 @@
 #ifndef _BALL_H_
 #define _BALL_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 
 class Paddle;
 
-class Ball : public axis::Sprite
+class Ball : public ax::Sprite
 {
-    axis::Vec2 _velocity;
+    ax::Vec2 _velocity;
 
 public:
     Ball();
     virtual ~Ball();
 
     float radius();
-    // BOOL initWithTexture(axis::Texture2D* aTexture);
-    // virtual void setTexture(axis::Texture2D* newTexture);
+    // BOOL initWithTexture(ax::Texture2D* aTexture);
+    // virtual void setTexture(ax::Texture2D* newTexture);
     void move(float delta);
     void collideWithPaddle(Paddle* paddle);
 
 public:
-    void setVelocity(axis::Vec2 velocity) { _velocity = velocity; }
-    axis::Vec2 getVelocity() { return _velocity; }
+    void setVelocity(ax::Vec2 velocity) { _velocity = velocity; }
+    ax::Vec2 getVelocity() { return _velocity; }
 
 public:
-    static Ball* ballWithTexture(axis::Texture2D* aTexture);
+    static Ball* ballWithTexture(ax::Texture2D* aTexture);
 };
 
 #endif

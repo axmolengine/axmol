@@ -46,11 +46,11 @@ public:
     TerrainSimple();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    axis::Terrain* _terrain;
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    ax::Terrain* _terrain;
 
 protected:
-    axis::Camera* _camera;
+    ax::Camera* _camera;
 };
 
 #    define PLAYER_STATE_LEFT 0
@@ -59,10 +59,10 @@ protected:
 #    define PLAYER_STATE_FORWARD 3
 #    define PLAYER_STATE_BACKWARD 4
 
-class Player : public axis::MeshRenderer
+class Player : public ax::MeshRenderer
 {
 public:
-    static Player* create(const char* file, axis::Camera* cam, axis::Terrain* terrain);
+    static Player* create(const char* file, ax::Camera* cam, ax::Terrain* terrain);
     virtual bool isDone() const;
     virtual void update(float dt);
 
@@ -71,14 +71,14 @@ public:
     void forward();
     void backward();
     void idle();
-    axis::Vec3 _targetPos;
+    ax::Vec3 _targetPos;
     void updateState();
     float _headingAngle;
-    axis::Vec3 _headingAxis;
+    ax::Vec3 _headingAxis;
 
 private:
-    axis::Terrain* _terrain;
-    axis::Camera* _cam;
+    ax::Terrain* _terrain;
+    ax::Camera* _cam;
     int _playerState;
 };
 
@@ -89,12 +89,12 @@ public:
     TerrainWalkThru();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnd(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnd(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
-    axis::Camera* _camera;
-    axis::Terrain* _terrain;
+    ax::Camera* _camera;
+    ax::Terrain* _terrain;
     Player* _player;
 };
 
@@ -105,11 +105,11 @@ public:
     TerrainWithLightMap();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
-    axis::Terrain* _terrain;
-    axis::Camera* _camera;
+    ax::Terrain* _terrain;
+    ax::Camera* _camera;
 };
 
 #endif  // !TERRAIN_TESH_H

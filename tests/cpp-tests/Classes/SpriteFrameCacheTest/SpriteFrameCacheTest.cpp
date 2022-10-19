@@ -48,7 +48,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
 
     infoLabel = Label::create();
     infoLabel->setAnchorPoint(Point(0.5f, 1.0f));
-    infoLabel->setAlignment(axis::TextHAlignment::CENTER);
+    infoLabel->setAlignment(ax::TextHAlignment::CENTER);
     infoLabel->setPosition(screenSize.width * 0.5f, screenSize.height * 0.7f);
     addChild(infoLabel);
 
@@ -77,7 +77,7 @@ SpriteFrameCachePixelFormatTest::SpriteFrameCachePixelFormatTest()
 }
 
 void SpriteFrameCachePixelFormatTest::loadSpriteFrames(std::string_view file,
-                                                       axis::backend::PixelFormat expectedFormat)
+                                                       ax::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
@@ -108,7 +108,7 @@ SpriteFrameCacheLoadMultipleTimes::SpriteFrameCacheLoadMultipleTimes()
 }
 
 void SpriteFrameCacheLoadMultipleTimes::loadSpriteFrames(std::string_view file,
-                                                         axis::backend::PixelFormat expectedFormat)
+                                                         ax::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file);
     SpriteFrame* spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("sprite_frames_test/grossini.png");
@@ -126,7 +126,7 @@ SpriteFrameCacheFullCheck::SpriteFrameCacheFullCheck()
     loadSpriteFrames("Images/test_polygon.plist", backend::PixelFormat::RGBA8);
 }
 
-void SpriteFrameCacheFullCheck::loadSpriteFrames(std::string_view file, axis::backend::PixelFormat expectedFormat)
+void SpriteFrameCacheFullCheck::loadSpriteFrames(std::string_view file, ax::backend::PixelFormat expectedFormat)
 {
     auto cache = SpriteFrameCache::getInstance();
 
@@ -477,7 +477,7 @@ SpriteFrameCacheJsonAtlasTest::SpriteFrameCacheJsonAtlasTest()
 
     infoLabel = Label::create();
     infoLabel->setAnchorPoint(Point(0.5f, 1.0f));
-    infoLabel->setAlignment(axis::TextHAlignment::CENTER);
+    infoLabel->setAlignment(ax::TextHAlignment::CENTER);
     infoLabel->setPosition(screenSize.width * 0.5f, screenSize.height * 0.7f);
     addChild(infoLabel);
 
@@ -491,7 +491,7 @@ SpriteFrameCacheJsonAtlasTest::~SpriteFrameCacheJsonAtlasTest()
 }
 
 void SpriteFrameCacheJsonAtlasTest::loadSpriteFrames(std::string_view file,
-                                                     axis::backend::PixelFormat expectedFormat)
+                                                     ax::backend::PixelFormat expectedFormat)
 {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile(file, GenericJsonArraySpriteSheetLoader::FORMAT);
     SpriteFrame* spriteFrame =

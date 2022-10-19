@@ -132,7 +132,7 @@ SOFTWARE.
 ** Workaround for 'vs2013 without full c++11 support', in the future, drop vs2013 support and
 ** follow 3 lines code will be removed
 */
-#if !YASIO__HAS_FULL_CXX11 && !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
+#if !YASIO__HAS_CXX11 && !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
 #  define YASIO_DISABLE_CONCURRENT_SINGLETON 1
 #endif
 

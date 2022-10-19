@@ -25,7 +25,7 @@
 #ifndef _PADDLE_H_
 #define _PADDLE_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 
 typedef enum tagPaddleState
 {
@@ -33,7 +33,7 @@ typedef enum tagPaddleState
     kPaddleStateUngrabbed
 } PaddleState;
 
-class Paddle : public axis::Sprite, public axis::Clonable
+class Paddle : public ax::Sprite, public ax::Clonable
 {
     PaddleState _state;
 
@@ -41,17 +41,17 @@ public:
     Paddle();
     virtual ~Paddle();
 
-    axis::Rect getRect();
-    bool initWithTexture(axis::Texture2D* aTexture) override;
+    ax::Rect getRect();
+    bool initWithTexture(ax::Texture2D* aTexture) override;
     virtual void onEnter() override;
     virtual void onExit() override;
-    bool containsTouchLocation(axis::Touch* touch);
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
-    void onTouchMoved(axis::Touch* touch, axis::Event* event);
-    void onTouchEnded(axis::Touch* touch, axis::Event* event);
+    bool containsTouchLocation(ax::Touch* touch);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchMoved(ax::Touch* touch, ax::Event* event);
+    void onTouchEnded(ax::Touch* touch, ax::Event* event);
     virtual Paddle* clone() const override;
 
-    static Paddle* createWithTexture(axis::Texture2D* aTexture);
+    static Paddle* createWithTexture(ax::Texture2D* aTexture);
 };
 
 #endif

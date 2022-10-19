@@ -36,7 +36,7 @@ int lua_ax_video_VideoPlayer_getFileName(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_VideoPlayer_getFileName'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getFileName();
+        auto&& ret = cobj->getFileName();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -83,7 +83,7 @@ int lua_ax_video_VideoPlayer_getURL(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_VideoPlayer_getURL'", nullptr);
             return 0;
         }
-        std::string_view ret = cobj->getURL();
+        auto&& ret = cobj->getURL();
         lua_pushlstring(tolua_S,ret.data(),ret.length());
         return 1;
     }
@@ -177,7 +177,7 @@ int lua_ax_video_VideoPlayer_isUserInputEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_VideoPlayer_isUserInputEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isUserInputEnabled();
+        auto&& ret = cobj->isUserInputEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -621,7 +621,7 @@ int lua_ax_video_VideoPlayer_isKeepAspectRatioEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_VideoPlayer_isKeepAspectRatioEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isKeepAspectRatioEnabled();
+        auto&& ret = cobj->isKeepAspectRatioEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -718,7 +718,7 @@ int lua_ax_video_VideoPlayer_isFullScreenEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_VideoPlayer_isFullScreenEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->isFullScreenEnabled();
+        auto&& ret = cobj->isFullScreenEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -765,7 +765,7 @@ int lua_ax_video_VideoPlayer_isLooping(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_VideoPlayer_isLooping'", nullptr);
             return 0;
         }
-        bool ret = cobj->isLooping();
+        auto&& ret = cobj->isLooping();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -812,7 +812,7 @@ int lua_ax_video_VideoPlayer_isPlaying(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_VideoPlayer_isPlaying'", nullptr);
             return 0;
         }
-        bool ret = cobj->isPlaying();
+        auto&& ret = cobj->isPlaying();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -948,7 +948,7 @@ int lua_ax_video_VideoPlayer_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_video_VideoPlayer_create'", nullptr);
             return 0;
         }
-        ax::ui::VideoPlayer* ret = ax::ui::VideoPlayer::create();
+        auto&& ret = ax::ui::VideoPlayer::create();
         object_to_luaval<ax::ui::VideoPlayer>(tolua_S, "axui.VideoPlayer",(ax::ui::VideoPlayer*)ret);
         return 1;
     }

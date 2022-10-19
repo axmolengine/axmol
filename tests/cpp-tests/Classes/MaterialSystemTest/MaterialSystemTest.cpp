@@ -30,7 +30,7 @@
 #include <spine/spine-cocos2dx.h>
 
 #include "../testResource.h"
-#include "cocos2d.h"
+#include "axmol.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_AX;
@@ -482,7 +482,7 @@ static void printProperties(Properties* properties, int indent)
 {
     // Print the name and ID of the current namespace.
     const char* spacename = properties->getNamespace();
-    const char* id        = properties->getId();
+    const char* id        = properties->getId().data();
     char chindent[64];
     int i = 0;
     for (i = 0; i < indent * 2; i++)

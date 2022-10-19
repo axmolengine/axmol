@@ -26,7 +26,7 @@
 #ifndef __CHIPMUNKTESTBED_H__
 #define __CHIPMUNKTESTBED_H__
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "chipmunk/chipmunk.h"
 #include "../BaseTest.h"
 #include "extensions/cocos-ext.h"
@@ -43,27 +43,27 @@ public:
 
     void onEnter() override;
     void createResetButton();
-    void reset(axis::Ref* sender);
+    void reset(ax::Ref* sender);
 
     void update(float dt) override;
     virtual void initPhysics();
 
-    void onMouseDown(axis::Event* event);
-    void onMouseUp(axis::Event* event);
-    void onMouseMove(axis::Event* event);
+    void onMouseDown(ax::Event* event);
+    void onMouseUp(ax::Event* event);
+    void onMouseMove(ax::Event* event);
     void DrawInfo();
     void updateInit(ChipmunkDemo tt);
 
     cpSpace* _space;                                              // strong ref
-    axis::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
+    ax::extension::PhysicsDebugNodeChipmunk2D* _debugLayer;  // weak ref
     int keyPresses;
     bool mousePresses = false;
 
 private:
-    axis::EventListenerMouse* _mouseListener;
-    axis::Node* _trackNode;
-    axis::DrawNode* draw;
-    axis::Label* drawInfo;
+    ax::EventListenerMouse* _mouseListener;
+    ax::Node* _trackNode;
+    ax::DrawNode* draw;
+    ax::Label* drawInfo;
 };
 
 class LogoSmashDemo : public ChipmunkTestBed

@@ -74,8 +74,8 @@ LAppLive2DManager::LAppLive2DManager()
 
     CreateShader();
 
-    int width = static_cast<int>(axis::Director::getInstance()->getOpenGLView()->getFrameSize().width);
-    int height = static_cast<int>(axis::Director::getInstance()->getOpenGLView()->getFrameSize().height);
+    int width = static_cast<int>(ax::Director::getInstance()->getOpenGLView()->getFrameSize().width);
+    int height = static_cast<int>(ax::Director::getInstance()->getOpenGLView()->getFrameSize().height);
 
     // 画面全体を覆うサイズ
     _sprite = new LAppSprite(_program);
@@ -343,7 +343,7 @@ void LAppLive2DManager::CreateShader()
         "    gl_FragColor = vec4(gl_FragColor.rgb * gl_FragColor.a,  gl_FragColor.a);"
         "}";
 
-    auto program = axis::backend::Device::getInstance()->newProgram(vertexShader, fragmentShader);
+    auto program = ax::backend::Device::getInstance()->newProgram(vertexShader, fragmentShader);
     _program = program;
 
 }

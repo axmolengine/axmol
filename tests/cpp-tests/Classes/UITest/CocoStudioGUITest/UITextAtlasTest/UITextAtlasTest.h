@@ -35,10 +35,10 @@ public:
     CREATE_FUNC(UITextAtlasTest);
 
     virtual bool init() override;
-    void printWidgetResources(axis::Ref* sender);
+    void printWidgetResources(ax::Ref* sender);
 
 protected:
-    axis::ui::TextAtlas* _textAtlas;
+    ax::ui::TextAtlas* _textAtlas;
 };
 
 class UITextAtlasETC1ShadowTest : public UIScene
@@ -47,10 +47,10 @@ public:
     CREATE_FUNC(UITextAtlasETC1ShadowTest);
 
     virtual bool init() override;
-    void printWidgetResources(axis::Ref* sender);
+    void printWidgetResources(ax::Ref* sender);
 
 protected:
-    axis::ui::TextAtlas* _textAtlas;
+    ax::ui::TextAtlas* _textAtlas;
 };
 
 #endif /* defined(__TestCpp__UITextAtlasTest__) */

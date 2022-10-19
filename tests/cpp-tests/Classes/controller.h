@@ -60,7 +60,7 @@ public:
     void onEnterBackground();
     void onEnterForeground();
 
-    bool blockTouchBegan(axis::Touch* touch, axis::Event* event);
+    bool blockTouchBegan(ax::Touch* touch, ax::Event* event);
 
     void setCurrTestSuite(TestSuite* testSuite) { _testSuite = testSuite; }
     TestSuite* getCurrTestSuite() { return _testSuite; }
@@ -88,8 +88,8 @@ private:
     std::condition_variable _sleepCondition;
     std::unique_lock<std::mutex>* _sleepUniqueLock;
 
-    axis::Director* _director;
-    axis::EventListenerTouchOneByOne* _touchListener;
+    ax::Director* _director;
+    ax::EventListenerTouchOneByOne* _touchListener;
 
     std::string _logIndentation;
 };

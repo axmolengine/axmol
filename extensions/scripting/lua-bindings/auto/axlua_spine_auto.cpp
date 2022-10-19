@@ -136,7 +136,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getDebugSlotsEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->getDebugSlotsEnabled();
+        auto&& ret = cobj->getDebugSlotsEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -760,7 +760,7 @@ int lua_ax_spine_SkeletonRenderer_isTwoColorTint(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_isTwoColorTint'", nullptr);
             return 0;
         }
-        bool ret = cobj->isTwoColorTint();
+        auto&& ret = cobj->isTwoColorTint();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -917,7 +917,7 @@ int lua_ax_spine_SkeletonRenderer_getBlendFunc(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getBlendFunc'", nullptr);
             return 0;
         }
-        const ax::BlendFunc& ret = cobj->getBlendFunc();
+        auto&& ret = cobj->getBlendFunc();
         blendfunc_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -1017,7 +1017,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled(lua_State* tolua_S
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getDebugBoundingRectEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->getDebugBoundingRectEnabled();
+        auto&& ret = cobj->getDebugBoundingRectEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1161,7 +1161,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getDebugBonesEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->getDebugBonesEnabled();
+        auto&& ret = cobj->getDebugBonesEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1208,7 +1208,7 @@ int lua_ax_spine_SkeletonRenderer_getTimeScale(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getTimeScale'", nullptr);
             return 0;
         }
-        double ret = cobj->getTimeScale();
+        auto&& ret = cobj->getTimeScale();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -1305,7 +1305,7 @@ int lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled'", nullptr);
             return 0;
         }
-        bool ret = cobj->getDebugMeshesEnabled();
+        auto&& ret = cobj->getDebugMeshesEnabled();
         tolua_pushboolean(tolua_S,(bool)ret);
         return 1;
     }
@@ -1507,7 +1507,7 @@ int lua_ax_spine_SkeletonRenderer_getSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_getSkeleton'", nullptr);
             return 0;
         }
-        spine::Skeleton* ret = cobj->getSkeleton();
+        auto&& ret = cobj->getSkeleton();
         object_to_luaval<spine::Skeleton>(tolua_S, "sp.Skeleton",(spine::Skeleton*)ret);
         return 1;
     }
@@ -1635,7 +1635,7 @@ int lua_ax_spine_SkeletonRenderer_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_create'", nullptr);
             return 0;
         }
-        spine::SkeletonRenderer* ret = spine::SkeletonRenderer::create();
+        auto&& ret = spine::SkeletonRenderer::create();
         object_to_luaval<spine::SkeletonRenderer>(tolua_S, "sp.SkeletonRenderer",(spine::SkeletonRenderer*)ret);
         return 1;
     }
@@ -1671,7 +1671,7 @@ int lua_ax_spine_SkeletonRenderer_createWithSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_createWithSkeleton'", nullptr);
             return 0;
         }
-        spine::SkeletonRenderer* ret = spine::SkeletonRenderer::createWithSkeleton(arg0);
+        auto&& ret = spine::SkeletonRenderer::createWithSkeleton(arg0);
         object_to_luaval<spine::SkeletonRenderer>(tolua_S, "sp.SkeletonRenderer",(spine::SkeletonRenderer*)ret);
         return 1;
     }
@@ -1686,7 +1686,7 @@ int lua_ax_spine_SkeletonRenderer_createWithSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_createWithSkeleton'", nullptr);
             return 0;
         }
-        spine::SkeletonRenderer* ret = spine::SkeletonRenderer::createWithSkeleton(arg0, arg1);
+        auto&& ret = spine::SkeletonRenderer::createWithSkeleton(arg0, arg1);
         object_to_luaval<spine::SkeletonRenderer>(tolua_S, "sp.SkeletonRenderer",(spine::SkeletonRenderer*)ret);
         return 1;
     }
@@ -1703,7 +1703,7 @@ int lua_ax_spine_SkeletonRenderer_createWithSkeleton(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_createWithSkeleton'", nullptr);
             return 0;
         }
-        spine::SkeletonRenderer* ret = spine::SkeletonRenderer::createWithSkeleton(arg0, arg1, arg2);
+        auto&& ret = spine::SkeletonRenderer::createWithSkeleton(arg0, arg1, arg2);
         object_to_luaval<spine::SkeletonRenderer>(tolua_S, "sp.SkeletonRenderer",(spine::SkeletonRenderer*)ret);
         return 1;
     }
@@ -2091,7 +2091,7 @@ int lua_ax_spine_SkeletonAnimation_findAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_findAnimation'", nullptr);
             return 0;
         }
-        spine::Animation* ret = cobj->findAnimation(arg0);
+        auto&& ret = cobj->findAnimation(arg0);
         object_to_luaval<spine::Animation>(tolua_S, "sp.Animation",(spine::Animation*)ret);
         return 1;
     }
@@ -2311,7 +2311,7 @@ int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_addEmptyAnimation'", nullptr);
             return 0;
         }
-        spine::TrackEntry* ret = cobj->addEmptyAnimation(arg0, arg1);
+        auto&& ret = cobj->addEmptyAnimation(arg0, arg1);
         object_to_luaval<spine::TrackEntry>(tolua_S, "sp.TrackEntry",(spine::TrackEntry*)ret);
         return 1;
     }
@@ -2331,7 +2331,7 @@ int lua_ax_spine_SkeletonAnimation_addEmptyAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_addEmptyAnimation'", nullptr);
             return 0;
         }
-        spine::TrackEntry* ret = cobj->addEmptyAnimation(arg0, arg1, arg2);
+        auto&& ret = cobj->addEmptyAnimation(arg0, arg1, arg2);
         object_to_luaval<spine::TrackEntry>(tolua_S, "sp.TrackEntry",(spine::TrackEntry*)ret);
         return 1;
     }
@@ -2764,7 +2764,7 @@ int lua_ax_spine_SkeletonAnimation_setEmptyAnimation(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_setEmptyAnimation'", nullptr);
             return 0;
         }
-        spine::TrackEntry* ret = cobj->setEmptyAnimation(arg0, arg1);
+        auto&& ret = cobj->setEmptyAnimation(arg0, arg1);
         object_to_luaval<spine::TrackEntry>(tolua_S, "sp.TrackEntry",(spine::TrackEntry*)ret);
         return 1;
     }
@@ -3326,7 +3326,7 @@ int lua_ax_spine_SkeletonAnimation_create(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonAnimation_create'", nullptr);
             return 0;
         }
-        spine::SkeletonAnimation* ret = spine::SkeletonAnimation::create();
+        auto&& ret = spine::SkeletonAnimation::create();
         object_to_luaval<spine::SkeletonAnimation>(tolua_S, "sp.SkeletonAnimation",(spine::SkeletonAnimation*)ret);
         return 1;
     }

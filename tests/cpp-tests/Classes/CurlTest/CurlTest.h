@@ -25,7 +25,7 @@
 #ifndef _CURL_TEST_H_
 #define _CURL_TEST_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(CurlTests);
@@ -38,10 +38,10 @@ public:
     CurlTest();
     ~CurlTest();
 
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 private:
-    axis::Label* _label;
+    ax::Label* _label;
 };
 
 #endif  // _CURL_TEST_H_

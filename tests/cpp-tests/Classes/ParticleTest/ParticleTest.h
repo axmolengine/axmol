@@ -32,9 +32,9 @@ DEFINE_TEST_SUITE(ParticleTests);
 class ParticleDemo : public TestCase
 {
 protected:
-    axis::ParticleSystemQuad* _emitter;
-    axis::Sprite* _background;
-    axis::LayerColor* _color;
+    ax::ParticleSystemQuad* _emitter;
+    ax::Sprite* _background;
+    ax::LayerColor* _color;
 
 public:
     ~ParticleDemo();
@@ -44,11 +44,11 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void toggleCallback(axis::Ref* sender);
+    void toggleCallback(ax::Ref* sender);
 
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
     virtual void update(float dt) override;
     void setEmitterPosition();
@@ -484,8 +484,8 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::Node* _parent1;
-    axis::Node* _parent2;
+    ax::Node* _parent1;
+    ax::Node* _parent2;
 };
 
 class ParticleBatchMultipleEmitters : public ParticleDemo
@@ -542,7 +542,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::ParticleBatchNode* _batchNode;
+    ax::ParticleBatchNode* _batchNode;
 };
 
 class ReorderParticleSystems : public ParticleDemo
@@ -556,7 +556,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::ParticleBatchNode* _batchNode;
+    ax::ParticleBatchNode* _batchNode;
 };
 
 class PremultipliedAlphaTest : public ParticleDemo

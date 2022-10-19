@@ -24,7 +24,6 @@
  ****************************************************************************/
 
 #include "renderer/backend/ProgramState.h"
-#include "renderer/backend/ProgramCache.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/Types.h"

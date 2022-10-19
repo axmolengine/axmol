@@ -25,7 +25,7 @@
 #include "platform/CCPlatformConfig.h"
 #include "extensions/cocos-ext.h"
 #include "ImGui/ImGuiPresenter.h"
-#include "cocos2d.h"
+#include "axmol.h"
 
 #include "Box2DTestBed.h"
 #include "tests/test.h"
@@ -40,7 +40,7 @@ enum
 };
 
 Settings settings;
-axis::Label* labelDebugDraw;
+ax::Label* labelDebugDraw;
 
 enum
 {

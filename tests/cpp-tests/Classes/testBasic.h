@@ -25,14 +25,14 @@
 #ifndef _TEST_BASIC_H_
 #define _TEST_BASIC_H_
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "VisibleRect.h"
 
 /**
  * TestScene is retained for compatibility with older versions.
  * @warning It should soon be removed.
  */
-class TestScene : public axis::Scene
+class TestScene : public ax::Scene
 {
 public:
     TestScene(bool bPortrait = false, bool physics = false) {}

@@ -1,6 +1,7 @@
 /****************************************************************************
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2022  Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -26,6 +27,7 @@
 #include "3d/CCAnimation3D.h"
 #include "3d/CCBundle3D.h"
 #include "platform/CCFileUtils.h"
+#include "base/axstd.h"
 
 NS_AX_BEGIN
 
@@ -102,83 +104,83 @@ bool Animation3D::init(const Animation3DData& data)
 {
     _duration = data._totalTime;
 
-    for (const auto& iter : data._translationKeys)
     {
-        Curve* curve = _boneCurves[iter.first];
-        if (curve == nullptr)
+        axstd::pod_vector<float> keys;
+        axstd::pod_vector<Vec3> values;
+        for (const auto& iter : data._translationKeys)
         {
-            curve                   = new Curve();
-            _boneCurves[iter.first] = curve;
-        }
+            Curve* curve = _boneCurves[iter.first];
+            if (curve == nullptr)
+            {
+                curve                   = new Curve();
+                _boneCurves[iter.first] = curve;
+            }
 
-        if (iter.second.empty())
-            continue;
-        std::vector<float> keys;
-        std::vector<float> values;
-        for (const auto& keyIter : iter.second)
-        {
-            keys.emplace_back(keyIter._time);
-            values.emplace_back(keyIter._key.x);
-            values.emplace_back(keyIter._key.y);
-            values.emplace_back(keyIter._key.z);
-        }
+            if (iter.second.empty())
+                continue;
 
-        curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0], (int)keys.size());
-        if (curve->translateCurve)
-            curve->translateCurve->retain();
+
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
+                                        [](const auto& keyIter) { return keyIter._time; });
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), values,
+                                        [](const auto& keyIter) { return keyIter._key; });
+
+            curve->translateCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
+            if (curve->translateCurve)
+                curve->translateCurve->retain();
+        }
     }
 
-    for (const auto& iter : data._rotationKeys)
     {
-        Curve* curve = _boneCurves[iter.first];
-        if (curve == nullptr)
+        axstd::pod_vector<float> keys;
+        axstd::pod_vector<Quaternion> values;
+        for (const auto& iter : data._rotationKeys)
         {
-            curve                   = new Curve();
-            _boneCurves[iter.first] = curve;
-        }
+            Curve* curve = _boneCurves[iter.first];
+            if (curve == nullptr)
+            {
+                curve                   = new Curve();
+                _boneCurves[iter.first] = curve;
+            }
 
-        if (iter.second.empty())
-            continue;
-        std::vector<float> keys;
-        std::vector<float> values;
-        for (const auto& keyIter : iter.second)
-        {
-            keys.emplace_back(keyIter._time);
-            values.emplace_back(keyIter._key.x);
-            values.emplace_back(keyIter._key.y);
-            values.emplace_back(keyIter._key.z);
-            values.emplace_back(keyIter._key.w);
-        }
+            if (iter.second.empty())
+                continue;
 
-        curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0], (int)keys.size());
-        if (curve->rotCurve)
-            curve->rotCurve->retain();
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
+                                        [](const auto& keyIter) { return keyIter._time; });
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), values,
+                                        [](const auto& keyIter) { return keyIter._key; });
+
+            curve->rotCurve = Curve::AnimationCurveQuat::create(&keys[0], &values[0].x, (int)keys.size());
+            if (curve->rotCurve)
+                curve->rotCurve->retain();
+        }
     }
 
-    for (const auto& iter : data._scaleKeys)
     {
-        Curve* curve = _boneCurves[iter.first];
-        if (curve == nullptr)
+        axstd::pod_vector<float> keys;
+        axstd::pod_vector<Vec3> values;
+        for (const auto& iter : data._scaleKeys)
         {
-            curve                   = new Curve();
-            _boneCurves[iter.first] = curve;
-        }
+            Curve* curve = _boneCurves[iter.first];
+            if (curve == nullptr)
+            {
+                curve                   = new Curve();
+                _boneCurves[iter.first] = curve;
+            }
 
-        if (iter.second.empty())
-            continue;
-        std::vector<float> keys;
-        std::vector<float> values;
-        for (const auto& keyIter : iter.second)
-        {
-            keys.emplace_back(keyIter._time);
-            values.emplace_back(keyIter._key.x);
-            values.emplace_back(keyIter._key.y);
-            values.emplace_back(keyIter._key.z);
-        }
+            if (iter.second.empty())
+                continue;
 
-        curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0], (int)keys.size());
-        if (curve->scaleCurve)
-            curve->scaleCurve->retain();
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), keys,
+                                        [](const auto& keyIter) { return keyIter._time; });
+            axstd::resize_and_transform(iter.second.begin(), iter.second.end(), values,
+                                        [](const auto& keyIter) { return keyIter._key; });
+
+            curve->scaleCurve = Curve::AnimationCurveVec3::create(&keys[0], &values[0].x, (int)keys.size());
+            if (curve->scaleCurve)
+                curve->scaleCurve->retain();
+        }
     }
 
     return true;

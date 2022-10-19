@@ -61,8 +61,8 @@ message(STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
 # custom target property for lua/js link
 define_property(TARGET
     PROPERTY AX_LUA_DEPEND
-    BRIEF_DOCS "axis lua depend libs"
-    FULL_DOCS "use to save depend libs of axis lua project"
+    BRIEF_DOCS "axmol lua depend libs"
+    FULL_DOCS "use to save depend libs of axmol lua project"
 )
 
 # config c standard
@@ -103,12 +103,12 @@ if(WINDOWS)
         # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
         # Visual Studio 2017, MSVC_VERSION 1910-1919 (v141 toolset)
         if(${MSVC_VERSION} EQUAL 1900 OR ${MSVC_VERSION} GREATER 1900)
-            message(STATUS "using Windows MSVC generate axis project, MSVC_VERSION:${MSVC_VERSION}")
+            message(STATUS "using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION}")
         else()
-            message(FATAL_ERROR "using Windows MSVC generate axis project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
+            message(FATAL_ERROR "using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
         endif()
     else()
-        message(FATAL_ERROR "please using Windows MSVC compile axis project, support other compile tools not yet")
+        message(FATAL_ERROR "please using Windows MSVC compile axmol project, support other compile tools not yet")
     endif()
 endif()
 
@@ -116,7 +116,7 @@ endif()
 function(use_ax_compile_define target)
     target_compile_definitions(${target} PUBLIC $<$<CONFIG:Debug>:_AX_DEBUG=1>)
 
-    # !important axis not use double precision
+    # !important axmol not use double precision
     # target_compile_definitions(${target} PUBLIC CP_USE_CGTYPES=0)
     # target_compile_definitions(${target} PUBLIC CP_USE_DOUBLES=0)
 

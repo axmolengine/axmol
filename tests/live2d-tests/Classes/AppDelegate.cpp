@@ -25,10 +25,10 @@ using namespace CocosDenshion;
 
 USING_NS_AX;
 
-static axis::Size designResolutionSize = axis::Size(LAppDefine::RenderTargetWidth, LAppDefine::RenderTargetHeight);
-static axis::Size smallResolutionSize = axis::Size(480, 320);
-static axis::Size mediumResolutionSize = axis::Size(1024, 768);
-static axis::Size largeResolutionSize = axis::Size(2048, 1536);
+static ax::Size designResolutionSize = ax::Size(LAppDefine::RenderTargetWidth, LAppDefine::RenderTargetHeight);
+static ax::Size smallResolutionSize = ax::Size(480, 320);
+static ax::Size mediumResolutionSize = ax::Size(1024, 768);
+static ax::Size largeResolutionSize = ax::Size(2048, 1536);
 
 AppDelegate::AppDelegate()
 {
@@ -72,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     if(!glView)
     {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-        glView = GLViewImpl::createWithRect("Demo", axis::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glView = GLViewImpl::createWithRect("Demo", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
         glView = GLViewImpl::create("Demo");
 #endif
@@ -111,7 +111,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     _cubismOption.LoggingLevel = LAppDefine::CubismLoggingLevel;
     Csm::CubismFramework::StartUp(&_cubismAllocator, &_cubismOption);
 
-    _recreatedEventlistener = axis::EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*)
+    _recreatedEventlistener = ax::EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*)
     {
         LAppLive2DManager::GetInstance()->RecreateRenderer();
     });

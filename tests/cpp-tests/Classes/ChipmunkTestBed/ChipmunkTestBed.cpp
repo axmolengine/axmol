@@ -100,7 +100,7 @@ char const* ChipmunkDemoMessageString = NULL;
 cpShapeFilter GRAB_FILTER          = {CP_NO_GROUP, (unsigned int)GRABBABLE_MASK_BIT, (unsigned int)GRABBABLE_MASK_BIT};
 cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
-axis::DrawNode* drawCP = NULL;
+ax::DrawNode* drawCP = NULL;
 
 void ChipmunkDemoDefaultDrawImpl(cpSpace* space){};
 
@@ -168,7 +168,7 @@ void ChipmunkDebugDrawBB(cpBB bb, cpSpaceDebugColor color)
                         Color4F(0.0f, 0.0f, 1.0f, 1.0f));
 }
 
-axis::Label* label;
+ax::Label* label;
 
 static int max_arbiters    = 0;
 static int max_points      = 0;
@@ -305,7 +305,7 @@ void updateMouseBody(void)
 
 ChipmunkTestBed::ChipmunkTestBed()
 {
-    // halx99: since axis init scene default camera at 'initWithXXX' function, only change design size at scene
+    // halx99: since axmol init scene default camera at 'initWithXXX' function, only change design size at scene
     // construct is ok see also: https://github.com/axmolengine/axmol/commit/581a7921554c09746616759d5a5ca6ce9d3eaa22
     auto director = Director::getInstance();
     auto glView   = director->getOpenGLView();

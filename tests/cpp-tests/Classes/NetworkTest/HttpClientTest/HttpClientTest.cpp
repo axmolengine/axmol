@@ -102,7 +102,7 @@ HttpClientTest::~HttpClientTest()
     HttpClient::destroyInstance();
 }
 
-void HttpClientTest::onMenuGetTestClicked(axis::Ref* sender)
+void HttpClientTest::onMenuGetTestClicked(ax::Ref* sender)
 {
     // test 1(sync request test)
     {
@@ -175,7 +175,7 @@ void HttpClientTest::onMenuGetTestClicked(axis::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuPostTestClicked(axis::Ref* sender)
+void HttpClientTest::onMenuPostTestClicked(ax::Ref* sender)
 {
     // test 1
     {
@@ -213,7 +213,7 @@ void HttpClientTest::onMenuPostTestClicked(axis::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientTest::onMenuPostBinaryTestClicked(axis::Ref* sender)
+void HttpClientTest::onMenuPostBinaryTestClicked(ax::Ref* sender)
 {
     HttpRequest* request = new HttpRequest();
     request->setUrl("https://httpbin.org/post");
@@ -381,7 +381,7 @@ HttpClientClearRequestsTest::~HttpClientClearRequestsTest()
     HttpClient::destroyInstance();
 }
 
-void HttpClientClearRequestsTest::onMenuCancelAllClicked(axis::Ref* sender)
+void HttpClientClearRequestsTest::onMenuCancelAllClicked(ax::Ref* sender)
 {
     for (int i = 0; i < 10; i++)
     {
@@ -409,7 +409,7 @@ void HttpClientClearRequestsTest::onMenuCancelAllClicked(axis::Ref* sender)
     _labelStatusCode->setString("waiting...");
 }
 
-void HttpClientClearRequestsTest::onMenuCancelSomeClicked(axis::Ref* sender)
+void HttpClientClearRequestsTest::onMenuCancelSomeClicked(ax::Ref* sender)
 {
     // test 1
     for (int i = 0; i < 10; i++)

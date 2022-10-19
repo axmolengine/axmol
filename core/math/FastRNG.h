@@ -8,7 +8,7 @@
  * It uses a simple algorithm to improve the speed of generating random numbers with a decent quality,
  * Use this if you're planning to generate large amounts of random numbers in a single frame.
  *
- * @since axis-1.0.0b8
+ * @since axmol-1.0.0b8
  */
 struct FastRNG
 {

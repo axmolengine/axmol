@@ -29,14 +29,14 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
     backend::BlendDescriptor* blendDescriptor = drawCommandBuffer->GetCommandDraw()->GetBlendDescriptor();
     backend::ProgramState* programState = pipelineDescriptor->programState;
 
-    drawCommandBuffer->GetCommandDraw()->GetCommand()->setDrawType(axis::CustomCommand::DrawType::ELEMENT);
-    drawCommandBuffer->GetCommandDraw()->GetCommand()->setPrimitiveType(axis::backend::PrimitiveType::TRIANGLE);
+    drawCommandBuffer->GetCommandDraw()->GetCommand()->setDrawType(ax::CustomCommand::DrawType::ELEMENT);
+    drawCommandBuffer->GetCommandDraw()->GetCommand()->setPrimitiveType(ax::backend::PrimitiveType::TRIANGLE);
     drawCommandBuffer->CreateVertexBuffer(sizeof(float) * 2, 4 * 2);
     drawCommandBuffer->CreateIndexBuffer(6);
 
     // 画面サイズを取得する
-    axis::Size visibleSize = axis::Director::getInstance()->getVisibleSize();
-    axis::Size winSize = axis::Director::getInstance()->getWinSize();
+    ax::Size visibleSize = ax::Director::getInstance()->getVisibleSize();
+    ax::Size winSize = ax::Director::getInstance()->getWinSize();
 
     // 頂点データ
     float positionVertex[] =
@@ -59,7 +59,7 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     if (!programState)
     {
-        programState = new axis::backend::ProgramState(_program);
+        programState = new ax::backend::ProgramState(_program);
     }
 
     // attribute属性を登録
@@ -73,10 +73,10 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
 
     programState->setVertexStride(sizeof(float) * 4);
 
-    blendDescriptor->sourceRGBBlendFactor = axis::backend::BlendFactor::ONE;
-    blendDescriptor->destinationRGBBlendFactor = axis::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
-    blendDescriptor->sourceAlphaBlendFactor = axis::backend::BlendFactor::ONE;
-    blendDescriptor->destinationAlphaBlendFactor = axis::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+    blendDescriptor->sourceRGBBlendFactor = ax::backend::BlendFactor::ONE;
+    blendDescriptor->destinationRGBBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
+    blendDescriptor->sourceAlphaBlendFactor = ax::backend::BlendFactor::ONE;
+    blendDescriptor->destinationAlphaBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;
     blendDescriptor->blendEnabled = true;
 
     pipelineDescriptor->programState = programState;
