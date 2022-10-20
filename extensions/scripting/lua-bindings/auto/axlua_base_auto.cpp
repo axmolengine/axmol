@@ -58872,6 +58872,53 @@ int lua_ax_base_Sprite_getSpriteFrame(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Sprite_setVertexLayout(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Sprite* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Sprite",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setVertexLayout'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setVertexLayout'", nullptr);
+            return 0;
+        }
+        cobj->setVertexLayout();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Sprite:setVertexLayout",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Sprite_setVertexLayout'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Sprite_removeAllChildrenWithCleanup(lua_State* tolua_S)
 {
     int argc = 0;
@@ -59916,6 +59963,7 @@ int lua_register_ax_base_Sprite(lua_State* tolua_S)
         tolua_function(tolua_S,"getBlendFunc",lua_ax_base_Sprite_getBlendFunc);
         tolua_function(tolua_S,"setCenterRect",lua_ax_base_Sprite_setCenterRect);
         tolua_function(tolua_S,"getSpriteFrame",lua_ax_base_Sprite_getSpriteFrame);
+        tolua_function(tolua_S,"setVertexLayout",lua_ax_base_Sprite_setVertexLayout);
         tolua_function(tolua_S,"removeAllChildrenWithCleanup",lua_ax_base_Sprite_removeAllChildrenWithCleanup);
         tolua_function(tolua_S,"getResourceName",lua_ax_base_Sprite_getResourceName);
         tolua_function(tolua_S,"isDirty",lua_ax_base_Sprite_isDirty);
