@@ -355,6 +355,12 @@ void Sprite::setTexture(std::string_view filename)
     setTextureRect(rect);
 }
 
+void Sprite::setVertexLayout()
+{
+    AXASSERT(_programState, "programState should not be nullptr");
+    _programState->validateSharedVertexLayout(VertexLayoutHelper::setupSprite);
+}
+
 void Sprite::setProgramState(uint32_t type)
 {
     setProgramStateWithRegistry(type, _texture);
@@ -370,6 +376,7 @@ bool Sprite::setProgramState(backend::ProgramState* programState, bool needsReta
 
         _mvpMatrixLocation = _programState->getUniformLocation(backend::Uniform::MVP_MATRIX);
 
+        setVertexLayout();
         updateProgramStateTexture(_texture);
         setMVPMatrixUniform();
         return true;
