@@ -121,6 +121,12 @@ void SpriteBatchNode::setUniformLocation()
     _textureLocation   = _programState->getUniformLocation("u_tex0");
 }
 
+void SpriteBatchNode::setVertexLayout()
+{
+    AXASSERT(_programState, "programState should not be nullptr");
+    _programState->validateSharedVertexLayout(VertexLayoutHelper::setupSprite);
+}
+
 bool SpriteBatchNode::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
     AXASSERT(programState, "programState should not be nullptr");
@@ -129,6 +135,7 @@ bool SpriteBatchNode::setProgramState(backend::ProgramState* programState, bool 
         auto& pipelineDescriptor        = _quadCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;
 
+        setVertexLayout();
         updateProgramStateTexture(_textureAtlas->getTexture());
         setUniformLocation();
         return true;

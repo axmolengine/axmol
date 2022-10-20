@@ -156,7 +156,6 @@ private:
     bool getAttributeLocation(std::string_view attributeName, unsigned int& location) const;
     void computeUniformInfos();
     void computeLocations();
-    void setupVertexLayout();
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     virtual void reloadProgram();
     virtual int getMappedLocation(int location) const override;

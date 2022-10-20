@@ -432,6 +432,12 @@ void ProgramState::setVertexLayout(const VertexLayout& vertexLayout) {
     *_vertexLayout = vertexLayout;
 }
 
+void ProgramState::validateSharedVertexLayout(std::function<void(Program*)> fnValidate)
+{
+    if (!_ownVertexLayout && !_vertexLayout->isValid())
+        fnValidate(_program);
+}
+
 void ProgramState::ensureVertexLayoutMutable()
 {
     if (!_ownVertexLayout)

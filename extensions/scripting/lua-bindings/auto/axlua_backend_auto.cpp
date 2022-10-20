@@ -1402,56 +1402,6 @@ int lua_ax_backend_ProgramState_setTexture(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_backend_ProgramState_setVertexLayout(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setVertexLayout'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        ax::backend::VertexLayout arg0;
-
-        ok &= luaval_to_vertexLayout(tolua_S, 2, arg0, "axb.ProgramState:setVertexLayout");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_setVertexLayout'", nullptr);
-            return 0;
-        }
-        cobj->setVertexLayout(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:setVertexLayout",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_setVertexLayout'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_backend_ProgramState_updateUniformID(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1513,7 +1463,62 @@ int lua_ax_backend_ProgramState_updateUniformID(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_backend_ProgramState_clone(lua_State* tolua_S)
+int lua_ax_backend_ProgramState_getAttributeLocation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::ProgramState* cobj = nullptr;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getAttributeLocation'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 1) {
+            ax::backend::Attribute arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.ProgramState:getAttributeLocation");
+
+            if (!ok) { break; }
+            int ret = cobj->getAttributeLocation(arg0);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ProgramState:getAttributeLocation");
+
+            if (!ok) { break; }
+            int ret = cobj->getAttributeLocation(arg0);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axb.ProgramState:getAttributeLocation",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_getAttributeLocation'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_ProgramState_getProgram(lua_State* tolua_S)
 {
     int argc = 0;
     ax::backend::ProgramState* cobj = nullptr;
@@ -1533,7 +1538,7 @@ int lua_ax_backend_ProgramState_clone(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_clone'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getProgram'", nullptr);
         return 0;
     }
 #endif
@@ -1543,19 +1548,19 @@ int lua_ax_backend_ProgramState_clone(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_clone'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_getProgram'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->clone();
-        object_to_luaval<ax::backend::ProgramState>(tolua_S, "axb.ProgramState",(ax::backend::ProgramState*)ret);
+        auto&& ret = cobj->getProgram();
+        object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:clone",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:getProgram",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_clone'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_getProgram'.",&tolua_err);
 #endif
 
     return 0;
@@ -1609,6 +1614,153 @@ int lua_ax_backend_ProgramState_setParameterAutoBinding(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_setParameterAutoBinding'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_ProgramState_setVertexLayout(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::ProgramState* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setVertexLayout'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::backend::VertexLayout arg0;
+
+        ok &= luaval_to_vertexLayout(tolua_S, 2, arg0, "axb.ProgramState:setVertexLayout");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_setVertexLayout'", nullptr);
+            return 0;
+        }
+        cobj->setVertexLayout(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:setVertexLayout",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_setVertexLayout'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_ProgramState_setVertexStride(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::ProgramState* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setVertexStride'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        unsigned int arg0;
+
+        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "axb.ProgramState:setVertexStride");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_setVertexStride'", nullptr);
+            return 0;
+        }
+        cobj->setVertexStride(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:setVertexStride",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_setVertexStride'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_backend_ProgramState_clone(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::backend::ProgramState* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_clone'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_clone'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->clone();
+        object_to_luaval<ax::backend::ProgramState>(tolua_S, "axb.ProgramState",(ax::backend::ProgramState*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:clone",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_clone'.",&tolua_err);
 #endif
 
     return 0;
@@ -1675,7 +1827,7 @@ int lua_ax_backend_ProgramState_setVertexAttrib(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_backend_ProgramState_getProgram(lua_State* tolua_S)
+int lua_ax_backend_ProgramState_validateSharedVertexLayout(lua_State* tolua_S)
 {
     int argc = 0;
     ax::backend::ProgramState* cobj = nullptr;
@@ -1695,29 +1847,36 @@ int lua_ax_backend_ProgramState_getProgram(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getProgram'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_validateSharedVertexLayout'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 1) 
     {
+        std::function<void (ax::backend::Program *)> arg0;
+
+        do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_getProgram'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_validateSharedVertexLayout'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getProgram();
-        object_to_luaval<ax::backend::Program>(tolua_S, "axb.Program",(ax::backend::Program*)ret);
+        cobj->validateSharedVertexLayout(arg0);
+        lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:getProgram",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:validateSharedVertexLayout",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_getProgram'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_validateSharedVertexLayout'.",&tolua_err);
 #endif
 
     return 0;
@@ -1765,111 +1924,6 @@ int lua_ax_backend_ProgramState_getUniformID(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_getUniformID'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_backend_ProgramState_getAttributeLocation(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
-    bool ok  = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
-#endif
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
-#if _AX_DEBUG >= 1
-    if (!cobj)
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_getAttributeLocation'", nullptr);
-        return 0;
-    }
-#endif
-    argc = lua_gettop(tolua_S)-1;
-    do{
-        if (argc == 1) {
-            ax::backend::Attribute arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axb.ProgramState:getAttributeLocation");
-
-            if (!ok) { break; }
-            int ret = cobj->getAttributeLocation(arg0);
-            tolua_pushnumber(tolua_S,(lua_Number)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    do{
-        if (argc == 1) {
-            std::string_view arg0;
-            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axb.ProgramState:getAttributeLocation");
-
-            if (!ok) { break; }
-            int ret = cobj->getAttributeLocation(arg0);
-            tolua_pushnumber(tolua_S,(lua_Number)ret);
-            return 1;
-        }
-    }while(0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "axb.ProgramState:getAttributeLocation",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_getAttributeLocation'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_backend_ProgramState_setVertexStride(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::backend::ProgramState* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.ProgramState",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::backend::ProgramState*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_ProgramState_setVertexStride'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        unsigned int arg0;
-
-        ok &= luaval_to_uint32(tolua_S, 2,&arg0, "axb.ProgramState:setVertexStride");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_ProgramState_setVertexStride'", nullptr);
-            return 0;
-        }
-        cobj->setVertexStride(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.ProgramState:setVertexStride",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_ProgramState_setVertexStride'.",&tolua_err);
 #endif
 
     return 0;
@@ -1928,15 +1982,16 @@ int lua_register_ax_backend_ProgramState(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"ProgramState");
         tolua_function(tolua_S,"new",lua_ax_backend_ProgramState_constructor);
         tolua_function(tolua_S,"setTexture",lua_ax_backend_ProgramState_setTexture);
-        tolua_function(tolua_S,"setVertexLayout",lua_ax_backend_ProgramState_setVertexLayout);
         tolua_function(tolua_S,"updateUniformID",lua_ax_backend_ProgramState_updateUniformID);
-        tolua_function(tolua_S,"clone",lua_ax_backend_ProgramState_clone);
-        tolua_function(tolua_S,"setParameterAutoBinding",lua_ax_backend_ProgramState_setParameterAutoBinding);
-        tolua_function(tolua_S,"setVertexAttrib",lua_ax_backend_ProgramState_setVertexAttrib);
-        tolua_function(tolua_S,"getProgram",lua_ax_backend_ProgramState_getProgram);
-        tolua_function(tolua_S,"getUniformID",lua_ax_backend_ProgramState_getUniformID);
         tolua_function(tolua_S,"getAttributeLocation",lua_ax_backend_ProgramState_getAttributeLocation);
+        tolua_function(tolua_S,"getProgram",lua_ax_backend_ProgramState_getProgram);
+        tolua_function(tolua_S,"setParameterAutoBinding",lua_ax_backend_ProgramState_setParameterAutoBinding);
+        tolua_function(tolua_S,"setVertexLayout",lua_ax_backend_ProgramState_setVertexLayout);
         tolua_function(tolua_S,"setVertexStride",lua_ax_backend_ProgramState_setVertexStride);
+        tolua_function(tolua_S,"clone",lua_ax_backend_ProgramState_clone);
+        tolua_function(tolua_S,"setVertexAttrib",lua_ax_backend_ProgramState_setVertexAttrib);
+        tolua_function(tolua_S,"validateSharedVertexLayout",lua_ax_backend_ProgramState_validateSharedVertexLayout);
+        tolua_function(tolua_S,"getUniformID",lua_ax_backend_ProgramState_getUniformID);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::backend::ProgramState).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "axb.ProgramState";

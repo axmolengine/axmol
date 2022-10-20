@@ -317,6 +317,11 @@ public:
 
     void setVertexLayout(const VertexLayout& vertexLayout);
 
+    /** Custom shader program's vertex layout maybe not setup
+     * so engine specific render node(such as Sprite) should invoke this API when ProgramState changed
+     */
+    void validateSharedVertexLayout(std::function <void(Program*)> fnValidate);
+
 protected:
 
     void ensureVertexLayoutMutable();

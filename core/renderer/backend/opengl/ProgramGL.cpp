@@ -72,7 +72,6 @@ ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentSha
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadProgram(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
-    setupVertexLayout();
 }
 
 ProgramGL::~ProgramGL()
@@ -201,11 +200,6 @@ void ProgramGL::computeLocations()
     /// u_tex1
     location = glGetUniformLocation(_program, UNIFORM_NAME_TEXTURE1.data());
     _builtinUniformLocation[Uniform::TEXTURE1].location[0] = location;
-}
-
-void ProgramGL::setupVertexLayout()
-{
-    _vertexLayout = new VertexLayout();
 }
 
 bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned int& location) const

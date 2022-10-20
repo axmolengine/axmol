@@ -42,11 +42,11 @@ static AppDelegate s_sharedApplication;
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
 
-    axis::Application* app = axis::Application::getInstance();
+    ax::Application* app = ax::Application::getInstance();
 
     // Initialize the GLView attributes
     app->initGLContextAttrs();
-    axis::GLViewImpl::convertAttrs();
+    ax::GLViewImpl::convertAttrs();
 
     // Override point for customization after application launch.
 
@@ -84,8 +84,8 @@ static AppDelegate s_sharedApplication;
     }
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
-    axis::GLView* glView = axis::GLViewImpl::createWithEAGLView((__bridge void*)_viewController.view);
-    axis::Director::getInstance()->setOpenGLView(glView);
+    ax::GLView* glView = ax::GLViewImpl::createWithEAGLView((__bridge void*)_viewController.view);
+    ax::Director::getInstance()->setOpenGLView(glView);
 
     // run the cocos2d-x game scene
     app->run();
@@ -102,7 +102,7 @@ static AppDelegate s_sharedApplication;
      throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
     // We don't need to call this method any more. It will interrupt user defined game pause&resume logic
-    /* axis::Director::getInstance()->pause(); */
+    /* ax::Director::getInstance()->pause(); */
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application
@@ -112,7 +112,7 @@ static AppDelegate s_sharedApplication;
      previously in the background, optionally refresh the user interface.
      */
     // We don't need to call this method any more. It will interrupt user defined game pause&resume logic
-    /* axis::Director::getInstance()->resume(); */
+    /* ax::Director::getInstance()->resume(); */
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application
@@ -122,7 +122,7 @@ static AppDelegate s_sharedApplication;
      information to restore your application to its current state in case it is terminated later. If your application
      supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
-    axis::Application::getInstance()->applicationDidEnterBackground();
+    ax::Application::getInstance()->applicationDidEnterBackground();
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application
@@ -131,7 +131,7 @@ static AppDelegate s_sharedApplication;
      Called as part of  transition from the background to the inactive state: here you can undo many of the changes made
      on entering the background.
      */
-    axis::Application::getInstance()->applicationWillEnterForeground();
+    ax::Application::getInstance()->applicationWillEnterForeground();
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application

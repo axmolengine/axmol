@@ -24,11 +24,11 @@ jobs:
     env:
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
       - name: Build
         run: tools\win-ci\build.ps1 $env:BUILD_ARCH
 
@@ -39,7 +39,7 @@ jobs:
       GH_OS_NAME: linux
       BUILD_TARGET: linux
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
       - name: Build
@@ -62,10 +62,10 @@ jobs:
       BUILD_TARGET: android
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           distribution: 'microsoft' # See 'Supported distributions' for available options
           java-version: '11'
@@ -87,7 +87,7 @@ jobs:
       BUILD_TARGET: osx
       BUILD_ARCH: ${{ matrix.arch }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
       # since github latest macos-latest(220807) env(3.24.0) break our ci, so we set cmake version explicit
@@ -107,7 +107,7 @@ jobs:
       GH_OS_NAME: osx
       BUILD_TARGET: ios
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
       # since github latest macos-latest(220807) env(3.24.0) break our ci, so we set cmake version explicit
@@ -127,7 +127,7 @@ jobs:
       GH_OS_NAME: osx
       BUILD_TARGET: tvos
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
       # since github latest macos-latest(220807) env(3.24.0) break our ci, so we set cmake version explicit
