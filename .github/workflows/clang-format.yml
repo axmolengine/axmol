@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
     - name: Run clang-format lint
       uses: DoozyX/clang-format-lint-action@v0.14
@@ -28,7 +28,7 @@ jobs:
         inplace: True
     - name: Commit clang-format changes
       if: ${{ github.event.inputs.commit_changes == 'true' }}
-      uses: EndBug/add-and-commit@v7.5.0
+      uses: EndBug/add-and-commit@v9
       with:
         committer_name: GitHub Actions
         committer_email: 41898282+github-actions[bot]@users.noreply.github.com
