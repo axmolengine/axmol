@@ -620,6 +620,8 @@ public:
      */
     virtual bool initWithFile(std::string_view filename, const Rect& rect);
 
+    virtual void setVertexLayout();
+
     void setProgramState(uint32_t type) override;
 
 protected:
