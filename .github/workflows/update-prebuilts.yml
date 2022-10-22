@@ -36,8 +36,8 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Update thirdparty prebuilts
-        # committer: GitHub Actions<noreply@github.com>
-        author: '${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>'
+        committer: 'GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>'
+        # author: '${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>'
         signoff: false
         branch: buildware_dist_${{ github.event.inputs.buildware_rel_tag }}
         delete-branch: true
