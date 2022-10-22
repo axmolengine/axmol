@@ -1,4 +1,4 @@
-VER=%1
+VER=$1
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 AX_ROOT="$DIR"/../..
