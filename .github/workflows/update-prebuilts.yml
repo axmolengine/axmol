@@ -19,9 +19,6 @@ jobs:
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
-    
-    env:
-      BUILDWARE_REL_TAG: ${{ github.event.inputs.buildware_rel_tag }}
 
     steps:
     - uses: actions/checkout@v3
@@ -31,7 +28,7 @@ jobs:
     - name: Update prebuilts
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
-      run: tools/unix-ci/update-prebuilts.sh $BUILDWARE_REL_TAG
+      run: tools/unix-ci/update-prebuilts.sh ${{ github.event.inputs.buildware_rel_tag }}
         
     - name: Create pull request
       id: cpr
@@ -39,8 +36,8 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Update thirdparty prebuilts
-        committer: GitHub Actions<noreply@github.com>
-        author: '41898282+github-actions[bot]@users.noreply.github.com'
+        # committer: GitHub Actions<noreply@github.com>
+        author: '${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>'
         signoff: false
         branch: buildware_dist_${{ github.event.inputs.buildware_rel_tag }}
         delete-branch: true
