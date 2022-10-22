@@ -1,14 +1,7 @@
 name: update-prebuilts
 
 on:
-  push:
-    branches:
-      - dev
-
-    paths:
-      - '.github/workflows/update-prebuilts.yml'
-    
-    workflow_dispatch:
+  workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
       buildware_rel_tag:
@@ -46,7 +39,7 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Update thirdparty prebuilts
-        committer: GitHub Actions<41898282+github-actions[bot]@users.noreply.github.com>
+        committer: GitHub Actions<noreply@github.com>
         author: '41898282+github-actions[bot]@users.noreply.github.com'
         signoff: false
         branch: buildware_dist_${{ github.event.inputs.buildware_rel_tag }}
