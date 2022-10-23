@@ -5,9 +5,12 @@ AX_ROOT="$DIR"/../..
 
 cd $AX_ROOT
 
-mkdir ./tmp
-wget -O ./tmp/buildware_dist_$VER.zip https://github.com/axmolengine/buildware/releases/download/$VER/buildware_dist_$VER.zip
-unzip ./tmp/buildware_dist_$VER.zip -d ./tmp/
+mkdir -p ./tmp
+
+if [ ! -d "./tmp/buildware_dist_$VER" ]; then
+    wget -O ./tmp/buildware_dist_$VER.zip https://github.com/axmolengine/buildware/releases/download/$VER/buildware_dist_$VER.zip
+    unzip ./tmp/buildware_dist_$VER.zip -d ./tmp/
+fi
 
 function update_lib()
 {
@@ -19,10 +22,11 @@ function update_lib()
     
     echo "Updating lib ${lib_dir} from ./tmp/buildware_dist_$VER/$lib_name ..."
     
-    rm -rf $prebuilt_dir
-    cp -r ./tmp/buildware_dist_$VER/$lib_name/prebuilt $lib_dir/
+    #rm -rf $prebuilt_dir
+    #cp -r ./tmp/buildware_dist_$VER/$lib_name/prebuilt $lib_dir/
     
-	if [ -f $inc_dir ]; then
+	if [ -d $inc_dir ]; then
+        echo "Update inc files for ${lib_name}"
 		rm -rf $inc_dir
         cp -r ./tmp/buildware_dist_$VER/$lib_name/include $lib_dir/
 	fi
