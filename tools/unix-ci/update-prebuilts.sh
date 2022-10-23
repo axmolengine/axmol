@@ -20,13 +20,12 @@ function update_lib()
     prebuilt_dir=$lib_dir/prebuilt
     inc_dir=$lib_dir/include
     
-    echo "Updating lib ${lib_dir} from ./tmp/buildware_dist_$VER/$lib_name ..."
-    
-    #rm -rf $prebuilt_dir
-    #cp -r ./tmp/buildware_dist_$VER/$lib_name/prebuilt $lib_dir/
+    echo "Updating lib files for ${lib_dir} from ./tmp/buildware_dist_$VER/$lib_name ..."
+    rm -rf $prebuilt_dir
+    cp -r ./tmp/buildware_dist_$VER/$lib_name/prebuilt $lib_dir/
     
 	if [ -d $inc_dir ]; then
-        echo "Update inc files for ${lib_name}"
+        echo "Update inc files for ${lib_dir}"
 		rm -rf $inc_dir
         cp -r ./tmp/buildware_dist_$VER/$lib_name/include $lib_dir/
 	fi
