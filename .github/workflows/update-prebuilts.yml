@@ -37,7 +37,7 @@ jobs:
         push-to-fork: axmol-bot/axmol
         commit-message: Update thirdparty prebuilts
         committer: 'GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>'
-        author: 'axmol-bot@users.noreply.github.com>'
+        author: 'axmol-bot <axmol-bot@users.noreply.github.com>'
         signoff: false
         branch: buildware_dist_${{ github.event.inputs.buildware_rel_tag }}
         delete-branch: true
