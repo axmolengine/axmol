@@ -34,7 +34,8 @@ jobs:
       id: cpr
       uses: peter-evans/create-pull-request@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.AX_BOT_TOKEN }}
+        push-to-fork: axmol-bot/axmol
         commit-message: Update thirdparty prebuilts
         committer: 'GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>'
         # author: '${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>'
@@ -51,7 +52,7 @@ jobs:
           thirdparty
           automated pr
           pinned
-        assignees: halx99
+        assignees: axmol-bot
         reviewers: halx99
         team-reviewers: |
           owners
