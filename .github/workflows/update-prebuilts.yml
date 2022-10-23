@@ -13,7 +13,6 @@ on:
          required: true
 jobs:
   build:
-    if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
@@ -38,7 +37,7 @@ jobs:
         push-to-fork: axmol-bot/axmol
         commit-message: Update thirdparty prebuilts
         committer: 'GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>'
-        # author: '${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>'
+        author: 'axmol-bot@users.noreply.github.com>'
         signoff: false
         branch: buildware_dist_${{ github.event.inputs.buildware_rel_tag }}
         delete-branch: true
