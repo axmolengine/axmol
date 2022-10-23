@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: git 2.1.19119 on branch `chromium/5195` @Google Chrome 105.0.5195.102
+- Version: 5195.102
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -113,12 +113,14 @@
   
 - sol2
   - Upstream: https://github.com/ThePhD/sol2
-  - Version: 2.20.6 with vs2019 compile fixes
+  - Version:
+    - 3.3.0 
+    - 2.20.6 with vs2019 compile fixes
   - License: MIT
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-50936d7 (2587)
+  - Version: git 2.1.0-6c4826f (2607)
   - License: MIT
 
 - tolua
@@ -241,7 +243,7 @@
 
 ## zlib
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
-- Version: 1.2.12
+- Version: 1.2.13
 - License: zlib
 
 ## ntcvt
