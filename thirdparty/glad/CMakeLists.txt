@@ -8,8 +8,8 @@ include(../cmake/AXConfigThirdparty.cmake)
 
 add_library(${target_name}
       ${${target_name}_src}
-      include/glad/glad.h
-      src/glad.c
+      "include/glad/gl.h"
+      src/gl.c
     )
 
 #~ set_target_properties(${target_name} PROPERTIES
@@ -18,8 +18,8 @@ add_library(${target_name}
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(${target_name}
-    PUBLIC GLAD_GLAPI_EXPORT=1
-    PRIVATE GLAD_GLAPI_EXPORT_BUILD=1
+    PUBLIC GLAD_API_CALL_EXPORT=1
+    PRIVATE GLAD_API_CALL_EXPORT_BUILD=1
   )
 endif()
 

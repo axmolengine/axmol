@@ -1198,8 +1198,8 @@ bool GLViewImpl::loadGL()
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#    if defined(AX_USE_GL)
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+#   if defined(AX_USE_GL)
+    if (!gladLoadGL(glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");
         return false;
@@ -1213,7 +1213,7 @@ bool GLViewImpl::loadGL()
         log("Not totally ready :(");
     }
 #    else
-    if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress))
+    if (!gladLoadGLES2(glfwGetProcAddress))
     {
         log("glad: Failed to Load GLES2");
         return false;
