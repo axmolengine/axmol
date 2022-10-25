@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "platform/CCPlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
-#    include "glad/glad.h"
+#    include "glad/gl.h"
 
 #    if defined(AX_USE_GLES)
 #        undef GL_DEPTH_STENCIL
