@@ -119,7 +119,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 33  
      * Android Gradle Plugin (AGP) 7.2.2  
-     * Android SDK Build-Tools 30.0.3 match with AGP
+     * Android SDK Build-Tools 30.0.3 match with AGP, refer to: https://developer.android.com/studio/releases/gradle-plugin
      * Gradle 7.4.2  
      * NDK r23c+  
      * CMake 3.22.1+  
