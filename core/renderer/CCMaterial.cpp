@@ -341,7 +341,7 @@ bool Material::parseSampler(backend::ProgramState* programState, Properties* sam
 
     if (!location)
     {
-        AXLOG("warning: failed to find texture uniform location %s when parsing material", textureName);
+        AXLOG("warning: failed to find texture uniform location %s when parsing material", textureName.data());
         return false;
     }
 
