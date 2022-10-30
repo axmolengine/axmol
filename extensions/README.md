@@ -2,13 +2,20 @@
 
 ## DragonBones
 
-- Upstream: NA
+- Upstream: https://github.com/DragonBones/DragonBonesCPP
 - Version: 4.5
 - License: MIT
 
-## GUI
+## Effekseer (OFF default)
 
-- Upstream: NA
+- Upstream: https://github.com/effekseer/EffekseerForCocos2d-x
+- Version: 1.70
+- License: MIT
+
+
+## GUI - DEPRECATED
+
+- Upstream: https://github.com/axmolengine/axmol
 - Version: axmol-1.0
 - License: MIT
 
@@ -18,3 +25,39 @@
 - Version: 1.88 on branch docking
 - License: MIT
 
+## Live2D (OFF default)
+
+- Upstream: https://www.live2d.com/en/download/cubism-sdk/download-native/
+- Version: [4-r.4] - 2021-12-09
+- License: Live2D Proprietary Software License
+
+## Particle3D
+
+- Upstream: https://github.com/axmolengine/axmol
+- Version: axmol-1.0
+- License: MIT
+
+## fairygui
+
+- Upstream: https://github.com/fairygui/FairyGUI-cocos2dx
+- Version: 3.0.0
+- License: MIT
+
+
+## physics-nodes
+
+- Upstream: https://github.com/axmolengine/axmol
+- Version: axmol-1.0
+- License: MIT
+
+## scripting/lua
+
+- Upstream: https://github.com/axmolengine/axmol
+- Version: axmol-1.0
+- License: MIT
+
+## spine
+
+- Upstream: https://github.com/EsotericSoftware/spine-runtimes
+- Version: 3.8
+- License: Spine Runtimes License
