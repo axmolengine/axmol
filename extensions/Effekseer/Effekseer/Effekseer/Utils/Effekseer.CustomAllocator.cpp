@@ -1,0 +1,97 @@
+﻿#include "Effekseer.CustomAllocator.h"
+
+#if defined(__MINGW32__)
+#include <malloc.h>
+#endif
+
+namespace Effekseer
+{
+
+void* InternalMalloc(unsigned int size)
+{
+	return (void*)new char*[size];
+}
+
+void InternalFree(void* p, unsigned int size)
+{
+	char* pData = (char*)p;
+	delete[] pData;
+}
+
+void* InternalAlignedMalloc(unsigned int size, unsigned int alignement)
+{
+#if defined(__EMSCRIPTEN__) && __EMSCRIPTEN_minor__ < 38
+	return malloc(size);
+#elif defined(_WIN32)
+	return _mm_malloc(size, alignement);
+#elif defined(__MINGW32__)
+	return _aligned_malloc(alignement, size);
+#else
+	void* ptr = nullptr;
+	posix_memalign(&ptr, alignement, size);
+	return ptr;
+#endif
+}
+
+void InternalAlignedFree(void* p, unsigned int size)
+{
+#if defined(__EMSCRIPTEN__) && __EMSCRIPTEN_minor__ < 38
+	free(p);
+#elif defined(_WIN32)
+	_mm_free(p);
+#elif defined(__MINGW32__)
+	return _aligned_free(p);
+#else
+	return free(p);
+#endif
+}
+
+MallocFunc mallocFunc_ = InternalMalloc;
+
+FreeFunc freeFunc_ = InternalFree;
+
+AlignedMallocFunc alignedMallocFunc_ = InternalAlignedMalloc;
+
+AlignedFreeFunc alignedFreeFunc_ = InternalAlignedFree;
+
+MallocFunc GetMallocFunc()
+{
+	return mallocFunc_;
+}
+
+void SetMallocFunc(MallocFunc func)
+{
+	mallocFunc_ = func;
+}
+
+FreeFunc GetFreeFunc()
+{
+	return freeFunc_;
+}
+
+void SetFreeFunc(FreeFunc func)
+{
+	freeFunc_ = func;
+}
+
+AlignedMallocFunc GetAlignedMallocFunc()
+{
+	return alignedMallocFunc_;
+}
+
+void SetAlignedMallocFunc(AlignedMallocFunc func)
+{
+	alignedMallocFunc_ = func;
+}
+
+AlignedFreeFunc GetAlignedFreeFunc()
+{
+	return alignedFreeFunc_;
+}
+
+void SetAlignedFreeFunc(AlignedFreeFunc func)
+{
+	alignedFreeFunc_ = func;
+}
+
+} // namespace Effekseer
