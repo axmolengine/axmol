@@ -34,21 +34,6 @@ class FileUtilsDemo : public TestCase
 public:
 };
 
-class TestResolutionDirectories : public FileUtilsDemo
-{
-public:
-    CREATE_FUNC(TestResolutionDirectories);
-
-    virtual void onEnter() override;
-    virtual void onExit() override;
-    virtual std::string title() const override;
-    virtual std::string subtitle() const override;
-
-private:
-    std::vector<std::string> _defaultSearchPathArray;
-    std::vector<std::string> _defaultResolutionsOrderArray;
-};
-
 class TestSearchPath : public FileUtilsDemo
 {
 public:
@@ -61,7 +46,6 @@ public:
 
 private:
     std::vector<std::string> _defaultSearchPathArray;
-    std::vector<std::string> _defaultResolutionsOrderArray;
 };
 
 class TestIsFileExist : public FileUtilsDemo
