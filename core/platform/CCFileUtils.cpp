@@ -1114,13 +1114,7 @@ void FileUtils::listFilesRecursivelyAsync(std::string_view dirPath,
 std::unique_ptr<FileStream> FileUtils::openFileStream(std::string_view filePath, FileStream::Mode mode)
 {
     PosixFileStream fs;
-
-    if (fs.open(filePath, mode))
-    {
-        return std::make_unique<PosixFileStream>(std::move(fs));  // PosixFileStream is the default implementation
-    }
-
-    return nullptr;
+    return fs.open(filePath, mode) ? std::make_unique<PosixFileStream>(std::move(fs)) : nullptr;
 }
 
 /* !!!Notes for c++fs
