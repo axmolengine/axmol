@@ -17,6 +17,7 @@ option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
 option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
+option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
 if(WINDOWS OR MACOSX OR LINUX OR ANDROID)
   option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
@@ -39,7 +40,7 @@ function(setup_ax_extension_config target_name)
     # target_compile_definitions(${target_name} PRIVATE CP_USE_CGTYPES=0)
     # target_compile_definitions(${target_name} PRIVATE CP_USE_DOUBLES=0)
   else()
-    target_link_libraries(${target_name} ${_AX_CORE_LIB})
+    target_link_libraries(${target_name} PUBLIC ${_AX_CORE_LIB})
   endif()
 
   if(BUILD_SHARED_LIBS)
@@ -121,6 +122,10 @@ endif()
 
 if(AX_ENABLE_EXT_LIVE2D)
   add_subdirectory(Live2D)
+endif()
+
+if (AX_ENABLE_EXT_EFFEKSEER)
+  add_subdirectory(Effekseer)
 endif()
 
 if(AX_ENABLE_EXT_LUA)
