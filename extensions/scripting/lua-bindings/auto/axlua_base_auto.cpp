@@ -32177,56 +32177,6 @@ int lua_register_ax_base_UserDefault(lua_State* tolua_S)
     return 1;
 }
 
-int lua_ax_base_FileUtils_fullPathForFilename(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::FileUtils* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_fullPathForFilename'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        std::string_view arg0;
-
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:fullPathForFilename");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_fullPathForFilename'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->fullPathForFilename(arg0);
-        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:fullPathForFilename",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_fullPathForFilename'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_FileUtils_getStringFromFile(lua_State* tolua_S)
 {
     int argc = 0;
@@ -33367,6 +33317,56 @@ int lua_ax_base_FileUtils_isFileExistInternal(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_FileUtils_fullPathForFilename(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::FileUtils* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.FileUtils",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_FileUtils_fullPathForFilename'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.FileUtils:fullPathForFilename");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_FileUtils_fullPathForFilename'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->fullPathForFilename(arg0);
+        lua_pushlstring(tolua_S,ret.c_str(),ret.length());
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FileUtils:fullPathForFilename",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_FileUtils_fullPathForFilename'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_FileUtils_addSearchPath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -34465,7 +34465,6 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
     tolua_cclass(tolua_S,"FileUtils","ax.FileUtils","",nullptr);
 
     tolua_beginmodule(tolua_S,"FileUtils");
-        tolua_function(tolua_S,"fullPathForFilename",lua_ax_base_FileUtils_fullPathForFilename);
         tolua_function(tolua_S,"getStringFromFile",lua_ax_base_FileUtils_getStringFromFile);
         tolua_function(tolua_S,"getNativeWritableAbsolutePath",lua_ax_base_FileUtils_getNativeWritableAbsolutePath);
         tolua_function(tolua_S,"removeFile",lua_ax_base_FileUtils_removeFile);
@@ -34486,6 +34485,7 @@ int lua_register_ax_base_FileUtils(lua_State* tolua_S)
         tolua_function(tolua_S,"setSearchPaths",lua_ax_base_FileUtils_setSearchPaths);
         tolua_function(tolua_S,"writeStringToFile",lua_ax_base_FileUtils_writeStringToFile);
         tolua_function(tolua_S,"isFileExistInternal",lua_ax_base_FileUtils_isFileExistInternal);
+        tolua_function(tolua_S,"fullPathForFilename",lua_ax_base_FileUtils_fullPathForFilename);
         tolua_function(tolua_S,"addSearchPath",lua_ax_base_FileUtils_addSearchPath);
         tolua_function(tolua_S,"writeValueVectorToFile",lua_ax_base_FileUtils_writeValueVectorToFile);
         tolua_function(tolua_S,"isFileExist",lua_ax_base_FileUtils_isFileExist);
