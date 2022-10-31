@@ -60,6 +60,7 @@ public:
 
     virtual bool createDirectory(std::string_view path) const override;
     virtual std::string getPathForDirectory(std::string_view dir,
+                                            std::string_view resolutionDiretory,
                                             std::string_view searchPath) const override;
 
 private:

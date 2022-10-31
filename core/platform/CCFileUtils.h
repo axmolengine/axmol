@@ -253,6 +253,8 @@ public:
      For instance:
 
          We set two elements("/mnt/sdcard/", "internal_dir/") to search paths vector by setSearchPaths,
+         and set three elements("resources-ipadhd/", "resources-ipad/", "resources-iphonehd")
+         to resolutions vector by setSearchResolutionsOrder. The "internal_dir" is relative to "Resources/".
 
         If we have a file named 'sprite.png', the mapping in fileLookup dictionary contains `key: sprite.png -> value:
      sprite.pvr.gz`. Firstly, it will replace 'sprite.png' with 'sprite.pvr.gz', then searching the file sprite.pvr.gz
@@ -302,6 +304,34 @@ public:
      *
      */
     virtual std::string fullPathFromRelativeFile(std::string_view filename, std::string_view relativeFile) const;
+
+    /**
+     *  Sets the array that contains the search order of the resources.
+     *
+     *  @param searchResolutionsOrder The source array that contains the search order of the resources.
+     *  @see getSearchResolutionsOrder(), fullPathForFilename(const char*).
+     *  @since v2.1
+     *  In js:var setSearchResolutionsOrder(var jsval)
+     *  @lua NA
+     */
+    virtual void setSearchResolutionsOrder(const std::vector<std::string>& searchResolutionsOrder);
+
+    /**
+     * Append search order of the resources.
+     *
+     * @see setSearchResolutionsOrder(), fullPathForFilename().
+     * @since v2.1
+     */
+    virtual void addSearchResolutionsOrder(std::string_view order, const bool front = false);
+
+    /**
+     *  Gets the array that contains the search order of the resources.
+     *
+     *  @see setSearchResolutionsOrder(const std::vector<std::string>&), fullPathForFilename(const char*).
+     *  @since v2.1
+     *  @lua NA
+     */
+    virtual const std::vector<std::string> getSearchResolutionsOrder() const;
 
     /**
      *  Sets the array of search paths.
@@ -776,7 +806,7 @@ protected:
     FileUtils();
 
     /**
-     *  Initializes the instance of FileUtils. It will set _searchPathArray.
+     *  Initializes the instance of FileUtils. It will set _searchPathArray and _searchResolutionsOrderArray to default
      * values.
      *
      *  @note When you are porting Cocos2d-x to a new platform, you may need to take care of this method.
@@ -791,13 +821,16 @@ protected:
      *  Gets full path for filename, resolution directory and search path.
      *
      *  @param filename The file name.
+     *  @param resolutionDirectory The resolution directory.
      *  @param searchPath The search path.
      *  @return The full path of the file. It will return an empty string if the full path of the file doesn't exist.
      */
     virtual std::string getPathForFilename(std::string_view filename,
+                                           std::string_view resolutionDirectory,
                                            std::string_view searchPath) const;
 
     virtual std::string getPathForDirectory(std::string_view dir,
+                                            std::string_view resolutionDiretory,
                                             std::string_view searchPath) const;
 
     /**
@@ -823,6 +856,12 @@ protected:
      * mutex used to protect fields.
      */
     mutable std::recursive_mutex _mutex;
+
+    /**
+     *  The vector contains resolution folders.
+     *  The lower index of the element in this vector, the higher priority for this resolution directory.
+     */
+    std::vector<std::string> _searchResolutionsOrderArray;
 
     /**
      * The vector contains search paths.

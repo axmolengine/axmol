@@ -1601,6 +1601,13 @@ void Console::printFileUtils(socket_native_type fd)
         Console::Utility::mydprintf(fd, "%s\n", item.c_str());
     }
 
+    Console::Utility::mydprintf(fd, "\nResolution Order:\n");
+    auto& list1 = fu->getSearchResolutionsOrder();
+    for (const auto& item : list1)
+    {
+        Console::Utility::mydprintf(fd, "%s\n", item.c_str());
+    }
+
     Console::Utility::mydprintf(fd, "\nWritable Path:\n");
     Console::Utility::mydprintf(fd, "%s\n", fu->getWritablePath().c_str());
 

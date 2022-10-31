@@ -120,6 +120,7 @@ protected:
      *  @return The full path of the file. It will return an empty string if the full path of the file doesn't exist.
      */
     virtual std::string getPathForFilename(std::string_view filename,
+                                           std::string_view resolutionDirectory,
                                            std::string_view searchPath) const override;
 
     /**

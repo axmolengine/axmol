@@ -532,6 +532,7 @@ bool FileUtils::init()
 {
     DECLARE_GUARD;
     _searchPathArray.emplace_back(_defaultResRootPath);
+    _searchResolutionsOrderArray.emplace_back("");
     return true;
 }
 
@@ -634,6 +635,7 @@ void FileUtils::writeValueVectorToFile(ValueVector vecData,
 }
 
 std::string FileUtils::getPathForFilename(std::string_view filename,
+                                          std::string_view resolutionDirectory,
                                           std::string_view searchPath) const
 {
     auto file                  = filename;
@@ -648,6 +650,7 @@ std::string FileUtils::getPathForFilename(std::string_view filename,
     // searchPath + file_path + resourceDirectory
     std::string path{searchPath};
     path += file_path;
+    path += resolutionDirectory;
 
     path = getFullPathForFilenameWithinDirectory(path, file);
 
@@ -655,9 +658,10 @@ std::string FileUtils::getPathForFilename(std::string_view filename,
 }
 
 std::string FileUtils::getPathForDirectory(std::string_view dir,
+                                           std::string_view resolutionDiretory,
                                            std::string_view searchPath) const
 {
-    return std::string{searchPath}.append(dir);
+    return std::string{searchPath}.append(resolutionDiretory).append(dir);
 }
 
 std::string FileUtils::fullPathForFilename(std::string_view filename) const
@@ -692,13 +696,16 @@ std::string FileUtils::fullPathForFilename(std::string_view filename) const
 
     for (const auto& searchIt : _searchPathArray)
     {
-        fullpath = this->getPathForFilename(filename, searchIt);
-
-        if (!fullpath.empty())
+        for (const auto& resolutionIt : _searchResolutionsOrderArray)
         {
-            // Using the filename passed in as key.
-            _fullPathCache.emplace(filename, fullpath);
-            return fullpath;
+            fullpath = this->getPathForFilename(filename, resolutionIt, searchIt);
+
+            if (!fullpath.empty())
+            {
+                // Using the filename passed in as key.
+                _fullPathCache.emplace(filename, fullpath);
+                return fullpath;
+            }
         }
     }
 
@@ -741,12 +748,15 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 
     for (const auto& searchIt : _searchPathArray)
     {
-        fullpath = this->getPathForDirectory(longdir, searchIt);
-        if (!fullpath.empty() && isDirectoryExistInternal(fullpath))
+        for (const auto& resolutionIt : _searchResolutionsOrderArray)
         {
-            // Using the filename passed in as key.
-            _fullPathCacheDir.emplace(dir, fullpath);
-            return fullpath;
+            fullpath = this->getPathForDirectory(longdir, resolutionIt, searchIt);
+            if (!fullpath.empty() && isDirectoryExistInternal(fullpath))
+            {
+                // Using the filename passed in as key.
+                _fullPathCacheDir.emplace(dir, fullpath);
+                return fullpath;
+            }
         }
     }
 
@@ -762,6 +772,67 @@ std::string FileUtils::fullPathForDirectory(std::string_view dir) const
 std::string FileUtils::fullPathFromRelativeFile(std::string_view filename, std::string_view relativeFile) const
 {
     return std::string{relativeFile.substr(0, relativeFile.rfind('/') + 1)}.append(filename);
+}
+
+void FileUtils::setSearchResolutionsOrder(const std::vector<std::string>& searchResolutionsOrder)
+{
+    DECLARE_GUARD;
+
+    if (_searchResolutionsOrderArray == searchResolutionsOrder)
+    {
+        return;
+    }
+
+    bool existDefault = false;
+
+    _fullPathCache.clear();
+    _fullPathCacheDir.clear();
+    _searchResolutionsOrderArray.clear();
+    for (const auto& iter : searchResolutionsOrder)
+    {
+        std::string resolutionDirectory = iter;
+        if (!existDefault && resolutionDirectory.empty())
+        {
+            existDefault = true;
+        }
+
+        if (!resolutionDirectory.empty() && resolutionDirectory[resolutionDirectory.length() - 1] != '/')
+        {
+            resolutionDirectory += "/";
+        }
+
+        _searchResolutionsOrderArray.emplace_back(resolutionDirectory);
+    }
+
+    if (!existDefault)
+    {
+        _searchResolutionsOrderArray.emplace_back("");
+    }
+}
+
+void FileUtils::addSearchResolutionsOrder(std::string_view order, const bool front)
+{
+
+    DECLARE_GUARD;
+
+    std::string resOrder{order};
+    if (!resOrder.empty() && resOrder[resOrder.length() - 1] != '/')
+        resOrder.push_back('/');
+
+    if (front)
+    {
+        _searchResolutionsOrderArray.insert(_searchResolutionsOrderArray.begin(), resOrder);
+    }
+    else
+    {
+        _searchResolutionsOrderArray.emplace_back(resOrder);
+    }
+}
+
+const std::vector<std::string> FileUtils::getSearchResolutionsOrder() const
+{
+    DECLARE_GUARD;
+    return _searchResolutionsOrderArray;
 }
 
 const std::vector<std::string> FileUtils::getSearchPaths() const
