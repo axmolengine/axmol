@@ -7,7 +7,7 @@
 #include "../../EffekseerRendererCommon/ModelLoader.h"
 #include "renderer/backend/metal/TextureMTL.h"
 #include "renderer/backend/metal/CommandBufferMTL.h"
-#include "renderer/backend/metal/UtilsMTL.h"
+#include "renderer/backend/metal/Utils.h"
 #include <Metal/LLGI.TextureMetal.h>
 
 namespace efk {
@@ -21,9 +21,8 @@ void SetMTLObjectsFromCocos2d(Effekseer::RefPtr<EffekseerRenderer::CommandList> 
     // use render pass descriptor from Cocos and add depth test
     auto descriptor = d->getRenderer()->getRenderPassDescriptor();
     descriptor.depthTestEnabled = true;
-    // using axmol render pass
-    auto target = d->getRenderer()->getRenderTarget();
-    bufferM->beginRenderPass(target, descriptor);
+    // using Cocos render pass
+    bufferM->beginRenderPass(descriptor);
     auto v = d->getRenderer()->getViewport();
     // important for ensuring znear and zfar are in sync with Cocos
     bufferM->setViewport(v.x, v.y, v.w, v.h);
