@@ -20,11 +20,13 @@ void SetMTLObjectsFromCocos2d(Effekseer::RefPtr<EffekseerRenderer::CommandList> 
     auto bufferM = static_cast<cocos2d::backend::CommandBufferMTL*>(buffer);
     
     // use render pass descriptor from Cocos and add depth test
-    auto descriptor = renderer->getRenderPassDescriptor();
-    descriptor.depthTestEnabled = true;
+    // auto descriptor = d->getRenderPassDescriptor();
+//    ax::backend::RenderPassDescriptor descriptor;
+//    descriptor.flags.clear = true;
     // using axmol render pass
     auto target = renderer->getRenderTarget();
-    bufferM->beginRenderPass(target, descriptor);
+    
+    renderer->beginRenderPass();
     auto v = renderer->getViewport();
     // important for ensuring znear and zfar are in sync with Cocos
     bufferM->setViewport(v.x, v.y, v.w, v.h);
@@ -84,7 +86,8 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
         textureInternal_ = EffekseerRendererMetal::CreateTexture(renderer->GetGraphicsDevice(), texture);
     }
 
-    auto commandBuffer = static_cast<cocos2d::backend::CommandBufferMTL*>(cocos2d::Director::getInstance()->getCommandBuffer());
+    auto rendererAX = cocos2d::Director::getInstance()->getRenderer();
+    auto commandBuffer = static_cast<cocos2d::backend::CommandBufferMTL*>(rendererAX->getCommandBuffer());
     commandBuffer->endEncoding();
     
     EffekseerRendererMetal::EndCommandList(commandList_);
@@ -172,7 +175,7 @@ void UpdateTextureData(::Effekseer::TextureRef textureData, cocos2d::Texture2D* 
     auto textureMTL = static_cast<cocos2d::backend::TextureMTL*>(texture->getBackendTexture());
 	auto device = EffekseerGraphicsDevice::create().DownCast<::EffekseerRendererLLGI::Backend::GraphicsDevice>();
 
-    auto backend = device->CreateTexture(reinterpret_cast<uint64_t>(textureMTL->getMTLTexture()), []() -> void {});
+    auto backend = device->CreateTexture(textureMTL->getHandler(), []() -> void {});
 	textureData->SetBackend(backend);
 }
 

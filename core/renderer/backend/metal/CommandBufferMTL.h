@@ -175,6 +175,8 @@ public:
      */
     virtual void endFrame() override;
 
+    void endEncoding();
+
     /**
      * Fixed-function state
      * @param lineWidth Specifies the width of rasterized lines.
@@ -196,6 +198,10 @@ public:
      * @param callback A callback to deal with pixel data read.
      */
     virtual void readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback) override;
+    
+    id<MTLRenderCommandEncoder> getRenderCommandEncoder() const { return _mtlRenderEncoder; }
+
+    id<MTLCommandBuffer> getMTLCommandBuffer() const { return _mtlCommandBuffer; }
 
 protected:
     /**
