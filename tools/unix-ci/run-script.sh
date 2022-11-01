@@ -66,7 +66,7 @@ function build_tvos()
 
     cd $AX_ROOT
 
-    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=12.0 -DAX_ENABLE_EXT_EFFEKSEER=ON -DAX_USE_ALSOFT=ON
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.5 -DAX_ENABLE_EXT_EFFEKSEER=ON -DAX_USE_ALSOFT=ON
     cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=tvOS Simulator,name=Apple TV Simulator"
 
     exit 0
