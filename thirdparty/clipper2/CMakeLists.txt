@@ -8,7 +8,7 @@ add_library(${target_name} STATIC
 	clipper.core.h
 	clipper.engine.cpp
 	clipper.engine.h
-	clipper_export.h
+	clipper.export.h
 	clipper.h
 	clipper.minkowski.h
 	clipper.offset.cpp
