@@ -31,7 +31,7 @@ function build_linux()
 {
     cd $AX_ROOT
     set -x
-    cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release -DAX_ENABLE_EXT_IMGUI=ON
+    cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release -DAX_ENABLE_EXT_IMGUI=ON -DAX_ENABLE_EXT_EFFEKSEER=ON
     cmake --build build --target cpp_tests -- -j `nproc`
     set +x
 }
@@ -66,7 +66,7 @@ function build_tvos()
 
     cd $AX_ROOT
 
-    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=11.0 -DAX_ENABLE_EXT_EFFEKSEER=ON -DAX_USE_ALSOFT=ON
+    cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=12.0 -DAX_ENABLE_EXT_EFFEKSEER=ON -DAX_USE_ALSOFT=ON
     cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=tvOS Simulator,name=Apple TV Simulator"
 
     exit 0
