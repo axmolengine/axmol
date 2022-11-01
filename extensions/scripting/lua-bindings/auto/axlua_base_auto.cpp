@@ -100268,6 +100268,53 @@ int lua_ax_base_Renderer_clean(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Renderer_getCommandBuffer(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Renderer* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Renderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getCommandBuffer'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_getCommandBuffer'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getCommandBuffer();
+        object_to_luaval<ax::backend::CommandBuffer>(tolua_S, "axb.CommandBuffer",(ax::backend::CommandBuffer*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getCommandBuffer",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Renderer_getCommandBuffer'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Renderer_getDrawnBatches(lua_State* tolua_S)
 {
     int argc = 0;
@@ -100512,6 +100559,7 @@ int lua_register_ax_base_Renderer(lua_State* tolua_S)
         tolua_function(tolua_S,"setScissorTest",lua_ax_base_Renderer_setScissorTest);
         tolua_function(tolua_S,"getDefaultRenderTarget",lua_ax_base_Renderer_getDefaultRenderTarget);
         tolua_function(tolua_S,"clean",lua_ax_base_Renderer_clean);
+        tolua_function(tolua_S,"getCommandBuffer",lua_ax_base_Renderer_getCommandBuffer);
         tolua_function(tolua_S,"getDrawnBatches",lua_ax_base_Renderer_getDrawnBatches);
         tolua_function(tolua_S,"clearDrawStats",lua_ax_base_Renderer_clearDrawStats);
         tolua_function(tolua_S,"getDepthCompareFunction",lua_ax_base_Renderer_getDepthCompareFunction);
