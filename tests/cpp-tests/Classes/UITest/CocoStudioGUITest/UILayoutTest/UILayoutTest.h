@@ -105,6 +105,27 @@ public:
     CREATE_FUNC(UILayoutTest_Layout_Linear_Horizontal);
 };
 
+class UILayoutTest_Layout_Linear_CenterVertical : public UIScene
+{
+public:
+    UILayoutTest_Layout_Linear_CenterVertical();
+    ~UILayoutTest_Layout_Linear_CenterVertical();
+    virtual bool init() override;
+
+    CREATE_FUNC(UILayoutTest_Layout_Linear_CenterVertical);
+};
+
+class UILayoutTest_Layout_Linear_CenterHorizontal : public UIScene
+{
+public:
+    UILayoutTest_Layout_Linear_CenterHorizontal();
+    ~UILayoutTest_Layout_Linear_CenterHorizontal();
+    virtual bool init() override;
+
+    CREATE_FUNC(UILayoutTest_Layout_Linear_CenterHorizontal);
+};
+
+
 class UILayoutTest_Layout_Relative_Align_Parent : public UIScene
 {
 public:

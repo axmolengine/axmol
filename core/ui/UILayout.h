@@ -125,6 +125,7 @@ public:
         HORIZONTAL,
         RELATIVE,
         CENTER_VERTICAL,
+        CENTER_HORIZONTAL,
     };
 
     /**
