@@ -8,10 +8,13 @@ add_library(${target_name} STATIC
 	clipper.core.h
 	clipper.engine.cpp
 	clipper.engine.h
+	clipper_export.h
 	clipper.h
 	clipper.minkowski.h
 	clipper.offset.cpp
 	clipper.offset.h
+	clipper.rectclip.cpp
+	clipper.rectclip.h
 )
 
 target_include_directories(${target_name} PUBLIC .)
