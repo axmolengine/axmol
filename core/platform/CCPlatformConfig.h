@@ -84,7 +84,7 @@ THE SOFTWARE.
 #endif
 
 // android, override linux
-#if defined(__ANDROID__)
+#if defined(__ANDROID__) || defined(ANDROID)
 #    undef AX_TARGET_PLATFORM
 #    define AX_TARGET_PLATFORM AX_PLATFORM_ANDROID
 #endif
