@@ -1,7 +1,8 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-
+ Copyright (c) 2022 Bytedance Inc.
+  
  https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -406,6 +407,8 @@ public:
     void setScissorRect(float x, float y, float width, float height);
     bool getScissorTest() const;                ///< Get whether scissor test is enabled or not.
     const ScissorRect& getScissorRect() const;  ///< Get scissor rectangle.
+
+    backend::CommandBuffer* getCommandBuffer() const { return _commandBuffer ; }
 
     /** returns whether or not a rectangle is visible or not */
     bool checkVisibility(const Mat4& transform, const Vec2& size);
