@@ -36,6 +36,8 @@ UILayoutTests::UILayoutTests()
     ADD_TEST_CASE(UILayoutTest_BackGroundImage_Scale9);
     ADD_TEST_CASE(UILayoutTest_Layout_Linear_Vertical);
     ADD_TEST_CASE(UILayoutTest_Layout_Linear_Horizontal);
+    ADD_TEST_CASE(UILayoutTest_Layout_Linear_CenterVertical);
+    ADD_TEST_CASE(UILayoutTest_Layout_Linear_CenterHorizontal);
     ADD_TEST_CASE(UILayoutTest_Layout_Relative_Align_Parent);
     ADD_TEST_CASE(UILayoutTest_Layout_Relative_Location);
     ADD_TEST_CASE(UILayoutTest_Layout_Scaled_Widget);
@@ -487,6 +489,122 @@ bool UILayoutTest_Layout_Linear_Horizontal::init()
         button_scale9->setLayoutParameter(lp3);
         lp3->setGravity(LinearLayoutParameter::LinearGravity::CENTER_VERTICAL);
         lp3->setMargin(Margin(0.0f, 10.0f, 0.0f, 10.0f));
+
+        return true;
+    }
+
+    return false;
+}
+
+// UILayoutTest_Layout_Linear_CenterVertical
+
+UILayoutTest_Layout_Linear_CenterVertical::UILayoutTest_Layout_Linear_CenterVertical() {}
+
+UILayoutTest_Layout_Linear_CenterVertical::~UILayoutTest_Layout_Linear_CenterVertical() {}
+
+bool UILayoutTest_Layout_Linear_CenterVertical::init()
+{
+    if (UIScene::init())
+    {
+        Size widgetSize = _widget->getContentSize();
+
+        // Add the alert
+        Text* alert = Text::create("Layout Linear Center Vertical", "fonts/Marker Felt.ttf", 20);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 4.5f));
+
+        _uiLayer->addChild(alert);
+
+        Layout* root = static_cast<Layout*>(_uiLayer->getChildByTag(81));
+
+        Layout* background = static_cast<Layout*>(root->getChildByName("background_Panel"));
+
+        // Create the layout
+        Layout* layout = Layout::create();
+        layout->setLayoutType(Layout::Type::CENTER_VERTICAL);
+        layout->setContentSize(Size(280, 150));
+        Size backgroundSize = background->getContentSize();
+        layout->setPosition(Vec2((widgetSize.width - backgroundSize.width) / 2.0f +
+                                     (backgroundSize.width - layout->getContentSize().width) / 2.0f,
+                                 (widgetSize.height - backgroundSize.height) / 2.0f +
+                                     (backgroundSize.height - layout->getContentSize().height) / 2.0f));
+        _uiLayer->addChild(layout);
+
+        Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+        layout->addChild(button);
+
+        LinearLayoutParameter* lp1 = LinearLayoutParameter::create();
+        button->setLayoutParameter(lp1);
+        lp1->setGravity(LinearLayoutParameter::LinearGravity::CENTER_HORIZONTAL);
+        lp1->setMargin(Margin(0.0f, 5.0f, 0.0f, 10.0f));
+
+        Button* titleButton = Button::create("cocosui/backtotopnormal.png", "cocosui/backtotoppressed.png");
+        titleButton->setTitleText("Title Button");
+        layout->addChild(titleButton);
+
+        LinearLayoutParameter* lp2 = LinearLayoutParameter::create();
+        titleButton->setLayoutParameter(lp2);
+        lp2->setGravity(LinearLayoutParameter::LinearGravity::CENTER_HORIZONTAL);
+        lp2->setMargin(Margin(0.0f, 10.0f, 0.0f, 10.0f));
+
+        return true;
+    }
+
+    return false;
+}
+
+// UILayoutTest_Layout_Linear_CenterHorizontal
+
+UILayoutTest_Layout_Linear_CenterHorizontal::UILayoutTest_Layout_Linear_CenterHorizontal() {}
+
+UILayoutTest_Layout_Linear_CenterHorizontal::~UILayoutTest_Layout_Linear_CenterHorizontal() {}
+
+bool UILayoutTest_Layout_Linear_CenterHorizontal::init()
+{
+    if (UIScene::init())
+    {
+        Size widgetSize = _widget->getContentSize();
+
+        // Add the alert
+        Text* alert = Text::create("Layout Linear Center Horizontal", "fonts/Marker Felt.ttf", 20);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 4.5f));
+        _uiLayer->addChild(alert);
+
+        Layout* root = static_cast<Layout*>(_uiLayer->getChildByTag(81));
+
+        Layout* background = dynamic_cast<Layout*>(root->getChildByName("background_Panel"));
+
+        // Create the layout
+        Layout* layout = Layout::create();
+        layout->setLayoutType(Layout::Type::CENTER_HORIZONTAL);
+        layout->setClippingEnabled(true);
+        layout->setContentSize(Size(280, 150));
+        Size backgroundSize = background->getContentSize();
+        layout->setPosition(Vec2((widgetSize.width - backgroundSize.width) / 2.0f +
+                                     (backgroundSize.width - layout->getContentSize().width) / 2.0f,
+                                 (widgetSize.height - backgroundSize.height) / 2.0f +
+                                     (backgroundSize.height - layout->getContentSize().height) / 2.0f));
+        _uiLayer->addChild(layout);
+
+        Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+        layout->addChild(button);
+
+        LinearLayoutParameter* lp1 = LinearLayoutParameter::create();
+        button->setLayoutParameter(lp1);
+        lp1->setGravity(LinearLayoutParameter::LinearGravity::CENTER_VERTICAL);
+        lp1->setMargin(Margin(10.0f, 10.0f, 10.0f, 10.0f));
+
+        Button* titleButton = Button::create("cocosui/backtotopnormal.png", "cocosui/backtotoppressed.png");
+        titleButton->setTitleText("Title Button");
+        layout->addChild(titleButton);
+
+        LinearLayoutParameter* lp2 = LinearLayoutParameter::create();
+        titleButton->setLayoutParameter(lp2);
+        lp2->setGravity(LinearLayoutParameter::LinearGravity::CENTER_VERTICAL);
+        lp2->setMargin(Margin(10.0f, 10.0f, 10.0f, 10.0f));
 
         return true;
     }

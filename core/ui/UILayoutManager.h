@@ -50,11 +50,11 @@ class RelativeLayoutParameter;
 class AX_GUI_DLL LayoutManager : public Ref
 {
 public:
-    virtual ~LayoutManager(){};
-    LayoutManager(){};
+    virtual ~LayoutManager(){}
+    LayoutManager(){}
 
     /**
-     * The interface does the actual layouting work.
+     * The interface does the actual layout work.
      */
     virtual void doLayout(LayoutProtocol* layout) = 0;
 
@@ -62,7 +62,7 @@ public:
 };
 
 /**
- *@brief Linear vertical layouting class.
+ *@brief Linear vertical layout class.
  * Note: This class is used only by @see `Layout` class.
  * @lua NA
  * @js NA
@@ -70,8 +70,8 @@ public:
 class AX_GUI_DLL LinearVerticalLayoutManager : public LayoutManager
 {
 private:
-    LinearVerticalLayoutManager(){};
-    virtual ~LinearVerticalLayoutManager(){};
+    LinearVerticalLayoutManager(){}
+    virtual ~LinearVerticalLayoutManager(){}
     static LinearVerticalLayoutManager* create();
     virtual void doLayout(LayoutProtocol* layout) override;
 
@@ -79,7 +79,7 @@ private:
 };
 
 /**
- *@brief Linear horizontal layouting class.
+ *@brief Linear horizontal layout class.
  *Note: This class is used only by @see `Layout` class.
  * @lua NA
  * @js NA
@@ -87,8 +87,8 @@ private:
 class AX_GUI_DLL LinearHorizontalLayoutManager : public LayoutManager
 {
 private:
-    LinearHorizontalLayoutManager(){};
-    virtual ~LinearHorizontalLayoutManager(){};
+    LinearHorizontalLayoutManager(){}
+    virtual ~LinearHorizontalLayoutManager(){}
     static LinearHorizontalLayoutManager* create();
     virtual void doLayout(LayoutProtocol* layout) override;
 
@@ -96,7 +96,7 @@ private:
 };
 
 /**
- *@brief Linear vertical layouting class.
+ *@brief Linear vertical layout class.
  * Note: This class is used only by @see `Layout` class.
  * @lua NA
  * @js NA
@@ -104,8 +104,8 @@ private:
 class AX_GUI_DLL LinearCenterVerticalLayoutManager : public LayoutManager
 {
 private:
-    LinearCenterVerticalLayoutManager(){};
-    virtual ~LinearCenterVerticalLayoutManager(){};
+    LinearCenterVerticalLayoutManager(){}
+    virtual ~LinearCenterVerticalLayoutManager(){}
     static LinearCenterVerticalLayoutManager* create();
     virtual void doLayout(LayoutProtocol* layout) override;
 
@@ -113,7 +113,25 @@ private:
 };
 
 /**
- *@brief Relative layouting class.
+ *@brief Linear horizontal layout class.
+ * Note: This class is used only by @see `Layout` class.
+ * @lua NA
+ * @js NA
+ */
+class AX_GUI_DLL LinearCenterHorizontalLayoutManager : public LayoutManager
+{
+private:
+    LinearCenterHorizontalLayoutManager(){}
+    virtual ~LinearCenterHorizontalLayoutManager(){}
+    static LinearCenterHorizontalLayoutManager* create();
+    virtual void doLayout(LayoutProtocol* layout) override;
+
+    friend class Layout;
+};
+
+
+/**
+ *@brief Relative layout class.
  *Note: This class is used only by `Layout` class.
  * @lua NA
  * @js NA
@@ -128,7 +146,7 @@ private:
         , _finalPositionY(0.0f)
         , _relativeWidgetLP(nullptr)
     {}
-    virtual ~RelativeLayoutManager(){};
+    virtual ~RelativeLayoutManager(){}
     static RelativeLayoutManager* create();
     virtual void doLayout(LayoutProtocol* layout) override;
 

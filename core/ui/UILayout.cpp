@@ -643,6 +643,7 @@ void Layout::supplyTheLayoutParameterLackToChild(Widget* child)
     case Type::HORIZONTAL:
     case Type::VERTICAL:
     case Type::CENTER_VERTICAL:
+    case Type::CENTER_HORIZONTAL:
     {
         LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
         if (!layoutParameter)
@@ -934,6 +935,9 @@ LayoutManager* Layout::createLayoutManager()
     case Type::CENTER_VERTICAL:
         exe = LinearCenterVerticalLayoutManager::create();
         break;
+    case Type::CENTER_HORIZONTAL:
+        exe = LinearCenterHorizontalLayoutManager::create();
+        break;
     case Type::HORIZONTAL:
         exe = LinearHorizontalLayoutManager::create();
         break;
@@ -1049,7 +1053,7 @@ Vec2 Layout::getLayoutAccumulatedSize() const
 
     // subtract extra size
     Type type = this->getLayoutType();
-    if (type == Type::HORIZONTAL)
+    if (type == Type::HORIZONTAL || type == Type::CENTER_HORIZONTAL)
     {
         layoutSize = layoutSize - Vec2(0, layoutSize.height / widgetCount * (widgetCount - 1));
     }
@@ -1725,7 +1729,7 @@ bool Layout::isWidgetAncestorSupportLoopFocus(Widget* widget, FocusDirection dir
     if (parent->isLoopFocus())
     {
         const auto layoutType = parent->getLayoutType();
-        if (layoutType == Type::HORIZONTAL)
+        if (layoutType == Type::HORIZONTAL || _layoutType == Type::CENTER_HORIZONTAL)
         {
             if (direction == FocusDirection::LEFT || direction == FocusDirection::RIGHT)
             {
@@ -1789,7 +1793,7 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
     }
     else if (current->isFocused() || dynamic_cast<Layout*>(current))
     {
-        if (_layoutType == Type::HORIZONTAL)
+        if (_layoutType == Type::HORIZONTAL || _layoutType == Type::CENTER_HORIZONTAL)
         {
             switch (direction)
             {
