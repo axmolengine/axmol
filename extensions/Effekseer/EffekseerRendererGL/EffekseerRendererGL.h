@@ -42,12 +42,8 @@
 // #else
 
 // #if defined(_WIN32)
-// #if __has_include("glad/gl.h")
-// #include "glad/gl.h"
-// #else
 // #include <GL/gl.h>
 // #pragma comment(lib, "opengl32.lib")
-// #endif
 // #elif defined(__APPLE__)
 // #define GL_SILENCE_DEPRECATION
 // #include <OpenGL/gl3.h>

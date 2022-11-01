@@ -24,11 +24,12 @@
 
 #include <memory>
 
-#if _WIN32
-#include "glad/gl.h"
-#elif EMSCRIPTEN
-#include <emscripten.h>
-#endif
+// #if _WIN32
+// #include "GL/gl.h"
+// #elif EMSCRIPTEN
+// #include <emscripten.h>
+// #endif
+#include "platform/CCGL.h"
 
 //----------------------------------------------------------------------------------
 //

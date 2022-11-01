@@ -106,9 +106,3 @@ add_subdirectory(EffekseerForCocos2d-x)
 
 set_target_properties (EffekseerForCocos2d-x PROPERTIES FOLDER Extensions/Effekseer)
 set_target_properties (Effekseer PROPERTIES FOLDER Extensions/Effekseer)
-
-
-if (WIN32 OR LINUX)
-    # target_include_directories(EffekseerRendererGL PUBLIC "${_AX_ROOT_PATH}/thirdparty/glad/include")
-    # target_include_directories(EffekseerForCocos2d-x PUBLIC "${_AX_ROOT_PATH}/thirdparty/glad/include")
-endif()

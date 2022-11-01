@@ -58,7 +58,7 @@
 
 // #endif
 
-#include "glad/gl.h"
+#include "platform/CCGL.h"
 
 #include "EffekseerRendererGL.Base.Pre.h"
 #include <stddef.h>
