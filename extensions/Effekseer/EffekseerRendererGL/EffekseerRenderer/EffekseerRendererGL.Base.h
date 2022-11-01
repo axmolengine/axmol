@@ -1,4 +1,4 @@
-﻿
+
 #ifndef __EFFEKSEERRENDERER_GL_BASE_H__
 #define __EFFEKSEERRENDERER_GL_BASE_H__
 
@@ -25,7 +25,7 @@
 #include <memory>
 
 #if _WIN32
-#include <GL/glu.h>
+#include "glad/gl.h"
 #elif EMSCRIPTEN
 #include <emscripten.h>
 #endif
@@ -64,7 +64,7 @@ class TextureLoader;
 		int __code = glGetError();                                                                                              \
 		if (__code != GL_NO_ERROR)                                                                                              \
 		{                                                                                                                       \
-			printf("GLError filename = %s , line = %d, error = %s\n", __FILE__, __LINE__, (const char*)gluErrorString(__code)); \
+			printf("GLError filename = %s , line = %d, error = %d\n", __FILE__, __LINE__, (int)(__code)); \
 		}                                                                                                                       \
 	}
 #else

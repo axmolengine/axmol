@@ -15,16 +15,17 @@ namespace efk {
 void SetMTLObjectsFromCocos2d(Effekseer::RefPtr<EffekseerRenderer::CommandList> commandList)
 {
     auto d = cocos2d::Director::getInstance();
-    auto buffer = d->getCommandBuffer();
+    auto renderer = d->getRenderer();
+    auto buffer = renderer->getCommandBuffer();
     auto bufferM = static_cast<cocos2d::backend::CommandBufferMTL*>(buffer);
     
     // use render pass descriptor from Cocos and add depth test
-    auto descriptor = d->getRenderer()->getRenderPassDescriptor();
+    auto descriptor = renderer->getRenderPassDescriptor();
     descriptor.depthTestEnabled = true;
     // using axmol render pass
-    auto target = d->getRenderer()->getRenderTarget();
+    auto target = renderer->getRenderTarget();
     bufferM->beginRenderPass(target, descriptor);
-    auto v = d->getRenderer()->getViewport();
+    auto v = renderer->getViewport();
     // important for ensuring znear and zfar are in sync with Cocos
     bufferM->setViewport(v.x, v.y, v.w, v.h);
     

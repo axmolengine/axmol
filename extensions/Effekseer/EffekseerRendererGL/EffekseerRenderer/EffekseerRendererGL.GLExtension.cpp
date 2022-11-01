@@ -287,7 +287,7 @@ bool Initialize(OpenGLDeviceType deviceType, bool isExtensionsEnabled)
 	if (g_isInitialized)
 		return true;
 	g_deviceType = deviceType;
-#if _WIN32
+#if 0
 	GET_PROC_REQ(glDeleteBuffers);
 	GET_PROC_REQ(glCreateShader);
 	GET_PROC_REQ(glBindBuffer);
