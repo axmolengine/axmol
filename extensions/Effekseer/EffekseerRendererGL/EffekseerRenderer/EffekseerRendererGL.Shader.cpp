@@ -143,7 +143,7 @@ void Shader::AssignAttribs()
 		attribs_ = Backend::GetVertexAttribLocations(vertexLayout_, shader);
 	}
 
-	baseInstance_ = GLExt::glGetUniformLocation(shader->GetProgram(), "SPIRV_Cross_BaseInstance");
+	baseInstance_ = glGetUniformLocation(shader->GetProgram(), "SPIRV_Cross_BaseInstance");
 }
 
 Shader::Shader(const Backend::GraphicsDeviceRef& graphicsDevice,
@@ -195,12 +195,12 @@ void Shader::SetVertexLayout(Backend::VertexLayoutRef vertexLayout)
 
 void Shader::BeginScene()
 {
-	GLExt::glUseProgram(GetCurrentShader()->GetProgram());
+	glUseProgram(GetCurrentShader()->GetProgram());
 }
 
 void Shader::EndScene()
 {
-	GLExt::glUseProgram(0);
+	glUseProgram(0);
 }
 
 void Shader::EnableAttribs()
@@ -231,7 +231,7 @@ void Shader::SetConstantBuffer()
 {
 	if (baseInstance_ >= 0)
 	{
-		GLExt::glUniform1i(baseInstance_, 0);
+		glUniform1i(baseInstance_, 0);
 	}
 
 	Backend::StoreUniforms(GetCurrentShader(), vertexConstantBuffer_, pixelConstantBuffer_, isTransposeEnabled_);

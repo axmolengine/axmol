@@ -464,569 +464,523 @@ void MakeMapBufferInvalid()
 	g_isSurrpotedMapBuffer = false;
 }
 
-void glDeleteBuffers(GLsizei n, const GLuint* buffers)
-{
-#if _WIN32
-	g_glDeleteBuffers(n, buffers);
-#else
-	::glDeleteBuffers(n, buffers);
-#endif
-}
-
-GLuint glCreateShader(GLenum type)
-{
-#if _WIN32
-	return g_glCreateShader(type);
-#else
-	return ::glCreateShader(type);
-#endif
-}
-
-void glBindBuffer(GLenum target, GLuint buffer)
-{
-#if _WIN32
-	return g_glBindBuffer(target, buffer);
-#else
-	return ::glBindBuffer(target, buffer);
-#endif
-}
-
-void glGenBuffers(GLsizei n, GLuint* buffers)
-{
-#if _WIN32
-	g_glGenBuffers(n, buffers);
-#else
-	::glGenBuffers(n, buffers);
-#endif
-}
-
-void glBufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage)
-{
-#if _WIN32
-	g_glBufferData(target, size, data, usage);
-#else
-	::glBufferData(target, size, data, usage);
-#endif
-}
-
-void glBlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
-{
-#if _WIN32
-	g_glBlendEquationSeparate(modeRGB, modeAlpha);
-#else
-	::glBlendEquationSeparate(modeRGB, modeAlpha);
-#endif
-}
-
-void glBlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
-{
-#if _WIN32
-	g_glBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
-#else
-	::glBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
-#endif
-}
-
-void glBlendEquation(GLenum mode)
-{
-#if _WIN32
-	g_glBlendEquation(mode);
-#else
-	::glBlendEquation(mode);
-#endif
-}
-
-void glActiveTexture(GLenum texture)
-{
-#if _WIN32
-	g_glActiveTexture(texture);
-#else
-	::glActiveTexture(texture);
-#endif
-}
-
-void glUniform1i(GLint location, GLint v0)
-{
-#if _WIN32
-	g_glUniform1i(location, v0);
-#else
-	::glUniform1i(location, v0);
-#endif
-}
-
-void glShaderSource(GLuint shader, GLsizei count, const GLchar** strings, const GLint* lengths)
-{
-#if _WIN32
-	g_glShaderSource(shader, count, strings, lengths);
-#else
-	::glShaderSource(shader, count, strings, lengths);
-#endif
-}
-
-void glCompileShader(GLuint shader)
-{
-#if _WIN32
-	g_glCompileShader(shader);
-#else
-	::glCompileShader(shader);
-#endif
-}
-
-void glGetShaderiv(GLuint shader, GLenum pname, GLint* param)
-{
-#if _WIN32
-	g_glGetShaderiv(shader, pname, param);
-#else
-	::glGetShaderiv(shader, pname, param);
-#endif
-}
-
-GLuint glCreateProgram(void)
-{
-#if _WIN32
-	return g_glCreateProgram();
-#else
-	return ::glCreateProgram();
-#endif
-}
-
-void glAttachShader(GLuint program, GLuint shader)
-{
-#if _WIN32
-	g_glAttachShader(program, shader);
-#else
-	::glAttachShader(program, shader);
-#endif
-}
-
-void glDeleteProgram(GLuint program)
-{
-#if _WIN32
-	g_glDeleteProgram(program);
-#else
-	::glDeleteProgram(program);
-#endif
-}
-
-void glDeleteShader(GLuint shader)
-{
-#if _WIN32
-	g_glDeleteShader(shader);
-#else
-	::glDeleteShader(shader);
-#endif
-}
-
-void glLinkProgram(GLuint program)
-{
-#if _WIN32
-	g_glLinkProgram(program);
-#else
-	::glLinkProgram(program);
-#endif
-}
-
-void glGetProgramiv(GLuint program, GLenum pname, GLint* param)
-{
-#if _WIN32
-	g_glGetProgramiv(program, pname, param);
-#else
-	::glGetProgramiv(program, pname, param);
-#endif
-}
-
-void glGetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog)
-{
-#if _WIN32
-	g_glGetShaderInfoLog(shader, bufSize, length, infoLog);
-#else
-	::glGetShaderInfoLog(shader, bufSize, length, infoLog);
-#endif
-}
-
-void glGetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog)
-{
-#if _WIN32
-	g_glGetProgramInfoLog(program, bufSize, length, infoLog);
-#else
-	::glGetProgramInfoLog(program, bufSize, length, infoLog);
-#endif
-}
-
-GLint glGetAttribLocation(GLuint program, const GLchar* name)
-{
-#if _WIN32
-	return g_glGetAttribLocation(program, name);
-#else
-	return ::glGetAttribLocation(program, name);
-#endif
-}
-
-GLint glGetUniformLocation(GLuint program, const GLchar* name)
-{
-#if _WIN32
-	return g_glGetUniformLocation(program, name);
-#else
-	return ::glGetUniformLocation(program, name);
-#endif
-}
-
-void glUseProgram(GLuint program)
-{
-#if _WIN32
-	g_glUseProgram(program);
-#else
-	::glUseProgram(program);
-#endif
-}
-
-void glEnableVertexAttribArray(GLuint index)
-{
-#if _WIN32
-	g_glEnableVertexAttribArray(index);
-#else
-	::glEnableVertexAttribArray(index);
-#endif
-}
-
-void glDisableVertexAttribArray(GLuint index)
-{
-#if _WIN32
-	g_glDisableVertexAttribArray(index);
-#else
-	::glDisableVertexAttribArray(index);
-#endif
-}
-
-void glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer)
-{
-#if _WIN32
-	g_glVertexAttribPointer(index, size, type, normalized, stride, pointer);
-#else
-	::glVertexAttribPointer(index, size, type, normalized, stride, pointer);
-#endif
-}
-
-void glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value)
-{
-#if _WIN32
-	g_glUniformMatrix4fv(location, count, transpose, value);
-#else
-	::glUniformMatrix4fv(location, count, transpose, value);
-#endif
-}
-
-void glUniform4fv(GLint location, GLsizei count, const GLfloat* value)
-{
-#if _WIN32
-	g_glUniform4fv(location, count, value);
-#else
-	::glUniform4fv(location, count, value);
-#endif
-}
-
-void glGenerateMipmap(GLenum target)
-{
-#if _WIN32
-	g_glGenerateMipmap(target);
-#else
-	::glGenerateMipmap(target);
-#endif
-}
-
-void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data)
-{
-#if _WIN32
-	g_glBufferSubData(target, offset, size, data);
-#else
-	::glBufferSubData(target, offset, size, data);
-#endif
-}
-
-void glGenVertexArrays(GLsizei n, GLuint* arrays)
-{
-#if _WIN32
-	g_glGenVertexArrays(n, arrays);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__)
-	g_glGenVertexArraysOES(n, arrays);
-#else
-	::glGenVertexArrays(n, arrays);
-#endif
-}
-
-void glDeleteVertexArrays(GLsizei n, const GLuint* arrays)
-{
-#if _WIN32
-	g_glDeleteVertexArrays(n, arrays);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__)
-	g_glDeleteVertexArraysOES(n, arrays);
-#else
-	::glDeleteVertexArrays(n, arrays);
-#endif
-}
-
-void glBindVertexArray(GLuint array)
-{
-#if _WIN32
-	g_glBindVertexArray(array);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__)
-	g_glBindVertexArrayOES(array);
-#else
-	::glBindVertexArray(array);
-#endif
-}
-
-void glGenSamplers(GLsizei n, GLuint* samplers)
-{
-#if _WIN32
-	g_glGenSamplers(n, samplers);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glGenSamplers(n, samplers);
-#endif
-}
-
-void glDeleteSamplers(GLsizei n, const GLuint* samplers)
-{
-#if _WIN32
-	g_glDeleteSamplers(n, samplers);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glDeleteSamplers(n, samplers);
-#endif
-}
-
-void glSamplerParameteri(GLuint sampler, GLenum pname, GLint param)
-{
-#if _WIN32
-	g_glSamplerParameteri(sampler, pname, param);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glSamplerParameteri(sampler, pname, param);
-#endif
-}
-
-void glBindSampler(GLuint unit, GLuint sampler)
-{
-#if _WIN32
-	g_glBindSampler(unit, sampler);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glBindSampler(unit, sampler);
-#endif
-}
-
-void* glMapBuffer(GLenum target, GLenum access)
-{
-#if _WIN32
-	return g_glMapBuffer(target, access);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__)
-	return g_glMapBufferOES(target, access);
-#elif defined(__EFFEKSEER_RENDERER_GLES3__)
-	return nullptr;
-#else
-	return ::glMapBuffer(target, access);
-#endif
-}
-
-void* glMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
-{
-#if _WIN32
-	return g_glMapBufferRange(target, offset, length, access);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__)
-	return g_glMapBufferRangeEXT(target, offset, length, access);
-#else
-
-#if defined(__APPLE__)
-
-#if defined(GL_ARB_map_buffer_range)
-	return ::glMapBufferRange(target, offset, length, access);
-#else
-	return nullptr;
-#endif
-
-#else
-	return ::glMapBufferRange(target, offset, length, access);
-#endif
-
-#endif
-}
-
-GLboolean glUnmapBuffer(GLenum target)
-{
-#if _WIN32
-	return g_glUnmapBuffer(target);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__)
-	return g_glUnmapBufferOES(target);
-#else
-	return ::glUnmapBuffer(target);
-#endif
-}
-
-void glDrawElementsInstanced(GLenum mode,
-							 GLsizei count,
-							 GLenum type,
-							 const void* indices,
-							 GLsizei primcount)
-{
-#if _WIN32
-	return g_glDrawElementsInstanced(mode, count, type, indices, primcount);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__)
-
-#ifdef EMSCRIPTEN
-	return g_glDrawElementsInstancedANGLE(mode, count, type, indices, primcount);
-#endif
-	return;
-#else
-	return ::glDrawElementsInstanced(mode, count, type, indices, primcount);
-#endif
-}
-
-void glCompressedTexImage2D(
-	GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void* data)
-{
-#if _WIN32
-	g_glCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
-#endif
-}
-
-void glGenFramebuffers(GLsizei n, GLuint* ids)
-{
-#if _WIN32
-	g_glGenFramebuffers(n, ids);
-#else
-	::glGenFramebuffers(n, ids);
-#endif
-}
-
-void glBindFramebuffer(GLenum target, GLuint framebuffer)
-{
-#if _WIN32
-	g_glBindFramebuffer(target, framebuffer);
-#else
-	::glBindFramebuffer(target, framebuffer);
-#endif
-}
-
-void glDeleteFramebuffers(GLsizei n, GLuint* framebuffers)
-{
-#if _WIN32
-	g_glDeleteFramebuffers(n, framebuffers);
-#else
-	::glDeleteFramebuffers(n, framebuffers);
-#endif
-}
-
-void glFramebufferTexture2D(GLenum target,
-							GLenum attachment,
-							GLenum textarget,
-							GLuint texture,
-							GLint level)
-{
-#if _WIN32
-	g_glFramebufferTexture2D(target,
-							 attachment,
-							 textarget,
-							 texture,
-							 level);
-#else
-	::glFramebufferTexture2D(target,
-							 attachment,
-							 textarget,
-							 texture,
-							 level);
-#endif
-}
-
-void glGenRenderbuffers(GLsizei n, GLuint* renderbuffers)
-{
-#if _WIN32
-	g_glGenRenderbuffers(n, renderbuffers);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glGenRenderbuffers(n, renderbuffers);
-#endif
-}
-
-void glBindRenderbuffer(GLenum target, GLuint renderbuffer)
-{
-#if _WIN32
-	g_glBindRenderbuffer(target, renderbuffer);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glBindRenderbuffer(target, renderbuffer);
-#endif
-}
-
-void glDeleteRenderbuffers(GLsizei n, GLuint* renderbuffers)
-{
-#if _WIN32
-	g_glDeleteRenderbuffers(n, renderbuffers);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glDeleteRenderbuffers(n, renderbuffers);
-#endif
-}
-
-void glRenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height)
-{
-#if _WIN32
-	g_glRenderbufferStorageMultisample(target, samples, internalformat, width, height);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glRenderbufferStorageMultisample(target, samples, internalformat, width, height);
-#endif
-}
-
-void glDrawBuffers(GLsizei n, const GLenum* bufs)
-{
-#if _WIN32
-	g_glDrawBuffers(n, bufs);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glDrawBuffers(n, bufs);
-#endif
-}
-
-void glTexImage3D(GLenum target,
-				  GLint level,
-				  GLint internalformat,
-				  GLsizei width,
-				  GLsizei height,
-				  GLsizei depth,
-				  GLint border,
-				  GLenum format,
-				  GLenum type,
-				  const void* data)
-{
-#if _WIN32
-	g_glTexImage3D(target, level, internalformat, width, height, depth, border, format, type, data);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glTexImage3D(target, level, internalformat, width, height, depth, border, format, type, data);
-#endif
-}
-
-void glCopyTexSubImage3D(GLenum target,
-						 GLint level,
-						 GLint xoffset,
-						 GLint yoffset,
-						 GLint zoffset,
-						 GLint x,
-						 GLint y,
-						 GLsizei width,
-						 GLsizei height)
-{
-#if _WIN32
-	g_glCopyTexSubImage3D(target, level, xoffset, yoffset, zoffset, x, y, width, height);
-#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
-#else
-	::glCopyTexSubImage3D(target, level, xoffset, yoffset, zoffset, x, y, width, height);
-#endif
-}
+//void glDeleteBuffers(GLsizei n, const GLuint* buffers)
+//{
+//#if _WIN32
+//	g_glDeleteBuffers(n, buffers);
+//#else
+//	::glDeleteBuffers(n, buffers);
+//#endif
+//}
+//
+//GLuint glCreateShader(GLenum type)
+//{
+//#if _WIN32
+//	return g_glCreateShader(type);
+//#else
+//	return ::glCreateShader(type);
+//#endif
+//}
+//
+//void glBindBuffer(GLenum target, GLuint buffer)
+//{
+//#if _WIN32
+//	return g_glBindBuffer(target, buffer);
+//#else
+//	return ::glBindBuffer(target, buffer);
+//#endif
+//}
+//
+//void glGenBuffers(GLsizei n, GLuint* buffers)
+//{
+//#if _WIN32
+//	g_glGenBuffers(n, buffers);
+//#else
+//	::glGenBuffers(n, buffers);
+//#endif
+//}
+//
+//void glBufferData(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage)
+//{
+//#if _WIN32
+//	g_glBufferData(target, size, data, usage);
+//#else
+//	::glBufferData(target, size, data, usage);
+//#endif
+//}
+//
+//void glBlendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
+//{
+//#if _WIN32
+//	g_glBlendEquationSeparate(modeRGB, modeAlpha);
+//#else
+//	::glBlendEquationSeparate(modeRGB, modeAlpha);
+//#endif
+//}
+//
+//void glBlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
+//{
+//#if _WIN32
+//	g_glBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+//#else
+//	::glBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+//#endif
+//}
+//
+//void glBlendEquation(GLenum mode)
+//{
+//#if _WIN32
+//	g_glBlendEquation(mode);
+//#else
+//	::glBlendEquation(mode);
+//#endif
+//}
+//
+//void glActiveTexture(GLenum texture)
+//{
+//#if _WIN32
+//	g_glActiveTexture(texture);
+//#else
+//	::glActiveTexture(texture);
+//#endif
+//}
+//
+//void glUniform1i(GLint location, GLint v0)
+//{
+//#if _WIN32
+//	g_glUniform1i(location, v0);
+//#else
+//	::glUniform1i(location, v0);
+//#endif
+//}
+//
+//void glShaderSource(GLuint shader, GLsizei count, const GLchar** strings, const GLint* lengths)
+//{
+//#if _WIN32
+//	g_glShaderSource(shader, count, strings, lengths);
+//#else
+//	::glShaderSource(shader, count, strings, lengths);
+//#endif
+//}
+//
+//void glCompileShader(GLuint shader)
+//{
+//#if _WIN32
+//	g_glCompileShader(shader);
+//#else
+//	::glCompileShader(shader);
+//#endif
+//}
+//
+//void glGetShaderiv(GLuint shader, GLenum pname, GLint* param)
+//{
+//#if _WIN32
+//	g_glGetShaderiv(shader, pname, param);
+//#else
+//	::glGetShaderiv(shader, pname, param);
+//#endif
+//}
+//
+//GLuint glCreateProgram(void)
+//{
+//#if _WIN32
+//	return g_glCreateProgram();
+//#else
+//	return ::glCreateProgram();
+//#endif
+//}
+//
+//void glAttachShader(GLuint program, GLuint shader)
+//{
+//#if _WIN32
+//	g_glAttachShader(program, shader);
+//#else
+//	::glAttachShader(program, shader);
+//#endif
+//}
+//
+//void glDeleteProgram(GLuint program)
+//{
+//#if _WIN32
+//	g_glDeleteProgram(program);
+//#else
+//	::glDeleteProgram(program);
+//#endif
+//}
+//
+//void glDeleteShader(GLuint shader)
+//{
+//#if _WIN32
+//	g_glDeleteShader(shader);
+//#else
+//	::glDeleteShader(shader);
+//#endif
+//}
+//
+//void glLinkProgram(GLuint program)
+//{
+//#if _WIN32
+//	g_glLinkProgram(program);
+//#else
+//	::glLinkProgram(program);
+//#endif
+//}
+//
+//void glGetProgramiv(GLuint program, GLenum pname, GLint* param)
+//{
+//#if _WIN32
+//	g_glGetProgramiv(program, pname, param);
+//#else
+//	::glGetProgramiv(program, pname, param);
+//#endif
+//}
+//
+//void glGetShaderInfoLog(GLuint shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog)
+//{
+//#if _WIN32
+//	g_glGetShaderInfoLog(shader, bufSize, length, infoLog);
+//#else
+//	::glGetShaderInfoLog(shader, bufSize, length, infoLog);
+//#endif
+//}
+//
+//void glGetProgramInfoLog(GLuint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog)
+//{
+//#if _WIN32
+//	g_glGetProgramInfoLog(program, bufSize, length, infoLog);
+//#else
+//	::glGetProgramInfoLog(program, bufSize, length, infoLog);
+//#endif
+//}
+//
+//GLint glGetAttribLocation(GLuint program, const GLchar* name)
+//{
+//#if _WIN32
+//	return g_glGetAttribLocation(program, name);
+//#else
+//	return ::glGetAttribLocation(program, name);
+//#endif
+//}
+//
+//GLint glGetUniformLocation(GLuint program, const GLchar* name)
+//{
+//#if _WIN32
+//	return g_glGetUniformLocation(program, name);
+//#else
+//	return ::glGetUniformLocation(program, name);
+//#endif
+//}
+//
+//void glUseProgram(GLuint program)
+//{
+//#if _WIN32
+//	g_glUseProgram(program);
+//#else
+//	::glUseProgram(program);
+//#endif
+//}
+//
+//void glEnableVertexAttribArray(GLuint index)
+//{
+//#if _WIN32
+//	g_glEnableVertexAttribArray(index);
+//#else
+//	::glEnableVertexAttribArray(index);
+//#endif
+//}
+//
+//void glDisableVertexAttribArray(GLuint index)
+//{
+//#if _WIN32
+//	g_glDisableVertexAttribArray(index);
+//#else
+//	::glDisableVertexAttribArray(index);
+//#endif
+//}
+//
+//void glVertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer)
+//{
+//#if _WIN32
+//	g_glVertexAttribPointer(index, size, type, normalized, stride, pointer);
+//#else
+//	::glVertexAttribPointer(index, size, type, normalized, stride, pointer);
+//#endif
+//}
+//
+//void glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value)
+//{
+//#if _WIN32
+//	g_glUniformMatrix4fv(location, count, transpose, value);
+//#else
+//	::glUniformMatrix4fv(location, count, transpose, value);
+//#endif
+//}
+//
+//void glUniform4fv(GLint location, GLsizei count, const GLfloat* value)
+//{
+//#if _WIN32
+//	g_glUniform4fv(location, count, value);
+//#else
+//	::glUniform4fv(location, count, value);
+//#endif
+//}
+//
+//void glGenerateMipmap(GLenum target)
+//{
+//#if _WIN32
+//	g_glGenerateMipmap(target);
+//#else
+//	::glGenerateMipmap(target);
+//#endif
+//}
+//
+//void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid* data)
+//{
+//#if _WIN32
+//	g_glBufferSubData(target, offset, size, data);
+//#else
+//	::glBufferSubData(target, offset, size, data);
+//#endif
+//}
+//
+//void glGenVertexArrays(GLsizei n, GLuint* arrays)
+//{
+//#if _WIN32
+//	g_glGenVertexArrays(n, arrays);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__)
+//	g_glGenVertexArraysOES(n, arrays);
+//#else
+//	::glGenVertexArrays(n, arrays);
+//#endif
+//}
+//
+//void glDeleteVertexArrays(GLsizei n, const GLuint* arrays)
+//{
+//#if _WIN32
+//	g_glDeleteVertexArrays(n, arrays);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__)
+//	g_glDeleteVertexArraysOES(n, arrays);
+//#else
+//	::glDeleteVertexArrays(n, arrays);
+//#endif
+//}
+//
+//void glBindVertexArray(GLuint array)
+//{
+//#if _WIN32
+//	g_glBindVertexArray(array);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__)
+//	g_glBindVertexArrayOES(array);
+//#else
+//	::glBindVertexArray(array);
+//#endif
+//}
+//
+//void glGenSamplers(GLsizei n, GLuint* samplers)
+//{
+//#if _WIN32
+//	g_glGenSamplers(n, samplers);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glGenSamplers(n, samplers);
+//#endif
+//}
+//
+//void glDeleteSamplers(GLsizei n, const GLuint* samplers)
+//{
+//#if _WIN32
+//	g_glDeleteSamplers(n, samplers);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glDeleteSamplers(n, samplers);
+//#endif
+//}
+//
+//void glSamplerParameteri(GLuint sampler, GLenum pname, GLint param)
+//{
+//#if _WIN32
+//	g_glSamplerParameteri(sampler, pname, param);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glSamplerParameteri(sampler, pname, param);
+//#endif
+//}
+//
+//void glBindSampler(GLuint unit, GLuint sampler)
+//{
+//#if _WIN32
+//	g_glBindSampler(unit, sampler);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glBindSampler(unit, sampler);
+//#endif
+//}
+//
+//void* glMapBuffer(GLenum target, GLenum access)
+//{
+//#if _WIN32
+//	return g_glMapBuffer(target, access);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__)
+//	return g_glMapBufferOES(target, access);
+//#elif defined(__EFFEKSEER_RENDERER_GLES3__)
+//	return nullptr;
+//#else
+//	return ::glMapBuffer(target, access);
+//#endif
+//}
+//
+//void* glMapBufferRange(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
+//{
+//#if _WIN32
+//	return g_glMapBufferRange(target, offset, length, access);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__)
+//	return g_glMapBufferRangeEXT(target, offset, length, access);
+//#else
+//
+//#if defined(__APPLE__)
+//
+//#if defined(GL_ARB_map_buffer_range)
+//	return ::glMapBufferRange(target, offset, length, access);
+//#else
+//	return nullptr;
+//#endif
+//
+//#else
+//	return ::glMapBufferRange(target, offset, length, access);
+//#endif
+//
+//#endif
+//}
+//
+//GLboolean glUnmapBuffer(GLenum target)
+//{
+//	return glUnmapBuffer(target);
+//}
+//
+//void glDrawElementsInstanced(GLenum mode,
+//							 GLsizei count,
+//							 GLenum type,
+//							 const void* indices,
+//							 GLsizei primcount)
+//{
+//	return ::glDrawElementsInstanced(mode, count, type, indices, primcount);
+//}
+//
+//void glCompressedTexImage2D(
+//	GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void* data)
+//{
+//	::glCompressedTexImage2D(target, level, internalformat, width, height, border, imageSize, data);
+//}
+//
+//void glGenFramebuffers(GLsizei n, GLuint* ids)
+//{
+//	::glGenFramebuffers(n, ids);
+//}
+//
+//void glBindFramebuffer(GLenum target, GLuint framebuffer)
+//{
+//	glBindFramebuffer(target, framebuffer);
+//}
+//
+//void glDeleteFramebuffers(GLsizei n, GLuint* framebuffers)
+//{
+//	::glDeleteFramebuffers(n, framebuffers);
+//}
+//
+//void glFramebufferTexture2D(GLenum target,
+//							GLenum attachment,
+//							GLenum textarget,
+//							GLuint texture,
+//							GLint level)
+//{
+//	::glFramebufferTexture2D(target,
+//							 attachment,
+//							 textarget,
+//							 texture,
+//							 level);
+//}
+//
+//void glGenRenderbuffers(GLsizei n, GLuint* renderbuffers)
+//{
+//    glGenRenderbuffers(n, renderbuffers);
+//}
+//
+//void glBindRenderbuffer(GLenum target, GLuint renderbuffer)
+//{
+//#if _WIN32
+//	g_glBindRenderbuffer(target, renderbuffer);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glBindRenderbuffer(target, renderbuffer);
+//#endif
+//}
+//
+//void glDeleteRenderbuffers(GLsizei n, GLuint* renderbuffers)
+//{
+//#if _WIN32
+//	g_glDeleteRenderbuffers(n, renderbuffers);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glDeleteRenderbuffers(n, renderbuffers);
+//#endif
+//}
+//
+//void glRenderbufferStorageMultisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height)
+//{
+//#if _WIN32
+//	g_glRenderbufferStorageMultisample(target, samples, internalformat, width, height);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glRenderbufferStorageMultisample(target, samples, internalformat, width, height);
+//#endif
+//}
+//
+//void glDrawBuffers(GLsizei n, const GLenum* bufs)
+//{
+//#if _WIN32
+//	g_glDrawBuffers(n, bufs);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glDrawBuffers(n, bufs);
+//#endif
+//}
+//
+//void glTexImage3D(GLenum target,
+//				  GLint level,
+//				  GLint internalformat,
+//				  GLsizei width,
+//				  GLsizei height,
+//				  GLsizei depth,
+//				  GLint border,
+//				  GLenum format,
+//				  GLenum type,
+//				  const void* data)
+//{
+//#if _WIN32
+//	g_glTexImage3D(target, level, internalformat, width, height, depth, border, format, type, data);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glTexImage3D(target, level, internalformat, width, height, depth, border, format, type, data);
+//#endif
+//}
+//
+//void glCopyTexSubImage3D(GLenum target,
+//						 GLint level,
+//						 GLint xoffset,
+//						 GLint yoffset,
+//						 GLint zoffset,
+//						 GLint x,
+//						 GLint y,
+//						 GLsizei width,
+//						 GLsizei height)
+//{
+//#if _WIN32
+//	g_glCopyTexSubImage3D(target, level, xoffset, yoffset, zoffset, x, y, width, height);
+//#elif defined(__EFFEKSEER_RENDERER_GLES2__) || defined(__EFFEKSEER_RENDERER_GL2__)
+//#else
+//	::glCopyTexSubImage3D(target, level, xoffset, yoffset, zoffset, x, y, width, height);
+//#endif
+//}
 
 //----------------------------------------------------------------------------------
 //

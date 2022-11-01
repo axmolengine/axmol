@@ -22,7 +22,7 @@ RenderState::RenderState(RendererImplemented* renderer)
 {
 	if (m_renderer->GetDeviceType() == OpenGLDeviceType::OpenGL3 || m_renderer->GetDeviceType() == OpenGLDeviceType::OpenGLES3)
 	{
-		GLExt::glGenSamplers(Effekseer::TextureSlotMax, m_samplers.data());
+		glGenSamplers(Effekseer::TextureSlotMax, m_samplers.data());
 	}
 
 	GLint frontFace = 0;
@@ -41,7 +41,7 @@ RenderState::~RenderState()
 {
 	if (m_renderer->GetDeviceType() == OpenGLDeviceType::OpenGL3 || m_renderer->GetDeviceType() == OpenGLDeviceType::OpenGLES3)
 	{
-		GLExt::glDeleteSamplers(Effekseer::TextureSlotMax, m_samplers.data());
+		glDeleteSamplers(Effekseer::TextureSlotMax, m_samplers.data());
 	}
 }
 
@@ -122,28 +122,28 @@ void RenderState::Update(bool forced)
 
 			if (m_next.AlphaBlend == ::Effekseer::AlphaBlendType::Opacity)
 			{
-				GLExt::glBlendEquationSeparate(GL_FUNC_ADD, GL_MAX);
-				GLExt::glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ONE);
+				glBlendEquationSeparate(GL_FUNC_ADD, GL_MAX);
+				glBlendFuncSeparate(GL_ONE, GL_ZERO, GL_ONE, GL_ONE);
 			}
 			else if (m_next.AlphaBlend == ::Effekseer::AlphaBlendType::Sub)
 			{
-				GLExt::glBlendEquationSeparate(GL_FUNC_REVERSE_SUBTRACT, GL_FUNC_ADD);
-				GLExt::glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE);
+				glBlendEquationSeparate(GL_FUNC_REVERSE_SUBTRACT, GL_FUNC_ADD);
+				glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ZERO, GL_ONE);
 			}
 			else
 			{
-				GLExt::glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+				glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 				if (m_next.AlphaBlend == ::Effekseer::AlphaBlendType::Blend)
 				{
-					GLExt::glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
+					glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 				}
 				else if (m_next.AlphaBlend == ::Effekseer::AlphaBlendType::Add)
 				{
-					GLExt::glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ONE);
+					glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ONE);
 				}
 				else if (m_next.AlphaBlend == ::Effekseer::AlphaBlendType::Mul)
 				{
-					GLExt::glBlendFuncSeparate(GL_ZERO, GL_SRC_COLOR, GL_ZERO, GL_ONE);
+					glBlendFuncSeparate(GL_ZERO, GL_SRC_COLOR, GL_ZERO, GL_ONE);
 				}
 			}
 		}
@@ -167,7 +167,7 @@ void RenderState::Update(bool forced)
 
 			if (m_active.TextureFilterTypes[i] != m_next.TextureFilterTypes[i] || forced || m_active.TextureIDs[i] != m_next.TextureIDs[i])
 			{
-				GLExt::glActiveTexture(GL_TEXTURE0 + i);
+				glActiveTexture(GL_TEXTURE0 + i);
 
 				// for webngl
 #ifndef NDEBUG
@@ -178,32 +178,32 @@ void RenderState::Update(bool forced)
 
 				int32_t filter_ = (int32_t)m_next.TextureFilterTypes[i];
 
-				GLExt::glSamplerParameteri(m_samplers[i], GL_TEXTURE_MAG_FILTER, glfilterMag[filter_]);
+				glSamplerParameteri(m_samplers[i], GL_TEXTURE_MAG_FILTER, glfilterMag[filter_]);
 
 				if (texture->GetParameter().MipLevelCount != 1)
 				{
-					GLExt::glSamplerParameteri(m_samplers[i], GL_TEXTURE_MIN_FILTER, glfilterMin[filter_]);
+					glSamplerParameteri(m_samplers[i], GL_TEXTURE_MIN_FILTER, glfilterMin[filter_]);
 				}
 				else
 				{
-					GLExt::glSamplerParameteri(m_samplers[i], GL_TEXTURE_MIN_FILTER, glfilterMin_NoneMipmap[filter_]);
+					glSamplerParameteri(m_samplers[i], GL_TEXTURE_MIN_FILTER, glfilterMin_NoneMipmap[filter_]);
 				}
 
 				// glSamplerParameteri( m_samplers[i],  GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 				// glSamplerParameteri( m_samplers[i],  GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-				GLExt::glBindSampler(i, m_samplers[i]);
+				glBindSampler(i, m_samplers[i]);
 			}
 
 			if (m_active.TextureWrapTypes[i] != m_next.TextureWrapTypes[i] || forced || m_active.TextureIDs[i] != m_next.TextureIDs[i])
 			{
-				GLExt::glActiveTexture(GL_TEXTURE0 + i);
+				glActiveTexture(GL_TEXTURE0 + i);
 
 				int32_t wrap_ = (int32_t)m_next.TextureWrapTypes[i];
-				GLExt::glSamplerParameteri(m_samplers[i], GL_TEXTURE_WRAP_S, glwrap[wrap_]);
-				GLExt::glSamplerParameteri(m_samplers[i], GL_TEXTURE_WRAP_T, glwrap[wrap_]);
+				glSamplerParameteri(m_samplers[i], GL_TEXTURE_WRAP_S, glwrap[wrap_]);
+				glSamplerParameteri(m_samplers[i], GL_TEXTURE_WRAP_T, glwrap[wrap_]);
 
-				GLExt::glBindSampler(i, m_samplers[i]);
+				glBindSampler(i, m_samplers[i]);
 			}
 		}
 	}
@@ -220,7 +220,7 @@ void RenderState::Update(bool forced)
 			// always changes because a flag is assigned into a texture
 			// if (m_active.TextureFilterTypes[i] != m_next.TextureFilterTypes[i] || forced)
 			{
-				GLExt::glActiveTexture(GL_TEXTURE0 + i);
+				glActiveTexture(GL_TEXTURE0 + i);
 				GLCheckError();
 
 				// for webngl
@@ -248,7 +248,7 @@ void RenderState::Update(bool forced)
 			// always changes because a flag is assigned into a texture
 			// if (m_active.TextureWrapTypes[i] != m_next.TextureWrapTypes[i] || forced)
 			{
-				GLExt::glActiveTexture(GL_TEXTURE0 + i);
+				glActiveTexture(GL_TEXTURE0 + i);
 				GLCheckError();
 
 				int32_t wrap_ = (int32_t)m_next.TextureWrapTypes[i];
@@ -263,7 +263,7 @@ void RenderState::Update(bool forced)
 		GLCheckError();
 	}
 
-	GLExt::glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE0);
 
 	m_active = m_next;
 

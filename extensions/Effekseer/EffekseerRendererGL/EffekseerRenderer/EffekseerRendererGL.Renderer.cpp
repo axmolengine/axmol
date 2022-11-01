@@ -203,7 +203,7 @@ RendererImplemented::~RendererImplemented()
 
 	if (GLExt::IsSupportedVertexArray() && defaultVertexArray_ > 0)
 	{
-		GLExt::glDeleteVertexArrays(1, &defaultVertexArray_);
+		glDeleteVertexArrays(1, &defaultVertexArray_);
 		defaultVertexArray_ = 0;
 	}
 }
@@ -437,20 +437,20 @@ bool RendererImplemented::Initialize()
 	m_standardRenderer =
 		new EffekseerRenderer::StandardRenderer<RendererImplemented, Shader>(this);
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, arrayBufferBinding);
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferBinding);
+	glBindBuffer(GL_ARRAY_BUFFER, arrayBufferBinding);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferBinding);
 	GetImpl()->isSoftParticleEnabled = GetDeviceType() == OpenGLDeviceType::OpenGL3 || GetDeviceType() == OpenGLDeviceType::OpenGLES3;
 
 	if (GLExt::IsSupportedVertexArray())
 	{
-		GLExt::glBindVertexArray(currentVAO);
+		glBindVertexArray(currentVAO);
 	}
 
 	GetImpl()->CreateProxyTextures(this);
 
 	if (GLExt::IsSupportedVertexArray())
 	{
-		GLExt::glGenVertexArrays(1, &defaultVertexArray_);
+		glGenVertexArrays(1, &defaultVertexArray_);
 	}
 
 	// Transpiled shader for OpenGL 3.x is transposed
@@ -510,7 +510,7 @@ bool RendererImplemented::BeginRendering()
 		for (size_t i = 0; i < m_originalState.boundTextures.size(); i++)
 		{
 			GLint bound = 0;
-			GLExt::glActiveTexture(GL_TEXTURE0 + (GLenum)i);
+			glActiveTexture(GL_TEXTURE0 + (GLenum)i);
 			glGetIntegerv(GL_TEXTURE_BINDING_2D, &bound);
 			m_originalState.boundTextures[i] = bound;
 		}
@@ -554,15 +554,15 @@ bool RendererImplemented::EndRendering()
 	{
 		if (GLExt::IsSupportedVertexArray())
 		{
-			GLExt::glBindVertexArray(m_originalState.vao);
+			glBindVertexArray(m_originalState.vao);
 		}
 
 		for (size_t i = 0; i < m_originalState.boundTextures.size(); i++)
 		{
-			GLExt::glActiveTexture(GL_TEXTURE0 + (GLenum)i);
+			glActiveTexture(GL_TEXTURE0 + (GLenum)i);
 			glBindTexture(GL_TEXTURE_2D, m_originalState.boundTextures[i]);
 		}
-		GLExt::glActiveTexture(GL_TEXTURE0);
+		glActiveTexture(GL_TEXTURE0);
 
 		if (m_originalState.blend)
 			glEnable(GL_BLEND);
@@ -588,18 +588,18 @@ bool RendererImplemented::EndRendering()
 		glDepthFunc(m_originalState.depthFunc);
 		glDepthMask(m_originalState.depthWrite);
 		glCullFace(m_originalState.cullFaceMode);
-		GLExt::glBlendFuncSeparate(m_originalState.blendSrc, m_originalState.blendDst, m_originalState.blendSrcAlpha, m_originalState.blendDstAlpha);
-		GLExt::glBlendEquation(m_originalState.blendEquation);
+		glBlendFuncSeparate(m_originalState.blendSrc, m_originalState.blendDst, m_originalState.blendSrcAlpha, m_originalState.blendDstAlpha);
+		glBlendEquation(m_originalState.blendEquation);
 
-		GLExt::glBindBuffer(GL_ARRAY_BUFFER, m_originalState.arrayBufferBinding);
-		GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_originalState.elementArrayBufferBinding);
-		GLExt::glUseProgram(m_originalState.program);
+		glBindBuffer(GL_ARRAY_BUFFER, m_originalState.arrayBufferBinding);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_originalState.elementArrayBufferBinding);
+		glUseProgram(m_originalState.program);
 
 		if (GetDeviceType() == OpenGLDeviceType::OpenGL3 || GetDeviceType() == OpenGLDeviceType::OpenGLES3)
 		{
 			for (int32_t i = 0; i < (int32_t)GetCurrentTextures().size(); i++)
 			{
-				GLExt::glBindSampler(i, 0);
+				glBindSampler(i, 0);
 			}
 		}
 	}
@@ -708,8 +708,8 @@ void RendererImplemented::SetSquareMaxCount(int32_t count)
 		ringVs_.emplace_back(rv);
 	}
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, arrayBufferBinding);
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferBinding);
+	glBindBuffer(GL_ARRAY_BUFFER, arrayBufferBinding);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferBinding);
 }
 
 //----------------------------------------------------------------------------------
@@ -814,7 +814,7 @@ void RendererImplemented::SetVertexBuffer(VertexBuffer* vertexBuffer, int32_t si
 {
 	if (m_currentVertexArray == nullptr || m_currentVertexArray->GetVertexBuffer() == nullptr)
 	{
-		GLExt::glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetInterface());
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->GetInterface());
 	}
 }
 
@@ -825,7 +825,7 @@ void RendererImplemented::SetVertexBuffer(GLuint vertexBuffer, int32_t size)
 {
 	if (m_currentVertexArray == nullptr || m_currentVertexArray->GetVertexBuffer() == nullptr)
 	{
-		GLExt::glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
 	}
 }
 
@@ -836,7 +836,7 @@ void RendererImplemented::SetIndexBuffer(IndexBuffer* indexBuffer)
 {
 	if (m_currentVertexArray == nullptr || m_currentVertexArray->GetIndexBuffer() == nullptr)
 	{
-		GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->GetInterface());
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer->GetInterface());
 		indexBufferCurrentStride_ = indexBuffer->GetStride();
 	}
 	else
@@ -852,7 +852,7 @@ void RendererImplemented::SetIndexBuffer(GLuint indexBuffer)
 {
 	if (m_currentVertexArray == nullptr || m_currentVertexArray->GetIndexBuffer() == nullptr)
 	{
-		GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 		indexBufferCurrentStride_ = 4;
 	}
 	else
@@ -954,11 +954,11 @@ void RendererImplemented::DrawPolygonInstanced(int32_t vertexCount, int32_t inde
 
 	if (GetRenderMode() == ::Effekseer::RenderMode::Normal)
 	{
-		GLExt::glDrawElementsInstanced(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr, instanceCount);
+		glDrawElementsInstanced(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr, instanceCount);
 	}
 	else if (GetRenderMode() == ::Effekseer::RenderMode::Wireframe)
 	{
-		GLExt::glDrawElementsInstanced(GL_LINES, indexCount, GL_UNSIGNED_INT, nullptr, instanceCount);
+		glDrawElementsInstanced(GL_LINES, indexCount, GL_UNSIGNED_INT, nullptr, instanceCount);
 	}
 	GLCheckError();
 }
@@ -1088,7 +1088,7 @@ void RendererImplemented::BeginShader(Shader* shader)
 
 		if (defaultVertexArray_ > 0)
 		{
-			GLExt::glBindVertexArray(defaultVertexArray_);
+			glBindVertexArray(defaultVertexArray_);
 		}
 	}
 
@@ -1096,7 +1096,7 @@ void RendererImplemented::BeginShader(Shader* shader)
 
 	if (m_currentVertexArray)
 	{
-		GLExt::glBindVertexArray(m_currentVertexArray->GetInterface());
+		glBindVertexArray(m_currentVertexArray->GetInterface());
 	}
 
 	assert(currentShader == nullptr);
@@ -1122,14 +1122,14 @@ void RendererImplemented::EndShader(Shader* shader)
 			shader->DisableAttribs();
 			GLCheckError();
 
-			GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 			GLCheckError();
 
-			GLExt::glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			GLCheckError();
 		}
 
-		GLExt::glBindVertexArray(0);
+		glBindVertexArray(0);
 		GLCheckError();
 		m_currentVertexArray = nullptr;
 	}
@@ -1138,15 +1138,15 @@ void RendererImplemented::EndShader(Shader* shader)
 		shader->DisableAttribs();
 		GLCheckError();
 
-		GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		GLCheckError();
 
-		GLExt::glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		GLCheckError();
 
 		if (defaultVertexArray_ > 0)
 		{
-			GLExt::glBindVertexArray(0);
+			glBindVertexArray(0);
 		}
 	}
 
@@ -1188,7 +1188,7 @@ void RendererImplemented::SetTextures(Shader* shader, Effekseer::Backend::Textur
 			id = texture->GetBuffer();
 		}
 
-		GLExt::glActiveTexture(GL_TEXTURE0 + i);
+		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, id);
 
 		if (textures[i] != nullptr)
@@ -1204,10 +1204,10 @@ void RendererImplemented::SetTextures(Shader* shader, Effekseer::Backend::Textur
 
 		if (shader->GetTextureSlotEnable(i))
 		{
-			GLExt::glUniform1i(shader->GetTextureSlot(i), i);
+			glUniform1i(shader->GetTextureSlot(i), i);
 		}
 	}
-	GLExt::glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE0);
 
 	GLCheckError();
 }
