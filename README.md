@@ -41,10 +41,16 @@
 * Windows video player support (based on microsoft media foundation)
 * Windows x64 build support
 * Reimplement HttpClient based on yasio for concorrent http requests processing.
-* ['Upstream-Version-License'](thirdparty/README.md) 
+* ['Upstream-Version-License'](thirdparty/README.md) Third-party
   * Third-party license overview for easier publishing of your commercial apps based on axmol framework. 
   * Some links to third party libs which support axmol too.
-  * Extensions having own license as part of there package.
+* ['Upstream-Version-License'](extensions/README.md) Extensions
+  * Extensions license overview for easier publishing of your commercial apps based on axmol framework. 
+  * Spine-3.8 support
+  * ```FairyGUI``` support
+  * DragonBones support
+  * Live2D support
+  * **ImGui integrated, easy to write game embedded tools, very easy to use, read [ImGui](extensions/ImGui/README.md) for more info**
 * Refactor AudioEngine, OpenAL for all platforms
   * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enabling it
   * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios/tvos, even though it was marked as deprecated, but still available.
@@ -58,8 +64,6 @@
 * Use fast pugixml
 * Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
 * Use SAX parser for all plist files
-* Spine-3.8 support
-* Extension ```FairyGUI``` support
 * ASTC 4x4/6x6/8x8 support (if hardware decoding is not supported, then software decoding is used)
 * ETC2 RGB/RGBA support    (if hardware decoding is not supported, then software decoding is used)
 * Supported 2D physics engines (see also [APPENDIX.md](APPENDIX.md)):
@@ -68,7 +72,6 @@
   * Chipmunk2D 
 * Supported 3D physics engines:
   * Bullet Physics SDK
-* **ImGui 1.88 integrated, easy to write game embedded tools, very easy to use, read [ImGui](extensions/ImGui/README.md) for more info**
 
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
@@ -119,7 +122,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 33  
      * Android Gradle Plugin (AGP) 7.2.2  
-     * Android SDK Build-Tools 30.0.3 match with AGP
+     * Android SDK Build-Tools 30.0.3 match with AGP, refer to: https://developer.android.com/studio/releases/gradle-plugin
      * Gradle 7.4.2  
      * NDK r23c+  
      * CMake 3.22.1+  

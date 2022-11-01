@@ -108,24 +108,24 @@ public:
     const_reverse_iterator crend() const { return _data.crend(); }
 
     /** Constructor. */
-    Vector<T>() : _data()
+    Vector() : _data()
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector!");
     }
 
     /**
      * Constructor with a capacity.
      * @param capacity Capacity of the Vector.
      */
-    explicit Vector<T>(ssize_t capacity) : _data()
+    explicit Vector(ssize_t capacity) : _data()
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector!");
         AXLOGINFO("In the default constructor with capacity of Vector.");
         reserve(capacity);
     }
 
     /** Constructor with initializer list. */
-    Vector<T>(std::initializer_list<T> list)
+    Vector(std::initializer_list<T> list)
     {
         for (auto&& element : list)
         {
@@ -134,31 +134,31 @@ public:
     }
 
     /** Destructor. */
-    ~Vector<T>()
+    ~Vector()
     {
         AXLOGINFO("In the destructor of Vector.");
         clear();
     }
 
     /** Copy constructor. */
-    Vector<T>(const Vector<T>& other)
+    Vector(const Vector& other)
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector!");
         AXLOGINFO("In the copy constructor!");
         _data = other._data;
         addRefForAllObjects();
     }
 
     /** Constructor with std::move semantic. */
-    Vector<T>(Vector<T>&& other)
+    Vector(Vector&& other)
     {
-        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector<T>!");
+        static_assert(std::is_convertible<T, Ref*>::value, "Invalid Type for ax::Vector!");
         AXLOGINFO("In the move constructor of Vector!");
         _data = std::move(other._data);
     }
 
     /** Copy assignment operator. */
-    Vector<T>& operator=(const Vector<T>& other)
+    Vector& operator=(const Vector& other)
     {
         if (this != &other)
         {
@@ -171,7 +171,7 @@ public:
     }
 
     /** Copy assignment operator with std::move semantic. */
-    Vector<T>& operator=(Vector<T>&& other)
+    Vector& operator=(Vector&& other)
     {
         if (this != &other)
         {
@@ -217,7 +217,7 @@ public:
 
     /** @brief Returns whether the Vector is empty (i.e. whether its size is 0).
      *  @note This function does not modify the container in any way. To clear the content of a vector, see
-     * Vector<T>::clear.
+     * Vector::clear.
      */
     bool empty() const { return _data.empty(); }
 
@@ -284,7 +284,7 @@ public:
      * @param other The vector to be compared.
      * @return True if two vectors are equal, false if not.
      */
-    bool equals(const Vector<T>& other) const
+    bool equals(const Vector& other) const
     {
         ssize_t s = this->size();
         if (s != other.size())
@@ -311,7 +311,7 @@ public:
     }
 
     /** Push all elements of an existing Vector to the end of current Vector. */
-    void pushBack(const Vector<T>& other)
+    void pushBack(const Vector& other)
     {
         for (const auto& obj : other)
         {

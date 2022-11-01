@@ -122,6 +122,16 @@ void UtilsMTL::initGPUTextureFormats()
     info.fmt   = getSupportedDepthStencilFormat();
 }
 
+MTLPixelFormat UtilsMTL::getDefaultColorAttachmentPixelFormat()
+{
+    return MTLPixelFormatBGRA8Unorm;
+}
+
+MTLPixelFormat UtilsMTL::getDefaultDepthStencilAttachmentPixelFormat()
+{
+    return getSupportedDepthStencilFormat();
+}
+
 id<MTLTexture> UtilsMTL::getDefaultDepthStencilTexture()
 {
     if (!_defaultDepthStencilAttachmentTexture)

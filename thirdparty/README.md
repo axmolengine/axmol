@@ -102,7 +102,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 8.0.0
+- Version: 8.1.0
 - License: MIT
 
 ## lua
@@ -170,8 +170,8 @@
 - License: Apache-2.0
 
 ## png
-- Upstream: https://github.com/glennrp/libpng
-- Version: git 1.6.38-a37d483 (4098) with arm64 neon detect fix
+- [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
+- Version: 1.6.38 with arm64 neon detect fix
 - License: PNG Reference Library License version 2
 
 ## poly2tri

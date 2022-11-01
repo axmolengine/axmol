@@ -1,7 +1,7 @@
 
 /* arm_init.c - NEON optimised filter functions
  *
- * Copyright (c) 2018 Cosmin Truta
+ * Copyright (c) 2018-2022 Cosmin Truta
  * Copyright (c) 2014,2016 Glenn Randers-Pehrson
  * Written by Mans Rullgard, 2011.
  *
@@ -10,9 +10,7 @@
  * and license in png.h
  */
 
-/* Below, after checking __linux__, various non-C90 POSIX 1003.1 functions are
- * called.
- */
+/* This module requires POSIX 1003.1 functions. */
 #define _POSIX_SOURCE 1
 
 #include "../pngpriv.h"
@@ -32,25 +30,23 @@
  * are a number of implementations in contrib/arm-neon, but the only one that
  * has partial support is contrib/arm-neon/linux.c - a generic Linux
  * implementation which reads /proc/cpufino.
- * Notes: the png_have_neon implementation at linux.c works on armv7 but doesn't works on arm64 
  */
+#include <signal.h> /* for sig_atomic_t */
+
 #ifndef PNG_ARM_NEON_FILE
 #  if defined(__ANDROID__)
-#     define PNG_ARM_NEON_FILE "contrib/arm-neon/android-ndk.c"
+#    define PNG_ARM_NEON_FILE "contrib/arm-neon/android-ndk.c"
 #  elif defined(__linux__)
-#     define PNG_ARM_NEON_FILE "contrib/arm-neon/linux.c"
+#    define PNG_ARM_NEON_FILE "contrib/arm-neon/linux.c"
+#  else
+#    error "No support for run-time ARM Neon checking; use compile-time options"
 #  endif
 #endif
 
-#ifdef PNG_ARM_NEON_FILE
-
-#include <signal.h> /* for sig_atomic_t */
 static int png_have_neon(png_structp png_ptr);
-#include PNG_ARM_NEON_FILE
-
-#else  /* PNG_ARM_NEON_FILE */
-#  error "PNG_ARM_NEON_FILE undefined: no support for run-time ARM NEON checks"
-#endif /* PNG_ARM_NEON_FILE */
+#ifdef PNG_ARM_NEON_FILE
+#  include PNG_ARM_NEON_FILE
+#endif
 #endif /* PNG_ARM_NEON_CHECK_SUPPORTED */
 
 #ifndef PNG_ALIGNED_MEMORY_SUPPORTED
