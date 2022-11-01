@@ -99,8 +99,10 @@ if (APPLE)
     set_target_properties (LLGI PROPERTIES FOLDER Extensions/Effekseer)
 endif()
 
-add_subdirectory(EffekseerRendererGL)
-set_target_properties (EffekseerRendererGL PROPERTIES FOLDER Extensions/Effekseer)
+if (NOT APPLE)
+    add_subdirectory(EffekseerRendererGL)
+    set_target_properties (EffekseerRendererGL PROPERTIES FOLDER Extensions/Effekseer)
+endif()
 
 add_subdirectory(EffekseerForCocos2d-x)
 

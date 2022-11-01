@@ -347,6 +347,15 @@ void CommandBufferMTL::endFrame()
     [_autoReleasePool drain];
 }
 
+void CommandBufferMTL::endEncoding()
+{
+    if (_mtlRenderEncoder) {
+        [_mtlRenderEncoder endEncoding];
+        [_mtlRenderEncoder release];
+    }
+    _mtlRenderEncoder = nil;
+}
+
 void CommandBufferMTL::flush()
 {
     if (_mtlCommandBuffer)

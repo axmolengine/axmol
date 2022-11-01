@@ -33,10 +33,12 @@ if (APPLE)
 
     target_link_libraries(${PROJECT_NAME} 
         PUBLIC EffekseerRendererMetal
-        PUBLIC EffekseerRendererGL)
+        # PUBLIC EffekseerRendererGL
+        )
 
     add_dependencies(${PROJECT_NAME} EffekseerRendererMetal)
-    add_dependencies(${PROJECT_NAME} EffekseerRendererGL)
+
+    # add_dependencies(${PROJECT_NAME} EffekseerRendererGL)
 else()
     target_include_directories(${PROJECT_NAME} 
         PUBLIC ../EffekseerRendererGL/)
