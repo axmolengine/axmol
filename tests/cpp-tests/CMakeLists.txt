@@ -530,6 +530,11 @@ if(WINDOWS OR MACOSX OR LINUX)
 	)
 endif()
 
+if (AX_ENABLE_EXT_EFFEKSEER)
+    list(APPEND GAME_HEADER Classes/EffekseerTest/EffekseerTest.h)
+    list(APPEND GAME_SOURCE Classes/EffekseerTest/EffekseerTest.cpp)
+endif()
+
 
 if(NOT LINUX)
     list(APPEND GAME_SOURCE
