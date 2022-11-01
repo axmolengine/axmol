@@ -172,7 +172,7 @@ ModelRenderer::ModelRenderer(RendererImplemented* renderer,
 
 	if (GLExt::IsSupportedVertexArray())
 	{
-		GLExt::glBindVertexArray(currentVAO);
+		glBindVertexArray(currentVAO);
 	}
 }
 

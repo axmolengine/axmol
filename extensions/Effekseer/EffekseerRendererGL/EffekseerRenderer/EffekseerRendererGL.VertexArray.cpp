@@ -77,9 +77,9 @@ void VertexArray::Init()
 
 	GLCheckError();
 
-	GLExt::glGenVertexArrays(1, &m_vertexArray);
+	glGenVertexArrays(1, &m_vertexArray);
 
-	GLExt::glBindVertexArray(m_vertexArray);
+	glBindVertexArray(m_vertexArray);
 
 	if (m_vertexBuffer != nullptr)
 	{
@@ -88,7 +88,7 @@ void VertexArray::Init()
 			m_vertexBuffer->OnResetDevice();
 		}
 
-		GLExt::glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer->GetInterface());
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer->GetInterface());
 	}
 
 	if (m_indexBuffer != nullptr)
@@ -98,7 +98,7 @@ void VertexArray::Init()
 			m_indexBuffer->OnResetDevice();
 		}
 
-		GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer->GetInterface());
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer->GetInterface());
 	}
 
 	if (m_vertexBuffer != nullptr)
@@ -106,7 +106,7 @@ void VertexArray::Init()
 		m_shader->EnableAttribs();
 	}
 
-	GLExt::glBindVertexArray(0);
+	glBindVertexArray(0);
 
 	GLCheckError();
 }
@@ -120,7 +120,7 @@ void VertexArray::Release()
 
 	if (m_vertexArray != 0)
 	{
-		GLExt::glDeleteVertexArrays(1, &m_vertexArray);
+		glDeleteVertexArrays(1, &m_vertexArray);
 		m_vertexArray = 0;
 	}
 
