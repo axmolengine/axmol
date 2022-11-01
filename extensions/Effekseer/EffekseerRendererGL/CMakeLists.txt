@@ -39,6 +39,7 @@ add_library(${PROJECT_NAME} STATIC ${LOCAL_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/../Effekseer ${EFK_THIRDPARTY_INCLUDES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${PublicHeader}")
 target_link_libraries(${PROJECT_NAME} PUBLIC Effekseer)
+target_include_directories(${PROJECT_NAME} PUBLIC "${_AX_ROOT_PATH}/thirdparty/glad/include")
 
 if(CLANG_FORMAT_ENABLED)
     clang_format(${PROJECT_NAME})
@@ -51,16 +52,16 @@ endif()
 #--------------------
 # Install
 
-install(
-    TARGETS ${PROJECT_NAME}
-    EXPORT ${PROJECT_NAME}-export
-    INCLUDES DESTINATION include/EffekseerRendererGL
-    PUBLIC_HEADER DESTINATION include/EffekseerRendererGL
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib)
+# install(
+#     TARGETS ${PROJECT_NAME}
+#     EXPORT ${PROJECT_NAME}-export
+#     INCLUDES DESTINATION include/EffekseerRendererGL
+#     PUBLIC_HEADER DESTINATION include/EffekseerRendererGL
+#     ARCHIVE DESTINATION lib
+#     LIBRARY DESTINATION lib)
 
-install(
-    EXPORT ${PROJECT_NAME}-export
-    FILE ${PROJECT_NAME}-config.cmake
-    DESTINATION lib/cmake
-    EXPORT_LINK_INTERFACE_LIBRARIES)
+# install(
+#     EXPORT ${PROJECT_NAME}-export
+#     FILE ${PROJECT_NAME}-config.cmake
+#     DESTINATION lib/cmake
+#     EXPORT_LINK_INTERFACE_LIBRARIES)
