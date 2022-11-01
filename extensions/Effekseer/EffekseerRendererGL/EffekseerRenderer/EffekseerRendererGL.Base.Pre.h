@@ -56,7 +56,7 @@
 // #if _WIN32
 // #pragma comment(lib, "opengl32.lib")
 // #endif
-#include "glad/gl.h"
+#include "platform/CCGL.h"
 
 namespace EffekseerRendererGL
 {
