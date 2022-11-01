@@ -74,7 +74,7 @@ bool DistortingCallbackMetal::OnDistorting(EffekseerRenderer::Renderer* renderer
         auto deviceMTL = static_cast<cocos2d::backend::DeviceMTL*>(cocos2d::backend::Device::getInstance());
         
         MTLTextureDescriptor* textureDescriptor =
-        [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:cocos2d::backend::Utils::getDefaultColorAttachmentPixelFormat()
+        [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:cocos2d::backend::UtilsMTL::getDefaultColorAttachmentPixelFormat()
                                                            width:drawable.texture.width
                                                           height:drawable.texture.height
                                                        mipmapped:NO];
@@ -205,8 +205,8 @@ void EffectManager::CreateRenderer(int32_t spriteSize)
     auto device = EffekseerGraphicsDevice::create();
     renderer2d = EffekseerRendererMetal::Create(device,
                                                 spriteSize,
-                                                cocos2d::backend::Utils::getDefaultColorAttachmentPixelFormat(),
-                                                cocos2d::backend::Utils::getDefaultDepthStencilAttachmentPixelFormat(),
+                                                cocos2d::backend::UtilsMTL::getDefaultColorAttachmentPixelFormat(),
+                                                cocos2d::backend::UtilsMTL::getDefaultDepthStencilAttachmentPixelFormat(),
                                                 false);
 
     memoryPool_ = EffekseerRenderer::CreateSingleFrameMemoryPool(device);
