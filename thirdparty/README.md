@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.85.0
+- Version: 7.86.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -166,7 +166,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.5
+- Version: 3.0.7
 - License: Apache-2.0
 
 ## png
