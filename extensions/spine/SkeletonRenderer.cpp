@@ -98,37 +98,7 @@ void SkeletonRenderer::initialize () {
 	_skeleton->updateWorldTransform();
 }
 
-void SkeletonRenderer::setupGLProgramState (bool twoColorTintEnabled) {
-	if (twoColorTintEnabled) {
-#if COCOS2D_VERSION < 0x00040000
-		setGLProgramState(SkeletonTwoColorBatch::getInstance()->getTwoColorTintProgramState());
-#endif
-		return;
-	}
-
-	Texture2D *texture = nullptr;
-	for (int i = 0, n = _skeleton->getSlots().size(); i < n; i++) {
-		Slot* slot = _skeleton->getDrawOrder()[i];
-		Attachment* const attachment = slot->getAttachment();
-		if (!attachment) continue;
-		if (attachment->getRTTI().isExactly(RegionAttachment::rtti)) {
-			RegionAttachment* regionAttachment = static_cast<RegionAttachment*>(attachment);
-			texture = static_cast<AttachmentVertices*>(regionAttachment->getRendererObject())->_texture;
-		} else if (attachment->getRTTI().isExactly(MeshAttachment::rtti)) {
-			MeshAttachment* meshAttachment = static_cast<MeshAttachment*>(attachment);
-			texture = static_cast<AttachmentVertices*>(meshAttachment->getRendererObject())->_texture;
-		} else {
-			continue;
-		}
-
-		if (texture != nullptr) {
-			break;
-		}
-	}
-#if COCOS2D_VERSION < 0x00040000
-	setGLProgramState(GLProgramState::getOrCreateWithGLProgramName(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR_NO_MVP, texture));
-#endif
-}
+void SkeletonRenderer::setupGLProgramState (bool /*twoColorTintEnabled*/) {}
 
 void SkeletonRenderer::setSkeletonData (SkeletonData *skeletonData, bool ownsSkeletonData) {
 	_skeleton = new (__FILE__, __LINE__) Skeleton(skeletonData);
