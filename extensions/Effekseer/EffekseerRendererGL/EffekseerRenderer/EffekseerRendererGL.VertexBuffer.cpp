@@ -34,15 +34,15 @@ VertexBuffer::VertexBuffer(const Backend::GraphicsDeviceRef& graphicsDevice, boo
 
 	m_resource = nullptr;
 
-	GLExt::glGenBuffers(1, &m_buffer);
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
+	glGenBuffers(1, &m_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
 	if (isRingEnabled_)
 	{
-		GLExt::glBufferData(GL_ARRAY_BUFFER, m_size, storage_->buffer.data(), GL_STREAM_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, m_size, storage_->buffer.data(), GL_STREAM_DRAW);
 	}
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 //-----------------------------------------------------------------------------------
@@ -50,7 +50,7 @@ VertexBuffer::VertexBuffer(const Backend::GraphicsDeviceRef& graphicsDevice, boo
 //-----------------------------------------------------------------------------------
 VertexBuffer::~VertexBuffer()
 {
-	GLExt::glDeleteBuffers(1, &m_buffer);
+	glDeleteBuffers(1, &m_buffer);
 }
 
 //-----------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ GLuint VertexBuffer::GetInterface()
 //-----------------------------------------------------------------------------------
 void VertexBuffer::OnLostDevice()
 {
-	GLExt::glDeleteBuffers(1, &m_buffer);
+	glDeleteBuffers(1, &m_buffer);
 	m_buffer = 0;
 }
 
@@ -83,14 +83,14 @@ void VertexBuffer::OnResetDevice()
 	if (IsValid())
 		return;
 
-	GLExt::glGenBuffers(1, &m_buffer);
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
+	glGenBuffers(1, &m_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
 #ifndef __ANDROID__
-	GLExt::glBufferData(GL_ARRAY_BUFFER, m_size, storage_->buffer.data(), GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_size, storage_->buffer.data(), GL_STREAM_DRAW);
 #endif // !__ANDROID__
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 //-----------------------------------------------------------------------------------
@@ -159,18 +159,18 @@ void VertexBuffer::Unlock()
 {
 	assert(m_isLock || m_ringBufferLock);
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffer);
 
 	if (GLExt::IsSupportedBufferRange() && m_vertexRingStart > 0)
 	{
 		if (!isRingEnabled_)
 		{
-			GLExt::glBufferData(GL_ARRAY_BUFFER, m_offset, m_resource, GL_STREAM_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, m_offset, m_resource, GL_STREAM_DRAW);
 		}
 
-		auto target = GLExt::glMapBufferRange(GL_ARRAY_BUFFER, m_vertexRingStart, m_offset, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
+		auto target = glMapBufferRange(GL_ARRAY_BUFFER, m_vertexRingStart, m_offset, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
 		memcpy(target, m_resource, m_offset);
-		GLExt::glUnmapBuffer(GL_ARRAY_BUFFER);
+		glUnmapBuffer(GL_ARRAY_BUFFER);
 	}
 	else
 	{
@@ -187,31 +187,31 @@ void VertexBuffer::Unlock()
 		{
 			if (isRingEnabled_)
 			{
-				GLExt::glBufferData(GL_ARRAY_BUFFER, m_size, nullptr, GL_STREAM_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, m_size, nullptr, GL_STREAM_DRAW);
 			}
 			else
 			{
-				GLExt::glBufferData(GL_ARRAY_BUFFER, m_offset, nullptr, GL_STREAM_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, m_offset, nullptr, GL_STREAM_DRAW);
 			}
 
-			auto target = (uint8_t*)GLExt::glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+			auto target = (uint8_t*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 			if (target == nullptr)
 			{
 				GLExt::MakeMapBufferInvalid();
 
 				if (m_vertexRingStart > 0)
 				{
-					GLExt::glBufferSubData(GL_ARRAY_BUFFER, m_vertexRingStart, m_offset, m_resource);
+					glBufferSubData(GL_ARRAY_BUFFER, m_vertexRingStart, m_offset, m_resource);
 				}
 				else
 				{
-					GLExt::glBufferData(GL_ARRAY_BUFFER, m_size, m_resource, GL_STREAM_DRAW);
+					glBufferData(GL_ARRAY_BUFFER, m_size, m_resource, GL_STREAM_DRAW);
 				}
 			}
 			else
 			{
 				memcpy(target + m_vertexRingStart, m_resource, m_offset);
-				GLExt::glUnmapBuffer(GL_ARRAY_BUFFER);
+				glUnmapBuffer(GL_ARRAY_BUFFER);
 			}
 		}
 		else
@@ -220,21 +220,21 @@ void VertexBuffer::Unlock()
 			{
 				if (m_vertexRingStart > 0)
 				{
-					GLExt::glBufferSubData(GL_ARRAY_BUFFER, m_vertexRingStart, m_offset, m_resource);
+					glBufferSubData(GL_ARRAY_BUFFER, m_vertexRingStart, m_offset, m_resource);
 				}
 				else
 				{
-					GLExt::glBufferData(GL_ARRAY_BUFFER, m_size, m_resource, GL_STREAM_DRAW);
+					glBufferData(GL_ARRAY_BUFFER, m_size, m_resource, GL_STREAM_DRAW);
 				}
 			}
 			else
 			{
-				GLExt::glBufferData(GL_ARRAY_BUFFER, m_offset, m_resource, GL_STREAM_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, m_offset, m_resource, GL_STREAM_DRAW);
 			}
 		}
 	}
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	m_isLock = false;
 	m_ringBufferLock = false;

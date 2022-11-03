@@ -32,7 +32,7 @@ Effekseer::CustomVector<GLint> GetVertexAttribLocations(const VertexLayoutRef& v
 	for (size_t i = 0; i < vertexLayout->GetElements().size(); i++)
 	{
 		const auto& element = vertexLayout->GetElements()[i];
-		ret.emplace_back(GLExt::glGetAttribLocation(shader->GetProgram(), element.Name.c_str()));
+		ret.emplace_back(glGetAttribLocation(shader->GetProgram(), element.Name.c_str()));
 	}
 
 	return ret;
@@ -95,8 +95,8 @@ void EnableLayouts(const VertexLayoutRef& vertexLayout, const Effekseer::CustomV
 
 		if (loc >= 0)
 		{
-			GLExt::glEnableVertexAttribArray(loc);
-			GLExt::glVertexAttribPointer(loc,
+			glEnableVertexAttribArray(loc);
+			glVertexAttribPointer(loc,
 										 count,
 										 type,
 										 isNormalized,
@@ -116,7 +116,7 @@ void DisableLayouts(const Effekseer::CustomVector<GLint>& locations)
 
 		if (loc >= 0)
 		{
-			GLExt::glDisableVertexAttribArray(loc);
+			glDisableVertexAttribArray(loc);
 		}
 	}
 }
@@ -150,13 +150,13 @@ void StoreUniforms(const ShaderRef& shader, const UniformBufferRef& vertexUnifor
 			{
 				const auto& buffer = uniformBuffer->GetBuffer();
 				assert(buffer.size() >= element.Offset + sizeof(float) * 4);
-				GLExt::glUniform4fv(loc, element.Count, reinterpret_cast<const GLfloat*>(buffer.data() + element.Offset));
+				glUniform4fv(loc, element.Count, reinterpret_cast<const GLfloat*>(buffer.data() + element.Offset));
 			}
 			else if (element.Type == Effekseer::Backend::UniformBufferLayoutElementType::Matrix44)
 			{
 				const auto& buffer = uniformBuffer->GetBuffer();
 				assert(buffer.size() >= element.Offset + sizeof(float) * 4 * 4);
-				GLExt::glUniformMatrix4fv(loc, element.Count, transpose ? GL_TRUE : GL_FALSE, reinterpret_cast<const GLfloat*>(buffer.data() + element.Offset));
+				glUniformMatrix4fv(loc, element.Count, transpose ? GL_TRUE : GL_FALSE, reinterpret_cast<const GLfloat*>(buffer.data() + element.Offset));
 			}
 			else
 			{
@@ -199,14 +199,14 @@ VertexBuffer::~VertexBuffer()
 bool VertexBuffer::Allocate(int32_t size, bool isDynamic)
 {
 	resources_.resize(static_cast<size_t>(size));
-	GLExt::glGenBuffers(1, &buffer_);
+	glGenBuffers(1, &buffer_);
 
 	int arrayBufferBinding = 0;
 	glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &arrayBufferBinding);
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, buffer_);
-	GLExt::glBufferData(GL_ARRAY_BUFFER, static_cast<uint32_t>(resources_.size()), nullptr, isDynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, arrayBufferBinding);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer_);
+	glBufferData(GL_ARRAY_BUFFER, static_cast<uint32_t>(resources_.size()), nullptr, isDynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, arrayBufferBinding);
 
 	return true;
 }
@@ -215,7 +215,7 @@ void VertexBuffer::Deallocate()
 {
 	if (buffer_ != 0)
 	{
-		GLExt::glDeleteBuffers(1, &buffer_);
+		glDeleteBuffers(1, &buffer_);
 		buffer_ = 0;
 	}
 }
@@ -253,21 +253,21 @@ void VertexBuffer::UpdateData(const void* src, int32_t size, int32_t offset)
 	int arrayBufferBinding = 0;
 	glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &arrayBufferBinding);
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, buffer_);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer_);
 
 	if (isSupportedBufferRange)
 	{
-		auto target = GLExt::glMapBufferRange(GL_ARRAY_BUFFER, offset, size, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
+		auto target = glMapBufferRange(GL_ARRAY_BUFFER, offset, size, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT);
 		memcpy(target, src, size);
-		GLExt::glUnmapBuffer(GL_ARRAY_BUFFER);
+		glUnmapBuffer(GL_ARRAY_BUFFER);
 	}
 	else
 	{
 		memcpy(resources_.data() + offset, src, size);
-		GLExt::glBufferData(GL_ARRAY_BUFFER, static_cast<uint32_t>(resources_.size()), resources_.data(), isDynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, static_cast<uint32_t>(resources_.size()), resources_.data(), isDynamic_ ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 	}
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, arrayBufferBinding);
+	glBindBuffer(GL_ARRAY_BUFFER, arrayBufferBinding);
 }
 
 IndexBuffer::IndexBuffer(GraphicsDevice* graphicsDevice)
@@ -289,14 +289,14 @@ IndexBuffer::~IndexBuffer()
 bool IndexBuffer::Allocate(int32_t elementCount, int32_t stride)
 {
 	resources_.resize(elementCount_ * stride_);
-	GLExt::glGenBuffers(1, &buffer_);
+	glGenBuffers(1, &buffer_);
 
 	int elementArrayBufferBinding = 0;
 	glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &elementArrayBufferBinding);
 
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_);
-	GLExt::glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<uint32_t>(resources_.size()), nullptr, GL_STATIC_DRAW);
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferBinding);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<uint32_t>(resources_.size()), nullptr, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferBinding);
 
 	elementCount_ = elementCount;
 	strideType_ = stride == 4 ? Effekseer::Backend::IndexBufferStrideType::Stride4 : Effekseer::Backend::IndexBufferStrideType::Stride2;
@@ -307,7 +307,7 @@ void IndexBuffer::Deallocate()
 {
 	if (buffer_ != 0)
 	{
-		GLExt::glDeleteBuffers(1, &buffer_);
+		glDeleteBuffers(1, &buffer_);
 		buffer_ = 0;
 	}
 }
@@ -342,9 +342,9 @@ void IndexBuffer::UpdateData(const void* src, int32_t size, int32_t offset)
 	int elementArrayBufferBinding = 0;
 	glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &elementArrayBufferBinding);
 
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_);
-	GLExt::glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<uint32_t>(resources_.size()), resources_.data(), GL_STATIC_DRAW);
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferBinding);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<uint32_t>(resources_.size()), resources_.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferBinding);
 }
 
 bool UniformBuffer::Init(int32_t size, const void* initialData)
@@ -393,7 +393,7 @@ Texture::~Texture()
 
 		if (renderbuffer_ > 0)
 		{
-			GLExt::glDeleteRenderbuffers(1, &renderbuffer_);
+			glDeleteRenderbuffers(1, &renderbuffer_);
 		}
 	}
 
@@ -455,8 +455,8 @@ bool Texture::Init(const Effekseer::Backend::TextureParameter& param, const Effe
 
 		glGetIntegerv(GL_RENDERBUFFER_BINDING, &bound);
 
-		GLExt::glGenRenderbuffers(1, &renderbuffer_);
-		GLExt::glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer_);
+		glGenRenderbuffers(1, &renderbuffer_);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer_);
 	}
 
 	if (isCompressed)
@@ -488,7 +488,7 @@ bool Texture::Init(const Effekseer::Backend::TextureParameter& param, const Effe
 			format = GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT;
 		}
 
-		GLExt::glCompressedTexImage2D(target,
+		glCompressedTexImage2D(target,
 									  0,
 									  format,
 									  param.Size[0],
@@ -574,11 +574,11 @@ bool Texture::Init(const Effekseer::Backend::TextureParameter& param, const Effe
 		{
 			if ((param.Usage & Effekseer::Backend::TextureUsageType::Array) != Effekseer::Backend::TextureUsageType::None)
 			{
-				GLExt::glTexImage3D(target, 0, internalFormat, param.Size[0], param.Size[1], param.Size[2], 0, format, type, initialDataPtr);
+				glTexImage3D(target, 0, internalFormat, param.Size[0], param.Size[1], param.Size[2], 0, format, type, initialDataPtr);
 			}
 			else if (param.Dimension == 3)
 			{
-				GLExt::glTexImage3D(target, 0, internalFormat, param.Size[0], param.Size[1], param.Size[2], 0, format, type, initialDataPtr);
+				glTexImage3D(target, 0, internalFormat, param.Size[0], param.Size[1], param.Size[2], 0, format, type, initialDataPtr);
 			}
 			else
 			{
@@ -595,13 +595,13 @@ bool Texture::Init(const Effekseer::Backend::TextureParameter& param, const Effe
 		}
 		else
 		{
-			GLExt::glRenderbufferStorageMultisample(GL_RENDERBUFFER, param.SampleCount, internalFormat, param.Size[0], param.Size[1]);
+			glRenderbufferStorageMultisample(GL_RENDERBUFFER, param.SampleCount, internalFormat, param.Size[0], param.Size[1]);
 		}
 	}
 
 	if (param.MipLevelCount != 1)
 	{
-		GLExt::glGenerateMipmap(target);
+		glGenerateMipmap(target);
 	}
 
 	if (woSampling)
@@ -610,7 +610,7 @@ bool Texture::Init(const Effekseer::Backend::TextureParameter& param, const Effe
 	}
 	else
 	{
-		GLExt::glBindRenderbuffer(GL_RENDERBUFFER, bound);
+		glBindRenderbuffer(GL_RENDERBUFFER, bound);
 	}
 
 	target_ = target;
@@ -668,8 +668,8 @@ bool Texture::Init(const Effekseer::Backend::DepthTextureParameter& param)
 	else
 	{
 		glGetIntegerv(GL_RENDERBUFFER_BINDING, &bound);
-		GLExt::glGenRenderbuffers(1, &renderbuffer_);
-		GLExt::glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer_);
+		glGenRenderbuffers(1, &renderbuffer_);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer_);
 	}
 
 	if (initWithBuffer)
@@ -678,7 +678,7 @@ bool Texture::Init(const Effekseer::Backend::DepthTextureParameter& param)
 	}
 	else
 	{
-		GLExt::glRenderbufferStorageMultisample(GL_RENDERBUFFER, param.SamplingCount, internalFormat, param.Size[0], param.Size[1]);
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, param.SamplingCount, internalFormat, param.Size[0], param.Size[1]);
 	}
 
 	if (initWithBuffer)
@@ -687,7 +687,7 @@ bool Texture::Init(const Effekseer::Backend::DepthTextureParameter& param)
 	}
 	else
 	{
-		GLExt::glBindRenderbuffer(GL_RENDERBUFFER, bound);
+		glBindRenderbuffer(GL_RENDERBUFFER, bound);
 	}
 
 	param_.Format = param.Format;
@@ -762,25 +762,25 @@ bool Shader::Compile()
 	}
 
 	GLint res_vs, res_fs, res_link = 0;
-	auto vert_shader = GLExt::glCreateShader(GL_VERTEX_SHADER);
+	auto vert_shader = glCreateShader(GL_VERTEX_SHADER);
 
-	GLExt::glShaderSource(vert_shader, vsCodes_.size(), const_cast<const GLchar**>(vsCodePtr.data()), vsCodeLen.data());
-	GLExt::glCompileShader(vert_shader);
-	GLExt::glGetShaderiv(vert_shader, GL_COMPILE_STATUS, &res_vs);
+	glShaderSource(vert_shader, vsCodes_.size(), const_cast<const GLchar**>(vsCodePtr.data()), vsCodeLen.data());
+	glCompileShader(vert_shader);
+	glGetShaderiv(vert_shader, GL_COMPILE_STATUS, &res_vs);
 
-	auto frag_shader = GLExt::glCreateShader(GL_FRAGMENT_SHADER);
-	GLExt::glShaderSource(frag_shader, psCodes_.size(), const_cast<const GLchar**>(psCodePtr.data()), psCodeLen.data());
-	GLExt::glCompileShader(frag_shader);
-	GLExt::glGetShaderiv(frag_shader, GL_COMPILE_STATUS, &res_fs);
+	auto frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(frag_shader, psCodes_.size(), const_cast<const GLchar**>(psCodePtr.data()), psCodeLen.data());
+	glCompileShader(frag_shader);
+	glGetShaderiv(frag_shader, GL_COMPILE_STATUS, &res_fs);
 
 	// create shader program
-	auto program = GLExt::glCreateProgram();
-	GLExt::glAttachShader(program, vert_shader);
-	GLExt::glAttachShader(program, frag_shader);
+	auto program = glCreateProgram();
+	glAttachShader(program, vert_shader);
+	glAttachShader(program, frag_shader);
 
 	// link shaders
-	GLExt::glLinkProgram(program);
-	GLExt::glGetProgramiv(program, GL_LINK_STATUS, &res_link);
+	glLinkProgram(program);
+	glGetProgramiv(program, GL_LINK_STATUS, &res_link);
 
 #ifndef NDEBUG
 	if (res_link == GL_FALSE)
@@ -788,19 +788,19 @@ bool Shader::Compile()
 		// output errors
 		char log[512];
 		int32_t log_size;
-		GLExt::glGetShaderInfoLog(vert_shader, sizeof(log), &log_size, log);
+		glGetShaderInfoLog(vert_shader, sizeof(log), &log_size, log);
 		if (log_size > 0)
 		{
 			LOG(": Vertex Shader error.\n");
 			LOG(log);
 		}
-		GLExt::glGetShaderInfoLog(frag_shader, sizeof(log), &log_size, log);
+		glGetShaderInfoLog(frag_shader, sizeof(log), &log_size, log);
 		if (log_size > 0)
 		{
 			LOG(": Fragment Shader error.\n");
 			LOG(log);
 		}
-		GLExt::glGetProgramInfoLog(program, sizeof(log), &log_size, log);
+		glGetProgramInfoLog(program, sizeof(log), &log_size, log);
 		if (log_size > 0)
 		{
 			LOG(": Shader Link error.\n");
@@ -809,12 +809,12 @@ bool Shader::Compile()
 	}
 #endif
 	// dispose shader objects
-	GLExt::glDeleteShader(frag_shader);
-	GLExt::glDeleteShader(vert_shader);
+	glDeleteShader(frag_shader);
+	glDeleteShader(vert_shader);
 
 	if (res_link == GL_FALSE)
 	{
-		GLExt::glDeleteProgram(program);
+		glDeleteProgram(program);
 		return false;
 	}
 
@@ -822,7 +822,7 @@ bool Shader::Compile()
 
 	if (GLExt::IsSupportedVertexArray())
 	{
-		GLExt::glGenVertexArrays(1, &vao_);
+		glGenVertexArrays(1, &vao_);
 	}
 
 	if (layout_ != nullptr)
@@ -830,13 +830,13 @@ bool Shader::Compile()
 		textureLocations_.reserve(layout_->GetTextures().size());
 		for (size_t i = 0; i < layout_->GetTextures().size(); i++)
 		{
-			textureLocations_.emplace_back(GLExt::glGetUniformLocation(program_, layout_->GetTextures()[i].c_str()));
+			textureLocations_.emplace_back(glGetUniformLocation(program_, layout_->GetTextures()[i].c_str()));
 		}
 
 		uniformLocations_.reserve(layout_->GetElements().size());
 		for (size_t i = 0; i < layout_->GetElements().size(); i++)
 		{
-			uniformLocations_.emplace_back(GLExt::glGetUniformLocation(program_, layout_->GetElements()[i].Name.c_str()));
+			uniformLocations_.emplace_back(glGetUniformLocation(program_, layout_->GetElements()[i].Name.c_str()));
 		}
 	}
 
@@ -847,12 +847,12 @@ void Shader::Reset()
 {
 	if (program_ > 0)
 	{
-		GLExt::glDeleteProgram(program_);
+		glDeleteProgram(program_);
 	}
 
 	if (vao_ > 0)
 	{
-		GLExt::glDeleteVertexArrays(1, &vao_);
+		glDeleteVertexArrays(1, &vao_);
 	}
 
 	textureLocations_.clear();
@@ -914,7 +914,7 @@ RenderPass::~RenderPass()
 {
 	if (buffer_ > 0)
 	{
-		GLExt::glDeleteFramebuffers(1, &buffer_);
+		glDeleteFramebuffers(1, &buffer_);
 		buffer_ = 0;
 	}
 
@@ -947,7 +947,7 @@ bool RenderPass::Init(Effekseer::FixedSizeVector<Effekseer::Backend::TextureRef,
 	textures_ = textures;
 	depthTexture_ = depthTexture;
 
-	GLExt::glGenFramebuffers(1, &buffer_);
+	glGenFramebuffers(1, &buffer_);
 	if (buffer_ == 0)
 	{
 		return false;
@@ -956,16 +956,16 @@ bool RenderPass::Init(Effekseer::FixedSizeVector<Effekseer::Backend::TextureRef,
 	GLint backupFramebuffer;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &backupFramebuffer);
 
-	GLExt::glBindFramebuffer(GL_FRAMEBUFFER, buffer_);
+	glBindFramebuffer(GL_FRAMEBUFFER, buffer_);
 
 	for (int32_t i = 0; i < textures.size(); i++)
 	{
-		GLExt::glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, static_cast<Texture*>(textures.at(i).Get())->GetBuffer(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, static_cast<Texture*>(textures.at(i).Get())->GetBuffer(), 0);
 	}
 
 	if (depthTexture != nullptr)
 	{
-		GLExt::glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, static_cast<Texture*>(depthTexture.Get())->GetBuffer(), 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, static_cast<Texture*>(depthTexture.Get())->GetBuffer(), 0);
 	}
 
 	textures_ = textures;
@@ -977,9 +977,9 @@ bool RenderPass::Init(Effekseer::FixedSizeVector<Effekseer::Backend::TextureRef,
 		GL_COLOR_ATTACHMENT2,
 		GL_COLOR_ATTACHMENT3,
 	};
-	GLExt::glDrawBuffers(static_cast<GLsizei>(textures.size()), bufs);
+	glDrawBuffers(static_cast<GLsizei>(textures.size()), bufs);
 
-	GLExt::glBindFramebuffer(GL_FRAMEBUFFER, backupFramebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, backupFramebuffer);
 	return true;
 }
 
@@ -993,7 +993,7 @@ GraphicsDevice::GraphicsDevice(OpenGLDeviceType deviceType, bool isExtensionsEna
 
 	if (deviceType == OpenGLDeviceType::OpenGL3 || deviceType == OpenGLDeviceType::OpenGLES3)
 	{
-		GLExt::glGenSamplers(Effekseer::TextureSlotMax, samplers_.data());
+		glGenSamplers(Effekseer::TextureSlotMax, samplers_.data());
 	}
 
 	{
@@ -1026,18 +1026,18 @@ GraphicsDevice::GraphicsDevice(OpenGLDeviceType deviceType, bool isExtensionsEna
 		properties_[DevicePropertyType::MaxTextureImageUnits] = v;
 	}
 
-	GLExt::glGenFramebuffers(1, &frameBufferTemp_);
+	glGenFramebuffers(1, &frameBufferTemp_);
 }
 
 GraphicsDevice::~GraphicsDevice()
 {
-	GLExt::glDeleteFramebuffers(1, &frameBufferTemp_);
+	glDeleteFramebuffers(1, &frameBufferTemp_);
 
 	if (isValid_)
 	{
 		if (deviceType_ == OpenGLDeviceType::OpenGL3 || deviceType_ == OpenGLDeviceType::OpenGLES3)
 		{
-			GLExt::glDeleteSamplers(Effekseer::TextureSlotMax, samplers_.data());
+			glDeleteSamplers(Effekseer::TextureSlotMax, samplers_.data());
 		}
 	}
 }
@@ -1168,8 +1168,8 @@ bool GraphicsDevice::CopyTexture(Effekseer::Backend::TextureRef& dst, Effekseer:
 	GLint backupFramebuffer;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &backupFramebuffer);
 
-	GLExt::glBindFramebuffer(GL_FRAMEBUFFER, frameBufferTemp_);
-	GLExt::glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, srcgl->GetBuffer(), 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferTemp_);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, srcgl->GetBuffer(), 0);
 	GLCheckError();
 
 	if (dstgl->GetTarget() == GL_TEXTURE_2D)
@@ -1181,11 +1181,11 @@ bool GraphicsDevice::CopyTexture(Effekseer::Backend::TextureRef& dst, Effekseer:
 	else
 	{
 		glBindTexture(dstgl->GetTarget(), dstgl->GetBuffer());
-		GLExt::glCopyTexSubImage3D(dstgl->GetTarget(), 0, dstPos[0], dstPos[1], dstPos[2] + dstLayer, srcPos[0], srcPos[1], size[0], size[1]);
+		glCopyTexSubImage3D(dstgl->GetTarget(), 0, dstPos[0], dstPos[1], dstPos[2] + dstLayer, srcPos[0], srcPos[1], size[0], size[1]);
 		GLCheckError();
 	}
 
-	GLExt::glBindFramebuffer(GL_FRAMEBUFFER, backupFramebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, backupFramebuffer);
 
 	GLCheckError();
 
@@ -1286,12 +1286,12 @@ void GraphicsDevice::Draw(const Effekseer::Backend::DrawParameter& drawParam)
 	if (GLExt::IsSupportedVertexArray())
 	{
 		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentVAO);
-		GLExt::glBindVertexArray(shader->GetVAO());
+		glBindVertexArray(shader->GetVAO());
 	}
 
-	GLExt::glBindBuffer(GL_ARRAY_BUFFER, static_cast<VertexBuffer*>(drawParam.VertexBufferPtr.Get())->GetBuffer());
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_cast<IndexBuffer*>(drawParam.IndexBufferPtr.Get())->GetBuffer());
-	GLExt::glUseProgram(shader->GetProgram());
+	glBindBuffer(GL_ARRAY_BUFFER, static_cast<VertexBuffer*>(drawParam.VertexBufferPtr.Get())->GetBuffer());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_cast<IndexBuffer*>(drawParam.IndexBufferPtr.Get())->GetBuffer());
+	glUseProgram(shader->GetProgram());
 
 	// textures
 	const auto textureCount = std::min(static_cast<int32_t>(shader->GetLayout()->GetTextures().size()), drawParam.TextureCount);
@@ -1305,12 +1305,12 @@ void GraphicsDevice::Draw(const Effekseer::Backend::DrawParameter& drawParam)
 			continue;
 		}
 
-		GLExt::glUniform1i(textureSlot, i);
+		glUniform1i(textureSlot, i);
 
 		auto texture = static_cast<Texture*>(drawParam.TexturePtrs[i].Get());
 		if (texture != nullptr)
 		{
-			GLExt::glActiveTexture(GL_TEXTURE0 + i);
+			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(texture->GetTarget(), texture->GetBuffer());
 
 			GLCheckError();
@@ -1360,11 +1360,11 @@ void GraphicsDevice::Draw(const Effekseer::Backend::DrawParameter& drawParam)
 
 			if (deviceType_ == OpenGLDeviceType::OpenGL3 || deviceType_ == OpenGLDeviceType::OpenGLES3)
 			{
-				GLExt::glSamplerParameteri(samplers_[i], GL_TEXTURE_MAG_FILTER, filterMag);
-				GLExt::glSamplerParameteri(samplers_[i], GL_TEXTURE_MIN_FILTER, filterMin);
-				GLExt::glSamplerParameteri(samplers_[i], GL_TEXTURE_WRAP_S, wrap);
-				GLExt::glSamplerParameteri(samplers_[i], GL_TEXTURE_WRAP_T, wrap);
-				GLExt::glBindSampler(i, samplers_[i]);
+				glSamplerParameteri(samplers_[i], GL_TEXTURE_MAG_FILTER, filterMag);
+				glSamplerParameteri(samplers_[i], GL_TEXTURE_MIN_FILTER, filterMin);
+				glSamplerParameteri(samplers_[i], GL_TEXTURE_WRAP_S, wrap);
+				glSamplerParameteri(samplers_[i], GL_TEXTURE_WRAP_T, wrap);
+				glBindSampler(i, samplers_[i]);
 			}
 			else
 			{
@@ -1494,8 +1494,8 @@ void GraphicsDevice::Draw(const Effekseer::Backend::DrawParameter& drawParam)
 			blendFunc[static_cast<int>(::Effekseer::Backend::BlendFuncType::DstAlpha)] = GL_DST_ALPHA;
 			blendFunc[static_cast<int>(::Effekseer::Backend::BlendFuncType::OneMinusDstAlpha)] = GL_ONE_MINUS_DST_ALPHA;
 
-			GLExt::glBlendEquationSeparate(blendEq[static_cast<int>(pip->GetParam().BlendEquationRGB)], blendEq[static_cast<int>(pip->GetParam().BlendEquationAlpha)]);
-			GLExt::glBlendFuncSeparate(blendFunc[static_cast<int>(pip->GetParam().BlendSrcFunc)], blendFunc[static_cast<int>(pip->GetParam().BlendDstFunc)], blendFunc[static_cast<int>(pip->GetParam().BlendSrcFuncAlpha)], blendFunc[static_cast<int>(pip->GetParam().BlendDstFuncAlpha)]);
+			glBlendEquationSeparate(blendEq[static_cast<int>(pip->GetParam().BlendEquationRGB)], blendEq[static_cast<int>(pip->GetParam().BlendEquationAlpha)]);
+			glBlendFuncSeparate(blendFunc[static_cast<int>(pip->GetParam().BlendSrcFunc)], blendFunc[static_cast<int>(pip->GetParam().BlendDstFunc)], blendFunc[static_cast<int>(pip->GetParam().BlendSrcFuncAlpha)], blendFunc[static_cast<int>(pip->GetParam().BlendDstFuncAlpha)]);
 		}
 		else
 		{
@@ -1539,7 +1539,7 @@ void GraphicsDevice::Draw(const Effekseer::Backend::DrawParameter& drawParam)
 
 	if (drawParam.InstanceCount > 1)
 	{
-		GLExt::glDrawElementsInstanced(primitiveMode, indexPerPrimitive * drawParam.PrimitiveCount, indexStrideType, (void*)(drawParam.IndexOffset * indexStride), drawParam.InstanceCount);
+		glDrawElementsInstanced(primitiveMode, indexPerPrimitive * drawParam.PrimitiveCount, indexStrideType, (void*)(drawParam.IndexOffset * indexStride), drawParam.InstanceCount);
 	}
 	else
 	{
@@ -1550,7 +1550,7 @@ void GraphicsDevice::Draw(const Effekseer::Backend::DrawParameter& drawParam)
 
 	if (GLExt::IsSupportedVertexArray())
 	{
-		GLExt::glBindVertexArray(currentVAO);
+		glBindVertexArray(currentVAO);
 	}
 
 	GLCheckError();
@@ -1561,11 +1561,11 @@ void GraphicsDevice::BeginRenderPass(Effekseer::Backend::RenderPassRef& renderPa
 	const auto renderPassGL = static_cast<RenderPass*>(renderPass.Get());
 	if (renderPass != nullptr)
 	{
-		GLExt::glBindFramebuffer(GL_FRAMEBUFFER, static_cast<RenderPass*>(renderPass.Get())->GetBuffer());
+		glBindFramebuffer(GL_FRAMEBUFFER, static_cast<RenderPass*>(renderPass.Get())->GetBuffer());
 	}
 	else
 	{
-		GLExt::glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 #if !defined(EMSCRIPTEN) && !defined(__EFFEKSEER_RENDERER_GLES2__) && !defined(__EFFEKSEER_RENDERER_GL2__) && !defined(__EFFEKSEER_RENDERER_GLES3__)
 		glDrawBuffer(GL_BACK);
@@ -1605,7 +1605,7 @@ void GraphicsDevice::BeginRenderPass(Effekseer::Backend::RenderPassRef& renderPa
 
 void GraphicsDevice::EndRenderPass()
 {
-	GLExt::glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	GLCheckError();
 }
 

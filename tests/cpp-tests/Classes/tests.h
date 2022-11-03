@@ -53,6 +53,10 @@
 #    include "WindowTest/WindowTest.h"
 #endif
 
+#if __has_include("EffekseerForCocos2d-x.h")
+#include "EffekseerTest/EffekseerTest.h"
+#endif
+
 // sort them alphabetically. thanks
 #include "ActionManagerTest/ActionManagerTest.h"
 #include "ActionsEaseTest/ActionsEaseTest.h"

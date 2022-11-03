@@ -1,4 +1,4 @@
-﻿
+
 //-----------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ IndexBuffer::IndexBuffer(const Backend::GraphicsDeviceRef& graphicsDevice, GLuin
 IndexBuffer::~IndexBuffer()
 {
 	delete[] m_resource;
-	GLExt::glDeleteBuffers(1, &m_buffer);
+	glDeleteBuffers(1, &m_buffer);
 }
 
 //-----------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ IndexBuffer::~IndexBuffer()
 IndexBuffer* IndexBuffer::Create(const Backend::GraphicsDeviceRef& graphicsDevice, int maxCount, bool isDynamic, int32_t stride)
 {
 	GLuint ib;
-	GLExt::glGenBuffers(1, &ib);
+	glGenBuffers(1, &ib);
 	return new IndexBuffer(graphicsDevice, ib, maxCount, isDynamic, stride);
 }
 
@@ -46,7 +46,7 @@ IndexBuffer* IndexBuffer::Create(const Backend::GraphicsDeviceRef& graphicsDevic
 //-----------------------------------------------------------------------------------
 void IndexBuffer::OnLostDevice()
 {
-	GLExt::glDeleteBuffers(1, &m_buffer);
+	glDeleteBuffers(1, &m_buffer);
 	m_buffer = 0;
 }
 
@@ -58,7 +58,7 @@ void IndexBuffer::OnResetDevice()
 	if (IsValid())
 		return;
 	GLuint ib;
-	GLExt::glGenBuffers(1, &ib);
+	glGenBuffers(1, &ib);
 	m_buffer = ib;
 }
 
@@ -80,9 +80,9 @@ void IndexBuffer::Unlock()
 {
 	assert(m_isLock);
 
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer);
-	GLExt::glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * stride_, m_resource, GL_DYNAMIC_DRAW);
-	GLExt::glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexCount * stride_, m_resource, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	m_isLock = false;
 }

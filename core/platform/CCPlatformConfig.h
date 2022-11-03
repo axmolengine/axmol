@@ -71,12 +71,6 @@ THE SOFTWARE.
 #    endif
 #endif
 
-// android
-#if defined(__ANDROID__)
-#    undef AX_TARGET_PLATFORM
-#    define AX_TARGET_PLATFORM AX_PLATFORM_ANDROID
-#endif
-
 // win32
 #if defined(_WIN32) && defined(_WINDOWS)
 #    undef AX_TARGET_PLATFORM
@@ -84,9 +78,15 @@ THE SOFTWARE.
 #endif
 
 // linux
-#if defined(LINUX) && !defined(__APPLE__)
+#if defined(__linux__)
 #    undef AX_TARGET_PLATFORM
 #    define AX_TARGET_PLATFORM AX_PLATFORM_LINUX
+#endif
+
+// android, override linux
+#if defined(__ANDROID__) || defined(ANDROID)
+#    undef AX_TARGET_PLATFORM
+#    define AX_TARGET_PLATFORM AX_PLATFORM_ANDROID
 #endif
 
 //////////////////////////////////////////////////////////////////////////

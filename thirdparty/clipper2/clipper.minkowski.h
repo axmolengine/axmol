@@ -1,7 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Version   :  Clipper2 - ver.1.0.0                                            *
-* Date      :  3 August 2022                                                   *
+* Date      :  15 October 2022                                                 *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2022                                         *
 * Purpose   :  Minkowski Sum and Difference                                    *
@@ -31,21 +30,21 @@ namespace Clipper2Lib
 
       if (isSum)
       {
-        for (Point64 pt : path)
+        for (const Point64& p : path)
         {
           Path64 path2(pattern.size());
           std::transform(pattern.cbegin(), pattern.cend(),
-            path2.begin(), [pt](const Point64& pt2) {return pt + pt2; });
+            path2.begin(), [p](const Point64& pt2) {return p + pt2; });
           tmp.push_back(path2);
         }
       }
       else
       {
-        for (Point64 pt : path)
+        for (const Point64& p : path)
         {
           Path64 path2(pattern.size());
           std::transform(pattern.cbegin(), pattern.cend(),
-            path2.begin(), [pt](const Point64& pt2) {return pt - pt2; });
+            path2.begin(), [p](const Point64& pt2) {return p - pt2; });
           tmp.push_back(path2);
         }
       }
