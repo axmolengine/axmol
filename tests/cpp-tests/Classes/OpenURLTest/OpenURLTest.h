@@ -37,10 +37,10 @@ public:
     OpenURLTest();
     ~OpenURLTest();
 
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 private:
-    axis::Label* _label;
+    ax::Label* _label;
 };
 
 #endif  // _OPEN_URL_TEST_H_

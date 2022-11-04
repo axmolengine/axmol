@@ -28,7 +28,6 @@ USING_NS_AX;
 
 FileUtilsTests::FileUtilsTests()
 {
-    ADD_TEST_CASE(TestResolutionDirectories);
     ADD_TEST_CASE(TestSearchPath);
     ADD_TEST_CASE(TestIsFileExist);
     ADD_TEST_CASE(TestIsDirectoryExist);
@@ -47,61 +46,6 @@ FileUtilsTests::FileUtilsTests()
     ADD_TEST_CASE(TestWriteDataAsync);
     ADD_TEST_CASE(TestListFiles);
     ADD_TEST_CASE(TestIsFileExistRejectFolder);
-}
-
-// TestResolutionDirectories
-
-void TestResolutionDirectories::onEnter()
-{
-    FileUtilsDemo::onEnter();
-    auto sharedFileUtils = FileUtils::getInstance();
-
-    std::string ret;
-
-    sharedFileUtils->purgeCachedEntries();
-    _defaultSearchPathArray              = sharedFileUtils->getOriginalSearchPaths();
-    std::vector<std::string> searchPaths = _defaultSearchPathArray;
-    searchPaths.insert(searchPaths.begin(), "Misc");
-    sharedFileUtils->setSearchPaths(searchPaths);
-
-    _defaultResolutionsOrderArray             = sharedFileUtils->getSearchResolutionsOrder();
-    std::vector<std::string> resolutionsOrder = _defaultResolutionsOrderArray;
-
-    resolutionsOrder.insert(resolutionsOrder.begin(), "resources-ipadhd");
-    resolutionsOrder.insert(resolutionsOrder.begin() + 1, "resources-ipad");
-    resolutionsOrder.insert(resolutionsOrder.begin() + 2, "resources-widehd");
-    resolutionsOrder.insert(resolutionsOrder.begin() + 3, "resources-wide");
-    resolutionsOrder.insert(resolutionsOrder.begin() + 4, "resources-hd");
-    resolutionsOrder.insert(resolutionsOrder.begin() + 5, "resources-iphone");
-
-    sharedFileUtils->setSearchResolutionsOrder(resolutionsOrder);
-
-    for (int i = 1; i < 7; i++)
-    {
-        auto filename = StringUtils::format("test%d.txt", i);
-        ret           = sharedFileUtils->fullPathForFilename(filename);
-        log("%s -> %s", filename.c_str(), ret.c_str());
-    }
-}
-
-void TestResolutionDirectories::onExit()
-{
-    auto sharedFileUtils = FileUtils::getInstance();
-
-    // reset search path
-    sharedFileUtils->setSearchPaths(_defaultSearchPathArray);
-    sharedFileUtils->setSearchResolutionsOrder(_defaultResolutionsOrderArray);
-    FileUtilsDemo::onExit();
-}
-
-std::string TestResolutionDirectories::title() const
-{
-    return "FileUtils: resolutions in directories";
-}
-
-std::string TestResolutionDirectories::subtitle() const
-{
-    return "See the console";
 }
 
 // TestSearchPath
@@ -133,12 +77,6 @@ void TestSearchPath::onEnter()
     searchPaths.insert(searchPaths.begin() + 1, "Misc/searchpath1");
     searchPaths.insert(searchPaths.begin() + 2, "Misc/searchpath2");
     sharedFileUtils->setSearchPaths(searchPaths);
-
-    _defaultResolutionsOrderArray             = sharedFileUtils->getSearchResolutionsOrder();
-    std::vector<std::string> resolutionsOrder = _defaultResolutionsOrderArray;
-
-    resolutionsOrder.insert(resolutionsOrder.begin(), "resources-ipad");
-    sharedFileUtils->setSearchResolutionsOrder(resolutionsOrder);
 
     for (int i = 1; i < 3; i++)
     {
@@ -193,7 +131,6 @@ void TestSearchPath::onExit()
 
     // reset search path
     sharedFileUtils->setSearchPaths(_defaultSearchPathArray);
-    sharedFileUtils->setSearchResolutionsOrder(_defaultResolutionsOrderArray);
     FileUtilsDemo::onExit();
 }
 

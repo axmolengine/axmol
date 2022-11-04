@@ -412,7 +412,7 @@ SpriteBlur* SpriteBlur::create(const char* pszFileName)
 {
     SpriteBlur* pRet = new SpriteBlur();
     bool result      = pRet->initWithFile("");
-    axis::log("Test call Sprite::initWithFile with bad file name result is : %s", result ? "true" : "false");
+    ax::log("Test call Sprite::initWithFile with bad file name result is : %s", result ? "true" : "false");
 
     if (pRet->initWithFile(pszFileName))
     {

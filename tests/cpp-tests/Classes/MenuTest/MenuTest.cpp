@@ -478,7 +478,7 @@ void BugsTest::issue1410MenuCallback(Ref* sender)
     log("NO CRASHES");
 }
 
-void BugsTest::issue1410v2MenuCallback(axis::Ref* pSender)
+void BugsTest::issue1410v2MenuCallback(ax::Ref* pSender)
 {
     auto menu = static_cast<Menu*>(static_cast<MenuItem*>(pSender)->getParent());
     menu->setEnabled(true);
@@ -487,7 +487,7 @@ void BugsTest::issue1410v2MenuCallback(axis::Ref* pSender)
     log("NO CRASHES. AND MENU SHOULD STOP WORKING");
 }
 
-void BugsTest::backMenuCallback(axis::Ref* pSender)
+void BugsTest::backMenuCallback(ax::Ref* pSender)
 {
     static_cast<LayerMultiplex*>(_parent)->switchTo(0, false);
 }

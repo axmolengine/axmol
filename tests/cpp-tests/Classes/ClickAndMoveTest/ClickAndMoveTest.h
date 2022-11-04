@@ -35,8 +35,8 @@ public:
     CREATE_FUNC(ClickAndMoveTestCase);
 
     ClickAndMoveTestCase();
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
-    void onTouchEnded(axis::Touch* touch, axis::Event* event);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchEnded(ax::Touch* touch, ax::Event* event);
 };
 
 #endif

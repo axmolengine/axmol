@@ -673,7 +673,7 @@ std::string LabelFNTMultiLineAlignment::subtitle() const
     return "";
 }
 
-void LabelFNTMultiLineAlignment::selectAlignmentItem(axis::MenuItemFont* item)
+void LabelFNTMultiLineAlignment::selectAlignmentItem(ax::MenuItemFont* item)
 {
     if (this->_lastAlignmentItem && this->_lastAlignmentItem != item)
     {
@@ -700,7 +700,7 @@ void LabelFNTMultiLineAlignment::selectAlignmentItem(axis::MenuItemFont* item)
     }
 }
 
-void LabelFNTMultiLineAlignment::selectSentenceItem(axis::MenuItemFont* item)
+void LabelFNTMultiLineAlignment::selectSentenceItem(ax::MenuItemFont* item)
 {
     if (this->_lastSentenceItem && this->_lastSentenceItem != item)
     {
@@ -714,7 +714,7 @@ void LabelFNTMultiLineAlignment::selectSentenceItem(axis::MenuItemFont* item)
     this->_label->setString(str);
 }
 
-std::string LabelFNTMultiLineAlignment::getItemString(axis::MenuItemFont* item)
+std::string LabelFNTMultiLineAlignment::getItemString(ax::MenuItemFont* item)
 {
     std::string str;
 
@@ -737,7 +737,7 @@ std::string LabelFNTMultiLineAlignment::getItemString(axis::MenuItemFont* item)
     return str;
 }
 
-void LabelFNTMultiLineAlignment::stringChanged(axis::Ref* sender)
+void LabelFNTMultiLineAlignment::stringChanged(ax::Ref* sender)
 {
     auto item = (MenuItemFont*)sender;
 
@@ -746,7 +746,7 @@ void LabelFNTMultiLineAlignment::stringChanged(axis::Ref* sender)
     this->snapArrowsToEdge();
 }
 
-void LabelFNTMultiLineAlignment::alignmentChanged(axis::Ref* sender)
+void LabelFNTMultiLineAlignment::alignmentChanged(ax::Ref* sender)
 {
     auto item = static_cast<MenuItemFont*>(sender);
 
@@ -755,7 +755,7 @@ void LabelFNTMultiLineAlignment::alignmentChanged(axis::Ref* sender)
     this->snapArrowsToEdge();
 }
 
-void LabelFNTMultiLineAlignment::onTouchesBegan(const std::vector<Touch*>& touches, axis::Event* event)
+void LabelFNTMultiLineAlignment::onTouchesBegan(const std::vector<Touch*>& touches, ax::Event* event)
 {
     auto touch    = touches[0];
     auto location = touch->getLocationInView();
@@ -767,7 +767,7 @@ void LabelFNTMultiLineAlignment::onTouchesBegan(const std::vector<Touch*>& touch
     }
 }
 
-void LabelFNTMultiLineAlignment::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event)
+void LabelFNTMultiLineAlignment::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event)
 {
     _drag = false;
     this->snapArrowsToEdge();
@@ -775,7 +775,7 @@ void LabelFNTMultiLineAlignment::onTouchesEnded(const std::vector<Touch*>& touch
     this->_arrowsBar->setVisible(false);
 }
 
-void LabelFNTMultiLineAlignment::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
+void LabelFNTMultiLineAlignment::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
 {
     if (!_drag)
     {
@@ -835,7 +835,7 @@ std::string LabelFNTMultiLineAlignmentUNICODE::subtitle() const
     return "";
 }
 
-std::string LabelFNTMultiLineAlignmentUNICODE::getItemString(axis::MenuItemFont* item)
+std::string LabelFNTMultiLineAlignmentUNICODE::getItemString(ax::MenuItemFont* item)
 {
     std::string str;
 
@@ -1208,8 +1208,8 @@ LabelTTFEmoji::LabelTTFEmoji()
     auto label = Label::createWithTTF(emojiString, "fonts/NotoEmoji-Regular.ttf", 23);
     label->setPosition(winSize.width / 2, winSize.height / 2);
     label->setDimensions(winSize.width, winSize.height);
-    label->setVerticalAlignment(axis::TextVAlignment::CENTER);
-    label->setHorizontalAlignment(axis::TextHAlignment::CENTER);
+    label->setVerticalAlignment(ax::TextVAlignment::CENTER);
+    label->setHorizontalAlignment(ax::TextHAlignment::CENTER);
     addChild(label);
 }
 
@@ -2261,7 +2261,7 @@ LabelLayoutBaseTest::LabelLayoutBaseTest()
     this->initSliders(size);
 }
 
-void LabelLayoutBaseTest::initFontSizeChange(const axis::Size& size)
+void LabelLayoutBaseTest::initFontSizeChange(const ax::Size& size)
 {
     auto fontSizeLabel = Label::createWithSystemFont("font size:20", "Arial", 10);
     fontSizeLabel->setName("fontSize");
@@ -2281,7 +2281,7 @@ void LabelLayoutBaseTest::initFontSizeChange(const axis::Size& size)
     this->addChild(fontSizeLabel);
 }
 
-void LabelLayoutBaseTest::initWrapOption(const axis::Size& size)
+void LabelLayoutBaseTest::initWrapOption(const ax::Size& size)
 {
     auto label = Label::createWithSystemFont("Enable Wrap:", "Arial", 10);
     label->setColor(Color3B::WHITE);
@@ -2310,7 +2310,7 @@ void LabelLayoutBaseTest::initWrapOption(const axis::Size& size)
     this->addChild(checkBox);
 }
 
-void LabelLayoutBaseTest::initToggleLabelTypeOption(const axis::Size& size)
+void LabelLayoutBaseTest::initToggleLabelTypeOption(const ax::Size& size)
 {
     auto label = Label::createWithSystemFont("Toggle Label Type:", "Arial", 10);
     label->setColor(Color3B::WHITE);
@@ -2347,7 +2347,7 @@ void LabelLayoutBaseTest::initToggleLabelTypeOption(const axis::Size& size)
     this->addChild(checkBox);
 }
 
-void LabelLayoutBaseTest::initAlignmentOption(const axis::Size& size)
+void LabelLayoutBaseTest::initAlignmentOption(const ax::Size& size)
 {
     // add text alignment settings
     MenuItemFont::setFontSize(30);
@@ -2368,7 +2368,7 @@ void LabelLayoutBaseTest::initAlignmentOption(const axis::Size& size)
     this->addChild(menu);
 }
 
-void LabelLayoutBaseTest::initSliders(const axis::Size& size)
+void LabelLayoutBaseTest::initSliders(const ax::Size& size)
 {
     auto slider = ui::Slider::create();
     slider->setTag(1);
@@ -2417,7 +2417,7 @@ void LabelLayoutBaseTest::initSliders(const axis::Size& size)
     });
 }
 
-void LabelLayoutBaseTest::initTestLabel(const axis::Size& size)
+void LabelLayoutBaseTest::initTestLabel(const ax::Size& size)
 {
     auto center = VisibleRect::center();
     _label = Label::createWithTTF("五六七八This is a very long sentence一二三四.", "fonts/HKYuanMini.ttf", 20);
@@ -2429,7 +2429,7 @@ void LabelLayoutBaseTest::initTestLabel(const axis::Size& size)
     _labelType = 0;
 }
 
-void LabelLayoutBaseTest::initDrawNode(const axis::Size& size)
+void LabelLayoutBaseTest::initDrawNode(const ax::Size& size)
 {
     _drawNode = DrawNode::create();
 
@@ -2468,7 +2468,7 @@ void LabelLayoutBaseTest::setAlignmentBottom(Ref* sender)
     _label->setVerticalAlignment(TextVAlignment::BOTTOM);
 }
 
-void LabelLayoutBaseTest::valueChanged(axis::Ref* sender, axis::extension::Control::EventType controlEvent)
+void LabelLayoutBaseTest::valueChanged(ax::Ref* sender, ax::extension::Control::EventType controlEvent)
 {
     ControlStepper* pControl = (ControlStepper*)sender;
     // Change value of label.
@@ -2501,7 +2501,7 @@ void LabelLayoutBaseTest::valueChanged(axis::Ref* sender, axis::extension::Contr
     //    AXLOG("label line height = %f", _label->getLineHeight());
 }
 
-void LabelLayoutBaseTest::updateDrawNodeSize(const axis::Size& drawNodeSize)
+void LabelLayoutBaseTest::updateDrawNodeSize(const ax::Size& drawNodeSize)
 {
     auto origin    = Director::getInstance()->getWinSize();
     auto labelSize = _label->getContentSize();
@@ -3077,7 +3077,7 @@ LabelItalics::LabelItalics()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 6));
 
-    auto menuItem = MenuItemFont::create("disable italics", [&](axis::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable italics", [&](ax::Ref* sender) {
         _label2a->disableEffect(LabelEffect::ITALICS);
         _label1a->disableEffect(LabelEffect::ITALICS);
     });
@@ -3129,7 +3129,7 @@ LabelBold::LabelBold()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 6));
 
-    auto menuItem = MenuItemFont::create("disable bold", [&](axis::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable bold", [&](ax::Ref* sender) {
         _label2a->disableEffect(LabelEffect::BOLD);
         _label1a->disableEffect(LabelEffect::BOLD);
     });
@@ -3181,7 +3181,7 @@ LabelUnderline::LabelUnderline()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 6));
 
-    auto menuItem = MenuItemFont::create("disable underline", [&](axis::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Ref* sender) {
         _label2a->disableEffect(LabelEffect::UNDERLINE);
         _label1a->disableEffect(LabelEffect::UNDERLINE);
     });
@@ -3223,7 +3223,7 @@ LabelUnderlineMultiline::LabelUnderlineMultiline()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 3));
 
-    auto menuItem = MenuItemFont::create("disable underline", [&](axis::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Ref* sender) {
         _label2a->disableEffect(LabelEffect::UNDERLINE);
         _label1a->disableEffect(LabelEffect::UNDERLINE);
     });
@@ -3265,7 +3265,7 @@ LabelStrikethrough::LabelStrikethrough()
     addChild(_label2a, 0, kTagBitmapAtlas2);
     _label2a->setPosition(Vec2(s.width / 2, s.height * 1 / 3));
 
-    auto menuItem = MenuItemFont::create("disable underline", [&](axis::Ref* sender) {
+    auto menuItem = MenuItemFont::create("disable underline", [&](ax::Ref* sender) {
         _label2a->disableEffect(LabelEffect::STRIKETHROUGH);
         _label1a->disableEffect(LabelEffect::STRIKETHROUGH);
     });
@@ -3403,14 +3403,14 @@ LabelIssue15214::LabelIssue15214()
     // 1
     Label* label = Label::createWithTTF("TTF with setColor()", "fonts/arial.ttf", 24.0f);
     label->enableUnderline();
-    label->setColor(axis::Color3B::BLUE);
+    label->setColor(ax::Color3B::BLUE);
     label->setPosition(size.width / 2, size.height / 5 * 4);
     this->addChild(label);
 
     // 2
     Label* label2 = Label::createWithSystemFont("System with setColor()", "Verdana", 24.0f);
     label2->enableUnderline();
-    label2->setColor(axis::Color3B::BLUE);
+    label2->setColor(ax::Color3B::BLUE);
     label2->setPosition(size.width / 2, size.height / 5 * 3);
     this->addChild(label2);
 
@@ -3597,7 +3597,7 @@ LabelIssue20523::LabelIssue20523()
     auto size           = Director::getInstance()->getWinSize();
     auto _crashingLabel = Label::createWithTTF("0", "fonts/Marker Felt.ttf", 120);
     _crashingLabel->setPosition(Vec2(size.width / 2, size.height / 2));
-    _crashingLabel->setColor(axis::Color3B(200, 200, 200));
+    _crashingLabel->setColor(ax::Color3B(200, 200, 200));
     addChild(_crashingLabel, 1);
     //_crashingLabel->setWidth(size.width);
 
@@ -3646,7 +3646,7 @@ std::string LabelLetterColorsTest::subtitle() const
     return "Should not crash!";
 }
 
-void LabelLetterColorsTest::setLetterColors(axis::Label* label, const axis::Color3B& color)
+void LabelLetterColorsTest::setLetterColors(ax::Label* label, const ax::Color3B& color)
 {
     int n = label->getStringLength();
     for (int i = 0; i < n; ++i)

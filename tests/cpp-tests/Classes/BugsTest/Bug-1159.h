@@ -34,7 +34,7 @@ public:
     virtual void onExit() override;
     virtual std::string title() const override { return "Bug1159"; }
 
-    void callBack(axis::Ref* sender);
+    void callBack(ax::Ref* sender);
 
     CREATE_FUNC(Bug1159Layer);
 };

@@ -30,7 +30,7 @@
 
 DEFINE_TEST_SUITE(SceneTests);
 
-class SceneTestLayer1 : public axis::Layer
+class SceneTestLayer1 : public ax::Layer
 {
 public:
     CREATE_FUNC(SceneTestLayer1);
@@ -42,12 +42,12 @@ public:
     virtual void onEnterTransitionDidFinish() override;
 
     void testDealloc(float dt);
-    void onPushScene(axis::Ref* sender);
-    void onPushSceneTran(axis::Ref* sender);
-    void onQuit(axis::Ref* sender);
+    void onPushScene(ax::Ref* sender);
+    void onPushSceneTran(ax::Ref* sender);
+    void onQuit(ax::Ref* sender);
 };
 
-class SceneTestLayer2 : public axis::Layer
+class SceneTestLayer2 : public ax::Layer
 {
     float _timeCounter;
 
@@ -57,12 +57,12 @@ public:
     SceneTestLayer2();
 
     void testDealloc(float dt);
-    void onGoBack(axis::Ref* sender);
-    void onReplaceScene(axis::Ref* sender);
-    void onReplaceSceneTran(axis::Ref* sender);
+    void onGoBack(ax::Ref* sender);
+    void onReplaceScene(ax::Ref* sender);
+    void onReplaceSceneTran(ax::Ref* sender);
 };
 
-class SceneTestLayer3 : public axis::LayerColor
+class SceneTestLayer3 : public ax::LayerColor
 {
 public:
     CREATE_FUNC(SceneTestLayer3);
@@ -71,10 +71,10 @@ public:
 
     virtual bool init() override;
     virtual void testDealloc(float dt);
-    void item0Clicked(axis::Ref* sender);
-    void item1Clicked(axis::Ref* sender);
-    void item2Clicked(axis::Ref* sender);
-    void item3Clicked(axis::Ref* sender);
+    void item0Clicked(ax::Ref* sender);
+    void item1Clicked(ax::Ref* sender);
+    void item2Clicked(ax::Ref* sender);
+    void item3Clicked(ax::Ref* sender);
 };
 
 class SceneTestScene : public TestCase

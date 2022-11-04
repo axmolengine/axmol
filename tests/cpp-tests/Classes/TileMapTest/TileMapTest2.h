@@ -39,7 +39,7 @@ public:
     virtual std::string subtitle() const override;
     virtual void onExit() override;
 
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
 class TileMapTestNew : public TileDemoNew
@@ -192,7 +192,7 @@ public:
 
 class TMXIsoZorderNew : public TileDemoNew
 {
-    axis::Sprite* _tamara;
+    ax::Sprite* _tamara;
 
 public:
     CREATE_FUNC(TMXIsoZorderNew);
@@ -207,7 +207,7 @@ public:
 
 class TMXOrthoZorderNew : public TileDemoNew
 {
-    axis::Sprite* _tamara;
+    ax::Sprite* _tamara;
 
 public:
     CREATE_FUNC(TMXOrthoZorderNew);
@@ -221,7 +221,7 @@ public:
 
 class TMXIsoVertexZNew : public TileDemoNew
 {
-    axis::Sprite* _tamara;
+    ax::Sprite* _tamara;
 
 public:
     CREATE_FUNC(TMXIsoVertexZNew);
@@ -237,7 +237,7 @@ public:
 
 class TMXOrthoVertexZNew : public TileDemoNew
 {
-    axis::Sprite* _tamara;
+    ax::Sprite* _tamara;
 
 public:
     CREATE_FUNC(TMXOrthoVertexZNew);
@@ -346,9 +346,9 @@ public:
     TileAnimTestNew();
     virtual std::string title() const override;
 
-    axis::FastTMXTiledMap* map;
+    ax::FastTMXTiledMap* map;
     bool _animStarted = true;
-    void onTouchBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
 #endif

@@ -22,8 +22,9 @@
   - AX_ENABLE_EXT_DRAGONBONES: the dragonbones extension: `TRUE`
   - AX_ENABLE_EXT_COCOSTUDIO: the cocosstudio extension for load .csb: `TRUE`
   - AX_ENABLE_EXT_FAIRYGUI: the fairygui extension, default: `TRUE`
-  - AX_ENABLE_EXT_IMGUI: the imgui extension, only support PC platforms, default: `TRUE` 
-  - AX_ENABLE_EXT_LIVE2D: the imgui extension, only support PC platforms, default: `FALSE` 
+  - AX_ENABLE_EXT_IMGUI: the imgui extension, support macos,win,linux,android, default: `TRUE` 
+  - AX_ENABLE_EXT_LIVE2D: the live2d extension, default: `FALSE` 
+  - AX_ENABLE_EXT_EFFEKSEER: the effekseer extension, default: `FALSE` 
 - AX_WITH_XXX: usually user don't need care it
 
 ## The options for axmol apps

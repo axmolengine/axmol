@@ -52,7 +52,7 @@ enum
 #define ARRAY_SIZE_Y 3
 #define ARRAY_SIZE_Z 4
 
-static axis::Scene* physicsScene = nullptr;
+static ax::Scene* physicsScene = nullptr;
 
 Physics3DTests::Physics3DTests()
 {
@@ -143,13 +143,13 @@ bool Physics3DTestDemo::init()
     return false;
 }
 
-void Physics3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, axis::Event* event)
+void Physics3DTestDemo::onTouchesBegan(const std::vector<Touch*>& touches, ax::Event* event)
 {
     _needShootBox = true;
     event->stopPropagation();
 }
 
-void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis::Event* event)
+void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, ax::Event* event)
 {
     if (touches.size() && _camera)
     {
@@ -168,7 +168,7 @@ void Physics3DTestDemo::onTouchesMoved(const std::vector<Touch*>& touches, axis:
     }
 }
 
-void Physics3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, axis::Event* event)
+void Physics3DTestDemo::onTouchesEnded(const std::vector<Touch*>& touches, ax::Event* event)
 {
     if (!_needShootBox)
         return;
@@ -191,7 +191,7 @@ void Physics3DTestDemo::update(float /*delta*/) {}
 
 Physics3DTestDemo::~Physics3DTestDemo() {}
 
-void Physics3DTestDemo::shootBox(const axis::Vec3& des)
+void Physics3DTestDemo::shootBox(const ax::Vec3& des)
 {
     Physics3DRigidBodyDes rbDes;
     Vec3 linearVel = des - _camera->getPosition3D();
@@ -534,7 +534,7 @@ bool Physics3DConstraintDemo::init()
     return true;
 }
 
-void Physics3DConstraintDemo::onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void Physics3DConstraintDemo::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     // ray trace
     if (_camera)
@@ -566,7 +566,7 @@ void Physics3DConstraintDemo::onTouchesBegan(const std::vector<axis::Touch*>& to
     Physics3DTestDemo::onTouchesBegan(touches, event);
     _needShootBox = false;
 }
-void Physics3DConstraintDemo::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void Physics3DConstraintDemo::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     if (_constraint)
     {
@@ -586,7 +586,7 @@ void Physics3DConstraintDemo::onTouchesMoved(const std::vector<axis::Touch*>& to
     }
     Physics3DTestDemo::onTouchesMoved(touches, event);
 }
-void Physics3DConstraintDemo::onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void Physics3DConstraintDemo::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     if (_constraint)
     {

@@ -68,10 +68,10 @@ class CameraBaseTest : public TestCase
 {
 public:
 protected:
-    axis::BillBoard* bill1;
-    axis::BillBoard* bill2;
-    axis::Label* l1;
-    axis::Label* l2;
+    ax::BillBoard* bill1;
+    ax::BillBoard* bill2;
+    ax::Label* l1;
+    ax::Label* l2;
 };
 
 class CameraRotationTest : public CameraBaseTest
@@ -92,9 +92,9 @@ public:
     virtual std::string subtitle() const override;
 
 protected:
-    axis::Node* _camControlNode;
-    axis::Node* _camNode;
-    axis::EventListenerTouchOneByOne* _lis;
+    ax::Node* _camControlNode;
+    ax::Node* _camNode;
+    ax::EventListenerTouchOneByOne* _lis;
 };
 
 class Camera3DTestDemo : public CameraBaseTest
@@ -108,55 +108,55 @@ public:
     virtual void onExit() override;
     // overrides
     virtual std::string title() const override;
-    void addNewSpriteWithCoords(axis::Vec3 p,
+    void addNewSpriteWithCoords(ax::Vec3 p,
                                 std::string fileName,
                                 bool playAnimation = false,
                                 float scale        = 1.0f,
                                 bool bindCamera    = false);
 
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void scaleCameraCallback(axis::Ref* sender, float value);
-    void rotateCameraCallback(axis::Ref* sender, float value);
-    void SwitchViewCallback(axis::Ref* sender, CameraType cameraType);
+    void scaleCameraCallback(ax::Ref* sender, float value);
+    void rotateCameraCallback(ax::Ref* sender, float value);
+    void SwitchViewCallback(ax::Ref* sender, CameraType cameraType);
     void updateCamera(float fDelta);
     void move3D(float elapsedTime);
     void updateState(float elapsedTime);
     bool isState(unsigned int state, unsigned int bit) const;
     void reachEndCallBack();
 
-    bool onTouchesCommon(axis::Touch* touch, axis::Event* event, bool* touchProperty);
-    bool onTouchesZoomOut(axis::Touch* touch, axis::Event* event);
-    void onTouchesZoomOutEnd(axis::Touch* touch, axis::Event* event);
-    bool onTouchesZoomIn(axis::Touch* touch, axis::Event* event);
-    void onTouchesZoomInEnd(axis::Touch* touch, axis::Event* event);
+    bool onTouchesCommon(ax::Touch* touch, ax::Event* event, bool* touchProperty);
+    bool onTouchesZoomOut(ax::Touch* touch, ax::Event* event);
+    void onTouchesZoomOutEnd(ax::Touch* touch, ax::Event* event);
+    bool onTouchesZoomIn(ax::Touch* touch, ax::Event* event);
+    void onTouchesZoomInEnd(ax::Touch* touch, ax::Event* event);
 
-    bool onTouchesRotateLeft(axis::Touch* touch, axis::Event* event);
-    void onTouchesRotateLeftEnd(axis::Touch* touch, axis::Event* event);
-    bool onTouchesRotateRight(axis::Touch* touch, axis::Event* event);
-    void onTouchesRotateRightEnd(axis::Touch* touch, axis::Event* event);
+    bool onTouchesRotateLeft(ax::Touch* touch, ax::Event* event);
+    void onTouchesRotateLeftEnd(ax::Touch* touch, ax::Event* event);
+    bool onTouchesRotateRight(ax::Touch* touch, ax::Event* event);
+    void onTouchesRotateRightEnd(ax::Touch* touch, ax::Event* event);
 
 protected:
     std::string _title;
-    axis::Layer* _layer3D;
-    axis::MeshRenderer* _mesh;
-    axis::Vec3 _targetPos;
+    ax::Layer* _layer3D;
+    ax::MeshRenderer* _mesh;
+    ax::Vec3 _targetPos;
     CameraType _cameraType;
-    axis::MenuItem* _incRot;
-    axis::MenuItem* _decRot;
+    ax::MenuItem* _incRot;
+    ax::MenuItem* _decRot;
     unsigned int _curState;
-    axis::Camera* _camera;
-    axis::MoveTo* _moveAction;
+    ax::Camera* _camera;
+    ax::MoveTo* _moveAction;
     bool _bZoomOut;
     bool _bZoomIn;
     bool _bRotateLeft;
     bool _bRotateRight;
-    axis::Label* _RotateRightlabel;
-    axis::Label* _RotateLeftlabel;
-    axis::Label* _ZoomInlabel;
-    axis::Label* _ZoomOutlabel;
+    ax::Label* _RotateRightlabel;
+    ax::Label* _RotateLeftlabel;
+    ax::Label* _ZoomInlabel;
+    ax::Label* _ZoomOutlabel;
 };
 
 class CameraCullingDemo : public CameraBaseTest
@@ -174,22 +174,22 @@ public:
     // overrides
     virtual std::string title() const override;
     void reachEndCallBack();
-    void switchViewCallback(axis::Ref* sender);
-    void addMeshCallback(axis::Ref* sender);
-    void delMeshCallback(axis::Ref* sender);
+    void switchViewCallback(ax::Ref* sender);
+    void addMeshCallback(ax::Ref* sender);
+    void delMeshCallback(ax::Ref* sender);
 
     void drawCameraFrustum();
 
 protected:
-    axis::Label* _labelMeshCount;
-    axis::Layer* _layer3D;
-    std::vector<axis::MeshRenderer*> _objects;
+    ax::Label* _labelMeshCount;
+    ax::Layer* _layer3D;
+    std::vector<ax::MeshRenderer*> _objects;
     CameraType _cameraType;
-    axis::Camera* _cameraFirst;
-    axis::Camera* _cameraThird;
-    axis::MoveBy* _moveAction;
-    axis::DrawNode3D* _drawAABB;
-    axis::DrawNode3D* _drawFrustum;
+    ax::Camera* _cameraFirst;
+    ax::Camera* _cameraThird;
+    ax::MoveBy* _moveAction;
+    ax::DrawNode3D* _drawAABB;
+    ax::DrawNode3D* _drawFrustum;
     int _row;
 };
 
@@ -208,11 +208,11 @@ public:
     // overrides
     virtual std::string title() const override;
 
-    void switchOperateCallback(axis::Ref* sender);
-    void switchTargetCallback(axis::Ref* sender);
-    void onTouchsMoved(const std::vector<axis::Touch*>& touchs, axis::Event* event);
+    void switchOperateCallback(ax::Ref* sender);
+    void switchTargetCallback(ax::Ref* sender);
+    void onTouchsMoved(const std::vector<ax::Touch*>& touchs, ax::Event* event);
     void updateCameraTransform();
-    void calculateArcBall(axis::Vec3& axis,
+    void calculateArcBall(ax::Vec3& axis,
                           float& angle,
                           float p1x,
                           float p1y,
@@ -221,18 +221,18 @@ public:
     float projectToSphere(float r, float x, float y);  // points on the screen project to arc ball
 
 protected:
-    axis::Layer* _layer3D;
+    ax::Layer* _layer3D;
     CameraType _cameraType;
-    axis::Camera* _camera;
-    axis::DrawNode3D* _drawGrid;
-    axis::Quaternion _rotationQuat;  // rotation Quaternion
+    ax::Camera* _camera;
+    ax::DrawNode3D* _drawGrid;
+    ax::Quaternion _rotationQuat;  // rotation Quaternion
     float _radius;                      // arc ball radius
     float _distanceZ;
     OperateCamType _operate;  // switch rotate or zoom
-    axis::Vec3 _center;    // camera look target
+    ax::Vec3 _center;    // camera look target
     int _target;              // switch camera look target
-    axis::MeshRenderer* _mesh1;
-    axis::MeshRenderer* _mesh2;
+    ax::MeshRenderer* _mesh1;
+    ax::MeshRenderer* _mesh2;
 };
 
 class FogTestDemo : public CameraBaseTest
@@ -250,21 +250,21 @@ public:
     // overrides
     virtual std::string title() const override;
 
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void switchTypeCallback(axis::Ref* sender, int type);
+    void switchTypeCallback(ax::Ref* sender, int type);
 
 protected:
     CameraType _cameraType                         = CameraType::Free;
-    axis::Layer* _layer3D                       = nullptr;
-    axis::Camera* _camera                       = nullptr;
-    axis::MeshRenderer* _mesh1                  = nullptr;
-    axis::MeshRenderer* _mesh2                  = nullptr;
-    axis::backend::ProgramState* _programState1 = nullptr;
-    axis::backend::ProgramState* _programState2 = nullptr;
+    ax::Layer* _layer3D                       = nullptr;
+    ax::Camera* _camera                       = nullptr;
+    ax::MeshRenderer* _mesh1                  = nullptr;
+    ax::MeshRenderer* _mesh2                  = nullptr;
+    ax::backend::ProgramState* _programState1 = nullptr;
+    ax::backend::ProgramState* _programState2 = nullptr;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    axis::EventListenerCustom* _backToForegroundListener;
+    ax::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 

@@ -39,7 +39,7 @@ add_subdirectory(Core)
 if (ANDROID)
     target_link_libraries(${LIB_NAME} INTERFACE Live2DCubismCore)
 else()
-    target_link_libraries(${LIB_NAME} Live2DCubismCore)
+    target_link_libraries(${LIB_NAME} PUBLIC Live2DCubismCore)
 endif()
 
 setup_ax_extension_config(${LIB_NAME})

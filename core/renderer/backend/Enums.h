@@ -144,7 +144,7 @@ enum class PixelFormat : uint32_t
     D24S8,
     //!!!Please append depth stencil pixel format
 
-    /* the count of pixel format supported by axis */
+    /* the count of pixel format supported by axmol */
     COUNT,
 
     NONE = 0xffff

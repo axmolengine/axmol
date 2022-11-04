@@ -222,7 +222,7 @@ public:
     void stopUpdate(float dt);
 };
 
-class TestNode : public axis::Node
+class TestNode : public ax::Node
 {
 public:
     CREATE_FUNC(TestNode);
@@ -272,9 +272,9 @@ public:
     void onExit() override;
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    axis::extension::ControlSlider* sliderCtl();
-    void sliderAction(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
-    axis::extension::ControlSlider* _sliderCtl;
+    ax::extension::ControlSlider* sliderCtl();
+    void sliderAction(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
+    ax::extension::ControlSlider* _sliderCtl;
 };
 
 class TwoSchedulers : public SchedulerTestLayer
@@ -286,15 +286,15 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     void onEnter() override;
-    axis::extension::ControlSlider* sliderCtl();
-    void sliderAction(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
-    axis::Scheduler* sched1;
-    axis::Scheduler* sched2;
-    axis::ActionManager* actionManager1;
-    axis::ActionManager* actionManager2;
+    ax::extension::ControlSlider* sliderCtl();
+    void sliderAction(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
+    ax::Scheduler* sched1;
+    ax::Scheduler* sched2;
+    ax::ActionManager* actionManager1;
+    ax::ActionManager* actionManager2;
 
-    axis::extension::ControlSlider* sliderCtl1;
-    axis::extension::ControlSlider* sliderCtl2;
+    ax::extension::ControlSlider* sliderCtl1;
+    ax::extension::ControlSlider* sliderCtl2;
 };
 
 class SchedulerIssue2268 : public SchedulerTestLayer
@@ -309,7 +309,7 @@ public:
     void update(float dt) override;
 
 private:
-    axis::Node* testNode;
+    ax::Node* testNode;
 };
 
 class SchedulerIssueWithReschedule : public SchedulerTestLayer
@@ -349,7 +349,7 @@ public:
 
     virtual void update(float dt) override;
 
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
 };
 
 class SchedulerIssue10232 : public SchedulerTestLayer
@@ -376,7 +376,7 @@ public:
     void update(float dt) override;
 
 private:
-    axis::Sprite* _sprite;
+    ax::Sprite* _sprite;
 };
 
 class SchedulerIssue17149 : public SchedulerTestLayer
@@ -432,13 +432,13 @@ private:
     class TestClass
     {
     public:
-        TestClass(int index, TestClass* nextObj, axis::Scheduler* scheduler);
+        TestClass(int index, TestClass* nextObj, ax::Scheduler* scheduler);
         void update(float dt);
 
     private:
         TestClass* _nextObj            = nullptr;
         int _index                     = 0;
-        axis::Scheduler* _scheduler = nullptr;
+        ax::Scheduler* _scheduler = nullptr;
         bool _cleanedUp                = false;
     };
     std::vector<TestClass*> _testvector;

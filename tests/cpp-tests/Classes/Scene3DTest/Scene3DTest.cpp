@@ -39,11 +39,11 @@ class SkeletonAnimationCullingFix : public SkeletonAnimation
 public:
     SkeletonAnimationCullingFix() : SkeletonAnimation() {}
 
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t transformFlags) override
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t transformFlags) override
     {
         glDisable(GL_CULL_FACE);
         SkeletonAnimation::draw(renderer, transform, transformFlags);
-        RenderState::StateBlock::invalidate(axis::RenderState::StateBlock::RS_ALL_ONES);
+        RenderState::StateBlock::invalidate(ax::RenderState::StateBlock::RS_ALL_ONES);
     }
 
     static SkeletonAnimationCullingFix* createWithFile(std::string_view skeletonDataFile,
@@ -100,7 +100,7 @@ private:
     // init in createWorld3D()
     TextureCube* _textureCube;
     Skybox* _skyBox;
-    axis::Terrain* _terrain;
+    ax::Terrain* _terrain;
     Player* _player;
     Node* _monsters[2];
 
@@ -130,7 +130,7 @@ private:
 
     std::vector<std::string> _skins[(int)SkinType::MAX_TYPE];  // all skins
     int _curSkin[(int)SkinType::MAX_TYPE];                     // current skin index
-    axis::MeshRenderer* _reskinGirl;
+    ax::MeshRenderer* _reskinGirl;
 
     // for capture screen
     static const int SNAPSHOT_TAG = 119;

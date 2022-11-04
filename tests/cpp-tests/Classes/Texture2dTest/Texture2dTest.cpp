@@ -2129,7 +2129,7 @@ void TextureMemoryAlloc::onEnter()
     menu2->setPosition(Vec2(s.width / 2, s.height / 4));
 }
 
-void TextureMemoryAlloc::changeBackgroundVisible(axis::Ref* sender)
+void TextureMemoryAlloc::changeBackgroundVisible(ax::Ref* sender)
 {
     if (_background)
     {
@@ -2137,7 +2137,7 @@ void TextureMemoryAlloc::changeBackgroundVisible(axis::Ref* sender)
     }
 }
 
-void TextureMemoryAlloc::updateImage(axis::Ref* sender)
+void TextureMemoryAlloc::updateImage(ax::Ref* sender)
 {
     if (_background)
     {
@@ -2223,7 +2223,7 @@ std::string TexturePVRv3Premult::subtitle() const
     return "All images should look exactly the same";
 }
 
-void TexturePVRv3Premult::transformSprite(axis::Sprite* sprite)
+void TexturePVRv3Premult::transformSprite(ax::Sprite* sprite)
 {
     auto fade   = FadeOut::create(2);
     auto dl     = DelayTime::create(2);

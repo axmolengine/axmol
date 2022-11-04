@@ -50,7 +50,7 @@ struct particle_point
  * Particle emission shapes.
  * Current supported shapes are Point, Rectangle, RectangularTorus, Circle, Torus, Cone, Cone Torus, Texture alpha
  * emission mask
- * @since axis-1.0.0b8
+ * @since axmol-1.0.0b8
  */
 struct EmissionShape
 {
@@ -75,7 +75,7 @@ struct EmissionShape
 
 /**
  * Particle emission mask descriptor.
- * @since axis-1.0.0b8
+ * @since axmol-1.0.0b8
  */
 struct ParticleEmissionMaskDescriptor
 {
@@ -237,7 +237,7 @@ public:
 
 /**
  * Particle emission mask cache.
- * @since axis-1.0.0b8
+ * @since axmol-1.0.0b8
  */
 class AX_DLL ParticleEmissionMaskCache : public ax::Ref
 {

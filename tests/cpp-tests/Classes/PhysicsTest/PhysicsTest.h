@@ -42,31 +42,31 @@ public:
     virtual void onEnter() override;
     virtual std::string title() const override;
 
-    void toggleDebugCallback(axis::Ref* sender);
+    void toggleDebugCallback(ax::Ref* sender);
 
-    axis::Sprite* addGrossiniAtPosition(axis::Vec2 p, float scale = 1.0);
-    axis::Sprite* makeBall(axis::Vec2 point,
+    ax::Sprite* addGrossiniAtPosition(ax::Vec2 p, float scale = 1.0);
+    ax::Sprite* makeBall(ax::Vec2 point,
                               float radius,
-                              axis::PhysicsMaterial material = axis::PHYSICSBODY_MATERIAL_DEFAULT);
-    axis::Sprite* makeBox(axis::Vec2 point,
-                             axis::Size size,
+                              ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
+    ax::Sprite* makeBox(ax::Vec2 point,
+                             ax::Size size,
                              int color                         = 0,
-                             axis::PhysicsMaterial material = axis::PHYSICSBODY_MATERIAL_DEFAULT);
-    axis::Sprite* makeTriangle(axis::Vec2 point,
-                                  axis::Size size,
+                             ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
+    ax::Sprite* makeTriangle(ax::Vec2 point,
+                                  ax::Size size,
                                   int color                         = 0,
-                                  axis::PhysicsMaterial material = axis::PHYSICSBODY_MATERIAL_DEFAULT);
+                                  ax::PhysicsMaterial material = ax::PHYSICSBODY_MATERIAL_DEFAULT);
 
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
-    void onTouchMoved(axis::Touch* touch, axis::Event* event);
-    void onTouchEnded(axis::Touch* touch, axis::Event* event);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchMoved(ax::Touch* touch, ax::Event* event);
+    void onTouchEnded(ax::Touch* touch, ax::Event* event);
 
     void toggleDebug();
 
 protected:
-    axis::Texture2D* _spriteTexture;
-    axis::SpriteBatchNode* _ball;
-    std::unordered_map<int, axis::Node*> _mouses;
+    ax::Texture2D* _spriteTexture;
+    ax::SpriteBatchNode* _ball;
+    std::unordered_map<int, ax::Node*> _mouses;
     bool _debugDraw;
 };
 
@@ -88,8 +88,8 @@ public:
     void onEnter() override;
     virtual std::string subtitle() const override;
 
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onAcceleration(axis::Acceleration* acc, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onAcceleration(ax::Acceleration* acc, ax::Event* event);
 };
 
 class PhysicsDemoPyramidStack : public PhysicsDemo
@@ -112,15 +112,15 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
     void update(float delta) override;
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void changeModeCallback(axis::Ref* sender);
+    void changeModeCallback(ax::Ref* sender);
 
-    bool anyRay(axis::PhysicsWorld& world, const axis::PhysicsRayCastInfo& info, void* data);
+    bool anyRay(ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info, void* data);
 
 private:
     float _angle;
-    axis::DrawNode* _node;
+    ax::DrawNode* _node;
     int _mode;
 };
 
@@ -152,9 +152,9 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
-    void onTouchMoved(axis::Touch* touch, axis::Event* event);
-    void onTouchEnded(axis::Touch* touch, axis::Event* event);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchMoved(ax::Touch* touch, ax::Event* event);
+    void onTouchEnded(ax::Touch* touch, ax::Event* event);
 
 private:
     float _distance;
@@ -169,7 +169,7 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
 
-    bool onContactBegin(axis::PhysicsContact& contact);
+    bool onContactBegin(ax::PhysicsContact& contact);
 };
 
 class PhysicsDemoSlice : public PhysicsDemo
@@ -181,10 +181,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    bool slice(axis::PhysicsWorld& world, const axis::PhysicsRayCastInfo& info, void* data);
-    void clipPoly(axis::PhysicsShapePolygon* shape, axis::Vec2 normal, float distance);
+    bool slice(ax::PhysicsWorld& world, const ax::PhysicsRayCastInfo& info, void* data);
+    void clipPoly(ax::PhysicsShapePolygon* shape, ax::Vec2 normal, float distance);
 
-    void onTouchEnded(axis::Touch* touch, axis::Event* event);
+    void onTouchEnded(ax::Touch* touch, ax::Event* event);
 
 private:
     int _sliceTag;
@@ -207,12 +207,12 @@ public:
 
     void onEnter() override;
     void resetTest();
-    bool onContactBegin(axis::PhysicsContact& contact);
+    bool onContactBegin(ax::PhysicsContact& contact);
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onDecrease(axis::Ref* sender);
-    void onIncrease(axis::Ref* sender);
+    void onDecrease(ax::Ref* sender);
+    void onIncrease(ax::Ref* sender);
 
 private:
     int _yellowBoxNum;
@@ -251,13 +251,13 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void changeBodyCallback(axis::Ref* sender);
+    void changeBodyCallback(ax::Ref* sender);
 
 private:
-    axis::Sprite* _nodeA;
-    axis::Sprite* _nodeB;
-    axis::PhysicsBody* _body;
-    axis::MenuItemFont* _button;
+    ax::Sprite* _nodeA;
+    ax::Sprite* _nodeB;
+    ax::PhysicsBody* _body;
+    ax::MenuItemFont* _button;
     bool _bodyInA;
 };
 
@@ -281,11 +281,11 @@ public:
     void onEnter() override;
     virtual std::string title() const override;
 
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
 
 private:
-    axis::Sprite* _parentSprite;
-    axis::Layer* _rootLayer;
+    ax::Sprite* _parentSprite;
+    ax::Layer* _rootLayer;
 };
 
 class PhysicsIssue9959 : public PhysicsDemo

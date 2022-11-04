@@ -39,11 +39,11 @@ public:
     ~UILoadingBarTest_Left();
     virtual bool init() override;
     void update(float delta) override;
-    void printWidgetResources(axis::Ref* sender);
+    void printWidgetResources(ax::Ref* sender);
 
 protected:
     int _count;
-    axis::ui::LoadingBar* _loadingBar;
+    ax::ui::LoadingBar* _loadingBar;
 };
 
 class UILoadingBarTest_Right : public UIScene
@@ -140,7 +140,7 @@ public:
 
 protected:
     int _count;
-    axis::ui::LoadingBar* _loadingBar;
+    ax::ui::LoadingBar* _loadingBar;
 };
 
 #endif /* defined(__TestCpp__UILoadingBarTest__) */

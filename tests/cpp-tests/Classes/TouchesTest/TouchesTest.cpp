@@ -172,9 +172,9 @@ std::string ForceTouchTest::subtitle() const
     return std::string("Touch with force to see info label changes\nOnly work on iPhone6s / iPhone6s Plus");
 }
 
-void ForceTouchTest::onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event) {}
+void ForceTouchTest::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) {}
 
-void ForceTouchTest::onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void ForceTouchTest::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     for (auto&& t : touches)
     {
@@ -185,7 +185,7 @@ void ForceTouchTest::onTouchesMoved(const std::vector<axis::Touch*>& touches, ax
     }
 }
 
-void ForceTouchTest::onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void ForceTouchTest::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     sprintf(formatBuffer, _Info_Formatter, 0.0f, 0.0f);
     _infoLabel->setString(std::string(formatBuffer));

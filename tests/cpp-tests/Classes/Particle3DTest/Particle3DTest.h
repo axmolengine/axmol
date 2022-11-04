@@ -44,14 +44,14 @@ public:
     virtual std::string title() const override;
     virtual void update(float delta) override;
 
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
     std::string _title;
-    axis::Camera* _camera;
-    axis::Label* _particleLab;
+    ax::Camera* _camera;
+    ax::Label* _particleLab;
     float _angle;
 };
 

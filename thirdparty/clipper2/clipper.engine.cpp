@@ -1,7 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Version   :  Clipper2 - ver.1.0.5                                            *
-* Date      :  2 October 2022                                                  *
+* Date      :  26 October 2022                                                 *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2022                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -114,18 +113,15 @@ namespace Clipper2Lib {
 		return prev;
 	}
 
-
 	inline bool IsFront(const Active& e)
 	{
 		return (&e == e.outrec->front_edge);
 	}
 
-
 	inline bool IsInvalidPath(OutPt* op)
 	{
 		return (!op || op->next == op);
 	}
-
 
 	/*******************************************************************************
 		*  Dx:                             0(90deg)                                    *
@@ -149,7 +145,9 @@ namespace Clipper2Lib {
 	{
 		if ((currentY == ae.top.y) || (ae.top.x == ae.bot.x)) return ae.top.x;
 		else if (currentY == ae.bot.y) return ae.bot.x;
-		else return ae.bot.x + static_cast<int64_t>(std::round(ae.dx * (currentY - ae.bot.y)));
+		else return ae.bot.x + static_cast<int64_t>(std::nearbyint(ae.dx * (currentY - ae.bot.y)));
+		// nb: std::nearbyint (or std::round) substantially *improves* performance here
+		// as it greatly improves the likelihood of edge adjacency in ProcessIntersectList().
 	}
 
 
@@ -605,10 +603,19 @@ namespace Clipper2Lib {
 		Clear();
 	}
 
+	void ClipperBase::DeleteEdges(Active*& e) 
+	{
+		while (e)
+		{
+			Active* e2 = e;
+			e = e->next_in_ael;
+			delete e2;
+		}
+	}
 
 	void ClipperBase::CleanUp()
 	{
-		while (actives_) DeleteFromAEL(*actives_);
+		DeleteEdges(actives_);
 		scanline_list_ = std::priority_queue<int64_t>();
 		intersect_nodes_.clear();
 		DisposeAllOutRecs();
@@ -1133,6 +1140,8 @@ namespace Clipper2Lib {
 				left_bound = new Active();
 				left_bound->bot = local_minima->vertex->pt;
 				left_bound->curr_x = left_bound->bot.x;
+				left_bound->wind_cnt = 0,
+				left_bound->wind_cnt2 = 0,
 				left_bound->wind_dx = -1,
 				left_bound->vertex_top = local_minima->vertex->prev;  // ie descending
 				left_bound->top = left_bound->vertex_top->pt;
@@ -1150,6 +1159,8 @@ namespace Clipper2Lib {
 				right_bound = new Active();
 				right_bound->bot = local_minima->vertex->pt;
 				right_bound->curr_x = right_bound->bot.x;
+				right_bound->wind_cnt = 0,
+				right_bound->wind_cnt2 = 0,
 				right_bound->wind_dx = 1,
 				right_bound->vertex_top = local_minima->vertex->next;  // ie ascending
 				right_bound->top = right_bound->vertex_top->pt;
@@ -1482,21 +1493,6 @@ namespace Clipper2Lib {
 		}
 		FixSelfIntersects(outrec);
 	}
-
-
-	inline bool SegmentsIntersect(const Point64& seg1a, const Point64& seg1b,
-		const Point64& seg2a, const Point64& seg2b)
-	{
-		double dx1 = static_cast<double>(seg1a.x - seg1b.x);
-		double dy1 = static_cast<double>(seg1a.y - seg1b.y);
-		double dx2 = static_cast<double>(seg2a.x - seg2b.x);
-		double dy2 = static_cast<double>(seg2a.y - seg2b.y);
-		return (((dy1 * (seg2a.x - seg1a.x) - dx1 * (seg2a.y - seg1a.y)) *
-			(dy1 * (seg2b.x - seg1a.x) - dx1 * (seg2b.y - seg1a.y)) < 0) &&
-			((dy2 * (seg1a.x - seg2a.x) - dx2 * (seg1a.y - seg2a.y)) *
-				(dy2 * (seg1b.x - seg2a.x) - dx2 * (seg1b.y - seg2a.y)) < 0));
-	}
-
 
 	OutPt* ClipperBase::DoSplitOp(OutPt* outRecOp, OutPt* splitOp)
 	{
@@ -2054,52 +2050,6 @@ namespace Clipper2Lib {
 		ProcessJoinerList();
 		return succeeded_;
 	}
-
-
-	bool ClipperBase::Execute(ClipType clip_type,
-		FillRule fill_rule, Paths64& solution_closed)
-	{
-		solution_closed.clear();
-		if (ExecuteInternal(clip_type, fill_rule, false))
-			BuildPaths(solution_closed, nullptr);
-		CleanUp();
-		return succeeded_;
-	}
-
-
-	bool ClipperBase::Execute(ClipType clip_type, FillRule fill_rule,
-		Paths64& solution_closed, Paths64& solution_open)
-	{
-		solution_closed.clear();
-		solution_open.clear();
-		if (ExecuteInternal(clip_type, fill_rule, false))
-			BuildPaths(solution_closed, &solution_open);
-		CleanUp();
-		return succeeded_;
-	}
-
-
-	bool ClipperBase::Execute(ClipType clip_type, FillRule fill_rule, PolyTree64& polytree)
-	{
-		Paths64 dummy;
-		polytree.Clear();
-		if (ExecuteInternal(clip_type, fill_rule, true))
-			BuildTree(polytree, dummy);
-		CleanUp();
-		return succeeded_;
-	}
-
-	bool ClipperBase::Execute(ClipType clip_type,
-		FillRule fill_rule, PolyTree64& polytree, Paths64& solution_open)
-	{
-		polytree.Clear();
-		solution_open.clear();
-		if (ExecuteInternal(clip_type, fill_rule, true))
-			BuildTree(polytree, solution_open);
-		CleanUp();
-		return succeeded_;
-	}
-
 
 	void ClipperBase::DoIntersections(const int64_t top_y)
 	{
@@ -3289,72 +3239,6 @@ namespace Clipper2Lib {
 
 	}
 
-
-	bool BuildPath(OutPt* op, bool reverse, bool isOpen, Path64& path)
-	{
-    if (op->next == op || (!isOpen && op->next == op->prev)) return false;
-		path.resize(0);
-		Point64 lastPt;
-		OutPt* op2;
-		if (reverse)
-		{
-			lastPt = op->pt;
-			op2 = op->prev;
-		}
-		else
-		{
-			op = op->next;
-			lastPt = op->pt;
-			op2 = op->next;
-		}
-		path.push_back(lastPt);
-
-		while (op2 != op)
-		{
-			if (op2->pt != lastPt)
-			{
-				lastPt = op2->pt;
-				path.push_back(lastPt);
-			}
-			if (reverse) 
-				op2 = op2->prev;
-			else
-				op2 = op2->next;
-		}
-		return true;
-	}
-
-
-	void ClipperBase::BuildPaths(Paths64& solutionClosed, Paths64* solutionOpen)
-	{
-		solutionClosed.resize(0);
-		solutionClosed.reserve(outrec_list_.size());
-		if (solutionOpen)
-		{
-			solutionOpen->resize(0);
-			solutionOpen->reserve(outrec_list_.size());
-		}
-
-		for (OutRec* outrec : outrec_list_)
-		{
-			if (outrec->pts == nullptr) continue;
-
-			Path64 path;
-			if (solutionOpen && outrec->is_open)
-			{
-				if (BuildPath(outrec->pts, ReverseSolution, true, path))
-					solutionOpen->emplace_back(std::move(path));
-			}
-			else
-			{
-				//closed paths should always return a Positive orientation
-				if (BuildPath(outrec->pts, ReverseSolution, false, path))
-					solutionClosed.emplace_back(std::move(path));
-			}
-		}
-	}
-
-
 	inline bool Path1InsidePath2(const OutRec* or1, const OutRec* or2)
 	{
 		PointInPolygonResult result = PointInPolygonResult::IsOn;
@@ -3385,7 +3269,40 @@ namespace Clipper2Lib {
 		return result;
 	}	
 
-	
+	bool BuildPath64(OutPt* op, bool reverse, bool isOpen, Path64& path)
+	{
+		if (op->next == op || (!isOpen && op->next == op->prev)) return false;
+		path.resize(0);
+		Point64 lastPt;
+		OutPt* op2;
+		if (reverse)
+		{
+			lastPt = op->pt;
+			op2 = op->prev;
+		}
+		else
+		{
+			op = op->next;
+			lastPt = op->pt;
+			op2 = op->next;
+		}
+		path.push_back(lastPt);
+
+		while (op2 != op)
+		{
+			if (op2->pt != lastPt)
+			{
+				lastPt = op2->pt;
+				path.push_back(lastPt);
+			}
+			if (reverse)
+				op2 = op2->prev;
+			else
+				op2 = op2->next;
+		}
+		return true;
+	}
+
 	bool ClipperBase::DeepCheckOwner(OutRec* outrec, OutRec* owner)
 	{
 		if (owner->bounds.IsEmpty()) owner->bounds = GetBounds(owner->path);
@@ -3405,7 +3322,7 @@ namespace Clipper2Lib {
 				if (split->splits && DeepCheckOwner(outrec, split)) return true;
 
 				if (!split->path.size())
-					BuildPath(split->pts, ReverseSolution, false, split->path);
+					BuildPath64(split->pts, ReverseSolution, false, split->path);
 				if (split->bounds.IsEmpty()) split->bounds = GetBounds(split->path);
 
 				if (split->bounds.Contains(outrec->bounds) &&
@@ -3431,8 +3348,36 @@ namespace Clipper2Lib {
 		}
 	}
 
+	void Clipper64::BuildPaths64(Paths64& solutionClosed, Paths64* solutionOpen)
+	{
+		solutionClosed.resize(0);
+		solutionClosed.reserve(outrec_list_.size());
+		if (solutionOpen)
+		{
+			solutionOpen->resize(0);
+			solutionOpen->reserve(outrec_list_.size());
+		}
 
-	void ClipperBase::BuildTree(PolyPath64& polytree, Paths64& open_paths)
+		for (OutRec* outrec : outrec_list_)
+		{
+			if (outrec->pts == nullptr) continue;
+
+			Path64 path;
+			if (solutionOpen && outrec->is_open)
+			{
+				if (BuildPath64(outrec->pts, ReverseSolution, true, path))
+					solutionOpen->emplace_back(std::move(path));
+			}
+			else
+			{
+				//closed paths should always return a Positive orientation
+				if (BuildPath64(outrec->pts, ReverseSolution, false, path))
+					solutionClosed.emplace_back(std::move(path));
+			}
+		}
+	}
+
+	void Clipper64::BuildTree64(PolyPath64& polytree, Paths64& open_paths)
 	{
 		polytree.Clear();
 		open_paths.resize(0);
@@ -3445,13 +3390,13 @@ namespace Clipper2Lib {
 			if (outrec->is_open)
 			{
 				Path64 path;
-				if (BuildPath(outrec->pts, ReverseSolution, true, path))
+				if (BuildPath64(outrec->pts, ReverseSolution, true, path))
 					open_paths.push_back(path);
 				continue;
 			}
 
-			if (!BuildPath(outrec->pts, ReverseSolution, false, outrec->path))
-					continue;
+			if (!BuildPath64(outrec->pts, ReverseSolution, false, outrec->path))
+				continue;
 			if (outrec->bounds.IsEmpty()) outrec->bounds = GetBounds(outrec->path);
 			outrec->owner = GetRealOutRec(outrec->owner);
 			if (outrec->owner) DeepCheckOwner(outrec, outrec->owner);
@@ -3468,12 +3413,12 @@ namespace Clipper2Lib {
 				tmp->idx = tmp_idx;
 				outrec = tmp;
 				outrec->owner = GetRealOutRec(outrec->owner);
-				BuildPath(outrec->pts, ReverseSolution, false, outrec->path);
+				BuildPath64(outrec->pts, ReverseSolution, false, outrec->path);
 				if (outrec->bounds.IsEmpty()) outrec->bounds = GetBounds(outrec->path);
 				if (outrec->owner) DeepCheckOwner(outrec, outrec->owner);
 			}
 
-			PolyPath64* owner_polypath;
+			PolyPath* owner_polypath;
 			if (outrec->owner && outrec->owner->polypath)
 				owner_polypath = outrec->owner->polypath;
 			else
@@ -3482,20 +3427,117 @@ namespace Clipper2Lib {
 		}
 	}
 
-	static void PolyPath64ToPolyPathD(const PolyPath64& polypath, PolyPathD& result)
+	bool BuildPathD(OutPt* op, bool reverse, bool isOpen, PathD& path, double inv_scale)
 	{
-		for (auto child : polypath)
+		if (op->next == op || (!isOpen && op->next == op->prev)) return false;
+		path.resize(0);
+		Point64 lastPt;
+		OutPt* op2;
+		if (reverse)
 		{
-			PolyPathD* res_child = result.AddChild(
-				Path64ToPathD(child->Polygon()));
-			PolyPath64ToPolyPathD(*child, *res_child);
+			lastPt = op->pt;
+			op2 = op->prev;
+		}
+		else
+		{
+			op = op->next;
+			lastPt = op->pt;
+			op2 = op->next;
+		}
+		path.push_back(PointD(lastPt.x * inv_scale, lastPt.y * inv_scale));
+
+		while (op2 != op)
+		{
+			if (op2->pt != lastPt)
+			{
+				lastPt = op2->pt;
+				path.push_back(PointD(lastPt.x * inv_scale, lastPt.y * inv_scale));
+			}
+			if (reverse)
+				op2 = op2->prev;
+			else
+				op2 = op2->next;
+		}
+		return true;
+	}
+
+	void ClipperD::BuildPathsD(PathsD& solutionClosed, PathsD* solutionOpen)
+	{
+		solutionClosed.resize(0);
+		solutionClosed.reserve(outrec_list_.size());
+		if (solutionOpen)
+		{
+			solutionOpen->resize(0);
+			solutionOpen->reserve(outrec_list_.size());
+		}
+
+		for (OutRec* outrec : outrec_list_)
+		{
+			if (outrec->pts == nullptr) continue;
+
+			PathD path;
+			if (solutionOpen && outrec->is_open)
+			{
+				if (BuildPathD(outrec->pts, ReverseSolution, true, path, invScale_))
+					solutionOpen->emplace_back(std::move(path));
+			}
+			else
+			{
+				//closed paths should always return a Positive orientation
+				if (BuildPathD(outrec->pts, ReverseSolution, false, path, invScale_))
+					solutionClosed.emplace_back(std::move(path));
+			}
 		}
 	}
 
-	inline void Polytree64ToPolytreeD(const PolyPath64& polytree, PolyPathD& result)
+	void ClipperD::BuildTreeD(PolyPathD& polytree, PathsD& open_paths)
 	{
-		result.Clear();
-		PolyPath64ToPolyPathD(polytree, result);
+		polytree.Clear();
+		open_paths.resize(0);
+		if (has_open_paths_)
+			open_paths.reserve(outrec_list_.size());
+
+		for (OutRec* outrec : outrec_list_)
+		{
+			if (!outrec || !outrec->pts) continue;
+			if (outrec->is_open)
+			{
+				PathD path;
+				if (BuildPathD(outrec->pts, ReverseSolution, true, path, invScale_))
+					open_paths.push_back(path);
+				continue;
+			}
+
+			if (!BuildPath64(outrec->pts, ReverseSolution, false, outrec->path))
+				continue;
+			if (outrec->bounds.IsEmpty()) outrec->bounds = GetBounds(outrec->path);
+			outrec->owner = GetRealOutRec(outrec->owner);
+			if (outrec->owner) DeepCheckOwner(outrec, outrec->owner);
+
+			// swap the order when a child preceeds its owner
+			// (because owners must preceed children in polytrees)
+			if (outrec->owner && outrec->idx < outrec->owner->idx)
+			{
+				OutRec* tmp = outrec->owner;
+				outrec_list_[outrec->owner->idx] = outrec;
+				outrec_list_[outrec->idx] = tmp;
+				size_t tmp_idx = outrec->idx;
+				outrec->idx = tmp->idx;
+				tmp->idx = tmp_idx;
+				outrec = tmp;
+				outrec->owner = GetRealOutRec(outrec->owner);
+				BuildPath64(outrec->pts, ReverseSolution, false, outrec->path);
+				if (outrec->bounds.IsEmpty()) outrec->bounds = GetBounds(outrec->path);
+				if (outrec->owner) DeepCheckOwner(outrec, outrec->owner);
+			}
+
+			PolyPath* owner_polypath;
+			if (outrec->owner && outrec->owner->polypath)
+				owner_polypath = outrec->owner->polypath;
+			else
+				owner_polypath = &polytree;
+			outrec->polypath = owner_polypath->AddChild(outrec->path);
+		}
 	}
 
 }  // namespace clipper2lib

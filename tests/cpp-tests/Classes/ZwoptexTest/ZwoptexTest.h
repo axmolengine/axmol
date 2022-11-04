@@ -49,8 +49,8 @@ public:
     virtual std::string subtitle() const override;
 
 protected:
-    axis::Sprite* sprite1;
-    axis::Sprite* sprite2;
+    ax::Sprite* sprite1;
+    ax::Sprite* sprite2;
     int counter;
 };
 

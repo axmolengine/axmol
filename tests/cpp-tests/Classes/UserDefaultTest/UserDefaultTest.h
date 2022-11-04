@@ -41,7 +41,7 @@ public:
 private:
     void doTest();
     void printValue();
-    axis::Label* _label;
+    ax::Label* _label;
 };
 
 #endif  // _USERDEFAULT_TEST_H_

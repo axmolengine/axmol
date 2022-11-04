@@ -37,12 +37,12 @@ public:
     CREATE_FUNC(WebViewTest);
 
     virtual bool init() override;
-    bool onWebViewShouldStartLoading(axis::ui::WebView* sender, std::string_view url);
-    void onWebViewDidFinishLoading(axis::ui::WebView* sender, std::string_view url);
-    void onWebViewDidFailLoading(axis::ui::WebView* sender, std::string_view url);
+    bool onWebViewShouldStartLoading(ax::ui::WebView* sender, std::string_view url);
+    void onWebViewDidFinishLoading(ax::ui::WebView* sender, std::string_view url);
+    void onWebViewDidFailLoading(ax::ui::WebView* sender, std::string_view url);
 
 private:
-    axis::ui::WebView* _webView;
+    ax::ui::WebView* _webView;
 };
 
 #endif /* defined(__cocos2d_tests__UIWebViewTest__) */

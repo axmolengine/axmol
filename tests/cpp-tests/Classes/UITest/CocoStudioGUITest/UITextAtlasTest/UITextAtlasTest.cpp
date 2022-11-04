@@ -73,9 +73,9 @@ bool UITextAtlasTest::init()
     }
     return false;
 }
-void UITextAtlasTest::printWidgetResources(axis::Ref* sender)
+void UITextAtlasTest::printWidgetResources(ax::Ref* sender)
 {
-    axis::ResourceData textureFile = _textAtlas->getRenderFile();
+    ax::ResourceData textureFile = _textAtlas->getRenderFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }
 
@@ -123,8 +123,8 @@ bool UITextAtlasETC1ShadowTest::init()
     }
     return false;
 }
-void UITextAtlasETC1ShadowTest::printWidgetResources(axis::Ref* sender)
+void UITextAtlasETC1ShadowTest::printWidgetResources(ax::Ref* sender)
 {
-    axis::ResourceData textureFile = _textAtlas->getRenderFile();
+    ax::ResourceData textureFile = _textAtlas->getRenderFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
 }

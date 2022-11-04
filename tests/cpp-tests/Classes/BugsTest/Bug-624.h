@@ -33,7 +33,7 @@ public:
     virtual ~Bug624Layer();
     virtual bool init() override;
     void switchLayer(float dt);
-    virtual void onAcceleration(axis::Acceleration* acc, axis::Event* event);
+    virtual void onAcceleration(ax::Acceleration* acc, ax::Event* event);
     virtual std::string title() const override { return "Bug624"; }
 
     CREATE_FUNC(Bug624Layer);
@@ -45,7 +45,7 @@ public:
     virtual ~Bug624Layer2();
     virtual bool init() override;
     void switchLayer(float dt);
-    virtual void onAcceleration(axis::Acceleration* acc, axis::Event* event);
+    virtual void onAcceleration(ax::Acceleration* acc, ax::Event* event);
     virtual std::string title() const override { return "Bug624-2"; }
 
     CREATE_FUNC(Bug624Layer2);

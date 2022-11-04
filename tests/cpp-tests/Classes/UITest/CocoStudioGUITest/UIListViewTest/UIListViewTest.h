@@ -40,15 +40,15 @@ public:
     ~UIListViewTest_Vertical();
 
     virtual bool init() override;
-    void selectedItemEvent(axis::Ref* sender, axis::ui::ListView::EventType type);
-    void selectedItemEventScrollView(axis::Ref* sender, axis::ui::ScrollView::EventType type);
+    void selectedItemEvent(ax::Ref* sender, ax::ui::ListView::EventType type);
+    void selectedItemEventScrollView(ax::Ref* sender, ax::ui::ScrollView::EventType type);
     virtual void update(float dt) override;
 
 protected:
-    float getItemPositionYInView(axis::ui::Widget* item) const;
+    float getItemPositionYInView(ax::ui::Widget* item) const;
     void updateItem(int itemID, int templateID);
 
-    axis::ui::Text* _displayValueLabel = nullptr;
+    ax::ui::Text* _displayValueLabel = nullptr;
     // How many items we actually spawn, these items will be reused.
     // Should > listview.width / templateWidth + 2.
     int _spawnCount = 5;
@@ -64,9 +64,9 @@ protected:
     // Use this value to detect if we are scrolling left or right
     float _lastContentPosY           = 0.f;
     float _reuseItemOffset           = 0.f;
-    axis::ui::ListView* _listView = nullptr;
+    ax::ui::ListView* _listView = nullptr;
     std::vector<std::string> _array;
-    axis::ui::Text* _indexLabels[3] = {nullptr};
+    ax::ui::Text* _indexLabels[3] = {nullptr};
 };
 
 class UIListViewTest_Horizontal : public UIScene
@@ -78,14 +78,14 @@ public:
     ~UIListViewTest_Horizontal();
 
     virtual bool init() override;
-    void selectedItemEvent(axis::Ref* sender, axis::ui::ListView::EventType type);
+    void selectedItemEvent(ax::Ref* sender, ax::ui::ListView::EventType type);
     virtual void update(float dt) override;
 
 protected:
-    float getItemPositionXInView(axis::ui::Widget* item) const;
+    float getItemPositionXInView(ax::ui::Widget* item) const;
     void updateItem(int itemID, int templateID);
 
-    axis::ui::Text* _displayValueLabel = nullptr;
+    ax::ui::Text* _displayValueLabel = nullptr;
     // How many items we actually spawn, these items will be reused.
     // Should > listview.width / templateWidth + 2.
     int _spawnCount = 4;
@@ -99,7 +99,7 @@ protected:
     float _updateTimer               = 0.f;
     float _lastContentPosX           = 0.f;
     float _reuseItemOffset           = 0.f;
-    axis::ui::ListView* _listView = nullptr;
+    ax::ui::ListView* _listView = nullptr;
 
     std::vector<std::string> _array;
 };
@@ -125,10 +125,10 @@ class UIListViewTest_ScrollToItem : public UIScene
 {
 protected:
     virtual bool init() override;
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const = 0;
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const = 0;
 
-    axis::ui::ListView* _listView;
-    axis::ui::Text* _titleLabel;
+    ax::ui::ListView* _listView;
+    ax::ui::Text* _titleLabel;
     int _nextIndex;
 };
 
@@ -136,9 +136,9 @@ class UIListViewTest_ScrollToItemVertical : public UIListViewTest_ScrollToItem
 {
 public:
     CREATE_FUNC(UIListViewTest_ScrollToItemVertical);
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const
     {
-        return axis::ui::ScrollView::Direction::VERTICAL;
+        return ax::ui::ScrollView::Direction::VERTICAL;
     }
 };
 
@@ -146,9 +146,9 @@ class UIListViewTest_ScrollToItemHorizontal : public UIListViewTest_ScrollToItem
 {
 public:
     CREATE_FUNC(UIListViewTest_ScrollToItemHorizontal);
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const
     {
-        return axis::ui::ScrollView::Direction::HORIZONTAL;
+        return ax::ui::ScrollView::Direction::HORIZONTAL;
     }
 };
 
@@ -157,20 +157,20 @@ class UIListViewTest_Magnetic : public UIScene
 {
 protected:
     virtual bool init() override;
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const = 0;
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const = 0;
 
-    axis::ui::ListView* _listView;
-    axis::ui::Text* _titleLabel;
-    axis::ui::Text* _indexLabels[5];
+    ax::ui::ListView* _listView;
+    ax::ui::Text* _titleLabel;
+    ax::ui::Text* _indexLabels[5];
 };
 
 class UIListViewTest_MagneticVertical : public UIListViewTest_Magnetic
 {
 public:
     CREATE_FUNC(UIListViewTest_MagneticVertical);
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const
     {
-        return axis::ui::ScrollView::Direction::VERTICAL;
+        return ax::ui::ScrollView::Direction::VERTICAL;
     }
 };
 
@@ -178,9 +178,9 @@ class UIListViewTest_MagneticHorizontal : public UIListViewTest_Magnetic
 {
 public:
     CREATE_FUNC(UIListViewTest_MagneticHorizontal);
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const
     {
-        return axis::ui::ScrollView::Direction::HORIZONTAL;
+        return ax::ui::ScrollView::Direction::HORIZONTAL;
     }
 };
 
@@ -189,23 +189,23 @@ class UIListViewTest_Padding : public UIScene
 {
 protected:
     virtual bool init() override;
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const = 0;
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const = 0;
 
-    void sliderEvent(axis::Ref* pSender, axis::ui::Slider::EventType type);
+    void sliderEvent(ax::Ref* pSender, ax::ui::Slider::EventType type);
 
-    axis::ui::ListView* _listView;
-    axis::ui::Text* _titleLabel;
-    axis::ui::Text* _indexLabels[5];
-    axis::ui::Text* _paddingLabels[4];
+    ax::ui::ListView* _listView;
+    ax::ui::Text* _titleLabel;
+    ax::ui::Text* _indexLabels[5];
+    ax::ui::Text* _paddingLabels[4];
 };
 
 class UIListViewTest_PaddingVertical : public UIListViewTest_Padding
 {
 public:
     CREATE_FUNC(UIListViewTest_PaddingVertical);
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const
     {
-        return axis::ui::ScrollView::Direction::VERTICAL;
+        return ax::ui::ScrollView::Direction::VERTICAL;
     }
 };
 
@@ -213,9 +213,9 @@ class UIListViewTest_PaddingHorizontal : public UIListViewTest_Padding
 {
 public:
     CREATE_FUNC(UIListViewTest_PaddingHorizontal);
-    virtual axis::ui::ScrollView::Direction getListViewDirection() const
+    virtual ax::ui::ScrollView::Direction getListViewDirection() const
     {
-        return axis::ui::ScrollView::Direction::HORIZONTAL;
+        return ax::ui::ScrollView::Direction::HORIZONTAL;
     }
 };
 

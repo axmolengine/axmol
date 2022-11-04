@@ -38,7 +38,7 @@ VibrateTests::VibrateTests()
 
 namespace
 {
-class TextButton : public axis::Label
+class TextButton : public ax::Label
 {
 public:
     static TextButton* create(std::string_view text, const std::function<void(TextButton*)>& onTriggered)

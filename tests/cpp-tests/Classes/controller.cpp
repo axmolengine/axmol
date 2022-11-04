@@ -43,6 +43,10 @@ class RootTests : public TestList
 public:
     RootTests()
     {
+#if __has_include("EffekseerForCocos2d-x.h")
+        addTest("Effekseer", []() { return new EffekseerTests(); });
+#endif
+
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) 
         addTest("ImGui", []() { return new ImGuiTests(); });

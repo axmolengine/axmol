@@ -285,7 +285,7 @@ void VideoPlayerTest::videoEventCallback(Ref* sender, VideoPlayer::EventType eve
 SimpleVideoPlayerTest::SimpleVideoPlayerTest()
 {
     _videoPlayer      = nullptr;
-    _style            = axis::ui::VideoPlayer::StyleType::NONE;
+    _style            = ax::ui::VideoPlayer::StyleType::NONE;
     _userInputEnabled = true;
 
     _switchUserInputEnabled = nullptr;
@@ -305,12 +305,12 @@ void SimpleVideoPlayerTest::updateButtonsTexts()
         std::string str = " - ";
         switch (_style)
         {
-        case axis::ui::VideoPlayer::StyleType::NONE:
+        case ax::ui::VideoPlayer::StyleType::NONE:
             _switchUserInputEnabled->setVisible(false);
             str = "< NO Sytle >";
             break;
 
-        case axis::ui::VideoPlayer::StyleType::DEFAULT:
+        case ax::ui::VideoPlayer::StyleType::DEFAULT:
             str = "< Default Style >";
             _switchUserInputEnabled->setVisible(true);
             break;
@@ -381,12 +381,12 @@ void SimpleVideoPlayerTest::switchStyleCallback(Ref* sender)
 {
     switch (_style)
     {
-    case axis::ui::VideoPlayer::StyleType::NONE:
-        _style = axis::ui::VideoPlayer::StyleType::DEFAULT;
+    case ax::ui::VideoPlayer::StyleType::NONE:
+        _style = ax::ui::VideoPlayer::StyleType::DEFAULT;
         break;
 
-    case axis::ui::VideoPlayer::StyleType::DEFAULT:
-        _style = axis::ui::VideoPlayer::StyleType::NONE;
+    case ax::ui::VideoPlayer::StyleType::DEFAULT:
+        _style = ax::ui::VideoPlayer::StyleType::NONE;
         break;
 
     default:

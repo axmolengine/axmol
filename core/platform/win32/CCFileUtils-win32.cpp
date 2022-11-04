@@ -43,7 +43,7 @@ NS_AX_BEGIN
 #define AX_MAX_PATH 512
 
 // The root path of resources, the character encoding is UTF-8.
-// UTF-8 is the only encoding supported by axis API by default.
+// UTF-8 is the only encoding supported by axmol API by default.
 static std::string s_workingDir;
 static std::string s_exeDir;
 
@@ -184,14 +184,12 @@ FileUtils::Status FileUtilsWin32::getContents(std::string_view filename, Resizab
 }
 
 std::string FileUtilsWin32::getPathForFilename(std::string_view filename,
-                                               std::string_view resolutionDirectory,
                                                std::string_view searchPath) const
 {
     std::string unixFileName            = convertPathFormatToUnixStyle(filename);
-    std::string unixResolutionDirectory = convertPathFormatToUnixStyle(resolutionDirectory);
     std::string unixSearchPath          = convertPathFormatToUnixStyle(searchPath);
 
-    return FileUtils::getPathForFilename(unixFileName, unixResolutionDirectory, unixSearchPath);
+    return FileUtils::getPathForFilename(unixFileName, unixSearchPath);
 }
 
 std::string FileUtilsWin32::getFullPathForFilenameWithinDirectory(std::string_view strDirectory,

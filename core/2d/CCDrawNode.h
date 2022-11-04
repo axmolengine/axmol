@@ -378,6 +378,8 @@ protected:
                               CustomCommand::PrimitiveType primitiveType);
     void freeShaderInternal(CustomCommand& cmd);
 
+    void setVertexLayout(CustomCommand& cmd);
+
     void updateBlendState(CustomCommand& cmd);
     void updateUniforms(const Mat4& transform, CustomCommand& cmd);
 

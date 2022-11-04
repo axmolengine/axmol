@@ -98,19 +98,19 @@ void UICheckBoxTest::selectedEvent(Ref* pSender, CheckBox::EventType type)
     }
 }
 
-void UICheckBoxTest::printWidgetResources(axis::Ref* sender)
+void UICheckBoxTest::printWidgetResources(ax::Ref* sender)
 {
-    axis::ResourceData backGroundFileName = _checkBox->getBackNormalFile();
+    ax::ResourceData backGroundFileName = _checkBox->getBackNormalFile();
     AXLOG("backGroundFile  Name : %s, Type: %d", backGroundFileName.file.c_str(), backGroundFileName.type);
-    axis::ResourceData backGroundSelectedFileName = _checkBox->getBackPressedFile();
+    ax::ResourceData backGroundSelectedFileName = _checkBox->getBackPressedFile();
     AXLOG("backGroundSelectedFile  Name : %s, Type: %d", backGroundSelectedFileName.file.c_str(),
           backGroundSelectedFileName.type);
-    axis::ResourceData backGroundDisabledFileName = _checkBox->getBackDisabledFile();
+    ax::ResourceData backGroundDisabledFileName = _checkBox->getBackDisabledFile();
     AXLOG("backGroundDisabledFile  Name : %s, Type: %d", backGroundDisabledFileName.file.c_str(),
           backGroundDisabledFileName.type);
-    axis::ResourceData frontCrossFileName = _checkBox->getCrossNormalFile();
+    ax::ResourceData frontCrossFileName = _checkBox->getCrossNormalFile();
     AXLOG("frontCrossFile  Name : %s, Type: %d", frontCrossFileName.file.c_str(), frontCrossFileName.type);
-    axis::ResourceData frontCrossDisabledFileName = _checkBox->getCrossDisabledFile();
+    ax::ResourceData frontCrossDisabledFileName = _checkBox->getCrossDisabledFile();
     AXLOG("frontCrossDisabledFile  Name : %s, Type: %d", frontCrossDisabledFileName.file.c_str(),
           frontCrossDisabledFileName.type);
 }

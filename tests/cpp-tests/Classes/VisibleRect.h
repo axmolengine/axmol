@@ -30,21 +30,21 @@
 class VisibleRect
 {
 public:
-    static axis::Rect getVisibleRect();
+    static ax::Rect getVisibleRect();
 
-    static axis::Vec2 left();
-    static axis::Vec2 right();
-    static axis::Vec2 top();
-    static axis::Vec2 bottom();
-    static axis::Vec2 center();
-    static axis::Vec2 leftTop();
-    static axis::Vec2 rightTop();
-    static axis::Vec2 leftBottom();
-    static axis::Vec2 rightBottom();
+    static ax::Vec2 left();
+    static ax::Vec2 right();
+    static ax::Vec2 top();
+    static ax::Vec2 bottom();
+    static ax::Vec2 center();
+    static ax::Vec2 leftTop();
+    static ax::Vec2 rightTop();
+    static ax::Vec2 leftBottom();
+    static ax::Vec2 rightBottom();
 
 private:
     static void lazyInit();
-    static axis::Rect s_visibleRect;
+    static ax::Rect s_visibleRect;
 };
 
 #endif /* __VISIBLERECT_H__ */

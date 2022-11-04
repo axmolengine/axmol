@@ -35,21 +35,21 @@ DEFINE_TEST_SUITE(TextInputTests);
 // KeyboardNotificationLayer for test IME keyboard notification.
 //////////////////////////////////////////////////////////////////////////
 
-class KeyboardNotificationLayer : public TestCase, public axis::IMEDelegate
+class KeyboardNotificationLayer : public TestCase, public ax::IMEDelegate
 {
 public:
     KeyboardNotificationLayer();
     virtual std::string title() const override;
-    virtual void onClickTrackNode(bool bClicked, const axis::Vec2& touchPos) = 0;
+    virtual void onClickTrackNode(bool bClicked, const ax::Vec2& touchPos) = 0;
 
-    virtual void keyboardWillShow(axis::IMEKeyboardNotificationInfo& info) override;
+    virtual void keyboardWillShow(ax::IMEKeyboardNotificationInfo& info) override;
 
-    bool onTouchBegan(axis::Touch* touch, axis::Event* event);
-    void onTouchEnded(axis::Touch* touch, axis::Event* event);
+    bool onTouchBegan(ax::Touch* touch, ax::Event* event);
+    void onTouchEnded(ax::Touch* touch, ax::Event* event);
 
 protected:
-    axis::Node* _trackNode;
-    axis::Vec2 _beginPos;
+    ax::Node* _trackNode;
+    ax::Vec2 _beginPos;
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ public:
     CREATE_FUNC(TextFieldTTFDefaultTest);
     // KeyboardNotificationLayer
     virtual std::string subtitle() const override;
-    virtual void onClickTrackNode(bool bClicked, const axis::Vec2& touchPos) override;
+    virtual void onClickTrackNode(bool bClicked, const ax::Vec2& touchPos) override;
 
     // Layer
     virtual void onEnter() override;
@@ -72,10 +72,10 @@ public:
 // TextFieldTTFActionTest
 //////////////////////////////////////////////////////////////////////////
 
-class TextFieldTTFActionTest : public KeyboardNotificationLayer, public axis::TextFieldDelegate
+class TextFieldTTFActionTest : public KeyboardNotificationLayer, public ax::TextFieldDelegate
 {
-    axis::TextFieldTTF* _textField;
-    axis::Action* _textFieldAction;
+    ax::TextFieldTTF* _textField;
+    ax::Action* _textFieldAction;
     bool _action;
     size_t _charLimit;  // the textfield max char limit
 
@@ -85,18 +85,18 @@ public:
 
     // KeyboardNotificationLayer
     virtual std::string subtitle() const override;
-    virtual void onClickTrackNode(bool bClicked, const axis::Vec2& touchPos) override;
+    virtual void onClickTrackNode(bool bClicked, const ax::Vec2& touchPos) override;
 
     // Layer
     virtual void onEnter() override;
     virtual void onExit() override;
 
     // TextFieldDelegate
-    virtual bool onTextFieldAttachWithIME(axis::TextFieldTTF* sender) override;
-    virtual bool onTextFieldDetachWithIME(axis::TextFieldTTF* sender) override;
-    virtual bool onTextFieldInsertText(axis::TextFieldTTF* sender, const char* text, size_t nLen) override;
-    virtual bool onTextFieldDeleteBackward(axis::TextFieldTTF* sender, const char* delText, size_t nLen) override;
-    virtual bool onDraw(axis::TextFieldTTF* sender);
+    virtual bool onTextFieldAttachWithIME(ax::TextFieldTTF* sender) override;
+    virtual bool onTextFieldDetachWithIME(ax::TextFieldTTF* sender) override;
+    virtual bool onTextFieldInsertText(ax::TextFieldTTF* sender, const char* text, size_t nLen) override;
+    virtual bool onTextFieldDeleteBackward(ax::TextFieldTTF* sender, const char* delText, size_t nLen) override;
+    virtual bool onDraw(ax::TextFieldTTF* sender);
 };
 
 //////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ public:
     CREATE_FUNC(TextFieldTTSetCursorFromPoint);
     // KeyboardNotificationLayer
     virtual std::string subtitle() const override;
-    virtual void onClickTrackNode(bool bClicked, const axis::Vec2& touchPos) override;
+    virtual void onClickTrackNode(bool bClicked, const ax::Vec2& touchPos) override;
 
     // Layer
     virtual void onEnter() override;

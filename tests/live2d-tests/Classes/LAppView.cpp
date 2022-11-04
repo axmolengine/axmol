@@ -94,13 +94,13 @@ void LAppView::onExit()
     delete viewMatrix;
 }
 
-void LAppView::draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags)
+void LAppView::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
     DrawNode::draw(renderer, transform, flags);
     onDraw(transform, flags);
 }
 
-void LAppView::onDraw(const axis::Mat4& transform, uint32_t flags)
+void LAppView::onDraw(const ax::Mat4& transform, uint32_t flags)
 {
     _commandBuffer.PushCommandGroup();
 
@@ -160,7 +160,7 @@ void LAppView::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
     live2DMgr->OnDrag(viewX, viewY);
 }
 
-void LAppView::onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event)
+void LAppView::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     // タッチ終了
     LAppLive2DManager* live2DMgr = LAppLive2DManager::GetInstance();

@@ -40,7 +40,7 @@ enum
 };
 
 Settings settings;
-axis::Label* labelDebugDraw;
+ax::Label* labelDebugDraw;
 
 enum
 {

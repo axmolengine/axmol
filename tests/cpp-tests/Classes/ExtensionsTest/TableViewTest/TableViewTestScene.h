@@ -32,22 +32,22 @@
 DEFINE_TEST_SUITE(TableViewTests);
 
 class TableViewTest : public TestCase,
-                      public axis::extension::TableViewDataSource,
-                      public axis::extension::TableViewDelegate
+                      public ax::extension::TableViewDataSource,
+                      public ax::extension::TableViewDelegate
 {
 public:
     CREATE_FUNC(TableViewTest);
 
     virtual bool init() override;
 
-    virtual void scrollViewDidScroll(axis::extension::ScrollView* view) override{};
-    virtual void scrollViewDidZoom(axis::extension::ScrollView* view) override {}
-    virtual void tableCellTouched(axis::extension::TableView* table,
-                                  axis::extension::TableViewCell* cell) override;
-    virtual axis::Size tableCellSizeForIndex(axis::extension::TableView* table, ssize_t idx) override;
-    virtual axis::extension::TableViewCell* tableCellAtIndex(axis::extension::TableView* table,
+    virtual void scrollViewDidScroll(ax::extension::ScrollView* view) override{};
+    virtual void scrollViewDidZoom(ax::extension::ScrollView* view) override {}
+    virtual void tableCellTouched(ax::extension::TableView* table,
+                                  ax::extension::TableViewCell* cell) override;
+    virtual ax::Size tableCellSizeForIndex(ax::extension::TableView* table, ssize_t idx) override;
+    virtual ax::extension::TableViewCell* tableCellAtIndex(ax::extension::TableView* table,
                                                                 ssize_t idx) override;
-    virtual ssize_t numberOfCellsInTableView(axis::extension::TableView* table) override;
+    virtual ssize_t numberOfCellsInTableView(ax::extension::TableView* table) override;
 };
 
 #endif  // __TABLEVIEWTESTSCENE_H__

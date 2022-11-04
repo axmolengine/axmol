@@ -170,8 +170,15 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
 
     auto program = backend::Program::getBuiltinProgram(programType);
     pipelinePS   = new backend::ProgramState(program);
+    setVertexLayout(cmd);
     cmd.setPrimitiveType(primitiveType);
     cmd.setDrawType(drawType);
+}
+
+void DrawNode::setVertexLayout(CustomCommand& cmd)
+{
+    auto* programState = cmd.getPipelineDescriptor().programState;
+    programState->validateSharedVertexLayout(VertexLayoutHelper::setupDrawNode);
 }
 
 void DrawNode::freeShaderInternal(CustomCommand& cmd)

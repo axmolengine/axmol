@@ -41,22 +41,22 @@ public:
 
     virtual void update(float delta) override;
 
-    void SwitchLight(axis::Ref* sender, axis::LightType lightType);
+    void SwitchLight(ax::Ref* sender, ax::LightType lightType);
 
 private:
     void addSprite();
     void addLights();
 
 private:
-    axis::AmbientLight* _ambientLight;
-    axis::DirectionLight* _directionalLight;
-    axis::PointLight* _pointLight;
-    axis::SpotLight* _spotLight;
+    ax::AmbientLight* _ambientLight;
+    ax::DirectionLight* _directionalLight;
+    ax::PointLight* _pointLight;
+    ax::SpotLight* _spotLight;
 
-    axis::Label* _ambientLightLabel;
-    axis::Label* _directionalLightLabel;
-    axis::Label* _pointLightLabel;
-    axis::Label* _spotLightLabel;
+    ax::Label* _ambientLightLabel;
+    ax::Label* _directionalLightLabel;
+    ax::Label* _pointLightLabel;
+    ax::Label* _spotLightLabel;
 };
 
 #endif

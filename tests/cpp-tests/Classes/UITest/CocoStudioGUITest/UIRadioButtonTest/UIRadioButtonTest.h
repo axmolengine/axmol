@@ -44,8 +44,8 @@ public:
     void deleteRadioButton(Ref* sender);
 
 private:
-    axis::ui::RadioButtonGroup* _radioButtonGroup;
-    axis::ui::Text* _allowNoSelectionText;
+    ax::ui::RadioButtonGroup* _radioButtonGroup;
+    ax::ui::Text* _allowNoSelectionText;
 };
 
 class UIRadioButtonTwoGroupsTest : public UIScene
@@ -57,22 +57,22 @@ public:
     ~UIRadioButtonTwoGroupsTest();
 
     virtual bool init() override;
-    void onChangedRadioButtonGroup1(axis::ui::RadioButton* radioButton,
+    void onChangedRadioButtonGroup1(ax::ui::RadioButton* radioButton,
                                     int index,
-                                    axis::ui::RadioButtonGroup::EventType type);
-    void onChangedRadioButtonGroup2(axis::ui::RadioButton* radioButton,
+                                    ax::ui::RadioButtonGroup::EventType type);
+    void onChangedRadioButtonGroup2(ax::ui::RadioButton* radioButton,
                                     int index,
-                                    axis::ui::RadioButtonGroup::EventType type);
-    void onChangedRadioButtonSelect(axis::ui::RadioButton* radioButton, axis::ui::RadioButton::EventType type);
+                                    ax::ui::RadioButtonGroup::EventType type);
+    void onChangedRadioButtonSelect(ax::ui::RadioButton* radioButton, ax::ui::RadioButton::EventType type);
     void clearRadioButtonGroup(Ref* sender);
 
 protected:
     void addLog(std::string_view log);
 
-    axis::ui::RadioButtonGroup* _radioButtonGroups[2];
-    axis::ui::Text* _groupEventLabel;
-    axis::ui::Text* _buttonEventLabel;
-    axis::ui::Text* _logConsole;
+    ax::ui::RadioButtonGroup* _radioButtonGroups[2];
+    ax::ui::Text* _groupEventLabel;
+    ax::ui::Text* _buttonEventLabel;
+    ax::ui::Text* _logConsole;
     int _numberOfLogLines;
 };
 

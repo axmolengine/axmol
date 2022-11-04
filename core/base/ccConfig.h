@@ -5,7 +5,7 @@ Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-https://axmolengine.github.io/
+https://axmolengine.github.io/axmol
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -376,7 +376,6 @@ THE SOFTWARE.
 #endif
 
 namespace ax {}
-namespace axis = ax; // DEPRECATED
-namespace axmol = ax; // DEPRECATED
+namespace axmol = ax;
 //  end of namespace group
 /// @}

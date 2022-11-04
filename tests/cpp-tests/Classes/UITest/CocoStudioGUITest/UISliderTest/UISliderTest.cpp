@@ -100,20 +100,20 @@ void UISliderTest::sliderEvent(Ref* pSender, Slider::EventType type)
         _displayValueLabel->setString(StringUtils::format("Percent %f", 10000.0 * percent / maxPercent));
     }
 }
-void UISliderTest::printWidgetResources(axis::Ref* /*sender*/)
+void UISliderTest::printWidgetResources(ax::Ref* /*sender*/)
 {
-    axis::ResourceData textureFile = _slider->getBackFile();
+    ax::ResourceData textureFile = _slider->getBackFile();
     AXLOG("textureFile  Name : %s, Type: %d", textureFile.file.c_str(), textureFile.type);
-    axis::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
+    ax::ResourceData progressBarTextureFile = _slider->getProgressBarFile();
     AXLOG("progressBarTextureFile  Name : %s, Type: %d", progressBarTextureFile.file.c_str(),
           progressBarTextureFile.type);
-    axis::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
+    ax::ResourceData slidBallNormalTextureFile = _slider->getBallNormalFile();
     AXLOG("slidBallNormalTextureFile  Name : %s, Type: %d", slidBallNormalTextureFile.file.c_str(),
           slidBallNormalTextureFile.type);
-    axis::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
+    ax::ResourceData slidBallPressedTextureFile = _slider->getBallPressedFile();
     AXLOG("slidBallPressedTextureFile  Name : %s, Type: %d", slidBallPressedTextureFile.file.c_str(),
           slidBallPressedTextureFile.type);
-    axis::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
+    ax::ResourceData slidBallDisabledTextureFile = _slider->getBallDisabledFile();
     AXLOG("slidBallDisabledTextureFile  Name : %s, Type: %d", slidBallDisabledTextureFile.file.c_str(),
           slidBallDisabledTextureFile.type);
 }

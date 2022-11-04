@@ -55,19 +55,19 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void update(float dt) override;
-    void addNewBillBoardWithCoords(axis::Vec3 p);
-    void addNewAniBillBoardWithCoords(axis::Vec3 p);
-    void rotateCameraCallback(axis::Ref* sender, float value);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void addNewBillBoardWithCoords(ax::Vec3 p);
+    void addNewAniBillBoardWithCoords(ax::Vec3 p);
+    void rotateCameraCallback(ax::Ref* sender, float value);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void menuCallback_orientedPoint(axis::Ref* sender);
-    void menuCallback_orientedPlane(axis::Ref* sender);
+    void menuCallback_orientedPoint(ax::Ref* sender);
+    void menuCallback_orientedPlane(ax::Ref* sender);
 
 protected:
-    axis::Camera* _camera;
-    axis::Layer* _layerBillBoard;
+    ax::Camera* _camera;
+    ax::Layer* _layerBillBoard;
 
-    std::vector<axis::BillBoard*> _billboards;
+    std::vector<ax::BillBoard*> _billboards;
 };
 
 DEFINE_TEST_SUITE(BillBoardTests);

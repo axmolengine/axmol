@@ -33,7 +33,7 @@ public:
     CREATE_FUNC(Bug458Layer);
 
     virtual bool init() override;
-    void selectAnswer(axis::Ref* sender);
+    void selectAnswer(ax::Ref* sender);
 };
 
 #endif  // __BUG_458_H__

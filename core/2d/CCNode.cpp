@@ -671,6 +671,7 @@ bool Node::isRunning() const
 void Node::setParent(Node* parent)
 {
     _parent           = parent;
+    _normalizedPositionDirty = true;
     _transformUpdated = _transformDirty = _inverseDirty = true;
 }
 

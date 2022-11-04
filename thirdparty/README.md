@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: git 2.1.19119 on branch `chromium/5195` @Google Chrome 105.0.5195.102
+- Version: 5195.102
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -37,7 +37,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.0.5
+- Version: 1.0.6
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.85.0
+- Version: 7.86.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -67,7 +67,7 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 0.1.34
+- Version: 2.0.0
 - License: MIT
 
 ## glfw
@@ -102,7 +102,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 8.0.0
+- Version: 8.1.0
 - License: MIT
 
 ## lua
@@ -113,12 +113,14 @@
   
 - sol2
   - Upstream: https://github.com/ThePhD/sol2
-  - Version: 2.20.6 with vs2019 compile fixes
+  - Version:
+    - 3.3.0 
+    - 2.20.6 with vs2019 compile fixes
   - License: MIT
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-50936d7 (2587)
+  - Version: git 2.1.0-6c4826f (2607)
   - License: MIT
 
 - tolua
@@ -164,12 +166,12 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.5
+- Version: 3.0.7
 - License: Apache-2.0
 
 ## png
-- Upstream: https://github.com/glennrp/libpng
-- Version: git 1.6.38-a37d483 (4098) with arm64 neon detect fix
+- [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
+- Version: 1.6.38 with arm64 neon detect fix
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -241,7 +243,7 @@
 
 ## zlib
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
-- Version: 1.2.12
+- Version: 1.2.13
 - License: zlib
 
 ## ntcvt

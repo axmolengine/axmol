@@ -105,7 +105,7 @@ bool UIScale9SpriteTest::init()
         this->addChild(sp1);
         sp1->runAction((FiniteTimeAction*)action2);
 
-        axis::ui::Scale9Sprite* sp2 = ui::Scale9Sprite::create("cocosui/animationbuttonnormal.png");
+        ax::ui::Scale9Sprite* sp2 = ui::Scale9Sprite::create("cocosui/animationbuttonnormal.png");
         sp2->setPosition(350.0f, 160.0f);
         sp2->setPreferredSize(sp1->getContentSize() * 1.2f);
         sp2->setColor(Color3B::GREEN);
@@ -160,7 +160,7 @@ bool UIScale9SpriteHierarchialTest::init()
         this->addChild(sp1);
         sp1->runAction((FiniteTimeAction*)action2);
 
-        axis::ui::Scale9Sprite* sp2 = ui::Scale9Sprite::create("cocosui/animationbuttonnormal.png");
+        ax::ui::Scale9Sprite* sp2 = ui::Scale9Sprite::create("cocosui/animationbuttonnormal.png");
         sp2->setPreferredSize(sp1->getContentSize() * 1.2f);
         sp2->setColor(Color3B::GREEN);
         sp2->setFlippedX(true);
@@ -186,7 +186,7 @@ bool UIScale9SpriteTouchTest::init()
         Size size   = Director::getInstance()->getVisibleSize();
 
         auto containerForSprite1 = Node::create();
-        auto sprite1             = axis::ui::Scale9Sprite::create("Images/CyanSquare.png");
+        auto sprite1             = ax::ui::Scale9Sprite::create("Images/CyanSquare.png");
         sprite1->setPosition(origin + Vec2(size.width / 2, size.height / 2) + Vec2(-80.0f, 80.0f));
         containerForSprite1->addChild(sprite1);
         addChild(containerForSprite1, 10);
@@ -1182,7 +1182,7 @@ bool UIS9GrayStateOpacityTest::init()
     return false;
 }
 
-void UIS9GrayStateOpacityTest::sliderEvent(axis::Ref* sender, axis::ui::Slider::EventType type)
+void UIS9GrayStateOpacityTest::sliderEvent(ax::Ref* sender, ax::ui::Slider::EventType type)
 {
     if (type == Slider::EventType::ON_PERCENTAGE_CHANGED)
     {

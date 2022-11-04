@@ -81,8 +81,8 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::EventListenerCustom* _listener;
-    axis::EventListenerCustom* _listener2;
+    ax::EventListenerCustom* _listener;
+    ax::EventListenerCustom* _listener2;
 };
 
 class LabelKeyboardEventTest : public EventDispatcherTestDemo
@@ -114,7 +114,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::Sprite* _sprite;
+    ax::Sprite* _sprite;
     bool _spriteSaved;
 };
 
@@ -138,16 +138,16 @@ public:
 
     virtual void update(float dt) override;
 
-    void onEvent1(axis::EventCustom* event);
-    void onEvent2(axis::EventCustom* event);
+    void onEvent1(ax::EventCustom* event);
+    void onEvent2(ax::EventCustom* event);
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
 protected:
     int _count1, _count2, _count3, _count4;
-    axis::Label *_label1, *_label2, *_label3, *_label4;
-    axis::EventListenerCustom *_event1, *_event2, *_event3, *_event4;
+    ax::Label *_label1, *_label2, *_label3, *_label4;
+    ax::EventListenerCustom *_event1, *_event2, *_event3, *_event4;
 };
 
 class GlobalZTouchTest : public EventDispatcherTestDemo
@@ -162,7 +162,7 @@ public:
     virtual std::string subtitle() const override;
 
 protected:
-    axis::Sprite* _sprite;
+    ax::Sprite* _sprite;
     float _accum;
 };
 
@@ -176,8 +176,8 @@ public:
     virtual std::string subtitle() const override;
 
 protected:
-    bool isPointInNode(axis::Vec2 pt, axis::Node* node);
-    bool isPointInTopHalfAreaOfScreen(axis::Vec2 pt);
+    bool isPointInNode(ax::Vec2 pt, ax::Node* node);
+    bool isPointInTopHalfAreaOfScreen(ax::Vec2 pt);
 };
 
 class PauseResumeTargetTest : public EventDispatcherTestDemo
@@ -204,11 +204,11 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::Sprite* _touchableSprite;
-    axis::MenuItemFont* _itemPauseTouch;
-    axis::MenuItemFont* _itemResumeTouch;
-    axis::MenuItemFont* _itemAddToScene;
-    axis::MenuItemFont* _itemRemoveFromScene;
+    ax::Sprite* _touchableSprite;
+    ax::MenuItemFont* _itemPauseTouch;
+    ax::MenuItemFont* _itemResumeTouch;
+    ax::MenuItemFont* _itemAddToScene;
+    ax::MenuItemFont* _itemRemoveFromScene;
 };
 
 class PauseResumeTargetTest3 : public EventDispatcherTestDemo
@@ -222,7 +222,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::Sprite* _touchableSprite;
+    ax::Sprite* _touchableSprite;
 };
 
 class Issue4129 : public EventDispatcherTestDemo
@@ -236,7 +236,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::EventListenerCustom* _customlistener;
+    ax::EventListenerCustom* _customlistener;
     bool _bugFixed;
 };
 
@@ -295,7 +295,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::EventListenerCustom* _listener;
+    ax::EventListenerCustom* _listener;
 };
 
 class Issue9898 : public EventDispatcherTestDemo
@@ -308,7 +308,7 @@ public:
     virtual std::string subtitle() const override;
 
 private:
-    axis::EventListenerCustom* _listener;
+    ax::EventListenerCustom* _listener;
 };
 
 #endif /* defined(__samples__NewEventDispatcherTest__) */

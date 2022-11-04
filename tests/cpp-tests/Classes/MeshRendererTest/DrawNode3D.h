@@ -33,16 +33,16 @@ NS_AX_BEGIN
 /**
  * Copy DrawNode for 3D geometry drawing.
  */
-class DrawNode3D : public axis::Node
+class DrawNode3D : public ax::Node
 {
 public:
     /** creates and initialize a DrawNode3D node */
-    static axis::DrawNode3D* create();
+    static ax::DrawNode3D* create();
 
     /**
      * Draw 3D Line
      */
-    void drawLine(const axis::Vec3& from, const axis::Vec3& to, const Color4F& color);
+    void drawLine(const ax::Vec3& from, const ax::Vec3& to, const Color4F& color);
 
     /**
      * Draw 3D cube
@@ -57,7 +57,7 @@ public:
      *        vertices[7]:Left-top-back.
      * @param color
      */
-    void drawCube(axis::Vec3* vertices, const Color4F& color);
+    void drawCube(ax::Vec3* vertices, const Color4F& color);
 
     /** Clear the geometry in the node's buffer. */
     void clear();
@@ -77,10 +77,10 @@ public:
      */
     void setBlendFunc(const BlendFunc& blendFunc);
 
-    void updateCommand(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags);
+    void updateCommand(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags);
 
     // Overrides
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
     DrawNode3D();
     virtual ~DrawNode3D();
@@ -93,7 +93,7 @@ protected:
     void ensureCapacity(int count);
 
     BlendFunc _blendFunc;
-    axis::CustomCommand _customCommand;
+    ax::CustomCommand _customCommand;
     backend::ProgramState* _programStateLine                 = nullptr;
     backend::DepthStencilDescriptor* _depthstencilDescriptor = nullptr;
     backend::UniformLocation _locMVPMatrix;

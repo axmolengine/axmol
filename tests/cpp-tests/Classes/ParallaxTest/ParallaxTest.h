@@ -32,15 +32,15 @@ DEFINE_TEST_SUITE(ParallaxTests);
 class ParallaxDemo : public TestCase
 {
 protected:
-    axis::TextureAtlas* _atlas;
+    ax::TextureAtlas* _atlas;
 };
 
 class Parallax1 : public ParallaxDemo
 {
 protected:
-    axis::Node* _root;
-    axis::Node* _target;
-    axis::MotionStreak* _streak;
+    ax::Node* _root;
+    ax::Node* _target;
+    ax::MotionStreak* _streak;
 
 public:
     CREATE_FUNC(Parallax1);
@@ -51,15 +51,15 @@ public:
 class Parallax2 : public ParallaxDemo
 {
 protected:
-    axis::Node* _root;
-    axis::Node* _target;
-    axis::MotionStreak* _streak;
+    ax::Node* _root;
+    ax::Node* _target;
+    ax::MotionStreak* _streak;
 
 public:
     CREATE_FUNC(Parallax2);
     Parallax2();
 
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
     virtual std::string title() const override;
 };
@@ -67,16 +67,16 @@ public:
 class Issue2572 : public ParallaxDemo
 {
 protected:
-    axis::ParallaxNode* _paraNode;
+    ax::ParallaxNode* _paraNode;
     float _moveTimer;
     float _addTimer;
-    axis::Vector<axis::Sprite*> _childList;
+    ax::Vector<ax::Sprite*> _childList;
     ssize_t _preListSize;
     int _printCount;
 
     float _addChildStep;
     float _wholeMoveTime;
-    axis::Vec2 _wholeMoveSize;
+    ax::Vec2 _wholeMoveSize;
 
     virtual void update(float dt) override;
 

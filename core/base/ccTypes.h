@@ -178,7 +178,7 @@ Color4F operator/(Color4F lhs, float rhs);
 
 /**
  * Hue Saturation Value color space composed of 4 floats.
- * @since axis-1.0.0b7
+ * @since axmol-1.0.0b7
  * 
  * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
  */
@@ -227,7 +227,7 @@ HSV operator/(HSV lhs, float rhs);
 
 /**
  * Hue Saturation Luminance color space composed of 4 floats.
- * @since axis-1.0.0b7
+ * @since axmol-1.0.0b7
  *
  * Implementation source: https://gist.github.com/ciembor/1494530
  */

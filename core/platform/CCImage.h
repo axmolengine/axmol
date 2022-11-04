@@ -57,7 +57,7 @@ typedef struct _MipmapInfo
     _MipmapInfo() : address(NULL), len(0) {}
 } MipmapInfo;
 
-/** The Image class for loading all images supported by axis . */
+/** The Image class for loading all images supported by axmol . */
 class AX_DLL Image : public Ref
 {
 public:

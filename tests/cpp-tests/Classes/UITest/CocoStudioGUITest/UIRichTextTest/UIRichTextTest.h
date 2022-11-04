@@ -35,12 +35,12 @@ public:
     CREATE_FUNC(UIRichTextTest);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLBasic : public UIScene
@@ -49,12 +49,12 @@ public:
     CREATE_FUNC(UIRichTextXMLBasic);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLSmallBig : public UIScene
@@ -63,12 +63,12 @@ public:
     CREATE_FUNC(UIRichTextXMLSmallBig);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLColor : public UIScene
@@ -77,12 +77,12 @@ public:
     CREATE_FUNC(UIRichTextXMLColor);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLSUIB : public UIScene
@@ -91,12 +91,12 @@ public:
     CREATE_FUNC(UIRichTextXMLSUIB);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLSUIB2 : public UIScene
@@ -105,12 +105,12 @@ public:
     CREATE_FUNC(UIRichTextXMLSUIB2);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLSUIB3 : public UIScene
@@ -119,12 +119,12 @@ public:
     CREATE_FUNC(UIRichTextXMLSUIB3);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLImg : public UIScene
@@ -133,12 +133,12 @@ public:
     CREATE_FUNC(UIRichTextXMLImg);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLUrl : public UIScene
@@ -147,12 +147,12 @@ public:
     CREATE_FUNC(UIRichTextXMLUrl);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLUrlImg : public UIScene
@@ -161,12 +161,12 @@ public:
     CREATE_FUNC(UIRichTextXMLUrlImg);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLFace : public UIScene
@@ -175,12 +175,12 @@ public:
     CREATE_FUNC(UIRichTextXMLFace);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLBR : public UIScene
@@ -189,12 +189,12 @@ public:
     CREATE_FUNC(UIRichTextXMLBR);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLInvalid : public UIScene
@@ -205,7 +205,7 @@ public:
     bool init() override;
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLOutline : public UIScene
@@ -214,12 +214,12 @@ public:
     CREATE_FUNC(UIRichTextXMLOutline);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLShadow : public UIScene
@@ -228,12 +228,12 @@ public:
     CREATE_FUNC(UIRichTextXMLShadow);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLGlow : public UIScene
@@ -242,12 +242,12 @@ public:
     CREATE_FUNC(UIRichTextXMLGlow);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLExtend : public UIScene
@@ -256,12 +256,12 @@ public:
     CREATE_FUNC(UIRichTextXMLExtend);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 class UIRichTextXMLSpace : public UIScene
@@ -270,12 +270,12 @@ public:
     CREATE_FUNC(UIRichTextXMLSpace);
 
     bool init() override;
-    void touchEvent(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchWrapMode(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
-    void switchAlignment(axis::Ref* sender, axis::ui::Widget::TouchEventType type);
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
 
 protected:
-    axis::ui::RichText* _richText;
+    ax::ui::RichText* _richText;
 };
 
 #endif /* defined(__TestCpp__UIRichTextTest__) */

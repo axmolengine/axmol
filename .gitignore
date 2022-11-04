@@ -1,6 +1,8 @@
 # Ignore thumbnails created by windows
 Thumbs.db
 
+buildsrc/
+
 # Ignore files build by Visual Studio
 *.exe
 *.pdb

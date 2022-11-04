@@ -290,7 +290,7 @@ void Box2DTest::addNewSpriteAtPosition(Vec2 p)
     parent->addChild(sprite);
     sprite->setB2Body(body);
     sprite->setPTMRatio(PTM_RATIO);
-    sprite->setPosition(axis::Vec2(p.x, p.y));
+    sprite->setPosition(ax::Vec2(p.x, p.y));
 }
 
 void Box2DTest::update(float dt)

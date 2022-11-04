@@ -127,7 +127,7 @@ void AssetsManagerExLoaderScene::startDownloadCallback(Ref* sender)
     else
     {
         _amListener =
-            axis::extension::EventListenerAssetsManagerEx::create(_am, [this](EventAssetsManagerEx* event) {
+            ax::extension::EventListenerAssetsManagerEx::create(_am, [this](EventAssetsManagerEx* event) {
                 static int failCount = 0;
                 switch (event->getEventCode())
                 {

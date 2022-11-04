@@ -268,6 +268,8 @@ static _pixel3_formathash::value_type v3_pixel_formathash_value[] = {
     _pixel3_formathash::value_type(PVR3TexturePixelFormat::PVRTC4BPP_RGBA, backend::PixelFormat::PVRTC4A),
 
     _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC1, backend::PixelFormat::ETC1),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC2_RGB, backend::PixelFormat::ETC2_RGB),
+    _pixel3_formathash::value_type(PVR3TexturePixelFormat::ETC2_RGBA, backend::PixelFormat::ETC2_RGBA),
 };
 
 static const int PVR3_MAX_TABLE_ELEMENTS = sizeof(v3_pixel_formathash_value) / sizeof(v3_pixel_formathash_value[0]);
@@ -455,7 +457,7 @@ static void pngReadCallback(png_structp png_ptr, png_bytep data, png_size_t leng
 }  // namespace
 
 /*
- * Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and axis only support pvrtc and etc1
+ * Notes: PVR file Specification have many pixel formats, cocos2d-x-v2~v4 and axmol only support pvrtc and etc1
  * see: https://cdn.imgtec.com/sdk-documentation/PVR+File+Format.Specification.pdf
  */
 static backend::PixelFormat getDevicePVRPixelFormat(backend::PixelFormat format)
@@ -493,6 +495,9 @@ bool testFormatForPvr3TCSupport(PVR3TexturePixelFormat format)
 {
     switch (format)
     {
+    case PVR3TexturePixelFormat::ETC2_RGBA:
+    case PVR3TexturePixelFormat::ETC2_RGB:
+        return Configuration::getInstance()->supportsETC2();
     case PVR3TexturePixelFormat::DXT1:
     case PVR3TexturePixelFormat::DXT3:
     case PVR3TexturePixelFormat::DXT5:

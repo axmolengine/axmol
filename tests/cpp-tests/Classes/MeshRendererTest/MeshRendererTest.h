@@ -75,8 +75,8 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewMeshWithCoords(axis::Vec2 p);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void addNewMeshWithCoords(ax::Vec2 p);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
 class MeshRendererUVAnimationTest : public MeshRendererTestDemo
@@ -93,10 +93,10 @@ protected:
 
     float _cylinder_texture_offset;
     float _shining_duration;
-    axis::backend::ProgramState* _state = nullptr;
+    ax::backend::ProgramState* _state = nullptr;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    axis::EventListenerCustom* _backToForegroundListener;
+    ax::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
@@ -115,25 +115,25 @@ public:
     virtual ~MeshRendererFakeShadowTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void Move(axis::Ref* sender, int value);
+    void Move(ax::Ref* sender, int value);
     void updateCamera(float fDelta);
     void move3D(float elapsedTime);
     void updateState(float elapsedTime);
     bool isState(unsigned int state, unsigned int bit) const;
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 private:
-    axis::Camera* _camera;
-    axis::Vec3 _targetPos;
+    ax::Camera* _camera;
+    ax::Vec3 _targetPos;
     unsigned int _curState;
-    axis::MeshRenderer* _plane;
-    axis::MeshRenderer* _orc;
-    axis::backend::ProgramState* _state = nullptr;
+    ax::MeshRenderer* _plane;
+    ax::MeshRenderer* _orc;
+    ax::backend::ProgramState* _state = nullptr;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    axis::EventListenerCustom* _backToForegroundListener;
+    ax::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
@@ -145,10 +145,10 @@ public:
     virtual ~MeshRendererLightMapTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 private:
-    axis::Camera* _camera;
+    ax::Camera* _camera;
 };
 
 class MeshRendererBasicToonShaderTest : public MeshRendererTestDemo
@@ -161,10 +161,10 @@ public:
     virtual std::string subtitle() const override;
 
 protected:
-    axis::backend::ProgramState* _state;
+    ax::backend::ProgramState* _state;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    axis::EventListenerCustom* _backToForegroundListener;
+    ax::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
@@ -186,15 +186,15 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewMeshWithCoords(axis::Vec2 p);
+    void addNewMeshWithCoords(ax::Vec2 p);
 
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
-    std::vector<axis::MeshRenderer*> _meshes;
+    std::vector<ax::MeshRenderer*> _meshes;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    axis::EventListenerCustom* _backToForegroundListener;
+    ax::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
@@ -207,9 +207,9 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void menuCallback_asyncLoadMesh(axis::Ref* sender);
+    void menuCallback_asyncLoadMesh(ax::Ref* sender);
 
-    void asyncLoad_Callback(axis::MeshRenderer* mesh, void* param);
+    void asyncLoad_Callback(ax::MeshRenderer* mesh, void* param);
 
 protected:
     std::vector<std::string> _paths;  // model paths to be loaded
@@ -223,17 +223,17 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewMeshWithCoords(axis::Vec2 p);
+    void addNewMeshWithCoords(ax::Vec2 p);
 
-    void switchAnimationQualityCallback(axis::Ref* sender);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void switchAnimationQualityCallback(ax::Ref* sender);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
     std::string getAnimationQualityMessage() const;
 
 private:
-    std::vector<axis::MeshRenderer*> _meshes;
+    std::vector<ax::MeshRenderer*> _meshes;
     int _animateQuality;
-    axis::MenuItemFont* _menuItem;
+    ax::MenuItemFont* _menuItem;
 };
 
 class MeshRendererWithSkinOutlineTest : public MeshRendererTestDemo
@@ -245,15 +245,15 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewMeshWithCoords(axis::Vec2 p);
+    void addNewMeshWithCoords(ax::Vec2 p);
 
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
-    std::vector<axis::MeshRenderer*> _meshes;
+    std::vector<ax::MeshRenderer*> _meshes;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    axis::EventListenerCustom* _backToForegroundListener;
+    ax::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
@@ -266,7 +266,7 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
     virtual void update(float dt) override;
 
@@ -285,16 +285,16 @@ protected:
 
     void renewCallBack();
 
-    axis::MeshRenderer* _mesh;
+    ax::MeshRenderer* _mesh;
 
-    axis::Action* _swim;
-    axis::Animate3D* _hurt;
+    ax::Action* _swim;
+    ax::Animate3D* _hurt;
 
     float _elapseTransTime;
 
     State _state;
 
-    axis::MoveTo* _moveAction;
+    ax::MoveTo* _moveAction;
 };
 
 class AttachmentTest : public MeshRendererTestDemo
@@ -305,13 +305,13 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
-    void addNewMeshWithCoords(axis::Vec2 p);
+    void addNewMeshWithCoords(ax::Vec2 p);
 
 protected:
     bool _hasWeapon;
-    axis::MeshRenderer* _mesh;
+    ax::MeshRenderer* _mesh;
 };
 
 class MeshRendererReskinTest : public MeshRendererTestDemo
@@ -321,10 +321,10 @@ public:
     MeshRendererReskinTest();
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void addNewMeshWithCoords(axis::Vec2 p);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void addNewMeshWithCoords(ax::Vec2 p);
 
-    void menuCallback_reSkin(axis::Ref* sender);
+    void menuCallback_reSkin(ax::Ref* sender);
 
 protected:
     void applyCurSkin();
@@ -343,7 +343,7 @@ protected:
 
     std::vector<std::string> _skins[(int)SkinType::MAX_TYPE];  // all skins
     int _curSkin[(int)SkinType::MAX_TYPE];                     // current skin index
-    axis::MeshRenderer* _mesh;
+    ax::MeshRenderer* _mesh;
 };
 
 class MeshRendererWithOBBPerformanceTest : public MeshRendererTestDemo
@@ -354,35 +354,35 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
     virtual void update(float dt) override;
-    void addNewOBBWithCoords(axis::Vec2 p);
-    void addNewMeshWithCoords(axis::Vec2 p);
-    void onTouchesBegan(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesEnded(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
-    void addOBBCallback(axis::Ref* sender);
-    void delOBBCallback(axis::Ref* sender);
+    void addNewOBBWithCoords(ax::Vec2 p);
+    void addNewMeshWithCoords(ax::Vec2 p);
+    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void addOBBCallback(ax::Ref* sender);
+    void delOBBCallback(ax::Ref* sender);
     void addOBBWithCount(float value);
     void delOBBWithCount(float value);
 
 protected:
-    axis::MeshRenderer* _mesh;
-    std::vector<axis::OBB> _obb;
-    axis::DrawNode3D* _drawOBB;
-    axis::Label* _labelCubeCount;
-    axis::MoveTo* _moveAction;
-    axis::OBB _obbt;
-    axis::OBB _obbtOri;  // tortoise origin obb
-    axis::DrawNode3D* _drawDebug;
+    ax::MeshRenderer* _mesh;
+    std::vector<ax::OBB> _obb;
+    ax::DrawNode3D* _drawOBB;
+    ax::Label* _labelCubeCount;
+    ax::MoveTo* _moveAction;
+    ax::OBB _obbt;
+    ax::OBB _obbtOri;  // tortoise origin obb
+    ax::DrawNode3D* _drawDebug;
     bool _hasCollider;
     std::set<int> _intersetList;
     void initDrawBox();
     void reachEndCallBack();
 
-    void unproject(const axis::Mat4& viewProjection,
-                   const axis::Size* viewport,
-                   axis::Vec3* src,
-                   axis::Vec3* dst);
-    void calculateRayByLocationInView(axis::Ray* ray, const axis::Vec2& location);
+    void unproject(const ax::Mat4& viewProjection,
+                   const ax::Size* viewport,
+                   ax::Vec3* src,
+                   ax::Vec3* dst);
+    void calculateRayByLocationInView(ax::Ray* ray, const ax::Vec2& location);
 };
 
 class MeshRendererMirrorTest : public MeshRendererTestDemo
@@ -393,12 +393,12 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewMeshWithCoords(axis::Vec2 p);
+    void addNewMeshWithCoords(ax::Vec2 p);
 
 protected:
     bool _hasWeapon;
-    axis::MeshRenderer* _mesh;
-    axis::MeshRenderer* _mirrorMesh;
+    ax::MeshRenderer* _mesh;
+    ax::MeshRenderer* _mirrorMesh;
 };
 
 class QuaternionTest : public MeshRendererTestDemo
@@ -409,11 +409,11 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewMeshWithCoords(axis::Vec2 p);
+    void addNewMeshWithCoords(ax::Vec2 p);
     virtual void update(float delta) override;
 
 protected:
-    axis::MeshRenderer* _mesh;
+    ax::MeshRenderer* _mesh;
     float _arcSpeed;
     float _radius;
     float _accAngle;
@@ -430,7 +430,7 @@ public:
 
     virtual void update(float delta) override;
 
-    void menuCallback_Message(axis::Ref* sender);
+    void menuCallback_Message(ax::Ref* sender);
 
 protected:
     void switchCase();
@@ -441,7 +441,7 @@ protected:
         _UI_3D_UI,
         MAX_CASE_NUM,
     };
-    axis::Label* _label;
+    ax::Label* _label;
     int _caseIdx;  // use case index
     std::string _useCaseTitles[(int)USECASE::MAX_CASE_NUM];
 };
@@ -455,10 +455,10 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewMeshWithCoords(axis::Vec2 p);
+    void addNewMeshWithCoords(ax::Vec2 p);
 
 protected:
-    std::vector<axis::MeshRenderer*> _meshes;
+    std::vector<ax::MeshRenderer*> _meshes;
     int _vectorIndex;
 };
 
@@ -476,18 +476,18 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void addNewMeshWithCoords(axis::Vec2);
+    void addNewMeshWithCoords(ax::Vec2);
 
-    void onTouchesMoved(const std::vector<axis::Touch*>& touches, axis::Event* event);
+    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
 
 protected:
-    axis::TextureCube* _textureCube;
-    axis::Skybox* _skyBox;
-    axis::MeshRenderer* _teapot;
-    axis::Camera* _camera;
+    ax::TextureCube* _textureCube;
+    ax::Skybox* _skyBox;
+    ax::MeshRenderer* _teapot;
+    ax::Camera* _camera;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    axis::EventListenerCustom* _backToForegroundListener;
+    ax::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
@@ -507,11 +507,11 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void menuCallback_SwitchShader(axis::Ref* sender);
+    void menuCallback_SwitchShader(ax::Ref* sender);
 
 protected:
     ShaderType _shaderType;
-    axis::MeshRenderer* _mesh;
+    ax::MeshRenderer* _mesh;
 };
 
 /// Clipping MeshRenderer
@@ -535,7 +535,7 @@ public:
     virtual std::string subtitle() const override;
 
 protected:
-    axis::MeshRenderer* _meshRenderer;
+    ax::MeshRenderer* _meshRenderer;
 };
 
 class CameraBackgroundClearTest : public MeshRendererTestDemo
@@ -546,11 +546,11 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 
-    void switch_CameraClearMode(axis::Ref* sender);
+    void switch_CameraClearMode(ax::Ref* sender);
 
 protected:
-    axis::Camera* _camera;
-    axis::Label* _label;
+    ax::Camera* _camera;
+    ax::Label* _label;
 };
 
 class MeshRendererVertexColorTest : public MeshRendererTestDemo
@@ -564,9 +564,9 @@ public:
     virtual ~MeshRendererVertexColorTest();
 
 protected:
-    axis::MeshRenderer* _mesh;
+    ax::MeshRenderer* _mesh;
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    axis::EventListenerCustom* _backToForegroundListener;
+    ax::EventListenerCustom* _backToForegroundListener;
 #endif
 };
 
@@ -580,8 +580,8 @@ public:
     virtual void update(float delta) override;
 
 protected:
-    axis::MeshRenderer* _mesh;
-    axis::MotionStreak3D* _streak;
+    ax::MeshRenderer* _mesh;
+    ax::MotionStreak3D* _streak;
 };
 
 class MeshRendererNormalMappingTest : public MeshRendererTestDemo
@@ -605,15 +605,15 @@ public:
     virtual std::string subtitle() const override;
     virtual void update(float delta) override;
 
-    void printMeshName(axis::Ref* sender);
-    void removeUsedTexture(axis::Ref* sender);
-    void resetTexture(axis::Ref* sender);
+    void printMeshName(ax::Ref* sender);
+    void removeUsedTexture(ax::Ref* sender);
+    void resetTexture(ax::Ref* sender);
 
     void refreshMeshRender();
 
 protected:
-    axis::MeshRenderer* _mesh;
-    axis::Texture2D* _meshTex;
+    ax::MeshRenderer* _mesh;
+    ax::Texture2D* _meshTex;
     std::string _texFile;
 };
 

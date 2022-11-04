@@ -112,13 +112,13 @@ public:
     virtual std::string subtitle() const override;
     virtual bool init() override;
     void createSliderCtls();
-    void onRadiusChanged(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
-    void onSampleNumChanged(axis::Ref* sender, axis::extension::Control::EventType controlEvent);
+    void onRadiusChanged(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
+    void onSampleNumChanged(ax::Ref* sender, ax::extension::Control::EventType controlEvent);
 
 protected:
     SpriteBlur* _blurSprite;
-    axis::extension::ControlSlider* _sliderRadiusCtl;
-    axis::extension::ControlSlider* _sliderNumCtrl;
+    ax::extension::ControlSlider* _sliderRadiusCtl;
+    ax::extension::ControlSlider* _sliderNumCtrl;
 };
 
 class ShaderRetroEffect : public ShaderTestDemo
@@ -132,19 +132,19 @@ public:
     virtual void update(float dt) override;
 
 protected:
-    axis::Label* _label;
+    ax::Label* _label;
     float _accum;
 };
 
-class ShaderNode : public axis::Node
+class ShaderNode : public ax::Node
 {
 public:
     CREATE_FUNC(ShaderNode);
     static ShaderNode* shaderNodeWithVertex(std::string_view vert, std::string_view frag);
 
     virtual void update(float dt) override;
-    virtual void setPosition(const axis::Vec2& newPosition) override;
-    virtual void draw(axis::Renderer* renderer, const axis::Mat4& transform, uint32_t flags) override;
+    virtual void setPosition(const ax::Vec2& newPosition) override;
+    virtual void draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags) override;
 
 protected:
     ShaderNode();
@@ -153,7 +153,7 @@ protected:
     bool initWithVertex(std::string_view vert, std::string_view frag);
     void loadShaderVertex(std::string_view vert, std::string_view frag);
 
-    virtual bool setProgramState(axis::backend::ProgramState* programState, bool needsRetain = true) override
+    virtual bool setProgramState(ax::backend::ProgramState* programState, bool needsRetain = true) override
     {
         if (Node::setProgramState(programState, needsRetain))
         {
@@ -166,20 +166,20 @@ protected:
 
     void updateUniforms();
 
-    axis::Vec2 _center;
-    axis::Vec2 _resolution;
+    ax::Vec2 _center;
+    ax::Vec2 _resolution;
     float _time;
     std::string _vertFileName;
     std::string _fragFileName;
-    axis::CustomCommand _customCommand;
+    ax::CustomCommand _customCommand;
 
-    axis::backend::UniformLocation _locResolution;
-    axis::backend::UniformLocation _locCenter;
-    axis::backend::UniformLocation _locMVP;
-    axis::backend::UniformLocation _locTime;
-    axis::backend::UniformLocation _locSinTime;
-    axis::backend::UniformLocation _locCosTime;
-    axis::backend::UniformLocation _locScreenSize;
+    ax::backend::UniformLocation _locResolution;
+    ax::backend::UniformLocation _locCenter;
+    ax::backend::UniformLocation _locMVP;
+    ax::backend::UniformLocation _locTime;
+    ax::backend::UniformLocation _locSinTime;
+    ax::backend::UniformLocation _locCosTime;
+    ax::backend::UniformLocation _locScreenSize;
 };
 
 class ShaderLensFlare : public ShaderTestDemo
@@ -211,10 +211,10 @@ class ShaderMultiTexture : public ShaderTestDemo
 public:
     CREATE_FUNC(ShaderMultiTexture);
     ShaderMultiTexture();
-    axis::ui::Slider* createSliderCtl();
-    void changeTexture(axis::Ref*);
+    ax::ui::Slider* createSliderCtl();
+    void changeTexture(ax::Ref*);
     int _changedTextureId;
-    axis::Sprite* _sprite;
+    ax::Sprite* _sprite;
 
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
