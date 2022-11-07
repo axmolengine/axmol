@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,30 +27,26 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/BoneData.h>
 
 #include <assert.h>
 
 using namespace spine;
 
-BoneData::BoneData(int index, const String &name, BoneData *parent) :
-		_index(index),
-		_name(name),
-		_parent(parent),
-		_length(0),
-		_x(0),
-		_y(0),
-		_rotation(0),
-		_scaleX(1),
-		_scaleY(1),
-		_shearX(0),
-		_shearY(0),
-		_transformMode(TransformMode_Normal),
-		_skinRequired(false) {
+BoneData::BoneData(int index, const String &name, BoneData *parent) : _index(index),
+																	  _name(name),
+																	  _parent(parent),
+																	  _length(0),
+																	  _x(0),
+																	  _y(0),
+																	  _rotation(0),
+																	  _scaleX(1),
+																	  _scaleY(1),
+																	  _shearX(0),
+																	  _shearY(0),
+																	  _transformMode(TransformMode_Normal),
+																	  _skinRequired(false),
+																	  _color() {
 	assert(index >= 0);
 	assert(_name.length() > 0);
 }
@@ -145,4 +141,8 @@ bool BoneData::isSkinRequired() {
 
 void BoneData::setSkinRequired(bool inValue) {
 	_skinRequired = inValue;
+}
+
+Color &BoneData::getColor() {
+	return _color;
 }

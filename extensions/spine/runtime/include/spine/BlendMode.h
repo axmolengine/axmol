@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -31,12 +31,12 @@
 #define Spine_BlendMode_h
 
 namespace spine {
-enum BlendMode {
-	BlendMode_Normal = 0,
-	BlendMode_Additive,
-	BlendMode_Multiply,
-	BlendMode_Screen
-};
+	enum BlendMode {
+		BlendMode_Normal = 0,
+		BlendMode_Additive,
+		BlendMode_Multiply,
+		BlendMode_Screen
+	};
 }
 
 #endif /* Spine_BlendMode_h */

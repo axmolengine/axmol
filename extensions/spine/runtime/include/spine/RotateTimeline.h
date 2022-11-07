@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -33,37 +33,28 @@
 #include <spine/CurveTimeline.h>
 
 namespace spine {
-	class SP_API RotateTimeline : public CurveTimeline {
+	class SP_API RotateTimeline : public CurveTimeline1 {
 		friend class SkeletonBinary;
+
 		friend class SkeletonJson;
+
 		friend class AnimationState;
 
-		RTTI_DECL
+	RTTI_DECL
 
 	public:
-		static const int ENTRIES = 2;
+		explicit RotateTimeline(size_t frameCount, size_t bezierCount, int boneIndex);
 
-		explicit RotateTimeline(int frameCount);
+		virtual void
+		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
+			  MixDirection direction);
 
-		virtual void apply(Skeleton& skeleton, float lastTime, float time, Vector<Event*>* pEvents, float alpha, MixBlend blend, MixDirection direction);
+		int getBoneIndex() { return _boneIndex; }
 
-		virtual int getPropertyId();
-
-		/// Sets the time and value of the specified keyframe.
-		void setFrame(int frameIndex, float time, float degrees);
-
-		int getBoneIndex();
-		void setBoneIndex(int inValue);
-
-		Vector<float>& getFrames();
+		void setBoneIndex(int inValue) { _boneIndex = inValue; }
 
 	private:
-		static const int PREV_TIME = -2;
-		static const int PREV_ROTATION = -1;
-		static const int ROTATION = 1;
-
 		int _boneIndex;
-		Vector<float> _frames; // time, angle, ...
 	};
 }
 

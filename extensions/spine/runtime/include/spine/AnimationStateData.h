@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -38,6 +38,7 @@
 
 namespace spine {
 	class SkeletonData;
+
 	class Animation;
 
 	/// Stores mix (crossfade) durations to be applied when AnimationState animations are changed.
@@ -45,38 +46,42 @@ namespace spine {
 		friend class AnimationState;
 
 	public:
-		explicit AnimationStateData(SkeletonData* skeletonData);
+		explicit AnimationStateData(SkeletonData *skeletonData);
 
 		/// The SkeletonData to look up animations when they are specified by name.
-		SkeletonData* getSkeletonData();
+		SkeletonData *getSkeletonData();
 
 		/// The mix duration to use when no mix duration has been specifically defined between two animations.
 		float getDefaultMix();
+
 		void setDefaultMix(float inValue);
 
 		/// Sets a mix duration by animation names.
-		void setMix(const String& fromName, const String& toName, float duration);
+		void setMix(const String &fromName, const String &toName, float duration);
 
 		/// Sets a mix duration when changing from the specified animation to the other.
 		/// See TrackEntry.MixDuration.
-		void setMix(Animation* from, Animation* to, float duration);
+		void setMix(Animation *from, Animation *to, float duration);
 
 		/// The mix duration to use when changing from the specified animation to the other,
 		/// or the DefaultMix if no mix duration has been set.
-		float getMix(Animation* from, Animation* to);
+		float getMix(Animation *from, Animation *to);
+
+		/// Removes all mixes and sets the default mix to 0.
+		void clear();
 
 	private:
 		class AnimationPair : public SpineObject {
 		public:
-			Animation* _a1;
-			Animation* _a2;
+			Animation *_a1;
+			Animation *_a2;
 
-			explicit AnimationPair(Animation* a1 = NULL, Animation* a2 = NULL);
+			explicit AnimationPair(Animation *a1 = NULL, Animation *a2 = NULL);
 
 			bool operator==(const AnimationPair &other) const;
 		};
 
-		SkeletonData* _skeletonData;
+		SkeletonData *_skeletonData;
 		float _defaultMix;
 		HashMap<AnimationPair, float> _animationToMixTime;
 	};

@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -34,20 +34,20 @@
 #include <spine/SpineObject.h>
 
 namespace spine {
-class SP_API Updatable : public SpineObject {
-RTTI_DECL
+	class SP_API Updatable : public SpineObject {
+	RTTI_DECL
 
-public:
-	Updatable();
+	public:
+		Updatable();
 
-	virtual ~Updatable();
+		virtual ~Updatable();
 
-	virtual void update() = 0;
+		virtual void update() = 0;
 
-	virtual bool isActive() = 0;
+		virtual bool isActive() = 0;
 
-	virtual void setActive(bool inValue) = 0;
-};
+		virtual void setActive(bool inValue) = 0;
+	};
 }
 
 #endif /* Spine_Updatable_h */

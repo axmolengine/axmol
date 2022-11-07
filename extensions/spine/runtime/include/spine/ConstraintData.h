@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -35,29 +35,31 @@
 
 namespace spine {
 /// The interface for all constraints.
-class SP_API ConstraintData : public SpineObject {
+	class SP_API ConstraintData : public SpineObject {
 
-public:
-	ConstraintData(const String& name);
+	public:
+		ConstraintData(const String &name);
 
-	virtual ~ConstraintData();
+		virtual ~ConstraintData();
 
-	/// The IK constraint's name, which is unique within the skeleton.
-	const String& getName();
+		/// The IK constraint's name, which is unique within the skeleton.
+		const String &getName();
 
-	/// The ordinal for the order a skeleton's constraints will be applied.
-	size_t getOrder();
-	void setOrder(size_t inValue);
+		/// The ordinal for the order a skeleton's constraints will be applied.
+		size_t getOrder();
 
-	/// Whether the constraint is only active for a specific skin.
-	bool isSkinRequired();
-	void setSkinRequired(bool inValue);
+		void setOrder(size_t inValue);
 
-private:
-	const String _name;
-	size_t _order;
-	bool _skinRequired;
-};
+		/// Whether the constraint is only active for a specific skin.
+		bool isSkinRequired();
+
+		void setSkinRequired(bool inValue);
+
+	private:
+		const String _name;
+		size_t _order;
+		bool _skinRequired;
+	};
 }
 
 #endif /* Spine_Constraint_h */

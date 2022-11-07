@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,10 +27,6 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/TransformConstraintData.h>
 
 #include <spine/BoneData.h>
@@ -38,21 +34,23 @@
 #include <assert.h>
 
 using namespace spine;
-TransformConstraintData::TransformConstraintData(const String &name) :
-		ConstraintData(name),
-		_target(NULL),
-		_rotateMix(0),
-		_translateMix(0),
-		_scaleMix(0),
-		_shearMix(0),
-		_offsetRotation(0),
-		_offsetX(0),
-		_offsetY(0),
-		_offsetScaleX(0),
-		_offsetScaleY(0),
-		_offsetShearY(0),
-		_relative(false),
-		_local(false) {
+
+TransformConstraintData::TransformConstraintData(const String &name) : ConstraintData(name),
+																	   _target(NULL),
+																	   _mixRotate(0),
+																	   _mixX(0),
+																	   _mixY(0),
+																	   _mixScaleX(0),
+																	   _mixScaleY(0),
+																	   _mixShearY(0),
+																	   _offsetRotation(0),
+																	   _offsetX(0),
+																	   _offsetY(0),
+																	   _offsetScaleX(0),
+																	   _offsetScaleY(0),
+																	   _offsetShearY(0),
+																	   _relative(false),
+																	   _local(false) {
 }
 
 Vector<BoneData *> &TransformConstraintData::getBones() {
@@ -63,20 +61,28 @@ BoneData *TransformConstraintData::getTarget() {
 	return _target;
 }
 
-float TransformConstraintData::getRotateMix() {
-	return _rotateMix;
+float TransformConstraintData::getMixRotate() {
+	return _mixRotate;
 }
 
-float TransformConstraintData::getTranslateMix() {
-	return _translateMix;
+float TransformConstraintData::getMixX() {
+	return _mixX;
 }
 
-float TransformConstraintData::getScaleMix() {
-	return _scaleMix;
+float TransformConstraintData::getMixY() {
+	return _mixY;
 }
 
-float TransformConstraintData::getShearMix() {
-	return _shearMix;
+float TransformConstraintData::getMixScaleX() {
+	return _mixScaleX;
+}
+
+float TransformConstraintData::getMixScaleY() {
+	return _mixScaleY;
+}
+
+float TransformConstraintData::getMixShearY() {
+	return _mixShearY;
 }
 
 float TransformConstraintData::getOffsetRotation() {

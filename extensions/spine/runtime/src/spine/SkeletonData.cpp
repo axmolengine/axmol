@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,36 +27,31 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/SkeletonData.h>
 
-#include <spine/BoneData.h>
-#include <spine/SlotData.h>
-#include <spine/Skin.h>
-#include <spine/EventData.h>
 #include <spine/Animation.h>
+#include <spine/BoneData.h>
+#include <spine/EventData.h>
 #include <spine/IkConstraintData.h>
-#include <spine/TransformConstraintData.h>
 #include <spine/PathConstraintData.h>
+#include <spine/Skin.h>
+#include <spine/SlotData.h>
+#include <spine/TransformConstraintData.h>
 
 #include <spine/ContainerUtil.h>
 
 using namespace spine;
 
-SkeletonData::SkeletonData() :
-		_name(),
-		_defaultSkin(NULL),
-		_x(0),
-		_y(0),
-		_width(0),
-		_height(0),
-		_version(),
-		_hash(),
-		_fps(0),
-		_imagesPath() {
+SkeletonData::SkeletonData() : _name(),
+							   _defaultSkin(NULL),
+							   _x(0),
+							   _y(0),
+							   _width(0),
+							   _height(0),
+							   _version(),
+							   _hash(),
+							   _fps(0),
+							   _imagesPath() {
 }
 
 SkeletonData::~SkeletonData() {
@@ -80,16 +75,8 @@ BoneData *SkeletonData::findBone(const String &boneName) {
 	return ContainerUtil::findWithName(_bones, boneName);
 }
 
-int SkeletonData::findBoneIndex(const String &boneName) {
-	return ContainerUtil::findIndexWithName(_bones, boneName);
-}
-
 SlotData *SkeletonData::findSlot(const String &slotName) {
 	return ContainerUtil::findWithName(_slots, slotName);
-}
-
-int SkeletonData::findSlotIndex(const String &slotName) {
-	return ContainerUtil::findIndexWithName(_slots, slotName);
 }
 
 Skin *SkeletonData::findSkin(const String &skinName) {
@@ -114,10 +101,6 @@ TransformConstraintData *SkeletonData::findTransformConstraint(const String &con
 
 PathConstraintData *SkeletonData::findPathConstraint(const String &constraintName) {
 	return ContainerUtil::findWithName(_pathConstraints, constraintName);
-}
-
-int SkeletonData::findPathConstraintIndex(const String &pathConstraintName) {
-	return ContainerUtil::findIndexWithName(_pathConstraints, pathConstraintName);
 }
 
 const String &SkeletonData::getName() {

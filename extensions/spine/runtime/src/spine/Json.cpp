@@ -21,10 +21,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 /* Json */
 /* JSON parser in CPP, from json.c in the spine-c runtime */
 
@@ -65,6 +61,15 @@ Json *Json::getItem(Json *object, const char *string) {
 	return c;
 }
 
+Json *Json::getItem(Json *object, int childIndex) {
+	Json *current = object->_child;
+	while (current != NULL && childIndex > 0) {
+		childIndex--;
+		current = current->_next;
+	}
+	return current;
+}
+
 const char *Json::getString(Json *object, const char *name, const char *defaultValue) {
 	object = getItem(object, name);
 	if (object) {
@@ -90,6 +95,8 @@ bool Json::getBoolean(spine::Json *value, const char *name, bool defaultValue) {
 		if (value->_valueString) return strcmp(value->_valueString, "true") == 0;
 		if (value->_type == JSON_NULL) return false;
 		if (value->_type == JSON_NUMBER) return value->_valueFloat != 0;
+		if (value->_type == JSON_FALSE) return false;
+		if (value->_type == JSON_TRUE) return true;
 		return defaultValue;
 	} else {
 		return defaultValue;
@@ -100,18 +107,17 @@ const char *Json::getError() {
 	return _error;
 }
 
-Json::Json(const char *value) :
-		_next(NULL),
+Json::Json(const char *value) : _next(NULL),
 #if SPINE_JSON_HAVE_PREV
-		_prev(NULL),
+								_prev(NULL),
 #endif
-		_child(NULL),
-		_type(0),
-		_size(0),
-		_valueString(NULL),
-		_valueInt(0),
-		_valueFloat(0),
-		_name(NULL) {
+								_child(NULL),
+								_type(0),
+								_size(0),
+								_valueString(NULL),
+								_valueInt(0),
+								_valueFloat(0),
+								_name(NULL) {
 	if (value) {
 		value = parseValue(this, skip(value));
 
@@ -120,23 +126,23 @@ Json::Json(const char *value) :
 }
 
 Json::~Json() {
-    spine::Json* curr = NULL;
-    spine::Json* next = _child;
-    do {
-        curr = next;
-        if (curr) {
-            next = curr->_next;
-        }
-        delete curr;
-    } while(next);
+	spine::Json *curr = NULL;
+	spine::Json *next = _child;
+	do {
+		curr = next;
+		if (curr) {
+			next = curr->_next;
+		}
+		delete curr;
+	} while (next);
 
-    if (_valueString) {
-        SpineExtension::free(_valueString, __FILE__, __LINE__);
-    }
+	if (_valueString) {
+		SpineExtension::free(_valueString, __FILE__, __LINE__);
+	}
 
-    if (_name) {
-        SpineExtension::free(_name, __FILE__, __LINE__);
-    }
+	if (_name) {
+		SpineExtension::free(_name, __FILE__, __LINE__);
+	}
 }
 
 const char *Json::skip(const char *inValue) {
@@ -163,49 +169,49 @@ const char *Json::parseValue(Json *item, const char *value) {
 #endif
 
 	switch (*value) {
-	case 'n': {
-		if (!strncmp(value + 1, "ull", 3)) {
-			item->_type = JSON_NULL;
-			return value + 4;
+		case 'n': {
+			if (!strncmp(value + 1, "ull", 3)) {
+				item->_type = JSON_NULL;
+				return value + 4;
+			}
+			break;
 		}
-		break;
-	}
-	case 'f': {
-		if (!strncmp(value + 1, "alse", 4)) {
-			item->_type = JSON_FALSE;
-			/* calloc prevents us needing item->_type = JSON_FALSE or valueInt = 0 here */
-			return value + 5;
+		case 'f': {
+			if (!strncmp(value + 1, "alse", 4)) {
+				item->_type = JSON_FALSE;
+				/* calloc prevents us needing item->_type = JSON_FALSE or valueInt = 0 here */
+				return value + 5;
+			}
+			break;
 		}
-		break;
-	}
-	case 't': {
-		if (!strncmp(value + 1, "rue", 3)) {
-			item->_type = JSON_TRUE;
-			item->_valueInt = 1;
-			return value + 4;
+		case 't': {
+			if (!strncmp(value + 1, "rue", 3)) {
+				item->_type = JSON_TRUE;
+				item->_valueInt = 1;
+				return value + 4;
+			}
+			break;
 		}
-		break;
-	}
-	case '\"':
-		return parseString(item, value);
-	case '[':
-		return parseArray(item, value);
-	case '{':
-		return parseObject(item, value);
-	case '-': /* fallthrough */
-	case '0': /* fallthrough */
-	case '1': /* fallthrough */
-	case '2': /* fallthrough */
-	case '3': /* fallthrough */
-	case '4': /* fallthrough */
-	case '5': /* fallthrough */
-	case '6': /* fallthrough */
-	case '7': /* fallthrough */
-	case '8': /* fallthrough */
-	case '9':
-		return parseNumber(item, value);
-	default:
-		break;
+		case '\"':
+			return parseString(item, value);
+		case '[':
+			return parseArray(item, value);
+		case '{':
+			return parseObject(item, value);
+		case '-': /* fallthrough */
+		case '0': /* fallthrough */
+		case '1': /* fallthrough */
+		case '2': /* fallthrough */
+		case '3': /* fallthrough */
+		case '4': /* fallthrough */
+		case '5': /* fallthrough */
+		case '6': /* fallthrough */
+		case '7': /* fallthrough */
+		case '8': /* fallthrough */
+		case '9':
+			return parseNumber(item, value);
+		default:
+			break;
 	}
 
 	_error = value;
@@ -391,8 +397,8 @@ const char *Json::parseNumber(Json *item, const char *num) {
 
 	if (ptr != num) {
 		/* Parse success, number found. */
-		item->_valueFloat = (float)result;
-		item->_valueInt = (int)result;
+		item->_valueFloat = (float) result;
+		item->_valueInt = (int) result;
 		item->_type = JSON_NUMBER;
 		return ptr;
 	} else {
@@ -418,7 +424,7 @@ const char *Json::parseArray(Json *item, const char *value) {
 		return value + 1; /* empty array. */
 	}
 
-	item->_child = child = new(__FILE__, __LINE__) Json(NULL);
+	item->_child = child = new (__FILE__, __LINE__) Json(NULL);
 	if (!item->_child) {
 		return NULL; /* memory fail */
 	}
@@ -432,7 +438,7 @@ const char *Json::parseArray(Json *item, const char *value) {
 	item->_size = 1;
 
 	while (*value == ',') {
-		Json *new_item = new(__FILE__, __LINE__) Json(NULL);
+		Json *new_item = new (__FILE__, __LINE__) Json(NULL);
 		if (!new_item) {
 			return NULL; /* memory fail */
 		}
@@ -474,7 +480,7 @@ const char *Json::parseObject(Json *item, const char *value) {
 		return value + 1; /* empty array. */
 	}
 
-	item->_child = child = new(__FILE__, __LINE__) Json(NULL);
+	item->_child = child = new (__FILE__, __LINE__) Json(NULL);
 	if (!item->_child) {
 		return NULL;
 	}
@@ -497,7 +503,7 @@ const char *Json::parseObject(Json *item, const char *value) {
 	item->_size = 1;
 
 	while (*value == ',') {
-		Json *new_item = new(__FILE__, __LINE__) Json(NULL);
+		Json *new_item = new (__FILE__, __LINE__) Json(NULL);
 		if (!new_item) {
 			return NULL; /* memory fail */
 		}

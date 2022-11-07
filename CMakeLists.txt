@@ -42,7 +42,7 @@ set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 # prevent in-source-build
 include(PreventInSourceBuilds)
 
-# works before build libaxis
+# works before build libaxmol
 include(AXBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)

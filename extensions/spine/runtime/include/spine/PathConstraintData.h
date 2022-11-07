@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -40,58 +40,78 @@
 
 namespace spine {
 	class BoneData;
+
 	class SlotData;
 
 	class SP_API PathConstraintData : public ConstraintData {
 		friend class SkeletonBinary;
+
 		friend class SkeletonJson;
 
 		friend class PathConstraint;
+
 		friend class Skeleton;
+
 		friend class PathConstraintMixTimeline;
+
 		friend class PathConstraintPositionTimeline;
+
 		friend class PathConstraintSpacingTimeline;
 
 	public:
-		explicit PathConstraintData(const String& name);
+		explicit PathConstraintData(const String &name);
 
-		Vector<BoneData*>& getBones();
+		Vector<BoneData *> &getBones();
 
-		SlotData* getTarget();
-		void setTarget(SlotData* inValue);
+		SlotData *getTarget();
+
+		void setTarget(SlotData *inValue);
 
 		PositionMode getPositionMode();
+
 		void setPositionMode(PositionMode inValue);
 
 		SpacingMode getSpacingMode();
+
 		void setSpacingMode(SpacingMode inValue);
 
 		RotateMode getRotateMode();
+
 		void setRotateMode(RotateMode inValue);
 
 		float getOffsetRotation();
+
 		void setOffsetRotation(float inValue);
 
 		float getPosition();
+
 		void setPosition(float inValue);
 
 		float getSpacing();
+
 		void setSpacing(float inValue);
 
-		float getRotateMix();
-		void setRotateMix(float inValue);
+		float getMixRotate();
 
-		float getTranslateMix();
-		void setTranslateMix(float inValue);
+		void setMixRotate(float inValue);
+
+		float getMixX();
+
+		void setMixX(float inValue);
+
+		float getMixY();
+
+		void setMixY(float inValue);
 
 	private:
-		Vector<BoneData*> _bones;
-		SlotData* _target;
+		Vector<BoneData *> _bones;
+		SlotData *_target;
 		PositionMode _positionMode;
 		SpacingMode _spacingMode;
 		RotateMode _rotateMode;
 		float _offsetRotation;
-		float _position, _spacing, _rotateMix, _translateMix;
+		float _position, _spacing;
+		float _mixRotate, _mixX, _mixY;
 	};
 }
 

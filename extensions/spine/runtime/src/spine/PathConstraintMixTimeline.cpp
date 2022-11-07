@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,42 +27,31 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/PathConstraintMixTimeline.h>
 
-#include <spine/Skeleton.h>
 #include <spine/Event.h>
+#include <spine/Skeleton.h>
 
 #include <spine/Animation.h>
-#include <spine/TimelineType.h>
-#include <spine/Slot.h>
-#include <spine/SlotData.h>
 #include <spine/PathConstraint.h>
 #include <spine/PathConstraintData.h>
+#include <spine/Property.h>
+#include <spine/Slot.h>
+#include <spine/SlotData.h>
 
 using namespace spine;
 
 RTTI_IMPL(PathConstraintMixTimeline, CurveTimeline)
 
-const int PathConstraintMixTimeline::ENTRIES = 3;
-const int PathConstraintMixTimeline::PREV_TIME = -3;
-const int PathConstraintMixTimeline::PREV_ROTATE = -2;
-const int PathConstraintMixTimeline::PREV_TRANSLATE = -1;
-const int PathConstraintMixTimeline::ROTATE = 1;
-const int PathConstraintMixTimeline::TRANSLATE = 2;
-
-PathConstraintMixTimeline::PathConstraintMixTimeline(int frameCount) : CurveTimeline(frameCount),
-	_pathConstraintIndex(0)
-{
-	_frames.setSize(frameCount * ENTRIES, 0);
+PathConstraintMixTimeline::PathConstraintMixTimeline(size_t frameCount, size_t bezierCount, int pathConstraintIndex)
+	: CurveTimeline(frameCount, PathConstraintMixTimeline::ENTRIES, bezierCount),
+	  _pathConstraintIndex(pathConstraintIndex) {
+	PropertyId ids[] = {((PropertyId) Property_PathConstraintMix << 32) | pathConstraintIndex};
+	setPropertyIds(ids, 1);
 }
 
 void PathConstraintMixTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha,
-	MixBlend blend, MixDirection direction
-) {
+									  MixBlend blend, MixDirection direction) {
 	SP_UNUSED(lastTime);
 	SP_UNUSED(pEvents);
 	SP_UNUSED(direction);
@@ -73,54 +62,65 @@ void PathConstraintMixTimeline::apply(Skeleton &skeleton, float lastTime, float 
 
 	if (time < _frames[0]) {
 		switch (blend) {
-		case MixBlend_Setup:
-			constraint._rotateMix = constraint._data._rotateMix;
-			constraint._translateMix = constraint._data._translateMix;
-			return;
-		case MixBlend_First:
-			constraint._rotateMix += (constraint._data._rotateMix - constraint._rotateMix) * alpha;
-			constraint._translateMix += (constraint._data._translateMix - constraint._translateMix) * alpha;
-			return;
-		default:
-			return;
+			case MixBlend_Setup:
+				constraint._mixRotate = constraint._data._mixRotate;
+				constraint._mixX = constraint._data._mixX;
+				constraint._mixY = constraint._data._mixY;
+				return;
+			case MixBlend_First:
+				constraint._mixRotate += (constraint._data._mixRotate - constraint._mixRotate) * alpha;
+				constraint._mixX += (constraint._data._mixX - constraint._mixX) * alpha;
+				constraint._mixY += (constraint._data._mixY - constraint._mixY) * alpha;
+			default: {
+			}
+		}
+		return;
+	}
+
+	float rotate, x, y;
+	int i = Animation::search(_frames, time, PathConstraintMixTimeline::ENTRIES);
+	int curveType = (int) _curves[i >> 2];
+	switch (curveType) {
+		case LINEAR: {
+			float before = _frames[i];
+			rotate = _frames[i + ROTATE];
+			x = _frames[i + X];
+			y = _frames[i + Y];
+			float t = (time - before) / (_frames[i + ENTRIES] - before);
+			rotate += (_frames[i + ENTRIES + ROTATE] - rotate) * t;
+			x += (_frames[i + ENTRIES + X] - x) * t;
+			y += (_frames[i + ENTRIES + Y] - y) * t;
+			break;
+		}
+		case STEPPED: {
+			rotate = _frames[i + ROTATE];
+			x = _frames[i + X];
+			y = _frames[i + Y];
+			break;
+		}
+		default: {
+			rotate = getBezierValue(time, i, ROTATE, curveType - BEZIER);
+			x = getBezierValue(time, i, X, curveType + BEZIER_SIZE - BEZIER);
+			y = getBezierValue(time, i, Y, curveType + BEZIER_SIZE * 2 - BEZIER);
 		}
 	}
 
-	float rotate, translate;
-	if (time >= _frames[_frames.size() - ENTRIES]) {
-		// Time is after last frame.
-		rotate = _frames[_frames.size() + PREV_ROTATE];
-		translate = _frames[_frames.size() + PREV_TRANSLATE];
-	} else {
-		// Interpolate between the previous frame and the current frame.
-		int frame = Animation::binarySearch(_frames, time, ENTRIES);
-		rotate = _frames[frame + PREV_ROTATE];
-		translate = _frames[frame + PREV_TRANSLATE];
-		float frameTime = _frames[frame];
-		float percent = getCurvePercent(frame / ENTRIES - 1,
-			1 - (time - frameTime) / (_frames[frame + PREV_TIME] - frameTime));
-
-		rotate += (_frames[frame + ROTATE] - rotate) * percent;
-		translate += (_frames[frame + TRANSLATE] - translate) * percent;
-	}
-
 	if (blend == MixBlend_Setup) {
-		constraint._rotateMix = constraint._data._rotateMix + (rotate - constraint._data._rotateMix) * alpha;
-		constraint._translateMix =
-			constraint._data._translateMix + (translate - constraint._data._translateMix) * alpha;
+		PathConstraintData data = constraint._data;
+		constraint._mixRotate = data._mixRotate + (rotate - data._mixRotate) * alpha;
+		constraint._mixX = data._mixX + (x - data._mixX) * alpha;
+		constraint._mixY = data._mixY + (y - data._mixY) * alpha;
 	} else {
-		constraint._rotateMix += (rotate - constraint._rotateMix) * alpha;
-		constraint._translateMix += (translate - constraint._translateMix) * alpha;
+		constraint._mixRotate += (rotate - constraint._mixRotate) * alpha;
+		constraint._mixX += (x - constraint._mixX) * alpha;
+		constraint._mixY += (y - constraint._mixY) * alpha;
 	}
 }
 
-int PathConstraintMixTimeline::getPropertyId() {
-	return ((int) TimelineType_PathConstraintMix << 24) + _pathConstraintIndex;
-}
-
-void PathConstraintMixTimeline::setFrame(int frameIndex, float time, float rotateMix, float translateMix) {
-	frameIndex *= ENTRIES;
-	_frames[frameIndex] = time;
-	_frames[frameIndex + ROTATE] = rotateMix;
-	_frames[frameIndex + TRANSLATE] = translateMix;
+void PathConstraintMixTimeline::setFrame(int frame, float time, float mixRotate, float mixX, float mixY) {
+	frame *= ENTRIES;
+	_frames[frame] = time;
+	_frames[frame + ROTATE] = mixRotate;
+	_frames[frame + X] = mixX;
+	_frames[frame + Y] = mixY;
 }

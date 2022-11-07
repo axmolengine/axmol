@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -35,28 +35,26 @@
 namespace spine {
 	class SP_API DrawOrderTimeline : public Timeline {
 		friend class SkeletonBinary;
+
 		friend class SkeletonJson;
 
-		RTTI_DECL
+	RTTI_DECL
 
 	public:
-		explicit DrawOrderTimeline(int frameCount);
+		explicit DrawOrderTimeline(size_t frameCount);
 
-		virtual void apply(Skeleton& skeleton, float lastTime, float time, Vector<Event*>* pEvents, float alpha, MixBlend blend, MixDirection direction);
-
-		virtual int getPropertyId();
+		virtual void
+		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
+			  MixDirection direction);
 
 		/// Sets the time and value of the specified keyframe.
 		/// @param drawOrder May be NULL to use bind pose draw order
-		void setFrame(size_t frameIndex, float time, Vector<int>& drawOrder);
+		void setFrame(size_t frame, float time, Vector<int> &drawOrder);
 
-		Vector<float>& getFrames();
-		Vector< Vector<int> >& getDrawOrders();
-		size_t getFrameCount();
+		Vector <Vector<int>> &getDrawOrders();
 
 	private:
-		Vector<float> _frames;
-		Vector< Vector<int> > _drawOrders;
+		Vector <Vector<int>> _drawOrders;
 	};
 }
 

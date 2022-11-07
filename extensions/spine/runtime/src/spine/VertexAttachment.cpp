@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,10 +27,6 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/VertexAttachment.h>
 
 #include <spine/Slot.h>
@@ -42,7 +38,8 @@ using namespace spine;
 
 RTTI_IMPL(VertexAttachment, Attachment)
 
-VertexAttachment::VertexAttachment(const String &name) : Attachment(name), _worldVerticesLength(0), _deformAttachment(this), _id(getNextID()) {
+VertexAttachment::VertexAttachment(const String &name) : Attachment(name), _worldVerticesLength(0),
+														 _timelineAttachment(this), _id(getNextID()) {
 }
 
 VertexAttachment::~VertexAttachment() {
@@ -56,11 +53,13 @@ void VertexAttachment::computeWorldVertices(Slot &slot, float *worldVertices) {
 	computeWorldVertices(slot, 0, _worldVerticesLength, worldVertices, 0);
 }
 
-void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t count, Vector<float> &worldVertices, size_t offset, size_t stride) {
+void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t count, Vector<float> &worldVertices,
+											size_t offset, size_t stride) {
 	computeWorldVertices(slot, start, count, worldVertices.buffer(), offset, stride);
 }
 
-void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t count, float *worldVertices, size_t offset, size_t stride) {
+void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t count, float *worldVertices, size_t offset,
+											size_t stride) {
 	count = offset + (count >> 1) * stride;
 	Skeleton &skeleton = slot._bone._skeleton;
 	Vector<float> *deformArray = &slot.getDeform();
@@ -84,7 +83,7 @@ void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t cou
 
 	int v = 0, skip = 0;
 	for (size_t i = 0; i < start; i += 2) {
-		int n = bones[v];
+		int n = (int) bones[v];
 		v += n + 1;
 		skip += n;
 	}
@@ -93,7 +92,7 @@ void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t cou
 	if (deformArray->size() == 0) {
 		for (size_t w = offset, b = skip * 3; w < count; w += stride) {
 			float wx = 0, wy = 0;
-			int n = bones[v++];
+			int n = (int) bones[v++];
 			n += v;
 			for (; v < n; v++, b += 3) {
 				Bone *boneP = skeletonBones[bones[v]];
@@ -110,7 +109,7 @@ void VertexAttachment::computeWorldVertices(Slot &slot, size_t start, size_t cou
 	} else {
 		for (size_t w = offset, b = skip * 3, f = skip << 1; w < count; w += stride) {
 			float wx = 0, wy = 0;
-			int n = bones[v++];
+			int n = (int) bones[v++];
 			n += v;
 			for (; v < n; v++, b += 3, f += 2) {
 				Bone *boneP = skeletonBones[bones[v]];
@@ -147,23 +146,22 @@ void VertexAttachment::setWorldVerticesLength(size_t inValue) {
 	_worldVerticesLength = inValue;
 }
 
-VertexAttachment* VertexAttachment::getDeformAttachment() {
-	return _deformAttachment;
+Attachment *VertexAttachment::getTimelineAttachment() {
+	return _timelineAttachment;
 }
 
-void VertexAttachment::setDeformAttachment(VertexAttachment* attachment) {
-	_deformAttachment = attachment;
+void VertexAttachment::setTimelineAttachment(Attachment *attachment) {
+	_timelineAttachment = attachment;
 }
 
 int VertexAttachment::getNextID() {
 	static int nextID = 0;
-
-	return (nextID++ & 65535) << 11;
+	return nextID++;
 }
 
-void VertexAttachment::copyTo(VertexAttachment* other) {
+void VertexAttachment::copyTo(VertexAttachment *other) {
 	other->_bones.clearAndAddAll(this->_bones);
 	other->_vertices.clearAndAddAll(this->_vertices);
 	other->_worldVerticesLength = this->_worldVerticesLength;
-	other->_deformAttachment = this->_deformAttachment;
+	other->_timelineAttachment = this->_timelineAttachment;
 }

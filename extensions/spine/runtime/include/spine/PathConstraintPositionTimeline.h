@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -34,32 +34,29 @@
 
 namespace spine {
 
-	class SP_API PathConstraintPositionTimeline : public CurveTimeline {
+	class SP_API PathConstraintPositionTimeline : public CurveTimeline1 {
 		friend class SkeletonBinary;
+
 		friend class SkeletonJson;
 
-		RTTI_DECL
+	RTTI_DECL
 
 	public:
 		static const int ENTRIES;
 
-		explicit PathConstraintPositionTimeline(int frameCount);
+		explicit PathConstraintPositionTimeline(size_t frameCount, size_t bezierCount, int pathConstraintIndex);
 
 		virtual ~PathConstraintPositionTimeline();
 
-		virtual void apply(Skeleton& skeleton, float lastTime, float time, Vector<Event*>* pEvents, float alpha, MixBlend blend, MixDirection direction);
+		virtual void
+		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
+			  MixDirection direction);
 
-		virtual int getPropertyId();
+		int getPathConstraintIndex() { return _pathConstraintIndex; }
 
-		/// Sets the time and value of the specified keyframe.
-		void setFrame(int frameIndex, float time, float value);
+		void setPathConstraintIndex(int inValue) { _pathConstraintIndex = inValue; }
 
 	protected:
-		static const int PREV_TIME;
-		static const int PREV_VALUE;
-		static const int VALUE;
-
-		Vector<float> _frames;
 		int _pathConstraintIndex;
 	};
 }
