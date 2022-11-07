@@ -113,7 +113,7 @@ axmol-1.0  ??
 - [REFINE] Replace `push_back` with `emplace_back`
 - [REFINE] Improve Camera, thanks to @DelinWorks
 - [REFINE] Use jpeg-turbo for jpg image decoding
-- [REFINE] Update clipper1 to clipper2 1.0.5
+- [REFINE] Update clipper1 to clipper2 1.0.6
 - [REFINE] Update flatbuffers to v2.0.8
 - [REFINE] Change Program::getActiveAttributes return type to reference
 - [REFINE] Rename `Sprite3D` to `MeshRenderer`
