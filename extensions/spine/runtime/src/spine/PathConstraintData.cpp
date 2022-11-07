@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,10 +27,6 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/PathConstraintData.h>
 
 #include <spine/BoneData.h>
@@ -40,17 +36,17 @@
 
 using namespace spine;
 
-PathConstraintData::PathConstraintData(const String &name) :
-		ConstraintData(name),
-		_target(NULL),
-		_positionMode(PositionMode_Fixed),
-		_spacingMode(SpacingMode_Length),
-		_rotateMode(RotateMode_Tangent),
-		_offsetRotation(0),
-		_position(0),
-		_spacing(0),
-		_rotateMix(0),
-		_translateMix(0) {
+PathConstraintData::PathConstraintData(const String &name) : ConstraintData(name),
+															 _target(NULL),
+															 _positionMode(PositionMode_Fixed),
+															 _spacingMode(SpacingMode_Length),
+															 _rotateMode(RotateMode_Tangent),
+															 _offsetRotation(0),
+															 _position(0),
+															 _spacing(0),
+															 _mixRotate(0),
+															 _mixX(0),
+															 _mixY(0) {
 }
 
 Vector<BoneData *> &PathConstraintData::getBones() {
@@ -113,18 +109,26 @@ void PathConstraintData::setSpacing(float inValue) {
 	_spacing = inValue;
 }
 
-float PathConstraintData::getRotateMix() {
-	return _rotateMix;
+float PathConstraintData::getMixRotate() {
+	return _mixRotate;
 }
 
-void PathConstraintData::setRotateMix(float inValue) {
-	_rotateMix = inValue;
+void PathConstraintData::setMixRotate(float inValue) {
+	_mixRotate = inValue;
 }
 
-float PathConstraintData::getTranslateMix() {
-	return _translateMix;
+float PathConstraintData::getMixX() {
+	return _mixX;
 }
 
-void PathConstraintData::setTranslateMix(float inValue) {
-	_translateMix = inValue;
+void PathConstraintData::setMixX(float inValue) {
+	_mixX = inValue;
+}
+
+float PathConstraintData::getMixY() {
+	return _mixY;
+}
+
+void PathConstraintData::setMixY(float inValue) {
+	_mixY = inValue;
 }

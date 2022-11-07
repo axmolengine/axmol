@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,20 +27,16 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/LinkedMesh.h>
 
 #include <spine/MeshAttachment.h>
 
 using namespace spine;
 
-LinkedMesh::LinkedMesh(MeshAttachment *mesh, const String &skin, size_t slotIndex, const String &parent, bool inheritDeform) :
-		_mesh(mesh),
-		_skin(skin),
-		_slotIndex(slotIndex),
-		_parent(parent),
-		_inheritDeform(inheritDeform) {
+LinkedMesh::LinkedMesh(MeshAttachment *mesh, const String &skin, size_t slotIndex, const String &parent,
+					   bool inheritTimeline) : _mesh(mesh),
+											   _skin(skin),
+											   _slotIndex(slotIndex),
+											   _parent(parent),
+											   _inheritTimeline(inheritTimeline) {
 }
