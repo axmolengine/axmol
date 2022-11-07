@@ -221,23 +221,28 @@ Issue11942Test::Issue11942Test()
     auto draw = DrawNode::create();
     addChild(draw, 10);
 
-    // draw a circle
+    // draw a circle thickness 1 
     draw->setLineWidth(1);
     draw->drawCircle(VisibleRect::center() - Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
-    draw->setLineWidth(10);
-    draw->drawCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
+    
+    auto draw1 = DrawNode::create();
+    addChild(draw1, 10)
+        
+    // draw a second circle thickness 10  
+    draw1->setLineWidth(10);
+    draw1->drawCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 }
 
 string Issue11942Test::title() const
 {
-    return "GitHub Issue #11942";
+    return "GitHub Issue #11942 (axmol #137)";
 }
 
 string Issue11942Test::subtitle() const
 {
-    return "drawCircle() with width";
+    return "setLineWidth() change the WHOLE DrawNode line thickness";
 }
 
 Issue829Test::Issue829Test()
