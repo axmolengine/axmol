@@ -1,6 +1,16 @@
 axmol-1.0  ??
 
+- [HIGHLIGHT] Add extensions `Effekseer` support
+- [HIGHLIGHT] Replace all string map with `robin_map` which support heterogeneous lookup
+- [HIGHLIGHT] Add precompile_headers all platforms support, thanks to @crazyhappygame
+- [HIGHLIGHT] Refactor `VertexLayout` sharing mechanism
+- [HIGHLIGHT] Refactor shader program management: link when use, rename `ProgramCache` to `ProgramManager`
+- [HIGHLIGHT] Improve MeshRenderer #879 thanks @solan-solan (#904) 
+- [HIGHLIGHT] Improve model loader, auto set texture for .obj file when texture path not specified
+- [HIGHLIGHT] Add apple M1, android x64 support, contributed by @pietpukkel
+- [HIGHLIGHT] Add apple tvos support, thanks to @paulocoutinhox
 - [HIGHLIGHT] Add Particle System Animations, Alpha Masks & Improvements, thanks to @DelinWorks
+- [HIGHLIGHT] Add wireframe rendering and function classification improvements, thanks to @DelinWorks
 - [HIGHLIGHT] Imporve text rendering
 - [HIGHLIGHT] Improve windows workflow, support linking with engine prebuilt libs
 - [HIGHLIGHT] Implement Windows video player using microsoft media foundation
@@ -18,25 +28,36 @@ axmol-1.0  ??
 - [HIGHLIGHT] Use Openal-Soft for all platform
 - [HIGHLIGHT] Refactor UserDefault with mio, speed up 100x+
 - [HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM
-- [HIGHLIGHT] Use modern GL loader Glad
-- [HIGHLIGHT] Google angle renderer backend support
-- [HIGHLIGHT] Update codebase to C++ 17 standard
+- [HIGHLIGHT] Use modern GL loader glad (v2.0.0)
+- [HIGHLIGHT] Add google angle (version 5195) renderer backend support for windows
+- [HIGHLIGHT] Update codebase to C++ 17/20 standard
 - [HIGHLIGHT] Remove tinyxml2
 - [HIGHLIGHT] Use fast pugixml
-- [HIGHLIGHT] Spine-3.6~4.0 support
+- [HIGHLIGHT] Spine-3.6~4.1 support, default is 4.1
 - [HIGHLIGHT] ASTC 4x4/6x6/8x8 support (if hardware decoder not present, use software decoder)
 - [HIGHLIGHT] ETC2 RGB/RGBA support (if hardware decoder not present, use software decoder)
+- [HIGHLIGHT] ImGui integrated for Android platform, thanks to @rh101
 - [HIGHLIGHT] ImGui integrated for PC platforms
-- [HIGHLIGHT] Add extension 'FairyGUI' support
-- [HIGHLIGHT] Add extension 'Live2D' support
+- [HIGHLIGHT] Add extension `FairyGUI` support
+- [HIGHLIGHT] Add extension `Live2D` support
 - [HIGHLIGHT] Use curl for transferring data with URL syntax
 - [HIGHLIGHT] Modularize all optional extension, move from engine core to folder extensions
-- [HIGHLIGHT] Improve thirdparty libs building, 99% of them build from sources or github actions with latest toolchain, see also: `axmolengine/buildware`
+- [HIGHLIGHT] Improve thirdparty libs building, 100% of them build from sources or github actions with latest toolchain, see also: `axmolengine/buildware`
 - [HIGHLIGHT] Add new API `Director::setChildrenIndexerEnabled` for speed up getChildByTag & getChildByName support
-- [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support, it's very useful for reduce memory cost when load large .ttf font file
+- [HIGHLIGHT] Add new API `FontFreeType::setStreamParsingEnabled` for stream parsing support . It's very useful for reducing memory costs when loading a large .ttf font file
 - [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs
 - [HIGHLIGHT] Use c++17 string_view instead `const std::string&`
+- [HIGHLIGHT] Improve code quality (stage1.Oct) (#916) 
+- [NEW] Add closeKeyboard() method for EditBox, thanks to @theunwisewolf
+- [NEW] Added automake and automake to dependency list, thanks to @clawfinger
+- [NEW] Add primitive type support for mesh materials, thanks to @DelinWorks
 - [NEW] Add int64_t/uint64_t support for `cocos2d::Value`
+- [NEW] Add support for scaling for RichElementImage, thanks to @theunwisewolf
+- [NEW] Add fmtlib 9.1.0
+- [NEW] Add llhttp 8.1.0
+- [NEW] Add return type 'ResourceData' for lua bindings, thanks to @tkzcfc
+- [NEW] Add spine binary support for lua bindings, thanks to @tkzcfc
+- [Fix] Fix to ensure Component::onEnter() is called (#867), thanks to @rh101
 - [Fix] Fix Label overflow shrink bug
 - [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
 - [FIX] Fix imgui draw frame cause afterimage when game scene nothing to draw
@@ -45,13 +66,18 @@ axmol-1.0  ??
 - [FIX] Fix Memory leak in ShaderModuleGL::getErrorLog(), thanks to @Xrysnow
 - [FIX] Fix console output text encoding for win32
 - [FIX] Fix charset process for fontName on win32
-- [FIX] Fix Crash on ParticleBatchNode::updateProgramStateTexture() 
-- [FIX] Fix Crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
+- [FIX] Fix crash on ParticleBatchNode::updateProgramStateTexture() 
+- [FIX] Fix crash on SpriteBatchNode::appendChild when CC_SPRITE_DEBUG_DRAW==1
 - [FIX] Fix Lua can't get `unsigned char` or `unsigned int` values of `ValueMap`
 - [FIX] Fix crash on AudioEngine::end after the `Director` was destroyed
 - [FIX] Fix font atlas will leak when it does not exist in the atlas cache, thanks to @rh101
 - [FIX] Fix ScrollView shows incorrect position in vertical direction some time, thanks to @wzhengsen
 - [FIX] Fix Spine ClippingAttachment doesn't work
+- [FIX] Fix render problem with boss.obj
+- [FIX] Fix downloader crash in lua coroutine, thanks to @tkzcfc
+- [FIX] Fix memory leak (VertexLayout) at `Program` constructor
+- [FIX] Fix missed edge case when resizing the memorymapped file in UserDefault that could cause a crash, thanks to  @theunwisewolf
+- [REFINE] Improve `FileUtils::addSearchPath`, thanks to @tkzcfc
 - [REFINE] Allow the forced reformatting of RichText contents, thanks to @rh101
 - [REFINE] Upgrade android toolsets to ndk-r23 LTS
 - [REFINE] CCValue move construct and assign with std::string support
@@ -66,8 +92,8 @@ axmol-1.0  ??
 - [REFINE] Ensure label underline node has the same global Z value as the label node to fix visibility issue when global Z is not 0
 - [REFINE] Improve android astc support check
 - [REFINE] Improve the "Physics part" (#379), thanks to @aismann 
-- [REFINE] Rename command line to to `axis`
-- [REFINE] Update imgui to 1.84 WIP
+- [REFINE] Rename command line to to `axmol`
+- [REFINE] Update imgui to 1.88
 - [REFINE] Rename thirdparty folder `external` to `thirdparty`
 - [REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
 - [REFINE] Fix some audio test case can't hear sound
@@ -81,6 +107,20 @@ axmol-1.0  ??
 - [REFINE] Use `jni.hpp` to improve jni call without method signature GC allocs
 - [REFINE] Rename is64BitIOSDevice to is64BitMobileDevice
 - [REFINE] Fix Android screen blank issue after unlocking device with application running, thanks to @rh101
+- [REFINE] Update zlib to v1.2.13
+- [REFINE] Add explicit cmake options
+- [REFINE] Migrate cross platform ci checks to github actions
+- [REFINE] Replace `push_back` with `emplace_back`
+- [REFINE] Improve Camera, thanks to @DelinWorks
+- [REFINE] Use jpeg-turbo for jpg image decoding
+- [REFINE] Update clipper1 to clipper2 1.0.5
+- [REFINE] Update flatbuffers to v2.0.8
+- [REFINE] Change Program::getActiveAttributes return type to reference
+- [REFINE] Rename `Sprite3D` to `MeshRenderer`
+- [REFINE] Improve AutoPolygon::generateTriangles performance (#905)
+- [REFINE] Add many box2d testbed, thanks to @aismann
+- [REFINE] Improve c++11 for-loop performance with Universal References ([#760](https://github.com/axmolengine/axmol/pull/760)), thanks to @aismann
+- [REFINE] New engine logo & splash (TODO)
 
 
 cocos2d-x-4.0  Dec.3 2019
