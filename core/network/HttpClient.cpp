@@ -3,7 +3,7 @@
  Copyright (c) 2012      cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2022 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -289,16 +289,8 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
             obs.write_bytes(" ");
 
             auto& uri = response->getRequestUri();
-            obs.write_bytes(uri.getPath());
-            if (!usePostData)
-            {
-                auto query = uri.getQuery();
-                if (!query.empty())
-                {
-                    obs.write_byte('?');
-                    obs.write_bytes(query);
-                }
-            }
+            obs.write_bytes(uri.getPathEtc());
+
             obs.write_bytes(" HTTP/1.1\r\n");
 
             obs.write_bytes("Host: ");
