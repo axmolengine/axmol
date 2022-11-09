@@ -138,4 +138,4 @@
 
 ### axmol项目活跃状态
 
-![Alt](https://repobeats.axiom.co/api/embed/aa26c65937eedb5f5f210673a7349e2def8cdc7f.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/6fcb8168a3af91ba9e797a1f14a3c2edc42ac56a.svg "Repobeats analytics image")
