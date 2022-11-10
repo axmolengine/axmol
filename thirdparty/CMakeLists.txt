@@ -279,7 +279,7 @@ add_subdirectory(ogg)
 target_link_libraries(thirdparty ogg)
 configure_target_outdir(ogg)
 
-if(WINDOWS OR LINUX)
+if(WINDOWS OR LINUX OR (ANDROID AND AX_USE_GLAD))
     add_subdirectory(glad)
     target_link_libraries(thirdparty glad)
     configure_target_outdir(glad)

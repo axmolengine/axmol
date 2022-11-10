@@ -2,7 +2,8 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2020 C4games Ltd
+Copyright (c) 2020 C4games Ltd.
+Copyright (c) 2022 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -41,8 +42,6 @@ THE SOFTWARE.
 #        undef glBindVertexArray
 #        undef glDeleteVertexArrays
 #        undef glGenVertexArrays
-// #undef glBlendFuncSeparate
-// #undef glBlendEquation
 #        if defined(GL_VERSION_ES_CM_1_0)
 #            undef glIsRenderbuffer
 #            undef glBindRenderbuffer
@@ -69,8 +68,6 @@ THE SOFTWARE.
 #        define glBindVertexArray glBindVertexArrayOES
 #        define glDeleteVertexArrays glDeleteVertexArraysOES
 #        define glGenVertexArrays glGenVertexArraysOES
-// #define glBlendFuncSeparate glBlendFuncSeparateOES
-// #define glBlendEquation glBlendEquationOES
 #        if defined(GL_VERSION_ES_CM_1_0)
 #            define glIsRenderbuffer glIsRenderbufferOES
 #            define glBindRenderbuffer glBindRenderbufferOES
