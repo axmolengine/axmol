@@ -6,6 +6,7 @@
 #include "platform/CCPlatformConfig.h"
 #include <string>
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#    include <errno.h>
 #    include <io.h>
 #    include <direct.h>
 #else
@@ -26,6 +27,7 @@
 #endif
 
 #if defined(_WIN32)
+extern int _ftruncate(int fd, int64_t size);
 #    include "ntcvt/ntcvt.hpp"
 #    define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
 #    define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
@@ -40,7 +42,7 @@
 #    define posix_read ::_read
 #    define posix_write ::_write
 #    define posix_fd2fh(fd) reinterpret_cast<HANDLE>(_get_osfhandle(fd))
-#    define posix_fsetsize(fd, size) ::_chsize(fd, size)
+#    define posix_ftruncate(fd, size) ::_ftruncate(fd, size)
 #else
 
 #    if defined(__APPLE__)
@@ -61,7 +63,7 @@
 #    define posix_read ::read
 #    define posix_write ::write
 #    define posix_fd2fh(fd) (fd)
-#    define posix_fsetsize(fd, size) (::ftruncate(fd, size), ::lseek(fd, 0, SEEK_SET))
+#    define posix_ftruncate(fd, size) ::ftruncate(fd, size)
 #endif
 
 NS_AX_BEGIN
@@ -99,8 +101,8 @@ public:
         if (this == &other)
             return *this;
         FileStream::operator=(std::move(other));
-        _handle             = std::move(other._handle);
-        _iof                = other._iof;
+        _handle = std::move(other._handle);
+        _iof    = other._iof;
 
         other.reset();
 
