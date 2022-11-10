@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -35,123 +35,103 @@
 #include <spine/SpineObject.h>
 #include <spine/SpineString.h>
 #include <spine/HasRendererObject.h>
+#include "TextureRegion.h"
 
 namespace spine {
-enum Format {
-	Format_Alpha,
-	Format_Intensity,
-	Format_LuminanceAlpha,
-	Format_RGB565,
-	Format_RGBA4444,
-	Format_RGB888,
-	Format_RGBA8888
-};
-
-enum TextureFilter {
-	TextureFilter_Unknown,
-	TextureFilter_Nearest,
-	TextureFilter_Linear,
-	TextureFilter_MipMap,
-	TextureFilter_MipMapNearestNearest,
-	TextureFilter_MipMapLinearNearest,
-	TextureFilter_MipMapNearestLinear,
-	TextureFilter_MipMapLinearLinear
-};
-
-enum TextureWrap {
-	TextureWrap_MirroredRepeat,
-	TextureWrap_ClampToEdge,
-	TextureWrap_Repeat
-};
-
-class SP_API AtlasPage : public SpineObject, public HasRendererObject {
-public:
-	String name;
-	String texturePath;
-	Format format;
-	TextureFilter minFilter;
-	TextureFilter magFilter;
-	TextureWrap uWrap;
-	TextureWrap vWrap;
-	int width, height;
-
-	explicit AtlasPage(const String &inName) : name(inName), format(Format_RGBA8888), minFilter(TextureFilter_Nearest),
-		magFilter(TextureFilter_Nearest), uWrap(TextureWrap_ClampToEdge),
-		vWrap(TextureWrap_ClampToEdge), width(0), height(0) {
-	}
-};
-
-class SP_API AtlasRegion : public SpineObject {
-public:
-	AtlasPage *page;
-	String name;
-	int x, y, width, height;
-	float u, v, u2, v2;
-	float offsetX, offsetY;
-	int originalWidth, originalHeight;
-	int index;
-	bool rotate;
-	int degrees;
-	Vector<int> splits;
-	Vector<int> pads;
-};
-
-class TextureLoader;
-
-class SP_API Atlas : public SpineObject {
-public:
-	Atlas(const String &path, TextureLoader *textureLoader, bool createTexture = true);
-
-	Atlas(const char *data, int length, const char *dir, TextureLoader *textureLoader, bool createTexture = true);
-
-	~Atlas();
-
-	void flipV();
-
-	/// Returns the first region found with the specified name. This method uses String comparison to find the region, so the result
-	/// should be cached rather than calling this method multiple times.
-	/// @return The region, or NULL.
-	AtlasRegion *findRegion(const String &name);
-
-	Vector<AtlasPage*> &getPages();
-
-    Vector<AtlasRegion*> &getRegions();
-
-private:
-	Vector<AtlasPage *> _pages;
-	Vector<AtlasRegion *> _regions;
-	TextureLoader *_textureLoader;
-
-	void load(const char *begin, int length, const char *dir, bool createTexture);
-
-	class Str {
-	public:
-		const char *begin;
-		const char *end;
+	enum Format {
+		Format_Alpha,
+		Format_Intensity,
+		Format_LuminanceAlpha,
+		Format_RGB565,
+		Format_RGBA4444,
+		Format_RGB888,
+		Format_RGBA8888
 	};
 
-	static void trim(Str *str);
+	// Our TextureFilter collides with UE4's TextureFilter in unity builds. We rename
+	// TextureFilter to SpineTextureFilter in UE4.
+#ifdef SPINE_UE4
+	#define TEXTURE_FILTER_ENUM SpineTextureFilter
+#else
+	#define TEXTURE_FILTER_ENUM TextureFilter
+#endif
 
-	/// Tokenize string without modification. Returns 0 on failure
-	static int readLine(const char **begin, const char *end, Str *str);
+	enum TEXTURE_FILTER_ENUM {
+		TextureFilter_Unknown,
+		TextureFilter_Nearest,
+		TextureFilter_Linear,
+		TextureFilter_MipMap,
+		TextureFilter_MipMapNearestNearest,
+		TextureFilter_MipMapLinearNearest,
+		TextureFilter_MipMapNearestLinear,
+		TextureFilter_MipMapLinearLinear
+	};
 
-	/// Moves str->begin past the first occurence of c. Returns 0 on failure
-	static int beginPast(Str *str, char c);
+	enum TextureWrap {
+		TextureWrap_MirroredRepeat,
+		TextureWrap_ClampToEdge,
+		TextureWrap_Repeat
+	};
 
-	/// Returns 0 on failure
-	static int readValue(const char **begin, const char *end, Str *str);
+	class SP_API AtlasPage : public SpineObject, public HasRendererObject {
+	public:
+		String name;
+		String texturePath;
+		Format format;
+		TEXTURE_FILTER_ENUM minFilter;
+		TEXTURE_FILTER_ENUM magFilter;
+		TextureWrap uWrap;
+		TextureWrap vWrap;
+		int width, height;
+		bool pma;
 
-	/// Returns the number of tuple values read (1, 2, 4, or 0 for failure)
-	static int readTuple(const char **begin, const char *end, Str tuple[]);
+		explicit AtlasPage(const String &inName) : name(inName), format(Format_RGBA8888),
+												   minFilter(TextureFilter_Nearest),
+												   magFilter(TextureFilter_Nearest), uWrap(TextureWrap_ClampToEdge),
+												   vWrap(TextureWrap_ClampToEdge), width(0), height(0), pma(false) {
+		}
+	};
 
-	static char *mallocString(Str *str);
+	class SP_API AtlasRegion : public TextureRegion {
+	public:
+		AtlasPage *page;
+		String name;
+		int index;
+		int x, y;
+		Vector<int> splits;
+		Vector<int> pads;
+		Vector <String> names;
+		Vector<float> values;
+	};
 
-	static int indexOf(const char **array, int count, Str *str);
+	class TextureLoader;
 
-	static int equals(Str *str, const char *other);
+	class SP_API Atlas : public SpineObject {
+	public:
+		Atlas(const String &path, TextureLoader *textureLoader, bool createTexture = true);
 
-	static int toInt(Str *str);
-};
+		Atlas(const char *data, int length, const char *dir, TextureLoader *textureLoader, bool createTexture = true);
+
+		~Atlas();
+
+		void flipV();
+
+		/// Returns the first region found with the specified name. This method uses String comparison to find the region, so the result
+		/// should be cached rather than calling this method multiple times.
+		/// @return The region, or NULL.
+		AtlasRegion *findRegion(const String &name);
+
+		Vector<AtlasPage *> &getPages();
+
+		Vector<AtlasRegion *> &getRegions();
+
+	private:
+		Vector<AtlasPage *> _pages;
+		Vector<AtlasRegion *> _regions;
+		TextureLoader *_textureLoader;
+
+		void load(const char *begin, int length, const char *dir, bool createTexture);
+	};
 }
 
 #endif /* Spine_Atlas_h */

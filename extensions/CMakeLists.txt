@@ -1,29 +1,5 @@
 
-# default value for axmol extensions modules to Build
-# currently 7 extensions
-# extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
-option(AX_ENABLE_EXT_GUI "Build extension GUI" ON)
-
-option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ON)
-option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ON)
-option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ON)
-
-option(AX_ENABLE_EXT_SPINE "Build extension spine" ON)
-option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ON)
-
-option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
-
-option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
-
-option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
-option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
-
-if(WINDOWS OR MACOSX OR LINUX OR ANDROID)
-  option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
-else()
-  set(AX_ENABLE_EXT_IMGUI OFF)
-endif()
 
 if(BUILD_SHARED_LIBS)
   cmake_policy(SET CMP0079 NEW)
@@ -37,8 +13,6 @@ function(setup_ax_extension_config target_name)
   if(ANDROID)
     target_link_libraries(${target_name} INTERFACE ${_AX_CORE_LIB})
     target_include_directories(${target_name} PRIVATE $<TARGET_PROPERTY:${_AX_CORE_LIB},INTERFACE_INCLUDE_DIRECTORIES>)
-    # target_compile_definitions(${target_name} PRIVATE CP_USE_CGTYPES=0)
-    # target_compile_definitions(${target_name} PRIVATE CP_USE_DOUBLES=0)
   else()
     target_link_libraries(${target_name} PUBLIC ${_AX_CORE_LIB})
   endif()

@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,113 +27,58 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/RotateTimeline.h>
 
-#include <spine/Skeleton.h>
 #include <spine/Event.h>
+#include <spine/Skeleton.h>
 
+#include <spine/Animation.h>
 #include <spine/Bone.h>
 #include <spine/BoneData.h>
-#include <spine/Animation.h>
-#include <spine/TimelineType.h>
+#include <spine/Property.h>
 
 using namespace spine;
 
-RTTI_IMPL(RotateTimeline, CurveTimeline)
+RTTI_IMPL(RotateTimeline, CurveTimeline1)
 
-RotateTimeline::RotateTimeline(int frameCount) : CurveTimeline(frameCount), _boneIndex(0) {
-	_frames.setSize(frameCount << 1, 0);
+RotateTimeline::RotateTimeline(size_t frameCount, size_t bezierCount, int boneIndex) : CurveTimeline1(frameCount,
+																									  bezierCount),
+																					   _boneIndex(boneIndex) {
+	PropertyId ids[] = {((PropertyId) Property_Rotate << 32) | boneIndex};
+	setPropertyIds(ids, 1);
 }
 
 void RotateTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha,
-	MixBlend blend, MixDirection direction
-) {
+						   MixBlend blend, MixDirection direction) {
 	SP_UNUSED(lastTime);
 	SP_UNUSED(pEvents);
 	SP_UNUSED(direction);
 
-	Bone *bone = skeleton.getBones()[_boneIndex];
+	Bone *bone = skeleton._bones[_boneIndex];
 	if (!bone->_active) return;
 
 	if (time < _frames[0]) {
 		switch (blend) {
-		case MixBlend_Setup: {
-			bone->_rotation = bone->_data._rotation;
-			break;
-		}
-		case MixBlend_First: {
-			float r = bone->_data._rotation - bone->_rotation;
-			bone->_rotation += (r - (16384 - (int) (16384.499999999996 - r / 360)) * 360) * alpha;
-			break;
-		}
-		default: {
-			// TODO?
-			break;
-		}
-		}
-		return;
-	}
-
-	if (time >= _frames[_frames.size() - ENTRIES]) {
-		float r = _frames[_frames.size() + PREV_ROTATION];
-		switch (blend) {
 			case MixBlend_Setup:
-				bone->_rotation = bone->_data._rotation + r * alpha;
-				break;
+				bone->_rotation = bone->_data._rotation;
+				return;
 			case MixBlend_First:
-			case MixBlend_Replace:
-				r += bone->_data._rotation - bone->_rotation;
-				r -= (16384 - (int)(16384.499999999996 - r / 360)) * 360;
-				// Fall through.
-			case MixBlend_Add:
-				bone->_rotation += r * alpha;
+				bone->_rotation += (bone->_data._rotation - bone->_rotation) * alpha;
+			default: {
+			}
 		}
 		return;
 	}
 
-	// Interpolate between the previous frame and the current frame.
-	int frame = Animation::binarySearch(_frames, time, ENTRIES);
-	float prevRotation = _frames[frame + PREV_ROTATION];
-	float frameTime = _frames[frame];
-	float percent = getCurvePercent((frame >> 1) - 1,
-		1 - (time - frameTime) / (_frames[frame + PREV_TIME] - frameTime));
-	float r = _frames[frame + ROTATION] - prevRotation;
-	r = prevRotation + (r - (16384 - (int)(16384.499999999996 - r / 360)) * 360) * percent;
+	float r = getCurveValue(time);
 	switch (blend) {
 		case MixBlend_Setup:
-			bone->_rotation = bone->_data._rotation + (r - (16384 - (int)(16384.499999999996 - r / 360)) * 360) * alpha;
+			bone->_rotation = bone->_data._rotation + r * alpha;
 			break;
 		case MixBlend_First:
 		case MixBlend_Replace:
 			r += bone->_data._rotation - bone->_rotation;
-			// Fall through.
 		case MixBlend_Add:
-			bone->_rotation += (r - (16384 - (int)(16384.499999999996 - r / 360)) * 360) * alpha;
+			bone->_rotation += r * alpha;
 	}
-}
-
-int RotateTimeline::getPropertyId() {
-	return ((int) TimelineType_Rotate << 24) + _boneIndex;
-}
-
-void RotateTimeline::setFrame(int frameIndex, float time, float degrees) {
-	frameIndex <<= 1;
-	_frames[frameIndex] = time;
-	_frames[frameIndex + ROTATION] = degrees;
-}
-
-int RotateTimeline::getBoneIndex() {
-	return _boneIndex;
-}
-
-void RotateTimeline::setBoneIndex(int inValue) {
-	_boneIndex = inValue;
-}
-
-Vector<float> &RotateTimeline::getFrames() {
-	return _frames;
 }

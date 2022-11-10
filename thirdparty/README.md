@@ -67,7 +67,7 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.0
+- Version: 2.0.2
 - License: MIT
 
 ## glfw

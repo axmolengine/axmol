@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,10 +27,6 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/Triangulator.h>
 
 #include <spine/MathUtil.h>
@@ -49,20 +45,20 @@ Vector<int> &Triangulator::triangulate(Vector<float> &vertices) {
 	indices.clear();
 	indices.ensureCapacity(vertexCount);
 	indices.setSize(vertexCount, 0);
-	for (size_t i = 0; i < vertexCount; ++i) {
+	for (int i = 0; i < (int) vertexCount; ++i) {
 		indices[i] = i;
 	}
 
 	Vector<bool> &isConcaveArray = _isConcaveArray;
 	isConcaveArray.ensureCapacity(vertexCount);
 	isConcaveArray.setSize(vertexCount, 0);
-	for (size_t i = 0, n = vertexCount; i < n; ++i) {
-		isConcaveArray[i] = isConcave(i, vertexCount, vertices, indices);
+	for (int i = 0, n = (int) vertexCount; i < n; ++i) {
+		isConcaveArray[i] = isConcave(i, (int) vertexCount, vertices, indices);
 	}
 
 	Vector<int> &triangles = _triangles;
 	triangles.clear();
-	triangles.ensureCapacity(MathUtil::max((int)0, (int)vertexCount - 2) << 2);
+	triangles.ensureCapacity(MathUtil::max((int) 0, (int) vertexCount - 2) << 2);
 
 	while (vertexCount > 3) {
 		// Find ear tip.
@@ -83,14 +79,14 @@ Vector<int> &Triangulator::triangulate(Vector<float> &vertices) {
 					if (positiveArea(p3x, p3y, p1x, p1y, vx, vy)) {
 						if (positiveArea(p1x, p1y, p2x, p2y, vx, vy)) {
 							if (positiveArea(p2x, p2y, p3x, p3y, vx, vy)) {
-								goto break_outer; // break outer;
+								goto break_outer;// break outer;
 							}
 						}
 					}
 				}
 				break;
 			}
-			break_outer:
+		break_outer:
 
 			if (next == 0) {
 				do {
@@ -113,10 +109,10 @@ Vector<int> &Triangulator::triangulate(Vector<float> &vertices) {
 		isConcaveArray.removeAt(i);
 		vertexCount--;
 
-		int previousIndex = (vertexCount + i - 1) % vertexCount;
-		int nextIndex = i == vertexCount ? 0 : i;
-		isConcaveArray[previousIndex] = isConcave(previousIndex, vertexCount, vertices, indices);
-		isConcaveArray[nextIndex] = isConcave(nextIndex, vertexCount, vertices, indices);
+		int previousIndex = (int) ((vertexCount + i - 1) % vertexCount);
+		int nextIndex = (int) (i == vertexCount ? 0 : i);
+		isConcaveArray[previousIndex] = isConcave(previousIndex, (int) vertexCount, vertices, indices);
+		isConcaveArray[nextIndex] = isConcave(nextIndex, (int) vertexCount, vertices, indices);
 	}
 
 	if (vertexCount == 3) {
@@ -255,7 +251,7 @@ Vector<Vector<float> *> &Triangulator::decompose(Vector<float> &vertices, Vector
 	}
 
 	// Remove empty polygons that resulted from the merge step above.
-	for (int i = (int)convexPolygons.size() - 1; i >= 0; --i) {
+	for (int i = (int) convexPolygons.size() - 1; i >= 0; --i) {
 		polygon = convexPolygons[i];
 		if (polygon->size() == 0) {
 			convexPolygons.removeAt(i);
@@ -275,8 +271,8 @@ bool Triangulator::isConcave(int index, int vertexCount, Vector<float> &vertices
 	int next = indices[(index + 1) % vertexCount] << 1;
 
 	return !positiveArea(vertices[previous], vertices[previous + 1],
-		vertices[current], vertices[current + 1],
-		vertices[next], vertices[next + 1]);
+						 vertices[current], vertices[current + 1],
+						 vertices[next], vertices[next + 1]);
 }
 
 bool Triangulator::positiveArea(float p1x, float p1y, float p2x, float p2y, float p3x, float p3y) {

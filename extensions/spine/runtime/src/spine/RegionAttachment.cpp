@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,13 +27,10 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/RegionAttachment.h>
 
 #include <spine/Bone.h>
+#include <spine/Slot.h>
 
 #include <assert.h>
 
@@ -51,37 +48,44 @@ const int RegionAttachment::BRX = 6;
 const int RegionAttachment::BRY = 7;
 
 RegionAttachment::RegionAttachment(const String &name) : Attachment(name), HasRendererObject(),
-	_x(0),
-	_y(0),
-	_rotation(0),
-	_scaleX(1),
-	_scaleY(1),
-	_width(0),
-	_height(0),
-	_regionOffsetX(0),
-	_regionOffsetY(0),
-	_regionWidth(0),
-	_regionHeight(0),
-	_regionOriginalWidth(0),
-	_regionOriginalHeight(0),
-	_path(),
-	_regionU(0),
-	_regionV(0),
-	_regionU2(0),
-	_regionV2(0),
-	_color(1, 1, 1, 1)
-{
+														 _x(0),
+														 _y(0),
+														 _rotation(0),
+														 _scaleX(1),
+														 _scaleY(1),
+														 _width(0),
+														 _height(0),
+														 _path(),
+														 _color(1, 1, 1, 1),
+														 _region(NULL),
+														 _sequence(NULL) {
 	_vertexOffset.setSize(NUM_UVS, 0);
 	_uvs.setSize(NUM_UVS, 0);
 }
 
-void RegionAttachment::updateOffset() {
-	float regionScaleX = _width / _regionOriginalWidth * _scaleX;
-	float regionScaleY = _height / _regionOriginalHeight * _scaleY;
-	float localX = -_width / 2 * _scaleX + _regionOffsetX * regionScaleX;
-	float localY = -_height / 2 * _scaleY + _regionOffsetY * regionScaleY;
-	float localX2 = localX + _regionWidth * regionScaleX;
-	float localY2 = localY + _regionHeight * regionScaleY;
+RegionAttachment::~RegionAttachment() {
+	if (_sequence) delete _sequence;
+}
+
+void RegionAttachment::updateRegion() {
+	if (_region == NULL) {
+		_uvs[BLX] = 0;
+		_uvs[BLY] = 0;
+		_uvs[ULX] = 0;
+		_uvs[ULY] = 1;
+		_uvs[URX] = 1;
+		_uvs[URY] = 1;
+		_uvs[BRX] = 1;
+		_uvs[BRY] = 0;
+		return;
+	}
+
+	float regionScaleX = _width / _region->originalWidth * _scaleX;
+	float regionScaleY = _height / _region->originalHeight * _scaleY;
+	float localX = -_width / 2 * _scaleX + _region->offsetX * regionScaleX;
+	float localY = -_height / 2 * _scaleY + _region->offsetY * regionScaleY;
+	float localX2 = localX + _region->width * regionScaleX;
+	float localY2 = localY + _region->height * regionScaleY;
 	float cos = MathUtil::cosDeg(_rotation);
 	float sin = MathUtil::sinDeg(_rotation);
 	float localXCos = localX * cos + _x;
@@ -101,61 +105,62 @@ void RegionAttachment::updateOffset() {
 	_vertexOffset[URY] = localY2Cos + localX2Sin;
 	_vertexOffset[BRX] = localX2Cos - localYSin;
 	_vertexOffset[BRY] = localYCos + localX2Sin;
-}
 
-void RegionAttachment::setUVs(float u, float v, float u2, float v2, bool rotate) {
-	if (rotate) {
-		_uvs[URX] = u;
-		_uvs[URY] = v2;
-		_uvs[BRX] = u;
-		_uvs[BRY] = v;
-		_uvs[BLX] = u2;
-		_uvs[BLY] = v;
-		_uvs[ULX] = u2;
-		_uvs[ULY] = v2;
+	if (_region->degrees == 90) {
+		_uvs[URX] = _region->u;
+		_uvs[URY] = _region->v2;
+		_uvs[BRX] = _region->u;
+		_uvs[BRY] = _region->v;
+		_uvs[BLX] = _region->u2;
+		_uvs[BLY] = _region->v;
+		_uvs[ULX] = _region->u2;
+		_uvs[ULY] = _region->v2;
 	} else {
-		_uvs[ULX] = u;
-		_uvs[ULY] = v2;
-		_uvs[URX] = u;
-		_uvs[URY] = v;
-		_uvs[BRX] = u2;
-		_uvs[BRY] = v;
-		_uvs[BLX] = u2;
-		_uvs[BLY] = v2;
+		_uvs[ULX] = _region->u;
+		_uvs[ULY] = _region->v2;
+		_uvs[URX] = _region->u;
+		_uvs[URY] = _region->v;
+		_uvs[BRX] = _region->u2;
+		_uvs[BRY] = _region->v;
+		_uvs[BLX] = _region->u2;
+		_uvs[BLY] = _region->v2;
 	}
 }
 
-void RegionAttachment::computeWorldVertices(Bone &bone, Vector<float> &worldVertices, size_t offset, size_t stride) {
+void RegionAttachment::computeWorldVertices(Slot &slot, Vector<float> &worldVertices, size_t offset, size_t stride) {
 	assert(worldVertices.size() >= (offset + 8));
-	computeWorldVertices(bone, worldVertices.buffer(), offset, stride);
+	computeWorldVertices(slot, worldVertices.buffer(), offset, stride);
 }
 
-void RegionAttachment::computeWorldVertices(Bone &bone, float* worldVertices, size_t offset, size_t stride) {
+void RegionAttachment::computeWorldVertices(Slot &slot, float *worldVertices, size_t offset, size_t stride) {
+	if (_sequence) _sequence->apply(&slot, this);
+
+	Bone &bone = slot.getBone();
 	float x = bone.getWorldX(), y = bone.getWorldY();
 	float a = bone.getA(), b = bone.getB(), c = bone.getC(), d = bone.getD();
 	float offsetX, offsetY;
 
 	offsetX = _vertexOffset[BRX];
 	offsetY = _vertexOffset[BRY];
-	worldVertices[offset] = offsetX * a + offsetY * b + x; // br
+	worldVertices[offset] = offsetX * a + offsetY * b + x;// br
 	worldVertices[offset + 1] = offsetX * c + offsetY * d + y;
 	offset += stride;
 
 	offsetX = _vertexOffset[BLX];
 	offsetY = _vertexOffset[BLY];
-	worldVertices[offset] = offsetX * a + offsetY * b + x; // bl
+	worldVertices[offset] = offsetX * a + offsetY * b + x;// bl
 	worldVertices[offset + 1] = offsetX * c + offsetY * d + y;
 	offset += stride;
 
 	offsetX = _vertexOffset[ULX];
 	offsetY = _vertexOffset[ULY];
-	worldVertices[offset] = offsetX * a + offsetY * b + x; // ul
+	worldVertices[offset] = offsetX * a + offsetY * b + x;// ul
 	worldVertices[offset + 1] = offsetX * c + offsetY * d + y;
 	offset += stride;
 
 	offsetX = _vertexOffset[URX];
 	offsetY = _vertexOffset[URY];
-	worldVertices[offset] = offsetX * a + offsetY * b + x; // ur
+	worldVertices[offset] = offsetX * a + offsetY * b + x;// ur
 	worldVertices[offset + 1] = offsetX * c + offsetY * d + y;
 }
 
@@ -223,52 +228,20 @@ void RegionAttachment::setPath(const String &inValue) {
 	_path = inValue;
 }
 
-float RegionAttachment::getRegionOffsetX() {
-	return _regionOffsetX;
+TextureRegion *RegionAttachment::getRegion() {
+	return _region;
 }
 
-void RegionAttachment::setRegionOffsetX(float inValue) {
-	_regionOffsetX = inValue;
+void RegionAttachment::setRegion(TextureRegion *region) {
+	_region = region;
 }
 
-float RegionAttachment::getRegionOffsetY() {
-	return _regionOffsetY;
+Sequence *RegionAttachment::getSequence() {
+	return _sequence;
 }
 
-void RegionAttachment::setRegionOffsetY(float inValue) {
-	_regionOffsetY = inValue;
-}
-
-float RegionAttachment::getRegionWidth() {
-	return _regionWidth;
-}
-
-void RegionAttachment::setRegionWidth(float inValue) {
-	_regionWidth = inValue;
-}
-
-float RegionAttachment::getRegionHeight() {
-	return _regionHeight;
-}
-
-void RegionAttachment::setRegionHeight(float inValue) {
-	_regionHeight = inValue;
-}
-
-float RegionAttachment::getRegionOriginalWidth() {
-	return _regionOriginalWidth;
-}
-
-void RegionAttachment::setRegionOriginalWidth(float inValue) {
-	_regionOriginalWidth = inValue;
-}
-
-float RegionAttachment::getRegionOriginalHeight() {
-	return _regionOriginalHeight;
-}
-
-void RegionAttachment::setRegionOriginalHeight(float inValue) {
-	_regionOriginalHeight = inValue;
+void RegionAttachment::setSequence(Sequence *sequence) {
+	_sequence = sequence;
 }
 
 Vector<float> &RegionAttachment::getOffset() {
@@ -283,14 +256,9 @@ spine::Color &RegionAttachment::getColor() {
 	return _color;
 }
 
-Attachment* RegionAttachment::copy() {
-	RegionAttachment* copy = new (__FILE__, __LINE__) RegionAttachment(getName());
-	copy->_regionWidth = _regionWidth;
-	copy->_regionHeight = _regionHeight;
-	copy->_regionOffsetX = _regionOffsetX;
-	copy->_regionOffsetY = _regionOffsetY;
-	copy->_regionOriginalWidth = _regionOriginalWidth;
-	copy->_regionOriginalHeight = _regionOriginalHeight;
+Attachment *RegionAttachment::copy() {
+	RegionAttachment *copy = new (__FILE__, __LINE__) RegionAttachment(getName());
+	copy->_region = _region;
 	copy->setRendererObject(getRendererObject());
 	copy->_path = _path;
 	copy->_x = _x;
@@ -303,5 +271,6 @@ Attachment* RegionAttachment::copy() {
 	copy->_uvs.clearAndAddAll(_uvs);
 	copy->_vertexOffset.clearAndAddAll(_vertexOffset);
 	copy->_color.set(_color);
+	copy->_sequence = _sequence != NULL ? _sequence->copy() : NULL;
 	return copy;
 }

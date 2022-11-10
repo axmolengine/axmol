@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -31,29 +31,39 @@
 #define Spine_PathAttachment_h
 
 #include <spine/VertexAttachment.h>
+#include <spine/Color.h>
 
 namespace spine {
 	class SP_API PathAttachment : public VertexAttachment {
 		friend class SkeletonBinary;
+
 		friend class SkeletonJson;
 
-		RTTI_DECL
+	RTTI_DECL
 
 	public:
-		explicit PathAttachment(const String& name);
+		explicit PathAttachment(const String &name);
 
 		/// The length in the setup pose from the start of the path to the end of each curve.
-		Vector<float>& getLengths();
+		Vector<float> &getLengths();
+
 		bool isClosed();
+
 		void setClosed(bool inValue);
+
 		bool isConstantSpeed();
+
 		void setConstantSpeed(bool inValue);
 
-		virtual Attachment* copy();
+		Color &getColor();
+
+		virtual Attachment *copy();
+
 	private:
 		Vector<float> _lengths;
 		bool _closed;
 		bool _constantSpeed;
+		Color _color;
 	};
 }
 

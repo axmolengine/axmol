@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -31,16 +31,23 @@
 #define Spine_BoundingBoxAttachment_h
 
 #include <spine/VertexAttachment.h>
+#include <spine/Color.h>
 #include <spine/SpineObject.h>
 
 namespace spine {
 	/// Attachment that has a polygon for bounds checking.
 	class SP_API BoundingBoxAttachment : public VertexAttachment {
-		RTTI_DECL
+	RTTI_DECL
 
-		explicit BoundingBoxAttachment(const String& name);
+	public:
+		explicit BoundingBoxAttachment(const String &name);
 
-		virtual Attachment* copy();
+		Color &getColor();
+
+		virtual Attachment *copy();
+
+	private:
+		Color _color;
 	};
 }
 

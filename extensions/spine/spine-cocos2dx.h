@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -30,42 +30,43 @@
 #ifndef SPINE_COCOS2DX_H_
 #define SPINE_COCOS2DX_H_
 
-#include <spine/spine.h>
 #include "cocos2d.h"
+#include <spine/spine.h>
 
 #include <spine/SkeletonRenderer.h>
 #include <spine/SkeletonBatch.h>
 #include <spine/SkeletonTwoColorBatch.h>
+
 #include <spine/SkeletonAnimation.h>
 
 namespace spine {
-	class SP_API Cocos2dAtlasAttachmentLoader: public AtlasAttachmentLoader {
+	class SP_API Cocos2dAtlasAttachmentLoader : public AtlasAttachmentLoader {
 	public:
-		Cocos2dAtlasAttachmentLoader(Atlas* atlas);
+		Cocos2dAtlasAttachmentLoader(Atlas *atlas);
 		virtual ~Cocos2dAtlasAttachmentLoader();
-		virtual void configureAttachment(Attachment* attachment);
+		virtual void configureAttachment(Attachment *attachment);
 	};
 
-	class SP_API Cocos2dTextureLoader: public TextureLoader {
+	class SP_API Cocos2dTextureLoader : public TextureLoader {
 	public:
 		Cocos2dTextureLoader();
-		
-		virtual ~Cocos2dTextureLoader();
-		
-		virtual void load(AtlasPage& page, const String& path);
 
-		virtual void unload(void* texture);
+		virtual ~Cocos2dTextureLoader();
+
+		virtual void load(AtlasPage &page, const String &path);
+
+		virtual void unload(void *texture);
 	};
 
-	class SP_API Cocos2dExtension: public DefaultSpineExtension {
+	class SP_API Cocos2dExtension : public DefaultSpineExtension {
 	public:
 		Cocos2dExtension();
-		
+
 		virtual ~Cocos2dExtension();
-		
+
 	protected:
 		virtual char *_readFile(const String &path, int *length);
 	};
-}
+}// namespace spine
 
 #endif /* SPINE_COCOS2DX_H_ */

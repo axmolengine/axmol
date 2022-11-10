@@ -95,10 +95,10 @@ class axutils {
 
         // Detecting sdkRoot
         def sdkRoot = null
-        Properties projProps = new Properties()
+        Properties localProps = new Properties()
         try {
-            projProps.load(project.rootProject.file("local.properties").newDataInputStream())
-            sdkRoot = projProps.getProperty("sdk.dir")
+            localProps.load(project.rootProject.file("local.properties").newDataInputStream())
+            sdkRoot = localProps.getProperty("sdk.dir")
         }
         catch(Exception ex) {
             ex.printStackTrace()
@@ -111,9 +111,10 @@ class axutils {
             }
         }
 
-        def rets = new String[3] // ndkVer,ndkPath,cmakeVer
+        def rets = new ArrayList(4) // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX)
         findNDK(sdkRoot, ndkVer, rets)
         findCMake(sdkRoot, cmakeVer, rets)
+        parseCMakeOptions(project.properties, rets)
         return rets
     }
 
@@ -228,6 +229,16 @@ class axutils {
         rets[2] = foundCMakeVer
     }
 
+    private static void parseCMakeOptions(properties, rets) {
+        def options = new ArrayList<Object>()
+        for(item in properties) {
+            if (item.key.startsWith('AX_')) {
+                options.add("\"-D${item.key}=${item.value}\"")
+            }
+        }
+        rets[3] = options
+    }
+
     private static int compareVersion(String ver1, String ver2) {
         return new VersionComparator().compare(ver1, ver2)
     }
@@ -268,7 +279,7 @@ class axutils {
 
     private static String findCMakeFromBinDir(String cmakeVer, String cmakeBin, boolean allowNewerCMake) {
         def foundCMakeVer = null
-        
+
         String ninjaPath = cmakeBin + File.separator + getNinjaProgramName()
         if(!new File(ninjaPath).isFile()) {
             println("The required ninja program is not present in cmake bin dir: '$cmakeBin'")

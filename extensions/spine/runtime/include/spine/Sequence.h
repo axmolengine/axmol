@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,27 +27,72 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifndef Spine_TimelineType_h
-#define Spine_TimelineType_h
+#ifndef Spine_Sequence_h
+#define Spine_Sequence_h
+
+#include <spine/Vector.h>
+#include <spine/SpineString.h>
+#include <spine/TextureRegion.h>
 
 namespace spine {
-enum TimelineType {
-	TimelineType_Rotate = 0,
-	TimelineType_Translate,
-	TimelineType_Scale,
-	TimelineType_Shear,
-	TimelineType_Attachment,
-	TimelineType_Color,
-	TimelineType_Deform,
-	TimelineType_Event,
-	TimelineType_DrawOrder,
-	TimelineType_IkConstraint,
-	TimelineType_TransformConstraint,
-	TimelineType_PathConstraintPosition,
-	TimelineType_PathConstraintSpacing,
-	TimelineType_PathConstraintMix,
-	TimelineType_TwoColor
-};
+	class Slot;
+
+	class Attachment;
+
+	class SkeletonBinary;
+	class SkeletonJson;
+
+	class SP_API Sequence : public SpineObject {
+		friend class SkeletonBinary;
+		friend class SkeletonJson;
+	public:
+		Sequence(int count);
+
+		~Sequence();
+
+		Sequence *copy();
+
+		void apply(Slot *slot, Attachment *attachment);
+
+		String getPath(const String &basePath, int index);
+
+		int getId() { return _id; }
+
+		void setId(int id) { _id = id; }
+
+		int getStart() { return _start; }
+
+		void setStart(int start) { _start = start; }
+
+		int getDigits() { return _digits; }
+
+		void setDigits(int digits) { _digits = digits; }
+
+		int getSetupIndex() { return _setupIndex; }
+
+		void setSetupIndex(int setupIndex) { _setupIndex = setupIndex; }
+
+		Vector<TextureRegion *> &getRegions() { return _regions; }
+
+	private:
+		int _id;
+		Vector<TextureRegion *> _regions;
+		int _start;
+		int _digits;
+		int _setupIndex;
+
+		int getNextID();
+	};
+
+	enum SequenceMode {
+		hold = 0,
+		once = 1,
+		loop = 2,
+		pingpong = 3,
+		onceReverse = 4,
+		loopReverse = 5,
+		pingpongReverse = 6
+	};
 }
 
-#endif /* Spine_TimelineType_h */
+#endif

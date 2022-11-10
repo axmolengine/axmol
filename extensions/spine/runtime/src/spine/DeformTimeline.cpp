@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,42 +27,37 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/DeformTimeline.h>
 
-#include <spine/Skeleton.h>
 #include <spine/Event.h>
+#include <spine/Skeleton.h>
 
 #include <spine/VertexAttachment.h>
 
 #include <spine/Animation.h>
-#include <spine/TimelineType.h>
-#include <spine/Slot.h>
 #include <spine/Bone.h>
+#include <spine/Property.h>
+#include <spine/Slot.h>
 #include <spine/SlotData.h>
 
 using namespace spine;
 
 RTTI_IMPL(DeformTimeline, CurveTimeline)
 
-DeformTimeline::DeformTimeline(int frameCount) : CurveTimeline(frameCount), _slotIndex(0), _attachment(NULL) {
-	_frames.ensureCapacity(frameCount);
-	_frameVertices.ensureCapacity(frameCount);
+DeformTimeline::DeformTimeline(size_t frameCount, size_t bezierCount, int slotIndex, VertexAttachment *attachment)
+	: CurveTimeline(frameCount, 1, bezierCount), _slotIndex(slotIndex), _attachment(attachment) {
+	PropertyId ids[] = {((PropertyId) Property_Deform << 32) | ((slotIndex << 16 | attachment->_id) & 0xffffffff)};
+	setPropertyIds(ids, 1);
 
-	_frames.setSize(frameCount, 0);
-
-	for (int i = 0; i < frameCount; ++i) {
+	_vertices.ensureCapacity(frameCount);
+	for (size_t i = 0; i < frameCount; ++i) {
 		Vector<float> vec;
-		_frameVertices.add(vec);
+		_vertices.add(vec);
 	}
 }
 
 void DeformTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha,
-	MixBlend blend, MixDirection direction
-) {
+						   MixBlend blend, MixDirection direction) {
 	SP_UNUSED(lastTime);
 	SP_UNUSED(pEvents);
 	SP_UNUSED(direction);
@@ -77,7 +72,7 @@ void DeformTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vecto
 	}
 
 	VertexAttachment *attachment = static_cast<VertexAttachment *>(slotAttachment);
-	if (attachment->_deformAttachment != _attachment) {
+	if (attachment->_timelineAttachment != _attachment) {
 		return;
 	}
 
@@ -86,48 +81,49 @@ void DeformTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vecto
 		blend = MixBlend_Setup;
 	}
 
-	Vector< Vector<float> > &frameVertices = _frameVertices;
-	size_t vertexCount = frameVertices[0].size();
+	Vector<Vector<float>> &vertices = _vertices;
+	size_t vertexCount = vertices[0].size();
 
 	Vector<float> &frames = _frames;
 	if (time < _frames[0]) {
 		switch (blend) {
-		case MixBlend_Setup:
-			deformArray.clear();
-			return;
-		case MixBlend_First: {
-			if (alpha == 1) {
+			case MixBlend_Setup:
 				deformArray.clear();
 				return;
+			case MixBlend_First: {
+				if (alpha == 1) {
+					deformArray.clear();
+					return;
+				}
+				deformArray.setSize(vertexCount, 0);
+				Vector<float> &deform = deformArray;
+				if (attachment->getBones().size() == 0) {
+					// Unweighted vertex positions.
+					Vector<float> &setupVertices = attachment->getVertices();
+					for (size_t i = 0; i < vertexCount; i++)
+						deform[i] += (setupVertices[i] - deform[i]) * alpha;
+				} else {
+					// Weighted deform offsets.
+					alpha = 1 - alpha;
+					for (size_t i = 0; i < vertexCount; i++)
+						deform[i] *= alpha;
+				}
 			}
-			deformArray.setSize(vertexCount, 0);
-			Vector<float> &deformInner = deformArray;
-			if (attachment->getBones().size() == 0) {
-				// Unweighted vertex positions.
-				Vector<float> &setupVertices = attachment->getVertices();
-				for (size_t i = 0; i < vertexCount; i++)
-					deformInner[i] += (setupVertices[i] - deformInner[i]) * alpha;
-			} else {
-				// Weighted deform offsets.
-				alpha = 1 - alpha;
-				for (size_t i = 0; i < vertexCount; i++)
-					deformInner[i] *= alpha;
+			case MixBlend_Replace:
+			case MixBlend_Add: {
 			}
 		}
-		case MixBlend_Replace:
-		case MixBlend_Add:
-			return;
-		}
+		return;
 	}
 
 	deformArray.setSize(vertexCount, 0);
 	Vector<float> &deform = deformArray;
 
-	if (time >= frames[frames.size() - 1]) { // Time is after last frame.
-		Vector<float> &lastVertices = frameVertices[frames.size() - 1];
+	if (time >= frames[frames.size() - 1]) {// Time is after last frame.
+		Vector<float> &lastVertices = vertices[frames.size() - 1];
 		if (alpha == 1) {
 			if (blend == MixBlend_Add) {
-				VertexAttachment *vertexAttachment = static_cast<VertexAttachment*>(slotAttachment);
+				VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
 				if (vertexAttachment->getBones().size() == 0) {
 					// Unweighted vertex positions, no alpha.
 					Vector<float> &setupVertices = vertexAttachment->getVertices();
@@ -144,51 +140,50 @@ void DeformTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vecto
 			}
 		} else {
 			switch (blend) {
-			case MixBlend_Setup: {
-				VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
-				if (vertexAttachment->getBones().size() == 0) {
-					// Unweighted vertex positions, with alpha.
-					Vector<float> &setupVertices = vertexAttachment->getVertices();
-					for (size_t i = 0; i < vertexCount; i++) {
-						float setup = setupVertices[i];
-						deform[i] = setup + (lastVertices[i] - setup) * alpha;
+				case MixBlend_Setup: {
+					VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
+					if (vertexAttachment->getBones().size() == 0) {
+						// Unweighted vertex positions, with alpha.
+						Vector<float> &setupVertices = vertexAttachment->getVertices();
+						for (size_t i = 0; i < vertexCount; i++) {
+							float setup = setupVertices[i];
+							deform[i] = setup + (lastVertices[i] - setup) * alpha;
+						}
+					} else {
+						// Weighted deform offsets, with alpha.
+						for (size_t i = 0; i < vertexCount; i++)
+							deform[i] = lastVertices[i] * alpha;
 					}
-				} else {
-					// Weighted deform offsets, with alpha.
-					for (size_t i = 0; i < vertexCount; i++)
-						deform[i] = lastVertices[i] * alpha;
+					break;
 				}
-				break;
-			}
-			case MixBlend_First:
-			case MixBlend_Replace:
-				// Vertex positions or deform offsets, with alpha.
-				for (size_t i = 0; i < vertexCount; i++)
-					deform[i] += (lastVertices[i] - deform[i]) * alpha;
-				break;
-			case MixBlend_Add:
-				VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
-				if (vertexAttachment->getBones().size() == 0) {
-					// Unweighted vertex positions, no alpha.
-					Vector<float> &setupVertices = vertexAttachment->getVertices();
+				case MixBlend_First:
+				case MixBlend_Replace:
+					// Vertex positions or deform offsets, with alpha.
 					for (size_t i = 0; i < vertexCount; i++)
-						deform[i] += (lastVertices[i] - setupVertices[i]) * alpha;
-				} else {
-					// Weighted deform offsets, alpha.
-					for (size_t i = 0; i < vertexCount; i++)
-						deform[i] += lastVertices[i] * alpha;
-				}
+						deform[i] += (lastVertices[i] - deform[i]) * alpha;
+					break;
+				case MixBlend_Add:
+					VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
+					if (vertexAttachment->getBones().size() == 0) {
+						// Unweighted vertex positions, no alpha.
+						Vector<float> &setupVertices = vertexAttachment->getVertices();
+						for (size_t i = 0; i < vertexCount; i++)
+							deform[i] += (lastVertices[i] - setupVertices[i]) * alpha;
+					} else {
+						// Weighted deform offsets, alpha.
+						for (size_t i = 0; i < vertexCount; i++)
+							deform[i] += lastVertices[i] * alpha;
+					}
 			}
 		}
 		return;
 	}
 
 	// Interpolate between the previous frame and the current frame.
-	int frame = Animation::binarySearch(frames, time);
-	Vector<float> &prevVertices = frameVertices[frame - 1];
-	Vector<float> &nextVertices = frameVertices[frame];
-	float frameTime = frames[frame];
-	float percent = getCurvePercent(frame - 1, 1 - (time - frameTime) / (frames[frame - 1] - frameTime));
+	int frame = Animation::search(frames, time);
+	float percent = getCurvePercent(time, frame);
+	Vector<float> &prevVertices = vertices[frame];
+	Vector<float> &nextVertices = vertices[frame + 1];
 
 	if (alpha == 1) {
 		if (blend == MixBlend_Add) {
@@ -216,77 +211,112 @@ void DeformTimeline::apply(Skeleton &skeleton, float lastTime, float time, Vecto
 		}
 	} else {
 		switch (blend) {
-		case MixBlend_Setup: {
-			VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
-			if (vertexAttachment->getBones().size() == 0) {
-				// Unweighted vertex positions, with alpha.
-				Vector<float> &setupVertices = vertexAttachment->getVertices();
-				for (size_t i = 0; i < vertexCount; i++) {
-					float prev = prevVertices[i], setup = setupVertices[i];
-					deform[i] = setup + (prev + (nextVertices[i] - prev) * percent - setup) * alpha;
+			case MixBlend_Setup: {
+				VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
+				if (vertexAttachment->getBones().size() == 0) {
+					// Unweighted vertex positions, with alpha.
+					Vector<float> &setupVertices = vertexAttachment->getVertices();
+					for (size_t i = 0; i < vertexCount; i++) {
+						float prev = prevVertices[i], setup = setupVertices[i];
+						deform[i] = setup + (prev + (nextVertices[i] - prev) * percent - setup) * alpha;
+					}
+				} else {
+					// Weighted deform offsets, with alpha.
+					for (size_t i = 0; i < vertexCount; i++) {
+						float prev = prevVertices[i];
+						deform[i] = (prev + (nextVertices[i] - prev) * percent) * alpha;
+					}
 				}
-			} else {
-				// Weighted deform offsets, with alpha.
+				break;
+			}
+			case MixBlend_First:
+			case MixBlend_Replace:
+				// Vertex positions or deform offsets, with alpha.
 				for (size_t i = 0; i < vertexCount; i++) {
 					float prev = prevVertices[i];
-					deform[i] = (prev + (nextVertices[i] - prev) * percent) * alpha;
+					deform[i] += (prev + (nextVertices[i] - prev) * percent - deform[i]) * alpha;
 				}
-			}
-			break;
-		}
-		case MixBlend_First:
-		case MixBlend_Replace:
-			// Vertex positions or deform offsets, with alpha.
-			for (size_t i = 0; i < vertexCount; i++) {
-				float prev = prevVertices[i];
-				deform[i] += (prev + (nextVertices[i] - prev) * percent - deform[i]) * alpha;
-			}
-			break;
-		case MixBlend_Add:
-			VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
-			if (vertexAttachment->getBones().size() == 0) {
-				// Unweighted vertex positions, with alpha.
-				Vector<float> &setupVertices = vertexAttachment->getVertices();
-				for (size_t i = 0; i < vertexCount; i++) {
-					float prev = prevVertices[i];
-					deform[i] += (prev + (nextVertices[i] - prev) * percent - setupVertices[i]) * alpha;
+				break;
+			case MixBlend_Add:
+				VertexAttachment *vertexAttachment = static_cast<VertexAttachment *>(slotAttachment);
+				if (vertexAttachment->getBones().size() == 0) {
+					// Unweighted vertex positions, with alpha.
+					Vector<float> &setupVertices = vertexAttachment->getVertices();
+					for (size_t i = 0; i < vertexCount; i++) {
+						float prev = prevVertices[i];
+						deform[i] += (prev + (nextVertices[i] - prev) * percent - setupVertices[i]) * alpha;
+					}
+				} else {
+					// Weighted deform offsets, with alpha.
+					for (size_t i = 0; i < vertexCount; i++) {
+						float prev = prevVertices[i];
+						deform[i] += (prev + (nextVertices[i] - prev) * percent) * alpha;
+					}
 				}
-			} else {
-				// Weighted deform offsets, with alpha.
-				for (size_t i = 0; i < vertexCount; i++) {
-					float prev = prevVertices[i];
-					deform[i] += (prev + (nextVertices[i] - prev) * percent) * alpha;
-				}
-			}
 		}
 	}
 }
 
-int DeformTimeline::getPropertyId() {
-	assert(_attachment != NULL);
-	return ((int) TimelineType_Deform << 24) + _attachment->_id + _slotIndex;
+void DeformTimeline::setBezier(size_t bezier, size_t frame, float value, float time1, float value1, float cx1, float cy1,
+							   float cx2, float cy2, float time2, float value2) {
+	SP_UNUSED(value1);
+	SP_UNUSED(value2);
+	size_t i = getFrameCount() + bezier * DeformTimeline::BEZIER_SIZE;
+	if (value == 0) _curves[frame] = DeformTimeline::BEZIER + i;
+	float tmpx = (time1 - cx1 * 2 + cx2) * 0.03, tmpy = cy2 * 0.03 - cy1 * 0.06;
+	float dddx = ((cx1 - cx2) * 3 - time1 + time2) * 0.006, dddy = (cy1 - cy2 + 0.33333333) * 0.018;
+	float ddx = tmpx * 2 + dddx, ddy = tmpy * 2 + dddy;
+	float dx = (cx1 - time1) * 0.3 + tmpx + dddx * 0.16666667, dy = cy1 * 0.3 + tmpy + dddy * 0.16666667;
+	float x = time1 + dx, y = dy;
+	for (size_t n = i + DeformTimeline::BEZIER_SIZE; i < n; i += 2) {
+		_curves[i] = x;
+		_curves[i + 1] = y;
+		dx += ddx;
+		dy += ddy;
+		ddx += dddx;
+		ddy += dddy;
+		x += dx;
+		y += dy;
+	}
 }
 
-void DeformTimeline::setFrame(int frameIndex, float time, Vector<float> &vertices) {
-	_frames[frameIndex] = time;
-	_frameVertices[frameIndex].clear();
-	_frameVertices[frameIndex].addAll(vertices);
+float DeformTimeline::getCurvePercent(float time, int frame) {
+	int i = (int) _curves[frame];
+	switch (i) {
+		case DeformTimeline::LINEAR: {
+			float x = _frames[frame];
+			return (time - x) / (_frames[frame + getFrameEntries()] - x);
+		}
+		case DeformTimeline::STEPPED: {
+			return 0;
+		}
+		default: {
+		}
+	}
+	i -= DeformTimeline::BEZIER;
+	if (_curves[i] > time) {
+		float x = _frames[frame];
+		return _curves[i + 1] * (time - x) / (_curves[i] - x);
+	}
+	int n = i + DeformTimeline::BEZIER_SIZE;
+	for (i += 2; i < n; i += 2) {
+		if (_curves[i] >= time) {
+			float x = _curves[i - 2], y = _curves[i - 1];
+			return y + (time - x) / (_curves[i] - x) * (_curves[i + 1] - y);
+		}
+	}
+	float x = _curves[n - 2], y = _curves[n - 1];
+	return y + (1 - y) * (time - x) / (_frames[frame + getFrameEntries()] - x);
 }
 
-int DeformTimeline::getSlotIndex() {
-	return _slotIndex;
+void DeformTimeline::setFrame(int frame, float time, Vector<float> &vertices) {
+	_frames[frame] = time;
+	_vertices[frame].clear();
+	_vertices[frame].addAll(vertices);
 }
 
-void DeformTimeline::setSlotIndex(int inValue) {
-	_slotIndex = inValue;
-}
-
-Vector<float> &DeformTimeline::getFrames() {
-	return _frames;
-}
-
-Vector<Vector<float> > &DeformTimeline::getVertices() {
-	return _frameVertices;
+Vector<Vector<float>> &DeformTimeline::getVertices() {
+	return _vertices;
 }
 
 VertexAttachment *DeformTimeline::getAttachment() {

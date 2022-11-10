@@ -2,9 +2,9 @@
 # coding=utf-8
 """****************************************************************************
 Copyright (c) 2014 cocos2d-x.org
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
-http://www.cocos2d-x.org
+https://axmolengine.github.io/axmol
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,10 @@ THE SOFTWARE.
 ****************************************************************************"""
 
 '''
-This script will install environment variables needed to by axis. It will set these envrironment variables:
-* AX_CONSOLE_ROOT: used to run axis console tools
+This script will install environment variables needed to by axmol. It will set these envrironment variables:
+* AX_CONSOLE_ROOT: used to run axmol console tools
 * ANDROID_SDK_ROOT: used to generate applicatoin on Android through commands
-* AX_ROOT: path where axis is installed
+* AX_ROOT: path where axmol is installed
 
 On Max OS X, when start a shell, it will read these files and execute commands in sequence:
 
@@ -189,7 +189,7 @@ class SetEnvVar(object):
             self.need_backup = False
 
         file = open(self.file_used_for_setup, 'a')
-        file.write('\n# Add environment variable %s for axis\n' % key)
+        file.write('\n# Add environment variable %s for axmol\n' % key)
         file.write('export %s="%s"\n' % (key, value))
         file.write('export PATH=$%s:$PATH\n' % key)
         if key == ANDROID_SDK_ROOT:
@@ -376,40 +376,40 @@ class SetEnvVar(object):
 
     def set_console_root(self):
         print("->Check environment variable %s" % AX_CONSOLE_ROOT)
-        axis_console_root = os.path.join(
+        axmol_console_root = os.path.join(
             self.current_absolute_path, 'tools', 'console', 'bin')
         old_dir = self._find_environment_variable(AX_CONSOLE_ROOT)
         if old_dir is None:
             # add environment variable
             if self._isWindows():
-                self.set_windows_path(axis_console_root)
+                self.set_windows_path(axmol_console_root)
 
             self._set_environment_variable(
-                AX_CONSOLE_ROOT, axis_console_root)
+                AX_CONSOLE_ROOT, axmol_console_root)
         else:
-            if old_dir == axis_console_root:
+            if old_dir == axmol_console_root:
                 # is same with before, nothing to do
                 return
 
             # update the environment variable
             if self._isWindows():
                 self.remove_dir_from_win_path(old_dir)
-                self.set_windows_path(axis_console_root)
+                self.set_windows_path(axmol_console_root)
 
-            self._force_update_env(AX_CONSOLE_ROOT, axis_console_root)
+            self._force_update_env(AX_CONSOLE_ROOT, axmol_console_root)
 
-    def set_axis_root(self):
+    def set_axmol_root(self):
         print("->Check environment variable %s" % AX_ROOT)
-        axis_root = self.current_absolute_path
+        axmol_root = self.current_absolute_path
         old_dir = self._find_environment_variable(AX_ROOT)
         if old_dir is None:
             # add environment variable
-            self._set_environment_variable(AX_ROOT, axis_root)
+            self._set_environment_variable(AX_ROOT, axmol_root)
         else:
-            if old_dir == axis_root:
+            if old_dir == axmol_root:
                 # is same with before, nothing to do
                 return
-            self._force_update_env(AX_ROOT, axis_root)
+            self._force_update_env(AX_ROOT, axmol_root)
 
     def _force_update_unix_env(self, var_name, value):
         import re
@@ -557,11 +557,11 @@ class SetEnvVar(object):
 
     def set_environment_variables(self, android_sdk_root, quiet):
 
-        print('\nSetting up axis...')
+        print('\nSetting up axmol...')
 
         self.file_used_for_setup = self._get_filepath_for_setup()
 
-        self.set_axis_root()
+        self.set_axmol_root()
         self.set_console_root()
         
         if self._isWindows():

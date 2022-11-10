@@ -229,7 +229,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         // retained
         setSprite(Sprite::createWithTexture(_texture2D));
 
-#if defined(AX_USE_GL) || defined(AX_USE_GLES)
+#if defined(AX_USE_GL)
         _sprite->setFlippedY(true);
 #endif
 

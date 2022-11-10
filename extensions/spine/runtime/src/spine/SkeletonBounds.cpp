@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,15 +27,11 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/SkeletonBounds.h>
 
-#include <spine/Skeleton.h>
 #include <spine/Bone.h>
 #include <spine/BoundingBoxAttachment.h>
+#include <spine/Skeleton.h>
 
 #include <spine/Slot.h>
 
@@ -47,9 +43,9 @@ SkeletonBounds::SkeletonBounds() : _minX(0), _minY(0), _maxX(0), _maxY(0) {
 }
 
 SkeletonBounds::~SkeletonBounds() {
-    for (size_t i = 0, n = _polygons.size(); i < n; i++)
-        _polygonPool.free(_polygons[i]);
-    _polygons.clear();
+	for (size_t i = 0, n = _polygons.size(); i < n; i++)
+		_polygonPool.free(_polygons[i]);
+	_polygons.clear();
 }
 
 void SkeletonBounds::update(Skeleton &skeleton, bool updateAabb) {
@@ -78,7 +74,7 @@ void SkeletonBounds::update(Skeleton &skeleton, bool updateAabb) {
 		Polygon &polygon = *polygonP;
 
 		size_t count = boundingBox->getWorldVerticesLength();
-		polygon._count = count;
+		polygon._count = (int) count;
 		if (polygon._vertices.size() < count) {
 			polygon._vertices.setSize(count, 0);
 		}
@@ -198,10 +194,10 @@ float SkeletonBounds::getHeight() {
 }
 
 void SkeletonBounds::aabbCompute() {
-	float minX = FLT_MIN;
-	float minY = FLT_MIN;
-	float maxX = FLT_MAX;
-	float maxY = FLT_MAX;
+	float minX = FLT_MAX;
+	float minY = FLT_MAX;
+	float maxX = FLT_MIN;
+	float maxY = FLT_MIN;
 
 	for (size_t i = 0, n = _polygons.size(); i < n; ++i) {
 		spine::Polygon *polygon = _polygons[i];
