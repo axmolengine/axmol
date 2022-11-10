@@ -489,7 +489,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
     }
 
     // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
-#if defined(AX_USE_GL)
+#if !defined(AX_USE_GLES)
     // Enable point size by default.
 #    if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -1198,7 +1198,7 @@ bool GLViewImpl::loadGL()
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#   if defined(AX_USE_GL)
+#   if !defined(AX_USE_GLES)
     if (!gladLoadGL(glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");

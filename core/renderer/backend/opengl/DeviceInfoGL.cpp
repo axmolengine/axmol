@@ -68,7 +68,7 @@ static bool checkReallySupportsASTC()
                            astctexels);
 
     auto error = glGetError();
-#if defined(AX_USE_GL)
+#if !defined(AX_USE_GLES)
     if (!error && glGetTexImage)
     {
         // read pixel RGB: should be: 255, 128, 0
