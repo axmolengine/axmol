@@ -11,6 +11,7 @@ android {
         ndkPath = nbtInfo[1]
     }
     def cmakeVer = nbtInfo[2]
+    def cmakeOptions = Eval.me(nbtInfo[3])
 
     defaultConfig {
         applicationId "org.axmol.hellolua"
@@ -22,6 +23,7 @@ android {
         externalNativeBuild {
             cmake {
                 arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_shared", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE"
+                arguments.addAll(cmakeOptions)
                 cppFlags "-frtti -fexceptions -fsigned-char"
             }
         }
