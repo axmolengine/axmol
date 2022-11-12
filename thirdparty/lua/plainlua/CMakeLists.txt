@@ -28,7 +28,10 @@ target_compile_definitions(${target_name}
     )
 
 if(${AX_LUA_VERSION} VERSION_GREATER_EQUAL "5.4.0") # !important: traditional lua bindings solution tolua++ not support yet
-  target_compile_definitions(${target_name} PUBLIC LUA_COMPAT_APIINTCASTS=1)
+  target_compile_definitions(${target_name} 
+      PUBLIC LUA_COMPAT_APIINTCASTS=1
+      PUBLIC LUA_COMPAT_MATHLIB=1
+    )
 elseif(${AX_LUA_VERSION} VERSION_GREATER_EQUAL "5.3.0")
   target_compile_definitions(${target_name} 
       PUBLIC LUA_COMPAT_5_1=1
