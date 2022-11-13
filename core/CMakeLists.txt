@@ -50,6 +50,37 @@ endif()
 
 project(ax_libs)
 
+# default value for axmol extensions modules to Build
+# total supported extensions count: 12
+# extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
+
+option(AX_ENABLE_EXT_GUI "Build extension GUI" ON)
+
+option(AX_ENABLE_EXT_ASSETMANAGER "Build extension asset-manager" ON)
+option(AX_ENABLE_EXT_PARTICLE3D "Build extension Particle3D" ON)
+option(AX_ENABLE_EXT_PHYSICS_NODE "Build extension physics-nodes" ON)
+
+option(AX_ENABLE_EXT_SPINE "Build extension spine" ON)
+option(AX_ENABLE_EXT_DRAGONBONES "Build extension DragonBones" ON)
+
+option(AX_ENABLE_EXT_COCOSTUDIO "Build extension cocostudio" ON)
+
+option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
+
+option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
+option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
+
+if(WINDOWS OR MACOSX OR LINUX OR ANDROID)
+  option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
+else()
+  set(AX_ENABLE_EXT_IMGUI OFF)
+endif()
+
+if (AX_ENABLE_EXT_EFFEKSEER AND ANDROID) # effekseer-axmol require use glad
+   set(AX_USE_GLAD TRUE CACHE INTERNAL "Forcing use glad for platforms which use GL backend" )
+   add_definitions(-DAX_USE_GLAD=1)
+endif()
+
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
     # set(CMAKE_INSTALL_RPATH "@executable_path/Frameworks")
@@ -147,11 +178,6 @@ set_target_properties(${_AX_CORE_LIB}
                       VERSION "${_AX_VERSION}"
                       FOLDER "Internal"
                       )
-
-## Lua bindings lib
-# if(AX_ENABLE_EXT_LUA)
-#     add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings ${ENGINE_BINARY_PATH}/core/lua-bindings)
-# endif()
 
 if(XCODE OR VS)
     ax_mark_code_files("${_AX_CORE_LIB}")

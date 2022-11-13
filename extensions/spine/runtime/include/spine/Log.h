@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,27 +27,31 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <spine/AttachmentVertices.h>
+#ifndef SPINE_DEBUG_LOG_H
+#define SPINE_DEBUG_LOG_H
 
-USING_NS_AX;
+#include <spine/spine.h>
 
 namespace spine {
+	SP_API void spDebug_printSkeletonData(SkeletonData *skeletonData);
 
-AttachmentVertices::AttachmentVertices (Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount) {
-	_texture = texture;
-	if (_texture) _texture->retain();
+	SP_API void spDebug_printAnimation(Animation *animation);
 
-	_triangles = new TrianglesCommand::Triangles();
-	_triangles->verts = new V3F_C4B_T2F[verticesCount];
-	_triangles->vertCount = verticesCount;
-	_triangles->indices = triangles;
-	_triangles->indexCount = trianglesCount;
+	SP_API void spDebug_printTimeline(Timeline *timeline);
+
+	SP_API void spDebug_printBoneDatas(Vector<BoneData *> &boneDatas);
+
+	SP_API void spDebug_printBoneData(BoneData *boneData);
+
+	SP_API void spDebug_printSkeleton(Skeleton *skeleton);
+
+	SP_API void spDebug_printBones(Vector<Bone *> &bones);
+
+	SP_API void spDebug_printBone(Bone *bone);
+
+	SP_API void spDebug_printFloats(float *values, int numFloats);
+
+	SP_API void spDebug_printFloats(Vector<float> &values);
 }
 
-AttachmentVertices::~AttachmentVertices () {
-	delete [] _triangles->verts;
-	delete _triangles;
-	if (_texture) _texture->release();
-}
-
-}
+#endif

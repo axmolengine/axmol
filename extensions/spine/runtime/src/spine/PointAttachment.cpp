@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,10 +27,6 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/PointAttachment.h>
 
 #include <spine/Bone.h>
@@ -41,7 +37,7 @@ using namespace spine;
 
 RTTI_IMPL(PointAttachment, Attachment)
 
-PointAttachment::PointAttachment(const String &name) : Attachment(name), _x(0), _y(0), _rotation(0) {
+PointAttachment::PointAttachment(const String &name) : Attachment(name), _x(0), _y(0), _rotation(0), _color() {
 }
 
 void PointAttachment::computeWorldPosition(Bone &bone, float &ox, float &oy) {
@@ -81,8 +77,12 @@ void PointAttachment::setRotation(float inValue) {
 	_rotation = inValue;
 }
 
-Attachment* PointAttachment::copy() {
-	PointAttachment* copy = new(__FILE__, __LINE__) PointAttachment(getName());
+Color &PointAttachment::getColor() {
+	return _color;
+}
+
+Attachment *PointAttachment::copy() {
+	PointAttachment *copy = new (__FILE__, __LINE__) PointAttachment(getName());
 	copy->_x = _x;
 	copy->_y = _y;
 	copy->_rotation = _rotation;

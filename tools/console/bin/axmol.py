@@ -675,7 +675,7 @@ class CCPlugin(object):
 
         if args.listplatforms and self._project is not None:
             platforms = axmol_project.Platforms(self._project, args.platform, args.proj_dir)
-            p = platforms.get_available_platforms().keys()
+            p = list(platforms.get_available_platforms().keys())
             print('{"platforms":' + json.dumps(p) + '}')
             sys.exit(0)
 

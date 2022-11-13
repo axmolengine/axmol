@@ -1369,56 +1369,6 @@ int lua_ax_spine_SkeletonRenderer_setBlendFunc(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_spine_SkeletonRenderer_setVertexEffect(lua_State* tolua_S)
-{
-    int argc = 0;
-    spine::SkeletonRenderer* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"sp.SkeletonRenderer",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (spine::SkeletonRenderer*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_spine_SkeletonRenderer_setVertexEffect'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        spine::VertexEffect* arg0;
-
-        ok &= luaval_to_object<spine::VertexEffect>(tolua_S, 2, "sp.VertexEffect",&arg0, "sp.SkeletonRenderer:setVertexEffect");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_spine_SkeletonRenderer_setVertexEffect'", nullptr);
-            return 0;
-        }
-        cobj->setVertexEffect(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "sp.SkeletonRenderer:setVertexEffect",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_spine_SkeletonRenderer_setVertexEffect'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_spine_SkeletonRenderer_setSkin(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1985,7 +1935,6 @@ int lua_register_ax_spine_SkeletonRenderer(lua_State* tolua_S)
         tolua_function(tolua_S,"setTwoColorTint",lua_ax_spine_SkeletonRenderer_setTwoColorTint);
         tolua_function(tolua_S,"getDebugMeshesEnabled",lua_ax_spine_SkeletonRenderer_getDebugMeshesEnabled);
         tolua_function(tolua_S,"setBlendFunc",lua_ax_spine_SkeletonRenderer_setBlendFunc);
-        tolua_function(tolua_S,"setVertexEffect",lua_ax_spine_SkeletonRenderer_setVertexEffect);
         tolua_function(tolua_S,"setSkin",lua_ax_spine_SkeletonRenderer_setSkin);
         tolua_function(tolua_S,"getSkeleton",lua_ax_spine_SkeletonRenderer_getSkeleton);
         tolua_function(tolua_S,"createWithFile", lua_ax_spine_SkeletonRenderer_createWithFile);

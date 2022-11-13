@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -36,34 +36,35 @@ namespace spine {
 
 	class SP_API TransformConstraintTimeline : public CurveTimeline {
 		friend class SkeletonBinary;
+
 		friend class SkeletonJson;
 
-		RTTI_DECL
+	RTTI_DECL
 
 	public:
-		static const int ENTRIES;
+		explicit TransformConstraintTimeline(size_t frameCount, size_t bezierCount, int transformConstraintIndex);
 
-		explicit TransformConstraintTimeline(int frameCount);
+		virtual void
+		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
+			  MixDirection direction);
 
-		virtual void apply(Skeleton& skeleton, float lastTime, float time, Vector<Event*>* pEvents, float alpha, MixBlend blend, MixDirection direction);
+		void setFrame(size_t frameIndex, float time, float mixRotate, float mixX, float mixY, float mixScaleX,
+					  float mixScaleY, float mixShearY);
 
-		virtual int getPropertyId();
+		int getTransformConstraintIndex() { return _transformConstraintIndex; }
 
-		void setFrame(size_t frameIndex, float time, float rotateMix, float translateMix, float scaleMix, float shearMix);
+		void setTransformConstraintIndex(int inValue) { _transformConstraintIndex = inValue; }
 
 	private:
-		static const int PREV_TIME;
-		static const int PREV_ROTATE;
-		static const int PREV_TRANSLATE;
-		static const int PREV_SCALE;
-		static const int PREV_SHEAR;
-		static const int ROTATE;
-		static const int TRANSLATE;
-		static const int SCALE;
-		static const int SHEAR;
-
-		Vector<float> _frames;
 		int _transformConstraintIndex;
+
+		static const int ENTRIES = 7;
+		static const int ROTATE = 1;
+		static const int X = 2;
+		static const int Y = 3;
+		static const int SCALEX = 4;
+		static const int SCALEY = 5;
+		static const int SHEARY = 6;
 	};
 }
 

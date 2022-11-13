@@ -397,7 +397,8 @@ void UserDefault::lazyInit()
 
     if (filesize < _curMapSize)
     {  // construct a empty file mapping
-        posix_fsetsize(_fd, _curMapSize);
+        posix_ftruncate(_fd, _curMapSize);
+        posix_lseek(_fd, _curMapSize, SEEK_SET);
         _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
     }
     else
@@ -487,7 +488,8 @@ void UserDefault::flush()
             while (obs.length() > _curMapSize)
                 _curMapSize <<= 1;  // X2
                 
-            posix_fsetsize(_fd, _curMapSize);
+            posix_ftruncate(_fd, _curMapSize);
+            posix_lseek(_fd, _curMapSize, SEEK_SET);
             _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
         }
 

@@ -218,26 +218,40 @@ string DrawNodeTest::subtitle() const
 //
 Issue11942Test::Issue11942Test()
 {
-    auto draw = DrawNode::create();
-    addChild(draw, 10);
+    // DrawNode 0 ------------------------------------------
+    auto draw0 = DrawNode::create();
+    addChild(draw0, 10);
 
-    // draw a circle
-    draw->setLineWidth(1);
-    draw->drawCircle(VisibleRect::center() - Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
+    // draw a circle thickness 10 
+    draw0->setLineWidth(10);
+    draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, 40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
-    draw->setLineWidth(10);
-    draw->drawCircle(VisibleRect::center() + Vec2(140.0f, 0.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
+    draw0->setLineWidth(1); // thickness 10 will replaced with thickness 1 (also for all 'same' draw commands before!)
+    draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, -40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
+                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+
+
+    // DrawNode 1 ------------------------------------------
+    auto draw1 = DrawNode::create();
+    addChild(draw1, 10);
+
+    // draw a second circle thickness 1  
+    draw1->setLineWidth(1);
+    draw1->drawCircle(VisibleRect::center() + Vec2(140.0f, 40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+    draw1->setLineWidth(10); // thickness 1 will replaced with thickness 10 (also for all 'same' draw commands before!)
+    draw1->drawCircle(VisibleRect::center() + Vec2(140.0f, -40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
+                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
 }
 
 string Issue11942Test::title() const
 {
-    return "GitHub Issue #11942";
+    return "GitHub Issue #11942 (axmol #137)";
 }
 
 string Issue11942Test::subtitle() const
 {
-    return "drawCircle() with width";
+    return "setLineWidth() change the WHOLE DrawNode object 'line with'";
 }
 
 Issue829Test::Issue829Test()

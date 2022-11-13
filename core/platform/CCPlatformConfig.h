@@ -130,18 +130,30 @@ other: GL
 #    if !AX_USE_COMPAT_GL
 #        define AX_USE_METAL
 #    else
+#        define AX_USE_GL
 #        define AX_USE_GLES
 #    endif
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#    define AX_USE_GL
 #    define AX_USE_GLES
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    if !AX_USE_COMPAT_GL
-#        define AX_USE_GL
-#    else
+#    define AX_USE_GL
+#    if AX_USE_COMPAT_GL
 #        define AX_USE_GLES
 #    endif
 #else
 #    define AX_USE_GL
+#endif
+
+#if defined(AX_USE_GL)
+#    if !defined(__ANDROID__)
+#        undef AX_USE_GLAD
+#        define AX_USE_GLAD 1
+#    else
+#        if !defined(AX_USE_GLAD)
+#            define AX_USE_GLAD 0
+#        endif
+#    endif
 #endif
 
 /// @endcond

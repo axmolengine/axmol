@@ -1,8 +1,8 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
@@ -27,10 +27,6 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#ifdef SPINE_UE4
-#include "SpinePluginPrivatePCH.h"
-#endif
-
 #include <spine/ClippingAttachment.h>
 
 #include <spine/SlotData.h>
@@ -39,7 +35,7 @@ using namespace spine;
 
 RTTI_IMPL(ClippingAttachment, VertexAttachment)
 
-ClippingAttachment::ClippingAttachment(const String &name) : VertexAttachment(name), _endSlot(NULL) {
+ClippingAttachment::ClippingAttachment(const String &name) : VertexAttachment(name), _endSlot(NULL), _color() {
 }
 
 SlotData *ClippingAttachment::getEndSlot() {
@@ -50,8 +46,12 @@ void ClippingAttachment::setEndSlot(SlotData *inValue) {
 	_endSlot = inValue;
 }
 
-Attachment* ClippingAttachment::copy() {
-	ClippingAttachment* copy = new (__FILE__, __LINE__) ClippingAttachment(getName());
+Color &ClippingAttachment::getColor() {
+	return _color;
+}
+
+Attachment *ClippingAttachment::copy() {
+	ClippingAttachment *copy = new (__FILE__, __LINE__) ClippingAttachment(getName());
 	copyTo(copy);
 	copy->_endSlot = _endSlot;
 	return copy;
