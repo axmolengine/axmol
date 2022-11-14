@@ -350,7 +350,7 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
                 char strContentLength[128] = {0};
                 auto requestData           = request->getRequestData();
                 auto requestDataSize       = request->getRequestDataSize();
-                sprintf(strContentLength, "Content-Length: %d\r\n\r\n", static_cast<int>(requestDataSize));
+                snprintf(strContentLength, sizeof(strContentLength), "Content-Length: %d\r\n\r\n", static_cast<int>(requestDataSize));
                 obs.write_bytes(strContentLength);
 
                 if (requestData && requestDataSize > 0)
