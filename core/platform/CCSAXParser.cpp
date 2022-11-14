@@ -43,14 +43,14 @@ public:
     {
         _curEleAttrs.reserve(64);
 
-        _sax3Handler.xml_start_element_cb = [=](char* name, size_t size) {
+        _sax3Handler.xml_start_element_cb = [=, this](char* name, size_t size) {
             _curEleName = xsxml::string_view(name, size);
         };
-        _sax3Handler.xml_attr_cb = [=](const char* name, size_t, const char* value, size_t) {
+        _sax3Handler.xml_attr_cb = [=, this](const char* name, size_t, const char* value, size_t) {
             _curEleAttrs.emplace_back(name);
             _curEleAttrs.emplace_back(value);
         };
-        _sax3Handler.xml_end_attr_cb = [=]() {
+        _sax3Handler.xml_end_attr_cb = [=, this]() {
             if (!_curEleAttrs.empty())
             {
                 _curEleAttrs.emplace_back(nullptr);
@@ -66,10 +66,10 @@ public:
                                         (const AX_XML_CHAR**)attrs);
             }
         };
-        _sax3Handler.xml_end_element_cb = [=](const char* name, size_t len) {
+        _sax3Handler.xml_end_element_cb = [=, this](const char* name, size_t len) {
             SAXParser::endElement(_ccsaxParserImp, (const AX_XML_CHAR*)name);
         };
-        _sax3Handler.xml_text_cb = [=](const char* s, size_t len) {
+        _sax3Handler.xml_text_cb = [=, this](const char* s, size_t len) {
             SAXParser::textHandler(_ccsaxParserImp, (const AX_XML_CHAR*)s, len);
         };
     };
