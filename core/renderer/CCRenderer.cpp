@@ -844,7 +844,7 @@ void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigne
 
     CallbackCommand* command = nextCallbackCommand();
     command->init(globalOrder);
-    command->func = [=]() -> void {
+    command->func = [=, this]() -> void {
 
         backend::RenderPassDescriptor descriptor;
 

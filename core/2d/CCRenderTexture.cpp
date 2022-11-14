@@ -652,7 +652,7 @@ void RenderTexture::clearColorAttachment()
     auto renderer                     = _director->getRenderer();
     auto beforeClearAttachmentCommand = renderer->nextCallbackCommand();
     beforeClearAttachmentCommand->init(0);
-    beforeClearAttachmentCommand->func = [=]() -> void {
+    beforeClearAttachmentCommand->func = [=, this]() -> void {
         _oldRenderTarget = renderer->getRenderTarget();
         renderer->setRenderTarget(_renderTarget);
     };
@@ -664,7 +664,7 @@ void RenderTexture::clearColorAttachment()
     // auto renderer                    = _director->getRenderer();
     auto afterClearAttachmentCommand = renderer->nextCallbackCommand();
     afterClearAttachmentCommand->init(0);
-    afterClearAttachmentCommand->func = [=]() -> void { renderer->setRenderTarget(_oldRenderTarget); };
+    afterClearAttachmentCommand->func = [=, this]() -> void { renderer->setRenderTarget(_oldRenderTarget); };
     renderer->addCommand(afterClearAttachmentCommand);
 }
 
