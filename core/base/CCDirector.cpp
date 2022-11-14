@@ -1195,7 +1195,7 @@ void Director::showStats()
         // to make the FPS stable
         if (_accumDt > AX_DIRECTOR_STATS_INTERVAL)
         {
-            sprintf(buffer, "%.1f / %.3f", _frames / _accumDt, _secondsPerFrame);
+            snprintf(buffer, sizeof(buffer), "%.1f / %.3f", _frames / _accumDt, _secondsPerFrame);
             _FPSLabel->setString(buffer);
             _accumDt = 0;
             _frames  = 0;
@@ -1205,14 +1205,14 @@ void Director::showStats()
         auto currentVerts = (uint32_t)_renderer->getDrawnVertices();
         if (currentCalls != prevCalls)
         {
-            sprintf(buffer, "GL calls:%6u", currentCalls);
+            snprintf(buffer, sizeof(buffer), "GL calls:%6u", currentCalls);
             _drawnBatchesLabel->setString(buffer);
             prevCalls = currentCalls;
         }
 
         if (currentVerts != prevVerts)
         {
-            sprintf(buffer, "GL verts:%6u", currentVerts);
+            snprintf(buffer, sizeof(buffer), "GL verts:%6u", currentVerts);
             _drawnVerticesLabel->setString(buffer);
             prevVerts = currentVerts;
         }

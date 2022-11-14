@@ -1273,17 +1273,17 @@ void Console::commandProjection(socket_native_type fd, std::string_view /*args*/
     switch (proj)
     {
     case ax::Director::Projection::_2D:
-        sprintf(buf, "2d");
+        snprintf(buf, sizeof(buf), "2d");
         break;
     case ax::Director::Projection::_3D:
-        sprintf(buf, "3d");
+        snprintf(buf, sizeof(buf), "3d");
         break;
     case ax::Director::Projection::CUSTOM:
-        sprintf(buf, "custom");
+        snprintf(buf, sizeof(buf), "custom");
         break;
 
     default:
-        sprintf(buf, "unknown");
+        snprintf(buf, sizeof(buf), "unknown");
         break;
     }
     Console::Utility::mydprintf(fd, "Current projection: %s\n", buf);
