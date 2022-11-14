@@ -816,7 +816,7 @@ void Terrain::cacheUniformAttribLocation()
         for (int i = 0; i < _maxDetailMapValue; ++i)
         {
             char str[20];
-            sprintf(str, "u_tex%d", i);
+            snprintf(str, sizeof(str), "u_tex%d", i);
             _detailMapLocation[i] = _programState->getUniformLocation(str);
         }
 
