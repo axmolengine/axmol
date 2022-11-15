@@ -380,7 +380,7 @@ void TextFieldEx::enableIME(Node* control)
     if (control == nullptr)
         control = this;
 
-    touchListener->onTouchBegan = [=](Touch* touch, Event*) {
+    touchListener->onTouchBegan = [=, this](Touch* touch, Event*) {
         bool focus = (engine_inj_checkVisibility(this) && this->editable && this->enabled &&
                       engine_inj_containsTouchPoint(control, touch));
 
@@ -396,7 +396,7 @@ void TextFieldEx::enableIME(Node* control)
             if (this->_continuousTouchCallback)
             {
                 this->_continuousTouchDelayTimerID = stimer::delay(
-                    this->_continuousTouchDelayTime, [=]() { this->_continuousTouchCallback(worldPoint); });
+                    this->_continuousTouchDelayTime, [=, this]() { this->_continuousTouchCallback(worldPoint); });
             }
         }
         return true;
