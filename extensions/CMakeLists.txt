@@ -14,7 +14,7 @@ function(setup_ax_extension_config target_name)
     target_link_libraries(${target_name} INTERFACE ${_AX_CORE_LIB})
     target_include_directories(${target_name} PRIVATE $<TARGET_PROPERTY:${_AX_CORE_LIB},INTERFACE_INCLUDE_DIRECTORIES>)
   else()
-    target_link_libraries(${target_name} PUBLIC ${_AX_CORE_LIB})
+    target_link_libraries(${target_name} ${_AX_CORE_LIB})
   endif()
 
   if(BUILD_SHARED_LIBS)
