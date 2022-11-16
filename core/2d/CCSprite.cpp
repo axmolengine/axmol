@@ -132,7 +132,7 @@ Sprite* Sprite::createWithSpriteFrameName(std::string_view spriteFrameName)
 
 #if _AX_DEBUG > 0
     char msg[256] = {0};
-    sprintf(msg, "Invalid spriteFrameName: %s", spriteFrameName.data());
+    snprintf(msg, sizeof(msg), "Invalid spriteFrameName: %s", spriteFrameName.data());
     AXASSERT(frame != nullptr, msg);
 #endif
 
@@ -1685,10 +1685,10 @@ std::string Sprite::getDescription() const
 {
     char textureDescriptor[100];
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
-        sprintf(textureDescriptor, "<Sprite | Tag = %d, TextureID = %p>", _tag,
+        snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag,
                 _batchNode->getTextureAtlas()->getTexture()->getBackendTexture());
     else
-        sprintf(textureDescriptor, "<Sprite | Tag = %d, TextureID = %p>", _tag, _texture->getBackendTexture());
+        snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag, _texture->getBackendTexture());
 
     return textureDescriptor;
 }

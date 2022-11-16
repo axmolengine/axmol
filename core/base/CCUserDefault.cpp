@@ -253,7 +253,7 @@ void UserDefault::setIntegerForKey(const char* pKey, int value)
     // format the value
     char tmp[50];
     memset(tmp, 0, sizeof(tmp));
-    sprintf(tmp, "%d", value);
+    snprintf(tmp, sizeof(tmp), "%d", value);
 
     setStringForKey(pKey, tmp);
 }
@@ -268,7 +268,7 @@ void UserDefault::setLargeIntForKey(const char* pKey, int64_t value)
     // format the value
     char tmp[96];
     memset(tmp, 0, sizeof(tmp));
-    sprintf(tmp, "%" PRId64, value);
+    snprintf(tmp, sizeof(tmp), "%" PRId64, value);
 
     setStringForKey(pKey, tmp);
 }
@@ -289,7 +289,7 @@ void UserDefault::setDoubleForKey(const char* pKey, double value)
     // format the value
     char tmp[50];
     memset(tmp, 0, 50);
-    sprintf(tmp, "%f", value);
+    snprintf(tmp, sizeof(tmp), "%f", value);
 
     setStringForKey(pKey, tmp);
 }

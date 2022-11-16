@@ -122,7 +122,7 @@ public:
     HRESULT OpenURL(const WCHAR* sURL);
     HRESULT Close();
     HRESULT Shutdown();
-    HRESULT HandleEvent(UINT_PTR pUnkPtr);
+    HRESULT HandleEvent(IMFMediaEvent* pUnkPtr);
     MFPlayerState GetState() const { return m_state; }
 
     UINT32 GetVideoWidth() const { return m_uVideoWidth; }

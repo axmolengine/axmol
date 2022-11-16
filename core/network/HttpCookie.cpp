@@ -275,7 +275,7 @@ void HttpCookie::writeFile()
         line.append(1, '\t');
         cookie.secure ? line.append("TRUE") : line.append("FALSE");
         line.append(1, '\t');
-        sprintf(expires, "%lld", static_cast<long long>(cookie.expires));
+        snprintf(expires, sizeof(expires), "%lld", static_cast<long long>(cookie.expires));
         line.append(expires);
         line.append(1, '\t');
         line.append(cookie.name);

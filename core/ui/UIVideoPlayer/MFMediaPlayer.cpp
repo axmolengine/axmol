@@ -448,10 +448,7 @@ HRESULT MFMediaPlayer::Invoke(IMFAsyncResult* pResult)
     // any number of other events before receiving MESessionClosed.
     if (m_state != MFPlayerState::Closing)
     {
-        // Leave a reference count on the event.
-        pEvent->AddRef();
-
-        HandleEvent((WPARAM)pEvent.Get());
+        HandleEvent(pEvent.Get());
 
         // if (!m_hwndEvent)
         //    HandleEvent((WPARAM)pEvent.Get());
@@ -477,24 +474,24 @@ done:
 //  event (IMFMediaEvent).
 //-------------------------------------------------------------------
 
-HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
+HRESULT MFMediaPlayer::HandleEvent(IMFMediaEvent* pEvent)
 {
     HRESULT hr               = S_OK;
     HRESULT hrStatus         = S_OK;                   // Event status
     MediaEventType meType    = MEUnknown;              // Event type
     MF_TOPOSTATUS TopoStatus = MF_TOPOSTATUS_INVALID;  // Used with MESessionTopologyStatus event.
 
-    auto pUnk = MFUtils::ReferencedPtrToComPtr((IUnknown*)pUnkPtr);
-    TComPtr<IMFMediaEvent> pEvent;
+    //auto pUnk = MFUtils::ReferencedPtrToComPtr((IUnknown*)pUnkPtr);
+    //TComPtr<IMFMediaEvent> pEvent;
 
     PROPVARIANT var;
 
-    if (!pUnk)
+    if (!pEvent)
     {
         return E_POINTER;
     }
 
-    CHECK_HR(hr = pUnk->QueryInterface(__uuidof(IMFMediaEvent), (void**)&pEvent));
+   // CHECK_HR(hr = pUnk->QueryInterface(__uuidof(IMFMediaEvent), (void**)&pEvent));
 
     // Get the event type.
     CHECK_HR(hr = pEvent->GetType(&meType));
@@ -517,7 +514,7 @@ HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
             switch (TopoStatus)
             {
             case MF_TOPOSTATUS_READY:
-                hr = OnTopologyReady(pEvent.Get());
+                hr = OnTopologyReady(pEvent);
                 break;
             default:
                 // Nothing to do.
@@ -525,7 +522,7 @@ HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
             }
             break;
         case MEEndOfPresentation:
-            OnPlayEnded(pEvent.Get());
+            OnPlayEnded(pEvent);
             break;
         case MESessionStarted:
             OnSessionStart(hrStatus);
@@ -561,7 +558,7 @@ HRESULT MFMediaPlayer::HandleEvent(UINT_PTR pUnkPtr)
 
         case MESessionCapabilitiesChanged:
             // The session capabilities changed. Get the updated capabilities.
-            m_caps = MFGetAttributeUINT32(pEvent.Get(), MF_EVENT_SESSIONCAPS, m_caps);
+            m_caps = MFGetAttributeUINT32(pEvent, MF_EVENT_SESSIONCAPS, m_caps);
             break;
         }
 
@@ -709,6 +706,9 @@ HRESULT MFMediaPlayer::Stop()
         return E_UNEXPECTED;
 
     AutoLock lock(m_critsec);
+
+    if (m_state == MFPlayerState::Stopped)
+        return S_OK;
 
     // If another operation is pending, cache the request.
     // Otherwise, stop the media session.
@@ -1348,6 +1348,7 @@ HRESULT MFMediaPlayer::CloseSession()
     m_pSession.Reset();
 
     m_state = MFPlayerState::Closed;
+    m_bPending = false;
 
 done:
     return hr;

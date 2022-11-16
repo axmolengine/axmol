@@ -38,7 +38,7 @@ set(PublicHeader
 add_library(${PROJECT_NAME} STATIC ${LOCAL_SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/../Effekseer ${EFK_THIRDPARTY_INCLUDES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${PublicHeader}")
-target_link_libraries(${PROJECT_NAME} PUBLIC Effekseer)
+target_link_libraries(${PROJECT_NAME} Effekseer)
 target_include_directories(${PROJECT_NAME} 
     PUBLIC "${_AX_ROOT_PATH}/thirdparty/glad/include"
     PUBLIC "${_AX_ROOT_PATH}/core"

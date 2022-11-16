@@ -1273,17 +1273,17 @@ void Console::commandProjection(socket_native_type fd, std::string_view /*args*/
     switch (proj)
     {
     case ax::Director::Projection::_2D:
-        sprintf(buf, "2d");
+        snprintf(buf, sizeof(buf), "2d");
         break;
     case ax::Director::Projection::_3D:
-        sprintf(buf, "3d");
+        snprintf(buf, sizeof(buf), "3d");
         break;
     case ax::Director::Projection::CUSTOM:
-        sprintf(buf, "custom");
+        snprintf(buf, sizeof(buf), "custom");
         break;
 
     default:
-        sprintf(buf, "unknown");
+        snprintf(buf, sizeof(buf), "unknown");
         break;
     }
     Console::Utility::mydprintf(fd, "Current projection: %s\n", buf);
@@ -1406,7 +1406,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
         _touchId = rand();
 
         Scheduler* sched = Director::getInstance()->getScheduler();
-        sched->performFunctionInCocosThread([=]() {
+        sched->performFunctionInCocosThread([=, this]() {
             float tempx = x1, tempy = y1;
             Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &_touchId, &tempx, &tempy);
         });
@@ -1435,7 +1435,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
                 {
                     _y_ -= dy / dx;
                 }
-                sched->performFunctionInCocosThread([=]() {
+                sched->performFunctionInCocosThread([=, this]() {
                     float tempx = _x_, tempy = _y_;
                     Director::getInstance()->getOpenGLView()->handleTouchesMove(1, &_touchId, &tempx, &tempy);
                 });
@@ -1462,7 +1462,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
                 {
                     _y_ -= 1;
                 }
-                sched->performFunctionInCocosThread([=]() {
+                sched->performFunctionInCocosThread([=, this]() {
                     float tempx = _x_, tempy = _y_;
                     Director::getInstance()->getOpenGLView()->handleTouchesMove(1, &_touchId, &tempx, &tempy);
                 });
@@ -1470,7 +1470,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
             }
         }
 
-        sched->performFunctionInCocosThread([=]() {
+        sched->performFunctionInCocosThread([=, this]() {
             float tempx = x2, tempy = y2;
             Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &_touchId, &tempx, &tempy);
         });
