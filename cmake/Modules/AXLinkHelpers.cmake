@@ -142,15 +142,15 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     if (AX_ENABLE_MSEDGE_WEBVIEW2)
         if(CMAKE_GENERATOR STREQUAL "Ninja")
-            target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
-            target_include_directories(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/include)
-            add_custom_command(TARGET ${ax_target} POST_BUILD
+            target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
+            target_include_directories(${APP_NAME} PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+            add_custom_command(TARGET ${APP_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+            "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
                 $<TARGET_FILE_DIR:${APP_NAME}>
             )
         else()
-            target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/build/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+            target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
         endif()
     endif()
 endfunction(ax_link_cxx_prebuilt)
