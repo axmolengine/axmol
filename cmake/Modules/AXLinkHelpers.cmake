@@ -1,11 +1,17 @@
 option(AX_ENABLE_MSEDGE_WEBVIEW2 "Enable msedge webview2" TRUE)
 
-if(NOT ("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
-    set(WIN64 TRUE)
-    set(ARCH_ALIAS "x64")
+if(WINDOWS)
+    if(NOT ("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
+        set(WIN64 TRUE)
+        set(ARCH_ALIAS "x64")
+    else()
+        set(WIN32 TRUE)
+        set(ARCH_ALIAS "x86")
+    endif()
+    set(OS "windows")
 else()
-    set(WIN32 TRUE)
-    set(ARCH_ALIAS "x86")
+    set(ARCH_ALIAS "x64")
+    set(OS "linux")
 endif()
 
 if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
@@ -67,18 +73,22 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     SET (CONFIGURATION_SUBFOLDER "")
     target_link_directories(${APP_NAME}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/windows/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${OS}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/${OS}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/${OS}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/${OS}/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib  # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
     )
 
     # Linking OS libs
-    target_link_libraries(${APP_NAME} winmm Version)
+    if (WINDOWS)
+        target_link_libraries(${APP_NAME} winmm Version)
+    else()
+        target_link_libraries(${APP_NAME} X11 fontconfig)
+    endif()
 
     # Linking engine and thirdparty libs
-    target_link_libraries(${APP_NAME}
+    set(LIBS
         spine
         particle3d
         assets-manager
@@ -88,12 +98,8 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         box2d
         chipmunk
         freetype
-        zlib
         recast
         bullet
-        jpeg-static
-        libcrypto
-        libssl
         webp
         pugixml
         xxhash
@@ -102,8 +108,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         ConvertUTF
         poly2tri
         astc
-        libcurl_imp
-        OpenAL32
         ogg
         glad
         glfw
@@ -112,45 +116,68 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         llhttp
         physics-nodes
     )
+    if (WINDOWS)
+        target_link_libraries(${APP_NAME}
+            ${LIBS}
+            zlib
+            jpeg-static
+            libcrypto
+            libssl
+            libcurl_imp
+            OpenAL32
+        )
+    else()
+        target_link_libraries(${APP_NAME}
+            ${LIBS}
+            z
+            jpeg
+            crypto
+            ssl
+            curl
+            openal
+        )
+    endif()
 
     # Copy dlls to app bin dir
         # copy thirdparty dlls to target bin dir
     # copy_thirdparty_dlls(${APP_NAME} $<TARGET_FILE_DIR:${APP_NAME}>)
-    set(ssl_dll_suffix "")
-    if(WIN64)
-        set(ssl_dll_suffix "-${ARCH_ALIAS}")
-    endif()
-    add_custom_command(TARGET ${APP_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
-        "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
-        "${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}/libcurl.dll"
-        "${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}/zlib1.dll"
-        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
-        $<TARGET_FILE_DIR:${APP_NAME}>)
-
-    # Copy windows angle binaries
-    if (AX_USE_COMPAT_GL)
+    if(WINDOWS)
+        set(ssl_dll_suffix "")
+        if(WIN64)
+            set(ssl_dll_suffix "-${ARCH_ALIAS}")
+        endif()
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libGLESv2.dll
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libEGL.dll
-            ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/d3dcompiler_47.dll
-            $<TARGET_FILE_DIR:${APP_NAME}>
-        )
-    endif()
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}/libcurl.dll"
+            "${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}/zlib1.dll"
+            "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
+            $<TARGET_FILE_DIR:${APP_NAME}>)
 
-    if (AX_ENABLE_MSEDGE_WEBVIEW2)
-        if(CMAKE_GENERATOR STREQUAL "Ninja")
-            target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
-            target_include_directories(${APP_NAME} PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+        # Copy windows angle binaries
+        if (AX_USE_COMPAT_GL)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libGLESv2.dll
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libEGL.dll
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/d3dcompiler_47.dll
                 $<TARGET_FILE_DIR:${APP_NAME}>
             )
-        else()
-            target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+        endif()
+
+        if (AX_ENABLE_MSEDGE_WEBVIEW2)
+            if(CMAKE_GENERATOR STREQUAL "Ninja")
+                target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
+                target_include_directories(${APP_NAME} PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
+                add_custom_command(TARGET ${APP_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+                    $<TARGET_FILE_DIR:${APP_NAME}>
+                )
+            else()
+                target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
+            endif()
         endif()
     endif()
 endfunction(ax_link_cxx_prebuilt)
@@ -164,8 +191,10 @@ function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         )
     endif()
     target_link_libraries(${APP_NAME} axlua lua-cjson tolua plainlua)
-    add_custom_command(TARGET ${APP_NAME} POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
-         $<TARGET_FILE_DIR:${APP_NAME}>)
+    if (WINDOWS)
+        add_custom_command(TARGET ${APP_NAME} POST_BUILD
+           COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
+             $<TARGET_FILE_DIR:${APP_NAME}>)
+    endif()
 endfunction(ax_link_lua_prebuilt)
