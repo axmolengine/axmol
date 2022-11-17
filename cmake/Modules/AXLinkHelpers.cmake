@@ -84,7 +84,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (WINDOWS)
         target_link_libraries(${APP_NAME} winmm Version)
     else()
-        target_link_libraries(${APP_NAME} X11 fontconfig)
+        target_link_libraries(${APP_NAME} X11 fontconfig glib-2.0 gtk-3 gobject-2.0)
     endif()
 
     # Linking engine and thirdparty libs
@@ -131,9 +131,9 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             ${LIBS}
             z
             jpeg
-            crypto
-            ssl
             curl
+            ssl
+            crypto
             openal
         )
     endif()
@@ -183,14 +183,15 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 endfunction(ax_link_cxx_prebuilt)
 
 function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
-    ax_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
-
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
 	        PRIVATE _USRLUASTATIC=1
         )
     endif()
     target_link_libraries(${APP_NAME} axlua lua-cjson tolua plainlua)
+
+    ax_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
+
     if (WINDOWS)
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
            COMMAND ${CMAKE_COMMAND} -E copy_if_different
