@@ -54,7 +54,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
 
     include(AXBuildSet)
     set(_AX_USE_PREBUILT FALSE)
-    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${_AX_ROOT_PATH}/${AX_PREBUILT_DIR})
+    if ((WIN32 OR LINUX) AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${_AX_ROOT_PATH}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
     endif()
 
@@ -210,7 +210,7 @@ if (AX_WITH_YAML_CPP)
     target_link_libraries(${APP_NAME} yaml-cpp)
 endif()
 
-if (_AX_USE_PREBUILT) # support windows only
+if (_AX_USE_PREBUILT) # support windows and linux
     include(${_AX_ROOT_PATH}/cmake/Modules/AXConfigDefine.cmake)
     use_ax_compile_define(${APP_NAME})
 
