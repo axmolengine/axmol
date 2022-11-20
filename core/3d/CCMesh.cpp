@@ -151,7 +151,7 @@ const MeshVertexAttrib& Mesh::getMeshVertexAttribute(int idx)
 
 int Mesh::getVertexSizeInBytes() const
 {
-    return _meshIndexData->getMeshVertexData()->getSizePerVertex();
+    return static_cast<int>(_meshIndexData->getMeshVertexData()->getSizePerVertex());
 }
 
 Mesh* Mesh::create(const std::vector<float>& positions,
@@ -450,7 +450,7 @@ void Mesh::draw(Renderer* renderer,
 
     _meshIndexData->setPrimitiveType(_material->_drawPrimitive);
     _material->draw(commands.data(), globalZ, getVertexBuffer(), getIndexBuffer(), getPrimitiveType(), getIndexFormat(),
-                    getIndexCount(), transform);
+                    static_cast<unsigned int>(getIndexCount()), transform);
 }
 
 void Mesh::setSkin(MeshSkin* skin)

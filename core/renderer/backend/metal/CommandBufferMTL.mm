@@ -591,8 +591,8 @@ void CommandBufferMTL::readPixels(id<MTLTexture> texture,
       {
           [readPixelsTexture getBytes:texelData bytesPerRow:bytePerRow fromRegion:imageRegion mipmapLevel:0];
           UtilsMTL::swizzleImage(texelData, rectWidth, rectHeight, readPixelsTexture.pixelFormat);
-          pbd._width  = rectWidth;
-          pbd._height = rectHeight;
+          pbd._width  = static_cast<int>(rectWidth);
+          pbd._height = static_cast<int>(rectHeight);
       }
       [readPixelsTexture release];
     }];
