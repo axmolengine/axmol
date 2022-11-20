@@ -229,7 +229,7 @@ int PosixFileStream::read(void* buf, unsigned int size)
 
 int PosixFileStream::write(const void* buf, unsigned int size)
 {
-    return posix_write(_handle._fd, buf, size);
+    return static_cast<int>(posix_write(_handle._fd, buf, size));
 }
 
 int64_t PosixFileStream::tell()

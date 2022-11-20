@@ -82,7 +82,7 @@ static unsigned long ft_stream_read_callback(FT_Stream stream,
         fd->seek(offset, SEEK_SET);
 
     if (buf)
-        return fd->read(buf, size);
+        return fd->read(buf, static_cast<unsigned int>(size));
 
     return 0;
 }
@@ -278,13 +278,13 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 #    define FT_PIX_FLOOR(x) ((x) & ~FT_TYPEOF(x) 63)
 #    define FT_PIX_ROUND(x) FT_PIX_FLOOR((x) + 32)
 #endif
-            _ascender  = FT_PIX_ROUND(FT_MulFix(face->ascender, size_metrics.y_scale));
-            _descender = FT_PIX_ROUND(FT_MulFix(face->descender, size_metrics.y_scale));
+            _ascender  = static_cast<int>(FT_PIX_ROUND(FT_MulFix(face->ascender, size_metrics.y_scale)));
+            _descender = static_cast<int>(FT_PIX_ROUND(FT_MulFix(face->descender, size_metrics.y_scale)));
         }
         else
         {
-            _ascender  = size_metrics.ascender;
-            _descender = size_metrics.descender;
+            _ascender  = static_cast<int>(size_metrics.ascender);
+            _descender = static_cast<int>(size_metrics.descender);
         }
 
         _lineHeight = (_ascender - _descender) >> 6;
@@ -501,8 +501,8 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
 
             outRect.size.width  = (float)blendWidth;
             outRect.size.height = (float)blendHeight;
-            outWidth            = blendWidth;
-            outHeight           = blendHeight;
+            outWidth            = static_cast<int>(blendWidth);
+            outHeight           = static_cast<int>(blendHeight);
 
             delete[] outlineBitmap;
             delete[] copyBitmap;
@@ -534,8 +534,8 @@ unsigned char* FontFreeType::getGlyphBitmapWithOutline(unsigned int glyphIndex, 
                 {
                     FT_Outline* outline = &reinterpret_cast<FT_OutlineGlyph>(glyph)->outline;
                     FT_Glyph_Get_CBox(glyph, FT_GLYPH_BBOX_GRIDFIT, &bbox);
-                    int32_t width = (bbox.xMax - bbox.xMin) >> 6;
-                    int32_t rows  = (bbox.yMax - bbox.yMin) >> 6;
+                    int32_t width = static_cast<int32_t>((bbox.xMax - bbox.xMin) >> 6);
+                    int32_t rows  = static_cast<int32_t>((bbox.yMax - bbox.yMin) >> 6);
 
                     FT_Bitmap bmp;
                     bmp.buffer = new unsigned char[width * rows];

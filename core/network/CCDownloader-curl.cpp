@@ -268,7 +268,7 @@ public:
 
         if (_fs)
         {
-            ret = _fs->write(buffer, bytes_transferred);  // fwrite(buffer, size, count, _fp);
+            ret = _fs->write(buffer, static_cast<unsigned int>(bytes_transferred));  // fwrite(buffer, size, count, _fp);
         }
         else
         {
