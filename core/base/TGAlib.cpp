@@ -280,7 +280,7 @@ tImageTGA* tgaLoad(const char* filename)
 
     if (!data.isNull())
     {
-        return tgaLoadBuffer(data.getBytes(), data.getSize());
+        return tgaLoadBuffer(data.getBytes(), static_cast<int32_t>(data.getSize()));
     }
 
     return nullptr;

@@ -433,7 +433,7 @@ void pngWriteCallback(png_structp png_ptr, png_bytep data, size_t length)
 
     FileStream* fileStream = (FileStream*)png_get_io_ptr(png_ptr);
 
-    const auto check = fileStream->write(data, length);
+    const auto check = fileStream->write(data, static_cast<unsigned int>(length));
 
     if (check != length)
         png_error(png_ptr, "Write Error");
@@ -691,7 +691,7 @@ bool Image::initWithImageData(uint8_t* data, ssize_t dataLen, bool ownData)
         default:
         {
             // load and detect image format
-            tImageTGA* tgaData = tgaLoadBuffer(unpackedData, unpackedLen);
+            tImageTGA* tgaData = tgaLoadBuffer(unpackedData, static_cast<int32_t>(unpackedLen));
 
             if (tgaData != nullptr && tgaData->status == TGA_OK)
             {
@@ -1218,7 +1218,7 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
 bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
 {
     const int nrChannels = 4;
-    _data                = stbi_load_from_memory(data, dataLen, &_width, &_height, nullptr, nrChannels);
+    _data                = stbi_load_from_memory(data, static_cast<int>(dataLen), &_width, &_height, nullptr, nrChannels);
     if (_data)
     {
         _dataLen     = _width * _height * nrChannels;
@@ -1584,7 +1584,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
 
     const int pixelOffset = (sizeof(PVRv3TexHeader) + header->metadataLength);
     uint8_t* pixelData    = data + pixelOffset;
-    int pixelLen          = dataLen - pixelOffset;
+    int pixelLen          = static_cast<int>(dataLen) - pixelOffset;
 
     int dataOffset = 0, dataSize = 0;
     int blockSize = 0, widthBlocks = 0, heightBlocks = 0;
@@ -1898,7 +1898,7 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
             _dataLen = _width * _height * 4;
             _data    = static_cast<uint8_t*>(malloc(_dataLen));
             if (UTILS_UNLIKELY(astc_decompress_image(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE,
-                                                     dataLen - ASTC_HEAD_SIZE, _data, _width, _height, block_x,
+                                                     static_cast<uint32_t>(dataLen) - ASTC_HEAD_SIZE, _data, _width, _height, block_x,
                                                      block_y) != 0))
             {
                 AX_SAFE_FREE(_data);
@@ -2461,7 +2461,7 @@ bool Image::saveImageToJPG(std::string_view filePath)
 
         jpeg_finish_compress(&cinfo);
 
-        outfile->write(outputBuffer, outputSize);
+        outfile->write(outputBuffer, static_cast<unsigned int>(outputSize));
         outfile.reset();
 
         if (outputBuffer)

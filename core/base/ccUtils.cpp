@@ -666,7 +666,7 @@ std::vector<int> parseIntegerList(std::string_view intsString)
         const char* cStr = intsString.data();
         char* endptr;
 
-        for (int32_t i = strtol(cStr, &endptr, 10); endptr != cStr; i = strtol(cStr, &endptr, 10))
+        for (auto i = strtol(cStr, &endptr, 10); endptr != cStr; i = strtol(cStr, &endptr, 10))
         {
             if (errno == ERANGE)
             {

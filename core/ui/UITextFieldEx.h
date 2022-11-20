@@ -46,7 +46,7 @@ public:
 
     Label* getRenderLabel();
 
-    inline int getCharCount() const { return charCount; };
+    inline int getCharCount() const { return static_cast<int>(charCount); };
 
     virtual void setPlaceholderColor(const Color4B& color);
     virtual const Color4B& getPlaceholderColor() const;
