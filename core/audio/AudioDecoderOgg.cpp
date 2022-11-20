@@ -107,7 +107,7 @@ uint32_t AudioDecoderOgg::read(uint32_t framesToRead, char* pcmBuf)
 {
     int currentSection = 0;
     int bytesToRead    = framesToBytes(framesToRead);
-    int32_t bytesRead  = ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection);
+    int32_t bytesRead  = static_cast<int32_t>(ov_read(&_vf, pcmBuf, bytesToRead, 0, 2, 1, &currentSection));
     return bytesToFrames(bytesRead);
 }
 

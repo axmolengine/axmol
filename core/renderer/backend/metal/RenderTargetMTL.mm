@@ -39,7 +39,7 @@ void RenderTargetMTL::applyRenderPassAttachments(const RenderPassDescriptor& par
 
     for (size_t i = 0; i < MAX_COLOR_ATTCHMENT; i++)
     {
-        auto attachment = getColorAttachment(i);
+        auto attachment = getColorAttachment(static_cast<int>(i));
         if (!attachment)
         {
             continue;

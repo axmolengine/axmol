@@ -233,7 +233,7 @@ void TextureMTL::updateSubData(std::size_t xoffset,
         {width, height, 1}      // MTLSize
     };
 
-    auto bytesPerRow = PixelFormatUtils::computeRowPitch(_textureFormat, width);
+    auto bytesPerRow = PixelFormatUtils::computeRowPitch(_textureFormat, static_cast<uint32_t>(width));
 
     [mtlTexture replaceRegion:region mipmapLevel:level withBytes:data bytesPerRow:bytesPerRow];
 
