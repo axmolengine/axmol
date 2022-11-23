@@ -413,7 +413,6 @@ protected:
      */
     Sprite* _sprite = nullptr;
 
-    GroupCommand _groupCommand;
     //CallbackCommand _beginCommand;
     //CallbackCommand _endCommand;
 

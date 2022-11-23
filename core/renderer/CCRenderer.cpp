@@ -176,11 +176,16 @@ Renderer::Renderer()
 Renderer::~Renderer()
 {
     _renderGroups.clear();
-    _groupCommandManager->release();
 
     for (auto&& clearCommand : _callbackCommandsPool)
         delete clearCommand;
     _callbackCommandsPool.clear();
+
+    for (auto&& clearCommand : _groupCommandPool)
+        delete clearCommand;
+    _groupCommandPool.clear();
+
+    _groupCommandManager->release();
 
     free(_triBatchesToDraw);
 
@@ -238,6 +243,19 @@ void Renderer::addCommand(RenderCommand* command, int renderQueueID)
     AXASSERT(command->getType() != RenderCommand::Type::UNKNOWN_COMMAND, "Invalid Command Type");
 
     _renderGroups[renderQueueID].emplace_back(command);
+}
+
+GroupCommand* Renderer::getNextGroupCommand()
+{
+    if (_groupCommandPool.empty())
+    {
+        return new GroupCommand();
+    }
+
+    auto* command = _groupCommandPool.back();
+    _groupCommandPool.pop_back();
+
+    return command;
 }
 
 void Renderer::pushGroup(int renderQueueID)
@@ -321,6 +339,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
         break;
     case RenderCommand::Type::GROUP_COMMAND:
         processGroupCommand(static_cast<GroupCommand*>(command));
+        _groupCommandPool.emplace_back(static_cast<GroupCommand*>(command));
         break;
     case RenderCommand::Type::CUSTOM_COMMAND:
         flush();

@@ -69,7 +69,6 @@ public:
 protected:
     void generateGroupCommand();
 
-    ax::GroupCommand* _groupCommand;
 };
 
 }  // namespace cocostudio
