@@ -77,13 +77,16 @@ void GroupCommand::init(float globalOrder)
     auto manager = Director::getInstance()->getRenderer()->getGroupCommandManager();
     manager->releaseGroupID(_renderQueueID);
     _renderQueueID = manager->getGroupID();
+}
 
-    // Set defaults any time init is called
+void GroupCommand::reset()
+{
+    _globalOrder   = 0.0f;
     _isTransparent = true;
-    _skipBatching = false;
-    _is3D = false;
-    _depth = 0.f;
-    _isWireframe = false;
+    _skipBatching  = false;
+    _is3D          = false;
+    _depth         = 0.0f;
+    _isWireframe   = false;
 }
 
 GroupCommand::~GroupCommand()

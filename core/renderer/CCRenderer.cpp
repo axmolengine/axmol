@@ -254,6 +254,7 @@ GroupCommand* Renderer::getNextGroupCommand()
 
     auto* command = _groupCommandPool.back();
     _groupCommandPool.pop_back();
+    command->reset();
 
     return command;
 }
