@@ -30,7 +30,7 @@ if(BUILD_UNITYPLUGIN_FOR_IOS)
     file(GLOB_RECURSE LOCAL_SOURCES *.cpp)
     add_library(${PROJECT_NAME} STATIC ${LOCAL_SOURCES})
     target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/../Effekseer ${EFK_THIRDPARTY_INCLUDES})
-    target_link_libraries(${PROJECT_NAME} PUBLIC Effekseer)
+    target_link_libraries(${PROJECT_NAME} Effekseer)
 endif()
 
 set_target_properties(

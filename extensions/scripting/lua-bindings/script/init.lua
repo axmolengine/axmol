@@ -35,7 +35,7 @@ if (unpack) then
     table.unpack = unpack
 end
 
--- < axis-1.0
+-- < axmol-1.0
 cc = ax
 cc.Director.setDisplayStats = ax.Director.setStatsDisplay
 cc.Sprite3D = ax.MeshRenderer

@@ -268,7 +268,7 @@ public:
 
         if (_fs)
         {
-            ret = _fs->write(buffer, bytes_transferred);  // fwrite(buffer, size, count, _fp);
+            ret = _fs->write(buffer, static_cast<unsigned int>(bytes_transferred));  // fwrite(buffer, size, count, _fp);
         }
         else
         {
@@ -540,7 +540,7 @@ private:
             if (coTask->_acceptRanges && coTask->_totalBytesReceived > 0)
             {
                 char buf[128];
-                sprintf(buf, "%" PRId64 "-", coTask->_totalBytesReceived);
+                snprintf(buf, sizeof(buf), "%" PRId64 "-", coTask->_totalBytesReceived);
                 curl_easy_setopt(handle, CURLOPT_RANGE, buf);
                 curl_easy_setopt(handle, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)coTask->_totalBytesReceived);
             }
@@ -970,7 +970,7 @@ void DownloaderCURL::_lazyScheduleUpdate()
         _scheduler->retain();
 
         char key[128];
-        sprintf(key, "DownloaderCURL(%p)", this);
+        snprintf(key, sizeof(key), "DownloaderCURL(%p)", this);
         _schedulerKey = key;
 
         _scheduler->schedule(std::bind(&DownloaderCURL::_onUpdate, this, std::placeholders::_1), this, 0.1f, true,

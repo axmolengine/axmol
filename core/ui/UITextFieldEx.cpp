@@ -380,7 +380,7 @@ void TextFieldEx::enableIME(Node* control)
     if (control == nullptr)
         control = this;
 
-    touchListener->onTouchBegan = [=](Touch* touch, Event*) {
+    touchListener->onTouchBegan = [=, this](Touch* touch, Event*) {
         bool focus = (engine_inj_checkVisibility(this) && this->editable && this->enabled &&
                       engine_inj_containsTouchPoint(control, touch));
 
@@ -396,7 +396,7 @@ void TextFieldEx::enableIME(Node* control)
             if (this->_continuousTouchCallback)
             {
                 this->_continuousTouchDelayTimerID = stimer::delay(
-                    this->_continuousTouchDelayTime, [=]() { this->_continuousTouchCallback(worldPoint); });
+                    this->_continuousTouchDelayTime, [=, this]() { this->_continuousTouchCallback(worldPoint); });
             }
         }
         return true;
@@ -558,7 +558,7 @@ void TextFieldEx::insertText(const char* text, size_t len)
     }
 
     int nb;
-    auto n = _truncateUTF8String(text, this->charLimit - this->charCount, nb);
+    auto n = _truncateUTF8String(text, static_cast<int>(this->charLimit - this->charCount), nb);
 
     std::string insert(text, nb);
 
@@ -823,9 +823,9 @@ void TextFieldEx::setString(std::string_view text)
 
     if (bInsertAtEnd)
     {
-        insertPosUtf8 = charCount;
-        insertPos     = inputText.length();
-        cursorPos     = displayText->length();
+        insertPosUtf8 = static_cast<int>(charCount);
+        insertPos     = static_cast<int>(inputText.length());
+        cursorPos     = static_cast<int>(displayText->length());
     }
 }
 
@@ -975,22 +975,22 @@ void TextFieldEx::__moveCursor(int direction)
 
         if (direction < 0)
         {
-            this->insertPos = internalUTF8MoveLeft(this->inputText, this->insertPos).size();
+            this->insertPos = static_cast<int>(internalUTF8MoveLeft(this->inputText, this->insertPos).size());
 
             auto s = internalUTF8MoveLeft(displayText, this->cursorPos);
 
             auto width = internalCalcStringWidth(s, this->fontName, this->fontSize);
             this->cursor->setPosition(Point(width, this->getContentSize().height / 2));
-            this->cursorPos = s.length();
+            this->cursorPos = static_cast<int>(s.length());
         }
         else
         {
-            this->insertPos = internalUTF8MoveRight(this->inputText, this->insertPos).size();
+            this->insertPos = static_cast<int>(internalUTF8MoveRight(this->inputText, this->insertPos).size());
 
             auto s     = internalUTF8MoveRight(displayText, this->cursorPos);
             auto width = internalCalcStringWidth(s, this->fontName, this->fontSize);
             this->cursor->setPosition(Point(width, this->getContentSize().height / 2));
-            this->cursorPos = s.length();
+            this->cursorPos = static_cast<int>(s.length());
         }
 
         this->insertPosUtf8 = newOffset;
@@ -1026,8 +1026,8 @@ void TextFieldEx::__moveCursorTo(float x)
         }
     }
 
-    int length = displayText.length();
-    int n      = this->charCount;  // UTF8 char counter
+    int length = static_cast<int>(displayText.length());
+    int n      = static_cast<int>(this->charCount);  // UTF8 char counter
 
     int insertWhere     = 0;
     int insertWhereUtf8 = 0;

@@ -1099,7 +1099,7 @@ bool Label::alignText()
         auto size      = textures.size();
         if (size > static_cast<size_t>(_batchNodes.size()))
         {
-            for (auto index = static_cast<size_t>(_batchNodes.size()); index < size; ++index)
+            for (auto index = static_cast<unsigned int>(_batchNodes.size()); index < size; ++index)
             {
                 auto batchNode = SpriteBatchNode::createWithTexture(textures.at(index));
                 if (batchNode)
@@ -2396,7 +2396,7 @@ void Label::updateColor()
 std::string Label::getDescription() const
 {
     char tmp[50];
-    sprintf(tmp, "<Label | Tag = %d, Label = >", _tag);
+    snprintf(tmp, sizeof(tmp), "<Label | Tag = %d, Label = >", _tag);
     std::string ret = tmp;
     ret += _utf8Text;
 

@@ -230,7 +230,7 @@ class axutils {
     }
 
     private static void parseCMakeOptions(properties, rets) {
-        def options = new ArrayList<Object>()
+        def options = []
         for(item in properties) {
             if (item.key.startsWith('AX_')) {
                 options.add("\"-D${item.key}=${item.value}\"")

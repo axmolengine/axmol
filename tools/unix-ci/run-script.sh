@@ -90,7 +90,7 @@ function build_android()
     # build cpp_tests
     pushd $AX_ROOT/tests/cpp-tests/proj.android
 
-    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH -PAX_ENABLE_EXT_EFFEKSEER=ON --parallel --info
     popd
 }
 

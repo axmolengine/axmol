@@ -334,7 +334,7 @@ void SpriteBatchNode::updateAtlasIndex(Sprite* sprite, ssize_t* curIndex)
     if (count == 0)
     {
         oldIndex = sprite->getAtlasIndex();
-        sprite->setAtlasIndex(*curIndex);
+        sprite->setAtlasIndex(static_cast<unsigned int>(*curIndex));
         if (oldIndex != *curIndex)
         {
             swap(oldIndex, *curIndex);
@@ -349,7 +349,7 @@ void SpriteBatchNode::updateAtlasIndex(Sprite* sprite, ssize_t* curIndex)
         {
             // all children are in front of the parent
             oldIndex = sprite->getAtlasIndex();
-            sprite->setAtlasIndex(*curIndex);
+            sprite->setAtlasIndex(static_cast<unsigned int>(*curIndex));
             if (oldIndex != *curIndex)
             {
                 swap(oldIndex, *curIndex);
@@ -365,7 +365,7 @@ void SpriteBatchNode::updateAtlasIndex(Sprite* sprite, ssize_t* curIndex)
             if (needNewIndex && sp->getLocalZOrder() >= 0)
             {
                 oldIndex = sprite->getAtlasIndex();
-                sprite->setAtlasIndex(*curIndex);
+                sprite->setAtlasIndex(static_cast<unsigned int>(*curIndex));
                 if (oldIndex != *curIndex)
                 {
                     this->swap(oldIndex, *curIndex);
@@ -380,7 +380,7 @@ void SpriteBatchNode::updateAtlasIndex(Sprite* sprite, ssize_t* curIndex)
         if (needNewIndex)
         {  // all children have a zOrder < 0)
             oldIndex = sprite->getAtlasIndex();
-            sprite->setAtlasIndex(*curIndex);
+            sprite->setAtlasIndex(static_cast<unsigned int>(*curIndex));
             if (oldIndex != *curIndex)
             {
                 swap(oldIndex, *curIndex);
@@ -404,7 +404,7 @@ void SpriteBatchNode::swap(ssize_t oldIndex, ssize_t newIndex)
     auto oldIt = std::next(_descendants.begin(), oldIndex);
     auto newIt = std::next(_descendants.begin(), newIndex);
 
-    (*newIt)->setAtlasIndex(oldIndex);
+    (*newIt)->setAtlasIndex(static_cast<unsigned int>(oldIndex));
     //    (*oldIt)->setAtlasIndex(newIndex);
 
     std::swap(*oldIt, *newIt);
@@ -484,7 +484,7 @@ ssize_t SpriteBatchNode::rebuildIndexInOrder(Sprite* parent, ssize_t index)
     // ignore self (batch node)
     if (parent != static_cast<Ref*>(this))
     {
-        parent->setAtlasIndex(index);
+        parent->setAtlasIndex(static_cast<unsigned int>(index));
         index++;
     }
 
@@ -721,7 +721,7 @@ void SpriteBatchNode::insertQuadFromSprite(Sprite* sprite, ssize_t index)
     // update the quad directly. Don't add the sprite to the scene graph
     //
     sprite->setBatchNode(this);
-    sprite->setAtlasIndex(index);
+    sprite->setAtlasIndex(static_cast<unsigned int>(index));
 
     V3F_C4B_T2F_Quad quad = sprite->getQuad();
     _textureAtlas->insertQuad(&quad, index);
@@ -747,7 +747,7 @@ void SpriteBatchNode::updateQuadFromSprite(Sprite* sprite, ssize_t index)
     // update the quad directly. Don't add the sprite to the scene graph
     //
     sprite->setBatchNode(this);
-    sprite->setAtlasIndex(index);
+    sprite->setAtlasIndex(static_cast<unsigned int>(index));
 
     sprite->setDirty(true);
 
