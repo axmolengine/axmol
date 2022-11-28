@@ -153,7 +153,6 @@ protected:
 
     Color4F _clearColor = {0, 0, 0, 0};
 
-    GroupCommand _groupCommand;
     CustomCommand _drawCommand;
     //CallbackCommand _beforeDrawCommand;
     //CallbackCommand _afterDrawCommand;

@@ -75,6 +75,12 @@ public:
     /**called by renderer, get the group ID.*/
     int getRenderQueueID() const { return _renderQueueID; }
 
+    /**
+     * @brief Reset the command state for reuse
+     * 
+     */
+    void reset();
+
 protected:
     int _renderQueueID;
 };

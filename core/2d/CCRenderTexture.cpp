@@ -611,11 +611,12 @@ void RenderTexture::begin()
         _director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
     }
 
-    _groupCommand.init(_globalZOrder);
 
     Renderer* renderer = _director->getRenderer();
-    renderer->addCommand(&_groupCommand);
-    renderer->pushGroup(_groupCommand.getRenderQueueID());
+    auto* groupCommand = renderer->getNextGroupCommand();
+    groupCommand->init(_globalZOrder);
+    renderer->addCommand(groupCommand);
+    renderer->pushGroup(groupCommand->getRenderQueueID());
 
     auto beginCommand = renderer->nextCallbackCommand();
     beginCommand->init(_globalZOrder);

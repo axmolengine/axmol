@@ -176,7 +176,6 @@ protected:
     float _depth;
     backend::UniformLocation _locDepth;
     CustomCommand _customCommand;
-    GroupCommand _groupCommand;
 
     bool _clearColor;
     std::vector<V3F_C4B_T2F> _vertices;
@@ -307,7 +306,6 @@ private:
     bool _textureValid;
 
     CustomCommand _customCommand;
-    GroupCommand _groupCommand;
 
     backend::UniformLocation _uniformColorLoc;
     backend::UniformLocation _uniformCameraRotLoc;
