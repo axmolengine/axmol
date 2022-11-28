@@ -99373,7 +99373,7 @@ int lua_ax_base_Renderer_checkVisibility(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Renderer_setStencilOperation(lua_State* tolua_S)
+int lua_ax_base_Renderer_getNextGroupCommand(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Renderer* cobj = nullptr;
@@ -99393,38 +99393,29 @@ int lua_ax_base_Renderer_setStencilOperation(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setStencilOperation'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_getNextGroupCommand'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 3) 
+    if (argc == 0) 
     {
-        ax::backend::StencilOperation arg0;
-        ax::backend::StencilOperation arg1;
-        ax::backend::StencilOperation arg2;
-
-        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:setStencilOperation");
-
-        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Renderer:setStencilOperation");
-
-        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Renderer:setStencilOperation");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setStencilOperation'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_getNextGroupCommand'", nullptr);
             return 0;
         }
-        cobj->setStencilOperation(arg0, arg1, arg2);
-        lua_settop(tolua_S, 1);
+        auto&& ret = cobj->getNextGroupCommand();
+        object_to_luaval<ax::GroupCommand>(tolua_S, "ax.GroupCommand",(ax::GroupCommand*)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:setStencilOperation",argc, 3);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:getNextGroupCommand",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Renderer_setStencilOperation'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Renderer_getNextGroupCommand'.",&tolua_err);
 #endif
 
     return 0;
@@ -100268,6 +100259,62 @@ int lua_ax_base_Renderer_clean(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Renderer_setStencilOperation(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Renderer* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Renderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Renderer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Renderer_setStencilOperation'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 3) 
+    {
+        ax::backend::StencilOperation arg0;
+        ax::backend::StencilOperation arg1;
+        ax::backend::StencilOperation arg2;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Renderer:setStencilOperation");
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Renderer:setStencilOperation");
+
+        ok &= luaval_to_int32(tolua_S, 4,(int *)&arg2, "ax.Renderer:setStencilOperation");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Renderer_setStencilOperation'", nullptr);
+            return 0;
+        }
+        cobj->setStencilOperation(arg0, arg1, arg2);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Renderer:setStencilOperation",argc, 3);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Renderer_setStencilOperation'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Renderer_getDrawnBatches(lua_State* tolua_S)
 {
     int argc = 0;
@@ -100494,7 +100541,7 @@ int lua_register_ax_base_Renderer(lua_State* tolua_S)
         tolua_function(tolua_S,"addDrawnBatches",lua_ax_base_Renderer_addDrawnBatches);
         tolua_function(tolua_S,"nextCallbackCommand",lua_ax_base_Renderer_nextCallbackCommand);
         tolua_function(tolua_S,"checkVisibility",lua_ax_base_Renderer_checkVisibility);
-        tolua_function(tolua_S,"setStencilOperation",lua_ax_base_Renderer_setStencilOperation);
+        tolua_function(tolua_S,"getNextGroupCommand",lua_ax_base_Renderer_getNextGroupCommand);
         tolua_function(tolua_S,"getDepthWrite",lua_ax_base_Renderer_getDepthWrite);
         tolua_function(tolua_S,"getCullMode",lua_ax_base_Renderer_getCullMode);
         tolua_function(tolua_S,"getStencilCompareFunction",lua_ax_base_Renderer_getStencilCompareFunction);
@@ -100512,6 +100559,7 @@ int lua_register_ax_base_Renderer(lua_State* tolua_S)
         tolua_function(tolua_S,"setScissorTest",lua_ax_base_Renderer_setScissorTest);
         tolua_function(tolua_S,"getDefaultRenderTarget",lua_ax_base_Renderer_getDefaultRenderTarget);
         tolua_function(tolua_S,"clean",lua_ax_base_Renderer_clean);
+        tolua_function(tolua_S,"setStencilOperation",lua_ax_base_Renderer_setStencilOperation);
         tolua_function(tolua_S,"getDrawnBatches",lua_ax_base_Renderer_getDrawnBatches);
         tolua_function(tolua_S,"clearDrawStats",lua_ax_base_Renderer_clearDrawStats);
         tolua_function(tolua_S,"getDepthCompareFunction",lua_ax_base_Renderer_getDepthCompareFunction);
