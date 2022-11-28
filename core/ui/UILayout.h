@@ -640,7 +640,6 @@ protected:
     // clipping
     StencilStateManager* _stencilStateManager;
 
-    GroupCommand _groupCommand;
     //CallbackCommand _beforeVisitCmdStencil;
     //CallbackCommand _afterDrawStencilCmd;
     //CallbackCommand _afterVisitCmdStencil;

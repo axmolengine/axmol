@@ -43,10 +43,9 @@ BatchNode* BatchNode::create()
     AX_SAFE_DELETE(batchNode);
     return nullptr;
 }
-BatchNode::BatchNode() : _groupCommand(nullptr) {}
+BatchNode::BatchNode() /*: _groupCommand(nullptr)*/ {}
 BatchNode::~BatchNode()
 {
-    AX_SAFE_DELETE(_groupCommand);
 }
 
 bool BatchNode::init()
@@ -62,10 +61,6 @@ void BatchNode::addChild(Node* child, int zOrder, int tag)
     if (armature != nullptr)
     {
         armature->setBatchNode(this);
-        if (_groupCommand == nullptr)
-        {
-            _groupCommand = new GroupCommand();
-        }
     }
 }
 
@@ -76,10 +71,6 @@ void BatchNode::addChild(ax::Node* child, int zOrder, std::string_view name)
     if (armature != nullptr)
     {
         armature->setBatchNode(this);
-        if (_groupCommand == nullptr)
-        {
-            _groupCommand = new GroupCommand();
-        }
     }
 }
 
@@ -160,10 +151,11 @@ void BatchNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 void BatchNode::generateGroupCommand()
 {
     Renderer* renderer = Director::getInstance()->getRenderer();
-    _groupCommand->init(_globalZOrder);
-    renderer->addCommand(_groupCommand);
+    auto* groupCommand = renderer->getNextGroupCommand();
+    groupCommand->init(_globalZOrder);
+    renderer->addCommand(groupCommand);
 
-    renderer->pushGroup(_groupCommand->getRenderQueueID());
+    renderer->pushGroup(groupCommand->getRenderQueueID());
 }
 
 }  // namespace cocostudio

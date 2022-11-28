@@ -155,6 +155,9 @@ public:
     /** Adds a `RenderComamnd` into the renderer specifying a particular render queue ID */
     void addCommand(RenderCommand* command, int renderQueueID);
 
+    /** Get a `GroupCommand` from a GroupCommand pool or creates a new command if the pool is empty */
+    GroupCommand* getNextGroupCommand();
+
     /** Pushes a group into the render queue */
     void pushGroup(int renderQueueID);
 
@@ -506,6 +509,8 @@ protected:
 
     // the pool for callback commands
     std::vector<CallbackCommand*> _callbackCommandsPool;
+
+    std::vector<GroupCommand*> _groupCommandPool;
 
     // for TrianglesCommand
     V3F_C4B_T2F _verts[VBO_SIZE];
