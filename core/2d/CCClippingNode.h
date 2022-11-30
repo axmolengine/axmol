@@ -159,8 +159,6 @@ protected:
     Node* _stencil                            = nullptr;
     StencilStateManager* _stencilStateManager = nullptr;
 
-    GroupCommand _groupCommandStencil;
-    GroupCommand _groupCommandChildren;
     //CallbackCommand _afterDrawStencilCmd;
     //CallbackCommand _afterVisitCmd;
     std::unordered_map<Node*, backend::ProgramState*> _originalStencilProgramState;

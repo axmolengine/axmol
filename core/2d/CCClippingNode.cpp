@@ -147,10 +147,11 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
 
     // Add group command
 
-    _groupCommandStencil.init(_globalZOrder);
-    renderer->addCommand(&_groupCommandStencil);
+    auto* groupCommandStencil = renderer->getNextGroupCommand();
+    groupCommandStencil->init(_globalZOrder);
+    renderer->addCommand(groupCommandStencil);
 
-    renderer->pushGroup(_groupCommandStencil.getRenderQueueID());
+    renderer->pushGroup(groupCommandStencil->getRenderQueueID());
 
     // _beforeVisitCmd.init(_globalZOrder);
     // _beforeVisitCmd.func = AX_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
@@ -180,10 +181,12 @@ void ClippingNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
 
     // `_groupCommandChildren` is used as a barrier
     // to ensure commands above be executed before children nodes
-    _groupCommandChildren.init(_globalZOrder);
-    renderer->addCommand(&_groupCommandChildren);
+    auto* groupCommandChildren = renderer->getNextGroupCommand();
 
-    renderer->pushGroup(_groupCommandChildren.getRenderQueueID());
+    groupCommandChildren->init(_globalZOrder);
+    renderer->addCommand(groupCommandChildren);
+
+    renderer->pushGroup(groupCommandChildren->getRenderQueueID());
 
     if (!_children.empty())
     {

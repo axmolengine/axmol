@@ -196,9 +196,6 @@ std::string NewSpriteTest::subtitle() const
 
 class SpriteInGroupCommand : public Sprite
 {
-protected:
-    GroupCommand _spriteWrapperCommand;
-
 public:
     static SpriteInGroupCommand* create(std::string_view filename);
 
@@ -216,9 +213,10 @@ SpriteInGroupCommand* SpriteInGroupCommand::create(std::string_view filename)
 void SpriteInGroupCommand::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     AXASSERT(renderer, "Render is null");
-    _spriteWrapperCommand.init(_globalZOrder);
-    renderer->addCommand(&_spriteWrapperCommand);
-    renderer->pushGroup(_spriteWrapperCommand.getRenderQueueID());
+    auto * spriteWrapperCommand = renderer->getNextGroupCommand();
+    spriteWrapperCommand->init(_globalZOrder);
+    renderer->addCommand(spriteWrapperCommand);
+    renderer->pushGroup(spriteWrapperCommand->getRenderQueueID());
     Sprite::draw(renderer, transform, flags);
     renderer->popGroup();
 }
@@ -744,7 +742,7 @@ void CaptureNodeTest::onCaptured(Ref*)
         sp->setPosition(s.width / 2, s.height / 2);
 
         // store to disk
-        image->saveToFile(_filename);
+        image->saveToFile(_filename, false);
     };
 
     auto callbackFunction = std::bind(callback, std::placeholders::_1);

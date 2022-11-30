@@ -386,11 +386,16 @@ void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransfo
         director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
         //Add group command
-
+#if defined(AX_VERSION)
+        auto* stencilGroupCommand = renderer->getNextGroupCommand();
+        stencilGroupCommand->init(_globalZOrder);
+        renderer->addCommand(stencilGroupCommand);
+        renderer->pushGroup(stencilGroupCommand->getRenderQueueID());
+#else
         _stencilClippingSupport->_groupCommand.init(_globalZOrder);
         renderer->addCommand(&_stencilClippingSupport->_groupCommand);
-
         renderer->pushGroup(_stencilClippingSupport->_groupCommand.getRenderQueueID());
+#endif
 
 #if COCOS2D_VERSION >= 0x00040000
         _stencilClippingSupport->_stencilStateManager->onBeforeVisit(_globalZOrder);
@@ -476,11 +481,19 @@ void FUIContainer::visit(ax::Renderer * renderer, const ax::Mat4 & parentTransfo
         {
             _rectClippingSupport->_clippingRectDirty = true;
         }
-#if COCOS2D_VERSION >= 0x00040000
+#if defined(AX_VERSION)
+        auto* rectClippingGroupCommand = renderer->getNextGroupCommand();
+        rectClippingGroupCommand->init(_globalZOrder);
+        renderer->addCommand(rectClippingGroupCommand);
+        renderer->pushGroup(rectClippingGroupCommand->getRenderQueueID());
+#else
+#    if COCOS2D_VERSION >= 0x00040000
         _rectClippingSupport->_groupCommand.init(_globalZOrder);
         renderer->addCommand(&_rectClippingSupport->_groupCommand);
         renderer->pushGroup(_rectClippingSupport->_groupCommand.getRenderQueueID());
+#    endif
 #endif
+
         auto beforeVisitCmdScissor = renderer->nextCallbackCommand();
         beforeVisitCmdScissor->init(_globalZOrder);
         beforeVisitCmdScissor->func = AX_CALLBACK_0(FUIContainer::onBeforeVisitScissor, this);

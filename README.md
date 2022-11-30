@@ -83,32 +83,70 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
   * Python-2.7.17+, Python-3.7+ 
 
 #### Prerequisites
-  1. Enter ```axmol``` root directory
-  2. Run ```python setup.py```, restart the console after it has finished for environment variables to take effect
+  1. Enter `axmol` root directory
+  2. Run `python setup.py`, restart the console after it has finished for environment variables to take effect
+
+#### Creating A New Project
+Using a console window, the command to generate a new project is as follows:
+
+```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua]```
+
+Examples:
+
+- Cpp: `axmol new -p org.axmol.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
+- Lua: `axmol new -p org.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
 #### Windows (64/32 bit  Visual Studio 2019/2022)
   1. Install [CMake](https://cmake.org/)  3.22.1+  
   2. Install Visual Studio 2019/2022 (it's recommended that you only use these versions)  
-  3. Execute the following commands in a command line (Console, Window Terminal or Powershell)
+  3. Create a new project as shown [here](#creating-a-new-project)
+  4. In a console window, navigate into the root directory of the project you created in the previous step
+  5. Generate the relevant Visual Studio project using the cmake command:
   
-       ```cd axmol ```
-  
+     ```cmake -S SOURCE_DIR -B BUILD_DIR -G VISUAL_STUDIO_VERSION_STRING -A [Win32|x64]```
+     
+     For example, say `SOURCE_DIR` is the current path `"."`, and `BUILD_DIR` (out-of-source build directory) is named `"build"`:
+
      a) C++ 20:
-     - for 32 bit Visual Studio 2019:
-     ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
-     - for 64 bit Visual Studio 2019:
-     ```cmake -S . -B build -G "Visual Studio 16 2019" -A x64```
-     - for 32 bit Visual Studio 2022:
-     ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
-     - for 64 bit Visual Studio 2022:
-     ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
+        - for 32 bit Visual Studio 2019:
+            ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
+        - for 64 bit Visual Studio 2019:
+            ```cmake -S . -B build -G "Visual Studio 16 2019" -A x64```
+        - for 32 bit Visual Studio 2022:
+            ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
+        - for 64 bit Visual Studio 2022:
+            ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
      
      b) C++17
-     - add ```-DCXX_STD=17``` for C++17 on your command line like:    
-       cmake -S . -B build ```-DCXX_STD=17``` -G "Visual Studio 17 2022" -A x64
+         - add `-DCXX_STD=17` for C++17 on your command line like:    
+         cmake -S . -B build `-DCXX_STD=17` -G "Visual Studio 17 2022" -A x64
+       
+  6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
   
-  4. Build excecutable in a command line (e.g. cpp-tests):  
-    ```msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount```
+##### Creating the Visual Studio solution for all axmol test projects: 
+  1. Open a console window (Command Prompt, Window Terminal or Powershell)
+  2. Navigate into the folder where axmol is installed. For example:
+    
+     ```cd axmol```
+        
+  3. Run one of the following commands to create the Visual Studio solution for all axmol test projects in a folder named `build`:
+  
+     a) C++ 20:
+        - for 32 bit Visual Studio 2019:
+            ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
+        - for 64 bit Visual Studio 2019:
+            ```cmake -S . -B build -G "Visual Studio 16 2019" -A x64```
+        - for 32 bit Visual Studio 2022:
+            ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
+        - for 64 bit Visual Studio 2022:
+            ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
+     
+     b) C++17
+     - add `-DCXX_STD=17` for C++17 on your command line like:    
+       cmake -S . -B build `-DCXX_STD=17` -G "Visual Studio 17 2022" -A x64
+  
+  4. You may either open the solution (".\build\axmol.sln") in Visual Studio and build any of the test projects via the IDE, or alternatively, build a project on the command line as follows (e.g. cpp-tests):  
+    `msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount`
     
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
 See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
@@ -117,8 +155,8 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 ##### With Android Studio
   1. Install Android Studio 2021.1.1+
-  2. When starting Android Studio for the first time, It will guide you to install the SDK and other tools, just install them
-  3. Start Android and choose [Open an existing Android Studio Project] and select ```axmol\tests\cpp-tests\proj.android```
+  2. When starting Android Studio for the first time, it will guide you to install the SDK and other tools, so ensure that you do install them.
+  3. Start Android and choose [Open an existing Android Studio Project] and select your project. For example, the existing cpp-test project located in ```axmol\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
      * Android SDK Platform 33  
      * Android Gradle Plugin (AGP) 7.2.2  
@@ -146,9 +184,11 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 #### iOS, tvOS and macOS
   1. Ensure xcode12+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
-  2. Execute the following command   
-  ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```  
-  3. Generate xcode project  
+  2. Create a new project as shown [here](#creating-a-new-project)
+  3. In a console window, navigate into the root directory of the project you created in the previous step
+  4. Execute the following command   
+   ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
+  5. Generate the relevant xcode project using one of the following commands:
      - for ios arm64:  
      ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=OS64```
      - for ios armv7,arm64 combined:  
@@ -164,14 +204,10 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
      - for macos arm64(M1)
      ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=arm64```
 
-  4. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
-  5. Notes  
+  6. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
+  7. Notes  
      - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
      - **axmol only provides armv7, arm64, x86_64 prebuilt libraries for ios/tvos**
-
-### New Project
-- Cpp: `axmol new -p org.axmol.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
-- Lua: `axmol new -p org.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
 ### Some interesting related projects based on axmol
 https://github.com/axmolengine/axmol/discussions/694
