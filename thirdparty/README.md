@@ -91,12 +91,12 @@
 - License: MIT-like
 
 ## jpeg-turbo
-- Upstream: https://github.com/libjpeg-turbo/libjpeg-turbo
+- [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
 - Version: 2.1.4
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
-- Upstream: https://github.com/skywind3000/kcp
+- [![Upstream](https://img.shields.io/github/v/release/skywind3000/kcp?label=Upstream)](https://github.com/skywind3000/kcp)
 - Version: 1.7
 - License: MIT
 
@@ -180,7 +180,7 @@
 - License: BSD-3-Clause
 
 ## pugixml
-- Upstream: https://github.com/zeux/pugixml
+- [![Upstream](https://img.shields.io/github/v/tag/zeux/pugixml?label=Upstream)](https://github.com/zeux/pugixml)
 - Version: 1.12.1
 - License: MIT
 
@@ -195,7 +195,7 @@
 - License: zlib
 
 ## robin-map
-- Upstream: https://github.com/Tessil/robin-map
+- [![Upstream](https://img.shields.io/github/v/tag/Tessil/robin-map?label=Upstream)](https://github.com/Tessil/robin-map)
 - Version: 1.0.1 with modified for more compatible with stl
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
@@ -222,7 +222,7 @@
 - License: Google Inc
 
 ## xsbase
-- Upstream: https://github.com/simdsoft/xsbase
+- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/xsbase?label=Upstream)](https://github.com/simdsoft/xsbase)
 - Version: 1.0
 - License: MIT
 
@@ -247,7 +247,7 @@
 - License: zlib
 
 ## ntcvt
-- Upstream: https://github.com/simdsoft/ntcvt
+- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
 - Version: git-8422188 (7)
 - License: Apache-2.0
 
