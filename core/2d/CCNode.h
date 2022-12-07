@@ -1609,6 +1609,13 @@ public:
     Vec2 convertTouchToNodeSpaceAR(Touch* touch) const;
 
     /**
+     * Gets position of widget in world space.
+     *
+     * @return Position of widget in world space.
+     */
+    Vec2 getWorldPosition() const;
+
+    /**
      *  Sets an additional transform matrix to the node.
      *
      *  In order to remove it, call it again with the argument `nullptr`.
