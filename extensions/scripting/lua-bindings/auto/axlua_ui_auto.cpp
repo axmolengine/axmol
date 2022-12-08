@@ -2269,7 +2269,7 @@ int lua_ax_ui_Widget_getActionTag(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_ui_Widget_getWorldPosition(lua_State* tolua_S)
+int lua_ax_ui_Widget_requestFocus(lua_State* tolua_S)
 {
     int argc = 0;
     ax::ui::Widget* cobj = nullptr;
@@ -2289,7 +2289,7 @@ int lua_ax_ui_Widget_getWorldPosition(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_getWorldPosition'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_requestFocus'", nullptr);
         return 0;
     }
 #endif
@@ -2299,19 +2299,19 @@ int lua_ax_ui_Widget_getWorldPosition(lua_State* tolua_S)
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_getWorldPosition'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_requestFocus'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getWorldPosition();
-        vec2_to_luaval(tolua_S, ret);
+        cobj->requestFocus();
+        lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:getWorldPosition",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:requestFocus",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_getWorldPosition'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_requestFocus'.",&tolua_err);
 #endif
 
     return 0;
@@ -3200,53 +3200,6 @@ int lua_ax_ui_Widget_isLayoutComponentEnabled(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_isLayoutComponentEnabled'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_ui_Widget_requestFocus(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::ui::Widget* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axui.Widget",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::ui::Widget*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_Widget_requestFocus'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_Widget_requestFocus'", nullptr);
-            return 0;
-        }
-        cobj->requestFocus();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.Widget:requestFocus",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_Widget_requestFocus'.",&tolua_err);
 #endif
 
     return 0;
@@ -4226,7 +4179,7 @@ int lua_register_ax_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"isTouchEnabled",lua_ax_ui_Widget_isTouchEnabled);
         tolua_function(tolua_S,"getCallbackName",lua_ax_ui_Widget_getCallbackName);
         tolua_function(tolua_S,"getActionTag",lua_ax_ui_Widget_getActionTag);
-        tolua_function(tolua_S,"getWorldPosition",lua_ax_ui_Widget_getWorldPosition);
+        tolua_function(tolua_S,"requestFocus",lua_ax_ui_Widget_requestFocus);
         tolua_function(tolua_S,"isFocusEnabled",lua_ax_ui_Widget_isFocusEnabled);
         tolua_function(tolua_S,"setFocused",lua_ax_ui_Widget_setFocused);
         tolua_function(tolua_S,"setActionTag",lua_ax_ui_Widget_setActionTag);
@@ -4245,7 +4198,6 @@ int lua_register_ax_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"isPropagateTouchEvents",lua_ax_ui_Widget_isPropagateTouchEvents);
         tolua_function(tolua_S,"hitTest",lua_ax_ui_Widget_hitTest);
         tolua_function(tolua_S,"isLayoutComponentEnabled",lua_ax_ui_Widget_isLayoutComponentEnabled);
-        tolua_function(tolua_S,"requestFocus",lua_ax_ui_Widget_requestFocus);
         tolua_function(tolua_S,"updateSizeAndPosition",lua_ax_ui_Widget_updateSizeAndPosition);
         tolua_function(tolua_S,"onFocusChange",lua_ax_ui_Widget_onFocusChange);
         tolua_function(tolua_S,"getTouchMovePosition",lua_ax_ui_Widget_getTouchMovePosition);
