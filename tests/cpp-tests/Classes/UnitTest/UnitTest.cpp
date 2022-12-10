@@ -28,6 +28,7 @@
 #include "network/Uri.h"
 #include "base/ccUtils.h"
 #include "yasio/detail/byte_buffer.hpp"
+#include <thread>
 
 USING_NS_AX;
 using namespace ax::network;
@@ -86,6 +87,7 @@ UnitTests::UnitTests()
 
 std::string UnitTestDemo::title() const
 {
+    std::jthread jthread;
     return "UnitTest";
 }
 
