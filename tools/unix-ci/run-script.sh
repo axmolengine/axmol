@@ -29,7 +29,7 @@ function do_retry()
 function build_linux()
 {
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release -DAX_ENABLE_EXT_IMGUI=ON -DAX_ENABLE_EXT_EFFEKSEER=ON
-    cmake --build build --parallel --target cpp_tests
+    cmake --build build --parallel `nproc` --target cpp_tests
 }
 
 function build_osx()
