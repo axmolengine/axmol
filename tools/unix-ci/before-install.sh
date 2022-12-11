@@ -15,12 +15,6 @@ function install_linux_environment()
     echo "Installing linux dependence packages finished!"
 }
 
-function install_python_module_for_osx()
-{
-    pip install PyYAML
-    sudo pip install Cheetah
-}
-
 # set up environment according os and target
 function install_environement()
 {
@@ -42,8 +36,6 @@ function install_environement()
     if [ "$GH_OS_NAME" == "osx" ]; then
         brew install nasm
         nasm -v
-
-        install_python_module_for_osx
     fi
 }
 
