@@ -47,16 +47,6 @@ function install_environement()
     fi
 }
 
-# install newer python for android for ssl connection
-if [ "$GH_OS_NAME" == "linux" ]; then
-    echo "Installing pyenv for github ci..."
-    curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-    export PATH="/home/runner/.pyenv/bin:$PATH"
-    pyenv install --list
-    pyenv install $PYENV_VERSION
-    pyenv versions
-fi
-
 python -V
 cmake --version
 
