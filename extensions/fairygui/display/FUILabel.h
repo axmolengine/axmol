@@ -23,14 +23,23 @@ public:
 
     void setUnderlineColor(const ax::Color3B& value);
 
-    virtual bool setBMFontFilePath(std::string_view bmfontFilePath, const ax::Vec2& imageOffset = ax::Vec2::ZERO, float fontSize = 0) override;
-
+#if defined(AX_VERSION)
+    bool setBMFontFilePath(std::string_view bmfontFilePath,
+                           const ax::Rect& imageRect = ax::Rect::ZERO,
+                           bool imageRotated = false,
+                           float fontSize = 0) override;
+#else
+    bool setBMFontFilePath(std::string_view bmfontFilePath,
+                                   const ax::Vec2& imageOffset = ax::Vec2::ZERO,
+                                   float fontSize              = 0) override;
+#endif
     void setGrayed(bool value);
+
 protected:
     /*
-    ע�⣡���������������˱��������Ҫ�޸�cocos2d��Դ�룬�ļ�2d/CCLabel.h����Լ��672�У�ΪupdateBMFontScale��������virtual���η���
-    ��Ϊ�����������ǿ���������ָ��ΪFontFnt���͵Ĵ��룬�����ǲ�ʹ��FontFnt��FontFntֻ֧�ִ��ⲿ�ļ����������ã���������BMFontConfiguration�Ƕ�����cpp��ġ���
-    ������Ҫ��д���������
+    注意！！！如果这里出现了编译错误，需要修改cocos2d的源码，文件2d/CCLabel.h，大约在672行，为updateBMFontScale函数打上virtual修饰符。
+    因为这个方法里有强制字体对象指针为FontFnt类型的代码，但我们不使用FontFnt（FontFnt只支持从外部文件中载入配置，更糟糕的是BMFontConfiguration是定义在cpp里的。）
+    所以需要重写这个方法。
     */
     virtual void updateBMFontScale() override;
 
