@@ -5,7 +5,6 @@ set -e
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 AX_ROOT="$DIR"/../..
-CPU_CORES=4
 
 function do_retry()
 {
@@ -29,47 +28,26 @@ function do_retry()
 
 function build_linux()
 {
-    cd $AX_ROOT
-    set -x
     cmake . -G "Unix Makefiles" -Bbuild -DCMAKE_BUILD_TYPE=Release -DAX_ENABLE_EXT_IMGUI=ON -DAX_ENABLE_EXT_EFFEKSEER=ON
-    cmake --build build --target cpp_tests -- -j `nproc`
-    set +x
+    cmake --build build --parallel --target cpp_tests
 }
 
 function build_osx()
 {
-    NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
-
-    cd $AX_ROOT
-    mkdir -p build
     cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=$BUILD_ARCH -DAX_ENABLE_EXT_IMGUI=ON -DAX_ENABLE_EXT_EFFEKSEER=ON -DAX_USE_ALSOFT=ON
-    cmake --build build --config Release --target cpp_tests -- -quiet
-
-    exit 0
+    cmake --build build --parallel --config Release --target cpp_tests -- -quiet
 }
 
 function build_ios()
 {
-    NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
-
-    cd $AX_ROOT
-
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64 -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=11.0 -DAX_ENABLE_EXT_EFFEKSEER=ON -DAX_USE_ALSOFT=ON
-    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)"
-
-    exit 0
+    cmake --build build --parallel --config Release --target cpp_tests -- -quiet -destination "platform=iOS Simulator,name=iPhone Retina (4-inch)"
 }
 
 function build_tvos()
 {
-    NUM_OF_CORES=`getconf _NPROCESSORS_ONLN`
-
-    cd $AX_ROOT
-
     cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS -DENABLE_ARC=OFF -DDEPLOYMENT_TARGET=14.5 -DAX_ENABLE_EXT_EFFEKSEER=ON -DAX_USE_ALSOFT=ON
-    cmake --build build --config Release --target cpp_tests -- -quiet -jobs $NUM_OF_CORES -destination "platform=tvOS Simulator,name=Apple TV Simulator"
-
-    exit 0
+    cmake --build build --parallel --config Release --target cpp_tests -- -quiet -destination "platform=tvOS Simulator,name=Apple TV Simulator"
 }
 
 function build_android()
@@ -83,45 +61,37 @@ function build_android()
 
     # build fairygui_tests
     pushd $AX_ROOT/tests/fairygui-tests/proj.android
-
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
     popd
 
     # build cpp_tests
     pushd $AX_ROOT/tests/cpp-tests/proj.android
-
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH -PAX_ENABLE_EXT_EFFEKSEER=ON --parallel --info
     popd
 }
 
 function run_build()
 {
+    set -x
+    cd $AX_ROOT
     echo "Building..."
 
     if [ $BUILD_TARGET == 'osx' ]; then
-        set -x
         build_osx
-        exit 0
     fi
 
     if [ $BUILD_TARGET == 'ios' ]; then
-        set -x
         build_ios
-        exit 0
     fi
 
     if [ $BUILD_TARGET == 'tvos' ]; then
-        set -x
         build_tvos
-        exit 0
     fi
 
-    # linux
     if [ $BUILD_TARGET == 'linux' ]; then
         build_linux
     fi
 
-    # android
     if [ $BUILD_TARGET == 'android' ]; then
         build_android
     fi
