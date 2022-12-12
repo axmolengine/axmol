@@ -166,7 +166,10 @@ static int lua_downloader_createDownloadDataTask(lua_State* L)
         identifier = lua_tostring(L, 3);
     auto tsk = d->createDownloadDataTask(url, identifier);
 
-    pushTaskTable(L, *tsk);
+    if (tsk)
+        pushTaskTable(L, *tsk);
+    else
+        lua_pushnil(L);
     return 1;
 }
 
@@ -204,7 +207,10 @@ static int lua_downloader_createDownloadFileTask(lua_State* L)
 
     auto tsk = d->createDownloadFileTask(url, storagePath, identifier, md5checksum, background, cacertPath);
 
-    pushTaskTable(L, *tsk);
+    if (tsk)
+        pushTaskTable(L, *tsk);
+    else
+        lua_pushnil(L);
     return 1;
 }
 static int lua_downloader_setOnFileTaskSuccess(lua_State* L)
