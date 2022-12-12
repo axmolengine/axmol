@@ -97,7 +97,6 @@ protected:
 
     Node* _gridTarget   = nullptr;
     GridBase* _nodeGrid = nullptr;
-    GroupCommand _groupCommand;
     CustomCommand _gridBeginCommand;
     CustomCommand _gridEndCommand;
 

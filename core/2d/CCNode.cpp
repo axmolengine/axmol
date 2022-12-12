@@ -1929,6 +1929,11 @@ Vec2 Node::convertTouchToNodeSpaceAR(Touch* touch) const
     return this->convertToNodeSpaceAR(point);
 }
 
+Vec2 Node::getWorldPosition() const
+{
+    return convertToWorldSpace(Vec2(_anchorPoint.x * _contentSize.width, _anchorPoint.y * _contentSize.height));
+}
+
 void Node::updateTransform()
 {
     // Recursively iterate over children

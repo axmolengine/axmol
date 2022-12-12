@@ -503,11 +503,6 @@ const Vec2& Widget::getSizePercent()
     return _sizePercent;
 }
 
-Vec2 Widget::getWorldPosition() const
-{
-    return convertToWorldSpace(Vec2(_anchorPoint.x * _contentSize.width, _anchorPoint.y * _contentSize.height));
-}
-
 Node* Widget::getVirtualRenderer()
 {
     return this;

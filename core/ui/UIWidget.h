@@ -512,13 +512,6 @@ public:
     bool isIgnoreContentAdaptWithSize() const;
 
     /**
-     * Gets position of widget in world space.
-     *
-     * @return Position of widget in world space.
-     */
-    Vec2 getWorldPosition() const;
-
-    /**
      * Gets the inner Renderer node of widget.
      *
      * For example, a button's Virtual Renderer is it's texture renderer.

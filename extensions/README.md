@@ -7,8 +7,9 @@
 - License: MIT
 
 ## Effekseer (OFF default)
-
-- Upstream: https://github.com/effekseer/EffekseerForCocos2d-x
+- [![Upstream](https://img.shields.io/github/v/release/effekseer/Effekseer?label=Upstream)](https://github.com/effekseer/EffekseerForCocos2d-x)
+- https://github.com/effekseer/EffekseerForCocos2d-x
+- https://github.com/effekseer/Effekseer
 - Version: 1.70
 - License: MIT
 
@@ -20,8 +21,7 @@
 - License: MIT
 
 ## ImGui
-
-- Upstream: https://github.com/ocornut/imgui
+- [![Upstream](https://img.shields.io/github/v/release/ocornut/imgui?label=Upstream)](https://github.com/ocornut/imgui)
 - Version: 1.88 on branch docking
 - License: MIT
 

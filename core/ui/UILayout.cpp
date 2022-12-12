@@ -248,10 +248,10 @@ void Layout::stencilClippingVisit(Renderer* renderer, const Mat4& parentTransfor
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
     // Add group command
 
-    _groupCommand.init(_globalZOrder);
-    renderer->addCommand(&_groupCommand);
-
-    renderer->pushGroup(_groupCommand.getRenderQueueID());
+    auto* groupCommand = renderer->getNextGroupCommand();
+    groupCommand->init(_globalZOrder);
+    renderer->addCommand(groupCommand);
+    renderer->pushGroup(groupCommand->getRenderQueueID());
 
     //    _beforeVisitCmdStencil.init(_globalZOrder);
     //    _beforeVisitCmdStencil.func = AX_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
@@ -369,9 +369,10 @@ void Layout::scissorClippingVisit(Renderer* renderer, const Mat4& parentTransfor
     _director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
-    _groupCommand.init(_globalZOrder);
-    renderer->addCommand(&_groupCommand);
-    renderer->pushGroup(_groupCommand.getRenderQueueID());
+    auto* groupCommand = renderer->getNextGroupCommand();
+    groupCommand->init(_globalZOrder);
+    renderer->addCommand(groupCommand);
+    renderer->pushGroup(groupCommand->getRenderQueueID());
 
     auto beforeVisitCmdScissor = renderer->nextCallbackCommand();
     beforeVisitCmdScissor->init(_globalZOrder);

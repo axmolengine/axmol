@@ -42,7 +42,7 @@ void FUILabel::applyTextFormat()
 
         if (_fontName.find("ui://") != -1)
         {
-            setBMFontFilePath(_fontName);
+            this->setBMFontFilePath(_fontName);
         }
         else
         {
@@ -118,7 +118,14 @@ void FUILabel::applyTextFormat()
         disableEffect(LabelEffect::SHADOW);
 }
 
+#if defined(AX_VERSION)
+bool FUILabel::setBMFontFilePath(std::string_view bmfontFilePath,
+                                 const Rect& imageRect,
+                                 bool imageRotated,
+                                 float fontSize)
+#else
 bool FUILabel::setBMFontFilePath(std::string_view bmfontFilePath, const Vec2& imageOffset, float fontSize)
+#endif
 {
     BitmapFont* bmFont = (BitmapFont*)UIPackage::getItemAssetByURL(bmfontFilePath, PackageItemType::FONT);
     if (bmFont == nullptr)

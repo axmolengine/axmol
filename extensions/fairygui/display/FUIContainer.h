@@ -21,7 +21,9 @@ public:
     bool _clippingRectDirty;
 
 #if COCOS2D_VERSION >= 0x00040000
+#if !defined(AX_VERSION)
     ax::GroupCommand _groupCommand;
+#endif
     //ax::CallbackCommand _beforeVisitCmdScissor;
     //ax::CallbackCommand _afterVisitCmdScissor;
 #else
@@ -37,7 +39,9 @@ public:
 
     ax::Node* _stencil;
     ax::StencilStateManager* _stencilStateManager;
+#if !defined(AX_VERSION) 
     ax::GroupCommand _groupCommand;
+#endif
 #if COCOS2D_VERSION >= 0x00040000
     ax::backend::ProgramState* _originStencilProgram;
     //ax::CallbackCommand _beforeVisitCmd;

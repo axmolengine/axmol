@@ -203,10 +203,10 @@ void GridBase::beforeDraw()
     // save projection
     Director* director = Director::getInstance();
 
-    auto renderer = director->getRenderer();
-
-    renderer->addCommand(&_groupCommand);
-    renderer->pushGroup(_groupCommand.getRenderQueueID());
+    auto* renderer = director->getRenderer();
+    auto* groupCommand = renderer->getNextGroupCommand();
+    renderer->addCommand(groupCommand);
+    renderer->pushGroup(groupCommand->getRenderQueueID());
 
     auto beforeDrawCommandFunc = [=, this]() -> void {
         _directorProjection = director->getProjection();

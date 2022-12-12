@@ -164,14 +164,14 @@ void CameraBackgroundDepthBrush::initBuffer()
 
 void CameraBackgroundDepthBrush::drawBackground(Camera* /*camera*/)
 {
+    auto* renderer = Director::getInstance()->getRenderer();
     // `clear screen` should be executed before other commands
-    _groupCommand.init(-1.0f);
+    auto* groupCommand = renderer->getNextGroupCommand();
+    groupCommand->init(-1.0f);
     _customCommand.init(0.0f);
 
-    auto* renderer = Director::getInstance()->getRenderer();
-
-    renderer->addCommand(&_groupCommand);
-    renderer->pushGroup(_groupCommand.getRenderQueueID());
+    renderer->addCommand(groupCommand);
+    renderer->pushGroup(groupCommand->getRenderQueueID());
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto& blend              = pipelineDescriptor.blendDescriptor;
@@ -337,8 +337,10 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create()
 
 void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
 {
+    auto* renderer = Director::getInstance()->getRenderer();
     // `clear screen` should be executed before other commands
-    _groupCommand.init(-1.0f);
+    auto* groupCommand = renderer->getNextGroupCommand();
+    groupCommand->init(-1.0f);
     _customCommand.init(0.0f);
 
     if (!_actived)
@@ -355,10 +357,9 @@ void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
     _programState->setUniform(_uniformColorLoc, &color, sizeof(color));
     _programState->setUniform(_uniformCameraRotLoc, cameraModelMat.m, sizeof(cameraModelMat.m));
 
-    auto* renderer = Director::getInstance()->getRenderer();
 
-    renderer->addCommand(&_groupCommand);
-    renderer->pushGroup(_groupCommand.getRenderQueueID());
+    renderer->addCommand(groupCommand);
+    renderer->pushGroup(groupCommand->getRenderQueueID());
 
     renderer->addCommand(&_customCommand);
 
