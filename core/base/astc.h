@@ -4,7 +4,7 @@
  astc compression tool: https://github.com/ARM-software/astc-encoder/releases
  version required: v2.2+
  command:
-   astcenc-sse4.2 -cl test1.png test1.astc 6x6 -medium -pp-premultiply
+   astcenc-avx2 -cl test1.png test1.astc 6x6 -medium -pp-premultiply
 
  ******************************************************************************/
 
