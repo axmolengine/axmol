@@ -221,6 +221,10 @@ if(MSVC)
     target_compile_options(${_AX_CORE_LIB} PUBLIC "/Zm2000")
 endif()
 
+if(ANDROID)
+    add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
+endif()
+
 # copy all thirdparty libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
 # if (WINDOWS)
 #     copy_thirdparty_dlls(libcocos2d ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
