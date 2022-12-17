@@ -31,7 +31,6 @@
 ### Purpose Summary
 
 - C++ 17/20
-
 - Focuses on native game dev (easy to use, fast deployment, intuitive)
 - Bugfixes ASAP
 
