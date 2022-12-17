@@ -21,59 +21,63 @@
 
 **This is another more radical fork of *Cocos2d-x-4.0*, it has Full Support OpenAL for all platforms, single texture multi GPU texture handler, C++ 17/20 and more! (see 'Highlighted Features' for more info).**  
 
-### View code with vscode online: 
+### View code with vscode online
+
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/axmolengine/axmol)
 - [![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/axmolengine/axmol)
-  
   
 **[简体中文](README_CN.md)**
   
 ### Purpose Summary
-* C++ 17/20
-* Focuses on native game dev (easy to use, fast deployment, intuitive)
-* Bugfixes ASAP
+
+- C++ 17/20
+
+- Focuses on native game dev (easy to use, fast deployment, intuitive)
+- Bugfixes ASAP
 
 ### Thirdparty
 
-* All thirdparty prebuilt libs are built from https://github.com/axmolengine/buildware via github actions automatically.
+- All thirdparty prebuilt libs are built from <https://github.com/axmolengine/buildware> via github actions automatically.
   
 ### Highlighted Features
-* Add apple M1, android x64 support, contributed by @pietpukkel
-* Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
-* Windows video player support (based on microsoft media foundation)
-* Windows x64 build support
-* Reimplement HttpClient based on yasio for concorrent http requests processing.
-* ['Upstream-Version-License'](thirdparty/README.md) Third-party
-  * Third-party license overview for easier publishing of your commercial apps based on axmol framework. 
-  * Some links to third party libs which support axmol too.
-* ['Upstream-Version-License'](extensions/README.md) Extensions
-  * Extensions license overview for easier publishing of your commercial apps based on axmol framework. 
-  * Spine-3.8 support
-  * ```FairyGUI``` support
-  * DragonBones support
-  * Live2D support
-  * **ImGui integrated, easy to write game embedded tools, very easy to use, read [ImGui](extensions/ImGui/README.md) for more info**
-* Refactor AudioEngine, OpenAL for all platforms
-  * [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enabling it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios/tvos, even though it was marked as deprecated, but still available.
-* Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
-* Modularize all optional extensions, move from engine core folder to an extensions folder
-* Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
-* Use a modern GL loader ```Glad```
-* Google [angle](https://github.com/google/angle) renderer backend support
-* C++ 17/20
-* IOS/TVOS SDK 9.0 as minimal deployment
-* Use fast pugixml
-* Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
-* Use SAX parser for all plist files
-* ASTC 4x4/6x6/8x8 support (if hardware decoding is not supported, then software decoding is used)
-* ETC2 RGB/RGBA support    (if hardware decoding is not supported, then software decoding is used)
-* Supported 2D physics engines (see also [APPENDIX.md](APPENDIX.md)):
-  * Box2D
-  * Box2D-optimized
-  * Chipmunk2D 
-* Supported 3D physics engines:
-  * Bullet Physics SDK
+
+- Add apple M1, android x64 support, contributed by @pietpukkel
+
+- Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
+- Windows video player support (based on microsoft media foundation)
+- Windows x64 build support
+- Reimplement HttpClient based on yasio for concorrent http requests processing.
+- ['Upstream-Version-License'](thirdparty/README.md) Third-party
+  - Third-party license overview for easier publishing of your commercial apps based on axmol framework.
+  - Some links to third party libs which support axmol too.
+- ['Upstream-Version-License'](extensions/README.md) Extensions
+  - Extensions license overview for easier publishing of your commercial apps based on axmol framework.
+  - Spine-3.8 support
+  - ```FairyGUI``` support
+  - DragonBones support
+  - Live2D support
+  - **ImGui integrated, easy to write game embedded tools, very easy to use, read [ImGui](extensions/ImGui/README.md) for more info**
+- Refactor AudioEngine, OpenAL for all platforms
+  - [OpenAL Soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enabling it
+  - [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios/tvos, even though it was marked as deprecated, but still available.
+- Refactor UserDefault with [mio](https://github.com/mandreyel/mio)
+- Modularize all optional extensions, move from engine core folder to an extensions folder
+- Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
+- Use a modern GL loader ```Glad```
+- Google [angle](https://github.com/google/angle) renderer backend support
+- C++ 17/20
+- IOS/TVOS SDK 9.0 as minimal deployment
+- Use fast pugixml
+- Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
+- Use SAX parser for all plist files
+- ASTC 4x4/6x6/8x8 support (if hardware decoding is not supported, then software decoding is used)
+- ETC2 RGB/RGBA support    (if hardware decoding is not supported, then software decoding is used)
+- Supported 2D physics engines (see also [APPENDIX.md](APPENDIX.md)):
+  - Box2D
+  - Box2D-optimized
+  - Chipmunk2D
+- Supported 3D physics engines:
+  - Bullet Physics SDK
 
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
@@ -82,13 +86,16 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 ### Quick Start
 
 #### Common Requirement [Python](https://www.python.org/downloads/)
-  * Python-2.7.17+, Python-3.7+ 
+
+- Python-2.7.17+, Python-3.7+
 
 #### Prerequisites
+
   1. Enter `axmol` root directory
   2. Run `python setup.py`, restart the console after it has finished for environment variables to take effect
 
 #### Creating A New Project
+
 Using a console window, the command to generate a new project is as follows:
 
 ```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua]```
@@ -99,6 +106,7 @@ Examples:
 - Lua: `axmol new -p org.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
 #### Windows (64/32 bit  Visual Studio 2019/2022)
+
   1. Install [CMake](https://cmake.org/)  3.22.1+  
   2. Install Visual Studio 2019/2022 (it's recommended that you only use these versions)  
   3. Create a new project as shown [here](#creating-a-new-project)
@@ -106,7 +114,7 @@ Examples:
   5. Generate the relevant Visual Studio project using the cmake command:
   
      ```cmake -S SOURCE_DIR -B BUILD_DIR -G VISUAL_STUDIO_VERSION_STRING -A [Win32|x64]```
-     
+
      For example, say `SOURCE_DIR` is the current path `"."`, and `BUILD_DIR` (out-of-source build directory) is named `"build"`:
 
      a) C++ 20:
@@ -118,19 +126,20 @@ Examples:
             ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
         - for 64 bit Visual Studio 2022:
             ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
-     
+
      b) C++17
-         - add `-DCXX_STD=17` for C++17 on your command line like:    
-         cmake -S . -B build `-DCXX_STD=17` -G "Visual Studio 17 2022" -A x64
-       
+         - add `-DCMAKE_CXX_STANDARD=17` for C++17 on your command line like:
+         cmake -S . -B build `-DCMAKE_CXX_STANDARD=17` -G "Visual Studio 17 2022" -A x64
+
   6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
   
-##### Creating the Visual Studio solution for all axmol test projects: 
+##### Creating the Visual Studio solution for all axmol test projects
+
   1. Open a console window (Command Prompt, Window Terminal or Powershell)
   2. Navigate into the folder where axmol is installed. For example:
-    
+
      ```cd axmol```
-        
+
   3. Run one of the following commands to create the Visual Studio solution for all axmol test projects in a folder named `build`:
   
      a) C++ 20:
@@ -142,36 +151,40 @@ Examples:
             ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
         - for 64 bit Visual Studio 2022:
             ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
-     
+
      b) C++17
-     - add `-DCXX_STD=17` for C++17 on your command line like:    
-       cmake -S . -B build `-DCXX_STD=17` -G "Visual Studio 17 2022" -A x64
+     - add `-DCMAKE_CXX_STANDARD=17` for C++17 on your command line like:
+       cmake -S . -B build `-DCMAKE_CXX_STANDARD=17` -G "Visual Studio 17 2022" -A x64
   
   4. You may either open the solution (".\build\axmol.sln") in Visual Studio and build any of the test projects via the IDE, or alternatively, build a project on the command line as follows (e.g. cpp-tests):  
     `msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount`
-    
+
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
+
 See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 #### Android
 
 ##### With Android Studio
+
   1. Install Android Studio 2021.1.1+
   2. When starting Android Studio for the first time, it will guide you to install the SDK and other tools, so ensure that you do install them.
   3. Start Android and choose [Open an existing Android Studio Project] and select your project. For example, the existing cpp-test project located in ```axmol\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
-     * Android SDK Platform 33  
-     * Android Gradle Plugin (AGP) 7.2.2  
-     * Android SDK Build-Tools 30.0.3 match with AGP, refer to: https://developer.android.com/studio/releases/gradle-plugin
-     * Gradle 7.4.2  
-     * NDK r23c+  
-     * CMake 3.22.1+  
+     - Android SDK Platform 33  
+     - Android Gradle Plugin (AGP) 7.2.2  
+     - Android SDK Build-Tools 30.0.3 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
+     - Gradle 7.4.2  
+     - NDK r23c+  
+     - CMake 3.22.1+  
   5. Wait for ```Gradle sync``` finish.
-  6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from https://github.com/ninja-build/ninja/releases, and copy ```ninja.exe``` to cmake's bin directory
+  6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from <https://github.com/ninja-build/ninja/releases>, and copy ```ninja.exe``` to cmake's bin directory
   
 ##### Without Android Studio
-  1. Download command-tools from https://developer.android.com/studio#command-tools
+
+  1. Download command-tools from <https://developer.android.com/studio#command-tools>
   2. Install Android devtools (for example in windows)
+
   ```bat
   # unzip command-tools at D:\dev\adt\
   # Install android devtools
@@ -185,10 +198,11 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
   ```
 
 #### iOS, tvOS and macOS
+
   1. Ensure xcode12+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
   2. Create a new project as shown [here](#creating-a-new-project)
   3. In a console window, navigate into the root directory of the project you created in the previous step
-  4. Execute the following command   
+  4. Execute the following command
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
   5. Generate the relevant xcode project using one of the following commands:
      - for ios arm64:  
@@ -212,19 +226,23 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
      - **axmol only provides armv7, arm64, x86_64 prebuilt libraries for ios/tvos**
 
 ### Some interesting related projects based on axmol
-https://github.com/axmolengine/axmol/discussions/694
+
+<https://github.com/axmolengine/axmol/discussions/694>
 
 ### Notes
-  * ThreadLocalStorage (TLS) 
-    - ios x86 simulator ios>=10 and axmol no longer provide x86 libraries
-    - ios x64 or devices (armv7, arm64) ios sdk>=9.0
-    - the 'OpenAL Soft' maintained by kcat uses TLS
+
+- ThreadLocalStorage (TLS)
+  - ios x86 simulator ios>=10 and axmol no longer provide x86 libraries
+  - ios x64 or devices (armv7, arm64) ios sdk>=9.0
+  - the 'OpenAL Soft' maintained by kcat uses TLS
 
 ### Reference links
-  * Official Cocos2d-x Repo: https://github.com/cocos2d/cocos2d-x
+
+- Official Cocos2d-x Repo: <https://github.com/cocos2d/cocos2d-x>
 
 ### Contributing guide
-https://github.com/axmolengine/axmol/discussions/411
+
+<https://github.com/axmolengine/axmol/discussions/411>
 
 ### The axmol Active Stats
 
