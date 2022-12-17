@@ -29,7 +29,7 @@ message(STATUS "PYTHON_PATH:"  ${PYTHON_COMMAND})
 message(STATUS "_AX_COMMAND_PATH:"  ${_AX_COMMAND})
 message(STATUS "HOST_SYSTEM:" ${CMAKE_HOST_SYSTEM_NAME})
 # the default behavior of build module
-option(AX_ENABLE_EXT_LUA "Build lua libraries" OFF)
+option(AX_ENABLE_EXT_LUA "Build lua libraries" ON)
 
 # hold the extensions list to auto link to app
 set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
