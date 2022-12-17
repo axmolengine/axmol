@@ -48,7 +48,20 @@ if (NOT DEFINED ASTC_ISA_SIMD)
         set(ASTC_HAVE_AVX2_INTRINSICS ${AX_HAVE_AVX2_INTRINSICS})
         set(ASTC_HAVE_SSE42_INTRINSICS ${AX_HAVE_SSE42_INTRINSICS})
         set(ASTC_HAVE_SSE41_INTRINSICS ${AX_HAVE_SSE41_INTRINSICS})
-        set(ASTC_HAVE_NEON_INTRINSICS ${AX_HAVE_NEON_INTRINSICS})
+        if (AX_HAVE_NEON_INTRINSICS)
+            set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -std=c++11")
+            check_cxx_source_compiles("#include <arm_neon.h>
+                    int main()
+                    {
+                        int32x4_t ret4 = vdupq_n_s32(0);
+                        uint32x4_t v{};
+                        float16x4_t f16 = vcvt_f16_f32(v);
+                        return vgetq_lane_s32(ret4, 0);
+                    }" ASTC_HAVE_NEON_INTRINSICS)
+            set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+            unset(OLD_REQUIRED_FLAGS)
+        endif()
     else()
         set(ASTC_HAVE_SSE2_INTRINSICS ${AX_HAVE_SSE2_INTRINSICS})
         message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build target 'x86' and 'tvos'")
