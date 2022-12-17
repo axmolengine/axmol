@@ -67,11 +67,11 @@ define_property(TARGET
 
 # config c standard
 if(NOT DEFINED CMAKE_C_STANDARD)
-    set(CMAKE_C_STANDARD ${C_STD})
+    set(CMAKE_C_STANDARD 11)
 endif()
 message(STATUS "CMAKE_C_STANDARD=${CMAKE_C_STANDARD}")
-if(NOT DEFINED CMAKE_C_STANDARD)
-    set(CMAKE_C_STANDARD ON)
+if(NOT DEFINED CMAKE_C_STANDARD_REQUIRED)
+    set(CMAKE_C_STANDARD_REQUIRED ON)
 endif()
 
 # config c++ standard
