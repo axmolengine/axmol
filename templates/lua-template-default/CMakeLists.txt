@@ -227,7 +227,6 @@ if (AX_WITH_YAML_CPP)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows and linux
-    include(${_AX_ROOT_PATH}/cmake/Modules/AXConfigDefine.cmake)
     use_ax_compile_define(${APP_NAME})
 
     include(${_AX_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
