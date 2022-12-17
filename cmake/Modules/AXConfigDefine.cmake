@@ -215,6 +215,7 @@ if (NOT DEFINED AX_ISA_SIMD)
     if (AX_HAVE_SSE2_SWITCH)
         set(AX_HAVE_SSE2_INTRINSICS 1)
     endif()
+    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
     ### end check -msse2 flag
 
     if (NOT TVOS)
@@ -254,14 +255,12 @@ if (NOT DEFINED AX_ISA_SIMD)
                 }" AX_HAVE_SSE2_INTRINSICS)
         endif()
 
-        ### restore CMAKE_REQUIRED_FLAGS
         set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-        unset(OLD_REQUIRED_FLAGS)
 
         ### Checking ARM SIMD neon
         check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
         if(AX_HAVE_ARM_NEON_H)
-            set(CMAKE_REQUIRED_FLAGS "-std=c++11")
+            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -std=c++11")
             check_cxx_source_compiles("#include <arm_neon.h>
                     int main()
                     {
@@ -270,10 +269,13 @@ if (NOT DEFINED AX_ISA_SIMD)
                         float16x4_t f16 = vcvt_f16_f32(v);
                         return vgetq_lane_s32(ret4, 0);
                     }" AX_HAVE_NEON_INTRINSICS)
+            set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
         endif()
     else()
         message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build target 'tvos'")
     endif()
+
+    unset(OLD_REQUIRED_FLAGS)
 
     ### set AX_ISA_SIMD
     if(AX_HAVE_AVX2_INTRINSICS)
