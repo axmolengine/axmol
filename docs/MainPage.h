@@ -3,7 +3,7 @@
 
 @mainpage axmol
 
-@image html splash_black.png
+@image html axmol_portrait.png
 
 @section sec1 About axmol
 axmol is based on cocos2d-x-4.0, cocos2d-x is a open source project is designed to be a cross-platform 2D game engine for building 2D games, demos and other graphical/interactive mobile applications.

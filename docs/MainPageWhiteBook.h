@@ -27,7 +27,7 @@
 
 @mainpage axmol
 
-@image html splash_white.png
+@image html img-axmol.png
 
 @section sec1 About axmol
  axmol is a complete game development toolkit that enables game developers to quickly build games all the way from prototyping to full fledged game.
