@@ -15,6 +15,7 @@ if(CMAKE_TOOLCHAIN_FILE)
 endif()
 
 find_program(PYTHON_COMMAND NAMES python3 python2 python)
+get_filename_component(_AX_ROOT_PATH ${CMAKE_CURRENT_LIST_DIR}/../.. ABSOLUTE)
 find_program(_AX_COMMAND NAME axmol
     PATHS ${_AX_ROOT_PATH}/tools/axmol-console/bin $ENV{_AX_CONSOLE_ROOT})
 
