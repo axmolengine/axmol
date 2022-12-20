@@ -16,14 +16,8 @@
 #define PNG_VERSION_INFO_ONLY
 #include "../pngpriv.h"
 
-#if defined(__arm__)
-
 #if (defined(__linux__) || defined(__FreeBSD__)) && defined(__ELF__)
 .section .note.GNU-stack,"",%progbits /* mark stack as non-executable */
-#endif
-
-#if defined(__APPLE__) && defined(__clang__)
-.section __LLVM,__asm
 #endif
 
 #ifdef PNG_READ_SUPPORTED
@@ -42,10 +36,10 @@
 #else
 #   define ELF @
 #endif
-#if !defined(__APPLE__)
+
         .arch armv7-a
         .fpu  neon
-#endif
+
 .macro  func    name, export=0
     .macro endfunc
 ELF     .size   \name, . - \name
@@ -257,5 +251,3 @@ endfunc
 #endif /* PNG_ARM_NEON_OPT > 0 */
 #endif /* PNG_ARM_NEON_IMPLEMENTATION == 2 (assembler) */
 #endif /* READ */
-
-#endif /* armv7 32bit */
