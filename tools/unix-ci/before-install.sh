@@ -15,12 +15,6 @@ function install_linux_environment()
     echo "Installing linux dependence packages finished!"
 }
 
-function install_python_module_for_osx()
-{
-    pip install PyYAML
-    sudo pip install Cheetah
-}
-
 # set up environment according os and target
 function install_environement()
 {
@@ -42,20 +36,8 @@ function install_environement()
     if [ "$GH_OS_NAME" == "osx" ]; then
         brew install nasm
         nasm -v
-
-        install_python_module_for_osx
     fi
 }
-
-# install newer python for android for ssl connection
-if [ "$GH_OS_NAME" == "linux" ]; then
-    echo "Installing pyenv for github ci..."
-    curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-    export PATH="/home/runner/.pyenv/bin:$PATH"
-    pyenv install --list
-    pyenv install $PYENV_VERSION
-    pyenv versions
-fi
 
 python -V
 cmake --version

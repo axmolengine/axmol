@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
- http://www.cocos2d-x.org
+ https://axmolengine.github.io/axmol
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -25,16 +25,16 @@
 /*!
 @cond GEN_WRITE_BOOK
 
-@mainpage cocos
+@mainpage axmol
 
-@image html img-cocos.jpg
+@image html img-axmol.png
 
-@section sec1 About cocos
- Cocos is a complete game development toolkit that enables game developers to quickly build games all the way from prototyping to full fledged game.
+@section sec1 About axmol
+ axmol is a complete game development toolkit that enables game developers to quickly build games all the way from prototyping to full fledged game.
  
- Cocos combines the best ingredients from the Cocos2d community. It includes an all purpose game editor, a coding IDE, and even a marketplace for the community to find and share 3rd-party extensions and tools. All for the purpose of making game development process a breeze.
+ axmol combines the best ingredients from the axmol community. It includes an all purpose game editor, a coding IDE, and even a marketplace for the community to find and share 3rd-party extensions and tools. All for the purpose of making game development process a breeze.
  
- Cocos is maintained and copyrighted by Chukong Technologies.
+ axmol is maintained and copyrighted by Chukong Technologies.
 
 @endcond
 */

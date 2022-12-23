@@ -3,6 +3,7 @@ Copyright (c) 2009      Jason Booth
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2022 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -192,10 +193,10 @@ bool RenderTexture::initWithWidthAndHeight(int w,
         _texture2D->updateTextureDescriptor(descriptor, !!AX_ENABLE_PREMULTIPLIED_ALPHA);
         _renderTargetFlags = RenderTargetFlag::COLOR;
 
-        if (PixelFormat::D24S8 == depthStencilFormat)
+        if (PixelFormat::D24S8 == depthStencilFormat || sharedRenderTarget)
         {
             _renderTargetFlags       = RenderTargetFlag::ALL;
-            descriptor.textureFormat = depthStencilFormat;
+            descriptor.textureFormat = PixelFormat::D24S8;
 
             _depthStencilTexture = new Texture2D();
             _depthStencilTexture->updateTextureDescriptor(descriptor);

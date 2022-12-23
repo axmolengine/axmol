@@ -46,9 +46,6 @@ include(PreventInSourceBuilds)
 include(AXBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
-option(AX_BUILD_EXAMPLES "Build examples" ON)
-
-set(AX_ENABLE_EXT_LUA ON) 
 
 add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
 

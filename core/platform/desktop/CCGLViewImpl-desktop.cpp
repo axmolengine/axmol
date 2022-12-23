@@ -1024,13 +1024,11 @@ void GLViewImpl::onGLFWKeyCallback(GLFWwindow* /*window*/, int key, int /*scanco
     }
 }
 
-void GLViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int character)
+void GLViewImpl::onGLFWCharCallback(GLFWwindow* /*window*/, unsigned int charCode)
 {
-    char16_t wcharString[2] = {(char16_t)character, 0};
     std::string utf8String;
-
-    StringUtils::UTF16ToUTF8(wcharString, utf8String);
-    static std::set<std::string> controlUnicode = {
+    StringUtils::UTF32ToUTF8(std::u32string_view{(char32_t*)&charCode, (size_t)1}, utf8String);
+    static std::unordered_set<std::string_view> controlUnicode = {
         "\xEF\x9C\x80",  // up
         "\xEF\x9C\x81",  // down
         "\xEF\x9C\x82",  // left
