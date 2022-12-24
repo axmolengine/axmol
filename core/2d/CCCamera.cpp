@@ -188,6 +188,7 @@ void Camera::initDefault()
     {
         case Director::Projection::_2D:
         {
+			_zoomFactor  = 1.0F;
             _fieldOfView = 60.0F;
             _nearPlane   = -1024.0F;
             _farPlane    = 1024.0F;
@@ -200,6 +201,7 @@ void Camera::initDefault()
         case Director::Projection::_3D:
         {
             float zeye   = _director->getZEye();
+			_zoomFactor  = 1.0F;
             _fieldOfView = 60.0F;
             _nearPlane   = 0.5F;
             _farPlane    = zeye + size.height / 2.0f;
@@ -214,9 +216,6 @@ void Camera::initDefault()
     }
 
     setDepth(0);
-	
-    if (_zoomFactor != 1.0F)
-        applyZoom();
 }
 
 void Camera::updateTransform()
