@@ -71,16 +71,6 @@ class AX_DLL Camera : public Node
 
 public:
     /**
-     * The type of camera.
-     */
-    enum class Type
-    {
-        PERSPECTIVE  = 1,
-        ORTHOGRAPHIC = 2
-    };
-
-public:
-    /**
      * Creates a perspective camera.
      *
      * @param fieldOfView The field of view for the perspective camera (normally in the range of 40-60 degrees).
@@ -117,13 +107,6 @@ public:
      * Get the default camera of the current running scene.
      */
     static Camera* getDefaultCamera();
-
-    /**
-     * Gets the type of camera.
-     *
-     * @return The camera type.
-     */
-    Camera::Type getType() const { return _type; }
 
     /**get & set Camera flag*/
     CameraFlag getCameraFlag() const { return _cameraFlag; }
