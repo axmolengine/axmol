@@ -123,7 +123,9 @@
 
 +(void)load
 {
-    [self setCellClass:[RSVerticallyCenteredSecureTextFieldCell class]];
+//    [self setCellClass:[RSVerticallyCenteredSecureTextFieldCell class]];
+    //Verwijderd na upgrade Xcode 13.1 (ios 15/monterey)
+
 }
 
 
