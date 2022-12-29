@@ -1686,10 +1686,9 @@ std::string Sprite::getDescription() const
     char textureDescriptor[100];
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
         snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag,
-                 _batchNode->getTextureAtlas()->getTexture()->getBackendTexture());
+                _batchNode->getTextureAtlas()->getTexture()->getBackendTexture());
     else
-        snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag,
-                 _texture->getBackendTexture());
+        snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag, _texture->getBackendTexture());
 
     return textureDescriptor;
 }
