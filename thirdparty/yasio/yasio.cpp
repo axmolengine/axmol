@@ -350,7 +350,7 @@ io_transport::io_transport(io_channel* ctx, xxsocket_ptr&& s) : ctx_(ctx)
 #endif
 }
 const print_fn2_t& io_transport::__get_cprint() const { return ctx_->get_service().options_.print_; }
-int io_transport::write(sbyte_buffer&& buffer, completion_cb_t&& handler)
+int io_transport::write(dynamic_buffer_t&& buffer, completion_cb_t&& handler)
 {
   int n = static_cast<int>(buffer.size());
   send_queue_.emplace(cxx14::make_unique<io_send_op>(std::move(buffer), std::move(handler)));
@@ -603,11 +603,11 @@ void io_transport_udp::disconnect()
   connected_ = false;
   set_primitives();
 }
-int io_transport_udp::write(sbyte_buffer&& buffer, completion_cb_t&& handler)
+int io_transport_udp::write(dynamic_buffer_t&& buffer, completion_cb_t&& handler)
 {
   return connected_ ? io_transport::write(std::move(buffer), std::move(handler)) : write_to(std::move(buffer), ensure_destination(), std::move(handler));
 }
-int io_transport_udp::write_to(sbyte_buffer&& buffer, const ip::endpoint& to, completion_cb_t&& handler)
+int io_transport_udp::write_to(dynamic_buffer_t&& buffer, const ip::endpoint& to, completion_cb_t&& handler)
 {
   int n = static_cast<int>(buffer.size());
   send_queue_.emplace(cxx14::make_unique<io_sendto_op>(std::move(buffer), std::move(handler), to));
@@ -658,12 +658,12 @@ io_transport_kcp::io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s) : io_trans
     if (yasio__min_wait_duration == 0)
       return t->write_cb_(buf, len, std::addressof(t->ensure_destination()));
     // Enqueue to transport queue
-    return t->io_transport_udp::write(sbyte_buffer{buf, buf + len}, nullptr);
+    return t->io_transport_udp::write(dynamic_buffer_t{buf, buf + len}, nullptr);
   });
 }
 io_transport_kcp::~io_transport_kcp() { ::ikcp_release(this->kcp_); }
 
-int io_transport_kcp::write(sbyte_buffer&& buffer, completion_cb_t&& /*handler*/)
+int io_transport_kcp::write(dynamic_buffer_t&& buffer, completion_cb_t&& /*handler*/)
 {
   std::lock_guard<std::recursive_mutex> lck(send_mtx_);
   int len    = static_cast<int>(buffer.size());
@@ -1117,7 +1117,7 @@ void io_service::unregister_descriptor(const socket_native_type fd, int flags)
   if (yasio__testbits(flags, YEM_POLLERR))
     FD_CLR(fd, &(fds_array_[except_op]));
 }
-int io_service::write(transport_handle_t transport, sbyte_buffer buffer, completion_cb_t handler)
+int io_service::write(transport_handle_t transport, dynamic_buffer_t buffer, completion_cb_t handler)
 {
   if (transport && transport->is_open())
     return !buffer.empty() ? transport->write(std::move(buffer), std::move(handler)) : 0;
@@ -1127,7 +1127,7 @@ int io_service::write(transport_handle_t transport, sbyte_buffer buffer, complet
     return -1;
   }
 }
-int io_service::write_to(transport_handle_t transport, sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t handler)
+int io_service::write_to(transport_handle_t transport, dynamic_buffer_t buffer, const ip::endpoint& to, completion_cb_t handler)
 {
   if (transport && transport->is_open())
     return !buffer.empty() ? transport->write_to(std::move(buffer), to, std::move(handler)) : 0;
@@ -1839,8 +1839,8 @@ void io_service::unpack(transport_handle_t transport, int bytes_expected, int by
 {
   auto& offset         = transport->offset_;
   auto bytes_available = bytes_transferred + offset;
-  transport->expected_packet_.insert(transport->expected_packet_.end(), transport->buffer_ + bytes_to_strip,
-                                     transport->buffer_ + (std::min)(bytes_expected, bytes_available));
+  auto& pkt            = transport->expected_packet_;
+  pkt.insert(pkt.end(), transport->buffer_ + bytes_to_strip, transport->buffer_ + (std::min)(bytes_expected, bytes_available));
 
   // set 'offset' to bytes of remain buffer
   offset = bytes_available - bytes_expected;
@@ -2124,7 +2124,10 @@ void io_service::start_query(io_channel* ctx)
 #  endif
     }
     else
+    {
+      ctx->set_last_errno(yasio::errc::resolve_host_failed);
       YASIO_KLOGE("[index: %d] query %s failed, ec=%d, detail:%s", ctx->index_, ctx->remote_host_.c_str(), error, xxsocket::gai_strerror(error));
+    }
     this->interrupt();
   });
   async_resolv_thread.detach();
