@@ -381,7 +381,7 @@ protected:
                          // with larger depth is drawn on top of camera with smaller depth
 
     float _eyeZdistance; // Z eye projection distance for 2D in 3D projection.
-    float _zoomFactor; // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
+    float _zoomFactor = 1.0F; // The zoom factor of the camera. 3D = (cameraZDistance * _zoomFactor), 2D = (cameraScale * _zoomFactor)
     float _zoomFactorFarPlane;
     float _zoomFactorNearPlane;
 
