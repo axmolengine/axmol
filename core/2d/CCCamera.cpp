@@ -223,15 +223,15 @@ void Camera::updateTransform()
 {
     auto& size = _director->getWinSize();
     // create default camera
-    switch (_type)
+    switch (_director->getProjection())
     {
-        case Type::ORTHOGRAPHIC:
+        case Director::Projection::_2D:
         {
             initOrthographic(size.width, size.height, _nearPlane, _farPlane);
             break;
         }
 
-        case Type::PERSPECTIVE:
+        case Director::Projection::_3D:
         {
             float zeye = _director->getZEye();
             initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
@@ -257,7 +257,6 @@ bool Camera::initPerspective(float fieldOfView, float aspectRatio, float nearPla
     Mat4::createPerspective(_fieldOfView, aspectRatio, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
-    _type                = Type::PERSPECTIVE;
 
     return true;
 }
@@ -271,7 +270,6 @@ bool Camera::initOrthographic(float zoomX, float zoomY, float nearPlane, float f
     Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
     _viewProjectionDirty = true;
     _frustumDirty        = true;
-    _type                = Type::ORTHOGRAPHIC;
 
     return true;
 }
