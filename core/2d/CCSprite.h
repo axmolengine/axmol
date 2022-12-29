@@ -377,15 +377,7 @@ public:
     virtual void sortAllChildren() override;
     virtual void setScale(float scale) override;
     virtual void setPositionZ(float positionZ) override;
-
-    virtual const Vec2& getAnchorPoint() const { return _spriteVertexAnchor; };
-    /**
-     * set the anchor point for the sprite.
-     * @param useVertexAnchor anchors the sprite using it's vertices, node position will stay persistent.
-     * @js  NA
-     * @lua NA
-     */
-    virtual void setAnchorPoint(const Vec2& anchor, bool useVertexAnchor = false);
+    virtual void setAnchorPoint(const Vec2& anchor) override;
     virtual void setContentSize(const Vec2& size) override;
 
     virtual void setIgnoreAnchorPointForPosition(bool value) override;
@@ -681,10 +673,9 @@ protected:
 
     Rect _centerRectNormalized = {0, 0, 1, 1};  /// Rectangle to implement "slice 9"
     RenderMode _renderMode =
-        Sprite::RenderMode::QUAD;               /// render mode used by the Sprite: Quad, Slice9, Polygon or Quad_Batchnode
-    Vec2 _stretchFactor       = Vec2::ONE;      /// stretch factor to match the contentSize. for 1- and 9- slice sprites
-    Vec2 _originalContentSize = Vec2::ZERO;     /// original content size
-    Vec2 _spriteVertexAnchor  = {0.5F, 0.5F};   /// sprite vertex anchor 
+        Sprite::RenderMode::QUAD;            /// render mode used by the Sprite: Quad, Slice9, Polygon or Quad_Batchnode
+    Vec2 _stretchFactor       = Vec2::ONE;   /// stretch factor to match the contentSize. for 1- and 9- slice sprites
+    Vec2 _originalContentSize = Vec2::ZERO;  /// original content size
 
     // Offset Position (used by Zwoptex)
     Vec2 _offsetPosition;
