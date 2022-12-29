@@ -1332,11 +1332,13 @@ void Sprite::setAnchorPoint(const Vec2& anchor, bool useVertexAnchor)
     if (useVertexAnchor)
     {
         _spriteVertexAnchor = anchor;
+        Node::setAnchorPoint({0, 0});
         SET_DIRTY_RECURSIVELY();
         updatePoly();
     }
     else
     {
+        _spriteVertexAnchor = {0, 0};
         Node::setAnchorPoint(anchor);
         SET_DIRTY_RECURSIVELY();
     }
