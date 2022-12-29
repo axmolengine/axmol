@@ -867,8 +867,8 @@ void Sprite::setTextureCoords(const Rect& rectInPoints, V3F_C4B_T2F_Quad* outQua
 
 void Sprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad)
 {
-    float relativeOffsetX = _unflippedOffsetPositionFromCenter.x;
-    float relativeOffsetY = _unflippedOffsetPositionFromCenter.y;
+    float relativeOffsetX = _unflippedOffsetPositionFromCenter.x - getContentSize().x * _spriteVertexAnchor.x;
+    float relativeOffsetY = _unflippedOffsetPositionFromCenter.y - getContentSize().y * _spriteVertexAnchor.y;
 
     // issue #732
     if (_flippedX)
@@ -1327,10 +1327,21 @@ void Sprite::setPositionZ(float fVertexZ)
     SET_DIRTY_RECURSIVELY();
 }
 
-void Sprite::setAnchorPoint(const Vec2& anchor)
+void Sprite::setAnchorPoint(const Vec2& anchor, bool useVertexAnchor)
 {
-    Node::setAnchorPoint(anchor);
-    SET_DIRTY_RECURSIVELY();
+    if (useVertexAnchor)
+    {
+        _spriteVertexAnchor = anchor;
+        Node::setAnchorPoint({0, 0});
+        SET_DIRTY_RECURSIVELY();
+        updatePoly();
+    }
+    else
+    {
+        _spriteVertexAnchor = {0, 0};
+        Node::setAnchorPoint(anchor);
+        SET_DIRTY_RECURSIVELY();
+    }
 }
 
 void Sprite::setIgnoreAnchorPointForPosition(bool value)
