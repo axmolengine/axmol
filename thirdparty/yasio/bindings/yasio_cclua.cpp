@@ -36,7 +36,7 @@ SOFTWARE.
 #    undef __has_attribute
 #  endif
 #include "cocos2d.h"
-USING_NS_AX;
+using namespace cocos2d;
 
 namespace lyasio
 {

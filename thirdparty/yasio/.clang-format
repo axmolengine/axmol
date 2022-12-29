@@ -6,8 +6,8 @@ Standard: Cpp11
 
 SortIncludes: false
 
-# Keep lines under 100 columns long.
-ColumnLimit: 100
+# Keep lines under 160 columns long.
+ColumnLimit: 160
 
 # Always break before braces
 BreakBeforeBraces: Custom
