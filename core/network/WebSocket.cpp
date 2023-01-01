@@ -211,7 +211,7 @@ WebSocket::WebSocket()
 {
     _service   = new yasio::io_service();
     _scheduler = Director::getInstance()->getScheduler();
-    _service->set_option(yasio::YOPT_S_DEFERRED_EVENT, 0);
+    _service->set_option(yasio::YOPT_S_FORWARD_EVENT, 1);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([=, this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
@@ -446,7 +446,8 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
     case YEK_ON_PACKET:
         if (_state == State::CONNECTING)
         {
-            this->do_handshake(event->packet());
+            auto&& pkt = event->packet_view();
+            this->do_handshake(pkt.data(), pkt.size());
             if (_handshakeFinished)
             {
                 ErrorCode error = ErrorCode::OK;
@@ -483,7 +484,7 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
         }
         else if (_state == State::OPEN)
         {
-            auto& pkt = event->packet();
+            auto&& pkt = event->packet_view();
             websocket_parser_execute(&_wsParser, &_wsParserSettings, pkt.data(), pkt.size());
         }  // else unreachable
         break;

@@ -246,9 +246,9 @@ protected:
     void generateHandshakeSecKey();
     void handleNetworkEvent(yasio::io_event* event);
 
-    void do_handshake(const yasio::sbyte_buffer& data)
+    void do_handshake(const char* d, size_t n)
     {
-        enum llhttp_errno err = llhttp_execute(&_context, data.data(), data.size());
+        enum llhttp_errno err = llhttp_execute(&_context, d, n);
         if (err != HPE_OK)
         {
             _handshakeFinished = true;
