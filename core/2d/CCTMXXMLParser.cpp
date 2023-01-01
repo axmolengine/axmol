@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include <sstream>
 //  #include "2d/CCTMXTiledMap.h"
 #include "base/ZipUtils.h"
-#include "base/base64.h"
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
 
@@ -691,7 +690,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             auto currentString = tmxMapInfo->getCurrentString();
             unsigned char* buffer;
             auto len =
-                base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(), &buffer);
+                utils::base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(), &buffer);
             if (!buffer)
             {
                 AXLOG("axmol: TiledMap: decode data error");

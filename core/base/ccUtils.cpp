@@ -3,7 +3,7 @@ Copyright (c) 2010      cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2022 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -42,7 +42,6 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 #include "base/CCAsyncTaskPool.h"
 #include "base/CCEventDispatcher.h"
-#include "base/base64.h"
 #include "base/ccConstants.h"
 #include "base/ccUTF8.h"
 #include "renderer/CCCustomCommand.h"
@@ -56,6 +55,8 @@ THE SOFTWARE.
 #include "platform/CCFileUtils.h"
 #include "2d/CCSprite.h"
 #include "2d/CCRenderTexture.h"
+
+#include "base/base64.h"
 
 using namespace std::string_view_literals;
 
@@ -74,6 +75,18 @@ int ccNextPOT(int x)
 
 namespace utils
 {
+namespace base64
+{
+inline int encBound(int sourceLen)
+{
+    return (sourceLen + 2) / 3 * 4;
+}
+inline int decBound(int sourceLen)
+{
+    return sourceLen / 4 * 3 + 1;
+}
+}  // namespace base64
+
 /*
  * Capture screen interface
  */
@@ -406,7 +419,7 @@ std::string getDataMD5Hash(const Data& data)
     return computeDigest(std::string_view{(const char*)data.getBytes(), (size_t)data.getSize()}, "md5"sv);
 }
 
-std::string computeDigest(std::string_view data, std::string_view algorithm)
+std::string computeDigest(std::string_view data, std::string_view algorithm, bool toHex)
 {
     const EVP_MD* md                       = nullptr;
     unsigned char mdValue[EVP_MAX_MD_SIZE] = {0};
@@ -423,7 +436,8 @@ std::string computeDigest(std::string_view data, std::string_view algorithm)
     EVP_DigestFinal_ex(mdctx, mdValue, &mdLen);
     EVP_MD_CTX_destroy(mdctx);
 
-    return bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen});
+    return toHex ? bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen})
+                 : std::string{(const char*)mdValue, (size_t)mdLen};
 }
 
 LanguageType getLanguageTypeByISO2(const char* code)
@@ -779,6 +793,62 @@ std::string urlDecode(std::string_view st)
         }
     }
     return decoded;
+}
+
+AX_DLL std::string base64Encode(std::string_view s)
+{
+    size_t n = ax::base64::encoded_size(s.length());
+    if (n > 0)
+    {
+        std::string ret;
+
+        ret.resize_and_overwrite(n,
+                                 [&](char* p, size_t) {
+                return ax::base64::encode(p, s.data(), s.length());
+            });
+
+        return ret;
+    }
+    return std::string{};
+}
+
+AX_DLL std::string base64Decode(std::string_view s)
+{
+    size_t n = ax::base64::decoded_size(s.length());
+    if (n > 0)
+    {
+        std::string ret;
+
+        ret.resize_and_overwrite(n, [&](char* p, size_t) {
+            return ax::base64::decode(p, s.data(), s.length());
+        });
+
+        return ret;
+    }
+    return std::string{};
+}
+
+int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
+{
+    auto n = ax::base64::encoded_size(inLength);
+    // should be enough to store 8-bit buffers in 6-bit buffers
+    *out = (char*)malloc(n + 1);
+    if (*out)
+    {
+        auto ret = ax::base64::encode(*out, in, inLength);
+        *out[ret] = '\0';
+        return ret;
+    }
+    return 0;
+}
+
+AX_DLL int base64Decode(const unsigned char* in, unsigned int inLength, unsigned char** out)
+{
+    size_t n = ax::base64::decoded_size(inLength);
+    *out     = (unsigned char*)malloc(n);
+    if (*out)
+        return static_cast<int>(ax::base64::decode(*out, (char*)in, inLength));
+    return 0;
 }
 
 AX_DLL uint32_t fourccValue(std::string_view str)

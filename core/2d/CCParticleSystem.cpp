@@ -50,7 +50,6 @@ THE SOFTWARE.
 
 #include "2d/CCParticleBatchNode.h"
 #include "renderer/CCTextureAtlas.h"
-#include "base/base64.h"
 #include "base/ZipUtils.h"
 #include "base/CCDirector.h"
 #include "base/CCProfiling.h"
@@ -637,7 +636,7 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                     {
                         // if it fails, try to get it from the base64-gzipped data
                         int decodeLen =
-                            base64Decode((unsigned char*)textureData.c_str(), (unsigned int)dataLen, &buffer);
+                            utils::base64Decode((unsigned char*)textureData.c_str(), (unsigned int)dataLen, &buffer);
                         AXASSERT(buffer != nullptr, "CCParticleSystem: error decoding textureImageData");
                         AX_BREAK_IF(!buffer);
 

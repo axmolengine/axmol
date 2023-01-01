@@ -1,196 +1,136 @@
-/****************************************************************************
-Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+//
+// Copyright (c) 2016-2019 Vinnie Falco (vinnie dot falco at gmail dot com)
+//
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+// Official repository: https://github.com/boostorg/beast
+//
 
-https://axmolengine.github.io/
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "base/base64.h"
+#include "base64.h"
 
 NS_AX_BEGIN
 
-unsigned char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+namespace base64 {
 
-int _base64Decode(const unsigned char* input, unsigned int input_len, unsigned char* output, unsigned int* output_len)
+AX_DLL char const*
+get_alphabet()
 {
-    static char inalphabet[256], decoder[256];
-    int c = 0, char_count, errors = 0;
-    unsigned int input_idx  = 0;
-    unsigned int output_idx = 0;
-
-    auto alphabetSize = sizeof(alphabet);
-    for (size_t i = 0; i < alphabetSize; i++)
-    {
-        inalphabet[alphabet[i]] = 1;
-        decoder[alphabet[i]]    = i;
-    }
-
-    char_count = 0;
-    int bits   = 0;
-    for (input_idx = 0; input_idx < input_len; input_idx++)
-    {
-        c = input[input_idx];
-        if (c == '=')
-            break;
-        if (c > 255 || !inalphabet[c])
-            continue;
-        bits += decoder[c];
-        char_count++;
-        if (char_count == 4)
-        {
-            output[output_idx++] = (bits >> 16);
-            output[output_idx++] = ((bits >> 8) & 0xff);
-            output[output_idx++] = (bits & 0xff);
-            bits                 = 0;
-            char_count           = 0;
-        }
-        else
-        {
-            bits <<= 6;
-        }
-    }
-
-    if (c == '=')
-    {
-        switch (char_count)
-        {
-        case 1:
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_BADA)
-            fprintf(stderr, "base64Decode: encoding incomplete: at least 2 bits missing");
-#endif
-            errors++;
-            break;
-        case 2:
-            output[output_idx++] = (bits >> 10);
-            break;
-        case 3:
-            output[output_idx++] = (bits >> 16);
-            output[output_idx++] = ((bits >> 8) & 0xff);
-            break;
-        }
-    }
-    else if (input_idx < input_len)
-    {
-        if (char_count)
-        {
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_BADA)
-            fprintf(stderr, "base64 encoding incomplete: at least %d bits truncated", ((4 - char_count) * 6));
-#endif
-            errors++;
-        }
-    }
-
-    *output_len = output_idx;
-    return errors;
+    static char constexpr tab[] = {
+        "ABCDEFGHIJKLMNOP"
+        "QRSTUVWXYZabcdef"
+        "ghijklmnopqrstuv"
+        "wxyz0123456789+/"
+    };
+    return &tab[0];
 }
 
-void _base64Encode(const unsigned char* input, unsigned int input_len, char* output)
+AX_DLL signed char const*
+get_inverse()
 {
-    unsigned int char_count;
-    unsigned int bits;
-    unsigned int input_idx  = 0;
-    unsigned int output_idx = 0;
-
-    char_count = 0;
-    bits       = 0;
-    for (input_idx = 0; input_idx < input_len; input_idx++)
-    {
-        bits |= input[input_idx];
-
-        char_count++;
-        if (char_count == 3)
-        {
-            output[output_idx++] = alphabet[(bits >> 18) & 0x3f];
-            output[output_idx++] = alphabet[(bits >> 12) & 0x3f];
-            output[output_idx++] = alphabet[(bits >> 6) & 0x3f];
-            output[output_idx++] = alphabet[bits & 0x3f];
-            bits                 = 0;
-            char_count           = 0;
-        }
-        else
-        {
-            bits <<= 8;
-        }
-    }
-
-    if (char_count)
-    {
-        if (char_count == 1)
-        {
-            bits <<= 8;
-        }
-
-        output[output_idx++] = alphabet[(bits >> 18) & 0x3f];
-        output[output_idx++] = alphabet[(bits >> 12) & 0x3f];
-        if (char_count > 1)
-        {
-            output[output_idx++] = alphabet[(bits >> 6) & 0x3f];
-        }
-        else
-        {
-            output[output_idx++] = '=';
-        }
-        output[output_idx++] = '=';
-    }
-
-    output[output_idx++] = 0;
+    static signed char constexpr tab[] = {
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //   0-15
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //  16-31
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63, //  32-47
+         52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1, //  48-63
+         -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, //  64-79
+         15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1, //  80-95
+         -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, //  96-111
+         41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1, // 112-127
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 128-143
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 144-159
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 160-175
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 176-191
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 192-207
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 208-223
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // 224-239
+         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1  // 240-255
+    };
+    return &tab[0];
 }
 
-int base64Decode(const unsigned char* in, unsigned int inLength, unsigned char** out)
+AX_DLL std::size_t
+encode(void* dest, void const* src, std::size_t len)
 {
-    unsigned int outLength = 0;
+    char*      out = static_cast<char*>(dest);
+    char const* in = static_cast<char const*>(src);
+    auto const tab = base64::get_alphabet();
 
-    // should be enough to store 6-bit buffers in 8-bit buffers
-    *out = (unsigned char*)malloc(inLength / 4 * 3 + 1);
-    if (*out)
+    for(auto n = len / 3; n--;)
     {
-        int ret = _base64Decode(in, inLength, *out, &outLength);
+        *out++ = tab[ (in[0] & 0xfc) >> 2];
+        *out++ = tab[((in[0] & 0x03) << 4) + ((in[1] & 0xf0) >> 4)];
+        *out++ = tab[((in[2] & 0xc0) >> 6) + ((in[1] & 0x0f) << 2)];
+        *out++ = tab[  in[2] & 0x3f];
+        in += 3;
+    }
 
-        if (ret > 0)
+    switch(len % 3)
+    {
+    case 2:
+        *out++ = tab[ (in[0] & 0xfc) >> 2];
+        *out++ = tab[((in[0] & 0x03) << 4) + ((in[1] & 0xf0) >> 4)];
+        *out++ = tab[                         (in[1] & 0x0f) << 2];
+        *out++ = '=';
+        break;
+
+    case 1:
+        *out++ = tab[ (in[0] & 0xfc) >> 2];
+        *out++ = tab[((in[0] & 0x03) << 4)];
+        *out++ = '=';
+        *out++ = '=';
+        break;
+
+    case 0:
+        break;
+    }
+
+    return out - static_cast<char*>(dest);
+}
+
+AX_DLL std::size_t
+decode(void* dest, char const* src, std::size_t len)
+{
+    char* out = static_cast<char*>(dest);
+    auto in = reinterpret_cast<unsigned char const*>(src);
+    unsigned char c3[3], c4[4] = {0,0,0,0};
+    int i = 0;
+    int j = 0;
+
+    auto const inverse = base64::get_inverse();
+
+    while(len-- && *in != '=')
+    {
+        auto const v = inverse[*in];
+        if(v == -1)
+            break;
+        ++in;
+        c4[i] = v;
+        if(++i == 4)
         {
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_BADA)
-            printf("Base64Utils: error decoding");
-#endif
-            free(*out);
-            *out      = nullptr;
-            outLength = 0;
+            c3[0] =  (c4[0]        << 2) + ((c4[1] & 0x30) >> 4);
+            c3[1] = ((c4[1] & 0xf) << 4) + ((c4[2] & 0x3c) >> 2);
+            c3[2] = ((c4[2] & 0x3) << 6) +   c4[3];
+
+            for(i = 0; i < 3; i++)
+                *out++ = c3[i];
+            i = 0;
         }
     }
-    return outLength;
-}
 
-int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
-{
-    unsigned int outLength = (inLength + 2) / 3 * 4;
-
-    // should be enough to store 8-bit buffers in 6-bit buffers
-    *out = (char*)malloc(outLength + 1);
-    if (*out)
+    if(i)
     {
-        _base64Encode(in, inLength, *out);
+        c3[0] = ( c4[0]        << 2) + ((c4[1] & 0x30) >> 4);
+        c3[1] = ((c4[1] & 0xf) << 4) + ((c4[2] & 0x3c) >> 2);
+        c3[2] = ((c4[2] & 0x3) << 6) +   c4[3];
+
+        for(j = 0; j < i - 1; j++)
+            *out++ = c3[j];
     }
-    return outLength;
+
+    return out - static_cast<char*>(dest);
 }
 
-}  // namespace   cocos2d
+} // base64
+
+NS_AX_END
