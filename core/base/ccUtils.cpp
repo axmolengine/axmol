@@ -3,7 +3,7 @@ Copyright (c) 2010      cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd
-Copyright (c) 2021-2022 Bytedance Inc.
+Copyright (c) 2021-2023 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -205,7 +205,7 @@ void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::st
             AsyncTaskPool::TaskType::TASK_IO,
             [_afterCap = std::move(_afterCap), image = std::move(image), _outfile = std::move(_outfile)]() mutable {
                 bool ok = image->saveToFile(_outfile);
-                Director::getInstance()->getScheduler()->performFunctionInCocosThread(
+                Director::getInstance()->getScheduler()->runOnAxmolThread(
                     [ok, _afterCap = std::move(_afterCap), _outfile = std::move(_outfile)] {
                         _afterCap(ok, _outfile);
                     });
@@ -801,11 +801,12 @@ AX_DLL std::string base64Encode(std::string_view s)
     if (n > 0)
     {
         std::string ret;
-
-        ret.resize_and_overwrite(n,
-                                 [&](char* p, size_t) {
-                return ax::base64::encode(p, s.data(), s.length());
-            });
+#if defined(_HAS_CXX23) && _HAS_CXX23
+        ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::encode(p, s.data(), s.length()); });
+#else
+        ret.resize(n);
+        ret.resize(ax::base64::encode(&ret.front(), s.data(), s.length()));
+#endif
 
         return ret;
     }
@@ -819,9 +820,12 @@ AX_DLL std::string base64Decode(std::string_view s)
     {
         std::string ret;
 
-        ret.resize_and_overwrite(n, [&](char* p, size_t) {
-            return ax::base64::decode(p, s.data(), s.length());
-        });
+#if defined(_HAS_CXX23) && _HAS_CXX23
+        ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::decode(p, s.data(), s.length()); });
+#else
+        ret.resize(n);
+        ret.resize(ax::base64::decode(&ret.front(), s.data(), s.length()));
+#endif
 
         return ret;
     }
@@ -835,7 +839,7 @@ int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
     *out = (char*)malloc(n + 1);
     if (*out)
     {
-        auto ret = ax::base64::encode(*out, in, inLength);
+        auto ret  = ax::base64::encode(*out, in, inLength);
         *out[ret] = '\0';
         return ret;
     }
