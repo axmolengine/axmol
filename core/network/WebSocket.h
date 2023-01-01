@@ -108,7 +108,6 @@ public:
         OK,
         TIME_OUT,           /** &lt; value 0 */
         CONNECTION_FAILURE, /** &lt; value 1 */
-        UNKNOWN,            /** &lt; value 2 */
         NO_SEC_ACCEPT,
         VERIFY_SEC_ACCEPT_FAILURE,
         UPGRADE_FAILURE
@@ -123,13 +122,6 @@ public:
         OPEN,       /** &lt; value 1 */
         CLOSING,    /** &lt; value 2 */
         CLOSED,     /** &lt; value 3 */
-    };
-
-    enum class ConnectState
-    {
-        WANT_HANDSHAKE,
-        HANDSHAKING,
-        CONNECTED,
     };
 
     /**
@@ -304,6 +296,8 @@ protected:
 
     Scheduler* _scheduler;
 
+    std::shared_ptr<std::atomic<bool>> _isDestroyed;
+
     // for close sync
     std::shared_ptr<std::promise<int>> _syncCloseState;
 
@@ -346,6 +340,8 @@ protected:
     // for receiveData
     yasio::sbyte_buffer _receivedData;
     std::recursive_mutex _receivedDataMtx;
+
+     EventListenerCustom* _resetDirectorListener;
 };
 }  // namespace network
 

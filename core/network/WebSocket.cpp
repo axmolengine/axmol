@@ -1,5 +1,5 @@
 /****************************************************************************
-* 
+*
  Copyright (c) 2023 Bytedance Inc.
 
  https://axmolengine.github.io/
@@ -207,7 +207,27 @@ struct WebSocketProtocol
     }
 };
 
-WebSocket::WebSocket()
+static std::vector<WebSocket*>* __websocketInstances = nullptr;
+static std::mutex __instanceMutex;
+
+void WebSocket::closeAllConnections()
+{
+    if (__websocketInstances != nullptr)
+    {
+        ssize_t count = __websocketInstances->size();
+        for (ssize_t i = count - 1; i >= 0; i--)
+        {
+            WebSocket* instance = __websocketInstances->at(i);
+            instance->close();
+        }
+
+        std::lock_guard<std::mutex> lk(__instanceMutex);
+        __websocketInstances->clear();
+        AX_SAFE_DELETE(__websocketInstances);
+    }
+}
+
+WebSocket::WebSocket() : _isDestroyed(std::make_shared<std::atomic<bool>>(false)), _delegate(nullptr)
 {
     _service   = new yasio::io_service();
     _scheduler = Director::getInstance()->getScheduler();
@@ -215,9 +235,44 @@ WebSocket::WebSocket()
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([=, this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
+
+    __instanceMutex.lock();
+    if (__websocketInstances == nullptr)
+    {
+        __websocketInstances = new (std::nothrow) std::vector<WebSocket*>();
+    }
+    __websocketInstances->push_back(this);
+    __instanceMutex.unlock();
+
+    std::shared_ptr<std::atomic<bool>> isDestroyed = _isDestroyed;
+    _resetDirectorListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
+        Director::EVENT_RESET, [this, isDestroyed](EventCustom*) {
+            if (*isDestroyed)
+                return;
+            close();
+        });
 }
 WebSocket::~WebSocket()
 {
+    std::lock_guard<std::mutex> lk(__instanceMutex);
+
+    if (__websocketInstances != nullptr)
+    {
+        auto iter = std::find(__websocketInstances->begin(), __websocketInstances->end(), this);
+        if (iter != __websocketInstances->end())
+        {
+            __websocketInstances->erase(iter);
+            if (__websocketInstances->empty())
+                AX_SAFE_DELETE(__websocketInstances);
+        }
+        else
+        {
+            AXLOGERROR(
+                "ERROR: WebSocket instance (%p) wasn't added to the container which saves websocket instances!\n",
+                this);
+        }
+    }
+
     delete _service;
 }
 
