@@ -18520,7 +18520,7 @@ int lua_ax_base_Scheduler_setTimeScale(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread(lua_State* tolua_S)
+int lua_ax_base_Scheduler_runOnAxmolThread(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Scheduler* cobj = nullptr;
@@ -18540,7 +18540,61 @@ int lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread(lua_State
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_runOnAxmolThread'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::function<void ()> arg0;
+
+        do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_runOnAxmolThread'", nullptr);
+            return 0;
+        }
+        cobj->runOnAxmolThread(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:runOnAxmolThread",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scheduler_runOnAxmolThread'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scheduler_removeAllPendingActions(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scheduler* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scheduler",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Scheduler*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_removeAllPendingActions'", nullptr);
         return 0;
     }
 #endif
@@ -18550,19 +18604,19 @@ int lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread(lua_State
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_removeAllPendingActions'", nullptr);
             return 0;
         }
-        cobj->removeAllFunctionsToBePerformedInCocosThread();
+        cobj->removeAllPendingActions();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:removeAllFunctionsToBePerformedInCocosThread",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:removeAllPendingActions",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scheduler_removeAllPendingActions'.",&tolua_err);
 #endif
 
     return 0;
@@ -18665,7 +18719,8 @@ int lua_register_ax_base_Scheduler(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"Scheduler");
         tolua_function(tolua_S,"new",lua_ax_base_Scheduler_constructor);
         tolua_function(tolua_S,"setTimeScale",lua_ax_base_Scheduler_setTimeScale);
-        tolua_function(tolua_S,"removeAllFunctionsToBePerformedInCocosThread",lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread);
+        tolua_function(tolua_S,"runOnAxmolThread",lua_ax_base_Scheduler_runOnAxmolThread);
+        tolua_function(tolua_S,"removeAllPendingActions",lua_ax_base_Scheduler_removeAllPendingActions);
         tolua_function(tolua_S,"getTimeScale",lua_ax_base_Scheduler_getTimeScale);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Scheduler).name(); // rtti is literal storage
