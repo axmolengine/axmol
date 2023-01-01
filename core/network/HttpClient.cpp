@@ -123,7 +123,7 @@ HttpClient::HttpClient()
     _scheduler = Director::getInstance()->getScheduler();
 
     _service = new yasio::io_service(HttpClient::MAX_CHANNELS);
-    _service->set_option(yasio::YOPT_S_DEFERRED_EVENT, 0);
+    _service->set_option(yasio::YOPT_S_FORWARD_EVENT, 1);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([=, this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
@@ -252,8 +252,10 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
     {
     case YEK_ON_PACKET:
         if (!responseFinished)
-            response->handleInput(event->packet());
-
+        {
+            auto&& pkt = event->packet_view();
+            response->handleInput(pkt.data(), pkt.size());
+        }
         if (response->isFinished())
         {
             response->updateInternalCode(yasio::errc::eof);
