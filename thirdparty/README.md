@@ -221,6 +221,11 @@
 - Version: 1.2.4
 - License: Google Inc
 
+## websocket-parser
+- [![Upstream](https://img.shields.io/github/v/tag/php-ion/websocket-parser?label=Upstream)](https://github.com/php-ion/websocket-parser)
+- Version: 1.0.2
+- License: BSD-3-Clause license
+
 ## xsbase
 - [![Upstream](https://img.shields.io/github/v/tag/simdsoft/xsbase?label=Upstream)](https://github.com/simdsoft/xsbase)
 - Version: 1.0

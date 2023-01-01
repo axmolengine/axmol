@@ -186,6 +186,11 @@ target_link_libraries(thirdparty
     dep_zlib
 )
 
+# websocket-parser
+add_subdirectory(websocket-parser)
+target_link_libraries(thirdparty websocket-parser)
+configure_target_outdir(websocket-parser)
+
 # libpng
 add_subdirectory(png)
 target_include_directories(png PRIVATE "zlib/include")
