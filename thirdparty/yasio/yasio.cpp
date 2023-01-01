@@ -632,7 +632,7 @@ void io_transport_udp::set_primitives()
 }
 int io_transport_udp::handle_input(const char* data, int bytes_transferred, int& /*error*/, highp_time_t&)
 { // pure udp, dispatch to upper layer directly
-  get_service().handle_event(cxx14::make_unique<io_event>(this->cindex(), io_packet{data, data + bytes_transferred}, this));
+  get_service().fire_event(this->cindex(), io_packet{data, data + bytes_transferred}, this);
   return bytes_transferred;
 }
 
@@ -747,6 +747,7 @@ void io_service::start(event_cb_t cb)
     if (!options_.no_new_thread_)
     {
       signal_blocker sb;
+      (void)sb;
       this->worker_    = std::thread(&io_service::run, this);
       this->worker_id_ = worker_.get_id();
     }
@@ -1085,7 +1086,7 @@ void io_service::handle_close(transport_handle_t thandle)
   // @Because we can't retrive peer endpoint when connect reset by peer, so use id to trace.
   YASIO_KLOGD("[index: %d] the connection #%u is lost, ec=%d, where=%d, detail:%s", ctx->index_, thandle->id_, ec, (int)thandle->error_stage_,
               io_service::strerror(ec));
-  handle_event(cxx14::make_unique<io_event>(thandle->cindex(), YEK_ON_CLOSE, ec, thandle));
+  this->fire_event(thandle->cindex(), YEK_ON_CLOSE, ec, thandle);
   cleanup_io(thandle);
   deallocate_transport(thandle);
   if (yasio__testbits(ctx->properties_, YCM_CLIENT))
@@ -1116,17 +1117,6 @@ int io_service::write_to(transport_handle_t transport, dynamic_buffer_t buffer, 
     YASIO_KLOGE("write_to failed, the connection not ok!");
     return -1;
   }
-}
-void io_service::handle_event(event_ptr event)
-{
-  if (options_.deferred_event_)
-  {
-    if (options_.on_defer_event_ && !options_.on_defer_event_(event))
-      return;
-    events_.emplace(std::move(event));
-  }
-  else
-    options_.on_event_(std::move(event));
 }
 void io_service::do_connect(io_channel* ctx)
 {
@@ -1587,7 +1577,7 @@ void io_service::do_accept(io_channel* ctx)
     ctx->state_ = io_base::state::CLOSED;
   }
 #if defined(YASIO_ENABLE_PASSIVE_EVENT)
-  handle_event(cxx14::make_unique<io_event>(ctx->index_, YEK_ON_OPEN, error, ctx, 1));
+  this->fire_event(ctx->index_, YEK_ON_OPEN, error, ctx, 1);
 #endif
 }
 void io_service::do_accept_completion(io_channel* ctx, fd_set_adapter& fd_set)
@@ -1726,7 +1716,7 @@ void io_service::notify_connect_succeed(transport_handle_t t)
   YASIO_KLOGV("[index: %d] sndbuf=%d, rcvbuf=%d", ctx->index_, s->get_optval<int>(SOL_SOCKET, SO_SNDBUF), s->get_optval<int>(SOL_SOCKET, SO_RCVBUF));
   YASIO_KLOGD("[index: %d] the connection #%u <%s> --> <%s> is established.", ctx->index_, t->id_, t->local_endpoint().to_string().c_str(),
               t->remote_endpoint().to_string().c_str());
-  handle_event(cxx14::make_unique<io_event>(ctx->index_, YEK_ON_OPEN, 0, t));
+  this->fire_event(ctx->index_, YEK_ON_OPEN, 0, t);
 }
 transport_handle_t io_service::allocate_transport(io_channel* ctx, xxsocket_ptr&& s)
 {
@@ -1779,7 +1769,7 @@ void io_service::handle_connect_failed(io_channel* ctx, int error)
 {
   cleanup_channel(ctx);
   YASIO_KLOGE("[index: %d] connect server %s failed, ec=%d, detail:%s", ctx->index_, ctx->format_destination().c_str(), error, io_service::strerror(error));
-  handle_event(cxx14::make_unique<io_event>(ctx->index_, YEK_ON_OPEN, error, ctx));
+  fire_event(ctx->index_, YEK_ON_OPEN, error, ctx);
 }
 bool io_service::do_read(transport_handle_t transport, fd_set_adapter& fd_set)
 {
@@ -1793,28 +1783,35 @@ bool io_service::do_read(transport_handle_t transport, fd_set_adapter& fd_set)
     int n      = transport->do_read(revent, error, this->wait_duration_);
     if (n >= 0)
     {
-      YASIO_KLOGV("[index: %d] do_read status ok, bytes transferred: %d, buffer used: %d", transport->cindex(), n, n + transport->offset_);
-      if (transport->expected_size_ == -1)
-      { // decode length
-        int length = transport->ctx_->decode_len_(transport->buffer_, transport->offset_ + n);
-        if (length > 0)
-        {
-          int bytes_to_strip        = ::yasio::clamp(transport->ctx_->uparams_.initial_bytes_to_strip, 0, length - 1);
-          transport->expected_size_ = length;
-          transport->expected_packet_.reserve((std::min)(length - bytes_to_strip,
-                                                         YASIO_MAX_PDU_BUFFER_SIZE)); // #perfomance, avoid memory reallocte.
-          unpack(transport, transport->expected_size_, n, bytes_to_strip);
+      if (!options_.forward_event_)
+      {
+        YASIO_KLOGV("[index: %d] do_read status ok, bytes transferred: %d, buffer used: %d", transport->cindex(), n, n + transport->offset_);
+        if (transport->expected_size_ == -1)
+        { // decode length
+          int length = transport->ctx_->decode_len_(transport->buffer_, transport->offset_ + n);
+          if (length > 0)
+          {
+            int bytes_to_strip        = ::yasio::clamp(transport->ctx_->uparams_.initial_bytes_to_strip, 0, length - 1);
+            transport->expected_size_ = length;
+            transport->expected_packet_.reserve((std::min)(length - bytes_to_strip,
+                                                           YASIO_MAX_PDU_BUFFER_SIZE)); // #perfomance, avoid memory reallocte.
+            unpack(transport, transport->expected_size_, n, bytes_to_strip);
+          }
+          else if (length == 0) // header insufficient, wait readfd ready at next event frame.
+            transport->offset_ += n;
+          else
+          {
+            transport->set_last_errno(yasio::errc::invalid_packet, yasio::io_base::error_stage::READ);
+            break;
+          }
         }
-        else if (length == 0) // header insufficient, wait readfd ready at next event frame.
-          transport->offset_ += n;
-        else
-        {
-          transport->set_last_errno(yasio::errc::invalid_packet, yasio::io_base::error_stage::READ);
-          break;
-        }
+        else // process incompleted pdu
+          unpack(transport, transport->expected_size_ - static_cast<int>(transport->expected_packet_.size()), n, 0);
       }
-      else // process incompleted pdu
-        unpack(transport, transport->expected_size_ - static_cast<int>(transport->expected_packet_.size()), n, 0);
+      else if (n > 0)
+      { // forward event, don't perform unpack, it's useful for implement streaming based protocol, like http, websocket and ...
+        this->fire_event(transport->cindex(), io_packet_view{transport->buffer_, n}, transport);
+      }
     }
     else
     { // n < 0, regard as connection should close
@@ -1843,7 +1840,7 @@ void io_service::unpack(transport_handle_t transport, int bytes_expected, int by
     }
     // move properly pdu to ready queue, the other thread who care about will retrieve it.
     YASIO_KLOGV("[index: %d] received a properly packet from peer, packet size:%d", transport->cindex(), transport->expected_size_);
-    this->handle_event(cxx14::make_unique<io_event>(transport->cindex(), transport->fetch_packet(), transport));
+    this->fire_event(transport->cindex(), transport->fetch_packet(), transport);
   }
   else /* all buffer consumed, set 'offset' to ZERO, pdu incomplete, continue recv remain data. */
     offset = 0;
@@ -1983,7 +1980,7 @@ bool io_service::cleanup_channel(io_channel* ctx, bool clear_mask)
   bool bret = cleanup_io(ctx, clear_mask);
 #if defined(YAISO_ENABLE_PASSIVE_EVENT)
   if (bret && yasio__testbits(ctx->properties_, YCM_SERVER))
-    handle_event(cxx14::make_unique<io_event>(ctx->index_, YEK_ON_CLOSE, 0, ctx, 1));
+    this->fire_event(ctx->index_, YEK_ON_CLOSE, 0, ctx, 1);
 #endif
   return bret;
 }
@@ -2241,6 +2238,9 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
       options_.dns_dirty_    = true;
       break;
 #endif
+    case YOPT_S_FORWARD_EVENT:
+      options_.forward_event_ = !!va_arg(ap, int);
+      break;
     case YOPT_C_UNPACK_PARAMS: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
