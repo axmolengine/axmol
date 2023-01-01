@@ -50,7 +50,6 @@ THE SOFTWARE.
 #include "platform/CCCommon.h"
 #include "platform/CCFileUtils.h"
 #include "pugixml/pugixml.hpp"
-#include "base/base64.h"
 #include "base/ccUtils.h"
 
 #include "CCPosixFileStream.h"

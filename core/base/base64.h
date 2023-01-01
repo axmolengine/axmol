@@ -1,62 +1,73 @@
-/****************************************************************************
-Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2013-2016 Chukong Technologies Inc.
-Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+//
+// Copyright (c) 2016-2019 Vinnie Falco (vinnie dot falco at gmail dot com)
+//
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+//
+// Official repository: https://github.com/boostorg/beast
+//
 
-https://axmolengine.github.io/
+#pragma once
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-****************************************************************************/
-
-#ifndef __SUPPORT_BASE64_H__
-#define __SUPPORT_BASE64_H__
-/// @cond DO_NOT_SHOW
-
+#include <utility>
 #include "platform/CCPlatformMacros.h"
 
 NS_AX_BEGIN
 
-/** @file
- base64 helper functions
- */
+namespace base64 {
 
-/**
- * Decodes a 64base encoded memory. The decoded memory is
- * expected to be freed by the caller by calling `free()`
- *
- * @returns the length of the out buffer
- *
- @since v0.8.1
- */
-int AX_DLL base64Decode(const unsigned char* in, unsigned int inLength, unsigned char** out);
+AX_DLL
+char const*
+get_alphabet();
 
-/**
- * Encodes bytes into a 64base encoded memory with terminating '\0' character.
- * The encoded memory is expected to be freed by the caller by calling `free()`
- *
- * @returns the length of the out buffer
- *
- @since v2.1.4
- */
-int AX_DLL base64Encode(const unsigned char* in, unsigned int inLength, char** out);
+AX_DLL
+signed char const*
+get_inverse();
 
-}  // namespace   cocos2d
+/// Returns max chars needed to encode a base64 string
+inline
+std::size_t constexpr
+encoded_size(std::size_t n)
+{
+    return 4 * ((n + 2) / 3);
+}
 
-/// @endcond
-#endif  // __SUPPORT_BASE64_H__
+/// Returns max bytes needed to decode a base64 string
+inline
+std::size_t constexpr
+decoded_size(std::size_t n)
+{
+    return n / 4 * 3; // requires n&3==0, smaller
+}
+
+/** Encode a series of octets as a padded, base64 string.
+
+    The resulting string will not be null terminated.
+      
+    @par Requires
+
+    The memory pointed to by `out` points to valid memory
+    of at least `encoded_size(len)` bytes.
+
+    @return The number of characters written to `out`. This
+    will exclude any null termination.
+*/
+AX_DLL
+std::size_t
+encode(void* dest, void const* src, std::size_t len);
+
+/** Decode a padded base64 string into a series of octets.
+
+    @par Requires
+
+    The memory pointed to by `out` points to valid memory
+    of at least `decoded_size(len)` bytes.
+
+    @return The number of octets written to `out`.
+*/
+AX_DLL
+std::size_t decode(void* dest, char const* src, std::size_t len);
+
+} // base64
+
+NS_AX_END
