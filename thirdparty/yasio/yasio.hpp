@@ -174,6 +174,12 @@ enum
   //  b. IPv6 addresses with ports require square brackets [fe80::1%lo0]:53
   YOPT_S_DNS_LIST,
 
+  // Set whether forward event without GC alloc
+  // params: forward: int(0)
+  // reamrks:
+  //   when forward event enabled, the option YOPT_S_DEFERRED_EVENT was ignored
+  YOPT_S_FORWARD_EVENT,
+
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
   YOPT_C_UNPACK_FN = 101,
@@ -837,6 +843,19 @@ inline io_packet::pointer packet_data(packet_t& pkt) { return pkt->data(); }
 inline io_packet::size_type packet_len(packet_t& pkt) { return pkt->size(); }
 #endif
 
+class io_packet_view {
+public:
+  io_packet_view() = default;
+  io_packet_view(char* d, int n) : data_(d), size_(n) {}
+  char* data() { return this->data_; }
+  const char* data() const { return this->data_; }
+  size_t size() const { return this->size_; }
+
+private:
+  char* data_  = nullptr;
+  size_t size_ = 0;
+};
+
 /*
  * Notes: store some properties of event source to make sure user can safe get them deferred
  */
@@ -863,6 +882,13 @@ public:
     source_ud_ = source_->ud_.ptr;
 #endif
   }
+  io_event(int cidx, io_packet_view pkt, io_transport* source /*not nullable*/)
+      : kind_(YEK_ON_PACKET), writable_(1), passive_(0), status_(0), cindex_(cidx), source_id_(source->id_), source_(source), packet_view_(pkt)
+  {
+#if !defined(YASIO_MINIFY_EVENT)
+    source_ud_ = source_->ud_.ptr;
+#endif
+  }
   io_event(const io_event&) = delete;
   io_event(io_event&& rhs)  = delete;
   ~io_event() {}
@@ -877,6 +903,8 @@ public:
   int passive() const { return passive_; }
 
   packet_t& packet() { return packet_; }
+
+  io_packet_view packet_view() const { return packet_view_; }
 
   /*[nullable]*/ transport_handle_t transport() const { return writable_ ? static_cast<transport_handle_t>(source_) : nullptr; }
 
@@ -903,7 +931,7 @@ public:
   highp_time_t timestamp() const { return timestamp_; }
 #endif
 #if !defined(YASIO_DISABLE_OBJECT_POOL)
-  DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_event, 512)
+  DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_event, 128)
 #endif
 private:
   unsigned int kind_ : 30;
@@ -917,6 +945,7 @@ private:
 
   io_base* source_;
   packet_t packet_;
+  io_packet_view packet_view_;
 #if !defined(YASIO_MINIFY_EVENT)
   void* source_ud_;
   highp_time_t timestamp_ = highp_clock();
@@ -1114,7 +1143,20 @@ private:
   YASIO__DECL bool cleanup_io(io_base* obj, bool clear_mask = true);
 
   YASIO__DECL void handle_close(transport_handle_t);
-  YASIO__DECL void handle_event(event_ptr event);
+
+  template <typename... _Types>
+  inline void fire_event(_Types&&... args)
+  {
+    auto event = cxx14::make_unique<io_event>(std::forward<_Types>(args)...);
+    if (options_.deferred_event_ && !options_.forward_event_)
+    {
+      if (options_.on_defer_event_ && !options_.on_defer_event_(event))
+        return;
+      events_.emplace(std::move(event));
+    }
+    else
+      options_.on_event_(std::move(event));
+  }
 
   // new/delete client socket connection channel
   // please call this at initialization, don't new channel at runtime
@@ -1185,6 +1227,8 @@ private:
 
     bool deferred_event_ = true;
     defer_event_cb_t on_defer_event_;
+
+    bool forward_event_ = false; // since v3.39.7
 
     // tcp keepalive settings
     struct __unnamed01 {
