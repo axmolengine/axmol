@@ -449,7 +449,12 @@ public:
      @since v3.0
      @js NA
      */
-    void performFunctionInCocosThread(std::function<void()> function);
+    void runOnAxmolThread(std::function<void()> action);
+
+    AX_DEPRECATED_ATTRIBUTE void performFunctionInCocosThread(std::function<void()> action)
+    {
+        runOnAxmolThread(std::move(action));
+    }
 
     /**
      * Remove all pending functions queued to be performed with Scheduler::performFunctionInCocosThread
@@ -458,7 +463,8 @@ public:
      * @since v3.14
      * @js NA
      */
-    void removeAllFunctionsToBePerformedInCocosThread();
+    void removeAllPendingActions();
+    AX_DEPRECATED_ATTRIBUTE void removeAllFunctionsToBePerformedInCocosThread() { removeAllPendingActions(); }
 
 protected:
     /** Schedules the 'callback' function for a given target with a given priority.
@@ -501,8 +507,8 @@ protected:
     Vector<SchedulerScriptHandlerEntry*> _scriptHandlerEntries;
 #endif
 
-    // Used for "perform Function"
-    std::vector<std::function<void()>> _functionsToPerform;
+    // Used for "perform action"
+    std::vector<std::function<void()>> _actionsToPerform;
     std::mutex _performMutex;
 };
 
