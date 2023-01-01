@@ -6,7 +6,7 @@
 // detail/socket_select_interrupter.hpp
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
-// Copyright (c) 2012-2022 HALX99 (halx99 at live dot com)
+// Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
 // Copyright (c) 2003-2020 Christopher M. Kohlhoff (chris at kohlhoff dot com)
 // Copyright (c) 2008 Roelof Naude (roelof.naude at gmail dot com)
 //
@@ -78,23 +78,23 @@ private:
 
     ip::endpoint ep(INADDR_LOOPBACK, 0);
 
-    int error = acceptor.bind(ep);
-    if (error)
-      yasio__throw_error(error, "socket_select_interrupter");
-    ep    = acceptor.local_endpoint();
+    int retval = acceptor.bind(ep);
+    if (retval < 0)
+      yasio__throw_error(xxsocket::get_last_errno(), "socket_select_interrupter");
+    ep = acceptor.local_endpoint();
     // Some broken firewalls on Windows will intermittently cause getsockname to
     // return 0.0.0.0 when the socket is actually bound to 127.0.0.1. We
     // explicitly specify the target address here to work around this problem.
     if (INADDR_ANY == ep.addr_v4())
       ep.addr_v4(INADDR_LOOPBACK);
-    error = acceptor.listen();
-    if (error)
-      yasio__throw_error(error, "socket_select_interrupter");
+    retval = acceptor.listen();
+    if (retval < 0)
+      yasio__throw_error(xxsocket::get_last_errno(), "socket_select_interrupter");
 
     xxsocket client(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    error = client.connect(ep);
-    if (error)
-      yasio__throw_error(error, "socket_select_interrupter");
+    retval = client.connect(ep);
+    if (retval < 0)
+      yasio__throw_error(xxsocket::get_last_errno(), "socket_select_interrupter");
 
     auto server = acceptor.accept();
     if (!server.is_open())
