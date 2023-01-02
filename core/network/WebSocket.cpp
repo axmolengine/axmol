@@ -289,8 +289,6 @@ bool WebSocket::init(const Delegate& delegate,
     setupParsers();
     generateHandshakeSecKey();
 
-    auto channelHandle = _service->channel_at(0);
-
     if (!_caFilePath.empty())
         _service->set_option(YOPT_S_SSL_CACERT, _caFilePath.c_str());
 
