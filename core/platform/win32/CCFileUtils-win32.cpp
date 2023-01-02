@@ -111,13 +111,14 @@ bool FileUtilsWin32::init()
     _checkWorkingPath();
     _checkExePath();
 
-    bool startedFromSelfLocation = s_workingDir == s_exeDir;
-    if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_PC_RESOURCES_DIR))
-        _defaultResRootPath = s_workingDir;
-    else
+    // By default check "{s_exeDir}/Resources" if not exist fallback to s_workingDir
+    _defaultResRootPath.reserve(s_exeDir.size() + AX_PC_RESOURCES_DIR_LEN);
+    _defaultResRootPath.append(s_exeDir).append(AX_PC_RESOURCES_DIR, AX_PC_RESOURCES_DIR_LEN);
+    bool startedFromSelfLocation = true;
+    if (!isDirectoryExistInternal(_defaultResRootPath))
     {
-        _defaultResRootPath.reserve(s_exeDir.size() + AX_PC_RESOURCES_DIR_LEN);
-        _defaultResRootPath.append(s_exeDir).append(AX_PC_RESOURCES_DIR, AX_PC_RESOURCES_DIR_LEN);
+        startedFromSelfLocation = false;
+        _defaultResRootPath     = s_workingDir;
     }
 
     bool bRet = FileUtils::init();
