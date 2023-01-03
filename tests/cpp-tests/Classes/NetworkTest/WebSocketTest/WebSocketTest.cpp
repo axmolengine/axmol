@@ -28,6 +28,15 @@
 
 #include "WebSocketTest.h"
 
+#include "fmt/format.h"
+#include "fmt/compile.h"
+
+// "ws://echo.websocket.org no longer avaiable: https://www.lob.com/blog/websocket-org-is-down-here-is-an-alternative
+// other public test servers:
+//   - "wss://socketsbay.com/wss/v2/1/demo/"
+#define ECHO_SERVER_URL "ws://echo.websocket.events/.ws"
+
+
 USING_NS_AX;
 using namespace ax::network;
 //USING_NS_AX_EXT;
@@ -113,16 +122,19 @@ void WebSocketTest::onExit()
     if (_wsiSendText)
     {
         _wsiSendText->closeAsync();
+        AX_SAFE_DELETE(_wsiSendText);
     }
 
     if (_wsiSendBinary)
     {
         _wsiSendBinary->closeAsync();
+        AX_SAFE_DELETE(_wsiSendBinary);
     }
 
     if (_wsiError)
     {
         _wsiError->closeAsync();
+        AX_SAFE_DELETE(_wsiError);
     }
     Node::onExit();
 }
@@ -139,7 +151,7 @@ void WebSocketTest::startTestCallback(Ref* sender)
     std::vector<std::string> protocols;
     protocols.push_back("myprotocol_1");
     protocols.push_back("myprotocol_2");
-    if (!_wsiSendText->init(*this, "wss://echo.websocket.org", &protocols, "cacert.pem"))
+    if (!_wsiSendText->init(*this, ECHO_SERVER_URL, &protocols, "cacert.pem"))
     {
         AX_SAFE_DELETE(_wsiSendText);
     }
@@ -149,7 +161,7 @@ void WebSocketTest::startTestCallback(Ref* sender)
     }
 
     protocols.erase(protocols.begin());
-    if (!_wsiSendBinary->init(*this, "wss://echo.websocket.org", &protocols, "cacert.pem"))
+    if (!_wsiSendBinary->init(*this, ECHO_SERVER_URL, &protocols, "cacert.pem"))
     {
         AX_SAFE_DELETE(_wsiSendBinary);
     }
@@ -194,9 +206,7 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
     if (!data.isBinary)
     {
         _sendTextTimes++;
-        char times[100] = {0};
-        sprintf(times, "%d", _sendTextTimes);
-        std::string textStr = std::string("response text msg: ")+data.bytes+", "+times;
+        std::string textStr = fmt::format(FMT_COMPILE("#{} response text msg: {}"), _sendTextTimes, std::string_view{data.bytes, static_cast<size_t>(data.len)});
         log("%s", textStr.c_str());
         
         _sendTextStatus->setString(textStr.c_str());
@@ -281,7 +291,7 @@ void WebSocketTest::onMenuSendTextClicked(ax::Ref *sender)
     if (_wsiSendText->getReadyState() == network::WebSocket::State::OPEN)
     {
         _sendTextStatus->setString("Send Text WS is waiting...");
-        _wsiSendText->send("Hello WebSocket, I'm a text message.");
+        _wsiSendText->send("Hello WebSocket, I'm a text message from axmol-1.0.0 game engine.");
     }
     else
     {
@@ -340,7 +350,7 @@ WebSocketCloseTest::WebSocketCloseTest()
 
     _wsiTest = new network::WebSocket();
 
-    if (!_wsiTest->init(*this, "ws://echo.websocket.org"))
+    if (!_wsiTest->init(*this, ECHO_SERVER_URL))
     {
         delete _wsiTest;
         _wsiTest = nullptr;
@@ -470,7 +480,7 @@ void WebSocketDelayTest::startTestCallback(Ref* sender)
     std::vector<std::string> protocols;
     protocols.push_back("myprotocol_1");
     protocols.push_back("myprotocol_2");
-    if (!_wsiSendText->init(*this, "wss://echo.websocket.org", &protocols, "cacert.pem"))
+    if (!_wsiSendText->init(*this, ECHO_SERVER_URL, &protocols, "cacert.pem"))
     {
         AX_SAFE_DELETE(_wsiSendText);
     }

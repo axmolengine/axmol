@@ -273,6 +273,9 @@ WebSocket::~WebSocket()
         }
     }
 
+    Director::getInstance()->getEventDispatcher()->removeEventListener(_resetDirectorListener);
+    *_isDestroyed = true;
+
     delete _service;
 }
 
