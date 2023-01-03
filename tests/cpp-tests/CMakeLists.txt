@@ -228,6 +228,7 @@ list(APPEND GAME_HEADER
      Classes/NetworkTest/NetworkTest.h
      Classes/NetworkTest/DownloaderTest/DownloaderTest.h
      Classes/NetworkTest/HttpClientTest/HttpClientTest.h
+     Classes/NetworkTest/WebSocketTest/WebSocketTest.h
      Classes/OpenURLTest/OpenURLTest.h
      Classes/ConsoleTest/ConsoleTest.h
      Classes/MenuTest/MenuTest.h
@@ -269,6 +270,7 @@ list(APPEND GAME_SOURCE
      Classes/NetworkTest/NetworkTest.cpp
      Classes/NetworkTest/DownloaderTest/DownloaderTest.cpp
      Classes/NetworkTest/HttpClientTest/HttpClientTest.cpp
+     Classes/NetworkTest/WebSocketTest/WebSocketTest.cpp
      Classes/DrawPrimitivesTest/DrawPrimitivesTest.cpp
      Classes/EffectsAdvancedTest/EffectsAdvancedTest.cpp
      Classes/EffectsTest/EffectsTest.cpp

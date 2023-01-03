@@ -8,6 +8,7 @@ set(_AX_NETWORK_HEADER
     network/HttpRequest.h
     network/HttpCookie.h
     network/WebSocket.h
+    network/SocketIO.h
     )
 
 set(_AX_NETWORK_SRC
@@ -17,4 +18,5 @@ set(_AX_NETWORK_SRC
     network/CCDownloader-curl.cpp
     network/HttpCookie.cpp
     network/WebSocket.cpp
+    network/SocketIO.cpp
     )
