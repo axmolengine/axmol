@@ -54,7 +54,8 @@ jobs:
           - x64
     env:
       BUILD_ARCH: ${{ matrix.arch }}
-      WINSDK_VER: '10.0.22621.0'
+      # Test winsdk < 10.0.22000.0 (missing C11 standard stdalign.h), axmol will auto fallback to C99 for resolving compiling issue.
+      WINSDK_VER: '10.0.19041.0' 
 
     steps:
     - uses: actions/checkout@v3
