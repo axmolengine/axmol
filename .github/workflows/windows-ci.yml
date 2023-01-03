@@ -11,7 +11,7 @@ on:
       - 'docs/**'
 
 jobs:
-  build:
+  toolset-latest:
     if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
@@ -34,9 +34,39 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v3
 
-    - uses: ilammy/msvc-dev-cmd@v1.11.0
+    - uses: ilammy/msvc-dev-cmd@v1.12.0
       with: 
         arch: ${{ env.BUILD_ARCH }}
 
     - name: Build
       run: tools\win-ci\build.ps1 $env:BUILD_ARCH
+  toolset-vs2019:
+    if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        arch:
+          - x86
+          - x64
+    env:
+      BUILD_ARCH: ${{ matrix.arch }}
+      WINSDK_VER: '10.0.22621.0'
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+
+    - name: Setup Python
+      uses: actions/setup-python@v3
+
+    - uses: ilammy/msvc-dev-cmd@v1.12.0
+      with: 
+        arch: ${{ env.BUILD_ARCH }}
+
+    - name: Build
+      run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:WINSDK_VER
