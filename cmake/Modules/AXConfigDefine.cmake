@@ -67,7 +67,18 @@ define_property(TARGET
 
 # config c standard
 if(NOT DEFINED CMAKE_C_STANDARD)
-    set(CMAKE_C_STANDARD 11)
+    if (WINDOWS)
+        message(AUTHOR_WARNING "===> CMAKE_SYSTEM_VERSION=${CMAKE_SYSTEM_VERSION}")
+        if (${CMAKE_SYSTEM_VERSION} VERSION_GREATER_EQUAL "10.0.22000.0")
+            set(CMAKE_C_STANDARD 11)
+        else()
+            # windows sdk < 10.0.22000.0, The c11 header stdalign.h was missing, so workaroud fallback C standard to 99
+            # refer to: https://github.com/axmolengine/axmol/issues/991
+            set(CMAKE_C_STANDARD 99)
+        endif()
+    else()
+        set(CMAKE_C_STANDARD 11)
+    endif()
 endif()
 message(STATUS "CMAKE_C_STANDARD=${CMAKE_C_STANDARD}")
 if(NOT DEFINED CMAKE_C_STANDARD_REQUIRED)
