@@ -31,7 +31,6 @@
 #    include "base/CCDirector.h"
 #    include "platform/CCFileUtils.h"
 #    include "platform/CCGLView.h"
-#    include "base/base64.h"
 #    include "ui/UIHelper.h"
 #    include "rapidjson/document.h"
 #    include "rapidjson/stringbuffer.h"
@@ -219,9 +218,7 @@ static std::string getUriStringFromArgs(ArgType* args)
 
 static std::string getDataURI(std::string_view data, std::string_view mime_type)
 {
-    char* encodedData;
-    ax::base64Encode(reinterpret_cast<const unsigned char*>(data.data()), static_cast<unsigned>(data.size()),
-                          &encodedData);
+    auto encodedData = utils::base64Encode(data);
     return std::string{"data:"}.append(mime_type).append(";base64,").append(utils::urlEncode(encodedData));
 }
 

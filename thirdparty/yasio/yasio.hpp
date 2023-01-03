@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,7 @@ SOFTWARE.
 #include "yasio/detail/utils.hpp"
 #include "yasio/detail/errc.hpp"
 #include "yasio/detail/byte_buffer.hpp"
+#include "yasio/detail/fd_set_adapter.hpp"
 #include "yasio/cxx17/memory.hpp"
 #include "yasio/cxx17/string_view.hpp"
 #include "yasio/xxsocket.hpp"
@@ -172,6 +173,12 @@ enum
   //  a. IPv4 address is 8.8.8.8 or 8.8.8.8:53, the port is optional
   //  b. IPv6 addresses with ports require square brackets [fe80::1%lo0]:53
   YOPT_S_DNS_LIST,
+
+  // Set whether forward event without GC alloc
+  // params: forward: int(0)
+  // reamrks:
+  //   when forward event enabled, the option YOPT_S_DEFERRED_EVENT was ignored
+  YOPT_S_FORWARD_EVENT,
 
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
@@ -836,6 +843,19 @@ inline io_packet::pointer packet_data(packet_t& pkt) { return pkt->data(); }
 inline io_packet::size_type packet_len(packet_t& pkt) { return pkt->size(); }
 #endif
 
+class io_packet_view {
+public:
+  io_packet_view() = default;
+  io_packet_view(char* d, int n) : data_(d), size_(n) {}
+  char* data() { return this->data_; }
+  const char* data() const { return this->data_; }
+  size_t size() const { return this->size_; }
+
+private:
+  char* data_  = nullptr;
+  size_t size_ = 0;
+};
+
 /*
  * Notes: store some properties of event source to make sure user can safe get them deferred
  */
@@ -862,6 +882,13 @@ public:
     source_ud_ = source_->ud_.ptr;
 #endif
   }
+  io_event(int cidx, io_packet_view pkt, io_transport* source /*not nullable*/)
+      : kind_(YEK_ON_PACKET), writable_(1), passive_(0), status_(0), cindex_(cidx), source_id_(source->id_), source_(source), packet_view_(pkt)
+  {
+#if !defined(YASIO_MINIFY_EVENT)
+    source_ud_ = source_->ud_.ptr;
+#endif
+  }
   io_event(const io_event&) = delete;
   io_event(io_event&& rhs)  = delete;
   ~io_event() {}
@@ -876,6 +903,8 @@ public:
   int passive() const { return passive_; }
 
   packet_t& packet() { return packet_; }
+
+  io_packet_view packet_view() const { return packet_view_; }
 
   /*[nullable]*/ transport_handle_t transport() const { return writable_ ? static_cast<transport_handle_t>(source_) : nullptr; }
 
@@ -902,7 +931,7 @@ public:
   highp_time_t timestamp() const { return timestamp_; }
 #endif
 #if !defined(YASIO_DISABLE_OBJECT_POOL)
-  DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_event, 512)
+  DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_event, 128)
 #endif
 private:
   unsigned int kind_ : 30;
@@ -916,6 +945,7 @@ private:
 
   io_base* source_;
   packet_t packet_;
+  io_packet_view packet_view_;
 #if !defined(YASIO_MINIFY_EVENT)
   void* source_ud_;
   highp_time_t timestamp_ = highp_clock();
@@ -1062,19 +1092,17 @@ private:
 
   YASIO__DECL bool open_internal(io_channel*);
 
-  YASIO__DECL void process_transports(fd_set* fds_array);
-  YASIO__DECL void process_channels(fd_set* fds_array);
+  YASIO__DECL void process_transports(fd_set_adapter& fd_set);
+  YASIO__DECL void process_channels(fd_set_adapter& fd_set);
   YASIO__DECL void process_timers();
 
   YASIO__DECL void interrupt();
 
   YASIO__DECL highp_time_t get_timeout(highp_time_t usec);
 
-  YASIO__DECL int do_select(fd_set* fds_array, highp_time_t wait_duration);
-
   YASIO__DECL int do_resolve(io_channel* ctx);
   YASIO__DECL void do_connect(io_channel*);
-  YASIO__DECL void do_connect_completion(io_channel*, fd_set* fds_array);
+  YASIO__DECL void do_connect_completion(io_channel*, fd_set_adapter& fd_set);
 
 #if defined(YASIO_SSL_BACKEND)
   YASIO__DECL void init_ssl_context();
@@ -1086,7 +1114,8 @@ private:
   YASIO__DECL static void ares_getaddrinfo_cb(void* arg, int status, int timeouts, ares_addrinfo* answerlist);
   YASIO__DECL void ares_work_started();
   YASIO__DECL void ares_work_finished();
-  YASIO__DECL void process_ares_requests(fd_set* fds_array);
+  YASIO__DECL int register_ares_fds(socket_native_type* ares_socks, fd_set_adapter& fd_set);
+  YASIO__DECL void process_ares_requests(socket_native_type* socks, int count, fd_set_adapter& fd_set);
   YASIO__DECL void recreate_ares_channel();
   YASIO__DECL void config_ares_name_servers();
   YASIO__DECL void destroy_ares_channel();
@@ -1100,13 +1129,13 @@ private:
   YASIO__DECL transport_handle_t allocate_transport(io_channel*, xxsocket_ptr&&);
   YASIO__DECL void deallocate_transport(transport_handle_t);
 
-  YASIO__DECL void register_descriptor(const socket_native_type fd, int flags);
-  YASIO__DECL void unregister_descriptor(const socket_native_type fd, int flags);
+  YASIO__DECL void register_descriptor(const socket_native_type fd, int events);
+  YASIO__DECL void deregister_descriptor(const socket_native_type fd, int events);
 
   // The major non-blocking event-loop
   YASIO__DECL void run(void);
 
-  YASIO__DECL bool do_read(transport_handle_t, fd_set* fds_array);
+  YASIO__DECL bool do_read(transport_handle_t, fd_set_adapter& fd_set);
   bool do_write(transport_handle_t transport) { return transport->do_write(this->wait_duration_); }
   YASIO__DECL void unpack(transport_handle_t, int bytes_expected, int bytes_transferred, int bytes_to_strip);
 
@@ -1114,7 +1143,20 @@ private:
   YASIO__DECL bool cleanup_io(io_base* obj, bool clear_mask = true);
 
   YASIO__DECL void handle_close(transport_handle_t);
-  YASIO__DECL void handle_event(event_ptr event);
+
+  template <typename... _Types>
+  inline void fire_event(_Types&&... args)
+  {
+    auto event = cxx14::make_unique<io_event>(std::forward<_Types>(args)...);
+    if (options_.deferred_event_ && !options_.forward_event_)
+    {
+      if (options_.on_defer_event_ && !options_.on_defer_event_(event))
+        return;
+      events_.emplace(std::move(event));
+    }
+    else
+      options_.on_event_(std::move(event));
+  }
 
   // new/delete client socket connection channel
   // please call this at initialization, don't new channel at runtime
@@ -1129,7 +1171,7 @@ private:
 
   // supporting server
   YASIO__DECL void do_accept(io_channel*);
-  YASIO__DECL void do_accept_completion(io_channel*, fd_set* fds_array);
+  YASIO__DECL void do_accept_completion(io_channel*, fd_set_adapter& fd_set);
 
   YASIO__DECL static const char* strerror(int error);
 
@@ -1172,16 +1214,7 @@ private:
   // the next wait duration for socket.select
   highp_time_t wait_duration_;
 
-  // the max nfds for socket.select, must be max_fd + 1
-  int max_nfds_;
-  enum
-  {
-    read_op,
-    write_op,
-    except_op,
-    max_ops,
-  };
-  fd_set fds_array_[max_ops];
+  fd_set_adapter fd_set_;
 
   // options
   struct __unnamed_options {
@@ -1194,6 +1227,8 @@ private:
 
     bool deferred_event_ = true;
     defer_event_cb_t on_defer_event_;
+
+    bool forward_event_ = false; // since v3.39.7
 
     // tcp keepalive settings
     struct __unnamed01 {

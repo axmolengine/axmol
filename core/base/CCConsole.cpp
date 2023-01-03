@@ -54,7 +54,6 @@
 #include "2d/CCScene.h"
 #include "platform/CCFileUtils.h"
 #include "renderer/CCTextureCache.h"
-#include "base/base64.h"
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
 
@@ -1551,7 +1550,7 @@ void Console::commandUpload(socket_native_type fd)
         }
         unsigned char* decode;
         unsigned char* in = (unsigned char*)data;
-        int dt            = base64Decode(in, 4, &decode);
+        int dt            = utils::base64Decode(in, 4, &decode);
         if (dt > 0)
         {
             fs->write(decode, dt);

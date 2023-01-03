@@ -3,7 +3,7 @@ Copyright (c) 2010      cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 Copyright (c) 2020 C4games Ltd
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2023 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -202,7 +202,7 @@ AX_DLL std::string getDataMD5Hash(const Data& data);
  *  @param algorithm The hash algorithm, support "md5", "sha1", "sha256", "sha512" and more
  *  @return The hash for the data
  */
-AX_DLL std::string computeDigest(std::string_view data, std::string_view algorithm);
+AX_DLL std::string computeDigest(std::string_view data, std::string_view algorithm, bool toHex = true);
 
 /**
 @brief Converts language iso 639-1 code to LanguageType enum.
@@ -405,7 +405,44 @@ AX_DLL std::string urlEncode(std::string_view s);
 
 AX_DLL std::string urlDecode(std::string_view st);
 
+/**
+ * Encodes bytes into a 64base buffer
+ * @returns base64 encoded string
+ *
+ @since axmol-1.0.0
+ */
+AX_DLL std::string base64Encode(std::string_view s);
+
+/**
+ * Decodes a 64base encoded buffer
+ * @returns palintext
+ *
+ @since axmol-1.0.0
+ */
+AX_DLL std::string base64Decode(std::string_view s);
+
+/**
+ * Encodes bytes into a 64base encoded memory with terminating '\0' character.
+ * The encoded memory is expected to be freed by the caller by calling `free()`
+ *
+ * @returns the length of the out buffer
+ *
+ @since v2.1.4, axmol-1.0.0 move from namespace ax to ax::utils
+ */
+AX_DLL int base64Encode(const unsigned char* in, unsigned int inLength, char** out);
+
+/**
+ * Decodes a 64base encoded memory. The decoded memory is
+ * expected to be freed by the caller by calling `free()`
+ *
+ * @returns the length of the out buffer
+ *
+ @since v0.8.1, axmol-1.0.0 move from namespace ax to ax::utils
+ */
+AX_DLL int base64Decode(const unsigned char* in, unsigned int inLength, unsigned char** out);
+
 AX_DLL uint32_t fourccValue(std::string_view str);
+
 }  // namespace utils
 
 NS_AX_END
