@@ -163,7 +163,7 @@ void HelloWorld::update(float delta)
         // Add your codes below...like....
         // 
         // CleanUpMyCrap();
-        _director->end();
+        menuCloseCallback(this);
         break;
     }
 }
