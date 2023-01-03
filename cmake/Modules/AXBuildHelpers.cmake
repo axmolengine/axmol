@@ -2,6 +2,7 @@ include(CMakeParseArguments)
 
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
 function(ax_copy_target_res ax_target)
+    ax_def_copy_resource_target(${ax_target})
     set(oneValueArgs LINK_TO)
     set(multiValueArgs FOLDERS)
     cmake_parse_arguments(opt "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -343,10 +344,6 @@ function(setup_ax_app_config app_name)
 
     if (XCODE)
         ax_config_app_xcode_property(${app_name})
-    endif()
-
-    if(LINUX OR WINDOWS)
-        ax_def_copy_resource_target(${app_name})
     endif()
 
     if(BUILD_SHARED_LIBS)
