@@ -54,6 +54,7 @@ jobs:
           - x64
     env:
       BUILD_ARCH: ${{ matrix.arch }}
+      WINSDK_VER: '10.0.22621.0'
 
     steps:
     - uses: actions/checkout@v3
@@ -68,4 +69,4 @@ jobs:
         arch: ${{ env.BUILD_ARCH }}
 
     - name: Build
-      run: tools\win-ci\build.ps1 $env:BUILD_ARCH
+      run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:WINSDK_VER
