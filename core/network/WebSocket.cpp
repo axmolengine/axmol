@@ -170,7 +170,7 @@ struct WebSocketProtocol
 {
     static int sendFrame(WebSocket& ws,
                          const char* buf,
-                         int len,
+                         size_t len,
                          ws::detail::opcode opcode /* = WS_OPCODE_BINARY */,
                          bool fin /* = true */)
     {
@@ -187,7 +187,7 @@ struct WebSocketProtocol
 
         if (fin)
             flags |= WS_FIN;
-        int frame_size = websocket_calc_frame_size((websocket_flags)flags, len);
+        auto frame_size = websocket_calc_frame_size((websocket_flags)flags, len);
         yasio::sbyte_buffer sb;
         sb.resize_fit(frame_size);
         websocket_build_frame(sb.data(), (websocket_flags)flags, mask, buf, len);
@@ -346,8 +346,8 @@ int WebSocket::on_frame_header(websocket_parser* parser)
 
     if (opcode != WS_OP_CONTINUE)
         ws->_opcode = opcode;
-    int length         = parser->length;
-    int reserve_length = (std::min)(length + 1, WS_MAX_PAYLOAD_LENGTH);
+    auto length         = parser->length;
+    auto reserve_length = (std::min)(length + 1, static_cast<size_t>(WS_MAX_PAYLOAD_LENGTH));
     if (reserve_length > ws->_receivedData.capacity())
     {
         message.reserve(reserve_length);
@@ -587,12 +587,11 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
             auto& timerForRead = channel->get_user_timer();
             timerForRead.cancel(*_service);
             timerForRead.expires_from_now(std::chrono::seconds(30));
-            timerForRead.async_wait(*_service, [=](io_service& s) {
+            timerForRead.async_wait_once(*_service, [=](io_service& s) {
                 _scheduler->runOnAxmolThread([this]() { _delegate->onError(this, ErrorCode::TIME_OUT); });
 
                 //_state = State::CLOSING;
                 s.close(channelIndex);  // timeout
-                return true;
             });
         }
         else

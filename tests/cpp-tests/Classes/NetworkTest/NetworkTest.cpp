@@ -25,10 +25,12 @@
 #include "NetworkTest.h"
 #include "../testResource.h"
 #include "HttpClientTest/HttpClientTest.h"
+#include "WebSocketTest/WebSocketTest.h"
 #include "DownloaderTest/DownloaderTest.h"
 
 NetworkTests::NetworkTests()
 {
     addTest("HttpClientTest", []() { return new HttpClientTests; });
+    addTest("WebSocketTest", []() { return new WebSocketTests; });
     addTest("DownloaderTest", []() { return new DownloaderTests; });
 }
