@@ -65,7 +65,7 @@ from os.path import dirname
 AX_ROOT = 'AX_ROOT'
 AX_CONSOLE_ROOT = 'AX_CONSOLE_ROOT'
 
-ANDROID_SDK_ROOT = 'ANDROID_SDK_ROOT'
+ANDROID_SDK_ROOT = 'ANDROID_HOME'
 
 def _check_python_version():
     major_ver = sys.version_info[0]
