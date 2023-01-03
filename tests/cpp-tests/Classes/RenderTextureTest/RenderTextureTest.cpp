@@ -102,7 +102,7 @@ void RenderTextureSave::saveImageWithPremultipliedAlpha(ax::Ref* sender)
     char png[20];
     sprintf(png, "image-pma-%d.png", counter);
 
-    auto callback = [&](RenderTexture* rt, std::string_view path) {
+    auto callback = [this](RenderTexture* rt, std::string_view path) {
         auto sprite = Sprite::create(path);
         addChild(sprite);
         sprite->setScale(0.3f);
@@ -127,7 +127,7 @@ void RenderTextureSave::saveImageWithNonPremultipliedAlpha(ax::Ref* sender)
     char png[20];
     sprintf(png, "image-no-pma-%d.png", counter);
 
-    auto callback = [&](RenderTexture* rt, std::string_view path) {
+    auto callback = [this](RenderTexture* rt, std::string_view path) {
         auto sprite = Sprite::create(path);
         addChild(sprite);
         sprite->setScale(0.3f);
@@ -792,7 +792,7 @@ Issue16113Test::Issue16113Test()
         text->setPosition(winSize.width / 2, winSize.height / 2);
         text->Node::visit();
         target->end();
-        auto callback = [&](RenderTexture* rt, std::string_view path) { rt->release(); };
+        auto callback = [this](RenderTexture* rt, std::string_view path) { rt->release(); };
         target->retain();
         target->saveToFile("issue16113.png", Image::Format::PNG, true, callback);
     });

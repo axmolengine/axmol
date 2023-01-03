@@ -296,9 +296,10 @@ void SpriteFrameCache::insertFrame(const std::shared_ptr<SpriteSheet>& spriteShe
 
 bool SpriteFrameCache::eraseFrame(std::string_view frameName)
 {
-    _spriteFrames.erase(frameName);  // drop SpriteFrame
+    // drop SpriteFrame
     const auto itFrame = _spriteFrameToSpriteSheetMap.find(frameName);
-    if (itFrame != _spriteFrameToSpriteSheetMap.end())
+    bool hint = itFrame != _spriteFrameToSpriteSheetMap.end();
+    if (hint)
     {
         auto& spriteSheet = itFrame->second;
         spriteSheet->full = false;
@@ -316,9 +317,9 @@ bool SpriteFrameCache::eraseFrame(std::string_view frameName)
         //{
         //    _spriteSheets.clear();
         //}
-        return true;
     }
-    return false;
+    _spriteFrames.erase(frameName);
+    return hint;
 }
 
 bool SpriteFrameCache::eraseFrames(const std::vector<std::string_view>& frames)
