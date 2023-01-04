@@ -43,12 +43,14 @@ extern int _ftruncate(int fd, int64_t size);
 #    define posix_write ::_write
 #    define posix_fd2fh(fd) reinterpret_cast<HANDLE>(_get_osfhandle(fd))
 #    define posix_ftruncate(fd, size) ::_ftruncate(fd, size)
+#    define posix_ftruncate64 posix_ftruncate
 #else
-
 #    if defined(__APPLE__)
 #        define posix_lseek64 ::lseek
+#        define posix_ftruncate64 ::ftruncate
 #    else
 #        define posix_lseek64 ::lseek64
+#        define posix_ftruncate64 ::ftruncate64
 #    endif
 
 #    define O_READ_FLAGS O_RDONLY
@@ -63,7 +65,6 @@ extern int _ftruncate(int fd, int64_t size);
 #    define posix_read ::read
 #    define posix_write ::write
 #    define posix_fd2fh(fd) (fd)
-#    define posix_ftruncate(fd, size) ::ftruncate(fd, size)
 #endif
 
 NS_AX_BEGIN
