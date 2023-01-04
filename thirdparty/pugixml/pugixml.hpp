@@ -59,6 +59,14 @@
 #    define PUGI_CXX_STD 20
 #endif   // C++20 features check
 
+#if (defined(_MSC_VER) && _MSC_VER > 1900 &&           \
+     ((defined(_HAS_CXX23) && _HAS_CXX23 == 1)))
+#  ifdef PUGI_CXX_STD
+#    undef PUGI_CXX_STD
+#  endif
+#    define PUGI_CXX_STD 23
+#endif
+
 #if !defined(PUGI_CXX_STD)
 #  define PUGI_CXX_STD 11
 #endif
