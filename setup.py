@@ -28,7 +28,7 @@ THE SOFTWARE.
 '''
 This script will install environment variables needed to by axmol. It will set these envrironment variables:
 * AX_CONSOLE_ROOT: used to run axmol console tools
-* ANDROID_SDK_ROOT: used to generate applicatoin on Android through commands
+* ANDROID_HOME: used to generate applicatoin on Android through commands
 * AX_ROOT: path where axmol is installed
 
 On Max OS X, when start a shell, it will read these files and execute commands in sequence:
@@ -65,7 +65,7 @@ from os.path import dirname
 AX_ROOT = 'AX_ROOT'
 AX_CONSOLE_ROOT = 'AX_CONSOLE_ROOT'
 
-ANDROID_SDK_ROOT = 'ANDROID_SDK_ROOT'
+ANDROID_HOME = 'ANDROID_HOME'
 
 def _check_python_version():
     major_ver = sys.version_info[0]
@@ -192,7 +192,7 @@ class SetEnvVar(object):
         file.write('\n# Add environment variable %s for axmol\n' % key)
         file.write('export %s="%s"\n' % (key, value))
         file.write('export PATH=$%s:$PATH\n' % key)
-        if key == ANDROID_SDK_ROOT:
+        if key == ANDROID_HOME:
             file.write(
                 'export PATH=$%s/tools:$%s/platform-tools:$PATH\n' % (key, key))
         file.close()
@@ -281,7 +281,7 @@ class SetEnvVar(object):
 
     def _check_valid(self, var_name, value):
         ret = False
-        if var_name == ANDROID_SDK_ROOT:
+        if var_name == ANDROID_HOME:
             ret = self._is_android_sdk_root_valid(value)
         else:
             ret = False
@@ -499,7 +499,7 @@ class SetEnvVar(object):
         return ret
 
     def _find_value_from_sys(self, var_name):
-        if var_name == ANDROID_SDK_ROOT:
+        if var_name == ANDROID_HOME:
             return self._get_androidsdk_path()
         else:
             return None
@@ -571,7 +571,7 @@ class SetEnvVar(object):
             print('->Configuration for Android platform only, you can also skip and manually edit "%s"\n' %
                   self.file_used_for_setup)
         if(quiet) :
-            sdk_ret = self.set_variable(ANDROID_SDK_ROOT, android_sdk_root)
+            sdk_ret = self.set_variable(ANDROID_HOME, android_sdk_root)
 
         # tip the backup file
         if (self.backup_file is not None) and (os.path.exists(self.backup_file)):
