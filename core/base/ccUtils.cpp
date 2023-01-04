@@ -801,7 +801,15 @@ AX_DLL std::string base64Encode(std::string_view s)
     if (n > 0)
     {
         std::string ret;
-#if defined(_HAS_CXX23) && _HAS_CXX23
+        /**
+         * @brief resize_and_overrite avaialbe on vs2022 17.1
+         *  refer to:
+         *    - https://learn.microsoft.com/en-us/cpp/overview/visual-cpp-language-conformance?view=msvc-170
+         *    - https://github.com/microsoft/STL/wiki/Changelog#vs-2022-171
+         *    - https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+         * 
+         */
+#if defined(_HAS_CXX23) && _HAS_CXX23 && (_MSC_VER >= 1931)
         ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::encode(p, s.data(), s.length()); });
 #else
         ret.resize(n);
@@ -820,7 +828,7 @@ AX_DLL std::string base64Decode(std::string_view s)
     {
         std::string ret;
 
-#if defined(_HAS_CXX23) && _HAS_CXX23
+#if defined(_HAS_CXX23) && _HAS_CXX23 && (_MSC_VER >= 1931)
         ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::decode(p, s.data(), s.length()); });
 #else
         ret.resize(n);
