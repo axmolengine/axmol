@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) Bytedance Inc.
+ Copyright (c) 2023 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -209,10 +209,10 @@ void LuaMinXmlHttpRequest::_sendRequest()
         [this](ax::network::HttpClient* sender, ax::network::HttpResponse* response) {
             if (_isAborted)
                 return;
-
-            if (0 != strlen(response->getHttpRequest()->getTag()))
+            auto tag = response->getHttpRequest()->getTag();
+            if (!tag.empty())
             {
-                AXLOG("%s completed", response->getHttpRequest()->getTag());
+                AXLOG("%s completed", tag.data());
             }
 
             int statusCode = response->getResponseCode();
