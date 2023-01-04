@@ -241,12 +241,13 @@ namespace inet
 struct socket_event {
   enum
   { // event mask
-    read  = 1,
-    write = 2,
-    error = 4,
+    null      = 0,
+    read      = 1,
+    write     = 2,
+    error     = 4,
     readwrite = read | write,
   };
 };
-}
+} // namespace inet
 } // namespace yasio
 #endif

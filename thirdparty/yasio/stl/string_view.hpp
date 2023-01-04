@@ -1436,6 +1436,15 @@ inline std::basic_string<_CharT, _Traits, Allocator>& assign(std::basic_string<_
     lhs.clear();
   return lhs;
 }
+template <typename _CharT, typename _Traits, typename Allocator>
+inline std::basic_string<_CharT, _Traits, Allocator>& append(std::basic_string<_CharT, _Traits, Allocator>& lhs, const basic_string_view<_CharT, _Traits>& rhs)
+{
+  if (!rhs.empty())
+    lhs.append(rhs.data(), rhs.size());
+  else
+    lhs.clear();
+  return lhs;
+}
 template <typename _CharT, typename _Traits, typename Allocator = std::allocator<_CharT>>
 inline std::basic_string<_CharT, _Traits, Allocator> svtos(const basic_string_view<_CharT, _Traits>& value)
 {

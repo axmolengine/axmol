@@ -29,7 +29,7 @@ SOFTWARE.
 #include "yasio/bindings/lyasio.hpp"
 #include "yasio/detail/object_pool.hpp"
 #include "yasio/detail/ref_ptr.hpp"
-#include "yasio/cxx17/string_view.hpp"
+#include "yasio/stl/string_view.hpp"
 
 // A workaround to fix compile issue caused by `CCPlatformMacros.h` doesn't handle `__has_attribute` it properly
 #  if !__has_attribute(format)

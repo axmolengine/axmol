@@ -206,13 +206,6 @@ SOFTWARE.
 // The default max listen count of tcp server.
 #define YASIO_SOMAXCONN 19
 
-// The max wait duration in microseconds when io_service nothing to do.
-#define YASIO_MAX_WAIT_DURATION (5LL * 60LL * 1000LL * 1000LL)
-
-// The min wait duration in microseconds when io_service have outstanding work to do.
-// !!!Only affects Single Core CPU
-#define YASIO_MIN_WAIT_DURATION 10LL
-
 // The default ttl of multicast
 #define YASIO_DEFAULT_MULTICAST_TTL (int)128
 
@@ -237,5 +230,8 @@ SOFTWARE.
 // The yasio ssl client PIN for server to recognize
 #define YASIO_SSL_PIN "yasio_ssl_client"
 #define YASIO_SSL_PIN_LEN (sizeof(YASIO_SSL_PIN) - 1)
+
+#define YASIO_SSL_PON "yasio_ssl_server"
+#define YASIO_SSL_PON_LEN (sizeof(YASIO_SSL_PON) - 1)
 
 #endif

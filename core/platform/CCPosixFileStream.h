@@ -38,19 +38,13 @@ extern int _ftruncate(int fd, int64_t size);
 #    define posix_open(path, ...) ::_wopen(ntcvt::from_chars(path).c_str(), ##__VA_ARGS__)
 #    define posix_close ::_close
 #    define posix_lseek ::_lseek
-#    define posix_lseek64 ::_lseeki64
 #    define posix_read ::_read
 #    define posix_write ::_write
 #    define posix_fd2fh(fd) reinterpret_cast<HANDLE>(_get_osfhandle(fd))
 #    define posix_ftruncate(fd, size) ::_ftruncate(fd, size)
+#    define posix_ftruncate64 posix_ftruncate
+#    define posix_lseek64 ::_lseeki64
 #else
-
-#    if defined(__APPLE__)
-#        define posix_lseek64 ::lseek
-#    else
-#        define posix_lseek64 ::lseek64
-#    endif
-
 #    define O_READ_FLAGS O_RDONLY
 #    define O_WRITE_FLAGS O_CREAT | O_RDWR | O_TRUNC, S_IRWXU
 #    define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
@@ -63,7 +57,14 @@ extern int _ftruncate(int fd, int64_t size);
 #    define posix_read ::read
 #    define posix_write ::write
 #    define posix_fd2fh(fd) (fd)
-#    define posix_ftruncate(fd, size) ::ftruncate(fd, size)
+#    define posix_ftruncate ::ftruncate
+#    if defined(__APPLE__)
+#        define posix_lseek64 ::lseek
+#        define posix_ftruncate64 ::ftruncate
+#    else
+#        define posix_lseek64 ::lseek64
+#        define posix_ftruncate64 ::ftruncate64
+#    endif
 #endif
 
 NS_AX_BEGIN
