@@ -47,14 +47,14 @@ The json files will be generated in the path `/mnt/sdcard/PerfTest`. So you can 
 
 	Run the command in cmd:  
 	```
-	%ANDROID_SDK_ROOT%\platform-tools\adb pull /mnt/sdcard/PerfTest C:\Users\USER_NAME\MY_LOG_FOLDER
+	%ANDROID_HOME%\platform-tools\adb pull /mnt/sdcard/PerfTest C:\Users\USER_NAME\MY_LOG_FOLDER
 	```
 
 * Mac System
 
 	Run the command in terminal:  
 	```
-	$ANDROID_SDK_ROOT/platform-tools/adb pull /mnt/sdcard/PerfTest ~/MY_LOG_FOLDER
+	$ANDROID_HOME/platform-tools/adb pull /mnt/sdcard/PerfTest ~/MY_LOG_FOLDER
 	```
 
 ### From Mac devices
