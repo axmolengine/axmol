@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/ccTypes.h"
 #include "platform/android/jni/JniHelper.h"
 #include "platform/CCFileUtils.h"
-#include "yasio/cxx17/string_view.hpp"
+#include "yasio/stl/string_view.hpp"
 
 static const char* helperClassName = "org.axmol.lib.AxmolEngine";
 
