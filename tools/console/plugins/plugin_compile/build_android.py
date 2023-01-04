@@ -53,7 +53,7 @@ class AndroidBuilder(object):
         self.build_type = build_type
 
         # check environment variable
-        self.sdk_root = axmol.check_environment_variable('ANDROID_HOME')
+        self.sdk_root = axmol.check_environment_variable('ANDROID_SDK_ROOT')
         self.ant_root = None
         if os.path.exists(os.path.join(self.app_android_root, "gradle.properties")):
             self.sign_prop_file = os.path.join(self.app_android_root, "gradle.properties")
