@@ -61,17 +61,16 @@ void AudioDecoderManager::destroy()
 
 AudioDecoder* AudioDecoderManager::createDecoder(std::string_view path)
 {
-    cxx17::string_view svPath(path);
-    if (cxx20::ic::ends_with(svPath, ".ogg"))
+    if (cxx20::ic::ends_with(path, ".ogg"))
     {
         return new AudioDecoderOgg();
     }
 #if !defined(__APPLE__)
-    else if (cxx20::ic::ends_with(svPath, ".mp3"))
+    else if (cxx20::ic::ends_with(path, ".mp3"))
     {
         return new AudioDecoderMp3();
     }
-    else if (cxx20::ic::ends_with(svPath, ".wav"))
+    else if (cxx20::ic::ends_with(path, ".wav"))
     {
         return new AudioDecoderWav();
     }
