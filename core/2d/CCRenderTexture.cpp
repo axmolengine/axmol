@@ -431,7 +431,7 @@ bool RenderTexture::saveToFileAsNonPMA(std::string_view fileName,
     auto renderer          = _director->getRenderer();
     auto saveToFileCommand = renderer->nextCallbackCommand();
     saveToFileCommand->init(_globalZOrder);
-    saveToFileCommand->func = AX_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, true);
+    saveToFileCommand->func = AX_CALLBACK_0(RenderTexture::onSaveToFile, this, std::move(fullpath), isRGBA, true);
 
     renderer->addCommand(saveToFileCommand);
     return true;
@@ -454,26 +454,26 @@ bool RenderTexture::saveToFile(std::string_view fileName,
     auto renderer          = _director->getRenderer();
     auto saveToFileCommand = renderer->nextCallbackCommand();
     saveToFileCommand->init(_globalZOrder);
-    saveToFileCommand->func = AX_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
+    saveToFileCommand->func = AX_CALLBACK_0(RenderTexture::onSaveToFile, this, std::move(fullpath), isRGBA, false);
 
     _director->getRenderer()->addCommand(saveToFileCommand);
     return true;
 }
 
-void RenderTexture::onSaveToFile(std::string_view filename, bool isRGBA, bool forceNonPMA)
+void RenderTexture::onSaveToFile(std::string filename, bool isRGBA, bool forceNonPMA)
 {
-    auto callbackFunc = [&, filename, isRGBA, forceNonPMA](RefPtr<Image> image) {
+    auto callbackFunc = [this, _filename = std::move(filename), isRGBA, forceNonPMA](RefPtr<Image> image) {
         if (image)
         {
             if (forceNonPMA && image->hasPremultipliedAlpha())
             {
                 image->reversePremultipliedAlpha();
             }
-            image->saveToFile(filename, !isRGBA);
+            image->saveToFile(_filename, !isRGBA);
         }
         if (_saveFileCallback)
         {
-            _saveFileCallback(this, filename);
+            _saveFileCallback(this, _filename);
         }
     };
     newImage(callbackFunc);
