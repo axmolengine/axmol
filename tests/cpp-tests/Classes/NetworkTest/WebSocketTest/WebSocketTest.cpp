@@ -241,21 +241,21 @@ void WebSocketTest::onClose(network::WebSocket* ws)
     log("onClose: websocket instance (%p) closed.", ws);
     if (ws == _wsiSendText)
     {
-        _wsiSendText = nullptr;
+        // _wsiSendText = nullptr;
         _sendTextStatus->setString("Send Text WS was closed");
     }
     else if (ws == _wsiSendBinary)
     {
-        _wsiSendBinary = nullptr;
+        // _wsiSendBinary = nullptr;
         _sendBinaryStatus->setString("Send Binary WS was closed");
     }
     else if (ws == _wsiError)
     {
-        _wsiError = nullptr;
+        // _wsiError = nullptr;
         _errorStatus->setString("Test invalid URL WS was closed");
     }
     // Delete websocket instance.
-    AX_SAFE_DELETE(ws);
+    // AX_SAFE_DELETE(ws);
     log("WebSocketTest ref: %u", _referenceCount);
     release();
 }
@@ -395,10 +395,10 @@ void WebSocketCloseTest::onMessage(network::WebSocket* ws, const network::WebSoc
 void WebSocketCloseTest::onClose(network::WebSocket* ws)
 {
     log("websocket (%p) closed.", ws);
-    if (ws == _wsiTest) {
-        _wsiTest = nullptr;
-    }
-    AX_SAFE_DELETE(ws);
+    // if (ws == _wsiTest) {
+    //     _wsiTest = nullptr;
+    // }
+    // AX_SAFE_DELETE(ws);
 }
 
 void WebSocketCloseTest::onError(network::WebSocket* ws, const network::WebSocket::ErrorCode& error)
@@ -551,11 +551,10 @@ void WebSocketDelayTest::onClose(network::WebSocket* ws)
     log("onClose: websocket instance (%p) closed.", ws);
     if (ws == _wsiSendText)
     {
+        delete _wsiSendText;
         _wsiSendText = nullptr;
         _sendTextStatus->setString("Send Text WS was closed");
     }
-    // Delete websocket instance.
-    AX_SAFE_DELETE(ws);
     log("WebSocketDelayTest ref: %u", _referenceCount);
     release();
 }

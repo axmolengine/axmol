@@ -286,7 +286,7 @@ bool WebSocket::init(const Delegate& delegate,
 {
     _delegate   = const_cast<Delegate*>(&delegate);
     _url        = url;
-    _caFilePath = caFilePath;
+    _caFilePath = FileUtils::getInstance()->fullPathForFilename(caFilePath);
     _requestUri = Uri::parse(url);
 
     setupParsers();
