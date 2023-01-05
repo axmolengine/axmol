@@ -51,6 +51,9 @@ add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
 
 # prevent tests project to build "axmol/core" again
 set(BUILD_ENGINE_DONE ON)
+if(WIN32)
+    set(BUILD_SHARED_LIBS ON)
+ENDIF()
 
 if(AX_BUILD_TESTS)
     # add cpp-template-default into project(axmol) for tmp test
