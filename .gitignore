@@ -54,10 +54,6 @@ local.properties
 # Ignore python compiled files
 *.pyc
 
-# Ignore files build by airplay and marmalade
-build_*_xcode/
-build_*_vc10/
-
 # Ignore files build by xcode
 *.mode*v*
 *.pbxuser
@@ -110,7 +106,7 @@ tags
 # ignore all build
 /build
 
-/build_*
+/build*
 
 # ignore ninja build dir
 /out
