@@ -33,7 +33,7 @@ struct cpSpace;
 
 NS_AX_EXT_BEGIN
 
-extern Vec2 physicsDebugNodeOffset;
+extern AX_EX_DLL Vec2 physicsDebugNodeOffset;
 
 /**
  * A BaseData that draws the components of a physics engine.
