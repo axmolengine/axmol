@@ -29,27 +29,29 @@
 #include "axmol.h"
 
 
+
+enum myGameState
+{
+    update = 0,
+    pause,
+    end,
+    menu1,
+    menu2,
+    menu3,
+};
+
+
 class HelloWorld : public ax::Scene
 {
-    enum class ExampleGameState
-    {
-        update = 0,
-        pause,
-        end,
-        menu1,
-        menu2,
-        menu3,
-    };
-    
 public:
     virtual bool init() override;
-    void update(float delta) override;
+    void update(float delta);
 
     // a selector callback
     void menuCloseCallback(Ref* sender);
 
 private:
-    ExampleGameState _gameState;
+    myGameState myGameState;
 };
 
 #endif  // __HELLOWORLD_SCENE_H__

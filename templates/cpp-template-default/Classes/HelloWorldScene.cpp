@@ -116,7 +116,8 @@ bool HelloWorld::init()
         drawNode->drawRect(safeArea.origin, safeArea.origin + safeArea.size, Color4F::BLUE);
     }
 
-    _gameState = ExampleGameState::update;
+
+    myGameState = myGameState::update;
     scheduleUpdate();
 
     return true; 
@@ -124,9 +125,9 @@ bool HelloWorld::init()
 
 void HelloWorld::update(float delta)
 {
-    switch (_gameState)
+    switch (myGameState)
     {
-    case ExampleGameState::update:
+    case myGameState::update:
         /////////////////////////////
         // Add your codes below...like....
         // 
@@ -136,28 +137,28 @@ void HelloWorld::update(float delta)
         // ...
         break;
 
-    case ExampleGameState::pause:
+    case myGameState::pause:
         /////////////////////////////
         // Add your codes below...like....
         //
         // anyPauseStuff()
         break;
 
-    case ExampleGameState::menu1:
+    case myGameState::menu1:
         /////////////////////////////
         // Add your codes below...like....
         // 
         // UpdateMenu1();
         break;
 
-    case ExampleGameState::menu2:
+    case myGameState::menu2:
         /////////////////////////////
         // Add your codes below...like....
         // 
         // UpdateMenu2();
         break;
 
-    case ExampleGameState::end:
+    case myGameState::end:
         /////////////////////////////
         // Add your codes below...like....
         // 
@@ -166,6 +167,9 @@ void HelloWorld::update(float delta)
         break;
     }
 }
+
+
+
 
 void HelloWorld::menuCloseCallback(Ref* sender)
 {
