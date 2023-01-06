@@ -34,6 +34,7 @@ DrawPrimitivesTests::DrawPrimitivesTests()
 {
     ADD_TEST_CASE(DrawNodeTest);
     ADD_TEST_CASE(Issue11942Test);
+    ADD_TEST_CASE(BetterCircleRendering);
     ADD_TEST_CASE(Issue829Test);
 }
 
@@ -225,10 +226,10 @@ Issue11942Test::Issue11942Test()
     // draw a circle thickness 10 
     draw0->setLineWidth(10);
     draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, 40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                     Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
     draw0->setLineWidth(1); // thickness 10 will replaced with thickness 1 (also for all 'same' draw commands before!)
     draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, -40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 
 
     // DrawNode 1 ------------------------------------------
@@ -238,10 +239,10 @@ Issue11942Test::Issue11942Test()
     // draw a second circle thickness 1  
     draw1->setLineWidth(1);
     draw1->drawCircle(VisibleRect::center() + Vec2(140.0f, 40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                     Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
-    draw1->setLineWidth(10); // thickness 1 will replaced with thickness 10 (also for all 'same' draw commands before!)
+                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
+    draw1->setLineWidth(20); // thickness 1 will replaced with thickness 10 (also for all 'same' draw commands before!)
     draw1->drawCircle(VisibleRect::center() + Vec2(140.0f, -40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-                 Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1));
+                      Color4F(AXRANDOM_0_1(), AXRANDOM_0_1(), AXRANDOM_0_1(), 1.0f));
 }
 
 string Issue11942Test::title() const
@@ -252,6 +253,59 @@ string Issue11942Test::title() const
 string Issue11942Test::subtitle() const
 {
     return "setLineWidth() change the WHOLE DrawNode object 'line with'";
+}
+
+//
+// drawCircle new feature 
+//
+BetterCircleRendering::BetterCircleRendering()
+{
+    //// DrawNode 0 ------------------------------------------
+    //auto draw0 = DrawNode::create();
+    //addChild(draw0, 10);
+
+    //// draw a circle thickness 10
+    //draw0->setLineWidth(10);
+    //draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, 40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
+    //                  Color4F::GREEN, 2);
+    //draw0->setLineWidth(30);  // thickness 10 will replaced with thickness 1 (also for all 'same' draw commands before!)
+    //draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, -40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
+    //                  Color4F::GREEN, 2);
+
+    //// DrawNode 1 ------------------------------------------
+    drawNode = DrawNode::create();
+    addChild(drawNode, 10);
+
+    scheduleUpdate();
+
+}
+
+ void BetterCircleRendering::update(float dt)
+ {
+    static float thick = 0;
+    thick += 0.5;
+    if (thick > 200)
+        thick = 0;
+
+   
+    drawNode->clear();
+    drawNode->setLineWidth(thick);
+
+    drawNode->drawCircle(VisibleRect::center() + Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false,
+                         Color4F::RED);
+  
+    drawNode->drawCircle(VisibleRect::center() - Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false,
+                         Color4F::GREEN, 2);
+ }
+
+string BetterCircleRendering::title() const
+ {
+    return "Rendering drawCircle";
+}
+
+string BetterCircleRendering::subtitle() const
+{
+    return "Green be the optimized rendering circle";
 }
 
 Issue829Test::Issue829Test()
