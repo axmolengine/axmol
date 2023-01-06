@@ -216,27 +216,11 @@ function(ax_copy_target_dll ax_target)
     if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
         set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
     endif()
-    add_custom_command(TARGET ${ax_target} POST_BUILD
-       COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
-         $<TARGET_FILE_DIR:${ax_target}>)
 
-    if (BUILD_SHARED_LIBS)
-        add_custom_command(TARGET ${ax_target} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}glad.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}glfw.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}pugixml.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}freetype.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}axmol.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}cocostudio.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}GUI.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}particle3d.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}physics-nodes.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}spine.dll"
-                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}assets-manager.dll"
-                $<TARGET_FILE_DIR:${ax_target}>)
-    endif()
+    add_custom_command(TARGET ${ax_target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:${ax_target}> $<TARGET_FILE_DIR:${ax_target}>
+        COMMAND_EXPAND_LISTS
+    )
 
     # Copy windows angle binaries
     if (AX_USE_COMPAT_GL)
