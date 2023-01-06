@@ -30,6 +30,9 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(axmol)
+if(WIN32)
+    set(BUILD_SHARED_LIBS ON)
+ENDIF()
 
 if(XCODE)
     set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
