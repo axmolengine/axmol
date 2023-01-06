@@ -141,9 +141,9 @@ private:
      */
     bool isFinished() const { return _finished; }
 
-    void handleInput(const yasio::sbyte_buffer& data)
+    void handleInput(const char* d, size_t n)
     {
-        enum llhttp_errno err = llhttp_execute(&_context, data.data(), data.size());
+        enum llhttp_errno err = llhttp_execute(&_context, d, n);
         if (err != HPE_OK)
         {
             _finished = true;

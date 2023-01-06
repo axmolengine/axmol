@@ -224,7 +224,7 @@ void ConsoleUploadFile::uploadFile()
         ssize_t ret = readBuffer(buffer, 3, srcFileData);
         if (ret > 0)
         {
-            int len = base64Encode(in, (unsigned int)ret, &out);
+            int len = utils::base64Encode(in, (unsigned int)ret, &out);
             send(sfd, out, len, 0);
             free(out);
             if (ret < 3)

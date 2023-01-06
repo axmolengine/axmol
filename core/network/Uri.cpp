@@ -174,7 +174,7 @@ bool Uri::doParse(std::string_view str)
     }
 
     bool hasScheme = true;
-    ;
+	
     std::string copied(str);
     if (copied.find("://") == std::string::npos)
     {
@@ -258,6 +258,10 @@ bool Uri::doParse(std::string_view str)
         _authority.append(::toString(getPort()));
     }
 
+    // Ensure path can be use for http request directly
+    if (_path.empty())
+        _path.push_back('/');
+
     // Assign path etc part
     _pathEtc = _path;
     if (!_query.empty())
@@ -313,9 +317,6 @@ bool Uri::doParse(std::string_view str)
     }
     else
         _isCustomPort = _port != 0;
-
-    if (_path.empty())
-        _path.push_back('/');
 
     return true;
 }

@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -48,12 +48,13 @@ SOFTWARE.
 #include "yasio/detail/utils.hpp"
 #include "yasio/detail/errc.hpp"
 #include "yasio/detail/byte_buffer.hpp"
-#include "yasio/cxx17/memory.hpp"
-#include "yasio/cxx17/string_view.hpp"
+#include "yasio/detail/fd_set_adapter.hpp"
+#include "yasio/stl/memory.hpp"
+#include "yasio/stl/string_view.hpp"
 #include "yasio/xxsocket.hpp"
 
 #if !defined(YASIO_HAVE_CARES)
-#  include "yasio/cxx17/shared_mutex.hpp"
+#  include "yasio/stl/shared_mutex.hpp"
 #endif
 
 #if defined(YASIO_HAVE_KCP)
@@ -173,6 +174,18 @@ enum
   //  b. IPv6 addresses with ports require square brackets [fe80::1%lo0]:53
   YOPT_S_DNS_LIST,
 
+  // Set whether forward event without GC alloc
+  // params: forward: int(0)
+  // reamrks:
+  //   when forward event enabled, the option YOPT_S_DEFERRED_EVENT was ignored
+  YOPT_S_FORWARD_EVENT,
+
+  // Set ssl server cert and private key file
+  // params:
+  //   crtfile: const char*
+  //   keyfile: const char*
+  YOPT_S_SSL_CERT,
+
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
   YOPT_C_UNPACK_FN = 101,
@@ -284,7 +297,8 @@ enum
   YCK_UDP_SERVER = YCM_UDP | YCM_SERVER,
   YCK_KCP_CLIENT = YCM_KCP | YCM_CLIENT | YCM_UDP,
   YCK_KCP_SERVER = YCM_KCP | YCM_SERVER | YCM_UDP,
-  YCK_SSL_CLIENT = YCM_SSL | YCM_CLIENT | YCM_TCP,
+  YCK_SSL_CLIENT = YCK_TCP_CLIENT | YCM_SSL,
+  YCK_SSL_SERVER = YCK_TCP_SERVER | YCM_SSL,
 };
 
 // channel flags
@@ -361,10 +375,17 @@ typedef highp_timer_ptr deadline_timer_ptr;
 typedef event_cb_t io_event_cb_t;
 typedef completion_cb_t io_completion_cb_t;
 
+// the ssl role
+enum ssl_role
+{
+  YSSL_CLIENT,
+  YSSL_SERVER,
+};
+
 struct io_hostent {
   io_hostent() = default;
   io_hostent(cxx17::string_view ip, u_short port) : host_(cxx17::svtos(ip)), port_(port) {}
-  io_hostent(io_hostent&& rhs) : host_(std::move(rhs.host_)), port_(rhs.port_) {}
+  io_hostent(io_hostent&& rhs) YASIO__NOEXCEPT : host_(std::move(rhs.host_)), port_(rhs.port_) {}
   io_hostent(const io_hostent& rhs) : host_(rhs.host_), port_(rhs.port_) {}
   void set_ip(cxx17::string_view ip) { cxx17::assign(host_, ip); }
   const std::string& get_ip() const { return host_; }
@@ -472,37 +493,6 @@ public:
   unsigned int id() const { return id_; }
 };
 
-#if defined(YASIO_SSL_BACKEND)
-class ssl_auto_handle {
-public:
-  ssl_auto_handle() : ssl_(nullptr) {}
-  ~ssl_auto_handle() { destroy(); }
-  ssl_auto_handle(ssl_auto_handle&& rhs) : ssl_(rhs.release()) {}
-  ssl_auto_handle& operator=(ssl_auto_handle&& rhs)
-  {
-    this->reset(rhs.release());
-    return *this;
-  }
-  SSL* release()
-  {
-    auto tmp = ssl_;
-    ssl_     = nullptr;
-    return tmp;
-  }
-  void reset(SSL* ssl)
-  {
-    if (ssl_)
-      destroy();
-    ssl_ = ssl;
-  }
-  operator SSL*() { return ssl_; }
-  YASIO__DECL void destroy();
-
-protected:
-  SSL* ssl_ = nullptr;
-};
-#endif
-
 class YASIO_API io_channel : public io_base {
   friend class io_service;
   friend class io_transport;
@@ -513,6 +503,9 @@ class YASIO_API io_channel : public io_base {
 
 public:
   io_service& get_service() const { return service_; }
+#if defined(YASIO_SSL_BACKEND)
+  YASIO__DECL SSL_CTX* get_ssl_context(bool client) const;
+#endif
   int index() const { return index_; }
   u_short remote_port() const { return remote_port_; }
   YASIO__DECL std::string format_destination() const;
@@ -625,10 +618,6 @@ private:
 #if defined(YASIO_HAVE_KCP)
   int kcp_conv_ = 0;
 #endif
-
-#if defined(YASIO_SSL_BACKEND)
-  ssl_auto_handle ssl_;
-#endif
 };
 
 // for tcp transport only
@@ -641,7 +630,7 @@ public:
   sbyte_buffer buffer_; // sending data buffer
   completion_cb_t handler_;
 
-  YASIO__DECL virtual int perform(transport_handle_t transport, const void* buf, int n);
+  YASIO__DECL virtual int perform(transport_handle_t transport, const void* buf, int n, int& error);
 
 #if !defined(YASIO_DISABLE_OBJECT_POOL)
   DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_send_op, 512)
@@ -655,7 +644,7 @@ public:
       : io_send_op(std::move(buffer), std::move(handler)), destination_(destination)
   {}
 
-  YASIO__DECL int perform(transport_handle_t transport, const void* buf, int n) override;
+  YASIO__DECL int perform(transport_handle_t transport, const void* buf, int n, int& error) override;
 #if !defined(YASIO_DISABLE_OBJECT_POOL)
   DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_sendto_op, 512)
 #endif
@@ -706,7 +695,7 @@ protected:
     return 0;
   }
 
-  YASIO__DECL int call_read(void* data, int size, int& error);
+  YASIO__DECL int call_read(void* data, int size, int revent, int& error);
   YASIO__DECL int call_write(io_send_op*, int& error);
   YASIO__DECL void complete_op(io_send_op*, int error);
 
@@ -731,8 +720,8 @@ protected:
 
   io_channel* ctx_;
 
-  std::function<int(const void*, int, const ip::endpoint*)> write_cb_;
-  std::function<int(void*, int)> read_cb_;
+  std::function<int(const void*, int, const ip::endpoint*, int&)> write_cb_;
+  std::function<int(void*, int, int, int&)> read_cb_;
 
   privacy::concurrent_queue<send_op_ptr> send_queue_;
 };
@@ -749,10 +738,11 @@ public:
   YASIO__DECL io_transport_ssl(io_channel* ctx, xxsocket_ptr&& s);
   YASIO__DECL void set_primitives() override;
 
-#  if defined(YASIO_SSL_BACKEND)
+  YASIO__DECL void do_ssl_shutdown();
+
 protected:
-  ssl_auto_handle ssl_;
-#  endif
+  YASIO__DECL int do_ssl_handshake(int& error); // always invoke at do_read
+  SSL* ssl_ = nullptr;
 };
 #else
 class io_transport_ssl {};
@@ -832,6 +822,19 @@ inline io_packet::pointer packet_data(packet_t& pkt) { return pkt->data(); }
 inline io_packet::size_type packet_len(packet_t& pkt) { return pkt->size(); }
 #endif
 
+class io_packet_view {
+public:
+  io_packet_view() = default;
+  io_packet_view(char* d, int n) : data_(d), size_(n) {}
+  char* data() { return this->data_; }
+  const char* data() const { return this->data_; }
+  size_t size() const { return this->size_; }
+
+private:
+  char* data_  = nullptr;
+  size_t size_ = 0;
+};
+
 /*
  * Notes: store some properties of event source to make sure user can safe get them deferred
  */
@@ -858,6 +861,13 @@ public:
     source_ud_ = source_->ud_.ptr;
 #endif
   }
+  io_event(int cidx, io_packet_view pkt, io_transport* source /*not nullable*/)
+      : kind_(YEK_ON_PACKET), writable_(1), passive_(0), status_(0), cindex_(cidx), source_id_(source->id_), source_(source), packet_view_(pkt)
+  {
+#if !defined(YASIO_MINIFY_EVENT)
+    source_ud_ = source_->ud_.ptr;
+#endif
+  }
   io_event(const io_event&) = delete;
   io_event(io_event&& rhs)  = delete;
   ~io_event() {}
@@ -872,6 +882,8 @@ public:
   int passive() const { return passive_; }
 
   packet_t& packet() { return packet_; }
+
+  io_packet_view packet_view() const { return packet_view_; }
 
   /*[nullable]*/ transport_handle_t transport() const { return writable_ ? static_cast<transport_handle_t>(source_) : nullptr; }
 
@@ -898,7 +910,7 @@ public:
   highp_time_t timestamp() const { return timestamp_; }
 #endif
 #if !defined(YASIO_DISABLE_OBJECT_POOL)
-  DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_event, 512)
+  DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_event, 128)
 #endif
 private:
   unsigned int kind_ : 30;
@@ -912,6 +924,7 @@ private:
 
   io_base* source_;
   packet_t packet_;
+  io_packet_view packet_view_;
 #if !defined(YASIO_MINIFY_EVENT)
   void* source_ud_;
   highp_time_t timestamp_ = highp_clock();
@@ -925,6 +938,9 @@ class YASIO_API io_service // lgtm [cpp/class-many-fields]
   friend class io_transport_tcp;
   friend class io_transport_udp;
   friend class io_transport_kcp;
+#if defined(YASIO_SSL_BACKEND)
+  friend class io_transport_ssl;
+#endif
   friend class io_channel;
 
 public:
@@ -1058,31 +1074,29 @@ private:
 
   YASIO__DECL bool open_internal(io_channel*);
 
-  YASIO__DECL void process_transports(fd_set* fds_array);
-  YASIO__DECL void process_channels(fd_set* fds_array);
+  YASIO__DECL void process_transports(fd_set_adapter& fd_set);
+  YASIO__DECL void process_channels(fd_set_adapter& fd_set);
   YASIO__DECL void process_timers();
 
   YASIO__DECL void interrupt();
 
   YASIO__DECL highp_time_t get_timeout(highp_time_t usec);
 
-  YASIO__DECL int do_select(fd_set* fds_array, highp_time_t wait_duration);
-
   YASIO__DECL int do_resolve(io_channel* ctx);
   YASIO__DECL void do_connect(io_channel*);
-  YASIO__DECL void do_connect_completion(io_channel*, fd_set* fds_array);
+  YASIO__DECL void do_connect_completion(io_channel*, fd_set_adapter& fd_set);
 
 #if defined(YASIO_SSL_BACKEND)
-  YASIO__DECL void init_ssl_context();
-  YASIO__DECL void cleanup_ssl_context();
-  YASIO__DECL void do_ssl_handshake(io_channel*);
+  YASIO__DECL SSL_CTX* init_ssl_context(ssl_role role);
+  YASIO__DECL void cleanup_ssl_context(ssl_role role);
 #endif
 
 #if defined(YASIO_HAVE_CARES)
   YASIO__DECL static void ares_getaddrinfo_cb(void* arg, int status, int timeouts, ares_addrinfo* answerlist);
   YASIO__DECL void ares_work_started();
   YASIO__DECL void ares_work_finished();
-  YASIO__DECL void process_ares_requests(fd_set* fds_array);
+  YASIO__DECL int do_ares_fds(socket_native_type* socks, fd_set_adapter& fd_set, timeval& waitd_tv);
+  YASIO__DECL void do_ares_process_fds(socket_native_type* socks, int count, fd_set_adapter& fd_set);
   YASIO__DECL void recreate_ares_channel();
   YASIO__DECL void config_ares_name_servers();
   YASIO__DECL void destroy_ares_channel();
@@ -1091,18 +1105,18 @@ private:
   void handle_connect_succeed(io_channel* ctx, xxsocket_ptr s) { handle_connect_succeed(allocate_transport(ctx, std::move(s))); }
   YASIO__DECL void handle_connect_succeed(transport_handle_t);
   YASIO__DECL void handle_connect_failed(io_channel*, int ec);
-  YASIO__DECL void notify_connect_succeed(transport_handle_t);
+  YASIO__DECL void active_transport(transport_handle_t);
 
   YASIO__DECL transport_handle_t allocate_transport(io_channel*, xxsocket_ptr&&);
   YASIO__DECL void deallocate_transport(transport_handle_t);
 
-  YASIO__DECL void register_descriptor(const socket_native_type fd, int flags);
-  YASIO__DECL void unregister_descriptor(const socket_native_type fd, int flags);
+  YASIO__DECL void register_descriptor(const socket_native_type fd, int events);
+  YASIO__DECL void deregister_descriptor(const socket_native_type fd, int events);
 
   // The major non-blocking event-loop
   YASIO__DECL void run(void);
 
-  YASIO__DECL bool do_read(transport_handle_t, fd_set* fds_array);
+  YASIO__DECL bool do_read(transport_handle_t, fd_set_adapter& fd_set);
   bool do_write(transport_handle_t transport) { return transport->do_write(this->wait_duration_); }
   YASIO__DECL void unpack(transport_handle_t, int bytes_expected, int bytes_transferred, int bytes_to_strip);
 
@@ -1110,7 +1124,20 @@ private:
   YASIO__DECL bool cleanup_io(io_base* obj, bool clear_mask = true);
 
   YASIO__DECL void handle_close(transport_handle_t);
-  YASIO__DECL void handle_event(event_ptr event);
+
+  template <typename... _Types>
+  inline void fire_event(_Types&&... args)
+  {
+    auto event = cxx14::make_unique<io_event>(std::forward<_Types>(args)...);
+    if (options_.deferred_event_ && !options_.forward_event_)
+    {
+      if (options_.on_defer_event_ && !options_.on_defer_event_(event))
+        return;
+      events_.emplace(std::move(event));
+    }
+    else
+      options_.on_event_(std::move(event));
+  }
 
   // new/delete client socket connection channel
   // please call this at initialization, don't new channel at runtime
@@ -1120,12 +1147,9 @@ private:
   YASIO__DECL void clear_transports(); // clear all transports
   YASIO__DECL bool close_internal(io_channel*);
 
-  // shutdown a tcp-connection if possible
-  YASIO__DECL void shutdown_internal(transport_handle_t);
-
   // supporting server
   YASIO__DECL void do_accept(io_channel*);
-  YASIO__DECL void do_accept_completion(io_channel*, fd_set* fds_array);
+  YASIO__DECL void do_accept_completion(io_channel*, fd_set_adapter& fd_set);
 
   YASIO__DECL static const char* strerror(int error);
 
@@ -1168,16 +1192,7 @@ private:
   // the next wait duration for socket.select
   highp_time_t wait_duration_;
 
-  // the max nfds for socket.select, must be max_fd + 1
-  int max_nfds_;
-  enum
-  {
-    read_op,
-    write_op,
-    except_op,
-    max_ops,
-  };
-  fd_set fds_array_[max_ops];
+  fd_set_adapter fd_set_;
 
   // options
   struct __unnamed_options {
@@ -1190,6 +1205,8 @@ private:
 
     bool deferred_event_ = true;
     defer_event_cb_t on_defer_event_;
+
+    bool forward_event_ = false; // since v3.39.7
 
     // tcp keepalive settings
     struct __unnamed01 {
@@ -1209,8 +1226,12 @@ private:
     print_fn2_t print_;
 
 #if defined(YASIO_SSL_BACKEND)
-    // The full path cacert(.pem) file for ssl verifaction
+    // SSL client, the full path cacert(.pem) file for ssl verifaction
     std::string cafile_;
+
+    // SSL server
+    std::string crtfile_;
+    std::string keyfile_;
 #endif
 
 #if defined(YASIO_HAVE_CARES)
@@ -1223,7 +1244,7 @@ private:
   // The stop flag to notify all transports needs close
   uint8_t stop_flag_ = 0;
 #if defined(YASIO_SSL_BACKEND)
-  SSL_CTX* ssl_ctx_ = nullptr;
+  SSL_CTX* ssl_roles_[2];
 #endif
 #if defined(YASIO_HAVE_CARES)
   ares_channel ares_         = nullptr; // the ares handle for non blocking io dns resolve support

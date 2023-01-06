@@ -8,4 +8,4 @@ THIS PROJECT IS IN DEVELOPMENT MODE. Any pull requests should merge to branch `d
 -  [ ] I have performed a self-review of my code.
 -  [ ] If it is a core feature, I have added thorough tests.
 -  [ ] I have checked readme and add important infos to this PR (if it needed).
--  [ ] An improved cpp-test/lua-test is not needed (explain why not, thanks).
+-  [ ] I have added/adapted some tests too.

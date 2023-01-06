@@ -3,7 +3,7 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright (c) 2021 halx99 (halx99 at live dot com)
+// Copyright (c) 2012-2023 halx99 (halx99 at live dot com)
 // Copyright Vicente J. Botet Escriba 2012.
 // Copyright Howard Hinnant 2007-2010.
 //

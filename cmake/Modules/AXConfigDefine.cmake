@@ -66,23 +66,40 @@ define_property(TARGET
 )
 
 # config c standard
-if (NOT WINDOWS)
-    if(NOT DEFINED C_STD)
-        set(C_STD 11)
+if(NOT DEFINED CMAKE_C_STANDARD)
+    if (WINDOWS)
+        message(STATUS "CMAKE_HOST_SYSTEM_VERSION: ${CMAKE_HOST_SYSTEM_VERSION}")
+        message(STATUS "CMAKE_SYSTEM_VERSION: ${CMAKE_SYSTEM_VERSION}")
+        message(STATUS "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION: ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}")
+        if (${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION} VERSION_GREATER_EQUAL "10.0.22000.0")
+            set(CMAKE_C_STANDARD 11)
+        else()
+            # windows sdk < 10.0.22000.0, The c11 header stdalign.h was missing, so workaroud fallback C standard to 99
+            # refer to: https://github.com/axmolengine/axmol/issues/991
+            set(CMAKE_C_STANDARD 99)
+        endif()
+    else()
+        set(CMAKE_C_STANDARD 11)
     endif()
-    message(STATUS "C_STD=${C_STD}")
-    set(CMAKE_C_STANDARD ${C_STD})
+endif()
+message(STATUS "CMAKE_C_STANDARD=${CMAKE_C_STANDARD}")
+if(NOT DEFINED CMAKE_C_STANDARD_REQUIRED)
     set(CMAKE_C_STANDARD_REQUIRED ON)
 endif()
 
 # config c++ standard
-if(NOT DEFINED CXX_STD)
-    set(CXX_STD 20)
+if(NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 20)
 endif()
-message(STATUS "CXX_STD=${CXX_STD}")
-set(CMAKE_CXX_STANDARD ${CXX_STD})
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+message(STATUS "CMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}")
+
+if(NOT DEFINED CMAKE_CXX_STANDARD_REQUIRED)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
+
 
 if (MSVC)
     add_compile_options(/GF)

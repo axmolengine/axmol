@@ -176,7 +176,7 @@ public:
      *
      * @return const char* the pointer of _tag
      */
-    const char* getTag() const { return _tag.c_str(); }
+    std::string_view getTag() const { return _tag; }
 
     /**
      * Set user-customed data of HttpRequest object.

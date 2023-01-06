@@ -264,7 +264,7 @@ Scheduler::Scheduler()
 #endif
 {
     // I don't expect to have more than 30 functions to all per frame
-    _functionsToPerform.reserve(30);
+    _actionsToPerform.reserve(30);
 }
 
 Scheduler::~Scheduler()
@@ -812,16 +812,16 @@ void Scheduler::resumeTargets(const std::set<void*>& targetsToResume)
     }
 }
 
-void Scheduler::performFunctionInCocosThread(std::function<void()> function)
+void Scheduler::runOnAxmolThread(std::function<void()> action)
 {
     std::lock_guard<std::mutex> lock(_performMutex);
-    _functionsToPerform.emplace_back(std::move(function));
+    _actionsToPerform.emplace_back(std::move(action));
 }
 
-void Scheduler::removeAllFunctionsToBePerformedInCocosThread()
+void Scheduler::removeAllPendingActions()
 {
     std::unique_lock<std::mutex> lock(_performMutex);
-    _functionsToPerform.clear();
+    _actionsToPerform.clear();
 }
 
 // main loop
@@ -944,12 +944,12 @@ void Scheduler::update(float dt)
 
     // Testing size is faster than locking / unlocking.
     // And almost never there will be functions scheduled to be called.
-    if (!_functionsToPerform.empty())
+    if (!_actionsToPerform.empty())
     {
         _performMutex.lock();
         // fixed #4123: Save the callback functions, they must be invoked after '_performMutex.unlock()', otherwise if
         // new functions are added in callback, it will cause thread deadlock.
-        auto temp = std::move(_functionsToPerform);
+        auto temp = std::move(_actionsToPerform);
         _performMutex.unlock();
 
         for (const auto& function : temp)

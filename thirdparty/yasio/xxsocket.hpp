@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -635,13 +635,13 @@ public:
   // Disable copy constructor
   YASIO__DECL xxsocket(const xxsocket&) = delete;
   // Construct with a exist socket, it will replace the source
-  YASIO__DECL xxsocket(xxsocket&&);
+  YASIO__DECL xxsocket(xxsocket&&) YASIO__NOEXCEPT;
 
-  YASIO__DECL xxsocket& operator=(socket_native_type handle);
+  YASIO__DECL xxsocket& operator=(socket_native_type handle) YASIO__NOEXCEPT;
   // Disable copy assign operator
   YASIO__DECL xxsocket& operator=(const xxsocket&) = delete;
   // Construct with a exist socket, it will replace the source
-  YASIO__DECL xxsocket& operator=(xxsocket&&);
+  YASIO__DECL xxsocket& operator=(xxsocket&&) YASIO__NOEXCEPT;
 
   // See also as function: open
   YASIO__DECL xxsocket(int af, int type, int protocol);
@@ -1022,6 +1022,7 @@ public:
   YASIO__DECL static bool not_recv_error(int error);
 
   YASIO__DECL static const char* strerror(int error);
+  YASIO__DECL static const char* strerror_r(int error, char* buf, size_t buflen);
   YASIO__DECL static const char* gai_strerror(int error);
 
   /// <summary>

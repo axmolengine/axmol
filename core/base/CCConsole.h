@@ -57,7 +57,9 @@ static const int MAX_LOG_LENGTH = 16 * 1024;
 /**
  @brief Output Debug message.
  */
-void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
+void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
+
+/* AX_DEPRECATED_ATTRIBUTE*/ void AX_DLL log(const char* format, ...) AX_FORMAT_PRINTF(1, 2);  // use print instead
 
 /** Console is helper class that lets the developer control the game from TCP connection.
  Console will spawn a new thread that will listen to a specified TCP port.
@@ -194,8 +196,10 @@ public:
     void delSubCommand(std::string_view cmdName, std::string_view subCmdName);
     void delSubCommand(Command& cmd, std::string_view subCmdName);
 
-    /** log something in the console */
-    void log(const char* buf);
+    /** print something in the console */
+    void print(const char* buf);
+
+    AX_DEPRECATED_ATTRIBUTE void log(const char* buf) { print(buf); }
 
     /**
      * set bind address

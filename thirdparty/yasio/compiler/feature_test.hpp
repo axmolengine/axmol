@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,10 @@ SOFTWARE.
 #  include <sdkddkver.h>
 #endif
 
+#if defined(_MSC_VER) && _MSC_VER < 1900
+#  define snprintf sprintf_s
+#endif
+
 // Tests whether compiler has(fully) c++11 support and keywords workaround for msvc
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 #  define YASIO__HAS_CXX11 1
@@ -50,8 +54,7 @@ SOFTWARE.
 #endif
 
 // Tests whether compiler has c++14 support
-#if (defined(__cplusplus) && __cplusplus >= 201402L) || \
-    (defined(_MSC_VER) && _MSC_VER >= 1900 && (defined(_MSVC_LANG) && (_MSVC_LANG >= 201402L)))
+#if (defined(__cplusplus) && __cplusplus >= 201402L) || (defined(_MSC_VER) && _MSC_VER >= 1900 && (defined(_MSVC_LANG) && (_MSVC_LANG >= 201402L)))
 #  ifndef YASIO_HAS_CXX14
 #    define YASIO__HAS_CXX14 1
 #  endif // C++14 features macro
@@ -62,9 +65,7 @@ SOFTWARE.
 
 // Tests whether compiler has c++17 support
 #if (defined(__cplusplus) && __cplusplus >= 201703L) || \
-    (defined(_MSC_VER) && _MSC_VER > 1900 &&            \
-     ((defined(_HAS_CXX17) && _HAS_CXX17 == 1) ||       \
-      (defined(_MSVC_LANG) && (_MSVC_LANG > 201402L))))
+    (defined(_MSC_VER) && _MSC_VER > 1900 && ((defined(_HAS_CXX17) && _HAS_CXX17 == 1) || (defined(_MSVC_LANG) && (_MSVC_LANG > 201402L))))
 #  ifndef YASIO_HAS_CXX17
 #    define YASIO__HAS_CXX17 1
 #  endif // C++17 features macro
@@ -75,9 +76,7 @@ SOFTWARE.
 
 // Tests whether compiler has c++20 support
 #if (defined(__cplusplus) && __cplusplus > 201703L) || \
-    (defined(_MSC_VER) && _MSC_VER > 1900 &&           \
-     ((defined(_HAS_CXX20) && _HAS_CXX20 == 1) ||      \
-      (defined(_MSVC_LANG) && (_MSVC_LANG > 201703L))))
+    (defined(_MSC_VER) && _MSC_VER > 1900 && ((defined(_HAS_CXX20) && _HAS_CXX20 == 1) || (defined(_MSVC_LANG) && (_MSVC_LANG > 201703L))))
 #  ifndef YASIO__HAS_CXX20
 #    define YASIO__HAS_CXX20 1
 #  endif // C++20 features macro
@@ -103,8 +102,7 @@ SOFTWARE.
 // Tests whether current OS is BSD-like system for process common BSD socket behaviors
 #if !defined(_WIN32) && !defined(__linux__)
 #  include <sys/param.h>
-#  if defined(BSD) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || \
-      defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__)
+#  if defined(BSD) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__)
 #    define YASIO__OS_BSD_LIKE 1
 #  else
 #    define YASIO__OS_BSD_LIKE 0
@@ -128,8 +126,7 @@ SOFTWARE.
 #endif
 
 // 64bits Sense Macros
-#if defined(_M_X64) || defined(_WIN64) || defined(__LP64__) || defined(_LP64) || \
-    defined(__x86_64) || defined(__arm64__) || defined(__aarch64__)
+#if defined(_M_X64) || defined(_WIN64) || defined(__LP64__) || defined(_LP64) || defined(__x86_64) || defined(__arm64__) || defined(__aarch64__)
 #  define YASIO__64BITS 1
 #else
 #  define YASIO__64BITS 0
@@ -149,8 +146,7 @@ SOFTWARE.
 #endif
 
 #include <system_error>
-#define yasio__throw_error(ec, what) \
-  YASIO__THROW0(std::system_error(std::error_code{(int)ec, std::system_category()}, what))
+#define yasio__throw_error(ec, what) YASIO__THROW0(std::system_error(std::error_code{(int)ec, std::system_category()}, what))
 #define yasio__throw_error0(ec) yasio__throw_error(ec, "")
 
 // Compatibility with non-clang compilers...

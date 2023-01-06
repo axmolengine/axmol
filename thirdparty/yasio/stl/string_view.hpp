@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 Copyright (c) 2016 Matthew Rodusek(matthew.rodusek@gmail.com) <http://rodusek.me>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -1432,6 +1432,15 @@ inline std::basic_string<_CharT, _Traits, Allocator>& assign(std::basic_string<_
 {
   if (!rhs.empty())
     lhs.assign(rhs.data(), rhs.size());
+  else
+    lhs.clear();
+  return lhs;
+}
+template <typename _CharT, typename _Traits, typename Allocator>
+inline std::basic_string<_CharT, _Traits, Allocator>& append(std::basic_string<_CharT, _Traits, Allocator>& lhs, const basic_string_view<_CharT, _Traits>& rhs)
+{
+  if (!rhs.empty())
+    lhs.append(rhs.data(), rhs.size());
   else
     lhs.clear();
   return lhs;

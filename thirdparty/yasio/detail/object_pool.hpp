@@ -1,11 +1,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -49,33 +49,30 @@ namespace gc
 #define YASIO_POOL_FL_BEGIN(chunk) reinterpret_cast<free_link_node*>(chunk->data)
 #define YASIO_POOL_PREALLOCATE 1
 
-template <typename _Ty> static size_t aligned_storage_size()
+template <typename _Ty>
+static size_t aligned_storage_size()
 {
   return sizeof(typename std::aligned_storage<sizeof(_Ty), std::alignment_of<_Ty>::value>::type);
 }
 
 namespace detail
 {
-class object_pool
-{
-  typedef struct free_link_node
-  {
+class object_pool {
+  typedef struct free_link_node {
     free_link_node* next;
-  } * free_link;
+  }* free_link;
 
-  typedef struct chunk_link_node
-  {
+  typedef struct chunk_link_node {
     chunk_link_node* next;
     char data[0];
-  } * chunk_link;
+  }* chunk_link;
 
-  object_pool(const object_pool&) = delete;
+  object_pool(const object_pool&)    = delete;
   void operator=(const object_pool&) = delete;
 
 public:
   OBJECT_POOL_DECL object_pool(size_t element_size, size_t element_count)
-      : free_link_(nullptr), chunk_(nullptr), element_size_(element_size),
-        element_count_(element_count)
+      : free_link_(nullptr), chunk_(nullptr), element_size_(element_size), element_count_(element_count)
   {
 #if YASIO_POOL_PREALLOCATE
     release(allocate_from_process_heap()); // preallocate 1 chunk
@@ -93,7 +90,7 @@ public:
     while ((p = *q) != nullptr)
     {
       *q = p->next;
-      free(p);
+      delete[] (uint8_t*)(p);
     }
 
     free_link_ = nullptr;
@@ -147,8 +144,7 @@ private:
   }
   OBJECT_POOL_DECL void* allocate_from_process_heap(void)
   {
-    chunk_link new_chunk =
-        (chunk_link)malloc(sizeof(chunk_link_node) + element_size_ * element_count_);
+    chunk_link new_chunk = (chunk_link) new uint8_t[sizeof(chunk_link_node) + element_size_ * element_count_];
 #ifdef _DEBUG
     ::memset(new_chunk, 0x00, sizeof(chunk_link_node));
 #endif
@@ -171,8 +167,7 @@ private:
 
     for (char* ptr = chunk->data; ptr < rbegin; ptr += element_size_)
     {
-      reinterpret_cast<free_link_node*>(ptr)->next =
-          reinterpret_cast<free_link_node*>(ptr + element_size_);
+      reinterpret_cast<free_link_node*>(ptr)->next = reinterpret_cast<free_link_node*>(ptr + element_size_);
     }
     return reinterpret_cast<free_link_node*>(rbegin);
   }
@@ -185,14 +180,13 @@ private:
 };
 } // namespace detail
 
-template <typename _Ty, typename _Mutex = std::mutex> class object_pool : public detail::object_pool
-{
+template <typename _Ty, typename _Mutex = std::mutex>
+class object_pool : public detail::object_pool {
 public:
-  object_pool(size_t _ElemCount = 512)
-      : detail::object_pool(yasio::gc::aligned_storage_size<_Ty>(), _ElemCount)
-  {}
+  object_pool(size_t _ElemCount = 512) : detail::object_pool(yasio::gc::aligned_storage_size<_Ty>(), _ElemCount) {}
 
-  template <typename... _Types> _Ty* construct(_Types&&... args)
+  template <typename... _Types>
+  _Ty* construct(_Types&&... args)
   {
     return new (allocate()) _Ty(std::forward<_Types>(args)...);
   }
@@ -218,17 +212,16 @@ public:
   _Mutex mutex_;
 };
 
-template <typename _Ty> class object_pool<_Ty, void> : public detail::object_pool
-{
-  object_pool(const object_pool&) = delete;
+template <typename _Ty>
+class object_pool<_Ty, void> : public detail::object_pool {
+  object_pool(const object_pool&)    = delete;
   void operator=(const object_pool&) = delete;
 
 public:
-  object_pool(size_t _ElemCount = 512)
-      : detail::object_pool(yasio::gc::aligned_storage_size<_Ty>(), _ElemCount)
-  {}
+  object_pool(size_t _ElemCount = 512) : detail::object_pool(yasio::gc::aligned_storage_size<_Ty>(), _ElemCount) {}
 
-  template <typename... _Types> _Ty* construct(_Types&&... args)
+  template <typename... _Types>
+  _Ty* construct(_Types&&... args)
   {
     return new (allocate()) _Ty(std::forward<_Types>(args)...);
   }
@@ -244,39 +237,57 @@ public:
   void deallocate(void* _Ptr) { release(_Ptr); }
 };
 
-#define DEFINE_OBJECT_POOL_ALLOCATION(ELEMENT_TYPE, ELEMENT_COUNT)                                 \
-public:                                                                                            \
-  static void* operator new(size_t /*size*/) { return get_pool().allocate(); }                     \
-                                                                                                   \
-  static void* operator new(size_t /*size*/, std::nothrow_t) { return get_pool().allocate(); }     \
-                                                                                                   \
-  static void operator delete(void* p) { get_pool().deallocate(p); }                               \
-                                                                                                   \
-  static yasio::gc::object_pool<ELEMENT_TYPE, void>& get_pool()                                    \
-  {                                                                                                \
-    static yasio::gc::object_pool<ELEMENT_TYPE, void> s_pool(ELEMENT_COUNT);                       \
-    return s_pool;                                                                                 \
+#define DEFINE_OBJECT_POOL_ALLOCATION(ELEMENT_TYPE, ELEMENT_COUNT)           \
+public:                                                                      \
+  static void* operator new(size_t /*size*/)                                 \
+  {                                                                          \
+    return get_pool().allocate();                                            \
+  }                                                                          \
+                                                                             \
+  static void* operator new(size_t /*size*/, std::nothrow_t)                 \
+  {                                                                          \
+    return get_pool().allocate();                                            \
+  }                                                                          \
+                                                                             \
+  static void operator delete(void* p)                                       \
+  {                                                                          \
+    get_pool().deallocate(p);                                                \
+  }                                                                          \
+                                                                             \
+  static yasio::gc::object_pool<ELEMENT_TYPE, void>& get_pool()              \
+  {                                                                          \
+    static yasio::gc::object_pool<ELEMENT_TYPE, void> s_pool(ELEMENT_COUNT); \
+    return s_pool;                                                           \
   }
 
 // The thread safe edition
-#define DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(ELEMENT_TYPE, ELEMENT_COUNT)                      \
-public:                                                                                            \
-  static void* operator new(size_t /*size*/) { return get_pool().allocate(); }                     \
-                                                                                                   \
-  static void* operator new(size_t /*size*/, std::nothrow_t) { return get_pool().allocate(); }     \
-                                                                                                   \
-  static void operator delete(void* p) { get_pool().deallocate(p); }                               \
-                                                                                                   \
-  static yasio::gc::object_pool<ELEMENT_TYPE, std::mutex>& get_pool()                              \
-  {                                                                                                \
-    static yasio::gc::object_pool<ELEMENT_TYPE, std::mutex> s_pool(ELEMENT_COUNT);                 \
-    return s_pool;                                                                                 \
+#define DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(ELEMENT_TYPE, ELEMENT_COUNT)      \
+public:                                                                            \
+  static void* operator new(size_t /*size*/)                                       \
+  {                                                                                \
+    return get_pool().allocate();                                                  \
+  }                                                                                \
+                                                                                   \
+  static void* operator new(size_t /*size*/, std::nothrow_t)                       \
+  {                                                                                \
+    return get_pool().allocate();                                                  \
+  }                                                                                \
+                                                                                   \
+  static void operator delete(void* p)                                             \
+  {                                                                                \
+    get_pool().deallocate(p);                                                      \
+  }                                                                                \
+                                                                                   \
+  static yasio::gc::object_pool<ELEMENT_TYPE, std::mutex>& get_pool()              \
+  {                                                                                \
+    static yasio::gc::object_pool<ELEMENT_TYPE, std::mutex> s_pool(ELEMENT_COUNT); \
+    return s_pool;                                                                 \
   }
 
 //////////////////////// allocator /////////////////
 // TEMPLATE CLASS object_pool_allocator, can't used by std::vector, DO NOT use at non-msvc compiler.
-template <class _Ty, size_t _ElemCount = 512, class _Mutex = void> class object_pool_allocator
-{ // generic allocator for objects of class _Ty
+template <class _Ty, size_t _ElemCount = 512, class _Mutex = void>
+class object_pool_allocator { // generic allocator for objects of class _Ty
 public:
   typedef _Ty value_type;
 
@@ -292,8 +303,8 @@ public:
   typedef long difference_type;
 #endif
 
-  template <class _Other> struct rebind
-  { // convert this type to _ALLOCATOR<_Other>
+  template <class _Other>
+  struct rebind { // convert this type to _ALLOCATOR<_Other>
     typedef object_pool_allocator<_Other> other;
   };
 
@@ -315,7 +326,8 @@ public:
   { // construct by copying (do nothing)
   }
 
-  template <class _Other> object_pool_allocator(const object_pool_allocator<_Other>&) throw()
+  template <class _Other>
+  object_pool_allocator(const object_pool_allocator<_Other>&) throw()
   { // construct from a related allocator (do nothing)
   }
 
@@ -357,17 +369,20 @@ public:
     new ((void*)_Ptr) _Ty(std::forward<_Ty>(_Val));
   }
 
-  template <class _Other> void construct(pointer _Ptr, _Other&& _Val)
+  template <class _Other>
+  void construct(pointer _Ptr, _Other&& _Val)
   { // construct object at _Ptr with value _Val
     new ((void*)_Ptr) _Ty(std::forward<_Other>(_Val));
   }
 
-  template <class _Objty, class... _Types> void construct(_Objty* _Ptr, _Types&&... _Args)
+  template <class _Objty, class... _Types>
+  void construct(_Objty* _Ptr, _Types&&... _Args)
   { // construct _Objty(_Types...) at _Ptr
     ::new ((void*)_Ptr) _Objty(std::forward<_Types>(_Args)...);
   }
 
-  template <class _Uty> void destroy(_Uty* _Ptr)
+  template <class _Uty>
+  void destroy(_Uty* _Ptr)
   { // destroy object at _Ptr, do nothing
     _Ptr->~_Uty();
   }
@@ -386,15 +401,13 @@ public:
 };
 
 template <class _Ty, class _Other>
-inline bool operator==(const object_pool_allocator<_Ty>&,
-                       const object_pool_allocator<_Other>&) throw()
+inline bool operator==(const object_pool_allocator<_Ty>&, const object_pool_allocator<_Other>&) throw()
 { // test for allocator equality
   return (true);
 }
 
 template <class _Ty, class _Other>
-inline bool operator!=(const object_pool_allocator<_Ty>& _Left,
-                       const object_pool_allocator<_Other>& _Right) throw()
+inline bool operator!=(const object_pool_allocator<_Ty>& _Left, const object_pool_allocator<_Other>& _Right) throw()
 { // test for allocator inequality
   return (!(_Left == _Right));
 }
