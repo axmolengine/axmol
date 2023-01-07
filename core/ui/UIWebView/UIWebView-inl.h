@@ -26,7 +26,7 @@
 
 /// @cond DO_NOT_SHOW
 
-#if defined(_AX_HAVE_WEBVIEW2)
+#if defined(_WIN32) && defined(_AX_HAVE_WEBVIEW2)
 
 #include "ui/UIWebView/UIWebView.h"
 #include "platform/CCGLView.h"
