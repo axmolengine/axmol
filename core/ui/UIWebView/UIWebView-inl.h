@@ -26,6 +26,8 @@
 
 /// @cond DO_NOT_SHOW
 
+#if defined(_AX_HAVE_WEBVIEW2)
+
 #include "ui/UIWebView/UIWebView.h"
 #include "platform/CCGLView.h"
 #include "base/CCDirector.h"
@@ -236,5 +238,7 @@ WebView::ccWebViewCallback WebView::getOnJSCallback() const
 
 }  // namespace ui
 NS_AX_END  // namespace ax
+
+#endif
 
 /// @endcond
