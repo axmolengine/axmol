@@ -30,7 +30,7 @@ USING_NS_AX;
 using namespace ax::network;
 
 #define CHROME_UA                                                                                                   \
-    "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 " \
+    "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 " \
     "Safari/537.36"
 
 HttpClientTests::HttpClientTests()
@@ -306,32 +306,33 @@ void HttpClientTest::onHttpRequestCompleted(HttpClient* sender, HttpResponse* re
     }
 
     // You can get original request type from: response->request->reqType
-    if (0 != strlen(response->getHttpRequest()->getTag()))
+    auto tag = response->getHttpRequest()->getTag();
+    if (!tag.empty())
     {
-        log("%s completed", response->getHttpRequest()->getTag());
+        ax::print("%s completed", tag.data());
     }
 
     int32_t statusCode    = response->getResponseCode();
     char statusString[64] = {};
-    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, tag.data());
     _labelStatusCode->setString(statusString);
-    log("response code: %d", statusCode);
+    ax::print("response code: %d", statusCode);
 
     if (response->getResponseCode() != 200)
     {
-        log("response failed");
-        // log("error buffer: %s", response->getErrorBuffer());
+        ax::print("response failed");
+        // ax::print("error buffer: %s", response->getErrorBuffer());
         return;
     }
 
     // dump data
     auto buffer = response->getResponseData();
     buffer->push_back('\0');  // to c_str
-    log("Http Test, dump data: %s", buffer->data());
-    log("\n");
+    ax::print("Http Test, dump data: %s", buffer->data());
+    ax::print("\n");
     if (response->getHttpRequest()->getReferenceCount() != 2)
     {
-        log("request ref count not 2, is %d", response->getHttpRequest()->getReferenceCount());
+        ax::print("request ref count not 2, is %d", response->getHttpRequest()->getReferenceCount());
     }
 }
 
@@ -456,16 +457,17 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient* sender, Htt
     }
 
     // You can get original request type from: response->request->reqType
-    if (0 != strlen(response->getHttpRequest()->getTag()))
+    auto tag = response->getHttpRequest()->getTag();
+    if (!tag.empty())
     {
-        log("%s completed", response->getHttpRequest()->getTag());
+        ax::print("%s completed", tag.data());
     }
 
     int32_t statusCode    = response->getResponseCode();
     char statusString[64] = {};
-    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, response->getHttpRequest()->getTag());
+    sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, tag.data());
     _labelStatusCode->setString(statusString);
-    log("response code: %d", statusCode);
+    ax::print("response code: %d", statusCode);
 
     _totalProcessedRequests++;
     sprintf(statusString, "Got %d of %d expected http requests", _totalProcessedRequests, _totalExpectedRequests);
@@ -473,7 +475,7 @@ void HttpClientClearRequestsTest::onHttpRequestCompleted(HttpClient* sender, Htt
 
     if (!response->isSucceed())
     {
-        log("response failed");
+        ax::print("response failed");
         // log("error buffer: %s", response->getErrorBuffer());
     }
 }

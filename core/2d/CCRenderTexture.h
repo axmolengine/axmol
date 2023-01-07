@@ -381,7 +381,7 @@ protected:
     void onEnd();
     void clearColorAttachment();
 
-    void onSaveToFile(std::string_view fileName, bool isRGBA = true, bool forceNonPMA = false);
+    void onSaveToFile(std::string fileName, bool isRGBA = true, bool forceNonPMA = false);
 
     bool _keepMatrix = false;
     Rect _rtTextureRect;

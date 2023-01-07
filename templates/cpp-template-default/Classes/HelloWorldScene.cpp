@@ -116,12 +116,64 @@ bool HelloWorld::init()
         drawNode->drawRect(safeArea.origin, safeArea.origin + safeArea.size, Color4F::BLUE);
     }
 
-    return true;
+    // scheduleUpdate() is required to ensure update(float) is called on every loop
+    scheduleUpdate();
+
+    return true; 
+}
+
+void HelloWorld::update(float delta)
+{
+    switch (_gameState)
+    {
+    case ExampleGameState::init:
+        _gameState = ExampleGameState::update;
+        break;
+
+    case ExampleGameState::update:
+        /////////////////////////////
+        // Add your codes below...like....
+        // 
+        // UpdateJoyStick();
+        // UpdatePlayer();
+        // UpdatePhysics();
+        // ...
+        break;
+
+    case ExampleGameState::pause:
+        /////////////////////////////
+        // Add your codes below...like....
+        //
+        // anyPauseStuff()
+        break;
+
+    case ExampleGameState::menu1:
+        /////////////////////////////
+        // Add your codes below...like....
+        // 
+        // UpdateMenu1();
+        break;
+
+    case ExampleGameState::menu2:
+        /////////////////////////////
+        // Add your codes below...like....
+        // 
+        // UpdateMenu2();
+        break;
+
+    case ExampleGameState::end:
+        /////////////////////////////
+        // Add your codes below...like....
+        // 
+        // CleanUpMyCrap();
+        menuCloseCallback(this);
+        break;
+    }
 }
 
 void HelloWorld::menuCloseCallback(Ref* sender)
 {
-    // Close the cocos2d-x game scene and quit the application
+    // Close the axmol game scene and quit the application
     _director->end();
 
     /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use

@@ -44,6 +44,8 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC "${_AX_ROOT_PATH}/core"
     )
 
+target_link_libraries(${PROJECT_NAME} glad)
+
 if(CLANG_FORMAT_ENABLED)
     clang_format(${PROJECT_NAME})
 endif()

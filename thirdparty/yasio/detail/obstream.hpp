@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ SOFTWARE.
 #include <limits>
 #include <stack>
 #include <fstream>
-#include "yasio/cxx17/string_view.hpp"
+#include "yasio/stl/string_view.hpp"
 #include "yasio/detail/endian_portable.hpp"
 #include "yasio/detail/utils.hpp"
 #include "yasio/detail/byte_buffer.hpp"

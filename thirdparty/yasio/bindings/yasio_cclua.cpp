@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,14 +29,14 @@ SOFTWARE.
 #include "yasio/bindings/lyasio.hpp"
 #include "yasio/detail/object_pool.hpp"
 #include "yasio/detail/ref_ptr.hpp"
-#include "yasio/cxx17/string_view.hpp"
+#include "yasio/stl/string_view.hpp"
 
 // A workaround to fix compile issue caused by `CCPlatformMacros.h` doesn't handle `__has_attribute` it properly
 #  if !__has_attribute(format)
 #    undef __has_attribute
 #  endif
 #include "cocos2d.h"
-USING_NS_AX;
+using namespace cocos2d;
 
 namespace lyasio
 {

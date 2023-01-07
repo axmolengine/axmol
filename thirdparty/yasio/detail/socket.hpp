@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -228,4 +228,26 @@ inline bool IN6_IS_ADDR_GLOBAL(const in6_addr* a)
 
 #define YASIO_ADDR_ANY(af) (af == AF_INET ? "0.0.0.0" : "::")
 
+#define yasio__setbits(x, m) ((x) |= (m))
+#define yasio__clearbits(x, m) ((x) &= ~(m))
+#define yasio__testbits(x, m) ((x) & (m))
+#define yasio__setlobyte(x, v) ((x) = ((x) & ~((decltype(x))0xff)) | (v))
+
+namespace yasio
+{
+YASIO__NS_INLINE
+namespace inet
+{
+struct socket_event {
+  enum
+  { // event mask
+    null      = 0,
+    read      = 1,
+    write     = 2,
+    error     = 4,
+    readwrite = read | write,
+  };
+};
+} // namespace inet
+} // namespace yasio
 #endif

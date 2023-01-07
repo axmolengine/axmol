@@ -5,7 +5,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2012-2022 HALX99
+Copyright (c) 2012-2023 HALX99
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -303,6 +303,7 @@ void xxsocket::traverse_local_address(std::function<bool(const ip::endpoint&)> h
 
   endpoint ep;
   int iret = getaddrinfo(hostname, nullptr, &hint, &ailist);
+  (void)iret;
   if (ailist != nullptr)
   {
     for (auto aip = ailist; aip != nullptr; aip = aip->ai_next)
@@ -362,17 +363,17 @@ void xxsocket::traverse_local_address(std::function<bool(const ip::endpoint&)> h
 
 xxsocket::xxsocket(void) : fd(invalid_socket) {}
 xxsocket::xxsocket(socket_native_type h) : fd(h) {}
-xxsocket::xxsocket(xxsocket&& right) : fd(invalid_socket) { swap(right); }
+xxsocket::xxsocket(xxsocket&& right) YASIO__NOEXCEPT : fd(invalid_socket) { swap(right); }
 xxsocket::xxsocket(int af, int type, int protocol) : fd(invalid_socket) { open(af, type, protocol); }
 xxsocket::~xxsocket(void) { close(); }
 
-xxsocket& xxsocket::operator=(socket_native_type handle)
+xxsocket& xxsocket::operator=(socket_native_type handle) YASIO__NOEXCEPT
 {
   if (!this->is_open())
     this->fd = handle;
   return *this;
 }
-xxsocket& xxsocket::operator=(xxsocket&& right) { return swap(right); }
+xxsocket& xxsocket::operator=(xxsocket&& right) YASIO__NOEXCEPT { return swap(right); }
 
 xxsocket& xxsocket::swap(xxsocket& rhs)
 {
@@ -550,7 +551,7 @@ int xxsocket::connect_n(socket_native_type s, const endpoint& ep, const std::chr
   if (ret == 0)
     goto done; /* connect completed immediately */
 
-  if ((ret = xxsocket::select(s, &rset, &wset, nullptr, wtimeout)) <= 0)
+  if (xxsocket::select(s, &rset, &wset, nullptr, wtimeout) <= 0)
     error = xxsocket::get_last_errno();
   else if ((FD_ISSET(s, &rset) || FD_ISSET(s, &wset)))
   { /* Everythings are ok */
@@ -930,14 +931,24 @@ const char* xxsocket::strerror(int error)
 {
 #if defined(_WIN32)
   static char error_msg[256];
-  ZeroMemory(error_msg, sizeof(error_msg));
-  ::FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK /* remove line-end charactors \r\n */, NULL,
-                   error, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), // english language
-                   error_msg, sizeof(error_msg), nullptr);
-
-  return error_msg;
+  return xxsocket::strerror_r(error, error_msg, sizeof(error_msg));
 #else
   return ::strerror(error);
+#endif
+}
+
+const char* xxsocket::strerror_r(int error, char* buf, size_t buflen)
+{
+#if defined(_WIN32)
+  ZeroMemory(buf, buflen);
+  ::FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_MAX_WIDTH_MASK /* remove line-end charactors \r\n */, NULL,
+                   error, MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), // english language
+                   buf, static_cast<DWORD>(buflen), nullptr);
+
+  return buf;
+#else
+  (void)::strerror_r(error, buf, buflen);
+  return buf;
 #endif
 }
 
@@ -960,7 +971,7 @@ struct ws2_32_gc {
   ws2_32_gc(void)
   {
     WSADATA dat = {0};
-    WSAStartup(0x0202, &dat);
+    (void)WSAStartup(0x0202, &dat);
   }
   ~ws2_32_gc(void) { WSACleanup(); }
 };

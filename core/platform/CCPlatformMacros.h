@@ -279,7 +279,7 @@ public:                                                             \
     break
 
 #define __AXLOGWITHFUNCTION(s, ...) \
-    ax::log("%s : %s", __FUNCTION__, ax::StringUtils::format(s, ##__VA_ARGS__).c_str())
+    ax::print("%s : %s", __FUNCTION__, ax::StringUtils::format(s, ##__VA_ARGS__).c_str())
 
 /// @name Cocos2d debug
 /// @{
@@ -302,8 +302,8 @@ public:                                                             \
         } while (0)
 
 #elif _AX_DEBUG == 1
-#    define AXLOG(format, ...) ax::log(format, ##__VA_ARGS__)
-#    define AXLOGERROR(format, ...) ax::log(format, ##__VA_ARGS__)
+#    define AXLOG(format, ...) ax::print(format, ##__VA_ARGS__)
+#    define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
 #    define AXLOGINFO(format, ...) \
         do                         \
         {                          \
@@ -311,9 +311,9 @@ public:                                                             \
 #    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
 
 #elif _AX_DEBUG > 1
-#    define AXLOG(format, ...) ax::log(format, ##__VA_ARGS__)
-#    define AXLOGERROR(format, ...) ax::log(format, ##__VA_ARGS__)
-#    define AXLOGINFO(format, ...) ax::log(format, ##__VA_ARGS__)
+#    define AXLOG(format, ...) ax::print(format, ##__VA_ARGS__)
+#    define AXLOGERROR(format, ...) ax::print(format, ##__VA_ARGS__)
+#    define AXLOGINFO(format, ...) ax::print(format, ##__VA_ARGS__)
 #    define AXLOGWARN(...) __AXLOGWITHFUNCTION(__VA_ARGS__)
 #endif  // _AX_DEBUG
 
@@ -321,7 +321,7 @@ public:                                                             \
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0 || AX_LUA_ENGINE_DEBUG == 0
 #    define LUALOG(...)
 #else
-#    define LUALOG(format, ...) ax::log(format, ##__VA_ARGS__)
+#    define LUALOG(format, ...) ax::print(format, ##__VA_ARGS__)
 #endif  // Lua engine debug
 
 //  end of debug group

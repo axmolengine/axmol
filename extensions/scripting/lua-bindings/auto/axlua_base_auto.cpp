@@ -222,56 +222,6 @@ int lua_ax_base_Console_listenOnTCP(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Console_log(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Console* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Console",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Console*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Console_log'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        const char* arg0;
-
-        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Console:log"); arg0 = arg0_tmp.c_str();
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Console_log'", nullptr);
-            return 0;
-        }
-        cobj->log(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Console:log",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Console_log'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_Console_delCommand(lua_State* tolua_S)
 {
     int argc = 0;
@@ -519,6 +469,56 @@ int lua_ax_base_Console_setBindAddress(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Console_print(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Console* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Console",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Console*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Console_print'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        const char* arg0;
+
+        std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Console:print"); arg0 = arg0_tmp.c_str();
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Console_print'", nullptr);
+            return 0;
+        }
+        cobj->print(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Console:print",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Console_print'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Console_isIpv6Server(lua_State* tolua_S)
 {
     int argc = 0;
@@ -579,12 +579,12 @@ int lua_register_ax_base_Console(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"Console");
         tolua_function(tolua_S,"listenOnTCP",lua_ax_base_Console_listenOnTCP);
-        tolua_function(tolua_S,"log",lua_ax_base_Console_log);
         tolua_function(tolua_S,"delCommand",lua_ax_base_Console_delCommand);
         tolua_function(tolua_S,"stop",lua_ax_base_Console_stop);
         tolua_function(tolua_S,"listenOnFileDescriptor",lua_ax_base_Console_listenOnFileDescriptor);
         tolua_function(tolua_S,"setCommandSeparator",lua_ax_base_Console_setCommandSeparator);
         tolua_function(tolua_S,"setBindAddress",lua_ax_base_Console_setBindAddress);
+        tolua_function(tolua_S,"print",lua_ax_base_Console_print);
         tolua_function(tolua_S,"isIpv6Server",lua_ax_base_Console_isIpv6Server);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Console).name(); // rtti is literal storage
@@ -18520,7 +18520,7 @@ int lua_ax_base_Scheduler_setTimeScale(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread(lua_State* tolua_S)
+int lua_ax_base_Scheduler_runOnAxmolThread(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Scheduler* cobj = nullptr;
@@ -18540,7 +18540,61 @@ int lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread(lua_State
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_runOnAxmolThread'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::function<void ()> arg0;
+
+        do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_runOnAxmolThread'", nullptr);
+            return 0;
+        }
+        cobj->runOnAxmolThread(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:runOnAxmolThread",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scheduler_runOnAxmolThread'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Scheduler_removeAllPendingActions(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Scheduler* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Scheduler",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Scheduler*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Scheduler_removeAllPendingActions'", nullptr);
         return 0;
     }
 #endif
@@ -18550,19 +18604,19 @@ int lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread(lua_State
     {
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Scheduler_removeAllPendingActions'", nullptr);
             return 0;
         }
-        cobj->removeAllFunctionsToBePerformedInCocosThread();
+        cobj->removeAllPendingActions();
         lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:removeAllFunctionsToBePerformedInCocosThread",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Scheduler:removeAllPendingActions",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Scheduler_removeAllPendingActions'.",&tolua_err);
 #endif
 
     return 0;
@@ -18665,7 +18719,8 @@ int lua_register_ax_base_Scheduler(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"Scheduler");
         tolua_function(tolua_S,"new",lua_ax_base_Scheduler_constructor);
         tolua_function(tolua_S,"setTimeScale",lua_ax_base_Scheduler_setTimeScale);
-        tolua_function(tolua_S,"removeAllFunctionsToBePerformedInCocosThread",lua_ax_base_Scheduler_removeAllFunctionsToBePerformedInCocosThread);
+        tolua_function(tolua_S,"runOnAxmolThread",lua_ax_base_Scheduler_runOnAxmolThread);
+        tolua_function(tolua_S,"removeAllPendingActions",lua_ax_base_Scheduler_removeAllPendingActions);
         tolua_function(tolua_S,"getTimeScale",lua_ax_base_Scheduler_getTimeScale);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Scheduler).name(); // rtti is literal storage
@@ -52501,6 +52556,42 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
     }while(0);
     ok  = true;
     do{
+        if (argc == 7) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            unsigned int arg3;
+            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            bool arg4;
+            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            ax::Color4B arg5;
+            ok &=luaval_to_color4b(tolua_S, 7, &arg5, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg6;
+            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            cobj->drawCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
         if (argc == 8) {
             ax::Vec2 arg0;
             ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
@@ -52535,6 +52626,50 @@ int lua_ax_base_DrawNode_drawCircle(lua_State* tolua_S)
 
             if (!ok) { break; }
             cobj->drawCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 9) {
+            ax::Vec2 arg0;
+            ok &= luaval_to_vec2(tolua_S, 2, &arg0, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg1;
+            ok &= luaval_to_number(tolua_S, 3,&arg1, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            unsigned int arg3;
+            ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            bool arg4;
+            ok &= luaval_to_boolean(tolua_S, 6,&arg4, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg5;
+            ok &= luaval_to_number(tolua_S, 7,&arg5, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg6;
+            ok &= luaval_to_number(tolua_S, 8,&arg6, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            ax::Color4B arg7;
+            ok &=luaval_to_color4b(tolua_S, 9, &arg7, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            double arg8;
+            ok &= luaval_to_number(tolua_S, 10,&arg8, "ax.DrawNode:drawCircle");
+
+            if (!ok) { break; }
+            cobj->drawCircle(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
             lua_settop(tolua_S, 1);
             return 1;
         }
@@ -88457,53 +88592,6 @@ int lua_ax_base_Camera_getViewProjectionMatrix(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Camera_applyViewport(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Camera* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_applyViewport'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_applyViewport'", nullptr);
-            return 0;
-        }
-        cobj->applyViewport();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:applyViewport",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_applyViewport'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_Camera_setBackgroundBrush(lua_State* tolua_S)
 {
     int argc = 0;
@@ -88906,7 +88994,7 @@ int lua_ax_base_Camera_isBrushValid(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Camera_getDepthInView(lua_State* tolua_S)
+int lua_ax_base_Camera_applyViewport(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Camera* cobj = nullptr;
@@ -88926,32 +89014,29 @@ int lua_ax_base_Camera_getDepthInView(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getDepthInView'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_applyViewport'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 0) 
     {
-        ax::Mat4 arg0;
-
-        ok &= luaval_to_mat4(tolua_S, 2, &arg0, "ax.Camera:getDepthInView");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_getDepthInView'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_applyViewport'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getDepthInView(arg0);
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        cobj->applyViewport();
+        lua_settop(tolua_S, 1);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:getDepthInView",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:applyViewport",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_getDepthInView'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_applyViewport'.",&tolua_err);
 #endif
 
     return 0;
@@ -89294,53 +89379,6 @@ int lua_ax_base_Camera_getCameraFlag(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Camera_getType(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::Camera* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getType'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_getType'", nullptr);
-            return 0;
-        }
-        int ret = (int)cobj->getType();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:getType",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_getType'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_base_Camera_setZoom(lua_State* tolua_S)
 {
     int argc = 0;
@@ -89497,7 +89535,7 @@ int lua_ax_base_Camera_getRenderOrder(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
+int lua_ax_base_Camera_getFOV(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Camera* cobj = nullptr;
@@ -89517,32 +89555,29 @@ int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_projectGL'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getFOV'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
+    if (argc == 0) 
     {
-        ax::Vec3 arg0;
-
-        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:projectGL");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_projectGL'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_getFOV'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->projectGL(arg0);
-        vec2_to_luaval(tolua_S, ret);
+        auto&& ret = cobj->getFOV();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:projectGL",argc, 1);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:getFOV",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_projectGL'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_getFOV'.",&tolua_err);
 #endif
 
     return 0;
@@ -89697,7 +89732,7 @@ int lua_ax_base_Camera_setScene(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_base_Camera_getFOV(lua_State* tolua_S)
+int lua_ax_base_Camera_projectGL(lua_State* tolua_S)
 {
     int argc = 0;
     ax::Camera* cobj = nullptr;
@@ -89717,29 +89752,32 @@ int lua_ax_base_Camera_getFOV(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     if (!cobj) 
     {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getFOV'", nullptr);
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_projectGL'", nullptr);
         return 0;
     }
 #endif
 
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
+    if (argc == 1) 
     {
+        ax::Vec3 arg0;
+
+        ok &= luaval_to_vec3(tolua_S, 2, &arg0, "ax.Camera:projectGL");
         if(!ok)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_getFOV'", nullptr);
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_projectGL'", nullptr);
             return 0;
         }
-        auto&& ret = cobj->getFOV();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        auto&& ret = cobj->projectGL(arg0);
+        vec2_to_luaval(tolua_S, ret);
         return 1;
     }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:getFOV",argc, 0);
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:projectGL",argc, 1);
     return 0;
 
 #if _AX_DEBUG >= 1
     tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_getFOV'.",&tolua_err);
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_projectGL'.",&tolua_err);
 #endif
 
     return 0;
@@ -89934,6 +89972,56 @@ int lua_ax_base_Camera_setCameraFlag(lua_State* tolua_S)
 #if _AX_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_setCameraFlag'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_base_Camera_getDepthInView(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Camera* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Camera",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Camera*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Camera_getDepthInView'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Mat4 arg0;
+
+        ok &= luaval_to_mat4(tolua_S, 2, &arg0, "ax.Camera:getDepthInView");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Camera_getDepthInView'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getDepthInView(arg0);
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Camera:getDepthInView",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Camera_getDepthInView'.",&tolua_err);
 #endif
 
     return 0;
@@ -90400,7 +90488,6 @@ int lua_register_ax_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_ax_base_Camera_constructor);
         tolua_function(tolua_S,"getDepth",lua_ax_base_Camera_getDepth);
         tolua_function(tolua_S,"getViewProjectionMatrix",lua_ax_base_Camera_getViewProjectionMatrix);
-        tolua_function(tolua_S,"applyViewport",lua_ax_base_Camera_applyViewport);
         tolua_function(tolua_S,"setBackgroundBrush",lua_ax_base_Camera_setBackgroundBrush);
         tolua_function(tolua_S,"getZoom",lua_ax_base_Camera_getZoom);
         tolua_function(tolua_S,"lookAt",lua_ax_base_Camera_lookAt);
@@ -90409,7 +90496,7 @@ int lua_register_ax_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"setFarPlane",lua_ax_base_Camera_setFarPlane);
         tolua_function(tolua_S,"getProjectionMatrix",lua_ax_base_Camera_getProjectionMatrix);
         tolua_function(tolua_S,"isBrushValid",lua_ax_base_Camera_isBrushValid);
-        tolua_function(tolua_S,"getDepthInView",lua_ax_base_Camera_getDepthInView);
+        tolua_function(tolua_S,"applyViewport",lua_ax_base_Camera_applyViewport);
         tolua_function(tolua_S,"clearBackground",lua_ax_base_Camera_clearBackground);
         tolua_function(tolua_S,"setAdditionalProjection",lua_ax_base_Camera_setAdditionalProjection);
         tolua_function(tolua_S,"initDefault",lua_ax_base_Camera_initDefault);
@@ -90417,19 +90504,19 @@ int lua_register_ax_base_Camera(lua_State* tolua_S)
         tolua_function(tolua_S,"applyZoom",lua_ax_base_Camera_applyZoom);
         tolua_function(tolua_S,"setFOV",lua_ax_base_Camera_setFOV);
         tolua_function(tolua_S,"getCameraFlag",lua_ax_base_Camera_getCameraFlag);
-        tolua_function(tolua_S,"getType",lua_ax_base_Camera_getType);
         tolua_function(tolua_S,"setZoom",lua_ax_base_Camera_setZoom);
         tolua_function(tolua_S,"initOrthographic",lua_ax_base_Camera_initOrthographic);
         tolua_function(tolua_S,"getRenderOrder",lua_ax_base_Camera_getRenderOrder);
-        tolua_function(tolua_S,"projectGL",lua_ax_base_Camera_projectGL);
+        tolua_function(tolua_S,"getFOV",lua_ax_base_Camera_getFOV);
         tolua_function(tolua_S,"isVisibleInFrustum",lua_ax_base_Camera_isVisibleInFrustum);
         tolua_function(tolua_S,"setDepth",lua_ax_base_Camera_setDepth);
         tolua_function(tolua_S,"setScene",lua_ax_base_Camera_setScene);
-        tolua_function(tolua_S,"getFOV",lua_ax_base_Camera_getFOV);
+        tolua_function(tolua_S,"projectGL",lua_ax_base_Camera_projectGL);
         tolua_function(tolua_S,"getViewMatrix",lua_ax_base_Camera_getViewMatrix);
         tolua_function(tolua_S,"getNearPlane",lua_ax_base_Camera_getNearPlane);
         tolua_function(tolua_S,"project",lua_ax_base_Camera_project);
         tolua_function(tolua_S,"setCameraFlag",lua_ax_base_Camera_setCameraFlag);
+        tolua_function(tolua_S,"getDepthInView",lua_ax_base_Camera_getDepthInView);
         tolua_function(tolua_S,"getFarPlane",lua_ax_base_Camera_getFarPlane);
         tolua_function(tolua_S,"isViewProjectionUpdated",lua_ax_base_Camera_isViewProjectionUpdated);
         tolua_function(tolua_S,"initPerspective",lua_ax_base_Camera_initPerspective);
