@@ -50,7 +50,7 @@ uniform mat4 u_MVPMatrix;
 void main()
 {
     v_color = vec4(a_color.rgb * a_color.a * u_alpha, a_color.a * u_alpha);
-    v_texcoord = a_texCoord;
+    v_texCoord = a_texCoord;
 
     gl_Position = u_MVPMatrix * a_position;
 }
