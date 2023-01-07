@@ -5,7 +5,7 @@ $WINSDK_VER = $args[1]
 $CONFIG_ALL_OPTIONS=@()
 
 if ($BUILD_ARCH -eq "x86") {
-    $CONFIG_ALL_OPTIONS += '-A', 'Win32'
+    $CONFIG_ALL_OPTIONS += '-A', 'Win32', '-DBUILD_SHARED_LIBS=ON'
 }
 
 # windows sdk version, require xxx, but 10.0.22621.0 recommanded
