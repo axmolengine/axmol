@@ -31,6 +31,8 @@ cmake_minimum_required(VERSION 3.10)
 
 project(axmol)
 
+SET(AX_USE_ALSOFT OFF CACHE BOOL "")
+
 if(XCODE)
     set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
 endif()
