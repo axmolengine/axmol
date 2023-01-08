@@ -20,11 +20,14 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        arch:
-          - x86
-          - x64
+        config:
+          - {arch: x86, dll: false}
+          - {arch: x64, dll: false}
+          - {arch: x86, dll: true}
+          - {arch: x64, dll: true}
     env:
-      BUILD_ARCH: ${{ matrix.arch }}
+      BUILD_ARCH: ${{ matrix.config.arch }}
+      BUILD_DLL: ${{ matrix.config.dll }}
 
     steps:
     - uses: actions/checkout@v3
@@ -39,7 +42,7 @@ jobs:
         arch: ${{ env.BUILD_ARCH }}
 
     - name: Build
-      run: tools\win-ci\build.ps1 $env:BUILD_ARCH
+      run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:BUILD_DLL
   toolset-vs2019:
     if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
     # The CMake configure and build commands are platform agnostic and should work equally
