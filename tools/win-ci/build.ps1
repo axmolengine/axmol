@@ -14,7 +14,7 @@ if ($BUILD_DLL -eq "true") {
 
 # windows sdk version, require xxx, but 10.0.22621.0 recommanded
 
-if (env:$WINSDK_VER -eq '') { # empty, cmake will choose same with runner windows OS build version
+if ($env:WINSDK_VER -eq '') { # empty, cmake will choose same with runner windows OS build version
     cmake -S . -B build_$BUILD_ARCH $CONFIG_ALL_OPTIONS -Thost=x64 -DAX_ENABLE_EXT_IMGUI=TRUE -DAX_ENABLE_EXT_LIVE2D=TRUE -DAX_ENABLE_EXT_EFFEKSEER=TRUE
 } else {
     cmake -S . -B build_$BUILD_ARCH $CONFIG_ALL_OPTIONS -Thost=x64 -DAX_ENABLE_EXT_IMGUI=TRUE -DAX_ENABLE_EXT_LIVE2D=TRUE -DAX_ENABLE_EXT_EFFEKSEER=TRUE "-DCMAKE_SYSTEM_VERSION=$env:WINSDK_VER"
