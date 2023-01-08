@@ -31,7 +31,7 @@ attribute mediump vec2 a_texCoord;
 attribute mediump vec4 a_color;
 
 varying mediump vec4 v_color;
-varying mediump vec2 v_texcoord;
+varying mediump vec2 v_texCoord;
 
 #else
 
@@ -40,7 +40,7 @@ attribute vec2 a_texCoord;
 attribute vec4 a_color;
 
 varying vec4 v_color;
-varying vec2 v_texcoord;
+varying vec2 v_texCoord;
 
 #endif
 
