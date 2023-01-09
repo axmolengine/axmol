@@ -2,7 +2,7 @@
 *
  Copyright (c) 2023 Bytedance Inc.
 
- https://axmolengine.github.io/
+ https://axmolengine.github.io/ 
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -251,11 +251,12 @@ WebSocket::WebSocket() : _isDestroyed(std::make_shared<std::atomic<bool>>(false)
                 return;
             close();
         });
+
+    _scheduler->schedule([=, this](float) { dispatchEvents(); }, this, 0, false, "#");
 }
 WebSocket::~WebSocket()
 {
-    std::lock_guard<std::mutex> lk(__instanceMutex);
-
+    __instanceMutex.lock();
     if (__websocketInstances != nullptr)
     {
         auto iter = std::find(__websocketInstances->begin(), __websocketInstances->end(), this);
@@ -272,11 +273,21 @@ WebSocket::~WebSocket()
                 this);
         }
     }
+    __instanceMutex.unlock(); // quick release lock to avoid dead lock
 
     Director::getInstance()->getEventDispatcher()->removeEventListener(_resetDirectorListener);
     *_isDestroyed = true;
 
     delete _service;
+
+    _scheduler->unscheduleAllForTarget(this);
+
+    // Design A(Current): dispatch pending events at destructor. user can't delete websocket instance in delegate callbacks
+    // Design B: purge pending events without dispatch.
+    dispatchEvents();
+
+    if(!_eventQueue.unsafe_empty()) // after _service destroyed, we can safe check by unsafe_xxx stubs
+        AXLOGERROR("WebSocket: still have %zu pending events not dispatched!", _eventQueue.unsafe_size());
 }
 
 bool WebSocket::init(const Delegate& delegate,
@@ -304,6 +315,39 @@ bool WebSocket::init(const Delegate& delegate,
         _service->open(0, YCK_TCP_CLIENT);
 
     return true;
+}
+
+void WebSocket::dispatchEvents()
+{
+    if (_eventQueue.unsafe_empty())
+        return;
+    if (_delegate)
+    {
+        auto lck = _eventQueue.get_lock();
+        while (!_eventQueue.empty())
+        {
+            auto event = _eventQueue.front();
+            _eventQueue.unsafe_pop_front();
+
+            switch (event->getType())
+            {
+            case Event::Type::ON_OPEN:
+                _delegate->onOpen(this);
+                break;
+            case Event::Type::ON_CLOSE:
+                _delegate->onClose(this);
+                break;
+            case Event::Type::ON_ERROR:
+                _delegate->onError(this, static_cast<ErrorEvent*>(event)->getErrorCode());
+                break;
+            case Event::Type::ON_MESSAGE: 
+                _delegate->onMessage(this, WebSocket::Data{static_cast<MessageEvent*>(event)});
+                break;
+            }
+
+            event->release();
+        }
+    }
 }
 
 void WebSocket::setupParsers()
@@ -388,13 +432,7 @@ int WebSocket::on_frame_end(websocket_parser* parser)
 
         bool isBinary = ws->_opcode == WS_OP_BINARY;
         std::unique_lock<std::recursive_mutex> lck(ws->_receivedDataMtx);
-        ws->_scheduler->runOnAxmolThread([=, message = std::move(ws->_receivedData)] {
-            WebSocket::Data data;
-            data.bytes    = message.data();
-            data.len      = message.size();
-            data.isBinary = ws->_opcode == WS_OP_BINARY;
-            ws->_delegate->onMessage(ws, data);
-        });
+        ws->_eventQueue.emplace_back(new MessageEvent{std::move(ws->_receivedData), ws->_opcode == WS_OP_BINARY});
     }
 
     return 0;
@@ -528,13 +566,13 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
                     auto& timerForRead = channel->get_user_timer();
                     timerForRead.cancel(*_service);
                     _transport = event->transport();
-                    _scheduler->runOnAxmolThread([this]() { _delegate->onOpen(this); });
+                    _eventQueue.emplace_back(new OpenEvent());
                 }
                 else
                 {
                     //_state = State::CLOSING;
                     _service->close(channelIndex);
-                    _scheduler->runOnAxmolThread([this, error]() { _delegate->onError(this, error); });
+                    _eventQueue.emplace_back(new ErrorEvent(error));
                 }
             }
         }
@@ -590,8 +628,8 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
             auto& timerForRead = channel->get_user_timer();
             timerForRead.cancel(*_service);
             timerForRead.expires_from_now(std::chrono::seconds(30));
-            timerForRead.async_wait_once(*_service, [=](io_service& s) {
-                _scheduler->runOnAxmolThread([this]() { _delegate->onError(this, ErrorCode::TIME_OUT); });
+            timerForRead.async_wait_once(*_service, [this, channelIndex](io_service& s) {
+                _eventQueue.emplace_back(new ErrorEvent(ErrorCode::TIME_OUT));
 
                 //_state = State::CLOSING;
                 s.close(channelIndex);  // timeout
@@ -599,7 +637,7 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
         }
         else
         {
-            _scheduler->runOnAxmolThread([this]() { _delegate->onError(this, ErrorCode::CONNECTION_FAILURE); });
+            _eventQueue.emplace_back(new ErrorEvent(ErrorCode::CONNECTION_FAILURE));
         }
         break;
     case YEK_ON_CLOSE:
@@ -607,8 +645,8 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
         if (_state == State::OPEN || _state == State::CLOSING)
         {
             _state = State::CLOSED;
+            _eventQueue.emplace_back(new CloseEvent());
 
-            _scheduler->runOnAxmolThread([this]() { _delegate->onClose(this); });
             if (_syncCloseState)
                 _syncCloseState->set_value(event->status());
         }
