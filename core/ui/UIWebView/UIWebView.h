@@ -29,7 +29,7 @@
 #include "ui/GUIExport.h"
 #include "base/CCData.h"
 
-#if defined(_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if (defined(_WIN32) && defined(_AX_HAVE_WEBVIEW2)) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 /**
  * @addtogroup ui
  * @{

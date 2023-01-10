@@ -10,6 +10,7 @@
 #pragma once
 
 #include <vector>
+#include <chrono>
 #include "yasio/detail/socket.hpp"
 
 namespace yasio
@@ -38,7 +39,7 @@ public:
 
   int poll_io(int waitd_ms)
   {
-    timeval waitd_tv = {(decltype(timeval::tv_sec))(waitd_ms / 1000), (decltype(timeval::tv_usec))(waitd_ms % 1000)};
+    timeval waitd_tv = {(decltype(timeval::tv_sec))(waitd_ms / std::milli::den), (decltype(timeval::tv_usec))(waitd_ms % std::milli::den)};
     return ::select(this->max_descriptor_, &(fd_set_[read_op]), &(fd_set_[write_op]), nullptr, &waitd_tv);
   }
 

@@ -196,7 +196,7 @@
 
 ## robin-map
 - [![Upstream](https://img.shields.io/github/v/tag/Tessil/robin-map?label=Upstream)](https://github.com/Tessil/robin-map)
-- Version: 1.0.1 with modified for more compatible with stl
+- Version: 1.2.1 with modified for more compatible with stl
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
 - License: MIT
@@ -243,7 +243,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 3.39.6
+- Version: git 3.39.7-2e7723f
 - License: MIT WITH Anti-996
 
 ## zlib

@@ -39,7 +39,6 @@ SOFTWARE.
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "yasio/detail/thread_name.hpp"
-#include "yasio/detail/signal_blocker.hpp"
 
 #if defined(YASIO_SSL_BACKEND)
 #  include "yasio/detail/ssl.hpp"
@@ -207,7 +206,7 @@ io_channel::io_channel(io_service& service, int index) : io_base(), service_(ser
   socket_     = std::make_shared<xxsocket>();
   state_      = io_base::state::CLOSED;
   index_      = index;
-  decode_len_ = [=](void* ptr, int len) { return this->__builtin_decode_len(ptr, len); };
+  decode_len_ = [this](void* ptr, int len) { return this->__builtin_decode_len(ptr, len); };
 }
 #if defined(YASIO_SSL_BACKEND)
 SSL_CTX* io_channel::get_ssl_context(bool client) const
@@ -443,13 +442,13 @@ void io_transport::complete_op(io_send_op* op, int error)
 }
 void io_transport::set_primitives()
 {
-  this->write_cb_ = [=](const void* data, int len, const ip::endpoint*, int& error) {
+  this->write_cb_ = [this](const void* data, int len, const ip::endpoint*, int& error) {
     int n = socket_->send(data, len);
     if (n < 0)
       error = xxsocket::get_last_errno();
     return n;
   };
-  this->read_cb_ = [=](void* data, int len, int revent, int& error) {
+  this->read_cb_ = [this](void* data, int len, int revent, int& error) {
     if (revent)
     {
       int n = socket_->recv(data, len);
@@ -478,13 +477,13 @@ int io_transport_ssl::do_ssl_handshake(int& error)
   if (ret == 0) // handshake succeed
   {             // because we invoke handshake in call_read, so we emit EWOULDBLOCK to mark ssl transport status `ok`
     this->state_   = io_base::state::OPENED;
-    this->read_cb_ = [=](void* data, int len, int revent, int& error) {
+    this->read_cb_ = [this](void* data, int len, int revent, int& error) {
       if (revent)
         return yssl_read(ssl_, data, len, error);
       error = EWOULDBLOCK;
       return -1;
     };
-    this->write_cb_ = [=](const void* data, int len, const ip::endpoint*, int& error) { return yssl_write(ssl_, data, len, error); };
+    this->write_cb_ = [this](const void* data, int len, const ip::endpoint*, int& error) { return yssl_write(ssl_, data, len, error); };
 
     YASIO_KLOGD("[index: %d] the connection #%u <%s> --> <%s> is established.", ctx_->index_, this->id_, this->local_endpoint().to_string().c_str(),
                 this->remote_endpoint().to_string().c_str());
@@ -517,7 +516,7 @@ void io_transport_ssl::do_ssl_shutdown()
 }
 void io_transport_ssl::set_primitives()
 {
-  this->read_cb_ = [=](void* /*data*/, int /*len*/, int /*revent*/, int& error) { return do_ssl_handshake(error); };
+  this->read_cb_ = [this](void* /*data*/, int /*len*/, int /*revent*/, int& error) { return do_ssl_handshake(error); };
 }
 #endif
 // ----------------------- io_transport_udp ----------------
@@ -589,7 +588,7 @@ void io_transport_udp::set_primitives()
     io_transport::set_primitives();
   else
   {
-    this->write_cb_ = [=](const void* data, int len, const ip::endpoint* destination, int& error) {
+    this->write_cb_ = [this](const void* data, int len, const ip::endpoint* destination, int& error) {
       assert(destination);
       int n = socket_->sendto(data, len, *destination);
       if (n < 0)
@@ -600,7 +599,7 @@ void io_transport_udp::set_primitives()
       }
       return n;
     };
-    this->read_cb_ = [=](void* data, int len, int revent, int& error) {
+    this->read_cb_ = [this](void* data, int len, int revent, int& error) {
       if (revent)
       {
         ip::endpoint peer;
@@ -735,8 +734,6 @@ void io_service::start(event_cb_t cb)
     this->state_ = io_service::state::RUNNING;
     if (!options_.no_new_thread_)
     {
-      signal_blocker sb;
-      (void)sb;
       this->worker_    = std::thread(&io_service::run, this);
       this->worker_id_ = worker_.get_id();
     }
@@ -805,7 +802,7 @@ void io_service::initialize(const io_hostent* channel_eps, int channel_count)
   if (channel_count < 1)
     channel_count = 1;
 
-  options_.resolv_ = [=](std::vector<ip::endpoint>& eps, const char* host, unsigned short port) { return this->resolve(eps, host, port); };
+  options_.resolv_ = [this](std::vector<ip::endpoint>& eps, const char* host, unsigned short port) { return this->resolve(eps, host, port); };
   register_descriptor(interrupter_.read_descriptor(), socket_event::read);
 
   // create channels
@@ -894,11 +891,9 @@ void io_service::run()
 
   do
   {
-    auto wait_duration   = get_timeout(this->wait_duration_); // Gets current wait duration
-    this->wait_duration_ = yasio__max_wait_usec;              // Reset next wait duration
+    fd_set = this->fd_set_;
 
-    fd_set           = this->fd_set_;
-    timeval waitd_tv = {(decltype(timeval::tv_sec))(wait_duration / 1000000), (decltype(timeval::tv_usec))(wait_duration % 1000000)};
+    const auto waitd_usec = get_timeout(this->wait_duration_); // Gets current wait duration
 #if defined(YASIO_HAVE_CARES)
     /**
      * retrieves the set of file descriptors which the calling application should poll io,
@@ -907,10 +902,13 @@ void io_service::run()
      * https://c-ares.org/ares_timeout.html
      * https://c-ares.org/ares_process_fd.html
      */
-    auto ares_nfds = do_ares_fds(ares_socks, fd_set, waitd_tv);
+    timeval waitd_tv    = {(decltype(timeval::tv_sec))(waitd_usec / std::micro::den), (decltype(timeval::tv_usec))(waitd_usec % std::micro::den)};
+    auto ares_nfds      = do_ares_fds(ares_socks, fd_set, waitd_tv);
+    const auto waitd_ms = static_cast<int>(waitd_tv.tv_sec * std::milli::den + waitd_tv.tv_usec / std::milli::den);
+#else
+    const auto waitd_ms = static_cast<int>(waitd_usec / std::milli::den);
 #endif
 
-    const int waitd_ms = static_cast<int>(waitd_tv.tv_sec * 1000 + waitd_tv.tv_usec / 1000);
     if (waitd_ms > 0)
     {
       YASIO_KLOGV("[core] poll_io max_nfds=%d, waiting... %ld milliseconds", fd_set.max_descriptor(), waitd_ms);
@@ -1219,8 +1217,8 @@ void io_service::do_connect_completion(io_channel* ctx, fd_set_adapter& fd_set)
 #if defined(YASIO_SSL_BACKEND)
 SSL_CTX* io_service::init_ssl_context(ssl_role role)
 {
-  auto ctx         = role == YSSL_CLIENT ? yssl_ctx_new(yssl_options{options_.cafile_.c_str(), nullptr, true})
-                                         : yssl_ctx_new(yssl_options{options_.crtfile_.c_str(), options_.keyfile_.c_str(), false});
+  auto ctx         = role == YSSL_CLIENT ? yssl_ctx_new(yssl_options{yasio__c_str(options_.cafile_), nullptr, true})
+                                         : yssl_ctx_new(yssl_options{yasio__c_str(options_.crtfile_), yasio__c_str(options_.keyfile_), false});
   ssl_roles_[role] = ctx;
   return ctx;
 }
@@ -1309,10 +1307,18 @@ void io_service::recreate_ares_channel()
   if (ares_)
     destroy_ares_channel();
 
+  int optmask          = ARES_OPT_TIMEOUTMS | ARES_OPT_TRIES /* | ARES_OPT_LOOKUPS*/;
   ares_options options = {};
   options.timeout      = static_cast<int>(this->options_.dns_queries_timeout_ / std::milli::den);
   options.tries        = this->options_.dns_queries_tries_;
-  int status           = ::ares_init_options(&ares_, &options, ARES_OPT_TIMEOUTMS | ARES_OPT_TRIES /* | ARES_OPT_LOOKUPS*/);
+#  if defined(__linux__) && !defined(__ANDROID__)
+  if (yasio::is_regular_file(YASIO_SYSTEMD_RESOLV_PATH))
+  {
+    options.resolvconf_path = strndup(YASIO_SYSTEMD_RESOLV_PATH, YASIO_SYSTEMD_RESOLV_PATH_LEN);
+    optmask |= ARES_OPT_RESOLVCONF;
+  }
+#  endif
+  int status = ::ares_init_options(&ares_, &options, optmask);
   if (status == ARES_SUCCESS)
   {
     YASIO_KLOGD("[c-ares] create channel succeed");
@@ -1806,6 +1812,8 @@ void io_service::process_timers()
 }
 highp_time_t io_service::get_timeout(highp_time_t usec)
 {
+  this->wait_duration_ = yasio__max_wait_usec; // Reset next wait duration per frame
+
   if (this->timer_queue_.empty())
     return usec;
 
@@ -1905,11 +1913,11 @@ void io_service::start_query(io_channel* ctx)
 #endif
 #if !defined(YASIO_HAVE_CARES)
   // init async name query thread state
-  std::string resolving_host                    = ctx->remote_host_;
-  u_short resolving_port                        = ctx->remote_port_;
+  auto resolving_host                           = ctx->remote_host_;
+  auto resolving_port                           = ctx->remote_port_;
   std::weak_ptr<cxx17::shared_mutex> weak_mutex = life_mutex_;
   std::weak_ptr<life_token> life_token          = life_token_;
-  std::thread async_resolv_thread([=] {
+  std::thread async_resolv_thread([this, life_token, weak_mutex, resolving_host, resolving_port, ctx] {
     // check life token
     if (life_token.use_count() < 1)
       return;
