@@ -430,7 +430,6 @@ int WebSocket::on_frame_end(websocket_parser* parser)
     {
         ws->_frameState = FrameState::FIN;
 
-        bool isBinary = ws->_opcode == WS_OP_BINARY;
         std::unique_lock<std::recursive_mutex> lck(ws->_receivedDataMtx);
         ws->_eventQueue.emplace_back(new MessageEvent{std::move(ws->_receivedData), ws->_opcode == WS_OP_BINARY});
     }
