@@ -1048,6 +1048,8 @@ public:
   // Gets channel by index
   YASIO__DECL io_channel* channel_at(size_t index) const;
 
+  YASIO__DECL static const char* strerror(int error);
+
 private:
   YASIO__DECL void do_stop(uint8_t flags);
   YASIO__DECL void schedule_timer(highp_timer*, timer_cb_t&&);
@@ -1150,8 +1152,6 @@ private:
   // supporting server
   YASIO__DECL void do_accept(io_channel*);
   YASIO__DECL void do_accept_completion(io_channel*, fd_set_adapter& fd_set);
-
-  YASIO__DECL static const char* strerror(int error);
 
   /*
   ** summary: For udp-server only, make dgram handle to communicate with client

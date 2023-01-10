@@ -384,7 +384,26 @@ xxsocket& xxsocket::swap(xxsocket& rhs)
 bool xxsocket::open(int af, int type, int protocol)
 {
   if (invalid_socket == this->fd)
+  {
+#  if defined(_WIN32)
+    this->fd             = ::socket(af, type, protocol);
+    //socket_native_type s = ::WSASocketW(af, type, protocol, 0, 0, WSA_FLAG_OVERLAPPED);
+    ////get_last_error(ec, s == invalid_socket);
+    //if (s == invalid_socket)
+    //  return false;
+    //this->fd = s;
+    //if (af == ASIO_OS_DEF(AF_INET6))
+    //{
+    //  // Try to enable the POSIX default behaviour of having IPV6_V6ONLY set to
+    //  // false. This will only succeed on Windows Vista and later versions of
+    //  // Windows, where a dual-stack IPv4/v6 implementation is available.
+    //  DWORD optval = 0;
+    //  ::setsockopt(s, IPPROTO_IPV6, IPV6_V6ONLY, reinterpret_cast<const char*>(&optval), sizeof(optval));
+    //}
+#else
     this->fd = ::socket(af, type, protocol);
+#endif
+  }
   return is_open();
 }
 
