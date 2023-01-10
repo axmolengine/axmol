@@ -1056,6 +1056,8 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
+
+        setFrameSize(w, h);
         /*
          x-studio spec, fix view size incorrect when window size changed.
          The original code behavior:
