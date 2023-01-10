@@ -551,8 +551,8 @@ void WebSocketDelayTest::onClose(network::WebSocket* ws)
     log("onClose: websocket instance (%p) closed.", ws);
     if (ws == _wsiSendText)
     {
-        delete _wsiSendText;
-        _wsiSendText = nullptr;
+        // delete _wsiSendText;
+        // _wsiSendText = nullptr;
         _sendTextStatus->setString("Send Text WS was closed");
     }
     log("WebSocketDelayTest ref: %u", _referenceCount);
