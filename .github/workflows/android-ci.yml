@@ -53,3 +53,9 @@ jobs:
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: tools/unix-ci/run-script.sh
+
+    - uses: actions/upload-artifact@v3
+      with:
+        path: |
+          templates/**/*.apk
+          tests/**/*.apk
