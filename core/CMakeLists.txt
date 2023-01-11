@@ -145,6 +145,9 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
+
 # use thirdparty libs
 add_subdirectory(${_AX_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${_AX_CORE_LIB} thirdparty)
