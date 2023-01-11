@@ -1192,7 +1192,7 @@ void Console::commandAllocator(socket_native_type fd, std::string_view /*args*/)
 void Console::commandConfig(socket_native_type fd, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
-    sched->performFunctionInCocosThread([=]() {
+    sched->runOnAxmolThread([=]() {
         Console::Utility::mydprintf(fd, "%s", Configuration::getInstance()->getInfo().c_str());
         Console::Utility::sendPrompt(fd);
     });
@@ -1212,7 +1212,7 @@ void Console::commandDirectorSubCommandPause(socket_native_type /*fd*/, std::str
 {
     auto director    = Director::getInstance();
     Scheduler* sched = director->getScheduler();
-    sched->performFunctionInCocosThread([]() { Director::getInstance()->pause(); });
+    sched->runOnAxmolThread([]() { Director::getInstance()->pause(); });
 }
 
 void Console::commandDirectorSubCommandResume(socket_native_type /*fd*/, std::string_view /*args*/)
@@ -1225,7 +1225,7 @@ void Console::commandDirectorSubCommandStop(socket_native_type /*fd*/, std::stri
 {
     auto director    = Director::getInstance();
     Scheduler* sched = director->getScheduler();
-    sched->performFunctionInCocosThread([]() { Director::getInstance()->stopAnimation(); });
+    sched->runOnAxmolThread([]() { Director::getInstance()->stopAnimation(); });
 }
 
 void Console::commandDirectorSubCommandStart(socket_native_type /*fd*/, std::string_view /*args*/)
@@ -1254,7 +1254,7 @@ void Console::commandExit(socket_native_type fd, std::string_view /*args*/)
 void Console::commandFileUtils(socket_native_type fd, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
-    sched->performFunctionInCocosThread(std::bind(&Console::printFileUtils, this, fd));
+    sched->runOnAxmolThread(std::bind(&Console::printFileUtils, this, fd));
 }
 
 void Console::commandFileUtilsSubCommandFlush(socket_native_type /*fd*/, std::string_view /*args*/)
@@ -1272,7 +1272,7 @@ void Console::commandFpsSubCommandOnOff(socket_native_type /*fd*/, std::string_v
     bool state       = (args.compare("on") == 0);
     Director* dir    = Director::getInstance();
     Scheduler* sched = dir->getScheduler();
-    sched->performFunctionInCocosThread(std::bind(&Director::setStatsDisplay, dir, state));
+    sched->runOnAxmolThread(std::bind(&Director::setStatsDisplay, dir, state));
 }
 
 void Console::commandHelp(socket_native_type fd, std::string_view /*args*/)
@@ -1308,14 +1308,14 @@ void Console::commandProjectionSubCommand2d(socket_native_type /*fd*/, std::stri
 {
     auto director    = Director::getInstance();
     Scheduler* sched = director->getScheduler();
-    sched->performFunctionInCocosThread([=]() { director->setProjection(Director::Projection::_2D); });
+    sched->runOnAxmolThread([=]() { director->setProjection(Director::Projection::_2D); });
 }
 
 void Console::commandProjectionSubCommand3d(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     auto director    = Director::getInstance();
     Scheduler* sched = director->getScheduler();
-    sched->performFunctionInCocosThread([=]() { director->setProjection(Director::Projection::_3D); });
+    sched->runOnAxmolThread([=]() { director->setProjection(Director::Projection::_3D); });
 }
 
 void Console::commandResolution(socket_native_type /*fd*/, std::string_view args)
@@ -1327,7 +1327,7 @@ void Console::commandResolution(socket_native_type /*fd*/, std::string_view args
     stream >> width >> height >> policy;
 
     Scheduler* sched = Director::getInstance()->getScheduler();
-    sched->performFunctionInCocosThread([=]() {
+    sched->runOnAxmolThread([=]() {
         Director::getInstance()->getOpenGLView()->setDesignResolutionSize(width, height,
                                                                           static_cast<ResolutionPolicy>(policy));
     });
@@ -1360,13 +1360,13 @@ void Console::commandResolutionSubCommandEmpty(socket_native_type fd, std::strin
 void Console::commandSceneGraph(socket_native_type fd, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
-    sched->performFunctionInCocosThread(std::bind(&Console::printSceneGraphBoot, this, fd));
+    sched->runOnAxmolThread(std::bind(&Console::printSceneGraphBoot, this, fd));
 }
 
 void Console::commandTextures(socket_native_type fd, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
-    sched->performFunctionInCocosThread([=]() {
+    sched->runOnAxmolThread([=]() {
         Console::Utility::mydprintf(fd, "%s",
                                     Director::getInstance()->getTextureCache()->getCachedTextureInfo().c_str());
         Console::Utility::sendPrompt(fd);
@@ -1376,7 +1376,7 @@ void Console::commandTextures(socket_native_type fd, std::string_view /*args*/)
 void Console::commandTexturesSubCommandFlush(socket_native_type /*fd*/, std::string_view /*args*/)
 {
     Scheduler* sched = Director::getInstance()->getScheduler();
-    sched->performFunctionInCocosThread([]() { Director::getInstance()->getTextureCache()->removeAllTextures(); });
+    sched->runOnAxmolThread([]() { Director::getInstance()->getTextureCache()->removeAllTextures(); });
 }
 
 void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view args)
@@ -1392,7 +1392,7 @@ void Console::commandTouchSubCommandTap(socket_native_type fd, std::string_view 
         std::srand((unsigned)time(nullptr));
         _touchId         = rand();
         Scheduler* sched = Director::getInstance()->getScheduler();
-        sched->performFunctionInCocosThread([&]() {
+        sched->runOnAxmolThread([&]() {
             Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &_touchId, &x, &y);
             Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &_touchId, &x, &y);
         });
@@ -1421,7 +1421,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
         _touchId = rand();
 
         Scheduler* sched = Director::getInstance()->getScheduler();
-        sched->performFunctionInCocosThread([=, this]() {
+        sched->runOnAxmolThread([=, this]() {
             float tempx = x1, tempy = y1;
             Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &_touchId, &tempx, &tempy);
         });
@@ -1450,7 +1450,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
                 {
                     _y_ -= dy / dx;
                 }
-                sched->performFunctionInCocosThread([=, this]() {
+                sched->runOnAxmolThread([=, this]() {
                     float tempx = _x_, tempy = _y_;
                     Director::getInstance()->getOpenGLView()->handleTouchesMove(1, &_touchId, &tempx, &tempy);
                 });
@@ -1477,7 +1477,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
                 {
                     _y_ -= 1;
                 }
-                sched->performFunctionInCocosThread([=, this]() {
+                sched->runOnAxmolThread([=, this]() {
                     float tempx = _x_, tempy = _y_;
                     Director::getInstance()->getOpenGLView()->handleTouchesMove(1, &_touchId, &tempx, &tempy);
                 });
@@ -1485,7 +1485,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
             }
         }
 
-        sched->performFunctionInCocosThread([=, this]() {
+        sched->runOnAxmolThread([=, this]() {
             float tempx = x2, tempy = y2;
             Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &_touchId, &tempx, &tempy);
         });

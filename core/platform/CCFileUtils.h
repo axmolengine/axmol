@@ -881,14 +881,14 @@ protected:
         // a lambda. To get around this, we will just copy these arguments via lambda capture
 #if defined(_MSC_VER) && _MSC_VER < 1900
         auto lambda = [action, callback, args...]() {
-            Director::getInstance()->getScheduler()->performFunctionInCocosThread(std::bind(callback, action(args...)));
+            Director::getInstance()->getScheduler()->runOnAxmolThread(std::bind(callback, action(args...)));
         };
 #else
         // As cocos2d-x uses c++11, we will use std::bind to leverage move sematics to
         // move our arguments into our lambda, to potentially avoid copying.
         auto lambda = std::bind(
             [](const T& actionIn, const R& callbackIn, const ARGS&... argsIn) {
-                Director::getInstance()->getScheduler()->performFunctionInCocosThread(
+                Director::getInstance()->getScheduler()->runOnAxmolThread(
                     std::bind(callbackIn, actionIn(argsIn...)));
             },
             std::forward<T>(action), std::forward<R>(callback), std::forward<ARGS>(args)...);
