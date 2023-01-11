@@ -659,7 +659,7 @@ void VideoPlayer::onPlayEvent(int event)
 
     if (_eventCallback)
     {
-        _director->getScheduler()->performFunctionInCocosThread(
+        _director->getScheduler()->runOnAxmolThread(
             std::bind(_eventCallback, this, (VideoPlayer::EventType)event));
     }
 }
