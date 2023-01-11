@@ -1056,8 +1056,11 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
+         /* Invoke `GLView::setFrameSize` to sync screen size immediately,
+            this->setFrameSize will invoke `glfwSetWindowSize` which is unnecessary.
+         */
+         GLView::setFrameSize(w, h);
 
-        setFrameSize(w, h);
         /*
          x-studio spec, fix view size incorrect when window size changed.
          The original code behavior:
@@ -1066,7 +1069,8 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
            1). w,h=976,679
            2). w,h=1024,768
 
-         @remark: we should use glfwSetWindowMonitor to control the window size in full screen mode
+         @remark:
+         1. we should use glfwSetWindowMonitor to control the window size in full screen mode
          @see also: updateWindowSize (call after enter/exit full screen mode)
         */
         updateDesignResolutionSize();
