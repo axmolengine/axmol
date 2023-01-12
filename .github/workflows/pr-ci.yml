@@ -32,6 +32,9 @@ jobs:
           submodules: 'recursive'
       - name: Setup Python
         uses: actions/setup-python@v3
+      - uses: ilammy/msvc-dev-cmd@v1.12.0
+        with: 
+          arch: ${{ env.BUILD_ARCH }}
       - name: Build
         run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:BUILD_DLL
 
