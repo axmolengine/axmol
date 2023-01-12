@@ -94,7 +94,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeRunOnGLThread(JNIEnv
         void operator()(jobject_type* __ptr) const _NOEXCEPT { JniHelper::getEnv()->DeleteGlobalRef(__ptr); }
     };
 
-    ax::Director::getInstance()->getScheduler()->performFunctionInCocosThread(
+    ax::Director::getInstance()->getScheduler()->runOnAxmolThread(
         [wrap = std::make_shared<std::unique_ptr<jobject_type, jobject_delete>>(env->NewGlobalRef(runnable))] {
             auto curEnv = JniHelper::getEnv();
 

@@ -67,7 +67,7 @@ void AX_DLL print(const char* format, ...) AX_FORMAT_PRINTF(1, 2);
  If the std::function<> needs to use the cocos2d API, it needs to call
 
  ```
- scheduler->performFunctionInCocosThread( ... );
+ scheduler->runOnAxmolThread( ... );
  ```
  */
 

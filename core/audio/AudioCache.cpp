@@ -409,7 +409,7 @@ void AudioCache::invokingLoadCallbacks()
 
     auto isDestroyed = _isDestroyed;
     auto scheduler   = Director::getInstance()->getScheduler();
-    scheduler->performFunctionInCocosThread([&, isDestroyed]() {
+    scheduler->runOnAxmolThread([&, isDestroyed]() {
         if (*isDestroyed)
         {
             ALOGV("invokingLoadCallbacks perform in cocos thread, AudioCache (%p) was destroyed!", this);
