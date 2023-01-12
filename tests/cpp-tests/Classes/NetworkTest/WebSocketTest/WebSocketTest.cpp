@@ -1,18 +1,18 @@
 /****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- 
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,91 +35,92 @@
  list of public test servers:
    - ws://echo.websocket.events/.ws
    - wss://ws.postman-echo.com/raw
-   - wss://ws.postman-echo.com/socketio
+   - wss://ws.postman-echo.com/socketio handshake path: random, handling
    - wss://socketsbay.com/wss/v2/1/demo/
-*/  
+   - https://blog.postman.com/introducing-postman-websocket-echo-service/
+*/
 #define ECHO_SERVER_URL "wss://ws.postman-echo.com/raw"
 #define SOCKETIO_SERVICE "wss://ws.postman-echo.com/socketio"
 
 USING_NS_AX;
 using namespace ax::network;
-//USING_NS_AX_EXT;
+// USING_NS_AX_EXT;
 
 WebSocketTests::WebSocketTests()
 {
     ADD_TEST_CASE(WebSocketTest);
     ADD_TEST_CASE(WebSocketCloseTest);
     ADD_TEST_CASE(WebSocketDelayTest);
-    ADD_TEST_CASE(SocketIOTest);
 }
 
 WebSocketTest::WebSocketTest()
-: _wsiSendText(nullptr)
-, _wsiSendBinary(nullptr)
-, _wsiError(nullptr)
-, _sendTextStatus(nullptr)
-, _sendBinaryStatus(nullptr)
-, _errorStatus(nullptr)
-, _sendTextTimes(0)
-, _sendBinaryTimes(0)
+    : _wsiSendText(nullptr)
+    , _wsiSendBinary(nullptr)
+    , _wsiError(nullptr)
+    , _sendTextStatus(nullptr)
+    , _sendBinaryStatus(nullptr)
+    , _errorStatus(nullptr)
+    , _sendTextTimes(0)
+    , _sendBinaryTimes(0)
 {
     auto winSize = Director::getInstance()->getWinSize();
-    
+
     const int MARGIN = 40;
-    const int SPACE = 35;
-    
+    const int SPACE  = 35;
+
     auto menuRequest = Menu::create();
     menuRequest->setPosition(Vec2::ZERO);
     addChild(menuRequest);
-    
+
     // Send Text
     auto labelSendText = Label::createWithTTF("Send Text", "fonts/arial.ttf", 20);
     auto itemSendText = MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketTest::onMenuSendTextClicked, this));
     itemSendText->setPosition(Vec2(winSize.width / 2, winSize.height - MARGIN - SPACE));
     menuRequest->addChild(itemSendText);
-    
+
     labelSendText = Label::createWithTTF("Send Multiple Text", "fonts/arial.ttf", 20);
-    itemSendText = MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketTest::onMenuSendMultipleTextClicked, this));
+    itemSendText =
+        MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketTest::onMenuSendMultipleTextClicked, this));
     itemSendText->setPosition(Vec2(winSize.width / 2, winSize.height - MARGIN - 2 * SPACE));
     menuRequest->addChild(itemSendText);
-    
+
     // Send Binary
     auto labelSendBinary = Label::createWithTTF("Send Binary", "fonts/arial.ttf", 20);
-    auto itemSendBinary = MenuItemLabel::create(labelSendBinary, AX_CALLBACK_1(WebSocketTest::onMenuSendBinaryClicked, this));
+    auto itemSendBinary =
+        MenuItemLabel::create(labelSendBinary, AX_CALLBACK_1(WebSocketTest::onMenuSendBinaryClicked, this));
     itemSendBinary->setPosition(Vec2(winSize.width / 2, winSize.height - MARGIN - 3 * SPACE));
     menuRequest->addChild(itemSendBinary);
-    
 
     // Send Text Status Label
-    _sendTextStatus = Label::createWithTTF("Send Text WS is waiting...", "fonts/arial.ttf", 16, Size(160, 100), TextHAlignment::CENTER, TextVAlignment::TOP);
+    _sendTextStatus = Label::createWithTTF("Send Text WS is waiting...", "fonts/arial.ttf", 16, Size(160, 100),
+                                           TextHAlignment::CENTER, TextVAlignment::TOP);
     _sendTextStatus->setAnchorPoint(Vec2(0, 0));
     _sendTextStatus->setPosition(Vec2(VisibleRect::left().x, VisibleRect::rightBottom().y + 25));
     this->addChild(_sendTextStatus);
-    
+
     // Send Binary Status Label
-    _sendBinaryStatus = Label::createWithTTF("Send Binary WS is waiting...", "fonts/arial.ttf", 16, Size(160, 100), TextHAlignment::CENTER, TextVAlignment::TOP);
+    _sendBinaryStatus = Label::createWithTTF("Send Binary WS is waiting...", "fonts/arial.ttf", 16, Size(160, 100),
+                                             TextHAlignment::CENTER, TextVAlignment::TOP);
     _sendBinaryStatus->setAnchorPoint(Vec2(0, 0));
     _sendBinaryStatus->setPosition(Vec2(VisibleRect::left().x + 160, VisibleRect::rightBottom().y + 25));
     this->addChild(_sendBinaryStatus);
-    
+
     // Error Label
-    _errorStatus = Label::createWithTTF("Error WS is waiting...", "fonts/arial.ttf", 16, Size(160, 100), TextHAlignment::CENTER, TextVAlignment::TOP);
+    _errorStatus = Label::createWithTTF("Error WS is waiting...", "fonts/arial.ttf", 16, Size(160, 100),
+                                        TextHAlignment::CENTER, TextVAlignment::TOP);
     _errorStatus->setAnchorPoint(Vec2(0, 0));
     _errorStatus->setPosition(Vec2(VisibleRect::left().x + 320, VisibleRect::rightBottom().y + 25));
     this->addChild(_errorStatus);
-    
+
     auto startTestLabel = Label::createWithTTF("Start Test WebSocket", "fonts/arial.ttf", 16);
-    auto startTestItem = MenuItemLabel::create(startTestLabel, AX_CALLBACK_1(WebSocketTest::startTestCallback, this));
+    auto startTestItem  = MenuItemLabel::create(startTestLabel, AX_CALLBACK_1(WebSocketTest::startTestCallback, this));
     startTestItem->setPosition(Vec2(VisibleRect::center().x - 150, VisibleRect::bottom().y + 150));
     _startTestMenu = Menu::create(startTestItem, nullptr);
     _startTestMenu->setPosition(Vec2::ZERO);
     this->addChild(_startTestMenu, 1);
 }
 
-WebSocketTest::~WebSocketTest()
-{
-
-}
+WebSocketTest::~WebSocketTest() {}
 
 void WebSocketTest::onExit()
 {
@@ -148,9 +149,9 @@ void WebSocketTest::startTestCallback(Ref* sender)
     removeChild(_startTestMenu);
     _startTestMenu = nullptr;
 
-    _wsiSendText = new network::WebSocket();
+    _wsiSendText   = new network::WebSocket();
     _wsiSendBinary = new network::WebSocket();
-    _wsiError = new network::WebSocket();
+    _wsiError      = new network::WebSocket();
 
     std::vector<std::string> protocols;
     protocols.push_back("myprotocol_1");
@@ -161,7 +162,8 @@ void WebSocketTest::startTestCallback(Ref* sender)
     }
     else
     {
-        retain(); // Retain self to avoid WebSocketTest instance be deleted immediately, it will be released in WebSocketTest::onClose.
+        retain();  // Retain self to avoid WebSocketTest instance be deleted immediately, it will be released in
+                   // WebSocketTest::onClose.
     }
 
     protocols.erase(protocols.begin());
@@ -171,7 +173,8 @@ void WebSocketTest::startTestCallback(Ref* sender)
     }
     else
     {
-        retain(); // Retain self to avoid WebSocketTest instance be deleted immediately, it will be released in WebSocketTest::onClose.
+        retain();  // Retain self to avoid WebSocketTest instance be deleted immediately, it will be released in
+                   // WebSocketTest::onClose.
     }
 
     if (!_wsiError->init(*this, "ws://invalid.urlxxxxxxxx.com"))
@@ -180,7 +183,8 @@ void WebSocketTest::startTestCallback(Ref* sender)
     }
     else
     {
-        retain(); // Retain self to avoid WebSocketTest instance be deleted immediately, it will be released in WebSocketTest::onClose.
+        retain();  // Retain self to avoid WebSocketTest instance be deleted immediately, it will be released in
+                   // WebSocketTest::onClose.
     }
 }
 
@@ -210,9 +214,10 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
     if (!data.isBinary)
     {
         _sendTextTimes++;
-        std::string textStr = fmt::format(FMT_COMPILE("#{} response text msg: {}"), _sendTextTimes, std::string_view{data.bytes, static_cast<size_t>(data.len)});
+        std::string textStr = fmt::format(FMT_COMPILE("#{} response text msg: {}"), _sendTextTimes,
+                                          std::string_view{data.bytes, static_cast<size_t>(data.len)});
         ax::print("%s", textStr.c_str());
-        
+
         _sendTextStatus->setString(textStr.c_str());
     }
     else
@@ -222,8 +227,9 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
         sprintf(times, "%d", _sendBinaryTimes);
 
         std::string binaryStr = "response bin msg: ";
-        
-        for (int i = 0; i < data.len; ++i) {
+
+        for (int i = 0; i < data.len; ++i)
+        {
             if (data.bytes[i] != '\0')
             {
                 binaryStr += data.bytes[i];
@@ -233,8 +239,8 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
                 binaryStr += "\'\\0\'";
             }
         }
-        
-        binaryStr += std::string(", ")+times;
+
+        binaryStr += std::string(", ") + times;
         ax::print("%s", binaryStr.c_str());
         _sendBinaryStatus->setString(binaryStr.c_str());
     }
@@ -285,9 +291,9 @@ void WebSocketTest::onError(network::WebSocket* ws, const network::WebSocket::Er
 }
 
 // Menu Callbacks
-void WebSocketTest::onMenuSendTextClicked(ax::Ref *sender)
+void WebSocketTest::onMenuSendTextClicked(ax::Ref* sender)
 {
-    if (! _wsiSendText)
+    if (!_wsiSendText)
     {
         return;
     }
@@ -305,17 +311,18 @@ void WebSocketTest::onMenuSendTextClicked(ax::Ref *sender)
     }
 }
 
-void WebSocketTest::onMenuSendMultipleTextClicked(ax::Ref *sender)
+void WebSocketTest::onMenuSendMultipleTextClicked(ax::Ref* sender)
 {
-    if (! _wsiSendText)
+    if (!_wsiSendText)
     {
         return;
     }
-    
+
     if (_wsiSendText->getReadyState() == network::WebSocket::State::OPEN)
     {
         _sendTextStatus->setString("Send Multiple Text WS is waiting...");
-        for (int index = 0; index < 15; ++index) {
+        for (int index = 0; index < 15; ++index)
+        {
             _wsiSendText->send(StringUtils::format("Hello WebSocket, text message index:%d", index));
         }
     }
@@ -327,9 +334,10 @@ void WebSocketTest::onMenuSendMultipleTextClicked(ax::Ref *sender)
     }
 }
 
-void WebSocketTest::onMenuSendBinaryClicked(ax::Ref *sender)
+void WebSocketTest::onMenuSendBinaryClicked(ax::Ref* sender)
 {
-    if (! _wsiSendBinary) {
+    if (!_wsiSendBinary)
+    {
         return;
     }
 
@@ -347,8 +355,7 @@ void WebSocketTest::onMenuSendBinaryClicked(ax::Ref *sender)
     }
 }
 
-WebSocketCloseTest::WebSocketCloseTest()
-: _wsiTest(nullptr)
+WebSocketCloseTest::WebSocketCloseTest() : _wsiTest(nullptr)
 {
     auto winSize = Director::getInstance()->getWinSize();
 
@@ -360,16 +367,18 @@ WebSocketCloseTest::WebSocketCloseTest()
         _wsiTest = nullptr;
     }
 
-    auto closeItem = MenuItemImage::create(s_pathClose, s_pathClose, [](Ref* sender){
-        Director::getInstance()->end();
-    });
+    auto closeItem =
+        MenuItemImage::create(s_pathClose, s_pathClose, [](Ref* sender) { Director::getInstance()->end(); });
     closeItem->setPosition(VisibleRect::right().x / 2, VisibleRect::top().y * 2 / 3);
 
     auto menu = Menu::create(closeItem, nullptr);
     menu->setPosition(Vec2::ZERO);
     addChild(menu, 1);
 
-    auto notifyLabel = Label::createWithTTF("See log window, when enter there's should have\n'Websocket opened' log,\nwhen close there's should have'websocket closed' log", "fonts/arial.ttf", 20);
+    auto notifyLabel = Label::createWithTTF(
+        "See log window, when enter there's should have\n'Websocket opened' log,\nwhen close there's should "
+        "have'websocket closed' log",
+        "fonts/arial.ttf", 20);
     notifyLabel->setPosition(VisibleRect::right().x / 2, VisibleRect::top().y / 3);
     notifyLabel->setAlignment(TextHAlignment::CENTER);
     addChild(notifyLabel, 1);
@@ -410,57 +419,53 @@ void WebSocketCloseTest::onError(network::WebSocket* ws, const network::WebSocke
     ax::print("Error was fired, error code: %d", static_cast<int>(error));
 }
 
-
 #define SEND_TEXT_TIMES 100
 
 WebSocketDelayTest::WebSocketDelayTest()
-: _wsiSendText(nullptr)
-, _sendTextStatus(nullptr)
-, _progressStatus(nullptr)
-, _sendTextTimes(0)
+    : _wsiSendText(nullptr), _sendTextStatus(nullptr), _progressStatus(nullptr), _sendTextTimes(0)
 {
     auto winSize = Director::getInstance()->getWinSize();
-    
+
     const int MARGIN = 40;
-    const int SPACE = 35;
-    
+    const int SPACE  = 35;
+
     auto menuRequest = Menu::create();
     menuRequest->setPosition(Vec2::ZERO);
     addChild(menuRequest);
-    
+
     // Send Text
-    char cmdLabel[60] = { 0 };
+    char cmdLabel[60] = {0};
     snprintf(cmdLabel, 60, "Send %d Text", SEND_TEXT_TIMES);
     auto labelSendText = Label::createWithTTF(cmdLabel, "fonts/arial.ttf", 20);
-    auto itemSendText = MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketDelayTest::onMenuSendTextClicked, this));
+    auto itemSendText =
+        MenuItemLabel::create(labelSendText, AX_CALLBACK_1(WebSocketDelayTest::onMenuSendTextClicked, this));
     itemSendText->setPosition(Vec2(winSize.width / 2, winSize.height - MARGIN - SPACE));
     menuRequest->addChild(itemSendText);
-    
+
     // Send Text Status Label
-    _sendTextStatus = Label::createWithTTF("Waiting connection...", "fonts/arial.ttf", 16, Size(160, 100), TextHAlignment::CENTER, TextVAlignment::TOP);
+    _sendTextStatus = Label::createWithTTF("Waiting connection...", "fonts/arial.ttf", 16, Size(160, 100),
+                                           TextHAlignment::CENTER, TextVAlignment::TOP);
     _sendTextStatus->setAnchorPoint(Vec2(0, 0));
     _sendTextStatus->setPosition(Vec2(VisibleRect::left().x, VisibleRect::rightBottom().y + 25));
     this->addChild(_sendTextStatus);
-   
 
     // Error Label
-    _progressStatus = Label::createWithTTF(".", "fonts/arial.ttf", 16, Size(160, 100), TextHAlignment::CENTER, TextVAlignment::TOP);
+    _progressStatus =
+        Label::createWithTTF(".", "fonts/arial.ttf", 16, Size(160, 100), TextHAlignment::CENTER, TextVAlignment::TOP);
     _progressStatus->setAnchorPoint(Vec2(0, 0));
     _progressStatus->setPosition(Vec2(VisibleRect::left().x + 320, VisibleRect::rightBottom().y + 25));
     this->addChild(_progressStatus);
-    
+
     auto startTestLabel = Label::createWithTTF("DO Connect!", "fonts/arial.ttf", 16);
-    auto startTestItem = MenuItemLabel::create(startTestLabel, AX_CALLBACK_1(WebSocketDelayTest::startTestCallback, this));
+    auto startTestItem =
+        MenuItemLabel::create(startTestLabel, AX_CALLBACK_1(WebSocketDelayTest::startTestCallback, this));
     startTestItem->setPosition(Vec2(VisibleRect::center().x - 150, VisibleRect::bottom().y + 150));
     _startTestMenu = Menu::create(startTestItem, nullptr);
     _startTestMenu->setPosition(Vec2::ZERO);
     this->addChild(_startTestMenu, 1);
 }
 
-WebSocketDelayTest::~WebSocketDelayTest()
-{
-
-}
+WebSocketDelayTest::~WebSocketDelayTest() {}
 
 void WebSocketDelayTest::onExit()
 {
@@ -480,7 +485,7 @@ void WebSocketDelayTest::startTestCallback(Ref* sender)
     _startTestMenu = nullptr;
 
     _wsiSendText = new network::WebSocket();
-    
+
     std::vector<std::string> protocols;
     protocols.push_back("myprotocol_1");
     protocols.push_back("myprotocol_2");
@@ -490,22 +495,21 @@ void WebSocketDelayTest::startTestCallback(Ref* sender)
     }
     else
     {
-        retain(); // Retain self to avoid WebSocketDelayTest instance be deleted immediately, it will be released in WebSocketDelayTest::onClose.
-
+        retain();  // Retain self to avoid WebSocketDelayTest instance be deleted immediately, it will be released in
+                   // WebSocketDelayTest::onClose.
     }
-
 }
 
 void WebSocketDelayTest::doSendText()
 {
     _sendTextTimes += 1;
-    if (_sendTextTimes > SEND_TEXT_TIMES) 
+    if (_sendTextTimes > SEND_TEXT_TIMES)
     {
         _sendTextStatus->setString("Test Done!");
         return;
     }
 
-    char statueBuffer[80] = { 0 };
+    char statueBuffer[80] = {0};
     snprintf(statueBuffer, 80, "Sending #%d/%d text", _sendTextTimes, SEND_TEXT_TIMES);
     _sendTextStatus->setString(statueBuffer);
     _sendTimeMircoSec = getNowMircroSeconds();
@@ -515,9 +519,9 @@ void WebSocketDelayTest::doSendText()
 void WebSocketDelayTest::doReceiveText()
 {
     _receiveTimeMircoSec = getNowMircroSeconds();
-    if(_sendTimeMircoSec > 0)
+    if (_sendTimeMircoSec > 0)
         _totalDelayMircoSec += (_receiveTimeMircoSec - _sendTimeMircoSec);
-    doSendText(); //send next 
+    doSendText();  // send next
 }
 
 // Delegate methods
@@ -530,7 +534,6 @@ void WebSocketDelayTest::onOpen(network::WebSocket* ws)
     if (ws == _wsiSendText)
     {
         _sendTextStatus->setString(status);
-
     }
 }
 
@@ -541,11 +544,11 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
         _receiveTextTimes++;
         char times[100] = {0};
         sprintf(times, "%d", _receiveTextTimes);
-        std::string textStr = std::string("response text msg: ")+data.bytes+", "+times;
+        std::string textStr = std::string("response text msg: ") + data.bytes + ", " + times;
         ax::print("%s", textStr.c_str());
         doReceiveText();
         memset(times, 0, 100);
-        snprintf(times, 100, "total delay %f seconds", (float)(_totalDelayMircoSec/ 1000000.0));
+        snprintf(times, 100, "total delay %f seconds", (float)(_totalDelayMircoSec / 1000000.0));
         _progressStatus->setString(times);
     }
 }
@@ -578,17 +581,17 @@ void WebSocketDelayTest::onError(network::WebSocket* ws, const network::WebSocke
 }
 
 // Menu Callbacks
-void WebSocketDelayTest::onMenuSendTextClicked(ax::Ref *sender)
+void WebSocketDelayTest::onMenuSendTextClicked(ax::Ref* sender)
 {
-    if (! _wsiSendText)
+    if (!_wsiSendText)
     {
         return;
     }
 
     if (_wsiSendText->getReadyState() == network::WebSocket::State::OPEN)
     {
-        
-        _sendTextTimes = 0;
+
+        _sendTextTimes    = 0;
         _receiveTextTimes = 0;
         doSendText();
     }
@@ -598,282 +601,4 @@ void WebSocketDelayTest::onMenuSendTextClicked(ax::Ref *sender)
         ax::print("%s", warningStr.c_str());
         _sendTextStatus->setString(warningStr.c_str());
     }
-}
-
-SocketIOTest::SocketIOTest()
-	: _sioClient(nullptr)
-	, _sioEndpoint(nullptr)
-	, _sioClientStatus(nullptr)
-{//set the clients to nullptr until we are ready to connect
-
-	Size winSize = Director::getInstance()->getWinSize();
-
-	const int MARGIN = 40;
-	const int SPACE = 35;
-
-	auto menuRequest = Menu::create();
-	menuRequest->setPosition(Vec2::ZERO);
-	addChild(menuRequest);
-
-	// Test to create basic client in the default namespace
-	auto labelSIOClient = Label::createWithTTF("Open SocketIO Client", "fonts/arial.ttf", 22);
-	auto itemSIOClient = MenuItemLabel::create(labelSIOClient, AX_CALLBACK_1(SocketIOTest::onMenuSIOClientClicked, this));
-	itemSIOClient->setPosition(Vec2(VisibleRect::left().x + labelSIOClient->getContentSize().width / 2 + 5, winSize.height - MARGIN - SPACE));
-	menuRequest->addChild(itemSIOClient);
-
-	// Test to create a client at the endpoint '/testpoint'
-	auto labelSIOEndpoint = Label::createWithTTF("Open SocketIO Endpoint", "fonts/arial.ttf", 22);
-	auto itemSIOEndpoint = MenuItemLabel::create(labelSIOEndpoint, AX_CALLBACK_1(SocketIOTest::onMenuSIOEndpointClicked, this));
-	itemSIOEndpoint->setPosition(Vec2(VisibleRect::right().x - labelSIOEndpoint->getContentSize().width / 2 - 5, winSize.height - MARGIN - SPACE));
-	menuRequest->addChild(itemSIOEndpoint);
-
-	// Test sending message to default namespace
-	auto labelTestMessage = Label::createWithTTF("Send Test Message", "fonts/arial.ttf", 22);
-	auto itemTestMessage = MenuItemLabel::create(labelTestMessage, AX_CALLBACK_1(SocketIOTest::onMenuTestMessageClicked, this));
-	itemTestMessage->setPosition(Vec2(VisibleRect::left().x + labelTestMessage->getContentSize().width / 2 + 5, winSize.height - MARGIN - 2 * SPACE));
-	menuRequest->addChild(itemTestMessage);
-
-	// Test sending message to the endpoint '/testpoint'
-	auto labelTestMessageEndpoint = Label::createWithTTF("Test Endpoint Message", "fonts/arial.ttf", 22);
-	auto itemTestMessageEndpoint = MenuItemLabel::create(labelTestMessageEndpoint, AX_CALLBACK_1(SocketIOTest::onMenuTestMessageEndpointClicked, this));
-	itemTestMessageEndpoint->setPosition(Vec2(VisibleRect::right().x - labelTestMessageEndpoint->getContentSize().width / 2 - 5, winSize.height - MARGIN - 2 * SPACE));
-	menuRequest->addChild(itemTestMessageEndpoint);
-
-	// Test sending event 'echotest' to default namespace
-	auto labelTestEvent = Label::createWithTTF("Send Test Event", "fonts/arial.ttf", 22);
-	auto itemTestEvent = MenuItemLabel::create(labelTestEvent, AX_CALLBACK_1(SocketIOTest::onMenuTestEventClicked, this));
-	itemTestEvent->setPosition(Vec2(VisibleRect::left().x + labelTestEvent->getContentSize().width / 2 + 5, winSize.height - MARGIN - 3 * SPACE));
-	menuRequest->addChild(itemTestEvent);
-
-	// Test sending event 'echotest' to the endpoint '/testpoint'
-	auto labelTestEventEndpoint = Label::createWithTTF("Test Endpoint Event", "fonts/arial.ttf", 22);
-	auto itemTestEventEndpoint = MenuItemLabel::create(labelTestEventEndpoint, AX_CALLBACK_1(SocketIOTest::onMenuTestEventEndpointClicked, this));
-	itemTestEventEndpoint->setPosition(Vec2(VisibleRect::right().x - labelTestEventEndpoint->getContentSize().width / 2 - 5, winSize.height - MARGIN - 3 * SPACE));
-	menuRequest->addChild(itemTestEventEndpoint);
-
-	// Test disconnecting basic client
-	auto labelTestClientDisconnect = Label::createWithTTF("Disconnect Socket", "fonts/arial.ttf", 22);
-	auto itemClientDisconnect = MenuItemLabel::create(labelTestClientDisconnect, AX_CALLBACK_1(SocketIOTest::onMenuTestClientDisconnectClicked, this));
-	itemClientDisconnect->setPosition(Vec2(VisibleRect::left().x + labelTestClientDisconnect->getContentSize().width / 2 + 5, winSize.height - MARGIN - 4 * SPACE));
-	menuRequest->addChild(itemClientDisconnect);
-
-	// Test disconnecting the endpoint '/testpoint'
-	auto labelTestEndpointDisconnect = Label::createWithTTF("Disconnect Endpoint", "fonts/arial.ttf", 22);
-	auto itemTestEndpointDisconnect = MenuItemLabel::create(labelTestEndpointDisconnect, AX_CALLBACK_1(SocketIOTest::onMenuTestEndpointDisconnectClicked, this));
-	itemTestEndpointDisconnect->setPosition(Vec2(VisibleRect::right().x - labelTestEndpointDisconnect->getContentSize().width / 2 - 5, winSize.height - MARGIN - 4 * SPACE));
-	menuRequest->addChild(itemTestEndpointDisconnect);
-
-	// Shared Status Label
-	_sioClientStatus = Label::createWithTTF("Not connected...", "fonts/arial.ttf", 14, Size(320, 100), TextHAlignment::LEFT);
-	_sioClientStatus->setAnchorPoint(Vec2(0, 0));
-	_sioClientStatus->setPosition(Vec2(VisibleRect::left().x, VisibleRect::rightBottom().y));
-	this->addChild(_sioClientStatus);
-}
-
-
-SocketIOTest::~SocketIOTest()
-{
-}
-
-//test event callback handlers, these will be registered with socket.io
-void SocketIOTest::testevent(SIOClient *client, std::string_view data) {
-
-    AXLOGINFO("SocketIOTest::testevent called with data: %s", data.data());
-
-	std::stringstream s;
-	s << client->getTag() << " received event testevent with data: " << data;
-
-	_sioClientStatus->setString(s.str().c_str());
-
-}
-
-void SocketIOTest::echotest(SIOClient *client, std::string_view data) {
-
-    AXLOGINFO("SocketIOTest::echotest called with data: %s", data.data());
-
-	std::stringstream s;
-	s << client->getTag() << " received event echotest with data: " << data;
-
-	_sioClientStatus->setString(s.str().c_str());
-
-}
-
-// onMessage is no longer a required override from the delegate class
-// 'message' events and handlers are now registered in the same way that other events are
-void SocketIOTest::message(network::SIOClient* client, std::string_view data)
-{
-    AXLOGINFO("SocketIOTest::message received: %s", data.data());
-
-	std::stringstream s;
-	s << client->getTag() << " received message with content: " << data;
-	_sioClientStatus->setString(s.str().c_str());
-
-}
-
-void SocketIOTest::json(network::SIOClient* client, std::string_view data)
-{
-    AXLOGINFO("SocketIOTest::json received: %s", data.data());
-
-	std::stringstream s;
-	s << client->getTag() << " received json message with content: " << data;
-	_sioClientStatus->setString(s.str().c_str());
-
-}
-
-void SocketIOTest::connect(network::SIOClient* client, std::string_view data)
-{
-    AXLOGINFO("SocketIOTest::connect called");
-
-	std::stringstream s;
-	s << client->getTag() << " connected!";
-	_sioClientStatus->setString(s.str().c_str());
-
-}
-
-void SocketIOTest::disconnect(network::SIOClient* client, std::string_view data)
-{
-    AXLOGINFO("SocketIOTest::disconnect called");
-
-	std::stringstream s;
-	s << client->getTag() << " disconnected by server!";
-	_sioClientStatus->setString(s.str().c_str());
-
-	this->closedSocketAction(client);
-
-}
-
-void SocketIOTest::closedSocketAction(network::SIOClient* client)
-{
-	//set the local pointer to nullptr or connect to another client
-	//the client object will be released on its own after this method completes
-	if (client == _sioClient) {
-
-		_sioClient = nullptr;
-	}
-	else if (client == _sioEndpoint) {
-
-		_sioEndpoint = nullptr;
-	}
-}
-
-void SocketIOTest::onMenuSIOClientClicked(ax::Ref *sender)
-{
-	//create a client by using this static method, url does not need to contain the protocol
-	_sioClient = SocketIO::connect("wss://ws.postman-echo.com/socketio", *this);
-	//you may set a tag for the client for reference in callbacks
-	_sioClient->setTag("Test Client");
-
-	//register event callbacks using the AX_CALLBACK_2() macro and passing the instance of the target class
-	_sioClient->on("testevent", AX_CALLBACK_2(SocketIOTest::testevent, this));
-	_sioClient->on("echotest", AX_CALLBACK_2(SocketIOTest::echotest, this));
-	_sioClient->on("message", AX_CALLBACK_2(SocketIOTest::message, this));
-	_sioClient->on("json", AX_CALLBACK_2(SocketIOTest::json, this));
-	_sioClient->on("connect", AX_CALLBACK_2(SocketIOTest::connect, this));
-	_sioClient->on("disconnect", AX_CALLBACK_2(SocketIOTest::disconnect, this));
-
-}
-
-void SocketIOTest::onMenuSIOEndpointClicked(ax::Ref *sender)
-{
-	//repeat the same connection steps for the namespace "testpoint"
-	_sioEndpoint = SocketIO::connect("wss://ws.postman-echo.com/socketio", *this); 
-	//a tag to differentiate in shared callbacks
-	_sioEndpoint->setTag("Test Endpoint");
-
-	//demonstrating how callbacks can be shared within a delegate
-	_sioEndpoint->on("testevent", AX_CALLBACK_2(SocketIOTest::testevent, this));
-	_sioEndpoint->on("echotest", AX_CALLBACK_2(SocketIOTest::echotest, this));
-	_sioEndpoint->on("message", AX_CALLBACK_2(SocketIOTest::message, this));
-	_sioEndpoint->on("json", AX_CALLBACK_2(SocketIOTest::json, this));
-	_sioEndpoint->on("connect", AX_CALLBACK_2(SocketIOTest::connect, this));
-	_sioEndpoint->on("disconnect", AX_CALLBACK_2(SocketIOTest::disconnect, this));
-
-}
-
-void SocketIOTest::onMenuTestMessageClicked(ax::Ref *sender)
-{
-	//check that the socket is != nullptr before sending or emitting events
-	//the client should be nullptr either before initialization and connection or after disconnect
-	if (_sioClient != nullptr) _sioClient->send("Hello Socket.IO!");
-
-}
-
-void SocketIOTest::onMenuTestMessageEndpointClicked(ax::Ref *sender)
-{
-
-	if (_sioEndpoint != nullptr) _sioEndpoint->send("Hello Socket.IO!");
-
-}
-
-void SocketIOTest::onMenuTestEventClicked(ax::Ref *sender)
-{
-	//check that the socket is != nullptr before sending or emitting events
-	//the client should be nullptr either before initialization and connection or after disconnect
-	if (_sioClient != nullptr) _sioClient->emit("echotest", "{\"name\":\"myname\",\"type\":\"mytype\"}");
-
-}
-
-void SocketIOTest::onMenuTestEventEndpointClicked(ax::Ref *sender)
-{
-
-	if (_sioEndpoint != nullptr) _sioEndpoint->emit("echotest", "{\"name\":\"myname\",\"type\":\"mytype\"}");
-
-}
-
-void SocketIOTest::onMenuTestClientDisconnectClicked(ax::Ref *sender)
-{
-	// Disconnecting from the default namespace "" or "/" will also disconnect all other endpoints
-	std::stringstream s;
-
-	if (_sioClient != nullptr) {
-		s << _sioClient->getTag() << " manually closed!";
-		_sioClient->disconnect();
-		_sioClient = nullptr;
-	}
-	else {
-		s << "Socket.io Test Client not initialized!";
-	}
-
-	_sioClientStatus->setString(s.str().c_str());
-
-}
-
-void SocketIOTest::onMenuTestEndpointDisconnectClicked(ax::Ref *sender)
-{
-	std::stringstream s;
-
-	if (_sioEndpoint != nullptr) {
-		s << _sioEndpoint->getTag() << " manually closed!";
-		_sioEndpoint->disconnect();
-		_sioEndpoint = nullptr;
-	}
-	else {
-		s << "Socket.io Test Endpoint not initialized!";
-	}
-
-	_sioClientStatus->setString(s.str().c_str());
-
-}
-
-// SIODelegate methods to catch network/socket level events outside of the socket.io events
-
-void SocketIOTest::onClose(network::SIOClient* client)
-{
-    AXLOGINFO("SocketIOTest::onClose called");
-
-	std::stringstream s;
-	s << client->getTag() << " closed!";
-	_sioClientStatus->setString(s.str().c_str());
-
-	this->closedSocketAction(client);
-
-}
-
-void SocketIOTest::onError(network::SIOClient* client, std::string_view data)
-{
-	AXLOGERROR("SocketIOTest::onError received: %s", data.data());
-
-	std::stringstream s;
-	s << client->getTag() << " received error with content: " << data;
-	_sioClientStatus->setString(s.str().c_str());
 }

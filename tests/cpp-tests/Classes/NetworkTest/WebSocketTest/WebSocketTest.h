@@ -37,7 +37,6 @@
 #include "axmol.h"
 #include "extensions/cocos-ext.h"
 #include "network/WebSocket.h"
-#include "network/SocketIO.h"
 #include "BaseTest.h"
 
 DEFINE_TEST_SUITE(WebSocketTests);
@@ -146,77 +145,5 @@ private:
     int _sendTextTimes = 0;
     int _receiveTextTimes = 0;
 };
-
-class SocketIOTest: public TestCase
-	, public ax::network::SocketIO::SIODelegate
-{
-public:
-    CREATE_FUNC(SocketIOTest);
-
-    SocketIOTest();
-    virtual ~SocketIOTest();
-
-	/**
-	*  @brief Used for network level socket close (not for disconnect from the socket.io server)
-	*/
-	virtual void onClose(ax::network::SIOClient* client)override;
-	/**
-	*  @brief Used for network level socket error (not for disconnect from the socket.io server)
-	**/
-	virtual void onError(ax::network::SIOClient* client, std::string_view data)override;
-	/**
-	*  @brief Common function to call on both socket.io disconnect and websocket close
-	**/
-	void closedSocketAction(ax::network::SIOClient* client);
-	
-	// test action handlers for main Test Client that connects to default namespace "" or "/"
-	void onMenuSIOClientClicked(ax::Ref *sender);
-	void onMenuTestMessageClicked(ax::Ref *sender);
-	void onMenuTestEventClicked(ax::Ref *sender);
-	void onMenuTestClientDisconnectClicked(ax::Ref *sender);
-
-	// test action handlers for Test Endpoint that connects to /testpoint endpoint
-	void onMenuSIOEndpointClicked(ax::Ref *sender);
-	void onMenuTestMessageEndpointClicked(ax::Ref *sender);
-	void onMenuTestEventEndpointClicked(ax::Ref *sender);
-	void onMenuTestEndpointDisconnectClicked(ax::Ref *sender);
-
-	// custom handlers for socket.io related events
-
-	/**
-	*  @brief Socket.io event handler for custom event "testevent"
-	**/
-	void testevent(ax::network::SIOClient *client, std::string_view data);
-	/**
-	*  @brief Socket.io event handler for custom event "echoevent"
-	**/
-	void echotest(ax::network::SIOClient *client, std::string_view data);
-	/**
-	*  @brief Socket.io event handler for event "connect"
-	**/
-	void connect(ax::network::SIOClient* client, std::string_view data);
-	/**
-	*  @brief Socket.io event handler for event "disconnect"
-	**/
-	void disconnect(ax::network::SIOClient* client, std::string_view data);
-	/**
-	*  @brief Socket.io event handler for event "message"
-	**/
-	void message(ax::network::SIOClient* client, std::string_view data);
-	/**
-	*  @brief Socket.io event handler for event "json"
-	*         This is only used in v 0.9.x, in 1.x this is handled as a "message" event
-	**/
-	void json(ax::network::SIOClient* client, std::string_view data);
-
-    virtual std::string title() const override{ return "SocketIO Extension Test"; }
-
-protected:
-
-	ax::network::SIOClient *_sioClient, *_sioEndpoint;
-
-	ax::Label *_sioClientStatus;
-};
-
 
 #endif /* defined(__TestCpp__WebSocketTest__) */

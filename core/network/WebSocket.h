@@ -347,8 +347,7 @@ protected:
     static int on_body(llhttp_t* context, const char* at, size_t length)
     {
         auto thiz = (WebSocket*)context->data;
-        // thiz->_responseData.insert(thiz->_responseData.end(), at, at + length);
-        // we simply ignore body because we only care handshake response header
+        thiz->_responseData.insert(thiz->_responseData.end(), at, at + length);
         return 0;
     }
     static int on_complete(llhttp_t* context)
@@ -382,6 +381,7 @@ protected:
     Delegate* _delegate{};
     yasio::io_service* _service;
     yasio::transport_handle_t _transport{};
+    yasio::highp_timer* _heartbeatTimer;
     State _state            = State::CLOSED;
     bool _handshakeFinished = false;
 
@@ -407,6 +407,7 @@ protected:
     std::string _currentHeader;
     std::string _currentHeaderValue;
     ResponseHeaderMap _responseHeaders;  /// the returned raw header data. You can also dump it as a string
+    std::string _responseData; /// the handshake repsonse message when fail
 
     /// the http status code returned from server, e.g. 200, 404, refer to
     /// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status

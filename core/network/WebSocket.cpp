@@ -32,12 +32,6 @@ using namespace yasio;
 
 #define WS_MAX_PAYLOAD_LENGTH (1 << 24)  // 16M
 
-// 1000 1001 1000 0000
-#define WS_CLIENT_PING_FRAME "\211\200WSWS"
-// 1000 1010 1000 0000
-#define WS_CLIENT_PONG_FRAME "\212\200WSWS"
-#define WS_CLIENT_MIN_FRAME_SIZE 6
-
 NS_AX_BEGIN
 
 namespace network
@@ -172,7 +166,7 @@ struct WebSocketProtocol
                          const char* buf,
                          size_t len,
                          ws::detail::opcode opcode /* = WS_OPCODE_BINARY */,
-                         bool fin /* = true */)
+                         bool fin = true)
     {
         int flags = (int)opcode;
 
@@ -192,18 +186,6 @@ struct WebSocketProtocol
         sb.resize_fit(frame_size);
         websocket_build_frame(sb.data(), (websocket_flags)flags, mask, buf, len);
         return ws._service->write(ws._transport, std::move(sb));  // write(sendbuf_.base, frame_size);
-    }
-
-    static int sendPing(WebSocket& ws)
-    {
-        const char* frame = WS_CLIENT_PING_FRAME;
-        return ws._service->write(ws._transport, yasio::sbyte_buffer{frame, frame + WS_CLIENT_MIN_FRAME_SIZE});
-    }
-
-    static int sendPong(WebSocket& ws)
-    {
-        const char* frame = WS_CLIENT_PONG_FRAME;
-        return ws._service->write(ws._transport, yasio::sbyte_buffer{frame, frame + WS_CLIENT_MIN_FRAME_SIZE});
     }
 };
 
@@ -229,8 +211,9 @@ void WebSocket::closeAllConnections()
 
 WebSocket::WebSocket() : _isDestroyed(std::make_shared<std::atomic<bool>>(false)), _delegate(nullptr)
 {
-    _service   = new yasio::io_service();
-    _scheduler = Director::getInstance()->getScheduler();
+    _heartbeatTimer = new yasio::highp_timer();
+    _service        = new yasio::io_service();
+    _scheduler      = Director::getInstance()->getScheduler();
     _service->set_option(yasio::YOPT_S_FORWARD_EVENT, 1);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
@@ -279,6 +262,7 @@ WebSocket::~WebSocket()
     *_isDestroyed = true;
 
     delete _service;
+    delete _heartbeatTimer;
 
     _scheduler->unscheduleAllForTarget(this);
 
@@ -431,7 +415,27 @@ int WebSocket::on_frame_end(websocket_parser* parser)
         ws->_frameState = FrameState::FIN;
 
         std::unique_lock<std::recursive_mutex> lck(ws->_receivedDataMtx);
-        ws->_eventQueue.emplace_back(new MessageEvent{std::move(ws->_receivedData), ws->_opcode == WS_OP_BINARY});
+        switch (ws->_opcode)
+        {
+        case WS_OP_TEXT:
+        case WS_OP_BINARY:
+            AX_ASSERT(!ws->_receivedData.empty());
+            ws->_eventQueue.emplace_back(new MessageEvent{std::move(ws->_receivedData), ws->_opcode == WS_OP_BINARY});
+            break;
+        case WS_OP_CLOSE:
+            AXLOG("WS: control frame: CLOSE");
+            break;
+        case WS_OP_PING:
+            AXLOG("WS: control frame: PING");
+            WebSocketProtocol::sendFrame(*ws, ws->_receivedData.data(), ws->_receivedData.size(),
+                                         ws::detail::opcode::pong);
+            break;
+        case WS_OP_PONG:
+            AXLOG("WS: control frame: PONG");
+            if (ws->_receivedData.size() != 4 || 0 != memcmp(ws->_receivedData.data(), "WSWS", 4))
+                AXLOG("WS: PONG frame from server mismatch!\n");
+            break;
+        }
     }
 
     return 0;
@@ -447,7 +451,7 @@ void WebSocket::send(std::string_view message)
 {
     if (!_transport || message.empty())
         return;
-    WebSocketProtocol::sendFrame(*this, (const char*)message.data(), message.length(), ws::detail::opcode::text, true);
+    WebSocketProtocol::sendFrame(*this, (const char*)message.data(), message.length(), ws::detail::opcode::text);
 }
 
 /**
@@ -461,7 +465,7 @@ void WebSocket::send(const void* data, unsigned int len)
 {
     if (!_transport || len == 0)
         return;
-    WebSocketProtocol::sendFrame(*this, (const char*)data, len, ws::detail::opcode::binary, true);
+    WebSocketProtocol::sendFrame(*this, (const char*)data, len, ws::detail::opcode::binary);
 }
 
 /**
@@ -474,12 +478,22 @@ void WebSocket::close()
     {
         if (_service->is_open(0))
         {
-            _state          = State::CLOSING;
-            _syncCloseState = std::make_shared<std::promise<int>>();
+            _state = State::CLOSING;
             _service->close(0);
-            int status = _syncCloseState->get_future().get();
-            _syncCloseState.reset();
-            ax::log("WebSocket close with status: %d", status);
+
+            if (_transport)
+            {
+                _syncCloseState = std::make_shared<std::promise<int>>();
+                int status      = _syncCloseState->get_future().get();
+                _syncCloseState.reset();
+                AXLOG("WebSocket close with status: %d", status);
+            }
+            else
+            {
+                _service->stop();  // stop internal service for sync close
+                _state = State::CLOSED;
+                AXLOG("WebSocket::close: connection not ready!");
+            }
         }
         else
             _state = State::CLOSED;
@@ -566,9 +580,21 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
                     timerForRead.cancel(*_service);
                     _transport = event->transport();
                     _eventQueue.emplace_back(new OpenEvent());
+
+                    // WebSocketProtocol::sendPing(*this);
+
+                    // starts websocket hartbeat timer
+                    //_heartbeatTimer->expires_from_now(std::chrono::seconds(30));
+                    //_heartbeatTimer->async_wait(*_service, [this](io_service& service) {
+                    //    WebSocketProtocol::sendFrame(*this, "WSWS", 4, ws::detail::opcode::ping);
+                    //    return false;
+                    //});
                 }
                 else
                 {
+                    if (!_responseData.empty())
+                        ax::print("WebSocket: handshake fail, detail: %s", _responseData.c_str());
+
                     //_state = State::CLOSING;
                     _service->close(channelIndex);
                     _eventQueue.emplace_back(new ErrorEvent(error));
@@ -645,10 +671,9 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
         {
             _state = State::CLOSED;
             _eventQueue.emplace_back(new CloseEvent());
-
-            if (_syncCloseState)
-                _syncCloseState->set_value(event->status());
         }
+        if (_syncCloseState)
+            _syncCloseState->set_value(event->status());
         break;
     }
 }
