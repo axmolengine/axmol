@@ -469,7 +469,7 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse* resp
         AXLOGINFO("%s completed", tag.data());
     }
 
-    int statusCode       = response->getResponseCode();
+    int statusCode        = response->getResponseCode();
     char statusString[64] = {};
     sprintf(statusString, "HTTP Status Code: %d, tag = %s", statusCode, tag.data());
     AXLOGINFO("response code: %ld", statusCode);

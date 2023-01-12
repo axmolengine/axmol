@@ -67,7 +67,6 @@ in the onClose method the pointer should be set to NULL or used to connect to a 
 #include "platform/CCPlatformMacros.h"
 #include "base/CCMap.h"
 
-
 /**
  * @addtogroup network
  * @{
@@ -75,9 +74,10 @@ in the onClose method the pointer should be set to NULL or used to connect to a 
 
 NS_AX_BEGIN
 
-namespace network {
+namespace network
+{
 
-//forward declarations
+// forward declarations
 class SIOClientImpl;
 class SIOClient;
 
@@ -109,7 +109,8 @@ public:
         /**
          * This is kept for backwards compatibility, connect is now fired as a socket.io event "connect"
          *
-         * This function would be called when the related SIOClient object receive messages that mean it have connected to endpoint successfully.
+         * This function would be called when the related SIOClient object receive messages that mean it have connected
+         * to endpoint successfully.
          *
          * @param client the connected SIOClient object.
          */
@@ -122,7 +123,10 @@ public:
          * @param client the connected SIOClient object.
          * @param data the message,it could be json message
          */
-        virtual void onMessage(SIOClient* client, const std::string& data) { AXLOG("SIODelegate onMessage fired with data: %s", data.c_str()); };
+        virtual void onMessage(SIOClient* client, const std::string& data)
+        {
+            AXLOG("SIODelegate onMessage fired with data: %s", data.c_str());
+        };
         /**
          * Pure virtual callback function, this function should be overridden by the subclass.
          *
@@ -134,7 +138,8 @@ public:
         /**
          * Pure virtual callback function, this function should be overridden by the subclass.
          *
-         * This function would be called when the related SIOClient object receive error signal or didn't connect the endpoint but do some network operation, eg.,send and emit,etc.
+         * This function would be called when the related SIOClient object receive error signal or didn't connect the
+         * endpoint but do some network operation, eg.,send and emit,etc.
          *
          * @param client the connected SIOClient object.
          * @param data the error message
@@ -147,7 +152,10 @@ public:
          * @param eventName the event's name.
          * @param data the event's data information.
          */
-        virtual void fireEventToScript(SIOClient* client, const std::string& eventName, const std::string& data) { AXLOG("SIODelegate event '%s' fired with data: %s", eventName.c_str(), data.c_str()); };
+        virtual void fireEventToScript(SIOClient* client, const std::string& eventName, const std::string& data)
+        {
+            AXLOG("SIODelegate event '%s' fired with data: %s", eventName.c_str(), data.c_str());
+        };
     };
 
     /**
@@ -168,27 +176,26 @@ public:
     static SIOClient* connect(const std::string& uri, SocketIO::SIODelegate& delegate, const std::string& caFilePath);
 
 private:
-
     SocketIO();
     virtual ~SocketIO();
 
-    static SocketIO *_inst;
+    static SocketIO* _inst;
 
-    hlookup::string_map<std::weak_ptr<SIOClientImpl
-    >> _sockets;
+    hlookup::string_map<std::weak_ptr<SIOClientImpl>> _sockets;
 
     std::shared_ptr<SIOClientImpl> getSocket(const std::string_view& uri);
     void addSocket(const std::string_view& uri, std::shared_ptr<SIOClientImpl>& socket);
     void removeSocket(const std::string_view& uri);
 
     friend class SIOClientImpl;
+
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(SocketIO)
 };
 
-//c++11 style callbacks entities will be created using CC_CALLBACK (which uses std::bind)
+// c++11 style callbacks entities will be created using CC_CALLBACK (which uses std::bind)
 typedef std::function<void(SIOClient*, const std::string&)> SIOEvent;
-//c++11 map to callbacks
+// c++11 map to callbacks
 typedef hlookup::string_map<SIOEvent> EventRegistry;
 
 /**
@@ -196,16 +203,15 @@ typedef hlookup::string_map<SIOEvent> EventRegistry;
  *
  * @lua NA
  */
-class AX_DLL SIOClient
-    : public ax::Ref
+class AX_DLL SIOClient : public ax::Ref
 {
 private:
-    friend class SocketIO; // Only SocketIO class could contruct a SIOClient instance.
+    friend class SocketIO;  // Only SocketIO class could contruct a SIOClient instance.
 
     std::string _path, _tag;
     bool _connected;
     std::shared_ptr<SIOClientImpl> _socket;
-    
+
     SocketIO::SIODelegate* _delegate = nullptr;
 
     EventRegistry _eventRegistry;
@@ -235,6 +241,7 @@ private:
      * Destructor of SIOClient class.
      */
     virtual ~SIOClient();
+
 public:
     /**
      * Get the delegate for the client
@@ -254,15 +261,13 @@ public:
     void send(const std::string& s);
     void send(const std::vector<std::string>& s);
 
-
-
     /**
      *  Emit the eventname and the args to the endpoint that _path point to.
      * @param eventname
      * @param args
      */
     void emit(const std::string& eventname, const std::string& args);
-    void emit(const std::string& eventname, const std::vector<std::string> &args);
+    void emit(const std::string& eventname, const std::vector<std::string>& args);
 
     /**
      * Used to register a socket.io event callback.
@@ -283,14 +288,10 @@ public:
      * Get tag of SIOClient.
      * @return const char* the pointer point to the _tag.
      */
-    const char* getTag()
-    {
-        return _tag.c_str();
-    }
-
+    const char* getTag() { return _tag.c_str(); }
 };
 
-}
+}  // namespace network
 
 NS_AX_END
 
@@ -298,4 +299,3 @@ NS_AX_END
 /// @}
 
 #endif /* defined(__CC_JSB_SOCKETIO_H__) */
-

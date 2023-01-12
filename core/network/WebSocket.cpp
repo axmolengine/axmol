@@ -2,7 +2,7 @@
 *
  Copyright (c) 2023 Bytedance Inc.
 
- https://axmolengine.github.io/ 
+ https://axmolengine.github.io/
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -273,7 +273,7 @@ WebSocket::~WebSocket()
                 this);
         }
     }
-    __instanceMutex.unlock(); // quick release lock to avoid dead lock
+    __instanceMutex.unlock();  // quick release lock to avoid dead lock
 
     Director::getInstance()->getEventDispatcher()->removeEventListener(_resetDirectorListener);
     *_isDestroyed = true;
@@ -282,11 +282,11 @@ WebSocket::~WebSocket()
 
     _scheduler->unscheduleAllForTarget(this);
 
-    // Design A(Current): dispatch pending events at destructor. user can't delete websocket instance in delegate callbacks
-    // Design B: purge pending events without dispatch.
+    // Design A(Current): dispatch pending events at destructor. user can't delete websocket instance in delegate
+    // callbacks Design B: purge pending events without dispatch.
     dispatchEvents();
 
-    if(!_eventQueue.unsafe_empty()) // after _service destroyed, we can safe check by unsafe_xxx stubs
+    if (!_eventQueue.unsafe_empty())  // after _service destroyed, we can safe check by unsafe_xxx stubs
         AXLOGERROR("WebSocket: still have %zu pending events not dispatched!", _eventQueue.unsafe_size());
 }
 
@@ -340,7 +340,7 @@ void WebSocket::dispatchEvents()
             case Event::Type::ON_ERROR:
                 _delegate->onError(this, static_cast<ErrorEvent*>(event)->getErrorCode());
                 break;
-            case Event::Type::ON_MESSAGE: 
+            case Event::Type::ON_MESSAGE:
                 _delegate->onMessage(this, WebSocket::Data{static_cast<MessageEvent*>(event)});
                 break;
             }

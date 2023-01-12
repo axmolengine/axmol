@@ -148,6 +148,7 @@ public:
         ErrorEvent(ErrorCode errorCode) : _errorCode(errorCode) { this->_type = Type::ON_ERROR; }
 
         ErrorCode getErrorCode() const { return _errorCode; }
+
     private:
         ErrorCode _errorCode;
     };
@@ -180,7 +181,13 @@ public:
     struct Data
     {
         Data() : bytes(nullptr), len(0), issued(0), isBinary(false), ext(nullptr) {}
-        Data(MessageEvent* event) : bytes(event->getMessage().data()), len(event->getMessage().size()), isBinary(event->isBinary()), issued(0), ext(nullptr){}
+        Data(MessageEvent* event)
+            : bytes(event->getMessage().data())
+            , len(event->getMessage().size())
+            , isBinary(event->isBinary())
+            , issued(0)
+            , ext(nullptr)
+        {}
         const char* bytes;
         size_t len, issued;
         bool isBinary;
@@ -298,7 +305,7 @@ public:
 
 protected:
     void dispatchEvents();
-    
+
     void setupParsers();
     void generateHandshakeSecKey();
     void handleNetworkEvent(yasio::io_event* event);
@@ -400,7 +407,10 @@ protected:
     std::string _currentHeader;
     std::string _currentHeaderValue;
     ResponseHeaderMap _responseHeaders;  /// the returned raw header data. You can also dump it as a string
-    int _responseCode = -1;              /// the status code returned from libcurl, e.g. 200, 404
+
+    /// the http status code returned from server, e.g. 200, 404, refer to
+    /// https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+    int _responseCode = -1;
 
     // for receiveData
     yasio::sbyte_buffer _receivedData;
