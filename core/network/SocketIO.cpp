@@ -66,23 +66,23 @@ public:
 
     SocketIOPacket();
     virtual ~SocketIOPacket();
-    void initWithType(const std::string& packetType);
+    void initWithType(std::string_view packetType);
     void initWithTypeIndex(int index);
 
     std::string toString() const;
     virtual int typeAsNumber() const;
-    const std::string& typeForIndex(int index) const;
+    std::string_view typeForIndex(int index) const;
 
     void setEndpoint(const std::string_view& endpoint) { _endpoint = endpoint; };
-    const std::string& getEndpoint() const { return _endpoint; };
-    void setEvent(const std::string& event) { _name = event; };
-    const std::string& getEvent() const { return _name; };
+    std::string_view getEndpoint() const { return _endpoint; };
+    void setEvent(std::string_view event) { _name = event; };
+    std::string_view getEvent() const { return _name; };
 
-    void addData(const std::string& data);
+    void addData(std::string_view data);
     std::vector<std::string> getData() const { return _args; };
     virtual std::string stringify() const;
 
-    static std::shared_ptr<SocketIOPacket> createPacketWithType(const std::string& type, SocketIOVersion version);
+    static std::shared_ptr<SocketIOPacket> createPacketWithType(std::string_view type, SocketIOVersion version);
     static std::shared_ptr<SocketIOPacket> createPacketWithTypeIndex(int type, SocketIOVersion version);
 
 protected:
@@ -127,7 +127,7 @@ SocketIOPacket::~SocketIOPacket()
     _types.clear();
 }
 
-void SocketIOPacket::initWithType(const std::string& packetType)
+void SocketIOPacket::initWithType(std::string_view packetType)
 {
     _type = packetType;
 }
@@ -187,15 +187,15 @@ int SocketIOPacket::typeAsNumber() const
     }
     return (int)num;
 }
-const std::string& SocketIOPacket::typeForIndex(int index) const
+std::string_view SocketIOPacket::typeForIndex(int index) const
 {
     return _types.at(index);
 }
 
-void SocketIOPacket::addData(const std::string& data)
+void SocketIOPacket::addData(std::string_view data)
 {
 
-    this->_args.push_back(data);
+    this->_args.emplace_back(std::string{data});
 }
 
 std::string SocketIOPacket::stringify() const
@@ -309,7 +309,7 @@ SocketIOPacketV10x::~SocketIOPacketV10x()
     _endpoint = "";
 }
 
-std::shared_ptr<SocketIOPacket> SocketIOPacket::createPacketWithType(const std::string& type,
+std::shared_ptr<SocketIOPacket> SocketIOPacket::createPacketWithType(std::string_view type,
                                                                      SocketIOPacket::SocketIOVersion version)
 {
     if (version == SocketIOPacket::SocketIOVersion::V09x)
@@ -364,10 +364,10 @@ private:
     StringMap<SIOClient*> _clients;
 
 public:
-    SIOClientImpl(const Uri& uri, const std::string& caFilePath);
+    SIOClientImpl(const Uri& uri, std::string_view caFilePath);
     virtual ~SIOClientImpl();
 
-    static std::shared_ptr<SIOClientImpl> create(const Uri& uri, const std::string& caFilePath);
+    static std::shared_ptr<SIOClientImpl> create(const Uri& uri, std::string_view caFilePath);
 
     virtual void onOpen(WebSocket* ws);
     virtual void onMessage(WebSocket* ws, const WebSocket::Data& data);
@@ -388,11 +388,11 @@ public:
     void connectToEndpoint(const std::string_view& endpoint);
     void disconnectFromEndpoint(const std::string_view& endpoint);
 
-    void send(const std::string& endpoint, const std::string& s);
-    void send(const std::string& endpoint, const std::vector<std::string>& s);
+    void send(std::string_view endpoint, std::string_view s);
+    void send(std::string_view endpoint, const std::vector<std::string_view>& s);
     void send(std::shared_ptr<SocketIOPacket>& packet);
-    void emit(const std::string& endpoint, const std::string& eventname, const std::string& args);
-    void emit(const std::string& endpoint, const std::string& eventname, const std::vector<std::string>& args);
+    void emit(std::string_view endpoint, std::string_view eventname, std::string_view args);
+    void emit(std::string_view endpoint, std::string_view eventname, const std::vector<std::string_view>& args);
 
     friend class SIOClient;
 };
@@ -400,7 +400,7 @@ public:
 // method implementations
 
 // begin SIOClientImpl methods
-SIOClientImpl::SIOClientImpl(const Uri& uri, const std::string& caFilePath)
+SIOClientImpl::SIOClientImpl(const Uri& uri, std::string_view caFilePath)
     : _heartbeat(0)
     , _timeout(0)
     , _uri(uri)
@@ -645,7 +645,7 @@ void SIOClientImpl::disconnect()
     _ws->close();
 }
 
-std::shared_ptr<SIOClientImpl> SIOClientImpl::create(const Uri& uri, const std::string& caFilePath)
+std::shared_ptr<SIOClientImpl> SIOClientImpl::create(const Uri& uri, std::string_view caFilePath)
 {
     SIOClientImpl* s = new (std::nothrow) SIOClientImpl(uri, caFilePath);
 
@@ -705,7 +705,7 @@ void SIOClientImpl::heartbeat(float /*dt*/)
     AXLOGINFO("Heartbeat sent");
 }
 
-void SIOClientImpl::send(const std::string& endpoint, const std::vector<std::string>& s)
+void SIOClientImpl::send(std::string_view endpoint, const std::vector<std::string_view>& s)
 {
     switch (_version)
     {
@@ -728,9 +728,9 @@ void SIOClientImpl::send(const std::string& endpoint, const std::vector<std::str
     }
 }
 
-void SIOClientImpl::send(const std::string& endpoint, const std::string& s)
+void SIOClientImpl::send(std::string_view endpoint, std::string_view s)
 {
-    std::vector<std::string> t{s};
+    std::vector<std::string_view> t{s};
     send(endpoint, t);
 }
 
@@ -746,7 +746,7 @@ void SIOClientImpl::send(std::shared_ptr<SocketIOPacket>& packet)
         AXLOGINFO("Cant send the message (%s) because disconnected", req.c_str());
 }
 
-void SIOClientImpl::emit(const std::string& endpoint, const std::string& eventname, const std::string& args)
+void SIOClientImpl::emit(std::string_view endpoint, std::string_view eventname, std::string_view args)
 {
     AXLOGINFO("Emitting event \"%s\"", eventname.c_str());
     auto packet = SocketIOPacket::createPacketWithType("event", _version);
@@ -756,9 +756,9 @@ void SIOClientImpl::emit(const std::string& endpoint, const std::string& eventna
     this->send(packet);
 }
 
-void SIOClientImpl::emit(const std::string& endpoint,
-                         const std::string& eventname,
-                         const std::vector<std::string>& args)
+void SIOClientImpl::emit(std::string_view endpoint,
+                         std::string_view eventname,
+                         const std::vector<std::string_view>& args)
 {
     AXLOGINFO("Emitting event \"%s\"", eventname.c_str());
     auto packet = SocketIOPacket::createPacketWithType("event", _version);
@@ -1099,13 +1099,13 @@ void SIOClient::onConnect()
     setConnected(true);
 }
 
-void SIOClient::send(const std::string& s)
+void SIOClient::send(std::string_view s)
 {
-    std::vector<std::string> t{s};
+    std::vector<std::string_view> t{s};
     send(t);
 }
 
-void SIOClient::send(const std::vector<std::string>& s)
+void SIOClient::send(const std::vector<std::string_view>& s)
 {
     if (isConnected())
     {
@@ -1117,7 +1117,7 @@ void SIOClient::send(const std::vector<std::string>& s)
     }
 }
 
-void SIOClient::emit(const std::string& eventname, const std::string& args)
+void SIOClient::emit(std::string_view eventname, std::string_view args)
 {
     if (isConnected())
     {
@@ -1129,7 +1129,7 @@ void SIOClient::emit(const std::string& eventname, const std::string& args)
     }
 }
 
-void SIOClient::emit(const std::string& eventname, const std::vector<std::string>& args)
+void SIOClient::emit(std::string_view eventname, const std::vector<std::string_view>& args)
 {
     if (isConnected())
     {
@@ -1165,12 +1165,12 @@ void SIOClient::setConnected(bool connected)
     _connected = connected;
 }
 
-void SIOClient::on(const std::string& eventName, SIOEvent e)
+void SIOClient::on(std::string_view eventName, SIOEvent e)
 {
     _eventRegistry[eventName] = e;
 }
 
-void SIOClient::fireEvent(const std::string& eventName, const std::string& data)
+void SIOClient::fireEvent(std::string_view eventName, std::string_view data)
 {
     AXLOGINFO("SIOClient::fireEvent called with event name: %s and data: %s", eventName.c_str(), data.c_str());
 
@@ -1188,7 +1188,7 @@ void SIOClient::fireEvent(const std::string& eventName, const std::string& data)
     AXLOGINFO("SIOClient::fireEvent no native event with name %s found", eventName.c_str());
 }
 
-void SIOClient::setTag(const char* tag)
+void SIOClient::setTag(std::string_view tag)
 {
     _tag = tag;
 }
@@ -1213,12 +1213,12 @@ void SocketIO::destroyInstance()
     AX_SAFE_DELETE(_inst);
 }
 
-SIOClient* SocketIO::connect(const std::string& uri, SocketIO::SIODelegate& delegate)
+SIOClient* SocketIO::connect(std::string_view uri, SocketIO::SIODelegate& delegate)
 {
     return SocketIO::connect(uri, delegate, "");
 }
 
-SIOClient* SocketIO::connect(const std::string& uri, SocketIO::SIODelegate& delegate, const std::string& caFilePath)
+SIOClient* SocketIO::connect(std::string_view uri, SocketIO::SIODelegate& delegate, std::string_view caFilePath)
 {
     Uri uriObj = Uri::parse(uri);
 

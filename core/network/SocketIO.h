@@ -49,7 +49,7 @@ CC_CALLBACK_2 is used to wrap the callback with std::bind and store as an SIOEve
 
 event target function should match this pattern, *this pointer will be made available
 
-    void TargetClass::targetfunc(SIOClient *, const std::string&)
+    void TargetClass::targetfunc(SIOClient *, std::string_view)
 
 disconnect from the endpoint by calling disconnect(), onClose will be called on the delegate once complete
 in the onClose method the pointer should be set to NULL or used to connect to a new endpoint
@@ -123,9 +123,9 @@ public:
          * @param client the connected SIOClient object.
          * @param data the message,it could be json message
          */
-        virtual void onMessage(SIOClient* client, const std::string& data)
+        virtual void onMessage(SIOClient* client, std::string_view data)
         {
-            AXLOG("SIODelegate onMessage fired with data: %s", data.c_str());
+            AXLOG("SIODelegate onMessage fired with data: %s", data.data());
         };
         /**
          * Pure virtual callback function, this function should be overridden by the subclass.
@@ -144,7 +144,7 @@ public:
          * @param client the connected SIOClient object.
          * @param data the error message
          */
-        virtual void onError(SIOClient* client, const std::string& data) = 0;
+        virtual void onError(SIOClient* client, std::string_view data) = 0;
         /**
          * Fire event to script when the related SIOClient object receive the fire event signal.
          *
@@ -152,9 +152,9 @@ public:
          * @param eventName the event's name.
          * @param data the event's data information.
          */
-        virtual void fireEventToScript(SIOClient* client, const std::string& eventName, const std::string& data)
+        virtual void fireEventToScript(SIOClient* client, std::string_view eventName, std::string_view data)
         {
-            AXLOG("SIODelegate event '%s' fired with data: %s", eventName.c_str(), data.c_str());
+            AXLOG("SIODelegate event '%s' fired with data: %s", eventName.data(), data.data());
         };
     };
 
@@ -164,7 +164,7 @@ public:
      *  @param  delegate the delegate which want to receive events from the socket.io client.
      *  @return SIOClient* an initialized SIOClient if connected successfully, otherwise nullptr.
      */
-    static SIOClient* connect(const std::string& uri, SocketIO::SIODelegate& delegate);
+    static SIOClient* connect(std::string_view uri, SocketIO::SIODelegate& delegate);
 
     /**
      *  Static client creation method, similar to socketio.connect(uri) in JS.
@@ -173,7 +173,7 @@ public:
      *  @param caFilePath The ca file path for wss connection
      *  @return SIOClient* an initialized SIOClient if connected successfully, otherwise nullptr.
      */
-    static SIOClient* connect(const std::string& uri, SocketIO::SIODelegate& delegate, const std::string& caFilePath);
+    static SIOClient* connect(std::string_view uri, SocketIO::SIODelegate& delegate, std::string_view caFilePath);
 
 private:
     SocketIO();
@@ -194,7 +194,7 @@ private:
 };
 
 // c++11 style callbacks entities will be created using CC_CALLBACK (which uses std::bind)
-typedef std::function<void(SIOClient*, const std::string&)> SIOEvent;
+typedef std::function<void(SIOClient*, std::string_view)> SIOEvent;
 // c++11 map to callbacks
 typedef hlookup::string_map<SIOEvent> EventRegistry;
 
@@ -216,7 +216,7 @@ private:
 
     EventRegistry _eventRegistry;
 
-    void fireEvent(const std::string& eventName, const std::string& data);
+    void fireEvent(std::string_view eventName, std::string_view data);
 
     void onOpen();
     void onConnect();
@@ -258,16 +258,16 @@ public:
      *
      * @param s message.
      */
-    void send(const std::string& s);
-    void send(const std::vector<std::string>& s);
+    void send(std::string_view s);
+    void send(const std::vector<std::string_view>& s);
 
     /**
      *  Emit the eventname and the args to the endpoint that _path point to.
      * @param eventname
      * @param args
      */
-    void emit(const std::string& eventname, const std::string& args);
-    void emit(const std::string& eventname, const std::vector<std::string>& args);
+    void emit(std::string_view eventname, std::string_view args);
+    void emit(std::string_view eventname, const std::vector<std::string_view>& args);
 
     /**
      * Used to register a socket.io event callback.
@@ -275,20 +275,20 @@ public:
      * @param eventName the name of event.
      * @param e the callback function.
      */
-    void on(const std::string& eventName, SIOEvent e);
+    void on(std::string_view eventName, SIOEvent e);
 
     /**
      * Set tag of SIOClient.
      * The tag is used to distinguish the various SIOClient objects.
      * @param tag string object.
      */
-    void setTag(const char* tag);
+    void setTag(std::string_view tag);
 
     /**
      * Get tag of SIOClient.
      * @return const char* the pointer point to the _tag.
      */
-    const char* getTag() { return _tag.c_str(); }
+    std::string_view getTag() { return _tag; }
 };
 
 }  // namespace network

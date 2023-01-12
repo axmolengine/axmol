@@ -291,9 +291,9 @@ WebSocket::~WebSocket()
 }
 
 bool WebSocket::init(const Delegate& delegate,
-                     const std::string& url,
+                     std::string_view url,
                      const std::vector<std::string>* protocols /* = nullptr*/,
-                     const std::string& caFilePath /* = ""*/)
+                     std::string_view caFilePath /* = ""*/)
 {
     _delegate   = const_cast<Delegate*>(&delegate);
     _url        = url;
@@ -443,11 +443,11 @@ int WebSocket::on_frame_end(websocket_parser* parser)
  *  @param message string data.
  *  @lua sendstring
  */
-void WebSocket::send(const std::string& message)
+void WebSocket::send(std::string_view message)
 {
     if (!_transport || message.empty())
         return;
-    WebSocketProtocol::sendFrame(*this, (const char*)message.c_str(), message.length(), ws::detail::opcode::text, true);
+    WebSocketProtocol::sendFrame(*this, (const char*)message.data(), message.length(), ws::detail::opcode::text, true);
 }
 
 /**

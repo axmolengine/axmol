@@ -31,11 +31,15 @@
 #include "fmt/format.h"
 #include "fmt/compile.h"
 
-// "ws://echo.websocket.org no longer avaiable: https://www.lob.com/blog/websocket-org-is-down-here-is-an-alternative
-// other public test servers:
-//   - "wss://socketsbay.com/wss/v2/1/demo/"
-#define ECHO_SERVER_URL "ws://echo.websocket.events/.ws"
-
+/* "ws://echo.websocket.org no longer avaiable: https://www.lob.com/blog/websocket-org-is-down-here-is-an-alternative
+ list of public test servers:
+   - ws://echo.websocket.events/.ws
+   - wss://ws.postman-echo.com/raw
+   - wss://ws.postman-echo.com/socketio
+   - wss://socketsbay.com/wss/v2/1/demo/
+*/  
+#define ECHO_SERVER_URL "wss://ws.postman-echo.com/raw"
+#define SOCKETIO_SERVICE "wss://ws.postman-echo.com/socketio"
 
 USING_NS_AX;
 using namespace ax::network;
@@ -184,9 +188,9 @@ void WebSocketTest::startTestCallback(Ref* sender)
 void WebSocketTest::onOpen(network::WebSocket* ws)
 {
     char status[256] = {0};
-    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl().c_str(), ws->getProtocol().c_str());
+    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl().data(), ws->getProtocol().data());
 
-    log("Websocket (%p) was opened, url: %s, protocol: %s", ws, ws->getUrl().c_str(), ws->getProtocol().c_str());
+    ax::print("Websocket (%p) was opened, url: %s, protocol: %s", ws, ws->getUrl().data(), ws->getProtocol().data());
     if (ws == _wsiSendText)
     {
         _sendTextStatus->setString(status);
@@ -207,7 +211,7 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
     {
         _sendTextTimes++;
         std::string textStr = fmt::format(FMT_COMPILE("#{} response text msg: {}"), _sendTextTimes, std::string_view{data.bytes, static_cast<size_t>(data.len)});
-        log("%s", textStr.c_str());
+        ax::print("%s", textStr.c_str());
         
         _sendTextStatus->setString(textStr.c_str());
     }
@@ -231,14 +235,14 @@ void WebSocketTest::onMessage(network::WebSocket* ws, const network::WebSocket::
         }
         
         binaryStr += std::string(", ")+times;
-        log("%s", binaryStr.c_str());
+        ax::print("%s", binaryStr.c_str());
         _sendBinaryStatus->setString(binaryStr.c_str());
     }
 }
 
 void WebSocketTest::onClose(network::WebSocket* ws)
 {
-    log("onClose: websocket instance (%p) closed.", ws);
+    ax::print("onClose: websocket instance (%p) closed.", ws);
     if (ws == _wsiSendText)
     {
         // _wsiSendText = nullptr;
@@ -256,13 +260,13 @@ void WebSocketTest::onClose(network::WebSocket* ws)
     }
     // Delete websocket instance.
     // AX_SAFE_DELETE(ws);
-    log("WebSocketTest ref: %u", _referenceCount);
+    ax::print("WebSocketTest ref: %u", _referenceCount);
     release();
 }
 
 void WebSocketTest::onError(network::WebSocket* ws, const network::WebSocket::ErrorCode& error)
 {
-    log("Error was fired, error code: %d", static_cast<int>(error));
+    ax::print("Error was fired, error code: %d", static_cast<int>(error));
     char buf[100] = {0};
     sprintf(buf, "An error was fired, code: %d", static_cast<int>(error));
 
@@ -296,7 +300,7 @@ void WebSocketTest::onMenuSendTextClicked(ax::Ref *sender)
     else
     {
         std::string warningStr = "send text websocket instance wasn't ready...";
-        log("%s", warningStr.c_str());
+        ax::print("%s", warningStr.c_str());
         _sendTextStatus->setString(warningStr.c_str());
     }
 }
@@ -318,7 +322,7 @@ void WebSocketTest::onMenuSendMultipleTextClicked(ax::Ref *sender)
     else
     {
         std::string warningStr = "send text websocket instance wasn't ready...";
-        log("%s", warningStr.c_str());
+        ax::print("%s", warningStr.c_str());
         _sendTextStatus->setString(warningStr.c_str());
     }
 }
@@ -338,7 +342,7 @@ void WebSocketTest::onMenuSendBinaryClicked(ax::Ref *sender)
     else
     {
         std::string warningStr = "send binary websocket instance wasn't ready...";
-        log("%s", warningStr.c_str());
+        ax::print("%s", warningStr.c_str());
         _sendBinaryStatus->setString(warningStr.c_str());
     }
 }
@@ -384,17 +388,17 @@ WebSocketCloseTest::~WebSocketCloseTest()
 // Delegate methods
 void WebSocketCloseTest::onOpen(network::WebSocket* ws)
 {
-    log("Websocket (%p) opened", ws);
+    ax::print("Websocket (%p) opened", ws);
 }
 
 void WebSocketCloseTest::onMessage(network::WebSocket* ws, const network::WebSocket::Data& data)
 {
-    log("Websocket get message from %p", ws);
+    ax::print("Websocket get message from %p", ws);
 }
 
 void WebSocketCloseTest::onClose(network::WebSocket* ws)
 {
-    log("websocket (%p) closed.", ws);
+    ax::print("websocket (%p) closed.", ws);
     // if (ws == _wsiTest) {
     //     _wsiTest = nullptr;
     // }
@@ -403,7 +407,7 @@ void WebSocketCloseTest::onClose(network::WebSocket* ws)
 
 void WebSocketCloseTest::onError(network::WebSocket* ws, const network::WebSocket::ErrorCode& error)
 {
-    log("Error was fired, error code: %d", static_cast<int>(error));
+    ax::print("Error was fired, error code: %d", static_cast<int>(error));
 }
 
 
@@ -520,9 +524,9 @@ void WebSocketDelayTest::doReceiveText()
 void WebSocketDelayTest::onOpen(network::WebSocket* ws)
 {
     char status[256] = {0};
-    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl().c_str(), ws->getProtocol().c_str());
+    sprintf(status, "Opened, url: %s, protocol: %s", ws->getUrl().data(), ws->getProtocol().data());
 
-    log("Websocket (%p) was opened, url: %s, protocol: %s", ws, ws->getUrl().c_str(), ws->getProtocol().c_str());
+    ax::print("Websocket (%p) was opened, url: %s, protocol: %s", ws, ws->getUrl().data(), ws->getProtocol().data());
     if (ws == _wsiSendText)
     {
         _sendTextStatus->setString(status);
@@ -538,7 +542,7 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
         char times[100] = {0};
         sprintf(times, "%d", _receiveTextTimes);
         std::string textStr = std::string("response text msg: ")+data.bytes+", "+times;
-        log("%s", textStr.c_str());
+        ax::print("%s", textStr.c_str());
         doReceiveText();
         memset(times, 0, 100);
         snprintf(times, 100, "total delay %f seconds", (float)(_totalDelayMircoSec/ 1000000.0));
@@ -548,20 +552,20 @@ void WebSocketDelayTest::onMessage(network::WebSocket* ws, const network::WebSoc
 
 void WebSocketDelayTest::onClose(network::WebSocket* ws)
 {
-    log("onClose: websocket instance (%p) closed.", ws);
+    ax::print("onClose: websocket instance (%p) closed.", ws);
     if (ws == _wsiSendText)
     {
         // delete _wsiSendText;
         // _wsiSendText = nullptr;
         _sendTextStatus->setString("Send Text WS was closed");
     }
-    log("WebSocketDelayTest ref: %u", _referenceCount);
+    ax::print("WebSocketDelayTest ref: %u", _referenceCount);
     release();
 }
 
 void WebSocketDelayTest::onError(network::WebSocket* ws, const network::WebSocket::ErrorCode& error)
 {
-    log("Error was fired, error code: %d", static_cast<int>(error));
+    ax::print("Error was fired, error code: %d", static_cast<int>(error));
     char buf[100] = {0};
     sprintf(buf, "An error was fired, code: %d", static_cast<int>(error));
 
@@ -591,7 +595,7 @@ void WebSocketDelayTest::onMenuSendTextClicked(ax::Ref *sender)
     else
     {
         std::string warningStr = "send text websocket instance wasn't ready...";
-        log("%s", warningStr.c_str());
+        ax::print("%s", warningStr.c_str());
         _sendTextStatus->setString(warningStr.c_str());
     }
 }
@@ -672,23 +676,23 @@ SocketIOTest::~SocketIOTest()
 }
 
 //test event callback handlers, these will be registered with socket.io
-void SocketIOTest::testevent(SIOClient *client, const std::string& data) {
+void SocketIOTest::testevent(SIOClient *client, std::string_view data) {
 
-    AXLOGINFO("SocketIOTest::testevent called with data: %s", data.c_str());
+    AXLOGINFO("SocketIOTest::testevent called with data: %s", data.data());
 
 	std::stringstream s;
-	s << client->getTag() << " received event testevent with data: " << data.c_str();
+	s << client->getTag() << " received event testevent with data: " << data;
 
 	_sioClientStatus->setString(s.str().c_str());
 
 }
 
-void SocketIOTest::echotest(SIOClient *client, const std::string& data) {
+void SocketIOTest::echotest(SIOClient *client, std::string_view data) {
 
-    AXLOGINFO("SocketIOTest::echotest called with data: %s", data.c_str());
+    AXLOGINFO("SocketIOTest::echotest called with data: %s", data.data());
 
 	std::stringstream s;
-	s << client->getTag() << " received event echotest with data: " << data.c_str();
+	s << client->getTag() << " received event echotest with data: " << data;
 
 	_sioClientStatus->setString(s.str().c_str());
 
@@ -696,27 +700,27 @@ void SocketIOTest::echotest(SIOClient *client, const std::string& data) {
 
 // onMessage is no longer a required override from the delegate class
 // 'message' events and handlers are now registered in the same way that other events are
-void SocketIOTest::message(network::SIOClient* client, const std::string& data)
+void SocketIOTest::message(network::SIOClient* client, std::string_view data)
 {
-    AXLOGINFO("SocketIOTest::message received: %s", data.c_str());
+    AXLOGINFO("SocketIOTest::message received: %s", data.data());
 
 	std::stringstream s;
-	s << client->getTag() << " received message with content: " << data.c_str();
+	s << client->getTag() << " received message with content: " << data;
 	_sioClientStatus->setString(s.str().c_str());
 
 }
 
-void SocketIOTest::json(network::SIOClient* client, const std::string& data)
+void SocketIOTest::json(network::SIOClient* client, std::string_view data)
 {
-    AXLOGINFO("SocketIOTest::json received: %s", data.c_str());
+    AXLOGINFO("SocketIOTest::json received: %s", data.data());
 
 	std::stringstream s;
-	s << client->getTag() << " received json message with content: " << data.c_str();
+	s << client->getTag() << " received json message with content: " << data;
 	_sioClientStatus->setString(s.str().c_str());
 
 }
 
-void SocketIOTest::connect(network::SIOClient* client, const std::string& data)
+void SocketIOTest::connect(network::SIOClient* client, std::string_view data)
 {
     AXLOGINFO("SocketIOTest::connect called");
 
@@ -726,7 +730,7 @@ void SocketIOTest::connect(network::SIOClient* client, const std::string& data)
 
 }
 
-void SocketIOTest::disconnect(network::SIOClient* client, const std::string& data)
+void SocketIOTest::disconnect(network::SIOClient* client, std::string_view data)
 {
     AXLOGINFO("SocketIOTest::disconnect called");
 
@@ -755,7 +759,7 @@ void SocketIOTest::closedSocketAction(network::SIOClient* client)
 void SocketIOTest::onMenuSIOClientClicked(ax::Ref *sender)
 {
 	//create a client by using this static method, url does not need to contain the protocol
-	_sioClient = SocketIO::connect("ws://tools.itharbors.com:4000", *this);
+	_sioClient = SocketIO::connect("wss://ws.postman-echo.com/socketio", *this);
 	//you may set a tag for the client for reference in callbacks
 	_sioClient->setTag("Test Client");
 
@@ -772,7 +776,7 @@ void SocketIOTest::onMenuSIOClientClicked(ax::Ref *sender)
 void SocketIOTest::onMenuSIOEndpointClicked(ax::Ref *sender)
 {
 	//repeat the same connection steps for the namespace "testpoint"
-	_sioEndpoint = SocketIO::connect("ws://tools.itharbors.com:4000/testpoint", *this); 
+	_sioEndpoint = SocketIO::connect("wss://ws.postman-echo.com/socketio", *this); 
 	//a tag to differentiate in shared callbacks
 	_sioEndpoint->setTag("Test Endpoint");
 
@@ -865,11 +869,11 @@ void SocketIOTest::onClose(network::SIOClient* client)
 
 }
 
-void SocketIOTest::onError(network::SIOClient* client, const std::string& data)
+void SocketIOTest::onError(network::SIOClient* client, std::string_view data)
 {
-	AXLOGERROR("SocketIOTest::onError received: %s", data.c_str());
+	AXLOGERROR("SocketIOTest::onError received: %s", data.data());
 
 	std::stringstream s;
-	s << client->getTag() << " received error with content: " << data.c_str();
+	s << client->getTag() << " received error with content: " << data;
 	_sioClientStatus->setString(s.str().c_str());
 }

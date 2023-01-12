@@ -252,9 +252,9 @@ public:
      *  @lua NA
      */
     bool init(const Delegate& delegate,
-              const std::string& url,
+              std::string_view url,
               const std::vector<std::string>* protocols = nullptr,
-              const std::string& caFilePath             = "");
+              std::string_view caFilePath             = "");
 
     /**
      *  @brief Sends string data to websocket server.
@@ -262,7 +262,7 @@ public:
      *  @param message string data.
      *  @lua sendstring
      */
-    void send(const std::string& message);
+    void send(std::string_view message);
 
     /**
      *  @brief Sends binary data to websocket server.
@@ -296,12 +296,12 @@ public:
     /**
      *  @brief Gets the URL of websocket connection.
      */
-    inline const std::string& getUrl() const { return _url; }
+    inline std::string_view getUrl() const { return _url; }
 
     /**
      *  @brief Gets the protocol selected by websocket server.
      */
-    inline const std::string& getProtocol() const { return _selectedProtocol; }
+    inline std::string_view getProtocol() const { return _selectedProtocol; }
 
 protected:
     void dispatchEvents();

@@ -163,7 +163,7 @@ public:
 	/**
 	*  @brief Used for network level socket error (not for disconnect from the socket.io server)
 	**/
-	virtual void onError(ax::network::SIOClient* client, const std::string& data)override;
+	virtual void onError(ax::network::SIOClient* client, std::string_view data)override;
 	/**
 	*  @brief Common function to call on both socket.io disconnect and websocket close
 	**/
@@ -186,28 +186,28 @@ public:
 	/**
 	*  @brief Socket.io event handler for custom event "testevent"
 	**/
-	void testevent(ax::network::SIOClient *client, const std::string& data);
+	void testevent(ax::network::SIOClient *client, std::string_view data);
 	/**
 	*  @brief Socket.io event handler for custom event "echoevent"
 	**/
-	void echotest(ax::network::SIOClient *client, const std::string& data);
+	void echotest(ax::network::SIOClient *client, std::string_view data);
 	/**
 	*  @brief Socket.io event handler for event "connect"
 	**/
-	void connect(ax::network::SIOClient* client, const std::string& data);
+	void connect(ax::network::SIOClient* client, std::string_view data);
 	/**
 	*  @brief Socket.io event handler for event "disconnect"
 	**/
-	void disconnect(ax::network::SIOClient* client, const std::string& data);
+	void disconnect(ax::network::SIOClient* client, std::string_view data);
 	/**
 	*  @brief Socket.io event handler for event "message"
 	**/
-	void message(ax::network::SIOClient* client, const std::string& data);
+	void message(ax::network::SIOClient* client, std::string_view data);
 	/**
 	*  @brief Socket.io event handler for event "json"
 	*         This is only used in v 0.9.x, in 1.x this is handled as a "message" event
 	**/
-	void json(ax::network::SIOClient* client, const std::string& data);
+	void json(ax::network::SIOClient* client, std::string_view data);
 
     virtual std::string title() const override{ return "SocketIO Extension Test"; }
 
