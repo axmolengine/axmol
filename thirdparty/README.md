@@ -238,7 +238,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: git 3.39.7-2e7723f
+- Version: 3.39.7
 - License: MIT WITH Anti-996
 
 ## zlib
