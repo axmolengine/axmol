@@ -68,6 +68,12 @@ function build_android()
     pushd $AX_ROOT/tests/cpp-tests/proj.android
     do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH -PAX_ENABLE_EXT_EFFEKSEER=ON --parallel --info
     popd
+    
+    # build cpp-template-default, template project not adapte to build in engine directory for android, so needs export env AX_ROOT
+    export AX_ROOT=$AX_ROOT
+    pushd $AX_ROOT/templates/cpp-template-default/proj.android
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH -PAX_ENABLE_EXT_EFFEKSEER=ON --parallel --info
+    popd
 }
 
 function run_build()
