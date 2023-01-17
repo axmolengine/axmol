@@ -207,12 +207,6 @@ if(WINDOWS)
     target_compile_definitions(${_AX_LUA_LIB} PUBLIC _USRLUASTATIC)
 endif()
 
-if(AX_ENABLE_MSEDGE_WEBVIEW2)
-endif()
-
-ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_MFMEDIA)
-ax_config_pred(${_AX_LUA_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
-
 set_target_properties(${_AX_LUA_LIB}
                       PROPERTIES
                       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
