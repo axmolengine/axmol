@@ -34,13 +34,6 @@
 
 USING_NS_AX;
 
-// Enable log on Debug version
-#ifndef NDEBUG
-#    define _AX_DEBUG 1
-#else
-#    define _AX_DEBUG 0
-#endif
-
 AppDelegate::AppDelegate() : _testController(nullptr) {}
 
 AppDelegate::~AppDelegate()
@@ -80,7 +73,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #ifndef NDEBUG
         title += " *Debug*",
 #endif
-            glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
+            glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height), 1.0F, true);
         director->setOpenGLView(glView);
     }
 
@@ -116,7 +109,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     fileUtils->setSearchPaths(searchPaths);
 
-    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 
     // Enable Remote Console
     auto console = director->getConsole();
