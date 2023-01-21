@@ -162,7 +162,7 @@ void TestList::runThisTest()
 #endif
 
     Size designSize(480, 320);
-    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 
     auto director = Director::getInstance();
     auto scene    = Scene::create();

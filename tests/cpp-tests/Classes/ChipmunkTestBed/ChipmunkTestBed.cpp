@@ -310,7 +310,7 @@ ChipmunkTestBed::ChipmunkTestBed()
     auto director = Director::getInstance();
     auto glView   = director->getOpenGLView();
     Size designSize(960 * 0.85, 640 * 0.85);
-    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::NO_BORDER);
+    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 
     // creating a keyboard event listener
     auto listener          = EventListenerKeyboard::create();
