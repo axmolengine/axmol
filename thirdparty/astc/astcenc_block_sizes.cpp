@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2022 Arm Limited
+// Copyright 2011-2023 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -330,17 +330,17 @@ static void init_decimation_info_2d(
 
 		for (unsigned int j = 0; j < wb.weight_count_of_texel[i]; j++)
 		{
-			di.texel_weights_int_4t[j][i] = wb.weights_of_texel[i][j];
-			di.texel_weights_float_4t[j][i] = static_cast<float>(wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
-			di.texel_weights_4t[j][i] = wb.grid_weights_of_texel[i][j];
+			di.texel_weight_contribs_int_tr[j][i] = wb.weights_of_texel[i][j];
+			di.texel_weight_contribs_float_tr[j][i] = static_cast<float>(wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
+			di.texel_weights_tr[j][i] = wb.grid_weights_of_texel[i][j];
 		}
 
 		// Init all 4 entries so we can rely on zeros for vectorization
 		for (unsigned int j = wb.weight_count_of_texel[i]; j < 4; j++)
 		{
-			di.texel_weights_int_4t[j][i] = 0;
-			di.texel_weights_float_4t[j][i] = 0.0f;
-			di.texel_weights_4t[j][i] = 0;
+			di.texel_weight_contribs_int_tr[j][i] = 0;
+			di.texel_weight_contribs_float_tr[j][i] = 0.0f;
+			di.texel_weights_tr[j][i] = 0;
 		}
 	}
 
@@ -356,43 +356,30 @@ static void init_decimation_info_2d(
 			uint8_t texel = wb.texels_of_weight[i][j];
 
 			// Create transposed versions of these for better vectorization
-			di.weight_texel[j][i] = texel;
-			di.weights_flt[j][i] = static_cast<float>(wb.texel_weights_of_weight[i][j]);
+			di.weight_texels_tr[j][i] = texel;
+			di.weights_texel_contribs_tr[j][i] = static_cast<float>(wb.texel_weights_of_weight[i][j]);
 
-			// perform a layer of array unrolling. An aspect of this unrolling is that
-			// one of the texel-weight indexes is an identity-mapped index; we will use this
-			// fact to reorder the indexes so that the first one is the identity index.
-			int swap_idx = -1;
+			// Store the per-texel contribution of this weight for each texel it contributes to
+			di.texel_contrib_for_weight[j][i] = 0.0f;
 			for (unsigned int k = 0; k < 4; k++)
 			{
-				uint8_t dttw = di.texel_weights_4t[k][texel];
-				float dttwf = di.texel_weights_float_4t[k][texel];
+				uint8_t dttw = di.texel_weights_tr[k][texel];
+				float dttwf = di.texel_weight_contribs_float_tr[k][texel];
 				if (dttw == i && dttwf != 0.0f)
 				{
-					swap_idx = k;
+					di.texel_contrib_for_weight[j][i] = di.texel_weight_contribs_float_tr[k][texel];
+					break;
 				}
-				di.texel_weights_texel[i][j][k] = dttw;
-				di.texel_weights_float_texel[i][j][k] = dttwf;
-			}
-
-			if (swap_idx != 0)
-			{
-				uint8_t vi = di.texel_weights_texel[i][j][0];
-				float vf = di.texel_weights_float_texel[i][j][0];
-				di.texel_weights_texel[i][j][0] = di.texel_weights_texel[i][j][swap_idx];
-				di.texel_weights_float_texel[i][j][0] = di.texel_weights_float_texel[i][j][swap_idx];
-				di.texel_weights_texel[i][j][swap_idx] = vi;
-				di.texel_weights_float_texel[i][j][swap_idx] = vf;
 			}
 		}
 
 		// Initialize array tail so we can over-fetch with SIMD later to avoid loop tails
 		// Match last texel in active lane in SIMD group, for better gathers
-		uint8_t last_texel = di.weight_texel[texel_count_wt - 1][i];
+		uint8_t last_texel = di.weight_texels_tr[texel_count_wt - 1][i];
 		for (unsigned int j = texel_count_wt; j < max_texel_count_of_weight; j++)
 		{
-			di.weight_texel[j][i] = last_texel;
-			di.weights_flt[j][i] = 0.0f;
+			di.weight_texels_tr[j][i] = last_texel;
+			di.weights_texel_contribs_tr[j][i] = 0.0f;
 		}
 	}
 
@@ -404,16 +391,16 @@ static void init_decimation_info_2d(
 
 		for (unsigned int j = 0; j < 4; j++)
 		{
-			di.texel_weights_float_4t[j][i] = 0;
-			di.texel_weights_4t[j][i] = 0;
-			di.texel_weights_int_4t[j][i] = 0;
+			di.texel_weight_contribs_float_tr[j][i] = 0;
+			di.texel_weights_tr[j][i] = 0;
+			di.texel_weight_contribs_int_tr[j][i] = 0;
 		}
 	}
 
 	// Initialize array tail so we can over-fetch with SIMD later to avoid loop tails
 	// Match last texel in active lane in SIMD group, for better gathers
 	unsigned int last_texel_count_wt = wb.texel_count_of_weight[weights_per_block - 1];
-	uint8_t last_texel = di.weight_texel[last_texel_count_wt - 1][weights_per_block - 1];
+	uint8_t last_texel = di.weight_texels_tr[last_texel_count_wt - 1][weights_per_block - 1];
 
 	unsigned int weights_per_block_simd = round_up_to_simd_multiple_vla(weights_per_block);
 	for (unsigned int i = weights_per_block; i < weights_per_block_simd; i++)
@@ -422,8 +409,8 @@ static void init_decimation_info_2d(
 
 		for (unsigned int j = 0; j < max_texel_count_of_weight; j++)
 		{
-			di.weight_texel[j][i] = last_texel;
-			di.weights_flt[j][i] = 0.0f;
+			di.weight_texels_tr[j][i] = last_texel;
+			di.weights_texel_contribs_tr[j][i] = 0.0f;
 		}
 	}
 
@@ -600,16 +587,16 @@ static void init_decimation_info_3d(
 		// Init all 4 entries so we can rely on zeros for vectorization
 		for (unsigned int j = 0; j < 4; j++)
 		{
-			di.texel_weights_int_4t[j][i] = 0;
-			di.texel_weights_float_4t[j][i] = 0.0f;
-			di.texel_weights_4t[j][i] = 0;
+			di.texel_weight_contribs_int_tr[j][i] = 0;
+			di.texel_weight_contribs_float_tr[j][i] = 0.0f;
+			di.texel_weights_tr[j][i] = 0;
 		}
 
 		for (unsigned int j = 0; j < wb.weight_count_of_texel[i]; j++)
 		{
-			di.texel_weights_int_4t[j][i] = wb.weights_of_texel[i][j];
-			di.texel_weights_float_4t[j][i] = static_cast<float>(wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
-			di.texel_weights_4t[j][i] = wb.grid_weights_of_texel[i][j];
+			di.texel_weight_contribs_int_tr[j][i] = wb.weights_of_texel[i][j];
+			di.texel_weight_contribs_float_tr[j][i] = static_cast<float>(wb.weights_of_texel[i][j]) * (1.0f / WEIGHTS_TEXEL_SUM);
+			di.texel_weights_tr[j][i] = wb.grid_weights_of_texel[i][j];
 		}
 	}
 
@@ -625,43 +612,30 @@ static void init_decimation_info_3d(
 			unsigned int texel = wb.texels_of_weight[i][j];
 
 			// Create transposed versions of these for better vectorization
-			di.weight_texel[j][i] = static_cast<uint8_t>(texel);
-			di.weights_flt[j][i] = static_cast<float>(wb.texel_weights_of_weight[i][j]);
+			di.weight_texels_tr[j][i] = static_cast<uint8_t>(texel);
+			di.weights_texel_contribs_tr[j][i] = static_cast<float>(wb.texel_weights_of_weight[i][j]);
 
-			// perform a layer of array unrolling. An aspect of this unrolling is that
-			// one of the texel-weight indexes is an identity-mapped index; we will use this
-			// fact to reorder the indexes so that the first one is the identity index.
-			int swap_idx = -1;
+			// Store the per-texel contribution of this weight for each texel it contributes to
+			di.texel_contrib_for_weight[j][i] = 0.0f;
 			for (unsigned int k = 0; k < 4; k++)
 			{
-				uint8_t dttw = di.texel_weights_4t[k][texel];
-				float dttwf = di.texel_weights_float_4t[k][texel];
+				uint8_t dttw = di.texel_weights_tr[k][texel];
+				float dttwf = di.texel_weight_contribs_float_tr[k][texel];
 				if (dttw == i && dttwf != 0.0f)
 				{
-					swap_idx = k;
+					di.texel_contrib_for_weight[j][i] = di.texel_weight_contribs_float_tr[k][texel];
+					break;
 				}
-				di.texel_weights_texel[i][j][k] = dttw;
-				di.texel_weights_float_texel[i][j][k] = dttwf;
-			}
-
-			if (swap_idx != 0)
-			{
-				uint8_t vi = di.texel_weights_texel[i][j][0];
-				float vf = di.texel_weights_float_texel[i][j][0];
-				di.texel_weights_texel[i][j][0] = di.texel_weights_texel[i][j][swap_idx];
-				di.texel_weights_float_texel[i][j][0] = di.texel_weights_float_texel[i][j][swap_idx];
-				di.texel_weights_texel[i][j][swap_idx] = vi;
-				di.texel_weights_float_texel[i][j][swap_idx] = vf;
 			}
 		}
 
 		// Initialize array tail so we can over-fetch with SIMD later to avoid loop tails
 		// Match last texel in active lane in SIMD group, for better gathers
-		uint8_t last_texel = di.weight_texel[texel_count_wt - 1][i];
+		uint8_t last_texel = di.weight_texels_tr[texel_count_wt - 1][i];
 		for (unsigned int j = texel_count_wt; j < max_texel_count_of_weight; j++)
 		{
-			di.weight_texel[j][i] = last_texel;
-			di.weights_flt[j][i] = 0.0f;
+			di.weight_texels_tr[j][i] = last_texel;
+			di.weights_texel_contribs_tr[j][i] = 0.0f;
 		}
 	}
 
@@ -673,16 +647,16 @@ static void init_decimation_info_3d(
 
 		for (unsigned int j = 0; j < 4; j++)
 		{
-			di.texel_weights_float_4t[j][i] = 0;
-			di.texel_weights_4t[j][i] = 0;
-			di.texel_weights_int_4t[j][i] = 0;
+			di.texel_weight_contribs_float_tr[j][i] = 0;
+			di.texel_weights_tr[j][i] = 0;
+			di.texel_weight_contribs_int_tr[j][i] = 0;
 		}
 	}
 
 	// Initialize array tail so we can over-fetch with SIMD later to avoid loop tails
 	// Match last texel in active lane in SIMD group, for better gathers
 	int last_texel_count_wt = wb.texel_count_of_weight[weights_per_block - 1];
-	uint8_t last_texel = di.weight_texel[last_texel_count_wt - 1][weights_per_block - 1];
+	uint8_t last_texel = di.weight_texels_tr[last_texel_count_wt - 1][weights_per_block - 1];
 
 	unsigned int weights_per_block_simd = round_up_to_simd_multiple_vla(weights_per_block);
 	for (unsigned int i = weights_per_block; i < weights_per_block_simd; i++)
@@ -691,8 +665,8 @@ static void init_decimation_info_3d(
 
 		for (int j = 0; j < max_texel_count_of_weight; j++)
 		{
-			di.weight_texel[j][i] = last_texel;
-			di.weights_flt[j][i] = 0.0f;
+			di.weight_texels_tr[j][i] = last_texel;
+			di.weights_texel_contribs_tr[j][i] = 0.0f;
 		}
 	}
 
@@ -1006,7 +980,7 @@ static void construct_block_size_descriptor_2d(
 }
 
 /**
- * @brief Allocate block modes and decimation tables for a single £D block size.
+ * @brief Allocate block modes and decimation tables for a single 3D block size.
  *
  * TODO: This function doesn't include all of the heuristics that we use for 2D block sizes such as
  * the percentile mode cutoffs. If 3D becomes more widely used we should look at this.

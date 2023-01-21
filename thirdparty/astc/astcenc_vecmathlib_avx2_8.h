@@ -89,7 +89,8 @@ struct vfloat8
 	/**
 	 * @brief Construct from an existing SIMD register.
 	 */
-	ASTCENC_SIMD_INLINE explicit vfloat8(__m256 a) {
+	ASTCENC_SIMD_INLINE explicit vfloat8(__m256 a)
+	{
 		m = a;
 	}
 

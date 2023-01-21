@@ -265,13 +265,15 @@ void symbolic_to_physical(
 	// Encode the color components
 	uint8_t values_to_encode[32];
 	int valuecount_to_encode = 0;
+
+	const uint8_t* pack_table = color_uquant_to_scrambled_pquant_tables[scb.quant_mode - QUANT_6];
 	for (unsigned int i = 0; i < scb.partition_count; i++)
 	{
 		int vals = 2 * (scb.color_formats[i] >> 2) + 2;
 		assert(vals <= 8);
 		for (int j = 0; j < vals; j++)
 		{
-			values_to_encode[j + valuecount_to_encode] = scb.color_values[i][j];
+			values_to_encode[j + valuecount_to_encode] = pack_table[scb.color_values[i][j]];
 		}
 		valuecount_to_encode += vals;
 	}
@@ -369,12 +371,15 @@ void physical_to_symbolic(
 	const auto& di = bsd.get_decimation_info(bm.decimation_mode);
 
 	int weight_count = di.weight_count;
+	promise(weight_count > 0);
+
 	quant_method weight_quant_method = static_cast<quant_method>(bm.quant_mode);
 	int is_dual_plane = bm.is_dual_plane;
 
 	int real_weight_count = is_dual_plane ? 2 * weight_count : weight_count;
 
 	int partition_count = read_bits(2, 11, pcb.data) + 1;
+	promise(partition_count > 0);
 
 	scb.block_mode = static_cast<uint16_t>(block_mode);
 	scb.partition_count = static_cast<uint8_t>(partition_count);
@@ -503,22 +508,25 @@ void physical_to_symbolic(
 
 	// Unpack the integer color values and assign to endpoints
 	scb.quant_mode = static_cast<quant_method>(color_quant_level);
+
 	uint8_t values_to_decode[32];
 	decode_ise(static_cast<quant_method>(color_quant_level), color_integer_count, pcb.data,
 	           values_to_decode, (partition_count == 1 ? 17 : 19 + PARTITION_INDEX_BITS));
 
 	int valuecount_to_decode = 0;
+	const uint8_t* unpack_table = color_scrambled_pquant_to_uquant_tables[scb.quant_mode - QUANT_6];
 	for (int i = 0; i < partition_count; i++)
 	{
 		int vals = 2 * (color_formats[i] >> 2) + 2;
 		for (int j = 0; j < vals; j++)
 		{
-			scb.color_values[i][j] = values_to_decode[j + valuecount_to_decode];
+			scb.color_values[i][j] = unpack_table[values_to_decode[j + valuecount_to_decode]];
 		}
 		valuecount_to_decode += vals;
 	}
 
 	// Fetch component for second-plane in the case of dual plane of weights.
+	scb.plane2_component = -1;
 	if (is_dual_plane)
 	{
 		scb.plane2_component = static_cast<int8_t>(read_bits(2, below_weights_pos - 2, pcb.data));

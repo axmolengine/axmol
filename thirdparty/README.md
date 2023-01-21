@@ -6,7 +6,7 @@
 
 ## astc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.1.0
+- Version: 4.3.0
 - License: Apache-2.0
 
 ## Box2D
@@ -67,12 +67,12 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.2
+- Version: 2.0.3
 - License: MIT
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: git df8d7bc on 31 Dec 2021 (4398)
+- Version: git 57cbded on Dec 16, 2022 (4609)
 - License: zlib
 
 ## glsl-optimizer (Apple Metal Render backend only)

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2022 Arm Limited
+// Copyright 2011-2023 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -46,6 +46,7 @@
  * lines for endpoint selection.
  */
 
+#include <limits>
 #include "astcenc_internal.h"
 
 /**
@@ -361,29 +362,27 @@ static void count_partition_mismatch_bits(
 	unsigned int mismatch_counts[BLOCK_MAX_PARTITIONINGS]
 ) {
 	unsigned int active_count = bsd.partitioning_count_selected[partition_count - 1];
+	promise(active_count > 0);
 
 	if (partition_count == 2)
 	{
 		for (unsigned int i = 0; i < active_count; i++)
 		{
-			int bitcount = partition_mismatch2(bitmaps, bsd.coverage_bitmaps_2[i]);
-			mismatch_counts[i] = astc::max(bitcount, static_cast<int>(bsd.partitioning_valid_2[i]));
+			mismatch_counts[i] = partition_mismatch2(bitmaps, bsd.coverage_bitmaps_2[i]);
 		}
 	}
 	else if (partition_count == 3)
 	{
 		for (unsigned int i = 0; i < active_count; i++)
 		{
-			int bitcount = partition_mismatch3(bitmaps, bsd.coverage_bitmaps_3[i]);
-			mismatch_counts[i] = astc::max(bitcount, static_cast<int>(bsd.partitioning_valid_3[i]));
+			mismatch_counts[i] = partition_mismatch3(bitmaps, bsd.coverage_bitmaps_3[i]);
 		}
 	}
 	else
 	{
 		for (unsigned int i = 0; i < active_count; i++)
 		{
-			int bitcount = partition_mismatch4(bitmaps, bsd.coverage_bitmaps_4[i]);
-			mismatch_counts[i] = astc::max(bitcount, static_cast<int>(bsd.partitioning_valid_4[i]));
+			mismatch_counts[i] = partition_mismatch4(bitmaps, bsd.coverage_bitmaps_4[i]);
 		}
 	}
 }
@@ -402,6 +401,7 @@ static unsigned int get_partition_ordering_by_mismatch_bits(
 	const unsigned int mismatch_count[BLOCK_MAX_PARTITIONINGS],
 	unsigned int partition_ordering[BLOCK_MAX_PARTITIONINGS]
 ) {
+	promise(partitioning_count > 0);
 	unsigned int mscount[256] { 0 };
 
 	// Create the histogram of mismatch counts
@@ -487,13 +487,61 @@ static unsigned int compute_kmeans_partition_ordering(
 	    mismatch_counts, partition_ordering);
 }
 
+/**
+ * @brief Insert a partitioning into an order list of results, sorted by error.
+ *
+ * @param      max_values      The max number of entries in the best result arrays.
+ * @param      this_error      The error of the new entry.
+ * @param      this_partition  The partition ID of the new entry.
+ * @param[out] best_errors     The array of best error values.
+ * @param[out] best_partitions The array of best partition values.
+ */
+static void insert_result(
+	unsigned int max_values,
+	float this_error,
+	unsigned int this_partition,
+	float* best_errors,
+	unsigned int* best_partitions)
+{
+	promise(max_values > 0);
+
+	// Don't bother searching if the current worst error beats the new error
+	if (this_error >= best_errors[max_values - 1])
+	{
+		return;
+	}
+
+	// Else insert into the list in error-order
+	for (unsigned int i = 0; i < max_values; i++)
+	{
+		// Existing result is better - move on ...
+		if (this_error > best_errors[i])
+		{
+			continue;
+		}
+
+		// Move existing results down one
+		for (unsigned int j = max_values - 1; j > i; j--)
+		{
+			best_errors[j] = best_errors[j - 1];
+			best_partitions[j] = best_partitions[j - 1];
+		}
+
+		// Insert new result
+		best_errors[i] = this_error;
+		best_partitions[i] = this_partition;
+		break;
+	}
+}
+
 /* See header for documentation. */
-void find_best_partition_candidates(
+unsigned int find_best_partition_candidates(
 	const block_size_descriptor& bsd,
 	const image_block& blk,
 	unsigned int partition_count,
 	unsigned int partition_search_limit,
-	unsigned int best_partitions[2]
+	unsigned int best_partitions[TUNE_MAX_PARTITIONING_CANDIDATES],
+	unsigned int requested_candidates
 ) {
 	// Constant used to estimate quantization error for a given partitioning; the optimal value for
 	// this depends on bitrate. These values have been determined empirically.
@@ -520,17 +568,23 @@ void find_best_partition_candidates(
 	unsigned int partition_sequence[BLOCK_MAX_PARTITIONINGS];
 	unsigned int sequence_len = compute_kmeans_partition_ordering(bsd, blk, partition_count, partition_sequence);
 	partition_search_limit = astc::min(partition_search_limit, sequence_len);
+	requested_candidates = astc::min(partition_search_limit, requested_candidates);
 
 	bool uses_alpha = !blk.is_constant_channel(3);
 
 	// Partitioning errors assuming uncorrelated-chrominance endpoints
-	float uncor_best_error { ERROR_CALC_DEFAULT };
-	unsigned int uncor_best_partition { 0 };
+	float uncor_best_errors[TUNE_MAX_PARTITIONING_CANDIDATES];
+	unsigned int uncor_best_partitions[TUNE_MAX_PARTITIONING_CANDIDATES];
 
 	// Partitioning errors assuming same-chrominance endpoints
-	// Store two so we can always return one different to uncorr
-	float samec_best_errors[2] { ERROR_CALC_DEFAULT, ERROR_CALC_DEFAULT };
-	unsigned int samec_best_partitions[2] { 0, 0 };
+	float samec_best_errors[TUNE_MAX_PARTITIONING_CANDIDATES];
+	unsigned int samec_best_partitions[TUNE_MAX_PARTITIONING_CANDIDATES];
+
+	for (unsigned int i = 0; i < requested_candidates; i++)
+	{
+		uncor_best_errors[i] = ERROR_CALC_DEFAULT;
+		samec_best_errors[i] = ERROR_CALC_DEFAULT;
+	}
 
 	if (uses_alpha)
 	{
@@ -604,25 +658,8 @@ void find_best_partition_candidates(
 				samec_error += dot_s(samec_vector * samec_vector, error_weights);
 			}
 
-			if (uncor_error < uncor_best_error)
-			{
-				uncor_best_error = uncor_error;
-				uncor_best_partition = partition;
-			}
-
-			if (samec_error < samec_best_errors[0])
-			{
-				samec_best_errors[1] = samec_best_errors[0];
-				samec_best_partitions[1] = samec_best_partitions[0];
-
-				samec_best_errors[0] = samec_error;
-				samec_best_partitions[0] = partition;
-			}
-			else if (samec_error < samec_best_errors[1])
-			{
-				samec_best_errors[1] = samec_error;
-				samec_best_partitions[1] = partition;
-			}
+			insert_result(requested_candidates, uncor_error, partition, uncor_best_errors, uncor_best_partitions);
+			insert_result(requested_candidates, samec_error, partition, samec_best_errors, samec_best_partitions);
 		}
 	}
 	else
@@ -644,10 +681,10 @@ void find_best_partition_candidates(
 				partition_lines3& pl = plines[j];
 
 				pl.uncor_line.a = pm.avg;
-				pl.uncor_line.b = normalize_safe(pm.dir.swz<0, 1, 2>(), unit3());
+				pl.uncor_line.b = normalize_safe(pm.dir, unit3());
 
 				pl.samec_line.a = vfloat4::zero();
-				pl.samec_line.b = normalize_safe(pm.avg.swz<0, 1, 2>(), unit3());
+				pl.samec_line.b = normalize_safe(pm.avg, unit3());
 
 				pl.uncor_pline.amod = pl.uncor_line.a - pl.uncor_line.b * dot3(pl.uncor_line.a, pl.uncor_line.b);
 				pl.uncor_pline.bs   = pl.uncor_line.b;
@@ -689,50 +726,55 @@ void find_best_partition_candidates(
 				samec_error += dot3_s(samec_vector * samec_vector, error_weights);
 			}
 
-			if (uncor_error < uncor_best_error)
-			{
-				uncor_best_error = uncor_error;
-				uncor_best_partition = partition;
-			}
+			insert_result(requested_candidates, uncor_error, partition, uncor_best_errors, uncor_best_partitions);
+			insert_result(requested_candidates, samec_error, partition, samec_best_errors, samec_best_partitions);
+		}
+	}
 
-			if (samec_error < samec_best_errors[0])
-			{
-				samec_best_errors[1] = samec_best_errors[0];
-				samec_best_partitions[1] = samec_best_partitions[0];
+	bool best_is_uncor = uncor_best_partitions[0] > samec_best_partitions[0];
 
-				samec_best_errors[0] = samec_error;
-				samec_best_partitions[0] = partition;
-			}
-			else if (samec_error < samec_best_errors[1])
+	unsigned int interleave[2 * TUNE_MAX_PARTITIONING_CANDIDATES];
+	for (unsigned int i = 0; i < requested_candidates; i++)
+	{
+		if (best_is_uncor)
+		{
+			interleave[2 * i] = bsd.get_raw_partition_info(partition_count, uncor_best_partitions[i]).partition_index;
+			interleave[2 * i + 1] = bsd.get_raw_partition_info(partition_count, samec_best_partitions[i]).partition_index;
+		}
+		else
+		{
+			interleave[2 * i] = bsd.get_raw_partition_info(partition_count, samec_best_partitions[i]).partition_index;
+			interleave[2 * i + 1] = bsd.get_raw_partition_info(partition_count, uncor_best_partitions[i]).partition_index;
+		}
+	}
+
+	uint64_t bitmasks[1024/64] { 0 };
+	unsigned int emitted = 0;
+
+	// Deduplicate the first "requested" entries
+	for (unsigned int i = 0; i < requested_candidates * 2;  i++)
+	{
+		unsigned int partition = interleave[i];
+
+		unsigned int word = partition / 64;
+		unsigned int bit = partition % 64;
+
+		bool written = bitmasks[word] & (1ull << bit);
+
+		if (!written)
+		{
+			best_partitions[emitted] = partition;
+			bitmasks[word] |= 1ull << bit;
+			emitted++;
+
+			if (emitted == requested_candidates)
 			{
-				samec_best_errors[1] = samec_error;
-				samec_best_partitions[1] = partition;
+				break;
 			}
 		}
 	}
 
-	// Same partition is best for both, so use this first unconditionally
-	if (uncor_best_partition == samec_best_partitions[0])
-	{
-		best_partitions[0] = samec_best_partitions[0];
-		best_partitions[1] = samec_best_partitions[1];
-	}
-	// Uncor is best
-	else if (uncor_best_error <= samec_best_errors[0])
-	{
-		best_partitions[0] = uncor_best_partition;
-		best_partitions[1] = samec_best_partitions[0];
-	}
-	// Samec is best
-	else
-	{
-		best_partitions[0] = samec_best_partitions[0];
-		best_partitions[1] = uncor_best_partition;
-	}
-
-	// Convert these back into canonical partition IDs for the rest of the codec
-	best_partitions[0] = bsd.get_raw_partition_info(partition_count, best_partitions[0]).partition_index;
-	best_partitions[1] = bsd.get_raw_partition_info(partition_count, best_partitions[1]).partition_index;
+	return emitted;
 }
 
 #endif
