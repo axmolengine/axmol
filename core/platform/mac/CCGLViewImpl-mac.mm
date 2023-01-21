@@ -46,6 +46,16 @@ THE SOFTWARE.
 #include "renderer/CCRenderer.h"
 #include "renderer/backend/metal/UtilsMTL.h"
 
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#    ifndef GLFW_EXPOSE_NATIVE_NSGL
+#        define GLFW_EXPOSE_NATIVE_NSGL
+#    endif
+#    ifndef GLFW_EXPOSE_NATIVE_COCOA
+#        define GLFW_EXPOSE_NATIVE_COCOA
+#    endif
+#    include "glfw3native.h"
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+
 NS_AX_BEGIN
 
 class GLFWEventHandler
@@ -308,6 +318,15 @@ GLViewImpl::~GLViewImpl()
     GLFWEventHandler::setGLViewImpl(nullptr);
     glfwTerminate();
 }
+
+void* GLViewImpl::getCocoaWindow()
+{
+    return (void*)glfwGetCocoaWindow(_mainWindow);
+}
+void* GLViewImpl::getNSGLContext()
+{
+    return (void*)glfwGetNSGLContext(_mainWindow);
+}  // stevetranby: added
 
 GLViewImpl* GLViewImpl::create(std::string_view viewName)
 {

@@ -30,26 +30,6 @@ THE SOFTWARE.
 #include "platform/CCGLView.h"
 #include "glfw3.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    ifndef GLFW_EXPOSE_NATIVE_WIN32
-#        define GLFW_EXPOSE_NATIVE_WIN32
-#    endif
-#    ifndef GLFW_EXPOSE_NATIVE_WGL
-#        define GLFW_EXPOSE_NATIVE_WGL
-#    endif
-#    include "glfw3native.h"
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    ifndef GLFW_EXPOSE_NATIVE_NSGL
-#        define GLFW_EXPOSE_NATIVE_NSGL
-#    endif
-#    ifndef GLFW_EXPOSE_NATIVE_COCOA
-#        define GLFW_EXPOSE_NATIVE_COCOA
-#    endif
-#    include "glfw3native.h"
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-
 NS_AX_BEGIN
 
 class GLFWEventHandler;
@@ -142,8 +122,8 @@ public:
     /** Get retina factor */
     int getRetinaFactor() const override { return _retinaFactor; }
 
-    id getCocoaWindow() override { return glfwGetCocoaWindow(_mainWindow); }
-    id getNSGLContext() override { return glfwGetNSGLContext(_mainWindow); }  // stevetranby: added
+    void* getCocoaWindow() override;
+    void* getNSGLContext() override; // stevetranby: added
 
 protected:
     GLViewImpl(bool initglfw = true);
