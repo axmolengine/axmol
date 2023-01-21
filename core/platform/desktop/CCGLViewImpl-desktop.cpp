@@ -474,7 +474,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
     glfwWindowHint(GLFW_VISIBLE, _glContextAttrs.visible);
     glfwWindowHint(GLFW_DECORATED, _glContextAttrs.decorated);
 
-#if (AX_USE_METAL)
+#if defined(AX_USE_METAL)
     // Don't create gl context.
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
