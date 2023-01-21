@@ -48,12 +48,54 @@ THE SOFTWARE.
 #include "renderer/CCRenderer.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#include <Metal/Metal.h>
-#include "renderer/backend/metal/DeviceMTL.h"
-#include "renderer/backend/metal/UtilsMTL.h"
+#    include <Metal/Metal.h>
+#    include "renderer/backend/metal/DeviceMTL.h"
+#    include "renderer/backend/metal/UtilsMTL.h"
 #else
-#include "renderer/backend/opengl/MacrosGL.h"
+#    include "renderer/backend/opengl/MacrosGL.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+
+/** glfw3native.h */
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#    ifndef GLFW_EXPOSE_NATIVE_WIN32
+#        define GLFW_EXPOSE_NATIVE_WIN32
+#    endif
+#    ifndef GLFW_EXPOSE_NATIVE_WGL
+#        define GLFW_EXPOSE_NATIVE_WGL
+#    endif
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#    ifndef GLFW_EXPOSE_NATIVE_NSGL
+#        define GLFW_EXPOSE_NATIVE_NSGL
+#    endif
+#    ifndef GLFW_EXPOSE_NATIVE_COCOA
+#        define GLFW_EXPOSE_NATIVE_COCOA
+#    endif
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+
+#include "glfw3native.h"
+
+/** glfw3native.h */
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#    ifndef GLFW_EXPOSE_NATIVE_WIN32
+#        define GLFW_EXPOSE_NATIVE_WIN32
+#    endif
+#    ifndef GLFW_EXPOSE_NATIVE_WGL
+#        define GLFW_EXPOSE_NATIVE_WGL
+#    endif
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#    ifndef GLFW_EXPOSE_NATIVE_NSGL
+#        define GLFW_EXPOSE_NATIVE_NSGL
+#    endif
+#    ifndef GLFW_EXPOSE_NATIVE_COCOA
+#        define GLFW_EXPOSE_NATIVE_COCOA
+#    endif
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+
+#include "glfw3native.h"
 
 #if defined(_WIN32)
 #    include "glfw3ext.h"
@@ -333,6 +375,24 @@ GLViewImpl::~GLViewImpl()
 #endif
 }
 
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+HWND GLViewImpl::getWin32Window()
+{
+    return glfwGetWin32Window(_mainWindow);
+}
+#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+void* GLViewImpl::getCocoaWindow()
+{
+    return (void*)glfwGetCocoaWindow(_mainWindow);
+}
+void* GLViewImpl::getNSGLContext()
+{
+    return (void*)glfwGetNSGLContext(_mainWindow);
+}  // stevetranby: added
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+
 GLViewImpl* GLViewImpl::create(std::string_view viewName)
 {
     return GLViewImpl::create(viewName, false);
@@ -341,7 +401,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
 GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
 {
     auto ret = new GLViewImpl;
-    if (ret->initWithRect(viewName, Rect(0, 0, 960, 640), 1.0f, resizable))
+    if (ret->initWithRect(viewName, ax::Rect(0, 0, 960, 640), 1.0f, resizable))
     {
         ret->autorelease();
         return ret;
@@ -350,7 +410,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, float frameZoomFactor, bool resizable)
+GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, ax::Rect rect, float frameZoomFactor, bool resizable)
 {
     auto ret = new GLViewImpl;
     if (ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
@@ -388,7 +448,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName,
     return nullptr;
 }
 
-bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZoomFactor, bool resizable)
+bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float frameZoomFactor, bool resizable)
 {
     setViewName(viewName);
 
@@ -553,7 +613,7 @@ bool GLViewImpl::initWithFullScreen(std::string_view viewName)
         return false;
 
     const GLFWvidmode* videoMode = glfwGetVideoMode(_monitor);
-    return initWithRect(viewName, Rect(0, 0, (float)videoMode->width, (float)videoMode->height), 1.0f, false);
+    return initWithRect(viewName, ax::Rect(0, 0, (float)videoMode->width, (float)videoMode->height), 1.0f, false);
 }
 
 bool GLViewImpl::initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor)
@@ -571,7 +631,7 @@ bool GLViewImpl::initWithFullscreen(std::string_view viewname, const GLFWvidmode
     glfwWindowHint(GLFW_BLUE_BITS, videoMode.blueBits);
     glfwWindowHint(GLFW_GREEN_BITS, videoMode.greenBits);
 
-    return initWithRect(viewname, Rect(0, 0, (float)videoMode.width, (float)videoMode.height), 1.0f, false);
+    return initWithRect(viewname, ax::Rect(0, 0, (float)videoMode.width, (float)videoMode.height), 1.0f, false);
 }
 
 bool GLViewImpl::isOpenGLReady()
@@ -902,7 +962,7 @@ void GLViewImpl::setScissorInPoints(float x, float y, float w, float h)
     renderer->setScissorRect(x1, y1, width1, height1);
 }
 
-Rect GLViewImpl::getScissorRect() const
+ax::Rect GLViewImpl::getScissorRect() const
 {
     auto renderer = Director::getInstance()->getRenderer();
     auto& rect    = renderer->getScissorRect();
@@ -913,7 +973,7 @@ Rect GLViewImpl::getScissorRect() const
               (_scaleY * _retinaFactor * _frameZoomFactor);
     float w = rect.width / (_scaleX * _retinaFactor * _frameZoomFactor);
     float h = rect.height / (_scaleY * _retinaFactor * _frameZoomFactor);
-    return Rect(x, y, w, h);
+    return ax::Rect(x, y, w, h);
 }
 
 void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
@@ -936,7 +996,7 @@ void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int act
         if (GLFW_PRESS == action)
         {
             _captured = true;
-            if (this->getViewPortRect().equals(Rect::ZERO) ||
+            if (this->getViewPortRect().equals(ax::Rect::ZERO) ||
                 this->getViewPortRect().containsPoint(Vec2(_mouseX, _mouseY)))
             {
                 intptr_t id = 0;
@@ -1093,10 +1153,10 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-         /* Invoke `GLView::setFrameSize` to sync screen size immediately,
-            this->setFrameSize will invoke `glfwSetWindowSize` which is unnecessary.
-         */
-         GLView::setFrameSize(w, h);
+        /* Invoke `GLView::setFrameSize` to sync screen size immediately,
+           this->setFrameSize will invoke `glfwSetWindowSize` which is unnecessary.
+        */
+        GLView::setFrameSize(w, h);
 
         /*
          x-studio spec, fix view size incorrect when window size changed.
@@ -1117,22 +1177,22 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 #else
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
-        Size baseDesignSize                   = _designResolutionSize;
+        Size baseDesignSize = _designResolutionSize;
         ResolutionPolicy baseResolutionPolicy = _resolutionPolicy;
 
-        int frameWidth  = w / _frameZoomFactor;
+        int frameWidth = w / _frameZoomFactor;
         int frameHeight = h / _frameZoomFactor;
         setFrameSize(frameWidth, frameHeight);
         setDesignResolutionSize(baseDesignSize.width, baseDesignSize.height, baseResolutionPolicy);
         Director::getInstance()->setViewport();
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
 
-#if defined(AX_USE_METAL)
+#    if defined(AX_USE_METAL)
         // update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
         backend::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
-#endif
+#    endif
     }
 #endif
 }
@@ -1257,11 +1317,11 @@ static bool loadFboExtensions()
 // helper
 bool GLViewImpl::loadGL()
 {
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
+#    if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#   if !defined(AX_USE_GLES)
+#        if !defined(AX_USE_GLES)
     if (!gladLoadGL(glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");
@@ -1275,17 +1335,17 @@ bool GLViewImpl::loadGL()
     {
         log("Not totally ready :(");
     }
-#    else
+#        else
     if (!gladLoadGLES2(glfwGetProcAddress))
     {
         log("glad: Failed to Load GLES2");
         return false;
     }
-#    endif
+#        endif
 
     loadFboExtensions();
 
-#endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
+#    endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 
     return true;
 }

@@ -30,27 +30,6 @@ THE SOFTWARE.
 #include "platform/CCGLView.h"
 #include "glfw3.h"
 
-/** glfw3native.h */
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    ifndef GLFW_EXPOSE_NATIVE_WIN32
-#        define GLFW_EXPOSE_NATIVE_WIN32
-#    endif
-#    ifndef GLFW_EXPOSE_NATIVE_WGL
-#        define GLFW_EXPOSE_NATIVE_WGL
-#    endif
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    ifndef GLFW_EXPOSE_NATIVE_NSGL
-#        define GLFW_EXPOSE_NATIVE_NSGL
-#    endif
-#    ifndef GLFW_EXPOSE_NATIVE_COCOA
-#        define GLFW_EXPOSE_NATIVE_COCOA
-#    endif
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-
-#include "glfw3native.h"
-
 NS_AX_BEGIN
 
 class GLFWEventHandler;
@@ -144,12 +123,12 @@ public:
     int getRetinaFactor() const override { return _retinaFactor; }
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-    HWND getWin32Window() { return glfwGetWin32Window(_mainWindow); }
+    HWND getWin32Window() override;
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-    void* getCocoaWindow() override { return (void*)glfwGetCocoaWindow(_mainWindow); }
-    void* getNSGLContext() override { return (void*)glfwGetNSGLContext(_mainWindow); }  // stevetranby: added
+    void* getCocoaWindow() override;
+    void* getNSGLContext() override; // stevetranby: added
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
 protected:
