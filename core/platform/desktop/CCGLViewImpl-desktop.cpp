@@ -580,25 +580,25 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
     }
-#endif
 
     // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
-#if !defined(AX_USE_GLES)
+#    if !defined(AX_USE_GLES)
     // Enable point size by default.
-#    if defined(GL_VERSION_2_0)
+#        if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
-#    else
+#        else
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE_ARB);
-#    endif
+#        endif
     if (_glContextAttrs.multisamplingCount > 0)
         glEnable(GL_MULTISAMPLE);
-#endif
+#    endif
     CHECK_GL_ERROR_DEBUG();
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
     glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
-#endif
+#    endif
 
+#endif
     //    // GLFW v3.2 no longer emits "onGLFWWindowSizeFunCallback" at creation time. Force default viewport:
     //    setViewPortInPoints(0, 0, neededWidth, neededHeight);
     //
