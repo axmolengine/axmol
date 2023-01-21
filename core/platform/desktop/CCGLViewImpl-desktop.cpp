@@ -41,18 +41,23 @@ THE SOFTWARE.
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
 #include "2d/CCCamera.h"
-
-#include "renderer/backend/opengl/MacrosGL.h"
-
-#if defined(_WIN32)
-#    include "glfw3ext.h"
-#endif
-
 #if AX_ICON_SET_SUPPORT
 #    include "platform/CCImage.h"
 #endif /* AX_ICON_SET_SUPPORT */
 
 #include "renderer/CCRenderer.h"
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#include <Metal/Metal.h>
+#include "renderer/backend/metal/DeviceMTL.h"
+#include "renderer/backend/metal/UtilsMTL.h"
+#else
+#include "renderer/backend/opengl/MacrosGL.h"
+#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+
+#if defined(_WIN32)
+#    include "glfw3ext.h"
+#endif
 
 NS_AX_BEGIN
 
@@ -295,7 +300,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     , _mouseX(0.0f)
     , _mouseY(0.0f)
 {
-    _viewName = "AX_10";
+    _viewName = "AXMOL10";
     g_keyCodeMap.clear();
     for (auto&& item : g_keyCodeStructArray)
     {
@@ -409,7 +414,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
     glfwWindowHint(GLFW_VISIBLE, _glContextAttrs.visible);
     glfwWindowHint(GLFW_DECORATED, _glContextAttrs.decorated);
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (AX_USE_METAL)
     // Don't create gl context.
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
@@ -436,6 +441,33 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
     }
+
+#if defined(AX_USE_METAL)
+    int fbWidth, fbHeight;
+    glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
+
+    CGSize size;
+    size.width  = static_cast<CGFloat>(fbWidth);
+    size.height = static_cast<CGFloat>(fbHeight);
+    // Initialize device.
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    if (!device)
+    {
+        AXLOG("Doesn't support metal.");
+        return false;
+    }
+
+    NSView* contentView = [getCocoaWindow() contentView];
+    [contentView setWantsLayer:YES];
+    CAMetalLayer* layer = [CAMetalLayer layer];
+    [layer setDevice:device];
+    [layer setPixelFormat:MTLPixelFormatBGRA8Unorm];
+    [layer setFramebufferOnly:YES];
+    [layer setDrawableSize:size];
+    layer.displaySyncEnabled = _glContextAttrs.vsync;
+    [contentView setLayer:layer];
+    backend::DeviceMTL::setCAMetalLayer(layer);
+#endif
 
     /*
      *  Note that the created window and context may differ from what you requested,
@@ -472,6 +504,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
 
     setFrameSize(rect.size.width, rect.size.height);
 
+#if defined(AX_USE_GL)
     loadGL();
 
     // check OpenGL version at first
@@ -487,6 +520,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZ
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
     }
+#endif
 
     // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #if !defined(AX_USE_GLES)
@@ -558,8 +592,10 @@ void GLViewImpl::end()
 
 void GLViewImpl::swapBuffers()
 {
+#if defined(AX_USE_GL)
     if (_mainWindow)
         glfwSwapBuffers(_mainWindow);
+#endif
 }
 
 bool GLViewImpl::windowShouldClose()
@@ -576,19 +612,19 @@ void GLViewImpl::pollEvents()
 }
 
 void GLViewImpl::enableRetina(bool enabled)
-{  // official v4 comment follow sources
-   // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-   //     _isRetinaEnabled = enabled;
-   //     if (_isRetinaEnabled)
-   //     {
-   //         _retinaFactor = 1;
-   //     }
-   //     else
-   //     {
-   //         _retinaFactor = 2;
-   //     }
-   //     updateFrameSize();
-   // #endif
+{
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+    _isRetinaEnabled = enabled;
+    if (_isRetinaEnabled)
+    {
+        _retinaFactor = 1;
+    }
+    else
+    {
+        _retinaFactor = 2;
+    }
+    updateFrameSize();
+#endif
 }
 
 void GLViewImpl::setIMEKeyboardState(bool /*bOpen*/) {}
@@ -1054,6 +1090,7 @@ void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int /*x*/, int 
 
 void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
          /* Invoke `GLView::setFrameSize` to sync screen size immediately,
@@ -1077,6 +1114,27 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
     }
+#else
+    if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
+    {
+        Size baseDesignSize                   = _designResolutionSize;
+        ResolutionPolicy baseResolutionPolicy = _resolutionPolicy;
+
+        int frameWidth  = w / _frameZoomFactor;
+        int frameHeight = h / _frameZoomFactor;
+        setFrameSize(frameWidth, frameHeight);
+        setDesignResolutionSize(baseDesignSize.width, baseDesignSize.height, baseResolutionPolicy);
+        Director::getInstance()->setViewport();
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
+
+#if defined(AX_USE_METAL)
+        // update metal attachment texture size.
+        int fbWidth, fbHeight;
+        glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
+        backend::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
+#endif
+    }
+#endif
 }
 
 void GLViewImpl::onGLFWWindowIconifyCallback(GLFWwindow* /*window*/, int iconified)
@@ -1103,6 +1161,7 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
     }
 }
 
+#if defined(AX_USE_GL)
 static bool loadFboExtensions()
 {
     const char* gl_extensions = (const char*)glGetString(GL_EXTENSIONS);
@@ -1230,5 +1289,7 @@ bool GLViewImpl::loadGL()
 
     return true;
 }
+
+#endif
 
 NS_AX_END  // end of namespace ax;
