@@ -73,7 +73,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 #ifndef NDEBUG
         title += " *Debug*",
 #endif
-            glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height), 1.0F, true);
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+        glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height), 1.0F, true);
+#else
+        glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
+#endif
         director->setOpenGLView(glView);
     }
 
