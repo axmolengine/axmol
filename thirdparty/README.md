@@ -6,7 +6,7 @@
 
 ## astc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.1.0
+- Version: 4.3.0
 - License: Apache-2.0
 
 ## Box2D
@@ -67,12 +67,12 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.2
+- Version: 2.0.3
 - License: MIT
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: git df8d7bc on 31 Dec 2021 (4398)
+- Version: git 57cbded on Dec 16, 2022 (4609)
 - License: zlib
 
 ## glsl-optimizer (Apple Metal Render backend only)
@@ -196,7 +196,7 @@
 
 ## robin-map
 - [![Upstream](https://img.shields.io/github/v/tag/Tessil/robin-map?label=Upstream)](https://github.com/Tessil/robin-map)
-- Version: 1.0.1 with modified for more compatible with stl
+- Version: 1.2.1 with modified for more compatible with stl
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
 - License: MIT
@@ -238,7 +238,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 3.39.6
+- Version: 3.39.7
 - License: MIT WITH Anti-996
 
 ## zlib

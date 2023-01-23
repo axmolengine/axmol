@@ -129,6 +129,7 @@ public:
      * @param scaleX The scale value in x.
      * @param scaleY The scale value in y.
      * @param color Set the circle color.
+     * @param thickness Set the thickness and draws a better rendered polygon.
      */
     void drawCircle(const Vec2& center,
                     float radius,
@@ -137,7 +138,8 @@ public:
                     bool drawLineToCenter,
                     float scaleX,
                     float scaleY,
-                    const Color4B& color);
+                    const Color4B& color,
+                    float minThickness = 200); // 200 should "simulate/save" th backwards compatibility  
 
     /** Draws a circle given the center, radius and number of segments.
      *
@@ -147,13 +149,15 @@ public:
      * @param segments The number of segments.
      * @param drawLineToCenter Whether or not draw the line from the origin to center.
      * @param color Set the circle color.
+     * @param thickness Set the thickness which will be draws a better rendered polygon.
      */
     void drawCircle(const Vec2& center,
                     float radius,
                     float angle,
                     unsigned int segments,
                     bool drawLineToCenter,
-                    const Color4B& color);
+                    const Color4B& color,
+                    float minThickness = 200);  // 200 should "simulate/save" th backwards compatibility  
 
     /** Draws a quad bezier path.
      *

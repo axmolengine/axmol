@@ -18,19 +18,25 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        arch:
-          - x86
-          - x64
+        config:
+          - {arch: x86, dll: false}
+          - {arch: x64, dll: false}
+          - {arch: x86, dll: true}
+          - {arch: x64, dll: true}
     env:
-      BUILD_ARCH: ${{ matrix.arch }}
+      BUILD_ARCH: ${{ matrix.config.arch }}
+      BUILD_DLL: ${{ matrix.config.dll }}
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
       - name: Setup Python
         uses: actions/setup-python@v3
+      - uses: ilammy/msvc-dev-cmd@v1.12.0
+        with: 
+          arch: ${{ env.BUILD_ARCH }}
       - name: Build
-        run: tools\win-ci\build.ps1 $env:BUILD_ARCH
+        run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:BUILD_DLL
 
   build-linux:
     name: build-linux

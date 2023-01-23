@@ -47,27 +47,44 @@ YASIO__DECL ssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
 
   if (opts.client)
   {
+    int fail_count = -1;
     if (yasio__valid_str(opts.crtfile_))
     {
-      if (::SSL_CTX_load_verify_locations(ctx, opts.crtfile_, nullptr) == 1)
-      {
-        ::SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, ::SSL_CTX_get_verify_callback(ctx));
+      fail_count = 0;
+      yssl_splitpath(opts.crtfile_, [&](char* first, char* last) {
+        yssl_split_term null_term(last);
+
+#  if defined(OPENSSL_VERSION_MAJOR) && (OPENSSL_VERSION_MAJOR >= 3)
+        /* OpenSSL 3.0.0 has deprecated SSL_CTX_load_verify_locations */
+        bool ok = ::SSL_CTX_load_verify_file(ctx, first) == 1;
+#  else
+        bool ok = ::SSL_CTX_load_verify_locations(ctx, first, nullptr) == 1;
+#  endif
+        if (!ok)
+        {
+          ++fail_count;
+          YASIO_LOG("[global] load ca certifaction file failed!");
+        }
+
+        return !ok;
+      });
+    }
+    if (!fail_count)
+    {
+      ::SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER, ::SSL_CTX_get_verify_callback(ctx));
 #  if OPENSSL_VERSION_NUMBER >= 0x10101000L
-        ::SSL_CTX_set_post_handshake_auth(ctx, 1);
+      ::SSL_CTX_set_post_handshake_auth(ctx, 1);
 #  endif
 #  if defined(X509_V_FLAG_PARTIAL_CHAIN)
-        /* Have intermediate certificates in the trust store be treated as
-           trust-anchors, in the same way as self-signed root CA certificates
-           are. This allows users to verify servers using the intermediate cert
-           only, instead of needing the whole chain. */
-        X509_STORE_set_flags(SSL_CTX_get_cert_store(ctx), X509_V_FLAG_PARTIAL_CHAIN);
+      /* Have intermediate certificates in the trust store be treated as
+        trust-anchors, in the same way as self-signed root CA certificates
+        are. This allows users to verify servers using the intermediate cert
+        only, instead of needing the whole chain. */
+      ::X509_STORE_set_flags(::SSL_CTX_get_cert_store(ctx), X509_V_FLAG_PARTIAL_CHAIN);
 #  endif
-      }
-      else
-        YASIO_LOG("[global] load ca certifaction file failed!");
     }
     else
-      SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, nullptr);
+      ::SSL_CTX_set_verify(ctx, SSL_VERIFY_NONE, nullptr);
   }
   else
   {

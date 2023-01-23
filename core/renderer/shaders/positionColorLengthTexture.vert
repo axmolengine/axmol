@@ -31,7 +31,7 @@ attribute mediump vec2 a_texCoord;
 attribute mediump vec4 a_color;
 
 varying mediump vec4 v_color;
-varying mediump vec2 v_texcoord;
+varying mediump vec2 v_texCoord;
 
 #else
 
@@ -40,7 +40,7 @@ attribute vec2 a_texCoord;
 attribute vec4 a_color;
 
 varying vec4 v_color;
-varying vec2 v_texcoord;
+varying vec2 v_texCoord;
 
 #endif
 
@@ -50,7 +50,7 @@ uniform mat4 u_MVPMatrix;
 void main()
 {
     v_color = vec4(a_color.rgb * a_color.a * u_alpha, a_color.a * u_alpha);
-    v_texcoord = a_texCoord;
+    v_texCoord = a_texCoord;
 
     gl_Position = u_MVPMatrix * a_position;
 }

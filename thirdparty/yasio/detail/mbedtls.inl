@@ -62,13 +62,20 @@ YASIO__DECL ssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
     int authmode = MBEDTLS_SSL_VERIFY_OPTIONAL;
     if (yasio__valid_str(opts.crtfile_)) // the cafile_ must be full path
     {
-      if ((ret = ::mbedtls_x509_crt_parse_file(&ctx->cert, opts.crtfile_)) == 0)
+      int fail_count = 0;
+      yssl_splitpath(opts.crtfile_, [&](char* first, char* last) {
+        yssl_split_term null_term(last);
+
+        if ((ret = ::mbedtls_x509_crt_parse_file(&ctx->cert, first)) != 0)
+        {
+          ++fail_count;
+          YASIO_LOG("mbedtls_x509_crt_parse_file with ret=-0x%x", (unsigned int)-ret);
+        }
+
+        return !!ret;
+      });
+      if (!fail_count)
         authmode = MBEDTLS_SSL_VERIFY_REQUIRED;
-      else
-      {
-        YASIO_LOG("mbedtls_x509_crt_parse_file with ret=-0x%x", (unsigned int)-ret);
-        break;
-      }
     }
 
     if (opts.client)
@@ -127,7 +134,8 @@ YASIO__DECL ssl_st* yssl_new(ssl_ctx_st* ctx, int fd, const char* hostname, bool
   // ssl_set_fd
   ssl->bio.fd = fd;
   ::mbedtls_ssl_set_bio(ssl, &ssl->bio, ::mbedtls_net_send, ::mbedtls_net_recv, nullptr /*  rev_timeout() */);
-  ::mbedtls_ssl_set_hostname(ssl, hostname);
+  if (client)
+    ::mbedtls_ssl_set_hostname(ssl, hostname);
   return ssl;
 }
 YASIO__DECL void yssl_shutdown(ssl_st*& ssl)

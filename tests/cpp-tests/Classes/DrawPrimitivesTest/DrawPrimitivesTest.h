@@ -58,6 +58,22 @@ public:
     virtual std::string subtitle() const override;
 };
 
+
+class BetterCircleRendering : public DrawPrimitivesBaseTest
+{
+public:
+    CREATE_FUNC(BetterCircleRendering);
+
+    BetterCircleRendering();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+private:
+    ax::DrawNode* drawNode;
+};
+
 class Issue829Test : public DrawPrimitivesBaseTest
 {
 public:

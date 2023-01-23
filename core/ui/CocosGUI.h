@@ -47,8 +47,12 @@ THE SOFTWARE.
 #include "ui/UIHBox.h"
 #include "ui/UIVBox.h"
 #include "ui/UIRelativeBox.h"
-#include "ui/UIVideoPlayer/UIVideoPlayer.h"
-#include "ui/UIWebView/UIWebView.h"
+#if !defined(_WIN32) || defined(AX_ENABLE_MFMEDIA)
+#    include "ui/UIVideoPlayer/UIVideoPlayer.h"
+#endif
+#if !defined(_WIN32) || defined(AX_ENABLE_MSEDGE_WEBVIEW2)
+#    include "ui/UIWebView/UIWebView.h"
+#endif
 #include "ui/GUIExport.h"
 #include "ui/UIScale9Sprite.h"
 #include "ui/UIEditBox/UIEditBox.h"
