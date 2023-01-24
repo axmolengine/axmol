@@ -507,7 +507,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
     [contentView setLayer:layer];
     backend::DeviceMTL::setCAMetalLayer(layer);
 #endif
-    
+
 #if defined(AX_USE_GL)
     glfwMakeContextCurrent(_mainWindow);
 #endif
@@ -565,15 +565,15 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
     }
-    
+
     if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
         ax::print("[GL:%s] Ready for GLSL", glVersion);
     else
         ax::print("Not totally ready :(");
 
-    // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
+        // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !defined(AX_USE_GLES)
-    // Enable point size by default.
+        // Enable point size by default.
 #        if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 #        else
@@ -1155,13 +1155,13 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
          @see also: updateWindowSize (call after enter/exit full screen mode)
         */
         updateDesignResolutionSize();
-        
-#    if defined(AX_USE_METAL)
+
+#if defined(AX_USE_METAL)
         // update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
         backend::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
-#    endif
+#endif
 
         Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
     }
@@ -1291,7 +1291,7 @@ bool GLViewImpl::loadGL()
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#        if !defined(AX_USE_GLES)loadGL
+#        if !defined(AX_USE_GLES)
     if (!gladLoadGL(glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");
