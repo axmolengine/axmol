@@ -75,6 +75,10 @@ THE SOFTWARE.
 #    if !defined(GL_SLUMINANCE_ALPHA)
 #        define GL_SLUMINANCE_ALPHA 0x8C44
 #    endif
+
+#    if !defined(GL_RGBA32F_EXT)
+#        define GL_RGBA32F_EXT 0x8814
+#    endif
 #endif
 
 /// @endcond
