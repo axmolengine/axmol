@@ -1150,7 +1150,7 @@ void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int /*x*/, int 
 
 void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
         /* Invoke `GLView::setFrameSize` to sync screen size immediately,
