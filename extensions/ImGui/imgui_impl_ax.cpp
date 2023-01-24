@@ -88,6 +88,7 @@ using namespace backend;
 #endif
 #ifdef __APPLE__
 #define GLFW_EXPOSE_NATIVE_COCOA
+typedef struct objc_object *id;
 extern "C" id glfwGetCocoaWindow(GLFWwindow* window);
 // #include <GLFW/glfw3native.h>   // for glfwGetCocoaWindow()
 #endif
