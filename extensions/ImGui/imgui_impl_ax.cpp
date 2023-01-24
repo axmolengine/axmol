@@ -133,7 +133,8 @@ enum GlfwClientApi
 {
     GlfwClientApi_Unknown,
     GlfwClientApi_OpenGL,
-    GlfwClientApi_Vulkan
+    GlfwClientApi_Vulkan,
+    GlfwClientApi_Metal,
 };
 
 struct ImGui_ImplGlfw_Data
@@ -1195,15 +1196,14 @@ static void ImGui_ImplGlfw_ShutdownPlatformInterface()
 #define AX_IMGUI_MIN_DELTA (1 / 1000.f)
 #define AX_IMGUI_MAX_DELTA (1 / 30.f)
 
-enum
-{
-    GlfwClientApi_Axmol = 0xadee,
-};
-
 // axmol spec
 bool ImGui_ImplGlfw_InitForAx(GLFWwindow* window, bool install_callbacks)
 {
-    return ImGui_ImplGlfw_Init(window, install_callbacks, (GlfwClientApi)GlfwClientApi_Axmol);
+#if defined(AX_USE_GL)
+    return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_OpenGL);
+#else
+    return ImGui_ImplGlfw_Init(window, install_callbacks, GlfwClientApi_Metal);
+#endif
 }
 
 struct ImGui_ImplAx_Data
@@ -1244,9 +1244,12 @@ static void ImGui_ImplAx_RenderWindow(ImGuiViewport* viewport, void*)
 {
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
+        ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
         ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
-        const auto window               = vd->Window;
-        AddRendererCommand([=]() { glfwMakeContextCurrent(window); });
+        if (bd->ClientApi == GlfwClientApi_OpenGL) {
+            const auto window               = vd->Window;
+            AddRendererCommand([=]() { glfwMakeContextCurrent(window); });
+        }
     }
 }
 
@@ -1254,13 +1257,15 @@ static void ImGui_ImplAx_SwapBuffers(ImGuiViewport* viewport, void*)
 {
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
-        const auto window               = vd->Window;
-        glfwMakeContextCurrent(window);
-        AddRendererCommand([=]() {
-            glfwMakeContextCurrent(window);
-            glfwSwapBuffers(window);
-        });
+        ImGui_ImplGlfw_Data* bd           = ImGui_ImplGlfw_GetBackendData();
+        if (bd->ClientApi == GlfwClientApi_OpenGL) {
+            ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+            const auto window               = vd->Window;
+            AddRendererCommand([=]() {
+                glfwMakeContextCurrent(window);
+                glfwSwapBuffers(window);
+            });
+        }
     }
 }
 
@@ -1356,7 +1361,7 @@ static void ImGui_ImplAx_CreateWindow(ImGuiViewport* viewport)
 #if GLFW_HAS_WINDOW_TOPMOST
     glfwWindowHint(GLFW_FLOATING, (viewport->Flags & ImGuiViewportFlags_TopMost) ? true : false);
 #endif
-    GLFWwindow* share_window = multi_viewport_enabled ? bd->Window : nullptr;
+    GLFWwindow* share_window = (bd->ClientApi == GlfwClientApi_OpenGL) ? bd->Window : nullptr;
 
     vd->Window = glfwCreateWindow((int)viewport->Size.x, (int)viewport->Size.y, "No Title Yet", nullptr, share_window);
     vd->WindowOwned          = true;
@@ -1378,7 +1383,7 @@ static void ImGui_ImplAx_CreateWindow(ImGuiViewport* viewport)
     glfwSetWindowPosCallback(vd->Window, ImGui_ImplGlfw_WindowPosCallback);
     glfwSetWindowSizeCallback(vd->Window, ImGui_ImplGlfw_WindowSizeCallback);
 
-    if (multi_viewport_enabled)
+    if (bd->ClientApi == GlfwClientApi_OpenGL)
     {
         const auto window = vd->Window;
         glfwMakeContextCurrent(window);
@@ -1699,8 +1704,12 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderPlatform()
         GLFWwindow* prev_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
-        glfwMakeContextCurrent(prev_current_context);
-        AddRendererCommand([=]() { glfwMakeContextCurrent(prev_current_context); });
+
+        ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
+        if (bd->ClientApi == GlfwClientApi_OpenGL) {
+            glfwMakeContextCurrent(prev_current_context);
+            AddRendererCommand([=]() { glfwMakeContextCurrent(prev_current_context); });
+        }
     }
 }
 
