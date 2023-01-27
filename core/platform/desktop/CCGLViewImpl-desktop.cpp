@@ -47,34 +47,13 @@ THE SOFTWARE.
 
 #include "renderer/CCRenderer.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#if defined(AX_USE_METAL)
 #    include <Metal/Metal.h>
 #    include "renderer/backend/metal/DeviceMTL.h"
 #    include "renderer/backend/metal/UtilsMTL.h"
 #else
 #    include "renderer/backend/opengl/MacrosGL.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-
-/** glfw3native.h */
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    ifndef GLFW_EXPOSE_NATIVE_WIN32
-#        define GLFW_EXPOSE_NATIVE_WIN32
-#    endif
-#    ifndef GLFW_EXPOSE_NATIVE_WGL
-#        define GLFW_EXPOSE_NATIVE_WGL
-#    endif
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
-
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    ifndef GLFW_EXPOSE_NATIVE_NSGL
-#        define GLFW_EXPOSE_NATIVE_NSGL
-#    endif
-#    ifndef GLFW_EXPOSE_NATIVE_COCOA
-#        define GLFW_EXPOSE_NATIVE_COCOA
-#    endif
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-
-#include "glfw3native.h"
 
 /** glfw3native.h */
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
@@ -529,6 +508,10 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
     backend::DeviceMTL::setCAMetalLayer(layer);
 #endif
 
+#if defined(AX_USE_GL)
+    glfwMakeContextCurrent(_mainWindow);
+#endif
+
     /*
      *  Note that the created window and context may differ from what you requested,
      *  as not all parameters and hints are
@@ -550,8 +533,6 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
         rect.size.height = realH / _frameZoomFactor;
     }
 
-    glfwMakeContextCurrent(_mainWindow);
-
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
     glfwSetScrollCallback(_mainWindow, GLFWEventHandler::onGLFWMouseScrollCallback);
@@ -564,8 +545,12 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
 
     setFrameSize(rect.size.width, rect.size.height);
 
-#if defined(AX_USE_GL)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     loadGL();
+#endif
+
+#if defined(AX_USE_GL)
+    glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
 
     // check OpenGL version at first
     const GLubyte* glVersion = glGetString(GL_VERSION);
@@ -581,9 +566,14 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
         return false;
     }
 
-    // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
+    if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
+        ax::print("[GL:%s] Ready for GLSL", glVersion);
+    else
+        ax::print("Not totally ready :(");
+
+        // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !defined(AX_USE_GLES)
-    // Enable point size by default.
+        // Enable point size by default.
 #        if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 #        else
@@ -593,11 +583,6 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
         glEnable(GL_MULTISAMPLE);
 #    endif
     CHECK_GL_ERROR_DEBUG();
-
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-    glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
-#    endif
-
 #endif
     //    // GLFW v3.2 no longer emits "onGLFWWindowSizeFunCallback" at creation time. Force default viewport:
     //    setViewPortInPoints(0, 0, neededWidth, neededHeight);
@@ -1150,7 +1135,6 @@ void GLViewImpl::onGLFWWindowPosCallback(GLFWwindow* /*window*/, int /*x*/, int 
 
 void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
     {
         /* Invoke `GLView::setFrameSize` to sync screen size immediately,
@@ -1172,29 +1156,15 @@ void GLViewImpl::onGLFWWindowSizeCallback(GLFWwindow* /*window*/, int w, int h)
         */
         updateDesignResolutionSize();
 
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
-    }
-#else
-    if (w && h && _resolutionPolicy != ResolutionPolicy::UNKNOWN)
-    {
-        Size baseDesignSize = _designResolutionSize;
-        ResolutionPolicy baseResolutionPolicy = _resolutionPolicy;
-
-        int frameWidth = w / _frameZoomFactor;
-        int frameHeight = h / _frameZoomFactor;
-        setFrameSize(frameWidth, frameHeight);
-        setDesignResolutionSize(baseDesignSize.width, baseDesignSize.height, baseResolutionPolicy);
-        Director::getInstance()->setViewport();
-        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
-
-#    if defined(AX_USE_METAL)
+#if defined(AX_USE_METAL)
         // update metal attachment texture size.
         int fbWidth, fbHeight;
         glfwGetFramebufferSize(_mainWindow, &fbWidth, &fbHeight);
         backend::UtilsMTL::resizeDefaultAttachmentTexture(fbWidth, fbHeight);
-#    endif
-    }
 #endif
+
+        Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(GLViewImpl::EVENT_WINDOW_RESIZED, nullptr);
+    }
 }
 
 void GLViewImpl::onGLFWWindowIconifyCallback(GLFWwindow* /*window*/, int iconified)
@@ -1221,7 +1191,7 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
     }
 }
 
-#if defined(AX_USE_GL)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 static bool loadFboExtensions()
 {
     const char* gl_extensions = (const char*)glGetString(GL_EXTENSIONS);
@@ -1326,14 +1296,6 @@ bool GLViewImpl::loadGL()
     {
         log("glad: Failed to Load GL");
         return false;
-    }
-    if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
-    {
-        log("Ready for GLSL");
-    }
-    else
-    {
-        log("Not totally ready :(");
     }
 #        else
     if (!gladLoadGLES2(glfwGetProcAddress))

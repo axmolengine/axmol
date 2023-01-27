@@ -1,8 +1,8 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  26 October 2022                                                 *
+* Date      :  23 January 2023                                                 *
 * Website   :  http://www.angusj.com                                           *
-* Copyright :  Angus Johnson 2010-2022                                         *
+* Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This module provides a simple interface to the Clipper Library  *
 * License   :  http://www.boost.org/LICENSE_1_0.txt                            *
 *******************************************************************************/
@@ -20,9 +20,6 @@
 #include "clipper.rectclip.h"
 
 namespace Clipper2Lib {
-
-  static const char* precision_error = 
-    "Precision exceeds the permitted range";
 
   static const Rect64 MaxInvalidRect64 = Rect64(
     (std::numeric_limits<int64_t>::max)(),
@@ -60,8 +57,7 @@ namespace Clipper2Lib {
   inline PathsD BooleanOp(ClipType cliptype, FillRule fillrule,
     const PathsD& subjects, const PathsD& clips, int decimal_prec = 2)
   {
-    if (decimal_prec > 8 || decimal_prec < -8)
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(decimal_prec);
     PathsD result;
     ClipperD clipper(decimal_prec);
     clipper.AddSubject(subjects);
@@ -74,8 +70,7 @@ namespace Clipper2Lib {
     const PathsD& subjects, const PathsD& clips, 
     PolyTreeD& polytree, int decimal_prec = 2)
   {
-    if (decimal_prec > 8 || decimal_prec < -8)
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(decimal_prec);
     PathsD result;
     ClipperD clipper(decimal_prec);
     clipper.AddSubject(subjects);
@@ -114,8 +109,7 @@ namespace Clipper2Lib {
 
   inline PathsD Union(const PathsD& subjects, FillRule fillrule, int decimal_prec = 2)
   {
-    if (decimal_prec > 8 || decimal_prec < -8)
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(decimal_prec);
     PathsD result;
     ClipperD clipper(decimal_prec);
     clipper.AddSubject(subjects);
@@ -152,10 +146,9 @@ namespace Clipper2Lib {
   }
 
   inline PathsD InflatePaths(const PathsD& paths, double delta,
-    JoinType jt, EndType et, double miter_limit = 2.0, double precision = 2)
+    JoinType jt, EndType et, double miter_limit = 2.0, int precision = 2)
   {
-    if (precision < -8 || precision > 8)
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(precision);
     const double scale = std::pow(10, precision);
     ClipperOffset clip_offset(miter_limit);
     clip_offset.AddPaths(ScalePaths<int64_t,double>(paths, scale), jt, et);
@@ -167,8 +160,8 @@ namespace Clipper2Lib {
   {
     Path64 result;
     result.reserve(path.size());
-    for (const Point64& pt : path)
-      result.push_back(Point64(pt.x + dx, pt.y + dy));
+    std::transform(path.begin(), path.end(), back_inserter(result),
+      [dx, dy](const auto& pt) { return Point64(pt.x + dx, pt.y +dy); });
     return result;
   }
 
@@ -176,8 +169,8 @@ namespace Clipper2Lib {
   {
     PathD result;
     result.reserve(path.size());
-    for (const PointD& pt : path)
-      result.push_back(PointD(pt.x + dx, pt.y + dy));
+    std::transform(path.begin(), path.end(), back_inserter(result),
+      [dx, dy](const auto& pt) { return PointD(pt.x + dx, pt.y + dy); });
     return result;
   }
 
@@ -185,8 +178,8 @@ namespace Clipper2Lib {
   {
     Paths64 result;
     result.reserve(paths.size());
-    for (const Path64& path : paths)
-      result.push_back(TranslatePath(path, dx, dy));
+    std::transform(paths.begin(), paths.end(), back_inserter(result),
+      [dx, dy](const auto& path) { return TranslatePath(path, dx, dy); });
     return result;
   }
 
@@ -194,8 +187,8 @@ namespace Clipper2Lib {
   {
     PathsD result;
     result.reserve(paths.size());
-    for (const PathD& path : paths)
-      result.push_back(TranslatePath(path, dx, dy));
+    std::transform(paths.begin(), paths.end(), back_inserter(result),
+      [dx, dy](const auto& path) { return TranslatePath(path, dx, dy); });
     return result;
   }
 
@@ -294,8 +287,7 @@ namespace Clipper2Lib {
   {
     if (rect.IsEmpty() || path.empty() ||
       !rect.Contains(Bounds(path))) return PathD();
-    if (precision < -8 || precision > 8)
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(precision);
     const double scale = std::pow(10, precision);
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
     class RectClip rc(r);
@@ -306,8 +298,7 @@ namespace Clipper2Lib {
   inline PathsD RectClip(const RectD& rect, const PathsD& paths, int precision = 2)
   {
     if (rect.IsEmpty() || paths.empty()) return PathsD();
-    if (precision < -8 || precision > 8)
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(precision);
     const double scale = std::pow(10, precision);
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
     class RectClip rc(r);
@@ -372,8 +363,7 @@ namespace Clipper2Lib {
   {
     if (rect.IsEmpty() || path.empty() ||
       !rect.Contains(Bounds(path))) return PathsD();
-    if (precision < -8 || precision > 8)
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(precision);
     const double scale = std::pow(10, precision);
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
     class RectClipLines rcl(r);
@@ -385,8 +375,7 @@ namespace Clipper2Lib {
   {
     PathsD result;
     if (rect.IsEmpty() || paths.empty()) return result;
-    if (precision < -8 || precision > 8)
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(precision);
     const double scale = std::pow(10, precision);
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
     class RectClipLines rcl(r);
@@ -416,25 +405,43 @@ namespace Clipper2Lib {
     inline void PolyPathToPaths64(const PolyPath64& polypath, Paths64& paths)
     {
       paths.push_back(polypath.Polygon());
-      for (const PolyPath* child : polypath)
-        PolyPathToPaths64(*(PolyPath64*)(child), paths);
+      for (const auto& child : polypath)
+        PolyPathToPaths64(*child, paths);
     }
 
     inline void PolyPathToPathsD(const PolyPathD& polypath, PathsD& paths)
     {
       paths.push_back(polypath.Polygon());
-      for (const PolyPath* child : polypath)
-        PolyPathToPathsD(*(PolyPathD*)(child), paths);
+      for (const auto& child : polypath)
+        PolyPathToPathsD(*child, paths);
     }
 
     inline bool PolyPath64ContainsChildren(const PolyPath64& pp)
     {
-      for (auto ch : pp)
+      for (const auto& child : pp)
       {
-        PolyPath64* child = (PolyPath64*)ch;
+        // return false if this child isn't fully contained by its parent
+
+        // the following algorithm is a bit too crude, and doesn't account
+        // for rounding errors. A better algorithm is to return false when
+        // consecutive vertices are found outside the parent's polygon.
+
+        //const Path64& path = pp.Polygon();
+        //if (std::any_of(child->Polygon().cbegin(), child->Polygon().cend(),
+        //  [path](const auto& pt) {return (PointInPolygon(pt, path) ==
+        //    PointInPolygonResult::IsOutside); })) return false;
+
+        int outsideCnt = 0;
         for (const Point64& pt : child->Polygon())
-          if (PointInPolygon(pt, pp.Polygon()) == PointInPolygonResult::IsOutside)
-            return false;
+        {
+          PointInPolygonResult result = PointInPolygon(pt, pp.Polygon());
+          if (result == PointInPolygonResult::IsInside) --outsideCnt;
+          else if (result == PointInPolygonResult::IsOutside) ++outsideCnt;
+          if (outsideCnt > 1) return false;
+          else if (outsideCnt < -1) break;
+        }
+
+        // now check any nested children too
         if (child->Count() > 0 && !PolyPath64ContainsChildren(*child))
           return false;
       }
@@ -529,29 +536,101 @@ namespace Clipper2Lib {
       return;
     }
 
+    static void OutlinePolyPath(std::ostream& os, 
+      bool isHole, size_t count, const std::string& preamble)
+    {
+      std::string plural = (count == 1) ? "." : "s.";
+      if (isHole)
+      {
+        if (count)
+          os << preamble << "+- Hole with " << count <<
+          " nested polygon" << plural << std::endl;
+        else
+          os << preamble << "+- Hole" << std::endl;
+      }
+      else
+      {
+        if (count)
+          os << preamble << "+- Polygon with " << count <<
+          " nested hole" << plural << std::endl;
+        else
+          os << preamble << "+- Polygon" << std::endl;
+      }
+    }
+
+    static void OutlinePolyPath64(std::ostream& os, const PolyPath64& pp,
+      std::string preamble, bool last_child)
+    {
+      OutlinePolyPath(os, pp.IsHole(), pp.Count(), preamble);
+      preamble += (!last_child) ? "|  " : "   ";
+      if (pp.Count())
+      {
+        PolyPath64List::const_iterator it = pp.begin();
+        for (; it < pp.end() - 1; ++it)
+          OutlinePolyPath64(os, **it, preamble, false);
+        OutlinePolyPath64(os, **it, preamble, true);
+      }
+    }
+
+    static void OutlinePolyPathD(std::ostream& os, const PolyPathD& pp,
+      std::string preamble, bool last_child)
+    {
+      OutlinePolyPath(os, pp.IsHole(), pp.Count(), preamble);
+      preamble += (!last_child) ? "|  " : "   ";
+      if (pp.Count())
+      {
+        PolyPathDList::const_iterator it = pp.begin();
+        for (; it < pp.end() - 1; ++it)
+          OutlinePolyPathD(os, **it, preamble, false);
+        OutlinePolyPathD(os, **it, preamble, true);
+      }
+    }
+
   } // end details namespace 
+
+  inline std::ostream& operator<< (std::ostream& os, const PolyTree64& pp)
+  {
+    PolyPath64List::const_iterator it = pp.begin();
+    for (; it < pp.end() - 1; ++it)
+      details::OutlinePolyPath64(os, **it, "   ", false);
+    details::OutlinePolyPath64(os, **it, "   ", true);
+    os << std::endl << std::endl;
+    if (!pp.Level()) os << std::endl;
+    return os;
+  }
+
+  inline std::ostream& operator<< (std::ostream& os, const PolyTreeD& pp)
+  {
+    PolyPathDList::const_iterator it = pp.begin();
+    for (; it < pp.end() - 1; ++it)
+      details::OutlinePolyPathD(os, **it, "   ", false);
+    details::OutlinePolyPathD(os, **it, "   ", true);
+    os << std::endl << std::endl;
+    if (!pp.Level()) os << std::endl;
+    return os;
+  }
 
   inline Paths64 PolyTreeToPaths64(const PolyTree64& polytree)
   {
     Paths64 result;
-    for (auto child : polytree)
-      details::PolyPathToPaths64(*(PolyPath64*)(child), result);
+    for (const auto& child : polytree)
+      details::PolyPathToPaths64(*child, result);
     return result;
   }
 
   inline PathsD PolyTreeToPathsD(const PolyTreeD& polytree)
   {
     PathsD result;
-    for (auto child : polytree)
-      details::PolyPathToPathsD(*(PolyPathD*)(child), result);
+    for (const auto& child : polytree)
+      details::PolyPathToPathsD(*child, result);
     return result;
   }
 
   inline bool CheckPolytreeFullyContainsChildren(const PolyTree64& polytree)
   {
-    for (auto child : polytree)
+    for (const auto& child : polytree)
       if (child->Count() > 0 && 
-        !details::PolyPath64ContainsChildren(*(PolyPath64*)(child)))
+        !details::PolyPath64ContainsChildren(*child))
           return false;
     return true;
   }
@@ -641,8 +720,7 @@ namespace Clipper2Lib {
 
   inline PathD TrimCollinear(const PathD& path, int precision, bool is_open_path = false)
   {
-    if (precision > 8 || precision < -8) 
-      throw Clipper2Exception(precision_error);
+    CheckPrecision(precision);
     const double scale = std::pow(10, precision);
     Path64 p = ScalePath<int64_t, double>(path, scale);
     p = TrimCollinear(p, is_open_path);
@@ -764,8 +842,9 @@ namespace Clipper2Lib {
   {
     Paths<T> result;
     result.reserve(paths.size());
-    for (const Path<T>& path : paths)
-      result.push_back(RamerDouglasPeucker<T>(path, epsilon));
+    std::transform(paths.begin(), paths.end(), back_inserter(result),
+      [epsilon](const auto& path) 
+      { return RamerDouglasPeucker<T>(path, epsilon); });
     return result;
   }
 
