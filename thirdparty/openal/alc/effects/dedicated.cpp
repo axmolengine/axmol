@@ -43,6 +43,10 @@ namespace {
 using uint = unsigned int;
 
 struct DedicatedState final : public EffectState {
+    /* The "dedicated" effect can output to the real output, so should have
+     * gains for all possible output channels and not just the main ambisonic
+     * buffer.
+     */
     float mCurrentGains[MAX_OUTPUT_CHANNELS];
     float mTargetGains[MAX_OUTPUT_CHANNELS];
 
@@ -70,9 +74,8 @@ void DedicatedState::update(const ContextBase*, const EffectSlot *slot,
 
     if(slot->EffectType == EffectSlotType::DedicatedLFE)
     {
-        const uint idx{!target.RealOut ? INVALID_CHANNEL_INDEX :
-            GetChannelIdxByName(*target.RealOut, LFE)};
-        if(idx != INVALID_CHANNEL_INDEX)
+        const uint idx{target.RealOut ? target.RealOut->ChannelIndex[LFE] : InvalidChannelIndex};
+        if(idx != InvalidChannelIndex)
         {
             mOutTarget = target.RealOut->Buffer;
             mTargetGains[idx] = Gain;
@@ -82,16 +85,16 @@ void DedicatedState::update(const ContextBase*, const EffectSlot *slot,
     {
         /* Dialog goes to the front-center speaker if it exists, otherwise it
          * plays from the front-center location. */
-        const uint idx{!target.RealOut ? INVALID_CHANNEL_INDEX :
-            GetChannelIdxByName(*target.RealOut, FrontCenter)};
-        if(idx != INVALID_CHANNEL_INDEX)
+        const uint idx{target.RealOut ? target.RealOut->ChannelIndex[FrontCenter]
+            : InvalidChannelIndex};
+        if(idx != InvalidChannelIndex)
         {
             mOutTarget = target.RealOut->Buffer;
             mTargetGains[idx] = Gain;
         }
         else
         {
-            const auto coeffs = CalcDirectionCoeffs({0.0f, 0.0f, -1.0f}, 0.0f);
+            static constexpr auto coeffs = CalcDirectionCoeffs({0.0f, 0.0f, -1.0f});
 
             mOutTarget = target.Main->Buffer;
             ComputePanGains(target.Main, coeffs.data(), Gain, mTargetGains);

@@ -55,11 +55,12 @@ static_assert(!(sizeof(DeviceBase::MixerBufferLine)&15),
     "DeviceBase::MixerBufferLine must be a multiple of 16 bytes");
 static_assert(!(MaxResamplerEdge&3), "MaxResamplerEdge is not a multiple of 4");
 
-Resampler ResamplerDefault{Resampler::Linear};
+Resampler ResamplerDefault{Resampler::Cubic};
 
 namespace {
 
 using uint = unsigned int;
+using namespace std::chrono;
 
 using HrtfMixerFunc = void(*)(const float *InSamples, float2 *AccumSamples, const uint IrSize,
     const MixHrtfFilter *hrtfparams, const size_t BufferSize);
@@ -70,7 +71,20 @@ using HrtfMixerBlendFunc = void(*)(const float *InSamples, float2 *AccumSamples,
 HrtfMixerFunc MixHrtfSamples{MixHrtf_<CTag>};
 HrtfMixerBlendFunc MixHrtfBlendSamples{MixHrtfBlend_<CTag>};
 
-inline MixerFunc SelectMixer()
+inline MixerOutFunc SelectMixer()
+{
+#ifdef HAVE_NEON
+    if((CPUCapFlags&CPU_CAP_NEON))
+        return Mix_<NEONTag>;
+#endif
+#ifdef HAVE_SSE
+    if((CPUCapFlags&CPU_CAP_SSE))
+        return Mix_<SSETag>;
+#endif
+    return Mix_<CTag>;
+}
+
+inline MixerOneFunc SelectMixerOne()
 {
 #ifdef HAVE_NEON
     if((CPUCapFlags&CPU_CAP_NEON))
@@ -151,7 +165,8 @@ void Voice::InitMixer(al::optional<std::string> resampler)
             ResamplerDefault = iter->resampler;
     }
 
-    MixSamples = SelectMixer();
+    MixSamplesOut = SelectMixer();
+    MixSamplesOne = SelectMixerOne();
     MixHrtfBlendSamples = SelectHrtfBlendMixer();
     MixHrtfSamples = SelectHrtfMixer();
 }
@@ -245,41 +260,46 @@ void LoadSamples(const al::span<float*> dstSamples, const size_t dstOffset, cons
 #undef HANDLE_FMT
 }
 
-void LoadBufferStatic(VoiceBufferItem *buffer, VoiceBufferItem *bufferLoopItem,
+void LoadBufferStatic(VoiceBufferItem *buffer, VoiceBufferItem *&bufferLoopItem,
     const size_t dataPosInt, const FmtType sampleType, const FmtChannels sampleChannels,
-    const size_t srcStep, const size_t samplesToLoad, const al::span<float*> voiceSamples)
+    const size_t srcStep, size_t samplesLoaded, const size_t samplesToLoad,
+    const al::span<float*> voiceSamples)
 {
-    const uint loopStart{buffer->mLoopStart};
-    const uint loopEnd{buffer->mLoopEnd};
-    ASSUME(loopEnd > loopStart);
+    const size_t loopStart{buffer->mLoopStart};
+    const size_t loopEnd{buffer->mLoopEnd};
 
     /* If current pos is beyond the loop range, do not loop */
     if(!bufferLoopItem || dataPosInt >= loopEnd)
     {
-        /* Load what's left to play from the buffer */
-        const size_t remaining{minz(samplesToLoad, buffer->mSampleLen-dataPosInt)};
-        LoadSamples(voiceSamples, 0, buffer->mSamples, dataPosInt, sampleType, sampleChannels,
-            srcStep, remaining);
+        bufferLoopItem = nullptr;
 
-        if(const size_t toFill{samplesToLoad - remaining})
+        /* Load what's left to play from the buffer */
+        const size_t remaining{minz(samplesToLoad-samplesLoaded, buffer->mSampleLen-dataPosInt)};
+        LoadSamples(voiceSamples, samplesLoaded, buffer->mSamples, dataPosInt, sampleType,
+            sampleChannels, srcStep, remaining);
+        samplesLoaded += remaining;
+
+        if(const size_t toFill{samplesToLoad - samplesLoaded})
         {
             for(auto *chanbuffer : voiceSamples)
             {
-                auto srcsamples = chanbuffer + remaining - 1;
+                auto srcsamples = chanbuffer + samplesLoaded - 1;
                 std::fill_n(srcsamples + 1, toFill, *srcsamples);
             }
         }
     }
     else
     {
+        ASSUME(loopEnd > loopStart);
+
         /* Load what's left of this loop iteration */
-        const size_t remaining{minz(samplesToLoad, loopEnd-dataPosInt)};
-        LoadSamples(voiceSamples, 0, buffer->mSamples, dataPosInt, sampleType, sampleChannels,
-            srcStep, remaining);
+        const size_t remaining{minz(samplesToLoad-samplesLoaded, loopEnd-dataPosInt)};
+        LoadSamples(voiceSamples, samplesLoaded, buffer->mSamples, dataPosInt, sampleType,
+            sampleChannels, srcStep, remaining);
+        samplesLoaded += remaining;
 
         /* Load repeats of the loop to fill the buffer. */
-        const auto loopSize = static_cast<size_t>(loopEnd - loopStart);
-        size_t samplesLoaded{remaining};
+        const size_t loopSize{loopEnd - loopStart};
         while(const size_t toFill{minz(samplesToLoad - samplesLoaded, loopSize)})
         {
             LoadSamples(voiceSamples, samplesLoaded, buffer->mSamples, loopStart, sampleType,
@@ -291,29 +311,30 @@ void LoadBufferStatic(VoiceBufferItem *buffer, VoiceBufferItem *bufferLoopItem,
 
 void LoadBufferCallback(VoiceBufferItem *buffer, const size_t numCallbackSamples,
     const FmtType sampleType, const FmtChannels sampleChannels, const size_t srcStep,
-    const size_t samplesToLoad, const al::span<float*> voiceSamples)
+    size_t samplesLoaded, const size_t samplesToLoad, const al::span<float*> voiceSamples)
 {
     /* Load what's left to play from the buffer */
-    const size_t remaining{minz(samplesToLoad, numCallbackSamples)};
-    LoadSamples(voiceSamples, 0, buffer->mSamples, 0, sampleType, sampleChannels, srcStep,
-        remaining);
+    const size_t remaining{minz(samplesToLoad-samplesLoaded, numCallbackSamples)};
+    LoadSamples(voiceSamples, samplesLoaded, buffer->mSamples, 0, sampleType, sampleChannels,
+        srcStep, remaining);
+    samplesLoaded += remaining;
 
-    if(const size_t toFill{samplesToLoad - remaining})
+    if(const size_t toFill{samplesToLoad - samplesLoaded})
     {
         for(auto *chanbuffer : voiceSamples)
         {
-            auto srcsamples = chanbuffer + remaining - 1;
-            std::fill_n(srcsamples + 1, toFill, *srcsamples);
+            auto srcsamples = chanbuffer + remaining;
+            std::fill_n(srcsamples, toFill, *(srcsamples-1));
         }
     }
 }
 
 void LoadBufferQueue(VoiceBufferItem *buffer, VoiceBufferItem *bufferLoopItem,
     size_t dataPosInt, const FmtType sampleType, const FmtChannels sampleChannels,
-    const size_t srcStep, const size_t samplesToLoad, const al::span<float*> voiceSamples)
+    const size_t srcStep, size_t samplesLoaded, const size_t samplesToLoad,
+    const al::span<float*> voiceSamples)
 {
     /* Crawl the buffer queue to fill in the temp buffer */
-    size_t samplesLoaded{0};
     while(buffer && samplesLoaded != samplesToLoad)
     {
         if(dataPosInt >= buffer->mSampleLen)
@@ -338,12 +359,10 @@ void LoadBufferQueue(VoiceBufferItem *buffer, VoiceBufferItem *bufferLoopItem,
     }
     if(const size_t toFill{samplesToLoad - samplesLoaded})
     {
-        size_t chanidx{0};
         for(auto *chanbuffer : voiceSamples)
         {
-            auto srcsamples = chanbuffer + samplesLoaded - 1;
-            std::fill_n(srcsamples + 1, toFill, *srcsamples);
-            ++chanidx;
+            auto srcsamples = chanbuffer + samplesLoaded;
+            std::fill_n(srcsamples, toFill, *(srcsamples-1));
         }
     }
 }
@@ -362,7 +381,7 @@ void DoHrtfMix(const float *samples, const uint DstBufferSize, DirectParams &par
         std::begin(HrtfSamples));
     std::copy_n(samples, DstBufferSize, src_iter);
     /* Copy the last used samples back into the history buffer for later. */
-    if(likely(IsPlaying))
+    if(IsPlaying) [[likely]]
         std::copy_n(std::begin(HrtfSamples) + DstBufferSize, parms.Hrtf.History.size(),
             parms.Hrtf.History.begin());
 
@@ -453,19 +472,23 @@ void DoNfcMix(const al::span<const float> samples, FloatBufferLine *OutBuffer, D
 
 } // namespace
 
-void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo)
+void Voice::mix(const State vstate, ContextBase *Context, const nanoseconds deviceTime,
+    const uint SamplesToDo)
 {
     static constexpr std::array<float,MAX_OUTPUT_CHANNELS> SilentTarget{};
 
     ASSUME(SamplesToDo > 0);
 
+    DeviceBase *Device{Context->mDevice};
+    const uint NumSends{Device->NumAuxSends};
+
     /* Get voice info */
-    uint DataPosInt{mPosition.load(std::memory_order_relaxed)};
+    int DataPosInt{mPosition.load(std::memory_order_relaxed)};
     uint DataPosFrac{mPositionFrac.load(std::memory_order_relaxed)};
     VoiceBufferItem *BufferListItem{mCurrentBuffer.load(std::memory_order_relaxed)};
     VoiceBufferItem *BufferLoopItem{mLoopBuffer.load(std::memory_order_relaxed)};
     const uint increment{mStep};
-    if UNLIKELY(increment < 1)
+    if(increment < 1) [[unlikely]]
     {
         /* If the voice is supposed to be stopping but can't be mixed, just
          * stop it before bailing.
@@ -475,13 +498,33 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
         return;
     }
 
-    DeviceBase *Device{Context->mDevice};
-    const uint NumSends{Device->NumAuxSends};
+    uint Counter{mFlags.test(VoiceIsFading) ? minu(SamplesToDo, 64u) : 0u};
+    uint OutPos{0u};
 
-    ResamplerFunc Resample{(increment == MixerFracOne && DataPosFrac == 0) ?
-                           Resample_<CopyTag,CTag> : mResampler};
+    /* Check if we're doing a delayed start, and we start in this update. */
+    if(mStartTime > deviceTime)
+    {
+        /* If the start time is too far ahead, don't bother. */
+        auto diff = mStartTime - deviceTime;
+        if(diff >= seconds{1})
+            return;
 
-    uint Counter{mFlags.test(VoiceIsFading) ? SamplesToDo : 0};
+        /* Get the number of samples ahead of the current time that output
+         * should start at. Skip this update if it's beyond the output sample
+         * count.
+         *
+         * Round the start position to a multiple of 4, which some mixers want.
+         * This makes the start time accurate to 4 samples. This could be made
+         * sample-accurate by forcing non-SIMD functions on the first run.
+         */
+        seconds::rep sampleOffset{duration_cast<seconds>(diff * Device->Frequency).count()};
+        sampleOffset = (sampleOffset+2) & ~seconds::rep{3};
+        if(sampleOffset >= SamplesToDo)
+            return;
+
+        OutPos = static_cast<uint>(sampleOffset);
+    }
+
     if(!Counter)
     {
         /* No fading, just overwrite the old/current params. */
@@ -504,8 +547,6 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
             }
         }
     }
-    else if UNLIKELY(!BufferListItem)
-        Counter = std::min(Counter, 64u);
 
     std::array<float*,DeviceBase::MixerChannelsMax> SamplePointers;
     const al::span<float*> MixingSamples{SamplePointers.data(), mChans.size()};
@@ -514,9 +555,10 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
     std::transform(Device->mSampleData.end() - mChans.size(), Device->mSampleData.end(),
         MixingSamples.begin(), offset_bufferline);
 
+    const ResamplerFunc Resample{(increment == MixerFracOne && DataPosFrac == 0) ?
+        Resample_<CopyTag,CTag> : mResampler};
     const uint PostPadding{MaxResamplerEdge + mDecoderPadding};
     uint buffers_done{0u};
-    uint OutPos{0u};
     do {
         /* Figure out how many buffer samples will be needed */
         uint DstBufferSize{SamplesToDo - OutPos};
@@ -563,14 +605,15 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
                     /* If the voice is stopping, only one mixing iteration will
                      * be done, so ensure it fades out completely this mix.
                      */
-                    if(unlikely(vstate == Stopping))
+                    if(vstate == Stopping) [[unlikely]]
                         Counter = std::min(Counter, DstBufferSize);
                 }
                 ASSUME(DstBufferSize > 0);
             }
         }
 
-        if(unlikely(!BufferListItem))
+        float **voiceSamples{};
+        if(!BufferListItem) [[unlikely]]
         {
             const size_t srcOffset{(increment*DstBufferSize + DataPosFrac)>>MixerFracBits};
             auto prevSamples = mPrevSamples.data();
@@ -603,15 +646,29 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
                 std::copy_n(prevSamples->data(), MaxResamplerEdge, chanbuffer-MaxResamplerEdge);
                 ++prevSamples;
             }
+
+            size_t samplesLoaded{0};
+            if(DataPosInt < 0) [[unlikely]]
+            {
+                if(static_cast<uint>(-DataPosInt) >= SrcBufferSize)
+                    goto skip_mix;
+
+                samplesLoaded = static_cast<uint>(-DataPosInt);
+                for(auto *chanbuffer : MixingSamples)
+                    std::fill_n(chanbuffer, samplesLoaded, 0.0f);
+            }
+            const uint DataPosUInt{static_cast<uint>(maxi(DataPosInt, 0))};
+
             if(mFlags.test(VoiceIsStatic))
-                LoadBufferStatic(BufferListItem, BufferLoopItem, DataPosInt, mFmtType,
-                    mFmtChannels, mFrameStep, SrcBufferSize, MixingSamples);
+                LoadBufferStatic(BufferListItem, BufferLoopItem, DataPosUInt, mFmtType,
+                    mFmtChannels, mFrameStep, samplesLoaded, SrcBufferSize, MixingSamples);
             else if(mFlags.test(VoiceIsCallback))
             {
-                if(!mFlags.test(VoiceCallbackStopped) && SrcBufferSize > mNumCallbackSamples)
+                const size_t remaining{SrcBufferSize - samplesLoaded};
+                if(!mFlags.test(VoiceCallbackStopped) && remaining > mNumCallbackSamples)
                 {
                     const size_t byteOffset{mNumCallbackSamples*mFrameSize};
-                    const size_t needBytes{SrcBufferSize*mFrameSize - byteOffset};
+                    const size_t needBytes{remaining*mFrameSize - byteOffset};
 
                     const int gotBytes{BufferListItem->mCallback(BufferListItem->mUserData,
                         &BufferListItem->mSamples[byteOffset], static_cast<int>(needBytes))};
@@ -623,29 +680,29 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
                         mNumCallbackSamples += static_cast<uint>(gotBytes) / mFrameSize;
                     }
                     else
-                        mNumCallbackSamples = SrcBufferSize;
+                        mNumCallbackSamples = static_cast<uint>(remaining);
                 }
                 LoadBufferCallback(BufferListItem, mNumCallbackSamples, mFmtType, mFmtChannels,
-                    mFrameStep, SrcBufferSize, MixingSamples);
+                    mFrameStep, samplesLoaded, SrcBufferSize, MixingSamples);
             }
             else
-                LoadBufferQueue(BufferListItem, BufferLoopItem, DataPosInt, mFmtType, mFmtChannels,
-                    mFrameStep, SrcBufferSize, MixingSamples);
+                LoadBufferQueue(BufferListItem, BufferLoopItem, DataPosUInt, mFmtType, mFmtChannels,
+                    mFrameStep, samplesLoaded, SrcBufferSize, MixingSamples);
 
             const size_t srcOffset{(increment*DstBufferSize + DataPosFrac)>>MixerFracBits};
             if(mDecoder)
             {
                 SrcBufferSize = SrcBufferSize - PostPadding + MaxResamplerEdge;
                 mDecoder->decode(MixingSamples, SrcBufferSize,
-                    likely(vstate == Playing) ? srcOffset : 0);
+                    (vstate == Playing) ? srcOffset : 0);
             }
+
             /* Store the last source samples used for next time. */
-            if(likely(vstate == Playing))
+            if(vstate == Playing) [[likely]]
             {
                 prevSamples = mPrevSamples.data();
                 for(auto *chanbuffer : MixingSamples)
                 {
-                    /* Store the last source samples used for next time. */
                     std::copy_n(chanbuffer-MaxResamplerEdge+srcOffset, prevSamples->size(),
                         prevSamples->data());
                     ++prevSamples;
@@ -653,7 +710,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
             }
         }
 
-        auto voiceSamples = MixingSamples.begin();
+        voiceSamples = MixingSamples.begin();
         for(auto &chandata : mChans)
         {
             /* Resample, then apply ambisonic upsampling as needed. */
@@ -674,13 +731,13 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
 
                 if(mFlags.test(VoiceHasHrtf))
                 {
-                    const float TargetGain{parms.Hrtf.Target.Gain * likely(vstate == Playing)};
+                    const float TargetGain{parms.Hrtf.Target.Gain * (vstate == Playing)};
                     DoHrtfMix(samples, DstBufferSize, parms, TargetGain, Counter, OutPos,
                         (vstate == Playing), Device);
                 }
                 else
                 {
-                    const float *TargetGains{likely(vstate == Playing) ? parms.Gains.Target.data()
+                    const float *TargetGains{(vstate == Playing) ? parms.Gains.Target.data()
                         : SilentTarget.data()};
                     if(mFlags.test(VoiceHasNfc))
                         DoNfcMix({samples, DstBufferSize}, mDirect.Buffer.data(), parms,
@@ -700,14 +757,15 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
                 const float *samples{DoFilters(parms.LowPass, parms.HighPass, FilterBuf.data(),
                     {ResampledData, DstBufferSize}, mSend[send].FilterType)};
 
-                const float *TargetGains{likely(vstate == Playing) ? parms.Gains.Target.data()
+                const float *TargetGains{(vstate == Playing) ? parms.Gains.Target.data()
                     : SilentTarget.data()};
                 MixSamples({samples, DstBufferSize}, mSend[send].Buffer,
                     parms.Gains.Current.data(), TargetGains, Counter, OutPos);
             }
         }
+    skip_mix:
         /* If the voice is stopping, we're now done. */
-        if(unlikely(vstate == Stopping))
+        if(vstate == Stopping) [[unlikely]]
             break;
 
         /* Update positions */
@@ -719,27 +777,31 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
         OutPos += DstBufferSize;
         Counter = maxu(DstBufferSize, Counter) - DstBufferSize;
 
-        if(unlikely(!BufferListItem))
-        {
-            /* Do nothing extra when there's no buffers. */
-        }
-        else if(mFlags.test(VoiceIsStatic))
+        /* Do nothing extra when there's no buffers, or if the voice position
+         * is still negative.
+         */
+        if(!BufferListItem || DataPosInt < 0) [[unlikely]]
+            continue;
+
+        if(mFlags.test(VoiceIsStatic))
         {
             if(BufferLoopItem)
             {
                 /* Handle looping static source */
                 const uint LoopStart{BufferListItem->mLoopStart};
                 const uint LoopEnd{BufferListItem->mLoopEnd};
-                if(DataPosInt >= LoopEnd)
+                uint DataPosUInt{static_cast<uint>(DataPosInt)};
+                if(DataPosUInt >= LoopEnd)
                 {
                     assert(LoopEnd > LoopStart);
-                    DataPosInt = ((DataPosInt-LoopStart)%(LoopEnd-LoopStart)) + LoopStart;
+                    DataPosUInt = ((DataPosUInt-LoopStart)%(LoopEnd-LoopStart)) + LoopStart;
+                    DataPosInt = static_cast<int>(DataPosUInt);
                 }
             }
             else
             {
                 /* Handle non-looping static source */
-                if(DataPosInt >= BufferListItem->mSampleLen)
+                if(static_cast<uint>(DataPosInt) >= BufferListItem->mSampleLen)
                 {
                     BufferListItem = nullptr;
                     break;
@@ -767,7 +829,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
         {
             /* Handle streaming source */
             do {
-                if(BufferListItem->mSampleLen > DataPosInt)
+                if(BufferListItem->mSampleLen > static_cast<uint>(DataPosInt))
                     break;
 
                 DataPosInt -= BufferListItem->mSampleLen;
@@ -782,7 +844,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
     mFlags.set(VoiceIsFading);
 
     /* Don't update positions and buffers if we were stopping. */
-    if(unlikely(vstate == Stopping))
+    if(vstate == Stopping) [[unlikely]]
     {
         mPlayState.store(Stopped, std::memory_order_release);
         return;
@@ -803,8 +865,8 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
     std::atomic_thread_fence(std::memory_order_release);
 
     /* Send any events now, after the position/buffer info was updated. */
-    const uint enabledevt{Context->mEnabledEvts.load(std::memory_order_acquire)};
-    if(buffers_done > 0 && (enabledevt&AsyncEvent::BufferCompleted))
+    const auto enabledevt = Context->mEnabledEvts.load(std::memory_order_acquire);
+    if(buffers_done > 0 && enabledevt.test(AsyncEvent::BufferCompleted))
     {
         RingBuffer *ring{Context->mAsyncEvents.get()};
         auto evt_vec = ring->getWriteVector();
@@ -824,7 +886,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const uint SamplesToDo
          * ensures any residual noise fades to 0 amplitude.
          */
         mPlayState.store(Stopping, std::memory_order_release);
-        if((enabledevt&AsyncEvent::SourceStateChange))
+        if(enabledevt.test(AsyncEvent::SourceStateChange))
             SendSourceStoppedEvent(Context, SourceID);
     }
 }
@@ -836,7 +898,7 @@ void Voice::prepare(DeviceBase *device)
      */
     uint num_channels{(mFmtChannels == FmtUHJ2 || mFmtChannels == FmtSuperStereo) ? 3 :
         ChannelsFromFmt(mFmtChannels, minu(mAmbiOrder, device->mAmbiOrder))};
-    if(unlikely(num_channels > device->mSampleData.size()))
+    if(num_channels > device->mSampleData.size()) [[unlikely]]
     {
         ERR("Unexpected channel count: %u (limit: %zu, %d:%d)\n", num_channels,
             device->mSampleData.size(), mFmtChannels, mAmbiOrder);
@@ -852,20 +914,43 @@ void Voice::prepare(DeviceBase *device)
     mPrevSamples.reserve(maxu(2, num_channels));
     mPrevSamples.resize(num_channels);
 
+    mDecoder = nullptr;
+    mDecoderPadding = 0;
     if(mFmtChannels == FmtSuperStereo)
     {
-        mDecoder = std::make_unique<UhjStereoDecoder>();
-        mDecoderPadding = UhjStereoDecoder::sFilterDelay;
+        switch(UhjDecodeQuality)
+        {
+        case UhjQualityType::IIR:
+            mDecoder = std::make_unique<UhjStereoDecoderIIR>();
+            mDecoderPadding = UhjStereoDecoderIIR::sInputPadding;
+            break;
+        case UhjQualityType::FIR256:
+            mDecoder = std::make_unique<UhjStereoDecoder<UhjLength256>>();
+            mDecoderPadding = UhjStereoDecoder<UhjLength256>::sInputPadding;
+            break;
+        case UhjQualityType::FIR512:
+            mDecoder = std::make_unique<UhjStereoDecoder<UhjLength512>>();
+            mDecoderPadding = UhjStereoDecoder<UhjLength512>::sInputPadding;
+            break;
+        }
     }
     else if(IsUHJ(mFmtChannels))
     {
-        mDecoder = std::make_unique<UhjDecoder>();
-        mDecoderPadding = UhjDecoder::sFilterDelay;
-    }
-    else
-    {
-        mDecoder = nullptr;
-        mDecoderPadding = 0;
+        switch(UhjDecodeQuality)
+        {
+        case UhjQualityType::IIR:
+            mDecoder = std::make_unique<UhjDecoderIIR>();
+            mDecoderPadding = UhjDecoderIIR::sInputPadding;
+            break;
+        case UhjQualityType::FIR256:
+            mDecoder = std::make_unique<UhjDecoder<UhjLength256>>();
+            mDecoderPadding = UhjDecoder<UhjLength256>::sInputPadding;
+            break;
+        case UhjQualityType::FIR512:
+            mDecoder = std::make_unique<UhjDecoder<UhjLength512>>();
+            mDecoderPadding = UhjDecoder<UhjLength512>::sInputPadding;
+            break;
+        }
     }
 
     /* Clear the stepping value explicitly so the mixer knows not to mix this
@@ -876,48 +961,18 @@ void Voice::prepare(DeviceBase *device)
     /* Make sure the sample history is cleared. */
     std::fill(mPrevSamples.begin(), mPrevSamples.end(), HistoryLine{});
 
-    /* Don't need to set the VoiceIsAmbisonic flag if the device is not higher
-     * order than the voice. No HF scaling is necessary to mix it.
-     */
-    if(mAmbiOrder && device->mAmbiOrder > mAmbiOrder)
+    if(mFmtChannels == FmtUHJ2 && !device->mUhjEncoder)
     {
-        const uint8_t *OrderFromChan{Is2DAmbisonic(mFmtChannels) ?
-            AmbiIndex::OrderFrom2DChannel().data() : AmbiIndex::OrderFromChannel().data()};
-        const auto scales = AmbiScale::GetHFOrderScales(mAmbiOrder, device->mAmbiOrder);
-
-        const BandSplitter splitter{device->mXOverFreq / static_cast<float>(device->Frequency)};
-        for(auto &chandata : mChans)
-        {
-            chandata.mAmbiHFScale = scales[*(OrderFromChan++)];
-            chandata.mAmbiLFScale = 1.0f;
-            chandata.mAmbiSplitter = splitter;
-            chandata.mDryParams = DirectParams{};
-            chandata.mDryParams.NFCtrlFilter = device->mNFCtrlFilter;
-            std::fill_n(chandata.mWetParams.begin(), device->NumAuxSends, SendParams{});
-        }
         /* 2-channel UHJ needs different shelf filters. However, we can't just
-         * use different shelf filters after mixing it and with any old speaker
+         * use different shelf filters after mixing it, given any old speaker
          * setup the user has. To make this work, we apply the expected shelf
          * filters for decoding UHJ2 to quad (only needs LF scaling), and act
-         * as if those 4 quad channels are encoded right back onto first-order
-         * B-Format, which then upsamples to higher order as normal (only needs
-         * HF scaling).
+         * as if those 4 quad channels are encoded right back into B-Format.
          *
          * This isn't perfect, but without an entirely separate and limited
          * UHJ2 path, it's better than nothing.
-         */
-        if(mFmtChannels == FmtUHJ2)
-        {
-            mChans[0].mAmbiLFScale = UhjDecoder::sWLFScale;
-            mChans[1].mAmbiLFScale = UhjDecoder::sXYLFScale;
-            mChans[2].mAmbiLFScale = UhjDecoder::sXYLFScale;
-        }
-        mFlags.set(VoiceIsAmbisonic);
-    }
-    else if(mFmtChannels == FmtUHJ2 && !device->mUhjEncoder)
-    {
-        /* 2-channel UHJ with first-order output also needs the shelf filter
-         * correction applied, except with UHJ output (UHJ2->B-Format->UHJ2 is
+         *
+         * Note this isn't needed with UHJ output (UHJ2->B-Format->UHJ2 is
          * identity, so don't mess with it).
          */
         const BandSplitter splitter{device->mXOverFreq / static_cast<float>(device->Frequency)};
@@ -930,9 +985,31 @@ void Voice::prepare(DeviceBase *device)
             chandata.mDryParams.NFCtrlFilter = device->mNFCtrlFilter;
             std::fill_n(chandata.mWetParams.begin(), device->NumAuxSends, SendParams{});
         }
-        mChans[0].mAmbiLFScale = UhjDecoder::sWLFScale;
-        mChans[1].mAmbiLFScale = UhjDecoder::sXYLFScale;
-        mChans[2].mAmbiLFScale = UhjDecoder::sXYLFScale;
+        mChans[0].mAmbiLFScale = DecoderBase::sWLFScale;
+        mChans[1].mAmbiLFScale = DecoderBase::sXYLFScale;
+        mChans[2].mAmbiLFScale = DecoderBase::sXYLFScale;
+        mFlags.set(VoiceIsAmbisonic);
+    }
+    /* Don't need to set the VoiceIsAmbisonic flag if the device is not higher
+     * order than the voice. No HF scaling is necessary to mix it.
+     */
+    else if(mAmbiOrder && device->mAmbiOrder > mAmbiOrder)
+    {
+        const uint8_t *OrderFromChan{Is2DAmbisonic(mFmtChannels) ?
+            AmbiIndex::OrderFrom2DChannel().data() : AmbiIndex::OrderFromChannel().data()};
+        const auto scales = AmbiScale::GetHFOrderScales(mAmbiOrder, device->mAmbiOrder,
+            device->m2DMixing);
+
+        const BandSplitter splitter{device->mXOverFreq / static_cast<float>(device->Frequency)};
+        for(auto &chandata : mChans)
+        {
+            chandata.mAmbiHFScale = scales[*(OrderFromChan++)];
+            chandata.mAmbiLFScale = 1.0f;
+            chandata.mAmbiSplitter = splitter;
+            chandata.mDryParams = DirectParams{};
+            chandata.mDryParams.NFCtrlFilter = device->mNFCtrlFilter;
+            std::fill_n(chandata.mWetParams.begin(), device->NumAuxSends, SendParams{});
+        }
         mFlags.set(VoiceIsAmbisonic);
     }
     else
