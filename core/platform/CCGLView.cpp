@@ -162,6 +162,8 @@ void GLView::updateDesignResolutionSize()
         director->_winSizeInPoints      = getDesignResolutionSize();
         director->_isStatusLabelUpdated = true;
         director->setProjection(director->getProjection());
+        // Set the "correct" 'content scale factor' 
+        director->setContentScaleFactor((_scaleX + _scaleY) / 2);
 
         // Github issue #16139
         // A default viewport is needed in order to display the FPS,
