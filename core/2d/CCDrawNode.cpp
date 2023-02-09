@@ -369,8 +369,8 @@ void DrawNode::drawCircle(const Vec2& center,
     }
     if (_lineWidth > minThickness)
     {
-        auto scaleFactor = AX_CONTENT_SCALE_FACTOR() * 2 ;
-        drawPolygon(vertices, segments, Color4B(1.0f, 0.0f, 0.0f, 1.0f), _lineWidth / scaleFactor, color);
+        static GLView* glView = _director->getOpenGLView();
+        drawPolygon(vertices, segments, Color4B(1.0f, 0.0f, 0.0f, 1.0f), _lineWidth / (glView->getScaleX() + glView->getScaleY()), color);
     }
     else
     {
