@@ -577,7 +577,7 @@ public:
 class EaxReverbEffect final : public EaxEffect
 {
 public:
-    EaxReverbEffect(const EaxCall& call) noexcept;
+    EaxReverbEffect(int eax_version) noexcept;
 
     void dispatch(const EaxCall& call) override;
     /*[[nodiscard]]*/ bool commit() override;
@@ -1194,8 +1194,8 @@ private:
     static void translate(const Props2& src, Props3& dst) noexcept;
 }; // EaxReverbEffect
 
-EaxReverbEffect::EaxReverbEffect(const EaxCall& call) noexcept
-    : EaxEffect{AL_EFFECT_EAXREVERB}, version_{call.get_version()}
+EaxReverbEffect::EaxReverbEffect(int eax_version) noexcept
+    : EaxEffect{AL_EFFECT_EAXREVERB}, version_{eax_version}
 {
     set_defaults();
     set_current_defaults();
@@ -1496,7 +1496,7 @@ void EaxReverbEffect::get2(const EaxCall& call, const Props2& props)
         case DSPROPERTY_EAX20LISTENER_DECAYTIME: call.set_value<Exception>(props.flDecayTime); break;
         case DSPROPERTY_EAX20LISTENER_DECAYHFRATIO: call.set_value<Exception>(props.flDecayHFRatio); break;
         case DSPROPERTY_EAX20LISTENER_REFLECTIONS: call.set_value<Exception>(props.lReflections); break;
-        case DSPROPERTY_EAX20LISTENER_REFLECTIONSDELAY: call.set_value<Exception>(props.flReverbDelay); break;
+        case DSPROPERTY_EAX20LISTENER_REFLECTIONSDELAY: call.set_value<Exception>(props.flReflectionsDelay); break;
         case DSPROPERTY_EAX20LISTENER_REVERB: call.set_value<Exception>(props.lReverb); break;
         case DSPROPERTY_EAX20LISTENER_REVERBDELAY: call.set_value<Exception>(props.flReverbDelay); break;
         case DSPROPERTY_EAX20LISTENER_ENVIRONMENT: call.set_value<Exception>(props.dwEnvironment); break;
@@ -1986,9 +1986,9 @@ void EaxReverbEffect::translate(const Props2& src, Props3& dst) noexcept
 
 } // namespace
 
-EaxEffectUPtr eax_create_eax_reverb_effect(const EaxCall& call)
+EaxEffectUPtr eax_create_eax_reverb_effect(int eax_version)
 {
-    return std::make_unique<EaxReverbEffect>(call);
+    return std::make_unique<EaxReverbEffect>(eax_version);
 }
 
 #endif // ALSOFT_EAX

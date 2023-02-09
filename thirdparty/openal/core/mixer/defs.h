@@ -16,9 +16,10 @@ using uint = unsigned int;
 using float2 = std::array<float,2>;
 
 
-constexpr int MixerFracBits{12};
+constexpr int MixerFracBits{16};
 constexpr int MixerFracOne{1 << MixerFracBits};
 constexpr int MixerFracMask{MixerFracOne - 1};
+constexpr int MixerFracHalf{MixerFracOne >> 1};
 
 constexpr float GainSilenceThreshold{0.00001f}; /* -100dB */
 
@@ -67,6 +68,9 @@ float *Resample_(const InterpState *state, float *RESTRICT src, uint frac, uint 
 template<typename InstTag>
 void Mix_(const al::span<const float> InSamples, const al::span<FloatBufferLine> OutBuffer,
     float *CurrentGains, const float *TargetGains, const size_t Counter, const size_t OutPos);
+template<typename InstTag>
+void Mix_(const al::span<const float> InSamples, float *OutBuffer, float &CurrentGain,
+    const float TargetGain, const size_t Counter);
 
 template<typename InstTag>
 void MixHrtf_(const float *InSamples, float2 *AccumSamples, const uint IrSize,

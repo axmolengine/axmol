@@ -61,8 +61,8 @@ struct ChorusState final : public EffectState {
 
     /* Gains for left and right sides */
     struct {
-        float Current[MAX_OUTPUT_CHANNELS]{};
-        float Target[MAX_OUTPUT_CHANNELS]{};
+        float Current[MaxAmbiChannels]{};
+        float Target[MaxAmbiChannels]{};
     } mGains[2];
 
     /* effect parameters */
@@ -120,8 +120,8 @@ void ChorusState::update(const ContextBase *Context, const EffectSlot *Slot,
     mFeedback = props->Chorus.Feedback;
 
     /* Gains for left and right sides */
-    const auto lcoeffs = CalcDirectionCoeffs({-1.0f, 0.0f, 0.0f}, 0.0f);
-    const auto rcoeffs = CalcDirectionCoeffs({ 1.0f, 0.0f, 0.0f}, 0.0f);
+    static constexpr auto lcoeffs = CalcDirectionCoeffs({-1.0f, 0.0f, 0.0f});
+    static constexpr auto rcoeffs = CalcDirectionCoeffs({ 1.0f, 0.0f, 0.0f});
 
     mOutTarget = target.Main->Buffer;
     ComputePanGains(target.Main, lcoeffs.data(), Slot->Gain, mGains[0].Target);
@@ -172,17 +172,33 @@ void ChorusState::getTriangleDelays(uint (*delays)[MAX_UPDATE_SAMPLES], const si
     ASSUME(lfo_range > 0);
     ASSUME(todo > 0);
 
-    uint offset{mLfoOffset};
-    auto gen_lfo = [&offset,lfo_range,lfo_scale,depth,delay]() -> uint
+    auto gen_lfo = [lfo_scale,depth,delay](const uint offset) -> uint
     {
-        offset = (offset+1)%lfo_range;
         const float offset_norm{static_cast<float>(offset) * lfo_scale};
         return static_cast<uint>(fastf2i((1.0f-std::abs(2.0f-offset_norm)) * depth) + delay);
     };
-    std::generate_n(delays[0], todo, gen_lfo);
+
+    uint offset{mLfoOffset};
+    for(size_t i{0};i < todo;)
+    {
+        size_t rem{minz(todo-i, lfo_range-offset)};
+        do {
+            delays[0][i++] = gen_lfo(offset++);
+        } while(--rem);
+        if(offset == lfo_range)
+            offset = 0;
+    }
 
     offset = (mLfoOffset+mLfoDisp) % lfo_range;
-    std::generate_n(delays[1], todo, gen_lfo);
+    for(size_t i{0};i < todo;)
+    {
+        size_t rem{minz(todo-i, lfo_range-offset)};
+        do {
+            delays[1][i++] = gen_lfo(offset++);
+        } while(--rem);
+        if(offset == lfo_range)
+            offset = 0;
+    }
 
     mLfoOffset = static_cast<uint>(mLfoOffset+todo) % lfo_range;
 }
@@ -197,17 +213,33 @@ void ChorusState::getSinusoidDelays(uint (*delays)[MAX_UPDATE_SAMPLES], const si
     ASSUME(lfo_range > 0);
     ASSUME(todo > 0);
 
-    uint offset{mLfoOffset};
-    auto gen_lfo = [&offset,lfo_range,lfo_scale,depth,delay]() -> uint
+    auto gen_lfo = [lfo_scale,depth,delay](const uint offset) -> uint
     {
-        offset = (offset+1)%lfo_range;
         const float offset_norm{static_cast<float>(offset) * lfo_scale};
         return static_cast<uint>(fastf2i(std::sin(offset_norm)*depth) + delay);
     };
-    std::generate_n(delays[0], todo, gen_lfo);
+
+    uint offset{mLfoOffset};
+    for(size_t i{0};i < todo;)
+    {
+        size_t rem{minz(todo-i, lfo_range-offset)};
+        do {
+            delays[0][i++] = gen_lfo(offset++);
+        } while(--rem);
+        if(offset == lfo_range)
+            offset = 0;
+    }
 
     offset = (mLfoOffset+mLfoDisp) % lfo_range;
-    std::generate_n(delays[1], todo, gen_lfo);
+    for(size_t i{0};i < todo;)
+    {
+        size_t rem{minz(todo-i, lfo_range-offset)};
+        do {
+            delays[1][i++] = gen_lfo(offset++);
+        } while(--rem);
+        if(offset == lfo_range)
+            offset = 0;
+    }
 
     mLfoOffset = static_cast<uint>(mLfoOffset+todo) % lfo_range;
 }
@@ -216,7 +248,7 @@ void ChorusState::process(const size_t samplesToDo, const al::span<const FloatBu
 {
     const size_t bufmask{mSampleBuffer.size()-1};
     const float feedback{mFeedback};
-    const uint avgdelay{(static_cast<uint>(mDelay) + (MixerFracOne>>1)) >> MixerFracBits};
+    const uint avgdelay{(static_cast<uint>(mDelay) + MixerFracHalf) >> MixerFracBits};
     float *RESTRICT delaybuf{mSampleBuffer.data()};
     uint offset{mOffset};
 
