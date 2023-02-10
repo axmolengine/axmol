@@ -282,10 +282,19 @@ void BetterCircleRendering::changeThickness(ax::Ref* pSender, ax::ui::Slider::Ev
 {
     if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
     {
-        ax::ui::Slider* slider = dynamic_cast<ax::ui::Slider*>(pSender);
-        thick                  = slider->getPercent();
+        ax::ui::Slider* sliderThickness = dynamic_cast<ax::ui::Slider*>(pSender);
+        thick                           = sliderThickness->getPercent();
+        _thickNessLabel->setString("setLineWidth(" + Value(thick).asString() + ")");
+    }
+}
 
-        _thickNessLabel->setString("Thickness: " + Value(thick).asString());
+void BetterCircleRendering::changeLineWidth(ax::Ref* pSender, ax::ui::Slider::EventType type)
+{
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        ax::ui::Slider* sliderLineWidth = dynamic_cast<ax::ui::Slider*>(pSender);
+        lineWidth                       = sliderLineWidth->getPercent();
+        _lineWidthLabel->setString("drawCircle(pos, radius, ..., segemnts, ..., color, " + Value(lineWidth).asString() + ")");
     }
 }
 
@@ -300,11 +309,24 @@ void BetterCircleRendering::initSliders()
     slider->setPosition(Vec2(vsize.width / 2, vsize.height / 6));
     slider->addEventListener(AX_CALLBACK_2(BetterCircleRendering::changeThickness, this));
 
-    auto ttfConfig = TTFConfig("fonts/arial.ttf", 8);
-    _thickNessLabel = Label::createWithTTF(ttfConfig, "Thickness: 0");
-    addChild(_thickNessLabel);
+    auto ttfConfig  = TTFConfig("fonts/arial.ttf", 8);
+    _thickNessLabel = Label::createWithTTF(ttfConfig, "setLineWidth(0)");
+    addChild(_thickNessLabel, 20);
     _thickNessLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 15));
-    addChild(slider);
+    addChild(slider, 20);
+
+    ax::ui::Slider* sliderLineWidth = ax::ui::Slider::create();
+    sliderLineWidth->setPercent(0);
+    sliderLineWidth->loadBarTexture("cocosui/sliderTrack.png");
+    sliderLineWidth->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+    sliderLineWidth->loadProgressBarTexture("cocosui/sliderProgress.png");
+    sliderLineWidth->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 35));
+    sliderLineWidth->addEventListener(AX_CALLBACK_2(BetterCircleRendering::changeLineWidth, this));
+
+    _lineWidthLabel = Label::createWithTTF(ttfConfig, "drawCircle(pos, radius, ..., segments, ..., color, 0)");
+    addChild(_lineWidthLabel, 20);
+    _lineWidthLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 50));
+    addChild(sliderLineWidth, 20);
 }
 
  void BetterCircleRendering::update(float dt)
@@ -320,11 +342,12 @@ void BetterCircleRendering::initSliders()
 
     // New behavior => slower but good rendering if line width > 5
     auto color = Color4F::GREEN;
-    if (thick <= switchDrawCircleBehavior)
+    if (thick <= lineWidth)
     {
         color = Color4F::RED;  // using the faster rendering internal method of drawCircle (old behavior)
     }
-    drawNode->drawCircle(VisibleRect::center() - Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false, color, switchDrawCircleBehavior);
+    drawNode->drawCircle(VisibleRect::center() - Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false, color,
+                         lineWidth);
  }
 
 string BetterCircleRendering::title() const
@@ -334,7 +357,7 @@ string BetterCircleRendering::title() const
 
 string BetterCircleRendering::subtitle() const
 {
-    return "Green be the optimized rendering circle\nRed circle: faster but badly rendering after line width > 5";
+    return "Green: smoother rendering; Red: faster but badly rendering";
 }
 
 Issue829Test::Issue829Test()

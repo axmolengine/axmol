@@ -72,11 +72,14 @@ public:
 
     void initSliders();
     void changeThickness(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeLineWidth(Ref* pSender, ax::ui::Slider::EventType type);
 
 private:
     ax::DrawNode* drawNode;
     float thick = 0;
     ax::Label* _thickNessLabel;
+    float lineWidth = 0;
+    ax::Label* _lineWidthLabel;
 };
 
 class Issue829Test : public DrawPrimitivesBaseTest
