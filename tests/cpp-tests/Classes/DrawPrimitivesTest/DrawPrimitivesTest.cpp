@@ -331,9 +331,6 @@ void BetterCircleRendering::initSliders()
 
  void BetterCircleRendering::update(float dt)
  {
-    // drawCircle with a thickness > 5 will be use the slower but good internal rendering method
-    float switchDrawCircleBehavior = 5.0f; 
-   
     drawNode->clear();
     drawNode->setLineWidth(thick); // value from the slider
 
