@@ -256,28 +256,24 @@ string Issue11942Test::subtitle() const
 }
 
 //
-// drawCircle new feature 
+// drawCircle example to see the better rendering of 'rings'
 //
 BetterCircleRendering::BetterCircleRendering()
 {
-    //// DrawNode 0 ------------------------------------------
-    //auto draw0 = DrawNode::create();
-    //addChild(draw0, 10);
+    // Add lines to see the correct "scale of the 'rings'" changing the window size
+    auto draw0 = DrawNode::create();
+    draw0->setLineWidth(1);
+    addChild(draw0, 10);
 
-    //// draw a circle thickness 10
-    //draw0->setLineWidth(10);
-    //draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, 40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-    //                  Color4F::GREEN, 2);
-    //draw0->setLineWidth(30);  // thickness 10 will replaced with thickness 1 (also for all 'same' draw commands before!)
-    //draw0->drawCircle(VisibleRect::center() - Vec2(140.0f, -40.0f), 50, AX_DEGREES_TO_RADIANS(90), 30, false,
-    //                  Color4F::GREEN, 2);
+    for (float y = 0; y < VisibleRect::top().y; y += 10)
+    {
+        draw0->drawLine({VisibleRect::left().x, y}, {VisibleRect::right().x, y}, Color4B::GRAY);
+    }
 
-    //// DrawNode 1 ------------------------------------------
     drawNode = DrawNode::create();
     addChild(drawNode, 10);
 
     scheduleUpdate();
-
 }
 
  void BetterCircleRendering::update(float dt)
@@ -287,19 +283,18 @@ BetterCircleRendering::BetterCircleRendering()
     if (thick > 200)
         thick = 0;
 
-   
     drawNode->clear();
     drawNode->setLineWidth(thick);
 
-    drawNode->drawCircle(VisibleRect::center() + Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false,
-                         Color4F::RED);
-  
-    drawNode->drawCircle(VisibleRect::center() - Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false,
-                         Color4F::GREEN, 2);
+    // old behavior => bad rendering of 'rings'
+    drawNode->drawCircle(VisibleRect::center() + Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false, Color4F::RED);
+
+    // New behavior => better rendering of 'rings'
+    drawNode->drawCircle(VisibleRect::center() - Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false, Color4F::GREEN, 2);
  }
 
 string BetterCircleRendering::title() const
- {
+{
     return "Rendering drawCircle";
 }
 
