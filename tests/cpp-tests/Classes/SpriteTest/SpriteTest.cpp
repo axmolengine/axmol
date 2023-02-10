@@ -61,6 +61,8 @@ SpriteTests::SpriteTests()
     ADD_TEST_CASE(Sprite1);
     ADD_TEST_CASE(SpriteBatchNode1);
     ADD_TEST_CASE(SpriteAnchorPoint);
+    ADD_TEST_CASE(SpriteWithoutVertexAnchorPoint);
+    ADD_TEST_CASE(SpriteVertexAnchorPoint);
     ADD_TEST_CASE(SpriteBatchNodeAnchorPoint);
     ADD_TEST_CASE(SpriteAnchorPointFromFile);
     ADD_TEST_CASE(SpriteOffsetAnchorRotation);
@@ -1173,6 +1175,120 @@ std::string SpriteAnchorPoint::title() const
 std::string SpriteAnchorPoint::subtitle() const
 {
     return "anchor point";
+}
+
+//------------------------------------------------------------------
+//
+// SpriteWithoutVertexAnchorPoint
+//
+//------------------------------------------------------------------
+
+SpriteWithoutVertexAnchorPoint::SpriteWithoutVertexAnchorPoint()
+{
+    auto s = Director::getInstance()->getWinSize();
+
+    auto rotate = RotateBy::create(10, 360);
+    auto action = RepeatForever::create(rotate);
+
+    for (int i = 0; i < 3; i++)
+    {
+        auto sprite = Sprite::create("Images/grossini_dance_atlas.png", Rect(85 * i, 121 * 1, 85, 121));
+        sprite->setPosition(Vec2(s.width / 4 * (i + 1), s.height / 2));
+
+        auto point = Sprite::create("Images/r1.png");
+        point->setScale(0.25f);
+        point->setPosition(sprite->getPosition());
+        addChild(point, 10);
+
+        switch (i)
+        {
+        case 0:
+            sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+            break;
+        case 1:
+            sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+            break;
+        case 2:
+            sprite->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+            break;
+        }
+
+        point->setPosition(sprite->getPosition());
+
+        sprite->runAction(action->clone());
+        addChild(sprite, i);
+
+        auto lb = Label::createWithSystemFont("This is a text", "", 16);
+        lb->setColor(Color3B::WHITE);
+        sprite->addChild(lb, i);
+    }
+}
+
+std::string SpriteWithoutVertexAnchorPoint::title() const
+{
+    return "Testing Sprite";
+}
+
+std::string SpriteWithoutVertexAnchorPoint::subtitle() const
+{
+    return "anchor point without using Anchored Sprite (default node anchoring) with children attached";
+}
+
+//------------------------------------------------------------------
+//
+// SpriteVertexAnchorPoint
+//
+//------------------------------------------------------------------
+
+SpriteVertexAnchorPoint::SpriteVertexAnchorPoint()
+{
+    auto s = Director::getInstance()->getWinSize();
+
+    auto rotate = RotateBy::create(10, 360);
+    auto action = RepeatForever::create(rotate);
+
+    for (int i = 0; i < 3; i++)
+    {
+        auto sprite = AnchoredSprite::create("Images/grossini_dance_atlas.png", Rect(85 * i, 121 * 1, 85, 121));
+        sprite->setPosition(Vec2(s.width / 4 * (i + 1), s.height / 2));
+
+        auto point = Sprite::create("Images/r1.png");
+        point->setScale(0.25f);
+        point->setPosition(sprite->getPosition());
+        addChild(point, 10);
+
+        switch (i)
+        {
+        case 0:
+            sprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+            break;
+        case 1:
+            sprite->setAnchorPoint(Vec2::ANCHOR_MIDDLE);
+            break;
+        case 2:
+            sprite->setAnchorPoint(Vec2::ANCHOR_TOP_RIGHT);
+            break;
+        }
+
+        point->setPosition(sprite->getPosition());
+
+        sprite->runAction(action->clone());
+        addChild(sprite, i);
+
+        auto lb = Label::createWithSystemFont("This is a text", "", 16);
+        lb->setColor(Color3B::WHITE);
+        sprite->addChild(lb, i);
+    }
+}
+
+std::string SpriteVertexAnchorPoint::title() const
+{
+    return "Testing Sprite";
+}
+
+std::string SpriteVertexAnchorPoint::subtitle() const
+{
+    return "anchor point using Anchored Sprite with children attached";
 }
 
 //------------------------------------------------------------------
