@@ -85,7 +85,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 
 #### Common Requirement [Python](https://www.python.org/downloads/)
 
-- Python-2.7.17+, Python-3.7+
+- Python-3.7+
 
 #### Prerequisites
 
