@@ -1226,7 +1226,7 @@ SpriteWithoutVertexAnchorPoint::SpriteWithoutVertexAnchorPoint()
 
 std::string SpriteWithoutVertexAnchorPoint::title() const
 {
-    return "Testing Sprite";
+    return "Testing AnchoredSprite";
 }
 
 std::string SpriteWithoutVertexAnchorPoint::subtitle() const
@@ -1283,7 +1283,7 @@ SpriteVertexAnchorPoint::SpriteVertexAnchorPoint()
 
 std::string SpriteVertexAnchorPoint::title() const
 {
-    return "Testing Sprite";
+    return "Testing AnchoredSprite";
 }
 
 std::string SpriteVertexAnchorPoint::subtitle() const
