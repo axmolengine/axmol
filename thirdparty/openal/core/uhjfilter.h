@@ -9,7 +9,117 @@
 #include "resampler_limits.h"
 
 
+static constexpr size_t UhjLength256{256};
+static constexpr size_t UhjLength512{512};
+
+enum class UhjQualityType : uint8_t {
+    IIR = 0,
+    FIR256,
+    FIR512,
+    Default = IIR
+};
+
+extern UhjQualityType UhjDecodeQuality;
+extern UhjQualityType UhjEncodeQuality;
+
+
+struct UhjAllPassFilter {
+    struct AllPassState {
+        /* Last two delayed components for direct form II. */
+        float z[2];
+    };
+    std::array<AllPassState,4> state;
+
+    void process(const al::span<const float,4> coeffs, const al::span<const float> src,
+        const size_t forwardSamples, float *RESTRICT dst);
+};
+
+
+struct UhjEncoderBase {
+    virtual ~UhjEncoderBase() = default;
+
+    virtual size_t getDelay() noexcept = 0;
+
+    /**
+     * Encodes a 2-channel UHJ (stereo-compatible) signal from a B-Format input
+     * signal. The input must use FuMa channel ordering and UHJ scaling (FuMa
+     * with an additional +3dB boost).
+     */
+    virtual void encode(float *LeftOut, float *RightOut,
+        const al::span<const float*const,3> InSamples, const size_t SamplesToDo) = 0;
+};
+
+template<size_t N>
+struct UhjEncoder final : public UhjEncoderBase {
+    static constexpr size_t sFilterDelay{N/2};
+
+    /* Delays and processing storage for the input signal. */
+    alignas(16) std::array<float,BufferLineSize+sFilterDelay> mW{};
+    alignas(16) std::array<float,BufferLineSize+sFilterDelay> mX{};
+    alignas(16) std::array<float,BufferLineSize+sFilterDelay> mY{};
+
+    alignas(16) std::array<float,BufferLineSize> mS{};
+    alignas(16) std::array<float,BufferLineSize> mD{};
+
+    /* History and temp storage for the FIR filter. New samples should be
+     * written to index sFilterDelay*2 - 1.
+     */
+    static constexpr size_t sWXInOffset{sFilterDelay*2 - 1};
+    alignas(16) std::array<float,BufferLineSize + sFilterDelay*2> mWX{};
+
+    alignas(16) std::array<std::array<float,sFilterDelay>,2> mDirectDelay{};
+
+    size_t getDelay() noexcept override { return sFilterDelay; }
+
+    /**
+     * Encodes a 2-channel UHJ (stereo-compatible) signal from a B-Format input
+     * signal. The input must use FuMa channel ordering and UHJ scaling (FuMa
+     * with an additional +3dB boost).
+     */
+    void encode(float *LeftOut, float *RightOut, const al::span<const float*const,3> InSamples,
+        const size_t SamplesToDo) override;
+
+    DEF_NEWDEL(UhjEncoder)
+};
+
+struct UhjEncoderIIR final : public UhjEncoderBase {
+    static constexpr size_t sFilterDelay{1};
+
+    /* Processing storage for the input signal. */
+    alignas(16) std::array<float,BufferLineSize+1> mS{};
+    alignas(16) std::array<float,BufferLineSize+1> mD{};
+    alignas(16) std::array<float,BufferLineSize+sFilterDelay> mWX{};
+    alignas(16) std::array<float,BufferLineSize+sFilterDelay> mTemp{};
+    float mDelayWX{}, mDelayY{};
+
+    UhjAllPassFilter mFilter1WX;
+    UhjAllPassFilter mFilter2WX;
+    UhjAllPassFilter mFilter1Y;
+
+    std::array<UhjAllPassFilter,2> mFilter1Direct;
+    std::array<float,2> mDirectDelay{};
+
+    size_t getDelay() noexcept override { return sFilterDelay; }
+
+    /**
+     * Encodes a 2-channel UHJ (stereo-compatible) signal from a B-Format input
+     * signal. The input must use FuMa channel ordering and UHJ scaling (FuMa
+     * with an additional +3dB boost).
+     */
+    void encode(float *LeftOut, float *RightOut, const al::span<const float*const,3> InSamples,
+        const size_t SamplesToDo) override;
+
+    DEF_NEWDEL(UhjEncoderIIR)
+};
+
+
 struct DecoderBase {
+    static constexpr size_t sMaxPadding{256};
+
+    /* For 2-channel UHJ, shelf filters should use these LF responses. */
+    static constexpr float sWLFScale{0.661f};
+    static constexpr float sXYLFScale{1.293f};
+
     virtual ~DecoderBase() = default;
 
     virtual void decode(const al::span<float*> samples, const size_t samplesToDo,
@@ -20,53 +130,21 @@ struct DecoderBase {
      * calls to decode, with valid values being between 0...0.7.
      */
     float mWidthControl{0.593f};
-
-    float mCurrentWidth{-1.0f};
 };
 
+template<size_t N>
+struct UhjDecoder final : public DecoderBase {
+    /* The number of extra sample frames needed for input. */
+    static constexpr size_t sInputPadding{N/2};
 
-struct UhjFilterBase {
-    /* The filter delay is half it's effective size, so a delay of 128 has a
-     * FIR length of 256.
-     */
-    static constexpr size_t sFilterDelay{128};
-};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sInputPadding> mS{};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sInputPadding> mD{};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sInputPadding> mT{};
 
-struct UhjEncoder : public UhjFilterBase {
-    /* Delays and processing storage for the unfiltered signal. */
-    alignas(16) std::array<float,BufferLineSize+sFilterDelay> mS{};
-    alignas(16) std::array<float,BufferLineSize+sFilterDelay> mD{};
+    alignas(16) std::array<float,sInputPadding-1> mDTHistory{};
+    alignas(16) std::array<float,sInputPadding-1> mSHistory{};
 
-    /* History for the FIR filter. */
-    alignas(16) std::array<float,sFilterDelay*2 - 1> mWXHistory{};
-
-    alignas(16) std::array<float,BufferLineSize + sFilterDelay*2> mTemp{};
-
-    /**
-     * Encodes a 2-channel UHJ (stereo-compatible) signal from a B-Format input
-     * signal. The input must use FuMa channel ordering and UHJ scaling (FuMa
-     * with an additional +3dB boost).
-     */
-    void encode(float *LeftOut, float *RightOut, const al::span<const float*const,3> InSamples,
-        const size_t SamplesToDo);
-
-    DEF_NEWDEL(UhjEncoder)
-};
-
-
-struct UhjDecoder : public DecoderBase, public UhjFilterBase {
-    /* For 2-channel UHJ, shelf filters should use these LF responses. */
-    static constexpr float sWLFScale{0.661f};
-    static constexpr float sXYLFScale{1.293f};
-
-    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sFilterDelay> mS{};
-    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sFilterDelay> mD{};
-    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sFilterDelay> mT{};
-
-    alignas(16) std::array<float,sFilterDelay-1> mDTHistory{};
-    alignas(16) std::array<float,sFilterDelay-1> mSHistory{};
-
-    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge + sFilterDelay*2> mTemp{};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge + sInputPadding*2> mTemp{};
 
     /**
      * Decodes a 3- or 4-channel UHJ signal into a B-Format signal with FuMa
@@ -82,7 +160,45 @@ struct UhjDecoder : public DecoderBase, public UhjFilterBase {
     DEF_NEWDEL(UhjDecoder)
 };
 
-struct UhjStereoDecoder : public UhjDecoder {
+struct UhjDecoderIIR final : public DecoderBase {
+    /* FIXME: These IIR decoder filters actually have a 1-sample delay on the
+     * non-filtered components, which is not reflected in the source latency
+     * value. sInputPadding is 0, however, because it doesn't need any extra
+     * input samples as long as 'forwardSamples' is less than 'samplesToDo'.
+     */
+    static constexpr size_t sInputPadding{0};
+
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge> mS{};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge> mD{};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge> mTemp{};
+    float mDelayS{}, mDelayDT{}, mDelayQ{};
+
+    UhjAllPassFilter mFilter1S;
+    UhjAllPassFilter mFilter2DT;
+    UhjAllPassFilter mFilter1DT;
+    UhjAllPassFilter mFilter2S;
+    UhjAllPassFilter mFilter1Q;
+
+    void decode(const al::span<float*> samples, const size_t samplesToDo,
+        const size_t forwardSamples) override;
+
+    DEF_NEWDEL(UhjDecoderIIR)
+};
+
+template<size_t N>
+struct UhjStereoDecoder final : public DecoderBase {
+    static constexpr size_t sInputPadding{N/2};
+
+    float mCurrentWidth{-1.0f};
+
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sInputPadding> mS{};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge+sInputPadding> mD{};
+
+    alignas(16) std::array<float,sInputPadding-1> mDTHistory{};
+    alignas(16) std::array<float,sInputPadding-1> mSHistory{};
+
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge + sInputPadding*2> mTemp{};
+
     /**
      * Applies Super Stereo processing on a stereo signal to create a B-Format
      * signal with FuMa channel ordering and UHJ scaling. The samples span
@@ -93,6 +209,27 @@ struct UhjStereoDecoder : public UhjDecoder {
         const size_t forwardSamples) override;
 
     DEF_NEWDEL(UhjStereoDecoder)
+};
+
+struct UhjStereoDecoderIIR final : public DecoderBase {
+    static constexpr size_t sInputPadding{0};
+
+    float mCurrentWidth{-1.0f};
+
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge> mS{};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge> mD{};
+    alignas(16) std::array<float,BufferLineSize+MaxResamplerEdge> mTemp{};
+    float mDelayS{}, mDelayD{};
+
+    UhjAllPassFilter mFilter1S;
+    UhjAllPassFilter mFilter2D;
+    UhjAllPassFilter mFilter1D;
+    UhjAllPassFilter mFilter2S;
+
+    void decode(const al::span<float*> samples, const size_t samplesToDo,
+        const size_t forwardSamples) override;
+
+    DEF_NEWDEL(UhjStereoDecoderIIR)
 };
 
 #endif /* CORE_UHJFILTER_H */

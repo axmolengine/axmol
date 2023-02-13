@@ -105,6 +105,7 @@ static_assert(!(MaxResamplerPadding&1), "MaxResamplerPadding is not a multiple o
 namespace {
 
 using uint = unsigned int;
+using namespace std::chrono;
 
 constexpr uint MaxPitch{10};
 
@@ -134,6 +135,9 @@ const float ConeScale{InitConeScale()};
 float XScale{1.0f};
 float YScale{1.0f};
 float ZScale{1.0f};
+
+/* Source distance scale for NFC filters. */
+float NfcScale{1.0f};
 
 
 struct ChanMap {
@@ -241,12 +245,14 @@ inline ResamplerFunc SelectResampler(Resampler resampler, uint increment)
 
 } // namespace
 
-void aluInit(CompatFlagBitset flags)
+void aluInit(CompatFlagBitset flags, const float nfcscale)
 {
     MixDirectHrtf = SelectHrtfMixer();
     XScale = flags.test(CompatFlags::ReverseX) ? -1.0f : 1.0f;
     YScale = flags.test(CompatFlags::ReverseY) ? -1.0f : 1.0f;
     ZScale = flags.test(CompatFlags::ReverseZ) ? -1.0f : 1.0f;
+
+    NfcScale = clampf(nfcscale, 0.0001f, 10000.0f);
 }
 
 
@@ -325,8 +331,6 @@ void DeviceBase::ProcessBs2b(const size_t SamplesToDo)
 
 namespace {
 
-using AmbiRotateMatrix = std::array<std::array<float,MaxAmbiChannels>,MaxAmbiChannels>;
-
 /* This RNG method was created based on the math found in opusdec. It's quick,
  * and starting with a seed value of 22222, is suitable for generating
  * whitenoise.
@@ -335,6 +339,35 @@ inline uint dither_rng(uint *seed) noexcept
 {
     *seed = (*seed * 96314165) + 907633515;
     return *seed;
+}
+
+
+/* Ambisonic upsampler function. It's effectively a matrix multiply. It takes
+ * an 'upsampler' and 'rotator' as the input matrices, and creates a matrix
+ * that behaves as if the B-Format input was first decoded to a speaker array
+ * at its input order, encoded back into the higher order mix, then finally
+ * rotated.
+ */
+void UpsampleBFormatTransform(
+    const al::span<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> output,
+    const al::span<const std::array<float,MaxAmbiChannels>> upsampler,
+    const al::span<std::array<float,MaxAmbiChannels>,MaxAmbiChannels> rotator, size_t coeffs_order)
+{
+    const size_t num_chans{AmbiChannelsFromOrder(coeffs_order)};
+    for(size_t i{0};i < upsampler.size();++i)
+        output[i].fill(0.0f);
+    for(size_t i{0};i < upsampler.size();++i)
+    {
+        for(size_t k{0};k < num_chans;++k)
+        {
+            float *RESTRICT out{output[i].data()};
+            /* Write the full number of channels. The compiler will have an
+             * easier time optimizing if it has a fixed length.
+             */
+            for(size_t j{0};j < MaxAmbiChannels;++j)
+                out[j] += upsampler[i][k] * rotator[k][j];
+        }
+    }
 }
 
 
@@ -439,8 +472,8 @@ bool CalcEffectSlotParams(EffectSlot *slot, EffectSlot **sorted_slots, ContextBa
     }
 
     EffectState *state{props->State.release()};
-    EffectState *oldstate{slot->mEffectState};
-    slot->mEffectState = state;
+    EffectState *oldstate{slot->mEffectState.release()};
+    slot->mEffectState.reset(state);
 
     /* Only release the old state if it won't get deleted, since we can't be
      * deleting/freeing anything in the mixer.
@@ -450,7 +483,7 @@ bool CalcEffectSlotParams(EffectSlot *slot, EffectSlot **sorted_slots, ContextBa
         /* Otherwise, if it would be deleted send it off with a release event. */
         RingBuffer *ring{context->mAsyncEvents.get()};
         auto evt_vec = ring->getWriteVector();
-        if LIKELY(evt_vec.first.len > 0)
+        if(evt_vec.first.len > 0) [[likely]]
         {
             AsyncEvent *evt{al::construct_at(reinterpret_cast<AsyncEvent*>(evt_vec.first.buf),
                 AsyncEvent::ReleaseEffectState)};
@@ -523,49 +556,48 @@ inline float WrapRadians(float r)
  * precomputed since they're constant. The second-order coefficients are
  * followed by the third-order coefficients, etc.
  */
+template<size_t L>
+constexpr size_t CalcRotatorSize()
+{ return (L*2 + 1)*(L*2 + 1) + CalcRotatorSize<L-1>(); }
+
+template<> constexpr size_t CalcRotatorSize<0>() = delete;
+template<> constexpr size_t CalcRotatorSize<1>() = delete;
+template<> constexpr size_t CalcRotatorSize<2>() { return 5*5; }
+
 struct RotatorCoeffs {
-    float u, v, w;
+    struct CoeffValues {
+        float u, v, w;
+    };
+    std::array<CoeffValues,CalcRotatorSize<MaxAmbiOrder>()> mCoeffs{};
 
-    template<size_t N0, size_t N1>
-    static std::array<RotatorCoeffs,N0+N1> ConcatArrays(const std::array<RotatorCoeffs,N0> &lhs,
-        const std::array<RotatorCoeffs,N1> &rhs)
+    RotatorCoeffs()
     {
-        std::array<RotatorCoeffs,N0+N1> ret;
-        auto iter = std::copy(lhs.cbegin(), lhs.cend(), ret.begin());
-        std::copy(rhs.cbegin(), rhs.cend(), iter);
-        return ret;
-    }
+        auto coeffs = mCoeffs.begin();
 
-    template<int l, int num_elems=l*2+1>
-    static std::array<RotatorCoeffs,num_elems*num_elems> GenCoeffs()
-    {
-        std::array<RotatorCoeffs,num_elems*num_elems> ret{};
-        auto coeffs = ret.begin();
-
-        for(int m{-l};m <= l;++m)
+        for(int l=2;l <= MaxAmbiOrder;++l)
         {
             for(int n{-l};n <= l;++n)
             {
-                // compute u,v,w terms of Eq.8.1 (Table I)
-                const bool d{m == 0}; // the delta function d_m0
-                const float denom{static_cast<float>((std::abs(n) == l) ?
-                    (2*l) * (2*l - 1) : (l*l - n*n))};
+                for(int m{-l};m <= l;++m)
+                {
+                    // compute u,v,w terms of Eq.8.1 (Table I)
+                    const bool d{m == 0}; // the delta function d_m0
+                    const float denom{static_cast<float>((std::abs(n) == l) ?
+                        (2*l) * (2*l - 1) : (l*l - n*n))};
 
-                const int abs_m{std::abs(m)};
-                coeffs->u = std::sqrt(static_cast<float>(l*l - m*m)/denom);
-                coeffs->v = std::sqrt(static_cast<float>(l+abs_m-1) * static_cast<float>(l+abs_m) /
-                    denom) * (1.0f+d) * (1.0f - 2.0f*d) * 0.5f;
-                coeffs->w = std::sqrt(static_cast<float>(l-abs_m-1) * static_cast<float>(l-abs_m) /
-                    denom) * (1.0f-d) * -0.5f;
-                ++coeffs;
+                    const int abs_m{std::abs(m)};
+                    coeffs->u = std::sqrt(static_cast<float>(l*l - m*m)/denom);
+                    coeffs->v = std::sqrt(static_cast<float>(l+abs_m-1) *
+                        static_cast<float>(l+abs_m) / denom) * (1.0f+d) * (1.0f - 2.0f*d) * 0.5f;
+                    coeffs->w = std::sqrt(static_cast<float>(l-abs_m-1) *
+                        static_cast<float>(l-abs_m) / denom) * (1.0f-d) * -0.5f;
+                    ++coeffs;
+                }
             }
         }
-
-        return ret;
     }
 };
-const auto RotatorCoeffArray = RotatorCoeffs::ConcatArrays(RotatorCoeffs::GenCoeffs<2>(),
-    RotatorCoeffs::GenCoeffs<3>());
+const RotatorCoeffs RotatorCoeffArray{};
 
 /**
  * Given the matrix, pre-filled with the (zeroth- and) first-order rotation
@@ -580,16 +612,16 @@ void AmbiRotator(AmbiRotateMatrix &matrix, const int order)
     auto P = [](const int i, const int l, const int a, const int n, const size_t last_band,
         const AmbiRotateMatrix &R)
     {
-        const float ri1{ R[static_cast<uint>(i+2)][ 1+2]};
-        const float rim1{R[static_cast<uint>(i+2)][-1+2]};
-        const float ri0{ R[static_cast<uint>(i+2)][ 0+2]};
+        const float ri1{ R[ 1+2][static_cast<size_t>(i+2)]};
+        const float rim1{R[-1+2][static_cast<size_t>(i+2)]};
+        const float ri0{ R[ 0+2][static_cast<size_t>(i+2)]};
 
-        auto vec = R[static_cast<uint>(a+l-1) + last_band].cbegin() + last_band;
+        const size_t y{last_band + static_cast<size_t>(a+l-1)};
         if(n == -l)
-            return ri1*vec[0] + rim1*vec[static_cast<uint>(l-1)*size_t{2}];
+            return ri1*R[last_band][y] + rim1*R[last_band + static_cast<size_t>(l-1)*2][y];
         if(n == l)
-            return ri1*vec[static_cast<uint>(l-1)*size_t{2}] - rim1*vec[0];
-        return ri0*vec[static_cast<uint>(n+l-1)];
+            return ri1*R[last_band + static_cast<size_t>(l-1)*2][y] - rim1*R[last_band][y];
+        return ri0*R[last_band + static_cast<size_t>(n+l-1)][y];
     };
 
     auto U = [P](const int l, const int m, const int n, const size_t last_band,
@@ -629,15 +661,15 @@ void AmbiRotator(AmbiRotateMatrix &matrix, const int order)
     };
 
     // compute rotation matrix of each subsequent band recursively
-    auto coeffs = RotatorCoeffArray.cbegin();
+    auto coeffs = RotatorCoeffArray.mCoeffs.cbegin();
     size_t band_idx{4}, last_band{1};
     for(int l{2};l <= order;++l)
     {
         size_t y{band_idx};
-        for(int m{-l};m <= l;++m,++y)
+        for(int n{-l};n <= l;++n,++y)
         {
             size_t x{band_idx};
-            for(int n{-l};n <= l;++n,++x)
+            for(int m{-l};m <= l;++m,++x)
             {
                 float r{0.0f};
 
@@ -668,7 +700,7 @@ struct GainTriplet { float Base, HF, LF; };
 void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, const float zpos,
     const float Distance, const float Spread, const GainTriplet &DryGain,
     const al::span<const GainTriplet,MAX_SENDS> WetGain, EffectSlot *(&SendSlots)[MAX_SENDS],
-    const VoiceProps *props, const ContextParams &Context, const DeviceBase *Device)
+    const VoiceProps *props, const ContextParams &Context, DeviceBase *Device)
 {
     static constexpr ChanMap MonoMap[1]{
         { FrontCenter, 0.0f, 0.0f }
@@ -787,7 +819,7 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                 /* Clamp the distance for really close sources, to prevent
                  * excessive bass.
                  */
-                const float mdist{maxf(Distance, Device->AvgSpeakerDist/4.0f)};
+                const float mdist{maxf(Distance*NfcScale, Device->AvgSpeakerDist/4.0f)};
                 const float w0{SpeedOfSoundMetersPerSec / (mdist * Frequency)};
 
                 /* Only need to adjust the first channel of a B-Format source. */
@@ -808,7 +840,7 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
         auto calc_coeffs = [xpos,ypos,zpos](RenderMode mode)
         {
             if(mode != RenderMode::Pairwise)
-                return CalcDirectionCoeffs({xpos, ypos, zpos}, 0.0f);
+                return CalcDirectionCoeffs({xpos, ypos, zpos});
 
             /* Clamp Y, in case rounding errors caused it to end up outside
              * of -1...+1.
@@ -823,22 +855,27 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
              */
             return CalcAngleCoeffs(ScaleAzimuthFront(az, 1.5f), ev, 0.0f);
         };
-        auto coeffs = calc_coeffs(Device->mRenderMode);
-        std::transform(coeffs.begin()+1, coeffs.end(), coeffs.begin()+1,
-            std::bind(std::multiplies<float>{}, _1, 1.0f-coverage));
-
-        /* NOTE: W needs to be scaled according to channel scaling. */
         auto&& scales = GetAmbiScales(voice->mAmbiScaling);
-        ComputePanGains(&Device->Dry, coeffs.data(), DryGain.Base*scales[0],
-            voice->mChans[0].mDryParams.Gains.Target);
-        for(uint i{0};i < NumSends;i++)
-        {
-            if(const EffectSlot *Slot{SendSlots[i]})
-                ComputePanGains(&Slot->Wet, coeffs.data(), WetGain[i].Base*scales[0],
-                    voice->mChans[0].mWetParams[i].Gains.Target);
-        }
+        auto coeffs = calc_coeffs(Device->mRenderMode);
+        /* Scale the panned W signal based on the coverage (full coverage means
+         * no panned signal). Scale the panned W signal according to channel
+         * scaling.
+         */
+        std::transform(coeffs.begin(), coeffs.end(), coeffs.begin(),
+            [scale=(1.0f-coverage)*scales[0]](const float c){ return c * scale; });
 
-        if(coverage > 0.0f)
+        if(!(coverage > 0.0f))
+        {
+            ComputePanGains(&Device->Dry, coeffs.data(), DryGain.Base,
+                voice->mChans[0].mDryParams.Gains.Target);
+            for(uint i{0};i < NumSends;i++)
+            {
+                if(const EffectSlot *Slot{SendSlots[i]})
+                    ComputePanGains(&Slot->Wet, coeffs.data(), WetGain[i].Base*scales[0],
+                        voice->mChans[0].mWetParams[i].Gains.Target);
+            }
+        }
+        else
         {
             /* Local B-Format sources have their XYZ channels rotated according
              * to the orientation.
@@ -861,12 +898,57 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
              * order elements, then construct the rotation for the higher
              * orders.
              */
-            AmbiRotateMatrix shrot{};
+            AmbiRotateMatrix &shrot = Device->mAmbiRotateMatrix;
+            shrot.fill(AmbiRotateMatrix::value_type{});
+
             shrot[0][0] = 1.0f;
-            shrot[1][1] =  U[0]; shrot[1][2] = -V[0]; shrot[1][3] = -N[0];
-            shrot[2][1] = -U[1]; shrot[2][2] =  V[1]; shrot[2][3] =  N[1];
-            shrot[3][1] =  U[2]; shrot[3][2] = -V[2]; shrot[3][3] = -N[2];
-            AmbiRotator(shrot, static_cast<int>(minu(voice->mAmbiOrder, Device->mAmbiOrder)));
+            shrot[1][1] =  U[0]; shrot[1][2] = -U[1]; shrot[1][3] =  U[2];
+            shrot[2][1] = -V[0]; shrot[2][2] =  V[1]; shrot[2][3] = -V[2];
+            shrot[3][1] = -N[0]; shrot[3][2] =  N[1]; shrot[3][3] = -N[2];
+            AmbiRotator(shrot, static_cast<int>(Device->mAmbiOrder));
+
+            /* If the device is higher order than the voice, "upsample" the
+             * matrix.
+             *
+             * NOTE: Starting with second-order, a 2D upsample needs to be
+             * applied with a 2D source and 3D output, even when they're the
+             * same order. This is because higher orders have a height offset
+             * on various channels (i.e. when elevation=0, those height-related
+             * channels should be non-0).
+             */
+            AmbiRotateMatrix &mixmatrix = Device->mAmbiRotateMatrix2;
+            if(Device->mAmbiOrder > voice->mAmbiOrder
+                || (Device->mAmbiOrder >= 2 && !Device->m2DMixing
+                    && Is2DAmbisonic(voice->mFmtChannels)))
+            {
+                if(voice->mAmbiOrder == 1)
+                {
+                    auto&& upsampler = Is2DAmbisonic(voice->mFmtChannels) ?
+                        AmbiScale::FirstOrder2DUp : AmbiScale::FirstOrderUp;
+                    UpsampleBFormatTransform(mixmatrix, upsampler, shrot, Device->mAmbiOrder);
+                }
+                else if(voice->mAmbiOrder == 2)
+                {
+                    auto&& upsampler = Is2DAmbisonic(voice->mFmtChannels) ?
+                        AmbiScale::SecondOrder2DUp : AmbiScale::SecondOrderUp;
+                    UpsampleBFormatTransform(mixmatrix, upsampler, shrot, Device->mAmbiOrder);
+                }
+                else if(voice->mAmbiOrder == 3)
+                {
+                    auto&& upsampler = Is2DAmbisonic(voice->mFmtChannels) ?
+                        AmbiScale::ThirdOrder2DUp : AmbiScale::ThirdOrderUp;
+                    UpsampleBFormatTransform(mixmatrix, upsampler, shrot, Device->mAmbiOrder);
+                }
+                else if(voice->mAmbiOrder == 4)
+                {
+                    auto&& upsampler = AmbiScale::FourthOrder2DUp;
+                    UpsampleBFormatTransform(mixmatrix, upsampler, shrot, Device->mAmbiOrder);
+                }
+                else
+                    al::unreachable();
+            }
+            else
+                mixmatrix = shrot;
 
             /* Convert the rotation matrix for input ordering and scaling, and
              * whether input is 2D or 3D.
@@ -875,20 +957,17 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                 GetAmbi2DLayout(voice->mAmbiLayout).data() :
                 GetAmbiLayout(voice->mAmbiLayout).data()};
 
-            static const uint8_t ChansPerOrder[MaxAmbiOrder+1]{1, 3, 5, 7,};
-            static const uint8_t OrderOffset[MaxAmbiOrder+1]{0, 1, 4, 9,};
-            for(size_t c{1};c < num_channels;c++)
+            for(size_t c{0};c < num_channels;c++)
             {
                 const size_t acn{index_map[c]};
-                const size_t order{AmbiIndex::OrderFromChannel()[acn]};
-                const size_t tocopy{ChansPerOrder[order]};
-                const size_t offset{OrderOffset[order]};
                 const float scale{scales[acn] * coverage};
-                auto in = shrot.cbegin() + offset;
 
-                coeffs = std::array<float,MaxAmbiChannels>{};
-                for(size_t x{0};x < tocopy;++x)
-                    coeffs[offset+x] = in[x][acn] * scale;
+                /* For channel 0, combine the B-Format signal (scaled according
+                 * to the coverage amount) with the directional pan. For all
+                 * other channels, use just the (scaled) B-Format signal.
+                 */
+                for(size_t x{0};x < MaxAmbiChannels;++x)
+                    coeffs[x] += mixmatrix[acn][x] * scale;
 
                 ComputePanGains(&Device->Dry, coeffs.data(), DryGain.Base,
                     voice->mChans[c].mDryParams.Gains.Target);
@@ -899,6 +978,8 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                         ComputePanGains(&Slot->Wet, coeffs.data(), WetGain[i].Base,
                             voice->mChans[c].mWetParams[i].Gains.Target);
                 }
+
+                coeffs = std::array<float,MaxAmbiChannels>{};
             }
         }
     }
@@ -911,8 +992,8 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
 
         for(size_t c{0};c < num_channels;c++)
         {
-            uint idx{GetChannelIdxByName(Device->RealOut, chans[c].channel)};
-            if(idx != INVALID_CHANNEL_INDEX)
+            uint idx{Device->channelIdxByName(chans[c].channel)};
+            if(idx != InvalidChannelIndex)
                 voice->mChans[c].mDryParams.Gains.Target[idx] = DryGain.Base;
             else if(DirectChannels == DirectMode::RemixMismatch)
             {
@@ -924,8 +1005,8 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                 {
                     for(const auto &target : remap->targets)
                     {
-                        idx = GetChannelIdxByName(Device->RealOut, target.channel);
-                        if(idx != INVALID_CHANNEL_INDEX)
+                        idx = Device->channelIdxByName(target.channel);
+                        if(idx != InvalidChannelIndex)
                             voice->mChans[c].mDryParams.Gains.Target[idx] = DryGain.Base *
                                 target.mix;
                     }
@@ -938,6 +1019,10 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
          */
         for(size_t c{0};c < num_channels;c++)
         {
+            /* Skip LFE */
+            if(chans[c].channel == LFE)
+                continue;
+
             const auto coeffs = CalcAngleCoeffs(chans[c].angle, chans[c].elevation, 0.0f);
 
             for(uint i{0};i < NumSends;i++)
@@ -957,35 +1042,54 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
 
         if(Distance > std::numeric_limits<float>::epsilon())
         {
-            const float ev{std::asin(clampf(ypos, -1.0f, 1.0f))};
-            const float az{std::atan2(xpos, -zpos)};
+            const float src_ev{std::asin(clampf(ypos, -1.0f, 1.0f))};
+            const float src_az{std::atan2(xpos, -zpos)};
 
-            /* Get the HRIR coefficients and delays just once, for the given
-             * source direction.
-             */
-            GetHrtfCoeffs(Device->mHrtf.get(), ev, az, Distance, Spread,
-                voice->mChans[0].mDryParams.Hrtf.Target.Coeffs,
-                voice->mChans[0].mDryParams.Hrtf.Target.Delay);
-            voice->mChans[0].mDryParams.Hrtf.Target.Gain = DryGain.Base;
-
-            /* Remaining channels use the same results as the first. */
-            for(size_t c{1};c < num_channels;c++)
+            if(voice->mFmtChannels == FmtMono)
             {
+                Device->mHrtf->getCoeffs(src_ev, src_az, Distance*NfcScale, Spread,
+                    voice->mChans[0].mDryParams.Hrtf.Target.Coeffs,
+                    voice->mChans[0].mDryParams.Hrtf.Target.Delay);
+                voice->mChans[0].mDryParams.Hrtf.Target.Gain = DryGain.Base;
+
+                const auto coeffs = CalcAngleCoeffs(src_az, src_ev, Spread);
+                for(uint i{0};i < NumSends;i++)
+                {
+                    if(const EffectSlot *Slot{SendSlots[i]})
+                        ComputePanGains(&Slot->Wet, coeffs.data(), WetGain[i].Base,
+                            voice->mChans[0].mWetParams[i].Gains.Target);
+                }
+            }
+            else for(size_t c{0};c < num_channels;c++)
+            {
+                using namespace al::numbers;
+
                 /* Skip LFE */
                 if(chans[c].channel == LFE) continue;
-                voice->mChans[c].mDryParams.Hrtf.Target = voice->mChans[0].mDryParams.Hrtf.Target;
-            }
 
-            /* Calculate the directional coefficients once, which apply to all
-             * input channels of the source sends.
-             */
-            const auto coeffs = CalcDirectionCoeffs({xpos, ypos, zpos}, Spread);
+                /* Warp the channel position toward the source position as the
+                 * source spread decreases. With no spread, all channels are at
+                 * the source position, at full spread (pi*2), each channel is
+                 * left unchanged.
+                 */
+                const float ev{lerpf(src_ev, chans[c].elevation, inv_pi_v<float>/2.0f * Spread)};
 
-            for(size_t c{0};c < num_channels;c++)
-            {
-                /* Skip LFE */
-                if(chans[c].channel == LFE)
-                    continue;
+                float az{chans[c].angle - src_az};
+                if(az < -pi_v<float>) az += pi_v<float>*2.0f;
+                else if(az > pi_v<float>) az -= pi_v<float>*2.0f;
+
+                az *= inv_pi_v<float>/2.0f * Spread;
+
+                az += src_az;
+                if(az < -pi_v<float>) az += pi_v<float>*2.0f;
+                else if(az > pi_v<float>) az -= pi_v<float>*2.0f;
+
+                Device->mHrtf->getCoeffs(ev, az, Distance*NfcScale, 0.0f,
+                    voice->mChans[c].mDryParams.Hrtf.Target.Coeffs,
+                    voice->mChans[c].mDryParams.Hrtf.Target.Delay);
+                voice->mChans[c].mDryParams.Hrtf.Target.Gain = DryGain.Base;
+
+                const auto coeffs = CalcAngleCoeffs(az, ev, 0.0f);
                 for(uint i{0};i < NumSends;i++)
                 {
                     if(const EffectSlot *Slot{SendSlots[i]})
@@ -996,6 +1100,12 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
         }
         else
         {
+            /* With no distance, spread is only meaningful for mono sources
+             * where it can be 0 or full (non-mono sources are always full
+             * spread here).
+             */
+            const float spread{Spread * (voice->mFmtChannels == FmtMono)};
+
             /* Local sources on HRTF play with each channel panned to its
              * relative location around the listener, providing "virtual
              * speaker" responses.
@@ -1009,14 +1119,14 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                 /* Get the HRIR coefficients and delays for this channel
                  * position.
                  */
-                GetHrtfCoeffs(Device->mHrtf.get(), chans[c].elevation, chans[c].angle,
-                    std::numeric_limits<float>::infinity(), Spread,
+                Device->mHrtf->getCoeffs(chans[c].elevation, chans[c].angle,
+                    std::numeric_limits<float>::infinity(), spread,
                     voice->mChans[c].mDryParams.Hrtf.Target.Coeffs,
                     voice->mChans[c].mDryParams.Hrtf.Target.Delay);
                 voice->mChans[c].mDryParams.Hrtf.Target.Gain = DryGain.Base;
 
                 /* Normal panning for auxiliary sends. */
-                const auto coeffs = CalcAngleCoeffs(chans[c].angle, chans[c].elevation, Spread);
+                const auto coeffs = CalcAngleCoeffs(chans[c].angle, chans[c].elevation, spread);
 
                 for(uint i{0};i < NumSends;i++)
                 {
@@ -1041,7 +1151,7 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                 /* Clamp the distance for really close sources, to prevent
                  * excessive bass.
                  */
-                const float mdist{maxf(Distance, Device->AvgSpeakerDist/4.0f)};
+                const float mdist{maxf(Distance*NfcScale, Device->AvgSpeakerDist/4.0f)};
                 const float w0{SpeedOfSoundMetersPerSec / (mdist * Frequency)};
 
                 /* Adjust NFC filters. */
@@ -1051,40 +1161,78 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                 voice->mFlags.set(VoiceHasNfc);
             }
 
-            /* Calculate the directional coefficients once, which apply to all
-             * input channels.
-             */
-            auto calc_coeffs = [xpos,ypos,zpos,Spread](RenderMode mode)
+            if(voice->mFmtChannels == FmtMono)
             {
-                if(mode != RenderMode::Pairwise)
-                    return CalcDirectionCoeffs({xpos, ypos, zpos}, Spread);
-                const float ev{std::asin(clampf(ypos, -1.0f, 1.0f))};
-                const float az{std::atan2(xpos, -zpos)};
-                return CalcAngleCoeffs(ScaleAzimuthFront(az, 1.5f), ev, Spread);
-            };
-            const auto coeffs = calc_coeffs(Device->mRenderMode);
-
-            for(size_t c{0};c < num_channels;c++)
-            {
-                /* Special-case LFE */
-                if(chans[c].channel == LFE)
+                auto calc_coeffs = [xpos,ypos,zpos,Spread](RenderMode mode)
                 {
-                    if(Device->Dry.Buffer.data() == Device->RealOut.Buffer.data())
-                    {
-                        const uint idx{GetChannelIdxByName(Device->RealOut, chans[c].channel)};
-                        if(idx != INVALID_CHANNEL_INDEX)
-                            voice->mChans[c].mDryParams.Gains.Target[idx] = DryGain.Base;
-                    }
-                    continue;
-                }
+                    if(mode != RenderMode::Pairwise)
+                        return CalcDirectionCoeffs({xpos, ypos, zpos}, Spread);
+                    const float ev{std::asin(clampf(ypos, -1.0f, 1.0f))};
+                    const float az{std::atan2(xpos, -zpos)};
+                    return CalcAngleCoeffs(ScaleAzimuthFront(az, 1.5f), ev, Spread);
+                };
+                const auto coeffs = calc_coeffs(Device->mRenderMode);
 
                 ComputePanGains(&Device->Dry, coeffs.data(), DryGain.Base,
-                    voice->mChans[c].mDryParams.Gains.Target);
+                    voice->mChans[0].mDryParams.Gains.Target);
                 for(uint i{0};i < NumSends;i++)
                 {
                     if(const EffectSlot *Slot{SendSlots[i]})
                         ComputePanGains(&Slot->Wet, coeffs.data(), WetGain[i].Base,
-                            voice->mChans[c].mWetParams[i].Gains.Target);
+                            voice->mChans[0].mWetParams[i].Gains.Target);
+                }
+            }
+            else
+            {
+                using namespace al::numbers;
+
+                const float src_ev{std::asin(clampf(ypos, -1.0f, 1.0f))};
+                const float src_az{std::atan2(xpos, -zpos)};
+
+                for(size_t c{0};c < num_channels;c++)
+                {
+                    /* Special-case LFE */
+                    if(chans[c].channel == LFE)
+                    {
+                        if(Device->Dry.Buffer.data() == Device->RealOut.Buffer.data())
+                        {
+                            const uint idx{Device->channelIdxByName(chans[c].channel)};
+                            if(idx != InvalidChannelIndex)
+                                voice->mChans[c].mDryParams.Gains.Target[idx] = DryGain.Base;
+                        }
+                        continue;
+                    }
+
+                    /* Warp the channel position toward the source position as
+                     * the spread decreases. With no spread, all channels are
+                     * at the source position, at full spread (pi*2), each
+                     * channel position is left unchanged.
+                     */
+                    const float ev{lerpf(src_ev, chans[c].elevation,
+                        inv_pi_v<float>/2.0f * Spread)};
+
+                    float az{chans[c].angle - src_az};
+                    if(az < -pi_v<float>) az += pi_v<float>*2.0f;
+                    else if(az > pi_v<float>) az -= pi_v<float>*2.0f;
+
+                    az *= inv_pi_v<float>/2.0f * Spread;
+
+                    az += src_az;
+                    if(az < -pi_v<float>) az += pi_v<float>*2.0f;
+                    else if(az > pi_v<float>) az -= pi_v<float>*2.0f;
+
+                    if(Device->mRenderMode == RenderMode::Pairwise)
+                        az = ScaleAzimuthFront(az, 3.0f);
+                    const auto coeffs = CalcAngleCoeffs(az, ev, 0.0f);
+
+                    ComputePanGains(&Device->Dry, coeffs.data(), DryGain.Base,
+                        voice->mChans[c].mDryParams.Gains.Target);
+                    for(uint i{0};i < NumSends;i++)
+                    {
+                        if(const EffectSlot *Slot{SendSlots[i]})
+                            ComputePanGains(&Slot->Wet, coeffs.data(), WetGain[i].Base,
+                                voice->mChans[c].mWetParams[i].Gains.Target);
+                    }
                 }
             }
         }
@@ -1102,6 +1250,11 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                 voice->mFlags.set(VoiceHasNfc);
             }
 
+            /* With no distance, spread is only meaningful for mono sources
+             * where it can be 0 or full (non-mono sources are always full
+             * spread here).
+             */
+            const float spread{Spread * (voice->mFmtChannels == FmtMono)};
             for(size_t c{0};c < num_channels;c++)
             {
                 /* Special-case LFE */
@@ -1109,8 +1262,8 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
                 {
                     if(Device->Dry.Buffer.data() == Device->RealOut.Buffer.data())
                     {
-                        const uint idx{GetChannelIdxByName(Device->RealOut, chans[c].channel)};
-                        if(idx != INVALID_CHANNEL_INDEX)
+                        const uint idx{Device->channelIdxByName(chans[c].channel)};
+                        if(idx != InvalidChannelIndex)
                             voice->mChans[c].mDryParams.Gains.Target[idx] = DryGain.Base;
                     }
                     continue;
@@ -1118,7 +1271,7 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
 
                 const auto coeffs = CalcAngleCoeffs((Device->mRenderMode == RenderMode::Pairwise)
                     ? ScaleAzimuthFront(chans[c].angle, 3.0f) : chans[c].angle,
-                    chans[c].elevation, Spread);
+                    chans[c].elevation, spread);
 
                 ComputePanGains(&Device->Dry, coeffs.data(), DryGain.Base,
                     voice->mChans[c].mDryParams.Gains.Target);
@@ -1173,7 +1326,7 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
 
 void CalcNonAttnSourceParams(Voice *voice, const VoiceProps *props, const ContextBase *context)
 {
-    const DeviceBase *Device{context->mDevice};
+    DeviceBase *Device{context->mDevice};
     EffectSlot *SendSlots[MAX_SENDS];
 
     voice->mDirect.Buffer = Device->Dry.Buffer;
@@ -1219,7 +1372,7 @@ void CalcNonAttnSourceParams(Voice *voice, const VoiceProps *props, const Contex
 
 void CalcAttnSourceParams(Voice *voice, const VoiceProps *props, const ContextBase *context)
 {
-    const DeviceBase *Device{context->mDevice};
+    DeviceBase *Device{context->mDevice};
     const uint NumSends{Device->NumAuxSends};
 
     /* Set mixing buffers and get send parameters. */
@@ -1373,18 +1526,13 @@ void CalcAttnSourceParams(Voice *voice, const VoiceProps *props, const ContextBa
     }
 
     /* Distance-based air absorption and initial send decay. */
-    if(likely(Distance > props->RefDistance))
+    if(Distance > props->RefDistance) [[likely]]
     {
         const float distance_base{(Distance-props->RefDistance) * props->RolloffFactor};
-        const float absorption{distance_base * context->mParams.MetersPerUnit *
-            props->AirAbsorptionFactor};
-        if(absorption > std::numeric_limits<float>::epsilon())
-        {
-            const float hfattn{std::pow(context->mParams.AirAbsorptionGainHF, absorption)};
-            DryGain.HF *= hfattn;
-            for(uint i{0u};i < NumSends;++i)
-                WetGain[i].HF *= hfattn;
-        }
+        const float distance_meters{distance_base * context->mParams.MetersPerUnit};
+        const float dryabsorb{distance_meters * props->AirAbsorptionFactor};
+        if(dryabsorb > std::numeric_limits<float>::epsilon())
+            DryGain.HF *= std::pow(context->mParams.AirAbsorptionGainHF, dryabsorb);
 
         /* If the source's Auxiliary Send Filter Gain Auto is off, no extra
          * adjustment is applied to the send gains.
@@ -1406,6 +1554,9 @@ void CalcAttnSourceParams(Voice *voice, const VoiceProps *props, const ContextBa
              */
             WetGain[i].Base *= calc_attenuation(Distance, props->RefDistance,
                 SendSlots[i]->RoomRolloff);
+
+            if(distance_meters > std::numeric_limits<float>::epsilon())
+                WetGain[i].HF *= std::pow(SendSlots[i]->AirAbsorptionGainHF, distance_meters);
 
             /* If this effect slot's Auxiliary Send Auto is off, don't apply
              * the automatic initial reverb decay (should the reverb's room
@@ -1513,8 +1664,7 @@ void CalcAttnSourceParams(Voice *voice, const VoiceProps *props, const ContextBa
         spread = std::asin(props->Radius/Distance) * 2.0f;
 
     CalcPanningAndFilters(voice, ToSource[0]*XScale, ToSource[1]*YScale, ToSource[2]*ZScale,
-        Distance*context->mParams.MetersPerUnit, spread, DryGain, WetGain, SendSlots, props,
-        context->mParams, Device);
+        Distance, spread, DryGain, WetGain, SendSlots, props, context->mParams, Device);
 }
 
 void CalcSourceParams(Voice *voice, ContextBase *context, bool force)
@@ -1564,7 +1714,7 @@ void SendSourceStateEvent(ContextBase *context, uint id, VChangeState state)
         break;
     /* Shouldn't happen. */
     case VChangeState::Restart:
-        ASSUME(0);
+        al::unreachable();
     }
 
     ring->writeAdvance(1);
@@ -1576,7 +1726,7 @@ void ProcessVoiceChanges(ContextBase *ctx)
     VoiceChange *next{cur->mNext.load(std::memory_order_acquire)};
     if(!next) return;
 
-    const uint enabledevt{ctx->mEnabledEvts.load(std::memory_order_acquire)};
+    const auto enabledevt = ctx->mEnabledEvts.load(std::memory_order_acquire);
     do {
         cur = next;
 
@@ -1657,7 +1807,7 @@ void ProcessVoiceChanges(ContextBase *ctx)
             }
             oldvoice->mPendingChange.store(false, std::memory_order_release);
         }
-        if(sendevt && (enabledevt&AsyncEvent::SourceStateChange))
+        if(sendevt && enabledevt.test(AsyncEvent::SourceStateChange))
             SendSourceStateEvent(ctx, cur->mSourceID, cur->mState);
 
         next = cur->mNext.load(std::memory_order_acquire);
@@ -1671,7 +1821,7 @@ void ProcessParamUpdates(ContextBase *ctx, const EffectSlotArray &slots,
     ProcessVoiceChanges(ctx);
 
     IncrementRef(ctx->mUpdateCount);
-    if LIKELY(!ctx->mHoldUpdates.load(std::memory_order_acquire))
+    if(!ctx->mHoldUpdates.load(std::memory_order_acquire)) [[likely]]
     {
         bool force{CalcContextParams(ctx)};
         auto sorted_slots = const_cast<EffectSlot**>(slots.data() + slots.size());
@@ -1691,6 +1841,9 @@ void ProcessParamUpdates(ContextBase *ctx, const EffectSlotArray &slots,
 void ProcessContexts(DeviceBase *device, const uint SamplesToDo)
 {
     ASSUME(SamplesToDo > 0);
+
+    const nanoseconds curtime{device->ClockBase +
+        nanoseconds{seconds{device->SamplesDone}}/device->Frequency};
 
     for(ContextBase *ctx : *device->mContexts.load(std::memory_order_acquire))
     {
@@ -1712,7 +1865,7 @@ void ProcessContexts(DeviceBase *device, const uint SamplesToDo)
         {
             const Voice::State vstate{voice->mPlayState.load(std::memory_order_acquire)};
             if(vstate != Voice::Stopped && vstate != Voice::Pending)
-                voice->mix(vstate, ctx, SamplesToDo);
+                voice->mix(vstate, ctx, curtime, SamplesToDo);
         }
 
         /* Process effects. */
@@ -1760,7 +1913,7 @@ void ProcessContexts(DeviceBase *device, const uint SamplesToDo)
                          * left that don't target any sorted slots, they can't
                          * contribute to the output, so leave them.
                          */
-                        if UNLIKELY(next_target == split_point)
+                        if(next_target == split_point) [[unlikely]]
                             break;
 
                         --next_target;
@@ -1773,7 +1926,7 @@ void ProcessContexts(DeviceBase *device, const uint SamplesToDo)
 
             for(const EffectSlot *slot : sorted_slots)
             {
-                EffectState *state{slot->mEffectState};
+                EffectState *state{slot->mEffectState.get()};
                 state->process(SamplesToDo, slot->Wet.Buffer, state->mOutTarget);
             }
         }
@@ -1803,7 +1956,7 @@ void ApplyDistanceComp(const al::span<FloatBufferLine> Samples, const size_t Sam
 
         float *inout{al::assume_aligned<16>(chanbuffer.data())};
         auto inout_end = inout + SamplesToDo;
-        if LIKELY(SamplesToDo >= base)
+        if(SamplesToDo >= base) [[likely]]
         {
             auto delay_end = std::rotate(inout, inout_end - base, inout_end);
             std::swap_ranges(inout, delay_end, distbuf);
@@ -1813,7 +1966,7 @@ void ApplyDistanceComp(const al::span<FloatBufferLine> Samples, const size_t Sam
             auto delay_start = std::swap_ranges(inout, inout_end, distbuf);
             std::rotate(distbuf, delay_start, distbuf + base);
         }
-        std::transform(inout, inout_end, inout, std::bind(std::multiplies<float>{}, _1, gain));
+        std::transform(inout, inout_end, inout, [gain](auto a){ return a * gain; });
     }
 }
 
@@ -1978,7 +2131,7 @@ void DeviceBase::renderSamples(void *outBuffer, const uint numSamples, const siz
     {
         const uint samplesToDo{renderSamples(todo)};
 
-        if LIKELY(outBuffer)
+        if(outBuffer) [[likely]]
         {
             /* Finally, interleave and convert samples, writing to the device's
              * output buffer.
@@ -2019,8 +2172,7 @@ void DeviceBase::handleDisconnect(const char *msg, ...)
 
         for(ContextBase *ctx : *mContexts.load())
         {
-            const uint enabledevt{ctx->mEnabledEvts.load(std::memory_order_acquire)};
-            if((enabledevt&AsyncEvent::Disconnected))
+            if(ctx->mEnabledEvts.load(std::memory_order_acquire).test(AsyncEvent::Disconnected))
             {
                 RingBuffer *ring{ctx->mAsyncEvents.get()};
                 auto evt_data = ring->getWriteVector().first;

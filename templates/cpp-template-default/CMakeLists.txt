@@ -75,13 +75,12 @@ if(APPLE OR WINDOWS)
 endif()
 
 # add cross-platforms source files and header files
-list(APPEND GAME_SOURCE
-     Classes/AppDelegate.cpp
-     Classes/HelloWorldScene.cpp
+file(GLOB_RECURSE GAME_SOURCE
+     Classes/*.cpp
      )
-list(APPEND GAME_HEADER
-     Classes/AppDelegate.h
-     Classes/HelloWorldScene.h
+
+file(GLOB_RECURSE GAME_HEADER
+     Classes/*.h
      )
 
 if(ANDROID)

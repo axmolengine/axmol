@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -28,6 +28,7 @@ SOFTWARE.
 #ifndef YASIO__UTILS_HPP
 #define YASIO__UTILS_HPP
 #include <assert.h>
+#include <sys/stat.h>
 #include <chrono>
 #include <algorithm>
 #include "yasio/compiler/feature_test.hpp"
@@ -40,18 +41,21 @@ typedef std::chrono::high_resolution_clock steady_clock_t;
 typedef std::chrono::system_clock system_clock_t;
 
 // The high precision nano seconds timestamp since epoch
-template <typename _Ty = steady_clock_t> inline highp_time_t xhighp_clock()
+template <typename _Ty = steady_clock_t>
+inline highp_time_t xhighp_clock()
 {
   auto duration = _Ty::now().time_since_epoch();
   return std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
 }
 // The high precision micro seconds timestamp since epoch
-template <typename _Ty = steady_clock_t> inline highp_time_t highp_clock()
+template <typename _Ty = steady_clock_t>
+inline highp_time_t highp_clock()
 {
   return xhighp_clock<_Ty>() / std::milli::den;
 }
 // The normal precision milli seconds timestamp since epoch
-template <typename _Ty = steady_clock_t> inline highp_time_t clock()
+template <typename _Ty = steady_clock_t>
+inline highp_time_t clock()
 {
   return xhighp_clock<_Ty>() / std::micro::den;
 }
@@ -63,14 +67,26 @@ inline highp_time_t time_now() { return ::time(nullptr); }
 #if YASIO__HAS_CXX17
 using std::clamp;
 #else
-template <typename _Ty> const _Ty& clamp(const _Ty& v, const _Ty& lo, const _Ty& hi)
+template <typename _Ty>
+const _Ty& clamp(const _Ty& v, const _Ty& lo, const _Ty& hi)
 {
   assert(!(hi < lo));
   return v < lo ? lo : hi < v ? hi : v;
 }
 #endif
 
-template <typename _Ty> inline void invoke_dtor(_Ty* p) { p->~_Ty(); }
+template <typename _Ty>
+inline void invoke_dtor(_Ty* p)
+{
+  p->~_Ty();
+}
+
+inline bool is_regular_file(const char* path)
+{
+  struct stat st;
+  return (::stat(path, &st) == 0) && (st.st_mode & S_IFREG);
+}
+
 } // namespace yasio
 
 #endif

@@ -9,7 +9,7 @@
 
 /// cocos2d singleton objects
 #define CCDIRECTOR ax::Director::getInstance()
-#define CCRUNONGL CCDIRECTOR->getScheduler()->performFunctionInCocosThread
+#define CCRUNONGL CCDIRECTOR->getScheduler()->runOnAxmolThread
 #define CCEVENTMGR CCDIRECTOR->getEventDispatcher()
 #define CCSCHTASKS CCDIRECTOR->getScheduler()
 #define CCACTIONMGR CCDIRECTOR->getActionManager()

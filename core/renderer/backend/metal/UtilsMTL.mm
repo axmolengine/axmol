@@ -107,6 +107,7 @@ static GPUTextureFormatInfo s_textureFormats[] = {
     {MTLPixelFormatA8Unorm, MTLPixelFormatInvalid},               // A8
     {MTLPixelFormatInvalid, MTLPixelFormatInvalid},               // L8
     {MTLPixelFormatInvalid, MTLPixelFormatInvalid},               // LA8
+    {MTLPixelFormatRGBA32Float, MTLPixelFormatInvalid},           // RGBA32F
 
     /* depth stencil */
     {MTLPixelFormat(255 /*Depth24Unorm_Stencil8*/), MTLPixelFormatInvalid},  // D24S8

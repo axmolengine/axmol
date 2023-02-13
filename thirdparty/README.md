@@ -6,7 +6,7 @@
 
 ## astc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.1.0
+- Version: 4.3.1
 - License: Apache-2.0
 
 ## Box2D
@@ -21,13 +21,13 @@
 
 ## Bullet
 - [![Upstream](https://img.shields.io/github/v/release/bulletphysics/bullet3?label=Upstream)](https://github.com/bulletphysics/bullet3)
-- Version: 3.24
+- Version: 3.25
 - License: zlib
 - Update method: Compare `axmol/thirdparty/bullet` with `bullet3/src`
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: git 1.18.1-c25d4eb (2138)
+- Version: git 1.19.0-bb8f5bb (2184)
 - License: MIT
 
 ## Chipmunk2D
@@ -37,7 +37,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.0.6
+- Version: 1.1.1
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -67,12 +67,12 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.2
+- Version: 2.0.3
 - License: MIT
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: git df8d7bc on 31 Dec 2021 (4398)
+- Version: git 57cbded on Dec 16, 2022 (4609)
 - License: zlib
 
 ## glsl-optimizer (Apple Metal Render backend only)
@@ -161,7 +161,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.22.2
+- Version: 1.23.0
 - License: LGPL-2.1
 
 ## OpenSSL
@@ -180,8 +180,10 @@
 - License: BSD-3-Clause
 
 ## pugixml
-- [![Upstream](https://img.shields.io/github/v/tag/zeux/pugixml?label=Upstream)](https://github.com/zeux/pugixml)
-- Version: 1.12.1
+- [![Upstream](https://img.shields.io/github/v/tag/halx99/pugixml?label=Upstream)](https://github.com/halx99/pugixml) by halx99 for string_view support
+  - original repo: https://github.com/zeux/pugixml
+  - all tests passed: https://github.com/halx99/pugixml/actions/runs/4090401630
+- Version: 1.13
 - License: MIT
 
 ## rapidjson
@@ -196,14 +198,14 @@
 
 ## robin-map
 - [![Upstream](https://img.shields.io/github/v/tag/Tessil/robin-map?label=Upstream)](https://github.com/Tessil/robin-map)
-- Version: 1.0.1 with modified for more compatible with stl
+- Version: 1.2.1 with modified for more compatible with stl
     - Modify `robin_map::iterator->second` to mutable same with `stl map/unordered_map`
     - Forward `robin_map::operator[]` key by `std::forward` same with `stl map/unordered_map`
 - License: MIT
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.27
+- Version: 2.28
 - License: MIT
 
 ## unzip (minizip-1.2)
@@ -218,7 +220,7 @@
 
 ## webp
 - [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
-- Version: 1.2.4
+- Version: 1.3.0
 - License: Google Inc
 
 ## xsbase
@@ -238,7 +240,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 3.39.6
+- Version: 3.39.7
 - License: MIT WITH Anti-996
 
 ## zlib
@@ -248,7 +250,7 @@
 
 ## ntcvt
 - [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
-- Version: git-8422188 (7)
+- Version: 0.0.2
 - License: Apache-2.0
 
 ## Some third party libs supporting axmol too:

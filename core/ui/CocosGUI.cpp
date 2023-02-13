@@ -32,7 +32,7 @@ namespace ui
 
 const char* CocosGUIVersion()
 {
-    return "CocosGUI v1.0.0.0";
+    return "AXGUI v1.0.0";
 }
 
 }  // namespace ui

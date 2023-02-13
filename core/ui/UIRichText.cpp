@@ -1102,7 +1102,7 @@ bool RichText::initWithXML(std::string_view origxml, const ValueMap& defaults, c
         MyXMLVisitor visitor(this);
         SAXParser parser;
         parser.setDelegator(&visitor);
-        return parser.parseIntrusive(&xml.front(), xml.length());
+        return parser.parseIntrusive(&xml.front(), xml.length(), SAXParser::ParseOption::HTML);
     }
     return false;
 }
