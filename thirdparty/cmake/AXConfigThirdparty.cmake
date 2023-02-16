@@ -56,7 +56,7 @@ elseif(MACOSX)
     set(platform_spec_path mac)
 elseif(LINUX)
     set(platform_name linux)
-    set(platform_spec_path linux/x64)
+    set(platform_spec_path linux)
 endif()
 
 set(platform_spec_path "${_path_prefix}${platform_spec_path}")
