@@ -35,6 +35,7 @@ BraceWrapping:
 
   # Keeps extern "C" blocks unindented.
   AfterExternBlock: false
+  BeforeLambdaBody: false
 
 # Lambda body indentation
 LambdaBodyIndentation: OuterScope
