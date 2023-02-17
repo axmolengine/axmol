@@ -1624,6 +1624,16 @@ void Node::pause()
     _eventDispatcher->pauseEventListenersForTarget(this);
 }
 
+bool Node::isAwake()
+{
+    if (_isFirstUpdate)
+    {
+        _isFirstUpdate = false;
+        return true;
+    }
+    return false;
+}
+
 // override me
 void Node::update(float fDelta)
 {
