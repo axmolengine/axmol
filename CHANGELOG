@@ -28,7 +28,7 @@ axmol-1.0  ??
 - [HIGHLIGHT] Use Openal-Soft for all platform
 - [HIGHLIGHT] Refactor UserDefault with mio, speed up 100x+
 - [HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM
-- [HIGHLIGHT] Use modern GL loader glad (v2.0.0)
+- [HIGHLIGHT] Use modern GL loader glad (v2.0.2)
 - [HIGHLIGHT] Add google angle (version 5195) renderer backend support for windows
 - [HIGHLIGHT] Update codebase to C++ 17/20 standard
 - [HIGHLIGHT] Remove tinyxml2
@@ -57,6 +57,7 @@ axmol-1.0  ??
 - [NEW] Add llhttp 8.1.0
 - [NEW] Add return type 'ResourceData' for lua bindings, thanks to @tkzcfc
 - [NEW] Add spine binary support for lua bindings, thanks to @tkzcfc
+- [CHANGE] Move getWroldPosition from Widget to Node class, thanks to @rh101
 - [Fix] Fix to ensure Component::onEnter() is called (#867), thanks to @rh101
 - [Fix] Fix Label overflow shrink bug
 - [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
@@ -77,6 +78,10 @@ axmol-1.0  ??
 - [FIX] Fix downloader crash in lua coroutine, thanks to @tkzcfc
 - [FIX] Fix memory leak (VertexLayout) at `Program` constructor
 - [FIX] Fix missed edge case when resizing the memorymapped file in UserDefault that could cause a crash, thanks to  @theunwisewolf
+- [FIX] Fix http post with uri params
+- [FIX] Fix extension issue - FairyGUI BMFont don't load, reported by @theSlyest
+- [FIX] Fix download task creation failure Program crash, reported by @tkzcfc
+- [FIX] Fix charset process in glfwCharCallback (cocos2dx-all)
 - [REFINE] Improve `FileUtils::addSearchPath`, thanks to @tkzcfc
 - [REFINE] Allow the forced reformatting of RichText contents, thanks to @rh101
 - [REFINE] Upgrade android toolsets to ndk-r23 LTS
@@ -113,14 +118,24 @@ axmol-1.0  ??
 - [REFINE] Replace `push_back` with `emplace_back`
 - [REFINE] Improve Camera, thanks to @DelinWorks
 - [REFINE] Use jpeg-turbo for jpg image decoding
-- [REFINE] Update clipper1 to clipper2 1.0.6
+- [REFINE] Update clipper1 to clipper2 1.x
 - [REFINE] Update flatbuffers to v2.0.8
 - [REFINE] Change Program::getActiveAttributes return type to reference
 - [REFINE] Rename `Sprite3D` to `MeshRenderer`
 - [REFINE] Improve AutoPolygon::generateTriangles performance (#905)
 - [REFINE] Add many box2d testbed, thanks to @aismann
 - [REFINE] Improve c++11 for-loop performance with Universal References ([#760](https://github.com/axmolengine/axmol/pull/760)), thanks to @aismann
-- [REFINE] New engine logo & splash (TODO)
+- [REFINE] New engine logo & splash
+- [REFINE] Improve gradle scripts
+- [REFINE] Replace use of deprecated sprintf with snprintf, thanks to @euler0
+- [REFINE] Fix some warnings compilation in linux gcc 12.2.0, thanks to @Joilnen
+- [REFINE] Add linux prebuilt support, thanks to @AsakuraMizu
+- [REFINE] Fix wanings implicit conversion loses and use of deprecated function, thanks to @euler0
+- [REFINE] Clarify the order of steps required to create and build new projects, thanks to @rh101
+- [REFINE] Add a pool for GroupCommand rendering commands, thanks to @rh101
+- [REFINE] Improve ci scripts, thanks to @crazyhappygame
+- [REFINE] Improve lua and android cmake, thanks to @crazyhappygame
+- [REFINE] Update libpng to 1.6.39
 
 
 cocos2d-x-4.0  Dec.3 2019
