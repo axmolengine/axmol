@@ -57,6 +57,7 @@ THE SOFTWARE.
 #include "2d/CCRenderTexture.h"
 
 #include "base/base64.h"
+#include "base/axstd.h"
 
 using namespace std::string_view_literals;
 
@@ -809,7 +810,7 @@ AX_DLL std::string base64Encode(std::string_view s)
          *    - https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
          * 
          */
-#if defined(_HAS_CXX23) && _HAS_CXX23 && (_MSC_VER >= 1931)
+#if _AX_HAS_CXX23
         ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::encode(p, s.data(), s.length()); });
 #else
         ret.resize(n);
@@ -828,7 +829,7 @@ AX_DLL std::string base64Decode(std::string_view s)
     {
         std::string ret;
 
-#if defined(_HAS_CXX23) && _HAS_CXX23 && (_MSC_VER >= 1931)
+#if _AX_HAS_CXX23
         ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::decode(p, s.data(), s.length()); });
 #else
         ret.resize(n);

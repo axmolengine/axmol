@@ -163,6 +163,7 @@ add_library(thirdparty STATIC empty.cpp)
 # bellow are header only libs
 target_include_directories(thirdparty
     INTERFACE "robin-map/include"
+    INTERFACE "range-v3/include"
 )
 
 if (ANDROID)

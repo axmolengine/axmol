@@ -2,15 +2,19 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2021 Bytedance Inc.
+
  https://axmolengine.github.io/
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,13 +29,14 @@
 #include "platform/CCFileUtils.h"
 #include "yasio/detail/utils.hpp"
 #include "yasio/stl/string_view.hpp"
-#include "xsbase/fast_split.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale>
 #include <iomanip>
 #include <sstream>
+#include <charconv>
+#include "base/axstd.h"
 
 NS_AX_BEGIN
 
@@ -53,42 +58,41 @@ void HttpCookie::readFile()
     std::string inString = ax::FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if (!inString.empty())
     {
-        xsbase::fast_split(inString, '\n', [this](char* s, char* e) {
-            if (*s == '#')  // skip comment
-                return;
+        for (auto line : axstd::views::split(inString, '\n'))
+        {
+            if (line.empty() || *line.begin() == '#')  // skip comment
+                continue;
             int count = 0;
             CookieInfo cookieInfo;
             using namespace cxx17;
-            xsbase::fast_split(s, e - s, '\t', [&, this](char* ss, char* ee) {
-                auto ch = *ee;  // store
-                *ee     = '\0';
+            for (auto subrgn : axstd::views::split(line, '\t')) {
+                std::string_view word{&*subrgn.begin(), static_cast<size_t>(axstd::ranges::distance(subrgn))};
                 switch (count)
                 {
                 case DOMAIN_INDEX:
-                    cookieInfo.domain.assign(ss, ee - ss);
+                    cookieInfo.domain = word;
                     break;
                 case PATH_INDEX:
-                    cookieInfo.path.assign(ss, ee - ss);
+                    cookieInfo.path = word;
                     break;
                 case SECURE_INDEX:
-                    cookieInfo.secure = cxx17::string_view{ss, (size_t)(ee - ss)} == "TRUE"_sv;
+                    cookieInfo.secure = word == "TRUE"_sv;
                     break;
                 case EXPIRES_INDEX:
-                    cookieInfo.expires = static_cast<time_t>(strtoll(ss, nullptr, 10));
+                    std::from_chars(word.data(), word.data() + word.size(), cookieInfo.expires);
                     break;
                 case NAME_INDEX:
-                    cookieInfo.name.assign(ss, ee - ss);
+                    cookieInfo.name = word;
                     break;
                 case VALUE_INDEX:
-                    cookieInfo.value.assign(ss, ee - ss);
+                    cookieInfo.value = word;
                     break;
                 }
-                *ee = ch;  // restore
                 ++count;
-            });
+            }
             if (count >= 7)
                 _cookies.emplace_back(std::move(cookieInfo));
-        });
+        }
     }
 }
 
@@ -151,25 +155,29 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
 {
     unsigned int count = 0;
     CookieInfo info;
-    xsbase::nzls::fast_split(cookie.data(), cookie.length(), ';', [&](const char* start, const char* end) {
+    for (auto rgn : axstd::views::split(cookie, ';'))
+    {
         unsigned int count_ = 0;
-        while (*start == ' ')
-            ++start;  // skip ws
+        std::string_view citem{&*rgn.begin(), static_cast<size_t>(axstd::ranges::distance(rgn))};
+        while (*citem.data() == ' ')
+            citem.remove_prefix(1);  // skip ws
         if (++count > 1)
         {
             cxx17::string_view key;
             cxx17::string_view value;
-            xsbase::fast_split(start, end - start, '=', [&](const char* s, const char* e) {
+            for (auto subrgn : axstd::views::split(citem, '='))
+            {
+                std::string_view word{&*subrgn.begin(), static_cast<size_t>(axstd::ranges::distance(subrgn))};
                 switch (++count_)
                 {
                 case 1:
-                    key = cxx17::string_view(s, e - s);
+                    key = word;
                     break;
                 case 2:
-                    value = cxx17::string_view(s, e - s);
+                    value = word;
                     break;
                 }
-            });
+            }
 
             using namespace cxx17;
             if (cxx20::ic::iequals(key, "domain"_sv))
@@ -188,7 +196,7 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
                 if (cxx20::ends_with(expires_ctime, " GMT"_sv))
                     expires_ctime.resize(expires_ctime.length() - sizeof(" GMT") + 1);
                 if (expires_ctime.empty())
-                    return;
+                    continue;
                 size_t off = 0;
                 auto p     = expires_ctime.find_first_of(',');
                 if (p != std::string::npos)
@@ -220,19 +228,21 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
         }
         else
         {  // first is cookie name
-            xsbase::fast_split(start, end - start, '=', [&](const char* s, const char* e) {
+            for (auto rgn : axstd::views::split(citem, '='))
+            {
+                std::string_view word{&*rgn.begin(), static_cast<size_t>(axstd::ranges::distance(rgn))};
                 switch (++count_)
                 {
                 case 1:
-                    info.name.assign(s, e - s);
+                    info.name = word;
                     break;
                 case 2:
-                    info.value.assign(s, e - s);
+                    info.value = word;
                     break;
                 }
-            });
+            }
         }
-    });
+    }
     if (info.path.empty())
         info.path.push_back('/');
 
