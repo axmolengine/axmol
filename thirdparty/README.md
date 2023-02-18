@@ -146,6 +146,16 @@
 - Version: git 8c0d3c7 (125)
 - License: MIT
 
+## ntcvt (Windows only)
+- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
+- Version: 0.0.2
+- License: Apache-2.0
+
+## oboe (Adnroid only)
+- [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
+- Version: 1.7.0
+- License: Apache-2.0
+
 ## ogg & vorbis
 - ogg
   - [![Upstream](https://img.shields.io/github/v/release/xiph/ogg?label=Upstream)](https://github.com/xiph/ogg)
@@ -251,13 +261,3 @@
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.2.13
 - License: zlib
-
-## ntcvt
-- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
-- Version: 0.0.2
-- License: Apache-2.0
-
-## oboe
-- [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
-- Version: 1.7.0
-- License: Apache-2.0
