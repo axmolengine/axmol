@@ -184,6 +184,12 @@
 - Version: 1.13
 - License: MIT
 
+## range-v3
+- [![Upstream](https://img.shields.io/github/v/tag/ericniebler/range-v3?label=Upstream)](https://github.com/ericniebler/range-v3) 
+- Version: 0.12.0
+- License: BSL-1.0
+
+
 ## rapidjson
 - [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
 - Version: 1.1.0
@@ -221,9 +227,9 @@
 - Version: 1.3.0
 - License: Google Inc
 
-## xsbase
-- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/xsbase?label=Upstream)](https://github.com/simdsoft/xsbase)
-- Version: 1.0
+## xsxml
+- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/xsxml?label=Upstream)](https://github.com/simdsoft/xsxml)
+- Version: 1.1
 - License: MIT
 
 ## xxHash
@@ -249,4 +255,9 @@
 ## ntcvt
 - [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
 - Version: 0.0.2
+- License: Apache-2.0
+
+## oboe
+- [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
+- Version: 1.7.0
 - License: Apache-2.0
