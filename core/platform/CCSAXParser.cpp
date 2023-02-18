@@ -29,7 +29,7 @@
 #include <vector>  // because its based on windows 8 build :P
 
 #include "platform/CCFileUtils.h"
-#include "xsbase/xsxml/xsxml.hpp"
+#include "xsxml/xsxml.hpp"
 
 NS_AX_BEGIN
 
