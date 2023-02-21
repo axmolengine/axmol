@@ -355,7 +355,7 @@ void DrawNode::drawCircle(const Vec2& center,
                           float scaleX,
                           float scaleY,
                           const Color4B& color,
-                          float minThickness)
+                          float threshold)
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
@@ -367,11 +367,9 @@ void DrawNode::drawCircle(const Vec2& center,
         vertices[i].x = radius * cosf(rads + angle) * scaleX + center.x;
         vertices[i].y = radius * sinf(rads + angle) * scaleY + center.y;
     }
-    if (_lineWidth > minThickness)
+    if (_lineWidth > threshold)
     {
-        GLView* glView = _director->getOpenGLView();
-        auto borderScale = (glView->getScaleX() + glView->getScaleY());
-        drawPolygon(vertices, segments, Color4B(1.0f, 0.0f, 0.0f, 1.0f), _lineWidth / borderScale , color);
+        drawPolygon(vertices, segments, Color4B(1.0f, 0.0f, 0.0f, 1.0f), _lineWidth/4, color);
     }
     else
     {
@@ -391,9 +389,9 @@ void DrawNode::drawCircle(const Vec2& center,
                           unsigned int segments,
                           bool drawLineToCenter,
                           const Color4B& color,
-                          float minThickness)
+                          float threshold)
 {
-    drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, minThickness);
+    drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, threshold);
 }
 
 void DrawNode::drawQuadBezier(const Vec2& origin,
