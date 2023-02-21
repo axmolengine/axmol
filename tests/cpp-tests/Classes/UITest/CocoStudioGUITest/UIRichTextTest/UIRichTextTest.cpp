@@ -239,8 +239,8 @@ bool UIRichTextXMLBasic::init()
 
         // RichText
         _richText = RichText::createWithXML(
-            "This is just a simple text. no xml tags here. testing the basics. testing word-wrapping. testing, "
-            "testing, testing");
+            "This is just simple text, with no XML tags. Testing the basics. Testing word-wrapping. Testing, "
+            "Testing, Testing");
         _richText->ignoreContentAdaptWithSize(false);
         _richText->setContentSize(Size(100, 100));
 
