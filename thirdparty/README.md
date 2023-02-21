@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 5195.102
+- Version: 111.0.5563.19
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.86.0
+- Version: 7.88.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -61,7 +61,7 @@
 - License: MIT
 
 ## FreeType
-- Upstream: https://www.freetype.org/
+- [![Upstream](https://img.shields.io/github/v/tag/freetype/freetype?label=Upstream)](https://www.freetype.org/)
 - Version: 2.12.1
 - License: BSD-style (The FreeType Project)
 
@@ -92,7 +92,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 2.1.4
+- Version: 2.1.5.1
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -112,15 +112,13 @@
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
-  - Upstream: https://github.com/ThePhD/sol2
-  - Version:
-    - 3.3.0 
-    - 2.20.6 with vs2019 compile fixes
+  - [![Upstream](https://img.shields.io/github/v/release/ThePhD/sol2?label=Upstream)](https://github.com/ThePhD/sol2)
+  - Version: 3.3.0 
   - License: MIT
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-6c4826f (2607)
+  - Version: git 2.1.0-d0e8893 (2624)
   - License: MIT
 
 - tolua
@@ -148,6 +146,16 @@
 - Version: git 8c0d3c7 (125)
 - License: MIT
 
+## ntcvt (Windows only)
+- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
+- Version: 0.0.2
+- License: Apache-2.0
+
+## oboe (Adnroid only)
+- [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
+- Version: 1.7.0
+- License: Apache-2.0
+
 ## ogg & vorbis
 - ogg
   - [![Upstream](https://img.shields.io/github/v/release/xiph/ogg?label=Upstream)](https://github.com/xiph/ogg)
@@ -166,7 +174,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.7
+- Version: 3.0.8
 - License: Apache-2.0
 
 ## png
@@ -185,6 +193,12 @@
   - all tests passed: https://github.com/halx99/pugixml/actions/runs/4090401630
 - Version: 1.13
 - License: MIT
+
+## range-v3
+- [![Upstream](https://img.shields.io/github/v/tag/ericniebler/range-v3?label=Upstream)](https://github.com/ericniebler/range-v3) 
+- Version: 0.12.0
+- License: BSL-1.0
+
 
 ## rapidjson
 - [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
@@ -223,9 +237,9 @@
 - Version: 1.3.0
 - License: Google Inc
 
-## xsbase
-- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/xsbase?label=Upstream)](https://github.com/simdsoft/xsbase)
-- Version: 1.0
+## xsxml
+- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/xsxml?label=Upstream)](https://github.com/simdsoft/xsxml)
+- Version: 1.1
 - License: MIT
 
 ## xxHash
@@ -247,13 +261,3 @@
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.2.13
 - License: zlib
-
-## ntcvt
-- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
-- Version: 0.0.2
-- License: Apache-2.0
-
-## Some third party libs supporting axmol too:
-   - Live2D for cocos2d-x, with lua binding:  https://github.com/Xrysnow/cocos2d-x-live2d
-     - Live2D is also part of the 'extensions'.
-
