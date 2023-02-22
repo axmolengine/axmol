@@ -256,36 +256,28 @@ string Issue11942Test::subtitle() const
 }
 
 //
-// drawCircle new feature 
+// drawCircle new feature (better rendering)
 //
 BetterCircleRendering::BetterCircleRendering()
 {
     //Add lines to see the correct "scale of the 'rings'" changing the window size
-    auto draw0 = DrawNode::create();
-    draw0->setLineWidth(1);
-    addChild(draw0, 10);
+
+    auto draw = DrawNode::create();
+    draw->setLineWidth(1);
+    addChild(draw, 10);
 
     for (float y = 0; y < VisibleRect::top().y; y += 10)
     {
-        draw0->drawLine({VisibleRect::left().x, y}, {VisibleRect::right().x, y}, Color4B::GRAY);
+        draw->drawLine({VisibleRect::left().x, y}, {VisibleRect::right().x, y}, Color4B::GRAY);
     }
     initSliders();
 
     drawNode = DrawNode::create();
     addChild(drawNode, 10);
-    thick = 0;
+
+    lineWidth = 0;
+
     scheduleUpdate();
-}
-
-
-void BetterCircleRendering::changeThickness(ax::Ref* pSender, ax::ui::Slider::EventType type)
-{
-    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
-    {
-        ax::ui::Slider* sliderThickness = dynamic_cast<ax::ui::Slider*>(pSender);
-        thick                           = sliderThickness->getPercent();
-        _thickNessLabel->setString("setLineWidth(" + Value(thick).asString() + ")");
-    }
 }
 
 void BetterCircleRendering::changeLineWidth(ax::Ref* pSender, ax::ui::Slider::EventType type)
@@ -294,7 +286,17 @@ void BetterCircleRendering::changeLineWidth(ax::Ref* pSender, ax::ui::Slider::Ev
     {
         ax::ui::Slider* sliderLineWidth = dynamic_cast<ax::ui::Slider*>(pSender);
         lineWidth                       = sliderLineWidth->getPercent();
-        _lineWidthLabel->setString("drawCircle(pos, radius, ..., segemnts, ..., color, " + Value(lineWidth).asString() + ")");
+        _lineWidthLabel->setString("setLineWidth(" + Value(lineWidth).asString() + ")");
+    }
+}
+
+void BetterCircleRendering::changeThreshold(ax::Ref* pSender, ax::ui::Slider::EventType type)
+{
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        ax::ui::Slider* sliderThreshold = dynamic_cast<ax::ui::Slider*>(pSender);
+        threshold                       = sliderThreshold->getPercent();
+        _thresholdLabel->setString("drawCircle(pos, radius, ..., segments, ..., color, " + Value(threshold).asString() + ")");
     }
 }
 
@@ -307,12 +309,14 @@ void BetterCircleRendering::initSliders()
     slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
     slider->setPosition(Vec2(vsize.width / 2, vsize.height / 6));
-    slider->addEventListener(AX_CALLBACK_2(BetterCircleRendering::changeThickness, this));
+
+    slider->addEventListener(AX_CALLBACK_2(BetterCircleRendering::changeThreshold, this));
 
     auto ttfConfig  = TTFConfig("fonts/arial.ttf", 8);
-    _thickNessLabel = Label::createWithTTF(ttfConfig, "setLineWidth(0)");
-    addChild(_thickNessLabel, 20);
-    _thickNessLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 15));
+    _thresholdLabel = Label::createWithTTF(ttfConfig, "drawCircle(pos, radius, ..., segments, ..., color, 0)"); 
+    addChild(_thresholdLabel, 20);
+    _thresholdLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 15));
+
     addChild(slider, 20);
 
     ax::ui::Slider* sliderLineWidth = ax::ui::Slider::create();
@@ -323,7 +327,8 @@ void BetterCircleRendering::initSliders()
     sliderLineWidth->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 35));
     sliderLineWidth->addEventListener(AX_CALLBACK_2(BetterCircleRendering::changeLineWidth, this));
 
-    _lineWidthLabel = Label::createWithTTF(ttfConfig, "drawCircle(pos, radius, ..., segments, ..., color, 0)");
+    _lineWidthLabel = Label::createWithTTF(ttfConfig, "setLineWidth(0)");
+
     addChild(_lineWidthLabel, 20);
     _lineWidthLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 50));
     addChild(sliderLineWidth, 20);
@@ -332,19 +337,20 @@ void BetterCircleRendering::initSliders()
  void BetterCircleRendering::update(float dt)
  {
     drawNode->clear();
-    drawNode->setLineWidth(thick); // value from the slider
+    drawNode->setLineWidth(lineWidth);  // value from the slider
 
     // Old behavior => faster but badly rendering if line width > 5 (= rings)
-    drawNode->drawCircle(VisibleRect::center() + Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false, Color4F::RED);
+    drawNode->drawCircle(VisibleRect::center() + Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false,
+                         Color4F::RED);
 
     // New behavior => slower but good rendering if line width > 5
     auto color = Color4F::GREEN;
-    if (thick <= lineWidth)
+    if (lineWidth <= threshold)
     {
         color = Color4F::RED;  // using the faster rendering internal method of drawCircle (old behavior)
     }
     drawNode->drawCircle(VisibleRect::center() - Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false, color,
-                         lineWidth);
+                         threshold);
  }
 
 string BetterCircleRendering::title() const
