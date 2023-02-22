@@ -71,15 +71,15 @@ public:
     void update(float dt);
 
     void initSliders();
-    void changeThickness(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeThreshold(Ref* pSender, ax::ui::Slider::EventType type);
     void changeLineWidth(Ref* pSender, ax::ui::Slider::EventType type);
 
 private:
     ax::DrawNode* drawNode;
-    float thick = 0;
-    ax::Label* _thickNessLabel;
-    float lineWidth = 0;
     ax::Label* _lineWidthLabel;
+    float lineWidth = 0;
+    ax::Label* _thresholdLabel;
+    float threshold = 0;
 };
 
 class Issue829Test : public DrawPrimitivesBaseTest
