@@ -266,12 +266,10 @@ WebSocket::~WebSocket()
 
     _scheduler->unscheduleAllForTarget(this);
 
-    // Design A(Current): dispatch pending events at destructor. user can't delete websocket instance in delegate
-    // callbacks Design B: purge pending events without dispatch.
-    dispatchEvents();
-
-    if (!_eventQueue.unsafe_empty())  // after _service destroyed, we can safe check by unsafe_xxx stubs
-        AXLOGERROR("WebSocket: still have %zu pending events not dispatched!", _eventQueue.unsafe_size());
+    // Design A: dispatch pending events at destructor. user can't delete websocket instance in delegate
+    // callbacks 
+    // Design B(Preferred): purge pending events without dispatch.
+    purgePendingEvents();
 }
 
 bool WebSocket::init(const Delegate& delegate,
@@ -299,6 +297,15 @@ bool WebSocket::init(const Delegate& delegate,
         _service->open(0, YCK_TCP_CLIENT);
 
     return true;
+}
+
+void WebSocket::purgePendingEvents() 
+{
+    auto lck = _eventQueue.get_lock();
+    for(auto it = _eventQueue.unsafe_begin(); it != _eventQueue.unsafe_end(); ++it) {
+        (*it)->release();
+    }
+    _eventQueue.unsafe_clear();
 }
 
 void WebSocket::dispatchEvents()

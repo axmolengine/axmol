@@ -304,8 +304,9 @@ public:
     inline std::string_view getProtocol() const { return _selectedProtocol; }
 
 protected:
+    void purgePendingEvents();
     void dispatchEvents();
-
+    
     void setupParsers();
     void generateHandshakeSecKey();
     void handleNetworkEvent(yasio::io_event* event);
