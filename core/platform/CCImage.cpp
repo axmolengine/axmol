@@ -786,7 +786,7 @@ bool Image::isASTC(const uint8_t* data, ssize_t /*dataLen*/)
 
     uint32_t magicval = astc_unpack_bytes(hdr->magic[0], hdr->magic[1], hdr->magic[2], hdr->magic[3]);
 
-    return (magicval == ASTC_MAGIC_ID);
+    return (magicval & 0x0FFFFFFF) == (ASTC_MAGIC_ID & 0x0FFFFFFF); // wildcard check
 }
 
 bool Image::isJpg(const uint8_t* data, ssize_t dataLen)

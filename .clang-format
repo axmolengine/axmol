@@ -1,5 +1,5 @@
 # This file is copy from https://github.com/google/angle with some modifications
-# Defines the AXIS style for automatic reformatting.
+# Defines the axmol style for automatic reformatting.
 # https://code.google.com/p/angleproject/wiki/CodingStandard
 # See Clang docs: http://clang.llvm.org/docs/ClangFormatStyleOptions.html
 BasedOnStyle: Chromium
@@ -35,6 +35,10 @@ BraceWrapping:
 
   # Keeps extern "C" blocks unindented.
   AfterExternBlock: false
+  BeforeLambdaBody: false
+
+# Lambda body indentation
+LambdaBodyIndentation: OuterScope
 
 # Indent case labels.
 IndentCaseLabels: false

@@ -261,6 +261,7 @@ string Issue11942Test::subtitle() const
 BetterCircleRendering::BetterCircleRendering()
 {
     //Add lines to see the correct "scale of the 'rings'" changing the window size
+
     auto draw = DrawNode::create();
     draw->setLineWidth(1);
     addChild(draw, 10);
@@ -273,10 +274,11 @@ BetterCircleRendering::BetterCircleRendering()
 
     drawNode = DrawNode::create();
     addChild(drawNode, 10);
+
     lineWidth = 0;
+
     scheduleUpdate();
 }
-
 
 void BetterCircleRendering::changeLineWidth(ax::Ref* pSender, ax::ui::Slider::EventType type)
 {
@@ -307,12 +309,14 @@ void BetterCircleRendering::initSliders()
     slider->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
     slider->loadProgressBarTexture("cocosui/sliderProgress.png");
     slider->setPosition(Vec2(vsize.width / 2, vsize.height / 6));
+
     slider->addEventListener(AX_CALLBACK_2(BetterCircleRendering::changeThreshold, this));
 
     auto ttfConfig  = TTFConfig("fonts/arial.ttf", 8);
     _thresholdLabel = Label::createWithTTF(ttfConfig, "drawCircle(pos, radius, ..., segments, ..., color, 0)"); 
     addChild(_thresholdLabel, 20);
     _thresholdLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 15));
+
     addChild(slider, 20);
 
     ax::ui::Slider* sliderLineWidth = ax::ui::Slider::create();
@@ -324,6 +328,7 @@ void BetterCircleRendering::initSliders()
     sliderLineWidth->addEventListener(AX_CALLBACK_2(BetterCircleRendering::changeLineWidth, this));
 
     _lineWidthLabel = Label::createWithTTF(ttfConfig, "setLineWidth(0)");
+
     addChild(_lineWidthLabel, 20);
     _lineWidthLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 50));
     addChild(sliderLineWidth, 20);
@@ -346,7 +351,6 @@ void BetterCircleRendering::initSliders()
     }
     drawNode->drawCircle(VisibleRect::center() - Vec2(120.0f, 0.0f), 60, AX_DEGREES_TO_RADIANS(90), 36, false, color,
                          threshold);
-                  
  }
 
 string BetterCircleRendering::title() const

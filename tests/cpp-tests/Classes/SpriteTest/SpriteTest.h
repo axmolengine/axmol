@@ -213,6 +213,26 @@ public:
     virtual std::string subtitle() const override;
 };
 
+class SpriteWithoutVertexAnchorPoint : public SpriteTestDemo
+{
+public:
+    CREATE_FUNC(SpriteWithoutVertexAnchorPoint);
+
+    SpriteWithoutVertexAnchorPoint();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class SpriteVertexAnchorPoint : public SpriteTestDemo
+{
+public:
+    CREATE_FUNC(SpriteVertexAnchorPoint);
+
+    SpriteVertexAnchorPoint();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
 class SpriteBatchNodeAnchorPoint : public SpriteTestDemo
 {
 public:

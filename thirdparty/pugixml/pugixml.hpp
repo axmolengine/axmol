@@ -59,6 +59,17 @@
 #    define PUGI_CXX_STD 20
 #endif   // C++20 features check
 
+// Tests whether compiler has c++23 support
+#if (defined(__cplusplus) && __cplusplus > 202002L) || \
+    (defined(_MSC_VER) && _MSC_VER > 1934 &&           \
+     ((defined(_HAS_CXX23) && _HAS_CXX23 == 1) ||      \
+      (defined(_MSVC_LANG) && (_MSVC_LANG > 202002L))))
+#  ifdef PUGI_CXX_STD
+#    undef PUGI_CXX_STD
+#  endif
+#    define PUGI_CXX_STD 23
+#endif   // C++20 features check
+
 #if !defined(PUGI_CXX_STD)
 #  define PUGI_CXX_STD 11
 #endif
