@@ -1,4 +1,5 @@
 
+import platform
 import sys
 import os
 import shutil
@@ -50,12 +51,17 @@ def compile_if_newer(src, dst, cmd):
             update_files = update_files  + 1
     
 ## copy folder if different
-def sync_folder(src_dir, dst_dir, luajit, compile):
+def sync_folder(src_dir, dst_dir, opts, compile):
+    if (not opts.luajit and not compile and platform.system() == 'Linux') and opts.symlink.lower() == 'true':
+        if (not os.path.exists(dst_dir)):
+            print("[message] create symlink %s ===> %s" % (src_dir, dst_dir))
+            os.symlink(src_dir, dst_dir)
+        return
     if os.path.isfile(src_dir):
         if not os.path.exists(os.path.dirname(dst_dir)):
             os.makedirs(os.path.dirname(dst_dir))
-        if luajit and need_compile:
-            compile_if_newer(src_dir, dst_dir, luajit)
+        if opts.luajit and need_compile:
+            compile_if_newer(src_dir, dst_dir, opts.luajit)
         else:
             copy_if_newer(src_dir, dst_dir)
 
@@ -64,7 +70,7 @@ def sync_folder(src_dir, dst_dir, luajit, compile):
         for name in names:
             src = os.path.join(src_dir, name)
             dst = os.path.join(dst_dir, name)
-            sync_folder(src, dst, luajit, need_compile)
+            sync_folder(src, dst, opts, need_compile)
     else:
         print("[warning] %s: src file %s is bad" % (__file__, src_dir))
 
@@ -73,9 +79,10 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("-s", dest="src_dir")
     parser.add_argument("-d", dest="dst_dir")
-    parser.add_argument("-l", dest="luajit", default=None)
+    parser.add_argument("-j", dest="luajit", default=None)
     parser.add_argument("-m", dest="mode", default=None)
-    (args, unkonw) = parser.parse_known_args(sys.argv)
+    parser.add_argument("-l", dest="symlink", default='false')
+    (opts, unkonw) = parser.parse_known_args(sys.argv)
 
     need_compile = False
     # if args.luajit:
@@ -89,7 +96,7 @@ if __name__ == "__main__":
     create_files = 0
     update_files = 0
     start_at = time.time()
-    sync_folder(args.src_dir, args.dst_dir, args.luajit, need_compile)
+    sync_folder(opts.src_dir, opts.dst_dir, opts, need_compile)
     end_at = time.time()
     
     if len(copy_files) > 0:
