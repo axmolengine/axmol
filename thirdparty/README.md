@@ -1,12 +1,12 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 5195.102
+- Version: 111.0.5563.19
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.1.0
+- Version: 4.3.1
 - License: Apache-2.0
 
 ## Box2D
@@ -21,13 +21,13 @@
 
 ## Bullet
 - [![Upstream](https://img.shields.io/github/v/release/bulletphysics/bullet3?label=Upstream)](https://github.com/bulletphysics/bullet3)
-- Version: 3.24
+- Version: 3.25
 - License: zlib
 - Update method: Compare `axmol/thirdparty/bullet` with `bullet3/src`
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: git 1.18.1-c25d4eb (2138)
+- Version: git 1.19.0-bb8f5bb (2184)
 - License: MIT
 
 ## Chipmunk2D
@@ -37,7 +37,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.0.6
+- Version: 1.1.1
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.86.0
+- Version: 7.88.0
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -61,18 +61,18 @@
 - License: MIT
 
 ## FreeType
-- Upstream: https://www.freetype.org/
+- [![Upstream](https://img.shields.io/github/v/tag/freetype/freetype?label=Upstream)](https://www.freetype.org/)
 - Version: 2.12.1
 - License: BSD-style (The FreeType Project)
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.2
+- Version: 2.0.3
 - License: MIT
 
 ## glfw
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
-- Version: git df8d7bc on 31 Dec 2021 (4398)
+- Version: git 57cbded on Dec 16, 2022 (4609)
 - License: zlib
 
 ## glsl-optimizer (Apple Metal Render backend only)
@@ -92,7 +92,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 2.1.4
+- Version: 2.1.5.1
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -112,15 +112,13 @@
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
-  - Upstream: https://github.com/ThePhD/sol2
-  - Version:
-    - 3.3.0 
-    - 2.20.6 with vs2019 compile fixes
+  - [![Upstream](https://img.shields.io/github/v/release/ThePhD/sol2?label=Upstream)](https://github.com/ThePhD/sol2)
+  - Version: 3.3.0 
   - License: MIT
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-6c4826f (2607)
+  - Version: git 2.1.0-d0e8893 (2624)
   - License: MIT
 
 - tolua
@@ -148,6 +146,16 @@
 - Version: git 8c0d3c7 (125)
 - License: MIT
 
+## ntcvt (Windows only)
+- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
+- Version: 0.0.2
+- License: Apache-2.0
+
+## oboe (Adnroid only)
+- [![Upstream](https://img.shields.io/github/v/tag/google/oboe?label=Upstream)](https://github.com/google/oboe)
+- Version: 1.7.0
+- License: Apache-2.0
+
 ## ogg & vorbis
 - ogg
   - [![Upstream](https://img.shields.io/github/v/release/xiph/ogg?label=Upstream)](https://github.com/xiph/ogg)
@@ -161,12 +169,12 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.22.2
+- Version: 1.23.0
 - License: LGPL-2.1
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.7
+- Version: 3.0.8
 - License: Apache-2.0
 
 ## png
@@ -180,9 +188,17 @@
 - License: BSD-3-Clause
 
 ## pugixml
-- [![Upstream](https://img.shields.io/github/v/tag/zeux/pugixml?label=Upstream)](https://github.com/zeux/pugixml)
-- Version: 1.12.1
+- [![Upstream](https://img.shields.io/github/v/tag/halx99/pugixml?label=Upstream)](https://github.com/halx99/pugixml) by halx99 for string_view support
+  - original repo: https://github.com/zeux/pugixml
+  - all tests passed: https://github.com/halx99/pugixml/actions/runs/4090401630
+- Version: 1.13
 - License: MIT
+
+## range-v3
+- [![Upstream](https://img.shields.io/github/v/tag/ericniebler/range-v3?label=Upstream)](https://github.com/ericniebler/range-v3) 
+- Version: 0.12.0
+- License: BSL-1.0
+
 
 ## rapidjson
 - [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
@@ -203,7 +219,7 @@
 
 ## stb (stb_image)
 - Upstream: https://github.com/nothings/stb
-- Version: 2.27
+- Version: 2.28
 - License: MIT
 
 ## unzip (minizip-1.2)
@@ -218,7 +234,7 @@
 
 ## webp
 - [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
-- Version: 1.2.4
+- Version: 1.3.0
 - License: Google Inc
 
 ## websocket-parser
@@ -226,9 +242,9 @@
 - Version: 1.0.2
 - License: BSD-3-Clause license
 
-## xsbase
-- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/xsbase?label=Upstream)](https://github.com/simdsoft/xsbase)
-- Version: 1.0
+## xsxml
+- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/xsxml?label=Upstream)](https://github.com/simdsoft/xsxml)
+- Version: 1.1
 - License: MIT
 
 ## xxHash
@@ -250,13 +266,3 @@
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.2.13
 - License: zlib
-
-## ntcvt
-- [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
-- Version: git-8422188 (7)
-- License: Apache-2.0
-
-## Some third party libs supporting axmol too:
-   - Live2D for cocos2d-x, with lua binding:  https://github.com/Xrysnow/cocos2d-x-live2d
-     - Live2D is also part of the 'extensions'.
-

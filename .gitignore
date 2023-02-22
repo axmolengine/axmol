@@ -204,3 +204,6 @@ extensions/libccs21
 extensions/libccs20
 extensions/libccs19
 
+tools/bindings-generator/libclang/*.dll
+tools/bindings-generator/libclang/*.dylib
+tools/bindings-generator/libclang/*.so

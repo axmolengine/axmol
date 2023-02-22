@@ -64,7 +64,7 @@
 ### 快速开始
 
 #### 必要工具 [python](https://www.python.org/downloads/)
-  * python-2.7.17+, python-3.7+都可以
+  * python-3.7+
 
 #### 准备步骤
   1. 进入引擎```axmol```根目录

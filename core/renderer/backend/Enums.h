@@ -136,6 +136,8 @@ enum class PixelFormat : uint32_t
     LA8,
 
     //!!!Please append normal pixel format
+    //! 32-bit texture: RGBA8888
+    RGBA32F,
 
     /* below is depth compression format */
     // A packed 32-bit combined depth and stencil pixel format with two nomorlized unsigned integer

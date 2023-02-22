@@ -24,6 +24,7 @@
 #pragma once
 
 #include "axmol.h"
+#include "ui/CocosGUI.h"
 #include "../BaseTest.h"
 
 #include <string>
@@ -58,7 +59,6 @@ public:
     virtual std::string subtitle() const override;
 };
 
-
 class BetterCircleRendering : public DrawPrimitivesBaseTest
 {
 public:
@@ -70,8 +70,16 @@ public:
     virtual std::string subtitle() const override;
     void update(float dt);
 
+    void initSliders();
+    void changeThreshold(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeLineWidth(Ref* pSender, ax::ui::Slider::EventType type);
+
 private:
     ax::DrawNode* drawNode;
+    ax::Label* _lineWidthLabel;
+    float lineWidth = 0;
+    ax::Label* _thresholdLabel;
+    float threshold = 0;
 };
 
 class Issue829Test : public DrawPrimitivesBaseTest

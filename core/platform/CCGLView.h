@@ -36,10 +36,6 @@ THE SOFTWARE.
 #    include <windows.h>
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-typedef void* id;
-#endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) */
-
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    define AX_ICON_SET_SUPPORT true
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX) */
@@ -421,8 +417,8 @@ public:
 #endif /* (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) */
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-    virtual id getCocoaWindow() = 0;
-    virtual id getNSGLContext() = 0;  // stevetranby: added
+    virtual void* getCocoaWindow() = 0;
+    virtual void* getNSGLContext() = 0;  // stevetranby: added
 #endif                                /* (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) */
 
     /**

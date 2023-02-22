@@ -21,6 +21,20 @@
 #include "core/devformat.h"
 
 
+namespace al {
+
+backend_exception::backend_exception(backend_error code, const char *msg, ...) : mErrorCode{code}
+{
+    std::va_list args;
+    va_start(args, msg);
+    setMessage(msg, args);
+    va_end(args);
+}
+backend_exception::~backend_exception() = default;
+
+} // namespace al
+
+
 bool BackendBase::reset()
 { throw al::backend_exception{al::backend_error::DeviceError, "Invalid BackendBase call"}; }
 
@@ -54,7 +68,7 @@ ClockLatency BackendBase::getClockLatency()
 
 void BackendBase::setDefaultWFXChannelOrder()
 {
-    mDevice->RealOut.ChannelIndex.fill(INVALID_CHANNEL_INDEX);
+    mDevice->RealOut.ChannelIndex.fill(InvalidChannelIndex);
 
     switch(mDevice->FmtChans)
     {
@@ -98,6 +112,20 @@ void BackendBase::setDefaultWFXChannelOrder()
         mDevice->RealOut.ChannelIndex[SideLeft]    = 6;
         mDevice->RealOut.ChannelIndex[SideRight]   = 7;
         break;
+    case DevFmtX714:
+        mDevice->RealOut.ChannelIndex[FrontLeft]     = 0;
+        mDevice->RealOut.ChannelIndex[FrontRight]    = 1;
+        mDevice->RealOut.ChannelIndex[FrontCenter]   = 2;
+        mDevice->RealOut.ChannelIndex[LFE]           = 3;
+        mDevice->RealOut.ChannelIndex[BackLeft]      = 4;
+        mDevice->RealOut.ChannelIndex[BackRight]     = 5;
+        mDevice->RealOut.ChannelIndex[SideLeft]      = 6;
+        mDevice->RealOut.ChannelIndex[SideRight]     = 7;
+        mDevice->RealOut.ChannelIndex[TopFrontLeft]  = 8;
+        mDevice->RealOut.ChannelIndex[TopFrontRight] = 9;
+        mDevice->RealOut.ChannelIndex[TopBackLeft]   = 10;
+        mDevice->RealOut.ChannelIndex[TopBackRight]  = 11;
+        break;
     case DevFmtX3D71:
         mDevice->RealOut.ChannelIndex[FrontLeft]   = 0;
         mDevice->RealOut.ChannelIndex[FrontRight]  = 1;
@@ -115,7 +143,7 @@ void BackendBase::setDefaultWFXChannelOrder()
 
 void BackendBase::setDefaultChannelOrder()
 {
-    mDevice->RealOut.ChannelIndex.fill(INVALID_CHANNEL_INDEX);
+    mDevice->RealOut.ChannelIndex.fill(InvalidChannelIndex);
 
     switch(mDevice->FmtChans)
     {
@@ -137,6 +165,20 @@ void BackendBase::setDefaultChannelOrder()
         mDevice->RealOut.ChannelIndex[SideLeft]    = 6;
         mDevice->RealOut.ChannelIndex[SideRight]   = 7;
         return;
+    case DevFmtX714:
+        mDevice->RealOut.ChannelIndex[FrontLeft]     = 0;
+        mDevice->RealOut.ChannelIndex[FrontRight]    = 1;
+        mDevice->RealOut.ChannelIndex[BackLeft]      = 2;
+        mDevice->RealOut.ChannelIndex[BackRight]     = 3;
+        mDevice->RealOut.ChannelIndex[FrontCenter]   = 4;
+        mDevice->RealOut.ChannelIndex[LFE]           = 5;
+        mDevice->RealOut.ChannelIndex[SideLeft]      = 6;
+        mDevice->RealOut.ChannelIndex[SideRight]     = 7;
+        mDevice->RealOut.ChannelIndex[TopFrontLeft]  = 8;
+        mDevice->RealOut.ChannelIndex[TopFrontRight] = 9;
+        mDevice->RealOut.ChannelIndex[TopBackLeft]   = 10;
+        mDevice->RealOut.ChannelIndex[TopBackRight]  = 11;
+        break;
     case DevFmtX3D71:
         mDevice->RealOut.ChannelIndex[FrontLeft]   = 0;
         mDevice->RealOut.ChannelIndex[FrontRight]  = 1;

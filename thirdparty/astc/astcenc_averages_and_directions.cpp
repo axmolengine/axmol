@@ -390,8 +390,6 @@ void compute_avgs_and_dirs_4_comp(
 	const image_block& blk,
 	partition_metrics pm[BLOCK_MAX_PARTITIONS]
 ) {
-	float texel_weight = hadd_s(blk.channel_weight) / 4.0f;
-
 	int partition_count = pi.partition_count;
 	promise(partition_count > 0);
 
@@ -434,11 +432,6 @@ void compute_avgs_and_dirs_4_comp(
 			sum_wp += select(zero, texel_datum, tdm3);
 		}
 
-		sum_xp = sum_xp * texel_weight;
-		sum_yp = sum_yp * texel_weight;
-		sum_zp = sum_zp * texel_weight;
-		sum_wp = sum_wp * texel_weight;
-
 		vfloat4 prod_xp = dot(sum_xp, sum_xp);
 		vfloat4 prod_yp = dot(sum_yp, sum_yp);
 		vfloat4 prod_zp = dot(sum_zp, sum_zp);
@@ -473,8 +466,6 @@ void compute_avgs_and_dirs_3_comp(
 	vfloat4 partition_averages[BLOCK_MAX_PARTITIONS];
 	compute_partition_averages_rgba(pi, blk, partition_averages);
 
-	float texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>());
-
 	const float* data_vr = blk.data_r;
 	const float* data_vg = blk.data_g;
 	const float* data_vb = blk.data_b;
@@ -482,8 +473,6 @@ void compute_avgs_and_dirs_3_comp(
 	// TODO: Data-driven permute would be useful to avoid this ...
 	if (omitted_component == 0)
 	{
-		texel_weight = hadd_s(blk.channel_weight.swz<1, 2, 3>());
-
 		partition_averages[0] = partition_averages[0].swz<1, 2, 3>();
 		partition_averages[1] = partition_averages[1].swz<1, 2, 3>();
 		partition_averages[2] = partition_averages[2].swz<1, 2, 3>();
@@ -495,8 +484,6 @@ void compute_avgs_and_dirs_3_comp(
 	}
 	else if (omitted_component == 1)
 	{
-		texel_weight = hadd_s(blk.channel_weight.swz<0, 2, 3>());
-
 		partition_averages[0] = partition_averages[0].swz<0, 2, 3>();
 		partition_averages[1] = partition_averages[1].swz<0, 2, 3>();
 		partition_averages[2] = partition_averages[2].swz<0, 2, 3>();
@@ -507,8 +494,6 @@ void compute_avgs_and_dirs_3_comp(
 	}
 	else if (omitted_component == 2)
 	{
-		texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 3>());
-
 		partition_averages[0] = partition_averages[0].swz<0, 1, 3>();
 		partition_averages[1] = partition_averages[1].swz<0, 1, 3>();
 		partition_averages[2] = partition_averages[2].swz<0, 1, 3>();
@@ -523,8 +508,6 @@ void compute_avgs_and_dirs_3_comp(
 		partition_averages[2] = partition_averages[2].swz<0, 1, 2>();
 		partition_averages[3] = partition_averages[3].swz<0, 1, 2>();
 	}
-
- 	texel_weight = texel_weight * (1.0f / 3.0f);
 
 	unsigned int partition_count = pi.partition_count;
 	promise(partition_count > 0);
@@ -563,10 +546,6 @@ void compute_avgs_and_dirs_3_comp(
 			sum_zp += select(zero, texel_datum, tdm2);
 		}
 
-		sum_xp = sum_xp * texel_weight;
-		sum_yp = sum_yp * texel_weight;
-		sum_zp = sum_zp * texel_weight;
-
 		vfloat4 prod_xp = dot(sum_xp, sum_xp);
 		vfloat4 prod_yp = dot(sum_yp, sum_yp);
 		vfloat4 prod_zp = dot(sum_zp, sum_zp);
@@ -591,8 +570,6 @@ void compute_avgs_and_dirs_3_comp_rgb(
 	const image_block& blk,
 	partition_metrics pm[BLOCK_MAX_PARTITIONS]
 ) {
-	float texel_weight = hadd_s(blk.channel_weight.swz<0, 1, 2>()) * (1.0f / 3.0f);
-
 	unsigned int partition_count = pi.partition_count;
 	promise(partition_count > 0);
 
@@ -632,10 +609,6 @@ void compute_avgs_and_dirs_3_comp_rgb(
 			sum_zp += select(zero, texel_datum, tdm2);
 		}
 
-		sum_xp = sum_xp * texel_weight;
-		sum_yp = sum_yp * texel_weight;
-		sum_zp = sum_zp * texel_weight;
-
 		vfloat4 prod_xp = dot(sum_xp, sum_xp);
 		vfloat4 prod_yp = dot(sum_yp, sum_yp);
 		vfloat4 prod_zp = dot(sum_zp, sum_zp);
@@ -662,7 +635,6 @@ void compute_avgs_and_dirs_2_comp(
 	unsigned int component2,
 	partition_metrics pm[BLOCK_MAX_PARTITIONS]
 ) {
-	float texel_weight;
 	vfloat4 average;
 
 	const float* data_vr = nullptr;
@@ -670,7 +642,6 @@ void compute_avgs_and_dirs_2_comp(
 
 	if (component1 == 0 && component2 == 1)
 	{
-		texel_weight = hadd_s(blk.channel_weight.swz<0, 1>()) / 2.0f;
 		average = blk.data_mean.swz<0, 1>();
 
 		data_vr = blk.data_r;
@@ -678,7 +649,6 @@ void compute_avgs_and_dirs_2_comp(
 	}
 	else if (component1 == 0 && component2 == 2)
 	{
-		texel_weight = hadd_s(blk.channel_weight.swz<0, 2>()) / 2.0f;
 		average = blk.data_mean.swz<0, 2>();
 
 		data_vr = blk.data_r;
@@ -688,7 +658,6 @@ void compute_avgs_and_dirs_2_comp(
 	{
 		assert(component1 == 1 && component2 == 2);
 
-		texel_weight = hadd_s(blk.channel_weight.swz<1, 2>()) / 2.0f;
 		average = blk.data_mean.swz<1, 2>();
 
 		data_vr = blk.data_g;
@@ -714,7 +683,7 @@ void compute_avgs_and_dirs_2_comp(
 				average += vfloat2(data_vr[iwt], data_vg[iwt]);
 			}
 
-			average = average * (1.0f / static_cast<float>(texel_count));
+			average = average / static_cast<float>(texel_count);
 		}
 
 		pm[partition].avg = average;
@@ -736,9 +705,6 @@ void compute_avgs_and_dirs_2_comp(
 			vmask4 tdm1 = texel_datum.swz<1,1,1,1>() > zero;
 			sum_yp += select(zero, texel_datum, tdm1);
 		}
-
-		sum_xp = sum_xp * texel_weight;
-		sum_yp = sum_yp * texel_weight;
 
 		vfloat4 prod_xp = dot(sum_xp, sum_xp);
 		vfloat4 prod_yp = dot(sum_yp, sum_yp);

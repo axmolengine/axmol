@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2011-2022 Arm Limited
+// Copyright 2011-2023 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -121,8 +121,8 @@ void unpack_weights(
 			promise(max_weight_count > 0);
 			for (int j = 0; j < max_weight_count; j++)
 			{
-				vint texel_weights(di.texel_weights_4t[j] + i);
-				vint texel_weights_int(di.texel_weights_int_4t[j] + i);
+				vint texel_weights(di.texel_weights_tr[j] + i);
+				vint texel_weights_int(di.texel_weight_contribs_int_tr[j] + i);
 
 				summed_value += vtable_8bt_32bi(tab0p, tab1p, tab2p, tab3p, texel_weights) * texel_weights_int;
 			}
@@ -156,8 +156,8 @@ void unpack_weights(
 			promise(max_weight_count > 0);
 			for (int j = 0; j < max_weight_count; j++)
 			{
-				vint texel_weights(di.texel_weights_4t[j] + i);
-				vint texel_weights_int(di.texel_weights_int_4t[j] + i);
+				vint texel_weights(di.texel_weights_tr[j] + i);
+				vint texel_weights_int(di.texel_weight_contribs_int_tr[j] + i);
 
 				sum_plane1 += vtable_8bt_32bi(tab0_plane1p, tab1_plane1p, texel_weights) * texel_weights_int;
 				sum_plane2 += vtable_8bt_32bi(tab0_plane2p, tab1_plane2p, texel_weights) * texel_weights_int;
@@ -286,7 +286,7 @@ void decompress_symbolic_block(
 	unpack_weights(bsd, scb, di, is_dual_plane, plane1_weights, plane2_weights);
 
 	// Now that we have endpoint colors and weights, we can unpack texel colors
-	int plane2_component = is_dual_plane ? scb.plane2_component : -1;
+	int plane2_component = scb.plane2_component;
 	vmask4 plane2_mask = vint4::lane_id() == vint4(plane2_component);
 
 	for (int i = 0; i < partition_count; i++)
@@ -299,7 +299,6 @@ void decompress_symbolic_block(
 
 		unpack_color_endpoints(decode_mode,
 		                       scb.color_formats[i],
-		                       scb.get_color_quant_mode(),
 		                       scb.color_values[i],
 		                       rgb_lns, a_lns,
 		                       ep0, ep1);
@@ -362,7 +361,6 @@ float compute_symbolic_block_difference_2plane(
 
 	unpack_color_endpoints(config.profile,
 	                       scb.color_formats[0],
-	                       scb.get_color_quant_mode(),
 	                       scb.color_values[0],
 	                       rgb_lns, a_lns,
 	                       ep0, ep1);
@@ -457,7 +455,6 @@ float compute_symbolic_block_difference_1plane(
 
 		unpack_color_endpoints(config.profile,
 		                       scb.color_formats[i],
-		                       scb.get_color_quant_mode(),
 		                       scb.color_values[i],
 		                       rgb_lns, a_lns,
 		                       ep0, ep1);
@@ -546,7 +543,6 @@ float compute_symbolic_block_difference_1plane_1partition(
 
 	unpack_color_endpoints(config.profile,
 	                       scb.color_formats[0],
-	                       scb.get_color_quant_mode(),
 	                       scb.color_values[0],
 	                       rgb_lns, a_lns,
 	                       ep0, ep1);

@@ -65,19 +65,18 @@ elseif(APPLE)
         set(_AX_PLATFORM_SPECIFIC_HEADER
             ${_AX_PLATFORM_SPECIFIC_HEADER}
             platform/mac/CCStdC-mac.h
-            platform/mac/CCGLViewImpl-mac.h
             platform/mac/CCPlatformDefine-mac.h
             platform/mac/CCApplication-mac.h
-           # platform/desktop/CCGLViewImpl-desktop.h
+            platform/desktop/CCGLViewImpl-desktop.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
             ${_AX_PLATFORM_SPECIFIC_SRC}
             platform/mac/CCApplication-mac.mm
-            platform/mac/CCGLViewImpl-mac.mm
             platform/mac/CCCommon-mac.mm
             platform/mac/CCDevice-mac.mm
-           # platform/desktop/CCGLViewImpl-desktop.cpp
+            platform/desktop/CCGLViewImpl-desktop.cpp
             )
+        set_source_files_properties(platform/desktop/CCGLViewImpl-desktop.cpp PROPERTIES LANGUAGE OBJCXX)
     elseif(IOS)
         set(_AX_PLATFORM_SPECIFIC_HEADER
             ${_AX_PLATFORM_SPECIFIC_HEADER}
