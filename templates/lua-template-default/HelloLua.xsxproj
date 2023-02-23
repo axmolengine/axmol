@@ -62,7 +62,7 @@
   </assets>
   <debug-options>
     <start-program>build\bin\HelloLua\Debug\HelloLua.exe</start-program>
-    <start-working-dir>.</start-working-dir>
+    <start-working-dir>.\Content</start-working-dir>
     <start-command></start-command>
     <search-paths>
       <item>src</item>
