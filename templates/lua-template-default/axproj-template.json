@@ -14,18 +14,13 @@
         },
         "append_dir": [
             {
+                "from": "templates/lua-template-default/Content",
+                "to": "Content",
+                "exclude": []
+            },
+            {
                 "from": "extensions/scripting/lua-bindings/script",
-                "to": "src/cocos",
-                "exclude": []
-            },
-            {
-                "from": "templates/lua-template-default/src",
-                "to": "src",
-                "exclude": []
-            },
-            {
-                "from": "templates/lua-template-default/res",
-                "to": "res",
+                "to": "Content/src/axmol",
                 "exclude": []
             }
         ]
@@ -46,7 +41,7 @@
         "append_dir": [
             {
                 "from": "extensions/scripting/lua-bindings/manual/lua_module_register.h",
-                "to": "frameworks/runtime-src/Classes/"
+                "to": "frameworks/runtime-src/Source/"
             }
         ],
         "project_rename": {
@@ -102,12 +97,12 @@
                 "replace_string": "\"isLandscape\": false,"
             },
             {
-                "file_path": "src/config.lua",
+                "file_path": "Content/src/config.lua",
                 "pattern": "width\\s*=.*,",
                 "replace_string": "width = 640,"
             },
             {
-                "file_path": "src/config.lua",
+                "file_path": "Content/src/config.lua",
                 "pattern": "height\\s*=.*,",
                 "replace_string": "height = 960,"
             },

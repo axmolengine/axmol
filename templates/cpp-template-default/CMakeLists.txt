@@ -63,24 +63,24 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
     endif()
 endif()
 
-# record sources, headers, resources...
+# record sources, headers, Content...
 set(GAME_SOURCE)
 set(GAME_HEADER)
 
-set(GAME_RES_FOLDER
-    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+set(content_folder
+    "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
 if(APPLE OR WINDOWS)
-    ax_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
 endif()
 
 # add cross-platforms source files and header files
 file(GLOB_RECURSE GAME_SOURCE
-     Classes/*.cpp
+     Source/*.cpp
      )
 
 file(GLOB_RECURSE GAME_HEADER
-     Classes/*.h
+     Source/*.h
      )
 
 if(ANDROID)
@@ -100,7 +100,7 @@ elseif(WINDOWS)
     list(APPEND GAME_SOURCE
          proj.win32/main.cpp
          proj.win32/game.rc
-         ${common_res_files}
+         ${common_content_files}
          )
 elseif(APPLE)
     if(IOS)
@@ -141,7 +141,7 @@ elseif(APPLE)
              ${APP_UI_RES}
              )
     endif()
-    list(APPEND GAME_SOURCE ${common_res_files})
+    list(APPEND GAME_SOURCE ${common_content_files})
 endif()
 
 # mark app complie info and libs info
@@ -163,7 +163,7 @@ if (NOT _AX_USE_PREBUILT)
 endif()
 
 target_include_directories(${APP_NAME}
-        PRIVATE Classes
+        PRIVATE Source
         PRIVATE ${_AX_ROOT_PATH}/core/audio
 )
 
@@ -192,13 +192,15 @@ elseif(WINDOWS)
     endif()
 endif()
 
-if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+if (NOT APPLE)
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER} SYM_LINK 1)
-elseif(WINDOWS)
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
-    if(NOT DEFINED BUILD_ENGINE_DONE)
-        set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
+
+    if((WINDOWS AND (NOT (CMAKE_GENERATOR STREQUAL "Ninja"))))
+        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${content_folder}")
+        if(NOT DEFINED BUILD_ENGINE_DONE)
+            set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+        endif()
     endif()
 endif()
 

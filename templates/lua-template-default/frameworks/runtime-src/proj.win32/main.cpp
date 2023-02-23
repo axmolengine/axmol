@@ -23,7 +23,7 @@
  ****************************************************************************/
 #include "main.h"
 #include "cocos2d.h"
-#include "../Classes/AppDelegate.h"
+#include "AppDelegate.h"
 
 USING_NS_AX;
 

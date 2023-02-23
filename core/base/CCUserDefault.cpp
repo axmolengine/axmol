@@ -413,14 +413,20 @@ void UserDefault::lazyInit()
                 int count = ibs.read<int>();
                 for (auto i = 0; i < count; ++i)
                 {
-                    std::string key(ibs.read_v());
-                    std::string value(ibs.read_v());
                     if (_encryptEnabled)
                     {
+                        std::string key(ibs.read_v());
+                        std::string value(ibs.read_v());
                         this->encrypt(key, AES_DECRYPT);
                         this->encrypt(value, AES_DECRYPT);
+                        updateValueForKey(key, value);
                     }
-                    updateValueForKey(key, value);
+                    else
+                    {
+                        std::string_view key(ibs.read_v());
+                        std::string_view value(ibs.read_v());
+                        updateValueForKey(key, value);
+                    }
                 }
                 _realSize = static_cast<int>(ibs.seek(0, SEEK_CUR) - sizeof(udflen_t));
             }

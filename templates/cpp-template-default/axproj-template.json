@@ -8,7 +8,7 @@
          "project_replace_project_name":{
             "src_project_name":"HelloCpp",
             "files":[
-               "Classes/AppDelegate.cpp",
+               "Source/AppDelegate.cpp",
                "proj.win32/main.cpp",
                "proj.android/settings.gradle",
                "proj.android/app/res/values/strings.xml",
@@ -47,7 +47,7 @@
       "change_orientation": {
          "modify_files": [
             {
-               "file_path": "Classes/AppDelegate.cpp",
+               "file_path": "Source/AppDelegate.cpp",
                "pattern": "static\\s+cocos2d\\:\\:Size\\s+([a-zA-Z_\\d]+)\\s*=\\s*cocos2d\\:\\:Size\\(\\s*(\\d+),\\s*(\\d+)\\)",
                "replace_string": "static cocos2d::Size \\1 = cocos2d::Size(\\3, \\2)"
             },
