@@ -1,11 +1,9 @@
 include(CMakeParseArguments)
 
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
-function(ax_copy_target_res ax_target)
-    ax_def_copy_resource_target(${ax_target})
-    set(oneValueArgs LINK_TO)
-    set(multiValueArgs FOLDERS)
-    cmake_parse_arguments(opt "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+function(ax_sync_target_res ax_target)
+    ax_def_sync_resource_target(${ax_target})
+    cmake_parse_arguments(opt "SYM_LINK" "LINK_TO" "FOLDERS" ${ARGN})
 
     if(NOT TARGET SYNC_RESOURCE-${ax_target})
         message(WARNING "SyncResource targe for ${ax_target} is not defined")
@@ -17,18 +15,18 @@ function(ax_copy_target_res ax_target)
         #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET SYNC_RESOURCE-${ax_target} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E echo "    copying to ${link_folder_abs}"
+            COMMAND ${CMAKE_COMMAND} -E echo "    Syncing to ${link_folder_abs}"
             COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
-                -s ${cc_folder} -d ${link_folder_abs}
+                -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
         )
     endforeach()
 endfunction()
 
 ## create a virtual target SYNC_RESOURCE-${ax_target}
 ## Update resource files in Resources/ folder everytime when `Run/Debug` target.
-function(ax_def_copy_resource_target ax_target)
+function(ax_def_sync_resource_target ax_target)
     add_custom_target(SYNC_RESOURCE-${ax_target} ALL
-        COMMAND ${CMAKE_COMMAND} -E echo "Copying resources for ${ax_target} ..."
+        COMMAND ${CMAKE_COMMAND} -E echo "Syncing resources for ${ax_target} ..."
     )
     add_dependencies(${ax_target} SYNC_RESOURCE-${ax_target})
     set_target_properties(SYNC_RESOURCE-${ax_target} PROPERTIES
@@ -37,11 +35,11 @@ function(ax_def_copy_resource_target ax_target)
 endfunction()
 
 
-function(ax_copy_lua_scripts ax_target src_dir dst_dir)
+function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     set(luacompile_target COPY_LUA-${ax_target})
     if(NOT TARGET ${luacompile_target})
         add_custom_target(${luacompile_target} ALL
-            COMMAND ${CMAKE_COMMAND} -E echo "Copying lua scripts ..."
+            COMMAND ${CMAKE_COMMAND} -E echo "Syncing lua scripts ..."
         )
         add_dependencies(${ax_target} ${luacompile_target})
         set_target_properties(${luacompile_target} PROPERTIES
