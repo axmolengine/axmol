@@ -1679,7 +1679,7 @@ namespace
 {
 inline bool isUTF8CharWrappable(const StringUtils::StringUTF8::CharUTF8& ch)
 {
-    return (!ch.isASCII() || !std::isalnum(ch._char[0], std::locale()));
+    return (!ch.isASCII() || !std::isgraph(ch._char[0], std::locale()));
 }
 
 int getPrevWordPos(const StringUtils::StringUTF8& text, int idx)
