@@ -70,7 +70,7 @@ if(AX_BUILD_TESTS)
 
     if(AX_ENABLE_EXT_LUA)
       add_subdirectory(${_AX_ROOT_PATH}/templates/lua-template-default ${ENGINE_BINARY_PATH}/tests/HelloLua)
-      add_subdirectory(${_AX_ROOT_PATH}/tests/lua-tests/project ${ENGINE_BINARY_PATH}/tests/lua-test)
+      add_subdirectory(${_AX_ROOT_PATH}/tests/lua-tests ${ENGINE_BINARY_PATH}/tests/lua-test)
     endif(AX_ENABLE_EXT_LUA)
 
 endif()

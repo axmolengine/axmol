@@ -52,14 +52,19 @@ def compile_if_newer(src, dst, cmd):
     
 ## copy folder if different
 def sync_folder(src_dir, dst_dir, opts, compile):
-    if (not opts.luajit and not compile and platform.system() == 'Linux') and opts.symlink.lower() == 'true':
-        if (not os.path.exists(dst_dir)):
+    parent_dir = os.path.dirname(dst_dir)
+    if not os.path.isdir(parent_dir):
+        os.makedirs(parent_dir)
+    if not opts.luajit and not compile and opts.issymlink:
+        if (not os.path.isdir(dst_dir)):
             print("[message] create symlink %s ===> %s" % (src_dir, dst_dir))
-            os.symlink(src_dir, dst_dir)
+            if opts.iswinnt:
+                # Fix error symbolic link privilege not held < win11
+                subprocess.run(['mklink', '/J', dst_dir, src_dir], shell=True)
+            else:
+                os.symlink(src_dir, dst_dir, True)
         return
     if os.path.isfile(src_dir):
-        if not os.path.exists(os.path.dirname(dst_dir)):
-            os.makedirs(os.path.dirname(dst_dir))
         if opts.luajit and need_compile:
             compile_if_newer(src_dir, dst_dir, opts.luajit)
         else:
@@ -83,7 +88,7 @@ if __name__ == "__main__":
     parser.add_argument("-m", dest="mode", default=None)
     parser.add_argument("-l", dest="symlink", default='false')
     (opts, unkonw) = parser.parse_known_args(sys.argv)
-
+    
     need_compile = False
     # if args.luajit:
     #     print("  luajit mode '%s'" % (args.mode))
@@ -96,7 +101,9 @@ if __name__ == "__main__":
     create_files = 0
     update_files = 0
     start_at = time.time()
-    sync_folder(opts.src_dir, opts.dst_dir, opts, need_compile)
+    opts.iswinnt = platform.system().lower() == 'windows'
+    opts.issymlink = opts.symlink.lower() == 'true'
+    sync_folder(os.path.abspath(opts.src_dir), os.path.abspath(opts.dst_dir), opts, need_compile)
     end_at = time.time()
     
     if len(copy_files) > 0:

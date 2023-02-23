@@ -70,28 +70,20 @@ endif()
 set(RUNTIME_SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src)
 
 # script and source files info, not need to compile
-set(res_res_folders
-    "${CMAKE_CURRENT_SOURCE_DIR}/res"
-    )
-set(res_src_folders
-    "${CMAKE_CURRENT_SOURCE_DIR}/src"
-    )
-set(res_script_folders
-    "${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/script"
-    )
+set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
+set(engine_script_folder "${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/script")
 if(APPLE OR VS)
-    ax_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
-    ax_mark_multi_resources(res_src RES_TO "Resources/src" FOLDERS ${res_src_folders})
-    set(cc_common_res ${res_res} ${res_src})
+    ax_mark_multi_resources(content_files RES_TO "Content" FOLDERS ${content_folder})
+    set(common_content_files ${content_files})
     if (NOT _AX_TOP_LEVEL_APP)
-        ax_mark_multi_resources(res_script RES_TO "Resources/src/axmol" FOLDERS ${res_script_folders})
-        set(cc_common_res ${cc_common_res} ${res_script})
+        ax_mark_multi_resources(engine_script_files RES_TO "Content/src/axmol" FOLDERS ${content_folder})
+        set(common_content_files ${common_content_files} ${engine_script_files})
     endif()
 endif()
 
 # record sources, headers
-set(GAME_HEADER ${RUNTIME_SRC_ROOT}/Classes/AppDelegate.h)
-set(GAME_SOURCE ${RUNTIME_SRC_ROOT}/Classes/AppDelegate.cpp)
+file(GLOB_RECURSE GAME_HEADER ${RUNTIME_SRC_ROOT}/Source/*.h)
+file(GLOB_RECURSE GAME_SOURCE ${RUNTIME_SRC_ROOT}/Source/*.cpp)
 # sources need to compile info, include dirs and source files
 
 if(ANDROID)
@@ -105,7 +97,7 @@ elseif(WINDOWS)
          )
     list(APPEND GAME_SOURCE
          ${RUNTIME_SRC_ROOT}/proj.win32/main.cpp
-         ${cc_common_res}
+         ${common_content_files}
          )
 elseif(APPLE)
     if(IOS)
@@ -149,7 +141,7 @@ elseif(APPLE)
              ${APP_UI_RES}
              )
     endif()
-    list(APPEND GAME_SOURCE ${cc_common_res})
+    list(APPEND GAME_SOURCE ${common_content_files})
 endif()
 
 set(APP_SRC ${GAME_HEADER} ${GAME_SOURCE})
@@ -172,7 +164,7 @@ if (NOT _AX_USE_PREBUILT)
     target_link_libraries(${APP_NAME} ${_AX_LUA_LIB})
 endif()
 
-target_include_directories(${APP_NAME} PRIVATE ${RUNTIME_SRC_ROOT}/Classes)
+target_include_directories(${APP_NAME} PRIVATE ${RUNTIME_SRC_ROOT}/Source)
 
 # mark app resources, resource will be copy auto after mark
 setup_ax_app_config(${APP_NAME})
@@ -204,18 +196,19 @@ elseif(WINDOWS)
         ax_copy_lua_dlls(${APP_NAME})
     endif()
 endif()
-# copy resource on linux or WINDOWS
-if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+
+if (NOT APPLE)
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR}/res FOLDERS ${res_res_folders})
-    ax_sync_lua_scripts(${APP_NAME} ${res_src_folders} ${APP_RES_DIR}/src)
-    ax_sync_lua_scripts(${APP_NAME} ${res_script_folders} ${APP_RES_DIR}/src/axmol)
-elseif(WINDOWS)
-    set(my_res_folder "${CMAKE_CURRENT_SOURCE_DIR}")
-    ax_sync_lua_scripts(${APP_NAME} ${res_script_folders} "${my_res_folder}/src/axmol")
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${my_res_folder}")
-    if(NOT DEFINED BUILD_ENGINE_DONE)
-        set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+    if (NOT _AX_TOP_LEVEL_APP)
+        ax_sync_lua_scripts(${APP_NAME} ${engine_script_folder} "${content_folder}/src/axmol")
+    endif()
+    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
+    
+    if((WINDOWS AND (NOT (CMAKE_GENERATOR STREQUAL "Ninja"))))
+        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${content_folder}")
+        if(NOT DEFINED BUILD_ENGINE_DONE)
+            set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+        endif()
     endif()
 endif()
 
