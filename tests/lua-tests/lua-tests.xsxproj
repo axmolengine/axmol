@@ -187,7 +187,7 @@
   </assets>
   <debug-options>
     <start-program>build\bin\lua-tests\Debug\lua-tests.exe</start-program>
-    <start-working-dir>.</start-working-dir>
+    <start-working-dir>.\Content</start-working-dir>
     <start-command></start-command>
     <search-paths>
       <item>src</item>
