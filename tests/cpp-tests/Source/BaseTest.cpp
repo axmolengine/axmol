@@ -33,7 +33,7 @@ USING_NS_AX_EXT;
 #define TABEL_LABEL_TAG 1024
 
 Size g_resourceSize(960, 640);
-Size g_designSize(960, 640);
+Size g_designSize(480, 320);
 
 TestBase::TestBase() : _parentTest(nullptr), _isTestList(false) {}
 
