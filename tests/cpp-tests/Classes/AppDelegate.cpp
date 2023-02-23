@@ -72,7 +72,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #ifdef AX_PLATFORM_PC
         glView = GLViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
 #else
-        glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
+        glView = GLViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif
         director->setOpenGLView(glView);
     }
