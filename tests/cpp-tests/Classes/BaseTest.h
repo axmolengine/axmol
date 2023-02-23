@@ -35,6 +35,9 @@
 
 class TestSuite;
 
+extern ax::Size g_resourceSize;
+extern ax::Size g_designSize;
+
 /**
  * Each test case should inherit from TestCase, and add to a TestSuite object.
  */
