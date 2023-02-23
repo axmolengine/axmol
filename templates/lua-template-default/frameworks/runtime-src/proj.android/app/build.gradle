@@ -37,7 +37,6 @@ android {
     sourceSets.main {
         java.srcDir "src"
         res.srcDir "res"
-        jniLibs.srcDir "libs"
         manifest.srcFile "AndroidManifest.xml"
         assets.srcDir "assets"
     }
@@ -92,25 +91,15 @@ android.applicationVariants.all { variant ->
 
     // delete previous files first
     delete dest_assets_folder
-
     def targetName = variant.name.capitalize()
     def copyTaskName = "copy${targetName}ResourcesToAssets"
-   
+    
     tasks.register(copyTaskName) {
         copy {
-           from project_root_folder + "/res"
-           into dest_assets_folder + "/res"
+            from "${project_root_folder}/Content"
+            into "${dest_assets_folder}"
+            exclude "**/*.gz"
         }
-
-        copy {
-            from project_root_folder + "/src"
-            into dest_assets_folder + "/src"
-        }
-
-        // copy {
-        //     from "${projectDir}/../../../cocos2d-x/extensions/scripting/lua-bindings/script"
-        //     into  dest_assets_folder + "/src/cocos"
-        // }
     }
     tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
 }
