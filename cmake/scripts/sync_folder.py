@@ -52,14 +52,15 @@ def compile_if_newer(src, dst, cmd):
     
 ## copy folder if different
 def sync_folder(src_dir, dst_dir, opts, compile):
-    if (not opts.luajit and not compile and platform.system() == 'Linux') and opts.symlink.lower() == 'true':
-        if (not os.path.exists(dst_dir)):
+    parent_dir = os.path.dirname(dst_dir)
+    if not os.path.isdir(parent_dir):
+        os.makedirs(parent_dir)
+    if not opts.luajit and not compile and opts.symlink.lower() == 'true':
+        if (not os.path.isdir(dst_dir)):
             print("[message] create symlink %s ===> %s" % (src_dir, dst_dir))
-            os.symlink(src_dir, dst_dir)
+            os.symlink(src_dir, dst_dir, True)
         return
     if os.path.isfile(src_dir):
-        if not os.path.exists(os.path.dirname(dst_dir)):
-            os.makedirs(os.path.dirname(dst_dir))
         if opts.luajit and need_compile:
             compile_if_newer(src_dir, dst_dir, opts.luajit)
         else:

@@ -38,18 +38,18 @@ set(GAME_SOURCE)
 set(GAME_HEADER)
 
 set(GAME_RES_FOLDER
-    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
 if(APPLE OR VS)
-    ax_mark_multi_resources(cc_common_res RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
 if(ANDROID)
     list(APPEND GAME_HEADER
-         Classes/JNITest/JNITest.h
+         Source/JNITest/JNITest.h
          )
     list(APPEND GAME_SOURCE
-         Classes/JNITest/JNITest.cpp
+         Source/JNITest/JNITest.cpp
          proj.android/app/jni/main.cpp
          )
 elseif(LINUX)
@@ -62,13 +62,13 @@ elseif(WINDOWS)
          )
     list(APPEND GAME_SOURCE
          proj.win32/main.cpp
-         ${cc_common_res}
+         ${common_content_files}
          )
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
-             proj.ios/Classes/testsAppDelegate.h
-             proj.ios/Classes/RootViewController.h
+             proj.ios/Source/testsAppDelegate.h
+             proj.ios/Source/RootViewController.h
              )
 
         if (TVOS)
@@ -87,8 +87,8 @@ elseif(APPLE)
 
         list(APPEND GAME_SOURCE
              proj.ios/main.m
-             proj.ios/Classes/testsAppDelegate.mm
-             proj.ios/Classes/RootViewController.mm
+             proj.ios/Source/testsAppDelegate.mm
+             proj.ios/Source/RootViewController.mm
              proj.ios/Prefix.pch
              ${APP_UI_RES}
              )
@@ -104,421 +104,421 @@ elseif(APPLE)
              ${APP_UI_RES}
              )
     endif()
-    list(APPEND GAME_SOURCE ${cc_common_res})
+    list(APPEND GAME_SOURCE ${common_content_files})
 endif()
 
 list(APPEND GAME_HEADER
-     Classes/ActionsEaseTest/ActionsEaseTest.h
-     Classes/ParallaxTest/ParallaxTest.h
-     Classes/testBasic.h
-     Classes/ZwoptexTest/ZwoptexTest.h
-     Classes/CurlTest/CurlTest.h
-     Classes/UnitTest/UnitTest.h
-#    Classes/UnitTest/RefPtrTest.h
-     Classes/ConfigurationTest/ConfigurationTest.h
-     Classes/CurrentLanguageTest/CurrentLanguageTest.h
-     Classes/AppDelegate.h
-     Classes/LabelTest/LabelTestNew.h
-    #  Classes/LabelTest/LabelTest.h
-     Classes/Particle3DTest/Particle3DTest.h
-     Classes/VibrateTest/VibrateTest.h
-     Classes/ClippingNodeTest/ClippingNodeTest.h
-     Classes/UserDefaultTest/UserDefaultTest.h
-     Classes/ImGuiTest/ImGuiTest.h
-     Classes/tests.h
-     Classes/DataVisitorTest/DataVisitorTest.h
-     Classes/NewAudioEngineTest/NewAudioEngineTest.h
-     Classes/BugsTest/Bug-422.h
-     Classes/BugsTest/Bug-CCDrawNode.h
-     Classes/BugsTest/BugsTest.h
-     Classes/BugsTest/Bug-12847.h
-     Classes/BugsTest/Bug-899.h
-     Classes/BugsTest/Bug-1159.h
-     Classes/BugsTest/Bug-350.h
-     Classes/BugsTest/Bug-15594.h
-     Classes/BugsTest/Bug-914.h
-     Classes/BugsTest/Bug-624.h
-     Classes/BugsTest/Bug-458/QuestionContainerSprite.h
-     Classes/BugsTest/Bug-458/Bug-458.h
-     Classes/BugsTest/Bug-886.h
-     Classes/BugsTest/Bug-Child.h
-     Classes/BugsTest/Bug-15776.h
-     Classes/BugsTest/Bug-1174.h
-     Classes/ActionsTest/ActionsTest.h
-     Classes/TouchesTest/TouchesTest.h
-     Classes/TouchesTest/Ball.h
-     Classes/TouchesTest/Paddle.h
-     Classes/ActionManagerTest/ActionManagerTest.h
-     Classes/ClickAndMoveTest/ClickAndMoveTest.h
-     Classes/MaterialSystemTest/MaterialSystemTest.h
-     Classes/IntervalTest/IntervalTest.h
-     Classes/TileMapTest/TileMapTest2.h
-     # Classes/TileMapTest/TileMapTest.h
-     Classes/NewEventDispatcherTest/NewEventDispatcherTest.h
-     Classes/ActionsProgressTest/ActionsProgressTest.h
-     Classes/RotateWorldTest/RotateWorldTest.h
-     Classes/Camera3DTest/Camera3DTest.h
-     Classes/TextInputTest/TextInputTest.h
-     Classes/Texture2dTest/Texture2dTest.h
-     Classes/TerrainTest/TerrainTest.h
-     Classes/controller.h
-     Classes/TransitionsTest/TransitionsTest.h
-     Classes/TextureCacheTest/TextureCacheTest.h
-     Classes/MotionStreakTest/MotionStreakTest.h
-     Classes/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.h
-     Classes/ExtensionsTest/ExtensionsTest.h
-     Classes/ExtensionsTest/TableViewTest/CustomTableViewCell.h
-     Classes/ExtensionsTest/TableViewTest/TableViewTestScene.h
-     Classes/MeshRendererTest/MeshRendererTest.h
-     Classes/MeshRendererTest/DrawNode3D.h
-     Classes/BaseTest.h
-     Classes/SceneTest/SceneTest.h
-     Classes/ReleasePoolTest/ReleasePoolTest.h
-     Classes/InputTest/MouseTest.h
-     Classes/SpineTest/SpineTest.h
-    #  Classes/Scene3DTest/Scene3DTest.h
-     Classes/ParticleTest/ParticleTest.h
-     Classes/EffectsTest/EffectsTest.h
-     Classes/UITest/UITest.h
-     Classes/UITest/CocoStudioGUITest/UIScrollViewTest/UIScrollViewTest.h
-     Classes/UITest/CocoStudioGUITest/CocosGUIScene.h
-     Classes/UITest/CocoStudioGUITest/UITabControlTest/UITabControlTest.h
-     Classes/UITest/CocoStudioGUITest/UITextFieldTest/UITextFieldTest.h
-     Classes/UITest/CocoStudioGUITest/UITextBMFontTest/UITextBMFontTest.h
-     Classes/UITest/CocoStudioGUITest/UIImageViewTest/UIImageViewTest.h
-     Classes/UITest/CocoStudioGUITest/UISliderTest/UISliderTest.h
-     Classes/UITest/CocoStudioGUITest/UILoadingBarTest/UILoadingBarTest.h
-     Classes/UITest/CocoStudioGUITest/UIEditBoxTest.h
-     Classes/UITest/CocoStudioGUITest/UIRichTextTest/UIRichTextTest.h
-     Classes/UITest/CocoStudioGUITest/UIScene.h
-     Classes/UITest/CocoStudioGUITest/UIPageViewTest/UIPageViewTest.h
-     Classes/UITest/CocoStudioGUITest/UIButtonTest/UIButtonTest.h
-     Classes/UITest/CocoStudioGUITest/UIScale9SpriteTest.h
-     Classes/UITest/CocoStudioGUITest/UIWidgetAddNodeTest/UIWidgetAddNodeTest.h
-     Classes/UITest/CocoStudioGUITest/UIListViewTest/UIListViewTest.h
-     Classes/UITest/CocoStudioGUITest/UISceneManager.h
-     Classes/UITest/CocoStudioGUITest/UIRadioButtonTest/UIRadioButtonTest.h
-     Classes/UITest/CocoStudioGUITest/UILayoutTest/UILayoutTest.h
-     Classes/UITest/CocoStudioGUITest/UITextAtlasTest/UITextAtlasTest.h
-     Classes/UITest/CocoStudioGUITest/UICheckBoxTest/UICheckBoxTest.h
-     Classes/UITest/CocoStudioGUITest/UIFocusTest/UIFocusTest.h
-     Classes/UITest/CocoStudioGUITest/UITextTest/UITextTest.h
-     Classes/DrawPrimitivesTest/DrawPrimitivesTest.h
-     Classes/BillBoardTest/BillBoardTest.h
-     Classes/SpriteFrameCacheTest/SpriteFrameCacheTest.h
-     Classes/EffectsAdvancedTest/EffectsAdvancedTest.h
-     Classes/SchedulerTest/SchedulerTest.h
-     Classes/MultiTouchTest/MultiTouchTest.h
-     Classes/testResource.h
-     Classes/ShaderTest/ShaderTest.vsh.h
-     Classes/ShaderTest/shaderTest.psh.h
-     Classes/ShaderTest/ShaderTest.h
-     Classes/ShaderTest/ShaderTest2.h
-     Classes/NewRendererTest/NewRendererTest.h
-     Classes/SpritePolygonTest/SpritePolygonTest.h
-     Classes/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.h
-     Classes/NodeTest/NodeTest.h
-     Classes/FileUtilsTest/FileUtilsTest.h
-     Classes/RenderTextureTest/RenderTextureTest.h
-     Classes/LayerTest/LayerTest.h
-     Classes/SpriteTest/SpriteTest.h
-     Classes/FontTest/FontTest.h
-     Classes/LightTest/LightTest.h
-     Classes/VisibleRect.h
-     Classes/NetworkTest/NetworkTest.h
-     Classes/NetworkTest/DownloaderTest/DownloaderTest.h
-     Classes/NetworkTest/HttpClientTest/HttpClientTest.h
-     Classes/OpenURLTest/OpenURLTest.h
-     Classes/ConsoleTest/ConsoleTest.h
-     Classes/MenuTest/MenuTest.h
-     Classes/ZipTest/ZipTests.h
+     Source/ActionsEaseTest/ActionsEaseTest.h
+     Source/ParallaxTest/ParallaxTest.h
+     Source/testBasic.h
+     Source/ZwoptexTest/ZwoptexTest.h
+     Source/CurlTest/CurlTest.h
+     Source/UnitTest/UnitTest.h
+#    Source/UnitTest/RefPtrTest.h
+     Source/ConfigurationTest/ConfigurationTest.h
+     Source/CurrentLanguageTest/CurrentLanguageTest.h
+     Source/AppDelegate.h
+     Source/LabelTest/LabelTestNew.h
+    #  Source/LabelTest/LabelTest.h
+     Source/Particle3DTest/Particle3DTest.h
+     Source/VibrateTest/VibrateTest.h
+     Source/ClippingNodeTest/ClippingNodeTest.h
+     Source/UserDefaultTest/UserDefaultTest.h
+     Source/ImGuiTest/ImGuiTest.h
+     Source/tests.h
+     Source/DataVisitorTest/DataVisitorTest.h
+     Source/NewAudioEngineTest/NewAudioEngineTest.h
+     Source/BugsTest/Bug-422.h
+     Source/BugsTest/Bug-CCDrawNode.h
+     Source/BugsTest/BugsTest.h
+     Source/BugsTest/Bug-12847.h
+     Source/BugsTest/Bug-899.h
+     Source/BugsTest/Bug-1159.h
+     Source/BugsTest/Bug-350.h
+     Source/BugsTest/Bug-15594.h
+     Source/BugsTest/Bug-914.h
+     Source/BugsTest/Bug-624.h
+     Source/BugsTest/Bug-458/QuestionContainerSprite.h
+     Source/BugsTest/Bug-458/Bug-458.h
+     Source/BugsTest/Bug-886.h
+     Source/BugsTest/Bug-Child.h
+     Source/BugsTest/Bug-15776.h
+     Source/BugsTest/Bug-1174.h
+     Source/ActionsTest/ActionsTest.h
+     Source/TouchesTest/TouchesTest.h
+     Source/TouchesTest/Ball.h
+     Source/TouchesTest/Paddle.h
+     Source/ActionManagerTest/ActionManagerTest.h
+     Source/ClickAndMoveTest/ClickAndMoveTest.h
+     Source/MaterialSystemTest/MaterialSystemTest.h
+     Source/IntervalTest/IntervalTest.h
+     Source/TileMapTest/TileMapTest2.h
+     # Source/TileMapTest/TileMapTest.h
+     Source/NewEventDispatcherTest/NewEventDispatcherTest.h
+     Source/ActionsProgressTest/ActionsProgressTest.h
+     Source/RotateWorldTest/RotateWorldTest.h
+     Source/Camera3DTest/Camera3DTest.h
+     Source/TextInputTest/TextInputTest.h
+     Source/Texture2dTest/Texture2dTest.h
+     Source/TerrainTest/TerrainTest.h
+     Source/controller.h
+     Source/TransitionsTest/TransitionsTest.h
+     Source/TextureCacheTest/TextureCacheTest.h
+     Source/MotionStreakTest/MotionStreakTest.h
+     Source/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.h
+     Source/ExtensionsTest/ExtensionsTest.h
+     Source/ExtensionsTest/TableViewTest/CustomTableViewCell.h
+     Source/ExtensionsTest/TableViewTest/TableViewTestScene.h
+     Source/MeshRendererTest/MeshRendererTest.h
+     Source/MeshRendererTest/DrawNode3D.h
+     Source/BaseTest.h
+     Source/SceneTest/SceneTest.h
+     Source/ReleasePoolTest/ReleasePoolTest.h
+     Source/InputTest/MouseTest.h
+     Source/SpineTest/SpineTest.h
+    #  Source/Scene3DTest/Scene3DTest.h
+     Source/ParticleTest/ParticleTest.h
+     Source/EffectsTest/EffectsTest.h
+     Source/UITest/UITest.h
+     Source/UITest/CocoStudioGUITest/UIScrollViewTest/UIScrollViewTest.h
+     Source/UITest/CocoStudioGUITest/CocosGUIScene.h
+     Source/UITest/CocoStudioGUITest/UITabControlTest/UITabControlTest.h
+     Source/UITest/CocoStudioGUITest/UITextFieldTest/UITextFieldTest.h
+     Source/UITest/CocoStudioGUITest/UITextBMFontTest/UITextBMFontTest.h
+     Source/UITest/CocoStudioGUITest/UIImageViewTest/UIImageViewTest.h
+     Source/UITest/CocoStudioGUITest/UISliderTest/UISliderTest.h
+     Source/UITest/CocoStudioGUITest/UILoadingBarTest/UILoadingBarTest.h
+     Source/UITest/CocoStudioGUITest/UIEditBoxTest.h
+     Source/UITest/CocoStudioGUITest/UIRichTextTest/UIRichTextTest.h
+     Source/UITest/CocoStudioGUITest/UIScene.h
+     Source/UITest/CocoStudioGUITest/UIPageViewTest/UIPageViewTest.h
+     Source/UITest/CocoStudioGUITest/UIButtonTest/UIButtonTest.h
+     Source/UITest/CocoStudioGUITest/UIScale9SpriteTest.h
+     Source/UITest/CocoStudioGUITest/UIWidgetAddNodeTest/UIWidgetAddNodeTest.h
+     Source/UITest/CocoStudioGUITest/UIListViewTest/UIListViewTest.h
+     Source/UITest/CocoStudioGUITest/UISceneManager.h
+     Source/UITest/CocoStudioGUITest/UIRadioButtonTest/UIRadioButtonTest.h
+     Source/UITest/CocoStudioGUITest/UILayoutTest/UILayoutTest.h
+     Source/UITest/CocoStudioGUITest/UITextAtlasTest/UITextAtlasTest.h
+     Source/UITest/CocoStudioGUITest/UICheckBoxTest/UICheckBoxTest.h
+     Source/UITest/CocoStudioGUITest/UIFocusTest/UIFocusTest.h
+     Source/UITest/CocoStudioGUITest/UITextTest/UITextTest.h
+     Source/DrawPrimitivesTest/DrawPrimitivesTest.h
+     Source/BillBoardTest/BillBoardTest.h
+     Source/SpriteFrameCacheTest/SpriteFrameCacheTest.h
+     Source/EffectsAdvancedTest/EffectsAdvancedTest.h
+     Source/SchedulerTest/SchedulerTest.h
+     Source/MultiTouchTest/MultiTouchTest.h
+     Source/testResource.h
+     Source/ShaderTest/ShaderTest.vsh.h
+     Source/ShaderTest/shaderTest.psh.h
+     Source/ShaderTest/ShaderTest.h
+     Source/ShaderTest/ShaderTest2.h
+     Source/NewRendererTest/NewRendererTest.h
+     Source/SpritePolygonTest/SpritePolygonTest.h
+     Source/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.h
+     Source/NodeTest/NodeTest.h
+     Source/FileUtilsTest/FileUtilsTest.h
+     Source/RenderTextureTest/RenderTextureTest.h
+     Source/LayerTest/LayerTest.h
+     Source/SpriteTest/SpriteTest.h
+     Source/FontTest/FontTest.h
+     Source/LightTest/LightTest.h
+     Source/VisibleRect.h
+     Source/NetworkTest/NetworkTest.h
+     Source/NetworkTest/DownloaderTest/DownloaderTest.h
+     Source/NetworkTest/HttpClientTest/HttpClientTest.h
+     Source/OpenURLTest/OpenURLTest.h
+     Source/ConsoleTest/ConsoleTest.h
+     Source/MenuTest/MenuTest.h
+     Source/ZipTest/ZipTests.h
      )
 
 list(APPEND GAME_SOURCE
-     Classes/ActionManagerTest/ActionManagerTest.cpp
-     Classes/ActionsEaseTest/ActionsEaseTest.cpp
-     Classes/ActionsProgressTest/ActionsProgressTest.cpp
-     Classes/ActionsTest/ActionsTest.cpp
-     Classes/AppDelegate.cpp
-     Classes/BaseTest.cpp
-     Classes/BillBoardTest/BillBoardTest.cpp
-     Classes/BugsTest/Bug-CCDrawNode.cpp
-     Classes/BugsTest/Bug-1159.cpp
-     Classes/BugsTest/Bug-1174.cpp
-     Classes/BugsTest/Bug-350.cpp
-     Classes/BugsTest/Bug-422.cpp
-     Classes/BugsTest/Bug-458/Bug-458.cpp
-     Classes/BugsTest/Bug-458/QuestionContainerSprite.cpp
-     Classes/BugsTest/Bug-624.cpp
-     Classes/BugsTest/Bug-886.cpp
-     Classes/BugsTest/Bug-899.cpp
-     Classes/BugsTest/Bug-914.cpp
-     Classes/BugsTest/Bug-12847.cpp
-     Classes/BugsTest/Bug-15594.cpp
-     Classes/BugsTest/Bug-15776.cpp
-     Classes/BugsTest/Bug-Child.cpp
-     Classes/BugsTest/BugsTest.cpp
-     Classes/Camera3DTest/Camera3DTest.cpp
-     Classes/ClickAndMoveTest/ClickAndMoveTest.cpp
-     Classes/ClippingNodeTest/ClippingNodeTest.cpp
-     Classes/ConfigurationTest/ConfigurationTest.cpp
-     Classes/ConsoleTest/ConsoleTest.cpp
-     Classes/CurlTest/CurlTest.cpp
-     Classes/CurrentLanguageTest/CurrentLanguageTest.cpp
-     Classes/DataVisitorTest/DataVisitorTest.cpp
-     Classes/NetworkTest/NetworkTest.cpp
-     Classes/NetworkTest/DownloaderTest/DownloaderTest.cpp
-     Classes/NetworkTest/HttpClientTest/HttpClientTest.cpp
-     Classes/DrawPrimitivesTest/DrawPrimitivesTest.cpp
-     Classes/EffectsAdvancedTest/EffectsAdvancedTest.cpp
-     Classes/EffectsTest/EffectsTest.cpp
-     Classes/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.cpp
-     Classes/ExtensionsTest/ExtensionsTest.cpp
-     Classes/ExtensionsTest/TableViewTest/CustomTableViewCell.cpp
-     Classes/ExtensionsTest/TableViewTest/TableViewTestScene.cpp
-     Classes/FileUtilsTest/FileUtilsTest.cpp
-     Classes/FontTest/FontTest.cpp
-     Classes/InputTest/MouseTest.cpp
-     Classes/IntervalTest/IntervalTest.cpp
-    #  Classes/LabelTest/LabelTest.cpp
-     Classes/LabelTest/LabelTestNew.cpp
-     Classes/LayerTest/LayerTest.cpp
-     Classes/LightTest/LightTest.cpp
-     Classes/MaterialSystemTest/MaterialSystemTest.cpp
-     Classes/MenuTest/MenuTest.cpp
-     Classes/MotionStreakTest/MotionStreakTest.cpp
-     Classes/MultiTouchTest/MultiTouchTest.cpp
-     Classes/NewAudioEngineTest/NewAudioEngineTest.cpp
-     Classes/NewEventDispatcherTest/NewEventDispatcherTest.cpp
-     Classes/NewRendererTest/NewRendererTest.cpp
-     Classes/NodeTest/NodeTest.cpp
-     Classes/OpenURLTest/OpenURLTest.cpp
-     Classes/ParallaxTest/ParallaxTest.cpp
-     Classes/Particle3DTest/Particle3DTest.cpp
-     Classes/ParticleTest/ParticleTest.cpp
-     Classes/ReleasePoolTest/ReleasePoolTest.cpp
-     Classes/RenderTextureTest/RenderTextureTest.cpp
-     Classes/RotateWorldTest/RotateWorldTest.cpp
-     Classes/SceneTest/SceneTest.cpp
-     Classes/SchedulerTest/SchedulerTest.cpp
-     Classes/ShaderTest/ShaderTest.cpp
-     Classes/ShaderTest/ShaderTest2.cpp
-     Classes/SpineTest/SpineTest.cpp
-    #  Classes/Scene3DTest/Scene3DTest.cpp
-     Classes/MeshRendererTest/DrawNode3D.cpp
-     Classes/MeshRendererTest/MeshRendererTest.cpp
-     Classes/SpritePolygonTest/SpritePolygonTest.cpp
-     Classes/SpriteTest/SpriteTest.cpp
-     Classes/TerrainTest/TerrainTest.cpp
-     Classes/TextInputTest/TextInputTest.cpp
-     Classes/Texture2dTest/Texture2dTest.cpp
-     Classes/TextureCacheTest/TextureCacheTest.cpp
-     Classes/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.cpp
-     #Classes/TileMapTest/TileMapTest.cpp
-     Classes/TileMapTest/TileMapTest2.cpp
-     Classes/TouchesTest/Ball.cpp
-     Classes/TouchesTest/Paddle.cpp
-     Classes/TouchesTest/TouchesTest.cpp
-     Classes/TransitionsTest/TransitionsTest.cpp
-     Classes/UITest/CocoStudioGUITest/CocosGUIScene.cpp
-     Classes/UITest/CocoStudioGUITest/UIButtonTest/UIButtonTest.cpp
-     Classes/UITest/CocoStudioGUITest/UICheckBoxTest/UICheckBoxTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIRadioButtonTest/UIRadioButtonTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIFocusTest/UIFocusTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIImageViewTest/UIImageViewTest.cpp
-     Classes/UITest/CocoStudioGUITest/UILayoutTest/UILayoutTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIListViewTest/UIListViewTest.cpp
-     Classes/UITest/CocoStudioGUITest/UILoadingBarTest/UILoadingBarTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIPageViewTest/UIPageViewTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIRichTextTest/UIRichTextTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIScale9SpriteTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIScene.cpp
-     Classes/UITest/CocoStudioGUITest/UISceneManager.cpp
-     Classes/UITest/CocoStudioGUITest/UIScrollViewTest/UIScrollViewTest.cpp
-     Classes/UITest/CocoStudioGUITest/UISliderTest/UISliderTest.cpp
-     Classes/UITest/CocoStudioGUITest/UITextAtlasTest/UITextAtlasTest.cpp
-     Classes/UITest/CocoStudioGUITest/UITextBMFontTest/UITextBMFontTest.cpp
-     Classes/UITest/CocoStudioGUITest/UITextFieldTest/UITextFieldTest.cpp
-     Classes/UITest/CocoStudioGUITest/UITextTest/UITextTest.cpp
-     Classes/UITest/CocoStudioGUITest/UIWidgetAddNodeTest/UIWidgetAddNodeTest.cpp
-     Classes/UITest/CocoStudioGUITest/UITabControlTest/UITabControlTest.cpp
-     Classes/UITest/UITest.cpp
-#     Classes/UnitTest/RefPtrTest.cpp
-     Classes/UnitTest/UnitTest.cpp
-     Classes/UserDefaultTest/UserDefaultTest.cpp
-     Classes/ImGuiTest/ImGuiTest.cpp
-     Classes/VisibleRect.cpp
-     Classes/VibrateTest/VibrateTest.cpp
-     Classes/ZwoptexTest/ZwoptexTest.cpp
-     Classes/SpriteFrameCacheTest/SpriteFrameCacheTest.cpp
-     Classes/controller.cpp
-     Classes/ZipTest/ZipTests.cpp
+     Source/ActionManagerTest/ActionManagerTest.cpp
+     Source/ActionsEaseTest/ActionsEaseTest.cpp
+     Source/ActionsProgressTest/ActionsProgressTest.cpp
+     Source/ActionsTest/ActionsTest.cpp
+     Source/AppDelegate.cpp
+     Source/BaseTest.cpp
+     Source/BillBoardTest/BillBoardTest.cpp
+     Source/BugsTest/Bug-CCDrawNode.cpp
+     Source/BugsTest/Bug-1159.cpp
+     Source/BugsTest/Bug-1174.cpp
+     Source/BugsTest/Bug-350.cpp
+     Source/BugsTest/Bug-422.cpp
+     Source/BugsTest/Bug-458/Bug-458.cpp
+     Source/BugsTest/Bug-458/QuestionContainerSprite.cpp
+     Source/BugsTest/Bug-624.cpp
+     Source/BugsTest/Bug-886.cpp
+     Source/BugsTest/Bug-899.cpp
+     Source/BugsTest/Bug-914.cpp
+     Source/BugsTest/Bug-12847.cpp
+     Source/BugsTest/Bug-15594.cpp
+     Source/BugsTest/Bug-15776.cpp
+     Source/BugsTest/Bug-Child.cpp
+     Source/BugsTest/BugsTest.cpp
+     Source/Camera3DTest/Camera3DTest.cpp
+     Source/ClickAndMoveTest/ClickAndMoveTest.cpp
+     Source/ClippingNodeTest/ClippingNodeTest.cpp
+     Source/ConfigurationTest/ConfigurationTest.cpp
+     Source/ConsoleTest/ConsoleTest.cpp
+     Source/CurlTest/CurlTest.cpp
+     Source/CurrentLanguageTest/CurrentLanguageTest.cpp
+     Source/DataVisitorTest/DataVisitorTest.cpp
+     Source/NetworkTest/NetworkTest.cpp
+     Source/NetworkTest/DownloaderTest/DownloaderTest.cpp
+     Source/NetworkTest/HttpClientTest/HttpClientTest.cpp
+     Source/DrawPrimitivesTest/DrawPrimitivesTest.cpp
+     Source/EffectsAdvancedTest/EffectsAdvancedTest.cpp
+     Source/EffectsTest/EffectsTest.cpp
+     Source/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.cpp
+     Source/ExtensionsTest/ExtensionsTest.cpp
+     Source/ExtensionsTest/TableViewTest/CustomTableViewCell.cpp
+     Source/ExtensionsTest/TableViewTest/TableViewTestScene.cpp
+     Source/FileUtilsTest/FileUtilsTest.cpp
+     Source/FontTest/FontTest.cpp
+     Source/InputTest/MouseTest.cpp
+     Source/IntervalTest/IntervalTest.cpp
+    #  Source/LabelTest/LabelTest.cpp
+     Source/LabelTest/LabelTestNew.cpp
+     Source/LayerTest/LayerTest.cpp
+     Source/LightTest/LightTest.cpp
+     Source/MaterialSystemTest/MaterialSystemTest.cpp
+     Source/MenuTest/MenuTest.cpp
+     Source/MotionStreakTest/MotionStreakTest.cpp
+     Source/MultiTouchTest/MultiTouchTest.cpp
+     Source/NewAudioEngineTest/NewAudioEngineTest.cpp
+     Source/NewEventDispatcherTest/NewEventDispatcherTest.cpp
+     Source/NewRendererTest/NewRendererTest.cpp
+     Source/NodeTest/NodeTest.cpp
+     Source/OpenURLTest/OpenURLTest.cpp
+     Source/ParallaxTest/ParallaxTest.cpp
+     Source/Particle3DTest/Particle3DTest.cpp
+     Source/ParticleTest/ParticleTest.cpp
+     Source/ReleasePoolTest/ReleasePoolTest.cpp
+     Source/RenderTextureTest/RenderTextureTest.cpp
+     Source/RotateWorldTest/RotateWorldTest.cpp
+     Source/SceneTest/SceneTest.cpp
+     Source/SchedulerTest/SchedulerTest.cpp
+     Source/ShaderTest/ShaderTest.cpp
+     Source/ShaderTest/ShaderTest2.cpp
+     Source/SpineTest/SpineTest.cpp
+    #  Source/Scene3DTest/Scene3DTest.cpp
+     Source/MeshRendererTest/DrawNode3D.cpp
+     Source/MeshRendererTest/MeshRendererTest.cpp
+     Source/SpritePolygonTest/SpritePolygonTest.cpp
+     Source/SpriteTest/SpriteTest.cpp
+     Source/TerrainTest/TerrainTest.cpp
+     Source/TextInputTest/TextInputTest.cpp
+     Source/Texture2dTest/Texture2dTest.cpp
+     Source/TextureCacheTest/TextureCacheTest.cpp
+     Source/TexturePackerEncryptionTest/TextureAtlasEncryptionTest.cpp
+     #Source/TileMapTest/TileMapTest.cpp
+     Source/TileMapTest/TileMapTest2.cpp
+     Source/TouchesTest/Ball.cpp
+     Source/TouchesTest/Paddle.cpp
+     Source/TouchesTest/TouchesTest.cpp
+     Source/TransitionsTest/TransitionsTest.cpp
+     Source/UITest/CocoStudioGUITest/CocosGUIScene.cpp
+     Source/UITest/CocoStudioGUITest/UIButtonTest/UIButtonTest.cpp
+     Source/UITest/CocoStudioGUITest/UICheckBoxTest/UICheckBoxTest.cpp
+     Source/UITest/CocoStudioGUITest/UIRadioButtonTest/UIRadioButtonTest.cpp
+     Source/UITest/CocoStudioGUITest/UIFocusTest/UIFocusTest.cpp
+     Source/UITest/CocoStudioGUITest/UIImageViewTest/UIImageViewTest.cpp
+     Source/UITest/CocoStudioGUITest/UILayoutTest/UILayoutTest.cpp
+     Source/UITest/CocoStudioGUITest/UIListViewTest/UIListViewTest.cpp
+     Source/UITest/CocoStudioGUITest/UILoadingBarTest/UILoadingBarTest.cpp
+     Source/UITest/CocoStudioGUITest/UIPageViewTest/UIPageViewTest.cpp
+     Source/UITest/CocoStudioGUITest/UIRichTextTest/UIRichTextTest.cpp
+     Source/UITest/CocoStudioGUITest/UIScale9SpriteTest.cpp
+     Source/UITest/CocoStudioGUITest/UIScene.cpp
+     Source/UITest/CocoStudioGUITest/UISceneManager.cpp
+     Source/UITest/CocoStudioGUITest/UIScrollViewTest/UIScrollViewTest.cpp
+     Source/UITest/CocoStudioGUITest/UISliderTest/UISliderTest.cpp
+     Source/UITest/CocoStudioGUITest/UITextAtlasTest/UITextAtlasTest.cpp
+     Source/UITest/CocoStudioGUITest/UITextBMFontTest/UITextBMFontTest.cpp
+     Source/UITest/CocoStudioGUITest/UITextFieldTest/UITextFieldTest.cpp
+     Source/UITest/CocoStudioGUITest/UITextTest/UITextTest.cpp
+     Source/UITest/CocoStudioGUITest/UIWidgetAddNodeTest/UIWidgetAddNodeTest.cpp
+     Source/UITest/CocoStudioGUITest/UITabControlTest/UITabControlTest.cpp
+     Source/UITest/UITest.cpp
+#     Source/UnitTest/RefPtrTest.cpp
+     Source/UnitTest/UnitTest.cpp
+     Source/UserDefaultTest/UserDefaultTest.cpp
+     Source/ImGuiTest/ImGuiTest.cpp
+     Source/VisibleRect.cpp
+     Source/VibrateTest/VibrateTest.cpp
+     Source/ZwoptexTest/ZwoptexTest.cpp
+     Source/SpriteFrameCacheTest/SpriteFrameCacheTest.cpp
+     Source/controller.cpp
+     Source/ZipTest/ZipTests.cpp
      )
 
 if(ANDROID OR IOS OR WIN32)
     list(APPEND GAME_HEADER
-             Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
+             Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
     list(APPEND GAME_SOURCE
-             Classes/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp)
+             Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp)
 endif()
 
 if(ANDROID OR IOS)
     list(APPEND GAME_HEADER
-         Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
+         Source/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
          )
     list(APPEND GAME_SOURCE
-         Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.cpp
+         Source/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.cpp
          )
 endif()
 
 if(WINDOWS OR MACOSX OR LINUX)
     list(APPEND GAME_HEADER
-         Classes/WindowTest/WindowTest.h
-         Classes/BugsTest/Bug-14327.h
+         Source/WindowTest/WindowTest.h
+         Source/BugsTest/Bug-14327.h
          )
     list(APPEND GAME_SOURCE
-         Classes/WindowTest/WindowTest.cpp
-         Classes/BugsTest/Bug-14327.cpp
+         Source/WindowTest/WindowTest.cpp
+         Source/BugsTest/Bug-14327.cpp
          )
 endif()
 
 if(WINDOWS)
     list(APPEND GAME_HEADER
-         Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
+         Source/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
          )
     list(APPEND GAME_SOURCE
-         Classes/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.cpp
+         Source/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.cpp
          )
 endif()
 
 list(APPEND GAME_HEADER
-   Classes/Box2DTest/Box2dTest.h
+   Source/Box2DTest/Box2dTest.h
    )
 
 list(APPEND GAME_SOURCE
-   Classes/Box2DTest/Box2dTest.cpp
+   Source/Box2DTest/Box2dTest.cpp
 )
 
 if(WINDOWS OR MACOSX OR LINUX)
     list(APPEND GAME_HEADER
-        Classes/Box2DTestBed/tests/test.h
-        Classes/Box2DTestBed/tests/settings.h
-        Classes/Box2DTestBed/Box2DTestBed.h
+        Source/Box2DTestBed/tests/test.h
+        Source/Box2DTestBed/tests/settings.h
+        Source/Box2DTestBed/Box2DTestBed.h
      )
 
    list(APPEND GAME_SOURCE
-    Classes/Box2DTestBed/Box2DTestBed.cpp
-    Classes/Box2DTestBed/test.cpp
-    Classes/Box2DTestBed/tests/add_pair.cpp
-    Classes/Box2DTestBed/tests/apply_force.cpp
-    Classes/Box2DTestBed/tests/body_types.cpp
-    Classes/Box2DTestBed/tests/box_stack.cpp
-    Classes/Box2DTestBed/tests/breakable.cpp
-    Classes/Box2DTestBed/tests/bridge.cpp
-    Classes/Box2DTestBed/tests/bullet_test.cpp
-    Classes/Box2DTestBed/tests/cantilever.cpp
-    Classes/Box2DTestBed/tests/car.cpp
-    Classes/Box2DTestBed/tests/chain.cpp
-    Classes/Box2DTestBed/tests/chain_problem.cpp
-    Classes/Box2DTestBed/tests/character_collision.cpp
-    Classes/Box2DTestBed/tests/circle_stack.cpp
-    Classes/Box2DTestBed/tests/collision_filtering.cpp
-    Classes/Box2DTestBed/tests/collision_processing.cpp
-    Classes/Box2DTestBed/tests/compound_shapes.cpp
-    Classes/Box2DTestBed/tests/confined.cpp
-    Classes/Box2DTestBed/tests/continuous_test.cpp
-    Classes/Box2DTestBed/tests/convex_hull.cpp
-    Classes/Box2DTestBed/tests/conveyor_belt.cpp
-    Classes/Box2DTestBed/tests/distance_joint.cpp
-    Classes/Box2DTestBed/tests/distance_test.cpp
-    Classes/Box2DTestBed/tests/dominos.cpp
-    Classes/Box2DTestBed/tests/dump_loader.cpp
-    Classes/Box2DTestBed/tests/dynamic_tree.cpp
-    Classes/Box2DTestBed/tests/edge_shapes.cpp
-    Classes/Box2DTestBed/tests/edge_test.cpp
-    Classes/Box2DTestBed/tests/friction.cpp
-    Classes/Box2DTestBed/tests/gear_joint.cpp
-    Classes/Box2DTestBed/tests/heavy1.cpp
-    Classes/Box2DTestBed/tests/heavy2.cpp
-    Classes/Box2DTestBed/tests/mobile_balanced.cpp
-    Classes/Box2DTestBed/tests/mobile_unbalanced.cpp
-    Classes/Box2DTestBed/tests/motor_joint.cpp
-    Classes/Box2DTestBed/tests/pinball.cpp
-    Classes/Box2DTestBed/tests/platformer.cpp
-    Classes/Box2DTestBed/tests/polygon_collision.cpp
-    Classes/Box2DTestBed/tests/polygon_shapes.cpp
-    Classes/Box2DTestBed/tests/prismatic_joint.cpp
-    Classes/Box2DTestBed/tests/pulley_joint.cpp
-    Classes/Box2DTestBed/tests/pyramid.cpp
-    Classes/Box2DTestBed/tests/ray_cast.cpp
-    Classes/Box2DTestBed/tests/restitution.cpp
-    Classes/Box2DTestBed/tests/revolute_joint.cpp
-    Classes/Box2DTestBed/tests/rope.cpp
-    Classes/Box2DTestBed/tests/sensor.cpp
-    Classes/Box2DTestBed/tests/shape_cast.cpp
-    Classes/Box2DTestBed/tests/shape_editing.cpp
-    Classes/Box2DTestBed/tests/skier.cpp
-    Classes/Box2DTestBed/tests/slider_crank_1.cpp
-    Classes/Box2DTestBed/tests/slider_crank_2.cpp
-    Classes/Box2DTestBed/tests/theo_jansen.cpp
-    Classes/Box2DTestBed/tests/tiles.cpp
-    Classes/Box2DTestBed/tests/time_of_impact.cpp
-    Classes/Box2DTestBed/tests/tumbler.cpp
-    Classes/Box2DTestBed/tests/web.cpp
-    Classes/Box2DTestBed/tests/wheel_joint.cpp
-    Classes/Box2DTestBed/tests/wrecking_ball.cpp
+    Source/Box2DTestBed/Box2DTestBed.cpp
+    Source/Box2DTestBed/test.cpp
+    Source/Box2DTestBed/tests/add_pair.cpp
+    Source/Box2DTestBed/tests/apply_force.cpp
+    Source/Box2DTestBed/tests/body_types.cpp
+    Source/Box2DTestBed/tests/box_stack.cpp
+    Source/Box2DTestBed/tests/breakable.cpp
+    Source/Box2DTestBed/tests/bridge.cpp
+    Source/Box2DTestBed/tests/bullet_test.cpp
+    Source/Box2DTestBed/tests/cantilever.cpp
+    Source/Box2DTestBed/tests/car.cpp
+    Source/Box2DTestBed/tests/chain.cpp
+    Source/Box2DTestBed/tests/chain_problem.cpp
+    Source/Box2DTestBed/tests/character_collision.cpp
+    Source/Box2DTestBed/tests/circle_stack.cpp
+    Source/Box2DTestBed/tests/collision_filtering.cpp
+    Source/Box2DTestBed/tests/collision_processing.cpp
+    Source/Box2DTestBed/tests/compound_shapes.cpp
+    Source/Box2DTestBed/tests/confined.cpp
+    Source/Box2DTestBed/tests/continuous_test.cpp
+    Source/Box2DTestBed/tests/convex_hull.cpp
+    Source/Box2DTestBed/tests/conveyor_belt.cpp
+    Source/Box2DTestBed/tests/distance_joint.cpp
+    Source/Box2DTestBed/tests/distance_test.cpp
+    Source/Box2DTestBed/tests/dominos.cpp
+    Source/Box2DTestBed/tests/dump_loader.cpp
+    Source/Box2DTestBed/tests/dynamic_tree.cpp
+    Source/Box2DTestBed/tests/edge_shapes.cpp
+    Source/Box2DTestBed/tests/edge_test.cpp
+    Source/Box2DTestBed/tests/friction.cpp
+    Source/Box2DTestBed/tests/gear_joint.cpp
+    Source/Box2DTestBed/tests/heavy1.cpp
+    Source/Box2DTestBed/tests/heavy2.cpp
+    Source/Box2DTestBed/tests/mobile_balanced.cpp
+    Source/Box2DTestBed/tests/mobile_unbalanced.cpp
+    Source/Box2DTestBed/tests/motor_joint.cpp
+    Source/Box2DTestBed/tests/pinball.cpp
+    Source/Box2DTestBed/tests/platformer.cpp
+    Source/Box2DTestBed/tests/polygon_collision.cpp
+    Source/Box2DTestBed/tests/polygon_shapes.cpp
+    Source/Box2DTestBed/tests/prismatic_joint.cpp
+    Source/Box2DTestBed/tests/pulley_joint.cpp
+    Source/Box2DTestBed/tests/pyramid.cpp
+    Source/Box2DTestBed/tests/ray_cast.cpp
+    Source/Box2DTestBed/tests/restitution.cpp
+    Source/Box2DTestBed/tests/revolute_joint.cpp
+    Source/Box2DTestBed/tests/rope.cpp
+    Source/Box2DTestBed/tests/sensor.cpp
+    Source/Box2DTestBed/tests/shape_cast.cpp
+    Source/Box2DTestBed/tests/shape_editing.cpp
+    Source/Box2DTestBed/tests/skier.cpp
+    Source/Box2DTestBed/tests/slider_crank_1.cpp
+    Source/Box2DTestBed/tests/slider_crank_2.cpp
+    Source/Box2DTestBed/tests/theo_jansen.cpp
+    Source/Box2DTestBed/tests/tiles.cpp
+    Source/Box2DTestBed/tests/time_of_impact.cpp
+    Source/Box2DTestBed/tests/tumbler.cpp
+    Source/Box2DTestBed/tests/web.cpp
+    Source/Box2DTestBed/tests/wheel_joint.cpp
+    Source/Box2DTestBed/tests/wrecking_ball.cpp
      )
 endif()
 
 list(APPEND GAME_HEADER
-     Classes/Physics3DTest/Physics3DTest.h
-     Classes/NavMeshTest/NavMeshTest.h
+     Source/Physics3DTest/Physics3DTest.h
+     Source/NavMeshTest/NavMeshTest.h
      )
 list(APPEND GAME_SOURCE
-     Classes/Physics3DTest/Physics3DTest.cpp
-     Classes/NavMeshTest/NavMeshTest.cpp
+     Source/Physics3DTest/Physics3DTest.cpp
+     Source/NavMeshTest/NavMeshTest.cpp
      )
 list(APPEND GAME_HEADER
-     Classes/PhysicsTest/PhysicsTest.h
-     Classes/ChipmunkTest/ChipmunkTest.h
+     Source/PhysicsTest/PhysicsTest.h
+     Source/ChipmunkTest/ChipmunkTest.h
 	 )
 
 list(APPEND GAME_SOURCE
-     Classes/PhysicsTest/PhysicsTest.cpp
-     Classes/ChipmunkTest/ChipmunkTest.cpp
+     Source/PhysicsTest/PhysicsTest.cpp
+     Source/ChipmunkTest/ChipmunkTest.cpp
 	 )
 
 if(WINDOWS OR MACOSX OR LINUX)
 	list(APPEND GAME_HEADER
-	    Classes/ChipmunkTestBed/demo/ChipmunkDemo.h
-		Classes/ChipmunkTestBed/ChipmunkTestBed.h
+	    Source/ChipmunkTestBed/demo/ChipmunkDemo.h
+		Source/ChipmunkTestBed/ChipmunkTestBed.h
 	)
    set (TESTBED_C_SORUCES
-        Classes/ChipmunkTestBed/demo/Bench.c
-        Classes/ChipmunkTestBed/demo/Chains.c
-        Classes/ChipmunkTestBed/demo/Convex.c
-        Classes/ChipmunkTestBed/demo/Crane.c
-        Classes/ChipmunkTestBed/demo/Joints.c
-        Classes/ChipmunkTestBed/demo/LogoSmash.c
-        Classes/ChipmunkTestBed/demo/OneWay.c
-        Classes/ChipmunkTestBed/demo/Planet.c
-        Classes/ChipmunkTestBed/demo/Player.c
-        Classes/ChipmunkTestBed/demo/Plink.c
-        Classes/ChipmunkTestBed/demo/Pump.c
-        Classes/ChipmunkTestBed/demo/PyramidStack.c
-        Classes/ChipmunkTestBed/demo/PyramidTopple.c
-        Classes/ChipmunkTestBed/demo/Shatter.c
-        Classes/ChipmunkTestBed/demo/Springies.c
-        Classes/ChipmunkTestBed/demo/Sticky.c
-        Classes/ChipmunkTestBed/demo/Tank.c
-        Classes/ChipmunkTestBed/demo/TheoJansen.c
-        Classes/ChipmunkTestBed/demo/Buoyancy.c
-        Classes/ChipmunkTestBed/demo/ContactGraph.c
-        Classes/ChipmunkTestBed/demo/Example.c
-        Classes/ChipmunkTestBed/demo/Query.c
-        Classes/ChipmunkTestBed/demo/Slice.c
-        Classes/ChipmunkTestBed/demo/Unicycle.c
-        Classes/ChipmunkTestBed/demo/Tumble.c)
+        Source/ChipmunkTestBed/demo/Bench.c
+        Source/ChipmunkTestBed/demo/Chains.c
+        Source/ChipmunkTestBed/demo/Convex.c
+        Source/ChipmunkTestBed/demo/Crane.c
+        Source/ChipmunkTestBed/demo/Joints.c
+        Source/ChipmunkTestBed/demo/LogoSmash.c
+        Source/ChipmunkTestBed/demo/OneWay.c
+        Source/ChipmunkTestBed/demo/Planet.c
+        Source/ChipmunkTestBed/demo/Player.c
+        Source/ChipmunkTestBed/demo/Plink.c
+        Source/ChipmunkTestBed/demo/Pump.c
+        Source/ChipmunkTestBed/demo/PyramidStack.c
+        Source/ChipmunkTestBed/demo/PyramidTopple.c
+        Source/ChipmunkTestBed/demo/Shatter.c
+        Source/ChipmunkTestBed/demo/Springies.c
+        Source/ChipmunkTestBed/demo/Sticky.c
+        Source/ChipmunkTestBed/demo/Tank.c
+        Source/ChipmunkTestBed/demo/TheoJansen.c
+        Source/ChipmunkTestBed/demo/Buoyancy.c
+        Source/ChipmunkTestBed/demo/ContactGraph.c
+        Source/ChipmunkTestBed/demo/Example.c
+        Source/ChipmunkTestBed/demo/Query.c
+        Source/ChipmunkTestBed/demo/Slice.c
+        Source/ChipmunkTestBed/demo/Unicycle.c
+        Source/ChipmunkTestBed/demo/Tumble.c)
     if(WINDOWS)
         set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
     else()
@@ -526,19 +526,19 @@ if(WINDOWS OR MACOSX OR LINUX)
     endif()
 	list(APPEND GAME_SOURCE
 		${TESTBED_C_SORUCES}
-		Classes/ChipmunkTestBed/ChipmunkTestBed.cpp
+		Source/ChipmunkTestBed/ChipmunkTestBed.cpp
 	)
 endif()
 
 if (AX_ENABLE_EXT_EFFEKSEER)
-    list(APPEND GAME_HEADER Classes/EffekseerTest/EffekseerTest.h)
-    list(APPEND GAME_SOURCE Classes/EffekseerTest/EffekseerTest.cpp)
+    list(APPEND GAME_HEADER Source/EffekseerTest/EffekseerTest.h)
+    list(APPEND GAME_SOURCE Source/EffekseerTest/EffekseerTest.cpp)
 endif()
 
 
 if(NOT LINUX)
     list(APPEND GAME_SOURCE
-         Classes/UITest/CocoStudioGUITest/UIEditBoxTest.cpp
+         Source/UITest/CocoStudioGUITest/UIEditBoxTest.cpp
          )
 endif()
 
@@ -562,12 +562,8 @@ endif()
 target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
 target_include_directories(${APP_NAME}
-        PRIVATE Classes
+        PRIVATE "${CMAKE_CURRENT_LIST_DIR}/Source"
 )
-
-if(WIN64)
-    target_link_options(${APP_NAME} PRIVATE "/STACK:4194304")
-endif()
 
 # mark app resources
 setup_ax_app_config(${APP_NAME})
@@ -592,11 +588,12 @@ elseif(WINDOWS)
     ax_copy_target_dll(${APP_NAME})
 endif()
 
-if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+if (NOT APPLE)
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
     ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER} SYM_LINK 1)
-elseif(WINDOWS)
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+    if(WINDOWS)
+        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+    endif()
 endif()
 
 if(NOT IOS)

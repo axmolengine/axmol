@@ -2,10 +2,20 @@ include(CMakeParseArguments)
 
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
 function(ax_sync_target_res ax_target)
-    ax_def_sync_resource_target(${ax_target})
-    cmake_parse_arguments(opt "SYM_LINK" "LINK_TO" "FOLDERS" ${ARGN})
+    set(options SYM_LINK)
+    set(oneValueArgs LINK_TO SYNC_TARGET_ID)
+    set(multiValueArgs FOLDERS)
+    cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+   
+    if (NOT DEFINED opt_SYNC_TARGET_ID)
+        set(sync_target_name "SYNC_RESOURCE-${ax_target}")
+    else()
+        set(sync_target_name "SYNC_RESOURCE-${ax_target}-${opt_SYNC_TARGET_ID}")
+    endif()
 
-    if(NOT TARGET SYNC_RESOURCE-${ax_target})
+    ax_def_sync_resource_target(${ax_target} ${sync_target_name})
+    
+    if(NOT TARGET ${sync_target_name})
         message(WARNING "SyncResource targe for ${ax_target} is not defined")
         return()
     endif()
@@ -14,7 +24,7 @@ function(ax_sync_target_res ax_target)
     foreach(cc_folder ${opt_FOLDERS})
         #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
-        add_custom_command(TARGET SYNC_RESOURCE-${ax_target} POST_BUILD
+        add_custom_command(TARGET ${sync_target_name} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E echo "    Syncing to ${link_folder_abs}"
             COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
                 -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
@@ -24,12 +34,12 @@ endfunction()
 
 ## create a virtual target SYNC_RESOURCE-${ax_target}
 ## Update resource files in Resources/ folder everytime when `Run/Debug` target.
-function(ax_def_sync_resource_target ax_target)
-    add_custom_target(SYNC_RESOURCE-${ax_target} ALL
+function(ax_def_sync_resource_target ax_target sync_target_name)
+    add_custom_target(${sync_target_name} ALL
         COMMAND ${CMAKE_COMMAND} -E echo "Syncing resources for ${ax_target} ..."
     )
-    add_dependencies(${ax_target} SYNC_RESOURCE-${ax_target})
-    set_target_properties(SYNC_RESOURCE-${ax_target} PROPERTIES
+    add_dependencies(${ax_target} ${sync_target_name})
+    set_target_properties(${sync_target_name} PROPERTIES
         FOLDER Utils
     )
 endfunction()
@@ -64,13 +74,12 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
             )
         endif()
     endif()
-
 endfunction()
 
 
 function(ax_get_resource_path output ax_target)
     get_target_property(rt_output ${ax_target} RUNTIME_OUTPUT_DIRECTORY)
-    set(${output} "${rt_output}/${CMAKE_CFG_INTDIR}/Resources" PARENT_SCOPE)
+    set(${output} "${rt_output}/${CMAKE_CFG_INTDIR}/Content" PARENT_SCOPE)
 endfunction()
 
 
@@ -318,6 +327,9 @@ endfunction()
 
 # setup a ax application
 function(setup_ax_app_config app_name)
+    if(WIN64)
+        target_link_options(${APP_NAME} PRIVATE "/STACK:4194304")
+    endif()
     # put all output app into bin/${app_name}
     set_target_properties(${app_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${app_name}")
     if(APPLE)
