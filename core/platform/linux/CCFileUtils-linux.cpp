@@ -82,12 +82,12 @@ bool FileUtilsLinux::init()
     std::string workingDir = _checkPath("/proc/self/cwd");
     workingDir += '/';
     bool startedFromSelfLocation = workingDir == exeDir;
-    if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_PC_RESOURCES_DIR))
+    if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_CONTENT_DIR))
         _defaultResRootPath = workingDir;
     else
     {
-        _defaultResRootPath.reserve(exeDir.size() + AX_PC_RESOURCES_DIR_LEN);
-        _defaultResRootPath.append(exeDir).append(AX_PC_RESOURCES_DIR, AX_PC_RESOURCES_DIR_LEN);
+        _defaultResRootPath.reserve(exeDir.size() + AX_CONTENT_DIR_LEN);
+        _defaultResRootPath.append(exeDir).append(AX_CONTENT_DIR, AX_CONTENT_DIR_LEN);
     }
 
     // Set writable path to $XDG_CONFIG_HOME or ~/.config/<app name>/ if $XDG_CONFIG_HOME not exists.
