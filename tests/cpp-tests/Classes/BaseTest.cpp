@@ -32,6 +32,9 @@ USING_NS_AX_EXT;
 
 #define TABEL_LABEL_TAG 1024
 
+Size g_resourceSize(960, 640);
+Size g_designSize(960, 640);
+
 TestBase::TestBase() : _parentTest(nullptr), _isTestList(false) {}
 
 TestBase::~TestBase() {}
@@ -157,12 +160,10 @@ void TestList::runThisTest()
 
     GLViewImpl* glView = (GLViewImpl*)Director::getInstance()->getOpenGLView();
 #if defined(AX_PLATFORM_PC)
-    Size resourceSize(960, 640);
-    glView->setWindowed(resourceSize.width, resourceSize.height);
+    glView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif
 
-    Size designSize(480, 320);
-    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
+    glView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
     auto director = Director::getInstance();
     auto scene    = Scene::create();
