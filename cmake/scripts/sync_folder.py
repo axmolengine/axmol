@@ -60,7 +60,7 @@ def sync_folder(src_dir, dst_dir, opts, compile):
             print("[message] create symlink %s ===> %s" % (src_dir, dst_dir))
             if opts.iswinnt:
                 # Fix error symbolic link privilege not held < win11
-                subprocess.check_call('mklink /J "%s" "%s"' % (dst_dir, src_dir), shell=True)
+                subprocess.run(['mklink', '/J', dst_dir, src_dir], shell=True)
             else:
                 os.symlink(src_dir, dst_dir, True)
         return
