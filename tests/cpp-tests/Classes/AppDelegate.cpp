@@ -29,7 +29,7 @@
 
 #include "axmol.h"
 #include "controller.h"
-// #include "extensions/cocostudio/CocoStudio.h"
+#include "BaseTest.h"
 #include "extensions/cocos-ext.h"
 
 USING_NS_AX;
@@ -53,10 +53,6 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-static Size resourceSize(960, 640);
-static Size designSize(480, 320);
-
-
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // As an example, load config file
@@ -74,9 +70,9 @@ bool AppDelegate::applicationDidFinishLaunching()
         title += " *Debug*",
 #endif
 #ifdef AX_PLATFORM_PC
-        glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height), 1.0F, true);
+        glView = GLViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
 #else
-        glView = GLViewImpl::createWithRect(title, Rect(0, 0, resourceSize.width, resourceSize.height));
+        glView = GLViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif
         director->setOpenGLView(glView);
     }
@@ -100,7 +96,7 @@ bool AppDelegate::applicationDidFinishLaunching()
         searchPaths.emplace_back("ccs-res/hd");
         searchPaths.emplace_back("ccs-res");
         searchPaths.emplace_back("Manifests");
-        director->setContentScaleFactor(resourceSize.height / designSize.height);
+        director->setContentScaleFactor(g_resourceSize.height / g_designSize.height);
 
         searchPaths.emplace_back("hd/ActionTimeline");
     }
@@ -113,7 +109,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     fileUtils->setSearchPaths(searchPaths);
 
-    glView->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
+    glView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);
 
     // Enable Remote Console
     auto console = director->getConsole();
