@@ -67,7 +67,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
     endif()
 endif()
 
-set(RUNTIME_SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src)
+set(RUNTIME_SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 # script and source files info, not need to compile
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
@@ -157,7 +157,7 @@ else()
     add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
 
-    config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src/proj.android/app/src")
+    config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
 if (NOT _AX_USE_PREBUILT)

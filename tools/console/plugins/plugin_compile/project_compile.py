@@ -649,7 +649,7 @@ class CCPluginCompile(axmol.CCPlugin):
     def _get_export_options_plist_path(self):
         project_dir = self._project.get_project_dir()
 
-        possible_sub_paths = [ 'proj.ios', 'proj.ios_mac/ios', 'frameworks/runtime-src/proj.ios_mac/ios' ]
+        possible_sub_paths = [ 'proj.ios', 'proj.ios_mac/ios' ]
         ios_project_dir = None
         for sub_path in possible_sub_paths:
             ios_project_dir = os.path.join(project_dir, sub_path)
