@@ -94,25 +94,25 @@ android.applicationVariants.all { variant ->
 
     tasks.register(copyTaskName) {
         copy {
-           from "${projectDir}/../../../res"
+           from "${projectDir}/../../../Content/res"
            into "${projectDir}/assets/res"
         }
 
         copy {
-            from("${projectDir}/../../../../cpp-tests/Resources") {
+            from("${projectDir}/../../../../cpp-tests/Content") {
                 exclude "**/*.gz"
             }
             into "${projectDir}/assets/res"
         }
 
         copy {
-            from "${projectDir}/../../../src"
+            from "${projectDir}/../../../Content/src"
             into "${projectDir}/assets/src"
         }
 
         copy {
             from "${projectDir}/../../../../../extensions/scripting/lua-bindings/script"
-            into  "${projectDir}/assets/src/cocos"
+            into  "${projectDir}/assets/src/axmol"
         }
     }
     tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
