@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  27 January 2023                                                 *
+* Date      :  21 February 2023                                                *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -14,7 +14,7 @@
 #include <numeric>
 #include <algorithm>
 
-#include "clipper.engine.h"
+#include "clipper2/clipper.engine.h"
 
 // https://github.com/AngusJohnson/Clipper2/discussions/334
 // #discussioncomment-4248602
@@ -28,12 +28,7 @@
 
 namespace Clipper2Lib {
 
-  static const Rect64 invalid_rect = Rect64(
-    std::numeric_limits<int64_t>::max(),
-    std::numeric_limits<int64_t>::max(),
-    -std::numeric_limits<int64_t>::max(),
-    -std::numeric_limits<int64_t>::max()
-  );
+  static const Rect64 invalid_rect = Rect64(false);
 
   // Every closed path (or polygon) is made up of a series of vertices forming
   // edges that alternate between going up (relative to the Y-axis) and going
@@ -686,7 +681,7 @@ namespace Clipper2Lib {
   } // end AddPaths
 
 
-  inline void ClipperBase::InsertScanline(int64_t y)
+  void ClipperBase::InsertScanline(int64_t y)
   {
     scanline_list_.push(y);
   }
@@ -1828,7 +1823,6 @@ namespace Clipper2Lib {
     return resultOp;
   }
 
-
   inline void ClipperBase::DeleteFromAEL(Active& e)
   {
     Active* prev = e.prev_in_ael;
@@ -1917,21 +1911,22 @@ namespace Clipper2Lib {
   {
     if (op == op->next || op->prev == op->next)
       return PointInPolygonResult::IsOutside;
+  
     OutPt* op2 = op;
     do
     {
       if (op->pt.y != pt.y) break;
       op = op->next;
     } while (op != op2);
-    if (op == op2)  return PointInPolygonResult::IsOutside;
+    if (op->pt.y == pt.y) // not a proper polygon
+      return PointInPolygonResult::IsOutside;
 
-    // must be above or below to get here
-    bool isAbove = op->pt.y < pt.y;
+    bool is_above = op->pt.y < pt.y, starting_above = is_above;
     int val = 0;
     op2 = op->next;
     while (op2 != op)
     {
-      if (isAbove)
+      if (is_above)
         while (op2 != op && op2->pt.y < pt.y) op2 = op2->next;
       else
         while (op2 != op && op2->pt.y > pt.y) op2 = op2->next;
@@ -1947,6 +1942,7 @@ namespace Clipper2Lib {
           return PointInPolygonResult::IsOn;
 
         op2 = op2->next;
+        if (op2 == op) break;
         continue;
       }
 
@@ -1959,11 +1955,19 @@ namespace Clipper2Lib {
       {
         double d = CrossProduct(op2->prev->pt, op2->pt, pt);
         if (d == 0) return PointInPolygonResult::IsOn;
-        if ((d < 0) == isAbove) val = 1 - val;
+        if ((d < 0) == is_above) val = 1 - val;
       }
-      isAbove = !isAbove;
+      is_above = !is_above;
       op2 = op2->next;
     }
+
+    if (is_above != starting_above)
+    {
+      double d = CrossProduct(op2->prev->pt, op2->pt, pt);
+      if (d == 0) return PointInPolygonResult::IsOn;
+      if ((d < 0) == is_above) val = 1 - val;
+    }
+
     if (val == 0) return PointInPolygonResult::IsOutside;
     else return PointInPolygonResult::IsInside;
   }
@@ -1985,25 +1989,6 @@ namespace Clipper2Lib {
     // since path1's location is still equivocal, check its midpoint
     Point64 mp = GetBounds(op).MidPoint();
     return  PointInOpPolygon(mp, op2) == PointInPolygonResult::IsInside;
-  }
-
-  inline bool Path1InsidePath2(const OutRec* or1, const OutRec* or2)
-  {
-    // we need to make some accommodation for rounding errors
-    // so we won't jump if the first vertex is found outside
-    int outside_cnt = 0;
-    OutPt* op = or1->pts;
-    do
-    {
-      PointInPolygonResult result = PointInPolygon(op->pt, or2->path);
-      if (result == PointInPolygonResult::IsOutside) ++outside_cnt;
-      else if (result == PointInPolygonResult::IsInside) --outside_cnt;
-      op = op->next;
-    } while (op != or1->pts && std::abs(outside_cnt) < 2);
-    if (std::abs(outside_cnt) > 1) return (outside_cnt < 0);
-    // since path1's location is still equivocal, check its midpoint
-    Point64 mp = GetBounds(op).MidPoint();
-    return  PointInPolygon(mp, or2->path) == PointInPolygonResult::IsInside;
   }
 
   inline bool SetHorzSegHeadingForward(HorzSegment& hs, OutPt* opP, OutPt* opN)
@@ -2287,7 +2272,7 @@ namespace Clipper2Lib {
 
       node.edge1->curr_x = node.pt.x;
       node.edge2->curr_x = node.pt.x;
-      CheckJoinLeft(*node.edge2, node.pt);
+      CheckJoinLeft(*node.edge2, node.pt, true);
       CheckJoinRight(*node.edge1, node.pt, true);
     }
   }
@@ -2646,15 +2631,21 @@ namespace Clipper2Lib {
     }
   }
 
-  void ClipperBase::CheckJoinLeft(Active& e, const Point64& pt)
+  void ClipperBase::CheckJoinLeft(Active& e, 
+    const Point64& pt, bool check_curr_x)
   {
     Active* prev = e.prev_in_ael;
-    if (IsOpen(e) || !IsHotEdge(e) || !prev || IsOpen(*prev) ||
-      !IsHotEdge(*prev) || e.curr_x != prev->curr_x ||
-      pt.y <= e.top.y || pt.y <= prev->top.y ||
-      IsJoined(e) || IsOpen(e) || 
-      CrossProduct(e.top, pt, prev->top))
+    if (IsOpen(e) || !IsHotEdge(e) || !prev || 
+      IsOpen(*prev) || !IsHotEdge(*prev) ||
+      pt.y < e.top.y + 2 || pt.y < prev->top.y + 2) // avoid trivial joins
         return;
+
+    if (check_curr_x)
+    {
+      if (DistanceFromLineSqrd(pt, prev->bot, prev->top) > 0.25) return;
+    }
+    else if (e.curr_x != prev->curr_x) return;
+    if (CrossProduct(e.top, pt, prev->top)) return;
 
     if (e.outrec->idx == prev->outrec->idx)
       AddLocalMaxPoly(*prev, e, pt);
@@ -2670,15 +2661,18 @@ namespace Clipper2Lib {
     const Point64& pt, bool check_curr_x)
   {
     Active* next = e.next_in_ael;
-    if (IsOpen(e) || !IsHotEdge(e) || IsJoined(e) ||
+    if (IsOpen(e) || !IsHotEdge(e) || 
       !next || IsOpen(*next) || !IsHotEdge(*next) ||
       pt.y < e.top.y +2 || pt.y < next->top.y +2) // avoids trivial joins
         return;      
 
-    if (check_curr_x) next->curr_x = TopX(*next, pt.y);
-    if (e.curr_x != next->curr_x ||
-      CrossProduct(e.top, pt, next->top)) return;
-
+    if (check_curr_x)
+    {
+      if (DistanceFromLineSqrd(pt, next->bot, next->top) > 0.35) return;
+    }
+    else if (e.curr_x != next->curr_x) return;
+    if (CrossProduct(e.top, pt, next->top)) return;
+      
     if (e.outrec->idx == next->outrec->idx)
       AddLocalMaxPoly(e, *next, pt);
     else if (e.outrec->idx < next->outrec->idx)
@@ -2709,20 +2703,6 @@ namespace Clipper2Lib {
         op2 = op2->next;
       return op2 != op && op2->next != op;
     }
-  }
-
-  inline Rect64 GetBounds(const Path64& path)
-  {
-    if (path.empty()) return Rect64();
-    Rect64 result = invalid_rect;
-    for (const Point64& pt : path)
-    {
-      if (pt.x < result.left) result.left = pt.x;
-      if (pt.x > result.right) result.right = pt.x;
-      if (pt.y < result.top) result.top = pt.y;
-      if (pt.y > result.bottom) result.bottom = pt.y;
-    }
-    return result;
   }
 
   bool BuildPath64(OutPt* op, bool reverse, bool isOpen, Path64& path)
@@ -2791,13 +2771,13 @@ namespace Clipper2Lib {
 
     while (outrec->owner)
       if (outrec->owner->bounds.Contains(outrec->bounds) &&
-        Path1InsidePath2(outrec, outrec->owner))
+        Path1InsidePath2(outrec->pts, outrec->owner->pts))
         break; // found - owner contain outrec!
       else
         outrec->owner = outrec->owner->owner;
 
     if (outrec->owner)
-      outrec->polypath = outrec->owner->polypath->AddChild(outrec->path); 
+      outrec->polypath = outrec->owner->polypath->AddChild(outrec->path);
     else
       outrec->polypath = polypath->AddChild(outrec->path);
   }
@@ -2815,7 +2795,7 @@ namespace Clipper2Lib {
         if (split && split != outrec &&
           split != outrec->owner && CheckBounds(split) &&
           split->bounds.Contains(outrec->bounds) &&
-            Path1InsidePath2(outrec, split)) 
+            Path1InsidePath2(outrec->pts, split->pts)) 
         {
           RecursiveCheckOwners(split, polypath);
           outrec->owner = split; //found in split

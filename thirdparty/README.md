@@ -37,7 +37,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.1.1
+- Version: git 1.1.1-df1c129
 - License: BSL-1.0
 
 ## ConvertUTF

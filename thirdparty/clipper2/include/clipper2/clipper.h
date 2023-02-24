@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  27 January 2023                                                 *
+* Date      :  9 February 2023                                                 *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This module provides a simple interface to the Clipper Library  *
@@ -11,6 +11,7 @@
 #define CLIPPER_H
 
 #include <cstdlib>
+#include <type_traits>
 #include <vector>
 
 #include "clipper.core.h"
@@ -43,11 +44,13 @@ namespace Clipper2Lib {
   }
 
   inline PathsD BooleanOp(ClipType cliptype, FillRule fillrule,
-    const PathsD& subjects, const PathsD& clips, int decimal_prec = 2)
+    const PathsD& subjects, const PathsD& clips, int precision = 2)
   {
-    CheckPrecision(decimal_prec);
+    int error_code = 0;
+    CheckPrecision(precision, error_code);
     PathsD result;
-    ClipperD clipper(decimal_prec);
+    if (error_code) return result;
+    ClipperD clipper(precision);
     clipper.AddSubject(subjects);
     clipper.AddClip(clips);
     clipper.Execute(cliptype, fillrule, result);
@@ -56,11 +59,13 @@ namespace Clipper2Lib {
 
   inline void BooleanOp(ClipType cliptype, FillRule fillrule,
     const PathsD& subjects, const PathsD& clips, 
-    PolyTreeD& polytree, int decimal_prec = 2)
+    PolyTreeD& polytree, int precision = 2)
   {
-    CheckPrecision(decimal_prec);
-    PathsD result;
-    ClipperD clipper(decimal_prec);
+    polytree.Clear();
+    int error_code = 0;
+    CheckPrecision(precision, error_code);
+    if (error_code) return;
+    ClipperD clipper(precision);
     clipper.AddSubject(subjects);
     clipper.AddClip(clips);
     clipper.Execute(cliptype, fillrule, polytree);
@@ -95,11 +100,13 @@ namespace Clipper2Lib {
     return result;
   }
 
-  inline PathsD Union(const PathsD& subjects, FillRule fillrule, int decimal_prec = 2)
+  inline PathsD Union(const PathsD& subjects, FillRule fillrule, int precision = 2)
   {
-    CheckPrecision(decimal_prec);
     PathsD result;
-    ClipperD clipper(decimal_prec);
+    int error_code = 0;
+    CheckPrecision(precision, error_code);
+    if (error_code) return result;
+    ClipperD clipper(precision);
     clipper.AddSubject(subjects);
     clipper.Execute(ClipType::Union, fillrule, result);
     return result;
@@ -126,22 +133,29 @@ namespace Clipper2Lib {
   }
 
   inline Paths64 InflatePaths(const Paths64& paths, double delta,
-    JoinType jt, EndType et, double miter_limit = 2.0)
+    JoinType jt, EndType et, double miter_limit = 2.0,
+    double arc_tolerance = 0.0)
   {
-    ClipperOffset clip_offset(miter_limit);
+    if (!delta) return paths;
+    ClipperOffset clip_offset(miter_limit, arc_tolerance);
     clip_offset.AddPaths(paths, jt, et);
     return clip_offset.Execute(delta);
   }
 
   inline PathsD InflatePaths(const PathsD& paths, double delta,
-    JoinType jt, EndType et, double miter_limit = 2.0, int precision = 2)
+    JoinType jt, EndType et, double miter_limit = 2.0, 
+    int precision = 2, double arc_tolerance = 0.0)
   {
-    CheckPrecision(precision);
+    int error_code = 0;
+    CheckPrecision(precision, error_code);
+    if (!delta) return paths;
+    if (error_code) return PathsD();
     const double scale = std::pow(10, precision);
-    ClipperOffset clip_offset(miter_limit);
-    clip_offset.AddPaths(ScalePaths<int64_t,double>(paths, scale), jt, et);
+    ClipperOffset clip_offset(miter_limit, arc_tolerance);
+    clip_offset.AddPaths(ScalePaths<int64_t,double>(paths, scale, error_code), jt, et);
+    if (error_code) return PathsD();
     Paths64 tmp = clip_offset.Execute(delta * scale);
-    return ScalePaths<double, int64_t>(tmp, 1 / scale);
+    return ScalePaths<double, int64_t>(tmp, 1 / scale, error_code);
   }
 
   inline Path64 TranslatePath(const Path64& path, int64_t dx, int64_t dy)
@@ -180,153 +194,82 @@ namespace Clipper2Lib {
     return result;
   }
 
-  inline Path64 RectClip(const Rect64& rect, const Path64& path)
-  {
-    if (rect.IsEmpty() || path.empty()) return Path64();
-    Rect64 pathRec = Bounds(path);
-    if (!rect.Intersects(pathRec)) return Path64();
-    if (rect.Contains(pathRec)) return path;
-    class RectClip rc(rect);
-    return rc.Execute(path);
-  }
-  
-  inline Paths64 RectClip(const Rect64& rect, const Paths64& paths)
+  inline Paths64 RectClip(const Rect64& rect, 
+    const Paths64& paths, bool convex_only = false)
   {
     if (rect.IsEmpty() || paths.empty()) return Paths64();
     class RectClip rc(rect);
-    Paths64 result;
-    result.reserve(paths.size());
-
-    for (const Path64& p : paths)
-    {
-      Rect64 pathRec = Bounds(p);
-      if (!rect.Intersects(pathRec)) 
-        continue;
-      else if (rect.Contains(pathRec))
-        result.push_back(p);
-      else
-      {
-        Path64 p2 = rc.Execute(p);
-        if (!p2.empty()) result.push_back(std::move(p2));
-      }
-    }
-    return result;
+    return rc.Execute(paths, convex_only);
   }
 
-  inline PathD RectClip(const RectD& rect, const PathD& path, int precision = 2)
+  inline Paths64 RectClip(const Rect64& rect, 
+    const Path64& path, bool convex_only = false)
   {
-    if (rect.IsEmpty() || path.empty() ||
-      !rect.Contains(Bounds(path))) return PathD();
-    CheckPrecision(precision);
-    const double scale = std::pow(10, precision);
-    Rect64 r = ScaleRect<int64_t, double>(rect, scale);
-    class RectClip rc(r);
-    Path64 p = ScalePath<int64_t, double>(path, scale);
-    return ScalePath<double, int64_t>(rc.Execute(p), 1 / scale);
+    if (rect.IsEmpty() || path.empty()) return Paths64();
+    class RectClip rc(rect);
+    Paths64 tmp;
+    tmp.push_back(path);
+    return rc.Execute(tmp, convex_only);
   }
 
-  inline PathsD RectClip(const RectD& rect, const PathsD& paths, int precision = 2)
+  inline PathsD RectClip(const RectD& rect, 
+    const PathsD& paths, bool convex_only = false, int precision = 2)
   {
     if (rect.IsEmpty() || paths.empty()) return PathsD();
-    CheckPrecision(precision);
+    int error_code = 0;
+    CheckPrecision(precision, error_code);
+    if (error_code) return PathsD();
     const double scale = std::pow(10, precision);
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
     class RectClip rc(r);
-    PathsD result;
-    result.reserve(paths.size());
-    for (const PathD& path : paths) 
-    {
-      RectD pathRec = Bounds(path);
-      if (!rect.Intersects(pathRec))
-        continue;
-      else if (rect.Contains(pathRec))
-        result.push_back(path);
-      else
-      {
-        Path64 p = ScalePath<int64_t, double>(path, scale);
-        p = rc.Execute(p);
-        if (!p.empty()) 
-          result.push_back(ScalePath<double, int64_t>(p, 1 / scale));
-      }
-    }
-    return result;
+    Paths64 pp = ScalePaths<int64_t, double>(paths, scale, error_code);
+    if (error_code) return PathsD(); // ie: error_code result is lost 
+    return ScalePaths<double, int64_t>(
+      rc.Execute(pp, convex_only), 1 / scale, error_code);
   }
 
-  inline Paths64 RectClipLines(const Rect64& rect, const Path64& path)
+  inline PathsD RectClip(const RectD& rect, 
+    const PathD& path, bool convex_only = false, int precision = 2)
   {
-    Paths64 result;
-    if (rect.IsEmpty() || path.empty()) return result;
-    Rect64 pathRec = Bounds(path);
-    if (!rect.Intersects(pathRec)) return result;
-    if (rect.Contains(pathRec)) 
-    {
-      result.push_back(path);
-      return result;
-    }
+    PathsD tmp;
+    tmp.push_back(path);
+    return RectClip(rect, tmp, convex_only, precision);
+  }
+
+  inline Paths64 RectClipLines(const Rect64& rect, const Paths64& lines)
+  {
+    if (rect.IsEmpty() || lines.empty()) return Paths64();
     class RectClipLines rcl(rect);
-    return rcl.Execute(path);
+    return rcl.Execute(lines);
   }
 
-  inline Paths64 RectClipLines(const Rect64& rect, const Paths64& paths)
+  inline Paths64 RectClipLines(const Rect64& rect, const Path64& line)
   {
-    Paths64 result;
-    if (rect.IsEmpty() || paths.empty()) return result;
-    class RectClipLines rcl(rect);
-    for (const Path64& p : paths)
-    {
-      Rect64 pathRec = Bounds(p);
-      if (!rect.Intersects(pathRec))
-        continue;
-      else if (rect.Contains(pathRec))
-        result.push_back(p);
-      else
-      {
-        Paths64 pp = rcl.Execute(p);
-        if (!pp.empty()) 
-          result.insert(result.end(), pp.begin(), pp.end());
-      }
-    }
-    return result;
+    Paths64 tmp;
+    tmp.push_back(line);
+    return RectClipLines(rect, tmp);
   }
 
-  inline PathsD RectClipLines(const RectD& rect, const PathD& path, int precision = 2)
+  inline PathsD RectClipLines(const RectD& rect, const PathD& line, int precision = 2)
   {
-    if (rect.IsEmpty() || path.empty() ||
-      !rect.Contains(Bounds(path))) return PathsD();
-    CheckPrecision(precision);
+    PathsD tmp;
+    tmp.push_back(line);
+    return RectClip(rect, tmp, precision);
+  }
+
+  inline PathsD RectClipLines(const RectD& rect, const PathsD& lines, int precision = 2)
+  {
+    if (rect.IsEmpty() || lines.empty()) return PathsD();
+    int error_code = 0;
+    CheckPrecision(precision, error_code);
+    if (error_code) return PathsD();
     const double scale = std::pow(10, precision);
     Rect64 r = ScaleRect<int64_t, double>(rect, scale);
     class RectClipLines rcl(r);
-    Path64 p = ScalePath<int64_t, double>(path, scale);
-    return ScalePaths<double, int64_t>(rcl.Execute(p), 1 / scale);
-  }
-
-  inline PathsD RectClipLines(const RectD& rect, const PathsD& paths, int precision = 2)
-  {
-    PathsD result;
-    if (rect.IsEmpty() || paths.empty()) return result;
-    CheckPrecision(precision);
-    const double scale = std::pow(10, precision);
-    Rect64 r = ScaleRect<int64_t, double>(rect, scale);
-    class RectClipLines rcl(r);
-    result.reserve(paths.size());
-    for (const PathD& path : paths)
-    {
-      RectD pathRec = Bounds(path);
-      if (!rect.Intersects(pathRec))
-        continue;
-      else if (rect.Contains(pathRec))
-        result.push_back(path);
-      else
-      {
-        Path64 p = ScalePath<int64_t, double>(path, scale);
-        Paths64 pp = rcl.Execute(p);
-        if (pp.empty()) continue;
-        PathsD ppd = ScalePaths<double, int64_t>(pp, 1 / scale);
-        result.insert(result.end(), ppd.begin(), ppd.end());
-      }
-    }
-    return result;
+    Paths64 p = ScalePaths<int64_t, double>(lines, scale, error_code);
+    if (error_code) return PathsD();
+    p = rcl.Execute(p);
+    return ScalePaths<double, int64_t>(p, 1 / scale, error_code);
   }
 
   namespace details
@@ -376,94 +319,6 @@ namespace Clipper2Lib {
           return false;
       }
       return true;
-    }
-
-    inline bool GetInt(std::string::const_iterator& iter, const
-      std::string::const_iterator& end_iter, int64_t& val)
-    {
-      val = 0;
-      bool is_neg = *iter == '-';
-      if (is_neg) ++iter;
-      std::string::const_iterator start_iter = iter;
-      while (iter != end_iter &&
-        ((*iter >= '0') && (*iter <= '9')))
-      {
-        val = val * 10 + (static_cast<int64_t>(*iter++) - '0');
-      }
-      if (is_neg) val = -val;
-      return (iter != start_iter);
-    }
-
-    inline bool GetFloat(std::string::const_iterator& iter, const 
-      std::string::const_iterator& end_iter, double& val)
-    {
-      val = 0;
-      bool is_neg = *iter == '-';
-      if (is_neg) ++iter;
-      int dec_pos = 1;
-      const std::string::const_iterator start_iter = iter;
-      while (iter != end_iter && (*iter == '.' ||
-        ((*iter >= '0') && (*iter <= '9'))))
-      {
-        if (*iter == '.')
-        {
-          if (dec_pos != 1) break;
-          dec_pos = 0;
-          ++iter;
-          continue;
-        }
-        if (dec_pos != 1) --dec_pos;
-        val = val * 10 + ((int64_t)(*iter++) - '0');
-      }
-      if (iter == start_iter || dec_pos == 0) return false;
-      if (dec_pos < 0)
-        val *= std::pow(10, dec_pos);
-      if (is_neg)
-        val *= -1;
-      return true;
-    }
-
-    inline void SkipWhiteSpace(std::string::const_iterator& iter, 
-      const std::string::const_iterator& end_iter)
-    {
-      while (iter != end_iter && *iter <= ' ') ++iter;
-    }
-
-    inline void SkipSpacesWithOptionalComma(std::string::const_iterator& iter, 
-      const std::string::const_iterator& end_iter)
-    {
-      bool comma_seen = false;
-      while (iter != end_iter)
-      {
-        if (*iter == ' ') ++iter;
-        else if (*iter == ',')
-        {
-          if (comma_seen) return; // don't skip 2 commas!
-          comma_seen = true;
-          ++iter;
-        }
-        else return;                
-      }
-    }
-
-    inline bool has_one_match(const char c, char* chrs)
-    {
-      while (*chrs > 0 && c != *chrs) ++chrs;
-      if (!*chrs) return false;
-      *chrs = ' '; // only match once per char
-      return true;
-    }
-
-
-    inline void SkipUserDefinedChars(std::string::const_iterator& iter,
-      const std::string::const_iterator& end_iter, const std::string& skip_chars)
-    {
-      const size_t MAX_CHARS = 16;
-      char buff[MAX_CHARS] = {0};
-      std::copy(skip_chars.cbegin(), skip_chars.cend(), &buff[0]);
-      while (iter != end_iter && 
-        (*iter <= ' ' || has_one_match(*iter, buff))) ++iter;
-      return;
     }
 
     static void OutlinePolyPath(std::ostream& os, 
@@ -565,39 +420,77 @@ namespace Clipper2Lib {
     return true;
   }
 
-  inline Path64 MakePath(const std::string& s)
-  {
-    const std::string skip_chars = " ,(){}[]";
-    Path64 result;
-    std::string::const_iterator s_iter = s.cbegin();
-    details::SkipUserDefinedChars(s_iter, s.cend(), skip_chars);
-    while (s_iter != s.cend())
+  namespace details {
+
+    template<typename T, typename U>
+    inline constexpr void MakePathGeneric(const T list, size_t size,
+      std::vector<U>& result)
     {
-      int64_t y = 0, x = 0;
-      if (!details::GetInt(s_iter, s.cend(), x)) break;
-      details::SkipSpacesWithOptionalComma(s_iter, s.cend());
-      if (!details::GetInt(s_iter, s.cend(), y)) break;
-      result.push_back(Point64(x, y));
-      details::SkipUserDefinedChars(s_iter, s.cend(), skip_chars);
+      for (size_t i = 0; i < size; ++i)
+#ifdef USINGZ
+        result[i / 2] = U{list[i], list[++i], 0};
+#else
+        result[i / 2] = U{list[i], list[++i]};
+#endif
     }
+
+  } // end details namespace
+
+  template<typename T,
+    typename std::enable_if<
+      std::is_integral<T>::value &&
+      !std::is_same<char, T>::value, bool
+    >::type = true>
+  inline Path64 MakePath(const std::vector<T>& list)
+  {
+    const auto size = list.size() - list.size() % 2;
+    if (list.size() != size)
+      DoError(non_pair_error_i);  // non-fatal without exception handling
+    Path64 result(size / 2);      // else ignores unpaired value
+    details::MakePathGeneric(list, size, result);
     return result;
   }
-  
-  inline PathD MakePathD(const std::string& s)
+
+  template<typename T, std::size_t N,
+    typename std::enable_if<
+      std::is_integral<T>::value &&
+      !std::is_same<char, T>::value, bool
+    >::type = true>
+  inline Path64 MakePath(const T(&list)[N])
   {
-    const std::string skip_chars = " ,(){}[]";
-    PathD result;
-    std::string::const_iterator s_iter = s.cbegin();
-    details::SkipUserDefinedChars(s_iter, s.cend(), skip_chars);
-    while (s_iter != s.cend())
-    {
-      double y = 0, x = 0;
-      if (!details::GetFloat(s_iter, s.cend(), x)) break;
-      details::SkipSpacesWithOptionalComma(s_iter, s.cend());
-      if (!details::GetFloat(s_iter, s.cend(), y)) break;
-      result.push_back(PointD(x, y));
-      details::SkipUserDefinedChars(s_iter, s.cend(), skip_chars);
-    }
+    // Make the compiler error on unpaired value (i.e. no runtime effects).
+    static_assert(N % 2 == 0, "MakePath requires an even number of arguments");
+    Path64 result(N / 2);
+    details::MakePathGeneric(list, N, result);
+    return result;
+  }
+
+  template<typename T,
+    typename std::enable_if<
+      std::is_arithmetic<T>::value &&
+      !std::is_same<char, T>::value, bool
+    >::type = true>
+  inline PathD MakePathD(const std::vector<T>& list)
+  {
+    const auto size = list.size() - list.size() % 2;
+    if (list.size() != size)
+      DoError(non_pair_error_i);  // non-fatal without exception handling
+    PathD result(size / 2);       // else ignores unpaired value
+    details::MakePathGeneric(list, size, result);
+    return result;
+  }
+
+  template<typename T, std::size_t N,
+    typename std::enable_if<
+      std::is_arithmetic<T>::value &&
+      !std::is_same<char, T>::value, bool
+    >::type = true>
+  inline PathD MakePathD(const T(&list)[N])
+  {
+    // Make the compiler error on unpaired value (i.e. no runtime effects).
+    static_assert(N % 2 == 0, "MakePath requires an even number of arguments");
+    PathD result(N / 2);
+    details::MakePathGeneric(list, N, result);
     return result;
   }
 
@@ -650,11 +543,14 @@ namespace Clipper2Lib {
 
   inline PathD TrimCollinear(const PathD& path, int precision, bool is_open_path = false)
   {
-    CheckPrecision(precision);
+    int error_code = 0;
+    CheckPrecision(precision, error_code);
+    if (error_code) return PathD();
     const double scale = std::pow(10, precision);
-    Path64 p = ScalePath<int64_t, double>(path, scale);
+    Path64 p = ScalePath<int64_t, double>(path, scale, error_code);
+    if (error_code) return PathD();
     p = TrimCollinear(p, is_open_path);
-    return ScalePath<double, int64_t>(p, 1/scale);
+    return ScalePath<double, int64_t>(p, 1/scale, error_code);
   }
 
   template <typename T>
