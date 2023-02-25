@@ -578,7 +578,6 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
             outPoints.reserve(outPoints.size() + p2->Polygon().size());
             for (auto&& so : p2->Polygon())
             {
-                const Vec2 pt(so.x / PRECISION, so.y / PRECISION);
                 if (pointSets.emplace(&so).second)
                     outPoints.emplace_back(so.x / PRECISION, so.y / PRECISION);
             }
