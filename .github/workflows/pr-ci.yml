@@ -9,7 +9,7 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
-  PYENV_VERSION: 2.7.18
+  PYENV_VERSION: 3.7.9
   PULL_REQUEST: yes
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
           submodules: 'recursive'
       - name: Setup Python
         uses: actions/setup-python@v3
-      - uses: ilammy/msvc-dev-cmd@v1.12.0
+      - uses: ilammy/msvc-dev-cmd@v1.12.1
         with: 
           arch: ${{ env.BUILD_ARCH }}
       - name: Build

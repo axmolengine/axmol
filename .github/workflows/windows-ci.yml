@@ -37,7 +37,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v3
 
-    - uses: ilammy/msvc-dev-cmd@v1.12.0
+    - uses: ilammy/msvc-dev-cmd@v1.12.1
       with: 
         arch: ${{ env.BUILD_ARCH }}
 
@@ -68,7 +68,7 @@ jobs:
 #     - name: Setup Python
 #       uses: actions/setup-python@v3
 
-#     - uses: ilammy/msvc-dev-cmd@v1.12.0
+#     - uses: ilammy/msvc-dev-cmd@v1.12.1
 #       with: 
 #         arch: ${{ env.BUILD_ARCH }}
 
