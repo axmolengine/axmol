@@ -148,7 +148,7 @@
 
 ## ntcvt (Windows only)
 - [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
-- Version: 0.0.2
+- Version: 1.0.0
 - License: Apache-2.0
 
 ## oboe (Adnroid only)
