@@ -87,13 +87,14 @@ android {
 }
 
 android.applicationVariants.all { variant ->
-
+    // delete previous files first
     delete "${projectDir}/assets"
     def targetName = variant.name.capitalize()
     def copyTaskName = "copy${targetName}ResourcesToAssets"
+    
     tasks.register(copyTaskName) {
         copy {
-            from "${projectDir}/../../Resources"
+            from "${projectDir}/../../Content"
             into "${projectDir}/assets"
             exclude "**/*.gz"
         }

@@ -207,3 +207,7 @@ extensions/libccs19
 tools/bindings-generator/libclang/*.dll
 tools/bindings-generator/libclang/*.dylib
 tools/bindings-generator/libclang/*.so
+
+templates/lua-template-default/Content/src/axmol
+tests/lua-tests/Content/src/axmol
+tests/lua-tests/Content/res

@@ -43,8 +43,8 @@ THE SOFTWARE.
 #include "base/CCScheduler.h"
 #include "base/CCDirector.h"
 
-#define AX_PC_RESOURCES_DIR "Resources/"
-#define AX_PC_RESOURCES_DIR_LEN (sizeof("Resources/") - 1)
+#define AX_CONTENT_DIR "Content/"
+#define AX_CONTENT_DIR_LEN (sizeof("Content/") - 1)
 
 NS_AX_BEGIN
 

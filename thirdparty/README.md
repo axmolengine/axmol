@@ -37,7 +37,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.1.1
+- Version: git 1.1.1-df1c129
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.88.0
+- Version: 7.88.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -118,7 +118,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-d0e8893 (2624)
+  - Version: git 2.1.0-505e2c0 (2628)
   - License: MIT
 
 - tolua
@@ -148,7 +148,7 @@
 
 ## ntcvt (Windows only)
 - [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
-- Version: 0.0.2
+- Version: 1.0.0
 - License: Apache-2.0
 
 ## oboe (Adnroid only)

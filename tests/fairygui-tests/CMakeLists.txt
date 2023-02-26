@@ -47,14 +47,14 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
 endif()
 
 # record sources, headers, resources...
-file(GLOB GAME_SOURCE Classes/*.cpp)
-file(GLOB GAME_HEADER Classes/*.h)
+file(GLOB GAME_SOURCE Source/*.cpp)
+file(GLOB GAME_HEADER Source/*.h)
 
 set(GAME_RES_FOLDER
-    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
 if(APPLE OR VS)
-    ax_mark_multi_resources(cc_common_res RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
 if(ANDROID)
@@ -71,7 +71,7 @@ elseif(WINDOWS)
          )
     list(APPEND GAME_SOURCE
          proj.win32/main.cpp
-         ${cc_common_res}
+         ${common_content_files}
          )
 elseif(APPLE)
     if(IOS)
@@ -111,7 +111,7 @@ elseif(APPLE)
              ${APP_UI_RES}
              )
     endif()
-    list(APPEND GAME_SOURCE ${cc_common_res})
+    list(APPEND GAME_SOURCE ${common_content_files})
 endif()
 
 set(all_code_files
@@ -133,7 +133,7 @@ endif()
 
 target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
-target_include_directories(${APP_NAME} PRIVATE Classes)
+target_include_directories(${APP_NAME} PRIVATE "${CMAKE_CURRENT_LIST_DIR}/Source")
 
 setup_ax_app_config(${APP_NAME})
 if(XCODE)
@@ -157,9 +157,11 @@ elseif(WINDOWS)
     ax_copy_target_dll(${APP_NAME})
 endif()
 
-if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+
+if (NOT APPLE)
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    ax_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
-elseif(WINDOWS)
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER} SYM_LINK 1)
+    if(WINDOWS)
+        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+    endif()
 endif()
