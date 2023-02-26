@@ -554,14 +554,32 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
     cl.AddClip(clamps);
     cl.Execute(Clipper2Lib::ClipType::Intersection, Clipper2Lib::FillRule::NonZero, out);
 
+    /*
+    * Notes: the clipper2 no longer remove duplicates, so we ensure it with std::set to avoid crash some times
+    *   Fix issue: https://github.com/axmolengine/axmol/issues/1075
+    *   @remark: Still faster than clipper1
+    */
+    using Point64Ptr = const Clipper2Lib::Point64*;
+    struct point64_less
+    {
+        bool operator()(const Point64Ptr& lhs, const Point64Ptr& rhs) const
+        {
+            return lhs->x < rhs->x || (lhs->x == rhs->x && lhs->y < rhs->y);
+        }
+    };
+
+    std::set<Point64Ptr, point64_less> pointSets;
+
     std::vector<Vec2> outPoints;
-    for (auto&& p2: out)
-	{
+    for (auto&& p2 : out)
+    {
         if (!p2->IsHole())
         {
+            outPoints.reserve(outPoints.size() + p2->Polygon().size());
             for (auto&& so : p2->Polygon())
             {
-                 outPoints.emplace_back(Vec2(so.x / PRECISION, so.y / PRECISION));
+                if (pointSets.emplace(&so).second)
+                    outPoints.emplace_back(so.x / PRECISION, so.y / PRECISION);
             }
         }
         else

@@ -4,17 +4,8 @@ set(target_name ${lib_name})
 
 project(${lib_name})
 
-add_library(${target_name} STATIC
-	clipper.core.h
-	clipper.engine.cpp
-	clipper.engine.h
-	clipper.export.h
-	clipper.h
-	clipper.minkowski.h
-	clipper.offset.cpp
-	clipper.offset.h
-	clipper.rectclip.cpp
-	clipper.rectclip.h
-)
+file(GLOB_RECURSE CLIPPER_SOURCES  *.h;*.cpp)
 
-target_include_directories(${target_name} PUBLIC .)
+add_library(${target_name} STATIC ${CLIPPER_SOURCES})
+
+target_include_directories(${target_name} PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include")
