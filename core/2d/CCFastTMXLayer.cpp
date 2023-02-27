@@ -594,15 +594,17 @@ void FastTMXLayer::updateTotalQuads()
                 bottom           = (tileTexture.origin.y / texSize.height);
                 top              = bottom + (tileTexture.size.height / texSize.height);
 
-                quad.bl.texCoords.u = left;
-                quad.bl.texCoords.v = bottom;
-                quad.br.texCoords.u = right;
-                quad.br.texCoords.v = bottom;
-                quad.tl.texCoords.u = left;
-                quad.tl.texCoords.v = top;
-                quad.tr.texCoords.u = right;
-                quad.tr.texCoords.v = top;
+                // issue#1085 OpenGL sub-pixel horizontal-vertical lines pixel-tolerance fix.
+                float pt = FLT_EPSILON;
 
+                quad.bl.texCoords.u = left + pt;
+                quad.bl.texCoords.v = bottom + pt;
+                quad.br.texCoords.u = right - pt;
+                quad.br.texCoords.v = bottom + pt;
+                quad.tl.texCoords.u = left + pt;
+                quad.tl.texCoords.v = top - pt;
+                quad.tr.texCoords.u = right - pt;
+                quad.tr.texCoords.v = top - pt;
                 quad.bl.colors = color;
                 quad.br.colors = color;
                 quad.tl.colors = color;
@@ -670,6 +672,9 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
 
 int FastTMXLayer::getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags /* = nullptr*/)
 {
+    if (!(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
+        tileCoordinate.y >= 0)) return 0;
+
     AXASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
                  tileCoordinate.y >= 0,
              "TMXLayer: invalid position");

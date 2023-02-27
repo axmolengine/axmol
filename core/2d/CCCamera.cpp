@@ -409,6 +409,7 @@ void Camera::applyZoom()
     case ax::Director::Projection::_2D:
     {
         Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
+        Camera::updateTransform();
         break;
     }
     case ax::Director::Projection::_3D:

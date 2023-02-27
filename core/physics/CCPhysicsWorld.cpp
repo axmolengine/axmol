@@ -911,6 +911,7 @@ void PhysicsWorld::step(float delta)
 
 void PhysicsWorld::update(float delta, bool userCall /* = false*/)
 {
+    deltaTime = delta;
 
     if (_preUpdateCallback)
         _preUpdateCallback();  // fix #11154

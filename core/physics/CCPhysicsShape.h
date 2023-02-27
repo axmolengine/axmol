@@ -358,8 +358,11 @@ protected:
 
 protected:
     PhysicsBody* _body;
+
+public:
     std::vector<cpShape*> _cpShapes;
 
+protected:
     Type _type;
     float _area;
     float _mass;

@@ -374,6 +374,8 @@ public:
      */
     void step(float delta);
 
+    float deltaTime = 0;
+
 protected:
     static PhysicsWorld* construct(Scene* scene);
     bool init();
@@ -406,8 +408,11 @@ protected:
     float _updateTime;
     int _substeps;
     int _fixedRate;
+
+public:
     cpSpace* _cpSpace;
 
+protected:
     bool _updateBodyTransform;
     Vector<PhysicsBody*> _bodies;
     std::list<PhysicsJoint*> _joints;
