@@ -49,12 +49,12 @@ SOFTWARE.
 #include "yasio/detail/errc.hpp"
 #include "yasio/detail/byte_buffer.hpp"
 #include "yasio/detail/fd_set_adapter.hpp"
-#include "yasio/cxx17/memory.hpp"
-#include "yasio/cxx17/string_view.hpp"
+#include "yasio/stl/memory.hpp"
+#include "yasio/stl/string_view.hpp"
 #include "yasio/xxsocket.hpp"
 
 #if !defined(YASIO_HAVE_CARES)
-#  include "yasio/cxx17/shared_mutex.hpp"
+#  include "yasio/stl/shared_mutex.hpp"
 #endif
 
 #if defined(YASIO_HAVE_KCP)
@@ -180,6 +180,12 @@ enum
   //   when forward event enabled, the option YOPT_S_DEFERRED_EVENT was ignored
   YOPT_S_FORWARD_EVENT,
 
+  // Set ssl server cert and private key file
+  // params:
+  //   crtfile: const char*
+  //   keyfile: const char*
+  YOPT_S_SSL_CERT,
+
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
   YOPT_C_UNPACK_FN = 101,
@@ -291,7 +297,8 @@ enum
   YCK_UDP_SERVER = YCM_UDP | YCM_SERVER,
   YCK_KCP_CLIENT = YCM_KCP | YCM_CLIENT | YCM_UDP,
   YCK_KCP_SERVER = YCM_KCP | YCM_SERVER | YCM_UDP,
-  YCK_SSL_CLIENT = YCM_SSL | YCM_CLIENT | YCM_TCP,
+  YCK_SSL_CLIENT = YCK_TCP_CLIENT | YCM_SSL,
+  YCK_SSL_SERVER = YCK_TCP_SERVER | YCM_SSL,
 };
 
 // channel flags
@@ -368,14 +375,17 @@ typedef highp_timer_ptr deadline_timer_ptr;
 typedef event_cb_t io_event_cb_t;
 typedef completion_cb_t io_completion_cb_t;
 
-typedef sbyte_buffer dynamic_buffer_t;
-
-inline dynamic_buffer_t make_dynamic_buffer(const void* p, size_t n) { return dynamic_buffer_t{(const char*)p, (const char*)p + n, std::true_type{}}; }
+// the ssl role
+enum ssl_role
+{
+  YSSL_CLIENT,
+  YSSL_SERVER,
+};
 
 struct io_hostent {
   io_hostent() = default;
   io_hostent(cxx17::string_view ip, u_short port) : host_(cxx17::svtos(ip)), port_(port) {}
-  io_hostent(io_hostent&& rhs) : host_(std::move(rhs.host_)), port_(rhs.port_) {}
+  io_hostent(io_hostent&& rhs) YASIO__NOEXCEPT : host_(std::move(rhs.host_)), port_(rhs.port_) {}
   io_hostent(const io_hostent& rhs) : host_(rhs.host_), port_(rhs.port_) {}
   void set_ip(cxx17::string_view ip) { cxx17::assign(host_, ip); }
   const std::string& get_ip() const { return host_; }
@@ -483,37 +493,6 @@ public:
   unsigned int id() const { return id_; }
 };
 
-#if defined(YASIO_SSL_BACKEND)
-class ssl_auto_handle {
-public:
-  ssl_auto_handle() : ssl_(nullptr) {}
-  ~ssl_auto_handle() { destroy(); }
-  ssl_auto_handle(ssl_auto_handle&& rhs) : ssl_(rhs.release()) {}
-  ssl_auto_handle& operator=(ssl_auto_handle&& rhs)
-  {
-    this->reset(rhs.release());
-    return *this;
-  }
-  SSL* release()
-  {
-    auto tmp = ssl_;
-    ssl_     = nullptr;
-    return tmp;
-  }
-  void reset(SSL* ssl)
-  {
-    if (ssl_)
-      destroy();
-    ssl_ = ssl;
-  }
-  operator SSL*() { return ssl_; }
-  YASIO__DECL void destroy();
-
-protected:
-  SSL* ssl_ = nullptr;
-};
-#endif
-
 class YASIO_API io_channel : public io_base {
   friend class io_service;
   friend class io_transport;
@@ -524,6 +503,9 @@ class YASIO_API io_channel : public io_base {
 
 public:
   io_service& get_service() const { return service_; }
+#if defined(YASIO_SSL_BACKEND)
+  YASIO__DECL SSL_CTX* get_ssl_context(bool client) const;
+#endif
   int index() const { return index_; }
   u_short remote_port() const { return remote_port_; }
   YASIO__DECL std::string format_destination() const;
@@ -626,7 +608,7 @@ private:
   ip::endpoint multiaddr_, multiif_;
 
   // Current it's only for UDP
-  dynamic_buffer_t buffer_;
+  sbyte_buffer buffer_;
 
   // The bytes transferred from socket low layer, currently, only works for client channel
   long long bytes_transferred_ = 0;
@@ -636,23 +618,19 @@ private:
 #if defined(YASIO_HAVE_KCP)
   int kcp_conv_ = 0;
 #endif
-
-#if defined(YASIO_SSL_BACKEND)
-  ssl_auto_handle ssl_;
-#endif
 };
 
 // for tcp transport only
 class YASIO_API io_send_op {
 public:
-  io_send_op(dynamic_buffer_t&& buffer, completion_cb_t&& handler) : offset_(0), buffer_(std::move(buffer)), handler_(std::move(handler)) {}
+  io_send_op(sbyte_buffer&& buffer, completion_cb_t&& handler) : offset_(0), buffer_(std::move(buffer)), handler_(std::move(handler)) {}
   virtual ~io_send_op() {}
 
-  size_t offset_;           // read pos from sending buffer
-  dynamic_buffer_t buffer_; // sending data buffer
+  size_t offset_;       // read pos from sending buffer
+  sbyte_buffer buffer_; // sending data buffer
   completion_cb_t handler_;
 
-  YASIO__DECL virtual int perform(transport_handle_t transport, const void* buf, int n);
+  YASIO__DECL virtual int perform(transport_handle_t transport, const void* buf, int n, int& error);
 
 #if !defined(YASIO_DISABLE_OBJECT_POOL)
   DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_send_op, 512)
@@ -662,11 +640,11 @@ public:
 // for udp transport only
 class YASIO_API io_sendto_op : public io_send_op {
 public:
-  io_sendto_op(dynamic_buffer_t&& buffer, completion_cb_t&& handler, const ip::endpoint& destination)
+  io_sendto_op(sbyte_buffer&& buffer, completion_cb_t&& handler, const ip::endpoint& destination)
       : io_send_op(std::move(buffer), std::move(handler)), destination_(destination)
   {}
 
-  YASIO__DECL int perform(transport_handle_t transport, const void* buf, int n) override;
+  YASIO__DECL int perform(transport_handle_t transport, const void* buf, int n, int& error) override;
 #if !defined(YASIO_DISABLE_OBJECT_POOL)
   DEFINE_CONCURRENT_OBJECT_POOL_ALLOCATION(io_sendto_op, 512)
 #endif
@@ -698,7 +676,7 @@ public:
 protected:
   io_service& get_service() const { return ctx_->get_service(); }
   bool is_open() const { return state_ == state::OPENED && socket_ && socket_->is_open(); }
-  dynamic_buffer_t fetch_packet()
+  sbyte_buffer fetch_packet()
   {
     expected_size_ = -1;
     return std::move(expected_packet_);
@@ -708,16 +686,16 @@ protected:
   YASIO__DECL const print_fn2_t& __get_cprint() const;
 
   // Call at user thread
-  YASIO__DECL virtual int write(dynamic_buffer_t&&, completion_cb_t&&);
+  YASIO__DECL virtual int write(sbyte_buffer&&, completion_cb_t&&);
 
   // Call at user thread
-  virtual int write_to(dynamic_buffer_t&&, const ip::endpoint&, completion_cb_t&&)
+  virtual int write_to(sbyte_buffer&&, const ip::endpoint&, completion_cb_t&&)
   {
     YASIO_LOG("[warning] io_transport doesn't support 'write_to' operation!");
     return 0;
   }
 
-  YASIO__DECL int call_read(void* data, int size, int& error);
+  YASIO__DECL int call_read(void* data, int size, int revent, int& error);
   YASIO__DECL int call_write(io_send_op*, int& error);
   YASIO__DECL void complete_op(io_send_op*, int error);
 
@@ -738,12 +716,12 @@ protected:
   int offset_ = 0;                      // recv buffer offset
 
   int expected_size_ = -1;
-  dynamic_buffer_t expected_packet_;
+  sbyte_buffer expected_packet_;
 
   io_channel* ctx_;
 
-  std::function<int(const void*, int, const ip::endpoint*)> write_cb_;
-  std::function<int(void*, int)> read_cb_;
+  std::function<int(const void*, int, const ip::endpoint*, int&)> write_cb_;
+  std::function<int(void*, int, int, int&)> read_cb_;
 
   privacy::concurrent_queue<send_op_ptr> send_queue_;
 };
@@ -760,10 +738,11 @@ public:
   YASIO__DECL io_transport_ssl(io_channel* ctx, xxsocket_ptr&& s);
   YASIO__DECL void set_primitives() override;
 
-#  if defined(YASIO_SSL_BACKEND)
+  YASIO__DECL void do_ssl_shutdown();
+
 protected:
-  ssl_auto_handle ssl_;
-#  endif
+  YASIO__DECL int do_ssl_handshake(int& error); // always invoke at do_read
+  SSL* ssl_ = nullptr;
 };
 #else
 class io_transport_ssl {};
@@ -781,8 +760,8 @@ protected:
   YASIO__DECL void connect();
   YASIO__DECL void disconnect();
 
-  YASIO__DECL int write(dynamic_buffer_t&&, completion_cb_t&&) override;
-  YASIO__DECL int write_to(dynamic_buffer_t&&, const ip::endpoint&, completion_cb_t&&) override;
+  YASIO__DECL int write(sbyte_buffer&&, completion_cb_t&&) override;
+  YASIO__DECL int write_to(sbyte_buffer&&, const ip::endpoint&, completion_cb_t&&) override;
 
   YASIO__DECL void set_primitives() override;
 
@@ -807,7 +786,7 @@ public:
   ikcpcb* internal_object() { return kcp_; }
 
 protected:
-  YASIO__DECL int write(dynamic_buffer_t&&, completion_cb_t&&) override;
+  YASIO__DECL int write(sbyte_buffer&&, completion_cb_t&&) override;
 
   YASIO__DECL int do_read(int revent, int& error, highp_time_t& wait_duration) override;
   YASIO__DECL bool do_write(highp_time_t& wait_duration) override;
@@ -816,7 +795,7 @@ protected:
 
   YASIO__DECL void check_timeout(highp_time_t& wait_duration) const;
 
-  dynamic_buffer_t rawbuf_; // the low level raw buffer
+  sbyte_buffer rawbuf_; // the low level raw buffer
   ikcpcb* kcp_;
   std::recursive_mutex send_mtx_;
 };
@@ -824,7 +803,7 @@ protected:
 class io_transport_kcp {};
 #endif
 
-using io_packet = dynamic_buffer_t;
+using io_packet = sbyte_buffer;
 #if !defined(YASIO_USE_SHARED_PACKET)
 using packet_t = io_packet;
 inline packet_t wrap_packet(io_packet& raw_packet) { return std::move(raw_packet); }
@@ -959,6 +938,9 @@ class YASIO_API io_service // lgtm [cpp/class-many-fields]
   friend class io_transport_tcp;
   friend class io_transport_udp;
   friend class io_transport_kcp;
+#if defined(YASIO_SSL_BACKEND)
+  friend class io_transport_ssl;
+#endif
   friend class io_channel;
 
 public:
@@ -1041,9 +1023,9 @@ public:
   */
   int write(transport_handle_t thandle, const void* buf, size_t len, completion_cb_t completion_handler = nullptr)
   {
-    return write(thandle, make_dynamic_buffer(buf, len), std::move(completion_handler));
+    return write(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len, std::true_type{}}, std::move(completion_handler));
   }
-  YASIO__DECL int write(transport_handle_t thandle, dynamic_buffer_t buffer, completion_cb_t completion_handler = nullptr);
+  YASIO__DECL int write(transport_handle_t thandle, sbyte_buffer buffer, completion_cb_t completion_handler = nullptr);
 
   /*
    ** Summary: Write data to unconnected UDP transport with specified address.
@@ -1054,9 +1036,9 @@ public:
    */
   int write_to(transport_handle_t thandle, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t completion_handler = nullptr)
   {
-    return write_to(thandle, make_dynamic_buffer(buf, len), to, std::move(completion_handler));
+    return write_to(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len, std::true_type{}}, to, std::move(completion_handler));
   }
-  YASIO__DECL int write_to(transport_handle_t thandle, dynamic_buffer_t buffer, const ip::endpoint& to, completion_cb_t completion_handler = nullptr);
+  YASIO__DECL int write_to(transport_handle_t thandle, sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t completion_handler = nullptr);
 
   // The highp_timer support, !important, the callback is called on the thread of io_service
   YASIO__DECL highp_timer_ptr schedule(const std::chrono::microseconds& duration, timer_cb_t);
@@ -1065,6 +1047,8 @@ public:
 
   // Gets channel by index
   YASIO__DECL io_channel* channel_at(size_t index) const;
+
+  YASIO__DECL static const char* strerror(int error);
 
 private:
   YASIO__DECL void do_stop(uint8_t flags);
@@ -1105,17 +1089,16 @@ private:
   YASIO__DECL void do_connect_completion(io_channel*, fd_set_adapter& fd_set);
 
 #if defined(YASIO_SSL_BACKEND)
-  YASIO__DECL void init_ssl_context();
-  YASIO__DECL void cleanup_ssl_context();
-  YASIO__DECL void do_ssl_handshake(io_channel*);
+  YASIO__DECL SSL_CTX* init_ssl_context(ssl_role role);
+  YASIO__DECL void cleanup_ssl_context(ssl_role role);
 #endif
 
 #if defined(YASIO_HAVE_CARES)
   YASIO__DECL static void ares_getaddrinfo_cb(void* arg, int status, int timeouts, ares_addrinfo* answerlist);
   YASIO__DECL void ares_work_started();
   YASIO__DECL void ares_work_finished();
-  YASIO__DECL int register_ares_fds(socket_native_type* ares_socks, fd_set_adapter& fd_set);
-  YASIO__DECL void process_ares_requests(socket_native_type* socks, int count, fd_set_adapter& fd_set);
+  YASIO__DECL int do_ares_fds(socket_native_type* socks, fd_set_adapter& fd_set, timeval& waitd_tv);
+  YASIO__DECL void do_ares_process_fds(socket_native_type* socks, int count, fd_set_adapter& fd_set);
   YASIO__DECL void recreate_ares_channel();
   YASIO__DECL void config_ares_name_servers();
   YASIO__DECL void destroy_ares_channel();
@@ -1124,7 +1107,7 @@ private:
   void handle_connect_succeed(io_channel* ctx, xxsocket_ptr s) { handle_connect_succeed(allocate_transport(ctx, std::move(s))); }
   YASIO__DECL void handle_connect_succeed(transport_handle_t);
   YASIO__DECL void handle_connect_failed(io_channel*, int ec);
-  YASIO__DECL void notify_connect_succeed(transport_handle_t);
+  YASIO__DECL void active_transport(transport_handle_t);
 
   YASIO__DECL transport_handle_t allocate_transport(io_channel*, xxsocket_ptr&&);
   YASIO__DECL void deallocate_transport(transport_handle_t);
@@ -1166,14 +1149,9 @@ private:
   YASIO__DECL void clear_transports(); // clear all transports
   YASIO__DECL bool close_internal(io_channel*);
 
-  // shutdown a tcp-connection if possible
-  YASIO__DECL void shutdown_internal(transport_handle_t);
-
   // supporting server
   YASIO__DECL void do_accept(io_channel*);
   YASIO__DECL void do_accept_completion(io_channel*, fd_set_adapter& fd_set);
-
-  YASIO__DECL static const char* strerror(int error);
 
   /*
   ** summary: For udp-server only, make dgram handle to communicate with client
@@ -1248,8 +1226,12 @@ private:
     print_fn2_t print_;
 
 #if defined(YASIO_SSL_BACKEND)
-    // The full path cacert(.pem) file for ssl verifaction
+    // SSL client, the full path cacert(.pem) file for ssl verifaction
     std::string cafile_;
+
+    // SSL server
+    std::string crtfile_;
+    std::string keyfile_;
 #endif
 
 #if defined(YASIO_HAVE_CARES)
@@ -1262,7 +1244,7 @@ private:
   // The stop flag to notify all transports needs close
   uint8_t stop_flag_ = 0;
 #if defined(YASIO_SSL_BACKEND)
-  SSL_CTX* ssl_ctx_ = nullptr;
+  SSL_CTX* ssl_roles_[2];
 #endif
 #if defined(YASIO_HAVE_CARES)
   ares_channel ares_         = nullptr; // the ares handle for non blocking io dns resolve support

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // ----------------------------------------------------------------------------
-// Copyright 2020-2022 Arm Limited
+// Copyright 2020-2023 Arm Limited
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy
@@ -74,7 +74,7 @@
  *
  * The codec supports compressing single images, which can be either 2D images or volumetric 3D
  * images. Calling code is responsible for any handling of aggregate types, such as mipmap chains,
- * texture arrays, or sliced 3D textures
+ * texture arrays, or sliced 3D textures.
  *
  * Images are passed in as an astcenc_image structure. Inputs can be either 8-bit unorm, 16-bit
  * half-float, or 32-bit float, as indicated by the data_type field.
@@ -241,6 +241,9 @@ static const float ASTCENC_PRE_MEDIUM = 60.0f;
 /** @brief The thorough quality search preset. */
 static const float ASTCENC_PRE_THOROUGH = 98.0f;
 
+/** @brief The thorough quality search preset. */
+static const float ASTCENC_PRE_VERYTHOROUGH = 99.0f;
+
 /** @brief The exhaustive, highest quality, search preset. */
 static const float ASTCENC_PRE_EXHAUSTIVE = 100.0f;
 
@@ -304,14 +307,6 @@ enum astcenc_type
 static const unsigned int ASTCENC_FLG_MAP_NORMAL          = 1 << 0;
 
 /**
- * @brief Enable mask map compression.
- *
- * Input data will be treated a multi-layer mask map, where is is desirable for the color components
- * to be treated independently for the purposes of error analysis.
- */
-static const unsigned int ASTCENC_FLG_MAP_MASK             = 1 << 1;
-
-/**
  * @brief Enable alpha weighting.
  *
  * The input alpha value is used for transparency, so errors in the RGB components are weighted by
@@ -373,7 +368,6 @@ static const unsigned int ASTCENC_FLG_MAP_RGBM             = 1 << 6;
  * @brief The bit mask of all valid flags.
  */
 static const unsigned int ASTCENC_ALL_FLAGS =
-                              ASTCENC_FLG_MAP_MASK |
                               ASTCENC_FLG_MAP_NORMAL |
                               ASTCENC_FLG_MAP_RGBM |
                               ASTCENC_FLG_USE_ALPHA_WEIGHT |
@@ -440,11 +434,25 @@ struct astcenc_config
 	unsigned int tune_partition_count_limit;
 
 	/**
-	 * @brief The maximum number of partitions searched (-partitionindexlimit).
+	 * @brief The maximum number of partitions searched (-2partitionindexlimit).
 	 *
 	 * Valid values are between 1 and 1024.
 	 */
-	unsigned int tune_partition_index_limit;
+	unsigned int tune_2partition_index_limit;
+
+	/**
+	 * @brief The maximum number of partitions searched (-3partitionindexlimit).
+	 *
+	 * Valid values are between 1 and 1024.
+	 */
+	unsigned int tune_3partition_index_limit;
+
+	/**
+	 * @brief The maximum number of partitions searched (-4partitionindexlimit).
+	 *
+	 * Valid values are between 1 and 1024.
+	 */
+	unsigned int tune_4partition_index_limit;
 
 	/**
 	 * @brief The maximum centile for block modes searched (-blockmodelimit).
@@ -469,6 +477,27 @@ struct astcenc_config
 	unsigned int tune_candidate_limit;
 
 	/**
+	 * @brief The number of trial partitionings per search (-2partitioncandidatelimit).
+	 *
+	 * Valid values are between 1 and TUNE_MAX_PARTITIONING_CANDIDATES.
+	 */
+	unsigned int tune_2partitioning_candidate_limit;
+
+	/**
+	 * @brief The number of trial partitionings per search (-3partitioncandidatelimit).
+	 *
+	 * Valid values are between 1 and TUNE_MAX_PARTITIONING_CANDIDATES.
+	 */
+	unsigned int tune_3partitioning_candidate_limit;
+
+	/**
+	 * @brief The number of trial partitionings per search (-4partitioncandidatelimit).
+	 *
+	 * Valid values are between 1 and TUNE_MAX_PARTITIONING_CANDIDATES.
+	 */
+	unsigned int tune_4partitioning_candidate_limit;
+
+	/**
 	 * @brief The dB threshold for stopping block search (-dblimit).
 	 *
 	 * This option is ineffective for HDR textures.
@@ -476,25 +505,15 @@ struct astcenc_config
 	float tune_db_limit;
 
 	/**
-	 * @brief The amount of overshoot needed to early-out mode 0 fast path.
+	 * @brief The amount of MSE overshoot needed to early-out trials.
 	 *
-	 * We have a fast-path for mode 0 (1 partition, 1 plane) which uses only essential block modes
-	 * as an initial search. This can short-cut compression for simple blocks, but to avoid
-	 * short-cutting too much we force this to overshoot the MSE threshold needed to hit the
-	 * block-local db_limit e.g. 1.0 = no overshoot, 2.0 = need half the error to trigger.
-	 */
-	float tune_mode0_mse_overshoot;
-
-	/**
-	 * @brief The amount of overshoot needed to early-out refinement.
+	 * The first early-out is for 1 partition, 1 plane trials, where we try a minimal encode using
+	 * the high probability block modes. This can short-cut compression for simple blocks.
 	 *
-	 * The codec will refine block candidates iteratively to improve the encoding, based on the
-	 * @c tune_refinement_limit count. Earlier implementations will use all refinement iterations,
-	 * even if the target threshold is reached. This tuning parameter allows an early out, but with
-	 * an overshoot MSE threshold. Setting this to 1.0 will early-out as soon as the target is hit,
-	 * but does reduce image quality vs the default behavior of over-refinement.
+	 * The second early-out is for refinement trials, where we can exit refinement once quality is
+	 * reached.
 	 */
-	float tune_refinement_mse_overshoot;
+	float tune_mse_overshoot;
 
 	/**
 	 * @brief The threshold for skipping 3.1/4.1 trials (-2partitionlimitfactor).
@@ -516,11 +535,6 @@ struct astcenc_config
 	 * This option is ineffective for normal maps.
 	 */
 	float tune_2_plane_early_out_limit_correlation;
-
-	/**
-	 * @brief The threshold below which (inclusive) we stop testing low/high/low+high cutoffs.
-	 */
-	unsigned int tune_low_weight_count_limit;
 
 #if defined(ASTCENC_DIAGNOSTICS)
 	/**

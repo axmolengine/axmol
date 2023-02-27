@@ -54,10 +54,6 @@ local.properties
 # Ignore python compiled files
 *.pyc
 
-# Ignore files build by airplay and marmalade
-build_*_xcode/
-build_*_vc10/
-
 # Ignore files build by xcode
 *.mode*v*
 *.pbxuser
@@ -110,7 +106,7 @@ tags
 # ignore all build
 /build
 
-/build_*
+/build*
 
 # ignore ninja build dir
 /out
@@ -208,3 +204,10 @@ extensions/libccs21
 extensions/libccs20
 extensions/libccs19
 
+tools/bindings-generator/libclang/*.dll
+tools/bindings-generator/libclang/*.dylib
+tools/bindings-generator/libclang/*.so
+
+templates/lua-template-default/Content/src/axmol
+tests/lua-tests/Content/src/axmol
+tests/lua-tests/Content/res

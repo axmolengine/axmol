@@ -95,7 +95,7 @@ android.applicationVariants.all { variant ->
     def copyTaskName = "copy${targetName}ResourcesToAssets"
     tasks.register(copyTaskName) {
         copy {
-            from "${projectDir}/../../Resources"
+            from "${projectDir}/../../Content"
             into "${projectDir}/assets"
             exclude "**/*.gz"
         }

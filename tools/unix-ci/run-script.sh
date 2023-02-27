@@ -61,12 +61,18 @@ function build_android()
 
     # build fairygui_tests
     pushd $AX_ROOT/tests/fairygui-tests/proj.android
-    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH --parallel --info
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH -PRELEASE_STORE_FILE=$AX_ROOT/tools/unix-ci/axmol-ci.jks -PRELEASE_STORE_PASSWORD=axmol-ci -PRELEASE_KEY_ALIAS=axmol-ci -PRELEASE_KEY_PASSWORD=axmol-ci  --parallel --info
     popd
 
     # build cpp_tests
     pushd $AX_ROOT/tests/cpp-tests/proj.android
-    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH -PAX_ENABLE_EXT_EFFEKSEER=ON --parallel --info
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH -PAX_ENABLE_EXT_EFFEKSEER=ON -PRELEASE_STORE_FILE=$AX_ROOT/tools/unix-ci/axmol-ci.jks -PRELEASE_STORE_PASSWORD=axmol-ci -PRELEASE_KEY_ALIAS=axmol-ci -PRELEASE_KEY_PASSWORD=axmol-ci --parallel --info
+    popd
+    
+    # build cpp-template-default, template project not adapte to build in engine directory for android, so needs export env AX_ROOT
+    export AX_ROOT=$AX_ROOT
+    pushd $AX_ROOT/templates/cpp-template-default/proj.android
+    do_retry ./gradlew assembleRelease -PPROP_BUILD_TYPE=cmake -PPROP_APP_ABI=$BUILD_ARCH -PAX_ENABLE_EXT_EFFEKSEER=ON -PRELEASE_STORE_FILE=$AX_ROOT/tools/unix-ci/axmol-ci.jks -PRELEASE_STORE_PASSWORD=axmol-ci -PRELEASE_KEY_ALIAS=axmol-ci -PRELEASE_KEY_PASSWORD=axmol-ci --parallel --info
     popd
 }
 

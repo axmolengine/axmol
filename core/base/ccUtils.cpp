@@ -57,6 +57,7 @@ THE SOFTWARE.
 #include "2d/CCRenderTexture.h"
 
 #include "base/base64.h"
+#include "base/axstd.h"
 
 using namespace std::string_view_literals;
 
@@ -809,7 +810,7 @@ AX_DLL std::string base64Encode(std::string_view s)
          *    - https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
          * 
          */
-#if defined(_HAS_CXX23) && _HAS_CXX23 && (_MSC_VER >= 1931)
+#if _AX_HAS_CXX23
         ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::encode(p, s.data(), s.length()); });
 #else
         ret.resize(n);
@@ -828,7 +829,7 @@ AX_DLL std::string base64Decode(std::string_view s)
     {
         std::string ret;
 
-#if defined(_HAS_CXX23) && _HAS_CXX23 && (_MSC_VER >= 1931)
+#if _AX_HAS_CXX23
         ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::decode(p, s.data(), s.length()); });
 #else
         ret.resize(n);
@@ -844,22 +845,35 @@ int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
 {
     auto n = ax::base64::encoded_size(inLength);
     // should be enough to store 8-bit buffers in 6-bit buffers
-    *out = (char*)malloc(n + 1);
-    if (*out)
+    char* tmp = nullptr;
+    if (n > 0 && (tmp = (char*)malloc(n + 1)))
     {
-        auto ret  = ax::base64::encode(*out, in, inLength);
-        *out[ret] = '\0';
+        auto ret  = ax::base64::encode(tmp, in, inLength);
+        tmp[ret] = '\0';
+        *out      = tmp;
         return ret;
     }
+    *out = nullptr;
     return 0;
 }
 
 AX_DLL int base64Decode(const unsigned char* in, unsigned int inLength, unsigned char** out)
 {
     size_t n = ax::base64::decoded_size(inLength);
-    *out     = (unsigned char*)malloc(n);
-    if (*out)
-        return static_cast<int>(ax::base64::decode(*out, (char*)in, inLength));
+    unsigned char* tmp = nullptr;
+    if (n > 0 && (tmp = (unsigned char*)malloc(n)))
+    {
+        n = static_cast<int>(ax::base64::decode(tmp, reinterpret_cast<const char*>(in), inLength));
+        if (n > 0)
+            *out = tmp;
+        else
+        {
+            *out = nullptr;
+            free(tmp);
+        }
+        return n;
+    }
+    *out = nullptr;
     return 0;
 }
 

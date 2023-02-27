@@ -2,6 +2,7 @@
 Copyright (c) 2010-2013 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2022-2023 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -42,8 +43,8 @@ THE SOFTWARE.
 #include "base/CCScheduler.h"
 #include "base/CCDirector.h"
 
-#define AX_PC_RESOURCES_DIR "Resources/"
-#define AX_PC_RESOURCES_DIR_LEN (sizeof("Resources/") - 1)
+#define AX_CONTENT_DIR "Content/"
+#define AX_CONTENT_DIR_LEN (sizeof("Content/") - 1)
 
 NS_AX_BEGIN
 
@@ -880,14 +881,14 @@ protected:
         // a lambda. To get around this, we will just copy these arguments via lambda capture
 #if defined(_MSC_VER) && _MSC_VER < 1900
         auto lambda = [action, callback, args...]() {
-            Director::getInstance()->getScheduler()->performFunctionInCocosThread(std::bind(callback, action(args...)));
+            Director::getInstance()->getScheduler()->runOnAxmolThread(std::bind(callback, action(args...)));
         };
 #else
         // As cocos2d-x uses c++11, we will use std::bind to leverage move sematics to
         // move our arguments into our lambda, to potentially avoid copying.
         auto lambda = std::bind(
             [](const T& actionIn, const R& callbackIn, const ARGS&... argsIn) {
-                Director::getInstance()->getScheduler()->performFunctionInCocosThread(
+                Director::getInstance()->getScheduler()->runOnAxmolThread(
                     std::bind(callbackIn, actionIn(argsIn...)));
             },
             std::forward<T>(action), std::forward<R>(callback), std::forward<ARGS>(args)...);

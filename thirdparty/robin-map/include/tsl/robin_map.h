@@ -97,8 +97,8 @@ class robin_map {
    public:
     using key_type = Key;
 
-    const key_type& operator()(const std::pair<Key, T>& key_value) const
-        noexcept {
+    const key_type& operator()(
+        const std::pair<Key, T>& key_value) const noexcept {
       return key_value.first;
     }
 
@@ -111,8 +111,8 @@ class robin_map {
    public:
     using value_type = T;
 
-    const value_type& operator()(const std::pair<Key, T>& key_value) const
-        noexcept {
+    const value_type& operator()(
+        const std::pair<Key, T>& key_value) const noexcept {
       return key_value.second;
     }
 
@@ -120,7 +120,9 @@ class robin_map {
       return key_value.second;
     }
 
-    value_type& operator()(std::pair<const Key, T>& key_value) noexcept { return key_value.second; }
+    value_type& operator()(std::pair<const Key, T>& key_value) noexcept { 
+	  return key_value.second; 
+	}
   };
 
   using ht = detail_robin_hash::robin_hash<std::pair<Key, T>, std::pair<const Key, T>, KeySelect,

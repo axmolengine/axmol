@@ -354,7 +354,8 @@ void DrawNode::drawCircle(const Vec2& center,
                           bool drawLineToCenter,
                           float scaleX,
                           float scaleY,
-                          const Color4B& color)
+                          const Color4B& color,
+                          float threshold)
 {
     const float coef = 2.0f * (float)M_PI / segments;
 
@@ -366,13 +367,20 @@ void DrawNode::drawCircle(const Vec2& center,
         vertices[i].x = radius * cosf(rads + angle) * scaleX + center.x;
         vertices[i].y = radius * sinf(rads + angle) * scaleY + center.y;
     }
-    if (drawLineToCenter)
+    if (_lineWidth > threshold)
     {
-        vertices[segments + 1] = center;
-        drawPoly(vertices, segments + 2, true, color);
+        drawPolygon(vertices, segments, Color4B(1.0f, 0.0f, 0.0f, 1.0f), _lineWidth/4, color);
     }
     else
-        drawPoly(vertices, segments + 1, true, color);
+    {
+        if (drawLineToCenter)
+        {
+            vertices[segments + 1] = center;
+            drawPoly(vertices, segments + 2, true, color);
+        }
+        else
+            drawPoly(vertices, segments + 1, true, color);
+    }
 }
 
 void DrawNode::drawCircle(const Vec2& center,
@@ -380,9 +388,10 @@ void DrawNode::drawCircle(const Vec2& center,
                           float angle,
                           unsigned int segments,
                           bool drawLineToCenter,
-                          const Color4B& color)
+                          const Color4B& color,
+                          float threshold)
 {
-    drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color);
+    drawCircle(center, radius, angle, segments, drawLineToCenter, 1.0f, 1.0f, color, threshold);
 }
 
 void DrawNode::drawQuadBezier(const Vec2& origin,

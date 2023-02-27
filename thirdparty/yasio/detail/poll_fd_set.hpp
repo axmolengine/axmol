@@ -26,7 +26,7 @@ public:
 
   void reset() { this->fd_set_.clear(); }
 
-  int poll_io(timeval& waitd_tv) { return ::poll(this->fd_set_.data(), static_cast<int>(this->fd_set_.size()), waitd_tv.tv_sec * 1000 + waitd_tv.tv_usec / 1000); }
+  int poll_io(int wait_ms) { return ::poll(this->fd_set_.data(), static_cast<int>(this->fd_set_.size()), wait_ms); }
 
   int is_set(socket_native_type fd, int events) const
   {

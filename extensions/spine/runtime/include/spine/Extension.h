@@ -119,7 +119,7 @@ namespace spine {
 // the default extension for that engine. It is called the first time
 // SpineExtension::getInstance() is called, when no instance has been set
 // yet.
-	extern SpineExtension *getDefaultExtension();
+	extern SP_API SpineExtension *getDefaultExtension();
 }
 
 #endif /* Spine_Extension_h */

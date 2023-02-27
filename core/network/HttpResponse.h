@@ -246,7 +246,7 @@ protected:
     std::string _currentHeader;
     std::string _currentHeaderValue;
     ResponseHeaderMap _responseHeaders;  /// the returned raw header data. You can also dump it as a string
-    int _responseCode = -1;              /// the status code returned from libcurl, e.g. 200, 404
+    int _responseCode = -1;              /// the status code returned from server, e.g. 200, 404
     int _internalCode = 0;               /// the ret code of perform
     llhttp_t _context;
     llhttp_settings_t _contextSettings;

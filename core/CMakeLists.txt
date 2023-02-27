@@ -36,19 +36,11 @@ if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
 endif()
 
-if (NOT DEFINED AX_USE_COMPAT_GL)
-    set(AX_USE_COMPAT_GL FALSE CACHE INTERNAL "Enabling AX_USE_COMPAT_GL" )
-endif()
-
-if (NOT DEFINED AX_ENABLE_MSEDGE_WEBVIEW2)
-    set(AX_ENABLE_MSEDGE_WEBVIEW2 TRUE CACHE INTERNAL "Enabling windows webview2" )
-endif()
-
-if (NOT DEFINED AX_ENABLE_MFMEDIA)
-    set(AX_ENABLE_MFMEDIA TRUE CACHE INTERNAL "Enabling microsoft media foundation for windows video player" )
-endif()
-
 project(ax_libs)
+
+option (AX_USE_COMPAT_GL "Use compat gl" OFF)
+option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
+option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation for windows video player" ON)
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 12
@@ -144,6 +136,9 @@ set(_AX_SRC axmol.cpp
 list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
+
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
+ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
 # use thirdparty libs
 add_subdirectory(${_AX_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)

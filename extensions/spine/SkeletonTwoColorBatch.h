@@ -105,7 +105,7 @@ namespace spine {
 		bool _forceFlush;
 	};
 
-	class SkeletonTwoColorBatch {
+	class SP_API SkeletonTwoColorBatch {
 	public:
 		static SkeletonTwoColorBatch *getInstance();
 

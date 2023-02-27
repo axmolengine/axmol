@@ -38,7 +38,7 @@ android {
         java.srcDir "src"
         res.srcDir "res"
         manifest.srcFile "AndroidManifest.xml"
-        assets.srcDir "../../Resources"
+        assets.srcDir "assets"
     }
 
     externalNativeBuild {
@@ -96,8 +96,8 @@ android.applicationVariants.all { variant ->
     
     tasks.register(copyTaskName) {
         copy {
-            from "${buildDir}/../../../Resources"
-            into "${buildDir}/intermediates/assets/${variant.dirName}"
+            from "${project_root_folder}/Content"
+            into "${dest_assets_folder}"
             exclude "**/*.gz"
         }
     }

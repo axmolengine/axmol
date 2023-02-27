@@ -14,7 +14,7 @@ env:
   GH_OS_NAME: linux
   BUILD_TARGET: android
   BUILD_TYPE: Release
-  PYENV_VERSION: 2.7.18
+  PYENV_VERSION: 3.7.9
 
 jobs:
   build:
@@ -53,3 +53,10 @@ jobs:
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: tools/unix-ci/run-script.sh
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.arch }}
+        path: |
+          templates/**/*.apk
+          tests/**/*.apk

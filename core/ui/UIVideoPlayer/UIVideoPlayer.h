@@ -54,7 +54,7 @@ namespace ui
  * It's mean VideoPlayer displays a video file above all graphical elements of cocos2d-x.
  * @js NA
  */
-class VideoPlayer : public ax::ui::Widget
+class AX_GUI_DLL VideoPlayer : public ax::ui::Widget
 {
 public:
     /**

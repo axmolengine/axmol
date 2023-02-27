@@ -53,14 +53,14 @@ endif()
 set(GAME_SOURCE)
 set(GAME_HEADER)
 
-file(GLOB GAME_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/Classes/*.h;${CMAKE_CURRENT_SOURCE_DIR}/Classes/*.hpp)
-file(GLOB GAME_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Classes/*.cpp)
+file(GLOB GAME_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h;${CMAKE_CURRENT_SOURCE_DIR}/Source/*.hpp)
+file(GLOB GAME_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp)
 
 set(GAME_RES_FOLDER
-    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
 if(APPLE OR WINDOWS)
-    ax_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
 if(ANDROID)
@@ -80,7 +80,7 @@ elseif(WINDOWS)
     list(APPEND GAME_SOURCE
          proj.win32/main.cpp
          proj.win32/game.rc
-         ${common_res_files}
+         ${common_content_files}
          )
 elseif(APPLE)
     if(IOS)
@@ -121,7 +121,7 @@ elseif(APPLE)
              ${APP_UI_RES}
              )
     endif()
-    list(APPEND GAME_SOURCE ${common_res_files})
+    list(APPEND GAME_SOURCE ${common_content_files})
 endif()
 
 # mark app complie info and libs info
@@ -141,7 +141,7 @@ endif()
 target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
 target_include_directories(${APP_NAME}
-        PRIVATE Classes
+        PRIVATE "${CMAKE_CURRENT_LIST_DIR}/Source"
         PRIVATE ${_AX_ROOT_PATH}/core/audio
 )
 
@@ -168,9 +168,10 @@ elseif(WINDOWS)
     ax_copy_target_dll(${APP_NAME})
 endif()
 
-if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+if (NOT APPLE)
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    ax_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
-elseif(WINDOWS)
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER} SYM_LINK 1)
+    if(WINDOWS)
+        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+    endif()
 endif()

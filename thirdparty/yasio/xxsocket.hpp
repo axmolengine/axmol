@@ -62,7 +62,7 @@ namespace ip
 {
 #pragma pack(push, 1)
 // ip packet
-struct ip_header {
+struct ip_hdr_st {
   // header size; 5+
   unsigned char header_length : 4;
 
@@ -106,7 +106,7 @@ struct ip_header {
   unsigned char protocol; // TCP / UDP / Other
 
   // check header of IP-PACKET 's correctness.
-  unsigned short checksum;
+  unsigned short sum;
 
   typedef union {
     unsigned int value;
@@ -122,7 +122,7 @@ struct ip_header {
   dotted_decimal_t dst_ip;
 };
 
-struct psd_header {
+struct psd_hdr_st {
   unsigned long src_addr;
   unsigned long dst_addr;
   char mbz;
@@ -130,7 +130,7 @@ struct psd_header {
   unsigned short tcp_length;
 };
 
-struct tcp_header {
+struct tcp_hdr_st {
   unsigned short src_port; // lgtm [cpp/class-many-fields]
   unsigned short dst_port;
   unsigned int seqno;
@@ -139,32 +139,32 @@ struct tcp_header {
   unsigned char reserved : 4;
   unsigned char flg_fin : 1, flg_syn : 1, flg_rst : 1, flg_psh : 1, flg_ack : 1, flg_urg : 1, flg_reserved : 2;
   unsigned short win_length;
-  unsigned short checksum;
+  unsigned short sum;
   unsigned short urp;
 };
 
-struct udp_header {
+struct udp_hdr_st {
   unsigned short src_port;
   unsigned short dst_port;
   unsigned short length;
-  unsigned short checksum;
+  unsigned short sum;
 };
 
-struct icmp_header {
-  unsigned char type;      // 8bit type
-  unsigned char code;      // 8bit code
-  unsigned short checksum; // 16bit check sum
-  unsigned short id;       // identifier: usually use process id
-  unsigned short seqno;    // message sequence NO.
+struct icmp_hdr_st {
+  unsigned char type;   // 8bit type
+  unsigned char code;   // 8bit code
+  unsigned short sum;   // 16bit check sum
+  unsigned short id;    // identifier: usually use process id
+  unsigned short seqno; // message sequence NO.
 };
 
-struct eth_header {
+struct eth_hdr_st {
   unsigned dst_eth[6];
   unsigned src_eth[6];
   unsigned eth_type;
 };
 
-struct arp_header {
+struct arp_hdr_st {
   unsigned short arp_hw;    // format of hardware address
   unsigned short arp_pro;   // format of protocol address
   unsigned char arp_hlen;   // length of hardware address
@@ -176,9 +176,9 @@ struct arp_header {
   unsigned long arp_tpa;    // target protocol address;
 };
 
-struct arp_packet {
-  eth_header ethhdr;
-  arp_header arphdr;
+struct arp_packet_st {
+  eth_hdr_st ethhdr;
+  arp_hdr_st arphdr;
 };
 #pragma pack(pop)
 
@@ -635,13 +635,13 @@ public:
   // Disable copy constructor
   YASIO__DECL xxsocket(const xxsocket&) = delete;
   // Construct with a exist socket, it will replace the source
-  YASIO__DECL xxsocket(xxsocket&&);
+  YASIO__DECL xxsocket(xxsocket&&) YASIO__NOEXCEPT;
 
-  YASIO__DECL xxsocket& operator=(socket_native_type handle);
+  YASIO__DECL xxsocket& operator=(socket_native_type handle) YASIO__NOEXCEPT;
   // Disable copy assign operator
   YASIO__DECL xxsocket& operator=(const xxsocket&) = delete;
   // Construct with a exist socket, it will replace the source
-  YASIO__DECL xxsocket& operator=(xxsocket&&);
+  YASIO__DECL xxsocket& operator=(xxsocket&&) YASIO__NOEXCEPT;
 
   // See also as function: open
   YASIO__DECL xxsocket(int af, int type, int protocol);
@@ -1022,6 +1022,7 @@ public:
   YASIO__DECL static bool not_recv_error(int error);
 
   YASIO__DECL static const char* strerror(int error);
+  YASIO__DECL static const char* strerror_r(int error, char* buf, size_t buflen);
   YASIO__DECL static const char* gai_strerror(int error);
 
   /// <summary>
