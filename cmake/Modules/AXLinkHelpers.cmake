@@ -19,17 +19,9 @@ else()
 endif()
 
 function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
-    load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" INCLUDE_INTERNALS 
-        AX_ENABLE_MSEDGE_WEBVIEW2
-        AX_ENABLE_MFMEDIA
-        AX_USE_COMPAT_GL
-        AX_USE_GLAD
-        AX_USE_ALSOFT
-    )
+    load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}")
 
     message(STATUS "AX_USE_COMPAT_GL=${AX_USE_COMPAT_GL}")
-    # message(STATUS "AX_USE_GLAD=${AX_USE_GLAD}")
-    # message(STATUS "AX_USE_ALSOFT=${AX_USE_ALSOFT}")
 
     message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
     message(STATUS "AX_ENABLE_MFMEDIA=${AX_ENABLE_MFMEDIA}")
