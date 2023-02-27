@@ -594,7 +594,7 @@ void FastTMXLayer::updateTotalQuads()
                 bottom           = (tileTexture.origin.y / texSize.height);
                 top              = bottom + (tileTexture.size.height / texSize.height);
 
-                // issue# OpenGL sub-pixel horizontal-vertical lines pixel-talorance fix.
+                // issue#1085 OpenGL sub-pixel horizontal-vertical lines pixel-tolerance fix.
                 float pt = FLT_EPSILON;
 
                 quad.bl.texCoords.u = left + pt;
