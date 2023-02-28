@@ -595,8 +595,8 @@ void FastTMXLayer::updateTotalQuads()
                 top              = bottom + (tileTexture.size.height / texSize.height);
 
                 // issue#1085 OpenGL sub-pixel horizontal-vertical lines pixel-tolerance fix.
-                float ptx = 1.0 / (_layerSize.x * tileSize.x);
-                float pty = 1.0 / (_layerSize.y * tileSize.y);
+                float ptx = 1.0 / (_tileSet->_imageSize.x * tileSize.x);
+                float pty = 1.0 / (_tileSet->_imageSize.y * tileSize.y);
 
                 quad.bl.texCoords.u = left + ptx;
                 quad.bl.texCoords.v = bottom + pty;
