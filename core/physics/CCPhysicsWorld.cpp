@@ -443,7 +443,11 @@ void PhysicsWorld::collisionSeparateCallback(PhysicsContact& contact)
     _eventDispatcher->dispatchEvent(&contact);
 }
 
-void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, const Vec2& point2, void* data)
+void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func,
+                           cpShapeFilter filter,
+                           const Vec2& point1,
+                           const Vec2& point2,
+                           void* data)
 {
     AXASSERT(func != nullptr, "func shouldn't be nullptr");
 
@@ -456,8 +460,8 @@ void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, 
         RayCastCallbackInfo info = {this, func, point1, point2, data};
 
         PhysicsWorldCallback::continues = true;
-        cpSpaceSegmentQuery(_cpSpace, PhysicsHelper::vec22cpv(point1), PhysicsHelper::vec22cpv(point2), 0.0f,
-                            CP_SHAPE_FILTER_ALL, (cpSpaceSegmentQueryFunc)PhysicsWorldCallback::rayCastCallbackFunc,
+        cpSpaceSegmentQuery(_cpSpace, PhysicsHelper::vec22cpv(point1), PhysicsHelper::vec22cpv(point2), 0.0f, filter,
+                            (cpSpaceSegmentQueryFunc)PhysicsWorldCallback::rayCastCallbackFunc,
                             &info);
     }
 }

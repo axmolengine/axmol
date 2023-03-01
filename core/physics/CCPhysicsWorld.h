@@ -33,6 +33,7 @@
 #    include "base/CCVector.h"
 #    include "math/CCMath.h"
 #    include "physics/CCPhysicsBody.h"
+#    include "chipmunk/chipmunk_private.h"
 
 struct cpSpace;
 
@@ -169,7 +170,7 @@ public:
      * @param   end   A Vec2 object contains the end position of the ray.
      * @param   data   User defined data, it is passed to func.
      */
-    void rayCast(PhysicsRayCastCallbackFunc func, const Vec2& start, const Vec2& end, void* data);
+    void rayCast(PhysicsRayCastCallbackFunc func, cpShapeFilter filter, const Vec2& start, const Vec2& end, void* data);
 
     /**
      * Searches for physics shapes that contains in the rect.
