@@ -40,7 +40,9 @@ set(GAME_HEADER)
 set(GAME_RES_FOLDER
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
-if(APPLE OR VS)
+if(APPLE)
+    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+elseif(VS)
     ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
