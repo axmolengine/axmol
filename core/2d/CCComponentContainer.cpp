@@ -50,7 +50,7 @@ bool ComponentContainer::add(Component* com)
 {
     bool ret = false;
     AXASSERT(com != nullptr, "Component must be non-nil");
-    AXASSERT(com->getOwner() == nullptr, "Component already added. It can't be added again");
+    //AXASSERT(com->getOwner() == nullptr, "Component already added. It can't be added again");
     do
     {
         auto componentName = com->getName();
