@@ -59,7 +59,9 @@ file(GLOB GAME_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp)
 set(GAME_RES_FOLDER
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
-if(APPLE OR WINDOWS)
+if(APPLE)
+    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+elseif(WINDOWS)
     ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
