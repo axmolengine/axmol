@@ -50,13 +50,13 @@ endif()
 file(GLOB GAME_SOURCE Source/*.cpp)
 file(GLOB GAME_HEADER Source/*.h)
 
-set(GAME_RES_FOLDER
+set(content_folder
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
 if(APPLE)
-    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${content_folder})
 elseif(WINDOWS)
-    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
 endif()
 
 if(ANDROID)
@@ -162,8 +162,8 @@ endif()
 
 if (NOT APPLE)
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER} SYM_LINK 1)
+    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
     if(WINDOWS)
-        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${content_folder}")
     endif()
 endif()
