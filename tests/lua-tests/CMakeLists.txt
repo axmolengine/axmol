@@ -45,7 +45,12 @@ file(GLOB_RECURSE GAME_SOURCE
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
 set(engine_script_folder "${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/script")
 
-if(APPLE OR VS)
+if(APPLE)
+    ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
+    if (NOT _AX_TOP_LEVEL_APP)
+        ax_mark_multi_resources(engine_script_files RES_TO "Resources/src/axmol" FOLDERS ${content_folder})
+    endif()
+elseif(VS)
     ax_mark_multi_resources(content_files RES_TO "Content" FOLDERS ${content_folder})
     if (NOT _AX_TOP_LEVEL_APP)
         ax_mark_multi_resources(engine_script_files RES_TO "Content/src/axmol" FOLDERS ${content_folder})
