@@ -19,7 +19,7 @@ else()
 endif()
 
 function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
-    load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}")
+    load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" EXCLUDE thirdparty_LIB_DEPENDS)
 
     message(STATUS "AX_USE_COMPAT_GL=${AX_USE_COMPAT_GL}")
 
