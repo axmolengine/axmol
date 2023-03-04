@@ -71,9 +71,9 @@ set(content_folder
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
 if(APPLE)
-    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${content_folder})
 elseif(WINDOWS)
-    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${GAME_RES_FOLDER})
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
 endif()
 
 # add cross-platforms source files and header files
