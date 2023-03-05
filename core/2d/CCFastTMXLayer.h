@@ -296,9 +296,14 @@ public:
                                                      TMXLayerInfo* layerInfo,
                                                      TMXMapInfo* mapInfo);
 
-protected:
     virtual void setOpacity(uint8_t opacity) override;
+    void setColor(const Color4B& color);
+    void setEditorColor(const Color4B& color);
+    std::string getEditorRawTint() { return _hex; };
 
+    bool isVisible() const { return _visible; }
+
+protected:
     void updateTiles(const Rect& culledRect);
     Vec2 calculateLayerOffset(const Vec2& offset);
 
@@ -357,10 +362,18 @@ protected:
     int _vertexZvalue         = 0;
     bool _useAutomaticVertexZ = false;
 
+    Color4B _layerColor;
+    Color4B _editorColor;
+    std::string _hex;
+    bool _visible = true;
+
     /** tile coordinate to node coordinate transform */
     Mat4 _tileToNodeTransform;
     /** data for rendering */
     bool _quadsDirty = true;
+    Vec2 _cameraPositionDirty;
+    float _cameraZoomDirty;
+
     std::vector<int> _tileToQuadIndex;
     std::vector<V3F_C4B_T2F_Quad> _totalQuads;
 #ifdef AX_FAST_TILEMAP_32_BIT_INDICES

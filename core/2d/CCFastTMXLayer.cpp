@@ -84,6 +84,8 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo
     _tiles      = layerInfo->_tiles;
     _quadsDirty = true;
     setOpacity(layerInfo->_opacity);
+    _visible = layerInfo->_visible;
+    _hex = layerInfo->_hex;
     setProperties(layerInfo->getProperties());
 
     // tilesetInfo
@@ -130,15 +132,21 @@ FastTMXLayer::~FastTMXLayer()
 
 void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
+    if (!_visible) return;
+
     updateTotalQuads();
 
-    if (flags != 0 || _dirty || _quadsDirty)
+    auto camera = Camera::getVisitingCamera();
+    if (flags != 0 || _dirty || _quadsDirty || _cameraPositionDirty != camera->getPosition() ||
+        _cameraZoomDirty != camera->getZoom())
     {
+        _cameraPositionDirty = camera->getPosition();
+        auto zoom = _cameraZoomDirty = camera->getZoom();
         Vec2 s             = _director->getVisibleSize();
         const Vec2& anchor = getAnchorPoint();
-        auto rect = Rect(Camera::getVisitingCamera()->getPositionX() - s.width * (anchor.x == 0.0f ? 0.5f : anchor.x),
-                         Camera::getVisitingCamera()->getPositionY() - s.height * (anchor.y == 0.0f ? 0.5f : anchor.y),
-                         s.width, s.height);
+        auto rect = Rect(camera->getPositionX() - s.width * zoom * (anchor.x == 0.0f ? 0.5f : anchor.x),
+                         camera->getPositionY() - s.height * zoom * (anchor.y == 0.0f ? 0.5f : anchor.y),
+                         s.width * zoom, s.height * zoom);
 
         Mat4 inv = transform;
         inv.inverse();
@@ -480,6 +488,18 @@ void FastTMXLayer::setOpacity(uint8_t opacity)
     _quadsDirty = true;
 }
 
+void FastTMXLayer::setColor(const Color4B& color)
+{
+    _layerColor = color;
+    _quadsDirty = true;
+}
+
+void FastTMXLayer::setEditorColor(const Color4B& color)
+{
+    _editorColor = color;
+    _quadsDirty = true;
+}
+
 void FastTMXLayer::updateTotalQuads()
 {
     if (_quadsDirty)
@@ -492,8 +512,14 @@ void FastTMXLayer::updateTotalQuads()
         _tileToQuadIndex.resize(int(_layerSize.width * _layerSize.height), -1);
         _indicesVertexZOffsets.clear();
 
-        auto color = Color4B::WHITE;
-        color.a    = getDisplayedOpacity();
+        auto tint      = _layerColor;
+        auto etint     = Color4F(_editorColor);
+
+        if (etint.r == 0 && etint.g == 0 && etint.b == 0)
+            etint = Color4F(1,1,1,1);
+
+        auto color     = Color4B(tint.r * etint.r, tint.g * etint.g, tint.b * etint.b, 255);
+        color.a        = getDisplayedOpacity() * (tint.a / 255.0) * _visible;
 
         if (_texture->hasPremultipliedAlpha())
         {

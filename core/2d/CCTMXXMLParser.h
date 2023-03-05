@@ -189,6 +189,7 @@ public:
     uint32_t* _tiles;
     bool _visible;
     unsigned char _opacity;
+    std::string _hex;
     bool _ownTiles;
     Vec2 _offset;
 };
@@ -404,6 +405,9 @@ protected:
     int _currentFirstGID;
     bool _recordFirstGID;
     std::string _externalTilesetFilename;
+
+public:
+    std::string encoding;
 };
 
 // end of tilemap_parallax_nodes group

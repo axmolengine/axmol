@@ -378,6 +378,9 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         Value& opacityValue = attributeDict["opacity"];
         layer->_opacity     = opacityValue.isNull() ? 255 : (unsigned char)(255.0f * opacityValue.asFloat());
 
+        Value& tintValue = attributeDict["tintcolor"];
+        layer->_hex = tintValue.isNull() ? "#ffffffff" : tintValue.asString();
+
         float x = attributeDict["x"].asFloat();
         float y = attributeDict["y"].asFloat();
         layer->_offset.set(x, y);
@@ -471,6 +474,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         }
         else if (encoding == "csv")
         {
+            tmxMapInfo->encoding = "csv";
             int layerAttribs = tmxMapInfo->getLayerAttribs();
             tmxMapInfo->setLayerAttribs(layerAttribs | TMXLayerAttribCSV);
             tmxMapInfo->setStoringCharacters(true);
@@ -734,9 +738,14 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             tmxMapInfo->setStoringCharacters(false);
             auto currentString = tmxMapInfo->getCurrentString();
 
+            string nCurrentString = "";
+            for (int i = 0; i < currentString.length(); i++)
+                if (currentString[i] != '\r' && currentString[i] != '\n')
+                    nCurrentString += currentString[i];
+
             vector<string> gidTokens;
             std::stringstream filestr;
-            filestr << currentString;
+            filestr << nCurrentString;
             string sRow;
             while (getline(filestr, sRow, '\n'))
             {

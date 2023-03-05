@@ -377,6 +377,8 @@ public:
 
     float deltaTime = 0;
 
+    virtual void update(float delta, bool userCall = false);
+
 protected:
     static PhysicsWorld* construct(Scene* scene);
     bool init();
@@ -384,7 +386,6 @@ protected:
     virtual void addBody(PhysicsBody* body);
     virtual void addShape(PhysicsShape* shape);
     virtual void removeShape(PhysicsShape* shape);
-    virtual void update(float delta, bool userCall = false);
 
     virtual void debugDraw();
 

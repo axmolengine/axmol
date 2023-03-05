@@ -51,7 +51,7 @@ const int PhysicsWorld::DEBUGDRAW_JOINT   = 0x02;
 const int PhysicsWorld::DEBUGDRAW_CONTACT = 0x04;
 const int PhysicsWorld::DEBUGDRAW_ALL     = DEBUGDRAW_SHAPE | DEBUGDRAW_JOINT | DEBUGDRAW_CONTACT;
 
-const float _debugDrawThickness = 0.5f;  // thickness of the DebugDraw lines, circles, dots, polygons
+const float _debugDrawThickness = 1;  // thickness of the DebugDraw lines, circles, dots, polygons
 
 namespace
 {

@@ -65,6 +65,9 @@ bool FastTMXTiledMap::initWithTMXFile(std::string_view tmxFile)
 
     TMXMapInfo* mapInfo = TMXMapInfo::create(tmxFile);
 
+    if (mapInfo->encoding != "csv")
+        return false;
+
     if (!mapInfo)
     {
         return false;
@@ -169,7 +172,7 @@ void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
     auto& layers = mapInfo->getLayers();
     for (const auto& layerInfo : layers)
     {
-        if (layerInfo->_visible)
+        //if (layerInfo->_visible)
         {
             FastTMXLayer* child = parseLayer(layerInfo, mapInfo);
             if (child == nullptr)
