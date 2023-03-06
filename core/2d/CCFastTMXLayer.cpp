@@ -356,7 +356,16 @@ void FastTMXLayer::setupTiles()
                 }
 
                 int pos = static_cast<int>(newX + _layerSize.width * y);
-                int gid = _tiles[pos];
+                uint32_t gid = _tiles[pos];
+                uint32_t flags = 0;
+
+                if (gid & kTMXTileHorizontalFlag) flags |= kTMXTileHorizontalFlag;
+                if (gid & kTMXTileVerticalFlag)   flags |= kTMXTileVerticalFlag;
+                if (gid & kTMXTileDiagonalFlag)   flags |= kTMXTileDiagonalFlag;
+
+                gid &= ~kTMXTileHorizontalFlag;
+                gid &= ~kTMXTileVerticalFlag;
+                gid &= ~kTMXTileDiagonalFlag;
 
                 // gid are stored in little endian.
                 // if host is big endian, then swap
@@ -369,7 +378,7 @@ void FastTMXLayer::setupTiles()
                 {
                     if (_tileSet->_animationInfo.find(gid) != _tileSet->_animationInfo.end())
                     {
-                        _animTileCoord[gid].emplace_back(Vec2(newX, y));
+                        _animTileCoord[gid].emplace_back(TMXTileAnimFlag{Vec2(newX, y), flags});
                     }
                 }
             }
@@ -960,9 +969,9 @@ TMXTileAnimManager::TMXTileAnimManager(FastTMXLayer* layer)
     _layer = layer;
     for (const auto& p : *_layer->getAnimTileCoord())
     {
-        for (auto&& tilePos : p.second)
+        for (auto&& tile : p.second)
         {
-            _tasks.pushBack(TMXTileAnimTask::create(_layer, _layer->getTileSet()->_animationInfo.at(p.first), tilePos));
+            _tasks.pushBack(TMXTileAnimTask::create(_layer, _layer->getTileSet()->_animationInfo.at(p.first), tile._tilePos, tile._flag));
         }
     }
 }
@@ -996,12 +1005,13 @@ void TMXTileAnimManager::stopAll()
     }
 }
 
-TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos)
+TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag)
 {
     _layer        = layer;
     _animation    = animation;
     _frameCount   = static_cast<uint32_t>(_animation->_frames.size());
     _tilePosition = tilePos;
+    _flag         = flag;
     std::stringstream ss;
     ss << "TickAnimOnTilePos(" << _tilePosition.x << "," << _tilePosition.y << ")";
     _key = ss.str();
@@ -1028,13 +1038,13 @@ void TMXTileAnimTask::stop()
 
 void TMXTileAnimTask::setCurrFrame()
 {
-    _layer->setTileGID(_animation->_frames[_currentFrame]._tileID, _tilePosition);
+    _layer->setTileGID(_animation->_frames[_currentFrame]._tileID, _tilePosition, (TMXTileFlags)_flag);
     _currentFrame = (_currentFrame + 1) % _frameCount;
 }
 
-TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos)
+TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag)
 {
-    TMXTileAnimTask* ret = new TMXTileAnimTask(layer, animation, tilePos);
+    TMXTileAnimTask* ret = new TMXTileAnimTask(layer, animation, tilePos, flag);
     ret->autorelease();
     return ret;
 }
