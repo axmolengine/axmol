@@ -351,4 +351,16 @@ public:
     void onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
+class TileAnimTestNew2 : public TileDemoNew
+{
+public:
+    CREATE_FUNC(TileAnimTestNew2);
+    TileAnimTestNew2();
+    virtual std::string title() const override;
+
+    ax::FastTMXTiledMap* map;
+    bool _animStarted = true;
+    void onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+};
+
 #endif

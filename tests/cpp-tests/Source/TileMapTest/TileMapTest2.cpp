@@ -67,6 +67,7 @@ FastTileMapTests::FastTileMapTests()
     ADD_TEST_CASE(TMXBug787New);
     ADD_TEST_CASE(TMXGIDObjectsTestNew);
     ADD_TEST_CASE(TileAnimTestNew);
+    ADD_TEST_CASE(TileAnimTestNew2);
 }
 
 TileDemoNew::TileDemoNew()
@@ -1394,6 +1395,38 @@ std::string TileAnimTestNew::title() const
 }
 
 void TileAnimTestNew::onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+{
+    _animStarted = !_animStarted;
+    map->setTileAnimEnabled(_animStarted);
+}
+
+//------------------------------------------------------------------
+//
+// TileAnimTestNew2
+//
+//------------------------------------------------------------------
+TileAnimTestNew2::TileAnimTestNew2()
+{
+
+    map = FastTMXTiledMap::create("TileMaps/tile_animation_test_2.tmx");
+    addChild(map, 0, kTagTileMap);
+
+    auto listener            = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesBegan = AX_CALLBACK_2(TileAnimTestNew2::onTouchBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+    Size AX_UNUSED s = map->getContentSize();
+    AXLOG("ContentSize: %f, %f", s.width, s.height);
+
+    map->setTileAnimEnabled(_animStarted);
+}
+
+std::string TileAnimTestNew2::title() const
+{
+    return "Tile animation test with flipped/rotated. Click to toggle the animation";
+}
+
+void TileAnimTestNew2::onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
 {
     _animStarted = !_animStarted;
     map->setTileAnimEnabled(_animStarted);
