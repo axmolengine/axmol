@@ -359,9 +359,9 @@ void FastTMXLayer::setupTiles()
                 uint32_t gid = _tiles[pos];
                 uint32_t flags = 0;
 
-                if (gid & kTMXTileHorizontalFlag) flags |= kTMXTileHorizontalFlag;
-                if (gid & kTMXTileVerticalFlag)   flags |= kTMXTileVerticalFlag;
-                if (gid & kTMXTileDiagonalFlag)   flags |= kTMXTileDiagonalFlag;
+                flags |= gid & kTMXTileHorizontalFlag;
+                flags |= gid & kTMXTileVerticalFlag;
+                flags |= gid & kTMXTileDiagonalFlag;
 
                 gid &= ~kTMXTileHorizontalFlag;
                 gid &= ~kTMXTileVerticalFlag;
