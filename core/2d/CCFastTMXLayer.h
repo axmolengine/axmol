@@ -279,6 +279,7 @@ public:
     // Override
     //
     virtual std::string getDescription() const override;
+    void update(float dt) override;
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     void removeChild(Node* child, bool cleanup = true) override;
 
@@ -286,7 +287,7 @@ public:
      *
      * @return Map from gid of animated tile to its instance.
      */
-    const std::unordered_map<uint32_t, std::vector<Vec2>>* getAnimTileCoord() { return &_animTileCoord; }
+    const std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>>* getAnimTileCoord() { return &_animTileCoord; }
 
     bool hasTileAnimation() const { return !_animTileCoord.empty(); }
 
@@ -346,7 +347,7 @@ protected:
     ValueMap _properties;
 
     /** map from gid of animated tile to its instance. Also useful for optimization*/
-    std::unordered_map<uint32_t, std::vector<Vec2>> _animTileCoord;
+    std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>> _animTileCoord;
     /** pointer to the tile animation manager of this layer */
     TMXTileAnimManager* _tileAnimManager = nullptr;
 
@@ -402,8 +403,10 @@ protected:
 class AX_DLL TMXTileAnimTask : public Ref
 {
 public:
-    TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos);
-    static TMXTileAnimTask* create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos);
+    TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flags = 0);
+    static TMXTileAnimTask* create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flags = 0);
+    void update(float dt);
+    void setTimeScale(float dt);
     /** start the animation task */
     void start();
     /** stop the animation task */
@@ -417,6 +420,8 @@ protected:
     void tickAndScheduleNext(float dt);
 
     bool _isRunning = false;
+    float _currentDt = 0;
+    float _timeScale = 1;
     /** key of schedule task for specific animated tile */
     std::string _key;
     FastTMXLayer* _layer = nullptr;
@@ -427,6 +432,7 @@ protected:
     /** Index of the frame that should be drawn currently */
     uint32_t _currentFrame = 0;
     uint32_t _frameCount   = 0;
+    uint32_t _tileFlags    = 0;
 };
 
 /** @brief TMXTileAnimManager controls all tile animation of a layer.

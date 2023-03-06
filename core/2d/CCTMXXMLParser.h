@@ -139,6 +139,8 @@ struct AX_DLL TMXTileAnimFrame
     TMXTileAnimFrame(uint32_t tileID, float duration);
     /** gid of the frame */
     uint32_t _tileID = 0;
+    /** flags of the frame */
+    uint32_t _flags = 0;
     /** duration of the frame */
     float _duration = 0.0f;
 };
@@ -155,6 +157,12 @@ struct AX_DLL TMXTileAnimInfo : public Ref
     explicit TMXTileAnimInfo(uint32_t tileID);
     uint32_t _tileID = 0;
     std::vector<TMXTileAnimFrame> _frames;
+};
+
+struct AX_DLL TMXTileAnimFlag
+{
+    ax::Vec2 _tilePos;
+    uint32_t _flags;
 };
 
 // Bits on the far end of the 32-bit global tile ID (GID's) are used for tile flags

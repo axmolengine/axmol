@@ -92,6 +92,18 @@ bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view r
     return true;
 }
 
+void FastTMXTiledMap::update(float dt)
+{
+    for (auto&& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer->hasTileAnimation())
+        {
+            layer->update(dt);
+        }
+    }
+}
+
 FastTMXTiledMap::FastTMXTiledMap() : _mapSize(Vec2::ZERO), _tileSize(Vec2::ZERO) {}
 
 FastTMXTiledMap::~FastTMXTiledMap() {}
