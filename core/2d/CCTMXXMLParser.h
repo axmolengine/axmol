@@ -143,6 +143,17 @@ struct AX_DLL TMXTileAnimFrame
     float _duration = 0.0f;
 };
 
+/** @brief TMXTileAnimFlag contains animated tile position and flag
+This information is obtained from the TMX file.
+*/
+struct AX_DLL TMXTileAnimFlag
+{
+    /** position of tile */
+    ax::Vec2 _tilePos;
+    /** flag of a tile */
+    uint32_t _flag = 0;
+};
+
 /** @brief TMXTileAnimInfo contains the information about the animated tile like:
 - Animated Tile gid
 - frames the animated tile contains
