@@ -594,14 +594,18 @@ void FastTMXLayer::updateTotalQuads()
                 bottom           = (tileTexture.origin.y / texSize.height);
                 top              = bottom + (tileTexture.size.height / texSize.height);
 
-                quad.bl.texCoords.u = left;
-                quad.bl.texCoords.v = bottom;
-                quad.br.texCoords.u = right;
-                quad.br.texCoords.v = bottom;
-                quad.tl.texCoords.u = left;
-                quad.tl.texCoords.v = top;
-                quad.tr.texCoords.u = right;
-                quad.tr.texCoords.v = top;
+                // issue#1085 OpenGL sub-pixel horizontal-vertical lines pixel-tolerance fix.
+                float ptx = 1.0 / (_tileSet->_imageSize.x * tileSize.x);
+                float pty = 1.0 / (_tileSet->_imageSize.y * tileSize.y);
+
+                quad.bl.texCoords.u = left + ptx;
+                quad.bl.texCoords.v = bottom + pty;
+                quad.br.texCoords.u = right - ptx;
+                quad.br.texCoords.v = bottom + pty;
+                quad.tl.texCoords.u = left + ptx;
+                quad.tl.texCoords.v = top - pty;
+                quad.tr.texCoords.u = right - ptx;
+                quad.tr.texCoords.v = top - pty;
 
                 quad.bl.colors = color;
                 quad.br.colors = color;

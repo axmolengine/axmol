@@ -436,11 +436,12 @@ void HttpClient::dispatchResponseCallbacks()
     if (_finishedResponseQueue.unsafe_empty())
         return;
 
-    auto AX_UNUSED lck = _finishedResponseQueue.get_lock();
+    auto lck = _finishedResponseQueue.get_lock();
     if (!_finishedResponseQueue.unsafe_empty())
     {
         HttpResponse* response = _finishedResponseQueue.front();
-        _finishedResponseQueue.pop_front();
+        _finishedResponseQueue.unsafe_pop_front();
+        lck.unlock();
         invokeResposneCallbackAndRelease(response);
     }
 }
