@@ -286,7 +286,7 @@ public:
      *
      * @return Map from gid of animated tile to its instance.
      */
-    const std::unordered_map<uint32_t, std::vector<Vec2>>* getAnimTileCoord() { return &_animTileCoord; }
+    const std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>>* getAnimTileCoord() { return &_animTileCoord; }
 
     bool hasTileAnimation() const { return !_animTileCoord.empty(); }
 
@@ -341,7 +341,7 @@ protected:
     ValueMap _properties;
 
     /** map from gid of animated tile to its instance. Also useful for optimization*/
-    std::unordered_map<uint32_t, std::vector<Vec2>> _animTileCoord;
+    std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>> _animTileCoord;
     /** pointer to the tile animation manager of this layer */
     TMXTileAnimManager* _tileAnimManager = nullptr;
 
@@ -389,8 +389,8 @@ protected:
 class AX_DLL TMXTileAnimTask : public Ref
 {
 public:
-    TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos);
-    static TMXTileAnimTask* create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos);
+    TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
+    static TMXTileAnimTask* create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
     /** start the animation task */
     void start();
     /** stop the animation task */
@@ -398,6 +398,9 @@ public:
     bool isRunning() const { return _isRunning; }
 
 protected:
+    /** tile flag */
+    uint32_t _flag = 0;
+
     /** set texture of tile to current frame */
     void setCurrFrame();
     /** tick to next frame and schedule next tick */
