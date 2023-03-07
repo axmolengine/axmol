@@ -359,13 +359,9 @@ void FastTMXLayer::setupTiles()
                 uint32_t gid = _tiles[pos];
                 uint32_t flags = 0;
 
-                flags |= gid & kTMXTileHorizontalFlag;
-                flags |= gid & kTMXTileVerticalFlag;
-                flags |= gid & kTMXTileDiagonalFlag;
-
-                gid &= ~kTMXTileHorizontalFlag;
-                gid &= ~kTMXTileVerticalFlag;
-                gid &= ~kTMXTileDiagonalFlag;
+                // issue#1098 TileMap flipped/rotated animation bug.
+                flags |= gid & kTMXFlipedAll;
+                gid &= ~kTMXFlipedAll;
 
                 // gid are stored in little endian.
                 // if host is big endian, then swap
