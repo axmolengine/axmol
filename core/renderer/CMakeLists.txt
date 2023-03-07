@@ -1,5 +1,6 @@
 set(_AX_RENDERER_HEADER
     renderer/CCCallbackCommand.h
+    renderer/CCColorizer.h
     renderer/CCCustomCommand.h
     renderer/CCGroupCommand.h
     renderer/CCMaterial.h
@@ -9,38 +10,39 @@ set(_AX_RENDERER_HEADER
     renderer/CCQuadCommand.h
     renderer/CCRenderCommand.h
     renderer/CCRenderCommandPool.h
-    renderer/CCRenderState.h
     renderer/CCRenderer.h
+    renderer/CCRenderState.h
+    renderer/ccShaders.h
     renderer/CCTechnique.h
     renderer/CCTexture2D.h
     renderer/CCTextureAtlas.h
     renderer/CCTextureCache.h
     renderer/CCTextureCube.h
     renderer/CCTrianglesCommand.h
-    renderer/ccShaders.h
     
-    renderer/backend/ProgramManager.h
-    renderer/backend/ProgramStateRegistry.h
-
     renderer/backend/Backend.h
     renderer/backend/Buffer.h
     renderer/backend/CommandBuffer.h
     renderer/backend/DepthStencilState.h
     renderer/backend/Device.h
-    renderer/backend/Program.h
-    
+    renderer/backend/DeviceInfo.h
+    renderer/backend/Enums.h
     renderer/backend/Macros.h
+    renderer/backend/PixelBufferDescriptor.h
+    renderer/backend/PixelFormatUtils.h
+    renderer/backend/Program.h
+    renderer/backend/ProgramManager.h
+    renderer/backend/ProgramState.h
+    renderer/backend/ProgramStateRegistry.h
     renderer/backend/RenderPassDescriptor.h
     renderer/backend/RenderPipeline.h
+    renderer/backend/RenderTarget.h
+    renderer/backend/ShaderCache.h
     renderer/backend/ShaderModule.h
     renderer/backend/Texture.h
-    renderer/backend/PixelFormatUtils.h
     renderer/backend/Types.h
-    renderer/backend/Enums.h
-    renderer/backend/VertexLayout.h
-    renderer/backend/ProgramState.h
-    renderer/backend/ShaderCache.h
-    renderer/backend/DeviceInfo.h
+    renderer/backend/VertexLayout.h    
+    
     )
 
 set(_AX_RENDERER_SRC
@@ -87,13 +89,14 @@ list(APPEND _AX_RENDERER_HEADER
     renderer/backend/opengl/CommandBufferGL.h
     renderer/backend/opengl/DepthStencilStateGL.h
     renderer/backend/opengl/DeviceGL.h
+    renderer/backend/opengl/DeviceInfoGL.h
+    renderer/backend/opengl/MacrosGL.h
     renderer/backend/opengl/ProgramGL.h
     renderer/backend/opengl/RenderPipelineGL.h
+    renderer/backend/opengl/RenderTargetGL.h
     renderer/backend/opengl/ShaderModuleGL.h
     renderer/backend/opengl/TextureGL.h
     renderer/backend/opengl/UtilsGL.h
-    renderer/backend/opengl/DeviceInfoGL.h
-    renderer/backend/opengl/RenderTargetGL.h
 )
 
 list(APPEND _AX_RENDERER_SRC
