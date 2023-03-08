@@ -1114,7 +1114,7 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
     }
 }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
 // windows os implement should override in platform specific FileUtiles class
 bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
 {
