@@ -108275,7 +108275,7 @@ int lua_ax_base_FastTMXLayer_getAnimTileCoord(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getAnimTileCoord();
-        object_to_luaval<std::unordered_map<unsigned int, std::vector<ax::Vec2>>>(tolua_S, "std::unordered_map<unsigned int, std::vector<ax::Vec2>>*",(std::unordered_map<unsigned int, std::vector<ax::Vec2>>*)ret);
+        object_to_luaval<std::unordered_map<unsigned int, std::vector<ax::TMXTileAnimFlag>>>(tolua_S, "std::unordered_map<unsigned int, std::vector<ax::TMXTileAnimFlag>>*",(std::unordered_map<unsigned int, std::vector<ax::TMXTileAnimFlag>>*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXLayer:getAnimTileCoord",argc, 0);
@@ -108733,6 +108733,26 @@ int lua_ax_base_TMXTileAnimTask_create(lua_State* tolua_S)
         object_to_luaval<ax::TMXTileAnimTask>(tolua_S, "ax.TMXTileAnimTask",(ax::TMXTileAnimTask*)ret);
         return 1;
     }
+    if (argc == 4)
+    {
+        ax::FastTMXLayer* arg0;
+        ax::TMXTileAnimInfo* arg1;
+        ax::Vec2 arg2;
+        unsigned int arg3;
+        ok &= luaval_to_object<ax::FastTMXLayer>(tolua_S, 2, "ax.FastTMXLayer",&arg0, "ax.TMXTileAnimTask:create");
+        #pragma warning NO CONVERSION TO NATIVE FOR TMXTileAnimInfo*
+		ok = false;
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.TMXTileAnimTask:create");
+        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.TMXTileAnimTask:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXTileAnimTask_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::TMXTileAnimTask::create(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::TMXTileAnimTask>(tolua_S, "ax.TMXTileAnimTask",(ax::TMXTileAnimTask*)ret);
+        return 1;
+    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.TMXTileAnimTask:create",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
@@ -108772,6 +108792,33 @@ int lua_ax_base_TMXTileAnimTask_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXTileAnimTask(arg0, arg1, arg2);
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXTileAnimTask");
+        return 1;
+    }
+    if (argc == 4) 
+    {
+        ax::FastTMXLayer* arg0;
+        ax::TMXTileAnimInfo* arg1;
+        ax::Vec2 arg2;
+        unsigned int arg3;
+
+        ok &= luaval_to_object<ax::FastTMXLayer>(tolua_S, 2, "ax.FastTMXLayer",&arg0, "ax.TMXTileAnimTask:TMXTileAnimTask");
+
+        #pragma warning NO CONVERSION TO NATIVE FOR TMXTileAnimInfo*
+		ok = false;
+
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.TMXTileAnimTask:TMXTileAnimTask");
+
+        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.TMXTileAnimTask:TMXTileAnimTask");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXTileAnimTask_constructor'", nullptr);
+            return 0;
+        }
+        cobj = new ax::TMXTileAnimTask(arg0, arg1, arg2, arg3);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;

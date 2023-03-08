@@ -77,7 +77,7 @@ void TextureInfoGL::applySampler(const SamplerDescriptor& descriptor, bool isPow
     }
 
     // apply sampler for all internal textures
-    foreach ([=, this](GLuint texID, int index) {
+    foreach ([this, target](GLuint texID, int index) {
         glBindTexture(target, textures[index]);
 
         setCurrentTexParameters(target);

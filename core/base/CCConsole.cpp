@@ -517,14 +517,14 @@ bool Console::listenOnTCP(int port)
     hints.ai_family   = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
     WSADATA wsaData;
     n = WSAStartup(MAKEWORD(2, 2), &wsaData);
 #endif
 
     if ((n = getaddrinfo(nullptr, serv, &hints, &res)) != 0)
     {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
         fprintf(stderr, "net_listen error for %s: %s", serv, gai_strerrorA(n));
 #else
         fprintf(stderr, "net_listen error for %s: %s", serv, gai_strerror(n));
@@ -561,7 +561,7 @@ bool Console::listenOnTCP(int port)
             break; /* success */
 
 /* bind error, close and try next one */
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
         closesocket(listenfd);
 #else
         close(listenfd);
@@ -784,7 +784,7 @@ void Console::loop()
                     // receive a SIGPIPE, which will cause linux system shutdown the sending process.
                     // Add this ioctl code to check if the socket has been closed by peer.
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
                     u_long n = 0;
                     ioctlsocket(fd, FIONREAD, &n);
 #else
@@ -841,14 +841,14 @@ void Console::loop()
     // clean up: ignore stdin, stdout and stderr
     for (const auto& fd : _fds)
     {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
         closesocket(fd);
 #else
         close(fd);
 #endif
     }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
     closesocket(_listenfd);
     WSACleanup();
 #else
@@ -1244,7 +1244,7 @@ void Console::commandExit(socket_native_type fd, std::string_view /*args*/)
 {
     FD_CLR(fd, &_read_set);
     _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
     closesocket(fd);
 #else
     close(fd);
@@ -1421,7 +1421,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
         _touchId = rand();
 
         Scheduler* sched = Director::getInstance()->getScheduler();
-        sched->runOnAxmolThread([=, this]() {
+        sched->runOnAxmolThread([x1, y1, this]() {
             float tempx = x1, tempy = y1;
             Director::getInstance()->getOpenGLView()->handleTouchesBegin(1, &_touchId, &tempx, &tempy);
         });
@@ -1450,7 +1450,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
                 {
                     _y_ -= dy / dx;
                 }
-                sched->runOnAxmolThread([=, this]() {
+                sched->runOnAxmolThread([_x_, _y_, this]() {
                     float tempx = _x_, tempy = _y_;
                     Director::getInstance()->getOpenGLView()->handleTouchesMove(1, &_touchId, &tempx, &tempy);
                 });
@@ -1477,7 +1477,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
                 {
                     _y_ -= 1;
                 }
-                sched->runOnAxmolThread([=, this]() {
+                sched->runOnAxmolThread([_x_, _y_, this]() {
                     float tempx = _x_, tempy = _y_;
                     Director::getInstance()->getOpenGLView()->handleTouchesMove(1, &_touchId, &tempx, &tempy);
                 });
@@ -1485,7 +1485,7 @@ void Console::commandTouchSubCommandSwipe(socket_native_type fd, std::string_vie
             }
         }
 
-        sched->runOnAxmolThread([=, this]() {
+        sched->runOnAxmolThread([x2, y2, this]() {
             float tempx = x2, tempy = y2;
             Director::getInstance()->getOpenGLView()->handleTouchesEnd(1, &_touchId, &tempx, &tempy);
         });

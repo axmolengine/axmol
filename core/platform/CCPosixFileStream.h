@@ -5,7 +5,7 @@
 #include "platform/CCFileStream.h"
 #include "platform/CCPlatformConfig.h"
 #include <string>
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#if defined(_WIN32)
 #    include <errno.h>
 #    include <io.h>
 #    include <direct.h>
