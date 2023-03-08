@@ -126,14 +126,14 @@ HttpClient::HttpClient()
     _service->set_option(yasio::YOPT_S_FORWARD_EVENT, 1);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
-    _service->start([=, this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
+    _service->start([this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
 
     for (int i = 0; i < HttpClient::MAX_CHANNELS; ++i)
     {
         _availChannelQueue.unsafe_emplace_back(i);
     }
 
-    _scheduler->schedule([=, this](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
+    _scheduler->schedule([this](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
 
     _isInited = true;
 }
@@ -159,7 +159,7 @@ void HttpClient::setDispatchOnWorkThread(bool bVal)
     _scheduler->unscheduleAllForTarget(this);
     _dispatchOnWorkThread = bVal;
     if (!bVal)
-        _scheduler->schedule([=, this](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
+        _scheduler->schedule([this](float) { dispatchResponseCallbacks(); }, this, 0, false, "#");
 }
 
 void HttpClient::handleNetworkStatusChanged()

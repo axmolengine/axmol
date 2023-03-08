@@ -40,7 +40,7 @@
 
 #include <sstream>
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
 #    define strcasecmp _stricmp
 #endif
 
