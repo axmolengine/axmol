@@ -223,10 +223,6 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
      - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
      - **axmol only provides armv7, arm64, x86_64 prebuilt libraries for ios/tvos**
 
-### Some interesting related projects based on axmol
-
-<https://github.com/axmolengine/axmol/discussions/694>
-
 ### Notes
 
 - ThreadLocalStorage (TLS)
@@ -237,11 +233,8 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 ### Reference links
 
 - Official Cocos2d-x Repo: <https://github.com/cocos2d/cocos2d-x>
-
-### Contributing guide
-
-<https://github.com/axmolengine/axmol/discussions/411>
+- [Some interesting related projects based on axmol](https://github.com/axmolengine/axmol/discussions/694)
+- [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 
 ### The axmol Active Stats
-
 ![Alt](https://repobeats.axiom.co/api/embed/6fcb8168a3af91ba9e797a1f14a3c2edc42ac56a.svg "Repobeats analytics image")
