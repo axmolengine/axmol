@@ -131,6 +131,13 @@ FastTMXLayer::~FastTMXLayer()
 }
 
 void FastTMXLayer::update(float dt) {
+    for (auto&& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer)
+            layer->update(dt);
+    }
+
     if (_tileAnimManager)
         for (auto& t : _tileAnimManager->getTasks())
             if (t && t->isRunning())
@@ -140,6 +147,15 @@ void FastTMXLayer::update(float dt) {
 void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     if (!_visible) return;
+
+    for (auto& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer)
+        {
+            layer->draw(renderer, transform, flags);
+        }
+    }
 
     updateTotalQuads();
 

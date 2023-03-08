@@ -228,7 +228,7 @@ public:
     void update(float dt) override;
 
 protected:
-    FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    std::vector<FastTMXLayer*> parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     TMXTilesetInfo* tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     void buildWithMapInfo(TMXMapInfo* mapInfo);
 

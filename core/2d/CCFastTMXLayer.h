@@ -368,6 +368,10 @@ protected:
     std::string _hex;
     bool _visible = true;
 
+public:
+    bool _isSubLayer = false;
+
+protected:
     /** tile coordinate to node coordinate transform */
     Mat4 _tileToNodeTransform;
     /** data for rendering */

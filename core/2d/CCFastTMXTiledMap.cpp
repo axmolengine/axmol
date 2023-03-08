@@ -109,19 +109,33 @@ FastTMXTiledMap::FastTMXTiledMap() : _mapSize(Vec2::ZERO), _tileSize(Vec2::ZERO)
 FastTMXTiledMap::~FastTMXTiledMap() {}
 
 // private
-FastTMXLayer* FastTMXTiledMap::parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
+std::vector<FastTMXLayer*> FastTMXTiledMap::parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-    TMXTilesetInfo* tileset = tilesetForLayer(layerInfo, mapInfo);
-    if (tileset == nullptr)
-        return nullptr;
+    Vec2 size      = layerInfo->_layerSize;
+    auto& tilesets = mapInfo->getTilesets();
 
-    FastTMXLayer* layer = FastTMXLayer::create(tileset, layerInfo, mapInfo);
+    TMXTilesetInfo* firstTileset;
+    FastTMXLayer* firstLayer = nullptr;
+    std::vector<FastTMXLayer*> layers;
+    for (auto iter = tilesets.crbegin(), iterCrend = tilesets.crend(); iter != iterCrend; ++iter)
+    {
+        TMXTilesetInfo* tileset = *iter;
+        if (tileset == nullptr)
+            continue;
 
-    // tell the layerinfo to release the ownership of the tiles map.
-    layerInfo->_ownTiles = false;
-    layer->setupTiles();
+        auto layer = FastTMXLayer::create(tileset, layerInfo, mapInfo);
+        layer->setupTiles();
+        layerInfo->_ownTiles = false;
 
-    return layer;
+        if (firstLayer)
+            layer->_isSubLayer = true;
+
+        firstLayer = layer;
+
+        layers.push_back(layer);
+    }
+
+    return layers;
 }
 
 TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
@@ -186,20 +200,21 @@ void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
     {
         //if (layerInfo->_visible)
         {
-            FastTMXLayer* child = parseLayer(layerInfo, mapInfo);
-            if (child == nullptr)
+            std::vector<FastTMXLayer*> children = parseLayer(layerInfo, mapInfo);
+            for (auto&& child : children)
             {
-                idx++;
-                continue;
-            }
-            addChild(child, idx, idx);
+                if (child)
+                {
+                    addChild(child, idx, idx);
+                    const Vec2& childSize = child->getContentSize();
 
-            // update content size with the max size
-            const Vec2& childSize = child->getContentSize();
-            Vec2 currentSize      = this->getContentSize();
-            currentSize.width     = std::max(currentSize.width, childSize.width);
-            currentSize.height    = std::max(currentSize.height, childSize.height);
-            this->setContentSize(currentSize);
+                    // update content size with the max size
+                    Vec2 currentSize   = this->getContentSize();
+                    currentSize.width  = std::max(currentSize.width, childSize.width);
+                    currentSize.height = std::max(currentSize.height, childSize.height);
+                    this->setContentSize(currentSize);
+                }
+            }
 
             idx++;
         }
