@@ -24,11 +24,11 @@ function update_lib()
     rm -rf $prebuilt_dir
     cp -r ./tmp/buildware_dist_$VER/$lib_name/prebuilt $lib_dir/
     
-	if [ -d $inc_dir ]; then
+    if [ -d "./tmp/buildware_dist_$VER/$lib_name/include" ]; then
         echo "Update inc files for ${lib_dir}"
-		rm -rf $inc_dir
+        rm -rf $inc_dir
         cp -r ./tmp/buildware_dist_$VER/$lib_name/include $lib_dir/
-	fi
+    fi
 }
 
 update_lib angle
