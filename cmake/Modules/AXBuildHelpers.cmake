@@ -268,6 +268,10 @@ function(ax_mark_resources)
                                         VS_DEPLOYMENT_CONTENT 1
                                         VS_DEPLOYMENT_LOCATION "${VSDEPLOY_LOC}"
             )
+        else()
+            set_source_files_properties(${RES_FILE} PROPERTIES
+                                        HEADER_FILE_ONLY 1
+                                        )
         endif()
 
         if(XCODE OR VS)
