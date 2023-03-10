@@ -35,13 +35,12 @@ obtained from https://directxtk.codeplex.com
 
 #include <memory>
 #include <string>
+#include <stdint.h>
 #include <wincodec.h>
+
 #include "platform/CCPlatformMacros.h"
 
 NS_AX_BEGIN
-
-
-	typedef const unsigned char* ImageBlob;
 
 struct WICConvert
 {
@@ -60,9 +59,9 @@ public:
 	int getHeight();
     size_t getImageDataSize();
 	WICPixelFormatGUID getPixelFormat();
-	size_t getImageData(ImageBlob rawData, size_t dataLen);
-	bool decodeImageData(ImageBlob data, size_t dataLen);
-    bool encodeImageData(std::string_view path, const unsigned char* data, size_t dataLen, WICPixelFormatGUID pixelFormat, int width, int height, GUID containerFormat);
+    size_t getImageData(WICInProcPointer rawData, size_t dataLen);
+    bool decodeImageData(const uint8_t* data, size_t dataLen);
+    bool encodeImageData(std::string_view path, const uint8_t* data, size_t dataLen, WICPixelFormatGUID pixelFormat, int width, int height, GUID containerFormat);
 
 protected:
 	bool processImage(IWICBitmapDecoder* decoder);

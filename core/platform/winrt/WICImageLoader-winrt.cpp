@@ -94,7 +94,7 @@ WICImageLoader::~WICImageLoader()
 	}
 }
 
-bool WICImageLoader::decodeImageData(ImageBlob blob, size_t size)
+bool WICImageLoader::decodeImageData(const uint8_t* blob, size_t size)
 {
     bool bRet = false;
     HRESULT hr = E_FAIL;
@@ -109,7 +109,7 @@ bool WICImageLoader::decodeImageData(ImageBlob blob, size_t size)
 
 	if(SUCCEEDED(hr))
 	{
-		hr = pWicStream->InitializeFromMemory((BYTE*)blob, static_cast<DWORD>(size));
+		hr = pWicStream->InitializeFromMemory(const_cast<WICInProcPointer>(blob), static_cast<DWORD>(size));
 	}
 
 	IWICBitmapDecoder* pDecoder = NULL;
@@ -289,12 +289,12 @@ int WICImageLoader::getWidth()
 	return _width;
 }
 
-size_t WICImageLoader::getImageData(ImageBlob rawData, size_t dataLen)
+size_t WICImageLoader::getImageData(WICInProcPointer rawData, size_t dataLen)
 {
 	if(dataLen < _dataLen)
 		return 0;
 
-	memcpy((void*)rawData, _data, _dataLen);
+	memcpy(rawData, _data, _dataLen);
 
 	return _dataLen;
 }
@@ -309,7 +309,7 @@ WICPixelFormatGUID WICImageLoader::getPixelFormat()
 	return _format;
 }
 
-bool WICImageLoader::encodeImageData(std::string_view path, const unsigned char* data, size_t dataLen, WICPixelFormatGUID pixelFormat, int width, int height, GUID containerFormat)
+bool WICImageLoader::encodeImageData(std::string_view path, const uint8_t* data, size_t dataLen, WICPixelFormatGUID pixelFormat, int width, int height, GUID containerFormat)
 {
 	assert(data != NULL);
 	assert(dataLen > 0 && width > 0 && height > 0);
@@ -365,7 +365,7 @@ bool WICImageLoader::encodeImageData(std::string_view path, const unsigned char*
 		size_t bpp = getBitsPerPixel(pixelFormat);
 		size_t stride = (width * bpp + 7) / 8;
 
-		hr = pFrame->WritePixels(height, static_cast<UINT>(stride), static_cast<UINT>(dataLen), (BYTE*)data);
+		hr = pFrame->WritePixels(height, static_cast<UINT>(stride), static_cast<UINT>(dataLen), const_cast<BYTE*>(data));
 	}
 
 	if (SUCCEEDED(hr)) {

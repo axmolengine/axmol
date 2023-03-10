@@ -40,7 +40,6 @@ static std::string s_pszResourcePath;
 static std::string convertPathFormatToUnixStyle(const std::string_view& path)
 {
     std::string ret{path};
-    int len = ret.length();
     std::replace(ret.begin(), ret.end(), '\\', '/');
     return ret;
 }
@@ -48,7 +47,6 @@ static std::string convertPathFormatToUnixStyle(const std::string_view& path)
 static std::string convertPathFormatToWinStyle(const std::string_view& path)
 {
     std::string ret{path};
-    int len = ret.length();
     std::replace(ret.begin(), ret.end(), '/', '\\');
     return ret;
 }
@@ -172,9 +170,6 @@ FileUtils::Status FileUtilsWinRT::getContents(std::string_view filename, Resizab
 
 bool FileUtilsWinRT::isFileExistInternal(std::string_view strFilePath) const
 {
-    bool ret = false;
-    FILE* pf = nullptr;
-
     std::string strPath{strFilePath};
     if (!isAbsolutePath(strPath))
     {  // Not absolute path, add the default root path at the beginning.

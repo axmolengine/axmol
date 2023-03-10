@@ -31,6 +31,7 @@ public:
                   float dpi, 
         Windows::Graphics::Display::DisplayOrientations orientation, 
         Windows::UI::Core::CoreDispatcher^ dispatcher, Windows::UI::Xaml::Controls::Panel^ panel);
+    AxmolRenderer(const AxmolRenderer&) = delete;
     ~AxmolRenderer();
     void Draw(size_t width, size_t height, float dpi, Windows::Graphics::Display::DisplayOrientations orientation);
 	void QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs^ args);

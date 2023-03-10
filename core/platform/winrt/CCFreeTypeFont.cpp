@@ -101,7 +101,7 @@ unsigned char* FreeTypeFont::initWithString(const char * text, const FontDefinit
 #endif // 0
 
 
-	if(!pBuffer)
+	// if(!pBuffer)
     {
         // attempt to load font from Resources fonts folder
         pBuffer = loadFont(textDefinition._fontName.c_str(), &size);
@@ -247,7 +247,7 @@ FT_Vector FreeTypeFont::getPenForAlignment(FTLineInfo* pInfo, Device::TextAlign 
 
 	    case Device::TextAlign::BOTTOM_LEFT: // Horizontal left and vertical bottom.
             pen.x -=pInfo->bbox.xMin;
-            top = (m_height - m_textHeight) / 2;
+            // top = (m_height - m_textHeight) / 2;
             pen.y = m_height + pInfo->bbox.yMin - ((maxLineNumber - lineNumber) * m_lineHeight);
   		    break;
 
@@ -397,7 +397,7 @@ FT_Error FreeTypeFont::initGlyphs(const char* text)
 
     m_lines.clear();
 
-    while(std::getline(stringStream, line) && !error)
+    while(std::getline(stringStream, line))
     {
         newLine();
 
@@ -422,7 +422,7 @@ FT_Error FreeTypeFont::initGlyphs(const char* text)
 
 // if linewidth > m_inWidth
 // get words for line
-
+#if 0
 void FreeTypeFont::initWords(const char* text)
 {
     std::stringstream stringStream(text);
@@ -448,12 +448,12 @@ void FreeTypeFont::initWords(const char* text)
             words.push_back(line.substr(prev, std::string::npos));
     }
 
-    for (auto& word : words)
-    {
-        std::string foo(word);
-    }
+    // for (auto& word : words)
+    // {
+    //     std::string foo(word);
+    // }
 }
-
+#endif
 FT_Error FreeTypeFont::initWordGlyphs(std::vector<TGlyph>& glyphs, const std::string& text, FT_Vector& pen)
 {
 	FT_GlyphSlot	slot = m_face->glyph;
@@ -705,7 +705,7 @@ unsigned char* FreeTypeFont::loadSystemFont(const char *pFontName, ssize_t *size
 
                 if(SUCCEEDED(hr))
                 {
-	                pBuffer = (unsigned char*)malloc((size_t)fileSize);
+	                pBuffer = reinterpret_cast<unsigned char*>(malloc((size_t)fileSize));
 	                memcpy(pBuffer, fragmentStart, (size_t)fileSize);
                     *size = (unsigned long)fileSize;
                 }

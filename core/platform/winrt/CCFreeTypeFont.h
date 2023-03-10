@@ -101,8 +101,6 @@ private:
 
     void draw_bitmap(unsigned char* pBuffer, FT_Bitmap*  bitmap,FT_Int x,FT_Int y);
 
-    void initWords(const char* text);
-
     void reset();
 
     FT_Vector getPenForAlignment(FTLineInfo* pInfo, Device::TextAlign eAlignMask, int lineNumber, int totalLines);
