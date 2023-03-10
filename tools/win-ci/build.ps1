@@ -61,12 +61,12 @@ Write-Output ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL
 cmake --version
 
 # geneate .sln
-cmake -S . -B build_$BUILD_ARCH -Thost=x64 $CONFIG_ALL_OPTIONS
+cmake -S . -B build_$optArch -Thost=x64 $CONFIG_ALL_OPTIONS
 
 # build cpp_test
-cmake --build build_$BUILD_ARCH --config Release --target cpp_tests
+cmake --build build_$optArch --config Release --target cpp_tests
 
 # biuld lua_tests if not pull request
 if ( !($env:PULL_REQUEST -eq 'yes') ) {
-    cmake --build build_$BUILD_ARCH --config Release --target lua_tests
+    cmake --build build_$optArch --config Release --target lua_tests
 }
