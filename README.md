@@ -96,7 +96,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 
 Using a console window, the command to generate a new project is as follows:
 
-```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua]```
+```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
 
 Examples:
 
