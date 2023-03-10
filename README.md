@@ -94,9 +94,11 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 
 #### Creating A New Project
 
-Using a console window, the command to generate a new project is as follows:
+Using a console window, an example of a command to generate a new project is as follows:
 
 ```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
+
+Type `axmol new --help` at the command line for more options you can pass to `axmol new`
 
 Examples:
 
