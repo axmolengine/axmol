@@ -194,12 +194,6 @@
 - Version: 1.13
 - License: MIT
 
-## range-v3
-- [![Upstream](https://img.shields.io/github/v/tag/ericniebler/range-v3?label=Upstream)](https://github.com/ericniebler/range-v3) 
-- Version: 0.12.0
-- License: BSL-1.0
-
-
 ## rapidjson
 - [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
 - Version: 1.1.0
