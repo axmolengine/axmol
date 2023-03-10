@@ -102064,6 +102064,7 @@ int lua_ax_base_GLViewImpl_create(lua_State* tolua_S)
 }
 int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
 {
+#if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     int argc = 0;
     bool ok  = true;
 
@@ -102115,10 +102116,12 @@ int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLViewImpl_createWithRect'.",&tolua_err);
 #endif
+#endif
     return 0;
 }
 int lua_ax_base_GLViewImpl_createWithFullScreen(lua_State* tolua_S)
 {
+#if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     int argc = 0;
     bool ok  = true;
 
@@ -102151,6 +102154,7 @@ int lua_ax_base_GLViewImpl_createWithFullScreen(lua_State* tolua_S)
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLViewImpl_createWithFullScreen'.",&tolua_err);
 #endif
+    #endif
     return 0;
 }
 static int lua_ax_base_GLViewImpl_finalize(lua_State* tolua_S)

@@ -129,8 +129,12 @@ Examples:
          - add `-DCMAKE_CXX_STANDARD=17` for C++17 on your command line like:
          cmake -S . -B build `-DCMAKE_CXX_STANDARD=17` -G "Visual Studio 17 2022" -A x64
 
+
   6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
-  
+
+#### Windows UWP (Visual Studio 2022), because microsoft limit, only support C++17
+  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"```  
+
 ##### Creating the Visual Studio solution for all axmol test projects
 
   1. Open a console window (Command Prompt, Window Terminal or Powershell)

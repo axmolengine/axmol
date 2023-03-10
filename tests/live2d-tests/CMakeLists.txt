@@ -1,6 +1,6 @@
 #/****************************************************************************
 # Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2021-2022 Bytedance Inc.
+# Copyright (c) 2021-2023 Bytedance Inc.
 #
 # https://axmolengine.github.io/
 #
@@ -50,11 +50,12 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
 endif()
 
 # record sources, headers, resources...
-set(GAME_SOURCE)
-set(GAME_HEADER)
+file(GLOB GAME_SOURCE Source/*.cpp)
+file(GLOB GAME_HEADER Source/*.h)
 
-file(GLOB GAME_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.h;${CMAKE_CURRENT_SOURCE_DIR}/Source/*.hpp)
-file(GLOB GAME_SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/Source/*.cpp)
+set(GAME_INC_DIRS
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source"
+)
 
 set(content_folder
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"
@@ -66,7 +67,6 @@ elseif(WINDOWS)
 endif()
 
 if(ANDROID)
-    # the APP_NAME should match on AndroidManifest.xml
     list(APPEND GAME_SOURCE
          proj.android/app/jni/main.cpp
          )
@@ -74,52 +74,55 @@ elseif(LINUX)
     list(APPEND GAME_SOURCE
          proj.linux/main.cpp
          )
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)
-    list(APPEND GAME_HEADER
-         proj.win32/main.h
-         proj.win32/resource.h
-         )
-    list(APPEND GAME_SOURCE
-         proj.win32/main.cpp
-         proj.win32/game.rc
-         ${common_content_files}
-         )
+    if(NOT WINRT)
+        list(APPEND GAME_HEADER
+             proj.win32/main.h
+             )
+        list(APPEND GAME_SOURCE
+             proj.win32/main.cpp
+             ${common_content_files}
+             )
+    else()
+        ax_setup_winrt_sources()
+    endif()
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
-             proj.ios_mac/ios/AppController.h
-             proj.ios_mac/ios/RootViewController.h
+             proj.ios/AppController.h
+             proj.ios/RootViewController.h
              )
 
         if (TVOS)
             set(APP_UI_RES
-                proj.ios_mac/ios/LaunchScreenBackground.png
-                proj.ios_mac/ios/targets/tvos/LaunchScreen.storyboard
-                proj.ios_mac/ios/targets/tvos/Images.xcassets
+                proj.ios/LaunchScreenBackground.png
+                proj.ios/targets/tvos/LaunchScreen.storyboard
+                proj.ios/targets/tvos/Images.xcassets
                 )
         else()
             set(APP_UI_RES
-                proj.ios_mac/ios/LaunchScreenBackground.png
-                proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard
-                proj.ios_mac/ios/targets/ios/Images.xcassets
+                proj.ios/LaunchScreenBackground.png
+                proj.ios/targets/ios/LaunchScreen.storyboard
+                proj.ios/targets/ios/Images.xcassets
                 )
         endif()
 
         list(APPEND GAME_SOURCE
-             proj.ios_mac/ios/main.m
-             proj.ios_mac/ios/AppController.mm
-             proj.ios_mac/ios/RootViewController.mm
-             proj.ios_mac/ios/Prefix.pch
+             proj.ios/main.m
+             proj.ios/AppController.mm
+             proj.ios/RootViewController.mm
              ${APP_UI_RES}
              )
     elseif(MACOSX)
         set(APP_UI_RES
-            proj.ios_mac/mac/Icon.icns
-            proj.ios_mac/mac/Info.plist
+            proj.mac/Icon.icns
+            proj.mac/Info.plist
+            proj.mac/en.lproj/InfoPlist.strings
             )
         list(APPEND GAME_SOURCE
-             proj.ios_mac/mac/main.cpp
-             proj.ios_mac/mac/Prefix.pch
+             proj.mac/main.cpp
              ${APP_UI_RES}
              )
     endif()
@@ -131,36 +134,36 @@ set(all_code_files
     ${GAME_HEADER}
     ${GAME_SOURCE}
     )
+
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
 else()
     add_library(${APP_NAME} SHARED ${all_code_files})
+
     # whole archive for jni
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+
     config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
 target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
-target_include_directories(${APP_NAME}
-        PRIVATE "${CMAKE_CURRENT_LIST_DIR}/Source"
-        PRIVATE ${_AX_ROOT_PATH}/core/audio
-)
+target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
 # mark app resources
-setup_ax_app_config(${APP_NAME})
+ax_setup_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
     set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axmol.live2d-tests")
 
     if(MACOSX)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.mac/Info.plist")
     elseif(TVOS)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}//proj.ios_mac/ios/targets/tvos/Info.plist")
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios/targets/tvos/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
     elseif(IOS)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}//proj.ios_mac/ios/targets/ios/Info.plist")
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios/targets/ios/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
     endif()
 
@@ -170,10 +173,17 @@ elseif(WINDOWS)
     ax_copy_target_dll(${APP_NAME})
 endif()
 
-if (NOT APPLE)
+if ((NOT APPLE) AND (NOT WINRT))
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
     ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
     if(WINDOWS)
         set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${content_folder}")
     endif()
+endif()
+
+if((NOT IOS) AND (NOT WINRT))
+    message("CMake ${APP_NAME} target_precompile_headers")
+    target_precompile_headers(${APP_NAME} PRIVATE 
+      "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
+    )
 endif()

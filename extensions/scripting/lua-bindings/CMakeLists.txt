@@ -205,6 +205,9 @@ target_include_directories(${_AX_LUA_LIB}
 
 if(WINDOWS)
     target_compile_definitions(${_AX_LUA_LIB} PUBLIC _USRLUASTATIC)
+    if (WINRT)
+        target_compile_options(${_AX_LUA_LIB} PUBLIC /wd4700)
+    endif()
 endif()
 
 set_target_properties(${_AX_LUA_LIB}

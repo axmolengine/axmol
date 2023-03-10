@@ -7,6 +7,7 @@
     See <http://creativecommons.org/publicdomain/zero/1.0/>.
 */
 #include "minimp3.h"
+#include "ntcvt/ntcvt.hpp"
 
 /* flags for mp3dec_ex_open_* functions */
 #define MP3D_SEEK_TO_BYTE   0      /* mp3dec_ex_seek seeks to byte in stream */
@@ -1170,7 +1171,7 @@ static int mp3dec_open_file_h(HANDLE file, mp3dec_map_info_t *map_info)
 
     HANDLE mapping = NULL;
     LARGE_INTEGER s;
-    s.LowPart = GetFileSize(file, (DWORD*)&s.HighPart);
+    s.LowPart = GetFileSizeEx(file, &s);
     if (s.LowPart == INVALID_FILE_SIZE && GetLastError() != NO_ERROR)
         goto error;
     map_info->size = s.QuadPart;
@@ -1191,6 +1192,8 @@ error:
     return MP3D_E_IOERROR;
 }
 
+#if defined(WINAPI_FAMILY)
+#if (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 static int mp3dec_open_file(const char *file_name, mp3dec_map_info_t *map_info)
 {
     if (!file_name)
@@ -1210,6 +1213,28 @@ static int mp3dec_open_file_w(const wchar_t *file_name, mp3dec_map_info_t *map_i
         return MP3D_E_IOERROR;
     return mp3dec_open_file_h(file, map_info);
 }
+#else
+static int mp3dec_open_file(const char* file_name, mp3dec_map_info_t* map_info)
+{
+    if (!file_name)
+        return MP3D_E_PARAM;
+    HANDLE file = CreateFile2(ntcvt::from_chars(file_name).c_str(), GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0);
+    if (INVALID_HANDLE_VALUE == file)
+        return MP3D_E_IOERROR;
+    return mp3dec_open_file_h(file, map_info);
+}
+
+static int mp3dec_open_file_w(const wchar_t* file_name, mp3dec_map_info_t* map_info)
+{
+    if (!file_name)
+        return MP3D_E_PARAM;
+    HANDLE file = CreateFile2(file_name, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0);
+    if (INVALID_HANDLE_VALUE == file)
+        return MP3D_E_IOERROR;
+    return mp3dec_open_file_h(file, map_info);
+}
+#endif
+#endif
 #else
 #include <stdio.h>
 

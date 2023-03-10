@@ -38,6 +38,8 @@ THE SOFTWARE.
 #    include "platform/android/CCApplication-android.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    include "platform/win32/CCApplication-win32.h"
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#    include "platform/winrt/CCApplication-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/CCApplication-linux.h"
 #endif

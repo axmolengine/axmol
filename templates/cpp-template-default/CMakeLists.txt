@@ -63,27 +63,27 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
     endif()
 endif()
 
-# record sources, headers, Content...
-set(GAME_SOURCE)
-set(GAME_HEADER)
+# The common cross-platforms source files and header files
+file(GLOB_RECURSE GAME_HEADER
+    Source/*.h
+    )
+file(GLOB_RECURSE GAME_SOURCE
+    Source/*.cpp
+    )
+    
+set(GAME_INC_DIRS
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source"
+)
 
 set(content_folder
     "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
+
 if(APPLE)
     ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${content_folder})
 elseif(WINDOWS)
     ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
 endif()
-
-# add cross-platforms source files and header files
-file(GLOB_RECURSE GAME_SOURCE
-     Source/*.cpp
-     )
-
-file(GLOB_RECURSE GAME_HEADER
-     Source/*.h
-     )
 
 if(ANDROID)
     # the APP_NAME should match on AndroidManifest.xml
@@ -94,16 +94,21 @@ elseif(LINUX)
     list(APPEND GAME_SOURCE
          proj.linux/main.cpp
          )
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)
-    list(APPEND GAME_HEADER
-         proj.win32/main.h
-         proj.win32/resource.h
-         )
-    list(APPEND GAME_SOURCE
-         proj.win32/main.cpp
-         proj.win32/game.rc
-         ${common_content_files}
-         )
+    if(NOT WINRT)
+        list(APPEND GAME_HEADER
+            proj.win32/main.h
+            proj.win32/resource.h
+            )
+        list(APPEND GAME_SOURCE
+            proj.win32/main.cpp
+            proj.win32/game.rc
+            )
+    else()
+        ax_setup_winrt_sources()
+    endif()
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
@@ -147,14 +152,14 @@ elseif(APPLE)
 endif()
 
 # mark app complie info and libs info
-set(all_code_files
+set(APP_SOURCES
     ${GAME_HEADER}
     ${GAME_SOURCE}
     )
 if(NOT ANDROID)
-    add_executable(${APP_NAME} ${all_code_files})
+    add_executable(${APP_NAME} ${APP_SOURCES})
 else()
-    add_library(${APP_NAME} SHARED ${all_code_files})
+    add_library(${APP_NAME} SHARED ${APP_SOURCES})
     # whole archive for jni
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
     config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
@@ -164,13 +169,16 @@ if (NOT _AX_USE_PREBUILT)
     target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 endif()
 
-target_include_directories(${APP_NAME}
-        PRIVATE Source
-        PRIVATE ${_AX_ROOT_PATH}/core/audio
-)
+# The optional thirdparties(not dependent by engine)
+if (AX_WITH_YAML_CPP)
+    list(APPEND GAME_INC_DIRS "${_AX_ROOT_PATH}/thirdparty/yaml-cpp/include")
+endif()
 
-# mark app resources
-setup_ax_app_config(${APP_NAME})
+target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
+
+
+# mark app resources, resource will be copy auto after mark
+ax_setup_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
@@ -189,12 +197,12 @@ if(APPLE)
     # For code-signing, set the DEVELOPMENT_TEAM:
     #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
 elseif(WINDOWS)
-    if(NOT _AX_USE_PREBUILT)
+    if((NOT _AX_USE_PREBUILT) AND (NOT WINRT))
         ax_copy_target_dll(${APP_NAME})
     endif()
 endif()
 
-if (NOT APPLE)
+if ((NOT APPLE) AND (NOT WINRT))
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
     ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
 
@@ -204,12 +212,6 @@ if (NOT APPLE)
             set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
         endif()
     endif()
-endif()
-
-# The optional thirdparties(not dependent by engine)
-if (AX_WITH_YAML_CPP)
-    target_include_directories(${APP_NAME} PRIVATE ${_AX_ROOT_PATH}/thirdparty/yaml-cpp/include)
-    target_link_libraries(${APP_NAME} yaml-cpp)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows and linux
