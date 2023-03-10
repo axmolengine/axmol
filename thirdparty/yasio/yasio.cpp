@@ -1421,7 +1421,7 @@ void io_service::do_accept(io_channel* ctx)
       ctx->buffer_.resize(YASIO_INET_BUFFER_SIZE);
     }
     register_descriptor(ctx->socket_->native_handle(), socket_event::read);
-    YASIO_KLOGD("[index: %d] open server succeed, socket.fd=%d listening at %s...", ctx->index_, (int)ctx->socket_->native_handle(), ep.to_string().c_str());
+    YASIO_KLOGI("[index: %d] open server succeed, socket.fd=%d listening at %s...", ctx->index_, (int)ctx->socket_->native_handle(), ep.to_string().c_str());
     error = 0;
   } while (false);
 
@@ -1831,7 +1831,7 @@ bool io_service::cleanup_channel(io_channel* ctx, bool clear_mask)
 {
   ctx->clear_mutable_flags();
   bool bret = cleanup_io(ctx, clear_mask);
-#if defined(YAISO_ENABLE_PASSIVE_EVENT)
+#if defined(YASIO_ENABLE_PASSIVE_EVENT)
   if (bret && yasio__testbits(ctx->properties_, YCM_SERVER))
     this->fire_event(ctx->index_, YEK_ON_CLOSE, 0, ctx, 1);
 #endif

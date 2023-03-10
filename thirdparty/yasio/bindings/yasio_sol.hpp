@@ -25,15 +25,14 @@ SOFTWARE.
 #define YASIO__SOL_HPP
 #include "yasio/detail/fp16.hpp"
 
-#if YASIO__HAS_CXX14
+#if YASIO__HAS_CXX17
+#  include "sol/sol.hpp" // sol2-3.x
+#else
+#  include "sol2/sol.hpp" // sol2-2.x
+#endif
 
-#  if !YASIO__HAS_CXX20
-#    include "sol2/sol.hpp"
-#  else
-#    include "sol/sol.hpp"
-#  endif
-
-#  if !YASIO__HAS_CXX17
+// use cxx17::string_view workaround with std::string_view
+#if !YASIO__HAS_CXX17
 namespace sol
 {
 namespace stack
@@ -60,31 +59,14 @@ struct getter<cxx17::string_view> {
 template <>
 struct lua_type_of<cxx17::string_view> : std::integral_constant<type, type::string> {};
 } // namespace sol
-#  endif
+#endif
 
+#if defined(YASIO_HAVE_HALF_FLOAT)
 namespace sol
 {
 namespace stack
 {
-#  if defined(YASIO_HAVE_HALF_FLOAT)
-#    if !YASIO__HAS_CXX20
-template <>
-struct pusher<fp16_t> {
-  static int push(lua_State* L, const fp16_t& value)
-  {
-    lua_pushnumber(L, static_cast<float>(value));
-    return 1;
-  }
-};
-template <>
-struct getter<fp16_t> {
-  static fp16_t get(lua_State* L, int index, record& tracking)
-  {
-    tracking.use(1); // THIS IS THE ONLY BIT THAT CHANGES
-    return fp16_t{static_cast<float>(lua_tonumber(L, index))};
-  }
-};
-#    else
+#  if YASIO__HAS_CXX17 // sol2-3.x pusher/getter
 template <>
 struct unqualified_pusher<fp16_t> {
   static int push(lua_State* L, const fp16_t& value)
@@ -101,15 +83,28 @@ struct unqualified_getter<fp16_t> {
     return fp16_t{static_cast<float>(lua_tonumber(L, index))};
   }
 };
-#    endif
-#  endif
+#  else  // sol2-2.x pusher/getter
+template <>
+struct pusher<fp16_t> {
+  static int push(lua_State* L, const fp16_t& value)
+  {
+    lua_pushnumber(L, static_cast<float>(value));
+    return 1;
+  }
+};
+template <>
+struct getter<fp16_t> {
+  static fp16_t get(lua_State* L, int index, record& tracking)
+  {
+    tracking.use(1); // THIS IS THE ONLY BIT THAT CHANGES
+    return fp16_t{static_cast<float>(lua_tonumber(L, index))};
+  }
+};
+#  endif // YASIO__HAS_CXX17
 } // namespace stack
-#  if defined(YASIO_HAVE_HALF_FLOAT)
 template <>
 struct lua_type_of<fp16_t> : std::integral_constant<type, type::number> {};
-#  endif
 } // namespace sol
+#endif // YASIO_HAVE_HALF_FLOAT
 
-#endif
-
-#endif
+#endif // YASIO__SOL_HPP
