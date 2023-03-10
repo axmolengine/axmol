@@ -57,6 +57,9 @@ if ($BUILD_DLL -eq "true") {
 # output all options for debugging
 Write-Output ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
 
+# print cmake version for debugging purpose
+cmake --version
+
 # geneate .sln
 cmake -S . -B build_$BUILD_ARCH -Thost=x64 $CONFIG_ALL_OPTIONS
 

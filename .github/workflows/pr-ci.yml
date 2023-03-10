@@ -58,6 +58,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1.12.1
         with: 
           arch: ${{ env.BUILD_ARCH }}
+          uwp: true
       - name: Build
         run: tools\win-ci\build.ps1 $env:BUILD_ARCH false true
 
