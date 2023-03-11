@@ -48,10 +48,7 @@ class AX_DLL GLViewImpl : public GLView
 {
 public:
     static GLViewImpl* create(std::string_view viewName);
-    static GLViewImpl* create(std::string_view viewName,
-                              const Vec2& viewSize,
-                              Windows::Graphics::Display::DisplayOrientations orientation,
-                              float dpi);
+    static GLViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f);
 
     /* override functions */
     virtual bool isOpenGLReady();
@@ -63,11 +60,6 @@ public:
 
     virtual void setIMEKeyboardState(bool bOpen) override;
     virtual void setIMEKeyboardState(bool bOpen, std::string_view str);
-
-    virtual bool Create(float width,
-                        float height,
-                        float dpi,
-                        Windows::Graphics::Display::DisplayOrientations orientation);
 
     /**
      * Hide or Show the mouse cursor if there is one.
@@ -128,7 +120,6 @@ public:
 
     void SetDPI(float dpi) { m_dpi = dpi; }
     float GetDPI() { return m_dpi; }
-
     // static function
     /**
     @brief    get the shared main open gl window
@@ -141,7 +132,7 @@ protected:
     GLViewImpl();
     virtual ~GLViewImpl();
 
-    bool initWithRect(std::string_view viewName, Rect rect, float frameZoomFactor);
+    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor);
     bool initWithFullScreen(std::string_view viewName);
 
     /*
@@ -173,7 +164,6 @@ private:
     float m_width;
     float m_height;
     float m_dpi;
-
     Windows::Graphics::Display::DisplayOrientations m_orientation;
     Windows::Foundation::Rect m_keyboardRect;
 
