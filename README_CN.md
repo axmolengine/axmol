@@ -7,11 +7,17 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
   
-[![Windows Build Status](https://github.com/axmolengine/axmol/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows-ci.yml)
-[![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)
-[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)
-[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)
-[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)  
+
+## 支持平台列表
+| Build | Status (github) |
+|-------|-----------------|
+| Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/win32-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/win32-ci.yml)|
+| Windows UWP|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/winuwp-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/winuwp-ci.yml)|
+| Android | [![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)|
+| iOS |[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)|
+| tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|
+| Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
+| macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
 
 **Axmol - X分子引擎，基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++17/20...**
