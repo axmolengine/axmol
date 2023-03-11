@@ -36,6 +36,8 @@
 * Review PR ASAP
   
 ### 主要特性:
+
+* Windows UWP 支持，请参考: https://github.com/axmolengine/axmol/pull/1108
 * 增加tvos支持
 * 增强Windows下工作流，支持链接引擎预编译库, 用法请查看: [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 * Windows 视频播放支持
