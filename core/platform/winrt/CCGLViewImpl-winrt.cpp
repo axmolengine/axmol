@@ -87,6 +87,18 @@ GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
     return nullptr;
 }
 
+GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
+{
+    auto ret = new GLViewImpl();
+    if (ret->initWithFullScreen(viewName))
+    {
+        ret->autorelease();
+        return ret;
+    }
+    AX_SAFE_DELETE(ret);
+    return nullptr;
+}
+
 GLViewImpl::GLViewImpl()
     : _frameZoomFactor(1.0f)
     , _supportTouch(true)
