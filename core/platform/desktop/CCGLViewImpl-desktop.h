@@ -41,7 +41,7 @@ public:
     static GLViewImpl* create(std::string_view viewName);
     static GLViewImpl* create(std::string_view viewName, bool resizable);
     static GLViewImpl* createWithRect(std::string_view viewName,
-                                      Rect size,
+                                      const Rect& size,
                                       float frameZoomFactor = 1.0f,
                                       bool resizable        = false);
     static GLViewImpl* createWithFullScreen(std::string_view viewName);
@@ -135,7 +135,7 @@ protected:
     GLViewImpl(bool initglfw = true);
     virtual ~GLViewImpl();
 
-    bool initWithRect(std::string_view viewName, Rect rect, float frameZoomFactor, bool resizable);
+    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable);
     bool initWithFullScreen(std::string_view viewName);
     bool initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor);
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC) // Windows, Linux: use glad to loadGL

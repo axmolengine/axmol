@@ -74,17 +74,12 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::create(std::string_view viewName,
-                               const Vec2& viewSize,
-                               Windows::Graphics::Display::DisplayOrientations orientation,
-                               float dpi)
+GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
+                                       const Rect& rect, float frameZoomFactor)
 {
     auto ret = new GLViewImpl;
-    if (ret && ret->initWithFullScreen(viewName))
+    if (ret && ret->initWithRect(viewName, rect, frameZoomFactor))
     {
-        ret->m_orientation = orientation;
-        ret->m_dpi         = dpi;
-        ret->UpdateForWindowSizeChange(viewSize.x, viewSize.y);
         ret->autorelease();
         return ret;
     }
@@ -125,25 +120,18 @@ GLViewImpl::~GLViewImpl()
     // TODO: cleanup
 }
 
-bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZoomFactor)
+bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor)
 {
     setViewName(viewName);
     setFrameSize(rect.size.width, rect.size.height);
     setFrameZoomFactor(frameZoomFactor);
+    UpdateForWindowSizeChange(rect.size.width, rect.size.height);
     return true;
 }
 
 bool GLViewImpl::initWithFullScreen(std::string_view viewName)
 {
     return initWithRect(viewName, Rect(0, 0, m_width, m_height), 1.0f);
-}
-
-bool GLViewImpl::Create(float width, float height, float dpi, DisplayOrientations orientation)
-{
-    m_orientation = orientation;
-    m_dpi         = dpi;
-    UpdateForWindowSizeChange(width, height);
-    return true;
 }
 
 void ax::GLViewImpl::setCursorVisible(bool isVisible)
@@ -509,23 +497,6 @@ void GLViewImpl::UpdateForWindowSizeChange(float width, float height)
     }
 }
 
-#if 0
-win32 version
-
-void GLViewEventHandler::OnGLFWWindowSizeFunCallback(GLFWwindow *windows, int width, int height)
-{	
-	auto view = Director::getInstance()->getOpenGLView();
-	if(view && view->getResolutionPolicy() != ResolutionPolicy::UNKNOWN)
-	{
-		Size resSize=view->getDesignResolutionSize();
-		ResolutionPolicy resPolicy=view->getResolutionPolicy();
-		view->setFrameSize(width, height);
- 		view->setDesignResolutionSize(resSize.width, resSize.height, resPolicy);
-		Director::getInstance()->setViewport();
-	}
-}
-#endif
-
 void GLViewImpl::UpdateWindowSize()
 {
     float width, height;
@@ -560,25 +531,6 @@ ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point p)
     float x     = p.X;
     float y     = p.Y;
     returnValue = Vec2(x, y);
-
-#if 0
-    switch (m_orientation)
-    {
-        case DisplayOrientations::Portrait:
-        default:
-            returnValue = Vec2(x, y);
-            break;
-        case DisplayOrientations::Landscape:
-            returnValue = Vec2(y, m_width - x);
-            break;
-        case DisplayOrientations::PortraitFlipped:
-            returnValue = Vec2(m_width - x, m_height - y);
-            break;
-        case DisplayOrientations::LandscapeFlipped:
-            returnValue = Vec2(m_height - y, x);
-            break;
-    }
-#endif
 
     float zoomFactor = GLViewImpl::sharedOpenGLView()->getFrameZoomFactor();
     if (zoomFactor > 0.0f)

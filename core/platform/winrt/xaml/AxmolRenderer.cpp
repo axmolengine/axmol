@@ -59,8 +59,10 @@ void AxmolRenderer::Resume()
 
     if (!glview)
     {
-        GLViewImpl* glview = GLViewImpl::create(
-            "axmol", Vec2{static_cast<float>(m_width), static_cast<float>(m_height)}, m_orientation, m_dpi);
+        GLViewImpl* glview = GLViewImpl::createWithRect(
+            "AXMOL10", ax::Rect{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)});
+        glview->UpdateOrientation(m_orientation);
+        glview->SetDPI(m_dpi);
         glview->setDispatcher(m_dispatcher.Get());
         glview->setPanel(m_panel.Get());
         director->setOpenGLView(glview);
