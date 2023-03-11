@@ -542,7 +542,7 @@ LabelFNTGlyphDesigner::LabelFNTGlyphDesigner()
     auto label1 = Label::createWithBMFont("fonts/futura-48.fnt", "Testing Glyph Designer");
     // Demo for reloadFontAtlasFNT function, after it been called, all UI widget
     //  use the special font must reset font, because the old one is invalid.
-    FontAtlasCache::reloadFontAtlasFNT("fonts/futura-48.fnt");
+    FontAtlasCache::reloadFontAtlasFNT("fonts/futura-48.fnt", ax::Rect::ZERO, false);
     label1->setBMFontFilePath("fonts/futura-48.fnt");
     addChild(label1);
     label1->setPosition(Vec2(winSize.width / 2, winSize.height * 0.4f));

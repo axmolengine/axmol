@@ -39,4 +39,6 @@ THE SOFTWARE.
 #    include "platform/win32/CCPlatformDefine-win32.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/CCPlatformDefine-linux.h"
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#    include "platform/winrt/CCPlatformDefine-winrt.h"
 #endif

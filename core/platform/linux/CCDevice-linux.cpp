@@ -546,7 +546,7 @@ static BitmapDC& sharedBitmapDC()
     return s_BmpDC;
 }
 
-Data Device::getTextureDataForText(const char* text,
+Data Device::getTextureDataForText(std::string_view text,
                                    const FontDefinition& textDefinition,
                                    TextAlign align,
                                    int& width,
@@ -558,7 +558,7 @@ Data Device::getTextureDataForText(const char* text,
     {
         BitmapDC& dc = sharedBitmapDC();
 
-        AX_BREAK_IF(!dc.getBitmap(text, textDefinition, align));
+        AX_BREAK_IF(!dc.getBitmap(text.data(), textDefinition, align));
         AX_BREAK_IF(!dc._data);
         width  = dc.iMaxLineWidth;
         height = dc.iMaxLineHeight;

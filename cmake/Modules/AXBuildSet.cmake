@@ -18,16 +18,6 @@ find_program(PYTHON_COMMAND NAMES python3 python2 python)
 find_program(_AX_COMMAND NAME axmol
     PATHS ${_AX_ROOT_PATH}/tools/console/bin $ENV{AX_CONSOLE_ROOT})
 
-message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
-message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
-message(STATUS "_AX_ROOT_PATH:" ${_AX_ROOT_PATH})
-message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
-# delete binary dir if you hope a full clean re-build
-message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})
-message(STATUS "ENGINE_BINARY_PATH:" ${ENGINE_BINARY_PATH})
-message(STATUS "PYTHON_PATH:"  ${PYTHON_COMMAND})
-message(STATUS "_AX_COMMAND_PATH:"  ${_AX_COMMAND})
-message(STATUS "HOST_SYSTEM:" ${CMAKE_HOST_SYSTEM_NAME})
 # the default behavior of build module
 option(AX_ENABLE_EXT_LUA "Build lua libraries" ON)
 
@@ -44,6 +34,21 @@ include(AXConfigDefine)
 
 # config libraries dependence
 include(AXConfigDepend)
+
+message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
+message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
+message(STATUS "_AX_ROOT_PATH:" ${_AX_ROOT_PATH})
+message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
+# delete binary dir if you hope a full clean re-build
+message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})
+message(STATUS "ENGINE_BINARY_PATH:" ${ENGINE_BINARY_PATH})
+message(STATUS "PYTHON_PATH:"  ${PYTHON_COMMAND})
+message(STATUS "_AX_COMMAND_PATH:"  ${_AX_COMMAND})
+message(STATUS "HOST_SYSTEM:" ${CMAKE_HOST_SYSTEM_NAME})
+message(STATUS "CMAKE_SYSTEM_NAME:" ${CMAKE_SYSTEM_NAME})
+message(STATUS "CMAKE_GENERATOR_PLATFORM:" ${CMAKE_GENERATOR_PLATFORM})
+message(STATUS "CMAKE_SYSTEM_PROCESSOR:" ${CMAKE_SYSTEM_PROCESSOR})
+message(STATUS "ARCH_ALIAS:" ${ARCH_ALIAS})
 
 if(_AX_COMMAND)
     get_filename_component(ax_console_dir ${_AX_COMMAND} DIRECTORY)

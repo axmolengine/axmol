@@ -38,9 +38,23 @@ endif()
 
 project(ax_libs)
 
-option (AX_USE_COMPAT_GL "Use compat gl" OFF)
-option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
-option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation for windows video player" ON)
+if (NOT WINRT)
+    option (AX_USE_COMPAT_GL "Use compat gl" OFF)
+else()
+    option (AX_USE_COMPAT_GL "Use compat gl" ON)
+    set(AX_USE_COMPAT_GL ON)
+endif()
+
+message(STATUS "WINRT=${WINRT}")
+
+if (NOT WINRT)
+    option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
+    option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation for windows video player" ON)
+else() # we not support webview2 and vidio player for WINRT target
+    set(AX_ENABLE_MSEDGE_WEBVIEW2 OFF CACHE BOOL "Use Microsoft Edge webview2" FORCE)
+    set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
+endif()
+
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 12
@@ -62,7 +76,7 @@ option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
-if(WINDOWS OR MACOSX OR LINUX OR ANDROID)
+if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID)
   option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
 else()
   set(AX_ENABLE_EXT_IMGUI OFF)
@@ -136,6 +150,10 @@ set(_AX_SRC axmol.cpp
 list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
+
+if (WINRT)
+    target_compile_options(${_AX_CORE_LIB} PUBLIC /ZW)
+endif()
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
@@ -219,11 +237,6 @@ endif()
 if(ANDROID)
     add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
 endif()
-
-# copy all thirdparty libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
-# if (WINDOWS)
-#     copy_thirdparty_dlls(libcocos2d ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
-# endif()
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

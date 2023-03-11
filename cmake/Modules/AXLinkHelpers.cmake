@@ -1,16 +1,4 @@
-if(WINDOWS)
-    if(NOT ("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
-        set(WIN64 TRUE)
-        set(ARCH_ALIAS "x64")
-    else()
-        set(WIN32 TRUE)
-        set(ARCH_ALIAS "x86")
-    endif()
-    set(OS "windows")
-else()
-    set(ARCH_ALIAS "x64")
-    set(OS "linux")
-endif()
+include(AXPlatform)
 
 if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
     set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
@@ -91,14 +79,14 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     SET (CONFIGURATION_SUBFOLDER "")
     target_link_directories(${APP_NAME}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${OS}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/${OS}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/${OS}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/${OS}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/${platform_name}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/${platform_name}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/${platform_name}/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib  # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
     )
 
-    # Linking OS libs
+    # Linking platform libs
     if (WINDOWS)
         target_link_libraries(${APP_NAME} winmm Version)
     else()
@@ -162,8 +150,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     endif()
 
     # Copy dlls to app bin dir
-        # copy thirdparty dlls to target bin dir
-    # copy_thirdparty_dlls(${APP_NAME} $<TARGET_FILE_DIR:${APP_NAME}>)
     if(WINDOWS)
         set(ssl_dll_suffix "")
         if(WIN64)
