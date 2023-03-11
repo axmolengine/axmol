@@ -48,8 +48,6 @@ private:
     int m_height;
     float m_dpi;
 
-    // The AppDelegate for the Cocos2D app
-    AppDelegate* m_app;
     Platform::Agile<Windows::UI::Core::CoreDispatcher> m_dispatcher;
     Platform::Agile<Windows::UI::Xaml::Controls::Panel> m_panel;
     Windows::Graphics::Display::DisplayOrientations m_orientation;

@@ -23,10 +23,6 @@ using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::Foundation;
 using namespace Windows::Foundation::Collections;
 
-#if !defined(EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE)
-#    define EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_WARP_ANGLE
-#endif
-
 OpenGLES::OpenGLES() :
     mEglDisplay(EGL_NO_DISPLAY),
     mEglContext(EGL_NO_CONTEXT),
@@ -97,8 +93,8 @@ void OpenGLES::Initialize()
         // These attributes can be used to request D3D11 WARP.
         // They are used if eglInitialize fails with both the default display attributes and the 9_3 display attributes.
         EGL_PLATFORM_ANGLE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_TYPE_D3D11_ANGLE,
-        EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE,
-// #ifdef EGL_ANGLE_DISPLAY_ALLOW_RENDER_TO_BACK_BUFFER
+        EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_DEVICE_TYPE_D3D_WARP_ANGLE,
+        // #ifdef EGL_ANGLE_DISPLAY_ALLOW_RENDER_TO_BACK_BUFFER
 //         EGL_ANGLE_DISPLAY_ALLOW_RENDER_TO_BACK_BUFFER, EGL_TRUE,
 // #endif
         EGL_PLATFORM_ANGLE_ENABLE_AUTOMATIC_TRIM_ANGLE, EGL_TRUE,
@@ -209,9 +205,9 @@ EGLSurface OpenGLES::CreateSurface(SwapChainPanel^ panel, const Size* renderSurf
     {
         // EGL_ANGLE_SURFACE_RENDER_TO_BACK_BUFFER is part of the same optimization as EGL_ANGLE_DISPLAY_ALLOW_RENDER_TO_BACK_BUFFER (see above).
         // If you have compilation issues with it then please update your Visual Studio templates.
-#if defined(EGL_ANGLE_SURFACE_RENDER_TO_BACK_BUFFER)
-        EGL_ANGLE_SURFACE_RENDER_TO_BACK_BUFFER, EGL_TRUE,
-#endif
+//#if defined(EGL_ANGLE_SURFACE_RENDER_TO_BACK_BUFFER)
+//        EGL_ANGLE_SURFACE_RENDER_TO_BACK_BUFFER, EGL_TRUE,
+//#endif
         EGL_NONE
     };
     
