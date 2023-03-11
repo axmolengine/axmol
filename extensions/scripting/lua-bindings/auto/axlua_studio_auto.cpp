@@ -8162,6 +8162,56 @@ int lua_ax_studio_Bone_getDisplayManager(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_studio_Bone_setIgnoreMovementBoneData(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocostudio::Bone* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccs.Bone",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocostudio::Bone*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_studio_Bone_setIgnoreMovementBoneData'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccs.Bone:setIgnoreMovementBoneData");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_studio_Bone_setIgnoreMovementBoneData'", nullptr);
+            return 0;
+        }
+        cobj->setIgnoreMovementBoneData(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccs.Bone:setIgnoreMovementBoneData",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_studio_Bone_setIgnoreMovementBoneData'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_studio_Bone_isIgnoreMovementBoneData(lua_State* tolua_S)
 {
     int argc = 0;
@@ -8619,6 +8669,7 @@ int lua_register_ax_studio_Bone(lua_State* tolua_S)
         tolua_function(tolua_S,"setChildArmature",lua_ax_studio_Bone_setChildArmature);
         tolua_function(tolua_S,"getChildArmature",lua_ax_studio_Bone_getChildArmature);
         tolua_function(tolua_S,"getDisplayManager",lua_ax_studio_Bone_getDisplayManager);
+        tolua_function(tolua_S,"setIgnoreMovementBoneData",lua_ax_studio_Bone_setIgnoreMovementBoneData);
         tolua_function(tolua_S,"isIgnoreMovementBoneData",lua_ax_studio_Bone_isIgnoreMovementBoneData);
         tolua_function(tolua_S,"setBlendFunc",lua_ax_studio_Bone_setBlendFunc);
         tolua_function(tolua_S,"getBlendFunc",lua_ax_studio_Bone_getBlendFunc);
