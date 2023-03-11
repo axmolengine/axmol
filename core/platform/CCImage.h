@@ -33,6 +33,12 @@ THE SOFTWARE.
 #include "renderer/CCTexture2D.h"
 #include "base/CCData.h"
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#    define AX_USE_WIC 1
+#else
+#    define AX_USE_WIC 0
+#endif
+
 // premultiply alpha, or the effect will be wrong when using other pixel formats in Texture2D,
 // such as RGB888, RGB5A1
 #define AX_RGB_PREMULTIPLY_ALPHA(vr, vg, vb, va)                             \
@@ -188,7 +194,10 @@ public:
 
 protected:
     typedef struct sImageTGA tImageTGA;
-
+#if AX_USE_WIC
+    bool encodeWithWIC(std::string_view filePath, bool isToRGB, GUID containerFormat);
+    bool decodeWithWIC(const unsigned char* data, ssize_t dataLen);
+#endif
     bool initWithJpgData(uint8_t* data, ssize_t dataLen);
     bool initWithPngData(uint8_t* data, ssize_t dataLen);
     bool initWithBmpData(uint8_t* data, ssize_t dataLen);

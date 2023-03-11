@@ -82,7 +82,7 @@
 
 ## GHC (iOS devices only)
 - [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
-- Version: 1.5.12
+- Version: 1.5.14
 - License: MIT
 
 ## jni.hpp
@@ -138,7 +138,7 @@
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
-- Version: git ca7c706(316)
+- Version: git ca7c706(316) with modified for UWP apps support
 - License: CC0-1.0
 
 ## mio
@@ -169,7 +169,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.23.0
+- Version: 1.23.0 with modified for UWP apps support
 - License: LGPL-2.1
 
 ## OpenSSL

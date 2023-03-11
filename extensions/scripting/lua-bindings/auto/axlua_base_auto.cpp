@@ -1564,8 +1564,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::FontDefinition arg1;
@@ -1580,8 +1580,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 3) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1600,8 +1600,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 4) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1624,8 +1624,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 5) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1652,8 +1652,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 6) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1684,8 +1684,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 7) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1720,8 +1720,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 8) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;

@@ -1170,7 +1170,7 @@ static int mp3dec_open_file_h(HANDLE file, mp3dec_map_info_t *map_info)
 
     HANDLE mapping = NULL;
     LARGE_INTEGER s;
-    s.LowPart = GetFileSize(file, (DWORD*)&s.HighPart);
+    s.LowPart = GetFileSizeEx(file, &s);
     if (s.LowPart == INVALID_FILE_SIZE && GetLastError() != NO_ERROR)
         goto error;
     map_info->size = s.QuadPart;
@@ -1191,6 +1191,8 @@ error:
     return MP3D_E_IOERROR;
 }
 
+#if defined(WINAPI_FAMILY)
+#if (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 static int mp3dec_open_file(const char *file_name, mp3dec_map_info_t *map_info)
 {
     if (!file_name)
@@ -1210,6 +1212,41 @@ static int mp3dec_open_file_w(const wchar_t *file_name, mp3dec_map_info_t *map_i
         return MP3D_E_IOERROR;
     return mp3dec_open_file_h(file, map_info);
 }
+#else
+static int mp3dec_open_file(const char* file_name, mp3dec_map_info_t* map_info)
+{
+    if (!file_name)
+        return MP3D_E_PARAM;
+    int cch = ::MultiByteToWideChar(CP_UTF8, 0, file_name, -1, NULL, 0);
+    if (cch < 2)
+        return MP3D_E_PARAM;
+    wchar_t* file_name_w = (wchar_t*)malloc(cch * sizeof(wchar_t*));
+    if (!file_name_w)
+        return MP3D_E_MEMORY;
+    if (::MultiByteToWideChar(CP_UTF8, 0, file_name, cch, file_name_w, cch) != cch)
+    {
+        free(file_name_w);
+        return MP3D_E_PARAM;
+    }
+
+    HANDLE file = CreateFile2(file_name_w, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0);
+    free(file_name_w);
+    if (INVALID_HANDLE_VALUE == file)
+        return MP3D_E_IOERROR;
+    return mp3dec_open_file_h(file, map_info);
+}
+
+static int mp3dec_open_file_w(const wchar_t* file_name, mp3dec_map_info_t* map_info)
+{
+    if (!file_name)
+        return MP3D_E_PARAM;
+    HANDLE file = CreateFile2(file_name, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0);
+    if (INVALID_HANDLE_VALUE == file)
+        return MP3D_E_IOERROR;
+    return mp3dec_open_file_h(file, map_info);
+}
+#endif
+#endif
 #else
 #include <stdio.h>
 

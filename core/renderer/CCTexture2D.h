@@ -269,7 +269,7 @@ public:
      @param enableWrap Whether enable text wrap or not.
      @param overflow Whether shrink font size when content larger than the dimensions.
      */
-    bool initWithString(const char* text,
+    bool initWithString(std::string_view text,
                         std::string_view fontName,
                         float fontSize,
                         const Vec2& dimensions    = Vec2(0, 0),
@@ -283,7 +283,7 @@ public:
      @param text A null terminated string.
      @param textDefinition A FontDefinition object contains font attributes.
      */
-    bool initWithString(const char* text, const FontDefinition& textDefinition);
+    bool initWithString(std::string_view text, const FontDefinition& textDefinition);
 
     //!!Used for render buffer, such depth stencil attachment
     bool updateTextureDescriptor(const backend::TextureDescriptor& descriptor, bool preMultipliedAlpha = false);

@@ -38,7 +38,7 @@ if not view then
             height = AX_DESIGN_RESOLUTION.height
         end
     end
-    view = cc.GLViewImpl:createWithRect("Cocos2d-Lua", cc.rect(0, 0, width, height))
+    view = cc.GLViewImpl:createWithRect("Axmol-Lua", cc.rect(0, 0, width, height))
     director:setOpenGLView(view)
 end
 

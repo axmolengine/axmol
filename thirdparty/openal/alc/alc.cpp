@@ -118,6 +118,9 @@
 #ifdef HAVE_ALSA
 #include "backends/alsa.h"
 #endif
+#ifdef HAVE_XAUDIO2
+#include "backends/xaudio2.h"
+#endif
 #ifdef HAVE_WASAPI
 #include "backends/wasapi.h"
 #endif
@@ -210,6 +213,9 @@ BackendInfo BackendList[] = {
 #endif
 #ifdef HAVE_PULSEAUDIO
     { "pulse", PulseBackendFactory::getFactory },
+#endif
+#ifdef HAVE_XAUDIO2
+    {"xaudio2", XAudio2BackendFactory::getFactory},
 #endif
 #ifdef HAVE_WASAPI
     { "wasapi", WasapiBackendFactory::getFactory },

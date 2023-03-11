@@ -4,7 +4,7 @@ set(target_name ${lib_name})
 
 project(${lib_name})
 
-include(../cmake/AXConfigThirdparty.cmake)
+include(AXPlatform)
 
 set(${target_name}_src
    pugixml.cpp

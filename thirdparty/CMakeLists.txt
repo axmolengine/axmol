@@ -146,6 +146,10 @@ function(configure_target_outdir target)
     )
 endfunction()
 
+if (WINRT)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
+endif()
+
 if(NOT DEFINED AX_USE_LUAJIT)
     set(AX_USE_LUAJIT FALSE CACHE INTERNAL "Use luajit instead plainlua")
 endif()
@@ -163,7 +167,6 @@ add_library(thirdparty STATIC empty.cpp)
 # bellow are header only libs
 target_include_directories(thirdparty
     INTERFACE "robin-map/include"
-    INTERFACE "range-v3/include"
 )
 
 if (ANDROID)
@@ -256,29 +259,10 @@ if(AX_WITH_BULLET)
     target_link_libraries(thirdparty bullet)
     configure_target_outdir(bullet)
 endif(AX_WITH_BULLET)
-if(AX_WITH_JPEG)
-    # set(WITH_SIMD ${CMAKE_ASM_NASM_COMPILER_LOADED} CACHE BOOL "Build TurboJPEG with simd speed up" FORCE)
-    # set(WITH_JPEG8 TRUE CACHE BOOL "Build libjpeg-turbo with JEPG8 API" FORCE)
-    # set(ENABLE_SHARED FALSE CACHE BOOL "Build shared libraries" FORCE)
-    # set(WITH_TURBOJPEG FALSE CACHE BOOL "Include the TurboJPEG API library and associated test programs" FORCE)
-    # set(JTURBO_ENABLE_INSTALL FALSE CACHE BOOL "Enable libjpeg-turbo install" FORCE)
-    # set(JTURBO_BUILD_TESTS FALSE CACHE BOOL "Build TurboJPEG tests and examples" FORCE)
-    # set(JTURBO_BUILD_BINARIES FALSE CACHE BOOL "Build TurboJPEG binaries" FORCE)
-    # set(WITH_CRT_DLL TRUE CACHE BOOL "Build TurboJPEG with crt dll" FORCE)
+if(AX_WITH_JPEG AND NOT WINRT)
     add_subdirectory(jpeg-turbo)
-    # configure_target_outdir(jpeg)
-    # configure_target_outdir(simd)
-    # if(TARGET simd-objs)
-    #     configure_target_outdir(simd-objs)
-    # endif()
-    # if(TARGET jsimdcfg)
-    #     configure_target_outdir(jsimdcfg)
-    # endif()
     target_link_libraries(thirdparty dep_jpeg-turbo)
-    # target_include_directories(thirdparty INTERFACE 
-    #   "${CMAKE_CURRENT_LIST_DIR}/jpeg" 
-    #   "${JPEG_CONFIG_OUT_DIR}")
-endif(AX_WITH_JPEG)
+endif()
 if(AX_WITH_OPENSSL)
     add_subdirectory(openssl)
     if(ANDROID OR LINUX)
@@ -363,13 +347,26 @@ if(AX_WITH_ALSOFT)
         set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
         set(OBOE_SOURCE "${CMAKE_CURRENT_LIST_DIR}/oboe" CACHE STRING "Source directory for Oboe." FORCE)
     endif()
+
+    if(WINRT)
+        set(ALSOFT_BACKEND_WASAPI OFF CACHE BOOL "Enable WASAPI backend" FORCE)
+        set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
+        set(ALSOFT_BACKEND_DSOUND OFF CACHE BOOL "Enable DirectSound backend" FORCE)
+        set(ALSOFT_BACKEND_WINMM OFF CACHE BOOL "Enable Windows Multimedia backend" FORCE)
+    endif()
+
     add_subdirectory(openal EXCLUDE_FROM_ALL)
     configure_target_outdir(common)
+    
     configure_target_outdir(OpenAL)
     target_link_libraries(thirdparty
         OpenAL
     )
     target_compile_definitions(thirdparty PUBLIC AX_USE_ALSOFT=1)
+
+    if(WINRT)
+        target_include_directories(thirdparty PUBLIC openal-uwp/include)
+    endif()
     
     if(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
@@ -387,7 +384,7 @@ if(WINDOWS OR LINUX OR (ANDROID AND AX_USE_GLAD))
     configure_target_outdir(glad)
 endif()
 
-if(WINDOWS OR MACOSX OR LINUX)
+if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation" FORCE)
     set(GLFW_INSTALL OFF CACHE BOOL "Build the GLFW documentation" FORCE)
     add_subdirectory(glfw)
@@ -446,6 +443,11 @@ if(AX_WITH_KCP)
     configure_target_outdir(kcp)
     target_link_libraries(thirdparty kcp)
     target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_KCP=1)
+endif()
+
+if (WINRT) 
+    add_subdirectory(angle)
+    target_link_libraries(thirdparty angle::GLESv2 angle::EGL)
 endif()
 
 # put "thirdparty" into thirdparty folder, too

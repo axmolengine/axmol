@@ -219,7 +219,7 @@ public:
         return true;
     }
 
-    int drawText(const char* pszText,
+    int drawText(std::string_view text,
                  SIZE& tSize,
                  Device::TextAlign eAlign,
                  const char* fontName,
@@ -232,7 +232,7 @@ public:
         wchar_t* fixedText  = nullptr;
         do
         {
-            AX_BREAK_IF(!pszText);
+            AX_BREAK_IF(text.empty());
 
             DWORD dwFmt = DT_WORDBREAK;
             if (!enableWrap)
@@ -255,16 +255,16 @@ public:
                 break;
             }
 
-            int nLen = strlen(pszText);
+            int nLen = static_cast<int>(text.length());
             // utf-8 to utf-16
             int nBufLen = nLen + 1;
             pwszBuffer  = new wchar_t[nBufLen];
             AX_BREAK_IF(!pwszBuffer);
 
             memset(pwszBuffer, 0, sizeof(wchar_t) * nBufLen);
-            nLen = MultiByteToWideChar(CP_UTF8, 0, pszText, nLen, pwszBuffer, nBufLen);
+            nLen = MultiByteToWideChar(CP_UTF8, 0, text.data(), nLen, pwszBuffer, nBufLen);
 
-            if (strchr(pszText, '&'))
+            if (strchr(text.data(), '&'))
             {
                 fixedText      = new wchar_t[nLen * 2 + 1];
                 int fixedIndex = 0;
@@ -406,7 +406,7 @@ static BitmapDC& sharedBitmapDC()
     return s_BmpDC;
 }
 
-Data Device::getTextureDataForText(const char* text,
+Data Device::getTextureDataForText(std::string_view text,
                                    const FontDefinition& textDefinition,
                                    TextAlign align,
                                    int& width,

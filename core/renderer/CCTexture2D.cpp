@@ -456,7 +456,7 @@ bool Texture2D::initWithImage(Image* image, backend::PixelFormat format)
 }
 
 // implementation Texture2D (Text)
-bool Texture2D::initWithString(const char* text,
+bool Texture2D::initWithString(std::string_view text,
                                std::string_view fontName,
                                float fontSize,
                                const Vec2& dimensions /* = Vec2(0, 0)*/,
@@ -482,9 +482,9 @@ bool Texture2D::initWithString(const char* text,
     return initWithString(text, tempDef);
 }
 
-bool Texture2D::initWithString(const char* text, const FontDefinition& textDefinition)
+bool Texture2D::initWithString(std::string_view text, const FontDefinition& textDefinition)
 {
-    if (!text || !(*text))
+    if (text.empty())
         return false;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA

@@ -279,7 +279,7 @@ class AX_DLL VolatileTextureMgr
 {
 public:
     static void addImageTexture(Texture2D* tt, std::string_view imageFileName);
-    static void addStringTexture(Texture2D* tt, const char* text, const FontDefinition& fontDefinition);
+    static void addStringTexture(Texture2D* tt, std::string_view text, const FontDefinition& fontDefinition);
     static void addDataTexture(Texture2D* tt,
                                void* data,
                                int dataLen,

@@ -11,13 +11,18 @@
 ![forks](https://img.shields.io/github/forks/axmolengine/axmol?style=plastic)
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
-  
-[![Windows Build Status](https://github.com/axmolengine/axmol/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows-ci.yml)
-[![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)
-[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)
-[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)
-[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)
-[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)  
+
+## Supported Platforms
+| Build | Status (github) |
+|-------|-----------------|
+| Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/win32-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/win32-ci.yml)|
+| Windows UWP|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/winuwp-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/winuwp-ci.yml)|
+| Android | [![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)|
+| iOS |[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)|
+| tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|
+| Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
+| macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
+
 
 **This is another more radical fork of *Cocos2d-x-4.0*, it has Full Support OpenAL for all platforms, single texture multi GPU texture handler, C++ 17/20 and more! (see 'Highlighted Features' for more info).**  
 
@@ -40,6 +45,7 @@
   
 ### Highlighted Features
 
+- Windows UWP support, refer to: https://github.com/axmolengine/axmol/pull/1108
 - Add apple M1, android x64 support, contributed by @pietpukkel
 - Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 - Windows video player support (based on microsoft media foundation)
@@ -94,9 +100,11 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 
 #### Creating A New Project
 
-Using a console window, the command to generate a new project is as follows:
+Using a console window, an example of a command to generate a new project is as follows:
 
-```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua]```
+```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
+
+Type `axmol new --help` at the command line for more options you can pass to `axmol new`
 
 Examples:
 
@@ -129,8 +137,12 @@ Examples:
          - add `-DCMAKE_CXX_STANDARD=17` for C++17 on your command line like:
          cmake -S . -B build `-DCMAKE_CXX_STANDARD=17` -G "Visual Studio 17 2022" -A x64
 
+
   6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
-  
+
+#### Windows UWP (Visual Studio 2022), because microsoft limit, only support C++17
+  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"```  
+
 ##### Creating the Visual Studio solution for all axmol test projects
 
   1. Open a console window (Command Prompt, Window Terminal or Powershell)

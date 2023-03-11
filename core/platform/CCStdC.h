@@ -37,6 +37,8 @@ THE SOFTWARE.
 #    include "platform/android/CCStdC-android.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    include "platform/win32/CCStdC-win32.h"
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#    include "platform/winrt/CCStdC-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/CCStdC-linux.h"
 #endif

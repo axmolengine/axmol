@@ -50,7 +50,7 @@ void initExtensions()
 
 NS_AX_BEGIN
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, Rect rect, float frameZoomFactor)
+GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor)
 {
     auto ret = new GLViewImpl;
     if (ret && ret->initWithRect(viewName, rect, frameZoomFactor))
@@ -93,7 +93,7 @@ GLViewImpl::GLViewImpl()
 
 GLViewImpl::~GLViewImpl() {}
 
-bool GLViewImpl::initWithRect(std::string_view viewName, Rect rect, float frameZoomFactor)
+bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor)
 {
     return true;
 }

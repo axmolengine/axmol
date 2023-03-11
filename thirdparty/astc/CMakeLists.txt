@@ -9,7 +9,7 @@ project(${lib_name})
 # include(CheckCSourceCompiles)
 # include(CheckCXXSourceCompiles)
 
-include(../cmake/AXConfigThirdparty.cmake)
+include(AXPlatform)
 
 set(${target_name}_src
     astcenc_averages_and_directions.cpp

@@ -160,52 +160,11 @@ function(get_target_depends_ext_dlls ax_target all_depend_dlls_out)
     set(${all_depend_dlls_out} ${all_depend_ext_dlls} PARENT_SCOPE)
 endfunction()
 
-function(copy_thirdparty_dlls ax_target destDir)
-    # init dependency list with direct dependencies
-    get_property(DEPENDENCIES TARGET ${_AX_THIRDPARTY_NAME} PROPERTY LINK_LIBRARIES)
-    # We're not intersted in interface link libraries of the top-most target
-#     if (INCLUDE_INTERFACE_LINK_LIBRARIES)
-#        get_property(INTERFACE_LINK_LIBRARIES TARGET ${_AX_THIRDPARTY_NAME} PROPERTY
-#   INTERFACE_LINK_LIBRARIES)
-#        list(APPEND DEPENDENCIES ${INTERFACE_LINK_LIBRARIES})
-#     endif()
-
-    if(AX_ENABLE_EXT_LUA)
-        list(APPEND DEPENDENCIES ${LUA_ENGINE})
-        list(APPEND DEPENDENCIES tolua)
-    endif()
-
-    if (DEPENDENCIES)
-      list(REMOVE_DUPLICATES DEPENDENCIES)
-      # message (STATUS "${LIB} dependens on ${DEPENDENCIES}")
-    endif()
-
-    SET(EXT_LIB_FILES "")
- 
-    foreach(DEPENDENCY ${DEPENDENCIES})
-      # message(STATUS ${DEPENDENCY} " depends by ${_AX_THIRDPARTY_NAME}")
-      get_property(IMPORTLIB TARGET ${DEPENDENCY} PROPERTY IMPORTED_IMPLIB)
-      get_property(IMPORTDLL TARGET ${DEPENDENCY} PROPERTY IMPORTED_LOCATION)
-      if(IMPORTLIB)
-          # message(STATUS "${DEPENDENCY} have import lib ${IMPORTLIB}")
-          list(APPEND EXT_LIB_FILES ${IMPORTLIB})
-      endif()
-      if(IMPORTDLL)
-          list(APPEND EXT_LIB_FILES ${IMPORTDLL})
-      endif()
-    endforeach()
-
-    message(STATUS "EXT_LIB_FILES=${EXT_LIB_FILES}")
-    add_custom_command(TARGET ${ax_target}
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${EXT_LIB_FILES}
-        ${destDir} # ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
-    )
-endfunction()
 
 # copy the `ax_target` needed dlls into TARGET_FILE_DIR
 function(ax_copy_target_dll ax_target)
     get_target_depends_ext_dlls(${ax_target} all_depend_dlls)
+
     # remove repeat items
     if(all_depend_dlls)
         list(REMOVE_DUPLICATES all_depend_dlls)
@@ -219,7 +178,6 @@ function(ax_copy_target_dll ax_target)
     endforeach()
 
     # copy thirdparty dlls to target bin dir
-    # copy_thirdparty_dlls(${ax_target} $<TARGET_FILE_DIR:${ax_target}>)
     if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
         set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
     endif()
@@ -278,10 +236,43 @@ function(ax_mark_resources)
         get_filename_component(RES_FILE_ABS ${RES_FILE} ABSOLUTE)
         file(RELATIVE_PATH RES ${BASEDIR_ABS} ${RES_FILE_ABS})
         get_filename_component(RES_LOC ${RES} PATH)
-        set_source_files_properties(${RES_FILE} PROPERTIES
-                                    MACOSX_PACKAGE_LOCATION "${opt_RESOURCEBASE}/${RES_LOC}"
-                                    HEADER_FILE_ONLY 1
-                                    )
+        if (APPLE)
+            set_source_files_properties(${RES_FILE} PROPERTIES
+                                        MACOSX_PACKAGE_LOCATION "${opt_RESOURCEBASE}/${RES_LOC}"
+                                        HEADER_FILE_ONLY 1
+                                        )
+        elseif(WINRT)
+            # MakeAppx.exe require deployment location path rule
+            #   - must full quailfied windows style path
+            #   - can't start with .\xxx.txt, must be xxx.txt
+            # 
+            # Otherwise, will fail with:
+            #  MakeAppx : error : 0x8007007b - The filename, directory name, or volume label syntax is incorrect.
+            if (opt_RESOURCEBASE STREQUAL ".")
+                set(basedir "")
+                if (NOT DEFINED basedir)
+                    message(FATAL_ERROR "empty string as false")
+                endif()
+            else()
+                set(basedir "${opt_RESOURCEBASE}\\")
+            endif()
+            get_filename_component(RES_EXTENSION ${RES_FILE} LAST_EXT)
+            string(TOLOWER "${RES_EXTENSION}" RES_EXTENSION)
+            if (RES_EXTENSION STREQUAL ".obj")
+                set_source_files_properties(${RES_FILE} PROPERTIES HEADER_FILE_ONLY 1)
+            endif()
+            string(REPLACE "/" "\\" VSDEPLOY_LOC "${basedir}${RES_LOC}")
+            # dir path can have one trailing / -> remove
+            string(REGEX REPLACE "(.)\\\\$" "\\1" VSDEPLOY_LOC "${VSDEPLOY_LOC}")
+            set_source_files_properties(${RES_FILE} PROPERTIES
+                                        VS_DEPLOYMENT_CONTENT 1
+                                        VS_DEPLOYMENT_LOCATION "${VSDEPLOY_LOC}"
+            )
+        else()
+            set_source_files_properties(${RES_FILE} PROPERTIES
+                                        HEADER_FILE_ONLY 1
+                                        )
+        endif()
 
         if(XCODE OR VS)
             string(REPLACE "/" "\\" ide_source_group "${opt_RESOURCEBASE}/${RES_LOC}")
@@ -326,8 +317,14 @@ function(source_group_single_file single_file)
 endfunction()
 
 # setup a ax application
-function(setup_ax_app_config app_name)
-    if(WIN64)
+function(ax_setup_app_config app_name)
+    if (WINRT)
+        target_include_directories(${APP_NAME} 
+            PRIVATE "proj.winrt"
+        )
+        set_target_properties(${APP_NAME} PROPERTIES VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.19041.0")
+    endif()
+    if(WIN32)
         target_link_options(${APP_NAME} PRIVATE "/STACK:4194304")
     endif()
     # put all output app into bin/${app_name}
@@ -381,6 +378,40 @@ macro(ax_set_default_value cc_variable cc_value)
     if(NOT DEFINED ${cc_variable})
         set(${cc_variable} ${cc_value})
     endif()
+endmacro()
+
+macro(ax_setup_winrt_sources )
+    set_property(SOURCE "proj.winrt/App.xaml" PROPERTY VS_XAML_TYPE "ApplicationDefinition")
+
+    ax_mark_multi_resources(platform_content_files RES_TO "Content" FOLDERS "${CMAKE_CURRENT_SOURCE_DIR}/proj.winrt/Content")
+
+    get_target_depends_ext_dlls(thirdparty prebuilt_dlls)
+    ax_mark_multi_resources(prebuilt_dlls RES_TO "." FILES ${prebuilt_dlls})
+
+    list(APPEND PLATFORM_SOURCES
+        proj.winrt/App.xaml
+        proj.winrt/App.xaml.h
+        proj.winrt/App.xaml.cpp
+        proj.winrt/Package.appxmanifest
+        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLES.h
+        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLES.cpp
+        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml
+        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml.h
+        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml.cpp
+        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/AxmolRenderer.h
+        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/AxmolRenderer.cpp
+    )
+
+    list(APPEND GAME_INC_DIRS ${_AX_ROOT_PATH}/core/platform/winrt/xaml)
+
+    list(APPEND GAME_HEADER
+        ${PLATFORM_HEADERS}
+    )
+    list(APPEND GAME_SOURCE
+        ${PLATFORM_SOURCES}
+        ${platform_content_files}
+        ${prebuilt_dlls}
+        )
 endmacro()
 
 # set Xcode property for application, include all depend target
