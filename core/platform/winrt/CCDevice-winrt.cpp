@@ -25,11 +25,17 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "platform/CCPlatformConfig.h"
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 
+#    include <dwrite.h>
+#    include <d2d1.h>
+#    include <wrl/client.h>
+#    include <wincodec.h>
+#    include <Shlwapi.h>
+#    include <shellapi.h>
+#    include "ntcvt/ntcvt.hpp"
 #    include "platform/CCDevice.h"
 #    include "platform/CCFileUtils.h"
-#    include "platform/winrt/CCFreeTypeFont.h"
 #    include "platform/winrt/CCWinRTUtils.h"
 #    include "platform/CCStdC.h"
 #    include "platform/winrt/CCGLViewImpl-winrt.h"
@@ -37,11 +43,333 @@ THE SOFTWARE.
 using namespace Windows::Graphics::Display;
 using namespace Windows::Devices::Sensors;
 using namespace Windows::Foundation;
+using namespace Microsoft::WRL;
 #    if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 using namespace Windows::Phone::Devices::Notification;
 #    endif  // (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 
 NS_AX_BEGIN
+
+template <typename T>
+inline HRESULT CreateInstance(REFCLSID clsid, Microsoft::WRL::ComPtr<T>& ptr)
+{
+    ASSERT(!ptr);
+    return CoCreateInstance(clsid, nullptr, CLSCTX_INPROC_SERVER, __uuidof(T),
+                            reinterpret_cast<void**>(ptr.GetAddressOf()));
+}
+
+struct ComException
+{
+    HRESULT const hr;
+    std::string where;
+    ComException(const char* expression, HRESULT const value) : where(expression), hr(value) {}
+};
+
+inline void _AssertHR(const char* expression, HRESULT hr)
+{
+    if (FAILED(hr))
+        throw ComException(expression, hr);
+}
+
+#    define ASSERT_HR(expression) _AssertHR(#expression, (expression))
+
+class TextRenderer
+{
+    ComPtr<ID2D1Factory> _d2d1Factory;
+    ComPtr<IDWriteFactory> _dwriteFactory;
+    ComPtr<IWICImagingFactory> _imageFactory;
+
+    ComPtr<IDWriteTextFormat> _textFormat;
+    ComPtr<ID2D1RenderTarget> _renderTarget;
+    ComPtr<ID2D1SolidColorBrush> _fillBrush;
+
+    ComPtr<IWICBitmap> _wicBitmap;
+
+public:
+    TextRenderer()
+    {
+        ASSERT_HR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &_dwriteFactory));
+
+        D2D1_FACTORY_OPTIONS fo = {};
+
+#    ifdef _DEBUG
+        fo.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
+#    endif
+
+        ASSERT_HR(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, fo, _d2d1Factory.GetAddressOf()));
+
+        ASSERT_HR(CreateInstance(CLSID_WICImagingFactory, _imageFactory));
+    }
+
+    ~TextRenderer() {}
+
+    bool setFont(const FontDefinition& textDefinition)
+    {
+        bool bRet = false;
+        do
+        {
+            std::wstring wfontName = ntcvt::from_chars(textDefinition._fontName);
+
+            // italic ? DWRITE_FONT_STYLE_ITALIC : DWRITE_FONT_STYLE_NORMAL;
+            const DWRITE_FONT_STYLE fontStyle = DWRITE_FONT_STYLE_NORMAL;
+            // bold ? DWRITE_FONT_WEIGHT_BOLD : DWRITE_FONT_WEIGHT_NORMAL;
+            const DWRITE_FONT_WEIGHT fontWeight = DWRITE_FONT_WEIGHT_NORMAL;
+
+            ASSERT_HR(_dwriteFactory->CreateTextFormat(wfontName.c_str(), nullptr, fontWeight, fontStyle,
+                                                       DWRITE_FONT_STRETCH_NORMAL, textDefinition._fontSize, L"",
+                                                       _textFormat.ReleaseAndGetAddressOf()));
+
+            if (textDefinition._alignment == TextHAlignment::CENTER)
+                _textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+
+            if (textDefinition._vertAlignment == TextVAlignment::CENTER)
+                _textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+            return _textFormat;
+
+            bRet = true;
+        } while (0);
+        return bRet;
+    }
+
+    SIZE sizeWithText(const wchar_t* text,
+                      int nLen,
+                      DWORD dwFmt,
+                      LONG nWidthLimit,
+                      LONG nHeightLimit,
+                      bool enableWrap,
+                      int overflow)
+    {
+        SIZE tRet = {0};
+        do
+        {
+            HRESULT hr = S_OK;
+            ComPtr<IDWriteTextLayout> pTextLayout;
+            const float maxWidth  = nWidthLimit == 0 ? 16384.0f : static_cast<float>(nWidthLimit);
+            const float maxHeight = nHeightLimit == 0 ? 16384.0f : static_cast<float>(nWidthLimit);
+
+            // layout
+            if (!enableWrap)
+                _textFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+
+            enum Overflow
+            {
+                /**
+                 * In SHRINK mode, the font size will change dynamically to adapt the content size.
+                 */
+                SHRINK = 2,
+            };
+            if (overflow == Overflow::SHRINK)
+            {
+                DWRITE_TRIMMING trimOptions{DWRITE_TRIMMING_GRANULARITY::DWRITE_TRIMMING_GRANULARITY_WORD, 0, 0};
+                _textFormat->SetTrimming(&trimOptions, nullptr);
+            }
+            // Create a text layout
+            hr = _dwriteFactory->CreateTextLayout(text, static_cast<UINT32>(wcslen(text)), _textFormat.Get(), maxWidth,
+                                                  maxHeight, pTextLayout.GetAddressOf());
+
+            if (SUCCEEDED(hr))
+            {
+                // Get text size
+                DWRITE_TEXT_METRICS textMetrics;
+                hr = pTextLayout->GetMetrics(&textMetrics);
+                auto metrics =
+                    D2D1::SizeF(ceil(textMetrics.widthIncludingTrailingWhitespace), ceil(textMetrics.height));
+                tRet.cx = static_cast<LONG>(metrics.width);
+                tRet.cy = static_cast<LONG>(metrics.height);
+            }
+
+        } while (0);
+
+        return tRet;
+    }
+
+    bool prepareBitmap(int nWidth, int nHeight, const FontDefinition& textDef)
+    {
+        // release bitmap
+        // Create a pixel format and initial its format
+        // and alphaMode fields.
+        // https://docs.microsoft.com/en-gb/windows/win32/direct2d/supported-pixel-formats-and-alpha-modes#supported-formats-for-id2d1devicecontext
+        D2D1_PIXEL_FORMAT pixelFormat = D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED);
+
+        D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties();
+        props.pixelFormat                   = pixelFormat;
+
+        ASSERT_HR(_imageFactory->CreateBitmap(nWidth, nHeight, GUID_WICPixelFormat32bppPBGRA, WICBitmapCacheOnLoad,
+                                              _wicBitmap.ReleaseAndGetAddressOf()));
+
+        ASSERT_HR(
+            _d2d1Factory->CreateWicBitmapRenderTarget(_wicBitmap.Get(), props, _renderTarget.ReleaseAndGetAddressOf()));
+
+        // CreateDeviceResources();
+        ASSERT_HR(_renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White),
+                                                       _fillBrush.ReleaseAndGetAddressOf()));
+        return true;
+    }
+
+    int drawText(const char* pszText, SIZE& tSize, Device::TextAlign eAlign, const FontDefinition& textDefinition)
+    {
+        int nRet            = 0;
+        wchar_t* pwszBuffer = nullptr;
+        wchar_t* fixedText  = nullptr;
+        do
+        {
+            AX_BREAK_IF(!pszText);
+
+            DWORD dwFmt = DT_WORDBREAK;
+            if (!textDefinition._enableWrap)
+            {
+                dwFmt |= DT_SINGLELINE;
+            }
+            DWORD dwHoriFlag = (int)eAlign & 0x0f;
+            DWORD dwVertFlag = ((int)eAlign & 0xf0) >> 4;
+
+            switch (dwHoriFlag)
+            {
+            case 1:  // left
+                dwFmt |= DT_LEFT;
+                break;
+            case 2:  // right
+                dwFmt |= DT_RIGHT;
+                break;
+            case 3:  // center
+                dwFmt |= DT_CENTER;
+                break;
+            }
+
+            int nLen = strlen(pszText);
+            // utf-8 to utf-16
+            int nBufLen = nLen + 1;
+            pwszBuffer  = new wchar_t[nBufLen];
+            AX_BREAK_IF(!pwszBuffer);
+
+            memset(pwszBuffer, 0, sizeof(wchar_t) * nBufLen);
+            nLen = MultiByteToWideChar(CP_UTF8, 0, pszText, nLen, pwszBuffer, nBufLen);
+
+            if (strchr(pszText, '&'))
+            {
+                fixedText      = new wchar_t[nLen * 2 + 1];
+                int fixedIndex = 0;
+                for (int index = 0; index < nLen; ++index)
+                {
+                    if (pwszBuffer[index] == '&')
+                    {
+                        fixedText[fixedIndex]     = '&';
+                        fixedText[fixedIndex + 1] = '&';
+                        fixedIndex += 2;
+                    }
+                    else
+                    {
+                        fixedText[fixedIndex] = pwszBuffer[index];
+                        fixedIndex += 1;
+                    }
+                }
+                fixedText[fixedIndex] = '\0';
+                nLen                  = fixedIndex;
+            }
+
+            SIZE newSize;
+            if (fixedText)
+            {
+                newSize = sizeWithText(fixedText, nLen, dwFmt, tSize.cx, tSize.cy, textDefinition._enableWrap,
+                                       textDefinition._overflow);
+            }
+            else
+            {
+                newSize = sizeWithText(pwszBuffer, nLen, dwFmt, tSize.cx, tSize.cy, textDefinition._enableWrap,
+                                       textDefinition._overflow);
+            }
+
+            D2D1_RECT_F rcText = {0};
+            // if content width is 0, use text size as content size
+            if (tSize.cx <= 0)
+            {
+                tSize         = newSize;
+                rcText.right  = newSize.cx;
+                rcText.bottom = newSize.cy;
+            }
+            else
+            {
+
+                LONG offsetX = 0;
+                LONG offsetY = 0;
+                rcText.right = newSize.cx;  // store the text width to rectangle
+
+                // calculate text horizontal offset
+                if (1 != dwHoriFlag                                      // and text isn't align to left
+                    && newSize.cx < tSize.cx)                            // and text's width less then content width,
+                {                                                        // then need adjust offset of X.
+                    offsetX = (2 == dwHoriFlag) ? tSize.cx - newSize.cx  // align to right
+                                                : (tSize.cx - newSize.cx) / 2;  // align to center
+                }
+
+                // if content height is 0, use text height as content height
+                // else if content height less than text height, use content height to draw text
+                if (tSize.cy <= 0)
+                {
+                    tSize.cy = newSize.cy;
+                    dwFmt |= DT_NOCLIP;
+                    rcText.bottom = newSize.cy;  // store the text height to rectangle
+                }
+                else if (tSize.cy < newSize.cy)
+                {
+                    // content height larger than text height need, clip text to rect
+                    rcText.bottom = tSize.cy;
+                }
+                else
+                {
+                    rcText.bottom = newSize.cy;  // store the text height to rectangle
+
+                    // content larger than text, need adjust vertical position
+                    dwFmt |= DT_NOCLIP;
+
+                    // calculate text vertical offset
+                    offsetY = (2 == dwVertFlag)   ? tSize.cy - newSize.cy        // align to bottom
+                              : (3 == dwVertFlag) ? (tSize.cy - newSize.cy) / 2  // align to middle
+                                                  : 0;                           // align to top
+                }
+
+                if (offsetX || offsetY)
+                {
+                    // OffsetRect(&rcText, offsetX, offsetY);
+                    rcText.left += offsetX;
+                    rcText.right += offsetY;
+                    rcText.bottom += offsetY;
+                    rcText.top += offsetY;
+                }
+            }
+
+            AX_BREAK_IF(!prepareBitmap(tSize.cx, tSize.cy, textDefinition));
+
+            // draw text
+            _renderTarget->BeginDraw();
+
+            _renderTarget->DrawText(fixedText ? (LPCTSTR)fixedText : pwszBuffer, nLen, _textFormat.Get(), &rcText,
+                                    _fillBrush.Get());
+            _renderTarget->EndDraw();
+
+            nRet = true;
+        } while (0);
+        AX_SAFE_DELETE_ARRAY(pwszBuffer);
+        delete[] fixedText;
+
+        return nRet;
+    }
+
+    void copyPixels(uint8_t* out, size_t outLen, int rowPitch)
+    {
+        _wicBitmap->CopyPixels(NULL, static_cast<UINT>(rowPitch), static_cast<UINT>(outLen), out);
+    }
+
+private:
+    friend class Image;
+};
+
+static TextRenderer& sharedTextRenderer()
+{
+    static TextRenderer s_BmpDC;
+    return s_BmpDC;
+}
 
 int Device::getDPI()
 {
@@ -192,15 +520,34 @@ Data Device::getTextureDataForText(const char* text,
                                    bool& hasPremultipliedAlpha)
 {
     Data ret;
-    ssize_t dataLen;
-    static FreeTypeFont sFT;
-    unsigned char* data = sFT.initWithString(text, textDefinition, align, width, height, dataLen);
-
-    if (data)
+    do
     {
-        ret.fastSet(data, dataLen);
+        auto& textRenderer = sharedTextRenderer();
+
+        if (!textRenderer.setFont(textDefinition))
+        {
+            log("Can't found font(%s), use system default", textDefinition._fontName.c_str());
+        }
+
+        // draw text
+        // does changing to SIZE here affects the font size by rounding from float?
+        SIZE size = {(LONG)textDefinition._dimensions.width, (LONG)textDefinition._dimensions.height};
+        AX_BREAK_IF(!textRenderer.drawText(text, size, align, textDefinition));
+
+        int dataLen            = size.cx * size.cy * 4;
+        unsigned char* dataBuf = (unsigned char*)malloc(sizeof(unsigned char) * dataLen);
+        AX_BREAK_IF(!dataBuf);
+
+        width  = static_cast<int>(size.cx);
+        height = static_cast<int>(size.cy);
+
+        const int bpp   = 32;
+        size_t rowPitch = (width * bpp + 7) / 8;
+        textRenderer.copyPixels(dataBuf, dataLen, rowPitch);
+
+        ret.fastSet(dataBuf, dataLen);
         hasPremultipliedAlpha = false;
-    }
+    } while (0);
 
     return ret;
 }
