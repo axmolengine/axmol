@@ -35,6 +35,8 @@ THE SOFTWARE.
 #    include "platform/android/CCGL-android.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    include "platform/win32/CCGL-win32.h"
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#    include "platform/winrt/CCGL-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/CCGL-linux.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS

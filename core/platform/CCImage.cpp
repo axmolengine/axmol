@@ -94,11 +94,11 @@ struct dirent* readdir$INODE64(DIR* dir)
 #    endif
 #endif
 
-#if AX_USE_PNG
+#if AX_USE_PNG && !AX_USE_WIC
 #    include "png.h"
 #endif  // AX_USE_PNG
 
-#if AX_USE_JPEG
+#if AX_USE_JPEG && !AX_USE_WIC
 #    include "jpeglib.h"
 #    include <setjmp.h>
 #endif  // AX_USE_JPEG
@@ -132,6 +132,9 @@ struct dirent* readdir$INODE64(DIR* dir)
 #    include "platform/CCGL.h"
 #endif
 
+#if AX_USE_WIC
+#    include "platform/winrt/WICImageLoader-winrt.h"
+#endif
 
 NS_AX_BEGIN
 
@@ -425,7 +428,7 @@ typedef struct
     int offset;
 } tImageSource;
 
-#if AX_USE_PNG
+#if AX_USE_PNG && !AX_USE_WIC
 void pngWriteCallback(png_structp png_ptr, png_bytep data, size_t length)
 {
     if (png_ptr == NULL)
@@ -786,7 +789,7 @@ bool Image::isASTC(const uint8_t* data, ssize_t /*dataLen*/)
 
     uint32_t magicval = astc_unpack_bytes(hdr->magic[0], hdr->magic[1], hdr->magic[2], hdr->magic[3]);
 
-    return (magicval & 0x0FFFFFFF) == (ASTC_MAGIC_ID & 0x0FFFFFFF); // wildcard check
+    return (magicval & 0x0FFFFFFF) == (ASTC_MAGIC_ID & 0x0FFFFFFF);  // wildcard check
 }
 
 bool Image::isJpg(const uint8_t* data, ssize_t dataLen)
@@ -905,6 +908,102 @@ bool Image::isCompressed()
     return backend::PixelFormatUtils::isCompressed(_pixelFormat);
 }
 
+#if AX_USE_WIC
+bool Image::decodeWithWIC(const unsigned char* data, ssize_t dataLen)
+{
+    bool bRet = false;
+    WICImageLoader img;
+
+    if (img.decodeImageData(data, dataLen))
+    {
+        _width  = img.getWidth();
+        _height = img.getHeight();
+
+        WICPixelFormatGUID format = img.getPixelFormat();
+
+        if (memcmp(&format, &GUID_WICPixelFormat8bppGray, sizeof(WICPixelFormatGUID)) == 0)
+        {
+            _pixelFormat = backend::PixelFormat::L8;
+        }
+
+        if (memcmp(&format, &GUID_WICPixelFormat8bppAlpha, sizeof(WICPixelFormatGUID)) == 0)
+        {
+            _pixelFormat = backend::PixelFormat::LA8;
+        }
+
+        if (memcmp(&format, &GUID_WICPixelFormat24bppRGB, sizeof(WICPixelFormatGUID)) == 0)
+        {
+            _pixelFormat = backend::PixelFormat::RGB8;
+        }
+
+        if (memcmp(&format, &GUID_WICPixelFormat32bppRGBA, sizeof(WICPixelFormatGUID)) == 0)
+        {
+            _pixelFormat = backend::PixelFormat::RGBA8;
+        }
+
+        if (memcmp(&format, &GUID_WICPixelFormat32bppBGRA, sizeof(WICPixelFormatGUID)) == 0)
+        {
+            _pixelFormat = backend::PixelFormat::BGRA8;
+        }
+
+        _dataLen = img.getImageDataSize();
+
+        AXASSERT(_dataLen > 0, "Image: Decompressed data length is invalid");
+
+        _data = new (std::nothrow) unsigned char[_dataLen];
+        bRet  = (img.getImageData(_data, _dataLen) > 0);
+
+        if (_pixelFormat == backend::PixelFormat::RGBA8)
+        {
+            premultiplyAlpha();
+        }
+    }
+
+    return bRet;
+}
+
+bool Image::encodeWithWIC(std::string_view filePath, bool isToRGB, GUID containerFormat)
+{
+    // Save formats supported by WIC
+    WICPixelFormatGUID targetFormat = isToRGB ? GUID_WICPixelFormat24bppBGR : GUID_WICPixelFormat32bppBGRA;
+    unsigned char* pSaveData        = nullptr;
+    int saveLen                     = _dataLen;
+    int bpp                         = 4;
+
+    if (targetFormat == GUID_WICPixelFormat24bppBGR && _pixelFormat == backend::PixelFormat::RGBA8)
+    {
+        bpp       = 3;
+        saveLen   = _width * _height * bpp;
+        pSaveData = new (std::nothrow) unsigned char[saveLen];
+        int indL = 0, indR = 0;
+
+        while (indL < saveLen && indR < _dataLen)
+        {
+            memcpy(&pSaveData[indL], &_data[indR], 3);
+            indL += 3;
+            indR += 4;
+        }
+    }
+    else
+    {
+        pSaveData = new (std::nothrow) unsigned char[saveLen];
+        memcpy(pSaveData, _data, saveLen);
+    }
+
+    for (int ind = 2; ind < saveLen; ind += bpp)
+    {
+        std::swap(pSaveData[ind - 2], pSaveData[ind]);
+    }
+
+    WICImageLoader img;
+    bool bRet = img.encodeImageData(filePath, pSaveData, saveLen, targetFormat, _width, _height, containerFormat);
+
+    delete[] pSaveData;
+    return bRet;
+}
+
+#endif  // AX_USE_WIC
+
 namespace
 {
 /*
@@ -929,7 +1028,7 @@ namespace
  *
  * Here's the extended error handler struct:
  */
-#if AX_USE_JPEG
+#if AX_USE_JPEG && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
 struct MyErrorMgr
 {
     struct jpeg_error_mgr pub; /* "public" fields */
@@ -966,7 +1065,9 @@ myErrorExit(j_common_ptr cinfo)
 
 bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
 {
-#if AX_USE_JPEG
+#if AX_USE_WIC
+    return decodeWithWIC(data, dataLen);
+#elif AX_USE_JPEG
     /* these are standard libjpeg structures for reading(decompression) */
     struct jpeg_decompress_struct cinfo;
     /* We use our private extension JPEG error handler.
@@ -997,17 +1098,17 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
         /* setup decompression process and source, then read JPEG header */
         jpeg_create_decompress(&cinfo);
 
-#    ifndef AX_TARGET_QT5
+#        ifndef AX_TARGET_QT5
         jpeg_mem_src(&cinfo, const_cast<uint8_t*>(data), dataLen);
-#    endif /* AX_TARGET_QT5 */
+#        endif /* AX_TARGET_QT5 */
 
         /* reading the image header which contains image information */
-#    if (JPEG_LIB_VERSION >= 90)
+#        if (JPEG_LIB_VERSION >= 90)
         // libjpeg 0.9 adds stricter types.
         jpeg_read_header(&cinfo, TRUE);
-#    else
+#        else
         jpeg_read_header(&cinfo, TRUE);
-#    endif  //(JPEG_LIB_VERSION >= 90)
+#        endif  //(JPEG_LIB_VERSION >= 90)
 
         // we only support RGB or grayscale
         if (cinfo.jpeg_color_space == JCS_GRAYSCALE)
@@ -1060,9 +1161,11 @@ bool Image::initWithJpgData(uint8_t* data, ssize_t dataLen)
 
 bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
 {
-#if AX_USE_PNG
+#if AX_USE_WIC
+    return decodeWithWIC(data, dataLen);
+#elif AX_USE_PNG
     // length of bytes to check if it is a valid png file
-#    define PNGSIGSIZE 8
+#        define PNGSIGSIZE 8
     bool ret                    = false;
     png_byte header[PNGSIGSIZE] = {0};
     png_structp png_ptr         = 0;
@@ -1218,7 +1321,7 @@ bool Image::initWithPngData(uint8_t* data, ssize_t dataLen)
 bool Image::initWithBmpData(uint8_t* data, ssize_t dataLen)
 {
     const int nrChannels = 4;
-    _data                = stbi_load_from_memory(data, static_cast<int>(dataLen), &_width, &_height, nullptr, nrChannels);
+    _data = stbi_load_from_memory(data, static_cast<int>(dataLen), &_width, &_height, nullptr, nrChannels);
     if (_data)
     {
         _dataLen     = _width * _height * nrChannels;
@@ -1898,8 +2001,8 @@ bool Image::initWithASTCData(uint8_t* data, ssize_t dataLen, bool ownData)
             _dataLen = _width * _height * 4;
             _data    = static_cast<uint8_t*>(malloc(_dataLen));
             if (UTILS_UNLIKELY(astc_decompress_image(static_cast<const uint8_t*>(data) + ASTC_HEAD_SIZE,
-                                                     static_cast<uint32_t>(dataLen) - ASTC_HEAD_SIZE, _data, _width, _height, block_x,
-                                                     block_y) != 0))
+                                                     static_cast<uint32_t>(dataLen) - ASTC_HEAD_SIZE, _data, _width,
+                                                     _height, block_x, block_y) != 0))
             {
                 AX_SAFE_FREE(_data);
                 _dataLen = 0;
@@ -1929,9 +2032,9 @@ bool Image::initWithS3TCData(uint8_t* data, ssize_t dataLen, bool ownData)
     _width                = header->ddsd.width;
     _height               = header->ddsd.height;
     _numberOfMipmaps      = MAX(
-             1,
-             header->ddsd.DUMMYUNIONNAMEN2
-                 .mipMapCount);  // if dds header reports 0 mipmaps, set to 1 to force correct software decoding (if needed).
+        1,
+        header->ddsd.DUMMYUNIONNAMEN2
+            .mipMapCount);  // if dds header reports 0 mipmaps, set to 1 to force correct software decoding (if needed).
     _dataLen      = 0;
     int blockSize = (FOURCC_DXT1 == header->ddsd.DUMMYUNIONNAMEN4.ddpfPixelFormat.fourCC) ? 8 : 16;
 
@@ -2235,7 +2338,9 @@ bool Image::saveToFile(std::string_view filename, bool isToRGB)
 
 bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
 {
-#if AX_USE_PNG
+#if AX_USE_WIC
+    return encodeWithWIC(filePath, isToRGB, GUID_ContainerFormatPng);
+#elif AX_USE_PNG
     bool ret = false;
     do
     {
@@ -2378,7 +2483,9 @@ bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
 
 bool Image::saveImageToJPG(std::string_view filePath)
 {
-#if AX_USE_JPEG
+#if AX_USE_WIC
+    return encodeWithWIC(filePath, false, GUID_ContainerFormatJpeg);
+#elif AX_USE_JPEG
     bool ret = false;
     do
     {

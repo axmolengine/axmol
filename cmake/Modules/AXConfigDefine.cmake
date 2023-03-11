@@ -1,62 +1,5 @@
-If(APPLE)
-    if(${CMAKE_VERSION} VERSION_LESS "3.14")
-        message(FATAL_ERROR "Please use CMake 3.14 or newer for Apple platform (macOS, iOS, tvOS or watchOS)")
-    endif()
-endif()
 
- #Please use them everywhere
- #WINDOWS   =   Windows Desktop
- #ANDROID    =  Android
- #IOS    =  iOS
- #MACOSX    =  MacOS X
- #LINUX      =   Linux
-if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    set(WINDOWS TRUE)
-    if(NOT ("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32"))
-        set(WIN64 TRUE)
-        set(ARCH_ALIAS "x64")
-     else()
-        set(WIN32 TRUE)
-        set(ARCH_ALIAS "x86")
-     endif()
-    set(PLATFORM_FOLDER win32)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Android")
-    set(PLATFORM_FOLDER android)
-    set(ARCH_ALIAS ${ANDROID_ABI})
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    if(ANDROID)
-        set(PLATFORM_FOLDER android)
-    else()
-        set(LINUX TRUE)
-        set(PLATFORM_FOLDER linux)
-    endif()
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set(APPLE TRUE)
-    set(MACOSX TRUE)
-    set(PLATFORM_FOLDER mac)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "iOS")
-    set(APPLE TRUE)
-    set(IOS TRUE)
-    set(PLATFORM_FOLDER ios)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "tvOS")
-    set(APPLE TRUE)
-    set(IOS TRUE)
-    set(TVOS TRUE)
-    set(PLATFORM_FOLDER tvos)
-else()
-    message(FATAL_ERROR "Unsupported platform, CMake will exit")
-    return()
-endif()
-
-# generators that are capable of organizing into a hierarchy of folders
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-# simplify generator condition, please use them everywhere
-if(CMAKE_GENERATOR STREQUAL Xcode)
-    set(XCODE TRUE)
-elseif(CMAKE_GENERATOR MATCHES Visual)
-    set(VS TRUE)
-endif()
-message(STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
+include(AXPlatform)
 
 # custom target property for lua/js link
 define_property(TARGET
@@ -92,7 +35,11 @@ endif()
 
 # config c++ standard
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 20)
+    if (NOT WINRT)
+        set(CMAKE_CXX_STANDARD 20)
+    else()
+        set(CMAKE_CXX_STANDARD 17)
+    endif()
 endif()
 message(STATUS "CMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}")
 
@@ -212,5 +159,5 @@ message(STATUS "The nasm compiler speed up libraries: jpeg(libjpeg-turbo)")
 
 if(NOT EXISTS "${CMAKE_ASM_NASM_COMPILER}")
    set(CMAKE_ASM_NASM_COMPILER_LOADED FALSE CACHE BOOL "Does cmake asm nasm compiler loaded" FORCE)
-   message(WARNING "The nasm compiler doesn't present on your system PATH, please download from: https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/")
+   message(WARNING "The nasm compiler doesn't present on your system PATH, please download from: https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/")
 endif()

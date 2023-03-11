@@ -140,6 +140,8 @@ set(CPP_DEFS ) # C pre-processor, not C++
 set(INC_PATHS )
 set(C_FLAGS )
 set(LINKER_FLAGS )
+set(LINKER_FLAGS_DEBUG )
+set(LINKER_FLAGS_RELEASE )
 set(EXTRA_LIBS )
 
 if(WIN32)
@@ -979,53 +981,81 @@ if(ALSOFT_REQUIRE_SNDIO AND NOT HAVE_SNDIO)
 endif()
 
 # Check Windows-only backends
+option(ALSOFT_REQUIRE_XAUDIO2 "Require Windows Xaudio2 backend" OFF)
 option(ALSOFT_REQUIRE_WINMM "Require Windows Multimedia backend" OFF)
 option(ALSOFT_REQUIRE_DSOUND "Require DirectSound backend" OFF)
 option(ALSOFT_REQUIRE_WASAPI "Require WASAPI backend" OFF)
 if(WIN32)
-    # Check MMSystem backend
-    option(ALSOFT_BACKEND_WINMM "Enable Windows Multimedia backend" ON)
-    if(ALSOFT_BACKEND_WINMM)
-        set(HAVE_WINMM 1)
-        set(BACKENDS "${BACKENDS} WinMM,")
-        set(ALC_OBJS ${ALC_OBJS} alc/backends/winmm.cpp alc/backends/winmm.h)
-        # There doesn't seem to be good way to search for winmm.lib for MSVC.
-        # find_library doesn't find it without being told to look in a specific
-        # place in the WindowsSDK, but it links anyway. If there ends up being
-        # Windows targets without this, another means to detect it is needed.
-        set(EXTRA_LIBS winmm ${EXTRA_LIBS})
-    endif()
+    if(${CMAKE_SYSTEM_NAME} MATCHES "WindowsStore")
+        # WindowsStore (UWP) Apps only works with xaudio2 backend
+	# WaveFile could compile and link, but no voice could be hear when play sound
+	# Other backends can't be compiled because may Win32 APIs doesn't present in WINRT
+	# APIs
+        set(EXTRA_LIBS runtimeobject ${EXTRA_LIBS})
+        check_include_file(xaudio2.h HAVE_XAUDIO2_H)
+        if(HAVE_XAUDIO2_H)
+            option(ALSOFT_BACKEND_XAUDIO2 "Enable Windows XAudio2 backend" ON)
+            if (ALSOFT_BACKEND_XAUDIO2)
+                set(HAVE_XAUDIO2 1)
+                set(BACKENDS "${BACKENDS} Xaudio2,")
+                set(ALC_OBJS ${ALC_OBJS} alc/backends/xaudio2.cpp alc/backends/xaudio2.h)
+                set(EXTRA_LIBS Xaudio2 ${EXTRA_LIBS})
+                set_source_files_properties(alc/backends/xaudio2.cpp PROPERTIES COMPILE_FLAGS /ZW)
+                # Add compile and link flags required C++/CX
+                set(C_FLAGS "/Zc:twoPhase-" ${C_FLAGS})
+                set(LINKER_FLAGS_DEBUG "/nodefaultlib:vccorlibd /nodefaultlib:msvcrtd vccorlibd.lib msvcrtd.lib ${LINKER_FLAGS_DEBUG}")
+                set(LINKER_FLAGS_RELEASE "/nodefaultlib:vccorlib /nodefaultlib:msvcrt vccorlib.lib msvcrt.lib ${LINKER_FLAGS_RELEASE}")
+            endif()
+        endif()
+    else()
+        # Check MMSystem backend
+        option(ALSOFT_BACKEND_WINMM "Enable Windows Multimedia backend" ON)
+        if(ALSOFT_BACKEND_WINMM)
+            set(HAVE_WINMM 1)
+            set(BACKENDS "${BACKENDS} WinMM,")
+            set(ALC_OBJS ${ALC_OBJS} alc/backends/winmm.cpp alc/backends/winmm.h)
+            # There doesn't seem to be good way to search for winmm.lib for MSVC.
+            # find_library doesn't find it without being told to look in a specific
+            # place in the WindowsSDK, but it links anyway. If there ends up being
+            # Windows targets without this, another means to detect it is needed.
+            set(EXTRA_LIBS winmm ${EXTRA_LIBS})
+        endif()
 
-    # Check DSound backend
-    check_include_file(dsound.h HAVE_DSOUND_H)
-    if(DXSDK_DIR)
-        find_path(DSOUND_INCLUDE_DIR NAMES "dsound.h"
-            PATHS "${DXSDK_DIR}" PATH_SUFFIXES include
-            DOC "The DirectSound include directory")
-    endif()
-    if(HAVE_DSOUND_H OR DSOUND_INCLUDE_DIR)
-        option(ALSOFT_BACKEND_DSOUND "Enable DirectSound backend" ON)
-        if(ALSOFT_BACKEND_DSOUND)
-            set(HAVE_DSOUND 1)
-            set(BACKENDS "${BACKENDS} DirectSound,")
-            set(ALC_OBJS ${ALC_OBJS} alc/backends/dsound.cpp alc/backends/dsound.h)
+        # Check DSound backend
+        check_include_file(dsound.h HAVE_DSOUND_H)
+        if(DXSDK_DIR)
+            find_path(DSOUND_INCLUDE_DIR NAMES "dsound.h"
+                PATHS "${DXSDK_DIR}" PATH_SUFFIXES include
+                DOC "The DirectSound include directory")
+        endif()
+        if(HAVE_DSOUND_H OR DSOUND_INCLUDE_DIR)
+            option(ALSOFT_BACKEND_DSOUND "Enable DirectSound backend" ON)
+            if(ALSOFT_BACKEND_DSOUND)
+                set(HAVE_DSOUND 1)
+                set(BACKENDS "${BACKENDS} DirectSound,")
+                set(ALC_OBJS ${ALC_OBJS} alc/backends/dsound.cpp alc/backends/dsound.h)
 
-            if(NOT HAVE_DSOUND_H)
-                set(INC_PATHS ${INC_PATHS} ${DSOUND_INCLUDE_DIR})
+                if(NOT HAVE_DSOUND_H)
+                    set(INC_PATHS ${INC_PATHS} ${DSOUND_INCLUDE_DIR})
+                endif()
+            endif()
+        endif()
+
+        # Check for WASAPI backend
+        check_include_file(mmdeviceapi.h HAVE_MMDEVICEAPI_H)
+        if(HAVE_MMDEVICEAPI_H)
+            option(ALSOFT_BACKEND_WASAPI "Enable WASAPI backend" ON)
+            if(ALSOFT_BACKEND_WASAPI)
+                set(HAVE_WASAPI 1)
+                set(BACKENDS  "${BACKENDS} WASAPI,")
+                set(ALC_OBJS  ${ALC_OBJS} alc/backends/wasapi.cpp alc/backends/wasapi.h)
             endif()
         endif()
     endif()
+endif()
 
-    # Check for WASAPI backend
-    check_include_file(mmdeviceapi.h HAVE_MMDEVICEAPI_H)
-    if(HAVE_MMDEVICEAPI_H)
-        option(ALSOFT_BACKEND_WASAPI "Enable WASAPI backend" ON)
-        if(ALSOFT_BACKEND_WASAPI)
-            set(HAVE_WASAPI 1)
-            set(BACKENDS  "${BACKENDS} WASAPI,")
-            set(ALC_OBJS  ${ALC_OBJS} alc/backends/wasapi.cpp alc/backends/wasapi.h)
-        endif()
-    endif()
+if(ALSOFT_REQUIRE_XAUDIO2 AND NOT HAVE_XAUDIO2)
+    message(FATAL_ERROR "Failed to enabled required Xaudio2 backend")
 endif()
 if(ALSOFT_REQUIRE_WINMM AND NOT HAVE_WINMM)
     message(FATAL_ERROR "Failed to enabled required WinMM backend")
@@ -1374,6 +1404,13 @@ else()
         set_target_properties(${IMPL_TARGET} PROPERTIES PREFIX "")
     endif()
     target_link_libraries(${IMPL_TARGET} PRIVATE common ${LINKER_FLAGS} ${EXTRA_LIBS} ${MATH_LIB})
+
+    set_target_properties(${IMPL_TARGET} PROPERTIES 
+        LINK_FLAGS_DEBUG "${LINKER_FLAGS_DEBUG}"
+        LINK_FLAGS_RELEASE "${LINKER_FLAGS_RELEASE}"
+        LINK_FLAGS_MINSIZEREL "${LINKER_FLAGS_RELEASE}"
+        LINK_FLAGS_RELWITHDEBINFO "${LINKER_FLAGS_RELEASE}"
+    )
 
     if(APPLE AND ALSOFT_OSX_FRAMEWORK)
         # Sets framework name to soft_oal to avoid ambiguity with the system OpenAL.framework

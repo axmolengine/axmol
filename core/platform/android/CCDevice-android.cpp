@@ -71,7 +71,7 @@ public:
 
     ~BitmapDC() {}
 
-    bool getBitmapFromJavaShadowStroke(const char* text,
+    bool getBitmapFromJavaShadowStroke(std::string_view text,
                                        int nWidth,
                                        int nHeight,
                                        Device::TextAlign eAlignMask,
@@ -109,9 +109,9 @@ public:
          * and data.
          * use this approach to decrease the jni call number
          */
-        int count           = strlen(text);
+        int count           = static_cast<int>(text.length());
         jbyteArray strArray = methodInfo.env->NewByteArray(count);
-        methodInfo.env->SetByteArrayRegion(strArray, 0, count, reinterpret_cast<const jbyte*>(text));
+        methodInfo.env->SetByteArrayRegion(strArray, 0, count, reinterpret_cast<const jbyte*>(text.data()));
         jstring jstrFont = methodInfo.env->NewStringUTF(fullPathOrFontName.c_str());
 
         if (!methodInfo.env->CallStaticBooleanMethod(
@@ -147,7 +147,7 @@ static BitmapDC& sharedBitmapDC()
     return s_BmpDC;
 }
 
-Data Device::getTextureDataForText(const char* text,
+Data Device::getTextureDataForText(std::string_view text,
                                    const FontDefinition& textDefinition,
                                    TextAlign align,
                                    int& width,

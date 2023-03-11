@@ -1,0 +1,49 @@
+name: winuwp
+
+on: 
+  push:
+    branches:
+      - dev
+      - release
+
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  toolset-latest:
+    if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch:
+          - x64
+
+    env:
+      BUILD_ARCH: ${{ matrix.arch }}
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+
+    - name: Setup Python
+      uses: actions/setup-python@v3
+
+    - uses: ilammy/msvc-dev-cmd@v1.12.1
+      with: 
+        arch: ${{ env.BUILD_ARCH }}
+        uwp: true
+
+    - name: Build
+      run: tools\win-ci\build.ps1 $env:BUILD_ARCH false true
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.arch }}
+        path: |
+          build_*/AppPackages/**/*.msix

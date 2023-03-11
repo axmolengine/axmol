@@ -28,6 +28,8 @@
 
 #include "../UIScene.h"
 
+#    if defined(AX_ENABLE_MFMEDIA)
+
 DEFINE_TEST_SUITE(VideoPlayerTests);
 
 class VideoPlayerTest : public UIScene
@@ -97,5 +99,7 @@ private:
 
     void updateButtonsTexts();
 };
+
+#endif
 
 #endif  // __tests__VideoPlayerTest__

@@ -51,7 +51,6 @@ static std::string s_exeDir;
 static std::string convertPathFormatToUnixStyle(const std::string_view& path)
 {
     std::string ret{path};
-    int len = ret.length();
     std::replace(ret.begin(), ret.end(), '\\', '/');
     return ret;
 }
@@ -59,7 +58,6 @@ static std::string convertPathFormatToUnixStyle(const std::string_view& path)
 static std::string convertPathFormatToWinStyle(const std::string_view& path)
 {
     std::string ret{path};
-    int len = ret.length();
     std::replace(ret.begin(), ret.end(), '/', '\\');
     return ret;
 }

@@ -268,7 +268,7 @@ static CGFloat _calculateTextDrawStartHeight(ax::Device::TextAlign align, CGSize
     return startH;
 }
 
-static bool _initWithString(const char* text,
+static bool _initWithString(std::string_view text,
                             Device::TextAlign align,
                             const char* fontName,
                             int size,
@@ -281,12 +281,12 @@ static bool _initWithString(const char* text,
 {
     bool ret = false;
 
-    AXASSERT(text, "Invalid text");
+    AXASSERT(!text.empty(), "Invalid text");
     AXASSERT(info, "Invalid info");
 
     do
     {
-        NSString* string = [NSString stringWithUTF8String:text];
+        NSString* string = [NSString stringWithUTF8String:text.data()];
         AX_BREAK_IF(!string);
 
         id font = _createSystemFont(fontName, size);
@@ -399,7 +399,7 @@ static bool _initWithString(const char* text,
     return ret;
 }
 
-Data Device::getTextureDataForText(const char* text,
+Data Device::getTextureDataForText(std::string_view text,
                                    const FontDefinition& textDefinition,
                                    TextAlign align,
                                    int& width,

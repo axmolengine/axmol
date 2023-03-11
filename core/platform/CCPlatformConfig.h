@@ -44,16 +44,9 @@ THE SOFTWARE.
 #define AX_PLATFORM_IOS 1
 #define AX_PLATFORM_ANDROID 2
 #define AX_PLATFORM_WIN32 3
-// #define AX_PLATFORM_MARMALADE          4
 #define AX_PLATFORM_LINUX 5
-// #define AX_PLATFORM_BADA               6
-// #define AX_PLATFORM_BLACKBERRY         7
 #define AX_PLATFORM_MAC 8
-// #define AX_PLATFORM_NACL               9
-// #define AX_PLATFORM_EMSCRIPTEN        10
-// #define AX_PLATFORM_TIZEN             11
-// #define AX_PLATFORM_QT5               12
-// #define AX_PLATFORM_WINRT             13
+#define AX_PLATFORM_WINRT 13
 
 // Determine target platform by compile environment macro.
 #define AX_TARGET_PLATFORM AX_PLATFORM_UNKNOWN
@@ -75,6 +68,13 @@ THE SOFTWARE.
 #if defined(_WIN32) && defined(_WINDOWS)
 #    undef AX_TARGET_PLATFORM
 #    define AX_TARGET_PLATFORM AX_PLATFORM_WIN32
+#endif
+
+// WinRT (Windows 10.0 UWP App)
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
+// Windows Store or Universal Windows Platform
+#    undef AX_TARGET_PLATFORM
+#    define AX_TARGET_PLATFORM AX_PLATFORM_WINRT
 #endif
 
 // linux
@@ -141,6 +141,12 @@ other: GL
 #    if AX_USE_COMPAT_GL
 #        define AX_USE_GLES
 #    endif
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
+#    define AX_USE_GL
+#    if !defined(AX_USE_COMPAT_GL)
+#        define AX_USE_COMPAT_GL 1
+#    endif
+#    define AX_USE_GLES
 #else
 #    define AX_USE_GL
 #endif

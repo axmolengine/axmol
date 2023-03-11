@@ -1,23 +1,23 @@
 if(WINDOWS)
-    if(AX_ENABLE_MSEDGE_WEBVIEW2)
+    if(NOT WINRT)
         set(_AX_UI_SPECIFIC_HEADER
             ui/UIEditBox/UIEditBoxImpl-win32.h
-            ui/UIWebView/UIWebViewImpl-win32.h
-            ui/UIWebView/UIWebView.h
-
             )
         set(_AX_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
-            ui/UIWebView/UIWebViewImpl-win32.cpp
-            ui/UIWebView/UIWebView.cpp
             )
     else()
         set(_AX_UI_SPECIFIC_HEADER
-            ui/UIEditBox/UIEditBoxImpl-win32.h
+            ui/UIEditBox/UIEditBoxImpl-winrt.h
             )
         set(_AX_UI_SPECIFIC_SRC
-            ui/UIEditBox/UIEditBoxImpl-win32.cpp
+            ui/UIEditBox/UIEditBoxImpl-winrt.cpp
             )
+    endif()
+
+    if(AX_ENABLE_MSEDGE_WEBVIEW2)
+        list(APPEND _AX_UI_SPECIFIC_HEADER ui/UIWebView/UIWebViewImpl-win32.h ui/UIWebView/UIWebView.h)
+        list(APPEND _AX_UI_SPECIFIC_SRC ui/UIWebView/UIWebViewImpl-win32.cpp ui/UIWebView/UIWebView.cpp)
     endif()
 
     if (AX_ENABLE_MFMEDIA)
