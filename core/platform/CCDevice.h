@@ -96,7 +96,7 @@ public:
     /**
      * Gets texture data for text.
      */
-    static Data getTextureDataForText(const char* text,
+    static Data getTextureDataForText(std::string_view text,
                                       const FontDefinition& textDefinition,
                                       TextAlign align,
                                       int& width,
