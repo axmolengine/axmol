@@ -82,7 +82,7 @@
 
 ## GHC (iOS devices only)
 - [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
-- Version: 1.5.12
+- Version: 1.5.14
 - License: MIT
 
 ## jni.hpp
