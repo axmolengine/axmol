@@ -348,7 +348,7 @@ protected:
     Texture2D* _texture = nullptr;
 
     /** container for sprite children. map<index, pair<sprite, gid> > */
-    std::map<int, std::pair<Sprite*, int>> _spriteContainer;
+    std::map<int, std::pair<Sprite*, uint32_t>> _spriteContainer;
 
     Vec2 _screenGridSize;
     Rect _screenGridRect;
