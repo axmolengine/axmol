@@ -22,6 +22,7 @@ jobs:
       matrix:
         arch:
           - x64
+          - amd64_arm64
 
     env:
       BUILD_ARCH: ${{ matrix.arch }}
@@ -46,4 +47,4 @@ jobs:
       with:
         name: ${{ matrix.arch }}
         path: |
-          build_*/AppPackages/**/*.msix
+          build_*/tests/**/AppPackages/**/*.msix
