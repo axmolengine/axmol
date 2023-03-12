@@ -641,8 +641,9 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
              "TMXLayer: invalid position");
     AXASSERT(_tiles, "TMXLayer: the tiles map has been released");
 
+    TMXTileFlags flags;
     Sprite* tile = nullptr;
-    int gid      = this->getTileGIDAt(tileCoordinate);
+    int gid      = this->getTileGIDAt(tileCoordinate, &flags);
 
     // if GID == 0, then no tile is present
     if (gid)
@@ -668,7 +669,8 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
             tile->setOpacity(this->getOpacity());
             tile->setTag(index);
             this->addChild(tile, index);
-            _spriteContainer.insert(std::pair<int, std::pair<Sprite*, int>>(index, std::pair<Sprite*, int>(tile, gid)));
+            _spriteContainer.insert(
+                std::pair<int, std::pair<Sprite*, uint32_t>>(index, std::pair<Sprite*, uint32_t>(tile, gid | flags)));
 
             // tile is converted to sprite.
             setFlaggedTileGIDByIndex(index, 0);
@@ -857,7 +859,7 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
     if (currentGID == gid && currentFlags == flags)
         return;
 
-    uint32_t gidAndFlags = gid | flags;
+    const uint32_t gidAndFlags = gid | flags;
 
     // setting gid=0 is equal to remove the tile
     if (gid == 0)
@@ -885,7 +887,7 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
             this->reorderChild(sprite, z);
             if (flags)
             {
-                setupTileSprite(sprite, sprite->getPosition(), gidAndFlags);
+                setupTileSprite(sprite, tileCoordinate, gidAndFlags);
             }
 
             it->second.second = gidAndFlags;

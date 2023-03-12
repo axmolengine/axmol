@@ -322,7 +322,6 @@ function(ax_setup_app_config app_name)
         target_include_directories(${APP_NAME} 
             PRIVATE "proj.winrt"
         )
-        set_target_properties(${APP_NAME} PROPERTIES VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "10.0.19041.0")
     endif()
     if(WIN32)
         target_link_options(${APP_NAME} PRIVATE "/STACK:4194304")
@@ -413,6 +412,39 @@ macro(ax_setup_winrt_sources )
         ${prebuilt_dlls}
         )
 endmacro()
+
+# must call last line
+function(get_all_targets var)
+    set(targets)
+    get_all_targets_recursive(targets ${CMAKE_CURRENT_SOURCE_DIR})
+    set(${var} ${targets} PARENT_SCOPE)
+endfunction()
+
+macro(get_all_targets_recursive targets dir)
+    get_property(subdirectories DIRECTORY ${dir} PROPERTY SUBDIRECTORIES)
+    foreach(subdir ${subdirectories})
+        get_all_targets_recursive(${targets} ${subdir})
+    endforeach()
+
+    get_property(current_targets DIRECTORY ${dir} PROPERTY BUILDSYSTEM_TARGETS)
+    list(APPEND ${targets} ${current_targets})
+endmacro()
+
+function (ax_uwp_set_all_targets_deploy_min_version)
+    if (WINRT)
+        set(oneValueArgs TARGET_PLATFORM_MIN_VERSION)
+        cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
+        if (NOT opt_TARGET_PLATFORM_MIN_VERSION)
+            set(opt_TARGET_PLATFORM_MIN_VERSION "10.0.19041.0")
+        endif()
+        
+        get_all_targets(all_targets)
+
+        foreach(target ${all_targets})
+            set_target_properties(${target} PROPERTIES VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION "${opt_TARGET_PLATFORM_MIN_VERSION}")
+        endforeach()
+    endif()
+endfunction()
 
 # set Xcode property for application, include all depend target
 macro(ax_config_app_xcode_property ax_app)

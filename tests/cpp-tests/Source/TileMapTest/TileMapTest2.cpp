@@ -1296,7 +1296,7 @@ std::string TMXBug987New::title() const
 
 std::string TMXBug987New::subtitle() const
 {
-    return "You should see an square";
+    return "You should see a square";
 }
 
 //------------------------------------------------------------------
@@ -1391,7 +1391,7 @@ TileAnimTestNew::TileAnimTestNew()
 
 std::string TileAnimTestNew::title() const
 {
-    return "Tile animation test. Click to toggle the animation";
+    return "Tile animation test.\nClick to toggle the animation";
 }
 
 void TileAnimTestNew::onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
@@ -1423,7 +1423,7 @@ TileAnimTestNew2::TileAnimTestNew2()
 
 std::string TileAnimTestNew2::title() const
 {
-    return "Tile animation test with flipped/rotated. Click to toggle the animation";
+    return "Tile animation test with flipped/rotated.\nClick to toggle the animation";
 }
 
 void TileAnimTestNew2::onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
