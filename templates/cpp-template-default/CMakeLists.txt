@@ -212,6 +212,10 @@ if ((NOT APPLE) AND (NOT WINRT))
             set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
         endif()
     endif()
+elseif(WINRT)
+    if(NOT DEFINED BUILD_ENGINE_DONE)
+        set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+    endif()
 endif()
 
 if (_AX_USE_PREBUILT) # support windows and linux
