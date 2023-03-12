@@ -231,3 +231,7 @@ if (_AX_USE_PREBUILT) # support windows and linux
     include(${_AX_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
     ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT_PATH} ${AX_PREBUILT_DIR})
 endif()
+
+if (NOT DEFINED BUILD_ENGINE_DONE)
+    ax_uwp_set_all_targets_deploy_min_version()
+endif()
