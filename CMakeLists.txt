@@ -82,3 +82,5 @@ if(AX_BUILD_TESTS)
     endif(AX_ENABLE_EXT_LUA)
 
 endif()
+
+ax_uwp_set_all_targets_deploy_min_version()
