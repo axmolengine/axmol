@@ -435,7 +435,7 @@ function (ax_uwp_set_all_targets_deploy_min_version)
         set(oneValueArgs TARGET_PLATFORM_MIN_VERSION)
         cmake_parse_arguments(opt "" "${oneValueArgs}" "" ${ARGN})
         if (NOT opt_TARGET_PLATFORM_MIN_VERSION)
-            set(opt_TARGET_PLATFORM_MIN_VERSION "10.0.10240.0")
+            set(opt_TARGET_PLATFORM_MIN_VERSION "10.0.19041.0")
         endif()
         
         get_all_targets(all_targets)
