@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "platform/CCPlatformConfig.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "ImGui/ImGuiPresenter.h"
 #include "axmol.h"
 

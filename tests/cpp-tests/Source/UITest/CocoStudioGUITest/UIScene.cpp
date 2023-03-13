@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "UIScene.h"
 #include "UISceneManager.h"
 #include "cocostudio/CCSGUIReader.h"

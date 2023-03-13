@@ -22,7 +22,7 @@
 // SOFTWARE.
 
 #include "test.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
 USING_NS_AX_EXT;
 

@@ -26,7 +26,7 @@
 
 #include "ui/CocosGUI.h"
 
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(ShaderTests);

@@ -27,7 +27,7 @@
 #define __TestCpp__UIScene__
 
 #include "axmol.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "ui/CocosGUI.h"
 #include "BaseTest.h"
 
