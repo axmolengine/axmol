@@ -202,7 +202,7 @@ void TriggerObj::serialize(const rapidjson::Value& val)
         sprintf(buf, "%d", event);
         std::string custom_event_name(buf);
 
-        EventListenerCustom* listener = EventListenerCustom::create(custom_event_name, [=, this](EventCustom* /*evt*/) {
+        EventListenerCustom* listener = EventListenerCustom::create(custom_event_name, [this](EventCustom* /*evt*/) {
             if (detect())
             {
                 done();
@@ -295,7 +295,7 @@ void TriggerObj::serialize(cocostudio::CocoLoader* pCocoLoader, cocostudio::stEx
                 std::string custom_event_name(buf);
 
                 EventListenerCustom* listener =
-                    EventListenerCustom::create(custom_event_name, [=, this](EventCustom* /*evt*/) {
+                    EventListenerCustom::create(custom_event_name, [this](EventCustom* /*evt*/) {
                         if (detect())
                         {
                             done();
