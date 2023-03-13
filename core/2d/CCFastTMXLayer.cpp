@@ -662,13 +662,11 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
             rect      = AX_RECT_PIXELS_TO_POINTS(rect);
             tile      = Sprite::createWithTexture(_texture, rect);
 
-            Vec2 p = this->getPositionAt(tileCoordinate);
-            tile->setAnchorPoint(Vec2::ZERO);
-            tile->setPosition(p);
-            tile->setPositionZ((float)getVertexZForPos(tileCoordinate));
-            tile->setOpacity(this->getOpacity());
+            setupTileSprite(tile, tileCoordinate, gid | flags);
+
             tile->setTag(index);
             this->addChild(tile, index);
+
             _spriteContainer.insert(
                 std::pair<int, std::pair<Sprite*, uint32_t>>(index, std::pair<Sprite*, uint32_t>(tile, gid | flags)));
 
