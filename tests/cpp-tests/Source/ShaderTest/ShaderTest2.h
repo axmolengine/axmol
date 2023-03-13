@@ -25,7 +25,7 @@
 #ifndef _SHADER_TEST2_H_
 #define _SHADER_TEST2_H_
 
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "../BaseTest.h"
 
 DEFINE_TEST_SUITE(Shader2Tests);

@@ -26,7 +26,7 @@
 #define __TABLEVIEWTESTSCENE_H__
 
 #include "axmol.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "BaseTest.h"
 
 DEFINE_TEST_SUITE(TableViewTests);

@@ -29,7 +29,7 @@
 #include "axmol.h"
 #include "box2d/box2d.h"
 #include "../BaseTest.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
 DEFINE_TEST_SUITE(Box2DTests);
 
