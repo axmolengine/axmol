@@ -6,7 +6,7 @@
 USING_NS_AX;
 USING_NS_AX_EXT;
 
-#if (defined(AX_PLATFORM_PC) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 static bool show_test_window    = true;
 static bool show_another_window = true;

@@ -25,8 +25,6 @@
 
 #include "UIVideoPlayerTest.h"
 
-#if defined(AX_ENABLE_MFMEDIA)
-
 USING_NS_AX;
 using namespace ax::ui;
 
@@ -440,5 +438,3 @@ void SimpleVideoPlayerTest::createVideo()
     _videoPlayer->setFileName("cocosvideo.mp4");
     _videoPlayer->play();
 }
-
-#endif
