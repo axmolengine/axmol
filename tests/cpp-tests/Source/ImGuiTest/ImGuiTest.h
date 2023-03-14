@@ -30,7 +30,7 @@
 #include "axmol.h"
 #include "../BaseTest.h"
 
-#if (defined(AX_PLATFORM_PC) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 
 DEFINE_TEST_SUITE(ImGuiTests);
 
