@@ -82,10 +82,9 @@
   1. 安装CMake，要求3.22以上  
   2. 确保 Visual Studio 2019/2022 已正确安装
   3. 执行下面的命令
-  ```bat
-  cd axmol
-  cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
-  ``` 
+      - PC: ```cmake -S . -B build -G "Visual Studio 16 2019"```
+
+      - UWP: ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```
   4. 之后就可以用vs打开```axmol/build/axmol.sln```启动cpp-tests等测试工程了
 
 #### Android

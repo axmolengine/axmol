@@ -8,12 +8,33 @@ define_property(TARGET
     FULL_DOCS "use to save depend libs of axmol lua project"
 )
 
+# UWP min deploy target support, VS property: targetPlatformMinVersion
+if (WINRT)
+    if (NOT DEFINED AX_VS_DEPLOYMENT_TARGET)
+        set(AX_VS_DEPLOYMENT_TARGET "10.0.17763.0")
+    endif()
+    if("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}" VERSION_GREATER_EQUAL "3.27.0")
+        if (NOT DEFINED)
+            # The minmal deploy target version: Windows 10, version 1809 (Build 10.0.17763) for building msix package
+            # refer to: https://learn.microsoft.com/en-us/windows/msix/supported-platforms?source=recommendations
+            set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION ${AX_VS_DEPLOYMENT_TARGET})
+        endif()
+    else()
+        if(DEFINED CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
+            unset(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
+        endif()
+    endif()
+endif()
+
 # config c standard
 if(NOT DEFINED CMAKE_C_STANDARD)
     if (WINDOWS)
         message(STATUS "CMAKE_HOST_SYSTEM_VERSION: ${CMAKE_HOST_SYSTEM_VERSION}")
         message(STATUS "CMAKE_SYSTEM_VERSION: ${CMAKE_SYSTEM_VERSION}")
         message(STATUS "CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION: ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}")
+        if (DEFINED CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
+            message(STATUS "CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION: ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION}")
+        endif()
         if (NOT CMAKE_SYSTEM_VERSION)
             set(CMAKE_SYSTEM_VERSION ${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION})
         endif()
