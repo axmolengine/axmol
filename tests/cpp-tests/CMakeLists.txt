@@ -367,14 +367,14 @@ list(APPEND GAME_SOURCE
      Source/ZipTest/ZipTests.cpp
      )
 
-if(ANDROID OR IOS OR WIN32)
+if(ANDROID OR IOS OR (WINDOWS AND AX_ENABLE_MFMEDIA))
     list(APPEND GAME_HEADER
              Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
     list(APPEND GAME_SOURCE
              Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.cpp)
 endif()
 
-if(ANDROID OR IOS OR (WINDOWS AND NOT WINRT))
+if(ANDROID OR IOS OR (WINDOWS AND AX_ENABLE_MSEDGE_WEBVIEW2))
     list(APPEND GAME_HEADER
          Source/UITest/CocoStudioGUITest/UIWebViewTest/UIWebViewTest.h
          )
