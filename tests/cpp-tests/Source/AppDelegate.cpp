@@ -30,7 +30,7 @@
 #include "axmol.h"
 #include "controller.h"
 #include "BaseTest.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
 USING_NS_AX;
 
@@ -69,18 +69,21 @@ bool AppDelegate::applicationDidFinishLaunching()
 #ifndef NDEBUG
         title += " *Debug*",
 #endif
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-            glView = GLViewImpl::createWithRect(title, ax::Rect(0, 0, g_designSize.width, g_designSize.height));
+#ifdef AX_PLATFORM_PC
+        glView = GLViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height), 1.0F, true);
 #else
-        glView = GLViewImpl::create(title);
+        glView = GLViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif
         director->setOpenGLView(glView);
     }
 
     director->setStatsDisplay(true);
 
+#ifdef AX_PLATFORM_PC
+    director->setAnimationInterval(1.0f / glfwGetVideoMode(glfwGetPrimaryMonitor())->refreshRate);
+#else
     director->setAnimationInterval(1.0f / 60);
+#endif
 
     auto screenSize = glView->getFrameSize();
 

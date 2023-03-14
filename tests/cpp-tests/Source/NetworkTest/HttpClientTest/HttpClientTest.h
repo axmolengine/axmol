@@ -26,7 +26,7 @@
 #define __HTTP_CLIENT_H__
 
 #include "axmol.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "network/HttpClient.h"
 #include "BaseTest.h"
 

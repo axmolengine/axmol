@@ -32,7 +32,7 @@
 #include "axmol.h"
 #include "chipmunk/chipmunk.h"
 #include "../BaseTest.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
 class ChipmunkTest : public TestCase
 {
@@ -58,6 +58,7 @@ private:
 
     cpSpace* _space;  // strong ref
     cpShape* _walls[4];
+    ax::DrawNode* drawNode;
 };
 
 DEFINE_TEST_SUITE(ChipmunkTests);

@@ -27,7 +27,7 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 
 #include "cocos2d.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
 #if !defined(_WIN32)
 #    include <dirent.h>

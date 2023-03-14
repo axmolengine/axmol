@@ -20,7 +20,7 @@
 #define TEST_H
 
 #include "box2d/box2d.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
 #include <cstdlib>
 
