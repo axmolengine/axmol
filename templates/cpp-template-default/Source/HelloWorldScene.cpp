@@ -78,6 +78,27 @@ bool HelloWorld::init()
     /////////////////////////////
     // 3. add your codes below...
 
+    // Some templates (uncomment what you  need)
+    auto touchListener            = EventListenerTouchAllAtOnce::create();
+    touchListener->onTouchesBegan = AX_CALLBACK_2(HelloWorld::onTouchesBegan, this);
+    touchListener->onTouchesMoved = AX_CALLBACK_2(HelloWorld::onTouchesMoved, this);
+    touchListener->onTouchesEnded = AX_CALLBACK_2(HelloWorld::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
+    //auto mouseListener           = EventListenerMouse::create();
+    //mouseListener->onMouseMove   = AX_CALLBACK_1(HelloWorld::onMouseMove, this);
+    //mouseListener->onMouseUp     = AX_CALLBACK_1(HelloWorld::onMouseUp, this);
+    //mouseListener->onMouseDown   = AX_CALLBACK_1(HelloWorld::onMouseDown, this);
+    //mouseListener->onMouseScroll = AX_CALLBACK_1(HelloWorld::onMouseScroll, this);
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
+    //auto keyboardListener           = EventListenerKeyboard::create();
+    //keyboardListener->onKeyPressed  = AX_CALLBACK_2(HelloWorld::onKeyPressed, this);
+    //keyboardListener->onKeyReleased = AX_CALLBACK_2(HelloWorld::onKeyReleased, this);
+    //_eventDispatcher->addEventListenerWithFixedPriority(keyboardListener, 11);
+
+
+
     // add a label shows "Hello World"
     // create and initialize a label
 
@@ -120,6 +141,65 @@ bool HelloWorld::init()
     scheduleUpdate();
 
     return true; 
+}
+
+
+void HelloWorld::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+{
+    for (auto&& t : touches)
+    {
+        AXLOG("onTouchesBegan detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+    }
+}
+
+void HelloWorld::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
+{
+    for (auto&& t : touches)
+    {
+        AXLOG("onTouchesMoved detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+    }
+}
+
+void HelloWorld::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+{
+    for (auto&& t : touches)
+    {
+        AXLOG("onTouchesEnded detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+    }
+}
+
+void HelloWorld::onMouseDown(Event* event)
+{
+    EventMouse* e = static_cast<EventMouse*>(event);
+    AXLOG("onMouseDown detected, Key: %d", static_cast<int>(e->getMouseButton()));
+}
+
+void HelloWorld::onMouseUp(Event* event)
+{
+    EventMouse* e = static_cast<EventMouse*>(event);
+    AXLOG("onMouseUp detected, Key: %d", static_cast<int>(e->getMouseButton()));
+}
+
+void HelloWorld::onMouseMove(Event* event)
+{
+    EventMouse* e = static_cast<EventMouse*>(event);
+    AXLOG("onMouseMove detected, X:%f  Y:%f", e->getCursorX(), e->getCursorY());
+}
+
+void HelloWorld::onMouseScroll(Event* event)
+{
+    EventMouse* e = static_cast<EventMouse*>(event);
+    AXLOG("onMouseScroll detected, X:%f  Y:%f", e->getScrollX(), e->getScrollY());
+}
+
+void HelloWorld::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
+{
+    AXLOG("onKeyPressed, keycode: %d", static_cast<int>(code));
+}
+
+void HelloWorld::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
+{
+    AXLOG("onKeyReleased, keycode: %d", static_cast<int>(code));
 }
 
 void HelloWorld::update(float delta)
