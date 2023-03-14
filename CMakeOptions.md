@@ -29,6 +29,7 @@
   - AX_ENABLE_EXT_LIVE2D: the live2d extension, default: `FALSE` 
   - AX_ENABLE_EXT_EFFEKSEER: the effekseer extension, default: `FALSE` 
 - AX_WITH_XXX: usually user don't need care it
+- AX_VS_DEPLOYMENT_TARGET: specify windows store deploy target, default: `10.0.17763.0`
 
 ## The options for axmol apps
 

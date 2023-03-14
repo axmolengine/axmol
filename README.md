@@ -141,7 +141,7 @@ Examples:
   6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
 
 #### Windows UWP (Visual Studio 2022), because microsoft limit, only support C++17
-  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0"```  
+  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
 
 ##### Creating the Visual Studio solution for all axmol test projects
 
@@ -233,14 +233,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
   6. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
   7. Notes  
      - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
-     - **axmol only provides armv7, arm64, x86_64 prebuilt libraries for ios/tvos**
-
-### Notes
-
-- ThreadLocalStorage (TLS)
-  - ios x86 simulator ios>=10 and axmol no longer provide x86 libraries
-  - ios x64 or devices (armv7, arm64) ios sdk>=9.0
-  - the 'OpenAL Soft' maintained by kcat uses TLS
+     - **axmol only provides aarm64, x86_64 prebuilt libraries for ios/tvos**
 
 ### Reference links
 
