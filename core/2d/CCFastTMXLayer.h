@@ -454,6 +454,7 @@ public:
 
     /** get vector of tasks */
     const Vector<TMXTileAnimTask*>& getTasks() const { return _tasks; }
+    int currentTaskPointer = 0;
 
 protected:
     bool _started = false;

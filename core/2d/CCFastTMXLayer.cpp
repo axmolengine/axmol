@@ -148,23 +148,15 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 {
     if (!_visible) return;
 
-    for (auto& child : _children)
-    {
-        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
-        if (layer)
-        {
-            layer->draw(renderer, transform, flags);
-        }
-    }
-
     updateTotalQuads();
 
     auto camera = Camera::getVisitingCamera();
-    if (flags != 0 || _dirty || _quadsDirty || _cameraPositionDirty != camera->getPosition() ||
+    if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(camera->getPosition(), 1000) ||
         _cameraZoomDirty != camera->getZoom())
     {
         _cameraPositionDirty = camera->getPosition();
         auto zoom = _cameraZoomDirty = camera->getZoom();
+        zoom *= 2;
         Vec2 s             = _director->getVisibleSize();
         const Vec2& anchor = getAnchorPoint();
         auto rect = Rect(camera->getPositionX() - s.width * zoom * (anchor.x == 0.0f ? 0.5f : anchor.x),
