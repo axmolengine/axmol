@@ -989,7 +989,7 @@ void ClippingNodePerformanceTest::setup()
     countLabel->setPosition(Vec2(s.width / 2, s.height - 120));
     addChild(countLabel, 1);
     
-    auto addClippingNode = [=, this] (int count) -> void {
+    auto addClippingNode = [=] (int count) -> void {
         for (int i = 0; i < count; i++) {
             Vec2 pos = Vec2(random(0, (int) s.width), random(0, (int) s.height));
             auto stencil = Sprite::create("Images/stars2.png");
@@ -997,7 +997,7 @@ void ClippingNodePerformanceTest::setup()
             clipper->setPosition(pos);
             clipper->setAlphaThreshold(0.1);
             clipper->setInverted(true);
-            addChild(clipper);
+            this->addChild(clipper);
 
             auto spriteA = Sprite::create("Images/grossini.png");
             clipper->addChild(spriteA);
