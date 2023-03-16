@@ -64,6 +64,7 @@ ClippingNodeTests::ClippingNodeTests()
     ADD_TEST_CASE(RawStencilBufferTest6);
     ADD_TEST_CASE(ClippingToRenderTextureTest);
     ADD_TEST_CASE(ClippingRectangleNodeTest);
+    ADD_TEST_CASE(ClippingNodePerformanceTest);
 }
 
 //// Demo examples start here
@@ -965,4 +966,55 @@ void ClippingRectangleNodeTest::setup()
     content->setAnchorPoint(Vec2(0.5f, 0.5f));
     content->setPosition(this->getContentSize().width / 2, this->getContentSize().height / 2);
     clipper->addChild(content);
+}
+
+// ClippingNodePerformanceTest
+
+std::string ClippingNodePerformanceTest::title() const
+{
+    return "ClippingNodePerformanceTest Test";
+}
+
+std::string ClippingNodePerformanceTest::subtitle() const
+{
+    return "Click button to add 10 clipping node";
+}
+
+void ClippingNodePerformanceTest::setup()
+{
+    auto s = Director::getInstance()->getWinSize();
+
+    auto countLabel = Label::createWithTTF("0", "fonts/arial.ttf", 30);
+    countLabel->enableOutline(Color4B(0, 0, 0, 255), 2);
+    countLabel->setPosition(Vec2(s.width / 2, s.height - 120));
+    addChild(countLabel, 1);
+    
+    auto addClippingNode = [=] (int count) -> void {
+        for (int i = 0; i < count; i++) {
+            Vec2 pos = Vec2(random(0, (int) s.width), random(0, (int) s.height));
+            auto stencil = Sprite::create("Images/stars2.png");
+            auto clipper = ClippingNode::create(stencil);
+            clipper->setPosition(pos);
+            clipper->setAlphaThreshold(0.1);
+            clipper->setInverted(true);
+            this->addChild(clipper);
+
+            auto spriteA = Sprite::create("Images/grossini.png");
+            clipper->addChild(spriteA);
+        }
+        
+        _totalCount += count;
+        countLabel->setString(std::to_string(_totalCount));
+    };
+    addClippingNode(100);
+    
+    MenuItemFont::setFontName("fonts/arial.ttf");
+    MenuItemFont::setFontSize(65);
+    auto increase = MenuItemFont::create(" + ", [=] (Ref*) -> void {
+        addClippingNode(10);
+    });
+    increase->setColor(Color3B(0, 200, 20));
+    auto menu = Menu::create(increase, nullptr);
+    menu->setPosition(Vec2(s.width / 2, s.height - 80));
+    addChild(menu, 1);
 }
