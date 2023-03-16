@@ -25,6 +25,9 @@
 # include <openssl/x509.h>
 # include <openssl/conf.h>
 # include <openssl/x509v3err.h>
+# ifndef OPENSSL_NO_STDIO
+#  include <stdio.h>
+# endif
 
 #ifdef __cplusplus
 extern "C" {
