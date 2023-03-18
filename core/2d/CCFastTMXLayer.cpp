@@ -151,7 +151,7 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     updateTotalQuads();
 
     auto camera = Camera::getVisitingCamera();
-    if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(camera->getPosition(), 1000) ||
+    if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(camera->getPosition(), 300) ||
         _cameraZoomDirty != camera->getZoom())
     {
         _cameraPositionDirty = camera->getPosition();
