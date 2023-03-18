@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 111.0.5563.19
+- Version: 111.0.5563.65
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -77,7 +77,7 @@
 
 ## glsl-optimizer (Apple Metal Render backend only)
 - Upstream: https://github.com/aras-p/glsl-optimizer
-- Version: git d78c3d2
+- Version: git cdfc9ef
 - License: MIT
 
 ## GHC (iOS devices only)
@@ -118,7 +118,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-505e2c0 (2628)
+  - Version: 2.1-505e2c0
   - License: MIT
 
 - tolua
@@ -174,7 +174,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.8
+- Version: 3.1.0
 - License: Apache-2.0
 
 ## png
@@ -255,3 +255,4 @@
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.2.13
 - License: zlib
+

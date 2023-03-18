@@ -286,3 +286,15 @@ public:
     virtual std::string subtitle() const override;
     virtual void setup() override;
 };
+
+class ClippingNodePerformanceTest : public BaseClippingNodeTest
+{
+private:
+    int _totalCount = 0;
+public:
+    CREATE_FUNC(ClippingNodePerformanceTest);
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    virtual void setup() override;
+};

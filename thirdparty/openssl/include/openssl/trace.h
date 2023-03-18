@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2019-2022 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the Apache License 2.0 (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -55,8 +55,10 @@ extern "C" {
 # define OSSL_TRACE_CATEGORY_DECODER            15
 # define OSSL_TRACE_CATEGORY_ENCODER            16
 # define OSSL_TRACE_CATEGORY_REF_COUNT          17
+# define OSSL_TRACE_CATEGORY_HTTP               18
 /* Count of available categories. */
-# define OSSL_TRACE_CATEGORY_NUM                18
+# define OSSL_TRACE_CATEGORY_NUM                19
+/* KEEP THIS LIST IN SYNC with trace_categories[] in crypto/trace.c */
 
 /* Returns the trace category number for the given |name| */
 int OSSL_trace_get_category_num(const char *name);
