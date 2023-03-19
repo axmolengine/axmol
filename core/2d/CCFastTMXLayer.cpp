@@ -84,6 +84,8 @@ bool FastTMXLayer::initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo
     _tiles      = layerInfo->_tiles;
     _quadsDirty = true;
     setOpacity(layerInfo->_opacity);
+    _visible = layerInfo->_visible;
+    _hex = layerInfo->_hex;
     setProperties(layerInfo->getProperties());
 
     // tilesetInfo
@@ -128,17 +130,38 @@ FastTMXLayer::~FastTMXLayer()
     }
 }
 
+void FastTMXLayer::update(float dt) {
+    for (auto&& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer)
+            layer->update(dt);
+    }
+
+    if (_tileAnimManager)
+        for (auto& t : _tileAnimManager->getTasks())
+            if (t && t->isRunning())
+                t->update(dt);
+}
+
 void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
+    if (!_visible) return;
+
     updateTotalQuads();
 
-    if (flags != 0 || _dirty || _quadsDirty)
+    auto camera = Camera::getVisitingCamera();
+    if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(camera->getPosition(), 300) ||
+        _cameraZoomDirty != camera->getZoom())
     {
+        _cameraPositionDirty = camera->getPosition();
+        auto zoom = _cameraZoomDirty = camera->getZoom();
+        zoom *= 2;
         Vec2 s             = _director->getVisibleSize();
         const Vec2& anchor = getAnchorPoint();
-        auto rect = Rect(Camera::getVisitingCamera()->getPositionX() - s.width * (anchor.x == 0.0f ? 0.5f : anchor.x),
-                         Camera::getVisitingCamera()->getPositionY() - s.height * (anchor.y == 0.0f ? 0.5f : anchor.y),
-                         s.width, s.height);
+        auto rect = Rect(camera->getPositionX() - s.width * zoom * (anchor.x == 0.0f ? 0.5f : anchor.x),
+                         camera->getPositionY() - s.height * zoom * (anchor.y == 0.0f ? 0.5f : anchor.y),
+                         s.width * zoom, s.height * zoom);
 
         Mat4 inv = transform;
         inv.inverse();
@@ -356,7 +379,17 @@ void FastTMXLayer::setupTiles()
                 }
 
                 int pos = static_cast<int>(newX + _layerSize.width * y);
-                int gid = _tiles[pos];
+                uint32_t gid = _tiles[pos];
+
+                uint32_t flags = 0;
+
+                if (gid & kTMXTileHorizontalFlag) flags |= kTMXTileHorizontalFlag;
+                if (gid & kTMXTileVerticalFlag) flags |= kTMXTileVerticalFlag;
+                if (gid & kTMXTileDiagonalFlag) flags |= kTMXTileDiagonalFlag;
+
+                gid &= ~kTMXTileHorizontalFlag;
+                gid &= ~kTMXTileVerticalFlag;
+                gid &= ~kTMXTileDiagonalFlag;
 
                 // gid are stored in little endian.
                 // if host is big endian, then swap
@@ -369,7 +402,7 @@ void FastTMXLayer::setupTiles()
                 {
                     if (_tileSet->_animationInfo.find(gid) != _tileSet->_animationInfo.end())
                     {
-                        _animTileCoord[gid].emplace_back(Vec2(newX, y));
+                        _animTileCoord[gid].emplace_back(TMXTileAnimFlag{Vec2(newX, y), flags});
                     }
                 }
             }
@@ -480,6 +513,18 @@ void FastTMXLayer::setOpacity(uint8_t opacity)
     _quadsDirty = true;
 }
 
+void FastTMXLayer::setColor(const Color4B& color)
+{
+    _layerColor = color;
+    _quadsDirty = true;
+}
+
+void FastTMXLayer::setEditorColor(const Color4B& color)
+{
+    _editorColor = color;
+    _quadsDirty = true;
+}
+
 void FastTMXLayer::updateTotalQuads()
 {
     if (_quadsDirty)
@@ -492,8 +537,14 @@ void FastTMXLayer::updateTotalQuads()
         _tileToQuadIndex.resize(int(_layerSize.width * _layerSize.height), -1);
         _indicesVertexZOffsets.clear();
 
-        auto color = Color4B::WHITE;
-        color.a    = getDisplayedOpacity();
+        auto tint      = _layerColor;
+        auto etint     = Color4F(_editorColor);
+
+        if (etint.r == 0 && etint.g == 0 && etint.b == 0)
+            etint = Color4F(1,1,1,1);
+
+        auto color     = Color4B(tint.r * etint.r, tint.g * etint.g, tint.b * etint.b, 255);
+        color.a        = getDisplayedOpacity() * (tint.a / 255.0) * _visible;
 
         if (_texture->hasPremultipliedAlpha())
         {
@@ -594,14 +645,18 @@ void FastTMXLayer::updateTotalQuads()
                 bottom           = (tileTexture.origin.y / texSize.height);
                 top              = bottom + (tileTexture.size.height / texSize.height);
 
-                quad.bl.texCoords.u = left;
-                quad.bl.texCoords.v = bottom;
-                quad.br.texCoords.u = right;
-                quad.br.texCoords.v = bottom;
-                quad.tl.texCoords.u = left;
-                quad.tl.texCoords.v = top;
-                quad.tr.texCoords.u = right;
-                quad.tr.texCoords.v = top;
+                // issue#1085 OpenGL sub-pixel horizontal-vertical lines pixel-tolerance fix.
+                float ptx = (1.0 / (_tileSet->_imageSize.x * std::powf(tileSize.x, 2)));
+                float pty = (1.0 / (_tileSet->_imageSize.y * std::powf(tileSize.x, 2)));
+
+                quad.bl.texCoords.u = left + ptx;
+                quad.bl.texCoords.v = bottom + pty;
+                quad.br.texCoords.u = right - ptx;
+                quad.br.texCoords.v = bottom + pty;
+                quad.tl.texCoords.u = left + ptx;
+                quad.tl.texCoords.v = top - pty;
+                quad.tr.texCoords.u = right - ptx;
+                quad.tr.texCoords.v = top - pty;
 
                 quad.bl.colors = color;
                 quad.br.colors = color;
@@ -670,6 +725,9 @@ Sprite* FastTMXLayer::getTileAt(const Vec2& tileCoordinate)
 
 int FastTMXLayer::getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags /* = nullptr*/)
 {
+    if (!(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
+        tileCoordinate.y >= 0)) return 0;
+
     AXASSERT(tileCoordinate.x < _layerSize.width && tileCoordinate.y < _layerSize.height && tileCoordinate.x >= 0 &&
                  tileCoordinate.y >= 0,
              "TMXLayer: invalid position");
@@ -956,9 +1014,9 @@ TMXTileAnimManager::TMXTileAnimManager(FastTMXLayer* layer)
     _layer = layer;
     for (const auto& p : *_layer->getAnimTileCoord())
     {
-        for (auto&& tilePos : p.second)
+        for (auto&& tile : p.second)
         {
-            _tasks.pushBack(TMXTileAnimTask::create(_layer, _layer->getTileSet()->_animationInfo.at(p.first), tilePos));
+            _tasks.pushBack(TMXTileAnimTask::create(_layer, _layer->getTileSet()->_animationInfo.at(p.first), tile._tilePos, tile._flags));
         }
     }
 }
@@ -992,12 +1050,13 @@ void TMXTileAnimManager::stopAll()
     }
 }
 
-TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos)
+TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flags)
 {
     _layer        = layer;
     _animation    = animation;
     _frameCount   = static_cast<uint32_t>(_animation->_frames.size());
     _tilePosition = tilePos;
+    _tileFlags    = flags;
     std::stringstream ss;
     ss << "TickAnimOnTilePos(" << _tilePosition.x << "," << _tilePosition.y << ")";
     _key = ss.str();
@@ -1006,31 +1065,43 @@ TMXTileAnimTask::TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation
 void TMXTileAnimTask::tickAndScheduleNext(float dt)
 {
     setCurrFrame();
-    _layer->getParent()->scheduleOnce(AX_CALLBACK_1(TMXTileAnimTask::tickAndScheduleNext, this),
-                                      _animation->_frames[_currentFrame]._duration / 1000.0f, _key);
+}
+
+void TMXTileAnimTask::update(float dt)
+{
+    _currentDt += dt * _timeScale;
+
+    if (_currentDt >= _animation->_frames[_currentFrame]._duration / 1000.0f)
+    {
+        _currentDt = _currentDt - _animation->_frames[_currentFrame]._duration / 1000.0f;
+        tickAndScheduleNext(dt);
+    }
+}
+
+void TMXTileAnimTask::setTimeScale(float dt)
+{
+    _timeScale = dt;
 }
 
 void TMXTileAnimTask::start()
 {
     _isRunning = true;
-    tickAndScheduleNext(0.0f);
 }
 
 void TMXTileAnimTask::stop()
 {
     _isRunning = false;
-    _layer->getParent()->unschedule(_key);
 }
 
 void TMXTileAnimTask::setCurrFrame()
 {
-    _layer->setTileGID(_animation->_frames[_currentFrame]._tileID, _tilePosition);
     _currentFrame = (_currentFrame + 1) % _frameCount;
+    _layer->setTileGID(_animation->_frames[_currentFrame]._tileID, _tilePosition, (TMXTileFlags)_tileFlags);
 }
 
-TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos)
+TMXTileAnimTask* TMXTileAnimTask::create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flags)
 {
-    TMXTileAnimTask* ret = new TMXTileAnimTask(layer, animation, tilePos);
+    TMXTileAnimTask* ret = new TMXTileAnimTask(layer, animation, tilePos, flags);
     ret->autorelease();
     return ret;
 }
