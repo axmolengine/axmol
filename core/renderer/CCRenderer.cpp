@@ -1010,7 +1010,10 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
         return;
     }
 #else
-    auto tmpData = malloc(Renderer::VBO_SIZE * sizeof(V3F_C4B_T2F));
+    auto size = sizeof(V3F_C4B_T2F);
+    auto tmpData = malloc(size);
+    memset(tmpData, 0, size);
+
     if (!tmpData)
         return;
 
@@ -1021,7 +1024,7 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
         free(tmpData);
         return;
     }
-    vertexBuffer->updateData(tmpData, Renderer::VBO_SIZE * sizeof(V3F_C4B_T2F));
+    vertexBuffer->updateData(tmpData, size);
 
     auto indexBuffer = device->newBuffer(Renderer::INDEX_VBO_SIZE * sizeof(unsigned short), backend::BufferType::INDEX,
                                          backend::BufferUsage::DYNAMIC);
@@ -1031,7 +1034,7 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
         vertexBuffer->release();
         return;
     }
-    indexBuffer->updateData(tmpData, Renderer::INDEX_VBO_SIZE * sizeof(unsigned short));
+    indexBuffer->updateData(tmpData, size);
 
     free(tmpData);
 #endif
