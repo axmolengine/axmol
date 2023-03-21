@@ -995,6 +995,10 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
 {
     auto device = backend::Device::getInstance();
 
+    // Not initializing the buffer before passing it to updateData for Android/OpenGL ES.
+    // This change does fix the Android/OpenGL ES performance problem
+    // If for some reason we get reports of performance issues on OpenGL implementations,
+    // then we can just add pre-processor checks for OpenGL and have the updateData() allocate the full size after buffer creation.
     auto vertexBuffer = device->newBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX,
                                           backend::BufferUsage::DYNAMIC);
     if (!vertexBuffer)
