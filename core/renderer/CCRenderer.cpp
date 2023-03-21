@@ -995,8 +995,6 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
 {
     auto device = backend::Device::getInstance();
 
-#ifdef AX_USE_METAL
-    // Metal doesn't need to update buffer to make sure it has the correct size.
     auto vertexBuffer = device->newBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX,
                                           backend::BufferUsage::DYNAMIC);
     if (!vertexBuffer)
@@ -1009,34 +1007,6 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
         vertexBuffer->release();
         return;
     }
-#else
-    auto size = sizeof(V3F_C4B_T2F);
-    auto tmpData = malloc(size);
-
-    if (!tmpData)
-        return;
-
-    auto vertexBuffer = device->newBuffer(Renderer::VBO_SIZE * sizeof(V3F_C4B_T2F), backend::BufferType::VERTEX,
-                                          backend::BufferUsage::DYNAMIC);
-    if (!vertexBuffer)
-    {
-        free(tmpData);
-        return;
-    }
-    vertexBuffer->updateData(tmpData, size);
-
-    auto indexBuffer = device->newBuffer(Renderer::INDEX_VBO_SIZE * sizeof(unsigned short), backend::BufferType::INDEX,
-                                         backend::BufferUsage::DYNAMIC);
-    if (!indexBuffer)
-    {
-        free(tmpData);
-        vertexBuffer->release();
-        return;
-    }
-    indexBuffer->updateData(tmpData, size);
-
-    free(tmpData);
-#endif
 
     _vertexBufferPool.emplace_back(vertexBuffer);
     _indexBufferPool.emplace_back(indexBuffer);
