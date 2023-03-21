@@ -1012,7 +1012,6 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
 #else
     auto size = sizeof(V3F_C4B_T2F);
     auto tmpData = malloc(size);
-    memset(tmpData, 0, size);
 
     if (!tmpData)
         return;
