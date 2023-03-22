@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 111.0.5563.66
+- Version: 111.0.5563.111
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
