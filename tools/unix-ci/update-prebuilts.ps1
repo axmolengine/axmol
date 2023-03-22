@@ -35,7 +35,7 @@ if ($null -eq (Get-Module -ListAvailable -Name powershell-yaml)) {
 
 # check upstream prebuilts version
 if (!(Test-Path ./tmp/verlist.yml -PathType Leaf)) {
-    curl -L https://github.com/axmolengine/buildware/releases/download/v47/verlist.yml -o ./tmp/verlist.yml
+    curl -L https://github.com/axmolengine/buildware/releases/download/$VER/verlist.yml -o ./tmp/verlist.yml
 }
 
 $newVerList = ConvertFrom-Yaml -Yaml (Get-Content './tmp/verlist.yml' -raw)

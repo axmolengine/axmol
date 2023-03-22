@@ -88,9 +88,6 @@ typedef enum {
 
 const char *OSSL_EC_curve_nid2name(int nid);
 
-# ifndef OPENSSL_NO_STDIO
-#  include <stdio.h>
-# endif
 # ifndef OPENSSL_NO_EC
 #  include <openssl/asn1.h>
 #  include <openssl/symhacks.h>

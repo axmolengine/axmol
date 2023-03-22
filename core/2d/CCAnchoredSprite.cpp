@@ -200,7 +200,7 @@ void AnchoredSprite::setAnchorPoint(const Vec2& anchor)
     updatePoly();
 }
 
-const Rect& AnchoredSprite::getTouchRect()
+Rect AnchoredSprite::getTouchRect()
 {
     Size s = getContentSize();
     Size a = _spriteVertexAnchor * s;
