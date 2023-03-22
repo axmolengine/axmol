@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 111.0.5563.65
+- Version: 111.0.5563.66
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -174,7 +174,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.1.0
+- Version: 3.0.8
 - License: Apache-2.0
 
 ## png
