@@ -19,7 +19,8 @@
 | Windows Desktop |    complete                  |
 | Windows UWP     |    complete                  |
 | Mac OS X        |                              |
-| iOS             |                              |
+| iOS/tvOS        |                              |
+| Android         |                              |
 
 ## Supported Platforms
 | Build | Status (github) |
