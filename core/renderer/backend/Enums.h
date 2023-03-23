@@ -369,8 +369,13 @@ struct ProgramType
         HSV_DUAL_SAMPLER,
         HSV_ETC1 = HSV_DUAL_SAMPLER,
 
+        VIDEO_TEXTURE_YUY2,
+        VIDEO_TEXTURE_NV12,
+        VIDEO_TEXTURE_BGR32,
+        
         BUILTIN_COUNT,
 
+        VIDEO_TEXTURE_RGB32 = POSITION_TEXTURE_COLOR,
         CUSTOM_PROGRAM = 0x1000,  // user-define program, used by engine
     };
 };

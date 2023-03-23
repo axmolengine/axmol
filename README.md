@@ -12,6 +12,15 @@
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
 
+## VideoPlayer based on VideoTexture
+
+|  Platform       |    MediaEngine/VideoTexture  |
+|-----------------|------------------------------|
+| Windows Desktop |    complete                  |
+| Windows UWP     |    complete                  |
+| Mac OS X        |                              |
+| iOS             |                              |
+
 ## Supported Platforms
 | Build | Status (github) |
 |-------|-----------------|

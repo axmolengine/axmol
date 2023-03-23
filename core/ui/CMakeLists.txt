@@ -22,14 +22,10 @@ if(WINDOWS)
 
     if (AX_ENABLE_MFMEDIA)
         set(_AX_UI_SPECIFIC_HEADER ${_AX_UI_SPECIFIC_HEADER}
-            ui/UIVideoPlayer/MFUtils.h
-            ui/UIVideoPlayer/MFMediaPlayer.h
             ui/UIVideoPlayer/UIVideoPlayer.h
             )
         set(_AX_UI_SPECIFIC_SRC ${_AX_UI_SPECIFIC_SRC}
-            ui/UIVideoPlayer/MFUtils.cpp
-            ui/UIVideoPlayer/MFMediaPlayer.cpp
-            ui/UIVideoPlayer/UIVideoPlayer-win.cpp
+            ui/UIVideoPlayer/UIVideoPlayer.cpp
             )
     endif()
 elseif(APPLE)

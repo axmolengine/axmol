@@ -47,12 +47,13 @@ endif()
 
 message(STATUS "WINRT=${WINRT}")
 
+option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation for windows video player" ON)
+
 if (NOT WINRT)
     option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
-    option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation for windows video player" ON)
 else() # we not support webview2 and vidio player for WINRT target
     set(AX_ENABLE_MSEDGE_WEBVIEW2 OFF CACHE BOOL "Use Microsoft Edge webview2" FORCE)
-    set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
+    # set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
 endif()
 
 
@@ -117,6 +118,11 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
+file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
+file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
+
+message(STATUS "_AX_MEDIA_SRC=${_AX_MEDIA_SRC}")
+
 set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
     ${_AX_3D_HEADER}
@@ -130,6 +136,7 @@ set(_AX_HEADER axmol.h
     ${_AX_AUDIO_HEADER}
     ${_AX_UI_HEADER}
     ${_AX_NETWORK_HEADER}
+    ${_AX_MEDIA_HEADER}
     )
 
 set(_AX_SRC axmol.cpp
@@ -145,6 +152,7 @@ set(_AX_SRC axmol.cpp
     ${_AX_AUDIO_SRC}
     ${_AX_UI_SRC}
     ${_AX_NETWORK_SRC}
+    ${_AX_MEDIA_SRC}
     )
 
 list(APPEND _AX_SRC ${_AX_HEADER})
