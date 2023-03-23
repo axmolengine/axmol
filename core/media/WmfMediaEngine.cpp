@@ -15,28 +15,28 @@
 
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 
-#include <Shlwapi.h>
-#include "MFUtils.h"
+#    include <Shlwapi.h>
+#    include "MFUtils.h"
 
-#include "ntcvt/ntcvt.hpp"
+#    include "ntcvt/ntcvt.hpp"
 
-#include "base/CCConsole.h"
+#    include "base/CCConsole.h"
 
 NS_AX_BEGIN
 
 // IF_FAILED_GOTO macro.
 // Jumps to 'label' on failure.
-#ifndef IF_FAILED_GOTO
-#    define IF_FAILED_GOTO(hr, label) \
-        if (FAILED(hr))               \
-        {                             \
-            goto label;               \
-        }
-#endif
+#    ifndef IF_FAILED_GOTO
+#        define IF_FAILED_GOTO(hr, label) \
+            if (FAILED(hr))               \
+            {                             \
+                goto label;               \
+            }
+#    endif
 
-#define CHECK_HR(hr) IF_FAILED_GOTO(hr, done)
+#    define CHECK_HR(hr) IF_FAILED_GOTO(hr, done)
 
-#    define TRACE(format,...) ax::print(format,##__VA_ARGS__)
+#    define TRACE(format, ...) ax::print(format, ##__VA_ARGS__)
 
 // const UINT WM_APP_PLAYER_EVENT = ::RegisterWindowMessageW(L"mfmedia-event");
 
@@ -123,10 +123,10 @@ public:
 
     STDMETHODIMP_(ULONG) AddRef() { return InterlockedIncrement(&RefCount); }
 
-#if _MSC_VER == 1900
-#    pragma warning(push)
-#    pragma warning(disable : 4838)
-#endif
+#    if _MSC_VER == 1900
+#        pragma warning(push)
+#        pragma warning(disable : 4838)
+#    endif
 
     STDMETHODIMP QueryInterface(REFIID RefID, void** Object)
     {
@@ -135,9 +135,9 @@ public:
         return QISearch(this, QITab, RefID, Object);
     }
 
-#if _MSC_VER == 1900
-#    pragma warning(pop)
-#endif
+#    if _MSC_VER == 1900
+#        pragma warning(pop)
+#    endif
 
     STDMETHODIMP_(ULONG) Release()
     {
@@ -159,10 +159,10 @@ private:
     /** Holds a reference counter for this instance. */
     long RefCount;
 
-    WmfMediaEngine* Owner; // weak ref to owner
+    WmfMediaEngine* Owner;  // weak ref to owner
 };
 
-#if 0
+#    if 0
 ///////////////////////////////////////////////////////////////////////
 //  Name: CreateInstance
 //  Description:  Static class method to create the WmfMediaEngine object.
@@ -200,18 +200,13 @@ HRESULT WmfMediaEngine::CreateInstance(WmfMediaEngine** ppPlayer)
 
     return hr;
 }
-#endif
+#    endif
 
 ///////////////////////////////////////////////////////////////////////
 //  WmfMediaEngine constructor
 /////////////////////////////////////////////////////////////////////////
 
-WmfMediaEngine::WmfMediaEngine()
-    : m_pSession()
-    , m_pSource()
-    , m_hwndEvent(nullptr)
-    , m_hCloseEvent(NULL)
-    , m_nRefCount(1)
+WmfMediaEngine::WmfMediaEngine() : m_pSession(), m_pSource(), m_hwndEvent(nullptr), m_hCloseEvent(NULL), m_nRefCount(1)
 {}
 
 ///////////////////////////////////////////////////////////////////////
@@ -322,7 +317,7 @@ HRESULT WmfMediaEngine::QueryInterface(REFIID iid, void** ppv)
 //  Description:  Opens a URL for playback.
 /////////////////////////////////////////////////////////////////////////
 
-int WmfMediaEngine::Open(std::string_view sourceUri)
+bool WmfMediaEngine::Open(std::string_view sourceUri)
 {
     auto wsourceUri = ntcvt::from_chars(sourceUri);
 
@@ -388,10 +383,10 @@ done:
 
     // SAFE_RELEASE(pTopology);
 
-    return hr;
+    return SUCCEEDED(hr);
 }
 
-int WmfMediaEngine::Close()
+bool WmfMediaEngine::Close()
 {
     HRESULT hr = S_OK;
     auto state = GetState();
@@ -400,7 +395,7 @@ int WmfMediaEngine::Close()
         Stop();
         hr = CloseSession();
     }
-    return hr;
+    return SUCCEEDED(hr);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -412,7 +407,7 @@ int WmfMediaEngine::Close()
 
 HRESULT WmfMediaEngine::Invoke(IMFAsyncResult* pResult)
 {
-    HRESULT hr            = S_OK;
+    HRESULT hr              = S_OK;
     ::MediaEventType meType = MEUnknown;  // Event type
 
     TComPtr<IMFMediaEvent> pEvent;
@@ -464,12 +459,14 @@ done:
     return S_OK;
 }
 
-void WmfMediaEngine::HandleVideoSample(const uint8_t* buf, size_t len) {
+void WmfMediaEngine::HandleVideoSample(const uint8_t* buf, size_t len)
+{
     this->m_videoSampleDirty = true;
     this->m_lastVideoFrame.assign(buf, buf + len, std::true_type{});
 }
 
-bool WmfMediaEngine::GetLastVideoFrame(yasio::byte_buffer& frameData) const {
+bool WmfMediaEngine::GetLastVideoFrame(yasio::byte_buffer& frameData) const
+{
     if (this->m_videoSampleDirty)
     {
         this->m_videoSampleDirty = false;
@@ -497,11 +494,11 @@ HRESULT WmfMediaEngine::HandleEvent(IMFMediaEvent* pEvent)
 {
     HRESULT hr               = S_OK;
     HRESULT hrStatus         = S_OK;                   // Event status
-    ::MediaEventType meType    = MEUnknown;              // Event type
+    ::MediaEventType meType  = MEUnknown;              // Event type
     MF_TOPOSTATUS TopoStatus = MF_TOPOSTATUS_INVALID;  // Used with MESessionTopologyStatus event.
 
-    //auto pUnk = MFUtils::ReferencedPtrToComPtr((IUnknown*)pUnkPtr);
-    //TComPtr<IMFMediaEvent> pEvent;
+    // auto pUnk = MFUtils::ReferencedPtrToComPtr((IUnknown*)pUnkPtr);
+    // TComPtr<IMFMediaEvent> pEvent;
 
     PROPVARIANT var;
 
@@ -510,7 +507,7 @@ HRESULT WmfMediaEngine::HandleEvent(IMFMediaEvent* pEvent)
         return E_POINTER;
     }
 
-   // CHECK_HR(hr = pUnk->QueryInterface(__uuidof(IMFMediaEvent), (void**)&pEvent));
+    // CHECK_HR(hr = pUnk->QueryInterface(__uuidof(IMFMediaEvent), (void**)&pEvent));
 
     // Get the event type.
     CHECK_HR(hr = pEvent->GetType(&meType));
@@ -651,7 +648,7 @@ HRESULT WmfMediaEngine::OnTopologyReady(IMFMediaEvent* pEvent)
 
 // Starts playback.
 
-int WmfMediaEngine::Play()
+bool WmfMediaEngine::Play()
 {
     HRESULT hr = S_OK;
 
@@ -679,12 +676,12 @@ int WmfMediaEngine::Play()
         m_bPending        = CMD_PENDING;
     }
 
-    return hr;
+    return SUCCEEDED(hr);
 }
 
 // Pauses playback.
 
-int WmfMediaEngine::Pause()
+bool WmfMediaEngine::Pause()
 {
     HRESULT hr = S_OK;
 
@@ -710,12 +707,12 @@ int WmfMediaEngine::Pause()
     if (SUCCEEDED(hr))
         m_state = MediaState::Paused;
 
-    return hr;
+    return SUCCEEDED(hr);
 }
 
 // Stops playback.
 
-int WmfMediaEngine::Stop()
+bool WmfMediaEngine::Stop()
 {
     HRESULT hr = S_OK;
 
@@ -744,7 +741,7 @@ int WmfMediaEngine::Stop()
     if (SUCCEEDED(hr))
         m_state = MediaState::Stopped;
 
-    return hr;
+    return SUCCEEDED(hr);
 }
 
 BOOL WmfMediaEngine::CanSeek() const
@@ -844,7 +841,7 @@ HRESULT WmfMediaEngine::Scrub(BOOL bScrub)
             m_fPrevRate = m_nominal.fRate;
         }
 
-        hr = SetRate(0.0f);
+        hr = SetRate(0.0f) ? S_OK : E_FAIL;
     }
     else
     {
@@ -852,7 +849,7 @@ HRESULT WmfMediaEngine::Scrub(BOOL bScrub)
 
         if (GetNominalRate() == 0)
         {
-            hr = SetRate(m_fPrevRate);
+            hr = SetRate(m_fPrevRate) ? S_OK : E_FAIL;
         }
     }
 
@@ -886,7 +883,7 @@ HRESULT WmfMediaEngine::FastForward()
         fTarget = 1.0f;
     }
 
-    hr = SetRate(fTarget);
+    hr = SetRate(fTarget) ? S_OK : E_FAIL;
 
     return hr;
 }
@@ -911,21 +908,23 @@ HRESULT WmfMediaEngine::Rewind()
     return hr;
 }
 
-int WmfMediaEngine::SetRate(double fRate)
+bool WmfMediaEngine::SetRate(double lfRate)
 {
     HRESULT hr = S_OK;
     BOOL bThin = FALSE;
 
     AutoLock lock(m_critsec);
 
+    const float fRate = static_cast<float>(lfRate);
+
     if (fRate == GetNominalRate())
     {
-        return S_OK;  // no-op
+        return true;  // S_OK;  // no-op
     }
 
     if (m_RateSupport == NULL)
     {
-        return MF_E_INVALIDREQUEST;
+        return false;  // MF_E_INVALIDREQUEST;
     }
 
     // Check if this rate is supported. Try non-thinned playback first,
@@ -941,7 +940,7 @@ int WmfMediaEngine::SetRate(double fRate)
     if (FAILED(hr) && hr != MF_E_INVALIDREQUEST)
     {
         // Unsupported rate.
-        return hr;
+        return SUCCEEDED(hr);
     }
 
     // If there is an operation pending, cache the request.
@@ -967,7 +966,7 @@ int WmfMediaEngine::SetRate(double fRate)
         hr = CommitRateChange(fRate, bThin);
     }
 
-    return hr;
+    return SUCCEEDED(hr);
 }
 
 HRESULT WmfMediaEngine::SetPositionInternal(const MFTIME& hnsPosition)
@@ -1064,9 +1063,9 @@ HRESULT WmfMediaEngine::CommitRateChange(float fRate, BOOL bThin)
             assert(hnsSystemTime != 0);
 
             // Stop and set the rate
-            hr = Stop();
-            if (FAILED(hr))
+            if (!Stop())
             {
+                hr = E_FAIL;
                 goto done;
             }
 
@@ -1095,9 +1094,9 @@ HRESULT WmfMediaEngine::CommitRateChange(float fRate, BOOL bThin)
             // This transisition requires the paused state.
 
             // Pause and set the rate.
-            hr = Pause();
-            if (FAILED(hr))
+            if (!Pause())
             {
+                hr = E_FAIL;
                 goto done;
             }
 
@@ -1364,7 +1363,7 @@ HRESULT WmfMediaEngine::CloseSession()
     m_pSource.Reset();
     m_pSession.Reset();
 
-    m_state = MediaState::Closed;
+    m_state    = MediaState::Closed;
     m_bPending = false;
 
 done:
@@ -1484,8 +1483,8 @@ done:
 /////////////////////////////////////////////////////////////////////////
 
 HRESULT WmfMediaEngine::AddBranchToPartialTopology(IMFTopology* pTopology,
-                                                  IMFPresentationDescriptor* pSourcePD,
-                                                  DWORD iStream)
+                                                   IMFPresentationDescriptor* pSourcePD,
+                                                   DWORD iStream)
 {
     TRACE("WmfMediaEngine::AddBranchToPartialTopology\n");
 

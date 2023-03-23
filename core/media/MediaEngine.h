@@ -69,14 +69,14 @@ class MediaEngine
 public:
     virtual void SetMediaEventCallback(MediaEventCallback cb)           = 0;
     virtual void SetAutoPlay(bool bAutoPlay)                            = 0;
-    virtual int Open(std::string_view sourceUri)                        = 0;
-    virtual int Close()                                                 = 0;
-    virtual int SetLoop(bool bLooping)                                  = 0;
-    virtual int SetRate(double fRate)                                   = 0;
-    virtual int SetCurrentTime(double fSeekTimeInSec)                   = 0;
-    virtual int Play()                                                  = 0;
-    virtual int Pause()                                                 = 0;
-    virtual int Stop()                                                  = 0;
+    virtual bool Open(std::string_view sourceUri)                       = 0;
+    virtual bool Close()                                                = 0;
+    virtual bool SetLoop(bool bLooping)                                 = 0;
+    virtual bool SetRate(double fRate)                                  = 0;
+    virtual bool SetCurrentTime(double fSeekTimeInSec)                  = 0;
+    virtual bool Play()                                                 = 0;
+    virtual bool Pause()                                                = 0;
+    virtual bool Stop()                                                 = 0;
     virtual VideoExtent GetVideoExtent() const                          = 0;
     virtual MediaState GetState() const                                 = 0;
     virtual VideoSampleFormat GetVideoSampleFormat() const              = 0;

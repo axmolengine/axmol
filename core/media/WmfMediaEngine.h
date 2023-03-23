@@ -127,8 +127,8 @@ public:
     void SetMediaEventCallback(MediaEventCallback cb) override { m_eventCallback = cb; }
 
     // Playback
-    int Open(std::string_view sourceUri) override;
-    int Close() override;
+    bool Open(std::string_view sourceUri) override;
+    bool Close() override;
     HRESULT Shutdown();
     HRESULT HandleEvent(IMFMediaEvent* pUnkPtr);
     MediaState GetState() const override { return m_state; }
@@ -140,10 +140,10 @@ public:
     VideoSampleFormat GetVideoSampleFormat() const override { return m_videoSampleFormat; }
 
     // Video functionality
-    int SetLoop(bool bLooping) override
+    bool SetLoop(bool bLooping) override
     {
         m_bLooping = bLooping;
-        return S_OK;
+        return true;
     }
 
     void SetAutoPlay(bool bAutoPlay) override { m_bAutoPlay = bAutoPlay; }
@@ -152,7 +152,10 @@ public:
     MFTIME GetDuration() const;
     MFTIME GetCurrentPosition() const;
 
-    int SetCurrentTime(double sec) override { return SetPosition(static_cast<MFTIME>((std::nano::den / 100) * sec)); }
+    bool SetCurrentTime(double sec) override
+    {
+        return SUCCEEDED(SetPosition(static_cast<MFTIME>((std::nano::den / 100) * sec)));
+    }
 
     // Set position in 100ns units, will reply if play ended
     // see: https://docs.microsoft.com/en-us/windows/win32/medfound/mf-pd-duration-attribute
@@ -163,13 +166,13 @@ public:
 
     BOOL CanFastForward() const;
     BOOL CanRewind() const;
-    int SetRate(double fRate) override;
+    bool SetRate(double fRate) override;
     HRESULT FastForward();
     HRESULT Rewind();
 
-    int Play() override;
-    int Pause() override;
-    int Stop() override;
+    bool Play() override;
+    bool Pause() override;
+    bool Stop() override;
 
     bool IsH264() const override { return m_bIsH264; }
 
@@ -191,7 +194,6 @@ protected:
     HRESULT UpdatePendingCommands(Command cmd);
 
 protected:
-
     // Destructor is private. Caller should call Release.
     virtual ~WmfMediaEngine();
 
@@ -269,7 +271,7 @@ struct WmfMediaEngineFactory : public MediaEngineFactory
     MediaEngine* CreateMediaEngine() override
     {
         auto engine = new WmfMediaEngine();
-        auto hr = engine->Initialize();
+        auto hr     = engine->Initialize();
         if (SUCCEEDED(hr))
             return engine;
 

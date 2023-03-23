@@ -120,25 +120,25 @@ bool MfMediaEngine::Initialize()
     return m_mediaEngine != nullptr;
 }
 
-int MfMediaEngine::SetLoop(bool bLoop)
+bool MfMediaEngine::SetLoop(bool bLoop)
 {
     if (m_mediaEngine)
-        return m_mediaEngine->SetLoop(bLoop);
-    return E_POINTER;
+        return SUCCEEDED(m_mediaEngine->SetLoop(bLoop));
+    return false;
 }
 
-int MfMediaEngine::SetRate(double fRate)
+bool MfMediaEngine::SetRate(double fRate)
 {
     if (m_mediaEngine)
-        return m_mediaEngine->SetPlaybackRate(fRate);
+        return SUCCEEDED(m_mediaEngine->SetPlaybackRate(fRate));
 
-    return E_POINTER;
+    return false;
 }
 
-int MfMediaEngine::Play()
+bool MfMediaEngine::Play()
 {
     if (m_state == MediaState::Playing)
-        return S_OK;
+        return true;
 
     HRESULT hr = S_OK;
     if (m_mediaEngine)
@@ -148,14 +148,14 @@ int MfMediaEngine::Play()
         hr = (m_mediaEngine->Play());
         m_state = MediaState::Playing;
     }
-    return hr;
+    return SUCCEEDED(hr);
 }
 
-int MfMediaEngine::Pause()
+bool MfMediaEngine::Pause()
 {
     if (m_mediaEngine)
-        return m_mediaEngine->Pause();
-    return E_POINTER;
+        return SUCCEEDED(m_mediaEngine->Pause());
+    return false;
 }
 
 void MfMediaEngine::SetMuted(bool muted)
@@ -166,7 +166,7 @@ void MfMediaEngine::SetMuted(bool muted)
     }
 }
 
-int MfMediaEngine::Open(std::string_view sourceUri)
+bool MfMediaEngine::Open(std::string_view sourceUri)
 {
     auto bstrUrl = ntcvt::from_chars(sourceUri);
 
@@ -174,26 +174,26 @@ int MfMediaEngine::Open(std::string_view sourceUri)
     m_readyToPlay = false;
     m_state       = MediaState::Preparing;
     if (m_mediaEngine)
-        return (m_mediaEngine->SetSource(bstrUrl.data()));
-    return E_POINTER;
+        return SUCCEEDED(m_mediaEngine->SetSource(bstrUrl.data()));
+    return false;
 }
 
 
-int MfMediaEngine::Close()
+bool MfMediaEngine::Close()
 {
     if (m_state == MediaState::Closed)
-        return S_OK;
+        return true;
     
     if (m_mediaEngine)
     {
         m_state = MediaState::Closed;
-        return (m_mediaEngine->SetSource(NULL));
+        return SUCCEEDED(m_mediaEngine->SetSource(NULL));
     }
     
-    return E_POINTER;
+    return false;
 }
 
-int MfMediaEngine::Stop()
+bool MfMediaEngine::Stop()
 {
     if (m_mediaEngine)
     {
@@ -212,15 +212,15 @@ int MfMediaEngine::Stop()
                     m_eventCallback(MediaEventType::STOPPED);
             }
         }
-        return hr;
+        return SUCCEEDED(hr);
     }
-    return E_POINTER;
+    return false;
 }
 
-int MfMediaEngine::SetCurrentTime(double fPosInSeconds)
+bool MfMediaEngine::SetCurrentTime(double fPosInSeconds)
 {
     if (m_mediaEngine)
-        return m_mediaEngine->SetCurrentTime(fPosInSeconds);
+        return SUCCEEDED(m_mediaEngine->SetCurrentTime(fPosInSeconds));
     return E_POINTER;
 }
 

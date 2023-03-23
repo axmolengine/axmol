@@ -66,11 +66,11 @@ public:
 
     void SetAutoPlay(bool bAutoPlay) { m_autoPlay = bAutoPlay; }
 
-    int Open(std::string_view sourceUri) override;
-    int Close() override;
+    bool Open(std::string_view sourceUri) override;
+    bool Close() override;
  
-    int SetLoop(bool bLoop) override;
-    int SetRate(double fRate) override;
+    bool SetLoop(bool bLoop) override;
+    bool SetRate(double fRate) override;
 
     VideoExtent GetVideoExtent() const override { return m_videoExtent; }
 
@@ -79,11 +79,11 @@ public:
 
     bool IsH264() const override { return false; }
 
-    int Play() override;
-    int Pause() override;
-    int Stop() override;
+    bool Play() override;
+    bool Pause() override;
+    bool Stop() override;
 
-    int SetCurrentTime(double fPosInSeconds) override;
+    bool SetCurrentTime(double fPosInSeconds) override;
 
     MediaState GetState() const override { return m_state; }
 
