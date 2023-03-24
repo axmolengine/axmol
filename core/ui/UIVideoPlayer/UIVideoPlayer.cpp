@@ -182,7 +182,7 @@ VideoPlayer::VideoPlayer()
 
 VideoPlayer::~VideoPlayer()
 {
-    auto pvd = (PrivateVideoDescriptor*)_videoContext;
+    auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
 
     removeAllProtectedChildren();
 
@@ -223,7 +223,7 @@ void VideoPlayer::setLooping(bool looping)
 {
     _isLooping = looping;
 
-    auto pvd = (PrivateVideoDescriptor*)_videoContext;
+    auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     if (pvd->_vplayer)
         pvd->_vplayer->SetLoop(looping);
 }
@@ -242,7 +242,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 {
     ax::ui::Widget::draw(renderer, transform, flags);
 
-    auto pvd     = (PrivateVideoDescriptor*)_videoContext;  //
+    auto pvd     = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     auto vrender = pvd->_vrender;
     auto vplayer = pvd->_vplayer;
     if (!vrender || !vplayer)
