@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "2d/CCTMXXMLParser.h"
 #include <unordered_map>
 #include <sstream>
+#include <regex>
 //  #include "2d/CCTMXTiledMap.h"
 #include "base/ZipUtils.h"
 #include "base/CCDirector.h"
@@ -692,6 +693,12 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             auto currentString = tmxMapInfo->getCurrentString();
+
+            auto currentStringView = tmxMapInfo->getCurrentString();
+            std::string currentString;
+            std::regex_replace(std::back_inserter(currentString), currentStringView.begin(), currentStringView.end(),
+                               std::regex("[\n\r ]"), "");
+
             unsigned char* buffer;
             auto len =
                 utils::base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(), &buffer);
@@ -736,7 +743,11 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-            auto currentString = tmxMapInfo->getCurrentString();
+
+            auto currentStringView = tmxMapInfo->getCurrentString();
+            std::string currentString;
+            std::regex_replace(std::back_inserter(currentString), currentStringView.begin(), currentStringView.end(),
+                               std::regex("[\n\r ]"), "");
 
             string nCurrentString = "";
             for (int i = 0; i < currentString.length(); i++)
