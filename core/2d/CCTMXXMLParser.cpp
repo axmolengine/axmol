@@ -688,7 +688,12 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
-            auto currentString = tmxMapInfo->getCurrentString();
+            std::string currentString = std::string(tmxMapInfo->getCurrentString());
+
+            while (utils::replace(currentString, "\n", ""));
+            while (utils::replace(currentString, "\r", ""));
+            while (utils::replace(currentString, " ", ""));
+
             unsigned char* buffer;
             auto len = utils::base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(),
                                            &buffer);
@@ -733,7 +738,11 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-            auto currentString = tmxMapInfo->getCurrentString();
+            std::string currentString = std::string(tmxMapInfo->getCurrentString());
+
+            while (utils::replace(currentString, "\n", ""));
+            while (utils::replace(currentString, "\r", ""));
+            while (utils::replace(currentString, " ", ""));
 
             std::vector<std::string> gidTokens;
             std::stringstream filestr;

@@ -443,6 +443,14 @@ AX_DLL int base64Decode(const unsigned char* in, unsigned int inLength, unsigned
 
 AX_DLL uint32_t fourccValue(std::string_view str);
 
+inline bool replace(std::string& str, const std::string& from, const std::string& to);
+
+inline bool wreplace(std::wstring& str, const std::wstring& from, const std::wstring& to);
+
+inline std::string replace_const(const std::string str, const std::string& from, const std::string& to);
+
+inline std::wstring wreplace_const(const std::wstring str, const std::wstring& from, const std::wstring& to);
+
 }  // namespace utils
 
 NS_AX_END

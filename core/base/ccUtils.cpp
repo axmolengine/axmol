@@ -886,6 +886,44 @@ AX_DLL uint32_t fourccValue(std::string_view str)
     return value;
 }
 
+    inline bool replace(std::string& str, const std::string& from, const std::string& to)
+{
+    size_t start_pos = str.find(from);
+    if (start_pos == std::string::npos)
+        return false;
+    str.replace(start_pos, from.length(), to);
+    return true;
+}
+
+inline bool wreplace(std::wstring& str, const std::wstring& from, const std::wstring& to)
+{
+    size_t start_pos = str.find(from);
+    if (start_pos == std::wstring::npos)
+        return false;
+    str.replace(start_pos, from.length(), to);
+    return true;
+}
+
+inline std::string replace_const(const std::string str, const std::string& from, const std::string& to)
+{
+    std::string final = str;
+    size_t start_pos  = final.find(from);
+    if (start_pos == std::string::npos)
+        return final;
+    final.replace(start_pos, from.length(), to);
+    return final;
+}
+
+inline std::wstring wreplace_const(const std::wstring str, const std::wstring& from, const std::wstring& to)
+{
+    std::wstring final = str;
+    size_t start_pos   = final.find(from);
+    if (start_pos == std::wstring::npos)
+        return final;
+    final.replace(start_pos, from.length(), to);
+    return final;
+}
+
 }  // namespace utils
 
 NS_AX_END
