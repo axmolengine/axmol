@@ -688,11 +688,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             tmxMapInfo->setStoringCharacters(false);
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
-
-            auto currentStringView = tmxMapInfo->getCurrentString();
-            std::string currentString;
-            std::regex_replace(std::back_inserter(currentString), currentStringView.begin(), currentStringView.end(),
-                               std::regex("[\n\r ]"), "");
+            auto currentString = tmxMapInfo->getCurrentString();
 
             unsigned char* buffer;
             auto len = utils::base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(),
@@ -738,11 +734,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-
-            auto currentStringView = tmxMapInfo->getCurrentString();
-            std::string currentString;
-            std::regex_replace(std::back_inserter(currentString), currentStringView.begin(), currentStringView.end(),
-                               std::regex("[\n\r ]"), "");
+            auto currentString = tmxMapInfo->getCurrentString();
 
             std::vector<std::string> gidTokens;
             std::stringstream filestr;
@@ -817,6 +809,7 @@ void TMXMapInfo::textHandler(void* /*ctx*/, const char* ch, size_t len)
 {
     TMXMapInfo* tmxMapInfo = this;
     std::string text(ch, 0, len);
+    text = std::regex_replace(text, std::regex("[\n\r ]"), "");
 
     if (tmxMapInfo->isStoringCharacters())
     {
