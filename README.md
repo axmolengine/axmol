@@ -14,13 +14,13 @@
 
 ## VideoPlayer based on VideoTexture
 
-|  Platform       |    MediaEngine/VideoTexture  |
-|-----------------|------------------------------|
-| Windows Desktop |    complete                  |
-| Windows UWP     |    complete                  |
-| Mac OS X        |                              |
-| iOS/tvOS        |                              |
-| Android         |                              |
+|  Platform       |    MediaEngine/VideoTexture  | Video Texture Format 
+|-----------------|------------------------------|------------------------------|
+| Windows Desktop |    complete                  | YUY2, NV12, RGB32            |
+| Windows UWP     |    complete                  | BGR32                        |
+| Mac OS X        |    in progress               | NV12, BGR32                  |
+| iOS/tvOS        |    in progress               | NV12, BGR32                  |
+| Android         |    planned                   | RGB32                        |
 
 ## Supported Platforms
 | Build | Status (github) |

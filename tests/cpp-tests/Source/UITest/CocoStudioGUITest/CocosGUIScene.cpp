@@ -44,7 +44,7 @@
 #include "UIFocusTest/UIFocusTest.h"
 #include "UITabControlTest/UITabControlTest.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || defined(__APPLE__) || \
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      defined(_WIN32)) && !defined(AX_TARGET_OS_TVOS)
 #    include "UIVideoPlayerTest/UIVideoPlayerTest.h"
 #endif
@@ -63,7 +63,7 @@
 
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || defined(__APPLE__) || \
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
     defined(_WIN32)) && !defined(AX_TARGET_OS_TVOS)
     addTest("VideoPlayer Test", []() { return new VideoPlayerTests; });
 #endif
