@@ -361,7 +361,7 @@ protected:
     Mat4 _tileToNodeTransform;
     /** data for rendering */
     bool _quadsDirty = true;
-    Vec2 _cameraPositionDirty = {INFINITY, INFINITE};
+    Vec2 _cameraPositionDirty = {INFINITY, INFINITY};
     float _cameraZoomDirty;
 
     std::vector<int> _tileToQuadIndex;
