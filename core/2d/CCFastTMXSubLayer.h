@@ -32,6 +32,7 @@ THE SOFTWARE.
 #include "2d/CCNode.h"
 #include "2d/CCTMXXMLParser.h"
 #include "renderer/CCCustomCommand.h"
+#include "CCFastTMXLayer.h"
 
 NS_AX_BEGIN
 
@@ -52,7 +53,7 @@ class Buffer;
  * @{
  */
 
-/** @brief FastTMXLayer represents the TMX layer.
+/** @brief FastTMXSubLayer represents the TMX layer.
 
  * It is a subclass of SpriteBatchNode. By default the tiles are rendered using a TextureAtlas.
  * If you modify a tile on runtime, then, that tile will become a Sprite, otherwise no Sprite objects are created.
@@ -81,7 +82,7 @@ class Buffer;
  * @js NA
  */
 
-class AX_DLL FastTMXLayer : public Node
+class AX_DLL FastTMXSubLayer : public Node
 {
 public:
     /** Possible orientations of the TMX map */
@@ -89,23 +90,23 @@ public:
     static const int FAST_TMX_ORIENTATION_HEX;
     static const int FAST_TMX_ORIENTATION_ISO;
 
-    /** Creates a FastTMXLayer with an tileset info, a layer info and a map info.
+    /** Creates a FastTMXSubLayer with an tileset info, a layer info and a map info.
      *
      * @param tilesetInfo An tileset info.
      * @param layerInfo A layer info.
      * @param mapInfo A map info.
      * @return Return an autorelease object.
      */
-    static FastTMXLayer* create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    static FastTMXSubLayer* create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     /**
      * @js ctor
      */
-    FastTMXLayer();
+    FastTMXSubLayer();
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~FastTMXLayer();
+    virtual ~FastTMXSubLayer();
 
     /** Returns the tile gid at a given tile coordinate. It also returns the tile flags.
      *
@@ -147,39 +148,32 @@ public:
      */
     Vec2 getPositionAt(const Vec2& tileCoordinate);
 
-    /** Return the value for the specific property name.
-     *
-     * @param propertyName The value for the specific property name.
-     * @return The value for the specific property name.
-     */
-    Value getProperty(std::string_view propertyName) const;
-
     /** Creates the tiles. */
     void setupTiles();
 
-    /** Get the tile layer name.
+    /** Get the tile sub layer name.
      *
      * @return The tile layer name.
      */
-    std::string_view getLayerName() { return _layerName; }
+    std::string_view getSubLayerName() { return _subLayerName; }
 
-    /** Set the tile layer name.
+    /** Set the tile sub layer name.
      *
-     * @param layerName The new layer name.
+     * @param subLayerName The new sub layer name.
      */
-    void setLayerName(std::string_view layerName) { _layerName = layerName; }
+    void setSubLayerName(std::string_view subLayerName) { _subLayerName = subLayerName; }
 
-    /** Gets the size of the layer in tiles.
+    /** Gets the size of the sub layer in tiles.
      *
-     * @return The size of the layer in tiles.
+     * @return The size of the sub layer in tiles.
      */
-    const Vec2& getLayerSize() const { return _layerSize; }
+    const Vec2& getSubLayerSize() const { return _subLayerSize; }
 
-    /** Set the size of the layer in tiles.
+    /** Set the size of the sub layer in tiles.
      *
-     * @param size The new size of the layer in tiles.
+     * @param size The new size of the sub layer in tiles.
      */
-    void setLayerSize(const Vec2& size) { _layerSize = size; }
+    void setSubLayerSize(const Vec2& size) { _subLayerSize = size; }
 
     /** Gets the size of the map's tile (could be different from the tile's size).
      *
@@ -231,31 +225,13 @@ public:
      *
      * @return Layer orientation, which is the same as the map orientation.
      */
-    int getLayerOrientation() const { return _layerOrientation; }
+    int getSubLayerOrientation() const { return _subLayerOrientation; }
 
     /** Set Layer orientation, which is the same as the map orientation.
      *
-     * @param orientation Layer orientation, which is the same as the map orientation.
+     * @param orientation sub layer orientation, which is the same as the map orientation.
      */
-    void setLayerOrientation(int orientation) { _layerOrientation = orientation; }
-
-    /** Properties from the layer. They can be added using Tiled.
-     *
-     * @return Properties from the layer. They can be added using Tiled.
-     */
-    const ValueMap& getProperties() const { return _properties; }
-
-    /** Properties from the layer. They can be added using Tiled.
-     *
-     * @return Properties from the layer. They can be added using Tiled.
-     */
-    ValueMap& getProperties() { return _properties; }
-
-    /** Set the properties to the layer.
-     *
-     * @param properties The properties to the layer.
-     */
-    void setProperties(const ValueMap& properties) { _properties = properties; }
+    void setSubLayerOrientation(int orientation) { _subLayerOrientation = orientation; }
 
     /** Returns the tile (Sprite) at a given a tile coordinate.
      * The returned Sprite will be already added to the TMXLayer. Don't add it again.
@@ -316,17 +292,17 @@ protected:
     //
     void updateTotalQuads();
 
-    int getTileIndexAtPos(int x, int y) const { return x + y * (int)_layerSize.width; }
+    int getTileIndexAtPos(int x, int y) const { return x + y * (int)_subLayerSize.width; }
 
     void updateVertexBuffer();
     void updateIndexBuffer();
     void updatePrimitives();
 
     //! name of the layer
-    std::string _layerName;
+    std::string _subLayerName;
 
     /** size of the layer in tiles */
-    Vec2 _layerSize;
+    Vec2 _subLayerSize;
     /** size of the map's tile (could be different from the tile's size) */
     Vec2 _mapTileSize;
     /** pointer to the map of tiles */
@@ -334,11 +310,9 @@ protected:
     /** Tileset information for the layer */
     TMXTilesetInfo* _tileSet = nullptr;
     /** Layer orientation, which is the same as the map orientation */
-    int _layerOrientation = FAST_TMX_ORIENTATION_ORTHO;
+    int _subLayerOrientation = FAST_TMX_ORIENTATION_ORTHO;
     int _staggerAxis      = TMXStaggerAxis_Y;
     int _staggerIndex     = TMXStaggerIndex_Even;
-    /** properties from the layer. They can be added using Tiled */
-    ValueMap _properties;
 
     /** map from gid of animated tile to its instance. Also useful for optimization*/
     std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>> _animTileCoord;
@@ -382,68 +356,6 @@ protected:
     backend::UniformLocation _textureLocation;
     backend::UniformLocation _alphaValueLocation;
 };
-
-/** @brief TMXTileAnimTask represents the frame-tick task of an animated tile.
- * It is a assistant class for TMXTileAnimTicker.
- */
-class AX_DLL TMXTileAnimTask : public Ref
-{
-public:
-    TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
-    static TMXTileAnimTask* create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
-    /** start the animation task */
-    void start();
-    /** stop the animation task */
-    void stop();
-    bool isRunning() const { return _isRunning; }
-
-protected:
-    /** tile flag */
-    uint32_t _flag = 0;
-
-    /** set texture of tile to current frame */
-    void setCurrFrame();
-    /** tick to next frame and schedule next tick */
-    void tickAndScheduleNext(float dt);
-
-    bool _isRunning = false;
-    /** key of schedule task for specific animated tile */
-    std::string _key;
-    FastTMXLayer* _layer = nullptr;
-    /** position of the animated tile */
-    Vec2 _tilePosition;
-    /** AnimationInfo on this tile */
-    TMXTileAnimInfo* _animation = nullptr;
-    /** Index of the frame that should be drawn currently */
-    uint32_t _currentFrame = 0;
-    uint32_t _frameCount   = 0;
-};
-
-/** @brief TMXTileAnimManager controls all tile animation of a layer.
- */
-class AX_DLL TMXTileAnimManager : public Ref
-{
-public:
-    static TMXTileAnimManager* create(FastTMXLayer* layer);
-    explicit TMXTileAnimManager(FastTMXLayer* layer);
-
-    /** start all tile animations */
-    void startAll();
-    /** stop all tile animations */
-    void stopAll();
-
-    /** get vector of tasks */
-    const Vector<TMXTileAnimTask*>& getTasks() const { return _tasks; }
-
-protected:
-    bool _started = false;
-    /** vector contains all tasks of this layer */
-    Vector<TMXTileAnimTask*> _tasks;
-    FastTMXLayer* _layer = nullptr;
-};
-
-// @API compatible
-typedef FastTMXLayer TMXLayer;
 
 // end of tilemap_parallax_nodes group
 /// @}
