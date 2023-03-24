@@ -8,18 +8,21 @@
 
 NS_AX_BEGIN
 
-enum class MediaEventType
+static constexpr std::string_view FILE_URL_SCHEME = "file://"sv;
+
+enum class MEMediaEventType
 {
-    PLAYING = 0,
-    PAUSED,
-    STOPPED,
-    COMPLETED,
+    Playing = 0,
+    Paused,
+    Stopped,
+    Completed,
+    Error,
 };
 
 /**
  * Possible states of media playback.
  */
-enum class MediaState
+enum class MEMediaState
 {
     /** Media has been closed and cannot be played again. */
     Closed,
@@ -45,7 +48,7 @@ enum class MediaState
     Completed,
 };
 
-enum class VideoSampleFormat
+enum class MEVideoSampleFormat
 {
     NONE,
     YUY2,
@@ -54,34 +57,44 @@ enum class VideoSampleFormat
     BGR32,
 };
 
-using MediaEventCallback = std::function<void(MediaEventType)>;
+using MEMediaEventCallback = std::function<void(MEMediaEventType)>;
 
-struct VideoExtent
+struct MEIntPoint
 {
-    unsigned int cx = 0;
-    unsigned int cy = 0;
+    MEIntPoint() : x(0), y(0) {}
+    MEIntPoint(int x_, int y_) : x(x_), y(y_) {}
+    int x;
+    int y;
 
-    bool equals(const VideoExtent& rhs) const { return this->cx == rhs.cx && this->cy == rhs.cy; }
+    bool equals(const MEIntPoint& rhs) const { return this->x == rhs.x && this->y == rhs.y; }
+};
+
+struct MEVideoTextueSample
+{
+    yasio::byte_buffer _buffer;
+    MEIntPoint _bufferDim;
+    MEIntPoint _videoDim;
+    MEVideoSampleFormat _format = MEVideoSampleFormat::NONE;
+    int _stride                 = 0;  // bytesPerRow
+    int _mods                   = 0;  // whether format, videoDim changed
 };
 
 class MediaEngine
 {
 public:
-    virtual void SetMediaEventCallback(MediaEventCallback cb)           = 0;
-    virtual void SetAutoPlay(bool bAutoPlay)                            = 0;
-    virtual bool Open(std::string_view sourceUri)                       = 0;
-    virtual bool Close()                                                = 0;
-    virtual bool SetLoop(bool bLooping)                                 = 0;
-    virtual bool SetRate(double fRate)                                  = 0;
-    virtual bool SetCurrentTime(double fSeekTimeInSec)                  = 0;
-    virtual bool Play()                                                 = 0;
-    virtual bool Pause()                                                = 0;
-    virtual bool Stop()                                                 = 0;
-    virtual VideoExtent GetVideoExtent() const                          = 0;
-    virtual MediaState GetState() const                                 = 0;
-    virtual VideoSampleFormat GetVideoSampleFormat() const              = 0;
-    virtual bool GetLastVideoFrame(yasio::byte_buffer& frameData) const = 0;
-    virtual bool IsH264() const                                         = 0;
+    virtual ~MediaEngine() {}
+    virtual void SetMediaEventCallback(MEMediaEventCallback cb)        = 0;
+    virtual void SetAutoPlay(bool bAutoPlay)                           = 0;
+    virtual bool Open(std::string_view sourceUri)                      = 0;
+    virtual bool Close()                                               = 0;
+    virtual bool SetLoop(bool bLooping)                                = 0;
+    virtual bool SetRate(double fRate)                                 = 0;
+    virtual bool SetCurrentTime(double fSeekTimeInSec)                 = 0;
+    virtual bool Play()                                                = 0;
+    virtual bool Pause()                                               = 0;
+    virtual bool Stop()                                                = 0;
+    virtual MEMediaState GetState() const                              = 0;
+    virtual bool GetLastVideoSample(MEVideoTextueSample& sample) const = 0;
 };
 
 class MediaEngineFactory

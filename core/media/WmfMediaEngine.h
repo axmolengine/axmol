@@ -16,7 +16,10 @@
 //  b. https://docs.microsoft.com/en-us/windows/win32/medfound/seeking--fast-forward--and-reverse-play
 //
 //////////////////////////////////////////////////////////////////////////
+
+#if defined(_WIN32)
 #include <winapifamily.h>
+#endif
 
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
 
@@ -174,10 +177,8 @@ public:
     bool Pause() override;
     bool Stop() override;
 
-    bool IsH264() const override { return m_bIsH264; }
-
     void HandleVideoSample(const uint8_t* buf, size_t len);
-    bool GetLastVideoFrame(yasio::byte_buffer& frameData) const override;
+    bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
 
     void FireMediaEvent(ax::MediaEventType event)
     {

@@ -31,6 +31,7 @@ if(WINDOWS)
 elseif(APPLE)
     if(MACOSX)
         set(_AX_UI_SPECIFIC_HEADER
+            ui/UIVideoPlayer/UIVideoPlayer.h
             ui/UIEditBox/UIEditBoxImpl-mac.h
             ui/UIEditBox/Mac/CCUIPasswordTextField.h
             ui/UIEditBox/Mac/CCUIMultilineTextField.h
@@ -46,6 +47,7 @@ elseif(APPLE)
             ui/UIEditBox/Mac/CCUIPasswordTextField.m
             ui/UIEditBox/Mac/CCUISingleLineTextField.m
             ui/UIEditBox/Mac/CCUITextFieldFormatter.m
+            ui/UIVideoPlayer/UIVideoPlayer.cpp
             )
     elseif(IOS)
         if (TVOS)
@@ -60,7 +62,7 @@ elseif(APPLE)
                 ui/UIEditBox/iOS/CCUISingleLineTextField.h
                 )
             set(_AX_UI_SPECIFIC_SRC
-                ui/UIVideoPlayer/UIVideoPlayer-ios.mm
+                ui/UIVideoPlayer/UIVideoPlayer.cpp
                 ui/UIEditBox/UIEditBoxImpl-ios.mm
                 ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
                 ui/UIEditBox/iOS/CCUIMultilineTextField.mm
@@ -83,7 +85,7 @@ elseif(APPLE)
                 )
             set(_AX_UI_SPECIFIC_SRC
                 ui/UIWebView/UIWebView.mm
-                ui/UIVideoPlayer/UIVideoPlayer-ios.mm
+                ui/UIVideoPlayer/UIVideoPlayer.cpp
                 ui/UIWebView/UIWebViewImpl-ios.mm
                 ui/UIEditBox/UIEditBoxImpl-ios.mm
                 ui/UIEditBox/iOS/CCUIEditBoxIOS.mm

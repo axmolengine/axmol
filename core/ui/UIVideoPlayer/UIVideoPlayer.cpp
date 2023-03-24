@@ -26,7 +26,7 @@
 
 #include "ui/UIVideoPlayer/UIVideoPlayer.h"
 
-#if defined(_WIN32)
+#if defined(_WIN32) || defined(__APPLE__)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>
@@ -36,7 +36,6 @@
 #    include "ui/UIHelper.h"
 #    include "media/MediaEngine.h"
 #    include "yasio/detail/byte_buffer.hpp"
-#    include "ntcvt/ntcvt.hpp"
 #    include "ui/LayoutHelper.h"
 #    include "yasio/detail/sz.hpp"
 //-----------------------------------------------------------------------------------------------------------
@@ -63,28 +62,9 @@ struct PrivateVideoDescriptor
     Texture2D* _vtexture  = nullptr;
     Sprite* _vrender      = nullptr;
 
-    yasio::byte_buffer _sampleBuffer;
+    MEVideoTextueSample _vsample;
 
     bool _scaleDirty = false;
-
-    VideoExtent _vextent;
-    VideoSampleFormat _sampleFormat = VideoSampleFormat::NONE;
-
-    bool updateExtent(const VideoExtent& extent)
-    {
-        bool updated = !this->_vextent.equals(extent);
-        if (updated)
-            this->_vextent = extent;
-        return updated;
-    }
-
-    bool updateSampleFormat(VideoSampleFormat sampleFormat)
-    {
-        bool updated = sampleFormat != this->_sampleFormat;
-        if (updated)
-            this->_sampleFormat = sampleFormat;
-        return updated;
-    }
 
     void closePlayer()
     {
@@ -106,8 +86,8 @@ struct PrivateVideoDescriptor
                 }
                 else
                 {
-                    const Vec2 originalScale{static_cast<float>(_vextent.cx) / _vtexture->getPixelsWide(),
-                                             static_cast<float>(_vextent.cy) / _vtexture->getPixelsHigh()};
+                    const Vec2 originalScale{static_cast<float>(_vsample._videoDim.x) / _vtexture->getPixelsWide(),
+                                             static_cast<float>(_vsample._videoDim.y) / _vtexture->getPixelsHigh()};
 
                     const auto aspectRatio =
                         (std::min)(viewSize.x / videoSize.x, viewSize.y / (videoSize.y * originalScale.y));
@@ -158,19 +138,19 @@ VideoPlayer::VideoPlayer()
         pvd->_vrender->setAutoUpdatePS(false);
         this->addProtectedChild(pvd->_vrender);
         /// setup media event callback
-        pvd->_vplayer->SetMediaEventCallback([=](MediaEventType event) {
+        pvd->_vplayer->SetMediaEventCallback([=](MEMediaEventType event) {
             switch (event)
             {
-            case MediaEventType::PLAYING:
+            case MEMediaEventType::Playing:
                 if (!isPlaying())
                     onPlayEvent((int)EventType::PLAYING);
                 break;
 
-            case MediaEventType::PAUSED:
+            case MEMediaEventType::Paused:
                 onPlayEvent((int)EventType::PAUSED);
                 break;
 
-            case MediaEventType::STOPPED:
+            case MEMediaEventType::Stopped:
                 onPlayEvent((int)EventType::STOPPED);
                 break;
 
@@ -183,8 +163,11 @@ VideoPlayer::VideoPlayer()
             /* Raised by the Media Session when it has finished playing the last presentation in the playback queue.
              * We send complete event at this case
              */
-            case MediaEventType::COMPLETED:
+            case MEMediaEventType::Completed:
                 onPlayEvent((int)EventType::COMPLETED);
+                break;
+            case MEMediaEventType::Error:
+                onPlayEvent((int)EventType::ERROR);
                 break;
             }
         });
@@ -215,6 +198,7 @@ VideoPlayer::~VideoPlayer()
 void VideoPlayer::setFileName(std::string_view fileName)
 {
     auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
+    fullPath.insert(fullPath.begin(), FILE_URL_SCHEME.begin(), FILE_URL_SCHEME.end());
     if (fullPath != _videoURL)
     {
         reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
@@ -262,23 +246,15 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
     if (!vrender || !vplayer)
         return;
 
-    if (vrender->isVisible() && isPlaying() && vplayer->GetLastVideoFrame(pvd->_sampleBuffer))
+    if (vrender->isVisible() && isPlaying() && vplayer->GetLastVideoSample(pvd->_vsample))
     {
-        bool extentChanged       = pvd->updateExtent(vplayer->GetVideoExtent());
-        bool sampleFormatChanged = pvd->updateSampleFormat(vplayer->GetVideoSampleFormat());
+        auto& vsample     = pvd->_vsample;
+        auto sampleFormat = vsample._format;
 
-        auto sampleFormat = pvd->_sampleFormat;
+        uint8_t* sampleData  = vsample._buffer.data();
+        size_t sampleDataLen = vsample._buffer.size();
 
-        uint8_t* sampleData  = pvd->_sampleBuffer.data();
-        size_t sampleDataLen = pvd->_sampleBuffer.size();
-
-        auto rWidth  = pvd->_vextent.cx;
-        auto rHeight = pvd->_vextent.cy;
-
-        Vec2 uvScale{1.0f, 1.0f};
-
-        bool needsRecreateTexture = extentChanged || sampleFormatChanged;
-        if (needsRecreateTexture)
+        if (vsample._mods)
         {
             if (pvd->_vtexture)
                 pvd->_vtexture->release();
@@ -288,13 +264,13 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 
             switch (sampleFormat)
             {
-            case VideoSampleFormat::YUY2:
+            case MEVideoSampleFormat::YUY2:
                 pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_YUY2);
                 break;
-            case VideoSampleFormat::NV12:
+            case MEVideoSampleFormat::NV12:
                 pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_NV12);
                 break;
-            case VideoSampleFormat::BGR32:
+            case MEVideoSampleFormat::BGR32:
                 pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_BGR32);
                 break;
             default:
@@ -302,58 +278,55 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
             }
         }
 
+        Vec2 uvScale{1.0f, 1.0f};
+        auto& videoDim  = vsample._videoDim;
+        auto& bufferDim = vsample._bufferDim;
         switch (sampleFormat)
         {
-        case VideoSampleFormat::NV12:
+        case MEVideoSampleFormat::NV12:
         {
             /* For single sampler */
-            int texelWidth  = YASIO_SZ_ALIGN(rWidth, 16);
-            int texelHeight = pvd->_vplayer->IsH264() ? YASIO_SZ_ALIGN(rHeight, 16) * 3 / 2 : rHeight * 3 / 2;
-            uvScale.x       = rWidth / (float)texelWidth;
-            uvScale.y       = rHeight / (float)texelHeight;
-            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::L8, PixelFormat::L8, texelWidth,
-                                           texelHeight, false);
-
-            /* For dual sampler */
-            // const int ySampleSize = rWidth * rHeight;
-            // pvd->_vtexture->updateWithData(sampleData, ySampleSize, PixelFormat::L8, PixelFormat::L8, rWidth,
-            //                                rHeight, false, 0);
-            // pvd->_vtexture->updateWithData(sampleData + ySampleSize, sampleDataLen - ySampleSize, PixelFormat::LA8,
-            //                               PixelFormat::LA8, rWidth >> 1, rHeight >> 1, false, 1);
+            // int texelWidth  = YASIO_SZ_ALIGN(rWidth, 16);
+            // int texelHeight = pvd->_vplayer->IsH264() ? YASIO_SZ_ALIGN(rHeight, 16) * 3 / 2 : rHeight * 3 / 2;
+            uvScale.x = videoDim.x / (float)bufferDim.x;
+            uvScale.y = videoDim.y / (float)bufferDim.y;
+            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::A8, PixelFormat::A8, bufferDim.x,
+                                           bufferDim.y, false);
             break;
         }
-        case VideoSampleFormat::YUY2:
+        case MEVideoSampleFormat::YUY2:
         {
-            int texelWidth = pvd->_vplayer->IsH264() ? (YASIO_SZ_ALIGN(rWidth, 16)) : (rWidth);
-            uvScale.x      = (float)rWidth / texelWidth;
-
-            /* For single sampler */
-            // pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8,
-            //                               texelWidth >> 1, rHeight, false, 0);
+            // int texelWidth = pvd->_vplayer->IsH264() ? (YASIO_SZ_ALIGN(rWidth, 16)) : (rWidth);
+            uvScale.x = (float)videoDim.x / bufferDim.x;
 
             /* For dual sampler */
-            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::LA8, PixelFormat::LA8, texelWidth,
-                                           rHeight, false, 0);
+#    if defined(AX_USE_GL)
+            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::LA8, PixelFormat::LA8, bufferDim.x,
+                                           bufferDim.y, false, 0);
+#    else
+            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RG8, PixelFormat::RG8, bufferDim.x,
+                                           bufferDim.y, false, 0);
+#    endif
             pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8,
-                                           texelWidth >> 1, rHeight, false, 1);
+                                           bufferDim.x >> 1, bufferDim.y, false, 1);
             break;
         }
-        case VideoSampleFormat::RGB32:
-        case VideoSampleFormat::BGR32:
-            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8, rWidth,
-                                           rHeight, false, 0);
+        case MEVideoSampleFormat::RGB32:
+        case MEVideoSampleFormat::BGR32:
+            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8,
+                                           bufferDim.x, bufferDim.y, false, 0);
             break;
         default:;
         }
-        if (needsRecreateTexture)
+        if (vsample._mods)
         {
             pvd->_vrender->setTexture(pvd->_vtexture);
             pvd->_vrender->setTextureRect(ax::Rect{Vec2::ZERO, pvd->_vtexture->getContentSize()});
 
-            if (sampleFormat == VideoSampleFormat::NV12 || sampleFormat == VideoSampleFormat::YUY2)
+            if (sampleFormat == MEVideoSampleFormat::NV12 || sampleFormat == MEVideoSampleFormat::YUY2)
             {
                 auto ps = pvd->_vrender->getProgramState();
-                PS_SET_UNIFORM(ps, "out_w", (float)rWidth);
+                PS_SET_UNIFORM(ps, "out_w", (float)videoDim.x);
                 PS_SET_UNIFORM(ps, "uv_scale", uvScale);
             }
 
@@ -421,7 +394,7 @@ void VideoPlayer::play()
         {
             switch (vplayer->GetState())
             {
-            case MediaState::Closed:
+            case MEMediaState::Closed:
                 vplayer->SetAutoPlay(true);
                 vplayer->Open(_videoURL);
                 break;
@@ -451,8 +424,8 @@ void VideoPlayer::resume()
         {
             switch (vplayer->GetState())
             {
-            case MediaState::Stopped:
-            case MediaState::Paused:
+            case MEMediaState::Stopped:
+            case MEMediaState::Paused:
                 vplayer->Play();
             }
         }

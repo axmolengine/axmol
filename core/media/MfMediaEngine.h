@@ -75,9 +75,7 @@ public:
     VideoExtent GetVideoExtent() const override { return m_videoExtent; }
 
     VideoSampleFormat GetVideoSampleFormat() const override { return VideoSampleFormat::BGR32; }
-    bool GetLastVideoFrame(yasio::byte_buffer& frameData) const override;
-
-    bool IsH264() const override { return false; }
+    bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
 
     bool Play() override;
     bool Pause() override;

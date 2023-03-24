@@ -4,6 +4,8 @@
 #    include "media/WmfMediaEngine.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 #    include "media/MfMediaEngine.h"
+#elif defined(__APPLE__)
+#    include "media/AvfMediaEngine.h"
 #endif
 
 namespace axstd
@@ -87,7 +89,7 @@ std::unique_ptr<MediaEngineFactory> CreatePlatformMediaEngineFactory()
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
     return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<MfMediaEngineFactory>());
 #else
-    return nullptr;
+    return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<AvfMediaEngineFactory>());
 #endif
 }
 

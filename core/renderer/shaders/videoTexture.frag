@@ -31,11 +31,11 @@ const mat3 YUVtoRGBCoeff = mat3(
     1.79265225, -0.533004045, 0.00000000
 );
 
-const vec3 YUVOffsets = vec3(0.0627451017, 0.501960814, 0.501960814);
+const vec3 YUVOffset8bits = vec3(0.0627451017, 0.501960814, 0.501960814);
 
 vec3 YuvToRgb(vec3 YUV)
 {
-    YUV -= YUVOffsets;
+    YUV -= YUVOffset8bits;
     return YUVtoRGBCoeff * YUV;
 }
 
@@ -51,17 +51,17 @@ void main()
 
     /* For single sampler */
     vec2 tXY = v_texCoord * uv_scale;
-    YUV.x = texture2D(u_tex0, tXY).x;
+    YUV.x = texture2D(u_tex0, tXY).w;
     
     tXY.y *= 0.5;
     tXY.y += 2.0 / 3.0;
     
-    float UVOffs = floor(v_texCoord.x * out_w / 2.0) * 2;
+    float UVOffs = floor(v_texCoord.x * out_w / 2.0) * 2.0;
     float UPos = ((UVOffs * uv_scale.x) + 0.5) / out_w;
     float VPos = ((UVOffs * uv_scale.x) + 1.5) / out_w;
     
-    YUV.y = texture2D(u_tex0, vec2(UPos, tXY.y)).x;
-    YUV.z = texture2D(u_tex0, vec2(VPos, tXY.y)).x;
+    YUV.y = texture2D(u_tex0, vec2(UPos, tXY.y)).w;
+    YUV.z = texture2D(u_tex0, vec2(VPos, tXY.y)).w;
 
     /* Convert YUV to RGB */
     vec4 OutColor;
@@ -95,11 +95,11 @@ const mat3 YUVtoRGBCoeff = mat3(
     1.79265225, -0.533004045, 0.00000000
 );
 
-const vec3 YUVOffsets = vec3(0.0627451017, 0.501960814, 0.501960814);
+const vec3 YUVOffset8bits = vec3(0.0627451017, 0.501960814, 0.501960814);
 
 vec3 YuvToRgb(vec3 YUV)
 {
-    YUV -= YUVOffsets;
+    YUV -= YUVOffset8bits;
     return YUVtoRGBCoeff * YUV;
 }
 
@@ -110,11 +110,15 @@ void main()
     vec3 YUV;
     
     /* For dual sampler */
-    YUV.yz = texture2D(u_tex1, tXY).yw;
+#ifdef GL_ES
+    YUV.yz = texture2D(u_tex1, tXY).xw;
+#else
+    YUV.yz = texture2D(u_tex1, tXY).xy;
+#endif
     YUV.x = texture2D(u_tex0, tXY).x;
 	
     /* For single sampler */
-    //YUV.yz = texture2D(u_tex0, tXY).yw;
+    //YUV.yz = texture2D(u_tex0, tXY).xw;
     //
     //vec4 YUY2P = texture2D(u_tex0, tXY);
     //float Pos = v_texCoord.x * out_w;
