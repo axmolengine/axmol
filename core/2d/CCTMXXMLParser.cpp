@@ -689,8 +689,10 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
-            std::string currentString = std::string(tmxMapInfo->getCurrentString());
-            std::regex_replace(currentString, std::regex("[\n\r ]"), "");
+            auto currentStringView = tmxMapInfo->getCurrentString();
+            std::string currentString;
+            std::regex_replace(std::back_inserter(currentString), currentStringView.begin(), currentStringView.end(),
+                               std::regex("[\n\r ]"), "");
 
             unsigned char* buffer;
             auto len = utils::base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(),
@@ -736,8 +738,11 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-            std::string currentString = std::string(tmxMapInfo->getCurrentString());
-            std::regex_replace(currentString, std::regex("[\n\r ]"), "");
+
+            auto currentStringView = tmxMapInfo->getCurrentString();
+            std::string currentString;
+            std::regex_replace(std::back_inserter(currentString), currentStringView.begin(), currentStringView.end(),
+                               std::regex("[\n\r ]"), "");
 
             std::vector<std::string> gidTokens;
             std::stringstream filestr;
