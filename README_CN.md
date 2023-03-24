@@ -2,6 +2,8 @@
 
 # Axmol游戏引擎
 
+## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
+
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
@@ -19,9 +21,16 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
+## 基于VideoTexture的适配播放引擎
 
-**Axmol - X分子引擎，基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++17/20...**
-  
+|  Platform       |    MediaEngine/VideoTexture  | Video Texture Format 
+|-----------------|------------------------------|------------------------------|
+| Windows Desktop |    complete                  | YUY2, NV12, RGB32            |
+| Windows UWP     |    complete                  | BGR32                        |
+| Mac OS X        |    in progress               | NV12, BGR32                  |
+| iOS/tvOS        |    in progress               | NV12, BGR32                  |
+| Android         |    planned                   | RGB32                        |
+
 **[English](README.md)**
 
 ### 关于预编译库
