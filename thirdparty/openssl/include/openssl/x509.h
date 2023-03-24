@@ -40,9 +40,6 @@
 
 # include <openssl/sha.h>
 # include <openssl/x509err.h>
-# ifndef OPENSSL_NO_STDIO
-#  include <stdio.h>
-# endif
 
 #ifdef  __cplusplus
 extern "C" {
