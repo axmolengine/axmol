@@ -62,7 +62,13 @@ public:
 
     bool Initialize();
 
-    void SetMediaEventCallback(MediaEventCallback cb) override { m_eventCallback = cb; }
+    void FireMediaEvent(MEMediaEventType event)
+    {
+        if (m_eventCallback)
+            m_eventCallback(event);
+    }
+
+    void SetMediaEventCallback(MEMediaEventCallback cb) override { m_eventCallback = cb; }
 
     void SetAutoPlay(bool bAutoPlay) { m_autoPlay = bAutoPlay; }
 
@@ -72,9 +78,6 @@ public:
     bool SetLoop(bool bLoop) override;
     bool SetRate(double fRate) override;
 
-    VideoExtent GetVideoExtent() const override { return m_videoExtent; }
-
-    VideoSampleFormat GetVideoSampleFormat() const override { return VideoSampleFormat::BGR32; }
     bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
 
     bool Play() override;
@@ -83,7 +86,7 @@ public:
 
     bool SetCurrentTime(double fPosInSeconds) override;
 
-    MediaState GetState() const override { return m_state; }
+    MEMediaState GetState() const override { return m_state; }
 
     void SetMuted(bool muted);
 
@@ -105,11 +108,11 @@ private:
     bool m_stopping = false;
 
     bool m_autoPlay = false;
-    MediaState m_state = MediaState::Closed;
+    MEMediaState m_state = MEMediaState::Closed;
 
-    VideoExtent m_videoExtent;
+    MEIntPoint m_videoExtent;
 
-    MediaEventCallback m_eventCallback;
+    MEMediaEventCallback m_eventCallback;
 };
 
 struct MfMediaEngineFactory : public MediaEngineFactory {

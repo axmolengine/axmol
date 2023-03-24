@@ -19,6 +19,7 @@
 #    include "MFUtils.h"
 
 #    include "ntcvt/ntcvt.hpp"
+#    include "yasio/detail/sz.hpp"
 
 #    include "base/CCConsole.h"
 
@@ -375,11 +376,11 @@ bool WmfMediaEngine::Open(std::string_view sourceUri)
     assert(m_RateControl || !m_bCanScrub);
 
     // Set our state to "open pending"
-    m_state = MediaState::Preparing;
+    m_state = MEMediaState::Preparing;
 
 done:
     if (FAILED(hr))
-        m_state = MediaState::Closed;
+        m_state = MEMediaState::Closed;
 
     // SAFE_RELEASE(pTopology);
 
@@ -390,7 +391,7 @@ bool WmfMediaEngine::Close()
 {
     HRESULT hr = S_OK;
     auto state = GetState();
-    if (state != MediaState::Closing && state != MediaState::Closed)
+    if (state != MEMediaState::Closing && state != MEMediaState::Closed)
     {
         Stop();
         hr = CloseSession();
@@ -444,7 +445,7 @@ HRESULT WmfMediaEngine::Invoke(IMFAsyncResult* pResult)
     // NOTE: When IMFMediaSession::Close is called, MESessionClosed is NOT
     // necessarily the next event that we will receive. We may receive
     // any number of other events before receiving MESessionClosed.
-    if (m_state != MediaState::Closing)
+    if (m_state != MEMediaState::Closing)
     {
         HandleEvent(pEvent.Get());
 
@@ -465,12 +466,43 @@ void WmfMediaEngine::HandleVideoSample(const uint8_t* buf, size_t len)
     this->m_lastVideoFrame.assign(buf, buf + len, std::true_type{});
 }
 
-bool WmfMediaEngine::GetLastVideoFrame(yasio::byte_buffer& frameData) const
+bool WmfMediaEngine::GetLastVideoSample(MEVideoTextueSample& sample) const
 {
     if (this->m_videoSampleDirty)
     {
         this->m_videoSampleDirty = false;
-        frameData.assign(this->m_lastVideoFrame);
+        sample._buffer.assign(this->m_lastVideoFrame);
+
+        switch (m_videoSampleFormat)
+        {
+        case MEVideoSampleFormat::YUY2:
+            sample._bufferDim.x = m_bIsH264 ? YASIO_SZ_ALIGN(m_videoExtent.x, 16) : m_videoExtent.x;
+            sample._bufferDim.y = m_videoExtent.y;
+            sample._stride      = sample._bufferDim.x * 2;
+            break;
+        case MEVideoSampleFormat::NV12:
+            sample._bufferDim.x = YASIO_SZ_ALIGN(m_videoExtent.x, 16);
+            sample._bufferDim.y = m_bIsH264 ? YASIO_SZ_ALIGN(m_videoExtent.y, 16) * 3 / 2 : m_videoExtent.y * 3 / 2;
+            sample._stride      = sample._bufferDim.x;
+            break;
+        default:
+            assert(m_videoSampleFormat == MEVideoSampleFormat::RGB32 ||
+                   m_videoSampleFormat == MEVideoSampleFormat::BGR32);
+            sample._bufferDim = m_videoExtent;
+            sample._stride    = m_videoExtent.x * 4;
+        }
+
+        sample._mods = 0;
+        if (!sample._videoDim.equals(m_videoExtent))
+        {
+            sample._videoDim = m_videoExtent;
+            ++sample._mods;
+        }
+        if (sample._format != m_videoSampleFormat)
+        {
+            sample._format = m_videoSampleFormat;
+            ++sample._mods;
+        }
         return true;
     }
 
@@ -542,17 +574,17 @@ HRESULT WmfMediaEngine::HandleEvent(IMFMediaEvent* pEvent)
             break;
         case MESessionStarted:
             OnSessionStart(hrStatus);
-            FireMediaEvent(ax::MediaEventType::PLAYING);
+            FireMediaEvent(MEMediaEventType::Playing);
             break;
 
         case MESessionStopped:
             OnSessionStop(hrStatus);
-            FireMediaEvent(ax::MediaEventType::STOPPED);
+            FireMediaEvent(MEMediaEventType::Stopped);
             break;
 
         case MESessionPaused:
             OnSessionPause(hrStatus);
-            FireMediaEvent(ax::MediaEventType::PAUSED);
+            FireMediaEvent(MEMediaEventType::Paused);
             break;
 
         case MESessionRateChanged:
@@ -573,7 +605,7 @@ HRESULT WmfMediaEngine::HandleEvent(IMFMediaEvent* pEvent)
 
         case MESessionEnded:
             OnSessionEnded(hrStatus);
-            FireMediaEvent(ax::MediaEventType::COMPLETED);
+            FireMediaEvent(MEMediaEventType::Completed);
             break;
 
         case MESessionCapabilitiesChanged:
@@ -654,7 +686,7 @@ bool WmfMediaEngine::Play()
 
     TRACE("WmfMediaEngine::Play\n");
 
-    if (m_state != MediaState::Paused && m_state != MediaState::Stopped)
+    if (m_state != MEMediaState::Paused && m_state != MEMediaState::Stopped)
         MF_E_INVALIDREQUEST;
 
     if (m_pSession == NULL || m_pSource == NULL)
@@ -705,7 +737,7 @@ bool WmfMediaEngine::Pause()
     }
 
     if (SUCCEEDED(hr))
-        m_state = MediaState::Paused;
+        m_state = MEMediaState::Paused;
 
     return SUCCEEDED(hr);
 }
@@ -717,12 +749,12 @@ bool WmfMediaEngine::Stop()
     HRESULT hr = S_OK;
 
     if (m_pSession == NULL || m_pSource == NULL)
-        E_UNEXPECTED;
+        return false;  // E_UNEXPECTED;
 
     AutoLock lock(m_critsec);
 
-    if (m_state == MediaState::Stopped)
-        S_OK;
+    if (m_state == MEMediaState::Stopped)
+        return false;  // S_OK;
 
     // If another operation is pending, cache the request.
     // Otherwise, stop the media session.
@@ -739,7 +771,7 @@ bool WmfMediaEngine::Stop()
     }
 
     if (SUCCEEDED(hr))
-        m_state = MediaState::Stopped;
+        m_state = MEMediaState::Stopped;
 
     return SUCCEEDED(hr);
 }
@@ -986,7 +1018,7 @@ HRESULT WmfMediaEngine::SetPositionInternal(const MFTIME& hnsPosition)
         m_nominal.hnsStart = hnsPosition;
         m_bPending         = CMD_PENDING_SEEK;
 
-        m_state = MediaState::Playing;
+        m_state = MEMediaState::Playing;
     }
     return hr;
 }
@@ -1022,7 +1054,7 @@ HRESULT WmfMediaEngine::StartPlayback(const MFTIME* hnsPosition)
     // fails later, we'll get an MESessionStarted event with
     // an error code, and we will update our state then.
     if (SUCCEEDED(hr))
-        m_state = MediaState::Playing;
+        m_state = MEMediaState::Playing;
     return hr;
 }
 
@@ -1187,7 +1219,7 @@ HRESULT WmfMediaEngine::OnPlayEnded(IMFMediaEvent* pEvent)
 
     // The session puts itself into the stopped state autmoatically.
 
-    m_state = MediaState::Stopped;
+    m_state = MEMediaState::Stopped;
 
     if (m_bLooping)
     {
@@ -1277,7 +1309,7 @@ HRESULT WmfMediaEngine::CreateSession()
     // Close the old session, if any.
     CHECK_HR(hr = CloseSession());
 
-    assert(m_state == MediaState::Closed);
+    assert(m_state == MEMediaState::Closed);
 
     // Create a new attribute store.
     CHECK_HR(hr = MFCreateAttributes(&pAttributes, 2));
@@ -1325,7 +1357,7 @@ HRESULT WmfMediaEngine::CloseSession()
     {
         DWORD dwWaitResult = 0;
 
-        m_state = MediaState::Closing;
+        m_state = MEMediaState::Closing;
 
         CHECK_HR(hr = m_pSession->Close());
 
@@ -1363,7 +1395,7 @@ HRESULT WmfMediaEngine::CloseSession()
     m_pSource.Reset();
     m_pSession.Reset();
 
-    m_state    = MediaState::Closed;
+    m_state    = MEMediaState::Closed;
     m_bPending = false;
 
 done:
@@ -1573,7 +1605,8 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
         CHECK_HR(hr = pHandler->GetCurrentMediaType(&InputType));
 
         // Get video dim
-        CHECK_HR(hr = MFGetAttributeSize(InputType.Get(), MF_MT_FRAME_SIZE, &m_videoExtent.cx, &m_videoExtent.cy));
+        CHECK_HR(hr = MFGetAttributeSize(InputType.Get(), MF_MT_FRAME_SIZE, (UINT32*)&m_videoExtent.x,
+                                         (UINT32*)&m_videoExtent.y));
 
         // Create output type
         GUID SubType;
@@ -1607,11 +1640,11 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
         m_VideoOutputFormat = VideoOutputFormat;
 
         if (m_VideoOutputFormat == MFVideoFormat_YUY2)
-            m_videoSampleFormat = VideoSampleFormat::YUY2;
+            m_videoSampleFormat = MEVideoSampleFormat::YUY2;
         else if (m_VideoOutputFormat == MFVideoFormat_NV12)
-            m_videoSampleFormat = VideoSampleFormat::NV12;
+            m_videoSampleFormat = MEVideoSampleFormat::NV12;
         else if (m_VideoOutputFormat == MFVideoFormat_RGB32)
-            m_videoSampleFormat = VideoSampleFormat::RGB32;
+            m_videoSampleFormat = MEVideoSampleFormat::RGB32;
         // To run as fast as possible, set this attribute (requires Windows 7):
         // CHECK_HR(hr = pRendererActivate->SetUINT32(MF_SAMPLEGRABBERSINK_IGNORE_CLOCK, TRUE));
     }

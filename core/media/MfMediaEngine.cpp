@@ -7,11 +7,11 @@
 
 #if defined(_WIN32)
 
-#include "media/MfMediaEngine.h"
+#    include "media/MfMediaEngine.h"
 
-#include "ntcvt/ntcvt.hpp"
+#    include "ntcvt/ntcvt.hpp"
 
-#include "MFUtils.h"
+#    include "MFUtils.h"
 
 NS_AX_BEGIN
 
@@ -137,16 +137,16 @@ bool MfMediaEngine::SetRate(double fRate)
 
 bool MfMediaEngine::Play()
 {
-    if (m_state == MediaState::Playing)
+    if (m_state == MEMediaState::Playing)
         return true;
 
     HRESULT hr = S_OK;
     if (m_mediaEngine)
     {
-        if (m_state == MediaState::Stopped)
+        if (m_state == MEMediaState::Stopped)
             m_mediaEngine->SetCurrentTime(0);
-        hr = (m_mediaEngine->Play());
-        m_state = MediaState::Playing;
+        hr      = (m_mediaEngine->Play());
+        m_state = MEMediaState::Playing;
     }
     return SUCCEEDED(hr);
 }
@@ -170,26 +170,24 @@ bool MfMediaEngine::Open(std::string_view sourceUri)
 {
     auto bstrUrl = ntcvt::from_chars(sourceUri);
 
-    
     m_readyToPlay = false;
-    m_state       = MediaState::Preparing;
+    m_state       = MEMediaState::Preparing;
     if (m_mediaEngine)
         return SUCCEEDED(m_mediaEngine->SetSource(bstrUrl.data()));
     return false;
 }
 
-
 bool MfMediaEngine::Close()
 {
-    if (m_state == MediaState::Closed)
+    if (m_state == MEMediaState::Closed)
         return true;
-    
+
     if (m_mediaEngine)
     {
-        m_state = MediaState::Closed;
+        m_state = MEMediaState::Closed;
         return SUCCEEDED(m_mediaEngine->SetSource(NULL));
     }
-    
+
     return false;
 }
 
@@ -198,18 +196,17 @@ bool MfMediaEngine::Stop()
     if (m_mediaEngine)
     {
         HRESULT hr = S_OK;
-        if (m_state == MediaState::Playing)
+        if (m_state == MEMediaState::Playing)
         {
             m_stopping = true;
-            hr = m_mediaEngine->Pause();
+            hr         = m_mediaEngine->Pause();
         }
         else
         {
-            if (m_state == MediaState::Paused)
+            if (m_state == MEMediaState::Paused)
             {
-                m_state = MediaState::Stopped;
-                if (m_eventCallback)
-                    m_eventCallback(MediaEventType::STOPPED);
+                m_state = MEMediaState::Stopped;
+                FireMediaEvent(MEMediaEventType::Stopped);
             }
         }
         return SUCCEEDED(hr);
@@ -221,24 +218,24 @@ bool MfMediaEngine::SetCurrentTime(double fPosInSeconds)
 {
     if (m_mediaEngine)
         return SUCCEEDED(m_mediaEngine->SetCurrentTime(fPosInSeconds));
-    return E_POINTER;
+    return false;
 }
 
-bool MfMediaEngine::GetLastVideoFrame(yasio::byte_buffer& frameData) const
+bool MfMediaEngine::GetLastVideoSample(MEVideoTextueSample& sample) const
 {
-    if (m_mediaEngine != nullptr && m_state == MediaState::Playing)
+    if (m_mediaEngine != nullptr && m_state == MEMediaState::Playing)
     {
         LONGLONG pts;
         if (m_mediaEngine->OnVideoStreamTick(&pts) == S_OK)
         {
             const MFVideoNormalizedRect rect{0, 0, 1.0, 1.0};
-            const RECT rcTarget{0, 0, m_videoExtent.cx, m_videoExtent.cy};
+            const RECT rcTarget{0, 0, m_videoExtent.x, m_videoExtent.y};
             HRESULT hr = m_mediaEngine->TransferVideoFrame(m_wicBitmap.Get(), &rect, &rcTarget, &m_bkgColor);
             if (hr == S_OK)
             {
                 ComPtr<IWICBitmapLock> lockedData;
                 DWORD flags = WICBitmapLockRead;
-                WICRect srcRect{0, 0, m_videoExtent.cx, m_videoExtent.cy};
+                WICRect srcRect{0, 0, m_videoExtent.x, m_videoExtent.y};
 
                 if (SUCCEEDED(m_wicBitmap->Lock(&srcRect, flags, lockedData.GetAddressOf())))
                 {
@@ -251,7 +248,20 @@ bool MfMediaEngine::GetLastVideoFrame(yasio::byte_buffer& frameData) const
 
                         if (SUCCEEDED(lockedData->GetDataPointer(&bufferSize, &data)))
                         {
-                            frameData.assign(data, data + bufferSize, std::true_type{});
+                            sample._buffer.assign(data, data + bufferSize, std::true_type{});
+                            sample._bufferDim = m_videoExtent;
+                            sample._stride    = sample._bufferDim.x * 4;
+                            sample._mods      = 0;
+                            if (!sample._videoDim.equals(m_videoExtent))
+                            {
+                                sample._videoDim = m_videoExtent;
+                                ++sample._mods;
+                            }
+                            if (sample._format != MEVideoSampleFormat::BGR32)
+                            {
+                                sample._format = MEVideoSampleFormat::BGR32;
+                                ++sample._mods;
+                            }
                         }
                     }
                 }
@@ -278,47 +288,43 @@ void MfMediaEngine::OnMediaEngineEvent(uint32_t meEvent)
         // Here we auto-play when ready...
         if (m_readyToPlay)
         {
-            if (m_eventCallback)
-                m_eventCallback(MediaEventType::PLAYING);
+            FireMediaEvent(MEMediaEventType::Playing);
             Play();
         }
         break;
 
     case MF_MEDIA_ENGINE_EVENT_PLAY:
-        m_state = MediaState::Playing;
-        if (m_eventCallback)
-            m_eventCallback(MediaEventType::PLAYING);
+        m_state = MEMediaState::Playing;
+        FireMediaEvent(MEMediaEventType::Playing);
         break;
 
     case MF_MEDIA_ENGINE_EVENT_PAUSE:
         if (!m_stopping)
         {
-            m_state = MediaState::Paused;
-            if (m_eventCallback)
-                m_eventCallback(MediaEventType::PAUSED);
+            m_state = MEMediaState::Paused;
+            FireMediaEvent(MEMediaEventType::Paused);
         }
         else
         {
-            m_state = MediaState::Stopped;
-            if (m_eventCallback)
-                m_eventCallback(MediaEventType::STOPPED);
+            m_state = MEMediaState::Stopped;
+            FireMediaEvent(MEMediaEventType::Stopped);
 
             m_stopping = false;
         }
         break;
 
     case MF_MEDIA_ENGINE_EVENT_ENDED:
-        m_state      = MediaState::Completed;
-        if (m_eventCallback)
-            m_eventCallback(MediaEventType::COMPLETED);
+        m_state = MEMediaState::Completed;
+        FireMediaEvent(MEMediaEventType::Completed);
         break;
 
     case MF_MEDIA_ENGINE_EVENT_TIMEUPDATE:
         break;
 
     case MF_MEDIA_ENGINE_EVENT_ERROR:
-        m_state = MediaState::Error;
-#ifdef _DEBUG
+        m_state = MEMediaState::Error;
+        FireMediaEvent(MEMediaEventType::Error);
+#    ifdef _DEBUG
         if (m_mediaEngine)
         {
             ComPtr<IMFMediaError> error;
@@ -336,7 +342,7 @@ void MfMediaEngine::OnMediaEngineEvent(uint32_t meEvent)
                 OutputDebugStringA("ERROR: Media Foundation Event Error *FAILED GetError*\n");
             }
         }
-#endif
+#    endif
         break;
     }
 }
@@ -349,14 +355,14 @@ void MfMediaEngine::UpdateVideoExtent()
         DX::ThrowIfFailed(m_mediaEngine->GetNativeVideoSize(&x, &y));
 
         int mods = 0;
-        if (m_videoExtent.cx != x)
+        if (m_videoExtent.x != x)
         {
-            m_videoExtent.cx = x;
+            m_videoExtent.y = x;
             ++mods;
         }
-        if (m_videoExtent.cy != y)
+        if (m_videoExtent.x != y)
         {
-            m_videoExtent.cy = y;
+            m_videoExtent.y = y;
             ++mods;
         }
 

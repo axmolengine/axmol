@@ -127,20 +127,16 @@ public:
 
     STDMETHODIMP Invoke(IMFAsyncResult* pAsyncResult);
 
-    void SetMediaEventCallback(MediaEventCallback cb) override { m_eventCallback = cb; }
+    void SetMediaEventCallback(MEMediaEventCallback cb) override { m_eventCallback = cb; }
 
     // Playback
     bool Open(std::string_view sourceUri) override;
     bool Close() override;
     HRESULT Shutdown();
     HRESULT HandleEvent(IMFMediaEvent* pUnkPtr);
-    MediaState GetState() const override { return m_state; }
-
-    VideoExtent GetVideoExtent() const override { return m_videoExtent; }
+    MEMediaState GetState() const override { return m_state; }
 
     const GUID& GetVideoOutputFormat() const { return m_VideoOutputFormat; }
-
-    VideoSampleFormat GetVideoSampleFormat() const override { return m_videoSampleFormat; }
 
     // Video functionality
     bool SetLoop(bool bLooping) override
@@ -180,7 +176,7 @@ public:
     void HandleVideoSample(const uint8_t* buf, size_t len);
     bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
 
-    void FireMediaEvent(ax::MediaEventType event)
+    void FireMediaEvent(MEMediaEventType event)
     {
         if (m_eventCallback)
             m_eventCallback(event);
@@ -248,10 +244,10 @@ protected:
     mutable CritSec m_critsec;  // Protects the seeking and rate-change states.
 
     HWND m_hwndEvent;                         // App window to receive events.
-    MediaState m_state = MediaState::Closed;  // Current state of the media session.
+    MEMediaState m_state = MEMediaState::Closed;  // Current state of the media session.
     HANDLE m_hCloseEvent;                     // Event to wait on while closing
 
-    VideoExtent m_videoExtent;
+    MEIntPoint m_videoExtent;
 
     BOOL m_bLooping  = FALSE;
     BOOL m_bAutoPlay = TRUE;
@@ -259,9 +255,9 @@ protected:
     BOOL m_bIsH264 = FALSE;
     GUID m_VideoOutputFormat{};
 
-    MediaEventCallback m_eventCallback;
+    MEMediaEventCallback m_eventCallback;
 
-    VideoSampleFormat m_videoSampleFormat = VideoSampleFormat::NONE;
+    MEVideoSampleFormat m_videoSampleFormat = MEVideoSampleFormat::NONE;
 
     yasio::byte_buffer m_lastVideoFrame;
     mutable bool m_videoSampleDirty = false;

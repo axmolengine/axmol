@@ -110,11 +110,7 @@ void main()
     vec3 YUV;
     
     /* For dual sampler */
-#ifdef GL_ES
-    YUV.yz = texture2D(u_tex1, tXY).xw;
-#else
-    YUV.yz = texture2D(u_tex1, tXY).xy;
-#endif
+    YUV.yz = texture2D(u_tex1, tXY).yw;
     YUV.x = texture2D(u_tex0, tXY).x;
 	
     /* For single sampler */

@@ -64,6 +64,8 @@ struct PrivateVideoDescriptor
 
     MEVideoTextueSample _vsample;
 
+    Vec2 _originalViewSize;
+
     bool _scaleDirty = false;
 
     void closePlayer()
@@ -300,13 +302,8 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
             uvScale.x = (float)videoDim.x / bufferDim.x;
 
             /* For dual sampler */
-#    if defined(AX_USE_GL)
             pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::LA8, PixelFormat::LA8, bufferDim.x,
                                            bufferDim.y, false, 0);
-#    else
-            pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RG8, PixelFormat::RG8, bufferDim.x,
-                                           bufferDim.y, false, 0);
-#    endif
             pvd->_vtexture->updateWithData(sampleData, sampleDataLen, PixelFormat::RGBA8, PixelFormat::RGBA8,
                                            bufferDim.x >> 1, bufferDim.y, false, 1);
             break;
@@ -347,7 +344,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 void VideoPlayer::setContentSize(const Size& contentSize)
 {
     Widget::setContentSize(contentSize);
-    // reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_originalViewSize = contentSize;
+    reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_originalViewSize = contentSize;
 }
 
 void VideoPlayer::setFullScreenEnabled(bool enabled)
@@ -357,7 +354,8 @@ void VideoPlayer::setFullScreenEnabled(bool enabled)
         _fullScreenEnabled = enabled;
 
         auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-        // Widget::setContentSize(enabled ? _director->getOpenGLView()->getFrameSize() : pvd->_originalViewSize);
+        Widget::setContentSize(enabled ? _director->getOpenGLView()->getDesignResolutionSize()
+                                       : pvd->_originalViewSize);
     }
 }
 
