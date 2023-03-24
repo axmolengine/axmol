@@ -8,6 +8,8 @@
 #pragma once
 
 #if defined(_WIN32)
+#include <winapifamily.h>
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
 
 #include <stdint.h>
 #include <mfapi.h>
@@ -130,4 +132,5 @@ struct MfMediaEngineFactory : public MediaEngineFactory {
 
 NS_AX_END
 
+#endif
 #endif
