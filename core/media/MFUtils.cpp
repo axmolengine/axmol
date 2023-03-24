@@ -16,18 +16,19 @@
 namespace MFUtils
 {
 struct MFMedia {
-    MFMedia(){
-        hr = MFStartup(MF_VERSION);
+    MFMedia() : _hr(MFStartup(MF_VERSION))
+    {
     }
-    ~MFMedia() {
+    ~MFMedia() 
+    {
         MFShutdown();
     }
-    HRESULT hr;
+    HRESULT _hr;
 };
 
 HRESULT InitializeMFOnce() {
     static MFMedia s_mfMedia;
-    return s_mfMedia.hr;
+    return s_mfMedia._hr;
 }
 
 }
