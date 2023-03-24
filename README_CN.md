@@ -23,13 +23,13 @@
 
 ## 基于VideoTexture的适配播放引擎
 
-|  Platform       |    MediaEngine/VideoTexture  | Video Texture Format 
-|-----------------|------------------------------|------------------------------|
-| Windows Desktop |    complete                  | YUY2, NV12, RGB32            |
-| Windows UWP     |    complete                  | BGR32                        |
-| Mac OS X        |    in progress               | NV12, BGR32                  |
-| iOS/tvOS        |    in progress               | NV12, BGR32                  |
-| Android         |    planned                   | RGB32                        |
+|  Platform       |    MediaEngine/VideoTexture  | Video Texture Format         | MediaEngine Backend          |
+|-----------------|------------------------------|------------------------------|------------------------------|
+| Windows Desktop |    complete                  | YUY2, NV12, RGB32            | MS-Media: IMFMediaSession    |
+| Windows UWP     |    complete                  | BGR32                        | MS-Media: IMFMediaEngine     |
+| Mac OS X        |    in progress               | NV12, BGR32                  | AVFoundation                 |
+| iOS/tvOS        |    in progress               | NV12, BGR32                  | AVFoundation                 |
+| Android         |    planned                   | RGB32                        |                              |
 
 **[English](README.md)**
 
