@@ -227,7 +227,7 @@ public:
 
 protected:
     FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
-    TMXTilesetInfo* tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    Vector<TMXTilesetInfo*> getLayerTilesets(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     void buildWithMapInfo(TMXMapInfo* mapInfo);
 
     /** the map's size property measured in tiles */

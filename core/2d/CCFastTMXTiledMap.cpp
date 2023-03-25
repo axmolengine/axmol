@@ -96,23 +96,22 @@ FastTMXTiledMap::~FastTMXTiledMap() {}
 // private
 FastTMXLayer* FastTMXTiledMap::parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-    TMXTilesetInfo* tileset = tilesetForLayer(layerInfo, mapInfo);
-    if (tileset == nullptr)
-        return nullptr;
-
+    Vector<TMXTilesetInfo*> tileset = getLayerTilesets(layerInfo, mapInfo);
     FastTMXLayer* layer = FastTMXLayer::create(tileset, layerInfo, mapInfo);
 
     // tell the layerinfo to release the ownership of the tiles map.
     layerInfo->_ownTiles = false;
-    layer->setupTiles();
+    for (auto& [_, sub] : layer->getSubLayers())
+        layer->setupTiles(sub);
 
     return layer;
 }
 
-TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
+Vector<TMXTilesetInfo*> FastTMXTiledMap::getLayerTilesets(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
     Vec2 size      = layerInfo->_layerSize;
     auto& tilesets = mapInfo->getTilesets();
+    auto activeTilesets = Vector<TMXTilesetInfo*>();
 
     for (auto iter = tilesets.crbegin(), iterCrend = tilesets.crend(); iter != iterCrend; ++iter)
     {
@@ -139,17 +138,22 @@ TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMap
                         // if the layer is invalid (more than 1 tileset per layer) an CCAssert will be thrown later
                         if ((gid & kTMXFlippedMask) >= static_cast<uint32_t>(tilesetInfo->_firstGid))
                         {
-                            return tilesetInfo;
+                            activeTilesets.pushBack(tilesetInfo);
+                            goto next_tileset;
                         }
                     }
                 }
             }
         }
+
+        next_tileset:
+        continue;
     }
 
     // If all the tiles are 0, return empty tileset
-    AXLOG("axmol: Warning: TMX Layer '%s' has no tiles", layerInfo->_name.c_str());
-    return nullptr;
+    if (activeTilesets.size() == 0)
+        AXLOG("axmol: Warning: TMX Layer '%s' has no tiles", layerInfo->_name.c_str());
+    return activeTilesets;
 }
 
 void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
@@ -263,12 +267,13 @@ void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
         FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
         if (layer)
         {
-            if (layer->hasTileAnimation())
+            for (auto& [_, sub] : layer->getSubLayers())
+            if (layer->hasTileAnimation(sub))
             {
                 if (enabled)
-                    layer->getTileAnimManager()->startAll();
+                    layer->getTileAnimManager(sub)->startAll();
                 else
-                    layer->getTileAnimManager()->stopAll();
+                    layer->getTileAnimManager(sub)->stopAll();
             }
         }
     }
