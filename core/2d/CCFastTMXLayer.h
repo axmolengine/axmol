@@ -96,7 +96,7 @@ public:
      * @param mapInfo A map info.
      * @return Return an autorelease object.
      */
-    static FastTMXLayer* create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    static FastTMXLayer* create(Vector<TMXTilesetInfo*> tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     /**
      * @js ctor
      */
@@ -210,22 +210,11 @@ public:
         _quadsDirty = true;
     };
 
-    /** Tileset information for the layer.
+    /** Tileset vector for the layer.
      *
-     * @return Tileset information for the layer.
+     * @return Tileset vector for the layer.
      */
-    TMXTilesetInfo* getTileSet() const { return _tileSet; }
-
-    /** Set the tileset information for the layer.
-     *
-     * @param info The new tileset information for the layer.
-     */
-    void setTileSet(TMXTilesetInfo* info)
-    {
-        AX_SAFE_RETAIN(info);
-        AX_SAFE_RELEASE(_tileSet);
-        _tileSet = info;
-    }
+    Vector<TMXTilesetInfo*> getTileSetVector() const { return _tileSets; }
 
     /** Layer orientation, which is the same as the map orientation.
      *
@@ -286,15 +275,13 @@ public:
      *
      * @return Map from gid of animated tile to its instance.
      */
-    const std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>>* getAnimTileCoord() { return &_animTileCoord; }
+    std::map<int, std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>>> getAnimTileCoords() { return _animTileCoords; }
 
-    bool hasTileAnimation() const { return !_animTileCoord.empty(); }
+    bool hasTileAnimation() const { return !_animTileCoords.empty(); }
 
-    TMXTileAnimManager* getTileAnimManager() const { return _tileAnimManager; }
+    std::map<int, TMXTileAnimManager*> getTileAnimManagerTileSetMap() const { return _tileAnimManagers; }
 
-    bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo,
-                                                     TMXLayerInfo* layerInfo,
-                                                     TMXMapInfo* mapInfo);
+    bool initWithTilesetInfo(Vector<TMXTilesetInfo*> tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
 protected:
     virtual void setOpacity(uint8_t opacity) override;
@@ -316,7 +303,7 @@ protected:
     //
     void updateTotalQuads();
 
-    int getTileIndexAtPos(int x, int y) const { return x + y * (int)_layerSize.width; }
+    int getTileIndexByPos(int x, int y) const { return x + y * (int)_layerSize.width; }
 
     void updateVertexBuffer();
     void updateIndexBuffer();
@@ -332,7 +319,7 @@ protected:
     /** pointer to the map of tiles */
     uint32_t* _tiles = nullptr;
     /** Tileset information for the layer */
-    TMXTilesetInfo* _tileSet = nullptr;
+    Vector<TMXTilesetInfo*> _tileSets;
     /** Layer orientation, which is the same as the map orientation */
     int _layerOrientation = FAST_TMX_ORIENTATION_ORTHO;
     int _staggerAxis      = TMXStaggerAxis_Y;
@@ -341,14 +328,14 @@ protected:
     ValueMap _properties;
 
     /** map from gid of animated tile to its instance. Also useful for optimization*/
-    std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>> _animTileCoord;
+    std::map<int /*first_gid*/, std::unordered_map<uint32_t, std::vector<TMXTileAnimFlag>>> _animTileCoords;
     /** pointer to the tile animation manager of this layer */
-    TMXTileAnimManager* _tileAnimManager = nullptr;
+    std::map<int /*first_gid*/, TMXTileAnimManager*> _tileAnimManagers;
 
-    Texture2D* _texture = nullptr;
+    std::map<int /*first_gid*/, Texture2D*> _textures;
 
     /** container for sprite children. map<index, pair<sprite, gid> > */
-    std::map<int, std::pair<Sprite*, uint32_t>> _spriteContainer;
+    std::map<int /*first_gid*/, std::map<int, std::pair<Sprite*, uint32_t>>> _spriteContainers;
 
     Vec2 _screenGridSize;
     Rect _screenGridRect;
@@ -361,26 +348,27 @@ protected:
     Mat4 _tileToNodeTransform;
     /** data for rendering */
     bool _quadsDirty = true;
-    std::vector<int> _tileToQuadIndex;
-    std::vector<V3F_C4B_T2F_Quad> _totalQuads;
+    std::map<int /*first_gid*/, std::vector<int>> _tileToQuadIndex;
+    std::map<int /*first_gid*/, std::vector<V3F_C4B_T2F_Quad>> _totalQuads;
 #ifdef AX_FAST_TILEMAP_32_BIT_INDICES
-    std::vector<unsigned int> _indices;
+    std::map<int /*first_gid*/, std::vector<unsigned int>> _indices;
 #else
-    std::vector<unsigned short> _indices;
+    std::map<int /*first_gid*/, std::vector<unsigned short>> _indices;
 #endif
-    std::map<int /*vertexZ*/, int /*offset to _indices by quads*/> _indicesVertexZOffsets;
-    std::unordered_map<int /*vertexZ*/, int /*number to quads*/> _indicesVertexZNumber;
+    std::map<int /*first_gid*/, std::map<int /*vertexZ*/, int /*offset to _indices by quads*/>> _indicesVertexZOffsets;
+    std::map<int /*first_gid*/, std::unordered_map<int /*vertexZ*/, int /*number to quads*/>>
+        _indicesVertexZNumber;
     bool _dirty = true;
 
-    backend::Buffer* _vertexBuffer = nullptr;
-    backend::Buffer* _indexBuffer  = nullptr;
+    std::map<int /*first_gid*/, backend::Buffer*> _vertexBuffers;
+    std::map<int /*first_gid*/, backend::Buffer*> _indexBuffers;
 
     float _alphaFuncValue = 0.f;
-    std::unordered_map<int, CustomCommand*> _customCommands;
+    std::map<int /*first_gid*/, std::unordered_map<int, CustomCommand*>> _customCommands;
 
-    backend::UniformLocation _mvpMatrixLocaiton;
-    backend::UniformLocation _textureLocation;
-    backend::UniformLocation _alphaValueLocation;
+    std::map<int /*first_gid*/, backend::UniformLocation> _mvpMatrixLocations;
+    std::map<int /*first_gid*/, backend::UniformLocation> _textureLocations;
+    std::map<int /*first_gid*/, backend::UniformLocation> _alphaValueLocations;
 };
 
 /** @brief TMXTileAnimTask represents the frame-tick task of an animated tile.

@@ -36,7 +36,6 @@ set(_AX_2D_HEADER
     2d/CCTextFieldTTF.h
     2d/CCAnimationCache.h
     2d/CCFastTMXLayer.h
-    2d/CCFastTMXSubLayer.h
     2d/CCFontAtlasCache.h
     2d/CCFont.h
     2d/CCParticleSystemQuad.h
@@ -98,7 +97,6 @@ set(_AX_2D_SRC
     2d/CCComponent.cpp
     2d/CCDrawNode.cpp
     2d/CCFastTMXLayer.cpp
-    2d/CCFastTMXSubLayer.cpp
     2d/CCFastTMXTiledMap.cpp
     2d/CCFontAtlasCache.cpp
     2d/CCFontAtlas.cpp
