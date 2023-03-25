@@ -132,13 +132,22 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 {
     updateTotalQuads();
 
-    if (flags != 0 || _dirty || _quadsDirty)
+    auto cam = Camera::getVisitingCamera();
+    if (flags != 0 || _dirty || _quadsDirty || !_cameraPositionDirty.fuzzyEquals(cam->getPosition(), _tileSet->_tileSize.x) ||
+        _cameraZoomDirty != cam->getZoom())
     {
-        Vec2 s             = _director->getVisibleSize();
-        const Vec2& anchor = getAnchorPoint();
-        auto rect = Rect(Camera::getVisitingCamera()->getPositionX() - s.width * (anchor.x == 0.0f ? 0.5f : anchor.x),
-                         Camera::getVisitingCamera()->getPositionY() - s.height * (anchor.y == 0.0f ? 0.5f : anchor.y),
-                         s.width, s.height);
+        _cameraPositionDirty = cam->getPosition();
+        auto zoom            = _cameraZoomDirty = cam->getZoom();
+        Vec2 s               = _director->getVisibleSize();
+        const Vec2& anchor   = getAnchorPoint();
+        auto rect            = Rect(cam->getPositionX() - s.width * zoom * (anchor.x == 0.0f ? 0.5f : anchor.x),
+                                    cam->getPositionY() - s.height * zoom * (anchor.y == 0.0f ? 0.5f : anchor.y),
+                                    s.width * zoom, s.height * zoom);
+
+        rect.origin.x -= _tileSet->_tileSize.x;
+        rect.origin.y -= _tileSet->_tileSize.y;
+        rect.size.x += s.x * (zoom / 2) / 2 + _tileSet->_tileSize.x * zoom;
+        rect.size.y += s.y * (zoom / 2) / 2 + _tileSet->_tileSize.y * zoom;
 
         Mat4 inv = transform;
         inv.inverse();
