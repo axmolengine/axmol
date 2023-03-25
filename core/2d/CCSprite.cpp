@@ -409,8 +409,9 @@ void Sprite::setTexture(Texture2D* texture)
     }
 
     bool needsUpdatePS =
-        (!_programState || _programState->getProgram()->getProgramType() < backend::ProgramType::CUSTOM_PROGRAM) &&
-        (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags());
+        _autoUpdatePS &&
+        ((!_programState || _programState->getProgram()->getProgramType() < backend::ProgramType::CUSTOM_PROGRAM) &&
+         (_texture == nullptr || _texture->getSamplerFlags() != texture->getSamplerFlags()));
 
     if (_renderMode != RenderMode::QUAD_BATCHNODE)
     {
@@ -1686,9 +1687,10 @@ std::string Sprite::getDescription() const
     char textureDescriptor[100];
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
         snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag,
-                _batchNode->getTextureAtlas()->getTexture()->getBackendTexture());
+                 _batchNode->getTextureAtlas()->getTexture()->getBackendTexture());
     else
-        snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag, _texture->getBackendTexture());
+        snprintf(textureDescriptor, sizeof(textureDescriptor), "<Sprite | Tag = %d, TextureID = %p>", _tag,
+                 _texture->getBackendTexture());
 
     return textureDescriptor;
 }

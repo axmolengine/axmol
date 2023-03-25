@@ -1,6 +1,8 @@
 <p align="center"><a href="https://axmolengine.github.io/axmol" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
-# Axmol Game Engine
+# Axmol Engine
+
+## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
 
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
@@ -12,7 +14,10 @@
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
 
+**[简体中文](README_CN.md)**
+
 ## Supported Platforms
+
 | Build | Status (github) |
 |-------|-----------------|
 | Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/win32-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/win32-ci.yml)|
@@ -23,21 +28,20 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
+## VideoPlayer based on VideoTexture
 
-**This is another more radical fork of *Cocos2d-x-4.0*, it has Full Support OpenAL for all platforms, single texture multi GPU texture handler, C++ 17/20 and more! (see 'Highlighted Features' for more info).**  
+|  Platform       |    MediaEngine/VideoTexture  | Video Texture Format         | MediaEngine Backend          |
+|-----------------|------------------------------|------------------------------|------------------------------|
+| Windows Desktop |    complete                  | YUY2, NV12, RGB32            | MS-Media: IMFMediaSession    |
+| Windows UWP     |    complete                  | BGR32                        | MS-Media: IMFMediaEngine     |
+| Mac OS X        |    in progress               | NV12, BGR32                  | AVFoundation                 |
+| iOS/tvOS        |    in progress               | NV12, BGR32                  | AVFoundation                 |
+| Android         |    planned                   | RGB32                        |                              |
 
 ### View code with vscode online
 
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/axmolengine/axmol)
 - [![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/axmolengine/axmol)
-  
-**[简体中文](README_CN.md)**
-  
-### Purpose Summary
-
-- C++ 17/20
-- Focuses on native game dev (easy to use, fast deployment, intuitive)
-- Bugfixes ASAP
 
 ### Thirdparty
 

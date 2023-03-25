@@ -14,7 +14,6 @@ env:
   GH_OS_NAME: linux
   BUILD_TARGET: android
   BUILD_TYPE: Release
-  PYENV_VERSION: 3.7.9
 
 jobs:
   build:

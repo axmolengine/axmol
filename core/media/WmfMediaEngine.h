@@ -1,6 +1,7 @@
+#pragma once
 //////////////////////////////////////////////////////////////////////////
 //
-// MFMediaPlayer.h : Playback helper class.
+// WmfMediaEngine.h : Playback helper class.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -8,44 +9,55 @@
 // PARTICULAR PURPOSE.
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
-// 
-// refer to: 
-//  a. https://github.com/microsoft/Windows-classic-samples/tree/main/Samples/Win7Samples/multimedia/mediafoundation/protectedplayback
+//
+// refer to:
+//  a.
+//  https://github.com/microsoft/Windows-classic-samples/tree/main/Samples/Win7Samples/multimedia/mediafoundation/protectedplayback
 //  b. https://docs.microsoft.com/en-us/windows/win32/medfound/seeking--fast-forward--and-reverse-play
 //
 //////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#if defined(_WIN32)
+#include <winapifamily.h>
+#endif
 
-#include <windows.h>
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
+
+#    include <Windows.h>
 
 // C RunTime Header Files
-#include <tchar.h>
-#include <commdlg.h>  // OpenFile dialog
-#include <assert.h>
+#    include <tchar.h>
+#    include <commdlg.h>  // OpenFile dialog
+#    include <assert.h>
 
 // Media Foundation headers
-#include <mfapi.h>
-#include <mfobjects.h>
-#include <mfidl.h>
-#include <mferror.h>
-#include <nserror.h>  // More DRM errors.
+#    include <mfapi.h>
+#    include <mfobjects.h>
+#    include <mfidl.h>
+#    include <mferror.h>
+#    include <nserror.h>  // More DRM errors.
 
 // EVR headers
-#include <evr.h>
+#    include <evr.h>
 
 // Safe string functions
-#include <strsafe.h>
-#include "MFUtils.h"
+#    include <strsafe.h>
+#    include "MFUtils.h"
 
-#include <functional>
-#include <string>
+#    include <functional>
+#    include <string>
+
+#    include "MediaEngine.h"
+
+#    include "yasio/detail/byte_buffer.hpp"
+
+NS_AX_BEGIN
 
 using namespace MFUtils;
 
-#define CMD_PENDING 0x01
-#define CMD_PENDING_SEEK 0x02
-#define CMD_PENDING_RATE 0x04
+#    define CMD_PENDING 0x01
+#    define CMD_PENDING_SEEK 0x02
+#    define CMD_PENDING_RATE 0x04
 
 enum class MFPlayerState
 {
@@ -58,10 +70,7 @@ enum class MFPlayerState
     Closing       // Application has closed the session, but is waiting for MESessionClosed.
 };
 
-using SampleEventCallback = std::function<void(uint8_t* buffer, size_t size)>;
-using SessionEventCallback = std::function<void(int ev)>;
-
-class MFMediaPlayer : public IMFAsyncCallback
+class WmfMediaEngine : public IMFAsyncCallback, public MediaEngine
 {
     enum Command
     {
@@ -99,10 +108,10 @@ class MFMediaPlayer : public IMFAsyncCallback
     };
 
 public:
-    SampleEventCallback SampleEvent;
-    SessionEventCallback SessionEvent;
+    // Constructor is private. Use static CreateInstance method to instantiate.
+    WmfMediaEngine();
 
-    static HRESULT CreateInstance(MFMediaPlayer** ppPlayer, HWND hwndEvent = NULL);
+    HRESULT Initialize();
 
     // IUnknown methods
     STDMETHODIMP QueryInterface(REFIID iid, void** ppv);
@@ -118,26 +127,34 @@ public:
 
     STDMETHODIMP Invoke(IMFAsyncResult* pAsyncResult);
 
+    void SetMediaEventCallback(MEMediaEventCallback cb) override { m_eventCallback = cb; }
+
     // Playback
-    HRESULT OpenURL(const WCHAR* sURL);
-    HRESULT Close();
+    bool Open(std::string_view sourceUri) override;
+    bool Close() override;
     HRESULT Shutdown();
     HRESULT HandleEvent(IMFMediaEvent* pUnkPtr);
-    MFPlayerState GetState() const { return m_state; }
-
-    UINT32 GetVideoWidth() const { return m_uVideoWidth; }
-    UINT32 GetVideoHeight() const { return m_uVideoHeight; }
+    MEMediaState GetState() const override { return m_state; }
 
     const GUID& GetVideoOutputFormat() const { return m_VideoOutputFormat; }
 
     // Video functionality
-    void SetLooping(BOOL bLooping) { m_bLooping = bLooping; }
+    bool SetLoop(bool bLooping) override
+    {
+        m_bLooping = bLooping;
+        return true;
+    }
 
-    void SetPlayOnOpen(BOOL bPlayOnOpen) { m_bPlayOnOpen = bPlayOnOpen; }
+    void SetAutoPlay(bool bAutoPlay) override { m_bAutoPlay = bAutoPlay; }
 
     BOOL CanSeek() const;
     MFTIME GetDuration() const;
     MFTIME GetCurrentPosition() const;
+
+    bool SetCurrentTime(double sec) override
+    {
+        return SUCCEEDED(SetPosition(static_cast<MFTIME>((std::nano::den / 100) * sec)));
+    }
 
     // Set position in 100ns units, will reply if play ended
     // see: https://docs.microsoft.com/en-us/windows/win32/medfound/mf-pd-duration-attribute
@@ -148,15 +165,22 @@ public:
 
     BOOL CanFastForward() const;
     BOOL CanRewind() const;
-    HRESULT SetRate(float fRate);
+    bool SetRate(double fRate) override;
     HRESULT FastForward();
     HRESULT Rewind();
 
-    HRESULT Play();
-    HRESULT Pause();
-    HRESULT Stop();
+    bool Play() override;
+    bool Pause() override;
+    bool Stop() override;
 
-    BOOL IsH264() const { return m_bIsH264; }
+    void HandleVideoSample(const uint8_t* buf, size_t len);
+    bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
+
+    void FireMediaEvent(MEMediaEventType event)
+    {
+        if (m_eventCallback)
+            m_eventCallback(event);
+    }
 
 protected:
     HRESULT SetPositionInternal(const MFTIME& hnsPosition);
@@ -167,15 +191,11 @@ protected:
     HRESULT UpdatePendingCommands(Command cmd);
 
 protected:
-    // Constructor is private. Use static CreateInstance method to instantiate.
-    MFMediaPlayer(HWND hwndEvent);
-
     // Destructor is private. Caller should call Release.
-    virtual ~MFMediaPlayer();
+    virtual ~WmfMediaEngine();
 
     HRESULT CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopologyNode** ppNode);
 
-    HRESULT Initialize();
     HRESULT CreateSession();
     HRESULT CloseSession();
 
@@ -217,22 +237,52 @@ protected:
         BOOL bThin;       // Thinned playback?
         MFTIME hnsStart;  // Start position
     };
-    SeekState m_nominal{CmdStop, 1.0, FALSE, 0};    // Current nominal state.
-    SeekState m_request{CmdNone, 1.0, FALSE, 0};    // Pending request state.
-    BOOL m_bPending = FALSE;      // Is a request pending?
+    SeekState m_nominal{CmdStop, 1.0, FALSE, 0};  // Current nominal state.
+    SeekState m_request{CmdNone, 1.0, FALSE, 0};  // Pending request state.
+    BOOL m_bPending = FALSE;                      // Is a request pending?
 
     mutable CritSec m_critsec;  // Protects the seeking and rate-change states.
 
-    HWND m_hwndEvent;      // App window to receive events.
-    MFPlayerState m_state;  // Current state of the media session.
-    HANDLE m_hCloseEvent;  // Event to wait on while closing
+    HWND m_hwndEvent;                         // App window to receive events.
+    MEMediaState m_state = MEMediaState::Closed;  // Current state of the media session.
+    HANDLE m_hCloseEvent;                     // Event to wait on while closing
 
-    UINT32 m_uVideoWidth  = 0;
-    UINT32 m_uVideoHeight = 0;
+    MEIntPoint m_videoExtent;
 
-    BOOL m_bLooping = FALSE;
-    BOOL m_bPlayOnOpen = TRUE;
+    BOOL m_bLooping  = FALSE;
+    BOOL m_bAutoPlay = TRUE;
 
     BOOL m_bIsH264 = FALSE;
     GUID m_VideoOutputFormat{};
+
+    MEMediaEventCallback m_eventCallback;
+
+    MEVideoSampleFormat m_videoSampleFormat = MEVideoSampleFormat::NONE;
+
+    yasio::byte_buffer m_lastVideoFrame;
+    mutable bool m_videoSampleDirty = false;
 };
+
+struct WmfMediaEngineFactory : public MediaEngineFactory
+{
+    MediaEngine* CreateMediaEngine() override
+    {
+        auto engine = new WmfMediaEngine();
+        auto hr     = engine->Initialize();
+        if (SUCCEEDED(hr))
+            return engine;
+
+        engine->Release();
+        return nullptr;
+    }
+    void DestroyMediaEngine(MediaEngine* me) override
+    {
+        auto wmfme = static_cast<WmfMediaEngine*>(me);
+        wmfme->Shutdown();
+        wmfme->Release();
+    }
+};
+
+NS_AX_END
+
+#endif

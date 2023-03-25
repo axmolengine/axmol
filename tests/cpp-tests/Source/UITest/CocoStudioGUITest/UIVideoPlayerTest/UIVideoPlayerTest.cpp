@@ -154,7 +154,7 @@ void VideoPlayerTest::menuResourceVideoCallback(Ref* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setFileName("cocosvideo.mp4");
+        _videoPlayer->setFileName("SampleVideo.mp4");
         _videoPlayer->play();
     }
 }
@@ -163,7 +163,7 @@ void VideoPlayerTest::menuOnlineVideoCallback(Ref* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setURL("http://benchmark.cocos2d-x.org/cocosvideo.mp4");
+        _videoPlayer->setURL("http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4");
         _videoPlayer->play();
     }
 }
@@ -435,6 +435,6 @@ void SimpleVideoPlayerTest::createVideo()
 
     // _videoPlayer->addEventListener(AX_CALLBACK_2(SimpleVideoPlayerTest::videoEventCallback, this));
 
-    _videoPlayer->setFileName("cocosvideo.mp4");
+    _videoPlayer->setFileName("SampleVideo.mp4");
     _videoPlayer->play();
 }

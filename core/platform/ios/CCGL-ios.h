@@ -126,6 +126,15 @@ THE SOFTWARE.
 #        define GL_COMPRESSED_SRGB8_ALPHA8_ASTC_12x12_KHR 0x93DD
 #    endif
 
+// works on device which support OpenGLES 3.0
+#    if !defined(GL_RG)
+#        define GL_RG 0x8227
+#    endif
+
+#    if !defined(GL_RG8)
+#        define GL_RG8 0x822B
+#    endif
+
 #endif  // AX_PLATFORM_IOS
 
 #endif  // __PLATFORM_IOS_CCGL_H__

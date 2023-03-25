@@ -1,12 +1,16 @@
 <p align="center"><a href="https://axmolengine.github.io/axmol" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
-# Axmol游戏引擎
+# Axmol引擎
+
+## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
 
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
-  
+
+ 
+**[English](README.md)** 
 
 ## 支持平台列表
 | Build | Status (github) |
@@ -19,10 +23,15 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
+## 基于VideoTexture的适配播放引擎
 
-**Axmol - X分子引擎，基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++17/20...**
-  
-**[English](README.md)**
+|  Platform       |    MediaEngine/VideoTexture  | Video Texture Format         | MediaEngine Backend          |
+|-----------------|------------------------------|------------------------------|------------------------------|
+| Windows Desktop |    complete                  | YUY2, NV12, RGB32            | MS-Media: IMFMediaSession    |
+| Windows UWP     |    complete                  | BGR32                        | MS-Media: IMFMediaEngine     |
+| Mac OS X        |    in progress               | NV12, BGR32                  | AVFoundation                 |
+| iOS/tvOS        |    in progress               | NV12, BGR32                  | AVFoundation                 |
+| Android         |    planned                   | RGB32                        |                              |
 
 ### 关于预编译库
 

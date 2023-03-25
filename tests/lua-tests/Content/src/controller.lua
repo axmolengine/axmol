@@ -15,7 +15,7 @@ require "axmol.init"
 local director = cc.Director:getInstance()
 local glView   = director:getOpenGLView()
 if nil == glView then
-    glView = cc.GLViewImpl:createWithRect("Lua Tests", cc.rect(0,0,960,640))
+    glView = cc.GLViewImpl:createWithRect("Lua Tests", cc.rect(0,0,960,640), 1.0, true)
     director:setOpenGLView(glView)
 end
 
@@ -34,7 +34,7 @@ if screenSize.height > 320 then
     cc.Director:getInstance():setContentScaleFactor(resourceSize.height/designSize.height)
 end
 
-glView:setDesignResolutionSize(designSize.width, designSize.height, cc.ResolutionPolicy.NO_BORDER)
+glView:setDesignResolutionSize(designSize.width, designSize.height, cc.ResolutionPolicy.SHOW_ALL)
 
 local fileUtils = cc.FileUtils:getInstance()
 local function addSearchPath(resPrefix, height)
