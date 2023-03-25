@@ -348,8 +348,12 @@ protected:
     Mat4 _tileToNodeTransform;
     /** data for rendering */
     bool _quadsDirty = true;
+    Vec2 _cameraPositionDirty = {INFINITY, INFINITY};
+    float _cameraZoomDirty;
+    
     std::map<int /*first_gid*/, std::vector<int>> _tileToQuadIndex;
     std::map<int /*first_gid*/, std::vector<V3F_C4B_T2F_Quad>> _totalQuads;
+    
 #ifdef AX_FAST_TILEMAP_32_BIT_INDICES
     std::map<int /*first_gid*/, std::vector<unsigned int>> _indices;
 #else

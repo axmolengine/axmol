@@ -22,19 +22,16 @@ if(WINDOWS)
 
     if (AX_ENABLE_MFMEDIA)
         set(_AX_UI_SPECIFIC_HEADER ${_AX_UI_SPECIFIC_HEADER}
-            ui/UIVideoPlayer/MFUtils.h
-            ui/UIVideoPlayer/MFMediaPlayer.h
             ui/UIVideoPlayer/UIVideoPlayer.h
             )
         set(_AX_UI_SPECIFIC_SRC ${_AX_UI_SPECIFIC_SRC}
-            ui/UIVideoPlayer/MFUtils.cpp
-            ui/UIVideoPlayer/MFMediaPlayer.cpp
-            ui/UIVideoPlayer/UIVideoPlayer-win.cpp
+            ui/UIVideoPlayer/UIVideoPlayer.cpp
             )
     endif()
 elseif(APPLE)
     if(MACOSX)
         set(_AX_UI_SPECIFIC_HEADER
+            #ui/UIVideoPlayer/UIVideoPlayer.h
             ui/UIEditBox/UIEditBoxImpl-mac.h
             ui/UIEditBox/Mac/CCUIPasswordTextField.h
             ui/UIEditBox/Mac/CCUIMultilineTextField.h
@@ -44,6 +41,7 @@ elseif(APPLE)
             ui/UIEditBox/Mac/CCUITextFieldFormatter.h
             )
         set(_AX_UI_SPECIFIC_SRC
+            #ui/UIVideoPlayer/UIVideoPlayer.cpp
             ui/UIEditBox/UIEditBoxImpl-mac.mm
             ui/UIEditBox/Mac/CCUIEditBoxMac.mm
             ui/UIEditBox/Mac/CCUIMultilineTextField.m

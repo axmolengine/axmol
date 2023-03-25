@@ -45,7 +45,7 @@
 #include "UITabControlTest/UITabControlTest.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) && !defined(AX_TARGET_OS_TVOS)
+     defined(_WIN32)) && !defined(AX_TARGET_OS_TVOS)
 #    include "UIVideoPlayerTest/UIVideoPlayerTest.h"
 #endif
 
@@ -64,7 +64,7 @@
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) && !defined(AX_TARGET_OS_TVOS)
+    defined(_WIN32)) && !defined(AX_TARGET_OS_TVOS)
     addTest("VideoPlayer Test", []() { return new VideoPlayerTests; });
 #endif
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && \

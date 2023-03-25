@@ -315,6 +315,12 @@ void VideoPlayer::onPlayEvent(int event)
     }
 }
 
+void VideoPlayer::setContentSize(const Size& contentSize)
+{
+    Widget::setContentSize(contentSize);
+    // reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_originalViewSize = contentSize;
+}
+
 ax::ui::Widget* VideoPlayer::createCloneInstance()
 {
     return VideoPlayer::create();
