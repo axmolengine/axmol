@@ -265,13 +265,13 @@ public:
      *
      * @return Tileset information for the layer.
      */
-    Vector<TMXTilesetInfo*> getTileSetVector() const { return _tileSets; }
+    Vector<TMXTilesetInfo*>& getTileSetVector() { return _tileSets; }
 
     /** Tileset information for the layer.
      *
      * @return Tileset information for the layer.
      */
-    std::map<int, FastTMXSubLayer> getSubLayers() const { return _subLayers; }
+    std::map<int, FastTMXSubLayer>& getSubLayers() { return _subLayers; }
 
     /** Set the tileset information for the layer.
      *
@@ -406,6 +406,8 @@ protected:
 
     Vector<TMXTilesetInfo*> _tileSets;
     std::map<int, FastTMXSubLayer> _subLayers;
+
+    friend class FastTMXTiledMap;
 };
 
 /** @brief TMXTileAnimTask represents the frame-tick task of an animated tile.

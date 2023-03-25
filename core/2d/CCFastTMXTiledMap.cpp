@@ -268,13 +268,13 @@ void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
         if (layer)
         {
             for (auto& [_, sub] : layer->getSubLayers())
-            if (layer->hasTileAnimation(sub))
-            {
-                if (enabled)
-                    layer->getTileAnimManager(sub)->startAll();
-                else
-                    layer->getTileAnimManager(sub)->stopAll();
-            }
+                if (layer->hasTileAnimation(sub))
+                {
+                    if (enabled)
+                        layer->getTileAnimManager(sub)->startAll();
+                    else
+                        layer->getTileAnimManager(sub)->stopAll();
+                }
         }
     }
 }
