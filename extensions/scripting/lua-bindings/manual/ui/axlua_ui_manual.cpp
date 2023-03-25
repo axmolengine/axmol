@@ -29,7 +29,7 @@
 #    include "scripting/lua-bindings/manual/ui/axlua_video_manual.hpp"
 #    include "scripting/lua-bindings/auto/axlua_webview_auto.hpp"
 #    include "scripting/lua-bindings/manual/ui/axlua_webview_manual.hpp"
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#elif defined(_WIN32)
 #    if defined(AX_ENABLE_MFMEDIA)
 #        include "scripting/lua-bindings/auto/axlua_video_auto.hpp"
 #        include "scripting/lua-bindings/manual/ui/axlua_video_manual.hpp"
@@ -1248,7 +1248,7 @@ int register_ui_module(lua_State* L)
         register_all_ax_video_manual(L);
         register_all_ax_webview(L);
         register_all_ax_webview_manual(L);
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#elif defined(_WIN32)
 #    if defined(AX_ENABLE_MFMEDIA)
         register_all_ax_video(L);
         register_all_ax_video_manual(L);

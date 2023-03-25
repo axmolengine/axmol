@@ -126,7 +126,7 @@ static void print_impl(std::string& buf) {
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
     __android_log_print(ANDROID_LOG_DEBUG, "axmol debug info", "%s", buf.c_str());
 
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#elif defined(_WIN32)
     buf.push_back('\n');
 
     // print to debugger output window

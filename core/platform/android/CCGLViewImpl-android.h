@@ -36,7 +36,7 @@ class AX_DLL GLViewImpl : public GLView
 public:
     // static function
     static GLViewImpl* create(std::string_view viewname);
-    static GLViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f);
+    static GLViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f, bool resizable = false);
     static GLViewImpl* createWithFullScreen(std::string_view viewName);
 
     bool isOpenGLReady() override;
@@ -49,7 +49,7 @@ protected:
     GLViewImpl();
     virtual ~GLViewImpl();
 
-    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor);
+    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
 };
 
