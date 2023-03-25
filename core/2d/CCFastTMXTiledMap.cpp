@@ -248,6 +248,18 @@ std::string FastTMXTiledMap::getDescription() const
     return StringUtils::format("<FastTMXTiledMap | Tag = %d, Layers = %d", _tag, static_cast<int>(_children.size()));
 }
 
+void FastTMXTiledMap::setCullingEnabled(bool enabled)
+{
+    for (auto&& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer)
+        {
+            layer->setCullingEnabled(enabled);
+        }
+    }
+}
+
 void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
 {
     for (auto&& child : _children)

@@ -198,6 +198,13 @@ public:
 
     virtual std::string getDescription() const override;
 
+    /** Enable layer culling, use this if you want to prioritize rendering over processing.
+     * Or consifer using 'infinite' property to ease the rendering process by using chunks (NOT YET IMPLEMENTED)
+     *
+     * @param enabled: Whther to enable culling or not. default: enabled
+     */
+    void setCullingEnabled(bool enabled);
+
     /** Set all tile animations enabled or not.
      *  animations are not enabled by default
      */

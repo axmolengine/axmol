@@ -146,27 +146,28 @@ void FastTMXLayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
 
         auto cam = Camera::getVisitingCamera();
         if (flags != 0 || sub._dirty || sub._quadsDirty ||
-            !sub._cameraPositionDirty.fuzzyEquals(cam->getPosition(), sub._tileSet->_tileSize.x) ||
-            sub._cameraZoomDirty != cam->getZoom())
+            (!sub._cameraPositionDirty.fuzzyEquals(cam->getPosition(), sub._tileSet->_tileSize.x) ||
+             ((sub._cameraZoomDirty > cam->getZoom() + 0.1 || sub._cameraZoomDirty < cam->getZoom() - 0.1))) &&
+                culling)
         {
             sub._cameraPositionDirty = cam->getPosition();
             auto zoom = sub._cameraZoomDirty = cam->getZoom();
-            Vec2 s                       = _director->getVisibleSize();
-            const Vec2& anchor           = getAnchorPoint();
+            Vec2 s                           = _director->getVisibleSize();
+            const Vec2& anchor               = getAnchorPoint();
             auto rect = Rect(cam->getPositionX() - s.width * zoom * (anchor.x == 0.0f ? 0.5f : anchor.x),
                              cam->getPositionY() - s.height * zoom * (anchor.y == 0.0f ? 0.5f : anchor.y),
                              s.width * zoom, s.height * zoom);
 
             rect.origin.x -= sub._tileSet->_tileSize.x;
             rect.origin.y -= sub._tileSet->_tileSize.y;
-            rect.size.x += s.x * (zoom / 2) / 2 + sub._tileSet->_tileSize.x * zoom;
-            rect.size.y += s.y * (zoom / 2) / 2 + sub._tileSet->_tileSize.y * zoom;
+            rect.size.x += s.x * (zoom / 2) / 2 + sub._tileSet->_tileSize.x * 2 * zoom;
+            rect.size.y += s.y * (zoom / 2) / 2 + sub._tileSet->_tileSize.y * 2 * zoom;
 
             Mat4 inv = transform;
             inv.inverse();
             rect = RectApplyTransform(rect, inv);
 
-            updateTiles(sub, rect);
+            updateTiles(sub, culling ? rect : Rect(-INFINITY, -INFINITY, INFINITY, INFINITY));
             updateIndexBuffer(sub);
             updatePrimitives(sub);
             sub._dirty = false;

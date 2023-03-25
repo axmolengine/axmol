@@ -341,6 +341,13 @@ public:
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     void removeChild(Node* child, bool cleanup = true) override;
 
+    /** Enable layer culling, use this if you want to prioritize rendering over processing.
+     * Or consifer using 'infinite' property to ease the rendering process by using chunks (NOT YET IMPLEMENTED)
+     *
+     * @param enabled: Whther to enable culling or not. default: enabled
+     */
+    void setCullingEnabled(bool enabled) { culling = enabled; }
+
     /** Map from gid of animated tile to its instance.
      *
      * @return Map from gid of animated tile to its instance.
@@ -404,10 +411,10 @@ protected:
     /** container for sprite children. map<index, pair<sprite, gid> > */
     std::map<int, std::pair<Sprite*, uint32_t>> _spriteContainer;
 
+    bool culling = true;
+
     Vector<TMXTilesetInfo*> _tileSets;
     std::map<int, FastTMXSubLayer> _subLayers;
-
-    friend class FastTMXTiledMap;
 };
 
 /** @brief TMXTileAnimTask represents the frame-tick task of an animated tile.
