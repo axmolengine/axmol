@@ -109,45 +109,33 @@ FastTMXLayer* FastTMXTiledMap::parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* m
 
 Vector<TMXTilesetInfo*> FastTMXTiledMap::getLayerTilesets(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-    Vec2 size      = layerInfo->_layerSize;
-    auto& tilesets = mapInfo->getTilesets();
+    Vec2 size           = layerInfo->_layerSize;
+    auto& tilesets      = mapInfo->getTilesets();
+    auto inactive       = std::set<int>();
     auto activeTilesets = Vector<TMXTilesetInfo*>();
 
-    for (auto iter = tilesets.crbegin(), iterCrend = tilesets.crend(); iter != iterCrend; ++iter)
+    for (int y = 0; y < size.height; y++)
     {
-        TMXTilesetInfo* tilesetInfo = *iter;
-        if (tilesetInfo)
+        for (int x = 0; x < size.width; x++)
         {
-            for (int y = 0; y < size.height; y++)
+            uint32_t pos = static_cast<uint32_t>(x + size.width * y);
+            uint32_t gid = layerInfo->_tiles[pos];
+            gid &= kTMXFlippedMask;
+
+            if (gid != 0)
             {
-                for (int x = 0; x < size.width; x++)
-                {
-                    uint32_t pos = static_cast<uint32_t>(x + size.width * y);
-                    uint32_t gid = layerInfo->_tiles[pos];
-
-                    // gid are stored in little endian.
-                    // if host is big endian, then swap
-                    // if( o == CFByteOrderBigEndian )
-                    //    gid = CFSwapInt32( gid );
-                    /* We support little endian.*/
-
-                    // FIXME: gid == 0 --> empty tile
-                    if (gid != 0)
+                for (auto iter = tilesets.rbegin(); iter != tilesets.rend(); ++iter)
+                    if (gid >= (*iter)->_firstGid)
                     {
-                        // Optimization: quick return
-                        // if the layer is invalid (more than 1 tileset per layer) an CCAssert will be thrown later
-                        if ((gid & kTMXFlippedMask) >= static_cast<uint32_t>(tilesetInfo->_firstGid))
+                        if (inactive.find((*iter)->_firstGid) == inactive.end())
                         {
-                            activeTilesets.pushBack(tilesetInfo);
-                            goto next_tileset;
+                            activeTilesets.pushBack(*iter);
+                            inactive.insert((*iter)->_firstGid);
                         }
+                        break;
                     }
-                }
             }
         }
-
-        next_tileset:
-        continue;
     }
 
     // If all the tiles are 0, return empty tileset
