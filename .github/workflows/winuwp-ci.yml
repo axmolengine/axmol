@@ -33,7 +33,7 @@ jobs:
         submodules: 'recursive'
 
     - name: Setup Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
 
     - uses: ilammy/msvc-dev-cmd@v1.12.1
       with: 
