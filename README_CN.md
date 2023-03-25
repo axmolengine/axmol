@@ -1,6 +1,6 @@
 <p align="center"><a href="https://axmolengine.github.io/axmol" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
-# Axmol游戏引擎
+# Axmol引擎
 
 ## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
 
@@ -8,7 +8,9 @@
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
-  
+
+ 
+**[English](README.md)** 
 
 ## 支持平台列表
 | Build | Status (github) |
@@ -30,8 +32,6 @@
 | Mac OS X        |    in progress               | NV12, BGR32                  | AVFoundation                 |
 | iOS/tvOS        |    in progress               | NV12, BGR32                  | AVFoundation                 |
 | Android         |    planned                   | RGB32                        |                              |
-
-**[English](README.md)**
 
 ### 关于预编译库
 
