@@ -30,6 +30,7 @@ THE SOFTWARE.
 #include "2d/CCTMXXMLParser.h"
 #include <unordered_map>
 #include <sstream>
+#include <regex>
 //  #include "2d/CCTMXTiledMap.h"
 #include "base/ZipUtils.h"
 #include "base/CCDirector.h"
@@ -687,8 +688,8 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             tmxMapInfo->setStoringCharacters(false);
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
-
             auto currentString = tmxMapInfo->getCurrentString();
+
             unsigned char* buffer;
             auto len = utils::base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(),
                                            &buffer);
@@ -808,6 +809,7 @@ void TMXMapInfo::textHandler(void* /*ctx*/, const char* ch, size_t len)
 {
     TMXMapInfo* tmxMapInfo = this;
     std::string text(ch, 0, len);
+    text = std::regex_replace(text, std::regex("[\n\r ]"), "");
 
     if (tmxMapInfo->isStoringCharacters())
     {
