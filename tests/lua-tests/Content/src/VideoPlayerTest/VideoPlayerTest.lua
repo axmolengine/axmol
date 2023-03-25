@@ -94,7 +94,7 @@ local function VideoPlayerTest()
     local function menuResourceVideoCallback(tag, sender)
         if nil ~= videoPlayer then
             print('start play video')
-            local videoFullPath = cc.FileUtils:getInstance():fullPathForFilename("cocosvideo.mp4")
+            local videoFullPath = cc.FileUtils:getInstance():fullPathForFilename("SampleVideo2.mp4")
             videoPlayer:setFileName(videoFullPath)   
             videoPlayer:play()
             print('start play video succeed')
@@ -108,7 +108,7 @@ local function VideoPlayerTest()
 
     local function menuOnlineVideoCallback(tag, sender)
         if nil ~= videoPlayer then
-            videoPlayer:setURL("http://benchmark.cocos2d-x.org/cocosvideo.mp4")
+            videoPlayer:setURL("http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4")
             videoPlayer:play()
         end
     end

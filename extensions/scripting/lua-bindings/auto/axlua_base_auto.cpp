@@ -59663,6 +59663,56 @@ int lua_ax_base_Sprite_setVertexLayout(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Sprite_setAutoUpdatePS(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Sprite* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Sprite",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setAutoUpdatePS'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:setAutoUpdatePS");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setAutoUpdatePS'", nullptr);
+            return 0;
+        }
+        cobj->setAutoUpdatePS(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Sprite:setAutoUpdatePS",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Sprite_setAutoUpdatePS'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
 {
     int argc = 0;
@@ -59894,6 +59944,7 @@ int lua_register_ax_base_Sprite(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSpriteFrameName",lua_ax_base_Sprite_initWithSpriteFrameName);
         tolua_function(tolua_S,"initWithFile",lua_ax_base_Sprite_initWithFile);
         tolua_function(tolua_S,"setVertexLayout",lua_ax_base_Sprite_setVertexLayout);
+        tolua_function(tolua_S,"setAutoUpdatePS",lua_ax_base_Sprite_setAutoUpdatePS);
         tolua_function(tolua_S,"createWithTexture", lua_ax_base_Sprite_createWithTexture);
         tolua_function(tolua_S,"createWithSpriteFrame", lua_ax_base_Sprite_createWithSpriteFrame);
         tolua_function(tolua_S,"createWithSpriteFrameName", lua_ax_base_Sprite_createWithSpriteFrameName);
@@ -102106,6 +102157,25 @@ int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::GLViewImpl::createWithRect(arg0, arg1, arg2);
+        object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
+        return 1;
+    }
+    if (argc == 4)
+    {
+        std::string_view arg0;
+        ax::Rect arg1;
+        double arg2;
+        bool arg3;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.GLViewImpl:createWithRect");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLViewImpl_createWithRect'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::GLViewImpl::createWithRect(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
         return 1;
     }

@@ -25,7 +25,7 @@
  ****************************************************************************/
 #pragma once
 
-#if defined(_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
+#if defined(_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || defined(__APPLE__) || \
                         AX_TARGET_PLATFORM == AX_PLATFORM_TIZEN) &&                                           \
                            !defined(AX_PLATFORM_OS_TVOS)
 
@@ -236,9 +236,7 @@ public:
     virtual void onEnter() override;
     virtual void onExit() override;
 
-#    if defined(_WIN32)
     void setContentSize(const Size& contentSize) override;
-#    endif
 
     VideoPlayer();
     virtual ~VideoPlayer();

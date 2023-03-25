@@ -34,12 +34,18 @@ macro(ax_depend)
         find_library(QUARTZCORE_LIBRARY QuartzCore)
         find_library(GAMECONTROLLER_LIBRARY GameController)
         find_library(METAL_LIBRARY Metal)
+        find_library(COREVIDEO_LIBRARY CoreVideo)
+        find_library(AVFOUNDATION_LIBRARY AVFoundation)
+        find_library(COREMEDIA_LIBRARY CoreMedia)
         set(_AX_APPLE_LIBS
             ${AUDIOTOOLBOX_LIBRARY}
             ${QUARTZCORE_LIBRARY}
             ${FOUNDATION_LIBRARY}
             ${GAMECONTROLLER_LIBRARY}
             ${METAL_LIBRARY}
+            ${COREVIDEO_LIBRARY}
+            ${AVFOUNDATION_LIBRARY}
+            ${COREMEDIA_LIBRARY}
             )
 
         if(NOT AX_USE_ALSOFT)
@@ -79,11 +85,11 @@ macro(ax_depend)
             find_library(UIKIT_LIBRARY UIKit)
             find_library(OPENGLES_LIBRARY OpenGLES)            
             find_library(AVKIT_LIBRARY AVKit)
-            find_library(CORE_MEDIA_LIBRARY CoreMedia)
+            # find_library(CORE_MEDIA_LIBRARY CoreMedia)
             find_library(CORE_TEXT_LIBRARY CoreText)
             find_library(SECURITY_LIBRARY Security)
             find_library(CORE_GRAPHICS_LIBRARY CoreGraphics)
-            find_library(AV_FOUNDATION_LIBRARY AVFoundation)
+            # find_library(AV_FOUNDATION_LIBRARY AVFoundation)
             find_library(ZLIB z)
             #find_library(ICONVLIB iconv)
 

@@ -158,4 +158,13 @@ extern PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT;
 #        define GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT5_EXT 0x8C4F
 #    endif /* GL_EXT_texture_compression_s3tc_srgb */
 
+// works on device which support OpenGLES 3.0
+#    if !defined(GL_RG)
+#        define GL_RG 0x8227
+#    endif
+
+#    if !defined(GL_RG8)
+#        define GL_RG8 0x822B
+#    endif
+
 #endif

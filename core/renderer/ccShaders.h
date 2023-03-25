@@ -30,6 +30,8 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformMacros.h"
 
+#include <string_view>
+
 /**
  * @addtogroup renderer
  * @{
@@ -85,6 +87,10 @@ extern AX_DLL const char* CC2D_quadColor_vert;
 
 extern AX_DLL const char* hsv_frag;
 extern AX_DLL const char* dualSampler_hsv_frag;
+
+extern AX_DLL const std::string_view videoTextureYUY2_frag;
+extern AX_DLL const std::string_view videoTextureNV12_frag;
+extern AX_DLL const std::string_view videoTextureBGRA_frag;
 NS_AX_END
 /**
  end of support group
