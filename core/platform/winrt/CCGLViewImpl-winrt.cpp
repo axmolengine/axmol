@@ -75,7 +75,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName)
 }
 
 GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
-                                       const Rect& rect, float frameZoomFactor)
+                                       const Rect& rect, float frameZoomFactor, bool /*resizable*/)
 {
     auto ret = new GLViewImpl;
     if (ret && ret->initWithRect(viewName, rect, frameZoomFactor))
