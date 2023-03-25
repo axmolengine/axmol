@@ -1,6 +1,6 @@
 <p align="center"><a href="https://axmolengine.github.io/axmol" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
-# Axmol Game Engine
+# Axmol Engine
 
 ## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
 
@@ -14,6 +14,7 @@
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
 
+**[简体中文](README_CN.md)**
 
 ## Supported Platforms
 
@@ -41,14 +42,6 @@
 
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/axmolengine/axmol)
 - [![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/axmolengine/axmol)
-  
-**[简体中文](README_CN.md)**
-  
-### Purpose Summary
-
-- C++ 17/20
-- Focuses on native game dev (easy to use, fast deployment, intuitive)
-- Bugfixes ASAP
 
 ### Thirdparty
 
