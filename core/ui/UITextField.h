@@ -620,9 +620,10 @@ protected:
     virtual void copySpecialProperties(Widget* model) override;
     virtual void adaptRenderers() override;
 
-protected:
+public:
     UICCTextField* _textFieldRenderer;
 
+protected:
     float _touchWidth;
     float _touchHeight;
     bool _useTouchArea;

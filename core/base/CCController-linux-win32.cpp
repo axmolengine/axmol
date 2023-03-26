@@ -3878,6 +3878,36 @@ public:
         s_controllerProfiles.insert(std::make_pair(deviceName, std::make_pair(buttonInputMap, axisInputMap)));
 
         // Prepare variables:
+        deviceName = "Xbox Controller";
+        buttonInputMap.clear();
+        axisInputMap.clear();
+
+        // Map the controller inputs to Controller::Key codes
+        buttonInputMap[0]  = Controller::Key::BUTTON_A;
+        buttonInputMap[2]  = Controller::Key::BUTTON_X;
+        buttonInputMap[6]  = Controller::Key::BUTTON_SELECT;
+        buttonInputMap[7]  = Controller::Key::BUTTON_START;
+        buttonInputMap[10] = Controller::Key::BUTTON_DPAD_UP;
+        buttonInputMap[12] = Controller::Key::BUTTON_DPAD_DOWN;
+        buttonInputMap[13] = Controller::Key::BUTTON_DPAD_LEFT;
+        buttonInputMap[11] = Controller::Key::BUTTON_DPAD_RIGHT;
+        buttonInputMap[1]  = Controller::Key::BUTTON_B;
+        buttonInputMap[3]  = Controller::Key::BUTTON_Y;
+        buttonInputMap[4]  = Controller::Key::BUTTON_LEFT_SHOULDER;
+        buttonInputMap[5]  = Controller::Key::BUTTON_RIGHT_SHOULDER;
+        buttonInputMap[8]  = Controller::Key::BUTTON_LEFT_THUMBSTICK;
+        buttonInputMap[9]  = Controller::Key::BUTTON_RIGHT_THUMBSTICK;
+        axisInputMap[4]    = Controller::Key::AXIS_LEFT_TRIGGER;
+        axisInputMap[5]    = Controller::Key::AXIS_RIGHT_TRIGGER;
+        axisInputMap[0]    = Controller::Key::JOYSTICK_LEFT_X;
+        axisInputMap[1]    = Controller::Key::JOYSTICK_LEFT_Y;
+        axisInputMap[2]    = Controller::Key::JOYSTICK_RIGHT_X;
+        axisInputMap[3]    = Controller::Key::JOYSTICK_RIGHT_Y;
+
+        // Add the controller profile to the map
+        s_controllerProfiles.insert(std::make_pair(deviceName, std::make_pair(buttonInputMap, axisInputMap)));
+
+        // Prepare variables:
         deviceName = "Wireless Xbox 360 Controller";
         buttonInputMap.clear();
         axisInputMap.clear();
@@ -4213,7 +4243,7 @@ public:
         // It's a new controller being connected.
         auto controller         = new ax::Controller();
         controller->_deviceId   = deviceId;
-        controller->_deviceName = deviceName;
+        controller->_deviceName = "Xbox Controller";
         Controller::s_allController.emplace_back(controller);
 
         // Check if we already have an available input controller profile. If so, attach it it to the controller.
@@ -4347,6 +4377,9 @@ public:
             if (glfwJoystickPresent(deviceId))
             {
                 auto controller = Controller::getControllerByDeviceId(deviceId);
+
+                if (!controller)
+                    break;
 
                 // Poll game controller button presses
                 int count;

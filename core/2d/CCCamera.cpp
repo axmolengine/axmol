@@ -214,7 +214,7 @@ void Camera::initDefault()
     }
 
     setDepth(0);
-	
+
     if (_zoomFactor != 1.0F)
         applyZoom();
 }
@@ -225,13 +225,13 @@ void Camera::updateTransform()
     // create default camera
     switch (_director->getProjection())
     {
-        case Director::Projection::_2D:
+    case Director::Projection::_2D:
         {
             initOrthographic(size.width, size.height, _nearPlane, _farPlane);
             break;
         }
 
-        case Director::Projection::_3D:
+    case Director::Projection::_3D:
         {
             float zeye = _director->getZEye();
             initPerspective(_fieldOfView, (float)size.width / size.height, _nearPlane, _farPlane);
@@ -409,6 +409,7 @@ void Camera::applyZoom()
     case ax::Director::Projection::_2D:
     {
         Mat4::createOrthographic(_zoom[0] * _zoomFactor, _zoom[1] * _zoomFactor, _nearPlane, _farPlane, &_projection);
+        Camera::updateTransform();
         break;
     }
     case ax::Director::Projection::_3D:

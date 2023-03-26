@@ -65,6 +65,9 @@ bool FastTMXTiledMap::initWithTMXFile(std::string_view tmxFile)
 
     TMXMapInfo* mapInfo = TMXMapInfo::create(tmxFile);
 
+    if (mapInfo->encoding != "csv")
+        return false;
+
     if (!mapInfo)
     {
         return false;
@@ -87,6 +90,19 @@ bool FastTMXTiledMap::initWithXML(std::string_view tmxString, std::string_view r
     buildWithMapInfo(mapInfo);
 
     return true;
+}
+
+void FastTMXTiledMap::update(float dt)
+{
+    for (auto&& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        for (auto& [_, sub] : layer->getSubLayers())
+            if (layer->hasTileAnimation(sub))
+            {
+                layer->update(dt);
+            }
+    }
 }
 
 FastTMXTiledMap::FastTMXTiledMap() : _mapSize(Vec2::ZERO), _tileSize(Vec2::ZERO) {}
