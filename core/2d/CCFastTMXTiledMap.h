@@ -232,8 +232,6 @@ public:
     /** initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources */
     bool initWithXML(std::string_view tmxString, std::string_view resourcePath);
 
-    void update(float dt) override;
-
 protected:
     FastTMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     Vector<TMXTilesetInfo*> getLayerTilesets(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);

@@ -414,11 +414,11 @@ bool b2Body::ShouldCollide(const b2Body* other) const
 
 void b2Body::SetTransform(const b2Vec2& position, float angle)
 {
-	//b2Assert(m_world->IsLocked() == false);
-	//if (m_world->IsLocked() == true)
-	//{
-	//	return;
-	//}
+	b2Assert(m_world->IsLocked() == false);
+	if (m_world->IsLocked() == true)
+	{
+		return;
+	}
 
 	m_xf.q.Set(angle);
 	m_xf.p = position;

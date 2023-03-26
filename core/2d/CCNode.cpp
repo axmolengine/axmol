@@ -969,16 +969,16 @@ bool Node::doEnumerate(std::string name, std::function<bool(Node*)> callback) co
  */
 void Node::addChild(Node* child, int localZOrder, int tag)
 {
-    //AXASSERT(child != nullptr, "Argument must be non-nil");
-    //AXASSERT(child->_parent == nullptr, "child already added. It can't be added again");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child->_parent == nullptr, "child already added. It can't be added again");
 
     addChildHelper(child, localZOrder, tag, "", true);
 }
 
 void Node::addChild(Node* child, int localZOrder, std::string_view name)
 {
-    //AXASSERT(child != nullptr, "Argument must be non-nil");
-    //AXASSERT(child->_parent == nullptr, "child already added. It can't be added again");
+    AXASSERT(child != nullptr, "Argument must be non-nil");
+    AXASSERT(child->_parent == nullptr, "child already added. It can't be added again");
 
     addChildHelper(child, localZOrder, INVALID_TAG, name, false);
 }
@@ -1622,16 +1622,6 @@ void Node::pause()
     _scheduler->pauseTarget(this);
     _actionManager->pauseTarget(this);
     _eventDispatcher->pauseEventListenersForTarget(this);
-}
-
-bool Node::isAwake()
-{
-    if (_isFirstUpdate)
-    {
-        _isFirstUpdate = false;
-        return true;
-    }
-    return false;
 }
 
 // override me

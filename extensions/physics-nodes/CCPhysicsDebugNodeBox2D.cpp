@@ -62,7 +62,7 @@ void PhysicsDebugNodeBox2D::DrawSolidPolygon(const b2Vec2* verts, int vertexCoun
         vec[i] = Vec2(verts[i].x * mRatio, verts[i].y * mRatio) + debugNodeOffset;
     }
     drawBP->drawPolygon(vec, vertexCount, Color4F(color.r / 2, color.g / 2, color.b / 2, color.a), 0.4f,
-                        Color4F::RED);
+                        Color4F(color.r, color.g, color.b, color.a));
 }
 
 void PhysicsDebugNodeBox2D::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)

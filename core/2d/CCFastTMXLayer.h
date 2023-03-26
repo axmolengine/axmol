@@ -338,7 +338,6 @@ public:
     // Override
     //
     virtual std::string getDescription() const override;
-    void update(float dt) override;
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
     void removeChild(Node* child, bool cleanup = true) override;
 
@@ -364,12 +363,8 @@ public:
 
     bool initWithTilesetInfo(Vector<TMXTilesetInfo*> tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
+protected:
     virtual void setOpacity(uint8_t opacity) override;
-    void setColor(const Color4B& color);
-    void setEditorColor(const Color4B& color);
-    std::string getEditorRawTint() { return _hex; };
-
-    bool isVisible() const { return _visible; }
 
     void updateTiles(FastTMXSubLayer& sub, const Rect& culledRect);
     Vec2 calculateLayerOffset(const Vec2& offset);
@@ -416,11 +411,6 @@ public:
     /** container for sprite children. map<index, pair<sprite, gid> > */
     std::map<int, std::pair<Sprite*, uint32_t>> _spriteContainer;
 
-    Color4B _layerColor;
-    Color4B _editorColor;
-    std::string _hex;
-    bool _visible = true;
-
     bool culling = true;
 
     Vector<TMXTilesetInfo*> _tileSets;
@@ -433,10 +423,8 @@ public:
 class AX_DLL TMXTileAnimTask : public Ref
 {
 public:
-    TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flags = 0);
-    static TMXTileAnimTask* create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flags = 0);
-    void update(float dt);
-    void setTimeScale(float dt);
+    TMXTileAnimTask(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
+    static TMXTileAnimTask* create(FastTMXLayer* layer, TMXTileAnimInfo* animation, const Vec2& tilePos, uint32_t flag = 0);
     /** start the animation task */
     void start();
     /** stop the animation task */
@@ -453,8 +441,6 @@ protected:
     void tickAndScheduleNext(float dt);
 
     bool _isRunning = false;
-    float _currentDt = 0;
-    float _timeScale = 1;
     /** key of schedule task for specific animated tile */
     std::string _key;
     FastTMXLayer* _layer = nullptr;
@@ -482,7 +468,6 @@ public:
 
     /** get vector of tasks */
     const Vector<TMXTileAnimTask*>& getTasks() const { return _tasks; }
-    int currentTaskPointer = 0;
 
 protected:
     bool _started = false;

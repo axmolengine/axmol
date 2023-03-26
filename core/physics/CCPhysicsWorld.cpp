@@ -51,7 +51,7 @@ const int PhysicsWorld::DEBUGDRAW_JOINT   = 0x02;
 const int PhysicsWorld::DEBUGDRAW_CONTACT = 0x04;
 const int PhysicsWorld::DEBUGDRAW_ALL     = DEBUGDRAW_SHAPE | DEBUGDRAW_JOINT | DEBUGDRAW_CONTACT;
 
-const float _debugDrawThickness = 1;  // thickness of the DebugDraw lines, circles, dots, polygons
+const float _debugDrawThickness = 0.5f;  // thickness of the DebugDraw lines, circles, dots, polygons
 
 namespace
 {
@@ -443,11 +443,7 @@ void PhysicsWorld::collisionSeparateCallback(PhysicsContact& contact)
     _eventDispatcher->dispatchEvent(&contact);
 }
 
-void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func,
-                           cpShapeFilter filter,
-                           const Vec2& point1,
-                           const Vec2& point2,
-                           void* data)
+void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func, const Vec2& point1, const Vec2& point2, void* data)
 {
     AXASSERT(func != nullptr, "func shouldn't be nullptr");
 
@@ -460,8 +456,8 @@ void PhysicsWorld::rayCast(PhysicsRayCastCallbackFunc func,
         RayCastCallbackInfo info = {this, func, point1, point2, data};
 
         PhysicsWorldCallback::continues = true;
-        cpSpaceSegmentQuery(_cpSpace, PhysicsHelper::vec22cpv(point1), PhysicsHelper::vec22cpv(point2), 0.0f, filter,
-                            (cpSpaceSegmentQueryFunc)PhysicsWorldCallback::rayCastCallbackFunc,
+        cpSpaceSegmentQuery(_cpSpace, PhysicsHelper::vec22cpv(point1), PhysicsHelper::vec22cpv(point2), 0.0f,
+                            CP_SHAPE_FILTER_ALL, (cpSpaceSegmentQueryFunc)PhysicsWorldCallback::rayCastCallbackFunc,
                             &info);
     }
 }
@@ -915,7 +911,6 @@ void PhysicsWorld::step(float delta)
 
 void PhysicsWorld::update(float delta, bool userCall /* = false*/)
 {
-    deltaTime = delta;
 
     if (_preUpdateCallback)
         _preUpdateCallback();  // fix #11154

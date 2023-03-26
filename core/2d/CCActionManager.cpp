@@ -183,7 +183,7 @@ void ActionManager::addAction(Action* action, Node* target, bool paused)
 
     actionAllocWithHashElement(element);
 
-    //AXASSERT(!ccArrayContainsObject(element->actions, action), "action already be added!");
+    AXASSERT(!ccArrayContainsObject(element->actions, action), "action already be added!");
     ccArrayAppendObject(element->actions, action);
 
     action->startWithTarget(target);

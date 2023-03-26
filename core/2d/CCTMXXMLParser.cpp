@@ -380,9 +380,6 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         Value& opacityValue = attributeDict["opacity"];
         layer->_opacity     = opacityValue.isNull() ? 255 : (unsigned char)(255.0f * opacityValue.asFloat());
 
-        Value& tintValue = attributeDict["tintcolor"];
-        layer->_hex = tintValue.isNull() ? "#ffffffff" : tintValue.asString();
-
         float x = attributeDict["x"].asFloat();
         float y = attributeDict["y"].asFloat();
         layer->_offset.set(x, y);
@@ -476,7 +473,6 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
         }
         else if (encoding == "csv")
         {
-            tmxMapInfo->encoding = "csv";
             int layerAttribs = tmxMapInfo->getLayerAttribs();
             tmxMapInfo->setLayerAttribs(layerAttribs | TMXLayerAttribCSV);
             tmxMapInfo->setStoringCharacters(true);
@@ -738,7 +734,6 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
-
             auto currentString = tmxMapInfo->getCurrentString();
 
             std::vector<std::string> gidTokens;

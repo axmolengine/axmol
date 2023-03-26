@@ -1468,11 +1468,6 @@ public:
     virtual void pause();
 
     /**
-     * is awake method will be called after the first update.
-     */
-    virtual bool isAwake();
-
-    /**
      * Update method will be called automatically every frame if "scheduleUpdate" is called, and the node is "live".
      * @param delta In seconds.
      */
@@ -1976,7 +1971,6 @@ protected:
     bool _visible;                       ///< is this node visible
     bool _ignoreAnchorPointForPosition;  ///< true if the Anchor Vec2 will be (0,0) when you position the Node, false
                                          ///< otherwise. Used by Layer and Scene.
-    bool _isFirstUpdate = true;
 
     bool _isTransitionFinished;  ///< flag to indicate whether the transition was finished
     bool _cascadeColorEnabled;

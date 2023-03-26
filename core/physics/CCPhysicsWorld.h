@@ -33,7 +33,6 @@
 #    include "base/CCVector.h"
 #    include "math/CCMath.h"
 #    include "physics/CCPhysicsBody.h"
-#    include "chipmunk/chipmunk_private.h"
 
 struct cpSpace;
 
@@ -170,7 +169,7 @@ public:
      * @param   end   A Vec2 object contains the end position of the ray.
      * @param   data   User defined data, it is passed to func.
      */
-    void rayCast(PhysicsRayCastCallbackFunc func, cpShapeFilter filter, const Vec2& start, const Vec2& end, void* data);
+    void rayCast(PhysicsRayCastCallbackFunc func, const Vec2& start, const Vec2& end, void* data);
 
     /**
      * Searches for physics shapes that contains in the rect.
@@ -375,10 +374,6 @@ public:
      */
     void step(float delta);
 
-    float deltaTime = 0;
-
-    virtual void update(float delta, bool userCall = false);
-
 protected:
     static PhysicsWorld* construct(Scene* scene);
     bool init();
@@ -386,6 +381,7 @@ protected:
     virtual void addBody(PhysicsBody* body);
     virtual void addShape(PhysicsShape* shape);
     virtual void removeShape(PhysicsShape* shape);
+    virtual void update(float delta, bool userCall = false);
 
     virtual void debugDraw();
 
@@ -410,11 +406,8 @@ protected:
     float _updateTime;
     int _substeps;
     int _fixedRate;
-
-public:
     cpSpace* _cpSpace;
 
-protected:
     bool _updateBodyTransform;
     Vector<PhysicsBody*> _bodies;
     std::list<PhysicsJoint*> _joints;

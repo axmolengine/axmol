@@ -30,6 +30,40 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
+class PointObject : public Ref
+{
+public:
+    static PointObject* create(Vec2 ratio, Vec2 offset)
+    {
+        PointObject* ret = new PointObject();
+        ret->initWithPoint(ratio, offset);
+        ret->autorelease();
+        return ret;
+    }
+
+    bool initWithPoint(Vec2 ratio, Vec2 offset)
+    {
+        _ratio  = ratio;
+        _offset = offset;
+        _child  = nullptr;
+        return true;
+    }
+
+    const Vec2& getRatio() const { return _ratio; }
+    void setRatio(const Vec2& ratio) { _ratio = ratio; }
+
+    const Vec2& getOffset() const { return _offset; }
+    void setOffset(const Vec2& offset) { _offset = offset; }
+
+    Node* getChild() const { return _child; }
+    void setChild(Node* child) { _child = child; }
+
+private:
+    Vec2 _ratio;
+    Vec2 _offset;
+    Node* _child;  // weak ref
+};
+
 ParallaxNode::ParallaxNode()
 {
     _parallaxArray = ccArrayNew(5);
