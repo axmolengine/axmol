@@ -199,6 +199,15 @@ bool PosixFileStream::open(std::string_view path, FileStream::Mode mode)
     return ok;
 }
 
+void* PosixFileStream::getNativeHandle() const
+{
+#if AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID
+    if (_handle._fd != -1)
+        return (void*)posix_fd2fh(_handle._fd);
+#endif
+    return nullptr;
+}
+
 int PosixFileStream::internalClose()
 {
     if (_iof)
