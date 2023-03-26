@@ -78,6 +78,14 @@ public:
      */
     virtual bool isOpen() const = 0;
 
+    /*
+    * Get native handle if support
+    * @returns nullptr if not a local disk file
+    *   Windows: HANDLE
+    *   Other: file descriptor
+    */
+    virtual void* getNativeHandle() const { return nullptr; }
+
     virtual operator bool() const { return isOpen(); }
 
 protected:

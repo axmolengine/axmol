@@ -127,6 +127,8 @@ public:
     int64_t size() override;
     bool isOpen() const override;
 
+    void* getNativeHandle() const override;
+
 private:
     int internalClose();
     void reset();
