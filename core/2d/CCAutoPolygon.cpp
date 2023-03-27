@@ -532,7 +532,7 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
 
     Clipper2Lib::ClipperOffset co;
     co.AddPath(result, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon);
-    solution = co.Execute(epsilon * PRECISION);
+    co.Execute(epsilon * PRECISION, solution);
 
 
     // turn the result into simply polygon (AKA, fix overlap)
