@@ -267,7 +267,7 @@ void FastTMXLayer::updateTiles(FastTMXSubLayer& sub, const Rect& culledRect)
             offset      = iter->second;
             iter->second++;
 
-            unsigned short quadIndex     = static_cast<unsigned short>(sub._tileToQuadIndex[tileIndex]);
+            unsigned short quadIndex     = static_cast<unsigned short>(_tileToQuadIndex[tileIndex]);
             sub._indices[6 * offset + 0] = quadIndex * 4 + 0;
             sub._indices[6 * offset + 1] = quadIndex * 4 + 1;
             sub._indices[6 * offset + 2] = quadIndex * 4 + 2;
@@ -520,10 +520,10 @@ void FastTMXLayer::updateTotalQuads(FastTMXSubLayer& sub)
     {
         Vec2 tileSize = AX_SIZE_PIXELS_TO_POINTS(sub._tileSet->_tileSize);
         Vec2 texSize  = sub._tileSet->_imageSize;
-        sub._tileToQuadIndex.clear();
+        _tileToQuadIndex.clear();
         sub._totalQuads.resize(int(_layerSize.width * _layerSize.height));
         sub._indices.resize(6 * int(_layerSize.width * _layerSize.height));
-        sub._tileToQuadIndex.resize(int(_layerSize.width * _layerSize.height), -1);
+        _tileToQuadIndex.resize(int(_layerSize.width * _layerSize.height), -1);
         sub._indicesVertexZOffsets.clear();
 
         auto color = Color4B::WHITE;
@@ -548,7 +548,7 @@ void FastTMXLayer::updateTotalQuads(FastTMXSubLayer& sub)
                 if (tileGID == 0)
                     continue;
 
-                sub._tileToQuadIndex[tileIndex] = quadIndex;
+                _tileToQuadIndex[tileIndex] = quadIndex;
 
                 auto& quad = sub._totalQuads[quadIndex];
 

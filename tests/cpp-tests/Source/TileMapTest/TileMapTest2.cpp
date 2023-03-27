@@ -68,6 +68,7 @@ FastTileMapTests::FastTileMapTests()
     ADD_TEST_CASE(TMXGIDObjectsTestNew);
     ADD_TEST_CASE(TileAnimTestNew);
     ADD_TEST_CASE(TileAnimTestNew2);
+    ADD_TEST_CASE(MultiTileSetsTestNew);
 }
 
 TileDemoNew::TileDemoNew()
@@ -1378,6 +1379,7 @@ TileAnimTestNew::TileAnimTestNew()
 
     map = FastTMXTiledMap::create("TileMaps/tile_animation_test.tmx");
     addChild(map, 0, kTagTileMap);
+    map->setCullingEnabled(false);
 
     auto listener            = EventListenerTouchAllAtOnce::create();
     listener->onTouchesBegan = AX_CALLBACK_2(TileAnimTestNew::onTouchBegan, this);
@@ -1431,3 +1433,24 @@ void TileAnimTestNew2::onTouchBegan(const std::vector<ax::Touch*>& touches, ax::
     _animStarted = !_animStarted;
     map->setTileAnimEnabled(_animStarted);
 }
+
+MultiTileSetsTestNew::MultiTileSetsTestNew()
+{
+    map = FastTMXTiledMap::create("TileMaps/multi-tileset-test.tmx");
+    addChild(map, 0, kTagTileMap);
+    map->setScale(2);
+
+    auto listener            = EventListenerTouchAllAtOnce::create();
+    listener->onTouchesBegan = AX_CALLBACK_2(MultiTileSetsTestNew::onTouchBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+
+    Size AX_UNUSED s = map->getContentSize();
+    AXLOG("ContentSize: %f, %f", s.width, s.height);
+}
+
+std::string MultiTileSetsTestNew::title() const
+{
+    return "multiple tilesets in one layer.";
+}
+
+void MultiTileSetsTestNew::onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event) {}

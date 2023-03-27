@@ -363,4 +363,16 @@ public:
     void onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
+class MultiTileSetsTestNew : public TileDemoNew
+{
+public:
+    CREATE_FUNC(MultiTileSetsTestNew);
+    MultiTileSetsTestNew();
+    virtual std::string title() const override;
+
+    ax::FastTMXTiledMap* map;
+    bool _animStarted = true;
+    void onTouchBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
+};
+
 #endif

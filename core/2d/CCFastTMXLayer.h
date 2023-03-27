@@ -109,7 +109,6 @@ struct FastTMXSubLayer
     Vec2 _cameraPositionDirty = {INFINITY, INFINITY};
     float _cameraZoomDirty;
 
-    std::vector<int> _tileToQuadIndex;
     std::vector<V3F_C4B_T2F_Quad> _totalQuads;
 #ifdef AX_FAST_TILEMAP_32_BIT_INDICES
     std::vector<unsigned int> _indices;
@@ -398,6 +397,7 @@ protected:
     Vec2 _mapTileSize;
     /** pointer to the map of tiles */
     uint32_t* _tiles = nullptr;
+    std::vector<int> _tileToQuadIndex;
     /** Layer orientation, which is the same as the map orientation */
     int _layerOrientation = FAST_TMX_ORIENTATION_ORTHO;
     int _staggerAxis      = TMXStaggerAxis_Y;
