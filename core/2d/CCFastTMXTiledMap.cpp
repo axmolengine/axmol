@@ -96,60 +96,52 @@ FastTMXTiledMap::~FastTMXTiledMap() {}
 // private
 FastTMXLayer* FastTMXTiledMap::parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-    TMXTilesetInfo* tileset = tilesetForLayer(layerInfo, mapInfo);
-    if (tileset == nullptr)
-        return nullptr;
-
+    Vector<TMXTilesetInfo*> tileset = getLayerTilesets(layerInfo, mapInfo);
     FastTMXLayer* layer = FastTMXLayer::create(tileset, layerInfo, mapInfo);
 
     // tell the layerinfo to release the ownership of the tiles map.
     layerInfo->_ownTiles = false;
-    layer->setupTiles();
+    for (auto& [_, sub] : layer->getSubLayers())
+        layer->setupTiles(sub);
 
     return layer;
 }
 
-TMXTilesetInfo* FastTMXTiledMap::tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
+Vector<TMXTilesetInfo*> FastTMXTiledMap::getLayerTilesets(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo)
 {
-    Vec2 size      = layerInfo->_layerSize;
-    auto& tilesets = mapInfo->getTilesets();
+    Vec2 size           = layerInfo->_layerSize;
+    auto& tilesets      = mapInfo->getTilesets();
+    auto inactive       = std::set<int>();
+    auto activeTilesets = Vector<TMXTilesetInfo*>();
 
-    for (auto iter = tilesets.crbegin(), iterCrend = tilesets.crend(); iter != iterCrend; ++iter)
+    for (int y = 0; y < size.height; y++)
     {
-        TMXTilesetInfo* tilesetInfo = *iter;
-        if (tilesetInfo)
+        for (int x = 0; x < size.width; x++)
         {
-            for (int y = 0; y < size.height; y++)
+            uint32_t pos = static_cast<uint32_t>(x + size.width * y);
+            uint32_t gid = layerInfo->_tiles[pos];
+            gid &= kTMXFlippedMask;
+
+            if (gid != 0)
             {
-                for (int x = 0; x < size.width; x++)
-                {
-                    uint32_t pos = static_cast<uint32_t>(x + size.width * y);
-                    uint32_t gid = layerInfo->_tiles[pos];
-
-                    // gid are stored in little endian.
-                    // if host is big endian, then swap
-                    // if( o == CFByteOrderBigEndian )
-                    //    gid = CFSwapInt32( gid );
-                    /* We support little endian.*/
-
-                    // FIXME: gid == 0 --> empty tile
-                    if (gid != 0)
+                for (auto iter = tilesets.rbegin(); iter != tilesets.rend(); ++iter)
+                    if (gid >= (*iter)->_firstGid)
                     {
-                        // Optimization: quick return
-                        // if the layer is invalid (more than 1 tileset per layer) an CCAssert will be thrown later
-                        if ((gid & kTMXFlippedMask) >= static_cast<uint32_t>(tilesetInfo->_firstGid))
+                        if (inactive.find((*iter)->_firstGid) == inactive.end())
                         {
-                            return tilesetInfo;
+                            activeTilesets.pushBack(*iter);
+                            inactive.insert((*iter)->_firstGid);
                         }
+                        break;
                     }
-                }
             }
         }
     }
 
     // If all the tiles are 0, return empty tileset
-    AXLOG("axmol: Warning: TMX Layer '%s' has no tiles", layerInfo->_name.c_str());
-    return nullptr;
+    if (activeTilesets.size() == 0)
+        AXLOG("axmol: Warning: TMX Layer '%s' has no tiles", layerInfo->_name.c_str());
+    return activeTilesets;
 }
 
 void FastTMXTiledMap::buildWithMapInfo(TMXMapInfo* mapInfo)
@@ -256,6 +248,18 @@ std::string FastTMXTiledMap::getDescription() const
     return StringUtils::format("<FastTMXTiledMap | Tag = %d, Layers = %d", _tag, static_cast<int>(_children.size()));
 }
 
+void FastTMXTiledMap::setCullingEnabled(bool enabled)
+{
+    for (auto&& child : _children)
+    {
+        FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
+        if (layer)
+        {
+            layer->setCullingEnabled(enabled);
+        }
+    }
+}
+
 void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
 {
     for (auto&& child : _children)
@@ -263,13 +267,14 @@ void FastTMXTiledMap::setTileAnimEnabled(bool enabled)
         FastTMXLayer* layer = dynamic_cast<FastTMXLayer*>(child);
         if (layer)
         {
-            if (layer->hasTileAnimation())
-            {
-                if (enabled)
-                    layer->getTileAnimManager()->startAll();
-                else
-                    layer->getTileAnimManager()->stopAll();
-            }
+            for (auto& [_, sub] : layer->getSubLayers())
+                if (layer->hasTileAnimation(sub))
+                {
+                    if (enabled)
+                        layer->getTileAnimManager(sub)->startAll();
+                    else
+                        layer->getTileAnimManager(sub)->stopAll();
+                }
         }
     }
 }
