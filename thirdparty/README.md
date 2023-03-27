@@ -1,3 +1,9 @@
+
+IMPORTANT INFO:
+For correct working of the "third party robot" please update also the
+https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
+
+
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
@@ -37,7 +43,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.2.0
+- Version: 1.2.2
 - License: BSL-1.0
 
 ## ConvertUTF
