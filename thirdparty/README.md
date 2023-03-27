@@ -1,3 +1,9 @@
+
+IMPORTANT INFO:
+For correct working of the "third party robot" please update also the
+https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
+
+
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
