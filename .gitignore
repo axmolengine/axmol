@@ -51,6 +51,8 @@ gen/
 assets/
 local.properties
 
+/core/version.h
+
 # Ignore python compiled files
 *.pyc
 
