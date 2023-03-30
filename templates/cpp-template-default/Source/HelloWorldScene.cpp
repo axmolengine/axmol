@@ -207,10 +207,12 @@ void HelloWorld::update(float delta)
     switch (_gameState)
     {
     case ExampleGameState::init:
+    {
         _gameState = ExampleGameState::update;
         break;
-
+    }
     case ExampleGameState::update:
+    {
         /////////////////////////////
         // Add your codes below...like....
         // 
@@ -219,35 +221,40 @@ void HelloWorld::update(float delta)
         // UpdatePhysics();
         // ...
         break;
-
+    }
     case ExampleGameState::pause:
+    {
         /////////////////////////////
         // Add your codes below...like....
         //
         // anyPauseStuff()
+
         break;
+    }
+
 
     case ExampleGameState::menu1:
-        /////////////////////////////
+    {    /////////////////////////////
         // Add your codes below...like....
         // 
         // UpdateMenu1();
         break;
-
+    }
     case ExampleGameState::menu2:
-        /////////////////////////////
+    {    /////////////////////////////
         // Add your codes below...like....
         // 
         // UpdateMenu2();
         break;
-
+    }
     case ExampleGameState::end:
-        /////////////////////////////
+    {    /////////////////////////////
         // Add your codes below...like....
         // 
         // CleanUpMyCrap();
         menuCloseCallback(this);
         break;
+    }
     }
 }
 
