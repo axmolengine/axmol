@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIVideoPlayer/UIVideoPlayer.h"
+#include "ui/UIVideoPlayer.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <unordered_map>

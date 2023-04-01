@@ -23,15 +23,16 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
-## 基于VideoTexture的适配播放引擎
+## 基于VideoTexture的视频播放引擎
 
-|  Platform       |    MediaEngine/VideoTexture  | Video Texture Format         | MediaEngine Backend          |
-|-----------------|------------------------------|------------------------------|------------------------------|
-| Windows Desktop |    complete                  | YUY2, NV12, RGB32            | MS-Media: IMFMediaSession    |
-| Windows UWP     |    complete                  | BGR32                        | MS-Media: IMFMediaEngine     |
-| Mac OS X        |    in progress               | NV12, BGR32                  | AVFoundation                 |
-| iOS/tvOS        |    in progress               | NV12, BGR32                  | AVFoundation                 |
-| Android         |    planned                   | RGB32                        |                              |
+|  Platform             |    MediaEngine    | Video Compress Format | Video Pixel Format   | Backend            |
+|-----------------------|-------------------|-----------------------|----------------------|--------------------|
+| Windows Desktop       |    complete       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | IMFMediaSession    |
+| Windows UWP           |    complete       | H264, HEVC, VP90      | BGR32                | IMFMediaEngine     |
+| Apple macOS           |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Apple tvOS            |     complete      | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Apple iOS             |    in progress    | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Android               |    planned        | H264                  | RGB32                |                    |
 
 ### 关于预编译库
 

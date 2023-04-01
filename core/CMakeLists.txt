@@ -124,7 +124,8 @@ file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
 file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
 
 if (APPLE)
-    set_source_files_properties(media/MediaEngine.cpp;media/AvfMediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
+    list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
+    set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()
 
 message(STATUS "_AX_MEDIA_SRC=${_AX_MEDIA_SRC}")
