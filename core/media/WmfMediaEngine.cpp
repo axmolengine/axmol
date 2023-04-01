@@ -21,8 +21,6 @@
 #    include "ntcvt/ntcvt.hpp"
 #    include "yasio/detail/sz.hpp"
 
-#    include "base/CCConsole.h"
-
 NS_AX_BEGIN
 
 // IF_FAILED_GOTO macro.
@@ -37,9 +35,17 @@ NS_AX_BEGIN
 
 #    define CHECK_HR(hr) IF_FAILED_GOTO(hr, done)
 
-#    define TRACE(format, ...) ax::print(format, ##__VA_ARGS__)
-
 // const UINT WM_APP_PLAYER_EVENT = ::RegisterWindowMessageW(L"mfmedia-event");
+
+// static MFOffset MakeOffset(float v)
+//{
+//     // v = offset.value + (offset.fract / denominator), where denominator = 65536.0f.
+//     const int denominator = std::numeric_limits<WORD>::max() + 1;
+//     MFOffset offset;
+//     offset.value = short(v);
+//     offset.fract = WORD(denominator * (v - offset.value));
+//     return offset;
+// }
 
 //-------------------------------------------------------------------
 //  Name: CreateSourceStreamNode
@@ -176,7 +182,7 @@ private:
 
 HRESULT WmfMediaEngine::CreateInstance(WmfMediaEngine** ppPlayer)
 {
-    TRACE((L"WmfMediaEngine::Create\n"));
+    AXME_TRACE((L"WmfMediaEngine::Create\n"));
 
     if (ppPlayer == NULL)
     {
@@ -207,7 +213,8 @@ HRESULT WmfMediaEngine::CreateInstance(WmfMediaEngine** ppPlayer)
 //  WmfMediaEngine constructor
 /////////////////////////////////////////////////////////////////////////
 
-WmfMediaEngine::WmfMediaEngine() : m_pSession(), m_pSource(), m_hwndEvent(nullptr), m_hCloseEvent(NULL), m_nRefCount(1)
+WmfMediaEngine::WmfMediaEngine()
+    : m_nRefCount(1)
 {}
 
 ///////////////////////////////////////////////////////////////////////
@@ -231,6 +238,8 @@ WmfMediaEngine::~WmfMediaEngine()
     // CreateInstance has failed. Also, calling Shutdown() twice is
     // harmless.
 
+    ClearPendingFrames();
+
     Shutdown();
 }
 
@@ -251,6 +260,12 @@ HRESULT WmfMediaEngine::Initialize()
 
     // Start up Media Foundation platform.
     CHECK_HR(hr = MFUtils::InitializeMFOnce());
+
+    m_hOpenEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    if (m_hOpenEvent == NULL)
+    {
+        CHECK_HR(hr = HRESULT_FROM_WIN32(GetLastError()));
+    }
 
     m_hCloseEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_hCloseEvent == NULL)
@@ -320,11 +335,13 @@ HRESULT WmfMediaEngine::QueryInterface(REFIID iid, void** ppv)
 
 bool WmfMediaEngine::Open(std::string_view sourceUri)
 {
-    auto wsourceUri = ntcvt::from_chars(sourceUri);
+    Close();
 
-    auto sURL = wsourceUri.c_str();
-    TRACE("WmfMediaEngine::OpenURL\n");
-    TRACE("URL = %s\n", sURL);
+    if (sourceUri.empty())
+        return false;
+
+    AXME_TRACE("WmfMediaEngine::OpenURL\n");
+    AXME_TRACE("URL = %s\n", sourceUri.data());
 
     // 1. Create a new media session.
     // 2. Create the media source.
@@ -332,63 +349,82 @@ bool WmfMediaEngine::Open(std::string_view sourceUri)
     // 4. Queue the topology [asynchronous]
     // 5. Start playback [asynchronous - does not happen in this method.]
 
-    HRESULT hr = S_OK;
-    TComPtr<IMFTopology> pTopology;
-    TComPtr<IMFClock> pClock;
-
     // Create the media session.
-    CHECK_HR(hr = CreateSession());
-
-    // Create the media source.
-    CHECK_HR(hr = CreateMediaSource(sURL));
-
-    // Create a partial topology.
-    CHECK_HR(hr = CreateTopologyFromSource(&pTopology));
-
-    // Set the topology on the media session.
-    CHECK_HR(hr = m_pSession->SetTopology(0, pTopology.Get()));
-
-    // If SetTopology succeeded, the media session will queue an
-    // MESessionTopologySet event.
-
-    // ======> Read media properties
-    // Get the session capabilities.
-    CHECK_HR(hr = m_pSession->GetSessionCapabilities(&m_caps));
-
-    // Get the duration from the presentation descriptor (optional)
-    (void)m_PresentDescriptor->GetUINT64(MF_PD_DURATION, (UINT64*)&m_hnsDuration);
-
-    // Get the presentation clock (optional)
-    hr = m_pSession->GetClock(&pClock);
-    if (SUCCEEDED(hr))
-        CHECK_HR(hr = pClock->QueryInterface(IID_PPV_ARGS(&m_pClock)));
-
-    // Get the rate control interface (optional)
-    CHECK_HR(hr = MFGetService(m_pSession.Get(), MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateControl)));
-
-    CHECK_HR(hr = MFGetService(m_pSession.Get(), MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateSupport)));
-
-    // Check if rate 0 (scrubbing) is supported.
-    if (SUCCEEDED(m_RateSupport->IsRateSupported(TRUE, 0, NULL)))
-        m_bCanScrub = TRUE;
-
-    // if m_pRate is NULL, m_bCanScrub must be FALSE.
-    assert(m_RateControl || !m_bCanScrub);
+    if (FAILED(CreateSession()))
+        return false;
 
     // Set our state to "open pending"
     m_state = MEMediaState::Preparing;
 
-done:
-    if (FAILED(hr))
-        m_state = MEMediaState::Closed;
+    TComPtr<IUnknown> sharedFromThis;
+    this->QueryInterface(IID_IUnknown, &sharedFromThis);
 
-    // SAFE_RELEASE(pTopology);
+    m_bOpenPending = true;
+    std::thread t([this, sharedFromThis, wsourceUri = ntcvt::from_chars(sourceUri)] {
+        TComPtr<IMFTopology> pTopology;
+        TComPtr<IMFClock> pClock;
 
-    return SUCCEEDED(hr);
+        try
+        {
+            // Create the media source.
+            DX::ThrowIfFailed(CreateMediaSource(wsourceUri.c_str()));
+            if (!m_pSession)
+                DX::ThrowIfFailed(E_POINTER);
+
+            // Create a partial topology.
+            DX::ThrowIfFailed(CreateTopologyFromSource(&pTopology));
+
+            // Set the topology on the media session.
+            DX::ThrowIfFailed(m_pSession->SetTopology(0, pTopology.Get()));
+
+            // If SetTopology succeeded, the media session will queue an
+            // MESessionTopologySet event.
+
+            // ======> Read media properties
+            // Get the session capabilities.
+            DX::ThrowIfFailed(m_pSession->GetSessionCapabilities(&m_caps));
+
+            // Get the duration from the presentation descriptor (optional)
+            (void)m_PresentDescriptor->GetUINT64(MF_PD_DURATION, (UINT64*)&m_hnsDuration);
+
+            // Get the presentation clock (optional)
+            auto hr = m_pSession->GetClock(&pClock);
+            if (SUCCEEDED(hr))
+                DX::ThrowIfFailed(hr = pClock->QueryInterface(IID_PPV_ARGS(&m_pClock)));
+
+            // Get the rate control interface (optional)
+            DX::ThrowIfFailed(MFGetService(m_pSession.Get(), MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateControl)));
+
+            DX::ThrowIfFailed(MFGetService(m_pSession.Get(), MF_RATE_CONTROL_SERVICE, IID_PPV_ARGS(&m_RateSupport)));
+
+            // Check if rate 0 (scrubbing) is supported.
+            if (SUCCEEDED(m_RateSupport->IsRateSupported(TRUE, 0, NULL)))
+                m_bCanScrub = TRUE;
+
+            // if m_pRate is NULL, m_bCanScrub must be FALSE.
+            assert(m_RateControl || !m_bCanScrub);
+        }
+        catch (const std::exception& ex)
+        {
+            AXME_TRACE("Exception occurred when Open Media: %s", ex.what());
+            m_state = MEMediaState::Error;
+        }
+
+        m_bOpenPending = false;
+        SetEvent(m_hOpenEvent);
+    });
+    t.detach();
+
+    return false;
 }
 
 bool WmfMediaEngine::Close()
 {
+    if (m_bOpenPending)
+        WaitForSingleObject(m_hOpenEvent, INFINITE);
+
+    ClearPendingFrames();
+
     HRESULT hr = S_OK;
     auto state = GetState();
     if (state != MEMediaState::Closing && state != MEMediaState::Closed)
@@ -462,50 +498,63 @@ done:
 
 void WmfMediaEngine::HandleVideoSample(const uint8_t* buf, size_t len)
 {
-    this->m_videoSampleDirty = true;
-    this->m_lastVideoFrame.assign(buf, buf + len, std::true_type{});
+    std::unique_lock<std::mutex> lck(m_framesQueueMtx);
+    m_framesQueue.emplace_back(buf, buf + len);
 }
 
-bool WmfMediaEngine::GetLastVideoSample(MEVideoTextueSample& sample) const
+void WmfMediaEngine::ClearPendingFrames()
 {
-    if (this->m_videoSampleDirty)
+    std::unique_lock<std::mutex> lck(m_framesQueueMtx);
+    m_framesQueue.clear();
+}
+
+bool WmfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
+{
+    if (m_state != MEMediaState::Playing || m_framesQueue.empty())
+        return false;
+
+    std::unique_lock<std::mutex> lck(m_framesQueueMtx);
+    if (!m_framesQueue.empty())
     {
-        this->m_videoSampleDirty = false;
-        sample._buffer.assign(this->m_lastVideoFrame);
+        auto buffer = std::move(m_framesQueue.front());
+        m_framesQueue.pop_front();
+        lck.unlock();  // unlock immidiately before invoke user callback (maybe upload buffer to GPU)
 
-        switch (m_videoSampleFormat)
+        auto cbcrData =
+            (m_videoPF == MEVideoPixelFormat::NV12) ? buffer.data() + m_frameExtent.x * m_frameExtent.y : nullptr;
+        MEVideoFrame frame{buffer.data(), cbcrData, buffer.size(),
+                           MEVideoPixelDesc{m_videoPF, MEIntPoint{m_frameExtent.x, m_frameExtent.y}}, m_videoExtent};
+#    if defined(_DEBUG)
+        switch (m_videoPF)
         {
-        case MEVideoSampleFormat::YUY2:
-            sample._bufferDim.x = m_bIsH264 ? YASIO_SZ_ALIGN(m_videoExtent.x, 16) : m_videoExtent.x;
-            sample._bufferDim.y = m_videoExtent.y;
-            sample._stride      = sample._bufferDim.x * 2;
+        case MEVideoPixelFormat::YUY2:
+            assert(m_frameExtent.x == m_bIsH264 ? YASIO_SZ_ALIGN(m_frameExtent.x, 16) : m_frameExtent.x);
             break;
-        case MEVideoSampleFormat::NV12:
-            sample._bufferDim.x = YASIO_SZ_ALIGN(m_videoExtent.x, 16);
-            sample._bufferDim.y = m_bIsH264 ? YASIO_SZ_ALIGN(m_videoExtent.y, 16) * 3 / 2 : m_videoExtent.y * 3 / 2;
-            sample._stride      = sample._bufferDim.x;
+        case MEVideoPixelFormat::NV12:
+        {
+            // HEVC(H265) on Windows, both height width align 32
+            // refer to: https://community.intel.com/t5/Media-Intel-oneAPI-Video/32-byte-alignment-for-HEVC/m-p/1048275
+            auto& desc     = frame._ycbcrDesc;
+            desc.YDim.x    = YASIO_SZ_ALIGN(m_videoExtent.x, 32);
+            desc.YDim.y    = m_bIsHEVC ? YASIO_SZ_ALIGN(m_videoExtent.y, 32) : m_videoExtent.y;
+            desc.CbCrDim.x = desc.YDim.x / 2;
+            desc.CbCrDim.y = desc.YDim.y / 2;
+            desc.YPitch    = desc.YDim.x;
+            desc.CbCrPitch = desc.YPitch;
+
+            assert(frame._vpd._dim.x * frame._vpd._dim.y * 3 / 2 == static_cast<int>(frame._dataLen));
+            assert((desc.YPitch * desc.YDim.y + desc.CbCrPitch * desc.CbCrDim.y) == static_cast<int>(frame._dataLen));
             break;
+        }
         default:
-            assert(m_videoSampleFormat == MEVideoSampleFormat::RGB32 ||
-                   m_videoSampleFormat == MEVideoSampleFormat::BGR32);
-            sample._bufferDim = m_videoExtent;
-            sample._stride    = m_videoExtent.x * 4;
+            assert(m_videoPF == MEVideoPixelFormat::RGB32 || m_videoPF == MEVideoPixelFormat::BGR32);
         }
+#    endif
+        // check data
+        callback(frame);
 
-        sample._mods = 0;
-        if (!sample._videoDim.equals(m_videoExtent))
-        {
-            sample._videoDim = m_videoExtent;
-            ++sample._mods;
-        }
-        if (sample._format != m_videoSampleFormat)
-        {
-            sample._format = m_videoSampleFormat;
-            ++sample._mods;
-        }
         return true;
     }
-
     return false;
 }
 
@@ -548,7 +597,7 @@ HRESULT WmfMediaEngine::HandleEvent(IMFMediaEvent* pEvent)
     // not succeed, the status is a failure code.
     CHECK_HR(hr = pEvent->GetStatus(&hrStatus));
 
-    // TRACE("Media event: %s\n", EventName(meType));
+    // AXME_TRACE("Media event: %s\n", EventName(meType));
 
     // Check if the async operation succeeded.
     if (SUCCEEDED(hrStatus))
@@ -630,7 +679,7 @@ done:
 
 HRESULT WmfMediaEngine::Shutdown()
 {
-    TRACE("WmfMediaEngine::ShutDown\n");
+    AXME_TRACE("WmfMediaEngine::ShutDown\n");
 
     HRESULT hr = S_OK;
 
@@ -640,7 +689,13 @@ HRESULT WmfMediaEngine::Shutdown()
     if (m_hCloseEvent)
     {
         CloseHandle(m_hCloseEvent);
-        m_hCloseEvent = NULL;
+        m_hCloseEvent = nullptr;
+    }
+
+    if (m_hOpenEvent)
+    {
+        CloseHandle(m_hOpenEvent);
+        m_hOpenEvent = nullptr;
     }
 
     return hr;
@@ -670,7 +725,17 @@ HRESULT WmfMediaEngine::Shutdown()
 
 HRESULT WmfMediaEngine::OnTopologyReady(IMFMediaEvent* pEvent)
 {
-    TRACE("WmfMediaEngine::OnTopologyReady\n");
+    AXME_TRACE("WmfMediaEngine::OnTopologyReady\n");
+
+    UINT32 w = 0, h = 0;
+    MFGetAttributeSize(m_videoInputType.Get(), MF_MT_FRAME_SIZE, &w, &h);
+    m_frameExtent.x = w;
+    m_frameExtent.y = h;
+
+    DWORD cx = 0, cy = 0;
+    GetNativeVideoSize(&cx, &cy);
+    m_videoExtent.x = cx;
+    m_videoExtent.y = cy;
 
     if (m_bAutoPlay)
         StartPlayback(nullptr);
@@ -684,7 +749,7 @@ bool WmfMediaEngine::Play()
 {
     HRESULT hr = S_OK;
 
-    TRACE("WmfMediaEngine::Play\n");
+    AXME_TRACE("WmfMediaEngine::Play\n");
 
     if (m_state != MEMediaState::Paused && m_state != MEMediaState::Stopped)
         MF_E_INVALIDREQUEST;
@@ -1215,7 +1280,7 @@ done:
 
 HRESULT WmfMediaEngine::OnPlayEnded(IMFMediaEvent* pEvent)
 {
-    TRACE("WmfMediaEngine::OnPlayEnded\n");
+    AXME_TRACE("WmfMediaEngine::OnPlayEnded\n");
 
     // The session puts itself into the stopped state autmoatically.
 
@@ -1299,7 +1364,7 @@ HRESULT WmfMediaEngine::OnSessionEnded(HRESULT hrStatus)
 
 HRESULT WmfMediaEngine::CreateSession()
 {
-    TRACE("WmfMediaEngine::CreateSession\n");
+    AXME_TRACE("WmfMediaEngine::CreateSession\n");
 
     HRESULT hr = S_OK;
 
@@ -1367,7 +1432,7 @@ HRESULT WmfMediaEngine::CloseSession()
 
         if (dwWaitResult == WAIT_TIMEOUT)
         {
-            TRACE("CloseSession timed out!\n");
+            AXME_TRACE("CloseSession timed out!\n");
         }
 
         // Now there will be no more events from this session.
@@ -1411,7 +1476,7 @@ done:
 
 HRESULT WmfMediaEngine::CreateMediaSource(const WCHAR* sURL)
 {
-    TRACE("WmfMediaEngine::CreateMediaSource\n");
+    AXME_TRACE("WmfMediaEngine::CreateMediaSource\n");
 
     HRESULT hr                = S_OK;
     MF_OBJECT_TYPE ObjectType = MF_OBJECT_INVALID;
@@ -1458,7 +1523,7 @@ done:
 
 HRESULT WmfMediaEngine::CreateTopologyFromSource(IMFTopology** ppTopology)
 {
-    TRACE("WmfMediaEngine::CreateTopologyFromSource\n");
+    AXME_TRACE("WmfMediaEngine::CreateTopologyFromSource\n");
 
     assert(m_pSession != NULL);
     assert(m_pSource != NULL);
@@ -1477,7 +1542,7 @@ HRESULT WmfMediaEngine::CreateTopologyFromSource(IMFTopology** ppTopology)
     // Get the number of streams in the media source.
     CHECK_HR(hr = m_PresentDescriptor->GetStreamDescriptorCount(&cSourceStreams));
 
-    TRACE("Stream count: %d\n", cSourceStreams);
+    AXME_TRACE("Stream count: %d\n", cSourceStreams);
 
     // For each stream, create the topology nodes and add them to the topology.
     for (DWORD i = 0; i < cSourceStreams; ++i)
@@ -1518,7 +1583,7 @@ HRESULT WmfMediaEngine::AddBranchToPartialTopology(IMFTopology* pTopology,
                                                    IMFPresentationDescriptor* pSourcePD,
                                                    DWORD iStream)
 {
-    TRACE("WmfMediaEngine::AddBranchToPartialTopology\n");
+    AXME_TRACE("WmfMediaEngine::AddBranchToPartialTopology\n");
 
     assert(pTopology != NULL);
 
@@ -1598,21 +1663,18 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
     if (MFMediaType_Video == guidMajorType)
     {
         // Create the video renderer.
-        TRACE("Stream %d: video stream\n", streamID);
+        AXME_TRACE("Stream %d: video stream\n", streamID);
         // CHECK_HR(hr = MFCreateVideoRendererActivate(hwndVideo, &pRendererActivate));
-        auto Sampler = MFUtils::MakeComPtr<MFVideoSampler>(this);
-        TComPtr<IMFMediaType> InputType;
-        CHECK_HR(hr = pHandler->GetCurrentMediaType(&InputType));
-
-        // Get video dim
-        CHECK_HR(hr = MFGetAttributeSize(InputType.Get(), MF_MT_FRAME_SIZE, (UINT32*)&m_videoExtent.x,
-                                         (UINT32*)&m_videoExtent.y));
+        auto Sampler                     = MFUtils::MakeComPtr<MFVideoSampler>(this);
+        TComPtr<IMFMediaType>& InputType = m_videoInputType;
+        CHECK_HR(hr = pHandler->GetCurrentMediaType(InputType.ReleaseAndGetAddressOf()));
 
         // Create output type
         GUID SubType;
         CHECK_HR(hr = InputType->GetGUID(MF_MT_SUBTYPE, &SubType));
 
         m_bIsH264 = SubType == MFVideoFormat_H264 || SubType == MFVideoFormat_H264_ES;
+        m_bIsHEVC = SubType == MFVideoFormat_HEVC || SubType == MFVideoFormat_HEVC_ES;
 
         GUID VideoOutputFormat;
         if ((SubType == MFVideoFormat_HEVC) || (SubType == MFVideoFormat_HEVC_ES) || (SubType == MFVideoFormat_NV12) ||
@@ -1640,23 +1702,23 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
         m_VideoOutputFormat = VideoOutputFormat;
 
         if (m_VideoOutputFormat == MFVideoFormat_YUY2)
-            m_videoSampleFormat = MEVideoSampleFormat::YUY2;
+            m_videoPF = MEVideoPixelFormat::YUY2;
         else if (m_VideoOutputFormat == MFVideoFormat_NV12)
-            m_videoSampleFormat = MEVideoSampleFormat::NV12;
+            m_videoPF = MEVideoPixelFormat::NV12;
         else if (m_VideoOutputFormat == MFVideoFormat_RGB32)
-            m_videoSampleFormat = MEVideoSampleFormat::RGB32;
+            m_videoPF = MEVideoPixelFormat::RGB32;
         // To run as fast as possible, set this attribute (requires Windows 7):
         // CHECK_HR(hr = pRendererActivate->SetUINT32(MF_SAMPLEGRABBERSINK_IGNORE_CLOCK, TRUE));
     }
     else if (MFMediaType_Audio == guidMajorType)
     {
         // Create the audio renderer.
-        TRACE("Stream %d: audio stream\n", streamID);
+        AXME_TRACE("Stream %d: audio stream\n", streamID);
         CHECK_HR(hr = MFCreateAudioRendererActivate(&pRendererActivate));
     }
     else
     {
-        TRACE("Stream %d: Unknown format\n", streamID);
+        AXME_TRACE("Stream %d: Unknown format\n", streamID);
         CHECK_HR(hr = E_FAIL);
     }
 
@@ -1669,6 +1731,45 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
     (*ppNode)->AddRef();
 
 done:
+    return hr;
+}
+
+HRESULT WmfMediaEngine::GetNativeVideoSize(DWORD* cx, DWORD* cy)
+{
+    if (!m_videoInputType || !cx || !cy)
+        return E_POINTER;
+
+    HRESULT hr   = S_OK;
+    UINT32 width = 0, height = 0;
+
+    MFVideoArea mfArea = {0};
+
+    do
+    {
+        BOOL bPanScan = MFGetAttributeUINT32(m_videoInputType.Get(), MF_MT_PAN_SCAN_ENABLED, FALSE);
+        if (bPanScan)
+        {
+            hr = m_videoInputType->GetBlob(MF_MT_PAN_SCAN_APERTURE, (UINT8*)&mfArea, sizeof(MFVideoArea), nullptr);
+            AX_BREAK_IF(SUCCEEDED(hr));
+        }
+
+        hr = m_videoInputType->GetBlob(MF_MT_MINIMUM_DISPLAY_APERTURE, (UINT8*)&mfArea, sizeof(MFVideoArea), nullptr);
+        AX_BREAK_IF(SUCCEEDED(hr));
+
+        hr = m_videoInputType->GetBlob(MF_MT_GEOMETRIC_APERTURE, (UINT8*)&mfArea, sizeof(MFVideoArea), nullptr);
+
+    } while (false);
+
+    if (SUCCEEDED(hr))
+    {
+        *cx = mfArea.Area.cx;
+        *cy = mfArea.Area.cy;
+    }
+    else  // fallback to frame extent
+    {
+        *cx = m_frameExtent.x;
+        *cy = m_frameExtent.y;
+    }
     return hr;
 }
 
