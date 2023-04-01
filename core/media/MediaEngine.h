@@ -100,7 +100,7 @@ struct MEIntPoint
     bool equals(const MEIntPoint& rhs) const { return this->x == rhs.x && this->y == rhs.y; }
 };
 
-#if defined(_DEBUG)
+#if defined(_DEBUG) || !defined(_NDEBUG)
 struct YCbCrBiPlanarPixelInfo
 {
     unsigned int YPitch = 0;
@@ -154,7 +154,7 @@ struct MEVideoFrame
     const uint8_t* _cbcrDataPointer;
     MEVideoPixelDesc _vpd;  // the video pixel desc
     MEIntPoint _videoDim;   // the aligned frame size
-#if defined(_DEBUG)
+#if defined(_DEBUG) || !defined(_NDEBUG)
     YCbCrBiPlanarPixelInfo _ycbcrDesc{};
 #endif
 };

@@ -305,10 +305,10 @@ void AvfMediaEngine::onStatusNotification(void* context)
             case kCVPixelFormatType_420YpCbCr8BiPlanarFullRange:
                 _bFullColorRange = true;
             case kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange:
-                _videoSampleFormat = MEVideoSampleFormat::NV12;
+                _videoPF = MEVideoPixelFormat::NV12;
                 break;
             default:  // kCVPixelFormatType_32BGRA
-                _videoSampleFormat = MEVideoSampleFormat::BGR32;
+                _videoPF = MEVideoPixelFormat::BGR32;
             }
 
             [outputAttrs setObject:[NSNumber numberWithInt:videoOutputPF]
@@ -335,26 +335,22 @@ void AvfMediaEngine::onStatusNotification(void* context)
         this->Play();
 }
 
-void AvfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
+bool AvfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
 {
     auto videoOutput = static_cast<AVPlayerItemVideoOutput*>(this->_playerOutput);
     if (!videoOutput)
-        return;
+        return false;
 
     CMTime currentTime = [videoOutput itemTimeForHostTime:CACurrentMediaTime()];
-
     if (![videoOutput hasNewPixelBufferForItemTime:currentTime])
-        return;
+        return false;
 
     CVPixelBufferRef videoFrame = [videoOutput copyPixelBufferForItemTime:currentTime itemTimeForDisplay:nullptr];
-
     if (!videoFrame)
-        return;
+        return false;
 
     auto& videoDim = _videoExtent;
     MEIntPoint bufferDim;
-
-    sample._stride = static_cast<int>(CVPixelBufferGetBytesPerRow(videoFrame));
 
     CVPixelBufferLockBaseAddress(videoFrame, kCVPixelBufferLock_ReadOnly);
 
@@ -362,46 +358,37 @@ void AvfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)>
     {  // NV12('420v' or '420f' expected
         assert(CVPixelBufferGetPlaneCount(videoFrame) == 2);
 
-        auto& yuvDesc = sample._yuvDesc;
+        auto YWidth  = static_cast<int>(CVPixelBufferGetWidthOfPlane(videoFrame, 0));   // 1920
+        auto YHeight = static_cast<int>(CVPixelBufferGetHeightOfPlane(videoFrame, 0));  // 1080
 
-        auto YWidth  = CVPixelBufferGetWidthOfPlane(videoFrame, 0);   // 1920
-        auto YHeight = CVPixelBufferGetHeightOfPlane(videoFrame, 0);  // 1080
+        auto UVWidth  = static_cast<int>(CVPixelBufferGetWidthOfPlane(videoFrame, 1));   // 960
+        auto UVHeight = static_cast<int>(CVPixelBufferGetHeightOfPlane(videoFrame, 1));  // 540
 
-        auto UVWidth  = CVPixelBufferGetWidthOfPlane(videoFrame, 1);   // 960
-        auto UVHeight = CVPixelBufferGetHeightOfPlane(videoFrame, 1);  // 540
-
-        auto YPitch  = CVPixelBufferGetBytesPerRowOfPlane(videoFrame, 0);
-        auto UVPitch = CVPixelBufferGetBytesPerRowOfPlane(videoFrame, 1);
+        auto YPitch  = static_cast<int>(CVPixelBufferGetBytesPerRowOfPlane(videoFrame, 0));
+        auto UVPitch = static_cast<int>(CVPixelBufferGetBytesPerRowOfPlane(videoFrame, 1));
 
         auto YDataLen      = YPitch * YHeight;    // 1920x1080: YDataLen=2073600
         auto UVDataLen     = UVPitch * UVHeight;  // 1920x1080: UVDataLen=1036800
         auto frameYData    = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 0);
         auto frameCbCrData = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 1);
-
-        // Convert Y Plane & CbCr Plane to contiguous buffer
-        sample._buffer.reserve(YDataLen + UVDataLen);
-        sample._buffer.assign(frameYData, frameYData + YDataLen, std::true_type{});  // Y Plane Data
-        sample._buffer.append(frameCbCrData, frameCbCrData + UVDataLen);             // CbCr Plane Data
-
-        sample._bufferDim.x = YASIO_SZ_ALIGN(videoDim.x, 32);
-        sample._bufferDim.y = videoDim.y * 3 / 2;
-
-        yuvDesc.YDataLen  = static_cast<int>(YDataLen);
-        yuvDesc.UVDataLen = static_cast<int>(UVDataLen);
-        yuvDesc.YDim.x    = static_cast<int>(YWidth);
-        yuvDesc.YDim.y    = static_cast<int>(YHeight);
-        yuvDesc.UVDim.x   = static_cast<int>(UVWidth);
-        yuvDesc.UVDim.y   = static_cast<int>(UVHeight);
-        yuvDesc.YPitch   = static_cast<int>(YPitch);
-        yuvDesc.UVPitch  = static_cast<int>(UVPitch);
+        assert(YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen);
+        MEVideoFrame frame{frameYData, frameCbCrData, static_cast<size_t>(YDataLen + UVDataLen), MEVideoPixelDesc{_videoPF, MEIntPoint{YWidth, YHeight}}, videoDim};
+#if defined(_DEBUG) || !defined(_NDEBUG)
+        auto& ycbcrDesc = frame._ycbcrDesc;
+        ycbcrDesc.YDim.x = YWidth;
+        ycbcrDesc.YDim.y = YHeight;
+        ycbcrDesc.CbCrDim.x = UVWidth;
+        ycbcrDesc.CbCrDim.y = UVHeight;
+        ycbcrDesc.YPitch = YPitch;
+        ycbcrDesc.CbCrPitch = UVPitch;
+#endif
+        callback(frame);
     }
     else
     {  // BGRA
         auto frameData       = (uint8_t*)CVPixelBufferGetBaseAddress(videoFrame);
         size_t frameDataSize = CVPixelBufferGetDataSize(videoFrame);
-
-        // sample._buffer.assign(frameData, frameData + frameDataSize, std::true_type{});
-        // sample._bufferDim = videoDim;
+        callback(MEVideoFrame{frameData, nullptr, frameDataSize, MEVideoPixelDesc{_videoPF, videoDim}, videoDim});
     }
     CVPixelBufferUnlockBaseAddress(videoFrame, kCVPixelBufferLock_ReadOnly);
 

@@ -40,7 +40,7 @@ public:
     
 private:
     MEMediaEventCallback _eventCallback;
-    MEVideoSampleFormat _videoSampleFormat = MEVideoSampleFormat::NONE;
+    MEVideoPixelFormat _videoPF = MEVideoPixelFormat::INVALID;
     MEMediaState _state = MEMediaState::Closed;
     MEIntPoint _videoExtent;
     AVPlayer* _player = nil;
