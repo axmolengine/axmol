@@ -1,11 +1,13 @@
 #include "MediaEngine.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-#    include "media/WmfMediaEngine.h"
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-#    include "media/MfMediaEngine.h"
-// #elif defined(__APPLE__)
-// #    include "media/AvfMediaEngine.h"
+#if defined(WINAPI_FAMILY)
+#    if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP && !defined(AXME_USE_IMFME)
+#        include "media/WmfMediaEngine.h"
+#    else
+#        include "media/MfMediaEngine.h"
+#    endif
+#elif defined(__APPLE__)
+#    include "media/AvfMediaEngine.h"
 #endif
 
 namespace axstd
@@ -30,12 +32,14 @@ NS_AX_BEGIN
 
 std::unique_ptr<MediaEngineFactory> CreatePlatformMediaEngineFactory()
 {
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#if defined(WINAPI_FAMILY)
+#    if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP && !defined(AXME_USE_IMFME)
     return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<WmfMediaEngineFactory>());
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
+#    else
     return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<MfMediaEngineFactory>());
-// #elif defined(__APPLE__)
-//     return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<AvfMediaEngineFactory>());
+#    endif
+#elif defined(__APPLE__)
+    return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<AvfMediaEngineFactory>());
 #else
     return nullptr;
 #endif
