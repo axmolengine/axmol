@@ -157,10 +157,9 @@ endfunction()
 
 # Set compiler options
 function(use_ax_compile_options target)
-    if(MSVC)
-        target_compile_options(${target}
-            PUBLIC /MP
-        )
+    if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        # Enable msvc multi-process building
+        target_compile_options(${target} PUBLIC /MP)
     endif()
 endfunction()
 
