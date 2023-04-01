@@ -29,6 +29,10 @@ THE SOFTWARE.
 #define __BASE_AX_PLATFORM_CONFIG_H__
 /// @cond DO_NOT_SHOW
 
+#if __has_include(<winapifamily.h>)
+#    include <winapifamily.h>
+#endif
+
 /**
   Config of cocos2d-x project, per target platform.
 
@@ -65,7 +69,7 @@ THE SOFTWARE.
 #endif
 
 // win32
-#if defined(_WIN32) && defined(_WINDOWS)
+#if defined(_WIN32) && WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
 #    undef AX_TARGET_PLATFORM
 #    define AX_TARGET_PLATFORM AX_PLATFORM_WIN32
 #endif
