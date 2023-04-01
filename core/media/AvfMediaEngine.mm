@@ -372,7 +372,11 @@ bool AvfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)>
         auto frameYData    = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 0);
         auto frameCbCrData = (uint8_t*)CVPixelBufferGetBaseAddressOfPlane(videoFrame, 1);
         assert(YASIO_SZ_ALIGN(videoDim.x, 32) * videoDim.y * 3 / 2 == YDataLen + UVDataLen);
-        MEVideoFrame frame{frameYData, frameCbCrData, static_cast<size_t>(YDataLen + UVDataLen), MEVideoPixelDesc{_videoPF, MEIntPoint{YWidth, YHeight}}, videoDim};
+        // Apple: both H264, HEVC(H265) bufferDimX=ALIGN(videoDim.x, 32), bufferDimY=videoDim.y
+        // Windows:
+        //    - H264: BufferDimX align videoDim.x with 16, BufferDimY as-is
+        //    - HEVC(H265): BufferDim(X,Y) align videoDim(X,Y) with 32
+        MEVideoFrame frame{frameYData, frameCbCrData, static_cast<size_t>(YDataLen + UVDataLen), MEVideoPixelDesc{_videoPF, MEIntPoint{YPitch, YHeight}}, videoDim};
 #if defined(_DEBUG) || !defined(_NDEBUG)
         auto& ycbcrDesc = frame._ycbcrDesc;
         ycbcrDesc.YDim.x = YWidth;

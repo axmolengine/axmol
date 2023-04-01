@@ -163,7 +163,11 @@ void VideoPlayerTest::menuResourceVideoCallback(Ref* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setFileName("SampleVideo.mp4");
+#if defined(__APPLE__)
+        _videoPlayer->setFileName("video/h265/1912x1080_hvc1.mp4");
+#else
+        _videoPlayer->setFileName("video/h265/1912x1080_hev1.mp4");
+#endif
         _videoPlayer->play();
     }
 }
@@ -444,6 +448,6 @@ void SimpleVideoPlayerTest::createVideo()
 
     _uiLayer->addChild(_videoPlayer);
     
-    _videoPlayer->setFileName("SampleVideo2.mp4");
+    _videoPlayer->setFileName("video/h264/1920x1080.mp4");
     _videoPlayer->play();
 }

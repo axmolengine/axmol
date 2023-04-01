@@ -94,7 +94,7 @@ local function VideoPlayerTest()
     local function menuResourceVideoCallback(tag, sender)
         if nil ~= videoPlayer then
             print('start play video')
-            local videoFullPath = cc.FileUtils:getInstance():fullPathForFilename("SampleVideo2.mp4")
+            local videoFullPath = cc.FileUtils:getInstance():fullPathForFilename("video/h264/1280x720.mp4")
             videoPlayer:setFileName(videoFullPath)   
             videoPlayer:play()
             print('start play video succeed')
