@@ -240,18 +240,16 @@ def rmdir(folder):
             axmol.CMDRunner.run_cmd("rd /s/q \"%s\"" % folder, verbose=True)
         else:
             shutil.rmtree(folder)
-
-VERSION_FILE_PATH = 'core/axmol.cpp'
-VERSION_PATTERN = r".*return[ \t]+\"(.*)\";"
-def get_engine_version(engine_path):
+            
+def get_str_from_file(engine_path, file_path, pattern):
     ret = None
 
     try:
-        version_file = os.path.join(engine_path, VERSION_FILE_PATH)
+        version_file = os.path.join(engine_path, file_path)
         if os.path.isfile(version_file):
             f = open(version_file)
             for line in f.readlines():
-                match = re.match(VERSION_PATTERN, line)
+                match = re.match(pattern, line)
                 if match:
                     ret = match.group(1)
                     break
@@ -259,4 +257,20 @@ def get_engine_version(engine_path):
     except:
         pass
 
+    return ret
+
+
+VERSION_FILE_PATH = 'core/axmol.cpp'
+VERSION_PATTERN = r".*return[ \t]+\"(.*)\".*;"
+
+VERSION_H_PATH = 'core/version.h'
+COMMIT_HASH_PATTERN = r".*AX_GIT_COMMIT_HASH[ \t]+\"(.*)\""
+
+def get_engine_version(engine_path):
+    ret = None
+    ver_str = get_str_from_file(engine_path, VERSION_FILE_PATH, VERSION_PATTERN)
+    commit_hash = get_str_from_file(engine_path, VERSION_H_PATH, COMMIT_HASH_PATTERN)
+    if ver_str is not None and commit_hash is not None:
+        ret = ver_str + commit_hash
+    
     return ret

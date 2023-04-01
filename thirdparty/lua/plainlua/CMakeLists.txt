@@ -95,4 +95,6 @@ if(WIN32 OR MACOSX)
 
   # tool:lua the lua interpreter
   add_lua_bin(lua "${LUA_SRC_PATH}/lua.c")
+elseif(LINUX)
+  target_compile_definitions(${target_name} PUBLIC LUA_USE_LINUX=1)
 endif()
