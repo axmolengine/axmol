@@ -107,11 +107,11 @@ tags
 
 # ignore all build
 /build
-
 /build*
 
 # ignore ninja build dir
 /out
+/out*
 
 # ignore jniLibs android
 /**/jniLibs/*/*.so
