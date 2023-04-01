@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIVideoPlayer/UIVideoPlayer.h"
+#include "ui/UIVideoPlayer.h"
 
 // No Available on tvOS
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS && !defined(AX_TARGET_OS_TVOS)

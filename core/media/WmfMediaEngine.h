@@ -18,7 +18,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #if defined(_WIN32)
-#include <winapifamily.h>
+#    include <winapifamily.h>
 #endif
 
 #if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
@@ -48,6 +48,10 @@
 #    include <string>
 
 #    include "MediaEngine.h"
+
+#    include <atomic>
+#    include <mutex>
+#    include <deque>
 
 #    include "yasio/detail/byte_buffer.hpp"
 
@@ -174,7 +178,9 @@ public:
     bool Stop() override;
 
     void HandleVideoSample(const uint8_t* buf, size_t len);
-    bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
+    //bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
+
+    bool TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback) override;
 
     void FireMediaEvent(MEMediaEventType event)
     {
@@ -189,6 +195,10 @@ protected:
     float GetNominalRate() const;
 
     HRESULT UpdatePendingCommands(Command cmd);
+
+    HRESULT GetNativeVideoSize(DWORD* cx, DWORD* cy);
+
+     void ClearPendingFrames();
 
 protected:
     // Destructor is private. Caller should call Release.
@@ -223,6 +233,8 @@ protected:
     TComPtr<IMFRateSupport> m_RateSupport;
     TComPtr<IMFPresentationClock> m_pClock;
 
+    TComPtr<IMFMediaType> m_videoInputType;
+
     DWORD m_caps         = 0;      // Session caps.
     MFTIME m_hnsDuration = 0;      // Duration of the current presentation.
     BOOL m_bCanScrub     = FALSE;  // Does the current session support rate = 0.
@@ -241,26 +253,31 @@ protected:
     SeekState m_request{CmdNone, 1.0, FALSE, 0};  // Pending request state.
     BOOL m_bPending = FALSE;                      // Is a request pending?
 
+    std::atomic<bool> m_bOpenPending = false;
+
     mutable CritSec m_critsec;  // Protects the seeking and rate-change states.
 
-    HWND m_hwndEvent;                         // App window to receive events.
-    MEMediaState m_state = MEMediaState::Closed;  // Current state of the media session.
-    HANDLE m_hCloseEvent;                     // Event to wait on while closing
+    std::atomic<MEMediaState> m_state = MEMediaState::Closed;  // Current state of the media session.
+
+    HANDLE m_hOpenEvent  = nullptr;  // App window to receive events.
+    HANDLE m_hCloseEvent = nullptr;  // Event to wait on while closing
 
     MEIntPoint m_videoExtent;
+    MEIntPoint m_frameExtent;  // may same with m_videoExtent
 
     BOOL m_bLooping  = FALSE;
     BOOL m_bAutoPlay = TRUE;
 
     BOOL m_bIsH264 = FALSE;
+    BOOL m_bIsHEVC = FALSE;  // hvc1,hev1
     GUID m_VideoOutputFormat{};
 
     MEMediaEventCallback m_eventCallback;
 
-    MEVideoSampleFormat m_videoSampleFormat = MEVideoSampleFormat::NONE;
+    MEVideoPixelFormat m_videoPF = MEVideoPixelFormat::INVALID;
 
-    yasio::byte_buffer m_lastVideoFrame;
-    mutable bool m_videoSampleDirty = false;
+    mutable std::deque<yasio::byte_buffer> m_framesQueue;
+    mutable std::mutex m_framesQueueMtx;
 };
 
 struct WmfMediaEngineFactory : public MediaEngineFactory

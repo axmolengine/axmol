@@ -1,5 +1,7 @@
 //--------------------------------------------------------------------------------------
-// File: MediaEnginePlayer.h
+// File: MfMediaEngine.h
+//
+// Modified from https://github.com/microsoft/Xbox-ATG-Samples/tree/main/UWPSamples/Graphics/VideoTextureUWP
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
@@ -9,7 +11,9 @@
 
 #if defined(_WIN32)
 #include <winapifamily.h>
-#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+#include "media/MediaEngine.h"
+
+#    if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP || defined(AXME_USE_IMFME))
 
 #include <stdint.h>
 #include <mfapi.h>
@@ -17,8 +21,6 @@
 #include <mfmediaengine.h>
 #include <wincodec.h>
 #include <wrl/client.h>
-
-#include "media/MediaEngine.h"
 
 #include "media/MFUtils.h"
 
@@ -43,13 +45,7 @@ protected:
 };
 
 //-------------------------------------------------------------------------------------
-template <typename T>
-inline HRESULT CreateInstance(REFCLSID clsid, Microsoft::WRL::ComPtr<T>& ptr)
-{
-    // ASSERT(!ptr);
-    return CoCreateInstance(clsid, nullptr, CLSCTX_INPROC_SERVER, __uuidof(T),
-                            reinterpret_cast<void**>(ptr.GetAddressOf()));
-}
+
 class MfMediaEngine : public IMFNotify, public MediaEngine
 {
 public:
@@ -80,7 +76,7 @@ public:
     bool SetLoop(bool bLoop) override;
     bool SetRate(double fRate) override;
 
-    bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
+    bool TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback) override;
 
     bool Play() override;
     bool Pause() override;
