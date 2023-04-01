@@ -275,6 +275,6 @@ def get_engine_version(engine_path):
         if commit_hash != None:
             ret = ver_str + commit_hash
         else:
-            ret = ver_str.removesuffix('-'); # remove the character '-'
+            ret = ver_str[:len(ver_str)-1] # remove the character '-'
     
     return ret
