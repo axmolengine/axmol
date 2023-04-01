@@ -59,7 +59,6 @@ elseif(APPLE)
                 ui/UIEditBox/iOS/CCUISingleLineTextField.h
                 )
             set(_AX_UI_SPECIFIC_SRC
-                ui/UIVideoPlayer-ios.mm
                 ui/UIEditBox/UIEditBoxImpl-ios.mm
                 ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
                 ui/UIEditBox/iOS/CCUIMultilineTextField.mm

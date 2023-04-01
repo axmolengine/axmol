@@ -121,9 +121,10 @@ include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
 file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
-file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp;media/*.mm)
+file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
 
 if (APPLE)
+    list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
     set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()
 
