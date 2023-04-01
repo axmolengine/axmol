@@ -18,7 +18,8 @@ VS_VERSION_MAP = {
     2013 : "12.0",
     2015 : "14.0",
     2017 : "15.0",
-    2019 : "16.0"
+    2019 : "16.0",
+    2022 : "17.0",
 }
 
 def get_msbuild_path(vs_version):
@@ -270,7 +271,10 @@ def get_engine_version(engine_path):
     ret = None
     ver_str = get_str_from_file(engine_path, VERSION_FILE_PATH, VERSION_PATTERN)
     commit_hash = get_str_from_file(engine_path, VERSION_H_PATH, COMMIT_HASH_PATTERN)
-    if ver_str is not None and commit_hash is not None:
-        ret = ver_str + commit_hash
+    if ver_str != None:
+        if commit_hash != None:
+            ret = ver_str + commit_hash
+        else:
+            ret = ver_str.removesuffix('-'); # remove the character '-'
     
     return ret
