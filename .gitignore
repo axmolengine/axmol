@@ -167,6 +167,9 @@ tests/lua-tests/project/proj.tizen/res/
 
 /extensions/Live2D/Core/
 
+# Ignore x-studio folder
+.xs
+
 # Ignore vscode folder
 .vscode/
 

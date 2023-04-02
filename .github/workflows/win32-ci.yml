@@ -36,6 +36,8 @@ jobs:
 
     - name: Setup Python
       uses: actions/setup-python@v4
+      with:
+        python-version: '3.7.8'
 
     - uses: ilammy/msvc-dev-cmd@v1.12.1
       with: 
