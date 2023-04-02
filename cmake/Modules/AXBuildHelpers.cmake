@@ -340,11 +340,13 @@ function(ax_setup_app_config app_name)
             set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "NO")
             set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "NO")
         endif()
-    elseif(MSVC)
-        # visual studio default is Console app, but we need Windows app
-        set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
-    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "-Xlinker /subsystem:windows")
+    elseif(WINDOWS)
+        # windows: visual studio/LLVM-clang default is Console app, but we need Windows app
+        if(MSVC)
+            set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+        elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "-Xlinker /subsystem:windows")
+        endif()
     endif()
     # auto mark code files for IDE when mark app
     if(XCODE OR VS)
