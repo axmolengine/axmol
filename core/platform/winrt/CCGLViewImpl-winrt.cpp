@@ -426,21 +426,20 @@ void ax::GLViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs ^ args)
 void ax::GLViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs ^ args)
 {
     Vec2 mousePosition = GetPointMouse(args);
-
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
-
-    float delta = args->CurrentPoint->Properties->MouseWheelDelta;
-
+    // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
+    float cursorX = (mousePosition.x - _viewPortRect.origin.x) / _scaleX;
+    float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - mousePosition.y) / _scaleY;
+    float delta   = args->CurrentPoint->Properties->MouseWheelDelta;
     if (args->CurrentPoint->Properties->IsHorizontalMouseWheel)
     {
-        event.setScrollData(delta, 0.0f);
+        event.setScrollData(delta / WHEEL_DELTA, 0.0f);
     }
     else
     {
-        event.setScrollData(0.0f, -delta);
+        event.setScrollData(0.0f, -delta / WHEEL_DELTA);
     }
-
-    event.setCursorPosition(mousePosition.x, mousePosition.y);
+    event.setCursorPosition(cursorX, cursorY);
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
