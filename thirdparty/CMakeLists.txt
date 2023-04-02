@@ -46,95 +46,100 @@ include(CheckCSourceCompiles)
 include(CheckCXXSourceCompiles)
 
 # Detetion SIMD instrinsics
-if (NOT DEFINED AX_ISA_SIMD)
-    ### check -msse2 flag
 
-    set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-    if(MSVC)
-        set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} /WX")
-        check_c_compiler_flag("/arch:SSE2" AX_HAVE_SSE2_SWITCH)
-    else()
-        set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
-        check_c_compiler_flag(-msse2 AX_HAVE_SSE2_SWITCH)
+### check -msse2 flag
+set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+if(MSVC)
+    set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} /WX")
+    check_c_compiler_flag("/arch:SSE2" AX_HAVE_SSE2_SWITCH)
+else()
+    set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
+    check_c_compiler_flag(-msse2 AX_HAVE_SSE2_SWITCH)
+endif()
+if (AX_HAVE_SSE2_SWITCH)
+    set(AX_HAVE_SSE2_INTRINSICS 1)
+endif()
+### end check -msse2 flag
+
+if (NOT TVOS)
+    # Checking intel SIMD Intrinsics
+    if(APPLE)
+        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
     endif()
-    if (AX_HAVE_SSE2_SWITCH)
-        set(AX_HAVE_SSE2_INTRINSICS 1)
-    endif()
-    
-    ### end check -msse2 flag
+    check_c_source_compiles("#include <immintrin.h>
+        #include <stdint.h>
+        int main()
+        {
+            __m256 m = _mm256_set_ps(1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f);
+            return (int)*(float*)&m;
+        }" AX_HAVE_AVX2_INTRINSICS)
+    check_c_source_compiles("#include <nmmintrin.h>
+        #include <stdint.h>
+        int main()
+        {
+            uint32_t v = 0;
+            return (int)_mm_popcnt_u32(v);
+        }" AX_HAVE_SSE42_INTRINSICS)
+    check_c_source_compiles("#include <smmintrin.h>
+        #include <stdint.h>
+        int main()
+        {
+            __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 12,8,4,0);
+            return *(int*)&shuf;
+        }" AX_HAVE_SSE41_INTRINSICS)
 
-    if (NOT TVOS)
-        # Checking intel SIMD Intrinsics
-        if(APPLE)
-            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
-        endif()
-        check_c_source_compiles("#include <immintrin.h>
+    if (NOT AX_HAVE_SSE2_INTRINSICS)
+        check_c_source_compiles("#include <emmintrin.h>
             #include <stdint.h>
             int main()
             {
-                __m256 m = _mm256_set_ps(1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f);
-                return (int)*(float*)&m;
-            }" AX_HAVE_AVX2_INTRINSICS)
-        check_c_source_compiles("#include <nmmintrin.h>
-            #include <stdint.h>
-            int main()
-            {
-                uint32_t v = 0;
-                return (int)_mm_popcnt_u32(v);
-            }" AX_HAVE_SSE42_INTRINSICS)
-        check_c_source_compiles("#include <smmintrin.h>
-            #include <stdint.h>
-            int main()
-            {
-                __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 12,8,4,0);
-                return *(int*)&shuf;
-            }" AX_HAVE_SSE41_INTRINSICS)
-
-        if (NOT AX_HAVE_SSE2_INTRINSICS)
-            check_c_source_compiles("#include <emmintrin.h>
-                #include <stdint.h>
-                int main()
-                {
-                    __m128d m = _mm_set_sd(0.0);
-                    return (int)*(double*)&m;
-                }" AX_HAVE_SSE2_INTRINSICS)
-        endif()
-
-        set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-
-        ### Checking ARM SIMD neon
-        check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
-        if(AX_HAVE_ARM_NEON_H)
-            check_c_source_compiles("#include <arm_neon.h>
-            int main()
-            {
-                int32x4_t ret4 = vdupq_n_s32(0);
-                return vgetq_lane_s32(ret4, 0);
-            }" AX_HAVE_NEON_INTRINSICS)
-        endif()
-    else()
-        message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build target 'tvos'")
+                __m128d m = _mm_set_sd(0.0);
+                return (int)*(double*)&m;
+            }" AX_HAVE_SSE2_INTRINSICS)
     endif()
 
     set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-    unset(OLD_REQUIRED_FLAGS)
 
-    ### set AX_ISA_SIMD
-    if(AX_HAVE_AVX2_INTRINSICS)
-        set(AX_ISA_SIMD "avx2")
-    elseif(AX_HAVE_SSE42_INTRINSICS)
-        set(AX_ISA_SIMD "sse4.2")
-    elseif(AX_HAVE_SSE41_INTRINSICS)
-        set(AX_ISA_SIMD "sse4.1")
-    elseif(AX_HAVE_SSE2_INTRINSICS)
-        set(AX_ISA_SIMD "sse2")
-    elseif(AX_HAVE_NEON_INTRINSICS)
-        set(AX_ISA_SIMD "neon")
-    else()
-        set(AX_ISA_SIMD "none")
+    ### Checking ARM SIMD neon
+    check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
+    if(AX_HAVE_ARM_NEON_H)
+        check_c_source_compiles("#include <arm_neon.h>
+        int main()
+        {
+            int32x4_t ret4 = vdupq_n_s32(0);
+            return vgetq_lane_s32(ret4, 0);
+        }" AX_HAVE_NEON_INTRINSICS)
     endif()
+else()
+    message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build target 'tvos'")
+endif()
 
-    message(AUTHOR_WARNING "AX_ISA_SIMD=${AX_ISA_SIMD},AX_HAVE_AVX2_INTRINSICS=${AX_HAVE_AVX2_INTRINSICS},AX_HAVE_SSE42_INTRINSICS=${AX_HAVE_SSE42_INTRINSICS},AX_HAVE_SSE41_INTRINSICS=${AX_HAVE_SSE41_INTRINSICS},AX_HAVE_SSE2_INTRINSICS=${AX_HAVE_SSE2_INTRINSICS},AX_HAVE_NEON_INTRINSICS=${AX_HAVE_NEON_INTRINSICS}")
+set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+unset(OLD_REQUIRED_FLAGS)
+
+### set AX_ISA_SIMD
+if(AX_HAVE_AVX2_INTRINSICS)
+    set(AX_ISA_SIMD "avx2")
+elseif(AX_HAVE_SSE42_INTRINSICS)
+    set(AX_ISA_SIMD "sse4.2")
+elseif(AX_HAVE_SSE41_INTRINSICS)
+    set(AX_ISA_SIMD "sse4.1")
+elseif(AX_HAVE_SSE2_INTRINSICS)
+    set(AX_ISA_SIMD "sse2")
+elseif(AX_HAVE_NEON_INTRINSICS)
+    set(AX_ISA_SIMD "neon")
+else()
+    set(AX_ISA_SIMD "none")
+endif()
+
+message(AUTHOR_WARNING "AX_ISA_SIMD=${AX_ISA_SIMD},AX_HAVE_AVX2_INTRINSICS=${AX_HAVE_AVX2_INTRINSICS},AX_HAVE_SSE42_INTRINSICS=${AX_HAVE_SSE42_INTRINSICS},AX_HAVE_SSE41_INTRINSICS=${AX_HAVE_SSE41_INTRINSICS},AX_HAVE_SSE2_INTRINSICS=${AX_HAVE_SSE2_INTRINSICS},AX_HAVE_NEON_INTRINSICS=${AX_HAVE_NEON_INTRINSICS}")
+
+if (WINDOWS)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        if (AX_HAVE_SSE41_INTRINSICS)
+            add_compile_options("-msse4.1")
+        endif()
+    endif()
 endif()
 
 function(configure_target_outdir target)
@@ -246,6 +251,9 @@ if(AX_WITH_FREETYPE)
         add_subdirectory(freetype)
         target_link_libraries(thirdparty freetype)
         configure_target_outdir(freetype)
+        if (WINRT)
+            target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
+        endif()
     endif()
     target_include_directories(thirdparty PUBLIC "freetype/include")
 endif(AX_WITH_FREETYPE)

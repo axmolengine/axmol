@@ -24,7 +24,7 @@
  ****************************************************************************/
 #include "scripting/lua-bindings/manual/ui/axlua_video_manual.hpp"
 
-#include "ui/UIVideoPlayer/UIVideoPlayer.h"
+#include "ui/UIVideoPlayer.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/CCLuaValue.h"

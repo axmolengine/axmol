@@ -68,7 +68,7 @@ https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
 
 ## FreeType
 - [![Upstream](https://img.shields.io/github/v/tag/freetype/freetype?label=Upstream)](https://www.freetype.org/)
-- Version: 2.12.1
+- Version: 2.13.0
 - License: BSD-style (The FreeType Project)
 
 ## Glad

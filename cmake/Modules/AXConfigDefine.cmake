@@ -95,8 +95,10 @@ if(WINDOWS)
         else()
             message(FATAL_ERROR "using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
         endif()
+    elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        message(STATUS "using Windows clang-cl generate axmol project")
     else()
-        message(FATAL_ERROR "please using Windows MSVC compile axmol project, support other compile tools not yet")
+        message(FATAL_ERROR "please using Windows MSVC/LLVM-Clang compile axmol project, support other compile tools not yet")
     endif()
 endif()
 
@@ -157,10 +159,9 @@ endfunction()
 
 # Set compiler options
 function(use_ax_compile_options target)
-    if(MSVC)
-        target_compile_options(${target}
-            PUBLIC /MP
-        )
+    if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        # Enable msvc multi-process building
+        target_compile_options(${target} PUBLIC /MP)
     endif()
 endfunction()
 
