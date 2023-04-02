@@ -21,8 +21,11 @@ foreach ($arg in $args) {
         } else {
             Write-Output "Warning: ignore unrecognized option: $optName"
         }
+        $optName = $null
     }
 }
+
+echo $options
 
 ## read options
 $BUILD_ARCH = $options.arch
@@ -50,7 +53,7 @@ if ($CLANG) {
 }
 
 # arch
-if ("$CLANG" -ne 'true') {
+if (!"$CLANG") {
     $CONFIG_ALL_OPTIONS += '-A', $optArch
 } # TODO: how to specific arch for clang-cl toolchain?
 
