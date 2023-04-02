@@ -12,8 +12,8 @@ env:
   PULL_REQUEST: yes
 
 jobs:
-  build-win32:
-    name: build-win32
+  build-windows:
+    name: build-windows
     runs-on: windows-latest
     strategy:
       matrix:
@@ -31,11 +31,36 @@ jobs:
           submodules: 'recursive'
       - name: Setup Python
         uses: actions/setup-python@v4
+        with:
+          python-version: '3.7.8'
       - uses: ilammy/msvc-dev-cmd@v1.12.1
         with: 
           arch: ${{ env.BUILD_ARCH }}
       - name: Build
         run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:BUILD_DLL
+
+  build-windows-clang:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch:
+          - x64
+    env:
+      BUILD_ARCH: ${{ matrix.arch }}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.7.8'
+    - name: Install LLVM and Clang
+      uses: KyleMayes/install-llvm-action@v1
+      with:
+        version: "16.0"
+    - name: Build
+      run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_clang true
 
   build-winuwp:
     name: build-winuwp
@@ -54,6 +79,8 @@ jobs:
           submodules: 'recursive'
       - name: Setup Python
         uses: actions/setup-python@v4
+        with:
+          python-version: '3.7.8'
       - uses: ilammy/msvc-dev-cmd@v1.12.1
         with: 
           arch: ${{ env.BUILD_ARCH }}

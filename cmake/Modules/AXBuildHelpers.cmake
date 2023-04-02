@@ -178,7 +178,7 @@ function(ax_copy_target_dll ax_target)
     endforeach()
 
     # copy thirdparty dlls to target bin dir
-    if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+    if(NOT CMAKE_GENERATOR MATCHES "Ninja")
         set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
     endif()
 
@@ -200,24 +200,26 @@ function(ax_copy_target_dll ax_target)
 
     # Copy webview2 for ninja
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
-        if(CMAKE_GENERATOR STREQUAL "Ninja")
+        if(CMAKE_GENERATOR MATCHES "Ninja")
             add_custom_command(TARGET ${ax_target} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
-            $<TARGET_FILE_DIR:${ax_target}>)
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+                $<TARGET_FILE_DIR:${ax_target}>)
         endif()
     endif()
 endfunction()
 
 function(ax_copy_lua_dlls ax_target)
     if(NOT AX_USE_LUAJIT)
-        if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+        if(NOT CMAKE_GENERATOR MATCHES "Ninja")
             set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
         endif()
-        add_custom_command(TARGET ${ax_target} POST_BUILD
-           COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
-             $<TARGET_FILE_DIR:${ax_target}>)
+        if (MSVC)
+            add_custom_command(TARGET ${ax_target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
+                $<TARGET_FILE_DIR:${ax_target}>)
+        endif()
     endif()
 endfunction()
 
@@ -323,7 +325,7 @@ function(ax_setup_app_config app_name)
             PRIVATE "proj.winrt"
         )
     endif()
-    if(WIN32)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         target_link_options(${APP_NAME} PRIVATE "/STACK:4194304")
     endif()
     # put all output app into bin/${app_name}
@@ -340,9 +342,13 @@ function(ax_setup_app_config app_name)
             set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "NO")
             set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "NO")
         endif()
-    elseif(MSVC)
-        # visual studio default is Console app, but we need Windows app
-        set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+    elseif(WINDOWS)
+        # windows: visual studio/LLVM-clang default is Console app, but we need Windows app
+        if(MSVC)
+            set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+        elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+            set_property(TARGET ${app_name} APPEND PROPERTY LINK_FLAGS "-Xlinker /subsystem:windows")
+        endif()
     endif()
     # auto mark code files for IDE when mark app
     if(XCODE OR VS)

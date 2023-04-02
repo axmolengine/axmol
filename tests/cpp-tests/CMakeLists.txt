@@ -522,7 +522,7 @@ if(WINDOWS OR MACOSX OR LINUX)
         Source/ChipmunkTestBed/demo/Slice.c
         Source/ChipmunkTestBed/demo/Unicycle.c
         Source/ChipmunkTestBed/demo/Tumble.c)
-    if(WINDOWS)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
     else()
         set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)

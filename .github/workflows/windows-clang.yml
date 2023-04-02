@@ -1,4 +1,4 @@
-name: winuwp
+name: windows-clang
 
 on: 
   push:
@@ -11,7 +11,7 @@ on:
       - 'docs/**'
 
 jobs:
-  toolset-latest:
+  build:
     if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
@@ -22,10 +22,10 @@ jobs:
       matrix:
         arch:
           - x64
-          - amd64_arm64
-
     env:
       BUILD_ARCH: ${{ matrix.arch }}
+      # Test winsdk < 10.0.22000.0 (missing C11 standard stdalign.h), axmol will auto fallback to C99 for resolving compiling issue.
+      # WINSDK_VER: '10.0.19041.0' 
 
     steps:
     - uses: actions/checkout@v3
@@ -34,17 +34,13 @@ jobs:
 
     - name: Setup Python
       uses: actions/setup-python@v4
+      with:
+        python-version: '3.7.8'
 
-    - uses: ilammy/msvc-dev-cmd@v1.12.1
-      with: 
-        arch: ${{ env.BUILD_ARCH }}
-        uwp: true
+    - name: Install LLVM and Clang
+      uses: KyleMayes/install-llvm-action@v1
+      with:
+        version: "16.0"
 
     - name: Build
-      run: tools\win-ci\build.ps1 $env:BUILD_ARCH false true
-
-    - uses: actions/upload-artifact@v3
-      with:
-        name: ${{ matrix.arch }}
-        path: |
-          build_*/tests/**/AppPackages/**/*.msix
+      run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_clang true
