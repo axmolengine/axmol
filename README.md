@@ -20,8 +20,9 @@
 
 | Build | Status (github) |
 |-------|-----------------|
-| Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/win32-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/win32-ci.yml)|
-| Windows UWP|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/winuwp-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/winuwp-ci.yml)|
+| Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/msw.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/msw.yml)|
+| Windows Desktop(Clang)|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/msw-clang.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/msw-clang.yml)|
+| Windows UWP|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml)|
 | Android | [![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)|
 | iOS |[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)|
 | tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|

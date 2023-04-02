@@ -12,8 +12,8 @@ env:
   PULL_REQUEST: yes
 
 jobs:
-  build-win32:
-    name: build-win32
+  build-windows:
+    name: build-windows
     runs-on: windows-latest
     strategy:
       matrix:
@@ -39,7 +39,7 @@ jobs:
       - name: Build
         run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:BUILD_DLL
 
-  build-win32-clang:
+  build-windows-clang:
     runs-on: windows-latest
     strategy:
       matrix:
