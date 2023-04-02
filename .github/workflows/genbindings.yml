@@ -19,6 +19,8 @@ jobs:
 
     - name: Setup Python
       uses: actions/setup-python@v4
+      with:
+        python-version: '3.10.6'
 
     - name: Build
       run: tools\win-ci\genbindings.ps1

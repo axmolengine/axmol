@@ -231,7 +231,7 @@ if ((NOT APPLE) AND (NOT WINRT))
     endif()
     ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
     
-    if((WINDOWS AND (NOT (CMAKE_GENERATOR STREQUAL "Ninja"))))
+    if((WINDOWS AND (NOT (CMAKE_GENERATOR MATCHES "Ninja"))))
         set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${content_folder}")
         if(NOT DEFINED BUILD_ENGINE_DONE)
             set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
