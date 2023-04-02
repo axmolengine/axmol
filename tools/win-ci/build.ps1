@@ -7,7 +7,7 @@
 ##
 
 ## parsing options
-$options = @{ arch = 'x64'; is_dll = 'false'; is_uwp = 'false'; is_clang = 'false' }
+$options = @{ arch = 'x64'; is_dll = 'false'; is_uwp = 'false'; is_clang = 'false'; target = $null; config='Release' }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -94,10 +94,16 @@ cmake --version
 # geneate .sln
 cmake -S . -B build_$optArch $CONFIG_ALL_OPTIONS
 
-# build cpp_test
-cmake --build build_$optArch --config Release --target cpp_tests
+$target = $options.target
 
-# biuld lua_tests if not pull request
-if ( !($env:PULL_REQUEST -eq 'yes') ) {
-    cmake --build build_$optArch --config Release --target lua_tests
+if ($target) {
+    cmake --build build_$optArch --config $options.config --target $target
+} else { # for github actions 
+    # build cpp_test
+    cmake --build build_$optArch --config Release --target cpp_tests
+
+    # biuld lua_tests if not pull request
+    if ( !($env:PULL_REQUEST -eq 'yes') ) {
+        cmake --build build_$optArch --config Release --target lua_tests
+    }
 }
