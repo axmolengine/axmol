@@ -42,35 +42,35 @@ jobs:
         arch: ${{ env.BUILD_ARCH }}
 
     - name: Build
-      run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:BUILD_DLL
-#   toolset-vs2019:
-#     if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
-#     # The CMake configure and build commands are platform agnostic and should work equally
-#     # well on Windows or Mac.  You can convert this to a matrix build if you need
-#     # cross-platform coverage.
-#     # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
-#     runs-on: windows-2019
-#     strategy:
-#       matrix:
-#         arch:
-#           - x86
-#           - x64
-#     env:
-#       BUILD_ARCH: ${{ matrix.arch }}
-#       # Test winsdk < 10.0.22000.0 (missing C11 standard stdalign.h), axmol will auto fallback to C99 for resolving compiling issue.
-#       WINSDK_VER: '10.0.19041.0' 
+      run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_dll $env:BUILD_DLL
+  toolset-clang-cl:
+    if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch:
+          - x64
+    env:
+      BUILD_ARCH: ${{ matrix.arch }}
+      # Test winsdk < 10.0.22000.0 (missing C11 standard stdalign.h), axmol will auto fallback to C99 for resolving compiling issue.
+      # WINSDK_VER: '10.0.19041.0' 
 
-#     steps:
-#     - uses: actions/checkout@v3
-#       with:
-#         submodules: 'recursive'
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
 
-#     - name: Setup Python
-#       uses: actions/setup-python@v4
+    - name: Setup Python
+      uses: actions/setup-python@v4
 
-#     - uses: ilammy/msvc-dev-cmd@v1.12.1
-#       with: 
-#         arch: ${{ env.BUILD_ARCH }}
+    - name: Install LLVM and Clang
+      uses: KyleMayes/install-llvm-action@v1
+      with:
+        version: "16.0"
 
-#     - name: Build
-#       run: tools\win-ci\build.ps1 $env:BUILD_ARCH
+    - name: Build
+      run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_clang true

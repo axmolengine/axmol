@@ -1,6 +1,6 @@
 include(AXPlatform)
 
-if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+if(NOT CMAKE_GENERATOR MATCHES "Ninja")
     set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
 else()
     set(BUILD_CONFIG_DIR "")
@@ -193,7 +193,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         endif()
 
         if (AX_ENABLE_MSEDGE_WEBVIEW2)
-            if(CMAKE_GENERATOR STREQUAL "Ninja")
+            if(CMAKE_GENERATOR MATCHES "Ninja")
                 target_link_libraries(${APP_NAME} ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
                 target_include_directories(${APP_NAME} PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
                 add_custom_command(TARGET ${APP_NAME} POST_BUILD

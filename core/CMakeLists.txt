@@ -229,7 +229,7 @@ if(WINDOWS)
         exec_program(${NUGET_EXE}
             ARGS install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory ${CMAKE_BINARY_DIR}/packages)
 
-        if(CMAKE_GENERATOR STREQUAL "Ninja")
+        if(CMAKE_GENERATOR MATCHES "Ninja")
             target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
             target_include_directories(${_AX_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
         else()
