@@ -49,12 +49,13 @@ $CONFIG_ALL_OPTIONS=@()
 # cmake generator, default is latest Visual Studio installed on target machine, such as "Visual Studio 17 2022"
 if ($CLANG) {
     clang --version
-    $CONFIG_ALL_OPTIONS += '-G', 'Ninja Multi-Config', '"-DCMAKE_C_COMPILER=clang"', '"-DCMAKE_CXX_COMPILER=clang++"'
+    $CONFIG_ALL_OPTIONS += '-G', 'Ninja Multi-Config', '-DCMAKE_C_COMPILER=clang', '-DCMAKE_CXX_COMPILER=clang++'
 }
 
 # arch
 if (!"$CLANG") {
     $CONFIG_ALL_OPTIONS += '-A', $optArch
+    $CONFIG_ALL_OPTIONS += '-Thost=x64'
 } # TODO: how to specific arch for clang-cl toolchain?
 
 # cxx_std, if $UWP, must be c++17, C++/CX not support c++20 or later yet.
@@ -91,7 +92,7 @@ Write-Output ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL
 cmake --version
 
 # geneate .sln
-cmake -S . -B build_$optArch -Thost=x64 $CONFIG_ALL_OPTIONS
+cmake -S . -B build_$optArch $CONFIG_ALL_OPTIONS
 
 # build cpp_test
 cmake --build build_$optArch --config Release --target cpp_tests

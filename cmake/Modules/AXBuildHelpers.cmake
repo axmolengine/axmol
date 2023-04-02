@@ -201,10 +201,12 @@ function(ax_copy_target_dll ax_target)
     # Copy webview2 for ninja
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         if(CMAKE_GENERATOR MATCHES "Ninja")
-            add_custom_command(TARGET ${ax_target} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
-            $<TARGET_FILE_DIR:${ax_target}>)
+            if(MSVC)
+                add_custom_command(TARGET ${ax_target} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
+                $<TARGET_FILE_DIR:${ax_target}>)
+            endif()
         endif()
     endif()
 endfunction()
@@ -214,10 +216,12 @@ function(ax_copy_lua_dlls ax_target)
         if(NOT CMAKE_GENERATOR MATCHES "Ninja")
             set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
         endif()
-        add_custom_command(TARGET ${ax_target} POST_BUILD
-           COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
-             $<TARGET_FILE_DIR:${ax_target}>)
+        if (MSVC)
+            add_custom_command(TARGET ${ax_target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${CMAKE_BINARY_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
+                $<TARGET_FILE_DIR:${ax_target}>)
+        endif()
     endif()
 endfunction()
 

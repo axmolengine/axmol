@@ -219,9 +219,16 @@ function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     ax_link_cxx_prebuilt(${APP_NAME} ${AX_ROOT_DIR} ${AX_PREBUILT_DIR})
 
     if (WINDOWS)
-        add_custom_command(TARGET ${APP_NAME} POST_BUILD
-           COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
-             $<TARGET_FILE_DIR:${APP_NAME}>)
+        if(MSVC)
+            add_custom_command(TARGET ${APP_NAME} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}plainlua.dll"
+                    $<TARGET_FILE_DIR:${APP_NAME}>)
+        else()
+            add_custom_command(TARGET ${APP_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/$<CONFIG>/plainlua.dll"
+                $<TARGET_FILE_DIR:${APP_NAME}>)
+        endif()
     endif()
 endfunction(ax_link_lua_prebuilt)
