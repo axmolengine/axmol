@@ -43,7 +43,7 @@ struct TextureInfoGL
     ~TextureInfoGL() { destroy(); }
 
     template <typename _Fty>
-    void foreach (const _Fty& cb) const
+    void foreachTextures(const _Fty& cb) const
     {
         GLuint texID;
         int idx = 0;
@@ -56,8 +56,7 @@ struct TextureInfoGL
 
     void destroy()
     {
-        foreach ([=](GLuint texID, int) { glDeleteTextures(1, &texID); })
-            ;
+        foreachTextures([=](GLuint texID, int) { glDeleteTextures(1, &texID); });
         textures.fill(0);
     }
 

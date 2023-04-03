@@ -51,6 +51,8 @@ gen/
 assets/
 local.properties
 
+/core/version.h
+
 # Ignore python compiled files
 *.pyc
 
@@ -99,17 +101,19 @@ tools/jenkins_scripts/mac/android/userconf.ini
 # CTags
 tags
 
+CMakeSettings.json
+
 # ignore files, created with make-all-linux-project script
 /lib
 /build/linux-build
 
 # ignore all build
 /build
-
 /build*
 
 # ignore ninja build dir
 /out
+/out*
 
 # ignore jniLibs android
 /**/jniLibs/*/*.so
@@ -162,6 +166,9 @@ tests/lua-empty-test/project/proj.tizen/res/
 tests/lua-tests/project/proj.tizen/res/
 
 /extensions/Live2D/Core/
+
+# Ignore x-studio folder
+.xs
 
 # Ignore vscode folder
 .vscode/

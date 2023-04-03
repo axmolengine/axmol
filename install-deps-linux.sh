@@ -45,7 +45,7 @@ mkdir buildsrc
 cd buildsrc
 git clone https://github.com/freetype/freetype.git
 cd freetype
-git checkout VER-2-12-1
+git checkout VER-2-13-0
 sh autogen.sh
 ./configure --prefix=/usr --enable-freetype-config --disable-static
 sudo make install

@@ -29,11 +29,13 @@ THE SOFTWARE.
 
 #include "platform/CCPlatformMacros.h"
 
+#include "./version.h"
+
 NS_AX_BEGIN
 
 AX_DLL const char* axmolVersion()
 {
-    return "axmol-1.0.0";
+    return "axmol-1.0.0-" AX_GIT_COMMIT_HASH;
 }
 
 AX_DLL const char* cocos2dVersion()

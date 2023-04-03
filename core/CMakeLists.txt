@@ -56,6 +56,8 @@ else() # we not support webview2 and vidio player for WINRT target
     # set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
 endif()
 
+option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
+
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 12
@@ -122,7 +124,8 @@ file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
 file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
 
 if (APPLE)
-    set_source_files_properties(media/MediaEngine.cpp;media/AvfMediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
+    list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
+    set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()
 
 message(STATUS "_AX_MEDIA_SRC=${_AX_MEDIA_SRC}")
@@ -226,7 +229,7 @@ if(WINDOWS)
         exec_program(${NUGET_EXE}
             ARGS install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory ${CMAKE_BINARY_DIR}/packages)
 
-        if(CMAKE_GENERATOR STREQUAL "Ninja")
+        if(CMAKE_GENERATOR MATCHES "Ninja")
             target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
             target_include_directories(${_AX_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
         else()
@@ -249,6 +252,29 @@ endif()
 if(ANDROID)
     add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
 endif()
+
+find_package(Git)
+if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT_PATH}/.git")
+    # Get the current working branch and its latest abbreviated commit hash
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" rev-list --count HEAD
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_BUILD_NUM
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" branch --show-current
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" rev-parse --short=7 HEAD
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+    set(AX_GIT_BRANCH "UNKNOWN")
+    set(AX_GIT_COMMIT_HASH "unknown")
+endif()
+configure_file(
+        "${CMAKE_CURRENT_LIST_DIR}/version.h.in"
+        "${CMAKE_CURRENT_LIST_DIR}/version.h")
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

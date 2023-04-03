@@ -367,7 +367,7 @@ list(APPEND GAME_SOURCE
      Source/ZipTest/ZipTests.cpp
      )
 
-if(ANDROID OR IOS OR (WINDOWS AND AX_ENABLE_MFMEDIA))
+if(ANDROID OR MACOSX OR IOS OR (WINDOWS AND AX_ENABLE_MFMEDIA))
     list(APPEND GAME_HEADER
              Source/UITest/CocoStudioGUITest/UIVideoPlayerTest/UIVideoPlayerTest.h)
     list(APPEND GAME_SOURCE
@@ -522,7 +522,7 @@ if(WINDOWS OR MACOSX OR LINUX)
         Source/ChipmunkTestBed/demo/Slice.c
         Source/ChipmunkTestBed/demo/Unicycle.c
         Source/ChipmunkTestBed/demo/Tumble.c)
-    if(WINDOWS)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
     else()
         set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)

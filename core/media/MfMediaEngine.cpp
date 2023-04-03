@@ -5,13 +5,15 @@
 // Licensed under the MIT License.
 //-------------------------------------------------------------------------------------
 
-#    include "media/MfMediaEngine.h"
+#include "media/MfMediaEngine.h"
 
-#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP || defined(AXME_USE_IMFME))
 
 #    include "ntcvt/ntcvt.hpp"
 
 #    include "MFUtils.h"
+
+#    include "yasio/stl/string_view.hpp"
 
 NS_AX_BEGIN
 
@@ -106,7 +108,9 @@ bool MfMediaEngine::Initialize()
     // reinterpret_cast<IUnknown*>(dxgiManager.Get())));
     DX::ThrowIfFailed(attributes->SetUnknown(MF_MEDIA_ENGINE_CALLBACK, reinterpret_cast<IUnknown*>(spNotify.Get())));
     DX::ThrowIfFailed(
-        attributes->SetUINT32(MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, DXGI_FORMAT::DXGI_FORMAT_B8G8R8X8_UNORM));
+        attributes->SetUINT32(MF_MEDIA_ENGINE_VIDEO_OUTPUT_FORMAT, DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM));
+
+    DX::ThrowIfFailed(attributes->SetUINT32(MF_MEDIA_ENGINE_STREAM_CONTAINS_ALPHA_CHANNEL, 1));
 
     // Create MediaEngine.
     ComPtr<IMFMediaEngineClassFactory> mfFactory;
@@ -115,7 +119,7 @@ bool MfMediaEngine::Initialize()
 
     DX::ThrowIfFailed(mfFactory->CreateInstance(0, attributes.Get(), m_mediaEngine.ReleaseAndGetAddressOf()));
 
-    CreateInstance(CLSID_WICImagingFactory, m_wicFactory);
+    MFUtils::CreateInstance(CLSID_WICImagingFactory, m_wicFactory);
 
     return m_mediaEngine != nullptr;
 }
@@ -168,6 +172,8 @@ void MfMediaEngine::SetMuted(bool muted)
 
 bool MfMediaEngine::Open(std::string_view sourceUri)
 {
+    if (cxx20::starts_with(sourceUri, FILE_URL_SCHEME))
+        sourceUri.remove_prefix(FILE_URL_SCHEME.length());
     auto bstrUrl = ntcvt::from_chars(sourceUri);
 
     m_readyToPlay = false;
@@ -221,56 +227,38 @@ bool MfMediaEngine::SetCurrentTime(double fPosInSeconds)
     return false;
 }
 
-bool MfMediaEngine::GetLastVideoSample(MEVideoTextueSample& sample) const
+bool MfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
 {
     if (m_mediaEngine != nullptr && m_state == MEMediaState::Playing)
     {
-        LONGLONG pts;
-        if (m_mediaEngine->OnVideoStreamTick(&pts) == S_OK)
+        do
         {
+            LONGLONG pts;
+            AX_BREAK_IF(FAILED(m_mediaEngine->OnVideoStreamTick(&pts)));
+
             const MFVideoNormalizedRect rect{0, 0, 1.0, 1.0};
             const RECT rcTarget{0, 0, m_videoExtent.x, m_videoExtent.y};
             HRESULT hr = m_mediaEngine->TransferVideoFrame(m_wicBitmap.Get(), &rect, &rcTarget, &m_bkgColor);
-            if (hr == S_OK)
-            {
-                ComPtr<IWICBitmapLock> lockedData;
-                DWORD flags = WICBitmapLockRead;
-                WICRect srcRect{0, 0, m_videoExtent.x, m_videoExtent.y};
+            AX_BREAK_IF(FAILED(hr));
 
-                if (SUCCEEDED(m_wicBitmap->Lock(&srcRect, flags, lockedData.GetAddressOf())))
-                {
-                    UINT stride{0};
+            ComPtr<IWICBitmapLock> lockedData;
+            DWORD flags = WICBitmapLockRead;
+            WICRect srcRect{0, 0, m_videoExtent.x, m_videoExtent.y};
 
-                    if (SUCCEEDED(lockedData->GetStride(&stride)))
-                    {
-                        UINT bufferSize{0};
-                        BYTE* data{nullptr};
+            AX_BREAK_IF(FAILED(m_wicBitmap->Lock(&srcRect, flags, lockedData.GetAddressOf())));
 
-                        if (SUCCEEDED(lockedData->GetDataPointer(&bufferSize, &data)))
-                        {
-                            sample._buffer.assign(data, data + bufferSize, std::true_type{});
-                            sample._bufferDim = m_videoExtent;
-                            sample._stride    = sample._bufferDim.x * 4;
-                            sample._mods      = 0;
-                            if (!sample._videoDim.equals(m_videoExtent))
-                            {
-                                sample._videoDim = m_videoExtent;
-                                ++sample._mods;
-                            }
-                            if (sample._format != MEVideoSampleFormat::BGR32)
-                            {
-                                sample._format = MEVideoSampleFormat::BGR32;
-                                ++sample._mods;
-                            }
-                        }
-                    }
-                }
+            UINT stride{0};
+            AX_BREAK_IF(FAILED(lockedData->GetStride(&stride)));
 
-                return true;
-            }
-        }
+            UINT bufferSize{0};
+            BYTE* data{nullptr};
+            AX_BREAK_IF(FAILED(lockedData->GetDataPointer(&bufferSize, &data)));
+
+            callback(MEVideoFrame{data, nullptr, bufferSize, MEVideoPixelDesc{MEVideoPixelFormat::BGR32, m_videoExtent},
+                                  m_videoExtent});
+            return true;
+        } while (false);
     }
-
     return false;
 }
 
@@ -351,13 +339,13 @@ void MfMediaEngine::UpdateVideoExtent()
 {
     if (m_mediaEngine && m_readyToPlay)
     {
-        DWORD x, y;
+        DWORD x = 0, y = 0;
         DX::ThrowIfFailed(m_mediaEngine->GetNativeVideoSize(&x, &y));
 
         int mods = 0;
         if (m_videoExtent.x != x)
         {
-            m_videoExtent.y = x;
+            m_videoExtent.x = x;
             ++mods;
         }
         if (m_videoExtent.x != y)
