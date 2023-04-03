@@ -1644,7 +1644,7 @@ bool io_service::do_read(transport_handle_t transport, fd_set_adapter& fd_set)
     int n      = transport->do_read(revent, error, this->wait_duration_);
     if (n >= 0)
     {
-      if (!options_.forward_event_)
+      if (!options_.forward_event_ && !options_.forward_packet_)
       {
         YASIO_KLOGV("[index: %d] do_read status ok, bytes transferred: %d, buffer used: %d", transport->cindex(), n, n + transport->offset_);
         if (transport->expected_size_ == -1)
@@ -1670,8 +1670,8 @@ bool io_service::do_read(transport_handle_t transport, fd_set_adapter& fd_set)
           unpack(transport, transport->expected_size_ - static_cast<int>(transport->expected_packet_.size()), n, 0);
       }
       else if (n > 0)
-      { // forward event, don't perform unpack, it's useful for implement streaming based protocol, like http, websocket and ...
-        this->fire_event(transport->cindex(), io_packet_view{transport->buffer_, n}, transport);
+      { // forward packet, don't perform unpack, it's useful for implement streaming based protocol, like http, websocket and ...
+        this->forward_packet(transport->cindex(), io_packet_view{transport->buffer_, n}, transport);
       }
     }
     else
@@ -2099,6 +2099,9 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
       break;
     case YOPT_S_FORWARD_EVENT:
       options_.forward_event_ = !!va_arg(ap, int);
+      break;
+    case YOPT_S_FORWARD_PACKET:
+      options_.forward_packet_ = !!va_arg(ap, int);
       break;
 #if defined(YASIO_SSL_BACKEND)
     case YOPT_S_SSL_CERT:
