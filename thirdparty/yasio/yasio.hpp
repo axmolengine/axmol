@@ -186,6 +186,8 @@ enum
   //   keyfile: const char*
   YOPT_S_SSL_CERT,
 
+  YOPT_S_FORWARD_PACKET,
+
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
   YOPT_C_UNPACK_FN = 101,
@@ -1140,6 +1142,11 @@ private:
     else
       options_.on_event_(std::move(event));
   }
+  template <typename... _Types>
+  inline void forward_packet(_Types&&... args)
+  {
+    options_.on_event_(cxx14::make_unique<io_event>(std::forward<_Types>(args)...));
+  }
 
   // new/delete client socket connection channel
   // please call this at initialization, don't new channel at runtime
@@ -1206,7 +1213,8 @@ private:
     bool deferred_event_ = true;
     defer_event_cb_t on_defer_event_;
 
-    bool forward_event_ = false; // since v3.39.7
+    bool forward_event_  = false; // since v3.39.7
+    bool forward_packet_ = false; // since v3.39.8
 
     // tcp keepalive settings
     struct __unnamed01 {
