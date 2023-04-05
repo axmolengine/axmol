@@ -594,6 +594,8 @@ public:
                      const ValueMap& defaults            = ValueMap(),
                      const OpenUrlHandler& handleOpenUrl = nullptr);
 
+    bool setString(std::string_view text);
+
 protected:
     virtual void adaptRenderers() override;
 
@@ -635,6 +637,9 @@ protected:
 
     ValueMap _defaults;            /*!< default values */
     OpenUrlHandler _handleOpenUrl; /*!< the callback for open URL */
+
+    std::string _text;
+    std::string _xmlText;
 };
 
 }  // namespace ui
