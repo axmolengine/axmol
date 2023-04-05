@@ -316,7 +316,7 @@ const ax::StringMap<BoneNode*>& SkeletonNode::getAllSubBonesMap() const
     return _subBonesMap;
 }
 
-void SkeletonNode::addSkinGroup(std::string groupName, hlookup::string_map<std::string> boneSkinNameMap)
+void SkeletonNode::addSkinGroup(std::string_view groupName, hlookup::string_map<std::string> boneSkinNameMap)
 {
     _skinGroupMap.emplace(groupName, std::move(boneSkinNameMap));
 }
