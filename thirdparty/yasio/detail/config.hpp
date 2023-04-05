@@ -67,16 +67,7 @@ SOFTWARE.
 /*
 ** Uncomment or add compiler flag -DYASIO_HAVE_CARES to use c-ares to perform async resolve
 */
-// #define YASIO_HAVE_CARES 1
-
-/*
-** Uncomment or add compiler flag -DYASIO_HAVE_KCP for kcp support
-** Remember, before thus, please ensure:
-** 1. Execute: `git submodule update --init --recursive` to clone the kcp sources.
-** 2. Add yasio/kcp/ikcp.c to your build system, even through the `YASIO_HEADER_ONLY` was defined.
-** pitfall: yasio kcp support is experimental currently.
-*/
-// #define YASIO_HAVE_KCP 1
+// #define YASIO_USE_CARES 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_SSL_BACKEND=1 for SSL support with OpenSSL
@@ -198,7 +189,7 @@ SOFTWARE.
 /*
 **  The yasio version macros
 */
-#define YASIO_VERSION_NUM 0x033907
+#define YASIO_VERSION_NUM 0x040000
 
 /*
 ** The macros used by io_service.

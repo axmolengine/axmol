@@ -68,7 +68,7 @@ public:
      *@param: groupName, key
      *@param: boneSkinNameMap, map <name of bone, name of skin to display which added to bone>
      */
-    void addSkinGroup(std::string groupName, hlookup::string_map<std::string> boneSkinNameMap);
+    void addSkinGroup(std::string_view groupName, hlookup::string_map<std::string> boneSkinNameMap);
 
     ax::Rect getBoundingBox() const override;
 
