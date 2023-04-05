@@ -3,7 +3,7 @@ set(lib_name openssl)
 
 project(${lib_name})
 
-include(../cmake/AXConfigThirdparty.cmake)
+include(AXPlatform)
 
 set(OPENSSL_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE STRING "OpenSSL include dir" FORCE)
 

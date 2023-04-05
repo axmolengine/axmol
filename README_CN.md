@@ -1,22 +1,39 @@
 <p align="center"><a href="https://axmolengine.github.io/axmol" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
-# Axmol游戏引擎
+# Axmol引擎
+
+## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
 
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
-  
-[![Windows Build Status](https://github.com/axmolengine/axmol/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows-ci.yml)
-[![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)
-[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)
-[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)
-[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)  
 
+ 
+**[English](README.md)** 
 
-**Axmol - X分子引擎，基于 *Cocos2d-x-4.0* 持续维护的分支, 全平台基于OpenAL, c++17/20...**
-  
-**[English](README.md)**
+## 支持平台列表
+| Build | Status (github) |
+|-------|-----------------|
+| Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows.yml)|
+| Windows Desktop(Clang)|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows-clang.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows-clang.yml)|
+| Windows UWP|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml)|
+| Android | [![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)|
+| iOS |[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)|
+| tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|
+| Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
+| macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
+
+## 基于VideoTexture的视频播放引擎
+
+|  Platform             |    MediaEngine    | Video Compress Format | Video Pixel Format   | Backend            |
+|-----------------------|-------------------|-----------------------|----------------------|--------------------|
+| Windows Desktop       |    complete       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | IMFMediaSession    |
+| Windows UWP           |    complete       | H264, HEVC, VP90      | BGR32                | IMFMediaEngine     |
+| Apple macOS           |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Apple tvOS            |     complete      | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Apple iOS             |    in progress    | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Android               |    planned        | H264                  | RGB32                |                    |
 
 ### 关于预编译库
 
@@ -36,6 +53,8 @@
 * Review PR ASAP
   
 ### 主要特性:
+
+* Windows UWP 支持，请参考: https://github.com/axmolengine/axmol/pull/1108
 * 增加tvos支持
 * 增强Windows下工作流，支持链接引擎预编译库, 用法请查看: [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 * Windows 视频播放支持
@@ -74,10 +93,9 @@
   1. 安装CMake，要求3.22以上  
   2. 确保 Visual Studio 2019/2022 已正确安装
   3. 执行下面的命令
-  ```bat
-  cd axmol
-  cmake -S . -B build -G "Visual Studio 16 2019" -A Win32
-  ``` 
+      - PC: ```cmake -S . -B build -G "Visual Studio 16 2019"```
+
+      - UWP: ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```
   4. 之后就可以用vs打开```axmol/build/axmol.sln```启动cpp-tests等测试工程了
 
 #### Android

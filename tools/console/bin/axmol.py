@@ -32,7 +32,7 @@ import re
 # FIXME: MultiLanguage should be deprecated in favor of gettext
 from MultiLanguage import MultiLanguage
 
-COCOS2D_CONSOLE_VERSION = '2.3'
+AXOML_CONSOLE_VERSION = '1.0'
 
 def dict_contains(dict,key):
     if(sys.version_info.major >= 3):
@@ -965,7 +965,7 @@ def pushd(newDir):
 
 def help():
     print(MultiLanguage.get_string('COCOS_HELP_BRIEF_FMT',
-          (sys.argv[0], COCOS2D_CONSOLE_VERSION)))
+          (sys.argv[0], AXOML_CONSOLE_VERSION)))
     print(MultiLanguage.get_string('COCOS_HELP_AVAILABLE_CMD'))
     parse = Cocos2dIniParser()
     classes = parse.parse_plugins()
@@ -986,8 +986,8 @@ def help():
     print(MultiLanguage.get_string('COCOS_HELP_EXAMPLE'))
 
 def show_version():
-    print(COCOS_ENGINE_VERSION)
-    print("Cocos Console %s" % COCOS2D_CONSOLE_VERSION)
+    print(AXOML_ENGINE_VERSION)
+    print("Axmol Console %s" % AXOML_CONSOLE_VERSION)
 
 def run_plugin(command, argv, plugins):
     run_directly = False
@@ -1085,10 +1085,11 @@ if __name__ == "__main__":
     # Get the engine version for the DataStat
     cur_path = get_current_path()
     engine_path = os.path.normpath(os.path.join(cur_path, '../../../'))
-    COCOS_ENGINE_VERSION = utils.get_engine_version(engine_path)
-    STAT_VERSION = COCOS_ENGINE_VERSION
+    AXOML_ENGINE_VERSION = utils.get_engine_version(engine_path)
+    print(AXOML_ENGINE_VERSION)
+    STAT_VERSION = AXOML_ENGINE_VERSION
     ver_pattern = r"axmol-(.*)"
-    match = re.match(ver_pattern, COCOS_ENGINE_VERSION)
+    match = re.match(ver_pattern, AXOML_ENGINE_VERSION)
     if match:
         STAT_VERSION = match.group(1)
 

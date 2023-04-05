@@ -67,162 +67,180 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
     endif()
 endif()
 
-set(RUNTIME_SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src)
+# The common cross-platforms source files and header files
+file(GLOB_RECURSE GAME_HEADER
+    Source/*.h
+    )
+file(GLOB_RECURSE GAME_SOURCE
+    Source/*.cpp
+    )
+    
+set(GAME_INC_DIRS
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source"
+)
 
-# script and source files info, not need to compile
-set(res_res_folders
-    "${CMAKE_CURRENT_SOURCE_DIR}/res"
-    )
-set(res_src_folders
-    "${CMAKE_CURRENT_SOURCE_DIR}/src"
-    )
-set(res_script_folders
-    "${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/script"
-    )
-if(APPLE OR VS)
-    ax_mark_multi_resources(res_res RES_TO "Resources/res" FOLDERS ${res_res_folders})
-    ax_mark_multi_resources(res_src RES_TO "Resources/src" FOLDERS ${res_src_folders})
-    set(cc_common_res ${res_res} ${res_src})
+set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
+set(engine_script_folder "${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/script")
+
+if(APPLE)
+    ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
+    set(common_content_files ${content_files})
     if (NOT _AX_TOP_LEVEL_APP)
-        ax_mark_multi_resources(res_script RES_TO "Resources/src/axmol" FOLDERS ${res_script_folders})
-        set(cc_common_res ${cc_common_res} ${res_script})
+        ax_mark_multi_resources(engine_script_files RES_TO "Resources/src/axmol" FOLDERS ${engine_script_folder})
+        set(common_content_files ${common_content_files} ${engine_script_files})
+    endif()
+elseif(WINDOWS)
+    ax_mark_multi_resources(content_files RES_TO "Content" FOLDERS ${content_folder})
+    set(common_content_files ${content_files})
+    if (NOT _AX_TOP_LEVEL_APP)
+        ax_mark_multi_resources(engine_script_files RES_TO "Content/src/axmol" FOLDERS ${engine_script_folder})
+        set(common_content_files ${common_content_files} ${engine_script_files})
     endif()
 endif()
 
-# record sources, headers
-set(GAME_HEADER ${RUNTIME_SRC_ROOT}/Classes/AppDelegate.h)
-set(GAME_SOURCE ${RUNTIME_SRC_ROOT}/Classes/AppDelegate.cpp)
-# sources need to compile info, include dirs and source files
-
 if(ANDROID)
     # the APP_NAME should match on AndroidManifest.xml
-    list(APPEND GAME_SOURCE ${RUNTIME_SRC_ROOT}/proj.android/app/jni/main.cpp)
-elseif(LINUX)
-    list(APPEND GAME_SOURCE ${RUNTIME_SRC_ROOT}/proj.linux/main.cpp)
-elseif(WINDOWS)
-    list(APPEND GAME_HEADER
-         ${RUNTIME_SRC_ROOT}/proj.win32/main.h
-         )
     list(APPEND GAME_SOURCE
-         ${RUNTIME_SRC_ROOT}/proj.win32/main.cpp
-         ${cc_common_res}
+         proj.android/app/jni/main.cpp
          )
+elseif(LINUX)
+    list(APPEND GAME_SOURCE
+         proj.linux/main.cpp
+         )
+    list(APPEND GAME_SOURCE ${common_content_files})
+elseif(WINDOWS)
+    if(NOT WINRT)
+        list(APPEND GAME_HEADER
+             proj.win32/main.h
+             )
+        list(APPEND GAME_SOURCE
+             proj.win32/main.cpp
+             )
+    else()
+        ax_setup_winrt_sources()
+    endif()
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/AppController.h
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/RootViewController.h
+             proj.ios_mac/ios/AppController.h
+             proj.ios_mac/ios/RootViewController.h
              )
 
         if (TVOS)
             set(APP_UI_RES
-                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreenBackground.png
-                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/LaunchScreen.storyboard
-                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/Images.xcassets
-            )
+                proj.ios_mac/ios/LaunchScreenBackground.png
+                proj.ios_mac/ios/targets/tvos/LaunchScreen.storyboard
+                proj.ios_mac/ios/targets/tvos/Images.xcassets
+                )
         else()
             set(APP_UI_RES
-                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/LaunchScreenBackground.png
-                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard
-                ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/Images.xcassets
-            )
+                proj.ios_mac/ios/LaunchScreenBackground.png
+                proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard
+                proj.ios_mac/ios/targets/ios/Images.xcassets
+                )
         endif()
 
         list(APPEND GAME_SOURCE
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/main.m
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/AppController.mm
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/RootViewController.mm
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/Prefix.pch
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/build-cfg.json
+             proj.ios_mac/ios/main.m
+             proj.ios_mac/ios/AppController.mm
+             proj.ios_mac/ios/RootViewController.mm
+             proj.ios_mac/ios/Prefix.pch
+             proj.ios_mac/ios/build-cfg.json
              ${APP_UI_RES}
              )
     elseif(MACOSX)
-        list(APPEND GAME_HEADER
-             )
         set(APP_UI_RES
-            ${RUNTIME_SRC_ROOT}/proj.ios_mac/mac/Icon.icns
-            ${RUNTIME_SRC_ROOT}/proj.ios_mac/mac/Info.plist
+            proj.ios_mac/mac/Icon.icns
+            proj.ios_mac/mac/Info.plist
             )
         list(APPEND GAME_SOURCE
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/mac/main.cpp
-             ${RUNTIME_SRC_ROOT}/proj.ios_mac/mac/Prefix.pch
+             proj.ios_mac/mac/main.cpp
+             proj.ios_mac/mac/Prefix.pch
              ${APP_UI_RES}
              )
     endif()
-    list(APPEND GAME_SOURCE ${cc_common_res})
+    list(APPEND GAME_SOURCE ${common_content_files})
 endif()
 
-set(APP_SRC ${GAME_HEADER} ${GAME_SOURCE})
-
 # mark app complie info and libs info
+set(APP_SOURCES
+    ${GAME_HEADER}
+    ${GAME_SOURCE}
+    )
 if(NOT ANDROID)
-    add_executable(${APP_NAME} ${APP_SRC})
+    add_executable(${APP_NAME} ${APP_SOURCES})
 else()
-    add_library(${APP_NAME} SHARED ${APP_SRC})
-
+    add_library(${APP_NAME} SHARED ${APP_SOURCES})
+    
     # whole archive for jni
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
     add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive)
 
-    config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/frameworks/runtime-src/proj.android/app/src")
+    config_android_shared_libs("org.axmol.lib" "${CMAKE_CURRENT_SOURCE_DIR}/proj.android/app/src")
 endif()
 
 if (NOT _AX_USE_PREBUILT)
     target_link_libraries(${APP_NAME} ${_AX_LUA_LIB})
 endif()
 
-target_include_directories(${APP_NAME} PRIVATE ${RUNTIME_SRC_ROOT}/Classes)
+# The optional thirdparties(not dependent by engine)
+if (AX_WITH_YAML_CPP)
+    list(APPEND GAME_INC_DIRS "${_AX_ROOT_PATH}/thirdparty/yaml-cpp/include")
+endif()
+
+target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
+
 
 # mark app resources, resource will be copy auto after mark
-setup_ax_app_config(${APP_NAME})
+ax_setup_app_config(${APP_NAME})
 if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
     set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axmol.hellolua")
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES
-                              MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/mac/Info.plist"
+                              MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist"
                               )
         set_target_properties(${APP_NAME} PROPERTIES
             LINK_FLAGS "-pagezero_size 10000 -image_base 100000000"
         )
     elseif(TVOS)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/tvos/Info.plist")
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/targets/tvos/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
         set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
         set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     elseif(IOS)
-        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${RUNTIME_SRC_ROOT}/proj.ios_mac/ios/targets/ios/Info.plist")
+        set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/targets/ios/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
         set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
         set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     endif()
 elseif(WINDOWS)
-    if(NOT _AX_USE_PREBUILT)
+    if((NOT _AX_USE_PREBUILT) AND (NOT WINRT))
         ax_copy_target_dll(${APP_NAME})
         ax_copy_lua_dlls(${APP_NAME})
     endif()
 endif()
-# copy resource on linux or WINDOWS
-if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+
+if ((NOT APPLE) AND (NOT WINRT))
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    ax_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR}/res FOLDERS ${res_res_folders})
-    ax_copy_lua_scripts(${APP_NAME} ${res_src_folders} ${APP_RES_DIR}/src )
-    ax_copy_lua_scripts(${APP_NAME} ${res_script_folders} ${APP_RES_DIR}/src/axmol)
-elseif(WINDOWS)
-    set(my_res_folder "${CMAKE_CURRENT_SOURCE_DIR}")
-    ax_copy_lua_scripts(${APP_NAME} ${res_script_folders} "${my_res_folder}/src/axmol")
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${my_res_folder}")
+    if (NOT _AX_TOP_LEVEL_APP)
+        ax_sync_lua_scripts(${APP_NAME} ${engine_script_folder} "${content_folder}/src/axmol")
+    endif()
+    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
+    
+    if((WINDOWS AND (NOT (CMAKE_GENERATOR MATCHES "Ninja"))))
+        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${content_folder}")
+        if(NOT DEFINED BUILD_ENGINE_DONE)
+            set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
+        endif()
+    endif()
+elseif(WINRT)
     if(NOT DEFINED BUILD_ENGINE_DONE)
         set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${APP_NAME})
     endif()
-endif()
-
-# The optional thirdparties(not dependent by engine)
-if (AX_WITH_YAML_CPP)
-    target_include_directories(${APP_NAME} PRIVATE ${_AX_ROOT_PATH}/thirdparty/yaml-cpp/include)
-    target_link_libraries(${APP_NAME} yaml-cpp)
 endif()
 
 if (_AX_USE_PREBUILT) # support windows and linux
@@ -230,4 +248,9 @@ if (_AX_USE_PREBUILT) # support windows and linux
 
     include(${_AX_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
     ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT_PATH} ${AX_PREBUILT_DIR})
+endif()
+
+
+if (NOT DEFINED BUILD_ENGINE_DONE)
+    ax_uwp_set_all_targets_deploy_min_version()
 endif()

@@ -1,0 +1,133 @@
+apply plugin: 'com.android.application'
+apply from: project(':libaxmol').projectDir.toString() + "/axutils.gradle"
+
+android {
+    compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
+
+    // Setup native build tools: ndk & cmake
+    def nbtInfo = axutils.findNativeBuildTools(project)
+    ndkVersion = nbtInfo[0]
+    if(nbtInfo[1]) {
+        ndkPath = nbtInfo[1]
+    }
+    def cmakeVer = nbtInfo[2]
+    def cmakeOptions = Eval.me(nbtInfo[3])
+
+    defaultConfig {
+        applicationId "org.axmol.lua_tests"
+        minSdkVersion PROP_MIN_SDK_VERSION
+        targetSdkVersion PROP_TARGET_SDK_VERSION
+        versionCode 1
+        versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                targets 'lua_tests'
+                arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_shared", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE"
+                arguments.addAll(cmakeOptions)
+                cppFlags "-frtti -fexceptions -fsigned-char"
+            }
+        }
+
+        ndk {
+            abiFilters = []
+            abiFilters.addAll(PROP_APP_ABI.split(':').collect{it as String})
+        }
+    }
+
+    sourceSets.main {
+        java.srcDir "src"
+        res.srcDir "res"
+        manifest.srcFile "AndroidManifest.xml"
+        assets.srcDir "assets"
+    }
+
+    externalNativeBuild {
+        cmake {
+            version "$cmakeVer"
+            path "../../CMakeLists.txt"
+        }
+    }
+
+    signingConfigs {
+
+       release {
+            if (project.hasProperty("RELEASE_STORE_FILE")) {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (project.hasProperty("RELEASE_STORE_FILE")) {
+                signingConfig signingConfigs.release
+            }
+        }
+
+        debug {
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+        }
+    }
+
+    aaptOptions {
+       noCompress 'mp3','ogg','wav','mp4','ttf','ttc'
+    }
+}
+
+android.applicationVariants.all { variant ->
+
+    delete "${projectDir}/assets"
+    def targetName = variant.name.capitalize()
+    def copyTaskName = "copy${targetName}ResourcesToAssets"
+
+    tasks.register(copyTaskName) {
+        copy {
+           from "${projectDir}/../../../Content/res"
+           into "${projectDir}/assets/res"
+        }
+
+        copy {
+            from("${projectDir}/../../../../cpp-tests/Content") {
+                exclude "**/*.gz"
+            }
+            into "${projectDir}/assets/res"
+        }
+
+        copy {
+            from "${projectDir}/../../../Content/src"
+            into "${projectDir}/assets/src"
+        }
+
+        copy {
+            from "${projectDir}/../../../../../extensions/scripting/lua-bindings/script"
+            into  "${projectDir}/assets/src/axmol"
+        }
+    }
+    tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':libaxmol')
+}
+
+project.afterEvaluate {
+    if (tasks.findByName("externalNativeBuildDebug")) {
+        compileDebugJavaWithJavac.dependsOn externalNativeBuildDebug
+    }
+    if (tasks.findByName("externalNativeBuildRelease")) {
+        compileReleaseJavaWithJavac.dependsOn externalNativeBuildRelease  
+    }
+}

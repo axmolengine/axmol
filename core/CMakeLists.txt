@@ -36,19 +36,28 @@ if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
 endif()
 
-if (NOT DEFINED AX_USE_COMPAT_GL)
-    set(AX_USE_COMPAT_GL FALSE CACHE INTERNAL "Enabling AX_USE_COMPAT_GL" )
-endif()
-
-if (NOT DEFINED AX_ENABLE_MSEDGE_WEBVIEW2)
-    set(AX_ENABLE_MSEDGE_WEBVIEW2 TRUE CACHE INTERNAL "Enabling windows webview2" )
-endif()
-
-if (NOT DEFINED AX_ENABLE_MFMEDIA)
-    set(AX_ENABLE_MFMEDIA TRUE CACHE INTERNAL "Enabling microsoft media foundation for windows video player" )
-endif()
-
 project(ax_libs)
+
+if (NOT WINRT)
+    option (AX_USE_COMPAT_GL "Use compat gl" OFF)
+else()
+    option (AX_USE_COMPAT_GL "Use compat gl" ON)
+    set(AX_USE_COMPAT_GL ON)
+endif()
+
+message(STATUS "WINRT=${WINRT}")
+
+option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation for windows video player" ON)
+
+if (NOT WINRT)
+    option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
+else() # we not support webview2 and vidio player for WINRT target
+    set(AX_ENABLE_MSEDGE_WEBVIEW2 OFF CACHE BOOL "Use Microsoft Edge webview2" FORCE)
+    # set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
+endif()
+
+option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
+
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 12
@@ -70,7 +79,7 @@ option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
-if(WINDOWS OR MACOSX OR LINUX OR ANDROID)
+if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID)
   option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
 else()
   set(AX_ENABLE_EXT_IMGUI OFF)
@@ -111,6 +120,16 @@ include(ui/CMakeLists.txt)
 include(network/CMakeLists.txt)
 include(audio/CMakeLists.txt)
 
+file(GLOB_RECURSE _AX_MEDIA_HEADER media/*.h)
+file(GLOB_RECURSE _AX_MEDIA_SRC media/*.cpp)
+
+if (APPLE)
+    list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
+    set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
+endif()
+
+message(STATUS "_AX_MEDIA_SRC=${_AX_MEDIA_SRC}")
+
 set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
     ${_AX_3D_HEADER}
@@ -124,6 +143,7 @@ set(_AX_HEADER axmol.h
     ${_AX_AUDIO_HEADER}
     ${_AX_UI_HEADER}
     ${_AX_NETWORK_HEADER}
+    ${_AX_MEDIA_HEADER}
     )
 
 set(_AX_SRC axmol.cpp
@@ -139,11 +159,16 @@ set(_AX_SRC axmol.cpp
     ${_AX_AUDIO_SRC}
     ${_AX_UI_SRC}
     ${_AX_NETWORK_SRC}
+    ${_AX_MEDIA_SRC}
     )
 
 list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
+
+if (WINRT)
+    target_compile_options(${_AX_CORE_LIB} PUBLIC /ZW)
+endif()
 
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
@@ -204,7 +229,7 @@ if(WINDOWS)
         exec_program(${NUGET_EXE}
             ARGS install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory ${CMAKE_BINARY_DIR}/packages)
 
-        if(CMAKE_GENERATOR STREQUAL "Ninja")
+        if(CMAKE_GENERATOR MATCHES "Ninja")
             target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
             target_include_directories(${_AX_CORE_LIB} PUBLIC ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/include)
         else()
@@ -228,10 +253,28 @@ if(ANDROID)
     add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
 endif()
 
-# copy all thirdparty libraries to ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
-# if (WINDOWS)
-#     copy_thirdparty_dlls(libcocos2d ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
-# endif()
+find_package(Git)
+if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT_PATH}/.git")
+    # Get the current working branch and its latest abbreviated commit hash
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" rev-list --count HEAD
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_BUILD_NUM
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" branch --show-current
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" rev-parse --short=7 HEAD
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+    set(AX_GIT_BRANCH "UNKNOWN")
+    set(AX_GIT_COMMIT_HASH "unknown")
+endif()
+configure_file(
+        "${CMAKE_CURRENT_LIST_DIR}/version.h.in"
+        "${CMAKE_CURRENT_LIST_DIR}/version.h")
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

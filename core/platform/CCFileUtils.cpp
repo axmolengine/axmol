@@ -1075,7 +1075,8 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
             *   008E3210  mov         esi,eax  
             *   008E3212  mov         byte ptr [ebp-4],6
             */
-            auto&& pathStr = (std::string &&)(entry.path().u8string());
+            auto pathU8Str = entry.path().u8string();
+            auto& pathStr = *reinterpret_cast<std::string*>(&pathU8Str);
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
 #else
             std::string pathStr = entry.path().string();
@@ -1102,7 +1103,8 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
         if (isDir || entry.is_regular_file())
         {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-            auto&& pathStr = (std::string &&)(entry.path().u8string());
+            auto pathU8Str        = entry.path().u8string();
+            auto& pathStr  = *reinterpret_cast<std::string*>(&pathU8Str);
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
 #else
             std::string pathStr = entry.path().string();
@@ -1114,7 +1116,7 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
     }
 }
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
 // windows os implement should override in platform specific FileUtiles class
 bool FileUtils::isDirectoryExistInternal(std::string_view dirPath) const
 {

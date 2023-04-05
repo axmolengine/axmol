@@ -25,25 +25,6 @@
 #ifndef __COCOS2D_EXT_H__
 #define __COCOS2D_EXT_H__
 
-#include "ExtensionMacros.h"
-
-// Physics integration
-#include "physics-nodes/CCPhysicsDebugNode.h"
-#include "physics-nodes/CCPhysicsDebugNodeBox2D.h"
-#include "physics-nodes/CCPhysicsDebugNodeChipmunk2D.h"
-#include "physics-nodes/CCPhysicsSprite.h"
-#include "physics-nodes/CCPhysicsSpriteBox2D.h"
-#include "physics-nodes/CCPhysicsSpriteChipmunk2D.h"
-
-#include "assets-manager/AssetsManager.h"
-#include "assets-manager/AssetsManagerEx.h"
-#include "assets-manager/CCEventAssetsManagerEx.h"
-#include "assets-manager/CCEventListenerAssetsManagerEx.h"
-#include "assets-manager/Manifest.h"
-
-// Particle System, include Particle Universe Particle System
-#include "Particle3D/CCParticle3DRender.h"
-#include "Particle3D/CCParticleSystem3D.h"
-#include "Particle3D/PU/CCPUParticleSystem3D.h"
+#include "axmol-ext.h"
 
 #endif /* __COCOS2D_EXT_H__ */

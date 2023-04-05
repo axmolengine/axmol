@@ -1685,7 +1685,7 @@ namespace
 {
 inline bool isUTF8CharWrappable(const StringUtils::StringUTF8::CharUTF8& ch)
 {
-    return (!ch.isASCII() || !std::isalnum(ch._char[0], std::locale()));
+    return (!ch.isASCII() || !std::isgraph(ch._char[0], std::locale()));
 }
 
 int getPrevWordPos(const StringUtils::StringUTF8& text, int idx)
@@ -1695,7 +1695,7 @@ int getPrevWordPos(const StringUtils::StringUTF8& text, int idx)
 
     // start from idx-1
     const StringUtils::StringUTF8::CharUTF8Store& str = text.getString();
-    auto it = std::find_if(str.rbegin() + (str.size() - idx + 1), str.rend(), isUTF8CharWrappable);
+    const auto it = std::find_if(str.rbegin() + (str.size() - idx + 1), str.rend(), isUTF8CharWrappable);
     if (it == str.rend())
         return -1;
     return static_cast<int>(it.base() - str.begin());
@@ -1707,7 +1707,7 @@ int getNextWordPos(const StringUtils::StringUTF8& text, int idx)
     if (idx + 1 >= static_cast<int>(str.size()))
         return static_cast<int>(str.size());
 
-    auto it = std::find_if(str.begin() + idx + 1, str.end(), isUTF8CharWrappable);
+    const auto it = std::find_if(str.begin() + idx + 1, str.end(), isUTF8CharWrappable);
     return static_cast<int>(it - str.begin());
 }
 
@@ -1723,7 +1723,7 @@ int findSplitPositionForWord(Label* label,
                              float originalLeftSpaceWidth,
                              float newLineWidth)
 {
-    bool startingNewLine = (newLineWidth == originalLeftSpaceWidth);
+    const bool startingNewLine = (newLineWidth == originalLeftSpaceWidth);
     if (!isWrappable(text))
         return (startingNewLine ? static_cast<int>(text.length()) : 0);
 
@@ -1901,7 +1901,7 @@ void RichText::handleTextRenderer(std::string_view text,
 
             // textRendererWidth will get 0.0f, when we've got glError: 0x0501 in Label::getContentSize
             // It happens when currentText is very very long so that can't generate a texture
-            float textRendererWidth = textRenderer->getContentSize().width;
+            const float textRendererWidth = textRenderer->getContentSize().width;
 
             // no splitting
             if (textRendererWidth > 0.0f && _leftSpaceWidth >= textRendererWidth)
@@ -1936,6 +1936,14 @@ void RichText::handleTextRenderer(std::string_view text,
             }
 
             StringUtils::StringUTF8::CharUTF8Store& str = utf8Text.getString();
+
+            // after the first line, skip any spaces to the left
+            const auto startOfWordItr =
+                std::find_if(str.begin() + leftLength, str.end(), [](const StringUtils::StringUTF8::CharUTF8& ch) {
+                    return !std::isspace(ch._char[0], std::locale());
+                });
+            if (startOfWordItr != str.end())
+                leftLength = static_cast<int>(startOfWordItr - str.begin());
 
             // erase the chars which are processed
             str.erase(str.begin(), str.begin() + leftLength);

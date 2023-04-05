@@ -5,7 +5,7 @@
 #include "platform/CCFileStream.h"
 #include "platform/CCPlatformConfig.h"
 #include <string>
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
+#if defined(_WIN32)
 #    include <errno.h>
 #    include <io.h>
 #    include <direct.h>
@@ -126,6 +126,8 @@ public:
     int64_t tell() override;
     int64_t size() override;
     bool isOpen() const override;
+
+    void* getNativeHandle() const override;
 
 private:
     int internalClose();

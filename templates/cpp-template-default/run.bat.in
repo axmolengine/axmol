@@ -22,4 +22,4 @@ if not defined BUILD_CFG set BUILD_CFG=Debug
 rem Save run config to run.bat.txt
 echo %BUILD_CFG%>%cacheFile%
 
-start /D %myDir%Resources %BUILD_DIR%/bin/%APP_NAME%/%BUILD_CFG%/%APP_NAME%.exe
+start /D %myDir%Content %BUILD_DIR%/bin/%APP_NAME%/%BUILD_CFG%/%APP_NAME%.exe

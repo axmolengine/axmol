@@ -1,7 +1,13 @@
+
+IMPORTANT INFO:
+For correct working of the "third party robot" please update also the
+https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
+
+
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 111.0.5563.19
+- Version: 111.0.5563.111
 - License: BSD WITH The ANGLE Project Authors
 
 ## astc
@@ -37,7 +43,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.1.1
+- Version: 1.2.2
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -47,7 +53,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.88.0
+- Version: 7.88.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -62,7 +68,7 @@
 
 ## FreeType
 - [![Upstream](https://img.shields.io/github/v/tag/freetype/freetype?label=Upstream)](https://www.freetype.org/)
-- Version: 2.12.1
+- Version: 2.13.0
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -77,12 +83,12 @@
 
 ## glsl-optimizer (Apple Metal Render backend only)
 - Upstream: https://github.com/aras-p/glsl-optimizer
-- Version: git d78c3d2
+- Version: git cdfc9ef
 - License: MIT
 
 ## GHC (iOS devices only)
 - [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
-- Version: 1.5.12
+- Version: 1.5.14
 - License: MIT
 
 ## jni.hpp
@@ -118,7 +124,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-d0e8893 (2624)
+  - Version: 2.1-505e2c0
   - License: MIT
 
 - tolua
@@ -138,7 +144,7 @@
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
-- Version: git ca7c706(316)
+- Version: git ca7c706(316) with modified for UWP apps support
 - License: CC0-1.0
 
 ## mio
@@ -148,7 +154,7 @@
 
 ## ntcvt (Windows only)
 - [![Upstream](https://img.shields.io/github/v/tag/simdsoft/ntcvt?label=Upstream)](https://github.com/simdsoft/ntcvt)
-- Version: 0.0.2
+- Version: 1.0.0
 - License: Apache-2.0
 
 ## oboe (Adnroid only)
@@ -169,7 +175,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.23.0
+- Version: 1.23.0 with modified for UWP apps support
 - License: LGPL-2.1
 
 ## OpenSSL
@@ -193,12 +199,6 @@
   - all tests passed: https://github.com/halx99/pugixml/actions/runs/4090401630
 - Version: 1.13
 - License: MIT
-
-## range-v3
-- [![Upstream](https://img.shields.io/github/v/tag/ericniebler/range-v3?label=Upstream)](https://github.com/ericniebler/range-v3) 
-- Version: 0.12.0
-- License: BSL-1.0
-
 
 ## rapidjson
 - [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
@@ -254,10 +254,11 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 3.39.7
+- Version: git 4.0.0-db592fd
 - License: MIT WITH Anti-996
 
 ## zlib
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.2.13
 - License: zlib
+

@@ -214,9 +214,7 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
           case YOPT_C_REMOTE_HOST:
             service->set_option(opt, static_cast<int>(args[0]), args[1].as<const char*>());
             break;
-#  if YASIO_VERSION_NUM >= 0x033100
-          case YOPT_C_LFBFD_IBTS:
-#  endif
+          case YOPT_C_UNPACK_STRIP:
           case YOPT_C_LOCAL_PORT:
           case YOPT_C_REMOTE_PORT:
           case YOPT_C_KCP_CONV:
@@ -316,6 +314,8 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(YOPT_S_TCP_KEEPALIVE);
   YASIO_EXPORT_ENUM(YOPT_S_EVENT_CB);
   YASIO_EXPORT_ENUM(YOPT_C_UNPACK_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_STRIP);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_NO_BSWAP);
   YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS); // alias for YOPT_C_UNPACK_PARAMS
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_HOST);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_PORT);
@@ -326,7 +326,6 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   YASIO_EXPORT_ENUM(YOPT_C_ENABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_DISABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_KCP_CONV);
-  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_NO_BSWAP);
   YASIO_EXPORT_ENUM(YOPT_C_MOD_FLAGS);
 
   YASIO_EXPORT_ENUM(YCF_REUSEADDR);
@@ -660,9 +659,7 @@ end
                                    service->set_option(opt, static_cast<int>(args[0]), static_cast<const char*>(args[1]));
                                    break;
 
-#  if YASIO_VERSION_NUM >= 0x033100
-                                 case YOPT_C_LFBFD_IBTS:
-#  endif
+                                 case YOPT_C_UNPACK_STRIP:
                                  case YOPT_C_LOCAL_PORT:
                                  case YOPT_C_REMOTE_PORT:
                                  case YOPT_C_KCP_CONV:
@@ -749,6 +746,8 @@ end
   YASIO_EXPORT_ENUM(YOPT_S_TCP_KEEPALIVE);
   YASIO_EXPORT_ENUM(YOPT_S_EVENT_CB);
   YASIO_EXPORT_ENUM(YOPT_C_UNPACK_PARAMS);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_STRIP);
+  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_NO_BSWAP);
   YASIO_EXPORT_ENUM(YOPT_C_LFBFD_PARAMS); // alias for YOPT_C_UNPACK_PARAMS
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_HOST);
   YASIO_EXPORT_ENUM(YOPT_C_LOCAL_PORT);
@@ -759,7 +758,6 @@ end
   YASIO_EXPORT_ENUM(YOPT_C_ENABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_DISABLE_MCAST);
   YASIO_EXPORT_ENUM(YOPT_C_KCP_CONV);
-  YASIO_EXPORT_ENUM(YOPT_C_UNPACK_NO_BSWAP);
   YASIO_EXPORT_ENUM(YOPT_C_MOD_FLAGS);
 
   YASIO_EXPORT_ENUM(YCF_REUSEADDR);

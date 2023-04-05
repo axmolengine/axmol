@@ -1,6 +1,7 @@
 #/****************************************************************************
-# Copyright (c) 2015-2017 Chukong Technologies Inc.
-
+# Copyright (c) 2013-2014 cocos2d-x.org
+# Copyright (c) 2021-2023 Bytedance Inc.
+#
 # https://axmolengine.github.io/
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,6 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 # ****************************************************************************/
+
 cmake_minimum_required(VERSION 3.10)
 
 set(APP_NAME fairygui_tests)
@@ -40,6 +42,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     else()
         set(_AX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../..)
     endif()
+
     set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
 
     include(AXBuildSet)
@@ -47,14 +50,20 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
 endif()
 
 # record sources, headers, resources...
-file(GLOB GAME_SOURCE Classes/*.cpp)
-file(GLOB GAME_HEADER Classes/*.h)
+file(GLOB GAME_SOURCE Source/*.cpp)
+file(GLOB GAME_HEADER Source/*.h)
 
-set(GAME_RES_FOLDER
-    "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
+set(GAME_INC_DIRS
+  "${CMAKE_CURRENT_SOURCE_DIR}/Source"
+)
+
+set(content_folder
+    "${CMAKE_CURRENT_SOURCE_DIR}/Content"
     )
-if(APPLE OR VS)
-    ax_mark_multi_resources(cc_common_res RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
+if(APPLE)
+    ax_mark_multi_resources(common_content_files RES_TO "Resources" FOLDERS ${content_folder})
+elseif(WINDOWS)
+    ax_mark_multi_resources(common_content_files RES_TO "Content" FOLDERS ${content_folder})
 endif()
 
 if(ANDROID)
@@ -65,14 +74,20 @@ elseif(LINUX)
     list(APPEND GAME_SOURCE
          proj.linux/main.cpp
          )
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)
-    list(APPEND GAME_HEADER
-         proj.win32/main.h
-         )
-    list(APPEND GAME_SOURCE
-         proj.win32/main.cpp
-         ${cc_common_res}
-         )
+    if(NOT WINRT)
+        list(APPEND GAME_HEADER
+             proj.win32/main.h
+             )
+        list(APPEND GAME_SOURCE
+             proj.win32/main.cpp
+             ${common_content_files}
+             )
+    else()
+        ax_setup_winrt_sources()
+    endif()
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
@@ -111,15 +126,15 @@ elseif(APPLE)
              ${APP_UI_RES}
              )
     endif()
-    list(APPEND GAME_SOURCE ${cc_common_res})
+    list(APPEND GAME_SOURCE ${common_content_files})
 endif()
 
+# mark app complie info and libs info
 set(all_code_files
     ${GAME_HEADER}
     ${GAME_SOURCE}
     )
 
-# mark app complie info
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
 else()
@@ -133,10 +148,11 @@ endif()
 
 target_link_libraries(${APP_NAME} ${_AX_CORE_LIB})
 
-target_include_directories(${APP_NAME} PRIVATE Classes)
+target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
 
-setup_ax_app_config(${APP_NAME})
-if(XCODE)
+# mark app resources
+ax_setup_app_config(${APP_NAME})
+if(APPLE)
     set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")
     set_xcode_property(${APP_NAME} INSTALL_PATH "\$(LOCAL_APPS_DIR)")
     set_xcode_property(${APP_NAME} PRODUCT_BUNDLE_IDENTIFIER "org.axmol.fairygui-tests")
@@ -153,13 +169,25 @@ if(XCODE)
 
     # For code-signing, set the DEVELOPMENT_TEAM:
     #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
-elseif(WINDOWS)
+elseif(WINDOWS AND (NOT WINRT))
     ax_copy_target_dll(${APP_NAME})
 endif()
 
-if((WINDOWS AND (CMAKE_GENERATOR STREQUAL "Ninja")) OR LINUX)
+if ((NOT APPLE) AND (NOT WINRT))
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    ax_copy_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
-elseif(WINDOWS)
-    set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${GAME_RES_FOLDER}")
+    ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
+    if(WINDOWS)
+        set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${content_folder}")
+    endif()
+endif()
+
+if((NOT IOS) AND (NOT WINRT))
+    message("CMake ${APP_NAME} target_precompile_headers")
+    target_precompile_headers(${APP_NAME} PRIVATE 
+      "$<$<COMPILE_LANGUAGE:CXX>:axmol.h>"
+    )
+endif()
+
+if (NOT DEFINED BUILD_ENGINE_DONE)
+    ax_uwp_set_all_targets_deploy_min_version()
 endif()

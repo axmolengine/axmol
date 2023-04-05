@@ -63,7 +63,6 @@ public:
      * How many requests could be perform concurrency.
      */
     static const int MAX_CHANNELS       = 21;
-    static const int MAX_REDIRECT_COUNT = 3;
 
     /**
      * Get instance of HttpClient.
@@ -119,12 +118,6 @@ public:
      *      https://stackoverflow.com/questions/23714383/what-are-all-the-possible-values-for-http-content-type-header
      */
     bool send(HttpRequest* request);
-
-    /**
-     * Send http request sync, will block caller thread until request finished.
-     * @remark  Caller must call release manually when the response never been used.
-     */
-    HttpResponse* sendSync(HttpRequest* request);
 
     /**
      * Set the timeout value for connecting.
@@ -205,7 +198,7 @@ private:
     HttpClient();
     virtual ~HttpClient();
 
-    void processResponse(HttpResponse* response, std::string_view url);
+    void processResponse(HttpResponse* response, int channelIndex);
 
     int tryTakeAvailChannel();
 
@@ -213,7 +206,7 @@ private:
 
     void handleNetworkEOF(HttpResponse* response, yasio::io_channel* channel, int internalErrorCode);
 
-    void dispatchResponseCallbacks();
+    void tickInput();
 
     void finishResponse(HttpResponse* response);
 

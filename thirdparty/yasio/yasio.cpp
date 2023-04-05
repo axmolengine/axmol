@@ -44,11 +44,7 @@ SOFTWARE.
 #  include "yasio/detail/ssl.hpp"
 #endif
 
-#if defined(YASIO_HAVE_KCP)
-#  include "kcp/ikcp.h"
-#endif
-
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
 #  include "yasio/detail/ares.hpp"
 #endif
 
@@ -126,7 +122,7 @@ static highp_time_t yasio__min_wait_usec = 0LL;
 // any changes to the system clock are detected after no longer than this.
 static const highp_time_t yasio__max_wait_usec = 5 * 60 * 1000 * 1000LL;
 // the max transport alloc size
-static const size_t yasio__max_tsize = (std::max)({sizeof(io_transport_tcp), sizeof(io_transport_udp), sizeof(io_transport_ssl), sizeof(io_transport_kcp)});
+static const size_t yasio__max_tsize = (std::max)({sizeof(io_transport_tcp), sizeof(io_transport_udp), sizeof(io_transport_ssl)});
 } // namespace
 struct yasio__global_state {
   enum
@@ -148,7 +144,7 @@ struct yasio__global_state {
     }
 #  endif
 #endif
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
     int ares_status = ::ares_library_init(ARES_LIB_INIT_ALL);
     if (ares_status == 0)
       yasio__setbits(init_flags_, INITF_CARES);
@@ -167,7 +163,7 @@ struct yasio__global_state {
   }
   ~yasio__global_state()
   {
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
     if (yasio__testbits(this->init_flags_, INITF_CARES))
       ::ares_library_cleanup();
 #endif
@@ -336,7 +332,7 @@ io_transport::io_transport(io_channel* ctx, xxsocket_ptr&& s) : ctx_(ctx)
 #endif
 }
 const print_fn2_t& io_transport::__get_cprint() const { return ctx_->get_service().options_.print_; }
-int io_transport::write(sbyte_buffer&& buffer, completion_cb_t&& handler)
+int io_transport::write(io_send_buffer&& buffer, completion_cb_t&& handler)
 {
   int n = static_cast<int>(buffer.size());
   send_queue_.emplace(cxx14::make_unique<io_send_op>(std::move(buffer), std::move(handler)));
@@ -571,11 +567,11 @@ void io_transport_udp::disconnect()
   connected_ = false;
   set_primitives();
 }
-int io_transport_udp::write(sbyte_buffer&& buffer, completion_cb_t&& handler)
+int io_transport_udp::write(io_send_buffer&& buffer, completion_cb_t&& handler)
 {
   return connected_ ? io_transport::write(std::move(buffer), std::move(handler)) : write_to(std::move(buffer), ensure_destination(), std::move(handler));
 }
-int io_transport_udp::write_to(sbyte_buffer&& buffer, const ip::endpoint& to, completion_cb_t&& handler)
+int io_transport_udp::write_to(io_send_buffer&& buffer, const ip::endpoint& to, completion_cb_t&& handler)
 {
   int n = static_cast<int>(buffer.size());
   send_queue_.emplace(cxx14::make_unique<io_sendto_op>(std::move(buffer), std::move(handler), to));
@@ -620,89 +616,6 @@ int io_transport_udp::handle_input(const char* data, int bytes_transferred, int&
   get_service().fire_event(this->cindex(), io_packet{data, data + bytes_transferred}, this);
   return bytes_transferred;
 }
-
-#if defined(YASIO_HAVE_KCP)
-// ----------------------- io_transport_kcp ------------------
-io_transport_kcp::io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s) : io_transport_udp(ctx, std::forward<xxsocket_ptr>(s))
-{
-  this->kcp_ = ::ikcp_create(static_cast<IUINT32>(ctx->kcp_conv_), this);
-  this->rawbuf_.resize(YASIO_INET_BUFFER_SIZE);
-  ::ikcp_nodelay(this->kcp_, 1, 5000 /*kcp max interval is 5000(ms)*/, 2, 1);
-  ::ikcp_setoutput(this->kcp_, [](const char* buf, int len, ::ikcpcb* /*kcp*/, void* user) {
-    auto t = (io_transport_kcp*)user;
-    if (yasio__min_wait_usec == 0)
-    {
-      int ignored_ec = 0;
-      return t->write_cb_(buf, len, std::addressof(t->ensure_destination()), ignored_ec);
-    }
-    // Enqueue to transport queue
-    return t->io_transport_udp::write(sbyte_buffer{buf, buf + len}, nullptr);
-  });
-}
-io_transport_kcp::~io_transport_kcp() { ::ikcp_release(this->kcp_); }
-
-int io_transport_kcp::write(sbyte_buffer&& buffer, completion_cb_t&& /*handler*/)
-{
-  std::lock_guard<std::recursive_mutex> lck(send_mtx_);
-  int len    = static_cast<int>(buffer.size());
-  int retval = ::ikcp_send(kcp_, buffer.data(), len);
-  get_service().interrupt();
-  return retval == 0 ? len : retval;
-}
-int io_transport_kcp::do_read(int revent, int& error, highp_time_t& wait_duration)
-{
-  int n = this->call_read(&rawbuf_.front(), static_cast<int>(rawbuf_.size()), revent, error);
-  if (n > 0)
-    this->handle_input(rawbuf_.data(), n, error, wait_duration);
-  if (!error)
-  { // !important, should always try to call ikcp_recv when no error occured.
-    n = ::ikcp_recv(kcp_, buffer_ + offset_, sizeof(buffer_) - offset_);
-    if (n > 0) // If got data from kcp, don't wait
-      wait_duration = yasio__min_wait_usec;
-    else if (n < 0)
-      n = 0; // EAGAIN/EWOULDBLOCK
-  }
-  return n;
-}
-int io_transport_kcp::handle_input(const char* buf, int len, int& error, highp_time_t& wait_duration)
-{
-  // ikcp in event always in service thread, so no need to lock
-  if (0 == ::ikcp_input(kcp_, buf, len))
-  {
-    this->check_timeout(wait_duration); // call ikcp_check
-    return len;
-  }
-
-  // simply regards -1,-2,-3 as error and trigger connection lost event.
-  error = yasio::errc::invalid_packet;
-  return -1;
-}
-bool io_transport_kcp::do_write(highp_time_t& wait_duration)
-{
-  std::lock_guard<std::recursive_mutex> lck(send_mtx_);
-
-  ::ikcp_update(kcp_, static_cast<IUINT32>(::yasio::clock()));
-  ::ikcp_flush(kcp_);
-  this->check_timeout(wait_duration); // call ikcp_check
-  if (yasio__min_wait_usec == 0)
-    return true;
-  // Call super do_write to perform low layer socket.send
-  // benefit of transport queue:
-  // a. cache udp data if kernel buffer full
-  // b. lower packet lose, but may reduce transfer performance and large memory use
-  return io_transport_udp::do_write(wait_duration);
-}
-void io_transport_kcp::check_timeout(highp_time_t& wait_duration) const
-{
-  auto current          = static_cast<IUINT32>(::yasio::clock());
-  auto expire_time      = ::ikcp_check(kcp_, current);
-  highp_time_t duration = static_cast<highp_time_t>(expire_time - current) * std::milli::den;
-  if (duration < 0)
-    duration = yasio__min_wait_usec;
-  if (wait_duration > duration)
-    wait_duration = duration;
-}
-#endif
 
 // ------------------------ io_service ------------------------
 void io_service::init_globals(const yasio::inet::print_fn2_t& prt) { yasio__shared_globals(prt).cprint_ = prt; }
@@ -808,7 +721,7 @@ void io_service::initialize(const io_hostent* channel_eps, int channel_count)
   // create channels
   create_channels(channel_eps, channel_count);
 
-#if !defined(YASIO_HAVE_CARES)
+#if !defined(YASIO_USE_CARES)
   life_mutex_ = std::make_shared<cxx17::shared_mutex>();
   life_token_ = std::make_shared<life_token>();
 #endif
@@ -818,7 +731,7 @@ void io_service::finalize()
 {
   if (this->state_ == io_service::state::IDLE)
   {
-#if !defined(YASIO_HAVE_CARES)
+#if !defined(YASIO_USE_CARES)
     std::unique_lock<cxx17::shared_mutex> lck(*life_mutex_);
     life_token_.reset();
 #endif
@@ -866,10 +779,11 @@ void io_service::clear_transports()
   }
   transports_.clear();
 }
-void io_service::dispatch(int max_count)
+size_t io_service::dispatch(int max_count)
 {
   if (options_.on_event_)
     this->events_.consume(max_count, options_.on_event_);
+  return this->events_.count();
 }
 void io_service::run()
 {
@@ -878,7 +792,7 @@ void io_service::run()
 #if defined(YASIO_SSL_BACKEND)
   init_ssl_context(YSSL_CLIENT); // by default, init ssl client context
 #endif
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
   recreate_ares_channel();
   ares_socket_t ares_socks[ARES_GETSOCK_MAXNUM] = {0};
 #endif
@@ -894,7 +808,7 @@ void io_service::run()
     fd_set = this->fd_set_;
 
     const auto waitd_usec = get_timeout(this->wait_duration_); // Gets current wait duration
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
     /**
      * retrieves the set of file descriptors which the calling application should poll io,
      * after poll_io, for ares invoke flow, refer to:
@@ -933,7 +847,7 @@ void io_service::run()
       }
     }
 
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
     // process events for name resolution.
     do_ares_process_fds(ares_socks, ares_nfds, fd_set);
 #endif
@@ -946,9 +860,12 @@ void io_service::run()
 
     // process timeout timers
     process_timers();
+
+    // process deferred events if auto dispatch enabled
+    process_deferred_events();
   } while (!this->stop_flag_ || !this->transports_.empty());
 
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
   destroy_ares_channel();
 #endif
 #if defined(YASIO_SSL_BACKEND)
@@ -1111,7 +1028,17 @@ void io_service::deregister_descriptor(const socket_native_type fd, int events) 
 int io_service::write(transport_handle_t transport, sbyte_buffer buffer, completion_cb_t handler)
 {
   if (transport && transport->is_open())
-    return !buffer.empty() ? transport->write(std::move(buffer), std::move(handler)) : 0;
+    return !buffer.empty() ? transport->write(io_send_buffer{std::move(buffer)}, std::move(handler)) : 0;
+  else
+  {
+    YASIO_KLOGE("write failed, the connection not ok!");
+    return -1;
+  }
+}
+int io_service::forward(transport_handle_t transport, const void* buf, size_t len, completion_cb_t handler)
+{
+  if (transport && transport->is_open())
+    return len != 0 ? transport->write(io_send_buffer{(const char*)buf, len}, std::move(handler)) : 0;
   else
   {
     YASIO_KLOGE("write failed, the connection not ok!");
@@ -1121,7 +1048,17 @@ int io_service::write(transport_handle_t transport, sbyte_buffer buffer, complet
 int io_service::write_to(transport_handle_t transport, sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t handler)
 {
   if (transport && transport->is_open())
-    return !buffer.empty() ? transport->write_to(std::move(buffer), to, std::move(handler)) : 0;
+    return !buffer.empty() ? transport->write_to(io_send_buffer{std::move(buffer)}, to, std::move(handler)) : 0;
+  else
+  {
+    YASIO_KLOGE("write_to failed, the connection not ok!");
+    return -1;
+  }
+}
+int io_service::forward_to(transport_handle_t transport, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t handler)
+{
+  if (transport && transport->is_open())
+    return len != 0 ? transport->write_to(io_send_buffer{(const char*)buf, len}, to, std::move(handler)) : 0;
   else
   {
     YASIO_KLOGE("write_to failed, the connection not ok!");
@@ -1229,7 +1166,7 @@ void io_service::cleanup_ssl_context(ssl_role role)
     yssl_ctx_free(ctx);
 }
 #endif
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
 void io_service::ares_work_started() { ++ares_outstanding_work_; }
 void io_service::ares_work_finished()
 {
@@ -1421,7 +1358,7 @@ void io_service::do_accept(io_channel* ctx)
       ctx->buffer_.resize(YASIO_INET_BUFFER_SIZE);
     }
     register_descriptor(ctx->socket_->native_handle(), socket_event::read);
-    YASIO_KLOGD("[index: %d] open server succeed, socket.fd=%d listening at %s...", ctx->index_, (int)ctx->socket_->native_handle(), ep.to_string().c_str());
+    YASIO_KLOGI("[index: %d] open server succeed, socket.fd=%d listening at %s...", ctx->index_, (int)ctx->socket_->native_handle(), ep.to_string().c_str());
     error = 0;
   } while (false);
 
@@ -1605,13 +1542,6 @@ transport_handle_t io_service::allocate_transport(io_channel* ctx, xxsocket_ptr&
     }
     else // udp like transport
     {
-#if defined(YASIO_HAVE_KCP)
-      if (yasio__testbits(ctx->properties_, YCM_KCP))
-      {
-        transport = new (vp) io_transport_kcp(ctx, std::forward<xxsocket_ptr>(s));
-        break;
-      }
-#endif
       transport = new (vp) io_transport_udp(ctx, std::forward<xxsocket_ptr>(s));
     }
   } while (false);
@@ -1644,7 +1574,7 @@ bool io_service::do_read(transport_handle_t transport, fd_set_adapter& fd_set)
     int n      = transport->do_read(revent, error, this->wait_duration_);
     if (n >= 0)
     {
-      if (!options_.forward_event_)
+      if (!options_.forward_packet_)
       {
         YASIO_KLOGV("[index: %d] do_read status ok, bytes transferred: %d, buffer used: %d", transport->cindex(), n, n + transport->offset_);
         if (transport->expected_size_ == -1)
@@ -1670,8 +1600,8 @@ bool io_service::do_read(transport_handle_t transport, fd_set_adapter& fd_set)
           unpack(transport, transport->expected_size_ - static_cast<int>(transport->expected_packet_.size()), n, 0);
       }
       else if (n > 0)
-      { // forward event, don't perform unpack, it's useful for implement streaming based protocol, like http, websocket and ...
-        this->fire_event(transport->cindex(), io_packet_view{transport->buffer_, n}, transport);
+      { // forward packet, don't perform unpack, it's useful for implement streaming based protocol, like http, websocket and ...
+        this->forward_packet(transport->cindex(), io_packet_view{transport->buffer_, n}, transport);
       }
     }
     else
@@ -1810,6 +1740,11 @@ void io_service::process_timers()
   if (n)
     sort_timers();
 }
+void io_service::process_deferred_events()
+{
+  if (options_.auto_dispatch_ && dispatch() > 0)
+    this->wait_duration_ = yasio__min_wait_usec;
+}
 highp_time_t io_service::get_timeout(highp_time_t usec)
 {
   this->wait_duration_ = yasio__max_wait_usec; // Reset next wait duration per frame
@@ -1831,7 +1766,7 @@ bool io_service::cleanup_channel(io_channel* ctx, bool clear_mask)
 {
   ctx->clear_mutable_flags();
   bool bret = cleanup_io(ctx, clear_mask);
-#if defined(YAISO_ENABLE_PASSIVE_EVENT)
+#if defined(YASIO_ENABLE_PASSIVE_EVENT)
   if (bret && yasio__testbits(ctx->properties_, YCM_SERVER))
     this->fire_event(ctx->index_, YEK_ON_CLOSE, 0, ctx, 1);
 #endif
@@ -1911,7 +1846,7 @@ void io_service::start_query(io_channel* ctx)
 #if defined(YASIO_ENABLE_ARES_PROFILER)
   ctx->query_start_time_ = highp_clock();
 #endif
-#if !defined(YASIO_HAVE_CARES)
+#if !defined(YASIO_USE_CARES)
   // init async name query thread state
   auto resolving_host                           = ctx->remote_host_;
   auto resolving_port                           = ctx->remote_port_;
@@ -1973,7 +1908,7 @@ void io_service::update_dns_status()
   if (this->options_.dns_dirty_)
   {
     this->options_.dns_dirty_ = false;
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
     recreate_ares_channel();
 #endif
     for (auto channel : this->channels_)
@@ -2085,7 +2020,7 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     case YOPT_S_DNS_DIRTY:
       options_.dns_dirty_ = true;
       break;
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
     case YOPT_S_DNS_LIST:
       options_.name_servers_ = va_arg(ap, const char*);
       options_.dns_dirty_    = true;
@@ -2097,8 +2032,11 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     case YOPT_S_DEFER_EVENT_CB:
       options_.on_defer_event_ = *va_arg(ap, defer_event_cb_t*);
       break;
-    case YOPT_S_FORWARD_EVENT:
-      options_.forward_event_ = !!va_arg(ap, int);
+    case YOPT_S_AUTO_DISPATCH:
+      options_.auto_dispatch_ = !!va_arg(ap, int);
+      break;
+    case YOPT_S_FORWARD_PACKET:
+      options_.forward_packet_ = !!va_arg(ap, int);
       break;
 #if defined(YASIO_SSL_BACKEND)
     case YOPT_S_SSL_CERT:
@@ -2214,7 +2152,7 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
       }
       break;
     }
-#if defined(YASIO_HAVE_KCP)
+#if defined(YASIO_ENABLE_KCP)
     case YOPT_C_KCP_CONV: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)

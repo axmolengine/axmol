@@ -118,10 +118,10 @@ YASIO_LUA_API void clear()
 
 #if YASIO__HAS_CXX14
 
-#  if !YASIO__HAS_CXX20
-#    include "sol2/sol.hpp"
-#  else
+#  if YASIO__HAS_CXX17
 #    include "sol/sol.hpp"
+#  else
+#    include "sol2/sol.hpp"
 #  endif
 
 extern "C" {

@@ -27,7 +27,7 @@
 #define __cocos2d_libs__CCController__
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
-     AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+     defined(_WIN32))
 
 #    include "platform/CCPlatformMacros.h"
 #    include <string>

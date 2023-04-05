@@ -150,51 +150,77 @@ private:
         }
     }
 
-    /**
-     * Set the response data by the string pointer and the defined size.
-     * @param value a string pointer that point to response data buffer.
-     * @param n the defined size that the response data buffer would be copied.
-     */
-    bool prepareForProcess(std::string_view url)
+    bool tryRedirect()
     {
-        /* Resets response status */
-        _finished = false;
-        _responseData.clear();
-        _currentHeader.clear();
-        _responseCode = -1;
-        _internalCode = 0;
+        if ((_redirectCount < HttpRequest::MAX_REDIRECT_COUNT))
+        {
+            auto iter = _responseHeaders.find("location");
+            if (iter != _responseHeaders.end())
+            {
+                auto redirectUrl = iter->second;
+                if (_responseCode == 302)
+                    getHttpRequest()->setRequestType(HttpRequest::Type::GET);
+                AXLOG("Process url redirect (%d): %s", _responseCode, redirectUrl.c_str());
+                return setLocation(redirectUrl, true);
+            }
+        }
+        return false;
+    }
 
-        Uri uri = Uri::parse(url);
-        if (!uri.isValid())
-            return false;
+    /**
+     * Set new request location with url
+     * @param url the actually url to request
+     * @param redirect wither redirect
+     */
+    bool setLocation(std::string_view url, bool redirect)
+    {
+        if (redirect)
+        {
+            ++_redirectCount;
+            _requestUri.invalid();
+        }
 
-        _requestUri = std::move(uri);
+        if (!_requestUri.isValid())
+        {
+            Uri uri = Uri::parse(url);
+            if (!uri.isValid())
+                return false;
+            _requestUri = std::move(uri);
 
-        /* Initialize user callbacks and settings */
-        llhttp_settings_init(&_contextSettings);
+            /* Resets response status */
+            _responseHeaders.clear();
+            _finished = false;
+            _responseData.clear();
+            _currentHeader.clear();
+            _responseCode = -1;
+            _internalCode = 0;
 
-        /* Initialize the parser in HTTP_BOTH mode, meaning that it will select between
-         * HTTP_REQUEST and HTTP_RESPONSE parsing automatically while reading the first
-         * input.
-         */
-        llhttp_init(&_context, HTTP_RESPONSE, &_contextSettings);
+            /* Initialize user callbacks and settings */
+            llhttp_settings_init(&_contextSettings);
 
-        _context.data = this;
+            /* Initialize the parser in HTTP_BOTH mode, meaning that it will select between
+             * HTTP_REQUEST and HTTP_RESPONSE parsing automatically while reading the first
+             * input.
+             */
+            llhttp_init(&_context, HTTP_RESPONSE, &_contextSettings);
 
-        /* Set user callbacks */
-        _contextSettings.on_header_field          = on_header_field;
-        _contextSettings.on_header_field_complete = on_header_field_complete;
-        _contextSettings.on_header_value          = on_header_value;
-        _contextSettings.on_header_value_complete = on_header_value_complete;
-        _contextSettings.on_body                  = on_body;
-        _contextSettings.on_message_complete      = on_complete;
+            _context.data = this;
+
+            /* Set user callbacks */
+            _contextSettings.on_header_field          = on_header_field;
+            _contextSettings.on_header_field_complete = on_header_field_complete;
+            _contextSettings.on_header_value          = on_header_value;
+            _contextSettings.on_header_value_complete = on_header_value_complete;
+            _contextSettings.on_body                  = on_body;
+            _contextSettings.on_message_complete      = on_complete;
+        }
 
         return true;
     }
 
-    const Uri& getRequestUri() const { return _requestUri; }
+    bool validateUri() const { return _requestUri.isValid(); }
 
-    int increaseRedirectCount() { return ++_redirectCount; }
+    const Uri& getRequestUri() const { return _requestUri; }
 
     static int on_header_field(llhttp_t* context, const char* at, size_t length)
     {

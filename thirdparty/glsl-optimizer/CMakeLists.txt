@@ -4,7 +4,7 @@ set(target_name dep_${lib_name})
 
 project(${lib_name})
 
-include(../cmake/AXConfigThirdparty.cmake)
+include(AXPlatform)
 
 add_library(dep_glcpp_library STATIC IMPORTED GLOBAL)
 add_library(dep_glsl_optimizer STATIC IMPORTED GLOBAL)

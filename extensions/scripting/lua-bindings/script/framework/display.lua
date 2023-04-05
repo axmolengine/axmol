@@ -38,7 +38,7 @@ if not view then
             height = AX_DESIGN_RESOLUTION.height
         end
     end
-    view = cc.GLViewImpl:createWithRect("Cocos2d-Lua", cc.rect(0, 0, width, height))
+    view = cc.GLViewImpl:createWithRect("Axmol-Lua", cc.rect(0, 0, width, height))
     director:setOpenGLView(view)
 end
 
@@ -385,13 +385,13 @@ function display.newSprite(source, x, y, params)
             error(string.format("display.newSprite() - invalid source type \"%s\"", sourceType), 0)
         else
             sourceType = tolua.type(source)
-            if sourceType == "cc.SpriteFrame" then
+            if sourceType == "ax.SpriteFrame" then
                 if not scale9 then
                     sprite = spriteClass:createWithSpriteFrame(source)
                 else
                     sprite = spriteClass:createWithSpriteFrame(source, params.capInsets)
                 end
-            elseif sourceType == "cc.Texture2D" then
+            elseif sourceType == "ax.Texture2D" then
                 sprite = spriteClass:createWithTexture(source)
             else
                 error(string.format("display.newSprite() - invalid source type \"%s\"", sourceType), 0)
@@ -420,7 +420,7 @@ function display.newSpriteFrame(source, ...)
         if not frame then
             error(string.format("display.newSpriteFrame() - invalid frame name \"%s\"", tostring(source)), 0)
         end
-    elseif tolua.type(source) == "cc.Texture2D" then
+    elseif tolua.type(source) == "ax.Texture2D" then
         frame = cc.SpriteFrame:createWithTexture(source, ...)
     else
         error("display.newSpriteFrame() - invalid parameters", 0)

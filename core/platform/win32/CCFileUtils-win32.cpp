@@ -51,7 +51,6 @@ static std::string s_exeDir;
 static std::string convertPathFormatToUnixStyle(const std::string_view& path)
 {
     std::string ret{path};
-    int len = ret.length();
     std::replace(ret.begin(), ret.end(), '\\', '/');
     return ret;
 }
@@ -59,7 +58,6 @@ static std::string convertPathFormatToUnixStyle(const std::string_view& path)
 static std::string convertPathFormatToWinStyle(const std::string_view& path)
 {
     std::string ret{path};
-    int len = ret.length();
     std::replace(ret.begin(), ret.end(), '/', '\\');
     return ret;
 }
@@ -112,12 +110,12 @@ bool FileUtilsWin32::init()
     _checkExePath();
 
     bool startedFromSelfLocation = s_workingDir == s_exeDir;
-    if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_PC_RESOURCES_DIR))
+    if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_CONTENT_DIR))
         _defaultResRootPath = s_workingDir;
     else
     {
-        _defaultResRootPath.reserve(s_exeDir.size() + AX_PC_RESOURCES_DIR_LEN);
-        _defaultResRootPath.append(s_exeDir).append(AX_PC_RESOURCES_DIR, AX_PC_RESOURCES_DIR_LEN);
+        _defaultResRootPath.reserve(s_exeDir.size() + AX_CONTENT_DIR_LEN);
+        _defaultResRootPath.append(s_exeDir).append(AX_CONTENT_DIR, AX_CONTENT_DIR_LEN);
     }
 
     bool bRet = FileUtils::init();

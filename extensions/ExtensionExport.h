@@ -22,8 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCEXTENSIONEXPORT_H__
-#define __CCEXTENSIONEXPORT_H__
+#ifndef __EXTENSIONEXPORT_H__
+#define __EXTENSIONEXPORT_H__
 
 #if (defined(WIN32) && defined(_WINDOWS)) || defined(WINRT) || defined(WP8)
 #    ifdef __MINGW32__
@@ -54,4 +54,4 @@
 #    define AX_EX_DLL
 #endif
 
-#endif /* __CCEXTENSIONEXPORT_H__*/
+#endif /* __EXTENSIONEXPORT_H__*/

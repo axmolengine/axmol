@@ -1,6 +1,8 @@
 <p align="center"><a href="https://axmolengine.github.io/axmol" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
-# Axmol Game Engine
+# Axmol Engine
+
+## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
 
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
@@ -11,28 +13,37 @@
 ![forks](https://img.shields.io/github/forks/axmolengine/axmol?style=plastic)
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
-  
-[![Windows Build Status](https://github.com/axmolengine/axmol/actions/workflows/windows-ci.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows-ci.yml)
-[![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)
-[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)
-[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)
-[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)
-[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)  
 
-**This is another more radical fork of *Cocos2d-x-4.0*, it has Full Support OpenAL for all platforms, single texture multi GPU texture handler, C++ 17/20 and more! (see 'Highlighted Features' for more info).**  
+**[简体中文](README_CN.md)**
+
+## Supported Platforms
+
+| Build | Status (github) |
+|-------|-----------------|
+| Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows.yml)|
+| Windows Desktop(Clang)|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows-clang.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows-clang.yml)|
+| Windows UWP|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml)|
+| Android | [![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)|
+| iOS |[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)|
+| tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|
+| Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
+| macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
+
+## Reimplemented VideoPlayer(VideoTexture) based on Redesigned MediaEngine
+
+|  Platform             |    MediaEngine    | Video Compress Format | Video Pixel Format   | Backend            |
+|-----------------------|-------------------|-----------------------|----------------------|--------------------|
+| Windows Desktop       |    complete       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | IMFMediaSession    |
+| Windows UWP           |    complete       | H264, HEVC, VP90      | BGR32                | IMFMediaEngine     |
+| Apple macOS           |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Apple tvOS            |     complete      | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Apple iOS             |    in progress    | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Android               |    planned        | H264                  | RGB32                |                    |
 
 ### View code with vscode online
 
 - [![github1s](https://img.shields.io/badge/github1s-green.svg)](https://github1s.com/axmolengine/axmol)
 - [![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/axmolengine/axmol)
-  
-**[简体中文](README_CN.md)**
-  
-### Purpose Summary
-
-- C++ 17/20
-- Focuses on native game dev (easy to use, fast deployment, intuitive)
-- Bugfixes ASAP
 
 ### Thirdparty
 
@@ -40,6 +51,7 @@
   
 ### Highlighted Features
 
+- Windows UWP support, refer to: https://github.com/axmolengine/axmol/pull/1108
 - Add apple M1, android x64 support, contributed by @pietpukkel
 - Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 - Windows video player support (based on microsoft media foundation)
@@ -94,9 +106,11 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 
 #### Creating A New Project
 
-Using a console window, the command to generate a new project is as follows:
+Using a console window, an example of a command to generate a new project is as follows:
 
-```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua]```
+```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
+
+Type `axmol new --help` at the command line for more options you can pass to `axmol new`
 
 Examples:
 
@@ -129,8 +143,12 @@ Examples:
          - add `-DCMAKE_CXX_STANDARD=17` for C++17 on your command line like:
          cmake -S . -B build `-DCMAKE_CXX_STANDARD=17` -G "Visual Studio 17 2022" -A x64
 
+
   6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
-  
+
+#### Windows UWP (Visual Studio 2022), because microsoft limit, only support C++17
+  ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
+
 ##### Creating the Visual Studio solution for all axmol test projects
 
   1. Open a console window (Command Prompt, Window Terminal or Powershell)
@@ -221,27 +239,13 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
   6. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
   7. Notes  
      - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
-     - **axmol only provides armv7, arm64, x86_64 prebuilt libraries for ios/tvos**
-
-### Some interesting related projects based on axmol
-
-<https://github.com/axmolengine/axmol/discussions/694>
-
-### Notes
-
-- ThreadLocalStorage (TLS)
-  - ios x86 simulator ios>=10 and axmol no longer provide x86 libraries
-  - ios x64 or devices (armv7, arm64) ios sdk>=9.0
-  - the 'OpenAL Soft' maintained by kcat uses TLS
+     - **axmol only provides aarm64, x86_64 prebuilt libraries for ios/tvos**
 
 ### Reference links
 
 - Official Cocos2d-x Repo: <https://github.com/cocos2d/cocos2d-x>
-
-### Contributing guide
-
-<https://github.com/axmolengine/axmol/discussions/411>
+- [Some interesting related projects based on axmol](https://github.com/axmolengine/axmol/discussions/694)
+- [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 
 ### The axmol Active Stats
-
 ![Alt](https://repobeats.axiom.co/api/embed/6fcb8168a3af91ba9e797a1f14a3c2edc42ac56a.svg "Repobeats analytics image")

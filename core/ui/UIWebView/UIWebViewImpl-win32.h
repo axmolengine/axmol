@@ -28,7 +28,7 @@
 
 #include "platform/CCPlatformMacros.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(_AX_HAVE_WEBVIEW2)
+#if defined(_WIN32) && defined(_AX_HAVE_WEBVIEW2)
 
 #    include <string>
 #    include "CCStdC.h"

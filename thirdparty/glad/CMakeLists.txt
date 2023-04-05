@@ -4,8 +4,6 @@ set(target_name ${lib_name})
 
 project(${target_name})
 
-include(../cmake/AXConfigThirdparty.cmake)
-
 add_library(${target_name} 
     "include/glad/gl.h" 
     src/gl.c)

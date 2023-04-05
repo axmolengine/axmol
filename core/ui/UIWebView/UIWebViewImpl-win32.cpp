@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(_AX_HAVE_WEBVIEW2)
+#if defined(_WIN32) && defined(_AX_HAVE_WEBVIEW2)
 
 #    include "UIWebViewImpl-win32.h"
 #    include "UIWebView.h"
@@ -232,7 +232,7 @@ static double getDeviceScaleFactor()
         // This value is safe to cache for the life time of the app since the user
         // must logout to change the DPI setting. This value also applies to all
         // screens.
-#    if _WIN32
+#    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
         HDC screen_dc = ::GetDC(NULL);
         int dpi_x     = GetDeviceCaps(screen_dc, LOGPIXELSX);
         scale_factor  = static_cast<double>(dpi_x) / 96.0;
@@ -309,7 +309,11 @@ private:
 
         char currentExePath[MAX_PATH];
         GetModuleFileNameA(NULL, currentExePath, MAX_PATH);
-        char* currentExeName = PathFindFileNameA(currentExePath);
+#    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
+        const char* currentExeName = PathFindFileNameA(currentExePath);
+#else
+        const char* currentExeName = "axmol-app";
+#endif
 
         /*
         * Note: New OS feature 'Beta: Use Unicode UTF-8 for worldwide language support' since win10/win11 
@@ -371,12 +375,14 @@ private:
             CoUninitialize();
             return false;
         }
+#    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
         MSG msg = {};
         while (flag.test_and_set() && GetMessage(&msg, NULL, 0, 0))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
+#endif
         init("window.external={invoke:s=>window.chrome.webview.postMessage(s)}");
         return true;
     }
@@ -387,9 +393,11 @@ private:
         {
             return;
         }
+#    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
         RECT bounds;
         GetClientRect(wnd, &bounds);
         m_controller->put_Bounds(bounds);
+#endif
     }
 
     void navigate(std::string_view url)
@@ -828,12 +836,14 @@ bool Win32WebControl::s_isInitialized = false;
 
 void Win32WebControl::lazyInit()
 {
+#    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     // reset the main windows style so that its drawing does not cover the webview sub window
     auto hwnd        = ax::Director::getInstance()->getOpenGLView()->getWin32Window();
     const auto style = GetWindowLong(hwnd, GWL_STYLE);
     SetWindowLong(hwnd, GWL_STYLE, style | WS_CLIPCHILDREN);
 
     CoInitialize(NULL);
+#endif
 }
 
 Win32WebControl::Win32WebControl() : _shouldStartLoading(nullptr), _didFinishLoading(nullptr), _didFailLoading(nullptr)
@@ -850,6 +860,7 @@ bool Win32WebControl::createWebView(const std::function<bool(std::string_view)>&
                                     const std::function<void(std::string_view)>& onJsCallback)
 {
     bool ret = false;
+#    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     do
     {
         HWND hwnd           = ax::Director::getInstance()->getOpenGLView()->getWin32Window();
@@ -933,6 +944,7 @@ bool Win32WebControl::createWebView(const std::function<bool(std::string_view)>&
     _didFinishLoading   = didFinishLoading;
     _didFailLoading     = didFailLoading;
     _onJsCallback       = onJsCallback;
+#endif
     return ret;
 }
 
@@ -946,6 +958,7 @@ void Win32WebControl::removeWebView()
 
 void Win32WebControl::setWebViewRect(const int left, const int top, const int width, const int height)
 {
+#    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     if (m_controller == nullptr)
     {
         return;
@@ -960,6 +973,7 @@ void Win32WebControl::setWebViewRect(const int left, const int top, const int wi
     SetWindowPos(m_window, nullptr, left, top, width, height, SWP_NOZORDER);
 
     m_controller->put_ZoomFactor(_scalesPageToFit ? getDeviceScaleFactor() : 1.0);
+#endif
 }
 
 void Win32WebControl::setJavascriptInterfaceScheme(std::string_view scheme)
@@ -1048,6 +1062,7 @@ void Win32WebControl::setScalesPageToFit(const bool scalesPageToFit)
 
 void Win32WebControl::setWebViewVisible(const bool visible) const
 {
+#    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     ShowWindow(m_window, visible ? SW_SHOW : SW_HIDE);
     if (!visible)
     {
@@ -1055,6 +1070,7 @@ void Win32WebControl::setWebViewVisible(const bool visible) const
         // reduce resource usage.
         SetWindowPos(m_window, nullptr, 0, 0, 0, 0, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
     }
+#endif
 }
 
 void Win32WebControl::setBounces(bool bounces) {}

@@ -46,95 +46,100 @@ include(CheckCSourceCompiles)
 include(CheckCXXSourceCompiles)
 
 # Detetion SIMD instrinsics
-if (NOT DEFINED AX_ISA_SIMD)
-    ### check -msse2 flag
 
-    set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
-    if(MSVC)
-        set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} /WX")
-        check_c_compiler_flag("/arch:SSE2" AX_HAVE_SSE2_SWITCH)
-    else()
-        set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
-        check_c_compiler_flag(-msse2 AX_HAVE_SSE2_SWITCH)
+### check -msse2 flag
+set(OLD_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS})
+if(MSVC)
+    set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} /WX")
+    check_c_compiler_flag("/arch:SSE2" AX_HAVE_SSE2_SWITCH)
+else()
+    set(CMAKE_REQUIRED_FLAGS "${OLD_REQUIRED_FLAGS} -Werror")
+    check_c_compiler_flag(-msse2 AX_HAVE_SSE2_SWITCH)
+endif()
+if (AX_HAVE_SSE2_SWITCH)
+    set(AX_HAVE_SSE2_INTRINSICS 1)
+endif()
+### end check -msse2 flag
+
+if (NOT TVOS)
+    # Checking intel SIMD Intrinsics
+    if(APPLE)
+        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
     endif()
-    if (AX_HAVE_SSE2_SWITCH)
-        set(AX_HAVE_SSE2_INTRINSICS 1)
-    endif()
-    
-    ### end check -msse2 flag
+    check_c_source_compiles("#include <immintrin.h>
+        #include <stdint.h>
+        int main()
+        {
+            __m256 m = _mm256_set_ps(1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f);
+            return (int)*(float*)&m;
+        }" AX_HAVE_AVX2_INTRINSICS)
+    check_c_source_compiles("#include <nmmintrin.h>
+        #include <stdint.h>
+        int main()
+        {
+            uint32_t v = 0;
+            return (int)_mm_popcnt_u32(v);
+        }" AX_HAVE_SSE42_INTRINSICS)
+    check_c_source_compiles("#include <smmintrin.h>
+        #include <stdint.h>
+        int main()
+        {
+            __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 12,8,4,0);
+            return *(int*)&shuf;
+        }" AX_HAVE_SSE41_INTRINSICS)
 
-    if (NOT TVOS)
-        # Checking intel SIMD Intrinsics
-        if(APPLE)
-            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
-        endif()
-        check_c_source_compiles("#include <immintrin.h>
+    if (NOT AX_HAVE_SSE2_INTRINSICS)
+        check_c_source_compiles("#include <emmintrin.h>
             #include <stdint.h>
             int main()
             {
-                __m256 m = _mm256_set_ps(1.f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f, 8.f);
-                return (int)*(float*)&m;
-            }" AX_HAVE_AVX2_INTRINSICS)
-        check_c_source_compiles("#include <nmmintrin.h>
-            #include <stdint.h>
-            int main()
-            {
-                uint32_t v = 0;
-                return (int)_mm_popcnt_u32(v);
-            }" AX_HAVE_SSE42_INTRINSICS)
-        check_c_source_compiles("#include <smmintrin.h>
-            #include <stdint.h>
-            int main()
-            {
-                __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 12,8,4,0);
-                return *(int*)&shuf;
-            }" AX_HAVE_SSE41_INTRINSICS)
-
-        if (NOT AX_HAVE_SSE2_INTRINSICS)
-            check_c_source_compiles("#include <emmintrin.h>
-                #include <stdint.h>
-                int main()
-                {
-                    __m128d m = _mm_set_sd(0.0);
-                    return (int)*(double*)&m;
-                }" AX_HAVE_SSE2_INTRINSICS)
-        endif()
-
-        set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-
-        ### Checking ARM SIMD neon
-        check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
-        if(AX_HAVE_ARM_NEON_H)
-            check_c_source_compiles("#include <arm_neon.h>
-            int main()
-            {
-                int32x4_t ret4 = vdupq_n_s32(0);
-                return vgetq_lane_s32(ret4, 0);
-            }" AX_HAVE_NEON_INTRINSICS)
-        endif()
-    else()
-        message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build target 'tvos'")
+                __m128d m = _mm_set_sd(0.0);
+                return (int)*(double*)&m;
+            }" AX_HAVE_SSE2_INTRINSICS)
     endif()
 
     set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-    unset(OLD_REQUIRED_FLAGS)
 
-    ### set AX_ISA_SIMD
-    if(AX_HAVE_AVX2_INTRINSICS)
-        set(AX_ISA_SIMD "avx2")
-    elseif(AX_HAVE_SSE42_INTRINSICS)
-        set(AX_ISA_SIMD "sse4.2")
-    elseif(AX_HAVE_SSE41_INTRINSICS)
-        set(AX_ISA_SIMD "sse4.1")
-    elseif(AX_HAVE_SSE2_INTRINSICS)
-        set(AX_ISA_SIMD "sse2")
-    elseif(AX_HAVE_NEON_INTRINSICS)
-        set(AX_ISA_SIMD "neon")
-    else()
-        set(AX_ISA_SIMD "none")
+    ### Checking ARM SIMD neon
+    check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
+    if(AX_HAVE_ARM_NEON_H)
+        check_c_source_compiles("#include <arm_neon.h>
+        int main()
+        {
+            int32x4_t ret4 = vdupq_n_s32(0);
+            return vgetq_lane_s32(ret4, 0);
+        }" AX_HAVE_NEON_INTRINSICS)
     endif()
+else()
+    message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build target 'tvos'")
+endif()
 
-    message(AUTHOR_WARNING "AX_ISA_SIMD=${AX_ISA_SIMD},AX_HAVE_AVX2_INTRINSICS=${AX_HAVE_AVX2_INTRINSICS},AX_HAVE_SSE42_INTRINSICS=${AX_HAVE_SSE42_INTRINSICS},AX_HAVE_SSE41_INTRINSICS=${AX_HAVE_SSE41_INTRINSICS},AX_HAVE_SSE2_INTRINSICS=${AX_HAVE_SSE2_INTRINSICS},AX_HAVE_NEON_INTRINSICS=${AX_HAVE_NEON_INTRINSICS}")
+set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+unset(OLD_REQUIRED_FLAGS)
+
+### set AX_ISA_SIMD
+if(AX_HAVE_AVX2_INTRINSICS)
+    set(AX_ISA_SIMD "avx2")
+elseif(AX_HAVE_SSE42_INTRINSICS)
+    set(AX_ISA_SIMD "sse4.2")
+elseif(AX_HAVE_SSE41_INTRINSICS)
+    set(AX_ISA_SIMD "sse4.1")
+elseif(AX_HAVE_SSE2_INTRINSICS)
+    set(AX_ISA_SIMD "sse2")
+elseif(AX_HAVE_NEON_INTRINSICS)
+    set(AX_ISA_SIMD "neon")
+else()
+    set(AX_ISA_SIMD "none")
+endif()
+
+message(AUTHOR_WARNING "AX_ISA_SIMD=${AX_ISA_SIMD},AX_HAVE_AVX2_INTRINSICS=${AX_HAVE_AVX2_INTRINSICS},AX_HAVE_SSE42_INTRINSICS=${AX_HAVE_SSE42_INTRINSICS},AX_HAVE_SSE41_INTRINSICS=${AX_HAVE_SSE41_INTRINSICS},AX_HAVE_SSE2_INTRINSICS=${AX_HAVE_SSE2_INTRINSICS},AX_HAVE_NEON_INTRINSICS=${AX_HAVE_NEON_INTRINSICS}")
+
+if (WINDOWS)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        if (AX_HAVE_SSE41_INTRINSICS)
+            add_compile_options("-msse4.1")
+        endif()
+    endif()
 endif()
 
 function(configure_target_outdir target)
@@ -145,6 +150,10 @@ function(configure_target_outdir target)
         FOLDER "ThirdParty"
     )
 endfunction()
+
+if (WINRT)
+  add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
+endif()
 
 if(NOT DEFINED AX_USE_LUAJIT)
     set(AX_USE_LUAJIT FALSE CACHE INTERNAL "Use luajit instead plainlua")
@@ -163,7 +172,6 @@ add_library(thirdparty STATIC empty.cpp)
 # bellow are header only libs
 target_include_directories(thirdparty
     INTERFACE "robin-map/include"
-    INTERFACE "range-v3/include"
 )
 
 if (ANDROID)
@@ -243,6 +251,9 @@ if(AX_WITH_FREETYPE)
         add_subdirectory(freetype)
         target_link_libraries(thirdparty freetype)
         configure_target_outdir(freetype)
+        if (WINRT)
+            target_compile_definitions(freetype PUBLIC "generic=GenericFromFreeTypeLibrary")
+        endif()
     endif()
     target_include_directories(thirdparty PUBLIC "freetype/include")
 endif(AX_WITH_FREETYPE)
@@ -256,29 +267,10 @@ if(AX_WITH_BULLET)
     target_link_libraries(thirdparty bullet)
     configure_target_outdir(bullet)
 endif(AX_WITH_BULLET)
-if(AX_WITH_JPEG)
-    # set(WITH_SIMD ${CMAKE_ASM_NASM_COMPILER_LOADED} CACHE BOOL "Build TurboJPEG with simd speed up" FORCE)
-    # set(WITH_JPEG8 TRUE CACHE BOOL "Build libjpeg-turbo with JEPG8 API" FORCE)
-    # set(ENABLE_SHARED FALSE CACHE BOOL "Build shared libraries" FORCE)
-    # set(WITH_TURBOJPEG FALSE CACHE BOOL "Include the TurboJPEG API library and associated test programs" FORCE)
-    # set(JTURBO_ENABLE_INSTALL FALSE CACHE BOOL "Enable libjpeg-turbo install" FORCE)
-    # set(JTURBO_BUILD_TESTS FALSE CACHE BOOL "Build TurboJPEG tests and examples" FORCE)
-    # set(JTURBO_BUILD_BINARIES FALSE CACHE BOOL "Build TurboJPEG binaries" FORCE)
-    # set(WITH_CRT_DLL TRUE CACHE BOOL "Build TurboJPEG with crt dll" FORCE)
+if(AX_WITH_JPEG AND NOT WINRT)
     add_subdirectory(jpeg-turbo)
-    # configure_target_outdir(jpeg)
-    # configure_target_outdir(simd)
-    # if(TARGET simd-objs)
-    #     configure_target_outdir(simd-objs)
-    # endif()
-    # if(TARGET jsimdcfg)
-    #     configure_target_outdir(jsimdcfg)
-    # endif()
     target_link_libraries(thirdparty dep_jpeg-turbo)
-    # target_include_directories(thirdparty INTERFACE 
-    #   "${CMAKE_CURRENT_LIST_DIR}/jpeg" 
-    #   "${JPEG_CONFIG_OUT_DIR}")
-endif(AX_WITH_JPEG)
+endif()
 if(AX_WITH_OPENSSL)
     add_subdirectory(openssl)
     if(ANDROID OR LINUX)
@@ -363,13 +355,26 @@ if(AX_WITH_ALSOFT)
         set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
         set(OBOE_SOURCE "${CMAKE_CURRENT_LIST_DIR}/oboe" CACHE STRING "Source directory for Oboe." FORCE)
     endif()
+
+    if(WINRT)
+        set(ALSOFT_BACKEND_WASAPI OFF CACHE BOOL "Enable WASAPI backend" FORCE)
+        set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
+        set(ALSOFT_BACKEND_DSOUND OFF CACHE BOOL "Enable DirectSound backend" FORCE)
+        set(ALSOFT_BACKEND_WINMM OFF CACHE BOOL "Enable Windows Multimedia backend" FORCE)
+    endif()
+
     add_subdirectory(openal EXCLUDE_FROM_ALL)
     configure_target_outdir(common)
+    
     configure_target_outdir(OpenAL)
     target_link_libraries(thirdparty
         OpenAL
     )
     target_compile_definitions(thirdparty PUBLIC AX_USE_ALSOFT=1)
+
+    if(WINRT)
+        target_include_directories(thirdparty PUBLIC openal-uwp/include)
+    endif()
     
     if(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
@@ -387,7 +392,7 @@ if(WINDOWS OR LINUX OR (ANDROID AND AX_USE_GLAD))
     configure_target_outdir(glad)
 endif()
 
-if(WINDOWS OR MACOSX OR LINUX)
+if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX)
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation" FORCE)
     set(GLFW_INSTALL OFF CACHE BOOL "Build the GLFW documentation" FORCE)
     add_subdirectory(glfw)
@@ -418,7 +423,7 @@ if(AX_WITH_CARES)
     include_directories($<TARGET_FILE_DIR:c-ares>)
     include_directories("c-ares/include")
     configure_target_outdir(c-ares)
-    target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_CARES=1)
+    target_compile_definitions(thirdparty PUBLIC YASIO_USE_CARES=1)
 endif(AX_WITH_CARES)
 
 if(AX_WITH_LLHTTP)
@@ -445,7 +450,11 @@ if(AX_WITH_KCP)
     add_subdirectory(kcp)
     configure_target_outdir(kcp)
     target_link_libraries(thirdparty kcp)
-    target_compile_definitions(thirdparty PUBLIC YASIO_HAVE_KCP=1)
+endif()
+
+if (WINRT) 
+    add_subdirectory(angle)
+    target_link_libraries(thirdparty angle::GLESv2 angle::EGL)
 endif()
 
 # put "thirdparty" into thirdparty folder, too
