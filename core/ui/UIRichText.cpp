@@ -1127,6 +1127,12 @@ void RichText::removeElement(int index)
     _formatTextDirty = true;
 }
 
+void RichText::removeAllElements()
+{
+    _richElements.clear();
+    _formatTextDirty = true;
+}
+
 void RichText::removeElement(RichElement* element)
 {
     _richElements.eraseObject(element);

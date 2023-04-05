@@ -486,6 +486,10 @@ public:
     void pushBackElement(RichElement* element);
 
     /**
+     * @brief Remove all RichElements.
+     */
+    void removeAllElements();
+    /**
      * @brief Remove a RichElement at a given index.
      *
      * @param index A integer index value.
