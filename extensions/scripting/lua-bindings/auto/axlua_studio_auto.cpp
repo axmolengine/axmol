@@ -24910,10 +24910,10 @@ int lua_ax_studio_SkeletonNode_addSkinGroup(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     if (argc == 2) 
     {
-        std::string arg0;
+        std::string_view arg0;
         tsl::robin_map<std::string, std::string, hlookup::string_hash, hlookup::equal_to> arg1;
 
-        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "ccs.SkeletonNode:addSkinGroup");
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ccs.SkeletonNode:addSkinGroup");
 
         ok &= luaval_to_std_map_string_string(tolua_S, 3, &arg1, "ccs.SkeletonNode:addSkinGroup");
         if(!ok)

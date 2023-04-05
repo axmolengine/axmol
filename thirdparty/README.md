@@ -254,7 +254,7 @@ https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 3.39.7
+- Version: git 4.0.0-db592fd
 - License: MIT WITH Anti-996
 
 ## zlib
