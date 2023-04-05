@@ -59,17 +59,17 @@ inline void write_ix_impl(_Stream* stream, _Intty value)
   }
   stream->write_byte((uint8_t)v);
 }
-template <typename _Stream, typename _Intty>
+template <typename _Stream, typename _Intty, bool _LargeInt>
 struct write_ix_helper {};
 
-template <typename _Stream>
-struct write_ix_helper<_Stream, int32_t> {
-  static void write_ix(_Stream* stream, int32_t value) { write_ix_impl<_Stream, int32_t>(stream, value); }
+template <typename _Stream, typename _Intty>
+struct write_ix_helper<_Stream, _Intty, false> {
+  static void write_ix(_Stream* stream, _Intty value) { write_ix_impl<_Stream>(stream, static_cast<int32_t>(value)); }
 };
 
-template <typename _Stream>
-struct write_ix_helper<_Stream, int64_t> {
-  static void write_ix(_Stream* stream, int64_t value) { write_ix_impl<_Stream, int64_t>(stream, value); }
+template <typename _Stream, typename _Intty>
+struct write_ix_helper<_Stream, _Intty, true> {
+  static void write_ix(_Stream* stream, _Intty value) { write_ix_impl<_Stream>(stream, static_cast<int64_t>(value)); }
 };
 } // namespace detail
 
@@ -354,7 +354,7 @@ public:
   template <typename _Intty>
   void write_ix(_Intty value)
   {
-    detail::write_ix_helper<my_type, _Intty>::write_ix(this, value);
+    detail::write_ix_helper<my_type, _Intty, sizeof(_Intty) >= sizeof(int64_t)>::write_ix(this, value);
   }
 
   void write_varint(int value, int size)

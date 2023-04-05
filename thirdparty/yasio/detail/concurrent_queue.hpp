@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -37,19 +37,20 @@ SOFTWARE.
 
 namespace yasio
 {
-template <typename _Ty> inline void clear_queue(_Ty& queue)
+template <typename _Ty>
+inline void clear_queue(_Ty& queue)
 {
   _Ty tmp;
   std::swap(tmp, queue);
 }
 namespace privacy
 {
-template <typename _Ty, bool _Dual = false> class concurrent_queue;
+template <typename _Ty, bool _Dual = false>
+class concurrent_queue;
 
 #if defined(YASIO_USE_SPSC_QUEUE)
 template <typename _Ty, bool _Dual>
-class concurrent_queue : public moodycamel::ReaderWriterQueue<_Ty>
-{
+class concurrent_queue : public moodycamel::ReaderWriterQueue<_Ty> {
 public:
   bool empty() const { return this->peek() == nullptr; }
   void consume(int count, const std::function<void(_Ty&&)>& func)
@@ -62,24 +63,22 @@ public:
 };
 
 #else
-template <typename _Ty> inline _Ty* release_pointer(_Ty*& pointer)
+template <typename _Ty>
+inline _Ty* release_pointer(_Ty*& pointer)
 {
   auto tmp = pointer;
   pointer  = nullptr;
   return tmp;
 }
-template <typename _Ty> class concurrent_queue_primitive
-{
-  struct concurrent_item
-  {
+template <typename _Ty>
+class concurrent_queue_primitive {
+  struct concurrent_item {
 
   public:
     concurrent_item() : pitem_(nullptr), pmtx_(nullptr) {}
     concurrent_item(_Ty* pitem, std::recursive_mutex* pmtx) : pitem_(pitem), pmtx_(pmtx) {}
     concurrent_item(const concurrent_item&) = delete;
-    concurrent_item(concurrent_item&& rhs)
-        : pitem_(release_pointer(rhs.pitem_)), pmtx_(release_pointer(rhs.pmtx_))
-    {}
+    concurrent_item(concurrent_item&& rhs) : pitem_(release_pointer(rhs.pitem_)), pmtx_(release_pointer(rhs.pmtx_)) {}
     ~concurrent_item()
     {
       if (pmtx_ != nullptr)
@@ -96,7 +95,8 @@ template <typename _Ty> class concurrent_queue_primitive
   };
 
 public:
-  template <typename... _Types> void emplace(_Types&&... values)
+  template <typename... _Types>
+  void emplace(_Types&&... values)
   {
     std::lock_guard<std::recursive_mutex> lck(this->mtx_);
     queue_.emplace(std::forward<_Types>(values)...);
@@ -127,16 +127,16 @@ protected:
   std::queue<_Ty> queue_;
   std::recursive_mutex mtx_;
 };
-template <typename _Ty> class concurrent_queue<_Ty, false> : public concurrent_queue_primitive<_Ty>
-{};
-template <typename _Ty> class concurrent_queue<_Ty, true> : public concurrent_queue_primitive<_Ty>
-{
+template <typename _Ty>
+class concurrent_queue<_Ty, false> : public concurrent_queue_primitive<_Ty> {};
+template <typename _Ty>
+class concurrent_queue<_Ty, true> : public concurrent_queue_primitive<_Ty> {
 public:
   void consume(int count, const std::function<void(_Ty&&)>& func)
   {
     if (this->deal_.empty())
     {
-      if (this->empty())
+      if (this->queue_.empty())
         return;
       else
       {
@@ -153,6 +153,8 @@ public:
       func(std::move(event));
     };
   }
+
+  size_t count() { return this->queue_.size() + this->deal_.size(); }
 
   void clear()
   {
