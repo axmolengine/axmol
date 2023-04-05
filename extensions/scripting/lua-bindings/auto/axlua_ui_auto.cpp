@@ -30684,6 +30684,56 @@ int lua_ax_ui_RichText_initWithXML(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_ui_RichText_setString(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichText* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_setString'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        std::string_view arg0;
+
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "axui.RichText:setString");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setString'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->setString(arg0);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:setString",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_setString'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_ui_RichText_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -30873,6 +30923,7 @@ int lua_register_ax_ui_RichText(lua_State* tolua_S)
         tolua_function(tolua_S,"stringWithColor4B",lua_ax_ui_RichText_stringWithColor4B);
         tolua_function(tolua_S,"openUrl",lua_ax_ui_RichText_openUrl);
         tolua_function(tolua_S,"initWithXML",lua_ax_ui_RichText_initWithXML);
+        tolua_function(tolua_S,"setString",lua_ax_ui_RichText_setString);
         tolua_function(tolua_S,"create", lua_ax_ui_RichText_create);
         tolua_function(tolua_S,"createWithXML", lua_ax_ui_RichText_createWithXML);
     tolua_endmodule(tolua_S);
