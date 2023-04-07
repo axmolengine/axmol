@@ -1671,7 +1671,8 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
         GUID SubType;
         CHECK_HR(hr = InputType->GetGUID(MF_MT_SUBTYPE, &SubType));
 
-        auto strType = MFUtils::GuidToString(SubType);
+        auto strType = MFUtils::GetVideoTypeName(SubType);
+        AXME_TRACE("WmfMediaEngine: Input video type: %s", strType.data());
 
         m_bIsH264 = SubType == MFVideoFormat_H264 || SubType == MFVideoFormat_H264_ES;
         m_bIsHEVC = SubType == MFVideoFormat_HEVC || SubType == MFVideoFormat_HEVC_ES;

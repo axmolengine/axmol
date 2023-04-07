@@ -6,6 +6,7 @@
 #    include <Unknwn.h>
 #    include <wrl/client.h>
 #    include <exception>
+#    include <string_view>
 
 namespace MFUtils
 {
@@ -49,6 +50,8 @@ inline HRESULT CreateInstance(REFCLSID clsid, Microsoft::WRL::ComPtr<T>& ptr)
 }
 
 HRESULT InitializeMFOnce();
+
+std::string_view GetVideoTypeName(const GUID& SubType);
 
 }  // namespace MFUtils
 
