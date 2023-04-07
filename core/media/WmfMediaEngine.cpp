@@ -213,9 +213,7 @@ HRESULT WmfMediaEngine::CreateInstance(WmfMediaEngine** ppPlayer)
 //  WmfMediaEngine constructor
 /////////////////////////////////////////////////////////////////////////
 
-WmfMediaEngine::WmfMediaEngine()
-    : m_nRefCount(1)
-{}
+WmfMediaEngine::WmfMediaEngine() : m_nRefCount(1) {}
 
 ///////////////////////////////////////////////////////////////////////
 //  WmfMediaEngine destructor
@@ -415,7 +413,7 @@ bool WmfMediaEngine::Open(std::string_view sourceUri)
     });
     t.detach();
 
-    return false;
+    return true;
 }
 
 bool WmfMediaEngine::Close()
@@ -528,7 +526,7 @@ bool WmfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)>
         switch (m_videoPF)
         {
         case MEVideoPixelFormat::YUY2:
-            assert(m_frameExtent.x == m_bIsH264 ? YASIO_SZ_ALIGN(m_frameExtent.x, 16) : m_frameExtent.x);
+            assert(m_frameExtent.x == (m_bIsH264 ? YASIO_SZ_ALIGN(m_frameExtent.x, 16) : m_frameExtent.x));
             break;
         case MEVideoPixelFormat::NV12:
         {
@@ -729,7 +727,7 @@ HRESULT WmfMediaEngine::OnTopologyReady(IMFMediaEvent* pEvent)
 
     UINT32 w = 0, h = 0;
     MFGetAttributeSize(m_videoInputType.Get(), MF_MT_FRAME_SIZE, &w, &h);
-    m_frameExtent.x = w;
+    m_frameExtent.x = m_bIsH264 ? YASIO_SZ_ALIGN(w, 16) : w;
     m_frameExtent.y = h;
 
     DWORD cx = 0, cy = 0;
@@ -1672,6 +1670,9 @@ HRESULT WmfMediaEngine::CreateOutputNode(IMFStreamDescriptor* pSourceSD, IMFTopo
         // Create output type
         GUID SubType;
         CHECK_HR(hr = InputType->GetGUID(MF_MT_SUBTYPE, &SubType));
+
+        auto strType = MFUtils::GetVideoTypeName(SubType);
+        AXME_TRACE("WmfMediaEngine: Input video type: %s", strType.data());
 
         m_bIsH264 = SubType == MFVideoFormat_H264 || SubType == MFVideoFormat_H264_ES;
         m_bIsHEVC = SubType == MFVideoFormat_HEVC || SubType == MFVideoFormat_HEVC_ES;
