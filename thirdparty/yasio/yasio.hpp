@@ -53,12 +53,8 @@ SOFTWARE.
 #include "yasio/stl/string_view.hpp"
 #include "yasio/xxsocket.hpp"
 
-#if !defined(YASIO_HAVE_CARES)
+#if !defined(YASIO_USE_CARES)
 #  include "yasio/stl/shared_mutex.hpp"
-#endif
-
-#if defined(YASIO_HAVE_KCP)
-typedef struct IKCPCB ikcpcb;
 #endif
 
 #if defined(YASIO_SSL_BACKEND)
@@ -66,7 +62,7 @@ typedef struct ssl_ctx_st SSL_CTX;
 typedef struct ssl_st SSL;
 #endif
 
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
 typedef struct ares_channeldata* ares_channel;
 typedef struct ares_addrinfo ares_addrinfo;
 #endif
@@ -174,17 +170,22 @@ enum
   //  b. IPv6 addresses with ports require square brackets [fe80::1%lo0]:53
   YOPT_S_DNS_LIST,
 
-  // Set whether forward event without GC alloc
-  // params: forward: int(0)
-  // reamrks:
-  //   when forward event enabled, the option YOPT_S_DEFERRED_EVENT was ignored
-  YOPT_S_FORWARD_EVENT,
+  // Whether enable auto dispatch event on io_service thread, default: 0
+  // params: auto_dispatch: int(1)
+  YOPT_S_AUTO_DISPATCH,
 
   // Set ssl server cert and private key file
   // params:
   //   crtfile: const char*
   //   keyfile: const char*
   YOPT_S_SSL_CERT,
+
+  // Set whether forward packet without GC alloc
+  // params: forward: int(0)
+  // reamrks:
+  //   when forward packet enabled, the packet will always dispach when recv data from OS kernel immediately,
+  //   even through the option YOPT_S_DEFERRED_EVENT was enabled
+  YOPT_S_FORWARD_PACKET,
 
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
@@ -344,7 +345,6 @@ class io_transport;
 class io_transport_tcp; // tcp client/server
 class io_transport_ssl; // ssl client
 class io_transport_udp; // udp client/server
-class io_transport_kcp; // kcp client/server
 class io_service;
 
 // recommand user always use transport_handle_t, in the future, it's maybe void* or intptr_t
@@ -499,7 +499,6 @@ class YASIO_API io_channel : public io_base {
   friend class io_transport_tcp;
   friend class io_transport_ssl;
   friend class io_transport_udp;
-  friend class io_transport_kcp;
 
 public:
   io_service& get_service() const { return service_; }
@@ -614,20 +613,49 @@ private:
   long long bytes_transferred_ = 0;
 
   unsigned int connect_id_ = 0;
+};
 
-#if defined(YASIO_HAVE_KCP)
-  int kcp_conv_ = 0;
-#endif
+class io_send_buffer {
+public:
+  explicit io_send_buffer(yasio::sbyte_buffer&& mutable_buffer)
+  {
+    mutable_buffer_ = std::move(mutable_buffer);
+    data_           = mutable_buffer_.data();
+    size_           = mutable_buffer_.size();
+  }
+  io_send_buffer(const char* const_buffer, size_t const_buffer_size)
+  {
+    data_ = const_buffer;
+    size_ = const_buffer_size;
+  }
+  io_send_buffer(const io_send_buffer&) = delete;
+  io_send_buffer(io_send_buffer&& rhs) YASIO__NOEXCEPT
+  {
+    mutable_buffer_ = std::move(rhs.mutable_buffer_);
+    data_           = rhs.data_;
+    size_           = rhs.size_;
+  }
+
+  bool empty() const { return size_ == 0; }
+
+  const char* data() const { return data_; }
+  size_t size() const { return size_; }
+
+private:
+  yasio::sbyte_buffer mutable_buffer_;
+
+  const char* data_;
+  size_t size_;
 };
 
 // for tcp transport only
 class YASIO_API io_send_op {
 public:
-  io_send_op(sbyte_buffer&& buffer, completion_cb_t&& handler) : offset_(0), buffer_(std::move(buffer)), handler_(std::move(handler)) {}
+  io_send_op(io_send_buffer&& buffer, completion_cb_t&& handler) : offset_(0), buffer_(std::move(buffer)), handler_(std::move(handler)) {}
   virtual ~io_send_op() {}
 
-  size_t offset_;       // read pos from sending buffer
-  sbyte_buffer buffer_; // sending data buffer
+  size_t offset_;         // read pos from sending buffer
+  io_send_buffer buffer_; // sending data buffer
   completion_cb_t handler_;
 
   YASIO__DECL virtual int perform(transport_handle_t transport, const void* buf, int n, int& error);
@@ -640,7 +668,7 @@ public:
 // for udp transport only
 class YASIO_API io_sendto_op : public io_send_op {
 public:
-  io_sendto_op(sbyte_buffer&& buffer, completion_cb_t&& handler, const ip::endpoint& destination)
+  io_sendto_op(io_send_buffer&& buffer, completion_cb_t&& handler, const ip::endpoint& destination)
       : io_send_op(std::move(buffer), std::move(handler)), destination_(destination)
   {}
 
@@ -686,10 +714,10 @@ protected:
   YASIO__DECL const print_fn2_t& __get_cprint() const;
 
   // Call at user thread
-  YASIO__DECL virtual int write(sbyte_buffer&&, completion_cb_t&&);
+  YASIO__DECL virtual int write(io_send_buffer&&, completion_cb_t&&);
 
   // Call at user thread
-  virtual int write_to(sbyte_buffer&&, const ip::endpoint&, completion_cb_t&&)
+  virtual int write_to(io_send_buffer&&, const ip::endpoint&, completion_cb_t&&)
   {
     YASIO_LOG("[warning] io_transport doesn't support 'write_to' operation!");
     return 0;
@@ -760,8 +788,8 @@ protected:
   YASIO__DECL void connect();
   YASIO__DECL void disconnect();
 
-  YASIO__DECL int write(sbyte_buffer&&, completion_cb_t&&) override;
-  YASIO__DECL int write_to(sbyte_buffer&&, const ip::endpoint&, completion_cb_t&&) override;
+  YASIO__DECL int write(io_send_buffer&&, completion_cb_t&&) override;
+  YASIO__DECL int write_to(io_send_buffer&&, const ip::endpoint&, completion_cb_t&&) override;
 
   YASIO__DECL void set_primitives() override;
 
@@ -778,30 +806,6 @@ protected:
   mutable ip::endpoint destination_; // for sendto only, stable
   bool connected_ = false;
 };
-#if defined(YASIO_HAVE_KCP)
-class io_transport_kcp : public io_transport_udp {
-public:
-  YASIO__DECL io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s);
-  YASIO__DECL ~io_transport_kcp();
-  ikcpcb* internal_object() { return kcp_; }
-
-protected:
-  YASIO__DECL int write(sbyte_buffer&&, completion_cb_t&&) override;
-
-  YASIO__DECL int do_read(int revent, int& error, highp_time_t& wait_duration) override;
-  YASIO__DECL bool do_write(highp_time_t& wait_duration) override;
-
-  YASIO__DECL int handle_input(const char* buf, int len, int& error, highp_time_t& wait_duration) override;
-
-  YASIO__DECL void check_timeout(highp_time_t& wait_duration) const;
-
-  sbyte_buffer rawbuf_; // the low level raw buffer
-  ikcpcb* kcp_;
-  std::recursive_mutex send_mtx_;
-};
-#else
-class io_transport_kcp {};
-#endif
 
 using io_packet = sbyte_buffer;
 #if !defined(YASIO_USE_SHARED_PACKET)
@@ -937,7 +941,6 @@ class YASIO_API io_service // lgtm [cpp/class-many-fields]
   friend class io_transport;
   friend class io_transport_tcp;
   friend class io_transport_udp;
-  friend class io_transport_kcp;
 #if defined(YASIO_SSL_BACKEND)
   friend class io_transport_ssl;
 #endif
@@ -990,7 +993,8 @@ public:
   // should call at the thread who care about async io
   // events(CONNECT_RESPONSE,CONNECTION_LOST,PACKET), such cocos2d-x opengl or
   // any other game engines' render thread.
-  YASIO__DECL void dispatch(int max_count = 128);
+  // returns: The remain events in queue
+  YASIO__DECL size_t dispatch(int max_count = 128);
 
   // set option, see enum YOPT_XXX
   YASIO__DECL void set_option(int opt, ...);
@@ -1016,7 +1020,7 @@ public:
   **        'thandle': the transport to write, could be tcp/udp/kcp
   **        'buf': the data to write
   **        'len': the data len
-  **        'handler': send finish callback, only works for TCP transport
+  **        'handler': send finish callback
   ** remark:
   **        + TCP/UDP: Use queue to store user message, flush at io_service thread
   **        + KCP: Use queue provided by kcp internal, flush at io_service thread
@@ -1026,6 +1030,7 @@ public:
     return write(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len, std::true_type{}}, std::move(completion_handler));
   }
   YASIO__DECL int write(transport_handle_t thandle, sbyte_buffer buffer, completion_cb_t completion_handler = nullptr);
+  YASIO__DECL int forward(transport_handle_t thandle, const void* buf, size_t len, completion_cb_t completion_handler);
 
   /*
    ** Summary: Write data to unconnected UDP transport with specified address.
@@ -1039,6 +1044,7 @@ public:
     return write_to(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len, std::true_type{}}, to, std::move(completion_handler));
   }
   YASIO__DECL int write_to(transport_handle_t thandle, sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t completion_handler = nullptr);
+  YASIO__DECL int forward_to(transport_handle_t thandle, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t completion_handler);
 
   // The highp_timer support, !important, the callback is called on the thread of io_service
   YASIO__DECL highp_timer_ptr schedule(const std::chrono::microseconds& duration, timer_cb_t);
@@ -1079,6 +1085,7 @@ private:
   YASIO__DECL void process_transports(fd_set_adapter& fd_set);
   YASIO__DECL void process_channels(fd_set_adapter& fd_set);
   YASIO__DECL void process_timers();
+  YASIO__DECL void process_deferred_events();
 
   YASIO__DECL void interrupt();
 
@@ -1093,7 +1100,7 @@ private:
   YASIO__DECL void cleanup_ssl_context(ssl_role role);
 #endif
 
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
   YASIO__DECL static void ares_getaddrinfo_cb(void* arg, int status, int timeouts, ares_addrinfo* answerlist);
   YASIO__DECL void ares_work_started();
   YASIO__DECL void ares_work_finished();
@@ -1131,7 +1138,7 @@ private:
   inline void fire_event(_Types&&... args)
   {
     auto event = cxx14::make_unique<io_event>(std::forward<_Types>(args)...);
-    if (options_.deferred_event_ && !options_.forward_event_)
+    if (options_.deferred_event_)
     {
       if (options_.on_defer_event_ && !options_.on_defer_event_(event))
         return;
@@ -1139,6 +1146,11 @@ private:
     }
     else
       options_.on_event_(std::move(event));
+  }
+  template <typename... _Types>
+  inline void forward_packet(_Types&&... args)
+  {
+    options_.on_event_(cxx14::make_unique<io_event>(std::forward<_Types>(args)...));
   }
 
   // new/delete client socket connection channel
@@ -1206,7 +1218,8 @@ private:
     bool deferred_event_ = true;
     defer_event_cb_t on_defer_event_;
 
-    bool forward_event_ = false; // since v3.39.7
+    bool auto_dispatch_  = false;  // since v3.39.8
+    bool forward_packet_ = false; // since v3.39.8
 
     // tcp keepalive settings
     struct __unnamed01 {
@@ -1234,7 +1247,7 @@ private:
     std::string keyfile_;
 #endif
 
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
     std::string name_servers_;
 #endif
   } options_;
@@ -1246,7 +1259,7 @@ private:
 #if defined(YASIO_SSL_BACKEND)
   SSL_CTX* ssl_roles_[2];
 #endif
-#if defined(YASIO_HAVE_CARES)
+#if defined(YASIO_USE_CARES)
   ares_channel ares_         = nullptr; // the ares handle for non blocking io dns resolve support
   int ares_outstanding_work_ = 0;
 #else

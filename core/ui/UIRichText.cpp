@@ -41,6 +41,8 @@
 #include "base/ccUTF8.h"
 #include "ui/UIHelper.h"
 
+#include "fmt/compile.h"
+
 #include "platform/CCSAXParser.h"
 
 USING_NS_AX;
@@ -1079,32 +1081,38 @@ bool RichText::init()
 
 bool RichText::initWithXML(std::string_view origxml, const ValueMap& defaults, const OpenUrlHandler& handleOpenUrl)
 {
-    static std::function<std::string(RichText*)> startTagFont = [](RichText* richText) {
-        std::string fontFace = richText->getFontFace();
-        std::stringstream ss;
-        ss << richText->getFontSize();
-        std::string fontSize  = ss.str();
-        std::string fontColor = richText->getFontColor();
-        return "<font face=\"" + fontFace + "\" size=\"" + fontSize + "\" color=\"" + fontColor + "\">";
-    };
     if (Widget::init())
     {
         setDefaults(defaults);
         setOpenUrlHandler(handleOpenUrl);
 
+        return this->setString(origxml);
+    }
+    return false;
+}
+
+bool RichText::setString(std::string_view text)
+{
+    if (_text != text)
+    {
+        _formatTextDirty = true;
+
+        _richElements.clear();
+        _text = text;
+
         // solves to issues:
         //  - creates defaults values
         //  - makes sure that the xml well formed and starts with an element
-        std::string xml = startTagFont(this);
-        xml += origxml;
-        xml += "</font>";
+        _xmlText.clear();
+        fmt::format_to(std::back_inserter(_xmlText), FMT_COMPILE(R"(<font face="{}" size="{}" color="{}">{}</font>)"),
+                       this->getFontFace(), this->getFontSize(), this->getFontColor(), _text);
 
         MyXMLVisitor visitor(this);
         SAXParser parser;
         parser.setDelegator(&visitor);
-        return parser.parseIntrusive(&xml.front(), xml.length(), SAXParser::ParseOption::HTML);
+        return parser.parseIntrusive(&_xmlText.front(), _xmlText.length(), SAXParser::ParseOption::HTML);
     }
-    return false;
+    return true;
 }
 
 void RichText::initRenderer() {}
@@ -1932,10 +1940,9 @@ void RichText::handleTextRenderer(std::string_view text,
             StringUtils::StringUTF8::CharUTF8Store& str = utf8Text.getString();
 
             // after the first line, skip any spaces to the left
-            const auto startOfWordItr =
-                std::find_if(str.begin() + leftLength, str.end(), [](const StringUtils::StringUTF8::CharUTF8& ch) {
-                    return !std::isspace(ch._char[0], std::locale());
-                });
+            const auto startOfWordItr = std::find_if(
+                str.begin() + leftLength, str.end(),
+                [](const StringUtils::StringUTF8::CharUTF8& ch) { return !std::isspace(ch._char[0], std::locale()); });
             if (startOfWordItr != str.end())
                 leftLength = static_cast<int>(startOfWordItr - str.begin());
 

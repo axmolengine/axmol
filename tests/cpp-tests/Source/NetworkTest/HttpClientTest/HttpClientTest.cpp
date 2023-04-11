@@ -104,24 +104,7 @@ HttpClientTest::~HttpClientTest()
 
 void HttpClientTest::onMenuGetTestClicked(ax::Ref* sender)
 {
-    // test 1(sync request test)
-    {
-        HttpRequest* request = new HttpRequest();
-        request->setUrl("https://tool.chinaz.com");
-        request->setRequestType(HttpRequest::Type::GET);
-        request->setHeaders(std::vector<std::string>{CHROME_UA});
-        // request->setResponseCallback(AX_CALLBACK_2(HttpClientTest::onHttpRequestCompleted, this));
-        request->setTag("GET test1");
-        HttpResponse* response = HttpClient::getInstance()->sendSync(request);
-        if (response)
-        {
-            onHttpRequestCompleted(HttpClient::getInstance(), response);
-            response->release();
-        }
-        request->release();
-    }
-
-    // test 2
+    // test 1
     {
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://just-make-this-request-failed.com");
@@ -133,7 +116,7 @@ void HttpClientTest::onMenuGetTestClicked(ax::Ref* sender)
         request->release();
     }
 
-    // test 3
+    // test 2
     {
         HttpRequest* request = new HttpRequest();
         // required fields
@@ -147,7 +130,7 @@ void HttpClientTest::onMenuGetTestClicked(ax::Ref* sender)
         request->release();
     }
 
-    // test 4
+    // test 3
     {
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://httpbin.org/get");
@@ -159,7 +142,7 @@ void HttpClientTest::onMenuGetTestClicked(ax::Ref* sender)
         request->release();
     }
 
-    // test 5
+    // test 4
     {
         HttpRequest* request = new HttpRequest();
         request->setUrl("https://github.com/yasio/yasio");
