@@ -278,4 +278,18 @@ protected:
     ax::ui::RichText* _richText;
 };
 
+class UIRichTextNewline : public UIScene
+{
+public:
+    CREATE_FUNC(UIRichTextNewline);
+
+    bool init() override;
+    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+
+protected:
+    ax::ui::RichText* _richText;
+};
+
 #endif /* defined(__TestCpp__UIRichTextTest__) */
