@@ -1951,6 +1951,14 @@ void RichText::handleTextRenderer(std::string_view text,
             currentText = utf8Text.getAsCharSequence();
         }
     }
+    
+    // std::getline discards the delimiter, so if it exists at the end of the text, then
+    // a new line entry should be added
+    if (!text.empty() && (text.back() == '\n'))
+    {
+        addNewLine();
+        _lineHeights.back() = fontSize;
+    }
 }
 
 void RichText::handleImageRenderer(std::string_view filePath,
