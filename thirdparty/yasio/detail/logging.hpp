@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -29,7 +29,9 @@ SOFTWARE.
 #define YASIO__LOGGING_HPP
 #include "yasio/detail/strfmt.hpp"
 
-#if defined(_WIN32)
+#if defined(__EMSCRIPTEN__)
+#  define YASIO_LOG_TAG(tag, format, ...) printf((tag format "\n"), ##__VA_ARGS__)
+#elif defined(_WIN32)
 #  define YASIO_LOG_TAG(tag, format, ...) OutputDebugStringA(::yasio::strfmt(127, (tag format "\n"), ##__VA_ARGS__).c_str())
 #elif defined(ANDROID) || defined(__ANDROID__)
 #  include <android/log.h>

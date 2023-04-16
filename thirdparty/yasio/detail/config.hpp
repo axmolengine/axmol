@@ -65,7 +65,7 @@ SOFTWARE.
 // #define YASIO_ENABLE_ARES_PROFILER 1
 
 /*
-** Uncomment or add compiler flag -DYASIO_HAVE_CARES to use c-ares to perform async resolve
+** Uncomment or add compiler flag -DYASIO_USE_CARES to use c-ares to perform async resolve
 */
 // #define YASIO_USE_CARES 1
 
@@ -99,9 +99,9 @@ SOFTWARE.
 // #define YASIO_MINIFY_EVENT 1
 
 /*
-** Uncomment or add compiler flag -DYASIO_HAVE_HALF_FLOAT to enable half-precision floating-point support
+** Uncomment or add compiler flag -DYASIO_ENABLE_HALF_FLOAT to enable half-precision floating-point support
 */
-// #define YASIO_HAVE_HALF_FLOAT 1
+// #define YASIO_ENABLE_HALF_FLOAT 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_ENABLE_PASSIVE_EVENT to enable server channel open/close event
@@ -124,6 +124,40 @@ SOFTWARE.
 ** If you need support Windows XP, you need disable poll
 */
 // #define YASIO_DISABLE_POLL 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_DISABLE_EPOLL to disable epoll
+*/
+// #define YASIO_DISABLE_EPOLL 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_DISABLE_KQUEUE to disable kqueue for bsd-like OS
+*/
+// #define YASIO_DISABLE_KQUEUE 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_ENABLE_WEPOLL for windows
+*/
+// #define YASIO_ENABLE_WEPOLL 1
+
+/*
+** Uncomment or add compiler flag -DYASIO_USE_OPENSSL_BIO to use openssl bio when YASIO_SSL_BACKEND=1
+*/
+// #define YASIO_USE_OPENSSL_BIO 1
+
+#if defined(__EMSCRIPTEN__) && !defined(YASIO_USE_OPENSSL_BIO)
+#  define YASIO_USE_OPENSSL_BIO 1
+#endif
+
+#if YASIO__HAS_EPOLL
+#  define epoll_close close
+typedef int epoll_handle_t;
+#elif defined(_WIN32) && defined(YASIO_ENABLE_WEPOLL)
+#  include "wepoll/wepoll.h"
+#  undef YASIO__HAS_EPOLL
+#  define YASIO__HAS_EPOLL 1
+typedef HANDLE epoll_handle_t;
+#endif
 
 /*
 ** Workaround for 'vs2013 without full c++11 support', in the future, drop vs2013 support and
@@ -230,5 +264,15 @@ SOFTWARE.
 
 #define YASIO_SSL_PON "yasio_ssl_server"
 #define YASIO_SSL_PON_LEN (sizeof(YASIO_SSL_PON) - 1)
+
+// The msg flag for socket.send
+// Linux: MSG_NOSIGNAL as to socket.send flag to ignore SIGPIPE
+// BSDs: use setsockopt SO_NOSIGPIPE to ignore SIGPIPE
+// Refer to: https://linux.die.net/man/2/send
+#if defined(__linux__)
+#  define YASIO_MSG_FLAG MSG_NOSIGNAL
+#else
+#  define YASIO_MSG_FLAG 0
+#endif
 
 #endif
