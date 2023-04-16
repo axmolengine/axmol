@@ -106,7 +106,7 @@ SOFTWARE.
 // Tests whether current OS support epoll
 #if defined(__linux__)
 #  define YASIO__HAS_EPOLL 1
-#  if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 11, 0)
+#  if !defined(__ANDROID__) && LINUX_VERSION_CODE >= KERNEL_VERSION(5, 11, 0)
 #    define YASIO__HAS_EPOLL_PWAIT2 1
 #  else
 #    define YASIO__HAS_EPOLL_PWAIT2 0
