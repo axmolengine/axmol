@@ -30,7 +30,7 @@ USING_NS_AX;
 using namespace ax::network;
 
 #define CHROME_UA                                                                                                   \
-    "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.5359.125 " \
+    "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 " \
     "Safari/537.36"
 
 HttpClientTests::HttpClientTests()
