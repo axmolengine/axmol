@@ -43,12 +43,11 @@ SOFTWARE.
 #include "yasio/detail/config.hpp"
 #include "yasio/detail/object_pool.hpp"
 #include "yasio/detail/singleton.hpp"
-#include "yasio/detail/select_interrupter.hpp"
 #include "yasio/detail/concurrent_queue.hpp"
 #include "yasio/detail/utils.hpp"
 #include "yasio/detail/errc.hpp"
 #include "yasio/detail/byte_buffer.hpp"
-#include "yasio/detail/fd_set_adapter.hpp"
+#include "yasio/detail/io_watcher.hpp"
 #include "yasio/stl/memory.hpp"
 #include "yasio/stl/string_view.hpp"
 #include "yasio/xxsocket.hpp"
@@ -58,8 +57,12 @@ SOFTWARE.
 #endif
 
 #if defined(YASIO_SSL_BACKEND)
-typedef struct ssl_ctx_st SSL_CTX;
-typedef struct ssl_st SSL;
+typedef struct ssl_ctx_st yssl_ctx_st;
+#  if YASIO_SSL_BACKEND == 2 || defined(YASIO_USE_OPENSSL_BIO)
+struct yssl_st;
+#  else
+typedef struct ssl_st yssl_st;
+#  endif
 #endif
 
 #if defined(YASIO_USE_CARES)
@@ -79,9 +82,12 @@ namespace inet
 enum
 { // lgtm [cpp/irregular-enum-init]
 
-  // Set whether deferred dispatch event.
-  // params: deferred_event:int(1)
-  YOPT_S_DEFERRED_EVENT = 1,
+  // Set whether disable internal dispatch, if yes
+  // user must invoke dispatch on thread which care about 
+  // network events, it's useful for game engine update ui
+  // when recv network events.
+  // params: no_dispatch:int(0)
+  YOPT_S_NO_DISPATCH = 1,
 
   // Set custom resolve function, native C++ ONLY.
   // params: func:resolv_fn_t*
@@ -103,7 +109,7 @@ enum
   // remarks: this callback will be invoke at io_service::dispatch caller thread
   YOPT_S_EVENT_CB,
 
-  // Sets callback before defer dispatch event.
+  // Sets callback before enque event to defer queue.
   // params: func:defer_event_cb_t*
   // remarks: this callback invoke at io_service thread
   YOPT_S_DEFER_EVENT_CB,
@@ -170,10 +176,6 @@ enum
   //  b. IPv6 addresses with ports require square brackets [fe80::1%lo0]:53
   YOPT_S_DNS_LIST,
 
-  // Whether enable auto dispatch event on io_service thread, default: 0
-  // params: auto_dispatch: int(1)
-  YOPT_S_AUTO_DISPATCH,
-
   // Set ssl server cert and private key file
   // params:
   //   crtfile: const char*
@@ -183,8 +185,7 @@ enum
   // Set whether forward packet without GC alloc
   // params: forward: int(0)
   // reamrks:
-  //   when forward packet enabled, the packet will always dispach when recv data from OS kernel immediately,
-  //   even through the option YOPT_S_DEFERRED_EVENT was enabled
+  //   when forward packet enabled, the packet will always dispach when recv data from OS kernel immediately
   YOPT_S_FORWARD_PACKET,
 
   // Sets channel length field based frame decode function, native C++ ONLY
@@ -403,10 +404,10 @@ public:
   void expires_from_now(const std::chrono::microseconds& duration)
   {
     this->duration_    = duration;
-    this->expire_time_ = steady_clock_t::now() + this->duration_;
+    this->expire_time_ = yasio::steady_clock_t::now() + this->duration_;
   }
 
-  void expires_from_now() { this->expire_time_ = steady_clock_t::now() + this->duration_; }
+  void expires_from_now() { this->expire_time_ = yasio::steady_clock_t::now() + this->duration_; }
 
   // Wait timer timeout once.
   void async_wait_once(io_service& service, timerv_cb_t cb)
@@ -431,13 +432,13 @@ public:
   YASIO__DECL void cancel(io_service& service);
 
   // Check if timer is expired?
-  bool expired() const { return wait_duration().count() <= 0; }
+  bool expired(io_service& service) const { return this->wait_duration(service).count() <= 0; }
 
   // Gets wait duration of timer.
-  std::chrono::microseconds wait_duration() const { return std::chrono::duration_cast<std::chrono::microseconds>(this->expire_time_ - steady_clock_t::now()); }
+  YASIO__DECL std::chrono::microseconds wait_duration(io_service& service) const;
 
-  std::chrono::microseconds duration_                  = {};
-  std::chrono::time_point<steady_clock_t> expire_time_ = {};
+  std::chrono::microseconds duration_                         = {};
+  std::chrono::time_point<yasio::steady_clock_t> expire_time_ = {};
 };
 
 struct YASIO_API io_base {
@@ -503,7 +504,7 @@ class YASIO_API io_channel : public io_base {
 public:
   io_service& get_service() const { return service_; }
 #if defined(YASIO_SSL_BACKEND)
-  YASIO__DECL SSL_CTX* get_ssl_context(bool client) const;
+  YASIO__DECL yssl_ctx_st* get_ssl_context(bool client) const;
 #endif
   int index() const { return index_; }
   u_short remote_port() const { return remote_port_; }
@@ -770,7 +771,7 @@ public:
 
 protected:
   YASIO__DECL int do_ssl_handshake(int& error); // always invoke at do_read
-  SSL* ssl_ = nullptr;
+  yssl_st* ssl_ = nullptr;
 };
 #else
 class io_transport_ssl {};
@@ -1068,7 +1069,7 @@ private:
   void sort_timers()
   {
     std::sort(this->timer_queue_.begin(), this->timer_queue_.end(),
-              [](const timer_impl_t& lhs, const timer_impl_t& rhs) { return lhs.first->wait_duration() > rhs.first->wait_duration(); });
+              [](const timer_impl_t& lhs, const timer_impl_t& rhs) { return lhs.first->expire_time_ > rhs.first->expire_time_; });
   }
 
   // Start a async domain name query
@@ -1082,30 +1083,31 @@ private:
 
   YASIO__DECL bool open_internal(io_channel*);
 
-  YASIO__DECL void process_transports(fd_set_adapter& fd_set);
-  YASIO__DECL void process_channels(fd_set_adapter& fd_set);
+  YASIO__DECL void process_transports();
+  YASIO__DECL void process_channels();
   YASIO__DECL void process_timers();
   YASIO__DECL void process_deferred_events();
 
-  YASIO__DECL void interrupt();
+  YASIO__DECL void wakeup();
 
   YASIO__DECL highp_time_t get_timeout(highp_time_t usec);
 
   YASIO__DECL int do_resolve(io_channel* ctx);
   YASIO__DECL void do_connect(io_channel*);
-  YASIO__DECL void do_connect_completion(io_channel*, fd_set_adapter& fd_set);
+  YASIO__DECL void do_connect_completion(io_channel*);
 
 #if defined(YASIO_SSL_BACKEND)
-  YASIO__DECL SSL_CTX* init_ssl_context(ssl_role role);
+  YASIO__DECL yssl_ctx_st* init_ssl_context(ssl_role role);
   YASIO__DECL void cleanup_ssl_context(ssl_role role);
 #endif
 
 #if defined(YASIO_USE_CARES)
-  YASIO__DECL static void ares_getaddrinfo_cb(void* arg, int status, int timeouts, ares_addrinfo* answerlist);
+  YASIO__DECL static void ares_getaddrinfo_cb(void* data, int status, int timeouts, ares_addrinfo* answerlist);
+  YASIO__DECL static void ares_sock_state_cb(void *data, socket_native_type socket_fd, int readable, int writable);
   YASIO__DECL void ares_work_started();
   YASIO__DECL void ares_work_finished();
-  YASIO__DECL int do_ares_fds(socket_native_type* socks, fd_set_adapter& fd_set, timeval& waitd_tv);
-  YASIO__DECL void do_ares_process_fds(socket_native_type* socks, int count, fd_set_adapter& fd_set);
+  YASIO__DECL int ares_get_fds(socket_native_type* socks, highp_time_t& waitd_usec);
+  YASIO__DECL void do_ares_process_fds(socket_native_type* socks, int count);
   YASIO__DECL void recreate_ares_channel();
   YASIO__DECL void config_ares_name_servers();
   YASIO__DECL void destroy_ares_channel();
@@ -1125,7 +1127,7 @@ private:
   // The major non-blocking event-loop
   YASIO__DECL void run(void);
 
-  YASIO__DECL bool do_read(transport_handle_t, fd_set_adapter& fd_set);
+  YASIO__DECL bool do_read(transport_handle_t);
   bool do_write(transport_handle_t transport) { return transport->do_write(this->wait_duration_); }
   YASIO__DECL void unpack(transport_handle_t, int bytes_expected, int bytes_transferred, int bytes_to_strip);
 
@@ -1138,14 +1140,9 @@ private:
   inline void fire_event(_Types&&... args)
   {
     auto event = cxx14::make_unique<io_event>(std::forward<_Types>(args)...);
-    if (options_.deferred_event_)
-    {
-      if (options_.on_defer_event_ && !options_.on_defer_event_(event))
-        return;
-      events_.emplace(std::move(event));
-    }
-    else
-      options_.on_event_(std::move(event));
+    if (options_.on_defer_event_ && options_.on_defer_event_(event))
+      return;
+    events_.emplace(std::move(event));
   }
   template <typename... _Types>
   inline void forward_packet(_Types&&... args)
@@ -1163,7 +1160,7 @@ private:
 
   // supporting server
   YASIO__DECL void do_accept(io_channel*);
-  YASIO__DECL void do_accept_completion(io_channel*, fd_set_adapter& fd_set);
+  YASIO__DECL void do_accept_completion(io_channel*);
 
   /*
   ** summary: For udp-server only, make dgram handle to communicate with client
@@ -1179,10 +1176,15 @@ private:
   /* For log macro only */
   inline const print_fn2_t& __get_cprint() const { return options_.print_; }
 
+  void update_time() { this->time_ = yasio::steady_clock_t::now(); }
+
 private:
   state state_ = state::UNINITIALIZED; // The service state
   std::thread worker_;
   std::thread::id worker_id_;
+
+  /* The current time according to the event loop. in msecs. */
+  std::chrono::time_point<yasio::steady_clock_t> time_;
 
   privacy::concurrent_queue<event_ptr, true> events_;
 
@@ -1194,17 +1196,14 @@ private:
   std::vector<transport_handle_t> transports_;
   std::vector<transport_handle_t> tpool_;
 
-  // select interrupter
-  select_interrupter interrupter_;
-
-  // timer support timer_pair
+  // timer support timer_pair, back is earliest expire timer
   std::vector<timer_impl_t> timer_queue_;
   std::recursive_mutex timer_queue_mtx_;
 
   // the next wait duration for socket.select
   highp_time_t wait_duration_;
 
-  fd_set_adapter fd_set_;
+  io_watcher io_watcher_;
 
   // options
   struct __unnamed_options {
@@ -1218,7 +1217,7 @@ private:
     bool deferred_event_ = true;
     defer_event_cb_t on_defer_event_;
 
-    bool auto_dispatch_  = false;  // since v3.39.8
+    bool no_dispatch_  = false; // since v4.0.0
     bool forward_packet_ = false; // since v3.39.8
 
     // tcp keepalive settings
@@ -1257,7 +1256,7 @@ private:
   // The stop flag to notify all transports needs close
   uint8_t stop_flag_ = 0;
 #if defined(YASIO_SSL_BACKEND)
-  SSL_CTX* ssl_roles_[2];
+  yssl_ctx_st* ssl_roles_[2];
 #endif
 #if defined(YASIO_USE_CARES)
   ares_channel ares_         = nullptr; // the ares handle for non blocking io dns resolve support

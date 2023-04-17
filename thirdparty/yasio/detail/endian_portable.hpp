@@ -104,68 +104,85 @@ SOFTWARE.
 
 namespace yasio
 {
-inline uint64_t (htonll)(uint64_t Value) { return YASIO__SWAP_LONGLONG(Value); }
-inline uint64_t (ntohll)(uint64_t Value) { return YASIO__SWAP_LONGLONG(Value); }
+
+inline uint64_t(htonll)(uint64_t Value) { return YASIO__SWAP_LONGLONG(Value); }
+inline uint64_t(ntohll)(uint64_t Value) { return YASIO__SWAP_LONGLONG(Value); }
 
 YASIO__NS_INLINE
 namespace endian
 {
-template <typename _Ty, size_t n> struct byte_order_impl {};
+template <typename _Ty, size_t n>
+struct byte_order_impl {};
 
-template <typename _Ty> struct byte_order_impl<_Ty, sizeof(int8_t)> {
+template <typename _Ty>
+struct byte_order_impl<_Ty, sizeof(int8_t)> {
   static inline _Ty host_to_network(_Ty value) { return static_cast<_Ty>(value); }
   static inline _Ty network_to_host(_Ty value) { return static_cast<_Ty>(value); }
 };
 
-template <typename _Ty> struct byte_order_impl<_Ty, sizeof(int16_t)> {
+template <typename _Ty>
+struct byte_order_impl<_Ty, sizeof(int16_t)> {
   static inline _Ty host_to_network(_Ty value) { return static_cast<_Ty>(htons(static_cast<u_short>(value))); }
   static inline _Ty network_to_host(_Ty value) { return static_cast<_Ty>(ntohs(static_cast<u_short>(value))); }
 };
 
-template <typename _Ty> struct byte_order_impl<_Ty, sizeof(int32_t)> {
+template <typename _Ty>
+struct byte_order_impl<_Ty, sizeof(int32_t)> {
   static inline _Ty host_to_network(_Ty value) { return (_Ty)(htonl((uint32_t)(value))); }
   static inline _Ty network_to_host(_Ty value) { return (_Ty)(ntohl((uint32_t)(value))); }
 };
 
-template <typename _Ty> struct byte_order_impl<_Ty, sizeof(int64_t)> {
+template <typename _Ty>
+struct byte_order_impl<_Ty, sizeof(int64_t)> {
   static inline _Ty host_to_network(_Ty value) { return (_Ty)((yasio::htonll)((uint64_t)(value))); }
   static inline _Ty network_to_host(_Ty value) { return (_Ty)((yasio::ntohll)((uint64_t)(value))); }
 };
 
-#if defined(YASIO_HAVE_HALF_FLOAT)
-template <> struct byte_order_impl<fp16_t, sizeof(fp16_t)> {
+#if defined(YASIO_ENABLE_HALF_FLOAT)
+template <>
+struct byte_order_impl<fp16_t, sizeof(fp16_t)> {
   static inline fp16_t host_to_network(fp16_t value)
   {
-    uint16_t& p = (uint16_t&)value;
-    YASIO__SWAP_SHORT(p);
+    uint16_t& underlying_value = (uint16_t&)value;
+    YASIO__SWAP_SHORT(underlying_value);
     return value;
   }
   static inline fp16_t network_to_host(fp16_t value) { return host_to_network(value); }
 };
 #endif
 
-template <> struct byte_order_impl<float, sizeof(float)> {
+template <>
+struct byte_order_impl<float, sizeof(float)> {
   static inline float host_to_network(float value)
   {
-    uint32_t& p = (uint32_t&)value;
-    YASIO__SWAP_LONG(p);
+    uint32_t& underlying_value = (uint32_t&)value;
+    YASIO__SWAP_LONG(underlying_value);
     return value;
   }
   static inline float network_to_host(float value) { return host_to_network(value); }
 };
 
-template <> struct byte_order_impl<double, sizeof(double)> {
+template <>
+struct byte_order_impl<double, sizeof(double)> {
   static inline double host_to_network(double value)
   {
-    uint64_t& p = (uint64_t&)value;
-    YASIO__SWAP_LONGLONG(p);
+    uint64_t& underlying_value = (uint64_t&)value;
+    YASIO__SWAP_LONGLONG(underlying_value);
     return value;
   }
   static inline double network_to_host(double value) { return host_to_network(value); }
 };
 
-template <typename _Ty> inline _Ty host_to_network(_Ty value) { return byte_order_impl<_Ty, sizeof(_Ty)>::host_to_network(value); }
-template <typename _Ty> inline _Ty network_to_host(_Ty value) { return byte_order_impl<_Ty, sizeof(_Ty)>::network_to_host(value); }
+template <typename _Ty>
+inline _Ty host_to_network(_Ty value)
+{
+  return byte_order_impl<_Ty, sizeof(_Ty)>::host_to_network(value);
+}
+template <typename _Ty>
+inline _Ty network_to_host(_Ty value)
+{
+  return byte_order_impl<_Ty, sizeof(_Ty)>::network_to_host(value);
+}
 inline int host_to_network(int value, int size)
 {
   auto netval = host_to_network<unsigned int>(value);
@@ -186,18 +203,37 @@ inline int network_to_host(int value, int size)
 /// </summary>
 struct network_convert_tag {};
 struct host_convert_tag {};
-template <typename _TT> struct convert_traits {};
+template <typename _TT>
+struct convert_traits {};
 
-template <> struct convert_traits<network_convert_tag> {
-  template <typename _Ty> static inline _Ty to(_Ty value) { return host_to_network<_Ty>(value); }
-  template <typename _Ty> static inline _Ty from(_Ty value) { return network_to_host<_Ty>(value); }
+template <>
+struct convert_traits<network_convert_tag> {
+  template <typename _Ty>
+  static inline _Ty to(_Ty value)
+  {
+    return host_to_network<_Ty>(value);
+  }
+  template <typename _Ty>
+  static inline _Ty from(_Ty value)
+  {
+    return network_to_host<_Ty>(value);
+  }
   static int toint(int value, int size) { return host_to_network(value, size); }
   static int fromint(int value, int size) { return network_to_host(value, size); }
 };
 
-template <> struct convert_traits<host_convert_tag> {
-  template <typename _Ty> static inline _Ty to(_Ty value) { return value; }
-  template <typename _Ty> static inline _Ty from(_Ty value) { return value; }
+template <>
+struct convert_traits<host_convert_tag> {
+  template <typename _Ty>
+  static inline _Ty to(_Ty value)
+  {
+    return value;
+  }
+  template <typename _Ty>
+  static inline _Ty from(_Ty value)
+  {
+    return value;
+  }
   static int toint(int value, int) { return value; }
   static int fromint(int value, int) { return value; }
 };

@@ -36,6 +36,10 @@ SOFTWARE.
 #  include <sdkddkver.h>
 #endif
 
+#if defined(__linux__)
+#  include <linux/version.h>
+#endif
+
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #  define snprintf sprintf_s
 #endif
@@ -92,6 +96,26 @@ SOFTWARE.
 #  define YASIO__HAS_UDS 0
 #endif
 
+// Tests whether current OS support ppoll
+#if defined(__linux__) && !defined(__ANDROID__) || (defined(__ANDROID_API__) && __ANDROID_API__ >= 21)
+#  define YASIO__HAS_PPOLL 1
+#else
+#  define YASIO__HAS_PPOLL 0
+#endif
+
+// Tests whether current OS support epoll
+#if defined(__linux__)
+#  define YASIO__HAS_EPOLL 1
+#  if !defined(__ANDROID__) && LINUX_VERSION_CODE >= KERNEL_VERSION(5, 11, 0)
+#    define YASIO__HAS_EPOLL_PWAIT2 1
+#  else
+#    define YASIO__HAS_EPOLL_PWAIT2 0
+#  endif
+#else
+#  define YASIO__HAS_EPOLL 0
+#  define YASIO__HAS_EPOLL_PWAIT2 0
+#endif
+
 // Tests whether current OS support route client io event in kernel for udp server
 #if defined(_WIN32)
 #  define YASIO__UDP_KROUTE 0
@@ -110,6 +134,8 @@ SOFTWARE.
 #else
 #  define YASIO__OS_BSD_LIKE 0
 #endif
+
+#define YASIO__HAS_KQUEUE YASIO__OS_BSD_LIKE
 
 // Test whether sockaddr has member 'sa_len'
 // see also: https://github.com/freebsd/freebsd-src/blob/main/sys/sys/socket.h#L329
