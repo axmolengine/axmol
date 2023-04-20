@@ -188,9 +188,9 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
   3. Start Android and choose [Open an existing Android Studio Project] and select your project. For example, the existing cpp-test project located in ```axmol\tests\cpp-tests\proj.android```
   4. Start Android Studio and Open [Tools][SDKManager], then switch to ```SDK Tools```, check the ```Show Package Details```, choose the following tools and click the button ```Apply``` to install them:  
      - Android SDK Platform 33  
-     - Android Gradle Plugin (AGP) 7.2.2  
+     - Android Gradle Plugin (AGP) 7.4.2  
      - Android SDK Build-Tools 30.0.3 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
-     - Gradle 7.4.2  
+     - Gradle 8.1  
      - NDK r23c+  
      - CMake 3.22.1+  
   5. Wait for ```Gradle sync``` finish.
@@ -198,7 +198,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
   
 ##### Without Android Studio
 
-  1. Download command-tools from <https://developer.android.com/studio#command-tools>
+  1. Download command-tools from <https://developer.android.com/studio#command-tools>, for example: https://dl.google.com/android/repository/commandlinetools-win-9477386_latest.zip
   2. Install Android devtools (for example in windows)
 
   ```bat
