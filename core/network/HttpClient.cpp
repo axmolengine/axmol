@@ -124,7 +124,6 @@ HttpClient::HttpClient()
 
     _service = new yasio::io_service(HttpClient::MAX_CHANNELS);
     _service->set_option(yasio::YOPT_S_FORWARD_PACKET, 1); // forward packet immediately when got data from OS kernel
-    _service->set_option(yasio::YOPT_S_AUTO_DISPATCH, 1); // auto dispatch on io_service worker thread
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });

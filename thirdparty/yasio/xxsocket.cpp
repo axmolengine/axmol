@@ -860,8 +860,10 @@ void xxsocket::close(int shut_how)
 {
   if (is_open())
   {
+#if !defined(__EMSCRIPTEN__)
     if (shut_how >= 0)
       ::shutdown(this->fd, shut_how);
+#endif
     ::closesocket(this->fd);
     this->fd = invalid_socket;
   }
@@ -947,7 +949,8 @@ const char* xxsocket::strerror_r(int error, char* buf, size_t buflen)
 
   return buf;
 #else
-  (void)::strerror_r(error, buf, buflen);
+  // XSI-compliant return int not const char*, refer to: https://linux.die.net/man/3/strerror_r
+  auto YASIO__UNUSED ret = ::strerror_r(error, buf, buflen);
   return buf;
 #endif
 }

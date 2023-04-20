@@ -37,7 +37,7 @@ org/yasio/AppGlobals.java provide 2 function:
 #include "yasio/detail/config.hpp"
 #include "yasio/detail/logging.hpp"
 
-#if defined(__ANDROID__) && defined(YASIO_HAVE_CARES)
+#if defined(__ANDROID__) && defined(YASIO_USE_CARES)
 static JavaVM* yasio__jvm;
 static jclass yasio__appglobals_cls;
 static jobject yasio__get_app_context(JNIEnv* env, jclass obj_cls, const char* funcName,

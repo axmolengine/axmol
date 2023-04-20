@@ -37,7 +37,11 @@ namespace yasio
 {
 // typedefs
 typedef long long highp_time_t;
+#if YASIO__HAS_CXX11
+typedef std::chrono::steady_clock steady_clock_t;
+#else
 typedef std::chrono::high_resolution_clock steady_clock_t;
+#endif
 typedef std::chrono::system_clock system_clock_t;
 
 // The high precision nano seconds timestamp since epoch

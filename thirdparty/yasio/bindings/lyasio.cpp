@@ -29,7 +29,6 @@ SOFTWARE.
 #include "yasio/obstream.hpp"
 #include "yasio/yasio.hpp"
 #include "yasio/bindings/lyasio.hpp"
-#include "yasio/bindings/yasio_sol.hpp"
 using namespace yasio;
 
 namespace lyasio
@@ -83,6 +82,8 @@ static cxx17::string_view ibstream_read_v(_Stream* ibs, int length_field_bits)
 
 #if YASIO__HAS_CXX14
 
+#  include "yasio/bindings/yasio_sol.hpp"
+
 namespace lyasio
 {
 template <typename _Stream>
@@ -110,7 +111,7 @@ static void register_obstream(sol::table& lib, const char* usertype)
       &_Stream::template write<int16_t>, "write_i32", &_Stream::template write<int32_t>, "write_i64", &_Stream::template write<int64_t>, "write_u8",
       &_Stream::template write<uint8_t>, "write_u16", &_Stream::template write<uint16_t>, "write_u32", &_Stream::template write<uint32_t>, "write_u64",
       &_Stream::template write<uint64_t>,
-#  if defined(YASIO_HAVE_HALF_FLOAT)
+#  if defined(YASIO_ENABLE_HALF_FLOAT)
       "write_f16", &_Stream::template write<fp16_t>,
 #  endif
       "write_f", &_Stream::template write<float>, "write_lf", &_Stream::template write<double>, "write_v",
@@ -133,7 +134,7 @@ static void register_ibstream(sol::table& lib, const char* usertype)
       &_Stream::template read<int16_t>, "read_i32", &_Stream::template read<int32_t>, "read_i64", &_Stream::template read<int64_t>, "read_u8",
       &_Stream::template read<uint8_t>, "read_u16", &_Stream::template read<uint16_t>, "read_u32", &_Stream::template read<uint32_t>, "read_u64",
       &_Stream::template read<uint64_t>,
-#  if defined(YASIO_HAVE_HALF_FLOAT)
+#  if defined(YASIO_ENABLE_HALF_FLOAT)
       "read_f16", &_Stream::template read<fp16_t>,
 #  endif
       "read_f", &_Stream::template read<float>, "read_lf", &_Stream::template read<double>, "read_v",
@@ -206,7 +207,11 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
                               io_service(!hosts.empty() ? &hosts.front() : nullptr, (std::max)(static_cast<int>(hosts.size()), 1));
                         }),
       sol::meta_function::garbage_collect, sol::destructor([](io_service& memory_from_lua) { memory_from_lua.~io_service(); }), "start",
-      [](io_service* service, sol::function cb) { service->start([=](event_ptr ev) { cb(std::move(ev)); }); }, "stop", &io_service::stop, "set_option",
+      [](io_service* service, sol::function cb) {
+        service->set_option(YOPT_S_NO_DISPATCH, 1); // script doesn't support handle event at network thread
+        service->start([=](event_ptr ev) { cb(std::move(ev)); });
+      },
+      "stop", &io_service::stop, "set_option",
       [](io_service* service, int opt, sol::variadic_args args) {
         switch (opt)
         {
@@ -277,8 +282,8 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   lyasio::register_ibstream<ibstream, ibstream_view, obstream>(yasio_lib, "ibstream");
   lyasio::register_ibstream<fast_ibstream, fast_ibstream_view, fast_obstream>(yasio_lib, "fast_ibstream");
 
-  yasio_lib["highp_clock"] = &highp_clock<steady_clock_t>;
-  yasio_lib["highp_time"]  = &highp_clock<system_clock_t>;
+  yasio_lib["highp_clock"] = &highp_clock<yasio::steady_clock_t>;
+  yasio_lib["highp_time"]  = &highp_clock<yasio::system_clock_t>;
 
   yasio_lib["unwrap_ptr"] = [](lua_State* L) -> int {
     auto& pkt  = *(packet_t*)lua_touserdata(L, 1);
@@ -295,12 +300,12 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
   };
 
   // ##-- yasio enums
-#  define YASIO_EXPORT_ENUM(v) yasio_lib[#  v] = v
+#  define YASIO_EXPORT_ENUM(v) yasio_lib[#v] = v
   YASIO_EXPORT_ENUM(YCK_TCP_CLIENT);
   YASIO_EXPORT_ENUM(YCK_TCP_SERVER);
   YASIO_EXPORT_ENUM(YCK_UDP_CLIENT);
   YASIO_EXPORT_ENUM(YCK_UDP_SERVER);
-#  if defined(YASIO_HAVE_KCP)
+#  if defined(YASIO_ENABLE_KCP)
   YASIO_EXPORT_ENUM(YCK_KCP_CLIENT);
   YASIO_EXPORT_ENUM(YCK_KCP_SERVER);
 #  endif
@@ -445,7 +450,7 @@ struct lua_type_traits<std::vector<yasio::inet::io_hostent>> {
     return 1;
   }
 };
-#  if defined(YASIO_HAVE_HALF_FLOAT)
+#  if defined(YASIO_ENABLE_HALF_FLOAT)
 template <>
 struct lua_type_traits<fp16_t> {
   typedef fp16_t get_type;
@@ -467,9 +472,9 @@ namespace lyasio
 {
 #  define kaguya_obstream_class(_Stream, _BaseStream) kaguya::UserdataMetatable<_Stream, _BaseStream>().setConstructors<_Stream(), _Stream(size_t)>()
 #  define kaguya_obstream_base_class(_BaseStream) kaguya::UserdataMetatable<_BaseStream>().setConstructors<_BaseStream(_BaseStream::buffer_type*)>()
-#  define kaguya_ibstream_view_class(_StreamView, _OStream)                                                                                                    \
+#  define kaguya_ibstream_view_class(_StreamView, _OStream) \
     kaguya::UserdataMetatable<_StreamView>().setConstructors<_StreamView(), _StreamView(const void*, size_t), _StreamView(const _OStream*)>()
-#  define kaguya_ibstream_class(_Stream, _StreamView, _OStream)                                                                                                \
+#  define kaguya_ibstream_class(_Stream, _StreamView, _OStream) \
     kaguya::UserdataMetatable<_Stream, _StreamView>().setConstructors<_Stream(yasio::sbyte_buffer), _Stream(const _OStream*)>()
 
 template <typename _Stream, typename _BaseStream>
@@ -508,7 +513,7 @@ static void register_obstream(kaguya::LuaTable& lib, const char* usertype, const
           .addFunction("write_u16", &_BaseStream::template write<uint16_t>)
           .addFunction("write_u32", &_BaseStream::template write<uint32_t>)
           .addFunction("write_u64", &_BaseStream::template write<uint64_t>)
-#  if defined(YASIO_HAVE_HALF_FLOAT)
+#  if defined(YASIO_ENABLE_HALF_FLOAT)
           .addFunction("write_f16", &_BaseStream::template write<fp16_t>)
 #  endif
           .addFunction("write_f", &_BaseStream::template write<float>)
@@ -540,7 +545,7 @@ static void register_ibstream(kaguya::LuaTable& lib, const char* usertype, const
                              .addFunction("read_u16", &_StreamView::template read<uint16_t>)
                              .addFunction("read_u32", &_StreamView::template read<uint32_t>)
                              .addFunction("read_u64", &_StreamView::template read<uint64_t>)
-#  if defined(YASIO_HAVE_HALF_FLOAT)
+#  if defined(YASIO_ENABLE_HALF_FLOAT)
                              .addFunction("read_f16", &_Stream::template read<fp16_t>)
 #  endif
                              .addFunction("read_f", &_StreamView::template read<float>)
@@ -627,6 +632,7 @@ end
           .addStaticFunction("start",
                              [](io_service* service, kaguya::LuaFunction cb) {
                                io_event_cb_t fnwrap = [=](event_ptr e) mutable -> void { cb(e.get()); };
+                               service->set_option(YOPT_S_NO_DISPATCH, 1); // script doesn't support handle event at network thread
                                service->start(std::move(fnwrap));
                              })
           .addFunction("stop", &io_service::stop)
@@ -709,8 +715,8 @@ end
                                                                               kaguya_ibstream_class(fast_ibstream, fast_ibstream_view, fast_obstream),
                                                                               kaguya_ibstream_view_class(fast_ibstream_view, fast_obstream));
 
-  yasio_lib.setField("highp_clock", &highp_clock<steady_clock_t>);
-  yasio_lib.setField("highp_time", &highp_clock<system_clock_t>);
+  yasio_lib.setField("highp_clock", &highp_clock<yasio::steady_clock_t>);
+  yasio_lib.setField("highp_time", &highp_clock<yasio::system_clock_t>);
 
   yasio_lib.setField("unwrap_ptr", [](lua_State* L) -> int {
     auto& pkt  = *(packet_t*)lua_touserdata(L, 1);
@@ -727,12 +733,12 @@ end
   });
 
   // ##-- yasio enums
-#  define YASIO_EXPORT_ENUM(v) yasio_lib[#  v] = v
+#  define YASIO_EXPORT_ENUM(v) yasio_lib[#v] = v
   YASIO_EXPORT_ENUM(YCK_TCP_CLIENT);
   YASIO_EXPORT_ENUM(YCK_TCP_SERVER);
   YASIO_EXPORT_ENUM(YCK_UDP_CLIENT);
   YASIO_EXPORT_ENUM(YCK_UDP_SERVER);
-#  if defined(YASIO_HAVE_KCP)
+#  if defined(YASIO_ENABLE_KCP)
   YASIO_EXPORT_ENUM(YCK_KCP_CLIENT);
   YASIO_EXPORT_ENUM(YCK_KCP_SERVER);
 #  endif
