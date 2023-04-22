@@ -626,6 +626,9 @@ public: /// portable connect APIs
   YASIO__DECL int pserve(const char* addr, u_short port);
   YASIO__DECL int pserve(const endpoint& ep);
 
+  // open socket for proactor io
+  YASIO__DECL bool popen(int af = AF_INET, int type = SOCK_STREAM, int protocol = 0);
+
 public:
   // Construct a empty socket object
   YASIO__DECL xxsocket();

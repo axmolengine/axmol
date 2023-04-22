@@ -16,6 +16,8 @@
 #  include "yasio/detail/kqueue_io_watcher.hpp"
 #elif YASIO__HAS_EPOLL && !defined(YASIO_DISABLE_EPOLL)
 #  include "yasio/detail/epoll_io_watcher.hpp"
+#elif YASIO__HAS_EVPORT && !defined(YASIO_DISABLE_EVPORT)
+#  include "yasio/detail/evport_io_watcher.hpp"
 #elif !defined(YASIO_DISABLE_POLL)
 #  include "yasio/detail/poll_io_watcher.hpp"
 #else
@@ -31,6 +33,8 @@ namespace inet
 using io_watcher = kqueue_io_watcher;
 #elif YASIO__HAS_EPOLL && !defined(YASIO_DISABLE_EPOLL)
 using io_watcher = epoll_io_watcher;
+#elif YASIO__HAS_EVPORT && !defined(YASIO_DISABLE_EVPORT)
+using io_watcher = evport_io_watcher;
 #elif !defined(YASIO_DISABLE_POLL)
 using io_watcher = poll_io_watcher;
 #else
