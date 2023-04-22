@@ -375,9 +375,9 @@ void HttpClient::handleNetworkEvent(yasio::io_event* event)
             _service->write(event->transport(), std::move(obs.buffer()));
 
             auto& timerForRead = channel->get_user_timer();
-            timerForRead.cancel(*_service);
+            timerForRead.cancel();
             timerForRead.expires_from_now(std::chrono::seconds(this->_timeoutForRead));
-            timerForRead.async_wait(*_service, [=](io_service& s) {
+            timerForRead.async_wait([=](io_service& s) {
                 response->updateInternalCode(yasio::errc::read_timeout);
                 s.close(channelIndex);  // timeout
                 return true;
@@ -398,7 +398,7 @@ void HttpClient::handleNetworkEOF(HttpResponse* response, yasio::io_channel* cha
 {
     channel->ud_.ptr = nullptr;
 
-    channel->get_user_timer().cancel(*_service);
+    channel->get_user_timer().cancel();
     response->updateInternalCode(internalErrorCode);
     auto responseCode = response->getResponseCode();
     switch (responseCode)
