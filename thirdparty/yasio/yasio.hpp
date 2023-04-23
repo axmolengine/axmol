@@ -398,7 +398,7 @@ struct io_hostent {
 
 class YASIO_API highp_timer {
 public:
-  highp_timer()                   = default;
+  highp_timer(io_service& service) : service_(service){};
   highp_timer(const highp_timer&) = delete;
   highp_timer(highp_timer&&)      = delete;
   void expires_from_now(const std::chrono::microseconds& duration)
@@ -410,12 +410,12 @@ public:
   void expires_from_now() { this->expire_time_ = yasio::steady_clock_t::now() + this->duration_; }
 
   // Wait timer timeout once.
-  void async_wait_once(io_service& service, timerv_cb_t cb)
+  void async_wait_once(timerv_cb_t cb)
   {
 #if YASIO__HAS_CXX14
-    this->async_wait(service, [cb = std::move(cb)](io_service& service) {
+    this->async_wait([cb = std::move(cb)](io_service& service) {
 #else
-    this->async_wait(service, [cb](io_service& service) {
+    this->async_wait([cb](io_service& service) {
 #endif
       cb(service);
       return true;
@@ -426,17 +426,18 @@ public:
   // @retval of timer_cb_t:
   //        true: wait once
   //        false: wait again after expired
-  YASIO__DECL void async_wait(io_service& service, timer_cb_t);
+  YASIO__DECL void async_wait(timer_cb_t);
 
   // Cancel the timer
-  YASIO__DECL void cancel(io_service& service);
+  YASIO__DECL void cancel();
 
   // Check if timer is expired?
-  bool expired(io_service& service) const { return this->wait_duration(service).count() <= 0; }
+  bool expired() const { return this->wait_duration().count() <= 0; }
 
   // Gets wait duration of timer.
-  YASIO__DECL std::chrono::microseconds wait_duration(io_service& service) const;
+  YASIO__DECL std::chrono::microseconds wait_duration() const;
 
+  io_service& service_;
   std::chrono::microseconds duration_                         = {};
   std::chrono::time_point<yasio::steady_clock_t> expire_time_ = {};
 };

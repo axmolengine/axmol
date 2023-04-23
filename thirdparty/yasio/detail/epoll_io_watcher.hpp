@@ -15,6 +15,10 @@
 #include "yasio/detail/pod_vector.hpp"
 #include "yasio/detail/select_interrupter.hpp"
 
+#if !defined(__linux__)
+#  define EPOLLET 0
+#endif
+
 namespace yasio
 {
 YASIO__NS_INLINE
@@ -105,7 +109,7 @@ public:
 #else
     int num_events = ::epoll_wait(epoll_handle_, ready_events_.data(), static_cast<int>(ready_events_.size()), static_cast<int>(waitd_us / std::milli::den));
 #endif
-
+    nevents_ = num_events;
     if (num_events > 0 && is_ready(this->interrupter_.read_descriptor(), socket_event::read))
     {
 #if defined(_WIN32)
@@ -138,7 +142,7 @@ public:
       underlying_events |= EPOLLOUT;
     if (events & socket_event::error)
       underlying_events |= (EPOLLERR | EPOLLHUP | EPOLLPRI);
-    auto it = std::find_if(ready_events_.begin(), this->ready_events_.end(), [fd](const epoll_event& ev) { return ev.data.fd == fd; });
+    auto it = std::find_if(ready_events_.begin(), ready_events_.begin() + nevents_, [fd](const epoll_event& ev) { return ev.data.fd == fd; });
     return it != this->ready_events_.end() ? (it->events & underlying_events) : 0;
   }
 
@@ -174,6 +178,8 @@ protected:
   epoll_handle_t epoll_handle_;
   std::map<socket_native_type, int> registered_events_;
   yasio::pod_vector<epoll_event> ready_events_;
+  int nevents_ = 0;
+
   select_interrupter interrupter_;
 };
 } // namespace inet

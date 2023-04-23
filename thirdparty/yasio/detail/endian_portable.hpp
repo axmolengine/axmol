@@ -55,16 +55,18 @@ SOFTWARE.
 #    pragma runtime_checks("c", off)
 #  endif
 #else
-#  ifdef __APPLE__
+#  if defined(__APPLE__)
 #    include <machine/endian.h> // __BYTE_ORDER
 #  elif defined(__FreeBSD__)
 #    include <sys/endian.h> // __BYTE_ORDER
+#  elif defined(__sun)
+#    include <sys/byteorder.h>
 #  else
 #    if !defined(__QNX__)
 #      include <endian.h> // __BYTE_ORDER
 #    endif
 #  endif
-#  if ((defined(__LITTLE_ENDIAN__) && !defined(__BIG_ENDIAN__)) || (defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN)) && \
+#  if ((defined(__LITTLE_ENDIAN__) && !defined(__BIG_ENDIAN__)) || (defined(__BYTE_ORDER) && __BYTE_ORDER == __LITTLE_ENDIAN) || defined(_LITTLE_ENDIAN)) && \
       !defined(YASIO_DISABLE_LITTLE_ENDIAN_OPT_FOR_TEST)
 #    define YASIO_LITTLE_ENDIAN 1
 #  endif

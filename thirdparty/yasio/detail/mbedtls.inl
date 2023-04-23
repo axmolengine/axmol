@@ -125,38 +125,42 @@ YASIO__DECL void yssl_ctx_free(yssl_ctx_st*& ctx)
   ctx = nullptr;
 }
 
-YASIO__DECL int yssl_mbedtls_send(void *ctx, const unsigned char *buf, size_t len)
+YASIO__DECL int yssl_mbedtls_send(void* ctx, const unsigned char* buf, size_t len)
 {
-    int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
-    int fd = ((mbedtls_net_context *) ctx)->fd;
+  int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
+  int fd  = ((mbedtls_net_context*)ctx)->fd;
 
-    ret = (int) yasio::xxsocket::send(fd, buf, len, YASIO_MSG_FLAG);
+  ret = yasio::xxsocket::send(fd, buf, static_cast<int>(len), YASIO_MSG_FLAG);
 
-    if (ret < 0) {
-        int err = yasio::xxsocket::get_last_errno();
-        if (err == EWOULDBLOCK || err == EAGAIN) {
-            return MBEDTLS_ERR_SSL_WANT_WRITE;
-        }
-
-#if (defined(_WIN32) || defined(_WIN32_WCE)) && !defined(EFIX64) && \
-        !defined(EFI32)
-        if (WSAGetLastError() == WSAECONNRESET) {
-            return MBEDTLS_ERR_NET_CONN_RESET;
-        }
-#else
-        if (errno == EPIPE || errno == ECONNRESET) {
-            return MBEDTLS_ERR_NET_CONN_RESET;
-        }
-
-        if (errno == EINTR) {
-            return MBEDTLS_ERR_SSL_WANT_WRITE;
-        }
-#endif
-
-        return MBEDTLS_ERR_NET_SEND_FAILED;
+  if (ret < 0)
+  {
+    int err = yasio::xxsocket::get_last_errno();
+    if (err == EWOULDBLOCK || err == EAGAIN)
+    {
+      return MBEDTLS_ERR_SSL_WANT_WRITE;
     }
 
-    return ret;
+#  if (defined(_WIN32) || defined(_WIN32_WCE)) && !defined(EFIX64) && !defined(EFI32)
+    if (WSAGetLastError() == WSAECONNRESET)
+    {
+      return MBEDTLS_ERR_NET_CONN_RESET;
+    }
+#  else
+    if (errno == EPIPE || errno == ECONNRESET)
+    {
+      return MBEDTLS_ERR_NET_CONN_RESET;
+    }
+
+    if (errno == EINTR)
+    {
+      return MBEDTLS_ERR_SSL_WANT_WRITE;
+    }
+#  endif
+
+    return MBEDTLS_ERR_NET_SEND_FAILED;
+  }
+
+  return ret;
 }
 
 YASIO__DECL yssl_st* yssl_new(yssl_ctx_st* ctx, int fd, const char* hostname, bool client)
@@ -173,7 +177,7 @@ YASIO__DECL yssl_st* yssl_new(yssl_ctx_st* ctx, int fd, const char* hostname, bo
   return ssl;
 }
 YASIO__DECL void yssl_shutdown(yssl_st*& ssl, bool writable)
-{ 
+{
   // Avoid SIGPIPE on linux, because linux not support SO_NOSIGPIPE,
   // If the socket status not sync with kernel, we also pass MSG_NOSIGNAL
   // to socket.send to avoid SIGPIPE, see also: yssl_mbedtls_send
