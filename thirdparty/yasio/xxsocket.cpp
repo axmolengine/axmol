@@ -219,6 +219,18 @@ int xxsocket::pserve(const endpoint& ep)
   return this->listen();
 }
 
+bool xxsocket::popen(int af, int type, int protocol)
+{
+#if defined(_WIN32)
+  bool ok = this->open_ex(af, type, protocol);
+#else
+  bool ok = this->open(af, type, protocol);
+#endif
+  if (ok)
+    set_nonblocking(true);
+  return ok;
+}
+
 int xxsocket::resolve(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
 {
   return resolve_i(
