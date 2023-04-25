@@ -438,7 +438,7 @@ void HSV::set(float r, float g, float b, float a)
     this->a = a;
 }
 
-void HSV::get(float& r, float& g, float& b) const
+void HSV::get(float r, float g, float b) const
 {
     float hue = remainder(std::fabs(h), 360);
     hue += 360;
@@ -684,7 +684,7 @@ float HSL::hue2rgb(float p, float q, float t)
     return p;
 }
 
-void HSL::get(float& r, float& g, float& b) const
+void HSL::get(float r, float g, float b) const
 {
     float hue = remainder(std::fabs(h), 360);
     hue += 360;
