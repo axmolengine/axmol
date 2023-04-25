@@ -35,6 +35,19 @@ SOFTWARE.
 #  include <openssl/bio.h>
 #  include <openssl/ssl.h>
 #  include <openssl/err.h>
+typedef struct ssl_ctx_st yssl_ctx_st;
+#  if defined(YASIO_USE_OPENSSL_BIO)
+struct yssl_st {
+  ssl_st* session;
+  int fd;
+  BIO_METHOD* bmth;
+};
+#    define yssl_unwrap(ssl) ssl->session
+#  else
+typedef struct ssl_st yssl_st;
+#    define yssl_unwrap(ssl) ssl
+#  endif
+
 #elif YASIO_SSL_BACKEND == 2 // mbedtls
 #  define MBEDTLS_ALLOW_PRIVATE_ACCESS
 #  include "mbedtls/net_sockets.h"
@@ -44,14 +57,14 @@ SOFTWARE.
 #  include "mbedtls/ctr_drbg.h"
 #  include "mbedtls/error.h"
 #  include "mbedtls/version.h"
-struct ssl_ctx_st {
+typedef struct ssl_ctx_st {
   mbedtls_ctr_drbg_context ctr_drbg;
   mbedtls_entropy_context entropy;
   mbedtls_x509_crt cert;
   mbedtls_pk_context pkey;
   mbedtls_ssl_config conf;
-};
-struct ssl_st : public mbedtls_ssl_context {
+} yssl_ctx_st;
+struct yssl_st : public mbedtls_ssl_context {
   mbedtls_net_context bio;
 };
 #endif
@@ -63,11 +76,11 @@ struct yssl_options {
   bool client;
 };
 
-YASIO__DECL ssl_ctx_st* yssl_ctx_new(const yssl_options& opts);
-YASIO__DECL void yssl_ctx_free(ssl_ctx_st*& ctx);
+YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts);
+YASIO__DECL void yssl_ctx_free(yssl_ctx_st*& ctx);
 
-YASIO__DECL ssl_st* yssl_new(ssl_ctx_st* ctx, int fd, const char* hostname, bool client);
-YASIO__DECL void yssl_shutdown(ssl_st*&);
+YASIO__DECL yssl_st* yssl_new(yssl_ctx_st* ctx, int fd, const char* hostname, bool client);
+YASIO__DECL void yssl_shutdown(yssl_st*&, bool writable);
 
 /**
 * @returns
@@ -77,11 +90,11 @@ YASIO__DECL void yssl_shutdown(ssl_st*&);
        - EWOULDBLOCK: status ok, repeat call next time
 *      - yasio::errc::ssl_handshake_failed: failed
 */
-YASIO__DECL int yssl_do_handshake(ssl_st* ssl, int& err);
-YASIO__DECL const char* yssl_strerror(ssl_st* ssl, int sslerr, char* buf, size_t buflen);
+YASIO__DECL int yssl_do_handshake(yssl_st* ssl, int& err);
+YASIO__DECL const char* yssl_strerror(yssl_st* ssl, int sslerr, char* buf, size_t buflen);
 
-YASIO__DECL int yssl_write(ssl_st* ssl, const void* data, size_t len, int& err);
-YASIO__DECL int yssl_read(ssl_st* ssl, void* data, size_t len, int& err);
+YASIO__DECL int yssl_write(yssl_st* ssl, const void* data, size_t len, int& err);
+YASIO__DECL int yssl_read(yssl_st* ssl, void* data, size_t len, int& err);
 #endif
 
 ///////////////////////////////////////////////////////////////////
@@ -116,9 +129,10 @@ inline bool yssl_splitpath(char* str, _Fty&& func)
 struct yssl_split_term {
   yssl_split_term(char* end)
   {
-    if (end) {
+    if (end)
+    {
       this->val_ = *end;
-      *end = '\0';
+      *end       = '\0';
       this->end_ = end;
     }
   }
@@ -127,9 +141,10 @@ struct yssl_split_term {
     if (this->end_)
       *this->end_ = this->val_;
   }
+
 private:
   char* end_ = nullptr;
-  char val_ = '\0';
+  char val_  = '\0';
 };
 
 #if YASIO_SSL_BACKEND == 1 // openssl

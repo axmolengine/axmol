@@ -440,7 +440,7 @@ void HSV::set(float r, float g, float b, float a)
 
 void HSV::get(float& r, float& g, float& b) const
 {
-    float hue = -(remainder(std::fabs(h), 360));
+    float hue = remainder(std::fabs(h), 360);
     hue += 360;
 
     float fC      = v * s;
@@ -686,13 +686,13 @@ float HSL::hue2rgb(float p, float q, float t)
 
 void HSL::get(float& r, float& g, float& b) const
 {
-    float hue = -(remainder(std::fabs(h), 360));
+    float hue = remainder(std::fabs(h), 360);
     hue += 360;
     hue /= 360.0F;
 
     if (0 == s)
     {
-        r = g = b = l;  // achromatic
+        r = g = b = l;
     }
     else
     {

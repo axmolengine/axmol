@@ -31,9 +31,9 @@ SOFTWARE.
 
 #if YASIO_SSL_BACKEND == 2
 
-YASIO__DECL ssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
+YASIO__DECL yssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
 {
-  auto ctx = new ssl_ctx_st();
+  auto ctx = new yssl_ctx_st();
   ::mbedtls_ctr_drbg_init(&ctx->ctr_drbg);
   ::mbedtls_entropy_init(&ctx->entropy);
   ::mbedtls_ssl_config_init(&ctx->conf);
@@ -111,7 +111,7 @@ YASIO__DECL ssl_ctx_st* yssl_ctx_new(const yssl_options& opts)
   return ctx;
 }
 
-YASIO__DECL void yssl_ctx_free(ssl_ctx_st*& ctx)
+YASIO__DECL void yssl_ctx_free(yssl_ctx_st*& ctx)
 {
   if (!ctx)
     return;
@@ -125,27 +125,69 @@ YASIO__DECL void yssl_ctx_free(ssl_ctx_st*& ctx)
   ctx = nullptr;
 }
 
-YASIO__DECL ssl_st* yssl_new(ssl_ctx_st* ctx, int fd, const char* hostname, bool client)
+YASIO__DECL int yssl_mbedtls_send(void* ctx, const unsigned char* buf, size_t len)
 {
-  auto ssl = new ssl_st();
+  int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
+  int fd  = ((mbedtls_net_context*)ctx)->fd;
+
+  ret = yasio::xxsocket::send(fd, buf, static_cast<int>(len), YASIO_MSG_FLAG);
+
+  if (ret < 0)
+  {
+    int err = yasio::xxsocket::get_last_errno();
+    if (err == EWOULDBLOCK || err == EAGAIN)
+    {
+      return MBEDTLS_ERR_SSL_WANT_WRITE;
+    }
+
+#  if (defined(_WIN32) || defined(_WIN32_WCE)) && !defined(EFIX64) && !defined(EFI32)
+    if (WSAGetLastError() == WSAECONNRESET)
+    {
+      return MBEDTLS_ERR_NET_CONN_RESET;
+    }
+#  else
+    if (errno == EPIPE || errno == ECONNRESET)
+    {
+      return MBEDTLS_ERR_NET_CONN_RESET;
+    }
+
+    if (errno == EINTR)
+    {
+      return MBEDTLS_ERR_SSL_WANT_WRITE;
+    }
+#  endif
+
+    return MBEDTLS_ERR_NET_SEND_FAILED;
+  }
+
+  return ret;
+}
+
+YASIO__DECL yssl_st* yssl_new(yssl_ctx_st* ctx, int fd, const char* hostname, bool client)
+{
+  auto ssl = new yssl_st();
   ::mbedtls_ssl_init(ssl);
   ::mbedtls_ssl_setup(ssl, &ctx->conf);
 
   // ssl_set_fd
   ssl->bio.fd = fd;
-  ::mbedtls_ssl_set_bio(ssl, &ssl->bio, ::mbedtls_net_send, ::mbedtls_net_recv, nullptr /*  rev_timeout() */);
+  ::mbedtls_ssl_set_bio(ssl, &ssl->bio, ::yssl_mbedtls_send, ::mbedtls_net_recv, nullptr /*  rev_timeout() */);
   if (client)
     ::mbedtls_ssl_set_hostname(ssl, hostname);
   return ssl;
 }
-YASIO__DECL void yssl_shutdown(ssl_st*& ssl)
+YASIO__DECL void yssl_shutdown(yssl_st*& ssl, bool writable)
 {
-  ::mbedtls_ssl_close_notify(ssl);
+  // Avoid SIGPIPE on linux, because linux not support SO_NOSIGPIPE,
+  // If the socket status not sync with kernel, we also pass MSG_NOSIGNAL
+  // to socket.send to avoid SIGPIPE, see also: yssl_mbedtls_send
+  if (writable)
+    ::mbedtls_ssl_close_notify(ssl);
   ::mbedtls_ssl_free(ssl);
   delete ssl;
   ssl = nullptr;
 }
-YASIO__DECL int yssl_do_handshake(ssl_st* ssl, int& err)
+YASIO__DECL int yssl_do_handshake(yssl_st* ssl, int& err)
 {
   int ret = ::mbedtls_ssl_handshake_step(ssl);
   switch (ret)
@@ -165,13 +207,13 @@ YASIO__DECL int yssl_do_handshake(ssl_st* ssl, int& err)
   }
   return ret;
 }
-const char* yssl_strerror(ssl_st* ssl, int sslerr, char* buf, size_t buflen)
+const char* yssl_strerror(yssl_st* ssl, int sslerr, char* buf, size_t buflen)
 {
   int n = snprintf(buf, buflen, "error:%d:", sslerr);
   ::mbedtls_strerror(sslerr, buf + n, buflen - n);
   return buf;
 }
-YASIO__DECL int yssl_write(ssl_st* ssl, const void* data, size_t len, int& err)
+YASIO__DECL int yssl_write(yssl_st* ssl, const void* data, size_t len, int& err)
 {
   int n = ::mbedtls_ssl_write(ssl, static_cast<const uint8_t*>(data), len);
   if (n > 0)
@@ -187,7 +229,7 @@ YASIO__DECL int yssl_write(ssl_st* ssl, const void* data, size_t len, int& err)
   }
   return -1;
 }
-YASIO__DECL int yssl_read(ssl_st* ssl, void* data, size_t len, int& err)
+YASIO__DECL int yssl_read(yssl_st* ssl, void* data, size_t len, int& err)
 {
   int n = ::mbedtls_ssl_read(ssl, static_cast<uint8_t*>(data), len);
   if (n > 0)

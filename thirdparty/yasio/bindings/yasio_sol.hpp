@@ -61,7 +61,7 @@ struct lua_type_of<cxx17::string_view> : std::integral_constant<type, type::stri
 } // namespace sol
 #endif
 
-#if defined(YASIO_HAVE_HALF_FLOAT)
+#if defined(YASIO_ENABLE_HALF_FLOAT)
 namespace sol
 {
 namespace stack
@@ -105,6 +105,6 @@ struct getter<fp16_t> {
 template <>
 struct lua_type_of<fp16_t> : std::integral_constant<type, type::number> {};
 } // namespace sol
-#endif // YASIO_HAVE_HALF_FLOAT
+#endif // YASIO_ENABLE_HALF_FLOAT
 
 #endif // YASIO__SOL_HPP

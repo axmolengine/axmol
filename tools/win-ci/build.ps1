@@ -41,6 +41,7 @@ if ($optArch -eq 'x86') {
 }
 elseif ($optArch -eq 'amd64_arm64') {
     $optArch = 'arm64'
+    $BUILD_ARCH = 'arm64'
 }
 
 # CONFIG_ALL_OPTIONS
@@ -53,7 +54,7 @@ if ($CLANG) {
 }
 
 # arch
-if (!"$CLANG") {
+if (!$CLANG) {
     $CONFIG_ALL_OPTIONS += '-A', $optArch
     $CONFIG_ALL_OPTIONS += '-Thost=x64'
 } # TODO: how to specific arch for clang-cl toolchain?
@@ -92,18 +93,18 @@ Write-Output ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL
 cmake --version
 
 # geneate .sln
-cmake -S . -B build_$optArch $CONFIG_ALL_OPTIONS
+cmake -S . -B build_$BUILD_ARCH $CONFIG_ALL_OPTIONS
 
 $target = $options.target
 
 if ($target) {
-    cmake --build build_$optArch --config $options.config --target $target
+    cmake --build build_$BUILD_ARCH --config $options.config --target $target
 } else { # for github actions 
     # build cpp_test
-    cmake --build build_$optArch --config Release --target cpp_tests
+    cmake --build build_$BUILD_ARCH --config Release --target cpp_tests
 
     # biuld lua_tests if not pull request
     if ( !($env:PULL_REQUEST -eq 'yes') ) {
-        cmake --build build_$optArch --config Release --target lua_tests
+        cmake --build build_$BUILD_ARCH --config Release --target lua_tests
     }
 }
