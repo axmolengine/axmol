@@ -197,11 +197,11 @@ struct AX_DLL HSV
     bool equals(const HSV& other) const { return (*this == other); }
 
     void fromRgba(const Color4F& rgba);
-    const Color4F& toRgba() const;
+    Color4F toRgba() const;
 
-    const Color3B& toColor3B() const;
-    const Color4B& toColor4B() const;
-    const Color4F& toColor4F() const;
+    Color3B toColor3B() const;
+    Color4B toColor4B() const;
+    Color4F toColor4F() const;
 
     float h = 0.f;
     float s = 0.f;
@@ -246,13 +246,13 @@ struct AX_DLL HSL
     bool equals(const HSL& other) const { return (*this == other); }
 
     void fromRgba(const Color4F& rgba);
-    const Color4F& toRgba() const;
+    Color4F toRgba() const;
 
     static float hue2rgb(float p, float q, float t);
 
-    const Color3B& toColor3B() const;
-    const Color4B& toColor4B() const;
-    const Color4F& toColor4F() const;
+    Color3B toColor3B() const;
+    Color4B toColor4B() const;
+    Color4F toColor4F() const;
 
     float h = 0.f;
     float s = 0.f;

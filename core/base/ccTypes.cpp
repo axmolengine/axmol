@@ -427,7 +427,7 @@ void HSV::fromRgba(const Color4F& rgba)
     this->a = a;
 }
 
-const Color4F& HSV::toRgba() const
+Color4F HSV::toRgba() const
 {
     auto rgba = Color4F(0, 0, 0, a);
 
@@ -489,17 +489,17 @@ const Color4F& HSV::toRgba() const
     return rgba;
 }
 
-const Color3B& HSV::toColor3B() const 
+Color3B HSV::toColor3B() const 
 {
     return Color3B(toRgba());
 }
 
-const Color4B& HSV::toColor4B() const
+Color4B HSV::toColor4B() const
 {
     return Color4B(toRgba());
 }
 
-const Color4F& HSV::toColor4F() const
+Color4F HSV::toColor4F() const
 {
     return toRgba();
 }
@@ -660,7 +660,7 @@ float HSL::hue2rgb(float p, float q, float t)
     return p;
 }
 
-const Color4F& HSL::toRgba() const
+Color4F HSL::toRgba() const
 {
     auto rgba = Color4F(0, 0, 0, a);
 
@@ -684,17 +684,17 @@ const Color4F& HSL::toRgba() const
     return rgba;
 }
 
-const Color3B& HSL::toColor3B() const
+Color3B HSL::toColor3B() const
 {
     return Color3B(toRgba());
 }
 
-const Color4B& HSL::toColor4B() const
+Color4B HSL::toColor4B() const
 {
     return Color4B(toRgba());
 }
 
-const Color4F& HSL::toColor4F() const
+Color4F HSL::toColor4F() const
 {
     return Color4F(toRgba());
 }
