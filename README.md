@@ -151,29 +151,8 @@ Examples:
 
 ##### Creating the Visual Studio solution for all axmol test projects
 
-  1. Open a console window (Command Prompt, Window Terminal or Powershell)
-  2. Navigate into the folder where axmol is installed. For example:
-
-     ```cd axmol```
-
-  3. Run one of the following commands to create the Visual Studio solution for all axmol test projects in a folder named `build`:
-  
-     a) C++ 20:
-        - for 32 bit Visual Studio 2019:
-            ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
-        - for 64 bit Visual Studio 2019:
-            ```cmake -S . -B build -G "Visual Studio 16 2019" -A x64```
-        - for 32 bit Visual Studio 2022:
-            ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
-        - for 64 bit Visual Studio 2022:
-            ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
-
-     b) C++17
-     - add `-DCMAKE_CXX_STANDARD=17` for C++17 on your command line like:
-       cmake -S . -B build `-DCMAKE_CXX_STANDARD=17` -G "Visual Studio 17 2022" -A x64
-  
-  4. You may either open the solution (".\build\axmol.sln") in Visual Studio and build any of the test projects via the IDE, or alternatively, build a project on the command line as follows (e.g. cpp-tests):  
-    `msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount`
+  - Perform 1. -6. above (if not done)
+  7. Open the solution (".\build\axmol.sln") in Visual Studio and build any of the test projects via the IDE.
 
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
 
