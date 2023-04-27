@@ -149,10 +149,10 @@ Examples:
 #### Windows UWP (Visual Studio 2022), because microsoft limit, only support C++17
   ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
 
-##### Creating the Visual Studio solution for all axmol test projects
+##### Creating the Visual Studio solution for all axmol test projects (Win/UWP)
 
-  - Perform 1. -6. above (if not done)
-  7. Open the solution (".\build\axmol.sln") in Visual Studio and build any of the test projects via the IDE.
+  - Perform steps 1.-6. or the Windows UWP step above (if not done)
+  7. Open the solution (".\build\axmol.sln" or ".\build_uwp\axmol.sln") in Visual Studio and build any of the test projects via the IDE.
 
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
 
