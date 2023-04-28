@@ -198,6 +198,8 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             _renderTargetFlags       = RenderTargetFlag::ALL;
             descriptor.textureFormat = PixelFormat::D24S8;
 
+            AX_SAFE_RELEASE(_depthStencilTexture);
+
             _depthStencilTexture = new Texture2D();
             _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
@@ -271,8 +273,13 @@ void RenderTexture::setSprite(Sprite* sprite)
             sEngine->releaseScriptObject(this, _sprite);
     }
 #endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+    if (_sprite)
+    {
+        _sprite->removeFromParent();
+        _sprite->release();
+    }
+
     AX_SAFE_RETAIN(sprite);
-    AX_SAFE_RELEASE(_sprite);
     _sprite = sprite;
 }
 
