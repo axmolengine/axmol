@@ -191,10 +191,12 @@ cc.UNIFORM_SIN_TIME_S   = 'AX_SinTime'
 cc.UNIFORM_TIME_S   = 'AX_Time'
 
 cc.PLATFORM_WINDOWS   = 0
-cc.PLATFORM_LINUX     = 1
-cc.PLATFORM_MACOS     = 2
-cc.PLATFORM_ANDROID   = 3
-cc.PLATFORM_IOS       = 4
+cc.PLATFORM_UWP       = 1
+cc.PLATFORM_UWP_PHONE = 2
+cc.PLATFORM_LINUX     = 3
+cc.PLATFORM_MACOS     = 4
+cc.PLATFORM_ANDROID   = 5
+cc.PLATFORM_IOS       = 6
 -- iPAD device of iOS, TODO: provide API: isIPad()
 
 cc.LANGUAGE_ENGLISH    = 0

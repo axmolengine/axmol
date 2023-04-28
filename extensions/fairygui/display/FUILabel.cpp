@@ -141,7 +141,7 @@ bool FUILabel::setBMFontFilePath(std::string_view bmfontFilePath, const Vec2& im
         _bmFontSize = originalFontSize / AX_CONTENT_SCALE_FACTOR();
     }
 
-    if (fontSize > 0.0f && bmFont->isResizable())
+    if (fontSize > 0.0f && (bmFont->isResizable() || getOverflow() >= Label::Overflow::SHRINK))
     {
         _bmFontSize = fontSize;
     }

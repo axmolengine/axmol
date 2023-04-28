@@ -149,31 +149,10 @@ Examples:
 #### Windows UWP (Visual Studio 2022), because microsoft limit, only support C++17
   ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
 
-##### Creating the Visual Studio solution for all axmol test projects
+##### Creating the Visual Studio solution for all axmol test projects (Win/UWP)
 
-  1. Open a console window (Command Prompt, Window Terminal or Powershell)
-  2. Navigate into the folder where axmol is installed. For example:
-
-     ```cd axmol```
-
-  3. Run one of the following commands to create the Visual Studio solution for all axmol test projects in a folder named `build`:
-  
-     a) C++ 20:
-        - for 32 bit Visual Studio 2019:
-            ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
-        - for 64 bit Visual Studio 2019:
-            ```cmake -S . -B build -G "Visual Studio 16 2019" -A x64```
-        - for 32 bit Visual Studio 2022:
-            ```cmake -S . -B build -G "Visual Studio 17 2022" -A Win32```
-        - for 64 bit Visual Studio 2022:
-            ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
-
-     b) C++17
-     - add `-DCMAKE_CXX_STANDARD=17` for C++17 on your command line like:
-       cmake -S . -B build `-DCMAKE_CXX_STANDARD=17` -G "Visual Studio 17 2022" -A x64
-  
-  4. You may either open the solution (".\build\axmol.sln") in Visual Studio and build any of the test projects via the IDE, or alternatively, build a project on the command line as follows (e.g. cpp-tests):  
-    `msbuild .\build\axmol.sln -target:cpp_tests -maxCpuCount`
+  - Perform steps 1.-6. or the Windows UWP step above (if not done)
+  7. Open the solution (".\build\axmol.sln" or ".\build_uwp\axmol.sln") in Visual Studio and build any of the test projects via the IDE.
 
 #### Improve 'Visual Studio' workflow, support linking with engine prebuilt libs
 
