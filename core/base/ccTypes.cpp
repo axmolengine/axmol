@@ -280,28 +280,17 @@ HSV::HSV(float _h, float _s, float _v, float _a) : h(_h), s(_s), v(_v), a(_a) {}
 
 HSV::HSV(const Color3B& c)
 {
-    float r = c.r / 255.0F;
-    float g = c.g / 255.0F;
-    float b = c.b / 255.0F;
-    set(r, g, b, 1.0F);
-}
+    fromRgba(Color4F(c));
+};
 
 HSV::HSV(const Color4B& c)
 {
-    float r = c.r / 255.0F;
-    float g = c.g / 255.0F;
-    float b = c.b / 255.0F;
-    float a = c.a / 255.0F;
-    set(r, g, b, a);
+    fromRgba(Color4F(c));
 }
 
 HSV::HSV(const Color4F& c)
 {
-    float r = c.r;
-    float g = c.g;
-    float b = c.b;
-    float a = c.a;
-    set(r, g, b, a);
+    fromRgba(c);
 }
 
 bool HSV::operator==(const HSV& right) const
@@ -391,43 +380,43 @@ HSV operator/(HSV lhs, float rhs)
     return lhs /= rhs;
 }
 
-void HSV::set(float r, float g, float b, float a)
+void HSV::fromRgba(const Color4F& rgba)
 {
-    float fCMax  = MAX(MAX(r, g), b);
-    float fCMin  = MIN(MIN(r, g), b);
-    float fDelta = fCMax - fCMin;
+    float fcmax  = MAX(MAX(rgba.r, rgba.g), rgba.b);
+    float fcmin  = MIN(MIN(rgba.r, rgba.g), rgba.b);
+    float fdel   = fcmax - fcmin;
 
-    if (fDelta > 0)
+    if (fdel > 0)
     {
-        if (fCMax == r)
+        if (fcmax == rgba.r)
         {
-            h = 60 * (fmod(((g - b) / fDelta), 6));
+            h = 60 * (fmod(((rgba.g - rgba.b) / fdel), 6));
         }
-        else if (fCMax == g)
+        else if (fcmax == rgba.g)
         {
-            h = 60 * (((b - r) / fDelta) + 2);
+            h = 60 * (((rgba.b - rgba.r) / fdel) + 2);
         }
-        else if (fCMax == b)
+        else if (fcmax == rgba.b)
         {
-            h = 60 * (((r - g) / fDelta) + 4);
+            h = 60 * (((rgba.r - rgba.g) / fdel) + 4);
         }
 
-        if (fCMax > 0)
+        if (fcmax > 0)
         {
-            s = fDelta / fCMax;
+            s = fdel / fcmax;
         }
         else
         {
             s = 0;
         }
 
-        v = fCMax;
+        v = fcmax;
     }
     else
     {
         h = 0;
         s = 0;
-        v = fCMax;
+        v = fcmax;
     }
 
     if (h < 0)
@@ -438,83 +427,81 @@ void HSV::set(float r, float g, float b, float a)
     this->a = a;
 }
 
-void HSV::get(float& r, float& g, float& b) const
+Color4F HSV::toRgba() const
 {
-    float hue = -(remainder(std::fabs(h), 360));
+    auto rgba = Color4F(0, 0, 0, a);
+
+    float hue = remainder(std::fabs(h), 360);
     hue += 360;
 
-    float fC      = v * s;
-    float fHPrime = fmod(hue / 60.0, 6);
-    float fX      = fC * (1 - fabs(fmod(fHPrime, 2) - 1));
-    float fM      = v - fC;
+    float fc      = v * s;
+    float fhprime = fmod(hue / 60.0, 6);
+    float fx      = fc * (1 - fabs(fmod(fhprime, 2) - 1));
+    float fm      = v - fc;
 
-    if (0 <= fHPrime && fHPrime < 1)
+    if (0 <= fhprime && fhprime < 1)
     {
-        r = fC;
-        g = fX;
-        b = 0;
+        rgba.r = fc;
+        rgba.g = fx;
+        rgba.b = 0;
     }
-    else if (1 <= fHPrime && fHPrime < 2)
+    else if (1 <= fhprime && fhprime < 2)
     {
-        r = fX;
-        g = fC;
-        b = 0;
+        rgba.r = fx;
+        rgba.g = fc;
+        rgba.b = 0;
     }
-    else if (2 <= fHPrime && fHPrime < 3)
+    else if (2 <= fhprime && fhprime < 3)
     {
-        r = 0;
-        g = fC;
-        b = fX;
+        rgba.r = 0;
+        rgba.g = fc;
+        rgba.b = fx;
     }
-    else if (3 <= fHPrime && fHPrime < 4)
+    else if (3 <= fhprime && fhprime < 4)
     {
-        r = 0;
-        g = fX;
-        b = fC;
+        rgba.r = 0;
+        rgba.g = fx;
+        rgba.b = fc;
     }
-    else if (4 <= fHPrime && fHPrime < 5)
+    else if (4 <= fhprime && fhprime < 5)
     {
-        r = fX;
-        g = 0;
-        b = fC;
+        rgba.r = fx;
+        rgba.g = 0;
+        rgba.b = fc;
     }
-    else if (5 <= fHPrime && fHPrime < 6)
+    else if (5 <= fhprime && fhprime < 6)
     {
-        r = fC;
-        g = 0;
-        b = fX;
+        rgba.r = fc;
+        rgba.g = 0;
+        rgba.b = fx;
     }
     else
     {
-        r = 0;
-        g = 0;
-        b = 0;
+        rgba.r = 0;
+        rgba.g = 0;
+        rgba.b = 0;
     }
 
-    r += fM;
-    g += fM;
-    b += fM;
+    rgba.r += fm;
+    rgba.g += fm;
+    rgba.b += fm;
+
+    return rgba;
 }
 
-Color3B HSV::toColor3B()
+Color3B HSV::toColor3B() const 
 {
-    float r, g, b;
-    get(r, g, b);
-    return Color3B(r * 255.0F, g * 255.0F, b * 255.0F);
+    return Color3B(toRgba());
 }
 
-Color4B HSV::toColor4B()
+Color4B HSV::toColor4B() const
 {
-    float r, g, b;
-    get(r, g, b);
-    return Color4B(r * 255.0F, g * 255.0F, b * 255.0F, a * 255.0F);
+    return Color4B(toRgba());
 }
 
-Color4F HSV::toColor4F()
+Color4F HSV::toColor4F() const
 {
-    float r, g, b;
-    get(r, g, b);
-    return Color4F(r, g, b, a);
+    return toRgba();
 }
 
 HSL::HSL() {}
@@ -522,28 +509,17 @@ HSL::HSL(float _h, float _s, float _l, float _a) : h(_h), s(_s), l(_l), a(_a) {}
 
 HSL::HSL(const Color3B& c)
 {
-    float r = c.r / 255.0F;
-    float g = c.g / 255.0F;
-    float b = c.b / 255.0F;
-    set(r, g, b, 1.0F);
+    fromRgba(Color4F(c));
 }
 
 HSL::HSL(const Color4B& c)
 {
-    float r = c.r / 255.0F;
-    float g = c.g / 255.0F;
-    float b = c.b / 255.0F;
-    float a = c.a / 255.0F;
-    set(r, g, b, a);
+    fromRgba(Color4F(c));
 }
 
 HSL::HSL(const Color4F& c)
 {
-    float r = c.r;
-    float g = c.g;
-    float b = c.b;
-    float a = c.a;
-    set(r, g, b, a);
+    fromRgba(c);
 }
 
 bool HSL::operator==(const HSL& right) const
@@ -633,10 +609,10 @@ HSL operator/(HSL lhs, float rhs)
     return lhs /= rhs;
 }
 
-void HSL::set(float r, float g, float b, float a)
+void HSL::fromRgba(const Color4F& rgba)
 {
-    float max = MAX(MAX(r, g), b);
-    float min = MIN(MIN(r, g), b);
+    float max = MAX(MAX(rgba.r, rgba.g), rgba.b);
+    float min = MIN(MIN(rgba.r, rgba.g), rgba.b);
 
     h = s = l = (max + min) / 2;
 
@@ -649,17 +625,17 @@ void HSL::set(float r, float g, float b, float a)
         float d  = max - min;
         s = (l > 0.5) ? d / (2 - max - min) : d / (max + min);
 
-        if (max == r)
+        if (max == rgba.r)
         {
-            h = (g - b) / d + (g < b ? 6 : 0);
+            h = (rgba.g - rgba.b) / d + (rgba.g < rgba.b ? 6 : 0);
         }
-        else if (max == g)
+        else if (max == rgba.g)
         {
-            h = (b - r) / d + 2;
+            h = (rgba.b - rgba.r) / d + 2;
         }
-        else if (max == b)
+        else if (max == rgba.b)
         {
-            h = (r - g) / d + 4;
+            h = (rgba.r - rgba.g) / d + 4;
         }
 
         h /= 6;
@@ -684,45 +660,43 @@ float HSL::hue2rgb(float p, float q, float t)
     return p;
 }
 
-void HSL::get(float& r, float& g, float& b) const
+Color4F HSL::toRgba() const
 {
-    float hue = -(remainder(std::fabs(h), 360));
+    auto rgba = Color4F(0, 0, 0, a);
+
+    float hue = remainder(std::fabs(h), 360);
     hue += 360;
     hue /= 360.0F;
 
     if (0 == s)
     {
-        r = g = b = l;  // achromatic
+        rgba.r = rgba.g = rgba.b = l;
     }
     else
     {
         float q  = l < 0.5 ? l * (1 + s) : l + s - l * s;
         float p  = 2 * l - q;
-        r       = hue2rgb(p, q, hue + 1. / 3);
-        g       = hue2rgb(p, q, hue);
-        b       = hue2rgb(p, q, hue - 1. / 3);
+        rgba.r   = hue2rgb(p, q, hue + 1. / 3);
+        rgba.g   = hue2rgb(p, q, hue);
+        rgba.b   = hue2rgb(p, q, hue - 1. / 3);
     }
+
+    return rgba;
 }
 
-Color3B HSL::toColor3B()
+Color3B HSL::toColor3B() const
 {
-    float r, g, b;
-    get(r, g, b);
-    return Color3B(r * 255.0F, g * 255.0F, b * 255.0F);
+    return Color3B(toRgba());
 }
 
-Color4B HSL::toColor4B()
+Color4B HSL::toColor4B() const
 {
-    float r, g, b;
-    get(r, g, b);
-    return Color4B(r * 255.0F, g * 255.0F, b * 255.0F, a * 255.0F);
+    return Color4B(toRgba());
 }
 
-Color4F HSL::toColor4F()
+Color4F HSL::toColor4F() const
 {
-    float r, g, b;
-    get(r, g, b);
-    return Color4F(r, g, b, a);
+    return Color4F(toRgba());
 }
 
 const BlendFunc BlendFunc::DISABLE             = {backend::BlendFactor::ONE, backend::BlendFactor::ZERO};
