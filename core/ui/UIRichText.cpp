@@ -212,6 +212,8 @@ bool RichElementImage::init(int tag,
         _filePath    = filePath;
         _width       = -1;
         _height      = -1;
+        _scaleX      = 1.0f;
+        _scaleY      = 1.0f;
         _url         = url;
         _textureType = texType;
         return true;
