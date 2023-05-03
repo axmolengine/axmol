@@ -55,6 +55,7 @@
 #include "core/buffer_storage.h"
 #include "core/context.h"
 #include "core/cpu_caps.h"
+#include "core/cubic_tables.h"
 #include "core/devformat.h"
 #include "core/device.h"
 #include "core/effects/base.h"
@@ -106,12 +107,6 @@ namespace {
 
 using uint = unsigned int;
 using namespace std::chrono;
-
-constexpr uint MaxPitch{10};
-
-static_assert((BufferLineSize-1)/MaxPitch > 0, "MaxPitch is too large for BufferLineSize!");
-static_assert((INT_MAX>>MixerFracBits)/MaxPitch > BufferLineSize,
-    "MaxPitch and/or BufferLineSize are too large for MixerFracBits!");
 
 using namespace std::placeholders;
 
@@ -211,6 +206,14 @@ inline ResamplerFunc SelectResampler(Resampler resampler, uint increment)
 #endif
         return Resample_<LerpTag,CTag>;
     case Resampler::Cubic:
+#ifdef HAVE_NEON
+        if((CPUCapFlags&CPU_CAP_NEON))
+            return Resample_<CubicTag,NEONTag>;
+#endif
+#ifdef HAVE_SSE
+        if((CPUCapFlags&CPU_CAP_SSE))
+            return Resample_<CubicTag,SSETag>;
+#endif
         return Resample_<CubicTag,CTag>;
     case Resampler::BSinc12:
     case Resampler::BSinc24:
@@ -262,15 +265,17 @@ ResamplerFunc PrepareResampler(Resampler resampler, uint increment, InterpState 
     {
     case Resampler::Point:
     case Resampler::Linear:
+        break;
     case Resampler::Cubic:
+        state->cubic.filter = gCubicSpline.Tab.data();
         break;
     case Resampler::FastBSinc12:
     case Resampler::BSinc12:
-        BsincPrepare(increment, &state->bsinc, &bsinc12);
+        BsincPrepare(increment, &state->bsinc, &gBSinc12);
         break;
     case Resampler::FastBSinc24:
     case Resampler::BSinc24:
-        BsincPrepare(increment, &state->bsinc, &bsinc24);
+        BsincPrepare(increment, &state->bsinc, &gBSinc24);
         break;
     }
     return SelectResampler(resampler, increment);
@@ -483,7 +488,7 @@ bool CalcEffectSlotParams(EffectSlot *slot, EffectSlot **sorted_slots, ContextBa
         /* Otherwise, if it would be deleted send it off with a release event. */
         RingBuffer *ring{context->mAsyncEvents.get()};
         auto evt_vec = ring->getWriteVector();
-        if(evt_vec.first.len > 0) [[likely]]
+        if(evt_vec.first.len > 0) LIKELY
         {
             AsyncEvent *evt{al::construct_at(reinterpret_cast<AsyncEvent*>(evt_vec.first.buf),
                 AsyncEvent::ReleaseEffectState)};
@@ -857,16 +862,10 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
         };
         auto&& scales = GetAmbiScales(voice->mAmbiScaling);
         auto coeffs = calc_coeffs(Device->mRenderMode);
-        /* Scale the panned W signal based on the coverage (full coverage means
-         * no panned signal). Scale the panned W signal according to channel
-         * scaling.
-         */
-        std::transform(coeffs.begin(), coeffs.end(), coeffs.begin(),
-            [scale=(1.0f-coverage)*scales[0]](const float c){ return c * scale; });
 
         if(!(coverage > 0.0f))
         {
-            ComputePanGains(&Device->Dry, coeffs.data(), DryGain.Base,
+            ComputePanGains(&Device->Dry, coeffs.data(), DryGain.Base*scales[0],
                 voice->mChans[0].mDryParams.Gains.Target);
             for(uint i{0};i < NumSends;i++)
             {
@@ -956,6 +955,12 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
             const uint8_t *index_map{Is2DAmbisonic(voice->mFmtChannels) ?
                 GetAmbi2DLayout(voice->mAmbiLayout).data() :
                 GetAmbiLayout(voice->mAmbiLayout).data()};
+
+            /* Scale the panned W signal inversely to coverage (full coverage
+             * means no panned signal), and according to the channel scaling.
+             */
+            std::for_each(coeffs.begin(), coeffs.end(),
+                [scale=(1.0f-coverage)*scales[0]](float &coeff) noexcept { coeff *= scale; });
 
             for(size_t c{0};c < num_channels;c++)
             {
@@ -1526,7 +1531,7 @@ void CalcAttnSourceParams(Voice *voice, const VoiceProps *props, const ContextBa
     }
 
     /* Distance-based air absorption and initial send decay. */
-    if(Distance > props->RefDistance) [[likely]]
+    if(Distance > props->RefDistance) LIKELY
     {
         const float distance_base{(Distance-props->RefDistance) * props->RolloffFactor};
         const float distance_meters{distance_base * context->mParams.MetersPerUnit};
@@ -1821,7 +1826,7 @@ void ProcessParamUpdates(ContextBase *ctx, const EffectSlotArray &slots,
     ProcessVoiceChanges(ctx);
 
     IncrementRef(ctx->mUpdateCount);
-    if(!ctx->mHoldUpdates.load(std::memory_order_acquire)) [[likely]]
+    if(!ctx->mHoldUpdates.load(std::memory_order_acquire)) LIKELY
     {
         bool force{CalcContextParams(ctx)};
         auto sorted_slots = const_cast<EffectSlot**>(slots.data() + slots.size());
@@ -1913,7 +1918,7 @@ void ProcessContexts(DeviceBase *device, const uint SamplesToDo)
                          * left that don't target any sorted slots, they can't
                          * contribute to the output, so leave them.
                          */
-                        if(next_target == split_point) [[unlikely]]
+                        if(next_target == split_point) UNLIKELY
                             break;
 
                         --next_target;
@@ -1956,7 +1961,7 @@ void ApplyDistanceComp(const al::span<FloatBufferLine> Samples, const size_t Sam
 
         float *inout{al::assume_aligned<16>(chanbuffer.data())};
         auto inout_end = inout + SamplesToDo;
-        if(SamplesToDo >= base) [[likely]]
+        if(SamplesToDo >= base) LIKELY
         {
             auto delay_end = std::rotate(inout, inout_end - base, inout_end);
             std::swap_ranges(inout, delay_end, distbuf);
@@ -1966,7 +1971,7 @@ void ApplyDistanceComp(const al::span<FloatBufferLine> Samples, const size_t Sam
             auto delay_start = std::swap_ranges(inout, inout_end, distbuf);
             std::rotate(distbuf, delay_start, distbuf + base);
         }
-        std::transform(inout, inout_end, inout, [gain](auto a){ return a * gain; });
+        std::transform(inout, inout_end, inout, [gain](float s) { return s * gain; });
     }
 }
 
@@ -2131,7 +2136,7 @@ void DeviceBase::renderSamples(void *outBuffer, const uint numSamples, const siz
     {
         const uint samplesToDo{renderSamples(todo)};
 
-        if(outBuffer) [[likely]]
+        if(outBuffer) LIKELY
         {
             /* Finally, interleave and convert samples, writing to the device's
              * output buffer.
