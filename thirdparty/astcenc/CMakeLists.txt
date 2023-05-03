@@ -1,5 +1,5 @@
 ## astc-encoder CMakeLists.txt: auto detect SIMD Intrinsics
-set(lib_name astc)
+set(lib_name astcenc)
 set(target_name ${lib_name})
 
 project(${lib_name})
@@ -30,7 +30,6 @@ set(${target_name}_src
     astcenc_partition_tables.cpp
     astcenc_percentile_tables.cpp
     astcenc_pick_best_endpoint_format.cpp
-    astcenc_platform_isa_detection.cpp
     astcenc_quantization.cpp
     astcenc_symbolic_physical.cpp
     astcenc_weight_align.cpp

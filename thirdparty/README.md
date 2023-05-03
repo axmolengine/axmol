@@ -10,9 +10,9 @@ https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
 - Version: 111.0.5563.111
 - License: BSD WITH The ANGLE Project Authors
 
-## astc
+## astcenc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.3.1
+- Version: 4.4.0
 - License: Apache-2.0
 
 ## Box2D
