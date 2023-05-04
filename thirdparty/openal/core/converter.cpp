@@ -15,9 +15,6 @@
 #include "alnumeric.h"
 #include "fpu_ctrl.h"
 
-struct CTag;
-struct CopyTag;
-
 
 namespace {
 
@@ -143,7 +140,7 @@ void Multi2Mono(uint chanmask, const size_t step, const float scale, float *REST
     std::fill_n(dst, frames, 0.0f);
     for(size_t c{0};chanmask;++c)
     {
-        if((chanmask&1)) [[likely]]
+        if((chanmask&1)) LIKELY
         {
             for(size_t i{0u};i < frames;i++)
                 dst[i] += LoadSample<T>(ssrc[i*step + c]);
@@ -182,7 +179,8 @@ SampleConverterPtr SampleConverter::Create(DevFmtType srcType, DevFmtType dstTyp
         mind(srcRate*double{MixerFracOne}/dstRate + 0.5, MaxPitch*MixerFracOne));
     converter->mIncrement = maxu(step, 1);
     if(converter->mIncrement == MixerFracOne)
-        converter->mResample = Resample_<CopyTag,CTag>;
+        converter->mResample = [](const InterpState*, const float *RESTRICT src, uint, const uint,
+            const al::span<float> dst) { std::copy_n(src, dst.size(), dst.begin()); };
     else
         converter->mResample = PrepareResampler(resampler, converter->mIncrement,
             &converter->mState);
@@ -284,10 +282,10 @@ uint SampleConverter::convert(const void **src, uint *srcframes, void *dst, uint
                 std::end(mChan[chan].PrevSamples), 0.0f);
 
             /* Now resample, and store the result in the output buffer. */
-            const float *ResampledData{mResample(&mState, SrcData+(MaxResamplerPadding>>1),
-                DataPosFrac, increment, {DstData, DstSize})};
+            mResample(&mState, SrcData+MaxResamplerEdge, DataPosFrac, increment,
+                {DstData, DstSize});
 
-            StoreSamples(DstSamples, ResampledData, mChan.size(), mDstType, DstSize);
+            StoreSamples(DstSamples, DstData, mChan.size(), mDstType, DstSize);
         }
 
         /* Update the number of prep samples still available, as well as the

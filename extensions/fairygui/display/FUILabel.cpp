@@ -73,7 +73,9 @@ void FUILabel::applyTextFormat()
         }
         else if (_currentLabelType == LabelType::BMFONT)
         {
-            setBMFontSize(_fontSize);
+            BitmapFont* bmFont = (BitmapFont*)UIPackage::getItemAssetByURL(_bmFontPath, PackageItemType::FONT);
+            if (bmFont && bmFont->isResizable())
+                setBMFontSize(_fontSize);
         }
         else
         {

@@ -1,18 +1,12 @@
-
-IMPORTANT INFO:
-For correct working of the "third party robot" please update also the
-https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
-
-
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 111.0.5563.111
+- Version: 112.0.5615.138
 - License: BSD WITH The ANGLE Project Authors
 
-## astc
+## astcenc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.3.1
+- Version: 4.4.0
 - License: Apache-2.0
 
 ## Box2D
@@ -124,7 +118,7 @@ https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-505e2c0
+  - Version: 2.1-1c27912
   - License: MIT
 
 - tolua
@@ -175,7 +169,7 @@ https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.23.0 with modified for UWP apps support
+- Version: 1.23.1 with modified for UWP apps support
 - License: LGPL-2.1
 
 ## OpenSSL

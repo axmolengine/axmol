@@ -222,13 +222,12 @@ struct DeviceBase {
     AmbiRotateMatrix mAmbiRotateMatrix2{};
 
     /* Temp storage used for mixer processing. */
-    static constexpr size_t MixerLineSize{BufferLineSize + MaxResamplerPadding +
-        DecoderBase::sMaxPadding};
+    static constexpr size_t MixerLineSize{BufferLineSize + DecoderBase::sMaxPadding};
     static constexpr size_t MixerChannelsMax{16};
     using MixerBufferLine = std::array<float,MixerLineSize>;
     alignas(16) std::array<MixerBufferLine,MixerChannelsMax> mSampleData;
+    alignas(16) std::array<float,MixerLineSize+MaxResamplerPadding> mResampleData;
 
-    alignas(16) float ResampledData[BufferLineSize];
     alignas(16) float FilteredData[BufferLineSize];
     union {
         alignas(16) float HrtfSourceData[BufferLineSize + HrtfHistoryLength];
@@ -311,7 +310,7 @@ struct DeviceBase {
     void ProcessBs2b(const size_t SamplesToDo);
 
     inline void postProcess(const size_t SamplesToDo)
-    { if(PostProcess) [[likely]] (this->*PostProcess)(SamplesToDo); }
+    { if(PostProcess) LIKELY (this->*PostProcess)(SamplesToDo); }
 
     void renderSamples(const al::span<float*> outBuffers, const uint numSamples);
     void renderSamples(void *outBuffer, const uint numSamples, const size_t frameStep);

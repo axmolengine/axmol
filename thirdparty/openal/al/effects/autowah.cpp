@@ -118,201 +118,135 @@ const EffectProps AutowahEffectProps{genDefaultProps()};
 #ifdef ALSOFT_EAX
 namespace {
 
-class EaxAutoWahEffectException : public EaxException {
-public:
-    explicit EaxAutoWahEffectException(const char* message)
-        : EaxException{"EAX_AUTO_WAH_EFFECT", message}
-    {}
-}; // EaxAutoWahEffectException
+using AutowahCommitter = EaxCommitter<EaxAutowahCommitter>;
 
-class EaxAutoWahEffect final : public EaxEffect4<EaxAutoWahEffectException, EAXAUTOWAHPROPERTIES> {
-public:
-    EaxAutoWahEffect(int eax_version);
-
-private:
-    struct AttackTimeValidator {
-        void operator()(float flAttackTime) const
-        {
-            eax_validate_range<Exception>(
-                "Attack Time",
-                flAttackTime,
-                EAXAUTOWAH_MINATTACKTIME,
-                EAXAUTOWAH_MAXATTACKTIME);
-        }
-    }; // AttackTimeValidator
-
-    struct ReleaseTimeValidator {
-        void operator()(float flReleaseTime) const
-        {
-            eax_validate_range<Exception>(
-                "Release Time",
-                flReleaseTime,
-                EAXAUTOWAH_MINRELEASETIME,
-                EAXAUTOWAH_MAXRELEASETIME);
-        }
-    }; // ReleaseTimeValidator
-
-    struct ResonanceValidator {
-        void operator()(long lResonance) const
-        {
-            eax_validate_range<Exception>(
-                "Resonance",
-                lResonance,
-                EAXAUTOWAH_MINRESONANCE,
-                EAXAUTOWAH_MAXRESONANCE);
-        }
-    }; // ResonanceValidator
-
-    struct PeakLevelValidator {
-        void operator()(long lPeakLevel) const
-        {
-            eax_validate_range<Exception>(
-                "Peak Level",
-                lPeakLevel,
-                EAXAUTOWAH_MINPEAKLEVEL,
-                EAXAUTOWAH_MAXPEAKLEVEL);
-        }
-    }; // PeakLevelValidator
-
-    struct AllValidator {
-        void operator()(const Props& all) const
-        {
-            AttackTimeValidator{}(all.flAttackTime);
-            ReleaseTimeValidator{}(all.flReleaseTime);
-            ResonanceValidator{}(all.lResonance);
-            PeakLevelValidator{}(all.lPeakLevel);
-        }
-    }; // AllValidator
-
-    void set_defaults(Props& props) override;
-
-    void set_efx_attack_time() noexcept;
-    void set_efx_release_time() noexcept;
-    void set_efx_resonance() noexcept;
-    void set_efx_peak_gain() noexcept;
-    void set_efx_defaults() override;
-
-    void get(const EaxCall& call, const Props& props) override;
-    void set(const EaxCall& call, Props& props) override;
-    bool commit_props(const Props& props) override;
-}; // EaxAutoWahEffect
-
-EaxAutoWahEffect::EaxAutoWahEffect(int eax_version)
-    : EaxEffect4{AL_EFFECT_AUTOWAH, eax_version}
-{}
-
-void EaxAutoWahEffect::set_defaults(Props& props)
-{
-    props.flAttackTime = EAXAUTOWAH_DEFAULTATTACKTIME;
-    props.flReleaseTime = EAXAUTOWAH_DEFAULTRELEASETIME;
-    props.lResonance = EAXAUTOWAH_DEFAULTRESONANCE;
-    props.lPeakLevel = EAXAUTOWAH_DEFAULTPEAKLEVEL;
-}
-
-void EaxAutoWahEffect::set_efx_attack_time() noexcept
-{
-    al_effect_props_.Autowah.AttackTime = clamp(
-        props_.flAttackTime,
-        AL_AUTOWAH_MIN_ATTACK_TIME,
-        AL_AUTOWAH_MAX_ATTACK_TIME);
-}
-
-void EaxAutoWahEffect::set_efx_release_time() noexcept
-{
-    al_effect_props_.Autowah.ReleaseTime = clamp(
-        props_.flReleaseTime,
-        AL_AUTOWAH_MIN_RELEASE_TIME,
-        AL_AUTOWAH_MAX_RELEASE_TIME);
-}
-
-void EaxAutoWahEffect::set_efx_resonance() noexcept
-{
-    al_effect_props_.Autowah.Resonance = clamp(
-        level_mb_to_gain(static_cast<float>(props_.lResonance)),
-        AL_AUTOWAH_MIN_RESONANCE,
-        AL_AUTOWAH_MAX_RESONANCE);
-}
-
-void EaxAutoWahEffect::set_efx_peak_gain() noexcept
-{
-    al_effect_props_.Autowah.PeakGain = clamp(
-        level_mb_to_gain(static_cast<float>(props_.lPeakLevel)),
-        AL_AUTOWAH_MIN_PEAK_GAIN,
-        AL_AUTOWAH_MAX_PEAK_GAIN);
-}
-
-void EaxAutoWahEffect::set_efx_defaults()
-{
-    set_efx_attack_time();
-    set_efx_release_time();
-    set_efx_resonance();
-    set_efx_peak_gain();
-}
-
-void EaxAutoWahEffect::get(const EaxCall& call, const Props& props)
-{
-    switch (call.get_property_id())
+struct AttackTimeValidator {
+    void operator()(float flAttackTime) const
     {
-        case EAXAUTOWAH_NONE: break;
-        case EAXAUTOWAH_ALLPARAMETERS: call.set_value<Exception>(props); break;
-        case EAXAUTOWAH_ATTACKTIME: call.set_value<Exception>(props.flAttackTime); break;
-        case EAXAUTOWAH_RELEASETIME: call.set_value<Exception>(props.flReleaseTime); break;
-        case EAXAUTOWAH_RESONANCE: call.set_value<Exception>(props.lResonance); break;
-        case EAXAUTOWAH_PEAKLEVEL: call.set_value<Exception>(props.lPeakLevel); break;
-        default: fail_unknown_property_id();
+        eax_validate_range<AutowahCommitter::Exception>(
+            "Attack Time",
+            flAttackTime,
+            EAXAUTOWAH_MINATTACKTIME,
+            EAXAUTOWAH_MAXATTACKTIME);
     }
-}
+}; // AttackTimeValidator
 
-void EaxAutoWahEffect::set(const EaxCall& call, Props& props)
-{
-    switch (call.get_property_id())
+struct ReleaseTimeValidator {
+    void operator()(float flReleaseTime) const
     {
-        case EAXAUTOWAH_NONE: break;
-        case EAXAUTOWAH_ALLPARAMETERS: defer<AllValidator>(call, props); break;
-        case EAXAUTOWAH_ATTACKTIME: defer<AttackTimeValidator>(call, props.flAttackTime); break;
-        case EAXAUTOWAH_RELEASETIME: defer<ReleaseTimeValidator>(call, props.flReleaseTime); break;
-        case EAXAUTOWAH_RESONANCE: defer<ResonanceValidator>(call, props.lResonance); break;
-        case EAXAUTOWAH_PEAKLEVEL: defer<PeakLevelValidator>(call, props.lPeakLevel); break;
-        default: fail_unknown_property_id();
+        eax_validate_range<AutowahCommitter::Exception>(
+            "Release Time",
+            flReleaseTime,
+            EAXAUTOWAH_MINRELEASETIME,
+            EAXAUTOWAH_MAXRELEASETIME);
     }
-}
+}; // ReleaseTimeValidator
 
-bool EaxAutoWahEffect::commit_props(const Props& props)
-{
-    auto is_dirty = false;
-
-    if (props_.flAttackTime != props.flAttackTime)
+struct ResonanceValidator {
+    void operator()(long lResonance) const
     {
-        is_dirty = true;
-        set_efx_attack_time();
+        eax_validate_range<AutowahCommitter::Exception>(
+            "Resonance",
+            lResonance,
+            EAXAUTOWAH_MINRESONANCE,
+            EAXAUTOWAH_MAXRESONANCE);
     }
+}; // ResonanceValidator
 
-    if (props_.flReleaseTime != props.flReleaseTime)
+struct PeakLevelValidator {
+    void operator()(long lPeakLevel) const
     {
-        is_dirty = true;
-        set_efx_release_time();
+        eax_validate_range<AutowahCommitter::Exception>(
+            "Peak Level",
+            lPeakLevel,
+            EAXAUTOWAH_MINPEAKLEVEL,
+            EAXAUTOWAH_MAXPEAKLEVEL);
     }
+}; // PeakLevelValidator
 
-    if (props_.lResonance != props.lResonance)
+struct AllValidator {
+    void operator()(const EAXAUTOWAHPROPERTIES& all) const
     {
-        is_dirty = true;
-        set_efx_resonance();
+        AttackTimeValidator{}(all.flAttackTime);
+        ReleaseTimeValidator{}(all.flReleaseTime);
+        ResonanceValidator{}(all.lResonance);
+        PeakLevelValidator{}(all.lPeakLevel);
     }
-
-    if (props_.lPeakLevel != props.lPeakLevel)
-    {
-        is_dirty = true;
-        set_efx_peak_gain();
-    }
-
-    return is_dirty;
-}
+}; // AllValidator
 
 } // namespace
 
-EaxEffectUPtr eax_create_eax_auto_wah_effect(int eax_version)
+template<>
+struct AutowahCommitter::Exception : public EaxException
 {
-    return eax_create_eax4_effect<EaxAutoWahEffect>(eax_version);
+    explicit Exception(const char *message) : EaxException{"EAX_AUTOWAH_EFFECT", message}
+    { }
+};
+
+template<>
+[[noreturn]] void AutowahCommitter::fail(const char *message)
+{
+    throw Exception{message};
+}
+
+template<>
+bool AutowahCommitter::commit(const EaxEffectProps &props)
+{
+    if(props.mType == mEaxProps.mType
+        && mEaxProps.mAutowah.flAttackTime == props.mAutowah.flAttackTime
+        && mEaxProps.mAutowah.flReleaseTime == props.mAutowah.flReleaseTime
+        && mEaxProps.mAutowah.lResonance == props.mAutowah.lResonance
+        && mEaxProps.mAutowah.lPeakLevel == props.mAutowah.lPeakLevel)
+        return false;
+
+    mEaxProps = props;
+
+    mAlProps.Autowah.AttackTime = props.mAutowah.flAttackTime;
+    mAlProps.Autowah.ReleaseTime = props.mAutowah.flReleaseTime;
+    mAlProps.Autowah.Resonance = level_mb_to_gain(static_cast<float>(props.mAutowah.lResonance));
+    mAlProps.Autowah.PeakGain = level_mb_to_gain(static_cast<float>(props.mAutowah.lPeakLevel));
+
+    return true;
+}
+
+template<>
+void AutowahCommitter::SetDefaults(EaxEffectProps &props)
+{
+    props.mType = EaxEffectType::Autowah;
+    props.mAutowah.flAttackTime = EAXAUTOWAH_DEFAULTATTACKTIME;
+    props.mAutowah.flReleaseTime = EAXAUTOWAH_DEFAULTRELEASETIME;
+    props.mAutowah.lResonance = EAXAUTOWAH_DEFAULTRESONANCE;
+    props.mAutowah.lPeakLevel = EAXAUTOWAH_DEFAULTPEAKLEVEL;
+}
+
+template<>
+void AutowahCommitter::Get(const EaxCall &call, const EaxEffectProps &props)
+{
+    switch(call.get_property_id())
+    {
+    case EAXAUTOWAH_NONE: break;
+    case EAXAUTOWAH_ALLPARAMETERS: call.set_value<Exception>(props.mAutowah); break;
+    case EAXAUTOWAH_ATTACKTIME: call.set_value<Exception>(props.mAutowah.flAttackTime); break;
+    case EAXAUTOWAH_RELEASETIME: call.set_value<Exception>(props.mAutowah.flReleaseTime); break;
+    case EAXAUTOWAH_RESONANCE: call.set_value<Exception>(props.mAutowah.lResonance); break;
+    case EAXAUTOWAH_PEAKLEVEL: call.set_value<Exception>(props.mAutowah.lPeakLevel); break;
+    default: fail_unknown_property_id();
+    }
+}
+
+template<>
+void AutowahCommitter::Set(const EaxCall &call, EaxEffectProps &props)
+{
+    switch(call.get_property_id())
+    {
+    case EAXAUTOWAH_NONE: break;
+    case EAXAUTOWAH_ALLPARAMETERS: defer<AllValidator>(call, props.mAutowah); break;
+    case EAXAUTOWAH_ATTACKTIME: defer<AttackTimeValidator>(call, props.mAutowah.flAttackTime); break;
+    case EAXAUTOWAH_RELEASETIME: defer<ReleaseTimeValidator>(call, props.mAutowah.flReleaseTime); break;
+    case EAXAUTOWAH_RESONANCE: defer<ResonanceValidator>(call, props.mAutowah.lResonance); break;
+    case EAXAUTOWAH_PEAKLEVEL: defer<PeakLevelValidator>(call, props.mAutowah.lPeakLevel); break;
+    default: fail_unknown_property_id();
+    }
 }
 
 #endif // ALSOFT_EAX
