@@ -299,7 +299,7 @@ private:
     // Returns `true` if all sources should be updated, or `false` otherwise.
     bool eax_get(const EaxCall& call);
 
-    void eax_fx_slot_load_effect();
+    void eax_fx_slot_load_effect(int version, ALenum altype);
     void eax_fx_slot_set_volume();
     void eax_fx_slot_set_environment_flag();
     void eax_fx_slot_set_flags();
@@ -338,8 +338,6 @@ private:
 
     void eax4_fx_slot_commit(EaxDirtyFlags& dst_df);
     void eax5_fx_slot_commit(Eax5State& state, EaxDirtyFlags& dst_df);
-
-    void eax_dispatch_effect(const EaxCall& call);
 
     // `alAuxiliaryEffectSloti(effect_slot, AL_EFFECTSLOT_EFFECT, effect)`
     void eax_set_efx_slot_effect(EaxEffect &effect);

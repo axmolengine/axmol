@@ -7,10 +7,12 @@
 
 #include "alnumeric.h"
 #include "core/bsinc_defs.h"
+#include "core/cubic_defs.h"
 #include "defs.h"
 #include "hrtfbase.h"
 
 struct SSETag;
+struct CubicTag;
 struct BSincTag;
 struct FastBSincTag;
 
@@ -21,8 +23,13 @@ struct FastBSincTag;
 
 namespace {
 
-constexpr uint FracPhaseBitDiff{MixerFracBits - BSincPhaseBits};
-constexpr uint FracPhaseDiffOne{1 << FracPhaseBitDiff};
+constexpr uint BSincPhaseDiffBits{MixerFracBits - BSincPhaseBits};
+constexpr uint BSincPhaseDiffOne{1 << BSincPhaseDiffBits};
+constexpr uint BSincPhaseDiffMask{BSincPhaseDiffOne - 1u};
+
+constexpr uint CubicPhaseDiffBits{MixerFracBits - CubicPhaseBits};
+constexpr uint CubicPhaseDiffOne{1 << CubicPhaseDiffBits};
+constexpr uint CubicPhaseDiffMask{CubicPhaseDiffOne - 1u};
 
 #define MLA4(x, y, z) _mm_add_ps(x, _mm_mul_ps(y, z))
 
@@ -147,20 +154,54 @@ force_inline void MixLine(const al::span<const float> InSamples, float *RESTRICT
 } // namespace
 
 template<>
-float *Resample_<BSincTag,SSETag>(const InterpState *state, float *RESTRICT src, uint frac,
-    uint increment, const al::span<float> dst)
+void Resample_<CubicTag,SSETag>(const InterpState *state, const float *RESTRICT src, uint frac,
+    const uint increment, const al::span<float> dst)
+{
+    ASSUME(frac < MixerFracOne);
+
+    const CubicCoefficients *RESTRICT filter = al::assume_aligned<16>(state->cubic.filter);
+
+    src -= 1;
+    for(float &out_sample : dst)
+    {
+        const uint pi{frac >> CubicPhaseDiffBits};
+        const float pf{static_cast<float>(frac&CubicPhaseDiffMask) * (1.0f/CubicPhaseDiffOne)};
+        const __m128 pf4{_mm_set1_ps(pf)};
+
+        /* Apply the phase interpolated filter. */
+
+        /* f = fil + pf*phd */
+        const __m128 f4 = MLA4(_mm_load_ps(filter[pi].mCoeffs), pf4,
+            _mm_load_ps(filter[pi].mDeltas));
+        /* r = f*src */
+        __m128 r4{_mm_mul_ps(f4, _mm_loadu_ps(src))};
+
+        r4 = _mm_add_ps(r4, _mm_shuffle_ps(r4, r4, _MM_SHUFFLE(0, 1, 2, 3)));
+        r4 = _mm_add_ps(r4, _mm_movehl_ps(r4, r4));
+        out_sample = _mm_cvtss_f32(r4);
+
+        frac += increment;
+        src  += frac>>MixerFracBits;
+        frac &= MixerFracMask;
+    }
+}
+
+template<>
+void Resample_<BSincTag,SSETag>(const InterpState *state, const float *RESTRICT src, uint frac,
+    const uint increment, const al::span<float> dst)
 {
     const float *const filter{state->bsinc.filter};
     const __m128 sf4{_mm_set1_ps(state->bsinc.sf)};
     const size_t m{state->bsinc.m};
     ASSUME(m > 0);
+    ASSUME(frac < MixerFracOne);
 
     src -= state->bsinc.l;
     for(float &out_sample : dst)
     {
         // Calculate the phase index and factor.
-        const uint pi{frac >> FracPhaseBitDiff};
-        const float pf{static_cast<float>(frac & (FracPhaseDiffOne-1)) * (1.0f/FracPhaseDiffOne)};
+        const uint pi{frac >> BSincPhaseDiffBits};
+        const float pf{static_cast<float>(frac&BSincPhaseDiffMask) * (1.0f/BSincPhaseDiffOne)};
 
         // Apply the scale and phase interpolated filter.
         __m128 r4{_mm_setzero_ps()};
@@ -191,23 +232,23 @@ float *Resample_<BSincTag,SSETag>(const InterpState *state, float *RESTRICT src,
         src  += frac>>MixerFracBits;
         frac &= MixerFracMask;
     }
-    return dst.data();
 }
 
 template<>
-float *Resample_<FastBSincTag,SSETag>(const InterpState *state, float *RESTRICT src, uint frac,
-    uint increment, const al::span<float> dst)
+void Resample_<FastBSincTag,SSETag>(const InterpState *state, const float *RESTRICT src, uint frac,
+    const uint increment, const al::span<float> dst)
 {
     const float *const filter{state->bsinc.filter};
     const size_t m{state->bsinc.m};
     ASSUME(m > 0);
+    ASSUME(frac < MixerFracOne);
 
     src -= state->bsinc.l;
     for(float &out_sample : dst)
     {
         // Calculate the phase index and factor.
-        const uint pi{frac >> FracPhaseBitDiff};
-        const float pf{static_cast<float>(frac & (FracPhaseDiffOne-1)) * (1.0f/FracPhaseDiffOne)};
+        const uint pi{frac >> BSincPhaseDiffBits};
+        const float pf{static_cast<float>(frac&BSincPhaseDiffMask) * (1.0f/BSincPhaseDiffOne)};
 
         // Apply the phase interpolated filter.
         __m128 r4{_mm_setzero_ps()};
@@ -234,7 +275,6 @@ float *Resample_<FastBSincTag,SSETag>(const InterpState *state, float *RESTRICT 
         src  += frac>>MixerFracBits;
         frac &= MixerFracMask;
     }
-    return dst.data();
 }
 
 

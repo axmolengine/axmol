@@ -11,6 +11,12 @@
 #define HAS_BUILTIN(x) (0)
 #endif
 
+#ifdef __has_cpp_attribute
+#define HAS_ATTRIBUTE __has_cpp_attribute
+#else
+#define HAS_ATTRIBUTE(x) (0)
+#endif
+
 #ifdef __GNUC__
 #define force_inline [[gnu::always_inline]] inline
 #elif defined(_MSC_VER)
@@ -34,6 +40,17 @@
 #define ASSUME(x) do { if(x) break; __builtin_unreachable(); } while(0)
 #else
 #define ASSUME(x) ((void)0)
+#endif
+
+/* This shouldn't be needed since unknown attributes are ignored, but older
+ * versions of GCC choke on the attribute syntax in certain situations.
+ */
+#if HAS_ATTRIBUTE(likely)
+#define LIKELY [[likely]]
+#define UNLIKELY [[unlikely]]
+#else
+#define LIKELY
+#define UNLIKELY
 #endif
 
 namespace al {

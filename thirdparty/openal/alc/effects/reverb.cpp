@@ -65,6 +65,39 @@ constexpr float DefaultModulationTime{0.25f};
 #define MOD_FRACMASK (MOD_FRACONE-1)
 
 
+struct CubicFilter {
+    static constexpr size_t sTableBits{8};
+    static constexpr size_t sTableSteps{1 << sTableBits};
+    static constexpr size_t sTableMask{sTableSteps - 1};
+
+    float mFilter[sTableSteps*2 + 1]{};
+
+    constexpr CubicFilter()
+    {
+        /* This creates a lookup table for a cubic spline filter, with 256
+         * steps between samples. Only half the coefficients are needed, since
+         * Coeff2 is just Coeff1 in reverse and Coeff3 is just Coeff0 in
+         * reverse.
+         */
+        for(size_t i{0};i < sTableSteps;++i)
+        {
+            const double mu{static_cast<double>(i) / double{sTableSteps}};
+            const double mu2{mu*mu}, mu3{mu2*mu};
+            const double a0{-0.5*mu3 +      mu2 + -0.5*mu};
+            const double a1{ 1.5*mu3 + -2.5*mu2           + 1.0f};
+            mFilter[i] = static_cast<float>(a1);
+            mFilter[sTableSteps+i] = static_cast<float>(a0);
+        }
+    }
+
+    constexpr float getCoeff0(size_t i) const noexcept { return mFilter[sTableSteps+i]; }
+    constexpr float getCoeff1(size_t i) const noexcept { return mFilter[i]; }
+    constexpr float getCoeff2(size_t i) const noexcept { return mFilter[sTableSteps-i]; }
+    constexpr float getCoeff3(size_t i) const noexcept { return mFilter[sTableSteps*2-i]; }
+};
+constexpr CubicFilter gCubicTable;
+
+
 using namespace std::placeholders;
 
 /* Max samples per process iteration. Used to limit the size needed for
@@ -589,7 +622,7 @@ struct ReverbState final : public EffectState {
 
     void allocLines(const float frequency);
 
-    void deviceUpdate(const DeviceBase *device, const Buffer &buffer) override;
+    void deviceUpdate(const DeviceBase *device, const BufferStorage *buffer) override;
     void update(const ContextBase *context, const EffectSlot *slot, const EffectProps *props,
         const EffectTarget target) override;
     void process(const size_t samplesToDo, const al::span<const FloatBufferLine> samplesIn,
@@ -659,11 +692,11 @@ void ReverbState::allocLines(const float frequency)
             0);
 
         /* The late delay lines are calculated from the largest maximum density
-         * line length, and the maximum modulation delay. An additional sample
-         * is added to keep it stable when there is no modulation.
+         * line length, and the maximum modulation delay. Four additional
+         * samples are needed for resampling the modulator delay.
          */
         length = LATE_LINE_LENGTHS.back()*multiplier + max_mod_delay;
-        totalSamples += pipeline.mLate.Delay.calcLineLength(length, totalSamples, frequency, 1);
+        totalSamples += pipeline.mLate.Delay.calcLineLength(length, totalSamples, frequency, 4);
     }
 
     if(totalSamples != mSampleBuffer.size())
@@ -684,7 +717,7 @@ void ReverbState::allocLines(const float frequency)
     }
 }
 
-void ReverbState::deviceUpdate(const DeviceBase *device, const Buffer&)
+void ReverbState::deviceUpdate(const DeviceBase *device, const BufferStorage*)
 {
     const auto frequency = static_cast<float>(device->Frequency);
 
@@ -943,9 +976,12 @@ void LateReverb::updateLines(const float density_mult, const float diffusion,
         length = LATE_ALLPASS_LENGTHS[i] * density_mult;
         VecAp.Offset[i] = float2uint(length * frequency);
 
-        /* Calculate the delay length of each feedback delay line. */
+        /* Calculate the delay length of each feedback delay line. A cubic
+         * resampler is used for modulation on the feedback delay, which
+         * includes one sample of delay. Reduce by one to compensate.
+         */
         length = LATE_LINE_LENGTHS[i] * density_mult;
-        Offset[i] = float2uint(length*frequency + 0.5f);
+        Offset[i] = maxu(float2uint(length*frequency + 0.5f), 1u) - 1u;
 
         /* Approximate the absorption that the vector all-pass would exhibit
          * given the current diffusion so we don't have to process a full T60
@@ -1053,12 +1089,13 @@ void ReverbPipeline::update3DPanning(const float *ReflectionsPan, const float *L
 
             for(size_t i{0};i < mtx1[0].size();++i)
             {
-                for(size_t j{0};j < mtx2[0].size();++j)
+                float *RESTRICT dst{res[i].data()};
+                for(size_t k{0};k < mtx1.size();++k)
                 {
-                    double sum{0.0};
-                    for(size_t k{0};k < mtx1.size();++k)
-                        sum += double{mtx1[k][i]} * mtx2[k][j];
-                    res[i][j] = static_cast<float>(sum);
+                    const float *RESTRICT src{mtx2[k].data()};
+                    const float a{mtx1[k][i]};
+                    for(size_t j{0};j < mtx2[0].size();++j)
+                        dst[j] += a * src[j];
                 }
             }
 
@@ -1085,12 +1122,12 @@ void ReverbPipeline::update3DPanning(const float *ReflectionsPan, const float *L
 
             for(size_t i{0};i < mtx1[0].size();++i)
             {
-                for(size_t j{0};j < mtx2.size();++j)
+                float *RESTRICT dst{res[i].data()};
+                for(size_t k{0};k < mtx1.size();++k)
                 {
-                    double sum{0.0};
-                    for(size_t k{0};k < mtx1.size();++k)
-                        sum += double{mtx1[k][i]} * mtx2[j][k];
-                    res[i][j] = static_cast<float>(sum);
+                    const float a{mtx1[k][i]};
+                    for(size_t j{0};j < mtx2.size();++j)
+                        dst[j] += a * mtx2[j][k];
                 }
             }
 
@@ -1503,26 +1540,33 @@ void ReverbPipeline::processLate(size_t offset, const size_t samplesToDo,
                 late_delay_tap1 &= in_delay.Mask;
                 size_t td{minz(todo-i, in_delay.Mask+1 - maxz(late_delay_tap0, late_delay_tap1))};
                 do {
-                    /* Calculate the read offset and fraction between it and
-                     * the next sample.
+                    /* Calculate the read offset and offset between it and the
+                     * next sample.
                      */
                     const float fdelay{mLate.Mod.ModDelays[i]};
-                    const size_t delay{float2uint(fdelay)};
-                    const float frac{fdelay - static_cast<float>(delay)};
-
-                    /* Get the two samples crossed by the delayed offset. */
-                    const float out0{late_delay.Line[(late_feedb_tap-delay) & late_delay.Mask][j]};
-                    const float out1{late_delay.Line[(late_feedb_tap-delay-1) & late_delay.Mask][j]};
+                    const size_t idelay{float2uint(fdelay * float{gCubicTable.sTableSteps})};
+                    const size_t delay{late_feedb_tap - (idelay>>gCubicTable.sTableBits)};
+                    const size_t delayoffset{idelay & gCubicTable.sTableMask};
                     ++late_feedb_tap;
 
-                    /* The output is obtained by linearly interpolating the two
-                     * samples that were acquired above, and combined with the
-                     * main delay tap.
+                    /* Get the samples around by the delayed offset. */
+                    const float out0{late_delay.Line[(delay  ) & late_delay.Mask][j]};
+                    const float out1{late_delay.Line[(delay-1) & late_delay.Mask][j]};
+                    const float out2{late_delay.Line[(delay-2) & late_delay.Mask][j]};
+                    const float out3{late_delay.Line[(delay-3) & late_delay.Mask][j]};
+
+                    /* The output is obtained by interpolating the four samples
+                     * that were acquired above, and combined with the main
+                     * delay tap.
                      */
+                    const float out{out0*gCubicTable.getCoeff0(delayoffset)
+                        + out1*gCubicTable.getCoeff1(delayoffset)
+                        + out2*gCubicTable.getCoeff2(delayoffset)
+                        + out3*gCubicTable.getCoeff3(delayoffset)};
                     const float fade0{densityGain - densityStep*fadeCount};
                     const float fade1{densityStep*fadeCount};
                     fadeCount += 1.0f;
-                    tempSamples[j][i] = lerpf(out0, out1, frac)*midGain +
+                    tempSamples[j][i] = out*midGain +
                         in_delay.Line[late_delay_tap0++][j]*fade0 +
                         in_delay.Line[late_delay_tap1++][j]*fade1;
                     ++i;

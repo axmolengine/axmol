@@ -477,7 +477,7 @@ struct EventManager {
      */
     void waitForInit()
     {
-        if(!mInitDone.load(std::memory_order_acquire)) [[unlikely]]
+        if(!mInitDone.load(std::memory_order_acquire)) UNLIKELY
         {
             MainloopUniqueLock plock{mLoop};
             plock.wait([this](){ return mInitDone.load(std::memory_order_acquire); });
@@ -862,7 +862,7 @@ void NodeProxy::infoCallback(const pw_node_info *info)
     {
         /* Can this actually change? */
         const char *media_class{spa_dict_lookup(info->props, PW_KEY_MEDIA_CLASS)};
-        if(!media_class) [[unlikely]] return;
+        if(!media_class) UNLIKELY return;
 
         NodeType ntype{};
         if(al::strcasecmp(media_class, AudioSinkClass) == 0)
@@ -884,17 +884,18 @@ void NodeProxy::infoCallback(const pw_node_info *info)
         if(!nodeName || !*nodeName) nodeName = spa_dict_lookup(info->props, PW_KEY_NODE_NICK);
         if(!nodeName || !*nodeName) nodeName = devName;
 
-#ifdef PW_KEY_OBJECT_SERIAL
-        char *serial_end{};
-        const char *serial_str{spa_dict_lookup(info->props, PW_KEY_OBJECT_SERIAL)};
-        uint64_t serial_id{std::strtoull(serial_str, &serial_end, 0)};
-        if(*serial_end != '\0' || errno == ERANGE)
-        {
-            ERR("Unexpected object serial: %s\n", serial_str);
-            serial_id = info->id;
-        }
-#else
         uint64_t serial_id{info->id};
+#ifdef PW_KEY_OBJECT_SERIAL
+        if(const char *serial_str{spa_dict_lookup(info->props, PW_KEY_OBJECT_SERIAL)})
+        {
+            char *serial_end{};
+            serial_id = std::strtoull(serial_str, &serial_end, 0);
+            if(*serial_end != '\0' || errno == ERANGE)
+            {
+                ERR("Unexpected object serial: %s\n", serial_str);
+                serial_id = info->id;
+            }
+        }
 #endif
 
         const char *form_factor{spa_dict_lookup(info->props, PW_KEY_DEVICE_FORM_FACTOR)};
@@ -918,7 +919,7 @@ void NodeProxy::paramCallback(int, uint32_t id, uint32_t, uint32_t, const spa_po
     if(id == SPA_PARAM_EnumFormat)
     {
         DeviceNode *node{DeviceNode::Find(mId)};
-        if(!node) [[unlikely]] return;
+        if(!node) UNLIKELY return;
 
         if(const spa_pod_prop *prop{spa_pod_find_prop(param, nullptr, SPA_FORMAT_AUDIO_rate)})
             node->parseSampleRate(&prop->value);
@@ -1343,7 +1344,7 @@ void PipeWirePlayback::ioChangedCallback(uint32_t id, void *area, uint32_t size)
 void PipeWirePlayback::outputCallback()
 {
     pw_buffer *pw_buf{pw_stream_dequeue_buffer(mStream.get())};
-    if(!pw_buf) [[unlikely]] return;
+    if(!pw_buf) UNLIKELY return;
 
     const al::span<spa_data> datas{pw_buf->buffer->datas,
         minu(mNumChannels, pw_buf->buffer->n_datas)};
@@ -1359,7 +1360,7 @@ void PipeWirePlayback::outputCallback()
     uint length{mRateMatch ? mRateMatch->size : 0u};
 #endif
     /* If no length is specified, use the device's update size as a fallback. */
-    if(!length) [[unlikely]] length = mDevice->UpdateSize;
+    if(!length) UNLIKELY length = mDevice->UpdateSize;
 
     /* For planar formats, each datas[] seems to contain one channel, so store
      * the pointers in an array. Limit the render length in case the available
@@ -1728,7 +1729,7 @@ ClockLatency PipeWirePlayback::getClockLatency()
      */
     nanoseconds monoclock{seconds{tspec.tv_sec} + nanoseconds{tspec.tv_nsec}};
     nanoseconds curtic{}, delay{};
-    if(ptime.rate.denom < 1) [[unlikely]]
+    if(ptime.rate.denom < 1) UNLIKELY
     {
         /* If there's no stream rate, the stream hasn't had a chance to get
          * going and return time info yet. Just use dummy values.
@@ -1826,7 +1827,7 @@ void PipeWireCapture::stateChangedCallback(pw_stream_state, pw_stream_state, con
 void PipeWireCapture::inputCallback()
 {
     pw_buffer *pw_buf{pw_stream_dequeue_buffer(mStream.get())};
-    if(!pw_buf) [[unlikely]] return;
+    if(!pw_buf) UNLIKELY return;
 
     spa_data *bufdata{pw_buf->buffer->datas};
     const uint offset{minu(bufdata->chunk->offset, bufdata->maxsize)};

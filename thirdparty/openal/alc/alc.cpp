@@ -461,6 +461,10 @@ const struct {
 
     DECL(alSourcePlayAtTimeSOFT),
     DECL(alSourcePlayAtTimevSOFT),
+
+    DECL(alBufferSubDataSOFT),
+
+    DECL(alBufferDataStatic),
 #ifdef ALSOFT_EAX
 }, eaxFunctions[] = {
     DECL(EAXGet),
@@ -908,6 +912,15 @@ constexpr struct {
     DECL(AL_SUPER_STEREO_SOFT),
     DECL(AL_SUPER_STEREO_WIDTH_SOFT),
 
+    DECL(AL_FORMAT_UHJ2CHN_MULAW_SOFT),
+    DECL(AL_FORMAT_UHJ2CHN_ALAW_SOFT),
+    DECL(AL_FORMAT_UHJ2CHN_IMA4_SOFT),
+    DECL(AL_FORMAT_UHJ2CHN_MSADPCM_SOFT),
+    DECL(AL_FORMAT_UHJ3CHN_MULAW_SOFT),
+    DECL(AL_FORMAT_UHJ3CHN_ALAW_SOFT),
+    DECL(AL_FORMAT_UHJ4CHN_MULAW_SOFT),
+    DECL(AL_FORMAT_UHJ4CHN_ALAW_SOFT),
+
     DECL(AL_STOP_SOURCES_ON_DISCONNECT_SOFT),
 
 #ifdef ALSOFT_EAX
@@ -1155,6 +1168,7 @@ void alc_initconfig(void)
             }
             return GetConfigValueBool(nullptr, "game_compat", optname, false);
         };
+        sBufferSubDataCompat = checkflag("__ALSOFT_ENABLE_SUB_DATA_EXT", "enable-sub-data-ext");
         compatflags.set(CompatFlags::ReverseX, checkflag("__ALSOFT_REVERSE_X", "reverse-x"));
         compatflags.set(CompatFlags::ReverseY, checkflag("__ALSOFT_REVERSE_Y", "reverse-y"));
         compatflags.set(CompatFlags::ReverseZ, checkflag("__ALSOFT_REVERSE_Z", "reverse-z"));
@@ -2310,11 +2324,6 @@ ALCenum UpdateDeviceParams(ALCdevice *device, const int *attrList)
     {
         auto *context = static_cast<ALCcontext*>(ctxbase);
 
-        auto GetEffectBuffer = [](ALbuffer *buffer) noexcept -> EffectState::Buffer
-        {
-            if(!buffer) return EffectState::Buffer{};
-            return EffectState::Buffer{buffer, buffer->mData};
-        };
         std::unique_lock<std::mutex> proplock{context->mPropLock};
         std::unique_lock<std::mutex> slotlock{context->mEffectSlotLock};
 
@@ -2351,7 +2360,7 @@ ALCenum UpdateDeviceParams(ALCdevice *device, const int *attrList)
 
             EffectState *state{slot->Effect.State.get()};
             state->mOutTarget = device->Dry.Buffer;
-            state->deviceUpdate(device, GetEffectBuffer(slot->Buffer));
+            state->deviceUpdate(device, slot->Buffer);
             slot->updateProps(context);
         }
 
@@ -2370,7 +2379,7 @@ ALCenum UpdateDeviceParams(ALCdevice *device, const int *attrList)
 
                 EffectState *state{slot->Effect.State.get()};
                 state->mOutTarget = device->Dry.Buffer;
-                state->deviceUpdate(device, GetEffectBuffer(slot->Buffer));
+                state->deviceUpdate(device, slot->Buffer);
                 slot->updateProps(context);
             }
         }
@@ -2469,7 +2478,7 @@ ALCenum UpdateDeviceParams(ALCdevice *device, const int *attrList)
 bool ResetDeviceParams(ALCdevice *device, const int *attrList)
 {
     /* If the device was disconnected, reset it since we're opened anew. */
-    if(!device->Connected.load(std::memory_order_relaxed)) [[unlikely]]
+    if(!device->Connected.load(std::memory_order_relaxed)) UNLIKELY
     {
         /* Make sure disconnection is finished before continuing on. */
         device->waitForMix();
@@ -2501,7 +2510,7 @@ bool ResetDeviceParams(ALCdevice *device, const int *attrList)
     }
 
     ALCenum err{UpdateDeviceParams(device, attrList)};
-    if(err == ALC_NO_ERROR) [[likely]] return ALC_TRUE;
+    if(err == ALC_NO_ERROR) LIKELY return ALC_TRUE;
 
     alcSetError(device, err);
     return ALC_FALSE;
@@ -2553,7 +2562,7 @@ ContextRef GetContextRef(void)
              */
         }
         context = ALCcontext::sGlobalContext.load(std::memory_order_acquire);
-        if(context) [[likely]] context->add_ref();
+        if(context) LIKELY context->add_ref();
         ALCcontext::sGlobalContextLock.store(false, std::memory_order_release);
     }
     return ContextRef{context};

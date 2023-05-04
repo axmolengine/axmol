@@ -18,8 +18,8 @@
 #include <memory>
 #include <vector>
 #include <deque>
-#include "astc/astcenc.h"
-#include "astc/astcenc_internal_entry.h"
+#include "astcenc/astcenc.h"
+#include "astcenc/astcenc_internal_entry.h"
 #include "yasio/detail/utils.hpp"
 
 #define ASTCDEC_NO_CONTEXT 1
@@ -203,7 +203,7 @@ private:
             unsigned int block_x = task->_config.block_x;
             unsigned int block_y = task->_config.block_y;
             unsigned int block_z = 1;  // task->_config.block_z;
-            auto& bsd = *task->_context->bsd;
+            auto& bsd = *task->_context->context.bsd;
             auto& decompress_pm = task->_context->manage_decompress;
 #endif
             unsigned int xblocks = task->_xblocks;
