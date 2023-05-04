@@ -1,13 +1,7 @@
-
-IMPORTANT INFO:
-For correct working of the "third party robot" please update also the
-https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
-
-
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 111.0.5563.111
+- Version: 112.0.5615.138
 - License: BSD WITH The ANGLE Project Authors
 
 ## astcenc
@@ -124,7 +118,7 @@ https://github.com/axmolengine/axmol/blob/dev/thirdparty/README.md.in
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-505e2c0
+  - Version: 2.1-1c27912
   - License: MIT
 
 - tolua

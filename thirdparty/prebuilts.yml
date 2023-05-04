@@ -2,6 +2,6 @@ zlib: 1.2.13
 jpeg-turbo: 2.1.5.1
 openssl: 3.0.8
 curl: 7.88.1
-luajit: 2.1-505e2c0
-angle: 111.0.5563.111
+luajit: 2.1-1c27912
+angle: 112.0.5615.138
 glsl-optimizer: git cdfc9ef
