@@ -524,12 +524,6 @@ std::vector<Vec2> AutoPolygon::expand(const std::vector<Vec2>& points, const ax:
         result.emplace_back(Clipper2Lib::Point64(pt.x * PRECISION, pt.y * PRECISION));
     }
 
-    if (!Clipper2Lib::IsPositive(result))
-    {
-        log("AUTOPOLYGON: cannot expand points for %s detect a hole!, e: %f", _filename.c_str(), epsilon);
-        return std::vector<Vec2>();
-    }
-
     Clipper2Lib::ClipperOffset co;
     co.AddPath(result, Clipper2Lib::JoinType::Miter, Clipper2Lib::EndType::Polygon);
     co.Execute(epsilon * PRECISION, solution);
