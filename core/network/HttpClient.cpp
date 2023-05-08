@@ -228,11 +228,7 @@ void HttpClient::processResponse(HttpResponse* response, int channelIndex)
         if (channelIndex != -1)
         {
             auto channelHandle = _service->channel_at(channelIndex);
-
             auto& requestUri = response->getRequestUri();
-
-            ax::print("###### open connection for %s", requestUri.getHostName().data());
-
             channelHandle->ud_.ptr = response;
             _service->set_option(YOPT_C_REMOTE_ENDPOINT, channelIndex, requestUri.getHost().data(),
                                  (int)requestUri.getPort());
