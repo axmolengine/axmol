@@ -35,8 +35,6 @@
 
 namespace spine {
 
-	// class AttachmentVertices;
-
 	/* Draws a skeleton. */
 	class SP_API SkeletonRenderer : public cocos2d::Node, public cocos2d::BlendProtocol {
 	public:
@@ -153,8 +151,6 @@ namespace spine {
 		int _startSlotIndex;
 		int _endSlotIndex;
 		bool _twoColorTint;
-
-        //Pool<AttachmentVertices*> _verticesPool;
 	};
 
 }// namespace spine

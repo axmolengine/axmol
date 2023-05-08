@@ -71,7 +71,6 @@ namespace spine {
 		Director::getInstance()->getEventDispatcher()->addCustomEventListener(EVENT_AFTER_DRAW_RESET_POSITION, [this](EventCustom *eventCustom) {
 			this->update(0);
 		});
-		;
 	}
 
 	SkeletonBatch::~SkeletonBatch() {
