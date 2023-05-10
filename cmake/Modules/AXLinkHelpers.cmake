@@ -113,7 +113,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         clipper2
         ConvertUTF
         poly2tri
-        astc
+        astcenc
         ogg
         glad
         glfw
