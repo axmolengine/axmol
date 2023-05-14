@@ -1146,7 +1146,7 @@ inline bool operator==(const yasio::inet::ip::endpoint& lhs, const yasio::inet::
 #endif
 
 #if defined(YASIO_HEADER_ONLY)
-#  include "yasio/xxsocket.cpp" // lgtm [cpp/include-non-header]
+#  include "yasio/core/xxsocket.cpp" // lgtm [cpp/include-non-header]
 #endif
 
 #endif
