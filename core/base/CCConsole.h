@@ -43,7 +43,7 @@ typedef SSIZE_T ssize_t;
 #include <string>
 #include <mutex>
 #include <stdarg.h>
-#include "yasio/detail/socket.hpp"
+#include "yasio/core/socket.hpp"
 
 #include "base/CCRef.h"
 #include "base/ccMacros.h"
