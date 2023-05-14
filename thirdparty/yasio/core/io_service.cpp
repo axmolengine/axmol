@@ -28,10 +28,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef YASIO__CORE_CPP
-#define YASIO__CORE_CPP
+#ifndef YASIO__IO_SERVICE_CPP
+#define YASIO__IO_SERVICE_CPP
 #if !defined(YASIO_HEADER_ONLY)
-#  include "yasio/yasio.hpp"
+#  include "yasio/core/io_service.hpp"
 #endif
 #include <limits>
 #include <sstream>
@@ -41,7 +41,7 @@ SOFTWARE.
 #include "yasio/detail/thread_name.hpp"
 
 #if defined(YASIO_SSL_BACKEND)
-#  include "yasio/detail/ssl.hpp"
+#  include "yasio/core/ssl.hpp"
 #endif
 
 #if defined(YASIO_USE_CARES)
@@ -373,7 +373,7 @@ bool io_transport::do_write(highp_time_t& wait_duration)
       { // system kernel buffer full
         if (!pollout_registerred_)
         {
-          get_service().register_descriptor(socket_->native_handle(), socket_event::write);
+          get_service().io_watcher_.mod_event(socket_->native_handle(), socket_event::write, 0);
           pollout_registerred_ = true;
         }
       }
@@ -382,7 +382,7 @@ bool io_transport::do_write(highp_time_t& wait_duration)
     }
     if (no_wevent && pollout_registerred_)
     {
-      get_service().deregister_descriptor(socket_->native_handle(), socket_event::write);
+      get_service().io_watcher_.mod_event(socket_->native_handle(), 0, socket_event::write);
       pollout_registerred_ = false;
     }
     ret = true;
@@ -1010,9 +1010,6 @@ void io_service::handle_close(transport_handle_t thandle)
     cleanup_channel(ctx, false);
   }
 }
-void io_service::register_descriptor(const socket_native_type fd, int events) { this->io_watcher_.add_event(fd, events); }
-void io_service::deregister_descriptor(const socket_native_type fd, int events) { this->io_watcher_.del_event(fd, events); }
-
 int io_service::write(transport_handle_t transport, sbyte_buffer buffer, completion_cb_t handler)
 {
   if (transport && transport->is_open())
@@ -1071,13 +1068,11 @@ void io_service::do_connect(io_channel* ctx)
       ctx->socket_->reuse_address(true);
     if (yasio__testbits(ctx->properties_, YCF_EXCLUSIVEADDRUSE))
       ctx->socket_->exclusive_address(true);
-    if (ctx->local_port_ != 0 || !ctx->local_host_.empty() || yasio__testbits(ctx->properties_, YCM_UDP))
+
+    if (!yasio__testbits(ctx->properties_, YCM_UDS))
     {
-      if (!yasio__testbits(ctx->properties_, YCM_UDS))
-      {
-        auto ifaddr = ctx->local_host_.empty() ? YASIO_ADDR_ANY(ep.af()) : ctx->local_host_.c_str();
-        ret         = ctx->socket_->bind(ifaddr, ctx->local_port_);
-      }
+      auto ifaddr = ctx->local_host_.empty() ? YASIO_ADDR_ANY(ep.af()) : ctx->local_host_.c_str();
+      ret         = ctx->socket_->bind(ifaddr, ctx->local_port_);
     }
 
     if (ret == 0)
@@ -1098,7 +1093,7 @@ void io_service::do_connect(io_channel* ctx)
       else
       {
         ctx->set_last_errno(EINPROGRESS);
-        register_descriptor(ctx->socket_->native_handle(), socket_event::readwrite);
+        io_watcher_.mod_event(ctx->socket_->native_handle(), socket_event::readwrite, 0);
         ctx->timer_.expires_from_now(std::chrono::microseconds(options_.connect_timeout_));
         ctx->timer_.async_wait_once([ctx](io_service& thiz) {
           if (ctx->state_ != io_base::state::OPENED)
@@ -1108,7 +1103,7 @@ void io_service::do_connect(io_channel* ctx)
     }
     else if (ret == 0)
     { // connect server successful immediately.
-      register_descriptor(ctx->socket_->native_handle(), socket_event::read);
+      io_watcher_.mod_event(ctx->socket_->native_handle(), socket_event::read, 0);
       handle_connect_succeed(ctx, ctx->socket_);
     } // !!!NEVER GO HERE
   }
@@ -1127,7 +1122,7 @@ void io_service::do_connect_completion(io_channel* ctx)
       if (ctx->socket_->get_optval(SOL_SOCKET, SO_ERROR, error) >= 0 && error == 0)
       {
         // The nonblocking tcp handshake complete, remove write event avoid high-CPU occupation
-        deregister_descriptor(ctx->socket_->native_handle(), socket_event::write);
+        io_watcher_.mod_event(ctx->socket_->native_handle(), 0, socket_event::write);
         handle_connect_succeed(ctx, ctx->socket_);
       }
       else
@@ -1167,9 +1162,9 @@ void io_service::ares_sock_state_cb(void* data, socket_native_type socket_fd, in
   if (writable)
     events |= socket_event::write;
   if (events != 0)
-    service->register_descriptor(socket_fd, events);
+    service->io_watcher_.mod_event(socket_fd, events, 0);
   else
-    service->deregister_descriptor(socket_fd, socket_event::readwrite);
+    service->io_watcher_.mod_event(socket_fd, 0, socket_event::readwrite);
 }
 void io_service::ares_getaddrinfo_cb(void* data, int status, int /*timeouts*/, ares_addrinfo* answerlist)
 {
@@ -1358,7 +1353,7 @@ void io_service::do_accept(io_channel* ctx)
         ctx->join_multicast_group();
       ctx->buffer_.resize(YASIO_INET_BUFFER_SIZE);
     }
-    register_descriptor(ctx->socket_->native_handle(), socket_event::read);
+    io_watcher_.mod_event(ctx->socket_->native_handle(), socket_event::read, 0);
     YASIO_KLOGI("[index: %d] open server succeed, socket.fd=%d listening at %s...", ctx->index_, (int)ctx->socket_->native_handle(), ep.to_string().c_str());
     error = 0;
   } while (false);
@@ -1487,7 +1482,7 @@ void io_service::handle_connect_succeed(transport_handle_t transport)
       static_cast<io_transport_udp*>(transport)->confgure_remote(ctx->remote_eps_[0]);
   }
   else
-    register_descriptor(connection->native_handle(), socket_event::read);
+    io_watcher_.mod_event(connection->native_handle(), socket_event::read, 0);
   if (yasio__testbits(ctx->properties_, YCM_TCP))
   {
 #if defined(SO_NOSIGPIPE) // BSD-like OS can set socket ignore PIPE
@@ -1782,7 +1777,7 @@ bool io_service::cleanup_io(io_base* obj, bool clear_mask)
     obj->opmask_ = 0;
   if (obj->socket_->is_open())
   {
-    deregister_descriptor(obj->socket_->native_handle(), socket_event::readwrite);
+    io_watcher_.mod_event(obj->socket_->native_handle(), 0, socket_event::readwrite);
     obj->socket_->close();
     return true;
   }

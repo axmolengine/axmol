@@ -33,7 +33,7 @@ SOFTWARE.
 #endif
 
 #if !defined(YASIO_HEADER_ONLY)
-#  include "yasio/xxsocket.hpp"
+#  include "yasio/core/xxsocket.hpp"
 #endif
 
 #include "yasio/detail/utils.hpp"
@@ -876,6 +876,7 @@ void xxsocket::close(int shut_how)
     if (shut_how >= 0)
       ::shutdown(this->fd, shut_how);
 #endif
+    set_nonblocking(false);
     ::closesocket(this->fd);
     this->fd = invalid_socket;
   }

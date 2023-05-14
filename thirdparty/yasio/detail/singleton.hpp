@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////////////////
-// A multi-platform support c++11 library with focus on asynchronous socket I/O for any 
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -40,21 +40,24 @@ SOFTWARE.
 
 namespace yasio
 {
+YASIO__NS_INLINE
 namespace gc
 {
-template <typename _Ty, bool delay = false> class singleton_constructor
-{
+template <typename _Ty, bool delay = false>
+class singleton_constructor {
 public:
-  template <typename... _Types> static _Ty* construct(_Types&&... args)
+  template <typename... _Types>
+  static _Ty* construct(_Types&&... args)
   {
     return new _Ty(std::forward<_Types>(args)...);
   }
 };
 
-template <typename _Ty> class singleton_constructor<_Ty, true>
-{
+template <typename _Ty>
+class singleton_constructor<_Ty, true> {
 public:
-  template <typename... _Types> static _Ty* construct(_Types&&... args)
+  template <typename... _Types>
+  static _Ty* construct(_Types&&... args)
   {
     auto inst = new _Ty();
     delay_init(inst, std::forward<_Types>(args)...);
@@ -68,12 +71,14 @@ private:
     std::mem_fn(memf)(inst, std::forward<_Types>(args)...);
   }
 
-  template <typename _Fty, typename _Arg> static void delay_init(_Ty* inst, _Fty&& memf, _Arg&& arg)
+  template <typename _Fty, typename _Arg>
+  static void delay_init(_Ty* inst, _Fty&& memf, _Arg&& arg)
   { // init use specific member func with 1 arg
     std::mem_fn(memf)(inst, std::forward<_Arg>(arg));
   }
 
-  template <typename _Fty> static void delay_init(_Ty* inst, _Fty&& memf)
+  template <typename _Fty>
+  static void delay_init(_Ty* inst, _Fty&& memf)
   { // init use specific member func without arg
     std::mem_fn(memf)(inst);
   }
@@ -85,14 +90,15 @@ private:
 
 /// CLASS TEMPLATE singleton, support non-delayed or delayed init with variadic args
 /// the managed singleton object will be destructed after main function.
-template <typename _Ty> class singleton
-{
+template <typename _Ty>
+class singleton {
   typedef singleton<_Ty> _Myt;
   typedef _Ty* pointer;
 
 public:
   // Return the singleton instance
-  template <typename... _Types> static pointer instance(_Types&&... args)
+  template <typename... _Types>
+  static pointer instance(_Types&&... args)
   {
     if (_Myt::__single__)
       return _Myt::__single__;
@@ -102,12 +108,12 @@ public:
     if (_Myt::__single__)
       return _Myt::__single__;
 #endif
-    return (_Myt::__single__ =
-                singleton_constructor<_Ty>::construct(std::forward<_Types>(args)...));
+    return (_Myt::__single__ = singleton_constructor<_Ty>::construct(std::forward<_Types>(args)...));
   }
 
   // Return the singleton instance with delayed init func
-  template <typename... _Types> static pointer delayed(_Types&&... args)
+  template <typename... _Types>
+  static pointer delayed(_Types&&... args)
   {
     if (_Myt::__single__)
       return _Myt::__single__;
@@ -117,8 +123,7 @@ public:
     if (_Myt::__single__)
       return _Myt::__single__;
 #endif
-    return (_Myt::__single__ =
-                singleton_constructor<_Ty, true>::construct(std::forward<_Types>(args)...));
+    return (_Myt::__single__ = singleton_constructor<_Ty, true>::construct(std::forward<_Types>(args)...));
   }
 
   // Peek the singleton instance
@@ -149,13 +154,19 @@ private:
 };
 
 #if !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
-template <typename _Ty> std::atomic<_Ty*> singleton<_Ty>::__single__;
-template <typename _Ty> std::mutex singleton<_Ty>::__mutex__;
+template <typename _Ty>
+std::atomic<_Ty*> singleton<_Ty>::__single__;
+template <typename _Ty>
+std::mutex singleton<_Ty>::__mutex__;
 #else
-template <typename _Ty> _Ty* singleton<_Ty>::__single__;
+template <typename _Ty>
+_Ty* singleton<_Ty>::__single__;
 #endif
 
 } // namespace gc
+#if !YASIO__HAS_CXX11
+using namespace yasio::gc;
+#endif
 } // namespace yasio
 
 #endif

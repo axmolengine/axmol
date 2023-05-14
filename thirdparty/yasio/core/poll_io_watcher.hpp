@@ -3,14 +3,11 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// detail/poll_io_watcher.hpp
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
 // Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
 #pragma once
 #include <vector>
 #include "yasio/detail/socket.hpp"
-#include "yasio/detail/select_interrupter.hpp"
+#include "yasio/core/select_interrupter.hpp"
 
 namespace yasio
 {
@@ -19,35 +16,11 @@ namespace inet
 {
 class poll_io_watcher {
 public:
-  poll_io_watcher() { this->add_event(interrupter_.read_descriptor(), socket_event::read); }
+  poll_io_watcher() { this->mod_event(interrupter_.read_descriptor(), socket_event::read, 0); }
 
-  void add_event(socket_native_type fd, int events)
+  void mod_event(socket_native_type fd, int add_events, int remove_events)
   {
-    int underlying_events = 0;
-    if (yasio__testbits(events, socket_event::read))
-      underlying_events |= POLLIN;
-
-    if (yasio__testbits(events, socket_event::write))
-      underlying_events |= POLLOUT;
-
-    if (yasio__testbits(events, socket_event::error))
-      underlying_events |= POLLERR;
-    pollfd_mod(this->registered_events_, fd, underlying_events, 0);
-  }
-
-  void del_event(socket_native_type fd, int events)
-  {
-    int underlying_events = 0;
-    if (yasio__testbits(events, socket_event::read))
-      underlying_events |= POLLIN;
-
-    if (yasio__testbits(events, socket_event::write))
-      underlying_events |= POLLOUT;
-
-    if (yasio__testbits(events, socket_event::error))
-      underlying_events |= POLLERR;
-
-    pollfd_mod(this->registered_events_, fd, 0, underlying_events);
+    pollfd_mod(this->registered_events_, fd, to_underlying_events(add_events), to_underlying_events(remove_events));
   }
 
   int poll_io(int64_t waitd_us)
@@ -87,6 +60,22 @@ public:
   int max_descriptor() const { return -1; }
 
 protected:
+  int to_underlying_events(int events)
+  {
+    int underlying_events = 0;
+    if (events)
+    {
+      if (yasio__testbits(events, socket_event::read))
+        underlying_events |= POLLIN;
+
+      if (yasio__testbits(events, socket_event::write))
+        underlying_events |= POLLOUT;
+
+      if (yasio__testbits(events, socket_event::error))
+        underlying_events |= POLLERR;
+    }
+    return underlying_events;
+  }
   static void pollfd_mod(std::vector<pollfd>& fdset, socket_native_type fd, int add_events, int remove_events)
   {
     auto it = std::find_if(fdset.begin(), fdset.end(), [fd](const pollfd& pfd) { return pfd.fd == fd; });

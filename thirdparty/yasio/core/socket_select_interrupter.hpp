@@ -3,8 +3,6 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// detail/socket_select_interrupter.hpp
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
 // Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
 // Copyright (c) 2003-2020 Christopher M. Kohlhoff (chris at kohlhoff dot com)
@@ -17,7 +15,7 @@
 //
 #ifndef YASIO__SOCKET_SELECT_INTERRUPTER_HPP
 #define YASIO__SOCKET_SELECT_INTERRUPTER_HPP
-#include "yasio/xxsocket.hpp"
+#include "yasio/core/xxsocket.hpp"
 
 namespace yasio
 {

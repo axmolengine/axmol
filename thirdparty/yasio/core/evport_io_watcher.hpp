@@ -3,9 +3,6 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// detail/evport_io_watcher.hpp
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
 // Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
 #pragma once
 #include <vector>
@@ -14,8 +11,8 @@
 
 #include <port.h>
 #include "yasio/detail/socket.hpp"
-#include "yasio/detail/pod_vector.hpp"
-#include "yasio/detail/select_interrupter.hpp"
+#include "yasio/core/pod_vector.hpp"
+#include "yasio/core/select_interrupter.hpp"
 
 /*
  * port_event_t
@@ -37,49 +34,33 @@ public:
   evport_io_watcher() : port_handle_(::port_create()) { this->ready_events_.reserve(128); }
   ~evport_io_watcher() { ::close(port_handle_); }
 
-  void add_event(socket_native_type fd, int events)
+  void mod_event(socket_native_type fd, int add_events, int remove_events, int flags = 0)
   {
-    int prev_events       = registered_events_[fd];
-    int underlying_events = prev_events;
-    if (yasio__testbits(events, socket_event::read))
-      underlying_events |= POLLIN;
+    auto it               = registered_events_.find(fd);
+    const auto registered = it != registered_events_.end();
+    int underlying_events = registered ? it->second : 0;
+    underlying_events |= to_underlying_events(add_events);
+    underlying_events &= ~to_underlying_events(remove_events);
 
-    if (yasio__testbits(events, socket_event::write))
-      underlying_events |= POLLOUT;
-
-    if (yasio__testbits(events, socket_event::error))
-      underlying_events |= POLLERR;
-
-    int result = ::port_associate(port_handle_, PORT_SOURCE_FD, fd, underlying_events, nullptr);
-    if (result == 0)
-    {
-      registered_events_[fd] = underlying_events;
-      if (prev_events == 0)
-        ready_events_.resize(registered_events_.size());
-    }
-  }
-
-  void del_event(socket_native_type fd, int events, int flags = 0)
-  {
-    int underlying_events = registered_events_[fd];
-    if (yasio__testbits(events, socket_event::read))
-      underlying_events &= ~POLLIN;
-
-    if (yasio__testbits(events, socket_event::write))
-      underlying_events &= ~POLLOUT;
-
-    if (yasio__testbits(events, socket_event::error))
-      underlying_events &= ~POLLERR;
-
-    int result = underlying_events != 0 ? ::port_associate(port_handle_, PORT_SOURCE_FD, fd, underlying_events, nullptr)
-                                        : ::port_dissociate(port_handle_, PORT_SOURCE_FD, fd);
-    if (result == 0)
-    {
-      if (underlying_events != 0)
-        registered_events_[fd] = underlying_events;
-      else
+    if (underlying_events)
+    { // add or mod
+      if (::port_associate(port_handle_, PORT_SOURCE_FD, fd, underlying_events, nullptr) == 0)
       {
-        registered_events_.erase(fd);
+        if (registered)
+          it->second = underlying_events;
+        else
+        {
+          registered_events_[fd] = underlying_events;
+          ready_events_.resize(registered_events_.size());
+        }
+      }
+    }
+    else
+    { // del if registered
+      if (registered)
+      {
+        ::port_dissociate(port_handle_, PORT_SOURCE_FD, fd);
+        registered_events_.erase(it);
         ready_events_.resize(registered_events_.size());
       }
     }
@@ -142,6 +123,23 @@ public:
   int max_descriptor() const { return -1; }
 
 protected:
+  int to_underlying_events(int events)
+  {
+    int underlying_events = 0;
+    if (events)
+    {
+      if (yasio__testbits(events, socket_event::read))
+        underlying_events |= POLLIN;
+
+      if (yasio__testbits(events, socket_event::write))
+        underlying_events |= POLLOUT;
+
+      if (yasio__testbits(events, socket_event::error))
+        underlying_events |= POLLERR;
+    }
+    return underlying_events;
+  }
+
   int port_handle_;
   std::map<socket_native_type, int> registered_events_;
   yasio::pod_vector<port_event_t> ready_events_;

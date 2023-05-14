@@ -27,7 +27,7 @@ SOFTWARE.
 */
 #ifndef YASIO__IBSTREAM_HPP
 #define YASIO__IBSTREAM_HPP
-#include "yasio/detail/obstream.hpp"
+#include "yasio/core/obstream.hpp"
 namespace yasio
 {
 namespace detail

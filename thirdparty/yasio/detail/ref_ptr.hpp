@@ -27,7 +27,7 @@ SOFTWARE.
 */
 #ifndef YASIO__REF_PTR_HPP
 #define YASIO__REF_PTR_HPP
-#include <iostream>
+#include "yasio/detail/config.hpp"
 
 // clang-format off
 #define YASIO__DEFINE_REFERENCE_CLASS  \
@@ -66,6 +66,7 @@ private:
 
 namespace yasio
 {
+YASIO__NS_INLINE
 namespace gc
 {
 
@@ -210,7 +211,9 @@ private:
 };
 
 }; // namespace gc
-
+#if !YASIO__HAS_CXX11
+using namespace yasio::gc;
+#endif
 }; // namespace yasio
 
 #endif

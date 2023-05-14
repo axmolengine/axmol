@@ -199,6 +199,8 @@ YASIO__DECL int yssl_do_handshake(yssl_st* ssl, int& err)
       ret = -1;
       break;
     case MBEDTLS_ERR_SSL_WANT_READ:
+      err = EWOULDBLOCK;
+      break;
     case MBEDTLS_ERR_SSL_WANT_WRITE:
       err = EWOULDBLOCK;
       break; // Nothing need to do

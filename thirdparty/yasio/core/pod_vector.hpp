@@ -1,11 +1,11 @@
-/****************************************************************************
- Copyright (c) Microsoft Corporation.
+//////////////////////////////////////////////////////////////////////////////////////////
+// A multi-platform support c++11 library with focus on asynchronous socket I/O for any
+// client application.
+//////////////////////////////////////////////////////////////////////////////////////////
+/*
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
- SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
-
- Copyright (c) 2022 Bytedance Inc.
-
- https://axmolengine.github.io/
+Copyright (c) 2012-2023 HALX99
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

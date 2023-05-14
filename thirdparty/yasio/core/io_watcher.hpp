@@ -3,8 +3,6 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// detail/io_watcher.hpp
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
 // Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
 
@@ -13,15 +11,15 @@
 #include "yasio/detail/config.hpp"
 
 #if YASIO__HAS_KQUEUE && !defined(YASIO_DISABLE_KQUEUE)
-#  include "yasio/detail/kqueue_io_watcher.hpp"
+#  include "yasio/core/kqueue_io_watcher.hpp"
 #elif YASIO__HAS_EPOLL && !defined(YASIO_DISABLE_EPOLL)
-#  include "yasio/detail/epoll_io_watcher.hpp"
+#  include "yasio/core/epoll_io_watcher.hpp"
 #elif YASIO__HAS_EVPORT && !defined(YASIO_DISABLE_EVPORT)
-#  include "yasio/detail/evport_io_watcher.hpp"
+#  include "yasio/core/evport_io_watcher.hpp"
 #elif !defined(YASIO_DISABLE_POLL)
-#  include "yasio/detail/poll_io_watcher.hpp"
+#  include "yasio/core/poll_io_watcher.hpp"
 #else
-#  include "yasio/detail/select_io_watcher.hpp"
+#  include "yasio/core/select_io_watcher.hpp"
 #endif
 
 namespace yasio

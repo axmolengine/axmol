@@ -3,21 +3,14 @@
 // client application.
 //////////////////////////////////////////////////////////////////////////////////////////
 //
-// detail/epoll_io_watcher.hpp
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//
 // Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
 #pragma once
 #include <vector>
 #include <chrono>
 #include <map>
 #include "yasio/detail/socket.hpp"
-#include "yasio/detail/pod_vector.hpp"
-#include "yasio/detail/select_interrupter.hpp"
-
-#if !defined(__linux__)
-#  define EPOLLET 0
-#endif
+#include "yasio/core/pod_vector.hpp"
+#include "yasio/core/select_interrupter.hpp"
 
 namespace yasio
 {
@@ -29,70 +22,47 @@ public:
   epoll_io_watcher() : epoll_handle_(do_epoll_create())
   {
     this->ready_events_.reserve(128);
-    this->add_event(interrupter_.read_descriptor(), socket_event::read, EPOLLET);
-#if defined(__linux__)
+    this->mod_event(interrupter_.read_descriptor(), socket_event::read, 0, EPOLLONESHOT);
     interrupter_.interrupt();
     poll_io(1);
-#endif
   }
   ~epoll_io_watcher()
   {
-    this->del_event(interrupter_.read_descriptor(), socket_event::read, EPOLLET);
+    this->mod_event(interrupter_.read_descriptor(), 0, socket_event::read, EPOLLONESHOT);
     epoll_close(epoll_handle_);
   }
 
-  void add_event(socket_native_type fd, int events, int flags = 0)
+  void mod_event(socket_native_type fd, int add_events, int remove_events, int flags = 0)
   {
-    int prev_events       = registered_events_[fd];
-    int underlying_events = prev_events;
-    if (yasio__testbits(events, socket_event::read))
-      underlying_events |= EPOLLIN;
-
-    if (yasio__testbits(events, socket_event::write))
-      underlying_events |= EPOLLOUT;
-
-    if (yasio__testbits(events, socket_event::error))
-      underlying_events |= EPOLLERR;
-
-    underlying_events |= flags;
+    auto it               = registered_events_.find(fd);
+    const auto registered = it != registered_events_.end();
+    int underlying_events = registered ? it->second : 0;
+    underlying_events |= to_underlying_events(add_events);
+    underlying_events &= ~to_underlying_events(remove_events);
 
     epoll_event ev = {0, {0}};
     ev.events      = underlying_events;
     ev.data.fd     = static_cast<int>(fd);
-    int result     = ::epoll_ctl(epoll_handle_, prev_events == 0 ? EPOLL_CTL_ADD : EPOLL_CTL_MOD, fd, &ev);
-    if (result == 0)
-    {
-      registered_events_[fd] = underlying_events;
-      if (prev_events == 0)
-        ready_events_.resize(registered_events_.size());
-    }
-  }
 
-  void del_event(socket_native_type fd, int events, int flags = 0)
-  {
-    int underlying_events = registered_events_[fd];
-    if (yasio__testbits(events, socket_event::read))
-      underlying_events &= ~EPOLLIN;
-
-    if (yasio__testbits(events, socket_event::write))
-      underlying_events &= ~EPOLLOUT;
-
-    if (yasio__testbits(events, socket_event::error))
-      underlying_events &= ~EPOLLERR;
-
-    underlying_events &= ~flags;
-
-    epoll_event ev = {0, {0}};
-    ev.events      = underlying_events;
-    ev.data.fd     = static_cast<int>(fd);
-    int result     = ::epoll_ctl(epoll_handle_, underlying_events != 0 ? EPOLL_CTL_MOD : EPOLL_CTL_DEL, fd, &ev);
-    if (result == 0)
-    {
-      if (underlying_events != 0)
-        registered_events_[fd] = underlying_events;
-      else
+    if (underlying_events)
+    { // add or mod
+      if (::epoll_ctl(epoll_handle_, !registered ? EPOLL_CTL_ADD : EPOLL_CTL_MOD, fd, &ev) == 0)
       {
-        registered_events_.erase(fd);
+        if (registered)
+          it->second = underlying_events;
+        else
+        {
+          registered_events_[fd] = underlying_events;
+          ready_events_.resize(registered_events_.size());
+        }
+      }
+    }
+    else
+    { // del if registered
+      if (registered)
+      {
+        ::epoll_ctl(epoll_handle_, EPOLL_CTL_DEL, fd, &ev);
+        registered_events_.erase(it);
         ready_events_.resize(registered_events_.size());
       }
     }
@@ -111,26 +81,16 @@ public:
 #endif
     nevents_ = num_events;
     if (num_events > 0 && is_ready(this->interrupter_.read_descriptor(), socket_event::read))
-    {
-#if defined(_WIN32)
-      if (!interrupter_.reset())
-        interrupter_.recreate();
-#endif
       --num_events;
-    }
     return num_events;
   }
 
   void wakeup()
   {
-#if defined(_WIN32)
-    interrupter_.interrupt();
-#else
     epoll_event ev = {0, {0}};
-    ev.events      = EPOLLIN | EPOLLERR | EPOLLET;
+    ev.events      = EPOLLIN | EPOLLERR | EPOLLONESHOT;
     ev.data.ptr    = &interrupter_;
     epoll_ctl(epoll_handle_, EPOLL_CTL_MOD, interrupter_.read_descriptor(), &ev);
-#endif
   }
 
   int is_ready(socket_native_type fd, int events) const
@@ -149,6 +109,23 @@ public:
   int max_descriptor() const { return -1; }
 
 protected:
+  int to_underlying_events(int events)
+  {
+    int underlying_events = 0;
+    if (events)
+    {
+      if (yasio__testbits(events, socket_event::read))
+        underlying_events |= EPOLLIN;
+
+      if (yasio__testbits(events, socket_event::write))
+        underlying_events |= EPOLLOUT;
+
+      if (yasio__testbits(events, socket_event::error))
+        underlying_events |= EPOLLERR;
+    }
+    return underlying_events;
+  }
+
   enum
   {
     epoll_size = 20000

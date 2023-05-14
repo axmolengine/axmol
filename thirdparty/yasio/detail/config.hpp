@@ -141,11 +141,6 @@ SOFTWARE.
 // #define YASIO_DISABLE_EVPORT 1
 
 /*
-** Uncomment or add compiler flag -DYASIO_DISABLE_IOCP for Windows
-*/
-// #define YASIO_DISABLE_IOCP 1
-
-/*
 ** Uncomment or add compiler flag -DYASIO_ENABLE_WEPOLL for windows
 */
 // #define YASIO_ENABLE_WEPOLL 1
