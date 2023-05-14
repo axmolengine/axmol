@@ -27,7 +27,7 @@
 #include "ui/UIHelper.h"
 #include "network/Uri.h"
 #include "base/ccUtils.h"
-#include "yasio/detail/byte_buffer.hpp"
+#include "yasio/core/byte_buffer.hpp"
 
 USING_NS_AX;
 using namespace ax::network;
