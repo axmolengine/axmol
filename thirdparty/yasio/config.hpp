@@ -33,7 +33,7 @@ SOFTWARE.
 ** Uncomment or add compiler flag -DYASIO_HEADER_ONLY to enable yasio core implementation header
 ** only
 */
-// #define YASIO_HEADER_ONLY 1
+#define YASIO_HEADER_ONLY 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_VERBOSE_LOG to enable verbose log
@@ -74,7 +74,7 @@ SOFTWARE.
 ** 1. -DYASIO_SSL_BACKEND=1: OpenSSL
 ** 2. -DYASIO_SSL_BACKEND=2: mbedtls
 */
-// #define YASIO_SSL_BACKEND 1
+#define YASIO_SSL_BACKEND 1
 
 /*
 ** Uncomment or add compiler flag -DYASIO_DISABLE_CONCURRENT_SINGLETON to disable concurrent
