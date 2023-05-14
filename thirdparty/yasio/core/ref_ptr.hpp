@@ -27,7 +27,7 @@ SOFTWARE.
 */
 #ifndef YASIO__REF_PTR_HPP
 #define YASIO__REF_PTR_HPP
-#include "yasio/detail/config.hpp"
+#include "yasio/config.hpp"
 
 // clang-format off
 #define YASIO__DEFINE_REFERENCE_CLASS  \
@@ -66,10 +66,6 @@ private:
 
 namespace yasio
 {
-YASIO__NS_INLINE
-namespace gc
-{
-
 struct own_ref_t {};
 
 // TEMPLATE CLASS ref_ptr, allow any time with functions 'retain' and 'release'
@@ -210,10 +206,6 @@ private:
   _Ty* ptr_; // the wrapped object pointer
 };
 
-}; // namespace gc
-#if !YASIO__HAS_CXX11
-using namespace yasio::gc;
-#endif
 }; // namespace yasio
 
 #endif

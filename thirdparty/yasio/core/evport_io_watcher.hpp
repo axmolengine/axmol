@@ -10,7 +10,7 @@
 #include <map>
 
 #include <port.h>
-#include "yasio/detail/socket.hpp"
+#include "yasio/core/socket.hpp"
 #include "yasio/core/pod_vector.hpp"
 #include "yasio/core/select_interrupter.hpp"
 

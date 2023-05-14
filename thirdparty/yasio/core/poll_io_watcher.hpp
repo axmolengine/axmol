@@ -6,7 +6,7 @@
 // Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
 #pragma once
 #include <vector>
-#include "yasio/detail/socket.hpp"
+#include "yasio/core/socket.hpp"
 #include "yasio/core/select_interrupter.hpp"
 
 namespace yasio

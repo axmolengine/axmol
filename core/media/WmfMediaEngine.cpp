@@ -19,7 +19,7 @@
 #    include "MFUtils.h"
 
 #    include "ntcvt/ntcvt.hpp"
-#    include "yasio/detail/sz.hpp"
+#    include "yasio/core/sz.hpp"
 
 NS_AX_BEGIN
 

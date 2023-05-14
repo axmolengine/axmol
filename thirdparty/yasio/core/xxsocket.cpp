@@ -36,10 +36,10 @@ SOFTWARE.
 #  include "yasio/core/xxsocket.hpp"
 #endif
 
-#include "yasio/detail/utils.hpp"
+#include "yasio/core/utils.hpp"
 
 #if !defined(_WIN32)
-#  include "yasio/detail/ifaddrs.hpp"
+#  include "yasio/core/ifaddrs.hpp"
 #endif
 
 // For apple bsd socket implemention
@@ -69,7 +69,7 @@ namespace ip
 {
 namespace compat
 {
-#  include "yasio/detail/inet_compat.inl"
+#  include "yasio/core/inet_ntop_impl.hpp"
 } // namespace compat
 } // namespace ip
 } // namespace inet
@@ -227,8 +227,42 @@ bool xxsocket::popen(int af, int type, int protocol)
   bool ok = this->open(af, type, protocol);
 #endif
   if (ok)
-    set_nonblocking(true);
+    xxsocket::poptions(this->fd);
   return ok;
+}
+
+int xxsocket::paccept(socket_native_type& new_sock) {
+  for (;;)
+  {
+    // Accept the waiting connection.
+    new_sock = ::accept(this->fd, nullptr, nullptr);
+
+    // Check if operation succeeded.
+    if (new_sock != invalid_socket)
+    {
+      xxsocket::poptions(new_sock);
+      return 0;
+    }
+
+    auto error = get_last_errno();
+    // Retry operation if interrupted by signal.
+    if (error == EINTR)
+      continue;
+
+    /* Operation failed.
+    ** The error maybe EWOULDBLOCK, EAGAIN, ECONNABORTED, EPROTO,
+    ** Simply Fall through to retry operation.
+    */
+    return error;
+  }
+}
+
+void xxsocket::poptions(socket_native_type sockfd)
+{
+  xxsocket::set_nonblocking(sockfd, true);
+#if defined(SO_NOSIGPIPE) // BSD-like OS can set socket ignore PIPE
+  xxsocket::set_optval(sockfd, SOL_SOCKET, SO_NOSIGPIPE, (int)1);
+#endif
 }
 
 int xxsocket::resolve(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)

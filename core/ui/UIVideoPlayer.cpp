@@ -36,9 +36,8 @@
 #    include "platform/CCFileUtils.h"
 #    include "ui/UIHelper.h"
 #    include "media/MediaEngine.h"
-#    include "yasio/core/byte_buffer.hpp"
 #    include "ui/LayoutHelper.h"
-#    include "yasio/detail/sz.hpp"
+#    include "yasio/core/byte_buffer.hpp"
 //-----------------------------------------------------------------------------------------------------------
 
 USING_NS_AX;

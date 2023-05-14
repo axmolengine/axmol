@@ -8,7 +8,7 @@
 
 #include <vector>
 #include <chrono>
-#include "yasio/detail/socket.hpp"
+#include "yasio/core/socket.hpp"
 #include "yasio/core/select_interrupter.hpp"
 
 namespace yasio

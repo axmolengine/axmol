@@ -34,8 +34,8 @@ org/yasio/AppGlobals.java provide 2 function:
  1. getApplicationContext(), for native only
  2. init(Context ctx), please call after your android app initialized.
 */
-#include "yasio/detail/config.hpp"
-#include "yasio/detail/logging.hpp"
+#include "yasio/config.hpp"
+#include "yasio/core/logging.hpp"
 
 #if defined(__ANDROID__) && defined(YASIO_USE_CARES)
 static JavaVM* yasio__jvm;

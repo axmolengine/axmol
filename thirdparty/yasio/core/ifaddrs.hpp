@@ -31,7 +31,7 @@ https://github.com/xamarin/xamarin-android/blob/master/src/monodroid/jni/xamarin
 #ifndef YASIO__IFADDRS_HPP
 #define YASIO__IFADDRS_HPP
 
-#include "yasio/detail/config.hpp"
+#include "yasio/config.hpp"
 
 #if !(defined(ANDROID) || defined(__ANDROID__)) || __ANDROID_API__ >= 24
 #  include <ifaddrs.h>

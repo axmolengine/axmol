@@ -27,7 +27,7 @@ SOFTWARE.
 */
 #ifndef YASIO__LOGGING_HPP
 #define YASIO__LOGGING_HPP
-#include "yasio/detail/strfmt.hpp"
+#include "yasio/core/strfmt.hpp"
 
 #if defined(__EMSCRIPTEN__)
 #  define YASIO_LOG_TAG(tag, format, ...) printf((tag format "\n"), ##__VA_ARGS__)

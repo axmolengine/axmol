@@ -38,14 +38,14 @@ SOFTWARE.
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include "yasio/detail/thread_name.hpp"
+#include "yasio/core/thread_name.hpp"
 
 #if defined(YASIO_SSL_BACKEND)
 #  include "yasio/core/ssl.hpp"
 #endif
 
 #if defined(YASIO_USE_CARES)
-#  include "yasio/detail/ares.hpp"
+#  include "yasio/core/ares.hpp"
 #endif
 
 // clang-format off
@@ -1379,7 +1379,7 @@ void io_service::do_accept_completion(io_channel* ctx)
       if (yasio__testbits(ctx->properties_, YCM_TCP))
       {
         socket_native_type sockfd{invalid_socket};
-        error = ctx->socket_->accept_n(sockfd);
+        error = ctx->socket_->paccept(sockfd);
         if (error == 0)
           handle_connect_succeed(ctx, std::make_shared<xxsocket>(sockfd));
         else // The non-blocking tcp accept failed can be ignored.
@@ -1485,9 +1485,6 @@ void io_service::handle_connect_succeed(transport_handle_t transport)
     io_watcher_.mod_event(connection->native_handle(), socket_event::read, 0);
   if (yasio__testbits(ctx->properties_, YCM_TCP))
   {
-#if defined(SO_NOSIGPIPE) // BSD-like OS can set socket ignore PIPE
-    connection->set_optval(SOL_SOCKET, SO_NOSIGPIPE, (int)1);
-#endif
     // apply tcp keepalive options
     if (options_.tcp_keepalive_.onoff)
       connection->set_keepalive(options_.tcp_keepalive_.onoff, options_.tcp_keepalive_.idle, options_.tcp_keepalive_.interval, options_.tcp_keepalive_.probs);

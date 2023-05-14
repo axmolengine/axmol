@@ -26,8 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef YASIO__OPENSSL_INL
-#define YASIO__OPENSSL_INL
+#ifndef YASIO__OPENSSL_IMPL_HPP
+#define YASIO__OPENSSL_IMPL_HPP
 
 #if YASIO_SSL_BACKEND == 1 // OpenSSL
 
@@ -103,14 +103,13 @@ YASIO__DECL void yssl_ctx_free(yssl_ctx_st*& ctx)
   ::SSL_CTX_free((SSL_CTX*)ctx);
   ctx = nullptr;
 }
-#  if defined(YASIO_USE_OPENSSL_BIO)
 YASIO__DECL int yssl_bio_out_write(BIO* bio, const char* buf, int blen)
 {
   auto backend = reinterpret_cast<yssl_st*>(BIO_get_data(bio));
   int nwritten;
   int result = 0;
 
-  nwritten = ::send(backend->fd, buf, blen, 0);
+  nwritten = ::send(backend->fd, buf, blen, YASIO_MSG_FLAG);
   BIO_clear_retry_flags(bio);
   if (nwritten < 0)
   {
@@ -198,18 +197,13 @@ YASIO__DECL BIO_METHOD* yssl_bio_method_create(void)
   }
   return m;
 }
-#  endif
 YASIO__DECL yssl_st* yssl_new(yssl_ctx_st* ctx, int fd, const char* hostname, bool client)
 {
   auto ssl = ::SSL_new(ctx);
-#  if defined(YASIO_USE_OPENSSL_BIO)
   auto yssl = new yssl_st{ssl, fd, yssl_bio_method_create()};
   auto bio  = ::BIO_new(yssl->bmth);
   ::BIO_set_data(bio, yssl);
   ::SSL_set_bio(ssl, bio, bio);
-#  else
-  ::SSL_set_fd(ssl, fd);
-#  endif
   if (client)
   {
     ::SSL_set_connect_state(ssl);
@@ -217,22 +211,15 @@ YASIO__DECL yssl_st* yssl_new(yssl_ctx_st* ctx, int fd, const char* hostname, bo
   }
   else
     ::SSL_set_accept_state(ssl);
-#  if defined(YASIO_USE_OPENSSL_BIO)
   return yssl;
-#  else
-  return ssl;
-#  endif
 }
 YASIO__DECL void yssl_shutdown(yssl_st*& ssl, bool /*writable*/)
 {
   ::SSL_shutdown(yssl_unwrap(ssl));
   ::SSL_free(yssl_unwrap(ssl));
-#  if defined(YASIO_USE_OPENSSL_BIO)
   if (ssl->bmth)
     ::BIO_meth_free(ssl->bmth);
   delete ssl;
-#  endif
-  ssl = nullptr;
 }
 YASIO__DECL int yssl_do_handshake(yssl_st* ssl, int& err)
 {

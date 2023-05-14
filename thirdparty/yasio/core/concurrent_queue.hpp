@@ -28,7 +28,7 @@ SOFTWARE.
 #ifndef YASIO__CONCURRENT_QUEUE_HPP
 #define YASIO__CONCURRENT_QUEUE_HPP
 
-#include "yasio/detail/config.hpp"
+#include "yasio/config.hpp"
 #if defined(YASIO_USE_SPSC_QUEUE)
 #  include "moodycamel/readerwriterqueue.h"
 #else

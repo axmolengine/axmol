@@ -38,8 +38,8 @@ SOFTWARE.
 #include <chrono>
 #include <functional>
 #include <memory>
-#include "yasio/detail/socket.hpp"
-#include "yasio/detail/logging.hpp"
+#include "yasio/core/socket.hpp"
+#include "yasio/core/logging.hpp"
 
 #if defined(_MSC_VER)
 #  pragma warning(push)
@@ -628,6 +628,10 @@ public: /// portable connect APIs
 
   // open socket for proactor io
   YASIO__DECL bool popen(int af = AF_INET, int type = SOCK_STREAM, int protocol = 0);
+  YASIO__DECL int paccept(socket_native_type& sockfd);
+
+private:
+  YASIO__DECL static void poptions(socket_native_type sockfd);
 
 public:
   // Construct a empty socket object

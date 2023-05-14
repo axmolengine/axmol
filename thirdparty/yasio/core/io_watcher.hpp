@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "yasio/detail/config.hpp"
+#include "yasio/config.hpp"
 
 #if YASIO__HAS_KQUEUE && !defined(YASIO_DISABLE_KQUEUE)
 #  include "yasio/core/kqueue_io_watcher.hpp"

@@ -31,7 +31,7 @@ SOFTWARE.
 #include <memory>
 #include <functional>
 
-#include "yasio/detail/config.hpp"
+#include "yasio/config.hpp"
 
 #if !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
 #  include <mutex>
@@ -39,9 +39,6 @@ SOFTWARE.
 #endif
 
 namespace yasio
-{
-YASIO__NS_INLINE
-namespace gc
 {
 template <typename _Ty, bool delay = false>
 class singleton_constructor {
@@ -161,11 +158,6 @@ std::mutex singleton<_Ty>::__mutex__;
 #else
 template <typename _Ty>
 _Ty* singleton<_Ty>::__single__;
-#endif
-
-} // namespace gc
-#if !YASIO__HAS_CXX11
-using namespace yasio::gc;
 #endif
 } // namespace yasio
 

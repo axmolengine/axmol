@@ -42,7 +42,7 @@ SOFTWARE.
 #else
 #  include <arpa/inet.h>
 #endif
-#include "yasio/detail/fp16.hpp"
+#include "yasio/core/fp16.hpp"
 
 #ifdef _WIN32
 // Assuming windows is always little-endian.

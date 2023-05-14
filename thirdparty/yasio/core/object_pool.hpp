@@ -45,9 +45,6 @@ SOFTWARE.
 
 namespace yasio
 {
-YASIO__NS_INLINE
-namespace gc
-{
 #define YASIO_POOL_FL_BEGIN(chunk) reinterpret_cast<free_link_node*>(chunk->data)
 #define YASIO_POOL_PREALLOCATE 1
 
@@ -258,9 +255,9 @@ public:                                                                      \
     get_pool().deallocate(p);                                                \
   }                                                                          \
                                                                              \
-  static yasio::gc::object_pool<ELEMENT_TYPE, void>& get_pool()              \
+  static yasio::object_pool<ELEMENT_TYPE, void>& get_pool()              \
   {                                                                          \
-    static yasio::gc::object_pool<ELEMENT_TYPE, void> s_pool(ELEMENT_COUNT); \
+    static yasio::object_pool<ELEMENT_TYPE, void> s_pool(ELEMENT_COUNT); \
     return s_pool;                                                           \
   }
 
@@ -282,9 +279,9 @@ public:                                                                         
     get_pool().deallocate(p);                                                      \
   }                                                                                \
                                                                                    \
-  static yasio::gc::object_pool<ELEMENT_TYPE, std::mutex>& get_pool()              \
+  static yasio::object_pool<ELEMENT_TYPE, std::mutex>& get_pool()              \
   {                                                                                \
-    static yasio::gc::object_pool<ELEMENT_TYPE, std::mutex> s_pool(ELEMENT_COUNT); \
+    static yasio::object_pool<ELEMENT_TYPE, std::mutex> s_pool(ELEMENT_COUNT); \
     return s_pool;                                                                 \
   }
 
@@ -404,10 +401,6 @@ public:
   }
 };
 
-} // namespace gc
-#if !YASIO__HAS_CXX11
-using namespace yasio::gc;
-#endif
 } // namespace yasio
 
 #if defined(_MSC_VER)

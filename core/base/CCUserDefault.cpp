@@ -44,7 +44,7 @@ THE SOFTWARE.
 
 #include "yasio/core/ibstream.hpp"
 #include "yasio/core/obstream.hpp"
-#include "yasio/detail/sz.hpp"
+#include "yasio/core/sz.hpp"
 
 #include "base/CCUserDefault.h"
 #include "platform/CCCommon.h"

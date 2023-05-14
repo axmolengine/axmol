@@ -25,7 +25,7 @@ SOFTWARE.
 */
 #ifndef YASIO__FP16_HPP
 #define YASIO__FP16_HPP
-#include "yasio/detail/config.hpp"
+#include "yasio/config.hpp"
 
 #if defined(YASIO_ENABLE_HALF_FLOAT)
 // Includes IEEE 754 16-bit half-precision floating-point library

@@ -28,7 +28,7 @@ SOFTWARE.
 #ifndef YASIO__SOCKET_HPP
 #define YASIO__SOCKET_HPP
 
-#include "yasio/detail/config.hpp"
+#include "yasio/config.hpp"
 
 #ifdef _WIN32
 #  if !defined(WIN32_LEAN_AND_MEAN)
@@ -102,7 +102,7 @@ typedef int socket_native_type;
 
 #include <fcntl.h> // common platform header
 
-#include "yasio/detail/endian_portable.hpp"
+#include "yasio/core/endian_portable.hpp"
 
 // redefine socket error code for posix api
 #ifdef _WIN32
