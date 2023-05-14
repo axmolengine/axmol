@@ -36,7 +36,7 @@
 #    include "platform/CCFileUtils.h"
 #    include "ui/UIHelper.h"
 #    include "media/MediaEngine.h"
-#    include "yasio/detail/byte_buffer.hpp"
+#    include "yasio/core/byte_buffer.hpp"
 #    include "ui/LayoutHelper.h"
 #    include "yasio/detail/sz.hpp"
 //-----------------------------------------------------------------------------------------------------------
