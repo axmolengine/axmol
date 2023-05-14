@@ -32,7 +32,6 @@
 #include "base/CCDirector.h"
 #include "platform/CCFileUtils.h"
 #include "yasio/yasio.hpp"
-#include "yasio/obstream.hpp"
 
 using namespace yasio;
 
