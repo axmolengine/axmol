@@ -27,7 +27,7 @@
 #include <memory>
 #include <chrono>
 #include <string_view>
-#include "yasio/detail/byte_buffer.hpp"
+#include "yasio/core/byte_buffer.hpp"
 
 using namespace std::string_view_literals;
 
