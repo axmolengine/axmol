@@ -56,7 +56,7 @@
 - Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 - Windows video player support (based on microsoft media foundation)
 - Windows x64 build support
-- Reimplement HttpClient based on yasio for concorrent http requests processing.
+- Reimplement HttpClient based on yasio for concurrent http requests processing.
 - ['Upstream-Version-License'](thirdparty/README.md) Third-party
   - Third-party license overview for easier publishing of your commercial apps based on axmol framework.
   - Some links to third party libs which support axmol too.
