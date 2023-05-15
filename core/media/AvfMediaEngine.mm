@@ -5,9 +5,9 @@
 #    include <TargetConditionals.h>
 
 #    include <assert.h>
-#    include "yasio/detail/endian_portable.hpp"
 #    include "yasio/stl/string_view.hpp"
-#    include "yasio/detail/sz.hpp"
+#    include "yasio/core/endian_portable.hpp"
+#    include "yasio/core/sz.hpp"
 
 #if TARGET_OS_IPHONE
 #    import <UIKit/UIKit.h>

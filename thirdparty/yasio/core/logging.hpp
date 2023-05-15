@@ -25,11 +25,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef YASIO__CORE_HPP
-#define YASIO__CORE_HPP
+#ifndef YASIO__LOGGING_HPP
+#define YASIO__LOGGING_HPP
+#include "yasio/core/strfmt.hpp"
 
-#include "yasio/core/ibstream.hpp"
-#include "yasio/core/obstream.hpp"
-#include "yasio/core/io_service.hpp"
+#if defined(__EMSCRIPTEN__)
+#  define YASIO_LOG_TAG(tag, format, ...) printf((tag format "\n"), ##__VA_ARGS__)
+#elif defined(_WIN32)
+#  define YASIO_LOG_TAG(tag, format, ...) OutputDebugStringA(::yasio::strfmt(127, (tag format "\n"), ##__VA_ARGS__).c_str())
+#elif defined(ANDROID) || defined(__ANDROID__)
+#  include <android/log.h>
+#  include <jni.h>
+#  define YASIO_LOG_TAG(tag, format, ...) __android_log_print(ANDROID_LOG_INFO, "yasio", (tag format), ##__VA_ARGS__)
+#else
+#  define YASIO_LOG_TAG(tag, format, ...) printf((tag format "\n"), ##__VA_ARGS__)
+#endif
+
+#define YASIO_LOG(format, ...) YASIO_LOG_TAG("[yasio]", format, ##__VA_ARGS__)
+
+#if !defined(YASIO_VERBOSE_LOG)
+#  define YASIO_LOGV(fmt, ...) (void)0
+#else
+#  define YASIO_LOGV YASIO_LOG
+#endif
 
 #endif

@@ -1,6 +1,6 @@
 #include "SimpleTimer.h"
-#include "yasio/detail/object_pool.hpp"
-#include "yasio/detail/ref_ptr.hpp"
+#include "yasio/core/object_pool.hpp"
+#include "yasio/core/ref_ptr.hpp"
 #include "axmol.h"
 
 #define STIMER_DEFINE_REFERENCE_CLASS    \
@@ -45,7 +45,7 @@ TIMER_ID loop(unsigned int n, float interval, vcallback_t callback, bool bNative
 {
     if (n > 0 && interval >= 0)
     {
-        yasio::gc::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
+        yasio::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
 
         auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
@@ -66,7 +66,7 @@ TIMER_ID delay(float delay, vcallback_t callback, bool bNative)
 {
     if (delay > 0)
     {
-        yasio::gc::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
+        yasio::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
         auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
         std::string key = StringUtils::format("STMR#%p", timerId);
