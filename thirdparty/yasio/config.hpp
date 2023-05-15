@@ -155,14 +155,6 @@ typedef int epoll_handle_t;
 typedef HANDLE epoll_handle_t;
 #endif
 
-/*
-** Workaround for 'vs2013 without full c++11 support', in the future, drop vs2013 support and
-** follow 3 lines code will be removed
-*/
-#if !YASIO__HAS_CXX11 && !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
-#  define YASIO_DISABLE_CONCURRENT_SINGLETON 1
-#endif
-
 #if defined(YASIO_HEADER_ONLY)
 #  define YASIO__DECL inline
 #else

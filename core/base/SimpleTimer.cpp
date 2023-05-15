@@ -35,7 +35,7 @@ struct TimerObject
     vcallback_t callback_;
     static uintptr_t s_timerId;
 
-    DEFINE_OBJECT_POOL_ALLOCATION(TimerObject, 128)
+    DEFINE_FAST_OBJECT_POOL_ALLOCATION(TimerObject, 128)
     STIMER_DEFINE_REFERENCE_CLASS
 };
 
