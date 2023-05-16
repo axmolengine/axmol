@@ -57,7 +57,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 9.1.0
+- Version: 10.0.0
 - License: MIT
 
 ## FreeType
@@ -108,7 +108,7 @@
 ## lua
 - plainlua
   - [![Upstream](https://img.shields.io/github/v/release/lua/lua?label=Upstream)](https://github.com/lua/lua) http://www.lua.org/
-  - Version: 5.4.4
+  - Version: 5.4.6
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
