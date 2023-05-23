@@ -174,6 +174,11 @@ bool AudioEngine::lazyInit()
 
 AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume, const AudioProfile* profile)
 {
+    return play2d(filePath, ax::AudioPlayerSettings{loop, volume, 0.0f});
+}
+
+AUDIO_ID AudioEngine::play2d(std::string_view filePath, const AudioPlayerSettings& settings, const AudioProfile* profile)
+{
     AUDIO_ID ret = AudioEngine::INVALID_AUDIO_ID;
 
     do
@@ -226,6 +231,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
             }
         }
 
+        float volume = settings.volume;
         if (volume < 0.0f)
         {
             volume = 0.0f;
@@ -235,7 +241,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
             volume = 1.0f;
         }
 
-        ret = _audioEngineImpl->play2d(filePath, loop, volume);
+        ret = _audioEngineImpl->play2d(filePath, settings.loop, volume, settings.time);
         if (ret != INVALID_AUDIO_ID)
         {
             _audioPathIDMap[filePath.data()].emplace_back(ret);
@@ -243,7 +249,7 @@ AUDIO_ID AudioEngine::play2d(std::string_view filePath, bool loop, float volume,
 
             auto& audioRef    = _audioIDInfoMap[ret];
             audioRef.volume   = volume;
-            audioRef.loop     = loop;
+            audioRef.loop     = settings.loop;
             audioRef.filePath = it->first;
 
             if (profileHelper)

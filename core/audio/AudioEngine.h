@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2018 HALX99.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2023 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -45,6 +45,19 @@
  */
 
 NS_AX_BEGIN
+
+/**
+ * @struct AudioPlayerSettings
+ *
+ * @brief
+ * @js NA
+ */
+struct AX_DLL AudioPlayerSettings
+{
+    bool loop = false; // Whether audio instance loop or not.
+    float volume = 1.0f; // Volume value (range from 0.0 to 1.0).
+    float time = 0.0f; // The initial time offset when play audio
+};
 
 /**
  * @class AudioProfile
@@ -131,6 +144,19 @@ public:
                            float volume                = 1.0f,
                            const AudioProfile* profile = nullptr);
 
+     /**
+     * Play 2d sound.
+     *
+     * @param filePath The path of an audio file.
+     * @param settings The player settings for audio.
+     * @param profile A profile for audio instance. When profile is not specified, default profile will be used.
+     * @return An audio ID. It allows you to dynamically change the behavior of an audio instance on the fly.
+     *
+     * @see `AudioProfile`, `AudioPlayerSettings`
+     */
+    static AUDIO_ID play2d(std::string_view filePath,
+                           const AudioPlayerSettings& settings,
+                           const AudioProfile* profile = nullptr);
     /**
      * Sets whether an audio instance loop or not.
      *
