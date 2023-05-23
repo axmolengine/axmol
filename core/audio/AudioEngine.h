@@ -46,6 +46,13 @@
 
 NS_AX_BEGIN
 
+struct AX_DLL AudioPlayerSettings
+{
+    bool loop = false;
+    float volume = 1.0f;
+    float time = 0.0f;
+};
+
 /**
  * @class AudioProfile
  *
@@ -131,6 +138,9 @@ public:
                            float volume                = 1.0f,
                            const AudioProfile* profile = nullptr);
 
+    static AUDIO_ID play2d(std::string_view filePath,
+                           const AudioPlayerSettings& settings,
+                           const AudioProfile* profile = nullptr);
     /**
      * Sets whether an audio instance loop or not.
      *
