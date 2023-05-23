@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: git 1.19.0-bb8f5bb (2184)
+- Version: git 1.19.1
 - License: MIT
 
 ## Chipmunk2D
