@@ -5,7 +5,7 @@ if (NOT DEFINED AX_USE_ALSOFT)
     if(NOT APPLE)
         set(AX_USE_ALSOFT ON)
     else()
-        set(AX_USE_ALSOFT OFF) 
+        set(AX_USE_ALSOFT OFF)
     endif()
 endif()
 
@@ -31,6 +31,7 @@ option(AX_WITH_CARES "Build with internal c-ares support" OFF)
 option(AX_WITH_LLHTTP "Build with lhttp support" ON)
 option(AX_WITH_YAML_CPP "Build with yaml-cpp support" OFF)
 option(AX_WITH_KCP "Build with internal kcp support" OFF)
+option(AX_WITH_OBOE "Build with oboe support" OFF)
 
 # by default, enable ios,macOS openal-soft framework for legal license LGPL-2.1
 option(ALSOFT_OSX_FRAMEWORK "" ON)
@@ -191,7 +192,7 @@ if(ANDROID)
 endif()
 
 add_subdirectory(zlib)
-target_link_libraries(thirdparty 
+target_link_libraries(thirdparty
     dep_zlib
 )
 
@@ -231,7 +232,7 @@ if(AX_WITH_CHIPMUNK)
     set_target_properties(chipmunk PROPERTIES
       INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/chipmunk/include"
     )
-    
+
     # !important axmol not use double precision
     target_compile_definitions(chipmunk PUBLIC CP_USE_CGTYPES=0)
     target_compile_definitions(chipmunk PUBLIC CP_USE_DOUBLES=0)
@@ -312,7 +313,7 @@ if(AX_WITH_CONVERTUTF)
 endif(AX_WITH_CONVERTUTF)
 if(AX_WITH_POLY2TRI)
     add_subdirectory(poly2tri)
-    target_link_libraries(thirdparty poly2tri)  
+    target_link_libraries(thirdparty poly2tri)
     # Build static lib
     target_compile_definitions(poly2tri PUBLIC P2T_STATIC_EXPORTS)
     configure_target_outdir(poly2tri)
@@ -329,7 +330,7 @@ if(AX_ENABLE_EXT_LUA)
     add_subdirectory(lua/${AX_LUA_ENGINE})
     add_subdirectory(lua/tolua)
     add_subdirectory(lua/lua-cjson)
-    set_property(TARGET thirdparty APPEND PROPERTY 
+    set_property(TARGET thirdparty APPEND PROPERTY
         AX_LUA_DEPEND ${AX_LUA_ENGINE} tolua lua-cjson
     )
     if (AX_USE_LUAJIT)
@@ -351,7 +352,7 @@ if(AX_WITH_ALSOFT)
     set(ALSOFT_UTILS OFF CACHE BOOL "Build utility program" FORCE)
     set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build example programs" FORCE)
     set(ALSOFT_INSTALL OFF CACHE BOOL "Install main library" FORCE)
-    if (ANDROID)
+    if (ANDROID AND AX_WITH_OBOE)
         set(ALSOFT_BACKEND_OPENSL OFF CACHE BOOL "Enable OpenSL backend" FORCE)
         set(OBOE_SOURCE "${CMAKE_CURRENT_LIST_DIR}/oboe" CACHE STRING "Source directory for Oboe." FORCE)
     endif()
@@ -365,7 +366,7 @@ if(AX_WITH_ALSOFT)
 
     add_subdirectory(openal EXCLUDE_FROM_ALL)
     configure_target_outdir(common)
-    
+
     configure_target_outdir(OpenAL)
     target_link_libraries(thirdparty
         OpenAL
@@ -375,7 +376,7 @@ if(AX_WITH_ALSOFT)
     if(WINRT)
         target_include_directories(thirdparty PUBLIC openal-uwp/include)
     endif()
-    
+
     if(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
     endif()
@@ -452,7 +453,7 @@ if(AX_WITH_KCP)
     target_link_libraries(thirdparty kcp)
 endif()
 
-if (WINRT) 
+if (WINRT)
     add_subdirectory(angle)
     target_link_libraries(thirdparty angle::GLESv2 angle::EGL)
 endif()
@@ -462,7 +463,7 @@ configure_target_outdir(thirdparty)
 
 if(MACOSX OR IOS)
     add_subdirectory(glsl-optimizer)
-    target_link_libraries(thirdparty 
+    target_link_libraries(thirdparty
     dep_glcpp_library
     dep_glsl_optimizer
     dep_libmesa
