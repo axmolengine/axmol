@@ -182,9 +182,7 @@ Director::~Director()
     ScriptEngineManager::destroyInstance();
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-    exit(0);
-#endif
+    PoolManager::destroyInstance();
 }
 
 void Director::setDefaultValues()
@@ -1054,6 +1052,10 @@ void Director::purgeDirector()
 
     // delete Director
     release();
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+    utils::killCurrentProcess();
+#endif
 }
 
 void Director::restartDirector()
@@ -1309,7 +1311,7 @@ void Director::setStatsAnchor(AnchorPreset anchor)
 {
     if (!_statsDisplay)
         return;
-    
+
     // Initialize stat counters
     if (!_FPSLabel)
         showStats();
