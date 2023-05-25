@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2023 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -621,6 +621,7 @@ void Console::stop()
     if (_running)
     {
         _endThread = true;
+        _interrupter.interrupt();
         if (_thread.joinable())
         {
             _thread.join();
@@ -739,9 +740,10 @@ void Console::loop()
 
     FD_ZERO(&_read_set);
     FD_SET(_listenfd, &_read_set);
-    _maxfd = _listenfd;
+    FD_SET(_interrupter.read_descriptor(), &_read_set);
+    _maxfd = (std::max)(_listenfd, _interrupter.read_descriptor());
 
-    timeout.tv_sec  = 1;
+    timeout.tv_sec  = 300;
     timeout.tv_usec = 0;
 
     while (!_endThread)
@@ -765,6 +767,15 @@ void Console::loop()
         }
         else
         {
+            if (FD_ISSET(_interrupter.read_descriptor(), &copy_set)) {
+                if (!_interrupter.reset())
+                    _interrupter.recreate();
+                --nready;
+
+                if (_endThread)
+                    break;
+            }
+
             /* new client */
             if (FD_ISSET(_listenfd, &copy_set))
             {
