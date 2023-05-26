@@ -236,7 +236,7 @@ WmfMediaEngine::~WmfMediaEngine()
     // CreateInstance has failed. Also, calling Shutdown() twice is
     // harmless.
 
-    ClearPendingFrames();
+    ClearPendingBuffers();
 
     Shutdown();
 }
@@ -421,7 +421,7 @@ bool WmfMediaEngine::Close()
     if (m_bOpenPending)
         WaitForSingleObject(m_hOpenEvent, INFINITE);
 
-    ClearPendingFrames();
+    ClearPendingBuffers();
 
     HRESULT hr = S_OK;
     auto state = GetState();
@@ -496,27 +496,29 @@ done:
 
 void WmfMediaEngine::HandleVideoSample(const uint8_t* buf, size_t len)
 {
-    std::unique_lock<std::mutex> lck(m_framesQueueMtx);
-    m_framesQueue.emplace_back(buf, buf + len);
+    std::unique_lock<std::mutex> lck(m_frameBuffer1Mtx);
+    m_frameBuffer1.assign(buf, buf + len, std::true_type{});
 }
 
-void WmfMediaEngine::ClearPendingFrames()
+void WmfMediaEngine::ClearPendingBuffers()
 {
-    std::unique_lock<std::mutex> lck(m_framesQueueMtx);
-    m_framesQueue.clear();
+    std::unique_lock<std::mutex> lck(m_frameBuffer1Mtx);
+    m_frameBuffer1.clear();
+    m_frameBuffer2.clear();
 }
 
 bool WmfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
 {
-    if (m_state != MEMediaState::Playing || m_framesQueue.empty())
+    if (m_state != MEMediaState::Playing || m_frameBuffer1.empty())
         return false;
 
-    std::unique_lock<std::mutex> lck(m_framesQueueMtx);
-    if (!m_framesQueue.empty())
+    std::unique_lock<std::mutex> lck(m_frameBuffer1Mtx);
+    if (!m_frameBuffer1.empty())
     {
-        auto buffer = std::move(m_framesQueue.front());
-        m_framesQueue.pop_front();
+        m_frameBuffer2.swap(m_frameBuffer1);
         lck.unlock();  // unlock immidiately before invoke user callback (maybe upload buffer to GPU)
+
+        auto& buffer = m_frameBuffer2;
 
         auto cbcrData =
             (m_videoPF == MEVideoPixelFormat::NV12) ? buffer.data() + m_frameExtent.x * m_frameExtent.y : nullptr;
@@ -550,6 +552,8 @@ bool WmfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)>
 #    endif
         // check data
         callback(frame);
+
+        m_frameBuffer2.clear();
 
         return true;
     }
