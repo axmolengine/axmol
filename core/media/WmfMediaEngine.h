@@ -198,7 +198,7 @@ protected:
 
     HRESULT GetNativeVideoSize(DWORD* cx, DWORD* cy);
 
-     void ClearPendingFrames();
+     void ClearPendingBuffers();
 
 protected:
     // Destructor is private. Caller should call Release.
@@ -276,8 +276,9 @@ protected:
 
     MEVideoPixelFormat m_videoPF = MEVideoPixelFormat::INVALID;
 
-    mutable std::deque<yasio::byte_buffer> m_framesQueue;
-    mutable std::mutex m_framesQueueMtx;
+    mutable std::mutex m_frameBuffer1Mtx;
+    yasio::byte_buffer m_frameBuffer1; // for write
+    yasio::byte_buffer m_frameBuffer2; // for read
 };
 
 struct WmfMediaEngineFactory : public MediaEngineFactory
