@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 112.0.5615.138
+- Version: 113.0.5672.128
 - License: BSD WITH The ANGLE Project Authors
 
 ## astcenc
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.88.1
+- Version: 8.1.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -118,7 +118,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-1c27912
+  - Version: 2.1-224129a
   - License: MIT
 
 - tolua
