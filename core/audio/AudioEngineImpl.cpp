@@ -271,6 +271,29 @@ ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notifi
 
 #endif
 
+#if AX_USE_ALSOFT
+static void _onALSoftEvent(ALenum eventType,
+                                 ALuint object,
+                                 ALuint param,
+                                 ALsizei length,
+                                 const ALchar* message,
+                                 void* userParam)
+{
+    if (eventType == AL_EVENT_TYPE_DISCONNECTED_SOFT)
+    {
+        AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, []() {
+            if (s_ALDevice)
+            {
+                ALOGD("reopen device");
+                auto alcReopenDeviceSOFTProc =
+                    (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
+                alcReopenDeviceSOFTProc(s_ALDevice, nullptr, nullptr);
+            };
+        });
+    }
+}
+#endif
+
 AudioEngineImpl::AudioEngineImpl() : _scheduled(false), _currentAudioID(0), _scheduler(nullptr)
 {
     s_instance = this;
@@ -406,6 +429,24 @@ bool AudioEngineImpl::init()
             ret                 = AudioDecoderManager::init();
             const char* vender  = alGetString(AL_VENDOR);
             const char* version = alGetString(AL_VERSION);
+
+#if AX_USE_ALSOFT
+            auto alEventControlSOFTProc = (decltype(alEventControlSOFT)*) alGetProcAddress("alEventControlSOFT");
+            auto alEventCallbackSOFTProc = (decltype(alEventCallbackSOFT)*)alGetProcAddress("alEventCallbackSOFT");
+            if (alEventControlSOFTProc && alEventCallbackSOFTProc)
+            {
+                // Enable receiving disconnection events
+                ALenum event = AL_EVENT_TYPE_DISCONNECTED_SOFT;
+                alEventControlSOFTProc(1, &event, AL_TRUE);
+                // Set callback
+                alEventCallbackSOFTProc(_onALSoftEvent, this);
+            }
+#    ifndef AL_STOP_SOURCES_ON_DISCONNECT_SOFT
+#        define AL_STOP_SOURCES_ON_DISCONNECT_SOFT 0x19AB
+#    endif
+            alDisable(AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
+#endif
+
             ALOGI("OpenAL was initialized successfully, vender:%s, version:%s", vender, version);
         }
     } while (false);
