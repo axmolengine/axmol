@@ -50,11 +50,14 @@ void TestLayer::onEnter()
     // auto array = [UIFont familyNames];
     // for( String *s in array )
     //     NSLog( s );
-    auto label = Label::createWithSystemFont("cocos2d", "Tahoma", 64);
-
-    label->setPosition(Vec2(x / 2, y / 2));
-
+    auto label = Label::createWithSystemFont("a Cocos2D-4.0 fork", "Tahoma", 52);
+    label->setPosition(Vec2(x / 2, y / 3.5));
     addChild(label);
+
+    auto sprite        = Sprite::create(s_pathAxmolLogo);
+    sprite->setScale(1.5f);
+    sprite->setPosition(Vec2(x / 2, y / 1.5));
+    addChild(sprite, -1);
 }
 
 //------------------------------------------------------------------
@@ -123,7 +126,7 @@ void RotateWorldMainLayer::onEnter()
 
     auto blue  = LayerColor::create(Color4B(0, 0, 255, 255));
     auto red   = LayerColor::create(Color4B(255, 0, 0, 255));
-    auto green = LayerColor::create(Color4B(0, 255, 0, 255));
+    auto dark = LayerColor::create(Color4B(2, 2, 2, 255));
     auto white = LayerColor::create(Color4B(255, 255, 255, 255));
 
     blue->setScale(0.5f);
@@ -133,9 +136,9 @@ void RotateWorldMainLayer::onEnter()
     red->setScale(0.5f);
     red->setPosition(Vec2(x / 4, -y / 4));
 
-    green->setScale(0.5f);
-    green->setPosition(Vec2(-x / 4, y / 4));
-    green->addChild(TestLayer::create());
+    dark->setScale(0.5f);
+    dark->setPosition(Vec2(-x / 4, y / 4));
+    dark->addChild(TestLayer::create());
 
     white->setScale(0.5f);
     white->setPosition(Vec2(x / 4, y / 4));
@@ -144,14 +147,14 @@ void RotateWorldMainLayer::onEnter()
 
     addChild(blue, -1);
     addChild(white);
-    addChild(green);
+    addChild(dark);
     addChild(red);
 
     auto rot = RotateBy::create(8, 720);
 
     blue->runAction(rot);
     red->runAction(rot->clone());
-    green->runAction(rot->clone());
+    dark->runAction(rot->clone());
     white->runAction(rot->clone());
 }
 
