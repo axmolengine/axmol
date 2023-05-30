@@ -2,7 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2023 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -182,6 +182,27 @@ void Device::setKeepScreenOn(bool value)
 void Device::vibrate(float duration)
 {
     JniHelper::callStaticVoidMethod(helperClassName, "vibrate", duration);
+}
+
+void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle style) {}
+
+void Device::impactOccurred(ImpactFeedbackStyle style)
+{
+    JniHelper::callStaticVoidMethod(helperClassName, "impactOccurred", (int)style);
+}
+
+void Device::prepareNotificationFeedbackGenerator() {}
+
+void Device::notificationOccurred(NotificationFeedbackType type)
+{
+    JniHelper::callStaticVoidMethod(helperClassName, "notificationOccurred", (int)type);
+}
+
+void Device::prepareSelectionFeedbackGenerator() {}
+
+void Device::selectionChanged()
+{
+    JniHelper::callStaticVoidMethod(helperClassName, "selectionChanged");
 }
 
 NS_AX_END

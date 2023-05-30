@@ -50,6 +50,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.DisplayCutout;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
@@ -286,6 +287,18 @@ public class AxmolEngine {
 
     public static void vibrate(float duration) {
         sVibrateService.vibrate((long)(duration * 1000));
+    }
+
+    public static void impactOccurred(int style) {
+        ((AxmolActivity)sActivity).impactOccurred(style);
+    }
+
+    public static void notificationOccurred(int type) {
+        ((AxmolActivity)sActivity).notificationOccurred(type);
+    }
+
+    public static void selectionChanged() {
+        ((AxmolActivity)sActivity).selectionChanged();
     }
 
  	public static String getVersion() {
