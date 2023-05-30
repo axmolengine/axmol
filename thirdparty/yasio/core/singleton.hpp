@@ -25,18 +25,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+// core/singleton.hpp: A common use thread safe singleton class template, support non-delayed or delayed init with variadic args.
+//
+// refer to:
+//   https://www.youtube.com/watch?v=c1gO9aB9nbs&t=1120s
+//
+// remark:
+// Singletons make it hard to determine the lifetime of an object, which can
+// lead to buggy code and spurious crashes.
+//
+// Instead of adding another singleton into the mix, try to identify either:
+//   a) An existing singleton that can manage your object's lifetime
+//   b) Locations where you can deterministically create the object and pass
+//      into other objects
+//
+// If you absolutely need a singleton, please keep them as trivial as possible
+// and ideally a leaf dependency. Singletons get problematic when they attempt
+// to do too much in their destructor or have circular dependencies.
 #ifndef YASIO__SINGLETON_HPP
 #define YASIO__SINGLETON_HPP
 #include <new>
 #include <memory>
 #include <functional>
+#include <mutex>
+#include <atomic>
 
 #include "yasio/config.hpp"
-
-#if !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
-#  include <mutex>
-#  include <atomic>
-#endif
 
 namespace yasio
 {
@@ -85,8 +99,6 @@ private:
   }
 };
 
-/// CLASS TEMPLATE singleton, support non-delayed or delayed init with variadic args
-/// the managed singleton object will be destructed after main function.
 template <typename _Ty>
 class singleton {
   typedef singleton<_Ty> _Myt;
@@ -97,68 +109,53 @@ public:
   template <typename... _Types>
   static pointer instance(_Types&&... args)
   {
-    if (_Myt::__single__)
-      return _Myt::__single__;
-
-#if !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
-    std::lock_guard<std::mutex> lck(__mutex__);
-    if (_Myt::__single__)
-      return _Myt::__single__;
-#endif
-    return (_Myt::__single__ = singleton_constructor<_Ty>::construct(std::forward<_Types>(args)...));
+    return get_instance<false>(std::forward<_Types>(args)...);
   }
 
-  // Return the singleton instance with delayed init func
   template <typename... _Types>
-  static pointer delayed(_Types&&... args)
+  static pointer instance1(_Types&&... args)
   {
-    if (_Myt::__single__)
-      return _Myt::__single__;
+    return get_instance<true>(std::forward<_Types>(args)...);
+  }
 
-#if !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
-    std::lock_guard<std::mutex> lck(__mutex__);
-    if (_Myt::__single__)
-      return _Myt::__single__;
-#endif
-    return (_Myt::__single__ = singleton_constructor<_Ty, true>::construct(std::forward<_Types>(args)...));
+  static void destroy(void)
+  {
+    if (auto inst = _Myt::__single__.exchange(nullptr, std::memory_order_acq_rel))
+      delete inst;
   }
 
   // Peek the singleton instance
   static pointer peek() { return _Myt::__single__; }
 
-  static void destroy(void)
+private:
+  template <bool delay, typename... _Types>
+  static pointer get_instance(_Types&&... args)
   {
-#if !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
-    std::lock_guard<std::mutex> lck(__mutex__);
-#endif
-    if (_Myt::__single__)
+    auto& inst = _Myt::__single__;
+    if (inst.load(std::memory_order_acquire))
+      return inst;
+
     {
-      delete static_cast<_Ty*>(_Myt::__single__);
-      _Myt::__single__ = nullptr;
+      std::lock_guard<std::mutex> lck(__mutex__);
+      if (!inst.load(std::memory_order_relaxed))
+        inst.store(singleton_constructor<_Ty, delay>::construct(std::forward<_Types>(args)...), std::memory_order_release);
     }
+    return inst;
   }
 
-private:
-#if !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
   static std::atomic<_Ty*> __single__;
   static std::mutex __mutex__;
-#else
-  static _Ty* __single__;
-#endif
+
 private:
   // disable construct, assign operation, copy construct also not allowed.
   singleton(void) = delete;
 };
 
-#if !defined(YASIO_DISABLE_CONCURRENT_SINGLETON)
 template <typename _Ty>
 std::atomic<_Ty*> singleton<_Ty>::__single__;
 template <typename _Ty>
 std::mutex singleton<_Ty>::__mutex__;
-#else
-template <typename _Ty>
-_Ty* singleton<_Ty>::__single__;
-#endif
+
 } // namespace yasio
 
 #endif

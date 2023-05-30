@@ -102,7 +102,7 @@ public class AxmolEngine {
 
     // The absolute path to the OBB if it exists, else the absolute path to the APK.
     private static String sAssetsPath = "";
-    
+
     // The OBB file
     private static ZipResourceFile sOBBFile = null;
 
@@ -125,18 +125,18 @@ public class AxmolEngine {
             Log.d(TAG, String.format("android version is %d, isSupportLowLatency: %s", Build.VERSION.SDK_INT, isSupportLowLatency ? "true" : "false") );
 
             final ApplicationInfo applicationInfo = activity.getApplicationInfo();
-            
+
             AxmolEngine.sPackageName = applicationInfo.packageName;
 
             AxmolEngine.sAssetManager = activity.getAssets();
             AxmolEngine.nativeSetContext((Context)activity, AxmolEngine.sAssetManager);
-    
+
             BitmapHelper.setContext(activity);
 
             AxmolEngine.sVibrateService = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
 
             sInited = true;
-            
+
             //Enhance API modification begin
             Intent serviceIntent = new Intent(IGameTuningService.class.getName());
             serviceIntent.setPackage("com.enhance.gameservice");
@@ -144,7 +144,7 @@ public class AxmolEngine {
             //Enhance API modification end
         }
     }
-    
+
     // This function returns the absolute path to the OBB if it exists,
     // else it returns the absolute path to the APK.
     public static String getAssetsPath()
@@ -170,10 +170,10 @@ public class AxmolEngine {
             else
                 AxmolEngine.sAssetsPath = AxmolEngine.sActivity.getApplicationInfo().sourceDir;
         }
-        
+
         return AxmolEngine.sAssetsPath;
     }
-    
+
     public static ZipResourceFile getObbFile() {
         if (null == sOBBFile) {
             int versionCode = 1;
@@ -192,7 +192,7 @@ public class AxmolEngine {
 
         return sOBBFile;
     }
-    
+
     //Enhance API modification begin
     private static ServiceConnection connection = new ServiceConnection() {
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -205,19 +205,19 @@ public class AxmolEngine {
         }
     };
     //Enhance API modification end
-    
+
     public static Activity getActivity() {
         return sActivity;
     }
-    
+
     public static void addOnActivityResultListener(OnActivityResultListener listener) {
         onActivityResultListeners.add(listener);
     }
-    
+
     public static Set<OnActivityResultListener> getOnActivityResultListeners() {
         return onActivityResultListeners;
     }
-    
+
     public static boolean isActivityVisible(){
         return sActivityVisible;
     }
@@ -252,7 +252,7 @@ public class AxmolEngine {
     public static String getCurrentLanguage() {
         return Locale.getDefault().getLanguage();
     }
-    
+
     public static String getDeviceModel(){
         return Build.MODEL;
     }
@@ -297,7 +297,7 @@ public class AxmolEngine {
  		}
  	}
 
-    public static boolean openURL(String url) { 
+    public static boolean openURL(String url) {
         boolean ret = false;
         try {
             Intent i = new Intent(Intent.ACTION_VIEW);
@@ -308,7 +308,7 @@ public class AxmolEngine {
         }
         return ret;
     }
-    
+
     public static long[] getObbAssetFileDescriptor(final String path) {
         long[] array = new long[3];
         if (AxmolEngine.getObbFile() != null) {
@@ -348,13 +348,12 @@ public class AxmolEngine {
             AxmolEngine.getAccelerometer().disable();
         }
     }
-    
-    public static void terminateProcess() {
+
+    public static void onExit() {
         // Remove it from recent apps.
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             sActivity.finishAndRemoveTask();
         }
-        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     private static void showDialog(final String pTitle, final String pMessage) {
@@ -412,11 +411,11 @@ public class AxmolEngine {
         }
         return -1;
     }
-    
+
     // ===========================================================
     // Functions for CCUserDefault
     // ===========================================================
-    
+
     public static boolean getBoolForKey(String key, boolean defaultValue) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         try {
@@ -445,7 +444,7 @@ public class AxmolEngine {
 
         return defaultValue;
     }
-    
+
     public static int getIntegerForKey(String key, int defaultValue) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         try {
@@ -473,7 +472,7 @@ public class AxmolEngine {
 
         return defaultValue;
     }
-    
+
     public static float getFloatForKey(String key, float defaultValue) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         try {
@@ -501,12 +500,12 @@ public class AxmolEngine {
 
         return defaultValue;
     }
-    
+
     public static double getDoubleForKey(String key, double defaultValue) {
         // SharedPreferences doesn't support saving double value
         return getFloatForKey(key, (float) defaultValue);
     }
-    
+
     public static String getStringForKey(String key, String defaultValue) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         try {
@@ -514,32 +513,32 @@ public class AxmolEngine {
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            
+
             return settings.getAll().get(key).toString();
         }
     }
-    
+
     public static void setBoolForKey(String key, boolean value) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(key, value);
         editor.apply();
     }
-    
+
     public static void setIntegerForKey(String key, int value) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(key, value);
         editor.apply();
     }
-    
+
     public static void setFloatForKey(String key, float value) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putFloat(key, value);
         editor.apply();
     }
-    
+
     public static void setDoubleForKey(String key, double value) {
         // SharedPreferences doesn't support recording double value
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
@@ -547,14 +546,14 @@ public class AxmolEngine {
         editor.putFloat(key, (float)value);
         editor.apply();
     }
-    
+
     public static void setStringForKey(String key, String value) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString(key, value);
         editor.apply();
     }
-    
+
     public static void deleteValueForKey(String key) {
         SharedPreferences settings = sActivity.getSharedPreferences(AxmolEngine.PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -573,7 +572,7 @@ public class AxmolEngine {
 
         return null;
     }
-    
+
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================
@@ -679,7 +678,7 @@ public class AxmolEngine {
      *
      * @return array of int with safe insets values
      */
-    @SuppressLint("NewApi") 
+    @SuppressLint("NewApi")
     public static int[] getSafeInsets() {
         final int[] safeInsets = new int[]{0, 0, 0, 0};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -737,7 +736,7 @@ public class AxmolEngine {
         return hasSoftwareKeys;
     }
 
-    //Enhance API modification end     
+    //Enhance API modification end
     public static float[] getAccelValue() {
         return AxmolEngine.getAccelerometer().accelerometerValues;
     }

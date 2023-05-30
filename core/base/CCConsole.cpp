@@ -2,7 +2,7 @@
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2023 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -56,6 +56,8 @@
 #include "renderer/CCTextureCache.h"
 #include "base/ccUtils.h"
 #include "base/ccUTF8.h"
+
+#include "yasio/core/xxsocket.hpp"
 
 // !FIXME: the previous version of ax::log not thread safe
 // since axmol make it multi-threading safe by default
@@ -475,7 +477,7 @@ Console::Console()
     , _endThread(false)
     , _isIpv6Server(false)
     , _sendDebugStrings(false)
-    , _bindAddress("")
+    , _bindAddress()
 {
     createCommandAllocator();
     createCommandConfig();
@@ -504,102 +506,32 @@ Console::~Console()
 
 bool Console::listenOnTCP(int port)
 {
-    socket_native_type listenfd = -1;
-    int n;
-    const int on = 1;
-    struct addrinfo hints, *res, *ressave;
-    char serv[30];
+    using namespace yasio;
+    xxsocket sock;
+    int ipsv = 0;
+    xxsocket::traverse_local_address([&](const ip::endpoint& ep) {
+        if (ep.af() == AF_INET)
+            ipsv |= ipsv_ipv4;
+        else if (ep.af() == AF_INET6)
+            ipsv |= ipsv_ipv6;
+        return ipsv == ipsv_dual_stack;
+    });
 
-    snprintf(serv, sizeof(serv) - 1, "%d", port);
-
-    bzero(&hints, sizeof(struct addrinfo));
-    hints.ai_flags    = AI_PASSIVE;
-    hints.ai_family   = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-
-#if defined(_WIN32)
-    WSADATA wsaData;
-    n = WSAStartup(MAKEWORD(2, 2), &wsaData);
-#endif
-
-    if ((n = getaddrinfo(nullptr, serv, &hints, &res)) != 0)
+    const char* finalBindAddr = this->_bindAddress.empty() ? (ipsv != ipsv_ipv6 ? "0.0.0.0" : ("::")) : this->_bindAddress.c_str();
+    ip::endpoint ep{finalBindAddr, static_cast<u_short>(port)};
+    if (sock.pserve(ep) != 0)
     {
-#if defined(_WIN32)
-        fprintf(stderr, "net_listen error for %s: %s", serv, gai_strerrorA(n));
-#else
-        fprintf(stderr, "net_listen error for %s: %s", serv, gai_strerror(n));
-#endif
+        int ec = xxsocket::get_last_errno();
+        ax::print("Console: open server failed, ec:%d", ec);
         return false;
     }
 
-    ressave = res;
+    if (ep.af() == AF_INET)
+        ax::print("Console: IPV4 server is listening on %s", ep.to_string().c_str());
+    else if (ep.af() == AF_INET6)
+        ax::print("Console: IPV6 server is listening on %s", ep.to_string().c_str());
 
-    do
-    {
-        listenfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-        if (listenfd < 0)
-            continue; /* error, try next one */
-
-        setsockopt(listenfd, SOL_SOCKET, SO_REUSEADDR, (const char*)&on, sizeof(on));
-
-        // bind address
-        if (!_bindAddress.empty())
-        {
-            if (res->ai_family == AF_INET)
-            {
-                struct sockaddr_in* sin = (struct sockaddr_in*)res->ai_addr;
-                inet_pton(res->ai_family, _bindAddress.c_str(), (void*)&sin->sin_addr);
-            }
-            else if (res->ai_family == AF_INET6)
-            {
-                struct sockaddr_in6* sin = (struct sockaddr_in6*)res->ai_addr;
-                inet_pton(res->ai_family, _bindAddress.c_str(), (void*)&sin->sin6_addr);
-            }
-        }
-
-        if (bind(listenfd, res->ai_addr, res->ai_addrlen) == 0)
-            break; /* success */
-
-/* bind error, close and try next one */
-#if defined(_WIN32)
-        closesocket(listenfd);
-#else
-        close(listenfd);
-#endif
-    } while ((res = res->ai_next) != nullptr);
-
-    if (res == nullptr)
-    {
-        perror("net_listen:");
-        freeaddrinfo(ressave);
-        return false;
-    }
-
-    listen(listenfd, 50);
-
-    if (res->ai_family == AF_INET)
-    {
-        _isIpv6Server             = false;
-        char buf[INET_ADDRSTRLEN] = {0};
-        struct sockaddr_in* sin   = (struct sockaddr_in*)res->ai_addr;
-        if (inet_ntop(res->ai_family, &sin->sin_addr, buf, sizeof(buf)) != nullptr)
-            ax::print("Console: IPV4 server is listening on %s:%d", buf, ntohs(sin->sin_port));
-        else
-            perror("inet_ntop");
-    }
-    else if (res->ai_family == AF_INET6)
-    {
-        _isIpv6Server              = true;
-        char buf[INET6_ADDRSTRLEN] = {0};
-        struct sockaddr_in6* sin   = (struct sockaddr_in6*)res->ai_addr;
-        if (inet_ntop(res->ai_family, &sin->sin6_addr, buf, sizeof(buf)) != nullptr)
-            ax::print("Console: IPV6 server is listening on [%s]:%d", buf, ntohs(sin->sin6_port));
-        else
-            perror("inet_ntop");
-    }
-
-    freeaddrinfo(ressave);
-    return listenOnFileDescriptor(listenfd);
+    return listenOnFileDescriptor(sock.release_handle());
 }
 
 bool Console::listenOnFileDescriptor(int fd)
@@ -621,6 +553,7 @@ void Console::stop()
     if (_running)
     {
         _endThread = true;
+        _interrupter.interrupt();
         if (_thread.joinable())
         {
             _thread.join();
@@ -739,9 +672,10 @@ void Console::loop()
 
     FD_ZERO(&_read_set);
     FD_SET(_listenfd, &_read_set);
-    _maxfd = _listenfd;
+    FD_SET(_interrupter.read_descriptor(), &_read_set);
+    _maxfd = (std::max)(_listenfd, _interrupter.read_descriptor());
 
-    timeout.tv_sec  = 1;
+    timeout.tv_sec  = 300;
     timeout.tv_usec = 0;
 
     while (!_endThread)
@@ -765,6 +699,15 @@ void Console::loop()
         }
         else
         {
+            if (FD_ISSET(_interrupter.read_descriptor(), &copy_set)) {
+                if (!_interrupter.reset())
+                    _interrupter.recreate();
+                --nready;
+
+                if (_endThread)
+                    break;
+            }
+
             /* new client */
             if (FD_ISSET(_listenfd, &copy_set))
             {
@@ -840,20 +783,10 @@ void Console::loop()
 
     // clean up: ignore stdin, stdout and stderr
     for (const auto& fd : _fds)
-    {
-#if defined(_WIN32)
         closesocket(fd);
-#else
-        close(fd);
-#endif
-    }
 
-#if defined(_WIN32)
     closesocket(_listenfd);
-    WSACleanup();
-#else
-    close(_listenfd);
-#endif
+
     _running = false;
 }
 
@@ -1244,11 +1177,7 @@ void Console::commandExit(socket_native_type fd, std::string_view /*args*/)
 {
     FD_CLR(fd, &_read_set);
     _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
-#if defined(_WIN32)
     closesocket(fd);
-#else
-    close(fd);
-#endif
 }
 
 void Console::commandFileUtils(socket_native_type fd, std::string_view /*args*/)

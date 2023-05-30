@@ -223,7 +223,7 @@ void TestController::traverseTestList(TestList* testList)
             test->setTestName(testList->_childTestNames[testIndex++]);
             if (test->isTestList())
             {
-                scheduler->performFunctionInCocosThread([&]() { test->runThisTest(); });
+                scheduler->runOnAxmolThread([&]() { test->runThisTest(); });
 
                 traverseTestList((TestList*)test);
             }
@@ -243,7 +243,7 @@ void TestController::traverseTestList(TestList* testList)
         if (!_stopAutoTest)
         {
             // Backs up one level and release TestList object.
-            scheduler->performFunctionInCocosThread([&]() { testList->_parentTest->runThisTest(); });
+            scheduler->runOnAxmolThread([&]() { testList->_parentTest->runThisTest(); });
             _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
             testList->release();
         }
@@ -281,7 +281,7 @@ void TestController::traverseTestSuite(TestSuite* testSuite)
             _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(500));
         }
         // Run test case in the cocos[GL] thread.
-        scheduler->performFunctionInCocosThread([&, logIndentation, testName]() {
+        scheduler->runOnAxmolThread([&, logIndentation, testName]() {
             if (_stopAutoTest)
                 return;
             logEx("%s%sRun test:%s.", LOG_TAG, logIndentation.c_str(), testName.c_str());
@@ -370,7 +370,7 @@ void TestController::traverseTestSuite(TestSuite* testSuite)
     {
         // Backs up one level and release TestSuite object.
         auto parentTest = testSuite->_parentTest;
-        scheduler->performFunctionInCocosThread([&]() { parentTest->runThisTest(); });
+        scheduler->runOnAxmolThread([&]() { parentTest->runThisTest(); });
 
         _sleepCondition.wait_for(*_sleepUniqueLock, std::chrono::milliseconds(1000));
         testSuite->release();

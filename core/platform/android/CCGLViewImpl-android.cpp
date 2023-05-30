@@ -110,7 +110,8 @@ bool GLViewImpl::isOpenGLReady()
 
 void GLViewImpl::end()
 {
-    JniHelper::callStaticVoidMethod("org.axmol.lib.AxmolEngine", "terminateProcess");
+    JniHelper::callStaticVoidMethod("org.axmol.lib.AxmolEngine", "onExit");
+    release();
 }
 
 void GLViewImpl::swapBuffers() {}

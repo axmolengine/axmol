@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 112.0.5615.138
+- Version: 113.0.5672.128
 - License: BSD WITH The ANGLE Project Authors
 
 ## astcenc
@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: git 1.19.0-bb8f5bb (2184)
+- Version: git 1.19.1
 - License: MIT
 
 ## Chipmunk2D
@@ -47,7 +47,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.88.1
+- Version: 8.1.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -57,7 +57,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 9.1.0
+- Version: 10.0.0
 - License: MIT
 
 ## FreeType
@@ -108,7 +108,7 @@
 ## lua
 - plainlua
   - [![Upstream](https://img.shields.io/github/v/release/lua/lua?label=Upstream)](https://github.com/lua/lua) http://www.lua.org/
-  - Version: 5.4.4
+  - Version: 5.4.6
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
@@ -118,7 +118,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-1c27912
+  - Version: 2.1-224129a
   - License: MIT
 
 - tolua
@@ -248,7 +248,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: git 4.0.0-f4aea5f
+- Version: git 4.0.0-bc1405d
 - License: MIT WITH Anti-996
 
 ## zlib
