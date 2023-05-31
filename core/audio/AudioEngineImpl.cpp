@@ -2,7 +2,7 @@
  Copyright (c) 2014-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2018-2020 HALX99.
- Copyright (c) 2021-2022 Bytedance Inc.
+ Copyright (c) 2021-2023 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -40,6 +40,10 @@
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
 #include "base/ccUtils.h"
+
+#if AX_USE_ALSOFT
+#    include "alc/inprogext.h"
+#endif
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 #    import <UIKit/UIKit.h>
@@ -157,13 +161,15 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
 
             if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive)
             {
-                ALOGD("AVAudioSessionInterruptionTypeBegan, application != UIApplicationStateActive, "
-                      "alcMakeContextCurrent(nullptr)");
+                ALOGD(
+                    "AVAudioSessionInterruptionTypeBegan, application != UIApplicationStateActive, "
+                    "alcMakeContextCurrent(nullptr)");
             }
             else
             {
-                ALOGD("AVAudioSessionInterruptionTypeBegan, application == UIApplicationStateActive, "
-                      "pauseOnResignActive = true");
+                ALOGD(
+                    "AVAudioSessionInterruptionTypeBegan, application == UIApplicationStateActive, "
+                    "pauseOnResignActive = true");
             }
 
             // We always pause device when interruption began
@@ -175,8 +181,9 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
 
             if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
             {
-                ALOGD("AVAudioSessionInterruptionTypeEnded, application == UIApplicationStateActive, "
-                      "alcMakeContextCurrent(s_ALContext)");
+                ALOGD(
+                    "AVAudioSessionInterruptionTypeEnded, application == UIApplicationStateActive, "
+                    "alcMakeContextCurrent(s_ALContext)");
                 NSError* error = nil;
                 [[AVAudioSession sharedInstance] setActive:YES error:&error];
                 ccALResumeDevice();
@@ -188,8 +195,9 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
             }
             else
             {
-                ALOGD("AVAudioSessionInterruptionTypeEnded, application != UIApplicationStateActive, "
-                      "resumeOnBecomingActive = true");
+                ALOGD(
+                    "AVAudioSessionInterruptionTypeEnded, application != UIApplicationStateActive, "
+                    "resumeOnBecomingActive = true");
                 resumeOnBecomingActive = true;
             }
         }
@@ -228,7 +236,7 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
         }
     }
     else if ([notification.name isEqualToString:AVAudioSessionRouteChangeNotification])
-    { // replay
+    {  // replay
         ccALPauseDevice();
         ccALResumeDevice();
     }
@@ -272,25 +280,35 @@ ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notifi
 #endif
 
 #if AX_USE_ALSOFT
-static void _onALSoftEvent(ALenum eventType,
-                                 ALuint object,
-                                 ALuint param,
-                                 ALsizei length,
-                                 const ALchar* message,
-                                 void* userParam)
+static void alcReopenDeviceOnAxmolThread()
+{
+    Director::getInstance()->getOpenGLView()->queueOperation([](void*) {
+        auto alcReopenDeviceSOFTProc =
+            (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
+        if (alcReopenDeviceSOFTProc)
+            alcReopenDeviceSOFTProc(s_ALDevice, nullptr, nullptr);
+    });
+}
+
+static void ALC_APIENTRY _onALCEvent(ALCenum eventType,
+                                     ALCdevice* device,
+                                     ALCsizei length,
+                                     const ALCchar* message,
+                                     void* userParam) AL_API_NOEXCEPT17
+{
+    if (eventType == ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT)
+        alcReopenDeviceOnAxmolThread();
+}
+
+static void AL_APIENTRY _onALEvent(ALenum eventType,
+                                   ALuint object,
+                                   ALuint param,
+                                   ALsizei length,
+                                   const ALchar* message,
+                                   void* userParam) AL_API_NOEXCEPT17
 {
     if (eventType == AL_EVENT_TYPE_DISCONNECTED_SOFT)
-    {
-        AsyncTaskPool::getInstance()->enqueue(AsyncTaskPool::TaskType::TASK_IO, []() {
-            if (s_ALDevice)
-            {
-                ALOGD("reopen device");
-                auto alcReopenDeviceSOFTProc =
-                    (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
-                alcReopenDeviceSOFTProc(s_ALDevice, nullptr, nullptr);
-            };
-        });
-    }
+        alcReopenDeviceOnAxmolThread();
 }
 #endif
 
@@ -431,16 +449,29 @@ bool AudioEngineImpl::init()
             const char* version = alGetString(AL_VERSION);
 
 #if AX_USE_ALSOFT
-            auto alEventControlSOFTProc = (decltype(alEventControlSOFT)*) alGetProcAddress("alEventControlSOFT");
-            auto alEventCallbackSOFTProc = (decltype(alEventCallbackSOFT)*)alGetProcAddress("alEventCallbackSOFT");
+#    if defined(_WIN32)
+            auto alcEventControlSOFTProc  = (decltype(alcEventControlSOFT)*)alGetProcAddress("alcEventControlSOFT");
+            auto alcEventCallbackSOFTProc = (decltype(alcEventCallbackSOFT)*)alGetProcAddress("alcEventCallbackSOFT");
+            if (alcEventControlSOFTProc && alcEventCallbackSOFTProc)
+            {
+                // Enable receiving disconnection events
+                ALenum event = ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT;
+                alcEventControlSOFTProc(1, &event, AL_TRUE);
+                // Set callback
+                alcEventCallbackSOFTProc(_onALCEvent, this);
+            }
+#    else
+            auto alEventControlSOFTProc  = (LPALEVENTCONTROLSOFT)alGetProcAddress("alEventControlSOFT");
+            auto alEventCallbackSOFTProc = (LPALEVENTCALLBACKSOFT)alGetProcAddress("alEventCallbackSOFT");
             if (alEventControlSOFTProc && alEventCallbackSOFTProc)
             {
                 // Enable receiving disconnection events
                 ALenum event = AL_EVENT_TYPE_DISCONNECTED_SOFT;
                 alEventControlSOFTProc(1, &event, AL_TRUE);
                 // Set callback
-                alEventCallbackSOFTProc(_onALSoftEvent, this);
+                alEventCallbackSOFTProc(_onALEvent, this);
             }
+#    endif
 #    ifndef AL_STOP_SOURCES_ON_DISCONNECT_SOFT
 #        define AL_STOP_SOURCES_ON_DISCONNECT_SOFT 0x19AB
 #    endif
@@ -873,8 +904,10 @@ void AudioEngineImpl::_updatePlayers(bool forStop)
             {
                 /// ###IMPORTANT: don't call immidiately, because at callback, user-end may play a new audio
                 /// cause _audioPlayers' iterator goan to invalid.
-                _finishCallbacks.emplace_back([finishCallback = std::move(player->_finishCallbak), audioID,
-                                            filePath = std::move(filePath)]() { finishCallback(audioID, filePath); });
+                _finishCallbacks.emplace_back(
+                    [finishCallback = std::move(player->_finishCallbak), audioID, filePath = std::move(filePath)]() {
+                    finishCallback(audioID, filePath);
+                });
             }
             // clear cache when audio player finsihed properly
             player->setCache(nullptr);
