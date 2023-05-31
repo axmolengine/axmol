@@ -41,7 +41,6 @@ using namespace Windows::UI::Xaml::Controls;
 NS_AX_BEGIN
 
 using namespace Windows::Graphics::Display;
-using namespace Windows::Storage;
 using namespace concurrency;
 using namespace Platform;
 using namespace Windows::Storage;
