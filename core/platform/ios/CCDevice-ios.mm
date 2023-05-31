@@ -44,9 +44,11 @@
 
 const float MAX_MEASURE_HEIGHT = 10000;
 
+#if !defined(AX_TARGET_OS_TVOS)
 static UIImpactFeedbackGenerator *impactFeedbackGenerator[3];
 static UINotificationFeedbackGenerator *notificationFeedbackGenerator;
 static UISelectionFeedbackGenerator *selectionFeedbackGenerator;
+#endif
 
 static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedString* attributedString, CGFloat fontSize)
 {
@@ -666,6 +668,7 @@ void Device::vibrate(float duration)
 
 void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle style)
 {
+#if !defined(AX_TARGET_OS_TVOS)
     if (impactFeedbackGenerator[style] == nullptr) {
         UIImpactFeedbackStyle impactStyle;
         switch (style) {
@@ -683,26 +686,32 @@ void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle style)
         impactFeedbackGenerator[style] = [[UIImpactFeedbackGenerator alloc] initWithStyle:impactStyle];
     }
     [impactFeedbackGenerator[style] prepare];
+#endif
 }
 
 void Device::impactOccurred(ImpactFeedbackStyle style)
 {
+#if !defined(AX_TARGET_OS_TVOS)
     if (impactFeedbackGenerator[style] == nullptr) {
         prepareImpactFeedbackGenerator(style);
     }
     [impactFeedbackGenerator[style] impactOccurred];
+#endif
 }
 
 void Device::prepareNotificationFeedbackGenerator()
 {
+#if !defined(AX_TARGET_OS_TVOS)
     if (notificationFeedbackGenerator == nullptr) {
         notificationFeedbackGenerator = [[UINotificationFeedbackGenerator alloc] init];
     }
     [notificationFeedbackGenerator prepare];
+#endif
 }
 
 void Device::notificationOccurred(NotificationFeedbackType type)
 {
+#if !defined(AX_TARGET_OS_TVOS)
     if (notificationFeedbackGenerator == nullptr) {
         prepareNotificationFeedbackGenerator();
     }
@@ -721,23 +730,28 @@ void Device::notificationOccurred(NotificationFeedbackType type)
     }
 
     [notificationFeedbackGenerator notificationOccurred:notificationType];
+#endif
 }
 
 void Device::prepareSelectionFeedbackGenerator()
 {
+#if !defined(AX_TARGET_OS_TVOS)
     if (selectionFeedbackGenerator == nullptr) {
         selectionFeedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
     }
     [selectionFeedbackGenerator prepare];
+#endif
 }
 
 void Device::selectionChanged()
 {
+#if !defined(AX_TARGET_OS_TVOS)
     if (selectionFeedbackGenerator == nullptr) {
         prepareSelectionFeedbackGenerator();
     }
     [selectionFeedbackGenerator selectionChanged];
     [selectionFeedbackGenerator prepare];
+#endif
 }
 
 NS_AX_END
