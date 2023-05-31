@@ -114,6 +114,11 @@ void AxmolRenderer::DeviceLost()
     }
 }
 
+void AxmolRenderer::SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb)
+{
+    GLViewImpl::sharedOpenGLView()->SetQueueOperationCb(std::move(cb));
+}
+
 void AxmolRenderer::Draw(size_t width, size_t height, float dpi, DisplayOrientations orientation)
 {
     auto glView = GLViewImpl::sharedOpenGLView();

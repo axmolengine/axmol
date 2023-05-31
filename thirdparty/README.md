@@ -40,6 +40,11 @@
 - Version: 1.2.2
 - License: BSL-1.0
 
+## moodycamel::ConcurrentQueue
+- [![Upstream](https://img.shields.io/github/v/tag/cameron314/concurrentqueue?label=Upstream)](https://github.com/cameron314/concurrentqueue)
+- Version: git 1.0.3-810f621
+- License: BSL-1.0
+
 ## ConvertUTF
 - Upstream: https://github.com/llvm/llvm-project
 - Version: git 2946cd7 without LLVM-specific wrappers of the functions

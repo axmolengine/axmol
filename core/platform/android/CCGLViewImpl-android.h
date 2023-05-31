@@ -45,6 +45,8 @@ public:
     void setIMEKeyboardState(bool bOpen) override;
     virtual Rect getSafeAreaRect() const override;
 
+    void queueOperation(void (*op)(void*), void* param) override;
+
 protected:
     GLViewImpl();
     virtual ~GLViewImpl();
