@@ -357,12 +357,14 @@ if(AX_WITH_ALSOFT)
         set(OBOE_SOURCE "${CMAKE_CURRENT_LIST_DIR}/oboe" CACHE STRING "Source directory for Oboe." FORCE)
     endif()
 
-    if(WINRT)
-        set(ALSOFT_BACKEND_WASAPI OFF CACHE BOOL "Enable WASAPI backend" FORCE)
+    if(WINDOWS)
+        set(ALSOFT_BACKEND_WASAPI (NOT WINRT) CACHE BOOL "Enable WASAPI backend" FORCE)
         set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
         set(ALSOFT_BACKEND_DSOUND OFF CACHE BOOL "Enable DirectSound backend" FORCE)
         set(ALSOFT_BACKEND_WINMM OFF CACHE BOOL "Enable Windows Multimedia backend" FORCE)
     endif()
+
+    target_include_directories(thirdparty PUBLIC openal)
 
     add_subdirectory(openal EXCLUDE_FROM_ALL)
     configure_target_outdir(common)
@@ -372,10 +374,6 @@ if(AX_WITH_ALSOFT)
         OpenAL
     )
     target_compile_definitions(thirdparty PUBLIC AX_USE_ALSOFT=1)
-
-    if(WINRT)
-        target_include_directories(thirdparty PUBLIC openal-uwp/include)
-    endif()
 
     if(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )
