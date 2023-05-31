@@ -2,6 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021-2023 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -61,6 +62,22 @@ public:
         TOP_LEFT     = 0x11, /** Horizontal left and vertical top. */
     };
 
+    /** Defines the impact haptic feedback style. */
+    enum ImpactFeedbackStyle
+    {
+        ImpactFeedbackStyleLight = 0,
+        ImpactFeedbackStyleMedium,
+        ImpactFeedbackStyleHeavy
+    };
+
+    /** Defines the notification haptic feedback style. */
+    enum NotificationFeedbackType
+    {
+        NotificationFeedbackTypeSuccess = 0,
+        NotificationFeedbackTypeWarning,
+        NotificationFeedbackTypeError
+    };
+
     /**
      *  Gets the DPI of device
      *  @return The DPI of device.
@@ -92,6 +109,45 @@ public:
      * @param duration The duration in seconds.
      */
     static void vibrate(float duration);
+
+    /**
+     * Prepare haptic feedback impact with selected style
+     * If haptic feedback is not supported, then invoking this method has no effect.
+     * @param style The style of the feedback.
+     */
+    static void prepareImpactFeedbackGenerator(ImpactFeedbackStyle style);
+
+    /**
+     * Generate haptic feedback impact with selected style
+     * If haptic feedback is not supported, then invoking this method has no effect.
+     */
+    static void impactOccurred(ImpactFeedbackStyle style);
+
+    /**
+     * Prepare haptic feedback notification
+     * If haptic feedback is not supported, then invoking this method has no effect.
+     * @param style The style of the feedback.
+     */
+    static void prepareNotificationFeedbackGenerator();
+
+    /**
+     * Generate haptic feedback notification with selected type
+     * If haptic feedback is not supported, then invoking this method has no effect.
+     */
+    static void notificationOccurred(NotificationFeedbackType type);
+
+    /**
+     * Prepare haptic feedback selection
+     * If haptic feedback is not supported, then invoking this method has no effect.
+     * @param style The style of the feedback.
+     */
+    static void prepareSelectionFeedbackGenerator();
+
+    /**
+     * Generate haptic feedback selection changed
+     * If haptic feedback is not supported, then invoking this method has no effect.
+     */
+    static void selectionChanged();
 
     /**
      * Gets texture data for text.

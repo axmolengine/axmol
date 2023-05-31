@@ -288,6 +288,18 @@ public class AxmolEngine {
         sVibrateService.vibrate((long)(duration * 1000));
     }
 
+    public static void impactOccurred(int style) {
+        ((AxmolActivity)sActivity).impactOccurred(style);
+    }
+
+    public static void notificationOccurred(int type) {
+        ((AxmolActivity)sActivity).notificationOccurred(type);
+    }
+
+    public static void selectionChanged() {
+        ((AxmolActivity)sActivity).selectionChanged();
+    }
+
  	public static String getVersion() {
  		try {
  			String version = AxmolActivity.getContext().getPackageManager().getPackageInfo(AxmolActivity.getContext().getPackageName(), 0).versionName;
