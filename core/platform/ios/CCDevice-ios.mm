@@ -2,6 +2,7 @@
  Copyright (c) 2010-2012 cocos2d-x.org
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 2021-2023 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -42,6 +43,12 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 const float MAX_MEASURE_HEIGHT = 10000;
+
+#if !defined(AX_TARGET_OS_TVOS)
+static UIImpactFeedbackGenerator *impactFeedbackGenerator[3];
+static UINotificationFeedbackGenerator *notificationFeedbackGenerator;
+static UISelectionFeedbackGenerator *selectionFeedbackGenerator;
+#endif
 
 static NSAttributedString* __attributedStringWithFontSize(NSMutableAttributedString* attributedString, CGFloat fontSize)
 {
@@ -657,6 +664,94 @@ void Device::vibrate(float duration)
         // play the less annoying tick noise or one of your own
         AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
     }
+}
+
+void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle style)
+{
+#if !defined(AX_TARGET_OS_TVOS)
+    if (impactFeedbackGenerator[style] == nullptr) {
+        UIImpactFeedbackStyle impactStyle;
+        switch (style) {
+            case ImpactFeedbackStyleLight:
+                impactStyle = UIImpactFeedbackStyleLight;
+                break;
+            case ImpactFeedbackStyleMedium:
+                impactStyle = UIImpactFeedbackStyleMedium;
+                break;
+            case ImpactFeedbackStyleHeavy:
+                impactStyle = UIImpactFeedbackStyleHeavy;
+                break;
+        }
+
+        impactFeedbackGenerator[style] = [[UIImpactFeedbackGenerator alloc] initWithStyle:impactStyle];
+    }
+    [impactFeedbackGenerator[style] prepare];
+#endif
+}
+
+void Device::impactOccurred(ImpactFeedbackStyle style)
+{
+#if !defined(AX_TARGET_OS_TVOS)
+    if (impactFeedbackGenerator[style] == nullptr) {
+        prepareImpactFeedbackGenerator(style);
+    }
+    [impactFeedbackGenerator[style] impactOccurred];
+#endif
+}
+
+void Device::prepareNotificationFeedbackGenerator()
+{
+#if !defined(AX_TARGET_OS_TVOS)
+    if (notificationFeedbackGenerator == nullptr) {
+        notificationFeedbackGenerator = [[UINotificationFeedbackGenerator alloc] init];
+    }
+    [notificationFeedbackGenerator prepare];
+#endif
+}
+
+void Device::notificationOccurred(NotificationFeedbackType type)
+{
+#if !defined(AX_TARGET_OS_TVOS)
+    if (notificationFeedbackGenerator == nullptr) {
+        prepareNotificationFeedbackGenerator();
+    }
+
+    UINotificationFeedbackType notificationType;
+    switch (type) {
+        case NotificationFeedbackTypeError:
+            notificationType = UINotificationFeedbackTypeError;
+            break;
+        case NotificationFeedbackTypeSuccess:
+            notificationType = UINotificationFeedbackTypeSuccess;
+            break;
+        case NotificationFeedbackTypeWarning:
+            notificationType = UINotificationFeedbackTypeWarning;
+            break;
+    }
+
+    [notificationFeedbackGenerator notificationOccurred:notificationType];
+#endif
+}
+
+void Device::prepareSelectionFeedbackGenerator()
+{
+#if !defined(AX_TARGET_OS_TVOS)
+    if (selectionFeedbackGenerator == nullptr) {
+        selectionFeedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
+    }
+    [selectionFeedbackGenerator prepare];
+#endif
+}
+
+void Device::selectionChanged()
+{
+#if !defined(AX_TARGET_OS_TVOS)
+    if (selectionFeedbackGenerator == nullptr) {
+        prepareSelectionFeedbackGenerator();
+    }
+    [selectionFeedbackGenerator selectionChanged];
+    [selectionFeedbackGenerator prepare];
+#endif
 }
 
 NS_AX_END
