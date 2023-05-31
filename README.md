@@ -30,7 +30,7 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
-## Reimplemented VideoPlayer(VideoTexture) based on Redesigned MediaEngine
+## Reimplemented VideoPlayer(VideoTexture)
 
 |  Platform             |    MediaEngine    | Video Compress Format | Video Pixel Format   | Backend            |
 |-----------------------|-------------------|-----------------------|----------------------|--------------------|
@@ -41,10 +41,6 @@
 | Apple iOS             |    in progress    | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
 | Android               |    planned        | H264                  | RGB32                |                    |
 
-## Thirdparty
-
-- All thirdparty prebuilt libs are built from <https://github.com/axmolengine/buildware> via github actions automatically.
-  
 ## Highlighted Features
 
 - Windows UWP support, refer to: https://github.com/axmolengine/axmol/pull/1108
