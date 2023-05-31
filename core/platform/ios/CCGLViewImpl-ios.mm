@@ -282,4 +282,11 @@ Rect GLViewImpl::getSafeAreaRect() const
     return GLView::getSafeAreaRect();
 }
 
+void GLViewImpl::queueOperation(void (*op)(void*), void* param)
+{
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^(void){
+        op(param);
+    }];
+}
+
 NS_AX_END

@@ -181,8 +181,6 @@ Director::~Director()
 #if AX_ENABLE_SCRIPT_BINDING
     ScriptEngineManager::destroyInstance();
 #endif
-
-    PoolManager::destroyInstance();
 }
 
 void Director::setDefaultValues()
@@ -1472,6 +1470,10 @@ void Director::startAnimation(SetIntervalReason reason)
 
 void Director::mainLoop()
 {
+#if defined(AX_PLATFORM_PC)
+    _openGLView->processOperations();
+#endif
+
     if (_purgeDirectorInNextLoop)
     {
         _purgeDirectorInNextLoop = false;

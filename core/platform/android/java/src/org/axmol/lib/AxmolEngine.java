@@ -114,6 +114,15 @@ public class AxmolEngine {
         nativeRunOnGLThread(r);
     }
 
+    public static void queueOperation(final long op, final long param) {
+        ((AxmolActivity)sActivity).getGLSurfaceView().queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                AxmolEngine.nativeInvoke(op, param);
+            }
+        });
+    }
+
     private static boolean sInited = false;
     public static void init(final Activity activity) {
         sActivity = activity;
@@ -241,6 +250,8 @@ public class AxmolEngine {
     private static native void nativeSetContext(final Object pContext, final Object pAssetManager);
 
     private static native void nativeSetAudioDeviceInfo(boolean isSupportLowLatency, int deviceSampleRate, int audioBufferSizeInFames);
+
+    public static native void nativeInvoke(long op, long param);
 
     public static String getPackageName() {
         return AxmolEngine.sPackageName;

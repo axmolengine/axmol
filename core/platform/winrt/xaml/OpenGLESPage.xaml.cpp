@@ -215,6 +215,13 @@ void OpenGLESPage::TerminateApp()
     Windows::UI::Xaml::Application::Current->Exit();
 }
 
+void OpenGLESPage::ProcessOperations()
+{
+    std::function<void()> op;
+    while (mOperations.try_pop(op))
+        op();
+}
+
 void OpenGLESPage::StartRenderLoop()
 {
     // If the render loop is already running then do not start another thread.
@@ -237,12 +244,17 @@ void OpenGLESPage::StartRenderLoop()
         GLsizei panelHeight = 0;
         mOpenGLES->GetSurfaceDimensions(mRenderSurface, &panelWidth, &panelHeight);
 
-        if (mRenderer.get() == nullptr)
-        {
+        if (!mRenderer)
             mRenderer = std::make_shared<AxmolRenderer>(panelWidth, panelHeight, mDpi, mOrientation, dispatcher, swapChainPanel);
-        }
 
         mRenderer->Resume();
+
+        void* thiz = (void*)this;
+        mRenderer->SetQueueOperationCb([thiz](ax::AsyncOperation op, void* param) {
+            auto thisUnsafe = reinterpret_cast<OpenGLESPage ^>(thiz);
+            thisUnsafe->mOperations.push([=]() { op(param); });
+            thisUnsafe->mSleepCondition.notify_one();
+        });
 
         while (action->Status == Windows::Foundation::AsyncStatus::Started)
         {
@@ -268,12 +280,15 @@ void OpenGLESPage::StartRenderLoop()
                 }
                 else // spurious wake up
                 {
+                    ProcessOperations();
                     continue;
                 }
             }
 
+            ProcessOperations();
+
             mOpenGLES->GetSurfaceDimensions(mRenderSurface, &panelWidth, &panelHeight);
-            mRenderer.get()->Draw(panelWidth, panelHeight, mDpi, mOrientation);
+            mRenderer->Draw(panelWidth, panelHeight, mDpi, mOrientation);
 
             // Recreate input dispatch
             if (GLViewImpl::sharedOpenGLView() && mCursorVisible != GLViewImpl::sharedOpenGLView()->isCursorVisible())
