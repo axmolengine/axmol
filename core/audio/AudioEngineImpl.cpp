@@ -280,6 +280,9 @@ ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notifi
 #endif
 
 #if AX_USE_ALSOFT
+#if !defined(AL_API_NOEXCEPT17)
+#define AL_API_NOEXCEPT17
+#endif
 static void alcReopenDeviceOnAxmolThread()
 {
     Director::getInstance()->getOpenGLView()->queueOperation([](void*) {
