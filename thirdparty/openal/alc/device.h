@@ -4,11 +4,9 @@
 #include <atomic>
 #include <memory>
 #include <mutex>
-#include <optional>
 #include <stdint.h>
 #include <string>
 #include <utility>
-#include <vector>
 
 #include "AL/alc.h"
 #include "AL/alext.h"
@@ -19,6 +17,7 @@
 #include "core/device.h"
 #include "inprogext.h"
 #include "intrusive_ptr.h"
+#include "vector.h"
 
 #ifdef ALSOFT_EAX
 #include "al/eax/x_ram.h"
@@ -95,7 +94,7 @@ struct ALCdevice : public al::intrusive_ref<ALCdevice>, DeviceBase {
     uint AuxiliaryEffectSlotMax{};
 
     std::string mHrtfName;
-    std::vector<std::string> mHrtfList;
+    al::vector<std::string> mHrtfList;
     ALCenum mHrtfStatus{ALC_FALSE};
 
     enum class OutputMode1 : ALCenum {
@@ -118,15 +117,15 @@ struct ALCdevice : public al::intrusive_ref<ALCdevice>, DeviceBase {
 
     // Map of Buffers for this device
     std::mutex BufferLock;
-    std::vector<BufferSubList> BufferList;
+    al::vector<BufferSubList> BufferList;
 
     // Map of Effects for this device
     std::mutex EffectLock;
-    std::vector<EffectSubList> EffectList;
+    al::vector<EffectSubList> EffectList;
 
     // Map of Filters for this device
     std::mutex FilterLock;
-    std::vector<FilterSubList> FilterList;
+    al::vector<FilterSubList> FilterList;
 
 #ifdef ALSOFT_EAX
     ALuint eax_x_ram_free_size{eax_x_ram_max_size};
@@ -142,28 +141,25 @@ struct ALCdevice : public al::intrusive_ref<ALCdevice>, DeviceBase {
     { return GetConfigValueBool(DeviceName.c_str(), block, key, def); }
 
     template<typename T>
-    inline std::optional<T> configValue(const char *block, const char *key) = delete;
+    inline al::optional<T> configValue(const char *block, const char *key) = delete;
 
     DEF_NEWDEL(ALCdevice)
 };
 
 template<>
-inline std::optional<std::string> ALCdevice::configValue(const char *block, const char *key)
+inline al::optional<std::string> ALCdevice::configValue(const char *block, const char *key)
 { return ConfigValueStr(DeviceName.c_str(), block, key); }
 template<>
-inline std::optional<int> ALCdevice::configValue(const char *block, const char *key)
+inline al::optional<int> ALCdevice::configValue(const char *block, const char *key)
 { return ConfigValueInt(DeviceName.c_str(), block, key); }
 template<>
-inline std::optional<uint> ALCdevice::configValue(const char *block, const char *key)
+inline al::optional<uint> ALCdevice::configValue(const char *block, const char *key)
 { return ConfigValueUInt(DeviceName.c_str(), block, key); }
 template<>
-inline std::optional<float> ALCdevice::configValue(const char *block, const char *key)
+inline al::optional<float> ALCdevice::configValue(const char *block, const char *key)
 { return ConfigValueFloat(DeviceName.c_str(), block, key); }
 template<>
-inline std::optional<bool> ALCdevice::configValue(const char *block, const char *key)
+inline al::optional<bool> ALCdevice::configValue(const char *block, const char *key)
 { return ConfigValueBool(DeviceName.c_str(), block, key); }
-
-/** Stores the latest ALC device error. */
-void alcSetError(ALCdevice *device, ALCenum errorCode);
 
 #endif

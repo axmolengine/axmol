@@ -1,13 +1,14 @@
 #ifndef CORE_DEVICE_H
 #define CORE_DEVICE_H
 
+#include <stddef.h>
+
 #include <array>
 #include <atomic>
 #include <bitset>
 #include <chrono>
 #include <memory>
-#include <stddef.h>
-#include <stdint.h>
+#include <mutex>
 #include <string>
 
 #include "almalloc.h"
@@ -42,20 +43,20 @@ using uint = unsigned int;
 #define DEFAULT_NUM_UPDATES  3
 
 
-enum class DeviceType : uint8_t {
+enum class DeviceType : unsigned char {
     Playback,
     Capture,
     Loopback
 };
 
 
-enum class RenderMode : uint8_t {
+enum class RenderMode : unsigned char {
     Normal,
     Pairwise,
     Hrtf
 };
 
-enum class StereoEncoding : uint8_t {
+enum class StereoEncoding : unsigned char {
     Basic,
     Uhj,
     Hrtf,

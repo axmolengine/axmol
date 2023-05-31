@@ -141,14 +141,15 @@ template<>
 template<>
 bool PitchShifterCommitter::commit(const EaxEffectProps &props)
 {
-    if(props == mEaxProps)
+    if(props.mType == mEaxProps.mType
+        && mEaxProps.mPitchShifter.lCoarseTune == props.mPitchShifter.lCoarseTune
+        && mEaxProps.mPitchShifter.lFineTune == props.mPitchShifter.lFineTune)
         return false;
 
     mEaxProps = props;
 
-    auto &eaxprops = std::get<EAXPITCHSHIFTERPROPERTIES>(props);
-    mAlProps.Pshifter.CoarseTune = static_cast<int>(eaxprops.lCoarseTune);
-    mAlProps.Pshifter.FineTune = static_cast<int>(eaxprops.lFineTune);
+    mAlProps.Pshifter.CoarseTune = static_cast<int>(mEaxProps.mPitchShifter.lCoarseTune);
+    mAlProps.Pshifter.FineTune = static_cast<int>(mEaxProps.mPitchShifter.lFineTune);
 
     return true;
 }
@@ -156,34 +157,33 @@ bool PitchShifterCommitter::commit(const EaxEffectProps &props)
 template<>
 void PitchShifterCommitter::SetDefaults(EaxEffectProps &props)
 {
-    props = EAXPITCHSHIFTERPROPERTIES{EAXPITCHSHIFTER_DEFAULTCOARSETUNE,
-        EAXPITCHSHIFTER_DEFAULTFINETUNE};
+    props.mType = EaxEffectType::PitchShifter;
+    props.mPitchShifter.lCoarseTune = EAXPITCHSHIFTER_DEFAULTCOARSETUNE;
+    props.mPitchShifter.lFineTune = EAXPITCHSHIFTER_DEFAULTFINETUNE;
 }
 
 template<>
-void PitchShifterCommitter::Get(const EaxCall &call, const EaxEffectProps &props_)
+void PitchShifterCommitter::Get(const EaxCall &call, const EaxEffectProps &props)
 {
-    auto &props = std::get<EAXPITCHSHIFTERPROPERTIES>(props_);
     switch(call.get_property_id())
     {
     case EAXPITCHSHIFTER_NONE: break;
-    case EAXPITCHSHIFTER_ALLPARAMETERS: call.set_value<Exception>(props); break;
-    case EAXPITCHSHIFTER_COARSETUNE: call.set_value<Exception>(props.lCoarseTune); break;
-    case EAXPITCHSHIFTER_FINETUNE: call.set_value<Exception>(props.lFineTune); break;
+    case EAXPITCHSHIFTER_ALLPARAMETERS: call.set_value<Exception>(props.mPitchShifter); break;
+    case EAXPITCHSHIFTER_COARSETUNE: call.set_value<Exception>(props.mPitchShifter.lCoarseTune); break;
+    case EAXPITCHSHIFTER_FINETUNE: call.set_value<Exception>(props.mPitchShifter.lFineTune); break;
     default: fail_unknown_property_id();
     }
 }
 
 template<>
-void PitchShifterCommitter::Set(const EaxCall &call, EaxEffectProps &props_)
+void PitchShifterCommitter::Set(const EaxCall &call, EaxEffectProps &props)
 {
-    auto &props = std::get<EAXPITCHSHIFTERPROPERTIES>(props_);
     switch(call.get_property_id())
     {
     case EAXPITCHSHIFTER_NONE: break;
-    case EAXPITCHSHIFTER_ALLPARAMETERS: defer<AllValidator>(call, props); break;
-    case EAXPITCHSHIFTER_COARSETUNE: defer<CoarseTuneValidator>(call, props.lCoarseTune); break;
-    case EAXPITCHSHIFTER_FINETUNE: defer<FineTuneValidator>(call, props.lFineTune); break;
+    case EAXPITCHSHIFTER_ALLPARAMETERS: defer<AllValidator>(call, props.mPitchShifter); break;
+    case EAXPITCHSHIFTER_COARSETUNE: defer<CoarseTuneValidator>(call, props.mPitchShifter.lCoarseTune); break;
+    case EAXPITCHSHIFTER_FINETUNE: defer<FineTuneValidator>(call, props.mPitchShifter.lFineTune); break;
     default: fail_unknown_property_id();
     }
 }

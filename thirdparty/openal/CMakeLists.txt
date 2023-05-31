@@ -28,8 +28,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "iOS")
                 FORCE)
         endif()
     endif()
-elseif(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
-    set(ALSOFT_UWP TRUE)
 endif()
 
 set(CMAKE_C_VISIBILITY_PRESET hidden)
@@ -78,8 +76,8 @@ if(NOT CMAKE_DEBUG_POSTFIX)
 endif()
 
 set(DEFAULT_TARGET_PROPS
-    # Require C++17.
-    CXX_STANDARD 17
+    # Require C++14.
+    CXX_STANDARD 14
     CXX_STANDARD_REQUIRED TRUE
     # Prefer C11, but support C99 and earlier when possible.
     C_STANDARD 11)
@@ -189,20 +187,6 @@ set(LIB_VERSION_NUM ${LIB_MAJOR_VERSION},${LIB_MINOR_VERSION},${LIB_REVISION},0)
 
 set(EXPORT_DECL "")
 
-
-# Some systems erroneously require the __STDC_FORMAT_MACROS macro to be defined
-# to get the fixed-width integer type formatter macros.
-check_cxx_source_compiles("#include <cinttypes>
-#include <cstdio>
-int main()
-{
-    int64_t i64{};
-    std::printf(\"%\" PRId64, i64);
-}"
-HAVE_STDC_FORMAT_MACROS)
-if(NOT HAVE_STDC_FORMAT_MACROS)
-    set(CPP_DEFS ${CPP_DEFS} __STDC_FORMAT_MACROS)
-endif()
 
 if(NOT WIN32)
     # Check if _POSIX_C_SOURCE and _XOPEN_SOURCE needs to be set for POSIX functions
@@ -607,6 +591,7 @@ check_symbol_exists(getopt unistd.h HAVE_GETOPT)
 # router, and certain tools and examples.
 set(COMMON_OBJS
     common/albit.h
+    common/albyte.h
     common/alcomplex.cpp
     common/alcomplex.h
     common/aldeque.h
@@ -616,6 +601,7 @@ set(COMMON_OBJS
     common/almalloc.h
     common/alnumbers.h
     common/alnumeric.h
+    common/aloptional.h
     common/alspan.h
     common/alstring.cpp
     common/alstring.h
@@ -758,9 +744,6 @@ set(OPENAL_OBJS
     al/auxeffectslot.h
     al/buffer.cpp
     al/buffer.h
-    al/debug.cpp
-    al/debug.h
-    al/direct_defs.h
     al/effect.cpp
     al/effect.h
     al/effects/autowah.cpp
@@ -817,9 +800,6 @@ set(ALC_OBJS
     alc/effects/pshifter.cpp
     alc/effects/reverb.cpp
     alc/effects/vmorpher.cpp
-    alc/events.cpp
-    alc/events.h
-    alc/export_list.h
     alc/inprogext.h
     alc/panning.cpp)
 
@@ -1014,42 +994,65 @@ endif()
 
 # Check Windows-only backends
 if(WIN32)
-    if (NOT ALSOFT_UWP)
-        # Check MMSystem backend
-        option(ALSOFT_BACKEND_WINMM "Enable Windows Multimedia backend" ON)
-        option(ALSOFT_REQUIRE_WINMM "Require Windows Multimedia backend" OFF)
-        if(ALSOFT_BACKEND_WINMM)
-            set(HAVE_WINMM 1)
-            set(BACKENDS "${BACKENDS} WinMM,")
-            set(ALC_OBJS ${ALC_OBJS} alc/backends/winmm.cpp alc/backends/winmm.h)
-            # There doesn't seem to be good way to search for winmm.lib for MSVC.
-            # find_library doesn't find it without being told to look in a specific
-            # place in the WindowsSDK, but it links anyway. If there ends up being
-            # Windows targets without this, another means to detect it is needed.
-            set(EXTRA_LIBS winmm ${EXTRA_LIBS})
-        endif()
-
-        # Check DSound backend
-        option(ALSOFT_BACKEND_DSOUND "Enable DirectSound backend" ON)
-        option(ALSOFT_REQUIRE_DSOUND "Require DirectSound backend" OFF)
-        if(ALSOFT_BACKEND_DSOUND)
-            check_include_file(dsound.h HAVE_DSOUND_H)
-            if(DXSDK_DIR)
-                find_path(DSOUND_INCLUDE_DIR NAMES "dsound.h"
-                    PATHS "${DXSDK_DIR}" PATH_SUFFIXES include
-                    DOC "The DirectSound include directory")
+    
+    if(${CMAKE_SYSTEM_NAME} MATCHES "WindowsStore")
+        # WindowsStore (UWP) Apps only works with xaudio2 backend
+	    # WaveFile could compile and link, but no voice could be hear when play sound
+	    # Other backends can't be compiled because may Win32 APIs doesn't present in WINRT
+	    # APIs
+        option(ALSOFT_BACKEND_XAUDIO2 "Enable Windows XAudio2 backend" ON)
+        option(ALSOFT_REQUIRE_XAUDIO2 "Require Windows Xaudio2 backend" ON)
+        if (ALSOFT_BACKEND_XAUDIO2)
+            set(EXTRA_LIBS runtimeobject ${EXTRA_LIBS})
+            check_include_file(xaudio2.h HAVE_XAUDIO2_H)
+            if(HAVE_XAUDIO2_H)
+                set(HAVE_XAUDIO2 1)
+                set(BACKENDS "${BACKENDS} Xaudio2,")
+                set(ALC_OBJS ${ALC_OBJS} alc/backends/xaudio2.cpp alc/backends/xaudio2.h)
+                set(EXTRA_LIBS Xaudio2 ${EXTRA_LIBS})
+                set_source_files_properties(alc/backends/xaudio2.cpp PROPERTIES COMPILE_FLAGS /ZW)
+                # Add compile and link flags required C++/CX
+                set(C_FLAGS "/Zc:twoPhase-" ${C_FLAGS})
+                set(LINKER_FLAGS_DEBUG "/nodefaultlib:vccorlibd /nodefaultlib:msvcrtd vccorlibd.lib msvcrtd.lib ${LINKER_FLAGS_DEBUG}")
+                set(LINKER_FLAGS_RELEASE "/nodefaultlib:vccorlib /nodefaultlib:msvcrt vccorlib.lib msvcrt.lib ${LINKER_FLAGS_RELEASE}")
             endif()
-            if(HAVE_DSOUND_H OR DSOUND_INCLUDE_DIR)
-                set(HAVE_DSOUND 1)
-                set(BACKENDS "${BACKENDS} DirectSound,")
-                set(ALC_OBJS ${ALC_OBJS} alc/backends/dsound.cpp alc/backends/dsound.h)
+        endif()
+    endif()
+
+    # Check MMSystem backend
+    option(ALSOFT_BACKEND_WINMM "Enable Windows Multimedia backend" ON)
+    option(ALSOFT_REQUIRE_WINMM "Require Windows Multimedia backend" OFF)
+    if(ALSOFT_BACKEND_WINMM)
+        set(HAVE_WINMM 1)
+        set(BACKENDS "${BACKENDS} WinMM,")
+        set(ALC_OBJS ${ALC_OBJS} alc/backends/winmm.cpp alc/backends/winmm.h)
+        # There doesn't seem to be good way to search for winmm.lib for MSVC.
+        # find_library doesn't find it without being told to look in a specific
+        # place in the WindowsSDK, but it links anyway. If there ends up being
+        # Windows targets without this, another means to detect it is needed.
+        set(EXTRA_LIBS winmm ${EXTRA_LIBS})
+    endif()
+
+    # Check DSound backend
+    option(ALSOFT_BACKEND_DSOUND "Enable DirectSound backend" ON)
+    option(ALSOFT_REQUIRE_DSOUND "Require DirectSound backend" OFF)
+    if(ALSOFT_BACKEND_DSOUND)
+        check_include_file(dsound.h HAVE_DSOUND_H)
+        if(DXSDK_DIR)
+            find_path(DSOUND_INCLUDE_DIR NAMES "dsound.h"
+                PATHS "${DXSDK_DIR}" PATH_SUFFIXES include
+                DOC "The DirectSound include directory")
+        endif()
+        if(HAVE_DSOUND_H OR DSOUND_INCLUDE_DIR)
+            set(HAVE_DSOUND 1)
+            set(BACKENDS "${BACKENDS} DirectSound,")
+            set(ALC_OBJS ${ALC_OBJS} alc/backends/dsound.cpp alc/backends/dsound.h)
 
                 if(NOT HAVE_DSOUND_H)
                     set(INC_PATHS ${INC_PATHS} ${DSOUND_INCLUDE_DIR})
                 endif()
             endif()
         endif()
-    endif()
 
     # Check for WASAPI backend
     option(ALSOFT_BACKEND_WASAPI "Enable WASAPI backend" ON)
@@ -1060,18 +1063,7 @@ if(WIN32)
             set(HAVE_WASAPI 1)
             set(BACKENDS  "${BACKENDS} WASAPI,")
             set(ALC_OBJS  ${ALC_OBJS} alc/backends/wasapi.cpp alc/backends/wasapi.h)
-            if(ALSOFT_UWP)
-                set_source_files_properties(alc/backends/wasapi.cpp alc/alconfig.cpp PROPERTIES COMPILE_FLAGS /ZW)
-            endif()
         endif()
-    endif()
-
-    # Setup properly link flags for UWP
-    if(ALSOFT_UWP AND HAVE_WASAPI)
-        # Add compile and link flags required C++/CX
-        set(C_FLAGS "/Zc:twoPhase-" ${C_FLAGS})
-        set(LINKER_FLAGS_DEBUG "/nodefaultlib:vccorlibd /nodefaultlib:msvcrtd vccorlibd.lib msvcrtd.lib ${LINKER_FLAGS_DEBUG}")
-        set(LINKER_FLAGS_RELEASE "/nodefaultlib:vccorlib /nodefaultlib:msvcrt vccorlib.lib msvcrt.lib ${LINKER_FLAGS_RELEASE}")
     endif()
 endif()
 if(ALSOFT_REQUIRE_WINMM AND NOT HAVE_WINMM)
@@ -1416,20 +1408,18 @@ else()
     endif()
     target_link_libraries(${IMPL_TARGET} PRIVATE common ${LINKER_FLAGS} ${EXTRA_LIBS} ${MATH_LIB})
 
-    if(ALSOFT_UWP AND HAVE_WASAPI)
-        set_target_properties(${IMPL_TARGET} PROPERTIES
-            LINK_FLAGS_DEBUG "${LINKER_FLAGS_DEBUG}"
-            LINK_FLAGS_RELEASE "${LINKER_FLAGS_RELEASE}"
-            LINK_FLAGS_MINSIZEREL "${LINKER_FLAGS_RELEASE}"
-            LINK_FLAGS_RELWITHDEBINFO "${LINKER_FLAGS_RELEASE}"
-        )
-    endif()
-
     if(NOT WIN32 AND NOT APPLE)
         # FIXME: This doesn't put a dependency on the version script. Changing
         # the version script will not cause a relink as it should.
         set_property(TARGET ${IMPL_TARGET} APPEND_STRING PROPERTY
             LINK_FLAGS " -Wl,--version-script=${OpenAL_SOURCE_DIR}/libopenal.version")
+    elseif(WIN32)
+        set_target_properties(${IMPL_TARGET} PROPERTIES 
+            LINK_FLAGS_DEBUG "${LINKER_FLAGS_DEBUG}"
+            LINK_FLAGS_RELEASE "${LINKER_FLAGS_RELEASE}"
+            LINK_FLAGS_MINSIZEREL "${LINKER_FLAGS_RELEASE}"
+            LINK_FLAGS_RELWITHDEBINFO "${LINKER_FLAGS_RELEASE}"
+        )
     endif()
 
     if(APPLE AND ALSOFT_OSX_FRAMEWORK)
@@ -1538,10 +1528,7 @@ if(FPMATH_SET)
     message(STATUS "Building with SSE${FPMATH_SET} codegen")
     message(STATUS "")
 endif()
-if(ALSOFT_UWP)
-    message(STATUS "Building with UWP support")
-    message(STATUS "")
-endif()
+
 if(ALSOFT_EAX)
     message(STATUS "Building with legacy EAX extension support")
     message(STATUS "")

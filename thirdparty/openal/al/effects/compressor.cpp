@@ -118,43 +118,43 @@ template<>
 template<>
 bool CompressorCommitter::commit(const EaxEffectProps &props)
 {
-    if(props == mEaxProps)
+    if(props.mType == mEaxProps.mType
+        && props.mCompressor.ulOnOff == mEaxProps.mCompressor.ulOnOff)
         return false;
 
     mEaxProps = props;
 
-    mAlProps.Compressor.OnOff = (std::get<EAXAGCCOMPRESSORPROPERTIES>(props).ulOnOff != 0);
+    mAlProps.Compressor.OnOff = (props.mCompressor.ulOnOff != 0);
     return true;
 }
 
 template<>
 void CompressorCommitter::SetDefaults(EaxEffectProps &props)
 {
-    props = EAXAGCCOMPRESSORPROPERTIES{EAXAGCCOMPRESSOR_DEFAULTONOFF};
+    props.mType = EaxEffectType::Compressor;
+    props.mCompressor.ulOnOff = EAXAGCCOMPRESSOR_DEFAULTONOFF;
 }
 
 template<>
-void CompressorCommitter::Get(const EaxCall &call, const EaxEffectProps &props_)
+void CompressorCommitter::Get(const EaxCall &call, const EaxEffectProps &props)
 {
-    auto &props = std::get<EAXAGCCOMPRESSORPROPERTIES>(props_);
     switch(call.get_property_id())
     {
     case EAXAGCCOMPRESSOR_NONE: break;
-    case EAXAGCCOMPRESSOR_ALLPARAMETERS: call.set_value<Exception>(props); break;
-    case EAXAGCCOMPRESSOR_ONOFF: call.set_value<Exception>(props.ulOnOff); break;
+    case EAXAGCCOMPRESSOR_ALLPARAMETERS: call.set_value<Exception>(props.mCompressor); break;
+    case EAXAGCCOMPRESSOR_ONOFF: call.set_value<Exception>(props.mCompressor.ulOnOff); break;
     default: fail_unknown_property_id();
     }
 }
 
 template<>
-void CompressorCommitter::Set(const EaxCall &call, EaxEffectProps &props_)
+void CompressorCommitter::Set(const EaxCall &call, EaxEffectProps &props)
 {
-    auto &props = std::get<EAXAGCCOMPRESSORPROPERTIES>(props_);
     switch(call.get_property_id())
     {
     case EAXAGCCOMPRESSOR_NONE: break;
-    case EAXAGCCOMPRESSOR_ALLPARAMETERS: defer<AllValidator>(call, props); break;
-    case EAXAGCCOMPRESSOR_ONOFF: defer<OnOffValidator>(call, props.ulOnOff); break;
+    case EAXAGCCOMPRESSOR_ALLPARAMETERS: defer<AllValidator>(call, props.mCompressor); break;
+    case EAXAGCCOMPRESSOR_ONOFF: defer<OnOffValidator>(call, props.mCompressor.ulOnOff); break;
     default: fail_unknown_property_id();
     }
 }

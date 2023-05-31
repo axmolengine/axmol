@@ -3,9 +3,9 @@
 
 #include <array>
 #include <memory>
-#include <optional>
 #include <string>
 
+#include "aloptional.h"
 #include "core/ambidefs.h"
 
 /* Helpers to read .ambdec configuration files. */
@@ -49,7 +49,7 @@ struct AmbDecConf {
 
     ~AmbDecConf();
 
-    std::optional<std::string> load(const char *fname) noexcept;
+    al::optional<std::string> load(const char *fname) noexcept;
 };
 
 #endif /* CORE_AMBDEC_H */

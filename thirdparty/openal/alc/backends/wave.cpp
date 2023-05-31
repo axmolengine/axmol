@@ -32,9 +32,9 @@
 #include <exception>
 #include <functional>
 #include <thread>
-#include <vector>
 
 #include "albit.h"
+#include "albyte.h"
 #include "alc/alconfig.h"
 #include "almalloc.h"
 #include "alnumeric.h"
@@ -44,6 +44,7 @@
 #include "opthelpers.h"
 #include "strutils.h"
 #include "threads.h"
+#include "vector.h"
 
 
 namespace {
@@ -104,7 +105,7 @@ struct WaveBackend final : public BackendBase {
     FILE *mFile{nullptr};
     long mDataStart{-1};
 
-    std::vector<std::byte> mBuffer;
+    al::vector<al::byte> mBuffer;
 
     std::atomic<bool> mKillNow{true};
     std::thread mThread;

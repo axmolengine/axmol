@@ -3,26 +3,21 @@
 
 #include "helpers.h"
 
-#if defined(_WIN32)
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
-
 #include <algorithm>
 #include <cerrno>
 #include <cstdarg>
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
-#include <limits>
 #include <mutex>
-#include <optional>
+#include <limits>
 #include <string>
 #include <tuple>
 
 #include "almalloc.h"
 #include "alfstream.h"
 #include "alnumeric.h"
+#include "aloptional.h"
 #include "alspan.h"
 #include "alstring.h"
 #include "logging.h"
@@ -43,10 +38,11 @@ bool AllowRTTimeLimit{true};
 
 const PathNamePair &GetProcBinary()
 {
-    static std::optional<PathNamePair> procbin;
+    static al::optional<PathNamePair> procbin;
     if(procbin) return *procbin;
-#if !defined(ALSOFT_UWP)
-    auto fullpath = std::vector<WCHAR>(256);
+
+#if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
+    auto fullpath = al::vector<WCHAR>(256);
     DWORD len{GetModuleFileNameW(nullptr, fullpath.data(), static_cast<DWORD>(fullpath.size()))};
     while(len == fullpath.size())
     {
@@ -63,16 +59,7 @@ const PathNamePair &GetProcBinary()
     fullpath.resize(len);
     if(fullpath.back() != 0)
         fullpath.push_back(0);
-#else
-    auto exePath               = __wargv[0];
-    if (!exePath)
-    {
-        ERR("Failed to get process name: error %lu\n", GetLastError());
-        procbin.emplace();
-        return *procbin;
-    }
-    std::vector<WCHAR> fullpath{exePath, exePath + wcslen(exePath) + 1};
-#endif
+
     std::replace(fullpath.begin(), fullpath.end(), '/', '\\');
     auto sep = std::find(fullpath.rbegin()+1, fullpath.rend(), '\\');
     if(sep != fullpath.rend())
@@ -84,21 +71,23 @@ const PathNamePair &GetProcBinary()
         procbin.emplace(std::string{}, wstr_to_utf8(fullpath.data()));
 
     TRACE("Got binary: %s, %s\n", procbin->path.c_str(), procbin->fname.c_str());
+#endif
     return *procbin;
 }
 
 namespace {
 
-void DirectorySearch(const char *path, const char *ext, std::vector<std::string> *const results)
+void DirectorySearch(const char *path, const char *ext, al::vector<std::string> *const results)
 {
     std::string pathstr{path};
     pathstr += "\\*";
     pathstr += ext;
     TRACE("Searching %s\n", pathstr.c_str());
 
+#if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
     std::wstring wpath{utf8_to_wstr(pathstr.c_str())};
     WIN32_FIND_DATAW fdata;
-    HANDLE hdl{FindFirstFileExW(wpath.c_str(), FindExInfoStandard, &fdata, FindExSearchNameMatch, NULL, 0)};
+    HANDLE hdl{FindFirstFileW(wpath.c_str(), &fdata)};
     if(hdl == INVALID_HANDLE_VALUE) return;
 
     const auto base = results->size();
@@ -111,15 +100,17 @@ void DirectorySearch(const char *path, const char *ext, std::vector<std::string>
         str += wstr_to_utf8(fdata.cFileName);
     } while(FindNextFileW(hdl, &fdata));
     FindClose(hdl);
+    
     const al::span<std::string> newlist{results->data()+base, results->size()-base};
     std::sort(newlist.begin(), newlist.end());
     for(const auto &name : newlist)
         TRACE(" got %s\n", name.c_str());
+#    endif
 }
 
 } // namespace
 
-std::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
+al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
 {
     auto is_slash = [](int c) noexcept -> int { return (c == '\\' || c == '/'); };
 
@@ -127,7 +118,7 @@ std::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
     std::lock_guard<std::mutex> _{search_lock};
 
     /* If the path is absolute, use it directly. */
-    std::vector<std::string> results;
+    al::vector<std::string> results;
     if(isalpha(subdir[0]) && subdir[1] == ':' && is_slash(subdir[2]))
     {
         std::string path{subdir};
@@ -150,6 +141,7 @@ std::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
         if(is_slash(path.back()))
             path.pop_back();
     }
+#if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
     else if(WCHAR *cwdbuf{_wgetcwd(nullptr, 0)})
     {
         path = wstr_to_utf8(cwdbuf);
@@ -157,12 +149,13 @@ std::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
             path.pop_back();
         free(cwdbuf);
     }
+#endif
     else
         path = ".";
     std::replace(path.begin(), path.end(), '/', '\\');
     DirectorySearch(path.c_str(), ext, &results);
 
-#if !defined(ALSOFT_UWP)
+#if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
     /* Search the local and global data dirs. */
     static const int ids[2]{ CSIDL_APPDATA, CSIDL_COMMON_APPDATA };
     for(int id : ids)
@@ -186,7 +179,7 @@ std::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
 
 void SetRTPriority(void)
 {
-#if !defined(ALSOFT_UWP)
+#if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
     if(RTPrioLevel > 0)
     {
         if(!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL))
@@ -226,10 +219,10 @@ void SetRTPriority(void)
 
 const PathNamePair &GetProcBinary()
 {
-    static std::optional<PathNamePair> procbin;
+    static al::optional<PathNamePair> procbin;
     if(procbin) return *procbin;
 
-    std::vector<char> pathname;
+    al::vector<char> pathname;
 #ifdef __FreeBSD__
     size_t pathlen;
     int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
@@ -312,7 +305,7 @@ const PathNamePair &GetProcBinary()
 
 namespace {
 
-void DirectorySearch(const char *path, const char *ext, std::vector<std::string> *const results)
+void DirectorySearch(const char *path, const char *ext, al::vector<std::string> *const results)
 {
     TRACE("Searching %s for *%s\n", path, ext);
     DIR *dir{opendir(path)};
@@ -348,12 +341,12 @@ void DirectorySearch(const char *path, const char *ext, std::vector<std::string>
 
 } // namespace
 
-std::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
+al::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
 {
     static std::mutex search_lock;
     std::lock_guard<std::mutex> _{search_lock};
 
-    std::vector<std::string> results;
+    al::vector<std::string> results;
     if(subdir[0] == '/')
     {
         DirectorySearch(subdir, ext, &results);
@@ -365,7 +358,7 @@ std::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
         DirectorySearch(localpath->c_str(), ext, &results);
     else
     {
-        std::vector<char> cwdbuf(256);
+        al::vector<char> cwdbuf(256);
         while(!getcwd(cwdbuf.data(), cwdbuf.size()))
         {
             if(errno != ERANGE)

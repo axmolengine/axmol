@@ -43,21 +43,21 @@ std::wstring utf8_to_wstr(const char *str)
 
 namespace al {
 
-std::optional<std::string> getenv(const char *envname)
+al::optional<std::string> getenv(const char *envname)
 {
     const char *str{std::getenv(envname)};
     if(str && str[0] != '\0')
         return str;
-    return std::nullopt;
+    return al::nullopt;
 }
 
 #ifdef _WIN32
-std::optional<std::wstring> getenv(const WCHAR *envname)
+al::optional<std::wstring> getenv(const WCHAR *envname)
 {
     const WCHAR *str{_wgetenv(envname)};
     if(str && str[0] != L'\0')
         return str;
-    return std::nullopt;
+    return al::nullopt;
 }
 #endif
 

@@ -358,7 +358,7 @@ if(AX_WITH_ALSOFT)
     endif()
 
     if(WINDOWS)
-        set(ALSOFT_BACKEND_WASAPI ON CACHE BOOL "Enable WASAPI backend" FORCE)
+        set(ALSOFT_BACKEND_WASAPI (NOT WINRT) CACHE BOOL "Enable WASAPI backend" FORCE)
         set(ALSOFT_BACKEND_WAVE OFF CACHE BOOL "Enable Wave Writer backend" FORCE)
         set(ALSOFT_BACKEND_DSOUND OFF CACHE BOOL "Enable DirectSound backend" FORCE)
         set(ALSOFT_BACKEND_WINMM OFF CACHE BOOL "Enable Windows Multimedia backend" FORCE)

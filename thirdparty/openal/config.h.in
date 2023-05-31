@@ -43,6 +43,9 @@
 /* Define if we have the SndIO backend */
 #cmakedefine HAVE_SNDIO
 
+/* Define if we have the xaudio2 backend */
+#cmakedefine HAVE_XAUDIO2
+
 /* Define if we have the WASAPI backend */
 #cmakedefine HAVE_WASAPI
 
@@ -117,6 +120,3 @@
 
 /* Define the installation data directory */
 #cmakedefine ALSOFT_INSTALL_DATADIR "@ALSOFT_INSTALL_DATADIR@"
-
-/* Define whether build alsoft for winuwp */
-#cmakedefine ALSOFT_UWP
