@@ -290,6 +290,7 @@ static void alcReopenDeviceOnAxmolThread()
     });
 }
 
+#    if defined(_WIN32) && defined(ALC_SOFT_system_events)
 static void ALC_APIENTRY _onALCEvent(ALCenum eventType,
                                      ALCdevice* device,
                                      ALCsizei length,
@@ -299,6 +300,7 @@ static void ALC_APIENTRY _onALCEvent(ALCenum eventType,
     if (eventType == ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT)
         alcReopenDeviceOnAxmolThread();
 }
+#    endif
 
 static void AL_APIENTRY _onALEvent(ALenum eventType,
                                    ALuint object,
@@ -449,7 +451,7 @@ bool AudioEngineImpl::init()
             const char* version = alGetString(AL_VERSION);
 
 #if AX_USE_ALSOFT
-#    if defined(_WIN32)
+#    if defined(_WIN32) && defined(ALC_SOFT_system_events)
             auto alcEventControlSOFTProc  = (decltype(alcEventControlSOFT)*)alGetProcAddress("alcEventControlSOFT");
             auto alcEventCallbackSOFTProc = (decltype(alcEventCallbackSOFT)*)alGetProcAddress("alcEventCallbackSOFT");
             if (alcEventControlSOFTProc && alcEventCallbackSOFTProc)
