@@ -394,7 +394,7 @@ static void InitCtxFuncs(DriverIface &iface)
 }
 
 
-ALC_API ALCdevice* ALC_APIENTRY alcOpenDevice(const ALCchar *devicename) noexcept
+ALC_API ALCdevice* ALC_APIENTRY alcOpenDevice(const ALCchar *devicename)
 {
     ALCdevice *device = nullptr;
     ALint idx = 0;
@@ -459,7 +459,7 @@ ALC_API ALCdevice* ALC_APIENTRY alcOpenDevice(const ALCchar *devicename) noexcep
     return device;
 }
 
-ALC_API ALCboolean ALC_APIENTRY alcCloseDevice(ALCdevice *device) noexcept
+ALC_API ALCboolean ALC_APIENTRY alcCloseDevice(ALCdevice *device)
 {
     ALint idx;
 
@@ -475,7 +475,7 @@ ALC_API ALCboolean ALC_APIENTRY alcCloseDevice(ALCdevice *device) noexcept
 }
 
 
-ALC_API ALCcontext* ALC_APIENTRY alcCreateContext(ALCdevice *device, const ALCint *attrlist) noexcept
+ALC_API ALCcontext* ALC_APIENTRY alcCreateContext(ALCdevice *device, const ALCint *attrlist)
 {
     ALCcontext *context;
     ALint idx;
@@ -498,7 +498,7 @@ ALC_API ALCcontext* ALC_APIENTRY alcCreateContext(ALCdevice *device, const ALCin
     return context;
 }
 
-ALC_API ALCboolean ALC_APIENTRY alcMakeContextCurrent(ALCcontext *context) noexcept
+ALC_API ALCboolean ALC_APIENTRY alcMakeContextCurrent(ALCcontext *context)
 {
     ALint idx = -1;
 
@@ -542,7 +542,7 @@ ALC_API ALCboolean ALC_APIENTRY alcMakeContextCurrent(ALCcontext *context) noexc
     return ALC_TRUE;
 }
 
-ALC_API void ALC_APIENTRY alcProcessContext(ALCcontext *context) noexcept
+ALC_API void ALC_APIENTRY alcProcessContext(ALCcontext *context)
 {
     if(context)
     {
@@ -553,7 +553,7 @@ ALC_API void ALC_APIENTRY alcProcessContext(ALCcontext *context) noexcept
     LastError.store(ALC_INVALID_CONTEXT);
 }
 
-ALC_API void ALC_APIENTRY alcSuspendContext(ALCcontext *context) noexcept
+ALC_API void ALC_APIENTRY alcSuspendContext(ALCcontext *context)
 {
     if(context)
     {
@@ -564,7 +564,7 @@ ALC_API void ALC_APIENTRY alcSuspendContext(ALCcontext *context) noexcept
     LastError.store(ALC_INVALID_CONTEXT);
 }
 
-ALC_API void ALC_APIENTRY alcDestroyContext(ALCcontext *context) noexcept
+ALC_API void ALC_APIENTRY alcDestroyContext(ALCcontext *context)
 {
     ALint idx;
 
@@ -578,14 +578,14 @@ ALC_API void ALC_APIENTRY alcDestroyContext(ALCcontext *context) noexcept
     ContextIfaceMap.removeByKey(context);
 }
 
-ALC_API ALCcontext* ALC_APIENTRY alcGetCurrentContext(void) noexcept
+ALC_API ALCcontext* ALC_APIENTRY alcGetCurrentContext(void)
 {
     DriverIface *iface = GetThreadDriver();
     if(!iface) iface = CurrentCtxDriver.load();
     return iface ? iface->alcGetCurrentContext() : nullptr;
 }
 
-ALC_API ALCdevice* ALC_APIENTRY alcGetContextsDevice(ALCcontext *context) noexcept
+ALC_API ALCdevice* ALC_APIENTRY alcGetContextsDevice(ALCcontext *context)
 {
     if(context)
     {
@@ -598,7 +598,7 @@ ALC_API ALCdevice* ALC_APIENTRY alcGetContextsDevice(ALCcontext *context) noexce
 }
 
 
-ALC_API ALCenum ALC_APIENTRY alcGetError(ALCdevice *device) noexcept
+ALC_API ALCenum ALC_APIENTRY alcGetError(ALCdevice *device)
 {
     if(device)
     {
@@ -609,7 +609,7 @@ ALC_API ALCenum ALC_APIENTRY alcGetError(ALCdevice *device) noexcept
     return LastError.exchange(ALC_NO_ERROR);
 }
 
-ALC_API ALCboolean ALC_APIENTRY alcIsExtensionPresent(ALCdevice *device, const ALCchar *extname) noexcept
+ALC_API ALCboolean ALC_APIENTRY alcIsExtensionPresent(ALCdevice *device, const ALCchar *extname)
 {
     const char *ptr;
     size_t len;
@@ -641,7 +641,7 @@ ALC_API ALCboolean ALC_APIENTRY alcIsExtensionPresent(ALCdevice *device, const A
     return ALC_FALSE;
 }
 
-ALC_API void* ALC_APIENTRY alcGetProcAddress(ALCdevice *device, const ALCchar *funcname) noexcept
+ALC_API void* ALC_APIENTRY alcGetProcAddress(ALCdevice *device, const ALCchar *funcname)
 {
     if(device)
     {
@@ -661,7 +661,7 @@ ALC_API void* ALC_APIENTRY alcGetProcAddress(ALCdevice *device, const ALCchar *f
     return (iter != alcFunctions.cend()) ? iter->address : nullptr;
 }
 
-ALC_API ALCenum ALC_APIENTRY alcGetEnumValue(ALCdevice *device, const ALCchar *enumname) noexcept
+ALC_API ALCenum ALC_APIENTRY alcGetEnumValue(ALCdevice *device, const ALCchar *enumname)
 {
     if(device)
     {
@@ -681,7 +681,7 @@ ALC_API ALCenum ALC_APIENTRY alcGetEnumValue(ALCdevice *device, const ALCchar *e
     return (iter != alcEnumerations.cend()) ? iter->value : 0;
 }
 
-ALC_API const ALCchar* ALC_APIENTRY alcGetString(ALCdevice *device, ALCenum param) noexcept
+ALC_API const ALCchar* ALC_APIENTRY alcGetString(ALCdevice *device, ALCenum param)
 {
     if(device)
     {
@@ -817,7 +817,7 @@ ALC_API const ALCchar* ALC_APIENTRY alcGetString(ALCdevice *device, ALCenum para
     return nullptr;
 }
 
-ALC_API void ALC_APIENTRY alcGetIntegerv(ALCdevice *device, ALCenum param, ALCsizei size, ALCint *values) noexcept
+ALC_API void ALC_APIENTRY alcGetIntegerv(ALCdevice *device, ALCenum param, ALCsizei size, ALCint *values)
 {
     if(device)
     {
@@ -872,7 +872,7 @@ ALC_API void ALC_APIENTRY alcGetIntegerv(ALCdevice *device, ALCenum param, ALCsi
 }
 
 
-ALC_API ALCdevice* ALC_APIENTRY alcCaptureOpenDevice(const ALCchar *devicename, ALCuint frequency, ALCenum format, ALCsizei buffersize) noexcept
+ALC_API ALCdevice* ALC_APIENTRY alcCaptureOpenDevice(const ALCchar *devicename, ALCuint frequency, ALCenum format, ALCsizei buffersize)
 {
     ALCdevice *device = nullptr;
     ALint idx = 0;
@@ -924,7 +924,7 @@ ALC_API ALCdevice* ALC_APIENTRY alcCaptureOpenDevice(const ALCchar *devicename, 
     return device;
 }
 
-ALC_API ALCboolean ALC_APIENTRY alcCaptureCloseDevice(ALCdevice *device) noexcept
+ALC_API ALCboolean ALC_APIENTRY alcCaptureCloseDevice(ALCdevice *device)
 {
     ALint idx;
 
@@ -939,7 +939,7 @@ ALC_API ALCboolean ALC_APIENTRY alcCaptureCloseDevice(ALCdevice *device) noexcep
     return ALC_TRUE;
 }
 
-ALC_API void ALC_APIENTRY alcCaptureStart(ALCdevice *device) noexcept
+ALC_API void ALC_APIENTRY alcCaptureStart(ALCdevice *device)
 {
     if(device)
     {
@@ -950,7 +950,7 @@ ALC_API void ALC_APIENTRY alcCaptureStart(ALCdevice *device) noexcept
     LastError.store(ALC_INVALID_DEVICE);
 }
 
-ALC_API void ALC_APIENTRY alcCaptureStop(ALCdevice *device) noexcept
+ALC_API void ALC_APIENTRY alcCaptureStop(ALCdevice *device)
 {
     if(device)
     {
@@ -961,7 +961,7 @@ ALC_API void ALC_APIENTRY alcCaptureStop(ALCdevice *device) noexcept
     LastError.store(ALC_INVALID_DEVICE);
 }
 
-ALC_API void ALC_APIENTRY alcCaptureSamples(ALCdevice *device, ALCvoid *buffer, ALCsizei samples) noexcept
+ALC_API void ALC_APIENTRY alcCaptureSamples(ALCdevice *device, ALCvoid *buffer, ALCsizei samples)
 {
     if(device)
     {
@@ -973,7 +973,7 @@ ALC_API void ALC_APIENTRY alcCaptureSamples(ALCdevice *device, ALCvoid *buffer, 
 }
 
 
-ALC_API ALCboolean ALC_APIENTRY alcSetThreadContext(ALCcontext *context) noexcept
+ALC_API ALCboolean ALC_APIENTRY alcSetThreadContext(ALCcontext *context)
 {
     ALCenum err = ALC_INVALID_CONTEXT;
     ALint idx;
@@ -1009,7 +1009,7 @@ ALC_API ALCboolean ALC_APIENTRY alcSetThreadContext(ALCcontext *context) noexcep
     return ALC_FALSE;
 }
 
-ALC_API ALCcontext* ALC_APIENTRY alcGetThreadContext(void) noexcept
+ALC_API ALCcontext* ALC_APIENTRY alcGetThreadContext(void)
 {
     DriverIface *iface = GetThreadDriver();
     if(iface) return iface->alcGetThreadContext();

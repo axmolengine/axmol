@@ -1,13 +1,13 @@
 
 #include "config.h"
 
-#include <optional>
 #include <stdexcept>
 
 #include "AL/al.h"
 #include "AL/efx.h"
 
 #include "alc/effects/base.h"
+#include "aloptional.h"
 #include "core/logging.h"
 #include "effects.h"
 
@@ -27,14 +27,14 @@ static_assert(FlangerMaxDelay >= AL_FLANGER_MAX_DELAY, "Flanger max delay too sm
 static_assert(AL_CHORUS_WAVEFORM_SINUSOID == AL_FLANGER_WAVEFORM_SINUSOID, "Chorus/Flanger waveform value mismatch");
 static_assert(AL_CHORUS_WAVEFORM_TRIANGLE == AL_FLANGER_WAVEFORM_TRIANGLE, "Chorus/Flanger waveform value mismatch");
 
-inline std::optional<ChorusWaveform> WaveformFromEnum(ALenum type)
+inline al::optional<ChorusWaveform> WaveformFromEnum(ALenum type)
 {
     switch(type)
     {
     case AL_CHORUS_WAVEFORM_SINUSOID: return ChorusWaveform::Sinusoid;
     case AL_CHORUS_WAVEFORM_TRIANGLE: return ChorusWaveform::Triangle;
     }
-    return std::nullopt;
+    return al::nullopt;
 }
 inline ALenum EnumFromWaveform(ChorusWaveform type)
 {
@@ -294,7 +294,9 @@ namespace {
 struct EaxChorusTraits {
     using Props = EAXCHORUSPROPERTIES;
     using Committer = EaxChorusCommitter;
+    static constexpr auto Field = &EaxEffectProps::mChorus;
 
+    static constexpr auto eax_effect_type() { return EaxEffectType::Chorus; }
     static constexpr auto efx_effect() { return AL_EFFECT_CHORUS; }
 
     static constexpr auto eax_none_param_id() { return EAXCHORUS_NONE; }
@@ -359,7 +361,9 @@ struct EaxChorusTraits {
 struct EaxFlangerTraits {
     using Props = EAXFLANGERPROPERTIES;
     using Committer = EaxFlangerCommitter;
+    static constexpr auto Field = &EaxEffectProps::mFlanger;
 
+    static constexpr auto eax_effect_type() { return EaxEffectType::Flanger; }
     static constexpr auto efx_effect() { return AL_EFFECT_FLANGER; }
 
     static constexpr auto eax_none_param_id() { return EAXFLANGER_NONE; }
@@ -426,6 +430,8 @@ struct ChorusFlangerEffect {
     using Traits = TTraits;
     using Committer = typename Traits::Committer;
     using Exception = typename Committer::Exception;
+
+    static constexpr auto Field = Traits::Field;
 
     struct WaveformValidator {
         void operator()(unsigned long ulWaveform) const
@@ -508,7 +514,8 @@ struct ChorusFlangerEffect {
 public:
     static void SetDefaults(EaxEffectProps &props)
     {
-        auto&& all = props.emplace<typename Traits::Props>();
+        auto&& all = props.*Field;
+        props.mType = Traits::eax_effect_type();
         all.ulWaveform = Traits::eax_default_waveform();
         all.lPhase = Traits::eax_default_phase();
         all.flRate = Traits::eax_default_rate();
@@ -520,7 +527,7 @@ public:
 
     static void Get(const EaxCall &call, const EaxEffectProps &props)
     {
-        auto&& all = std::get<typename Traits::Props>(props);
+        auto&& all = props.*Field;
         switch(call.get_property_id())
         {
         case Traits::eax_none_param_id():
@@ -561,7 +568,7 @@ public:
 
     static void Set(const EaxCall &call, EaxEffectProps &props)
     {
-        auto&& all = std::get<typename Traits::Props>(props);
+        auto&& all = props.*Field;
         switch(call.get_property_id())
         {
         case Traits::eax_none_param_id():
@@ -602,11 +609,18 @@ public:
 
     static bool Commit(const EaxEffectProps &props, EaxEffectProps &props_, EffectProps &al_props_)
     {
-        if(props == props)
-            return false;
+        if(props.mType == props_.mType)
+        {
+            auto&& src = props_.*Field;
+            auto&& dst = props.*Field;
+            if(dst.ulWaveform == src.ulWaveform && dst.lPhase == src.lPhase
+                && dst.flRate == src.flRate && dst.flDepth == src.flDepth
+                && dst.flFeedback == src.flFeedback && dst.flDelay == src.flDelay)
+                return false;
+        }
 
         props_ = props;
-        auto&& dst = std::get<typename Traits::Props>(props);
+        auto&& dst = props.*Field;
 
         al_props_.Chorus.Waveform = Traits::eax_waveform(dst.ulWaveform);
         al_props_.Chorus.Phase = static_cast<int>(dst.lPhase);

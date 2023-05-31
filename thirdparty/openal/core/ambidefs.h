@@ -14,26 +14,26 @@ using uint = unsigned int;
  * needed will be (o+1)**2, thus zero-order has 1, first-order has 4, second-
  * order has 9, third-order has 16, and fourth-order has 25.
  */
-inline constexpr uint8_t MaxAmbiOrder{3};
+constexpr uint8_t MaxAmbiOrder{3};
 constexpr inline size_t AmbiChannelsFromOrder(size_t order) noexcept
 { return (order+1) * (order+1); }
-inline constexpr size_t MaxAmbiChannels{AmbiChannelsFromOrder(MaxAmbiOrder)};
+constexpr size_t MaxAmbiChannels{AmbiChannelsFromOrder(MaxAmbiOrder)};
 
 /* A bitmask of ambisonic channels for 0 to 4th order. This only specifies up
  * to 4th order, which is the highest order a 32-bit mask value can specify (a
  * 64-bit mask could handle up to 7th order).
  */
-inline constexpr uint Ambi0OrderMask{0x00000001};
-inline constexpr uint Ambi1OrderMask{0x0000000f};
-inline constexpr uint Ambi2OrderMask{0x000001ff};
-inline constexpr uint Ambi3OrderMask{0x0000ffff};
-inline constexpr uint Ambi4OrderMask{0x01ffffff};
+constexpr uint Ambi0OrderMask{0x00000001};
+constexpr uint Ambi1OrderMask{0x0000000f};
+constexpr uint Ambi2OrderMask{0x000001ff};
+constexpr uint Ambi3OrderMask{0x0000ffff};
+constexpr uint Ambi4OrderMask{0x01ffffff};
 
 /* A bitmask of ambisonic channels with height information. If none of these
  * channels are used/needed, there's no height (e.g. with most surround sound
  * speaker setups). This is ACN ordering, with bit 0 being ACN 0, etc.
  */
-inline constexpr uint AmbiPeriphonicMask{0xfe7ce4};
+constexpr uint AmbiPeriphonicMask{0xfe7ce4};
 
 /* The maximum number of ambisonic channels for 2D (non-periphonic)
  * representation. This is 2 per each order above zero-order, plus 1 for zero-
@@ -41,7 +41,7 @@ inline constexpr uint AmbiPeriphonicMask{0xfe7ce4};
  */
 constexpr inline size_t Ambi2DChannelsFromOrder(size_t order) noexcept
 { return order*2 + 1; }
-inline constexpr size_t MaxAmbi2DChannels{Ambi2DChannelsFromOrder(MaxAmbiOrder)};
+constexpr size_t MaxAmbi2DChannels{Ambi2DChannelsFromOrder(MaxAmbiOrder)};
 
 
 /* NOTE: These are scale factors as applied to Ambisonics content. Decoder

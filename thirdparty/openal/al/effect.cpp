@@ -31,7 +31,6 @@
 #include <new>
 #include <numeric>
 #include <utility>
-#include <vector>
 
 #include "AL/al.h"
 #include "AL/alc.h"
@@ -49,8 +48,8 @@
 #include "alstring.h"
 #include "core/except.h"
 #include "core/logging.h"
-#include "direct_defs.h"
 #include "opthelpers.h"
+#include "vector.h"
 
 #ifdef ALSOFT_EAX
 #include <cassert>
@@ -211,7 +210,7 @@ void FreeEffect(ALCdevice *device, ALeffect *effect)
     const size_t lidx{id >> 6};
     const ALuint slidx{id & 0x3f};
 
-    std::destroy_at(effect);
+    al::destroy_at(effect);
 
     device->EffectList[lidx].FreeMask |= 1_u64 << slidx;
 }
@@ -231,8 +230,12 @@ inline ALeffect *LookupEffect(ALCdevice *device, ALuint id)
 
 } // namespace
 
-FORCE_ALIGN void AL_APIENTRY alGenEffectsDirect(ALCcontext *context, ALsizei n, ALuint *effects) noexcept
+AL_API void AL_APIENTRY alGenEffects(ALsizei n, ALuint *effects)
+START_API_FUNC
 {
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
+
     if(n < 0) UNLIKELY
         context->setError(AL_INVALID_VALUE, "Generating %d effects", n);
     if(n <= 0) UNLIKELY return;
@@ -256,7 +259,7 @@ FORCE_ALIGN void AL_APIENTRY alGenEffectsDirect(ALCcontext *context, ALsizei n, 
         /* Store the allocated buffer IDs in a separate local list, to avoid
          * modifying the user storage in case of failure.
          */
-        std::vector<ALuint> ids;
+        al::vector<ALuint> ids;
         ids.reserve(static_cast<ALuint>(n));
         do {
             ALeffect *effect{AllocEffect(device)};
@@ -265,10 +268,14 @@ FORCE_ALIGN void AL_APIENTRY alGenEffectsDirect(ALCcontext *context, ALsizei n, 
         std::copy(ids.cbegin(), ids.cend(), effects);
     }
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alDeleteEffectsDirect(ALCcontext *context, ALsizei n,
-    const ALuint *effects) noexcept
+AL_API void AL_APIENTRY alDeleteEffects(ALsizei n, const ALuint *effects)
+START_API_FUNC
 {
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
+
     if(n < 0) UNLIKELY
         context->setError(AL_INVALID_VALUE, "Deleting %d effects", n);
     if(n <= 0) UNLIKELY return;
@@ -296,19 +303,29 @@ FORCE_ALIGN void AL_APIENTRY alDeleteEffectsDirect(ALCcontext *context, ALsizei 
     };
     std::for_each(effects, effects_end, delete_effect);
 }
+END_API_FUNC
 
-FORCE_ALIGN ALboolean AL_APIENTRY alIsEffectDirect(ALCcontext *context, ALuint effect) noexcept
+AL_API ALboolean AL_APIENTRY alIsEffect(ALuint effect)
+START_API_FUNC
 {
-    ALCdevice *device{context->mALDevice.get()};
-    std::lock_guard<std::mutex> _{device->EffectLock};
-    if(!effect || LookupEffect(device, effect))
-        return AL_TRUE;
+    ContextRef context{GetContextRef()};
+    if(context) LIKELY
+    {
+        ALCdevice *device{context->mALDevice.get()};
+        std::lock_guard<std::mutex> _{device->EffectLock};
+        if(!effect || LookupEffect(device, effect))
+            return AL_TRUE;
+    }
     return AL_FALSE;
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alEffectiDirect(ALCcontext *context, ALuint effect, ALenum param,
-    ALint value) noexcept
+AL_API void AL_APIENTRY alEffecti(ALuint effect, ALenum param, ALint value)
+START_API_FUNC
 {
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
+
     ALCdevice *device{context->mALDevice.get()};
     std::lock_guard<std::mutex> _{device->EffectLock};
 
@@ -344,16 +361,20 @@ FORCE_ALIGN void AL_APIENTRY alEffectiDirect(ALCcontext *context, ALuint effect,
         context->setError(e.errorCode(), "%s", e.what());
     }
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alEffectivDirect(ALCcontext *context, ALuint effect, ALenum param,
-    const ALint *values) noexcept
+AL_API void AL_APIENTRY alEffectiv(ALuint effect, ALenum param, const ALint *values)
+START_API_FUNC
 {
     switch(param)
     {
     case AL_EFFECT_TYPE:
-        alEffectiDirect(context, effect, param, values[0]);
+        alEffecti(effect, param, values[0]);
         return;
     }
+
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
 
     ALCdevice *device{context->mALDevice.get()};
     std::lock_guard<std::mutex> _{device->EffectLock};
@@ -370,10 +391,14 @@ FORCE_ALIGN void AL_APIENTRY alEffectivDirect(ALCcontext *context, ALuint effect
         context->setError(e.errorCode(), "%s", e.what());
     }
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alEffectfDirect(ALCcontext *context, ALuint effect, ALenum param,
-    ALfloat value) noexcept
+AL_API void AL_APIENTRY alEffectf(ALuint effect, ALenum param, ALfloat value)
+START_API_FUNC
 {
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
+
     ALCdevice *device{context->mALDevice.get()};
     std::lock_guard<std::mutex> _{device->EffectLock};
 
@@ -389,10 +414,14 @@ FORCE_ALIGN void AL_APIENTRY alEffectfDirect(ALCcontext *context, ALuint effect,
         context->setError(e.errorCode(), "%s", e.what());
     }
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alEffectfvDirect(ALCcontext *context, ALuint effect, ALenum param,
-    const ALfloat *values) noexcept
+AL_API void AL_APIENTRY alEffectfv(ALuint effect, ALenum param, const ALfloat *values)
+START_API_FUNC
 {
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
+
     ALCdevice *device{context->mALDevice.get()};
     std::lock_guard<std::mutex> _{device->EffectLock};
 
@@ -408,10 +437,14 @@ FORCE_ALIGN void AL_APIENTRY alEffectfvDirect(ALCcontext *context, ALuint effect
         context->setError(e.errorCode(), "%s", e.what());
     }
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alGetEffectiDirect(ALCcontext *context, ALuint effect, ALenum param,
-    ALint *value) noexcept
+AL_API void AL_APIENTRY alGetEffecti(ALuint effect, ALenum param, ALint *value)
+START_API_FUNC
 {
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
+
     ALCdevice *device{context->mALDevice.get()};
     std::lock_guard<std::mutex> _{device->EffectLock};
 
@@ -429,16 +462,20 @@ FORCE_ALIGN void AL_APIENTRY alGetEffectiDirect(ALCcontext *context, ALuint effe
         context->setError(e.errorCode(), "%s", e.what());
     }
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alGetEffectivDirect(ALCcontext *context, ALuint effect, ALenum param,
-    ALint *values) noexcept
+AL_API void AL_APIENTRY alGetEffectiv(ALuint effect, ALenum param, ALint *values)
+START_API_FUNC
 {
     switch(param)
     {
     case AL_EFFECT_TYPE:
-        alGetEffectiDirect(context, effect, param, values);
+        alGetEffecti(effect, param, values);
         return;
     }
+
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
 
     ALCdevice *device{context->mALDevice.get()};
     std::lock_guard<std::mutex> _{device->EffectLock};
@@ -455,10 +492,14 @@ FORCE_ALIGN void AL_APIENTRY alGetEffectivDirect(ALCcontext *context, ALuint eff
         context->setError(e.errorCode(), "%s", e.what());
     }
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alGetEffectfDirect(ALCcontext *context, ALuint effect, ALenum param,
-    ALfloat *value) noexcept
+AL_API void AL_APIENTRY alGetEffectf(ALuint effect, ALenum param, ALfloat *value)
+START_API_FUNC
 {
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
+
     ALCdevice *device{context->mALDevice.get()};
     std::lock_guard<std::mutex> _{device->EffectLock};
 
@@ -474,10 +515,14 @@ FORCE_ALIGN void AL_APIENTRY alGetEffectfDirect(ALCcontext *context, ALuint effe
         context->setError(e.errorCode(), "%s", e.what());
     }
 }
+END_API_FUNC
 
-FORCE_ALIGN void AL_APIENTRY alGetEffectfvDirect(ALCcontext *context, ALuint effect, ALenum param,
-    ALfloat *values) noexcept
+AL_API void AL_APIENTRY alGetEffectfv(ALuint effect, ALenum param, ALfloat *values)
+START_API_FUNC
 {
+    ContextRef context{GetContextRef()};
+    if(!context) UNLIKELY return;
+
     ALCdevice *device{context->mALDevice.get()};
     std::lock_guard<std::mutex> _{device->EffectLock};
 
@@ -493,18 +538,7 @@ FORCE_ALIGN void AL_APIENTRY alGetEffectfvDirect(ALCcontext *context, ALuint eff
         context->setError(e.errorCode(), "%s", e.what());
     }
 }
-
-AL_API DECL_FUNC2(void, alGenEffects, ALsizei, ALuint*)
-AL_API DECL_FUNC2(void, alDeleteEffects, ALsizei, const ALuint*)
-AL_API DECL_FUNC1(ALboolean, alIsEffect, ALuint)
-AL_API DECL_FUNC3(void, alEffectf, ALuint, ALenum, ALfloat)
-AL_API DECL_FUNC3(void, alEffectfv, ALuint, ALenum, const ALfloat*)
-AL_API DECL_FUNC3(void, alEffecti, ALuint, ALenum, ALint)
-AL_API DECL_FUNC3(void, alEffectiv, ALuint, ALenum, const ALint*)
-AL_API DECL_FUNC3(void, alGetEffectf, ALuint, ALenum, ALfloat*)
-AL_API DECL_FUNC3(void, alGetEffectfv, ALuint, ALenum, ALfloat*)
-AL_API DECL_FUNC3(void, alGetEffecti, ALuint, ALenum, ALint*)
-AL_API DECL_FUNC3(void, alGetEffectiv, ALuint, ALenum, ALint*)
+END_API_FUNC
 
 
 void InitEffect(ALeffect *effect)
@@ -514,14 +548,11 @@ void InitEffect(ALeffect *effect)
 
 EffectSubList::~EffectSubList()
 {
-    if(!Effects)
-        return;
-
     uint64_t usemask{~FreeMask};
     while(usemask)
     {
         const int idx{al::countr_zero(usemask)};
-        std::destroy_at(Effects+idx);
+        al::destroy_at(Effects+idx);
         usemask &= ~(1_u64 << idx);
     }
     FreeMask = ~usemask;

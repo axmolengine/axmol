@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 
+#include "albyte.h"
 #include "almalloc.h"
 #include "alspan.h"
 #include "atomic.h"

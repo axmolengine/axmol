@@ -3,16 +3,17 @@
 
 
 #include <cstddef>
-#include <optional>
 
+#include "aloptional.h"
 #include "api.h"
 
 
 using EaxFxSlotIndexValue = std::size_t;
 
-class EaxFxSlotIndex : public std::optional<EaxFxSlotIndexValue> {
+class EaxFxSlotIndex : public al::optional<EaxFxSlotIndexValue>
+{
 public:
-    using std::optional<EaxFxSlotIndexValue>::optional;
+    using al::optional<EaxFxSlotIndexValue>::optional;
 
     EaxFxSlotIndex& operator=(const EaxFxSlotIndexValue &value) { set(value); return *this; }
     EaxFxSlotIndex& operator=(const GUID &guid) { set(guid); return *this; }

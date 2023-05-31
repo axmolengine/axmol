@@ -382,10 +382,10 @@ std::unique_ptr<Compressor> Compressor::Create(const size_t NumChans, const floa
 Compressor::~Compressor()
 {
     if(mHold)
-        std::destroy_at(mHold);
+        al::destroy_at(mHold);
     mHold = nullptr;
     if(mDelay)
-        std::destroy_n(mDelay, mNumChans);
+        al::destroy_n(mDelay, mNumChans);
     mDelay = nullptr;
 }
 

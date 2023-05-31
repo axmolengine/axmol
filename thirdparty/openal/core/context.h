@@ -7,15 +7,15 @@
 #include <cstddef>
 #include <memory>
 #include <thread>
-#include <vector>
 
 #include "almalloc.h"
 #include "alspan.h"
 #include "async_event.h"
 #include "atomic.h"
-#include "opthelpers.h"
+#include "bufferline.h"
 #include "threads.h"
 #include "vecmat.h"
+#include "vector.h"
 
 struct DeviceBase;
 struct EffectSlot;
@@ -24,6 +24,8 @@ struct RingBuffer;
 struct Voice;
 struct VoiceChange;
 struct VoicePropsItem;
+
+using uint = unsigned int;
 
 
 constexpr float SpeedOfSoundMetersPerSec{343.3f};
@@ -135,7 +137,7 @@ struct ContextBase {
     std::thread mEventThread;
     al::semaphore mEventSem;
     std::unique_ptr<RingBuffer> mAsyncEvents;
-    using AsyncEventBitset = std::bitset<al::to_underlying(AsyncEnableBits::Count)>;
+    using AsyncEventBitset = std::bitset<AsyncEvent::UserEventCount>;
     std::atomic<AsyncEventBitset> mEnabledEvts{0u};
 
     /* Asynchronous voice change actions are processed as a linked list of
@@ -144,20 +146,20 @@ struct ContextBase {
      * in clusters that are stored in a vector for easy automatic cleanup.
      */
     using VoiceChangeCluster = std::unique_ptr<VoiceChange[]>;
-    std::vector<VoiceChangeCluster> mVoiceChangeClusters;
+    al::vector<VoiceChangeCluster> mVoiceChangeClusters;
 
     using VoiceCluster = std::unique_ptr<Voice[]>;
-    std::vector<VoiceCluster> mVoiceClusters;
+    al::vector<VoiceCluster> mVoiceClusters;
 
     using VoicePropsCluster = std::unique_ptr<VoicePropsItem[]>;
-    std::vector<VoicePropsCluster> mVoicePropClusters;
+    al::vector<VoicePropsCluster> mVoicePropClusters;
 
 
     static constexpr size_t EffectSlotClusterSize{4};
     EffectSlot *getEffectSlot();
 
     using EffectSlotCluster = std::unique_ptr<EffectSlot[]>;
-    std::vector<EffectSlotCluster> mEffectSlotClusters;
+    al::vector<EffectSlotCluster> mEffectSlotClusters;
 
 
     ContextBase(DeviceBase *device);

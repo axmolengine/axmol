@@ -2,46 +2,49 @@
 #define COMMON_COMPTR_H
 
 #include <cstddef>
-#include <memory>
-#include <type_traits>
 #include <utility>
-#include <variant>
+
+#include "opthelpers.h"
+
 
 template<typename T>
-struct ComPtr {
-    using element_type = T;
+class ComPtr {
+    T *mPtr{nullptr};
 
-    static constexpr bool RefIsNoexcept{noexcept(std::declval<T&>().AddRef())
-        && noexcept(std::declval<T&>().Release())};
-
+public:
     ComPtr() noexcept = default;
-    ComPtr(const ComPtr &rhs) noexcept(RefIsNoexcept) : mPtr{rhs.mPtr}
-    { if(mPtr) mPtr->AddRef(); }
+    ComPtr(const ComPtr &rhs) : mPtr{rhs.mPtr} { if(mPtr) mPtr->AddRef(); }
     ComPtr(ComPtr&& rhs) noexcept : mPtr{rhs.mPtr} { rhs.mPtr = nullptr; }
     ComPtr(std::nullptr_t) noexcept { }
     explicit ComPtr(T *ptr) noexcept : mPtr{ptr} { }
     ~ComPtr() { if(mPtr) mPtr->Release(); }
 
-    ComPtr& operator=(const ComPtr &rhs) noexcept(RefIsNoexcept)
+    ComPtr& operator=(const ComPtr &rhs)
     {
-        if constexpr(RefIsNoexcept)
+        if(!rhs.mPtr)
         {
-            if(rhs.mPtr) rhs.mPtr->AddRef();
-            if(mPtr) mPtr->Release();
-            mPtr = rhs.mPtr;
-            return *this;
+            if(mPtr)
+                mPtr->Release();
+            mPtr = nullptr;
         }
         else
         {
-            ComPtr tmp{rhs};
-            if(mPtr) mPtr->Release();
-            mPtr = tmp.release();
-            return *this;
+            rhs.mPtr->AddRef();
+            try {
+                if(mPtr)
+                    mPtr->Release();
+                mPtr = rhs.mPtr;
+            }
+            catch(...) {
+                rhs.mPtr->Release();
+                throw;
+            }
         }
+        return *this;
     }
-    ComPtr& operator=(ComPtr&& rhs) noexcept(RefIsNoexcept)
+    ComPtr& operator=(ComPtr&& rhs)
     {
-        if(&rhs != this)
+        if(&rhs != this) LIKELY
         {
             if(mPtr) mPtr->Release();
             mPtr = std::exchange(rhs.mPtr, nullptr);
@@ -49,63 +52,17 @@ struct ComPtr {
         return *this;
     }
 
-    void reset(T *ptr=nullptr) noexcept(RefIsNoexcept)
-    {
-        if(mPtr) mPtr->Release();
-        mPtr = ptr;
-    }
-
     explicit operator bool() const noexcept { return mPtr != nullptr; }
 
     T& operator*() const noexcept { return *mPtr; }
     T* operator->() const noexcept { return mPtr; }
     T* get() const noexcept { return mPtr; }
+    T** getPtr() noexcept { return &mPtr; }
 
     T* release() noexcept { return std::exchange(mPtr, nullptr); }
 
     void swap(ComPtr &rhs) noexcept { std::swap(mPtr, rhs.mPtr); }
     void swap(ComPtr&& rhs) noexcept { std::swap(mPtr, rhs.mPtr); }
-
-private:
-    T *mPtr{nullptr};
 };
-
-
-namespace al {
-
-template<typename SP, typename PT, typename ...Args>
-class out_ptr_t {
-    static_assert(!std::is_same_v<PT,void*>);
-
-    SP &mRes;
-    std::variant<PT,void*> mPtr{};
-
-public:
-    out_ptr_t(SP &res) : mRes{res} { }
-    ~out_ptr_t()
-    {
-        auto set_res = [this](auto &ptr)
-        { mRes.reset(static_cast<PT>(ptr)); };
-        std::visit(set_res, mPtr);
-    }
-    out_ptr_t(const out_ptr_t&) = delete;
-
-    out_ptr_t& operator=(const out_ptr_t&) = delete;
-
-    operator PT*() noexcept
-    { return &std::get<PT>(mPtr); }
-
-    operator void**() noexcept
-    { return &mPtr.template emplace<void*>(); }
-};
-
-template<typename T=void, typename SP, typename ...Args>
-auto out_ptr(SP &res)
-{
-    using ptype = typename SP::element_type*;
-    return out_ptr_t<SP,ptype>{res};
-}
-
-} // namespace al
 
 #endif

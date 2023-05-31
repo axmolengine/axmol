@@ -8,7 +8,6 @@
 #include <mutex>
 #include <type_traits>
 
-#include "albit.h"
 #include "logging.h"
 
 
@@ -22,7 +21,7 @@ void PrepareDBus()
     static constexpr char libname[] = "libdbus-1.so.3";
 
     auto load_func = [](auto &f, const char *name) -> void
-    { f = al::bit_cast<std::remove_reference_t<decltype(f)>>(GetSymbol(dbus_handle, name)); };
+    { f = reinterpret_cast<std::remove_reference_t<decltype(f)>>(GetSymbol(dbus_handle, name)); };
 #define LOAD_FUNC(x) do {                         \
     load_func(p##x, #x);                          \
     if(!p##x)                                     \

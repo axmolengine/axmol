@@ -1,13 +1,13 @@
 
 #include "config.h"
 
-#include <optional>
 #include <stdexcept>
 
 #include "AL/al.h"
 #include "AL/efx.h"
 
 #include "alc/effects/base.h"
+#include "aloptional.h"
 #include "effects.h"
 
 #ifdef ALSOFT_EAX
@@ -20,7 +20,7 @@
 
 namespace {
 
-std::optional<VMorpherPhenome> PhenomeFromEnum(ALenum val)
+al::optional<VMorpherPhenome> PhenomeFromEnum(ALenum val)
 {
 #define HANDLE_PHENOME(x) case AL_VOCAL_MORPHER_PHONEME_ ## x:                \
     return VMorpherPhenome::x
@@ -57,7 +57,7 @@ std::optional<VMorpherPhenome> PhenomeFromEnum(ALenum val)
     HANDLE_PHENOME(V);
     HANDLE_PHENOME(Z);
     }
-    return std::nullopt;
+    return al::nullopt;
 #undef HANDLE_PHENOME
 }
 ALenum EnumFromPhenome(VMorpherPhenome phenome)
@@ -100,7 +100,7 @@ ALenum EnumFromPhenome(VMorpherPhenome phenome)
 #undef HANDLE_PHENOME
 }
 
-std::optional<VMorpherWaveform> WaveformFromEmum(ALenum value)
+al::optional<VMorpherWaveform> WaveformFromEmum(ALenum value)
 {
     switch(value)
     {
@@ -108,7 +108,7 @@ std::optional<VMorpherWaveform> WaveformFromEmum(ALenum value)
     case AL_VOCAL_MORPHER_WAVEFORM_TRIANGLE: return VMorpherWaveform::Triangle;
     case AL_VOCAL_MORPHER_WAVEFORM_SAWTOOTH: return VMorpherWaveform::Sawtooth;
     }
-    return std::nullopt;
+    return al::nullopt;
 }
 ALenum EnumFromWaveform(VMorpherWaveform type)
 {
@@ -355,7 +355,13 @@ template<>
 template<>
 bool VocalMorpherCommitter::commit(const EaxEffectProps &props)
 {
-    if(props == mEaxProps)
+    if(props.mType == mEaxProps.mType
+        && mEaxProps.mVocalMorpher.ulPhonemeA == props.mVocalMorpher.ulPhonemeA
+        && mEaxProps.mVocalMorpher.lPhonemeACoarseTuning == props.mVocalMorpher.lPhonemeACoarseTuning
+        && mEaxProps.mVocalMorpher.ulPhonemeB == props.mVocalMorpher.ulPhonemeB
+        && mEaxProps.mVocalMorpher.lPhonemeBCoarseTuning == props.mVocalMorpher.lPhonemeBCoarseTuning
+        && mEaxProps.mVocalMorpher.ulWaveform == props.mVocalMorpher.ulWaveform
+        && mEaxProps.mVocalMorpher.flRate == props.mVocalMorpher.flRate)
         return false;
 
     mEaxProps = props;
@@ -407,13 +413,12 @@ bool VocalMorpherCommitter::commit(const EaxEffectProps &props)
         return VMorpherWaveform::Sinusoid;
     };
 
-    auto &eaxprops = std::get<EAXVOCALMORPHERPROPERTIES>(props);
-    mAlProps.Vmorpher.PhonemeA = get_phoneme(eaxprops.ulPhonemeA);
-    mAlProps.Vmorpher.PhonemeACoarseTuning = static_cast<int>(eaxprops.lPhonemeACoarseTuning);
-    mAlProps.Vmorpher.PhonemeB = get_phoneme(eaxprops.ulPhonemeB);
-    mAlProps.Vmorpher.PhonemeBCoarseTuning = static_cast<int>(eaxprops.lPhonemeBCoarseTuning);
-    mAlProps.Vmorpher.Waveform = get_waveform(eaxprops.ulWaveform);
-    mAlProps.Vmorpher.Rate = eaxprops.flRate;
+    mAlProps.Vmorpher.PhonemeA = get_phoneme(props.mVocalMorpher.ulPhonemeA);
+    mAlProps.Vmorpher.PhonemeACoarseTuning = static_cast<int>(props.mVocalMorpher.lPhonemeACoarseTuning);
+    mAlProps.Vmorpher.PhonemeB = get_phoneme(props.mVocalMorpher.ulPhonemeB);
+    mAlProps.Vmorpher.PhonemeBCoarseTuning = static_cast<int>(props.mVocalMorpher.lPhonemeBCoarseTuning);
+    mAlProps.Vmorpher.Waveform = get_waveform(props.mVocalMorpher.ulWaveform);
+    mAlProps.Vmorpher.Rate = props.mVocalMorpher.flRate;
 
     return true;
 }
@@ -421,55 +426,49 @@ bool VocalMorpherCommitter::commit(const EaxEffectProps &props)
 template<>
 void VocalMorpherCommitter::SetDefaults(EaxEffectProps &props)
 {
-    static constexpr EAXVOCALMORPHERPROPERTIES defprops{[]
-    {
-        EAXVOCALMORPHERPROPERTIES ret{};
-        ret.ulPhonemeA = EAXVOCALMORPHER_DEFAULTPHONEMEA;
-        ret.lPhonemeACoarseTuning = EAXVOCALMORPHER_DEFAULTPHONEMEACOARSETUNING;
-        ret.ulPhonemeB = EAXVOCALMORPHER_DEFAULTPHONEMEB;
-        ret.lPhonemeBCoarseTuning = EAXVOCALMORPHER_DEFAULTPHONEMEBCOARSETUNING;
-        ret.ulWaveform = EAXVOCALMORPHER_DEFAULTWAVEFORM;
-        ret.flRate = EAXVOCALMORPHER_DEFAULTRATE;
-        return ret;
-    }()};
-    props = defprops;
+    props.mType = EaxEffectType::VocalMorpher;
+    props.mVocalMorpher.ulPhonemeA = EAXVOCALMORPHER_DEFAULTPHONEMEA;
+    props.mVocalMorpher.lPhonemeACoarseTuning = EAXVOCALMORPHER_DEFAULTPHONEMEACOARSETUNING;
+    props.mVocalMorpher.ulPhonemeB = EAXVOCALMORPHER_DEFAULTPHONEMEB;
+    props.mVocalMorpher.lPhonemeBCoarseTuning = EAXVOCALMORPHER_DEFAULTPHONEMEBCOARSETUNING;
+    props.mVocalMorpher.ulWaveform = EAXVOCALMORPHER_DEFAULTWAVEFORM;
+    props.mVocalMorpher.flRate = EAXVOCALMORPHER_DEFAULTRATE;
 }
 
 template<>
-void VocalMorpherCommitter::Get(const EaxCall &call, const EaxEffectProps &props_)
+void VocalMorpherCommitter::Get(const EaxCall &call, const EaxEffectProps &props)
 {
-    auto &props = std::get<EAXVOCALMORPHERPROPERTIES>(props_);
     switch(call.get_property_id())
     {
     case EAXVOCALMORPHER_NONE:
         break;
 
     case EAXVOCALMORPHER_ALLPARAMETERS:
-        call.set_value<Exception>(props);
+        call.set_value<Exception>(props.mVocalMorpher);
         break;
 
     case EAXVOCALMORPHER_PHONEMEA:
-        call.set_value<Exception>(props.ulPhonemeA);
+        call.set_value<Exception>(props.mVocalMorpher.ulPhonemeA);
         break;
 
     case EAXVOCALMORPHER_PHONEMEACOARSETUNING:
-        call.set_value<Exception>(props.lPhonemeACoarseTuning);
+        call.set_value<Exception>(props.mVocalMorpher.lPhonemeACoarseTuning);
         break;
 
     case EAXVOCALMORPHER_PHONEMEB:
-        call.set_value<Exception>(props.ulPhonemeB);
+        call.set_value<Exception>(props.mVocalMorpher.ulPhonemeB);
         break;
 
     case EAXVOCALMORPHER_PHONEMEBCOARSETUNING:
-        call.set_value<Exception>(props.lPhonemeBCoarseTuning);
+        call.set_value<Exception>(props.mVocalMorpher.lPhonemeBCoarseTuning);
         break;
 
     case EAXVOCALMORPHER_WAVEFORM:
-        call.set_value<Exception>(props.ulWaveform);
+        call.set_value<Exception>(props.mVocalMorpher.ulWaveform);
         break;
 
     case EAXVOCALMORPHER_RATE:
-        call.set_value<Exception>(props.flRate);
+        call.set_value<Exception>(props.mVocalMorpher.flRate);
         break;
 
     default:
@@ -478,40 +477,39 @@ void VocalMorpherCommitter::Get(const EaxCall &call, const EaxEffectProps &props
 }
 
 template<>
-void VocalMorpherCommitter::Set(const EaxCall &call, EaxEffectProps &props_)
+void VocalMorpherCommitter::Set(const EaxCall &call, EaxEffectProps &props)
 {
-    auto &props = std::get<EAXVOCALMORPHERPROPERTIES>(props_);
     switch(call.get_property_id())
     {
     case EAXVOCALMORPHER_NONE:
         break;
 
     case EAXVOCALMORPHER_ALLPARAMETERS:
-        defer<AllValidator>(call, props);
+        defer<AllValidator>(call, props.mVocalMorpher);
         break;
 
     case EAXVOCALMORPHER_PHONEMEA:
-        defer<PhonemeAValidator>(call, props.ulPhonemeA);
+        defer<PhonemeAValidator>(call, props.mVocalMorpher.ulPhonemeA);
         break;
 
     case EAXVOCALMORPHER_PHONEMEACOARSETUNING:
-        defer<PhonemeACoarseTuningValidator>(call, props.lPhonemeACoarseTuning);
+        defer<PhonemeACoarseTuningValidator>(call, props.mVocalMorpher.lPhonemeACoarseTuning);
         break;
 
     case EAXVOCALMORPHER_PHONEMEB:
-        defer<PhonemeBValidator>(call, props.ulPhonemeB);
+        defer<PhonemeBValidator>(call, props.mVocalMorpher.ulPhonemeB);
         break;
 
     case EAXVOCALMORPHER_PHONEMEBCOARSETUNING:
-        defer<PhonemeBCoarseTuningValidator>(call, props.lPhonemeBCoarseTuning);
+        defer<PhonemeBCoarseTuningValidator>(call, props.mVocalMorpher.lPhonemeBCoarseTuning);
         break;
 
     case EAXVOCALMORPHER_WAVEFORM:
-        defer<WaveformValidator>(call, props.ulWaveform);
+        defer<WaveformValidator>(call, props.mVocalMorpher.ulWaveform);
         break;
 
     case EAXVOCALMORPHER_RATE:
-        defer<RateValidator>(call, props.flRate);
+        defer<RateValidator>(call, props.mVocalMorpher.flRate);
         break;
 
     default:

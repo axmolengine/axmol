@@ -174,7 +174,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: git 1.23.1-1a583b0
+- Version: 1.23.1 with modified for UWP apps support
 - License: LGPL-2.1
 
 ## OpenSSL
