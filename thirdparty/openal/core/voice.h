@@ -5,13 +5,12 @@
 #include <atomic>
 #include <bitset>
 #include <chrono>
+#include <cstddef>
 #include <memory>
-#include <stddef.h>
+#include <optional>
 #include <string>
 
-#include "albyte.h"
 #include "almalloc.h"
-#include "aloptional.h"
 #include "alspan.h"
 #include "bufferline.h"
 #include "buffer_storage.h"
@@ -100,7 +99,7 @@ struct VoiceBufferItem {
     uint mLoopStart{0u};
     uint mLoopEnd{0u};
 
-    al::byte *mSamples{nullptr};
+    std::byte *mSamples{nullptr};
 };
 
 
@@ -270,7 +269,7 @@ struct Voice {
 
     void prepare(DeviceBase *device);
 
-    static void InitMixer(al::optional<std::string> resampler);
+    static void InitMixer(std::optional<std::string> resampler);
 
     DEF_NEWDEL(Voice)
 };

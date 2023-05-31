@@ -6,10 +6,10 @@
 #include <cstdarg>
 #include <cstdio>
 #include <string>
+#include <vector>
 
 #include "alspan.h"
 #include "strutils.h"
-#include "vector.h"
 
 
 #if defined(_WIN32)
@@ -25,16 +25,16 @@ void al_print(LogLevel level, FILE *logfile, const char *fmt, ...)
      * that includes the null terminator, which we want to exclude from the
      * span.
      */
-    auto prefix = al::as_span("[ALSOFT] (--) ").first<14>();
+    auto prefix = al::span{"[ALSOFT] (--) "}.first<14>();
     switch(level)
     {
     case LogLevel::Disable: break;
-    case LogLevel::Error: prefix = al::as_span("[ALSOFT] (EE) ").first<14>(); break;
-    case LogLevel::Warning: prefix = al::as_span("[ALSOFT] (WW) ").first<14>(); break;
-    case LogLevel::Trace: prefix = al::as_span("[ALSOFT] (II) ").first<14>(); break;
+    case LogLevel::Error: prefix = al::span{"[ALSOFT] (EE) "}.first<14>(); break;
+    case LogLevel::Warning: prefix = al::span{"[ALSOFT] (WW) "}.first<14>(); break;
+    case LogLevel::Trace: prefix = al::span{"[ALSOFT] (II) "}.first<14>(); break;
     }
 
-    al::vector<char> dynmsg;
+    std::vector<char> dynmsg;
     std::array<char,256> stcmsg{};
 
     char *str{stcmsg.data()};

@@ -20,14 +20,8 @@
 
 #include "config.h"
 
-#ifdef _WIN32
-#    define WIN32_LEAN_AND_MEAN 1
-#    include <Windows.h>
-#else
-#    include <unistd.h>
-#endif
-
-#include "alc/backends/xaudio2.h"
+#include <windows.h>
+#include "./xaudio2.h"
 
 #include <cassert>
 #include <cstdlib>
@@ -49,19 +43,35 @@
 
 constexpr char defaultDeviceName[] = DEVNAME_PREFIX "Default Device";
 
-class VoiceCallback;
+struct XAudio2Playback;
 
-struct XAudio2Backend final : public BackendBase
+class VoiceCallback : public IXAudio2VoiceCallback
 {
-    XAudio2Backend(DeviceBase* device) noexcept;
-    ~XAudio2Backend() override;
+public:
+    XAudio2Playback* playback;
+    VoiceCallback(XAudio2Playback* backend) : playback(backend) {}
+    ~VoiceCallback() {}
 
-    IXAudio2* audioengine;
-    IXAudio2MasteringVoice* masteringvoice;
-    IXAudio2SourceVoice* source;
+    STDMETHOD_(void, OnStreamEnd()) {}
+    STDMETHOD_(void, OnVoiceProcessingPassEnd(THIS)) {}
+    STDMETHOD_(void, OnVoiceProcessingPassStart(THIS_ UINT32 SamplesRequired));
+    STDMETHOD_(void, OnBufferEnd(THIS_ void* /*pBufferContext*/)) {}
+    STDMETHOD_(void, OnBufferStart(THIS_ void* /*pBufferContext*/)) {}
+    STDMETHOD_(void, OnLoopEnd(THIS_ void* /*pBufferContext*/)) {}
+    STDMETHOD_(void, OnVoiceError(THIS_ void* /*pBufferContext*/, HRESULT /*Error*/)) {}
+};
 
-    VoiceCallback* callback;
-    void mix(int len) noexcept;
+struct XAudio2Playback final : public BackendBase
+{
+    XAudio2Playback(DeviceBase* device) noexcept;
+    ~XAudio2Playback() override;
+
+    IXAudio2* mAudioEngine{nullptr};
+    IXAudio2MasteringVoice* mMasteringVoice{nullptr};
+    IXAudio2SourceVoice* mSourceVoice{nullptr};
+
+    std::unique_ptr<VoiceCallback> mVoiceCallback;
+    void mixerProc(int len) noexcept;
 
     void open(const char* name) override;
     bool reset() override;
@@ -79,50 +89,48 @@ struct XAudio2Backend final : public BackendBase
     BYTE* mBuffer{nullptr};
     size_t mBufferSize{0};
 
-    DEF_NEWDEL(XAudio2Backend)
+    DEF_NEWDEL(XAudio2Playback)
 };
 
-class VoiceCallback : public IXAudio2VoiceCallback
+void VoiceCallback::OnVoiceProcessingPassStart(THIS_ UINT32 SamplesRequired)
 {
-public:
-    XAudio2Backend* master;
-    VoiceCallback(XAudio2Backend* backend) : master(backend) {}
-    ~VoiceCallback() {}
-
-    STDMETHOD_(void, OnStreamEnd()) { ; }
-    STDMETHOD_(void, OnVoiceProcessingPassEnd(THIS)) {}
-    STDMETHOD_(void, OnVoiceProcessingPassStart(THIS_ UINT32 SamplesRequired)) { master->mix(SamplesRequired); }
-    STDMETHOD_(void, OnBufferEnd(THIS_ void* pBufferContext)) {}
-    STDMETHOD_(void, OnBufferStart(THIS_ void* pBufferContext)) {}
-    STDMETHOD_(void, OnLoopEnd(THIS_ void* pBufferContext)) {}
-    STDMETHOD_(void, OnVoiceError(THIS_ void* pBufferContext, HRESULT Error)) {}
-};
-
-XAudio2Backend::XAudio2Backend(DeviceBase* device) noexcept : BackendBase{device}
-{
-    XAudio2Create(&audioengine);
-    HRESULT hr = audioengine->CreateMasteringVoice(&masteringvoice);
-    source     = nullptr;
-    callback   = new VoiceCallback(this);
+    playback->mixerProc(SamplesRequired);
 }
 
-XAudio2Backend::~XAudio2Backend()
+XAudio2Playback::XAudio2Playback(DeviceBase* device) noexcept : BackendBase{device}
 {
-    delete callback;
+    HRESULT hr = XAudio2Create(&mAudioEngine, 0u, 0u);
+    if (FAILED(hr))
+        WARN("Failed to create IXAudio2 instance: 0x%08lx\n", hr);
+    /*
+     * About AudioCategory
+     * The default AudioCategory_GameEffects which doesn't support uap3:Capability: backgroundMediaPlayback
+     */
+    hr = mAudioEngine->CreateMasteringVoice(&mMasteringVoice, 0u, 0u, 0u, nullptr /* szDeviceId */, nullptr,
+                                            AudioCategory_GameMedia);
+    if (FAILED(hr))
+        WARN("Failed to create IXAudio2MasteringVoice instance: 0x%08lx\n", hr);
+    mVoiceCallback.reset(new VoiceCallback(this));
+}
 
-    if (masteringvoice)
-        masteringvoice->DestroyVoice();
+XAudio2Playback::~XAudio2Playback()
+{
+    mVoiceCallback.reset(nullptr);
 
-    if (source)
-        source->DestroyVoice();
+    if (mMasteringVoice)
+        mMasteringVoice->DestroyVoice();
+
+    if (mSourceVoice)
+        mSourceVoice->DestroyVoice();
 
     if (mBuffer != NULL)
         delete[] mBuffer;
 
-    audioengine->Release();
+    if (mAudioEngine)
+        mAudioEngine->Release();
 }
 
-void XAudio2Backend::mix(int len) noexcept
+void XAudio2Playback::mixerProc(int len) noexcept
 {
     const auto ulen = static_cast<unsigned int>(len);
     assert((ulen % mFrameSize) == 0);
@@ -138,21 +146,21 @@ void XAudio2Backend::mix(int len) noexcept
         mBuffer     = new (std::nothrow) BYTE[mBufferSize];
     }
 
-    mDevice->renderSamples(mBuffer, samples, mDevice->channelsFromFmt());
+    mDevice->renderSamples(mBuffer, static_cast<uint>(samples), mDevice->channelsFromFmt());
 
     XAUDIO2_BUFFER bufferRegionToSubmit;
     memset(&bufferRegionToSubmit, 0, sizeof(bufferRegionToSubmit));
-    bufferRegionToSubmit.AudioBytes = bufferRegionSize;
+    bufferRegionToSubmit.AudioBytes = static_cast<UINT32>(bufferRegionSize);
     bufferRegionToSubmit.pAudioData = mBuffer;
 
-    hr = source->SubmitSourceBuffer(&bufferRegionToSubmit);
+    hr = mSourceVoice->SubmitSourceBuffer(&bufferRegionToSubmit);
     if (FAILED(hr))
     {
         ERR("SubmitSourceBuffer() failed: 0x%08lx\n", hr);
     }
 }
 
-void XAudio2Backend::open(const char* name)
+void XAudio2Playback::open(const char* name)
 {
 
     WAVEFORMATEX wf;
@@ -165,7 +173,8 @@ void XAudio2Backend::open(const char* name)
     wf.nBlockAlign     = wf.wBitsPerSample * wf.nChannels / 8;
     wf.cbSize          = 0;
 
-    audioengine->CreateSourceVoice(&source, &wf, 0, XAUDIO2_DEFAULT_FREQ_RATIO, callback, NULL, NULL);
+    mAudioEngine->CreateSourceVoice(&mSourceVoice, &wf, 0, XAUDIO2_DEFAULT_FREQ_RATIO, mVoiceCallback.get(), NULL,
+                                    NULL);
 
     DevFmtType devtype = DevFmtShort;
     mFrameSize         = BytesFromDevFmt(devtype) * wf.nChannels;
@@ -177,7 +186,7 @@ void XAudio2Backend::open(const char* name)
     mDevice->DeviceName = name ? name : defaultDeviceName;
 }
 
-bool XAudio2Backend::reset()
+bool XAudio2Playback::reset()
 {
     mDevice->Frequency  = mFrequency;
     mDevice->FmtChans   = mFmtChans;
@@ -188,16 +197,16 @@ bool XAudio2Backend::reset()
     return true;
 }
 
-void XAudio2Backend::start()
+void XAudio2Playback::start()
 {
-    if (source)
-        source->Start();
+    if (mSourceVoice)
+        mSourceVoice->Start();
 }
 
-void XAudio2Backend::stop()
+void XAudio2Playback::stop()
 {
-    if (source)
-        source->Stop();
+    if (mSourceVoice)
+        mSourceVoice->Stop();
 }
 
 #include <chrono>
@@ -231,25 +240,25 @@ struct XAudio2Capture final : public BackendBase
     XAudio2Capture(DeviceBase* device) noexcept;
     ~XAudio2Capture() override;
 
-    MediaCapture ^ capture { nullptr };
-    IRandomAccessStream ^ buffer { nullptr };
-    IInputStream ^ instream { nullptr };
-    XAudio2Delegates ^ delegates;
-    bool record{false};
+    Platform::Agile<MediaCapture> mCapture{nullptr};
+    IRandomAccessStream ^ mStream { nullptr };
+    IInputStream ^ mInputStream { nullptr };
+    XAudio2Delegates ^ mDelegates;
+    bool mRecord{false};
 
     void open(const char* name) override;
     void start() override;
     void stop() override;
-    void captureSamples(al::byte* buffer, uint samples) override;
+    void captureSamples(std::byte* buffer, uint samples) override;
     uint availableSamples() override;
 
     void failed();
 
     BYTE mBuffer[8192];
-    size_t mSkip{0};
-    size_t mBufferSize{0};
-    size_t mFrameSize{0};
-    std::recursive_mutex mutex;
+    uint mSkip{0};
+    uint mBufferSize{0};
+    uint mFrameSize{0};
+    std::recursive_mutex mMutex;
 
     DEF_NEWDEL(XAudio2Capture)
 };
@@ -262,48 +271,46 @@ void XAudio2Delegates::OnFailed(Windows::Media::Capture::MediaCapture ^ sender,
 
 XAudio2Capture::XAudio2Capture(DeviceBase* device) noexcept : BackendBase{device}
 {
-    delegates = ref new XAudio2Delegates(this);
+    mDelegates = ref new XAudio2Delegates(this);
 }
 
 XAudio2Capture::~XAudio2Capture()
 {
     stop();
-    delegates = nullptr;
+    mDelegates = nullptr;
 }
 
-void XAudio2Capture::captureSamples(al::byte* buffer, uint samples)
+void XAudio2Capture::captureSamples(std::byte* buffer, uint samples)
 {
-    int nsmp = availableSamples();
+    uint nsmp = availableSamples();
     if (samples > nsmp)
         samples = nsmp;
     if (!samples)
         return;
-    size_t tt = samples * mFrameSize;
-    mutex.lock();
+    uint tt = samples * mFrameSize;
+    std::unique_lock<std::recursive_mutex> lck(mMutex);
     memcpy(buffer, mBuffer + mSkip, tt);
     memmove(mBuffer, mBuffer + mSkip + tt, mBufferSize - mSkip - tt);
     mBufferSize -= tt;
-    mutex.unlock();
 }
 
 uint XAudio2Capture::availableSamples()
 {
-    if (!record)
+    if (!mRecord)
         return 0;
-    mutex.lock();
-    size_t cur  = std::max(mBufferSize - mSkip, (size_t)0) / mFrameSize;
-    size_t room = sizeof(mBuffer) - mBufferSize;
-    mutex.unlock();
-    if (room > 1024)
+    mMutex.lock();
+    uint cur  = ((mBufferSize > mSkip) ? (mBufferSize - mSkip) : 0u) / mFrameSize;
+    uint room = static_cast<uint>(sizeof(mBuffer) - mBufferSize);
+    mMutex.unlock();
+    if (room > 1024u)
     {
         IBuffer ^ buf = ref new Buffer(room);
-        create_task(instream->ReadAsync(buf, room, InputStreamOptions::Partial)).then([=](IBuffer ^ ibuf) {
-            size_t blen = ibuf->Length;
+        create_task(mInputStream->ReadAsync(buf, room, InputStreamOptions::Partial)).then([=](IBuffer ^ ibuf) {
+            uint blen   = ibuf->Length;
             auto reader = Windows::Storage::Streams::DataReader::FromBuffer(ibuf);
-            mutex.lock();
+            std::unique_lock<std::recursive_mutex> lck(mMutex);
             reader->ReadBytes(::Platform::ArrayReference<BYTE>(mBuffer + mBufferSize, blen));
             mBufferSize += blen;
-            mutex.unlock();
         });
     }
     return cur;
@@ -317,18 +324,18 @@ void XAudio2Capture::failed()
 void XAudio2Capture::open(const char* name)
 {
     DevFmtType devtype  = DevFmtShort;
-    mFrameSize          = BytesFromDevFmt(devtype) * 2;
+    mFrameSize          = BytesFromDevFmt(devtype);  // Mono ?
     mDevice->DeviceName = name ? name : defaultDeviceName;
 }
 
 void XAudio2Capture::start()
 {
-    if (!record)
+    if (!mRecord)
     {
-        buffer = ref new InMemoryRandomAccessStream();
-        if (capture != nullptr)
+        mStream = ref new InMemoryRandomAccessStream();
+        if (mCapture != nullptr)
         {
-            capture->StopRecordAsync();
+            mCapture->StopRecordAsync();
         }
         try
         {
@@ -337,19 +344,19 @@ void XAudio2Capture::start()
             settings->AudioDeviceId = Windows::Media::Devices::MediaDevice::GetDefaultAudioCaptureId(
                 Windows::Media::Devices::AudioDeviceRole::Default);
 
-            capture = ref new MediaCapture();
-            create_task(capture->InitializeAsync(settings))
+            mCapture = ref new MediaCapture();
+            create_task(mCapture->InitializeAsync(settings))
                 .then([this](void) {
-                    capture->Failed += ref new Windows::Media::Capture::MediaCaptureFailedEventHandler(
-                        delegates, &XAudio2Delegates::OnFailed);
+                    mCapture->Failed += ref new Windows::Media::Capture::MediaCaptureFailedEventHandler(
+                        mDelegates, &XAudio2Delegates::OnFailed);
                     mBufferSize = 0;
                     mSkip       = 82;
-                    return capture->StartRecordToStreamAsync(
-                        MediaEncodingProfile::CreateWav(AudioEncodingQuality::High), buffer);
+                    return mCapture->StartRecordToStreamAsync(
+                        MediaEncodingProfile::CreateWav(AudioEncodingQuality::High), mStream);
                 })
                 .then([this](void) {
-                    instream = buffer->GetInputStreamAt(0);
-                    record   = true;
+                    mInputStream = mStream->GetInputStreamAt(0);
+                    mRecord      = true;
                 })
                 .then([this](task<void> t) {
                     try
@@ -358,41 +365,41 @@ void XAudio2Capture::start()
                     }
                     catch (Platform::Exception ^ e)
                     {
-                        instream = nullptr;
-                        buffer   = nullptr;
-                        capture  = nullptr;
-                        record   = false;
+                        mInputStream = nullptr;
+                        mStream      = nullptr;
+                        mCapture     = nullptr;
+                        mRecord      = false;
                     }
                 });
-            while (buffer && (!record))
+            while (mStream && !mRecord)
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
         catch (Platform::Exception ^ e)
         {
-            instream = nullptr;
-            buffer   = nullptr;
-            capture  = nullptr;
+            mInputStream = nullptr;
+            mStream      = nullptr;
+            mCapture     = nullptr;
         }
     }
 }
 
 void XAudio2Capture::stop()
 {
-    if (record)
+    if (mRecord)
     {
-        if (capture)
+        if (mCapture != nullptr)
         {
-            create_task(capture->StopRecordAsync()).then([=]() {
-                record   = false;
-                buffer   = nullptr;
-                capture  = nullptr;
-                instream = nullptr;
+            create_task(mCapture->StopRecordAsync()).then([=]() {
+                mRecord      = false;
+                mStream      = nullptr;
+                mCapture     = nullptr;
+                mInputStream = nullptr;
             });
-            while (buffer)
+            while (mStream)
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
         else
-            record = false;
+            mRecord = false;
     }
 }
 
@@ -412,7 +419,7 @@ bool XAudio2BackendFactory::querySupport(BackendType type)
     return type == BackendType::Playback || type == BackendType::Capture;
 }
 
-std::string XAudio2BackendFactory::probe(BackendType type)
+std::string XAudio2BackendFactory::probe(BackendType /*type*/)
 {
     std::string outnames;
 
@@ -425,10 +432,8 @@ std::string XAudio2BackendFactory::probe(BackendType type)
 BackendPtr XAudio2BackendFactory::createBackend(DeviceBase* device, BackendType type)
 {
     if (type == BackendType::Playback)
-        return BackendPtr{new XAudio2Backend{device}};
-
+        return BackendPtr{new XAudio2Playback{device}};
     if (type == BackendType::Capture)
         return BackendPtr{new XAudio2Capture{device}};
-
     return nullptr;
 }

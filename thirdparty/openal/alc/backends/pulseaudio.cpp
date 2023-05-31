@@ -31,17 +31,18 @@
 #include <cstring>
 #include <limits>
 #include <mutex>
+#include <optional>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string>
 #include <sys/types.h>
 #include <utility>
+#include <vector>
 
-#include "albyte.h"
+#include "albit.h"
 #include "alc/alconfig.h"
 #include "almalloc.h"
 #include "alnumeric.h"
-#include "aloptional.h"
 #include "alspan.h"
 #include "core/devformat.h"
 #include "core/device.h"
@@ -49,7 +50,6 @@
 #include "dynload.h"
 #include "opthelpers.h"
 #include "strutils.h"
-#include "vector.h"
 
 #include <pulse/pulseaudio.h>
 
@@ -282,8 +282,8 @@ bool checkName(const al::span<const DevMap> list, const std::string &name)
     return std::find_if(list.cbegin(), list.cend(), match_name) != list.cend();
 }
 
-al::vector<DevMap> PlaybackDevices;
-al::vector<DevMap> CaptureDevices;
+std::vector<DevMap> PlaybackDevices;
+std::vector<DevMap> CaptureDevices;
 
 
 /* Global flags and properties */
@@ -615,7 +615,7 @@ struct PulsePlayback final : public BackendBase {
 
     PulseMainloop mMainloop;
 
-    al::optional<std::string> mDeviceName{al::nullopt};
+    std::optional<std::string> mDeviceName{std::nullopt};
 
     bool mIs51Rear{false};
     pa_buffer_attr mAttr;
@@ -1036,20 +1036,20 @@ struct PulseCapture final : public BackendBase {
     void open(const char *name) override;
     void start() override;
     void stop() override;
-    void captureSamples(al::byte *buffer, uint samples) override;
+    void captureSamples(std::byte *buffer, uint samples) override;
     uint availableSamples() override;
     ClockLatency getClockLatency() override;
 
     PulseMainloop mMainloop;
 
-    al::optional<std::string> mDeviceName{al::nullopt};
+    std::optional<std::string> mDeviceName{std::nullopt};
 
-    al::span<const al::byte> mCapBuffer;
+    al::span<const std::byte> mCapBuffer;
     size_t mHoleLength{0};
     size_t mPacketLength{0};
 
     uint mLastReadable{0u};
-    al::byte mSilentVal{};
+    std::byte mSilentVal{};
 
     pa_buffer_attr mAttr{};
     pa_sample_spec mSpec{};
@@ -1158,7 +1158,7 @@ void PulseCapture::open(const char *name)
     switch(mDevice->FmtType)
     {
     case DevFmtUByte:
-        mSilentVal = al::byte(0x80);
+        mSilentVal = std::byte(0x80);
         mSpec.format = PA_SAMPLE_U8;
         break;
     case DevFmtShort:
@@ -1230,9 +1230,9 @@ void PulseCapture::stop()
     plock.waitForOperation(op);
 }
 
-void PulseCapture::captureSamples(al::byte *buffer, uint samples)
+void PulseCapture::captureSamples(std::byte *buffer, uint samples)
 {
-    al::span<al::byte> dstbuf{buffer, samples * pa_frame_size(&mSpec)};
+    al::span<std::byte> dstbuf{buffer, samples * pa_frame_size(&mSpec)};
 
     /* Capture is done in fragment-sized chunks, so we loop until we get all
      * that's available.
@@ -1290,7 +1290,7 @@ void PulseCapture::captureSamples(al::byte *buffer, uint samples)
         if(!capbuf) UNLIKELY
             mHoleLength = caplen;
         else
-            mCapBuffer = {static_cast<const al::byte*>(capbuf), caplen};
+            mCapBuffer = {static_cast<const std::byte*>(capbuf), caplen};
         mPacketLength = caplen;
     }
     if(!dstbuf.empty())
@@ -1381,7 +1381,7 @@ bool PulseBackendFactory::init()
         }
 
 #define LOAD_FUNC(x) do {                                                     \
-    p##x = reinterpret_cast<decltype(p##x)>(GetSymbol(pulse_handle, #x));     \
+    p##x = al::bit_cast<decltype(p##x)>(GetSymbol(pulse_handle, #x));         \
     if(!(p##x)) {                                                             \
         ret = false;                                                          \
         missing_funcs += "\n" #x;                                             \

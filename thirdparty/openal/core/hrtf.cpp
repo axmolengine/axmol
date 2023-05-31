@@ -8,6 +8,7 @@
 #include <cassert>
 #include <cctype>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -16,16 +17,16 @@
 #include <memory>
 #include <mutex>
 #include <numeric>
+#include <optional>
 #include <type_traits>
 #include <utility>
+#include <vector>
 
 #include "albit.h"
-#include "albyte.h"
 #include "alfstream.h"
 #include "almalloc.h"
 #include "alnumbers.h"
 #include "alnumeric.h"
-#include "aloptional.h"
 #include "alspan.h"
 #include "ambidefs.h"
 #include "filters/splitter.h"
@@ -34,7 +35,6 @@
 #include "mixer/hrtfdefs.h"
 #include "opthelpers.h"
 #include "polyphase_resampler.h"
-#include "vector.h"
 
 
 namespace {
@@ -98,10 +98,10 @@ constexpr char magicMarker03[8]{'M','i','n','P','H','R','0','3'};
 constexpr auto PassthruCoeff = static_cast<float>(1.0/al::numbers::sqrt2);
 
 std::mutex LoadedHrtfLock;
-al::vector<LoadedHrtf> LoadedHrtfs;
+std::vector<LoadedHrtf> LoadedHrtfs;
 
 std::mutex EnumeratedHrtfLock;
-al::vector<HrtfEntry> EnumeratedHrtfs;
+std::vector<HrtfEntry> EnumeratedHrtfs;
 
 
 class databuf final : public std::streambuf {
@@ -295,7 +295,7 @@ void DirectHrtfState::build(const HrtfStore *Hrtf, const uint irSize, const bool
     }
 
     uint min_delay{HrtfHistoryLength*HrirDelayFracOne}, max_delay{0};
-    al::vector<ImpulseResponse> impres; impres.reserve(AmbiPoints.size());
+    std::vector<ImpulseResponse> impres; impres.reserve(AmbiPoints.size());
     auto calc_res = [Hrtf,&max_delay,&min_delay](const AngularPoint &pt) -> ImpulseResponse
     {
         auto &field = Hrtf->mFields[0];
@@ -331,7 +331,7 @@ void DirectHrtfState::build(const HrtfStore *Hrtf, const uint irSize, const bool
     TRACE("Min delay: %.2f, max delay: %.2f, FIR length: %u\n",
         min_delay/double{HrirDelayFracOne}, max_delay/double{HrirDelayFracOne}, irSize);
 
-    auto tmpres = al::vector<std::array<double2,HrirLength>>(mChannels.size());
+    auto tmpres = std::vector<std::array<double2,HrirLength>>(mChannels.size());
     max_delay = 0;
     for(size_t c{0u};c < AmbiPoints.size();++c)
     {
@@ -393,7 +393,7 @@ std::unique_ptr<HrtfStore> CreateHrtfStore(uint rate, uint8_t irSize,
     {
         Hrtf.reset(al::construct_at(static_cast<HrtfStore*>(ptr)));
         InitRef(Hrtf->mRef, 1u);
-        Hrtf->mSampleRate = rate;
+        Hrtf->mSampleRate = rate & 0xff'ff'ff;
         Hrtf->mIrSize = irSize;
 
         /* Set up pointers to storage following the main HRTF struct. */
@@ -425,7 +425,7 @@ std::unique_ptr<HrtfStore> CreateHrtfStore(uint rate, uint8_t irSize,
         std::uninitialized_copy_n(delays, irCount, delays_);
 
         /* Finally, assign the storage pointers. */
-        Hrtf->mFields = al::as_span(field_, fields.size());
+        Hrtf->mFields = {field_, fields.size()};
         Hrtf->mElev = elev_;
         Hrtf->mCoeffs = coeffs_;
         Hrtf->mDelays = delays_;
@@ -492,10 +492,10 @@ T> readle(std::istream &data)
     static_assert(num_bits <= sizeof(T)*8, "num_bits is too large for the type");
 
     T ret{};
-    al::byte b[sizeof(T)]{};
+    std::byte b[sizeof(T)]{};
     if(!data.read(reinterpret_cast<char*>(b), num_bits/8))
         return static_cast<T>(EOF);
-    std::reverse_copy(std::begin(b), std::end(b), reinterpret_cast<al::byte*>(&ret));
+    std::reverse_copy(std::begin(b), std::end(b), reinterpret_cast<std::byte*>(&ret));
 
     return fixsign<num_bits>(ret);
 }
@@ -529,7 +529,7 @@ std::unique_ptr<HrtfStore> LoadHrtf00(std::istream &data, const char *filename)
         return nullptr;
     }
 
-    auto elevs = al::vector<HrtfStore::Elevation>(evCount);
+    auto elevs = std::vector<HrtfStore::Elevation>(evCount);
     for(auto &elev : elevs)
         elev.irOffset = readle<uint16_t>(data);
     if(!data || data.eof())
@@ -571,8 +571,8 @@ std::unique_ptr<HrtfStore> LoadHrtf00(std::istream &data, const char *filename)
         return nullptr;
     }
 
-    auto coeffs = al::vector<HrirArray>(irCount, HrirArray{});
-    auto delays = al::vector<ubyte2>(irCount);
+    auto coeffs = std::vector<HrirArray>(irCount, HrirArray{});
+    auto delays = std::vector<ubyte2>(irCount);
     for(auto &hrir : coeffs)
     {
         for(auto &val : al::span<float2>{hrir.data(), irSize})
@@ -626,7 +626,7 @@ std::unique_ptr<HrtfStore> LoadHrtf01(std::istream &data, const char *filename)
         return nullptr;
     }
 
-    auto elevs = al::vector<HrtfStore::Elevation>(evCount);
+    auto elevs = std::vector<HrtfStore::Elevation>(evCount);
     for(auto &elev : elevs)
         elev.azCount = readle<uint8_t>(data);
     if(!data || data.eof())
@@ -649,8 +649,8 @@ std::unique_ptr<HrtfStore> LoadHrtf01(std::istream &data, const char *filename)
         elevs[i].irOffset = static_cast<ushort>(elevs[i-1].irOffset + elevs[i-1].azCount);
     const ushort irCount{static_cast<ushort>(elevs.back().irOffset + elevs.back().azCount)};
 
-    auto coeffs = al::vector<HrirArray>(irCount, HrirArray{});
-    auto delays = al::vector<ubyte2>(irCount);
+    auto coeffs = std::vector<HrirArray>(irCount, HrirArray{});
+    auto delays = std::vector<ubyte2>(irCount);
     for(auto &hrir : coeffs)
     {
         for(auto &val : al::span<float2>{hrir.data(), irSize})
@@ -722,8 +722,8 @@ std::unique_ptr<HrtfStore> LoadHrtf02(std::istream &data, const char *filename)
         return nullptr;
     }
 
-    auto fields = al::vector<HrtfStore::Field>(fdCount);
-    auto elevs = al::vector<HrtfStore::Elevation>{};
+    auto fields = std::vector<HrtfStore::Field>(fdCount);
+    auto elevs = std::vector<HrtfStore::Elevation>{};
     for(size_t f{0};f < fdCount;f++)
     {
         const ushort distance{readle<uint16_t>(data)};
@@ -787,8 +787,8 @@ std::unique_ptr<HrtfStore> LoadHrtf02(std::istream &data, const char *filename)
         });
     const auto irTotal = static_cast<ushort>(elevs.back().azCount + elevs.back().irOffset);
 
-    auto coeffs = al::vector<HrirArray>(irTotal, HrirArray{});
-    auto delays = al::vector<ubyte2>(irTotal);
+    auto coeffs = std::vector<HrirArray>(irTotal, HrirArray{});
+    auto delays = std::vector<ubyte2>(irTotal);
     if(channelType == ChanType_LeftOnly)
     {
         if(sampleType == SampleType_S16)
@@ -881,10 +881,10 @@ std::unique_ptr<HrtfStore> LoadHrtf02(std::istream &data, const char *filename)
 
     if(fdCount > 1)
     {
-        auto fields_ = al::vector<HrtfStore::Field>(fields.size());
-        auto elevs_ = al::vector<HrtfStore::Elevation>(elevs.size());
-        auto coeffs_ = al::vector<HrirArray>(coeffs.size());
-        auto delays_ = al::vector<ubyte2>(delays.size());
+        auto fields_ = std::vector<HrtfStore::Field>(fields.size());
+        auto elevs_ = std::vector<HrtfStore::Elevation>(elevs.size());
+        auto coeffs_ = std::vector<HrirArray>(coeffs.size());
+        auto delays_ = std::vector<ubyte2>(delays.size());
 
         /* Simple reverse for the per-field elements. */
         std::reverse_copy(fields.cbegin(), fields.cend(), fields_.begin());
@@ -983,8 +983,8 @@ std::unique_ptr<HrtfStore> LoadHrtf03(std::istream &data, const char *filename)
         return nullptr;
     }
 
-    auto fields = al::vector<HrtfStore::Field>(fdCount);
-    auto elevs = al::vector<HrtfStore::Elevation>{};
+    auto fields = std::vector<HrtfStore::Field>(fdCount);
+    auto elevs = std::vector<HrtfStore::Elevation>{};
     for(size_t f{0};f < fdCount;f++)
     {
         const ushort distance{readle<uint16_t>(data)};
@@ -1048,8 +1048,8 @@ std::unique_ptr<HrtfStore> LoadHrtf03(std::istream &data, const char *filename)
         });
     const auto irTotal = static_cast<ushort>(elevs.back().azCount + elevs.back().irOffset);
 
-    auto coeffs = al::vector<HrirArray>(irTotal, HrirArray{});
-    auto delays = al::vector<ubyte2>(irTotal);
+    auto coeffs = std::vector<HrirArray>(irTotal, HrirArray{});
+    auto delays = std::vector<ubyte2>(irTotal);
     if(channelType == ChanType_LeftOnly)
     {
         for(auto &hrir : coeffs)
@@ -1221,7 +1221,7 @@ al::span<const char> GetResource(int name)
 } // namespace
 
 
-al::vector<std::string> EnumerateHrtf(al::optional<std::string> pathopt)
+std::vector<std::string> EnumerateHrtf(std::optional<std::string> pathopt)
 {
     std::lock_guard<std::mutex> _{EnumeratedHrtfLock};
     EnumeratedHrtfs.clear();
@@ -1270,7 +1270,7 @@ al::vector<std::string> EnumerateHrtf(al::optional<std::string> pathopt)
             AddBuiltInEntry("Built-In HRTF", IDR_DEFAULT_HRTF_MHR);
     }
 
-    al::vector<std::string> list;
+    std::vector<std::string> list;
     list.reserve(EnumeratedHrtfs.size());
     for(auto &entry : EnumeratedHrtfs)
         list.emplace_back(entry.mDispName);
@@ -1394,7 +1394,7 @@ HrtfStorePtr GetLoadedHrtf(const std::string &name, const uint devrate)
 
         /* Scale the delays for the new sample rate. */
         float max_delay{0.0f};
-        auto new_delays = al::vector<float2>(irCount);
+        auto new_delays = std::vector<float2>(irCount);
         const float rate_scale{static_cast<float>(devrate)/static_cast<float>(hrtf->mSampleRate)};
         for(size_t i{0};i < irCount;++i)
         {
@@ -1430,7 +1430,7 @@ HrtfStorePtr GetLoadedHrtf(const std::string &name, const uint devrate)
          */
         const float newIrSize{std::round(static_cast<float>(hrtf->mIrSize) * rate_scale)};
         hrtf->mIrSize = static_cast<uint8_t>(minf(HrirLength, newIrSize));
-        hrtf->mSampleRate = devrate;
+        hrtf->mSampleRate = devrate & 0xff'ff'ff;
     }
 
     TRACE("Loaded HRTF %s for sample rate %uhz, %u-sample filter\n", name.c_str(),
