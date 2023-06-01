@@ -80,7 +80,6 @@ elseif(APPLE)
                 )
             set(_AX_UI_SPECIFIC_SRC
                 ui/UIWebView/UIWebView.mm
-                ui/UIVideoPlayer-ios.mm
                 ui/UIWebView/UIWebViewImpl-ios.mm
                 ui/UIEditBox/UIEditBoxImpl-ios.mm
                 ui/UIEditBox/iOS/CCUIEditBoxIOS.mm

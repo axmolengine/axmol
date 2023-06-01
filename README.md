@@ -37,8 +37,8 @@
 | Windows Desktop       |    complete       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | IMFMediaSession    |
 | Windows UWP           |    complete       | H264, HEVC, VP90      | BGR32                | IMFMediaEngine     |
 | Apple macOS           |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Apple tvOS            |     complete      | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Apple iOS             |    in progress    | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Apple tvOS            |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
+| Apple iOS             |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
 | Android               |    planned        | H264                  | RGB32                |                    |
 
 ## Highlighted Features

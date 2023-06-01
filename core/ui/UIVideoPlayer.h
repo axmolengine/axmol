@@ -25,11 +25,9 @@
  ****************************************************************************/
 #pragma once
 
-#if defined(_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || defined(__APPLE__) || \
-                        AX_TARGET_PLATFORM == AX_PLATFORM_TIZEN) &&                                           \
-                           !defined(AX_PLATFORM_OS_TVOS)
+#include "ui/UIWidget.h"
 
-#    include "ui/UIWidget.h"
+#if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
 #        include "2d/CCDrawNode.h"
@@ -136,7 +134,7 @@ public:
     virtual void setStyle(StyleType style);
 
     /**
-     * Sets play rate, currently, only supported by windows 
+     * Sets play rate, currently, only supported by windows
      *
      * @param fRate   the rate for play, default 1.0
      */
