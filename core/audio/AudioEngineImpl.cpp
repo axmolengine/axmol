@@ -139,7 +139,12 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
                                                      name:UIApplicationWillResignActiveNotification
                                                    object:nil];
 
-        BOOL success = [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:nil];
+#if TARGET_OS_SIMULATOR
+        const auto category = AVAudioSessionCategoryPlayback; // Fix can't hear sound in ios simulator 16.0
+#else
+        const auto category = AVAudioSessionCategoryAmbient;
+#endif
+        BOOL success = [[AVAudioSession sharedInstance] setCategory:category error:nil];
         if (!success)
             ALOGE("Fail to set audio session.");
     }
