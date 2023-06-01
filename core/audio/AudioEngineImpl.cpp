@@ -79,31 +79,6 @@ static void ccALResumeDevice()
 }
 
 #if defined(__APPLE__)
-
-typedef ALvoid (*alSourceNotificationProc)(ALuint sid, ALuint notificationID, ALvoid* userData);
-typedef ALenum (*alSourceAddNotificationProcPtr)(ALuint sid,
-                                                 ALuint notificationID,
-                                                 alSourceNotificationProc notifyProc,
-                                                 ALvoid* userData);
-static ALenum alSourceAddNotificationExt(ALuint sid,
-                                         ALuint notificationID,
-                                         alSourceNotificationProc notifyProc,
-                                         ALvoid* userData)
-{
-    static alSourceAddNotificationProcPtr proc = nullptr;
-
-    if (proc == nullptr)
-    {
-        proc = (alSourceAddNotificationProcPtr)alcGetProcAddress(nullptr, "alSourceAddNotification");
-    }
-
-    if (proc)
-    {
-        return proc(sid, notificationID, notifyProc, userData);
-    }
-    return AL_INVALID_VALUE;
-}
-
 #    if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 @interface AudioEngineSessionHandler : NSObject {
 }
@@ -139,11 +114,11 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
                                                      name:UIApplicationWillResignActiveNotification
                                                    object:nil];
 
-#if TARGET_OS_SIMULATOR
-        const auto category = AVAudioSessionCategoryPlayback; // Fix can't hear sound in ios simulator 16.0
-#else
+#        if TARGET_OS_SIMULATOR
+        const auto category = AVAudioSessionCategoryPlayback;  // Fix can't hear sound in ios simulator 16.0
+#        else
         const auto category = AVAudioSessionCategoryAmbient;
-#endif
+#        endif
         BOOL success = [[AVAudioSession sharedInstance] setCategory:category error:nil];
         if (!success)
             ALOGE("Fail to set audio session.");
@@ -263,31 +238,12 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
 static id s_AudioEngineSessionHandler = nullptr;
 #    endif
 
-ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData)
-{
-    // Currently, we only care about AL_BUFFERS_PROCESSED event
-    if (notificationID != AL_BUFFERS_PROCESSED)
-        return;
-
-    AudioPlayer* player = nullptr;
-    s_instance->_threadMutex.lock();
-    for (const auto& e : s_instance->_audioPlayers)
-    {
-        player = e.second;
-        if (player->_alSource == sid && player->_streamingSource)
-        {
-            player->wakeupRotateThread();
-        }
-    }
-    s_instance->_threadMutex.unlock();
-}
-
 #endif
 
 #if AX_USE_ALSOFT
-#if !defined(AL_API_NOEXCEPT17)
-#define AL_API_NOEXCEPT17
-#endif
+#    if !defined(AL_API_NOEXCEPT17)
+#        define AL_API_NOEXCEPT17
+#    endif
 static void alcReopenDeviceOnAxmolThread()
 {
     Director::getInstance()->getOpenGLView()->queueOperation([](void*) {
@@ -319,6 +275,51 @@ static void AL_APIENTRY _onALEvent(ALenum eventType,
 {
     if (eventType == AL_EVENT_TYPE_DISCONNECTED_SOFT)
         alcReopenDeviceOnAxmolThread();
+}
+#endif
+
+#if defined(__APPLE__) && !AX_USE_ALSOFT
+typedef ALvoid (*alSourceNotificationProc)(ALuint sid, ALuint notificationID, ALvoid* userData);
+typedef ALenum (*alSourceAddNotificationProcPtr)(ALuint sid,
+                                                 ALuint notificationID,
+                                                 alSourceNotificationProc notifyProc,
+                                                 ALvoid* userData);
+static ALenum alSourceAddNotificationExt(ALuint sid,
+                                         ALuint notificationID,
+                                         alSourceNotificationProc notifyProc,
+                                         ALvoid* userData)
+{
+    static alSourceAddNotificationProcPtr proc = nullptr;
+
+    if (proc == nullptr)
+    {
+        proc = (alSourceAddNotificationProcPtr)alcGetProcAddress(nullptr, "alSourceAddNotification");
+    }
+
+    if (proc)
+    {
+        return proc(sid, notificationID, notifyProc, userData);
+    }
+    return AL_INVALID_VALUE;
+}
+
+ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData)
+{
+    // Currently, we only care about AL_BUFFERS_PROCESSED event
+    if (notificationID != AL_BUFFERS_PROCESSED)
+        return;
+
+    AudioPlayer* player = nullptr;
+    s_instance->_threadMutex.lock();
+    for (const auto& e : s_instance->_audioPlayers)
+    {
+        player = e.second;
+        if (player->_alSource == sid && player->_streamingSource)
+        {
+            player->wakeupRotateThread();
+        }
+    }
+    s_instance->_threadMutex.unlock();
 }
 #endif
 
@@ -386,7 +387,7 @@ bool AudioEngineImpl::init()
             for (int i = 0; i < MAX_AUDIOINSTANCES; ++i)
             {
                 _unusedSourcesPool.push(_alSources[i]);
-#if defined(__APPLE__)
+#if !AX_USE_ALSOFT
                 alSourceAddNotificationExt(_alSources[i], AL_BUFFERS_PROCESSED, myAlSourceNotificationCallback,
                                            nullptr);
 #endif
@@ -481,9 +482,6 @@ bool AudioEngineImpl::init()
                 // Set callback
                 alEventCallbackSOFTProc(_onALEvent, this);
             }
-#    endif
-#    ifndef AL_STOP_SOURCES_ON_DISCONNECT_SOFT
-#        define AL_STOP_SOURCES_ON_DISCONNECT_SOFT 0x19AB
 #    endif
             alDisable(AL_STOP_SOURCES_ON_DISCONNECT_SOFT);
 #endif
