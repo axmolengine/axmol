@@ -78,8 +78,8 @@ static void ccALResumeDevice()
 #endif
 }
 
-#if defined(__APPLE__)
-#    if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+#if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
+
 @interface AudioEngineSessionHandler : NSObject {
 }
 
@@ -114,11 +114,11 @@ static void ccALResumeDevice()
                                                      name:UIApplicationWillResignActiveNotification
                                                    object:nil];
 
-#        if TARGET_OS_SIMULATOR
+#    if TARGET_OS_SIMULATOR
         const auto category = AVAudioSessionCategoryPlayback;  // Fix can't hear sound in ios simulator 16.0
-#        else
+#    else
         const auto category = AVAudioSessionCategoryAmbient;
-#        endif
+#    endif
         BOOL success = [[AVAudioSession sharedInstance] setCategory:category error:nil];
         if (!success)
             ALOGE("Fail to set audio session.");
@@ -236,8 +236,6 @@ static void ccALResumeDevice()
 @end
 
 static id s_AudioEngineSessionHandler = nullptr;
-#    endif
-
 #endif
 
 #if AX_USE_ALSOFT
@@ -254,7 +252,8 @@ static void alcReopenDeviceOnAxmolThread()
     });
 }
 
-#    if defined(_WIN32) && defined(ALC_SOFT_system_events)
+#    if defined(ALC_SOFT_system_events) && (defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+#        define _AX_USE_ALC_EVENTS 1
 static void ALC_APIENTRY _onALCEvent(ALCenum eventType,
                                      ALCdevice* device,
                                      ALCsizei length,
@@ -325,6 +324,16 @@ ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notifi
 
 AudioEngineImpl::AudioEngineImpl() : _scheduled(false), _currentAudioID(0), _scheduler(nullptr)
 {
+    struct A
+    {
+        ~A() {
+            ax::print("destructor!");
+        }
+    };
+
+    std::optional<A> a;
+    a = A{};
+
     s_instance = this;
 }
 
@@ -460,7 +469,7 @@ bool AudioEngineImpl::init()
             const char* version = alGetString(AL_VERSION);
 
 #if AX_USE_ALSOFT
-#    if defined(_WIN32) && defined(ALC_SOFT_system_events)
+#    if defined(_AX_USE_ALC_EVENTS)
             auto alcEventControlSOFTProc  = (decltype(alcEventControlSOFT)*)alGetProcAddress("alcEventControlSOFT");
             auto alcEventCallbackSOFTProc = (decltype(alcEventCallbackSOFT)*)alGetProcAddress("alcEventCallbackSOFT");
             if (alcEventControlSOFTProc && alcEventCallbackSOFTProc)
