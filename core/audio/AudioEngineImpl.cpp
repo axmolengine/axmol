@@ -324,16 +324,6 @@ ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notifi
 
 AudioEngineImpl::AudioEngineImpl() : _scheduled(false), _currentAudioID(0), _scheduler(nullptr)
 {
-    struct A
-    {
-        ~A() {
-            ax::print("destructor!");
-        }
-    };
-
-    std::optional<A> a;
-    a = A{};
-
     s_instance = this;
 }
 
