@@ -80,6 +80,12 @@ static void ccALResumeDevice()
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
+#  if TARGET_OS_SIMULATOR
+      #define AVAUDIOSESSION_DEFAULT_CATEGORY  AVAudioSessionCategoryPlayback  // Fix can't hear sound in ios simulator 16.0
+#  else
+      #define AVAUDIOSESSION_DEFAULT_CATEGORY AVAudioSessionCategoryAmbient
+#  endif
+
 @interface AudioEngineSessionHandler : NSObject {
 }
 
@@ -114,12 +120,7 @@ static void ccALResumeDevice()
                                                      name:UIApplicationWillResignActiveNotification
                                                    object:nil];
 
-#    if TARGET_OS_SIMULATOR
-        const auto category = AVAudioSessionCategoryPlayback;  // Fix can't hear sound in ios simulator 16.0
-#    else
-        const auto category = AVAudioSessionCategoryAmbient;
-#    endif
-        BOOL success = [[AVAudioSession sharedInstance] setCategory:category error:nil];
+        BOOL success = [[AVAudioSession sharedInstance] setCategory:AVAUDIOSESSION_DEFAULT_CATEGORY error:nil];
         if (!success)
             ALOGE("Fail to set audio session.");
     }
@@ -200,7 +201,7 @@ static void ccALResumeDevice()
             resumeOnBecomingActive = false;
             ALOGD("UIApplicationDidBecomeActiveNotification, alcMakeContextCurrent(s_ALContext)");
             NSError* error = nil;
-            BOOL success   = [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:&error];
+            BOOL success   = [[AVAudioSession sharedInstance] setCategory:AVAUDIOSESSION_DEFAULT_CATEGORY error:&error];
             if (!success)
             {
                 ALOGE("Fail to set audio session.");
