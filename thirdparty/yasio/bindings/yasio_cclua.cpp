@@ -27,8 +27,8 @@ SOFTWARE.
 */
 #include "yasio/bindings/yasio_cclua.hpp"
 #include "yasio/bindings/lyasio.hpp"
-#include "yasio/detail/object_pool.hpp"
-#include "yasio/detail/ref_ptr.hpp"
+#include "yasio/core/object_pool.hpp"
+#include "yasio/core/ref_ptr.hpp"
 #include "yasio/stl/string_view.hpp"
 
 // A workaround to fix compile issue caused by `CCPlatformMacros.h` doesn't handle `__has_attribute` it properly
@@ -57,7 +57,7 @@ struct TimerObject
   vcallback_t callback_;
   static uintptr_t s_timerId;
 
-  DEFINE_OBJECT_POOL_ALLOCATION(TimerObject, 128)
+  DEFINE_FAST_OBJECT_POOL_ALLOCATION(TimerObject, 128)
   YASIO__DEFINE_REFERENCE_CLASS
 };
 uintptr_t TimerObject::s_timerId = 0;
@@ -66,7 +66,7 @@ static TIMER_ID loop(unsigned int n, float interval, vcallback_t callback)
 {
   if (n > 0 && interval >= 0)
   {
-    yasio::gc::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
+    yasio::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
 
     auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
@@ -88,7 +88,7 @@ static TIMER_ID delay(float delay, vcallback_t callback)
 {
   if (delay > 0)
   {
-    yasio::gc::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
+    yasio::ref_ptr<TimerObject> timerObj(new TimerObject(std::move(callback)));
     auto timerId = reinterpret_cast<TIMER_ID>(++TimerObject::s_timerId);
 
     std::string key = StringUtils::format("LSTMR#%p", timerId);

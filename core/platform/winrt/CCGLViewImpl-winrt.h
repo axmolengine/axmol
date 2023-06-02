@@ -129,6 +129,10 @@ public:
 
     void ProcessEvents();
 
+    void queueOperation(AsyncOperation op, void* param) override;
+
+    void SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb);
+
 protected:
     GLViewImpl();
     virtual ~GLViewImpl();
@@ -179,6 +183,8 @@ private:
     bool m_appShouldExit;
 
     Concurrency::concurrent_queue<std::shared_ptr<InputEvent>> mInputEvents;
+
+    std::function<void(AsyncOperation, void*)> mQueueOperationCb;
 
     Platform::Agile<Windows::UI::Core::CoreDispatcher> m_dispatcher;
     Platform::Agile<Windows::UI::Xaml::Controls::Panel> m_panel;

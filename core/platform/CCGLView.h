@@ -30,7 +30,11 @@ THE SOFTWARE.
 #include "base/ccTypes.h"
 #include "base/CCEventTouch.h"
 
+#include <functional>
 #include <vector>
+#if defined(AX_PLATFORM_PC)
+#    include "concurrentqueue/concurrentqueue.h"
+#endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <windows.h>
@@ -427,6 +431,14 @@ public:
      */
     void renderScene(Scene* scene, Renderer* renderer);
 
+    /** since Axmol-1.0
+    * queue a priority operation in render thread, even through app in background
+    */
+    virtual void queueOperation(AsyncOperation op, void* param = nullptr);
+
+#if defined(AX_PLATFORM_PC)
+    void processOperations();
+#endif
 protected:
     void updateDesignResolutionSize();
 
@@ -444,6 +456,10 @@ protected:
     float _scaleX;
     float _scaleY;
     ResolutionPolicy _resolutionPolicy;
+
+#if defined(AX_PLATFORM_PC)
+    moodycamel::ConcurrentQueue<std::function<void()>> _operations;
+#endif
 };
 
 // end of platform group

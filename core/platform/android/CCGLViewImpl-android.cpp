@@ -110,7 +110,8 @@ bool GLViewImpl::isOpenGLReady()
 
 void GLViewImpl::end()
 {
-    JniHelper::callStaticVoidMethod("org.axmol.lib.AxmolEngine", "terminateProcess");
+    JniHelper::callStaticVoidMethod("org.axmol.lib.AxmolEngine", "onExit");
+    release();
 }
 
 void GLViewImpl::swapBuffers() {}
@@ -235,6 +236,12 @@ Rect GLViewImpl::getSafeAreaRect() const
     }
 
     return safeAreaRect;
+}
+
+void GLViewImpl::queueOperation(void (*op)(void*), void* param)
+{
+    JniHelper::callStaticVoidMethod("org.axmol.lib.AxmolEngine", "queueOperation", (jlong)(uintptr_t)op,
+                                    (jlong)(uintptr_t)param);
 }
 
 NS_AX_END

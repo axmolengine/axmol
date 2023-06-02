@@ -27,7 +27,7 @@
 #include "ui/UIVideoPlayer.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
-#if defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_TARGET_OS_TVOS
+#if defined(_WIN32) || defined(__APPLE__)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>
@@ -36,9 +36,8 @@
 #    include "platform/CCFileUtils.h"
 #    include "ui/UIHelper.h"
 #    include "media/MediaEngine.h"
-#    include "yasio/detail/byte_buffer.hpp"
 #    include "ui/LayoutHelper.h"
-#    include "yasio/detail/sz.hpp"
+#    include "yasio/core/byte_buffer.hpp"
 //-----------------------------------------------------------------------------------------------------------
 
 USING_NS_AX;

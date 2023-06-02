@@ -20,6 +20,7 @@
 
 #include <agile.h>
 #include "platform/winrt/InputEvent.h"
+#include "base/ccTypes.h"
 
 class AppDelegate;
 
@@ -33,6 +34,7 @@ public:
         Windows::UI::Core::CoreDispatcher^ dispatcher, Windows::UI::Xaml::Controls::Panel^ panel);
     AxmolRenderer(const AxmolRenderer&) = delete;
     ~AxmolRenderer();
+    void SetQueueOperationCb(std::function<void(ax::AsyncOperation, void*)> op);
     void Draw(size_t width, size_t height, float dpi, Windows::Graphics::Display::DisplayOrientations orientation);
 	void QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs^ args);
     void QueueKeyboardEvent(ax::WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs ^ args);

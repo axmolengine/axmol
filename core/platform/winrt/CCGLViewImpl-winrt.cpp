@@ -610,4 +610,15 @@ void GLViewImpl::ProcessEvents()
     }
 }
 
+void GLViewImpl::SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb)
+{
+    mQueueOperationCb = std::move(cb);
+}
+
+void GLViewImpl::queueOperation(AsyncOperation op, void* param)
+{
+    if (mQueueOperationCb)
+        mQueueOperationCb(std::move(op), param);
+}
+
 NS_AX_END

@@ -25,8 +25,6 @@ SOFTWARE.
 #  define LUA_LIB
 #endif
 
-#include "yasio/ibstream.hpp"
-#include "yasio/obstream.hpp"
 #include "yasio/yasio.hpp"
 #include "yasio/bindings/lyasio.hpp"
 using namespace yasio;

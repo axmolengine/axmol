@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: git 1.19.0-bb8f5bb (2184)
+- Version: git 1.19.1
 - License: MIT
 
 ## Chipmunk2D
@@ -38,6 +38,11 @@
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
 - Version: 1.2.2
+- License: BSL-1.0
+
+## moodycamel::ConcurrentQueue
+- [![Upstream](https://img.shields.io/github/v/tag/cameron314/concurrentqueue?label=Upstream)](https://github.com/cameron314/concurrentqueue)
+- Version: git 1.0.3-810f621
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -57,7 +62,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 9.1.0
+- Version: 10.0.0
 - License: MIT
 
 ## FreeType
@@ -108,7 +113,7 @@
 ## lua
 - plainlua
   - [![Upstream](https://img.shields.io/github/v/release/lua/lua?label=Upstream)](https://github.com/lua/lua) http://www.lua.org/
-  - Version: 5.4.4
+  - Version: 5.4.6
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
@@ -248,7 +253,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: git 4.0.0-88e5557
+- Version: git 4.0.0-bc1405d
 - License: MIT WITH Anti-996
 
 ## zlib

@@ -684,6 +684,8 @@ using DepthStencilFlags = backend::DepthStencilFlags;
 using RenderTargetFlag  = backend::RenderTargetFlag;
 using ClearFlag         = backend::ClearFlag;
 
+typedef void (*AsyncOperation)(void* param);
+
 NS_AX_END
 // end group
 /// @}

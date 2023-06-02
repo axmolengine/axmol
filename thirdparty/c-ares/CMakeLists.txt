@@ -8,7 +8,7 @@ INCLUDE (CheckCSourceCompiles)
 INCLUDE (CheckStructHasMember)
 INCLUDE (CheckLibraryExists)
 
-PROJECT (c-ares LANGUAGES C VERSION "1.19.0" )
+PROJECT (c-ares LANGUAGES C VERSION "1.19.1" )
 
 # Set this version before release
 SET (CARES_VERSION "${PROJECT_VERSION}")
@@ -26,7 +26,7 @@ INCLUDE (GNUInstallDirs) # include this *AFTER* PROJECT(), otherwise paths are w
 # For example, a version of 4:0:2 would generate output such as:
 #    libname.so   -> libname.so.2
 #    libname.so.2 -> libname.so.2.2.0
-SET (CARES_LIB_VERSIONINFO "8:0:6")
+SET (CARES_LIB_VERSIONINFO "8:1:6")
 
 
 OPTION (CARES_STATIC     "Build as a static library"                                             OFF)
@@ -36,6 +36,8 @@ OPTION (CARES_STATIC_PIC "Build the static library as PIC (position independent)
 OPTION (CARES_BUILD_TESTS "Build and run tests"                                                  OFF)
 OPTION (CARES_BUILD_CONTAINER_TESTS "Build and run container tests (implies CARES_BUILD_TESTS, Linux only)" OFF)
 OPTION (CARES_BUILD_TOOLS "Build tools"                                                          ON)
+SET    (CARES_RANDOM_FILE "/dev/urandom" CACHE STRING "Suitable File / Device Path for entropy, such as /dev/urandom")
+
 
 # Tests require static to be enabled on Windows to be able to access otherwise hidden symbols
 IF (CARES_BUILD_TESTS AND (NOT CARES_STATIC) AND WIN32)
@@ -391,6 +393,8 @@ CHECK_SYMBOL_EXISTS (strncasecmp     "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_STRNCAS
 CHECK_SYMBOL_EXISTS (strncmpi        "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_STRNCMPI)
 CHECK_SYMBOL_EXISTS (strnicmp        "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_STRNICMP)
 CHECK_SYMBOL_EXISTS (writev          "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_WRITEV)
+CHECK_SYMBOL_EXISTS (arc4random_buf  "${CMAKE_EXTRA_INCLUDE_FILES}" HAVE_ARC4RANDOM_BUF)
+
 
 # On Android, the system headers may define __system_property_get(), but excluded
 # from libc.  We need to perform a link test instead of a header/symbol test.
@@ -400,10 +404,6 @@ CHECK_FUNCTION_EXISTS (__system_property_get HAVE___SYSTEM_PROPERTY_GET)
 SET (CMAKE_EXTRA_INCLUDE_FILES)
 SET (CMAKE_REQUIRED_DEFINITIONS)
 SET (CMAKE_REQUIRED_LIBRARIES)
-
-
-find_file(CARES_RANDOM_FILE urandom /dev)
-mark_as_advanced(CARES_RANDOM_FILE)
 
 
 ################################################################################
@@ -623,7 +623,7 @@ ADD_SUBDIRECTORY (include)
 ADD_SUBDIRECTORY (src)
 
 # Docs
-ADD_SUBDIRECTORY (docs)
+# ADD_SUBDIRECTORY (docs)
 
 # Tests
 IF (CARES_BUILD_TESTS OR CARES_BUILD_CONTAINER_TESTS)

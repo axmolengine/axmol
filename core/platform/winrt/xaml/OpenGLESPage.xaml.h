@@ -25,6 +25,7 @@
 #include <condition_variable>
 #include <mutex>
 #include <concrt.h>
+#include <concurrent_queue.h>
 
 #include "AxmolRenderer.h"
 
@@ -39,6 +40,8 @@ namespace AxmolAppWinRT
 
     internal:
         OpenGLESPage(OpenGLES* openGLES);
+
+        void ProcessOperations();
 
     private:
         void OnPageLoaded(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
@@ -87,6 +90,10 @@ namespace AxmolAppWinRT
         Windows::Graphics::Display::DisplayOrientations mOrientation;
 
         std::mutex mSleepMutex;
+
+    internal:
         std::condition_variable mSleepCondition;
+
+        Concurrency::concurrent_queue<std::function<void()>> mOperations;
     };
 }

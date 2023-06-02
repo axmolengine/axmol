@@ -263,6 +263,13 @@ bool AudioPlayer::play2d()
         // OpenAL framework: sometime when switch audio too fast, the result state will error, but there is no any
         // alError, so just skip for workaround.
         assert(state == AL_PLAYING);
+
+        if (!_streamingSource && _currTime >= 0.0f)
+        {
+            alSourcef(_alSource, AL_SEC_OFFSET, _currTime);
+            CHECK_AL_ERROR_DEBUG();
+        }
+
         _ready = true;
         ret    = true;
     } while (false);
