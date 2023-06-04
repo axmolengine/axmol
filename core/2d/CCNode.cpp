@@ -1164,6 +1164,49 @@ void Node::resetChild(Node* child, bool cleanup)
     child->setParent(nullptr);
 }
 
+void Node::fillGlobalZNodeMap(std::unordered_map<float, std::vector<Node*>>& map,
+                              const std::function<bool(Node*)>& addNodePredicate)
+{
+    sortAllChildren();
+
+    int i                    = 0;
+    const auto childrenCount = _children.size();
+
+    if (childrenCount > 0)
+    {
+        Node* child = nullptr;
+        // visit children zOrder < 0
+        for (; i < childrenCount; i++)
+        {
+            child = _children.at(i);
+
+            if (child && child->getLocalZOrder() < 0)
+                child->fillGlobalZNodeMap(map, addNodePredicate);
+            else
+                break;
+        }
+
+        if (addNodePredicate(this))
+        {
+            map[this->getGlobalZOrder()].emplace_back(this);
+        }
+
+        for (; i < childrenCount; i++)
+        {
+            child = _children.at(i);
+            if (child)
+                child->fillGlobalZNodeMap(map, addNodePredicate);
+        }
+    }
+    else
+    {
+        if (addNodePredicate(this))
+        {
+            map[this->getGlobalZOrder()].emplace_back(this);
+        }
+    }
+}
+
 void Node::detachChild(Node* child, ssize_t childIndex, bool cleanup)
 {
     if (_childrenIndexer)
