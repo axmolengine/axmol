@@ -80,11 +80,12 @@ static void ccALResumeDevice()
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
-#  if TARGET_OS_SIMULATOR
-      #define AVAUDIOSESSION_DEFAULT_CATEGORY  AVAudioSessionCategoryPlayback  // Fix can't hear sound in ios simulator 16.0
-#  else
-      #define AVAUDIOSESSION_DEFAULT_CATEGORY AVAudioSessionCategoryAmbient
-#  endif
+#    if TARGET_OS_SIMULATOR
+#        define AVAUDIOSESSION_DEFAULT_CATEGORY \
+            AVAudioSessionCategoryPlayback  // Fix can't hear sound in ios simulator 16.0
+#    else
+#        define AVAUDIOSESSION_DEFAULT_CATEGORY AVAudioSessionCategoryAmbient
+#    endif
 
 @interface AudioEngineSessionHandler : NSObject {
 }
@@ -256,6 +257,7 @@ static void alcReopenDeviceOnAxmolThread()
 #    if defined(ALC_SOFT_system_events) && (defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 #        define _AX_USE_ALC_EVENTS 1
 static void ALC_APIENTRY _onALCEvent(ALCenum eventType,
+                                     ALCenum deviceType,
                                      ALCdevice* device,
                                      ALCsizei length,
                                      const ALCchar* message,
