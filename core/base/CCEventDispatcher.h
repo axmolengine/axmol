@@ -315,7 +315,7 @@ protected:
 
     /** Walks though scene graph to get the draw order for each node, it's called before sorting event listener with
      * scene graph priority */
-    void fillNodePriorityMap(Node* rootNode);
+    void visitTarget(Node* node, bool isRootNode);
 
     /** Remove all listeners in _toRemoveListeners list and cleanup */
     void cleanToRemovedListeners();

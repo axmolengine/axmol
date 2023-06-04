@@ -188,10 +188,6 @@ public:
     virtual void disableCascadeOpacity() override;
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true) override;
     virtual void setGlobalZOrder(float globalZOrder) override;
-
-    void fillGlobalZNodeMap(std::unordered_map<float, std::vector<Node*>>& map,
-                        const std::function<bool(Node*)>& addNodePredicate) override;
-
     ProtectedNode();
     virtual ~ProtectedNode();
 

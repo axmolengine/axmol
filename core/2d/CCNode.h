@@ -1839,14 +1839,6 @@ public:
      */
     void resetChild(Node* child, bool cleanup);
 
-
-    /*
-     * Adds child nodes to an unordered map based on their global Z values and a predicate to
-     * decide if those nodes should be added
-     */
-    virtual void fillGlobalZNodeMap(std::unordered_map<float, std::vector<Node*>>& map,
-                                const std::function<bool(Node*)>& addNodePredicate);
-
     // Nodes should be created using create();
     Node();
     virtual ~Node();
