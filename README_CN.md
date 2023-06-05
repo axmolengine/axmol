@@ -33,7 +33,7 @@
 | Apple macOS           |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
 | Apple tvOS            |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
 | Apple iOS             |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Android               |    planned        | H264                  | RGB32                |                    |
+| Android               |    in progress    | H264, HEVC            | NV12                 | ExoPlayer2         |
 
 ### 关于预编译库
 
