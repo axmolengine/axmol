@@ -86,12 +86,13 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeSetEditTextDialogRes
     }
 }
 
-JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeInvoke(JNIEnv* env, jclass, jlong op, jlong param)
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeCall0(JNIEnv* env, jclass, jlong op, jlong param)
 {
     auto operation = reinterpret_cast<AsyncOperation>(static_cast<uintptr_t>(op));
     if (operation)
         operation(reinterpret_cast<void*>(static_cast<uintptr_t>(param)));
 }
+
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeRunOnGLThread(JNIEnv* env, jclass, jobject runnable)
 {
     using jobject_type = std::remove_pointer_t<jobject>;
