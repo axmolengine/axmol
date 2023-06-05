@@ -213,45 +213,113 @@ EventDispatcher::~EventDispatcher()
 
 void EventDispatcher::visitTarget(Node* node, bool isRootNode)
 {
-    node->sortAllChildren();
-
-    int i          = 0;
-    auto& children = node->getChildren();
-
-    auto childrenCount = children.size();
-
-    if (childrenCount > 0)
+    auto* protectedNode = dynamic_cast<ProtectedNode*>(node);
+    if (protectedNode)
     {
-        Node* child = nullptr;
-        // visit children zOrder < 0
-        for (; i < childrenCount; i++)
-        {
-            child = children.at(i);
+        protectedNode->sortAllProtectedChildren();
+        protectedNode->sortAllChildren();
 
-            if (child && child->getLocalZOrder() < 0)
-                visitTarget(child, false);
-            else
-                break;
-        }
+        const auto& children          = protectedNode->getChildren();
+        const auto& protectedChildren = protectedNode->getProtectedChildren();
 
-        if (_nodeListenersMap.find(node) != _nodeListenersMap.end())
-        {
-            _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
-        }
+        const auto childrenCount          = children.size();
+        const auto protectedChildrenCount = protectedChildren.size();
 
-        for (; i < childrenCount; i++)
+        if (childrenCount > 0 || protectedChildrenCount > 0)
         {
-            child = children.at(i);
-            if (child)
-                visitTarget(child, false);
+            int childIndex          = 0;
+            int protectedChildIndex = 0;
+            Node* child             = nullptr;
+            // visit children zOrder < 0
+            for (; childIndex < childrenCount; childIndex++)
+            {
+                child = children.at(childIndex);
+
+                if (child && child->getLocalZOrder() < 0)
+                    visitTarget(child, false);
+                else
+                    break;
+            }
+
+            for (; protectedChildIndex < protectedChildrenCount; protectedChildIndex++)
+            {
+                child = protectedChildren.at(protectedChildIndex);
+
+                if (child && child->getLocalZOrder() < 0)
+                    visitTarget(child, false);
+                else
+                    break;
+            }
+
+            if (_nodeListenersMap.find(node) != _nodeListenersMap.end())
+            {
+                _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
+            }
+
+            for (; childIndex < childrenCount; childIndex++)
+            {
+                child = children.at(childIndex);
+                if (child)
+                    visitTarget(child, false);
+            }
+
+            for (; protectedChildIndex < protectedChildrenCount; protectedChildIndex++)
+            {
+                child = protectedChildren.at(protectedChildIndex);
+                if (child)
+                    visitTarget(child, false);
+            }
         }
+        else
+        {
+            if (_nodeListenersMap.find(node) != _nodeListenersMap.end())
+            {
+                _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
+            }
+        }    
     }
     else
     {
-        if (_nodeListenersMap.find(node) != _nodeListenersMap.end())
+        node->sortAllChildren();
+
+        const auto& children = node->getChildren();
+
+        const auto childrenCount = children.size();
+
+        if (childrenCount > 0)
         {
-            _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
+            int i       = 0;
+            Node* child = nullptr;
+            // visit children zOrder < 0
+            for (; i < childrenCount; i++)
+            {
+                child = children.at(i);
+
+                if (child && child->getLocalZOrder() < 0)
+                    visitTarget(child, false);
+                else
+                    break;
+            }
+
+            if (_nodeListenersMap.find(node) != _nodeListenersMap.end())
+            {
+                _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
+            }
+
+            for (; i < childrenCount; i++)
+            {
+                child = children.at(i);
+                if (child)
+                    visitTarget(child, false);
+            }
         }
+        else
+        {
+            if (_nodeListenersMap.find(node) != _nodeListenersMap.end())
+            {
+                _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
+            }
+        }        
     }
 
     if (isRootNode)
