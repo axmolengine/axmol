@@ -177,7 +177,7 @@ void VideoPlayerTest::menuOnlineVideoCallback(Ref* sender)
     if (_videoPlayer)
     {
         _videoPlayer->setURL(
-            "http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4");
+            "https://storage.googleapis.com/exoplayer-test-media-1/mkv/android-screens-lavf-56.36.100-aac-avc-main-1280x720.mkv");
         _videoPlayer->play();
     }
 }
