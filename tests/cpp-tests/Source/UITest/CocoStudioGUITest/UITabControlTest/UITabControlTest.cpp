@@ -49,6 +49,15 @@ bool UITabControlTest::init()
         displayText->setPosition(VisibleRect::bottom() + Vec2(0, 50));
         _uiLayer->addChild(displayText);
 
+        auto* touchSinkLayer = Layer::create();
+        touchSinkLayer->setContentSize(_uiLayer->getContentSize());
+        _uiLayer->addChild(touchSinkLayer);
+
+        auto listener = EventListenerTouchOneByOne::create();
+        listener->setSwallowTouches(true);
+        listener->onTouchBegan = [](Touch* t, Event* e) { return true; };
+        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, touchSinkLayer);
+
         auto tab = TabControl::create();
         tab->setContentSize(Size(200.f, 200.f));
         tab->setHeaderHeight(20.f);
@@ -88,7 +97,7 @@ bool UITabControlTest::init()
 
         tab->setSelectTab(2);
 
-        _uiLayer->addChild(tab);
+        touchSinkLayer->addChild(tab);
         tab->setPosition(Vec2(widgetSize.width * .5f, widgetSize.height * .5f));
 
         tab->setTabChangedEventListener([displayText](int index, TabControl::EventType evtType) {
