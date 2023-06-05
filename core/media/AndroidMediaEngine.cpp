@@ -47,9 +47,9 @@ struct ExoPlayer
 AndroidMediaEngine::AndroidMediaEngine()
 {
     // create java object
-    context = JniHelper::callStaticObjectMethod(className, "CreateMediaEngine");
+    context = JniHelper::callStaticObjectMethod(className, "createMediaEngine");
     if (context)
-        JniHelper::callVoidMethod(className, "BindNativeObject", context, (jlong)(uintptr_t)this);
+        JniHelper::callVoidMethod(className, "bindNativeObject", context, (jlong)(uintptr_t)this);
 }
 AndroidMediaEngine::~AndroidMediaEngine()
 {
@@ -57,7 +57,7 @@ AndroidMediaEngine::~AndroidMediaEngine()
     if (context)
     {
         // clear callback
-        JniHelper::callVoidMethod(className, "BindNativeObject", context, (jlong)(uintptr_t)0);
+        JniHelper::callVoidMethod(className, "bindNativeObject", context, (jlong)(uintptr_t)0);
         JniHelper::getEnv()->DeleteGlobalRef(static_cast<jobject>(context));
         context = nullptr;
     }
@@ -70,7 +70,7 @@ void AndroidMediaEngine::SetMediaEventCallback(MEMediaEventCallback cb1)
 void AndroidMediaEngine::SetAutoPlay(bool bAutoPlay)
 {
     if (context)
-        JniHelper::callVoidMethod(className, "SetAutoPlay", context, bAutoPlay);
+        JniHelper::callVoidMethod(className, "setAutoPlay", context, bAutoPlay);
 }
 bool AndroidMediaEngine::Open(std::string_view sourceUri)
 {
@@ -89,56 +89,56 @@ bool AndroidMediaEngine::Open(std::string_view sourceUri)
     }
 
     // call java object method
-    JniHelper::callBooleanMethod(className, "Open", context, sourceUri);
+    JniHelper::callBooleanMethod(className, "open", context, sourceUri);
     return true;
 }
 bool AndroidMediaEngine::Close()
 {
     if (context)
-        JniHelper::callBooleanMethod(className, "Close", context);
+        JniHelper::callBooleanMethod(className, "close", context);
     return true;
 }
 bool AndroidMediaEngine::SetLoop(bool bLooping)
 {
     if (context)
-        JniHelper::callBooleanMethod(className, "SetLoop", context, bLooping);
+        JniHelper::callBooleanMethod(className, "setLoop", context, bLooping);
     return true;
 }
 bool AndroidMediaEngine::SetRate(double fRate)
 {
     if (context)
-        JniHelper::callBooleanMethod(className, "SetRate", context, fRate);
+        JniHelper::callBooleanMethod(className, "setRate", context, fRate);
     return true;
 }
 bool AndroidMediaEngine::SetCurrentTime(double fSeekTimeInSec)
 {
     if (context)
-        JniHelper::callBooleanMethod(className, "SetCurrentTime", context, fSeekTimeInSec);
+        JniHelper::callBooleanMethod(className, "setCurrentTime", context, fSeekTimeInSec);
     return true;
 }
 bool AndroidMediaEngine::Play()
 {
     if (context)
-        JniHelper::callBooleanMethod(className, "Play", context);
+        JniHelper::callBooleanMethod(className, "play", context);
     return true;
 }
 bool AndroidMediaEngine::Pause()
 {
     if (context)
-        JniHelper::callBooleanMethod(className, "Pause", context);
+        JniHelper::callBooleanMethod(className, "pause", context);
     return true;
 }
 bool AndroidMediaEngine::Stop()
 {
     if (context)
-        JniHelper::callBooleanMethod(className, "Stop", context);
+        JniHelper::callBooleanMethod(className, "stop", context);
     return true;
 }
 MEMediaState AndroidMediaEngine::GetState() const
 {
     if (context)
     {
-        int state = JniHelper::callIntMethod(className, "GetState", context);
+        int state = JniHelper::callIntMethod(className, "getState", context);
         return (MEMediaState)state;
     }
     return MEMediaState::Closed;

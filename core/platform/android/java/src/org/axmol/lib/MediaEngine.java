@@ -99,15 +99,15 @@ public class MediaEngine implements Player.Listener {
     public static native void nativeHandleEvent(long nativeObj, int arg1);
     public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY);
 
-    public static Object CreateMediaEngine() {
+    public static Object createMediaEngine() {
         return new MediaEngine();
     }
 
-    public void BindNativeObject(long nativeObj) {
+    public void bindNativeObject(long nativeObj) {
         mNativeObj = nativeObj;
     }
 
-    public void SetAutoPlay(boolean bAutoPlay)
+    public void setAutoPlay(boolean bAutoPlay)
     {
         mAutoPlay = bAutoPlay;
     }
@@ -120,7 +120,7 @@ public class MediaEngine implements Player.Listener {
      *                 assets: file:///android_asset
      * @return
      */
-    public boolean Open(String sourceUri)
+    public boolean open(String sourceUri)
     {
         Close();
 
@@ -159,7 +159,7 @@ public class MediaEngine implements Player.Listener {
         }
         return true;
     }
-    public boolean Close() {
+    public boolean close() {
         if(mPlayer != null) {
             mState = STATE_CLOSING;
             final ExoPlayer player = mPlayer;
@@ -177,7 +177,7 @@ public class MediaEngine implements Player.Listener {
         }
         return true;
     }
-    public boolean SetLoop(boolean bLooping) {
+    public boolean setLoop(boolean bLooping) {
         if (mLooping != bLooping) {
             mLooping = bLooping;
             if (mPlayer == null) return false;
@@ -191,7 +191,7 @@ public class MediaEngine implements Player.Listener {
         }
         return true;
     }
-    public boolean SetRate(double fRate) {
+    public boolean setRate(double fRate) {
         if(mPlayer == null) return false;
         AxmolEngine.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -202,7 +202,7 @@ public class MediaEngine implements Player.Listener {
         });
         return true;
     }
-    public boolean SetCurrentTime(double fSeekTimeInSec)
+    public boolean setCurrentTime(double fSeekTimeInSec)
     {
         if(mPlayer == null) return false;
 
@@ -215,7 +215,7 @@ public class MediaEngine implements Player.Listener {
         });
         return true;
     }
-    public boolean Play() {
+    public boolean play() {
         if (mPlayer == null) return false;
         AxmolEngine.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -229,7 +229,7 @@ public class MediaEngine implements Player.Listener {
         });
         return true;
     }
-    public boolean Pause() {
+    public boolean pause() {
         if(mPlayer == null) return false;
         AxmolEngine.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -240,7 +240,7 @@ public class MediaEngine implements Player.Listener {
         });
         return true;
     }
-    public boolean Stop() {
+    public boolean stop() {
         if(mPlayer == null) return false;
         AxmolEngine.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -261,7 +261,7 @@ public class MediaEngine implements Player.Listener {
      *     int STATE_READY = 3;
      *     int STATE_ENDED = 4;
      */
-    public int GetState() {
+    public int getState() {
         return mState;
     }
 
@@ -315,10 +315,10 @@ public class MediaEngine implements Player.Listener {
         }
     }
 
-    @Override
-    public void onRenderedFirstFrame() {
-        Player.Listener.super.onRenderedFirstFrame();
-    }
+    // @Override
+    // public void onRenderedFirstFrame() {
+    //     Player.Listener.super.onRenderedFirstFrame();
+    // }
 
     @Override
     public void onEvents(Player player, Player.Events events) {
