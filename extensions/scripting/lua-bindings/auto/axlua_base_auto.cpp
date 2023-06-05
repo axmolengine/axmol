@@ -81845,6 +81845,53 @@ int lua_ax_base_ProtectedNode_sortAllProtectedChildren(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_ProtectedNode_getProtectedChildren(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ProtectedNode* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ProtectedNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_getProtectedChildren'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_getProtectedChildren'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getProtectedChildren();
+        ccvector_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProtectedNode:getProtectedChildren",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ProtectedNode_getProtectedChildren'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_ProtectedNode_disableCascadeColor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -82031,6 +82078,7 @@ int lua_register_ax_base_ProtectedNode(lua_State* tolua_S)
         tolua_function(tolua_S,"removeAllProtectedChildrenWithCleanup",lua_ax_base_ProtectedNode_removeAllProtectedChildrenWithCleanup);
         tolua_function(tolua_S,"reorderProtectedChild",lua_ax_base_ProtectedNode_reorderProtectedChild);
         tolua_function(tolua_S,"sortAllProtectedChildren",lua_ax_base_ProtectedNode_sortAllProtectedChildren);
+        tolua_function(tolua_S,"getProtectedChildren",lua_ax_base_ProtectedNode_getProtectedChildren);
         tolua_function(tolua_S,"disableCascadeColor",lua_ax_base_ProtectedNode_disableCascadeColor);
         tolua_function(tolua_S,"disableCascadeOpacity",lua_ax_base_ProtectedNode_disableCascadeOpacity);
         tolua_function(tolua_S,"create", lua_ax_base_ProtectedNode_create);
