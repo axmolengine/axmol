@@ -8,6 +8,8 @@
 #    endif
 #elif defined(__APPLE__)
 #    include "media/AvfMediaEngine.h"
+#elif defined(__ANDROID__)
+#    include "media/AndroidMediaEngine.h"
 #endif
 
 namespace axstd
@@ -40,6 +42,8 @@ std::unique_ptr<MediaEngineFactory> CreatePlatformMediaEngineFactory()
 #    endif
 #elif defined(__APPLE__)
     return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<AvfMediaEngineFactory>());
+#elif defined(__ANDROID__)
+    return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<AndroidMediaEngineFactory>());
 #else
     return nullptr;
 #endif

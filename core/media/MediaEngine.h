@@ -95,10 +95,14 @@ struct MEIntPoint
 {
     MEIntPoint() : x(0), y(0) {}
     MEIntPoint(int x_, int y_) : x(x_), y(y_) {}
+    bool equals(const MEIntPoint& rhs) const { return this->x == rhs.x && this->y == rhs.y; }
+    void set(int x_, int y_) {
+        this->x = x_;
+        this->y = y_;
+    }
+
     int x;
     int y;
-
-    bool equals(const MEIntPoint& rhs) const { return this->x == rhs.x && this->y == rhs.y; }
 };
 
 #if defined(_DEBUG) || !defined(_NDEBUG)

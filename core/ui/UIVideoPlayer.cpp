@@ -27,7 +27,7 @@
 #include "ui/UIVideoPlayer.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>

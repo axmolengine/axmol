@@ -119,6 +119,34 @@ public:
     }
 
     /**
+    @brief Call of Java static object method
+    @if no such method will log error
+    @remark: user been responsible for delete by DeleteGlobalRef
+    */
+    template <typename... Ts>
+    static jobject callStaticObjectMethod(const char* className, const char* methodName, Ts&&... xs)
+    {
+        ax::JniMethodInfo t;
+        const char* signature = jni::TypeSignature<jni::Object<>(std::decay_t<Ts>...)>{}();
+        if (ax::JniHelper::getStaticMethodInfo(t, className, methodName, signature))
+        {
+            LocalRefMapType localRefs;
+            jobject tmp = t.env->CallStaticObjectMethod(t.classID, t.methodID, convert(localRefs, t, xs)...);
+            jobject ret{};
+            if (tmp)
+                ret = t.env->NewGlobalRef(tmp);
+            t.env->DeleteLocalRef(t.classID);
+            deleteLocalRefs(t.env, localRefs);
+            return ret;
+        }
+        else
+        {
+            reportError(className, methodName, signature);
+            return nullptr;
+        }
+    }
+
+    /**
     @brief Call of Java static boolean method
     @return value from Java static boolean method if there are proper JniMethodInfo; otherwise false.
     */
@@ -345,6 +373,79 @@ public:
             reportError(className, methodName, signature);
         }
         return ret;
+    }
+
+    /**
+    @brief Call of Java int method
+    @return value from Java int method if there are proper JniMethodInfo; otherwise 0.
+    */
+    template <typename... Ts>
+    static int callIntMethod(const char* className, const char* methodName, void* object, Ts&&... xs)
+    {
+        jint ret = 0;
+        ax::JniMethodInfo t;
+        const char* signature = jni::TypeSignature<jint(std::decay_t<Ts>...)>{}();
+        if (ax::JniHelper::getMethodInfo(t, className, methodName, signature))
+        {
+
+            LocalRefMapType localRefs;
+            ret = t.env->CallIntMethod((jobject)object, t.methodID, convert(localRefs, t, xs)...);
+            t.env->DeleteLocalRef(t.classID);
+            deleteLocalRefs(t.env, localRefs);
+        }
+        else
+        {
+            reportError(className, methodName, signature);
+        }
+        return ret;
+    }
+
+    /**
+    @brief Call of Java booleans method
+    @return value from Java boolean method if there are proper JniMethodInfo; otherwise 0.
+    */
+    template <typename... Ts>
+    static bool callBooleanMethod(const char* className, const char* methodName, void* object, Ts&&... xs)
+    {
+        jboolean ret = 0;
+        ax::JniMethodInfo t;
+        const char* signature = jni::TypeSignature<jboolean(std::decay_t<Ts>...)>{}();
+        if (ax::JniHelper::getMethodInfo(t, className, methodName, signature))
+        {
+
+            LocalRefMapType localRefs;
+            ret = t.env->CallBooleanMethod((jobject)object, t.methodID, convert(localRefs, t, xs)...);
+            t.env->DeleteLocalRef(t.classID);
+            deleteLocalRefs(t.env, localRefs);
+        }
+        else
+        {
+            reportError(className, methodName, signature);
+        }
+        return (ret == JNI_TRUE);
+    }
+
+    /**
+   @brief Call of Java void method
+   @return value from Java void method if there are proper JniMethodInfo; otherwise 0.
+   */
+    template <typename... Ts>
+    static void callVoidMethod(const char* className, const char* methodName, void* object, Ts&&... xs)
+    {
+        ax::JniMethodInfo t;
+        const char* signature = jni::TypeSignature<void(std::decay_t<Ts>...)>{}();
+        if (ax::JniHelper::getMethodInfo(t, className, methodName, signature))
+        {
+
+            LocalRefMapType localRefs;
+            t.env->CallVoidMethod((jobject)object, t.methodID, convert(localRefs, t, xs)...);
+            t.env->DeleteLocalRef(t.classID);
+            deleteLocalRefs(t.env, localRefs);
+        }
+        else
+        {
+            reportError(className, methodName, signature);
+        }
     }
 
 private:

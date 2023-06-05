@@ -102,17 +102,17 @@ elseif(LINUX)
 elseif(ANDROID)
     set(_AX_UI_SPECIFIC_HEADER
         ui/UIWebView/UIWebView.h
-        ui/UIVideoPlayer.h
         ui/UIWebView/UIWebViewImpl-android.h
         ui/UIEditBox/UIEditBoxImpl-android.h
         )
     set(_AX_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-android.cpp
-        ui/UIVideoPlayer-android.cpp
         ui/UIWebView/UIWebViewImpl-android.cpp
         # it's special for android, not a common file
         ui/UIWebView/UIWebView.cpp
         )
+    set(_AX_UI_SPECIFIC_HEADER ui/UIVideoPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+    set(_AX_UI_SPECIFIC_SRC ui/UIVideoPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 endif()
 
 set(_AX_UI_HEADER
