@@ -313,11 +313,9 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
                 mState.set(STATE_PAUSED);
                 nativeEvent(EVENT_PAUSED);
             }
-            else if(playbackState == Player.STATE_IDLE) {
-                if (mState.get() != STATE_STOPPED) {
-                    mState.set(STATE_STOPPED);
-                    nativeEvent(EVENT_STOPPED);
-                }
+            else if(playbackState == Player.STATE_IDLE && mState.get() != STATE_STOPPED) {
+                mState.set(STATE_STOPPED);
+                nativeEvent(EVENT_STOPPED);
             }
         }
     }
