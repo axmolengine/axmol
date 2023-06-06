@@ -24,7 +24,6 @@
  ****************************************************************************/
 
 #include "yasio/yasio.hpp"
-#include "yasio/obstream.hpp"
 
 #include "network/WebSocket.h"
 
@@ -211,10 +210,10 @@ void WebSocket::closeAllConnections()
 
 WebSocket::WebSocket() : _isDestroyed(std::make_shared<std::atomic<bool>>(false)), _delegate(nullptr)
 {
-    _heartbeatTimer = new yasio::highp_timer();
     _service        = new yasio::io_service();
+    _heartbeatTimer = new yasio::highp_timer(*_service);
     _scheduler      = Director::getInstance()->getScheduler();
-    _service->set_option(yasio::YOPT_S_FORWARD_EVENT, 1);
+    _service->set_option(yasio::YOPT_S_FORWARD_PACKET, 1);  // forward packet immediately when got data from OS kernel
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
     _service->start([=, this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
@@ -584,7 +583,7 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
                 {
                     _state             = State::OPEN;
                     auto& timerForRead = channel->get_user_timer();
-                    timerForRead.cancel(*_service);
+                    timerForRead.cancel();
                     _transport = event->transport();
                     _eventQueue.emplace_back(new OpenEvent());
 
@@ -658,9 +657,9 @@ void WebSocket::handleNetworkEvent(yasio::io_event* event)
             _service->write(event->transport(), std::move(obs.buffer()));
 
             auto& timerForRead = channel->get_user_timer();
-            timerForRead.cancel(*_service);
+            timerForRead.cancel();
             timerForRead.expires_from_now(std::chrono::seconds(30));
-            timerForRead.async_wait_once(*_service, [this, channelIndex](io_service& s) {
+            timerForRead.async_wait_once([this, channelIndex](io_service& s) {
                 _eventQueue.emplace_back(new ErrorEvent(ErrorCode::TIME_OUT));
 
                 //_state = State::CLOSING;

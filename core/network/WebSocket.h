@@ -47,7 +47,7 @@
 #include "base/CCScheduler.h"
 #include "base/ConcurrentDeque.h"
 #include "yasio/yasio_fwd.hpp"
-#include "yasio/detail/byte_buffer.hpp"
+#include "yasio/core/byte_buffer.hpp"
 #include "network/Uri.h"
 #include "llhttp.h"
 #include "websocket_parser.h"
