@@ -36,14 +36,6 @@ NS_AX_BEGIN
 static const char* className                    = "org.axmol.lib.MediaEngine";
 static const std::string_view assets_uri_prefix = "file://assets/";
 
-struct ExoPlayer
-{
-    static const int STATE_IDLE      = 1;
-    static const int STATE_BUFFERING = 2;
-    static const int STATE_READY     = 3;
-    static const int STATE_ENDED     = 4;
-};
-
 AndroidMediaEngine::AndroidMediaEngine()
 {
     // create java object

@@ -25,7 +25,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: '../java/libs', include: ['*.jar', '*.aar'])
+    implementation fileTree(dir: '../java/libs', include: ['*.jar'])
+    compileOnly fileTree(dir: '../java/libs', include: ['*.aar'])
+
     implementation 'androidx.annotation:annotation:1.3.0'
 
     api ('com.google.guava:guava:31.0.1-android') {
