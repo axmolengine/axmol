@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.VideoSize;
 import androidx.media3.datasource.DataSource;
@@ -23,6 +24,7 @@ import androidx.media3.exoplayer.video.VideoRendererEventListener;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("unused")
 public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.OutputHandler {
@@ -72,7 +74,7 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
     private boolean mLooping = false;
     private long mNativeObj = 0; // native object address for send event to C++, weak ref
 
-    private int mState = STATE_CLOSED;
+    private AtomicInteger mState = new AtomicInteger(STATE_CLOSED);
 
     Point mOutputDim = new Point(); // The output dim match with buffer
     Point mVideoDim = new Point(); // The video dim (validate image dim)
@@ -106,10 +108,10 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
      */
     public boolean open(String sourceUri)
     {
-        if(mState == STATE_PREPARING)
+        if (mState.get() == STATE_PREPARING)
             return false;
+        mState.set(STATE_PREPARING);
 
-        mState = STATE_PREPARING;
         final AxmolMediaEngine outputHandler = this;
         AxmolEngine.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -141,7 +143,7 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
 
     public boolean close() {
         if(mPlayer != null) {
-            mState = STATE_CLOSING;
+            mState.set(STATE_CLOSING);
             final ExoPlayer player = mPlayer;
             mPlayer = null;
             final AxmolMediaEngine thiz = this;
@@ -151,7 +153,7 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
                     player.removeListener(thiz);
                     player.stop();
                     player.release();
-                    mState = STATE_CLOSED;
+                    mState.set(STATE_CLOSED);
                 }
             });
         }
@@ -203,7 +205,7 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
             @Override
             public void run() {
                 if (mPlayer != null) {
-                    if (mState == STATE_STOPPED) // TO-CHECK: can't reply after playback stopped
+                    if (mState.compareAndSet(STATE_STOPPED, STATE_PREPARING)) // TO-CHECK: can't reply after playback stopped
                     {
                         /**
                          * The player is used in a way that may benefit from foreground mode.
@@ -247,7 +249,7 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
      * Get playback State match with native MEMediaState
      */
     public int getState() {
-        return mState;
+        return mState.get();
     }
 
     /** update video informations */
@@ -271,23 +273,27 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
         else
             mVideoDim.y = mOutputDim.y;
 
-        mState = STATE_PLAYING;
-
         return format;
     }
 
     /** handler or listener methods */
 
     @Override
-    public void handleVideoSample(MediaCodecAdapter codec, int index) {
+    public void handleVideoSample(MediaCodecAdapter codec, int index, long presentationTimeUs) {
 //        MediaFormat format = updateVideoInfo();
 
 //        String mimeType = format.getString(MediaFormat.KEY_MIME); // "video/raw" (NV12)
 //        Integer colorFormat = format.getInteger(MediaFormat.KEY_COLOR_FORMAT);
 //        boolean NV12 = colorFormat == AxmolVideoRenderer.DESIRED_PIXEL_FORMAT;
 
-        mState = STATE_PLAYING;
-        updateVideoInfo();
+        if(presentationTimeUs == 0) {
+            updateVideoInfo();
+        }
+
+        if (mState.get() != STATE_PLAYING) {
+            mState.set(STATE_PLAYING);
+            nativeEvent(EVENT_PLAYING);
+        }
 
         ByteBuffer tmpBuffer = codec.getOutputBuffer(index);
         nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y);
@@ -296,6 +302,20 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
     @Override
     public void onIsPlayingChanged(boolean isPlaying) {
         Log.d(TAG, "[Individual]onIsPlayingChanged: " + isPlaying);
+        if(mPlayer == null) return;
+        if (!isPlaying) {
+            int playbackState = mPlayer.getPlaybackState();
+            if (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING) {
+                mState.set(STATE_PAUSED);
+                nativeEvent(EVENT_PAUSED);
+            }
+            else if(playbackState == Player.STATE_IDLE) {
+                if (mState.get() != STATE_STOPPED) {
+                    mState.set(STATE_STOPPED);
+                    nativeEvent(EVENT_STOPPED);
+                }
+            }
+        }
     }
 
     /**
@@ -309,66 +329,46 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
     @Override
     public void onPlaybackStateChanged(int playbackState) {
         Log.d(TAG, "[Individual]onPlaybackStateChanged: " + playbackState);
+        if(mPlayer == null) return;
+        switch (playbackState) {
+            case Player.STATE_READY:
+                Log.d(TAG, "[Individual]onPlaybackStateChanged: decoder: " + mVideoRenderer.getCodecName());
+                break;
+            case Player.STATE_ENDED:
+                mState.set(STATE_COMPLETED);
+                nativeEvent(EVENT_COMPLETED);
+                break;
+            case Player.STATE_IDLE:
+                mState.set(STATE_STOPPED);
+                nativeEvent(EVENT_STOPPED);
+                break;
+            default: ;
+        }
+    }
+
+    @Override
+    public void onPlayerError(PlaybackException error) {
+        Log.e(TAG, "onPlayerError: " + error.getMessage());
+        if(mPlayer == null) return;
+        mState .set(STATE_ERROR);
+        nativeEvent(EVENT_ERROR);
     }
 
     @Override
     public void onVideoSizeChanged(VideoSize videoSize) {
         Log.d(TAG, String.format("[Individual]onVideoSizeChanged: (%d,%d)", videoSize.width, videoSize.height));
+        if(mPlayer != null)
+            updateVideoInfo();
     }
-
-    public void nativeEvent(int event){
-        if(mNativeObj != 0) {
-            nativeHandleEvent(mNativeObj, event);
-        }
-    }
-
-    // @Override
-    // public void onRenderedFirstFrame() {
-    //     Player.Listener.super.onRenderedFirstFrame();
-    // }
 
     @Override
-    public void onEvents(Player player, Player.Events events) {
-        if (mPlayer == null) return;
+    public void onIsLoadingChanged(boolean isLoading) {
+        Log.d(TAG, "[Individual]onIsLoadingChanged: " + isLoading);
+    }
 
-        if(events.contains(Player.EVENT_IS_PLAYING_CHANGED)) {
-            Log.d(TAG, "onIsPlayingChanged: " + mPlayer.isPlaying());
-            if (mPlayer.isPlaying())
-                nativeEvent(EVENT_PLAYING);
-            else {
-                nativeEvent(EVENT_PAUSED);
-                mState = STATE_PAUSED;
-            }
-        }
-        if(events.contains(Player.EVENT_PLAYBACK_STATE_CHANGED)) {
-            int state = mPlayer.getPlaybackState();
-            Log.d(TAG, "onPlaybackStateChanged: " + state);
-            switch (state) {
-                case Player.STATE_READY:
-//                    mIsH256 = mVideoRenderer.isH2565();
-                    break;
-                case Player.STATE_ENDED:
-                    nativeEvent(EVENT_COMPLETED);
-                    mState = STATE_COMPLETED;
-                    break;
-                case Player.STATE_IDLE:
-                    nativeEvent(EVENT_STOPPED);
-                    mState = STATE_STOPPED;
-                    break;
-                default: ;
-            }
-        }
-        if(events.contains(Player.EVENT_PLAYER_ERROR)) {
-            Log.e(TAG, "onPlayerError: " + mPlayer.isPlaying());
-            nativeEvent(EVENT_ERROR);
-            mState = STATE_ERROR;
-        }
-        if(events.contains(Player.EVENT_VIDEO_SIZE_CHANGED)) {
-            final VideoSize videoSize = mPlayer.getVideoSize();
-            Log.d(TAG, String.format("onVideoSizeChanged: %d, %d", videoSize.width, videoSize.height));
-        }
-        if(events.contains(Player.EVENT_IS_LOADING_CHANGED)) {
-            Log.d(TAG, "onIsLoadingChanged: " + mPlayer.isLoading());
+    public void nativeEvent(int event) {
+        if(mNativeObj != 0 && mPlayer != null) {
+            nativeHandleEvent(mNativeObj, event);
         }
     }
 

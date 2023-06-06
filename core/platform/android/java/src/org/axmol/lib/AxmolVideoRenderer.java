@@ -110,10 +110,6 @@ import androidx.media3.exoplayer.video.VideoFrameMetadataListener;
 
 
 public class AxmolVideoRenderer extends MediaCodecRenderer {
-  public interface OutputHandler {
-    void handleVideoSample(MediaCodecAdapter codec, int index);
-  }
-
   public static final int DESIRED_PIXEL_FORMAT = CodecCapabilities.COLOR_FormatYUV420SemiPlanar; // desired pixel format: NV12
 
   private static final String TAG = "AxmolVideoRenderer";
@@ -178,12 +174,22 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
   @Nullable private VideoFrameMetadataListener frameMetadataListener;
 
   private OutputHandler outputHandler;
+
   public void setOutputHandler(OutputHandler handler) {
     outputHandler = handler;
   }
 
+  public interface OutputHandler {
+    void handleVideoSample(MediaCodecAdapter codec, int index, long presentationTimeUs);
+  }
+
   public MediaFormat getOutputMediaFormat() {
       return this.getCodecOutputMediaFormat();
+  }
+
+  public String getCodecName() {
+      MediaCodecInfo info = getCodecInfo();
+      return info != null ? info.mimeType : "";
   }
 
   /**
@@ -1292,7 +1298,7 @@ public class AxmolVideoRenderer extends MediaCodecRenderer {
    */
   protected void renderOutputBuffer(MediaCodecAdapter codec, int index, long presentationTimeUs) {
     maybeNotifyVideoSizeChanged();
-    outputHandler.handleVideoSample(codec, index);
+    outputHandler.handleVideoSample(codec, index, presentationTimeUs);
     TraceUtil.beginSection("releaseOutputBuffer");
     codec.releaseOutputBuffer(index, false);
     TraceUtil.endSection();
