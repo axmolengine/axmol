@@ -7,7 +7,6 @@ import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.net.Uri;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -122,8 +121,6 @@ public class MediaEngine implements Player.Listener {
      */
     public boolean open(String sourceUri)
     {
-        Close();
-
         try {
             mState = STATE_PREPARING;
 
