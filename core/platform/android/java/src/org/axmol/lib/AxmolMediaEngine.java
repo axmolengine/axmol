@@ -1,38 +1,30 @@
 package org.axmol.lib;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Point;
-import android.media.MediaCrypto;
 import android.media.MediaFormat;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Renderer;
-import com.google.android.exoplayer2.mediacodec.MediaCodecAdapter;
-import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
-import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.exoplayer2.video.VideoRendererEventListener;
-import com.google.android.exoplayer2.video.VideoSize;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.Player;
+import androidx.media3.common.VideoSize;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.Renderer;
+import androidx.media3.exoplayer.mediacodec.MediaCodecAdapter;
+import androidx.media3.exoplayer.mediacodec.MediaCodecSelector;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.exoplayer.video.VideoRendererEventListener;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import android.media.MediaCodecInfo.CodecCapabilities;
-
+@SuppressWarnings("unused")
 public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.OutputHandler {
     // The native media events, match with MEMediaEventType
     public static final int EVENT_PLAYING = 0;
