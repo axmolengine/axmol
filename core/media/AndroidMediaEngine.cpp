@@ -81,59 +81,39 @@ bool AndroidMediaEngine::Open(std::string_view sourceUri)
     }
 
     // call java object method
-    JniHelper::callBooleanMethod(className, "open", context, sourceUri);
-    return true;
+    return JniHelper::callBooleanMethod(className, "open", context, sourceUri);
 }
 bool AndroidMediaEngine::Close()
 {
-    if (context)
-        JniHelper::callBooleanMethod(className, "close", context);
-    return true;
+    return context && JniHelper::callBooleanMethod(className, "close", context);
 }
 bool AndroidMediaEngine::SetLoop(bool bLooping)
 {
-    if (context)
-        JniHelper::callBooleanMethod(className, "setLoop", context, bLooping);
-    return true;
+    return context && JniHelper::callBooleanMethod(className, "setLoop", context, bLooping);
 }
 bool AndroidMediaEngine::SetRate(double fRate)
 {
-    if (context)
-        JniHelper::callBooleanMethod(className, "setRate", context, fRate);
-    return true;
+    return context && JniHelper::callBooleanMethod(className, "setRate", context, fRate);
 }
 bool AndroidMediaEngine::SetCurrentTime(double fSeekTimeInSec)
 {
-    if (context)
-        JniHelper::callBooleanMethod(className, "setCurrentTime", context, fSeekTimeInSec);
-    return true;
+    return context && JniHelper::callBooleanMethod(className, "setCurrentTime", context, fSeekTimeInSec);
 }
 bool AndroidMediaEngine::Play()
 {
-    if (context)
-        JniHelper::callBooleanMethod(className, "play", context);
-    return true;
+    return context && JniHelper::callBooleanMethod(className, "play", context);
 }
 bool AndroidMediaEngine::Pause()
 {
-    if (context)
-        JniHelper::callBooleanMethod(className, "pause", context);
-    return true;
+    return context && JniHelper::callBooleanMethod(className, "pause", context);
 }
 bool AndroidMediaEngine::Stop()
 {
-    if (context)
-        JniHelper::callBooleanMethod(className, "stop", context);
-    return true;
+    return context && JniHelper::callBooleanMethod(className, "stop", context);
 }
 MEMediaState AndroidMediaEngine::GetState() const
 {
-    if (context)
-    {
-        int state = JniHelper::callIntMethod(className, "getState", context);
-        return (MEMediaState)state;
-    }
-    return MEMediaState::Closed;
+    return context ? (MEMediaState)JniHelper::callIntMethod(className, "getState", context) : MEMediaState::Closed;
 }
 
 bool AndroidMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)

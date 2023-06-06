@@ -116,41 +116,39 @@ public class MediaEngine implements Player.Listener {
      */
     public boolean open(String sourceUri)
     {
-        try {
-            mState = STATE_PREPARING;
-
-            final Context activity = AxmolEngine.getActivity();
-            Uri uri = Uri.parse(sourceUri);
-            DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(activity);
-            MediaSource mediaSource =
-                new ProgressiveMediaSource.Factory(dataSourceFactory)
-                    .createMediaSource(MediaItem.fromUri(uri));
-            Context context = activity.getApplicationContext();
-            mPlayer = new ExoPlayer.Builder(context, new ByteBufferRenderersFactory(context)).build();
-            mPlayer.addListener(this);
-
-            final MediaEngine outputHandler = this;
-            AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        mVideoRenderer = (ByteBufferMediaCodecVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
-                        mVideoRenderer.setOutputHandler(outputHandler);
-                        mPlayer.setMediaSource(mediaSource);
-                        mPlayer.prepare();
-                        mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
-                        mPlayer.setPlayWhenReady(mAutoPlay);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if(mState == STATE_PREPARING)
             return false;
-        }
+
+        mState = STATE_PREPARING;
+        final MediaEngine outputHandler = this;
+        AxmolEngine.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final Context activity = AxmolEngine.getActivity();
+                    Context context = activity.getApplicationContext();
+                    DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(activity);
+                    MediaSource mediaSource =
+                        new ProgressiveMediaSource.Factory(dataSourceFactory)
+                            .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
+
+                    mPlayer = new ExoPlayer.Builder(context, new ByteBufferRenderersFactory(context)).build();
+                    mVideoRenderer = (ByteBufferMediaCodecVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
+                    mVideoRenderer.setOutputHandler(outputHandler);
+                    mPlayer.addListener(outputHandler);
+                    mPlayer.setMediaSource(mediaSource);
+                    mPlayer.prepare();
+                    mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
+                    mPlayer.setPlayWhenReady(mAutoPlay);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         return true;
     }
+
     public boolean close() {
         if(mPlayer != null) {
             mState = STATE_CLOSING;
@@ -183,6 +181,8 @@ public class MediaEngine implements Player.Listener {
         }
         return true;
     }
+
+    @SuppressWarnings("unused")
     public boolean setRate(double fRate) {
         if(mPlayer == null) return false;
         AxmolEngine.getActivity().runOnUiThread(new Runnable() {
@@ -214,7 +214,16 @@ public class MediaEngine implements Player.Listener {
             public void run() {
                 if (mPlayer != null) {
                     if (mState == STATE_STOPPED) // TO-CHECK: can't reply after playback stopped
+                    {
+                        /**
+                         * The player is used in a way that may benefit from foreground mode.
+                         * For this to be true, the same player instance must be used to play multiple pieces of content,
+                         * and there must be gaps between the playbacks (i.e. Player.stop() is called to halt one playback,
+                         * and prepare(com.google.android.exoplayer2.source.MediaSource) is called some time later to start a new one).
+                         */
+                        mPlayer.prepare();
                         mPlayer.seekTo(0);
+                    }
                     mPlayer.play();
                 }
             }
@@ -291,6 +300,29 @@ public class MediaEngine implements Player.Listener {
 
         ByteBuffer tmpBuffer = codec.getOutputBuffer(index);
         nativeHandleVideoSample(mNativeObj, tmpBuffer, tmpBuffer.remaining(), mOutputDim.x, mOutputDim.y, mVideoDim.x, mVideoDim.y);
+    }
+
+    @Override
+    public void onIsPlayingChanged(boolean isPlaying) {
+        Log.d(TAG, "[Individual]onIsPlayingChanged: " + isPlaying);
+    }
+
+    /**
+     *
+     * @param playbackState
+     *     int STATE_IDLE = 1;
+     *     int STATE_BUFFERING = 2;
+     *     int STATE_READY = 3;
+     *     int STATE_ENDED = 4;
+     */
+    @Override
+    public void onPlaybackStateChanged(int playbackState) {
+        Log.d(TAG, "[Individual]onPlaybackStateChanged: " + playbackState);
+    }
+
+    @Override
+    public void onVideoSizeChanged(VideoSize videoSize) {
+        Log.d(TAG, String.format("[Individual]onVideoSizeChanged: (%d,%d)", videoSize.width, videoSize.height));
     }
 
     public void nativeEvent(int event){
