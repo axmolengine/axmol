@@ -25,7 +25,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_MediaEngine_nativeHandleVideoSample(JN
     if (!mediaEngine)
         return;
 
-    auto sampleData = (uint8_t*)env->GetDirectBufferAddress(sampleBuffer);
+    auto sampleData = static_cast<uint8_t*>(env->GetDirectBufferAddress(sampleBuffer));
 
     mediaEngine->handleVideoSample(sampleData, sampleLen, outputX, outputY, videoX, videoY);
 }

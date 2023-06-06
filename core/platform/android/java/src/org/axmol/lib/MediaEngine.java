@@ -26,13 +26,10 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
-import com.google.android.exoplayer2.video.VideoFrameMetadataListener;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.android.exoplayer2.video.VideoSize;
 
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 
 import android.media.MediaCodecInfo.CodecCapabilities;
@@ -81,12 +78,8 @@ public class MediaEngine implements Player.Listener {
 
     private ExoPlayer mPlayer;
     private ByteBufferMediaCodecVideoRenderer mVideoRenderer;
-    private ByteBuffer mLastVideoFrameData = null;
     private boolean mAutoPlay = false;
     private boolean mLooping = false;
-
-    private boolean mIsH256 = false;
-
     private long mNativeObj = 0; // native object address for send event to C++, weak ref
 
     private int mState = STATE_CLOSED;
@@ -98,10 +91,12 @@ public class MediaEngine implements Player.Listener {
     public static native void nativeHandleEvent(long nativeObj, int arg1);
     public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY);
 
+    @SuppressWarnings("unused")
     public static Object createMediaEngine() {
         return new MediaEngine();
     }
 
+    @SuppressWarnings("unused")
     public void bindNativeObject(long nativeObj) {
         mNativeObj = nativeObj;
     }
@@ -250,13 +245,7 @@ public class MediaEngine implements Player.Listener {
     }
 
     /**
-     * Get playback State
-     *
-     * @return
-     *     int STATE_IDLE = 1;
-     *     int STATE_BUFFERING = 2;
-     *     int STATE_READY = 3;
-     *     int STATE_ENDED = 4;
+     * Get playback State match with native MEMediaState
      */
     public int getState() {
         return mState;
@@ -282,8 +271,6 @@ public class MediaEngine implements Player.Listener {
         }
         else
             mVideoDim.y = mOutputDim.y;
-
-        mIsH256 = mVideoRenderer.isH256();
 
         mState = STATE_PLAYING;
 
@@ -345,6 +332,7 @@ public class MediaEngine implements Player.Listener {
                     nativeEvent(EVENT_STOPPED);
                     mState = STATE_STOPPED;
                     break;
+                default: ;
             }
         }
         if(events.contains(Player.EVENT_PLAYER_ERROR)) {
@@ -370,10 +358,10 @@ public class MediaEngine implements Player.Listener {
             this.mOutputHandler = handler;
         }
 
-        public boolean isH256() {
-            MediaCodecInfo codecInfo = getCodecInfo();
-            return codecInfo.mimeType == "video/hevc";
-        }
+//        public boolean isH256() {
+//            MediaCodecInfo codecInfo = getCodecInfo();
+//            return codecInfo.mimeType == "video/hevc";
+//        }
 
         public MediaFormat getOutputMediaFormat() {
             return getCodecOutputMediaFormat();
