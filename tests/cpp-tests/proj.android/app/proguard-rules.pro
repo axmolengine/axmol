@@ -28,9 +28,6 @@
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 
--keep public class com.google.android.exoplayer2.**
--keepclassmembers public class com.google.android.exoplayer2.** { *; }
-
 # Proguard Android Webivew for release. uncomment if you are using a webview in axmol
 #-keep public class android.net.http.SslError
 #-keep public class android.webkit.WebViewClient

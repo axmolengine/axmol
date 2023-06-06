@@ -20,6 +20,3 @@
 
 -keep public class org.axmol.lib.**
 -keepclassmembers public class org.axmol.lib.** { *; }
-
--keep public class com.google.android.exoplayer2.**
--keepclassmembers public class com.google.android.exoplayer2.** { *; }
