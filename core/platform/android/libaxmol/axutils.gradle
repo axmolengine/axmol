@@ -91,6 +91,12 @@ class VersionComparator implements Comparator<String> {
 
 class axutils {
 
+    @SuppressWarnings('unused')
+    static String getCoreAARDir(project) {
+        return new File(project.projectDir.toString() + "/../java/libs").getCanonicalPath();
+    }
+
+    @SuppressWarnings('unused')
     static String[] findNativeBuildTools(project, ndkVer = "23.2.8568313+", cmakeVer = "3.22.1+") {
 
         // Detecting sdkRoot
