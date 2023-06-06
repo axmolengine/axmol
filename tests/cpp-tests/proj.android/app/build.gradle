@@ -104,10 +104,6 @@ android.applicationVariants.all { variant ->
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    // Embed ExoPlayer aar to apk
-    implementation fileTree(dir: axutils.getCoreAARDir(project(':libaxmol')), includes: ['*.aar'])
-
     implementation project(':libaxmol')
 }
 

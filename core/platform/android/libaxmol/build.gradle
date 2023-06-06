@@ -26,7 +26,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: '../java/libs', include: ['*.jar'])
-    compileOnly fileTree(dir: '../java/libs', include: ['*.aar'])
+
+    api 'com.google.android.exoplayer:exoplayer-core:2.18.7'
+    api 'com.google.android.exoplayer:exoplayer-common:2.18.7'
+    api 'com.google.android.exoplayer:exoplayer-datasource:2.18.7'
+    api 'com.google.android.exoplayer:exoplayer-decoder:2.18.7'
+    api 'com.google.android.exoplayer:exoplayer-extractor:2.18.7'
 
     implementation 'androidx.annotation:annotation:1.3.0'
 

@@ -3,7 +3,7 @@
 #    include "platform/android/jni/JniHelper.h"
 
 extern "C" {
-JNIEXPORT void JNICALL Java_org_axmol_lib_MediaEngine_nativeHandleEvent(JNIEnv* env, jclass, jlong pME, int arg1)
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleEvent(JNIEnv* env, jclass, jlong pME, int arg1)
 {
     auto mediaEngine = (ax::AndroidMediaEngine*)((uintptr_t)pME);
     if (!mediaEngine)
@@ -11,7 +11,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_MediaEngine_nativeHandleEvent(JNIEnv* 
 
     mediaEngine->handleEvent(arg1);
 }
-JNIEXPORT void JNICALL Java_org_axmol_lib_MediaEngine_nativeHandleVideoSample(JNIEnv* env,
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleVideoSample(JNIEnv* env,
                                                                               jclass,
                                                                               jlong pME,
                                                                               jobject sampleBuffer,
@@ -33,7 +33,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_MediaEngine_nativeHandleVideoSample(JN
 
 NS_AX_BEGIN
 
-static const char* className                    = "org.axmol.lib.MediaEngine";
+static const char* className                    = "org.axmol.lib.AxmolMediaEngine";
 static const std::string_view assets_uri_prefix = "file://assets/";
 
 AndroidMediaEngine::AndroidMediaEngine()

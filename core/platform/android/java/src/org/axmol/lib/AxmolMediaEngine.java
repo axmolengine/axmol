@@ -25,7 +25,6 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.android.exoplayer2.video.VideoSize;
 
@@ -34,7 +33,7 @@ import java.util.ArrayList;
 
 import android.media.MediaCodecInfo.CodecCapabilities;
 
-public class MediaEngine implements Player.Listener {
+public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.OutputHandler {
     // The native media events, match with MEMediaEventType
     public static final int EVENT_PLAYING = 0;
     public static final int EVENT_PAUSED = 1;
@@ -72,12 +71,11 @@ public class MediaEngine implements Player.Listener {
      * COLOR_FormatYUV420Planar (yyyyyyyy uu vv)     (YUV420p)
      * COLOR_FormatYUV422SemiPlanar (Y0 U0 Y1 V0)    (YUY2)
      */
-    public static final int DESIRED_PIXEL_FORMAT = CodecCapabilities.COLOR_FormatYUV420SemiPlanar; // desired pixel format: NV12
 
-    public static final String TAG = "MediaEngine";
+    public static final String TAG = "AxmolMediaEngine";
 
     private ExoPlayer mPlayer;
-    private ByteBufferMediaCodecVideoRenderer mVideoRenderer;
+    private AxmolVideoRenderer mVideoRenderer;
     private boolean mAutoPlay = false;
     private boolean mLooping = false;
     private long mNativeObj = 0; // native object address for send event to C++, weak ref
@@ -93,7 +91,7 @@ public class MediaEngine implements Player.Listener {
 
     @SuppressWarnings("unused")
     public static Object createMediaEngine() {
-        return new MediaEngine();
+        return new AxmolMediaEngine();
     }
 
     @SuppressWarnings("unused")
@@ -120,7 +118,7 @@ public class MediaEngine implements Player.Listener {
             return false;
 
         mState = STATE_PREPARING;
-        final MediaEngine outputHandler = this;
+        final AxmolMediaEngine outputHandler = this;
         AxmolEngine.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -132,8 +130,8 @@ public class MediaEngine implements Player.Listener {
                         new ProgressiveMediaSource.Factory(dataSourceFactory)
                             .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
 
-                    mPlayer = new ExoPlayer.Builder(context, new ByteBufferRenderersFactory(context)).build();
-                    mVideoRenderer = (ByteBufferMediaCodecVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
+                    mPlayer = new ExoPlayer.Builder(context, new AxmolRenderersFactory(context)).build();
+                    mVideoRenderer = (AxmolVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
                     mVideoRenderer.setOutputHandler(outputHandler);
                     mPlayer.addListener(outputHandler);
                     mPlayer.setMediaSource(mediaSource);
@@ -154,7 +152,7 @@ public class MediaEngine implements Player.Listener {
             mState = STATE_CLOSING;
             final ExoPlayer player = mPlayer;
             mPlayer = null;
-            final MediaEngine thiz = this;
+            final AxmolMediaEngine thiz = this;
             AxmolEngine.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -288,12 +286,13 @@ public class MediaEngine implements Player.Listener {
 
     /** handler or listener methods */
 
+    @Override
     public void handleVideoSample(MediaCodecAdapter codec, int index) {
 //        MediaFormat format = updateVideoInfo();
 
 //        String mimeType = format.getString(MediaFormat.KEY_MIME); // "video/raw" (NV12)
 //        Integer colorFormat = format.getInteger(MediaFormat.KEY_COLOR_FORMAT);
-//        boolean NV12 = colorFormat == DESIRED_PIXEL_FORMAT;
+//        boolean NV12 = colorFormat == AxmolVideoRenderer.DESIRED_PIXEL_FORMAT;
 
         mState = STATE_PLAYING;
         updateVideoInfo();
@@ -381,76 +380,9 @@ public class MediaEngine implements Player.Listener {
         }
     }
 
-    /** internal classes */
-    class ByteBufferMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
+    final class AxmolRenderersFactory extends DefaultRenderersFactory {
 
-        MediaEngine mOutputHandler;
-
-        public void setOutputHandler(MediaEngine handler) {
-            this.mOutputHandler = handler;
-        }
-
-//        public boolean isH256() {
-//            MediaCodecInfo codecInfo = getCodecInfo();
-//            return codecInfo.mimeType == "video/hevc";
-//        }
-
-        public MediaFormat getOutputMediaFormat() {
-            return getCodecOutputMediaFormat();
-        }
-
-        @TargetApi(17)
-        @Override
-        protected MediaCodecAdapter.Configuration getMediaCodecConfiguration(
-            MediaCodecInfo codecInfo,
-            Format format,
-            MediaCrypto crypto,
-            float codecOperatingRate) {
-            MediaCodecAdapter.Configuration configuration = super.getMediaCodecConfiguration(codecInfo, format, crypto, codecOperatingRate);
-            configuration.mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaEngine.DESIRED_PIXEL_FORMAT);
-
-            return configuration;
-        }
-
-        public ByteBufferMediaCodecVideoRenderer(
-            Context context,
-            MediaCodecAdapter.Factory codecAdapterFactory,
-            MediaCodecSelector mediaCodecSelector,
-            long allowedJoiningTimeMs,
-            boolean enableDecoderFallback,
-            @Nullable Handler eventHandler,
-            @Nullable VideoRendererEventListener eventListener,
-            int maxDroppedFramesToNotify) {
-            super(
-                context,
-                codecAdapterFactory,
-                mediaCodecSelector,
-                allowedJoiningTimeMs,
-                enableDecoderFallback,
-                eventHandler,
-                eventListener,
-                maxDroppedFramesToNotify);
-            this.mByteBufferMode = true;
-        }
-
-        @RequiresApi(21)
-        @Override
-        protected void renderOutputBufferV21(
-            MediaCodecAdapter codec, int index, long presentationTimeUs, long releaseTimeNs)
-        {
-            mOutputHandler.handleVideoSample(codec, index);
-            super.renderOutputBufferV21(codec, index, presentationTimeUs, releaseTimeNs);
-        }
-        @Override
-        protected void renderOutputBuffer(MediaCodecAdapter codec, int index, long presentationTimeUs) {
-            mOutputHandler.handleVideoSample(codec, index);
-            super.renderOutputBuffer(codec, index, presentationTimeUs);
-        }
-    }
-
-    final class ByteBufferRenderersFactory extends DefaultRenderersFactory {
-
-        public ByteBufferRenderersFactory(Context context) {
+        public AxmolRenderersFactory(Context context) {
             super(context);
             setAllowedVideoJoiningTimeMs(0);
         }
@@ -466,7 +398,7 @@ public class MediaEngine implements Player.Listener {
             long allowedVideoJoiningTimeMs,
             ArrayList<Renderer> out) {
             out.add(
-                new ByteBufferMediaCodecVideoRenderer(
+                new AxmolVideoRenderer(
                     context,
                     getCodecAdapterFactory(),
                     mediaCodecSelector,
