@@ -99,9 +99,9 @@ class axutils {
         try {
             localProps.load(project.rootProject.file("local.properties").newDataInputStream())
             sdkRoot = localProps.getProperty("sdk.dir")
+            println("Using sdk.dir=$sdkRoot from local.properties")
         }
         catch(Exception ex) {
-            ex.printStackTrace()
         }
 
         if (sdkRoot == null || !new File(sdkRoot).isDirectory()) {
