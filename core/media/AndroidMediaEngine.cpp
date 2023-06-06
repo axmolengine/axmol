@@ -45,7 +45,6 @@ AndroidMediaEngine::AndroidMediaEngine()
 }
 AndroidMediaEngine::~AndroidMediaEngine()
 {
-
     if (context)
     {
         // clear callback

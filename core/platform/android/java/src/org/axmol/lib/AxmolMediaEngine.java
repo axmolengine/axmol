@@ -91,6 +91,9 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
     @SuppressWarnings("unused")
     public void bindNativeObject(long nativeObj) {
         mNativeObj = nativeObj;
+        if(nativeObj == 0) { // when unbind nativeObj, we should ensure close player
+            close();
+        }
     }
 
     public void setAutoPlay(boolean bAutoPlay)
@@ -150,6 +153,7 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
             AxmolEngine.getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    mVideoRenderer.setOutputHandler(null);
                     player.removeListener(thiz);
                     player.stop();
                     player.release();
