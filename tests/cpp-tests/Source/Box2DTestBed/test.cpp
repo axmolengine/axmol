@@ -19,7 +19,7 @@
 #include "tests/test.h"
 #include "tests/settings.h"
 
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "axmol.h"
 
 #include <stdio.h>

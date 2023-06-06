@@ -49,6 +49,7 @@ UIRichTextTests::UIRichTextTests()
     ADD_TEST_CASE(UIRichTextXMLGlow);
     ADD_TEST_CASE(UIRichTextXMLExtend);
     ADD_TEST_CASE(UIRichTextXMLSpace);
+    ADD_TEST_CASE(UIRichTextNewline);
 }
 
 //
@@ -1972,6 +1973,115 @@ void UIRichTextXMLSpace::switchWrapMode(Ref* pSender, Widget::TouchEventType typ
 }
 
 void UIRichTextXMLSpace::switchAlignment(Ref* sender, Widget::TouchEventType type)
+{
+    if (type == Widget::TouchEventType::ENDED)
+    {
+        auto alignment = _richText->getHorizontalAlignment();
+        alignment      = static_cast<RichText::HorizontalAlignment>(
+            (static_cast<std::underlying_type<RichText::HorizontalAlignment>::type>(alignment) + 1) % 3);
+        _richText->setHorizontalAlignment(alignment);
+    }
+}
+
+//
+// UIRichTextNewline
+//
+bool UIRichTextNewline::init()
+{
+    if (UIScene::init())
+    {
+        Size widgetSize = _widget->getContentSize();
+
+                // Add the alert
+        Text* alert = Text::create("Axmol Issue #1170", "fonts/Marker Felt.ttf", 30);
+        alert->setColor(Color3B(159, 168, 176));
+        alert->setPosition(
+            Vec2(widgetSize.width / 2.0f, widgetSize.height / 2.0f - alert->getContentSize().height * 3.125));
+        _widget->addChild(alert);
+
+        Button* button = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+        button->setTouchEnabled(true);
+        button->setTitleText("switch");
+        button->setPosition(
+            Vec2(widgetSize.width * 1 / 3, widgetSize.height / 2.0f + button->getContentSize().height * 2.5));
+        button->addTouchEventListener(AX_CALLBACK_2(UIRichTextNewline::touchEvent, this));
+        button->setLocalZOrder(10);
+        _widget->addChild(button);
+
+        Button* button2 = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+        button2->setTouchEnabled(true);
+        button2->setTitleText("wrap mode");
+        button2->setPosition(
+            Vec2(widgetSize.width / 2, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
+        button2->addTouchEventListener(AX_CALLBACK_2(UIRichTextNewline::switchWrapMode, this));
+        button2->setLocalZOrder(10);
+        _widget->addChild(button2);
+
+        Button* button3 = Button::create("cocosui/animationbuttonnormal.png", "cocosui/animationbuttonpressed.png");
+        button3->setTouchEnabled(true);
+        button3->setTitleText("alignment");
+        button3->setPosition(
+            Vec2(widgetSize.width * 2 / 3, widgetSize.height / 2.0f + button2->getContentSize().height * 2.5));
+        button3->addTouchEventListener(AX_CALLBACK_2(UIRichTextNewline::switchAlignment, this));
+        button3->setLocalZOrder(10);
+        _widget->addChild(button3);
+
+        _richText = RichText::create();
+        _richText->setHorizontalAlignment(ui::RichText::HorizontalAlignment::CENTER);
+        auto* textElement =
+            ui::RichElementText::create(1, Color3B::WHITE, 255, "Line1\nLine2\n", "fonts/Marker Felt.ttf", 32, 0);
+        _richText->pushBackElement(textElement);
+        textElement = ui::RichElementText::create(2, Color3B::WHITE, 255, "Line3", "fonts/Marker Felt.ttf", 32, 0);
+        _richText->pushBackElement(textElement);
+        _richText->ignoreContentAdaptWithSize(false);
+        _richText->setContentSize(Size(50, 100));
+        _richText->setPosition(Vec2(widgetSize.width / 2, widgetSize.height / 2));
+        _richText->setLocalZOrder(10);
+
+        _widget->addChild(_richText);
+
+        // test remove all children, this call won't effect the test
+        _richText->removeAllChildren();
+
+        return true;
+    }
+    return false;
+}
+
+void UIRichTextNewline::touchEvent(Ref* pSender, Widget::TouchEventType type)
+{
+    switch (type)
+    {
+    case Widget::TouchEventType::ENDED:
+    {
+        if (_richText->isIgnoreContentAdaptWithSize())
+        {
+            _richText->ignoreContentAdaptWithSize(false);
+            _richText->setContentSize(Size(50, 100));
+        }
+        else
+        {
+            _richText->ignoreContentAdaptWithSize(true);
+        }
+    }
+    break;
+
+    default:
+        break;
+    }
+}
+
+void UIRichTextNewline::switchWrapMode(Ref* pSender, Widget::TouchEventType type)
+{
+    if (type == Widget::TouchEventType::ENDED)
+    {
+        auto wrapMode = _richText->getWrapMode();
+        wrapMode      = (wrapMode == RichText::WRAP_PER_WORD) ? RichText::WRAP_PER_CHAR : RichText::WRAP_PER_WORD;
+        _richText->setWrapMode(wrapMode);
+    }
+}
+
+void UIRichTextNewline::switchAlignment(Ref* sender, Widget::TouchEventType type)
 {
     if (type == Widget::TouchEventType::ENDED)
     {

@@ -2,7 +2,7 @@
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2021-2023 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -71,7 +71,7 @@ public:
 
     ~BitmapDC() {}
 
-    bool getBitmapFromJavaShadowStroke(const char* text,
+    bool getBitmapFromJavaShadowStroke(std::string_view text,
                                        int nWidth,
                                        int nHeight,
                                        Device::TextAlign eAlignMask,
@@ -109,9 +109,9 @@ public:
          * and data.
          * use this approach to decrease the jni call number
          */
-        int count           = strlen(text);
+        int count           = static_cast<int>(text.length());
         jbyteArray strArray = methodInfo.env->NewByteArray(count);
-        methodInfo.env->SetByteArrayRegion(strArray, 0, count, reinterpret_cast<const jbyte*>(text));
+        methodInfo.env->SetByteArrayRegion(strArray, 0, count, reinterpret_cast<const jbyte*>(text.data()));
         jstring jstrFont = methodInfo.env->NewStringUTF(fullPathOrFontName.c_str());
 
         if (!methodInfo.env->CallStaticBooleanMethod(
@@ -147,7 +147,7 @@ static BitmapDC& sharedBitmapDC()
     return s_BmpDC;
 }
 
-Data Device::getTextureDataForText(const char* text,
+Data Device::getTextureDataForText(std::string_view text,
                                    const FontDefinition& textDefinition,
                                    TextAlign align,
                                    int& width,
@@ -182,6 +182,27 @@ void Device::setKeepScreenOn(bool value)
 void Device::vibrate(float duration)
 {
     JniHelper::callStaticVoidMethod(helperClassName, "vibrate", duration);
+}
+
+void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle style) {}
+
+void Device::impactOccurred(ImpactFeedbackStyle style)
+{
+    JniHelper::callStaticVoidMethod(helperClassName, "impactOccurred", (int)style);
+}
+
+void Device::prepareNotificationFeedbackGenerator() {}
+
+void Device::notificationOccurred(NotificationFeedbackType type)
+{
+    JniHelper::callStaticVoidMethod(helperClassName, "notificationOccurred", (int)type);
+}
+
+void Device::prepareSelectionFeedbackGenerator() {}
+
+void Device::selectionChanged()
+{
+    JniHelper::callStaticVoidMethod(helperClassName, "selectionChanged");
 }
 
 NS_AX_END

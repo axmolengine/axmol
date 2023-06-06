@@ -39,6 +39,7 @@ import android.os.Message;
 import android.os.PowerManager;
 import android.preference.PreferenceManager.OnActivityResultListener;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -61,10 +62,10 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     // ===========================================================
     // Fields
     // ===========================================================
-    
+
     private AxmolGLSurfaceView mGLSurfaceView = null;
     private int[] mGLContextAttrs = null;
-    private AxmolHandler mHandler = null;   
+    private AxmolHandler mHandler = null;
     private static AxmolActivity sContext = null;
     private VideoHelper mVideoHelper = null;
     private WebViewHelper mWebViewHelper = null;
@@ -80,7 +81,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     public static Context getContext() {
         return sContext;
     }
-    
+
     public void setKeepScreenOn(boolean value) {
         final boolean newValue = value;
         runOnUiThread(new Runnable() {
@@ -89,6 +90,43 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
                 mGLSurfaceView.setKeepScreenOn(newValue);
             }
         });
+    }
+
+    public void impactOccurred(int style) {
+        int feedback = HapticFeedbackConstants.VIRTUAL_KEY;
+        performHapticFeedback(feedback);
+    }
+
+    public void notificationOccurred(int type) {
+        int feedback;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            switch (type) {
+                case 1:
+                case 2:
+                    feedback = HapticFeedbackConstants.REJECT;
+                    break;
+                default:
+                    feedback = HapticFeedbackConstants.CONFIRM;
+                    break;
+            }
+        } else {
+            feedback = HapticFeedbackConstants.VIRTUAL_KEY;
+        }
+        performHapticFeedback(feedback);
+    }
+
+    public void selectionChanged() {
+        int feedback;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            feedback = HapticFeedbackConstants.CLOCK_TICK;
+        } else {
+            feedback = HapticFeedbackConstants.VIRTUAL_KEY;
+        }
+        performHapticFeedback(feedback);
+    }
+
+    protected void performHapticFeedback(int feedback) {
+        getWindow().getDecorView().performHapticFeedback(feedback);
     }
 
     public void setEnableVirtualButton(boolean value) {
@@ -105,7 +143,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
             e.printStackTrace();
         }
     }
-    
+
     // ===========================================================
     // Constructors
     // ===========================================================
@@ -130,16 +168,16 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
         sContext = this;
         this.mHandler = new AxmolHandler(this);
-        
+
         AxmolEngine.init(this);
-        
+
         this.mGLContextAttrs = getGLContextAttrs();
         this.init();
 
         if (mVideoHelper == null) {
             mVideoHelper = new VideoHelper(this, mFrameLayout);
         }
-        
+
         if(mWebViewHelper == null){
             mWebViewHelper = new WebViewHelper(mFrameLayout);
         }
@@ -175,12 +213,12 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
             resume();
         }
     }
-    
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
     	Log.d(TAG, "onWindowFocusChanged() hasFocus=" + hasFocus);
         super.onWindowFocusChanged(hasFocus);
-        
+
         this.hasFocus = hasFocus;
         if (this.hasFocus && !paused) {
             resume();
@@ -192,7 +230,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         AxmolEngine.onResume();
         mGLSurfaceView.onResume();
     }
-    
+
     private void resumeIfHasFocus() {
         //It is possible for the app to receive the onWindowsFocusChanged(true) event
         //even though it is locked or asleep
@@ -211,7 +249,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         AxmolEngine.onPause();
         mGLSurfaceView.onPause();
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -229,7 +267,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     public void runOnGLThread(final Runnable runnable) {
         AxmolEngine.runOnGLThread(runnable);
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -246,7 +284,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     // Methods
     // ===========================================================
     public void init() {
-        
+
         // FrameLayout
         ViewGroup.LayoutParams framelayout_params =
             new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -285,7 +323,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
         setContentView(mFrameLayout);
     }
 
-    
+
     public AxmolGLSurfaceView onCreateView() {
         AxmolGLSurfaceView glSurfaceView = new AxmolGLSurfaceView(this);
         //this line is need on some device if we specify an alpha bits
@@ -364,7 +402,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
             return !powerManager.isScreenOn();
         }
     }
-    
+
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================

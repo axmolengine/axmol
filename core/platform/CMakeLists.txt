@@ -32,25 +32,31 @@ if(ANDROID)
         platform/android/CCEnhanceAPI-android.cpp
     )
 elseif(WINDOWS)
-    set(_AX_PLATFORM_SPECIFIC_HEADER
-        platform/win32/compat/stdint.h
-        platform/win32/CCApplication-win32.h
-        platform/win32/inet_pton_mingw.h
-        platform/win32/CCGL-win32.h
-        platform/win32/CCFileUtils-win32.h
-        platform/win32/CCStdC-win32.h
-        platform/win32/CCPlatformDefine-win32.h
-        platform/desktop/CCGLViewImpl-desktop.h
-        )
-    set(_AX_PLATFORM_SPECIFIC_SRC
-        platform/win32/CCStdC-win32.cpp
-        platform/win32/CCFileUtils-win32.cpp
-        platform/win32/CCCommon-win32.cpp
-        platform/win32/CCApplication-win32.cpp
-        platform/win32/CCDevice-win32.cpp
-        platform/win32/inet_pton_mingw.cpp
-        platform/desktop/CCGLViewImpl-desktop.cpp
-        )
+
+    if (NOT WINRT)
+        set(_AX_PLATFORM_SPECIFIC_HEADER
+            platform/win32/compat/stdint.h
+            platform/win32/CCApplication-win32.h
+            platform/win32/inet_pton_mingw.h
+            platform/win32/CCGL-win32.h
+            platform/win32/CCFileUtils-win32.h
+            platform/win32/CCStdC-win32.h
+            platform/win32/CCPlatformDefine-win32.h
+            platform/desktop/CCGLViewImpl-desktop.h
+            )
+        set(_AX_PLATFORM_SPECIFIC_SRC
+            platform/win32/CCStdC-win32.cpp
+            platform/win32/CCFileUtils-win32.cpp
+            platform/win32/CCCommon-win32.cpp
+            platform/win32/CCApplication-win32.cpp
+            platform/win32/CCDevice-win32.cpp
+            platform/win32/inet_pton_mingw.cpp
+            platform/desktop/CCGLViewImpl-desktop.cpp
+            )
+    else()
+        file(GLOB _AX_PLATFORM_SPECIFIC_HEADER platform/winrt/*.h)
+        file(GLOB _AX_PLATFORM_SPECIFIC_SRC platform/winrt/*.cpp)
+    endif()
 
 elseif(APPLE)
     set(_AX_PLATFORM_SPECIFIC_HEADER

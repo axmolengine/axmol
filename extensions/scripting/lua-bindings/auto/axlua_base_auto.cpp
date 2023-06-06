@@ -1564,8 +1564,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     argc = lua_gettop(tolua_S)-1;
     do{
         if (argc == 2) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             ax::FontDefinition arg1;
@@ -1580,8 +1580,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 3) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1600,8 +1600,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 4) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1624,8 +1624,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 5) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1652,8 +1652,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 6) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1684,8 +1684,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 7) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -1720,8 +1720,8 @@ int lua_ax_base_Texture2D_initWithString(lua_State* tolua_S)
     ok  = true;
     do{
         if (argc == 8) {
-            const char* arg0;
-            std::string arg0_tmp; ok &= luaval_to_std_string(tolua_S, 2, &arg0_tmp, "ax.Texture2D:initWithString"); arg0 = arg0_tmp.c_str();
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.Texture2D:initWithString");
 
             if (!ok) { break; }
             std::string_view arg1;
@@ -59663,6 +59663,56 @@ int lua_ax_base_Sprite_setVertexLayout(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Sprite_setAutoUpdatePS(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Sprite* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Sprite",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Sprite*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Sprite_setAutoUpdatePS'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Sprite:setAutoUpdatePS");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Sprite_setAutoUpdatePS'", nullptr);
+            return 0;
+        }
+        cobj->setAutoUpdatePS(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Sprite:setAutoUpdatePS",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Sprite_setAutoUpdatePS'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Sprite_createWithTexture(lua_State* tolua_S)
 {
     int argc = 0;
@@ -59894,6 +59944,7 @@ int lua_register_ax_base_Sprite(lua_State* tolua_S)
         tolua_function(tolua_S,"initWithSpriteFrameName",lua_ax_base_Sprite_initWithSpriteFrameName);
         tolua_function(tolua_S,"initWithFile",lua_ax_base_Sprite_initWithFile);
         tolua_function(tolua_S,"setVertexLayout",lua_ax_base_Sprite_setVertexLayout);
+        tolua_function(tolua_S,"setAutoUpdatePS",lua_ax_base_Sprite_setAutoUpdatePS);
         tolua_function(tolua_S,"createWithTexture", lua_ax_base_Sprite_createWithTexture);
         tolua_function(tolua_S,"createWithSpriteFrame", lua_ax_base_Sprite_createWithSpriteFrame);
         tolua_function(tolua_S,"createWithSpriteFrameName", lua_ax_base_Sprite_createWithSpriteFrameName);
@@ -81794,6 +81845,53 @@ int lua_ax_base_ProtectedNode_sortAllProtectedChildren(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_ProtectedNode_getProtectedChildren(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ProtectedNode* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.ProtectedNode",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ProtectedNode*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_ProtectedNode_getProtectedChildren'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ProtectedNode_getProtectedChildren'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getProtectedChildren();
+        ccvector_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ProtectedNode:getProtectedChildren",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ProtectedNode_getProtectedChildren'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_ProtectedNode_disableCascadeColor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -81980,6 +82078,7 @@ int lua_register_ax_base_ProtectedNode(lua_State* tolua_S)
         tolua_function(tolua_S,"removeAllProtectedChildrenWithCleanup",lua_ax_base_ProtectedNode_removeAllProtectedChildrenWithCleanup);
         tolua_function(tolua_S,"reorderProtectedChild",lua_ax_base_ProtectedNode_reorderProtectedChild);
         tolua_function(tolua_S,"sortAllProtectedChildren",lua_ax_base_ProtectedNode_sortAllProtectedChildren);
+        tolua_function(tolua_S,"getProtectedChildren",lua_ax_base_ProtectedNode_getProtectedChildren);
         tolua_function(tolua_S,"disableCascadeColor",lua_ax_base_ProtectedNode_disableCascadeColor);
         tolua_function(tolua_S,"disableCascadeOpacity",lua_ax_base_ProtectedNode_disableCascadeOpacity);
         tolua_function(tolua_S,"create", lua_ax_base_ProtectedNode_create);
@@ -101654,6 +101753,216 @@ int lua_ax_base_Device_vibrate(lua_State* tolua_S)
 #endif
     return 0;
 }
+int lua_ax_base_Device_prepareImpactFeedbackGenerator(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::Device::ImpactFeedbackStyle arg0;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Device:prepareImpactFeedbackGenerator");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_prepareImpactFeedbackGenerator'", nullptr);
+            return 0;
+        }
+        ax::Device::prepareImpactFeedbackGenerator(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:prepareImpactFeedbackGenerator",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_prepareImpactFeedbackGenerator'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_impactOccurred(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::Device::ImpactFeedbackStyle arg0;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Device:impactOccurred");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_impactOccurred'", nullptr);
+            return 0;
+        }
+        ax::Device::impactOccurred(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:impactOccurred",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_impactOccurred'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_prepareNotificationFeedbackGenerator(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_prepareNotificationFeedbackGenerator'", nullptr);
+            return 0;
+        }
+        ax::Device::prepareNotificationFeedbackGenerator();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:prepareNotificationFeedbackGenerator",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_prepareNotificationFeedbackGenerator'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_notificationOccurred(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::Device::NotificationFeedbackType arg0;
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Device:notificationOccurred");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_notificationOccurred'", nullptr);
+            return 0;
+        }
+        ax::Device::notificationOccurred(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:notificationOccurred",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_notificationOccurred'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_prepareSelectionFeedbackGenerator(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_prepareSelectionFeedbackGenerator'", nullptr);
+            return 0;
+        }
+        ax::Device::prepareSelectionFeedbackGenerator();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:prepareSelectionFeedbackGenerator",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_prepareSelectionFeedbackGenerator'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_base_Device_selectionChanged(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.Device",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Device_selectionChanged'", nullptr);
+            return 0;
+        }
+        ax::Device::selectionChanged();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.Device:selectionChanged",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Device_selectionChanged'.",&tolua_err);
+#endif
+    return 0;
+}
 static int lua_ax_base_Device_finalize(lua_State* tolua_S)
 {
     printf("luabindings: finalizing LUA object (Device)");
@@ -101671,6 +101980,12 @@ int lua_register_ax_base_Device(lua_State* tolua_S)
         tolua_function(tolua_S,"setAccelerometerInterval", lua_ax_base_Device_setAccelerometerInterval);
         tolua_function(tolua_S,"setKeepScreenOn", lua_ax_base_Device_setKeepScreenOn);
         tolua_function(tolua_S,"vibrate", lua_ax_base_Device_vibrate);
+        tolua_function(tolua_S,"prepareImpactFeedbackGenerator", lua_ax_base_Device_prepareImpactFeedbackGenerator);
+        tolua_function(tolua_S,"impactOccurred", lua_ax_base_Device_impactOccurred);
+        tolua_function(tolua_S,"prepareNotificationFeedbackGenerator", lua_ax_base_Device_prepareNotificationFeedbackGenerator);
+        tolua_function(tolua_S,"notificationOccurred", lua_ax_base_Device_notificationOccurred);
+        tolua_function(tolua_S,"prepareSelectionFeedbackGenerator", lua_ax_base_Device_prepareSelectionFeedbackGenerator);
+        tolua_function(tolua_S,"selectionChanged", lua_ax_base_Device_selectionChanged);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Device).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Device";
@@ -102106,6 +102421,25 @@ int lua_ax_base_GLViewImpl_createWithRect(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = ax::GLViewImpl::createWithRect(arg0, arg1, arg2);
+        object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
+        return 1;
+    }
+    if (argc == 4)
+    {
+        std::string_view arg0;
+        ax::Rect arg1;
+        double arg2;
+        bool arg3;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_rect(tolua_S, 3, &arg1, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.GLViewImpl:createWithRect");
+        ok &= luaval_to_boolean(tolua_S, 5,&arg3, "ax.GLViewImpl:createWithRect");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLViewImpl_createWithRect'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::GLViewImpl::createWithRect(arg0, arg1, arg2, arg3);
         object_to_luaval<ax::GLViewImpl>(tolua_S, "ax.GLViewImpl",(ax::GLViewImpl*)ret);
         return 1;
     }
@@ -108275,7 +108609,7 @@ int lua_ax_base_FastTMXLayer_getAnimTileCoord(lua_State* tolua_S)
             return 0;
         }
         auto&& ret = cobj->getAnimTileCoord();
-        object_to_luaval<std::unordered_map<unsigned int, std::vector<ax::Vec2>>>(tolua_S, "std::unordered_map<unsigned int, std::vector<ax::Vec2>>*",(std::unordered_map<unsigned int, std::vector<ax::Vec2>>*)ret);
+        object_to_luaval<std::unordered_map<unsigned int, std::vector<ax::TMXTileAnimFlag>>>(tolua_S, "std::unordered_map<unsigned int, std::vector<ax::TMXTileAnimFlag>>*",(std::unordered_map<unsigned int, std::vector<ax::TMXTileAnimFlag>>*)ret);
         return 1;
     }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.FastTMXLayer:getAnimTileCoord",argc, 0);
@@ -108733,6 +109067,26 @@ int lua_ax_base_TMXTileAnimTask_create(lua_State* tolua_S)
         object_to_luaval<ax::TMXTileAnimTask>(tolua_S, "ax.TMXTileAnimTask",(ax::TMXTileAnimTask*)ret);
         return 1;
     }
+    if (argc == 4)
+    {
+        ax::FastTMXLayer* arg0;
+        ax::TMXTileAnimInfo* arg1;
+        ax::Vec2 arg2;
+        unsigned int arg3;
+        ok &= luaval_to_object<ax::FastTMXLayer>(tolua_S, 2, "ax.FastTMXLayer",&arg0, "ax.TMXTileAnimTask:create");
+        #pragma warning NO CONVERSION TO NATIVE FOR TMXTileAnimInfo*
+		ok = false;
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.TMXTileAnimTask:create");
+        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.TMXTileAnimTask:create");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXTileAnimTask_create'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::TMXTileAnimTask::create(arg0, arg1, arg2, arg3);
+        object_to_luaval<ax::TMXTileAnimTask>(tolua_S, "ax.TMXTileAnimTask",(ax::TMXTileAnimTask*)ret);
+        return 1;
+    }
     luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.TMXTileAnimTask:create",argc, 3);
     return 0;
 #if _AX_DEBUG >= 1
@@ -108772,6 +109126,33 @@ int lua_ax_base_TMXTileAnimTask_constructor(lua_State* tolua_S)
             return 0;
         }
         cobj = new ax::TMXTileAnimTask(arg0, arg1, arg2);
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.TMXTileAnimTask");
+        return 1;
+    }
+    if (argc == 4) 
+    {
+        ax::FastTMXLayer* arg0;
+        ax::TMXTileAnimInfo* arg1;
+        ax::Vec2 arg2;
+        unsigned int arg3;
+
+        ok &= luaval_to_object<ax::FastTMXLayer>(tolua_S, 2, "ax.FastTMXLayer",&arg0, "ax.TMXTileAnimTask:TMXTileAnimTask");
+
+        #pragma warning NO CONVERSION TO NATIVE FOR TMXTileAnimInfo*
+		ok = false;
+
+        ok &= luaval_to_vec2(tolua_S, 4, &arg2, "ax.TMXTileAnimTask:TMXTileAnimTask");
+
+        ok &= luaval_to_uint32(tolua_S, 5,&arg3, "ax.TMXTileAnimTask:TMXTileAnimTask");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TMXTileAnimTask_constructor'", nullptr);
+            return 0;
+        }
+        cobj = new ax::TMXTileAnimTask(arg0, arg1, arg2, arg3);
         cobj->autorelease();
         int ID =  (int)cobj->_ID ;
         int* luaID =  &cobj->_luaID ;

@@ -1,12 +1,12 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 111.0.5563.19
+- Version: 113.0.5672.128
 - License: BSD WITH The ANGLE Project Authors
 
-## astc
+## astcenc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.3.1
+- Version: 4.4.0
 - License: Apache-2.0
 
 ## Box2D
@@ -27,7 +27,7 @@
 
 ## c-ares
 - [![Upstream](https://img.shields.io/github/v/release/c-ares/c-ares?label=Upstream)](https://github.com/c-ares/c-ares)
-- Version: git 1.19.0-bb8f5bb (2184)
+- Version: git 1.19.1
 - License: MIT
 
 ## Chipmunk2D
@@ -37,7 +37,12 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: git 1.1.1-df1c129
+- Version: 1.2.2
+- License: BSL-1.0
+
+## moodycamel::ConcurrentQueue
+- [![Upstream](https://img.shields.io/github/v/tag/cameron314/concurrentqueue?label=Upstream)](https://github.com/cameron314/concurrentqueue)
+- Version: git 1.0.3-810f621
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -47,7 +52,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 7.88.1
+- Version: 8.1.1
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -57,12 +62,12 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 9.1.0
+- Version: 10.0.0
 - License: MIT
 
 ## FreeType
 - [![Upstream](https://img.shields.io/github/v/tag/freetype/freetype?label=Upstream)](https://www.freetype.org/)
-- Version: 2.12.1
+- Version: 2.13.0
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -77,12 +82,12 @@
 
 ## glsl-optimizer (Apple Metal Render backend only)
 - Upstream: https://github.com/aras-p/glsl-optimizer
-- Version: git d78c3d2
+- Version: git cdfc9ef
 - License: MIT
 
 ## GHC (iOS devices only)
 - [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
-- Version: 1.5.12
+- Version: 1.5.14
 - License: MIT
 
 ## jni.hpp
@@ -108,7 +113,7 @@
 ## lua
 - plainlua
   - [![Upstream](https://img.shields.io/github/v/release/lua/lua?label=Upstream)](https://github.com/lua/lua) http://www.lua.org/
-  - Version: 5.4.4
+  - Version: 5.4.6
   - License: MIT (http://www.lua.org/license.html)
   
 - sol2
@@ -118,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: git 2.1.0-505e2c0 (2628)
+  - Version: 2.1-224129a
   - License: MIT
 
 - tolua
@@ -138,7 +143,7 @@
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
-- Version: git ca7c706(316)
+- Version: git ca7c706(316) with modified for UWP apps support
 - License: CC0-1.0
 
 ## mio
@@ -169,7 +174,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.23.0
+- Version: 1.23.1 with modified for UWP apps support
 - License: LGPL-2.1
 
 ## OpenSSL
@@ -193,12 +198,6 @@
   - all tests passed: https://github.com/halx99/pugixml/actions/runs/4090401630
 - Version: 1.13
 - License: MIT
-
-## range-v3
-- [![Upstream](https://img.shields.io/github/v/tag/ericniebler/range-v3?label=Upstream)](https://github.com/ericniebler/range-v3) 
-- Version: 0.12.0
-- License: BSL-1.0
-
 
 ## rapidjson
 - [![Upstream](https://img.shields.io/github/v/tag/Tencent/rapidjson?label=Upstream)](https://github.com/Tencent/rapidjson)
@@ -259,10 +258,11 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: 3.39.7
+- Version: git 4.0.0-bc1405d
 - License: MIT WITH Anti-996
 
 ## zlib
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
 - Version: 1.2.13
 - License: zlib
+

@@ -45,7 +45,7 @@ void JoystickModule::onTouchBegin(EventContext * context)
 {
     if (touchId == -1)//First touch
     {
-        InputEvent* evt = (InputEvent*)context->getInput();
+        fairygui::InputEvent* evt = (fairygui::InputEvent*)context->getInput();
         touchId = evt->getTouchId();
 
         if (_tweener != nullptr)
@@ -89,7 +89,7 @@ void JoystickModule::onTouchBegin(EventContext * context)
 
 void JoystickModule::onTouchMove(EventContext * context)
 {
-    InputEvent* evt = (InputEvent*)context->getInput();
+    fairygui::InputEvent* evt = (fairygui::InputEvent*)context->getInput();
     if (touchId != -1 && evt->getTouchId() == touchId)
     {
         Vec2 pt = UIRoot->globalToLocal(evt->getPosition());
@@ -131,7 +131,7 @@ void JoystickModule::onTouchMove(EventContext * context)
 
 void JoystickModule::onTouchEnd(EventContext * context)
 {
-    InputEvent* evt = (InputEvent*)context->getInput();
+    fairygui::InputEvent* evt = (fairygui::InputEvent*)context->getInput();
     if (touchId != -1 && evt->getTouchId() == touchId)
     {
         touchId = -1;

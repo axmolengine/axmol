@@ -131,24 +131,27 @@ int iterPath(const char* fpath, const struct stat* /*sb*/, int typeflag)
 bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 {
     bool state = false;
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
+#if defined(_WIN32)
     std::string seg("/");
     std::string fullPath{fileFolder};
     fullPath += seg;
     fullPath += std::string("*.material");
-    _finddata_t data;
-    intptr_t handle = _findfirst(fullPath.c_str(), &data);
-    int done        = 0;
-    while ((handle != -1) && (done == 0))
+    WIN32_FIND_DATAA data;
+    HANDLE handle =
+        FindFirstFileExA(fullPath.c_str(), FindExInfoStandard, &data, FindExSearchNameMatch, NULL, 0);
+    if (handle != INVALID_HANDLE_VALUE)
     {
-        fullPath = fileFolder;
-        fullPath += seg;
-        fullPath += data.name;
-        loadMaterials(fullPath);
-        done  = _findnext(handle, &data);
         state = true;
+        do
+        {
+            fullPath = fileFolder;
+            fullPath += seg;
+            fullPath += data.cFileName;
+            loadMaterials(fullPath);
+           
+        } while (FindNextFileA(handle, &data));
+        FindClose(handle);
     }
-    _findclose(handle);
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID /* || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX*/)
     std::string::size_type pos    = fileFolder.find("assets/");
     std::string_view relativePath = fileFolder;

@@ -296,6 +296,16 @@ bool ProgramManager::init()
     registerProgramFactory(ProgramType::HSV_DUAL_SAMPLER, positionTextureColor_vert, dualSampler_hsv_frag,
                            VertexLayoutHelper::setupSprite);
 
+    registerProgramFactory(ProgramType::VIDEO_TEXTURE_YUY2, positionTextureColor_vert,
+                           std::string{videoTextureYUY2_frag},
+                           VertexLayoutHelper::setupSprite);
+    registerProgramFactory(ProgramType::VIDEO_TEXTURE_NV12, positionTextureColor_vert,
+                           std::string{videoTextureNV12_frag},
+                           VertexLayoutHelper::setupSprite);
+    registerProgramFactory(ProgramType::VIDEO_TEXTURE_BGR32, positionTextureColor_vert,
+                           std::string{videoTextureBGRA_frag},
+                           VertexLayoutHelper::setupSprite);
+
     // The builtin dual sampler shader registry
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR,
                                                          TextureSamplerFlag::DUAL_SAMPLER,

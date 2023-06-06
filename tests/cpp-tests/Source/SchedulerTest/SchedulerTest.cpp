@@ -1234,13 +1234,13 @@ void SchedulerRemoveAllFunctionsToBePerformedInCocosThread::onExit()
 
 void SchedulerRemoveAllFunctionsToBePerformedInCocosThread::update(float dt)
 {
-    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this]() { _sprite->setVisible(false); });
-    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this]() { _sprite->setVisible(false); });
-    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this]() { _sprite->setVisible(false); });
-    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this]() { _sprite->setVisible(false); });
-    Director::getInstance()->getScheduler()->performFunctionInCocosThread([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
+    Director::getInstance()->getScheduler()->runOnAxmolThread([this]() { _sprite->setVisible(false); });
     if (!TestController::getInstance()->isAutoTestRunning())
-        Director::getInstance()->getScheduler()->removeAllFunctionsToBePerformedInCocosThread();
+        Director::getInstance()->getScheduler()->removeAllPendingActions();
 }
 
 std::string SchedulerRemoveAllFunctionsToBePerformedInCocosThread::title() const

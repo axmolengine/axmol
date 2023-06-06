@@ -27,7 +27,7 @@
 #include "../testResource.h"
 #include <stdio.h>
 #include <stdlib.h>
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32)
+#if !defined(_WIN32)
 #    include <unistd.h>
 #    include <sys/types.h>
 #    include <sys/socket.h>
@@ -177,7 +177,7 @@ void ConsoleUploadFile::uploadFile()
         if (connect(sfd, rp->ai_addr, rp->ai_addrlen) != -1)
             break; /* Success */
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
         closesocket(sfd);
 #else
         close(sfd);
@@ -246,7 +246,7 @@ void ConsoleUploadFile::uploadFile()
     // Sleep 1s to wait server to receive all data.
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
+#if defined(_WIN32)
     closesocket(sfd);
     WSACleanup();
 #else

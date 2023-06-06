@@ -535,7 +535,7 @@ bool GRoot::initWithScene(ax::Scene* scene, int zOrder)
     _inputProcessor = new InputProcessor(this);
     _inputProcessor->setCaptureCallback(AX_CALLBACK_1(GRoot::onTouchEvent, this));
 
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     _windowSizeListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(GLViewImpl::EVENT_WINDOW_RESIZED, AX_CALLBACK_0(GRoot::onWindowSizeChanged, this));
 #endif
     onWindowSizeChanged();

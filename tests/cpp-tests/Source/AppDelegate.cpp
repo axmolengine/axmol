@@ -30,7 +30,7 @@
 #include "axmol.h"
 #include "controller.h"
 #include "BaseTest.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
 USING_NS_AX;
 

@@ -144,6 +144,8 @@ public:
      */
     virtual void sortAllProtectedChildren();
 
+    const Vector<Node*>& getProtectedChildren() const { return _protectedChildren; }
+
     /// @} end of Children and Parent
 
     /**

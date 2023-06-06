@@ -35,7 +35,7 @@
 #include "base/CCRef.h"
 #include "base/ccMacros.h"
 
-#include "yasio/detail/byte_buffer.hpp"
+#include "yasio/core/byte_buffer.hpp"
 
 /**
  * @addtogroup network
@@ -65,6 +65,8 @@ class AX_DLL HttpRequest : public Ref
     friend class HttpClient;
 
 public:
+    static const int MAX_REDIRECT_COUNT = 3;
+
     /**
      * The HttpRequest type enum used in the HttpRequest::setRequestType.
      */

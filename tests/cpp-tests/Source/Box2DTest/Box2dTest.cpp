@@ -25,7 +25,7 @@
 
 #include "Box2dTest.h"
 #include "../testResource.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "renderer/CCRenderer.h"
 #include "renderer/CCCustomCommand.h"
 

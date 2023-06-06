@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2013-2016 Chukong Technologies Inc.
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2021-2023 Bytedance Inc.
 
  https://axmolengine.github.io/
 
@@ -43,7 +43,8 @@ typedef SSIZE_T ssize_t;
 #include <string>
 #include <mutex>
 #include <stdarg.h>
-#include "yasio/detail/socket.hpp"
+#include "yasio/core/socket.hpp"
+#include "yasio/core/select_interrupter.hpp"
 
 #include "base/CCRef.h"
 #include "base/ccMacros.h"
@@ -282,6 +283,8 @@ protected:
     bool _running;
     bool _endThread;
     bool _isIpv6Server;
+
+    yasio::select_interrupter _interrupter;
 
     hlookup::string_map<Command*> _commands;
 

@@ -27,9 +27,9 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 
 #include "cocos2d.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32)
+#if !defined(_WIN32)
 #    include <dirent.h>
 #    include <sys/stat.h>
 #endif
@@ -49,7 +49,7 @@ static int lua_cocos2dx_createDownloadDir(lua_State* L)
         std::string pathToSave = FileUtils::getInstance()->getWritablePath();
         pathToSave += "tmpdir";
 
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_WIN32)
+#if !defined(_WIN32)
         DIR* pDir = NULL;
 
         pDir = opendir(pathToSave.c_str());

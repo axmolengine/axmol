@@ -8,6 +8,7 @@
 #include "core/bufferline.h"
 #include "core/resampler_limits.h"
 
+struct CubicCoefficients;
 struct HrtfChannelState;
 struct HrtfFilter;
 struct MixHrtfFilter;
@@ -24,7 +25,7 @@ constexpr int MixerFracHalf{MixerFracOne >> 1};
 constexpr float GainSilenceThreshold{0.00001f}; /* -100dB */
 
 
-enum class Resampler {
+enum class Resampler : uint8_t {
     Point,
     Linear,
     Cubic,
@@ -51,19 +52,27 @@ struct BsincState {
     const float *filter;
 };
 
+struct CubicState {
+    /* Filter coefficients, and coefficient deltas. Starting at phase index 0,
+     * each subsequent phase index follows contiguously.
+     */
+    const CubicCoefficients *filter;
+};
+
 union InterpState {
+    CubicState cubic;
     BsincState bsinc;
 };
 
-using ResamplerFunc = float*(*)(const InterpState *state, float *RESTRICT src, uint frac,
-    uint increment, const al::span<float> dst);
+using ResamplerFunc = void(*)(const InterpState *state, const float *RESTRICT src, uint frac,
+    const uint increment, const al::span<float> dst);
 
 ResamplerFunc PrepareResampler(Resampler resampler, uint increment, InterpState *state);
 
 
 template<typename TypeTag, typename InstTag>
-float *Resample_(const InterpState *state, float *RESTRICT src, uint frac, uint increment,
-    const al::span<float> dst);
+void Resample_(const InterpState *state, const float *RESTRICT src, uint frac,
+    const uint increment, const al::span<float> dst);
 
 template<typename InstTag>
 void Mix_(const al::span<const float> InSamples, const al::span<FloatBufferLine> OutBuffer,

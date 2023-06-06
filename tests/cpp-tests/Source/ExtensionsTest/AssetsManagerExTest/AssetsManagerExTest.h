@@ -25,7 +25,7 @@
 #ifndef __AssetsManagerEx_Test_H__
 #define __AssetsManagerEx_Test_H__
 
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "../../BaseTest.h"
 
 DEFINE_TEST_SUITE(AssetsManagerExTests);

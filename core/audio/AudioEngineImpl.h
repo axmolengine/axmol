@@ -49,7 +49,7 @@ public:
     ~AudioEngineImpl();
 
     bool init();
-    AUDIO_ID play2d(std::string_view fileFullPath, bool loop, float volume);
+    AUDIO_ID play2d(std::string_view fileFullPath, bool loop, float volume, float time);
     void setVolume(AUDIO_ID audioID, float volume);
     void setLoop(AUDIO_ID audioID, bool loop);
     bool pause(AUDIO_ID audioID);

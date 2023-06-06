@@ -47,9 +47,9 @@ bool HelloWorld::init()
     }
 
     auto visibleSize = _director->getVisibleSize();
-    auto origin      = _director->getVisibleOrigin();
-    auto safeArea    = _director->getSafeAreaRect();
-    auto safeOrigin  = safeArea.origin;
+    auto origin = _director->getVisibleOrigin();
+    auto safeArea = _director->getSafeAreaRect();
+    auto safeOrigin = safeArea.origin;
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -57,7 +57,7 @@ bool HelloWorld::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
     auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-                                           AX_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+        AX_CALLBACK_1(HelloWorld::menuCloseCallback, this));
 
     if (closeItem == nullptr || closeItem->getContentSize().width <= 0 || closeItem->getContentSize().height <= 0)
     {
@@ -77,6 +77,27 @@ bool HelloWorld::init()
 
     /////////////////////////////
     // 3. add your codes below...
+
+    // Some templates (uncomment what you  need)
+    auto touchListener = EventListenerTouchAllAtOnce::create();
+    touchListener->onTouchesBegan = AX_CALLBACK_2(HelloWorld::onTouchesBegan, this);
+    touchListener->onTouchesMoved = AX_CALLBACK_2(HelloWorld::onTouchesMoved, this);
+    touchListener->onTouchesEnded = AX_CALLBACK_2(HelloWorld::onTouchesEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+
+    //auto mouseListener           = EventListenerMouse::create();
+    //mouseListener->onMouseMove   = AX_CALLBACK_1(HelloWorld::onMouseMove, this);
+    //mouseListener->onMouseUp     = AX_CALLBACK_1(HelloWorld::onMouseUp, this);
+    //mouseListener->onMouseDown   = AX_CALLBACK_1(HelloWorld::onMouseDown, this);
+    //mouseListener->onMouseScroll = AX_CALLBACK_1(HelloWorld::onMouseScroll, this);
+    //_eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
+    //auto keyboardListener           = EventListenerKeyboard::create();
+    //keyboardListener->onKeyPressed  = AX_CALLBACK_2(HelloWorld::onKeyPressed, this);
+    //keyboardListener->onKeyReleased = AX_CALLBACK_2(HelloWorld::onKeyReleased, this);
+    //_eventDispatcher->addEventListenerWithFixedPriority(keyboardListener, 11);
+
+
 
     // add a label shows "Hello World"
     // create and initialize a label
@@ -113,13 +134,72 @@ bool HelloWorld::init()
         drawNode->setPosition(Vec2(0, 0));
         addChild(drawNode);
 
-        drawNode->drawRect(safeArea.origin, safeArea.origin + safeArea.size, Color4F::BLUE);
+        drawNode->drawRect(safeArea.origin + Vec2(1, 1), safeArea.origin + safeArea.size, Color4F::BLUE);
     }
 
     // scheduleUpdate() is required to ensure update(float) is called on every loop
     scheduleUpdate();
 
-    return true; 
+    return true;
+}
+
+
+void HelloWorld::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+{
+    for (auto&& t : touches)
+    {
+        AXLOG("onTouchesBegan detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+    }
+}
+
+void HelloWorld::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
+{
+    for (auto&& t : touches)
+    {
+        AXLOG("onTouchesMoved detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+    }
+}
+
+void HelloWorld::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+{
+    for (auto&& t : touches)
+    {
+        AXLOG("onTouchesEnded detected, X:%f  Y:%f", t->getLocation().x, t->getLocation().y);
+    }
+}
+
+void HelloWorld::onMouseDown(Event* event)
+{
+    EventMouse* e = static_cast<EventMouse*>(event);
+    AXLOG("onMouseDown detected, Key: %d", static_cast<int>(e->getMouseButton()));
+}
+
+void HelloWorld::onMouseUp(Event* event)
+{
+    EventMouse* e = static_cast<EventMouse*>(event);
+    AXLOG("onMouseUp detected, Key: %d", static_cast<int>(e->getMouseButton()));
+}
+
+void HelloWorld::onMouseMove(Event* event)
+{
+    EventMouse* e = static_cast<EventMouse*>(event);
+    AXLOG("onMouseMove detected, X:%f  Y:%f", e->getCursorX(), e->getCursorY());
+}
+
+void HelloWorld::onMouseScroll(Event* event)
+{
+    EventMouse* e = static_cast<EventMouse*>(event);
+    AXLOG("onMouseScroll detected, X:%f  Y:%f", e->getScrollX(), e->getScrollY());
+}
+
+void HelloWorld::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
+{
+    AXLOG("onKeyPressed, keycode: %d", static_cast<int>(code));
+}
+
+void HelloWorld::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
+{
+    AXLOG("onKeyReleased, keycode: %d", static_cast<int>(code));
 }
 
 void HelloWorld::update(float delta)
@@ -127,10 +207,13 @@ void HelloWorld::update(float delta)
     switch (_gameState)
     {
     case ExampleGameState::init:
+    {
         _gameState = ExampleGameState::update;
         break;
+    }
 
     case ExampleGameState::update:
+    {
         /////////////////////////////
         // Add your codes below...like....
         // 
@@ -139,36 +222,44 @@ void HelloWorld::update(float delta)
         // UpdatePhysics();
         // ...
         break;
+    }
 
     case ExampleGameState::pause:
+    {
         /////////////////////////////
         // Add your codes below...like....
         //
         // anyPauseStuff()
+
         break;
+    }
 
     case ExampleGameState::menu1:
-        /////////////////////////////
+    {    /////////////////////////////
         // Add your codes below...like....
         // 
         // UpdateMenu1();
         break;
+    }
 
     case ExampleGameState::menu2:
-        /////////////////////////////
+    {    /////////////////////////////
         // Add your codes below...like....
         // 
         // UpdateMenu2();
         break;
+    }
 
     case ExampleGameState::end:
-        /////////////////////////////
+    {    /////////////////////////////
         // Add your codes below...like....
         // 
         // CleanUpMyCrap();
         menuCloseCallback(this);
         break;
     }
+
+    } //switch
 }
 
 void HelloWorld::menuCloseCallback(Ref* sender)
@@ -180,6 +271,6 @@ void HelloWorld::menuCloseCallback(Ref* sender)
      * _director->end() as given above,instead trigger a custom event created in RootViewController.mm
      * as below*/
 
-    // EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
+     // EventCustom customEndEvent("game_scene_close_event");
+     //_eventDispatcher->dispatchEvent(&customEndEvent);
 }

@@ -2,6 +2,7 @@
 Copyright (c) 2011      Laschweinski
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2021-2023 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -546,7 +547,7 @@ static BitmapDC& sharedBitmapDC()
     return s_BmpDC;
 }
 
-Data Device::getTextureDataForText(const char* text,
+Data Device::getTextureDataForText(std::string_view text,
                                    const FontDefinition& textDefinition,
                                    TextAlign align,
                                    int& width,
@@ -558,7 +559,7 @@ Data Device::getTextureDataForText(const char* text,
     {
         BitmapDC& dc = sharedBitmapDC();
 
-        AX_BREAK_IF(!dc.getBitmap(text, textDefinition, align));
+        AX_BREAK_IF(!dc.getBitmap(text.data(), textDefinition, align));
         AX_BREAK_IF(!dc._data);
         width  = dc.iMaxLineWidth;
         height = dc.iMaxLineHeight;
@@ -573,5 +574,17 @@ Data Device::getTextureDataForText(const char* text,
 void Device::setKeepScreenOn(bool /*value*/) {}
 
 void Device::vibrate(float /*duration*/) {}
+
+void Device::prepareImpactFeedbackGenerator(ImpactFeedbackStyle /*style*/) {}
+
+void Device::impactOccurred(ImpactFeedbackStyle /*style*/) {}
+
+void Device::prepareNotificationFeedbackGenerator() {}
+
+void Device::notificationOccurred(NotificationFeedbackType /*type*/) {}
+
+void Device::prepareSelectionFeedbackGenerator() {}
+
+void Device::selectionChanged() {}
 
 NS_AX_END

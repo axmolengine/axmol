@@ -1,0 +1,10 @@
+#pragma once
+
+/* Define to the library build number from git commit count */
+#define AX_BUILD_NUM "${AX_BUILD_NUM}"
+
+/* Define the branch being built */
+#define AX_GIT_BRANCH "${AX_GIT_BRANCH}"
+
+/* Define the hash of the head commit */
+#define AX_GIT_COMMIT_HASH "${AX_GIT_COMMIT_HASH}"

@@ -196,12 +196,12 @@ struct AX_DLL HSV
 
     bool equals(const HSV& other) const { return (*this == other); }
 
-    void set(float r, float g, float b, float a = 1.0F);
-    void get(float& r, float& g, float& b) const;
+    void fromRgba(const Color4F& rgba);
+    Color4F toRgba() const;
 
-    Color3B toColor3B();
-    Color4B toColor4B();
-    Color4F toColor4F();
+    Color3B toColor3B() const;
+    Color4B toColor4B() const;
+    Color4F toColor4F() const;
 
     float h = 0.f;
     float s = 0.f;
@@ -245,14 +245,14 @@ struct AX_DLL HSL
 
     bool equals(const HSL& other) const { return (*this == other); }
 
-    void set(float r, float g, float b, float a = 1.0F);
-    void get(float& r, float& g, float& b) const;
+    void fromRgba(const Color4F& rgba);
+    Color4F toRgba() const;
 
     static float hue2rgb(float p, float q, float t);
 
-    Color3B toColor3B();
-    Color4B toColor4B();
-    Color4F toColor4F();
+    Color3B toColor3B() const;
+    Color4B toColor4B() const;
+    Color4F toColor4F() const;
 
     float h = 0.f;
     float s = 0.f;
@@ -683,6 +683,8 @@ using TargetBufferFlags = backend::TargetBufferFlags;
 using DepthStencilFlags = backend::DepthStencilFlags;
 using RenderTargetFlag  = backend::RenderTargetFlag;
 using ClearFlag         = backend::ClearFlag;
+
+typedef void (*AsyncOperation)(void* param);
 
 NS_AX_END
 // end group

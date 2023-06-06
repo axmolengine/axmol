@@ -210,7 +210,7 @@ def main():
     conf_ini_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'userconf.ini'))
 
     print('generating userconf.ini...')
-    with open(conf_ini_file, 'w') as configfile:
+    with open(conf_ini_file, 'w', newline='\n') as configfile:
       config.write(configfile)
 
 

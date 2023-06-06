@@ -28,7 +28,7 @@
 #include "../BaseTest.h"
 #include "renderer/CCCustomCommand.h"
 #include "ui/CocosGUI.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "cocostudio/LocalizationManager.h"
 
 DEFINE_TEST_SUITE(NewLabelTests);

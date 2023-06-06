@@ -1,0 +1,185 @@
+name: pull_request
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+  PULL_REQUEST: yes
+
+jobs:
+  build-windows:
+    name: build-windows
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        config:
+          - {arch: x86, dll: false}
+          - {arch: x64, dll: false}
+          - {arch: x86, dll: true}
+          - {arch: x64, dll: true}
+    env:
+      BUILD_ARCH: ${{ matrix.config.arch }}
+      BUILD_DLL: ${{ matrix.config.dll }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7.8'
+      - uses: ilammy/msvc-dev-cmd@v1.12.1
+        with: 
+          arch: ${{ env.BUILD_ARCH }}
+      - name: Build
+        run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:BUILD_DLL
+
+  build-windows-clang:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch:
+          - x64
+    env:
+      BUILD_ARCH: ${{ matrix.arch }}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.7.8'
+    - name: Install LLVM and Clang
+      uses: KyleMayes/install-llvm-action@v1
+      with:
+        version: "16.0"
+    - name: Build
+      run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_clang true
+
+  build-winuwp:
+    name: build-winuwp
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        arch:
+          - x64
+          - amd64_arm64
+        
+    env:
+      BUILD_ARCH: ${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7.8'
+      - uses: ilammy/msvc-dev-cmd@v1.12.1
+        with: 
+          arch: ${{ env.BUILD_ARCH }}
+          uwp: true
+      - name: Build
+        run: tools\win-ci\build.ps1 $env:BUILD_ARCH false true
+
+  build-linux:
+    name: build-linux
+    runs-on: ubuntu-latest
+    env:
+      GH_OS_NAME: linux
+      BUILD_TARGET: linux
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Build
+        run: |
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
+
+  build-android:
+    name: build-android
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - armeabi-v7a
+          - arm64-v8a
+          - x86
+          - x86_64
+    env:
+      GH_OS_NAME: linux
+      BUILD_TARGET: android
+      BUILD_ARCH: ${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'microsoft' # See 'Supported distributions' for available options
+          java-version: '11'
+      - name: Build
+        run: |
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
+
+  build-osx:
+    name: build-osx
+    runs-on: macos-12
+    strategy:
+      matrix:
+        arch:
+          - x86_64
+          - arm64
+    env:
+      GH_OS_NAME: osx
+      BUILD_TARGET: osx
+      BUILD_ARCH: ${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        run: |
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
+
+  build-ios:
+    name: build-ios
+    runs-on: macos-latest
+    env:
+      GH_OS_NAME: osx
+      BUILD_TARGET: ios
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        run: |
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh
+
+  build-tvos:
+    name: build-tvos
+    runs-on: macos-latest
+    env:
+      GH_OS_NAME: osx
+      BUILD_TARGET: tvos
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        run: |
+          tools/unix-ci/before-install.sh
+          tools/unix-ci/run-script.sh

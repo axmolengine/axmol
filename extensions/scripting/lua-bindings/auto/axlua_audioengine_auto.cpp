@@ -1,5 +1,5 @@
 #include "scripting/lua-bindings/auto/axlua_audioengine_auto.hpp"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #include "audio/AudioEngine.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
@@ -165,7 +165,6 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
 {
     int argc = 0;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
@@ -174,73 +173,116 @@ int lua_ax_audioengine_AudioEngine_play2d(lua_State* tolua_S)
     if (!tolua_isusertable(tolua_S,1,"ax.AudioEngine",0,&tolua_err)) goto tolua_lerror;
 #endif
 
-    argc = lua_gettop(tolua_S) - 1;
+    argc = lua_gettop(tolua_S)-1;
 
-    if (argc == 1)
+    do 
     {
-        std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
-        if(!ok)
+        if (argc == 2)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_play2d'", nullptr);
-            return 0;
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            ax::AudioPlayerSettings arg1;
+            #pragma warning NO CONVERSION TO NATIVE FOR AudioPlayerSettings
+		ok = false;
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play2d(arg0, arg1);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
         }
-        auto&& ret = ax::AudioEngine::play2d(arg0);
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    if (argc == 2)
+    } while (0);
+    ok  = true;
+    do 
     {
-        std::string_view arg0;
-        bool arg1;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.AudioEngine:play2d");
-        if(!ok)
+        if (argc == 3)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_play2d'", nullptr);
-            return 0;
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            ax::AudioPlayerSettings arg1;
+            #pragma warning NO CONVERSION TO NATIVE FOR AudioPlayerSettings
+		ok = false;
+            if (!ok) { break; }
+            const ax::AudioProfile* arg2;
+            ok &= luaval_to_object<const ax::AudioProfile>(tolua_S, 4, "ax.AudioProfile",&arg2, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play2d(arg0, arg1, arg2);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
         }
-        auto&& ret = ax::AudioEngine::play2d(arg0, arg1);
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    if (argc == 3)
+    } while (0);
+    ok  = true;
+    do 
     {
-        std::string_view arg0;
-        bool arg1;
-        double arg2;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.AudioEngine:play2d");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.AudioEngine:play2d");
-        if(!ok)
+        if (argc == 1)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_play2d'", nullptr);
-            return 0;
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play2d(arg0);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
         }
-        auto&& ret = ax::AudioEngine::play2d(arg0, arg1, arg2);
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    if (argc == 4)
+    } while (0);
+    ok  = true;
+    do 
     {
-        std::string_view arg0;
-        bool arg1;
-        double arg2;
-        const ax::AudioProfile* arg3;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
-        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.AudioEngine:play2d");
-        ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.AudioEngine:play2d");
-        ok &= luaval_to_object<const ax::AudioProfile>(tolua_S, 5, "ax.AudioProfile",&arg3, "ax.AudioEngine:play2d");
-        if(!ok)
+        if (argc == 2)
         {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_audioengine_AudioEngine_play2d'", nullptr);
-            return 0;
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play2d(arg0, arg1);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
         }
-        auto&& ret = ax::AudioEngine::play2d(arg0, arg1, arg2, arg3);
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.AudioEngine:play2d",argc, 1);
+    } while (0);
+    ok  = true;
+    do 
+    {
+        if (argc == 3)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play2d(arg0, arg1, arg2);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do 
+    {
+        if (argc == 4)
+        {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            const ax::AudioProfile* arg3;
+            ok &= luaval_to_object<const ax::AudioProfile>(tolua_S, 5, "ax.AudioProfile",&arg3, "ax.AudioEngine:play2d");
+            if (!ok) { break; }
+            int ret = ax::AudioEngine::play2d(arg0, arg1, arg2, arg3);
+            tolua_pushnumber(tolua_S,(lua_Number)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.AudioEngine:play2d",argc, 1);
     return 0;
 #if _AX_DEBUG >= 1
     tolua_lerror:

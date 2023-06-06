@@ -624,6 +624,8 @@ public:
 
     void setProgramState(uint32_t type) override;
 
+    void setAutoUpdatePS(bool bVal) { _autoUpdatePS = bVal; }
+
 protected:
     virtual void updateColor() override;
     virtual void setTextureCoords(const Rect& rect);
@@ -700,6 +702,7 @@ protected:
     int _fileType = 0;
 
     bool _stretchEnabled = true;
+    bool _autoUpdatePS   = true;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(Sprite);

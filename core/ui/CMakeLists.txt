@@ -1,35 +1,31 @@
 if(WINDOWS)
-    if(AX_ENABLE_MSEDGE_WEBVIEW2)
+    if(NOT WINRT)
         set(_AX_UI_SPECIFIC_HEADER
             ui/UIEditBox/UIEditBoxImpl-win32.h
-            ui/UIWebView/UIWebViewImpl-win32.h
-            ui/UIWebView/UIWebView.h
-
             )
         set(_AX_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-win32.cpp
-            ui/UIWebView/UIWebViewImpl-win32.cpp
-            ui/UIWebView/UIWebView.cpp
             )
     else()
         set(_AX_UI_SPECIFIC_HEADER
-            ui/UIEditBox/UIEditBoxImpl-win32.h
+            ui/UIEditBox/UIEditBoxImpl-winrt.h
             )
         set(_AX_UI_SPECIFIC_SRC
-            ui/UIEditBox/UIEditBoxImpl-win32.cpp
+            ui/UIEditBox/UIEditBoxImpl-winrt.cpp
             )
+    endif()
+
+    if(AX_ENABLE_MSEDGE_WEBVIEW2)
+        list(APPEND _AX_UI_SPECIFIC_HEADER ui/UIWebView/UIWebViewImpl-win32.h ui/UIWebView/UIWebView.h)
+        list(APPEND _AX_UI_SPECIFIC_SRC ui/UIWebView/UIWebViewImpl-win32.cpp ui/UIWebView/UIWebView.cpp)
     endif()
 
     if (AX_ENABLE_MFMEDIA)
         set(_AX_UI_SPECIFIC_HEADER ${_AX_UI_SPECIFIC_HEADER}
-            ui/UIVideoPlayer/MFUtils.h
-            ui/UIVideoPlayer/MFMediaPlayer.h
-            ui/UIVideoPlayer/UIVideoPlayer.h
+            ui/UIVideoPlayer.h
             )
         set(_AX_UI_SPECIFIC_SRC ${_AX_UI_SPECIFIC_SRC}
-            ui/UIVideoPlayer/MFUtils.cpp
-            ui/UIVideoPlayer/MFMediaPlayer.cpp
-            ui/UIVideoPlayer/UIVideoPlayer-win.cpp
+            ui/UIVideoPlayer.cpp
             )
     endif()
 elseif(APPLE)
@@ -54,7 +50,6 @@ elseif(APPLE)
     elseif(IOS)
         if (TVOS)
             set(_AX_UI_SPECIFIC_HEADER
-                ui/UIVideoPlayer/UIVideoPlayer.h
                 ui/UIEditBox/UIEditBoxImpl-ios.h
                 ui/UIEditBox/iOS/CCUIEditBoxIOS.h
                 ui/UIEditBox/iOS/CCUIMultilineTextField.h
@@ -64,7 +59,6 @@ elseif(APPLE)
                 ui/UIEditBox/iOS/CCUISingleLineTextField.h
                 )
             set(_AX_UI_SPECIFIC_SRC
-                ui/UIVideoPlayer/UIVideoPlayer-ios.mm
                 ui/UIEditBox/UIEditBoxImpl-ios.mm
                 ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
                 ui/UIEditBox/iOS/CCUIMultilineTextField.mm
@@ -75,7 +69,6 @@ elseif(APPLE)
         else()
             set(_AX_UI_SPECIFIC_HEADER
                 ui/UIWebView/UIWebView.h
-                ui/UIVideoPlayer/UIVideoPlayer.h
                 ui/UIWebView/UIWebViewImpl-ios.h
                 ui/UIEditBox/UIEditBoxImpl-ios.h
                 ui/UIEditBox/iOS/CCUIEditBoxIOS.h
@@ -87,7 +80,6 @@ elseif(APPLE)
                 )
             set(_AX_UI_SPECIFIC_SRC
                 ui/UIWebView/UIWebView.mm
-                ui/UIVideoPlayer/UIVideoPlayer-ios.mm
                 ui/UIWebView/UIWebViewImpl-ios.mm
                 ui/UIEditBox/UIEditBoxImpl-ios.mm
                 ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
@@ -98,6 +90,8 @@ elseif(APPLE)
                 )
         endif()
     endif()
+    set(_AX_UI_SPECIFIC_HEADER ui/UIVideoPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+    set(_AX_UI_SPECIFIC_SRC ui/UIVideoPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 elseif(LINUX)
     set(_AX_UI_SPECIFIC_HEADER
         ui/UIEditBox/UIEditBoxImpl-linux.h
@@ -108,13 +102,13 @@ elseif(LINUX)
 elseif(ANDROID)
     set(_AX_UI_SPECIFIC_HEADER
         ui/UIWebView/UIWebView.h
-        ui/UIVideoPlayer/UIVideoPlayer.h
+        ui/UIVideoPlayer.h
         ui/UIWebView/UIWebViewImpl-android.h
         ui/UIEditBox/UIEditBoxImpl-android.h
         )
     set(_AX_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-android.cpp
-        ui/UIVideoPlayer/UIVideoPlayer-android.cpp
+        ui/UIVideoPlayer-android.cpp
         ui/UIWebView/UIWebViewImpl-android.cpp
         # it's special for android, not a common file
         ui/UIWebView/UIWebView.cpp

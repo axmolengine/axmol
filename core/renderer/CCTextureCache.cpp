@@ -800,7 +800,7 @@ void VolatileTextureMgr::addDataTexture(Texture2D* tt,
     vt->_textureSize     = contentSize;
 }
 
-void VolatileTextureMgr::addStringTexture(Texture2D* tt, const char* text, const FontDefinition& fontDefinition)
+void VolatileTextureMgr::addStringTexture(Texture2D* tt, std::string_view text, const FontDefinition& fontDefinition)
 {
     if (_isReloading)
     {
@@ -859,7 +859,7 @@ void VolatileTextureMgr::reloadAllTextures()
         break;
         case VolatileTexture::kString:
         {
-            vt->_texture->initWithString(vt->_text.c_str(), vt->_fontDefinition);
+            vt->_texture->initWithString(vt->_text, vt->_fontDefinition);
         }
         break;
         case VolatileTexture::kImage:

@@ -31,6 +31,10 @@ local app = cc.Application:getInstance()
 local target = app:getTargetPlatform()
 if target == cc.PLATFORM_WINDOWS then
     device.platform = "windows"
+elseif target == cc.PLATFORM_UWP then
+    device.platform = "uwp"
+elseif target == cc.PLATFORM_UWP_PHONE then
+    device.platform = "uwp phone"
 elseif target == cc.PLATFORM_MAC then
     device.platform = "mac"
 elseif target == cc.PLATFORM_ANDROID then

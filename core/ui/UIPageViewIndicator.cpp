@@ -248,7 +248,7 @@ void PageViewIndicator::increaseNumberOfPages()
             indexNode = Sprite::createWithSpriteFrameName(_indexNodesTextureFile);
             break;
         default:
-            break;
+            return;
         }
     }
 

@@ -198,6 +198,8 @@ bool RenderTexture::initWithWidthAndHeight(int w,
             _renderTargetFlags       = RenderTargetFlag::ALL;
             descriptor.textureFormat = PixelFormat::D24S8;
 
+            AX_SAFE_RELEASE(_depthStencilTexture);
+
             _depthStencilTexture = new Texture2D();
             _depthStencilTexture->updateTextureDescriptor(descriptor);
         }
@@ -271,8 +273,13 @@ void RenderTexture::setSprite(Sprite* sprite)
             sEngine->releaseScriptObject(this, _sprite);
     }
 #endif  // AX_ENABLE_GC_FOR_NATIVE_OBJECTS
+    if (_sprite)
+    {
+        _sprite->removeFromParent();
+        _sprite->release();
+    }
+
     AX_SAFE_RETAIN(sprite);
-    AX_SAFE_RELEASE(_sprite);
     _sprite = sprite;
 }
 
@@ -654,7 +661,7 @@ void RenderTexture::clearColorAttachment()
     auto renderer                     = _director->getRenderer();
     auto beforeClearAttachmentCommand = renderer->nextCallbackCommand();
     beforeClearAttachmentCommand->init(0);
-    beforeClearAttachmentCommand->func = [=, this]() -> void {
+    beforeClearAttachmentCommand->func = [this, renderer]() -> void {
         _oldRenderTarget = renderer->getRenderTarget();
         renderer->setRenderTarget(_renderTarget);
     };
@@ -666,7 +673,7 @@ void RenderTexture::clearColorAttachment()
     // auto renderer                    = _director->getRenderer();
     auto afterClearAttachmentCommand = renderer->nextCallbackCommand();
     afterClearAttachmentCommand->init(0);
-    afterClearAttachmentCommand->func = [=, this]() -> void { renderer->setRenderTarget(_oldRenderTarget); };
+    afterClearAttachmentCommand->func = [this, renderer]() -> void { renderer->setRenderTarget(_oldRenderTarget); };
     renderer->addCommand(afterClearAttachmentCommand);
 }
 

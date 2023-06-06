@@ -29,7 +29,7 @@
 #include "axmol.h"
 #include "chipmunk/chipmunk.h"
 #include "../BaseTest.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 
 #include "demo/ChipmunkDemo.h"
 

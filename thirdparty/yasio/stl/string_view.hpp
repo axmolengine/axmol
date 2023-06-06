@@ -1507,7 +1507,8 @@ template <typename _CharT>
 inline bool ends_with(cxx17::basic_string_view<_CharT> lhs,
                       cxx17::basic_string_view<_CharT> v) // (1)
 {
-  return lhs.size() >= v.size() && lhs.compare(lhs.size() - v.size(), lhs.npos, v) == 0;
+  auto offset = lhs.size() - v.size();
+  return lhs.size() >= v.size() && lhs.compare(offset, v.size(), v) == 0;
 }
 
 template <typename _T1, typename _T2> 

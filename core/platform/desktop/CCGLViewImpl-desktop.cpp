@@ -389,7 +389,7 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, ax::Rect rect, float frameZoomFactor, bool resizable)
+GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, const ax::Rect& rect, float frameZoomFactor, bool resizable)
 {
     auto ret = new GLViewImpl;
     if (ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
@@ -427,11 +427,13 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName,
     return nullptr;
 }
 
-bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float frameZoomFactor, bool resizable)
+bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, float frameZoomFactor, bool resizable)
 {
     setViewName(viewName);
 
     _frameZoomFactor = frameZoomFactor;
+
+    Vec2 frameSize = rect.size;
 
 #if defined(AX_USE_GLES)
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
@@ -458,14 +460,15 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
     glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 #endif
 
-    int neededWidth  = (int)(rect.size.width * _frameZoomFactor);
-    int neededHeight = (int)(rect.size.height * _frameZoomFactor);
+    int neededWidth  = static_cast<int>(frameSize.width * _frameZoomFactor);
+    int neededHeight = static_cast<int>(frameSize.height * _frameZoomFactor);
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
     glfwxSetParent((HWND)_glContextAttrs.viewParent);
 #endif
 
-    _mainWindow = glfwCreateWindow(neededWidth, neededHeight, _viewName.c_str(), _monitor, nullptr);
+    _mainWindow = glfwCreateWindow(neededWidth, neededHeight, _viewName.c_str(),
+                                   _monitor, nullptr);
 
     if (_mainWindow == nullptr)
     {
@@ -526,11 +529,11 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
     glfwGetWindowSize(_mainWindow, &realW, &realH);
     if (realW != neededWidth)
     {
-        rect.size.width = realW / _frameZoomFactor;
+        frameSize.width = realW / _frameZoomFactor;
     }
     if (realH != neededHeight)
     {
-        rect.size.height = realH / _frameZoomFactor;
+        frameSize.height = realH / _frameZoomFactor;
     }
 
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
@@ -543,7 +546,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, ax::Rect rect, float fr
     glfwSetWindowIconifyCallback(_mainWindow, GLFWEventHandler::onGLFWWindowIconifyCallback);
     glfwSetWindowFocusCallback(_mainWindow, GLFWEventHandler::onGLFWWindowFocusCallback);
 
-    setFrameSize(rect.size.width, rect.size.height);
+    setFrameSize(frameSize.width, frameSize.height);
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     loadGL();

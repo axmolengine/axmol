@@ -8,7 +8,7 @@ set(target_name ${lib_name})
 
 project(${lib_name})
 
-include(../../cmake/AXConfigThirdparty.cmake)
+include(AXPlatform)
 
 aux_source_directory(${LUA_SRC_PATH} LUA_CORE)
 list(REMOVE_ITEM LUA_CORE ${LUA_SRC_PATH}/lua.c ${LUA_SRC_PATH}/luac.c)
@@ -18,6 +18,9 @@ set(LUA_BUILD_AS_DLL ${BUILD_SHARED_LIBS})
 if(WIN32)
     set(LUA_BUILD_AS_DLL TRUE)
     add_library(${target_name} SHARED ${LUA_CORE} ${LUA_SRC_PATH}/plainlua.def)
+    if(WINRT)
+        target_link_libraries(${target_name} PRIVATE runtimeobject)
+    endif()
 else()
     add_library(${target_name} ${LUA_CORE})
 endif()
@@ -92,4 +95,6 @@ if(WIN32 OR MACOSX)
 
   # tool:lua the lua interpreter
   add_lua_bin(lua "${LUA_SRC_PATH}/lua.c")
+elseif(LINUX)
+  target_compile_definitions(${target_name} PUBLIC LUA_USE_LINUX=1)
 endif()

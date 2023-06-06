@@ -24,7 +24,7 @@ SOFTWARE.
 #ifndef YASIO__UNREAL_HPP
 #define YASIO__UNREAL_HPP
 
-#include "yasio/detail/config.hpp"
+#include "yasio/config.hpp"
 
 YASIO_API void yasio_unreal_init();
 YASIO_API void yasio_unreal_cleanup();

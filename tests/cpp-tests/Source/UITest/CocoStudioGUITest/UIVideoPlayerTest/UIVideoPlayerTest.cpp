@@ -28,6 +28,15 @@
 USING_NS_AX;
 using namespace ax::ui;
 
+static MenuItemFont* createMenuFontWithColor(std::string_view title,
+                                             ax::ccMenuCallback&& cb,
+                                             const Color3B& color = Color3B::RED)
+{
+    auto menuFont = ax::MenuItemFont::create(title, cb);
+    menuFont->setColor(color);
+    return menuFont;
+}
+
 VideoPlayerTests::VideoPlayerTests()
 {
     ADD_TEST_CASE(VideoPlayerTest);
@@ -46,49 +55,49 @@ bool VideoPlayerTest::init()
     MenuItemFont::setFontSize(16);
 
     auto fullSwitch =
-        MenuItemFont::create("FullScreenSwitch", AX_CALLBACK_1(VideoPlayerTest::menuFullScreenCallback, this));
+        createMenuFontWithColor("FullScreenSwitch", AX_CALLBACK_1(VideoPlayerTest::menuFullScreenCallback, this));
     fullSwitch->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     fullSwitch->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 50));
 
-    auto pauseItem = MenuItemFont::create("Pause", AX_CALLBACK_1(VideoPlayerTest::menuPauseCallback, this));
+    auto pauseItem = createMenuFontWithColor("Pause", AX_CALLBACK_1(VideoPlayerTest::menuPauseCallback, this));
     pauseItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     pauseItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 100));
 
-    auto resumeItem = MenuItemFont::create("Resume", AX_CALLBACK_1(VideoPlayerTest::menuResumeCallback, this));
+    auto resumeItem = createMenuFontWithColor("Resume", AX_CALLBACK_1(VideoPlayerTest::menuResumeCallback, this));
     resumeItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     resumeItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 150));
 
-    auto stopItem = MenuItemFont::create("Stop", AX_CALLBACK_1(VideoPlayerTest::menuStopCallback, this));
+    auto stopItem = createMenuFontWithColor("Stop", AX_CALLBACK_1(VideoPlayerTest::menuStopCallback, this));
     stopItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     stopItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 200));
 
-    auto hintItem = MenuItemFont::create("Hint", AX_CALLBACK_1(VideoPlayerTest::menuHintCallback, this));
+    auto hintItem = createMenuFontWithColor("Hint", AX_CALLBACK_1(VideoPlayerTest::menuHintCallback, this));
     hintItem->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     hintItem->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 250));
 
     //-------------------------------------------------------------------------------------------------------------------
     auto resourceVideo =
-        MenuItemFont::create("Play resource video", AX_CALLBACK_1(VideoPlayerTest::menuResourceVideoCallback, this));
+        createMenuFontWithColor("Play resource video", AX_CALLBACK_1(VideoPlayerTest::menuResourceVideoCallback, this));
     resourceVideo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     resourceVideo->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 50));
 
     auto onlineVideo =
-        MenuItemFont::create("Play online video", AX_CALLBACK_1(VideoPlayerTest::menuOnlineVideoCallback, this));
+        createMenuFontWithColor("Play online video", AX_CALLBACK_1(VideoPlayerTest::menuOnlineVideoCallback, this));
     onlineVideo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     onlineVideo->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 100));
 
-    auto ratioSwitch = MenuItemFont::create("KeepRatioSwitch", AX_CALLBACK_1(VideoPlayerTest::menuRatioCallback, this));
+    auto ratioSwitch = createMenuFontWithColor("KeepRatioSwitch", AX_CALLBACK_1(VideoPlayerTest::menuRatioCallback, this));
     ratioSwitch->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     ratioSwitch->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 150));
 
-    auto loopToggle = MenuItemFont::create("LoopToogle", AX_CALLBACK_1(VideoPlayerTest::menuLoopCallback, this));
+    auto loopToggle = createMenuFontWithColor("LoopToogle", AX_CALLBACK_1(VideoPlayerTest::menuLoopCallback, this));
     loopToggle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     loopToggle->setPosition(Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 170));
 
     auto menu = Menu::create(resourceVideo, onlineVideo, ratioSwitch, loopToggle, fullSwitch, pauseItem, resumeItem,
                              stopItem, hintItem, nullptr);
     menu->setPosition(Vec2::ZERO);
-    _uiLayer->addChild(menu);
+    _uiLayer->addChild(menu, 1);
 
     _videoStateLabel = Label::createWithSystemFont("IDLE", "Arial", 16);
     _videoStateLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
@@ -154,7 +163,11 @@ void VideoPlayerTest::menuResourceVideoCallback(Ref* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setFileName("cocosvideo.mp4");
+#if defined(__APPLE__)
+        _videoPlayer->setFileName("video/h265/1912x1080_hvc1.mp4");
+#else
+        _videoPlayer->setFileName("video/h265/1912x1080_hev1.mp4");
+#endif
         _videoPlayer->play();
     }
 }
@@ -163,7 +176,8 @@ void VideoPlayerTest::menuOnlineVideoCallback(Ref* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setURL("http://benchmark.cocos2d-x.org/cocosvideo.mp4");
+        _videoPlayer->setURL(
+            "https://storage.googleapis.com/exoplayer-test-media-1/mkv/android-screens-lavf-56.36.100-aac-avc-main-1280x720.mkv");
         _videoPlayer->play();
     }
 }
@@ -335,12 +349,12 @@ bool SimpleVideoPlayerTest::init()
     MenuItemFont::setFontSize(16);
 
     _switchStyle =
-        MenuItemFont::create("Switch Style", AX_CALLBACK_1(SimpleVideoPlayerTest::switchStyleCallback, this));
+        createMenuFontWithColor("Switch Style", AX_CALLBACK_1(SimpleVideoPlayerTest::switchStyleCallback, this));
     _switchStyle->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _switchStyle->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 50));
 
     _switchUserInputEnabled =
-        MenuItemFont::create("Enable User Input", AX_CALLBACK_1(SimpleVideoPlayerTest::switchUserInputCallback, this));
+        createMenuFontWithColor("Enable User Input", AX_CALLBACK_1(SimpleVideoPlayerTest::switchUserInputCallback, this));
     _switchUserInputEnabled->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
     _switchUserInputEnabled->setPosition(Vec2(_visibleRect.origin.x + 10, _visibleRect.origin.y + 100));
 
@@ -430,11 +444,10 @@ void SimpleVideoPlayerTest::createVideo()
     _videoPlayer->setLooping(true);
     _videoPlayer->setStyle(_style);
     _videoPlayer->setUserInputEnabled(_userInputEnabled);
+    _videoPlayer->setKeepAspectRatioEnabled(true);
 
     _uiLayer->addChild(_videoPlayer);
-
-    // _videoPlayer->addEventListener(AX_CALLBACK_2(SimpleVideoPlayerTest::videoEventCallback, this));
-
-    _videoPlayer->setFileName("cocosvideo.mp4");
+    
+    _videoPlayer->setFileName("video/h264/1920x1080.mp4");
     _videoPlayer->play();
 }

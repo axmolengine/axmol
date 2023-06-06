@@ -317,7 +317,7 @@ void AssetsManager::downloadAndUncompress()
             // Uncompress zip file.
             if (!uncompress())
             {
-                Director::getInstance()->getScheduler()->performFunctionInCocosThread([&, this] {
+                Director::getInstance()->getScheduler()->runOnAxmolThread([&, this] {
                     UserDefault::getInstance()->setStringForKey(this->keyOfDownloadedVersion().c_str(), "");
                     UserDefault::getInstance()->flush();
                     if (this->_delegate)
@@ -326,7 +326,7 @@ void AssetsManager::downloadAndUncompress()
                 break;
             }
 
-            Director::getInstance()->getScheduler()->performFunctionInCocosThread([&, this] {
+            Director::getInstance()->getScheduler()->runOnAxmolThread([&, this] {
                 // Record new version code.
                 UserDefault::getInstance()->setStringForKey(this->keyOfVersion().c_str(), this->_version);
 
