@@ -1,5 +1,6 @@
 package org.axmol.lib;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.media.MediaFormat;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("unused")
-public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.OutputHandler {
+public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.Listener, AxmolVideoRenderer.OutputHandler  {
     // The native media events, match with MEMediaEventType
     public static final int EVENT_PLAYING = 0;
     public static final int EVENT_PAUSED = 1;
@@ -68,6 +69,8 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
 
     public static final String TAG = "AxmolMediaEngine";
 
+    public static Context sContext = null;
+
     private ExoPlayer mPlayer;
     private AxmolVideoRenderer mVideoRenderer;
     private boolean mAutoPlay = false;
@@ -79,13 +82,26 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
     Point mOutputDim = new Point(); // The output dim match with buffer
     Point mVideoDim = new Point(); // The video dim (validate image dim)
 
+
     /** ------ native methods ------- */
     public static native void nativeHandleEvent(long nativeObj, int arg1);
     public static native void nativeHandleVideoSample(long nativeObj, ByteBuffer sampleData, int sampleLen, int outputX, int outputY, int videoX, int videoY);
 
+    public static void setContext(Activity activity) {
+        sContext = activity.getApplicationContext();
+    }
+
     @SuppressWarnings("unused")
     public static Object createMediaEngine() {
-        return new AxmolMediaEngine();
+        return new AxmolMediaEngine(sContext);
+    }
+
+    /**
+     * @param context A {@link Context}.
+     */
+    public AxmolMediaEngine(Context context) {
+        super(context);
+        setAllowedVideoJoiningTimeMs(0);
     }
 
     @SuppressWarnings("unused")
@@ -94,6 +110,28 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
         if(nativeObj == 0) { // when unbind nativeObj, we should ensure close player
             close();
         }
+    }
+
+    @Override
+    protected void buildVideoRenderers(
+        Context context,
+        @DefaultRenderersFactory.ExtensionRendererMode int extensionRendererMode,
+        MediaCodecSelector mediaCodecSelector,
+        boolean enableDecoderFallback,
+        Handler eventHandler,
+        VideoRendererEventListener eventListener,
+        long allowedVideoJoiningTimeMs,
+        ArrayList<Renderer> out) {
+        out.add(
+            new AxmolVideoRenderer(
+                context,
+                getCodecAdapterFactory(),
+                mediaCodecSelector,
+                allowedVideoJoiningTimeMs,
+                enableDecoderFallback,
+                eventHandler,
+                eventListener,
+                MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
     }
 
     public void setAutoPlay(boolean bAutoPlay)
@@ -115,29 +153,24 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
             return false;
         mState.set(STATE_PREPARING);
 
-        final AxmolMediaEngine outputHandler = this;
-        AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final Context activity = AxmolEngine.getActivity();
-                    Context context = activity.getApplicationContext();
-                    DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(activity);
-                    MediaSource mediaSource =
-                        new ProgressiveMediaSource.Factory(dataSourceFactory)
-                            .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
+        final AxmolMediaEngine mediaEngine = this;
+        AxmolEngine.getActivity().runOnUiThread(() -> {
+            try {
+                DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(sContext);
+                MediaSource mediaSource =
+                    new ProgressiveMediaSource.Factory(dataSourceFactory)
+                        .createMediaSource(MediaItem.fromUri(Uri.parse(sourceUri)));
 
-                    mPlayer = new ExoPlayer.Builder(context, new AxmolRenderersFactory(context)).build();
-                    mVideoRenderer = (AxmolVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
-                    mVideoRenderer.setOutputHandler(outputHandler);
-                    mPlayer.addListener(outputHandler);
-                    mPlayer.setMediaSource(mediaSource);
-                    mPlayer.prepare();
-                    mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
-                    mPlayer.setPlayWhenReady(mAutoPlay);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                mPlayer = new ExoPlayer.Builder(sContext, mediaEngine).build();
+                mVideoRenderer = (AxmolVideoRenderer) mPlayer.getRenderer(0); // the first must be video renderer
+                mVideoRenderer.setOutputHandler(mediaEngine);
+                mPlayer.addListener(mediaEngine);
+                mPlayer.setMediaSource(mediaSource);
+                mPlayer.prepare();
+                mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
+                mPlayer.setPlayWhenReady(mAutoPlay);
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -149,16 +182,13 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
             mState.set(STATE_CLOSING);
             final ExoPlayer player = mPlayer;
             mPlayer = null;
-            final AxmolMediaEngine thiz = this;
-            AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mVideoRenderer.setOutputHandler(null);
-                    player.removeListener(thiz);
-                    player.stop();
-                    player.release();
-                    mState.set(STATE_CLOSED);
-                }
+            final AxmolMediaEngine mediaEngine = this;
+            AxmolEngine.getActivity().runOnUiThread(() -> {
+                mVideoRenderer.setOutputHandler(null);
+                player.removeListener(mediaEngine);
+                player.stop();
+                player.release();
+                mState.set(STATE_CLOSED);
             });
         }
         return true;
@@ -167,12 +197,9 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
         if (mLooping != bLooping) {
             mLooping = bLooping;
             if (mPlayer == null) return false;
-            AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (mPlayer != null)
-                        mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
-                }
+            AxmolEngine.getActivity().runOnUiThread(() -> {
+                if (mPlayer != null)
+                    mPlayer.setRepeatMode(mLooping ? Player.REPEAT_MODE_ALL : Player.REPEAT_MODE_OFF);
             });
         }
         return true;
@@ -181,12 +208,9 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
     @SuppressWarnings("unused")
     public boolean setRate(double fRate) {
         if(mPlayer == null) return false;
-        AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mPlayer != null)
-                    mPlayer.setPlaybackSpeed((float)fRate);
-            }
+        AxmolEngine.getActivity().runOnUiThread(() -> {
+            if (mPlayer != null)
+                mPlayer.setPlaybackSpeed((float)fRate);
         });
         return true;
     }
@@ -194,57 +218,45 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
     {
         if(mPlayer == null) return false;
 
-        AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mPlayer != null)
-                    mPlayer.seekTo((long)(fSeekTimeInSec * 1000));
-            }
+        AxmolEngine.getActivity().runOnUiThread(() -> {
+            if (mPlayer != null)
+                mPlayer.seekTo((long)(fSeekTimeInSec * 1000));
         });
         return true;
     }
     public boolean play() {
         if (mPlayer == null) return false;
-        AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mPlayer != null) {
-                    if (mState.compareAndSet(STATE_STOPPED, STATE_PREPARING)) // TO-CHECK: can't reply after playback stopped
-                    {
-                        /**
-                         * The player is used in a way that may benefit from foreground mode.
-                         * For this to be true, the same player instance must be used to play multiple pieces of content,
-                         * and there must be gaps between the playbacks (i.e. Player.stop() is called to halt one playback,
-                         * and prepare(com.google.android.exoplayer2.source.MediaSource) is called some time later to start a new one).
-                         */
-                        mPlayer.prepare();
-                        mPlayer.seekTo(0);
-                    }
-                    mPlayer.play();
+        AxmolEngine.getActivity().runOnUiThread(() -> {
+            if (mPlayer != null) {
+                if (mState.compareAndSet(STATE_STOPPED, STATE_PREPARING)) // TO-CHECK: can't reply after playback stopped
+                {
+                    /**
+                     * The player is used in a way that may benefit from foreground mode.
+                     * For this to be true, the same player instance must be used to play multiple pieces of content,
+                     * and there must be gaps between the playbacks (i.e. Player.stop() is called to halt one playback,
+                     * and prepare(com.google.android.exoplayer2.source.MediaSource) is called some time later to start a new one).
+                     */
+                    mPlayer.prepare();
+                    mPlayer.seekTo(0);
                 }
+                mPlayer.play();
             }
         });
         return true;
     }
     public boolean pause() {
         if(mPlayer == null) return false;
-        AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mPlayer != null)
-                    mPlayer.pause();
-            }
+        AxmolEngine.getActivity().runOnUiThread(() -> {
+            if (mPlayer != null)
+                mPlayer.pause();
         });
         return true;
     }
     public boolean stop() {
         if(mPlayer == null) return false;
-        AxmolEngine.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mPlayer != null)
-                    mPlayer.stop();
-            }
+        AxmolEngine.getActivity().runOnUiThread(() -> {
+            if (mPlayer != null)
+                mPlayer.stop();
         });
         return true;
     }
@@ -371,36 +383,6 @@ public class AxmolMediaEngine implements Player.Listener, AxmolVideoRenderer.Out
     public void nativeEvent(int event) {
         if(mNativeObj != 0 && mPlayer != null) {
             nativeHandleEvent(mNativeObj, event);
-        }
-    }
-
-    final class AxmolRenderersFactory extends DefaultRenderersFactory {
-
-        public AxmolRenderersFactory(Context context) {
-            super(context);
-            setAllowedVideoJoiningTimeMs(0);
-        }
-
-        @Override
-        protected void buildVideoRenderers(
-            Context context,
-            @ExtensionRendererMode int extensionRendererMode,
-            MediaCodecSelector mediaCodecSelector,
-            boolean enableDecoderFallback,
-            Handler eventHandler,
-            VideoRendererEventListener eventListener,
-            long allowedVideoJoiningTimeMs,
-            ArrayList<Renderer> out) {
-            out.add(
-                new AxmolVideoRenderer(
-                    context,
-                    getCodecAdapterFactory(),
-                    mediaCodecSelector,
-                    allowedVideoJoiningTimeMs,
-                    enableDecoderFallback,
-                    eventHandler,
-                    eventListener,
-                    MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
         }
     }
 }
