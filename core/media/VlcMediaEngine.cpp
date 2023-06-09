@@ -169,8 +169,8 @@ void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* user
 
 VlcMediaEngine::VlcMediaEngine()
 {
+    // too late set vlc plugins path at hete, vlc maybe read it at DllMain
     //_putenv_s("VLC_PLUGIN_PATH", R"(D:\dev\axmol\thirdparty\vlc\win\lib)");
-    auto paths = getenv("VLC_PLUGIN_PATH");
     _vlc       = libvlc_new(0, nullptr);
     if (!_vlc)
     {
@@ -305,7 +305,6 @@ bool VlcMediaEngine::updatePlaybackProperties()
 {
     if (_frameIndex == 0)
     {
-        bool hasVideoTrack = false;
         auto media         = libvlc_media_player_get_media(_mp);
 #    if LIBVLC_VERSION_MAJOR < 4
         /* local file, we Get the size of the video with the tracks information of the media. */
@@ -324,7 +323,6 @@ bool VlcMediaEngine::updatePlaybackProperties()
 
                 auto vdi = track->video;
                 _videoDim.set(vdi->i_width, vdi->i_height);
-                hasVideoTrack = true;
                 break;
             }
         }
@@ -342,7 +340,6 @@ bool VlcMediaEngine::updatePlaybackProperties()
 
                 auto vdi = track->video;
                 _videoDim.set(vdi->i_width, vdi->i_height);
-                hasVideoTrack = true;
             }
             libvlc_media_tracklist_delete(tracks);
         }
