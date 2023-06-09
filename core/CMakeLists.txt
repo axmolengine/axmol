@@ -64,6 +64,8 @@ if (LINUX)
     endif()
 endif()
 
+message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
+
 if(NOT APPLE)
     set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
 else()

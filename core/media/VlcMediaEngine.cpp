@@ -122,7 +122,7 @@ void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* user
     {
     case libvlc_MediaPlayerPlaying:
         mediaEngine->_playbackEnded = false;
-        mediaEngine->_state = MEMediaState::Playing;
+        mediaEngine->_state         = MEMediaState::Playing;
         mediaEngine->handleEvent(MEMediaEventType::Playing);
         break;
     case libvlc_MediaPlayerPaused:
@@ -169,13 +169,14 @@ void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* user
 
 VlcMediaEngine::VlcMediaEngine()
 {
+    AXLOG("libvlc-version: %s", libvlc_get_version());
+
     // too late set vlc plugins path at hete, vlc maybe read it at DllMain
     //_putenv_s("VLC_PLUGIN_PATH", R"(D:\dev\axmol\thirdparty\vlc\win\lib)");
-    _vlc       = libvlc_new(0, nullptr);
+    _vlc = libvlc_new(0, nullptr);
     if (!_vlc)
     {
-        ax::print(
-            "VlcMediaEngine: libvlc_new fail, ensure the plugins folder in directory of libvlc.so,libvlccore.so!");
+        ax::print("VlcMediaEngine: libvlc_new fail, ensure install vlc and ubuntu-restricted-extras");
         return;
     }
 
@@ -305,7 +306,7 @@ bool VlcMediaEngine::updatePlaybackProperties()
 {
     if (_frameIndex == 0)
     {
-        auto media         = libvlc_media_player_get_media(_mp);
+        auto media = libvlc_media_player_get_media(_mp);
 #    if LIBVLC_VERSION_MAJOR < 4
         /* local file, we Get the size of the video with the tracks information of the media. */
         libvlc_media_track_t** tracks{};
