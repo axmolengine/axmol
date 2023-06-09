@@ -172,8 +172,6 @@ void MfMediaEngine::SetMuted(bool muted)
 
 bool MfMediaEngine::Open(std::string_view sourceUri)
 {
-    if (cxx20::starts_with(sourceUri, FILE_URL_SCHEME))
-        sourceUri.remove_prefix(FILE_URL_SCHEME.length());
     auto bstrUrl = ntcvt::from_chars(sourceUri);
 
     m_readyToPlay = false;

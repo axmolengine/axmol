@@ -140,6 +140,8 @@ public class AxmolEngine {
             AxmolEngine.sAssetManager = activity.getAssets();
             AxmolEngine.nativeSetContext((Context)activity, AxmolEngine.sAssetManager);
 
+            AxmolMediaEngine.setContext(activity);
+
             BitmapHelper.setContext(activity);
 
             AxmolEngine.sVibrateService = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);

@@ -26,14 +26,13 @@
 #include <functional>
 #include <memory>
 #include <chrono>
-#include <string_view>
+
+#include "yasio/stl/string_view.hpp"
 #include "yasio/core/byte_buffer.hpp"
 
 using namespace std::string_view_literals;
 
 NS_AX_BEGIN
-
-static constexpr std::string_view FILE_URL_SCHEME = "file://"sv;
 
 enum class MEMediaEventType
 {
@@ -95,10 +94,14 @@ struct MEIntPoint
 {
     MEIntPoint() : x(0), y(0) {}
     MEIntPoint(int x_, int y_) : x(x_), y(y_) {}
+    bool equals(const MEIntPoint& rhs) const { return this->x == rhs.x && this->y == rhs.y; }
+    void set(int x_, int y_) {
+        this->x = x_;
+        this->y = y_;
+    }
+
     int x;
     int y;
-
-    bool equals(const MEIntPoint& rhs) const { return this->x == rhs.x && this->y == rhs.y; }
 };
 
 #if defined(_DEBUG) || !defined(_NDEBUG)
@@ -159,6 +162,34 @@ struct MEVideoFrame
     YCbCrBiPlanarPixelInfo _ycbcrDesc{};
 #endif
 };
+
+//
+// file uri helper: https://www.ietf.org/rfc/rfc3986.txt
+//
+static constexpr std::string_view LOCAL_FILE_URI_PREFIX = "file:///"sv;  // The localhost file prefix
+
+inline std::string& path2uri(std::string& path)
+{
+    // windows: file:///D:/xxx/xxx.mp4
+    // unix: file:///home/xxx/xxx.mp4
+    // android_asset:
+    //   - file:///android_asset/xxx/xxx.mp4
+    //   - asset://android_asset/xxx/xxx.mp4
+    if (!path.empty())
+    {
+        if (path[0] == '/')
+            path.insert(0, LOCAL_FILE_URI_PREFIX.data(), LOCAL_FILE_URI_PREFIX.length() - 1);
+        else
+        {
+            if (!cxx20::starts_with(path, "assets/"sv)) // not android asset
+                path.insert(0, LOCAL_FILE_URI_PREFIX.data(), LOCAL_FILE_URI_PREFIX.length());
+            else
+                path.replace(0, "assets/"sv.length(), "file:///android_asset/");
+        }
+           
+    }
+    return path;
+}
 
 //
 // redisigned corss-platform MediaEngine, inspired from microsoft media foundation: IMFMediaEngine

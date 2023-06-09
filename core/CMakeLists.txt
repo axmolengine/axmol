@@ -56,6 +56,14 @@ else() # we not support webview2 and vidio player for WINRT target
     # set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
 endif()
 
+if (LINUX)
+    # include(CheckIncludeFile)
+    # check_include_file(vlc/vlc.h _AX_HAVE_VLC)
+    # if (_AX_HAVE_VLC)
+    option (AX_ENABLE_VLC_MEDIA "Enabling vlc media for linux video player" ON)
+    # endif()
+endif()
+
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 
 

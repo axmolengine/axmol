@@ -433,6 +433,12 @@ if(AX_WITH_LLHTTP)
     target_link_libraries(thirdparty llhttp)
 endif()
 
+# libvlc
+if (AX_ENABLE_VLC_MEDIA)
+    add_subdirectory(vlc)
+    target_link_libraries(thirdparty VLC::vlc VLC::vlccore)
+endif()
+
 # yaml
 if(AX_WITH_YAML_CPP)
     set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)

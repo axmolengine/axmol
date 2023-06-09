@@ -27,7 +27,7 @@
 #include "ui/UIVideoPlayer.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__) || defined(AX_ENABLE_VLC_MEDIA)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>
@@ -164,7 +164,7 @@ VideoPlayer::VideoPlayer()
         pvd->_vrender->setAutoUpdatePS(false);
         this->addProtectedChild(pvd->_vrender);
         /// setup media event callback
-        pvd->_vplayer->SetMediaEventCallback([=](MEMediaEventType event) {
+        pvd->_vplayer->SetMediaEventCallback([this](MEMediaEventType event) {
             switch (event)
             {
             case MEMediaEventType::Playing:
@@ -223,8 +223,7 @@ VideoPlayer::~VideoPlayer()
 void VideoPlayer::setFileName(std::string_view fileName)
 {
     auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
-    fullPath.insert(fullPath.begin(), FILE_URL_SCHEME.begin(), FILE_URL_SCHEME.end());
-    if (fullPath != _videoURL)
+    if (ax::path2uri(fullPath) != _videoURL)
     {
         reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
         _videoURL = std::move(fullPath);

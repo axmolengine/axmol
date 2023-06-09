@@ -366,7 +366,6 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
     public boolean onKeyDown(final int pKeyCode, final KeyEvent pKeyEvent) {
         switch (pKeyCode) {
             case KeyEvent.KEYCODE_BACK:
-                VideoHelper.mVideoHandler.sendEmptyMessage(VideoHelper.KeyEventBack);
             case KeyEvent.KEYCODE_MENU:
             case KeyEvent.KEYCODE_DPAD_LEFT:
             case KeyEvent.KEYCODE_DPAD_RIGHT:

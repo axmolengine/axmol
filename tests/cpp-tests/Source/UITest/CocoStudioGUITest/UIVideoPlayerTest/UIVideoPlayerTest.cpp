@@ -103,13 +103,15 @@ bool VideoPlayerTest::init()
     _videoStateLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     _videoStateLabel->setPosition(
         Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 200));
-    _uiLayer->addChild(_videoStateLabel);
+    _uiLayer->addChild(_videoStateLabel, 1);
+    _videoStateLabel->setTextColor(Color4B::YELLOW);
 
     _loopStatusLabel = Label::createWithSystemFont("(1)", "Arial", 10);
     _loopStatusLabel->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
     _loopStatusLabel->setPosition(
         Vec2(_visibleRect.origin.x + _visibleRect.size.width - 10, _visibleRect.origin.y + 185));
-    _uiLayer->addChild(_loopStatusLabel);
+    _uiLayer->addChild(_loopStatusLabel, 1);
+    _loopStatusLabel->setTextColor(Color4B::YELLOW);
 
     return true;
 }
@@ -447,7 +449,7 @@ void SimpleVideoPlayerTest::createVideo()
     _videoPlayer->setKeepAspectRatioEnabled(true);
 
     _uiLayer->addChild(_videoPlayer);
-    
+
     _videoPlayer->setFileName("video/h264/1920x1080.mp4");
     _videoPlayer->play();
 }

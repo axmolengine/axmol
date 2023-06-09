@@ -27,7 +27,7 @@
 
 #include "ui/UIWidget.h"
 
-#if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX
+#if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX || defined(AX_ENABLE_VLC_MEDIA)
 
 #    if AX_VIDEOPLAYER_DEBUG_DRAW
 #        include "2d/CCDrawNode.h"
