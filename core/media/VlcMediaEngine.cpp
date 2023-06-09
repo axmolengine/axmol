@@ -130,6 +130,11 @@ void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* user
         mediaEngine->handleEvent(MEMediaEventType::Paused);
         break;
 #    if LIBVLC_VERSION_MAJOR < 4
+    case libvlc_MediaPlayerEndReached:
+        mediaEngine->_playbackEnded = true;
+        mediaEngine->_state         = MEMediaState::Stopped;
+        mediaEngine->handleEvent(MEMediaEventType::Stopped);
+        break;
     case libvlc_MediaPlayerStopped:
         if (!mediaEngine->_playbackEnded)
         {
@@ -137,19 +142,18 @@ void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* user
             mediaEngine->handleEvent(MEMediaEventType::Stopped);
         }
         break;
-    case libvlc_MediaPlayerEndReached:
-        mediaEngine->_playbackEnded = true;
-        mediaEngine->_state = MEMediaState::Stopped;
-        mediaEngine->handleEvent(MEMediaEventType::Stopped);
-        break;
 #    else
-    case libvlc_MediaListPlayerStopped:
-        mediaEngine->_state = MEMediaState::Stopped;
+    case libvlc_MediaPlayerStopped:
+        mediaEngine->_playbackEnded = true;
+        mediaEngine->_state         = MEMediaState::Stopped;
         mediaEngine->handleEvent(MEMediaEventType::Stopped);
         break;
-    case libvlc_MediaPlayerStopped:
-        mediaEngine->_state = MEMediaState::Completed;
-        mediaEngine->handleEvent(MEMediaEventType::Completed);
+    case libvlc_MediaListPlayerStopped:
+        if (!mediaEngine->_playbackEnded)
+        {
+            mediaEngine->_state = MEMediaState::Stopped;
+            mediaEngine->handleEvent(MEMediaEventType::Stopped);
+        }
         break;
 #    endif
     case libvlc_MediaPlayerEncounteredError:
