@@ -146,8 +146,8 @@ void AvfMediaEngine::onPlayerEnd()
     fireMediaEvent(MEMediaEventType::Stopped);
     
     if (_repeatEnabled) {
-        this->SetCurrentTime(0);
-        this->Play();
+        this->setCurrentTime(0);
+        this->play();
     }
 }
 
@@ -330,7 +330,7 @@ void AvfMediaEngine::onStatusNotification(void* context)
     }
 
     if (_bAutoPlay)
-        this->Play();
+        this->play();
 }
 
 bool AvfMediaEngine::transferVideoFrame()
@@ -484,9 +484,9 @@ bool AvfMediaEngine::pause()
 }
 bool AvfMediaEngine::stop()
 {
-    if (_state != MEMediaState::stopped)
+    if (_state != MEMediaState::Stopped)
     {
-        SetCurrentTime(0);
+        setCurrentTime(0);
         [_player pause];
         _state = MEMediaState::Stopped;
 
