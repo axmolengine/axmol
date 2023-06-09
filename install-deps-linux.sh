@@ -9,7 +9,7 @@ else
     exit
 fi
 
-sudo apt-get update
+sudo apt update
 
 # for vm, libxxf86vm-dev also required
 
@@ -29,8 +29,12 @@ DEPENDS+=' binutils'
 DEPENDS+=' libbsd-dev'
 DEPENDS+=' libasound2-dev'
 DEPENDS+=' libxxf86vm-dev'
+DEPENDS+=' libvlc-dev libvlccore-dev vlc'
 
-sudo apt-get install --allow-unauthenticated --yes $DEPENDS > /dev/null
+# if vlc encouter codec error, install
+# sudo apt install ubuntu-restricted-extras
+
+sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
 
 echo "Installing latest freetype for linux ..."
 mkdir buildsrc

@@ -1,32 +1,8 @@
 /***************************************************
 * VlcMediaEngine.cpp
 
-# building vlc
-
-## codec:
-
-### codec-dev
-sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev liba52-0.7.4-dev
-
-### codec-runtime: ubuntu-restricted-extras (contains intel-media-va-driver)
+required codec-runtime: ubuntu-restricted-extras (contains intel-media-va-driver)
 sudo apt install ubuntu-restricted-extras
-
-# play media from https://xxx
-git clone https://github.com/gnutls/gnutls
-cd gnutls
-git checkout 3.7.9
-sudo apt install gperf autopoint gtk-doc-tools nettle-dev libidn-dev libtasn1-dev libev-dev libp11-kit-dev libtasn1-bin texinfo
-./bootstrap
-./configure --prefix=/usr --with-included-libtasn1 --with-included-unistring
-make && sudo make install
-cd -
-
-git clone https://github.com/videolan/vlc
-cd vlc
-git checkout 3.0.18
-sudo apt install flex bison gettext
-./bootstrap
-./configure --enable-debug --prefix=$AX_ROOT/thirdparty/vlc --disable-lua --disable-xcb --disable-qt --enable-gnutls
 
 */
 #if defined(AX_ENABLE_VLC_MEDIA)
@@ -270,7 +246,6 @@ bool VlcMediaEngine::updatePlaybackProperties()
         if (!nbTracks)
             return false;
 
-        int videoWidth = 0, videoHeight = 0;
         bool hasVideoTrack = false;
         for (unsigned int i = 0; i < nbTracks; ++i)
         {
@@ -322,7 +297,6 @@ bool VlcMediaEngine::SetLoop(bool bLooping)
 bool VlcMediaEngine::SetRate(double fRate)
 {
     return _mp && libvlc_media_player_set_rate(_mp, static_cast<float>(fRate)) == 0;
-    return true;
 }
 bool VlcMediaEngine::SetCurrentTime(double fSeekTimeInSec)
 {
