@@ -31,7 +31,7 @@ public:
     bool play() override;
     bool pause() override;
     bool stop() override;
-    bool isPlaybackEnded() override { return _playbackEnded; }
+    bool isPlaybackEnded() const override { return _playbackEnded; }
     MEMediaState getState() const override;
     bool transferVideoFrame() override;
     
