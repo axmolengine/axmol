@@ -79,7 +79,7 @@ struct PrivateVideoDescriptor
     void closePlayer()
     {
         if (_vplayer)
-            _vplayer->Close();
+            _vplayer->close();
     }
 
     void rescaleTo(VideoPlayer* videoView)
@@ -164,7 +164,7 @@ VideoPlayer::VideoPlayer()
         pvd->_vrender->setAutoUpdatePS(false);
         this->addProtectedChild(pvd->_vrender);
         /// setup media event callback
-        pvd->_vplayer->SetMediaEventCallback([this](MEMediaEventType event) {
+        pvd->_vplayer->setCallbacks([this, pvd](MEMediaEventType event) {
             switch (event)
             {
             case MEMediaEventType::Playing:
@@ -177,7 +177,7 @@ VideoPlayer::VideoPlayer()
                 break;
 
             case MEMediaEventType::Stopped:
-                onPlayEvent((int)EventType::STOPPED);
+                onPlayEvent(pvd->_vplayer->isPlaybackEnded() ? (int) EventType::COMPLETED : (int) EventType::STOPPED);
                 break;
 
             /* Raised by a media source when a presentation ends. This event signals that all streams in the
@@ -189,12 +189,92 @@ VideoPlayer::VideoPlayer()
             /* Raised by the Media Session when it has finished playing the last presentation in the playback queue.
              * We send complete event at this case
              */
-            case MEMediaEventType::Completed:
-                onPlayEvent((int)EventType::COMPLETED);
-                break;
+            // case MEMediaEventType::Stopped:
+            //     onPlayEvent((int)EventType::COMPLETED);
+            //     break;
             case MEMediaEventType::Error:
                 onPlayEvent((int)EventType::ERROR);
                 break;
+            }
+        }, [this, pvd](const ax::MEVideoFrame& frame) {
+            auto pixelFormat       = frame._vpd._PF;
+            auto bPixelDescChnaged = !frame._vpd.equals(pvd->_vpixelDesc);
+            if (bPixelDescChnaged)
+            {
+                pvd->_vpixelDesc = frame._vpd;
+
+                AX_SAFE_RELEASE(pvd->_vtexture);
+                pvd->_vtexture = new Texture2D();  // deault is Sampler Filter is: LINEAR
+
+                AX_SAFE_RELEASE_NULL(pvd->_vchromaTexture);
+                if (pixelFormat >= MEVideoPixelFormat::YUY2)
+                {  // use separated texture we can set differrent sample filter
+                    pvd->_vchromaTexture = new Texture2D();  // Sampler Filter: NEAREST
+                    pvd->_vchromaTexture->setAliasTexParameters();
+                }
+
+                auto programManager = ProgramManager::getInstance();
+
+                switch (pixelFormat)
+                {
+                case MEVideoPixelFormat::YUY2:
+                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_YUY2);
+                    break;
+                case MEVideoPixelFormat::NV12:
+                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_NV12);
+                    break;
+                case MEVideoPixelFormat::BGR32:
+                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_BGR32);
+                    break;
+                default:
+                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_RGB32);
+                }
+            }
+
+            auto& bufferDim = frame._vpd._dim;
+
+            switch (pixelFormat)
+            {
+            case MEVideoPixelFormat::YUY2:
+            {
+                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::LA8, PixelFormat::LA8,
+                                               bufferDim.x, bufferDim.y, false, 0);
+                pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
+                                                     PixelFormat::RGBA8, bufferDim.x >> 1, bufferDim.y, false, 0);
+                break;
+            }
+            case MEVideoPixelFormat::NV12:
+            {
+                pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::A8,
+                                               PixelFormat::A8, bufferDim.x, bufferDim.y, false, 0);
+                pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
+                                                     PixelFormat::RG8, PixelFormat::RG8, bufferDim.x >> 1,
+                                                     bufferDim.y >> 1, false, 0);
+                break;
+            }
+            case MEVideoPixelFormat::RGB32:
+            case MEVideoPixelFormat::BGR32:
+                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
+                                               PixelFormat::RGBA8, bufferDim.x, bufferDim.y, false, 0);
+                break;
+            default:;
+            }
+            if (bPixelDescChnaged)
+            {
+                pvd->_vrender->setTexture(pvd->_vtexture);
+                pvd->_vrender->setTextureRect(ax::Rect{Vec2::ZERO, Vec2{
+                                                                       frame._videoDim.x / AX_CONTENT_SCALE_FACTOR(),
+                                                                       frame._videoDim.y / AX_CONTENT_SCALE_FACTOR(),
+                                                                   }});
+
+                if (pixelFormat >= MEVideoPixelFormat::YUY2)
+                {
+                    auto ps = pvd->_vrender->getProgramState();
+                    PrivateVideoDescriptor::updateColorTransform(ps, frame._vpd._fullRange);
+                    ps->setTexture(ps->getUniformLocation("u_tex1"), 1, pvd->_vchromaTexture->getBackendTexture());
+                }
+
+                pvd->_scaleDirty = true;
             }
         });
     }
@@ -247,7 +327,7 @@ void VideoPlayer::setLooping(bool looping)
 
     auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     if (pvd->_vplayer)
-        pvd->_vplayer->SetLoop(looping);
+        pvd->_vplayer->setLoop(looping);
 }
 
 void VideoPlayer::setUserInputEnabled(bool enableInput)
@@ -272,90 +352,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 
     if (vrender->isVisible() && isPlaying())
     {  // render 1 video sample if avaiable
-
-        vplayer->TransferVideoFrame([this, pvd](const ax::MEVideoFrame& frame){
-            auto pixelFormat = frame._vpd._PF;
-            auto bPixelDescChnaged         = !frame._vpd.equals(pvd->_vpixelDesc);
-            if (bPixelDescChnaged)
-            {
-                pvd->_vpixelDesc = frame._vpd;
-
-                AX_SAFE_RELEASE(pvd->_vtexture);
-                pvd->_vtexture = new Texture2D();  // deault is Sampler Filter is: LINEAR
-
-                AX_SAFE_RELEASE_NULL(pvd->_vchromaTexture);
-                if (pixelFormat >= MEVideoPixelFormat::YUY2)
-                {  // use separated texture we can set differrent sample filter
-                    pvd->_vchromaTexture = new Texture2D();  // Sampler Filter: NEAREST
-                    pvd->_vchromaTexture->setAliasTexParameters();
-                }
-
-                auto programManager = ProgramManager::getInstance();
-
-                switch (pixelFormat)
-                {
-                case MEVideoPixelFormat::YUY2:
-                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_YUY2);
-                    break;
-                case MEVideoPixelFormat::NV12:
-                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_NV12);
-                    break;
-                case MEVideoPixelFormat::BGR32:
-                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_BGR32);
-                    break;
-                default:
-                    pvd->_vrender->setProgramState(backend::ProgramType::VIDEO_TEXTURE_RGB32);
-                }
-            }
-
-            auto& bufferDim = frame._vpd._dim;
-
-            switch (pixelFormat)
-            {
-            case MEVideoPixelFormat::YUY2:
-            {
-                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::LA8,
-                                               PixelFormat::LA8,
-                                               bufferDim.x, bufferDim.y, false, 0);
-                pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
-                                                     PixelFormat::RGBA8,
-                                                     bufferDim.x >> 1, bufferDim.y, false, 0);
-                break;
-            }
-            case MEVideoPixelFormat::NV12:
-            {
-                pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::A8,
-                                               PixelFormat::A8, bufferDim.x, bufferDim.y, false, 0);
-                pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
-                                                     PixelFormat::RG8,
-                                                     PixelFormat::RG8, bufferDim.x >> 1, bufferDim.y >> 1, false, 0);
-                break;
-            }
-            case MEVideoPixelFormat::RGB32:
-            case MEVideoPixelFormat::BGR32:
-                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
-                                               PixelFormat::RGBA8, bufferDim.x, bufferDim.y, false, 0);
-                break;
-            default:;
-            }
-            if (bPixelDescChnaged)
-            {
-                pvd->_vrender->setTexture(pvd->_vtexture);
-                pvd->_vrender->setTextureRect(ax::Rect{Vec2::ZERO, Vec2{
-                                                                       frame._videoDim.x / AX_CONTENT_SCALE_FACTOR(),
-                                                                       frame._videoDim.y / AX_CONTENT_SCALE_FACTOR(),
-                                                                   }});
-
-                if (pixelFormat >= MEVideoPixelFormat::YUY2)
-                {
-                    auto ps = pvd->_vrender->getProgramState();
-                    PrivateVideoDescriptor::updateColorTransform(ps, frame._vpd._fullRange);
-                    ps->setTexture(ps->getUniformLocation("u_tex1"), 1, pvd->_vchromaTexture->getBackendTexture());
-                }
-
-                pvd->_scaleDirty = true;
-            }
-        });
+        vplayer->transferVideoFrame();
     }
     if (pvd->_scaleDirty || (flags & FLAGS_TRANSFORM_DIRTY))
         pvd->rescaleTo(this);
@@ -406,7 +403,7 @@ void VideoPlayer::setPlayRate(float fRate)
     {
         auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
         if (vplayer)
-            vplayer->SetRate(fRate);
+            vplayer->setRate(fRate);
     }
 }
 
@@ -417,14 +414,14 @@ void VideoPlayer::play()
         auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
         if (vplayer)
         {
-            switch (vplayer->GetState())
+            switch (vplayer->getState())
             {
             case MEMediaState::Closed:
-                vplayer->SetAutoPlay(true);
-                vplayer->Open(_videoURL);
+                vplayer->setAutoPlay(true);
+                vplayer->open(_videoURL);
                 break;
             default:
-                vplayer->Play();
+                vplayer->play();
             }
         }
     }
@@ -436,7 +433,7 @@ void VideoPlayer::pause()
     {
         auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
         if (vplayer)
-            vplayer->Pause();
+            vplayer->pause();
     }
 }
 
@@ -447,11 +444,11 @@ void VideoPlayer::resume()
         auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
         if (vplayer)
         {
-            switch (vplayer->GetState())
+            switch (vplayer->getState())
             {
             case MEMediaState::Stopped:
             case MEMediaState::Paused:
-                vplayer->Play();
+                vplayer->play();
             }
         }
     }
@@ -463,7 +460,7 @@ void VideoPlayer::stop()
     {
         auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
         if (vplayer)
-            vplayer->Stop();
+            vplayer->stop();
     }
 }
 
@@ -473,7 +470,7 @@ void VideoPlayer::seekTo(float sec)
     {
         auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
         if (vplayer)
-            vplayer->SetCurrentTime(sec);
+            vplayer->setCurrentTime(sec);
     }
 }
 

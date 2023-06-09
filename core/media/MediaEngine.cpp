@@ -10,7 +10,9 @@
 #    include "media/AvfMediaEngine.h"
 #elif defined(__ANDROID__)
 #    include "media/AndroidMediaEngine.h"
-#elif defined(__linux__) && defined(AX_ENABLE_VLC_MEDIA)
+#endif
+
+#if defined(AX_ENABLE_VLC_MEDIA)
 #    include "media/VlcMediaEngine.h"
 #endif
 

@@ -11,25 +11,36 @@ class AndroidMediaEngine : public MediaEngine
 public:
     AndroidMediaEngine();
     ~AndroidMediaEngine();
-    void SetMediaEventCallback(MEMediaEventCallback cb) override;
-    void SetAutoPlay(bool bAutoPlay) override;
-    bool Open(std::string_view sourceUri) override;
-    bool Close() override;
-    bool SetLoop(bool bLooping) override;
-    bool SetRate(double fRate) override;
-    bool SetCurrentTime(double fSeekTimeInSec) override;
-    bool Play() override;
-    bool Pause() override;
-    bool Stop() override;
-    MEMediaState GetState() const override;
-    bool TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback) override;
+    void fireMediaEvent(MEMediaEventType event)
+    {
+        if (_onMediaEvent)
+            _onMediaEvent(event);
+    }
+    void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
+                     std::function<void(const MEVideoFrame&)> onVideoFrame) override
+    {
+        _onMediaEvent = std::move(onMediaEvent);
+        _onVideoFrame = std::move(onVideoFrame);
+    }
+    void setAutoPlay(bool bAutoPlay) override;
+    bool open(std::string_view sourceUri) override;
+    bool close() override;
+    bool setLoop(bool bLooping) override;
+    bool setRate(double fRate) override;
+    bool setCurrentTime(double fSeekTimeInSec) override;
+    bool play() override;
+    bool pause() override;
+    bool stop() override;
+    bool isPlaybackEnded() const override;
+    MEMediaState getState() const override;
+    bool transferVideoFrame() override;
 
-    void handleEvent(int event);
     void handleVideoSample(const uint8_t* buf, size_t len, int outputX, int outputY, int videoX, int videoY);
 
 private:
     void* context{};  // java object strong-refs
-    MEMediaEventCallback _eventCallback;
+    std::function<void(MEMediaEventType)> _onMediaEvent;
+    std::function<void(const MEVideoFrame&)> _onVideoFrame;
 
     MEIntPoint _outputDim;
     MEIntPoint _videoDim;

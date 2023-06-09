@@ -33,32 +33,25 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     public static final int EVENT_PLAYING = 0;
     public static final int EVENT_PAUSED = 1;
     public static final int EVENT_STOPPED = 2;
-    public static final int EVENT_COMPLETED = 3;
-    public static final int EVENT_ERROR = 4;
+    public static final int EVENT_ERROR = 3;
 
     /** Media has been closed and cannot be played again. */
     public static final int STATE_CLOSED = 0;
 
-    public static final int STATE_CLOSING = 1;
+    /** Media is being prepared for playback. */
+    public static final int STATE_PREPARING = 1;
 
-    /** Unrecoverable error occurred during playback. */
-    public static final int STATE_ERROR = 2;
+    /** Media is currently playing. */
+    public static final int STATE_PLAYING = 2;
 
     /** Playback has been paused, but can be resumed. */
     public static final int STATE_PAUSED = 3;
 
-    /** Media is currently playing. */
-    public static final int STATE_PLAYING = 4;
-
-    /** Media is being prepared for playback. */
-    public static final int STATE_PREPARING = 5;
-
     /** Playback has been stopped, but can be restarted. */
-    public static final int STATE_STOPPED = 6;
+    public static final int STATE_STOPPED = 4;
 
-    /** Playback has been completed, but can be restarted. */
-    public static final int STATE_COMPLETED = 7;
-
+    /** Unrecoverable error occurred during playback. */
+    public static final int STATE_ERROR = 5;
 
     // The desired video pixel format
     /**
@@ -76,6 +69,8 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
     private boolean mAutoPlay = false;
     private boolean mLooping = false;
     private long mNativeObj = 0; // native object address for send event to C++, weak ref
+
+    private boolean mPlaybackEnded = false;
 
     private AtomicInteger mState = new AtomicInteger(STATE_CLOSED);
 
@@ -179,7 +174,6 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
 
     public boolean close() {
         if(mPlayer != null) {
-            mState.set(STATE_CLOSING);
             final ExoPlayer player = mPlayer;
             mPlayer = null;
             final AxmolMediaEngine mediaEngine = this;
@@ -228,7 +222,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if (mPlayer == null) return false;
         AxmolEngine.getActivity().runOnUiThread(() -> {
             if (mPlayer != null) {
-                if (mState.compareAndSet(STATE_STOPPED, STATE_PREPARING)) // TO-CHECK: can't reply after playback stopped
+                if (!mPlaybackEnded && mState.compareAndSet(STATE_STOPPED, STATE_PREPARING)) // TO-CHECK: can't reply after playback stopped
                 {
                     /**
                      * The player is used in a way that may benefit from foreground mode.
@@ -307,6 +301,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         }
 
         if (mState.get() != STATE_PLAYING) {
+            mPlaybackEnded = false;
             mState.set(STATE_PLAYING);
             nativeEvent(EVENT_PLAYING);
         }
@@ -349,9 +344,7 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
                 Log.d(TAG, "[Individual]onPlaybackStateChanged: decoder: " + mVideoRenderer.getCodecName());
                 break;
             case Player.STATE_ENDED:
-                mState.set(STATE_COMPLETED);
-                nativeEvent(EVENT_COMPLETED);
-                break;
+                mPlaybackEnded = true;
             case Player.STATE_IDLE:
                 mState.set(STATE_STOPPED);
                 nativeEvent(EVENT_STOPPED);
@@ -366,6 +359,10 @@ public class AxmolMediaEngine extends DefaultRenderersFactory implements Player.
         if(mPlayer == null) return;
         mState .set(STATE_ERROR);
         nativeEvent(EVENT_ERROR);
+    }
+
+    public boolean isPlaybackEnded() {
+        return mPlaybackEnded;
     }
 
     @Override

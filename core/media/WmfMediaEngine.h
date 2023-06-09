@@ -63,17 +63,6 @@ using namespace MFUtils;
 #    define CMD_PENDING_SEEK 0x02
 #    define CMD_PENDING_RATE 0x04
 
-enum class MFPlayerState
-{
-    Closed = 0,   // No session.
-    Ready,        // Session was created, ready to open a file.
-    OpenPending,  // Session is opening a file.
-    Started,      // Session is playing a file.
-    Paused,       // Session is paused.
-    Stopped,      // Session is stopped (ready to play).
-    Closing       // Application has closed the session, but is waiting for MESessionClosed.
-};
-
 class WmfMediaEngine : public IMFAsyncCallback, public MediaEngine
 {
     enum Command
@@ -131,31 +120,42 @@ public:
 
     STDMETHODIMP Invoke(IMFAsyncResult* pAsyncResult);
 
-    void SetMediaEventCallback(MEMediaEventCallback cb) override { m_eventCallback = cb; }
+    void fireMediaEvent(MEMediaEventType event)
+    {
+        if (_onMediaEvent)
+            _onMediaEvent(event);
+    }
+
+    void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
+                     std::function<void(const MEVideoFrame&)> onVideoFrame) override
+    {
+        _onMediaEvent = std::move(onMediaEvent);
+        _onVideoFrame = std::move(onVideoFrame);
+    }
 
     // Playback
-    bool Open(std::string_view sourceUri) override;
-    bool Close() override;
+    bool open(std::string_view sourceUri) override;
+    bool close() override;
     HRESULT Shutdown();
     HRESULT HandleEvent(IMFMediaEvent* pUnkPtr);
-    MEMediaState GetState() const override { return m_state; }
+    MEMediaState getState() const override { return m_state; }
 
     const GUID& GetVideoOutputFormat() const { return m_VideoOutputFormat; }
 
     // Video functionality
-    bool SetLoop(bool bLooping) override
+    bool setLoop(bool bLooping) override
     {
         m_bLooping = bLooping;
         return true;
     }
 
-    void SetAutoPlay(bool bAutoPlay) override { m_bAutoPlay = bAutoPlay; }
+    void setAutoPlay(bool bAutoPlay) override { m_bAutoPlay = bAutoPlay; }
 
     BOOL CanSeek() const;
     MFTIME GetDuration() const;
     MFTIME GetCurrentPosition() const;
 
-    bool SetCurrentTime(double sec) override
+    bool setCurrentTime(double sec) override
     {
         return SUCCEEDED(SetPosition(static_cast<MFTIME>((std::nano::den / 100) * sec)));
     }
@@ -169,24 +169,20 @@ public:
 
     BOOL CanFastForward() const;
     BOOL CanRewind() const;
-    bool SetRate(double fRate) override;
+    bool setRate(double fRate) override;
     HRESULT FastForward();
     HRESULT Rewind();
 
-    bool Play() override;
-    bool Pause() override;
-    bool Stop() override;
+    bool play() override;
+    bool pause() override;
+    bool stop() override;
+
+    bool isPlaybackEnded() const override { return m_bPlaybackEnded; }
 
     void HandleVideoSample(const uint8_t* buf, size_t len);
     //bool GetLastVideoSample(MEVideoTextueSample& sample) const override;
 
-    bool TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback) override;
-
-    void FireMediaEvent(MEMediaEventType event)
-    {
-        if (m_eventCallback)
-            m_eventCallback(event);
-    }
+    bool transferVideoFrame() override;
 
 protected:
     HRESULT SetPositionInternal(const MFTIME& hnsPosition);
@@ -254,6 +250,8 @@ protected:
     BOOL m_bPending = FALSE;                      // Is a request pending?
 
     std::atomic<bool> m_bOpenPending = false;
+    std::atomic<bool> m_bClosePending = false;
+    bool m_bPlaybackEnded = false;
 
     mutable CritSec m_critsec;  // Protects the seeking and rate-change states.
 
@@ -272,7 +270,8 @@ protected:
     BOOL m_bIsHEVC = FALSE;  // hvc1,hev1
     GUID m_VideoOutputFormat{};
 
-    MEMediaEventCallback m_eventCallback;
+    std::function<void(MEMediaEventType)> _onMediaEvent;
+    std::function<void(const MEVideoFrame&)> _onVideoFrame;
 
     MEVideoPixelFormat m_videoPF = MEVideoPixelFormat::INVALID;
 

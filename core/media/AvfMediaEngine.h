@@ -11,26 +11,32 @@ NS_AX_BEGIN
 class AvfMediaEngine : public MediaEngine
 {
 public:
-    void SetMediaEventCallback(MEMediaEventCallback cb) override;
-    void SetAutoPlay(bool bAutoPlay) override;
-    bool Open(std::string_view sourceUri) override;
-    bool Close() override;
-    bool SetLoop(bool bLooping) override;
-    bool SetRate(double fRate) override;
-    bool SetCurrentTime(double fSeekTimeInSec) override;
-    bool Play() override;
-    bool Pause() override;
-    bool Stop() override;
-    MEMediaState GetState() const override;
-    bool TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback) override;
+    void fireMediaEvent(MEMediaEventType event)
+    {
+        if (_onMediaEvent)
+            _onMediaEvent(event);
+    }
+    void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
+                      std::function<void(const MEVideoFrame&)> onVideoFrame) override
+    {
+        _onMediaEvent = std::move(onMediaEvent);
+        _onVideoFrame = std::move(onVideoFrame);
+    }
+    void setAutoPlay(bool bAutoPlay) override;
+    bool open(std::string_view sourceUri) override;
+    bool close() override;
+    bool setLoop(bool bLooping) override;
+    bool setRate(double fRate) override;
+    bool setCurrentTime(double fSeekTimeInSec) override;
+    bool play() override;
+    bool pause() override;
+    bool stop() override;
+    bool isPlaybackEnded() override { return _playbackEnded; }
+    MEMediaState getState() const override;
+    bool transferVideoFrame() override;
     
     void onStatusNotification(void* context);
     void onPlayerEnd();
-    void FireEvent(MEMediaEventType event)
-    {
-        if (_eventCallback)
-            _eventCallback(event);
-    }
     bool isPlaying() const {
         return _state == MEMediaState::Playing;
     }
@@ -39,7 +45,8 @@ public:
     void internalPause();
     
 private:
-    MEMediaEventCallback _eventCallback;
+    std::function<void(MEMediaEventType)> _onMediaEvent;
+    std::function<void(const MEVideoFrame&)> _onVideoFrame;
     MEVideoPixelFormat _videoPF = MEVideoPixelFormat::INVALID;
     MEMediaState _state = MEMediaState::Closed;
     MEIntPoint _videoExtent;
@@ -50,6 +57,7 @@ private:
 
     bool _bAutoPlay = false;
     bool _repeatEnabled = false;
+    bool _playbackEnded = false;
 
     /* 
     true: luma=[0,255] chroma=[1,255]

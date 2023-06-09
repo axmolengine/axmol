@@ -9,7 +9,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleEvent(JNI
     if (!mediaEngine)
         return;
 
-    mediaEngine->handleEvent(arg1);
+    mediaEngine->fireMediaEvent((ax::MEMediaEventType)arg1);
 }
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolMediaEngine_nativeHandleVideoSample(JNIEnv* env,
                                                                               jclass,
@@ -52,54 +52,54 @@ AndroidMediaEngine::~AndroidMediaEngine()
         context = nullptr;
     }
 }
-void AndroidMediaEngine::SetMediaEventCallback(MEMediaEventCallback cb1)
-{
-    _eventCallback = std::move(cb1);
-}
 
-void AndroidMediaEngine::SetAutoPlay(bool bAutoPlay)
+void AndroidMediaEngine::setAutoPlay(bool bAutoPlay)
 {
     if (context)
         JniHelper::callVoidMethod(className, "setAutoPlay", context, bAutoPlay);
 }
-bool AndroidMediaEngine::Open(std::string_view sourceUri)
+bool AndroidMediaEngine::open(std::string_view sourceUri)
 {
     return context && JniHelper::callBooleanMethod(className, "open", context, sourceUri);
 }
-bool AndroidMediaEngine::Close()
+bool AndroidMediaEngine::close()
 {
     return context && JniHelper::callBooleanMethod(className, "close", context);
 }
-bool AndroidMediaEngine::SetLoop(bool bLooping)
+bool AndroidMediaEngine::setLoop(bool bLooping)
 {
     return context && JniHelper::callBooleanMethod(className, "setLoop", context, bLooping);
 }
-bool AndroidMediaEngine::SetRate(double fRate)
+bool AndroidMediaEngine::setRate(double fRate)
 {
     return context && JniHelper::callBooleanMethod(className, "setRate", context, fRate);
 }
-bool AndroidMediaEngine::SetCurrentTime(double fSeekTimeInSec)
+bool AndroidMediaEngine::setCurrentTime(double fSeekTimeInSec)
 {
     return context && JniHelper::callBooleanMethod(className, "setCurrentTime", context, fSeekTimeInSec);
 }
-bool AndroidMediaEngine::Play()
+bool AndroidMediaEngine::play()
 {
     return context && JniHelper::callBooleanMethod(className, "play", context);
 }
-bool AndroidMediaEngine::Pause()
+bool AndroidMediaEngine::pause()
 {
     return context && JniHelper::callBooleanMethod(className, "pause", context);
 }
-bool AndroidMediaEngine::Stop()
+bool AndroidMediaEngine::stop()
 {
     return context && JniHelper::callBooleanMethod(className, "stop", context);
 }
-MEMediaState AndroidMediaEngine::GetState() const
+bool AndroidMediaEngine::isPlaybackEnded() const
+{
+    return context && JniHelper::callBooleanMethod(className, "isPlaybackEnded", context);
+}
+MEMediaState AndroidMediaEngine::getState() const
 {
     return context ? (MEMediaState)JniHelper::callIntMethod(className, "getState", context) : MEMediaState::Closed;
 }
 
-bool AndroidMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
+bool AndroidMediaEngine::transferVideoFrame()
 {
     if (context)
     {
@@ -114,7 +114,7 @@ bool AndroidMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFram
             ax::MEVideoFrame frame{buffer.data(), buffer.data() + _outputDim.x * _outputDim.y, buffer.size(),
                                    ax::MEVideoPixelDesc{ax::MEVideoPixelFormat::NV12, _outputDim}, _videoDim};
             assert(static_cast<int>(frame._dataLen) >= frame._vpd._dim.x * frame._vpd._dim.y * 3 / 2);
-            callback(frame);
+            _onVideoFrame(frame);
             _frameBuffer2.clear();
             return true;
         }
@@ -133,12 +133,6 @@ void AndroidMediaEngine::handleVideoSample(const uint8_t* buf,
     _frameBuffer1.assign(buf, buf + len, std::true_type{});
     _outputDim.set(outputX, outputY);
     _videoDim.set(videoX, videoY);
-}
-
-void AndroidMediaEngine::handleEvent(int event)
-{
-    if (_eventCallback)
-        _eventCallback((MEMediaEventType)event);
 }
 
 NS_AX_END

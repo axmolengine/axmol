@@ -18,26 +18,23 @@ void* VlcMediaEngine::libvlc_video_lock(void* data, void** p_pixels)
 {
     VlcMediaEngine* mediaEngine = static_cast<VlcMediaEngine*>(data);
 
-    auto& outputDim    = mediaEngine->_outputDim;
+    auto& bufferDim    = mediaEngine->_videoDim;
     auto& outputBuffer = mediaEngine->_frameBuffer1;
     mediaEngine->_frameBuffer1Mtx.lock();
     if constexpr (VLC_OUTPUT_FORMAT == ax::MEVideoPixelFormat::NV12)
     {
-        outputBuffer.resize_fit(outputDim.x * outputDim.y +
-                                (mediaEngine->_outputDim.x * mediaEngine->_outputDim.y >> 1));  // NV12
+        outputBuffer.resize_fit(bufferDim.x * bufferDim.y + (bufferDim.x * bufferDim.y >> 1));  // NV12
         p_pixels[0] = outputBuffer.data();
-        p_pixels[1] = outputBuffer.data() + (outputDim.x * outputDim.y);
+        p_pixels[1] = outputBuffer.data() + (bufferDim.x * bufferDim.y);
     }
     else if constexpr (VLC_OUTPUT_FORMAT == ax::MEVideoPixelFormat::YUY2)
     {
-        outputBuffer.resize_fit(outputDim.x * outputDim.y +
-                                ((mediaEngine->_outputDim.x >> 1) * mediaEngine->_outputDim.y * 4));  // YUY2
+        outputBuffer.resize_fit(bufferDim.x * bufferDim.y + ((bufferDim.x >> 1) * bufferDim.y * 4));  // YUY2
         p_pixels[0] = outputBuffer.data();
     }
     else
     {
-
-        outputBuffer.resize_fit(outputDim.x * outputDim.y * 4);  // RGBA32
+        outputBuffer.resize_fit(bufferDim.x * bufferDim.y * 4);  // RGBA32
         p_pixels[0] = outputBuffer.data();
     }
     return nullptr;
@@ -72,11 +69,20 @@ unsigned int VlcMediaEngine::libvlc_video_format_setup(void** opaque,
     // https://github.com/videolan/vlc/blob/master/modules/video_output/vmem.c#L156
     VlcMediaEngine* mediaEngine = static_cast<VlcMediaEngine*>(*opaque);
 
-    // plane1
-    width[0]   = mediaEngine->_outputDim.x;
-    height[0]  = mediaEngine->_outputDim.y;
+    // vlc tell us the original codecDim(ALIGNED)
+    mediaEngine->_codecDim.set(width[0], height[0]);
+
+    // tell vlc we want render as video size
+    width[0]  = mediaEngine->_videoDim.x;
+    height[0] = mediaEngine->_videoDim.y;
+
+    // plane0
     pitches[0] = width[0];   // bytesPerRow
     lines[0]   = height[0];  // rows
+
+#    if LIBVLC_VERSION_MAJOR >= 4
+    mediaEngine->_videoDim.set(width[1], height[1]);
+#    endif
 
     int num_of_plane = 1;
 
@@ -84,8 +90,9 @@ unsigned int VlcMediaEngine::libvlc_video_format_setup(void** opaque,
     {
         memcpy(chroma, "NV12", 4);
 
-        pitches[1] = mediaEngine->_outputDim.x;       // bytesPerRow
-        lines[1]   = mediaEngine->_outputDim.y >> 1;  // rows
+        // plane1
+        pitches[1] = mediaEngine->_videoDim.x;       // bytesPerRow
+        lines[1]   = mediaEngine->_videoDim.y >> 1;  // rows
 
         num_of_plane = 2;
     }
@@ -114,21 +121,43 @@ void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* user
     switch (event->type)
     {
     case libvlc_MediaPlayerPlaying:
+        mediaEngine->_playbackEnded = false;
+        mediaEngine->_state = MEMediaState::Playing;
         mediaEngine->handleEvent(MEMediaEventType::Playing);
         break;
     case libvlc_MediaPlayerPaused:
+        mediaEngine->_state = MEMediaState::Paused;
         mediaEngine->handleEvent(MEMediaEventType::Paused);
         break;
-    // case libvlc_MediaPlayerStopped:
-    case libvlc_MediaListPlayerStopped:
-        mediaEngine->handleEvent(MEMediaEventType::Stopped);
+#    if LIBVLC_VERSION_MAJOR < 4
+    case libvlc_MediaPlayerStopped:
+        if (!mediaEngine->_playbackEnded)
+        {
+            mediaEngine->_state = MEMediaState::Stopped;
+            mediaEngine->handleEvent(MEMediaEventType::Stopped);
+        }
         break;
     case libvlc_MediaPlayerEndReached:
-        // case libvlc_MediaListEndReached:
+        mediaEngine->_playbackEnded = true;
+        mediaEngine->_state = MEMediaState::Stopped;
+        mediaEngine->handleEvent(MEMediaEventType::Stopped);
+        break;
+#    else
+    case libvlc_MediaListPlayerStopped:
+        mediaEngine->_state = MEMediaState::Stopped;
+        mediaEngine->handleEvent(MEMediaEventType::Stopped);
+        break;
+    case libvlc_MediaPlayerStopped:
+        mediaEngine->_state = MEMediaState::Completed;
         mediaEngine->handleEvent(MEMediaEventType::Completed);
         break;
+#    endif
     case libvlc_MediaPlayerEncounteredError:
+        mediaEngine->_state = MEMediaState::Error;
         mediaEngine->handleEvent(MEMediaEventType::Error);
+        break;
+    case libvlc_MediaPlayerMediaChanged:
+        mediaEngine->_frameIndex = 0;
         break;
     default:;
     }
@@ -136,7 +165,9 @@ void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* user
 
 VlcMediaEngine::VlcMediaEngine()
 {
-    _vlc = libvlc_new(0, nullptr);
+    //_putenv_s("VLC_PLUGIN_PATH", R"(D:\dev\axmol\thirdparty\vlc\win\lib)");
+    auto paths = getenv("VLC_PLUGIN_PATH");
+    _vlc       = libvlc_new(0, nullptr);
     if (!_vlc)
     {
         ax::print(
@@ -144,13 +175,17 @@ VlcMediaEngine::VlcMediaEngine()
         return;
     }
 
-    // media players
+    // media player
     _mp = libvlc_media_player_new(_vlc);
     libvlc_video_set_callbacks(_mp, libvlc_video_lock, libvlc_video_unlock, display, this);
     libvlc_video_set_format_callbacks(_mp, libvlc_video_format_setup, libvlc_video_cleanup_cb);
 
     // media list
+#    if LIBVLC_VERSION_MAJOR < 4
     _ml = libvlc_media_list_new(_vlc);
+#    else
+    _ml = libvlc_media_list_new();
+#    endif
 
     // media list player
     _mlp = libvlc_media_list_player_new(_vlc);
@@ -162,7 +197,10 @@ VlcMediaEngine::VlcMediaEngine()
     libvlc_event_attach(_mp_events, libvlc_MediaPlayerPlaying, libvlc_handle_event, this);
     libvlc_event_attach(_mp_events, libvlc_MediaPlayerPaused, libvlc_handle_event, this);
     libvlc_event_attach(_mp_events, libvlc_MediaPlayerStopped, libvlc_handle_event, this);
+    libvlc_event_attach(_mp_events, libvlc_MediaPlayerMediaChanged, libvlc_handle_event, this);
+#    if LIBVLC_VERSION_MAJOR < 4
     libvlc_event_attach(_mp_events, libvlc_MediaPlayerEndReached, libvlc_handle_event, this);
+#    endif
     libvlc_event_attach(_mp_events, libvlc_MediaPlayerEncounteredError, libvlc_handle_event, this);
 
     // register media list player events
@@ -183,13 +221,20 @@ VlcMediaEngine::~VlcMediaEngine()
         libvlc_event_detach(_mp_events, libvlc_MediaPlayerPlaying, libvlc_handle_event, this);
         libvlc_event_detach(_mp_events, libvlc_MediaPlayerPaused, libvlc_handle_event, this);
         libvlc_event_detach(_mp_events, libvlc_MediaPlayerStopped, libvlc_handle_event, this);
+        libvlc_event_detach(_mp_events, libvlc_MediaPlayerMediaChanged, libvlc_handle_event, this);
+#    if LIBVLC_VERSION_MAJOR < 4
         libvlc_event_detach(_mp_events, libvlc_MediaPlayerEndReached, libvlc_handle_event, this);
+#    endif
         libvlc_event_detach(_mp_events, libvlc_MediaPlayerEncounteredError, libvlc_handle_event, this);
     }
 
     if (_mlp)
     {
+#    if LIBVLC_VERSION_MAJOR < 4
         libvlc_media_list_player_stop(_mlp);
+#    else
+        libvlc_media_list_player_stop_async(_mlp);
+#    endif
         libvlc_media_list_player_release(_mlp);
     }
 
@@ -202,63 +247,76 @@ VlcMediaEngine::~VlcMediaEngine()
 }
 void VlcMediaEngine::handleEvent(MEMediaEventType event)
 {
-    if(event == MEMediaEventType::Playing)
+    if (event == MEMediaEventType::Playing)
         updatePlaybackProperties();
-    
-    if (_eventCallback)
-        _eventCallback(event);
-}
-void VlcMediaEngine::SetMediaEventCallback(MEMediaEventCallback cb1)
-{
-    _eventCallback = std::move(cb1);
+
+    fireMediaEvent(event);
 }
 
-void VlcMediaEngine::SetAutoPlay(bool bAutoPlay)
+void VlcMediaEngine::setAutoPlay(bool bAutoPlay)
 {
     _bAutoPlay = bAutoPlay;
 }
-bool VlcMediaEngine::Open(std::string_view sourceUri)
+bool VlcMediaEngine::open(std::string_view sourceUri)
 {
-    libvlc_media_t* media{};
+    if (_state != MEMediaState::Closed)
+        return false;
 
-    media = libvlc_media_new_location(_vlc, sourceUri.data());
+#    if LIBVLC_VERSION_MAJOR < 4
+    libvlc_media_t* media = libvlc_media_new_location(_vlc, sourceUri.data());
+#    else
+    libvlc_media_t* media = libvlc_media_new_location(sourceUri.data());
+#    endif
     if (!media)
         return false;
 
-    _sourceUri = sourceUri;
+    _frameIndex = 0;
+    _sourceUri  = sourceUri;
 
     libvlc_media_list_add_media(_ml, media);  // always one media
     libvlc_media_release(media);
 
     if (_bAutoPlay)
+    {
+        _state = MEMediaState::Preparing;
         libvlc_media_list_player_play(_mlp);
+    }
+    else
+        _state = MEMediaState::Stopped;
 
     return true;
 }
+
+static void track_codec_to_mime_type(libvlc_media_track_t* track, std::string& out)
+
+{
+    out.clear();
+    out.reserve(9);  // 4 * 2 + 1
+    out.append(reinterpret_cast<const char*>(&track->i_codec), 4);
+    out.push_back('/');
+    out.append(reinterpret_cast<const char*>(&track->i_original_fourcc), 4);
+}
+
 bool VlcMediaEngine::updatePlaybackProperties()
 {
     if (_frameIndex == 0)
     {
-        auto media = libvlc_media_player_get_media(_mp);
+        bool hasVideoTrack = false;
+        auto media         = libvlc_media_player_get_media(_mp);
+#    if LIBVLC_VERSION_MAJOR < 4
         /* local file, we Get the size of the video with the tracks information of the media. */
         libvlc_media_track_t** tracks{};
         unsigned int nbTracks = libvlc_media_tracks_get(media, &tracks);
         if (!nbTracks)
             return false;
 
-        bool hasVideoTrack = false;
         for (unsigned int i = 0; i < nbTracks; ++i)
         {
             auto track = tracks[i];
             if (track->i_type == libvlc_track_video)
             {
-                char mimeType[16] = {0};
-                memcpy(mimeType, &track->i_codec, 4);
-                mimeType[4] = '/';
-                memcpy(mimeType + 5, &track->i_original_fourcc, 4);
-                mimeType[9] = '\0';
-
-                ax::print("VlcMediaEngine: sourceUri: %s, codec: %s", _sourceUri.c_str(), mimeType);
+                track_codec_to_mime_type(track, _videoCodecMimeType);
+                ax::print("VlcMediaEngine: sourceUri: %s, codec: %s", _sourceUri.c_str(), _videoCodecMimeType.c_str());
 
                 auto vdi = track->video;
                 _videoDim.set(vdi->i_width, vdi->i_height);
@@ -267,89 +325,95 @@ bool VlcMediaEngine::updatePlaybackProperties()
             }
         }
         libvlc_media_tracks_release(tracks, nbTracks);
-        if (hasVideoTrack)
-            _outputDim.set(_videoDim.x, _videoDim.y);
+#    else
+        auto tracks = libvlc_media_get_tracklist(media, libvlc_track_type_t::libvlc_track_video);
+        if (tracks)
+        {
+            auto nTrack = libvlc_media_tracklist_count(tracks);
+            if (nTrack > 0)
+            {
+                auto track = libvlc_media_tracklist_at(tracks, 0);
+                track_codec_to_mime_type(track, _videoCodecMimeType);
+                ax::print("VlcMediaEngine: sourceUri: %s, codec: %s", _sourceUri.c_str(), _videoCodecMimeType.c_str());
 
+                auto vdi = track->video;
+                _videoDim.set(vdi->i_width, vdi->i_height);
+                hasVideoTrack = true;
+            }
+            libvlc_media_tracklist_delete(tracks);
+        }
+#    endif
 
-       // set playback mode
-       libvlc_media_list_player_set_playback_mode(_mlp,
-                                               _looping ? libvlc_playback_mode_repeat : libvlc_playback_mode_default);
+        // set playback mode
+        libvlc_media_list_player_set_playback_mode(
+            _mlp, _looping ? libvlc_playback_mode_repeat : libvlc_playback_mode_default);
     }
     return true;
 }
-bool VlcMediaEngine::Close()
+bool VlcMediaEngine::close()
 {
     if (libvlc_media_list_count(_ml) > 0)
     {
+#    if LIBVLC_VERSION_MAJOR < 4
         libvlc_media_list_player_stop(_mlp);
+#    else
+        libvlc_media_list_player_stop_async(_mlp);
+#    endif
         libvlc_media_list_remove_index(_ml, 0);
     }
+    _state = MEMediaState::Closed;
     return true;
 }
-bool VlcMediaEngine::SetLoop(bool bLooping)
+bool VlcMediaEngine::setLoop(bool bLooping)
 {
     _looping = bLooping;
-    if (GetState() == MEMediaState::Playing)
+    if (getState() == MEMediaState::Playing)
         libvlc_media_list_player_set_playback_mode(
             _mlp, _looping ? libvlc_playback_mode_repeat : libvlc_playback_mode_default);
     return true;
 }
-bool VlcMediaEngine::SetRate(double fRate)
+bool VlcMediaEngine::setRate(double fRate)
 {
     return _mp && libvlc_media_player_set_rate(_mp, static_cast<float>(fRate)) == 0;
 }
-bool VlcMediaEngine::SetCurrentTime(double fSeekTimeInSec)
+bool VlcMediaEngine::setCurrentTime(double fSeekTimeInSec)
 {
     if (_mp)
+#    if LIBVLC_VERSION_MAJOR < 4
         libvlc_media_player_set_time(_mp, static_cast<libvlc_time_t>(fSeekTimeInSec * 1000));
+#    else
+        libvlc_media_player_set_time(_mp, static_cast<libvlc_time_t>(fSeekTimeInSec * 1000), true);
+#    endif
     return true;
 }
-bool VlcMediaEngine::Play()
+bool VlcMediaEngine::play()
 {
-    if (_mlp)
+    if (_mlp && _state != MEMediaState::Closed)
         libvlc_media_list_player_play(_mlp);
     return true;
 }
-bool VlcMediaEngine::Pause()
+bool VlcMediaEngine::pause()
 {
-    if (_mlp)
+    if (_mlp && _state != MEMediaState::Closed)
         libvlc_media_list_player_pause(_mlp);
     return true;
 }
-bool VlcMediaEngine::Stop()
+bool VlcMediaEngine::stop()
 {
-    if (_mlp)
+    if (_mlp && _state != MEMediaState::Closed)
+#    if LIBVLC_VERSION_MAJOR < 4
         libvlc_media_list_player_stop(_mlp);
+#    else
+        libvlc_media_list_player_stop_async(_mlp);
+#    endif
     return true;
 }
-MEMediaState VlcMediaEngine::GetState() const
+MEMediaState VlcMediaEngine::getState() const
 {
-    if (_mlp)
-    {
-        auto underlying_state = libvlc_media_list_player_get_state(_mlp);
-        switch (underlying_state)
-        {
-        case libvlc_NothingSpecial:
-            return MEMediaState::Closed;
-        case libvlc_Opening:
-            return MEMediaState::Preparing;
-        case libvlc_Buffering:
-        case libvlc_Playing:
-            return MEMediaState::Playing;
-        case libvlc_Paused:
-            return MEMediaState::Paused;
-        case libvlc_Stopped:
-            return MEMediaState::Stopped;
-        case libvlc_Ended:
-            return MEMediaState::Completed;
-        case libvlc_Error:
-            return MEMediaState::Error;
-        }
-    }
-    return MEMediaState::Closed;
+    return _state;
 }
 
-bool VlcMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
+bool VlcMediaEngine::transferVideoFrame()
 {
     if (_frameBuffer1.empty())
         return false;
@@ -362,10 +426,10 @@ bool VlcMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)>
 
         auto& buffer = _frameBuffer2;
 
-        ax::MEVideoFrame frame{buffer.data(), buffer.data() + _outputDim.x * _outputDim.y, buffer.size(),
-                               ax::MEVideoPixelDesc{VLC_OUTPUT_FORMAT, _outputDim}, _videoDim};
+        ax::MEVideoFrame frame{buffer.data(), buffer.data() + _videoDim.x * _videoDim.y, buffer.size(),
+                               ax::MEVideoPixelDesc{VLC_OUTPUT_FORMAT, _videoDim}, _videoDim};
         // assert(static_cast<int>(frame._dataLen) >= frame._vpd._dim.x * frame._vpd._dim.y * 3 / 2);
-        callback(frame);
+        _onVideoFrame(frame);
         _frameBuffer2.clear();
         return true;
     }
