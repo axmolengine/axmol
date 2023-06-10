@@ -1,5 +1,5 @@
 #include "scripting/lua-bindings/auto/axlua_video_auto.hpp"
-#include "ui/UIVideoPlayer.h"
+#include "ui/UIMediaPlayer.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 

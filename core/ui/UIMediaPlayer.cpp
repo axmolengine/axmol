@@ -24,10 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIVideoPlayer.h"
+#include "ui/UIMediaPlayer.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__) || defined(AX_ENABLE_VLC_MEDIA)
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>
@@ -65,7 +65,7 @@ namespace
 {
 struct PrivateVideoDescriptor
 {
-    MediaEngine* _vplayer      = nullptr;
+    MediaEngine* _engine      = nullptr;
     Texture2D* _vtexture       = nullptr;
     Texture2D* _vchromaTexture = nullptr;
     Sprite* _vrender           = nullptr;
@@ -78,11 +78,11 @@ struct PrivateVideoDescriptor
 
     void closePlayer()
     {
-        if (_vplayer)
-            _vplayer->Close();
+        if (_engine)
+            _engine->close();
     }
 
-    void rescaleTo(VideoPlayer* videoView)
+    void rescaleTo(MediaPlayer* videoView)
     {
         auto& videoSize = _vrender->getContentSize();
         if (videoSize.x > 0 && videoSize.y > 0)
@@ -134,9 +134,9 @@ struct PrivateVideoDescriptor
 };
 }  // namespace
 
-static std::unique_ptr<MediaEngineFactory> _meFactory = CreatePlatformMediaEngineFactory();
+static std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
 
-VideoPlayer::VideoPlayer()
+MediaPlayer::MediaPlayer()
     : _fullScreenDirty(false)
     , _fullScreenEnabled(false)
     , _keepAspectRatioEnabled(false)
@@ -155,8 +155,8 @@ VideoPlayer::VideoPlayer()
 #    endif
 
     // Initialize mediaPlayer backend
-    pvd->_vplayer = _meFactory->CreateMediaEngine();
-    if (pvd->_vplayer)
+    pvd->_engine = _meFactory->createMediaEngine();
+    if (pvd->_engine)
     {
         /// create video render sprite
         pvd->_vrender = new Sprite();
@@ -164,7 +164,7 @@ VideoPlayer::VideoPlayer()
         pvd->_vrender->setAutoUpdatePS(false);
         this->addProtectedChild(pvd->_vrender);
         /// setup media event callback
-        pvd->_vplayer->SetMediaEventCallback([=](MEMediaEventType event) {
+        pvd->_engine->setCallbacks([this, pvd](MEMediaEventType event) {
             switch (event)
             {
             case MEMediaEventType::Playing:
@@ -177,7 +177,7 @@ VideoPlayer::VideoPlayer()
                 break;
 
             case MEMediaEventType::Stopped:
-                onPlayEvent((int)EventType::STOPPED);
+                onPlayEvent(pvd->_engine->isPlaybackEnded() ? (int) EventType::COMPLETED : (int) EventType::STOPPED);
                 break;
 
             /* Raised by a media source when a presentation ends. This event signals that all streams in the
@@ -189,94 +189,16 @@ VideoPlayer::VideoPlayer()
             /* Raised by the Media Session when it has finished playing the last presentation in the playback queue.
              * We send complete event at this case
              */
-            case MEMediaEventType::Completed:
-                onPlayEvent((int)EventType::COMPLETED);
-                break;
+            // case MEMediaEventType::Stopped:
+            //     onPlayEvent((int)EventType::COMPLETED);
+            //     break;
             case MEMediaEventType::Error:
                 onPlayEvent((int)EventType::ERROR);
                 break;
             }
-        });
-    }
-    else
-    {
-        ax::log("Create VideoPlayer backend failed");
-    }
-}
-
-VideoPlayer::~VideoPlayer()
-{
-    auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-
-    removeAllProtectedChildren();
-
-    if (pvd->_vplayer)
-        _meFactory->DestroyMediaEngine(pvd->_vplayer);
-
-    AX_SAFE_RELEASE(pvd->_vrender);
-    AX_SAFE_RELEASE(pvd->_vtexture);
-    AX_SAFE_RELEASE(pvd->_vchromaTexture);
-
-    delete pvd;
-}
-
-void VideoPlayer::setFileName(std::string_view fileName)
-{
-    auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
-    fullPath.insert(fullPath.begin(), FILE_URL_SCHEME.begin(), FILE_URL_SCHEME.end());
-    if (fullPath != _videoURL)
-    {
-        reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
-        _videoURL = std::move(fullPath);
-    }
-    _videoSource = VideoPlayer::Source::FILENAME;
-}
-
-void VideoPlayer::setURL(std::string_view videoUrl)
-{
-    if (_videoURL != videoUrl)
-    {
-        reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
-        _videoURL = videoUrl;
-    }
-    _videoSource = VideoPlayer::Source::URL;
-}
-
-void VideoPlayer::setLooping(bool looping)
-{
-    _isLooping = looping;
-
-    auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-    if (pvd->_vplayer)
-        pvd->_vplayer->SetLoop(looping);
-}
-
-void VideoPlayer::setUserInputEnabled(bool enableInput)
-{
-    _isUserInputEnabled = enableInput;
-}
-
-void VideoPlayer::setStyle(StyleType style)
-{
-    _styleType = style;
-}
-
-void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
-{
-    ax::ui::Widget::draw(renderer, transform, flags);
-
-    auto pvd     = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-    auto vrender = pvd->_vrender;
-    auto vplayer = pvd->_vplayer;
-    if (!vrender || !vplayer)
-        return;
-
-    if (vrender->isVisible() && isPlaying())
-    {  // render 1 video sample if avaiable
-
-        vplayer->TransferVideoFrame([this, pvd](const ax::MEVideoFrame& frame){
-            auto pixelFormat = frame._vpd._PF;
-            auto bPixelDescChnaged         = !frame._vpd.equals(pvd->_vpixelDesc);
+        }, [this, pvd](const ax::MEVideoFrame& frame) {
+            auto pixelFormat       = frame._vpd._PF;
+            auto bPixelDescChnaged = !frame._vpd.equals(pvd->_vpixelDesc);
             if (bPixelDescChnaged)
             {
                 pvd->_vpixelDesc = frame._vpd;
@@ -315,12 +237,10 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
             {
             case MEVideoPixelFormat::YUY2:
             {
-                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::LA8,
-                                               PixelFormat::LA8,
+                pvd->_vtexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::LA8, PixelFormat::LA8,
                                                bufferDim.x, bufferDim.y, false, 0);
                 pvd->_vchromaTexture->updateWithData(frame._dataPointer, frame._dataLen, PixelFormat::RGBA8,
-                                                     PixelFormat::RGBA8,
-                                                     bufferDim.x >> 1, bufferDim.y, false, 0);
+                                                     PixelFormat::RGBA8, bufferDim.x >> 1, bufferDim.y, false, 0);
                 break;
             }
             case MEVideoPixelFormat::NV12:
@@ -328,8 +248,8 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
                 pvd->_vtexture->updateWithData(frame._dataPointer, bufferDim.x * bufferDim.y, PixelFormat::A8,
                                                PixelFormat::A8, bufferDim.x, bufferDim.y, false, 0);
                 pvd->_vchromaTexture->updateWithData(frame._cbcrDataPointer, (bufferDim.x * bufferDim.y) >> 1,
-                                                     PixelFormat::RG8,
-                                                     PixelFormat::RG8, bufferDim.x >> 1, bufferDim.y >> 1, false, 0);
+                                                     PixelFormat::RG8, PixelFormat::RG8, bufferDim.x >> 1,
+                                                     bufferDim.y >> 1, false, 0);
                 break;
             }
             case MEVideoPixelFormat::RGB32:
@@ -358,6 +278,82 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
             }
         });
     }
+    else
+    {
+        ax::log("Create MediaPlayer backend failed");
+    }
+}
+
+MediaPlayer::~MediaPlayer()
+{
+    auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+
+    removeAllProtectedChildren();
+
+    if (pvd->_engine)
+        _meFactory->destroyMediaEngine(pvd->_engine);
+
+    AX_SAFE_RELEASE(pvd->_vrender);
+    AX_SAFE_RELEASE(pvd->_vtexture);
+    AX_SAFE_RELEASE(pvd->_vchromaTexture);
+
+    delete pvd;
+}
+
+void MediaPlayer::setFileName(std::string_view fileName)
+{
+    auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
+    if (ax::path2uri(fullPath) != _videoURL)
+    {
+        reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
+        _videoURL = std::move(fullPath);
+    }
+    _videoSource = MediaPlayer::Source::FILENAME;
+}
+
+void MediaPlayer::setURL(std::string_view videoUrl)
+{
+    if (_videoURL != videoUrl)
+    {
+        reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
+        _videoURL = videoUrl;
+    }
+    _videoSource = MediaPlayer::Source::URL;
+}
+
+void MediaPlayer::setLooping(bool looping)
+{
+    _isLooping = looping;
+
+    auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+    if (pvd->_engine)
+        pvd->_engine->setLoop(looping);
+}
+
+void MediaPlayer::setUserInputEnabled(bool enableInput)
+{
+    _isUserInputEnabled = enableInput;
+}
+
+void MediaPlayer::setStyle(StyleType style)
+{
+    _styleType = style;
+}
+
+void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+{
+    ax::ui::Widget::draw(renderer, transform, flags);
+
+    auto pvd     = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
+    auto vrender = pvd->_vrender;
+    auto engine = pvd->_engine;
+    if (!vrender || !engine)
+        return;
+
+    if (vrender->isVisible() && isPlaying())
+    {  // render 1 video sample if avaiable
+        engine->transferVideoFrame();
+    }
     if (pvd->_scaleDirty || (flags & FLAGS_TRANSFORM_DIRTY))
         pvd->rescaleTo(this);
 
@@ -369,13 +365,13 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 #    endif
 }
 
-void VideoPlayer::setContentSize(const Size& contentSize)
+void MediaPlayer::setContentSize(const Size& contentSize)
 {
     Widget::setContentSize(contentSize);
     reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_originalViewSize = contentSize;
 }
 
-void VideoPlayer::setFullScreenEnabled(bool enabled)
+void MediaPlayer::setFullScreenEnabled(bool enabled)
 {
     if (_fullScreenEnabled != enabled)
     {
@@ -387,12 +383,12 @@ void VideoPlayer::setFullScreenEnabled(bool enabled)
     }
 }
 
-bool VideoPlayer::isFullScreenEnabled() const
+bool MediaPlayer::isFullScreenEnabled() const
 {
     return _fullScreenEnabled;
 }
 
-void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
+void MediaPlayer::setKeepAspectRatioEnabled(bool enable)
 {
     if (_keepAspectRatioEnabled != enable)
     {
@@ -401,137 +397,137 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     }
 }
 
-void VideoPlayer::setPlayRate(float fRate)
+void MediaPlayer::setPlayRate(float fRate)
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
-            vplayer->SetRate(fRate);
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+            engine->setRate(fRate);
     }
 }
 
-void VideoPlayer::play()
+void MediaPlayer::play()
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
         {
-            switch (vplayer->GetState())
+            switch (engine->getState())
             {
             case MEMediaState::Closed:
-                vplayer->SetAutoPlay(true);
-                vplayer->Open(_videoURL);
+                engine->setAutoPlay(true);
+                engine->open(_videoURL);
                 break;
             default:
-                vplayer->Play();
+                engine->play();
             }
         }
     }
 }
 
-void VideoPlayer::pause()
+void MediaPlayer::pause()
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
-            vplayer->Pause();
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+            engine->pause();
     }
 }
 
-void VideoPlayer::resume()
+void MediaPlayer::resume()
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
         {
-            switch (vplayer->GetState())
+            switch (engine->getState())
             {
             case MEMediaState::Stopped:
             case MEMediaState::Paused:
-                vplayer->Play();
+                engine->play();
             }
         }
     }
 }
 
-void VideoPlayer::stop()
+void MediaPlayer::stop()
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
-            vplayer->Stop();
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+            engine->stop();
     }
 }
 
-void VideoPlayer::seekTo(float sec)
+void MediaPlayer::seekTo(float sec)
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
-            vplayer->SetCurrentTime(sec);
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+            engine->setCurrentTime(sec);
     }
 }
 
-bool VideoPlayer::isPlaying() const
+bool MediaPlayer::isPlaying() const
 {
     return _isPlaying;
 }
 
-bool VideoPlayer::isLooping() const
+bool MediaPlayer::isLooping() const
 {
     return _isLooping;
 }
 
-bool VideoPlayer::isUserInputEnabled() const
+bool MediaPlayer::isUserInputEnabled() const
 {
     return _isUserInputEnabled;
 }
 
-void VideoPlayer::setVisible(bool visible)
+void MediaPlayer::setVisible(bool visible)
 {
     ax::ui::Widget::setVisible(visible);
 }
 
-void VideoPlayer::onEnter()
+void MediaPlayer::onEnter()
 {
     Widget::onEnter();
 }
 
-void VideoPlayer::onExit()
+void MediaPlayer::onExit()
 {
     _eventCallback = nullptr;
     Widget::onExit();
 }
 
-void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback& callback)
+void MediaPlayer::addEventListener(const MediaPlayer::ccVideoPlayerCallback& callback)
 {
     _eventCallback = callback;
 }
 
-void VideoPlayer::onPlayEvent(int event)
+void MediaPlayer::onPlayEvent(int event)
 {
-    _isPlaying = (event == (int)VideoPlayer::EventType::PLAYING);
+    _isPlaying = (event == (int)MediaPlayer::EventType::PLAYING);
 
     if (_eventCallback)
     {
-        _director->getScheduler()->runOnAxmolThread(std::bind(_eventCallback, this, (VideoPlayer::EventType)event));
+        _director->getScheduler()->runOnAxmolThread(std::bind(_eventCallback, this, (MediaPlayer::EventType)event));
     }
 }
 
-ax::ui::Widget* VideoPlayer::createCloneInstance()
+ax::ui::Widget* MediaPlayer::createCloneInstance()
 {
-    return VideoPlayer::create();
+    return MediaPlayer::create();
 }
 
-void VideoPlayer::copySpecialProperties(Widget* widget)
+void MediaPlayer::copySpecialProperties(Widget* widget)
 {
-    VideoPlayer* videoPlayer = dynamic_cast<VideoPlayer*>(widget);
+    MediaPlayer* videoPlayer = dynamic_cast<MediaPlayer*>(widget);
     if (videoPlayer)
     {
         _isPlaying              = videoPlayer->_isPlaying;

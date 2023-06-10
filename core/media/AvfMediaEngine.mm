@@ -141,26 +141,24 @@ NS_AX_BEGIN
 
 void AvfMediaEngine::onPlayerEnd()
 {
-    _state = MEMediaState::Completed;
-    FireEvent(MEMediaEventType::Completed);
+    _playbackEnded = true;
+    _state = MEMediaState::Stopped;
+    fireMediaEvent(MEMediaEventType::Stopped);
     
     if (_repeatEnabled) {
-        this->SetCurrentTime(0);
-        this->Play();
+        this->setCurrentTime(0);
+        this->play();
     }
 }
 
-void AvfMediaEngine::SetMediaEventCallback(MEMediaEventCallback cb)
-{
-    _eventCallback = cb;
-}
-void AvfMediaEngine::SetAutoPlay(bool bAutoPlay)
+void AvfMediaEngine::setAutoPlay(bool bAutoPlay)
 {
     _bAutoPlay = bAutoPlay;
 }
-bool AvfMediaEngine::Open(std::string_view sourceUri)
+
+bool AvfMediaEngine::open(std::string_view sourceUri)
 {
-    Close();
+    close();
 
     NSURL* nsMediaUrl = nil;
     std::string_view Path;
@@ -261,7 +259,7 @@ void AvfMediaEngine::onStatusNotification(void* context)
         return;
     if (_playerItem.status == AVPlayerItemStatusFailed)
     {
-        FireEvent(MEMediaEventType::Error);
+        fireMediaEvent(MEMediaEventType::Error);
         return;
     }
     if (_playerItem.status != AVPlayerItemStatusReadyToPlay)
@@ -332,10 +330,10 @@ void AvfMediaEngine::onStatusNotification(void* context)
     }
 
     if (_bAutoPlay)
-        this->Play();
+        this->play();
 }
 
-bool AvfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
+bool AvfMediaEngine::transferVideoFrame()
 {
     auto videoOutput = static_cast<AVPlayerItemVideoOutput*>(this->_playerOutput);
     if (!videoOutput)
@@ -386,20 +384,20 @@ bool AvfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)>
         ycbcrDesc.YPitch = YPitch;
         ycbcrDesc.CbCrPitch = UVPitch;
 #endif
-        callback(frame);
+        _onVideoFrame(frame);
     }
     else
     {  // BGRA
         auto frameData       = (uint8_t*)CVPixelBufferGetBaseAddress(videoFrame);
         size_t frameDataSize = CVPixelBufferGetDataSize(videoFrame);
-        callback(MEVideoFrame{frameData, nullptr, frameDataSize, MEVideoPixelDesc{_videoPF, videoDim}, videoDim});
+        _onVideoFrame(MEVideoFrame{frameData, nullptr, frameDataSize, MEVideoPixelDesc{_videoPF, videoDim}, videoDim});
     }
     CVPixelBufferUnlockBaseAddress(videoFrame, kCVPixelBufferLock_ReadOnly);
 
     CVPixelBufferRelease(videoFrame);
 }
 
-bool AvfMediaEngine::Close()
+bool AvfMediaEngine::close()
 {
     if (_state == MEMediaState::Closed)
         return true;
@@ -424,7 +422,7 @@ bool AvfMediaEngine::Close()
     _state = MEMediaState::Closed;
     return true;
 }
-bool AvfMediaEngine::SetLoop(bool bLooping)
+bool AvfMediaEngine::setLoop(bool bLooping)
 {
     _repeatEnabled = bLooping;
     if (bLooping)
@@ -433,7 +431,7 @@ bool AvfMediaEngine::SetLoop(bool bLooping)
         _player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
     return true;
 }
-bool AvfMediaEngine::SetRate(double fRate)
+bool AvfMediaEngine::setRate(double fRate)
 {
     if (_player)
     {
@@ -444,19 +442,20 @@ bool AvfMediaEngine::SetRate(double fRate)
     }
     return true;
 }
-bool AvfMediaEngine::SetCurrentTime(double fSeekTimeInSec)
+bool AvfMediaEngine::setCurrentTime(double fSeekTimeInSec)
 {
     if (_player != nil)
         [_player seekToTime:CMTimeMake(fSeekTimeInSec, 1)];
     return true;
 }
-bool AvfMediaEngine::Play()
+bool AvfMediaEngine::play()
 {
     if (_state != MEMediaState::Playing)
     {
         [_player play];
+        _playbackEnded = false;
         _state = MEMediaState::Playing;
-        FireEvent(MEMediaEventType::Playing);
+        fireMediaEvent(MEMediaEventType::Playing);
     }
     return true;
 }
@@ -473,21 +472,21 @@ void AvfMediaEngine::internalPause()
     if (_player != nil)
         [_player pause];
 }
-bool AvfMediaEngine::Pause()
+bool AvfMediaEngine::pause()
 {
     if (_state == MEMediaState::Playing)
     {
         [_player pause];
         _state = MEMediaState::Paused;
-        FireEvent(MEMediaEventType::Paused);
+        fireMediaEvent(MEMediaEventType::Paused);
     }
     return true;
 }
-bool AvfMediaEngine::Stop()
+bool AvfMediaEngine::stop()
 {
     if (_state != MEMediaState::Stopped)
     {
-        SetCurrentTime(0);
+        setCurrentTime(0);
         [_player pause];
         _state = MEMediaState::Stopped;
 
@@ -496,7 +495,7 @@ bool AvfMediaEngine::Stop()
     }
     return true;
 }
-MEMediaState AvfMediaEngine::GetState() const
+MEMediaState AvfMediaEngine::getState() const
 {
     return _state;
 }

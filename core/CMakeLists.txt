@@ -56,6 +56,22 @@ else() # we not support webview2 and vidio player for WINRT target
     # set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
 endif()
 
+if (LINUX)
+    include(CheckIncludeFile)
+    check_include_file(vlc/vlc.h _AX_HAVE_VLC)
+    if (_AX_HAVE_VLC)
+        option (AX_ENABLE_VLC_MEDIA "Enabling vlc media for linux video player" ON)
+    endif()
+endif()
+
+message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
+
+if(NOT APPLE)
+    set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
+else()
+    option(AX_USE_ALSOFT "Use ALSOFT on apple" OFF)
+endif()
+
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 
 

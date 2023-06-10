@@ -8,6 +8,12 @@
 #    endif
 #elif defined(__APPLE__)
 #    include "media/AvfMediaEngine.h"
+#elif defined(__ANDROID__)
+#    include "media/AndroidMediaEngine.h"
+#endif
+
+#if defined(AX_ENABLE_VLC_MEDIA)
+#    include "media/VlcMediaEngine.h"
 #endif
 
 namespace axstd
@@ -30,7 +36,7 @@ std::unique_ptr<T> static_pointer_cast(std::unique_ptr<U>&& r)
 
 NS_AX_BEGIN
 
-std::unique_ptr<MediaEngineFactory> CreatePlatformMediaEngineFactory()
+std::unique_ptr<MediaEngineFactory> MediaEngineFactory::create()
 {
 #if defined(WINAPI_FAMILY)
 #    if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP && !defined(AXME_USE_IMFME)
@@ -40,6 +46,10 @@ std::unique_ptr<MediaEngineFactory> CreatePlatformMediaEngineFactory()
 #    endif
 #elif defined(__APPLE__)
     return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<AvfMediaEngineFactory>());
+#elif defined(__ANDROID__)
+    return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<AndroidMediaEngineFactory>());
+#elif defined(__linux__) && defined(AX_ENABLE_VLC_MEDIA)
+    return axstd::static_pointer_cast<MediaEngineFactory>(std::make_unique<VlcMediaEngineFactory>());
 #else
     return nullptr;
 #endif
