@@ -58,8 +58,8 @@ extensions/background.png
 extensions/button.png
 extensions/buttonBackground.png
 extensions/buttonHighlighted.png
-extensions/CCControlColourPickerSpriteSheet.plist
-extensions/CCControlColourPickerSpriteSheet.png
+extensions/ControlColourPickerSpriteSheet.plist
+extensions/ControlColourPickerSpriteSheet.png
 extensions/green_edit.png
 extensions/orange_edit.png
 extensions/potentiometerButton.png
@@ -133,8 +133,8 @@ hd/ccb/burst.png
 hd/extensions/background.png
 hd/extensions/button.png
 hd/extensions/buttonHighlighted.png
-hd/extensions/CCControlColourPickerSpriteSheet.plist
-hd/extensions/CCControlColourPickerSpriteSheet.png
+hd/extensions/ControlColourPickerSpriteSheet.plist
+hd/extensions/ControlColourPickerSpriteSheet.png
 hd/extensions/potentiometerButton.png
 hd/extensions/potentiometerProgress.png
 hd/extensions/potentiometerTrack.png
@@ -374,8 +374,8 @@ ipad/ccb/burst.png
 ipad/ccb/jungle-left.png
 ipad/ccb/jungle-right.png
 ipad/extensions/background.png
-ipad/extensions/CCControlColourPickerSpriteSheet.plist
-ipad/extensions/CCControlColourPickerSpriteSheet.png
+ipad/extensions/ControlColourPickerSpriteSheet.plist
+ipad/extensions/ControlColourPickerSpriteSheet.png
 ipad/extensions/potentiometerButton.png
 ipad/extensions/potentiometerProgress.png
 ipad/extensions/potentiometerTrack.png

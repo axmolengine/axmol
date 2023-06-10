@@ -51,10 +51,10 @@ bool ControlColourPicker::init()
     if (Control::init())
     {
         // Cache the sprites
-        SpriteFrameCache::getInstance()->addSpriteFramesWithFile("extensions/CCControlColourPickerSpriteSheet.plist");
+        SpriteFrameCache::getInstance()->addSpriteFramesWithFile("extensions/ControlColourPickerSpriteSheet.plist");
 
         // Create the sprite batch node
-        SpriteBatchNode* spriteSheet = SpriteBatchNode::create("extensions/CCControlColourPickerSpriteSheet.png");
+        SpriteBatchNode* spriteSheet = SpriteBatchNode::create("extensions/ControlColourPickerSpriteSheet.png");
         addChild(spriteSheet);
 
         // MIPMAP
