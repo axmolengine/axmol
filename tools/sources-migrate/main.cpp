@@ -28,7 +28,6 @@ len=83570
 #include <fstream>
 #include "yasio/stl/string_view.hpp"
 
-
 namespace stdfs = std::filesystem;
 
 #define O_READ_FLAGS O_RDONLY
@@ -38,11 +37,11 @@ namespace stdfs = std::filesystem;
 #define O_OVERLAP_FLAGS O_CREAT | O_RDWR, S_IRWXU
 #define posix_open_cxx(path, ...) ::open(path.data(), ##__VA_ARGS__)
 
-int totals = 0;
+int totals          = 0;
 int replaced_totals = 0;
 std::vector<std::string_view> chunks;
 
-const std::regex include_re(R"(#(\s)*include(\s)*(.)*((CC)|(cc)))", std::regex_constants::ECMAScript);
+const std::regex include_re(R"(#(\s)*include(\s)*(.)*\b((CC)|(cc)))", std::regex_constants::ECMAScript);
 const std::regex cmake_re(R"(/CC)", std::regex_constants::ECMAScript | std::regex_constants::icase);
 
 std::string load_file(std::string_view path)
@@ -73,12 +72,14 @@ std::string load_file(std::string_view path)
     return {};
 }
 
-void save_file(std::string_view path, const std::vector<std::string_view>& chunks) {
+void save_file(std::string_view path, const std::vector<std::string_view>& chunks)
+{
     auto fp = fopen(path.data(), "wb");
-    if(!fp) {
+    if (!fp)
+    {
         throw std::runtime_error("open file fail");
     }
-    for(auto& chunk : chunks)
+    for (auto& chunk : chunks)
         fwrite(chunk.data(), chunk.length(), 1, fp);
     fclose(fp);
 }
@@ -87,19 +88,20 @@ bool regex_search_for_replace(const std::string& content, const std::regex& re)
 {
     // scan line by line, and put to chunks
     const char* cur_line = content.c_str();
-    const char* ptr   = cur_line;
+    const char* ptr      = cur_line;
 
-    int line_count = 0; // for stats only
-    int hints = 0;
+    int line_count = 0;  // for stats only
+    int hints      = 0;
 
     chunks.clear();
 
-    for(;;) {
+    for (;;)
+    {
         ++line_count;
 
         while (*ptr && *ptr != '\n')
             ++ptr;
-        
+
         auto next_line = *ptr == '\n' ? ptr + 1 : ptr;
         std::string_view line{cur_line, next_line};  // ensure line contains '\n' if not '\0'
 
@@ -109,20 +111,22 @@ bool regex_search_for_replace(const std::string& content, const std::regex& re)
             if (std::regex_search(line.begin(), line.end(), results, re))
             {
                 auto& match = results[0];
-                auto first = match.first;
-                auto last = match.second;
+                auto first  = match.first;
+                auto last   = match.second;
                 assert(first >= line.data() && first <= &line.back());
                 std::string_view word{first, last};
                 std::string_view chunk1{cur_line, last - 2};
                 chunks.push_back(chunk1);
                 auto chunk2_first = last;
-                if(chunk2_first < next_line) {
+                if (chunk2_first < next_line)
+                {
                     std::string_view chunk2{chunk2_first, next_line};
                     chunks.push_back(chunk2);
                 }
                 ++hints;
             }
-            else {
+            else
+            {
                 chunks.push_back(line);
             }
         }
@@ -131,10 +135,12 @@ bool regex_search_for_replace(const std::string& content, const std::regex& re)
             chunks.push_back(line);
         }
 
-        if (*next_line != '\0') {
+        if (*next_line != '\0')
+        {
             ptr = cur_line = next_line;
         }
-        else {
+        else
+        {
             break;
         }
     }
@@ -144,7 +150,7 @@ bool regex_search_for_replace(const std::string& content, const std::regex& re)
 
 void replace_cmake_lists(std::string& content) {}
 
-void process_file(std::string_view file_path, std::string_view file_name, bool is_cmake)
+void process_file(std::string_view file_path, std::string_view file_name, bool is_cmake, bool needs_rename = false)
 {
     auto content = load_file(file_path);
     if (content.empty())
@@ -152,45 +158,44 @@ void process_file(std::string_view file_path, std::string_view file_name, bool i
         throw std::runtime_error("found empty file!");
     }
 
-    
     if (!is_cmake)
     {
-        if (cxx20::ic::ends_with(file_path, ".h") || cxx20::ic::ends_with(file_path, ".cpp") ||
-            cxx20::ic::ends_with(file_path, ".mm") || cxx20::ic::ends_with(file_path, ".m") ||
-            cxx20::ic::ends_with(file_path, ".inl"))
+        // replacing file include stub from CCxxx to xxx, do in editor is better
+        if (regex_search_for_replace(content, include_re))
         {
-            
-            // replacing file include stub from CCxxx to xxx, do in editor is better
-            if(regex_search_for_replace(content, include_re)) {
-                printf("replacing c/c++,objc file %d: %s, len=%zu\n", ++totals, file_path.data(), content.size());
-                save_file(file_path, chunks);
-                ++replaced_totals;
-            } else {
-                printf("skipping c/c++,objc file %d: %s, len=%zu\n", ++totals, file_path.data(), content.size());
-            }
+            printf("replacing c/c++,objc file %d: %s, len=%zu\n", ++totals, file_path.data(), content.size());
+            save_file(file_path, chunks);
+            ++replaced_totals;
+        }
+        else
+        {
+            printf("skipping c/c++,objc file %d: %s, len=%zu\n", ++totals, file_path.data(), content.size());
+        }
 
+        if (needs_rename)
+        {
             auto new_file_name = file_name.substr(2);
-            std::string new_file_path {file_path.data(), file_path.length() - file_name.length()};
+            std::string new_file_path{file_path.data(), file_path.length() - file_name.length()};
             new_file_path += new_file_name;
 
             // rename
             int ret = ::rename(file_path.data(), new_file_path.c_str());
-            if (ret != 0) {
+            if (ret != 0)
+            {
                 throw std::runtime_error("rename file fail");
             }
         }
-        else
-        {
-            printf("skip file %d: %s, len=%zu\n", ++totals, file_path.data(), content.size());
-            return;
-        }
     }
-    else {
-        if(regex_search_for_replace(content, cmake_re)) {
+    else
+    {
+        if (regex_search_for_replace(content, cmake_re))
+        {
             printf("replacing cmake file %d: %s, len=%zu\n", ++totals, file_path.data(), content.size());
             save_file(file_path, chunks);
             ++replaced_totals;
-        } else {
+        }
+        else
+        {
             printf("skip cmake %s not part of axmol engine!", file_path.data());
         }
     }
@@ -208,10 +213,16 @@ void process_folder(std::string_view sub_path)
             auto pathname = path.filename();
             auto strName  = pathname.native();
 
-            if (cxx20::ic::starts_with(strName, "CC"))
-                process_file(strPath, strName, false);
+            if (cxx20::ic::ends_with(strName, ".h") || cxx20::ic::ends_with(strName, ".cpp") ||
+                cxx20::ic::ends_with(strName, ".mm") || cxx20::ic::ends_with(strName, ".m") ||
+                cxx20::ic::ends_with(strName, ".inl"))
+            {
+                process_file(strPath, strName, false, cxx20::ic::starts_with(strName, "CC"));
+            }
             else if (cxx20::ic::ends_with(strPath, "CMakeLists.txt"))
+            {
                 process_file(strPath, strName, true);
+            }
         }
     }
 }
@@ -233,7 +244,8 @@ int main(int argc, const char** argv)
     process_folder(std::string{axroot} + "/tests");
 
     auto diff = std::chrono::steady_clock::now() - start;
-    printf("replaced totals: %d, total cost: %.3lf(ms)\n", replaced_totals, std::chrono::duration_cast<std::chrono::microseconds>(diff).count() / 1000.0);
+    printf("replaced totals: %d, total cost: %.3lf(ms)\n", replaced_totals,
+           std::chrono::duration_cast<std::chrono::microseconds>(diff).count() / 1000.0);
 
     return 0;
 }
