@@ -27,7 +27,7 @@
 #define COCOS2DX_PLATFORM_THIRDPARTY_ATITC_
 /// @cond DO_NOT_SHOW
 
-#include "platform/CCStdC.h"
+#include "platform/StdC.h"
 
 enum class ATITCDecodeFlag
 {

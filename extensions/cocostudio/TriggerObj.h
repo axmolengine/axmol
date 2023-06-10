@@ -26,8 +26,8 @@ THE SOFTWARE.
 #define __TRIGGEROBJ_H__
 
 #include "CocoStudio.h"
-#include "base/CCVector.h"
-#include "base/CCEventListenerCustom.h"
+#include "base/Vector.h"
+#include "base/EventListenerCustom.h"
 
 namespace cocostudio
 {

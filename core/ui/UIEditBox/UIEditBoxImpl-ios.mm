@@ -31,8 +31,8 @@
 #    define kLabelZOrder 9999
 
 #    include "ui/UIEditBox/UIEditBox.h"
-#    include "base/CCDirector.h"
-#    include "2d/CCLabel.h"
+#    include "base/Director.h"
+#    include "2d/Label.h"
 #    import "platform/ios/CCEAGLView-ios.h"
 
 #    import <Foundation/Foundation.h>

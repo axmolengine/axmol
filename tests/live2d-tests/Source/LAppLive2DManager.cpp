@@ -18,7 +18,7 @@
 #endif
 
 //cocos2d
-#include "base/CCDirector.h"
+#include "base/Director.h"
 #include "renderer/backend/Device.h"
 
 using namespace Csm;

@@ -24,8 +24,8 @@
 
 #include "LabelTestNew.h"
 #include "../testResource.h"
-#include "renderer/CCRenderer.h"
-#include "2d/CCFontAtlasCache.h"
+#include "renderer/Renderer.h"
+#include "2d/FontAtlasCache.h"
 
 USING_NS_AX;
 using namespace ui;

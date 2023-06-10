@@ -30,9 +30,9 @@
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #    include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#    include "scripting/lua-bindings/manual/CCLuaValue.h"
-#    include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#    include "base/CCGameController.h"
+#    include "scripting/lua-bindings/manual/LuaValue.h"
+#    include "scripting/lua-bindings/manual/LuaEngine.h"
+#    include "base/GameController.h"
 
 static void cloneEventListenerControllerHandler(const ax::EventListenerController* src,
                                                 ax::EventListenerController* dst,

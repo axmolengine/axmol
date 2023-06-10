@@ -3,8 +3,8 @@
 #include "WidgetReader/TextReader/TextReader.h"
 
 #include "ui/UIText.h"
-#include "2d/CCLabel.h"
-#include "platform/CCFileUtils.h"
+#include "2d/Label.h"
+#include "platform/FileUtils.h"
 
 #include "CocoLoader.h"
 #include "CSParseBinary_generated.h"

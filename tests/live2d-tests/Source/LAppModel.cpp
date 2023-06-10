@@ -20,9 +20,9 @@
 #include "SampleScene.h"
 
 //cocos2d
-#include "base/CCDirector.h"
-#include "renderer/CCTexture2D.h"
-#include "renderer/CCTextureCache.h"
+#include "base/Director.h"
+#include "renderer/Texture2D.h"
+#include "renderer/TextureCache.h"
 
 using namespace std;
 using namespace Csm;

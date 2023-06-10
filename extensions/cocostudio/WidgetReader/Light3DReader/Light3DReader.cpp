@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "WidgetReader/Light3DReader/Light3DReader.h"
-#include "2d/CCLight.h"
+#include "2d/Light.h"
 
 #include "CSParseBinary_generated.h"
 #include "CSParse3DBinary_generated.h"

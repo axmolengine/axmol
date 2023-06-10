@@ -27,9 +27,9 @@
 #include "FlatBuffersSerialize.h"
 
 #include "base/ObjectFactory.h"
-#include "base/ccConstants.h"
+#include "base/Constants.h"
 #include "ui/CocosGUI.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 #include "CSLanguageDataBinary_generated.h"
 #include "CSParseBinary_generated.h"
 

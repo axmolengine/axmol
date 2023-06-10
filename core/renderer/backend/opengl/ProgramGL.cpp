@@ -27,9 +27,9 @@
 #include "ShaderModuleGL.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/opengl/MacrosGL.h"
-#include "base/CCDirector.h"
-#include "base/CCEventDispatcher.h"
-#include "base/CCEventType.h"
+#include "base/Director.h"
+#include "base/EventDispatcher.h"
+#include "base/EventType.h"
 #include "base/axstd.h"
 #include "renderer/backend/opengl/UtilsGL.h"
 

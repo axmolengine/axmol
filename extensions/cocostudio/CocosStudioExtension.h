@@ -2,7 +2,7 @@
 #ifndef __COCOSSTUDIOEXTENSION_H__
 #define __COCOSSTUDIOEXTENSION_H__
 
-#include "math/CCAffineTransform.h"
+#include "math/AffineTransform.h"
 #include "CocosStudioExport.h"
 
 NS_AX_BEGIN

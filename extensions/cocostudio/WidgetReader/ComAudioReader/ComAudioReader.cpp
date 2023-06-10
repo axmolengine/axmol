@@ -24,7 +24,7 @@
 
 #include "WidgetReader/ComAudioReader/ComAudioReader.h"
 
-#include "CCComAudio.h"
+#include "ComAudio.h"
 #include "CSParseBinary_generated.h"
 #include "WidgetReader/NodeReader/NodeReader.h"
 

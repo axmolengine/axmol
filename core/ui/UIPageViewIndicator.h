@@ -27,7 +27,7 @@ THE SOFTWARE.
 #define __UIPAGEVIEWINDICATOR_H__
 
 #include "ui/UIPageView.h"
-#include "2d/CCSprite.h"
+#include "2d/Sprite.h"
 
 NS_AX_BEGIN
 /**

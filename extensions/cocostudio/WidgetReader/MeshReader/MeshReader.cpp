@@ -23,11 +23,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "2d/CCLight.h"
-#include "3d/CCMeshRenderer.h"
-#include "3d/CCAnimate3D.h"
-#include "3d/CCAnimation3D.h"
-#include "platform/CCFileUtils.h"
+#include "2d/Light.h"
+#include "3d/MeshRenderer.h"
+#include "3d/Animate3D.h"
+#include "3d/Animation3D.h"
+#include "platform/FileUtils.h"
 #include "WidgetReader/MeshReader/MeshReader.h"
 
 #include "CSParseBinary_generated.h"

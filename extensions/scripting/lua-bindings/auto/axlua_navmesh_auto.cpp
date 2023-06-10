@@ -1,6 +1,6 @@
 #include "scripting/lua-bindings/auto/axlua_navmesh_auto.hpp"
 #if AX_USE_NAVMESH
-#include "navmesh/CCNavMesh.h"
+#include "navmesh/NavMesh.h"
 #include "scripting/lua-bindings/manual/navmesh/axlua_navmesh_conversions.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"

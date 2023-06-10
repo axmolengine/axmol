@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 #include "CurlTest.h"
 #include "stdio.h"
 #include "stdlib.h"

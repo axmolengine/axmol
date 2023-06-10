@@ -26,9 +26,9 @@
 
 #include "../Macros.h"
 #include "../Types.h"
-#include "base/CCRef.h"
-#include "base/CCEventListenerCustom.h"
-#include "platform/CCGL.h"
+#include "base/Ref.h"
+#include "base/EventListenerCustom.h"
+#include "platform/GL.h"
 #include "../Program.h"
 
 #include <string>

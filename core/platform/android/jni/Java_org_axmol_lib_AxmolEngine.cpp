@@ -28,11 +28,11 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <string>
 #include "platform/android/jni/JniHelper.h"
-#include "platform/android/CCFileUtils-android.h"
+#include "platform/android/FileUtils-android.h"
 #include "android/asset_manager_jni.h"
 #include "platform/android/jni/Java_org_axmol_lib_AxmolEngine.h"
 
-#include "base/ccUTF8.h"
+#include "base/UTF8.h"
 
 #define LOG_TAG "Java_org_axmol_lib_AxmolEngine.cpp"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)

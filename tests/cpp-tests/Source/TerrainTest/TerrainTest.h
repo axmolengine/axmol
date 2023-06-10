@@ -26,10 +26,10 @@
 
 #include "../BaseTest.h"
 
-#include "3d/CCMeshRenderer.h"
-#include "3d/CCTerrain.h"
-#include "2d/CCCamera.h"
-#include "2d/CCAction.h"
+#include "3d/MeshRenderer.h"
+#include "3d/Terrain.h"
+#include "2d/Camera.h"
+#include "2d/Action.h"
 
 DEFINE_TEST_SUITE(TerrainTests);
 

@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #include "BillBoardTest.h"
-#include "3d/CCBillBoard.h"
+#include "3d/BillBoard.h"
 
 #include <algorithm>
 #include "../testResource.h"

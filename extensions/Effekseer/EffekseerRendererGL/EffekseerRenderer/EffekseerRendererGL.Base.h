@@ -29,7 +29,7 @@
 // #elif EMSCRIPTEN
 // #include <emscripten.h>
 // #endif
-#include "platform/CCGL.h"
+#include "platform/GL.h"
 
 //----------------------------------------------------------------------------------
 //

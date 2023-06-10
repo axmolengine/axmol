@@ -22,9 +22,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/CCDirector.h"
-#include "2d/CCCamera.h"
-#include "platform/CCFileUtils.h"
+#include "base/Director.h"
+#include "2d/Camera.h"
+#include "platform/FileUtils.h"
 #include "WidgetReader/UserCameraReader/UserCameraReader.h"
 
 #include "CSParseBinary_generated.h"

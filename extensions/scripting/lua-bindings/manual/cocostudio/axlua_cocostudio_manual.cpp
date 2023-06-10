@@ -30,10 +30,10 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/manual/CCLuaValue.h"
+#include "scripting/lua-bindings/manual/LuaValue.h"
 #include "CocoStudio.h"
-#include "ActionTimeline/CCActionTimelineCache.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "ActionTimeline/ActionTimelineCache.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 #include "scripting/lua-bindings/manual/cocostudio/CustomGUIReader.h"
 
 using namespace cocostudio;

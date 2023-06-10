@@ -29,8 +29,8 @@
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 
 #    include "ui/UIEditBox/UIEditBox.h"
-#    include "2d/CCLabel.h"
-#    include "base/ccUTF8.h"
+#    include "2d/Label.h"
+#    include "base/UTF8.h"
 #    include <gtk/gtk.h>
 
 // destroy dialog when lost focus

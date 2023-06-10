@@ -20,7 +20,7 @@
 
 #include <agile.h>
 #include "platform/winrt/InputEvent.h"
-#include "base/ccTypes.h"
+#include "base/Types.h"
 
 class AppDelegate;
 

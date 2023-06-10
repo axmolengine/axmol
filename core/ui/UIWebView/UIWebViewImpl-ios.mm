@@ -28,11 +28,11 @@
 
 #include "ui/UIWebView/UIWebViewImpl-ios.h"
 #include "ui/UIWebView/UIWebView.h"
-#include "renderer/CCRenderer.h"
-#include "base/CCDirector.h"
-#include "platform/CCGLView.h"
-#include "platform/ios/CCEAGLView-ios.h"
-#include "platform/CCFileUtils.h"
+#include "renderer/Renderer.h"
+#include "base/Director.h"
+#include "platform/GLView.h"
+#include "platform/ios/EAGLView-ios.h"
+#include "platform/FileUtils.h"
 
 @interface UIWebViewWrapper : NSObject
 @property(nonatomic) std::function<bool(std::string url)> shouldStartLoading;

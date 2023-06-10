@@ -1,7 +1,7 @@
 #pragma once
 #include "Macros.h"
-#include "base/CCRef.h"
-#include "platform/CCPlatformMacros.h"
+#include "base/Ref.h"
+#include "platform/PlatformMacros.h"
 #include "Program.h"
 #include "ProgramState.h"
 

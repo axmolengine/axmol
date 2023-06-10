@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "Camera3DTest.h"
 #include "testResource.h"
 #include "ui/UISlider.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 #include "renderer/backend/Device.h"
 
 USING_NS_AX;

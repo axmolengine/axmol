@@ -27,7 +27,7 @@
 #define _PARTICLE3D_TEST_H_
 
 #include "../BaseTest.h"
-#include "Particle3D/CCParticleSystem3D.h"
+#include "Particle3D/ParticleSystem3D.h"
 #include <string>
 
 DEFINE_TEST_SUITE(Particle3DTests);

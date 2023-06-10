@@ -24,10 +24,10 @@
 
 #include "WidgetReader/ParticleReader/ParticleReader.h"
 
-#include "base/ccTypes.h"
-#include "base/ccUtils.h"
-#include "2d/CCParticleSystemQuad.h"
-#include "platform/CCFileUtils.h"
+#include "base/Types.h"
+#include "base/Utils.h"
+#include "2d/ParticleSystemQuad.h"
+#include "platform/FileUtils.h"
 #include "CSParseBinary_generated.h"
 #include "WidgetReader/NodeReader/NodeReader.h"
 

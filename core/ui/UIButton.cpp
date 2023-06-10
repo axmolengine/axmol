@@ -26,10 +26,10 @@ THE SOFTWARE.
 
 #include "ui/UIButton.h"
 #include "ui/UIScale9Sprite.h"
-#include "2d/CCLabel.h"
-#include "2d/CCSprite.h"
-#include "2d/CCActionInterval.h"
-#include "platform/CCFileUtils.h"
+#include "2d/Label.h"
+#include "2d/Sprite.h"
+#include "2d/ActionInterval.h"
+#include "platform/FileUtils.h"
 #include "ui/UIHelper.h"
 #include <algorithm>
 

@@ -25,7 +25,7 @@
 #include "scripting/lua-bindings/manual/network/axlua_network_manual.h"
 #include "scripting/lua-bindings/manual/network/lua_xml_http_request.h"
 #include "scripting/lua-bindings/manual/network/lua_downloader.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 
 int register_network_module(lua_State* L)
 {

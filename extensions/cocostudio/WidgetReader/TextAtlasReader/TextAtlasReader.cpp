@@ -3,7 +3,7 @@
 #include "WidgetReader/TextAtlasReader/TextAtlasReader.h"
 
 #include "ui/UITextAtlas.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
 #include "CocoLoader.h"
 #include "CSParseBinary_generated.h"

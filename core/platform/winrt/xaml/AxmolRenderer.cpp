@@ -19,9 +19,9 @@
 
 #include "AxmolRenderer.h"
 #include "AppDelegate.h"
-#include "platform/winrt/CCGLViewImpl-winrt.h"
-#include "platform/CCApplication.h"
-#include "renderer/CCTextureCache.h"
+#include "platform/winrt/GLViewImpl-winrt.h"
+#include "platform/Application.h"
+#include "renderer/TextureCache.h"
 
 // These are used by the shader compilation methods.
 #include <vector>

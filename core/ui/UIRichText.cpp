@@ -31,19 +31,19 @@
 #include <locale>
 #include <algorithm>
 
-#include "platform/CCFileUtils.h"
-#include "platform/CCApplication.h"
-#include "base/CCEventListenerTouch.h"
-#include "base/CCEventDispatcher.h"
-#include "base/CCDirector.h"
-#include "2d/CCLabel.h"
-#include "2d/CCSprite.h"
-#include "base/ccUTF8.h"
+#include "platform/FileUtils.h"
+#include "platform/Application.h"
+#include "base/EventListenerTouch.h"
+#include "base/EventDispatcher.h"
+#include "base/Director.h"
+#include "2d/Label.h"
+#include "2d/Sprite.h"
+#include "base/UTF8.h"
 #include "ui/UIHelper.h"
 
 #include "fmt/compile.h"
 
-#include "platform/CCSAXParser.h"
+#include "platform/SAXParser.h"
 
 USING_NS_AX;
 using namespace ax::ui;

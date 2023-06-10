@@ -33,7 +33,7 @@
 #include "DeviceInfoMTL.h"
 #include "RenderTargetMTL.h"
 
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 #include "renderer/backend/ProgramManager.h"
 

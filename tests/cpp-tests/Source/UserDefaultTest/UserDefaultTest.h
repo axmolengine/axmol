@@ -27,7 +27,7 @@
 
 #include "axmol.h"
 #include "../BaseTest.h"
-#include "2d/CCLabel.h"
+#include "2d/Label.h"
 
 DEFINE_TEST_SUITE(UserDefaultTests);
 

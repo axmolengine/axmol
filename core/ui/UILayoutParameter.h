@@ -27,7 +27,7 @@
 #define __LAYOUTPARMETER_H__
 
 #include <string>
-#include "base/CCRef.h"
+#include "base/Ref.h"
 #include "ui/GUIExport.h"
 
 /**

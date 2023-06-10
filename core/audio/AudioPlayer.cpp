@@ -27,10 +27,10 @@
 
 #define LOG_TAG "AudioPlayer"
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 #include "audio/AudioPlayer.h"
 #include "audio/AudioCache.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 #include "audio/AudioDecoder.h"
 #include "audio/AudioDecoderManager.h"
 

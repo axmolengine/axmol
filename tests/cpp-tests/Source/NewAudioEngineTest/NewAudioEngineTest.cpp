@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 #include "NewAudioEngineTest.h"
 #include "ui/CocosGUI.h"
 

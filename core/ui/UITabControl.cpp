@@ -23,9 +23,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/CCFileUtils.h"
-#include "2d/CCSprite.h"
-#include "2d/CCLabel.h"
+#include "platform/FileUtils.h"
+#include "2d/Sprite.h"
+#include "2d/Label.h"
 #include "ui/UILayout.h"
 #include "ui/UITabControl.h"
 

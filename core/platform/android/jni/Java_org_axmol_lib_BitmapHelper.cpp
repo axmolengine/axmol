@@ -26,10 +26,10 @@ THE SOFTWARE.
 
 #include "platform/android/jni/JniHelper.h"
 #include <string.h>
-#include "base/CCDirector.h"
-#include "platform/CCApplication.h"
-#include "platform/CCFileUtils.h"
-#include "base/ccUTF8.h"
+#include "base/Director.h"
+#include "platform/Application.h"
+#include "platform/FileUtils.h"
+#include "base/UTF8.h"
 
 static const char* className = "org.axmol.lib.BitmapHelper";
 

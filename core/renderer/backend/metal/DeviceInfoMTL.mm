@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "DeviceInfoMTL.h"
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 #include "UtilsMTL.h"
 NS_AX_BACKEND_BEGIN
 

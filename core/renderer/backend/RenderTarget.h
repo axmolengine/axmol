@@ -1,6 +1,6 @@
 #pragma once
 
-#include "base/CCRef.h"
+#include "base/Ref.h"
 #include "Texture.h"
 #include <assert.h>
 

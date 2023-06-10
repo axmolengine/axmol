@@ -29,7 +29,7 @@
 #include "DeviceInfoMTL.h"
 #include "TextureMTL.h"
 #include "../PixelFormatUtils.h"
-#include "base/CCConfiguration.h"
+#include "base/Configuration.h"
 
 NS_AX_BACKEND_BEGIN
 

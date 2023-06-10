@@ -41,7 +41,7 @@ int totals          = 0;
 int replaced_totals = 0;
 std::vector<std::string_view> chunks;
 
-const std::regex include_re(R"(#(\s)*include(\s)*(.)*\b((CC)|(cc)))", std::regex_constants::ECMAScript);
+const std::regex include_re(R"(#(\s)*include(\s)*"(.)*\b(CC|cc))", std::regex_constants::ECMAScript);
 const std::regex cmake_re(R"(/CC)", std::regex_constants::ECMAScript | std::regex_constants::icase);
 
 std::string load_file(std::string_view path)

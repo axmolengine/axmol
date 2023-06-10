@@ -61,7 +61,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 */
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
 /* Generic error reporting */

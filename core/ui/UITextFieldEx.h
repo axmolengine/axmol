@@ -5,7 +5,7 @@
 #define _UITEXTFIELDEX_H_
 
 #include "cocos2d.h"
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 #include "base/SimpleTimer.h"
 
 NS_AX_BEGIN

@@ -24,9 +24,9 @@
 
 #include "BufferGL.h"
 #include <cassert>
-#include "base/CCDirector.h"
-#include "base/CCEventType.h"
-#include "base/CCEventDispatcher.h"
+#include "base/Director.h"
+#include "base/EventType.h"
+#include "base/EventDispatcher.h"
 #include "renderer/backend/opengl/MacrosGL.h"
 
 NS_AX_BACKEND_BEGIN

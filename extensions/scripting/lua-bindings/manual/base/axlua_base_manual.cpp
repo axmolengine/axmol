@@ -26,44 +26,44 @@
 #include "scripting/lua-bindings/manual/base/axlua_base_manual.hpp"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/CCLuaValue.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "scripting/lua-bindings/manual/LuaValue.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <WS2tcpip.h>
 #else
 #    include <sys/socket.h>
 #endif
 
-#include "2d/CCActionCamera.h"
-#include "2d/CCActionCatmullRom.h"
-#include "2d/CCActionGrid.h"
-#include "2d/CCActionInterval.h"
-#include "2d/CCAtlasNode.h"
-#include "2d/CCCamera.h"
-#include "2d/CCMenu.h"
-#include "2d/CCMenuItem.h"
-#include "2d/CCMotionStreak.h"
-#include "2d/CCParticleBatchNode.h"
-#include "2d/CCParticleSystem.h"
-#include "2d/CCScene.h"
-#include "2d/CCSpriteBatchNode.h"
-#include "2d/CCFastTMXLayer.h"
-#include "2d/CCFastTMXTiledMap.h"
-#include "2d/CCRenderTexture.h"
-#include "base/CCEventDispatcher.h"
-#include "base/CCEventListenerKeyboard.h"
-#include "base/CCEventListenerMouse.h"
-#include "base/CCEventListenerTouch.h"
-#include "base/CCProperties.h"
-#include "base/CCScheduler.h"
-#include "base/CCUserDefault.h"
-#include "base/ccUtils.h"
-#include "platform/CCApplication.h"
-#include "platform/CCDevice.h"
-#include "platform/CCFileUtils.h"
-#include "platform/CCGLView.h"
-#include "renderer/CCTextureCache.h"
-#include "renderer/ccShaders.h"
+#include "2d/ActionCamera.h"
+#include "2d/ActionCatmullRom.h"
+#include "2d/ActionGrid.h"
+#include "2d/ActionInterval.h"
+#include "2d/AtlasNode.h"
+#include "2d/Camera.h"
+#include "2d/Menu.h"
+#include "2d/MenuItem.h"
+#include "2d/MotionStreak.h"
+#include "2d/ParticleBatchNode.h"
+#include "2d/ParticleSystem.h"
+#include "2d/Scene.h"
+#include "2d/SpriteBatchNode.h"
+#include "2d/FastTMXLayer.h"
+#include "2d/FastTMXTiledMap.h"
+#include "2d/RenderTexture.h"
+#include "base/EventDispatcher.h"
+#include "base/EventListenerKeyboard.h"
+#include "base/EventListenerMouse.h"
+#include "base/EventListenerTouch.h"
+#include "base/Properties.h"
+#include "base/Scheduler.h"
+#include "base/UserDefault.h"
+#include "base/Utils.h"
+#include "platform/Application.h"
+#include "platform/Device.h"
+#include "platform/FileUtils.h"
+#include "platform/GLView.h"
+#include "renderer/TextureCache.h"
+#include "renderer/Shaders.h"
 
 void LuaNode::draw(ax::Renderer* renderer, const ax::Mat4& transform, uint32_t flags)
 {
@@ -2440,7 +2440,7 @@ tolua_lerror:
 }
 
 #if AX_USE_NAVMESH
-#    include "navmesh/CCNavMesh.h"
+#    include "navmesh/NavMesh.h"
 int axlua_Scene_setNavMeshDebugCamera(lua_State* tolua_S)
 {
     int argc             = 0;
@@ -3787,7 +3787,7 @@ tolua_lerror:
 }
 
 #if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
-#    include "physics3d/CCPhysics3DWorld.h"
+#    include "physics3d/Physics3DWorld.h"
 int axlua_Scene_getPhysics3DWorld(lua_State* tolua_S)
 {
     int argc             = 0;

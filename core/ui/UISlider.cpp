@@ -26,9 +26,9 @@ THE SOFTWARE.
 #include "ui/UISlider.h"
 #include "ui/UIScale9Sprite.h"
 #include "ui/UIHelper.h"
-#include "2d/CCSprite.h"
-#include "2d/CCCamera.h"
-#include "renderer/ccShaders.h"
+#include "2d/Sprite.h"
+#include "2d/Camera.h"
+#include "renderer/Shaders.h"
 NS_AX_BEGIN
 
 /* FIXME:

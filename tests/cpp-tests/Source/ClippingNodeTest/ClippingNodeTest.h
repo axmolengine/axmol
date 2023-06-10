@@ -24,7 +24,7 @@
 #pragma once
 
 #include "../BaseTest.h"
-#include "renderer/CCCustomCommand.h"
+#include "renderer/CustomCommand.h"
 #include <list>
 
 NS_AX_BEGIN

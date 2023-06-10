@@ -31,7 +31,7 @@
 #include <string>
 #include <string_view>
 
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 
 NS_AX_BEGIN
 
