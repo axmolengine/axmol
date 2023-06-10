@@ -80,7 +80,7 @@ if(AX_BUILD_TESTS)
         add_test_target(HelloLua ${_AX_ROOT_PATH}/templates/lua-template-default)
         add_test_target(lua_tests ${_AX_ROOT_PATH}/tests/lua-tests)
     endif(AX_ENABLE_EXT_LUA)
-
+    add_subdirectory(tools/sources-migrate)
 endif()
 
 ax_uwp_set_all_targets_deploy_min_version()
