@@ -46,6 +46,7 @@ include(PreventInSourceBuilds)
 include(AXBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
+option(AX_BUILD_TOOLS "Build tools" OFF)
 
 add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
 
@@ -80,6 +81,10 @@ if(AX_BUILD_TESTS)
         add_test_target(HelloLua ${_AX_ROOT_PATH}/templates/lua-template-default)
         add_test_target(lua_tests ${_AX_ROOT_PATH}/tests/lua-tests)
     endif(AX_ENABLE_EXT_LUA)
+    
+endif()
+
+if (AX_BUILD_TOOLS) 
     add_subdirectory(tools/sources-migrate)
 endif()
 
