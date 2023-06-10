@@ -94,8 +94,8 @@ private:
 
 struct VlcMediaEngineFactory : public MediaEngineFactory
 {
-    MediaEngine* CreateMediaEngine() override { return new VlcMediaEngine(); }
-    void DestroyMediaEngine(MediaEngine* me) override { delete static_cast<VlcMediaEngine*>(me); }
+    MediaEngine* createMediaEngine() override { return new VlcMediaEngine(); }
+    void destroyMediaEngine(MediaEngine* me) override { delete static_cast<VlcMediaEngine*>(me); }
 };
 
 NS_AX_END

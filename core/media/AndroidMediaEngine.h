@@ -52,8 +52,8 @@ private:
 
 struct AndroidMediaEngineFactory : public MediaEngineFactory
 {
-    MediaEngine* CreateMediaEngine() override { return new AndroidMediaEngine(); }
-    void DestroyMediaEngine(MediaEngine* me) override { delete static_cast<AndroidMediaEngine*>(me); }
+    MediaEngine* createMediaEngine() override { return new AndroidMediaEngine(); }
+    void destroyMediaEngine(MediaEngine* me) override { delete static_cast<AndroidMediaEngine*>(me); }
 };
 
 NS_AX_END

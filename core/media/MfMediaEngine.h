@@ -122,13 +122,13 @@ private:
 };
 
 struct MfMediaEngineFactory : public MediaEngineFactory {
-    MediaEngine* CreateMediaEngine() override
+    MediaEngine* createMediaEngine() override
     {
         auto engine = new MfMediaEngine();
         engine->Initialize();
         return engine;
     }
-    void DestroyMediaEngine(MediaEngine* me) override 
+    void destroyMediaEngine(MediaEngine* me) override 
     {
         delete static_cast<MfMediaEngine*>(me);
     }

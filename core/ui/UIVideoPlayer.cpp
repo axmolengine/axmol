@@ -65,7 +65,7 @@ namespace
 {
 struct PrivateVideoDescriptor
 {
-    MediaEngine* _vplayer      = nullptr;
+    MediaEngine* _engine      = nullptr;
     Texture2D* _vtexture       = nullptr;
     Texture2D* _vchromaTexture = nullptr;
     Sprite* _vrender           = nullptr;
@@ -78,8 +78,8 @@ struct PrivateVideoDescriptor
 
     void closePlayer()
     {
-        if (_vplayer)
-            _vplayer->close();
+        if (_engine)
+            _engine->close();
     }
 
     void rescaleTo(VideoPlayer* videoView)
@@ -134,7 +134,7 @@ struct PrivateVideoDescriptor
 };
 }  // namespace
 
-static std::unique_ptr<MediaEngineFactory> _meFactory = CreatePlatformMediaEngineFactory();
+static std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
 
 VideoPlayer::VideoPlayer()
     : _fullScreenDirty(false)
@@ -155,8 +155,8 @@ VideoPlayer::VideoPlayer()
 #    endif
 
     // Initialize mediaPlayer backend
-    pvd->_vplayer = _meFactory->CreateMediaEngine();
-    if (pvd->_vplayer)
+    pvd->_engine = _meFactory->createMediaEngine();
+    if (pvd->_engine)
     {
         /// create video render sprite
         pvd->_vrender = new Sprite();
@@ -164,7 +164,7 @@ VideoPlayer::VideoPlayer()
         pvd->_vrender->setAutoUpdatePS(false);
         this->addProtectedChild(pvd->_vrender);
         /// setup media event callback
-        pvd->_vplayer->setCallbacks([this, pvd](MEMediaEventType event) {
+        pvd->_engine->setCallbacks([this, pvd](MEMediaEventType event) {
             switch (event)
             {
             case MEMediaEventType::Playing:
@@ -177,7 +177,7 @@ VideoPlayer::VideoPlayer()
                 break;
 
             case MEMediaEventType::Stopped:
-                onPlayEvent(pvd->_vplayer->isPlaybackEnded() ? (int) EventType::COMPLETED : (int) EventType::STOPPED);
+                onPlayEvent(pvd->_engine->isPlaybackEnded() ? (int) EventType::COMPLETED : (int) EventType::STOPPED);
                 break;
 
             /* Raised by a media source when a presentation ends. This event signals that all streams in the
@@ -290,8 +290,8 @@ VideoPlayer::~VideoPlayer()
 
     removeAllProtectedChildren();
 
-    if (pvd->_vplayer)
-        _meFactory->DestroyMediaEngine(pvd->_vplayer);
+    if (pvd->_engine)
+        _meFactory->destroyMediaEngine(pvd->_engine);
 
     AX_SAFE_RELEASE(pvd->_vrender);
     AX_SAFE_RELEASE(pvd->_vtexture);
@@ -326,8 +326,8 @@ void VideoPlayer::setLooping(bool looping)
     _isLooping = looping;
 
     auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-    if (pvd->_vplayer)
-        pvd->_vplayer->setLoop(looping);
+    if (pvd->_engine)
+        pvd->_engine->setLoop(looping);
 }
 
 void VideoPlayer::setUserInputEnabled(bool enableInput)
@@ -346,13 +346,13 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 
     auto pvd     = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
     auto vrender = pvd->_vrender;
-    auto vplayer = pvd->_vplayer;
-    if (!vrender || !vplayer)
+    auto engine = pvd->_engine;
+    if (!vrender || !engine)
         return;
 
     if (vrender->isVisible() && isPlaying())
     {  // render 1 video sample if avaiable
-        vplayer->transferVideoFrame();
+        engine->transferVideoFrame();
     }
     if (pvd->_scaleDirty || (flags & FLAGS_TRANSFORM_DIRTY))
         pvd->rescaleTo(this);
@@ -401,9 +401,9 @@ void VideoPlayer::setPlayRate(float fRate)
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
-            vplayer->setRate(fRate);
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+            engine->setRate(fRate);
     }
 }
 
@@ -411,17 +411,17 @@ void VideoPlayer::play()
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
         {
-            switch (vplayer->getState())
+            switch (engine->getState())
             {
             case MEMediaState::Closed:
-                vplayer->setAutoPlay(true);
-                vplayer->open(_videoURL);
+                engine->setAutoPlay(true);
+                engine->open(_videoURL);
                 break;
             default:
-                vplayer->play();
+                engine->play();
             }
         }
     }
@@ -431,9 +431,9 @@ void VideoPlayer::pause()
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
-            vplayer->pause();
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+            engine->pause();
     }
 }
 
@@ -441,14 +441,14 @@ void VideoPlayer::resume()
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
         {
-            switch (vplayer->getState())
+            switch (engine->getState())
             {
             case MEMediaState::Stopped:
             case MEMediaState::Paused:
-                vplayer->play();
+                engine->play();
             }
         }
     }
@@ -458,9 +458,9 @@ void VideoPlayer::stop()
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
-            vplayer->stop();
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+            engine->stop();
     }
 }
 
@@ -468,9 +468,9 @@ void VideoPlayer::seekTo(float sec)
 {
     if (!_videoURL.empty())
     {
-        auto vplayer = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_vplayer;
-        if (vplayer)
-            vplayer->setCurrentTime(sec);
+        auto engine = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_engine;
+        if (engine)
+            engine->setCurrentTime(sec);
     }
 }
 

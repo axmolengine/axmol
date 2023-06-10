@@ -282,7 +282,7 @@ protected:
 
 struct WmfMediaEngineFactory : public MediaEngineFactory
 {
-    MediaEngine* CreateMediaEngine() override
+    MediaEngine* createMediaEngine() override
     {
         auto engine = new WmfMediaEngine();
         auto hr     = engine->Initialize();
@@ -292,7 +292,7 @@ struct WmfMediaEngineFactory : public MediaEngineFactory
         engine->Release();
         return nullptr;
     }
-    void DestroyMediaEngine(MediaEngine* me) override
+    void destroyMediaEngine(MediaEngine* me) override
     {
         auto wmfme = static_cast<WmfMediaEngine*>(me);
         wmfme->Shutdown();

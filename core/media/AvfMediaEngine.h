@@ -68,11 +68,11 @@ private:
 
 struct AvfMediaEngineFactory : public MediaEngineFactory
 {
-    MediaEngine* CreateMediaEngine() override
+    MediaEngine* createMediaEngine() override
     {
         return new AvfMediaEngine();
     }
-    void DestroyMediaEngine(MediaEngine* me) override { delete static_cast<AvfMediaEngine*>(me); }
+    void destroyMediaEngine(MediaEngine* me) override { delete static_cast<AvfMediaEngine*>(me); }
 };
 
 NS_AX_END

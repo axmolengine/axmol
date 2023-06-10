@@ -36,7 +36,7 @@ std::unique_ptr<T> static_pointer_cast(std::unique_ptr<U>&& r)
 
 NS_AX_BEGIN
 
-std::unique_ptr<MediaEngineFactory> CreatePlatformMediaEngineFactory()
+std::unique_ptr<MediaEngineFactory> MediaEngineFactory::create()
 {
 #if defined(WINAPI_FAMILY)
 #    if WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP && !defined(AXME_USE_IMFME)
