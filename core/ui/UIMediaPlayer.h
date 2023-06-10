@@ -45,14 +45,14 @@ namespace ui
 {
 
 /**
- * @class VideoPlayer
- * @brief Displays a video file.
+ * @class MediaPlayer
+ * @brief Play a media file.
  *
- * @note VideoPlayer displays a video file base on system widget.
- * It's mean VideoPlayer displays a video file above all graphical elements of cocos2d-x.
+ * @note MediaPlayer play a media file base on system widget.
+ * It's mean MediaPlayer play a media file above all graphical elements of axmol.
  * @js NA
  */
-class AX_GUI_DLL VideoPlayer : public ax::ui::Widget
+class AX_GUI_DLL MediaPlayer : public ax::ui::Widget
 {
 public:
     /**
@@ -79,17 +79,17 @@ public:
     };
 
     /**
-     * A callback which will be called after specific VideoPlayer event happens.
+     * A callback which will be called after specific MediaPlayer event happens.
      */
-    typedef std::function<void(Ref*, VideoPlayer::EventType)> ccVideoPlayerCallback;
+    typedef std::function<void(Ref*, MediaPlayer::EventType)> ccVideoPlayerCallback;
 
     /**
-     *Static create method for instancing a VideoPlayer.
+     *Static create method for instancing a MediaPlayer.
      */
-    CREATE_FUNC(VideoPlayer);
+    CREATE_FUNC(MediaPlayer);
 
     /**
-     * Sets a file path as a video source for VideoPlayer.
+     * Sets a file path as a video source for MediaPlayer.
      */
     virtual void setFileName(std::string_view videoPath);
 
@@ -101,7 +101,7 @@ public:
     virtual std::string_view getFileName() const { return _videoURL; }
 
     /**
-     * Sets a URL as a video source for VideoPlayer.
+     * Sets a URL as a video source for MediaPlayer.
      */
     virtual void setURL(std::string_view _videoURL);
 
@@ -168,21 +168,21 @@ public:
     virtual void seekTo(float sec);
 
     /**
-     * Checks whether the VideoPlayer is playing.
+     * Checks whether the MediaPlayer is playing.
      *
      * @return True if currently playing, false otherwise.
      */
     virtual bool isPlaying() const;
 
     /**
-     * Checks whether the VideoPlayer is set with looping mode.
+     * Checks whether the MediaPlayer is set with looping mode.
      *
      * @return true if the videoplayer is set to loop, false otherwise.
      */
     virtual bool isLooping() const;
 
     /**
-     * Checks whether the VideoPlayer is set to listen user input to resume and pause the video
+     * Checks whether the MediaPlayer is set to listen user input to resume and pause the video
      *
      * @return true if the videoplayer user input is set, false otherwise.
      */
@@ -220,12 +220,12 @@ public:
      *
      * @param callback  The callback that will be run.
      */
-    virtual void addEventListener(const VideoPlayer::ccVideoPlayerCallback& callback);
+    virtual void addEventListener(const MediaPlayer::ccVideoPlayerCallback& callback);
 
     /**
      * @brief A function which will be called when video is playing.
      *
-     * @param event @see VideoPlayer::EventType.
+     * @param event @see MediaPlayer::EventType.
 
      */
     virtual void onPlayEvent(int event);
@@ -236,8 +236,8 @@ public:
 
     void setContentSize(const Size& contentSize) override;
 
-    VideoPlayer();
-    virtual ~VideoPlayer();
+    MediaPlayer();
+    virtual ~MediaPlayer();
 
 protected:
     virtual ax::ui::Widget* createCloneInstance() override;
@@ -270,6 +270,7 @@ protected:
 
     void* _videoContext = nullptr;
 };
+using VideoPlayer = MediaPlayer;
 }  // namespace ui
 
 NS_AX_END

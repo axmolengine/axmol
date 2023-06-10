@@ -22,10 +22,10 @@ if(WINDOWS)
 
     if (AX_ENABLE_MFMEDIA)
         set(_AX_UI_SPECIFIC_HEADER ${_AX_UI_SPECIFIC_HEADER}
-            ui/UIVideoPlayer.h
+            ui/UIMediaPlayer.h
             )
         set(_AX_UI_SPECIFIC_SRC ${_AX_UI_SPECIFIC_SRC}
-            ui/UIVideoPlayer.cpp
+            ui/UIMediaPlayer.cpp
             )
     endif()
 elseif(APPLE)
@@ -90,8 +90,8 @@ elseif(APPLE)
                 )
         endif()
     endif()
-    set(_AX_UI_SPECIFIC_HEADER ui/UIVideoPlayer.h ${_AX_UI_SPECIFIC_HEADER})
-    set(_AX_UI_SPECIFIC_SRC ui/UIVideoPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
+    set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+    set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 elseif(LINUX)
     set(_AX_UI_SPECIFIC_HEADER
         ui/UIEditBox/UIEditBoxImpl-linux.h
@@ -100,8 +100,8 @@ elseif(LINUX)
         ui/UIEditBox/UIEditBoxImpl-linux.cpp
         )
     if(AX_ENABLE_VLC_MEDIA)
-        set(_AX_UI_SPECIFIC_HEADER ui/UIVideoPlayer.h ${_AX_UI_SPECIFIC_HEADER})
-        set(_AX_UI_SPECIFIC_SRC ui/UIVideoPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
+        set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+        set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
     endif()
 elseif(ANDROID)
     set(_AX_UI_SPECIFIC_HEADER
@@ -115,8 +115,8 @@ elseif(ANDROID)
         # it's special for android, not a common file
         ui/UIWebView/UIWebView.cpp
         )
-    set(_AX_UI_SPECIFIC_HEADER ui/UIVideoPlayer.h ${_AX_UI_SPECIFIC_HEADER})
-    set(_AX_UI_SPECIFIC_SRC ui/UIVideoPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
+    set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+    set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 endif()
 
 set(_AX_UI_HEADER

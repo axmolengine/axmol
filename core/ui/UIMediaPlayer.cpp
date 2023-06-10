@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ui/UIVideoPlayer.h"
+#include "ui/UIMediaPlayer.h"
 
 // Now, common implementation based on redesigned MediaEngine is enable for windows and macOS
 #if defined(_WIN32) || defined(__APPLE__) || defined(__ANDROID__) || defined(AX_ENABLE_VLC_MEDIA)
@@ -82,7 +82,7 @@ struct PrivateVideoDescriptor
             _engine->close();
     }
 
-    void rescaleTo(VideoPlayer* videoView)
+    void rescaleTo(MediaPlayer* videoView)
     {
         auto& videoSize = _vrender->getContentSize();
         if (videoSize.x > 0 && videoSize.y > 0)
@@ -136,7 +136,7 @@ struct PrivateVideoDescriptor
 
 static std::unique_ptr<MediaEngineFactory> _meFactory = MediaEngineFactory::create();
 
-VideoPlayer::VideoPlayer()
+MediaPlayer::MediaPlayer()
     : _fullScreenDirty(false)
     , _fullScreenEnabled(false)
     , _keepAspectRatioEnabled(false)
@@ -280,11 +280,11 @@ VideoPlayer::VideoPlayer()
     }
     else
     {
-        ax::log("Create VideoPlayer backend failed");
+        ax::log("Create MediaPlayer backend failed");
     }
 }
 
-VideoPlayer::~VideoPlayer()
+MediaPlayer::~MediaPlayer()
 {
     auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
 
@@ -300,7 +300,7 @@ VideoPlayer::~VideoPlayer()
     delete pvd;
 }
 
-void VideoPlayer::setFileName(std::string_view fileName)
+void MediaPlayer::setFileName(std::string_view fileName)
 {
     auto fullPath = FileUtils::getInstance()->fullPathForFilename(fileName);
     if (ax::path2uri(fullPath) != _videoURL)
@@ -308,20 +308,20 @@ void VideoPlayer::setFileName(std::string_view fileName)
         reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
         _videoURL = std::move(fullPath);
     }
-    _videoSource = VideoPlayer::Source::FILENAME;
+    _videoSource = MediaPlayer::Source::FILENAME;
 }
 
-void VideoPlayer::setURL(std::string_view videoUrl)
+void MediaPlayer::setURL(std::string_view videoUrl)
 {
     if (_videoURL != videoUrl)
     {
         reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->closePlayer();
         _videoURL = videoUrl;
     }
-    _videoSource = VideoPlayer::Source::URL;
+    _videoSource = MediaPlayer::Source::URL;
 }
 
-void VideoPlayer::setLooping(bool looping)
+void MediaPlayer::setLooping(bool looping)
 {
     _isLooping = looping;
 
@@ -330,17 +330,17 @@ void VideoPlayer::setLooping(bool looping)
         pvd->_engine->setLoop(looping);
 }
 
-void VideoPlayer::setUserInputEnabled(bool enableInput)
+void MediaPlayer::setUserInputEnabled(bool enableInput)
 {
     _isUserInputEnabled = enableInput;
 }
 
-void VideoPlayer::setStyle(StyleType style)
+void MediaPlayer::setStyle(StyleType style)
 {
     _styleType = style;
 }
 
-void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+void MediaPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 {
     ax::ui::Widget::draw(renderer, transform, flags);
 
@@ -365,13 +365,13 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4& transform, uint32_t flags
 #    endif
 }
 
-void VideoPlayer::setContentSize(const Size& contentSize)
+void MediaPlayer::setContentSize(const Size& contentSize)
 {
     Widget::setContentSize(contentSize);
     reinterpret_cast<PrivateVideoDescriptor*>(_videoContext)->_originalViewSize = contentSize;
 }
 
-void VideoPlayer::setFullScreenEnabled(bool enabled)
+void MediaPlayer::setFullScreenEnabled(bool enabled)
 {
     if (_fullScreenEnabled != enabled)
     {
@@ -383,12 +383,12 @@ void VideoPlayer::setFullScreenEnabled(bool enabled)
     }
 }
 
-bool VideoPlayer::isFullScreenEnabled() const
+bool MediaPlayer::isFullScreenEnabled() const
 {
     return _fullScreenEnabled;
 }
 
-void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
+void MediaPlayer::setKeepAspectRatioEnabled(bool enable)
 {
     if (_keepAspectRatioEnabled != enable)
     {
@@ -397,7 +397,7 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
     }
 }
 
-void VideoPlayer::setPlayRate(float fRate)
+void MediaPlayer::setPlayRate(float fRate)
 {
     if (!_videoURL.empty())
     {
@@ -407,7 +407,7 @@ void VideoPlayer::setPlayRate(float fRate)
     }
 }
 
-void VideoPlayer::play()
+void MediaPlayer::play()
 {
     if (!_videoURL.empty())
     {
@@ -427,7 +427,7 @@ void VideoPlayer::play()
     }
 }
 
-void VideoPlayer::pause()
+void MediaPlayer::pause()
 {
     if (!_videoURL.empty())
     {
@@ -437,7 +437,7 @@ void VideoPlayer::pause()
     }
 }
 
-void VideoPlayer::resume()
+void MediaPlayer::resume()
 {
     if (!_videoURL.empty())
     {
@@ -454,7 +454,7 @@ void VideoPlayer::resume()
     }
 }
 
-void VideoPlayer::stop()
+void MediaPlayer::stop()
 {
     if (!_videoURL.empty())
     {
@@ -464,7 +464,7 @@ void VideoPlayer::stop()
     }
 }
 
-void VideoPlayer::seekTo(float sec)
+void MediaPlayer::seekTo(float sec)
 {
     if (!_videoURL.empty())
     {
@@ -474,60 +474,60 @@ void VideoPlayer::seekTo(float sec)
     }
 }
 
-bool VideoPlayer::isPlaying() const
+bool MediaPlayer::isPlaying() const
 {
     return _isPlaying;
 }
 
-bool VideoPlayer::isLooping() const
+bool MediaPlayer::isLooping() const
 {
     return _isLooping;
 }
 
-bool VideoPlayer::isUserInputEnabled() const
+bool MediaPlayer::isUserInputEnabled() const
 {
     return _isUserInputEnabled;
 }
 
-void VideoPlayer::setVisible(bool visible)
+void MediaPlayer::setVisible(bool visible)
 {
     ax::ui::Widget::setVisible(visible);
 }
 
-void VideoPlayer::onEnter()
+void MediaPlayer::onEnter()
 {
     Widget::onEnter();
 }
 
-void VideoPlayer::onExit()
+void MediaPlayer::onExit()
 {
     _eventCallback = nullptr;
     Widget::onExit();
 }
 
-void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback& callback)
+void MediaPlayer::addEventListener(const MediaPlayer::ccVideoPlayerCallback& callback)
 {
     _eventCallback = callback;
 }
 
-void VideoPlayer::onPlayEvent(int event)
+void MediaPlayer::onPlayEvent(int event)
 {
-    _isPlaying = (event == (int)VideoPlayer::EventType::PLAYING);
+    _isPlaying = (event == (int)MediaPlayer::EventType::PLAYING);
 
     if (_eventCallback)
     {
-        _director->getScheduler()->runOnAxmolThread(std::bind(_eventCallback, this, (VideoPlayer::EventType)event));
+        _director->getScheduler()->runOnAxmolThread(std::bind(_eventCallback, this, (MediaPlayer::EventType)event));
     }
 }
 
-ax::ui::Widget* VideoPlayer::createCloneInstance()
+ax::ui::Widget* MediaPlayer::createCloneInstance()
 {
-    return VideoPlayer::create();
+    return MediaPlayer::create();
 }
 
-void VideoPlayer::copySpecialProperties(Widget* widget)
+void MediaPlayer::copySpecialProperties(Widget* widget)
 {
-    VideoPlayer* videoPlayer = dynamic_cast<VideoPlayer*>(widget);
+    MediaPlayer* videoPlayer = dynamic_cast<MediaPlayer*>(widget);
     if (videoPlayer)
     {
         _isPlaying              = videoPlayer->_isPlaying;
