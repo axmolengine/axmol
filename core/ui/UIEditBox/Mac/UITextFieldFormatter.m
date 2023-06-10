@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/Mac/CCUITextFieldFormatter.h"
+#import "ui/UIEditBox/Mac/UITextFieldFormatter.h"
 
 @implementation CCUITextFieldFormatter
 {

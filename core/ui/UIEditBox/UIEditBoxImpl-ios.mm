@@ -33,12 +33,12 @@
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include "base/Director.h"
 #    include "2d/Label.h"
-#    import "platform/ios/CCEAGLView-ios.h"
+#    import "platform/ios/EAGLView-ios.h"
 
 #    import <Foundation/Foundation.h>
 #    import <UIKit/UIKit.h>
 
-#    import "ui/UIEditBox/iOS/CCUIEditBoxIOS.h"
+#    import "ui/UIEditBox/iOS/UIEditBoxIOS.h"
 
 #    define getEditBoxImplIOS() ((ax::ui::EditBoxImplIOS*)_editBox)
 

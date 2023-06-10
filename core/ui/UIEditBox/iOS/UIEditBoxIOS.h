@@ -27,7 +27,7 @@
  ****************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "ui/UIEditBox/iOS/CCUITextInput.h"
+#import "ui/UIEditBox/iOS/UITextInput.h"
 #include "ui/UIEditBox/UIEditBoxImpl-ios.h"
 
 @interface UIEditBoxImplIOS_objc : NSObject <UITextFieldDelegate, UITextViewDelegate>

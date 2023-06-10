@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/Mac/CCUISingleLineTextField.h"
+#import "ui/UIEditBox/Mac/UISingleLineTextField.h"
 #include "ui/UIEditBox/Mac/UITextFieldFormatter.h"
 
 @interface RSVerticallyCenteredTextFieldCell : NSTextFieldCell

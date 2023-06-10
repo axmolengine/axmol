@@ -26,11 +26,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#import "ui/UIEditBox/iOS/CCUIEditBoxIOS.h"
-#import "ui/UIEditBox/iOS/CCUISingleLineTextField.h"
-#import "ui/UIEditBox/iOS/CCUIMultilineTextField.h"
+#import "ui/UIEditBox/iOS/UIEditBoxIOS.h"
+#import "ui/UIEditBox/iOS/UISingleLineTextField.h"
+#import "ui/UIEditBox/iOS/UIMultilineTextField.h"
 
-#import "platform/ios/CCEAGLView-ios.h"
+#import "platform/ios/EAGLView-ios.h"
 #include "base/Director.h"
 
 #define getEditBoxImplIOS() ((ax::ui::EditBoxImplIOS*)_editBox)
