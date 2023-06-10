@@ -60,31 +60,37 @@ public:
 
     bool Initialize();
 
-    void FireMediaEvent(MEMediaEventType event)
+    void fireMediaEvent(MEMediaEventType event)
     {
-        if (m_eventCallback)
-            m_eventCallback(event);
+        if (_onMediaEvent)
+            _onMediaEvent(event);
     }
 
-    void SetMediaEventCallback(MEMediaEventCallback cb) override { m_eventCallback = cb; }
+    void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
+                     std::function<void(const MEVideoFrame&)> onVideoFrame) override
+    {
+        _onMediaEvent = std::move(onMediaEvent);
+        _onVideoFrame = std::move(onVideoFrame);
+    }
 
-    void SetAutoPlay(bool bAutoPlay) { m_autoPlay = bAutoPlay; }
+    void setAutoPlay(bool bAutoPlay) { m_autoPlay = bAutoPlay; }
 
-    bool Open(std::string_view sourceUri) override;
-    bool Close() override;
+    bool open(std::string_view sourceUri) override;
+    bool close() override;
  
-    bool SetLoop(bool bLoop) override;
-    bool SetRate(double fRate) override;
+    bool setLoop(bool bLoop) override;
+    bool setRate(double fRate) override;
 
-    bool TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback) override;
+    bool transferVideoFrame() override;
 
-    bool Play() override;
-    bool Pause() override;
-    bool Stop() override;
+    bool play() override;
+    bool pause() override;
+    bool stop() override;
+    bool isPlaybackEnded() const override { return m_bPlaybackEnded; }
 
-    bool SetCurrentTime(double fPosInSeconds) override;
+    bool setCurrentTime(double fPosInSeconds) override;
 
-    MEMediaState GetState() const override { return m_state; }
+    MEMediaState getState() const override { return m_state; }
 
     void SetMuted(bool muted);
 
@@ -104,23 +110,25 @@ private:
 
     bool m_readyToPlay = false;
     bool m_stopping = false;
+    bool m_bPlaybackEnded = false;
 
     bool m_autoPlay = false;
     MEMediaState m_state = MEMediaState::Closed;
 
     MEIntPoint m_videoExtent;
 
-    MEMediaEventCallback m_eventCallback;
+    std::function<void(MEMediaEventType)> _onMediaEvent;
+    std::function<void(const MEVideoFrame&)> _onVideoFrame;
 };
 
 struct MfMediaEngineFactory : public MediaEngineFactory {
-    MediaEngine* CreateMediaEngine() override
+    MediaEngine* createMediaEngine() override
     {
         auto engine = new MfMediaEngine();
         engine->Initialize();
         return engine;
     }
-    void DestroyMediaEngine(MediaEngine* me) override 
+    void destroyMediaEngine(MediaEngine* me) override 
     {
         delete static_cast<MfMediaEngine*>(me);
     }

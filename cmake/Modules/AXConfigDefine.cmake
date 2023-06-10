@@ -129,6 +129,7 @@ function(use_ax_compile_define target)
         endif()
 
     elseif(LINUX)
+        ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target} PUBLIC _GNU_SOURCE)
     elseif(ANDROID)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
@@ -136,6 +137,7 @@ function(use_ax_compile_define target)
         if(AX_USE_COMPAT_GL)
             target_compile_definitions(${target} PUBLIC AX_USE_COMPAT_GL=1)
         endif()
+        ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target}
             PUBLIC WIN32
             PUBLIC _WIN32

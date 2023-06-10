@@ -218,3 +218,5 @@ tools/bindings-generator/libclang/*.so
 templates/lua-template-default/Content/src/axmol
 tests/lua-tests/Content/src/axmol
 tests/lua-tests/Content/res
+
+thirdparty/vlc/**/*
