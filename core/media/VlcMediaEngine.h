@@ -50,8 +50,6 @@ public:
                                                   unsigned* height,
                                                   unsigned* pitches,
                                                   unsigned* lines);
-    static void libvlc_video_cleanup_cb(void* opaque);
-
     static void libvlc_handle_event(const libvlc_event_t* event, void* userData);
 
 private:

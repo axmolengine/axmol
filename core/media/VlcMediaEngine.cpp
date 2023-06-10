@@ -51,12 +51,6 @@ void VlcMediaEngine::libvlc_video_unlock(void* data, void* id, void* const* p_pi
     assert(id == nullptr);
 }
 
-static void display(void* data, void* id)
-{
-    (void)data;
-    assert(id == nullptr);
-}
-
 unsigned int VlcMediaEngine::libvlc_video_format_setup(void** opaque,
                                                        char* chroma,  // forcc, refer to:vlc_fourcc.h
                                                        unsigned* width,
@@ -110,8 +104,6 @@ unsigned int VlcMediaEngine::libvlc_video_format_setup(void** opaque,
     // return the number of picture buffers allocated, 0 indicates failure
     return num_of_plane;
 }
-
-void VlcMediaEngine::libvlc_video_cleanup_cb(void* opaque) {}
 
 void VlcMediaEngine::libvlc_handle_event(const libvlc_event_t* event, void* userData)
 {
@@ -182,8 +174,8 @@ VlcMediaEngine::VlcMediaEngine()
 
     // media player
     _mp = libvlc_media_player_new(_vlc);
-    libvlc_video_set_callbacks(_mp, libvlc_video_lock, libvlc_video_unlock, display, this);
-    libvlc_video_set_format_callbacks(_mp, libvlc_video_format_setup, libvlc_video_cleanup_cb);
+    libvlc_video_set_callbacks(_mp, libvlc_video_lock, libvlc_video_unlock, nullptr, this);
+    libvlc_video_set_format_callbacks(_mp, libvlc_video_format_setup, nullptr);
 
     // media list
 #    if LIBVLC_VERSION_MAJOR < 4
