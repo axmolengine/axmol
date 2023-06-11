@@ -69,7 +69,7 @@ namespace ip
 {
 namespace compat
 {
-#  include "yasio/core/inet_ntop_impl.hpp"
+#  include "yasio/core/impl/inet_ntop.hpp"
 } // namespace compat
 } // namespace ip
 } // namespace inet
@@ -89,22 +89,19 @@ int xxsocket::xpconnect(const char* hostname, u_short port, u_short local_port)
   int error = -1;
 
   xxsocket::resolve_i(
-      [&](const endpoint& ep) {
-        switch (ep.af())
+      [&](const addrinfo* ai) {
+        switch (ai->ai_family)
         {
           case AF_INET:
             if (flags & ipsv_ipv4)
-            {
-              error = pconnect(ep, local_port);
-            }
+              error = pconnect(ip::endpoint{ai}, local_port);
             else if (flags & ipsv_ipv6)
-            {
-              xxsocket::resolve_i([&](const endpoint& ep6) { return 0 == (error = pconnect(ep6, local_port)); }, hostname, port, AF_INET6, AI_V4MAPPED);
-            }
+              xxsocket::resolve_i([&](const addrinfo* ai6) { return 0 == (error = pconnect(ip::endpoint{ai6}, local_port)); }, hostname, port, AF_INET6,
+                                  AI_V4MAPPED);
             break;
           case AF_INET6:
             if (flags & ipsv_ipv6)
-              error = pconnect(ep, local_port);
+              error = pconnect(ip::endpoint{ai}, local_port);
             break;
         }
 
@@ -120,21 +117,22 @@ int xxsocket::xpconnect_n(const char* hostname, u_short port, const std::chrono:
   auto flags = getipsv();
   int error  = -1;
   xxsocket::resolve_i(
-      [&](const endpoint& ep) {
-        switch (ep.af())
+      [&](const addrinfo* ai) {
+        switch (ai->ai_family)
         {
           case AF_INET:
             if (flags & ipsv_ipv4)
-              error = pconnect_n(ep, wtimeout, local_port);
+              error = pconnect_n(ip::endpoint{ai}, wtimeout, local_port);
             else if (flags & ipsv_ipv6)
             {
-              xxsocket::resolve_i([&](const endpoint& ep6) { return 0 == (error = pconnect_n(ep6, wtimeout, local_port)); }, hostname, port, AF_INET6,
+              xxsocket::resolve_i([&](const addrinfo* ai6) { return 0 == (error = pconnect_n(ip::endpoint{ai6}, wtimeout, local_port)); }, hostname, port,
+                                  AF_INET6,
                                   AI_V4MAPPED);
             }
             break;
           case AF_INET6:
             if (flags & ipsv_ipv6)
-              error = pconnect_n(ep, wtimeout, local_port);
+              error = pconnect_n(ip::endpoint{ai}, wtimeout, local_port);
             break;
         }
 
@@ -148,14 +146,14 @@ int xxsocket::xpconnect_n(const char* hostname, u_short port, const std::chrono:
 int xxsocket::pconnect(const char* hostname, u_short port, u_short local_port)
 {
   int error = -1;
-  xxsocket::resolve_i([&](const endpoint& ep) { return 0 == (error = pconnect(ep, local_port)); }, hostname, port);
+  xxsocket::resolve_i([&](const addrinfo* ai) { return 0 == (error = pconnect(ip::endpoint{ai}, local_port)); }, hostname, port);
   return error;
 }
 
 int xxsocket::pconnect_n(const char* hostname, u_short port, const std::chrono::microseconds& wtimeout, u_short local_port)
 {
   int error = -1;
-  xxsocket::resolve_i([&](const endpoint& ep) { return 0 == (error = pconnect_n(ep, wtimeout, local_port)); }, hostname, port);
+  xxsocket::resolve_i([&](const addrinfo* ai) { return 0 == (error = pconnect_n(ip::endpoint{ai}, wtimeout, local_port)); }, hostname, port);
   return error;
 }
 
@@ -163,8 +161,8 @@ int xxsocket::pconnect_n(const char* hostname, u_short port, u_short local_port)
 {
   int error = -1;
   xxsocket::resolve_i(
-      [&](const endpoint& ep) {
-        (error = pconnect_n(ep, local_port));
+      [&](const addrinfo* ai) {
+        (error = pconnect_n(ip::endpoint{ai}, local_port));
         return true;
       },
       hostname, port);
@@ -268,8 +266,8 @@ void xxsocket::poptions(socket_native_type sockfd)
 int xxsocket::resolve(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
 {
   return resolve_i(
-      [&](const endpoint& ep) {
-        endpoints.push_back(ep);
+      [&](const addrinfo* ai) {
+        endpoints.emplace_back(ai);
         return false;
       },
       hostname, port, AF_UNSPEC, AI_ALL, socktype);
@@ -277,8 +275,8 @@ int xxsocket::resolve(std::vector<endpoint>& endpoints, const char* hostname, un
 int xxsocket::resolve_v4(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
 {
   return resolve_i(
-      [&](const endpoint& ep) {
-        endpoints.push_back(ep);
+      [&](const addrinfo* ai) {
+        endpoints.emplace_back(ai);
         return false;
       },
       hostname, port, AF_INET, 0, socktype);
@@ -286,8 +284,8 @@ int xxsocket::resolve_v4(std::vector<endpoint>& endpoints, const char* hostname,
 int xxsocket::resolve_v6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
 {
   return resolve_i(
-      [&](const endpoint& ep) {
-        endpoints.push_back(ep);
+      [&](const addrinfo* ai) {
+        endpoints.emplace_back(ai);
         return false;
       },
       hostname, port, AF_INET6, 0, socktype);
@@ -295,8 +293,8 @@ int xxsocket::resolve_v6(std::vector<endpoint>& endpoints, const char* hostname,
 int xxsocket::resolve_v4to6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
 {
   return xxsocket::resolve_i(
-      [&](const endpoint& ep) {
-        endpoints.push_back(ep);
+      [&](const addrinfo* ai) {
+        endpoints.emplace_back(ai);
         return false;
       },
       hostname, port, AF_INET6, AI_V4MAPPED, socktype);
@@ -304,8 +302,8 @@ int xxsocket::resolve_v4to6(std::vector<endpoint>& endpoints, const char* hostna
 int xxsocket::resolve_tov6(std::vector<endpoint>& endpoints, const char* hostname, unsigned short port, int socktype)
 {
   return resolve_i(
-      [&](const endpoint& ep) {
-        endpoints.push_back(ep);
+      [&](const addrinfo* ai) {
+        endpoints.emplace_back(ai);
         return false;
       },
       hostname, port, AF_INET6, AI_ALL | AI_V4MAPPED, socktype);

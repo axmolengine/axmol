@@ -196,7 +196,7 @@ YASIO__DECL int inet_pton(int af, const char* src, void* dst);
 inline bool is_global_in4_addr(const in_addr* addr) { return !IN4_IS_ADDR_LOOPBACK(addr) && !IN4_IS_ADDR_LINKLOCAL(addr); };
 inline bool is_global_in6_addr(const in6_addr* addr) { return !!IN6_IS_ADDR_GLOBAL(addr); };
 
-struct endpoint {
+struct endpoint final {
 public:
   enum
   {
@@ -212,8 +212,8 @@ public:
   static const size_t max_fmt_len = IN_MAX_ADDRSTRLEN + 2 /*[]*/ + sizeof("65535") /*:port*/;
 #endif
 
-  endpoint() { this->zeroset(); }
-  endpoint(const endpoint& rhs) { this->as_is(rhs); }
+  endpoint() { as_unspec(); }
+  endpoint(const endpoint& rhs) { as_is(rhs); }
   explicit endpoint(const addrinfo* info) { as_is(info); }
   explicit endpoint(const sockaddr* info) { as_is(info); }
   explicit endpoint(const char* str_ep) { as_is(str_ep); }
@@ -223,17 +223,15 @@ public:
 
   explicit operator bool() const { return this->af() != AF_UNSPEC; }
 
-  endpoint& operator=(const endpoint& rhs) { return this->as_is(rhs); }
+  endpoint& operator=(const endpoint& rhs) { return as_is(rhs); }
   endpoint& as_is(const endpoint& rhs)
   {
-    this->zeroset();
     memcpy(this, &rhs, sizeof(rhs));
     return *this;
   }
-  endpoint& as_is(const addrinfo* info) { return this->as_is_raw(info->ai_addr, info->ai_addrlen); }
+  endpoint& as_is(const addrinfo* info) { return as_is_raw(info->ai_addr, info->ai_addrlen); }
   endpoint& as_is(const sockaddr* addr)
   {
-    this->zeroset();
     switch (addr->sa_family)
     {
       case AF_INET:
@@ -249,6 +247,8 @@ public:
         as_un(((sockaddr_un*)addr)->sun_path);
         break;
 #endif
+      default:
+        as_unspec();
     }
     return *this;
   }
@@ -268,6 +268,8 @@ public:
         auto zone_value = parse_in6_zone(ip, addr_part, sizeof(addr_part), rbracket);
         as_in6(ip, static_cast<u_short>(atoi(rbracket + 2)), zone_value);
       }
+      else
+        as_unspec();
     }
     else
     { // ipv4
@@ -279,12 +281,13 @@ public:
         addr_part[n] = '\0';
         as_in4(addr_part, static_cast<u_short>(atoi(colon + 1)));
       }
+      else
+        as_unspec();
     }
     return *this;
   }
   endpoint& as_in(int family, const void* addr_in, u_short port)
   {
-    this->zeroset();
     this->af(family);
     this->port(port);
     switch (family)
@@ -297,23 +300,21 @@ public:
         ::memcpy(&in6_.sin6_addr, addr_in, sizeof(in6_addr));
         this->len(sizeof(sockaddr_in6));
         break;
+      default:
+        as_unspec();
     }
     return *this;
   }
   endpoint& as_in(const char* ip, unsigned short port)
   {
-    this->zeroset();
-
     if (strchr(ip, ':'))
     { // ipv6
       char addr_part[IN_MAX_ADDRSTRLEN];
       auto zone_value = parse_in6_zone(ip, addr_part, sizeof(addr_part), nullptr);
       as_in6(ip, port, zone_value);
     }
-    else
-    { // ipv4
+    else // ipv4
       as_in4(ip, port);
-    }
 
     return *this;
   }
@@ -326,6 +327,8 @@ public:
       this->in6_.sin6_scope_id = scope_id;
       this->len(sizeof(sockaddr_in6));
     }
+    else
+      as_unspec();
   }
   void as_in4(const char* ip, unsigned short port)
   {
@@ -335,11 +338,11 @@ public:
       this->in4_.sin_port   = host_to_network(port);
       this->len(sizeof(sockaddr_in));
     }
+    else
+      as_unspec();
   }
   endpoint& as_in(uint32_t addr, u_short port)
   {
-    this->zeroset();
-
     this->addr_v4(addr);
     this->port(port);
     return *this;
@@ -355,23 +358,23 @@ public:
       this->len(offsetof(struct sockaddr_un, sun_path) + n + 1);
     }
     else
-    {
-      un_.sun_family = AF_UNSPEC;
-      this->len(0);
-    }
+      as_unspec();
     return *this;
   }
 #endif
 
   endpoint& as_is_raw(const void* ai_addr, size_t ai_addrlen)
   {
-    this->zeroset();
     ::memcpy(this, ai_addr, ai_addrlen);
     this->len(ai_addrlen);
     return *this;
   }
 
-  void zeroset() { ::memset(this, 0x0, sizeof(*this)); }
+  void as_unspec()
+  {
+    this->af(AF_UNSPEC);
+    this->len(0);
+  }
 
   void af(int v) { sa_.sa_family = static_cast<u_short>(v); }
   int af() const { return sa_.sa_family; }
@@ -1085,7 +1088,7 @@ public:
     {
       if (ai->ai_family == AF_INET6 || ai->ai_family == AF_INET)
       {
-        if (callback(endpoint(ai)))
+        if (callback(ai))
           break;
       }
     }

@@ -143,9 +143,9 @@ private:
 };
 
 #if YASIO_SSL_BACKEND == 1 // openssl
-#  include "yasio/core/openssl_impl.hpp"
+#  include "yasio/core/impl/openssl.hpp"
 #elif YASIO_SSL_BACKEND == 2 // mbedtls
-#  include "yasio/core/mbedtls_impl.hpp"
+#  include "yasio/core/impl/mbedtls.hpp"
 #else
 #  error "yasio - Unsupported ssl backend provided!"
 #endif
