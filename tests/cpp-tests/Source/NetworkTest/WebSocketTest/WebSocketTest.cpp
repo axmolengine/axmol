@@ -345,7 +345,7 @@ void WebSocketTest::onMenuSendBinaryClicked(ax::Ref* sender)
     {
         _sendBinaryStatus->setString("Send Binary WS is waiting...");
         char buf[] = "Hello WebSocket,\0 I'm\0 a\0 binary\0 message\0.";
-        _wsiSendBinary->send((unsigned char*)buf, sizeof(buf));
+        _wsiSendBinary->send(buf, sizeof(buf));
     }
     else
     {

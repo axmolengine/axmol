@@ -42,9 +42,9 @@
 #include <atomic>
 #include <condition_variable>
 
-#include "platform/CCPlatformMacros.h"
-#include "platform/CCStdC.h"
-#include "base/CCScheduler.h"
+#include "platform/PlatformMacros.h"
+#include "platform/StdC.h"
+#include "base/Scheduler.h"
 #include "base/ConcurrentDeque.h"
 #include "yasio/yasio_fwd.hpp"
 #include "yasio/core/byte_buffer.hpp"

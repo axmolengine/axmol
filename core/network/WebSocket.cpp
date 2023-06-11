@@ -266,7 +266,7 @@ WebSocket::~WebSocket()
     _scheduler->unscheduleAllForTarget(this);
 
     // Design A: dispatch pending events at destructor. user can't delete websocket instance in delegate
-    // callbacks 
+    // callbacks
     // Design B(Preferred): purge pending events without dispatch.
     purgePendingEvents();
 }
@@ -298,10 +298,11 @@ bool WebSocket::init(const Delegate& delegate,
     return true;
 }
 
-void WebSocket::purgePendingEvents() 
+void WebSocket::purgePendingEvents()
 {
     auto lck = _eventQueue.get_lock();
-    for(auto it = _eventQueue.unsafe_begin(); it != _eventQueue.unsafe_end(); ++it) {
+    for (auto it = _eventQueue.unsafe_begin(); it != _eventQueue.unsafe_end(); ++it)
+    {
         (*it)->release();
     }
     _eventQueue.unsafe_clear();
@@ -375,7 +376,7 @@ void WebSocket::setupParsers()
 
 int WebSocket::on_frame_header(websocket_parser* parser)
 {
-    WebSocket* ws = (WebSocket*)parser->data;
+    WebSocket* ws = static_cast<WebSocket*>(parser->data);
     int opcode    = parser->flags & WS_OP_MASK;
 
     std::unique_lock<std::recursive_mutex> lck(ws->_receivedDataMtx);
@@ -401,7 +402,7 @@ int WebSocket::on_frame_header(websocket_parser* parser)
 
 int WebSocket::on_frame_body(websocket_parser* parser, const char* at, size_t length)
 {
-    WebSocket* ws   = (WebSocket*)parser->data;
+    WebSocket* ws   = static_cast<WebSocket*>(parser->data);
     ws->_frameState = FrameState::BODY;
     if (parser->flags & WS_HAS_MASK)
         websocket_parser_decode((char*)at, at, length, parser);
@@ -413,7 +414,7 @@ int WebSocket::on_frame_body(websocket_parser* parser, const char* at, size_t le
 
 int WebSocket::on_frame_end(websocket_parser* parser)
 {
-    WebSocket* ws = (WebSocket*)parser->data;
+    WebSocket* ws = static_cast<WebSocket*>(parser->data);
 
     ws->_frameState = FrameState::END;
     if (parser->flags & WS_FIN)
@@ -457,7 +458,7 @@ void WebSocket::send(std::string_view message)
 {
     if (!_transport || message.empty())
         return;
-    WebSocketProtocol::sendFrame(*this, (const char*)message.data(), message.length(), ws::detail::opcode::text);
+    WebSocketProtocol::sendFrame(*this, message.data(), message.length(), ws::detail::opcode::text);
 }
 
 /**
@@ -471,7 +472,7 @@ void WebSocket::send(const void* data, unsigned int len)
 {
     if (!_transport || len == 0)
         return;
-    WebSocketProtocol::sendFrame(*this, (const char*)data, len, ws::detail::opcode::binary);
+    WebSocketProtocol::sendFrame(*this, static_cast<const char*>(data), len, ws::detail::opcode::binary);
 }
 
 /**
@@ -537,13 +538,11 @@ WebSocket::State WebSocket::getReadyState()
 
 void WebSocket::generateHandshakeSecKey()
 {
-    unsigned char rand_key[16] = {0};
-    int* p                     = (int*)rand_key;
+    char rand_key[16] = {0};
+    int* p            = reinterpret_cast<int*>(rand_key);
     for (int i = 0; i < 4; ++i, ++p)
-    {
         *p = ax::random();
-    }
-    _handshakeSecKey = utils::base64Encode(std::string_view{(char*)rand_key, sizeof(rand_key)});
+    _handshakeSecKey = utils::base64Encode(std::string_view{rand_key, sizeof(rand_key)});
 
     auto signContent = _handshakeSecKey;
     signContent += "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"sv;
