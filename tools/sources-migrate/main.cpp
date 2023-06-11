@@ -216,9 +216,9 @@ void process_folder(std::string_view sub_path)
             if (strPath.find(exclude) != std::string::npos)
                 continue;
 
-            if (cxx20::ic::ends_with(strName, ".h") || cxx20::ic::ends_with(strName, ".cpp") ||
-                cxx20::ic::ends_with(strName, ".mm") || cxx20::ic::ends_with(strName, ".m") ||
-                cxx20::ic::ends_with(strName, ".inl"))
+            if (cxx20::ic::ends_with(strName, ".h") || cxx20::ic::ends_with(strName, ".hpp") ||
+                cxx20::ic::ends_with(strName, ".cpp") || cxx20::ic::ends_with(strName, ".mm") ||
+                cxx20::ic::ends_with(strName, ".m") || cxx20::ic::ends_with(strName, ".inl"))
             {
                 process_file(strPath, strName, false, cxx20::ic::starts_with(strName, "CC"));
             }
@@ -232,23 +232,30 @@ void process_folder(std::string_view sub_path)
 
 int main(int argc, const char** argv)
 {
-    auto axroot = getenv("AX_ROOT");
-    if (!axroot)
+    if (argc < 2)
     {
-        perror("please run python setup.py first");
-        return -1;
+        auto axroot = getenv("AX_ROOT");
+        if (!axroot)
+        {
+            perror("please run python setup.py first");
+            return -1;
+        }
+
+        auto start = std::chrono::steady_clock::now();
+
+        // 921 .h, .cpp, .mm, .m
+        process_folder(std::string{axroot} + "/core");
+        process_folder(std::string{axroot} + "/extensions");
+        process_folder(std::string{axroot} + "/tests");
+
+        auto diff = std::chrono::steady_clock::now() - start;
+        printf("replaced totals: %d, total cost: %.3lf(ms)\n", replaced_totals,
+               std::chrono::duration_cast<std::chrono::microseconds>(diff).count() / 1000.0);
     }
-
-    auto start = std::chrono::steady_clock::now();
-
-    // 921 .h, .cpp, .mm, .m
-    process_folder(std::string{axroot} + "/core");
-    process_folder(std::string{axroot} + "/extensions");
-    process_folder(std::string{axroot} + "/tests");
-
-    auto diff = std::chrono::steady_clock::now() - start;
-    printf("replaced totals: %d, total cost: %.3lf(ms)\n", replaced_totals,
-           std::chrono::duration_cast<std::chrono::microseconds>(diff).count() / 1000.0);
+    else
+    {
+        process_folder(argv[1]);
+    }
 
     return 0;
 }
