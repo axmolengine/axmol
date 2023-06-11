@@ -1,5 +1,8 @@
 axmol-1.0  ??
 
+- [HIGHLIGHT] Reimplemented MediaPlayer support play media(video/audio) files for all platforms, and ui::VideoPlayer was renamed to ui::MediaPlayer
+- [HIGHLIGHT] Windows Store UWP apps support
+- [HIGHLIGHT] Add build windows with llvm-clang + ninja support
 - [HIGHLIGHT] Add extensions `Effekseer` support
 - [HIGHLIGHT] Replace all string map with `robin_map` which support heterogeneous lookup
 - [HIGHLIGHT] Add precompile_headers all platforms support, thanks to @crazyhappygame
@@ -11,9 +14,8 @@ axmol-1.0  ??
 - [HIGHLIGHT] Add apple tvos support, thanks to @paulocoutinhox
 - [HIGHLIGHT] Add Particle System Animations, Alpha Masks & Improvements, thanks to @DelinWorks
 - [HIGHLIGHT] Add wireframe rendering and function classification improvements, thanks to @DelinWorks
-- [HIGHLIGHT] Imporve text rendering
+- [HIGHLIGHT] Improve text rendering
 - [HIGHLIGHT] Improve windows workflow, support linking with engine prebuilt libs
-- [HIGHLIGHT] Implement Windows video player using microsoft media foundation
 - [HIGHLIGHT] Improve spine RTTI compare performance when compiler string pooling enabled
 - [HIGHLIGHT] Implement Windows WebView using WebView2 Edge Chromium, thanks to @rh101
 - [HIGHLIGHT] Windows x64 build support
@@ -29,7 +31,7 @@ axmol-1.0  ??
 - [HIGHLIGHT] Refactor UserDefault with mio, speed up 100x+
 - [HIGHLIGHT] Implement all .wav formats supported by Openal-Soft, such as MS-ADPCM, ADPCM
 - [HIGHLIGHT] Use modern GL loader glad (v2.0.2)
-- [HIGHLIGHT] Add google angle (version 5195) renderer backend support for windows
+- [HIGHLIGHT] Add google angle (version 5672) renderer backend support for windows
 - [HIGHLIGHT] Update codebase to C++ 17/20 standard
 - [HIGHLIGHT] Remove tinyxml2
 - [HIGHLIGHT] Use fast pugixml
@@ -48,16 +50,23 @@ axmol-1.0  ??
 - [HIGHLIGHT] Remove all unnecessary `std::nothrow` stubs
 - [HIGHLIGHT] Use c++17 string_view instead `const std::string&`
 - [HIGHLIGHT] Improve code quality (stage1.Oct) (#916) 
+- [HIGHLIGHT] Remove CC prefix from code file name
 - [NEW] Add closeKeyboard() method for EditBox, thanks to @theunwisewolf
 - [NEW] Added automake and automake to dependency list, thanks to @clawfinger
 - [NEW] Add primitive type support for mesh materials, thanks to @DelinWorks
 - [NEW] Add int64_t/uint64_t support for `cocos2d::Value`
 - [NEW] Add support for scaling for RichElementImage, thanks to @theunwisewolf
-- [NEW] Add fmtlib 9.1.0
+- [NEW] Add fmtlib 10.0.0
 - [NEW] Add llhttp 8.1.0
 - [NEW] Add return type 'ResourceData' for lua bindings, thanks to @tkzcfc
 - [NEW] Add spine binary support for lua bindings, thanks to @tkzcfc
-- [CHANGE] Move getWroldPosition from Widget to Node class, thanks to @rh101
+- [NEW] Add GL_RGBA32F GL backend support by @solan-solan
+- [NEW] CI: add upload android apk support by @crazyhappygame
+- [NEW] Add Anchored Sprite Class by @DelinWorks
+- [NEW] Update app icon to Axmol logo by @rh101
+- [NEW] Add HSV/HSL types support by @DelinWorks
+- [NEW] Add support for haptic feedback on iOS and Android devices by @maksg
+- [FIX] Fix for UIEditBox password on Mac/iOS (Montery+/15+), thanks to @Niborski
 - [Fix] Fix to ensure Component::onEnter() is called (#867), thanks to @rh101
 - [Fix] Fix Label overflow shrink bug
 - [FIX] Fix uniform location mismatch when more than 1 spine with different shaders  
@@ -82,6 +91,21 @@ axmol-1.0  ??
 - [FIX] Fix extension issue - FairyGUI BMFont don't load, reported by @theSlyest
 - [FIX] Fix download task creation failure Program crash, reported by @tkzcfc
 - [FIX] Fix charset process in glfwCharCallback (cocos2dx-all)
+- [FIX] Fix positionColorLengthTexture.vert shader compilation, thanks to @DelinWorks
+- [FIX] Fixed resize on Windows by @Niborski
+- [FIX] Trim leading space from wrapped lines of text in RichText by @rh101
+- [FIX] Fix TileMap OpenGL pixel-tolerance by @DelinWorks
+- [FIX] Fix TileMap flipped/rotated animated tiles incorrect rendering by @DelinWorks
+- [FIX] Fix TiledMap sprite position by @rh101
+- [FIX] Fix for incorrect tile sprite setup on creation by @rh101
+- [FIX] Fix return reference to local temporary value by @rh101
+- [FIX] Fix TMX Tiled Map CSV, BASE64, & ZLIB incorrect parsing by @DelinWorks
+- [FIX] Fix to ensure new line is correctly added to RichText by @rh101
+- [FIX] Fix tilemap camera move and zoom culling by @DelinWorks
+- [FIX] Fix some audio test case can't hear sound
+- [FIX] Fix RenderTexture memory leak and increased memory usage when initWithWidthAndHeight is called by @rh101
+- [REFINE] Improved error handling in shader initialization by @CodeAndWeb
+- [REFINE] Move getWroldPosition from Widget to Node class, thanks to @rh101
 - [REFINE] Improve `FileUtils::addSearchPath`, thanks to @tkzcfc
 - [REFINE] Allow the forced reformatting of RichText contents, thanks to @rh101
 - [REFINE] Upgrade android toolsets to ndk-r23 LTS
@@ -101,7 +125,6 @@ axmol-1.0  ??
 - [REFINE] Update imgui to 1.88
 - [REFINE] Rename thirdparty folder `external` to `thirdparty`
 - [REFINE] Building plainlua as dll on windows always for debugger happy to debug app quickly
-- [REFINE] Fix some audio test case can't hear sound
 - [REFINE] Avoid OS_WINDOWS conflict with system macro
 - [REFINE] Update OpenSSL to v3.0.x latest
 - [REFINE] Update FreeType to latest
@@ -136,6 +159,20 @@ axmol-1.0  ??
 - [REFINE] Improve ci scripts, thanks to @crazyhappygame
 - [REFINE] Improve lua and android cmake, thanks to @crazyhappygame
 - [REFINE] Update libpng to 1.6.39
+- [REFINE] Improve cpp template, thanks to @aismann
+- [REFINE] Improve drawCircle rendering for big ring, thanks to @aismann
+- [REFINE] Add windows dll build checks for GH actions
+- [REFINE] Improve test naming by @DelinWorks
+- [REFINE] Scrollbar visibility fix for when auto hide is disabled by @rh101
+- [REFINE] Improve richtext word wrapping by @rh101
+- [REFINE] Tidy project tree and full symlink support
+- [REFINE] Impore Metal Renderer Dirty Detection by @Yehsam23
+- [REFINE] Improve Android performance
+- [REFINE] Add 1 overload AudioEngine::play2d for time offset support
+- [REFINE] Improve exit flow
+- [REFINE] Use ipv4 address preferred for console command server
+- [REFINE] Reopen alsoft device when default device changed
+- [REFINE] Factor in protected nodes when creating global Z node priority map for event dispatcher by @rh101
 
 
 cocos2d-x-4.0  Dec.3 2019
