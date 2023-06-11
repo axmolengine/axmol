@@ -40,9 +40,6 @@
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #    include <io.h>
-#    if defined(__MINGW32__)
-#        include "platform/win32/inet_pton_mingw.h"
-#    endif
 #    define bzero(a, b) memset(a, 0, b)
 #    include "ntcvt/ntcvt.hpp"
 #endif

@@ -11,7 +11,7 @@
 #include <fcntl.h>
 
 #if defined(_WIN32)
-extern int _ftruncate(int fd, int64_t size);
+extern "C" int _ftruncate(int fd, int64_t size);
 #    include "ntcvt/ntcvt.hpp"
 #    define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
 #    define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
