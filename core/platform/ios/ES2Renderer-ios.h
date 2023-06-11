@@ -32,12 +32,12 @@
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
-#    import "platform/ios/CCESRenderer-ios.h"
+#    import "platform/ios/ESRenderer-ios.h"
 
 #    import <OpenGLES/ES2/gl.h>
 #    import <OpenGLES/ES2/glext.h>
 
-//#    import "platform/CCPlatformMacros.h"
+//#    import "platform/PlatformMacros.h"
 
 @interface CCES2Renderer : NSObject <CCESRenderer> {
     // The pixel dimensions of the CAEAGLLayer

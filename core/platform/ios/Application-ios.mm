@@ -23,13 +23,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#import "CCApplication.h"
+#import "Application.h"
 
 #import <UIKit/UIKit.h>
 
-#import "math/CCMath.h"
-#import "platform/ios/CCDirectorCaller-ios.h"
-#import "base/ccUtils.h"
+#import "math/Math.h"
+#import "platform/ios/DirectorCaller-ios.h"
+#import "base/Utils.h"
 
 NS_AX_BEGIN
 

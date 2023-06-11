@@ -32,8 +32,8 @@
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
-#import "platform/ios/CCES2Renderer-ios.h"
-// #import "platform/CCPlatformMacros.h"
+#import "platform/ios/ES2Renderer-ios.h"
+// #import "platform/PlatformMacros.h"
 #import "platform/ios/OpenGL_Internal-ios.h"
 
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0

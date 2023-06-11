@@ -26,7 +26,7 @@
  ****************************************************************************/
 
 #import <UIKit/UIKit.h>
-#import "ui/UIEditBox/iOS/UITextField+CCUITextInput.h"
+#import "ui/UIEditBox/iOS/UITextField+UITextInput.h"
 
 #pragma mark - UISingleLineTextField implementation
 

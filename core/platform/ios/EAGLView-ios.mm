@@ -60,22 +60,22 @@ APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 */
-#import "platform/ios/CCEAGLView-ios.h"
+#import "platform/ios/EAGLView-ios.h"
 
 #import <QuartzCore/QuartzCore.h>
 
-#import "base/CCDirector.h"
-#import "base/CCTouch.h"
-#import "base/CCIMEDispatcher.h"
-#import "platform/ios/CCInputView-ios.h"
+#import "base/Director.h"
+#import "base/Touch.h"
+#import "base/IMEDispatcher.h"
+#import "platform/ios/InputView-ios.h"
 
 #if defined(AX_USE_METAL)
 #    import <Metal/Metal.h>
 #    import "renderer/backend/metal/DeviceMTL.h"
 #    import "renderer/backend/metal/UtilsMTL.h"
 #else
-#    import "platform/ios/CCGLViewImpl-ios.h"
-#    import "platform/ios/CCES2Renderer-ios.h"
+#    import "platform/ios/GLViewImpl-ios.h"
+#    import "platform/ios/ES2Renderer-ios.h"
 #    import "platform/ios/OpenGL_Internal-ios.h"
 #endif
 

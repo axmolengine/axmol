@@ -67,9 +67,9 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import <OpenGLES/ES2/glext.h>
 #import <CoreFoundation/CoreFoundation.h>
 
-#import "platform/CCPlatformConfig.h"
+#import "platform/PlatformConfig.h"
 #if defined(AX_USE_GLES)
-#    import "platform/ios/CCESRenderer-ios.h"
+#    import "platform/ios/ESRenderer-ios.h"
 #endif
 
 // CLASS INTERFACE:

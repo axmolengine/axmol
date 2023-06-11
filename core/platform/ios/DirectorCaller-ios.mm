@@ -25,13 +25,13 @@
  ****************************************************************************/
 #include <mach/mach_time.h>
 
-#import "platform/ios/CCDirectorCaller-ios.h"
+#import "platform/ios/DirectorCaller-ios.h"
 
 #import <Foundation/Foundation.h>
 #import <OpenGLES/EAGL.h>
 
-#import "base/CCDirector.h"
-#import "platform/ios/CCEAGLView-ios.h"
+#import "base/Director.h"
+#import "platform/ios/EAGLView-ios.h"
 
 static id s_sharedDirectorCaller;
 
