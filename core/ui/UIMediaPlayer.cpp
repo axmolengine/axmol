@@ -31,9 +31,9 @@
 #    include <unordered_map>
 #    include <stdlib.h>
 #    include <string>
-#    include "base/CCDirector.h"
-#    include "base/CCEventListenerKeyboard.h"
-#    include "platform/CCFileUtils.h"
+#    include "base/Director.h"
+#    include "base/EventListenerKeyboard.h"
+#    include "platform/FileUtils.h"
 #    include "ui/UIHelper.h"
 #    include "media/MediaEngine.h"
 #    include "ui/LayoutHelper.h"

@@ -10,8 +10,8 @@
 #include "CSParseBinary_generated.h"  // flatbuffers::ResourceData, it's ok for all revision of loaders
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
-#include "CCArmature.h"
-#include "ActionTimeline/CCSkeletonNode.h"
+#include "Armature.h"
+#include "ActionTimeline/SkeletonNode.h"
 
 // x-studio spec, csb batch load support, assets hook functions.
 static bool onLoadObjectAssetDummy(ax::Node*, ax::ResourceData& assets, int index)

@@ -30,7 +30,7 @@
 
 #include "ui/UILoadingBar.h"
 #include "ui/UIButton.h"
-#include "network/CCDownloader.h"
+#include "network/Downloader.h"
 
 USING_NS_AX;
 

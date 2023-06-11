@@ -24,11 +24,11 @@
 
 #include "WidgetReader/GameMapReader/GameMapReader.h"
 
-#include "2d/CCLabel.h"
-#include "2d/CCTMXXMLParser.h"
-#include "2d/CCFastTMXTiledMap.h"
-#include "platform/CCFileUtils.h"
-#include "base/ccUTF8.h"
+#include "2d/Label.h"
+#include "2d/TMXXMLParser.h"
+#include "2d/FastTMXTiledMap.h"
+#include "platform/FileUtils.h"
+#include "base/UTF8.h"
 
 #include "CSParseBinary_generated.h"
 #include "WidgetReader/NodeReader/NodeReader.h"

@@ -13,7 +13,7 @@
 #    define _LAYOUTHELPER_H_
 
 #    include "axmol.h"
-#    include "base/ccMacros.h"
+#    include "base/Macros.h"
 
 // f(x) = s * a + x
 #    define adjust_coord(__sz__, __achor__, __coord__) ((__sz__) * (__achor__) + (__coord__))

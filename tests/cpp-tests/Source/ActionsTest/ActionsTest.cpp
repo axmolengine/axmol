@@ -29,9 +29,9 @@ THE SOFTWARE.
 #include "axmol.h"
 #include "ui/CocosGUI.h"
 
-#include "renderer/CCRenderer.h"
-#include "renderer/CCCustomCommand.h"
-#include "renderer/CCGroupCommand.h"
+#include "renderer/Renderer.h"
+#include "renderer/CustomCommand.h"
+#include "renderer/GroupCommand.h"
 
 USING_NS_AX;
 using namespace ax::ui;

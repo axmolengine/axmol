@@ -26,7 +26,7 @@ THE SOFTWARE.
 
 #ifndef __cocos2d_libs__LayoutComponent__
 #define __cocos2d_libs__LayoutComponent__
-#include "2d/CCComponent.h"
+#include "2d/Component.h"
 #include "ui/GUIExport.h"
 
 NS_AX_BEGIN

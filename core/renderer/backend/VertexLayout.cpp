@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "VertexLayout.h"
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 #include <cassert>
 
 NS_AX_BACKEND_BEGIN

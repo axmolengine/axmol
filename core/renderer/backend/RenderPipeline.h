@@ -26,8 +26,8 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "base/CCRef.h"
-#include "renderer/CCPipelineDescriptor.h"
+#include "base/Ref.h"
+#include "renderer/PipelineDescriptor.h"
 #include "renderer/backend/RenderPassDescriptor.h"
 
 NS_AX_BACKEND_BEGIN

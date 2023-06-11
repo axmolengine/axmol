@@ -19,7 +19,7 @@
 
 //#include "App.xaml.h"
 #include "OpenGLESPage.xaml.h"
-#include "platform/winrt/CCGLViewImpl-winrt.h"
+#include "platform/winrt/GLViewImpl-winrt.h"
 
 using namespace AxmolAppWinRT;
 using namespace ax;

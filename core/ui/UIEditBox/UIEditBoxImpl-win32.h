@@ -27,7 +27,7 @@ THE SOFTWARE.
 #ifndef __UIEditBoxIMPLWIN_H__
 #define __UIEditBoxIMPLWIN_H__
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include "ui/UIEditBox/UIEditBoxImpl-common.h"

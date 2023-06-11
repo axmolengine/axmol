@@ -26,7 +26,7 @@
 
 #include "Macros.h"
 #include "Types.h"
-#include "base/CCRef.h"
+#include "base/Ref.h"
 
 NS_AX_BEGIN
 

@@ -25,7 +25,7 @@
  ****************************************************************************/
 #include "ui/UIPageView.h"
 #include "ui/UILayoutComponent.h"
-#include "2d/CCNode.h"
+#include "2d/Node.h"
 #include "ui/GUIDefine.h"
 #include "ui/UIHelper.h"
 

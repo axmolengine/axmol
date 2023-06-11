@@ -30,7 +30,7 @@
 
 #include <cassert>
 
-#include "CCNinePatchImageParser.h"
+#include "NinePatchImageParser.h"
 
 USING_NS_AX;
 

@@ -28,8 +28,8 @@
 #ifndef __UIEditBoxIMPLICOMMON_H__
 #define __UIEditBoxIMPLICOMMON_H__
 
-#include "platform/CCPlatformConfig.h"
-#include "2d/CCLabel.h"
+#include "platform/PlatformConfig.h"
+#include "2d/Label.h"
 #include "ui/UIEditBox/UIEditBoxImpl-common.h"
 #include "ui/UIEditBox/UIEditBoxImpl.h"
 

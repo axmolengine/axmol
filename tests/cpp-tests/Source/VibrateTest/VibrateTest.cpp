@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #include "VibrateTest.h"
 #include "ui/CocosGUI.h"

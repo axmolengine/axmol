@@ -23,7 +23,7 @@
 
 #include <cmath>
 #include "math/MathUtil.h"
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 NS_AX_MATH_BEGIN
 

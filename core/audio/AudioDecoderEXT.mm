@@ -26,7 +26,7 @@
 
 #include "audio/AudioDecoderEXT.h"
 #include "audio/AudioMacros.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
 #import <Foundation/Foundation.h>
 

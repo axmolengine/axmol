@@ -27,9 +27,9 @@
 #if defined(__ANDROID__)
 #    include <android/log.h>
 
-#    include "scripting/lua-bindings/manual/platform/android/CCLuaJavaBridge.h"
+#    include "scripting/lua-bindings/manual/platform/android/LuaJavaBridge.h"
 
-#    include "base/ccUTF8.h"
+#    include "base/UTF8.h"
 
 #    define LOG_TAG "LuaBridge_java"
 #    define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)

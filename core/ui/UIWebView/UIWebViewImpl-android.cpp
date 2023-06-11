@@ -31,9 +31,9 @@
 #include "platform/android/jni/JniHelper.h"
 
 #include "ui/UIWebView/UIWebView.h"
-#include "platform/CCGLView.h"
-#include "base/CCDirector.h"
-#include "platform/CCFileUtils.h"
+#include "platform/GLView.h"
+#include "base/Director.h"
+#include "platform/FileUtils.h"
 #include "ui/UIHelper.h"
 #include "yasio/stl/string_view.hpp"
 

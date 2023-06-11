@@ -1,6 +1,6 @@
 #pragma once
 #include "imgui.h"
-#include "platform/CCGLView.h"
+#include "platform/GLView.h"
 
 struct ANativeWindow;
 struct AInputEvent;

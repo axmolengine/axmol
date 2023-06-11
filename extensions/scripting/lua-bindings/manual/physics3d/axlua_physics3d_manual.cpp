@@ -22,15 +22,15 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-#include "platform/CCPlatformConfig.h"
-#include "base/ccConfig.h"
+#include "platform/PlatformConfig.h"
+#include "base/Config.h"
 #if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
 #    include "scripting/lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
 #    include "scripting/lua-bindings/auto/axlua_physics3d_auto.hpp"
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#    include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#    include "physics3d/CCPhysics3D.h"
+#    include "scripting/lua-bindings/manual/LuaEngine.h"
+#    include "physics3d/Physics3D.h"
 
 bool luaval_to_Physics3DRigidBodyDes(lua_State* L,
                                      int lo,

@@ -28,7 +28,7 @@
 
 #include "audio/AudioDecoderOgg.h"
 #include "audio/AudioMacros.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include <unistd.h>

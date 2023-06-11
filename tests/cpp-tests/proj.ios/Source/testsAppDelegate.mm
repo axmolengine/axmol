@@ -26,7 +26,7 @@
 
 #import "testsAppDelegate.h"
 
-#import "platform/ios/CCEAGLView-ios.h"
+#import "platform/ios/EAGLView-ios.h"
 #import "cocos2d.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"

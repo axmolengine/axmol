@@ -141,7 +141,7 @@ list(APPEND GAME_HEADER
      Source/DataVisitorTest/DataVisitorTest.h
      Source/NewAudioEngineTest/NewAudioEngineTest.h
      Source/BugsTest/Bug-422.h
-     Source/BugsTest/Bug-CCDrawNode.h
+     Source/BugsTest/Bug-DrawNode.h
      Source/BugsTest/BugsTest.h
      Source/BugsTest/Bug-12847.h
      Source/BugsTest/Bug-899.h
@@ -254,7 +254,7 @@ list(APPEND GAME_SOURCE
      Source/AppDelegate.cpp
      Source/BaseTest.cpp
      Source/BillBoardTest/BillBoardTest.cpp
-     Source/BugsTest/Bug-CCDrawNode.cpp
+     Source/BugsTest/Bug-DrawNode.cpp
      Source/BugsTest/Bug-1159.cpp
      Source/BugsTest/Bug-1174.cpp
      Source/BugsTest/Bug-350.cpp

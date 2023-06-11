@@ -4,7 +4,7 @@ set(target_name cpp_android_spec)
 project(${target_name})
 
 set(${target_name}_src
-  CCDevice-android.cpp
+  Device-android.cpp
   javaactivity-android.cpp
   jni/JniHelper.cpp
   jni/TouchesJni.cpp

@@ -27,7 +27,7 @@
 #ifndef __UIEDITTEXT_H__
 #define __UIEDITTEXT_H__
 
-#include "base/CCIMEDelegate.h"
+#include "base/IMEDelegate.h"
 #include "ui/GUIDefine.h"
 #include "ui/UIWidget.h"
 #include "ui/UIScale9Sprite.h"

@@ -3,8 +3,8 @@
 #include "WidgetReader/ScrollViewReader/ScrollViewReader.h"
 
 #include "ui/UIScrollView.h"
-#include "platform/CCFileUtils.h"
-#include "2d/CCSpriteFrameCache.h"
+#include "platform/FileUtils.h"
+#include "2d/SpriteFrameCache.h"
 #include "CocoLoader.h"
 #include "CSParseBinary_generated.h"
 #include "FlatBuffersSerialize.h"

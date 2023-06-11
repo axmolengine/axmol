@@ -1,16 +1,16 @@
 
 if(APPLE)
     set(_AX_BASE_SPECIFIC_SRC
-        base/CCController-apple.mm
+        base/Controller-apple.mm
         )
 
 elseif(ANDROID)
     set(_AX_BASE_SPECIFIC_SRC
-        base/CCController-android.cpp
+        base/Controller-android.cpp
         )
 elseif(LINUX OR WINDOWS)
     set(_AX_BASE_SPECIFIC_SRC
-        base/CCController-linux-win32.cpp
+        base/Controller-linux-win32.cpp
         )
 endif()
 
@@ -18,118 +18,118 @@ set(_AX_BASE_HEADER
     base/astc.h
     base/pvr.h
     base/format.h
-    base/CCValue.h
-    base/CCEventListenerMouse.h
+    base/Value.h
+    base/EventListenerMouse.h
     base/atitc.h
-    base/CCEventTouch.h
-    base/CCData.h
-    base/ccMacros.h
-    base/CCEventAcceleration.h
-    base/CCEventListenerKeyboard.h
-    base/CCController.h
-    base/CCTouch.h
+    base/EventTouch.h
+    base/Data.h
+    base/Macros.h
+    base/EventAcceleration.h
+    base/EventListenerKeyboard.h
+    base/Controller.h
+    base/Touch.h
     base/base64.h
-    base/CCEventListenerController.h
+    base/EventListenerController.h
     base/s3tc.h
     base/etc1.h
     base/etc2.h
-    base/CCGameController.h
-    base/CCConsole.h
-    base/ccConstants.h
-    base/CCEvent.h
-    base/ccTypes.h
-    base/ccEnums.h
-    base/CCAsyncTaskPool.h
-    base/ccRandom.h
-    base/CCRef.h
-    base/CCProfiling.h
+    base/GameController.h
+    base/Console.h
+    base/Constants.h
+    base/Event.h
+    base/Types.h
+    base/Enums.h
+    base/AsyncTaskPool.h
+    base/Random.h
+    base/Ref.h
+    base/Profiling.h
     base/ObjectFactory.h
-    base/CCProperties.h
-    base/CCVector.h
-    base/CCEventCustom.h
-    base/CCEventKeyboard.h
-    base/CCNinePatchImageParser.h
-    base/CCEventListenerCustom.h
-    base/CCEventDispatcher.h
-    base/ccUtils.h
-    base/CCEventController.h
-    base/CCRefPtr.h
-    base/CCDirector.h
-    base/CCEventListenerFocus.h
-    base/CCUserDefault.h
-    base/ccConfig.h
-    base/ccFPSImages.h
+    base/Properties.h
+    base/Vector.h
+    base/EventCustom.h
+    base/EventKeyboard.h
+    base/NinePatchImageParser.h
+    base/EventListenerCustom.h
+    base/EventDispatcher.h
+    base/Utils.h
+    base/EventController.h
+    base/RefPtr.h
+    base/Director.h
+    base/EventListenerFocus.h
+    base/UserDefault.h
+    base/Config.h
+    base/FPSImages.h
     base/ZipUtils.h
-    base/CCMap.h
-    base/ccUTF8.h
-    base/CCScriptSupport.h
-    base/CCEventFocus.h
-    base/CCConfiguration.h
-    base/CCProtocols.h
+    base/Map.h
+    base/UTF8.h
+    base/ScriptSupport.h
+    base/EventFocus.h
+    base/Configuration.h
+    base/Protocols.h
     base/TGAlib.h
-    base/CCEventMouse.h
-    base/CCIMEDelegate.h
-    base/CCNS.h
-    base/CCAutoreleasePool.h
-    base/CCStencilStateManager.h
-    base/CCEventListenerTouch.h
-    base/CCEventListenerAcceleration.h
+    base/EventMouse.h
+    base/IMEDelegate.h
+    base/NS.h
+    base/AutoreleasePool.h
+    base/StencilStateManager.h
+    base/EventListenerTouch.h
+    base/EventListenerAcceleration.h
     base/firePngData.h
-    base/ccCArray.h
-    base/CCEventListener.h
-    base/CCScheduler.h
-    base/CCEventType.h
-    base/CCIMEDispatcher.h
+    base/CArray.h
+    base/EventListener.h
+    base/Scheduler.h
+    base/EventType.h
+    base/IMEDispatcher.h
     )
 
 set(_AX_BASE_SRC
-    base/CCAsyncTaskPool.cpp
-    base/CCAutoreleasePool.cpp
-    base/CCConfiguration.cpp
-    base/CCConsole.cpp
-    base/CCController.cpp
-    base/CCData.cpp
-    base/CCNinePatchImageParser.cpp
-    base/CCDirector.cpp
-    base/CCEvent.cpp
-    base/CCEventAcceleration.cpp
-    base/CCEventController.cpp
-    base/CCEventCustom.cpp
-    base/CCEventDispatcher.cpp
-    base/CCEventFocus.cpp
-    base/CCEventKeyboard.cpp
-    base/CCEventListener.cpp
-    base/CCEventListenerAcceleration.cpp
-    base/CCEventListenerController.cpp
-    base/CCEventListenerCustom.cpp
-    base/CCEventListenerFocus.cpp
-    base/CCEventListenerKeyboard.cpp
-    base/CCEventListenerMouse.cpp
-    base/CCEventListenerTouch.cpp
-    base/CCEventMouse.cpp
-    base/CCEventTouch.cpp
-    base/CCIMEDispatcher.cpp
-    base/CCNS.cpp
-    base/CCProfiling.cpp
-    base/CCProperties.cpp
-    base/CCRef.cpp
-    base/CCScheduler.cpp
-    base/CCScriptSupport.cpp
-    base/CCTouch.cpp
-    base/CCUserDefault.cpp
-    base/CCValue.cpp
+    base/AsyncTaskPool.cpp
+    base/AutoreleasePool.cpp
+    base/Configuration.cpp
+    base/Console.cpp
+    base/Controller.cpp
+    base/Data.cpp
+    base/NinePatchImageParser.cpp
+    base/Director.cpp
+    base/Event.cpp
+    base/EventAcceleration.cpp
+    base/EventController.cpp
+    base/EventCustom.cpp
+    base/EventDispatcher.cpp
+    base/EventFocus.cpp
+    base/EventKeyboard.cpp
+    base/EventListener.cpp
+    base/EventListenerAcceleration.cpp
+    base/EventListenerController.cpp
+    base/EventListenerCustom.cpp
+    base/EventListenerFocus.cpp
+    base/EventListenerKeyboard.cpp
+    base/EventListenerMouse.cpp
+    base/EventListenerTouch.cpp
+    base/EventMouse.cpp
+    base/EventTouch.cpp
+    base/IMEDispatcher.cpp
+    base/NS.cpp
+    base/Profiling.cpp
+    base/Properties.cpp
+    base/Ref.cpp
+    base/Scheduler.cpp
+    base/ScriptSupport.cpp
+    base/Touch.cpp
+    base/UserDefault.cpp
+    base/Value.cpp
     base/ObjectFactory.cpp
-    base/CCStencilStateManager.cpp
+    base/StencilStateManager.cpp
     base/TGAlib.cpp
     base/ZipUtils.cpp
     base/atitc.cpp
     base/base64.cpp
-    base/ccCArray.cpp
-    base/ccFPSImages.cpp
-    base/ccRandom.cpp
-    base/ccTypes.cpp
-    base/ccUTF8.cpp
-    base/ccUtils.cpp
+    base/CArray.cpp
+    base/FPSImages.cpp
+    base/Random.cpp
+    base/Types.cpp
+    base/UTF8.cpp
+    base/Utils.cpp
     base/SimpleTimer.cpp
     base/etc1.cpp
     base/etc2.cpp

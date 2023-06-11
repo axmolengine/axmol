@@ -28,9 +28,9 @@ THE SOFTWARE.
 #include <string>
 #include <algorithm>
 
-#include "scripting/lua-bindings/manual/CCLuaStack.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "platform/CCFileUtils.h"
+#include "scripting/lua-bindings/manual/LuaStack.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "platform/FileUtils.h"
 #include "yasio/stl/string_view.hpp"
 
 USING_NS_AX;

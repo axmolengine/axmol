@@ -27,9 +27,9 @@
 
 #include "axmol.h"
 #include "extensions/axmol-ext.h"
-#include "GUI/CCControlExtension/CCControlExtensions.h"
-#include "GUI/CCScrollView/CCScrollView.h"
-#include "GUI/CCScrollView/CCTableView.h"
+#include "GUI/ControlExtension/ControlExtensions.h"
+#include "GUI/ScrollView/ScrollView.h"
+#include "GUI/ScrollView/TableView.h"
 
 class CustomTableViewCell : public ax::extension::TableViewCell
 {

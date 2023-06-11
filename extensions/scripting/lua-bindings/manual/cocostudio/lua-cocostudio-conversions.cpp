@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "scripting/lua-bindings/manual/cocostudio/lua-cocostudio-conversions.h"
-#include "ActionTimeline/CCActionTimeline.h"
+#include "ActionTimeline/ActionTimeline.h"
 
 #if _AX_DEBUG >= 1
 extern void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName);

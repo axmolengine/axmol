@@ -1,24 +1,24 @@
 set(_AX_RENDERER_HEADER
-    renderer/CCCallbackCommand.h
-    renderer/CCColorizer.h
-    renderer/CCCustomCommand.h
-    renderer/CCGroupCommand.h
-    renderer/CCMaterial.h
-    renderer/CCMeshCommand.h
-    renderer/CCPass.h
-    renderer/CCPipelineDescriptor.h
-    renderer/CCQuadCommand.h
-    renderer/CCRenderCommand.h
-    renderer/CCRenderCommandPool.h
-    renderer/CCRenderer.h
-    renderer/CCRenderState.h
-    renderer/ccShaders.h
-    renderer/CCTechnique.h
-    renderer/CCTexture2D.h
-    renderer/CCTextureAtlas.h
-    renderer/CCTextureCache.h
-    renderer/CCTextureCube.h
-    renderer/CCTrianglesCommand.h
+    renderer/CallbackCommand.h
+    renderer/Colorizer.h
+    renderer/CustomCommand.h
+    renderer/GroupCommand.h
+    renderer/Material.h
+    renderer/MeshCommand.h
+    renderer/Pass.h
+    renderer/PipelineDescriptor.h
+    renderer/QuadCommand.h
+    renderer/RenderCommand.h
+    renderer/RenderCommandPool.h
+    renderer/Renderer.h
+    renderer/RenderState.h
+    renderer/Shaders.h
+    renderer/Technique.h
+    renderer/Texture2D.h
+    renderer/TextureAtlas.h
+    renderer/TextureCache.h
+    renderer/TextureCube.h
+    renderer/TrianglesCommand.h
     
     renderer/backend/Backend.h
     renderer/backend/Buffer.h
@@ -46,24 +46,24 @@ set(_AX_RENDERER_HEADER
     )
 
 set(_AX_RENDERER_SRC
-    renderer/CCCallbackCommand.cpp
-    renderer/CCCustomCommand.cpp
-    renderer/CCGroupCommand.cpp
-    renderer/CCMaterial.cpp
-    renderer/CCMeshCommand.cpp
-    renderer/CCPass.cpp
-    renderer/CCQuadCommand.cpp
-    renderer/CCRenderCommand.cpp
-    renderer/CCRenderState.cpp
-    renderer/CCRenderer.cpp
-    renderer/CCTechnique.cpp
-    renderer/CCTexture2D.cpp
-    renderer/CCTextureAtlas.cpp
-    renderer/CCTextureCache.cpp
-    renderer/CCTextureCube.cpp
-    renderer/CCTrianglesCommand.cpp
-    renderer/ccShaders.cpp
-    renderer/CCColorizer.cpp
+    renderer/CallbackCommand.cpp
+    renderer/CustomCommand.cpp
+    renderer/GroupCommand.cpp
+    renderer/Material.cpp
+    renderer/MeshCommand.cpp
+    renderer/Pass.cpp
+    renderer/QuadCommand.cpp
+    renderer/RenderCommand.cpp
+    renderer/RenderState.cpp
+    renderer/Renderer.cpp
+    renderer/Technique.cpp
+    renderer/Texture2D.cpp
+    renderer/TextureAtlas.cpp
+    renderer/TextureCache.cpp
+    renderer/TextureCube.cpp
+    renderer/TrianglesCommand.cpp
+    renderer/Shaders.cpp
+    renderer/Colorizer.cpp
     
     renderer/backend/ProgramManager.cpp
     renderer/backend/ProgramStateRegistry.cpp

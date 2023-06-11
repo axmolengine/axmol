@@ -23,9 +23,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "AssetsManagerEx.h"
-#include "CCEventListenerAssetsManagerEx.h"
-#include "base/ccUTF8.h"
-#include "base/CCDirector.h"
+#include "EventListenerAssetsManagerEx.h"
+#include "base/UTF8.h"
+#include "base/Director.h"
 
 #include <stdio.h>
 
@@ -35,7 +35,7 @@
 #    include "unzip.h"
 #endif
 #include <ioapi.h>
-#include "base/CCAsyncTaskPool.h"
+#include "base/AsyncTaskPool.h"
 
 NS_AX_EXT_BEGIN
 

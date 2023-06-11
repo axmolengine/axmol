@@ -29,9 +29,9 @@
 #if (defined(_WIN32) && defined(_AX_HAVE_WEBVIEW2)) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
 #include "ui/UIWebView/UIWebView.h"
-#include "platform/CCGLView.h"
-#include "base/CCDirector.h"
-#include "platform/CCFileUtils.h"
+#include "platform/GLView.h"
+#include "base/Director.h"
+#include "platform/FileUtils.h"
 
 NS_AX_BEGIN
 namespace ui

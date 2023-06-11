@@ -28,7 +28,7 @@
 #include <fstream>
 #include <string.h>
 #include "spine/spine.h"
-#include "renderer/CCColorizer.h"
+#include "renderer/Colorizer.h"
 
 USING_NS_AX;
 using namespace std;

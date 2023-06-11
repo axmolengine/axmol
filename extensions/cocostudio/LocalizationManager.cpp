@@ -1,6 +1,6 @@
 #include "LocalizationManager.h"
-#include "platform/CCPlatformMacros.h"
-#include "platform/CCFileUtils.h"
+#include "platform/PlatformMacros.h"
+#include "platform/FileUtils.h"
 #include "CSLanguageDataBinary_generated.h"
 
 using namespace cocostudio;

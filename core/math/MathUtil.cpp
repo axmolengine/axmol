@@ -20,7 +20,7 @@ This file was modified to fit the cocos2d-x project
 */
 
 #include "math/MathUtil.h"
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 #    include <cpu-features.h>

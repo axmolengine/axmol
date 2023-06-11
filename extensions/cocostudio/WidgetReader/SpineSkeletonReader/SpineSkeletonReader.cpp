@@ -27,9 +27,9 @@
 #if defined(AX_BUILD_WITH_SPINE)
 #    include "SpineSkeletonDataCache.h"
 
-#    include "2d/CCSprite.h"
-#    include "2d/CCSpriteFrameCache.h"
-#    include "platform/CCFileUtils.h"
+#    include "2d/Sprite.h"
+#    include "2d/SpriteFrameCache.h"
+#    include "platform/FileUtils.h"
 
 #    include "CSParseBinary_generated.h"
 #    include "FlatBuffersSerialize.h"

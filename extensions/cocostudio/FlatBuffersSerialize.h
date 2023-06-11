@@ -30,7 +30,7 @@
 
 #include "ExtensionMacros.h"
 #include "CocosStudioExport.h"
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 #include "ui/UIWidget.h"
 
 #include "pugixml/pugixml.hpp"

@@ -26,11 +26,11 @@
 
 #include "MeshRendererTest.h"
 #include "DrawNode3D.h"
-#include "2d/CCCameraBackgroundBrush.h"
-#include "3d/CCMeshMaterial.h"
-#include "3d/CCMotionStreak3D.h"
+#include "2d/CameraBackgroundBrush.h"
+#include "3d/MeshMaterial.h"
+#include "3d/MotionStreak3D.h"
 
-#include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
+#include "extensions/Particle3D/PU/PUParticleSystem3D.h"
 
 #include <algorithm>
 #include "../testResource.h"

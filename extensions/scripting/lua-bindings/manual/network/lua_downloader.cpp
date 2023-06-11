@@ -22,16 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "lua_downloader.h"
-#include "scripting/lua-bindings/manual/CCLuaValue.h"
+#include "scripting/lua-bindings/manual/LuaValue.h"
 
-#include "network/CCDownloader.h"
+#include "network/Downloader.h"
 #include <iostream>
 
 #include <unordered_map>
 #include <string>
 #include <sstream>
 
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 
 USING_NS_AX;
 using namespace ax::network;

@@ -22,17 +22,17 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/CCIMEDispatcher.h"
-#include "base/CCDirector.h"
-#include "base/CCEventType.h"
-#include "base/CCEventCustom.h"
-#include "base/CCEventDispatcher.h"
-#include "platform/CCApplication.h"
-#include "platform/CCFileUtils.h"
+#include "base/IMEDispatcher.h"
+#include "base/Director.h"
+#include "base/EventType.h"
+#include "base/EventCustom.h"
+#include "base/EventDispatcher.h"
+#include "platform/Application.h"
+#include "platform/FileUtils.h"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
 
-#include "base/ccUTF8.h"
+#include "base/UTF8.h"
 
 USING_NS_AX;
 

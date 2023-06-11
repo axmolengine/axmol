@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #include <string>
 #include <condition_variable>
@@ -35,7 +35,7 @@
 #include <thread>
 
 #include "audio/AudioMacros.h"
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 #include "audio/alconfig.h"
 
 NS_AX_BEGIN

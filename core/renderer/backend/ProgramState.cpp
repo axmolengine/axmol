@@ -27,9 +27,9 @@
 #include "renderer/backend/Program.h"
 #include "renderer/backend/Texture.h"
 #include "renderer/backend/Types.h"
-#include "base/CCEventDispatcher.h"
-#include "base/CCEventType.h"
-#include "base/CCDirector.h"
+#include "base/EventDispatcher.h"
+#include "base/EventType.h"
+#include "base/Director.h"
 #include <algorithm>
 
 #include "xxhash.h"

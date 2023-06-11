@@ -4,7 +4,7 @@
 #ifndef _SIMPLE_TIMER_H_
 #define _SIMPLE_TIMER_H_
 
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 #include <functional>
 
 NS_AX_BEGIN

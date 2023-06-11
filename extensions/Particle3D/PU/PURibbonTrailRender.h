@@ -1,0 +1,152 @@
+/****************************************************************************
+ Copyright (C) 2013 Henry van Merode. All rights reserved.
+ Copyright (c) 2015-2016 Chukong Technologies Inc.
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+
+ https://axmolengine.github.io/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
+#ifndef __AX_PU_PARTICLE_3D_RIBBON_TRAIL_RENDER_H__
+#define __AX_PU_PARTICLE_3D_RIBBON_TRAIL_RENDER_H__
+
+#include "base/Ref.h"
+#include "math/Math.h"
+#include "extensions/Particle3D/Particle3DRender.h"
+#include "extensions/Particle3D/PU/PUListener.h"
+#include "extensions/Particle3D/PU/PURender.h"
+#include "extensions/Particle3D/PU/PURibbonTrail.h"
+#include "extensions/Particle3D/PU/PUParticleSystem3D.h"
+#include <vector>
+
+NS_AX_BEGIN
+
+class PURibbonTrailVisualData : public Ref
+{
+public:
+    // Constructor
+    PURibbonTrailVisualData(Node* sceneNode, PURibbonTrail* ribbonTrail)
+        : node(sceneNode), addedToTrail(false), trail(ribbonTrail), index(0){};
+
+    Node* node;
+    bool addedToTrail;
+    PURibbonTrail* trail;
+    size_t index;
+    virtual void setVisible(bool visible)
+    {
+        if (visible)
+        {
+            if (!addedToTrail)
+            {
+                trail->addNode(node);
+                addedToTrail = true;
+            }
+        }
+        else
+        {
+            if (addedToTrail)
+            {
+                trail->removeNode(node);
+                addedToTrail = false;
+            }
+        }
+    }
+};
+
+// particle render for quad
+class AX_EX_DLL PURibbonTrailRender : public PURender, public PUListener
+{
+public:
+    // Constants
+    static const bool DEFAULT_USE_VERTEX_COLOURS;
+    static const size_t DEFAULT_MAX_ELEMENTS;
+    static const float DEFAULT_LENGTH;
+    static const float DEFAULT_WIDTH;
+    static const bool DEFAULT_RANDOM_INITIAL_COLOUR;
+    static const Vec4 DEFAULT_INITIAL_COLOUR;
+    static const Vec4 DEFAULT_COLOUR_CHANGE;
+
+    static PURibbonTrailRender* create(std::string_view texFile = "");
+
+    virtual void notifyRescaled(const Vec3& scale) override;
+    virtual void prepare() override;
+    virtual void unPrepare() override;
+    virtual void updateRender(PUParticle3D* particle, float deltaTime, bool firstParticle) override;
+
+    virtual void render(Renderer* renderer, const Mat4& transform, ParticleSystem3D* particleSystem) override;
+    virtual void particleEmitted(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
+    virtual void particleExpired(PUParticleSystem3D* particleSystem, PUParticle3D* particle) override;
+
+    /** Getters and Setters
+     */
+    bool isUseVertexColors() const;
+    void setUseVertexColors(bool useVertexColours);
+
+    size_t getMaxChainElements() const;
+    void setMaxChainElements(size_t maxChainElements);
+
+    float getTrailLength() const;
+    void setTrailLength(float trailLength);
+
+    float getTrailWidth() const;
+    void setTrailWidth(float trailWidth);
+
+    bool isRandomInitialColor() const;
+    void setRandomInitialColor(bool randomInitialColour);
+
+    const Vec4& getInitialColor() const;
+    void setInitialColor(const Vec4& initialColour);
+
+    const Vec4& getColorChange() const;
+    void setColorChange(const Vec4& colourChange);
+
+    /** Deletes all ChildSceneNodes en Entities.
+     */
+    void destroyAll();
+
+    virtual PURibbonTrailRender* clone() override;
+    void copyAttributesTo(PURibbonTrailRender* render);
+
+    PURibbonTrailRender();
+    virtual ~PURibbonTrailRender();
+
+    void updateParticles(const ParticlePool& pool);
+
+protected:
+    std::vector<PURibbonTrailVisualData*> _allVisualData;
+    std::vector<PURibbonTrailVisualData*> _visualData;
+    size_t _quota;
+    PURibbonTrail* _trail;
+    std::string _ribbonTrailName;
+    bool _useVertexColours;
+    size_t _maxChainElements;
+    float _trailLength;
+    float _trailWidth;
+    bool _randomInitialColor;
+    bool _setLength;
+    bool _setWidth;
+    Vec4 _initialColor;
+    Vec4 _colorChange;
+    Node* _childNode;
+    std::string _texFile;
+};
+
+NS_AX_END
+#endif

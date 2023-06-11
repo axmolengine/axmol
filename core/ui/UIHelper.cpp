@@ -26,8 +26,8 @@ THE SOFTWARE.
 #include "ui/UIHelper.h"
 #include "ui/UIWidget.h"
 #include "ui/UILayoutComponent.h"
-#include "base/CCDirector.h"
-#include "base/ccUTF8.h"
+#include "base/Director.h"
+#include "base/UTF8.h"
 
 NS_AX_BEGIN
 
