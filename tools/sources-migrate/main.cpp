@@ -1,11 +1,10 @@
 /*
-no c/c++ objc files is resource file, needs sync manually in cpp-tests
-processing file 1: /home/vmroot/dev/axmol/tests/cpp-tests/Content/extensions/CCControlColourPickerSpriteSheet.plist,
-len=4137 processing file 2:
-/home/vmroot/dev/axmol/tests/cpp-tests/Content/extensions/CCControlColourPickerSpriteSheet.png, len=38149 processing
-file 3: /home/vmroot/dev/axmol/tests/cpp-tests/Content/hd/extensions/CCControlColourPickerSpriteSheet.plist, len=2860
-processing file 4: /home/vmroot/dev/axmol/tests/cpp-tests/Content/hd/extensions/CCControlColourPickerSpriteSheet.png,
-len=83570
+non c/c++ objc files is resource file, needs sync manually in cpp-tests:
+
+processing file 1: /home/vmroot/dev/axmol/tests/cpp-tests/Content/extensions/CCControlColourPickerSpriteSheet.plist, len=4137
+processing file 2: /home/vmroot/dev/axmol/tests/cpp-tests/Content/extensions/CCControlColourPickerSpriteSheet.png, len=38149
+processing file 3: /home/vmroot/dev/axmol/tests/cpp-tests/Content/hd/extensions/CCControlColourPickerSpriteSheet.plist, len=2860
+processing file 4: /home/vmroot/dev/axmol/tests/cpp-tests/Content/hd/extensions/CCControlColourPickerSpriteSheet.png, len=83570
 */
 
 // ./core/**/*.h,./core/**/*.cpp,./core/**/*.inl,./core/**/*.mm,./core/**/*.m
@@ -247,7 +246,11 @@ int main(int argc, const char** argv)
     }
     else
     {
+        auto start = std::chrono::steady_clock::now();
         process_folder(argv[1]);
+        auto diff = std::chrono::steady_clock::now() - start;
+        printf("replaced totals: %d, total cost: %.3lf(ms)\n", replaced_totals,
+               std::chrono::duration_cast<std::chrono::microseconds>(diff).count() / 1000.0);
     }
 
     return 0;
