@@ -42,6 +42,10 @@
 | Android               |    complete       | H264, HEVC            | NV12                 | ExoPlayer2         |
 | Linux                 |    complete       | H264, HEVC            | NV12                 | libVLC             |
 
+## Building
+
+View the [Dev setup instructions](docs/DevSetup.md).
+
 ## Highlighted Features
 
 - Windows UWP support, refer to: https://github.com/axmolengine/axmol/pull/1108
@@ -85,10 +89,6 @@
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
 Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/axmolengine/axmol/milestones) for planed features too.
-
-## Building
-
-View the [Dev setup instructions](docs/DevSetup.md).
 
 ## Reference links
 
