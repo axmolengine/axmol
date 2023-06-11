@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 #include "DeviceInfoGL.h"
-#include "platform/CCGL.h"
+#include "platform/GL.h"
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
 #    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278

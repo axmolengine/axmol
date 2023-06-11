@@ -25,8 +25,8 @@
 #include "TileMapTest2.h"
 #include "../testResource.h"
 
-#include "2d/CCFastTMXLayer.h"
-#include "2d/CCFastTMXTiledMap.h"
+#include "2d/FastTMXLayer.h"
+#include "2d/FastTMXTiledMap.h"
 
 USING_NS_AX;
 

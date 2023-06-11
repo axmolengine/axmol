@@ -30,8 +30,8 @@ THE SOFTWARE.
 #include "audio/AudioDecoderManager.h"
 #include "audio/AudioDecoderOgg.h"
 #include "audio/AudioMacros.h"
-#include "platform/CCFileUtils.h"
-#include "base/CCConsole.h"
+#include "platform/FileUtils.h"
+#include "base/Console.h"
 
 #if !defined(__APPLE__)
 #    include "audio/AudioDecoderMp3.h"

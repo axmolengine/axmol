@@ -27,9 +27,9 @@
 
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/CCLuaValue.h"
+#include "scripting/lua-bindings/manual/LuaValue.h"
 #include "axmol-ext.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
 
 USING_NS_AX;

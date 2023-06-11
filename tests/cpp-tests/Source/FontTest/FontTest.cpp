@@ -24,8 +24,8 @@
 
 #include "FontTest.h"
 #include "../testResource.h"
-#include "2d/CCFontAtlasCache.h"
-#include "2d/CCFontFreeType.h"
+#include "2d/FontAtlasCache.h"
+#include "2d/FontFreeType.h"
 
 USING_NS_AX;
 

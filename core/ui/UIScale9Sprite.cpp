@@ -25,17 +25,17 @@
  ****************************************************************************/
 
 #include "ui/UIScale9Sprite.h"
-#include "2d/CCSprite.h"
-#include "2d/CCSpriteFrameCache.h"
-#include "base/CCVector.h"
-#include "base/CCDirector.h"
-#include "base/ccUTF8.h"
-#include "renderer/ccShaders.h"
-#include "platform/CCImage.h"
-#include "base/CCNinePatchImageParser.h"
-#include "2d/CCDrawNode.h"
-#include "2d/CCCamera.h"
-#include "renderer/CCRenderer.h"
+#include "2d/Sprite.h"
+#include "2d/SpriteFrameCache.h"
+#include "base/Vector.h"
+#include "base/Director.h"
+#include "base/UTF8.h"
+#include "renderer/Shaders.h"
+#include "platform/Image.h"
+#include "base/NinePatchImageParser.h"
+#include "2d/DrawNode.h"
+#include "2d/Camera.h"
+#include "renderer/Renderer.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
 USING_NS_AX;

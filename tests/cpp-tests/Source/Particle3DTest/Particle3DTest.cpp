@@ -25,8 +25,8 @@
  ****************************************************************************/
 
 #include "Particle3DTest.h"
-#include "Particle3D/CCParticleSystem3D.h"
-#include "Particle3D/PU/CCPUParticleSystem3D.h"
+#include "Particle3D/ParticleSystem3D.h"
+#include "Particle3D/PU/PUParticleSystem3D.h"
 
 USING_NS_AX;
 

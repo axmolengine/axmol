@@ -29,8 +29,8 @@
 #include "FlatBuffersSerialize.h"
 #include "ActionTimeline/CSLoader.h"
 #include "ui/UITabControl.h"
-#include "platform/CCFileUtils.h"
-#include "2d/CCSpriteFrameCache.h"
+#include "platform/FileUtils.h"
+#include "2d/SpriteFrameCache.h"
 
 USING_NS_AX;
 using namespace cocostudio;

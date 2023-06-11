@@ -3,8 +3,8 @@
 #include "WidgetReader/SliderReader/SliderReader.h"
 
 #include "ui/UISlider.h"
-#include "2d/CCSpriteFrameCache.h"
-#include "platform/CCFileUtils.h"
+#include "2d/SpriteFrameCache.h"
+#include "platform/FileUtils.h"
 
 #include "CocoLoader.h"
 #include "CSParseBinary_generated.h"

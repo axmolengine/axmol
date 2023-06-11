@@ -25,10 +25,10 @@
 #include "scripting/lua-bindings/manual/3d/axlua_3d_manual.h"
 #include "scripting/lua-bindings/auto/axlua_3d_auto.hpp"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "3d/CCBundle3D.h"
-#include "3d/CCMeshRenderer.h"
-#include "3d/CCTerrain.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "3d/Bundle3D.h"
+#include "3d/MeshRenderer.h"
+#include "3d/Terrain.h"
 
 int axlua_3d_MeshRenderer_getAABB(lua_State* L)
 {

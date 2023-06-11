@@ -26,7 +26,7 @@ Based upon code from the DirectX Tool Kit by Microsoft Corporation,
 obtained from https://directxtk.codeplex.com
 ****************************************************************************/
 #include "platform/winrt/WICImageLoader-winrt.h"
-#include "platform/winrt/CCWinRTUtils.h"
+#include "platform/winrt/WinRTUtils.h"
 #include "ntcvt/ntcvt.hpp"
 
 NS_AX_BEGIN

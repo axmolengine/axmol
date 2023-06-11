@@ -1,12 +1,12 @@
 #include "WidgetReader/ArmatureNodeReader/ArmatureNodeReader.h"
 
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
 #include "flatbuffers/flatbuffers.h"
 #include "WidgetReader/NodeReader/NodeReader.h"
 #include "CSParseBinary_generated.h"
 #include "WidgetReader/ArmatureNodeReader/CSArmatureNode_generated.h"
-#include "CCArmature.h"
+#include "Armature.h"
 #if defined(AX_BUILD_WITH_DRANGBONES) && AX_BUILD_WITH_DRANGBONES
 #    include "DragonBones/CCDragonBonesHeaders.h"
 #endif

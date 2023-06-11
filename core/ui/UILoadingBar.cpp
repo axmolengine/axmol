@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include "ui/UILoadingBar.h"
 #include "ui/UIHelper.h"
 #include "ui/UIScale9Sprite.h"
-#include "2d/CCSprite.h"
+#include "2d/Sprite.h"
 
 NS_AX_BEGIN
 

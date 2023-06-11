@@ -5,7 +5,7 @@
 #define _UITEXTFIELD_CPP_H_
 #include "UITextFieldEx.h"
 
-#include "base/CCDirector.h"
+#include "base/Director.h"
 
 /// cocos2d singleton objects
 #define CCDIRECTOR ax::Director::getInstance()

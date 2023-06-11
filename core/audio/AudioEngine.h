@@ -27,8 +27,8 @@
 
 #pragma once
 
-#include "platform/CCPlatformConfig.h"
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformConfig.h"
+#include "platform/PlatformMacros.h"
 #include "audio/AudioMacros.h"
 #include <functional>
 #include <list>

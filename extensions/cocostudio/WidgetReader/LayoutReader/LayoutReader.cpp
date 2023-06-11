@@ -9,9 +9,9 @@
 #include "ui/UIListView.h"
 #include "CSParseBinary_generated.h"
 #include "FlatBuffersSerialize.h"
-#include "base/CCDirector.h"
-#include "platform/CCFileUtils.h"
-#include "2d/CCSpriteFrameCache.h"
+#include "base/Director.h"
+#include "platform/FileUtils.h"
+#include "2d/SpriteFrameCache.h"
 
 #include "flatbuffers/flatbuffers.h"
 

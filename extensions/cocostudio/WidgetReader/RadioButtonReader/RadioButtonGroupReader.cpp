@@ -3,9 +3,9 @@
 #include "WidgetReader/RadioButtonReader/RadioButtonGroupReader.h"
 
 #include "ui/UIRadioButton.h"
-#include "platform/CCFileUtils.h"
-#include "2d/CCSpriteFrame.h"
-#include "2d/CCSpriteFrameCache.h"
+#include "platform/FileUtils.h"
+#include "2d/SpriteFrame.h"
+#include "2d/SpriteFrameCache.h"
 #include "CocoLoader.h"
 #include "CSParseBinary_generated.h"
 #include "FlatBuffersSerialize.h"

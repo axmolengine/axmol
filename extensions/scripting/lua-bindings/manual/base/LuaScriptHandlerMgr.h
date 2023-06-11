@@ -26,9 +26,9 @@
 #define __LUA_SCRIPT_HANDLER_MGR_H__
 
 #include "tolua++.h"
-#include "base/CCRef.h"
-#include "base/ccMacros.h"
-#include "2d/CCActionInstant.h"
+#include "base/Ref.h"
+#include "base/Macros.h"
+#include "2d/ActionInstant.h"
 #include <vector>
 #include <map>
 

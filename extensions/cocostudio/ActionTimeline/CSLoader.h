@@ -29,7 +29,7 @@
 #include "CocosStudioExport.h"
 
 #include "base/ObjectFactory.h"
-#include "base/CCData.h"
+#include "base/Data.h"
 #include "ui/UIWidget.h"
 
 namespace flatbuffers

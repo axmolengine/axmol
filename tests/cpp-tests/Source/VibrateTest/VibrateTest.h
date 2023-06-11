@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #ifndef __VIBRATE_TEST_H_
 #    define __VIBRATE_TEST_H_

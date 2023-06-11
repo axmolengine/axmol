@@ -26,7 +26,7 @@
 #define _ATLAS_TEST_NEW_H_
 
 #include "../BaseTest.h"
-#include "renderer/CCCustomCommand.h"
+#include "renderer/CustomCommand.h"
 #include "ui/CocosGUI.h"
 #include "extensions/axmol-ext.h"
 #include "cocostudio/LocalizationManager.h"

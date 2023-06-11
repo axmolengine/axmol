@@ -28,12 +28,12 @@
 
 #define LOG_TAG "AudioCache"
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #include "audio/AudioCache.h"
 #include <thread>
-#include "base/CCDirector.h"
-#include "base/CCScheduler.h"
+#include "base/Director.h"
+#include "base/Scheduler.h"
 
 #include "audio/AudioDecoderManager.h"
 #include "audio/AudioDecoder.h"

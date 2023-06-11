@@ -28,11 +28,11 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/manual/CCLuaValue.h"
+#include "scripting/lua-bindings/manual/LuaValue.h"
 #include "spine/spine.h"
 #include "spine/spine-cocos2dx.h"
 #include "scripting/lua-bindings/manual/spine/LuaSkeletonAnimation.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 
 using namespace spine;
 

@@ -28,9 +28,9 @@
 #if AX_USE_PHYSICS
 #    include "scripting/lua-bindings/manual/tolua_fix.h"
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#    include "scripting/lua-bindings/manual/CCLuaValue.h"
-#    include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#    include "2d/CCScene.h"
+#    include "scripting/lua-bindings/manual/LuaValue.h"
+#    include "scripting/lua-bindings/manual/LuaEngine.h"
+#    include "2d/Scene.h"
 
 #    ifndef AX_SAFE_DELETE_ARRAY
 #        define do                 \

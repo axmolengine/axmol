@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ui/UITextAtlas.h"
-#include "2d/CCLabel.h"
+#include "2d/Label.h"
 
 NS_AX_BEGIN
 

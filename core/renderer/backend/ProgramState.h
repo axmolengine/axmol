@@ -30,9 +30,9 @@
 #include <unordered_map>
 #include <cstdint>
 #include <functional>
-#include "platform/CCPlatformMacros.h"
-#include "base/CCRef.h"
-#include "base/CCEventListenerCustom.h"
+#include "platform/PlatformMacros.h"
+#include "base/Ref.h"
+#include "base/EventListenerCustom.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"

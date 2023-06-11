@@ -1,10 +1,10 @@
 set(target_name GUI)
 
-FILE(GLOB GUI_CONTROL_SOURCES CCControlExtension/*.h;CCControlExtension/*.cpp)
-FILE(GLOB GUI_SCROLLVIEW_SOURCES CCScrollView/*.h;CCScrollView/*.cpp)
+FILE(GLOB GUI_CONTROL_SOURCES ControlExtension/*.h;ControlExtension/*.cpp)
+FILE(GLOB GUI_SCROLLVIEW_SOURCES ScrollView/*.h;ScrollView/*.cpp)
 
-SOURCE_GROUP("CCControlExtension" FILES ${GUI_CONTROL_SOURCES})
-SOURCE_GROUP("CCScrollView" FILES ${GUI_SCROLLVIEW_SOURCES})
+SOURCE_GROUP("ControlExtension" FILES ${GUI_CONTROL_SOURCES})
+SOURCE_GROUP("ScrollView" FILES ${GUI_SCROLLVIEW_SOURCES})
 
 add_library(${target_name} 
         ${GUI_CONTROL_SOURCES} 

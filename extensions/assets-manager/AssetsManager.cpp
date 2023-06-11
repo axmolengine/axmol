@@ -26,11 +26,11 @@
 
 #include <thread>
 
-#include "base/CCDirector.h"
-#include "base/CCScheduler.h"
-#include "base/CCUserDefault.h"
-#include "network/CCDownloader.h"
-#include "platform/CCFileUtils.h"
+#include "base/Director.h"
+#include "base/Scheduler.h"
+#include "base/UserDefault.h"
+#include "network/Downloader.h"
+#include "platform/FileUtils.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
 #    include <minizip/unzip.h>

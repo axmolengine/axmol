@@ -27,10 +27,10 @@
 
 #include "../Macros.h"
 #include "../CommandBuffer.h"
-#include "base/CCEventListenerCustom.h"
-#include "platform/CCGL.h"
+#include "base/EventListenerCustom.h"
+#include "platform/GL.h"
 
-#include "CCStdC.h"
+#include "StdC.h"
 
 #include <vector>
 

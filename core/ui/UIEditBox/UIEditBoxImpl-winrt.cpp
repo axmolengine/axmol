@@ -26,12 +26,12 @@
 //THE SOFTWARE.
 //****************************************************************************/
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
 #include "ui/UIEditBox/UIEditBoxImpl-winrt.h"
-#include "platform/winrt/CCWinRTUtils.h"
-#include "platform/winrt/CCGLViewImpl-winrt.h"
-#include "2d/CCFontFreeType.h"
+#include "platform/winrt/WinRTUtils.h"
+#include "platform/winrt/GLViewImpl-winrt.h"
+#include "2d/FontFreeType.h"
 
 #if defined(WINAPI_FAMILY) && WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
 #define XAML_TOP_PADDING 10.0f

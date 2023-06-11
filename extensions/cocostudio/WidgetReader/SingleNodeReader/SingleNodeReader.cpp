@@ -25,7 +25,7 @@
 #include "WidgetReader/SingleNodeReader/SingleNodeReader.h"
 
 #include "CSParseBinary_generated.h"
-#include "ActionTimeline/CCActionTimeline.h"
+#include "ActionTimeline/ActionTimeline.h"
 #include "WidgetReader/NodeReader/NodeReader.h"
 
 #include "flatbuffers/flatbuffers.h"

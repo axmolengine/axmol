@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #include <functional>
 
@@ -40,7 +40,7 @@
 // log, AXLOG aren't threadsafe, since we uses sub threads for parsing pcm data, threadsafe log output
 // is needed. Define the following macros (ALOGV, ALOGD, ALOGI, ALOGW, ALOGE) for threadsafe log output.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
-#    include "base/ccUTF8.h"  // for StringUtils::format
+#    include "base/UTF8.h"  // for StringUtils::format
 #    define AUDIO_LOG(fmt, ...) OutputDebugStringA(StringUtils::format((fmt "\r\n"), ##__VA_ARGS__).c_str())
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include <android/log.h>

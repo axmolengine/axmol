@@ -4,15 +4,15 @@
 
 #include "CocoLoader.h"
 #include "ui/UIButton.h"
-#include "ActionTimeline/CCActionTimeline.h"
-#include "CCComExtensionData.h"
+#include "ActionTimeline/ActionTimeline.h"
+#include "ComExtensionData.h"
 #include "CSParseBinary_generated.h"
 
 #include "flatbuffers/flatbuffers.h"
 #include "ui/UILayoutComponent.h"
 #include "ActionTimeline/CSLoader.h"
-#include "base/ccUtils.h"
-#include "base/CCDirector.h"
+#include "base/Utils.h"
+#include "base/Director.h"
 
 USING_NS_AX;
 using namespace ui;
@@ -98,9 +98,9 @@ WidgetReader::WidgetReader()
     , _opacity(255)
     , _isAdaptScreen(false)
 {
-    valueToInt = [=](std::string_view str) -> int { return atoi(str.data()); };
+    valueToInt = [](std::string_view str) -> int { return atoi(str.data()); };
 
-    valueToBool = [=](std::string_view str) -> bool {
+    valueToBool = [this](std::string_view str) -> bool {
         int intValue = valueToInt(str);
         if (1 == intValue)
         {

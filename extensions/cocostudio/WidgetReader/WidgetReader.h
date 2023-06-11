@@ -26,7 +26,7 @@
 #define __TestCpp__WidgetReader__
 
 #include "WidgetReader/WidgetReaderProtocol.h"
-#include "CCSGUIReader.h"
+#include "SGUIReader.h"
 #include "ui/GUIDefine.h"
 #include "CocosStudioExport.h"
 #include "WidgetReader/NodeReaderProtocol.h"

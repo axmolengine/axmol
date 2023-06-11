@@ -2,8 +2,8 @@
 #pragma once
 
 #if !defined(AXME_NO_AXMOL)
-#    include "base/CCConsole.h"
-#    include "platform/CCPlatformMacros.h"
+#    include "base/Console.h"
+#    include "platform/PlatformMacros.h"
 #    define AXME_TRACE AXLOG
 #else
 #    define AXME_TRACE printf

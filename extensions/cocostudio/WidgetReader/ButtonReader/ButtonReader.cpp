@@ -3,9 +3,9 @@
 #include "WidgetReader/ButtonReader/ButtonReader.h"
 
 #include "ui/UIButton.h"
-#include "2d/CCSpriteFrameCache.h"
-#include "2d/CCLabel.h"
-#include "platform/CCFileUtils.h"
+#include "2d/SpriteFrameCache.h"
+#include "2d/Label.h"
+#include "platform/FileUtils.h"
 #include "CocoLoader.h"
 #include "CSParseBinary_generated.h"
 #include "FlatBuffersSerialize.h"

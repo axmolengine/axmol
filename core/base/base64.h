@@ -10,7 +10,7 @@
 #pragma once
 
 #include <utility>
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 
 NS_AX_BEGIN
 

@@ -1,7 +1,7 @@
 set(_AX_NETWORK_HEADER
-    network/CCDownloader-curl.h
-    network/CCIDownloaderImpl.h
-    network/CCDownloader.h
+    network/Downloader-curl.h
+    network/IDownloaderImpl.h
+    network/Downloader.h
     network/Uri.h
     network/HttpClient.h
     network/HttpResponse.h
@@ -11,8 +11,8 @@ set(_AX_NETWORK_HEADER
 
 set(_AX_NETWORK_SRC
     network/HttpClient.cpp
-    network/CCDownloader.cpp
-    network/CCDownloader-curl.cpp
+    network/Downloader.cpp
+    network/Downloader-curl.cpp
     network/HttpCookie.cpp
     network/Uri.cpp
     )

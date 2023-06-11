@@ -6,7 +6,7 @@
  */
 
 #include "LAppSprite.hpp"
-#include "base/CCDirector.h"
+#include "base/Director.h"
 #include "LAppPal.hpp"
 
 LAppSprite::LAppSprite(backend::Program* program)

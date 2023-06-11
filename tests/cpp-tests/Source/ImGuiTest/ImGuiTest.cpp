@@ -1,4 +1,4 @@
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 #include "ImGuiTest.h"
 
 #include "ImGui/ImGuiPresenter.h"

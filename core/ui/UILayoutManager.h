@@ -26,8 +26,8 @@
 #ifndef __cocos2d_libs__CCLayoutManager__
 #define __cocos2d_libs__CCLayoutManager__
 
-#include "base/CCRef.h"
-#include "base/CCVector.h"
+#include "base/Ref.h"
+#include "base/Vector.h"
 #include "ui/GUIExport.h"
 
 /**

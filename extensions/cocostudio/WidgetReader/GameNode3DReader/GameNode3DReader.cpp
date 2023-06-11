@@ -24,9 +24,9 @@
 
 #include "WidgetReader/GameNode3DReader/GameNode3DReader.h"
 
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
-#include "CCComExtensionData.h"
+#include "ComExtensionData.h"
 #include "CSParseBinary_generated.h"
 #include "CSParse3DBinary_generated.h"
 

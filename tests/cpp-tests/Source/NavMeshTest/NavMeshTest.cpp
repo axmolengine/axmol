@@ -25,10 +25,10 @@
  ****************************************************************************/
 
 #include "NavMeshTest.h"
-#include "physics3d/CCPhysics3DWorld.h"
-#include "physics3d/CCPhysics3D.h"
-#include "3d/CCBundle3D.h"
-#include "2d/CCLight.h"
+#include "physics3d/Physics3DWorld.h"
+#include "physics3d/Physics3D.h"
+#include "3d/Bundle3D.h"
+#include "2d/Light.h"
 
 USING_NS_AX_EXT;
 USING_NS_AX;

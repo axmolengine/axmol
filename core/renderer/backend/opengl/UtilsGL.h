@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "base/ccMacros.h"
-#include "platform/CCGL.h"
+#include "base/Macros.h"
+#include "platform/GL.h"
 #include "renderer/backend/Types.h"
 #include "renderer/backend/PixelBufferDescriptor.h"
 

@@ -30,14 +30,14 @@
 #include <spine/spine-cocos2dx.h>
 #if COCOS2D_VERSION >= 0x00040000
 
-#include "base/ccTypes.h"
-#include "base/ccUtils.h"
+#include "base/Types.h"
+#include "base/Utils.h"
 #include <algorithm>
 #include <spine/Extension.h>
 #include <stddef.h>// offsetof
 
 #include "renderer/backend/Device.h"
-#include "renderer/ccShaders.h"
+#include "renderer/Shaders.h"
 #include "xxhash.h"
 
 USING_NS_CC;

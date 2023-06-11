@@ -26,7 +26,7 @@
 #pragma once
 
 #include "Types.h"
-#include "base/CCRef.h"
+#include "base/Ref.h"
 #include <cassert>
 
 #include <functional>

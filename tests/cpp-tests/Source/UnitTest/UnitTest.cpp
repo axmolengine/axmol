@@ -26,7 +26,7 @@
 #include "UnitTest.h"
 #include "ui/UIHelper.h"
 #include "network/Uri.h"
-#include "base/ccUtils.h"
+#include "base/Utils.h"
 #include "yasio/core/byte_buffer.hpp"
 
 USING_NS_AX;

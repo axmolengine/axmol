@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <unordered_map>
 #include <functional>
 #include <type_traits>
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 #include "math/Vec3.h"
 #include "jni/jni.hpp"
 

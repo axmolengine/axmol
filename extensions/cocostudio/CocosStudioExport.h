@@ -32,6 +32,6 @@
 #endif
 
 #include "base/hlookup.h"
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 
 #endif /* __CCEXTENSIONEXPORT_H__*/

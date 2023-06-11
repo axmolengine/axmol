@@ -27,8 +27,8 @@ THE SOFTWARE.
 #include "scripting/lua-bindings/manual/spine/LuaSkeletonAnimation.h"
 
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/manual/CCLuaStack.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "scripting/lua-bindings/manual/LuaStack.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 
 using namespace spine;
 USING_NS_AX;

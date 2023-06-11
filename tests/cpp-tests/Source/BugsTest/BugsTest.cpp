@@ -34,7 +34,7 @@
 #include "Bug-1174.h"
 #include "Bug-12847.h"
 #include "Bug-Child.h"
-#include "Bug-CCDrawNode.h"
+#include "Bug-DrawNode.h"
 #include "Bug-15594.h"
 #include "Bug-15776.h"
 
