@@ -29,9 +29,9 @@
 #include "tolua++.h"
 
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "base/CCEventListenerAcceleration.h"
-#include "base/CCEventListenerCustom.h"
-#include "2d/CCNode.h"
+#include "base/EventListenerAcceleration.h"
+#include "base/EventListenerCustom.h"
+#include "2d/Node.h"
 
 NS_AX_BEGIN
 class LuaEventListenerCustom
