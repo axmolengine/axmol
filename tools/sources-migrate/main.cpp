@@ -27,13 +27,6 @@ len=83570
 
 namespace stdfs = std::filesystem;
 
-#define O_READ_FLAGS O_RDONLY
-#define O_WRITE_FLAGS O_CREAT | O_RDWR | O_TRUNC, S_IRWXU
-#define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
-
-#define O_OVERLAP_FLAGS O_CREAT | O_RDWR, S_IRWXU
-#define posix_open_cxx(path, ...) ::open(path.data(), ##__VA_ARGS__)
-
 int totals          = 0;
 int replaced_totals = 0;
 std::vector<std::string_view> chunks;
