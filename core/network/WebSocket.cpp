@@ -405,7 +405,7 @@ int WebSocket::on_frame_body(websocket_parser* parser, const char* at, size_t le
     WebSocket* ws   = static_cast<WebSocket*>(parser->data);
     ws->_frameState = FrameState::BODY;
     if (parser->flags & WS_HAS_MASK)
-        websocket_parser_decode((char*)at, at, length, parser);
+        websocket_parser_decode(const_cast<char*>(at), at, length, parser);
 
     std::unique_lock<std::recursive_mutex> lck(ws->_receivedDataMtx);
     ws->_receivedData.append(at, at + length);
