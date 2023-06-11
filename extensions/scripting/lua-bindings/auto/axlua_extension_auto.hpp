@@ -1,4 +1,4 @@
-#include "base/ccConfig.h"
+#include "base/Config.h"
 #ifndef __ax_extension_h__
 #define __ax_extension_h__
 

@@ -1,4 +1,4 @@
-#include "base/ccConfig.h"
+#include "base/Config.h"
 #if AX_USE_NAVMESH
 #ifndef __ax_navmesh_h__
 #define __ax_navmesh_h__

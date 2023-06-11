@@ -1,4 +1,4 @@
-#include "base/ccConfig.h"
+#include "base/Config.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC || defined(_WIN32) || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #ifndef __ax_audioengine_h__
 #define __ax_audioengine_h__

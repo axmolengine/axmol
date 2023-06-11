@@ -1,4 +1,4 @@
-#include "base/ccConfig.h"
+#include "base/Config.h"
 #ifndef __ax_base_h__
 #define __ax_base_h__
 
