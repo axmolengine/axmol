@@ -12,9 +12,6 @@ len=83570
 // ./extensions/**/*.h,./extensions/**/*.cpp,./extensions/**/*.inl,./extensions/**/*.mm,./extensions/**/*.m
 // ./tests/**/*.h,./tests/**/*.cpp,./tests/**/*.inl,./tests/**/*.mm,./tests/**/*.m
 // ./templates/**/*.h,./templates/**/*.cpp,./templates/**/*.inl,./templates/**/*.mm,./templates/**/*.m
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,7 +22,7 @@ len=83570
 #include <vector>
 #include <regex>
 #include <iostream>
-#include <fstream>
+#include "base/posix_io.h"
 #include "yasio/stl/string_view.hpp"
 
 namespace stdfs = std::filesystem;
@@ -61,7 +58,7 @@ std::string load_file(std::string_view path)
             std::string content;
             content.reserve(len);
             char buf[512];
-            ssize_t nb = -1;
+            int nb = -1;
             while ((nb = read(fd, buf, sizeof(buf))) > 0)
             {
                 content.append(buf, static_cast<size_t>(nb));
@@ -113,11 +110,11 @@ bool regex_search_for_replace(const std::string& content, const std::regex& re)
                 auto& match = results[0];
                 auto first  = match.first;
                 auto last   = match.second;
-                assert(first >= line.data() && first <= &line.back());
+                // assert(first >= line.data() && first <= &line.back());
                 std::string_view word{first, last};
-                std::string_view chunk1{cur_line, last - 2};
+                std::string_view chunk1{cur_line, std::addressof(*last) - 2};
                 chunks.push_back(chunk1);
-                auto chunk2_first = last;
+                auto chunk2_first = std::addressof(*last);
                 if (chunk2_first < next_line)
                 {
                     std::string_view chunk2{chunk2_first, next_line};
@@ -147,8 +144,6 @@ bool regex_search_for_replace(const std::string& content, const std::regex& re)
 
     return !!hints;
 }
-
-void replace_cmake_lists(std::string& content) {}
 
 void process_file(std::string_view file_path, std::string_view file_name, bool is_cmake, bool needs_rename = false)
 {
@@ -203,16 +198,20 @@ void process_file(std::string_view file_path, std::string_view file_name, bool i
 
 void process_folder(std::string_view sub_path)
 {
+#if defined(_WIN32)
+    static std::string exclude = "\\DragonBones\\";
+#else
     static std::string exclude = "/DragonBones/";
+#endif
     for (const auto& entry : stdfs::recursive_directory_iterator(sub_path))
     {
         const auto isDir = entry.is_directory();
         if (entry.is_regular_file())
         {
             auto& path    = entry.path();
-            auto& strPath = path.native();
+            auto strPath  = path.generic_string();
             auto pathname = path.filename();
-            auto strName  = pathname.native();
+            auto strName  = pathname.generic_string();
 
             if (strPath.find(exclude) != std::string::npos)
                 continue;
