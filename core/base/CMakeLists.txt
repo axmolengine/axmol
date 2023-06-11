@@ -15,6 +15,7 @@ elseif(LINUX OR WINDOWS)
 endif()
 
 set(_AX_BASE_HEADER
+    base/posix_io.h
     base/astc.h
     base/pvr.h
     base/format.h
@@ -136,5 +137,6 @@ set(_AX_BASE_SRC
     base/pvr.cpp
     base/s3tc.cpp
     base/astc.cpp
+    base/posix_io.cpp
     ${_AX_BASE_SPECIFIC_SRC}
     )
