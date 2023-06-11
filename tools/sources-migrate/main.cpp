@@ -41,7 +41,7 @@ int totals          = 0;
 int replaced_totals = 0;
 std::vector<std::string_view> chunks;
 
-const std::regex include_re(R"(#(\s)*include(\s)*"(.)*\b(CC|cc))", std::regex_constants::ECMAScript);
+const std::regex include_re(R"(#(\s)*(include|import)(\s)*"(.)*\b(CC|cc))", std::regex_constants::ECMAScript);
 const std::regex cmake_re(R"(/CC)", std::regex_constants::ECMAScript | std::regex_constants::icase);
 
 std::string load_file(std::string_view path)
@@ -196,13 +196,14 @@ void process_file(std::string_view file_path, std::string_view file_name, bool i
         }
         else
         {
-            printf("skip cmake %s not part of axmol engine!", file_path.data());
+            printf("skip cmake %s not part of axmol engine!\n", file_path.data());
         }
     }
 }
 
 void process_folder(std::string_view sub_path)
 {
+    static std::string exclude = "/DragonBones/";
     for (const auto& entry : stdfs::recursive_directory_iterator(sub_path))
     {
         const auto isDir = entry.is_directory();
@@ -212,6 +213,9 @@ void process_folder(std::string_view sub_path)
             auto& strPath = path.native();
             auto pathname = path.filename();
             auto strName  = pathname.native();
+
+            if (strPath.find(exclude) != std::string::npos)
+                continue;
 
             if (cxx20::ic::ends_with(strName, ".h") || cxx20::ic::ends_with(strName, ".cpp") ||
                 cxx20::ic::ends_with(strName, ".mm") || cxx20::ic::ends_with(strName, ".m") ||
