@@ -54,8 +54,8 @@ elseif(APPLE)
                 ui/UIEditBox/iOS/UIEditBoxIOS.h
                 ui/UIEditBox/iOS/UIMultilineTextField.h
                 ui/UIEditBox/iOS/UITextInput.h
-                ui/UIEditBox/iOS/UITextView+CCUITextInput.h
-                ui/UIEditBox/iOS/UITextField+CCUITextInput.h
+                ui/UIEditBox/iOS/UITextView+UITextInput.h
+                ui/UIEditBox/iOS/UITextField+UITextInput.h
                 ui/UIEditBox/iOS/UISingleLineTextField.h
                 )
             set(_AX_UI_SPECIFIC_SRC
@@ -63,8 +63,8 @@ elseif(APPLE)
                 ui/UIEditBox/iOS/UIEditBoxIOS.mm
                 ui/UIEditBox/iOS/UIMultilineTextField.mm
                 ui/UIEditBox/iOS/UISingleLineTextField.mm
-                ui/UIEditBox/iOS/UITextField+CCUITextInput.mm
-                ui/UIEditBox/iOS/UITextView+CCUITextInput.mm
+                ui/UIEditBox/iOS/UITextField+UITextInput.mm
+                ui/UIEditBox/iOS/UITextView+UITextInput.mm
                 )
         else()
             set(_AX_UI_SPECIFIC_HEADER
@@ -74,8 +74,8 @@ elseif(APPLE)
                 ui/UIEditBox/iOS/UIEditBoxIOS.h
                 ui/UIEditBox/iOS/UIMultilineTextField.h
                 ui/UIEditBox/iOS/UITextInput.h
-                ui/UIEditBox/iOS/UITextView+CCUITextInput.h
-                ui/UIEditBox/iOS/UITextField+CCUITextInput.h
+                ui/UIEditBox/iOS/UITextView+UITextInput.h
+                ui/UIEditBox/iOS/UITextField+UITextInput.h
                 ui/UIEditBox/iOS/UISingleLineTextField.h
                 )
             set(_AX_UI_SPECIFIC_SRC
@@ -85,8 +85,8 @@ elseif(APPLE)
                 ui/UIEditBox/iOS/UIEditBoxIOS.mm
                 ui/UIEditBox/iOS/UIMultilineTextField.mm
                 ui/UIEditBox/iOS/UISingleLineTextField.mm
-                ui/UIEditBox/iOS/UITextField+CCUITextInput.mm
-                ui/UIEditBox/iOS/UITextView+CCUITextInput.mm
+                ui/UIEditBox/iOS/UITextField+UITextInput.mm
+                ui/UIEditBox/iOS/UITextView+UITextInput.mm
                 )
         endif()
     endif()
