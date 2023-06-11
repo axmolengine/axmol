@@ -27,12 +27,12 @@
 #ifndef __cocos2d_libs__UIScale9Sprite__
 #define __cocos2d_libs__UIScale9Sprite__
 
-#include "2d/CCSprite.h"
-#include "2d/CCSpriteFrame.h"
-#include "2d/CCSpriteBatchNode.h"
-#include "platform/CCPlatformMacros.h"
+#include "2d/Sprite.h"
+#include "2d/SpriteFrame.h"
+#include "2d/SpriteBatchNode.h"
+#include "platform/PlatformMacros.h"
 #include "ui/GUIExport.h"
-#include "renderer/CCTrianglesCommand.h"
+#include "renderer/TrianglesCommand.h"
 
 /**
  * @addtogroup ui

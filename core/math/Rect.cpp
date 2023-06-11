@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include <algorithm>
 #include <cmath>
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 // implementation of Vec2
 NS_AX_BEGIN

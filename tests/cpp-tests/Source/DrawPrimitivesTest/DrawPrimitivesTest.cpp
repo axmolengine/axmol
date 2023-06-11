@@ -23,8 +23,8 @@
  ****************************************************************************/
 
 #include "DrawPrimitivesTest.h"
-#include "renderer/CCRenderer.h"
-#include "renderer/CCCustomCommand.h"
+#include "renderer/Renderer.h"
+#include "renderer/CustomCommand.h"
 
 USING_NS_AX;
 

@@ -28,9 +28,9 @@
 #define LOG_TAG "AudioDecoderMp3"
 #include "audio/AudioDecoderMp3.h"
 #include "audio/AudioMacros.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
-#include "base/CCConsole.h"
+#include "base/Console.h"
 
 #if !AX_USE_MPG123
 #    define MINIMP3_IMPLEMENTATION

@@ -3,7 +3,7 @@
 #include "WidgetReader/TextFieldReader/TextFieldExReader.h"
 
 #include "ui/UITextFieldEx.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 #include "CocoLoader.h"
 #include "CSParseBinary_generated.h"
 #include "LocalizationManager.h"

@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "base/CCRef.h"
+#include "base/Ref.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include <stdlib.h>
 

@@ -5,19 +5,19 @@ set(_AX_MATH_HEADER
     math/Quaternion.h
     math/TransformUtils.h
     math/Vec4.h
-    math/CCAffineTransform.h
-    math/CCVertex.h
+    math/AffineTransform.h
+    math/Vertex.h
     math/Vec3.h
-    math/CCMathBase.h
+    math/MathBase.h
     math/MathUtil.h
-    math/CCMath.h
+    math/Math.h
     math/Rect.h
     math/FastRNG.h
     )
 
 set(_AX_MATH_SRC
-    math/CCAffineTransform.cpp
-    math/CCVertex.cpp
+    math/AffineTransform.cpp
+    math/Vertex.cpp
     math/Mat3.cpp
     math/Mat4.cpp
     math/MathUtil.cpp

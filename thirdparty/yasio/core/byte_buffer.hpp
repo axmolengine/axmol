@@ -33,8 +33,8 @@ The byte_buffer concepts:
    c. By default resize without fill (uninitialized and for overwrite)
    d. Support release internal buffer ownership with `release_pointer`
    e. Since 3.39.5, default allocator use new/delete instead `malloc/free`
-     - yasio::default_bytes_allocator (new/delete)
-     - yasio::crt_bytes_allocator (malloc/free)
+     - yasio::default_byte_allocator (new/delete)
+     - yasio::crt_byte_allocator (malloc/free)
 */
 #ifndef YASIO__BYTE_BUFFER_HPP
 #define YASIO__BYTE_BUFFER_HPP

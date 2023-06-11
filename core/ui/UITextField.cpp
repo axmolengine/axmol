@@ -24,10 +24,10 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ui/UITextField.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 #include "ui/UIHelper.h"
-#include "base/ccUTF8.h"
-#include "2d/CCCamera.h"
+#include "base/UTF8.h"
+#include "2d/Camera.h"
 
 NS_AX_BEGIN
 

@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #ifndef __NEWAUDIOENGINE_TEST_H_
 #    define __NEWAUDIOENGINE_TEST_H_

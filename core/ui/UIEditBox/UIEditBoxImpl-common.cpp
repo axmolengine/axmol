@@ -29,8 +29,8 @@
 #define kLabelZOrder 9999
 
 #include "ui/UIEditBox/UIEditBox.h"
-#include "base/CCDirector.h"
-#include "2d/CCLabel.h"
+#include "base/Director.h"
+#include "2d/Label.h"
 #include "ui/UIHelper.h"
 
 static const int AX_EDIT_BOX_PADDING = 5;

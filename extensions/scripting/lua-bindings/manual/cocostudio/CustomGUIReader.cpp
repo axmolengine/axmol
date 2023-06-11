@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "scripting/lua-bindings/manual/cocostudio/CustomGUIReader.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 

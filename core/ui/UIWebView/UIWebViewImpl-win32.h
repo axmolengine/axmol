@@ -26,12 +26,12 @@
 #ifndef __COCOS2D__UI__WEBVIEWIMPL_WIN32_H_
 #define __COCOS2D__UI__WEBVIEWIMPL_WIN32_H_
 
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 
 #if defined(_WIN32) && defined(_AX_HAVE_WEBVIEW2)
 
 #    include <string>
-#    include "CCStdC.h"
+#    include "StdC.h"
 
 NS_AX_BEGIN
 

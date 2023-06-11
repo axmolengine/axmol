@@ -28,12 +28,12 @@
 #ifndef __AUDIO_ENGINE_IMPL_H_
 #    define __AUDIO_ENGINE_IMPL_H_
 
-#    include "platform/CCPlatformConfig.h"
+#    include "platform/PlatformConfig.h"
 
 #    include <unordered_map>
 #    include <queue>
 
-#    include "base/CCRef.h"
+#    include "base/Ref.h"
 #    include "audio/AudioMacros.h"
 #    include "audio/AudioCache.h"
 #    include "audio/AudioPlayer.h"

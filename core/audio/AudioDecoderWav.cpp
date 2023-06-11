@@ -28,7 +28,7 @@
 #include <assert.h>
 #include "audio/AudioDecoderWav.h"
 #include "audio/AudioMacros.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
 NS_AX_BEGIN
 

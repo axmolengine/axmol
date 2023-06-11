@@ -25,7 +25,7 @@
 #include "extensions/axmol-ext.h"
 #include "UIScene.h"
 #include "UISceneManager.h"
-#include "cocostudio/CCSGUIReader.h"
+#include "cocostudio/SGUIReader.h"
 #include "CocosGUIScene.h"
 
 USING_NS_AX;

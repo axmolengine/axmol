@@ -28,9 +28,9 @@
 
 #include "network/HttpClient.h"
 #include <errno.h>
-#include "base/ccUtils.h"
-#include "base/CCDirector.h"
-#include "platform/CCFileUtils.h"
+#include "base/Utils.h"
+#include "base/Director.h"
+#include "platform/FileUtils.h"
 #include "yasio/yasio.hpp"
 
 using namespace yasio;

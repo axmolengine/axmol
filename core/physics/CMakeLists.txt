@@ -1,17 +1,17 @@
 set(_AX_PHYSICS_HEADER
-    physics/CCPhysicsContact.h
-    physics/CCPhysicsWorld.h
-    physics/CCPhysicsBody.h
+    physics/PhysicsContact.h
+    physics/PhysicsWorld.h
+    physics/PhysicsBody.h
     physics/cpCompat62.h
-    physics/CCPhysicsShape.h
-    physics/CCPhysicsHelper.h
-    physics/CCPhysicsJoint.h
+    physics/PhysicsShape.h
+    physics/PhysicsHelper.h
+    physics/PhysicsJoint.h
     )
 
 set(_AX_PHYSICS_SRC
-    physics/CCPhysicsBody.cpp
-    physics/CCPhysicsContact.cpp
-    physics/CCPhysicsJoint.cpp
-    physics/CCPhysicsShape.cpp
-    physics/CCPhysicsWorld.cpp
+    physics/PhysicsBody.cpp
+    physics/PhysicsContact.cpp
+    physics/PhysicsJoint.cpp
+    physics/PhysicsShape.cpp
+    physics/PhysicsWorld.cpp
     )

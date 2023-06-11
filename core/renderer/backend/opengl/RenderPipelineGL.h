@@ -26,7 +26,7 @@
 
 #include "../RenderPipeline.h"
 
-#include "platform/CCGL.h"
+#include "platform/GL.h"
 
 #include <vector>
 

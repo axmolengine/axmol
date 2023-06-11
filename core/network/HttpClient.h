@@ -32,7 +32,7 @@
 #include <thread>
 #include <condition_variable>
 #include <deque>
-#include "base/CCScheduler.h"
+#include "base/Scheduler.h"
 #include "network/HttpRequest.h"
 #include "network/HttpResponse.h"
 #include "network/HttpCookie.h"

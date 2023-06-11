@@ -26,7 +26,7 @@
 
 #include "audio/AudioDecoder.h"
 #include "audio/AudioMacros.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
 #define LOG_TAG "AudioDecoder"
 

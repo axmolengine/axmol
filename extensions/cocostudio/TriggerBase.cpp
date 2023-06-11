@@ -24,7 +24,7 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "TriggerBase.h"
-#include "base/CCEventCustom.h"
+#include "base/EventCustom.h"
 
 USING_NS_AX;
 using namespace cocostudio;

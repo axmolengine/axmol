@@ -22,7 +22,7 @@
 #include "math/Quaternion.h"
 
 #include <cmath>
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 NS_AX_MATH_BEGIN
 

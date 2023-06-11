@@ -28,8 +28,8 @@ THE SOFTWARE.
 #include "CSParseBinary_generated.h"
 #include "WidgetReader/SkeletonReader/CSBoneBinary_generated.h"
 #include "WidgetReader/SkeletonReader/BoneNodeReader.h"
-#include "ActionTimeline/CCBoneNode.h"
-#include "base/ccUtils.h"
+#include "ActionTimeline/BoneNode.h"
+#include "base/Utils.h"
 
 USING_NS_AX;
 USING_NS_TIMELINE;

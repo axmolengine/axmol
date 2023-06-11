@@ -33,7 +33,7 @@ extern "C" {
 }
 #endif
 
-#include "base/CCRef.h"
+#include "base/Ref.h"
 #include <string>
 
 TOLUA_API int  register_all_ax_csloader_manual(lua_State* L);

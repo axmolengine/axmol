@@ -22,76 +22,76 @@ if(WINDOWS)
 
     if (AX_ENABLE_MFMEDIA)
         set(_AX_UI_SPECIFIC_HEADER ${_AX_UI_SPECIFIC_HEADER}
-            ui/UIVideoPlayer.h
+            ui/UIMediaPlayer.h
             )
         set(_AX_UI_SPECIFIC_SRC ${_AX_UI_SPECIFIC_SRC}
-            ui/UIVideoPlayer.cpp
+            ui/UIMediaPlayer.cpp
             )
     endif()
 elseif(APPLE)
     if(MACOSX)
         set(_AX_UI_SPECIFIC_HEADER
             ui/UIEditBox/UIEditBoxImpl-mac.h
-            ui/UIEditBox/Mac/CCUIPasswordTextField.h
-            ui/UIEditBox/Mac/CCUIMultilineTextField.h
-            ui/UIEditBox/Mac/CCUITextInput.h
-            ui/UIEditBox/Mac/CCUIEditBoxMac.h
-            ui/UIEditBox/Mac/CCUISingleLineTextField.h
-            ui/UIEditBox/Mac/CCUITextFieldFormatter.h
+            ui/UIEditBox/Mac/UIPasswordTextField.h
+            ui/UIEditBox/Mac/UIMultilineTextField.h
+            ui/UIEditBox/Mac/UITextInput.h
+            ui/UIEditBox/Mac/UIEditBoxMac.h
+            ui/UIEditBox/Mac/UISingleLineTextField.h
+            ui/UIEditBox/Mac/UITextFieldFormatter.h
             )
         set(_AX_UI_SPECIFIC_SRC
             ui/UIEditBox/UIEditBoxImpl-mac.mm
-            ui/UIEditBox/Mac/CCUIEditBoxMac.mm
-            ui/UIEditBox/Mac/CCUIMultilineTextField.m
-            ui/UIEditBox/Mac/CCUIPasswordTextField.m
-            ui/UIEditBox/Mac/CCUISingleLineTextField.m
-            ui/UIEditBox/Mac/CCUITextFieldFormatter.m
+            ui/UIEditBox/Mac/UIEditBoxMac.mm
+            ui/UIEditBox/Mac/UIMultilineTextField.m
+            ui/UIEditBox/Mac/UIPasswordTextField.m
+            ui/UIEditBox/Mac/UISingleLineTextField.m
+            ui/UIEditBox/Mac/UITextFieldFormatter.m
             )
     elseif(IOS)
         if (TVOS)
             set(_AX_UI_SPECIFIC_HEADER
                 ui/UIEditBox/UIEditBoxImpl-ios.h
-                ui/UIEditBox/iOS/CCUIEditBoxIOS.h
-                ui/UIEditBox/iOS/CCUIMultilineTextField.h
-                ui/UIEditBox/iOS/CCUITextInput.h
-                ui/UIEditBox/iOS/UITextView+CCUITextInput.h
-                ui/UIEditBox/iOS/UITextField+CCUITextInput.h
-                ui/UIEditBox/iOS/CCUISingleLineTextField.h
+                ui/UIEditBox/iOS/UIEditBoxIOS.h
+                ui/UIEditBox/iOS/UIMultilineTextField.h
+                ui/UIEditBox/iOS/UITextInput.h
+                ui/UIEditBox/iOS/UITextView+UITextInput.h
+                ui/UIEditBox/iOS/UITextField+UITextInput.h
+                ui/UIEditBox/iOS/UISingleLineTextField.h
                 )
             set(_AX_UI_SPECIFIC_SRC
                 ui/UIEditBox/UIEditBoxImpl-ios.mm
-                ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
-                ui/UIEditBox/iOS/CCUIMultilineTextField.mm
-                ui/UIEditBox/iOS/CCUISingleLineTextField.mm
-                ui/UIEditBox/iOS/UITextField+CCUITextInput.mm
-                ui/UIEditBox/iOS/UITextView+CCUITextInput.mm
+                ui/UIEditBox/iOS/UIEditBoxIOS.mm
+                ui/UIEditBox/iOS/UIMultilineTextField.mm
+                ui/UIEditBox/iOS/UISingleLineTextField.mm
+                ui/UIEditBox/iOS/UITextField+UITextInput.mm
+                ui/UIEditBox/iOS/UITextView+UITextInput.mm
                 )
         else()
             set(_AX_UI_SPECIFIC_HEADER
                 ui/UIWebView/UIWebView.h
                 ui/UIWebView/UIWebViewImpl-ios.h
                 ui/UIEditBox/UIEditBoxImpl-ios.h
-                ui/UIEditBox/iOS/CCUIEditBoxIOS.h
-                ui/UIEditBox/iOS/CCUIMultilineTextField.h
-                ui/UIEditBox/iOS/CCUITextInput.h
-                ui/UIEditBox/iOS/UITextView+CCUITextInput.h
-                ui/UIEditBox/iOS/UITextField+CCUITextInput.h
-                ui/UIEditBox/iOS/CCUISingleLineTextField.h
+                ui/UIEditBox/iOS/UIEditBoxIOS.h
+                ui/UIEditBox/iOS/UIMultilineTextField.h
+                ui/UIEditBox/iOS/UITextInput.h
+                ui/UIEditBox/iOS/UITextView+UITextInput.h
+                ui/UIEditBox/iOS/UITextField+UITextInput.h
+                ui/UIEditBox/iOS/UISingleLineTextField.h
                 )
             set(_AX_UI_SPECIFIC_SRC
                 ui/UIWebView/UIWebView.mm
                 ui/UIWebView/UIWebViewImpl-ios.mm
                 ui/UIEditBox/UIEditBoxImpl-ios.mm
-                ui/UIEditBox/iOS/CCUIEditBoxIOS.mm
-                ui/UIEditBox/iOS/CCUIMultilineTextField.mm
-                ui/UIEditBox/iOS/CCUISingleLineTextField.mm
-                ui/UIEditBox/iOS/UITextField+CCUITextInput.mm
-                ui/UIEditBox/iOS/UITextView+CCUITextInput.mm
+                ui/UIEditBox/iOS/UIEditBoxIOS.mm
+                ui/UIEditBox/iOS/UIMultilineTextField.mm
+                ui/UIEditBox/iOS/UISingleLineTextField.mm
+                ui/UIEditBox/iOS/UITextField+UITextInput.mm
+                ui/UIEditBox/iOS/UITextView+UITextInput.mm
                 )
         endif()
     endif()
-    set(_AX_UI_SPECIFIC_HEADER ui/UIVideoPlayer.h ${_AX_UI_SPECIFIC_HEADER})
-    set(_AX_UI_SPECIFIC_SRC ui/UIVideoPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
+    set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+    set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 elseif(LINUX)
     set(_AX_UI_SPECIFIC_HEADER
         ui/UIEditBox/UIEditBoxImpl-linux.h
@@ -99,20 +99,24 @@ elseif(LINUX)
     set(_AX_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-linux.cpp
         )
+    if(AX_ENABLE_VLC_MEDIA)
+        set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+        set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
+    endif()
 elseif(ANDROID)
     set(_AX_UI_SPECIFIC_HEADER
         ui/UIWebView/UIWebView.h
-        ui/UIVideoPlayer.h
         ui/UIWebView/UIWebViewImpl-android.h
         ui/UIEditBox/UIEditBoxImpl-android.h
         )
     set(_AX_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-android.cpp
-        ui/UIVideoPlayer-android.cpp
         ui/UIWebView/UIWebViewImpl-android.cpp
         # it's special for android, not a common file
         ui/UIWebView/UIWebView.cpp
         )
+    set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
+    set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
 endif()
 
 set(_AX_UI_HEADER

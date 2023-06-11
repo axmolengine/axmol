@@ -29,7 +29,7 @@
 #include <algorithm>
 #include <functional>
 #include <cmath>
-#include "math/CCMathBase.h"
+#include "math/MathBase.h"
 
 /**
  * @addtogroup base

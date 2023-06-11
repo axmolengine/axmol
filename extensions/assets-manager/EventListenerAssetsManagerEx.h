@@ -1,0 +1,87 @@
+/****************************************************************************
+ Copyright (c) 2014-2016 Chukong Technologies Inc.
+ Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+
+ https://axmolengine.github.io/
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ****************************************************************************/
+
+#ifndef __cocos2d_libs__CCEventListenerAssetsManagerEx__
+#define __cocos2d_libs__CCEventListenerAssetsManagerEx__
+
+#include "base/EventListener.h"
+#include "base/EventListenerCustom.h"
+#include "extensions/ExtensionMacros.h"
+#include "extensions/ExtensionExport.h"
+
+NS_AX_EXT_BEGIN
+
+class EventAssetsManagerEx;
+class AssetsManagerEx;
+
+/**
+ *  Usage:
+ *        auto dispatcher = Director::getInstance()->getEventDispatcher();
+ *        auto manager = AssetsManagerEx::create(manifestUrl, storagePath);
+ *     Adds a listener:
+ *
+ *        auto callback = [](EventAssetsManagerEx* event){ do_some_thing(); };
+ *        auto listener = EventListenerAssetsManagerEx::create(manager, callback);
+ *        dispatcher->addEventListenerWithSceneGraphPriority(listener, one_node);
+ *
+ *     Removes a listener
+ *
+ *        dispatcher->removeEventListener(listener);
+ */
+class AX_EX_DLL EventListenerAssetsManagerEx : public ax::EventListenerCustom
+{
+public:
+    friend class AssetsManagerEx;
+
+    /** Creates an event listener with type and callback.
+     *  @param eventType The type of the event.
+     *  @param callback The callback function when the specified event was emitted.
+     */
+    static EventListenerAssetsManagerEx* create(AssetsManagerEx* AssetsManagerEx,
+                                                const std::function<void(EventAssetsManagerEx*)>& callback);
+
+    /// Overrides
+    virtual bool checkAvailable() override;
+    virtual EventListenerAssetsManagerEx* clone() override;
+
+    /** Constructor */
+    EventListenerAssetsManagerEx();
+
+    /** Initializes event with type and callback function */
+    bool init(const AssetsManagerEx* AssetsManagerEx, const std::function<void(EventAssetsManagerEx*)>& callback);
+
+protected:
+    static const std::string LISTENER_ID;
+
+    std::function<void(EventAssetsManagerEx*)> _onAssetsManagerExEvent;
+
+    const AssetsManagerEx* _AssetsManagerEx;
+
+    // friend class luaEventListenerAssetsManagerEx;
+};
+
+NS_AX_EXT_END
+
+#endif /* defined(__cocos2d_libs__CCEventListenerAssetsManagerEx__) */

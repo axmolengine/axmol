@@ -27,7 +27,7 @@ THE SOFTWARE.
 #include "WidgetReader/NodeReader/NodeReader.h"
 #include "CSParseBinary_generated.h"
 #include "WidgetReader/SkeletonReader/SkeletonNodeReader.h"
-#include "ActionTimeline/CCSkeletonNode.h"
+#include "ActionTimeline/SkeletonNode.h"
 
 USING_NS_AX;
 USING_NS_TIMELINE;

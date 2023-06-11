@@ -27,15 +27,15 @@ THE SOFTWARE.
 #include "ui/UILayout.h"
 #include "ui/UIHelper.h"
 #include "ui/UIScale9Sprite.h"
-#include "renderer/CCRenderState.h"
-#include "base/CCDirector.h"
-#include "renderer/CCRenderer.h"
+#include "renderer/RenderState.h"
+#include "base/Director.h"
+#include "renderer/Renderer.h"
 #include "ui/UILayoutManager.h"
-#include "2d/CCDrawNode.h"
-#include "2d/CCLayer.h"
-#include "2d/CCSprite.h"
-#include "base/CCEventFocus.h"
-#include "base/CCStencilStateManager.h"
+#include "2d/DrawNode.h"
+#include "2d/Layer.h"
+#include "2d/Sprite.h"
+#include "base/EventFocus.h"
+#include "base/StencilStateManager.h"
 #include <algorithm>
 
 NS_AX_BEGIN

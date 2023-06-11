@@ -24,8 +24,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ui/UIPageViewIndicator.h"
-#include "2d/CCSprite.h"
-#include "base/ccUtils.h"
+#include "2d/Sprite.h"
+#include "base/Utils.h"
 
 static const char* CIRCLE_IMAGE =
     "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAA8ElEQVRIx62VyRGCQBBF+6gWRCEmYDIQkhiBCgHhSclC8YqWzOV5oVzKAYZp3r1/"

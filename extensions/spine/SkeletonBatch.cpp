@@ -39,7 +39,7 @@ using std::max;
 #define INITIAL_SIZE (10000)
 
 #include "renderer/backend/Device.h"
-#include "renderer/ccShaders.h"
+#include "renderer/Shaders.h"
 #include "renderer/backend/Types.h"
 
 namespace spine {

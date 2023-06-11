@@ -1,14 +1,6 @@
 
 project(thirdparty)
 
-if (NOT DEFINED AX_USE_ALSOFT)
-    if(NOT APPLE)
-        set(AX_USE_ALSOFT ON)
-    else()
-        set(AX_USE_ALSOFT OFF)
-    endif()
-endif()
-
 option(OPT_BOX2D_OPTIMIZED "" OFF)
 option(AX_WITH_BOX2D "Build with internal Box2D support" ON)
 option(AX_WITH_CHIPMUNK "Build with internal chipmunk support" ON)
@@ -26,7 +18,6 @@ option(AX_WITH_ZLIB "Build with internal zlib support" ON)
 option(AX_WITH_CURL "Build with internal curl support" ON)
 option(AX_WITH_UNZIP "Build with internal unzip support" ON)
 option(AX_WITH_ASTCENC "Build with internal ASTCENC support" ON)
-option(AX_WITH_ALSOFT "Build with internal openal-soft support" ${AX_USE_ALSOFT})
 option(AX_WITH_CARES "Build with internal c-ares support" OFF)
 option(AX_WITH_LLHTTP "Build with lhttp support" ON)
 option(AX_WITH_YAML_CPP "Build with yaml-cpp support" OFF)
@@ -352,7 +343,7 @@ if(AX_WITH_CURL)
 endif(AX_WITH_CURL)
 
 # The openal-soft(LGPL 2.1)
-if(AX_WITH_ALSOFT)
+if(AX_USE_ALSOFT)
     set(ALSOFT_DLOPEN OFF CACHE BOOL "Check for the dlopen API for loading optional libs" FORCE)
     set(ALSOFT_UTILS OFF CACHE BOOL "Build utility program" FORCE)
     set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build example programs" FORCE)
@@ -436,6 +427,14 @@ if(AX_WITH_LLHTTP)
     add_subdirectory(llhttp)
     configure_target_outdir(llhttp)
     target_link_libraries(thirdparty llhttp)
+endif()
+
+# libvlc
+if (AX_ENABLE_VLC_MEDIA)
+    if(WINDOWS)
+        add_subdirectory(vlc)
+        target_link_libraries(thirdparty VLC::vlc VLC::vlccore)
+    endif()
 endif()
 
 # yaml

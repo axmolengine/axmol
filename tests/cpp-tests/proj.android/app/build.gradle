@@ -112,6 +112,6 @@ project.afterEvaluate {
         compileDebugJavaWithJavac.dependsOn externalNativeBuildDebug
     }
     if (tasks.findByName("externalNativeBuildRelease")) {
-        compileReleaseJavaWithJavac.dependsOn externalNativeBuildRelease  
+        compileReleaseJavaWithJavac.dependsOn externalNativeBuildRelease
     }
 }

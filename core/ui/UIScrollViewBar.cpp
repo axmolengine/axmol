@@ -24,9 +24,9 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ui/UIScrollViewBar.h"
-#include "platform/CCImage.h"
-#include "2d/CCSprite.h"
-#include "base/ccUtils.h"
+#include "platform/Image.h"
+#include "2d/Sprite.h"
+#include "base/Utils.h"
 
 NS_AX_BEGIN
 

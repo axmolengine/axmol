@@ -32,7 +32,7 @@
 #ifndef _MSC_STDINT_H_  // [
 #define _MSC_STDINT_H_
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
 #    ifndef _MSC_VER  // [

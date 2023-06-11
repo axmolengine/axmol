@@ -26,7 +26,7 @@
 
 #include "network/HttpCookie.h"
 #include "network/Uri.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 #include "yasio/core/utils.hpp"
 
 #include <stdio.h>

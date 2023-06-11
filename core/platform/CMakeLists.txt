@@ -25,33 +25,31 @@
 if(ANDROID)
     # refer to target: core/platform/android/CMakeLists.txt
     set(_AX_PLATFORM_SPECIFIC_SRC
-        platform/android/CCApplication-android.cpp
-        platform/android/CCCommon-android.cpp
-        platform/android/CCGLViewImpl-android.cpp
-        platform/android/CCFileUtils-android.cpp
-        platform/android/CCEnhanceAPI-android.cpp
+        platform/android/Application-android.cpp
+        platform/android/Common-android.cpp
+        platform/android/GLViewImpl-android.cpp
+        platform/android/FileUtils-android.cpp
+        platform/android/EnhanceAPI-android.cpp
     )
 elseif(WINDOWS)
 
     if (NOT WINRT)
         set(_AX_PLATFORM_SPECIFIC_HEADER
             platform/win32/compat/stdint.h
-            platform/win32/CCApplication-win32.h
-            platform/win32/inet_pton_mingw.h
-            platform/win32/CCGL-win32.h
-            platform/win32/CCFileUtils-win32.h
-            platform/win32/CCStdC-win32.h
-            platform/win32/CCPlatformDefine-win32.h
-            platform/desktop/CCGLViewImpl-desktop.h
+            platform/win32/Application-win32.h
+            platform/win32/GL-win32.h
+            platform/win32/FileUtils-win32.h
+            platform/win32/StdC-win32.h
+            platform/win32/PlatformDefine-win32.h
+            platform/desktop/GLViewImpl-desktop.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
-            platform/win32/CCStdC-win32.cpp
-            platform/win32/CCFileUtils-win32.cpp
-            platform/win32/CCCommon-win32.cpp
-            platform/win32/CCApplication-win32.cpp
-            platform/win32/CCDevice-win32.cpp
-            platform/win32/inet_pton_mingw.cpp
-            platform/desktop/CCGLViewImpl-desktop.cpp
+            platform/win32/StdC-win32.cpp
+            platform/win32/FileUtils-win32.cpp
+            platform/win32/Common-win32.cpp
+            platform/win32/Application-win32.cpp
+            platform/win32/Device-win32.cpp
+            platform/desktop/GLViewImpl-desktop.cpp
             )
     else()
         file(GLOB _AX_PLATFORM_SPECIFIC_HEADER platform/winrt/*.h)
@@ -60,64 +58,64 @@ elseif(WINDOWS)
 
 elseif(APPLE)
     set(_AX_PLATFORM_SPECIFIC_HEADER
-        platform/apple/CCFileUtils-apple.h
-        platform/apple/CCDevice-apple.h
+        platform/apple/FileUtils-apple.h
+        platform/apple/Device-apple.h
         )
     set(_AX_PLATFORM_SPECIFIC_SRC
-        platform/apple/CCFileUtils-apple.mm
-        platform/apple/CCDevice-apple.mm
+        platform/apple/FileUtils-apple.mm
+        platform/apple/Device-apple.mm
         )
     if(MACOSX)
         set(_AX_PLATFORM_SPECIFIC_HEADER
             ${_AX_PLATFORM_SPECIFIC_HEADER}
-            platform/mac/CCStdC-mac.h
-            platform/mac/CCPlatformDefine-mac.h
-            platform/mac/CCApplication-mac.h
-            platform/desktop/CCGLViewImpl-desktop.h
+            platform/mac/StdC-mac.h
+            platform/mac/PlatformDefine-mac.h
+            platform/mac/Application-mac.h
+            platform/desktop/GLViewImpl-desktop.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
             ${_AX_PLATFORM_SPECIFIC_SRC}
-            platform/mac/CCApplication-mac.mm
-            platform/mac/CCCommon-mac.mm
-            platform/mac/CCDevice-mac.mm
-            platform/desktop/CCGLViewImpl-desktop.cpp
+            platform/mac/Application-mac.mm
+            platform/mac/Common-mac.mm
+            platform/mac/Device-mac.mm
+            platform/desktop/GLViewImpl-desktop.cpp
             )
-        set_source_files_properties(platform/desktop/CCGLViewImpl-desktop.cpp PROPERTIES LANGUAGE OBJCXX)
+        set_source_files_properties(platform/desktop/GLViewImpl-desktop.cpp PROPERTIES LANGUAGE OBJCXX)
     elseif(IOS)
         set(_AX_PLATFORM_SPECIFIC_HEADER
             ${_AX_PLATFORM_SPECIFIC_HEADER}
-            platform/ios/CCApplication-ios.h
-            platform/ios/CCDirectorCaller-ios.h
-            platform/ios/CCEAGLView-ios.h
-            platform/ios/CCGLViewImpl-ios.h
-            platform/ios/CCPlatformDefine-ios.h
-            platform/ios/CCStdC-ios.h
-            platform/ios/CCInputView-ios.h
+            platform/ios/Application-ios.h
+            platform/ios/DirectorCaller-ios.h
+            platform/ios/EAGLView-ios.h
+            platform/ios/GLViewImpl-ios.h
+            platform/ios/PlatformDefine-ios.h
+            platform/ios/StdC-ios.h
+            platform/ios/InputView-ios.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
             ${_AX_PLATFORM_SPECIFIC_SRC}
-            platform/ios/CCApplication-ios.mm
-            platform/ios/CCCommon-ios.mm
-            platform/ios/CCDevice-ios.mm
-            platform/ios/CCDirectorCaller-ios.mm
-            platform/ios/CCEAGLView-ios.mm
-            platform/ios/CCGLViewImpl-ios.mm
-            platform/ios/CCImage-ios.mm
-            platform/ios/CCInputView-ios.mm
+            platform/ios/Application-ios.mm
+            platform/ios/Common-ios.mm
+            platform/ios/Device-ios.mm
+            platform/ios/DirectorCaller-ios.mm
+            platform/ios/EAGLView-ios.mm
+            platform/ios/GLViewImpl-ios.mm
+            platform/ios/Image-ios.mm
+            platform/ios/InputView-ios.mm
             )
 
         if(NOT AX_USE_COMPAT_GL)
             set(_AX_PLATFORM_SPECIFIC_HEADER
                 ${_AX_PLATFORM_SPECIFIC_HEADER}
-                platform/ios/CCES2Renderer-ios.h
-                platform/ios/CCES2Renderer-ios.h
-                platform/ios/CCESRenderer-ios.h
-                platform/ios/CCGL-ios.h
+                platform/ios/ES2Renderer-ios.h
+                platform/ios/ES2Renderer-ios.h
+                platform/ios/ESRenderer-ios.h
+                platform/ios/GL-ios.h
                 platform/ios/OpenGL_Internal-ios.h
             )
             set(_AX_PLATFORM_SPECIFIC_SRC
                 ${_AX_PLATFORM_SPECIFIC_SRC}
-                platform/ios/CCES2Renderer-ios.m
+                platform/ios/ES2Renderer-ios.m
             )
         endif()
     endif()
@@ -133,47 +131,47 @@ elseif(LINUX)
     endif(NOT CMAKE_CROSSCOMPILING)
 
     set(_AX_PLATFORM_SPECIFIC_HEADER
-        platform/linux/CCApplication-linux.h
-        platform/linux/CCGL-linux.h
-        platform/linux/CCStdC-linux.h
-        platform/linux/CCFileUtils-linux.h
-        platform/linux/CCPlatformDefine-linux.h
-        platform/desktop/CCGLViewImpl-desktop.h
+        platform/linux/Application-linux.h
+        platform/linux/GL-linux.h
+        platform/linux/StdC-linux.h
+        platform/linux/FileUtils-linux.h
+        platform/linux/PlatformDefine-linux.h
+        platform/desktop/GLViewImpl-desktop.h
         )
     set(_AX_PLATFORM_SPECIFIC_SRC
-        platform/linux/CCFileUtils-linux.cpp
-        platform/linux/CCCommon-linux.cpp
-        platform/linux/CCApplication-linux.cpp
-        platform/linux/CCDevice-linux.cpp
-        platform/desktop/CCGLViewImpl-desktop.cpp
+        platform/linux/FileUtils-linux.cpp
+        platform/linux/Common-linux.cpp
+        platform/linux/Application-linux.cpp
+        platform/linux/Device-linux.cpp
+        platform/desktop/GLViewImpl-desktop.cpp
         )
 endif()
 
 set(_AX_PLATFORM_HEADER
     ${_AX_PLATFORM_SPECIFIC_HEADER}
-    platform/CCApplication.h
-    platform/CCApplicationProtocol.h
-    platform/CCCommon.h
-    platform/CCDevice.h
-    platform/CCFileUtils.h
-    platform/CCGL.h
-    platform/CCGLView.h
-    platform/CCImage.h
-    platform/CCPlatformConfig.h
-    platform/CCPlatformDefine.h
-    platform/CCPlatformMacros.h
-    platform/CCSAXParser.h
-    platform/CCStdC.h
-    platform/CCFileStream.h
-    platform/CCPosixFileStream.h
+    platform/Application.h
+    platform/ApplicationProtocol.h
+    platform/Common.h
+    platform/Device.h
+    platform/FileUtils.h
+    platform/GL.h
+    platform/GLView.h
+    platform/Image.h
+    platform/PlatformConfig.h
+    platform/PlatformDefine.h
+    platform/PlatformMacros.h
+    platform/SAXParser.h
+    platform/StdC.h
+    platform/FileStream.h
+    platform/PosixFileStream.h
     )
 
 set(_AX_PLATFORM_SRC
     ${_AX_PLATFORM_SPECIFIC_SRC}
-    platform/CCSAXParser.cpp
-    platform/CCGLView.cpp
-    platform/CCFileUtils.cpp
-    platform/CCImage.cpp
-    platform/CCFileStream.cpp
-    platform/CCPosixFileStream.cpp
+    platform/SAXParser.cpp
+    platform/GLView.cpp
+    platform/FileUtils.cpp
+    platform/Image.cpp
+    platform/FileStream.cpp
+    platform/PosixFileStream.cpp
     )

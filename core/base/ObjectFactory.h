@@ -29,8 +29,8 @@ THE SOFTWARE.
 #include <string>
 #include <unordered_map>
 #include <functional>
-#include "base/CCRef.h"
-#include "platform/CCPlatformMacros.h"
+#include "base/Ref.h"
+#include "platform/PlatformMacros.h"
 
 NS_AX_BEGIN
 

@@ -27,11 +27,11 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "platform/winrt/Keyboard-winrt.h"
-#include "base/CCEventKeyboard.h"
-#include "platform/winrt/CCGLViewImpl-winrt.h"
-#include "base/CCIMEDispatcher.h"
-#include "base/CCDirector.h"
-#include "base/CCEventDispatcher.h"
+#include "base/EventKeyboard.h"
+#include "platform/winrt/GLViewImpl-winrt.h"
+#include "base/IMEDispatcher.h"
+#include "base/Director.h"
+#include "base/EventDispatcher.h"
 
 using namespace ax;
 using namespace Platform;

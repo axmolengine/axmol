@@ -26,7 +26,7 @@
 
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
-#include "base/ccUtils.h"
+#include "base/Utils.h"
 #include <sstream>
 
 std::unordered_map<uintptr_t, const char*> g_luaType;

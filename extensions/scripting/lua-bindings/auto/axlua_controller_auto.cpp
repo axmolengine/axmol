@@ -1,6 +1,6 @@
 #include "scripting/lua-bindings/auto/axlua_controller_auto.hpp"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-#include "base/CCGameController.h"
+#include "base/GameController.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 

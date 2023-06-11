@@ -27,7 +27,7 @@
 #ifndef __UIEDITBOXIMPLANDROID_H__
 #define __UIEDITBOXIMPLANDROID_H__
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
 

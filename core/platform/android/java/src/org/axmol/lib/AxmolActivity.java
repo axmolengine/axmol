@@ -67,7 +67,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
     private int[] mGLContextAttrs = null;
     private AxmolHandler mHandler = null;
     private static AxmolActivity sContext = null;
-    private VideoHelper mVideoHelper = null;
     private WebViewHelper mWebViewHelper = null;
     private EditBoxHelper mEditBoxHelper = null;
     private boolean hasFocus = false;
@@ -173,10 +172,6 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
 
         this.mGLContextAttrs = getGLContextAttrs();
         this.init();
-
-        if (mVideoHelper == null) {
-            mVideoHelper = new VideoHelper(this, mFrameLayout);
-        }
 
         if(mWebViewHelper == null){
             mWebViewHelper = new WebViewHelper(mFrameLayout);

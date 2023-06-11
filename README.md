@@ -39,7 +39,12 @@
 | Apple macOS           |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
 | Apple tvOS            |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
 | Apple iOS             |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Android               |    in progress    | H264, HEVC            | NV12                 | ExoPlayer2         |
+| Android               |    complete       | H264, HEVC            | NV12                 | ExoPlayer2         |
+| Linux                 |    complete       | H264, HEVC            | NV12                 | libVLC             |
+
+## Building
+
+View the [Dev setup instructions](docs/DevSetup.md).
 
 ## Highlighted Features
 
@@ -84,10 +89,6 @@
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
 Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/axmolengine/axmol/milestones) for planed features too.
-
-## Building
-
-View the [Dev setup instructions](docs/DevSetup.md).
 
 ## Reference links
 

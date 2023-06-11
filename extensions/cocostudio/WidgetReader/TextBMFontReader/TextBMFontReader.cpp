@@ -2,9 +2,9 @@
 
 #include "WidgetReader/TextBMFontReader/TextBMFontReader.h"
 
-#include "2d/CCFontAtlasCache.h"
+#include "2d/FontAtlasCache.h"
 #include "ui/UITextBMFont.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 #include "CocoLoader.h"
 #include "CSParseBinary_generated.h"
 #include "LocalizationManager.h"
