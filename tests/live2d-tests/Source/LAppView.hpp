@@ -11,7 +11,7 @@
 #include <Math/CubismMatrix44.hpp>
 #include <Math/CubismViewMatrix.hpp>
 #include "TouchManager.h"
-#include "2d/CCSprite.h"
+#include "2d/Sprite.h"
 #include "cocos2d.h"
 #include <vector>
 #include "LAppLive2DManager.hpp"

@@ -1,10 +1,6 @@
 /****************************************************************************
-Copyright (c) 2008-2010 Ricardo Quesada
-Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2022 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -27,20 +23,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/PlatformMacros.h"
-
-#include "axmolver.h"
+#include "ui/CocosGUI.h"
 
 NS_AX_BEGIN
 
-AX_DLL const char* axmolVersion()
+namespace ui
 {
-    return "axmol-" AX_VERSION "-" AX_GIT_COMMIT_HASH;
+
+const char* axmolUIVersion()
+{
+    return "AXGUI v1.0.0";
 }
 
-AX_DLL const char* cocos2dVersion()
+const char* CocosGUIVersion()
 {
-    return axmolVersion();
+    return axmolUIVersion();
 }
 
+}  // namespace ui
 NS_AX_END
