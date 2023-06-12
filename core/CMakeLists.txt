@@ -289,8 +289,8 @@ else()
     set(AX_GIT_COMMIT_HASH "unknown")
 endif()
 configure_file(
-        "${CMAKE_CURRENT_LIST_DIR}/version.h.in"
-        "${CMAKE_CURRENT_LIST_DIR}/version.h")
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h")
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

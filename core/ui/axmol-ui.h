@@ -1,6 +1,7 @@
 /****************************************************************************
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+Copyright (c) 2022 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -23,17 +24,59 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/CocosGUI.h"
+#ifndef __AXMOL_UI_H__
+#define __AXMOL_UI_H__
 
+#include "ui/UIWidget.h"
+#include "ui/UILayout.h"
+#include "ui/UIButton.h"
+#include "ui/UICheckBox.h"
+#include "ui/UIRadioButton.h"
+#include "ui/UIImageView.h"
+#include "ui/UIText.h"
+#include "ui/UITextAtlas.h"
+#include "ui/UILoadingBar.h"
+#include "ui/UIScrollView.h"
+#include "ui/UIListView.h"
+#include "ui/UISlider.h"
+#include "ui/UITextField.h"
+#include "ui/UITextBMFont.h"
+#include "ui/UIPageView.h"
+#include "ui/UIHelper.h"
+#include "ui/UIRichText.h"
+#include "ui/UIHBox.h"
+#include "ui/UIVBox.h"
+#include "ui/UIRelativeBox.h"
+#if !defined(_WIN32) || defined(AX_ENABLE_MFMEDIA)
+#    include "ui/UIMediaPlayer.h"
+#endif
+#if !defined(_WIN32) || defined(AX_ENABLE_MSEDGE_WEBVIEW2)
+#    include "ui/UIWebView/UIWebView.h"
+#endif
+#include "ui/GUIExport.h"
+#include "ui/UIScale9Sprite.h"
+#include "ui/UIEditBox/UIEditBox.h"
+#include "ui/UILayoutComponent.h"
+#include "ui/UITabControl.h"
+
+/**
+ * @addtogroup ui
+ * @{
+ */
 NS_AX_BEGIN
-
 namespace ui
 {
 
-const char* CocosGUIVersion()
-{
-    return "AXGUI v1.0.0";
-}
+/**
+ * Get current cocos GUI module version string.
+ *@return A string representation of GUI module version number
+ */
+AX_GUI_DLL const char* axmolUIVersion();
 
 }  // namespace ui
+
 NS_AX_END
+// end of ui group
+/// @}
+
+#endif /* defined(__CocosGUITest__Cocos__) */

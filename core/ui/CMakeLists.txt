@@ -121,7 +121,7 @@ endif()
 
 set(_AX_UI_HEADER
     ${_AX_UI_SPECIFIC_HEADER}
-    ui/CocosGUI.h
+    ui/axmol-ui.h
     ui/GUIDefine.h
     ui/GUIExport.h
     ui/UIAbstractCheckButton.h
@@ -157,7 +157,7 @@ set(_AX_UI_HEADER
 
 set(_AX_UI_SRC
     ${_AX_UI_SPECIFIC_SRC}
-    ui/CocosGUI.cpp
+    ui/axmol-ui.cpp
     ui/UIButton.cpp
     ui/UIAbstractCheckButton.cpp
     ui/UICheckBox.cpp
