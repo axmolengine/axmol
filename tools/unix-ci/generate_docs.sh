@@ -17,7 +17,7 @@ echo $version
 
 cd $DIR/../../docs
 #we should  read axmolver.h and retrieve the version number
-sed -i.bak "s~v1.0~v{version}~g" doxygen.config
+sed -i.bak "s~v1.0~v$version~g" doxygen.config
 
 doxygen ${CONFIG_NAME}.config
 
