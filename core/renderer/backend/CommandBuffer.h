@@ -42,9 +42,9 @@
 
 NS_AX_BEGIN
 struct PipelineDescriptor;
+NS_AX_END
 
-namespace backend
-{
+NS_AX_BACKEND_BEGIN
 
 class RenderPass;
 class RenderPipeline;
