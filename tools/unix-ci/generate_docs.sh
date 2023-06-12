@@ -2,7 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-sudo apt install doxygen
+echo -e "y" | sudo apt-get install doxygen
 
 CONFIG_NAME=doxygen
 if [ ! -z $1 ]; then
@@ -17,7 +17,7 @@ echo $version
 
 cd $DIR/../../docs
 #we should  read axmolver.h and retrieve the version number
-sed -i .bak "s/1\.0/${version}/g" doxygen.config
+sed -i.bak "s~v1.0~v{version}~g" doxygen.config
 
 doxygen ${CONFIG_NAME}.config
 
