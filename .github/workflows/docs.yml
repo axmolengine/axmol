@@ -10,7 +10,8 @@ on:
       - core/**/*
       - docs/**/*
       - .github/workflows/docs-ci.yml
-
+  workflow_dispatch:
+    
 jobs:
   build-docs:
     runs-on: ubuntu-latest
@@ -19,11 +20,8 @@ jobs:
     - uses: actions/checkout@v3
     
     # Build the HTML documentation
-    - name: Doxygen Action
-      uses: mattnotmitt/doxygen-action@v1.3.1
-      with:
-          doxyfile-path: ./doxygen.config
-          working-directory: ./docs
+    - name: Build HTML documentation
+      run: ./tools/unix-ci/generate_docs.sh
     
     # Deploy the HTML documentation to GitHub Pages
     - name: GH Pages Deployment

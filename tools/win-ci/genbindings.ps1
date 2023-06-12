@@ -41,6 +41,13 @@ curl -L "https://github.com/axmolengine/buildware/releases/download/llvmorg-15.0
 Expand-Archive -Path llvmorg-15.0.7.zip -DestinationPath .\
 Copy-Item ".\llvmorg-15.0.7\llvm\prebuilt\windows\x64\libclang.dll" -Destination "..\tools\bindings-generator\libclang"
 
+## ensure $env:AX_ROOT/core/axmolver.h exists
+$env:AX_ROOT = (Resolve-Path $PSScriptRoot\..\..).Path
+echo "AX_ROOT=$env:AX_ROOT"
+if (!(Test-Path "$env:AX_ROOT\core\axmolver.h" -PathType Leaf)) {
+    Copy-Item "$env:AX_ROOT\core\axmolver.h.in" -Destination "$env:AX_ROOT\core\axmolver.h"
+}
+
 ## run genbindings.py
 pwd
 cd ..\tools\tolua

@@ -30,7 +30,10 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
-## Reimplemented VideoPlayer(VideoTexture)
+## New MediaPlayer
+
+The new `ui::MediaPlayer`(renamed from `ui::VideoPlayer`) render video as Texture2D with designed corss-platform MediaEngine, the MediaEngine inspired from microsoft
+media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which axmol engine does.
 
 |  Platform             |    MediaEngine    | Video Compress Format | Video Pixel Format   | Backend            |
 |-----------------------|-------------------|-----------------------|----------------------|--------------------|
