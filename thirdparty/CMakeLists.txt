@@ -425,11 +425,10 @@ if(AX_WITH_LLHTTP)
 endif()
 
 # libvlc
-if (AX_ENABLE_VLC_MEDIA)
-    if(WINDOWS)
-        add_subdirectory(vlc)
-        target_link_libraries(thirdparty VLC::vlc VLC::vlccore)
-    endif()
+if (AX_ENABLE_VLC_MEDIA AND (NOT _AX_HAVE_VLC))
+    message(STATUS "Using axmol prebuilt libvlc")
+    add_subdirectory(vlc)
+    target_link_libraries(thirdparty VLC::vlc VLC::vlccore)
 endif()
 
 # yaml
