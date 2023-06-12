@@ -33,17 +33,17 @@ class CCPluginVersion(cocos2d.CCPlugin):
         return "prints the version of the installed components"
 
     def _show_versions(self):
-        path = os.path.join(self._src_dir, "cocos2dx", "axmol.cpp")
+        path = os.path.join(self._src_dir, "axmol", "axmolver.h")
         if not os.path.exists(path):
-            path = os.path.join(self._src_dir, "cocos", "2d", "axmol.cpp")
+            path = os.path.join(self._src_dir, "axmol", "2d", "axmolver.h")
             if not os.path.exists(path):
                 raise cocos2d.CCPluginError("Couldn't find file with version information")
 
     	with open(path, 'r')  as f:
     		data = f.read()
-    		match = re.search('axmolVersion\(\)\s*{\s*return\s+"([^"]+)"\s*;', data)
+    		match = re.search(r".*AX_VERSION_STR[ \t]+\"(.*)\"", data)
     		if match:
-    			print 'cocos2d %s' % match.group(1)
+    			print 'axmol %s' % match.group(1)
     		else:
     			raise cocos2d.CCPluginError("Couldn't find version info")
 

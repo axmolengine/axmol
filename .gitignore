@@ -51,7 +51,7 @@ gen/
 assets/
 local.properties
 
-/core/version.h
+/core/axmolver.h
 
 # Ignore python compiled files
 *.pyc

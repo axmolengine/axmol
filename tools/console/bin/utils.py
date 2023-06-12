@@ -261,10 +261,10 @@ def get_str_from_file(engine_path, file_path, pattern):
     return ret
 
 
-VERSION_FILE_PATH = 'core/axmol.cpp'
-VERSION_PATTERN = r".*return[ \t]+\"(.*)\".*;"
+VERSION_FILE_PATH = 'core/axmolver.h.in'
+VERSION_PATTERN = r".*AX_VERSION_STR[ \t]+\"(.*)\""
 
-VERSION_H_PATH = 'core/version.h'
+VERSION_H_PATH = 'core/axmolver.h'
 COMMIT_HASH_PATTERN = r".*AX_GIT_COMMIT_HASH[ \t]+\"(.*)\""
 
 def get_engine_version(engine_path):
@@ -273,8 +273,8 @@ def get_engine_version(engine_path):
     commit_hash = get_str_from_file(engine_path, VERSION_H_PATH, COMMIT_HASH_PATTERN)
     if ver_str != None:
         if commit_hash != None:
-            ret = ver_str + commit_hash
+            ret = ver_str + '-' + commit_hash
         else:
-            ret = ver_str[:len(ver_str)-1] # remove the character '-'
+            ret = ver_str[:len(ver_str)] # remove the character '-'
     
     return ret

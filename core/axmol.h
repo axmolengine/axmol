@@ -33,7 +33,7 @@ THE SOFTWARE.
 // 0x00 HI ME LO
 // 00   03 08 00
 
-#define AX_VERSION 0x00010000
+#include "axmolver.h"
 
 //
 // all axmol include files

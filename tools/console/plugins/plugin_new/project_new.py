@@ -173,7 +173,7 @@ class CCPluginNew(axmol.CCPlugin):
             engine_type = None
 
             framework_ver_file = os.path.join(self._cocosroot, 'version')
-            x_ver_file = os.path.join(self._cocosroot, 'core/axmol.cpp')
+            x_ver_file = os.path.join(self._cocosroot, 'core/axmolver.h')
             js_ver_file = os.path.join(self._cocosroot, 'frameworks/js-bindings/bindings/manual/ScriptingCore.h')
             if os.path.isfile(framework_ver_file):
                 # the engine is Cocos Framework
@@ -185,15 +185,10 @@ class CCPluginNew(axmol.CCPlugin):
                 ver_file = None
                 pattern = None
                 if os.path.isfile(x_ver_file):
-                    # the engine is cocos2d-x
-                    pattern = r".*return[ \t]+\"(.*)\";"
+                    # the engine is axmol
+                    pattern = r".*AX_VERSION_STR[ \t]+\"(.*)\""
                     ver_file = x_ver_file
-                    engine_type = 'cocos2d-x'
-                elif os.path.isfile(js_ver_file):
-                    # the engine is cocos2d-js
-                    pattern = r".*#define[ \t]+ENGINE_VERSION[ \t]+\"(.*)\""
-                    ver_file = js_ver_file
-                    engine_type = 'cocos2d-js'
+                    engine_type = 'axmol'
 
                 if ver_file is not None:
                     f = open(ver_file)
