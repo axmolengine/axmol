@@ -10,7 +10,8 @@ on:
       - core/**/*
       - docs/**/*
       - .github/workflows/docs-ci.yml
-
+  workflow_dispatch:
+    
 jobs:
   build-docs:
     runs-on: ubuntu-latest
