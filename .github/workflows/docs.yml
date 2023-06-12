@@ -20,9 +20,7 @@ jobs:
     
     # Build the HTML documentation
     - name: Build HTML documentation
-      # Some projects don't allow in-source building, so create a separate build directory
-      # We'll use this as our working directory for all
-      run: tools/unix-ci/generate_docs.sh
+      run: ./tools/unix-ci/generate_docs.sh
     
     # Deploy the HTML documentation to GitHub Pages
     - name: GH Pages Deployment
