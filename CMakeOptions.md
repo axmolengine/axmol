@@ -5,6 +5,7 @@
 - AX_ENABLE_XXX for core feature: 
   - AX_ENABLE_MSEDGE_WEBVIEW2: whether enable msedge webview2, default: `TRUE`
   - AX_ENABLE_MFMEDIA: whether enable microsoft media foundation for windows video player support, default: `TRUE`
+  - AX_ENABLE_VLC_MEDIA: whether enable libvlc media, default: `TRUE on Linux`, `FALSE on Windows`, not support other platforms
 - AX_USE_XXX:
   - AX_USE_ALSOFT: whether use openal-soft for all platforms
     - Apple platform: Use openal-soft instead system deprecated: `OpenAL.framework`
