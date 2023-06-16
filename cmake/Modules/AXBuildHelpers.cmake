@@ -207,6 +207,14 @@ function(ax_copy_target_dll ax_target)
                 $<TARGET_FILE_DIR:${ax_target}>)
         endif()
     endif()
+
+    # copy libvlc plugins dir for windows
+    if(AX_ENABLE_VLC_MEDIA)
+        add_custom_command(TARGET ${ax_target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/vlc/win/lib/vlc/plugins
+        $<TARGET_FILE_DIR:${ax_target}>/plugins
+        )
+    endif()
 endfunction()
 
 function(ax_copy_lua_dlls ax_target)
