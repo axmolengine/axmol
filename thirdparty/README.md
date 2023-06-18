@@ -52,7 +52,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.1.1
+- Version: 8.1.2
 - License: Curl (MIT/X)
 
 ## flatbuffers
@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-224129a
+  - Version: 2.1-ff6c496
   - License: MIT
 
 - tolua
@@ -179,7 +179,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.8
+- Version: 3.0.9
 - License: Apache-2.0
 
 ## png
