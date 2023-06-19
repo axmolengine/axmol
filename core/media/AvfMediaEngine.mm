@@ -234,8 +234,8 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
                                              NSDictionary* errDetail = [nsError userInfo];
                                              NSString* errStr =
                                                  [[errDetail objectForKey:NSUnderlyingErrorKey] localizedDescription];
-
-                                             AXME_TRACE("Load media asset failed, %s", errStr.UTF8String);
+                                             NSString* errorReason = [errDetail objectForKey:NSLocalizedFailureReasonErrorKey];
+                                             AXME_TRACE("Load media asset failed, %s, %s", errStr.UTF8String, errorReason.UTF8String);
                                          }
                                        }];
 
