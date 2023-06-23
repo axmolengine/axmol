@@ -55,6 +55,11 @@
 - Version: 8.1.2
 - License: Curl (MIT/X)
 
+## FastLZ
+- Upstream: https://github.com/ariya/FastLZ
+- Version: git 344eb40 (121)
+- License: MIT
+
 ## flatbuffers
 - [![Upstream](https://img.shields.io/github/v/release/google/flatbuffers?label=Upstream)](https://github.com/google/flatbuffers)
 - Version: 2.0.8
