@@ -6,7 +6,7 @@
 
 ## astcenc
 - [![Upstream](https://img.shields.io/github/v/release/ARM-software/astc-encoder?label=Upstream)](https://github.com/ARM-software/astc-encoder)
-- Version: 4.4.0
+- Version: 4.5.0
 - License: Apache-2.0
 
 ## Box2D
@@ -72,7 +72,7 @@
 
 ## Glad
 - [![Upstream](https://img.shields.io/github/v/tag/Dav1dde/glad?label=Upstream)](https://github.com/Dav1dde/glad)
-- Version: 2.0.3
+- Version: 2.0.4
 - License: MIT
 
 ## glfw
@@ -174,7 +174,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: 1.23.1 with modified for UWP apps support
+- Version: git 1.23.1-a49b612 (8655)
 - License: LGPL-2.1
 
 ## OpenSSL
@@ -184,7 +184,7 @@
 
 ## png
 - [![Upstream](https://img.shields.io/github/v/tag/glennrp/libpng?label=Upstream)](https://github.com/glennrp/libpng)
-- Version: 1.6.39
+- Version: 1.6.40
 - License: PNG Reference Library License version 2
 
 ## poly2tri
@@ -205,8 +205,8 @@
 - License: MIT
 
 ## recast
-- Upstream: https://github.com/recastnavigation/recastnavigation
-- Version: git 65b314a (747) with dtCrowd::getEditableAgentAnim
+- Upstream: [![Upstream](https://img.shields.io/github/v/tag/recastnavigation/recastnavigation?label=Upstream)](https://github.com/recastnavigation/recastnavigation) 
+- Version: 1.6.0 with dtCrowd::getEditableAgentAnim
 - License: zlib
 
 ## robin-map
@@ -253,7 +253,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: git 4.0.0-585095b
+- Version: git 4.0.0-79dba18
 - License: MIT WITH Anti-996
 
 ## zlib

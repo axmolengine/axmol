@@ -27,8 +27,8 @@ SOFTWARE.
 */
 #include "yasio/bindings/yasio_cclua.hpp"
 #include "yasio/bindings/lyasio.hpp"
-#include "yasio/core/object_pool.hpp"
-#include "yasio/core/ref_ptr.hpp"
+#include "yasio/object_pool.hpp"
+#include "yasio/ref_ptr.hpp"
 #include "yasio/stl/string_view.hpp"
 
 // A workaround to fix compile issue caused by `CCPlatformMacros.h` doesn't handle `__has_attribute` it properly

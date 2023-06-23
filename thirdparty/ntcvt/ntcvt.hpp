@@ -105,7 +105,7 @@ template <typename _StringContType>
 inline _StringContType wcbs2a(const wchar_t* wcb, int len, UINT cp = NTCVT_CP_DEFAULT)
 {
   if (len == -1)
-    len = wcslen(wcb);
+    len = static_cast<int>(wcslen(wcb));
   _StringContType buffer;
   int cch;
   if (len > 0 && (cch = ::WideCharToMultiByte(cp, 0, wcb, len, NULL, 0, NULL, NULL)) > 0)
@@ -122,7 +122,7 @@ template <typename _StringContType>
 inline _StringContType mcbs2w(const char* mcb, int len, UINT cp = NTCVT_CP_DEFAULT)
 {
   if (len == -1)
-    len = strlen(mcb);
+    len = static_cast<int>(strlen(mcb));
   _StringContType buffer;
   int cch;
   if (len > 0 && (cch = ::MultiByteToWideChar(cp, 0, mcb, len, NULL, 0)) > 0)
@@ -139,7 +139,7 @@ inline _StringContType mcbs2w(const char* mcb, int len, UINT cp = NTCVT_CP_DEFAU
 inline int mcbs2w(const char* mcb, int len, wchar_t* wbuf, int wbuf_len, UINT cp = NTCVT_CP_DEFAULT)
 {
   if (len == -1)
-    len = strlen(mcb);
+    len = static_cast<int>(strlen(mcb));
   int cch;
   if (len > 0 && (cch = ::MultiByteToWideChar(cp, 0, mcb, len, NULL, 0)) > 0)
     return ::MultiByteToWideChar(cp, 0, mcb, len, wbuf, wbuf_len);
@@ -150,7 +150,7 @@ inline int mcbs2w(const char* mcb, int len, wchar_t* wbuf, int wbuf_len, UINT cp
 inline wchar_t* mcbs2wdup(const char* mcb, int len, int* wbuf_len, UINT cp = NTCVT_CP_DEFAULT)
 {
   if (len == -1)
-    len = strlen(mcb);
+    len = static_cast<int>(strlen(mcb));
   int cch;
   if (len > 0 && (cch = ::MultiByteToWideChar(cp, 0, mcb, len, NULL, 0)) > 0)
   {

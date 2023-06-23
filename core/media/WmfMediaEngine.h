@@ -53,7 +53,7 @@
 #    include <mutex>
 #    include <deque>
 
-#    include "yasio/core/byte_buffer.hpp"
+#    include "yasio/byte_buffer.hpp"
 
 NS_AX_BEGIN
 
