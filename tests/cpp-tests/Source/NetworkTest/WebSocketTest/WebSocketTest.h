@@ -35,7 +35,7 @@
 #define __TestCpp__WebSocketTest__
 
 #include "axmol.h"
-#include "extensions/cocos-ext.h"
+#include "extensions/axmol-ext.h"
 #include "network/WebSocket.h"
 #include "BaseTest.h"
 
