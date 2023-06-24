@@ -38,6 +38,9 @@ THE SOFTWARE.
 #include "2d/Scene.h"
 #include "math/Math.h"
 #include "platform/GLView.h"
+#if defined(AX_PLATFORM_PC)
+#    include "concurrentqueue/concurrentqueue.h"
+#endif
 
 NS_AX_BEGIN
 
@@ -505,6 +508,11 @@ public:
      */
     bool isChildrenIndexerEnabled() const { return _childrenIndexerEnabled; }
 
+    /** since Axmol-1.0
+    * queue a priority operation in render thread, even through app in background
+    */
+    void queueOperation(AsyncOperation op, void* param = nullptr);
+
     /**
      * returns whether or not the Director is in a valid state
      */
@@ -512,6 +520,10 @@ public:
 
 protected:
     void reset();
+
+#if defined(AX_PLATFORM_PC)
+    void processOperations();
+#endif
 
     virtual void startAnimation(SetIntervalReason reason);
     virtual void setAnimationInterval(float interval, SetIntervalReason reason);
@@ -647,6 +659,11 @@ protected:
 
     /* axmol thread id */
     std::thread::id _axmol_thread_id;
+
+#if defined(AX_PLATFORM_PC)
+    /* axmol priority operations in render thread for PC platforms */
+    moodycamel::ConcurrentQueue<std::function<void()>> _operations;
+#endif
 
     // GLView will recreate stats labels to fit visible rect
     friend class GLView;

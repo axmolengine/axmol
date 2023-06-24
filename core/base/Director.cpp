@@ -1468,10 +1468,28 @@ void Director::startAnimation(SetIntervalReason reason)
     setNextDeltaTimeZero(true);
 }
 
+void Director::queueOperation(AsyncOperation op, void* param)
+{
+#if defined(AX_PLATFORM_PC)
+    _operations.enqueue([=]() { op(param); });
+#else
+    _openGLView->queueOperation(op, param);
+#endif
+}
+
+#if defined(AX_PLATFORM_PC)
+void Director::processOperations()
+{
+    std::function<void()> op;
+    while (_operations.try_dequeue(op))
+        op();
+}
+#endif
+
 void Director::mainLoop()
 {
 #if defined(AX_PLATFORM_PC)
-    _openGLView->processOperations();
+    processOperations();
 #endif
 
     if (_purgeDirectorInNextLoop)
