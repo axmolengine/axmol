@@ -216,7 +216,7 @@ WebSocket::WebSocket() : _isDestroyed(std::make_shared<std::atomic<bool>>(false)
     _service->set_option(yasio::YOPT_S_FORWARD_PACKET, 1);  // forward packet immediately when got data from OS kernel
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TIMEOUT, 3);
     _service->set_option(yasio::YOPT_S_DNS_QUERIES_TRIES, 1);
-    _service->start([=, this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
+    _service->start([this](yasio::event_ptr&& e) { handleNetworkEvent(e.get()); });
 
     __instanceMutex.lock();
     if (__websocketInstances == nullptr)
@@ -234,7 +234,7 @@ WebSocket::WebSocket() : _isDestroyed(std::make_shared<std::atomic<bool>>(false)
             close();
         });
 
-    _scheduler->schedule([=, this](float) { dispatchEvents(); }, this, 0, false, "#");
+    _scheduler->schedule([this](float) { dispatchEvents(); }, this, 0, false, "#");
 }
 WebSocket::~WebSocket()
 {
