@@ -47,7 +47,7 @@ endif()
 
 message(STATUS "WINRT=${WINRT}")
 
-option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation for windows video player" ON)
+option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON)
 
 if (NOT WINRT)
     option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
@@ -59,9 +59,9 @@ endif()
 if (LINUX)
     include(CheckIncludeFile)
     check_include_file(vlc/vlc.h _AX_HAVE_VLC)
-    if (_AX_HAVE_VLC)
-        option (AX_ENABLE_VLC_MEDIA "Enabling vlc media for linux video player" ON)
-    endif()
+    option (AX_ENABLE_VLC_MEDIA "Enabling vlc media on linux" ON)
+elseif(WINDOWS AND (NOT WINRT))
+    option (AX_ENABLE_VLC_MEDIA "Enabling vlc media on windows" OFF)
 endif()
 
 message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")

@@ -42,9 +42,9 @@ THE SOFTWARE.
 #include "openssl/modes.h"
 #include "openssl/rc4.h"
 
-#include "yasio/core/ibstream.hpp"
-#include "yasio/core/obstream.hpp"
-#include "yasio/core/sz.hpp"
+#include "yasio/ibstream.hpp"
+#include "yasio/obstream.hpp"
+#include "yasio/sz.hpp"
 
 #include "base/UserDefault.h"
 #include "platform/Common.h"

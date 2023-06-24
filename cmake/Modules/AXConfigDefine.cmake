@@ -71,9 +71,38 @@ if(NOT DEFINED CMAKE_CXX_EXTENSIONS)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
+# check compiler on windows
+if(WINDOWS)
+    # not support other compile tools except MSVC for now
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        message(STATUS "Using Windows clang generate axmol project, CLANG_VERSION: ${CLANG_VERSION_STRING}")
+        set(FUZZ_CLANG TRUE)
+        if (NOT MSVC)
+            set(FULL_CLANG TRUE)
+        else()
+            set(FUZZ_MSVC TRUE)
+        endif()
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
+        # Visual Studio 2017, MSVC_VERSION 1910-1919 (v141 toolset)
+        set(FUZZ_MSVC TRUE)
+        set(FULL_MSVC TRUE)
+        if(${MSVC_VERSION} EQUAL 1900 OR ${MSVC_VERSION} GREATER 1900)
+            message(STATUS "Using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION}")
+        else()
+            message(FATAL_ERROR "Using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
+        endif()
+    else()
+        message(FATAL_ERROR "Please using Windows MSVC/LLVM-Clang compile axmol project")
+    endif()
+endif()
 
-if (MSVC)
+if (FUZZ_MSVC)
     add_compile_options(/GF)
+endif()
+
+if (FULL_MSVC)
+    add_compile_options(/Bv)
 endif()
 
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
@@ -82,24 +111,6 @@ set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Norma
 # see also: https://github.com/axmolengine/axmol/discussions/614
 if (ANDROID)
     set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--hash-style=both")
-endif()
-
-# check visual studio version
-if(WINDOWS)
-    # not support other compile tools except MSVC for now
-    if(MSVC)
-        # Visual Studio 2015, MSVC_VERSION 1900      (v140 toolset)
-        # Visual Studio 2017, MSVC_VERSION 1910-1919 (v141 toolset)
-        if(${MSVC_VERSION} EQUAL 1900 OR ${MSVC_VERSION} GREATER 1900)
-            message(STATUS "using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION}")
-        else()
-            message(FATAL_ERROR "using Windows MSVC generate axmol project, MSVC_VERSION:${MSVC_VERSION} lower than needed")
-        endif()
-    elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        message(STATUS "using Windows clang-cl generate axmol project")
-    else()
-        message(FATAL_ERROR "please using Windows MSVC/LLVM-Clang compile axmol project, support other compile tools not yet")
-    endif()
 endif()
 
 # Set macro definitions for special platforms
@@ -179,7 +190,6 @@ endfunction()
 set(can_use_assembler TRUE)
 enable_language(ASM)
 enable_language(ASM_NASM OPTIONAL)
-message(STATUS "The nasm compiler speed up libraries: jpeg(libjpeg-turbo)")
 
 if(NOT EXISTS "${CMAKE_ASM_NASM_COMPILER}")
    set(CMAKE_ASM_NASM_COMPILER_LOADED FALSE CACHE BOOL "Does cmake asm nasm compiler loaded" FORCE)

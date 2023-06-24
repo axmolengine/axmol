@@ -20,7 +20,7 @@
 #include <deque>
 #include "astcenc/astcenc.h"
 #include "astcenc/astcenc_internal_entry.h"
-#include "yasio/core/utils.hpp"
+#include "yasio/utils.hpp"
 
 #define ASTCDEC_NO_CONTEXT 1
 #define ASTCDEC_PRINT_BENCHMARK 0

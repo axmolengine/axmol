@@ -32,7 +32,9 @@
 #include <memory>
 #include <new>
 #include <numeric>
+#include <optional>
 #include <string>
+#include <vector>
 
 #include "AL/al.h"
 #include "AL/alc.h"
@@ -45,7 +47,6 @@
 #include "almalloc.h"
 #include "alnumbers.h"
 #include "alnumeric.h"
-#include "aloptional.h"
 #include "alspan.h"
 #include "alstring.h"
 #include "alu.h"
@@ -346,10 +347,10 @@ DecoderView MakeDecoderView(ALCdevice *device, const AmbDecConf *conf,
     }
 
     std::copy_n(std::begin(conf->HFOrderGain),
-        std::min(al::size(conf->HFOrderGain), al::size(decoder.mOrderGain)),
+        std::min(std::size(conf->HFOrderGain), std::size(decoder.mOrderGain)),
         std::begin(decoder.mOrderGain));
     std::copy_n(std::begin(conf->LFOrderGain),
-        std::min(al::size(conf->LFOrderGain), al::size(decoder.mOrderGainLF)),
+        std::min(std::size(conf->LFOrderGain), std::size(decoder.mOrderGainLF)),
         std::begin(decoder.mOrderGainLF));
 
     const auto num_coeffs = decoder.mIs3D ? AmbiChannelsFromOrder(decoder.mOrder)
@@ -628,7 +629,7 @@ void InitPanning(ALCdevice *device, const bool hqdec=false, const bool stablize=
     const size_t ambicount{decoder.mIs3D ? AmbiChannelsFromOrder(decoder.mOrder) :
         Ambi2DChannelsFromOrder(decoder.mOrder)};
     const bool dual_band{hqdec && !decoder.mCoeffsLF.empty()};
-    al::vector<ChannelDec> chancoeffs, chancoeffslf;
+    std::vector<ChannelDec> chancoeffs, chancoeffslf;
     for(size_t i{0u};i < decoder.mChannels.size();++i)
     {
         const uint idx{device->channelIdxByName(decoder.mChannels[i])};
@@ -818,9 +819,9 @@ void InitHrtfPanning(ALCdevice *device)
         /*RMS   8.340921354e-01f, 7.182670250e-01f, 5.107426573e-01f, 2.541870634e-01f*/
     };
 
-    static_assert(al::size(AmbiPoints1O) == al::size(AmbiMatrix1O), "First-Order Ambisonic HRTF mismatch");
-    static_assert(al::size(AmbiPoints2O) == al::size(AmbiMatrix2O), "Second-Order Ambisonic HRTF mismatch");
-    static_assert(al::size(AmbiPoints3O) == al::size(AmbiMatrix3O), "Third-Order Ambisonic HRTF mismatch");
+    static_assert(std::size(AmbiPoints1O) == std::size(AmbiMatrix1O), "First-Order Ambisonic HRTF mismatch");
+    static_assert(std::size(AmbiPoints2O) == std::size(AmbiMatrix2O), "Second-Order Ambisonic HRTF mismatch");
+    static_assert(std::size(AmbiPoints3O) == std::size(AmbiMatrix3O), "Third-Order Ambisonic HRTF mismatch");
 
     /* A 700hz crossover frequency provides tighter sound imaging at the sweet
      * spot with ambisonic decoding, as the distance between the ears is closer
@@ -933,7 +934,7 @@ void InitUhjPanning(ALCdevice *device)
 
 } // namespace
 
-void aluInitRenderer(ALCdevice *device, int hrtf_id, al::optional<StereoEncoding> stereomode)
+void aluInitRenderer(ALCdevice *device, int hrtf_id, std::optional<StereoEncoding> stereomode)
 {
     /* Hold the HRTF the device last used, in case it's used again. */
     HrtfStorePtr old_hrtf{std::move(device->mHrtf)};

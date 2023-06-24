@@ -40,7 +40,7 @@
 
 #include "3d/3DProgramInfo.h"
 
-#include "yasio/core/byte_buffer.hpp"
+#include "yasio/byte_buffer.hpp"
 
 NS_AX_BEGIN
 

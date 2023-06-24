@@ -6,8 +6,8 @@
 
 #    include <assert.h>
 #    include "yasio/stl/string_view.hpp"
-#    include "yasio/core/endian_portable.hpp"
-#    include "yasio/core/sz.hpp"
+#    include "yasio/endian_portable.hpp"
+#    include "yasio/sz.hpp"
 
 #if TARGET_OS_IPHONE
 #    import <UIKit/UIKit.h>
@@ -234,8 +234,8 @@ bool AvfMediaEngine::open(std::string_view sourceUri)
                                              NSDictionary* errDetail = [nsError userInfo];
                                              NSString* errStr =
                                                  [[errDetail objectForKey:NSUnderlyingErrorKey] localizedDescription];
-
-                                             AXME_TRACE("Load media asset failed, %s", errStr.UTF8String);
+                                             NSString* errorReason = [errDetail objectForKey:NSLocalizedFailureReasonErrorKey];
+                                             AXME_TRACE("Load media asset failed, %s, %s", errStr.UTF8String, errorReason.UTF8String);
                                          }
                                        }];
 

@@ -945,7 +945,7 @@ struct EnvironmentSizeDeferrer2 {
 
         if ((props.dwFlags & EAX2LISTENERFLAGS_DECAYTIMESCALE) != 0)
         {
-            props.flDecayTime = clamp(
+            props.flDecayTime = std::clamp(
                 props.flDecayTime * scale,
                 EAXREVERB_MINDECAYTIME,
                 EAXREVERB_MAXDECAYTIME);
@@ -954,7 +954,7 @@ struct EnvironmentSizeDeferrer2 {
         if ((props.dwFlags & EAX2LISTENERFLAGS_REFLECTIONSSCALE) != 0 &&
             (props.dwFlags & EAX2LISTENERFLAGS_REFLECTIONSDELAYSCALE) != 0)
         {
-            props.lReflections = clamp(
+            props.lReflections = std::clamp(
                 props.lReflections - static_cast<long>(gain_to_level_mb(scale)),
                 EAXREVERB_MINREFLECTIONS,
                 EAXREVERB_MAXREFLECTIONS);
@@ -962,7 +962,7 @@ struct EnvironmentSizeDeferrer2 {
 
         if ((props.dwFlags & EAX2LISTENERFLAGS_REFLECTIONSDELAYSCALE) != 0)
         {
-            props.flReflectionsDelay = clamp(
+            props.flReflectionsDelay = std::clamp(
                 props.flReflectionsDelay * scale,
                 EAXREVERB_MINREFLECTIONSDELAY,
                 EAXREVERB_MAXREFLECTIONSDELAY);
@@ -972,7 +972,7 @@ struct EnvironmentSizeDeferrer2 {
         {
             const auto log_scalar = ((props.dwFlags & EAXREVERBFLAGS_DECAYTIMESCALE) != 0) ? 2'000.0F : 3'000.0F;
 
-            props.lReverb = clamp(
+            props.lReverb = std::clamp(
                 props.lReverb - static_cast<long>(std::log10(scale) * log_scalar),
                 EAXREVERB_MINREVERB,
                 EAXREVERB_MAXREVERB);
@@ -980,7 +980,7 @@ struct EnvironmentSizeDeferrer2 {
 
         if ((props.dwFlags & EAX2LISTENERFLAGS_REVERBDELAYSCALE) != 0)
         {
-            props.flReverbDelay = clamp(
+            props.flReverbDelay = std::clamp(
                 props.flReverbDelay * scale,
                 EAXREVERB_MINREVERBDELAY,
                 EAXREVERB_MAXREVERBDELAY);
@@ -1015,7 +1015,7 @@ struct EnvironmentSizeDeferrer3 {
 
         if ((props.ulFlags & EAXREVERBFLAGS_DECAYTIMESCALE) != 0)
         {
-            props.flDecayTime = clamp(
+            props.flDecayTime = std::clamp(
                 props.flDecayTime * scale,
                 EAXREVERB_MINDECAYTIME,
                 EAXREVERB_MAXDECAYTIME);
@@ -1024,7 +1024,7 @@ struct EnvironmentSizeDeferrer3 {
         if ((props.ulFlags & EAXREVERBFLAGS_REFLECTIONSSCALE) != 0 &&
             (props.ulFlags & EAXREVERBFLAGS_REFLECTIONSDELAYSCALE) != 0)
         {
-            props.lReflections = clamp(
+            props.lReflections = std::clamp(
                 props.lReflections - static_cast<long>(gain_to_level_mb(scale)),
                 EAXREVERB_MINREFLECTIONS,
                 EAXREVERB_MAXREFLECTIONS);
@@ -1032,7 +1032,7 @@ struct EnvironmentSizeDeferrer3 {
 
         if ((props.ulFlags & EAXREVERBFLAGS_REFLECTIONSDELAYSCALE) != 0)
         {
-            props.flReflectionsDelay = clamp(
+            props.flReflectionsDelay = std::clamp(
                 props.flReflectionsDelay * scale,
                 EAXREVERB_MINREFLECTIONSDELAY,
                 EAXREVERB_MAXREFLECTIONSDELAY);
@@ -1041,7 +1041,7 @@ struct EnvironmentSizeDeferrer3 {
         if ((props.ulFlags & EAXREVERBFLAGS_REVERBSCALE) != 0)
         {
             const auto log_scalar = ((props.ulFlags & EAXREVERBFLAGS_DECAYTIMESCALE) != 0) ? 2'000.0F : 3'000.0F;
-            props.lReverb = clamp(
+            props.lReverb = std::clamp(
                 props.lReverb - static_cast<long>(std::log10(scale) * log_scalar),
                 EAXREVERB_MINREVERB,
                 EAXREVERB_MAXREVERB);
@@ -1049,7 +1049,7 @@ struct EnvironmentSizeDeferrer3 {
 
         if ((props.ulFlags & EAXREVERBFLAGS_REVERBDELAYSCALE) != 0)
         {
-            props.flReverbDelay = clamp(
+            props.flReverbDelay = std::clamp(
                 props.flReverbDelay * scale,
                 EAXREVERB_MINREVERBDELAY,
                 EAXREVERB_MAXREVERBDELAY);
@@ -1057,7 +1057,7 @@ struct EnvironmentSizeDeferrer3 {
 
         if ((props.ulFlags & EAXREVERBFLAGS_ECHOTIMESCALE) != 0)
         {
-            props.flEchoTime = clamp(
+            props.flEchoTime = std::clamp(
                 props.flEchoTime * scale,
                 EAXREVERB_MINECHOTIME,
                 EAXREVERB_MAXECHOTIME);
@@ -1065,7 +1065,7 @@ struct EnvironmentSizeDeferrer3 {
 
         if ((props.ulFlags & EAXREVERBFLAGS_MODULATIONTIMESCALE) != 0)
         {
-            props.flModulationTime = clamp(
+            props.flModulationTime = std::clamp(
                 props.flModulationTime * scale,
                 EAXREVERB_MINMODULATIONTIME,
                 EAXREVERB_MAXMODULATIONTIME);
@@ -1089,48 +1089,35 @@ struct EaxReverbCommitter::Exception : public EaxReverbEffectException
 void EaxReverbCommitter::translate(const EAX_REVERBPROPERTIES& src, EaxEffectProps& dst) noexcept
 {
     assert(src.environment <= EAX1REVERB_MAXENVIRONMENT);
-    dst.mType = EaxEffectType::Reverb;
-    dst.mReverb = EAXREVERB_PRESETS[src.environment];
-    dst.mReverb.flDecayTime = src.fDecayTime_sec;
-    dst.mReverb.flDecayHFRatio = src.fDamping;
-    dst.mReverb.lReverb = mini(static_cast<int>(gain_to_level_mb(src.fVolume)), 0);
+    auto&& eaxprops = dst.emplace<EAXREVERBPROPERTIES>(EAXREVERB_PRESETS[src.environment]);
+    eaxprops.flDecayTime = src.fDecayTime_sec;
+    eaxprops.flDecayHFRatio = src.fDamping;
+    eaxprops.lReverb = mini(static_cast<int>(gain_to_level_mb(src.fVolume)), 0);
 }
 
 void EaxReverbCommitter::translate(const EAX20LISTENERPROPERTIES& src, EaxEffectProps& dst) noexcept
 {
     assert(src.dwEnvironment <= EAX1REVERB_MAXENVIRONMENT);
-    const auto& env = EAXREVERB_PRESETS[src.dwEnvironment];
-    dst.mType = EaxEffectType::Reverb;
-    dst.mReverb.ulEnvironment = src.dwEnvironment;
-    dst.mReverb.flEnvironmentSize = src.flEnvironmentSize;
-    dst.mReverb.flEnvironmentDiffusion = src.flEnvironmentDiffusion;
-    dst.mReverb.lRoom = src.lRoom;
-    dst.mReverb.lRoomHF = src.lRoomHF;
-    dst.mReverb.lRoomLF = env.lRoomLF;
-    dst.mReverb.flDecayTime = src.flDecayTime;
-    dst.mReverb.flDecayHFRatio = src.flDecayHFRatio;
-    dst.mReverb.flDecayLFRatio = env.flDecayLFRatio;
-    dst.mReverb.lReflections = src.lReflections;
-    dst.mReverb.flReflectionsDelay = src.flReflectionsDelay;
-    dst.mReverb.vReflectionsPan = env.vReflectionsPan;
-    dst.mReverb.lReverb = src.lReverb;
-    dst.mReverb.flReverbDelay = src.flReverbDelay;
-    dst.mReverb.vReverbPan = env.vReverbPan;
-    dst.mReverb.flEchoTime = env.flEchoTime;
-    dst.mReverb.flEchoDepth = env.flEchoDepth;
-    dst.mReverb.flModulationTime = env.flModulationTime;
-    dst.mReverb.flModulationDepth = env.flModulationDepth;
-    dst.mReverb.flAirAbsorptionHF = src.flAirAbsorptionHF;
-    dst.mReverb.flHFReference = env.flHFReference;
-    dst.mReverb.flLFReference = env.flLFReference;
-    dst.mReverb.flRoomRolloffFactor = src.flRoomRolloffFactor;
-    dst.mReverb.ulFlags = src.dwFlags;
+    auto&& eaxprops = dst.emplace<EAXREVERBPROPERTIES>(EAXREVERB_PRESETS[src.dwEnvironment]);
+    eaxprops.ulEnvironment = src.dwEnvironment;
+    eaxprops.flEnvironmentSize = src.flEnvironmentSize;
+    eaxprops.flEnvironmentDiffusion = src.flEnvironmentDiffusion;
+    eaxprops.lRoom = src.lRoom;
+    eaxprops.lRoomHF = src.lRoomHF;
+    eaxprops.flDecayTime = src.flDecayTime;
+    eaxprops.flDecayHFRatio = src.flDecayHFRatio;
+    eaxprops.lReflections = src.lReflections;
+    eaxprops.flReflectionsDelay = src.flReflectionsDelay;
+    eaxprops.lReverb = src.lReverb;
+    eaxprops.flReverbDelay = src.flReverbDelay;
+    eaxprops.flAirAbsorptionHF = src.flAirAbsorptionHF;
+    eaxprops.flRoomRolloffFactor = src.flRoomRolloffFactor;
+    eaxprops.ulFlags = src.dwFlags;
 }
 
 void EaxReverbCommitter::translate(const EAXREVERBPROPERTIES& src, EaxEffectProps& dst) noexcept
 {
-    dst.mType = EaxEffectType::Reverb;
-    dst.mReverb = src;
+    dst = src;
 }
 
 bool EaxReverbCommitter::commit(const EAX_REVERBPROPERTIES &props)
@@ -1156,41 +1143,41 @@ bool EaxReverbCommitter::commit(const EAXREVERBPROPERTIES &props)
 
 bool EaxReverbCommitter::commit(const EaxEffectProps &props)
 {
-    if(props.mType == mEaxProps.mType
-        && memcmp(&props.mReverb, &mEaxProps.mReverb, sizeof(mEaxProps.mReverb)) == 0)
+    if(props == mEaxProps)
         return false;
 
     mEaxProps = props;
 
-    const auto size = props.mReverb.flEnvironmentSize;
+    auto &eaxprops = std::get<EAXREVERBPROPERTIES>(props);
+    const auto size = eaxprops.flEnvironmentSize;
     const auto density = (size * size * size) / 16.0F;
     mAlProps.Reverb.Density = std::min(density, AL_EAXREVERB_MAX_DENSITY);
-    mAlProps.Reverb.Diffusion = props.mReverb.flEnvironmentDiffusion;
-    mAlProps.Reverb.Gain = level_mb_to_gain(static_cast<float>(props.mReverb.lRoom));
-    mAlProps.Reverb.GainHF = level_mb_to_gain(static_cast<float>(props.mReverb.lRoomHF));
-    mAlProps.Reverb.GainLF = level_mb_to_gain(static_cast<float>(props.mReverb.lRoomLF));
-    mAlProps.Reverb.DecayTime = props.mReverb.flDecayTime;
-    mAlProps.Reverb.DecayHFRatio = props.mReverb.flDecayHFRatio;
-    mAlProps.Reverb.DecayLFRatio = mEaxProps.mReverb.flDecayLFRatio;
-    mAlProps.Reverb.ReflectionsGain = level_mb_to_gain(static_cast<float>(props.mReverb.lReflections));
-    mAlProps.Reverb.ReflectionsDelay = props.mReverb.flReflectionsDelay;
-    mAlProps.Reverb.ReflectionsPan[0] = props.mReverb.vReflectionsPan.x;
-    mAlProps.Reverb.ReflectionsPan[1] = props.mReverb.vReflectionsPan.y;
-    mAlProps.Reverb.ReflectionsPan[2] = props.mReverb.vReflectionsPan.z;
-    mAlProps.Reverb.LateReverbGain = level_mb_to_gain(static_cast<float>(props.mReverb.lReverb));
-    mAlProps.Reverb.LateReverbDelay = props.mReverb.flReverbDelay;
-    mAlProps.Reverb.LateReverbPan[0] = props.mReverb.vReverbPan.x;
-    mAlProps.Reverb.LateReverbPan[1] = props.mReverb.vReverbPan.y;
-    mAlProps.Reverb.LateReverbPan[2] = props.mReverb.vReverbPan.z;
-    mAlProps.Reverb.EchoTime = props.mReverb.flEchoTime;
-    mAlProps.Reverb.EchoDepth = props.mReverb.flEchoDepth;
-    mAlProps.Reverb.ModulationTime = props.mReverb.flModulationTime;
-    mAlProps.Reverb.ModulationDepth = props.mReverb.flModulationDepth;
-    mAlProps.Reverb.AirAbsorptionGainHF = level_mb_to_gain(props.mReverb.flAirAbsorptionHF);
-    mAlProps.Reverb.HFReference = props.mReverb.flHFReference;
-    mAlProps.Reverb.LFReference = props.mReverb.flLFReference;
-    mAlProps.Reverb.RoomRolloffFactor = props.mReverb.flRoomRolloffFactor;
-    mAlProps.Reverb.DecayHFLimit = ((props.mReverb.ulFlags & EAXREVERBFLAGS_DECAYHFLIMIT) != 0);
+    mAlProps.Reverb.Diffusion = eaxprops.flEnvironmentDiffusion;
+    mAlProps.Reverb.Gain = level_mb_to_gain(static_cast<float>(eaxprops.lRoom));
+    mAlProps.Reverb.GainHF = level_mb_to_gain(static_cast<float>(eaxprops.lRoomHF));
+    mAlProps.Reverb.GainLF = level_mb_to_gain(static_cast<float>(eaxprops.lRoomLF));
+    mAlProps.Reverb.DecayTime = eaxprops.flDecayTime;
+    mAlProps.Reverb.DecayHFRatio = eaxprops.flDecayHFRatio;
+    mAlProps.Reverb.DecayLFRatio = eaxprops.flDecayLFRatio;
+    mAlProps.Reverb.ReflectionsGain = level_mb_to_gain(static_cast<float>(eaxprops.lReflections));
+    mAlProps.Reverb.ReflectionsDelay = eaxprops.flReflectionsDelay;
+    mAlProps.Reverb.ReflectionsPan[0] = eaxprops.vReflectionsPan.x;
+    mAlProps.Reverb.ReflectionsPan[1] = eaxprops.vReflectionsPan.y;
+    mAlProps.Reverb.ReflectionsPan[2] = eaxprops.vReflectionsPan.z;
+    mAlProps.Reverb.LateReverbGain = level_mb_to_gain(static_cast<float>(eaxprops.lReverb));
+    mAlProps.Reverb.LateReverbDelay = eaxprops.flReverbDelay;
+    mAlProps.Reverb.LateReverbPan[0] = eaxprops.vReverbPan.x;
+    mAlProps.Reverb.LateReverbPan[1] = eaxprops.vReverbPan.y;
+    mAlProps.Reverb.LateReverbPan[2] = eaxprops.vReverbPan.z;
+    mAlProps.Reverb.EchoTime = eaxprops.flEchoTime;
+    mAlProps.Reverb.EchoDepth = eaxprops.flEchoDepth;
+    mAlProps.Reverb.ModulationTime = eaxprops.flModulationTime;
+    mAlProps.Reverb.ModulationDepth = eaxprops.flModulationDepth;
+    mAlProps.Reverb.AirAbsorptionGainHF = level_mb_to_gain(eaxprops.flAirAbsorptionHF);
+    mAlProps.Reverb.HFReference = eaxprops.flHFReference;
+    mAlProps.Reverb.LFReference = eaxprops.flLFReference;
+    mAlProps.Reverb.RoomRolloffFactor = eaxprops.flRoomRolloffFactor;
+    mAlProps.Reverb.DecayHFLimit = ((eaxprops.ulFlags & EAXREVERBFLAGS_DECAYHFLIMIT) != 0);
     return true;
 }
 
@@ -1212,8 +1199,7 @@ void EaxReverbCommitter::SetDefaults(EAXREVERBPROPERTIES &props)
 
 void EaxReverbCommitter::SetDefaults(EaxEffectProps &props)
 {
-    props.mType = EaxEffectType::Reverb;
-    SetDefaults(props.mReverb);
+    SetDefaults(props.emplace<EAXREVERBPROPERTIES>());
 }
 
 
@@ -1290,7 +1276,7 @@ void EaxReverbCommitter::Get(const EaxCall &call, const EAXREVERBPROPERTIES &pro
 
 void EaxReverbCommitter::Get(const EaxCall &call, const EaxEffectProps &props)
 {
-    Get(call, props.mReverb);
+    Get(call, std::get<EAXREVERBPROPERTIES>(props));
 }
 
 
@@ -1493,7 +1479,7 @@ void EaxReverbCommitter::Set(const EaxCall &call, EAXREVERBPROPERTIES &props)
 
 void EaxReverbCommitter::Set(const EaxCall &call, EaxEffectProps &props)
 {
-    Set(call, props.mReverb);
+    Set(call, std::get<EAXREVERBPROPERTIES>(props));
 }
 
 #endif // ALSOFT_EAX

@@ -178,8 +178,7 @@ void VideoPlayerTest::menuOnlineVideoCallback(Ref* sender)
 {
     if (_videoPlayer)
     {
-        _videoPlayer->setURL(
-            "https://storage.googleapis.com/exoplayer-test-media-1/mkv/android-screens-lavf-56.36.100-aac-avc-main-1280x720.mkv");
+        _videoPlayer->setURL("https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-25s.mp4");
         _videoPlayer->play();
     }
 }

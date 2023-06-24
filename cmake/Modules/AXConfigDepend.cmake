@@ -12,7 +12,7 @@ macro(ax_depend)
     elseif(LINUX)
         # need review those libs: X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m
         list(APPEND PLATFORM_SPECIFIC_LIBS dl X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m bsd)
-        if(AX_ENABLE_VLC_MEDIA)
+        if(_AX_HAVE_VLC)
             list(APPEND PLATFORM_SPECIFIC_LIBS vlc vlccore)
         endif()
         # use older cmake style on below linux libs

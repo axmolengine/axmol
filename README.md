@@ -35,15 +35,15 @@
 The new `ui::MediaPlayer`(renamed from `ui::VideoPlayer`) render video as Texture2D with designed corss-platform MediaEngine, the MediaEngine inspired from microsoft
 media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which axmol engine does.
 
-|  Platform             |    MediaEngine    | Video Compress Format | Video Pixel Format   | Backend            |
-|-----------------------|-------------------|-----------------------|----------------------|--------------------|
-| Windows Desktop       |    complete       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | IMFMediaSession    |
-| Windows UWP           |    complete       | H264, HEVC, VP90      | BGR32                | IMFMediaEngine     |
-| Apple macOS           |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Apple tvOS            |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Apple iOS             |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Android               |    complete       | H264, HEVC            | NV12                 | ExoPlayer2         |
-| Linux                 |    complete       | H264, HEVC            | NV12                 | libVLC             |
+|  Platform             | Video Compress Format | Video Pixel Format   | Container Format | Backend            |
+|-----------------------|-----------------------|----------------------|----------------- |--------------------|
+| Windows Desktop       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | .mp4,.mkv,.webm  | IMFMediaSession    |
+| Windows UWP           | H264, HEVC, VP90      | BGR32                | .mp4,.mkv,.webm  | IMFMediaEngine     |
+| Apple macOS           | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
+| Apple tvOS            | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
+| Apple iOS             | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
+| Android               | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | ExoPlayer2         |
+| Linux                 | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | libVLC             |
 
 ## Building
 

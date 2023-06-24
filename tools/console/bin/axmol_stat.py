@@ -41,7 +41,7 @@ else:
 GA_HOST        = 'www.google-analytics.com'
 GA_PATH        = '/collect'
 GA_APIVERSION  = '1'
-APPNAME     = 'AxisConsole'
+APPNAME     = 'AxmolConsole'
 
 TIMEOUT_VALUE = 0.5
 
@@ -49,7 +49,7 @@ TIMEOUT_VALUE = 0.5
 GA_TRACKERID = 'UA-60734607-3'
 
 # debug tracker ID
-# GA_TRACKERID = 'UA-60530469-4'
+GA_TRACKERID = 'UA-60530469-4'
 
 # BI related Constants
 BI_HOST  = 'ark.cocounion.com'
