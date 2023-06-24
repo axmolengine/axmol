@@ -39,7 +39,7 @@
 #include "network/Downloader.h"
 #include "platform/FileStream.h"
 #include "openssl/md5.h"
-#include "yasio/core/xxsocket.hpp"
+#include "yasio/xxsocket.hpp"
 
 // **NOTE**
 // In the file:

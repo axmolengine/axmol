@@ -54,7 +54,7 @@
 #include "base/Utils.h"
 #include "base/UTF8.h"
 
-#include "yasio/core/xxsocket.hpp"
+#include "yasio/xxsocket.hpp"
 
 // !FIXME: the previous version of ax::log not thread safe
 // since axmol make it multi-threading safe by default
@@ -550,7 +550,7 @@ void Console::stop()
     if (_running)
     {
         _endThread = true;
-        _interrupter.interrupt();
+        _watcher.wakeup();
         if (_thread.joinable())
         {
             _thread.join();
@@ -662,32 +662,21 @@ bool Console::isIpv6Server() const
 //
 void Console::loop()
 {
-    fd_set copy_set;
-    struct timeval timeout, timeout_copy;
-
     _running = true;
 
-    FD_ZERO(&_read_set);
-    FD_SET(_listenfd, &_read_set);
-    FD_SET(_interrupter.read_descriptor(), &_read_set);
-    _maxfd = (std::max)(_listenfd, _interrupter.read_descriptor());
+    _watcher.mod_event(_listenfd, yasio::socket_event::read, 0);
 
-    timeout.tv_sec  = 300;
-    timeout.tv_usec = 0;
+    const int64_t timeout_usec = 300 * std::micro::den;
 
     while (!_endThread)
     {
-
-        copy_set     = _read_set;
-        timeout_copy = timeout;
-
-        int nready = select(_maxfd + 1, &copy_set, nullptr, nullptr, &timeout_copy);
+        int nready = _watcher.poll_io(timeout_usec);
 
         if (nready == -1)
         {
             /* error */
             if (errno != EINTR)
-                ax::print("Abnormal error in select()\n");
+                ax::print("Abnormal error in poll_io()\n");
             continue;
         }
         else if (nready == 0)
@@ -696,17 +685,11 @@ void Console::loop()
         }
         else
         {
-            if (FD_ISSET(_interrupter.read_descriptor(), &copy_set)) {
-                if (!_interrupter.reset())
-                    _interrupter.recreate();
-                --nready;
-
-                if (_endThread)
-                    break;
-            }
+            if (_endThread)
+                break;
 
             /* new client */
-            if (FD_ISSET(_listenfd, &copy_set))
+            if (_watcher.is_ready(_listenfd, yasio::socket_event::read))
             {
                 addClient();
                 if (--nready <= 0)
@@ -717,7 +700,7 @@ void Console::loop()
             std::vector<int> to_remove;
             for (const auto& fd : _fds)
             {
-                if (FD_ISSET(fd, &copy_set))
+                if (_watcher.is_ready(fd, yasio::socket_event::read))
                 {
                     // fix Bug #4302 Test case ConsoleTest--ConsoleUploadFile crashed on Linux
                     // On linux, if you send data to a closed socket, the sending process will
@@ -755,7 +738,7 @@ void Console::loop()
             /* remove closed connections */
             for (int fd : to_remove)
             {
-                FD_CLR(fd, &_read_set);
+                _watcher.mod_event(fd, 0, yasio::socket_event::read);
                 _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
             }
         }
@@ -961,9 +944,8 @@ void Console::addClient()
     // add fd to list of FD
     if (fd != -1)
     {
-        FD_SET(fd, &_read_set);
+        _watcher.mod_event(fd, yasio::socket_event::read, 0);
         _fds.emplace_back(fd);
-        _maxfd = (std::max)(_maxfd, fd);
 
         Console::Utility::sendPrompt(fd);
 
@@ -1172,7 +1154,7 @@ void Console::commandDirectorSubCommandEnd(socket_native_type /*fd*/, std::strin
 
 void Console::commandExit(socket_native_type fd, std::string_view /*args*/)
 {
-    FD_CLR(fd, &_read_set);
+    _watcher.mod_event(fd, 0, yasio::socket_event::read);
     _fds.erase(std::remove(_fds.begin(), _fds.end(), fd), _fds.end());
     closesocket(fd);
 }

@@ -35,7 +35,7 @@
 #include "base/Ref.h"
 #include "base/Macros.h"
 
-#include "yasio/core/byte_buffer.hpp"
+#include "yasio/byte_buffer.hpp"
 
 /**
  * @addtogroup network

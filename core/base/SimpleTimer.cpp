@@ -1,6 +1,6 @@
 #include "SimpleTimer.h"
-#include "yasio/core/object_pool.hpp"
-#include "yasio/core/ref_ptr.hpp"
+#include "yasio/object_pool.hpp"
+#include "yasio/ref_ptr.hpp"
 #include "axmol.h"
 
 #define STIMER_DEFINE_REFERENCE_CLASS    \
