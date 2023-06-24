@@ -42,7 +42,7 @@
 
 ## ConcurrentQueue
 - [![Upstream](https://img.shields.io/github/v/tag/cameron314/concurrentqueue?label=Upstream)](https://github.com/cameron314/concurrentqueue)
-- Version: git 1.0.4
+- Version: 1.0.4
 - License: BSL-1.0
 
 ## ConvertUTF
@@ -258,7 +258,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: git 4.0.0-79dba18
+- Version: git 4.0.0-c1af119
 - License: MIT WITH Anti-996
 
 ## zlib
