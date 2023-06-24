@@ -36,7 +36,7 @@
 #include <string>
 #include <sstream>
 
-#include "yasio/core/byte_buffer.hpp"
+#include "yasio/byte_buffer.hpp"
 
 USING_NS_AX;
 using namespace ax::network;

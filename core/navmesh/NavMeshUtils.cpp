@@ -27,7 +27,7 @@
 
 #    include "recast/DetourCommon.h"
 #    include "recast/DetourNavMeshBuilder.h"
-#    include "lz4/lz4.h"
+#    include "fastlz/fastlz.h"
 
 NS_AX_BEGIN
 
@@ -68,28 +68,28 @@ void LinearAllocator::resize(const int cap)
     capacity = cap;
 }
 
-int LZ4Compressor::maxCompressedSize(const int bufferSize)
+int FastLZCompressor::maxCompressedSize(const int bufferSize)
 {
-    return LZ4_compressBound(bufferSize);
+    return (int)(bufferSize* 1.05f);
 }
 
-dtStatus ax::LZ4Compressor::decompress(const unsigned char* compressed,
+dtStatus ax::FastLZCompressor::decompress(const unsigned char* compressed,
                                             const int compressedSize,
                                             unsigned char* buffer,
                                             const int maxBufferSize,
                                             int* bufferSize)
 {
-    *bufferSize = LZ4_decompress_safe((const char*)compressed, (char*)buffer, compressedSize, maxBufferSize);
+    *bufferSize = fastlz_decompress(compressed, compressedSize, buffer, maxBufferSize);
     return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
 }
 
-dtStatus ax::LZ4Compressor::compress(const unsigned char* buffer,
+dtStatus ax::FastLZCompressor::compress(const unsigned char* buffer,
                                           const int bufferSize,
                                           unsigned char* compressed,
                                           const int maxCompressedSize,
                                           int* compressedSize)
 {
-    *compressedSize = LZ4_compress_default((const char*)buffer, (char*)compressed, bufferSize, maxCompressedSize);
+    *compressedSize = fastlz_compress((const void *const)buffer, bufferSize, compressed);
     return DT_SUCCESS;
 }
 

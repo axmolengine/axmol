@@ -39,12 +39,13 @@
 #include <functional>
 
 #include "alnumeric.h"
+#include "alsem.h"
+#include "althrd_setname.h"
 #include "core/device.h"
 #include "core/helpers.h"
 #include "core/logging.h"
 #include "ringbuffer.h"
 #include "strutils.h"
-#include "threads.h"
 
 #ifndef WAVE_FORMAT_IEEE_FLOAT
 #define WAVE_FORMAT_IEEE_FLOAT  0x0003
@@ -55,10 +56,10 @@ namespace {
 #define DEVNAME_HEAD "OpenAL Soft on "
 
 
-al::vector<std::string> PlaybackDevices;
-al::vector<std::string> CaptureDevices;
+std::vector<std::string> PlaybackDevices;
+std::vector<std::string> CaptureDevices;
 
-bool checkName(const al::vector<std::string> &list, const std::string &name)
+bool checkName(const std::vector<std::string> &list, const std::string &name)
 { return std::find(list.cbegin(), list.cend(), name) != list.cend(); }
 
 void ProbePlaybackDevices(void)
@@ -372,7 +373,7 @@ struct WinMMCapture final : public BackendBase {
     void open(const char *name) override;
     void start() override;
     void stop() override;
-    void captureSamples(al::byte *buffer, uint samples) override;
+    void captureSamples(std::byte *buffer, uint samples) override;
     uint availableSamples() override;
 
     std::atomic<uint> mReadable{0u};
@@ -571,7 +572,7 @@ void WinMMCapture::stop()
     mIdx = 0;
 }
 
-void WinMMCapture::captureSamples(al::byte *buffer, uint samples)
+void WinMMCapture::captureSamples(std::byte *buffer, uint samples)
 { mRing->read(buffer, samples); }
 
 uint WinMMCapture::availableSamples()

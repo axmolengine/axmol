@@ -963,10 +963,11 @@ ASTCENC_SIMD_INLINE vint4 float_to_int(vfloat4 a)
  */
 ASTCENC_SIMD_INLINE vint4 float_to_int_rtn(vfloat4 a)
 {
-	return vint4(static_cast<int>(a.m[0] + 0.5f),
-	             static_cast<int>(a.m[1] + 0.5f),
-	             static_cast<int>(a.m[2] + 0.5f),
-	             static_cast<int>(a.m[3] + 0.5f));
+	a = a + vfloat4(0.5f);
+	return vint4(static_cast<int>(a.m[0]),
+	             static_cast<int>(a.m[1]),
+	             static_cast<int>(a.m[2]),
+	             static_cast<int>(a.m[3]));
 }
 
 /**

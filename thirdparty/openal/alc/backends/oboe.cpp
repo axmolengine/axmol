@@ -28,6 +28,8 @@ struct OboePlayback final : public BackendBase, public oboe::AudioStreamCallback
     oboe::DataCallbackResult onAudioReady(oboe::AudioStream *oboeStream, void *audioData,
         int32_t numFrames) override;
 
+    void onErrorAfterClose(oboe::AudioStream* /* audioStream */, oboe::Result /* error */) override;
+
     void open(const char *name) override;
     bool reset() override;
     void start() override;
@@ -46,6 +48,13 @@ oboe::DataCallbackResult OboePlayback::onAudioReady(oboe::AudioStream *oboeStrea
     return oboe::DataCallbackResult::Continue;
 }
 
+void OboePlayback::onErrorAfterClose(oboe::AudioStream* audioStream, oboe::Result error)
+{
+    if (error == oboe::Result::ErrorDisconnected) {
+        mDevice->handleDisconnect("Oboe AudioStream was disconnected: %s", oboe::convertToText(error));
+    }
+    TRACE("Error was %s", oboe::convertToText(error));
+}
 
 void OboePlayback::open(const char *name)
 {
@@ -197,8 +206,7 @@ void OboePlayback::stop()
 {
     oboe::Result result{mStream->stop()};
     if(result != oboe::Result::OK)
-        throw al::backend_exception{al::backend_error::DeviceError, "Failed to stop stream: %s",
-            oboe::convertToText(result)};
+        ERR("Failed to stop stream: %s\n", oboe::convertToText(result));
 }
 
 
@@ -215,7 +223,7 @@ struct OboeCapture final : public BackendBase, public oboe::AudioStreamCallback 
     void open(const char *name) override;
     void start() override;
     void stop() override;
-    void captureSamples(al::byte *buffer, uint samples) override;
+    void captureSamples(std::byte *buffer, uint samples) override;
     uint availableSamples() override;
 };
 
@@ -315,14 +323,13 @@ void OboeCapture::stop()
 {
     const oboe::Result result{mStream->stop()};
     if(result != oboe::Result::OK)
-        throw al::backend_exception{al::backend_error::DeviceError, "Failed to stop stream: %s",
-            oboe::convertToText(result)};
+        ERR("Failed to stop stream: %s\n", oboe::convertToText(result));
 }
 
 uint OboeCapture::availableSamples()
 { return static_cast<uint>(mRing->readSpace()); }
 
-void OboeCapture::captureSamples(al::byte *buffer, uint samples)
+void OboeCapture::captureSamples(std::byte *buffer, uint samples)
 { mRing->read(buffer, samples); }
 
 } // namespace

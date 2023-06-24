@@ -43,8 +43,7 @@ typedef SSIZE_T ssize_t;
 #include <string>
 #include <mutex>
 #include <stdarg.h>
-#include "yasio/core/socket.hpp"
-#include "yasio/core/select_interrupter.hpp"
+#include "yasio/io_watcher.hpp"
 
 #include "base/Ref.h"
 #include "base/Macros.h"
@@ -274,17 +273,14 @@ protected:
     void commandVersion(socket_native_type fd, std::string_view args);
     // file descriptor: socket, console, etc.
     socket_native_type _listenfd;
-    socket_native_type _maxfd;
     std::vector<socket_native_type> _fds;
     std::thread _thread;
 
-    fd_set _read_set;
+    yasio::io_watcher _watcher;
 
     bool _running;
     bool _endThread;
     bool _isIpv6Server;
-
-    yasio::select_interrupter _interrupter;
 
     hlookup::string_map<Command*> _commands;
 

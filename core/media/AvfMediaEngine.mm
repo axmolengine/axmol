@@ -6,8 +6,8 @@
 
 #    include <assert.h>
 #    include "yasio/stl/string_view.hpp"
-#    include "yasio/core/endian_portable.hpp"
-#    include "yasio/core/sz.hpp"
+#    include "yasio/endian_portable.hpp"
+#    include "yasio/sz.hpp"
 
 #if TARGET_OS_IPHONE
 #    import <UIKit/UIKit.h>
