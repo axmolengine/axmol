@@ -40,9 +40,9 @@
 - Version: 1.2.2
 - License: BSL-1.0
 
-## moodycamel::ConcurrentQueue
+## ConcurrentQueue
 - [![Upstream](https://img.shields.io/github/v/tag/cameron314/concurrentqueue?label=Upstream)](https://github.com/cameron314/concurrentqueue)
-- Version: git 1.0.3-810f621
+- Version: git 1.0.4
 - License: BSL-1.0
 
 ## ConvertUTF
