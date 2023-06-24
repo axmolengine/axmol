@@ -5,7 +5,7 @@
 #    include <TargetConditionals.h>
 
 #    include <assert.h>
-#    include "yasio/stl/string_view.hpp"
+#    include "yasio/string_view.hpp"
 #    include "yasio/endian_portable.hpp"
 #    include "yasio/sz.hpp"
 

@@ -33,7 +33,7 @@ SOFTWARE.
 #include <limits>
 #include <stack>
 #include <fstream>
-#include "yasio/stl/string_view.hpp"
+#include "yasio/string_view.hpp"
 #include "yasio/endian_portable.hpp"
 #include "yasio/utils.hpp"
 #include "yasio/byte_buffer.hpp"

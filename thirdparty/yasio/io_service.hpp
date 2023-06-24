@@ -42,15 +42,15 @@ SOFTWARE.
 #include "yasio/impl/concurrent_queue.hpp"
 #include "yasio/utils.hpp"
 #include "yasio/errc.hpp"
-#include "yasio/stl/memory.hpp"
-#include "yasio/stl/string_view.hpp"
+#include "yasio/memory.hpp"
+#include "yasio/string_view.hpp"
 #include "yasio/object_pool.hpp"
 #include "yasio/byte_buffer.hpp"
 #include "yasio/xxsocket.hpp"
 #include "yasio/io_watcher.hpp"
 
 #if !defined(YASIO_USE_CARES)
-#  include "yasio/stl/shared_mutex.hpp"
+#  include "yasio/shared_mutex.hpp"
 #endif
 
 #if defined(YASIO_SSL_BACKEND)

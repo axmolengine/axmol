@@ -35,7 +35,7 @@
 #include "base/Director.h"
 #include "platform/FileUtils.h"
 #include "ui/UIHelper.h"
-#include "yasio/stl/string_view.hpp"
+#include "yasio/string_view.hpp"
 
 static const char* className = "org.axmol.lib.WebViewHelper";
 
