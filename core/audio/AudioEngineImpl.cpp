@@ -246,7 +246,7 @@ static id s_AudioEngineSessionHandler = nullptr;
 #    endif
 static void alcReopenDeviceOnAxmolThread()
 {
-    Director::getInstance()->getOpenGLView()->queueOperation([](void*) {
+    Director::getInstance()->queueOperation([](void*) {
         auto alcReopenDeviceSOFTProc =
             (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
         if (alcReopenDeviceSOFTProc)
