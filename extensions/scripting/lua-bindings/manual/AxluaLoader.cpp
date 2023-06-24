@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "scripting/lua-bindings/manual/LuaStack.h"
 #include "scripting/lua-bindings/manual/LuaEngine.h"
 #include "platform/FileUtils.h"
-#include "yasio/stl/string_view.hpp"
+#include "yasio/string_view.hpp"
 
 USING_NS_AX;
 

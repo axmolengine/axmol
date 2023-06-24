@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 #include <unordered_map>
 #include "mio/mio.hpp"
-#include "yasio/stl/string_view.hpp"
+#include "yasio/string_view.hpp"
 
 /**
  * @addtogroup base

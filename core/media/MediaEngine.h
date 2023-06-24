@@ -27,7 +27,7 @@
 #include <memory>
 #include <chrono>
 
-#include "yasio/stl/string_view.hpp"
+#include "yasio/string_view.hpp"
 #include "yasio/byte_buffer.hpp"
 
 using namespace std::string_view_literals;
