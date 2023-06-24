@@ -37,7 +37,7 @@ jobs:
         with: 
           arch: ${{ env.BUILD_ARCH }}
       - name: Build
-        run: tools\win-ci\build.ps1 $env:BUILD_ARCH $env:BUILD_DLL
+        run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_dll $env:BUILD_DLL
 
   build-windows-clang:
     runs-on: windows-latest
@@ -65,14 +65,6 @@ jobs:
   build-winuwp:
     name: build-winuwp
     runs-on: windows-latest
-    strategy:
-      matrix:
-        arch:
-          - x64
-          - amd64_arm64
-        
-    env:
-      BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -83,10 +75,10 @@ jobs:
           python-version: '3.7.8'
       - uses: ilammy/msvc-dev-cmd@v1.12.1
         with: 
-          arch: ${{ env.BUILD_ARCH }}
+          arch: x64
           uwp: true
       - name: Build
-        run: tools\win-ci\build.ps1 $env:BUILD_ARCH false true
+        run: tools\win-ci\build.ps1 -arch x64 -is_uwp true
 
   build-linux:
     name: build-linux
