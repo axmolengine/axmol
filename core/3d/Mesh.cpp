@@ -529,7 +529,7 @@ void Mesh::draw(Renderer* renderer,
         if (_instancing && _instances.size() > 0)
         {
             command.setDrawType(CustomCommand::DrawType::ELEMENT_INSTANCE);
-            command.setInstancBuffer(_instanceTransformBuffer, _instances.size());
+            command.setInstanceBuffer(_instanceTransformBuffer, _instances.size());
         }
         else if (_instancing)
             return;

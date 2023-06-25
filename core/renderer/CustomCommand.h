@@ -223,7 +223,7 @@ TODO: should remove it.
      */
     void setAfterCallback(const CallBackFunc& after) { _afterCallback = after; }
 
-    void setInstancBuffer(backend::Buffer* transformBuffer, int count)
+    void setInstanceBuffer(backend::Buffer* transformBuffer, int count)
     {
         _InstanceTransformBuffer = transformBuffer, _instanceCount = count;
     }

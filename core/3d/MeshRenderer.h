@@ -254,7 +254,12 @@ public:
     // Enables instancing for this Mesh Renderer, keep in mind that
     // a special vertex shader has to be used, make sure that your shader
     // has a mat4 attribute set on the location of total vertex attributes +1
-    void enableInstancing(MeshMaterial::InstanceMaterialType instanceShader, int count);
+    void enableInstancing(MeshMaterial::InstanceMaterialType instanceMat, int count);
+
+    // Enables instancing for this Mesh Renderer, keep in mind that
+    // a special vertex shader has to be used, make sure that your shader
+    // has a mat4 attribute set on the location of total vertex attributes +1
+    void enableInstancing(MeshMaterial* instanceMat, int count);
 
     // Set this to true and instancing objects within this mesh renderer
     // will be recalculated each frame, use it when you plan to move objects,
