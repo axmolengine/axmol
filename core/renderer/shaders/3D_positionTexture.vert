@@ -23,6 +23,25 @@
  ****************************************************************************/
  
 
+const char* CC3D_positionTextureInstance_vert = R"(
+#version 330 core
+
+layout(location = 0) in vec4 a_position;
+layout(location = 1) in vec2 a_texCoord;
+layout(location = 2) in mat4 a_instanceMatrix;
+
+varying vec2 TextureCoordOut;
+
+uniform mat4 u_MVPMatrix;
+
+void main(void)
+{
+    gl_Position = u_MVPMatrix * a_instanceMatrix * a_position;
+    TextureCoordOut = a_texCoord;
+    TextureCoordOut.y = 1.0 - TextureCoordOut.y;
+}
+)";
+
 const char* CC3D_positionTexture_vert = R"(
 
 attribute vec4 a_position;

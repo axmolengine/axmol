@@ -358,6 +358,7 @@ struct ProgramType
         POSITION_NORMAL_TEXTURE_3D,            // CC3D_positionNormalTexture_vert,      CC3D_colorNormalTexture_frag
         POSITION_NORMAL_3D,                    // CC3D_positionNormalTexture_vert,      CC3D_colorNormal_frag
         POSITION_TEXTURE_3D,                   // CC3D_positionTexture_vert,            CC3D_colorTexture_frag
+        POSITION_TEXTURE_3D_INSTANCE,          // CC3D_positionTextureInstance_vert,    CC3D_colorTexture_frag
         POSITION_3D,                           // CC3D_positionTexture_vert,            CC3D_color_frag
         POSITION_BUMPEDNORMAL_TEXTURE_3D,      // CC3D_positionNormalTexture_vert,      CC3D_colorNormalTexture_frag
         SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D,  // CC3D_skinPositionNormalTexture_vert,  CC3D_colorNormalTexture_frag

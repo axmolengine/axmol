@@ -753,6 +753,14 @@ void Renderer::drawCustomCommand(RenderCommand* command)
                                      cmd->getIndexDrawOffset(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount();
     }
+    else if (CustomCommand::DrawType::ELEMENT_INSTANCE == drawType)
+    {
+        _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
+        _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
+        _commandBuffer->drawElementsInstanced(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
+                                              cmd->getIndexDrawOffset(), cmd->getInstanceCount(), cmd->isWireframe());
+        _drawnVertices += cmd->getIndexDrawCount() * cmd->getInstanceCount();
+    }
     else
     {
         _commandBuffer->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),

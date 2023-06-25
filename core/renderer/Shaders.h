@@ -74,6 +74,7 @@ extern AX_DLL const char* CC3D_particle_vert;
 extern AX_DLL const char* CC3D_positionNormalTexture_vert;
 extern AX_DLL const char* CC3D_skinPositionNormalTexture_vert;
 extern AX_DLL const char* CC3D_positionTexture_vert;
+extern AX_DLL const char* CC3D_positionTextureInstance_vert;
 extern AX_DLL const char* CC3D_skinPositionTexture_vert;
 extern AX_DLL const char* CC3D_skybox_frag;
 extern AX_DLL const char* CC3D_skybox_vert;

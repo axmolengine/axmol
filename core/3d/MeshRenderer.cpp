@@ -692,6 +692,38 @@ void MeshRenderer::setModelTexture(std::string_view modelPath, std::string_view 
     }
 }
 
+void MeshRenderer::enableInstancing(MeshMaterial::InstanceMaterialType instanceShader, int count)
+{
+    switch (instanceShader)
+    {
+    case MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE:
+    {
+        auto mat = MeshMaterial::createBuiltInMaterial(MeshMaterial::MaterialType::UNLIT_INSTANCE, false);
+        for (auto&& mesh : _meshes)
+        {
+            mesh->enableInstancing(true, count);
+            mesh->setMaterial(mat);
+        }
+        break;
+    }
+    }
+}
+
+void MeshRenderer::setDynamicInstancing(bool dynamic)
+{
+    getMesh()->setDynamicInstancing(dynamic);
+}
+
+void MeshRenderer::addInstanceChild(Node* child) {
+    getMesh()->addInstanceChild(child);
+    addChild(child);
+}
+
+void MeshRenderer::rebuildInstances()
+{
+    getMesh()->rebuildInstances();
+}
+
 void MeshRenderer::setTexture(std::string_view texFile)
 {
     auto tex = _director->getTextureCache()->addImage(texFile);

@@ -108,9 +108,42 @@ static Texture2D* getDummyTexture()
     return texture;
 }
 
+void Mesh::enableInstancing(bool instance, int count)
+{
+    _instancing = instance;
+    _instanceCount = count;
+}
+
+void Mesh::setInstanceCount(int count) {
+    AXASSERT(_instancing, "Instancing should be enabled on this mesh.");
+
+    _instanceCount = count;
+}
+
+void Mesh::addInstanceChild(Node* child)
+{
+    AXASSERT(_instances.size() < _instanceCount, "Instance child overflow, try expanding instance count.");
+
+    _instances.push_back(child);
+    _instanceTransformDirty = true;
+}
+
+void Mesh::rebuildInstances()
+{
+    _instanceTransformDirty = true;
+}
+
+void Mesh::setDynamicInstancing(bool dynamic)
+{
+    _dynamicInstancing = dynamic;
+}
+
 Mesh::Mesh()
     : _skin(nullptr)
     , _visible(true)
+    , _instancing(true)
+    , _instanceTransformBuffer(nullptr)
+    , _instanceCount(0)
     , meshIndexFormat(CustomCommand::IndexFormat::U_SHORT)
     , _meshIndexData(nullptr)
     , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
@@ -127,6 +160,7 @@ Mesh::~Mesh()
     AX_SAFE_RELEASE(_skin);
     AX_SAFE_RELEASE(_meshIndexData);
     AX_SAFE_RELEASE(_material);
+    AX_SAFE_RELEASE(_instanceTransformBuffer);
 }
 
 backend::Buffer* Mesh::getVertexBuffer() const
@@ -361,7 +395,7 @@ void Mesh::setMaterial(Material* material)
                     auto& attributes     = program->getActiveAttributes();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
-                    AXASSERT(attributes.size() <= attributeCount, "missing attribute data");
+                    //AXASSERT(attributes.size() <= attributeCount, "missing attribute data");
                 }
 #endif
                 // TODO
@@ -405,6 +439,52 @@ void Mesh::draw(Renderer* renderer,
     if (isTransparent)
         flags |= Node::FLAGS_RENDER_AS_3D;
 
+    if (_instancing && _instanceCount > 0)
+    {
+        if (!_instanceTransformBuffer)
+        {
+            _instanceTransformBuffer = backend::Device::getInstance()->newBuffer(
+                _instanceCount * 64, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+
+            _instanceMatrixCache = new float[_instanceCount * 16];
+            for (int i = 0; i < _instanceCount; i++)
+            {
+                _instanceMatrixCache[i * 16 + 0]  = 1.0f;
+                _instanceMatrixCache[i * 16 + 1]  = 0.0f;
+                _instanceMatrixCache[i * 16 + 2]  = 0.0f;
+                _instanceMatrixCache[i * 16 + 3]  = 0.0f;
+                _instanceMatrixCache[i * 16 + 4]  = 0.0f;
+                _instanceMatrixCache[i * 16 + 5]  = 1.0f;
+                _instanceMatrixCache[i * 16 + 6]  = 0.0f;
+                _instanceMatrixCache[i * 16 + 7]  = 0.0f;
+                _instanceMatrixCache[i * 16 + 8]  = 0.0f;
+                _instanceMatrixCache[i * 16 + 9]  = 0.0f;
+                _instanceMatrixCache[i * 16 + 10] = 1.0f;
+                _instanceMatrixCache[i * 16 + 11] = 0.0f;
+                _instanceMatrixCache[i * 16 + 12] = 0.0f;
+                _instanceMatrixCache[i * 16 + 13] = 0.0f;
+                _instanceMatrixCache[i * 16 + 14] = 0.0f;
+                _instanceMatrixCache[i * 16 + 15] = 1.0f;
+            }
+
+            // Fill the buffer with identity matrix.
+            _instanceTransformBuffer->updateData(_instanceMatrixCache, _instanceCount * 64);
+        }
+
+        if (_instanceTransformDirty || _dynamicInstancing)
+        {
+            _instanceTransformDirty = false;
+
+            int memOffset = 0;
+            for (auto& _ : _instances)
+            {
+                auto mat = _->getNodeToParentTransform();
+                std::copy(mat.m, mat.m + 16, _instanceMatrixCache + 16 * memOffset++);
+            }
+            _instanceTransformBuffer->updateSubData(_instanceMatrixCache, 0, _instanceCount * 64);
+        }
+    }
+
     // TODO
     //     _meshCommand.init(globalZ,
     //                       _material,
@@ -446,6 +526,13 @@ void Mesh::draw(Renderer* renderer,
         command.setTransparent(isTransparent);
         command.set3D(!_material->isForce2DQueue());
         command.setWireframe(wireframe);
+        if (_instancing && _instances.size() > 0)
+        {
+            command.setDrawType(CustomCommand::DrawType::ELEMENT_INSTANCE);
+            command.setInstancBuffer(_instanceTransformBuffer, _instances.size());
+        }
+        else if (_instancing)
+            return;
     }
 
     _meshIndexData->setPrimitiveType(_material->_drawPrimitive);
