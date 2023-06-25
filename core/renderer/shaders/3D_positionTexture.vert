@@ -24,11 +24,9 @@
  
 
 const char* CC3D_positionTextureInstance_vert = R"(
-#version 330 core
-
-layout(location = 0) in vec4 a_position;
-layout(location = 1) in vec2 a_texCoord;
-layout(location = 2) in mat4 a_instanceMatrix;
+attribute vec4 a_position;
+attribute vec2 a_texCoord;
+attribute mat4 a_instanceMatrix;
 
 varying vec2 TextureCoordOut;
 
