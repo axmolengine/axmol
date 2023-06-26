@@ -124,6 +124,7 @@ void Mesh::addInstanceChild(Node* child)
 {
     AXASSERT(_instances.size() < _instanceCount, "Instance child overflow, try expanding instance count.");
 
+    AX_SAFE_RETAIN(child);
     _instances.push_back(child);
     _instanceTransformDirty = true;
 }
@@ -154,13 +155,16 @@ Mesh::Mesh()
 Mesh::~Mesh()
 {
     for (auto&& tex : _textures)
-    {
         AX_SAFE_RELEASE(tex.second);
-    }
+
+    for (auto&& ins : _instances)
+        AX_SAFE_RELEASE(ins);
+
     AX_SAFE_RELEASE(_skin);
     AX_SAFE_RELEASE(_meshIndexData);
     AX_SAFE_RELEASE(_material);
     AX_SAFE_RELEASE(_instanceTransformBuffer);
+    AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
 }
 
 backend::Buffer* Mesh::getVertexBuffer() const
@@ -478,7 +482,7 @@ void Mesh::draw(Renderer* renderer,
             int memOffset = 0;
             for (auto& _ : _instances)
             {
-                auto mat = _->getNodeToParentTransform();
+                auto& mat = _->getNodeToParentTransform();
                 std::copy(mat.m, mat.m + 16, _instanceMatrixCache + 16 * memOffset++);
             }
             _instanceTransformBuffer->updateSubData(_instanceMatrixCache, 0, _instanceCount * 64);

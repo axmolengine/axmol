@@ -718,9 +718,18 @@ void MeshRenderer::setDynamicInstancing(bool dynamic)
     getMesh()->setDynamicInstancing(dynamic);
 }
 
-void MeshRenderer::addInstanceChild(Node* child) {
-    getMesh()->addInstanceChild(child);
-    addChild(child);
+void MeshRenderer::addInstanceChild(Node* child, bool active)
+{
+    if (active)
+    {
+        getMesh()->addInstanceChild(child);
+        addChild(child);
+    }
+    else
+    {
+        getMesh()->addInstanceChild(child);
+        child->setParent(this);
+    }
 }
 
 void MeshRenderer::rebuildInstances()

@@ -228,8 +228,8 @@ private:
         unsigned int h = 0;
     };
 
-    void prepareDrawing() const;
-    void bindVertexBuffer(ProgramGL* program) const;
+    void prepareDrawing();
+    void bindVertexBuffer(ProgramGL* program);
     void setUniforms(ProgramGL* program) const;
     void setUniform(bool isArray, GLuint location, unsigned int size, GLenum uniformType, void* data) const;
     void cleanResources();
@@ -242,7 +242,11 @@ private:
     CullMode _cullMode                        = CullMode::NONE;
     DepthStencilStateGL* _depthStencilStateGL = nullptr;
     Viewport _viewPort;
-    GLboolean _alphaTestEnabled = false;
+    GLboolean _alphaTestEnabled               = false;
+
+    // Used for instancing and other buffers to reset vertex attributes & divisors
+    GLubyte _currentVertexAttribIndex         = 0;
+    GLubyte _currentVertexAttribAdvance       = 0;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

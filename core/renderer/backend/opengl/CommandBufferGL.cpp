@@ -295,7 +295,7 @@ void CommandBufferGL::endRenderPass()
 
 void CommandBufferGL::endFrame() {}
 
-void CommandBufferGL::prepareDrawing() const
+void CommandBufferGL::prepareDrawing()
 {
     const auto& program = _renderPipeline->getProgram();
     glUseProgram(program->getHandler());
@@ -321,7 +321,7 @@ void CommandBufferGL::prepareDrawing() const
     }
 }
 
-void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
+void CommandBufferGL::bindVertexBuffer(ProgramGL* program)
 {
     // Bind vertex buffers and set the attributes.
     auto vertexLayout = _programState->getVertexLayout();
@@ -346,6 +346,8 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
     // if we have an instance transform buffer pointer then we must be rendering in instance mode.
     if (_instanceTransformBuffer)
     {
+        _currentVertexAttribIndex = attribCountPreInst;
+
         glBindBuffer(GL_ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
 
         // Enable 4 attrib arrays for each matrix row.
@@ -366,6 +368,8 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
         glVertexAttribDivisor(attribCountPreInst + 1, 1);
         glVertexAttribDivisor(attribCountPreInst + 2, 1);
         glVertexAttribDivisor(attribCountPreInst + 3, 1);
+
+        _currentVertexAttribAdvance += 4;
     }
 }
 
@@ -508,6 +512,13 @@ void CommandBufferGL::setUniform(bool isArray, GLuint location, unsigned int siz
 void CommandBufferGL::cleanResources()
 {
     AX_SAFE_RELEASE_NULL(_programState);
+
+    for (GLubyte i = _currentVertexAttribIndex; i < _currentVertexAttribIndex + _currentVertexAttribAdvance; i++)
+    {
+        glDisableVertexAttribArray(i);
+        glVertexAttribDivisor(i, 0);
+    }
+    _currentVertexAttribIndex = _currentVertexAttribAdvance = 0;
 }
 
 void CommandBufferGL::setLineWidth(float lineWidth)

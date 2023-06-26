@@ -251,9 +251,10 @@ public:
 
     static AABB getAABBRecursivelyImp(Node* node);
 
-    // Enables instancing for this Mesh Renderer, keep in mind that
-    // a special vertex shader has to be used, make sure that your shader
-    // has a mat4 attribute set on the location of total vertex attributes +1
+    /** Enables instancing for this Mesh Renderer, keep in mind that
+     a special vertex shader has to be used, make sure that your shader
+     has a mat4 attribute set on the location of total vertex attributes +1
+     */
     void enableInstancing(MeshMaterial::InstanceMaterialType instanceMat, int count);
 
     // Enables instancing for this Mesh Renderer, keep in mind that
@@ -261,17 +262,24 @@ public:
     // has a mat4 attribute set on the location of total vertex attributes +1
     void enableInstancing(MeshMaterial* instanceMat, int count);
 
-    // Set this to true and instancing objects within this mesh renderer
-    // will be recalculated each frame, use it when you plan to move objects,
-    // Otherwise, transforms will be built once for better performance.
-    // to update transforms on demand use `rebuildInstances()`
+    /** Set this to true and instancing objects within this mesh renderer
+    will be recalculated each frame, use it when you plan to move objects,
+    Otherwise, transforms will be built once for better performance.
+    * to update transforms on demand use `rebuildInstances()` */
     void setDynamicInstancing(bool dynamic);
 
-    // Adds a child to use it's transformations for instancing.
-    // The child is in the space of this Node.
-    void addInstanceChild(Node* child);
+    /** Adds a child to use it's transformations for instancing.
+    * The child is in the space of this Node, keep in mind that
+    the node isn't added to the scene graph, it is instead retained
+    and it's parent is set to this node, updates and actions will not run.
+    * the reason for this is performance.
+    *
+    * @param child, The child to use for instancing.
+    * @param active, Child will run updates & actions but performance issues may arise.
+    */
+    void addInstanceChild(Node* child, bool active = false);
 
-    // rebuilds the instance transform buffer next frame.
+    /** rebuilds the instance transform buffer next frame. */
     void rebuildInstances();
 
 protected:
