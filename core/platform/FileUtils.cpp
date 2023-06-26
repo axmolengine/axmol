@@ -56,12 +56,6 @@ THE SOFTWARE.
 #include "base/filesystem.h"
 
 #if defined(_WIN32)
-#    define AX_EDITOR_FS 1
-#else
-#    define AX_EDITOR_FS 0
-#endif
-
-#if defined(_WIN32)
 inline stdfs::path toFspath(const std::string_view& pathSV)
 {
     return stdfs::path{ntcvt::from_chars(pathSV)};
@@ -901,18 +895,8 @@ std::string FileUtils::getFullPathForFilenameWithinDirectory(std::string_view di
     ret += filename;
     // if the file doesn't exist, return an empty string
 
-#if AX_EDITOR_FS
-    auto status = stdfs::status(toFspath(ret));
-    switch (status.type())
-    {
-    case stdfs::file_type::regular:
-    case stdfs::file_type::directory:
-        return ret;
-    }
-#else
     if (isFileExistInternal(ret))
         return ret;
-#endif
     return std::string{};
 }
 
