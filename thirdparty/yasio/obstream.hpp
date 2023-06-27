@@ -111,11 +111,18 @@ public:
     ::memcpy(this->data() + offset, d, n);
     this->pos_ += n;
   }
-
   void resize(size_t newsize)
   {
     if (yasio__unlikely(newsize > max_size()))
       YASIO__THROW0(std::out_of_range("fixed_buffer_span: out of range"));
+    this->pos_ = newsize;
+  }
+  void resize(size_t newsize, char val)
+  {
+    if (yasio__unlikely(newsize > max_size()))
+      YASIO__THROW0(std::out_of_range("fixed_buffer_span: out of range"));
+    if (this->pos_ < newsize)
+      ::memset(this->data() + this->pos_, val, newsize - this->pos_);
     this->pos_ = newsize;
   }
 
@@ -168,6 +175,7 @@ public:
   }
 
   void resize(size_t newsize) { outs_->resize(newsize); }
+  void resize(size_t newsize, uint8_t val) { outs_->resize(newsize, val); }
   void reserve(size_t capacity) { outs_->reserve(capacity); }
   void shrink_to_fit() { outs_->shrink_to_fit(); };
   void clear() { outs_->clear(); }
@@ -325,6 +333,7 @@ public:
   void write_bytes(cxx17::string_view v) { return write_bytes(v.data(), static_cast<int>(v.size())); }
   void write_bytes(const void* d, int n) { outs_->write_bytes(d, n); }
   void write_bytes(size_t offset, const void* d, int n) { outs_->write_bytes(offset, d, n); }
+  void fill_bytes(int n, uint8_t val) { outs_->resize(outs_->length() + n, val); }
 
   bool empty() const { return outs_->empty(); }
   size_t length() const { return outs_->length(); }
