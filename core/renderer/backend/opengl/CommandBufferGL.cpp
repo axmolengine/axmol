@@ -224,7 +224,6 @@ void CommandBufferGL::setProgramState(ProgramState* programState)
 
 void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
 {
-    _instanceTransformBuffer = nullptr;
     prepareDrawing();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -244,7 +243,6 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
                                    std::size_t offset,
                                    bool wireframe)
 {
-    _instanceTransformBuffer = nullptr;
     prepareDrawing();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -295,7 +293,7 @@ void CommandBufferGL::endRenderPass()
 
 void CommandBufferGL::endFrame() {}
 
-void CommandBufferGL::prepareDrawing()
+void CommandBufferGL::prepareDrawing() const
 {
     const auto& program = _renderPipeline->getProgram();
     glUseProgram(program->getHandler());
@@ -321,7 +319,7 @@ void CommandBufferGL::prepareDrawing()
     }
 }
 
-void CommandBufferGL::bindVertexBuffer(ProgramGL* program)
+void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
 {
     // Bind vertex buffers and set the attributes.
     auto vertexLayout = _programState->getVertexLayout();
@@ -346,8 +344,6 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program)
     // if we have an instance transform buffer pointer then we must be rendering in instance mode.
     if (_instanceTransformBuffer)
     {
-        _currentVertexAttribIndex = attribCountPreInst;
-
         glBindBuffer(GL_ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
 
         // Enable 4 attrib arrays for each matrix row.
@@ -368,8 +364,6 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program)
         glVertexAttribDivisor(attribCountPreInst + 1, 1);
         glVertexAttribDivisor(attribCountPreInst + 2, 1);
         glVertexAttribDivisor(attribCountPreInst + 3, 1);
-
-        _currentVertexAttribAdvance += 4;
     }
 }
 
@@ -511,11 +505,17 @@ void CommandBufferGL::setUniform(bool isArray, GLuint location, unsigned int siz
 
 void CommandBufferGL::cleanResources()
 {
-    AX_SAFE_RELEASE_NULL(_programState);
+    if (_instanceTransformBuffer)
+    {
+        const auto& attribOffset = _programState->getVertexLayout()->getAttributes().size();
 
-    for (GLubyte i = _currentVertexAttribIndex; i < _currentVertexAttribIndex + _currentVertexAttribAdvance; i++)
-        glVertexAttribDivisor(i, 0);
-    _currentVertexAttribIndex = _currentVertexAttribAdvance = 0;
+        for (GLubyte i = attribOffset; i < attribOffset + 4; i++)
+            glVertexAttribDivisor(i, 0);
+
+        _instanceTransformBuffer = nullptr;
+    }
+
+    AX_SAFE_RELEASE_NULL(_programState);
 }
 
 void CommandBufferGL::setLineWidth(float lineWidth)

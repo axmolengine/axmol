@@ -713,28 +713,34 @@ void MeshRenderer::enableInstancing(MeshMaterial* instanceMat, int count)
     }
 }
 
+void MeshRenderer::disableInstancing()
+{
+    for (auto&& mesh : _meshes)
+        mesh->enableInstancing(false, 0);
+}
+
 void MeshRenderer::setDynamicInstancing(bool dynamic)
 {
-    getMesh()->setDynamicInstancing(dynamic);
+    for (auto&& mesh : _meshes)
+        mesh->setDynamicInstancing(dynamic);
 }
 
 void MeshRenderer::addInstanceChild(Node* child, bool active)
 {
-    if (active)
+    for (auto&& mesh : _meshes)
     {
-        getMesh()->addInstanceChild(child);
-        addChild(child);
-    }
-    else
-    {
-        getMesh()->addInstanceChild(child);
-        child->setParent(this);
+        mesh->addInstanceChild(child);
+        if (active)
+            addChild(child);
+        else
+            child->setParent(this);
     }
 }
 
 void MeshRenderer::rebuildInstances()
 {
-    getMesh()->rebuildInstances();
+    for (auto&& mesh : _meshes)
+        mesh->rebuildInstances();
 }
 
 void MeshRenderer::setTexture(std::string_view texFile)

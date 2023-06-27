@@ -262,6 +262,9 @@ public:
     // has a mat4 attribute set on the location of total vertex attributes +1
     void enableInstancing(MeshMaterial* instanceMat, int count);
 
+    // Disables instancing for this Mesh Renderer.
+    void disableInstancing();
+
     /** Set this to true and instancing objects within this mesh renderer
     will be recalculated each frame, use it when you plan to move objects,
     Otherwise, transforms will be built once for better performance.
