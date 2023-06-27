@@ -514,10 +514,7 @@ void CommandBufferGL::cleanResources()
     AX_SAFE_RELEASE_NULL(_programState);
 
     for (GLubyte i = _currentVertexAttribIndex; i < _currentVertexAttribIndex + _currentVertexAttribAdvance; i++)
-    {
-        glDisableVertexAttribArray(i);
         glVertexAttribDivisor(i, 0);
-    }
     _currentVertexAttribIndex = _currentVertexAttribAdvance = 0;
 }
 
