@@ -286,9 +286,7 @@ protected:
     backend::Buffer* _instanceTransformBuffer;
     bool _instanceTransformDirty;
     int _instanceCount;
-
     std::vector<Node*> _instances;
-
     float* _instanceMatrixCache;
     bool _dynamicInstancing;
 
