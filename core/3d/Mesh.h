@@ -287,9 +287,7 @@ protected:
     bool _instanceTransformDirty;
     int _instanceCount;
 
-    public:
     std::vector<Node*> _instances;
-protected:
 
     float* _instanceMatrixCache;
     bool _dynamicInstancing;
