@@ -96,7 +96,9 @@ jobs:
       - name: Install deps
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
-        run: echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
+        run: |
+          AX_ROOT=`pwd`
+          echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
       - name: Build
         shell: pwsh
         run: tools/ci/build.ps1 -p linux -a x64 -cb '--config','Release','--target','cpp_tests'
