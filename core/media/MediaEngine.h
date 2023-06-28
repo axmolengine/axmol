@@ -185,7 +185,7 @@ inline std::string& path2uri(std::string& path)
 
 //
 // redisigned corss-platform MediaEngine, inspired from microsoft media foundation: IMFMediaEngine
-// 
+//
 class MediaEngine
 {
 public:
@@ -209,12 +209,11 @@ public:
 class MediaEngineFactory
 {
 public:
+    virtual ~MediaEngineFactory() {}
     static std::unique_ptr<MediaEngineFactory> create();
-    
+
     virtual MediaEngine* createMediaEngine()         = 0;
     virtual void destroyMediaEngine(MediaEngine* me) = 0;
 };
-
-
 
 NS_AX_END
