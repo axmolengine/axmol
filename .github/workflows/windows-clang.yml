@@ -43,4 +43,4 @@ jobs:
         version: "16.0"
 
     - name: Build
-      run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_clang true
+      run: tools/ci/build.ps1 -p win32 -a 'x64' -cc clang -cb '--config','Release','--target','cpp_tests'
