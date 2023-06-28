@@ -506,6 +506,7 @@ Write-Host "Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLC
 # step1. preprocess cross make options
 $CONFIG_ALL_OPTIONS = $(& $proprocessTable[$BUILD_TARGET] -inputOptions $CONFIG_DEFAULT_OPTIONS)
 
+# call script block, return array only 1 element will be string
 if ($CONFIG_ALL_OPTIONS.GetType() -eq [string]) {
     $CONFIG_ALL_OPTIONS = @($CONFIG_ALL_OPTIONS)
 }
@@ -539,7 +540,6 @@ if ($BUILD_TARGET -ne 'android') {
     Write-Host ("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
     cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS
 } else {
-    $CONFIG_ALL_OPTIONS += '--parallel', '--info'
     ./gradlew assembleRelease '-PPROP_BUILD_TYPE=cmake' $CONFIG_ALL_OPTIONS
 }
 
