@@ -93,11 +93,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
+      - name: Install deps
+      # Some projects don't allow in-source building, so create a separate build directory
+      # We'll use this as our working directory for all subsequent commands
+        run: echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
       - name: Build
         shell: pwsh
-        run: |
-          echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
-          tools/ci/build.ps1 -p linux -a x64 -cb '--config','Release','--target','cpp_tests'
+        run: tools/ci/build.ps1 -p linux -a x64 -cb '--config','Release','--target','cpp_tests'
 
   build-android:
     name: build-android

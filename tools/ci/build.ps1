@@ -80,19 +80,6 @@ $ninja_prog = $null
 
 $myRoot = $PSScriptRoot
 
-# determine build script workspace
-$cwd = $options.cwd
-if ($cwd) {
-    Set-Location $cwd
-}
-else {
-    $cwd = $(Get-Location).Path
-}
-
-$tools_dir = Join-Path -Path $cwd -ChildPath 'tools'
-
-Write-Host "cwd=$cwd, tools_dir=$tools_dir"
-
 $HOST_WIN   = 0 # targets: win,uwp,android
 $HOST_LINUX = 1 # targets: linux,android 
 $HOST_MAC   = 2 # targets: android,ios,osx(macos),tvos,watchos
@@ -111,16 +98,11 @@ else {
         $HOST_OS = $HOST_MAC
     }
     else {
-        Write-Error "Unsupported host OS for building target $(options.p)"
-        exit 1
+        throw "Unsupported host OS for building target $(options.p)"
     }
 }
 
 $exeSuffix = if ($HOST_OS -eq 0) {'.exe'} else {''}
-
-if (!(Test-Path "$tools_dir" -PathType Container)) {
-    mkdir $tools_dir
-}
 
 $CONFIG_DEFAULT_OPTIONS = @()
 $HOST_OS_NAME = $('windows', 'linux', 'macos').Get($HOST_OS)
@@ -158,6 +140,20 @@ if ($TOOLCHAIN_INFO.Count -ge 2) {
 if (!$TOOLCHAIN_VER) {
     $TOOLCHAIN_NAME = $TOOLCHAIN
 }
+
+# determine build script workspace
+$stored_cwd = $(Get-Location).Path
+if ($options.cwd) {
+    Set-Location $options.cwd
+}
+$cwd = $(Get-Location).Path
+
+$tools_dir = Join-Path -Path $cwd -ChildPath 'tools'
+if (!(Test-Path "$tools_dir" -PathType Container)) {
+    mkdir $tools_dir
+}
+
+Write-Host "cwd=$cwd, tools_dir=$tools_dir"
 
 function download_file($url, $out) {
     Write-Host "Downloading $url to $out ..."
@@ -233,8 +229,7 @@ function setup_cmake() {
             Write-Host "Install cmake $_cmake_ver succeed"
         }
         else {
-            Write-Host "Install cmake $_cmake_ver fail"
-            exit 1
+            throw "Install cmake $_cmake_ver fail"
         }
     }
 }
@@ -352,8 +347,7 @@ function preprocess_win([string[]]$inputOptions) {
             }
             $gen = $gens[$TOOLCHAIN_VER]
             if(!$gen) {
-                Write-Error "Unsupported toolchain: $TOOLCHAIN"
-                exit 1
+                throw "Unsupported toolchain: $TOOLCHAIN"
             }
             if ($options.a -eq "x64") {
                 $gen += ' Win64'
@@ -429,6 +423,7 @@ function preprocess_osx([string[]]$inputOptions) {
 # build ios famliy (ios,tvos,watchos)
 function preprocess_ios([string[]]$inputOptions) {
     $outputOptions = $inputOptions
+    $arch = $options.a
     if ($arch -eq 'x64') {
         $arch = 'x86_64'
     }
@@ -543,3 +538,5 @@ if ($BUILD_TARGET -ne 'android') {
     $CONFIG_ALL_OPTIONS += '--parallel', '--info'
     ./gradlew assembleRelease '-PPROP_BUILD_TYPE=cmake' $CONFIG_ALL_OPTIONS
 }
+
+Set-Location $stored_cwd
