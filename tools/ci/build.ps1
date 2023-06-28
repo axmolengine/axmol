@@ -396,7 +396,8 @@ function preprocess_andorid([string[]]$inputOptions) {
 
     $archs = $archlist -join ':' # TODO: modify gradle, split by ';'
     
-    $outputOptions += "-PPROP_APP_ABI=$archs", '--parallel', '--info'
+    $outputOptions += "-PPROP_APP_ABI=$archs"
+    $outputOptions += '--parallel', '--info'
 
     # $cmake_toolchain_file = "$ndk_root\build\cmake\android.toolchain.cmake"
     # $outputOptions += '-G', 'Ninja', '-DANDROID_STL=c++_shared', "-DCMAKE_MAKE_PROGRAM=$ninja_prog", "-DCMAKE_TOOLCHAIN_FILE=$cmake_toolchain_file", "-DANDROID_ABI=$arch"
@@ -504,14 +505,10 @@ if ($BUILD_TARGET -eq 'android') {
 Write-Host "Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLCHAIN ..."
 
 # step1. preprocess cross make options
-$CONFIG_ALL_OPTIONS = $(& $proprocessTable[$BUILD_TARGET] -inputOptions $CONFIG_DEFAULT_OPTIONS)
+$CONFIG_ALL_OPTIONS = [array]$(& $proprocessTable['linux'] -inputOptions $CONFIG_DEFAULT_OPTIONS)
 
-# call script block, return array only 1 element will be string
 if (!$CONFIG_ALL_OPTIONS) {
     $CONFIG_ALL_OPTIONS = @()
-}
-elseif ($CONFIG_ALL_OPTIONS.GetType() -eq [string]) {
-    $CONFIG_ALL_OPTIONS = @($CONFIG_ALL_OPTIONS)
 }
 
 # step2. apply additional cross make options
