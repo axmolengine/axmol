@@ -179,7 +179,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: git 1.23.1-a49b612 (8655)
+- Version: git 1.23.1-e714c8f (8659)
 - License: LGPL-2.1
 
 ## OpenSSL
