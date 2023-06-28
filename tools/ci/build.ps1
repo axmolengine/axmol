@@ -120,10 +120,10 @@ $toolchains = @{
     'winuwp' = 'msvc';
     'linux' = 'gcc'; 
     'android' = 'ndk';
-    'osx' = 'clang';
-    'ios' = 'clang';
-    'tvos' = 'clang';
-    'watchos' = 'clang';
+    'osx' = 'xcode';
+    'ios' = 'xcode';
+    'tvos' = 'xcode';
+    'watchos' = 'xcode';
 }
 if (!$TOOLCHAIN) {
     $TOOLCHAIN = $toolchains[$BUILD_TARGET]
@@ -442,7 +442,7 @@ function preprocess_ios([string[]]$inputOptions) {
 function validHostAndToolchain() {
     $appleTable = @{
         'host' = @{'macos' = $True};
-        'toolchain' = @{'clang' = $True; };
+        'toolchain' = @{'xcode' = $True; };
     };
     $validTable = @{
         'win32' = @{
@@ -505,7 +505,7 @@ if ($BUILD_TARGET -eq 'android') {
 Write-Host "Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLCHAIN ..."
 
 # step1. preprocess cross make options
-$CONFIG_ALL_OPTIONS = [array]$(& $proprocessTable['linux'] -inputOptions $CONFIG_DEFAULT_OPTIONS)
+$CONFIG_ALL_OPTIONS = [array]$(& $proprocessTable[$BUILD_TARGET] -inputOptions $CONFIG_DEFAULT_OPTIONS)
 
 if (!$CONFIG_ALL_OPTIONS) {
     $CONFIG_ALL_OPTIONS = @()
@@ -537,10 +537,18 @@ if ($BUILD_TARGET -ne 'android') {
     $BUILD_ALL_OPTIONS = if ("$($options.cb)".IndexOf('--config') -eq -1) {@('--config','Release')} else {@()}
     $BUILD_ALL_OPTIONS += $options.cb
 
+    $BUILD_ALL_OPTIONS += "--parallel"
+    if ($BUILD_TARGET -eq 'linux') {
+        $BUILD_ALL_OPTIONS += "$(nproc)"
+    }
+    if ($TOOLCHAIN_NAME -eq 'xcode') {
+        $BUILD_ALL_OPTIONS += '--', '-quiet'
+    }
     Write-Host ("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
+
     cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS
 } else {
-    ./gradlew assembleRelease '-PPROP_BUILD_TYPE=cmake' $CONFIG_ALL_OPTIONS
+    ./gradlew assembleRelease $CONFIG_ALL_OPTIONS
 }
 
 Set-Location $stored_cwd
