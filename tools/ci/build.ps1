@@ -507,7 +507,10 @@ Write-Host "Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLC
 $CONFIG_ALL_OPTIONS = $(& $proprocessTable[$BUILD_TARGET] -inputOptions $CONFIG_DEFAULT_OPTIONS)
 
 # call script block, return array only 1 element will be string
-if ($CONFIG_ALL_OPTIONS.GetType() -eq [string]) {
+if (!$CONFIG_ALL_OPTIONS) {
+    $CONFIG_ALL_OPTIONS = @()
+}
+elseif ($CONFIG_ALL_OPTIONS.GetType() -eq [string]) {
     $CONFIG_ALL_OPTIONS = @($CONFIG_ALL_OPTIONS)
 }
 
