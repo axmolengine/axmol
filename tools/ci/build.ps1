@@ -148,7 +148,8 @@ if ($options.cwd) {
 }
 $cwd = $(Get-Location).Path
 
-$tools_dir = $(Resolve-Path $PSScriptRoot/../external).Path # the tools install dir if not found in system
+$tools_dir = $(Resolve-Path $PSScriptRoot/..).Path # the tools install dir if not found in system
+$tools_dir = Join-Path -Path $tools_dir -ChildPath 'external'
 if (!(Test-Path "$tools_dir" -PathType Container)) {
     mkdir $tools_dir
 }
@@ -193,6 +194,10 @@ function setup_nuget() {
     }
 
     $nuget_prog = Join-Path -Path $tools_dir -ChildPath 'nuget'
+    if (!(Test-Path -Path $nuget_prog -PathType Container)) {
+        mkdir $nuget_prog
+    }
+
     $nuget_prog = Join-Path -Path $nuget_prog -ChildPath 'nuget.exe'
 
     if (Test-Path -Path $nuget_prog -PathType Leaf) {
