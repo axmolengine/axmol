@@ -37,7 +37,8 @@ jobs:
         with: 
           arch: ${{ env.BUILD_ARCH }}
       - name: Build
-        run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_dll $env:BUILD_DLL
+        shell: pwsh
+        run: tools\ci\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL -cb '--config','Release','--target','cpp_tests'
 
   build-windows-clang:
     runs-on: windows-latest
@@ -60,7 +61,8 @@ jobs:
       with:
         version: "16.0"
     - name: Build
-      run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_clang true
+      shell: pwsh
+      run: tools\ci\build.ps1 -p win32 -a x64 -cc clang -cb '--config','Release','--target','cpp_tests'
 
   build-winuwp:
     name: build-winuwp
@@ -78,7 +80,8 @@ jobs:
           arch: x64
           uwp: true
       - name: Build
-        run: tools\win-ci\build.ps1 -arch x64 -is_uwp true
+        shell: pwsh
+        run: tools\ci\build.ps1 -p winuwp -a x64 -cb '--config','Release','--target','cpp_tests'
 
   build-linux:
     name: build-linux
@@ -90,10 +93,15 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
-      - name: Build
+      - name: Install deps
+      # Some projects don't allow in-source building, so create a separate build directory
+      # We'll use this as our working directory for all subsequent commands
         run: |
-          tools/unix-ci/before-install.sh
-          tools/unix-ci/run-script.sh
+          AX_ROOT=`pwd`
+          echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
+      - name: Build
+        shell: pwsh
+        run: tools/ci/build.ps1 -p linux -a x64 -cb '--config','Release','--target','cpp_tests'
 
   build-android:
     name: build-android
@@ -101,10 +109,10 @@ jobs:
     strategy:
       matrix:
         arch:
-          - armeabi-v7a
-          - arm64-v8a
+          - armv7
+          - arm64
           - x86
-          - x86_64
+          - x64
     env:
       GH_OS_NAME: linux
       BUILD_TARGET: android
@@ -118,9 +126,10 @@ jobs:
           distribution: 'microsoft' # See 'Supported distributions' for available options
           java-version: '11'
       - name: Build
+        shell: pwsh
         run: |
-          tools/unix-ci/before-install.sh
-          tools/unix-ci/run-script.sh
+          $AX_ROOT = $(Get-Location).Path
+          tools/ci/build.ps1 -p android -a $env:BUILD_ARCH -cwd 'tests/cpp-tests/proj.android' -cm '-PAX_ENABLE_EXT_EFFEKSEER=ON',"-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks",'-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'
 
   build-osx:
     name: build-osx
@@ -140,9 +149,9 @@ jobs:
           submodules: 'recursive'
 
       - name: Build
+        shell: pwsh
         run: |
-          tools/unix-ci/before-install.sh
-          tools/unix-ci/run-script.sh
+          tools/ci/build.ps1 -p osx -a $env:BUILD_ARCH -cb '--config','Release','--target','cpp_tests'
 
   build-ios:
     name: build-ios
@@ -156,9 +165,8 @@ jobs:
           submodules: 'recursive'
 
       - name: Build
-        run: |
-          tools/unix-ci/before-install.sh
-          tools/unix-ci/run-script.sh
+        shell: pwsh
+        run: tools/ci/build.ps1 -p ios -a 'x64' -cb '--config','Release','--target','cpp_tests'
 
   build-tvos:
     name: build-tvos
@@ -172,6 +180,6 @@ jobs:
           submodules: 'recursive'
 
       - name: Build
+        shell: pwsh
         run: |
-          tools/unix-ci/before-install.sh
-          tools/unix-ci/run-script.sh
+          tools/ci/build.ps1 -p tvos -a 'x64' -cb '--config','Release','--target','cpp_tests'
