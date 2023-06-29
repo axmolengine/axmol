@@ -22,7 +22,7 @@ jobs:
       matrix:
         arch:
           - x64
-          - amd64_arm64
+          - arm64
 
     env:
       BUILD_ARCH: ${{ matrix.arch }}
@@ -43,7 +43,7 @@ jobs:
         uwp: true
 
     - name: Build
-      run: tools\win-ci\build.ps1 -arch $env:BUILD_ARCH -is_uwp true
+      run: tools/ci/build.ps1 -p winuwp -a $env:BUILD_ARCH -cb '--config','Release','--target','cpp_tests'
 
     - uses: actions/upload-artifact@v3
       with:

@@ -33,8 +33,11 @@ jobs:
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
-      run: tools/unix-ci/before-install.sh
+      run: |
+        AX_ROOT=`pwd`
+        echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
 
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: tools/unix-ci/run-script.sh
+      shell: pwsh
+      run: tools/ci/build.ps1 -p linux -a x64 -cb '--config','Release','--target','cpp_tests'

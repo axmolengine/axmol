@@ -577,7 +577,8 @@ struct DeviceHelper final : private IMMNotificationClient
         Platform::String^ devIfPath =
             devid.empty() ? (flow == eRender ? MediaDevice::GetDefaultAudioRenderId(deviceRole) : MediaDevice::GetDefaultAudioCaptureId(deviceRole))
             : ref new Platform::String(devid.data());
-
+        if (!devIfPath)
+            return E_POINTER;
         Concurrency::task<DeviceInformation^> createDeviceOp(
             DeviceInformation::CreateFromIdAsync(devIfPath, nullptr, DeviceInformationKind::DeviceInterface));
         auto status = createDeviceOp.then([&](DeviceInformation^ deviceInfo)
@@ -674,6 +675,8 @@ struct DeviceHelper final : private IMMNotificationClient
         const auto deviceRole = Windows::Media::Devices::AudioDeviceRole::Default;
         auto DefaultAudioId   = flowdir == eRender ? MediaDevice::GetDefaultAudioRenderId(deviceRole)
                                                    : MediaDevice::GetDefaultAudioCaptureId(deviceRole);
+        if (!DefaultAudioId)
+            return defaultId;
         Concurrency::task<DeviceInformation ^> createDefaultOp(DeviceInformation::CreateFromIdAsync(DefaultAudioId, nullptr, DeviceInformationKind::DeviceInterface));
         auto task_status = createDefaultOp.then([&defaultId](DeviceInformation ^ deviceInfo)
         {
@@ -1272,7 +1275,7 @@ HRESULT WasapiPlayback::resetProxy()
         const uint32_t chancount{OutputType.Format.nChannels};
         const DWORD chanmask{OutputType.dwChannelMask};
         if(chancount >= 12 && (chanmask&X714Mask) == X7DOT1DOT4)
-            mDevice->FmtChans = DevFmtX71;
+            mDevice->FmtChans = DevFmtX714;
         else if(chancount >= 8 && (chanmask&X71Mask) == X7DOT1)
             mDevice->FmtChans = DevFmtX71;
         else if(chancount >= 7 && (chanmask&X61Mask) == X6DOT1)

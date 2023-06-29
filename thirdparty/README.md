@@ -179,7 +179,7 @@
 
 ## OpenAL Soft
 - [![Upstream](https://img.shields.io/github/v/tag/kcat/openal-soft?label=Upstream)](https://github.com/kcat/openal-soft)
-- Version: git 1.23.1-a49b612 (8655)
+- Version: git 1.23.1-e714c8f (8659)
 - License: LGPL-2.1
 
 ## OpenSSL
@@ -263,7 +263,7 @@
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: git 4.0.0-c1af119
+- Version: git 4.0.0-5c7a75d
 - License: MIT WITH Anti-996
 
 ## zlib

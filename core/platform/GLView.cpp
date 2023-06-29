@@ -498,20 +498,8 @@ void GLView::renderScene(Scene* scene, Renderer* renderer)
     scene->render(renderer, Mat4::IDENTITY, nullptr);
 }
 
-void GLView::queueOperation(AsyncOperation op, void* param)
+void GLView::queueOperation(AsyncOperation /*op*/, void* /*param*/)
 {
-#if defined(AX_PLATFORM_PC)
-    _operations.enqueue([=]() { op(param); });
-#endif
 }
-
-#if defined(AX_PLATFORM_PC)
-void GLView::processOperations()
-{
-    std::function<void()> op;
-    while (_operations.try_dequeue(op))
-        op();
-}
-#endif
 
 NS_AX_END

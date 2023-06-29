@@ -32,9 +32,6 @@ THE SOFTWARE.
 
 #include <functional>
 #include <vector>
-#if defined(AX_PLATFORM_PC)
-#    include "concurrentqueue/concurrentqueue.h"
-#endif
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include <windows.h>
@@ -100,6 +97,7 @@ NS_AX_BEGIN
 
 class Scene;
 class Renderer;
+class Director;
 
 /**
  * @addtogroup platform
@@ -110,6 +108,7 @@ class Renderer;
  */
 class AX_DLL GLView : public Ref
 {
+    friend class Director;
 public:
     /**
      * @js ctor
@@ -431,15 +430,13 @@ public:
      */
     void renderScene(Scene* scene, Renderer* renderer);
 
-    /** since Axmol-1.0
-    * queue a priority operation in render thread, even through app in background
+protected:
+    /**
+    * queue a priority operation in render thread for non-PC platforms, even through app in background
+    * invoked by Director
     */
     virtual void queueOperation(AsyncOperation op, void* param = nullptr);
 
-#if defined(AX_PLATFORM_PC)
-    void processOperations();
-#endif
-protected:
     void updateDesignResolutionSize();
 
     void handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num, intptr_t ids[], float xs[], float ys[]);
@@ -456,10 +453,6 @@ protected:
     float _scaleX;
     float _scaleY;
     ResolutionPolicy _resolutionPolicy;
-
-#if defined(AX_PLATFORM_PC)
-    moodycamel::ConcurrentQueue<std::function<void()>> _operations;
-#endif
 };
 
 // end of platform group
