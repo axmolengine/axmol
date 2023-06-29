@@ -35,7 +35,7 @@
 #  -cc: c/c++ compiler toolchain: clang, msvc, gcc, mingw-gcc or empty use default installed on current OS
 #       msvc: msvc-120, msvc-141
 #       ndk: ndk-r16b, ndk-r16b+
-#  -cm: additional cmake options: i.e.  -cm '-DCXX_STD=23','-DYASIO_ENABLE_EXT_HTTP=OFF'
+#  -cm: additional cmake options: i.e.  -cm '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -cb: additional cross build options: i.e. -cb '--config','Release'
 #  -cwd: the build workspace, i.e project root which contains root CMakeLists.txt or others
 # support matrix
@@ -148,12 +148,32 @@ if ($options.cwd) {
 }
 $cwd = $(Get-Location).Path
 
-$tools_dir = Join-Path -Path $cwd -ChildPath 'tools'
+$tools_dir = $(Resolve-Path $PSScriptRoot/../external).Path # the tools install dir if not found in system
 if (!(Test-Path "$tools_dir" -PathType Container)) {
     mkdir $tools_dir
 }
 
 Write-Host "cwd=$cwd, tools_dir=$tools_dir"
+
+function find_prog($name, $path) {
+    $storedPATH = $env:PATH
+    $env:PATH = $path
+    $prog_path = (Get-Command $name -ErrorAction SilentlyContinue).Source
+    $env:PATH = $storedPATH
+    return $prog_path
+}
+
+function exec_prog($prog, $params) {
+    # & $prog_name $params
+    for ($i = 0; $i -lt $params.Count; $i++) {
+        $param = "'"
+        $param += $params[$i]
+        $param += "'"
+        $params[$i] = $param
+    }
+    $strParams = "$params"
+    return Invoke-Expression -Command "$prog $strParams"
+}
 
 function download_file($url, $out) {
     Write-Host "Downloading $url to $out ..."
@@ -164,7 +184,32 @@ function download_file($url, $out) {
     }
 }
 
-# now windows only
+# setup nuget
+function setup_nuget() {
+    $nuget_prog = (Get-Command "unget" -ErrorAction SilentlyContinue).Source
+    if ($nuget_prog) {
+        Write-Host "Using installed nuget: $nuget_prog"
+        returnInvoke-Expression -Command $var | Out-String -OutVariable out
+    }
+
+    $nuget_prog = Join-Path -Path $tools_dir -ChildPath 'nuget'
+    $nuget_prog = Join-Path -Path $nuget_prog -ChildPath 'nuget.exe'
+
+    if (Test-Path -Path $nuget_prog -PathType Leaf) {
+        Write-Host "Using installed nuget: $nuget_prog"
+        return
+    }
+    download_file "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" $nuget_prog
+
+    if (Test-Path -Path $nuget_prog -PathType Leaf) {
+        Write-Host "The nuget was successfully installed to: $nuget_prog"
+    }
+    else {
+        throw "Install nuget fail"
+    }
+}
+
+# setup cmake
 function setup_cmake() {
     $cmake_prog = (Get-Command "cmake" -ErrorAction SilentlyContinue).Source
     if ($cmake_prog) {
@@ -254,11 +299,11 @@ function setup_ninja() {
     return $ninja_prog
 }
 
-function setup_ndk() {
+function setup_android_sdk() {
     # setup ndk
     $ndk_ver = $TOOLCHAIN_VER
     if (!$ndk_ver) {
-        $ndk_ver = 'r16b+'
+        $ndk_ver = 'r23c+'
     }
 
     $IsGraterThan = $ndk_ver.EndsWith('+')
@@ -266,54 +311,115 @@ function setup_ndk() {
         $ndk_ver = $ndk_ver.Substring(0, $ndk_ver.Length - 1)
     }
 
-    # find ndk from env:ANDROID_HOME
-    if("$env:ANDROID_HOME" -ne '') {
-        $ndk_minor_base = [int][char]'a'
+    $sdk_root_envs = @('ANDROID_HOME', 'ANDROID_SDK_ROOT')
 
-        $ndk_major = ($ndk_ver -replace '[^0-9]', '')
-        $ndk_minor_off = "$ndk_major".Length + 1
-        $ndk_minor = if($ndk_minor_off -lt $ndk_ver.Length) {"$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)"} else {'0'}
-        $ndk_rev_base = "$ndk_major.$ndk_minor"
+    $ndk_minor_base = [int][char]'a'
 
-        # find ndk in sdk
-        $ndks = [ordered]@{}
-        $ndk_rev_max = '0.0'
-        foreach($item in $(Get-ChildItem -Path "$env:ANDROID_HOME/ndk")) {
-            $ndkDir = $item.FullName
-            $sourceProps = "$ndkDir/source.properties"
-            if (Test-Path $sourceProps -PathType Leaf) {
-                $verLine = $(Get-Content $sourceProps | Select-Object -Index 1)
-                $ndk_rev = $($verLine -split '=').Trim()[1].split('.')[0..1] -join '.'
-                $ndks.Add($ndk_rev, $ndkDir)
-                if ($ndk_rev_max -le $ndk_rev) {
-                    $ndk_rev_max = $ndk_rev
+    # looking up require ndk installed in exists sdk roots
+    $sdk_root = $null
+    foreach($sdk_root_env in $sdk_root_envs) {
+        $sdk_dir = [Environment]::GetEnvironmentVariable($sdk_root_env)
+        if("$sdk_dir" -ne '') {
+            $sdk_root = $sdk_dir
+            $ndk_root = $null
+
+            $ndk_major = ($ndk_ver -replace '[^0-9]', '')
+            $ndk_minor_off = "$ndk_major".Length + 1
+            $ndk_minor = if($ndk_minor_off -lt $ndk_ver.Length) {"$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)"} else {'0'}
+            $ndk_rev_base = "$ndk_major.$ndk_minor"
+
+            # find ndk in sdk
+            $ndks = [ordered]@{}
+            $ndk_rev_max = '0.0'
+            foreach($item in $(Get-ChildItem -Path "$env:ANDROID_HOME/ndk")) {
+                $ndkDir = $item.FullName
+                $sourceProps = "$ndkDir/source.properties"
+                if (Test-Path $sourceProps -PathType Leaf) {
+                    $verLine = $(Get-Content $sourceProps | Select-Object -Index 1)
+                    $ndk_rev = $($verLine -split '=').Trim()[1].split('.')[0..1] -join '.'
+                    $ndks.Add($ndk_rev, $ndkDir)
+                    if ($ndk_rev_max -le $ndk_rev) {
+                        $ndk_rev_max = $ndk_rev
+                    }
+                }
+            }
+            if ($IsGraterThan) {
+                if ($ndk_rev_max -ge $ndk_rev_base) {
+                    $ndk_root = $ndks[$ndk_rev_max]
+                }
+            } else {
+                $ndk_root = $ndks[$ndk_rev_base]
+            }
+
+            if ($null -ne $ndk_root) {
+                Write-Host "Found $ndk_root in $sdk_root ..."
+                break
+            }
+        }
+    }
+
+    if (!(Test-Path "$ndk_root" -PathType Container))
+    {
+        $sdkmanager_prog = $null
+        if (Test-Path "$sdk_root" -PathType Container) {
+            $sdkmanager_prog = (find_prog -name 'sdkmanager' -path "$sdk_root/cmdline-tools/latest/bin")
+        }
+
+        if (!$sdkmanager_prog)
+        {
+            $sdkmanager_prog = (find_prog -nam 'sdkmanager' -path "$tools_dir/cmdline-tools/bin")
+ 
+            # Write-Host "Not found sutiable android sdk, installing ..."
+            $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
+            if (!$sdkmanager_prog) {
+                $cmdlinetools_pkg_name = "commandlinetools-$suffix-9477386_latest.zip"
+                $cmdlinetools_pkg_path = Join-Path -Path $tools_dir -ChildPath $cmdlinetools_pkg_name
+                $cmdlinetools_url = "https://dl.google.com/android/repository/$cmdlinetools_pkg_name"
+                download_file $cmdlinetools_url $cmdlinetools_pkg_path
+                Expand-Archive -Path $cmdlinetools_pkg_path -DestinationPath "$tools_dir/"
+                $sdkmanager_prog = (find_prog -nam 'sdkmanager' -path "$tools_dir/cmdline-tools/bin")
+                if (!$sdkmanager_prog) {
+                    throw "Install cmdlinetools fail"
                 }
             }
         }
-        if ($IsGraterThan) {
-            if ($ndk_rev_max -ge $ndk_rev_base) {
-                $ndk_root = $ndks[$ndk_rev_max]
+
+        if (!$sdk_root) {
+            $sdk_root = "$tools_dir/adt/sdk"
+            if (!(Test-Path -Path $sdk_root -PathType Container)) {
+                mkdir $sdk_root
             }
-        } else {
-            $ndk_root = $ndks[$ndk_rev_base]
         }
-    }
-    
-    if (Test-Path "$ndk_root" -PathType Container)
-    {
-        Write-Host "Using installed ndk: $ndk_root ..."
-    }
-    else {
-        $suffix = "$(('windows', 'linux', 'darwin').Get($HOST_OS))$(if ("$ndk_ver" -le "r22z") {'-x86_64'} else {''})"
-        $ndk_root = "$tools_dir/android-ndk-$ndk_ver"
-        if (!(Test-Path "$ndk_root" -PathType Container)) {
-            $ndk_package="android-ndk-$ndk_ver-$suffix"
-            download_file "https://dl.google.com/android/repository/$ndk_package.zip" "$tools_dir/$ndk_package.zip"
-            Expand-Archive -Path $tools_dir/$ndk_package.zip -DestinationPath $tools_dir/
+        $sdkmanager_prog = (Resolve-Path -Path $sdkmanager_prog).Path
+
+        $matchInfos = (exec_prog -prog $sdkmanager_prog -params "--sdk_root=$sdk_root",'--list' | Select-String 'ndk;')
+        if ($null -ne $matchInfos -and $matchInfos.Count -gt 0) {
+            $ndks = @{}
+            foreach($matchInfo in $matchInfos) {
+                $fullVer = $matchInfo.Line.Trim().Split(' ')[0] # "ndk;23.2.8568313"
+                $verNums = $fullVer.Split(';')[1].Split('.')
+                $ndkVer = 'r'
+                $ndkVer += $verNums[0]
+
+                $ndk_minor = [int]$verNums[1]
+                if ($ndk_minor -gt 0) {
+                    $ndkVer += [char]($ndk_minor_base + $ndk_minor)
+                }
+                if (!$ndks.Contains($ndkVer)) {
+                    $ndks.Add($ndkVer, $fullVer)
+                }
+            }
+
+            $ndkFullVer = $ndks[$ndk_ver]
+
+            exec_prog -prog $sdkmanager_prog -params '--verbose',"--sdk_root=$sdk_root",'platform-tools','cmdline-tools;latest','platforms;android-33','build-tools;30.0.3','cmake;3.22.1',$ndkFullVer | Out-Host
+
+            $fullVer = $ndkFullVer.Split(';')[1]
+            $ndk_root = (Resolve-Path -Path "$sdk_root/ndk/$fullVer").Path
         }
     }
 
-    return $ndk_root
+    return $sdk_root,$ndk_root
 }
 
 # preprocess methods: 
@@ -490,15 +596,22 @@ $proprocessTable = @{
 
 validHostAndToolchain
 
-# setup tools: cmake, ninja, ndk if required for target build
-setup_cmake
+########## setup build tools if not installed #######
 
-if (($BUILD_TARGET -eq 'android' -or $BUILD_TARGET -eq 'win32') -and ($TOOLCHAIN_NAME -ne 'msvc')) {
-    $ninja_prog = setup_ninja
+if ($BUILD_TARGET -eq 'win32') {
+    setup_nuget
+    if ($TOOLCHAIN_NAME -ne 'msvc') {
+        $ninja_prog = setup_ninja
+    }
 }
 
-if ($BUILD_TARGET -eq 'android') {
-    $ndk_root = setup_ndk
+if ($BUILD_TARGET -ne 'android') {
+    setup_cmake
+} else {
+    # for android using cmake, ninja from android sdkmanager
+    $sdk_rets = setup_android_sdk
+    $env:ANDROID_HOME = $sdk_rets[0]
+    $env:ANDROID_NDK = $sdk_rets[1]
 }
 
 # enter building steps
@@ -535,7 +648,9 @@ if ($BUILD_TARGET -ne 'android') {
     # step4. build
     # apply additional build options
     $BUILD_ALL_OPTIONS = if ("$($options.cb)".IndexOf('--config') -eq -1) {@('--config','Release')} else {@()}
-    $BUILD_ALL_OPTIONS += $options.cb
+    if ($options.cb) {
+        $BUILD_ALL_OPTIONS += $options.cb
+    }
 
     $BUILD_ALL_OPTIONS += "--parallel"
     if ($BUILD_TARGET -eq 'linux') {
