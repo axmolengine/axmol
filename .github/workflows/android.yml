@@ -27,10 +27,10 @@ jobs:
     strategy:
       matrix:
         arch:
-          - armeabi-v7a
-          - arm64-v8a
+          - armv7
+          - arm64
           - x86
-          - x86_64
+          - x64
     env:
       BUILD_ARCH: ${{ matrix.arch }}
 
@@ -44,14 +44,12 @@ jobs:
         distribution: 'microsoft' # See 'Supported distributions' for available options
         java-version: '11'
 
-    - name: Create Build Environment
-      # Some projects don't allow in-source building, so create a separate build directory
-      # We'll use this as our working directory for all
-      run: tools/unix-ci/before-install.sh
-      
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: tools/unix-ci/run-script.sh
+      shell: pwsh
+      run: |
+        $AX_ROOT = $(Get-Location).Path
+        tools/ci/build.ps1 -p android -a $env:BUILD_ARCH -cwd 'tests/cpp-tests/proj.android' -cm '-PAX_ENABLE_EXT_EFFEKSEER=ON',"-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks",'-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'
 
     - uses: actions/upload-artifact@v3
       with:
