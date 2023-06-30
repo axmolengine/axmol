@@ -696,15 +696,16 @@ if (!$CONFIG_ALL_OPTIONS) {
 }
 
 # step2. apply additional cross make options
-if ($options.cm.Count -gt 0) {
-    b1k_print ("Apply additional cross make options: $($options.cm), Count={0}" -f $options.cm.Count)
-    $CONFIG_ALL_OPTIONS += $options.cm
+$xopts = $options.xc
+if ($xopts.Count -gt 0) {
+    b1k_print ("Apply additional cross make options: $($xopts), Count={0}" -f $xopts.Count)
+    $CONFIG_ALL_OPTIONS += $xopts
 }
-if ("$($options.cm)".IndexOf('-B') -eq -1) {
+if ("$($xopts)".IndexOf('-B') -eq -1) {
     $BUILD_DIR = "build_$($options.a)"
 }
 else {
-    foreach ($opt in $options.cm) {
+    foreach ($opt in $xopts) {
         if ($opt.StartsWith('-B')) {
             $BUILD_DIR = $opt.Substring(2).Trim()
             break
@@ -722,9 +723,10 @@ else {
 
     # step4. build
     # apply additional build options
-    $BUILD_ALL_OPTIONS = if ("$($options.cb)".IndexOf('--config') -eq -1) { @('--config', 'Release') } else { @() }
-    if ($options.cb) {
-        $BUILD_ALL_OPTIONS += $options.cb
+    $xb_opts = $options.xb
+    $BUILD_ALL_OPTIONS = if ("$($xb_opts)".IndexOf('--config') -eq -1) { @('--config', 'Release') } else { @() }
+    if ($xb_opts) {
+        $BUILD_ALL_OPTIONS += $xb_opts
     }
 
     $BUILD_ALL_OPTIONS += "--parallel"
