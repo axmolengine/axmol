@@ -41,6 +41,7 @@
 #include "base/Director.h"
 #include "base/EventType.h"
 #include "2d/Camera.h"
+#include "2d/ProtectedNode.h"
 
 #define DUMP_LISTENER_ITEM_PRIORITY_INFO 0
 
@@ -276,7 +277,7 @@ void EventDispatcher::visitTarget(Node* node, bool isRootNode)
             {
                 _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
             }
-        }    
+        }
     }
     else
     {
@@ -319,7 +320,7 @@ void EventDispatcher::visitTarget(Node* node, bool isRootNode)
             {
                 _globalZOrderNodeMap[node->getGlobalZOrder()].emplace_back(node);
             }
-        }        
+        }
     }
 
     if (isRootNode)

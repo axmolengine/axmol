@@ -16,7 +16,7 @@
 
 #include <string.h>
 
-static const char kMagic[] = {'P', 'K', 'M', ' ', '1', '0'};
+static const char ketc1Magic[] = {'P', 'K', 'M', ' ', '1', '0'};
 
 static const etc1_uint32 ETC1_PKM_FORMAT_OFFSET         = 6;
 static const etc1_uint32 ETC1_PKM_ENCODED_WIDTH_OFFSET  = 8;
@@ -31,7 +31,7 @@ static const etc1_uint32 ETC1_RGB_NO_MIPMAPS = 0;
 //     pOut[1] = (etc1_byte) data;
 // }
 
-static etc1_uint32 readBEUint16(const etc1_byte* pIn)
+static etc1_uint32 etc1ReadBEUint16(const etc1_byte* pIn)
 {
     return (pIn[0] << 8) | pIn[1];
 }
@@ -39,7 +39,7 @@ static etc1_uint32 readBEUint16(const etc1_byte* pIn)
 // Format a PKM header
 
 // void etc1_pkm_format_header(etc1_byte* pHeader, etc1_uint32 width, etc1_uint32 height) {
-//     memcpy(pHeader, kMagic, sizeof(kMagic));
+//     memcpy(pHeader, ketc1Magic, sizeof(ketc1Magic));
 //     etc1_uint32 encodedWidth = (width + 3) & ~3;
 //     etc1_uint32 encodedHeight = (height + 3) & ~3;
 //     writeBEUint16(pHeader + ETC1_PKM_FORMAT_OFFSET, ETC1_RGB_NO_MIPMAPS);
@@ -53,15 +53,15 @@ static etc1_uint32 readBEUint16(const etc1_byte* pIn)
 
 etc1_bool etc1_pkm_is_valid(const etc1_byte* pHeader)
 {
-    if (memcmp(pHeader, kMagic, sizeof(kMagic)))
+    if (memcmp(pHeader, ketc1Magic, sizeof(ketc1Magic)))
     {
         return false;
     }
-    etc1_uint32 format        = readBEUint16(pHeader + ETC1_PKM_FORMAT_OFFSET);
-    etc1_uint32 encodedWidth  = readBEUint16(pHeader + ETC1_PKM_ENCODED_WIDTH_OFFSET);
-    etc1_uint32 encodedHeight = readBEUint16(pHeader + ETC1_PKM_ENCODED_HEIGHT_OFFSET);
-    etc1_uint32 width         = readBEUint16(pHeader + ETC1_PKM_WIDTH_OFFSET);
-    etc1_uint32 height        = readBEUint16(pHeader + ETC1_PKM_HEIGHT_OFFSET);
+    etc1_uint32 format        = etc1ReadBEUint16(pHeader + ETC1_PKM_FORMAT_OFFSET);
+    etc1_uint32 encodedWidth  = etc1ReadBEUint16(pHeader + ETC1_PKM_ENCODED_WIDTH_OFFSET);
+    etc1_uint32 encodedHeight = etc1ReadBEUint16(pHeader + ETC1_PKM_ENCODED_HEIGHT_OFFSET);
+    etc1_uint32 width         = etc1ReadBEUint16(pHeader + ETC1_PKM_WIDTH_OFFSET);
+    etc1_uint32 height        = etc1ReadBEUint16(pHeader + ETC1_PKM_HEIGHT_OFFSET);
     return format == ETC1_RGB_NO_MIPMAPS && encodedWidth >= width && encodedWidth - width < 4 &&
            encodedHeight >= height && encodedHeight - height < 4;
 }
@@ -70,12 +70,12 @@ etc1_bool etc1_pkm_is_valid(const etc1_byte* pHeader)
 
 etc1_uint32 etc1_pkm_get_width(const etc1_byte* pHeader)
 {
-    return readBEUint16(pHeader + ETC1_PKM_WIDTH_OFFSET);
+    return etc1ReadBEUint16(pHeader + ETC1_PKM_WIDTH_OFFSET);
 }
 
 // Read the image height from a PKM header
 
 etc1_uint32 etc1_pkm_get_height(const etc1_byte* pHeader)
 {
-    return readBEUint16(pHeader + ETC1_PKM_HEIGHT_OFFSET);
+    return etc1ReadBEUint16(pHeader + ETC1_PKM_HEIGHT_OFFSET);
 }
