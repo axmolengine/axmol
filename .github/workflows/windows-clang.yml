@@ -43,4 +43,4 @@ jobs:
         version: "16.0"
 
     - name: Build
-      run: tools/ci/build.ps1 -p win32 -a 'x64' -cc clang -cb '--config','Release','--target','cpp_tests'
+      run: tools/ci/build1k.ps1 -p win32 -a 'x64' -cc clang -xb '--config','Release','--target','cpp_tests'
