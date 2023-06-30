@@ -43,4 +43,4 @@ jobs:
         version: "16.0"
 
     - name: Build
-      run: build.ps1 -p win32 -a 'x64' -cc clang
+      run: .\build.ps1 -p win32 -a 'x64' -cc clang

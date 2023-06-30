@@ -49,7 +49,7 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(Get-Location).Path
-        build.ps1 -p android -a $env:BUILD_ARCH
+        ./build.ps1 -p android -a $env:BUILD_ARCH
 
     - uses: actions/upload-artifact@v3
       with:

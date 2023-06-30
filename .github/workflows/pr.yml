@@ -38,7 +38,7 @@ jobs:
           arch: ${{ env.BUILD_ARCH }}
       - name: Build
         shell: pwsh
-        run: tools\ci\build1k.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL
+        run: .\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL
 
   build-windows-clang:
     runs-on: windows-latest
@@ -62,7 +62,7 @@ jobs:
         version: "16.0"
     - name: Build
       shell: pwsh
-      run: tools\ci\build1k.ps1 -p win32 -a x64 -cc clang
+      run: .\build.ps1 -p win32 -a x64 -cc clang
 
   build-winuwp:
     name: build-winuwp
@@ -81,7 +81,7 @@ jobs:
           uwp: true
       - name: Build
         shell: pwsh
-        run: tools\ci\build1k.ps1 -p winuwp -a x64
+        run: .\build.ps1 -p winuwp -a x64
 
   build-linux:
     name: build-linux
@@ -101,7 +101,7 @@ jobs:
           echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
       - name: Build
         shell: pwsh
-        run: build.ps1 -p linux -a x64
+        run: ./build.ps1 -p linux -a x64
 
   build-android:
     name: build-android
@@ -129,7 +129,7 @@ jobs:
         shell: pwsh
         run: |
           $AX_ROOT = $(Get-Location).Path
-          build.ps1 -p android -a $env:BUILD_ARCH
+          ./build.ps1 -p android -a $env:BUILD_ARCH
 
   build-osx:
     name: build-osx
@@ -151,7 +151,7 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
-          build.ps1 -p osx -a $env:BUILD_ARCH
+          ./build.ps1 -p osx -a $env:BUILD_ARCH
 
   build-ios:
     name: build-ios
@@ -166,7 +166,7 @@ jobs:
 
       - name: Build
         shell: pwsh
-        run: build.ps1 -p ios -a 'x64'
+        run: ./build.ps1 -p ios -a 'x64'
 
   build-tvos:
     name: build-tvos
@@ -182,4 +182,4 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
-          build.ps1 -p tvos -a 'x64'
+          ./build.ps1 -p tvos -a 'x64'

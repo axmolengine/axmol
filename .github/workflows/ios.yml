@@ -36,4 +36,4 @@ jobs:
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       shell: pwsh
-      run: build.ps1 -p ios -a 'x64'
+      run: ./build.ps1 -p ios -a 'x64'

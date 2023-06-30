@@ -41,4 +41,4 @@ jobs:
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       shell: pwsh
-      run: build.ps1 -p osx -a $env:BUILD_ARCH
+      run: ./build.ps1 -p osx -a $env:BUILD_ARCH
