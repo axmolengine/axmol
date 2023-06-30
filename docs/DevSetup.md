@@ -25,18 +25,22 @@ Examples:
 - Cpp: `axmol new -p org.axmol.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
 - Lua: `axmol new -p org.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
-## Quick building your new project by `build.ps1` for all target platforms
+## Quick build your new project by `build.ps1` for all target platforms [`Recommended`]
 
 If you use latest commits after 6/29/2023 18:50, once you crate a new project, there is a build script `build.ps1` in your project root directory,
 then you can simply build your project for all platform targets, i.e.
 
-- win32: `pwsh .\build.ps1 -p win32 -a x64 -xc '--config','Debug','--target','HelloCpp'` can runs on Windows with vs2022 installed
-- winuwp: `pwsh .\build.ps1 -p winuwp -a x64 -xc '--config','Debug','--target','HelloCpp'` can runs on Windows with vs2022 installed
-- linux: run the setup script `install-deps-linux.sh` once, then `pwsh .\build.ps1 -p linux -a x64 -xc '--config','Debug','--target','HelloCpp'` can runs on Linux with g++ installed
-- osx: `pwsh .\build.ps1 -p osx -a x64 -xc '--config','Debug','--target','HelloCpp'` can runs on macOS with xcode13~14.2 installed
+- win32: `pwsh .\build.ps1 -p win32 -a x64 -xc '--config','Debug'` can runs on Windows with vs2022 installed
+- winuwp: `pwsh .\build.ps1 -p winuwp -a x64 -xc '--config','Debug'` can runs on Windows with vs2022 installed
+- linux: run the setup script `install-deps-linux.sh` once, then `pwsh .\build.ps1 -p linux -a x64 -xc '--config','Debug'` can runs on Linux with g++ installed
+- osx: `pwsh .\build.ps1 -p osx -a x64 -xc '--config','Debug'` can runs on macOS with xcode13~14.2 installed
 - android: `pwsh .\build.ps1 -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
-- ios: `pwsh .\build.ps1 -p ios -a x64 -xc '--config','Debug','--target','HelloCpp'` can runs on macOS with xcode13~14.2 installed
-- tvos: `pwsh .\build.ps1 -p tvos -a x64 -xc '--config','Debug','--target','HelloCpp'` can runs on macOS with xcode13~14.2 installed
+- ios: `pwsh .\build.ps1 -p ios -a x64 -xc '--config','Debug'` can runs on macOS with xcode13~14.2 installed
+- tvos: `pwsh .\build.ps1 -p tvos -a x64 -xc '--config','Debug'` can runs on macOS with xcode13~14.2 installed
+
+## Quick build engine for host targets?
+
+Goto axmol root directory, double click or run `build.ps1` without any parameters, it will build `HelloCpp` by default
 
 ## Windows (Visual Studio)
 
