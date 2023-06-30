@@ -110,6 +110,8 @@ else {
     }
 }
 
+$IsWin = $HOST_OS -eq $HOST_WIN
+
 $exeSuffix = if ($HOST_OS -eq 0) { '.exe' } else { '' }
 
 $CONFIG_DEFAULT_OPTIONS = @()
@@ -309,26 +311,37 @@ function setup_nuget() {
 function setup_jdk() {
     $javac_prog = (Get-Command "javac" -ErrorAction SilentlyContinue).Source
     if ($javac_prog) {
-        $jdk_ver = $(javac --version).Split(' ')[1].Trim()
-        if ($jdk_ver -ge '11.0.0') {
+        $_jdk_ver = $(javac --version).Split(' ')[1].Trim()
+        if ($_jdk_ver -ge '11.0.0') {
             b1k_print "Using installed jdk: $javac_prog, version: $jdk_ver"
             return $javac_prog
         }
     }
 
     $jdk_ver = '11.0.19'
-    $suffix = $('windows', 'linux', 'macOS').Get($HOST_OS)
+    b1k_print "Not found suitable jdk: $_jdk_ver, installing $jdk_ver"
+    $suffix = $('windows-x64.zip', 'linux-x64.tar.gz', 'macOS-x64.tar.gz').Get($HOST_OS)
     $javac_bin = (Resolve-Path "$tools_dir/jdk-$jdk_ver/bin" -ErrorAction SilentlyContinue).Path
     if (!$javac_bin) {
-
-        if (!(Test-Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip" -PathType Leaf)) {
-            download_file "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix-x64.zip" "$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip"
+        # refer to https://learn.microsoft.com/en-us/java/openjdk/download
+        if (!(Test-Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix" -PathType Leaf)) {
+            download_file "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "$tools_dir/microsoft-jdk-$jdk_ver-$suffix"
         }
 
-        $folderName = get_zip_folder_name("$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip")
+        # uncompress
+        if ($IsWin) {
+            $folderName = get_zip_folder_name("$tools_dir/microsoft-jdk-$jdk_ver-$suffix")
+            Expand-Archive -Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix" -DestinationPath "$tools_dir/"
+        }
+        else {
+            tar xvf "$tools_dir/microsoft-jdk-$jdk_ver-$suffix" -C "$tools_dir/"
+        }
 
-        Expand-Archive -Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip" -DestinationPath "$tools_dir/"
-        Move-Item "$tools_dir/$folderName" "$tools_dir/jdk-$jdk_ver"
+        # move to plain folder name
+        $folderName = (Get-ChildItem -Path $tools_dir -Filter "jdk-$jdk_ver+*").Name
+        if ($folderName) {
+            Move-Item "$tools_dir/$folderName" "$tools_dir/jdk-$jdk_ver"
+        }
         $javac_bin = (Resolve-Path "$tools_dir/jdk-$jdk_ver/bin" -ErrorAction SilentlyContinue).Path
     }
     if ($env:PATH.IndexOf($javac_bin) -eq -1) {
