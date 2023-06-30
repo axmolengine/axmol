@@ -427,7 +427,7 @@ function setup_android_sdk() {
         if (!$sdkmanager_prog) {
             $sdkmanager_prog = (find_prog -nam 'sdkmanager' -path "$tools_dir/cmdline-tools/bin")
  
-            b1k_print "Not found sutiable android sdk, installing ..."
+            b1k_print "Not found suitable android sdk, installing ..."
             $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
             if (!$sdkmanager_prog) {
                 $cmdlinetools_pkg_name = "commandlinetools-$suffix-9477386_latest.zip"
@@ -452,6 +452,8 @@ function setup_android_sdk() {
 
         $matchInfos = (exec_prog -prog $sdkmanager_prog -params "--sdk_root=$sdk_root", '--list' | Select-String 'ndk;')
         if ($null -ne $matchInfos -and $matchInfos.Count -gt 0) {
+            b1k_print "Not found suitable android ndk, installing ..."
+
             $ndks = @{}
             foreach ($matchInfo in $matchInfos) {
                 $fullVer = $matchInfo.Line.Trim().Split(' ')[0] # "ndk;23.2.8568313"
