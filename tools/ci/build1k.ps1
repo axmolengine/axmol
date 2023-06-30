@@ -72,24 +72,6 @@ foreach ($arg in $args) {
     }
 }
 
-# Choose host target if not specified by command line automatically
-if (!$options.p) {
-    if ($IsWindows -or ("$env:OS" -eq 'Windows_NT')) {
-        $options.p = 'win32'
-    }
-    else {
-        if ($IsLinux) {
-            $options.p = 'linux'
-        }
-        elseif ($IsMacOS) {
-            $options.p = 'osx'
-        }
-        else {
-            throw "Unsupported host OS for building target $(options.p)"
-        }
-    }
-}
-
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
 b1k_print "PowerShell $pwsh_ver"
@@ -124,7 +106,7 @@ else {
         $HOST_OS = $HOST_MAC
     }
     else {
-        throw "Unsupported host OS for building target $(options.p)"
+        throw "Unsupported host OS to run build1k.ps1"
     }
 }
 
@@ -136,8 +118,10 @@ $HOST_OS_NAME = $('windows', 'linux', 'macos').Get($HOST_OS)
 # determine build target os
 $BUILD_TARGET = $options.p
 if (!$BUILD_TARGET) {
+    # choose host target if not specified by command line automatically
     $BUILD_TARGET = $('win32', 'linux', 'osx').Get($HOST_OS)
 }
+b1k_print "Building targetPlatform is $BUILD_TARGET"
 
 # determine toolchain
 $TOOLCHAIN = $options.cc
@@ -336,6 +320,7 @@ function setup_jdk() {
     $suffix = $('windows', 'linux', 'macOS').Get($HOST_OS)
     $javac_bin = (Resolve-Path "$tools_dir/jdk-$jdk_ver/bin" -ErrorAction SilentlyContinue).Path
     if (!$javac_bin) {
+
         if (!(Test-Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip" -PathType Leaf)) {
             download_file "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix-x64.zip" "$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip"
         }
