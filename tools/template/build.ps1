@@ -7,8 +7,8 @@
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
-#  -cm: additional cmake options: i.e.  -cm '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
-#  -cb: additional cross build options: i.e. -cb '--config','Release'
+#  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
+#  -xb: additional cross build options: i.e. -xb '--config','Release'
 # examples:
 #   - win32: 
 #     - pwsh build.ps1 -p win32
@@ -30,9 +30,9 @@
 #   on macos: target platform is osx, arch=x64
 #
 
-$fullCmdLine = @("$((Resolve-Path -Path "$env:AX_ROOT/tools/ci/build.ps1").Path)")
+$fullCmdLine = @("$((Resolve-Path -Path "$env:AX_ROOT/tools/ci/build1k.ps1").Path)")
 
-$options = @{p = ''; a = 'x64'; cc = '';  cm = @(); cb = @();}
+$options = @{p = ''; a = 'x64'; cc = ''; xc = @(); xb = @(); }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -40,10 +40,12 @@ foreach ($arg in $args) {
         if ($arg.StartsWith('-')) { 
             $optName = $arg.SubString(1)
         }
-    } else {
+    }
+    else {
         if ($options.Contains($optName)) {
             $options[$optName] = $arg
-        } else {
+        }
+        else {
             Write-Host "Warning: ignore unrecognized option: $optName"
         }
         $optName = $null
@@ -55,10 +57,10 @@ if (!$options.p) {
         $options.p = 'win32'
     }
     else {
-        if($IsLinux) {
+        if ($IsLinux) {
             $options.p = 'linux'
         }
-        elseif($IsMacOS) {
+        elseif ($IsMacOS) {
             $options.p = 'osx'
         }
         else {
@@ -79,8 +81,19 @@ foreach ($option in $options.GetEnumerator()) {
     $fullCmdLine += add_quote $option.Value
 }
 
-$build_cwd = if ($options.p -eq 'android') {(Resolve-Path "$PSScriptRoot/proj.android").Path} else {$PSScriptRoot}
-$fullCmdLine += "'-cwd'", "'$build_cwd'"
+if ($options.p -eq 'android') {
+    $fullCmdLine += "'-xt'", "'gradle'"
+    $proj_dir = (Resolve-Path "$PSScriptRoot/proj.android").Path
+    if(!$proj_dir) {
+        $proj_dir = (Resolve-Path "$((Get-Location).Path)/proj.android").Path
+    }
+} else { 
+    $proj_dir = $PSScriptRoot 
+}
+$fullCmdLine += "'-d'", "'$proj_dir'"
+
+$prefix = Join-Path -Path $env:AX_ROOT -ChildPath 'tools/external'
+$fullCmdLine += "'-prefix'", "'$prefix'"
 
 $strFullCmdLine = "$fullCmdLine"
 Invoke-Expression -Command $strFullCmdLine

@@ -49,7 +49,7 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(Get-Location).Path
-        tools/ci/build.ps1 -p android -a $env:BUILD_ARCH -cwd 'tests/cpp-tests/proj.android' -cm '-PAX_ENABLE_EXT_EFFEKSEER=ON',"-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks",'-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'
+        tools/ci/build1k.ps1 -p android -a $env:BUILD_ARCH -d 'tests/cpp-tests/proj.android' -xt gradle -xc '-PAX_ENABLE_EXT_EFFEKSEER=ON',"-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks",'-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'
 
     - uses: actions/upload-artifact@v3
       with:

@@ -26,28 +26,33 @@
 # SOFTWARE.
 # 
 # 
-# The build.ps1
+# The build1k.ps1, will be core script of project https://github.com/axmolengine/build1k
 # options
 #  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
 #      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64
-#  -cc: c/c++ compiler toolchain: clang, msvc, gcc, mingw-gcc or empty use default installed on current OS
+#  -d: the build workspace, i.e project root which contains root CMakeLists.txt, empty use script run working directory aka cwd
+#  -cc: The C/C++ compiler toolchain: clang, msvc, gcc, mingw-gcc or empty use default installed on current OS
 #       msvc: msvc-120, msvc-141
 #       ndk: ndk-r16b, ndk-r16b+
-#  -cm: additional cmake options: i.e.  -cm '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
-#  -cb: additional cross build options: i.e. -cb '--config','Release'
-#  -cwd: the build workspace, i.e project root which contains root CMakeLists.txt or others
+#  -xt: cross build tool, default: cmake, for android can be gradle
+#  -xc: cross build tool configure options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
+#  -xb: cross build tool build options: i.e. -xb '--config','Release'
+#  -prefix: the install location for missing tools in system, default is "$HOME/build1k"
 # support matrix
-#   | OS        |   Build targets     |  Build toolchain     |
-#   +----------+----------------------+----------------------+
-#   | Windows  |  win32,winuwp        | msvc,clang,mingw-gcc |
-#   | Linux    | linux,android        | gcc,clang            |        
-#   | macOS    | osx,ios,tvos,watchos | clang                |
-#  
+#   | OS        |   Build targets     |  C/C++ compiler toolchain | Cross Build tool |
+#   +----------+----------------------+---------------------------+------------------|
+#   | Windows  |  win32,winuwp        | msvc,clang,mingw-gcc      | cmake            |
+#   | Linux    | linux,android        | ndk                       | cmake,gradle     |    
+#   | macOS    | osx,ios,tvos,watchos | xcode                     | cmake            |
 #
 
-$options = @{p = ''; a = 'x64'; cc = '';  cm = @(); cb = @(); cwd = $null; dll = $false }
+function b1k_print($msg) {
+    Write-Host "build1k: $msg"
+}
+
+$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xt = 'cmake'; prefix = $null; xc = @(); xb = @(); dll = $false }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -55,11 +60,13 @@ foreach ($arg in $args) {
         if ($arg.StartsWith('-')) { 
             $optName = $arg.SubString(1)
         }
-    } else {
+    }
+    else {
         if ($options.Contains($optName)) {
             $options[$optName] = $arg
-        } else {
-            Write-Host "Warning: ignore unrecognized option: $optName"
+        }
+        else {
+            b1k_print("Warning: ignore unrecognized option: $optName")
         }
         $optName = $null
     }
@@ -67,22 +74,23 @@ foreach ($arg in $args) {
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
-Write-Host "PowerShell $pwsh_ver"
-Write-Host $(Out-String -InputObject $options)
+b1k_print "PowerShell $pwsh_ver"
+b1k_print $(Out-String -InputObject $options)
 
 # The preferred cmake version to install when system installed cmake < 3.13.0
 $cmake_ver = '3.26.4'
 $cmake_ver_minimal = '3.13.0'
 
 # if found or installed, the ndk_root indicate the root path of installed ndk
+$sdk_root = $null
 $ndk_root = $null
 $ninja_prog = $null
 
 $myRoot = $PSScriptRoot
 
-$HOST_WIN   = 0 # targets: win,uwp,android
+$HOST_WIN = 0 # targets: win,uwp,android
 $HOST_LINUX = 1 # targets: linux,android 
-$HOST_MAC   = 2 # targets: android,ios,osx(macos),tvos,watchos
+$HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
 
 # 0: windows, 1: linux, 2: macos
 if ($IsWindows -or ("$env:OS" -eq 'Windows_NT')) {
@@ -91,10 +99,10 @@ if ($IsWindows -or ("$env:OS" -eq 'Windows_NT')) {
 }
 else {
     $envPathSep = ':'
-    if($IsLinux) {
+    if ($IsLinux) {
         $HOST_OS = $HOST_LINUX
     }
-    elseif($IsMacOS) {
+    elseif ($IsMacOS) {
         $HOST_OS = $HOST_MAC
     }
     else {
@@ -102,7 +110,7 @@ else {
     }
 }
 
-$exeSuffix = if ($HOST_OS -eq 0) {'.exe'} else {''}
+$exeSuffix = if ($HOST_OS -eq 0) { '.exe' } else { '' }
 
 $CONFIG_DEFAULT_OPTIONS = @()
 $HOST_OS_NAME = $('windows', 'linux', 'macos').Get($HOST_OS)
@@ -116,13 +124,13 @@ if (!$BUILD_TARGET) {
 # determine toolchain
 $TOOLCHAIN = $options.cc
 $toolchains = @{ 
-    'win32' = 'msvc';
-    'winuwp' = 'msvc';
-    'linux' = 'gcc'; 
+    'win32'   = 'msvc';
+    'winuwp'  = 'msvc';
+    'linux'   = 'gcc'; 
     'android' = 'ndk';
-    'osx' = 'xcode';
-    'ios' = 'xcode';
-    'tvos' = 'xcode';
+    'osx'     = 'xcode';
+    'ios'     = 'xcode';
+    'tvos'    = 'xcode';
     'watchos' = 'xcode';
 }
 if (!$TOOLCHAIN) {
@@ -142,19 +150,18 @@ if (!$TOOLCHAIN_VER) {
 }
 
 # determine build script workspace
-$stored_cwd = $(Get-Location).Path
-if ($options.cwd) {
-    Set-Location $options.cwd
-}
-$cwd = $(Get-Location).Path
 
-$tools_dir = $(Resolve-Path $PSScriptRoot/..).Path # the tools install dir if not found in system
-$tools_dir = Join-Path -Path $tools_dir -ChildPath 'external'
+$stored_cwd = $(Get-Location).Path
+if ($options.d) {
+    Set-Location $options.d
+}
+
+$tools_dir = if ($options.prefix) { $options.prefix } else { Join-Path -Path $HOME -ChildPath 'build1k' }
 if (!(Test-Path "$tools_dir" -PathType Container)) {
     mkdir $tools_dir
 }
 
-Write-Host "cwd=$cwd, tools_dir=$tools_dir"
+b1k_print "build1k: proj_dir=$((Get-Location).Path), tools_dir=$tools_dir"
 
 function find_prog($name, $path) {
     $storedPATH = $env:PATH
@@ -177,41 +184,19 @@ function exec_prog($prog, $params) {
 }
 
 function download_file($url, $out) {
-    Write-Host "Downloading $url to $out ..."
-    if ($pwsh_ver -ge '7.0')  {
+    b1k_print "Downloading $url to $out ..."
+    if ($pwsh_ver -ge '7.0') {
         curl -L $url -o $out
-    } else {
+    }
+    else {
         Invoke-WebRequest -Uri $url -OutFile $out
     }
 }
 
-# setup nuget
-function setup_nuget() {
-    $nuget_prog = (Get-Command "unget" -ErrorAction SilentlyContinue).Source
-    if ($nuget_prog) {
-        Write-Host "Using installed nuget: $nuget_prog"
-        returnInvoke-Expression -Command $var | Out-String -OutVariable out
-    }
-
-    $nuget_prog = Join-Path -Path $tools_dir -ChildPath 'nuget'
-    if (!(Test-Path -Path $nuget_prog -PathType Container)) {
-        mkdir $nuget_prog
-    }
-
-    $nuget_prog = Join-Path -Path $nuget_prog -ChildPath 'nuget.exe'
-
-    if (Test-Path -Path $nuget_prog -PathType Leaf) {
-        Write-Host "Using installed nuget: $nuget_prog"
-        return
-    }
-    download_file "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" $nuget_prog
-
-    if (Test-Path -Path $nuget_prog -PathType Leaf) {
-        Write-Host "The nuget was successfully installed to: $nuget_prog"
-    }
-    else {
-        throw "Install nuget fail"
-    }
+function  get_zip_folder_name($pkg) {
+    [void][Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem')
+    $Files = [IO.Compression.ZipFile]::OpenRead($pkg).Entries
+    return (($Files | Where-Object FullName -match '/' | Select-Object -First 1).Fullname -Split '/')[0]
 }
 
 # setup cmake
@@ -219,19 +204,22 @@ function setup_cmake() {
     $cmake_prog = (Get-Command "cmake" -ErrorAction SilentlyContinue).Source
     if ($cmake_prog) {
         $_cmake_ver = $($(cmake --version | Select-Object -First 1) -split ' ')[2]
-    } else {
+    }
+    else {
         $_cmake_ver = '0.0.0'
     }
     if ($_cmake_ver -ge $cmake_ver_minimal) {
-        Write-Host "Using installed cmake $cmake_prog, version: $_cmake_ver"
-    } else {
+        b1k_print "Using installed cmake $cmake_prog, version: $_cmake_ver"
+    }
+    else {
         
-        Write-Host "The installed cmake $_cmake_ver too old, installing newer $cmake_ver ..."
+        b1k_print "The installed cmake $_cmake_ver too old, installing newer $cmake_ver ..."
 
         $cmake_suffix = @(".zip", ".sh", ".tar.gz").Get($HOST_OS)
         if ($HOST_OS -ne $HOST_MAC) {
             $cmake_dir = "cmake-$cmake_ver-$HOST_OS_NAME-x86_64"
-        } else {
+        }
+        else {
             $cmake_dir = "cmake-$cmake_ver-$HOST_OS_NAME-universal"
         }
         $cmake_root = $(Join-Path -Path $tools_dir -ChildPath $cmake_dir)
@@ -247,12 +235,12 @@ function setup_cmake() {
             if ($HOST_OS -eq $HOST_WIN) {
                 Expand-Archive -Path $cmake_pkg_path -DestinationPath $tools_dir\
             }
-            elseif($HOST_OS -eq $HOST_LINUX) {
+            elseif ($HOST_OS -eq $HOST_LINUX) {
                 chmod 'u+x' "$cmake_pkg_path"
                 mkdir $cmake_root
                 & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
             }
-            elseif($HOST_OS -eq $HOST_MAC) {
+            elseif ($HOST_OS -eq $HOST_MAC) {
                 tar xvf "$cmake_root.tar.gz" -C "$tools_dir/"
             }
         }
@@ -260,23 +248,26 @@ function setup_cmake() {
         $cmake_bin = $null
         if ($HOST_OS -ne $HOST_MAC) {
             $cmake_bin = Join-Path -Path $cmake_root -ChildPath 'bin'
-        } else {
-            if ((Test-Path '/Applications/CMake.app' -PathType Container)) { # upgrade installed cmake
+        }
+        else {
+            if ((Test-Path '/Applications/CMake.app' -PathType Container)) {
+                # upgrade installed cmake
                 Remove-Item '/Applications/CMake.app' -Recurse
                 Move-Item "$cmake_root/CMake.app" '/Applications/'
-            } else {
+            }
+            else {
                 $cmake_bin = "$cmake_root/CMake.app/Contents/bin"
             }
         }
         if (($null -ne $cmake_bin) -and ($env:PATH.IndexOf($cmake_bin) -eq -1)) {
             $env:PATH = "$cmake_bin$envPathSep$env:PATH"
         }
-        $cmake_prog=(Get-Command "cmake" -ErrorAction SilentlyContinue).Source
+        $cmake_prog = (Get-Command "cmake" -ErrorAction SilentlyContinue).Source
         if ($cmake_prog) {
             $_cmake_ver = $($(cmake --version | Select-Object -First 1) -split ' ')[2]
         }
         if ($_cmake_ver -ge $cmake_ver_minimal) {
-            Write-Host "Install cmake $_cmake_ver succeed"
+            b1k_print "Install cmake $_cmake_ver succeed"
         }
         else {
             throw "Install cmake $_cmake_ver fail"
@@ -284,8 +275,69 @@ function setup_cmake() {
     }
 }
 
+# setup nuget
+function setup_nuget() {
+    $nuget_prog = (Get-Command "unget" -ErrorAction SilentlyContinue).Source
+    if ($nuget_prog) {
+        b1k_print "Using installed nuget: $nuget_prog"
+        returnInvoke-Expression -Command $var | Out-String -OutVariable out
+    }
+
+    $nuget_prog = Join-Path -Path $tools_dir -ChildPath 'nuget'
+    if (!(Test-Path -Path $nuget_prog -PathType Container)) {
+        mkdir $nuget_prog
+    }
+
+    $nuget_prog = Join-Path -Path $nuget_prog -ChildPath 'nuget.exe'
+
+    if (Test-Path -Path $nuget_prog -PathType Leaf) {
+        b1k_print "Using installed nuget: $nuget_prog"
+        return
+    }
+    download_file "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" $nuget_prog
+
+    if (Test-Path -Path $nuget_prog -PathType Leaf) {
+        b1k_print "The nuget was successfully installed to: $nuget_prog"
+    }
+    else {
+        throw "Install nuget fail"
+    }
+}
+
+function setup_jdk() {
+    $javac_prog = (Get-Command "javac" -ErrorAction SilentlyContinue).Source
+    if ($javac_prog) {
+        $jdk_ver = $(javac --version).Split(' ')[1].Trim()
+        if ($jdk_ver -ge '11.0.0') {
+            b1k_print "Using installed jdk: $javac_prog, version: $jdk_ver"
+            return $javac_prog
+        }
+    }
+
+    $jdk_ver = '11.0.19'
+    $suffix = $('windows', 'linux', 'macOS').Get($HOST_OS)
+    $javac_bin = (Resolve-Path "$tools_dir/jdk-$jdk_ver/bin" -ErrorAction SilentlyContinue).Path
+    if (!$javac_bin) {
+        if (!(Test-Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip" -PathType Leaf)) {
+            download_file "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix-x64.zip" "$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip"
+        }
+
+        $folderName = get_zip_folder_name("$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip")
+
+        Expand-Archive -Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix-x64.zip" -DestinationPath "$tools_dir/"
+        Move-Item "$tools_dir/$folderName" "$tools_dir/jdk-$jdk_ver"
+        $javac_bin = (Resolve-Path "$tools_dir/jdk-$jdk_ver/bin" -ErrorAction SilentlyContinue).Path
+    }
+    if ($env:PATH.IndexOf($javac_bin) -eq -1) {
+        $env:PATH = "$javac_bin$envPathSep$env:PATH"
+    }
+    $javac_prog = (Join-Path -Path $javac_bin -ChildPath javac$exeSuffix)
+
+    return $javac_prog
+}
+
 function setup_ninja() {
-    $ninja_prog=(Get-Command "ninja" -ErrorAction SilentlyContinue).Source
+    $ninja_prog = (Get-Command "ninja" -ErrorAction SilentlyContinue).Source
     if (!$ninja_prog) {
         $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
         $ninja_bin = (Resolve-Path "$tools_dir/ninja-$suffix" -ErrorAction SilentlyContinue).Path
@@ -298,8 +350,9 @@ function setup_ninja() {
             $env:PATH = "$ninja_bin$envPathSep$env:PATH"
         }
         $ninja_prog = (Join-Path -Path $ninja_bin -ChildPath ninja$exeSuffix)
-    } else {
-        Write-Host "Using installed ninja: $ninja_prog, version: $(ninja --version)"
+    }
+    else {
+        b1k_print "Using installed ninja: $ninja_prog, version: $(ninja --version)"
     }
     return $ninja_prog
 }
@@ -312,31 +365,32 @@ function setup_android_sdk() {
     }
 
     $IsGraterThan = $ndk_ver.EndsWith('+')
-    if($IsGraterThan) {
+    if ($IsGraterThan) {
         $ndk_ver = $ndk_ver.Substring(0, $ndk_ver.Length - 1)
     }
 
     $sdk_root_envs = @('ANDROID_HOME', 'ANDROID_SDK_ROOT')
 
     $ndk_minor_base = [int][char]'a'
-
+    
     # looking up require ndk installed in exists sdk roots
     $sdk_root = $null
-    foreach($sdk_root_env in $sdk_root_envs) {
+    foreach ($sdk_root_env in $sdk_root_envs) {
         $sdk_dir = [Environment]::GetEnvironmentVariable($sdk_root_env)
-        if("$sdk_dir" -ne '') {
+        b1k_print "Looking require ndk-$TOOLCHAIN_VER in env:$sdk_root_env=$sdk_dir"
+        if ("$sdk_dir" -ne '') {
             $sdk_root = $sdk_dir
             $ndk_root = $null
 
             $ndk_major = ($ndk_ver -replace '[^0-9]', '')
             $ndk_minor_off = "$ndk_major".Length + 1
-            $ndk_minor = if($ndk_minor_off -lt $ndk_ver.Length) {"$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)"} else {'0'}
+            $ndk_minor = if ($ndk_minor_off -lt $ndk_ver.Length) { "$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)" } else { '0' }
             $ndk_rev_base = "$ndk_major.$ndk_minor"
 
             # find ndk in sdk
             $ndks = [ordered]@{}
             $ndk_rev_max = '0.0'
-            foreach($item in $(Get-ChildItem -Path "$env:ANDROID_HOME/ndk")) {
+            foreach ($item in $(Get-ChildItem -Path "$env:ANDROID_HOME/ndk")) {
                 $ndkDir = $item.FullName
                 $sourceProps = "$ndkDir/source.properties"
                 if (Test-Path $sourceProps -PathType Leaf) {
@@ -352,29 +406,28 @@ function setup_android_sdk() {
                 if ($ndk_rev_max -ge $ndk_rev_base) {
                     $ndk_root = $ndks[$ndk_rev_max]
                 }
-            } else {
+            }
+            else {
                 $ndk_root = $ndks[$ndk_rev_base]
             }
 
             if ($null -ne $ndk_root) {
-                Write-Host "Found $ndk_root in $sdk_root ..."
+                b1k_print "Found $ndk_root in $sdk_root ..."
                 break
             }
         }
     }
 
-    if (!(Test-Path "$ndk_root" -PathType Container))
-    {
+    if (!(Test-Path "$ndk_root" -PathType Container)) {
         $sdkmanager_prog = $null
         if (Test-Path "$sdk_root" -PathType Container) {
             $sdkmanager_prog = (find_prog -name 'sdkmanager' -path "$sdk_root/cmdline-tools/latest/bin")
         }
 
-        if (!$sdkmanager_prog)
-        {
+        if (!$sdkmanager_prog) {
             $sdkmanager_prog = (find_prog -nam 'sdkmanager' -path "$tools_dir/cmdline-tools/bin")
  
-            # Write-Host "Not found sutiable android sdk, installing ..."
+            b1k_print "Not found sutiable android sdk, installing ..."
             $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
             if (!$sdkmanager_prog) {
                 $cmdlinetools_pkg_name = "commandlinetools-$suffix-9477386_latest.zip"
@@ -397,10 +450,10 @@ function setup_android_sdk() {
         }
         $sdkmanager_prog = (Resolve-Path -Path $sdkmanager_prog).Path
 
-        $matchInfos = (exec_prog -prog $sdkmanager_prog -params "--sdk_root=$sdk_root",'--list' | Select-String 'ndk;')
+        $matchInfos = (exec_prog -prog $sdkmanager_prog -params "--sdk_root=$sdk_root", '--list' | Select-String 'ndk;')
         if ($null -ne $matchInfos -and $matchInfos.Count -gt 0) {
             $ndks = @{}
-            foreach($matchInfo in $matchInfos) {
+            foreach ($matchInfo in $matchInfos) {
                 $fullVer = $matchInfo.Line.Trim().Split(' ')[0] # "ndk;23.2.8568313"
                 $verNums = $fullVer.Split(';')[1].Split('.')
                 $ndkVer = 'r'
@@ -417,14 +470,14 @@ function setup_android_sdk() {
 
             $ndkFullVer = $ndks[$ndk_ver]
 
-            exec_prog -prog $sdkmanager_prog -params '--verbose',"--sdk_root=$sdk_root",'platform-tools','cmdline-tools;latest','platforms;android-33','build-tools;30.0.3','cmake;3.22.1',$ndkFullVer | Out-Host
+            exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", 'platform-tools', 'cmdline-tools;latest', 'platforms;android-33', 'build-tools;30.0.3', 'cmake;3.22.1', $ndkFullVer | Out-Host
 
             $fullVer = $ndkFullVer.Split(';')[1]
             $ndk_root = (Resolve-Path -Path "$sdk_root/ndk/$fullVer").Path
         }
     }
 
-    return $sdk_root,$ndk_root
+    return $sdk_root, $ndk_root
 }
 
 # preprocess methods: 
@@ -432,9 +485,10 @@ function setup_android_sdk() {
 function preprocess_win([string[]]$inputOptions) {
     $outputOptions = $inputOptions
 
-    if ($TOOLCHAIN_NAME -eq 'msvc') { # Generate vs2019 on github ci
+    if ($TOOLCHAIN_NAME -eq 'msvc') {
+        # Generate vs2019 on github ci
         # Determine arch name
-        $arch = if ($options.a -eq 'x86') {'Win32'} else {$options.a}
+        $arch = if ($options.a -eq 'x86') { 'Win32' } else { $options.a }
 
         $VSWHERE_EXE = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
         $eap = $ErrorActionPreference
@@ -444,7 +498,7 @@ function preprocess_win([string[]]$inputOptions) {
         $ErrorActionPreference = $eap
 
         # arch
-        if($VS2019_OR_LATER_VESION) {
+        if ($VS2019_OR_LATER_VESION) {
             $outputOptions += '-A', $arch
             if ($TOOLCHAIN_VER) {
                 $outputOptions += "-Tv$TOOLCHAIN_VER"
@@ -457,7 +511,7 @@ function preprocess_win([string[]]$inputOptions) {
                 "150" = 'Visual Studio 15 2017';
             }
             $gen = $gens[$TOOLCHAIN_VER]
-            if(!$gen) {
+            if (!$gen) {
                 throw "Unsupported toolchain: $TOOLCHAIN"
             }
             if ($options.a -eq "x64") {
@@ -475,11 +529,12 @@ function preprocess_win([string[]]$inputOptions) {
             $outputOptions += '-DBUILD_SHARED_LIBS=TRUE'
         }
     }
-    elseif($TOOLCHAIN_NAME -eq 'clang') {
-        Write-Host (clang --version)
+    elseif ($TOOLCHAIN_NAME -eq 'clang') {
+        b1k_print (clang --version)
         $outputOptions += '-G', 'Ninja Multi-Config', '-DCMAKE_C_COMPILER=clang', '-DCMAKE_CXX_COMPILER=clang++'
     }
-    else { # Generate mingw
+    else {
+        # Generate mingw
         $outputOptions += '-G', 'Ninja Multi-Config'
     }
     return $outputOptions
@@ -493,30 +548,35 @@ function preprocess_linux([string[]]$inputOptions) {
 function preprocess_andorid([string[]]$inputOptions) {
     $outputOptions = $inputOptions
 
-    $t_archs = @{arm64 = 'arm64-v8a'; armv7 = 'armeabi-v7a'; x64 = 'x86_64'; x86 = 'x86';}
+    $t_archs = @{arm64 = 'arm64-v8a'; armv7 = 'armeabi-v7a'; x64 = 'x86_64'; x86 = 'x86'; }
 
-    if ($options.a.GetType() -eq [object[]]) {
-        $archlist = [string[]]$options.a
-    } else {
-        $archlist = $options.a.Split(';')
-    }
-    for ($i = 0; $i -lt $archlist.Count; ++$i) {
-        $arch = $archlist[$i]
-        $archlist[$i] = $t_archs[$arch]
-    }
-
-    $archs = $archlist -join ':' # TODO: modify gradle, split by ';'
+    if ($options.xt -eq 'gradle') {
+        if ($options.a.GetType() -eq [object[]]) {
+            $archlist = [string[]]$options.a
+        }
+        else {
+            $archlist = $options.a.Split(';')
+        }
+        for ($i = 0; $i -lt $archlist.Count; ++$i) {
+            $arch = $archlist[$i]
+            $archlist[$i] = $t_archs[$arch]
+        }
     
-    $outputOptions += "-PPROP_APP_ABI=$archs"
-    $outputOptions += '--parallel', '--info'
+        $archs = $archlist -join ':' # TODO: modify gradle, split by ';'
 
-    # $cmake_toolchain_file = "$ndk_root\build\cmake\android.toolchain.cmake"
-    # $outputOptions += '-G', 'Ninja', '-DANDROID_STL=c++_shared', "-DCMAKE_MAKE_PROGRAM=$ninja_prog", "-DCMAKE_TOOLCHAIN_FILE=$cmake_toolchain_file", "-DANDROID_ABI=$arch"
-    # $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH'
-    # $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH'
-    # $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH'
-    # # by default, we want find host program only when cross-compiling
-    # $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER'
+        $outputOptions += "-PPROP_APP_ABI=$archs"
+        $outputOptions += '--parallel', '--info'
+    }
+    else {
+        $cmake_toolchain_file = "$ndk_root\build\cmake\android.toolchain.cmake"
+        $arch = $t_archs[$options.a]
+        $outputOptions += '-G', 'Ninja', '-DANDROID_STL=c++_shared', "-DCMAKE_MAKE_PROGRAM=$ninja_prog", "-DCMAKE_TOOLCHAIN_FILE=$cmake_toolchain_file", "-DANDROID_ABI=$arch"
+        $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH'
+        $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH'
+        $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH'
+        # by default, we want find host program only when cross-compiling
+        $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER'
+    }
     
     return $outputOptions
 }
@@ -552,29 +612,29 @@ function preprocess_ios([string[]]$inputOptions) {
 
 function validHostAndToolchain() {
     $appleTable = @{
-        'host' = @{'macos' = $True};
+        'host'      = @{'macos' = $True };
         'toolchain' = @{'xcode' = $True; };
     };
     $validTable = @{
-        'win32' = @{
-            'host' = @{'windows' = $True};
-            'toolchain' = @{'msvc' = $True; 'clang' = $True; 'mingw-gcc' = $True};
+        'win32'   = @{
+            'host'      = @{'windows' = $True };
+            'toolchain' = @{'msvc' = $True; 'clang' = $True; 'mingw-gcc' = $True };
         };
-        'winuwp' = @{
-            'host' = @{'windows' = $True};
+        'winuwp'  = @{
+            'host'      = @{'windows' = $True };
             'toolchain' = @{'msvc' = $True; };
         };
-        'linux' = @{
-            'host' = @{'linux' = $True};
+        'linux'   = @{
+            'host'      = @{'linux' = $True };
             'toolchain' = @{'gcc' = $True; };
         };
         'android' = @{
-            'host' = @{'windows' = $True; 'linux' = $True; 'macos' = $True};
+            'host'      = @{'windows' = $True; 'linux' = $True; 'macos' = $True };
             'toolchain' = @{'ndk' = $True; };
         };
-        'osx' = $appleTable;
-        'ios' = $appleTable;
-        'tvos' = $appleTable;
+        'osx'     = $appleTable;
+        'ios'     = $appleTable;
+        'tvos'    = $appleTable;
         'watchos' = $appleTable;
     }
     $validInfo = $validTable[$BUILD_TARGET]
@@ -583,19 +643,19 @@ function validHostAndToolchain() {
         throw "Can't build target $BUILD_TARGET on $HOST_OS_NAME"
     }
     $validToolchain = $validInfo.toolchain[$TOOLCHAIN_NAME]
-    if(!$validToolchain) {
+    if (!$validToolchain) {
         throw "Can't build target $BUILD_TARGET with toolchain $TOOLCHAIN_NAME"
     }
 }
 
 $proprocessTable = @{ 
-    'win32' = ${function:preprocess_win};
-    'winuwp' = ${function:preprocess_win};
-    'linux' = ${function:preprocess_linux}; 
+    'win32'   = ${function:preprocess_win};
+    'winuwp'  = ${function:preprocess_win};
+    'linux'   = ${function:preprocess_linux}; 
     'android' = ${function:preprocess_andorid};
-    'osx' = ${function:preprocess_osx};
-    'ios' = ${function:preprocess_ios};
-    'tvos' = ${function:preprocess_ios};
+    'osx'     = ${function:preprocess_osx};
+    'ios'     = ${function:preprocess_ios};
+    'tvos'    = ${function:preprocess_ios};
     'watchos' = ${function:preprocess_ios};
 }
 
@@ -603,24 +663,30 @@ validHostAndToolchain
 
 ########## setup build tools if not installed #######
 
+setup_cmake
+
 if ($BUILD_TARGET -eq 'win32') {
     setup_nuget
     if ($TOOLCHAIN_NAME -ne 'msvc') {
         $ninja_prog = setup_ninja
     }
 }
-
-if ($BUILD_TARGET -ne 'android') {
-    setup_cmake
-} else {
-    # for android using cmake, ninja from android sdkmanager
-    $sdk_rets = setup_android_sdk
-    $env:ANDROID_HOME = $sdk_rets[0]
-    $env:ANDROID_NDK = $sdk_rets[1]
+elseif ($BUILD_TARGET -eq 'android') {
+    $sdk_root, $ndk_root = setup_android_sdk
+    $env:ANDROID_HOME = $sdk_root
+    $env:ANDROID_NDK = $ndk_root
+    # we assume 'gradle' to build apk, so require setup jdk11+
+    # otherwise, build for android libs, needs setup ninja
+    if ($options.xt -eq 'gradle') {
+        $null = setup_jdk
+    }
+    else {
+        $ninja_prog = setup_ninja
+    }
 }
 
 # enter building steps
-Write-Host "Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLCHAIN ..."
+b1k_print "Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLCHAIN ..."
 
 # step1. preprocess cross make options
 $CONFIG_ALL_OPTIONS = [array]$(& $proprocessTable[$BUILD_TARGET] -inputOptions $CONFIG_DEFAULT_OPTIONS)
@@ -631,28 +697,32 @@ if (!$CONFIG_ALL_OPTIONS) {
 
 # step2. apply additional cross make options
 if ($options.cm.Count -gt 0) {
-    Write-Host ("Apply additional cross make options: $($options.cm), Count={0}" -f $options.cm.Count)
+    b1k_print ("Apply additional cross make options: $($options.cm), Count={0}" -f $options.cm.Count)
     $CONFIG_ALL_OPTIONS += $options.cm
 }
 if ("$($options.cm)".IndexOf('-B') -eq -1) {
     $BUILD_DIR = "build_$($options.a)"
-} else {
-    foreach($opt in $options.cm) {
+}
+else {
+    foreach ($opt in $options.cm) {
         if ($opt.StartsWith('-B')) {
             $BUILD_DIR = $opt.Substring(2).Trim()
             break
         }
     }
 }
-Write-Host ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
+b1k_print ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
 
-if ($BUILD_TARGET -ne 'android') {
+if (($BUILD_TARGET -eq 'android') -and ($options.xt -eq 'gradle')) {
+    ./gradlew assembleRelease $CONFIG_ALL_OPTIONS
+} 
+else {
     # step3. configure
     cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS
 
     # step4. build
     # apply additional build options
-    $BUILD_ALL_OPTIONS = if ("$($options.cb)".IndexOf('--config') -eq -1) {@('--config','Release')} else {@()}
+    $BUILD_ALL_OPTIONS = if ("$($options.cb)".IndexOf('--config') -eq -1) { @('--config', 'Release') } else { @() }
     if ($options.cb) {
         $BUILD_ALL_OPTIONS += $options.cb
     }
@@ -664,11 +734,9 @@ if ($BUILD_TARGET -ne 'android') {
     if ($TOOLCHAIN_NAME -eq 'xcode') {
         $BUILD_ALL_OPTIONS += '--', '-quiet'
     }
-    Write-Host ("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
+    b1k_print ("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 
     cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS
-} else {
-    ./gradlew assembleRelease $CONFIG_ALL_OPTIONS
 }
 
 Set-Location $stored_cwd
