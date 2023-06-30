@@ -43,9 +43,6 @@ foreach ($arg in $args) {
         if ($options.Contains($optName)) {
             $options[$optName] = $arg
         }
-        else {
-            Write-Host "Warning: ignore unrecognized option: $optName"
-        }
         $optName = $null
     }
 }
@@ -189,6 +186,4 @@ $prefix = Join-Path -Path $AX_ROOT -ChildPath 'tools/external'
 $fullCmdLine += "'-prefix'", "'$prefix'"
 
 $strFullCmdLine = "$fullCmdLine"
-
-Write-Host $strFullCmdLine
 Invoke-Expression -Command $strFullCmdLine
