@@ -313,7 +313,7 @@ function setup_jdk() {
     if ($javac_prog) {
         $_jdk_ver = $(javac --version).Split(' ')[1].Trim()
         if ($_jdk_ver -ge '11.0.0') {
-            b1k_print "Using installed jdk: $javac_prog, version: $jdk_ver"
+            b1k_print "Using installed jdk: $javac_prog, version: $_jdk_ver"
             return $javac_prog
         }
     }
@@ -380,7 +380,7 @@ function setup_android_sdk() {
         $ndk_ver = 'r23c+'
     }
 
-    $IsGraterThan = $ndk_ver.EndsWith('+')
+    $IsGraterThan = if ($ndk_ver.EndsWith('+')) { '+' } else { $null }
     if ($IsGraterThan) {
         $ndk_ver = $ndk_ver.Substring(0, $ndk_ver.Length - 1)
     }
@@ -393,7 +393,7 @@ function setup_android_sdk() {
     $sdk_root = $null
     foreach ($sdk_root_env in $sdk_root_envs) {
         $sdk_dir = [Environment]::GetEnvironmentVariable($sdk_root_env)
-        b1k_print "Looking require ndk-$TOOLCHAIN_VER in env:$sdk_root_env=$sdk_dir"
+        b1k_print "Looking require $ndk_ver$IsGraterThan in env:$sdk_root_env=$sdk_dir"
         if ("$sdk_dir" -ne '') {
             $sdk_root = $sdk_dir
             $ndk_root = $null
