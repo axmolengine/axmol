@@ -309,20 +309,25 @@ function setup_nuget() {
 }
 
 function setup_jdk() {
+    $jdk_ver = '11.0.19'
+    $IsGraterThan = if ($jdk_ver.EndsWith('+')) { '+' } else { $null }
+    if ($IsGraterThan) {
+        $jdk_ver = $jdk_ver.Substring(0, $jdk_ver.Length - 1)
+    }
+
     $javac_prog = (Get-Command "javac" -ErrorAction SilentlyContinue).Source
     if ($javac_prog) {
         $_jdk_ver = $(javac --version).Split(' ')[1].Trim()
-        if ($_jdk_ver -ge '11.0.0') {
+        if (($IsGraterThan -and $_jdk_ver -ge $jdk_ver) -or ($_jdk_ver -eq $jdk_ver)) {
             b1k_print "Using installed jdk: $javac_prog, version: $_jdk_ver"
             return $javac_prog
         }
     }
 
-    $jdk_ver = '11.0.19'
     b1k_print "Not found suitable jdk: $_jdk_ver, installing $jdk_ver"
     $suffix = $('windows-x64.zip', 'linux-x64.tar.gz', 'macOS-x64.tar.gz').Get($HOST_OS)
-    $javac_bin = (Resolve-Path "$tools_dir/jdk-$jdk_ver/bin" -ErrorAction SilentlyContinue).Path
-    if (!$javac_bin) {
+    $java_home = Join-Path -Path $tools_dir -ChildPath jdk-$jdk_ver
+    if (!(Test-Path $java_home -PathType Container)) {
         # refer to https://learn.microsoft.com/en-us/java/openjdk/download
         if (!(Test-Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix" -PathType Leaf)) {
             download_file "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "$tools_dir/microsoft-jdk-$jdk_ver-$suffix"
@@ -340,14 +345,19 @@ function setup_jdk() {
         # move to plain folder name
         $folderName = (Get-ChildItem -Path $tools_dir -Filter "jdk-$jdk_ver+*").Name
         if ($folderName) {
-            Move-Item "$tools_dir/$folderName" "$tools_dir/jdk-$jdk_ver"
+            Move-Item "$tools_dir/$folderName" $java_home
         }
-        $javac_bin = (Resolve-Path "$tools_dir/jdk-$jdk_ver/bin" -ErrorAction SilentlyContinue).Path
     }
-    if ($env:PATH.IndexOf($javac_bin) -eq -1) {
-        $env:PATH = "$javac_bin$envPathSep$env:PATH"
+    $env:JAVA_HOME = $java_home
+    $env:CLASSPATH=".;$java_home\lib\dt.jar;$java_home\lib\tools.jar"
+    $jdk_bin = Join-Path -Path $java_home -ChildPath 'bin'
+    if ($env:PATH.IndexOf($jdk_bin) -eq -1) {
+        $env:PATH = "$jdk_bin$envPathSep$env:PATH"
     }
-    $javac_prog = (Join-Path -Path $javac_bin -ChildPath javac$exeSuffix)
+    $javac_prog = (find_prog -name 'javac' -path $jdk_bin)
+    if (!$javac_prog) {
+        throw "Install jdk $jdk_ver fail"
+    }
 
     return $javac_prog
 }
