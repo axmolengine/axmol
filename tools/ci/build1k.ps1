@@ -309,7 +309,7 @@ function setup_nuget() {
 }
 
 function setup_jdk() {
-    $jdk_ver = '17.0.7+'
+    $jdk_ver = '11.0.19+'
     $IsGraterThan = if ($jdk_ver.EndsWith('+')) { '+' } else { $null }
     if ($IsGraterThan) {
         $jdk_ver = $jdk_ver.Substring(0, $jdk_ver.Length - 1)
