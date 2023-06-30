@@ -43,7 +43,7 @@ jobs:
         uwp: true
 
     - name: Build
-      run: tools/ci/build1k.ps1 -p winuwp -a $env:BUILD_ARCH -xb '--config','Release','--target','cpp_tests'
+      run: build.ps1 -p winuwp -a $env:BUILD_ARCH
 
     - uses: actions/upload-artifact@v3
       with:

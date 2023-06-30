@@ -72,6 +72,24 @@ foreach ($arg in $args) {
     }
 }
 
+# Choose host target if not specified by command line automatically
+if (!$options.p) {
+    if ($IsWindows -or ("$env:OS" -eq 'Windows_NT')) {
+        $options.p = 'win32'
+    }
+    else {
+        if ($IsLinux) {
+            $options.p = 'linux'
+        }
+        elseif ($IsMacOS) {
+            $options.p = 'osx'
+        }
+        else {
+            throw "Unsupported host OS for building target $(options.p)"
+        }
+    }
+}
+
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
 b1k_print "PowerShell $pwsh_ver"
