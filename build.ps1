@@ -191,5 +191,4 @@ $fullCmdLine += "'-prefix'", "'$prefix'"
 $strFullCmdLine = "$fullCmdLine"
 
 Write-Host $strFullCmdLine
-
-# Invoke-Expression -Command $strFullCmdLine
+Invoke-Expression -Command $strFullCmdLine
