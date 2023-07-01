@@ -46,7 +46,7 @@ include(PreventInSourceBuilds)
 include(AXBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
-option(AX_BUILD_TOOLS "Build tools" OFF)
+option(AX_BUILD_TOOLS "Build tools" ON)
 
 add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
 
