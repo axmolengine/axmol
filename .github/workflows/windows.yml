@@ -44,4 +44,4 @@ jobs:
         arch: ${{ env.BUILD_ARCH }}
 
     - name: Build
-      run: tools\ci\build1k.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL -xb '--config','Release','--target','cpp_tests'
+      run: .\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL

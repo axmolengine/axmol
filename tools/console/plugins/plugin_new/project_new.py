@@ -452,8 +452,17 @@ class TPCreator(object):
         self.do_cmds(default_cmds)
     
     def cp_ci_scripts(self):
-        tools_template = os.path.join(os.getenv('AX_ROOT'), 'tools', 'template')
-        axmol.copy_files_in_dir(tools_template, self.project_dir)
+        axroot = os.getenv('AX_ROOT')
+        axmol_files_path = os.path.join(axroot, 'templates', 'axmol_files.json')
+        f = open(axmol_files_path, encoding='utf8')
+        dict_files = json.load(f)
+        common_files = dict_files.get('common')
+        for filepath in common_files:
+            fullpath = os.path.realpath(os.path.join(axroot, filepath))
+            print("> Copying {0} to {1}".format(fullpath, self.project_dir))
+            shutil.copy(os.path.join(axroot, filepath), self.project_dir)
+
+        # axmol.copy_files_in_dir(tools_template, self.project_dir)
 
     def do_other_step(self, step, not_existed_error=True):
         if step not in self.tp_other_step:
