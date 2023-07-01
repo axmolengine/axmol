@@ -67,6 +67,7 @@ $manifest = @{
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
+# refer to: https://developer.android.com/studio#command-line-tools-only
 $cmdlinetools_rev = '9477386'
 
 function b1k_print($msg) {
