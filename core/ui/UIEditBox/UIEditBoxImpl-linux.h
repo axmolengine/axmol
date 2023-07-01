@@ -69,7 +69,7 @@ public:
     virtual void setNativePlaceHolder(const char* pText) override{};
     virtual void setNativeVisible(bool visible) override{};
     virtual void updateNativeFrame(const Rect& rect) override{};
-    virtual const char* getNativeDefaultFontName() override{};
+    virtual const char* getNativeDefaultFontName() override{ return ""; };
     virtual void nativeOpenKeyboard() override;
     virtual void nativeCloseKeyboard() override{};
     virtual void setNativeMaxLength(int maxLength) override{};
