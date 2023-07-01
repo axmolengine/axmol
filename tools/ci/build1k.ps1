@@ -67,7 +67,7 @@ $manifest = @{
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
-cmdlinetools_rev = '9477386'
+$cmdlinetools_rev = '9477386'
 
 function b1k_print($msg) {
     Write-Host "build1k: $msg"
