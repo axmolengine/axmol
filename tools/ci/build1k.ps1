@@ -98,11 +98,6 @@ $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 b1k_print "PowerShell $pwsh_ver"
 b1k_print $(Out-String -InputObject $options)
 
-# if found or installed, the ndk_root indicate the root path of installed ndk
-$sdk_root = $null
-$ndk_root = $null
-$ninja_prog = $null
-
 $myRoot = $PSScriptRoot
 
 $HOST_WIN = 0 # targets: win,uwp,android
@@ -633,6 +628,7 @@ function preprocess_linux([string[]]$inputOptions) {
     return $outputOptions
 }
 
+$ninja_prog = $null
 function preprocess_andorid([string[]]$inputOptions) {
     $outputOptions = $inputOptions
 
