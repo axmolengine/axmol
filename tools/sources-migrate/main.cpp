@@ -26,11 +26,13 @@ processing file 4: /home/vmroot/dev/axmol/tests/cpp-tests/Content/hd/extensions/
 
 namespace stdfs = std::filesystem;
 
+bool g_use_fuzzy_pattern;
 int totals          = 0;
 int replaced_totals = 0;
 std::vector<std::string_view> chunks;
 
 const std::regex include_re(R"(#(\s)*(include|import)(\s)*"(.)*\b(CC|cc))", std::regex_constants::ECMAScript);
+const std::regex include_re_fuzzy(R"(#(\s)*(include|import)(\s)*("|<)(.)*\b(CC|cc))", std::regex_constants::ECMAScript);
 const std::regex cmake_re(R"(/CC)", std::regex_constants::ECMAScript | std::regex_constants::icase);
 
 std::string load_file(std::string_view path)
@@ -97,7 +99,11 @@ bool regex_search_for_replace(const std::string& content, const std::regex& re)
         if (line.length() > 1)
         {
             std::match_results<std::string_view::const_iterator> results;
-            if (std::regex_search(line.begin(), line.end(), results, re))
+            if (std::regex_search(line.begin(), line.end(), results, re)
+                 // we don't want replace c standard header, but will match
+                 // when use fuzzy pattern
+                 && (!g_use_fuzzy_pattern || line.find("<cctype>") == std::string_view::npos)
+                )
             {
                 auto& match = results[0];
                 auto first  = match.first;
@@ -148,7 +154,7 @@ void process_file(std::string_view file_path, std::string_view file_name, bool i
     if (!is_cmake)
     {
         // replacing file include stub from CCxxx to xxx, do in editor is better
-        if (regex_search_for_replace(content, include_re))
+        if (regex_search_for_replace(content, !g_use_fuzzy_pattern ? include_re : include_re_fuzzy))
         {
             printf("replacing c/c++,objc file %d: %s, len=%zu\n", ++totals, file_path.data(), content.size());
             save_file(file_path, chunks);
@@ -222,6 +228,11 @@ void process_folder(std::string_view sub_path)
     }
 }
 
+/*
+usage:
+   sources-migrate <source-dir> [--fuzzy]
+*/
+
 int main(int argc, const char** argv)
 {
     if (argc < 2)
@@ -245,7 +256,8 @@ int main(int argc, const char** argv)
                std::chrono::duration_cast<std::chrono::microseconds>(diff).count() / 1000.0);
     }
     else
-    {
+    { // >=2
+        g_use_fuzzy_pattern = argc > 2 ? strcmp(argv[2], "--fuzzy") == 0 : false;
         auto start = std::chrono::steady_clock::now();
         process_folder(argv[1]);
         auto diff = std::chrono::steady_clock::now() - start;

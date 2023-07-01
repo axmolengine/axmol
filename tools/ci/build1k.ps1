@@ -199,6 +199,7 @@ function find_prog($name, $path = $null, $cmd = $null, $param = $null, $silent =
         }
         elseif ($requiredVer -eq '*') {
             $checkVerCond = '$True'
+            $preferredVer = 'latest'
         }
         else {
             $verArr = $requiredVer.Split('~')
@@ -342,7 +343,7 @@ function setup_cmake() {
 
 # setup nuget
 function setup_nuget() {
-    $nuget_prog = find_prog -name 'nuget'
+    $nuget_prog, $nuget_ver = find_prog -name 'nuget'
     if ($nuget_prog) {
         b1k_print "Using installed nuget: $nuget_prog"
         return $nuget_prog
@@ -359,7 +360,7 @@ function setup_nuget() {
         b1k_print "Using installed nuget: $nuget_prog"
         return $nuget_prog
     }
-    download_file "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe" $nuget_prog
+    download_file "https://dist.nuget.org/win-x86-commandline/$nuget_ver/nuget.exe" $nuget_prog
 
     if (Test-Path -Path $nuget_prog -PathType Leaf) {
         b1k_print "The nuget was successfully installed to: $nuget_prog"
