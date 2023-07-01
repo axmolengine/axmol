@@ -15,9 +15,7 @@
 ## 支持平台列表
 | Build | Status (github) |
 |-------|-----------------|
-| Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows.yml)|
-| Windows Desktop(Clang)|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows-clang.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows-clang.yml)|
-| Windows UWP|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml)|
+| Windows(win32,winuwp,win32-clang)|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows.yml)|
 | Android | [![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)|
 | iOS |[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)|
 | tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|
@@ -28,7 +26,7 @@
 
 新的媒体播放器`ui::MediaPlayer`(原命: `ui::VideoPlayer`) 将视频渲染为纹理，使得游戏对视频渲染控制更加灵活，就像普通UI一样，而无需考虑层级问题。这得益于重新升级的跨平台`MediaEngine`, 灵感来自微软的媒体基础库(Microsoft Media Foundation): `IMFMediaEngine`，目前已支持axmol引擎支持的所有平台。
 
-|  Platform             | Video Compress Format | Video Pixel Format   | Container Format | Backend            |
+|  Target Platform      | Video Compress Format | Video Pixel Format   | Container Format | Backend            |
 |-----------------------|-----------------------|----------------------|----------------- |--------------------|
 | Windows Desktop       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | .mp4,.mkv,.webm  | IMFMediaSession    |
 | Windows UWP           | H264, HEVC, VP90      | BGR32                | .mp4,.mkv,.webm  | IMFMediaEngine     |

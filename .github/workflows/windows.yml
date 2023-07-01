@@ -11,37 +11,96 @@ on:
       - 'docs/**'
 
 jobs:
-  build:
-    if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
+  win32:
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
     runs-on: windows-latest
-    strategy:
-      matrix:
-        config:
-          - {arch: x86, dll: false}
-          - {arch: x64, dll: false}
-          - {arch: x86, dll: true}
-          - {arch: x64, dll: true}
-    env:
-      BUILD_ARCH: ${{ matrix.config.arch }}
-      BUILD_DLL: ${{ matrix.config.dll }}
-
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: 'recursive'
-
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.7.8'
-
     - uses: ilammy/msvc-dev-cmd@v1.12.1
       with: 
-        arch: ${{ env.BUILD_ARCH }}
-
+        arch: 'x64'
     - name: Build
-      run: .\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL
+      shell: pwsh
+      run: .\build.ps1 -p win32 -a x64
+  win32-dll:
+        # The CMake configure and build commands are platform agnostic and should work equally
+        # well on Windows or Mac.  You can convert this to a matrix build if you need
+        # cross-platform coverage.
+        # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v3
+          with:
+            submodules: 'recursive'
+        - name: Setup Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.7.8'
+        - uses: ilammy/msvc-dev-cmd@v1.12.1
+          with: 
+            arch: 'x64'
+        - name: Build
+          shell: pwsh
+          run: .\build.ps1 -p win32 -a x64 -dll true
+  winuwp:
+        # The CMake configure and build commands are platform agnostic and should work equally
+        # well on Windows or Mac.  You can convert this to a matrix build if you need
+        # cross-platform coverage.
+        # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+        runs-on: windows-latest
+        steps:
+        - uses: actions/checkout@v3
+          with:
+            submodules: 'recursive'
+        - name: Setup Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.7.8'
+        - uses: ilammy/msvc-dev-cmd@v1.12.1
+          with: 
+            arch: 'x64'
+            uwp: true
+        - name: Build
+          shell: pwsh
+          run: .\build.ps1 -p winuwp -a x64
+        - uses: actions/upload-artifact@v3
+          with:
+            name: x64
+            path: |
+              build_*/tests/**/AppPackages/**/*.msix
+  win32-clang:
+        # The CMake configure and build commands are platform agnostic and should work equally
+        # well on Windows or Mac.  You can convert this to a matrix build if you need
+        # cross-platform coverage.
+        # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+        runs-on: windows-latest
+        env:
+          # Test winsdk < 10.0.22000.0 (missing C11 standard stdalign.h), axmol will auto fallback to C99 for resolving compiling issue.
+          WINSDK_VER: '10.0.19041.0' 
+        steps:
+        - uses: actions/checkout@v3
+          with:
+            submodules: 'recursive'
+    
+        - name: Setup Python
+          uses: actions/setup-python@v4
+          with:
+            python-version: '3.7.8'
+    
+        - name: Install LLVM and Clang
+          uses: KyleMayes/install-llvm-action@v1
+          with:
+            version: "16.0"
+    
+        - name: Build
+          shell: pwsh
+          run: .\build.ps1 -p win32 -a 'x64' -cc clang -winsdk $env:WINSDK_VER
