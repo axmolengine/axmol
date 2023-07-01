@@ -109,7 +109,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         webp
         pugixml
         xxhash
-        lz4
+        fastlz
         clipper2
         ConvertUTF
         poly2tri
