@@ -73,6 +73,7 @@ $AX_ROOT = $env:AX_ROOT
 if (!$AX_ROOT) {
     if(Test-Path "$myRoot/core/axmolver.h.in" -PathType Leaf) {
         $AX_ROOT = $myRoot
+        $env:AX_ROOT = $AX_ROOT
     }
     else {
         throw "Can't determine axmol engine root, please run python setup.py first"
