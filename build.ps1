@@ -30,7 +30,7 @@
 #   on macos: target platform is osx, arch=x64
 #
 
-$options = @{p = $null; a = 'x64'; cc = $null; xc = @(); xb = @(); }
+$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -88,7 +88,7 @@ $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 $fullCmdLine = @("$((Resolve-Path -Path "$AX_ROOT/tools/ci/build1k.ps1").Path)")
 
 foreach ($option in $options.GetEnumerator()) {
-    if ($option.Value) {
+    if ($option.Key -ne 'd' -and $option.Value) {
         $fullCmdLine += add_quote "-$($option.Key)"
         $fullCmdLine += add_quote $option.Value
     }
@@ -98,7 +98,7 @@ if ($options.p -eq 'android') {
     $fullCmdLine += "'-xt'", "'gradle'"
 }
 
-$search_paths = @($workDir, $myRoot)
+$search_paths = if ($options.d) { @($options.d, $workDir, $myRoot) } else { @($workDir, $myRoot) }
 function search_proj($path, $type) {
     foreach ($search_path in $search_paths) {
         $full_path = Join-Path -Path $search_path -ChildPath $path
