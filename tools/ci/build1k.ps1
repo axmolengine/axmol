@@ -582,6 +582,10 @@ function setup_clang(){
 function preprocess_win([string[]]$inputOptions) {
     $outputOptions = $inputOptions
 
+    if ($options.winsdk) {
+        $outputOptions += "-DCMAKE_SYSTEM_VERSION=$($options.winsdk)"
+    }
+
     if ($TOOLCHAIN_NAME -eq 'msvc') {
         # Generate vs2019 on github ci
         # Determine arch name
@@ -599,10 +603,6 @@ function preprocess_win([string[]]$inputOptions) {
             $outputOptions += '-A', $arch
             if ($TOOLCHAIN_VER) {
                 $outputOptions += "-Tv$TOOLCHAIN_VER"
-            }
-
-            if ($options.winsdk) {
-                $outputOptions += "-DCMAKE_SYSTEM_VERSION=$($options.winsdk)"
             }
         }
         else {
