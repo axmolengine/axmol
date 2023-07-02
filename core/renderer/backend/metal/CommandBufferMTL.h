@@ -164,7 +164,25 @@ public:
                               std::size_t count,
                               std::size_t offset,
                               bool wireframe) override;
-
+							  
+    /**
+     * Draw primitives with an index list instanced.
+     * @param primitiveType The type of primitives that elements are assembled into.
+     * @param indexType The type if indexes, either 16 bit integer or 32 bit integer.
+     * @param count The number of indexes to read from the index buffer for each instance.
+     * @param offset Byte offset within indexBuffer to start reading indexes from.
+     * @param instance Count of
+     * instances to draw at once.
+     * @see `setIndexBuffer(Buffer* buffer)`
+     * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
+     */
+    virtual void drawElementsInstanced(PrimitiveType primitiveType,
+                                       IndexFormat indexType,
+                                       std::size_t count,
+                                       std::size_t offset,
+                                       int instance,
+                                       bool wireframe = false) override;
+									   
     /**
      * Do some resources release.
      */

@@ -310,6 +310,22 @@ void CommandBufferMTL::drawElements(PrimitiveType primitiveType,
                            indexBufferOffset:offset];
 }
 
+void CommandBufferMTL::drawElementsInstanced(PrimitiveType primitiveType,
+                                             IndexFormat indexType,
+                                             std::size_t count,
+                                             std::size_t offset,
+                                             int instanceCount,
+                                             bool /* wireframe */)
+{
+    prepareDrawing();
+    [_mtlRenderEncoder drawIndexedPrimitives:toMTLPrimitive(primitiveType)
+                                  indexCount:count
+                                   indexType:toMTLIndexType(indexType)
+                                 indexBuffer:_mtlIndexBuffer
+                           indexBufferOffset:offset
+                               instanceCount:instanceCount];
+}
+
 void CommandBufferMTL::endRenderPass()
 {
     afterDraw();
