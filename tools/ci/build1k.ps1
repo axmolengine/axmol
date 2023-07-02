@@ -74,7 +74,7 @@ function b1k_print($msg) {
     Write-Host "build1k: $msg"
 }
 
-$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xt = 'cmake'; prefix = $null; xc = @(); xb = @(); dll = $false }
+$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xt = 'cmake'; prefix = $null; xc = @(); xb = @(); winsdk = $null; dll = $false }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -219,10 +219,17 @@ function find_prog($name, $path = $null, $cmd = $null, $param = $null, $silent =
     }
 
     # find command
-    $prog_path = (Get-Command $cmd -ErrorAction SilentlyContinue).Source
+    $cmd_info = (Get-Command $cmd -ErrorAction SilentlyContinue)
     $found_rets = $null # prog_path,prog_version
-    if ($prog_path) {
-        $verStr = if (!$param) { $(. $cmd '--version') | Select-Object -First 1 } else { $(. $cmd '--version' $param) | Select-Object -First 1 }
+    if ($cmd_info) {
+        $prog_path = $cmd_info.Source
+        if ($cmd_info.Version -eq '0.0.0.0') {
+            $verStr = if (!$param) { $(. $cmd '--version') | Select-Object -First 1 } else { $(. $cmd '--version' $param) | Select-Object -First 1 }
+        }
+        else {
+            $vsi = $cmd_info.Version
+            $verStr = "$($vsi.Major).$($vsi.Minor).$($vsi.Revision)"
+        }
         # full pattern: '(\d+\.)+(\*|\d+)(\-[a-z]+[0-9]*)?' can match x.y.z-rc3, but not require for us
         $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(-)?(\*|\d+)')
         $foundVer = $matchInfo.Value
