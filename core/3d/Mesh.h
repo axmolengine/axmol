@@ -267,6 +267,9 @@ public:
     */
     void addInstanceChild(Node* child);
 
+    /** shrinks the instance transform buffer after many steps of expansion to increase performance. */
+    void shrinkToFitInstances();
+
     /** rebuilds the instance transform buffer next frame. */
     void rebuildInstances();
 
@@ -285,6 +288,7 @@ protected:
     bool _instancing;
     backend::Buffer* _instanceTransformBuffer;
     bool _instanceTransformDirty;
+    bool _instanceTransformBufferDirty;
     int _instanceCount;
     std::vector<Node*> _instances;
     float* _instanceMatrixCache;

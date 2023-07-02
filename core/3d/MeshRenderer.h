@@ -254,13 +254,20 @@ public:
     /** Enables instancing for this Mesh Renderer, keep in mind that
      a special vertex shader has to be used, make sure that your shader
      has a mat4 attribute set on the location of total vertex attributes +1
-     */
-    void enableInstancing(MeshMaterial::InstanceMaterialType instanceMat, int count);
 
-    // Enables instancing for this Mesh Renderer, keep in mind that
-    // a special vertex shader has to be used, make sure that your shader
-    // has a mat4 attribute set on the location of total vertex attributes +1
-    void enableInstancing(MeshMaterial* instanceMat, int count);
+    @param instanceMat Prebuilt material made to work with instancing.
+    @param count Count of Instances, 0 to enable auto expanstion, but you
+    should call `shrinkToFitInstances` after adding children to maximize performance.*/
+    void enableInstancing(MeshMaterial::InstanceMaterialType instanceMat, int count = 0);
+
+    /* Enables instancing for this Mesh Renderer, keep in mind that
+    / a special vertex shader has to be used, make sure that your shader
+    / has a mat4 attribute set on the location of total vertex attributes +1
+
+    @param instanceMat Custom material that supports instancing.
+    @param count Count of Instances, 0 to enable auto expanstion, but you
+    should call `shrinkToFitInstances` after adding children to maximize performance.*/
+    void enableInstancing(MeshMaterial* instanceMat, int count = 0);
 
     // Disables instancing for this Mesh Renderer.
     void disableInstancing();
@@ -281,6 +288,9 @@ public:
     * @param active, Child will run updates & actions but performance issues may arise.
     */
     void addInstanceChild(Node* child, bool active = false);
+
+    /** shrinks the instance transform buffer after many steps of expansion to increase performance. */
+    void shrinkToFitInstances();
 
     /** rebuilds the instance transform buffer next frame. */
     void rebuildInstances();

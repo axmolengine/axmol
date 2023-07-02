@@ -122,11 +122,24 @@ void Mesh::setInstanceCount(int count) {
 
 void Mesh::addInstanceChild(Node* child)
 {
-    AXASSERT(_instances.size() < _instanceCount, "Instance child overflow, try expanding instance count.");
-
     AX_SAFE_RETAIN(child);
     _instances.push_back(child);
     _instanceTransformDirty = true;
+
+    if (_instances.size() > _instanceCount)
+    {
+        _instanceCount *= 2;
+        _instanceTransformBufferDirty = true;
+    }
+}
+
+void Mesh::shrinkToFitInstances()
+{
+    if (_instanceCount > _instances.size())
+    {
+        _instanceCount                = _instances.size();
+        _instanceTransformBufferDirty = true;
+    }
 }
 
 void Mesh::rebuildInstances()
@@ -144,6 +157,7 @@ Mesh::Mesh()
     , _visible(true)
     , _instancing(false)
     , _instanceTransformBuffer(nullptr)
+    , _instanceTransformBufferDirty(false)
     , _instanceCount(0)
     , _dynamicInstancing(false)
     , _instanceMatrixCache(nullptr)
@@ -447,8 +461,10 @@ void Mesh::draw(Renderer* renderer,
 
     if (_instancing && _instanceCount > 0)
     {
-        if (!_instanceTransformBuffer)
+        if (!_instanceTransformBuffer || _instanceTransformBufferDirty)
         {
+            AX_SAFE_RELEASE(_instanceTransformBuffer);
+
             _instanceTransformBuffer = backend::Device::getInstance()->newBuffer(
                 _instanceCount * 64, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
 
@@ -475,6 +491,8 @@ void Mesh::draw(Renderer* renderer,
 
             // Fill the buffer with identity matrix.
             _instanceTransformBuffer->updateData(_instanceMatrixCache, _instanceCount * 64);
+
+            _instanceTransformBufferDirty = false;
         }
 
         if (_instanceTransformDirty || _dynamicInstancing)

@@ -708,7 +708,7 @@ void MeshRenderer::enableInstancing(MeshMaterial* instanceMat, int count)
 {
     for (auto&& mesh : _meshes)
     {
-        mesh->enableInstancing(true, count);
+        mesh->enableInstancing(true, MAX(1, count));
         mesh->setMaterial(instanceMat);
     }
 }
@@ -735,6 +735,12 @@ void MeshRenderer::addInstanceChild(Node* child, bool active)
         else
             child->setParent(this);
     }
+}
+
+void MeshRenderer::shrinkToFitInstances()
+{
+    for (auto&& mesh : _meshes)
+        mesh->shrinkToFitInstances();
 }
 
 void MeshRenderer::rebuildInstances()
