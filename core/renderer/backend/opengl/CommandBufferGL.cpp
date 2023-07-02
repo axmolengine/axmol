@@ -263,7 +263,7 @@ void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
                                             IndexFormat indexType,
                                             std::size_t count,
                                             std::size_t offset,
-                                            int instanceCount,
+                                            int instance,
                                             bool wireframe)
 {
     prepareDrawing();
@@ -276,7 +276,7 @@ void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
 #endif
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
     glDrawElementsInstanced(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
-                            (GLvoid*)offset, instanceCount);
+                            (GLvoid*)offset, instance);
     CHECK_GL_ERROR_DEBUG();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)

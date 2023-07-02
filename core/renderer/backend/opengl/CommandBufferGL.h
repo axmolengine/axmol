@@ -177,7 +177,7 @@ public:
                                        IndexFormat indexType,
                                        std::size_t count,
                                        std::size_t offset,
-                                       int instanceCount,
+                                       int instance,
                                        bool wireframe = false) override;
 
     /**
