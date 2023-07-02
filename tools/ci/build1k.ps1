@@ -223,11 +223,12 @@ function find_prog($name, $path = $null, $cmd = $null, $param = $null, $silent =
     $found_rets = $null # prog_path,prog_version
     if ($cmd_info) {
         $prog_path = $cmd_info.Source
-        $verInfo = $cmd_info.Version
-        $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Revision)"
-        if ($verStr -eq '0.0.0') {
-            $verStr = if (!$param) { $(. $cmd '--version') | Select-Object -First 1 } else { $(. $cmd '--version' $param) | Select-Object -First 1 }
+        $verStr = if (!$param) { $(. $cmd '--version' 2>$null) | Select-Object -First 1 } else { $(. $cmd '--version' $param 2>$null) | Select-Object -First 1 }
+        if (!$verStr -or ($verStr.IndexOf('--version') -ne -1)) {
+            $verInfo = $cmd_info.Version
+            $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Revision)"
         }
+
         # full pattern: '(\d+\.)+(\*|\d+)(\-[a-z]+[0-9]*)?' can match x.y.z-rc3, but not require for us
         $matchInfo = [Regex]::Match($verStr, '(\d+\.)+(-)?(\*|\d+)')
         $foundVer = $matchInfo.Value
