@@ -30,7 +30,7 @@
 #   on macos: target platform is osx, arch=x64
 #
 
-$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); }
+$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); winsdk = $null }
 
 $optName = $null
 foreach ($arg in $args) {
