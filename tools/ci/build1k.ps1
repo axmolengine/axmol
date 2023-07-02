@@ -816,8 +816,6 @@ else {
 }
 b1k_print ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
 
-exit 0
-
 if (($BUILD_TARGET -eq 'android') -and ($options.xt -eq 'gradle')) {
     ./gradlew assembleRelease $CONFIG_ALL_OPTIONS
 } 
