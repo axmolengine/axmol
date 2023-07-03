@@ -127,9 +127,9 @@ function(use_ax_compile_define target)
     if(APPLE)
         target_compile_definitions(${target} PUBLIC __APPLE__)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
-        if(AX_USE_COMPAT_GL)
+        if(AX_USE_ANGLE)
             target_compile_definitions(${target}
-                PUBLIC AX_USE_COMPAT_GL=1
+                PUBLIC AX_USE_ANGLE=1
                 PUBLIC GL_SILENCE_DEPRECATION=1
             )
         endif()
@@ -148,9 +148,7 @@ function(use_ax_compile_define target)
     elseif(ANDROID)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
     elseif(WINDOWS)
-        if(AX_USE_COMPAT_GL)
-            target_compile_definitions(${target} PUBLIC AX_USE_COMPAT_GL=1)
-        endif()
+        ax_config_pred(${target} AX_USE_ANGLE)
         ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target}
             PUBLIC WIN32
