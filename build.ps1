@@ -174,7 +174,7 @@ if (!$is_android) {
 } else { # android
     # engine ci
     if ($is_engine -and $is_ci) {
-        $fullCmdLine += "'-xc'", "'-PAX_ENABLE_EXT_EFFEKSEER=ON','-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks','-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'"
+        $fullCmdLine += "'-xc'", "'-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks','-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'"
     }
 }
 
