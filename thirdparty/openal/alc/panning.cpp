@@ -314,17 +314,17 @@ void InitDistanceComp(ALCdevice *device, const al::span<const Channel> channels,
 }
 
 
-inline auto& GetAmbiScales(DevAmbiScaling scaletype) noexcept
+constexpr auto GetAmbiScales(DevAmbiScaling scaletype) noexcept
 {
-    if(scaletype == DevAmbiScaling::FuMa) return AmbiScale::FromFuMa();
-    if(scaletype == DevAmbiScaling::SN3D) return AmbiScale::FromSN3D();
-    return AmbiScale::FromN3D();
+    if(scaletype == DevAmbiScaling::FuMa) return al::span{AmbiScale::FromFuMa};
+    if(scaletype == DevAmbiScaling::SN3D) return al::span{AmbiScale::FromSN3D};
+    return al::span{AmbiScale::FromN3D};
 }
 
-inline auto& GetAmbiLayout(DevAmbiLayout layouttype) noexcept
+constexpr auto GetAmbiLayout(DevAmbiLayout layouttype) noexcept
 {
-    if(layouttype == DevAmbiLayout::FuMa) return AmbiIndex::FromFuMa();
-    return AmbiIndex::FromACN();
+    if(layouttype == DevAmbiLayout::FuMa) return al::span{AmbiIndex::FromFuMa};
+    return al::span{AmbiIndex::FromACN};
 }
 
 
@@ -355,8 +355,8 @@ DecoderView MakeDecoderView(ALCdevice *device, const AmbDecConf *conf,
 
     const auto num_coeffs = decoder.mIs3D ? AmbiChannelsFromOrder(decoder.mOrder)
         : Ambi2DChannelsFromOrder(decoder.mOrder);
-    const auto idx_map = decoder.mIs3D ? AmbiIndex::FromACN().data()
-        : AmbiIndex::FromACN2D().data();
+    const auto idx_map = decoder.mIs3D ? AmbiIndex::FromACN.data()
+        : AmbiIndex::FromACN2D.data();
     const auto hfmatrix = conf->HFMatrix;
     const auto lfmatrix = conf->LFMatrix;
 
@@ -601,13 +601,13 @@ void InitPanning(ALCdevice *device, const bool hqdec=false, const bool stablize=
         case DevFmtX714: decoder = X714Config; break;
         case DevFmtX3D71: decoder = X3D71Config; break;
         case DevFmtAmbi3D:
-            auto&& acnmap = GetAmbiLayout(device->mAmbiLayout);
-            auto&& n3dscale = GetAmbiScales(device->mAmbiScale);
+            const auto acnmap = GetAmbiLayout(device->mAmbiLayout);
+            const auto n3dscale = GetAmbiScales(device->mAmbiScale);
 
             /* For DevFmtAmbi3D, the ambisonic order is already set. */
             const size_t count{AmbiChannelsFromOrder(device->mAmbiOrder)};
             std::transform(acnmap.begin(), acnmap.begin()+count, std::begin(device->Dry.AmbiMap),
-                [&n3dscale](const uint8_t &acn) noexcept -> BFChannelConfig
+                [n3dscale](const uint8_t &acn) noexcept -> BFChannelConfig
                 { return BFChannelConfig{1.0f/n3dscale[acn], acn}; });
             AllocChannels(device, count, 0);
             device->m2DMixing = false;
@@ -640,8 +640,8 @@ void InitPanning(ALCdevice *device, const bool hqdec=false, const bool stablize=
             continue;
         }
 
-        auto ordermap = decoder.mIs3D ? AmbiIndex::OrderFromChannel().data()
-            : AmbiIndex::OrderFrom2DChannel().data();
+        auto ordermap = decoder.mIs3D ? AmbiIndex::OrderFromChannel.data()
+            : AmbiIndex::OrderFrom2DChannel.data();
 
         chancoeffs.resize(maxz(chancoeffs.size(), idx+1u), ChannelDec{});
         al::span<const float,MaxAmbiChannels> src{decoder.mCoeffs[i]};
@@ -663,11 +663,11 @@ void InitPanning(ALCdevice *device, const bool hqdec=false, const bool stablize=
     device->mAmbiOrder = decoder.mOrder;
     device->m2DMixing = !decoder.mIs3D;
 
-    const al::span<const uint8_t> acnmap{decoder.mIs3D ? AmbiIndex::FromACN().data() :
-        AmbiIndex::FromACN2D().data(), ambicount};
-    auto&& coeffscale = GetAmbiScales(decoder.mScaling);
+    const al::span<const uint8_t> acnmap{decoder.mIs3D ? AmbiIndex::FromACN.data() :
+        AmbiIndex::FromACN2D.data(), ambicount};
+    const auto coeffscale = GetAmbiScales(decoder.mScaling);
     std::transform(acnmap.begin(), acnmap.end(), std::begin(device->Dry.AmbiMap),
-        [&coeffscale](const uint8_t &acn) noexcept
+        [coeffscale](const uint8_t &acn) noexcept
         { return BFChannelConfig{1.0f/coeffscale[acn], acn}; });
     AllocChannels(device, ambicount, device->channelsFromFmt());
 
@@ -902,7 +902,7 @@ void InitHrtfPanning(ALCdevice *device)
     device->m2DMixing = false;
 
     const size_t count{AmbiChannelsFromOrder(ambi_order)};
-    std::transform(AmbiIndex::FromACN().begin(), AmbiIndex::FromACN().begin()+count,
+    std::transform(AmbiIndex::FromACN.begin(), AmbiIndex::FromACN.begin()+count,
         std::begin(device->Dry.AmbiMap),
         [](const uint8_t &index) noexcept { return BFChannelConfig{1.0f, index}; }
     );
@@ -925,10 +925,10 @@ void InitUhjPanning(ALCdevice *device)
     device->mAmbiOrder = 1;
     device->m2DMixing = true;
 
-    auto acnmap_begin = AmbiIndex::FromFuMa2D().begin();
+    auto acnmap_begin = AmbiIndex::FromFuMa2D.begin();
     std::transform(acnmap_begin, acnmap_begin + count, std::begin(device->Dry.AmbiMap),
         [](const uint8_t &acn) noexcept -> BFChannelConfig
-        { return BFChannelConfig{1.0f/AmbiScale::FromUHJ()[acn], acn}; });
+        { return BFChannelConfig{1.0f/AmbiScale::FromUHJ[acn], acn}; });
     AllocChannels(device, count, device->channelsFromFmt());
 }
 
@@ -979,28 +979,39 @@ void aluInitRenderer(ALCdevice *device, int hrtf_id, std::optional<StereoEncodin
             {
                 ERR("Failed to load layout file %s\n", config);
                 ERR("  %s\n", err->c_str());
+                return false;
             }
             else if(conf.NumSpeakers > MAX_OUTPUT_CHANNELS)
+            {
                 ERR("Unsupported decoder speaker count %zu (max %d)\n", conf.NumSpeakers,
                     MAX_OUTPUT_CHANNELS);
+                return false;
+            }
             else if(conf.ChanMask > Ambi3OrderMask)
+            {
                 ERR("Unsupported decoder channel mask 0x%04x (max 0x%x)\n", conf.ChanMask,
                     Ambi3OrderMask);
-            else
-            {
-                device->mXOverFreq = clampf(conf.XOverFreq, 100.0f, 1000.0f);
-
-                decoder_store = std::make_unique<DecoderConfig<DualBand,MAX_OUTPUT_CHANNELS>>();
-                decoder = MakeDecoderView(device, &conf, *decoder_store);
-                for(size_t i{0};i < decoder.mChannels.size();++i)
-                    speakerdists[i] = conf.Speakers[i].Distance;
+                return false;
             }
+
+            TRACE("Using %s decoder: \"%s\"\n", DevFmtChannelsString(device->FmtChans),
+                conf.Description.c_str());
+            device->mXOverFreq = clampf(conf.XOverFreq, 100.0f, 1000.0f);
+
+            decoder_store = std::make_unique<DecoderConfig<DualBand,MAX_OUTPUT_CHANNELS>>();
+            decoder = MakeDecoderView(device, &conf, *decoder_store);
+            for(size_t i{0};i < decoder.mChannels.size();++i)
+                speakerdists[i] = conf.Speakers[i].Distance;
+            return true;
         };
+        bool usingCustom{false};
         if(layout)
         {
             if(auto decopt = device->configValue<std::string>("decoder", layout))
-                load_config(decopt->c_str());
+                usingCustom = load_config(decopt->c_str());
         }
+        if(!usingCustom && device->FmtChans != DevFmtAmbi3D)
+            TRACE("Using built-in %s decoder\n", DevFmtChannelsString(device->FmtChans));
 
         /* Enable the stablizer only for formats that have front-left, front-
          * right, and front-center outputs.
@@ -1144,7 +1155,7 @@ void aluInitEffectPanning(EffectSlot *slot, ALCcontext *context)
 
     slot->mWetBuffer.resize(count);
 
-    auto acnmap_begin = AmbiIndex::FromACN().begin();
+    auto acnmap_begin = AmbiIndex::FromACN.begin();
     auto iter = std::transform(acnmap_begin, acnmap_begin + count, slot->Wet.AmbiMap.begin(),
         [](const uint8_t &acn) noexcept -> BFChannelConfig
         { return BFChannelConfig{1.0f, acn}; });

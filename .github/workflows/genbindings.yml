@@ -23,7 +23,7 @@ jobs:
         python-version: '3.10.6'
 
     - name: Build
-      run: tools\win-ci\genbindings.ps1
+      run: tools\ci\genbindings.ps1
       
     - name: Commit genbindings changes
       uses: EndBug/add-and-commit@v9

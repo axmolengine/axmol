@@ -21,7 +21,8 @@ jobs:
     
     # Build the HTML documentation
     - name: Build HTML documentation
-      run: ./tools/unix-ci/generate_docs.sh
+      shell: pwsh
+      run: ./tools/ci/gendocs.ps1
     
     # Deploy the HTML documentation to GitHub Pages
     - name: GH Pages Deployment

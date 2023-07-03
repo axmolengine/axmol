@@ -1,6 +1,6 @@
 {
     "common": [
-    ], 
-    "lua": [
+        "build.ps1",
+        "templates/run.bat.in"
     ]
 }
