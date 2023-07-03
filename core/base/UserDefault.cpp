@@ -387,7 +387,7 @@ void UserDefault::lazyInit()
     _fd = posix_open(_filePath.c_str(), O_OVERLAP_FLAGS);
     if (_fd == -1)
     {
-        log("[Warnning] UserDefault::init open storage file '%s' failed!", _filePath.c_str());
+        log("[Warning] UserDefault::init open storage file '%s' failed!", _filePath.c_str());
         return;
     }
 
@@ -396,7 +396,11 @@ void UserDefault::lazyInit()
 
     if (filesize < _curMapSize)
     {  // construct a empty file mapping
-        posix_ftruncate(_fd, _curMapSize);
+        if (posix_ftruncate(_fd, _curMapSize) == -1)
+        {
+            log("[Warning] UserDefault::init failed to truncate '%s'.", _filePath.c_str());
+            return;
+        }
         posix_lseek(_fd, _curMapSize, SEEK_SET);
         _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
     }
@@ -435,7 +439,7 @@ void UserDefault::lazyInit()
         {
             closeFileMapping();
             ::remove(_filePath.c_str());
-            log("[Warnning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time "
+            log("[Warning] UserDefault::init map file '%s' failed, we can't save data persisit this time, next time "
                 "we will retry!",
                 _filePath.c_str());
         }
@@ -492,8 +496,10 @@ void UserDefault::flush()
             _rwmmap->unmap();
             while (obs.length() > _curMapSize)
                 _curMapSize <<= 1;  // X2
-                
-            posix_ftruncate(_fd, _curMapSize);
+
+            if (posix_ftruncate(_fd, _curMapSize) == -1)
+                log("[Warning] UserDefault::flush failed to truncate '%s'.", _filePath.c_str());
+
             posix_lseek(_fd, _curMapSize, SEEK_SET);
             _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
         }

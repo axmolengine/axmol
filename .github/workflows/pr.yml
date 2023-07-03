@@ -38,7 +38,7 @@ jobs:
           arch: ${{ env.BUILD_ARCH }}
       - name: Build
         shell: pwsh
-        run: tools\ci\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL -cb '--config','Release','--target','cpp_tests'
+        run: .\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL
 
   build-windows-clang:
     runs-on: windows-latest
@@ -62,7 +62,7 @@ jobs:
         version: "16.0"
     - name: Build
       shell: pwsh
-      run: tools\ci\build.ps1 -p win32 -a x64 -cc clang -cb '--config','Release','--target','cpp_tests'
+      run: .\build.ps1 -p win32 -a x64 -cc clang
 
   build-winuwp:
     name: build-winuwp
@@ -81,7 +81,7 @@ jobs:
           uwp: true
       - name: Build
         shell: pwsh
-        run: tools\ci\build.ps1 -p winuwp -a x64 -cb '--config','Release','--target','cpp_tests'
+        run: .\build.ps1 -p winuwp -a x64
 
   build-linux:
     name: build-linux
@@ -101,7 +101,7 @@ jobs:
           echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
       - name: Build
         shell: pwsh
-        run: tools/ci/build.ps1 -p linux -a x64 -cb '--config','Release','--target','cpp_tests'
+        run: ./build.ps1 -p linux -a x64
 
   build-android:
     name: build-android
@@ -121,15 +121,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'microsoft' # See 'Supported distributions' for available options
-          java-version: '11'
       - name: Build
         shell: pwsh
         run: |
           $AX_ROOT = $(Get-Location).Path
-          tools/ci/build.ps1 -p android -a $env:BUILD_ARCH -cwd 'tests/cpp-tests/proj.android' -cm '-PAX_ENABLE_EXT_EFFEKSEER=ON',"-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks",'-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'
+          ./build.ps1 -p android -a $env:BUILD_ARCH
 
   build-osx:
     name: build-osx
@@ -151,7 +147,7 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
-          tools/ci/build.ps1 -p osx -a $env:BUILD_ARCH -cb '--config','Release','--target','cpp_tests'
+          ./build.ps1 -p osx -a $env:BUILD_ARCH
 
   build-ios:
     name: build-ios
@@ -166,7 +162,7 @@ jobs:
 
       - name: Build
         shell: pwsh
-        run: tools/ci/build.ps1 -p ios -a 'x64' -cb '--config','Release','--target','cpp_tests'
+        run: ./build.ps1 -p ios -a 'x64'
 
   build-tvos:
     name: build-tvos
@@ -182,4 +178,4 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
-          tools/ci/build.ps1 -p tvos -a 'x64' -cb '--config','Release','--target','cpp_tests'
+          ./build.ps1 -p tvos -a 'x64'

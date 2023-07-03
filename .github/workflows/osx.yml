@@ -41,4 +41,4 @@ jobs:
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       shell: pwsh
-      run: tools/ci/build.ps1 -p osx -a $env:BUILD_ARCH -cb '--config','Release','--target','cpp_tests'
+      run: ./build.ps1 -p osx -a $env:BUILD_ARCH
