@@ -9,6 +9,7 @@
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
 #  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -xb: additional cross build options: i.e. -xb '--config','Release'
+#  -d: specify project dir to compile, i.e. -d /path/your/project/
 # examples:
 #   - win32: 
 #     - pwsh build.ps1 -p win32
@@ -98,7 +99,16 @@ if ($options.p -eq 'android') {
     $fullCmdLine += "'-xt'", "'gradle'"
 }
 
-$search_paths = if ($options.d) { @($options.d, $workDir, $myRoot) } else { @($workDir, $myRoot) }
+$search_prior_dir = $options.d
+if (!$search_prior_dir -and $is_engine -and $is_android) {
+    if ($is_ci) {
+        $search_prior_dir = Join-Path $myRoot 'tests/cpp-tests'
+    } else {
+        $search_prior_dir = Join-Path $myRoot 'templates/cpp-template-default'
+    }
+}
+
+$search_paths = if ($search_prior_dir) { @($search_prior_dir, $workDir, $myRoot) } else { @($workDir, $myRoot) }
 function search_proj($path, $type) {
     foreach ($search_path in $search_paths) {
         $full_path = Join-Path -Path $search_path -ChildPath $path
@@ -112,34 +122,18 @@ function search_proj($path, $type) {
 
 $search_rules = @(
     # others
-    @(
-        # project
-        @{
-            path = 'CMakeLists.txt';
-            type = 'Leaf'
-        },
-        # engine
-        @{
-            path = 'CMakeLists.txt';
-            type = 'Leaf'
-        }
-    ),
+    @{
+        path = 'CMakeLists.txt';
+        type = 'Leaf'
+    },
     # android
-    @(
-        # project
-        @{
-            path = 'proj.android';
-            type = 'Container';
-        },
-        # engine
-        @{
-            path = if ($is_ci) { 'tests/cpp-tests/proj.android' } else { 'templates/cpp-template-default/proj.android' };
-            type = 'Container'
-        }
-    )
+    @{
+        path = 'proj.android';
+        type = 'Container';
+    }
 )
 
-$search_rule = $search_rules[$is_android][$is_engine]
+$search_rule = $search_rules[$is_android]
 $proj_dir = search_proj $search_rule.path $search_rule.type
 
 $proj_name = (Get-Item $myRoot).BaseName
