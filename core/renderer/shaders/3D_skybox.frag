@@ -23,6 +23,9 @@
  ****************************************************************************/
  
 const char* CC3D_skybox_frag = R"(
+precision highp float;
+precision highp int;
+
 #ifdef GL_ES
 varying mediump vec3        v_reflect;
 #else

@@ -21,14 +21,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
 
-const char* CC3D_positionTextureInstance_vert = R"(
-attribute vec4 a_position;
-attribute vec2 a_texCoord;
-attribute mat4 a_instanceMatrix;
 
-varying vec2 TextureCoordOut;
+const char* CC3D_positionTextureInstance_vert = R"(#version 300 es
+precision highp float;
+precision highp int;
+
+layout (location = 0) in vec4 a_position;
+layout (location = 1) in vec2 a_texCoord;
+layout (location = 2) in mat4 a_instanceMatrix;
+
+out vec2 TextureCoordOut;
 
 uniform mat4 u_MVPMatrix;
 

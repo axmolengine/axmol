@@ -24,6 +24,8 @@
  
 
 const char* CC3D_colorNormal_frag = R"(
+precision highp float;
+precision highp int;
 
 #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
 uniform vec3 u_DirLightSourceColor[MAX_DIRECTIONAL_LIGHT_NUM];

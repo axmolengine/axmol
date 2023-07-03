@@ -68,6 +68,7 @@ extern AX_DLL const char* CC3D_color_frag;
 extern AX_DLL const char* CC3D_colorNormal_frag;
 extern AX_DLL const char* CC3D_colorNormalTexture_frag;
 extern AX_DLL const char* CC3D_colorTexture_frag;
+extern AX_DLL const char* CC3D_colorTextureInstance_frag;
 extern AX_DLL const char* CC3D_particleTexture_frag;
 extern AX_DLL const char* CC3D_particleColor_frag;
 extern AX_DLL const char* CC3D_particle_vert;

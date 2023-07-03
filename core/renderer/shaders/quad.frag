@@ -24,6 +24,8 @@
  
 
 const char* CC2D_quadTexture_frag = R"(
+precision highp float;
+precision highp int;
 
 #ifdef GL_ES
 varying mediump vec2 TextureCoordOut;
@@ -43,6 +45,8 @@ void main(void)
 )";
 
 const char* CC2D_quadColor_frag = R"(
+precision highp float;
+precision highp int;
 
 #ifdef GL_ES
 varying mediump vec4 ColorOut;

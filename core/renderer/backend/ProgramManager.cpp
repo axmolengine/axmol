@@ -271,7 +271,7 @@ bool ProgramManager::init()
                            lightDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
     registerProgramFactory(ProgramType::POSITION_TEXTURE_3D, CC3D_positionTexture_vert, CC3D_colorTexture_frag,
                            VertexLayoutHelper::setupDummy);
-    registerProgramFactory(ProgramType::POSITION_TEXTURE_3D_INSTANCE, CC3D_positionTextureInstance_vert, CC3D_colorTexture_frag,
+    registerProgramFactory(ProgramType::POSITION_TEXTURE_3D_INSTANCE, CC3D_positionTextureInstance_vert, CC3D_colorTextureInstance_frag,
                            VertexLayoutHelper::setupDummy);
     registerProgramFactory(ProgramType::POSITION_3D, CC3D_positionTexture_vert, CC3D_color_frag,
                            VertexLayoutHelper::setupSprite);

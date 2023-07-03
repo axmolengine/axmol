@@ -24,6 +24,9 @@
  
 
 const char* CC3D_terrain_frag = R"(
+precision highp float;
+precision highp int;
+
 #ifdef GL_ES
 precision mediump float;
 #endif

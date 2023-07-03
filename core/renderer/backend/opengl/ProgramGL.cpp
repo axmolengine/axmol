@@ -37,7 +37,7 @@ NS_AX_BACKEND_BEGIN
 
 namespace
 {
-static const std::string SHADER_PREDEFINE = "#version 100\n precision highp float;\n precision highp int;\n";
+static const std::string SHADER_PREDEFINE = "";
 }
 
 ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentShader)

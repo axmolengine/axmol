@@ -21,9 +21,25 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
+const char* CC3D_colorTextureInstance_frag = R"(#version 300 es
+precision highp float;
+precision highp int;
+
+in vec2 TextureCoordOut;
+uniform vec4 u_color;
+uniform sampler2D u_tex0;
+out vec4 FragColor;
+
+void main(void)
+{
+    FragColor = texture(u_tex0, TextureCoordOut) * u_color;
+}
+)";
 
 const char* CC3D_colorTexture_frag = R"(
+precision highp float;
+precision highp int;
 
 #ifdef GL_ES
 varying mediump vec2 TextureCoordOut;
@@ -31,7 +47,7 @@ varying mediump vec2 TextureCoordOut;
 varying vec2 TextureCoordOut;
 #endif
 uniform vec4 u_color;
-uniform sampler2D u_tex0; 
+uniform sampler2D u_tex0;
 
 void main(void)
 {
