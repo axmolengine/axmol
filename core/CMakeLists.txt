@@ -39,10 +39,18 @@ endif()
 project(ax_libs)
 
 if (NOT WINRT)
-    option (AX_USE_COMPAT_GL "Use compat gl" OFF)
+    option (AX_USE_ANGLE "Use google angle renderer" OFF)
 else()
-    option (AX_USE_COMPAT_GL "Use compat gl" ON)
-    set(AX_USE_COMPAT_GL ON)
+    set (AX_USE_ANGLE TRUE CACHE BOOL "Use google angle renderer" FORCE)
+endif()
+
+if (NOT AX_USE_ANGLE)  # check deprecated option: AX_USE_COMPAT_GL
+    if (NOT WINRT)
+        option (AX_USE_COMPAT_GL "Use google angle renderer" OFF)
+    else()
+        set (AX_USE_COMPAT_GL TRUE CACHE BOOL "Use google angle renderer" ON)
+    endif()
+    set (AX_USE_ANGLE TRUE CACHE ${AX_USE_COMPAT_GL} "Use google angle renderer" FORCE)
 endif()
 
 message(STATUS "WINRT=${WINRT}")
@@ -101,9 +109,11 @@ else()
   set(AX_ENABLE_EXT_IMGUI OFF)
 endif()
 
-if (AX_ENABLE_EXT_EFFEKSEER AND ANDROID) # effekseer-axmol require use glad
-   set(AX_USE_GLAD TRUE CACHE INTERNAL "Forcing use glad for platforms which use GL backend" )
-   add_definitions(-DAX_USE_GLAD=1)
+if (ANDROID)
+   option(AX_USE_GLAD "Use glad for platforms which use GL backend" AX_ENABLE_EXT_EFFEKSEER)
+   if (AX_USE_GLAD)
+       add_definitions(-DAX_USE_GLAD=1)
+   endif()
 endif()
 
 if(XCODE)
