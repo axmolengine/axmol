@@ -5,7 +5,7 @@ $DIR = $PSScriptRoot
 $isWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 $tools_dir = $(Resolve-Path $PSScriptRoot/..).Path # the tools install dir if not found in system
-$tools_dir = Join-Path -Path $tools_dir -ChildPath 'external'
+$tools_dir = Join-Path $tools_dir 'external'
 if (!(Test-Path "$tools_dir" -PathType Container)) {
     mkdir $tools_dir
 }
@@ -14,14 +14,14 @@ function setup_doxygen() {
     $doxygen_ver = '1.9.7'
 
     $doxygen_pkg_name = if ($isWin) {"doxygen-$doxygen_ver.windows.x64.bin.zip"} else {"doxygen-$doxygen_ver.linux.bin.tar.gz"}
-    $doxygen_pkg_path = Join-Path -Path $tools_dir -ChildPath $doxygen_pkg_name
+    $doxygen_pkg_path = Join-Path $tools_dir $doxygen_pkg_name
     
     if (!(Test-Path $doxygen_pkg_path -PathType Leaf)) {
         $doxygen_ver_ul = $doxygen_ver.Replace('.', '_')
         Invoke-WebRequest -Uri "https://github.com/doxygen/doxygen/releases/download/Release_$doxygen_ver_ul/$doxygen_pkg_name" -OutFile $doxygen_pkg_path | Out-Host
     }
 
-    $doxygen_root = Join-Path -Path $tools_dir "doxygen-$doxygen_ver"
+    $doxygen_root = Join-Path $tools_dir "doxygen-$doxygen_ver"
     $doxygen_bin = $doxygen_root
     if (!(Test-Path $doxygen_root -PathType Container)) {
         if ($isWin) {
