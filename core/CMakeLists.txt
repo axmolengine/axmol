@@ -50,7 +50,7 @@ if (NOT AX_USE_ANGLE)  # check deprecated option: AX_USE_COMPAT_GL
     else()
         set (AX_USE_COMPAT_GL TRUE CACHE BOOL "Use google angle renderer" ON)
     endif()
-    set (AX_USE_ANGLE TRUE CACHE ${AX_USE_COMPAT_GL} "Use google angle renderer" FORCE)
+    set (AX_USE_ANGLE ${AX_USE_COMPAT_GL} CACHE BOOL "Use google angle renderer" FORCE)
 endif()
 
 message(STATUS "WINRT=${WINRT}")
