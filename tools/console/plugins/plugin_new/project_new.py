@@ -334,7 +334,6 @@ class Templates(object):
         template_pattern = {
             "cpp": 'cpp-template-(.+)',
             "lua": 'lua-template-(.+)',
-            "js": 'js-template-(.+)',
         }
 
         self._template_folders = {}
@@ -357,13 +356,6 @@ class Templates(object):
                     continue
 
                 self._template_folders[template_name] = os.path.join(templates_dir, name)
-
-        if len(self._template_folders) == 0:
-            cur_engine = "cocos2d-x" if self._lang == "js" else "cocos2d-js"
-            need_engine = "cocos2d-js" if self._lang == "js" else "cocos2d-x"
-            engine_tip = MultiLanguage.get_string('NEW_ERROR_ENGINE_TIP_FMT', need_engine)
-            message = MultiLanguage.get_string('NEW_ERROR_TEMPLATE_NOT_FOUND_FMT', (self._lang, engine_tip))
-            raise axmol.CCPluginError(message, axmol.CCPluginError.ERROR_PATH_NOT_FOUND)
 
     def none_active(self):
         return self._current is None
@@ -456,7 +448,21 @@ class TPCreator(object):
         # should ignore teh xx-template-xx.json
         exclude_files.append(self.tp_json)
         self.cp_self(self.project_dir, exclude_files)
+        self.cp_ci_scripts()
         self.do_cmds(default_cmds)
+    
+    def cp_ci_scripts(self):
+        axroot = os.getenv('AX_ROOT')
+        axmol_files_path = os.path.join(axroot, 'templates', 'axmol_files.json')
+        f = open(axmol_files_path, encoding='utf8')
+        dict_files = json.load(f)
+        common_files = dict_files.get('common')
+        for filepath in common_files:
+            fullpath = os.path.realpath(os.path.join(axroot, filepath))
+            print("> Copying {0} to {1}".format(fullpath, self.project_dir))
+            shutil.copy(os.path.join(axroot, filepath), self.project_dir)
+
+        # axmol.copy_files_in_dir(tools_template, self.project_dir)
 
     def do_other_step(self, step, not_existed_error=True):
         if step not in self.tp_other_step:
@@ -492,53 +498,6 @@ class TPCreator(object):
                 cmd(v)
             except Exception as e:
                 raise axmol.CCPluginError(str(e), axmol.CCPluginError.ERROR_RUNNING_CMD)
-
-# cmd methods below
-    def append_h5_engine(self, v):
-        src = os.path.join(self.cocos_root, v['from'])
-        dst = os.path.join(self.project_dir, v['to'])
-        # check cocos engine exist
-        moduleConfig = 'moduleConfig.json'
-        moudle_cfg = os.path.join(src, moduleConfig)
-        if not os.path.exists(moudle_cfg):
-            message = MultiLanguage.get_string('NEW_WARNING_FILE_NOT_FOUND_FMT', moudle_cfg)
-            raise axmol.CCPluginError(message, axmol.CCPluginError.ERROR_PATH_NOT_FOUND)
-
-        f = open(moudle_cfg)
-        data = json.load(f, 'utf8')
-        f.close()
-        modules = data['module']
-
-        # must copy moduleConfig.json & CCBoot.js
-        file_list = [moduleConfig, data['bootFile']]
-        for k, v in modules.iteritems():
-            module = modules[k]
-            for f in module:
-                if f[-2:] == 'js':
-                    file_list.append(f)
-
-        # begin copy engine
-        axmol.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_COPY_H5'))
-        for index in range(len(file_list)):
-            srcfile = os.path.join(src, file_list[index])
-            dstfile = os.path.join(dst, file_list[index])
-
-            srcfile = axmol.add_path_prefix(srcfile)
-            dstfile = axmol.add_path_prefix(dstfile)
-
-            if not os.path.exists(os.path.dirname(dstfile)):
-                os.makedirs(axmol.add_path_prefix(os.path.dirname(dstfile)))
-
-            # copy file or folder
-            if os.path.exists(srcfile):
-                if os.path.isdir(srcfile):
-                    if os.path.exists(dstfile):
-                        shutil.rmtree(dstfile)
-                    shutil.copytree(srcfile, dstfile)
-                else:
-                    if os.path.exists(dstfile):
-                        os.remove(dstfile)
-                    shutil.copy2(srcfile, dstfile)
 
     def append_from_template(self, v):
         axmol.Logging.info(MultiLanguage.get_string('NEW_INFO_STEP_APPEND_TEMPLATE'))

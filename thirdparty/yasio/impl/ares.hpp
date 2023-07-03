@@ -29,7 +29,6 @@ SOFTWARE.
 #define YASIO__ARES_HPP
 
 extern "C" {
-#include "ares_config.h"
 #include "ares.h"
 extern void (*ares_free)(void* ptr);
 }

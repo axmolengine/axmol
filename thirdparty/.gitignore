@@ -1,3 +1,6 @@
 .vscode
-build
 .DS_Store
+build
+vlc/**/*
+c-ares/**/*
+**/*.zip
