@@ -172,7 +172,7 @@ if ($options.d) {
     Set-Location $options.d
 }
 
-$tools_dir = if ($options.prefix) { $options.prefix } else { Join-Path -Path $HOME -ChildPath 'build1k' }
+$tools_dir = if ($options.prefix) { $options.prefix } else { Join-Path $HOME 'build1k' }
 if (!(Test-Path "$tools_dir" -PathType Container)) {
     mkdir $tools_dir
 }
@@ -303,7 +303,7 @@ function setup_cmake() {
         else {
             $cmake_dir = "cmake-$cmake_ver-$HOST_OS_NAME-universal"
         }
-        $cmake_root = $(Join-Path -Path $tools_dir -ChildPath $cmake_dir)
+        $cmake_root = $(Join-Path $tools_dir $cmake_dir)
         $cmake_pkg_name = "$cmake_dir$cmake_suffix"
         $cmake_pkg_path = "$cmake_root$cmake_suffix"
         if (!(Test-Path $cmake_root -PathType Container)) {
@@ -328,7 +328,7 @@ function setup_cmake() {
 
         $cmake_bin = $null
         if ($HOST_OS -ne $HOST_MAC) {
-            $cmake_bin = Join-Path -Path $cmake_root -ChildPath 'bin'
+            $cmake_bin = Join-Path $cmake_root 'bin'
         }
         else {
             $cmake_bin = "$cmake_root/CMake.app/Contents/bin"
@@ -355,12 +355,12 @@ function setup_nuget() {
         return $nuget_prog
     }
 
-    $nuget_prog = Join-Path -Path $tools_dir -ChildPath 'nuget'
+    $nuget_prog = Join-Path $tools_dir 'nuget'
     if (!(Test-Path -Path $nuget_prog -PathType Container)) {
         mkdir $nuget_prog
     }
 
-    $nuget_prog = Join-Path -Path $nuget_prog -ChildPath 'nuget.exe'
+    $nuget_prog = Join-Path $nuget_prog 'nuget.exe'
 
     if (Test-Path -Path $nuget_prog -PathType Leaf) {
         b1k_print "Using installed nuget: $nuget_prog"
@@ -386,7 +386,7 @@ function setup_jdk() {
 
     b1k_print "Installing jdk $jdk_ver ..."
     $suffix = $('windows-x64.zip', 'linux-x64.tar.gz', 'macOS-x64.tar.gz').Get($HOST_OS)
-    $java_home = Join-Path -Path $tools_dir -ChildPath jdk-$jdk_ver
+    $java_home = Join-Path $tools_dir "jdk-$jdk_ver"
     if (!(Test-Path $java_home -PathType Container)) {
         # refer to https://learn.microsoft.com/en-us/java/openjdk/download
         if (!(Test-Path "$tools_dir/microsoft-jdk-$jdk_ver-$suffix" -PathType Leaf)) {
@@ -409,7 +409,7 @@ function setup_jdk() {
     }
     $env:JAVA_HOME = $java_home
     $env:CLASSPATH = ".;$java_home\lib\dt.jar;$java_home\lib\tools.jar"
-    $jdk_bin = Join-Path -Path $java_home -ChildPath 'bin'
+    $jdk_bin = Join-Path $java_home 'bin'
     if ($env:PATH.IndexOf($jdk_bin) -eq -1) {
         $env:PATH = "$jdk_bin$envPathSep$env:PATH"
     }
@@ -440,7 +440,7 @@ function setup_ninja() {
     if ($env:PATH.IndexOf($ninja_bin) -eq -1) {
         $env:PATH = "$ninja_bin$envPathSep$env:PATH"
     }
-    $ninja_prog = (Join-Path -Path $ninja_bin -ChildPath ninja$exeSuffix)
+    $ninja_prog = (Join-Path $ninja_bin "ninja$exeSuffix")
     return $ninja_prog
 }
 
@@ -511,7 +511,7 @@ function setup_android_sdk() {
             $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$sdk_root/cmdline-tools/latest/bin" -param "--sdk_root=$sdk_root")
         }
         else {
-            $sdk_root = Join-Path -Path $tools_dir -ChildPath 'adt/sdk'
+            $sdk_root = Join-Path $tools_dir 'adt/sdk'
             if (!(Test-Path -Path $sdk_root -PathType Container)) {
                 mkdir $sdk_root
             }
@@ -524,7 +524,7 @@ function setup_android_sdk() {
                 b1k_print "Installing cmdlinetools version: $sdkmanager_ver ..."
 
                 $cmdlinetools_pkg_name = "commandlinetools-$suffix-$($cmdlinetools_rev)_latest.zip"
-                $cmdlinetools_pkg_path = Join-Path -Path $tools_dir -ChildPath $cmdlinetools_pkg_name
+                $cmdlinetools_pkg_path = Join-Path $tools_dir $cmdlinetools_pkg_name
                 $cmdlinetools_url = "https://dl.google.com/android/repository/$cmdlinetools_pkg_name"
                 download_file $cmdlinetools_url $cmdlinetools_pkg_path
                 Expand-Archive -Path $cmdlinetools_pkg_path -DestinationPath "$tools_dir/"
@@ -700,7 +700,7 @@ function preprocess_ios([string[]]$inputOptions) {
     if ($arch -eq 'x64') {
         $arch = 'x86_64'
     }
-    $cmake_toolchain_file = Join-Path -Path $myRoot -ChildPath 'ios.cmake'
+    $cmake_toolchain_file = Join-Path $myRoot 'ios.cmake'
     $outputOptions += '-GXcode', "-DCMAKE_TOOLCHAIN_FILE=$cmake_toolchain_file", "-DARCHS=$arch"
     if ($BUILD_TARGET -eq 'tvos') {
         $outputOptions += '-DPLAT=tvOS'
