@@ -110,10 +110,8 @@ else()
 endif()
 
 if (ANDROID)
-   option(AX_USE_GLAD "Use glad for platforms which use GL backend" AX_ENABLE_EXT_EFFEKSEER)
-   if (AX_USE_GLAD)
-       add_definitions(-DAX_USE_GLAD=1)
-   endif()
+    set(AX_USE_GLAD TRUE CACHE BOOL "Use glad for android GLESv3 support" FORCE)
+    add_definitions(-DAX_USE_GLAD=1)
 endif()
 
 if(XCODE)
