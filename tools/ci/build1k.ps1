@@ -816,8 +816,27 @@ else {
 }
 b1k_print ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
 
+# parsing build optimize flag from build_options
+$buildOptions = $options.xb
+$nopts = $buildOptions.Count
+$optimize_flag = $null
+for ($i = 0; $i -lt $nopts; ++$i) {
+    $optv = $buildOptions[$i]
+    if($optv -eq '--config') {
+        if ($i -lt ($nopts - 1)) {
+            $optimize_flag = $buildOptions[$i + 1]
+        }
+        break
+    }
+}
+
 if (($BUILD_TARGET -eq 'android') -and ($options.xt -eq 'gradle')) {
-    ./gradlew assembleRelease $CONFIG_ALL_OPTIONS
+    if ($optimize_flag -eq 'Debug') {
+        ./gradlew assembleDebug $CONFIG_ALL_OPTIONS
+    }
+    else {
+        ./gradlew assembleRelease $CONFIG_ALL_OPTIONS
+    }
 } 
 else {
     # step3. configure
@@ -825,12 +844,12 @@ else {
 
     # step4. build
     # apply additional build options
-    $xb_opts = $options.xb
-    $BUILD_ALL_OPTIONS = if ("$($xb_opts)".IndexOf('--config') -eq -1) { @('--config', 'Release') } else { @() }
-    if ($xb_opts) {
-        $BUILD_ALL_OPTIONS += $xb_opts
+    $BUILD_ALL_OPTIONS = @()
+    $BUILD_ALL_OPTIONS += $buildOptions
+    if (!$optimize_flag) {
+        $BUILD_ALL_OPTIONS += '--config', 'Release'
     }
-
+    
     $BUILD_ALL_OPTIONS += "--parallel"
     if ($BUILD_TARGET -eq 'linux') {
         $BUILD_ALL_OPTIONS += "$(nproc)"
