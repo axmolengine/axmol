@@ -825,6 +825,7 @@ for ($i = 0; $i -lt $nopts; ++$i) {
     if($optv -eq '--config') {
         if ($i -lt ($nopts - 1)) {
             $optimize_flag = $buildOptions[$i + 1]
+            ++$i
         }
         break
     }
@@ -849,7 +850,7 @@ else {
     if (!$optimize_flag) {
         $BUILD_ALL_OPTIONS += '--config', 'Release'
     }
-    
+
     $BUILD_ALL_OPTIONS += "--parallel"
     if ($BUILD_TARGET -eq 'linux') {
         $BUILD_ALL_OPTIONS += "$(nproc)"
