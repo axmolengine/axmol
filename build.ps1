@@ -88,10 +88,6 @@ $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 # start construct full cmd line
 $fullCmdLine = @("$((Resolve-Path -Path "$AX_ROOT/tools/ci/build1k.ps1").Path)")
 
-if ($options.p -eq 'android') {
-    $fullCmdLine += "'-xt'", "'gradle'"
-}
-
 $search_prior_dir = $options.d
 if (!$search_prior_dir -and $is_engine -and $is_android) {
     if ($is_ci) {
