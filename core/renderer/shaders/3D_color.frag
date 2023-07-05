@@ -22,18 +22,19 @@
  THE SOFTWARE.
  ****************************************************************************/
  
+const char* CC3D_color_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-const char* CC3D_color_frag = R"(
+layout (location = 0) in vec4 DestinationColor;
 
-#ifdef GL_ES
-varying lowp vec4 DestinationColor;
-#else
-varying vec4 DestinationColor;
-#endif
-uniform vec4 u_color;
+layout(std140, binding = 0) uniform Block_0 {
+    vec4 u_color;
+};
 
+layout (location = 0) out vec4 FragColor;
 void main(void)
 {
-    gl_FragColor = u_color;
+    FragColor = u_color;
 }
 )";

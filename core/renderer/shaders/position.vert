@@ -22,17 +22,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-const char* position_vert = R"(
+const char* position_vert = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-attribute vec4 a_position;
+layout (location = 0) in vec4 a_position;
+layout (location = 0) out vec4 v_position;
 
-#ifdef GL_ES
-varying lowp vec4 v_position;
-#else
-varying vec4 v_position;
-#endif
-
-uniform mat4 u_MVPMatrix;
+layout(std140, binding = 0) uniform Block_0 {
+    mat4 u_MVPMatrix;
+};
 
 void main()
 {

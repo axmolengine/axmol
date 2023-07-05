@@ -22,17 +22,21 @@
  THE SOFTWARE.
  ****************************************************************************/
  
-const char* CC3D_skybox_frag = R"(
-#ifdef GL_ES
-varying mediump vec3        v_reflect;
-#else
-varying vec3        v_reflect;
-#endif
-uniform samplerCube u_Env;
-uniform vec4 u_color;
+const char* CC3D_skybox_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
+layout (location = 0) in vec3 v_reflect;
+
+layout(std140, binding = 0) uniform Block_0 {
+    vec4 u_color;
+};
+
+layout(location = 0, binding = 0) uniform samplerCube u_Env;
+
+layout (location = 0) out vec4 FragColor;
 void main(void)
 {
-    gl_FragColor = textureCube(u_Env, v_reflect) * u_color;
+    FragColor = textureCube(u_Env, v_reflect) * u_color;
 }
 )";

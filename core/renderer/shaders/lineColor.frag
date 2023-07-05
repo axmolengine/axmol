@@ -23,15 +23,15 @@
  * THE SOFTWARE.
  */
 
-const char* lineColor3D_frag = R"(
-#ifdef GL_ES
-precision lowp float;
-#endif
+const char* lineColor3D_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-varying vec4 v_fragmentColor;
+layout (location = 0) in vec4 v_fragmentColor;
 
+layout (location = 0) out vec4 FragColor;
 void main()
 {
-    gl_FragColor = v_fragmentColor;
+    FragColor = v_fragmentColor;
 }
 )";

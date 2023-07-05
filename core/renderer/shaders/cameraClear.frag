@@ -23,19 +23,16 @@
  ****************************************************************************/
  
 
-const char * cameraClear_frag = R"(
+const char * cameraClear_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-#ifdef GL_ES
-varying mediump vec2 v_texCoord;
-varying mediump vec4 v_color;
-#else
-varying vec2 v_texCoord;
-varying vec4 v_color;
-#endif
+layout (location = 0) in vec2 v_texCoord;
+layout (location = 1) in vec4 v_color;
 
+layout (location = 0) out vec4 FragColor;
 void main()
 {
-    gl_FragColor = v_color;
+    FragColor = v_color;
 }
-
 )";

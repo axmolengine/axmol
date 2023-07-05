@@ -22,22 +22,24 @@
  THE SOFTWARE.
  ****************************************************************************/
  
-const char* labelDistanceFieldGlow_frag = R"(
+const char* labelDistanceFieldGlow_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-#ifdef GL_ES
-precision lowp float;
-#endif
+layout (location = 0) in vec4 v_fragmentColor;
+layout (location = 1) in vec2 v_texCoord;
 
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
+layout(std140, binding = 0) uniform Block_0 {
+    vec4 u_effectColor;
+    vec4 u_textColor;
+};
 
-uniform vec4 u_effectColor;
-uniform vec4 u_textColor;
-uniform sampler2D u_tex0;
+layout(location = 2, binding = 0) uniform sampler2D u_tex0;
 
+layout (location = 0) out vec4 FragColor;
 void main()
 {
-    float dist = texture2D(u_tex0, v_texCoord).a;
+    float dist = texture(u_tex0, v_texCoord).a;
     //TODO: Implementation 'fwidth' for glsl 1.0
     //float width = fwidth(dist);
     //assign width for constant will lead to a little bit fuzzy,it's temporary measure.
@@ -46,6 +48,6 @@ void main()
     //glow
     float mu = smoothstep(0.5, 1.0, sqrt(dist));
     vec4 color = u_effectColor*(1.0-alpha) + u_textColor*alpha;
-    gl_FragColor = v_fragmentColor * vec4(color.rgb, max(alpha,mu)*color.a);
+    FragColor = v_fragmentColor * vec4(color.rgb, max(alpha,mu)*color.a);
 }
 )";

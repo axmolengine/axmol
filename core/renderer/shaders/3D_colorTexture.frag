@@ -21,20 +21,41 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
 
-const char* CC3D_colorTexture_frag = R"(
+const char* CC3D_colorTextureInstance_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-#ifdef GL_ES
-varying mediump vec2 TextureCoordOut;
-#else
-varying vec2 TextureCoordOut;
-#endif
-uniform vec4 u_color;
-uniform sampler2D u_tex0; 
+layout (location = 0) in vec2 TextureCoordOut;
 
+layout(std140, binding = 0) uniform Block_0 {
+    vec4 u_color;
+};
+
+layout(location = 0, binding = 0) uniform sampler2D u_tex0;
+
+layout (location = 0) out vec4 FragColor;
 void main(void)
 {
-    gl_FragColor = texture2D(u_tex0, TextureCoordOut) * u_color;
+    FragColor = texture(u_tex0, TextureCoordOut) * u_color;
+}
+)";
+
+const char* CC3D_colorTexture_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
+
+layout (location = 0) in vec2 TextureCoordOut;
+
+layout(std140, binding = 0) uniform Block_0 {
+    vec4 u_color;
+};
+
+layout(location = 1, binding = 0) uniform sampler2D u_tex0;
+
+layout (location = 0) out vec4 FragColor;
+void main(void)
+{
+    FragColor = texture(u_tex0, TextureCoordOut) * u_color;
 }
 )";

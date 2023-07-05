@@ -23,21 +23,24 @@
  * THE SOFTWARE.
  */
 
-const char* label_normal_frag = R"(
-#ifdef GL_ES
-precision lowp float;
-#endif
+const char* label_normal_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
+layout (location = 0) in vec4 v_fragmentColor;
+layout (location = 1) in vec2 v_texCoord;
 
-uniform vec4 u_textColor;
-uniform sampler2D u_tex0;
+layout(std140, binding = 0) uniform Block_0 {
+    vec4 u_textColor;
+};
 
+layout(location = 2, binding = 0) uniform sampler2D u_tex0;
+
+layout (location = 0) out vec4 FragColor;
 void main()
 {
-    gl_FragColor =  v_fragmentColor * vec4(u_textColor.rgb,// RGB from uniform
-        u_textColor.a * texture2D(u_tex0, v_texCoord).a// A from texture & uniform
+    FragColor =  v_fragmentColor * vec4(u_textColor.rgb,// RGB from uniform
+        u_textColor.a * texture(u_tex0, v_texCoord).a// A from texture & uniform
     );
 }
 )";

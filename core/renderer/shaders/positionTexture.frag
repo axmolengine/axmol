@@ -23,18 +23,17 @@
  * THE SOFTWARE.
  */
 
-const char* positionTexture_frag = R"(
+const char* positionTexture_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-#ifdef GL_ES
-varying mediump vec2 v_texCoord;
-#else
-varying vec2 v_texCoord;
-#endif
+layout (location = 0) in vec2 v_texCoord;
 
-uniform sampler2D u_tex0;
+layout(location = 1, binding = 0) uniform sampler2D u_tex0;
 
+layout (location = 0) out vec4 FragColor;
 void main()
 {
-    gl_FragColor =  texture2D(u_tex0, v_texCoord);
+    FragColor =  texture(u_tex0, v_texCoord);
 }
 )";

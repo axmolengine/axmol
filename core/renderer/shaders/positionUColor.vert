@@ -23,17 +23,18 @@
  * THE SOFTWARE.
  */
 
-const char* positionUColor_vert = R"(
+const char* positionUColor_vert = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-attribute vec4 a_position;
-uniform vec4 u_color;
-uniform mat4 u_MVPMatrix;
+layout (location = 0) in vec4 a_position;
 
-#ifdef GL_ES
-varying lowp vec4 v_fragmentColor;
-#else
-varying vec4 v_fragmentColor;
-#endif
+layout(std140, binding = 0) uniform Block_0 {
+    vec4 u_color;
+    mat4 u_MVPMatrix;
+};
+
+layout (location = 0) out vec4 v_fragmentColor;
 
 void main()
 {

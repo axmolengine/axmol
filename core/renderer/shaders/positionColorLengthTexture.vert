@@ -19,39 +19,26 @@
  * SOFTWARE.
  */
 
-const char* positionColorLengthTexture_vert = R"(
+const char* positionColorLengthTexture_vert = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-#ifdef GL_ES
-precision lowp float;
-#endif
+layout (location = 0) in vec4 a_position;
+layout (location = 1) in vec2 a_texCoord;
+layout (location = 2) in vec4 a_color;
 
-#ifdef GL_ES
-attribute mediump vec4 a_position;
-attribute mediump vec2 a_texCoord;
-attribute mediump vec4 a_color;
+layout (location = 0) out vec4 v_color;
+layout (location = 1) out vec2 v_texCoord;
 
-varying mediump vec4 v_color;
-varying mediump vec2 v_texCoord;
-
-#else
-
-attribute vec4 a_position;
-attribute vec2 a_texCoord;
-attribute vec4 a_color;
-
-varying vec4 v_color;
-varying vec2 v_texCoord;
-
-#endif
-
-uniform float u_alpha;
-uniform mat4 u_MVPMatrix;
+layout(std140, binding = 0) uniform Block_0 {
+    float u_alpha;
+    mat4 u_MVPMatrix;
+};
 
 void main()
 {
     v_color = vec4(a_color.rgb * a_color.a * u_alpha, a_color.a * u_alpha);
     v_texCoord = a_texCoord;
-
     gl_Position = u_MVPMatrix * a_position;
 }
 )";

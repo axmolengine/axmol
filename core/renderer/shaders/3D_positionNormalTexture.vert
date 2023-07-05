@@ -23,58 +23,65 @@
  ****************************************************************************/
  
 
-const char* CC3D_positionNormalTexture_vert = R"(
+const char* CC3D_positionNormalTexture_vert = R"(#version 310 es
+precision highp float;
+precision highp int;
 
 #ifdef USE_NORMAL_MAPPING
 #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
-uniform vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
+layout(std140, binding = 0) uniform Block_0 {
+    vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
+};
 #endif
 #endif
 #if (MAX_POINT_LIGHT_NUM > 0)
-uniform vec3 u_PointLightSourcePosition[MAX_POINT_LIGHT_NUM];
+layout(std140, binding = 1) uniform Block_1 {
+    vec3 u_PointLightSourcePosition[MAX_POINT_LIGHT_NUM];
+};
 #endif
 #if (MAX_SPOT_LIGHT_NUM > 0)
-uniform vec3 u_SpotLightSourcePosition[MAX_SPOT_LIGHT_NUM];
+layout(std140, binding = 2) uniform Block_2 {
+    vec3 u_SpotLightSourcePosition[MAX_SPOT_LIGHT_NUM];
+};
 #ifdef USE_NORMAL_MAPPING
-uniform vec3 u_SpotLightSourceDirection[MAX_SPOT_LIGHT_NUM];
+layout(std140, binding = 3) uniform Block_3 {
+    vec3 u_SpotLightSourceDirection[MAX_SPOT_LIGHT_NUM];
+};
 #endif
 #endif
-
-attribute vec4 a_position;
-attribute vec2 a_texCoord;
-attribute vec3 a_normal;
+layout (location = 0) in vec4 a_position;
+layout (location = 1) in vec2 a_texCoord;
+layout (location = 2) in vec3 a_normal;
 #ifdef USE_NORMAL_MAPPING
-attribute vec3 a_tangent;
-attribute vec3 a_binormal;
+layout (location = 3) in vec3 a_tangent;
+layout (location = 4) in vec3 a_binormal;
 #endif
-varying vec2 TextureCoordOut;
-
+layout (location = 0) out vec2 TextureCoordOut;
 #ifdef USE_NORMAL_MAPPING
 #if MAX_DIRECTIONAL_LIGHT_NUM
-varying vec3 v_dirLightDirection[MAX_DIRECTIONAL_LIGHT_NUM];
+layout (location = 1) out vec3 v_dirLightDirection[MAX_DIRECTIONAL_LIGHT_NUM];
 #endif
 #endif
 #if MAX_POINT_LIGHT_NUM
-varying vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
+layout (location = 2) out vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
 #endif
 #if MAX_SPOT_LIGHT_NUM
-varying vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
+layout (location = 3) out vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
 #ifdef USE_NORMAL_MAPPING
-varying vec3 v_spotLightDirection[MAX_SPOT_LIGHT_NUM];
+layout (location = 4) out vec3 v_spotLightDirection[MAX_SPOT_LIGHT_NUM];
 #endif
 #endif
-
 #ifndef USE_NORMAL_MAPPING
 #if ((MAX_DIRECTIONAL_LIGHT_NUM > 0) || (MAX_POINT_LIGHT_NUM > 0) || (MAX_SPOT_LIGHT_NUM > 0))
-varying vec3 v_normal;
+layout (location = 5) out vec3 v_normal;
 #endif
 #endif
-
-uniform mat4 u_MVPMatrix;
-uniform mat4 u_MVMatrix;
-uniform mat4 u_PMatrix;
-uniform mat3 u_NormalMatrix;
-
+layout(std140, binding = 4) uniform Block_4 {
+    mat4 u_MVPMatrix;
+    mat4 u_MVMatrix;
+    mat4 u_PMatrix;
+    mat3 u_NormalMatrix;
+};
 void main(void)
 {
     vec4 ePosition = u_MVMatrix * a_position;
@@ -92,7 +99,6 @@ void main(void)
             v_dirLightDirection[i].z = dot(eNormal, u_DirLightSourceDirection[i]);
         }
     #endif
-
     #if (MAX_POINT_LIGHT_NUM > 0)
         for (int i = 0; i < MAX_POINT_LIGHT_NUM; ++i)
         {
@@ -102,7 +108,6 @@ void main(void)
             v_vertexToPointLightDirection[i].z = dot(eNormal, pointLightDir);
         }
     #endif
-
     #if (MAX_SPOT_LIGHT_NUM > 0)
         for (int i = 0; i < MAX_SPOT_LIGHT_NUM; ++i)
         {
@@ -110,7 +115,6 @@ void main(void)
             v_vertexToSpotLightDirection[i].x = dot(eTangent, spotLightDir);
             v_vertexToSpotLightDirection[i].y = dot(eBinormal, spotLightDir);
             v_vertexToSpotLightDirection[i].z = dot(eNormal, spotLightDir);
-
             v_spotLightDirection[i].x = dot(eTangent, u_SpotLightSourceDirection[i]);
             v_spotLightDirection[i].y = dot(eBinormal, u_SpotLightSourceDirection[i]);
             v_spotLightDirection[i].z = dot(eNormal, u_SpotLightSourceDirection[i]);
@@ -123,99 +127,93 @@ void main(void)
             v_vertexToPointLightDirection[i] = u_PointLightSourcePosition[i].xyz - ePosition.xyz;
         }
     #endif
-
     #if (MAX_SPOT_LIGHT_NUM > 0)
         for (int i = 0; i < MAX_SPOT_LIGHT_NUM; ++i)
         {
             v_vertexToSpotLightDirection[i] = u_SpotLightSourcePosition[i] - ePosition.xyz;
         }
     #endif
-
     #if ((MAX_DIRECTIONAL_LIGHT_NUM > 0) || (MAX_POINT_LIGHT_NUM > 0) || (MAX_SPOT_LIGHT_NUM > 0))
         v_normal = u_NormalMatrix * a_normal;
     #endif
 #endif
-
     TextureCoordOut = a_texCoord;
     TextureCoordOut.y = 1.0 - TextureCoordOut.y;
     gl_Position = u_PMatrix * ePosition;
 }
 )";
 
-const char* CC3D_skinPositionNormalTexture_vert = R"(
-
-
+const char* CC3D_skinPositionNormalTexture_vert = R"(#version 310 es
+precision highp float;
+precision highp int;
 
 #ifdef USE_NORMAL_MAPPING
 #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
-uniform vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
+layout(std140, binding = 0) uniform Block_0 {
+    vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
+};
 #endif
 #endif
 #if (MAX_POINT_LIGHT_NUM > 0)
-uniform vec3 u_PointLightSourcePosition[MAX_POINT_LIGHT_NUM];
+layout(std140, binding = 1) uniform Block_1 {
+    vec3 u_PointLightSourcePosition[MAX_POINT_LIGHT_NUM];
+};
 #endif
 #if (MAX_SPOT_LIGHT_NUM > 0)
-uniform vec3 u_SpotLightSourcePosition[MAX_SPOT_LIGHT_NUM];
+layout(std140, binding = 2) uniform Block_2 {
+    vec3 u_SpotLightSourcePosition[MAX_SPOT_LIGHT_NUM];
+};
 #ifdef USE_NORMAL_MAPPING
-uniform vec3 u_SpotLightSourceDirection[MAX_SPOT_LIGHT_NUM];
+layout(std140, binding = 3) uniform Block_3 {
+    vec3 u_SpotLightSourceDirection[MAX_SPOT_LIGHT_NUM];
+};
 #endif
 #endif
-
-attribute vec3 a_position;
-
-attribute vec4 a_blendWeight;
-attribute vec4 a_blendIndex;
-
-attribute vec2 a_texCoord;
-
-attribute vec3 a_normal;
+layout (location = 0) in vec3 a_position;
+layout (location = 1) in vec4 a_blendWeight;
+layout (location = 2) in vec4 a_blendIndex;
+layout (location = 3) in vec2 a_texCoord;
+layout (location = 4) in vec3 a_normal;
 #ifdef USE_NORMAL_MAPPING
-attribute vec3 a_tangent;
-attribute vec3 a_binormal;
+layout (location = 5) in vec3 a_tangent;
+layout (location = 6) in vec3 a_binormal;
 #endif
-
 const int SKINNING_JOINT_COUNT = 60;
 // Uniforms
-uniform vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
-
-uniform mat4 u_MVMatrix;
-uniform mat3 u_NormalMatrix;
-uniform mat4 u_PMatrix;
-
+layout(std140, binding = 4) uniform Block_4 {
+    vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
+    mat4 u_MVMatrix;
+    mat3 u_NormalMatrix;
+    mat4 u_PMatrix;
+};
 // Varyings
-varying vec2 TextureCoordOut;
-
+layout (location = 0) out vec2 TextureCoordOut;
 #ifdef USE_NORMAL_MAPPING
 #if MAX_DIRECTIONAL_LIGHT_NUM
-varying vec3 v_dirLightDirection[MAX_DIRECTIONAL_LIGHT_NUM];
+layout (location = 1) out vec3 v_dirLightDirection[MAX_DIRECTIONAL_LIGHT_NUM];
 #endif
 #endif
 #if MAX_POINT_LIGHT_NUM
-varying vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
+layout (location = 2) out vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
 #endif
 #if MAX_SPOT_LIGHT_NUM
-varying vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
+layout (location = 3) out vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
 #ifdef USE_NORMAL_MAPPING
-varying vec3 v_spotLightDirection[MAX_SPOT_LIGHT_NUM];
+layout (location = 4) out vec3 v_spotLightDirection[MAX_SPOT_LIGHT_NUM];
 #endif
 #endif
-
 #ifndef USE_NORMAL_MAPPING
 #if ((MAX_DIRECTIONAL_LIGHT_NUM > 0) || (MAX_POINT_LIGHT_NUM > 0) || (MAX_SPOT_LIGHT_NUM > 0))
-varying vec3 v_normal;
+layout (location = 5) out vec3 v_normal;
 #endif
 #endif
-
 void getPositionAndNormal(out vec4 position, out vec3 normal, out vec3 tangent, out vec3 binormal)
 {
     float blendWeight = a_blendWeight[0];
-
     int matrixIndex = int (a_blendIndex[0]) * 3;
     vec4 matrixPalette1 = u_matrixPalette[matrixIndex] * blendWeight;
     vec4 matrixPalette2 = u_matrixPalette[matrixIndex + 1] * blendWeight;
     vec4 matrixPalette3 = u_matrixPalette[matrixIndex + 2] * blendWeight;
-
-
     blendWeight = a_blendWeight[1];
     if (blendWeight > 0.0)
     {
@@ -223,7 +221,6 @@ void getPositionAndNormal(out vec4 position, out vec3 normal, out vec3 tangent, 
         matrixPalette1 += u_matrixPalette[matrixIndex] * blendWeight;
         matrixPalette2 += u_matrixPalette[matrixIndex + 1] * blendWeight;
         matrixPalette3 += u_matrixPalette[matrixIndex + 2] * blendWeight;
-
         blendWeight = a_blendWeight[2];
         if (blendWeight > 0.0)
         {
@@ -231,7 +228,6 @@ void getPositionAndNormal(out vec4 position, out vec3 normal, out vec3 tangent, 
             matrixPalette1 += u_matrixPalette[matrixIndex] * blendWeight;
             matrixPalette2 += u_matrixPalette[matrixIndex + 1] * blendWeight;
             matrixPalette3 += u_matrixPalette[matrixIndex + 2] * blendWeight;
-
             blendWeight = a_blendWeight[3];
             if (blendWeight > 0.0)
             {
@@ -242,13 +238,11 @@ void getPositionAndNormal(out vec4 position, out vec3 normal, out vec3 tangent, 
             }
         }
     }
-
     vec4 p = vec4(a_position, 1.0);
     position.x = dot(p, matrixPalette1);
     position.y = dot(p, matrixPalette2);
     position.z = dot(p, matrixPalette3);
     position.w = p.w;
-
 #if ((MAX_DIRECTIONAL_LIGHT_NUM > 0) || (MAX_POINT_LIGHT_NUM > 0) || (MAX_SPOT_LIGHT_NUM > 0))
     vec4 n = vec4(a_normal, 0.0);
     normal.x = dot(n, matrixPalette1);
@@ -266,7 +260,6 @@ void getPositionAndNormal(out vec4 position, out vec3 normal, out vec3 tangent, 
 #endif
 #endif
 }
-
 void main()
 {
     vec4 position;
@@ -275,14 +268,12 @@ void main()
     vec3 binormal;
     getPositionAndNormal(position, normal, tangent, binormal);
     vec4 ePosition = u_MVMatrix * position;
-
 #ifdef USE_NORMAL_MAPPING
     #if ((MAX_DIRECTIONAL_LIGHT_NUM > 0) || (MAX_POINT_LIGHT_NUM > 0) || (MAX_SPOT_LIGHT_NUM > 0))
         vec3 eTangent = normalize(u_NormalMatrix * tangent);
         vec3 eBinormal = normalize(u_NormalMatrix * binormal);
         vec3 eNormal = normalize(u_NormalMatrix * normal);
     #endif
-
     #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
         for (int i = 0; i < MAX_DIRECTIONAL_LIGHT_NUM; ++i)
         {
@@ -291,7 +282,6 @@ void main()
             v_dirLightDirection[i].z = dot(eNormal, u_DirLightSourceDirection[i]);
         }
     #endif
-
     #if (MAX_POINT_LIGHT_NUM > 0)
         for (int i = 0; i < MAX_POINT_LIGHT_NUM; ++i)
         {
@@ -301,7 +291,6 @@ void main()
             v_vertexToPointLightDirection[i].z = dot(eNormal, pointLightDir);
         }
     #endif
-
     #if (MAX_SPOT_LIGHT_NUM > 0)
         for (int i = 0; i < MAX_SPOT_LIGHT_NUM; ++i)
         {
@@ -309,7 +298,6 @@ void main()
             v_vertexToSpotLightDirection[i].x = dot(eTangent, spotLightDir);
             v_vertexToSpotLightDirection[i].y = dot(eBinormal, spotLightDir);
             v_vertexToSpotLightDirection[i].z = dot(eNormal, spotLightDir);
-
             v_spotLightDirection[i].x = dot(eTangent, u_SpotLightSourceDirection[i]);
             v_spotLightDirection[i].y = dot(eBinormal, u_SpotLightSourceDirection[i]);
             v_spotLightDirection[i].z = dot(eNormal, u_SpotLightSourceDirection[i]);
@@ -322,22 +310,18 @@ void main()
             v_vertexToPointLightDirection[i] = u_PointLightSourcePosition[i].xyz- ePosition.xyz;
         }
     #endif
-
     #if (MAX_SPOT_LIGHT_NUM > 0)
         for (int i = 0; i < MAX_SPOT_LIGHT_NUM; ++i)
         {
             v_vertexToSpotLightDirection[i] = u_SpotLightSourcePosition[i] - ePosition.xyz;
         }
     #endif
-
     #if ((MAX_DIRECTIONAL_LIGHT_NUM > 0) || (MAX_POINT_LIGHT_NUM > 0) || (MAX_SPOT_LIGHT_NUM > 0))
         v_normal = u_NormalMatrix * normal;
     #endif
 #endif
-
     TextureCoordOut = a_texCoord;
     TextureCoordOut.y = 1.0 - TextureCoordOut.y;
     gl_Position = u_PMatrix * ePosition;
 }
-
 )";

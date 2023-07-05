@@ -23,22 +23,20 @@
  * THE SOFTWARE.
  */
 
-const char* dualSampler_frag = R"(
-#ifdef GL_ES
-    precision mediump float;
-#endif
+const char* dualSampler_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
+layout (location = 0) in vec4 v_fragmentColor;
+layout (location = 1) in vec2 v_texCoord;
 
-uniform sampler2D u_tex0;
-uniform sampler2D u_tex1;
+layout(location = 2, binding = 0) uniform sampler2D u_tex0;
+layout(location = 3, binding = 0) uniform sampler2D u_tex1;
 
+layout (location = 0) out vec4 FragColor;
 void main() {
-    vec4 texColor = vec4(texture2D(u_tex0, v_texCoord).rgb, texture2D(u_tex1, v_texCoord).r);
-
+    vec4 texColor = vec4(texture(u_tex0, v_texCoord).rgb, texture(u_tex1, v_texCoord).r);
     texColor.rgb *= texColor.a; // Premultiply with Alpha channel
-
-    gl_FragColor = v_fragmentColor * texColor;
+    FragColor = v_fragmentColor * texColor;
 }
 )";

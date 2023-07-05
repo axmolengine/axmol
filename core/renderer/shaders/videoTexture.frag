@@ -16,19 +16,19 @@ mat3 coeff = mat3(colorTransform); // require GLES3
 
 // refer to:
 // https://docs.microsoft.com/en-us/windows/win32/medfound/recommended-8-bit-yuv-formats-for-video-rendering#yuy2
-const std::string_view videoTextureYUY2_frag = R"(
+const std::string_view videoTextureYUY2_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-#ifdef GL_ES
-varying lowp vec4 v_fragmentColor;
-varying mediump vec2 v_texCoord;
-#else
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
-#endif
+layout (location = 0) in vec4 v_fragmentColor;
+layout (location = 1) in vec2 v_texCoord;
 
-uniform sampler2D u_tex0; // Y sample
-uniform sampler2D u_tex1; // UV sample
-uniform mat4 colorTransform; 
+layout(location = 2, binding = 0) uniform sampler2D u_tex0;
+layout(location = 3, binding = 0) uniform sampler2D u_tex1;
+
+layout(std140, binding = 0) uniform Block_0 {
+    mat4 colorTransform; 
+};
 
 vec3 trasnformYUV(vec3 YUV)
 {
@@ -40,20 +40,20 @@ vec3 trasnformYUV(vec3 YUV)
     ) * YUV;
 }
 
+layout (location = 0) out vec4 FragColor;
 void main()
 {
     vec3 YUV;
     
     /* For dual sampler */
-    YUV.yz = texture2D(u_tex1, v_texCoord).yw;
-    YUV.x = texture2D(u_tex0, v_texCoord).x;
+    YUV.yz = texture(u_tex1, v_texCoord).yw;
+    YUV.x = texture(u_tex0, v_texCoord).x;
 	
     /* Convert YUV to RGB */
     vec4 OutColor;
     OutColor.xyz = trasnformYUV(YUV);
     OutColor.w = 1.0;
-
-    gl_FragColor = v_fragmentColor * OutColor;
+    FragColor = v_fragmentColor * OutColor;
 }
 )"sv;
 
@@ -75,19 +75,19 @@ refer to:
   - https://docs.microsoft.com/en-us/windows/win32/medfound/recommended-8-bit-yuv-formats-for-video-rendering#nv12
   - https://github.com/doyoulikerock/D3D11NV12Rendering/blob/master/D3D11NV12Rendering/PixelShader.hlsl
 */
-const std::string_view videoTextureNV12_frag = R"(
+const std::string_view videoTextureNV12_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-#ifdef GL_ES
-varying lowp vec4 v_fragmentColor;
-varying mediump vec2 v_texCoord;
-#else
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
-#endif
+layout (location = 0) in vec4 v_fragmentColor;
+layout (location = 1) in vec2 v_texCoord;
 
-uniform sampler2D u_tex0; // Y sample: LumaTexture
-uniform sampler2D u_tex1; // UV sample: ChromaTexture
-uniform mat4 colorTransform; 
+layout(location = 2, binding = 0) uniform sampler2D u_tex0;
+layout(location = 3, binding = 0) uniform sampler2D u_tex1;
+
+layout(std140, binding = 0) uniform Block_0 {
+    mat4 colorTransform; 
+};
 
 vec3 trasnformYUV(vec3 YUV)
 {
@@ -99,35 +99,34 @@ vec3 trasnformYUV(vec3 YUV)
     ) * YUV;
 }
 
+layout (location = 0) out vec4 FragColor;
 void main()
 {
     vec3 YUV;
     
-    YUV.x = texture2D(u_tex0, v_texCoord).w; // Y
-    YUV.yz = texture2D(u_tex1, v_texCoord).xy; // CbCr
+    YUV.x = texture(u_tex0, v_texCoord).w; // Y
+    YUV.yz = texture(u_tex1, v_texCoord).xy; // CbCr
 	
     /* Convert YUV to RGB */
     vec4 OutColor;
     OutColor.xyz = trasnformYUV(YUV);
     OutColor.w = 1.0;
-
-    gl_FragColor = v_fragmentColor * OutColor;
+    FragColor = v_fragmentColor * OutColor;
 }
 )"sv;
 
-const std::string_view videoTextureBGRA_frag = R"(
-#ifdef GL_ES
-varying lowp vec4 v_fragmentColor;
-varying mediump vec2 v_texCoord;
-#else
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
-#endif
+const std::string_view videoTextureBGRA_frag = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-uniform sampler2D u_tex0;
+layout (location = 0) in vec4 v_fragmentColor;
+layout (location = 1) in vec2 v_texCoord;
 
+layout(location = 2, binding = 0) uniform sampler2D u_tex0;
+
+layout (location = 0) out vec4 FragColor;
 void main()
 {
-    gl_FragColor = v_fragmentColor * texture2D(u_tex0, v_texCoord).bgra;
+    FragColor = v_fragmentColor * texture(u_tex0, v_texCoord).bgra;
 }
 )"sv;

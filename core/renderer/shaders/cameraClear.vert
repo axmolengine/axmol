@@ -23,19 +23,20 @@
  ****************************************************************************/
  
 
-const char * cameraClear_vert = R"(
-uniform float depth;
-attribute vec4 a_position;
-attribute vec4 a_color;
-attribute vec2 a_texCoord;
+const char * cameraClear_vert = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-#ifdef GL_ES
-varying mediump vec2 v_texCoord;
-varying mediump vec4 v_color;
-#else
-varying vec2 v_texCoord;
-varying vec4 v_color;
-#endif
+layout (location = 0) in vec4 a_position;
+layout (location = 1) in vec4 a_color;
+layout (location = 2) in vec2 a_texCoord;
+
+layout (location = 0) out vec2 v_texCoord;
+layout (location = 1) out vec4 v_color;
+
+layout(std140, binding = 0) uniform Block_0 {
+    float depth;
+};
 
 void main()
 {
@@ -45,5 +46,4 @@ void main()
     v_texCoord = a_texCoord;
     v_color = a_color;
 }
-
 )";

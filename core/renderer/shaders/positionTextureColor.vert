@@ -23,20 +23,20 @@
  * THE SOFTWARE.
  */
 
-const char* positionTextureColor_vert = R"(
-attribute vec4 a_position;
-attribute vec2 a_texCoord;
-attribute vec4 a_color;
+const char* positionTextureColor_vert = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-uniform mat4 u_MVPMatrix;
+layout (location = 0) in vec4 a_position;
+layout (location = 1) in vec2 a_texCoord;
+layout (location = 2) in vec4 a_color;
 
-#ifdef GL_ES
-varying lowp vec4 v_fragmentColor;
-varying mediump vec2 v_texCoord;
-#else
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
-#endif
+layout(std140, binding = 0) uniform Block_0 {
+    mat4 u_MVPMatrix;
+};
+
+layout (location = 0) out vec4 v_fragmentColor;
+layout (location = 1) out vec2 v_texCoord;
 
 void main()
 {

@@ -22,11 +22,17 @@
  THE SOFTWARE.
  ****************************************************************************/
  
-const char* CC3D_skybox_vert = R"(
+const char* CC3D_skybox_vert = R"(#version 310 es
+precision highp float;
+precision highp int;
 
-uniform mat4  u_cameraRot;
-attribute vec3 a_position;
-varying vec3 v_reflect;
+layout (location = 0) in vec3 a_position;
+
+layout (location = 0) out vec3 v_reflect;
+
+layout(std140, binding = 0) uniform Block_0 {
+    mat4  u_cameraRot;
+};
 
 void main(void)
 {
