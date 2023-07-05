@@ -25,7 +25,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "yasio/bindings/yasio_cclua.hpp"
+#include "yasio/bindings/yasio_axlua.hpp"
 #include "yasio/bindings/lyasio.hpp"
 #include "yasio/object_pool.hpp"
 #include "yasio/ref_ptr.hpp"
@@ -126,7 +126,7 @@ YASIO_LUA_API void clear()
 
 extern "C" {
 struct lua_State;
-YASIO_LUA_API int luaopen_yasio_cclua(lua_State* L)
+YASIO_LUA_API int luaopen_yasio_axlua(lua_State* L)
 {
   int n = luaopen_yasio(L);
   
@@ -145,7 +145,7 @@ YASIO_LUA_API int luaopen_yasio_cclua(lua_State* L)
 
 extern "C" {
 struct lua_State;
-YASIO_LUA_API int luaopen_yasio_cclua(lua_State* L)
+YASIO_LUA_API int luaopen_yasio_axlua(lua_State* L)
 {
   luaopen_yasio(L);
 

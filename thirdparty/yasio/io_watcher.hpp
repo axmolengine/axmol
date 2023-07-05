@@ -10,11 +10,11 @@
 
 #include "yasio/config.hpp"
 
-#if YASIO__HAS_KQUEUE && !defined(YASIO_DISABLE_KQUEUE) && defined(YASIO_ENABLE_HPERF_IO)
+#if YASIO__HAS_KQUEUE && defined(YASIO_ENABLE_HPERF_IO)
 #  include "yasio/impl/kqueue_io_watcher.hpp"
-#elif YASIO__HAS_EPOLL && !defined(YASIO_DISABLE_EPOLL) && defined(YASIO_ENABLE_HPERF_IO)
+#elif YASIO__HAS_EPOLL && defined(YASIO_ENABLE_HPERF_IO)
 #  include "yasio/impl/epoll_io_watcher.hpp"
-#elif YASIO__HAS_EVPORT && !defined(YASIO_DISABLE_EVPORT) && defined(YASIO_ENABLE_HPERF_IO)
+#elif YASIO__HAS_EVPORT && defined(YASIO_ENABLE_HPERF_IO)
 #  include "yasio/impl/evport_io_watcher.hpp"
 #elif !defined(YASIO_DISABLE_POLL)
 #  include "yasio/impl/poll_io_watcher.hpp"

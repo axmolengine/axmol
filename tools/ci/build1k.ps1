@@ -174,7 +174,7 @@ if ($options.d) {
 
 $tools_dir = if ($options.prefix) { $options.prefix } else { Join-Path $HOME 'build1k' }
 if (!(Test-Path "$tools_dir" -PathType Container)) {
-    mkdir $tools_dir
+    mkdir $tools_dir | Out-Null
 }
 
 b1k_print "proj_dir=$((Get-Location).Path), tools_dir=$tools_dir"
@@ -798,7 +798,7 @@ if (!$CONFIG_ALL_OPTIONS) {
 }
 
 # step2. apply additional cross make options
-$xopts = $options.xc
+$xopts = [array]$options.xc
 if ($xopts.Count -gt 0) {
     b1k_print ("Apply additional cross make options: $($xopts), Count={0}" -f $xopts.Count)
     $CONFIG_ALL_OPTIONS += $xopts
@@ -817,7 +817,7 @@ else {
 b1k_print ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
 
 # parsing build optimize flag from build_options
-$buildOptions = $options.xb
+$buildOptions = [array]$options.xb
 $nopts = $buildOptions.Count
 $optimize_flag = $null
 for ($i = 0; $i -lt $nopts; ++$i) {
@@ -833,15 +833,15 @@ for ($i = 0; $i -lt $nopts; ++$i) {
 
 if (($BUILD_TARGET -eq 'android') -and ($options.xt -eq 'gradle')) {
     if ($optimize_flag -eq 'Debug') {
-        ./gradlew assembleDebug $CONFIG_ALL_OPTIONS
+        ./gradlew assembleDebug $CONFIG_ALL_OPTIONS | Out-Host
     }
     else {
-        ./gradlew assembleRelease $CONFIG_ALL_OPTIONS
+        ./gradlew assembleRelease $CONFIG_ALL_OPTIONS | Out-Host
     }
 } 
 else {
     # step3. configure
-    cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS
+    cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
 
     # step4. build
     # apply additional build options
@@ -860,7 +860,13 @@ else {
     }
     b1k_print ("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 
-    cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS
+    cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
 }
 
 Set-Location $stored_cwd
+
+$env:buildResult = ConvertTo-Json @{
+    buildDir = $BUILD_DIR;
+    targetOS = $BUILD_TARGET;
+    compilerID = $TOOLCHAIN_NAME;
+}

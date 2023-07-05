@@ -44,6 +44,25 @@ SOFTWARE.
 #  include "yasio/ssl.hpp"
 #endif
 
+#if defined(YASIO_ENABLE_KCP)
+#  include "kcp/ikcp.h"
+struct yasio_kcp_options {
+  int kcp_conv_ = 0;
+
+  int kcp_nodelay_  = 1;
+  int kcp_interval_ = 10; // 10~100ms
+  int kcp_resend_   = 2;
+  int kcp_ncwnd_    = 1;
+
+  int kcp_sndwnd_ = 32;
+  int kcp_rcvwnd_ = 128;
+
+  int kcp_mtu_ = 1400;
+  // kcp fast model the RTO min is 30.
+  int kcp_minrto_ = 30;
+};
+#endif
+
 #if defined(YASIO_USE_CARES)
 #  include "yasio/impl/ares.hpp"
 #endif
@@ -116,13 +135,11 @@ enum
 
 namespace
 {
-// the minimal wait duration for select
-static highp_time_t yasio__min_wait_usec = 0LL;
 // By default we will wait no longer than 5 minutes. This will ensure that
 // any changes to the system clock are detected after no longer than this.
 static const highp_time_t yasio__max_wait_usec = 5 * 60 * 1000 * 1000LL;
 // the max transport alloc size
-static const size_t yasio__max_tsize = (std::max)({sizeof(io_transport_tcp), sizeof(io_transport_udp), sizeof(io_transport_ssl)});
+static const size_t yasio__max_tsize = (std::max)({sizeof(io_transport_tcp), sizeof(io_transport_udp), sizeof(io_transport_ssl), sizeof(io_transport_kcp)});
 } // namespace
 struct yasio__global_state {
   enum
@@ -133,8 +150,6 @@ struct yasio__global_state {
   yasio__global_state(const print_fn2_t& custom_print)
   {
     auto __get_cprint = [&]() -> const print_fn2_t& { return custom_print; };
-    // for single core CPU, we set minimal wait duration to 10us by default
-    yasio__min_wait_usec = std::thread::hardware_concurrency() > 1 ? 0LL : 10LL;
 #if defined(YASIO_SSL_BACKEND) && YASIO_SSL_BACKEND == 1
 #  if OPENSSL_VERSION_NUMBER >= 0x10100000 && !defined(LIBRESSL_VERSION_NUMBER)
     if (OPENSSL_init_ssl(0, nullptr) == 1)
@@ -209,6 +224,19 @@ io_channel::io_channel(io_service& service, int index) : io_base(), service_(ser
   index_      = index;
   decode_len_ = [this](void* ptr, int len) { return this->__builtin_decode_len(ptr, len); };
 }
+#if defined(YASIO_ENABLE_KCP)
+io_channel::~io_channel()
+{
+  if (kcp_options_)
+    delete kcp_options_;
+}
+yasio_kcp_options& io_channel::kcp_options()
+{
+  if (!kcp_options_)
+    kcp_options_ = new yasio_kcp_options();
+  return *kcp_options_;
+}
+#endif
 #if defined(YASIO_SSL_BACKEND)
 yssl_ctx_st* io_channel::get_ssl_context(bool client) const
 {
@@ -378,7 +406,7 @@ bool io_transport::do_write(highp_time_t& wait_duration)
         }
       }
       else
-        wait_duration = yasio__min_wait_usec;
+        wait_duration = 0;
     }
     if (no_wevent && pollout_registerred_)
     {
@@ -622,6 +650,129 @@ int io_transport_udp::handle_input(const char* data, int bytes_transferred, int&
   return bytes_transferred;
 }
 
+#if defined(YASIO_ENABLE_KCP)
+// ----------------------- io_transport_kcp ------------------
+io_transport_kcp::io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s) : io_transport_udp(ctx, std::forward<xxsocket_ptr>(s))
+{
+  auto& kopts = ctx->kcp_options();
+  this->kcp_  = ::ikcp_create(static_cast<IUINT32>(kopts.kcp_conv_), this);
+  ::ikcp_nodelay(this->kcp_, kopts.kcp_nodelay_, kopts.kcp_interval_ /*kcp max interval is 5000(ms)*/, kopts.kcp_resend_, kopts.kcp_ncwnd_);
+  ::ikcp_wndsize(this->kcp_, kopts.kcp_sndwnd_, kopts.kcp_rcvwnd_);
+  ::ikcp_setmtu(this->kcp_, kopts.kcp_mtu_);
+  // Because of nodelaying config will change the value. so setting RTO min after call ikcp_nodely.
+  this->kcp_->rx_minrto = kopts.kcp_minrto_;
+
+  this->rawbuf_.resize(YASIO_INET_BUFFER_SIZE);
+  ::ikcp_setoutput(this->kcp_, [](const char* buf, int len, ::ikcpcb* /*kcp*/, void* user) {
+    auto t         = (io_transport_kcp*)user;
+    int ignored_ec = 0;
+    return t->write_cb_(buf, len, std::addressof(t->ensure_destination()), ignored_ec);
+  });
+}
+io_transport_kcp::~io_transport_kcp() { ::ikcp_release(this->kcp_); }
+
+int io_transport_kcp::write(io_send_buffer&& buffer, completion_cb_t&& handler)
+{
+  std::lock_guard<std::recursive_mutex> lck(send_mtx_);
+  int nsent = ::ikcp_send(kcp_, buffer.data(), static_cast<int>(buffer.size()));
+  assert(nsent > 0);
+  if (handler)
+    handler(nsent > 0 ? 0 : nsent, nsent);
+  get_service().wakeup();
+  return nsent;
+}
+int io_transport_kcp::do_read(int revent, int& error, highp_time_t& wait_duration)
+{
+  int n = this->call_read(&rawbuf_.front(), static_cast<int>(rawbuf_.size()), revent, error);
+  if (n > 0)
+    this->handle_input(rawbuf_.data(), n, error, wait_duration);
+  if (!error)
+  { // !important, should always try to call ikcp_recv when no error occured.
+    n = ::ikcp_recv(kcp_, buffer_ + offset_, sizeof(buffer_) - offset_);
+    if (n > 0) // If got data from kcp, don't wait
+      wait_duration = 0;
+    else if (n < 0)
+      n = 0; // EAGAIN/EWOULDBLOCK
+  }
+  return n;
+}
+int io_transport_kcp::handle_input(const char* buf, int len, int& error, highp_time_t& wait_duration)
+{
+  // ikcp in event always in service thread, so no need to lock
+  if (0 == ::ikcp_input(kcp_, buf, len))
+  {
+    this->check_timeout(wait_duration); // call ikcp_check
+    return len;
+  }
+
+  // simply regards -1,-2,-3 as error and trigger connection lost event.
+  error = yasio::errc::invalid_packet;
+  return -1;
+}
+bool io_transport_kcp::do_write(highp_time_t& wait_duration)
+{
+  std::lock_guard<std::recursive_mutex> lck(send_mtx_);
+
+  ::ikcp_update(kcp_, static_cast<IUINT32>(::yasio::clock()));
+  ::ikcp_flush(kcp_);
+  this->check_timeout(wait_duration); // call ikcp_check
+  return true;
+}
+static IINT32 yasio_itimediff(IUINT32 later, IUINT32 earlier) { return static_cast<IINT32>(later - earlier); }
+static IUINT32 yasio_ikcp_check(const ikcpcb* kcp, IUINT32 current, IUINT32 waitd_ms)
+{
+  IUINT32 ts_flush = kcp->ts_flush;
+  IINT32 tm_flush  = 0x7fffffff;
+  IINT32 tm_packet = 0x7fffffff;
+  IUINT32 minimal  = 0;
+  struct IQUEUEHEAD* p;
+
+  if (kcp->updated == 0)
+    return current;
+
+  if (yasio_itimediff(current, ts_flush) < -10000)
+    ts_flush = current;
+
+  if (yasio_itimediff(current, ts_flush) >= 0)
+    return current;
+
+  if (kcp->nsnd_que)
+    return current;
+  if (kcp->probe)
+    return current;
+
+  if (kcp->rmt_wnd == 0 && yasio_itimediff(kcp->current, kcp->ts_probe) >= 0)
+    return current;
+
+  tm_flush = yasio_itimediff(ts_flush, current);
+
+  for (p = kcp->snd_buf.next; p != &kcp->snd_buf; p = p->next)
+  {
+    const IKCPSEG* seg = iqueue_entry(p, const IKCPSEG, node);
+    IINT32 diff        = yasio_itimediff(seg->resendts, current);
+    if (diff <= 0)
+    {
+      return current;
+    }
+    if (diff < tm_packet)
+      tm_packet = diff;
+  }
+
+  minimal = kcp->nsnd_buf ? static_cast<IUINT32>(tm_packet < tm_flush ? tm_packet : tm_flush) : waitd_ms;
+
+  return current + minimal;
+}
+void io_transport_kcp::check_timeout(highp_time_t& wait_duration) const
+{
+  auto current          = static_cast<IUINT32>(::yasio::clock());
+  auto expire_time      = yasio_ikcp_check(kcp_, current, static_cast<IUINT32>(wait_duration / std::milli::den));
+  highp_time_t duration = static_cast<highp_time_t>(expire_time - current) * std::milli::den;
+  if (duration < 0)
+    duration = 0;
+  if (wait_duration > duration)
+    wait_duration = duration;
+}
+#endif
 // ------------------------ io_service ------------------------
 void io_service::init_globals(const yasio::inet::print_fn2_t& prt) { yasio__shared_globals(prt).cprint_ = prt; }
 void io_service::cleanup_globals() { yasio__shared_globals().cprint_ = nullptr; }
@@ -1534,6 +1685,13 @@ transport_handle_t io_service::allocate_transport(io_channel* ctx, xxsocket_ptr&
     }
     else // udp like transport
     {
+#if defined(YASIO_ENABLE_KCP)
+      if (yasio__testbits(ctx->properties_, YCM_KCP))
+      {
+        transport = new (vp) io_transport_kcp(ctx, std::forward<xxsocket_ptr>(s));
+        break;
+      }
+#endif
       transport = new (vp) io_transport_udp(ctx, std::forward<xxsocket_ptr>(s));
     }
   } while (false);
@@ -1619,7 +1777,7 @@ void io_service::unpack(transport_handle_t transport, int bytes_expected, int by
     if (offset > 0)
     { /* move remain data to head of buffer and hold 'offset'. */
       ::memmove(transport->buffer_, transport->buffer_ + bytes_expected, offset);
-      this->wait_duration_ = yasio__min_wait_usec;
+      this->wait_duration_ = 0;
     }
     // move properly pdu to ready queue, the other thread who care about will retrieve it.
     YASIO_KLOGV("[index: %d] received a properly packet from peer, packet size:%d", transport->cindex(), transport->expected_size_);
@@ -1737,7 +1895,7 @@ void io_service::process_timers()
 void io_service::process_deferred_events()
 {
   if (!options_.no_dispatch_ && dispatch() > 0)
-    this->wait_duration_ = yasio__min_wait_usec;
+    this->wait_duration_ = 0;
 }
 highp_time_t io_service::get_timeout(highp_time_t usec)
 {
@@ -2147,7 +2305,40 @@ void io_service::set_option_internal(int opt, va_list ap) // lgtm [cpp/poorly-do
     case YOPT_C_KCP_CONV: {
       auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
       if (channel)
-        channel->kcp_conv_ = va_arg(ap, int);
+        channel->kcp_options().kcp_conv_ = va_arg(ap, int);
+      break;
+    }
+    case YOPT_C_KCP_NODELAY: {
+      auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
+      if (channel)
+      {
+        // nodelay:int, interval:int, resend:int, nc:int.
+        channel->kcp_options().kcp_nodelay_  = va_arg(ap, int);
+        channel->kcp_options().kcp_interval_ = va_arg(ap, int);
+        channel->kcp_options().kcp_resend_   = va_arg(ap, int);
+        channel->kcp_options().kcp_ncwnd_    = va_arg(ap, int);
+      }
+      break;
+    }
+    case YOPT_C_KCP_WINDOW_SIZE: {
+      auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
+      if (channel)
+      {
+        channel->kcp_options().kcp_sndwnd_ = va_arg(ap, int);
+        channel->kcp_options().kcp_rcvwnd_ = va_arg(ap, int);
+      }
+      break;
+    }
+    case YOPT_C_KCP_MTU: {
+      auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
+      if (channel)
+        channel->kcp_options().kcp_mtu_ = va_arg(ap, int);
+      break;
+    }
+    case YOPT_C_KCP_RTO_MIN: {
+      auto channel = channel_at(static_cast<size_t>(va_arg(ap, int)));
+      if (channel)
+        channel->kcp_options().kcp_minrto_ = va_arg(ap, int);
       break;
     }
 #endif

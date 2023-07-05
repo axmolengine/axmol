@@ -127,31 +127,14 @@ SOFTWARE.
 
 /*
 ** Uncomment or add compiler flag -DYASIO_ENABLE_HPERF_IO to enable high preformance platform I/O multiplexing
-** i.g. epoll on linux, kqueue on freebsd, evport on apple(osx,ios,tvos,watchos)
+**  - epoll on linux
+**  - wepoll on windows
+**  - kqueue on freebsd, apple(osx,ios,tvos,watchos)
+**  - evport on SunOS 5.10+
 */
 // #define YASIO_ENABLE_HPERF_IO 1
 
-/*
-** Uncomment or add compiler flag -DYASIO_DISABLE_EPOLL to disable epoll
-*/
-// #define YASIO_DISABLE_EPOLL 1
-
-/*
-** Uncomment or add compiler flag -DYASIO_DISABLE_KQUEUE to disable kqueue for bsd-like OS
-*/
-// #define YASIO_DISABLE_KQUEUE 1
-
-/*
-** Uncomment or add compiler flag -DYASIO_DISABLE_EVPORT for SunOS 5.10+
-*/
-// #define YASIO_DISABLE_EVPORT 1
-
-/*
-** Uncomment or add compiler flag -DYASIO_ENABLE_WEPOLL for windows
-*/
-// #define YASIO_ENABLE_WEPOLL 1
-
-#if defined(_WIN32) && defined(YASIO_ENABLE_WEPOLL)
+#if defined(_WIN32) && defined(YASIO_ENABLE_HPERF_IO)
 #  undef YASIO__HAS_EPOLL
 #  define YASIO__HAS_EPOLL 1
 #endif

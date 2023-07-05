@@ -32,7 +32,7 @@ SOFTWARE.
 #if defined(__cplusplus)
 extern "C" {
 #endif
-YASIO_LUA_API int luaopen_yasio_cclua(lua_State* L);
+YASIO_LUA_API int luaopen_yasio_axlua(lua_State* L);
 #if defined(__cplusplus)
 }
 

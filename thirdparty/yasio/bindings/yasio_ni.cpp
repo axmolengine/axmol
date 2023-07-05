@@ -172,7 +172,6 @@ YASIO_NI_API void yasio_set_option(void* service_ptr, int opt, const char* pszAr
     case YOPT_C_UNPACK_STRIP:
     case YOPT_C_LOCAL_PORT:
     case YOPT_C_REMOTE_PORT:
-    case YOPT_C_KCP_CONV:
     case YOPT_C_UNPACK_NO_BSWAP:
       service->set_option(opt, svtoi(args[0]), svtoi(args[1]));
       break;
@@ -188,6 +187,17 @@ YASIO_NI_API void yasio_set_option(void* service_ptr, int opt, const char* pszAr
       service->set_option(opt, svtoi(args[0]), svtoi(args[1]), svtoi(args[2]), svtoi(args[3]));
       break;
     case YOPT_C_UNPACK_PARAMS:
+      service->set_option(opt, svtoi(args[0]), svtoi(args[1]), svtoi(args[2]), svtoi(args[3]), svtoi(args[4]));
+      break;
+    case YOPT_C_KCP_CONV:
+    case YOPT_C_KCP_MTU:
+    case YOPT_C_KCP_RTO_MIN:
+      service->set_option(opt, svtoi(args[0]), svtoi(args[1]));
+      break;
+    case YOPT_C_KCP_WINDOW_SIZE:
+      service->set_option(opt, svtoi(args[0]), svtoi(args[1]), svtoi(args[2]));
+      break;
+    case YOPT_C_KCP_NODELAY:
       service->set_option(opt, svtoi(args[0]), svtoi(args[1]), svtoi(args[2]), svtoi(args[3]), svtoi(args[4]));
       break;
     default:
