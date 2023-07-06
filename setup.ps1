@@ -110,12 +110,12 @@ if ($IsWin) {
         $parentProcess = Get-Process -Id $instance.ParentProcessID
     }
     $parentProcessName = $parentProcess.ProcessName
+    if ($parentProcessName -like "explorer") {
+        Write-Host "setup successfully, press any key to exit . . ." -NoNewline
+        cmd /c pause 1>$null
+        exit 0
+    }
 }
 
-if ("$parentProcessName" -like 'explorer') {
-    b1k_print "setup successfully, press any key to exit."
-    $null = Read-Host
-}
-else {
-    b1k_print 'setup successfully.'
-}
+b1k_print 'setup successfully.'
+

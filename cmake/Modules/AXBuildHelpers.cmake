@@ -26,7 +26,7 @@ function(ax_sync_target_res ax_target)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET ${sync_target_name} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E echo "    Syncing to ${link_folder_abs}"
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
+            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                 -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
         )
     endforeach()
@@ -58,18 +58,18 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
+            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                 -s ${src_dir} -d ${dst_dir} -m $<CONFIG>
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
+                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
+                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                     -s ${src_dir} -d ${dst_dir} -m ${CMAKE_BUILD_TYPE}
             )
         endif()
@@ -191,9 +191,9 @@ function(ax_copy_target_dll ax_target)
     if (WIN32 AND AX_USE_ANGLE)
         add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
-            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libEGL.dll
-            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/d3dcompiler_47.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/d3dcompiler_47.dll
             $<TARGET_FILE_DIR:${ax_target}>
         )
     endif()
@@ -211,7 +211,7 @@ function(ax_copy_target_dll ax_target)
     # copy libvlc plugins dir for windows
     if(AX_ENABLE_VLC_MEDIA)
         add_custom_command(TARGET ${ax_target} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/vlc/win/lib/vlc/plugins
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/vlc/win/lib/vlc/plugins
         $<TARGET_FILE_DIR:${ax_target}>/plugins
         )
     endif()
@@ -406,16 +406,16 @@ macro(ax_setup_winrt_sources )
         proj.winrt/App.xaml.h
         proj.winrt/App.xaml.cpp
         proj.winrt/Package.appxmanifest
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLES.h
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLES.cpp
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml.h
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml.cpp
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/AxmolRenderer.h
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/AxmolRenderer.cpp
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLES.h
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLES.cpp
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml.h
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml.cpp
+        ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.h
+        ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.cpp
     )
 
-    list(APPEND GAME_INC_DIRS ${_AX_ROOT_PATH}/core/platform/winrt/xaml)
+    list(APPEND GAME_INC_DIRS ${_AX_ROOT}/core/platform/winrt/xaml)
 
     list(APPEND GAME_HEADER
         ${PLATFORM_HEADERS}
@@ -589,83 +589,6 @@ macro(ax_config_pred target_name pred)
     endif()
 endmacro()
 
-# glslcc
-find_program(GLSLCC_EXE NAMES glslcc
-    PATHS ${_AX_ROOT_PATH}/tools/external/glslcc
-)
-
-if (NOT GLSLCC_EXE)
-    message("glslcc not found.")
-    message(FATAL_ERROR "Please run setup.ps1 again to download glslcc, and run CMake again.")
-endif()
-
-# This function allow make shader files (.frag, .vert) compiled with glslcc
-# usage:
-# - ax_add_shader(${FILE}): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs.bin
-# - ax_add_shader(${FILE} CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs.bin
-# - ax_add_shader(${FILE} CVAR): the shader will compiled to c hex header for embed include by C/C++ use
-function (ax_add_shader FILE)
-    set(options CUSTOM CVAR)
-    cmake_parse_arguments(opt "${options}" "" "" ${ARGN})
-
-    get_filename_component(FILE_EXT ${FILE} LAST_EXT)
-    get_filename_component(FILE_NAME ${FILE} NAME_WE)
-    string(TOLOWER "${FILE_EXT}" FILE_EXT)
-
-     # silent when compile shader success
-    set(SC_FLAGS "--silent")
-    
-    # shader lang
-    if(NOT opt_CUSTOM)
-        set(SHADER_CATALOG "runtime")
-    else()
-        set(SHADER_CATALOG "custom")
-    endif()
-    if(ANDROID OR WINRT OR AX_USE_ANGLE)
-        # version 300 es
-        set(OUT_DIR "${CMAKE_BINARY_DIR}/${SHADER_CATALOG}/shaders/essl")
-        set(OUT_LANG "ESSL")
-        list(APPEND SC_FLAGS  "--lang=gles" "--profile=300")
-    elseif (WIN32 OR LINUX)
-         # version 330
-         set(OUT_DIR "${CMAKE_BINARY_DIR}/${SHADER_CATALOG}/shaders/glsl")
-         set(OUT_LANG "GLSL")
-         list(APPEND SC_FLAGS  "--lang=glsl" "--profile=330")
-    elseif (APPLE) 
-        set(OUT_DIR "${CMAKE_BINARY_DIR}/${SHADER_CATALOG}/shaders/msl")
-        set(OUT_LANG "MSL")
-        list(APPEND SC_FLAGS  "--lang=msl" "--defines=METAL")
-    endif()
-
-    # input
-    if (FILE_EXT STREQUAL ".frag")
-        list(APPEND SC_FLAGS "--frag=${FILE}")
-        set(TYPE "fs")
-    elseif(FILE_EXT STREQUAL ".vert")
-        set(TYPE "vs")
-        list(APPEND SC_FLAGS "--vert=${FILE}")
-    else()
-        message(FATAL_ERROR "Invalid shader source, the file extesion must be one of .frag;.vert")
-    endif()
-
-    # output
-    file(MAKE_DIRECTORY ${OUT_DIR})
-    if (NOT opt_CVAR)
-        list(APPEND SC_FLAGS "--output=${OUT_DIR}/${FILE_NAME}.bin" )
-
-        # glscc will auto insert ${FILE_NAME}_vs.bin or ${FILE_NAME}_fs.bin
-        # so we set OUTPUT to match with it, otherwise will cause cause incremental build to work incorrectly.
-        set(OUTPUT_FILE "${OUT_DIR}/${FILE_NAME}_${TYPE}.bin")
-    else()
-        set(OUTPUT_FILE "${OUT_DIR}/${FILE_NAME}_${TYPE}.bin.h")
-        list(APPEND SC_FLAGS "${OUT_FILE}" "--cvar=shader_rt_${FILE_NAME}" "--output=${OUTPUT_FILE}")
-    endif()
-
-    # "Compiling ${SHADER_CATALOG} shader ${FILE} for ${OUT_LANG} ..."
-    set(compileCmdLine ${GLSLCC_EXE} ${SC_FLAGS})
-    string(REPLACE ";" " " SC_COMMENT "${compileCmdLine} ...")
-    add_custom_command(
-			MAIN_DEPENDENCY ${FILE} OUTPUT ${OUTPUT_FILE} COMMAND ${compileCmdLine}
-			COMMENT "${SC_COMMENT}"
-		)
-endfunction()
+# import minimal AXGLSLCC.cmake for shader compiler support
+# the function: ax_target_compile_shaders avaiable from it
+include (AXGLSLCC)

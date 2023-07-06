@@ -36,8 +36,8 @@ if(XCODE)
 endif()
 
 # ax root path
-set(_AX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
+set(_AX_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
 # prevent in-source-build
 include(PreventInSourceBuilds)
@@ -48,7 +48,7 @@ include(AXBuildSet)
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
 option(AX_BUILD_TOOLS "Build tools" ON)
 
-add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
+add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 
 # prevent tests project to build "axmol/core" again
 set(BUILD_ENGINE_DONE ON)
@@ -63,23 +63,23 @@ if(AX_BUILD_TESTS)
     endmacro()
     
     # add cpp-template-default into project(axmol) for tmp test
-    add_test_target(HelloCpp ${_AX_ROOT_PATH}/templates/cpp-template-default )
+    add_test_target(HelloCpp ${_AX_ROOT}/templates/cpp-template-default )
 
 	  # add cpp tests default
-    add_test_target(cpp_tests ${_AX_ROOT_PATH}/tests/cpp-tests)
+    add_test_target(cpp_tests ${_AX_ROOT}/tests/cpp-tests)
     
 	  # add fairygui tests when fairygui extension is enabled
     if(AX_ENABLE_EXT_FAIRYGUI)
-        add_test_target(fairygui_tests ${_AX_ROOT_PATH}/tests/fairygui-tests)
+        add_test_target(fairygui_tests ${_AX_ROOT}/tests/fairygui-tests)
     endif()
     
     if(AX_ENABLE_EXT_LIVE2D)
-        add_test_target(live2d_tests ${_AX_ROOT_PATH}/tests/live2d-tests)
+        add_test_target(live2d_tests ${_AX_ROOT}/tests/live2d-tests)
     endif()
 
     if(AX_ENABLE_EXT_LUA)
-        add_test_target(HelloLua ${_AX_ROOT_PATH}/templates/lua-template-default)
-        add_test_target(lua_tests ${_AX_ROOT_PATH}/tests/lua-tests)
+        add_test_target(HelloLua ${_AX_ROOT}/templates/lua-template-default)
+        add_test_target(lua_tests ${_AX_ROOT}/tests/lua-tests)
     endif(AX_ENABLE_EXT_LUA)
     
 endif()

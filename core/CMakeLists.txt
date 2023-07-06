@@ -152,8 +152,6 @@ if (APPLE)
     set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()
 
-message(STATUS "_AX_MEDIA_SRC=${_AX_MEDIA_SRC}")
-
 set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
     ${_AX_3D_HEADER}
@@ -194,11 +192,14 @@ if (WINRT)
     target_compile_options(${_AX_CORE_LIB} PUBLIC /ZW)
 endif()
 
+file(GLOB SHADER_SOURCES "renderer/shaders/*.vert" "renderer/shaders/*.frag")
+ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${SHADER_SOURCES} RUNTIME)
+
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
 # use thirdparty libs
-add_subdirectory(${_AX_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
+add_subdirectory(${_AX_ROOT}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${_AX_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
@@ -209,17 +210,17 @@ use_ax_compile_options(${_AX_CORE_LIB})
 use_ax_depend(${_AX_CORE_LIB})
 
 target_include_directories(${_AX_CORE_LIB}
-    PUBLIC ${_AX_ROOT_PATH}
-    PUBLIC ${_AX_ROOT_PATH}/thirdparty
-    PUBLIC ${_AX_ROOT_PATH}/extensions
-    PUBLIC ${_AX_ROOT_PATH}/core
-    PUBLIC ${_AX_ROOT_PATH}/core/platform
+    PUBLIC ${_AX_ROOT}
+    PUBLIC ${_AX_ROOT}/thirdparty
+    PUBLIC ${_AX_ROOT}/extensions
+    PUBLIC ${_AX_ROOT}/core
+    PUBLIC ${_AX_ROOT}/core/platform
 
-    INTERFACE ${_AX_ROOT_PATH}/thirdparty
-    INTERFACE ${_AX_ROOT_PATH}/extensions
-    INTERFACE ${_AX_ROOT_PATH}/core/base
-    INTERFACE ${_AX_ROOT_PATH}/core/audio
-    INTERFACE ${_AX_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
+    INTERFACE ${_AX_ROOT}/thirdparty
+    INTERFACE ${_AX_ROOT}/extensions
+    INTERFACE ${_AX_ROOT}/core/base
+    INTERFACE ${_AX_ROOT}/core/audio
+    INTERFACE ${_AX_ROOT}/core/platform/${PLATFORM_FOLDER}
 )
 
 set_target_properties(${_AX_CORE_LIB}
@@ -243,7 +244,7 @@ target_precompile_headers(${_AX_CORE_LIB} PRIVATE
 if(WINDOWS)
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
-            PATHS ${_AX_ROOT_PATH}/tools/external/nuget)
+            PATHS ${_AX_ROOT}/tools/external/nuget)
             
         if(NOT NUGET_EXE)
             message("NUGET.EXE not found.")
@@ -264,7 +265,7 @@ if(WINDOWS)
 endif()
 
 # engine extensions
-add_subdirectory(${_AX_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
+add_subdirectory(${_AX_ROOT}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
     target_sources(${_AX_CORE_LIB} PRIVATE ./axmol.natvis)
@@ -274,21 +275,21 @@ if(MSVC)
 endif()
 
 if(ANDROID)
-    add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
+    add_subdirectory(${_AX_ROOT}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
 endif()
 
 find_package(Git)
-if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT_PATH}/.git")
+if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT}/.git")
     # Get the current working branch and its latest abbreviated commit hash
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" rev-list --count HEAD
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-list --count HEAD
         TIMEOUT 5
         OUTPUT_VARIABLE AX_BUILD_NUM
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" branch --show-current
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" branch --show-current
         TIMEOUT 5
         OUTPUT_VARIABLE AX_GIT_BRANCH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" rev-parse --short=7 HEAD
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
         TIMEOUT 5
         OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
