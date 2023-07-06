@@ -98,7 +98,7 @@ jobs:
       # We'll use this as our working directory for all subsequent commands
         run: |
           AX_ROOT=`pwd`
-          echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
+          echo -e "y" | pwsh $AX_ROOT/setup.ps1
       - name: Build
         shell: pwsh
         run: ./build.ps1 -p linux -a x64
