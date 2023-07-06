@@ -128,15 +128,13 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
   5. Generate the relevant xcode project using one of the following commands:
      - for ios arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATFORM=OS64```
-     - for ios armv7,arm64 combined:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATFORM=OS```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLAT=iOS```
      - for ios simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATFORM=SIMULATOR64```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLAT=iOS -DARCHS=x64```
      - for tvos arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATFORM=TVOS```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATF=tvOS```
      - for tvos simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATFORM=SIMULATOR_TVOS```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATF=tvOS -DARCHS=x64```
      - for macos x86_64(Intel)
      ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=x86_64```
      - for macos arm64(M1)
