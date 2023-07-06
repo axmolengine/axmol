@@ -15,15 +15,6 @@ endif()
 set(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
 set(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
 
-# This function allow make shader files (.frag, .vert) compiled with glslcc
-# usage:
-#   - ax_target_compile_shaders(axmol FILES filepathList): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs.bin
-#   - ax_target_compile_shaders(axmol FILES filepathList CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs.bin
-#   - ax_target_compile_shaders(axmol FILES filepathList CVAR): the shader will compiled to c hex header for embed include by C/C++ use
-# Use global variable to control shader file extension:
-#   - GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
-#   - GLSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
-# 
 # PROPERTY: output directory (optional)
 define_property(SOURCE PROPERTY GLSLCC_OUTPUT_DIRECTORY 
                 BRIEF_DOCS "Compiled shader output directory"
@@ -32,6 +23,40 @@ define_property(SOURCE PROPERTY GLSLCC_OUTPUT_DIRECTORY
 define_property(SOURCE PROPERTY GLSLCC_INCLUDE_DIRS 
                 BRIEF_DOCS "Compiled shader include directories"
                 FULL_DOCS "Compiled shader include directories, seperated with comma")
+
+# Find shader sources in specified directory
+# syntax: ax_find_shaders(dir shader_sources [RECURSE])
+# examples:
+#   - ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/core/renderer/shaders" runtime_shader_sources)
+#   - ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Source" custom_shader_sources RECURSE)
+function (ax_find_shaders dir varName)
+    set(options RECURSE)
+    cmake_parse_arguments(opt "${options}" "" "" ${ARGN})
+
+    set(SC_FILTERS "")
+    foreach(fileext ${GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS})
+        list(APPEND SC_FILTERS "${dir}/*${fileext}")
+    endforeach()
+    foreach(fileext ${GLSLCC_VERT_SOURCE_FILE_EXTENSIONS})
+        list(APPEND SC_FILTERS "${dir}/*${fileext}")
+    endforeach()
+    if (opt_RECURSE)
+        file(GLOB_RECURSE out_files ${SC_FILTERS})
+    else()
+        file(GLOB out_files ${SC_FILTERS})
+    endif()
+    set(${varName} ${out_files} PARENT_SCOPE)
+endfunction()
+
+# This function allow make shader files (.frag, .vert) compiled with glslcc
+# usage:
+#   - ax_target_compile_shaders(axmol FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs.bin
+#   - ax_target_compile_shaders(axmol FILES source_files CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs.bin
+#   - ax_target_compile_shaders(axmol FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
+# Use global variable to control shader file extension:
+#   - GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
+#   - GLSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
+# 
 function (ax_target_compile_shaders target_name)
     set(options RUNTIME CVAR)
     set(multiValueArgs FILES)
