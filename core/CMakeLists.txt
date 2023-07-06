@@ -192,9 +192,6 @@ if (WINRT)
     target_compile_options(${_AX_CORE_LIB} PUBLIC /ZW)
 endif()
 
-file(GLOB SHADER_SOURCES "renderer/shaders/*.vert" "renderer/shaders/*.frag")
-ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${SHADER_SOURCES} RUNTIME)
-
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
