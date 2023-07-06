@@ -37,10 +37,10 @@ then you can simply build your project for all platform targets, i.e.
 - win32: `pwsh .\build.ps1` can runs on Windows with vs2022 installed
 - winuwp: `pwsh .\build.ps1 -p winuwp` can runs on Windows with vs2022 installed
 - linux: `pwsh .\build.ps1` can runs on Linux with g++ installed
-- osx: `pwsh .\build.ps1 -p osx -a x64` can runs on macOS with xcode13~14.2 installed
-- android: `pwsh .\build.ps1 -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
-- ios: `pwsh .\build.ps1 -p ios -a x64` can runs on macOS with xcode13~14.2 installed
-- tvos: `pwsh .\build.ps1 -p tvos -a x64` can runs on macOS with xcode13~14.2 installed
+- osx: `pwsh ./build.ps1 -p osx -a x64` can runs on macOS with xcode13~14.2 installed
+- android: `pwsh ./build.ps1 -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
+- ios: `pwsh ./build.ps1 -p ios -a x64` can runs on macOS with xcode13~14.2 installed
+- tvos: `pwsh ./build.ps1 -p tvos -a x64` can runs on macOS with xcode13~14.2 installed
 
 ## Quick build engine for host targets?
 
