@@ -247,7 +247,7 @@ if(WINDOWS)
             
         if(NOT NUGET_EXE)
             message("NUGET.EXE not found.")
-            message(FATAL_ERROR "Please run setup.py again to download NUGET.EXE, and run CMake again.")
+            message(FATAL_ERROR "Please run setup.ps1 again to download NUGET.EXE, and run CMake again.")
         endif()
      
         exec_program(${NUGET_EXE}

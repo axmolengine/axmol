@@ -49,7 +49,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloLua into root project
         file(TO_CMAKE_PATH ${_AX_ROOT_PATH} _AX_ROOT_PATH) # string(REPLACE "\\" "/" _AX_ROOT_PATH ${_AX_ROOT_PATH})
         message(STATUS "Using system env var _AX_ROOT=${_AX_ROOT}")
     else()
-        message(FATAL_ERROR "Please run setup.py add system env var 'AX_ROOT' to specific the engine root")
+        message(FATAL_ERROR "Please run setup.ps1 add system env var 'AX_ROOT' to specific the engine root")
     endif()
 
     set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
