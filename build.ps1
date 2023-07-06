@@ -86,7 +86,7 @@ $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
 # start construct full cmd line
-$fullCmdLine = @("$((Resolve-Path -Path "$AX_ROOT/tools/ci/build1k.ps1").Path)")
+$fullCmdLine = @("$((Resolve-Path -Path "$AX_ROOT/1k/build1k.ps1").Path)")
 
 $search_prior_dir = $options.d
 if (!$search_prior_dir -and $is_engine -and $is_android) {

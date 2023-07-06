@@ -2,7 +2,7 @@
 # Copyright (c) 2013 cocos2d-x.org
 # Copyright (c) 2014 martell malone
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
-# Copyright (c) 2021-2022 Bytedance Inc.
+# Copyright (c) 2021-2023 Bytedance Inc.
 # 
 # https://axmolengine.github.io/
 #
@@ -29,8 +29,10 @@
 # build ax
 # build axlua if AX_ENABLE_EXT_LUA=ON
 
+# include_guard (GLOBAL)
+
 # The version number
-set(_AX_VERSION 1.0)
+set(_AX_VERSION 1.1)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )

@@ -1,8 +1,3 @@
-if (__AXGLSLCC_CMAKE__)
-    return()
-endif()
-set(__AXGLSLCC_CMAKE__ TRUE)
-
 cmake_policy(PUSH)
 cmake_policy(SET CMP0057 NEW)
 

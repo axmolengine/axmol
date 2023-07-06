@@ -1,7 +1,7 @@
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
-$build1kPath = Join-Path $myRoot 'tools/ci/build1k.ps1'
+$build1kPath = Join-Path $myRoot '1k/build1k.ps1'
 $prefix = Join-Path $myRoot 'tools/external'
 if (!(Test-Path $prefix -PathType Container)) {
     mkdir $prefix | Out-Null
