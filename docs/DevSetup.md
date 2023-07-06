@@ -1,15 +1,15 @@
 # Development setup
 
-## Common Requirement [Python](https://www.python.org/downloads/)
+## Common Requirements
 
-- PowerShell-5.0+
-  - Please install from: 
-    - https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.3
-    - https://github.com/PowerShell/PowerShell/releases
-  - win7+, no needs install, the system preinstalled PowerShell 5.0 should works
-  - macos,linux or you want install latest powershell for windows, visit: https://github.com/PowerShell/PowerShell/releases
+- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
+  - powershell-7 is recommended, it's support Windows,macOS,Linux
+  - How to Install:
+      - visit: https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell
+      - download from github release page: https://github.com/PowerShell/PowerShell/releases
+  - Note: win7+, system installed PowerShell 5.0 should works, but not recommended
 
-- Python-3.7+
+- [Python-3.7+](https://www.python.org/downloads/)
 
 ## Prerequisites
 
