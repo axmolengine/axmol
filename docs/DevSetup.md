@@ -2,19 +2,23 @@
 
 ## Common Requirement [Python](https://www.python.org/downloads/)
 
-- Python-3.7+
-- PowerShell if you want use the simply build script `tools/ci/build.ps1`
-  - win7+, no needs install the system preinstalled PowerShell 5.0 should works
+- PowerShell-5.0+
+  - Please install from: 
+    - https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7.3
+    - https://github.com/PowerShell/PowerShell/releases
+  - win7+, no needs install, the system preinstalled PowerShell 5.0 should works
   - macos,linux or you want install latest powershell for windows, visit: https://github.com/PowerShell/PowerShell/releases
+
+- Python-3.7+
 
 ## Prerequisites
 
   1. Enter `axmol` root directory
-  2. Run `python setup.py`, restart the console after it has finished for environment variables to take effect
+  2. Run `pwsh setup.ps1`, restart the console after it has finished for environment variables to take effect
 
 ## Creating A New Project
 
-Using a console window, an example of a command to generate a new project is as follows:
+Using a powershell console window, an example of a command to generate a new project is as follows:
 
 ```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
 
