@@ -34,13 +34,13 @@ Examples:
 If you use latest commits after 6/29/2023 18:50, once you crate a new project, there is a build script `build.ps1` in your project root directory,
 then you can simply build your project for all platform targets, i.e.
 
-- win32: `pwsh .\build.ps1 -p win32 -a x64 -xc '--config','Debug'` can runs on Windows with vs2022 installed
-- winuwp: `pwsh .\build.ps1 -p winuwp -a x64 -xc '--config','Debug'` can runs on Windows with vs2022 installed
-- linux: run the setup script `install-deps-linux.sh` once, then `pwsh .\build.ps1 -p linux -a x64 -xc '--config','Debug'` can runs on Linux with g++ installed
-- osx: `pwsh .\build.ps1 -p osx -a x64 -xc '--config','Debug'` can runs on macOS with xcode13~14.2 installed
+- win32: `pwsh .\build.ps1` can runs on Windows with vs2022 installed
+- winuwp: `pwsh .\build.ps1 -p winuwp` can runs on Windows with vs2022 installed
+- linux: `pwsh .\build.ps1` can runs on Linux with g++ installed
+- osx: `pwsh .\build.ps1 -p osx -a x64` can runs on macOS with xcode13~14.2 installed
 - android: `pwsh .\build.ps1 -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
-- ios: `pwsh .\build.ps1 -p ios -a x64 -xc '--config','Debug'` can runs on macOS with xcode13~14.2 installed
-- tvos: `pwsh .\build.ps1 -p tvos -a x64 -xc '--config','Debug'` can runs on macOS with xcode13~14.2 installed
+- ios: `pwsh .\build.ps1 -p ios -a x64` can runs on macOS with xcode13~14.2 installed
+- tvos: `pwsh .\build.ps1 -p tvos -a x64` can runs on macOS with xcode13~14.2 installed
 
 ## Quick build engine for host targets?
 
