@@ -1,4 +1,4 @@
-set(ax_root ${_AX_ROOT_PATH})
+set(ax_root ${_AX_ROOT})
 
 set(lua_bindings_manual_headers
     manual/ComponentLua.h

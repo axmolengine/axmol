@@ -20,17 +20,16 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
 
     set(_AX_ROOT "$ENV{AX_ROOT}")
     if(NOT (_AX_ROOT STREQUAL ""))
-        set(_AX_ROOT_PATH "${_AX_ROOT}")
-        file(TO_CMAKE_PATH ${_AX_ROOT_PATH} _AX_ROOT_PATH) # string(REPLACE "\\" "/" _AX_ROOT_PATH ${_AX_ROOT_PATH})
+        file(TO_CMAKE_PATH ${_AX_ROOT} _AX_ROOT)
         message(STATUS "Using system env var _AX_ROOT=${_AX_ROOT}")
     else()
-        set(_AX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+        set(_AX_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../..)
     endif()
 
-    set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
     include(AXBuildSet)
-    add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
+    add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 endif()
 
 # record sources, headers, resources...

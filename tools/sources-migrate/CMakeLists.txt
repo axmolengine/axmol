@@ -2,8 +2,8 @@
 set(target_name sources-migrate)
 add_executable(${target_name} main.cpp)
 target_include_directories(${target_name} 
-    PRIVATE ${_AX_ROOT_PATH}/core
-    PRIVATE ${_AX_ROOT_PATH}/thirdparty
+    PRIVATE ${_AX_ROOT}/core
+    PRIVATE ${_AX_ROOT}/thirdparty
 )
 set_target_properties(${target_name}
         PROPERTIES
