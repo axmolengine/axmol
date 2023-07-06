@@ -64,7 +64,7 @@ if ($IsLinux) {
 
         $DEPENDS = @()
 
-        $DEPENDS = 'libx11-dev'
+        $DEPENDS += 'libx11-dev'
         $DEPENDS += 'automake'
         $DEPENDS += 'libtool'
         $DEPENDS += 'cmake'
@@ -80,7 +80,7 @@ if ($IsLinux) {
         $DEPENDS += 'libbsd-dev'
         $DEPENDS += 'libasound2-dev'
         $DEPENDS += 'libxxf86vm-dev'
-        $DEPENDS += @('libvlc-dev', 'libvlccore-dev', 'vlc')
+        $DEPENDS += 'libvlc-dev', 'libvlccore-dev', 'vlc'
 
         # if vlc encouter codec error, install
         # sudo apt install ubuntu-restricted-extras
