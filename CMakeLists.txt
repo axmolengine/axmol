@@ -46,7 +46,7 @@ include(PreventInSourceBuilds)
 include(AXBuildSet)
 
 option(AX_BUILD_TESTS "Build cpp & lua tests" ON)
-option(AX_BUILD_TOOLS "Build tools" ON)
+# option(AX_BUILD_TOOLS "Build tools" ON)
 
 add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
 
@@ -82,10 +82,6 @@ if(AX_BUILD_TESTS)
         add_test_target(lua_tests ${_AX_ROOT}/tests/lua-tests)
     endif(AX_ENABLE_EXT_LUA)
     
-endif()
-
-if (AX_BUILD_TOOLS) 
-    add_subdirectory(tools/sources-migrate)
 endif()
 
 ax_uwp_set_all_targets_deploy_min_version()
