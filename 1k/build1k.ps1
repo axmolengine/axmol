@@ -69,6 +69,13 @@ $manifest = @{
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
+$myRoot = $PSScriptRoot
+
+$manifest_file = Join-Path $myRoot 'manifest.ps1'
+if (Test-Path $manifest_file -PathType Leaf) {
+    . $manifest_file
+}
+
 # refer to: https://developer.android.com/studio#command-line-tools-only
 $cmdlinetools_rev = '9477386'
 
@@ -115,8 +122,6 @@ b1k_print "PowerShell $pwsh_ver"
 if (!$options.setupOnly) {
     b1k_print $(Out-String -InputObject $options)
 }
-
-$myRoot = $PSScriptRoot
 
 $HOST_WIN = 0 # targets: win,uwp,android
 $HOST_LINUX = 1 # targets: linux,android 
@@ -362,6 +367,7 @@ function setup_cmake() {
 
 # setup nuget
 function setup_nuget() {
+    if(!$manifest.Contains('nuget')) { return $null }
     $nuget_bin = Join-Path $prefix 'nuget'
     $nuget_prog, $nuget_ver = find_prog -name 'nuget' -path $nuget_bin -mode 'BOTH'
     if ($nuget_prog) {
@@ -385,6 +391,7 @@ function setup_nuget() {
 }
 
 function setup_jdk() {
+    if(!$manifest.Contains('jdk')) { return $null }
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
@@ -429,6 +436,7 @@ function setup_jdk() {
 }
 
 function setup_glslcc() {
+    if(!$manifest.Contains('glslcc')) { return $null }
     $glslcc_bin = Join-Path $prefix 'glslcc'
     $glslcc_prog, $glslcc_ver = find_prog -name 'glslcc' -path $glslcc_bin -mode 'BOTH'
     if ($glslcc_prog) {
@@ -460,6 +468,7 @@ function setup_glslcc() {
 }
 
 function setup_ninja() {
+    if(!$manifest.Contains('ninja')) { return $null }
     $ninja_prog, $ninja_ver = find_prog -name 'ninja'
     if ($ninja_prog) {
         return $ninja_prog
@@ -482,6 +491,7 @@ function setup_ninja() {
 }
 
 function setup_android_sdk() {
+    if(!$manifest.Contains('ndk')) { return $null }
     # setup ndk
     $ndk_ver = $TOOLCHAIN_VER
     if (!$ndk_ver) {
@@ -605,6 +615,7 @@ function setup_android_sdk() {
 }
 
 function setup_clang() {
+    if(!$manifest.Contains('clang')) { return $null }
     $clang_prog, $clang_ver = find_prog -name 'clang'
     if (!$clang_prog) {
         throw 'required clang $clang_ver not installed, please install it from: https://github.com/llvm/llvm-project/releases'
