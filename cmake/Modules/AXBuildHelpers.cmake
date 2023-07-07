@@ -25,7 +25,7 @@ function(ax_sync_target_res ax_target)
         #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET ${sync_target_name} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E echo "    Syncing to ${link_folder_abs}"
+            COMMAND ${CMAKE_COMMAND} -E echo "    Syncing ${cc_folder} to ${link_folder_abs}"
             COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                 -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
         )

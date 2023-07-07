@@ -14,6 +14,7 @@ endif()
 
 set(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
 set(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
+set(GLSLCC_OUT_SUFFIX "")
 
 # PROPERTY: output directory (optional)
 define_property(SOURCE PROPERTY GLSLCC_OUTPUT_DIRECTORY 
@@ -50,8 +51,8 @@ endfunction()
 
 # This function allow make shader files (.frag, .vert) compiled with glslcc
 # usage:
-#   - ax_target_compile_shaders(axmol FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs.bin
-#   - ax_target_compile_shaders(axmol FILES source_files CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs.bin
+#   - ax_target_compile_shaders(axmol FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs
+#   - ax_target_compile_shaders(axmol FILES source_files CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs
 #   - ax_target_compile_shaders(axmol FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
 # Use global variable to control shader file extension:
 #   - GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
@@ -71,11 +72,6 @@ function (ax_target_compile_shaders target_name)
         set(SC_FLAGS "--silent" "--err-format=msvc")
         
         # shader lang
-        if(opt_RUNTIME)
-            set(SHADER_CATALOG "runtime")
-        else()
-            set(SHADER_CATALOG "custom")
-        endif()
         set(SC_PROFILE "")
         if(ANDROID OR WINRT OR AX_USE_ANGLE)
             # version 300 es
@@ -114,25 +110,25 @@ function (ax_target_compile_shaders target_name)
         # output
         get_source_file_property(OUT_DIR ${SC_FILE} GLSLCC_OUTPUT_DIRECTORY)
         if (OUT_DIR STREQUAL "NOTFOUND")
-            set(OUT_DIR "${CMAKE_BINARY_DIR}/shaders/${SHADER_CATALOG}")
+            set(OUT_DIR "${CMAKE_BINARY_DIR}/shaders")
         endif()
         file(MAKE_DIRECTORY ${OUT_DIR})
         if (NOT opt_CVAR)
-            list(APPEND SC_FLAGS "--output=${OUT_DIR}/${FILE_NAME}.bin" )
+            list(APPEND SC_FLAGS "--output=${OUT_DIR}/${FILE_NAME}${GLSLCC_OUT_SUFFIX}" )
 
             # glscc will auto insert ${FILE_NAME}_vs.bin or ${FILE_NAME}_fs.bin
             # so we set OUTPUT to match with it, otherwise will cause cause incremental build to work incorrectly.
-            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${TYPE}.bin")
+            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${TYPE}${GLSLCC_OUT_SUFFIX}")
         else()
-            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${TYPE}.bin.h")
+            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${TYPE}${GLSLCC_OUT_SUFFIX}.h")
             list(APPEND SC_FLAGS "${OUT_FILE}" "--cvar=shader_rt_${FILE_NAME}" "--output=${SC_OUTPUT}")
         endif()
 
-        set(SC_COMMENT "Compiling ${SHADER_CATALOG} shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} to ${SC_OUTPUT} ...")
-        # string(REPLACE ";" " " FULL_COMMAND_LINE "${GLSLCC_EXE};${SC_FLAGS} ...")
+        set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} to ${SC_OUTPUT} ...")
+        string(REPLACE ";" " " FULL_COMMAND_LINE "${GLSLCC_EXE};${SC_FLAGS} ...")
         add_custom_command(
                 MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
-                COMMENT "${SC_COMMENT}"
+                COMMENT "${FULL_COMMAND_LINE}"
             )
     endforeach()
     target_sources(${target_name} PRIVATE ${opt_FILES})
