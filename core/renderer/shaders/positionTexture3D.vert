@@ -2,16 +2,14 @@
 precision highp float;
 precision highp int;
 layout (location = 0) in vec4 a_position;
-#ifdef GL_ES
-layout (location = 0) out lowp vec4 v_position;
-#else
-layout (location = 1) out vec4 v_position;
-#endif
+layout (location = 1) in vec2 a_texCoord;
+layout (location = 0) out vec2 TextureCoordOut;
 layout(std140, binding = 0) uniform Block_0 {
     mat4 u_MVPMatrix;
 };
-void main()
+void main(void)
 {
     gl_Position = u_MVPMatrix * a_position;
-    v_position = a_position;
+    TextureCoordOut = a_texCoord;
+    TextureCoordOut.y = 1.0 - TextureCoordOut.y;
 }
