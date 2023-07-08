@@ -12,14 +12,23 @@ if (NOT GLSLCC_EXE)
     message(FATAL_ERROR "Please run setup.ps1 again to download glslcc, and run CMake again.")
 endif()
 
-set(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
-set(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
-set(GLSLCC_OUT_SUFFIX "")
+macro(glslcc_option variable value)
+    if(NOT DEFINED ${variable})
+        set(${variable} ${value})
+    endif()
+endmacro()
 
-# PROPERTY: output directory (optional)
-define_property(SOURCE PROPERTY GLSLCC_OUTPUT_DIRECTORY 
-                BRIEF_DOCS "Compiled shader output directory"
-                FULL_DOCS "Compiled shader output directory")
+glslcc_option(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
+glslcc_option(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
+glslcc_option(GLSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
+glslcc_option(GLSLCC_OUT_SUFFIX "")
+glslcc_option(GLSLCC_FLAT_UBOS TRUE)
+
+message(STATUS "GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS=${GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS}")
+message(STATUS "GLSLCC_VERT_SOURCE_FILE_EXTENSIONS=${GLSLCC_VERT_SOURCE_FILE_EXTENSIONS}")
+message(STATUS "GLSLCC_OUT_SUFFIX=${GLSLCC_OUT_SUFFIX}")
+message(STATUS "GLSLCC_FLAT_UBOS=${GLSLCC_FLAT_UBOS}")
+
 # PROPERTY: include direcotries (optional)
 define_property(SOURCE PROPERTY GLSLCC_INCLUDE_DIRS 
                 BRIEF_DOCS "Compiled shader include directories"
@@ -96,6 +105,11 @@ function (ax_target_compile_shaders target_name)
         list(APPEND INC_DIRS "${_AX_ROOT}/core/renderer/shaders")
         list(APPEND SC_FLAGS "--include-dirs=${INC_DIRS}")
 
+        # flat-ubs
+        if(${GLSLCC_FLAT_UBOS})
+            list(APPEND SC_FLAGS "--flatten-ubos")
+        endif()
+
         # input
         if (${FILE_EXT} IN_LIST GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS)
             list(APPEND SC_FLAGS "--frag=${SC_FILE}")
@@ -108,11 +122,10 @@ function (ax_target_compile_shaders target_name)
         endif()
 
         # output
-        get_source_file_property(OUT_DIR ${SC_FILE} GLSLCC_OUTPUT_DIRECTORY)
-        if (OUT_DIR STREQUAL "NOTFOUND")
-            set(OUT_DIR "${CMAKE_BINARY_DIR}/shaders")
+        set(OUT_DIR ${GLSLCC_OUT_DIR})
+        if (NOT (IS_DIRECTORY ${OUT_DIR}))
+            file(MAKE_DIRECTORY ${OUT_DIR})
         endif()
-        file(MAKE_DIRECTORY ${OUT_DIR})
         if (NOT opt_CVAR)
             list(APPEND SC_FLAGS "--output=${OUT_DIR}/${FILE_NAME}${GLSLCC_OUT_SUFFIX}" )
 

@@ -384,6 +384,13 @@ function(ax_setup_app_config app_name)
             XCODE_EMBED_FRAMEWORKS_REMOVE_HEADERS_ON_COPY ON
         )
     endif()
+
+    if((WIN32 AND (NOT WINRT)) OR LINUX)
+        if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
+            get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
+            ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
+        endif()
+    endif()
 endfunction()
 
 # if cc_variable not set, then set it cc_value
