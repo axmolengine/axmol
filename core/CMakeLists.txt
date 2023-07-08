@@ -190,6 +190,9 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
+ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+
 if (WINRT)
     target_compile_options(${_AX_CORE_LIB} PUBLIC /ZW)
 endif()
