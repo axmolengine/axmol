@@ -31,18 +31,21 @@ if ($IsWin) {
 else {
     $PATH = [System.Collections.ArrayList]$env:PATH.Split(':')
     if (Test-Path $PROFILE -PathType Leaf) {
-        $profileContent = Get-Content $PROFILE
+        $profileContent = Get-Content $PROFILE -raw
     }
     else {
         $profileContent = ''
     }
 
+    $needSave = $false
     if ($profileContent.IndexOf('$env:AX_ROOT = ') -eq -1) {
         $profileContent += '$env:AX_ROOT = "{0}"{1}' -f $AX_ROOT, "`n"
+        $needSave = $true
     }
 
     if ($profileContent.IndexOf('$env:PATH = ') -eq -1) {
         $profileContent += '$env:PATH = "{0}:$env:PATH"' -f $AX_CONSOLE_BIN
+        $needSave = $true
     }
 
     $profileDir = Split-Path $PROFILE -Parent
@@ -50,12 +53,13 @@ else {
         mkdir $profileDir | Out-Null
     }
 
-    Set-Content $PROFILE -Value $profileContent
+    if ($needSave) {
+        Set-Content $PROFILE -Value $profileContent
+    }
 }
 
 if ($IsLinux) {
-    b1k_print "This Shell Script will install dependencies for axmol" 
-    Write-Host "Are you continue? (y/n) " -NoNewline
+    Write-Host "Are you continue install linux dependencies for axmol? (y/n) " -NoNewline
     $answer = Read-Host
     if ($answer -like 'y*') {
         b1k_print "It will take few minutes"
@@ -111,7 +115,7 @@ if ($IsWin) {
     }
     $parentProcessName = $parentProcess.ProcessName
     if ($parentProcessName -like "explorer") {
-        Write-Host "setup successfully, press any key to exit . . ." -NoNewline
+        b1k_print "setup successfully, press any key to exit . . ." -NoNewline
         cmd /c pause 1>$null
         exit 0
     }
