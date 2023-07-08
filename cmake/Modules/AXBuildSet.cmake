@@ -7,6 +7,12 @@ set(CMAKE_DEBUG_TARGET_PROPERTIES
     # POSITION_INDEPENDENT_CODE
 )
 
+# The ``OLD`` behavior for this policy is to set ``OpenGL_GL_PREFERENCE`` to
+# ``LEGACY``.  The ``NEW`` behavior for this policy is to set
+# ``OpenGL_GL_PREFERENCE`` to ``GLVND``.
+# need review those libs: X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m
+cmake_policy(SET CMP0072 NEW)
+
 # some useful variables for every one ax project
 set(ENGINE_BINARY_PATH ${PROJECT_BINARY_DIR}/engine)
 
