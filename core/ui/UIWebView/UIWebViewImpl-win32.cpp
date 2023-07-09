@@ -28,14 +28,14 @@
 
 #    include "UIWebViewImpl-win32.h"
 #    include "UIWebView.h"
-#    include "base/CCDirector.h"
-#    include "platform/CCFileUtils.h"
-#    include "platform/CCGLView.h"
+#    include "base/Director.h"
+#    include "platform/FileUtils.h"
+#    include "platform/GLView.h"
 #    include "ui/UIHelper.h"
 #    include "rapidjson/document.h"
 #    include "rapidjson/stringbuffer.h"
 #    include "rapidjson/writer.h"
-#    include "base/ccUtils.h"
+#    include "base/Utils.h"
 
 #    define WIN32_LEAN_AND_MEAN
 #    include <Shlwapi.h>
@@ -52,7 +52,7 @@
 #    pragma comment(lib, "ole32.lib")
 #    pragma comment(lib, "oleaut32.lib")
 
-#    include "platform/CCPlatformConfig.h"
+#    include "platform/PlatformConfig.h"
 
 #    include "ntcvt/ntcvt.hpp"
 

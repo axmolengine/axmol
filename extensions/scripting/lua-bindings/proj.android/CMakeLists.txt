@@ -5,7 +5,7 @@ set(target_name lua_android_spec)
 project(${target_name})
 
 set(${target_name}_src
-  ../manual/platform/android/CCLuaJavaBridge.cpp
+  ../manual/platform/android/LuaJavaBridge.cpp
   ../manual/platform/android/jni/LuaBridge.cpp
 )
 

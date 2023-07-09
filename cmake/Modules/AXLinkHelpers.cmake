@@ -9,7 +9,7 @@ endif()
 function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" EXCLUDE thirdparty_LIB_DEPENDS)
 
-    message(STATUS "AX_USE_COMPAT_GL=${AX_USE_COMPAT_GL}")
+    message(STATUS "AX_USE_ANGLE=${AX_USE_ANGLE}")
 
     message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
     message(STATUS "AX_ENABLE_MFMEDIA=${AX_ENABLE_MFMEDIA}")
@@ -25,7 +25,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     message(STATUS "AX_ENABLE_EXT_EFFEKSEER=${AX_ENABLE_EXT_EFFEKSEER}")
     message(STATUS "AX_ENABLE_EXT_LUA=${AX_ENABLE_EXT_LUA}")
     
-    ax_config_pred(${APP_NAME} AX_USE_COMPAT_GL)
+    ax_config_pred(${APP_NAME} AX_USE_ANGLE)
     ax_config_pred(${APP_NAME} AX_ENABLE_MFMEDIA)
     ax_config_pred(${APP_NAME} AX_ENABLE_MSEDGE_WEBVIEW2)
 
@@ -109,7 +109,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         webp
         pugixml
         xxhash
-        lz4
+        fastlz
         clipper2
         ConvertUTF
         poly2tri
@@ -157,10 +157,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         endif()
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
-            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/windows/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
-            "${AX_ROOT_DIR}/thirdparty/curl/prebuilt/windows/${ARCH_ALIAS}/libcurl.dll"
-            "${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/windows/${ARCH_ALIAS}/zlib1.dll"
+            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/thirdparty/curl/prebuilt/${platform_name}/${ARCH_ALIAS}/libcurl.dll"
+            "${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/${platform_name}/${ARCH_ALIAS}/zlib1.dll"
             "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
             $<TARGET_FILE_DIR:${APP_NAME}>)
 
@@ -182,12 +182,12 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         endif()
 
         # Copy windows angle binaries
-        if (AX_USE_COMPAT_GL)
+        if (AX_USE_ANGLE)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libGLESv2.dll
-                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/libEGL.dll
-                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/windows/${ARCH_ALIAS}/d3dcompiler_47.dll
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libEGL.dll
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/d3dcompiler_47.dll
                 $<TARGET_FILE_DIR:${APP_NAME}>
             )
         endif()

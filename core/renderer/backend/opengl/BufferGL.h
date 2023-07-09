@@ -25,8 +25,8 @@
 #pragma once
 
 #include "../Buffer.h"
-#include "platform/CCGL.h"
-#include "base/CCEventListenerCustom.h"
+#include "platform/GL.h"
+#include "base/EventListenerCustom.h"
 
 #include <vector>
 

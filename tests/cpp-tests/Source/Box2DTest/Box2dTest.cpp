@@ -26,8 +26,8 @@
 #include "Box2dTest.h"
 #include "../testResource.h"
 #include "extensions/axmol-ext.h"
-#include "renderer/CCRenderer.h"
-#include "renderer/CCCustomCommand.h"
+#include "renderer/Renderer.h"
+#include "renderer/CustomCommand.h"
 
 USING_NS_AX;
 USING_NS_AX_EXT;

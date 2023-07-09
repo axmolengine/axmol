@@ -42,15 +42,15 @@ target_link_libraries(${PROJECT_NAME} Effekseer)
 
 if (NOT (${CMAKE_SYSTEM_NAME} MATCHES "WindowsStore"))
     target_include_directories(${PROJECT_NAME} 
-        PUBLIC "${_AX_ROOT_PATH}/thirdparty/glad/include"
-        PUBLIC "${_AX_ROOT_PATH}/core"
+        PUBLIC "${_AX_ROOT}/thirdparty/glad/include"
+        PUBLIC "${_AX_ROOT}/core"
         )
 
     target_link_libraries(${PROJECT_NAME} glad)
 else()
     target_include_directories(${PROJECT_NAME} 
-        PUBLIC "${_AX_ROOT_PATH}/thirdparty/angle/include"
-        PUBLIC "${_AX_ROOT_PATH}/core"
+        PUBLIC "${_AX_ROOT}/thirdparty/angle/include"
+        PUBLIC "${_AX_ROOT}/core"
         )
 endif()
 

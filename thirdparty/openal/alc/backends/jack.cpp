@@ -22,23 +22,26 @@
 
 #include "jack.h"
 
+#include <array>
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
 #include <memory.h>
-
-#include <array>
+#include <mutex>
 #include <thread>
 #include <functional>
+#include <vector>
 
+#include "albit.h"
 #include "alc/alconfig.h"
 #include "alnumeric.h"
+#include "alsem.h"
+#include "althrd_setname.h"
 #include "core/device.h"
 #include "core/helpers.h"
 #include "core/logging.h"
 #include "dynload.h"
 #include "ringbuffer.h"
-#include "threads.h"
 
 #include <jack/jack.h>
 #include <jack/ringbuffer.h>
@@ -126,7 +129,7 @@ bool jack_load()
 
         error = false;
 #define LOAD_FUNC(f) do {                                                     \
-    p##f = reinterpret_cast<decltype(p##f)>(GetSymbol(jack_handle, #f));      \
+    p##f = al::bit_cast<decltype(p##f)>(GetSymbol(jack_handle, #f));          \
     if(p##f == nullptr) {                                                     \
         error = true;                                                         \
         missing_funcs += "\n" #f;                                             \
@@ -135,7 +138,7 @@ bool jack_load()
         JACK_FUNCS(LOAD_FUNC);
 #undef LOAD_FUNC
         /* Optional symbols. These don't exist in all versions of JACK. */
-#define LOAD_SYM(f) p##f = reinterpret_cast<decltype(p##f)>(GetSymbol(jack_handle, #f))
+#define LOAD_SYM(f) p##f = al::bit_cast<decltype(p##f)>(GetSymbol(jack_handle, #f))
         LOAD_SYM(jack_error_callback);
 #undef LOAD_SYM
 
@@ -167,10 +170,10 @@ struct DeviceEntry {
     { }
 };
 
-al::vector<DeviceEntry> PlaybackList;
+std::vector<DeviceEntry> PlaybackList;
 
 
-void EnumerateDevices(jack_client_t *client, al::vector<DeviceEntry> &list)
+void EnumerateDevices(jack_client_t *client, std::vector<DeviceEntry> &list)
 {
     std::remove_reference_t<decltype(list)>{}.swap(list);
 
@@ -586,7 +589,7 @@ void JackPlayback::start()
             throw al::backend_exception{al::backend_error::DeviceError, "No playback ports found"};
         }
 
-        for(size_t i{0};i < al::size(mPort) && mPort[i];++i)
+        for(size_t i{0};i < std::size(mPort) && mPort[i];++i)
         {
             if(!pnames[i])
             {

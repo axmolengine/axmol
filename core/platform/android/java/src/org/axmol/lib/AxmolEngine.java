@@ -118,7 +118,7 @@ public class AxmolEngine {
         ((AxmolActivity)sActivity).getGLSurfaceView().queueEvent(new Runnable() {
             @Override
             public void run() {
-                AxmolEngine.nativeInvoke(op, param);
+                AxmolEngine.nativeCall0(op, param);
             }
         });
     }
@@ -139,6 +139,8 @@ public class AxmolEngine {
 
             AxmolEngine.sAssetManager = activity.getAssets();
             AxmolEngine.nativeSetContext((Context)activity, AxmolEngine.sAssetManager);
+
+            AxmolMediaEngine.setContext(activity);
 
             BitmapHelper.setContext(activity);
 
@@ -249,9 +251,9 @@ public class AxmolEngine {
 
     private static native void nativeSetContext(final Object pContext, final Object pAssetManager);
 
-    private static native void nativeSetAudioDeviceInfo(boolean isSupportLowLatency, int deviceSampleRate, int audioBufferSizeInFames);
+    // private static native void nativeSetAudioDeviceInfo(boolean isSupportLowLatency, int deviceSampleRate, int audioBufferSizeInFames);
 
-    public static native void nativeInvoke(long op, long param);
+    public static native void nativeCall0(long func, long ud);
 
     public static String getPackageName() {
         return AxmolEngine.sPackageName;

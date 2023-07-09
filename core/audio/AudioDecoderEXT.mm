@@ -26,7 +26,7 @@
 
 #include "audio/AudioDecoderEXT.h"
 #include "audio/AudioMacros.h"
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 
 #import <Foundation/Foundation.h>
 
@@ -221,4 +221,4 @@ SInt64 AudioDecoderEXT::getSizeCallback(void* inClientData)
     auto* audioDecoder = (AudioDecoderEXT*)inClientData;
     return audioDecoder->_streamSize;
 }
-NS_AX_END  // namespace axmol
+NS_AX_END  // namespace ax

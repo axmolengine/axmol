@@ -25,7 +25,7 @@
 #include "Scene3DTest.h"
 
 #include "ui/CocosGUI.h"
-#include "renderer/CCRenderState.h"
+#include "renderer/RenderState.h"
 #include <spine/spine-cocos2dx.h>
 
 #include "../testResource.h"

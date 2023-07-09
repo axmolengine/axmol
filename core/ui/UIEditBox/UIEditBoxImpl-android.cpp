@@ -33,13 +33,13 @@
 #    include "ui/UIEditBox/UIEditBox.h"
 #    include <jni.h>
 #    include "platform/android/jni/JniHelper.h"
-#    include "2d/CCLabel.h"
-#    include "base/ccUTF8.h"
+#    include "2d/Label.h"
+#    include "base/UTF8.h"
 #    include "math/Vec2.h"
 #    include "ui/UIHelper.h"
-#    include "base/CCDirector.h"
-#    include "platform/CCFileUtils.h"
-#    include "yasio/stl/string_view.hpp"
+#    include "base/Director.h"
+#    include "platform/FileUtils.h"
+#    include "yasio/string_view.hpp"
 
 NS_AX_BEGIN
 

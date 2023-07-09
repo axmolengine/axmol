@@ -31,9 +31,9 @@
 
 #include "ClippingNodeTest.h"
 #include "../testResource.h"
-#include "renderer/CCRenderer.h"
+#include "renderer/Renderer.h"
 #include "renderer/backend/ProgramState.h"
-#include "renderer/ccShaders.h"
+#include "renderer/Shaders.h"
 
 USING_NS_AX;
 

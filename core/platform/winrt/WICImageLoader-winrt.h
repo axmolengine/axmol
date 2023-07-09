@@ -28,7 +28,7 @@ obtained from https://directxtk.codeplex.com
 #ifndef __WIC_IMAGE_LOADER_H__
 #define __WIC_IMAGE_LOADER_H__
 
-#include "base/ccConfig.h"
+#include "base/Config.h"
 
 
 #if AX_USE_WIC
@@ -38,7 +38,7 @@ obtained from https://directxtk.codeplex.com
 #include <stdint.h>
 #include <wincodec.h>
 
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 
 NS_AX_BEGIN
 

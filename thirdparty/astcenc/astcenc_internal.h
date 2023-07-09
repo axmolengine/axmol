@@ -1849,6 +1849,34 @@ void unpack_color_endpoints(
 	vint4& output1);
 
 /**
+ * @brief Unpack an LDR RGBA color that uses delta encoding.
+ *
+ * @param      input0    The packed endpoint 0 color.
+ * @param      input1    The packed endpoint 1 color deltas.
+ * @param[out] output0   The unpacked endpoint 0 color.
+ * @param[out] output1   The unpacked endpoint 1 color.
+ */
+void rgba_delta_unpack(
+	vint4 input0,
+	vint4 input1,
+	vint4& output0,
+	vint4& output1);
+
+/**
+ * @brief Unpack an LDR RGBA color that uses direct encoding.
+ *
+ * @param      input0    The packed endpoint 0 color.
+ * @param      input1    The packed endpoint 1 color.
+ * @param[out] output0   The unpacked endpoint 0 color.
+ * @param[out] output1   The unpacked endpoint 1 color.
+ */
+void rgba_unpack(
+	vint4 input0,
+	vint4 input1,
+	vint4& output0,
+	vint4& output1);
+
+/**
  * @brief Unpack a set of quantized and decimated weights.
  *
  * TODO: Can we skip this for non-decimated weights now that the @c scb is

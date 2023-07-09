@@ -42,13 +42,13 @@
 #include <stdlib.h>
 #include <set>
 
-#include "base/CCData.h"
-#include "base/ccMacros.h"
-#include "platform/CCFileUtils.h"
+#include "base/Data.h"
+#include "base/Macros.h"
+#include "platform/FileUtils.h"
 #include <map>
 #include <mutex>
 
-#include "yasio/stl/string_view.hpp"
+#include "yasio/string_view.hpp"
 
 // minizip 1.2.0 is same with other platforms
 #define unzGoToFirstFile64(A, B, C, D) unzGoToFirstFile2(A, B, C, D, NULL, 0, NULL, 0)

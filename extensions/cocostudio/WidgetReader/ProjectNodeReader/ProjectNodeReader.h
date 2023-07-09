@@ -25,7 +25,7 @@
 #ifndef __cocos2d_libs__ProjectNodeReader__
 #define __cocos2d_libs__ProjectNodeReader__
 
-#include "base/CCRef.h"
+#include "base/Ref.h"
 #include "CocosStudioExport.h"
 #include "WidgetReader/NodeReaderProtocol.h"
 

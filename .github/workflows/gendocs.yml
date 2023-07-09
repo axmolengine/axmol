@@ -1,0 +1,36 @@
+name: gendocs
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on: 
+  push:
+    branches:
+      - dev
+    paths:
+      - core/**/*
+      - docs/**/*
+      - .github/workflows/gendocs.yml
+  workflow_dispatch:
+    
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    # Build the HTML documentation
+    - name: Build HTML documentation
+      shell: pwsh
+      run: ./tools/ci/gendocs.ps1
+    
+    # Deploy the HTML documentation to GitHub Pages
+    - name: GH Pages Deployment
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/html/
+        enable_jekyll: false
+        allow_empty_commit: false
+        force_orphan: true
+        publish_branch: gh-pages

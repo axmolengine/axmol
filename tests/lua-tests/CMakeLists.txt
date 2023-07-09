@@ -13,24 +13,23 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
 
     set(_AX_ROOT "$ENV{AX_ROOT}")
     if(NOT (_AX_ROOT STREQUAL ""))
-        set(_AX_ROOT_PATH "${_AX_ROOT}")
-        file(TO_CMAKE_PATH ${_AX_ROOT_PATH} _AX_ROOT_PATH) # string(REPLACE "\\" "/" _AX_ROOT_PATH ${_AX_ROOT_PATH})
+        file(TO_CMAKE_PATH ${_AX_ROOT} _AX_ROOT) # string(REPLACE "\\" "/" _AX_ROOT ${_AX_ROOT})
         message(STATUS "Using system env var _AX_ROOT=${_AX_ROOT}")
     else()
-        message(FATAL_ERROR "Please run setup.py add system env var 'AX_ROOT' to specific the engine root")
+        message(FATAL_ERROR "Please run setup.ps1 add system env var 'AX_ROOT' to specific the engine root")
     endif()
-    set(CMAKE_MODULE_PATH ${_AX_ROOT_PATH}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
     include(AXBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
 
     set(_AX_USE_PREBUILT FALSE)
-    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${_AX_ROOT_PATH}/${AX_PREBUILT_DIR})
+    if (WIN32 AND DEFINED AX_PREBUILT_DIR AND IS_DIRECTORY ${_AX_ROOT}/${AX_PREBUILT_DIR})
         set(_AX_USE_PREBUILT TRUE)
     endif()
 
     if (NOT _AX_USE_PREBUILT)
-        add_subdirectory(${_AX_ROOT_PATH}/core ${ENGINE_BINARY_PATH}/axmol/core)
+        add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
     endif()
 endif()
 
@@ -47,7 +46,7 @@ set(GAME_INC_DIRS
 )
 
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
-set(engine_script_folder "${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/script")
+set(engine_script_folder "${_AX_ROOT}/extensions/scripting/lua-bindings/script")
 
 if(APPLE)
     ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
@@ -85,7 +84,7 @@ elseif(WINDOWS)
              )
     else()
         ax_setup_winrt_sources()
-        ax_mark_multi_resources(res_files RES_TO "Content/res" FOLDERS "${_AX_ROOT_PATH}/tests/cpp-tests/Content")
+        ax_mark_multi_resources(res_files RES_TO "Content/res" FOLDERS "${_AX_ROOT}/tests/cpp-tests/Content")
         list(APPEND common_content_files ${res_files})
     endif()
     list(APPEND GAME_SOURCE ${common_content_files})
@@ -148,7 +147,7 @@ else()
     # whole archive for jni
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 
-    add_subdirectory(${_AX_ROOT_PATH}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
+    add_subdirectory(${_AX_ROOT}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
     if(${CMAKE_ANDROID_ARCH_ABI} STREQUAL "x86")
         #add `-Wl,--no-warn-shared-textrel` to fix warning "shared library text segment is not shareable clang"
         target_link_libraries(${APP_NAME} -Wl,--whole-archive lua_android_spec -Wl,--no-whole-archive -Wl,--no-warn-shared-textrel)
@@ -165,7 +164,7 @@ endif()
 
 # The optional thirdparties(not dependent by engine)
 if (AX_WITH_YAML_CPP)
-    list(APPEND GAME_INC_DIRS "${_AX_ROOT_PATH}/thirdparty/yaml-cpp/include")
+    list(APPEND GAME_INC_DIRS "${_AX_ROOT}/thirdparty/yaml-cpp/include")
 endif()
 
 target_include_directories(${APP_NAME} PRIVATE ${GAME_INC_DIRS})
@@ -205,7 +204,7 @@ elseif(WINDOWS AND (NOT WINRT))
 endif()
 
 if ((NOT APPLE) AND (NOT WINRT))
-    ax_sync_target_res(${APP_NAME} LINK_TO "${CMAKE_CURRENT_SOURCE_DIR}/Content/res" SYNC_TARGET_ID "1" FOLDERS "${_AX_ROOT_PATH}/tests/cpp-tests/Content" SYM_LINK 1)
+    ax_sync_target_res(${APP_NAME} LINK_TO "${CMAKE_CURRENT_SOURCE_DIR}/Content/res" SYNC_TARGET_ID "1" FOLDERS "${_AX_ROOT}/tests/cpp-tests/Content" SYM_LINK 1)
 
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
     if (NOT _AX_TOP_LEVEL_APP)
@@ -228,8 +227,8 @@ endif()
 if (_AX_USE_PREBUILT) # support windows and linux
     use_ax_compile_define(${APP_NAME})
 
-    include(${_AX_ROOT_PATH}/cmake/Modules/AXLinkHelpers.cmake)
-    ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT_PATH} ${AX_PREBUILT_DIR})
+    include(${_AX_ROOT}/cmake/Modules/AXLinkHelpers.cmake)
+    ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT} ${AX_PREBUILT_DIR})
 endif()
 
 if (NOT DEFINED BUILD_ENGINE_DONE)

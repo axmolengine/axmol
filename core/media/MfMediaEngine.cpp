@@ -13,7 +13,7 @@
 
 #    include "MFUtils.h"
 
-#    include "yasio/stl/string_view.hpp"
+#    include "yasio/string_view.hpp"
 
 NS_AX_BEGIN
 
@@ -124,14 +124,14 @@ bool MfMediaEngine::Initialize()
     return m_mediaEngine != nullptr;
 }
 
-bool MfMediaEngine::SetLoop(bool bLoop)
+bool MfMediaEngine::setLoop(bool bLoop)
 {
     if (m_mediaEngine)
         return SUCCEEDED(m_mediaEngine->SetLoop(bLoop));
     return false;
 }
 
-bool MfMediaEngine::SetRate(double fRate)
+bool MfMediaEngine::setRate(double fRate)
 {
     if (m_mediaEngine)
         return SUCCEEDED(m_mediaEngine->SetPlaybackRate(fRate));
@@ -139,10 +139,12 @@ bool MfMediaEngine::SetRate(double fRate)
     return false;
 }
 
-bool MfMediaEngine::Play()
+bool MfMediaEngine::play()
 {
     if (m_state == MEMediaState::Playing)
         return true;
+
+    m_bPlaybackEnded = false;
 
     HRESULT hr = S_OK;
     if (m_mediaEngine)
@@ -155,7 +157,7 @@ bool MfMediaEngine::Play()
     return SUCCEEDED(hr);
 }
 
-bool MfMediaEngine::Pause()
+bool MfMediaEngine::pause()
 {
     if (m_mediaEngine)
         return SUCCEEDED(m_mediaEngine->Pause());
@@ -170,10 +172,8 @@ void MfMediaEngine::SetMuted(bool muted)
     }
 }
 
-bool MfMediaEngine::Open(std::string_view sourceUri)
+bool MfMediaEngine::open(std::string_view sourceUri)
 {
-    if (cxx20::starts_with(sourceUri, FILE_URL_SCHEME))
-        sourceUri.remove_prefix(FILE_URL_SCHEME.length());
     auto bstrUrl = ntcvt::from_chars(sourceUri);
 
     m_readyToPlay = false;
@@ -183,7 +183,7 @@ bool MfMediaEngine::Open(std::string_view sourceUri)
     return false;
 }
 
-bool MfMediaEngine::Close()
+bool MfMediaEngine::close()
 {
     if (m_state == MEMediaState::Closed)
         return true;
@@ -197,7 +197,7 @@ bool MfMediaEngine::Close()
     return false;
 }
 
-bool MfMediaEngine::Stop()
+bool MfMediaEngine::stop()
 {
     if (m_mediaEngine)
     {
@@ -212,7 +212,7 @@ bool MfMediaEngine::Stop()
             if (m_state == MEMediaState::Paused)
             {
                 m_state = MEMediaState::Stopped;
-                FireMediaEvent(MEMediaEventType::Stopped);
+                fireMediaEvent(MEMediaEventType::Stopped);
             }
         }
         return SUCCEEDED(hr);
@@ -220,14 +220,14 @@ bool MfMediaEngine::Stop()
     return false;
 }
 
-bool MfMediaEngine::SetCurrentTime(double fPosInSeconds)
+bool MfMediaEngine::setCurrentTime(double fPosInSeconds)
 {
     if (m_mediaEngine)
         return SUCCEEDED(m_mediaEngine->SetCurrentTime(fPosInSeconds));
     return false;
 }
 
-bool MfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
+bool MfMediaEngine::transferVideoFrame()
 {
     if (m_mediaEngine != nullptr && m_state == MEMediaState::Playing)
     {
@@ -254,7 +254,7 @@ bool MfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> 
             BYTE* data{nullptr};
             AX_BREAK_IF(FAILED(lockedData->GetDataPointer(&bufferSize, &data)));
 
-            callback(MEVideoFrame{data, nullptr, bufferSize, MEVideoPixelDesc{MEVideoPixelFormat::BGR32, m_videoExtent},
+            _onVideoFrame(MEVideoFrame{data, nullptr, bufferSize, MEVideoPixelDesc{MEVideoPixelFormat::BGR32, m_videoExtent},
                                   m_videoExtent});
             return true;
         } while (false);
@@ -276,34 +276,34 @@ void MfMediaEngine::OnMediaEngineEvent(uint32_t meEvent)
         // Here we auto-play when ready...
         if (m_readyToPlay)
         {
-            FireMediaEvent(MEMediaEventType::Playing);
-            Play();
+            fireMediaEvent(MEMediaEventType::Playing);
+            play();
         }
         break;
 
     case MF_MEDIA_ENGINE_EVENT_PLAY:
         m_state = MEMediaState::Playing;
-        FireMediaEvent(MEMediaEventType::Playing);
+        fireMediaEvent(MEMediaEventType::Playing);
         break;
 
     case MF_MEDIA_ENGINE_EVENT_PAUSE:
         if (!m_stopping)
         {
             m_state = MEMediaState::Paused;
-            FireMediaEvent(MEMediaEventType::Paused);
+            fireMediaEvent(MEMediaEventType::Paused);
         }
         else
         {
             m_state = MEMediaState::Stopped;
-            FireMediaEvent(MEMediaEventType::Stopped);
+            fireMediaEvent(MEMediaEventType::Stopped);
 
             m_stopping = false;
         }
         break;
 
     case MF_MEDIA_ENGINE_EVENT_ENDED:
-        m_state = MEMediaState::Completed;
-        FireMediaEvent(MEMediaEventType::Completed);
+        m_bPlaybackEnded = true;
+        fireMediaEvent(MEMediaEventType::Stopped);
         break;
 
     case MF_MEDIA_ENGINE_EVENT_TIMEUPDATE:
@@ -311,7 +311,7 @@ void MfMediaEngine::OnMediaEngineEvent(uint32_t meEvent)
 
     case MF_MEDIA_ENGINE_EVENT_ERROR:
         m_state = MEMediaState::Error;
-        FireMediaEvent(MEMediaEventType::Error);
+        fireMediaEvent(MEMediaEventType::Error);
 #    ifdef _DEBUG
         if (m_mediaEngine)
         {

@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/CCFileUtils.h"
+#include "platform/FileUtils.h"
 #include "WidgetReader/Particle3DReader/Particle3DReader.h"
 
 #include "CSParseBinary_generated.h"
@@ -32,7 +32,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 
-#include "Particle3D/PU/CCPUParticleSystem3D.h"
+#include "Particle3D/PU/PUParticleSystem3D.h"
 
 USING_NS_AX;
 using namespace flatbuffers;

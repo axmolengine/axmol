@@ -25,11 +25,11 @@
 #include "scripting/lua-bindings/manual/cocostudio/axlua_csloader_manual.hpp"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/CCLuaValue.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "ActionTimeline/CCActionTimeline.h"
+#include "scripting/lua-bindings/manual/LuaValue.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "ActionTimeline/ActionTimeline.h"
 #include "ActionTimeline/CSLoader.h"
-#include "ActionTimeline/CCActionTimelineNode.h"
+#include "ActionTimeline/ActionTimelineNode.h"
 
 int axlua_csloader_CSLoader_createTimeline(lua_State* tolua_S)
 {

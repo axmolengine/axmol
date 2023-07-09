@@ -30,7 +30,7 @@
 
 #include <mutex>
 
-#include "2d/CCNode.h"
+#include "2d/Node.h"
 #include "extensions/ExtensionMacros.h"
 #include "extensions/ExtensionExport.h"
 

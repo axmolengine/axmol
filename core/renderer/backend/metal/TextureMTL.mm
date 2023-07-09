@@ -26,7 +26,7 @@
 
 #include "TextureMTL.h"
 #include "UtilsMTL.h"
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 #include "../PixelFormatUtils.h"
 
 NS_AX_BACKEND_BEGIN

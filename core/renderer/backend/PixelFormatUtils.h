@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "CCPlatformMacros.h"
-#include "renderer/CCTexture2D.h"
+#include "PlatformMacros.h"
+#include "renderer/Texture2D.h"
 
 NS_AX_BEGIN
 

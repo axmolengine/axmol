@@ -54,7 +54,7 @@
 
 // #endif
 
-#include "platform/CCGL.h"
+#include "platform/GL.h"
 
 namespace EffekseerRendererGL
 {

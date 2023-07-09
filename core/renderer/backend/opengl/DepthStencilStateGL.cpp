@@ -23,7 +23,7 @@
  ****************************************************************************/
 
 #include "DepthStencilStateGL.h"
-#include "platform/CCGL.h"
+#include "platform/GL.h"
 
 #include "renderer/backend/opengl/MacrosGL.h"
 #include "renderer/backend/opengl/UtilsGL.h"

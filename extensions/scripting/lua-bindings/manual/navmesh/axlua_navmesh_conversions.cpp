@@ -24,11 +24,11 @@
  ****************************************************************************/
 
 #include "scripting/lua-bindings/manual/navmesh/axlua_navmesh_conversions.h"
-#include "base/ccConfig.h"
+#include "base/Config.h"
 #if AX_USE_NAVMESH
 
 #    include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#    include "navmesh/CCNavMeshAgent.h"
+#    include "navmesh/NavMeshAgent.h"
 
 #    if _AX_DEBUG >= 1
 extern void luaval_to_native_err(lua_State* L, const char* msg, tolua_Error* err, const char* funcName);

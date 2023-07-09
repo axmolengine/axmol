@@ -5,13 +5,15 @@
 - AX_ENABLE_XXX for core feature: 
   - AX_ENABLE_MSEDGE_WEBVIEW2: whether enable msedge webview2, default: `TRUE`
   - AX_ENABLE_MFMEDIA: whether enable microsoft media foundation for windows video player support, default: `TRUE`
+  - AX_ENABLE_VLC_MEDIA: whether enable libvlc media, default: `TRUE on Linux`, `FALSE on Windows`, not support other platforms
 - AX_USE_XXX:
   - AX_USE_ALSOFT: whether use openal-soft for all platforms
     - Apple platform: Use openal-soft instead system deprecated: `OpenAL.framework`
     - Other platforms: Always use openal-soft even this option not enabled
-  - AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: `FALSE`
+  - AX_USE_ANGLE: whether use compat gl as renderer backend, default: `FALSE`
     - windows: whether use angleproject as GLES2 backend
     - apple: whether use GLES instead Metal backend
+  - AX_USE_COMPAT_GL: deprecated, use AX_USE_ANGLE instead
   - AX_USE_GLAD: 
     - Android: use glad load for GLES API loads, default `FALSE`
     - Other platforms: Always use glad even this option not enabled

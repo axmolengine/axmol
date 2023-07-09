@@ -19,7 +19,7 @@
 #    include "MFUtils.h"
 
 #    include "ntcvt/ntcvt.hpp"
-#    include "yasio/core/sz.hpp"
+#    include "yasio/sz.hpp"
 
 NS_AX_BEGIN
 
@@ -331,9 +331,9 @@ HRESULT WmfMediaEngine::QueryInterface(REFIID iid, void** ppv)
 //  Description:  Opens a URL for playback.
 /////////////////////////////////////////////////////////////////////////
 
-bool WmfMediaEngine::Open(std::string_view sourceUri)
+bool WmfMediaEngine::open(std::string_view sourceUri)
 {
-    Close();
+    close();
 
     if (sourceUri.empty())
         return false;
@@ -416,7 +416,7 @@ bool WmfMediaEngine::Open(std::string_view sourceUri)
     return true;
 }
 
-bool WmfMediaEngine::Close()
+bool WmfMediaEngine::close()
 {
     if (m_bOpenPending)
         WaitForSingleObject(m_hOpenEvent, INFINITE);
@@ -424,10 +424,10 @@ bool WmfMediaEngine::Close()
     ClearPendingBuffers();
 
     HRESULT hr = S_OK;
-    auto state = GetState();
-    if (state != MEMediaState::Closing && state != MEMediaState::Closed)
+    auto state = getState();
+    if (state != MEMediaState::Closed)
     {
-        Stop();
+        this->stop();
         hr = CloseSession();
     }
     return SUCCEEDED(hr);
@@ -479,7 +479,7 @@ HRESULT WmfMediaEngine::Invoke(IMFAsyncResult* pResult)
     // NOTE: When IMFMediaSession::Close is called, MESessionClosed is NOT
     // necessarily the next event that we will receive. We may receive
     // any number of other events before receiving MESessionClosed.
-    if (m_state != MEMediaState::Closing)
+    if (!m_bClosePending)
     {
         HandleEvent(pEvent.Get());
 
@@ -507,7 +507,7 @@ void WmfMediaEngine::ClearPendingBuffers()
     m_frameBuffer2.clear();
 }
 
-bool WmfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback)
+bool WmfMediaEngine::transferVideoFrame()
 {
     if (m_state != MEMediaState::Playing || m_frameBuffer1.empty())
         return false;
@@ -551,7 +551,7 @@ bool WmfMediaEngine::TransferVideoFrame(std::function<void(const MEVideoFrame&)>
         }
 #    endif
         // check data
-        callback(frame);
+        _onVideoFrame(frame);
 
         m_frameBuffer2.clear();
 
@@ -625,17 +625,17 @@ HRESULT WmfMediaEngine::HandleEvent(IMFMediaEvent* pEvent)
             break;
         case MESessionStarted:
             OnSessionStart(hrStatus);
-            FireMediaEvent(MEMediaEventType::Playing);
+            fireMediaEvent(MEMediaEventType::Playing);
             break;
 
         case MESessionStopped:
             OnSessionStop(hrStatus);
-            FireMediaEvent(MEMediaEventType::Stopped);
+            fireMediaEvent(MEMediaEventType::Stopped);
             break;
 
         case MESessionPaused:
             OnSessionPause(hrStatus);
-            FireMediaEvent(MEMediaEventType::Paused);
+            fireMediaEvent(MEMediaEventType::Paused);
             break;
 
         case MESessionRateChanged:
@@ -656,7 +656,8 @@ HRESULT WmfMediaEngine::HandleEvent(IMFMediaEvent* pEvent)
 
         case MESessionEnded:
             OnSessionEnded(hrStatus);
-            FireMediaEvent(MEMediaEventType::Completed);
+            m_bPlaybackEnded = true;
+            fireMediaEvent(MEMediaEventType::Stopped);
             break;
 
         case MESessionCapabilitiesChanged:
@@ -747,7 +748,7 @@ HRESULT WmfMediaEngine::OnTopologyReady(IMFMediaEvent* pEvent)
 
 // Starts playback.
 
-bool WmfMediaEngine::Play()
+bool WmfMediaEngine::play()
 {
     HRESULT hr = S_OK;
 
@@ -780,7 +781,7 @@ bool WmfMediaEngine::Play()
 
 // Pauses playback.
 
-bool WmfMediaEngine::Pause()
+bool WmfMediaEngine::pause()
 {
     HRESULT hr = S_OK;
 
@@ -811,7 +812,7 @@ bool WmfMediaEngine::Pause()
 
 // Stops playback.
 
-bool WmfMediaEngine::Stop()
+bool WmfMediaEngine::stop()
 {
     HRESULT hr = S_OK;
 
@@ -940,7 +941,7 @@ HRESULT WmfMediaEngine::Scrub(BOOL bScrub)
             m_fPrevRate = m_nominal.fRate;
         }
 
-        hr = SetRate(0.0f) ? S_OK : E_FAIL;
+        hr = setRate(0.0f) ? S_OK : E_FAIL;
     }
     else
     {
@@ -948,7 +949,7 @@ HRESULT WmfMediaEngine::Scrub(BOOL bScrub)
 
         if (GetNominalRate() == 0)
         {
-            hr = SetRate(m_fPrevRate) ? S_OK : E_FAIL;
+            hr = setRate(m_fPrevRate) ? S_OK : E_FAIL;
         }
     }
 
@@ -982,7 +983,7 @@ HRESULT WmfMediaEngine::FastForward()
         fTarget = 1.0f;
     }
 
-    hr = SetRate(fTarget) ? S_OK : E_FAIL;
+    hr = setRate(fTarget) ? S_OK : E_FAIL;
 
     return hr;
 }
@@ -1002,12 +1003,12 @@ HRESULT WmfMediaEngine::Rewind()
         fTarget = -1.0f;
     }
 
-    SetRate(fTarget);
+    setRate(fTarget);
 
     return hr;
 }
 
-bool WmfMediaEngine::SetRate(double lfRate)
+bool WmfMediaEngine::setRate(double lfRate)
 {
     HRESULT hr = S_OK;
     BOOL bThin = FALSE;
@@ -1114,6 +1115,7 @@ HRESULT WmfMediaEngine::StartPlayback(const MFTIME* hnsPosition)
         }
     }
 
+    m_bPlaybackEnded = false;
     hr = m_pSession->Start(NULL, &varStart);
 
     // Note: Start is an asynchronous operation. However, we
@@ -1162,7 +1164,7 @@ HRESULT WmfMediaEngine::CommitRateChange(float fRate, BOOL bThin)
             assert(hnsSystemTime != 0);
 
             // Stop and set the rate
-            if (!Stop())
+            if (!stop())
             {
                 hr = E_FAIL;
                 goto done;
@@ -1193,7 +1195,7 @@ HRESULT WmfMediaEngine::CommitRateChange(float fRate, BOOL bThin)
             // This transisition requires the paused state.
 
             // Pause and set the rate.
-            if (!Pause())
+            if (!pause())
             {
                 hr = E_FAIL;
                 goto done;
@@ -1257,15 +1259,15 @@ HRESULT WmfMediaEngine::UpdatePendingCommands(Command cmd)
                 break;
 
             case CmdStart:
-                Play();
+                play();
                 break;
 
             case CmdPause:
-                Pause();
+                pause();
                 break;
 
             case CmdStop:
-                Stop();
+                stop();
                 break;
 
             case CmdSeek:
@@ -1424,7 +1426,7 @@ HRESULT WmfMediaEngine::CloseSession()
     {
         DWORD dwWaitResult = 0;
 
-        m_state = MEMediaState::Closing;
+        m_bClosePending = true;
 
         CHECK_HR(hr = m_pSession->Close());
 
@@ -1464,6 +1466,7 @@ HRESULT WmfMediaEngine::CloseSession()
 
     m_state    = MEMediaState::Closed;
     m_bPending = false;
+    m_bClosePending = false;
 
 done:
     return hr;

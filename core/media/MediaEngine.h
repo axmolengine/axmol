@@ -2,8 +2,8 @@
 #pragma once
 
 #if !defined(AXME_NO_AXMOL)
-#    include "base/CCConsole.h"
-#    include "platform/CCPlatformMacros.h"
+#    include "base/Console.h"
+#    include "platform/PlatformMacros.h"
 #    define AXME_TRACE AXLOG
 #else
 #    define AXME_TRACE printf
@@ -14,7 +14,7 @@
 #    define AX_BREAK_IF(cond) \
         if (cond)             \
         break
-#define USING_NS_AX using namespace ax
+#    define USING_NS_AX using namespace ax
 #endif
 
 // #define AXME_USE_IMFME 1
@@ -26,21 +26,19 @@
 #include <functional>
 #include <memory>
 #include <chrono>
-#include <string_view>
-#include "yasio/core/byte_buffer.hpp"
+
+#include "yasio/string_view.hpp"
+#include "yasio/byte_buffer.hpp"
 
 using namespace std::string_view_literals;
 
 NS_AX_BEGIN
-
-static constexpr std::string_view FILE_URL_SCHEME = "file://"sv;
 
 enum class MEMediaEventType
 {
     Playing = 0,
     Paused,
     Stopped,
-    Completed,
     Error,
 };
 
@@ -52,25 +50,20 @@ enum class MEMediaState
     /** Media has been closed and cannot be played again. */
     Closed,
 
-    Closing,
-
-    /** Unrecoverable error occurred during playback. */
-    Error,
-
-    /** Playback has been paused, but can be resumed. */
-    Paused,
+    /** Media is being prepared for playback. */
+    Preparing,
 
     /** Media is currently playing. */
     Playing,
 
-    /** Media is being prepared for playback. */
-    Preparing,
+    /** Playback has been paused, but can be resumed. */
+    Paused,
 
     /** Playback has been stopped, but can be restarted. */
     Stopped,
 
-    /** Playback has been completed, but can be restarted. */
-    Completed,
+    /** Unrecoverable error occurred during playback. */
+    Error,
 };
 
 /**
@@ -89,16 +82,19 @@ enum class MEVideoPixelFormat
     BGR32,
 };
 
-using MEMediaEventCallback = std::function<void(MEMediaEventType)>;
-
 struct MEIntPoint
 {
     MEIntPoint() : x(0), y(0) {}
     MEIntPoint(int x_, int y_) : x(x_), y(y_) {}
+    bool equals(const MEIntPoint& rhs) const { return this->x == rhs.x && this->y == rhs.y; }
+    void set(int x_, int y_)
+    {
+        this->x = x_;
+        this->y = y_;
+    }
+
     int x;
     int y;
-
-    bool equals(const MEIntPoint& rhs) const { return this->x == rhs.x && this->y == rhs.y; }
 };
 
 #if defined(_DEBUG) || !defined(_NDEBUG)
@@ -161,33 +157,63 @@ struct MEVideoFrame
 };
 
 //
+// file uri helper: https://www.ietf.org/rfc/rfc3986.txt
+//
+static constexpr std::string_view LOCAL_FILE_URI_PREFIX = "file:///"sv;  // The localhost file prefix
+
+inline std::string& path2uri(std::string& path)
+{
+    // windows: file:///D:/xxx/xxx.mp4
+    // unix: file:///home/xxx/xxx.mp4
+    // android_asset:
+    //   - file:///android_asset/xxx/xxx.mp4
+    //   - asset://android_asset/xxx/xxx.mp4
+    if (!path.empty())
+    {
+        if (path[0] == '/')
+            path.insert(0, LOCAL_FILE_URI_PREFIX.data(), LOCAL_FILE_URI_PREFIX.length() - 1);
+        else
+        {
+            if (!cxx20::starts_with(path, "assets/"sv))  // not android asset
+                path.insert(0, LOCAL_FILE_URI_PREFIX.data(), LOCAL_FILE_URI_PREFIX.length());
+            else
+                path.replace(0, "assets/"sv.length(), "file:///android_asset/");
+        }
+    }
+    return path;
+}
+
+//
 // redisigned corss-platform MediaEngine, inspired from microsoft media foundation: IMFMediaEngine
 //
 class MediaEngine
 {
 public:
     virtual ~MediaEngine() {}
-    virtual void SetMediaEventCallback(MEMediaEventCallback cb)                        = 0;
-    virtual void SetAutoPlay(bool bAutoPlay)                                           = 0;
-    virtual bool Open(std::string_view sourceUri)                                      = 0;
-    virtual bool Close()                                                               = 0;
-    virtual bool SetLoop(bool bLooping)                                                = 0;
-    virtual bool SetRate(double fRate)                                                 = 0;
-    virtual bool SetCurrentTime(double fSeekTimeInSec)                                 = 0;
-    virtual bool Play()                                                                = 0;
-    virtual bool Pause()                                                               = 0;
-    virtual bool Stop()                                                                = 0;
-    virtual MEMediaState GetState() const                                              = 0;
-    virtual bool TransferVideoFrame(std::function<void(const MEVideoFrame&)> callback) = 0;
+    virtual void setCallbacks(std::function<void(MEMediaEventType)> onMediaEvent,
+                              std::function<void(const MEVideoFrame&)> onVideoFrame) = 0;
+    virtual void setAutoPlay(bool bAutoPlay)                                         = 0;
+    virtual bool open(std::string_view sourceUri)                                    = 0;
+    virtual bool close()                                                             = 0;
+    virtual bool setLoop(bool bLooping)                                              = 0;
+    virtual bool setRate(double fRate)                                               = 0;
+    virtual bool setCurrentTime(double fSeekTimeInSec)                               = 0;
+    virtual bool play()                                                              = 0;
+    virtual bool pause()                                                             = 0;
+    virtual bool stop()                                                              = 0;
+    virtual bool isPlaybackEnded() const                                             = 0;
+    virtual MEMediaState getState() const                                            = 0;
+    virtual bool transferVideoFrame()                                                = 0;
 };
 
 class MediaEngineFactory
 {
 public:
-    virtual MediaEngine* CreateMediaEngine()         = 0;
-    virtual void DestroyMediaEngine(MediaEngine* me) = 0;
-};
+    virtual ~MediaEngineFactory() {}
+    static std::unique_ptr<MediaEngineFactory> create();
 
-std::unique_ptr<MediaEngineFactory> CreatePlatformMediaEngineFactory();
+    virtual MediaEngine* createMediaEngine()         = 0;
+    virtual void destroyMediaEngine(MediaEngine* me) = 0;
+};
 
 NS_AX_END

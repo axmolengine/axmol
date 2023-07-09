@@ -36,6 +36,7 @@
 #include <limits>
 #include <memory>
 #include <new>
+#include <optional>
 #include <stdint.h>
 #include <utility>
 
@@ -76,7 +77,6 @@
 #include "opthelpers.h"
 #include "ringbuffer.h"
 #include "strutils.h"
-#include "threads.h"
 #include "vecmat.h"
 #include "vector.h"
 
@@ -376,28 +376,28 @@ void UpsampleBFormatTransform(
 }
 
 
-inline auto& GetAmbiScales(AmbiScaling scaletype) noexcept
+constexpr auto GetAmbiScales(AmbiScaling scaletype) noexcept
 {
     switch(scaletype)
     {
-    case AmbiScaling::FuMa: return AmbiScale::FromFuMa();
-    case AmbiScaling::SN3D: return AmbiScale::FromSN3D();
-    case AmbiScaling::UHJ: return AmbiScale::FromUHJ();
+    case AmbiScaling::FuMa: return al::span{AmbiScale::FromFuMa};
+    case AmbiScaling::SN3D: return al::span{AmbiScale::FromSN3D};
+    case AmbiScaling::UHJ: return al::span{AmbiScale::FromUHJ};
     case AmbiScaling::N3D: break;
     }
-    return AmbiScale::FromN3D();
+    return al::span{AmbiScale::FromN3D};
 }
 
-inline auto& GetAmbiLayout(AmbiLayout layouttype) noexcept
+constexpr auto GetAmbiLayout(AmbiLayout layouttype) noexcept
 {
-    if(layouttype == AmbiLayout::FuMa) return AmbiIndex::FromFuMa();
-    return AmbiIndex::FromACN();
+    if(layouttype == AmbiLayout::FuMa) return al::span{AmbiIndex::FromFuMa};
+    return al::span{AmbiIndex::FromACN};
 }
 
-inline auto& GetAmbi2DLayout(AmbiLayout layouttype) noexcept
+constexpr auto GetAmbi2DLayout(AmbiLayout layouttype) noexcept
 {
-    if(layouttype == AmbiLayout::FuMa) return AmbiIndex::FromFuMa2D();
-    return AmbiIndex::FromACN2D();
+    if(layouttype == AmbiLayout::FuMa) return al::span{AmbiIndex::FromFuMa2D};
+    return al::span{AmbiIndex::FromACN2D};
 }
 
 
@@ -490,9 +490,8 @@ bool CalcEffectSlotParams(EffectSlot *slot, EffectSlot **sorted_slots, ContextBa
         auto evt_vec = ring->getWriteVector();
         if(evt_vec.first.len > 0) LIKELY
         {
-            AsyncEvent *evt{al::construct_at(reinterpret_cast<AsyncEvent*>(evt_vec.first.buf),
-                AsyncEvent::ReleaseEffectState)};
-            evt->u.mEffectState = oldstate;
+            auto &evt = InitAsyncEvent<AsyncEffectReleaseEvent>(evt_vec.first.buf);
+            evt.mEffectState = oldstate;
             ring->writeAdvance(1);
         }
         else
@@ -860,7 +859,7 @@ void CalcPanningAndFilters(Voice *voice, const float xpos, const float ypos, con
              */
             return CalcAngleCoeffs(ScaleAzimuthFront(az, 1.5f), ev, 0.0f);
         };
-        auto&& scales = GetAmbiScales(voice->mAmbiScaling);
+        const auto scales = GetAmbiScales(voice->mAmbiScaling);
         auto coeffs = calc_coeffs(Device->mRenderMode);
 
         if(!(coverage > 0.0f))
@@ -1700,22 +1699,21 @@ void SendSourceStateEvent(ContextBase *context, uint id, VChangeState state)
     auto evt_vec = ring->getWriteVector();
     if(evt_vec.first.len < 1) return;
 
-    AsyncEvent *evt{al::construct_at(reinterpret_cast<AsyncEvent*>(evt_vec.first.buf),
-        AsyncEvent::SourceStateChange)};
-    evt->u.srcstate.id = id;
+    auto &evt = InitAsyncEvent<AsyncSourceStateEvent>(evt_vec.first.buf);
+    evt.mId = id;
     switch(state)
     {
     case VChangeState::Reset:
-        evt->u.srcstate.state = AsyncEvent::SrcState::Reset;
+        evt.mState = AsyncSrcState::Reset;
         break;
     case VChangeState::Stop:
-        evt->u.srcstate.state = AsyncEvent::SrcState::Stop;
+        evt.mState = AsyncSrcState::Stop;
         break;
     case VChangeState::Play:
-        evt->u.srcstate.state = AsyncEvent::SrcState::Play;
+        evt.mState = AsyncSrcState::Play;
         break;
     case VChangeState::Pause:
-        evt->u.srcstate.state = AsyncEvent::SrcState::Pause;
+        evt.mState = AsyncSrcState::Pause;
         break;
     /* Shouldn't happen. */
     case VChangeState::Restart:
@@ -1812,7 +1810,7 @@ void ProcessVoiceChanges(ContextBase *ctx)
             }
             oldvoice->mPendingChange.store(false, std::memory_order_release);
         }
-        if(sendevt && enabledevt.test(AsyncEvent::SourceStateChange))
+        if(sendevt && enabledevt.test(al::to_underlying(AsyncEnableBits::SourceState)))
             SendSourceStateEvent(ctx, cur->mSourceID, cur->mState);
 
         next = cur->mNext.load(std::memory_order_acquire);
@@ -2165,28 +2163,26 @@ void DeviceBase::handleDisconnect(const char *msg, ...)
     IncrementRef(MixCount);
     if(Connected.exchange(false, std::memory_order_acq_rel))
     {
-        AsyncEvent evt{AsyncEvent::Disconnected};
+        AsyncEvent evt{std::in_place_type<AsyncDisconnectEvent>};
+        auto &disconnect = std::get<AsyncDisconnectEvent>(evt);
 
         va_list args;
         va_start(args, msg);
-        int msglen{vsnprintf(evt.u.disconnect.msg, sizeof(evt.u.disconnect.msg), msg, args)};
+        int msglen{vsnprintf(disconnect.msg, sizeof(disconnect.msg), msg, args)};
         va_end(args);
 
-        if(msglen < 0 || static_cast<size_t>(msglen) >= sizeof(evt.u.disconnect.msg))
-            evt.u.disconnect.msg[sizeof(evt.u.disconnect.msg)-1] = 0;
+        if(msglen < 0 || static_cast<size_t>(msglen) >= sizeof(disconnect.msg))
+            disconnect.msg[sizeof(disconnect.msg)-1] = 0;
 
         for(ContextBase *ctx : *mContexts.load())
         {
-            if(ctx->mEnabledEvts.load(std::memory_order_acquire).test(AsyncEvent::Disconnected))
+            RingBuffer *ring{ctx->mAsyncEvents.get()};
+            auto evt_data = ring->getWriteVector().first;
+            if(evt_data.len > 0)
             {
-                RingBuffer *ring{ctx->mAsyncEvents.get()};
-                auto evt_data = ring->getWriteVector().first;
-                if(evt_data.len > 0)
-                {
-                    al::construct_at(reinterpret_cast<AsyncEvent*>(evt_data.buf), evt);
-                    ring->writeAdvance(1);
-                    ctx->mEventSem.post();
-                }
+                al::construct_at(reinterpret_cast<AsyncEvent*>(evt_data.buf), evt);
+                ring->writeAdvance(1);
+                ctx->mEventSem.post();
             }
 
             if(!ctx->mStopVoicesOnDisconnect)

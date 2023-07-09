@@ -28,8 +28,8 @@ SOFTWARE.
 #ifndef YASIO__CORE_HPP
 #define YASIO__CORE_HPP
 
-#include "yasio/core/ibstream.hpp"
-#include "yasio/core/obstream.hpp"
-#include "yasio/core/io_service.hpp"
+#include "yasio/ibstream.hpp"
+#include "yasio/obstream.hpp"
+#include "yasio/io_service.hpp"
 
 #endif

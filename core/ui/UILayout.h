@@ -29,9 +29,9 @@ THE SOFTWARE.
 
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
-#include "renderer/CCCustomCommand.h"
-#include "renderer/CCGroupCommand.h"
-#include "renderer/CCCallbackCommand.h"
+#include "renderer/CustomCommand.h"
+#include "renderer/GroupCommand.h"
+#include "renderer/CallbackCommand.h"
 
 /**
  * @addtogroup ui

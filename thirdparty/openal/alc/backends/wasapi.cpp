@@ -58,7 +58,10 @@
 
 #include "albit.h"
 #include "alc/alconfig.h"
+#include "alc/events.h"
 #include "alnumeric.h"
+#include "alspan.h"
+#include "althrd_setname.h"
 #include "comptr.h"
 #include "core/converter.h"
 #include "core/device.h"
@@ -66,8 +69,15 @@
 #include "core/logging.h"
 #include "ringbuffer.h"
 #include "strutils.h"
-#include "threads.h"
 
+#if defined(ALSOFT_UWP)
+#include <collection.h>
+using namespace Platform;
+using namespace Windows::Foundation;
+using namespace Windows::Media::Devices;
+using namespace Windows::Devices::Enumeration;
+using namespace Windows::Media::Devices;
+#endif
 
 /* Some headers seem to define these as macros for __uuidof, which is annoying
  * since some headers don't declare them at all. Hopefully the ifdef is enough
@@ -79,11 +89,11 @@ DEFINE_GUID(KSDATAFORMAT_SUBTYPE_PCM, 0x00000001, 0x0000, 0x0010, 0x80, 0x00, 0x
 #ifndef KSDATAFORMAT_SUBTYPE_IEEE_FLOAT
 DEFINE_GUID(KSDATAFORMAT_SUBTYPE_IEEE_FLOAT, 0x00000003, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
 #endif
-
+#if !defined(ALSOFT_UWP)
 DEFINE_DEVPROPKEY(DEVPKEY_Device_FriendlyName, 0xa45c254e, 0xdf1c, 0x4efd, 0x80,0x20, 0x67,0xd1,0x46,0xa8,0x50,0xe0, 14);
 DEFINE_PROPERTYKEY(PKEY_AudioEndpoint_FormFactor, 0x1da5d803, 0xd492, 0x4edd, 0x8c,0x23, 0xe0,0xc0,0xff,0xee,0x7f,0x0e, 0);
 DEFINE_PROPERTYKEY(PKEY_AudioEndpoint_GUID, 0x1da5d803, 0xd492, 0x4edd, 0x8c, 0x23,0xe0, 0xc0,0xff,0xee,0x7f,0x0e, 4 );
-
+#endif
 
 namespace {
 
@@ -125,7 +135,7 @@ constexpr DWORD X71Mask{MaskFromTopBits(X7DOT1)};
 constexpr DWORD X714Mask{MaskFromTopBits(X7DOT1DOT4)};
 
 constexpr char DevNameHead[] = "OpenAL Soft on ";
-constexpr size_t DevNameHeadLen{al::size(DevNameHead) - 1};
+constexpr size_t DevNameHeadLen{std::size(DevNameHead) - 1};
 
 
 /* Scales the given reftime value, rounding the result. */
@@ -142,7 +152,7 @@ class GuidPrinter {
 public:
     GuidPrinter(const GUID &guid)
     {
-        std::snprintf(mMsg, al::size(mMsg), "{%08lx-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
+        std::snprintf(mMsg, std::size(mMsg), "{%08lx-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x}",
             DWORD{guid.Data1}, guid.Data2, guid.Data3, guid.Data4[0], guid.Data4[1], guid.Data4[2],
             guid.Data4[3], guid.Data4[4], guid.Data4[5], guid.Data4[6], guid.Data4[7]);
     }
@@ -178,28 +188,73 @@ struct DevMap {
       , endpoint_guid{std::forward<T1>(guid_)}
       , devid{std::forward<T2>(devid_)}
     { }
+    /* To prevent GCC from complaining it doesn't want to inline this. */
+    ~DevMap();
 };
+DevMap::~DevMap() = default;
 
-bool checkName(const al::vector<DevMap> &list, const std::string &name)
+bool checkName(const al::span<DevMap> list, const std::string &name)
 {
-    auto match_name = [&name](const DevMap &entry) -> bool
-    { return entry.name == name; };
+    auto match_name = [&name](const DevMap &entry) -> bool { return entry.name == name; };
     return std::find_if(list.cbegin(), list.cend(), match_name) != list.cend();
 }
 
-al::vector<DevMap> PlaybackDevices;
-al::vector<DevMap> CaptureDevices;
+
+struct DeviceList {
+    auto lock() noexcept(noexcept(mMutex.lock())) { return mMutex.lock(); }
+    auto unlock() noexcept(noexcept(mMutex.unlock())) { return mMutex.unlock(); }
+
+private:
+    std::mutex mMutex;
+    std::vector<DevMap> mPlayback;
+    std::vector<DevMap> mCapture;
+    std::wstring mPlaybackDefaultId;
+    std::wstring mCaptureDefaultId;
+
+    friend struct DeviceListLock;
+};
+struct DeviceListLock : public std::unique_lock<DeviceList> {
+    using std::unique_lock<DeviceList>::unique_lock;
+
+    auto& getPlaybackList() const noexcept { return mutex()->mPlayback; }
+    auto& getCaptureList() const noexcept { return mutex()->mCapture; }
+
+    void setPlaybackDefaultId(std::wstring_view devid) const { mutex()->mPlaybackDefaultId = devid; }
+    std::wstring_view getPlaybackDefaultId() const noexcept { return mutex()->mPlaybackDefaultId; }
+    void setCaptureDefaultId(std::wstring_view devid) const { mutex()->mCaptureDefaultId = devid; }
+    std::wstring_view getCaptureDefaultId() const noexcept { return mutex()->mCaptureDefaultId; }
+};
+
+DeviceList gDeviceList;
+
+
+#if defined(ALSOFT_UWP)
+enum EDataFlow {
+    eRender              = 0,
+    eCapture             = (eRender + 1),
+    eAll                 = (eCapture + 1),
+    EDataFlow_enum_count = (eAll + 1)
+};
+#endif
+
+#if defined(ALSOFT_UWP)
+using DeviceHandle = DeviceInformation^;
+using EventRegistrationToken = Windows::Foundation::EventRegistrationToken;
+#else
+using DeviceHandle = ComPtr<IMMDevice>;
+#endif
 
 
 using NameGUIDPair = std::pair<std::string,std::string>;
-NameGUIDPair get_device_name_and_guid(IMMDevice *device)
+static NameGUIDPair GetDeviceNameAndGuid(const DeviceHandle &device)
 {
     static constexpr char UnknownName[]{"Unknown Device Name"};
     static constexpr char UnknownGuid[]{"Unknown Device GUID"};
+#if !defined(ALSOFT_UWP)
     std::string name, guid;
 
     ComPtr<IPropertyStore> ps;
-    HRESULT hr = device->OpenPropertyStore(STGM_READ, ps.getPtr());
+    HRESULT hr = device->OpenPropertyStore(STGM_READ, al::out_ptr(ps));
     if(FAILED(hr))
     {
         WARN("OpenPropertyStore failed: 0x%08lx\n", hr);
@@ -207,22 +262,22 @@ NameGUIDPair get_device_name_and_guid(IMMDevice *device)
     }
 
     PropVariant pvprop;
-    hr = ps->GetValue(reinterpret_cast<const PROPERTYKEY&>(DEVPKEY_Device_FriendlyName), pvprop.get());
+    hr = ps->GetValue(al::bit_cast<PROPERTYKEY>(DEVPKEY_Device_FriendlyName), pvprop.get());
     if(FAILED(hr))
     {
         WARN("GetValue Device_FriendlyName failed: 0x%08lx\n", hr);
-        name += UnknownName;
+        name = UnknownName;
     }
     else if(pvprop->vt == VT_LPWSTR)
-        name += wstr_to_utf8(pvprop->pwszVal);
+        name = wstr_to_utf8(pvprop->pwszVal);
     else
     {
-        WARN("Unexpected PROPVARIANT type: 0x%04x\n", pvprop->vt);
-        name += UnknownName;
+        WARN("Unexpected Device_FriendlyName PROPVARIANT type: 0x%04x\n", pvprop->vt);
+        name = UnknownName;
     }
 
     pvprop.clear();
-    hr = ps->GetValue(reinterpret_cast<const PROPERTYKEY&>(PKEY_AudioEndpoint_GUID), pvprop.get());
+    hr = ps->GetValue(al::bit_cast<PROPERTYKEY>(PKEY_AudioEndpoint_GUID), pvprop.get());
     if(FAILED(hr))
     {
         WARN("GetValue AudioEndpoint_GUID failed: 0x%08lx\n", hr);
@@ -232,17 +287,35 @@ NameGUIDPair get_device_name_and_guid(IMMDevice *device)
         guid = wstr_to_utf8(pvprop->pwszVal);
     else
     {
-        WARN("Unexpected PROPVARIANT type: 0x%04x\n", pvprop->vt);
+        WARN("Unexpected AudioEndpoint_GUID PROPVARIANT type: 0x%04x\n", pvprop->vt);
         guid = UnknownGuid;
     }
-
+#else
+    std::string name{wstr_to_utf8(device->Name->Data())};
+    std::string guid;
+    // device->Id is DeviceInterfacePath: \\?\SWD#MMDEVAPI#{0.0.0.00000000}.{a21c17a0-fc1d-405e-ab5a-b513422b57d1}#{e6327cad-dcec-4949-ae8a-991e976a79d2}
+    Platform::String^ devIfPath = device->Id;
+    if(auto devIdStart = wcsstr(devIfPath->Data(), L"}."))
+    {
+        devIdStart += 2;  // L"}."
+        if(auto devIdStartEnd = wcschr(devIdStart, L'#'))
+        {
+            std::wstring wDevId{devIdStart, static_cast<size_t>(devIdStartEnd - devIdStart)};
+            guid = wstr_to_utf8(wDevId.c_str());
+            std::transform(guid.begin(), guid.end(), guid.begin(),
+                [](char ch) { return static_cast<char>(std::toupper(ch)); });
+        }
+    }
+    if(name.empty()) name = UnknownName;
+    if(guid.empty()) guid = UnknownGuid;
+#endif
     return std::make_pair(std::move(name), std::move(guid));
 }
-
-EndpointFormFactor get_device_formfactor(IMMDevice *device)
+#if !defined(ALSOFT_UWP)
+EndpointFormFactor GetDeviceFormfactor(IMMDevice *device)
 {
     ComPtr<IPropertyStore> ps;
-    HRESULT hr{device->OpenPropertyStore(STGM_READ, ps.getPtr())};
+    HRESULT hr{device->OpenPropertyStore(STGM_READ, al::out_ptr(ps))};
     if(FAILED(hr))
     {
         WARN("OpenPropertyStore failed: 0x%08lx\n", hr);
@@ -260,90 +333,437 @@ EndpointFormFactor get_device_formfactor(IMMDevice *device)
         WARN("Unexpected PROPVARIANT type: 0x%04x\n", pvform->vt);
     return formfactor;
 }
+#endif
 
 
-void add_device(IMMDevice *device, const WCHAR *devid, al::vector<DevMap> &list)
+#if defined(ALSOFT_UWP)
+struct DeviceHelper final : public IActivateAudioInterfaceCompletionHandler
+#else
+struct DeviceHelper final : private IMMNotificationClient
+#endif
 {
-    for(auto &entry : list)
+    DeviceHelper()
     {
-        if(entry.devid == devid)
-            return;
+#if defined(ALSOFT_UWP)
+        /* TODO: UWP also needs to watch for device added/removed events and
+         * dynamically add/remove devices from the lists.
+         */
+        mActiveClientEvent = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+
+        mRenderDeviceChangedToken = MediaDevice::DefaultAudioRenderDeviceChanged +=
+            ref new TypedEventHandler<Platform::Object ^, DefaultAudioRenderDeviceChangedEventArgs ^>(
+                [this](Platform::Object ^ sender, DefaultAudioRenderDeviceChangedEventArgs ^ args) {
+                if(args->Role == AudioDeviceRole::Default)
+                {
+                    const std::string msg{"Default playback device changed: "+
+                        wstr_to_utf8(args->Id->Data())};
+                    alc::Event(alc::EventType::DefaultDeviceChanged, alc::DeviceType::Playback,
+                        msg);
+                }
+            });
+        mCaptureDeviceChangedToken = MediaDevice::DefaultAudioCaptureDeviceChanged +=
+            ref new TypedEventHandler<Platform::Object ^, DefaultAudioCaptureDeviceChangedEventArgs ^>(
+                [this](Platform::Object ^ sender, DefaultAudioCaptureDeviceChangedEventArgs ^ args) {
+                if(args->Role == AudioDeviceRole::Default)
+                {
+                    const std::string msg{"Default capture device changed: "+
+                        wstr_to_utf8(args->Id->Data())};
+                    alc::Event(alc::EventType::DefaultDeviceChanged, alc::DeviceType::Capture,
+                        msg);
+                }
+            });
+#endif
+    }
+    ~DeviceHelper()
+    {
+#if defined(ALSOFT_UWP)
+        MediaDevice::DefaultAudioRenderDeviceChanged -= mRenderDeviceChangedToken;
+        MediaDevice::DefaultAudioCaptureDeviceChanged -= mCaptureDeviceChangedToken;
+
+        if(mActiveClientEvent != nullptr)
+            CloseHandle(mActiveClientEvent);
+        mActiveClientEvent = nullptr;
+#else
+        if(mEnumerator)
+            mEnumerator->UnregisterEndpointNotificationCallback(this);
+        mEnumerator = nullptr;
+#endif
     }
 
-    auto name_guid = get_device_name_and_guid(device);
+    /** -------------------------- IUnknown ----------------------------- */
+    std::atomic<ULONG> mRefCount{1};
+    STDMETHODIMP_(ULONG) AddRef() noexcept override { return mRefCount.fetch_add(1u) + 1u; }
+    STDMETHODIMP_(ULONG) Release() noexcept override { return mRefCount.fetch_sub(1u) - 1u; }
 
-    int count{1};
-    std::string newname{name_guid.first};
-    while(checkName(list, newname))
+    STDMETHODIMP QueryInterface(const IID& IId, void **UnknownPtrPtr) noexcept override
     {
-        newname = name_guid.first;
-        newname += " #";
-        newname += std::to_string(++count);
-    }
-    list.emplace_back(std::move(newname), std::move(name_guid.second), devid);
-    const DevMap &newentry = list.back();
+        // Three rules of QueryInterface:
+        // https://docs.microsoft.com/en-us/windows/win32/com/rules-for-implementing-queryinterface
+        // 1. Objects must have identity.
+        // 2. The set of interfaces on an object instance must be static.
+        // 3. It must be possible to query successfully for any interface on an object from any other interface.
 
-    TRACE("Got device \"%s\", \"%s\", \"%ls\"\n", newentry.name.c_str(),
-          newentry.endpoint_guid.c_str(), newentry.devid.c_str());
-}
+        // If ppvObject(the address) is nullptr, then this method returns E_POINTER.
+        if(!UnknownPtrPtr)
+            return E_POINTER;
 
-WCHAR *get_device_id(IMMDevice *device)
-{
-    WCHAR *devid;
-
-    const HRESULT hr{device->GetId(&devid)};
-    if(FAILED(hr))
-    {
-        ERR("Failed to get device id: %lx\n", hr);
-        return nullptr;
-    }
-
-    return devid;
-}
-
-void probe_devices(IMMDeviceEnumerator *devenum, EDataFlow flowdir, al::vector<DevMap> &list)
-{
-    al::vector<DevMap>{}.swap(list);
-
-    ComPtr<IMMDeviceCollection> coll;
-    HRESULT hr{devenum->EnumAudioEndpoints(flowdir, DEVICE_STATE_ACTIVE, coll.getPtr())};
-    if(FAILED(hr))
-    {
-        ERR("Failed to enumerate audio endpoints: 0x%08lx\n", hr);
-        return;
-    }
-
-    UINT count{0};
-    hr = coll->GetCount(&count);
-    if(SUCCEEDED(hr) && count > 0)
-        list.reserve(count);
-
-    ComPtr<IMMDevice> device;
-    hr = devenum->GetDefaultAudioEndpoint(flowdir, eMultimedia, device.getPtr());
-    if(SUCCEEDED(hr))
-    {
-        if(WCHAR *devid{get_device_id(device.get())})
+        // https://docs.microsoft.com/en-us/windows/win32/com/implementing-reference-counting
+        // Whenever a client calls a method(or API function), such as QueryInterface, that returns a new interface
+        // pointer, the method being called is responsible for incrementing the reference count through the returned
+        // pointer. For example, when a client first creates an object, it receives an interface pointer to an object
+        // that, from the client's point of view, has a reference count of one. If the client then calls AddRef on the
+        // interface pointer, the reference count becomes two. The client must call Release twice on the interface
+        // pointer to drop all of its references to the object.
+#if defined(ALSOFT_UWP)
+        if(IId == __uuidof(IActivateAudioInterfaceCompletionHandler))
         {
-            add_device(device.get(), devid, list);
-            CoTaskMemFree(devid);
+            *UnknownPtrPtr = static_cast<IActivateAudioInterfaceCompletionHandler*>(this);
+            AddRef();
+            return S_OK;
         }
-        device = nullptr;
-    }
-
-    for(UINT i{0};i < count;++i)
-    {
-        hr = coll->Item(i, device.getPtr());
-        if(FAILED(hr)) continue;
-
-        if(WCHAR *devid{get_device_id(device.get())})
+#else
+        if(IId == __uuidof(IMMNotificationClient))
         {
-            add_device(device.get(), devid, list);
-            CoTaskMemFree(devid);
+            *UnknownPtrPtr = static_cast<IMMNotificationClient*>(this);
+            AddRef();
+            return S_OK;
         }
-        device = nullptr;
-    }
-}
+#endif
+        else if(IId == __uuidof(IAgileObject) || IId == __uuidof(IUnknown))
+        {
+            *UnknownPtrPtr = static_cast<IUnknown*>(this);
+            AddRef();
+            return S_OK;
+        }
 
+        // This method returns S_OK if the interface is supported, and E_NOINTERFACE otherwise.
+        *UnknownPtrPtr = nullptr;
+        return E_NOINTERFACE;
+    }
+
+#if defined(ALSOFT_UWP)
+    /** ----------------------- IActivateAudioInterfaceCompletionHandler ------------ */
+    HRESULT ActivateCompleted(IActivateAudioInterfaceAsyncOperation*) override
+    {
+        SetEvent(mActiveClientEvent);
+
+        // Need to return S_OK
+        return S_OK;
+    }
+#else
+    /** ----------------------- IMMNotificationClient ------------ */
+    STDMETHODIMP OnDeviceStateChanged(LPCWSTR /*pwstrDeviceId*/, DWORD /*dwNewState*/) noexcept override { return S_OK; }
+
+    STDMETHODIMP OnDeviceAdded(LPCWSTR pwstrDeviceId) noexcept override
+    {
+        ComPtr<IMMDevice> device;
+        HRESULT hr{mEnumerator->GetDevice(pwstrDeviceId, al::out_ptr(device))};
+        if(FAILED(hr))
+        {
+            ERR("Failed to get device: 0x%08lx\n", hr);
+            return S_OK;
+        }
+
+        ComPtr<IMMEndpoint> endpoint;
+        hr = device->QueryInterface(__uuidof(IMMEndpoint), al::out_ptr(endpoint));
+        if(FAILED(hr))
+        {
+            ERR("Failed to get device endpoint: 0x%08lx\n", hr);
+            return S_OK;
+        }
+
+        EDataFlow flowdir{};
+        hr = endpoint->GetDataFlow(&flowdir);
+        if(FAILED(hr))
+        {
+            ERR("Failed to get endpoint data flow: 0x%08lx\n", hr);
+            return S_OK;
+        }
+
+        auto devlock = DeviceListLock{gDeviceList};
+        auto &list = (flowdir==eRender) ? devlock.getPlaybackList() : devlock.getCaptureList();
+
+        if(AddDevice(device, pwstrDeviceId, list))
+        {
+            const auto devtype = (flowdir==eRender) ? alc::DeviceType::Playback
+                : alc::DeviceType::Capture;
+            const std::string msg{"Device added: "+list.back().name};
+            alc::Event(alc::EventType::DeviceAdded, devtype, msg);
+        }
+
+        return S_OK;
+    }
+
+    STDMETHODIMP OnDeviceRemoved(LPCWSTR pwstrDeviceId) noexcept override
+    {
+        auto devlock = DeviceListLock{gDeviceList};
+        for(auto flowdir : std::array{eRender, eCapture})
+        {
+            auto &list = (flowdir==eRender) ? devlock.getPlaybackList() : devlock.getCaptureList();
+            auto devtype = (flowdir==eRender)?alc::DeviceType::Playback : alc::DeviceType::Capture;
+
+            /* Find the ID in the list to remove. */
+            auto iter = std::find_if(list.begin(), list.end(),
+                [pwstrDeviceId](const DevMap &entry) noexcept
+                { return pwstrDeviceId == entry.devid; });
+            if(iter == list.end()) continue;
+
+            TRACE("Removing device \"%s\", \"%s\", \"%ls\"\n", iter->name.c_str(),
+                iter->endpoint_guid.c_str(), iter->devid.c_str());
+
+            std::string msg{"Device removed: "+std::move(iter->name)};
+            list.erase(iter);
+
+            alc::Event(alc::EventType::DeviceRemoved, devtype, msg);
+        }
+        return S_OK;
+    }
+
+    STDMETHODIMP OnPropertyValueChanged(LPCWSTR /*pwstrDeviceId*/, const PROPERTYKEY /*key*/) noexcept override { return S_OK; }
+
+    STDMETHODIMP OnDefaultDeviceChanged(EDataFlow flow, ERole role, LPCWSTR pwstrDefaultDeviceId) noexcept override
+    {
+        if(role != eMultimedia)
+            return S_OK;
+
+        if(flow == eRender)
+        {
+            DeviceListLock{gDeviceList}.setPlaybackDefaultId(pwstrDefaultDeviceId);
+            const std::string msg{"Default playback device changed: "+
+                wstr_to_utf8(pwstrDefaultDeviceId)};
+            alc::Event(alc::EventType::DefaultDeviceChanged, alc::DeviceType::Playback, msg);
+        }
+        else if(flow == eCapture)
+        {
+            DeviceListLock{gDeviceList}.setCaptureDefaultId(pwstrDefaultDeviceId);
+            const std::string msg{"Default capture device changed: "+
+                wstr_to_utf8(pwstrDefaultDeviceId)};
+            alc::Event(alc::EventType::DefaultDeviceChanged, alc::DeviceType::Capture, msg);
+        }
+        return S_OK;
+    }
+#endif
+
+    /** -------------------------- DeviceHelper ----------------------------- */
+    HRESULT init()
+    {
+#if !defined(ALSOFT_UWP)
+        HRESULT hr{CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER,
+            __uuidof(IMMDeviceEnumerator), al::out_ptr(mEnumerator))};
+        if(SUCCEEDED(hr))
+            mEnumerator->RegisterEndpointNotificationCallback(this);
+        else
+            WARN("Failed to create IMMDeviceEnumerator instance: 0x%08lx\n", hr);
+        return hr;
+#else
+        return S_OK;
+#endif
+    }
+
+    HRESULT openDevice(std::wstring_view devid, EDataFlow flow, DeviceHandle& device)
+    {
+#if !defined(ALSOFT_UWP)
+        HRESULT hr{E_FAIL};
+        if(mEnumerator)
+        {
+            if(devid.empty())
+                hr = mEnumerator->GetDefaultAudioEndpoint(flow, eMultimedia, al::out_ptr(device));
+            else
+                hr = mEnumerator->GetDevice(devid.data(), al::out_ptr(device));
+        }
+        return hr;
+#else
+        const auto deviceRole = Windows::Media::Devices::AudioDeviceRole::Default;
+        Platform::String^ devIfPath =
+            devid.empty() ? (flow == eRender ? MediaDevice::GetDefaultAudioRenderId(deviceRole) : MediaDevice::GetDefaultAudioCaptureId(deviceRole))
+            : ref new Platform::String(devid.data());
+        if (!devIfPath)
+            return E_POINTER;
+        Concurrency::task<DeviceInformation^> createDeviceOp(
+            DeviceInformation::CreateFromIdAsync(devIfPath, nullptr, DeviceInformationKind::DeviceInterface));
+        auto status = createDeviceOp.then([&](DeviceInformation^ deviceInfo)
+        {
+            device = deviceInfo;
+        }).wait();
+        if(status != Concurrency::task_status::completed)
+        {
+            return E_NOINTERFACE;
+        }
+        return S_OK;
+#endif
+    }
+
+#if !defined(ALSOFT_UWP)
+    static HRESULT activateAudioClient(_In_ DeviceHandle &device, REFIID iid, void **ppv)
+    { return device->Activate(iid, CLSCTX_INPROC_SERVER, nullptr, ppv); }
+#else
+    HRESULT activateAudioClient(_In_ DeviceHandle &device, _In_ REFIID iid, void **ppv)
+    {
+        ComPtr<IActivateAudioInterfaceAsyncOperation> asyncOp;
+        HRESULT hr{ActivateAudioInterfaceAsync(device->Id->Data(), iid, nullptr, this,
+            al::out_ptr(asyncOp))};
+        if(FAILED(hr))
+            return hr;
+
+        /* I don't like waiting for INFINITE time, but the activate operation
+         * can take an indefinite amount of time since it can require user
+         * input.
+         */
+        DWORD res{WaitForSingleObjectEx(mActiveClientEvent, INFINITE, FALSE)};
+        if(res != WAIT_OBJECT_0)
+        {
+            ERR("WaitForSingleObjectEx error: 0x%lx\n", res);
+            return E_FAIL;
+        }
+
+        HRESULT hrActivateRes{E_FAIL};
+        ComPtr<IUnknown> punkAudioIface;
+        hr = asyncOp->GetActivateResult(&hrActivateRes, al::out_ptr(punkAudioIface));
+        if(SUCCEEDED(hr)) hr = hrActivateRes;
+        if(FAILED(hr)) return hr;
+
+        return punkAudioIface->QueryInterface(iid, ppv);
+    }
+#endif
+
+    std::wstring probeDevices(EDataFlow flowdir, std::vector<DevMap> &list)
+    {
+        std::wstring defaultId;
+        std::vector<DevMap>{}.swap(list);
+
+#if !defined(ALSOFT_UWP)
+        ComPtr<IMMDeviceCollection> coll;
+        HRESULT hr{mEnumerator->EnumAudioEndpoints(flowdir, DEVICE_STATE_ACTIVE,
+            al::out_ptr(coll))};
+        if(FAILED(hr))
+        {
+            ERR("Failed to enumerate audio endpoints: 0x%08lx\n", hr);
+            return defaultId;
+        }
+
+        UINT count{0};
+        hr = coll->GetCount(&count);
+        if(SUCCEEDED(hr) && count > 0)
+            list.reserve(count);
+
+        ComPtr<IMMDevice> device;
+        hr = mEnumerator->GetDefaultAudioEndpoint(flowdir, eMultimedia, al::out_ptr(device));
+        if(SUCCEEDED(hr))
+        {
+            if(WCHAR *devid{GetDeviceId(device.get())})
+            {
+                defaultId = devid;
+                CoTaskMemFree(devid);
+            }
+            device = nullptr;
+        }
+
+        for(UINT i{0};i < count;++i)
+        {
+            hr = coll->Item(i, al::out_ptr(device));
+            if(FAILED(hr))
+                continue;
+
+            if(WCHAR *devid{GetDeviceId(device.get())})
+            {
+                std::ignore = AddDevice(device, devid, list);
+                CoTaskMemFree(devid);
+            }
+            device = nullptr;
+        }
+#else
+        const auto deviceRole = Windows::Media::Devices::AudioDeviceRole::Default;
+        auto DefaultAudioId   = flowdir == eRender ? MediaDevice::GetDefaultAudioRenderId(deviceRole)
+                                                   : MediaDevice::GetDefaultAudioCaptureId(deviceRole);
+        if (!DefaultAudioId)
+            return defaultId;
+        Concurrency::task<DeviceInformation ^> createDefaultOp(DeviceInformation::CreateFromIdAsync(DefaultAudioId, nullptr, DeviceInformationKind::DeviceInterface));
+        auto task_status = createDefaultOp.then([&defaultId](DeviceInformation ^ deviceInfo)
+        {
+            if(deviceInfo)
+                defaultId = deviceInfo->Id->Data();
+        }).wait();
+        if(task_status != Concurrency::task_group_status::completed)
+            return defaultId;
+
+        // Get the string identifier of the audio renderer
+        auto AudioSelector = flowdir == eRender ? MediaDevice::GetAudioRenderSelector() : MediaDevice::GetAudioCaptureSelector();
+
+        // Setup the asynchronous callback
+        Concurrency::task<DeviceInformationCollection ^> enumOperation(
+            DeviceInformation::FindAllAsync(AudioSelector, /*PropertyList*/nullptr, DeviceInformationKind::DeviceInterface));
+        task_status = enumOperation.then([this,&list](DeviceInformationCollection ^ DeviceInfoCollection)
+        {
+            if(DeviceInfoCollection)
+            {
+                try {
+                    auto deviceCount = DeviceInfoCollection->Size;
+                    for(unsigned int i{0};i < deviceCount;++i)
+                    {
+                        DeviceInformation^ deviceInfo = DeviceInfoCollection->GetAt(i);
+                        if(deviceInfo)
+                            std::ignore = AddDevice(deviceInfo, deviceInfo->Id->Data(), list);
+                    }
+                }
+                catch (Platform::Exception ^ e) {
+                }
+            }
+        }).wait();
+#endif
+
+        return defaultId;
+    }
+
+private:
+    static bool AddDevice(const DeviceHandle &device, const WCHAR *devid, std::vector<DevMap> &list)
+    {
+        for(auto &entry : list)
+        {
+            if(entry.devid == devid)
+                return false;
+        }
+
+        auto name_guid = GetDeviceNameAndGuid(device);
+        int count{1};
+        std::string newname{name_guid.first};
+        while(checkName(list, newname))
+        {
+            newname = name_guid.first;
+            newname += " #";
+            newname += std::to_string(++count);
+        }
+        list.emplace_back(std::move(newname), std::move(name_guid.second), devid);
+        const DevMap &newentry = list.back();
+
+        TRACE("Got device \"%s\", \"%s\", \"%ls\"\n", newentry.name.c_str(),
+            newentry.endpoint_guid.c_str(), newentry.devid.c_str());
+        return true;
+    }
+
+#if !defined(ALSOFT_UWP)
+    static WCHAR *GetDeviceId(IMMDevice *device)
+    {
+        WCHAR *devid;
+
+        const HRESULT hr{device->GetId(&devid)};
+        if(FAILED(hr))
+        {
+            ERR("Failed to get device id: %lx\n", hr);
+            return nullptr;
+        }
+
+        return devid;
+    }
+    ComPtr<IMMDeviceEnumerator> mEnumerator{nullptr};
+
+#else
+
+    HANDLE mActiveClientEvent{nullptr};
+
+    EventRegistrationToken mRenderDeviceChangedToken;
+    EventRegistrationToken mCaptureDeviceChangedToken;
+#endif
+};
 
 bool MakeExtensible(WAVEFORMATEXTENSIBLE *out, const WAVEFORMATEX *in)
 {
@@ -430,21 +850,17 @@ enum class MsgType {
     StartDevice,
     StopDevice,
     CloseDevice,
-    EnumeratePlayback,
-    EnumerateCapture,
 
     Count,
     QuitThread = Count
 };
 
-constexpr char MessageStr[static_cast<size_t>(MsgType::Count)][20]{
+constexpr char MessageStr[static_cast<size_t>(MsgType::Count)][16]{
     "Open Device",
     "Reset Device",
     "Start Device",
     "Stop Device",
     "Close Device",
-    "Enumerate Playback",
-    "Enumerate Capture"
 };
 
 
@@ -457,7 +873,7 @@ struct WasapiProxy {
 
     virtual HRESULT resetProxy() = 0;
     virtual HRESULT startProxy() = 0;
-    virtual void  stopProxy() = 0;
+    virtual void stopProxy() = 0;
 
     struct Msg {
         MsgType mType;
@@ -467,12 +883,11 @@ struct WasapiProxy {
 
         explicit operator bool() const noexcept { return mType != MsgType::QuitThread; }
     };
-    static std::thread sThread;
     static std::deque<Msg> mMsgQueue;
     static std::mutex mMsgQueueLock;
     static std::condition_variable mMsgQueueCond;
-    static std::mutex sThreadLock;
-    static size_t sInitCount;
+
+    static std::optional<DeviceHelper> sDeviceHelper;
 
     std::future<HRESULT> pushMessage(MsgType type, const char *param=nullptr)
     {
@@ -508,44 +923,11 @@ struct WasapiProxy {
     }
 
     static int messageHandler(std::promise<HRESULT> *promise);
-
-    static HRESULT InitThread()
-    {
-        std::lock_guard<std::mutex> _{sThreadLock};
-        HRESULT res{S_OK};
-        if(!sThread.joinable())
-        {
-            std::promise<HRESULT> promise;
-            auto future = promise.get_future();
-
-            sThread = std::thread{&WasapiProxy::messageHandler, &promise};
-            res = future.get();
-            if(FAILED(res))
-            {
-                sThread.join();
-                return res;
-            }
-        }
-        ++sInitCount;
-        return res;
-    }
-
-    static void DeinitThread()
-    {
-        std::lock_guard<std::mutex> _{sThreadLock};
-        if(!--sInitCount && sThread.joinable())
-        {
-            pushMessageStatic(MsgType::QuitThread);
-            sThread.join();
-        }
-    }
 };
-std::thread WasapiProxy::sThread;
 std::deque<WasapiProxy::Msg> WasapiProxy::mMsgQueue;
 std::mutex WasapiProxy::mMsgQueueLock;
 std::condition_variable WasapiProxy::mMsgQueueCond;
-std::mutex WasapiProxy::sThreadLock;
-size_t WasapiProxy::sInitCount{0};
+std::optional<DeviceHelper> WasapiProxy::sDeviceHelper;
 
 int WasapiProxy::messageHandler(std::promise<HRESULT> *promise)
 {
@@ -558,8 +940,20 @@ int WasapiProxy::messageHandler(std::promise<HRESULT> *promise)
         promise->set_value(hr);
         return 0;
     }
-    promise->set_value(S_OK);
+
+    hr = sDeviceHelper.emplace().init();
+    promise->set_value(hr);
     promise = nullptr;
+    if(FAILED(hr))
+        goto skip_loop;
+
+    {
+        auto devlock = DeviceListLock{gDeviceList};
+        auto defaultId = sDeviceHelper->probeDevices(eRender, devlock.getPlaybackList());
+        if(!defaultId.empty()) devlock.setPlaybackDefaultId(defaultId);
+        defaultId = sDeviceHelper->probeDevices(eCapture, devlock.getCaptureList());
+        if(!defaultId.empty()) devlock.setCaptureDefaultId(defaultId);
+    }
 
     TRACE("Starting message loop\n");
     while(Msg msg{popMessage()})
@@ -595,27 +989,6 @@ int WasapiProxy::messageHandler(std::promise<HRESULT> *promise)
             msg.mPromise.set_value(S_OK);
             continue;
 
-        case MsgType::EnumeratePlayback:
-        case MsgType::EnumerateCapture:
-            {
-                void *ptr{};
-                hr = CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER,
-                    IID_IMMDeviceEnumerator, &ptr);
-                if(FAILED(hr))
-                    msg.mPromise.set_value(hr);
-                else
-                {
-                    ComPtr<IMMDeviceEnumerator> devenum{static_cast<IMMDeviceEnumerator*>(ptr)};
-
-                    if(msg.mType == MsgType::EnumeratePlayback)
-                        probe_devices(devenum.get(), eRender, PlaybackDevices);
-                    else if(msg.mType == MsgType::EnumerateCapture)
-                        probe_devices(devenum.get(), eCapture, CaptureDevices);
-                    msg.mPromise.set_value(S_OK);
-                }
-                continue;
-            }
-
         case MsgType::QuitThread:
             break;
         }
@@ -623,11 +996,13 @@ int WasapiProxy::messageHandler(std::promise<HRESULT> *promise)
         msg.mPromise.set_value(E_FAIL);
     }
     TRACE("Message loop finished\n");
+
+skip_loop:
+    sDeviceHelper.reset();
     CoUninitialize();
 
     return 0;
 }
-
 
 struct WasapiPlayback final : public BackendBase, WasapiProxy {
     WasapiPlayback(DeviceBase *device) noexcept : BackendBase{device} { }
@@ -649,7 +1024,7 @@ struct WasapiPlayback final : public BackendBase, WasapiProxy {
     ClockLatency getClockLatency() override;
 
     HRESULT mOpenStatus{E_FAIL};
-    ComPtr<IMMDevice> mMMDev{nullptr};
+    DeviceHandle mMMDev{nullptr};
     ComPtr<IAudioClient> mClient{nullptr};
     ComPtr<IAudioRenderClient> mRender{nullptr};
     HANDLE mNotifyEvent{nullptr};
@@ -673,10 +1048,7 @@ struct WasapiPlayback final : public BackendBase, WasapiProxy {
 WasapiPlayback::~WasapiPlayback()
 {
     if(SUCCEEDED(mOpenStatus))
-    {
         pushMessage(MsgType::CloseDevice).wait();
-        DeinitThread();
-    }
     mOpenStatus = E_FAIL;
 
     if(mNotifyEvent != nullptr)
@@ -789,82 +1161,59 @@ void WasapiPlayback::open(const char *name)
             "Failed to create notify events"};
     }
 
-    HRESULT hr{InitThread()};
-    if(FAILED(hr))
+    if(name && std::strncmp(name, DevNameHead, DevNameHeadLen) == 0)
     {
-        throw al::backend_exception{al::backend_error::DeviceError,
-            "Failed to init COM thread: 0x%08lx", hr};
-    }
-
-    if(name)
-    {
-        if(PlaybackDevices.empty())
-            pushMessage(MsgType::EnumeratePlayback);
-        if(std::strncmp(name, DevNameHead, DevNameHeadLen) == 0)
-        {
-            name += DevNameHeadLen;
-            if(*name == '\0')
-                name = nullptr;
-        }
+        name += DevNameHeadLen;
+        if(*name == '\0')
+            name = nullptr;
     }
 
     mOpenStatus = pushMessage(MsgType::OpenDevice, name).get();
     if(FAILED(mOpenStatus))
-    {
-        DeinitThread();
         throw al::backend_exception{al::backend_error::DeviceError, "Device init failed: 0x%08lx",
             mOpenStatus};
-    }
 }
 
 HRESULT WasapiPlayback::openProxy(const char *name)
 {
-    const wchar_t *devid{nullptr};
+    std::string devname;
+    std::wstring devid;
     if(name)
     {
-        auto iter = std::find_if(PlaybackDevices.cbegin(), PlaybackDevices.cend(),
+        auto devlock = DeviceListLock{gDeviceList};
+        auto list = al::span{devlock.getPlaybackList()};
+        auto iter = std::find_if(list.cbegin(), list.cend(),
             [name](const DevMap &entry) -> bool
             { return entry.name == name || entry.endpoint_guid == name; });
-        if(iter == PlaybackDevices.cend())
+        if(iter == list.cend())
         {
             const std::wstring wname{utf8_to_wstr(name)};
-            iter = std::find_if(PlaybackDevices.cbegin(), PlaybackDevices.cend(),
+            iter = std::find_if(list.cbegin(), list.cend(),
                 [&wname](const DevMap &entry) -> bool
                 { return entry.devid == wname; });
         }
-        if(iter == PlaybackDevices.cend())
+        if(iter == list.cend())
         {
             WARN("Failed to find device name matching \"%s\"\n", name);
             return E_FAIL;
         }
-        name = iter->name.c_str();
-        devid = iter->devid.c_str();
+        devname = iter->name;
+        devid = iter->devid;
     }
 
-    void *ptr;
-    ComPtr<IMMDevice> mmdev;
-    HRESULT hr{CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER,
-        IID_IMMDeviceEnumerator, &ptr)};
-    if(SUCCEEDED(hr))
-    {
-        ComPtr<IMMDeviceEnumerator> enumerator{static_cast<IMMDeviceEnumerator*>(ptr)};
-        if(!devid)
-            hr = enumerator->GetDefaultAudioEndpoint(eRender, eMultimedia, mmdev.getPtr());
-        else
-            hr = enumerator->GetDevice(devid, mmdev.getPtr());
-    }
+    HRESULT hr{sDeviceHelper->openDevice(devid, eRender, mMMDev)};
     if(FAILED(hr))
     {
-        WARN("Failed to open device \"%s\"\n", name?name:"(default)");
+        WARN("Failed to open device \"%s\"\n", devname.empty() ? "(default)" : devname.c_str());
         return hr;
     }
-
     mClient = nullptr;
-    mMMDev = std::move(mmdev);
-    if(name) mDevice->DeviceName = std::string{DevNameHead} + name;
-    else mDevice->DeviceName = DevNameHead + get_device_name_and_guid(mMMDev.get()).first;
+    if(!devname.empty())
+        mDevice->DeviceName = DevNameHead + std::move(devname);
+    else
+        mDevice->DeviceName = DevNameHead + GetDeviceNameAndGuid(mMMDev).first;
 
-    return hr;
+    return S_OK;
 }
 
 void WasapiPlayback::closeProxy()
@@ -885,15 +1234,13 @@ bool WasapiPlayback::reset()
 HRESULT WasapiPlayback::resetProxy()
 {
     mClient = nullptr;
-
-    void *ptr;
-    HRESULT hr{mMMDev->Activate(IID_IAudioClient, CLSCTX_INPROC_SERVER, nullptr, &ptr)};
+    HRESULT hr{sDeviceHelper->activateAudioClient(mMMDev, __uuidof(IAudioClient),
+        al::out_ptr(mClient))};
     if(FAILED(hr))
     {
         ERR("Failed to reactivate audio client: 0x%08lx\n", hr);
         return hr;
     }
-    mClient = ComPtr<IAudioClient>{static_cast<IAudioClient*>(ptr)};
 
     WAVEFORMATEX *wfx;
     hr = mClient->GetMixFormat(&wfx);
@@ -928,7 +1275,7 @@ HRESULT WasapiPlayback::resetProxy()
         const uint32_t chancount{OutputType.Format.nChannels};
         const DWORD chanmask{OutputType.dwChannelMask};
         if(chancount >= 12 && (chanmask&X714Mask) == X7DOT1DOT4)
-            mDevice->FmtChans = DevFmtX71;
+            mDevice->FmtChans = DevFmtX714;
         else if(chancount >= 8 && (chanmask&X71Mask) == X7DOT1)
             mDevice->FmtChans = DevFmtX71;
         else if(chancount >= 7 && (chanmask&X61Mask) == X6DOT1)
@@ -1159,9 +1506,12 @@ HRESULT WasapiPlayback::resetProxy()
     }
     mFormat = OutputType;
 
-    const EndpointFormFactor formfactor{get_device_formfactor(mMMDev.get())};
+#if !defined(ALSOFT_UWP)
+    const EndpointFormFactor formfactor{GetDeviceFormfactor(mMMDev.get())};
     mDevice->Flags.set(DirectEar, (formfactor == Headphones || formfactor == Headset));
-
+#else
+    mDevice->Flags.set(DirectEar, false);
+#endif
     setDefaultWFXChannelOrder();
 
     hr = mClient->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
@@ -1242,11 +1592,9 @@ HRESULT WasapiPlayback::startProxy()
         return hr;
     }
 
-    void *ptr;
-    hr = mClient->GetService(IID_IAudioRenderClient, &ptr);
+    hr = mClient->GetService(__uuidof(IAudioRenderClient), al::out_ptr(mRender));
     if(SUCCEEDED(hr))
     {
-        mRender = ComPtr<IAudioRenderClient>{static_cast<IAudioRenderClient*>(ptr)};
         try {
             mKillNow.store(false, std::memory_order_release);
             mThread = std::thread{std::mem_fn(&WasapiPlayback::mixerProc), this};
@@ -1316,11 +1664,11 @@ struct WasapiCapture final : public BackendBase, WasapiProxy {
     void stop() override;
     void stopProxy() override;
 
-    void captureSamples(al::byte *buffer, uint samples) override;
+    void captureSamples(std::byte *buffer, uint samples) override;
     uint availableSamples() override;
 
     HRESULT mOpenStatus{E_FAIL};
-    ComPtr<IMMDevice> mMMDev{nullptr};
+    DeviceHandle mMMDev{nullptr};
     ComPtr<IAudioClient> mClient{nullptr};
     ComPtr<IAudioCaptureClient> mCapture{nullptr};
     HANDLE mNotifyEvent{nullptr};
@@ -1338,10 +1686,7 @@ struct WasapiCapture final : public BackendBase, WasapiProxy {
 WasapiCapture::~WasapiCapture()
 {
     if(SUCCEEDED(mOpenStatus))
-    {
         pushMessage(MsgType::CloseDevice).wait();
-        DeinitThread();
-    }
     mOpenStatus = E_FAIL;
 
     if(mNotifyEvent != nullptr)
@@ -1362,7 +1707,7 @@ FORCE_ALIGN int WasapiCapture::recordProc()
 
     althrd_setname(RECORD_THREAD_NAME);
 
-    al::vector<float> samples;
+    std::vector<float> samples;
     while(!mKillNow.load(std::memory_order_relaxed))
     {
         UINT32 avail;
@@ -1456,34 +1801,19 @@ void WasapiCapture::open(const char *name)
             "Failed to create notify events"};
     }
 
-    HRESULT hr{InitThread()};
-    if(FAILED(hr))
+    if(name && std::strncmp(name, DevNameHead, DevNameHeadLen) == 0)
     {
-        throw al::backend_exception{al::backend_error::DeviceError,
-            "Failed to init COM thread: 0x%08lx", hr};
-    }
-
-    if(name)
-    {
-        if(CaptureDevices.empty())
-            pushMessage(MsgType::EnumerateCapture);
-        if(std::strncmp(name, DevNameHead, DevNameHeadLen) == 0)
-        {
-            name += DevNameHeadLen;
-            if(*name == '\0')
-                name = nullptr;
-        }
+        name += DevNameHeadLen;
+        if(*name == '\0')
+            name = nullptr;
     }
 
     mOpenStatus = pushMessage(MsgType::OpenDevice, name).get();
     if(FAILED(mOpenStatus))
-    {
-        DeinitThread();
         throw al::backend_exception{al::backend_error::DeviceError, "Device init failed: 0x%08lx",
             mOpenStatus};
-    }
 
-    hr = pushMessage(MsgType::ResetDevice).get();
+    HRESULT hr{pushMessage(MsgType::ResetDevice).get()};
     if(FAILED(hr))
     {
         if(hr == E_OUTOFMEMORY)
@@ -1494,50 +1824,44 @@ void WasapiCapture::open(const char *name)
 
 HRESULT WasapiCapture::openProxy(const char *name)
 {
-    const wchar_t *devid{nullptr};
+    std::string devname;
+    std::wstring devid;
     if(name)
     {
-        auto iter = std::find_if(CaptureDevices.cbegin(), CaptureDevices.cend(),
+        auto devlock = DeviceListLock{gDeviceList};
+        auto devlist = al::span{devlock.getCaptureList()};
+        auto iter = std::find_if(devlist.cbegin(), devlist.cend(),
             [name](const DevMap &entry) -> bool
             { return entry.name == name || entry.endpoint_guid == name; });
-        if(iter == CaptureDevices.cend())
+        if(iter == devlist.cend())
         {
             const std::wstring wname{utf8_to_wstr(name)};
-            iter = std::find_if(CaptureDevices.cbegin(), CaptureDevices.cend(),
+            iter = std::find_if(devlist.cbegin(), devlist.cend(),
                 [&wname](const DevMap &entry) -> bool
                 { return entry.devid == wname; });
         }
-        if(iter == CaptureDevices.cend())
+        if(iter == devlist.cend())
         {
             WARN("Failed to find device name matching \"%s\"\n", name);
             return E_FAIL;
         }
-        name = iter->name.c_str();
-        devid = iter->devid.c_str();
+        devname = iter->name;
+        devid = iter->devid;
     }
 
-    void *ptr;
-    HRESULT hr{CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER,
-        IID_IMMDeviceEnumerator, &ptr)};
-    if(SUCCEEDED(hr))
-    {
-        ComPtr<IMMDeviceEnumerator> enumerator{static_cast<IMMDeviceEnumerator*>(ptr)};
-        if(!devid)
-            hr = enumerator->GetDefaultAudioEndpoint(eCapture, eMultimedia, mMMDev.getPtr());
-        else
-            hr = enumerator->GetDevice(devid, mMMDev.getPtr());
-    }
+    HRESULT hr{sDeviceHelper->openDevice(devid, eCapture, mMMDev)};
     if(FAILED(hr))
     {
-        WARN("Failed to open device \"%s\"\n", name?name:"(default)");
+        WARN("Failed to open device \"%s\"\n", devname.empty() ? "(default)" : devname.c_str());
         return hr;
     }
-
     mClient = nullptr;
-    if(name) mDevice->DeviceName = std::string{DevNameHead} + name;
-    else mDevice->DeviceName = DevNameHead + get_device_name_and_guid(mMMDev.get()).first;
+    if(!devname.empty())
+        mDevice->DeviceName = DevNameHead + std::move(devname);
+    else
+        mDevice->DeviceName = DevNameHead + GetDeviceNameAndGuid(mMMDev).first;
 
-    return hr;
+    return S_OK;
 }
 
 void WasapiCapture::closeProxy()
@@ -1550,14 +1874,13 @@ HRESULT WasapiCapture::resetProxy()
 {
     mClient = nullptr;
 
-    void *ptr;
-    HRESULT hr{mMMDev->Activate(IID_IAudioClient, CLSCTX_INPROC_SERVER, nullptr, &ptr)};
+    HRESULT hr{sDeviceHelper->activateAudioClient(mMMDev, __uuidof(IAudioClient),
+        al::out_ptr(mClient))};
     if(FAILED(hr))
     {
         ERR("Failed to reactivate audio client: 0x%08lx\n", hr);
         return hr;
     }
-    mClient = ComPtr<IAudioClient>{static_cast<IAudioClient*>(ptr)};
 
     WAVEFORMATEX *wfx;
     hr = mClient->GetMixFormat(&wfx);
@@ -1849,11 +2172,9 @@ HRESULT WasapiCapture::startProxy()
         return hr;
     }
 
-    void *ptr;
-    hr = mClient->GetService(IID_IAudioCaptureClient, &ptr);
+    hr = mClient->GetService(__uuidof(IAudioCaptureClient), al::out_ptr(mCapture));
     if(SUCCEEDED(hr))
     {
-        mCapture = ComPtr<IAudioCaptureClient>{static_cast<IAudioCaptureClient*>(ptr)};
         try {
             mKillNow.store(false, std::memory_order_release);
             mThread = std::thread{std::mem_fn(&WasapiCapture::recordProc), this};
@@ -1892,7 +2213,7 @@ void WasapiCapture::stopProxy()
 }
 
 
-void WasapiCapture::captureSamples(al::byte *buffer, uint samples)
+void WasapiCapture::captureSamples(std::byte *buffer, uint samples)
 { mRing->read(buffer, samples); }
 
 uint WasapiCapture::availableSamples()
@@ -1904,34 +2225,13 @@ uint WasapiCapture::availableSamples()
 bool WasapiBackendFactory::init()
 {
     static HRESULT InitResult{E_FAIL};
-
     if(FAILED(InitResult)) try
     {
-        auto res = std::async(std::launch::async, []() -> HRESULT
-        {
-            HRESULT hr{CoInitializeEx(nullptr, COINIT_MULTITHREADED)};
-            if(FAILED(hr))
-            {
-                WARN("Failed to initialize COM: 0x%08lx\n", hr);
-                return hr;
-            }
+        std::promise<HRESULT> promise;
+        auto future = promise.get_future();
 
-            void *ptr{};
-            hr = CoCreateInstance(CLSID_MMDeviceEnumerator, nullptr, CLSCTX_INPROC_SERVER,
-                IID_IMMDeviceEnumerator, &ptr);
-            if(FAILED(hr))
-            {
-                WARN("Failed to create IMMDeviceEnumerator instance: 0x%08lx\n", hr);
-                CoUninitialize();
-                return hr;
-            }
-            static_cast<IMMDeviceEnumerator*>(ptr)->Release();
-            CoUninitialize();
-
-            return S_OK;
-        });
-
-        InitResult = res.get();
+        std::thread{&WasapiProxy::messageHandler, &promise}.detach();
+        InitResult = future.get();
     }
     catch(...) {
     }
@@ -1944,34 +2244,45 @@ bool WasapiBackendFactory::querySupport(BackendType type)
 
 std::string WasapiBackendFactory::probe(BackendType type)
 {
-    struct ProxyControl {
-        HRESULT mResult{};
-        ProxyControl() { mResult = WasapiProxy::InitThread(); }
-        ~ProxyControl() { if(SUCCEEDED(mResult)) WasapiProxy::DeinitThread(); }
-    };
-    ProxyControl proxy;
-
     std::string outnames;
-    if(FAILED(proxy.mResult))
-        return outnames;
 
+    auto devlock = DeviceListLock{gDeviceList};
     switch(type)
     {
     case BackendType::Playback:
-        WasapiProxy::pushMessageStatic(MsgType::EnumeratePlayback).wait();
-        for(const DevMap &entry : PlaybackDevices)
         {
-            /* +1 to also append the null char (to ensure a null-separated list
-             * and double-null terminated list).
-             */
-            outnames.append(DevNameHead).append(entry.name.c_str(), entry.name.length()+1);
+            auto defaultId = devlock.getPlaybackDefaultId();
+            for(const DevMap &entry : devlock.getPlaybackList())
+            {
+                if(entry.devid != defaultId)
+                {
+                    /* +1 to also append the null char (to ensure a null-
+                     * separated list and double-null terminated list).
+                     */
+                    outnames.append(DevNameHead).append(entry.name.c_str(), entry.name.length()+1);
+                    continue;
+                }
+                /* Default device goes first. */
+                std::string name{DevNameHead + entry.name};
+                outnames.insert(0, name.c_str(), name.length()+1);
+            }
         }
         break;
 
     case BackendType::Capture:
-        WasapiProxy::pushMessageStatic(MsgType::EnumerateCapture).wait();
-        for(const DevMap &entry : CaptureDevices)
-            outnames.append(DevNameHead).append(entry.name.c_str(), entry.name.length()+1);
+        {
+            auto defaultId = devlock.getCaptureDefaultId();
+            for(const DevMap &entry : devlock.getCaptureList())
+            {
+                if(entry.devid != defaultId)
+                {
+                    outnames.append(DevNameHead).append(entry.name.c_str(), entry.name.length()+1);
+                    continue;
+                }
+                std::string name{DevNameHead + entry.name};
+                outnames.insert(0, name.c_str(), name.length()+1);
+            }
+        }
         break;
     }
 

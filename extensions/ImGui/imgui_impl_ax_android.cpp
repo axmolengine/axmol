@@ -7,7 +7,7 @@
 #include <android/keycodes.h>
 #include <android/log.h>
 #include <imgui_internal.h>
-#include "base/CCIMEDelegate.h"
+#include "base/IMEDelegate.h"
 
 USING_NS_AX;
 using namespace backend;

@@ -27,9 +27,9 @@ THE SOFTWARE.
 #define __UIHELPER_H__
 
 #include <string>
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 #include "ui/GUIExport.h"
-#include "2d/CCNode.h"
+#include "2d/Node.h"
 
 NS_AX_BEGIN
 

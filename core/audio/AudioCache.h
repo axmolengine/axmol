@@ -27,14 +27,14 @@
 
 #pragma once
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #include <string>
 #include <mutex>
 #include <vector>
 #include <memory>
 
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 #include "audio/AudioMacros.h"
 #include "audio/alconfig.h"
 

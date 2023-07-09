@@ -17,7 +17,6 @@
 #include <arm_neon.h>
 #endif
 
-#include "albyte.h"
 #include "alcomplex.h"
 #include "almalloc.h"
 #include "alnumbers.h"
@@ -72,7 +71,7 @@ namespace {
  */
 
 
-void LoadSamples(float *RESTRICT dst, const al::byte *src, const size_t srcstep, FmtType srctype,
+void LoadSamples(float *RESTRICT dst, const std::byte *src, const size_t srcstep, FmtType srctype,
     const size_t samples) noexcept
 {
 #define HANDLE_FMT(T)  case T: al::LoadSampleArray<T>(dst, src, srcstep, samples); break
@@ -94,28 +93,28 @@ void LoadSamples(float *RESTRICT dst, const al::byte *src, const size_t srcstep,
 }
 
 
-inline auto& GetAmbiScales(AmbiScaling scaletype) noexcept
+constexpr auto GetAmbiScales(AmbiScaling scaletype) noexcept
 {
     switch(scaletype)
     {
-    case AmbiScaling::FuMa: return AmbiScale::FromFuMa();
-    case AmbiScaling::SN3D: return AmbiScale::FromSN3D();
-    case AmbiScaling::UHJ: return AmbiScale::FromUHJ();
+    case AmbiScaling::FuMa: return al::span{AmbiScale::FromFuMa};
+    case AmbiScaling::SN3D: return al::span{AmbiScale::FromSN3D};
+    case AmbiScaling::UHJ: return al::span{AmbiScale::FromUHJ};
     case AmbiScaling::N3D: break;
     }
-    return AmbiScale::FromN3D();
+    return al::span{AmbiScale::FromN3D};
 }
 
-inline auto& GetAmbiLayout(AmbiLayout layouttype) noexcept
+constexpr auto GetAmbiLayout(AmbiLayout layouttype) noexcept
 {
-    if(layouttype == AmbiLayout::FuMa) return AmbiIndex::FromFuMa();
-    return AmbiIndex::FromACN();
+    if(layouttype == AmbiLayout::FuMa) return al::span{AmbiIndex::FromFuMa};
+    return al::span{AmbiIndex::FromACN};
 }
 
-inline auto& GetAmbi2DLayout(AmbiLayout layouttype) noexcept
+constexpr auto GetAmbi2DLayout(AmbiLayout layouttype) noexcept
 {
-    if(layouttype == AmbiLayout::FuMa) return AmbiIndex::FromFuMa2D();
-    return AmbiIndex::FromACN2D();
+    if(layouttype == AmbiLayout::FuMa) return al::span{AmbiIndex::FromFuMa2D};
+    return al::span{AmbiIndex::FromACN2D};
 }
 
 
@@ -361,7 +360,7 @@ void ConvolutionState::deviceUpdate(const DeviceBase *device, const BufferStorag
             done += todo;
             std::fill(iter, fftbuffer.end(), std::complex<double>{});
 
-            forward_fft(al::as_span(fftbuffer));
+            forward_fft(al::span{fftbuffer});
             filteriter = std::copy_n(fftbuffer.cbegin(), m, filteriter);
         }
     }
@@ -454,7 +453,7 @@ void ConvolutionState::update(const ContextBase *context, const EffectSlot *slot
         }
         mOutTarget = target.Main->Buffer;
 
-        auto&& scales = GetAmbiScales(mAmbiScaling);
+        const auto scales = GetAmbiScales(mAmbiScaling);
         const uint8_t *index_map{Is2DAmbisonic(mChannels) ?
             GetAmbi2DLayout(mAmbiLayout).data() :
             GetAmbiLayout(mAmbiLayout).data()};
@@ -563,7 +562,7 @@ void ConvolutionState::process(const size_t samplesToDo,
          */
         auto fftiter = std::copy_n(mInput.cbegin(), ConvolveUpdateSamples, mFftBuffer.begin());
         std::fill(fftiter, mFftBuffer.end(), complex_f{});
-        forward_fft(al::as_span(mFftBuffer));
+        forward_fft(al::span{mFftBuffer});
 
         std::copy_n(mFftBuffer.cbegin(), m, &mComplexData[curseg*m]);
 
@@ -599,7 +598,7 @@ void ConvolutionState::process(const size_t samplesToDo,
              * second-half samples (and this output's second half is
              * subsequently saved for next time).
              */
-            inverse_fft(al::as_span(mFftBuffer));
+            inverse_fft(al::span{mFftBuffer});
 
             /* The iFFT'd response is scaled up by the number of bins, so apply
              * the inverse to normalize the output.

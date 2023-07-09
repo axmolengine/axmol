@@ -26,8 +26,8 @@
 
 #include <array>
 #include "../Texture.h"
-#include "platform/CCGL.h"
-#include "base/CCEventListenerCustom.h"
+#include "platform/GL.h"
+#include "base/EventListenerCustom.h"
 
 NS_AX_BACKEND_BEGIN
 

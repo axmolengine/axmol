@@ -26,9 +26,9 @@
 #include "ProgramManager.h"
 #include "Device.h"
 #include "ShaderModule.h"
-#include "renderer/ccShaders.h"
-#include "base/ccMacros.h"
-#include "base/CCConfiguration.h"
+#include "renderer/Shaders.h"
+#include "base/Macros.h"
+#include "base/Configuration.h"
 
 NS_AX_BACKEND_BEGIN
 

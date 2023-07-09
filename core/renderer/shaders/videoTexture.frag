@@ -1,4 +1,3 @@
-#include <string_view>
 
 /* mat4 to mat3:
 mat3 coeff = mat3(
@@ -16,7 +15,7 @@ mat3 coeff = mat3(colorTransform); // require GLES3
 
 // refer to:
 // https://docs.microsoft.com/en-us/windows/win32/medfound/recommended-8-bit-yuv-formats-for-video-rendering#yuy2
-const std::string_view videoTextureYUY2_frag = R"(
+const char* videoTextureYUY2_frag = R"(
 
 #ifdef GL_ES
 varying lowp vec4 v_fragmentColor;
@@ -55,7 +54,7 @@ void main()
 
     gl_FragColor = v_fragmentColor * OutColor;
 }
-)"sv;
+)";
 
 /*
 The NV12 pixel format render shader: 
@@ -75,7 +74,7 @@ refer to:
   - https://docs.microsoft.com/en-us/windows/win32/medfound/recommended-8-bit-yuv-formats-for-video-rendering#nv12
   - https://github.com/doyoulikerock/D3D11NV12Rendering/blob/master/D3D11NV12Rendering/PixelShader.hlsl
 */
-const std::string_view videoTextureNV12_frag = R"(
+const char* videoTextureNV12_frag = R"(
 
 #ifdef GL_ES
 varying lowp vec4 v_fragmentColor;
@@ -113,9 +112,9 @@ void main()
 
     gl_FragColor = v_fragmentColor * OutColor;
 }
-)"sv;
+)";
 
-const std::string_view videoTextureBGRA_frag = R"(
+const char* videoTextureBGRA_frag = R"(
 #ifdef GL_ES
 varying lowp vec4 v_fragmentColor;
 varying mediump vec2 v_texCoord;
@@ -130,4 +129,4 @@ void main()
 {
     gl_FragColor = v_fragmentColor * texture2D(u_tex0, v_texCoord).bgra;
 }
-)"sv;
+)";

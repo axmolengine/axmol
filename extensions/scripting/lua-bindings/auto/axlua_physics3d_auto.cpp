@@ -1,6 +1,6 @@
 #include "scripting/lua-bindings/auto/axlua_physics3d_auto.hpp"
 #if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
-#include "physics3d/CCPhysics3D.h"
+#include "physics3d/Physics3D.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 

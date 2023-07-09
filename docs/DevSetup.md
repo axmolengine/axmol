@@ -1,17 +1,24 @@
 # Development setup
 
-## Common Requirement [Python](https://www.python.org/downloads/)
+## Common Requirements
 
-- Python-3.7+
+- [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
+  - powershell-7 is recommended, it's support Windows,macOS,Linux
+  - How to Install:
+      - visit: https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell
+      - download from github release page: https://github.com/PowerShell/PowerShell/releases
+  - Note: win7+, system installed PowerShell 5.0 should works, but not recommended
+
+- [Python-3.7+](https://www.python.org/downloads/)
 
 ## Prerequisites
 
   1. Enter `axmol` root directory
-  2. Run `python setup.py`, restart the console after it has finished for environment variables to take effect
+  2. Run `pwsh setup.ps1`, restart the console after it has finished for environment variables to take effect
 
 ## Creating A New Project
 
-Using a console window, an example of a command to generate a new project is as follows:
+Using a powershell console window, an example of a command to generate a new project is as follows:
 
 ```axmol new -p YOUR.UNIQUE.ID -d PROJECT_PATH -l [cpp|lua] [--portrait] PROJECT_NAME```
 
@@ -21,6 +28,23 @@ Examples:
 
 - Cpp: `axmol new -p org.axmol.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
 - Lua: `axmol new -p org.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
+
+## Quick build your new project by `build.ps1` for all target platforms [`Recommended`]
+
+If you use latest commits after 6/29/2023 18:50, once you crate a new project, there is a build script `build.ps1` in your project root directory,
+then you can simply build your project for all platform targets, i.e.
+
+- win32: `pwsh .\build.ps1` can runs on Windows with vs2022 installed
+- winuwp: `pwsh .\build.ps1 -p winuwp` can runs on Windows with vs2022 installed
+- linux: `pwsh .\build.ps1` can runs on Linux with g++ installed
+- osx: `pwsh ./build.ps1 -p osx -a x64` can runs on macOS with xcode13~14.2 installed
+- android: `pwsh ./build.ps1 -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
+- ios: `pwsh ./build.ps1 -p ios -a x64` can runs on macOS with xcode13~14.2 installed
+- tvos: `pwsh ./build.ps1 -p tvos -a x64` can runs on macOS with xcode13~14.2 installed
+
+## Quick build engine for host targets?
+
+Goto axmol root directory, double click or run `build.ps1` without any parameters, it will build `HelloCpp` by default
 
 ## Windows (Visual Studio)
 
@@ -104,15 +128,13 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
   5. Generate the relevant xcode project using one of the following commands:
      - for ios arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=OS64```
-     - for ios armv7,arm64 combined:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=OS```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLAT=iOS```
      - for ios simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR64```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLAT=iOS -DARCHS=x64```
      - for tvos arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=TVOS```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATF=tvOS```
      - for tvos simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/cmake/ios.toolchain.cmake -DPLATFORM=SIMULATOR_TVOS```
+     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATF=tvOS -DARCHS=x64```
      - for macos x86_64(Intel)
      ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=x86_64```
      - for macos arm64(M1)

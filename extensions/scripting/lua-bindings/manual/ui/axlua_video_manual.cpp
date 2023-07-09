@@ -24,11 +24,11 @@
  ****************************************************************************/
 #include "scripting/lua-bindings/manual/ui/axlua_video_manual.hpp"
 
-#include "ui/UIVideoPlayer.h"
+#include "ui/UIMediaPlayer.h"
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
-#include "scripting/lua-bindings/manual/CCLuaValue.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
+#include "scripting/lua-bindings/manual/LuaValue.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
 
 static int axlua_video_VideoPlayer_addEventListener(lua_State* L)
 {

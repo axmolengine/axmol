@@ -21,25 +21,31 @@
 
 | Build | Status (github) |
 |-------|-----------------|
-| Windows Desktop|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows.yml)|
-| Windows Desktop(Clang)|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows-clang.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows-clang.yml)|
-| Windows UWP|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/winuwp.yml)|
+| Windows(win32,winuwp,win32-clang)|[![Win32 CI](https://github.com/axmolengine/axmol/actions/workflows/windows.yml/badge.svg)](https://github.com/axmolengine/axmol/actions/workflows/windows.yml)|
 | Android | [![Android Build Status](https://github.com/axmolengine/axmol/workflows/android/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aandroid)|
 | iOS |[![iOS Build Status](https://github.com/axmolengine/axmol/workflows/ios/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aios)|
 | tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
-## Reimplemented VideoPlayer(VideoTexture)
+## New MediaPlayer
 
-|  Platform             |    MediaEngine    | Video Compress Format | Video Pixel Format   | Backend            |
-|-----------------------|-------------------|-----------------------|----------------------|--------------------|
-| Windows Desktop       |    complete       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | IMFMediaSession    |
-| Windows UWP           |    complete       | H264, HEVC, VP90      | BGR32                | IMFMediaEngine     |
-| Apple macOS           |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Apple tvOS            |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Apple iOS             |    complete       | H264, HEVC(hvc1)      | NV12, BGR32          | AVFoundation       |
-| Android               |    planned        | H264                  | RGB32                |                    |
+The new `ui::MediaPlayer`(renamed from `ui::VideoPlayer`) render video as Texture2D with designed corss-platform MediaEngine, the MediaEngine inspired from microsoft
+media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which axmol engine does.
+
+|  Target Platform      | Video Compress Format | Video Pixel Format   | Container Format | Backend            |
+|-----------------------|-----------------------|----------------------|----------------- |--------------------|
+| Windows Desktop       | H264, HEVC, VP90      | YUY2, NV12, RGB32    | .mp4,.mkv,.webm  | IMFMediaSession    |
+| Windows UWP           | H264, HEVC, VP90      | BGR32                | .mp4,.mkv,.webm  | IMFMediaEngine     |
+| Apple macOS           | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
+| Apple tvOS            | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
+| Apple iOS             | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
+| Android               | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | ExoPlayer2         |
+| Linux                 | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | libVLC             |
+
+## Building
+
+View the [Dev setup instructions](docs/DevSetup.md).
 
 ## Highlighted Features
 
@@ -84,10 +90,6 @@
 [Read Full changes since cocos2d-x-4.0](CHANGELOG)
 
 Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/axmolengine/axmol/milestones) for planed features too.
-
-## Building
-
-View the [Dev setup instructions](docs/DevSetup.md).
 
 ## Reference links
 

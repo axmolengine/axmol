@@ -1,21 +1,21 @@
 set(_AX_PHYSICS3D_HEADER
-    physics3d/CCPhysics3DConstraint.h
-    physics3d/CCPhysics3DShape.h
-    physics3d/CCPhysics3D.h
-    physics3d/CCPhysics3DWorld.h
-    physics3d/CCPhysicsMeshRenderer.h
-    physics3d/CCPhysics3DObject.h
-    physics3d/CCPhysics3DComponent.h
-    physics3d/CCPhysics3DDebugDrawer.h
+    physics3d/Physics3DConstraint.h
+    physics3d/Physics3DShape.h
+    physics3d/Physics3D.h
+    physics3d/Physics3DWorld.h
+    physics3d/PhysicsMeshRenderer.h
+    physics3d/Physics3DObject.h
+    physics3d/Physics3DComponent.h
+    physics3d/Physics3DDebugDrawer.h
     )
 
 set(_AX_PHYSICS3D_SRC
-    physics3d/CCPhysics3D.cpp
-    physics3d/CCPhysics3DComponent.cpp
-    physics3d/CCPhysics3DConstraint.cpp
-    physics3d/CCPhysics3DDebugDrawer.cpp
-    physics3d/CCPhysics3DObject.cpp
-    physics3d/CCPhysics3DShape.cpp
-    physics3d/CCPhysics3DWorld.cpp
-    physics3d/CCPhysicsMeshRenderer.cpp
+    physics3d/Physics3D.cpp
+    physics3d/Physics3DComponent.cpp
+    physics3d/Physics3DConstraint.cpp
+    physics3d/Physics3DDebugDrawer.cpp
+    physics3d/Physics3DObject.cpp
+    physics3d/Physics3DShape.cpp
+    physics3d/Physics3DWorld.cpp
+    physics3d/PhysicsMeshRenderer.cpp
     )

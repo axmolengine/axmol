@@ -25,8 +25,8 @@ function(ax_sync_target_res ax_target)
         #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET ${sync_target_name} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E echo "    Syncing to ${link_folder_abs}"
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
+            COMMAND ${CMAKE_COMMAND} -E echo "    Syncing ${cc_folder} to ${link_folder_abs}"
+            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                 -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
         )
     endforeach()
@@ -58,18 +58,18 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
+            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                 -s ${src_dir} -d ${dst_dir} -m $<CONFIG>
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
+                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT_PATH}/cmake/scripts/sync_folder.py
+                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
                     -s ${src_dir} -d ${dst_dir} -m ${CMAKE_BUILD_TYPE}
             )
         endif()
@@ -188,12 +188,12 @@ function(ax_copy_target_dll ax_target)
     )
 
     # Copy windows angle binaries
-    if (AX_USE_COMPAT_GL)
+    if (WIN32 AND AX_USE_ANGLE)
         add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/windows/${ARCH_ALIAS}/libGLESv2.dll
-            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/windows/${ARCH_ALIAS}/libEGL.dll
-            ${_AX_ROOT_PATH}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/windows/${ARCH_ALIAS}/d3dcompiler_47.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/d3dcompiler_47.dll
             $<TARGET_FILE_DIR:${ax_target}>
         )
     endif()
@@ -206,6 +206,14 @@ function(ax_copy_target_dll ax_target)
                 "${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll"
                 $<TARGET_FILE_DIR:${ax_target}>)
         endif()
+    endif()
+
+    # copy libvlc plugins dir for windows
+    if(AX_ENABLE_VLC_MEDIA)
+        add_custom_command(TARGET ${ax_target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/vlc/win/lib/vlc/plugins
+        $<TARGET_FILE_DIR:${ax_target}>/plugins
+        )
     endif()
 endfunction()
 
@@ -376,6 +384,13 @@ function(ax_setup_app_config app_name)
             XCODE_EMBED_FRAMEWORKS_REMOVE_HEADERS_ON_COPY ON
         )
     endif()
+
+    if((WIN32 AND (NOT WINRT)) OR LINUX)
+        if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
+            get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
+            ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
+        endif()
+    endif()
 endfunction()
 
 # if cc_variable not set, then set it cc_value
@@ -398,16 +413,16 @@ macro(ax_setup_winrt_sources )
         proj.winrt/App.xaml.h
         proj.winrt/App.xaml.cpp
         proj.winrt/Package.appxmanifest
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLES.h
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLES.cpp
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml.h
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/OpenGLESPage.xaml.cpp
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/AxmolRenderer.h
-        ${_AX_ROOT_PATH}/core/platform/winrt/xaml/AxmolRenderer.cpp
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLES.h
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLES.cpp
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml.h
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml.cpp
+        ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.h
+        ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.cpp
     )
 
-    list(APPEND GAME_INC_DIRS ${_AX_ROOT_PATH}/core/platform/winrt/xaml)
+    list(APPEND GAME_INC_DIRS ${_AX_ROOT}/core/platform/winrt/xaml)
 
     list(APPEND GAME_HEADER
         ${PLATFORM_HEADERS}
@@ -580,3 +595,7 @@ macro(ax_config_pred target_name pred)
         target_compile_definitions(${target_name} PUBLIC ${pred}=1)
     endif()
 endmacro()
+
+# import minimal AXGLSLCC.cmake for shader compiler support
+# the function: ax_target_compile_shaders avaiable from it
+include(AXGLSLCC)

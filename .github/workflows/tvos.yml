@@ -29,11 +29,11 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: Create Build Environment
-      # Some projects don't allow in-source building, so create a separate build directory
-      # We'll use this as our working directory for all
-      run: tools/unix-ci/before-install.sh
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '14.2'
 
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: tools/unix-ci/run-script.sh
+      shell: pwsh
+      run: ./build.ps1 -p tvos -a 'x64'

@@ -19,7 +19,7 @@
  */
 
 #include "network/Uri.h"
-#include "base/CCConsole.h"  // For AXLOGERROR macro
+#include "base/Console.h"  // For AXLOGERROR macro
 
 #include <regex>
 #include <sstream>
@@ -206,7 +206,7 @@ bool Uri::doParse(std::string_view str)
                                            // dotted-IPv4, or named host)
             "(?::(\\d*))?");               // port
 
-        auto authority = authorityAndPathMatch[1];
+        auto& authority = authorityAndPathMatch[1];
         std::smatch authorityMatch;
         if (!std::regex_match(authority.first, authority.second, authorityMatch, authorityRegex))
         {

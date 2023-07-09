@@ -28,7 +28,7 @@ THE SOFTWARE.
 
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
-#include "base/ccTypes.h"
+#include "base/Types.h"
 
 /**
  * @addtogroup ui

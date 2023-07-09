@@ -26,7 +26,7 @@
 
 #include "../ShaderModule.h"
 
-#include "platform/CCGL.h"
+#include "platform/GL.h"
 
 NS_AX_BACKEND_BEGIN
 /**

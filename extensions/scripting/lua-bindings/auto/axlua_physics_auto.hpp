@@ -1,4 +1,4 @@
-#include "base/ccConfig.h"
+#include "base/Config.h"
 #if AX_USE_PHYSICS
 #ifndef __ax_physics_h__
 #define __ax_physics_h__

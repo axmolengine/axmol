@@ -28,8 +28,8 @@ THE SOFTWARE.
 #include <stdlib.h>
 
 #include "base/TGAlib.h"
-#include "base/CCData.h"
-#include "platform/CCFileUtils.h"
+#include "base/Data.h"
+#include "platform/FileUtils.h"
 
 NS_AX_BEGIN
 

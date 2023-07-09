@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "2d/CCRenderTexture.h"
+#include "2d/RenderTexture.h"
 #include <CubismFramework.hpp>
 #include <Model/CubismUserModel.hpp>
 #include <ICubismModelSetting.hpp>

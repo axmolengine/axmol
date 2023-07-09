@@ -25,13 +25,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #include "audio/AudioEngine.h"
 #include <condition_variable>
 #include <queue>
-#include "platform/CCFileUtils.h"
-#include "base/ccUtils.h"
+#include "platform/FileUtils.h"
+#include "base/Utils.h"
 
 #include "audio/AudioEngineImpl.h"
 

@@ -25,7 +25,7 @@
 #ifndef __cocos2d_libs__GameNode3DReader__
 #define __cocos2d_libs__GameNode3DReader__
 
-#include "2d/CCCameraBackgroundBrush.h"
+#include "2d/CameraBackgroundBrush.h"
 #include "CocosStudioExport.h"
 #include "WidgetReader/NodeReaderProtocol.h"
 #include "WidgetReader/NodeReaderDefine.h"

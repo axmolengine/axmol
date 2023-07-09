@@ -12,13 +12,12 @@
 #include <iterator>
 #include <memory>
 #include <new>
+#include <optional>
 #include <stdlib.h>
 #include <utility>
 #include <vector>
 
-#include "albyte.h"
 #include "alnumeric.h"
-#include "aloptional.h"
 #include "alspan.h"
 #include "alstring.h"
 #include "ambidefs.h"
@@ -129,7 +128,7 @@ inline HrtfMixerBlendFunc SelectHrtfBlendMixer()
 
 } // namespace
 
-void Voice::InitMixer(al::optional<std::string> resampler)
+void Voice::InitMixer(std::optional<std::string> resampler)
 {
     if(resampler)
     {
@@ -227,10 +226,9 @@ void SendSourceStoppedEvent(ContextBase *context, uint id)
     auto evt_vec = ring->getWriteVector();
     if(evt_vec.first.len < 1) return;
 
-    AsyncEvent *evt{al::construct_at(reinterpret_cast<AsyncEvent*>(evt_vec.first.buf),
-        AsyncEvent::SourceStateChange)};
-    evt->u.srcstate.id = id;
-    evt->u.srcstate.state = AsyncEvent::SrcState::Stop;
+    auto &evt = InitAsyncEvent<AsyncSourceStateEvent>(evt_vec.first.buf);
+    evt.mId = id;
+    evt.mState = AsyncSrcState::Stop;
 
     ring->writeAdvance(1);
 }
@@ -264,7 +262,7 @@ const float *DoFilters(BiquadFilter &lpfilter, BiquadFilter &hpfilter, float *ds
 
 
 template<FmtType Type>
-inline void LoadSamples(float *RESTRICT dstSamples, const al::byte *src, const size_t srcChan,
+inline void LoadSamples(float *RESTRICT dstSamples, const std::byte *src, const size_t srcChan,
     const size_t srcOffset, const size_t srcStep, const size_t /*samplesPerBlock*/,
     const size_t samplesToLoad) noexcept
 {
@@ -275,7 +273,7 @@ inline void LoadSamples(float *RESTRICT dstSamples, const al::byte *src, const s
 }
 
 template<>
-inline void LoadSamples<FmtIMA4>(float *RESTRICT dstSamples, const al::byte *src,
+inline void LoadSamples<FmtIMA4>(float *RESTRICT dstSamples, const std::byte *src,
     const size_t srcChan, const size_t srcOffset, const size_t srcStep,
     const size_t samplesPerBlock, const size_t samplesToLoad) noexcept
 {
@@ -289,14 +287,15 @@ inline void LoadSamples<FmtIMA4>(float *RESTRICT dstSamples, const al::byte *src
     /* NOTE: This could probably be optimized better. */
     size_t wrote{0};
     do {
+        static constexpr int MaxStepIndex{static_cast<int>(std::size(IMAStep_size)) - 1};
         /* Each IMA4 block starts with a signed 16-bit sample, and a signed
          * 16-bit table index. The table index needs to be clamped.
          */
-        int sample{src[srcChan*4] | (src[srcChan*4 + 1] << 8)};
-        int index{src[srcChan*4 + 2] | (src[srcChan*4 + 3] << 8)};
+        int sample{int(src[srcChan*4]) | (int(src[srcChan*4 + 1]) << 8)};
+        int index{int(src[srcChan*4 + 2]) | (int(src[srcChan*4 + 3]) << 8)};
 
         sample = (sample^0x8000) - 32768;
-        index = clampi((index^0x8000) - 32768, 0, al::size(IMAStep_size)-1);
+        index = clampi((index^0x8000) - 32768, 0, MaxStepIndex);
 
         if(skip == 0)
         {
@@ -312,7 +311,7 @@ inline void LoadSamples<FmtIMA4>(float *RESTRICT dstSamples, const al::byte *src
             sample = clampi(sample, -32768, 32767);
 
             index += IMA4Index_adjust[nibble];
-            index = clampi(index, 0, al::size(IMAStep_size)-1);
+            index = clampi(index, 0, MaxStepIndex);
 
             return sample;
         };
@@ -325,7 +324,7 @@ inline void LoadSamples<FmtIMA4>(float *RESTRICT dstSamples, const al::byte *src
          * always be less than the block size). They need to be decoded despite
          * being ignored for proper state on the remaining samples.
          */
-        const al::byte *nibbleData{src + (srcStep+srcChan)*4};
+        const std::byte *nibbleData{src + (srcStep+srcChan)*4};
         size_t nibbleOffset{0};
         const size_t startOffset{skip + 1};
         for(;skip;--skip)
@@ -335,7 +334,7 @@ inline void LoadSamples<FmtIMA4>(float *RESTRICT dstSamples, const al::byte *src
             const size_t byteOffset{wordOffset*srcStep + ((nibbleOffset>>1)&3u)};
             ++nibbleOffset;
 
-            std::ignore = decode_sample((nibbleData[byteOffset]>>byteShift) & 15u);
+            std::ignore = decode_sample(uint(nibbleData[byteOffset]>>byteShift) & 15u);
         }
 
         /* Second, decode the rest of the block and write to the output, until
@@ -349,7 +348,7 @@ inline void LoadSamples<FmtIMA4>(float *RESTRICT dstSamples, const al::byte *src
             const size_t byteOffset{wordOffset*srcStep + ((nibbleOffset>>1)&3u)};
             ++nibbleOffset;
 
-            const int result{decode_sample((nibbleData[byteOffset]>>byteShift) & 15u)};
+            const int result{decode_sample(uint(nibbleData[byteOffset]>>byteShift) & 15u)};
             dstSamples[wrote++] = static_cast<float>(result) / 32768.0f;
         }
         if(wrote == samplesToLoad)
@@ -360,7 +359,7 @@ inline void LoadSamples<FmtIMA4>(float *RESTRICT dstSamples, const al::byte *src
 }
 
 template<>
-inline void LoadSamples<FmtMSADPCM>(float *RESTRICT dstSamples, const al::byte *src,
+inline void LoadSamples<FmtMSADPCM>(float *RESTRICT dstSamples, const std::byte *src,
     const size_t srcChan, const size_t srcOffset, const size_t srcStep,
     const size_t samplesPerBlock, const size_t samplesToLoad) noexcept
 {
@@ -377,19 +376,19 @@ inline void LoadSamples<FmtMSADPCM>(float *RESTRICT dstSamples, const al::byte *
          * nibble sample value. This is followed by the two initial 16-bit
          * sample history values.
          */
-        const al::byte *input{src};
-        const uint8_t blockpred{std::min(input[srcChan], uint8_t{6})};
+        const std::byte *input{src};
+        const uint8_t blockpred{std::min(uint8_t(input[srcChan]), uint8_t{6})};
         input += srcStep;
-        int delta{input[2*srcChan + 0] | (input[2*srcChan + 1] << 8)};
+        int delta{int(input[2*srcChan + 0]) | (int(input[2*srcChan + 1]) << 8)};
         input += srcStep*2;
 
         int sampleHistory[2]{};
-        sampleHistory[0] = input[2*srcChan + 0] | (input[2*srcChan + 1]<<8);
+        sampleHistory[0] = int(input[2*srcChan + 0]) | (int(input[2*srcChan + 1])<<8);
         input += srcStep*2;
-        sampleHistory[1] = input[2*srcChan + 0] | (input[2*srcChan + 1]<<8);
+        sampleHistory[1] = int(input[2*srcChan + 0]) | (int(input[2*srcChan + 1])<<8);
         input += srcStep*2;
 
-        const auto coeffs = al::as_span(MSADPCMAdaptionCoeff[blockpred]);
+        const al::span coeffs{MSADPCMAdaptionCoeff[blockpred]};
         delta = (delta^0x8000) - 32768;
         sampleHistory[0] = (sampleHistory[0]^0x8000) - 32768;
         sampleHistory[1] = (sampleHistory[1]^0x8000) - 32768;
@@ -439,7 +438,7 @@ inline void LoadSamples<FmtMSADPCM>(float *RESTRICT dstSamples, const al::byte *
             const size_t byteShift{((nibbleOffset&1)^1) * 4};
             nibbleOffset += srcStep;
 
-            std::ignore = decode_sample((input[byteOffset]>>byteShift) & 15);
+            std::ignore = decode_sample(int(input[byteOffset]>>byteShift) & 15);
         }
 
         /* Now decode the rest of the block, until the end of the block or the
@@ -452,7 +451,7 @@ inline void LoadSamples<FmtMSADPCM>(float *RESTRICT dstSamples, const al::byte *
             const size_t byteShift{((nibbleOffset&1)^1) * 4};
             nibbleOffset += srcStep;
 
-            const int sample{decode_sample((input[byteOffset]>>byteShift) & 15)};
+            const int sample{decode_sample(int(input[byteOffset]>>byteShift) & 15)};
             dstSamples[wrote++] = static_cast<float>(sample) / 32768.0f;
         }
         if(wrote == samplesToLoad)
@@ -462,7 +461,7 @@ inline void LoadSamples<FmtMSADPCM>(float *RESTRICT dstSamples, const al::byte *
     } while(true);
 }
 
-void LoadSamples(float *dstSamples, const al::byte *src, const size_t srcChan,
+void LoadSamples(float *dstSamples, const std::byte *src, const size_t srcChan,
     const size_t srcOffset, const FmtType srcType, const size_t srcStep,
     const size_t samplesPerBlock, const size_t samplesToLoad) noexcept
 {
@@ -798,7 +797,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const nanoseconds devi
         using ResBufType = decltype(DeviceBase::mResampleData);
         static constexpr uint srcSizeMax{static_cast<uint>(ResBufType{}.size()-MaxResamplerEdge)};
 
-        const auto prevSamples = al::as_span(mPrevSamples[chan]);
+        const al::span prevSamples{mPrevSamples[chan]};
         const auto resampleBuffer = std::copy(prevSamples.cbegin(), prevSamples.cend(),
             Device->mResampleData.begin()) - MaxResamplerEdge;
         int intPos{DataPosInt};
@@ -1101,7 +1100,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const nanoseconds devi
             {
                 const size_t byteOffset{blocksDone*mBytesPerBlock};
                 const size_t byteEnd{mNumCallbackBlocks*mBytesPerBlock};
-                al::byte *data{BufferListItem->mSamples};
+                std::byte *data{BufferListItem->mSamples};
                 std::copy(data+byteOffset, data+byteEnd, data);
                 mNumCallbackBlocks -= blocksDone;
                 mCallbackBlockBase += blocksDone;
@@ -1145,16 +1144,15 @@ void Voice::mix(const State vstate, ContextBase *Context, const nanoseconds devi
 
     /* Send any events now, after the position/buffer info was updated. */
     const auto enabledevt = Context->mEnabledEvts.load(std::memory_order_acquire);
-    if(buffers_done > 0 && enabledevt.test(AsyncEvent::BufferCompleted))
+    if(buffers_done > 0 && enabledevt.test(al::to_underlying(AsyncEnableBits::BufferCompleted)))
     {
         RingBuffer *ring{Context->mAsyncEvents.get()};
         auto evt_vec = ring->getWriteVector();
         if(evt_vec.first.len > 0)
         {
-            AsyncEvent *evt{al::construct_at(reinterpret_cast<AsyncEvent*>(evt_vec.first.buf),
-                AsyncEvent::BufferCompleted)};
-            evt->u.bufcomp.id = SourceID;
-            evt->u.bufcomp.count = buffers_done;
+            auto &evt = InitAsyncEvent<AsyncBufferCompleteEvent>(evt_vec.first.buf);
+            evt.mId = SourceID;
+            evt.mCount = buffers_done;
             ring->writeAdvance(1);
         }
     }
@@ -1165,7 +1163,7 @@ void Voice::mix(const State vstate, ContextBase *Context, const nanoseconds devi
          * ensures any residual noise fades to 0 amplitude.
          */
         mPlayState.store(Stopping, std::memory_order_release);
-        if(enabledevt.test(AsyncEvent::SourceStateChange))
+        if(enabledevt.test(al::to_underlying(AsyncEnableBits::SourceState)))
             SendSourceStoppedEvent(Context, SourceID);
     }
 }
@@ -1275,7 +1273,7 @@ void Voice::prepare(DeviceBase *device)
     else if(mAmbiOrder && device->mAmbiOrder > mAmbiOrder)
     {
         const uint8_t *OrderFromChan{Is2DAmbisonic(mFmtChannels) ?
-            AmbiIndex::OrderFrom2DChannel().data() : AmbiIndex::OrderFromChannel().data()};
+            AmbiIndex::OrderFrom2DChannel.data() : AmbiIndex::OrderFromChannel.data()};
         const auto scales = AmbiScale::GetHFOrderScales(mAmbiOrder, device->mAmbiOrder,
             device->m2DMixing);
 

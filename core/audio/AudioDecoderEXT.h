@@ -29,7 +29,7 @@
 #include <stdint.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
 #include "audio/AudioDecoder.h"
-#include "platform/CCFileStream.h"
+#include "platform/FileStream.h"
 
 NS_AX_BEGIN
 

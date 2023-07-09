@@ -2,7 +2,7 @@
 # Copyright (c) 2013 cocos2d-x.org
 # Copyright (c) 2014 martell malone
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
-# Copyright (c) 2021-2022 Bytedance Inc.
+# Copyright (c) 2021-2023 Bytedance Inc.
 # 
 # https://axmolengine.github.io/
 #
@@ -29,8 +29,10 @@
 # build ax
 # build axlua if AX_ENABLE_EXT_LUA=ON
 
+# include_guard (GLOBAL)
+
 # The version number
-set(_AX_VERSION 1.0)
+set(_AX_VERSION 1.1)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
@@ -39,21 +41,45 @@ endif()
 project(ax_libs)
 
 if (NOT WINRT)
-    option (AX_USE_COMPAT_GL "Use compat gl" OFF)
+    option (AX_USE_ANGLE "Use google angle renderer" OFF)
 else()
-    option (AX_USE_COMPAT_GL "Use compat gl" ON)
-    set(AX_USE_COMPAT_GL ON)
+    set (AX_USE_ANGLE TRUE CACHE BOOL "Use google angle renderer" FORCE)
+endif()
+
+if (NOT AX_USE_ANGLE)  # check deprecated option: AX_USE_COMPAT_GL
+    if (NOT WINRT)
+        option (AX_USE_COMPAT_GL "Use google angle renderer" OFF)
+    else()
+        set (AX_USE_COMPAT_GL TRUE CACHE BOOL "Use google angle renderer" ON)
+    endif()
+    set (AX_USE_ANGLE ${AX_USE_COMPAT_GL} CACHE BOOL "Use google angle renderer" FORCE)
 endif()
 
 message(STATUS "WINRT=${WINRT}")
 
-option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation for windows video player" ON)
+option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON)
 
 if (NOT WINRT)
     option (AX_ENABLE_MSEDGE_WEBVIEW2 "Use Microsoft Edge webview2" ON)
 else() # we not support webview2 and vidio player for WINRT target
     set(AX_ENABLE_MSEDGE_WEBVIEW2 OFF CACHE BOOL "Use Microsoft Edge webview2" FORCE)
     # set(AX_ENABLE_MFMEDIA OFF CACHE BOOL "Enabling microsoft media foundation for windows video player" FORCE)
+endif()
+
+if (LINUX)
+    include(CheckIncludeFile)
+    check_include_file(vlc/vlc.h _AX_HAVE_VLC)
+    option (AX_ENABLE_VLC_MEDIA "Enabling vlc media on linux" ON)
+elseif(WINDOWS AND (NOT WINRT))
+    option (AX_ENABLE_VLC_MEDIA "Enabling vlc media on windows" OFF)
+endif()
+
+message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
+
+if(NOT APPLE)
+    set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
+else()
+    option(AX_USE_ALSOFT "Use ALSOFT on apple" OFF)
 endif()
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
@@ -85,9 +111,9 @@ else()
   set(AX_ENABLE_EXT_IMGUI OFF)
 endif()
 
-if (AX_ENABLE_EXT_EFFEKSEER AND ANDROID) # effekseer-axmol require use glad
-   set(AX_USE_GLAD TRUE CACHE INTERNAL "Forcing use glad for platforms which use GL backend" )
-   add_definitions(-DAX_USE_GLAD=1)
+if (ANDROID)
+    set(AX_USE_GLAD TRUE CACHE BOOL "Use glad for android GLESv3 support" FORCE)
+    add_definitions(-DAX_USE_GLAD=1)
 endif()
 
 if(XCODE)
@@ -127,8 +153,6 @@ if (APPLE)
     list(APPEND _AX_MEDIA_SRC media/AvfMediaEngine.mm)
     set_source_files_properties(media/MediaEngine.cpp PROPERTIES LANGUAGE OBJCXX)
 endif()
-
-message(STATUS "_AX_MEDIA_SRC=${_AX_MEDIA_SRC}")
 
 set(_AX_HEADER axmol.h
     ${_AX_2D_HEADER}
@@ -174,7 +198,7 @@ ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
 # use thirdparty libs
-add_subdirectory(${_AX_ROOT_PATH}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
+add_subdirectory(${_AX_ROOT}/thirdparty ${ENGINE_BINARY_PATH}/thirdparty)
 target_link_libraries(${_AX_CORE_LIB} thirdparty)
 
 # add base macro define and compile options
@@ -185,17 +209,17 @@ use_ax_compile_options(${_AX_CORE_LIB})
 use_ax_depend(${_AX_CORE_LIB})
 
 target_include_directories(${_AX_CORE_LIB}
-    PUBLIC ${_AX_ROOT_PATH}
-    PUBLIC ${_AX_ROOT_PATH}/thirdparty
-    PUBLIC ${_AX_ROOT_PATH}/extensions
-    PUBLIC ${_AX_ROOT_PATH}/core
-    PUBLIC ${_AX_ROOT_PATH}/core/platform
+    PUBLIC ${_AX_ROOT}
+    PUBLIC ${_AX_ROOT}/thirdparty
+    PUBLIC ${_AX_ROOT}/extensions
+    PUBLIC ${_AX_ROOT}/core
+    PUBLIC ${_AX_ROOT}/core/platform
 
-    INTERFACE ${_AX_ROOT_PATH}/thirdparty
-    INTERFACE ${_AX_ROOT_PATH}/extensions
-    INTERFACE ${_AX_ROOT_PATH}/core/base
-    INTERFACE ${_AX_ROOT_PATH}/core/audio
-    INTERFACE ${_AX_ROOT_PATH}/core/platform/${PLATFORM_FOLDER}
+    INTERFACE ${_AX_ROOT}/thirdparty
+    INTERFACE ${_AX_ROOT}/extensions
+    INTERFACE ${_AX_ROOT}/core/base
+    INTERFACE ${_AX_ROOT}/core/audio
+    INTERFACE ${_AX_ROOT}/core/platform/${PLATFORM_FOLDER}
 )
 
 set_target_properties(${_AX_CORE_LIB}
@@ -219,11 +243,11 @@ target_precompile_headers(${_AX_CORE_LIB} PRIVATE
 if(WINDOWS)
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
-            PATHS ${_AX_ROOT_PATH}/tools/external/nuget)
+            PATHS ${_AX_ROOT}/tools/external/nuget)
             
         if(NOT NUGET_EXE)
             message("NUGET.EXE not found.")
-            message(FATAL_ERROR "Please run setup.py again to download NUGET.EXE, and run CMake again.")
+            message(FATAL_ERROR "Please run setup.ps1 again to download NUGET.EXE, and run CMake again.")
         endif()
      
         exec_program(${NUGET_EXE}
@@ -240,7 +264,7 @@ if(WINDOWS)
 endif()
 
 # engine extensions
-add_subdirectory(${_AX_ROOT_PATH}/extensions ${ENGINE_BINARY_PATH}/extensions)
+add_subdirectory(${_AX_ROOT}/extensions ${ENGINE_BINARY_PATH}/extensions)
 
 if(MSVC)
     target_sources(${_AX_CORE_LIB} PRIVATE ./axmol.natvis)
@@ -250,21 +274,21 @@ if(MSVC)
 endif()
 
 if(ANDROID)
-    add_subdirectory(${_AX_ROOT_PATH}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
+    add_subdirectory(${_AX_ROOT}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
 endif()
 
 find_package(Git)
-if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT_PATH}/.git")
+if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT}/.git")
     # Get the current working branch and its latest abbreviated commit hash
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" rev-list --count HEAD
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-list --count HEAD
         TIMEOUT 5
         OUTPUT_VARIABLE AX_BUILD_NUM
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" branch --show-current
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" branch --show-current
         TIMEOUT 5
         OUTPUT_VARIABLE AX_GIT_BRANCH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT_PATH}" rev-parse --short=7 HEAD
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
         TIMEOUT 5
         OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -273,8 +297,8 @@ else()
     set(AX_GIT_COMMIT_HASH "unknown")
 endif()
 configure_file(
-        "${CMAKE_CURRENT_LIST_DIR}/version.h.in"
-        "${CMAKE_CURRENT_LIST_DIR}/version.h")
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h")
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

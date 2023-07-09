@@ -26,7 +26,7 @@
  ****************************************************************************/
 #define LOG_TAG "AudioEngineImpl"
 
-#include "platform/CCPlatformConfig.h"
+#include "platform/PlatformConfig.h"
 
 #include "audio/AudioEngineImpl.h"
 #include "audio/AudioDecoderManager.h"
@@ -36,10 +36,10 @@
 #endif
 
 #include "audio/AudioEngine.h"
-#include "platform/CCFileUtils.h"
-#include "base/CCDirector.h"
-#include "base/CCScheduler.h"
-#include "base/ccUtils.h"
+#include "platform/FileUtils.h"
+#include "base/Director.h"
+#include "base/Scheduler.h"
+#include "base/Utils.h"
 
 #if AX_USE_ALSOFT
 #    include "alc/inprogext.h"
@@ -246,7 +246,7 @@ static id s_AudioEngineSessionHandler = nullptr;
 #    endif
 static void alcReopenDeviceOnAxmolThread()
 {
-    Director::getInstance()->getOpenGLView()->queueOperation([](void*) {
+    Director::getInstance()->queueOperation([](void*) {
         auto alcReopenDeviceSOFTProc =
             (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
         if (alcReopenDeviceSOFTProc)

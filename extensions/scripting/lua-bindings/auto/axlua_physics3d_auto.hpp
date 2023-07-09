@@ -1,4 +1,4 @@
-#include "base/ccConfig.h"
+#include "base/Config.h"
 #if AX_USE_3D_PHYSICS && AX_ENABLE_BULLET_INTEGRATION
 #ifndef __ax_physics3d_h__
 #define __ax_physics3d_h__

@@ -26,17 +26,17 @@
 
 #include "WidgetReader/SpriteReader/SpriteReader.h"
 
-#include "base/ccUtils.h"
-#include "2d/CCSprite.h"
-#include "2d/CCSpriteFrameCache.h"
-#include "platform/CCFileUtils.h"
+#include "base/Utils.h"
+#include "2d/Sprite.h"
+#include "2d/SpriteFrameCache.h"
+#include "platform/FileUtils.h"
 
 #include "CSParseBinary_generated.h"
 #include "FlatBuffersSerialize.h"
 #include "WidgetReader/NodeReader/NodeReader.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "renderer/CCColorizer.h"
+#include "renderer/Colorizer.h"
 
 USING_NS_AX;
 using namespace flatbuffers;

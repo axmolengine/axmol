@@ -43,10 +43,10 @@
 #include "scripting/lua-bindings/manual/tolua_fix.h"
 #include "scripting/lua-bindings/manual/LuaBasicConversions.h"
 #include "scripting/lua-bindings/manual/base/LuaScriptHandlerMgr.h"
-#include "scripting/lua-bindings/manual/CCLuaValue.h"
+#include "scripting/lua-bindings/manual/LuaValue.h"
 #include "ui/CocosGUI.h"
-#include "scripting/lua-bindings/manual/CCLuaEngine.h"
-#include "base/CCEventListenerFocus.h"
+#include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "base/EventListenerFocus.h"
 
 using namespace ui;
 

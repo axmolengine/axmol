@@ -32,10 +32,10 @@
 #include <vector>
 #include <memory>
 #include <future>
-#include "base/CCRef.h"
-#include "base/ccMacros.h"
+#include "base/Ref.h"
+#include "base/Macros.h"
 
-#include "yasio/core/byte_buffer.hpp"
+#include "yasio/byte_buffer.hpp"
 
 /**
  * @addtogroup network

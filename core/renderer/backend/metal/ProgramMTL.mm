@@ -24,7 +24,7 @@
 
 #include "ProgramMTL.h"
 #include "ShaderModuleMTL.h"
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 NS_AX_BACKEND_BEGIN
 namespace

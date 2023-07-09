@@ -28,7 +28,7 @@ THE SOFTWARE.
 #ifndef __SUPPORT_TRANSFORM_UTILS_H__
 #define __SUPPORT_TRANSFORM_UTILS_H__
 
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 /**
  * @addtogroup base

@@ -25,10 +25,10 @@ THE SOFTWARE.
 #include "TriggerMng.h"
 #include "rapidjson/prettywriter.h"
 #include "rapidjson/stringbuffer.h"
-#include "base/CCDirector.h"
-#include "base/CCEventDispatcher.h"
-#include "base/ccUtils.h"
-#include "base/CCEventCustom.h"
+#include "base/Director.h"
+#include "base/EventDispatcher.h"
+#include "base/Utils.h"
+#include "base/EventCustom.h"
 
 USING_NS_AX;
 

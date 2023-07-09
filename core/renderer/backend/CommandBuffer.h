@@ -26,14 +26,14 @@
 
 #include <cstdint>
 
-#include "base/CCRef.h"
-#include "base/CCData.h"
+#include "base/Ref.h"
+#include "base/Data.h"
 
 #include "Macros.h"
 #include "Types.h"
 #include "RenderPassDescriptor.h"
 #include "PixelBufferDescriptor.h"
-#include "CCStdC.h"
+#include "StdC.h"
 #include "ProgramState.h"
 #include "VertexLayout.h"
 
@@ -42,9 +42,9 @@
 
 NS_AX_BEGIN
 struct PipelineDescriptor;
+NS_AX_END
 
-namespace backend
-{
+NS_AX_BACKEND_BEGIN
 
 class RenderPass;
 class RenderPipeline;

@@ -1,16 +1,16 @@
-set(ax_root ${_AX_ROOT_PATH})
+set(ax_root ${_AX_ROOT})
 
 set(lua_bindings_manual_headers
-    manual/CCComponentLua.h
+    manual/ComponentLua.h
     manual/3d/axlua_3d_manual.h
-    manual/CCLuaStack.h
-    manual/CCLuaEngine.h
+    manual/LuaStack.h
+    manual/LuaEngine.h
     manual/lua_module_register.h
-    manual/CCLuaBridge.h
+    manual/LuaBridge.h
     manual/extension/axlua_extension_manual.h
     manual/LuaBasicConversions.h
     manual/spine/LuaSkeletonAnimation.h
-    manual/platform/ios/CCLuaObjcBridge.h
+    manual/platform/ios/LuaObjcBridge.h
     manual/network/axlua_network_manual.h
     manual/network/lua_xml_http_request.h
     manual/network/lua_downloader.h
@@ -22,7 +22,7 @@ set(lua_bindings_manual_headers
     manual/base/LuaScriptHandlerMgr.h
     manual/base/axlua_base_manual.hpp
     manual/AxluaLoader.h
-    manual/CCLuaValue.h
+    manual/LuaValue.h
     manual/physics3d/axlua_physics3d_manual.h
     manual/cocostudio/lua-cocostudio-conversions.h
     manual/cocostudio/CustomGUIReader.h
@@ -31,15 +31,15 @@ set(lua_bindings_manual_headers
     )
 
 set(lua_bindings_manual_files
-    manual/CCLuaBridge.cpp
-    manual/CCLuaEngine.cpp
-    manual/CCLuaStack.cpp
-    manual/CCLuaValue.cpp
+    manual/LuaBridge.cpp
+    manual/LuaEngine.cpp
+    manual/LuaStack.cpp
+    manual/LuaValue.cpp
     manual/AxluaLoader.cpp
     manual/LuaBasicConversions.cpp
     manual/lua_module_register.cpp
     manual/tolua_fix.cpp
-    manual/CCComponentLua.cpp
+    manual/ComponentLua.cpp
     manual/base/LuaScriptHandlerMgr.cpp
     manual/base/axlua_base_manual.cpp
     manual/physics/axlua_physics_manual.cpp
@@ -98,11 +98,11 @@ if(APPLE)
     # CCLuaObjcBridge.mm needed by ios and mac
     set(lua_bindings_manual_headers
         ${lua_bindings_manual_headers}
-        manual/platform/ios/CCLuaObjcBridge.h
+        manual/platform/ios/LuaObjcBridge.h
         )
     set(lua_bindings_manual_files
         ${lua_bindings_manual_files}
-        manual/platform/ios/CCLuaObjcBridge.mm
+        manual/platform/ios/LuaObjcBridge.mm
         )
     if(IOS)
         set(lua_bindings_manual_headers
@@ -176,7 +176,7 @@ set(lua_bindings_headers
 set(lua_bindings_files
     ${lua_bindings_files}
     "${ax_root}/thirdparty/yasio/bindings/lyasio.cpp"
-    "${ax_root}/thirdparty/yasio/bindings/yasio_cclua.cpp")
+    "${ax_root}/thirdparty/yasio/bindings/yasio_axlua.cpp")
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 

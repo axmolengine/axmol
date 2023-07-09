@@ -24,9 +24,9 @@
 
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
-#include "base/CCDirector.h"
-#include "base/CCEventDispatcher.h"
-#include "base/CCEventAcceleration.h"
+#include "base/Director.h"
+#include "base/EventDispatcher.h"
+#include "base/EventAcceleration.h"
 
 #define TG3_GRAVITY_EARTH (9.80665f)
 

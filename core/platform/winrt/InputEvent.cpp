@@ -25,12 +25,12 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "platform/winrt/InputEvent.h"
-#include "platform/winrt/CCWinRTUtils.h"
-#include "platform/winrt/CCGLViewImpl-winrt.h"
-#include "base/CCEventAcceleration.h"
-#include "base/CCDirector.h"
-#include "base/CCEventDispatcher.h"
-#include "base/CCIMEDispatcher.h"
+#include "platform/winrt/WinRTUtils.h"
+#include "platform/winrt/GLViewImpl-winrt.h"
+#include "base/EventAcceleration.h"
+#include "base/Director.h"
+#include "base/EventDispatcher.h"
+#include "base/IMEDispatcher.h"
 
 NS_AX_BEGIN
 

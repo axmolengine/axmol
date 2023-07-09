@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2022 Bytedance Inc.
+Copyright (c) 2021-2023 Bytedance Inc.
 
 https://axmolengine.github.io/
 
@@ -27,15 +27,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/CCPlatformMacros.h"
+#include "platform/PlatformMacros.h"
 
-#include "./version.h"
+#include "axmolver.h"
 
 NS_AX_BEGIN
 
 AX_DLL const char* axmolVersion()
 {
-    return "axmol-1.0.0-" AX_GIT_COMMIT_HASH;
+    return "axmol-" AX_VERSION_STR "-" AX_GIT_COMMIT_HASH;
 }
 
 AX_DLL const char* cocos2dVersion()

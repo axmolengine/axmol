@@ -28,11 +28,11 @@ THE SOFTWARE.
 #include <android/log.h>
 #include <string>
 #include "platform/android/jni/JniHelper.h"
-#include "platform/android/CCFileUtils-android.h"
+#include "platform/android/FileUtils-android.h"
 #include "android/asset_manager_jni.h"
 #include "platform/android/jni/Java_org_axmol_lib_AxmolEngine.h"
 
-#include "base/ccUTF8.h"
+#include "base/UTF8.h"
 
 #define LOG_TAG "Java_org_axmol_lib_AxmolEngine.cpp"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -86,12 +86,13 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeSetEditTextDialogRes
     }
 }
 
-JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeInvoke(JNIEnv* env, jclass, jlong op, jlong param)
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeCall0(JNIEnv* env, jclass, jlong op, jlong param)
 {
     auto operation = reinterpret_cast<AsyncOperation>(static_cast<uintptr_t>(op));
     if (operation)
         operation(reinterpret_cast<void*>(static_cast<uintptr_t>(param)));
 }
+
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolEngine_nativeRunOnGLThread(JNIEnv* env, jclass, jobject runnable)
 {
     using jobject_type = std::remove_pointer_t<jobject>;

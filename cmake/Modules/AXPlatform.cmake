@@ -94,3 +94,23 @@ elseif(LINUX)
 endif()
 
 set(platform_spec_path "${_path_prefix}${platform_spec_path}")
+
+
+### axpkg url
+set (axpkg_ver v56)
+set (axpkg_base_url "https://github.com/axmolengine/buildware/releases/download/${axpkg_ver}" CACHE STRING "" FORCE)
+
+function(axpkg_require package_name dir)
+    if(NOT IS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/prebuilt)
+        set (package_url "${axpkg_base_url}/${package_name}.zip")
+        message(AUTHOR_WARNING "Downloading ${package_url}")
+        if (NOT EXISTS ${dir}/${package_name}.zip)
+            file(DOWNLOAD ${package_url} ${dir}/${package_name}.zip)
+        endif()
+        file(ARCHIVE_EXTRACT INPUT ${dir}/${package_name}.zip DESTINATION ${dir}/)
+        file(RENAME ${dir}/${package_name}/include ${dir}/include)
+        file(RENAME ${dir}/${package_name}/prebuilt ${dir}/prebuilt)
+        file(REMOVE_RECURSE ${dir}/${package_name})
+        # file(REMOVE ${CMAKE_CURRENT_LIST_DIR}/${package_name}.zip)
+    endif()
+endfunction()

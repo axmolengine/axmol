@@ -23,11 +23,11 @@
  ****************************************************************************/
 
 #include "TextureGL.h"
-#include "base/CCEventListenerCustom.h"
-#include "base/CCEventDispatcher.h"
-#include "base/CCEventType.h"
-#include "base/CCDirector.h"
-#include "platform/CCPlatformConfig.h"
+#include "base/EventListenerCustom.h"
+#include "base/EventDispatcher.h"
+#include "base/EventType.h"
+#include "base/Director.h"
+#include "platform/PlatformConfig.h"
 #include "renderer/backend/opengl/MacrosGL.h"
 #include "renderer/backend/opengl/UtilsGL.h"
 

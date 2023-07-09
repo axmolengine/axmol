@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "base/ccMacros.h"
+#include "base/Macros.h"
 
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0
 #    define CHECK_GL_ERROR_DEBUG()

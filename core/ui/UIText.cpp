@@ -24,8 +24,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "ui/UIText.h"
-#include "2d/CCLabel.h"
-#include "platform/CCFileUtils.h"
+#include "2d/Label.h"
+#include "platform/FileUtils.h"
 
 NS_AX_BEGIN
 

@@ -27,10 +27,10 @@
 
 #include "Physics3DTest.h"
 
-#include "3d/CCTerrain.h"
-#include "3d/CCBundle3D.h"
-#include "physics3d/CCPhysics3D.h"
-#include "extensions/Particle3D/PU/CCPUParticleSystem3D.h"
+#include "3d/Terrain.h"
+#include "3d/Bundle3D.h"
+#include "physics3d/Physics3D.h"
+#include "extensions/Particle3D/PU/PUParticleSystem3D.h"
 USING_NS_AX_EXT;
 USING_NS_AX;
 

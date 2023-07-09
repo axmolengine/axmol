@@ -32,7 +32,7 @@
 #include "ShaderCache.h"
 #include "DeviceInfo.h"
 
-#include "base/CCRef.h"
+#include "base/Ref.h"
 
 #include <string>
 
