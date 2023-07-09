@@ -522,7 +522,7 @@ function setup_android_sdk() {
             $ndk_rev_base = "$ndk_major.$ndk_minor"
 
             $ndk_parent = Join-Path $sdk_dir 'ndk'
-            if (!(Test-Path $ndk_parent -PathType Leaf)) {
+            if (!(Test-Path $ndk_parent -PathType Container)) {
                 continue
             }
 
