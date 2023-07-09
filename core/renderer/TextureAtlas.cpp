@@ -204,18 +204,18 @@ void TextureAtlas::setupIndices()
 
 // TextureAtlas - Update, Insert, Move & Remove
 
-void TextureAtlas::updateQuad(V3F_C4B_T2F_Quad* quad, ssize_t index)
+void TextureAtlas::updateQuad(const V3F_C4B_T2F_Quad& quad, ssize_t index)
 {
     AXASSERT(index >= 0 && index < _capacity, "updateQuadWithTexture: Invalid index");
 
     _totalQuads = MAX(index + 1, _totalQuads);
 
-    _quads[index] = *quad;
+    _quads[index] = quad;
 
     _dirty = true;
 }
 
-void TextureAtlas::insertQuad(V3F_C4B_T2F_Quad* quad, ssize_t index)
+void TextureAtlas::insertQuad(const V3F_C4B_T2F_Quad& quad, ssize_t index)
 {
     AXASSERT(index >= 0 && index < _capacity, "insertQuadWithTexture: Invalid index");
 
@@ -232,7 +232,7 @@ void TextureAtlas::insertQuad(V3F_C4B_T2F_Quad* quad, ssize_t index)
         memmove(&_quads[index + 1], &_quads[index], sizeof(_quads[0]) * remaining);
     }
 
-    _quads[index] = *quad;
+    _quads[index] = quad;
 
     _dirty = true;
 }
