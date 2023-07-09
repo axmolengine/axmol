@@ -12,6 +12,7 @@ on:
 
 jobs:
   win32:
+    timeout-minutes: 60
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
@@ -31,6 +32,10 @@ jobs:
     - name: Build
       shell: pwsh
       run: .\build.ps1 -p win32 -a x64
+    - run: |
+        set AXMOL_START_AUTOTEST=YES
+        start /wait cpp_tests.exe
+      working-directory: build_x64/bin/Release
   win32-dll:
         # The CMake configure and build commands are platform agnostic and should work equally
         # well on Windows or Mac.  You can convert this to a matrix build if you need
