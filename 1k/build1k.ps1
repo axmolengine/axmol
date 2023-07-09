@@ -521,10 +521,15 @@ function setup_android_sdk() {
             $ndk_minor = if ($ndk_minor_off -lt $ndk_ver.Length) { "$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)" } else { '0' }
             $ndk_rev_base = "$ndk_major.$ndk_minor"
 
+            $ndk_parent = Join-Path $sdk_dir 'ndk'
+            if (!(Test-Path $ndk_parent -PathType Leaf)) {
+                continue
+            }
+
             # find ndk in sdk
             $ndks = [ordered]@{}
             $ndk_rev_max = '0.0'
-            foreach ($item in $(Get-ChildItem -Path "$env:ANDROID_HOME/ndk")) {
+            foreach ($item in $(Get-ChildItem -Path "$ndk_parent")) {
                 $ndkDir = $item.FullName
                 $sourceProps = "$ndkDir/source.properties"
                 if (Test-Path $sourceProps -PathType Leaf) {
