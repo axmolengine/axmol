@@ -3,15 +3,6 @@ cmake_policy(SET CMP0057 NEW)
 
 ##############################################################
 ##  enable shader lang by shader compiler: glslcc
-find_program(GLSLCC_EXE NAMES glslcc
-    PATHS ${_AX_ROOT}/tools/external/glslcc
-)
-
-if (NOT GLSLCC_EXE)
-    message("glslcc not found.")
-    message(FATAL_ERROR "Please run setup.ps1 again to download glslcc, and run CMake again.")
-endif()
-
 macro(glslcc_option variable value)
     if(NOT DEFINED ${variable})
         set(${variable} ${value})
@@ -22,7 +13,17 @@ glslcc_option(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
 glslcc_option(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
 glslcc_option(GLSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 glslcc_option(GLSLCC_OUT_SUFFIX "")
-glslcc_option(GLSLCC_FLAT_UBOS TRUE)
+glslcc_option(GLSLCC_FLAT_UBOS FALSE)
+glslcc_option(GLSLCC_FIND_PROG_ROOT "")
+
+find_program(GLSLCC_EXE NAMES glslcc
+    PATHS ${GLSLCC_FIND_PROG_ROOT}
+)
+
+if (NOT GLSLCC_EXE)
+    message("glslcc not found.")
+    message(FATAL_ERROR "Please run setup.ps1 again to download glslcc, and run CMake again.")
+endif()
 
 message(STATUS "GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS=${GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS}")
 message(STATUS "GLSLCC_VERT_SOURCE_FILE_EXTENSIONS=${GLSLCC_VERT_SOURCE_FILE_EXTENSIONS}")
