@@ -604,8 +604,8 @@ void SpriteBatchNode::appendChild(Sprite* sprite)
 
     sprite->setAtlasIndex(index);
 
-    V3F_C4B_T2F_Quad quad = sprite->getQuad();
-    _textureAtlas->insertQuad(&quad, index);
+    auto&& quad = sprite->getQuad();
+    _textureAtlas->insertQuad(quad, index);
 
     // add children recursively
     auto& children = sprite->getChildren();
@@ -723,8 +723,8 @@ void SpriteBatchNode::insertQuadFromSprite(Sprite* sprite, ssize_t index)
     sprite->setBatchNode(this);
     sprite->setAtlasIndex(static_cast<unsigned int>(index));
 
-    V3F_C4B_T2F_Quad quad = sprite->getQuad();
-    _textureAtlas->insertQuad(&quad, index);
+    auto&& quad = sprite->getQuad();
+    _textureAtlas->insertQuad(quad, index);
 
     // FIXME:: updateTransform will update the textureAtlas too, using updateQuad.
     // FIXME:: so, it should be AFTER the insertQuad
