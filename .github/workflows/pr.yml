@@ -13,6 +13,7 @@ env:
 
 jobs:
   build-windows:
+    timeout-minutes: 60
     name: build-windows
     runs-on: windows-latest
     strategy:
@@ -39,6 +40,10 @@ jobs:
       - name: Build
         shell: pwsh
         run: .\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL
+      - run: |
+          set AXMOL_START_AUTOTEST=YES
+          start /wait cpp_tests.exe
+        working-directory: build_x64/bin/Release
 
   build-windows-clang:
     runs-on: windows-latest
