@@ -48,7 +48,7 @@ public:
 #endif
 
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
-#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) 
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
         addTest("Texture2D", []() { return new Texture2DTests(); });
@@ -207,7 +207,7 @@ void TestController::traverseTestList(TestList* testList)
 
     auto scheduler = _director->getScheduler();
     int testIndex  = 0;
-    for (auto&&callback : testList->_testCallbacks)
+    for (auto&& callback : testList->_testCallbacks)
     {
         if (_stopAutoTest)
             break;
@@ -237,6 +237,10 @@ void TestController::traverseTestList(TestList* testList)
     if (testList == _rootTestList)
     {
         _stopAutoTest = true;
+        if (std::getenv("AXMOL_START_AUTOTEST"))
+        {
+            exit(0);
+        }
     }
     else
     {
@@ -264,7 +268,7 @@ void TestController::traverseTestSuite(TestSuite* testSuite)
     testSuite->_currTestIndex = -1;
 
     auto logIndentation = _logIndentation;
-    for (auto&&callback : testSuite->_testCallbacks)
+    for (auto&& callback : testSuite->_testCallbacks)
     {
         auto testName = testSuite->_childTestNames[testIndex++];
 
@@ -538,7 +542,7 @@ static void signalHandler(int sig)
 
 static void initCrashCatch()
 {
-    for (auto&&sig : s_fatal_signals)
+    for (auto&& sig : s_fatal_signals)
     {
         signal(sig, signalHandler);
     }
@@ -546,7 +550,7 @@ static void initCrashCatch()
 
 static void disableCrashCatch()
 {
-    for (auto&&sig : s_fatal_signals)
+    for (auto&& sig : s_fatal_signals)
     {
         signal(sig, SIG_DFL);
     }

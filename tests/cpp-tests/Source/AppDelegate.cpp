@@ -117,6 +117,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     _testController = TestController::getInstance();
 
+    if (std::getenv("AXMOL_START_AUTOTEST"))
+    {
+        _testController->startAutoTest();
+    }
+
     return true;
 }
 
