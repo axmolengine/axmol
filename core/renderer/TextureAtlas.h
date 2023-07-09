@@ -111,14 +111,14 @@ public:
     @param index Index must be between 0 and the atlas capacity - 1.
     @since v0.8
     */
-    void updateQuad(V3F_C4B_T2F_Quad* quad, ssize_t index);
+    void updateQuad(const V3F_C4B_T2F_Quad& quad, ssize_t index);
 
     /** Inserts a Quad (texture, vertex and color) at a certain index.
      @param quad Quad that are going to be rendered.
      @param index Index must be between 0 and the atlas capacity - 1.
      @since v0.8
     */
-    void insertQuad(V3F_C4B_T2F_Quad* quad, ssize_t index);
+    void insertQuad(const V3F_C4B_T2F_Quad& quad, ssize_t index);
 
     /** Inserts a c array of quads at a given index.
      @param quads Quad that are going to be rendered.
