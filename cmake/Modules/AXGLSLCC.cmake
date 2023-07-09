@@ -35,6 +35,11 @@ define_property(SOURCE PROPERTY GLSLCC_INCLUDE_DIRS
                 BRIEF_DOCS "Compiled shader include directories"
                 FULL_DOCS "Compiled shader include directories, seperated with comma")
 
+# PROPERTY: defines (optional)
+define_property(SOURCE PROPERTY GLSLCC_DEFINES 
+                BRIEF_DOCS "Compiled shader defines"
+                FULL_DOCS "Compiled shader defines, seperated with comma")
+
 # Find shader sources in specified directory
 # syntax: ax_find_shaders(dir shader_sources [RECURSE])
 # examples:
@@ -78,6 +83,8 @@ function (ax_target_compile_shaders target_name)
         get_filename_component(FILE_NAME ${SC_FILE} NAME_WE)
         string(TOLOWER "${FILE_EXT}" FILE_EXT)
 
+        set(SC_DEFINES "")
+
         # silent when compile shader success
         set(SC_FLAGS "--silent" "--err-format=msvc")
         
@@ -95,7 +102,16 @@ function (ax_target_compile_shaders target_name)
             list(APPEND SC_FLAGS  "--lang=glsl" "--profile=${SC_PROFILE}")
         elseif (APPLE) 
             set(OUT_LANG "MSL")
-            list(APPEND SC_FLAGS  "--lang=msl" "--defines=METAL")
+            list(APPEND SC_DEFINES "METAL")
+        endif()
+
+        # defines
+        get_source_file_property(SOURCE_SC_DEFINES ${SC_FILE} GLSLCC_DEFINES)
+        if (NOT (SOURCE_SC_DEFINES STREQUAL "NOTFOUND"))
+            list(APPEND SC_DEFINES ${SOURCE_SC_DEFINES})
+        endif()
+        if (SC_DEFINES)
+            list(APPEND SC_FLAGS "--defines=${SC_DEFINES}")
         endif()
 
         # includes
