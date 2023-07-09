@@ -46,6 +46,9 @@ then you can simply build your project for all platform targets, i.e.
 
 Goto axmol root directory, double click or run `build.ps1` without any parameters, it will build `HelloCpp` by default
 
+## Quick build a test project e.g. 'cpp-tests'?
+Using a powershell console window, goto `axmol\tests\<testdir e.g. 'cpp-tests'>` directory, perform`pwsh ../../build.ps1  -p android -a arm64`, it will build `cpp-tests` for android.
+
 ## Windows (Visual Studio)
 
   1. Install [CMake](https://cmake.org/)  3.22.1+  
