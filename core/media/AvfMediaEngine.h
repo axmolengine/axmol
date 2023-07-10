@@ -1,3 +1,5 @@
+#pragma once
+
 #include "MediaEngine.h"
 
 #if defined(__APPLE__)
@@ -34,16 +36,16 @@ public:
     bool isPlaybackEnded() const override { return _playbackEnded; }
     MEMediaState getState() const override;
     bool transferVideoFrame() override;
-    
+
     void onStatusNotification(void* context);
     void onPlayerEnd();
     bool isPlaying() const {
         return _state == MEMediaState::Playing;
     }
-    
+
     void internalPlay(bool replay = false);
     void internalPause();
-    
+
 private:
     std::function<void(MEMediaEventType)> _onMediaEvent;
     std::function<void(const MEVideoFrame&)> _onVideoFrame;
@@ -59,11 +61,11 @@ private:
     bool _repeatEnabled = false;
     bool _playbackEnded = false;
 
-    /* 
+    /*
     true: luma=[0,255] chroma=[1,255]
     false: luma=[16,235] chroma=[16,240]
     */
-    bool _bFullColorRange = false; 
+    bool _bFullColorRange = false;
 };
 
 struct AvfMediaEngineFactory : public MediaEngineFactory
