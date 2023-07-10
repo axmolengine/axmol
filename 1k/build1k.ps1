@@ -291,7 +291,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $param = 
         }
     }
 
-    if($storedPATH) {
+    if ($storedPATH) {
         $env:PATH = $storedPATH
     }
 
@@ -381,7 +381,7 @@ function setup_cmake() {
 
 # setup nuget
 function setup_nuget() {
-    if(!$manifest.Contains('nuget')) { return $null }
+    if (!$manifest.Contains('nuget')) { return $null }
     $nuget_bin = Join-Path $prefix 'nuget'
     $nuget_prog, $nuget_ver = find_prog -name 'nuget' -path $nuget_bin -mode 'BOTH'
     if ($nuget_prog) {
@@ -405,7 +405,7 @@ function setup_nuget() {
 }
 
 function setup_jdk() {
-    if(!$manifest.Contains('jdk')) { return $null }
+    if (!$manifest.Contains('jdk')) { return $null }
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
@@ -450,7 +450,7 @@ function setup_jdk() {
 }
 
 function setup_glslcc() {
-    if(!$manifest.Contains('glslcc')) { return $null }
+    if (!$manifest.Contains('glslcc')) { return $null }
     $glslcc_bin = Join-Path $prefix 'glslcc'
     $glslcc_prog, $glslcc_ver = find_prog -name 'glslcc' -path $glslcc_bin -mode 'BOTH'
     if ($glslcc_prog) {
@@ -482,7 +482,7 @@ function setup_glslcc() {
 }
 
 function setup_ninja() {
-    if(!$manifest.Contains('ninja')) { return $null }
+    if (!$manifest.Contains('ninja')) { return $null }
     $ninja_prog, $ninja_ver = find_prog -name 'ninja'
     if ($ninja_prog) {
         return $ninja_prog
@@ -505,7 +505,7 @@ function setup_ninja() {
 }
 
 function setup_android_sdk() {
-    if(!$manifest.Contains('ndk')) { return $null }
+    if (!$manifest.Contains('ndk')) { return $null }
     # setup ndk
     $ndk_ver = $TOOLCHAIN_VER
     if (!$ndk_ver) {
@@ -623,7 +623,7 @@ function setup_android_sdk() {
 
             $ndkFullVer = $ndks[$ndk_ver]
 
-            ((1..10 | ForEach-Object {"yes"; Start-Sleep -Milliseconds 100}) | . $sdkmanager_prog --licenses --sdk_root=$sdk_root) | Out-Host
+            ((1..10 | ForEach-Object { "yes"; Start-Sleep -Milliseconds 100 }) | . $sdkmanager_prog --licenses --sdk_root=$sdk_root) | Out-Host
             exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", 'platform-tools', 'cmdline-tools;latest', 'platforms;android-33', 'build-tools;30.0.3', 'cmake;3.22.1', $ndkFullVer | Out-Host
 
             $fullVer = $ndkFullVer.Split(';')[1]
@@ -635,7 +635,7 @@ function setup_android_sdk() {
 }
 
 function setup_clang() {
-    if(!$manifest.Contains('clang')) { return $null }
+    if (!$manifest.Contains('clang')) { return $null }
     $clang_prog, $clang_ver = find_prog -name 'clang'
     if (!$clang_prog) {
         throw 'required clang $clang_ver not installed, please install it from: https://github.com/llvm/llvm-project/releases'
@@ -878,7 +878,12 @@ if (!$options.setupOnly) {
         $CONFIG_ALL_OPTIONS += $xopts
     }
     if ("$($xopts)".IndexOf('-B') -eq -1) {
-        $BUILD_DIR = "build_$($options.a)"
+        $is_host_target = ($BUILD_TARGET -eq 'win32') -or ($BUILD_TARGET -eq 'linux') -or ($BUILD_TARGET -eq 'osx')
+        if ($is_host_target) { # wheither building host target?
+            $BUILD_DIR = "build_$($options.a)"
+        } else {
+            $BUILD_DIR = "build_${BUILD_TARGET}_$($options.a)"
+        }
     }
     else {
         foreach ($opt in $xopts) {
