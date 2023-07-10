@@ -193,14 +193,14 @@ add_library(${_AX_CORE_LIB} ${_AX_SRC})
 ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
 
 # not final fix the macro not defined glslcc compiler errors
-set_source_files_properties(
-    ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
-    ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
-    ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
-    ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
-    PROPERTIES GLSLCC_DEFINES
-    "MAX_DIRECTIONAL_LIGHT_NUM=1,MAX_POINT_LIGHT_NUM=1,MAX_SPOT_LIGHT_NUM=1"
-)
+# set_source_files_properties(
+#     ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
+#     ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
+#     ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
+#     ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+#     PROPERTIES GLSLCC_DEFINES
+#     "MAX_DIRECTIONAL_LIGHT_NUM=1,MAX_POINT_LIGHT_NUM=1,MAX_SPOT_LIGHT_NUM=1"
+# )
 ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
 
 
