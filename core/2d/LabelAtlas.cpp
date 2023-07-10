@@ -263,7 +263,7 @@ void LabelAtlas::updateColor()
             quads[index].br.colors = color4;
             quads[index].tl.colors = color4;
             quads[index].tr.colors = color4;
-            _textureAtlas->updateQuad(&quads[index], index);
+            _textureAtlas->updateQuad(quads[index], index);
         }
     }
 }
