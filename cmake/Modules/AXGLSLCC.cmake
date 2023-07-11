@@ -13,7 +13,7 @@ glslcc_option(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
 glslcc_option(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
 glslcc_option(GLSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 glslcc_option(GLSLCC_OUT_SUFFIX "")
-glslcc_option(GLSLCC_FLAT_UBOS FALSE)
+glslcc_option(GLSLCC_FLAT_UBOS TRUE)
 glslcc_option(GLSLCC_FIND_PROG_ROOT "")
 
 find_program(GLSLCC_EXE NAMES glslcc
@@ -122,7 +122,7 @@ function (ax_target_compile_shaders target_name)
         list(APPEND INC_DIRS "${_AX_ROOT}/core/renderer/shaders")
         list(APPEND SC_FLAGS "--include-dirs=${INC_DIRS}")
 
-        # flat-ubs
+        # flat-ubos
         if(${GLSLCC_FLAT_UBOS})
             list(APPEND SC_FLAGS "--flatten-ubos")
         endif()
