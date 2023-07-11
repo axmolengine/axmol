@@ -3,6 +3,15 @@ cmake_policy(SET CMP0057 NEW)
 
 ##############################################################
 ##  enable shader lang by shader compiler: glslcc
+find_program(GLSLCC_EXE NAMES glslcc
+    PATHS ${_AX_ROOT}/tools/external/glslcc
+)
+
+if (NOT GLSLCC_EXE)
+    message("glslcc not found.")
+    message(FATAL_ERROR "Please run setup.ps1 again to download glslcc, and run CMake again.")
+endif()
+
 macro(glslcc_option variable value)
     if(NOT DEFINED ${variable})
         set(${variable} ${value})
@@ -14,16 +23,6 @@ glslcc_option(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
 glslcc_option(GLSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 glslcc_option(GLSLCC_OUT_SUFFIX "")
 glslcc_option(GLSLCC_FLAT_UBOS TRUE)
-glslcc_option(GLSLCC_FIND_PROG_ROOT "")
-
-find_program(GLSLCC_EXE NAMES glslcc
-    PATHS ${GLSLCC_FIND_PROG_ROOT}
-)
-
-if (NOT GLSLCC_EXE)
-    message("glslcc not found.")
-    message(FATAL_ERROR "Please run setup.ps1 again to download glslcc, and run CMake again.")
-endif()
 
 message(STATUS "GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS=${GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS}")
 message(STATUS "GLSLCC_VERT_SOURCE_FILE_EXTENSIONS=${GLSLCC_VERT_SOURCE_FILE_EXTENSIONS}")
@@ -34,11 +33,6 @@ message(STATUS "GLSLCC_FLAT_UBOS=${GLSLCC_FLAT_UBOS}")
 define_property(SOURCE PROPERTY GLSLCC_INCLUDE_DIRS 
                 BRIEF_DOCS "Compiled shader include directories"
                 FULL_DOCS "Compiled shader include directories, seperated with comma")
-
-# PROPERTY: defines (optional)
-define_property(SOURCE PROPERTY GLSLCC_DEFINES 
-                BRIEF_DOCS "Compiled shader defines"
-                FULL_DOCS "Compiled shader defines, seperated with comma")
 
 # Find shader sources in specified directory
 # syntax: ax_find_shaders(dir shader_sources [RECURSE])
@@ -83,8 +77,6 @@ function (ax_target_compile_shaders target_name)
         get_filename_component(FILE_NAME ${SC_FILE} NAME_WE)
         string(TOLOWER "${FILE_EXT}" FILE_EXT)
 
-        set(SC_DEFINES "")
-
         # silent when compile shader success
         set(SC_FLAGS "--silent" "--err-format=msvc")
         
@@ -102,17 +94,7 @@ function (ax_target_compile_shaders target_name)
             list(APPEND SC_FLAGS  "--lang=glsl" "--profile=${SC_PROFILE}")
         elseif (APPLE) 
             set(OUT_LANG "MSL")
-            list(APPEND SC_FLAGS  "--lang=msl")
-            list(APPEND SC_DEFINES "METAL")
-        endif()
-
-        # defines
-        get_source_file_property(SOURCE_SC_DEFINES ${SC_FILE} GLSLCC_DEFINES)
-        if (NOT (SOURCE_SC_DEFINES STREQUAL "NOTFOUND"))
-            list(APPEND SC_DEFINES ${SOURCE_SC_DEFINES})
-        endif()
-        if (SC_DEFINES)
-            list(APPEND SC_FLAGS "--defines=${SC_DEFINES}")
+            list(APPEND SC_FLAGS  "--lang=msl" "--defines=METAL")
         endif()
 
         # includes
@@ -123,7 +105,7 @@ function (ax_target_compile_shaders target_name)
         list(APPEND INC_DIRS "${_AX_ROOT}/core/renderer/shaders")
         list(APPEND SC_FLAGS "--include-dirs=${INC_DIRS}")
 
-        # flat-ubos
+        # flat-ubs
         if(${GLSLCC_FLAT_UBOS})
             list(APPEND SC_FLAGS "--flatten-ubos")
         endif()
