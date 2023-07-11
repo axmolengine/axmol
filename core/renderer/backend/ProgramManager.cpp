@@ -361,12 +361,12 @@ Program* ProgramManager::addProgram(uint32_t internalType) const
 }
 
 void ProgramManager::registerCustomProgramFactory(uint32_t type,
-                                                  std::string vertShaderSource,
-                                                  std::string fragShaderSource,
+                                                  std::string_view vsName,
+                                                  std::string_view fsName,
                                                   std::function<void(Program*)> fnSetupLayout)
 {
     auto internalType = ProgramType::CUSTOM_PROGRAM | type;
-    registerProgramFactoryByName(internalType, std::move(vertShaderSource), std::move(fragShaderSource),
+    registerProgramFactoryByName(internalType, vsName, fsName,
                                  std::move(fnSetupLayout), "");
 }
 

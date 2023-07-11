@@ -80,8 +80,8 @@ public:
 
     // register custom program create factory
     void registerCustomProgramFactory(uint32_t type,
-                                      std::string vertShaderSource,
-                                      std::string fragShaderSource,
+                                      std::string_view vsName,
+                                      std::string_view fsName,
                                       std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
 
     /**
