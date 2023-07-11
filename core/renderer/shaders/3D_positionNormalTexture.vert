@@ -25,6 +25,16 @@
 
 const char* CC3D_positionNormalTexture_vert = R"(
 
+#ifndef MAX_DIRECTIONAL_LIGHT_NUM
+#define MAX_DIRECTIONAL_LIGHT_NUM 0
+#endif
+#ifndef MAX_POINT_LIGHT_NUM
+#define MAX_POINT_LIGHT_NUM 0
+#endif
+#ifndef MAX_SPOT_LIGHT_NUM
+#define MAX_SPOT_LIGHT_NUM 0
+#endif
+
 #ifdef USE_NORMAL_MAPPING
 #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
 uniform vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
@@ -144,7 +154,15 @@ void main(void)
 
 const char* CC3D_skinPositionNormalTexture_vert = R"(
 
-
+#ifndef MAX_DIRECTIONAL_LIGHT_NUM
+#define MAX_DIRECTIONAL_LIGHT_NUM 0
+#endif
+#ifndef MAX_POINT_LIGHT_NUM
+#define MAX_POINT_LIGHT_NUM 0
+#endif
+#ifndef MAX_SPOT_LIGHT_NUM
+#define MAX_SPOT_LIGHT_NUM 0
+#endif
 
 #ifdef USE_NORMAL_MAPPING
 #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
