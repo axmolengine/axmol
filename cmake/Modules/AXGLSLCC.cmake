@@ -102,6 +102,7 @@ function (ax_target_compile_shaders target_name)
             list(APPEND SC_FLAGS  "--lang=glsl" "--profile=${SC_PROFILE}")
         elseif (APPLE) 
             set(OUT_LANG "MSL")
+            list(APPEND SC_FLAGS  "--lang=msl")
             list(APPEND SC_DEFINES "METAL")
         endif()
 
