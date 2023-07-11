@@ -141,7 +141,7 @@ public:
 
             if (_textureAtlas)
             {
-                _textureAtlas->updateQuad(&_quad, _atlasIndex);
+                _textureAtlas->updateQuad(_quad, _atlasIndex);
             }
 
             _recursiveDirty = false;
@@ -176,7 +176,7 @@ public:
         _quad.tl.colors = color4;
         _quad.tr.colors = color4;
 
-        _textureAtlas->updateQuad(&_quad, _atlasIndex);
+        _textureAtlas->updateQuad(_quad, _atlasIndex);
     }
 
     void setVisible(bool visible) override
@@ -2388,7 +2388,7 @@ void Label::updateColor()
             quads[index].br.colors = color4;
             quads[index].tl.colors = color4;
             quads[index].tr.colors = color4;
-            textureAtlas->updateQuad(&quads[index], index);
+            textureAtlas->updateQuad(quads[index], index);
         }
     }
 }

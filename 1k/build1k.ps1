@@ -186,9 +186,13 @@ if (!$TOOLCHAIN_VER) {
     $TOOLCHAIN_NAME = $TOOLCHAIN
 }
 
+function mkdirs($path) {
+    New-Item $path -ItemType Directory 1>$null
+}
+
 $prefix = if ($options.prefix) { $options.prefix } else { Join-Path $HOME 'build1k' }
 if (!(Test-Path "$prefix" -PathType Container)) {
-    mkdir $prefix | Out-Null
+    mkdirs $prefix
 }
 
 b1k_print "proj_dir=$((Get-Location).Path), prefix=$prefix"
@@ -202,6 +206,9 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $param = 
         elseif ($mode -eq 'BOTH') {
             $env:PATH = "$path$envPathSep$env:PATH"
         }
+    }
+    else {
+        $storedPATH = $null
     }
     if (!$cmd) { $cmd = $name }
 
@@ -239,6 +246,12 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $param = 
 
     # find command
     $cmd_info = (Get-Command $cmd -ErrorAction SilentlyContinue)
+
+    # needs restore immidiately since further cmd invoke maybe require system bins
+    if ($path) {
+        $env:PATH = "$path$envPathSep$storedPATH"
+    }
+
     $found_rets = $null # prog_path,prog_version
     if ($cmd_info) {
         $prog_path = $cmd_info.Source
@@ -278,9 +291,10 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $param = 
         }
     }
 
-    if ($path) {
+    if ($storedPATH) {
         $env:PATH = $storedPATH
     }
+
     return $found_rets
 }
 
@@ -335,7 +349,7 @@ function setup_cmake() {
             }
             elseif ($HOST_OS -eq $HOST_LINUX) {
                 chmod 'u+x' "$cmake_pkg_path"
-                mkdir $cmake_root
+                mkdirs $cmake_root
                 & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
             }
             elseif ($HOST_OS -eq $HOST_MAC) {
@@ -367,7 +381,7 @@ function setup_cmake() {
 
 # setup nuget
 function setup_nuget() {
-    if(!$manifest.Contains('nuget')) { return $null }
+    if (!$manifest.Contains('nuget')) { return $null }
     $nuget_bin = Join-Path $prefix 'nuget'
     $nuget_prog, $nuget_ver = find_prog -name 'nuget' -path $nuget_bin -mode 'BOTH'
     if ($nuget_prog) {
@@ -375,7 +389,7 @@ function setup_nuget() {
     }
 
     if (!(Test-Path -Path $nuget_bin -PathType Container)) {
-        mkdir $nuget_bin | Out-Null
+        mkdirs $nuget_bin
     }
 
     $nuget_prog = Join-Path $nuget_bin 'nuget.exe'
@@ -391,7 +405,7 @@ function setup_nuget() {
 }
 
 function setup_jdk() {
-    if(!$manifest.Contains('jdk')) { return $null }
+    if (!$manifest.Contains('jdk')) { return $null }
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
@@ -436,7 +450,7 @@ function setup_jdk() {
 }
 
 function setup_glslcc() {
-    if(!$manifest.Contains('glslcc')) { return $null }
+    if (!$manifest.Contains('glslcc')) { return $null }
     $glslcc_bin = Join-Path $prefix 'glslcc'
     $glslcc_prog, $glslcc_ver = find_prog -name 'glslcc' -path $glslcc_bin -mode 'BOTH'
     if ($glslcc_prog) {
@@ -453,7 +467,7 @@ function setup_glslcc() {
             Expand-Archive -Path $glslcc_pkg -DestinationPath $glslcc_bin
         }
         else {
-            mkdir -p $glslcc_bin | Out-Null
+            mkdirs $glslcc_bin
             tar xvf "$glslcc_pkg" -C $glslcc_bin
         }
     }
@@ -468,7 +482,7 @@ function setup_glslcc() {
 }
 
 function setup_ninja() {
-    if(!$manifest.Contains('ninja')) { return $null }
+    if (!$manifest.Contains('ninja')) { return $null }
     $ninja_prog, $ninja_ver = find_prog -name 'ninja'
     if ($ninja_prog) {
         return $ninja_prog
@@ -491,7 +505,7 @@ function setup_ninja() {
 }
 
 function setup_android_sdk() {
-    if(!$manifest.Contains('ndk')) { return $null }
+    if (!$manifest.Contains('ndk')) { return $null }
     # setup ndk
     $ndk_ver = $TOOLCHAIN_VER
     if (!$ndk_ver) {
@@ -521,10 +535,15 @@ function setup_android_sdk() {
             $ndk_minor = if ($ndk_minor_off -lt $ndk_ver.Length) { "$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)" } else { '0' }
             $ndk_rev_base = "$ndk_major.$ndk_minor"
 
+            $ndk_parent = Join-Path $sdk_dir 'ndk'
+            if (!(Test-Path $ndk_parent -PathType Container)) {
+                continue
+            }
+
             # find ndk in sdk
             $ndks = [ordered]@{}
             $ndk_rev_max = '0.0'
-            foreach ($item in $(Get-ChildItem -Path "$env:ANDROID_HOME/ndk")) {
+            foreach ($item in $(Get-ChildItem -Path "$ndk_parent")) {
                 $ndkDir = $item.FullName
                 $sourceProps = "$ndkDir/source.properties"
                 if (Test-Path $sourceProps -PathType Leaf) {
@@ -560,7 +579,7 @@ function setup_android_sdk() {
         else {
             $sdk_root = Join-Path $prefix 'adt/sdk'
             if (!(Test-Path -Path $sdk_root -PathType Container)) {
-                mkdir $sdk_root
+                mkdirs $sdk_root
             }
         }
 
@@ -604,6 +623,7 @@ function setup_android_sdk() {
 
             $ndkFullVer = $ndks[$ndk_ver]
 
+            ((1..10 | ForEach-Object { "yes"; Start-Sleep -Milliseconds 100 }) | . $sdkmanager_prog --licenses --sdk_root=$sdk_root) | Out-Host
             exec_prog -prog $sdkmanager_prog -params '--verbose', "--sdk_root=$sdk_root", 'platform-tools', 'cmdline-tools;latest', 'platforms;android-33', 'build-tools;30.0.3', 'cmake;3.22.1', $ndkFullVer | Out-Host
 
             $fullVer = $ndkFullVer.Split(';')[1]
@@ -615,7 +635,7 @@ function setup_android_sdk() {
 }
 
 function setup_clang() {
-    if(!$manifest.Contains('clang')) { return $null }
+    if (!$manifest.Contains('clang')) { return $null }
     $clang_prog, $clang_ver = find_prog -name 'clang'
     if (!$clang_prog) {
         throw 'required clang $clang_ver not installed, please install it from: https://github.com/llvm/llvm-project/releases'
@@ -717,6 +737,9 @@ function preprocess_andorid([string[]]$inputOptions) {
         $cmake_toolchain_file = "$ndk_root\build\cmake\android.toolchain.cmake"
         $arch = $t_archs[$options.a]
         $outputOptions += '-G', 'Ninja', '-DANDROID_STL=c++_shared', "-DCMAKE_MAKE_PROGRAM=$ninja_prog", "-DCMAKE_TOOLCHAIN_FILE=$cmake_toolchain_file", "-DANDROID_ABI=$arch"
+        # If set to ONLY, then only the roots in CMAKE_FIND_ROOT_PATH will be searched
+        # If set to BOTH, then the host system paths and the paths in CMAKE_FIND_ROOT_PATH will be searched
+        # If set to NEVER, then the roots in CMAKE_FIND_ROOT_PATH will be ignored and only the host system root will be used
         $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=BOTH'
         $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=BOTH'
         $outputOptions += '-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=BOTH'
@@ -821,17 +844,15 @@ if ($BUILD_TARGET -eq 'win32') {
     }
 }
 elseif ($BUILD_TARGET -eq 'android') {
+    $null = setup_jdk # setup android sdk cmdlinetools require jdk
     $sdk_root, $ndk_root = setup_android_sdk
     $env:ANDROID_HOME = $sdk_root
     $env:ANDROID_NDK = $ndk_root
     # we assume 'gradle' to build apk, so require setup jdk11+
     # otherwise, build for android libs, needs setup ninja
-    if ($options.xt -eq 'gradle') {
-        $null = setup_jdk
-    }
-    else {
+    if ($options.xt -ne 'gradle') {
         $ninja_prog = setup_ninja
-    }
+    }  
 }
 
 if (!$options.setupOnly) {
@@ -857,7 +878,12 @@ if (!$options.setupOnly) {
         $CONFIG_ALL_OPTIONS += $xopts
     }
     if ("$($xopts)".IndexOf('-B') -eq -1) {
-        $BUILD_DIR = "build_$($options.a)"
+        $is_host_target = ($BUILD_TARGET -eq 'win32') -or ($BUILD_TARGET -eq 'linux') -or ($BUILD_TARGET -eq 'osx')
+        if ($is_host_target) { # wheither building host target?
+            $BUILD_DIR = "build_$($options.a)"
+        } else {
+            $BUILD_DIR = "build_${BUILD_TARGET}_$($options.a)"
+        }
     }
     else {
         foreach ($opt in $xopts) {
