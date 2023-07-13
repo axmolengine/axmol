@@ -35,12 +35,12 @@ RenderTargetGL::~RenderTargetGL()
 
 void RenderTargetGL::bindFrameBuffer() const
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, _FBO);
+    GL_BIND_FRAMEBUFFER(_FBO);
 }
 
 void RenderTargetGL::unbindFrameBuffer() const
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    GL_BIND_FRAMEBUFFER(0);
 }
 
 void RenderTargetGL::update() const {

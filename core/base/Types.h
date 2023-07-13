@@ -662,10 +662,23 @@ extern const ssize_t AX_DLL AX_INVALID_INDEX;
 
 struct AX_DLL Viewport
 {
-    int x          = 0;
-    int y          = 0;
+    int x = 0;
+    int y = 0;
     unsigned int w = 0;
     unsigned int h = 0;
+
+    void set(int _x, int _y, unsigned int _w, unsigned int _h)
+    {
+        x = _x;
+        y = _y;
+        w = _w;
+        h = _h;
+    }
+
+    bool operator==(const Viewport& v) const
+    {
+        return this->x == v.x && this->y == v.y && this->w == v.w && this->h == v.h;
+    };
 };
 
 struct AX_DLL ScissorRect
