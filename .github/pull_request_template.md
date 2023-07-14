@@ -1,4 +1,7 @@
-THIS PROJECT IS IN DEVELOPMENT MODE. Any pull requests should merge to branch `dev`, otherwise will be rejected immediately.
+Which branch your pull-request should merge into?
+
+- `main`: BugFixs, Minor features
+- `dev`: Big changes, big features, i.e. refactor render flow
 
 ## Describe your changes
 

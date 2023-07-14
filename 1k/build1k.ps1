@@ -50,38 +50,107 @@
 #   | macOS    | osx,ios,tvos,watchos | xcode                     | cmake            |
 #
 
+$myRoot = $PSScriptRoot
+
+# ----------------- utils functions -----------------
+
+$HOST_WIN = 0 # targets: win,uwp,android
+$HOST_LINUX = 1 # targets: linux,android 
+$HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
+
+# 0: windows, 1: linux, 2: macos
+$IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
+if ($IsWin) {
+    $HOST_OS = $HOST_WIN
+    $envPathSep = ';'
+}
+else {
+    $envPathSep = ':'
+    if ($IsLinux) {
+        $HOST_OS = $HOST_LINUX
+    }
+    elseif ($IsMacOS) {
+        $HOST_OS = $HOST_MAC
+    }
+    else {
+        throw "Unsupported host OS to run build1k.ps1"
+    }
+}
+
+$exeSuffix = if ($HOST_OS -eq 0) { '.exe' } else { '' }
+
+class build1k {
+    [void] println($msg) {
+        Write-Host "build1k: $msg"
+    }
+
+    [void] print($msg) {
+        Write-Host "build1k: $msg" -NoNewline
+    }
+
+    [System.Boolean] isfile([string]$path) {
+        return Test-Path $path -PathType Leaf
+    }
+
+    [System.Boolean] isdir([string]$path) {
+        return Test-Path $path -PathType Container
+    }
+
+    [void] mkdirs([string]$path) {
+        New-Item $path -ItemType Directory 1>$null
+    }
+
+    [void] pause($msg) {
+        if ($Global:IsWin) {
+            $myProcess = [System.Diagnostics.Process]::GetCurrentProcess()
+            $parentProcess = $myProcess.Parent
+            if (!$parentProcess) {
+                $myPID = $myProcess.Id
+                $instance = Get-WmiObject Win32_Process -Filter "ProcessId = $myPID"
+                $parentProcess = Get-Process -Id $instance.ParentProcessID
+            }
+            $parentProcessName = $parentProcess.ProcessName
+            if ($parentProcessName -like "explorer") {
+                $this.print("$msg, press any key to continue . . .")
+                cmd /c pause 1>$null
+            }
+        }
+        else {
+            $this.println($msg)
+        }
+    }
+}
+$b1k = [build1k]::new()
+
+# ---------------------- manifest --------------------
 # mode:
 # x.y.z+         : >=
 # x.y.z          : ==
 # *              : any
 # x.y.z~x2.y2.z2 : range
 $manifest = @{
-    msvc         = '143+';
+    # C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.36.32532\vc_redist.x64.exe
+    msvc         = '14.36.32532';
     ndk          = 'r23c+';
     xcode        = '13.0.0~14.2.0'; # range
     clang        = '15.0.0+';
     gcc          = '9.0.0+';
     cmake        = '3.26.4+';
     nuget        = '*'; # any
-    glslcc       = '1.7.6+';
+    # glslcc       = '1.8.0+';
     ninja        = '1.11.1+';
     jdk          = '11.0.19+';
+    nsis         = '3.09';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
-$myRoot = $PSScriptRoot
-
 $manifest_file = Join-Path $myRoot 'manifest.ps1'
-if (Test-Path $manifest_file -PathType Leaf) {
+if ($b1k.isfile($manifest_file)) {
     . $manifest_file
 }
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
 $cmdlinetools_rev = '9477386'
-
-function b1k_print($msg) {
-    Write-Host "build1k: $msg"
-}
 
 $options = @{
     p         = $null; 
@@ -109,7 +178,7 @@ foreach ($arg in $args) {
             $options[$optName] = $arg
         }
         else {
-            b1k_print("Warning: ignore unrecognized option: $optName")
+            $b1k.println("Warning: ignore unrecognized option: $optName")
         }
         $optName = $null
     }
@@ -117,36 +186,11 @@ foreach ($arg in $args) {
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
-b1k_print "PowerShell $pwsh_ver"
+$b1k.println("PowerShell $pwsh_ver")
 
 if (!$options.setupOnly) {
-    b1k_print $(Out-String -InputObject $options)
+    $b1k.println("$(Out-String -InputObject $options)")
 }
-
-$HOST_WIN = 0 # targets: win,uwp,android
-$HOST_LINUX = 1 # targets: linux,android 
-$HOST_MAC = 2 # targets: android,ios,osx(macos),tvos,watchos
-
-# 0: windows, 1: linux, 2: macos
-$IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
-if ($IsWin) {
-    $HOST_OS = $HOST_WIN
-    $envPathSep = ';'
-}
-else {
-    $envPathSep = ':'
-    if ($IsLinux) {
-        $HOST_OS = $HOST_LINUX
-    }
-    elseif ($IsMacOS) {
-        $HOST_OS = $HOST_MAC
-    }
-    else {
-        throw "Unsupported host OS to run build1k.ps1"
-    }
-}
-
-$exeSuffix = if ($HOST_OS -eq 0) { '.exe' } else { '' }
 
 $CONFIG_DEFAULT_OPTIONS = @()
 $HOST_OS_NAME = $('windows', 'linux', 'macos').Get($HOST_OS)
@@ -186,18 +230,14 @@ if (!$TOOLCHAIN_VER) {
     $TOOLCHAIN_NAME = $TOOLCHAIN
 }
 
-function mkdirs($path) {
-    New-Item $path -ItemType Directory 1>$null
-}
-
 $prefix = if ($options.prefix) { $options.prefix } else { Join-Path $HOME 'build1k' }
-if (!(Test-Path "$prefix" -PathType Container)) {
-    mkdirs $prefix
+if (!$b1k.isdir($prefix)) {
+    $b1k.mkdirs($prefix)
 }
 
-b1k_print "proj_dir=$((Get-Location).Path), prefix=$prefix"
+$b1k.println("proj_dir=$((Get-Location).Path), prefix=$prefix")
 
-function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $param = $null, $silent = $false) {
+function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params = @('--version'), $silent = $false) {
     if ($path) {
         $storedPATH = $env:PATH
         if ($mode -eq 'ONLY') {
@@ -211,6 +251,8 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $param = 
         $storedPATH = $null
     }
     if (!$cmd) { $cmd = $name }
+
+    $params = [array]$params
 
     # try get match expr and preferred ver
     $checkVerCond = $null
@@ -255,7 +297,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $param = 
     $found_rets = $null # prog_path,prog_version
     if ($cmd_info) {
         $prog_path = $cmd_info.Source
-        $verStr = if (!$param) { $(. $cmd '--version' 2>$null) | Select-Object -First 1 } else { $(. $cmd '--version' $param 2>$null) | Select-Object -First 1 }
+        $verStr = $(. $cmd @params 2>$null) | Select-Object -First 1
         if (!$verStr -or ($verStr.IndexOf('--version') -ne -1)) {
             $verInfo = $cmd_info.Version
             $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Revision)"
@@ -268,22 +310,22 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $param = 
         if ($checkVerCond) {
             $matched = Invoke-Expression $checkVerCond
             if ($matched) {
-                if (!$silent) { b1k_print "Found suitable installed ${name}: $prog_path, version: $foundVer" }
+                if (!$silent) { $b1k.println("Found suitable installed ${name}: $prog_path, version: $foundVer") }
                 $found_rets = $prog_path, $foundVer
             }
             else {
-                if (!$silent) { b1k_print "The installed ${name}: $prog_path, version: $foundVer not match required: $requiredVer" }
+                if (!$silent) { $b1k.println("The installed ${name}: $prog_path, version: $foundVer not match required: $requiredVer") }
                 $found_rets = $null, $preferredVer
             }
         }
         else {
-            if (!$silent) { b1k_print "Found installed ${name}: $prog_path, version: $foundVer" }
+            if (!$silent) { $b1k.println("Found installed ${name}: $prog_path, version: $foundVer") }
             $found_rets = $prog_path, $foundVer
         }
     }
     else {
         if ($preferredVer) {
-            if (!$silent) { b1k_print "Not found $name, needs install: $preferredVer" }
+            if (!$silent) { $b1k.println("Not found $name, needs install: $preferredVer") }
             $found_rets = $null, $preferredVer
         }
         else {
@@ -311,7 +353,8 @@ function exec_prog($prog, $params) {
 }
 
 function download_file($url, $out) {
-    b1k_print "Downloading $url to $out ..."
+    if($b1k.isfile($out)) { return }
+    $b1k.println("Downloading $url to $out ...")
     if ($pwsh_ver -ge '7.0') {
         curl -L $url -o $out
     }
@@ -337,10 +380,10 @@ function setup_cmake() {
         $cmake_root = $(Join-Path $prefix $cmake_dir)
         $cmake_pkg_name = "$cmake_dir$cmake_suffix"
         $cmake_pkg_path = "$cmake_root$cmake_suffix"
-        if (!(Test-Path $cmake_root -PathType Container)) {
+        if ($b1k.isdir($cmake_root)) {
             $cmake_base_uri = 'https://github.com/Kitware/CMake/releases/download'
             $cmake_url = "$cmake_base_uri/v$cmake_ver/$cmake_pkg_name"
-            if (!(Test-Path $cmake_pkg_path -PathType Leaf)) {
+            if (!$b1k.isfile($cmake_pkg_path)) {
                 download_file "$cmake_url" "$cmake_pkg_path"
             }
 
@@ -349,7 +392,7 @@ function setup_cmake() {
             }
             elseif ($HOST_OS -eq $HOST_LINUX) {
                 chmod 'u+x' "$cmake_pkg_path"
-                mkdirs $cmake_root
+                $b1k.mkdirs($cmake_root)
                 & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
             }
             elseif ($HOST_OS -eq $HOST_MAC) {
@@ -370,7 +413,7 @@ function setup_cmake() {
             if (($null -ne $cmake_bin) -and ($env:PATH.IndexOf($cmake_bin) -eq -1)) {
                 $env:PATH = "$cmake_bin$envPathSep$env:PATH"
             }
-            b1k_print "Using cmake: $cmake_prog, version: $cmake_ver"
+            $b1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
             return $cmake_prog
         }
         else {
@@ -388,20 +431,41 @@ function setup_nuget() {
         return $nuget_prog
     }
 
-    if (!(Test-Path -Path $nuget_bin -PathType Container)) {
-        mkdirs $nuget_bin
+    if (!$b1k.isdir($nuget_bin)) {
+        $b1k.mkdirs($nuget_bin)
     }
 
     $nuget_prog = Join-Path $nuget_bin 'nuget.exe'
     download_file "https://dist.nuget.org/win-x86-commandline/$nuget_ver/nuget.exe" $nuget_prog
 
-    if (Test-Path -Path $nuget_prog -PathType Leaf) {
-        b1k_print "Using nuget: $nuget_prog, version: $nuget_ver"
+    if ($b1k.isfile($nuget_prog)) {
+        $b1k.println("Using nuget: $nuget_prog, version: $nuget_ver")
         return $nuget_prog
     }
     else {
         throw "Install nuget fail"
     }
+}
+
+function setup_nsis() {
+    if(!$manifest.Contains('nsis')) { return $null }
+    $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION'
+    if ($nsis_prog) {
+        return $nsis_prog
+    }
+
+    $nsis_bin = Join-Path $prefix "nsis-$nsis_ver"
+    if (!$b1k.isdir($nsis_bin)) {
+        download_file "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" "$prefix/nsis-$nsis_ver.zip"
+        Expand-Archive -Path $prefix/nsis-$nsis_ver.zip -DestinationPath "$prefix"
+    }
+    if ($env:PATH.IndexOf($nsis_bin) -eq -1) {
+        $env:PATH = "$nsis_bin$envPathSep$env:PATH"
+    }
+    $nsis_prog = (Join-Path $nsis_bin "makensis$exeSuffix")
+
+    $b1k.println("Using nsis: $nsis_prog, version: $nsis_ver")
+    return $nsis_prog
 }
 
 function setup_jdk() {
@@ -413,9 +477,9 @@ function setup_jdk() {
 
     $suffix = $('windows-x64.zip', 'linux-x64.tar.gz', 'macOS-x64.tar.gz').Get($HOST_OS)
     $java_home = Join-Path $prefix "jdk-$jdk_ver"
-    if (!(Test-Path $java_home -PathType Container)) {
+    if (!$b1k.isdir($java_home)) {
         # refer to https://learn.microsoft.com/en-us/java/openjdk/download
-        if (!(Test-Path "$prefix/microsoft-jdk-$jdk_ver-$suffix" -PathType Leaf)) {
+        if (!$b1k.isfile("$prefix/microsoft-jdk-$jdk_ver-$suffix")) {
             download_file "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "$prefix/microsoft-jdk-$jdk_ver-$suffix"
         }
 
@@ -444,7 +508,7 @@ function setup_jdk() {
         throw "Install jdk $jdk_ver fail"
     }
 
-    b1k_print "Using jdk: $javac_prog, version: $jdk_ver"
+    $b1k.println("Using jdk: $javac_prog, version: $jdk_ver")
 
     return $javac_prog
 }
@@ -458,16 +522,16 @@ function setup_glslcc() {
     }
 
     $suffix = $('win64.zip', 'linux.tar.gz', 'osx.tar.gz').Get($HOST_OS)
-    if (!(Test-Path $glslcc_bin -PathType Container)) {
+    if (!$b1k.isdir($glslcc_bin)) {
         $glslcc_pkg = "$prefix/glslcc-$suffix"
-        if (!(Test-Path $glslcc_pkg -PathType Leaf)) {
+        if (!$b1k.isfile($glslcc_pkg)) {
             download_file "https://github.com/septag/glslcc/releases/download/v$glslcc_ver/glslcc-$glslcc_ver-$suffix" "$glslcc_pkg"
         }
         if ($IsWin) {
             Expand-Archive -Path $glslcc_pkg -DestinationPath $glslcc_bin
         }
         else {
-            mkdirs $glslcc_bin
+            $b1k.mkdirs($glslcc_bin)
             tar xvf "$glslcc_pkg" -C $glslcc_bin
         }
     }
@@ -476,7 +540,7 @@ function setup_glslcc() {
     }
     $glslcc_prog = (Join-Path $glslcc_bin "glslcc$exeSuffix")
 
-    b1k_print "Using glslcc: $glslcc_prog, version: $glslcc_ver"
+    $b1k.println("Using glslcc: $glslcc_prog, version: $glslcc_ver")
 
     return $glslcc_prog
 }
@@ -500,7 +564,7 @@ function setup_ninja() {
     }
     $ninja_prog = (Join-Path $ninja_bin "ninja$exeSuffix")
 
-    b1k_print "Using ninja: $ninja_prog, version: $ninja_ver"
+    $b1k.println("Using ninja: $ninja_prog, version: $ninja_ver")
     return $ninja_prog
 }
 
@@ -525,7 +589,7 @@ function setup_android_sdk() {
     $sdk_root = $null
     foreach ($sdk_root_env in $sdk_root_envs) {
         $sdk_dir = [Environment]::GetEnvironmentVariable($sdk_root_env)
-        b1k_print "Looking require $ndk_ver$IsGraterThan in env:$sdk_root_env=$sdk_dir"
+        $b1k.println("Looking require $ndk_ver$IsGraterThan in env:$sdk_root_env=$sdk_dir")
         if ("$sdk_dir" -ne '') {
             $sdk_root = $sdk_dir
             $ndk_root = $null
@@ -536,7 +600,7 @@ function setup_android_sdk() {
             $ndk_rev_base = "$ndk_major.$ndk_minor"
 
             $ndk_parent = Join-Path $sdk_dir 'ndk'
-            if (!(Test-Path $ndk_parent -PathType Container)) {
+            if (!$b1k.isdir($ndk_parent)) {
                 continue
             }
 
@@ -546,7 +610,7 @@ function setup_android_sdk() {
             foreach ($item in $(Get-ChildItem -Path "$ndk_parent")) {
                 $ndkDir = $item.FullName
                 $sourceProps = "$ndkDir/source.properties"
-                if (Test-Path $sourceProps -PathType Leaf) {
+                if ($b1k.isfile($sourceProps)) {
                     $verLine = $(Get-Content $sourceProps | Select-Object -Index 1)
                     $ndk_rev = $($verLine -split '=').Trim()[1].split('.')[0..1] -join '.'
                     $ndks.Add($ndk_rev, $ndkDir)
@@ -565,36 +629,36 @@ function setup_android_sdk() {
             }
 
             if ($null -ne $ndk_root) {
-                b1k_print "Found $ndk_root in $sdk_root ..."
+                $b1k.println("Found $ndk_root in $sdk_root ...")
                 break
             }
         }
     }
 
-    if (!(Test-Path "$ndk_root" -PathType Container)) {
+    if (!$b1k.isdir("$ndk_root")) {
         $sdkmanager_prog, $sdkmanager_ver = $null, $null
-        if (Test-Path "$sdk_root" -PathType Container) {
-            $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$sdk_root/cmdline-tools/latest/bin" -param "--sdk_root=$sdk_root")
+        if ($b1k.isdir($sdk_root)) {
+            $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$sdk_root/cmdline-tools/latest/bin" -params "--version", "--sdk_root=$sdk_root")
         }
         else {
             $sdk_root = Join-Path $prefix 'adt/sdk'
-            if (!(Test-Path -Path $sdk_root -PathType Container)) {
-                mkdirs $sdk_root
+            if (!$b1k.isdir($sdk_root)) {
+                $b1k.mkdirs($sdk_root)
             }
         }
 
         if (!$sdkmanager_prog) {
-            $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$prefix/cmdline-tools/bin" -param "--sdk_root=$sdk_root")
+            $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$prefix/cmdline-tools/bin" -params "--version", "--sdk_root=$sdk_root")
             $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
             if (!$sdkmanager_prog) {
-                b1k_print "Installing cmdlinetools version: $sdkmanager_ver ..."
+                $b1k.println("Installing cmdlinetools version: $sdkmanager_ver ...")
 
                 $cmdlinetools_pkg_name = "commandlinetools-$suffix-$($cmdlinetools_rev)_latest.zip"
                 $cmdlinetools_pkg_path = Join-Path $prefix $cmdlinetools_pkg_name
                 $cmdlinetools_url = "https://dl.google.com/android/repository/$cmdlinetools_pkg_name"
                 download_file $cmdlinetools_url $cmdlinetools_pkg_path
                 Expand-Archive -Path $cmdlinetools_pkg_path -DestinationPath "$prefix/"
-                $sdkmanager_prog, $_ = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$prefix/cmdline-tools/bin" -param "--sdk_root=$sdk_root" -silent $True)
+                $sdkmanager_prog, $_ = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$prefix/cmdline-tools/bin" -params "--version", "--sdk_root=$sdk_root" -silent $True)
                 if (!$sdkmanager_prog) {
                     throw "Install cmdlinetools version: $sdkmanager_ver fail"
                 }
@@ -603,7 +667,7 @@ function setup_android_sdk() {
 
         $matchInfos = (exec_prog -prog $sdkmanager_prog -params "--sdk_root=$sdk_root", '--list' | Select-String 'ndk;')
         if ($null -ne $matchInfos -and $matchInfos.Count -gt 0) {
-            b1k_print "Not found suitable android ndk, installing ..."
+            $b1k.println("Not found suitable android ndk, installing ...")
 
             $ndks = @{}
             foreach ($matchInfo in $matchInfos) {
@@ -832,12 +896,13 @@ validHostAndToolchain
 
 ########## setup build tools if not installed #######
 
-$null = setup_glslcc
+# $null = setup_glslcc
 
 $cmake_prog = setup_cmake
 
 if ($BUILD_TARGET -eq 'win32') {
     $nuget_prog = setup_nuget
+    # $nsis_prog = setup_nsis
     if ($TOOLCHAIN_NAME -ne 'msvc') {
         $ninja_prog = setup_ninja
         $null = setup_clang
@@ -862,7 +927,7 @@ if (!$options.setupOnly) {
     }
 
     # enter building steps
-    b1k_print "Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLCHAIN ..."
+    $b1k.println("Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLCHAIN ...")
 
     # step1. preprocess cross make options
     $CONFIG_ALL_OPTIONS = [array]$(& $proprocessTable[$BUILD_TARGET] -inputOptions $CONFIG_DEFAULT_OPTIONS)
@@ -874,7 +939,7 @@ if (!$options.setupOnly) {
     # step2. apply additional cross make options
     $xopts = [array]$options.xc
     if ($xopts.Count -gt 0) {
-        b1k_print ("Apply additional cross make options: $($xopts), Count={0}" -f $xopts.Count)
+        $b1k.println("Apply additional cross make options: $($xopts), Count={0}" -f $xopts.Count)
         $CONFIG_ALL_OPTIONS += $xopts
     }
     if ("$($xopts)".IndexOf('-B') -eq -1) {
@@ -893,7 +958,7 @@ if (!$options.setupOnly) {
             }
         }
     }
-    b1k_print ("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
+    $b1k.println("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
 
     # parsing build optimize flag from build_options
     $buildOptions = [array]$options.xb
@@ -937,7 +1002,7 @@ if (!$options.setupOnly) {
         if ($TOOLCHAIN_NAME -eq 'xcode') {
             $BUILD_ALL_OPTIONS += '--', '-quiet'
         }
-        b1k_print ("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
+        $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 
         cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
     }
