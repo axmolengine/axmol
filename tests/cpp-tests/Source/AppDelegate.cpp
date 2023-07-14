@@ -88,7 +88,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto screenSize = glView->getFrameSize();
 
     auto fileUtils = FileUtils::getInstance();
-    std::vector<std::string> searchPaths = fileUtils->getSearchPaths();
+    std::vector<std::string> searchPaths;
 
     if (screenSize.height > 320)
     {
