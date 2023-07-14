@@ -103,9 +103,9 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
 
         mask |= GL_DEPTH_BUFFER_BIT;
         glClearDepth(descirptor.clearDepthValue);
-        glEnable(GL_DEPTH_TEST);
-        glDepthMask(GL_TRUE);
-        glDepthFunc(GL_ALWAYS);
+        GL_ENABLE_DEPTH_TEST;
+        GL_SET_DEPTH_MASK(GL_TRUE);
+        GL_SET_DEPTH_FUNC(GL_ALWAYS);
     }
 
     CHECK_GL_ERROR_DEBUG();
@@ -125,10 +125,10 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
     if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
     {
         if (!oldDepthTest)
-            glDisable(GL_DEPTH_TEST);
+            GL_DISABLE_DEPTH_TEST;
 
-        glDepthMask(oldDepthWrite);
-        glDepthFunc(oldDepthFunc);
+        GL_SET_DEPTH_MASK(oldDepthWrite);
+        GL_SET_DEPTH_FUNC(oldDepthFunc);
         glClearDepth(oldDepthClearValue);
     }
 
@@ -165,11 +165,12 @@ void CommandBufferGL::updatePipelineState(const RenderTarget* rt, const Pipeline
 
 void CommandBufferGL::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
-    glViewport(x, y, w, h);
-    _viewPort.x = x;
-    _viewPort.y = y;
-    _viewPort.w = w;
-    _viewPort.h = h;
+    _glState._viewPort = {x, y, w, h};
+
+    if (_viewPort != _glState._viewPort)
+        glViewport(x, y, w, h);
+
+    _viewPort.set(x, y, w, h);
 }
 
 void CommandBufferGL::setCullMode(CullMode mode)
@@ -179,7 +180,11 @@ void CommandBufferGL::setCullMode(CullMode mode)
 
 void CommandBufferGL::setWinding(Winding winding)
 {
-    glFrontFace(UtilsGL::toGLFrontFace(winding));
+    if (_glState._winding != winding)
+    {
+        glFrontFace(UtilsGL::toGLFrontFace(winding));
+        _glState._winding = winding;
+    }
 }
 
 void CommandBufferGL::setIndexBuffer(Buffer* buffer)
@@ -238,7 +243,7 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
 #else
     if (wireframe) primitiveType = PrimitiveType::LINE;
 #endif
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
+    GL_BIND_ELEMENT_ARRAY_BUFFER(_indexBuffer->getHandler());
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
@@ -259,7 +264,7 @@ void CommandBufferGL::endFrame() {}
 void CommandBufferGL::prepareDrawing() const
 {
     const auto& program = _renderPipeline->getProgram();
-    glUseProgram(program->getHandler());
+    GL_USE_PROGRAM(program->getHandler());
 
     bindVertexBuffer(program);
     setUniforms(program);
@@ -273,11 +278,11 @@ void CommandBufferGL::prepareDrawing() const
     // Set cull mode.
     if (CullMode::NONE == _cullMode)
     {
-        glDisable(GL_CULL_FACE);
+        GL_DISABLE_CULL_FACE;
     }
     else
     {
-        glEnable(GL_CULL_FACE);
+        GL_ENABLE_CULL_FACE;
         glCullFace(UtilsGL::toGLCullMode(_cullMode));
     }
 }
@@ -290,7 +295,7 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
     if (!vertexLayout->isValid())
         return;
 
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->getHandler());
+    GL_BIND_ARRAY_BUFFER(_vertexBuffer->getHandler());
 
     const auto& attributes = vertexLayout->getAttributes();
     for (const auto& attributeInfo : attributes)
@@ -447,21 +452,23 @@ void CommandBufferGL::cleanResources()
 void CommandBufferGL::setLineWidth(float lineWidth)
 {
     if (lineWidth > 0.0f)
-        glLineWidth(lineWidth);
+        GL_LINE_WIDTH(lineWidth);
     else
-        glLineWidth(1.0f);
+        GL_LINE_WIDTH(1.0f);
 }
 
 void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
     if (isEnabled)
     {
-        glEnable(GL_SCISSOR_TEST);
+        GL_ENABLE_SCISSOR_TEST;
+
+        // In most cases this state doesn't need persistence.
         glScissor(x, y, width, height);
     }
     else
     {
-        glDisable(GL_SCISSOR_TEST);
+        GL_DISABLE_SCISSOR_TEST;
     }
 }
 

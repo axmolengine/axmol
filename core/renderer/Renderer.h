@@ -580,6 +580,120 @@ protected:
     std::deque<StateBlock> _stateBlockStack;
 };
 
+struct BlendEquationSeparateState
+{
+    unsigned int rgbBlendOperation;
+    unsigned int alphaBlendOperation;
+
+    bool operator==(const BlendEquationSeparateState& other) const
+    {
+        return this->rgbBlendOperation == other.rgbBlendOperation &&
+               this->alphaBlendOperation == other.alphaBlendOperation;
+    }
+};
+
+struct BlendFuncSeparateState
+{
+    unsigned int sourceRGBBlendFactor;
+    unsigned int destinationRGBBlendFactor;
+    unsigned int sourceAlphaBlendFactor;
+    unsigned int destinationAlphaBlendFactor;
+
+    bool operator==(const BlendFuncSeparateState& other) const
+    {
+        return this->sourceRGBBlendFactor == other.sourceRGBBlendFactor &&
+               this->destinationRGBBlendFactor == other.destinationRGBBlendFactor &&
+               this->sourceAlphaBlendFactor == other.sourceAlphaBlendFactor &&
+               this->destinationAlphaBlendFactor == other.destinationAlphaBlendFactor;
+    }
+};
+
+struct ColorMaskState
+{
+    unsigned char writeMaskRed;
+    unsigned char writeMaskGreen;
+    unsigned char writeMaskBlue;
+    unsigned char writeMaskAlpha;
+
+    bool operator==(const ColorMaskState& other) const
+    {
+        return this->writeMaskRed == other.writeMaskRed && this->writeMaskGreen == other.writeMaskGreen &&
+               this->writeMaskBlue == other.writeMaskBlue && this->writeMaskAlpha == other.writeMaskAlpha;
+    }
+};
+
+struct StencilFuncState
+{
+    unsigned int stencilCompareFunction;
+    int stencilReferenceValueFront;
+    unsigned int readMask;
+
+    bool operator==(const StencilFuncState& other) const
+    {
+        return this->stencilCompareFunction == other.stencilCompareFunction &&
+               this->stencilReferenceValueFront == other.stencilReferenceValueFront && this->readMask == other.readMask;
+    }
+};
+
+struct StencilOperationState
+{
+    unsigned int stencilFailureOperation;
+    unsigned int depthFailureOperation;
+    unsigned int depthStencilPassOperation;
+
+    bool operator==(const StencilOperationState& other) const
+    {
+        return this->stencilFailureOperation == other.stencilFailureOperation &&
+               this->depthFailureOperation == other.depthFailureOperation &&
+               this->depthStencilPassOperation == other.depthStencilPassOperation;
+    }
+};
+
+struct TextureBindState
+{
+    unsigned int target;
+    unsigned int texture;
+
+    bool operator==(const TextureBindState& other) const
+    {
+        return this->target == other.target && this->texture == other.texture;
+    }
+};
+
+struct OpenGLStateHandeler
+{
+    std::optional<Viewport> _viewPort;
+    std::optional<Winding> _winding;
+    std::optional<bool> _depthTest;
+    std::optional<bool> _blend;
+    std::optional<bool> _scissor;
+    std::optional<float> _lineWidth;
+    std::optional<int> _frameBufferBind;
+    std::optional<BlendEquationSeparateState> _blendEquationSeparate;
+    std::optional<BlendFuncSeparateState> _blendFuncSeparate;
+    std::optional<ColorMaskState> _colorMask;
+    std::optional<int> _depthMask;
+    std::optional<int> _depthFunc;
+    std::optional<bool> _stencilTest;
+    std::optional<bool> _cullFace;
+    std::optional<unsigned int> _programBind;
+    std::optional<StencilFuncState> _stencilFunc;
+    std::optional<StencilFuncState> _stencilFuncFront;
+    std::optional<StencilFuncState> _stencilFuncBack;
+    std::optional<StencilOperationState> _stencilOp;
+    std::optional<StencilOperationState> _stencilOpFront;
+    std::optional<StencilOperationState> _stencilOpBack;
+    std::optional<unsigned int> _stencilMask;
+    std::optional<unsigned int> _stencilMaskFront;
+    std::optional<unsigned int> _stencilMaskBack;
+    std::optional<unsigned int> _activeTexture;
+    std::optional<TextureBindState> _textureBind;
+    std::optional<unsigned int> _arrayBuffer;
+    std::optional<unsigned int> _elementArrayBuffer;
+};
+
+inline OpenGLStateHandeler _glState;
+
 NS_AX_END
 
 /**
