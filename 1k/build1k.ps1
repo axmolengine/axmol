@@ -380,7 +380,7 @@ function setup_cmake() {
         $cmake_root = $(Join-Path $prefix $cmake_dir)
         $cmake_pkg_name = "$cmake_dir$cmake_suffix"
         $cmake_pkg_path = "$cmake_root$cmake_suffix"
-        if ($b1k.isdir($cmake_root)) {
+        if (!$b1k.isdir($cmake_root)) {
             $cmake_base_uri = 'https://github.com/Kitware/CMake/releases/download'
             $cmake_url = "$cmake_base_uri/v$cmake_ver/$cmake_pkg_name"
             if (!$b1k.isfile($cmake_pkg_path)) {

@@ -25,19 +25,20 @@
 #include "ProgramMTL.h"
 #include "ShaderModuleMTL.h"
 #include "base/Macros.h"
-#include "DeviceMTL.h"
 
 NS_AX_BACKEND_BEGIN
 namespace
 {
-// constexpr std::string_view metalSpecificDefine = "#define METAL\n"sv;
+constexpr std::string_view metalSpecificDefine = "#define METAL\n"sv;
 }
 
 ProgramMTL::ProgramMTL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
     _vertexShader = static_cast<ShaderModuleMTL*>(ShaderCache::newVertexShaderModule(vertexShader));
-    _fragmentShader = static_cast<ShaderModuleMTL*>(ShaderCache::newFragmentShaderModule(fragmentShader));
+    std::string combinedSource{metalSpecificDefine};
+    combinedSource += fragmentShader;
+    _fragmentShader = static_cast<ShaderModuleMTL*>(ShaderCache::newFragmentShaderModule(std::move(combinedSource)));
 
     AX_SAFE_RETAIN(_vertexShader);
     AX_SAFE_RETAIN(_fragmentShader);
