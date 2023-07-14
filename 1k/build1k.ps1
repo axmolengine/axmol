@@ -137,7 +137,7 @@ $manifest = @{
     gcc          = '9.0.0+';
     cmake        = '3.26.4+';
     nuget        = '*'; # any
-    glslcc       = '1.7.6+';
+    # glslcc       = '1.8.0+';
     ninja        = '1.11.1+';
     jdk          = '11.0.19+';
     nsis         = '3.09';
@@ -896,7 +896,7 @@ validHostAndToolchain
 
 ########## setup build tools if not installed #######
 
-$null = setup_glslcc
+# $null = setup_glslcc
 
 $cmake_prog = setup_cmake
 
