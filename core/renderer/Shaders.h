@@ -39,58 +39,59 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-extern AX_DLL const char* positionColor_vert;
-extern AX_DLL const char* positionColor_frag;
-extern AX_DLL const char* positionTexture_vert;
-extern AX_DLL const char* positionTexture_frag;
-extern AX_DLL const char* positionTextureColor_vert;
-extern AX_DLL const char* positionTextureColor_frag;
-extern AX_DLL const char* positionTextureColorAlphaTest_frag;
-extern AX_DLL const char* label_normal_frag;
-extern AX_DLL const char* label_distanceNormal_frag;
-extern AX_DLL const char* labelOutline_frag;
-extern AX_DLL const char* labelDistanceFieldGlow_frag;
-extern AX_DLL const char* lineColor3D_frag;
-extern AX_DLL const char* lineColor3D_vert;
-extern AX_DLL const char* positionColorLengthTexture_vert;
-extern AX_DLL const char* positionColorLengthTexture_frag;
-extern AX_DLL const char* positionColorTextureAsPointsize_vert;
-extern AX_DLL const char* position_vert;
-extern AX_DLL const char* layer_radialGradient_frag;
-extern AX_DLL const char* grayScale_frag;
-extern AX_DLL const char* positionUColor_vert;
-extern AX_DLL const char* dualSampler_frag;
-extern AX_DLL const char* dualSampler_gray_frag;
-extern AX_DLL const char* cameraClear_vert;
-extern AX_DLL const char* cameraClear_frag;
+extern AX_DLL const std::string_view positionColor_vert;
+extern AX_DLL const std::string_view positionColor_frag;
+extern AX_DLL const std::string_view positionTexture_vert;
+extern AX_DLL const std::string_view positionTexture_frag;
+extern AX_DLL const std::string_view positionTextureColor_vert;
+extern AX_DLL const std::string_view positionTextureColor_frag;
+extern AX_DLL const std::string_view positionTextureColorAlphaTest_frag;
+extern AX_DLL const std::string_view label_normal_frag;
+extern AX_DLL const std::string_view label_distanceNormal_frag;
+extern AX_DLL const std::string_view labelOutline_frag;
+extern AX_DLL const std::string_view labelDistanceFieldGlow_frag;
+extern AX_DLL const std::string_view positionColorLengthTexture_vert;
+extern AX_DLL const std::string_view positionColorLengthTexture_frag;
+extern AX_DLL const std::string_view positionColorTextureAsPointsize_vert;
+extern AX_DLL const std::string_view position_vert;
+extern AX_DLL const std::string_view layer_radialGradient_frag;
+extern AX_DLL const std::string_view grayScale_frag;
+extern AX_DLL const std::string_view positionUColor_vert;
+extern AX_DLL const std::string_view dualSampler_frag;
+extern AX_DLL const std::string_view dualSampler_gray_frag;
+extern AX_DLL const std::string_view cameraClear_vert;
+extern AX_DLL const std::string_view cameraClear_frag;
 
-extern AX_DLL const char* CC3D_color_frag;
-extern AX_DLL const char* CC3D_colorNormal_frag;
-extern AX_DLL const char* CC3D_colorNormalTexture_frag;
-extern AX_DLL const char* CC3D_colorTexture_frag;
-extern AX_DLL const char* CC3D_particleTexture_frag;
-extern AX_DLL const char* CC3D_particleColor_frag;
-extern AX_DLL const char* CC3D_particle_vert;
-extern AX_DLL const char* CC3D_positionNormalTexture_vert;
-extern AX_DLL const char* CC3D_skinPositionNormalTexture_vert;
-extern AX_DLL const char* CC3D_positionTexture_vert;
-extern AX_DLL const char* CC3D_skinPositionTexture_vert;
-extern AX_DLL const char* CC3D_skybox_frag;
-extern AX_DLL const char* CC3D_skybox_vert;
-extern AX_DLL const char* CC3D_terrain_frag;
-extern AX_DLL const char* CC3D_terrain_vert;
+extern AX_DLL const std::string_view quadTexture_frag;
+extern AX_DLL const std::string_view quadTexture_vert;
+extern AX_DLL const std::string_view quadColor_frag;
+extern AX_DLL const std::string_view quadColor_vert;
 
-extern AX_DLL const char* CC2D_quadTexture_frag;
-extern AX_DLL const char* CC2D_quadTexture_vert;
-extern AX_DLL const char* CC2D_quadColor_frag;
-extern AX_DLL const char* CC2D_quadColor_vert;
+extern AX_DLL const std::string_view hsv_frag;
+extern AX_DLL const std::string_view dualSampler_hsv_frag;
 
-extern AX_DLL const char* hsv_frag;
-extern AX_DLL const char* dualSampler_hsv_frag;
+extern AX_DLL const std::string_view videoTextureYUY2_frag;
+extern AX_DLL const std::string_view videoTextureNV12_frag;
+extern AX_DLL const std::string_view videoTextureBGRA_frag;
 
-extern AX_DLL const char* videoTextureYUY2_frag;
-extern AX_DLL const char* videoTextureNV12_frag;
-extern AX_DLL const char* videoTextureBGRA_frag;
+/* below is 3d shaders */
+extern AX_DLL const std::string_view lineColor3D_frag;
+extern AX_DLL const std::string_view lineColor3D_vert;
+extern AX_DLL const std::string_view color_frag;
+extern AX_DLL const std::string_view colorNormal_frag;
+extern AX_DLL const std::string_view colorNormalTexture_frag;
+extern AX_DLL const std::string_view colorTexture_frag;
+extern AX_DLL const std::string_view particleTexture_frag;
+extern AX_DLL const std::string_view particleColor_frag;
+extern AX_DLL const std::string_view particle_vert;
+extern AX_DLL const std::string_view positionNormalTexture_vert;
+extern AX_DLL const std::string_view skinPositionNormalTexture_vert;
+extern AX_DLL const std::string_view positionTexture3D_vert;
+extern AX_DLL const std::string_view skinPositionTexture_vert;
+extern AX_DLL const std::string_view skybox_frag;
+extern AX_DLL const std::string_view skybox_vert;
+extern AX_DLL const std::string_view terrain_frag;
+extern AX_DLL const std::string_view terrain_vert;
 NS_AX_END
 /**
  end of support group
