@@ -266,7 +266,6 @@ public:
 
   bool eof() const { return ptr_ == last_; }
 
-protected:
   // will throw std::out_of_range
   const char* consume(size_t size)
   {

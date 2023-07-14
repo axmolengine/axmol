@@ -33,10 +33,7 @@
 #include <algorithm>
 
 #include "xxhash.h"
-
-#ifdef AX_USE_METAL
-#    include "glsl_optimizer.h"
-#endif
+#include "glslcc/sgs-spec.h"
 
 NS_AX_BACKEND_BEGIN
 
@@ -304,12 +301,13 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
                                              std::size_t srcSize,
                                              void* buffer)
 {
-    auto basicType      = static_cast<glslopt_basic_type>(uniformInfo.type);
+    // The type is glslcc FOURCC ID
+    auto basicType      = uniformInfo.type;
     
     int offset = 0;
     switch (basicType)
     {
-    case kGlslTypeFloat:
+    case SGS_VERTEXFORMAT_FLOAT:
     {
         if (uniformInfo.isMatrix)
         {
@@ -339,21 +337,21 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
         }
         break;
     }
-    case kGlslTypeBool:
-    {
-        bool b4[4];
-        for (int i = 0; i < uniformInfo.count; i++)
-        {
-            if (offset >= srcSize)
-                break;
-
-            convertbVec3TobVec4((bool*)((uint8_t*)srcData + offset), b4);
-            memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(b4), b4, sizeof(b4));
-            offset += BVEC3_SIZE;
-        }
-        break;
-    }
-    case kGlslTypeInt:
+//    case kGlslTypeBool:
+//    {
+//        bool b4[4];
+//        for (int i = 0; i < uniformInfo.count; i++)
+//        {
+//            if (offset >= srcSize)
+//                break;
+//
+//            convertbVec3TobVec4((bool*)((uint8_t*)srcData + offset), b4);
+//            memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(b4), b4, sizeof(b4));
+//            offset += BVEC3_SIZE;
+//        }
+//        break;
+//    }
+    case SGS_VERTEXFORMAT_INT:
     {
         int i4[4];
         for (int i = 0; i < uniformInfo.count; i++)

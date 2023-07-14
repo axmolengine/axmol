@@ -16,6 +16,10 @@ glslcc_option(GLSLCC_OUT_SUFFIX "")
 glslcc_option(GLSLCC_FLAT_UBOS TRUE)
 glslcc_option(GLSLCC_FIND_PROG_ROOT "")
 
+if(APPLE)
+    set(GLSLCC_FLAT_UBOS FALSE)
+endif()
+
 find_program(GLSLCC_EXE NAMES glslcc
     PATHS ${GLSLCC_FIND_PROG_ROOT}
 )
@@ -131,12 +135,21 @@ function (ax_target_compile_shaders target_name)
         # input
         if (${FILE_EXT} IN_LIST GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS)
             list(APPEND SC_FLAGS "--frag=${SC_FILE}")
-            set(TYPE "fs")
+            set(SC_TYPE "fs")
         elseif(${FILE_EXT} IN_LIST GLSLCC_VERT_SOURCE_FILE_EXTENSIONS)
-            set(TYPE "vs")
+            set(SC_TYPE "vs")
             list(APPEND SC_FLAGS "--vert=${SC_FILE}")
         else()
             message(FATAL_ERROR "Invalid shader source, the file extesion must be one of .frag;.vert")
+        endif()
+
+        # sgs, because Apple Metal lack of shader uniform reflect so use --sgs --refelect
+        if (APPLE)
+            list(APPEND SC_FLAGS "--sgs" "--reflect")
+             # need add suffix manually when flags contains --sgs
+            set(SC_SUFFIX "_${SC_TYPE}") 
+        else()
+            set(SC_SUFFIX "")
         endif()
 
         # output
@@ -145,13 +158,13 @@ function (ax_target_compile_shaders target_name)
             file(MAKE_DIRECTORY ${OUT_DIR})
         endif()
         if (NOT opt_CVAR)
-            list(APPEND SC_FLAGS "--output=${OUT_DIR}/${FILE_NAME}${GLSLCC_OUT_SUFFIX}" )
+            list(APPEND SC_FLAGS "--output=${OUT_DIR}/${FILE_NAME}${GLSLCC_OUT_SUFFIX}${SC_SUFFIX}" )
 
             # glscc will auto insert ${FILE_NAME}_vs.bin or ${FILE_NAME}_fs.bin
             # so we set OUTPUT to match with it, otherwise will cause cause incremental build to work incorrectly.
-            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${TYPE}${GLSLCC_OUT_SUFFIX}")
+            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}${GLSLCC_OUT_SUFFIX}")
         else()
-            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${TYPE}${GLSLCC_OUT_SUFFIX}.h")
+            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}${GLSLCC_OUT_SUFFIX}.h")
             list(APPEND SC_FLAGS "${OUT_FILE}" "--cvar=shader_rt_${FILE_NAME}" "--output=${SC_OUTPUT}")
         endif()
 
