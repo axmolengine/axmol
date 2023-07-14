@@ -124,6 +124,9 @@ bool FileUtilsWin32::init()
     if (!startedFromSelfLocation)
         addSearchPath(s_exeDir);
 
+    // win32: load compiled shader from exeDir/axslc
+    addSearchPath(s_exeDir + "/axslc");
+
     return bRet;
 }
 
