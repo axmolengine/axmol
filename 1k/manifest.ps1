@@ -8,7 +8,7 @@
 #     gcc          = '9.0.0+';
 #     cmake        = '3.26.4+';
 #     nuget        = '*'; # any
-#     glslcc       = '1.7.6+';
+#     glslcc       = '1.8.0+';
 #     ninja        = '1.11.1+';
 #     jdk          = '11.0.19+';
 #     cmdlinetools = '7.0+'; # android cmdlinetools
