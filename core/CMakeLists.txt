@@ -84,6 +84,7 @@ endif()
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 
+option(AX_ENABLE_EARLY_FEATURES "Enable early dev features for test" OFF)
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 12
@@ -190,18 +191,16 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
-ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+if (AX_ENABLE_EARLY_FEATURES)
+    message(AUTHOR_WARNING "Enable early dev features for local dev test only")
+    # import minimal AXGLSLCC.cmake for shader compiler support
+    # the function: ax_target_compile_shaders avaiable from it
+    set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
+    include(AXGLSLCC)
 
-# not final fix the macro not defined glslcc compiler errors
-# set_source_files_properties(
-#     ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
-#     ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
-#     ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
-#     ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
-#     PROPERTIES GLSLCC_DEFINES
-#     "MAX_DIRECTIONAL_LIGHT_NUM=1,MAX_POINT_LIGHT_NUM=1,MAX_SPOT_LIGHT_NUM=1"
-# )
-ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+    ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+    ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+endif()
 
 
 if (WINRT)
