@@ -385,10 +385,13 @@ function(ax_setup_app_config app_name)
         )
     endif()
 
-    if((WIN32 AND (NOT WINRT)) OR LINUX)
-        if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
-            get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
+    if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
+        get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
+        if ((WIN32 AND (NOT WINRT)) OR LINUX)
             ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
+        elseif(APPLE)
+            ax_mark_multi_resources(compiled_shader_files RES_TO "Resources/axslc" FOLDERS ${GLSLCC_OUT_DIR})
+            target_sources(${app_name} PRIVATE ${compiled_shader_files})
         endif()
     endif()
 endfunction()
@@ -598,4 +601,5 @@ endmacro()
 
 # import minimal AXGLSLCC.cmake for shader compiler support
 # the function: ax_target_compile_shaders avaiable from it
+set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
 include(AXGLSLCC)

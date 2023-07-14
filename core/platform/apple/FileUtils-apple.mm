@@ -76,6 +76,7 @@ FileUtils* FileUtils::getInstance()
             s_sharedFileUtils = nullptr;
             AXLOG("ERROR: Could not init CCFileUtilsApple");
         }
+        s_sharedFileUtils->addSearchPath("axslc");
     }
     return s_sharedFileUtils;
 }

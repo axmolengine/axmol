@@ -34,32 +34,6 @@ TextureCacheTests::TextureCacheTests()
 
 TextureCacheTest::TextureCacheTest() : _numberOfSprites(20), _numberOfLoadedSprites(0)
 {
-}
-
-TextureCacheTest::~TextureCacheTest()
-{
-    auto* cache = Director::getInstance()->getTextureCache();
-    cache->unbindAllImageAsync();
-}
-
-void TextureCacheTest::loadingCallBack(ax::Texture2D* texture)
-{
-    ++_numberOfLoadedSprites;
-    char tmp[10];
-    sprintf(tmp, "%%%d", (int)(((float)_numberOfLoadedSprites / _numberOfSprites) * 100));
-    _labelPercent->setString(tmp);
-
-    if (_numberOfLoadedSprites == _numberOfSprites)
-    {
-        this->removeChild(_labelLoading, true);
-        this->removeChild(_labelPercent, true);
-        addSprite();
-    }
-}
-
-void TextureCacheTest::onEnter()
-{
-    TestCase::onEnter();
     auto size = Director::getInstance()->getWinSize();
 
     _labelLoading = Label::createWithTTF("loading...", "fonts/arial.ttf", 15);
@@ -112,6 +86,21 @@ void TextureCacheTest::onEnter()
                                                               AX_CALLBACK_1(TextureCacheTest::loadingCallBack, this));
     Director::getInstance()->getTextureCache()->addImageAsync("Images/blocks.png",
                                                               AX_CALLBACK_1(TextureCacheTest::loadingCallBack, this));
+}
+
+void TextureCacheTest::loadingCallBack(ax::Texture2D* texture)
+{
+    ++_numberOfLoadedSprites;
+    char tmp[10];
+    sprintf(tmp, "%%%d", (int)(((float)_numberOfLoadedSprites / _numberOfSprites) * 100));
+    _labelPercent->setString(tmp);
+
+    if (_numberOfLoadedSprites == _numberOfSprites)
+    {
+        this->removeChild(_labelLoading, true);
+        this->removeChild(_labelPercent, true);
+        addSprite();
+    }
 }
 
 void TextureCacheTest::addSprite()
@@ -184,18 +173,6 @@ void TextureCacheTest::addSprite()
 
 TextureCacheUnbindTest::TextureCacheUnbindTest()
 {
-}
-
-TextureCacheUnbindTest::~TextureCacheUnbindTest()
-{
-    auto* cache = Director::getInstance()->getTextureCache();
-    cache->unbindAllImageAsync();
-}
-
-void TextureCacheUnbindTest::onEnter()
-{
-    TestCase::onEnter();
-
     auto size = Director::getInstance()->getWinSize();
 
     Label* nothing = Label::createWithTTF("There should be\nnothing below", "fonts/arial.ttf", 15);

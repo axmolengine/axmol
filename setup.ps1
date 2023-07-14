@@ -105,4 +105,21 @@ if ($IsLinux) {
     }
 }
 
-$b1k.pause("setup successfully")
+if ($IsWin) {
+    $myProcess = [System.Diagnostics.Process]::GetCurrentProcess()
+    $parentProcess = $myProcess.Parent
+    if (!$parentProcess) {
+        $myPID = $myProcess.Id
+        $instance = Get-WmiObject Win32_Process -Filter "ProcessId = $myPID"
+        $parentProcess = Get-Process -Id $instance.ParentProcessID
+    }
+    $parentProcessName = $parentProcess.ProcessName
+    if ($parentProcessName -like "explorer") {
+        b1k_print "setup successfully, press any key to exit . . ." -NoNewline
+        cmd /c pause 1>$null
+        exit 0
+    }
+}
+
+b1k_print 'setup successfully.'
+
