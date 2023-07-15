@@ -34,7 +34,7 @@ jobs:
       run: .\build.ps1 -p win32 -a x64
     - run: |
         set AXMOL_START_AUTOTEST=YES
-        start /wait cpp_tests.exe
+        Start-Process  cpp_tests.exe -Wait
       working-directory: build_x64\bin\cpp_tests\Release
   win32-dll:
         # The CMake configure and build commands are platform agnostic and should work equally

@@ -42,7 +42,7 @@ jobs:
         run: .\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL
       - run: |
           set AXMOL_START_AUTOTEST=YES
-          start /wait cpp_tests.exe
+          Start-Process  cpp_tests.exe -Wait
         working-directory: build_${{env.BUILD_ARCH}}\bin\cpp_tests\Release
 
   build-windows-clang:
