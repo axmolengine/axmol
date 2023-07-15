@@ -28,6 +28,7 @@
 #include "network/Uri.h"
 #include "platform/FileUtils.h"
 #include "yasio/utils.hpp"
+#include "yasio/string_view.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,6 +54,8 @@ void HttpCookie::readFile()
         NAME_INDEX,
         VALUE_INDEX,
     };
+
+    using namespace std::literals::string_view_literals;
 
     std::string inString = FileUtils::getInstance()->getStringFromFile(_cookieFileName);
     if (!inString.empty())
@@ -153,6 +156,8 @@ std::string HttpCookie::checkAndGetFormatedMatchCookies(const Uri& uri)
 
 bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
 {
+    using namespace std::literals::string_view_literals;
+
     unsigned int count = 0;
     CookieInfo info;
     axstd::split_cb(cookie.data(), cookie.length(), ';', [&](const char* start, const char* end) {
