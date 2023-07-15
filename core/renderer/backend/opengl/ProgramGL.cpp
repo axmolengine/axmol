@@ -80,9 +80,9 @@ void ProgramGL::reloadProgram()
     _mapToCurrentActiveLocation.clear();
     _mapToOriginalLocation.clear();
     static_cast<ShaderModuleGL*>(_vertexShaderModule)
-        ->compileShader(backend::ShaderStage::VERTEX, SHADER_PREDEFINE + _vertexShader);
+        ->compileShader(backend::ShaderStage::VERTEX, _vertexShader);
     static_cast<ShaderModuleGL*>(_fragmentShaderModule)
-        ->compileShader(backend::ShaderStage::FRAGMENT, SHADER_PREDEFINE + _fragmentShader);
+        ->compileShader(backend::ShaderStage::FRAGMENT, _fragmentShader);
     compileProgram();
     computeUniformInfos();
 
