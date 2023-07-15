@@ -63,8 +63,8 @@ class AX_DLL ProgramManager : public Ref
 public:
     /** new progrma with vertexLayout setup support, user should use this API */
     static Program* newProgram(std::string_view vertShaderSource,
-                               std::string_view fragShaderSource,
-                               std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
+                                        std::string_view fragShaderSource,
+        std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
 
     /** returns the shared instance */
     static ProgramManager* getInstance();
@@ -80,9 +80,9 @@ public:
 
     // register custom program create factory
     void registerCustomProgramFactory(uint32_t type,
-                                      std::string_view vsName,
-                                      std::string_view fsName,
-                                      std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
+                                      std::string vertShaderSource,
+                                      std::string fragShaderSource,
+        std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
 
     /**
      * Remove a program object from cache.
@@ -109,37 +109,36 @@ protected:
      */
     bool init();
 
-    void registerProgramFactoryByName(uint32_t internalType,
-                                      std::string_view vsName,
-                                      std::string_view fsName,
-                                      std::function<void(Program*)> fnSetupLayout,
-                                      std::string_view defines = ""sv);
+    void registerProgramFactory(uint32_t internalType,
+                                std::string&& vertShaderSource,
+                                std::string&& fragShaderSource,
+                                std::function<void(Program*)> fnSetupLayout);
     Program* addProgram(uint32_t internalType) const;
 
     std::function<Program*()> _builtinFactories[(int)backend::ProgramType::BUILTIN_COUNT];
     std::unordered_map<uint32_t, std::function<Program*()>> _customFactories;
 
     mutable std::unordered_map<uint32_t, Program*> _cachedPrograms;  ///< The cached program object.
-    static ProgramManager* _sharedProgramManager;                    ///< A shared instance of the program cache.
+    static ProgramManager* _sharedProgramManager;  ///< A shared instance of the program cache.
 };
 
-using ProgramCache = ProgramManager;  // for compatible
+using ProgramCache = ProgramManager; // for compatible
 
 // end of _backend group
 /// @}
 NS_AX_BACKEND_END
 
 /**
- * @alias some feq use types to namespace ax
- */
+* @alias some feq use types to namespace ax
+*/
 
 NS_AX_BEGIN
 
-using ProgramType        = ::ax::backend::ProgramType;
-using Program            = ::ax::backend::Program;
-using VertexLayout       = ::ax::backend::VertexLayout;
+using ProgramType = ::ax::backend::ProgramType;
+using Program = ::ax::backend::Program;
+using VertexLayout = ::ax::backend::VertexLayout;
 using VertexLayoutHelper = ::ax::backend::VertexLayoutHelper;
-using ProgramManager     = ::ax::backend::ProgramManager;
-using ProgramRegistry    = ::ax::backend::ProgramStateRegistry;
+using ProgramManager = ::ax::backend::ProgramManager;
+using ProgramRegistry = ::ax::backend::ProgramStateRegistry;
 
 NS_AX_END

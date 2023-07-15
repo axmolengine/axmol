@@ -29,8 +29,8 @@ const char* CC3D_particleTexture_frag = R"(
 varying mediump vec2 TextureCoordOut;
 varying mediump vec4 ColorOut;
 #else
-varying vec2 TextureCoordOut;
 varying vec4 ColorOut;
+varying vec2 TextureCoordOut;
 #endif
 uniform vec4 u_color;
 

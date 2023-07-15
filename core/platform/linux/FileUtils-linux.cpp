@@ -73,9 +73,9 @@ bool FileUtilsLinux::init()
     DECLARE_GUARD;
 
     // application path
-    std::string tmpPath = _checkPath("/proc/self/exe");
-    std::string_view exePathSV{tmpPath};
-    auto slash = tmpPath.find_last_of('/');
+    std::string exePath = _checkPath("/proc/self/exe");
+    std::string_view exePathSV{exePath};
+    auto slash = exePath.find_last_of('/');
     assert(slash != std::string::npos);
     auto exeDir = exePathSV.substr(0, slash + 1);
 
@@ -112,10 +112,6 @@ bool FileUtilsLinux::init()
     if (!startedFromSelfLocation)
         addSearchPath(exeDir);
 
-    // linux: for load compiled shader from exeDir/axslc
-    tmpPath.resize(slash);
-    tmpPath += "/axslc";
-    addSearchPath(tmpPath);
     return ret;
 }
 
