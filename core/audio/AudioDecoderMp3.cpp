@@ -299,3 +299,5 @@ bool AudioDecoderMp3::seek(uint32_t frameOffset)
 #endif
 }
 NS_AX_END  // namespace ax
+
+#undef LOG_TAG

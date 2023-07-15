@@ -37,8 +37,6 @@ THE SOFTWARE.
 #include <algorithm>
 #include <math.h>
 
-USING_NS_AX;
-
 static unsigned short quadIndices9[] = {
     0 + 4 * 0, 1 + 4 * 0, 2 + 4 * 0, 3 + 4 * 0, 2 + 4 * 0, 1 + 4 * 0, 0 + 4 * 1, 1 + 4 * 1, 2 + 4 * 1,
     3 + 4 * 1, 2 + 4 * 1, 1 + 4 * 1, 0 + 4 * 2, 1 + 4 * 2, 2 + 4 * 2, 3 + 4 * 2, 2 + 4 * 2, 1 + 4 * 2,
@@ -49,6 +47,8 @@ static unsigned short quadIndices9[] = {
 };
 
 const static float PRECISION = 10.0f;
+
+NS_AX_BEGIN
 
 PolygonInfo::PolygonInfo() : _isVertsOwner(true), _rect(Rect::ZERO), _filename("")
 {
@@ -609,7 +609,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
     cdt.Triangulate();
     std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
 
-    axstd::pod_vector<unsigned short> indices(tris.size() * 3); 
+    axstd::pod_vector<unsigned short> indices(tris.size() * 3);
     axstd::pod_vector<V3F_C4B_T2F> verts;
     verts.reserve(indices.size() / 2);  // we won't know the size of verts until we process all of the triangles!
 
@@ -728,3 +728,5 @@ PolygonInfo AutoPolygon::generatePolygon(std::string_view filename, const Rect& 
     AutoPolygon ap(filename);
     return ap.generateTriangles(rect, epsilon, threshold);
 }
+
+NS_AX_END

@@ -40,7 +40,7 @@
 #include <algorithm>
 #include <limits>
 
-static const char kMagic[] = {'P', 'K', 'M', ' ', '2', '0'};
+static const char ketc2Magic[] = {'P', 'K', 'M', ' ', '2', '0'};
 
 static const etc2_uint32 ETC2_PKM_FORMAT_OFFSET         = 6;
 static const etc2_uint32 ETC2_PKM_ENCODED_WIDTH_OFFSET  = 8;
@@ -54,7 +54,7 @@ static void writeBEUint16(etc2_byte* pOut, etc2_uint32 data)
     pOut[1] = (etc2_byte)data;
 }
 
-static etc2_uint32 readBEUint16(const etc2_byte* pIn)
+static etc2_uint32 etc2ReadBEUint16(const etc2_byte* pIn)
 {
     return (pIn[0] << 8) | pIn[1];
 }
@@ -63,15 +63,15 @@ static etc2_uint32 readBEUint16(const etc2_byte* pIn)
 
 etc2_bool etc2_pkm_is_valid(const etc2_byte* pHeader)
 {
-    if (memcmp(pHeader, kMagic, sizeof(kMagic)))
+    if (memcmp(pHeader, ketc2Magic, sizeof(ketc2Magic)))
     {
         return false;
     }
-    etc2_uint32 format        = readBEUint16(pHeader + ETC2_PKM_FORMAT_OFFSET);
-    etc2_uint32 encodedWidth  = readBEUint16(pHeader + ETC2_PKM_ENCODED_WIDTH_OFFSET);
-    etc2_uint32 encodedHeight = readBEUint16(pHeader + ETC2_PKM_ENCODED_HEIGHT_OFFSET);
-    etc2_uint32 width         = readBEUint16(pHeader + ETC2_PKM_WIDTH_OFFSET);
-    etc2_uint32 height        = readBEUint16(pHeader + ETC2_PKM_HEIGHT_OFFSET);
+    etc2_uint32 format        = etc2ReadBEUint16(pHeader + ETC2_PKM_FORMAT_OFFSET);
+    etc2_uint32 encodedWidth  = etc2ReadBEUint16(pHeader + ETC2_PKM_ENCODED_WIDTH_OFFSET);
+    etc2_uint32 encodedHeight = etc2ReadBEUint16(pHeader + ETC2_PKM_ENCODED_HEIGHT_OFFSET);
+    etc2_uint32 width         = etc2ReadBEUint16(pHeader + ETC2_PKM_WIDTH_OFFSET);
+    etc2_uint32 height        = etc2ReadBEUint16(pHeader + ETC2_PKM_HEIGHT_OFFSET);
     return (format == ETC2_RGB_NO_MIPMAPS || format == ETC2_RGBA_NO_MIPMAPS) && encodedWidth >= width &&
            encodedWidth - width < 4 && encodedHeight >= height && encodedHeight - height < 4;
 }
@@ -80,19 +80,19 @@ etc2_bool etc2_pkm_is_valid(const etc2_byte* pHeader)
 
 etc2_uint32 etc2_pkm_get_width(const etc2_byte* pHeader)
 {
-    return readBEUint16(pHeader + ETC2_PKM_WIDTH_OFFSET);
+    return etc2ReadBEUint16(pHeader + ETC2_PKM_WIDTH_OFFSET);
 }
 
 // Read the image height from a PKM header
 
 etc2_uint32 etc2_pkm_get_height(const etc2_byte* pHeader)
 {
-    return readBEUint16(pHeader + ETC2_PKM_HEIGHT_OFFSET);
+    return etc2ReadBEUint16(pHeader + ETC2_PKM_HEIGHT_OFFSET);
 }
 
 etc2_uint32 etc2_pkm_get_format(const etc2_byte* pHeader)
 {
-    return readBEUint16(pHeader + ETC2_PKM_FORMAT_OFFSET);
+    return etc2ReadBEUint16(pHeader + ETC2_PKM_FORMAT_OFFSET);
 }
 
 // The etc2 software decode implementation is modified from angleproject, and only support ETC2_RGB and ETC2_RGBA
@@ -955,7 +955,7 @@ private:
     size_t ComputeETC2RowPitch(size_t width, size_t blockWidth, size_t bytesPerPixel) {
         return ((width + blockWidth - 1) / blockWidth) * bytesPerPixel;
     }
-    
+
     size_t ComputeETC2DepthPitch(size_t height, size_t blockHeight, size_t rowPitch)
     {
         return ((height + blockHeight - 1) / blockHeight) * rowPitch;

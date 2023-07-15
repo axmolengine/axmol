@@ -38,7 +38,6 @@
 #include "renderer/Renderer.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
-USING_NS_AX;
 using namespace ax::ui;
 
 Scale9Sprite* Scale9Sprite::create()
@@ -362,12 +361,12 @@ void Scale9Sprite::updateCapInset()
     }
 }
 
-Vec2 Scale9Sprite::getOriginalSize() const
+ax::Vec2 Scale9Sprite::getOriginalSize() const
 {
     return _originalContentSize;
 }
 
-Vec2 Scale9Sprite::getPreferredSize() const
+ax::Vec2 Scale9Sprite::getPreferredSize() const
 {
     return getContentSize();
 }
@@ -413,7 +412,7 @@ bool Scale9Sprite::isScale9Enabled() const
     return (_renderingType == RenderingType::SLICE);
 }
 
-Sprite* Scale9Sprite::getSprite()
+ax::Sprite* Scale9Sprite::getSprite()
 {
     return this;
 }
@@ -585,7 +584,7 @@ void Scale9Sprite::setCapInsets(const ax::Rect& insetsCopy)
     }
 }
 
-Rect Scale9Sprite::getCapInsets() const
+ax::Rect Scale9Sprite::getCapInsets() const
 {
     return Rect(_insetLeft, _insetTop, _originalContentSize.width - _insetLeft - _insetRight,
                 _originalContentSize.height - _insetTop - _insetBottom);
