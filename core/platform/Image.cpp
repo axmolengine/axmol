@@ -52,7 +52,7 @@ THE SOFTWARE.
 extern "C" {
 // To resolve link error when building 32bits with Xcode 6.
 // More information please refer to the discussion in https://github.com/cocos2d/cocos2d-x/pull/6986
-#if defined(__unix) || (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if defined(__unix) && (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 #    ifndef __ENABLE_COMPATIBILITY_WITH_UNIX_2003__
 #        define __ENABLE_COMPATIBILITY_WITH_UNIX_2003__
 #        include <stdio.h>

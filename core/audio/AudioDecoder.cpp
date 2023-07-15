@@ -102,3 +102,5 @@ AUDIO_SOURCE_FORMAT AudioDecoder::getSourceFormat() const
     return _sourceFormat;
 }
 NS_AX_END  // namespace ax
+
+#undef LOG_TAG

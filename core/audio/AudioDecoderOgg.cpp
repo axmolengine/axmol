@@ -116,3 +116,5 @@ bool AudioDecoderOgg::seek(uint32_t frameOffset)
     return 0 == ov_pcm_seek(&_vf, frameOffset);
 }
 NS_AX_END  // namespace ax
+
+#undef LOG_TAG

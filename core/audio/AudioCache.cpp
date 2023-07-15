@@ -56,7 +56,7 @@ unsigned int __idIndex = 0;
 #define INVALID_AL_BUFFER_ID 0xFFFFFFFF
 #define PCMDATA_CACHEMAXSIZE 1048576
 
-USING_NS_AX;
+NS_AX_BEGIN
 
 AudioCache::AudioCache()
     : _totalFrames(0)
@@ -424,3 +424,5 @@ void AudioCache::invokingLoadCallbacks()
         _loadCallbacks.clear();
     });
 }
+NS_AX_END
+#undef LOG_TAG
