@@ -84,6 +84,7 @@ endif()
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 
+option(AX_ENABLE_EARLY_FEATURES "Enable early dev features for test" OFF)
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 12
@@ -189,6 +190,18 @@ set(_AX_SRC axmol.cpp
 list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
+
+if (AX_ENABLE_EARLY_FEATURES)
+    message(AUTHOR_WARNING "Enable early dev features for local dev test only")
+    # import minimal AXGLSLCC.cmake for shader compiler support
+    # the function: ax_target_compile_shaders avaiable from it
+    set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
+    include(AXGLSLCC)
+
+    ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+    ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+endif()
+
 
 if (WINRT)
     target_compile_options(${_AX_CORE_LIB} PUBLIC /ZW)
