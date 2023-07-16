@@ -6,7 +6,7 @@ layout(location = 2) in vec3 a_normal;
 layout(location = 0) out vec2 v_texCoord;
 layout(location = 1) out vec3 v_normal;
 
-layout(std140, binding = 0) uniform vs_ub {
+layout(std140) uniform vs_ub {
     mat4 u_MVPMatrix;
 };
 

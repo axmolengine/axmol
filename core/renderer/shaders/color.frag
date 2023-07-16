@@ -5,7 +5,7 @@ precision highp int;
 
 layout(location = 0) in vec4 DestinationColor;
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec4 u_color;
 };
 

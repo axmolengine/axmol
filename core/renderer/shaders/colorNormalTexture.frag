@@ -23,7 +23,7 @@ layout(binding = 0) uniform sampler2D u_normalTex;
 
 layout(binding = 1) uniform sampler2D u_tex0;
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec3 u_DirLightSourceColor[MAX_DIRECTIONAL_LIGHT_NUM];
     vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
     vec3 u_PointLightSourceColor[MAX_POINT_LIGHT_NUM];

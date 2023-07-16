@@ -5,7 +5,7 @@ precision highp int;
 layout(location = 0) in vec3        v_reflect;
 layout(binding = 0) uniform samplerCube u_Env;
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec4 u_color;
 };
 

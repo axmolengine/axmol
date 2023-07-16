@@ -8,7 +8,7 @@ layout(location = 2) in vec2 a_texCoord;
 layout(location = 0) out vec2 TextureCoordOut;
 layout(location = 1) out vec4 ColorOut;
 
-layout(std140, binding = 0) uniform vs_ub {
+layout(std140) uniform vs_ub {
     mat4 u_PMatrix;
 };
 

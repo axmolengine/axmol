@@ -10,7 +10,7 @@ layout(binding = 2) uniform sampler2D u_tex1;
 layout(binding = 3) uniform sampler2D u_tex2;
 layout(binding = 4) uniform sampler2D u_tex3;
 layout(binding = 5) uniform sampler2D u_lightMap;
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec3 u_color;
     int u_has_alpha;
     int u_has_light_map;

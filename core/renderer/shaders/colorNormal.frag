@@ -8,7 +8,7 @@ layout(location = 2) in vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
 layout(location = 3) in vec3 v_normal;
 
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec3 u_DirLightSourceColor[MAX_DIRECTIONAL_LIGHT_NUM];
     vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
     vec3 u_PointLightSourceColor[MAX_POINT_LIGHT_NUM];
