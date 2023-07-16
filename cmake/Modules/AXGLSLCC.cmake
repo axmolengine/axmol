@@ -12,12 +12,7 @@ endmacro()
 glslcc_option(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
 glslcc_option(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
 glslcc_option(GLSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
-glslcc_option(GLSLCC_FLAT_UBOS FALSE)
 glslcc_option(GLSLCC_FIND_PROG_ROOT "")
-
-if(APPLE)
-    set(GLSLCC_FLAT_UBOS FALSE)
-endif()
 
 find_program(GLSLCC_EXE NAMES glslcc
     PATHS ${GLSLCC_FIND_PROG_ROOT}
@@ -30,7 +25,6 @@ endif()
 
 message(STATUS "GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS=${GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS}")
 message(STATUS "GLSLCC_VERT_SOURCE_FILE_EXTENSIONS=${GLSLCC_VERT_SOURCE_FILE_EXTENSIONS}")
-message(STATUS "GLSLCC_FLAT_UBOS=${GLSLCC_FLAT_UBOS}")
 
 # PROPERTY: include direcotries (optional)
 define_property(SOURCE PROPERTY GLSLCC_INCLUDE_DIRS 
@@ -41,6 +35,11 @@ define_property(SOURCE PROPERTY GLSLCC_INCLUDE_DIRS
 define_property(SOURCE PROPERTY GLSLCC_DEFINES 
                 BRIEF_DOCS "Compiled shader defines"
                 FULL_DOCS "Compiled shader defines, seperated with comma")
+
+# PROPERTY: output1 (optional)
+define_property(SOURCE PROPERTY GLSLCC_OUTPUT1 
+                BRIEF_DOCS "Compiled shader output1 additional defines"
+                FULL_DOCS "Compiled shader output1 additional defines, seperated with comma")
 
 # Find shader sources in specified directory
 # syntax: ax_find_shaders(dir shader_sources [RECURSE])
@@ -126,11 +125,6 @@ function (ax_target_compile_shaders target_name)
         endif()
         list(APPEND INC_DIRS "${_AX_ROOT}/core/renderer/shaders")
         list(APPEND SC_FLAGS "--include-dirs=${INC_DIRS}")
-
-        # flat-ubos
-        # if(${GLSLCC_FLAT_UBOS})
-        #     list(APPEND SC_FLAGS "--flatten-ubos")
-        # endif()
 
         if (opt_CVAR)
             list(APPEND SC_FLAGS "--cvar=shader_rt_${FILE_NAME}")
