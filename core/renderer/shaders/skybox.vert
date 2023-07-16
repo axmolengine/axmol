@@ -4,7 +4,7 @@
 layout(location = 0) in vec3 a_position;
 layout(location = 0) out vec3 v_reflect;
 
-layout(std140, binding = 0) uniform vs_ub {
+layout(std140) uniform vs_ub {
     mat4  u_cameraRot;
 };
 

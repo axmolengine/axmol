@@ -13,7 +13,7 @@ const int SKINNING_JOINT_COUNT = 60;
 // Varyings
 layout(location = 0) out vec2 TextureCoordOut;
 
-layout(std140, binding = 0) uniform vs_ub {
+layout(std140) uniform vs_ub {
     vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
     mat4 u_MVPMatrix;
 };

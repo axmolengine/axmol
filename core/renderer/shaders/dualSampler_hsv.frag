@@ -12,7 +12,7 @@ layout(binding = 1) uniform sampler2D u_tex1;
 
 // filter color RGB values
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     mat3 u_mix_hsv;
     vec3 u_filter_rgb;
 };

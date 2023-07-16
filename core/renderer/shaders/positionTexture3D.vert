@@ -7,7 +7,7 @@ layout(location = 1) in vec2 a_texCoord;
 layout(location = 0) out vec2 TextureCoordOut;
 
 
-layout(std140, binding = 0) uniform vs_ub {
+layout(std140) uniform vs_ub {
     mat4 u_MVPMatrix;
 };
 

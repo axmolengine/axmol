@@ -8,7 +8,7 @@ layout(location = 2) in vec2 a_texCoord;
 
 layout(location = 0) out vec4 v_fragmentColor;
 
-layout(std140, binding = 0) uniform vs_ub {
+layout(std140) uniform vs_ub {
     float u_alpha;
     mat4 u_MVPMatrix;
 };
