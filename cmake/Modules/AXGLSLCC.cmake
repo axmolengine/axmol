@@ -5,7 +5,7 @@ cmake_policy(SET CMP0057 NEW)
 ##  enable shader lang by shader compiler: glslcc
 macro(glslcc_option variable value)
     if(NOT DEFINED ${variable})
-        set(${variable} ${value})
+        set(${variable} ${value} CACHE STRING "" FORCE)
     endif()
 endmacro()
 
@@ -23,6 +23,8 @@ if (NOT GLSLCC_EXE)
     message(FATAL_ERROR "Please run setup.ps1 again to download glslcc, and run CMake again.")
 endif()
 
+message(STATUS "GLSLCC_OUT_DIR=${GLSLCC_OUT_DIR}")
+message(STATUS "GLSLCC_FIND_PROG_ROOT=${GLSLCC_FIND_PROG_ROOT}")
 message(STATUS "GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS=${GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS}")
 message(STATUS "GLSLCC_VERT_SOURCE_FILE_EXTENSIONS=${GLSLCC_VERT_SOURCE_FILE_EXTENSIONS}")
 
