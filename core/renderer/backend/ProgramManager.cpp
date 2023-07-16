@@ -32,24 +32,6 @@
 
 NS_AX_BACKEND_BEGIN
 
-namespace
-{
-//std::string getShaderMacrosForLight()
-//{
-//    char def[256];
-//    auto conf = Configuration::getInstance();
-//
-//    snprintf(def, sizeof(def) - 1,
-//             "\n#define MAX_DIRECTIONAL_LIGHT_NUM %d \n"
-//             "\n#define MAX_POINT_LIGHT_NUM %d \n"
-//             "\n#define MAX_SPOT_LIGHT_NUM %d \n",
-//             conf->getMaxSupportDirLightInShader(), conf->getMaxSupportPointLightInShader(),
-//             conf->getMaxSupportSpotLightInShader());
-//
-//    return std::string(def);
-//}
-}  // namespace
-
 ProgramManager* ProgramManager::_sharedProgramManager = nullptr;
 
 Program* ProgramManager::newProgram(std::string_view vertShaderSource,

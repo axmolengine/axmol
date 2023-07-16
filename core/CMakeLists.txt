@@ -212,7 +212,7 @@ if (AX_ENABLE_EARLY_FEATURES)
     endif()
     configure_file(
         "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h.in"
-        "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h")
+        "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h" @ONLY)
     # SKINPOSITION_NORMAL_TEXTURE_3D:       skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
     # POSITION_NORMAL_TEXTURE_3D:           skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
     # POSITION_NORMAL_3D:                   positionNormalTexture.vert,         colorNormal.frag,        LightDefs
