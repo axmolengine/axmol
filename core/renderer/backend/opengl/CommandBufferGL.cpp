@@ -332,8 +332,7 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
                 int offset = uniformInfo.bufferOffset;
                 if (iter.second.isFragment)
                 {
-                    auto test = Vec4(1.0, 1.0, 1.0, 1.0);
-                    ubo.getFragmentBuffer()->updateSubData((void*)(&test), offset, uniformInfo.size);
+                    ubo.getFragmentBuffer()->updateSubData((void*)(fragBuffer + offset), offset, uniformInfo.size);
                 }
                 else
                 {
