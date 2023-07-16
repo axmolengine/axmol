@@ -154,6 +154,8 @@ function (ax_target_compile_shaders target_name)
             file(MAKE_DIRECTORY ${OUT_DIR})
         endif()
         set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
+
+        set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} ...")
     
         get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} GLSLCC_OUTPUT1)
 
@@ -162,11 +164,9 @@ function (ax_target_compile_shaders target_name)
             list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
             add_custom_command(
                     MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
-                    COMMENT "${FULL_COMMAND_LINE}"
+                    COMMENT "${SC_COMMENT}"
                 )
         else() # dual outputs
-            # set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} to ${SC_OUTPUT} ...")
-
             set(SC_DEFINES1 ${SC_DEFINES})
             list(APPEND SC_DEFINES1 ${SOURCE_SC_OUTPUT1})
             string(REPLACE " " "," SC_DEFINES1 "${SC_DEFINES1}")
@@ -185,7 +185,7 @@ function (ax_target_compile_shaders target_name)
                     OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
                     COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
                     COMMAND ${GLSLCC_EXE} ${SC_FLAGS1}
-                    COMMENT "${FULL_COMMAND_LINE}\r\n${FULL_COMMAND_LINE1}"
+                    COMMENT "${SC_COMMENT}"
                 )
         endif()
 

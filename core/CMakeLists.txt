@@ -38,6 +38,8 @@ if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
 endif()
 
+cmake_policy(SET CMP0127 NEW)
+
 project(ax_libs)
 
 if (NOT WINRT)
