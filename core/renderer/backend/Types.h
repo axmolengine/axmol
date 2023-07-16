@@ -75,8 +75,6 @@ struct UniformInfo
     bool isArray              = false;
     unsigned int size         = 0;
     unsigned int bufferOffset = 0;
-    bool isUBO                = false;
-    bool isFragment           = false;
 
     // only used in metal
     bool isMatrix    = false;
