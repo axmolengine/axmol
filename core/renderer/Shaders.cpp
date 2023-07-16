@@ -28,59 +28,66 @@ THE SOFTWARE.
 #include "renderer/Shaders.h"
 
 NS_AX_BEGIN
-//
-AX_DLL const std::string_view positionColor_vert = "positionColor_vs";
-AX_DLL const std::string_view positionColor_frag = "positionColor_fs";
-AX_DLL const std::string_view positionTexture_vert = "positionTexture_vs";
-AX_DLL const std::string_view positionTexture_frag = "positionTexture_fs";
-AX_DLL const std::string_view positionTextureColor_vert = "positionTextureColor_vs";
-AX_DLL const std::string_view positionTextureColor_frag = "positionTextureColor_fs";
-AX_DLL const std::string_view positionTextureColorAlphaTest_frag = "positionTextureColorAlphaTest_fs";
-AX_DLL const std::string_view label_normal_frag = "label_normal_fs";
-AX_DLL const std::string_view label_distanceNormal_frag = "label_distanceNormal_fs";
-AX_DLL const std::string_view labelOutline_frag = "labelOutline_fs";
-AX_DLL const std::string_view labelDistanceFieldGlow_frag = "labelDistanceFieldGlow_fs";
-AX_DLL const std::string_view positionColorLengthTexture_vert = "positionColorLengthTexture_vs";
-AX_DLL const std::string_view positionColorLengthTexture_frag = "positionColorLengthTexture_fs";
-AX_DLL const std::string_view positionColorTextureAsPointsize_vert = "positionColorTextureAsPointsize_vs";
-AX_DLL const std::string_view position_vert = "position_vs";
-AX_DLL const std::string_view layer_radialGradient_frag = "layer_radialGradient_fs";
-AX_DLL const std::string_view grayScale_frag = "grayScale_fs";
-AX_DLL const std::string_view positionUColor_vert = "positionUColor_vs";
-AX_DLL const std::string_view dualSampler_frag = "dualSampler_fs";
-AX_DLL const std::string_view dualSampler_gray_frag = "dualSampler_gray_fs";
-AX_DLL const std::string_view cameraClear_vert = "cameraClear_vs";
-AX_DLL const std::string_view cameraClear_frag = "cameraClear_fs";
 
-AX_DLL const std::string_view quadTexture_frag = "quadTexture_fs";
-AX_DLL const std::string_view quadTexture_vert = "quadTexture_vs";
-AX_DLL const std::string_view quadColor_frag = "quadColor_fs";
-AX_DLL const std::string_view quadColor_vert = "quadColor_vs";
+using namespace std::string_view_literals;
 
-AX_DLL const std::string_view hsv_frag = "hsv_fs";
-AX_DLL const std::string_view dualSampler_hsv_frag = "dualSampler_hsv_fs";
+AX_DLL const std::string_view positionColor_vert = "positionColor_vs"sv;
+AX_DLL const std::string_view positionColor_frag = "positionColor_fs"sv;
+AX_DLL const std::string_view positionTexture_vert = "positionTexture_vs"sv;
+AX_DLL const std::string_view positionTexture_frag = "positionTexture_fs"sv;
+AX_DLL const std::string_view positionTextureColor_vert = "positionTextureColor_vs"sv;
+AX_DLL const std::string_view positionTextureColor_frag = "positionTextureColor_fs"sv;
+AX_DLL const std::string_view positionTextureColorAlphaTest_frag = "positionTextureColorAlphaTest_fs"sv;
+AX_DLL const std::string_view label_normal_frag = "label_normal_fs"sv;
+AX_DLL const std::string_view label_distanceNormal_frag = "label_distanceNormal_fs"sv;
+AX_DLL const std::string_view labelOutline_frag = "labelOutline_fs"sv;
+AX_DLL const std::string_view labelDistanceFieldGlow_frag = "labelDistanceFieldGlow_fs"sv;
+AX_DLL const std::string_view positionColorLengthTexture_vert = "positionColorLengthTexture_vs"sv;
+AX_DLL const std::string_view positionColorLengthTexture_frag = "positionColorLengthTexture_fs"sv;
+AX_DLL const std::string_view positionColorTextureAsPointsize_vert = "positionColorTextureAsPointsize_vs"sv;
+AX_DLL const std::string_view position_vert = "position_vs"sv;
+AX_DLL const std::string_view layer_radialGradient_frag = "layer_radialGradient_fs"sv;
+AX_DLL const std::string_view grayScale_frag = "grayScale_fs"sv;
+AX_DLL const std::string_view positionUColor_vert = "positionUColor_vs"sv;
+AX_DLL const std::string_view dualSampler_frag = "dualSampler_fs"sv;
+AX_DLL const std::string_view dualSampler_gray_frag = "dualSampler_gray_fs"sv;
+AX_DLL const std::string_view cameraClear_vert = "cameraClear_vs"sv;
+AX_DLL const std::string_view cameraClear_frag = "cameraClear_fs"sv;
 
-AX_DLL const std::string_view videoTextureYUY2_frag = "videoTextureYUY2_fs";
-AX_DLL const std::string_view videoTextureNV12_frag = "videoTextureNV12_fs";
-AX_DLL const std::string_view videoTextureBGRA_frag = "videoTextureBGRA_fs";
+AX_DLL const std::string_view quadTexture_frag = "quadTexture_fs"sv;
+AX_DLL const std::string_view quadTexture_vert = "quadTexture_vs"sv;
+AX_DLL const std::string_view quadColor_frag = "quadColor_fs"sv;
+AX_DLL const std::string_view quadColor_vert = "quadColor_vs"sv;
+
+AX_DLL const std::string_view hsv_frag = "hsv_fs"sv;
+AX_DLL const std::string_view dualSampler_hsv_frag = "dualSampler_hsv_fs"sv;
+
+AX_DLL const std::string_view videoTextureYUY2_frag = "videoTextureYUY2_fs"sv;
+AX_DLL const std::string_view videoTextureNV12_frag = "videoTextureNV12_fs"sv;
+AX_DLL const std::string_view videoTextureBGRA_frag = "videoTextureBGRA_fs"sv;
 
 /* below is 3d shaders */
-AX_DLL const std::string_view lineColor3D_frag = "lineColor3D_fs";
-AX_DLL const std::string_view lineColor3D_vert = "lineColor3D_vs";
-AX_DLL const std::string_view color_frag = "color_fs";
-AX_DLL const std::string_view colorNormal_frag = "colorNormal_fs";
-AX_DLL const std::string_view colorNormalTexture_frag = "colorNormalTexture_fs";
-AX_DLL const std::string_view colorTexture_frag = "colorTexture_fs";
-AX_DLL const std::string_view particleTexture_frag = "particleTexture_fs";
-AX_DLL const std::string_view particleColor_frag = "particleColor_fs";
-AX_DLL const std::string_view particle_vert = "particle_vs";
-AX_DLL const std::string_view positionNormalTexture_vert = "positionNormalTexture_vs";
-AX_DLL const std::string_view skinPositionNormalTexture_vert = "skinPositionNormalTexture_vs";
-AX_DLL const std::string_view positionTexture3D_vert = "positionTexture3D_vs";
-AX_DLL const std::string_view skinPositionTexture_vert = "skinPositionTexture_vs";
-AX_DLL const std::string_view skybox_frag = "skybox_fs";
-AX_DLL const std::string_view skybox_vert = "skybox_vs";
-AX_DLL const std::string_view terrain_frag = "terrain_fs";
-AX_DLL const std::string_view terrain_vert = "terrain_vs";
+AX_DLL const std::string_view lineColor3D_frag = "lineColor3D_fs"sv;
+AX_DLL const std::string_view lineColor3D_vert = "lineColor3D_vs"sv;
+AX_DLL const std::string_view color_frag = "color_fs"sv;
+AX_DLL const std::string_view colorNormal_frag = "colorNormal_fs"sv;
+AX_DLL const std::string_view colorNormalTexture_frag = "colorNormalTexture_fs"sv;
+AX_DLL const std::string_view colorTexture_frag = "colorTexture_fs"sv;
+AX_DLL const std::string_view particleTexture_frag = "particleTexture_fs"sv;
+AX_DLL const std::string_view particleColor_frag = "particleColor_fs"sv;
+AX_DLL const std::string_view particle_vert = "particle_vs"sv;
+AX_DLL const std::string_view positionNormalTexture_vert = "positionNormalTexture_vs"sv;
+AX_DLL const std::string_view skinPositionNormalTexture_vert = "skinPositionNormalTexture_vs"sv;
+AX_DLL const std::string_view positionTexture3D_vert = "positionTexture3D_vs"sv;
+AX_DLL const std::string_view skinPositionTexture_vert = "skinPositionTexture_vs"sv;
+AX_DLL const std::string_view skybox_frag = "skybox_fs"sv;
+AX_DLL const std::string_view skybox_vert = "skybox_vs"sv;
+AX_DLL const std::string_view terrain_frag = "terrain_fs"sv;
+AX_DLL const std::string_view terrain_vert = "terrain_vs"sv;
+
+/* blow is with normal map */
+AX_DLL const std::string_view colorNormalTexture_frag_1 = "colorNormalTexture_fs_1"sv;
+AX_DLL const std::string_view positionNormalTexture_vert_1 = "positionNormalTexture_vs_1"sv;
+AX_DLL const std::string_view skinPositionNormalTexture_vert_1 = "skinPositionNormalTexture_vs_1"sv;
 
 NS_AX_END

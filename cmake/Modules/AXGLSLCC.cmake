@@ -12,8 +12,7 @@ endmacro()
 glslcc_option(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
 glslcc_option(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
 glslcc_option(GLSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
-glslcc_option(GLSLCC_OUT_SUFFIX "")
-glslcc_option(GLSLCC_FLAT_UBOS TRUE)
+glslcc_option(GLSLCC_FLAT_UBOS FALSE)
 glslcc_option(GLSLCC_FIND_PROG_ROOT "")
 
 if(APPLE)
@@ -31,7 +30,6 @@ endif()
 
 message(STATUS "GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS=${GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS}")
 message(STATUS "GLSLCC_VERT_SOURCE_FILE_EXTENSIONS=${GLSLCC_VERT_SOURCE_FILE_EXTENSIONS}")
-message(STATUS "GLSLCC_OUT_SUFFIX=${GLSLCC_OUT_SUFFIX}")
 message(STATUS "GLSLCC_FLAT_UBOS=${GLSLCC_FLAT_UBOS}")
 
 # PROPERTY: include direcotries (optional)
@@ -70,15 +68,14 @@ endfunction()
 
 # This function allow make shader files (.frag, .vert) compiled with glslcc
 # usage:
-#   - ax_target_compile_shaders(axmol FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs
-#   - ax_target_compile_shaders(axmol FILES source_files CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/shaders/${SC_LANG}/xxx_fs
+#   - ax_target_compile_shaders(axmol FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/xxx_fs
 #   - ax_target_compile_shaders(axmol FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
 # Use global variable to control shader file extension:
 #   - GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
 #   - GLSLCC_VERT_SOURCE_FILE_EXTENSIONS: default is .vert;.vsh
 # 
 function (ax_target_compile_shaders target_name)
-    set(options RUNTIME CVAR)
+    set(options RUNTIME CVAR CUSTOM)
     set(multiValueArgs FILES)
     cmake_parse_arguments(opt "${options}" "" "${multiValueArgs}" ${ARGN})
 
@@ -110,6 +107,9 @@ function (ax_target_compile_shaders target_name)
             list(APPEND SC_DEFINES "METAL")
         endif()
 
+        # automap, no-suffix since 1.18.1 released by axmolengine
+        list(APPEND SC_FLAGS "--automap" "--no-suffix")
+
         # defines
         get_source_file_property(SOURCE_SC_DEFINES ${SC_FILE} GLSLCC_DEFINES)
         if (NOT (SOURCE_SC_DEFINES STREQUAL "NOTFOUND"))
@@ -128,10 +128,19 @@ function (ax_target_compile_shaders target_name)
         list(APPEND SC_FLAGS "--include-dirs=${INC_DIRS}")
 
         # flat-ubos
-        if(${GLSLCC_FLAT_UBOS})
-            list(APPEND SC_FLAGS "--flatten-ubos")
+        # if(${GLSLCC_FLAT_UBOS})
+        #     list(APPEND SC_FLAGS "--flatten-ubos")
+        # endif()
+
+        if (opt_CVAR)
+            list(APPEND SC_FLAGS "--cvar=shader_rt_${FILE_NAME}")
         endif()
 
+        # sgs, because Apple Metal lack of shader uniform reflect so use --sgs --refelect
+        if (APPLE)
+            list(APPEND SC_FLAGS "--sgs" "--reflect")
+        endif()
+    
         # input
         if (${FILE_EXT} IN_LIST GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS)
             list(APPEND SC_FLAGS "--frag=${SC_FILE}")
@@ -143,37 +152,47 @@ function (ax_target_compile_shaders target_name)
             message(FATAL_ERROR "Invalid shader source, the file extesion must be one of .frag;.vert")
         endif()
 
-        # sgs, because Apple Metal lack of shader uniform reflect so use --sgs --refelect
-        if (APPLE)
-            list(APPEND SC_FLAGS "--sgs" "--reflect")
-             # need add suffix manually when flags contains --sgs
-            set(SC_SUFFIX "_${SC_TYPE}") 
-        else()
-            set(SC_SUFFIX "")
-        endif()
-
         # output
         set(OUT_DIR ${GLSLCC_OUT_DIR})
         if (NOT (IS_DIRECTORY ${OUT_DIR}))
             file(MAKE_DIRECTORY ${OUT_DIR})
         endif()
-        if (NOT opt_CVAR)
-            list(APPEND SC_FLAGS "--output=${OUT_DIR}/${FILE_NAME}${GLSLCC_OUT_SUFFIX}${SC_SUFFIX}" )
+        set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
+    
+        get_source_file_property(SOURCE_SC_OUTPUT1 ${SC_FILE} GLSLCC_OUTPUT1)
 
-            # glscc will auto insert ${FILE_NAME}_vs.bin or ${FILE_NAME}_fs.bin
-            # so we set OUTPUT to match with it, otherwise will cause cause incremental build to work incorrectly.
-            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}${GLSLCC_OUT_SUFFIX}")
-        else()
-            set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}${GLSLCC_OUT_SUFFIX}.h")
-            list(APPEND SC_FLAGS "${OUT_FILE}" "--cvar=shader_rt_${FILE_NAME}" "--output=${SC_OUTPUT}")
+        string(REPLACE ";" " " FULL_COMMAND_LINE "${GLSLCC_EXE};${SC_FLAGS} ...")
+        if(SOURCE_SC_OUTPUT1 STREQUAL "NOTFOUND") # single output
+            list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
+            add_custom_command(
+                    MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
+                    COMMENT "${FULL_COMMAND_LINE}"
+                )
+        else() # dual outputs
+            # set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} to ${SC_OUTPUT} ...")
+
+            set(SC_DEFINES1 ${SC_DEFINES})
+            list(APPEND SC_DEFINES1 ${SOURCE_SC_OUTPUT1})
+            string(REPLACE " " "," SC_DEFINES1 "${SC_DEFINES1}")
+
+            set(SC_FLAGS1 ${SC_FLAGS})
+            list(REMOVE_ITEM SC_FLAGS1 "--defines=${SC_DEFINES}")
+            list(APPEND SC_FLAGS1 "--defines=${SC_DEFINES1}")
+
+            list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
+
+            set(SC_OUTPUT1 "${SC_OUTPUT}_1")
+            list(APPEND SC_FLAGS1 "--output=${SC_OUTPUT1}")
+            string(REPLACE ";" " " FULL_COMMAND_LINE1 "${GLSLCC_EXE};${SC_FLAGS1} ...")
+            add_custom_command(
+                    MAIN_DEPENDENCY ${SC_FILE} 
+                    OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
+                    COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
+                    COMMAND ${GLSLCC_EXE} ${SC_FLAGS1}
+                    COMMENT "${FULL_COMMAND_LINE}\r\n${FULL_COMMAND_LINE1}"
+                )
         endif()
 
-        set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} to ${SC_OUTPUT} ...")
-        string(REPLACE ";" " " FULL_COMMAND_LINE "${GLSLCC_EXE};${SC_FLAGS} ...")
-        add_custom_command(
-                MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
-                COMMENT "${FULL_COMMAND_LINE}"
-            )
     endforeach()
     target_sources(${target_name} PRIVATE ${opt_FILES})
 endfunction()
