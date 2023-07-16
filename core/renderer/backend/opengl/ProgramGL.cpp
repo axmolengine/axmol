@@ -35,24 +35,11 @@
 
 NS_AX_BACKEND_BEGIN
 
-namespace
-{
-static const std::string SHADER_PREDEFINE = "#version 100\n precision highp float;\n precision highp int;\n";
-}
-
 ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
-#if defined(AX_USE_GLES)
-    // some device required manually specify the precision qualifiers for vertex shader.
-    _vertexShaderModule =
-        static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(SHADER_PREDEFINE + _vertexShader));
-    _fragmentShaderModule =
-        static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(SHADER_PREDEFINE + _fragmentShader));
-#else
     _vertexShaderModule   = static_cast<ShaderModuleGL*>(ShaderCache::newVertexShaderModule(_vertexShader));
     _fragmentShaderModule = static_cast<ShaderModuleGL*>(ShaderCache::newFragmentShaderModule(_fragmentShader));
-#endif
 
     AX_SAFE_RETAIN(_vertexShaderModule);
     AX_SAFE_RETAIN(_fragmentShaderModule);
@@ -93,9 +80,9 @@ void ProgramGL::reloadProgram()
     _mapToCurrentActiveLocation.clear();
     _mapToOriginalLocation.clear();
     static_cast<ShaderModuleGL*>(_vertexShaderModule)
-        ->compileShader(backend::ShaderStage::VERTEX, SHADER_PREDEFINE + _vertexShader);
+        ->compileShader(backend::ShaderStage::VERTEX, _vertexShader);
     static_cast<ShaderModuleGL*>(_fragmentShaderModule)
-        ->compileShader(backend::ShaderStage::FRAGMENT, SHADER_PREDEFINE + _fragmentShader);
+        ->compileShader(backend::ShaderStage::FRAGMENT, _fragmentShader);
     compileProgram();
     computeUniformInfos();
 

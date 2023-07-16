@@ -26,20 +26,20 @@
 
 #include "../ShaderModule.h"
 #include "../Types.h"
-
+#include <stdint.h>
 #include <string>
 #include <vector>
 #include <memory>
 #include <unordered_map>
 #import <Metal/Metal.h>
 
-struct glslopt_shader;
-
 NS_AX_BACKEND_BEGIN
 /**
  * @addtogroup _metal
  * @{
  */
+
+struct SLCReflectContext;
 
 /**
  * To Create a vertex or fragment shader.
@@ -120,9 +120,9 @@ public:
     inline std::size_t getUniformBufferSize() const { return _uniformBufferSize; }
 
 private:
-    void parseAttibute(id<MTLDevice> mtlDevice, glslopt_shader* shader);
-    void parseUniform(id<MTLDevice> mtlDevice, glslopt_shader* shader);
-    void parseTexture(id<MTLDevice> mtlDevice, glslopt_shader* shader);
+    void parseAttibute(SLCReflectContext* context);
+    void parseUniform(SLCReflectContext* context);
+    void parseTexture(SLCReflectContext* context);
     void setBuiltinUniformLocation();
     void setBuiltinAttributeLocation();
 

@@ -21,8 +21,8 @@ if ($IsWin) {
     }
 
     $pathList = [System.Collections.ArrayList]$env:PATH.Split(';')
-    if ($pathList.IndexOf($AX_CONSOLE_BIN) -eq -1) {
-        $pathList = [System.Collections.ArrayList][Environment]::GetEnvironmentVariable('PATH', 'User').Split(';')
+    if (!$pathList.IndexOf($AX_CONSOLE_BIN) -eq -1) {
+        $pathList = [Environment]::GetEnvironmentVariable('PATH', 'User').Split(';')
         $pathList.Insert(0, $AX_CONSOLE_BIN)
         $PATH = $pathList -join ';'
         [Environment]::SetEnvironmentVariable('PATH', $PATH, 'User')
