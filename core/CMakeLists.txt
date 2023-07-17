@@ -160,9 +160,10 @@ configure_file(
 
 # early features     
 include(CMakeDependentOption)
+set(GITHUB_ACTIONS $ENV{GITHUB_ACTIONS})
 cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
   "Build the tests when we are the root project" ON
-  "AX_GIT_BRANCH STREQUAL \"dev\"" OFF)
+  "AX_GIT_BRANCH STREQUAL \"dev\" OR GITHUB_ACTIONS STREQUAL \"true\"" OFF)
 
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)
@@ -222,7 +223,7 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
 if (AX_ENABLE_EARLY_FEATURES)
-    message(AUTHOR_WARNING "Enable early dev features for local dev test only")
+    message(AUTHOR_WARNING "Enable early dev features for test only")
     # import minimal AXGLSLCC.cmake for shader compiler support
     # the function: ax_target_compile_shaders avaiable from it
     set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")

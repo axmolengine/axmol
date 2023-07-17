@@ -19,7 +19,7 @@ find_program(GLSLCC_EXE NAMES glslcc
 )
 
 if (NOT GLSLCC_EXE)
-    message("glslcc not found.")
+    message(STATUS, "glslcc not found.")
     message(FATAL_ERROR "Please run setup.ps1 again to download glslcc, and run CMake again.")
 endif()
 
@@ -114,10 +114,10 @@ function (ax_target_compile_shaders target_name)
         # defines
         get_source_file_property(SOURCE_SC_DEFINES ${SC_FILE} GLSLCC_DEFINES)
         if (NOT (SOURCE_SC_DEFINES STREQUAL "NOTFOUND"))
-            list(APPEND SC_DEFINES ${SOURCE_SC_DEFINES})
+            set(SC_DEFINES "${SC_DEFINES},${SOURCE_SC_DEFINES}")
         endif()
         if (SC_DEFINES)
-            list(APPEND SC_FLAGS "--defines=${SC_DEFINES}")
+            list(APPEND SC_FLAGS "\"--defines=${SC_DEFINES}\"")
         endif()
 
         # includes
@@ -167,13 +167,11 @@ function (ax_target_compile_shaders target_name)
                     COMMENT "${SC_COMMENT}"
                 )
         else() # dual outputs
-            set(SC_DEFINES1 ${SC_DEFINES})
-            list(APPEND SC_DEFINES1 ${SOURCE_SC_OUTPUT1})
-            string(REPLACE " " "," SC_DEFINES1 "${SC_DEFINES1}")
+            set(SC_DEFINES1 "${SC_DEFINES},${SOURCE_SC_OUTPUT1}")
 
             set(SC_FLAGS1 ${SC_FLAGS})
-            list(REMOVE_ITEM SC_FLAGS1 "--defines=${SC_DEFINES}")
-            list(APPEND SC_FLAGS1 "--defines=${SC_DEFINES1}")
+            list(REMOVE_ITEM SC_FLAGS1 "\"--defines=${SC_DEFINES}\"")
+            list(APPEND SC_FLAGS1 "\"--defines=${SC_DEFINES1}\"")
 
             list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
 
