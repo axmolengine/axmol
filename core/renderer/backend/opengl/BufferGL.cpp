@@ -113,10 +113,15 @@ void BufferGL::updateData(void* data, std::size_t size)
             glBindBuffer(GL_ARRAY_BUFFER, _buffer);
             glBufferData(GL_ARRAY_BUFFER, size, data, toGLUsage(_usage));
         }
-        else
+        else if (BufferType::INDEX == _type)
         {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, toGLUsage(_usage));
+        }
+        else
+        {
+            glBindBuffer(GL_UNIFORM_BUFFER, _buffer);
+            glBufferData(GL_UNIFORM_BUFFER, size, data, toGLUsage(_usage));
         }
         CHECK_GL_ERROR_DEBUG();
         _bufferAllocated = size;
@@ -141,10 +146,15 @@ void BufferGL::updateSubData(void* data, std::size_t offset, std::size_t size)
             glBindBuffer(GL_ARRAY_BUFFER, _buffer);
             glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
         }
-        else
+        else if (BufferType::INDEX == _type)
         {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer);
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+        }
+        else
+        {
+            glBindBuffer(GL_UNIFORM_BUFFER, _buffer);
+            glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
         }
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA

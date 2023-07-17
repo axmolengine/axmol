@@ -76,11 +76,11 @@ NewRendererTests::NewRendererTests()
 {
     auto programManager = ProgramManager::getInstance();
     programManager->registerCustomProgramFactory(CustomProgramType::BLUR, positionTextureColor_vert,
-                                               FileUtils::getInstance()->getStringFromFile("Shaders/example_Blur.fsh"),
+                                                 "example_Blur_fs"sv,
                                                VertexLayoutHelper::setupSprite);
     programManager->registerCustomProgramFactory(
         CustomProgramType::SEPIA, positionTextureColor_vert,
-                                               FileUtils::getInstance()->getStringFromFile("Shaders/example_Sepia.fsh"),
+                                               "example_Sepia_fs"sv,
                                                VertexLayoutHelper::setupSprite);
 
     ADD_TEST_CASE(NewSpriteTest);

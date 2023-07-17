@@ -28,54 +28,66 @@ THE SOFTWARE.
 #include "renderer/Shaders.h"
 
 NS_AX_BEGIN
-//
 
-// backend shader file
-#include "renderer/shaders/positionColor.vert"
-#include "renderer/shaders/positionColor.frag"
-#include "renderer/shaders/positionTexture.vert"
-#include "renderer/shaders/positionTexture.frag"
-#include "renderer/shaders/positionTextureColor.vert"
-#include "renderer/shaders/positionTextureColor.frag"
-#include "renderer/shaders/positionTextureColorAlphaTest.frag"
-#include "renderer/shaders/label_normal.frag"
-#include "renderer/shaders/label_distanceNormal.frag"
-#include "renderer/shaders/label_outline.frag"
-#include "renderer/shaders/label_distanceFieldGlow.frag"
-#include "renderer/shaders/positionColorLengthTexture.vert"
-#include "renderer/shaders/positionColorLengthTexture.frag"
-#include "renderer/shaders/positionColorTextureAsPointsize.vert"
-#include "renderer/shaders/position.vert"
-#include "renderer/shaders/layer_radialGradient.frag"
-#include "renderer/shaders/ui_Gray.frag"
-#include "renderer/shaders/positionUColor.vert"
-#include "renderer/shaders/dualSampler.frag"
-#include "renderer/shaders/dualSampler_gray.frag"
-#include "renderer/shaders/cameraClear.vert"
-#include "renderer/shaders/cameraClear.frag"
+using namespace std::string_view_literals;
 
-#include "renderer/shaders/3D_color.frag"
-#include "renderer/shaders/3D_colorNormal.frag"
-#include "renderer/shaders/3D_colorNormalTexture.frag"
-#include "renderer/shaders/3D_colorTexture.frag"
-#include "renderer/shaders/3D_particle.vert"
-#include "renderer/shaders/3D_particle.frag"
-#include "renderer/shaders/3D_positionNormalTexture.vert"
-#include "renderer/shaders/3D_positionTexture.vert"
-#include "renderer/shaders/3D_skybox.vert"
-#include "renderer/shaders/3D_skybox.frag"
-#include "renderer/shaders/3D_terrain.frag"
-#include "renderer/shaders/3D_terrain.vert"
+AX_DLL const std::string_view positionColor_vert = "positionColor_vs"sv;
+AX_DLL const std::string_view positionColor_frag = "positionColor_fs"sv;
+AX_DLL const std::string_view positionTexture_vert = "positionTexture_vs"sv;
+AX_DLL const std::string_view positionTexture_frag = "positionTexture_fs"sv;
+AX_DLL const std::string_view positionTextureColor_vert = "positionTextureColor_vs"sv;
+AX_DLL const std::string_view positionTextureColor_frag = "positionTextureColor_fs"sv;
+AX_DLL const std::string_view positionTextureColorAlphaTest_frag = "positionTextureColorAlphaTest_fs"sv;
+AX_DLL const std::string_view label_normal_frag = "label_normal_fs"sv;
+AX_DLL const std::string_view label_distanceNormal_frag = "label_distanceNormal_fs"sv;
+AX_DLL const std::string_view labelOutline_frag = "labelOutline_fs"sv;
+AX_DLL const std::string_view labelDistanceFieldGlow_frag = "labelDistanceFieldGlow_fs"sv;
+AX_DLL const std::string_view positionColorLengthTexture_vert = "positionColorLengthTexture_vs"sv;
+AX_DLL const std::string_view positionColorLengthTexture_frag = "positionColorLengthTexture_fs"sv;
+AX_DLL const std::string_view positionColorTextureAsPointsize_vert = "positionColorTextureAsPointsize_vs"sv;
+AX_DLL const std::string_view position_vert = "position_vs"sv;
+AX_DLL const std::string_view layer_radialGradient_frag = "layer_radialGradient_fs"sv;
+AX_DLL const std::string_view grayScale_frag = "grayScale_fs"sv;
+AX_DLL const std::string_view positionUColor_vert = "positionUColor_vs"sv;
+AX_DLL const std::string_view dualSampler_frag = "dualSampler_fs"sv;
+AX_DLL const std::string_view dualSampler_gray_frag = "dualSampler_gray_fs"sv;
+AX_DLL const std::string_view cameraClear_vert = "cameraClear_vs"sv;
+AX_DLL const std::string_view cameraClear_frag = "cameraClear_fs"sv;
 
-#include "renderer/shaders/lineColor.frag"
-#include "renderer/shaders/lineColor.vert"
+AX_DLL const std::string_view quadTexture_frag = "quadTexture_fs"sv;
+AX_DLL const std::string_view quadTexture_vert = "quadTexture_vs"sv;
+AX_DLL const std::string_view quadColor_frag = "quadColor_fs"sv;
+AX_DLL const std::string_view quadColor_vert = "quadColor_vs"sv;
 
-#include "renderer/shaders/hsv.frag"
-#include "renderer/shaders/dualSampler_hsv.frag"
+AX_DLL const std::string_view hsv_frag = "hsv_fs"sv;
+AX_DLL const std::string_view dualSampler_hsv_frag = "dualSampler_hsv_fs"sv;
 
-#include "renderer/shaders/quad.vert"
-#include "renderer/shaders/quad.frag"
+AX_DLL const std::string_view videoTextureYUY2_frag = "videoTextureYUY2_fs"sv;
+AX_DLL const std::string_view videoTextureNV12_frag = "videoTextureNV12_fs"sv;
+AX_DLL const std::string_view videoTextureBGRA_frag = "videoTextureBGRA_fs"sv;
 
-#include "renderer/shaders/videoTexture.frag"
+/* below is 3d shaders */
+AX_DLL const std::string_view lineColor3D_frag = "lineColor3D_fs"sv;
+AX_DLL const std::string_view lineColor3D_vert = "lineColor3D_vs"sv;
+AX_DLL const std::string_view color_frag = "color_fs"sv;
+AX_DLL const std::string_view colorNormal_frag = "colorNormal_fs"sv;
+AX_DLL const std::string_view colorNormalTexture_frag = "colorNormalTexture_fs"sv;
+AX_DLL const std::string_view colorTexture_frag = "colorTexture_fs"sv;
+AX_DLL const std::string_view particleTexture_frag = "particleTexture_fs"sv;
+AX_DLL const std::string_view particleColor_frag = "particleColor_fs"sv;
+AX_DLL const std::string_view particle_vert = "particle_vs"sv;
+AX_DLL const std::string_view positionNormalTexture_vert = "positionNormalTexture_vs"sv;
+AX_DLL const std::string_view skinPositionNormalTexture_vert = "skinPositionNormalTexture_vs"sv;
+AX_DLL const std::string_view positionTexture3D_vert = "positionTexture3D_vs"sv;
+AX_DLL const std::string_view skinPositionTexture_vert = "skinPositionTexture_vs"sv;
+AX_DLL const std::string_view skybox_frag = "skybox_fs"sv;
+AX_DLL const std::string_view skybox_vert = "skybox_vs"sv;
+AX_DLL const std::string_view terrain_frag = "terrain_fs"sv;
+AX_DLL const std::string_view terrain_vert = "terrain_vs"sv;
+
+/* blow is with normal map */
+AX_DLL const std::string_view colorNormalTexture_frag_1 = "colorNormalTexture_fs_1"sv;
+AX_DLL const std::string_view positionNormalTexture_vert_1 = "positionNormalTexture_vs_1"sv;
+AX_DLL const std::string_view skinPositionNormalTexture_vert_1 = "skinPositionNormalTexture_vs_1"sv;
 
 NS_AX_END
