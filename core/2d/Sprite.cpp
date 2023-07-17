@@ -1041,7 +1041,7 @@ void Sprite::updateTransform()
 
         // MARMALADE CHANGE: ADDED CHECK FOR nullptr, TO PERMIT SPRITES WITH NO BATCH NODE / TEXTURE ATLAS
         if (_textureAtlas)
-            _textureAtlas->updateQuad(&_quad, _atlasIndex);
+            _textureAtlas->updateQuad(_quad, _atlasIndex);
 
         _recursiveDirty = false;
         setDirty(false);
@@ -1509,7 +1509,7 @@ void Sprite::updateColor()
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
         if (_atlasIndex != INDEX_NOT_INITIALIZED)
-            _textureAtlas->updateQuad(&_quad, _atlasIndex);
+            _textureAtlas->updateQuad(_quad, _atlasIndex);
         else
             // no need to set it recursively
             // update dirty_, don't update recursiveDirty_

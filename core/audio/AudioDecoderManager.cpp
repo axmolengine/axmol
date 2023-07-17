@@ -92,3 +92,5 @@ void AudioDecoderManager::destroyDecoder(AudioDecoder* decoder)
 }
 
 NS_AX_END  // namespace ax
+
+#undef LOG_TAG

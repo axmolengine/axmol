@@ -49,11 +49,9 @@
 #    import <UIKit/UIKit.h>
 #endif
 
-USING_NS_AX;
-
 static ALCdevice* s_ALDevice       = nullptr;
 static ALCcontext* s_ALContext     = nullptr;
-static AudioEngineImpl* s_instance = nullptr;
+static ax::AudioEngineImpl* s_instance = nullptr;
 
 static void ccALPauseDevice()
 {
@@ -169,10 +167,10 @@ static void ccALResumeDevice()
                 NSError* error = nil;
                 [[AVAudioSession sharedInstance] setActive:YES error:&error];
                 ccALResumeDevice();
-                if (Director::getInstance()->isPaused())
+                if (ax::Director::getInstance()->isPaused())
                 {
                     ALOGD("AVAudioSessionInterruptionTypeEnded, director was paused, try to resume it.");
-                    Director::getInstance()->resume();
+                    ax::Director::getInstance()->resume();
                 }
             }
             else
@@ -246,7 +244,7 @@ static id s_AudioEngineSessionHandler = nullptr;
 #    endif
 static void alcReopenDeviceOnAxmolThread()
 {
-    Director::getInstance()->queueOperation([](void*) {
+  ax::Director::getInstance()->queueOperation([](void*) {
         auto alcReopenDeviceSOFTProc =
             (decltype(alcReopenDeviceSOFT)*)alcGetProcAddress(s_ALDevice, "alcReopenDeviceSOFT");
         if (alcReopenDeviceSOFTProc)
@@ -305,7 +303,7 @@ static ALenum alSourceAddNotificationExt(ALuint sid,
     return AL_INVALID_VALUE;
 }
 
-ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData)
+ALvoid ax::AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData)
 {
     // Currently, we only care about AL_BUFFERS_PROCESSED event
     if (notificationID != AL_BUFFERS_PROCESSED)
@@ -324,6 +322,8 @@ ALvoid AudioEngineImpl::myAlSourceNotificationCallback(ALuint sid, ALuint notifi
     s_instance->_threadMutex.unlock();
 }
 #endif
+
+NS_AX_BEGIN
 
 AudioEngineImpl::AudioEngineImpl() : _scheduled(false), _currentAudioID(0), _scheduler(nullptr)
 {
@@ -969,3 +969,5 @@ void AudioEngineImpl::uncacheAll()
 
     _audioCaches.clear();
 }
+NS_AX_END
+#undef LOG_TAG

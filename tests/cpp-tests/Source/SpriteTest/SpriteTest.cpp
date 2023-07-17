@@ -2565,9 +2565,9 @@ SpriteHybrid::SpriteHybrid()
     // only show 80% of them
     for (int i = 0; i < 250; i++)
     {
-        int spriteIdx = AXRANDOM_0_1() * 14;
+        const int spriteIdx = random(1, 14);
         char str[25]  = {0};
-        sprintf(str, "grossini_dance_%02d.png", (spriteIdx + 1));
+        sprintf(str, "grossini_dance_%02d.png", spriteIdx);
         auto frame  = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
         auto sprite = Sprite::createWithSpriteFrame(frame);
         parent1->addChild(sprite, i, i);

@@ -7,6 +7,12 @@ set(CMAKE_DEBUG_TARGET_PROPERTIES
     # POSITION_INDEPENDENT_CODE
 )
 
+# The ``OLD`` behavior for this policy is to set ``OpenGL_GL_PREFERENCE`` to
+# ``LEGACY``.  The ``NEW`` behavior for this policy is to set
+# ``OpenGL_GL_PREFERENCE`` to ``GLVND``.
+# need review those libs: X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m
+cmake_policy(SET CMP0072 NEW)
+
 # some useful variables for every one ax project
 set(ENGINE_BINARY_PATH ${PROJECT_BINARY_DIR}/engine)
 
@@ -16,7 +22,7 @@ endif()
 
 find_program(PYTHON_COMMAND NAMES python3 python2 python)
 find_program(_AX_COMMAND NAME axmol
-    PATHS ${_AX_ROOT_PATH}/tools/console/bin $ENV{AX_CONSOLE_ROOT})
+    PATHS ${_AX_ROOT}/tools/console/bin $ENV{AX_CONSOLE_ROOT})
 
 # the default behavior of build module
 option(AX_ENABLE_EXT_LUA "Build lua libraries" ON)
@@ -44,7 +50,7 @@ message(STATUS "FUZZ_MSVC=${FUZZ_MSVC}, FULL_CLANG=${FULL_CLANG}")
 
 message(STATUS "PROJECT_NAME:" ${PROJECT_NAME})
 message(STATUS "PROJECT_SOURCE_DIR:" ${PROJECT_SOURCE_DIR})
-message(STATUS "_AX_ROOT_PATH:" ${_AX_ROOT_PATH})
+message(STATUS "_AX_ROOT:" ${_AX_ROOT})
 message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
 # delete binary dir if you hope a full clean re-build
 message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})

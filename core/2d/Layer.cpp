@@ -265,7 +265,7 @@ void LayerGradient::updateColor()
     if (_renderMode == RenderMode::QUAD_BATCHNODE)
     {
         if (_atlasIndex != INDEX_NOT_INITIALIZED)
-            _textureAtlas->updateQuad(&_quad, _atlasIndex);
+            _textureAtlas->updateQuad(_quad, _atlasIndex);
         else
             // no need to set it recursively
             // update dirty_, don't update recursiveDirty_

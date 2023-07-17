@@ -393,7 +393,7 @@ public:
      * @js  NA
      * @lua NA
      */
-    V3F_C4B_T2F_Quad getQuad() const { return _quad; }
+    const V3F_C4B_T2F_Quad& getQuad() const { return _quad; }
 
     /**
      * Returns whether or not the texture rectangle is rotated.

@@ -43,11 +43,11 @@
         } while (false)
 #endif
 
-USING_NS_AX;
+NS_AX_BEGIN
 
 namespace
 {
-unsigned int __idIndex = 0;
+unsigned int __playerIdIndex = 0;
 }
 
 AudioPlayer::AudioPlayer()
@@ -64,7 +64,7 @@ AudioPlayer::AudioPlayer()
 #if defined(__APPLE__)
     , _needWakeupRotateThread(false)
 #endif
-    , _id(++__idIndex)
+    , _id(++__playerIdIndex)
 {
     memset(_bufferIds, 0, sizeof(_bufferIds));
 }
@@ -468,3 +468,5 @@ bool AudioPlayer::setTime(float time)
     }
     return false;
 }
+NS_AX_END
+#undef LOG_TAG

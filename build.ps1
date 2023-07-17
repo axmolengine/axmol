@@ -9,6 +9,7 @@
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
 #  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -xb: additional cross build options: i.e. -xb '--config','Release'
+#  -d: specify project dir to compile, i.e. -d /path/your/project/
 # examples:
 #   - win32: 
 #     - pwsh build.ps1 -p win32
@@ -85,23 +86,21 @@ $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
 # start construct full cmd line
-$fullCmdLine = @("$((Resolve-Path -Path "$AX_ROOT/tools/ci/build1k.ps1").Path)")
+$fullCmdLine = @("$((Resolve-Path -Path "$AX_ROOT/1k/build1k.ps1").Path)")
 
-foreach ($option in $options.GetEnumerator()) {
-    if ($option.Key -ne 'd' -and $option.Value) {
-        $fullCmdLine += add_quote "-$($option.Key)"
-        $fullCmdLine += add_quote $option.Value
+$search_prior_dir = $options.d
+if (!$search_prior_dir -and $is_engine -and $is_android) {
+    if ($is_ci) {
+        $search_prior_dir = Join-Path $myRoot 'tests/cpp-tests'
+    } else {
+        $search_prior_dir = Join-Path $myRoot 'templates/cpp-template-default'
     }
 }
 
-if ($options.p -eq 'android') {
-    $fullCmdLine += "'-xt'", "'gradle'"
-}
-
-$search_paths = if ($options.d) { @($options.d, $workDir, $myRoot) } else { @($workDir, $myRoot) }
+$search_paths = if ($search_prior_dir) { @($search_prior_dir, $workDir, $myRoot) } else { @($workDir, $myRoot) }
 function search_proj($path, $type) {
     foreach ($search_path in $search_paths) {
-        $full_path = Join-Path -Path $search_path -ChildPath $path
+        $full_path = Join-Path $search_path $path
         if (Test-Path $full_path -PathType $type) {
             $ret_path = if ($type -eq 'Container') { $full_path } else { $search_path }
             return $ret_path
@@ -112,42 +111,42 @@ function search_proj($path, $type) {
 
 $search_rules = @(
     # others
-    @(
-        # project
-        @{
-            path = 'CMakeLists.txt';
-            type = 'Leaf'
-        },
-        # engine
-        @{
-            path = 'CMakeLists.txt';
-            type = 'Leaf'
-        }
-    ),
+    @{
+        path = 'CMakeLists.txt';
+        type = 'Leaf'
+    },
     # android
-    @(
-        # project
-        @{
-            path = 'proj.android';
-            type = 'Container';
-        },
-        # engine
-        @{
-            path = if ($is_ci) { 'tests/cpp-tests/proj.android' } else { 'templates/cpp-template-default/proj.android' };
-            type = 'Container'
-        }
-    )
+    @{
+        path = 'proj.android';
+        type = 'Container';
+    }
 )
 
-$search_rule = $search_rules[$is_android][$is_engine]
+$search_rule = $search_rules[$is_android]
 $proj_dir = search_proj $search_rule.path $search_rule.type
 
 $proj_name = (Get-Item $myRoot).BaseName
-$optimize_flag = @('Debug', 'Release')[$is_ci]
+
+$bti = $null
+$bci = $null
+# parsing build options
+$nopts = $options.xb.Count
+for ($i = 0; $i -lt $nopts; ++$i) {
+    $optv = $options.xb[$i]
+    if ($optv -eq '--target') {
+        if ($i -lt ($nopts - 1)) {
+            $bti = $i + 1
+        }
+    }
+    elseif($optv -eq '--config') {
+        if ($i -lt ($nopts - 1)) {
+            $bci = $i + 1
+        }
+    }
+}
 
 if (!$is_android) {
-    # non android
-    if ("$($options.xb)".IndexOf('--target') -eq -1) {
+    if (!$bti) {
         # non android, specific cmake target
         $cmake_targets = @(
             # local developer
@@ -166,14 +165,18 @@ if (!$is_android) {
             )
         )
         $cmake_target = $cmake_targets[$is_ci][$is_engine]
-        $fullCmdLine += "'-xb'", "'--config','$optimize_flag','--target','$cmake_target'"
-    } 
+        $options.xb += '--target', $cmake_target
+    }
 } else { # android
-    $fullCmdLine += "'-xb'", "'--config','$optimize_flag'"
     # engine ci
     if ($is_engine -and $is_ci) {
-        $fullCmdLine += "'-xc'", "'-PAX_ENABLE_EXT_EFFEKSEER=ON','-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks','-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'"
+        $fullCmdLine += "'-xc'", "'-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks','-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'"
     }
+}
+
+if (!$bci) {
+    $optimize_flag = @('Debug', 'Release')[$is_ci]
+    $options.xb += '--config', $optimize_flag
 }
 
 if ($is_android) {
@@ -183,8 +186,17 @@ if ($is_android) {
 if ($proj_dir) {
     $fullCmdLine += "'-d'", "'$proj_dir'"
 }
-$prefix = Join-Path -Path $AX_ROOT -ChildPath 'tools/external'
+$prefix = Join-Path $AX_ROOT 'tools/external'
 $fullCmdLine += "'-prefix'", "'$prefix'"
 
+# remove arg we don't want forward to
+$options.Remove('d')
+foreach ($option in $options.GetEnumerator()) {
+    if ($option.Value) {
+        $fullCmdLine += add_quote "-$($option.Key)"
+        $fullCmdLine += add_quote $option.Value
+    }
+}
+
 $strFullCmdLine = "$fullCmdLine"
-Invoke-Expression -Command $strFullCmdLine
+Invoke-Expression $strFullCmdLine

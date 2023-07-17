@@ -104,7 +104,7 @@ elseif(APPLE)
             platform/ios/InputView-ios.mm
             )
 
-        if(NOT AX_USE_COMPAT_GL)
+        if(NOT AX_USE_ANGLE)
             set(_AX_PLATFORM_SPECIFIC_HEADER
                 ${_AX_PLATFORM_SPECIFIC_HEADER}
                 platform/ios/ES2Renderer-ios.h

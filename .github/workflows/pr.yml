@@ -12,19 +12,8 @@ env:
   PULL_REQUEST: yes
 
 jobs:
-  build-windows:
-    name: build-windows
+  build-win:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        config:
-          - {arch: x86, dll: false}
-          - {arch: x64, dll: false}
-          - {arch: x86, dll: true}
-          - {arch: x64, dll: true}
-    env:
-      BUILD_ARCH: ${{ matrix.config.arch }}
-      BUILD_DLL: ${{ matrix.config.dll }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -38,34 +27,9 @@ jobs:
           arch: ${{ env.BUILD_ARCH }}
       - name: Build
         shell: pwsh
-        run: .\build.ps1 -p win32 -a $env:BUILD_ARCH -dll $env:BUILD_DLL
-
-  build-windows-clang:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        arch:
-          - x64
-    env:
-      BUILD_ARCH: ${{ matrix.arch }}
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: 'recursive'
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.7.8'
-    - name: Install LLVM and Clang
-      uses: KyleMayes/install-llvm-action@v1
-      with:
-        version: "16.0"
-    - name: Build
-      shell: pwsh
-      run: .\build.ps1 -p win32 -a x64 -cc clang
+        run: .\build.ps1 -p win32 -a x64
 
   build-winuwp:
-    name: build-winuwp
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -84,11 +48,7 @@ jobs:
         run: .\build.ps1 -p winuwp -a x64
 
   build-linux:
-    name: build-linux
     runs-on: ubuntu-latest
-    env:
-      GH_OS_NAME: linux
-      BUILD_TARGET: linux
     steps:
       - uses: actions/checkout@v3
         with:
@@ -98,25 +58,13 @@ jobs:
       # We'll use this as our working directory for all subsequent commands
         run: |
           AX_ROOT=`pwd`
-          echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
+          echo -e "y" | pwsh $AX_ROOT/setup.ps1
       - name: Build
         shell: pwsh
         run: ./build.ps1 -p linux -a x64
 
   build-android:
-    name: build-android
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        arch:
-          - armv7
-          - arm64
-          - x86
-          - x64
-    env:
-      GH_OS_NAME: linux
-      BUILD_TARGET: android
-      BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -125,29 +73,17 @@ jobs:
         shell: pwsh
         run: |
           $AX_ROOT = $(Get-Location).Path
-          ./build.ps1 -p android -a $env:BUILD_ARCH
+          ./build.ps1 -p android -a arm64
 
   build-osx:
-    name: build-osx
     runs-on: macos-12
-    strategy:
-      matrix:
-        arch:
-          - x86_64
-          - arm64
-    env:
-      GH_OS_NAME: osx
-      BUILD_TARGET: osx
-      BUILD_ARCH: ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: 'recursive'
-
       - name: Build
         shell: pwsh
-        run: |
-          ./build.ps1 -p osx -a $env:BUILD_ARCH
+        run: ./build.ps1 -p osx -a x64
 
   build-ios:
     name: build-ios
@@ -162,7 +98,7 @@ jobs:
 
       - name: Build
         shell: pwsh
-        run: ./build.ps1 -p ios -a 'x64'
+        run: ./build.ps1 -p ios -a x64
 
   build-tvos:
     name: build-tvos
@@ -177,5 +113,4 @@ jobs:
 
       - name: Build
         shell: pwsh
-        run: |
-          ./build.ps1 -p tvos -a 'x64'
+        run: ./build.ps1 -p tvos -a x64

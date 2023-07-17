@@ -202,7 +202,7 @@ void Skin::updateTransform()
     // MARMALADE CHANGE: ADDED CHECK FOR nullptr, TO PERMIT SPRITES WITH NO BATCH NODE / TEXTURE ATLAS
     if (_textureAtlas)
     {
-        _textureAtlas->updateQuad(&_quad, _textureAtlas->getTotalQuads());
+        _textureAtlas->updateQuad(_quad, _textureAtlas->getTotalQuads());
     }
 }
 

@@ -37,12 +37,12 @@
 #include "scripting/lua-bindings/manual/physics3d/axlua_physics3d_manual.h"
 #include "scripting/lua-bindings/manual/navmesh/axlua_navmesh_manual.h"
 #include "lua_cjson.h"
-#include "yasio/bindings/yasio_cclua.hpp"
+#include "yasio/bindings/yasio_axlua.hpp"
 
 static void lua_register_extensions(lua_State* L)
 {
 
-    static luaL_Reg lua_exts[] = {{"yasio", luaopen_yasio_cclua}, {"cjson", luaopen_cjson}, {NULL, NULL}};
+    static luaL_Reg lua_exts[] = {{"yasio", luaopen_yasio_axlua}, {"cjson", luaopen_cjson}, {NULL, NULL}};
 
     lua_getglobal(L, "package");
     lua_getfield(L, -1, "preload");

@@ -36,11 +36,13 @@ public:
     CREATE_FUNC(TextureCacheTest);
 
     TextureCacheTest();
+    ~TextureCacheTest() override;
 
     void addSprite();
     void loadingCallBack(ax::Texture2D* texture);
 
-    virtual float getDuration() const override { return 3.5f; }
+    float getDuration() const override { return 3.5f; }
+    void onEnter() override;
 
 private:
     ax::Label* _labelLoading;
@@ -55,6 +57,9 @@ public:
     CREATE_FUNC(TextureCacheUnbindTest);
 
     TextureCacheUnbindTest();
+    ~TextureCacheUnbindTest() override;
+
+    void onEnter() override;
 
 private:
     void textureLoadedA(ax::Texture2D* texture);

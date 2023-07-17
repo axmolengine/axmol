@@ -53,6 +53,11 @@ SOFTWARE.
 #  include "yasio/shared_mutex.hpp"
 #endif
 
+#if defined(YASIO_ENABLE_KCP)
+typedef struct IKCPCB ikcpcb;
+struct yasio_kcp_options;
+#endif
+
 #if defined(YASIO_SSL_BACKEND)
 typedef struct ssl_ctx_st yssl_ctx_st;
 struct yssl_st;
@@ -252,6 +257,26 @@ enum
   // params: index:int, conv:int
   YOPT_C_KCP_CONV,
 
+  // The setting for kcp nodelay config.
+  // refer to:https://github.com/skywind3000/kcp/wiki/KCP-Basic-Usage
+  // params: index:int, nodelay:int, interval:int, resend:int, nc:int.
+  YOPT_C_KCP_NODELAY,
+
+  // The setting for kcp window size config.
+  // refer to:https://github.com/skywind3000/kcp/wiki/KCP-Basic-Usage
+  // params: index:int, sndWnd:int, rcvwnd:int
+  YOPT_C_KCP_WINDOW_SIZE,
+
+  // The setting for kcp MTU config.
+  // refer to:https://github.com/skywind3000/kcp/wiki/KCP-Basic-Usage
+  // params: index:int,mtu:int
+  YOPT_C_KCP_MTU,
+
+  // The setting for kcp min RTO config.
+  // refer to:https://github.com/skywind3000/kcp/wiki/KCP-Basic-Usage
+  // params: index:int,minRTO:int
+  YOPT_C_KCP_RTO_MIN,
+
   // Whether never perform bswap for length field
   // params: index:int, no_bswap:int(0)
   YOPT_C_UNPACK_NO_BSWAP,
@@ -339,6 +364,7 @@ class io_transport;
 class io_transport_tcp; // tcp client/server
 class io_transport_ssl; // ssl client
 class io_transport_udp; // udp client/server
+class io_transport_kcp; // kcp client/server
 class io_service;
 
 // recommand user always use transport_handle_t, in the future, it's maybe void* or intptr_t
@@ -495,8 +521,13 @@ class YASIO_API io_channel : public io_base {
   friend class io_transport_tcp;
   friend class io_transport_ssl;
   friend class io_transport_udp;
+  friend class io_transport_kcp;
 
 public:
+#if defined(YASIO_ENABLE_KCP)
+  ~io_channel();
+  YASIO__DECL yasio_kcp_options& kcp_options();
+#endif
   io_service& get_service() const { return service_; }
 #if defined(YASIO_SSL_BACKEND)
   YASIO__DECL yssl_ctx_st* get_ssl_context(bool client) const;
@@ -609,6 +640,9 @@ private:
   long long bytes_transferred_ = 0;
 
   unsigned int connect_id_ = 0;
+#if YASIO_ENABLE_KCP
+  yasio_kcp_options* kcp_options_ = nullptr;
+#endif
 };
 
 class io_send_buffer {
@@ -802,6 +836,30 @@ protected:
   mutable ip::endpoint destination_; // for sendto only, stable
   bool connected_ = false;
 };
+#if defined(YASIO_ENABLE_KCP)
+class io_transport_kcp : public io_transport_udp {
+public:
+  YASIO__DECL io_transport_kcp(io_channel* ctx, xxsocket_ptr&& s);
+  YASIO__DECL ~io_transport_kcp();
+  ikcpcb* internal_object() { return kcp_; }
+
+protected:
+  YASIO__DECL int write(io_send_buffer&&, completion_cb_t&&) override;
+
+  YASIO__DECL int do_read(int revent, int& error, highp_time_t& wait_duration) override;
+  YASIO__DECL bool do_write(highp_time_t& wait_duration) override;
+
+  YASIO__DECL int handle_input(const char* buf, int len, int& error, highp_time_t& wait_duration) override;
+
+  YASIO__DECL void check_timeout(highp_time_t& wait_duration) const;
+
+  sbyte_buffer rawbuf_; // the low level raw buffer
+  ikcpcb* kcp_;
+  std::recursive_mutex send_mtx_;
+};
+#else
+class io_transport_kcp {};
+#endif
 
 using io_packet = sbyte_buffer;
 #if !defined(YASIO_USE_SHARED_PACKET)
@@ -937,9 +995,13 @@ class YASIO_API io_service // lgtm [cpp/class-many-fields]
   friend class io_transport;
   friend class io_transport_tcp;
   friend class io_transport_udp;
+#if defined(YASIO_ENABLE_KCP)
+  friend class io_transport_kcp;
+#endif
 #if defined(YASIO_SSL_BACKEND)
   friend class io_transport_ssl;
 #endif
+
   friend class io_channel;
 
 public:

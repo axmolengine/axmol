@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-      - release
+      - main
 
     paths-ignore:
       - '**.md'
@@ -35,7 +35,7 @@ jobs:
       # We'll use this as our working directory for all subsequent commands
       run: |
         AX_ROOT=`pwd`
-        echo -e "y" | bash $AX_ROOT/install-deps-linux.sh
+        echo -e "y" | pwsh $AX_ROOT/setup.ps1
 
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"

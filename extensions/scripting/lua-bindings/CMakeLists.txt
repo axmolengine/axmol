@@ -1,4 +1,4 @@
-set(ax_root ${_AX_ROOT_PATH})
+set(ax_root ${_AX_ROOT})
 
 set(lua_bindings_manual_headers
     manual/ComponentLua.h
@@ -176,7 +176,7 @@ set(lua_bindings_headers
 set(lua_bindings_files
     ${lua_bindings_files}
     "${ax_root}/thirdparty/yasio/bindings/lyasio.cpp"
-    "${ax_root}/thirdparty/yasio/bindings/yasio_cclua.cpp")
+    "${ax_root}/thirdparty/yasio/bindings/yasio_axlua.cpp")
 
 list(APPEND lua_bindings_files ${lua_bindings_headers})
 
