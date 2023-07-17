@@ -167,7 +167,7 @@ void CommandBufferGL::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     _glState._viewPort = {x, y, w, h};
 
-    if (_viewPort != _glState._viewPort)
+    if (_viewPort != _glState._viewPort())
         glViewport(x, y, w, h);
 
     _viewPort.set(x, y, w, h);
@@ -180,7 +180,7 @@ void CommandBufferGL::setCullMode(CullMode mode)
 
 void CommandBufferGL::setWinding(Winding winding)
 {
-    if (_glState._winding != winding)
+    if (_glState._winding() != winding)
     {
         glFrontFace(UtilsGL::toGLFrontFace(winding));
         _glState._winding = winding;
@@ -336,14 +336,9 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
                 auto& ubo = program->getUBOHandler();
                 int offset = uniformInfo.bufferOffset;
                 if (iter.second.isFragment)
-                {
                     ubo.getFragmentBuffer()->updateSubData((void*)(fragBuffer + offset), offset, uniformInfo.size);
-                }
                 else
-                {
-                    program->getUBOHandler().getVertexBuffer()->updateSubData((void*)(buffer + offset), offset,
-                                                                              uniformInfo.size);
-                }
+                    ubo.getVertexBuffer()->updateSubData((void*)(buffer + offset), offset, uniformInfo.size);
 
                 continue;
             }
@@ -384,8 +379,8 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
         }
 
         auto& ubo = program->getUBOHandler();
-        glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo.getVertexBuffer()->getHandler());
-        glBindBufferBase(GL_UNIFORM_BUFFER, 1, ubo.getFragmentBuffer()->getHandler());
+        GL_BIND_UNIFORM_BUFFER_BASE(0, ubo.getVertexBuffer()->getHandler());
+        GL_BIND_UNIFORM_BUFFER_BASE(1, ubo.getFragmentBuffer()->getHandler());
     }
 }
 

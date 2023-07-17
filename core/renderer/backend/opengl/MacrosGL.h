@@ -399,3 +399,13 @@
             _glState._elementArrayBuffer = B;                                                       \
         }                                                                                           \
     } while (0)
+
+#define GL_BIND_UNIFORM_BUFFER_BASE(I, B)                                                                            \
+    do                                                                                                               \
+    {                                                                                                                \
+        if (!_glState._uniformBuffer.has_value() || _glState._uniformBuffer.value() != UniformBufferBindState{I, B}) \
+        {                                                                                                            \
+            glBindBufferBase(GL_UNIFORM_BUFFER, I, B);                                                               \
+            _glState._uniformBuffer = UniformBufferBindState{I, B};                                                  \
+        }                                                                                                            \
+    } while (0)
