@@ -21,8 +21,8 @@ if ($IsWin) {
     }
 
     $pathList = [System.Collections.ArrayList]$env:PATH.Split(';')
-    if (!$pathList.IndexOf($AX_CONSOLE_BIN) -eq -1) {
-        $pathList = [Environment]::GetEnvironmentVariable('PATH', 'User').Split(';')
+    if ($pathList.IndexOf($AX_CONSOLE_BIN) -eq -1) {
+        $pathList = [System.Collections.ArrayList][Environment]::GetEnvironmentVariable('PATH', 'User').Split(';')
         $pathList.Insert(0, $AX_CONSOLE_BIN)
         $PATH = $pathList -join ';'
         [Environment]::SetEnvironmentVariable('PATH', $PATH, 'User')
@@ -105,21 +105,4 @@ if ($IsLinux) {
     }
 }
 
-if ($IsWin) {
-    $myProcess = [System.Diagnostics.Process]::GetCurrentProcess()
-    $parentProcess = $myProcess.Parent
-    if (!$parentProcess) {
-        $myPID = $myProcess.Id
-        $instance = Get-WmiObject Win32_Process -Filter "ProcessId = $myPID"
-        $parentProcess = Get-Process -Id $instance.ParentProcessID
-    }
-    $parentProcessName = $parentProcess.ProcessName
-    if ($parentProcessName -like "explorer") {
-        b1k_print "setup successfully, press any key to exit . . ." -NoNewline
-        cmd /c pause 1>$null
-        exit 0
-    }
-}
-
-b1k_print 'setup successfully.'
-
+$b1k.pause("setup successfully")

@@ -9,6 +9,8 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
 [![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/axmolengine/axmol)
+[![Gitter](https://img.shields.io/gitter/room/axmolengine/axmol)](https://gitter.im/axmolengine/axmol)
+[![Discord](https://img.shields.io/discord/1099599084895088670?label=discord)](https://discord.com/channels/1099599084895088670)
   
 ![issues](https://img.shields.io/github/issues/axmolengine/axmol?style=plastic)
 ![forks](https://img.shields.io/github/forks/axmolengine/axmol?style=plastic)

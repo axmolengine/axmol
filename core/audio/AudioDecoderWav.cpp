@@ -259,3 +259,6 @@ bool AudioDecoderWav::seek(uint32_t frameOffset)
     return wav_seek(&_wavf, offset) == offset;
 }
 NS_AX_END  // namespace ax
+
+#undef LOG_TAG
+

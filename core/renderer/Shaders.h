@@ -92,6 +92,13 @@ extern AX_DLL const std::string_view skybox_frag;
 extern AX_DLL const std::string_view skybox_vert;
 extern AX_DLL const std::string_view terrain_frag;
 extern AX_DLL const std::string_view terrain_vert;
+
+
+/* blow is with normal map */
+extern AX_DLL const std::string_view colorNormalTexture_frag_1;
+extern AX_DLL const std::string_view positionNormalTexture_vert_1;
+extern AX_DLL const std::string_view skinPositionNormalTexture_vert_1;
+
 NS_AX_END
 /**
  end of support group

@@ -405,6 +405,7 @@ bool WmfMediaEngine::open(std::string_view sourceUri)
         catch (const std::exception& ex)
         {
             AXME_TRACE("Exception occurred when Open Media: %s", ex.what());
+            (void)ex;
             m_state = MEMediaState::Error;
         }
 

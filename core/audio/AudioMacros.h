@@ -41,7 +41,7 @@
 // is needed. Define the following macros (ALOGV, ALOGD, ALOGI, ALOGW, ALOGE) for threadsafe log output.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 #    include "base/UTF8.h"  // for StringUtils::format
-#    define AUDIO_LOG(fmt, ...) OutputDebugStringA(StringUtils::format((fmt "\r\n"), ##__VA_ARGS__).c_str())
+#    define AUDIO_LOG(fmt, ...) OutputDebugStringA(ax::StringUtils::format((fmt "\r\n"), ##__VA_ARGS__).c_str())
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 #    include <android/log.h>
 #    define AUDIO_LOG(fmt, ...) __android_log_print(ANDROID_LOG_DEBUG, "AudioEngine", fmt, ##__VA_ARGS__)

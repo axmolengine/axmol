@@ -38,6 +38,8 @@ if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
 endif()
 
+cmake_policy(SET CMP0127 NEW)
+
 project(ax_libs)
 
 if (NOT WINRT)
@@ -83,7 +85,6 @@ else()
 endif()
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
-
 
 # default value for axmol extensions modules to Build
 # total supported extensions count: 12
@@ -132,6 +133,37 @@ if (WIN32)
         add_definitions(-DNTCVT_CP_DEFAULT=CP_ACP)
     endif()
 endif()
+
+# axmolver.h
+find_package(Git)
+if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT}/.git")
+    # Get the current working branch and its latest abbreviated commit hash
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-list --count HEAD
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_BUILD_NUM
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" branch --show-current
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+    set(AX_GIT_BRANCH "UNKNOWN")
+    set(AX_GIT_COMMIT_HASH "unknown")
+endif()
+configure_file(
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h")
+
+# early features     
+include(CMakeDependentOption)
+set(GITHUB_ACTIONS $ENV{GITHUB_ACTIONS})
+cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
+  "Build the tests when we are the root project" ON
+  "AX_GIT_BRANCH STREQUAL \"dev\" OR GITHUB_ACTIONS STREQUAL \"true\"" OFF)
 
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)
@@ -190,18 +222,49 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
-ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+if (AX_ENABLE_EARLY_FEATURES)
+    message(AUTHOR_WARNING "Enable early dev features for test only")
+    # import minimal AXGLSLCC.cmake for shader compiler support
+    # the function: ax_target_compile_shaders avaiable from it
+    set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
+    include(AXGLSLCC)
 
-# not final fix the macro not defined glslcc compiler errors
-# set_source_files_properties(
-#     ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
-#     ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
-#     ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
-#     ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
-#     PROPERTIES GLSLCC_DEFINES
-#     "MAX_DIRECTIONAL_LIGHT_NUM=1,MAX_POINT_LIGHT_NUM=1,MAX_SPOT_LIGHT_NUM=1"
-# )
-ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+    ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+
+    # configure engine builtin light num
+    if (NOT DEFINED AX_MAX_DIRECTIONAL_LIGHT)
+        set(AX_MAX_DIRECTIONAL_LIGHT 1)
+    endif()
+    if (NOT DEFINED AX_MAX_POINT_LIGHT)
+        set(AX_MAX_POINT_LIGHT 1)
+    endif()
+    if (NOT DEFINED AX_MAX_SPOT_LIGHT)
+        set (AX_MAX_SPOT_LIGHT 1)
+    endif()
+    configure_file(
+        "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h.in"
+        "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h" @ONLY)
+    # SKINPOSITION_NORMAL_TEXTURE_3D:       skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
+    # POSITION_NORMAL_TEXTURE_3D:           skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
+    # POSITION_NORMAL_3D:                   positionNormalTexture.vert,         colorNormal.frag,        LightDefs
+    # POSITION_BUMPEDNORMAL_TEXTURE_3D:     positionNormalTexture.vert,         colorNormalTexture.frag, lightNormMapDef
+    # SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D: skinPositionNormalTexture_vert,     colorNormalTexture.frag, lightNormMapDef
+    set_source_files_properties(
+        ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
+        ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
+        ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
+        ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+        PROPERTIES GLSLCC_DEFINES
+        "MAX_DIRECTIONAL_LIGHT_NUM=${AX_MAX_DIRECTIONAL_LIGHT},MAX_POINT_LIGHT_NUM=${AX_MAX_POINT_LIGHT},MAX_SPOT_LIGHT_NUM=${AX_MAX_SPOT_LIGHT}"
+    )
+    set_source_files_properties(
+        ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
+        ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
+        ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+        PROPERTIES GLSLCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
+    )
+    ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+endif()
 
 
 if (WINRT)
@@ -290,29 +353,6 @@ endif()
 if(ANDROID)
     add_subdirectory(${_AX_ROOT}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
 endif()
-
-find_package(Git)
-if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT}/.git")
-    # Get the current working branch and its latest abbreviated commit hash
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-list --count HEAD
-        TIMEOUT 5
-        OUTPUT_VARIABLE AX_BUILD_NUM
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" branch --show-current
-        TIMEOUT 5
-        OUTPUT_VARIABLE AX_GIT_BRANCH
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
-        TIMEOUT 5
-        OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-else()
-    set(AX_GIT_BRANCH "UNKNOWN")
-    set(AX_GIT_COMMIT_HASH "unknown")
-endif()
-configure_file(
-        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
-        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h")
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

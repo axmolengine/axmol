@@ -32,24 +32,6 @@
 
 NS_AX_BACKEND_BEGIN
 
-namespace
-{
-std::string getShaderMacrosForLight()
-{
-    char def[256];
-    auto conf = Configuration::getInstance();
-
-    snprintf(def, sizeof(def) - 1,
-             "\n#define MAX_DIRECTIONAL_LIGHT_NUM %d \n"
-             "\n#define MAX_POINT_LIGHT_NUM %d \n"
-             "\n#define MAX_SPOT_LIGHT_NUM %d \n",
-             conf->getMaxSupportDirLightInShader(), conf->getMaxSupportPointLightInShader(),
-             conf->getMaxSupportSpotLightInShader());
-
-    return std::string(def);
-}
-}  // namespace
-
 ProgramManager* ProgramManager::_sharedProgramManager = nullptr;
 
 Program* ProgramManager::newProgram(std::string_view vertShaderSource,
@@ -264,25 +246,22 @@ bool ProgramManager::init()
     registerProgramFactoryByName(ProgramType::SKYBOX_3D, skybox_vert, skybox_frag, VertexLayoutHelper::setupSkyBox);
     registerProgramFactoryByName(ProgramType::SKINPOSITION_TEXTURE_3D, skinPositionTexture_vert, colorTexture_frag,
                            VertexLayoutHelper::setupDummy);
-    auto lightDef = getShaderMacrosForLight();
     registerProgramFactoryByName(ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D, skinPositionNormalTexture_vert,
-                                 colorNormalTexture_frag, VertexLayoutHelper::setupDummy, lightDef);
+                                 colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
     registerProgramFactoryByName(ProgramType::POSITION_NORMAL_TEXTURE_3D, positionNormalTexture_vert,
-                                 colorNormalTexture_frag, VertexLayoutHelper::setupDummy, lightDef);
+                                 colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
     registerProgramFactoryByName(ProgramType::POSITION_TEXTURE_3D, positionTexture3D_vert, colorTexture_frag,
                            VertexLayoutHelper::setupDummy);
     registerProgramFactoryByName(ProgramType::POSITION_3D, positionTexture3D_vert, color_frag,
                            VertexLayoutHelper::setupSprite);
     registerProgramFactoryByName(ProgramType::POSITION_NORMAL_3D, positionNormalTexture_vert, colorNormal_frag,
-                                 VertexLayoutHelper::setupDummy, lightDef);
-    std::string lightNormMapDef = lightDef;
-    lightNormMapDef += "\n#define USE_NORMAL_MAPPING 1 \n"sv;
+                                 VertexLayoutHelper::setupDummy);
     registerProgramFactoryByName(ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D,
-                           positionNormalTexture_vert,
-        colorNormalTexture_frag, VertexLayoutHelper::setupDummy, lightNormMapDef);
+                           positionNormalTexture_vert_1,
+        colorNormalTexture_frag_1, VertexLayoutHelper::setupDummy);
     registerProgramFactoryByName(ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D,
-                           skinPositionNormalTexture_vert,
-                                 colorNormalTexture_frag, VertexLayoutHelper::setupDummy, lightNormMapDef);
+                           skinPositionNormalTexture_vert_1,
+                                 colorNormalTexture_frag_1, VertexLayoutHelper::setupDummy);
     registerProgramFactoryByName(ProgramType::TERRAIN_3D, terrain_vert, terrain_frag,
                            VertexLayoutHelper::setupTerrain3D);
     registerProgramFactoryByName(ProgramType::PARTICLE_TEXTURE_3D, particle_vert, particleTexture_frag,
@@ -367,27 +346,21 @@ void ProgramManager::registerCustomProgramFactory(uint32_t type,
 {
     auto internalType = ProgramType::CUSTOM_PROGRAM | type;
     registerProgramFactoryByName(internalType, vsName, fsName,
-                                 std::move(fnSetupLayout), "");
+                                 std::move(fnSetupLayout));
 }
 
 void ProgramManager::registerProgramFactoryByName(uint32_t internalType,
                                                   std::string_view vertShaderName,
                                                   std::string_view fragShaderName,
-                                                  std::function<void(Program*)> fnSetupLayout,
-                                                  std::string_view defines)
+                                                  std::function<void(Program*)> fnSetupLayout)
 {
     auto loadShaderFunc = [vsName = std::string{vertShaderName}, fsName = std::string{fragShaderName},
-                           setupLayout = std::move(fnSetupLayout), defines = std::string{defines}]() mutable {
+                           setupLayout = std::move(fnSetupLayout)]() mutable {
         auto fileUtils  = FileUtils::getInstance();
         auto vertFile = fileUtils->fullPathForFilename(vsName);
         auto fragFile = fileUtils->fullPathForFilename(fsName);
         auto vertSource = fileUtils->getStringFromFile(vertFile);
         auto fragSource = fileUtils->getStringFromFile(fragFile);
-        if (!defines.empty())
-        {
-            vertSource.insert(0, defines);
-            fragSource.insert(0, defines);
-        }
         auto program = backend::Device::getInstance()->newProgram(vertSource, fragSource);
         setupLayout(program);
         return program;

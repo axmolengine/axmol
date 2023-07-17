@@ -463,15 +463,6 @@ endif()
 # put "thirdparty" into thirdparty folder, too
 configure_target_outdir(thirdparty)
 
-if(MACOSX OR IOS)
-    add_subdirectory(glsl-optimizer)
-    target_link_libraries(thirdparty
-    dep_glcpp_library
-    dep_glsl_optimizer
-    dep_libmesa
-    )
-endif()
-
 if (ANDROID)
     function(config_android_shared_libs package_name target_folder)
         string(REPLACE "." "/" package_path ${package_name})

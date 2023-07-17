@@ -320,6 +320,9 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
         std::size_t bufferSize = 0;
         char* buffer           = nullptr;
         _programState->getVertexUniformBuffer(&buffer, bufferSize);
+        std::size_t fragBufferSize = 0;
+        char* fragBuffer           = nullptr;
+        _programState->getFragmentUniformBuffer(&fragBuffer, fragBufferSize);
 
         int i = 0;
         for (auto&& iter : uniformInfos)
@@ -327,6 +330,23 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
             auto& uniformInfo = iter.second;
             if (uniformInfo.size <= 0)
                 continue;
+
+            if (iter.second.isUBO)
+            {
+                auto& ubo = program->getUBOHandler();
+                int offset = uniformInfo.bufferOffset;
+                if (iter.second.isFragment)
+                {
+                    ubo.getFragmentBuffer()->updateSubData((void*)(fragBuffer + offset), offset, uniformInfo.size);
+                }
+                else
+                {
+                    program->getUBOHandler().getVertexBuffer()->updateSubData((void*)(buffer + offset), offset,
+                                                                              uniformInfo.size);
+                }
+
+                continue;
+            }
 
             int elementCount = uniformInfo.count;
             setUniform(uniformInfo.isArray, uniformInfo.location, elementCount, uniformInfo.type,
@@ -362,6 +382,10 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
             else
                 glUniform1iv(location, static_cast<GLsizei>(arrayCount), static_cast<const GLint*>(slots.data()));
         }
+
+        auto& ubo = program->getUBOHandler();
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo.getVertexBuffer()->getHandler());
+        glBindBufferBase(GL_UNIFORM_BUFFER, 1, ubo.getFragmentBuffer()->getHandler());
     }
 }
 

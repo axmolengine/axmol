@@ -112,8 +112,7 @@ protected:
     void registerProgramFactoryByName(uint32_t internalType,
                                       std::string_view vsName,
                                       std::string_view fsName,
-                                      std::function<void(Program*)> fnSetupLayout,
-                                      std::string_view defines = ""sv);
+                                      std::function<void(Program*)> fnSetupLayout);
     Program* addProgram(uint32_t internalType) const;
 
     std::function<Program*()> _builtinFactories[(int)backend::ProgramType::BUILTIN_COUNT];
