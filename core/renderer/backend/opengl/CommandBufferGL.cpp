@@ -167,7 +167,7 @@ void CommandBufferGL::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
     _glState._viewPort = {x, y, w, h};
 
-    if (_viewPort != _glState._viewPort())
+    if (_viewPort != _glState._viewPort)
         glViewport(x, y, w, h);
 
     _viewPort.set(x, y, w, h);
@@ -180,7 +180,7 @@ void CommandBufferGL::setCullMode(CullMode mode)
 
 void CommandBufferGL::setWinding(Winding winding)
 {
-    if (_glState._winding() != winding)
+    if (_glState._winding != winding)
     {
         glFrontFace(UtilsGL::toGLFrontFace(winding));
         _glState._winding = winding;

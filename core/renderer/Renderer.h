@@ -29,6 +29,7 @@
 #include <stack>
 #include <array>
 #include <deque>
+#include <optional>
 
 #include "platform/PlatformMacros.h"
 #include "renderer/RenderCommand.h"
@@ -671,58 +672,37 @@ struct UniformBufferBindState
     }
 };
 
-// simple implementation of std::optional that doesn't require C++17
-template<typename _Ty>
-class OptionalValue
-{
-public:
-    void operator=(const _Ty& val)
-    {
-        _value     = val;
-        _has_value = true;
-    }
-
-    _Ty& operator()() { return _value; }
-
-    _Ty& value() { return _value; }
-    bool has_value() { return _has_value; }
-
-private:
-    _Ty _value;
-    bool _has_value = false;
-};
-
 struct OpenGLStateHandeler
 {
-    OptionalValue<Viewport> _viewPort;
-    OptionalValue<Winding> _winding;
-    OptionalValue<bool> _depthTest;
-    OptionalValue<bool> _blend;
-    OptionalValue<bool> _scissor;
-    OptionalValue<float> _lineWidth;
-    OptionalValue<int> _frameBufferBind;
-    OptionalValue<BlendEquationSeparateState> _blendEquationSeparate;
-    OptionalValue<BlendFuncSeparateState> _blendFuncSeparate;
-    OptionalValue<ColorMaskState> _colorMask;
-    OptionalValue<int> _depthMask;
-    OptionalValue<int> _depthFunc;
-    OptionalValue<bool> _stencilTest;
-    OptionalValue<bool> _cullFace;
-    OptionalValue<unsigned int> _programBind;
-    OptionalValue<StencilFuncState> _stencilFunc;
-    OptionalValue<StencilFuncState> _stencilFuncFront;
-    OptionalValue<StencilFuncState> _stencilFuncBack;
-    OptionalValue<StencilOperationState> _stencilOp;
-    OptionalValue<StencilOperationState> _stencilOpFront;
-    OptionalValue<StencilOperationState> _stencilOpBack;
-    OptionalValue<unsigned int> _stencilMask;
-    OptionalValue<unsigned int> _stencilMaskFront;
-    OptionalValue<unsigned int> _stencilMaskBack;
-    OptionalValue<unsigned int> _activeTexture;
-    OptionalValue<TextureBindState> _textureBind;
-    OptionalValue<unsigned int> _arrayBuffer;
-    OptionalValue<unsigned int> _elementArrayBuffer;
-    OptionalValue<UniformBufferBindState> _uniformBuffer;
+    std::optional<Viewport> _viewPort;
+    std::optional<Winding> _winding;
+    std::optional<bool> _depthTest;
+    std::optional<bool> _blend;
+    std::optional<bool> _scissor;
+    std::optional<float> _lineWidth;
+    std::optional<int> _frameBufferBind;
+    std::optional<BlendEquationSeparateState> _blendEquationSeparate;
+    std::optional<BlendFuncSeparateState> _blendFuncSeparate;
+    std::optional<ColorMaskState> _colorMask;
+    std::optional<int> _depthMask;
+    std::optional<int> _depthFunc;
+    std::optional<bool> _stencilTest;
+    std::optional<bool> _cullFace;
+    std::optional<unsigned int> _programBind;
+    std::optional<StencilFuncState> _stencilFunc;
+    std::optional<StencilFuncState> _stencilFuncFront;
+    std::optional<StencilFuncState> _stencilFuncBack;
+    std::optional<StencilOperationState> _stencilOp;
+    std::optional<StencilOperationState> _stencilOpFront;
+    std::optional<StencilOperationState> _stencilOpBack;
+    std::optional<unsigned int> _stencilMask;
+    std::optional<unsigned int> _stencilMaskFront;
+    std::optional<unsigned int> _stencilMaskBack;
+    std::optional<unsigned int> _activeTexture;
+    std::optional<TextureBindState> _textureBind;
+    std::optional<unsigned int> _arrayBuffer;
+    std::optional<unsigned int> _elementArrayBuffer;
+    std::optional<UniformBufferBindState> _uniformBuffer;
 };
 
 inline OpenGLStateHandeler _glState;
