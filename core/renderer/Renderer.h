@@ -585,12 +585,6 @@ struct BlendEquationSeparateState
 {
     unsigned int rgbBlendOperation;
     unsigned int alphaBlendOperation;
-
-    bool operator==(const BlendEquationSeparateState& other) const
-    {
-        return this->rgbBlendOperation == other.rgbBlendOperation &&
-               this->alphaBlendOperation == other.alphaBlendOperation;
-    }
 };
 
 struct BlendFuncSeparateState
@@ -599,14 +593,6 @@ struct BlendFuncSeparateState
     unsigned int destinationRGBBlendFactor;
     unsigned int sourceAlphaBlendFactor;
     unsigned int destinationAlphaBlendFactor;
-
-    bool operator==(const BlendFuncSeparateState& other) const
-    {
-        return this->sourceRGBBlendFactor == other.sourceRGBBlendFactor &&
-               this->destinationRGBBlendFactor == other.destinationRGBBlendFactor &&
-               this->sourceAlphaBlendFactor == other.sourceAlphaBlendFactor &&
-               this->destinationAlphaBlendFactor == other.destinationAlphaBlendFactor;
-    }
 };
 
 struct ColorMaskState
@@ -615,12 +601,6 @@ struct ColorMaskState
     unsigned char writeMaskGreen;
     unsigned char writeMaskBlue;
     unsigned char writeMaskAlpha;
-
-    bool operator==(const ColorMaskState& other) const
-    {
-        return this->writeMaskRed == other.writeMaskRed && this->writeMaskGreen == other.writeMaskGreen &&
-               this->writeMaskBlue == other.writeMaskBlue && this->writeMaskAlpha == other.writeMaskAlpha;
-    }
 };
 
 struct StencilFuncState
@@ -628,12 +608,6 @@ struct StencilFuncState
     unsigned int stencilCompareFunction;
     int stencilReferenceValueFront;
     unsigned int readMask;
-
-    bool operator==(const StencilFuncState& other) const
-    {
-        return this->stencilCompareFunction == other.stencilCompareFunction &&
-               this->stencilReferenceValueFront == other.stencilReferenceValueFront && this->readMask == other.readMask;
-    }
 };
 
 struct StencilOperationState
@@ -641,35 +615,18 @@ struct StencilOperationState
     unsigned int stencilFailureOperation;
     unsigned int depthFailureOperation;
     unsigned int depthStencilPassOperation;
-
-    bool operator==(const StencilOperationState& other) const
-    {
-        return this->stencilFailureOperation == other.stencilFailureOperation &&
-               this->depthFailureOperation == other.depthFailureOperation &&
-               this->depthStencilPassOperation == other.depthStencilPassOperation;
-    }
 };
 
 struct TextureBindState
 {
     unsigned int target;
     unsigned int texture;
-
-    bool operator==(const TextureBindState& other) const
-    {
-        return this->target == other.target && this->texture == other.texture;
-    }
 };
 
 struct UniformBufferBindState
 {
     unsigned int index;
     unsigned int buffer;
-
-    bool operator==(const UniformBufferBindState& other) const
-    {
-        return this->index == other.index && this->buffer == other.buffer;
-    }
 };
 
 struct OpenGLStateHandeler
@@ -706,6 +663,48 @@ struct OpenGLStateHandeler
 };
 
 inline OpenGLStateHandeler _glState;
+
+inline bool operator==(const BlendEquationSeparateState& lhs, const BlendEquationSeparateState& rhs)
+{
+    return lhs.rgbBlendOperation == rhs.rgbBlendOperation && lhs.alphaBlendOperation == rhs.alphaBlendOperation;
+}
+
+inline bool operator==(const BlendFuncSeparateState& lhs, const BlendFuncSeparateState& rhs)
+{
+    return lhs.sourceRGBBlendFactor == rhs.sourceRGBBlendFactor &&
+           lhs.destinationRGBBlendFactor == rhs.destinationRGBBlendFactor &&
+           lhs.sourceAlphaBlendFactor == rhs.sourceAlphaBlendFactor &&
+           lhs.destinationAlphaBlendFactor == rhs.destinationAlphaBlendFactor;
+}
+
+inline bool operator==(const ColorMaskState& lhs, const ColorMaskState& rhs)
+{
+    return lhs.writeMaskRed == rhs.writeMaskRed && lhs.writeMaskGreen == rhs.writeMaskGreen &&
+           lhs.writeMaskBlue == rhs.writeMaskBlue && lhs.writeMaskAlpha == rhs.writeMaskAlpha;
+}
+
+inline bool operator==(const StencilFuncState& lhs, const StencilFuncState& rhs)
+{
+    return lhs.stencilCompareFunction == rhs.stencilCompareFunction &&
+           lhs.stencilReferenceValueFront == rhs.stencilReferenceValueFront && lhs.readMask == rhs.readMask;
+}
+
+inline bool operator==(const StencilOperationState& lhs, const StencilOperationState& rhs)
+{
+    return lhs.stencilFailureOperation == rhs.stencilFailureOperation &&
+           lhs.depthFailureOperation == rhs.depthFailureOperation &&
+           lhs.depthStencilPassOperation == rhs.depthStencilPassOperation;
+}
+
+inline bool operator==(const TextureBindState& lhs, const TextureBindState& rhs)
+{
+    return lhs.target == rhs.target && lhs.texture == rhs.texture;
+}
+
+inline bool operator==(const UniformBufferBindState& lhs, const UniformBufferBindState& rhs)
+{
+    return lhs.index == rhs.index && lhs.buffer == rhs.buffer;
+}
 
 NS_AX_END
 
