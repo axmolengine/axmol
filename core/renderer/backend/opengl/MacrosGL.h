@@ -164,7 +164,7 @@
     do                                                                                                               \
     {                                                                                                                \
         if (!_glState._blendEquationSeparate.has_value() ||                                                          \
-            _glState._blendEquationSeparate != BlendEquationSeparateState{BLEND_RBG_OPER, BLEND_ALPHA_OPER}) \
+            _glState._blendEquationSeparate.value() != BlendEquationSeparateState{BLEND_RBG_OPER, BLEND_ALPHA_OPER}) \
         {                                                                                                            \
             glBlendEquationSeparate(BLEND_RBG_OPER, BLEND_ALPHA_OPER);                                               \
             _glState._blendEquationSeparate = BlendEquationSeparateState{BLEND_RBG_OPER, BLEND_ALPHA_OPER};          \
@@ -175,7 +175,7 @@
     do                                                                                                      \
     {                                                                                                       \
         if (!_glState._blendFuncSeparate.has_value() ||                                                     \
-            _glState._blendFuncSeparate !=                                                          \
+            _glState._blendFuncSeparate.value() !=                                                          \
                 BlendFuncSeparateState{SRC_RBG_FACTOR, DST_RGB_FACTOR, SRC_ALPHA_FACTOR, DST_ALPHA_FACTOR}) \
         {                                                                                                   \
             glBlendFuncSeparate(SRC_RBG_FACTOR, DST_RGB_FACTOR, SRC_ALPHA_FACTOR, DST_ALPHA_FACTOR);        \
@@ -188,7 +188,7 @@
     do                                                                                                  \
     {                                                                                                   \
         if (!_glState._colorMask.has_value() ||                                                         \
-            _glState._colorMask != ColorMaskState{RED_MASK, GREEN_MASK, BLUE_MASK, ALPHA_MASK}) \
+            _glState._colorMask.value() != ColorMaskState{RED_MASK, GREEN_MASK, BLUE_MASK, ALPHA_MASK}) \
         {                                                                                               \
             glColorMask(RED_MASK, GREEN_MASK, BLUE_MASK, ALPHA_MASK);                                   \
             _glState._colorMask = ColorMaskState{RED_MASK, GREEN_MASK, BLUE_MASK, ALPHA_MASK};          \
@@ -268,7 +268,7 @@
 #define GL_STENCIL_FUNC(FUNC, REF, MASK)                                                                              \
     do                                                                                                                \
     {                                                                                                                 \
-        if (!_glState._stencilFunc.has_value() || _glState._stencilFunc != StencilFuncState{FUNC, REF, MASK}) \
+        if (!_glState._stencilFunc.has_value() || _glState._stencilFunc.value() != StencilFuncState{FUNC, REF, MASK}) \
         {                                                                                                             \
             glStencilFunc(FUNC, REF, MASK);                                                                           \
             _glState._stencilFunc = StencilFuncState{FUNC, REF, MASK};                                                \
@@ -279,7 +279,7 @@
     do                                                                                \
     {                                                                                 \
         if (!_glState._stencilOp.has_value() ||                                       \
-            _glState._stencilOp != StencilOperationState{FAIL, ZFAIL, ZPASS}) \
+            _glState._stencilOp.value() != StencilOperationState{FAIL, ZFAIL, ZPASS}) \
         {                                                                             \
             glStencilOp(FAIL, ZFAIL, ZPASS);                                          \
             _glState._stencilOp = StencilOperationState{FAIL, ZFAIL, ZPASS};          \
@@ -289,7 +289,7 @@
 #define GL_STENCIL_MASK(MASK)                                                            \
     do                                                                                   \
     {                                                                                    \
-        if (!_glState._stencilMask.has_value() || _glState._stencilMask != MASK) \
+        if (!_glState._stencilMask.has_value() || _glState._stencilMask.value() != MASK) \
         {                                                                                \
             glStencilMask(MASK);                                                         \
             _glState._stencilMask = MASK;                                                \
@@ -300,7 +300,7 @@
     do                                                                               \
     {                                                                                \
         if (!_glState._stencilFuncFront.has_value() ||                               \
-            _glState._stencilFuncFront != StencilFuncState{FUNC, REF, MASK}) \
+            _glState._stencilFuncFront.value() != StencilFuncState{FUNC, REF, MASK}) \
         {                                                                            \
             glStencilFuncSeparate(GL_FRONT, FUNC, REF, MASK);                        \
             _glState._stencilFuncFront = StencilFuncState{FUNC, REF, MASK};          \
@@ -311,7 +311,7 @@
     do                                                                              \
     {                                                                               \
         if (!_glState._stencilFuncBack.has_value() ||                               \
-            _glState._stencilFuncBack != StencilFuncState{FUNC, REF, MASK}) \
+            _glState._stencilFuncBack.value() != StencilFuncState{FUNC, REF, MASK}) \
         {                                                                           \
             glStencilFuncSeparate(GL_BACK, FUNC, REF, MASK);                        \
             _glState._stencilFuncBack = StencilFuncState{FUNC, REF, MASK};          \
@@ -322,7 +322,7 @@
     do                                                                                     \
     {                                                                                      \
         if (!_glState._stencilOpFront.has_value() ||                                       \
-            _glState._stencilOpFront != StencilOperationState{FAIL, ZFAIL, ZPASS}) \
+            _glState._stencilOpFront.value() != StencilOperationState{FAIL, ZFAIL, ZPASS}) \
         {                                                                                  \
             glStencilOpSeparate(GL_FRONT, FAIL, ZFAIL, ZPASS);                             \
             _glState._stencilOpFront = StencilOperationState{FAIL, ZFAIL, ZPASS};          \
@@ -333,7 +333,7 @@
     do                                                                                    \
     {                                                                                     \
         if (!_glState._stencilOpBack.has_value() ||                                       \
-            _glState._stencilOpBack != StencilOperationState{FAIL, ZFAIL, ZPASS}) \
+            _glState._stencilOpBack.value() != StencilOperationState{FAIL, ZFAIL, ZPASS}) \
         {                                                                                 \
             glStencilOpSeparate(GL_BACK, FAIL, ZFAIL, ZPASS);                             \
             _glState._stencilOpBack = StencilOperationState{FAIL, ZFAIL, ZPASS};          \
@@ -373,7 +373,7 @@
 #define GL_BIND_TEXTURE(TARGET, TEXTURE)                                                                              \
     do                                                                                                                \
     {                                                                                                                 \
-        if (!_glState._textureBind.has_value() || _glState._textureBind != TextureBindState{TARGET, TEXTURE}) \
+        if (!_glState._textureBind.has_value() || _glState._textureBind.value() != TextureBindState{TARGET, TEXTURE}) \
         {                                                                                                             \
             glBindTexture(TARGET, TEXTURE);                                                                           \
             _glState._textureBind = TextureBindState{TARGET, TEXTURE};                                                \
@@ -403,7 +403,7 @@
 #define GL_BIND_UNIFORM_BUFFER_BASE(I, B)                                                                            \
     do                                                                                                               \
     {                                                                                                                \
-        if (!_glState._uniformBuffer.has_value() || _glState._uniformBuffer != UniformBufferBindState{I, B}) \
+        if (!_glState._uniformBuffer.has_value() || _glState._uniformBuffer.value() != UniformBufferBindState{I, B}) \
         {                                                                                                            \
             glBindBufferBase(GL_UNIFORM_BUFFER, I, B);                                                               \
             _glState._uniformBuffer = UniformBufferBindState{I, B};                                                  \
