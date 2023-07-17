@@ -191,6 +191,8 @@ bool ProgramState::init(Program* program)
     _ownVertexLayout         = false;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
     _vertexUniformBuffer     = (char*)calloc(1, _vertexUniformBufferSize);
+    _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
+    _fragmentUniformBuffer     = (char*)calloc(1, _fragmentUniformBufferSize);
 #ifdef AX_USE_METAL
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
     _fragmentUniformBuffer     = (char*)calloc(1, _fragmentUniformBufferSize);
@@ -410,6 +412,7 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
         memcpy(_fragmentUniformBuffer + location, data, size);
     }
 #endif
+    memcpy(_fragmentUniformBuffer + location, data, size);
 }
 
 void ProgramState::setVertexAttrib(std::string_view name,
