@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
+ Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
  https://axmolengine.github.io/
 
@@ -21,22 +21,25 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+ 
 
-const char* position_vert = R"(
-
+const char* CC3D_terrain_vert = R"(
 attribute vec4 a_position;
-
+attribute vec2 a_texCoord;
+attribute vec3 a_normal;
 #ifdef GL_ES
-varying lowp vec4 v_position;
+varying mediump vec2 v_texCoord;
+varying mediump vec3 v_normal;
 #else
-varying vec4 v_position;
+varying vec2 v_texCoord;
+varying vec3 v_normal;
 #endif
 
 uniform mat4 u_MVPMatrix;
-
 void main()
 {
     gl_Position = u_MVPMatrix * a_position;
-    v_position = a_position;
+    v_texCoord = a_texCoord;
+    v_normal = a_normal;
 }
 )";

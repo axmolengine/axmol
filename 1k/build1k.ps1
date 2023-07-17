@@ -137,7 +137,7 @@ $manifest = @{
     gcc          = '9.0.0+';
     cmake        = '3.26.4+';
     nuget        = '*'; # any
-    glslcc       = '1.8.1+';
+    # glslcc       = '1.8.0+';
     ninja        = '1.11.1+';
     jdk          = '11.0.19+';
     nsis         = '3.09';
@@ -525,7 +525,7 @@ function setup_glslcc() {
     if (!$b1k.isdir($glslcc_bin)) {
         $glslcc_pkg = "$prefix/glslcc-$suffix"
         if (!$b1k.isfile($glslcc_pkg)) {
-            download_file "https://github.com/axmolengine/glslcc/releases/download/v$glslcc_ver/glslcc-$glslcc_ver-$suffix" "$glslcc_pkg"
+            download_file "https://github.com/septag/glslcc/releases/download/v$glslcc_ver/glslcc-$glslcc_ver-$suffix" "$glslcc_pkg"
         }
         if ($IsWin) {
             Expand-Archive -Path $glslcc_pkg -DestinationPath $glslcc_bin
@@ -896,7 +896,7 @@ validHostAndToolchain
 
 ########## setup build tools if not installed #######
 
-$null = setup_glslcc
+# $null = setup_glslcc
 
 $cmake_prog = setup_cmake
 

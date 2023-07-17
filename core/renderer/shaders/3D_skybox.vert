@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2016 Chukong Technologies Inc.
+ Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
 
  https://axmolengine.github.io/
 
@@ -21,22 +21,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
+ 
+const char* CC3D_skybox_vert = R"(
 
-const char* position_vert = R"(
+uniform mat4  u_cameraRot;
+attribute vec3 a_position;
+varying vec3 v_reflect;
 
-attribute vec4 a_position;
-
-#ifdef GL_ES
-varying lowp vec4 v_position;
-#else
-varying vec4 v_position;
-#endif
-
-uniform mat4 u_MVPMatrix;
-
-void main()
+void main(void)
 {
-    gl_Position = u_MVPMatrix * a_position;
-    v_position = a_position;
+    vec4 reflect =  u_cameraRot * vec4(a_position, 1.0);
+    v_reflect = reflect.xyz;
+    gl_Position = vec4(a_position.xy, 1.0 , 1.0);
 }
 )";

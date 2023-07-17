@@ -1,21 +1,19 @@
-#version 310 es
-precision highp float;
-precision highp int;
 
-layout(location = 0) in vec2 v_texCoord;  
-layout(location = 1) in vec4 v_fragmentColor;
+const char* dualSampler_hsv_frag = R"(#ifdef GL_ES
+precision mediump float;
+#endif 
 
-layout(binding = 0) uniform sampler2D u_tex0;
-layout(binding = 1) uniform sampler2D u_tex1;
+varying vec2 v_texCoord;  
+varying vec4 v_fragmentColor;
+
+uniform sampler2D u_tex0;
+uniform sampler2D u_tex1;
 
 // HSV matrix
+uniform mat3 u_mix_hsv;
 
 // filter color RGB values
-
-layout(std140) uniform fs_ub {
-    mat3 u_mix_hsv;
-    vec3 u_filter_rgb;
-};
+uniform vec3 u_filter_rgb;
 
 vec3 rgb2hsv(vec3 c)
 {
@@ -35,11 +33,9 @@ vec3 hsv2rgb(vec3 c)
     return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
-layout(location = 0) out vec4 FragColor;
-
 void main() 
 { 
-    vec4 texColor = vec4(texture(u_tex0, v_texCoord).rgb, texture(u_tex1, v_texCoord).r);
+    vec4 texColor = vec4(texture2D(u_tex0, v_texCoord).rgb, texture2D(u_tex1, v_texCoord).r);
     texColor.rgb *= texColor.a; // Premultiply with Alpha channel
     
     vec3 rgbColor = u_mix_hsv * texColor.rgb;
@@ -58,5 +54,6 @@ void main()
     } 
 
     rgbColor.rgb = rgbColor.rgb * v_fragmentColor.rgb;
-    FragColor = vec4(rgbColor, texColor.a * v_fragmentColor.a); 
+    gl_FragColor = vec4(rgbColor, texColor.a * v_fragmentColor.a); 
 } 
+)";
