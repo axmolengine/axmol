@@ -662,10 +662,23 @@ extern const ssize_t AX_DLL AX_INVALID_INDEX;
 
 struct RectI
 {
-    int x = 0;
-    int y = 0;
-    int width = 0;
-    int height = 0;
+    RectI() { this->x = this->y = this->w = this->h; }
+    int x;
+    int y;
+
+    union
+    {
+        struct
+        {
+            int width;
+            int height;
+        };
+        struct
+        {
+            int w;
+            int h;
+        };
+    };
 
     inline bool operator==(const RectI& v) const
     {
@@ -673,9 +686,9 @@ struct RectI
     }
     inline RectI& set(int x, int y, int w, int h)
     {
-        this->x = x;
-        this->y = y;
-        this->width = w;
+        this->x      = x;
+        this->y      = y;
+        this->width  = w;
         this->height = h;
         return *this;
     }
