@@ -103,9 +103,10 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
 
         mask |= GL_DEPTH_BUFFER_BIT;
         glClearDepth(descirptor.clearDepthValue);
-        glEnable(GL_DEPTH_TEST);
-        glDepthMask(GL_TRUE);
-        glDepthFunc(GL_ALWAYS);
+        __gl.enableDepthTest();
+        
+        __gl.depthMask(GL_TRUE);
+        __gl.depthFunc(GL_ALWAYS);
     }
 
     CHECK_GL_ERROR_DEBUG();
@@ -125,10 +126,10 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
     if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
     {
         if (!oldDepthTest)
-            glDisable(GL_DEPTH_TEST);
+            __gl.disableDepthTest();
 
-        glDepthMask(oldDepthWrite);
-        glDepthFunc(oldDepthFunc);
+        __gl.depthMask(oldDepthWrite);
+        __gl.depthFunc(oldDepthFunc);
         glClearDepth(oldDepthClearValue);
     }
 
@@ -165,11 +166,7 @@ void CommandBufferGL::updatePipelineState(const RenderTarget* rt, const Pipeline
 
 void CommandBufferGL::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
-    glViewport(x, y, w, h);
-    _viewPort.x = x;
-    _viewPort.y = y;
-    _viewPort.w = w;
-    _viewPort.h = h;
+    __gl.viewport(_viewPort.set(x, y, w, h));
 }
 
 void CommandBufferGL::setCullMode(CullMode mode)
@@ -179,7 +176,7 @@ void CommandBufferGL::setCullMode(CullMode mode)
 
 void CommandBufferGL::setWinding(Winding winding)
 {
-    glFrontFace(UtilsGL::toGLFrontFace(winding));
+    __gl.winding(winding);
 }
 
 void CommandBufferGL::setIndexBuffer(Buffer* buffer)
@@ -238,7 +235,7 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
 #else
     if (wireframe) primitiveType = PrimitiveType::LINE;
 #endif
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
+    __gl.bindElementBuffer(_indexBuffer->getHandler());
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
@@ -259,7 +256,7 @@ void CommandBufferGL::endFrame() {}
 void CommandBufferGL::prepareDrawing() const
 {
     const auto& program = _renderPipeline->getProgram();
-    glUseProgram(program->getHandler());
+    __gl.useProgram(program->getHandler());
 
     bindVertexBuffer(program);
     setUniforms(program);
@@ -271,15 +268,10 @@ void CommandBufferGL::prepareDrawing() const
         DepthStencilStateGL::reset();
 
     // Set cull mode.
-    if (CullMode::NONE == _cullMode)
-    {
-        glDisable(GL_CULL_FACE);
-    }
+    if (_cullMode != CullMode::NONE)
+        __gl.enableCullFace(UtilsGL::toGLCullMode(_cullMode));
     else
-    {
-        glEnable(GL_CULL_FACE);
-        glCullFace(UtilsGL::toGLCullMode(_cullMode));
-    }
+        __gl.disableCullFace();
 }
 
 void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
@@ -290,7 +282,7 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
     if (!vertexLayout->isValid())
         return;
 
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->getHandler());
+    __gl.bindArrayBuffer(_vertexBuffer->getHandler());
 
     const auto& attributes = vertexLayout->getAttributes();
     for (const auto& attributeInfo : attributes)
@@ -331,14 +323,9 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
                 auto& ubo = program->getUBOHandler();
                 int offset = uniformInfo.bufferOffset;
                 if (iter.second.isFragment)
-                {
                     ubo.getFragmentBuffer()->updateSubData((void*)(fragBuffer + offset), offset, uniformInfo.size);
-                }
                 else
-                {
-                    program->getUBOHandler().getVertexBuffer()->updateSubData((void*)(buffer + offset), offset,
-                                                                              uniformInfo.size);
-                }
+                    ubo.getVertexBuffer()->updateSubData((void*)(buffer + offset), offset, uniformInfo.size);
 
                 continue;
             }
@@ -379,8 +366,8 @@ void CommandBufferGL::setUniforms(ProgramGL* program) const
         }
 
         auto& ubo = program->getUBOHandler();
-        glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo.getVertexBuffer()->getHandler());
-        glBindBufferBase(GL_UNIFORM_BUFFER, 1, ubo.getFragmentBuffer()->getHandler());
+        __gl.bindUniformBufferBase(0, ubo.getVertexBuffer()->getHandler());
+        __gl.bindUniformBufferBase(1, ubo.getFragmentBuffer()->getHandler());
     }
 }
 
@@ -471,22 +458,17 @@ void CommandBufferGL::cleanResources()
 void CommandBufferGL::setLineWidth(float lineWidth)
 {
     if (lineWidth > 0.0f)
-        glLineWidth(lineWidth);
+        __gl.lineWidth(lineWidth);
     else
-        glLineWidth(1.0f);
+        __gl.lineWidth(1.0f);
 }
 
 void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
     if (isEnabled)
-    {
-        glEnable(GL_SCISSOR_TEST);
-        glScissor(x, y, width, height);
-    }
+        __gl.enableScissor(x, y, width, height);
     else
-    {
-        glDisable(GL_SCISSOR_TEST);
-    }
+        __gl.disableScissor();
 }
 
 void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
@@ -494,7 +476,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const Pixe
     PixelBufferDescriptor pbd;
     if (rt->isDefaultRenderTarget())
     {  // read pixels from screen
-        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, _viewPort.w * 4, pbd);
+        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.width, _viewPort.height, _viewPort.width * 4, pbd);
     }
     else
     {
