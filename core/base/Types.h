@@ -662,7 +662,7 @@ extern const ssize_t AX_DLL AX_INVALID_INDEX;
 
 struct RectI
 {
-    RectI() { this->x = this->y = this->w = this->h; }
+    RectI() { this->x = this->y = this->w = this->h = 0; }
     int x;
     int y;
 
