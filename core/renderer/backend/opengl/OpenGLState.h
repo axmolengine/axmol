@@ -112,18 +112,68 @@ struct UniformBufferBindState
 
 struct OpenGLState
 {
-    template <typename _Func, typename _Left, typename... _Args>
-    static inline void try_call(_Func&& func, _Left& lhs, _Args&&... args)
+    template <typename _Left>
+    static inline void try_enable(GLenum target, _Left& lhs)
     {
-        if(lhs || lhs.value().equals(args...)) return;
+        if (lhs)
+            return;
+        lhs = !lhs;
+        glEnable(target);
+    }
+    template <typename _Left>
+    static inline void try_disable(GLenum target, _Left& lhs)
+    {
+        if (!lhs)
+            return;
+        lhs = !lhs;
+        glDisable(target);
+    }
+    template <typename _Func, typename _Left>
+    static inline void try_enable(_Func&& func, GLenum target, _Left& lhs)
+    {
+        if (lhs)
+            return;
+        lhs = !lhs;
+        func(target);
+    }
+    template <typename _Func, typename _Left>
+    static inline void try_disable(_Func&& func, GLenum target, _Left& lhs)
+    {
+        if (!lhs)
+            return;
+        lhs = !lhs;
+        func(target);
+    }
+    template <typename _Func, typename _Left, typename _Right>
+    static inline void try_call(_Func&& func, _Left& lhs, _Right&& rhs)
+    {
+        if (lhs == rhs)
+            return;
+        lhs = rhs;
+        func(rhs);
+    }
+    template <typename _Func, typename _Left, typename _Right>
+    static inline void try_callu(_Func&& func, GLenum target, _Left& lhs, _Right&& rhs)
+    {
+        if (lhs == rhs)
+            return;
+        lhs = rhs;
+        func(target, rhs);
+    }
+    template <typename _Func, typename _Left, typename... _Args>
+    static inline void try_callx(_Func&& func, _Left& lhs, _Args&&... args)
+    {
+        if (lhs && lhs.value().equals(args...))
+            return;
         lhs.emplace(args...);
         func(args...);
     }
-    
+
     template <typename _Func, typename _Left, typename... _Args>
-    static inline void try_callu(_Func&& func, GLenum upvalue, _Left& lhs, _Args&&... args)
+    static inline void try_callxu(_Func&& func, GLenum upvalue, _Left& lhs, _Args&&... args)
     {
-        if(lhs || lhs.value().equals(args...)) return;
+        if (lhs && lhs.value().equals(args...))
+            return;
         lhs.emplace(args...);
         func(upvalue, args...);
     }
@@ -142,160 +192,73 @@ struct OpenGLState
         AX_GURAD_SET(_winding, v);
         glFrontFace(UtilsGL::toGLFrontFace(v));
     }
-    void enableDepthTest()
-    {
-        AX_GURAD_SET(_depthTest, true);
-        glEnable(GL_DEPTH_TEST);
-    }
-    void disableDepthTest()
-    {
-        AX_GURAD_SET(_depthTest, false);
-        glDisable(GL_DEPTH_TEST);
-    }
-    void enableBlend()
-    {
-        AX_GURAD_SET(_blend, true);
-        glEnable(GL_BLEND);
-    }
-    void disableBlend()
-    {
-        AX_GURAD_SET(_blend, false);
-        glDisable(GL_BLEND);
-    }
+    void enableDepthTest() { try_enable(GL_DEPTH_TEST, _depthTest); }
+    void disableDepthTest() { try_disable(GL_DEPTH_TEST, _depthTest); }
+    void enableBlend() { try_enable(GL_BLEND, _blend); }
+    void disableBlend() { try_disable(GL_BLEND, _blend); }
     void enableScissor(GLint x, GLint y, GLsizei width, GLsizei height)
     {
-        AX_GURAD_SET(_scissor, true);
-        glEnable(GL_SCISSOR_TEST);
+        try_enable(GL_SCISSOR_TEST, _scissor);
         glScissor(x, y, width, height);
     }
-    void disableScissor()
-    {
-        AX_GURAD_SET(_scissor, false);
-        glDisable(GL_SCISSOR_TEST);
-    }
-    void lineWidth(float v)
-    {
-        AX_GURAD_SET(_lineWidth, v);
-        glLineWidth(v);
-    }
-    void bindFrameBuffer(GLuint v)
-    {
-        AX_GURAD_SET(_frameBufferBind, v);
-        glBindFramebuffer(GL_FRAMEBUFFER, v);
-    }
+    void disableScissor() { try_disable(GL_SCISSOR_TEST, _scissor); }
+    void lineWidth(float v) { try_call(glLineWidth, _lineWidth, v); }
+    void bindFrameBuffer(GLuint v) { try_callu(glBindFramebuffer, GL_FRAMEBUFFER, _frameBufferBind, v); }
     void blendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
     {
-        try_call(glBlendEquationSeparate, _blendEquationSeparate, modeRGB, modeAlpha);
+        try_callx(glBlendEquationSeparate, _blendEquationSeparate, modeRGB, modeAlpha);
     }
     void blendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
     {
-        try_call(glBlendFuncSeparate, _blendFuncSeparate, sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+        try_callx(glBlendFuncSeparate, _blendFuncSeparate, sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
     }
     void colorMask(GLboolean r, GLboolean g, GLboolean b, GLboolean a)
     {
-        try_call(glColorMask, _colorMask, r, g, b, a);
+        try_callx(glColorMask, _colorMask, r, g, b, a);
     }
-    void depthMask(GLboolean v)
-    {
-        AX_GURAD_SET(_depthMask, v);
-        glDepthMask(v);
-    }
-    void depthFunc(GLenum v)
-    {
-        AX_GURAD_SET(_depthFunc, v);
-        glDepthFunc(v);
-    }
-    void enableStencilTest()
-    {
-        AX_GURAD_SET(_stencilTest, true);
-        glEnable(GL_STENCIL_TEST);
-    }
-    void disableStencilTest()
-    {
-        AX_GURAD_SET(_stencilTest, false);
-        glDisable(GL_STENCIL_TEST);
-    }
+    void depthMask(GLboolean v) { try_call(glDepthMask, _depthMask, v); }
+    void depthFunc(GLenum v) { try_call(glDepthFunc, _depthFunc, v); }
+    void enableStencilTest() { try_enable(GL_STENCIL_TEST, _stencilTest); }
+    void disableStencilTest() { try_disable(GL_STENCIL_TEST, _stencilTest); }
     void enableCullFace(GLenum mode)
     {
-        AX_GURAD_SET(_cullFace, true);
-        glEnable(GL_CULL_FACE);
+        try_enable(GL_CULL_FACE, _cullFace);
         glCullFace(mode);
     }
-    void disableCullFace()
-    {
-        AX_GURAD_SET(_cullFace, false);
-        glDisable(GL_CULL_FACE);
-    }
-    void useProgram(GLuint v)
-    {
-        AX_GURAD_SET(_programBind, v);
-        glUseProgram(v);
-    }
+    void disableCullFace() { try_disable(GL_CULL_FACE, _cullFace); }
+    void useProgram(GLuint v) { try_call(glUseProgram, _programBind, v); }
 
-    void stencilFunc(GLenum func, GLint ref, GLuint mask)
-    {
-        try_call(glStencilFunc, _stencilFunc, func, ref, mask);
-    }
+    void stencilFunc(GLenum func, GLint ref, GLuint mask) { try_callx(glStencilFunc, _stencilFunc, func, ref, mask); }
 
     void stencilFuncFront(GLenum func, GLint ref, GLuint mask)
     {
-        try_callu(glStencilFuncSeparate, GL_FRONT, _stencilFuncFront, func, ref, mask);
+        try_callxu(glStencilFuncSeparate, GL_FRONT, _stencilFuncFront, func, ref, mask);
     }
     void stencilFuncBack(GLenum func, GLint ref, GLuint mask)
     {
-        try_callu(glStencilFuncSeparate, GL_BACK, _stencilFuncBack, func, ref, mask);
+        try_callxu(glStencilFuncSeparate, GL_BACK, _stencilFuncBack, func, ref, mask);
     }
 
-    void stencilOp(GLenum fail, GLenum zfail, GLenum zpass)
-    {
-        try_call(glStencilOp, _stencilOp, fail, zfail, zpass);
-    }
+    void stencilOp(GLenum fail, GLenum zfail, GLenum zpass) { try_callx(glStencilOp, _stencilOp, fail, zfail, zpass); }
     void stencilOpFront(GLenum fail, GLenum zfail, GLenum zpass)
     {
-        try_callu(glStencilOpSeparate, GL_FRONT, _stencilOpFront, fail, zfail, zpass);
+        try_callxu(glStencilOpSeparate, GL_FRONT, _stencilOpFront, fail, zfail, zpass);
     }
     void stencilOpBack(GLenum fail, GLenum zfail, GLenum zpass)
     {
-        try_callu(glStencilOpSeparate, GL_BACK, _stencilOpBack, fail, zfail, zpass);
+        try_callxu(glStencilOpSeparate, GL_BACK, _stencilOpBack, fail, zfail, zpass);
     }
 
-    void stencilMask(GLuint v)
-    {
-        AX_GURAD_SET(_stencilMask, v);
-        glStencilMask(v);
-    }
-    void stencilMaskFront(GLuint v)
-    {
-        AX_GURAD_SET(_stencilMaskFront, v);
-        glStencilMaskSeparate(GL_FRONT, v);
-    }
-    void stencilMaskBack(GLuint v)
-    {
-        AX_GURAD_SET(_stencilMaskBack, v);
-        glStencilMaskSeparate(GL_BACK, v);
-    }
-    void activeTexture(GLenum v)
-    {
-        AX_GURAD_SET(_activeTexture, v);
-        glActiveTexture(v);
-    }
-    void bindTexture(GLenum target, GLuint handle)
-    {
-        try_call(glBindTexture, _textureBind, target, handle);
-    }
-    void bindArrayBuffer(GLuint v)
-    {
-        AX_GURAD_SET(_arrayBufferBind, v);
-        glBindBuffer(GL_ARRAY_BUFFER, v);
-    }
-    void bindElementBuffer(GLuint v)
-    {
-        AX_GURAD_SET(_elementBufferBind, v);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, v);
-    }
+    void stencilMask(GLuint v) { try_call(glStencilMask, _stencilMask, v); }
+    void stencilMaskFront(GLuint v) { try_callu(glStencilMaskSeparate, GL_FRONT, _stencilMaskFront, v); }
+    void stencilMaskBack(GLuint v) { try_callu(glStencilMaskSeparate, GL_BACK, _stencilMaskBack, v); }
+    void activeTexture(GLenum v) { try_call(glActiveTexture, _activeTexture, v); }
+    void bindTexture(GLenum target, GLuint handle) { try_callx(glBindTexture, _textureBind, target, handle); }
+    void bindArrayBuffer(GLuint v) { try_callu(glBindBuffer, GL_ARRAY_BUFFER, _arrayBufferBind, v); }
+    void bindElementBuffer(GLuint v) { try_callu(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, _elementBufferBind, v); }
     void bindUniformBufferBase(GLuint index, GLuint handle)
     {
-        try_callu(glBindBufferBase, GL_UNIFORM_BUFFER, _uniformBufferState, index, handle);
+        try_callxu(glBindBufferBase, GL_UNIFORM_BUFFER, _uniformBufferState, index, handle);
     }
 
 private:
@@ -304,7 +267,6 @@ private:
     std::optional<bool> _depthTest;
     std::optional<bool> _blend;
     std::optional<bool> _scissor;
-    // std::optional<ScissorRect> _scissorRect;
 
     std::optional<float> _lineWidth;
     std::optional<GLuint> _frameBufferBind;
@@ -315,7 +277,7 @@ private:
     std::optional<GLenum> _depthFunc;
     std::optional<bool> _stencilTest;
     std::optional<bool> _cullFace;
-    // std::optional<GLenum> _cullFaceMode;
+
     std::optional<GLuint> _programBind;
     std::optional<StencilFuncState> _stencilFunc;
     std::optional<StencilFuncState> _stencilFuncFront;
