@@ -96,8 +96,9 @@ void TextureInfoGL::setCurrentTexParameters(GLenum target)
 
 void TextureInfoGL::apply(int slot, int index, GLenum target) const
 {
-    GL_SET_ACTIVE_TEXTURE(GL_TEXTURE0 + slot);
-    GL_BIND_TEXTURE(target, index < AX_META_TEXTURES ? textures[index] : textures[0]);
+    __gl.activeTexture(GL_TEXTURE0 + slot);
+    // GL_SET_ACTIVE_TEXTURE(GL_TEXTURE0 + slot);
+    __gl.bindTexture(target, index < AX_META_TEXTURES ? textures[index] : textures[0]);
 }
 
 GLuint TextureInfoGL::ensure(int index, GLenum target)
@@ -108,7 +109,7 @@ GLuint TextureInfoGL::ensure(int index, GLenum target)
     auto& texID = this->textures[index];
     if (!texID)
         glGenTextures(1, &texID);
-    GL_BIND_TEXTURE(target, texID);
+    __gl.bindTexture(target, texID);
 
     setCurrentTexParameters(target);  // set once
 
@@ -305,7 +306,7 @@ void Texture2DGL::generateMipmaps()
     if (!_hasMipmaps)
     {
         _hasMipmaps = true;
-        GL_BIND_TEXTURE(GL_TEXTURE_2D, (GLuint)this->getHandler());
+        __gl.bindTexture(GL_TEXTURE_2D, (GLuint)this->getHandler());
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 }
@@ -362,7 +363,7 @@ void TextureCubeGL::updateFaceData(TextureCubeFace side, void* data, int index)
                  _textureInfo.format, _textureInfo.type, data);
 
     CHECK_GL_ERROR_DEBUG();
-    GL_BIND_TEXTURE(GL_TEXTURE_CUBE_MAP, 0);
+    __gl.bindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 void TextureCubeGL::generateMipmaps()
@@ -373,7 +374,7 @@ void TextureCubeGL::generateMipmaps()
     if (!_hasMipmaps)
     {
         _hasMipmaps = true;
-        GL_BIND_TEXTURE(GL_TEXTURE_CUBE_MAP, (GLuint)this->getHandler());
+        __gl.bindTexture(GL_TEXTURE_CUBE_MAP, (GLuint)this->getHandler());
         glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
     }
 }

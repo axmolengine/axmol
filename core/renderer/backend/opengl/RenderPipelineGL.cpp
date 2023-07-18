@@ -29,6 +29,7 @@ Copyright (c) 2020 C4games Ltd.
 #include "ProgramGL.h"
 #include "UtilsGL.h"
 #include "MacrosGL.h"
+#include "OpenGLState.h"
 
 #include <assert.h>
 
@@ -62,15 +63,16 @@ void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
 
     if (blendEnabled)
     {
-        GL_ENABLE_BLENDING;
-        GL_BLEND_EQUATION_SEPARATE(rgbBlendOperation, alphaBlendOperation);
-        GL_BLEND_FUNC_SEPARATE(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
+        __gl.enableBlend();
+
+        __gl.blendEquationSeparate(rgbBlendOperation, alphaBlendOperation);
+        __gl.blendFuncSeparate(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
                                destinationAlphaBlendFactor);
     }
     else
-        GL_DISABLE_BLENDING;
+        __gl.disableBlend();
 
-    GL_COLOR_MASK(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
+    __gl.colorMask(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
 }
 
 RenderPipelineGL::~RenderPipelineGL()
