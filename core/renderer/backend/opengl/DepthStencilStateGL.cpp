@@ -41,9 +41,12 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
 {
     const auto dsFlags = _depthStencilInfo.flags;
     // depth test
-    __gl.depthTest(bitmask::any(dsFlags, DepthStencilFlags::DEPTH_TEST));
-    __gl.depthMask(bitmask::any(dsFlags, DepthStencilFlags::DEPTH_WRITE));
+    if (bitmask::any(dsFlags, DepthStencilFlags::DEPTH_TEST))
+        __gl.enableDepthTest();
+    else
+        __gl.disableDepthTest();
 
+    __gl.depthMask(bitmask::any(dsFlags, DepthStencilFlags::DEPTH_WRITE));
     __gl.depthFunc(UtilsGL::toGLComareFunction(_depthStencilInfo.depthCompareFunction));
 
     // stencil test
@@ -54,11 +57,11 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
         if (_isBackFrontStencilEqual)
         {
             __gl.stencilFunc(UtilsGL::toGLComareFunction(_depthStencilInfo.frontFaceStencil.stencilCompareFunction),
-                            (GLint)stencilReferenceValueFront, _depthStencilInfo.frontFaceStencil.readMask);
+                             (GLint)stencilReferenceValueFront, _depthStencilInfo.frontFaceStencil.readMask);
 
             __gl.stencilOp(UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.stencilFailureOperation),
-                          UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.depthFailureOperation),
-                          UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.depthStencilPassOperation));
+                           UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.depthFailureOperation),
+                           UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.depthStencilPassOperation));
 
             __gl.stencilMask(_depthStencilInfo.frontFaceStencil.writeMask);
         }
@@ -66,8 +69,7 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
         {
             __gl.stencilFuncFront(UtilsGL::toGLComareFunction(_depthStencilInfo.backFaceStencil.stencilCompareFunction),
                                   (GLint)stencilReferenceValueBack, _depthStencilInfo.backFaceStencil.readMask);
-            __gl.stencilFuncBack(
-                UtilsGL::toGLComareFunction(_depthStencilInfo.frontFaceStencil.stencilCompareFunction),
+            __gl.stencilFuncBack(UtilsGL::toGLComareFunction(_depthStencilInfo.frontFaceStencil.stencilCompareFunction),
                                  (GLint)stencilReferenceValueFront, _depthStencilInfo.frontFaceStencil.readMask);
 
             __gl.stencilOpFront(

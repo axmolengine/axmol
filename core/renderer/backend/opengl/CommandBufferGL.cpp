@@ -103,7 +103,7 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
 
         mask |= GL_DEPTH_BUFFER_BIT;
         glClearDepth(descirptor.clearDepthValue);
-        __gl.depthTest(true);
+        __gl.enableDepthTest();
         
         __gl.depthMask(GL_TRUE);
         __gl.depthFunc(GL_ALWAYS);
@@ -126,7 +126,7 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
     if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
     {
         if (!oldDepthTest)
-            __gl.depthTest(false);
+            __gl.disableDepthTest();
 
         __gl.depthMask(oldDepthWrite);
         __gl.depthFunc(oldDepthFunc);

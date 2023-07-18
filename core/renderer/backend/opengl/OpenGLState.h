@@ -131,10 +131,15 @@ struct OpenGLState
         AX_GURAD_SET(_winding, v);
         glFrontFace(UtilsGL::toGLFrontFace(v));
     }
-    void depthTest(bool v)
+    void enableDepthTest()
     {
-        AX_GURAD_SET(_depthTest, v);
-        v ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
+        AX_GURAD_SET(_depthTest, true);
+        glEnable(GL_DEPTH_TEST);
+    }
+    void disableDepthTest()
+    {
+        AX_GURAD_SET(_depthTest, false);
+        glDisable(GL_DEPTH_TEST);
     }
     void enableBlend()
     {
