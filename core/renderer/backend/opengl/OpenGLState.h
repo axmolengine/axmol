@@ -105,18 +105,29 @@ struct UniformBufferBindState
     GLuint handle;
 };
 
-#define AX_GURAD_SET(x, y)         \
-    if (x && x == (y)) \
-        return;                    \
+#define AX_GURAD_SET(x, y) \
+    if (x && x == (y))     \
+        return;            \
     x = (y)
-
-#define AX_GURAD_SET_EQ(x, ...)                           \
-    if (x && x.value().equals(##__VA_ARGS__)) \
-        return;                                           \
-    x.emplace(##__VA_ARGS__)
 
 struct OpenGLState
 {
+    template <typename _Func, typename _Left, typename... _Args>
+    static inline void try_call(_Func&& func, _Left& lhs, _Args&&... args)
+    {
+        if(lhs || lhs.value().equals(args...)) return;
+        lhs.emplace(args...);
+        func(args...);
+    }
+    
+    template <typename _Func, typename _Left, typename... _Args>
+    static inline void try_callu(_Func&& func, GLenum upvalue, _Left& lhs, _Args&&... args)
+    {
+        if(lhs || lhs.value().equals(args...)) return;
+        lhs.emplace(args...);
+        func(upvalue, args...);
+    }
+
     using CullMode = backend::CullMode;
     using Winding  = backend::Winding;
     using UtilsGL  = backend::UtilsGL;
@@ -146,7 +157,8 @@ struct OpenGLState
         AX_GURAD_SET(_blend, true);
         glEnable(GL_BLEND);
     }
-    void disableBlend() {
+    void disableBlend()
+    {
         AX_GURAD_SET(_blend, false);
         glDisable(GL_BLEND);
     }
@@ -156,7 +168,8 @@ struct OpenGLState
         glEnable(GL_SCISSOR_TEST);
         glScissor(x, y, width, height);
     }
-    void disableScissor() {
+    void disableScissor()
+    {
         AX_GURAD_SET(_scissor, false);
         glDisable(GL_SCISSOR_TEST);
     }
@@ -172,18 +185,15 @@ struct OpenGLState
     }
     void blendEquationSeparate(GLenum modeRGB, GLenum modeAlpha)
     {
-        AX_GURAD_SET_EQ(_blendEquationSeparate, modeRGB, modeAlpha);
-        glBlendEquationSeparate(modeRGB, modeAlpha);
+        try_call(glBlendEquationSeparate, _blendEquationSeparate, modeRGB, modeAlpha);
     }
     void blendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
     {
-        AX_GURAD_SET_EQ(_blendFuncSeparate, sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
-        glBlendFuncSeparate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
+        try_call(glBlendFuncSeparate, _blendFuncSeparate, sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
     }
     void colorMask(GLboolean r, GLboolean g, GLboolean b, GLboolean a)
     {
-        AX_GURAD_SET_EQ(_colorMask, r, g, b, a);
-        glColorMask(r, g, b, a);
+        try_call(glColorMask, _colorMask, r, g, b, a);
     }
     void depthMask(GLboolean v)
     {
@@ -224,35 +234,29 @@ struct OpenGLState
 
     void stencilFunc(GLenum func, GLint ref, GLuint mask)
     {
-        AX_GURAD_SET_EQ(_stencilFunc, func, ref, mask);
-        glStencilFunc(func, ref, mask);
+        try_call(glStencilFunc, _stencilFunc, func, ref, mask);
     }
 
     void stencilFuncFront(GLenum func, GLint ref, GLuint mask)
     {
-        AX_GURAD_SET_EQ(_stencilFuncFront, func, ref, mask);
-        glStencilFuncSeparate(GL_FRONT, func, ref, mask);
+        try_callu(glStencilFuncSeparate, GL_FRONT, _stencilFuncFront, func, ref, mask);
     }
     void stencilFuncBack(GLenum func, GLint ref, GLuint mask)
     {
-        AX_GURAD_SET_EQ(_stencilFuncBack, func, ref, mask);
-        glStencilFuncSeparate(GL_BACK, func, ref, mask);
+        try_callu(glStencilFuncSeparate, GL_BACK, _stencilFuncBack, func, ref, mask);
     }
 
     void stencilOp(GLenum fail, GLenum zfail, GLenum zpass)
     {
-        AX_GURAD_SET_EQ(_stencilOp, fail, zfail, zpass);
-        glStencilOp(fail, zfail, zpass);
+        try_call(glStencilOp, _stencilOp, fail, zfail, zpass);
     }
     void stencilOpFront(GLenum fail, GLenum zfail, GLenum zpass)
     {
-        AX_GURAD_SET_EQ(_stencilOpFront, fail, zfail, zpass);
-        glStencilOpSeparate(GL_FRONT, fail, zfail, zpass);
+        try_callu(glStencilOpSeparate, GL_FRONT, _stencilOpFront, fail, zfail, zpass);
     }
     void stencilOpBack(GLenum fail, GLenum zfail, GLenum zpass)
     {
-        AX_GURAD_SET_EQ(_stencilOpBack, fail, zfail, zpass);
-        glStencilOpSeparate(GL_BACK, fail, zfail, zpass);
+        try_callu(glStencilOpSeparate, GL_BACK, _stencilOpBack, fail, zfail, zpass);
     }
 
     void stencilMask(GLuint v)
@@ -277,9 +281,7 @@ struct OpenGLState
     }
     void bindTexture(GLenum target, GLuint handle)
     {
-        AX_GURAD_SET_EQ(_textureBind, target, handle);
-
-        glBindTexture(target, handle);
+        try_call(glBindTexture, _textureBind, target, handle);
     }
     void bindArrayBuffer(GLuint v)
     {
@@ -293,8 +295,7 @@ struct OpenGLState
     }
     void bindUniformBufferBase(GLuint index, GLuint handle)
     {
-        AX_GURAD_SET_EQ(_uniformBufferState, index, handle);
-        glBindBufferBase(GL_UNIFORM_BUFFER, index, handle);
+        try_callu(glBindBufferBase, GL_UNIFORM_BUFFER, _uniformBufferState, index, handle);
     }
 
 private:
