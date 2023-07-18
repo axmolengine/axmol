@@ -105,77 +105,73 @@ struct UniformBufferBindState
     GLuint handle;
 };
 
-#define AX_GURAD_SET(x, y) \
-    if (x && x == (y))     \
-        return;            \
-    x = (y)
-
 struct OpenGLState
 {
     template <typename _Left>
-    static inline void try_enable(GLenum target, _Left& lhs)
+    static inline void try_enable(GLenum target, _Left& opt)
     {
-        if (lhs)
+        if (opt)
             return;
-        lhs = !lhs;
+        opt = !opt;
         glEnable(target);
     }
     template <typename _Left>
-    static inline void try_disable(GLenum target, _Left& lhs)
+    static inline void try_disable(GLenum target, _Left& opt)
     {
-        if (!lhs)
+        if (!opt)
             return;
-        lhs = !lhs;
+        opt = !opt;
         glDisable(target);
     }
     template <typename _Func, typename _Left, typename _Right>
-    static inline void try_call(_Func&& func, _Left& lhs, _Right&& rhs)
+    static inline void try_call(_Func&& func, _Left& opt, _Right&& v)
     {
-        if (lhs == rhs)
+        if (opt == v)
             return;
-        lhs = rhs;
-        func(rhs);
+        opt = v;
+        func(v);
+    }
+    template <typename _Func, typename _Left, typename _Right, typename... _Args>
+    static inline void try_callf(_Func&& func, _Left& opt, _Right&& v, _Args&&... args)
+    {
+        if (opt == v)
+            return;
+        opt = v;
+        func(args...);
     }
     template <typename _Func, typename _Left, typename _Right>
-    static inline void try_callu(_Func&& func, GLenum target, _Left& lhs, _Right&& rhs)
+    static inline void try_callu(_Func&& func, GLenum target, _Left& opt, _Right&& v)
     {
-        if (lhs == rhs)
+        if (opt == v)
             return;
-        lhs = rhs;
-        func(target, rhs);
+        opt = v;
+        func(target, v);
     }
     template <typename _Func, typename _Left, typename... _Args>
-    static inline void try_callx(_Func&& func, _Left& lhs, _Args&&... args)
+    static inline void try_callx(_Func&& func, _Left& opt, _Args&&... args)
     {
-        if (lhs && lhs.value().equals(args...))
+        if (opt && (*opt).equals(args...))
             return;
-        lhs.emplace(args...);
+        opt.emplace(args...);
         func(args...);
     }
 
     template <typename _Func, typename _Left, typename... _Args>
-    static inline void try_callxu(_Func&& func, GLenum upvalue, _Left& lhs, _Args&&... args)
+    static inline void try_callxu(_Func&& func, GLenum upvalue, _Left& opt, _Args&&... args)
     {
-        if (lhs && lhs.value().equals(args...))
+        if (opt && (*opt).equals(args...))
             return;
-        lhs.emplace(args...);
+        opt.emplace(args...);
         func(upvalue, args...);
     }
+
 
     using CullMode = backend::CullMode;
     using Winding  = backend::Winding;
     using UtilsGL  = backend::UtilsGL;
 
-    void viewport(const Viewport& v)
-    {
-        AX_GURAD_SET(_viewPort, v);
-        glViewport(v.x, v.y, v.width, v.height);
-    }
-    void winding(Winding v)
-    {
-        AX_GURAD_SET(_winding, v);
-        glFrontFace(UtilsGL::toGLFrontFace(v));
-    }
+    void viewport(const Viewport& v) { try_callf(glViewport, _viewPort, v, v.x, v.y, v.width, v.height); }
+    void winding(Winding v) { try_callf(glFrontFace, _winding, v, UtilsGL::toGLFrontFace(v)); }
     void enableDepthTest() { try_enable(GL_DEPTH_TEST, _depthTest); }
     void disableDepthTest() { try_disable(GL_DEPTH_TEST, _depthTest); }
     void enableBlend() { try_enable(GL_BLEND, _blend); }
