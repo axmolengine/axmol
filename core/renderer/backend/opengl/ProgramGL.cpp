@@ -431,6 +431,11 @@ void UniformBlockDescriptor::bindUniformBlock(GLint _program, UniformBlockStage 
 
     const char* blockName = stage == UniformBlockStage::VERTEX ? "vs_ub" : "fs_ub";
     blockIndex            = glGetUniformBlockIndex(_program, blockName);
+    if (blockIndex == GL_INVALID_INDEX)
+    {
+        stage = UniformBlockStage::UBO_NOT_FOUND;
+        return;
+    }
 
     bindingPoint = (GLint)stage - 1;
     glUniformBlockBinding(_program, blockIndex, bindingPoint);
