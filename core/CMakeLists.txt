@@ -160,10 +160,9 @@ configure_file(
 
 # early features     
 include(CMakeDependentOption)
-set(GITHUB_ACTIONS $ENV{GITHUB_ACTIONS})
 cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
   "Build the tests when we are the root project" ON
-  "AX_GIT_BRANCH STREQUAL \"dev\" OR GITHUB_ACTIONS STREQUAL \"true\"" OFF)
+  "NOT (AX_GIT_BRANCH STREQUAL \"main\")" OFF)
 
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)

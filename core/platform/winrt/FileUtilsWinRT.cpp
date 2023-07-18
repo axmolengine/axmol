@@ -97,6 +97,7 @@ bool FileUtilsWinRT::init()
 {
     _checkPath();
     _defaultResRootPath = s_pszResourcePath;
+    addSearchPath("axslc");
     return FileUtils::init();
 }
 
