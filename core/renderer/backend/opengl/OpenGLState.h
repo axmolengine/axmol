@@ -112,7 +112,7 @@ struct OpenGLState
     {
         if (opt)
             return;
-        opt = !opt;
+        opt = true;
         glEnable(target);
     }
     template <typename _Left>
@@ -120,7 +120,7 @@ struct OpenGLState
     {
         if (!opt)
             return;
-        opt = !opt;
+        opt = false;
         glDisable(target);
     }
     template <typename _Func, typename _Left, typename _Right>
