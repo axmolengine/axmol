@@ -128,22 +128,6 @@ struct OpenGLState
         lhs = !lhs;
         glDisable(target);
     }
-    template <typename _Func, typename _Left>
-    static inline void try_enable(_Func&& func, GLenum target, _Left& lhs)
-    {
-        if (lhs)
-            return;
-        lhs = !lhs;
-        func(target);
-    }
-    template <typename _Func, typename _Left>
-    static inline void try_disable(_Func&& func, GLenum target, _Left& lhs)
-    {
-        if (!lhs)
-            return;
-        lhs = !lhs;
-        func(target);
-    }
     template <typename _Func, typename _Left, typename _Right>
     static inline void try_call(_Func&& func, _Left& lhs, _Right&& rhs)
     {
