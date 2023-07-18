@@ -268,9 +268,8 @@ void CommandBufferGL::prepareDrawing() const
         DepthStencilStateGL::reset();
 
     // Set cull mode.
-    if (CullMode::NONE != _cullMode) {
-        __gl.enableCullFace(UtilsGL::toGLCullMode(_cullMode));  // glCullFace(UtilsGL::toGLCullMode(_cullMode));
-    }
+    if (_cullMode != CullMode::NONE)
+        __gl.enableCullFace(UtilsGL::toGLCullMode(_cullMode));
     else
         __gl.disableCullFace();
 }

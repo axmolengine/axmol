@@ -29,24 +29,24 @@
 #if !defined(_AX_DEBUG) || _AX_DEBUG == 0
 #    define CHECK_GL_ERROR_DEBUG()
 #else
-#    define CHECK_GL_ERROR_DEBUG()                                                                       \
-        do                                                                                               \
-        {                                                                                                \
-            GLenum __error = glGetError();                                                               \
-            if (__error)                                                                                 \
-            {                                                                                            \
+#    define CHECK_GL_ERROR_DEBUG()                                                                            \
+        do                                                                                                    \
+        {                                                                                                     \
+            GLenum __error = glGetError();                                                                    \
+            if (__error)                                                                                      \
+            {                                                                                                 \
                 ax::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-            }                                                                                            \
+            }                                                                                                 \
         } while (false)
-#    define CHECK_GL_ERROR_ABORT()                                                                       \
-        do                                                                                               \
-        {                                                                                                \
-            GLenum __error = glGetError();                                                               \
-            if (__error)                                                                                 \
-            {                                                                                            \
+#    define CHECK_GL_ERROR_ABORT()                                                                            \
+        do                                                                                                    \
+        {                                                                                                     \
+            GLenum __error = glGetError();                                                                    \
+            if (__error)                                                                                      \
+            {                                                                                                 \
                 ax::log("OpenGL error 0x%04X in %s %s %d\n", __error, __FILE__, __FUNCTION__, __LINE__); \
-                assert(false);                                                                           \
-            }                                                                                            \
+                assert(false);                                                                                \
+            }                                                                                                 \
         } while (false)
 #endif
 

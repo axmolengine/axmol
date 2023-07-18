@@ -97,7 +97,6 @@ void TextureInfoGL::setCurrentTexParameters(GLenum target)
 void TextureInfoGL::apply(int slot, int index, GLenum target) const
 {
     __gl.activeTexture(GL_TEXTURE0 + slot);
-    // GL_SET_ACTIVE_TEXTURE(GL_TEXTURE0 + slot);
     __gl.bindTexture(target, index < AX_META_TEXTURES ? textures[index] : textures[0]);
 }
 

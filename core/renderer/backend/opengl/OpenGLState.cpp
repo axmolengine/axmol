@@ -1,7 +1,7 @@
 #include "OpenGLState.h"
 
-NS_AX_BEGIN
+NS_AX_BACKEND_BEGIN
 
 OpenGLState __gl;
 
-NS_AX_END
+NS_AX_BACKEND_END

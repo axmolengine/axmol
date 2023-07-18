@@ -9,8 +9,8 @@
 
 // Inline opengl state set calls
 
-namespace ax
-{
+NS_AX_BACKEND_BEGIN
+
 struct BlendEquationSeparateState
 {
     BlendEquationSeparateState(GLenum rgb, GLenum alpha) : rgbBlendOperation(rgb), alphaBlendOperation(alpha) {}
@@ -334,4 +334,4 @@ private:
 
 AX_DLL extern OpenGLState __gl;
 
-}  // namespace ax
+NS_AX_BACKEND_END
