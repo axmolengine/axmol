@@ -70,6 +70,7 @@ endfunction()
 # This function allow make shader files (.frag, .vert) compiled with glslcc
 # usage:
 #   - ax_target_compile_shaders(axmol FILES source_files): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/xxx_fs
+#   - ax_target_compile_shaders(axmol FILES source_files CUSTOM): output compiled shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/xxx_fs
 #   - ax_target_compile_shaders(axmol FILES source_files CVAR): the shader will compiled to c hex header for embed include by C/C++ use
 # Use global variable to control shader file extension:
 #   - GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS: default is .frag;.fsh
@@ -153,7 +154,12 @@ function (ax_target_compile_shaders target_name)
         if (NOT (IS_DIRECTORY ${OUT_DIR}))
             file(MAKE_DIRECTORY ${OUT_DIR})
         endif()
-        set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
+
+        set(SC_CATALOG "")
+        if(opt_CUSTOM)
+            set(SC_CATALOG "custom/")
+        endif()
+        set(SC_OUTPUT "${OUT_DIR}/${SC_CATALOG}${FILE_NAME}_${SC_TYPE}")
 
         set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} ...")
     
