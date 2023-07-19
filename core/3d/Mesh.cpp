@@ -40,7 +40,6 @@
 #include "renderer/Renderer.h"
 #include "renderer/backend/Buffer.h"
 #include "renderer/backend/Program.h"
-#include "renderer/RenderConsts.h"
 #include "math/Mat4.h"
 
 using namespace std;
@@ -68,9 +67,9 @@ std::string s_uniformSamplerName[] = {
 void Mesh::resetLightUniformValues()
 {
     const auto& conf  = Configuration::getInstance();
-    constexpr int maxDirLight   = AX_MAX_DIRECTIONAL_LIGHT;
-    constexpr int maxPointLight = AX_MAX_POINT_LIGHT;
-    constexpr int maxSpotLight  = AX_MAX_SPOT_LIGHT;
+    int maxDirLight   = conf->getMaxSupportDirLightInShader();
+    int maxPointLight = conf->getMaxSupportPointLightInShader();
+    int maxSpotLight  = conf->getMaxSupportSpotLightInShader();
 
     _dirLightUniformColorValues.assign(maxDirLight, Vec3::ZERO);
     _dirLightUniformDirValues.assign(maxDirLight, Vec3::ZERO);
@@ -549,9 +548,9 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
     AXASSERT(scene, "Invalid scene");
 
     const auto& conf  = Configuration::getInstance();
-    constexpr int maxDirLight   = AX_MAX_DIRECTIONAL_LIGHT;
-    constexpr int maxPointLight = AX_MAX_POINT_LIGHT;
-    constexpr int maxSpotLight  = AX_MAX_SPOT_LIGHT;
+    int maxDirLight   = conf->getMaxSupportDirLightInShader();
+    int maxPointLight = conf->getMaxSupportPointLightInShader();
+    int maxSpotLight  = conf->getMaxSupportSpotLightInShader();
     auto& lights      = scene->getLights();
 
     auto bindings = pass->getVertexAttributeBinding();

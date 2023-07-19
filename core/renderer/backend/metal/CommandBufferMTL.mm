@@ -270,7 +270,7 @@ void CommandBufferMTL::setWinding(Winding winding)
 void CommandBufferMTL::setVertexBuffer(Buffer* buffer)
 {
     // Vertex buffer is bound in index 0.
-    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferMTL*>(buffer)->getMTLBuffer() offset:0 atIndex:DeviceMTL::DEFAULT_ATTRIBS_BINDING_INDEX];
+    [_mtlRenderEncoder setVertexBuffer:static_cast<BufferMTL*>(buffer)->getMTLBuffer() offset:0 atIndex:0];
 }
 
 void CommandBufferMTL::setProgramState(ProgramState* programState)
@@ -483,21 +483,20 @@ void CommandBufferMTL::setUniformBuffer() const
         for (auto& cb : callbackUniforms)
             cb.second(_programState, cb.first);
 
-        // Uniform buffer: glsl-optimizer is bound to index 1, glslcc: bound to 0
-        constexpr int bindingIndex = DeviceMTL::VBO_BINDING_INDEX_START;
+        // Uniform buffer is bound to index 1.
         std::size_t bufferSize = 0;
         char* vertexBuffer     = nullptr;
         _programState->getVertexUniformBuffer(&vertexBuffer, bufferSize);
         if (vertexBuffer)
         {
-            [_mtlRenderEncoder setVertexBytes:vertexBuffer length:bufferSize atIndex:bindingIndex];
+            [_mtlRenderEncoder setVertexBytes:vertexBuffer length:bufferSize atIndex:1];
         }
 
         char* fragmentBuffer = nullptr;
         _programState->getFragmentUniformBuffer(&fragmentBuffer, bufferSize);
         if (fragmentBuffer)
         {
-            [_mtlRenderEncoder setFragmentBytes:fragmentBuffer length:bufferSize atIndex:bindingIndex];
+            [_mtlRenderEncoder setFragmentBytes:fragmentBuffer length:bufferSize atIndex:1];
         }
     }
 }

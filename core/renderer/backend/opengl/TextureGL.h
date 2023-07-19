@@ -29,8 +29,6 @@
 #include "platform/GL.h"
 #include "base/EventListenerCustom.h"
 
-#include "OpenGLState.h"
-
 NS_AX_BACKEND_BEGIN
 
 /**
