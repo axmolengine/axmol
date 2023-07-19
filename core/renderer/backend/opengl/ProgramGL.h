@@ -37,7 +37,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "base/pod_vector.h"
+#include "base/axstd.h"
 
 NS_AX_BACKEND_BEGIN
 
@@ -63,6 +63,14 @@ struct AttributeInfo
  */
 
 #define MAX_UNIFORM_NAME_LENGTH 256
+
+struct UniformBlockDescriptor
+{
+    UniformBlockDescriptor(BufferGL* ubo, int loc, int size) : _ubo(ubo), _location(loc), _size(size) {}
+    BufferGL* _ubo;
+    int _location;
+    int _size;
+};
 
 /**
  * An OpenGL program.
