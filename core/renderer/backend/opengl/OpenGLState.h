@@ -88,17 +88,17 @@ struct StencilOperationState
     unsigned int depthStencilPassOperation;
 };
 
-struct TextureBindState
+struct CommonBindState
 {
-    TextureBindState(GLenum t, GLuint h) : target(t), handle(h) {}
+    CommonBindState(GLenum t, GLuint h) : target(t), handle(h) {}
     inline bool equals(GLenum t, GLuint h) const { return this->target == t && this->handle == h; }
     GLenum target;
     GLuint handle;
 };
 
-struct UniformBufferBindState
+struct UniformBufferBaseBindState
 {
-    UniformBufferBindState(GLenum i, GLuint h) : index(i), handle(h) {}
+    UniformBufferBaseBindState(GLenum i, GLuint h) : index(i), handle(h) {}
     inline bool equals(GLenum i, GLuint h) const { return this->index == i && this->handle == h; }
 
     GLuint index;
@@ -110,7 +110,7 @@ struct OpenGLState
     template <typename _Left>
     static inline void try_enable(GLenum target, _Left& opt)
     {
-        if (opt)
+        if (opt.has_value() && opt.value())
             return;
         opt = true;
         glEnable(target);
@@ -118,7 +118,7 @@ struct OpenGLState
     template <typename _Left>
     static inline void try_disable(GLenum target, _Left& opt)
     {
-        if (!opt)
+        if (!opt.has_value() || !opt.value())
             return;
         opt = false;
         glDisable(target);
@@ -164,7 +164,6 @@ struct OpenGLState
         opt.emplace(args...);
         func(upvalue, args...);
     }
-
 
     using CullMode = backend::CullMode;
     using Winding  = backend::Winding;
@@ -234,14 +233,61 @@ struct OpenGLState
     void stencilMaskBack(GLuint v) { try_callu(glStencilMaskSeparate, GL_BACK, _stencilMaskBack, v); }
     void activeTexture(GLenum v) { try_call(glActiveTexture, _activeTexture, v); }
     void bindTexture(GLenum target, GLuint handle) { try_callx(glBindTexture, _textureBind, target, handle); }
-    void bindArrayBuffer(GLuint v) { try_callu(glBindBuffer, GL_ARRAY_BUFFER, _arrayBufferBind, v); }
-    void bindElementBuffer(GLuint v) { try_callu(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, _elementBufferBind, v); }
+    void bindBuffer(const GLuint target, GLuint buffer)
+    {
+        if (target != GL_UNIFORM_BUFFER)
+        {
+            size_t const targetIndex = getIndexForBufferTarget(target);
+            if (_bufferBindings[targetIndex] != buffer)
+            {
+                _bufferBindings[targetIndex] = buffer;
+                glBindBuffer(target, buffer);
+            }
+        }
+        else
+            glBindBuffer(target, buffer);
+    }
     void bindUniformBufferBase(GLuint index, GLuint handle)
     {
         try_callxu(glBindBufferBase, GL_UNIFORM_BUFFER, _uniformBufferState, index, handle);
     }
 
 private:
+    constexpr size_t getIndexForBufferTarget(GLenum target) noexcept
+    {
+        size_t index = 0;
+        switch (target)
+        {
+        // The indexed buffers MUST be first in this list (those usable with bindBufferRange)
+        case GL_UNIFORM_BUFFER:
+            index = 0;
+            break;
+        case GL_TRANSFORM_FEEDBACK_BUFFER:
+            index = 1;
+            break;
+        case GL_SHADER_STORAGE_BUFFER:
+            index = 2;
+            break;
+        case GL_ARRAY_BUFFER:
+            index = 3;
+            break;
+        case GL_ELEMENT_ARRAY_BUFFER:
+            index = 4;
+            break;
+        case GL_PIXEL_PACK_BUFFER:
+            index = 5;
+            break;
+        case GL_PIXEL_UNPACK_BUFFER:
+            index = 6;
+            break;
+        default:
+            break;
+        }
+        return index;
+    }
+
+    std::optional<GLuint> _bufferBindings[7];
+
     std::optional<Viewport> _viewPort;
     std::optional<Winding> _winding;
     std::optional<bool> _depthTest;
@@ -269,10 +315,8 @@ private:
     std::optional<GLuint> _stencilMaskFront;
     std::optional<GLuint> _stencilMaskBack;
     std::optional<GLenum> _activeTexture;
-    std::optional<TextureBindState> _textureBind;
-    std::optional<GLuint> _arrayBufferBind;
-    std::optional<GLuint> _elementBufferBind;
-    std::optional<UniformBufferBindState> _uniformBufferState;
+    std::optional<CommonBindState> _textureBind;
+    std::optional<UniformBufferBaseBindState> _uniformBufferState;
 };
 
 AX_DLL extern OpenGLState __gl;
