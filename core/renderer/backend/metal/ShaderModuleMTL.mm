@@ -204,7 +204,6 @@ void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
             UniformInfo uniform;
             uniform.count                 = ubm.array_size;
             uniform.location              = location;
-            uniform.isArray               = ubm.array_size > 1;
             uniform.size                  = ubm.size_bytes; // ubm.size_bytes; // nextLocation - location;
             uniform.bufferOffset          = location;
             uniform.needConvert           = (ubm.format == SGS_VERTEXFORMAT_FLOAT3) ? true : false;
@@ -229,7 +228,6 @@ void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
         UniformInfo uniform;
         uniform.count          = -1;
         uniform.location       = texinfo.binding;
-        uniform.isArray        = texinfo.is_array;
         _uniformInfos[texinfo.name] = uniform;
     }
 }
