@@ -261,9 +261,11 @@ private:
         case GL_TRANSFORM_FEEDBACK_BUFFER:
             index = 1;
             break;
+#if defined(GL_SHADER_STORAGE_BUFFER)
         case GL_SHADER_STORAGE_BUFFER:
             index = 2;
             break;
+#endif
         case GL_ARRAY_BUFFER:
             index = 3;
             break;
