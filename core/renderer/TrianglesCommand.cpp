@@ -54,7 +54,7 @@ void TrianglesCommand::init(float globalOrder,
     _mv = mv;
 
     auto programType = _pipelineDescriptor.programState->getProgram()->getProgramType();
-    auto uniformID   = _pipelineDescriptor.programState->hashOfUniforms();
+    auto uniformID   = _pipelineDescriptor.programState->getUniformID();
     if (_programType != programType || _texture != texture->getBackendTexture() || _blendType != blendType ||
         _uniformID != uniformID)
     {

@@ -588,7 +588,7 @@ void RenderTexture::onEnd()
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _oldTransMatrix);
 
     Renderer* renderer = _director->getRenderer();
-    renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.width, _oldViewport.height);
+    renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.w, _oldViewport.h);
 
     renderer->setRenderTarget(_oldRenderTarget);
 }

@@ -89,9 +89,7 @@ namespace spine {
 	{
 		auto& currentState = command->getPipelineDescriptor().programState;
 	#if defined(AX_VERSION)
-                if (currentState == nullptr || currentState->getProgram() != programState->getProgram() ||
-                    currentState->hashOfUniforms() != programState->hashOfUniforms())
-                {
+		if(currentState == nullptr || currentState->getProgram() != programState->getProgram() || currentState->getUniformID() != programState->getUniformID()) {
 	#else
 		if(currentState == nullptr || currentState->getProgram() != programState->getProgram()) {
 	#endif

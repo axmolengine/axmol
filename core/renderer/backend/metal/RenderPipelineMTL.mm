@@ -249,29 +249,24 @@ RenderPipelineMTL::~RenderPipelineMTL()
 void RenderPipelineMTL::setVertexLayout(MTLRenderPipelineDescriptor* mtlDescriptor,
                                         const PipelineDescriptor& descriptor)
 {
+    int vertexIndex   = 0;
     auto vertexLayout = descriptor.programState->getVertexLayout();
     if (!vertexLayout->isValid())
         return;
 
-    int stride = vertexLayout->getStride();
-    auto vertexDesc = mtlDescriptor.vertexDescriptor;
-    vertexDesc.layouts[DeviceMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stride = stride;
-    vertexDesc.layouts[DeviceMTL::DEFAULT_ATTRIBS_BINDING_INDEX].stepFunction =
+    mtlDescriptor.vertexDescriptor.layouts[vertexIndex].stride = vertexLayout->getStride();
+    mtlDescriptor.vertexDescriptor.layouts[vertexIndex].stepFunction =
         toMTLVertexStepFunction(vertexLayout->getVertexStepMode());
 
     const auto& attributes = vertexLayout->getAttributes();
-    
-    
     for (const auto& it : attributes)
     {
         auto attribute = it.second;
-        
-        vertexDesc.attributes[attribute.index].format =
+        mtlDescriptor.vertexDescriptor.attributes[attribute.index].format =
             toMTLVertexFormat(attribute.format, attribute.needToBeNormallized);
-        vertexDesc.attributes[attribute.index].offset = attribute.offset;
+        mtlDescriptor.vertexDescriptor.attributes[attribute.index].offset = attribute.offset;
         // Buffer index will always be 0;
-        vertexDesc.attributes[attribute.index].bufferIndex = DeviceMTL::DEFAULT_ATTRIBS_BINDING_INDEX;
-        
+        mtlDescriptor.vertexDescriptor.attributes[attribute.index].bufferIndex = 0;
     }
 }
 

@@ -31,9 +31,6 @@
 #include <string>
 
 NS_AX_BACKEND_BEGIN
-
-// #define AX_USE_UNIFORM_FULL_NAME
-
 /**
  * @addtogroup _backend
  * @{

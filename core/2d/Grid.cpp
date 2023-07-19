@@ -241,7 +241,7 @@ void GridBase::afterDraw(ax::Node* /*target*/)
     renderer->addCallbackCommand([director, renderer, this]() -> void {
         director->setProjection(_directorProjection);
         const auto& vp = Camera::getDefaultViewport();
-        renderer->setViewPort(vp.x, vp.y, vp.width, vp.height);
+        renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
         renderer->setRenderTarget(_oldRenderTarget);
     });
 

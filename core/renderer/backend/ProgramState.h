@@ -294,6 +294,10 @@ public:
 
     inline const VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
+    /**
+     * Gets uniformID, it's part of materialID for batch draw
+     */
+    uint32_t getUniformID() const { return _uniformID; }
 
     /**
      * Updates uniformID, it's part of materialID for batch draw
@@ -302,7 +306,7 @@ public:
      * @remark If your custom shader uniform not stable, you needs call this function to update uniformID for
      * render to generate a different materialID
      */
-    uint32_t hashOfUniforms();
+    void updateUniformID(int uniformID = -1);
 
     void setVertexAttrib(std::string_view name,
                          std::size_t index,
@@ -409,7 +413,6 @@ protected:
     bool _ownVertexLayout = false;
 
     uint32_t _uniformID = 0;
-    bool _uniformDirty  = false;
 #ifdef AX_USE_METAL
     struct XXH32_state_s* _uniformHashState = nullptr;
 #endif

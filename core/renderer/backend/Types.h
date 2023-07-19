@@ -66,13 +66,14 @@ struct SamplerDescriptor
 
 struct UniformInfo
 {
-    int count    = 0; // element count
+    int count    = 0;
     int location = -1;
 
     // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
     // float
     unsigned int type         = 0;
-    unsigned int size         = 0; // element size
+    bool isArray              = false;
+    unsigned int size         = 0;
     unsigned int bufferOffset = 0;
 
     // only used in metal
@@ -82,21 +83,13 @@ struct UniformInfo
 
 struct UniformLocation
 {
-    UniformLocation() {
-        location[0] = -1;
-        location[1] = -1;
-    }
-    UniformLocation(int loc, int offset)
-    {
-        location[0] = loc;
-        location[1] = offset;
-    }
     /**
      * in metal, those two locations represent to vertex and fragment location.
-     * in opengl, location[0] represent the location, and location[1] represent location offset in uniform block.
+     * in opengl, location[0] represent the location, and location[1] represent location offset in uniform buffer.
      */
-    int location[2];
+    int location[2]         = {-1, -1};
     ShaderStage shaderStage = ShaderStage::VERTEX;
+    UniformLocation()       = default;
     operator bool()
     {
         if (shaderStage == ShaderStage::VERTEX_AND_FRAGMENT)
