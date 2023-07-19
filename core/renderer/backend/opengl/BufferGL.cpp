@@ -59,7 +59,7 @@ BufferGL::BufferGL(std::size_t size, BufferType type, BufferUsage usage) : Buffe
     case BufferType::INDEX:
         _target = GL_ELEMENT_ARRAY_BUFFER;
     default:  // case BufferType::UNIFORM:
-        _target = GL_UNIFORM_BUFFER, _buffer;
+        _target = GL_UNIFORM_BUFFER;
     }
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -101,7 +101,7 @@ void BufferGL::reloadBuffer()
     updateData(_data, _bufferAllocated);
 }
 
-void BufferGL::fillBuffer(void* data, std::size_t offset, std::size_t size)
+void BufferGL::fillBuffer(const void* data, std::size_t offset, std::size_t size)
 {
     if (_bufferAlreadyFilled || !_needDefaultStoredData || BufferUsage::STATIC != _usage)
         return;

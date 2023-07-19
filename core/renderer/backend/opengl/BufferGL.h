@@ -87,7 +87,7 @@ public:
 private:
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     void reloadBuffer();
-    void fillBuffer(void* data, std::size_t offset, std::size_t size);
+    void fillBuffer(const void* data, std::size_t offset, std::size_t size);
 
     bool _bufferAlreadyFilled                      = false;
     EventListenerCustom* _backToForegroundListener = nullptr;
