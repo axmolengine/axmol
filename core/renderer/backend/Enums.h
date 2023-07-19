@@ -43,7 +43,8 @@ enum class BufferUsage : uint32_t
 enum class BufferType : uint32_t
 {
     VERTEX,
-    INDEX
+    INDEX,
+    UNIFORM
 };
 
 enum class ShaderStage : uint32_t
@@ -51,6 +52,14 @@ enum class ShaderStage : uint32_t
     VERTEX,
     FRAGMENT,
     VERTEX_AND_FRAGMENT
+};
+
+enum class UniformBlockStage
+{
+    UBO_NOT_FOUND = 0,
+    VERTEX        = 1,
+    FRAGMENT      = 2,
+    ALL_STAGES    = 3
 };
 
 enum class VertexFormat : uint32_t

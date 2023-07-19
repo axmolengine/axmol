@@ -179,7 +179,7 @@ Color4F operator/(Color4F lhs, float rhs);
 /**
  * Hue Saturation Value color space composed of 4 floats.
  * @since axmol-1.0.0b7
- * 
+ *
  * Implementation source: https://gist.github.com/fairlight1337/4935ae72bcbcc1ba5c72
  */
 struct AX_DLL HSV
@@ -518,7 +518,7 @@ struct AX_DLL BlendFunc
  *
  * @note If any of these enums are edited and/or reordered, update Texture2D.m.
  */
-enum class AX_DLL TextVAlignment
+enum class TextVAlignment
 {
     TOP,
     CENTER,
@@ -530,7 +530,7 @@ enum class AX_DLL TextVAlignment
  *
  * @note If any of these enums are edited and/or reordered, update Texture2D.m.
  */
-enum class AX_DLL TextHAlignment
+enum class TextHAlignment
 {
     LEFT,
     CENTER,
@@ -660,21 +660,42 @@ public:
 extern const std::string AX_DLL STD_STRING_EMPTY;
 extern const ssize_t AX_DLL AX_INVALID_INDEX;
 
-struct AX_DLL Viewport
+struct RectI
 {
-    int x          = 0;
-    int y          = 0;
-    unsigned int w = 0;
-    unsigned int h = 0;
+    RectI() { this->x = this->y = this->w = this->h = 0; }
+    int x;
+    int y;
+
+    union
+    {
+        struct
+        {
+            int width;
+            int height;
+        };
+        struct
+        {
+            int w;
+            int h;
+        };
+    };
+
+    inline bool operator==(const RectI& v) const
+    {
+        return this->x == v.x && this->y == v.y && this->width == v.width && this->height == v.height;
+    }
+    inline RectI& set(int x, int y, int w, int h)
+    {
+        this->x      = x;
+        this->y      = y;
+        this->width  = w;
+        this->height = h;
+        return *this;
+    }
 };
 
-struct AX_DLL ScissorRect
-{
-    float x      = 0;
-    float y      = 0;
-    float width  = 0;
-    float height = 0;
-};
+using Viewport    = RectI;
+using ScissorRect = RectI;  // both GL & Metal is integer type, GL: int, Metal: NSUInteger
 
 using TextureUsage = backend::TextureUsage;
 using PixelFormat  = backend::PixelFormat;
