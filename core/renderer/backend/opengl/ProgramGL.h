@@ -37,6 +37,8 @@
 #include <vector>
 #include <unordered_map>
 
+#include "base/pod_vector.h"
+
 NS_AX_BACKEND_BEGIN
 
 class ShaderModuleGL;
@@ -61,54 +63,6 @@ struct AttributeInfo
  */
 
 #define MAX_UNIFORM_NAME_LENGTH 256
-#define UNIFORM_BLOCK_IDENTIFIER UINT16_MAX
-
-struct UniformBlockDescriptor
-{
-    void bindUniformBlock(GLint _program, UniformBlockStage _stage);
-
-    UniformBlockStage stage = UniformBlockStage::UBO_NOT_FOUND;
-
-    GLuint blockIndex = -1;
-    GLuint bindingPoint = -1;
-    GLint blockSize = -1;
-    GLint numUniforms = -1;
-    GLint* uniformIndices = nullptr;
-    GLint* uniformOffsets = nullptr;
-
-    ~UniformBlockDescriptor();
-};
-
-class UniformBlockHandler
-{
-public:
-    void setProgram(GLint _program) { this->_program = _program; };
-
-    void bindUniformBlock(UniformBlockStage _stage);
-    void bindUniformBlocks();
-    void generateUniformOffsets(UniformBlockStage _stage);
-    void allocateUBOBuffer();
-
-    UniformLocation getUniformLocationByName(std::string name) const;
-
-    std::unordered_map<std::string, UniformLocation> uniformOffsetsByName;
-
-    BufferGL* getVertexBuffer() const { return _UBOVertBuffer; };
-    BufferGL* getFragmentBuffer() const { return _UBOFragBuffer; };
-
-    ~UniformBlockHandler();
-
-    GLint vertBlockSize = 0;
-    GLint fragBlockSize = 0;
-
-private:
-    ax::backend::BufferGL* _UBOVertBuffer = nullptr;
-    ax::backend::BufferGL* _UBOFragBuffer = nullptr;
-    UniformBlockDescriptor _vertexUBO;
-    UniformBlockDescriptor _fragmentUBO;
-
-    GLint _program;
-};
 
 /**
  * An OpenGL program.
@@ -203,14 +157,16 @@ public:
      */
     virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
 
-    UniformBlockHandler& getUBOHandler() { return _ubo; };
+    void bindUniformBuffers(const char* buffer, size_t bufferSize, uint32_t uniformID);
 
 private:
     void compileProgram();
     bool getAttributeLocation(std::string_view attributeName, unsigned int& location) const;
     void computeUniformInfos();
-    void generateUniformBlockBuffers();
-    void computeLocations();
+    void setBuiltinLocations();
+
+    void clearUniformBuffers();
+
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     virtual void reloadProgram();
     virtual int getMappedLocation(int location) const override;
@@ -225,7 +181,7 @@ private:
     ShaderModuleGL* _vertexShaderModule   = nullptr;
     ShaderModuleGL* _fragmentShaderModule = nullptr;
 
-    UniformBlockHandler _ubo;
+    axstd::pod_vector<UniformBlockDescriptor> _uniformBuffers;
 
     std::vector<AttributeInfo> _attributeInfos;
     hlookup::string_map<UniformInfo> _activeUniformInfos;
@@ -238,12 +194,14 @@ private:
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 
-    std::size_t _totalFragBufferSize = 0;
-    std::size_t _totalVertBufferSize = 0;
-    int _maxLocation             = -1;
+    std::size_t _totalBufferSize = 0;  // total uniform buffer size (all blocks)
+
+    int _maxLocation = -1;
     UniformLocation _builtinUniformLocation[UNIFORM_MAX];
     int _builtinAttributeLocation[Attribute::ATTRIBUTE_MAX];
     std::unordered_map<int, int> _bufferOffset;
+
+    uint32_t _hashOfUniforms = 0;
 };
 // end of _opengl group
 /// @}

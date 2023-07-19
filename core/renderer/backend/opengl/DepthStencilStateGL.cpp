@@ -33,8 +33,8 @@ NS_AX_BACKEND_BEGIN
 
 void DepthStencilStateGL::reset()
 {
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_STENCIL_TEST);
+    __gl.disableDepthTest();
+    __gl.disableStencilTest();
 }
 
 void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigned int stencilReferenceValueBack) const

@@ -859,7 +859,7 @@ void Colorizer::updateNodeHsv(Node* node, const Vec3& hsv, const Vec3& filter)
     auto programState = node->getProgramState();
     programState->setUniform(programState->getUniformLocation("u_mix_hsv"), &hsvMatrix.m[0], sizeof(hsvMatrix));
     programState->setUniform(programState->getUniformLocation("u_filter_rgb"), &filter, sizeof(filter));
-    programState->updateUniformID();
+    programState->hashOfUniforms();
 }
 
 NS_AX_END
