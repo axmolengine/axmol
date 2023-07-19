@@ -88,6 +88,7 @@ android {
 android.applicationVariants.all { variant ->
     def project_root_folder = "${projectDir}/../.."
     def dest_assets_folder = "${projectDir}/assets"
+    def axslc_folder = "${projectDir}/../build/runtime/axslc"
 
     // delete previous files first
     delete dest_assets_folder
@@ -99,6 +100,10 @@ android.applicationVariants.all { variant ->
             from "${project_root_folder}/Content"
             into "${dest_assets_folder}"
             exclude "**/*.gz"
+        }
+        copy {
+            from "${axslc_folder}"
+            into "${dest_assets_folder}/axslc"
         }
     }
     tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
