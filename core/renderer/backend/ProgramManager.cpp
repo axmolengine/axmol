@@ -32,29 +32,11 @@
 
 NS_AX_BACKEND_BEGIN
 
-namespace
-{
-std::string getShaderMacrosForLight()
-{
-    char def[256];
-    auto conf = Configuration::getInstance();
-
-    snprintf(def, sizeof(def) - 1,
-             "\n#define MAX_DIRECTIONAL_LIGHT_NUM %d \n"
-             "\n#define MAX_POINT_LIGHT_NUM %d \n"
-             "\n#define MAX_SPOT_LIGHT_NUM %d \n",
-             conf->getMaxSupportDirLightInShader(), conf->getMaxSupportPointLightInShader(),
-             conf->getMaxSupportSpotLightInShader());
-
-    return std::string(def);
-}
-}  // namespace
-
 ProgramManager* ProgramManager::_sharedProgramManager = nullptr;
 
 Program* ProgramManager::newProgram(std::string_view vertShaderSource,
-                                           std::string_view fragShaderSource,
-                                           std::function<void(Program*)> fnSetupLayout)
+                                    std::string_view fragShaderSource,
+                                    std::function<void(Program*)> fnSetupLayout)
 {
     auto program = Device::getInstance()->newProgram(vertShaderSource, fragShaderSource);
     if (program)
@@ -227,95 +209,90 @@ void VertexLayoutHelper::setupTerrain3D(Program* program)
 
 bool ProgramManager::init()
 {
-    registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR, positionTextureColor_vert, positionTextureColor_frag,
+    registerProgramFactoryByName(ProgramType::POSITION_TEXTURE_COLOR, positionTextureColor_vert, positionTextureColor_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::DUAL_SAMPLER, positionTextureColor_vert, dualSampler_frag,
+    registerProgramFactoryByName(ProgramType::DUAL_SAMPLER, positionTextureColor_vert, dualSampler_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::LABEL_DISTANCE_NORMAL, positionTextureColor_vert, label_distanceNormal_frag,
+    registerProgramFactoryByName(ProgramType::LABEL_DISTANCE_NORMAL, positionTextureColor_vert, label_distanceNormal_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::LABEL_NORMAL, positionTextureColor_vert, label_normal_frag,
+    registerProgramFactoryByName(ProgramType::LABEL_NORMAL, positionTextureColor_vert, label_normal_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::LABLE_OUTLINE, positionTextureColor_vert, labelOutline_frag,
+    registerProgramFactoryByName(ProgramType::LABLE_OUTLINE, positionTextureColor_vert, labelOutline_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::LABLE_DISTANCEFIELD_GLOW, positionTextureColor_vert,
+    registerProgramFactoryByName(ProgramType::LABLE_DISTANCEFIELD_GLOW, positionTextureColor_vert,
                            labelDistanceFieldGlow_frag, VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::POSITION_COLOR_LENGTH_TEXTURE, positionColorLengthTexture_vert,
+    registerProgramFactoryByName(ProgramType::POSITION_COLOR_LENGTH_TEXTURE, positionColorLengthTexture_vert,
                            positionColorLengthTexture_frag, VertexLayoutHelper::setupDrawNode);
-    registerProgramFactory(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE, positionColorTextureAsPointsize_vert,
+    registerProgramFactoryByName(ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE, positionColorTextureAsPointsize_vert,
                            positionColor_frag, VertexLayoutHelper::setupDrawNode);
-    registerProgramFactory(ProgramType::POSITION_COLOR, positionColor_vert, positionColor_frag,
+    registerProgramFactoryByName(ProgramType::POSITION_COLOR, positionColor_vert, positionColor_frag,
                            VertexLayoutHelper::setupPosColor);
-    registerProgramFactory(ProgramType::LAYER_RADIA_GRADIENT, position_vert, layer_radialGradient_frag,
+    registerProgramFactoryByName(ProgramType::LAYER_RADIA_GRADIENT, position_vert, layer_radialGradient_frag,
                            VertexLayoutHelper::setupPos);
-    registerProgramFactory(ProgramType::POSITION_TEXTURE, positionTexture_vert, positionTexture_frag,
+    registerProgramFactoryByName(ProgramType::POSITION_TEXTURE, positionTexture_vert, positionTexture_frag,
                            VertexLayoutHelper::setupTexture);
-    registerProgramFactory(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert,
+    registerProgramFactoryByName(ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST, positionTextureColor_vert,
                            positionTextureColorAlphaTest_frag, VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag,
+    registerProgramFactoryByName(ProgramType::POSITION_UCOLOR, positionUColor_vert, positionColor_frag,
                            VertexLayoutHelper::setupPos);
-    registerProgramFactory(ProgramType::DUAL_SAMPLER_GRAY, positionTextureColor_vert, dualSampler_gray_frag,
+    registerProgramFactoryByName(ProgramType::DUAL_SAMPLER_GRAY, positionTextureColor_vert, dualSampler_gray_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::GRAY_SCALE, positionTextureColor_vert, grayScale_frag,
+    registerProgramFactoryByName(ProgramType::GRAY_SCALE, positionTextureColor_vert, grayScale_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::LINE_COLOR_3D, lineColor3D_vert, lineColor3D_frag,
+    registerProgramFactoryByName(ProgramType::LINE_COLOR_3D, lineColor3D_vert, lineColor3D_frag,
                            VertexLayoutHelper::setupDrawNode3D);
-    registerProgramFactory(ProgramType::CAMERA_CLEAR, cameraClear_vert, cameraClear_frag,
+    registerProgramFactoryByName(ProgramType::CAMERA_CLEAR, cameraClear_vert, cameraClear_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::SKYBOX_3D, CC3D_skybox_vert, CC3D_skybox_frag, VertexLayoutHelper::setupSkyBox);
-    registerProgramFactory(ProgramType::SKINPOSITION_TEXTURE_3D, CC3D_skinPositionTexture_vert, CC3D_colorTexture_frag,
+    registerProgramFactoryByName(ProgramType::SKYBOX_3D, skybox_vert, skybox_frag, VertexLayoutHelper::setupSkyBox);
+    registerProgramFactoryByName(ProgramType::SKINPOSITION_TEXTURE_3D, skinPositionTexture_vert, colorTexture_frag,
                            VertexLayoutHelper::setupDummy);
-    auto lightDef = getShaderMacrosForLight();
-    registerProgramFactory(ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D, lightDef + CC3D_skinPositionNormalTexture_vert,
-                           lightDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
-    registerProgramFactory(ProgramType::POSITION_NORMAL_TEXTURE_3D, lightDef + CC3D_positionNormalTexture_vert,
-                           lightDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
-    registerProgramFactory(ProgramType::POSITION_TEXTURE_3D, CC3D_positionTexture_vert, CC3D_colorTexture_frag,
+    registerProgramFactoryByName(ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D, skinPositionNormalTexture_vert,
+                                 colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
+    registerProgramFactoryByName(ProgramType::POSITION_NORMAL_TEXTURE_3D, positionNormalTexture_vert,
+                                 colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
+    registerProgramFactoryByName(ProgramType::POSITION_TEXTURE_3D, positionTexture3D_vert, colorTexture_frag,
                            VertexLayoutHelper::setupDummy);
-    registerProgramFactory(ProgramType::POSITION_3D, CC3D_positionTexture_vert, CC3D_color_frag,
+    registerProgramFactoryByName(ProgramType::POSITION_3D, positionTexture3D_vert, color_frag,
                            VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::POSITION_NORMAL_3D, lightDef + CC3D_positionNormalTexture_vert,
-                           lightDef + CC3D_colorNormal_frag, VertexLayoutHelper::setupDummy);
-    const char* normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
-    registerProgramFactory(ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D,
-                           lightDef + normalMapDef + CC3D_positionNormalTexture_vert,
-                           lightDef + normalMapDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
-    registerProgramFactory(ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D,
-                           lightDef + normalMapDef + CC3D_skinPositionNormalTexture_vert,
-                           lightDef + normalMapDef + CC3D_colorNormalTexture_frag, VertexLayoutHelper::setupDummy);
-    registerProgramFactory(ProgramType::TERRAIN_3D, CC3D_terrain_vert, CC3D_terrain_frag,
+    registerProgramFactoryByName(ProgramType::POSITION_NORMAL_3D, positionNormalTexture_vert, colorNormal_frag,
+                                 VertexLayoutHelper::setupDummy);
+    registerProgramFactoryByName(ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D,
+                           positionNormalTexture_vert_1,
+        colorNormalTexture_frag_1, VertexLayoutHelper::setupDummy);
+    registerProgramFactoryByName(ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D,
+                           skinPositionNormalTexture_vert_1,
+                                 colorNormalTexture_frag_1, VertexLayoutHelper::setupDummy);
+    registerProgramFactoryByName(ProgramType::TERRAIN_3D, terrain_vert, terrain_frag,
                            VertexLayoutHelper::setupTerrain3D);
-    registerProgramFactory(ProgramType::PARTICLE_TEXTURE_3D, CC3D_particle_vert, CC3D_particleTexture_frag,
+    registerProgramFactoryByName(ProgramType::PARTICLE_TEXTURE_3D, particle_vert, particleTexture_frag,
                            VertexLayoutHelper::setupPU3D);
-    registerProgramFactory(ProgramType::PARTICLE_COLOR_3D, CC3D_particle_vert, CC3D_particleColor_frag,
+    registerProgramFactoryByName(ProgramType::PARTICLE_COLOR_3D, particle_vert, particleColor_frag,
                            VertexLayoutHelper::setupPU3D);
-    registerProgramFactory(ProgramType::QUAD_COLOR_2D, CC2D_quadColor_vert, CC2D_quadColor_frag,
+    registerProgramFactoryByName(ProgramType::QUAD_COLOR_2D, quadColor_vert, quadColor_frag,
                            VertexLayoutHelper::setupDummy);
-    registerProgramFactory(ProgramType::QUAD_TEXTURE_2D, CC2D_quadTexture_vert, CC2D_quadTexture_frag,
+    registerProgramFactoryByName(ProgramType::QUAD_TEXTURE_2D, quadTexture_vert, quadTexture_frag,
                            VertexLayoutHelper::setupDummy);
-    registerProgramFactory(ProgramType::HSV, positionTextureColor_vert, hsv_frag, VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::HSV_DUAL_SAMPLER, positionTextureColor_vert, dualSampler_hsv_frag,
+    registerProgramFactoryByName(ProgramType::HSV, positionTextureColor_vert, hsv_frag, VertexLayoutHelper::setupSprite);
+    registerProgramFactoryByName(ProgramType::HSV_DUAL_SAMPLER, positionTextureColor_vert, dualSampler_hsv_frag,
                            VertexLayoutHelper::setupSprite);
 
-    registerProgramFactory(ProgramType::VIDEO_TEXTURE_YUY2, positionTextureColor_vert,
-                           std::string{videoTextureYUY2_frag},
-                           VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::VIDEO_TEXTURE_NV12, positionTextureColor_vert,
-                           std::string{videoTextureNV12_frag},
-                           VertexLayoutHelper::setupSprite);
-    registerProgramFactory(ProgramType::VIDEO_TEXTURE_BGR32, positionTextureColor_vert,
-                           std::string{videoTextureBGRA_frag},
-                           VertexLayoutHelper::setupSprite);
+    registerProgramFactoryByName(ProgramType::VIDEO_TEXTURE_YUY2, positionTextureColor_vert,
+                           std::string{videoTextureYUY2_frag}, VertexLayoutHelper::setupSprite);
+    registerProgramFactoryByName(ProgramType::VIDEO_TEXTURE_NV12, positionTextureColor_vert,
+                           std::string{videoTextureNV12_frag}, VertexLayoutHelper::setupSprite);
+    registerProgramFactoryByName(ProgramType::VIDEO_TEXTURE_BGR32, positionTextureColor_vert,
+                           std::string{videoTextureBGRA_frag}, VertexLayoutHelper::setupSprite);
 
     // The builtin dual sampler shader registry
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR,
                                                          TextureSamplerFlag::DUAL_SAMPLER,
-                                                         getBuiltinProgram(ProgramType::DUAL_SAMPLER));
+                                                         ProgramType::DUAL_SAMPLER);
 
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::GRAY_SCALE, TextureSamplerFlag::DUAL_SAMPLER,
-                                                         getBuiltinProgram(ProgramType::DUAL_SAMPLER_GRAY));
+                                                         ProgramType::DUAL_SAMPLER_GRAY);
 
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::HSV, TextureSamplerFlag::DUAL_SAMPLER,
-                                                         getBuiltinProgram(ProgramType::HSV_DUAL_SAMPLER));
+                                                         ProgramType::HSV_DUAL_SAMPLER);
     return true;
 }
 
@@ -363,38 +340,43 @@ Program* ProgramManager::addProgram(uint32_t internalType) const
 }
 
 void ProgramManager::registerCustomProgramFactory(uint32_t type,
-                                                std::string vertShaderSource,
-                                                std::string fragShaderSource,
-                                                std::function<void(Program*)> fnSetupLayout)
+                                                  std::string_view vsName,
+                                                  std::string_view fsName,
+                                                  std::function<void(Program*)> fnSetupLayout)
 {
     auto internalType = ProgramType::CUSTOM_PROGRAM | type;
-    registerProgramFactory(internalType, std::move(vertShaderSource), std::move(fragShaderSource),
-                           std::move(fnSetupLayout));
+    registerProgramFactoryByName(internalType, vsName, fsName,
+                                 std::move(fnSetupLayout));
 }
 
-void ProgramManager::registerProgramFactory(uint32_t internalType,
-                                          std::string&& vertShaderSource,
-                                          std::string&& fragShaderSource,
-                                          std::function<void(Program*)> fnSetupLayout)
+void ProgramManager::registerProgramFactoryByName(uint32_t internalType,
+                                                  std::string_view vertShaderName,
+                                                  std::string_view fragShaderName,
+                                                  std::function<void(Program*)> fnSetupLayout)
 {
-    auto constructProgram = [vsrc = std::move(vertShaderSource), fsrc = std::move(fragShaderSource),
-                             setupLayout = std::move(fnSetupLayout)]() {
-        auto program = backend::Device::getInstance()->newProgram(vsrc, fsrc);
+    auto loadShaderFunc = [vsName = std::string{vertShaderName}, fsName = std::string{fragShaderName},
+                           setupLayout = std::move(fnSetupLayout)]() mutable {
+        auto fileUtils  = FileUtils::getInstance();
+        auto vertFile = fileUtils->fullPathForFilename(vsName);
+        auto fragFile = fileUtils->fullPathForFilename(fsName);
+        auto vertSource = fileUtils->getStringFromFile(vertFile);
+        auto fragSource = fileUtils->getStringFromFile(fragFile);
+        auto program = backend::Device::getInstance()->newProgram(vertSource, fragSource);
         setupLayout(program);
         return program;
     };
 
     if (internalType < ProgramType::BUILTIN_COUNT)
     {
-        _builtinFactories[internalType] = constructProgram;
+        _builtinFactories[internalType] = loadShaderFunc;
     }
     else
     {
         auto it = _customFactories.find(internalType);
         if (it == _customFactories.end())
-            _customFactories.emplace(internalType, constructProgram);
+            _customFactories.emplace(internalType, loadShaderFunc);
         else
-            it->second = constructProgram;
+            it->second = loadShaderFunc;
     }
 }
 

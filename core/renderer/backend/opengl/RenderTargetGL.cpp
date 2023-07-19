@@ -35,12 +35,12 @@ RenderTargetGL::~RenderTargetGL()
 
 void RenderTargetGL::bindFrameBuffer() const
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, _FBO);
+    __gl.bindFrameBuffer(_FBO);
 }
 
 void RenderTargetGL::unbindFrameBuffer() const
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    __gl.bindFrameBuffer(0);
 }
 
 void RenderTargetGL::update() const {
@@ -54,7 +54,7 @@ void RenderTargetGL::update() const {
                 if (bitmask::any(_flags, getMRTColorFlag(i)))
                 {
                     auto textureInfo    = _color[i];
-                    auto textureHandler = textureInfo.texture != nullptr ? textureInfo.texture->getHandler() : 0;
+                    auto textureHandler = static_cast<GLuint>(textureInfo.texture != nullptr ? textureInfo.texture->getHandler() : 0);
                     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textureHandler,
                                         textureInfo.level);
                     bufs[i] = GL_COLOR_ATTACHMENT0 + i;

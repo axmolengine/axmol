@@ -115,7 +115,7 @@ default gl blend src function. Compatible with premultiplied alpha images.
 #define AX_DIRECTOR_END()                                        \
     do                                                           \
     {                                                            \
-        auto __director = ax::Director::getInstance(); \
+        Director* __director = ax::Director::getInstance(); \
         __director->end();                                       \
     } while (0)
 
@@ -163,14 +163,14 @@ On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  Converts a rect in pixels to points
  */
 #define AX_SIZE_PIXELS_TO_POINTS(__size_in_pixels__)             \
-    ax::Vec2((__size_in_pixels__).width / AX_CONTENT_SCALE_FACTOR(), \
+    Vec2((__size_in_pixels__).width / AX_CONTENT_SCALE_FACTOR(), \
          (__size_in_pixels__).height / AX_CONTENT_SCALE_FACTOR())
 
 /** @def AX_POINT_POINTS_TO_PIXELS
  Converts a rect in points to pixels
  */
 #define AX_SIZE_POINTS_TO_PIXELS(__size_in_points__) \
-    ax::Vec2((__size_in_points__).width* AX_CONTENT_SCALE_FACTOR(), (__size_in_points__).height* AX_CONTENT_SCALE_FACTOR())
+    Vec2((__size_in_points__).width* AX_CONTENT_SCALE_FACTOR(), (__size_in_points__).height* AX_CONTENT_SCALE_FACTOR())
 
 #ifndef FLT_EPSILON
 #    define FLT_EPSILON 1.192092896e-07F

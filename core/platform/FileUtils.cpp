@@ -764,13 +764,13 @@ std::string FileUtils::fullPathFromRelativeFile(std::string_view filename, std::
     return std::string{relativeFile.substr(0, relativeFile.rfind('/') + 1)}.append(filename);
 }
 
-const std::vector<std::string>& FileUtils::getSearchPaths() const
+const std::vector<std::string> FileUtils::getSearchPaths() const
 {
     DECLARE_GUARD;
     return _searchPathArray;
 }
 
-const std::vector<std::string>& FileUtils::getOriginalSearchPaths() const
+const std::vector<std::string> FileUtils::getOriginalSearchPaths() const
 {
     DECLARE_GUARD;
     return _originalSearchPaths;
@@ -782,7 +782,7 @@ void FileUtils::setWritablePath(std::string_view writablePath)
     _writablePath = writablePath;
 }
 
-const std::string& FileUtils::getDefaultResourceRootPath() const
+const std::string FileUtils::getDefaultResourceRootPath() const
 {
     DECLARE_GUARD;
     return _defaultResRootPath;
