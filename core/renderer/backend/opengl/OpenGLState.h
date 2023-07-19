@@ -238,11 +238,7 @@ struct OpenGLState
         if (target != GL_UNIFORM_BUFFER)
         {
             size_t const targetIndex = getIndexForBufferTarget(target);
-            if (_bufferBindings[targetIndex] != buffer)
-            {
-                _bufferBindings[targetIndex] = buffer;
-                glBindBuffer(target, buffer);
-            }
+            try_callu(glBindBuffer, target, _bufferBindings[targetIndex], buffer);
         }
         else
             glBindBuffer(target, buffer);

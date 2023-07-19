@@ -146,7 +146,7 @@ bool SpineTestLayer::init()
                 SET_UNIFORM(skeleton1PS, "resolution", resolution);
                 SET_UNIFORM(skeleton1PS, "blurRadius", blurRadius);
                 SET_UNIFORM(skeleton1PS, "sampleNum", sampleNum);
-                skeleton1PS->updateUniformID();
+                skeleton1PS->hashOfUniforms();
             }
     
         }

@@ -191,8 +191,6 @@ bool ProgramState::init(Program* program)
     _ownVertexLayout         = false;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
     _vertexUniformBuffer     = (char*)calloc(1, _vertexUniformBufferSize);
-    _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
-    _fragmentUniformBuffer     = (char*)calloc(1, _fragmentUniformBufferSize);
 #ifdef AX_USE_METAL
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
     _fragmentUniformBuffer     = (char*)calloc(1, _fragmentUniformBufferSize);
@@ -304,8 +302,8 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
                                              void* buffer)
 {
     // The type is glslcc FOURCC ID
-    auto basicType      = uniformInfo.type;
-    
+    auto basicType = uniformInfo.type;
+
     int offset = 0;
     switch (basicType)
     {
@@ -339,20 +337,20 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
         }
         break;
     }
-//    case kGlslTypeBool:
-//    {
-//        bool b4[4];
-//        for (int i = 0; i < uniformInfo.count; i++)
-//        {
-//            if (offset >= srcSize)
-//                break;
-//
-//            convertbVec3TobVec4((bool*)((uint8_t*)srcData + offset), b4);
-//            memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(b4), b4, sizeof(b4));
-//            offset += BVEC3_SIZE;
-//        }
-//        break;
-//    }
+        //    case kGlslTypeBool:
+        //    {
+        //        bool b4[4];
+        //        for (int i = 0; i < uniformInfo.count; i++)
+        //        {
+        //            if (offset >= srcSize)
+        //                break;
+        //
+        //            convertbVec3TobVec4((bool*)((uint8_t*)srcData + offset), b4);
+        //            memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(b4), b4, sizeof(b4));
+        //            offset += BVEC3_SIZE;
+        //        }
+        //        break;
+        //    }
     case SGS_VERTEXFORMAT_INT:
     {
         int i4[4];
@@ -391,8 +389,11 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
         memcpy(_vertexUniformBuffer + location, data, size);
     }
 #else
-    memcpy(_vertexUniformBuffer + offset, data, size);
+    assert(location + offset + size <= _vertexUniformBufferSize);
+    memcpy(_vertexUniformBuffer + location + offset, data, size);
 #endif
+
+    _uniformDirty = true;
 }
 
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size)
@@ -411,15 +412,17 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
     {
         memcpy(_fragmentUniformBuffer + location, data, size);
     }
+    _uniformDirty = true;
+#else
+    assert(false);
 #endif
-    memcpy(_fragmentUniformBuffer + location, data, size);
 }
 
 void ProgramState::setVertexAttrib(std::string_view name,
-    std::size_t index,
-    VertexFormat format,
-    std::size_t offset,
-    bool needToBeNormallized)
+                                   std::size_t index,
+                                   VertexFormat format,
+                                   std::size_t offset,
+                                   bool needToBeNormallized)
 {
     ensureVertexLayoutMutable();
 
@@ -432,7 +435,8 @@ void ProgramState::setVertexStride(uint32_t stride)
     _vertexLayout->setStride(stride);
 }
 
-void ProgramState::setVertexLayout(const VertexLayout& vertexLayout) {
+void ProgramState::setVertexLayout(const VertexLayout& vertexLayout)
+{
     ensureVertexLayoutMutable();
     *_vertexLayout = vertexLayout;
 }
@@ -447,28 +451,27 @@ void ProgramState::ensureVertexLayoutMutable()
 {
     if (!_ownVertexLayout)
     {
-        _vertexLayout = new VertexLayout();
+        _vertexLayout    = new VertexLayout();
         _ownVertexLayout = true;
     }
 }
 
-void ProgramState::updateUniformID(int uniformID)
+uint32_t ProgramState::hashOfUniforms()
 {
-    if (uniformID == -1)
-    {
+    if (!_uniformDirty)
+        return _uniformID;
+
+    _uniformDirty = false;
 #ifdef AX_USE_METAL
-        XXH32_reset(_uniformHashState, 0);
-        XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
-        XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
-        _uniformID = XXH32_digest(_uniformHashState);
+    XXH32_reset(_uniformHashState, 0);
+    XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
+    XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
+    _uniformID = XXH32_digest(_uniformHashState);
 #else
-        _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
+    _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
 #endif
-    }
-    else
-    {
-        _uniformID = uniformID;
-    }
+
+    return _uniformID;
 }
 
 void ProgramState::setTexture(backend::TextureBackend* texture)

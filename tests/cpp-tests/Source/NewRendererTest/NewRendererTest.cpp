@@ -880,7 +880,7 @@ ax::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
     auto programState =
         new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
 
-    // programState->updateUniformID();
+    // programState->hashOfUniforms();
 
     programState->autorelease();
     return programState;

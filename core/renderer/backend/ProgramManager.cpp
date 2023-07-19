@@ -286,13 +286,13 @@ bool ProgramManager::init()
     // The builtin dual sampler shader registry
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::POSITION_TEXTURE_COLOR,
                                                          TextureSamplerFlag::DUAL_SAMPLER,
-                                                         getBuiltinProgram(ProgramType::DUAL_SAMPLER));
+                                                         ProgramType::DUAL_SAMPLER);
 
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::GRAY_SCALE, TextureSamplerFlag::DUAL_SAMPLER,
-                                                         getBuiltinProgram(ProgramType::DUAL_SAMPLER_GRAY));
+                                                         ProgramType::DUAL_SAMPLER_GRAY);
 
     ProgramStateRegistry::getInstance()->registerProgram(ProgramType::HSV, TextureSamplerFlag::DUAL_SAMPLER,
-                                                         getBuiltinProgram(ProgramType::HSV_DUAL_SAMPLER));
+                                                         ProgramType::HSV_DUAL_SAMPLER);
     return true;
 }
 
