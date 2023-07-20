@@ -151,15 +151,14 @@ function (ax_target_compile_shaders target_name)
 
         # output
         set(OUT_DIR ${GLSLCC_OUT_DIR})
+        if(opt_CUSTOM)
+            set(OUT_DIR "${OUT_DIR}/custom")
+        endif()
         if (NOT (IS_DIRECTORY ${OUT_DIR}))
             file(MAKE_DIRECTORY ${OUT_DIR})
         endif()
-
-        set(SC_CATALOG "")
-        if(opt_CUSTOM)
-            set(SC_CATALOG "custom/")
-        endif()
-        set(SC_OUTPUT "${OUT_DIR}/${SC_CATALOG}${FILE_NAME}_${SC_TYPE}")
+        
+        set(SC_OUTPUT "${OUT_DIR}/${FILE_NAME}_${SC_TYPE}")
 
         set(SC_COMMENT "Compiling shader ${SC_FILE} for ${OUT_LANG}${SC_PROFILE} ...")
     
