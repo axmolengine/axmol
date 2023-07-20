@@ -51,7 +51,7 @@ static std::string _checkPath(const char* path) {
     return std::string{};
 }
 
-std::string FileUtils::s_exeName;
+std::string FileUtilsLinux::s_exeName;
 
 FileUtils* FileUtils::getInstance()
 {
