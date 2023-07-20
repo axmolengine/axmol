@@ -30,9 +30,9 @@ void main()
     vec3 YUV;
     
     /* For dual sampler */
-    YUV.yz = texture(u_tex1, v_texCoord).yw;
     YUV.x = texture(u_tex0, v_texCoord).x;
-	
+    YUV.yz = texture(u_tex1, v_texCoord).yw;
+
     /* Convert YUV to RGB */
     vec4 OutColor;
     OutColor.xyz = trasnformYUV(YUV);

@@ -47,7 +47,6 @@ ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentSha
     AX_SAFE_RETAIN(_fragmentShaderModule);
     compileProgram();
     computeUniformInfos();
-    setBuiltinLocations();
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     for (const auto& uniform : _activeUniformInfos)
     {
@@ -61,6 +60,8 @@ ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentSha
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->reloadProgram(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
+
+    setBuiltinLocations();
 }
 
 ProgramGL::~ProgramGL()
@@ -335,7 +336,7 @@ void ProgramGL::computeUniformInfos()
             uniform.location     = it->second.first;
             uniform.bufferOffset = it->second.second;
         }
-        else  
+        else
         {// must be samper: sampler2D or samplerCube
             assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE);
             uniform.location     = glGetUniformLocation(_program, uniformName.data());
@@ -363,11 +364,11 @@ void ProgramGL::bindUniformBuffers(const char* buffer, size_t bufferSize, uint32
 
         CHECK_GL_ERROR_DEBUG();
     }
-    
+
     for (GLuint blockIdx = 0; blockIdx < static_cast<GLuint>(_uniformBuffers.size()); ++blockIdx)
     {
         auto& desc = _uniformBuffers[blockIdx];
-        __gl.bindUniformBufferBase(blockIdx, desc._ubo->getHandler());
+        __gl->bindUniformBufferBase(blockIdx, desc._ubo->getHandler());
     }
 
     CHECK_GL_ERROR_DEBUG();

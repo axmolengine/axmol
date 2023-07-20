@@ -7,6 +7,8 @@
 #include "UtilsGL.h"
 #include "renderer/backend/Enums.h"
 
+#define AX_ENABLE_STATE_GUARD 1
+
 // Inline opengl state set calls
 
 NS_AX_BACKEND_BEGIN
@@ -110,58 +112,72 @@ struct OpenGLState
     template <typename _Left>
     static inline void try_enable(GLenum target, _Left& opt)
     {
+#if defined(AX_ENABLE_STATE_GUARD)
         if (opt.has_value() && opt.value())
             return;
         opt = true;
+#endif
         glEnable(target);
     }
     template <typename _Left>
     static inline void try_disable(GLenum target, _Left& opt)
     {
+#if defined(AX_ENABLE_STATE_GUARD)
         if (!opt.has_value() || !opt.value())
             return;
         opt = false;
+#endif
         glDisable(target);
     }
     template <typename _Func, typename _Left, typename _Right>
     static inline void try_call(_Func&& func, _Left& opt, _Right&& v)
     {
+#if defined(AX_ENABLE_STATE_GUARD)
         if (opt == v)
             return;
         opt = v;
+#endif
         func(v);
     }
     template <typename _Func, typename _Left, typename _Right, typename... _Args>
     static inline void try_callf(_Func&& func, _Left& opt, _Right&& v, _Args&&... args)
     {
+#if defined(AX_ENABLE_STATE_GUARD)
         if (opt == v)
             return;
         opt = v;
+#endif
         func(args...);
     }
     template <typename _Func, typename _Left, typename _Right>
     static inline void try_callu(_Func&& func, GLenum target, _Left& opt, _Right&& v)
     {
+#if defined(AX_ENABLE_STATE_GUARD)
         if (opt == v)
             return;
         opt = v;
+#endif
         func(target, v);
     }
     template <typename _Func, typename _Left, typename... _Args>
     static inline void try_callx(_Func&& func, _Left& opt, _Args&&... args)
     {
+#if defined(AX_ENABLE_STATE_GUARD)
         if (opt && (*opt).equals(args...))
             return;
         opt.emplace(args...);
+#endif
         func(args...);
     }
 
     template <typename _Func, typename _Left, typename... _Args>
     static inline void try_callxu(_Func&& func, GLenum upvalue, _Left& opt, _Args&&... args)
     {
+#if defined(AX_ENABLE_STATE_GUARD)
         if (opt && (*opt).equals(args...))
             return;
         opt.emplace(args...);
+#endif
         func(upvalue, args...);
     }
 
@@ -317,6 +333,6 @@ private:
     std::optional<UniformBufferBaseBindState> _uniformBufferState;
 };
 
-AX_DLL extern OpenGLState __gl;
+AX_DLL extern OpenGLState* __gl;
 
 NS_AX_BACKEND_END

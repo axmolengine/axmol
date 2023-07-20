@@ -29,7 +29,7 @@ void main()
 {
     vec3 YUV;
     
-    YUV.x = texture(u_tex0, v_texCoord).w; // Y
+    YUV.x = texture(u_tex0, v_texCoord).x; // Y
     YUV.yz = texture(u_tex1, v_texCoord).xy; // CbCr
 	
     /* Convert YUV to RGB */

@@ -159,7 +159,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
                                            PixelFormat depthStencilFormat,
                                            bool sharedRenderTarget)
 {
-    AXASSERT(format != backend::PixelFormat::A8, "only RGB and RGBA formats are valid for a render texture");
+    AXASSERT(format == backend::PixelFormat::RGBA8 || format == PixelFormat::RGB8, "only RGB and RGBA formats are valid for a render texture");
 
     bool ret = false;
     do

@@ -73,7 +73,7 @@ BufferGL::~BufferGL()
 {
     if (_buffer)
     {
-        __gl.bindBuffer(_target, 0);
+        __gl->bindBuffer(_target, 0);
         glDeleteBuffers(1, &_buffer);
     }
 #if AX_ENABLE_CACHE_TEXTURE_DATA
@@ -121,7 +121,7 @@ void BufferGL::updateData(const void* data, std::size_t size)
 
     if (_buffer)
     {
-        __gl.bindBuffer(_target, _buffer);
+        __gl->bindBuffer(_target, _buffer);
         glBufferData(_target, size, data, toGLUsage(_usage));
         CHECK_GL_ERROR_DEBUG();
         _bufferAllocated = size;
@@ -143,7 +143,7 @@ void BufferGL::updateSubData(const void* data, std::size_t offset, std::size_t s
     {
         CHECK_GL_ERROR_DEBUG();
 
-        __gl.bindBuffer(_target, _buffer);
+        __gl->bindBuffer(_target, _buffer);
         glBufferSubData(_target, offset, size, data);
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA

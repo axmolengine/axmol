@@ -112,12 +112,6 @@ public:
     virtual const char* getVersion() const override;
 
     /**
-     * Get metal extensions.
-     * @return Extension supported by Metal.
-     */
-    virtual const char* getExtension() const override;
-
-    /**
      * Check if feature supported by Metal.
      * @param feature Specify feature to be query.
      * @return true if the feature is supported, false otherwise.

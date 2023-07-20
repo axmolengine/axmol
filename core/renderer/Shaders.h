@@ -47,9 +47,10 @@ extern AX_DLL const std::string_view positionTextureColor_vert;
 extern AX_DLL const std::string_view positionTextureColor_frag;
 extern AX_DLL const std::string_view positionTextureColorAlphaTest_frag;
 extern AX_DLL const std::string_view label_normal_frag;
+extern AX_DLL const std::string_view label_outline_frag;
 extern AX_DLL const std::string_view label_distanceNormal_frag;
-extern AX_DLL const std::string_view labelOutline_frag;
-extern AX_DLL const std::string_view labelDistanceFieldGlow_frag;
+extern AX_DLL const std::string_view label_distanceOutline_frag;
+extern AX_DLL const std::string_view label_distanceGlow_frag;
 extern AX_DLL const std::string_view positionColorLengthTexture_vert;
 extern AX_DLL const std::string_view positionColorLengthTexture_frag;
 extern AX_DLL const std::string_view positionColorTextureAsPointsize_vert;
@@ -72,7 +73,6 @@ extern AX_DLL const std::string_view dualSampler_hsv_frag;
 
 extern AX_DLL const std::string_view videoTextureYUY2_frag;
 extern AX_DLL const std::string_view videoTextureNV12_frag;
-extern AX_DLL const std::string_view videoTextureBGRA_frag;
 
 /* below is 3d shaders */
 extern AX_DLL const std::string_view lineColor3D_frag;

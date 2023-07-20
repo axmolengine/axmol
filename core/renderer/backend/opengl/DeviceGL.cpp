@@ -55,6 +55,11 @@ DeviceGL::DeviceGL()
     }
 
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
+
+#if AX_USE_GL_CORE_PROFILE
+    glGenVertexArrays(1, &_defaultVAO);
+    glBindVertexArray(_defaultVAO);
+#endif
 }
 
 DeviceGL::~DeviceGL()

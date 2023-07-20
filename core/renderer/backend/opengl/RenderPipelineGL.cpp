@@ -63,16 +63,16 @@ void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
 
     if (blendEnabled)
     {
-        __gl.enableBlend();
+        __gl->enableBlend();
 
-        __gl.blendEquationSeparate(rgbBlendOperation, alphaBlendOperation);
-        __gl.blendFuncSeparate(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
+        __gl->blendEquationSeparate(rgbBlendOperation, alphaBlendOperation);
+        __gl->blendFuncSeparate(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
                                destinationAlphaBlendFactor);
     }
     else
-        __gl.disableBlend();
+        __gl->disableBlend();
 
-    __gl.colorMask(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
+    __gl->colorMask(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
 }
 
 RenderPipelineGL::~RenderPipelineGL()

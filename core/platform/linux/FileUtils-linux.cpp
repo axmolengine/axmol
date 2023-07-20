@@ -115,7 +115,7 @@ bool FileUtilsLinux::init()
 
     // make sure any path relative to exe dir can be found when app working directory location not exe path
     if (!startedFromSelfLocation)
-        addSearchPath(exeDir);
+        addSearchPath(s_exeDir);
 
     return ret;
 }

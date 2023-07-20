@@ -78,11 +78,12 @@ public:
     // get custom program, should call registerCustomProgram first
     Program* getCustomProgram(uint32_t type) const;
 
-    // register custom program create factory
-    void registerCustomProgram(uint32_t type,
+    // register custom program create factory, if custom programType already registered, will failed
+    bool registerCustomProgram(uint32_t type,
                                       std::string_view vsName,
                                       std::string_view fsName,
-                                      std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
+                               std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy,
+                               bool force = false);
 
     /**
      * Remove a program object from cache.
@@ -109,14 +110,15 @@ protected:
      */
     bool init();
 
-    void registerProgram(uint32_t internalType,
+    bool registerProgram(uint32_t internalType,
                                       std::string_view vsName,
                                       std::string_view fsName,
-                                      std::function<void(Program*)> fnSetupLayout);
+                         std::function<void(Program*)> fnSetupLayout,
+                         bool force = false);
     Program* addProgram(uint32_t internalType) const;
 
-    std::function<Program*()> _builtinFactories[(int)backend::ProgramType::BUILTIN_COUNT];
-    std::unordered_map<uint32_t, std::function<Program*()>> _customFactories;
+    std::function<Program*()> _builtinRegistry[(int)backend::ProgramType::BUILTIN_COUNT];
+    std::unordered_map<uint32_t, std::function<Program*()>> _customRegistry;
 
     mutable std::unordered_map<uint32_t, Program*> _cachedPrograms;  ///< The cached program object.
     static ProgramManager* _sharedProgramManager;                    ///< A shared instance of the program cache.
