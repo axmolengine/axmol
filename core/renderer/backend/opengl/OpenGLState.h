@@ -249,15 +249,17 @@ struct OpenGLState
     void stencilMaskBack(GLuint v) { try_callu(glStencilMaskSeparate, GL_BACK, _stencilMaskBack, v); }
     void activeTexture(GLenum v) { try_call(glActiveTexture, _activeTexture, v); }
     void bindTexture(GLenum target, GLuint handle) { try_callx(glBindTexture, _textureBind, target, handle); }
-    void bindBuffer(const GLuint target, GLuint buffer)
+    void bindBuffer(GLenum target, GLuint buffer)
     {
-        if (target != GL_UNIFORM_BUFFER)
-        {
-            size_t const targetIndex = getIndexForBufferTarget(target);
-            try_callu(glBindBuffer, target, _bufferBindings[targetIndex], buffer);
-        }
-        else
-            glBindBuffer(target, buffer);
+        size_t const targetIndex = getIndexForBufferTarget(target);
+        try_callu(glBindBuffer, target, _bufferBindings[targetIndex], buffer);
+    }
+    void deleteBuffer(GLenum target, GLuint buffer)
+    {
+        size_t const targetIndex = getIndexForBufferTarget(target);
+        glDeleteBuffers(1, &buffer);
+        if (_bufferBindings[targetIndex] == buffer)
+            _bufferBindings[targetIndex].reset();
     }
     void bindUniformBufferBase(GLuint index, GLuint handle)
     {
