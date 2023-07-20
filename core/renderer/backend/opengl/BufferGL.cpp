@@ -72,10 +72,7 @@ BufferGL::BufferGL(std::size_t size, BufferType type, BufferUsage usage) : Buffe
 BufferGL::~BufferGL()
 {
     if (_buffer)
-    {
-        __gl->bindBuffer(_target, 0);
-        glDeleteBuffers(1, &_buffer);
-    }
+        __gl->deleteBuffer(_target, _buffer);
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     AX_SAFE_DELETE_ARRAY(_data);
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
