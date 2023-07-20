@@ -75,11 +75,11 @@ public:
     /// get built-in program
     Program* getBuiltinProgram(uint32_t type) const;
 
-    // get custom program, should call registerCustomProgramFactory first
+    // get custom program, should call registerCustomProgram first
     Program* getCustomProgram(uint32_t type) const;
 
     // register custom program create factory
-    void registerCustomProgramFactory(uint32_t type,
+    void registerCustomProgram(uint32_t type,
                                       std::string_view vsName,
                                       std::string_view fsName,
                                       std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
@@ -109,7 +109,7 @@ protected:
      */
     bool init();
 
-    void registerProgramFactoryByName(uint32_t internalType,
+    void registerProgram(uint32_t internalType,
                                       std::string_view vsName,
                                       std::string_view fsName,
                                       std::function<void(Program*)> fnSetupLayout);

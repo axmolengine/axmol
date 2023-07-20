@@ -51,6 +51,8 @@ static std::string _checkPath(const char* path) {
     return std::string{};
 }
 
+std::string FileUtils::s_exeName;
+
 FileUtils* FileUtils::getInstance()
 {
     if (s_sharedFileUtils == nullptr)
@@ -73,21 +75,23 @@ bool FileUtilsLinux::init()
     DECLARE_GUARD;
 
     // application path
-    std::string tmpPath = _checkPath("/proc/self/exe");
-    std::string_view exePathSV{tmpPath};
-    auto slash = tmpPath.find_last_of('/');
-    assert(slash != std::string::npos);
-    auto exeDir = exePathSV.substr(0, slash + 1);
+    if (s_exeDir.empty()) {
+        s_exeDir = _checkPath("/proc/self/exe");
+        auto slash = s_exeDir.find_last_of('/');
+        assert(slash != std::string::npos);
+        s_exeName = s_exeDir.substr(slash + 1);
+        s_exeDir.resize(slash + 1);
+    }
 
     std::string workingDir = _checkPath("/proc/self/cwd");
     workingDir += '/';
-    bool startedFromSelfLocation = workingDir == exeDir;
+    bool startedFromSelfLocation = workingDir == s_exeDir;
     if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_CONTENT_DIR))
         _defaultResRootPath = workingDir;
     else
     {
-        _defaultResRootPath.reserve(exeDir.size() + AX_CONTENT_DIR_LEN);
-        _defaultResRootPath.append(exeDir).append(AX_CONTENT_DIR, AX_CONTENT_DIR_LEN);
+        _defaultResRootPath.reserve(s_exeDir.size() + AX_CONTENT_DIR_LEN);
+        _defaultResRootPath.append(s_exeDir).append(AX_CONTENT_DIR, AX_CONTENT_DIR_LEN);
     }
 
     // Set writable path to $XDG_CONFIG_HOME or ~/.config/<app name>/ if $XDG_CONFIG_HOME not exists.
@@ -103,7 +107,8 @@ bool FileUtilsLinux::init()
         xdgConfigPath = xdg_config_path;
     }
     _writablePath = xdgConfigPath;
-    _writablePath += exePathSV.substr(slash);
+    _writablePath += "/";
+    _writablePath += s_exeName;
     _writablePath += "/";
 
     bool ret = FileUtils::init();
@@ -112,10 +117,6 @@ bool FileUtilsLinux::init()
     if (!startedFromSelfLocation)
         addSearchPath(exeDir);
 
-    // linux: for load compiled shader from exeDir/axslc
-    tmpPath.resize(slash);
-    tmpPath += "/axslc";
-    addSearchPath(tmpPath);
     return ret;
 }
 

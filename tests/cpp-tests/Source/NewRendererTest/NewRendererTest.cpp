@@ -75,10 +75,10 @@ private:
 NewRendererTests::NewRendererTests()
 {
     auto programManager = ProgramManager::getInstance();
-    programManager->registerCustomProgramFactory(CustomProgramType::BLUR, positionTextureColor_vert,
+    programManager->registerCustomProgram(CustomProgramType::BLUR, positionTextureColor_vert,
                                                  "example_Blur_fs"sv,
                                                VertexLayoutHelper::setupSprite);
-    programManager->registerCustomProgramFactory(
+    programManager->registerCustomProgram(
         CustomProgramType::SEPIA, positionTextureColor_vert,
                                                "example_Sepia_fs"sv,
                                                VertexLayoutHelper::setupSprite);
