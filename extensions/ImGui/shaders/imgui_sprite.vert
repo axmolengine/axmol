@@ -13,7 +13,7 @@ layout(std140) uniform vs_ub {
 
 void main()
 {
-    gl_Position = u_MVPMatrix * a_position;
-    v_fragmentColor = a_color;
     v_texCoord = a_texCoord;
+    v_fragmentColor = a_color;
+    gl_Position = u_MVPMatrix * vec4(a_position.xy, 0.0, 1.0);
 }

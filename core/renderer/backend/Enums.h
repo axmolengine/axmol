@@ -76,10 +76,14 @@ enum class VertexFormat : uint32_t
     USHORT2,
     UBYTE4
 };
-
 /** @typedef backend::PixelFormat
      Possible texture pixel formats
-     */
+refer to:
+  https://docs.gl/es3/glTexImage2D
+  https://docs.gl/gl3/glTexImage2D
+  https://developer.apple.com/documentation/metal/mtlpixelformat?language=objc
+ */
+
 enum class PixelFormat : uint32_t
 {
     /* below is compression format */
@@ -137,15 +141,16 @@ enum class PixelFormat : uint32_t
     RGBA4,  // !render as ABGR4
     //! 16-bit textures: RGB5A1
     RGB5A1,  // !render as BGR5A1
-    //! 8-bit textures used as masks, in shader: texColor.a or texColor.w
-    A8,
-    //! 8-bit Luminance texture, in shader: texColor.r or texColor.x
-    L8,
-    //! 16-bit Luminance with alpha used as masks, in shader: texColor.xw or texColor.ra, supported GLES 2.0, not supported by Metal backend
-    LA8,
-    //! 16-bit read and green channel, supported OpenGES 3.0 or Metal backend
+    //! 8-bit textures used as red, GL3/GLES3/Metal     (R,G,0,0)
+    R8,
+    //! 16-bit read and green channel, GL3/GLES3/Metal  (R,G,0,0)
     RG8,
-
+    //! 8-bit textures used as masks, GLES2/GLES3/Metal (0,0,0,A) deprecated
+    A8,
+    //! 8-bit Luminance texture, GLES2/GLES3/Metal ONLY (L,L,L,1) deprecated
+    L8,
+    //! 16-bit Luminance with alpha, GLES2/GLES3 ONLY   (L,L,L,A) deprecated
+    LA8,
     //!!!Please append normal pixel format
     //! 32-bit texture: RGBA8888
     RGBA32F,
@@ -347,9 +352,10 @@ struct ProgramType
         POSITION_TEXTURE_COLOR_ALPHA_TEST,    // positionTextureColor_vert,    positionTextureColorAlphaTest_frag
         LABEL_NORMAL,                         // positionTextureColor_vert,    label_normal_frag
         LABLE_OUTLINE,                        // positionTextureColor_vert,    labelOutline_frag
-        LABLE_DISTANCEFIELD_GLOW,             // positionTextureColor_vert,    labelDistanceFieldGlow_frag
         LABEL_DISTANCE_NORMAL,                // positionTextureColor_vert,    label_distanceNormal_frag
-
+        LABEL_DISTANCE_OUTLINE,               // positionTextureColor_vert,    label_distanceOutline_frag
+        LABLE_DISTANCE_GLOW,                  // positionTextureColor_vert,    label_distanceGlow_frag
+        
         LAYER_RADIA_GRADIENT,  // position_vert,                layer_radialGradient_frag
 
         DUAL_SAMPLER,

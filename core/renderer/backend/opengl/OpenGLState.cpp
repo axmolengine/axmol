@@ -2,6 +2,8 @@
 
 NS_AX_BACKEND_BEGIN
 
-OpenGLState __gl;
+static auto defaultOpenGLState = std::make_unique<OpenGLState>();
+
+OpenGLState* __gl = defaultOpenGLState.get();
 
 NS_AX_BACKEND_END

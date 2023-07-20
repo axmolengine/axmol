@@ -2,12 +2,10 @@
 precision highp float;
 precision highp int;
 
-
 layout(location = 0) in vec4 v_fragmentColor;
 layout(location = 1) in vec2 v_texCoord;
 
 layout(binding = 0) uniform sampler2D u_tex0;
-
 
 layout(std140) uniform fs_ub {
     vec4 u_effectColor;
@@ -23,12 +21,12 @@ void main()
     // fontAlpha == 1 means the area of solid text (without edge)
     // fontAlpha == 0 means the area outside text, including outline area
     // fontAlpha == (0, 1) means the edge of text
-    float fontAlpha = texColor.a;
+    float fontAlpha = texColor.y;
 
     // outlineAlpha == 1 means the area of 'solid text' and 'solid outline'
     // outlineAlpha == 0 means the transparent area outside text and outline
     // outlineAlpha == (0, 1) means the edge of outline
-    float outlineAlpha = texColor.r;
+    float outlineAlpha = texColor.x;
 
     if (u_effectType == 0) // draw text
     {

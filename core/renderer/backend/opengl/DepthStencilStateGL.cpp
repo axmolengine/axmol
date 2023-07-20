@@ -33,8 +33,8 @@ NS_AX_BACKEND_BEGIN
 
 void DepthStencilStateGL::reset()
 {
-    __gl.disableDepthTest();
-    __gl.disableStencilTest();
+    __gl->disableDepthTest();
+    __gl->disableStencilTest();
 }
 
 void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigned int stencilReferenceValueBack) const
@@ -42,51 +42,51 @@ void DepthStencilStateGL::apply(unsigned int stencilReferenceValueFront, unsigne
     const auto dsFlags = _depthStencilInfo.flags;
     // depth test
     if (bitmask::any(dsFlags, DepthStencilFlags::DEPTH_TEST))
-        __gl.enableDepthTest();
+        __gl->enableDepthTest();
     else
-        __gl.disableDepthTest();
+        __gl->disableDepthTest();
 
-    __gl.depthMask(bitmask::any(dsFlags, DepthStencilFlags::DEPTH_WRITE));
-    __gl.depthFunc(UtilsGL::toGLComareFunction(_depthStencilInfo.depthCompareFunction));
+    __gl->depthMask(bitmask::any(dsFlags, DepthStencilFlags::DEPTH_WRITE));
+    __gl->depthFunc(UtilsGL::toGLComareFunction(_depthStencilInfo.depthCompareFunction));
 
     // stencil test
     if (bitmask::any(dsFlags, DepthStencilFlags::STENCIL_TEST))
     {
-        __gl.enableStencilTest();
+        __gl->enableStencilTest();
 
         if (_isBackFrontStencilEqual)
         {
-            __gl.stencilFunc(UtilsGL::toGLComareFunction(_depthStencilInfo.frontFaceStencil.stencilCompareFunction),
+            __gl->stencilFunc(UtilsGL::toGLComareFunction(_depthStencilInfo.frontFaceStencil.stencilCompareFunction),
                              (GLint)stencilReferenceValueFront, _depthStencilInfo.frontFaceStencil.readMask);
 
-            __gl.stencilOp(UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.stencilFailureOperation),
+            __gl->stencilOp(UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.stencilFailureOperation),
                            UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.depthFailureOperation),
                            UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.depthStencilPassOperation));
 
-            __gl.stencilMask(_depthStencilInfo.frontFaceStencil.writeMask);
+            __gl->stencilMask(_depthStencilInfo.frontFaceStencil.writeMask);
         }
         else
         {
-            __gl.stencilFuncFront(UtilsGL::toGLComareFunction(_depthStencilInfo.backFaceStencil.stencilCompareFunction),
+            __gl->stencilFuncFront(UtilsGL::toGLComareFunction(_depthStencilInfo.backFaceStencil.stencilCompareFunction),
                                   (GLint)stencilReferenceValueBack, _depthStencilInfo.backFaceStencil.readMask);
-            __gl.stencilFuncBack(UtilsGL::toGLComareFunction(_depthStencilInfo.frontFaceStencil.stencilCompareFunction),
+            __gl->stencilFuncBack(UtilsGL::toGLComareFunction(_depthStencilInfo.frontFaceStencil.stencilCompareFunction),
                                  (GLint)stencilReferenceValueFront, _depthStencilInfo.frontFaceStencil.readMask);
 
-            __gl.stencilOpFront(
+            __gl->stencilOpFront(
                 UtilsGL::toGLStencilOperation(_depthStencilInfo.backFaceStencil.stencilFailureOperation),
                 UtilsGL::toGLStencilOperation(_depthStencilInfo.backFaceStencil.depthFailureOperation),
                 UtilsGL::toGLStencilOperation(_depthStencilInfo.backFaceStencil.depthStencilPassOperation));
-            __gl.stencilOpBack(
+            __gl->stencilOpBack(
                 UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.stencilFailureOperation),
                 UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.depthFailureOperation),
                 UtilsGL::toGLStencilOperation(_depthStencilInfo.frontFaceStencil.depthStencilPassOperation));
 
-            __gl.stencilMaskBack(_depthStencilInfo.backFaceStencil.writeMask);
-            __gl.stencilMaskFront(_depthStencilInfo.frontFaceStencil.writeMask);
+            __gl->stencilMaskBack(_depthStencilInfo.backFaceStencil.writeMask);
+            __gl->stencilMaskFront(_depthStencilInfo.frontFaceStencil.writeMask);
         }
     }
     else
-        __gl.disableStencilTest();
+        __gl->disableStencilTest();
 
     CHECK_GL_ERROR_DEBUG();
 }

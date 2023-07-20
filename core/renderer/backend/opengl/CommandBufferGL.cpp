@@ -103,10 +103,10 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
 
         mask |= GL_DEPTH_BUFFER_BIT;
         glClearDepth(descirptor.clearDepthValue);
-        __gl.enableDepthTest();
+        __gl->enableDepthTest();
         
-        __gl.depthMask(GL_TRUE);
-        __gl.depthFunc(GL_ALWAYS);
+        __gl->depthMask(GL_TRUE);
+        __gl->depthFunc(GL_ALWAYS);
     }
 
     CHECK_GL_ERROR_DEBUG();
@@ -126,10 +126,10 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
     if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
     {
         if (!oldDepthTest)
-            __gl.disableDepthTest();
+            __gl->disableDepthTest();
 
-        __gl.depthMask(oldDepthWrite);
-        __gl.depthFunc(oldDepthFunc);
+        __gl->depthMask(oldDepthWrite);
+        __gl->depthFunc(oldDepthFunc);
         glClearDepth(oldDepthClearValue);
     }
 
@@ -166,7 +166,7 @@ void CommandBufferGL::updatePipelineState(const RenderTarget* rt, const Pipeline
 
 void CommandBufferGL::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
-    __gl.viewport(_viewPort.set(x, y, w, h));
+    __gl->viewport(_viewPort.set(x, y, w, h));
 }
 
 void CommandBufferGL::setCullMode(CullMode mode)
@@ -176,7 +176,7 @@ void CommandBufferGL::setCullMode(CullMode mode)
 
 void CommandBufferGL::setWinding(Winding winding)
 {
-    __gl.winding(winding);
+    __gl->winding(winding);
 }
 
 void CommandBufferGL::setIndexBuffer(Buffer* buffer)
@@ -235,7 +235,7 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
 #else
     if (wireframe) primitiveType = PrimitiveType::LINE;
 #endif
-    __gl.bindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
+    __gl->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
@@ -256,7 +256,7 @@ void CommandBufferGL::endFrame() {}
 void CommandBufferGL::prepareDrawing() const
 {
     const auto& program = _renderPipeline->getProgram();
-    __gl.useProgram(program->getHandler());
+    __gl->useProgram(program->getHandler());
 
     bindVertexBuffer(program);
     bindUniforms(program);
@@ -269,9 +269,9 @@ void CommandBufferGL::prepareDrawing() const
 
     // Set cull mode.
     if (_cullMode != CullMode::NONE)
-        __gl.enableCullFace(UtilsGL::toGLCullMode(_cullMode));
+        __gl->enableCullFace(UtilsGL::toGLCullMode(_cullMode));
     else
-        __gl.disableCullFace();
+        __gl->disableCullFace();
 }
 
 void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
@@ -282,7 +282,7 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
     if (!vertexLayout->isValid())
         return;
 
-    __gl.bindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->getHandler());
+    __gl->bindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->getHandler());
 
     const auto& attributes = vertexLayout->getAttributes();
     for (const auto& attributeInfo : attributes)
@@ -353,17 +353,17 @@ void CommandBufferGL::cleanResources()
 void CommandBufferGL::setLineWidth(float lineWidth)
 {
     if (lineWidth > 0.0f)
-        __gl.lineWidth(lineWidth);
+        __gl->lineWidth(lineWidth);
     else
-        __gl.lineWidth(1.0f);
+        __gl->lineWidth(1.0f);
 }
 
 void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
     if (isEnabled)
-        __gl.enableScissor(x, y, width, height);
+        __gl->enableScissor(x, y, width, height);
     else
-        __gl.disableScissor();
+        __gl->disableScissor();
 }
 
 void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
@@ -404,7 +404,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     GLuint pbo;
     glGenBuffers(1, &pbo);
-    __gl.bindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+    __gl->bindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
     glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     auto buffer = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
@@ -430,7 +430,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-    __gl.bindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    __gl->bindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     glDeleteBuffers(1, &pbo);
 #endif
 
