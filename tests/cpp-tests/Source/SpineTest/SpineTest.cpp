@@ -517,7 +517,7 @@ bool SpineboyExample::init()
     addChild(skeletonNode);
 
     auto programCache = backend::ProgramCache::getInstance();
-    programCache->registerCustomProgramFactory(101, positionTextureColor_vert,
+    programCache->registerCustomProgram(101, positionTextureColor_vert,
                                                FileUtils::getInstance()->getStringFromFile("Shaders/example_Blur.fsh"), VertexLayoutHelper::setupSprite);
     auto program = programCache->getCustomProgram(101);
     skeletonNode->setProgramState(new backend::ProgramState(program), false);
