@@ -908,10 +908,13 @@ void FastTMXLayer::setTileGID(int gid, const Vec2& tileCoordinate, TMXTileFlags 
 
 void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid)
 {
-    sprite->setPosition(getPositionAt(pos));
     sprite->setPositionZ((float)getVertexZForPos(pos));
-    sprite->setAnchorPoint(Vec2::ZERO);
     sprite->setOpacity(this->getOpacity());
+
+    // fix issue #1283 too;  put the anchor in the middle for ease of rotation. 
+    sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
+    sprite->setPosition(getPositionAt(pos).x + std::roundf(sprite->getContentSize().height / 2),
+                        getPositionAt(pos).y + std::roundf(sprite->getContentSize().width / 2));
 
     // issue 1264, flip can be undone as well
     sprite->setFlippedX(false);
@@ -922,11 +925,6 @@ void FastTMXLayer::setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid
     // of the tiles.
     if (gid & kTMXTileDiagonalFlag)
     {
-        // put the anchor in the middle for ease of rotation.
-        sprite->setAnchorPoint(Vec2(0.5f, 0.5f));
-        sprite->setPosition(getPositionAt(pos).x + sprite->getContentSize().height / 2,
-                            getPositionAt(pos).y + sprite->getContentSize().width / 2);
-
         uint32_t flag = gid & (kTMXTileHorizontalFlag | kTMXTileVerticalFlag);
 
         // handle the 4 diagonally flipped states.
