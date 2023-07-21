@@ -314,7 +314,7 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
         std::size_t bufferSize = 0;
         char* buffer           = nullptr;
         _programState->getVertexUniformBuffer(&buffer, bufferSize);
-        program->bindUniformBuffers(buffer, bufferSize, _programState->hashOfUniforms());
+        program->bindUniformBuffers(buffer, bufferSize);
 
         const auto& textureInfo = _programState->getVertexTextureInfos();
         for (const auto& iter : textureInfo)
