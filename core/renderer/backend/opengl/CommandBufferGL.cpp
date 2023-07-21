@@ -32,9 +32,10 @@
 #include "base/EventDispatcher.h"
 #include "base/EventType.h"
 #include "base/Director.h"
-#include "renderer/backend/opengl/MacrosGL.h"
-#include "renderer/backend/opengl/UtilsGL.h"
+#include "MacrosGL.h"
+#include "UtilsGL.h"
 #include "RenderTargetGL.h"
+#include "DeviceGL.h"
 #include <algorithm>
 
 NS_AX_BACKEND_BEGIN
@@ -282,6 +283,8 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
     if (!vertexLayout->isValid())
         return;
 
+    // Bind VAO, engine share 1 VAO for all vertexLayouts aka vfmts
+    // optimize proposal: create VAO per vertexLayout, just need bind VAO
     __gl->bindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->getHandler());
 
     const auto& attributes = vertexLayout->getAttributes();
