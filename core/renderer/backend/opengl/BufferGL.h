@@ -92,7 +92,6 @@ private:
     bool _bufferAlreadyFilled                      = false;
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
-    GLenum _target               = 0;
     GLuint _buffer               = 0;
     std::size_t _bufferAllocated = 0;
     char* _data                  = nullptr;
