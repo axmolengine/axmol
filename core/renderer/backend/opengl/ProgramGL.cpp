@@ -350,24 +350,12 @@ void ProgramGL::computeUniformInfos()
     }
 }
 
-void ProgramGL::bindUniformBuffers(const char* buffer, size_t bufferSize, uint32_t hashOfUniforms)
+void ProgramGL::bindUniformBuffers(const char* buffer, size_t bufferSize)
 {
-    if (_hashOfUniforms != hashOfUniforms)
-    {
-        _hashOfUniforms = hashOfUniforms;
-
-        for (GLuint blockIdx = 0; blockIdx < static_cast<GLuint>(_uniformBuffers.size()); ++blockIdx)
-        {
-            auto& desc = _uniformBuffers[blockIdx];
-            desc._ubo->updateData(buffer + desc._location, desc._size);
-        }
-
-        CHECK_GL_ERROR_DEBUG();
-    }
-
     for (GLuint blockIdx = 0; blockIdx < static_cast<GLuint>(_uniformBuffers.size()); ++blockIdx)
     {
         auto& desc = _uniformBuffers[blockIdx];
+        desc._ubo->updateData(buffer + desc._location, desc._size);
         __gl->bindUniformBufferBase(blockIdx, desc._ubo->getHandler());
     }
 

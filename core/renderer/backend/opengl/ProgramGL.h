@@ -165,7 +165,7 @@ public:
      */
     virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
 
-    void bindUniformBuffers(const char* buffer, size_t bufferSize, uint32_t uniformID);
+    void bindUniformBuffers(const char* buffer, size_t bufferSize);
 
 private:
     void compileProgram();
