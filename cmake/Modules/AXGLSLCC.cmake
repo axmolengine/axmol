@@ -29,19 +29,24 @@ message(STATUS "GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS=${GLSLCC_FRAG_SOURCE_FILE_EXT
 message(STATUS "GLSLCC_VERT_SOURCE_FILE_EXTENSIONS=${GLSLCC_VERT_SOURCE_FILE_EXTENSIONS}")
 
 # PROPERTY: include direcotries (optional)
-define_property(SOURCE PROPERTY GLSLCC_INCLUDE_DIRS 
+define_property(SOURCE PROPERTY GLSLCC_INCLUDE_DIRS
                 BRIEF_DOCS "Compiled shader include directories"
                 FULL_DOCS "Compiled shader include directories, seperated with comma")
 
-# PROPERTY: defines (optional)
-define_property(SOURCE PROPERTY GLSLCC_DEFINES 
+# PROPERTY: defines (optional) TODO: rename to PREPROCESSOR_LIST
+define_property(SOURCE PROPERTY GLSLCC_DEFINES
                 BRIEF_DOCS "Compiled shader defines"
                 FULL_DOCS "Compiled shader defines, seperated with comma")
 
-# PROPERTY: output1 (optional)
-define_property(SOURCE PROPERTY GLSLCC_OUTPUT1 
+# PROPERTY: output1 (optional) TODO: rename to PREPROCESSOR_LIST
+define_property(SOURCE PROPERTY GLSLCC_OUTPUT1
                 BRIEF_DOCS "Compiled shader output1 additional defines"
                 FULL_DOCS "Compiled shader output1 additional defines, seperated with comma")
+
+# PROPERTY: glscc output (optional)
+define_property(SOURCE PROPERTY GLSLCC_OUTPUT
+BRIEF_DOCS "The compiled sources shader output path list"
+FULL_DOCS "The compiled shaders output list, seperated with comma")
 
 # Find shader sources in specified directory
 # syntax: ax_find_shaders(dir shader_sources [RECURSE])
@@ -167,6 +172,7 @@ function (ax_target_compile_shaders target_name)
         string(REPLACE ";" " " FULL_COMMAND_LINE "${GLSLCC_EXE};${SC_FLAGS} ...")
         if(SOURCE_SC_OUTPUT1 STREQUAL "NOTFOUND") # single output
             list(APPEND SC_FLAGS "--output=${SC_OUTPUT}")
+            set_source_files_properties(${SC_FILE} DIRECTORY ${CMAKE_BINARY_DIR} PROPERTIES GLSLCC_OUTPUT ${SC_OUTPUT})
             add_custom_command(
                     MAIN_DEPENDENCY ${SC_FILE} OUTPUT ${SC_OUTPUT} COMMAND ${GLSLCC_EXE} ${SC_FLAGS}
                     COMMENT "${SC_COMMENT}"
@@ -183,6 +189,7 @@ function (ax_target_compile_shaders target_name)
             set(SC_OUTPUT1 "${SC_OUTPUT}_1")
             list(APPEND SC_FLAGS1 "--output=${SC_OUTPUT1}")
             string(REPLACE ";" " " FULL_COMMAND_LINE1 "${GLSLCC_EXE};${SC_FLAGS1} ...")
+            set_source_files_properties(${SC_FILE} DIRECTORY ${CMAKE_BINARY_DIR} PROPERTIES GLSLCC_OUTPUT "${SC_OUTPUT};${SC_OUTPUT1}")
             add_custom_command(
                     MAIN_DEPENDENCY ${SC_FILE} 
                     OUTPUT ${SC_OUTPUT} ${SC_OUTPUT1}
@@ -195,4 +202,35 @@ function (ax_target_compile_shaders target_name)
     endforeach()
     target_sources(${target_name} PRIVATE ${opt_FILES})
 endfunction()
+
+function(ax_target_embed_compiled_shaders target_name rc_output)
+    set(multiValueArgs FILES)
+    cmake_parse_arguments(opt "" "" "${multiValueArgs}" ${ARGN})
+
+    set(app_all_shaders_json "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+    set(app_all_shaders_json "${app_all_shaders_json}<Project DefaultTargets=\"Build\" ToolsVersion=\"12.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\n")
+    set(app_all_shaders_json "${app_all_shaders_json}  <ItemGroup>\n")
+    foreach(shader ${opt_FILES})
+        get_source_file_property(compiled_shaders ${shader} DIRECTORY ${CMAKE_BINARY_DIR} GLSLCC_OUTPUT)
+        if(compiled_shaders STREQUAL "NOTFOUND")
+            message(FATAL_ERROR "Not found property GLSLCC_OUTPUT of file: ${shader}")
+        endif()
+        foreach(compiled_shader ${compiled_shaders})
+            set(app_all_shaders_json "${app_all_shaders_json}    <None Include=\"${compiled_shader}\">\n")
+            set(app_all_shaders_json "${app_all_shaders_json}      <Link>Content\\axslc\\%(FileName)%(Extension)</Link>\n")
+            set(app_all_shaders_json "${app_all_shaders_json}      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='Debug|x64'\">true</DeploymentContent>\n")
+            set(app_all_shaders_json "${app_all_shaders_json}      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='Release|x64'\">true</DeploymentContent>\n")
+            set(app_all_shaders_json "${app_all_shaders_json}      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='MinSizeRel|x64'\">true</DeploymentContent>\n")
+            set(app_all_shaders_json "${app_all_shaders_json}      <DeploymentContent Condition=\"'\$(Configuration)|\$(Platform)'=='RelWithDebInfo|x64'\">true</DeploymentContent>\n")
+            set(app_all_shaders_json "${app_all_shaders_json}    </None>\n")
+        endforeach()
+    endforeach()
+    set(app_all_shaders_json "${app_all_shaders_json}  </ItemGroup>\n</Project>\n")
+    
+    set(props_file "${rt_output}/axslc.props")
+    write_file("${props_file}" "${app_all_shaders_json}")
+
+    set_target_properties(${target_name} PROPERTIES VS_USER_PROPS "${props_file}")
+endfunction()
+
 cmake_policy(POP)

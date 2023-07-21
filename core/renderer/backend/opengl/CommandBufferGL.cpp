@@ -236,7 +236,7 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
 #else
     if (wireframe) primitiveType = PrimitiveType::LINE;
 #endif
-    __gl->bindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
+    __gl->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
@@ -285,7 +285,7 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
 
     // Bind VAO, engine share 1 VAO for all vertexLayouts aka vfmts
     // optimize proposal: create VAO per vertexLayout, just need bind VAO
-    __gl->bindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->getHandler());
+    __gl->bindBuffer(BufferType::ARRAY_BUFFER, _vertexBuffer->getHandler());
 
     const auto& attributes = vertexLayout->getAttributes();
     for (const auto& attributeInfo : attributes)
@@ -407,7 +407,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     GLuint pbo;
     glGenBuffers(1, &pbo);
-    __gl->bindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+    __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, pbo);
     glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     auto buffer = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
@@ -433,7 +433,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-    __gl->bindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, 0);
     glDeleteBuffers(1, &pbo);
 #endif
 

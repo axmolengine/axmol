@@ -898,14 +898,25 @@ static void ImGui_ImplAx_makeCurrent(GLFWwindow* window)
 {
     glfwMakeContextCurrent(window);
 
-#if defined(AX_USE_GL) && false
+#if defined(AX_USE_GL)
     auto p = glfwGetWindowUserPointer(window);
     if (!p)
     {
         p = new OpenGLState();
         glfwSetWindowUserPointer(window, p);
+#    if defined(AX_USE_GL_CORE_PROFILE)
+        // this is a new OpenGLContext, create default VAO for it when core profile enabled
+        GLuint vao;
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+#    endif
     }
-    backend::__gl = (OpenGLState*)p;
+
+    if (backend::__gl != p)
+    {
+        backend::__gl->resetVAO();
+        backend::__gl = (OpenGLState*)p;
+    }
 #endif
 }
 
@@ -1460,11 +1471,6 @@ static void ImGui_ImplAx_CreateWindow(ImGuiViewport* viewport)
         const auto window = vd->Window;
         AddRendererCommand([=]() { 
             ImGui_ImplAx_makeCurrent(vd->Window);
-#if AX_USE_GL_CORE_PROFILE
-            GLuint vao;
-            glGenVertexArrays(1, &vao);
-            glBindVertexArray(vao);
-#endif
             glfwSwapInterval(0); 
         });
     }
@@ -1764,6 +1770,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderPlatform()
 
         ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
         if (bd->ClientApi == GlfwClientApi_OpenGL) {
+            // restore context
             AddRendererCommand([=]() { ImGui_ImplAx_makeCurrent(prev_current_context); });
         }
     }

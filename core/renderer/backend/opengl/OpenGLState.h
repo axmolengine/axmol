@@ -109,6 +109,13 @@ struct UniformBufferBaseBindState
 
 struct OpenGLState
 {
+    constexpr static GLenum BufferTargets[] = {
+        GL_ARRAY_BUFFER,          // VERTEX of VAO
+        GL_ELEMENT_ARRAY_BUFFER,  // INDEX of VAO
+        GL_UNIFORM_BUFFER,        // UNIFORM
+        GL_PIXEL_PACK_BUFFER,     // PIXEL
+    };
+
     template <typename _Left>
     static inline void try_enable(GLenum target, _Left& opt)
     {
@@ -249,60 +256,36 @@ struct OpenGLState
     void stencilMaskBack(GLuint v) { try_callu(glStencilMaskSeparate, GL_BACK, _stencilMaskBack, v); }
     void activeTexture(GLenum v) { try_call(glActiveTexture, _activeTexture, v); }
     void bindTexture(GLenum target, GLuint handle) { try_callx(glBindTexture, _textureBind, target, handle); }
-    void bindBuffer(GLenum target, GLuint buffer)
+    GLenum bindBuffer(BufferType type, GLuint buffer)
     {
-        size_t const targetIndex = getIndexForBufferTarget(target);
-        try_callu(glBindBuffer, target, _bufferBindings[targetIndex], buffer);
+        auto target = BufferTargets[static_cast<int>(type)];
+        try_callu(glBindBuffer, target, _bufferBindings[static_cast<int>(type)],
+                  buffer);
+        return target;
     }
-    void deleteBuffer(GLenum target, GLuint buffer)
+    void deleteBuffer(BufferType type, GLuint buffer)
     {
-        size_t const targetIndex = getIndexForBufferTarget(target);
         glDeleteBuffers(1, &buffer);
-        if (_bufferBindings[targetIndex] == buffer)
-            _bufferBindings[targetIndex].reset();
+        if (_bufferBindings[static_cast<int>(type)] == buffer)
+            _bufferBindings[static_cast<int>(type)].reset();
     }
     void bindUniformBufferBase(GLuint index, GLuint handle)
     {
         try_callxu(glBindBufferBase, GL_UNIFORM_BUFFER, _uniformBufferState, index, handle);
     }
 
-private:
-    constexpr size_t getIndexForBufferTarget(GLenum target) noexcept
+    // useful for multi GL context before GL context switch, reset VAO state
+    // VAO not share between context
+    // shareable: texture, uniform buffer
+    // not shareable: FBO, VAO(GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER)
+    void resetVAO()
     {
-        size_t index = 0;
-        switch (target)
-        {
-        // The indexed buffers MUST be first in this list (those usable with bindBufferRange)
-        case GL_UNIFORM_BUFFER:
-            index = 0;
-            break;
-        case GL_TRANSFORM_FEEDBACK_BUFFER:
-            index = 1;
-            break;
-#if defined(GL_SHADER_STORAGE_BUFFER)
-        case GL_SHADER_STORAGE_BUFFER:
-            index = 2;
-            break;
-#endif
-        case GL_ARRAY_BUFFER:
-            index = 3;
-            break;
-        case GL_ELEMENT_ARRAY_BUFFER:
-            index = 4;
-            break;
-        case GL_PIXEL_PACK_BUFFER:
-            index = 5;
-            break;
-        case GL_PIXEL_UNPACK_BUFFER:
-            index = 6;
-            break;
-        default:
-            break;
-        }
-        return index;
+        _bufferBindings[static_cast<int>(BufferType::ARRAY_BUFFER)].reset();
+        _bufferBindings[static_cast<int>(BufferType::ELEMENT_ARRAY_BUFFER)].reset();
     }
 
-    std::optional<GLuint> _bufferBindings[7];
+private:
+    std::optional<GLuint> _bufferBindings[(int)BufferType::COUNT];
 
     std::optional<Viewport> _viewPort;
     std::optional<Winding> _winding;

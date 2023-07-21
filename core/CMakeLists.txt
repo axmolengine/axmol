@@ -229,6 +229,7 @@ if (AX_ENABLE_EARLY_FEATURES)
     include(AXGLSLCC)
 
     ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+    set(ax_builtin_shaders ${BUILTIN_SHADER_SOURCES} CACHE STATIC "" FORCE)
 
     # configure engine builtin light num
     if (NOT DEFINED AX_MAX_DIRECTIONAL_LIGHT)

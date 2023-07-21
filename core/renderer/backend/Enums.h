@@ -42,9 +42,14 @@ enum class BufferUsage : uint32_t
 
 enum class BufferType : uint32_t
 {
-    VERTEX,
-    INDEX,
-    UNIFORM
+    ARRAY_BUFFER,
+    ELEMENT_ARRAY_BUFFER,
+    UNIFORM_BUFFER,
+    PIXEL_PACK_BUFFER,
+    COUNT,
+    VERTEX = ARRAY_BUFFER,
+    INDEX  = ELEMENT_ARRAY_BUFFER,
+    UNIFORM = UNIFORM_BUFFER
 };
 
 enum class ShaderStage : uint32_t
