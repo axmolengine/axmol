@@ -5,12 +5,12 @@ cmake_policy(SET CMP0057 NEW)
 ##  enable shader lang by shader compiler: glslcc
 macro(glslcc_option variable value)
     if(NOT DEFINED ${variable})
-        set(${variable} ${value} CACHE STRING "" FORCE)
+        set(${variable} ${value} CACHE STATIC "" FORCE)
     endif()
 endmacro()
 
-glslcc_option(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS .frag;.fsh)
-glslcc_option(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS .vert;.vsh)
+glslcc_option(GLSLCC_FRAG_SOURCE_FILE_EXTENSIONS ".frag;.fsh")
+glslcc_option(GLSLCC_VERT_SOURCE_FILE_EXTENSIONS ".vert;.vsh")
 glslcc_option(GLSLCC_OUT_DIR ${CMAKE_BINARY_DIR}/runtime/axslc)
 glslcc_option(GLSLCC_FIND_PROG_ROOT "")
 
