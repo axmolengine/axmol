@@ -7,8 +7,8 @@ material CubeMap
         {
             shader
             {
-                vertexShader = MeshRendererTest/cube_map.vert
-                fragmentShader = MeshRendererTest/cube_map.frag
+                vertexShader = custom/cube_map_vs
+                fragmentShader = custom/cube_map_fs
                 // sampler:
                 //   responsible for setting the texture and its parameters
                 //   the Id of the sampler is the uniform name

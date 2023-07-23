@@ -74,6 +74,7 @@ static bool isValidUniform(const char* name);
 
 Material* Material::createWithFilename(std::string_view filepath)
 {
+    AXLOG("Loading material: %s", filepath.data());
     auto validfilename = FileUtils::getInstance()->fullPathForFilename(filepath);
     if (!validfilename.empty())
     {
@@ -377,10 +378,11 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
         auto vertShaderSrc = fu->getStringFromFile(vertShader);
         auto fragShaderSrc = fu->getStringFromFile(fragShader);
 
-        auto defs = replaceDefines(compileTimeDefines);
+        //since axmol-1.1 no longer support compile time defines
+        //auto defs = replaceDefines(compileTimeDefines);
 
-        vertShaderSrc = defs + "\n" + vertShaderSrc;
-        fragShaderSrc = defs + "\n" + fragShaderSrc;
+        //vertShaderSrc = defs + "\n" + vertShaderSrc;
+        //fragShaderSrc = defs + "\n" + fragShaderSrc;
 
         auto* program     = backend::Device::getInstance()->newProgram(vertShaderSrc, fragShaderSrc);
         auto programState = new backend::ProgramState(program);

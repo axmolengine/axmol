@@ -17,8 +17,8 @@ material
 			}
 			shader
 			{
-				vertexShader = Shaders3D/OutLine.vert
-				fragmentShader = Shaders3D/OutLine.frag
+				vertexShader = custom/OutLine_vs
+				fragmentShader = custom/OutLine_fs
 				// Uniforms
 				OutLineColor = 1,1,0
 				OutlineWidth = 0.02
@@ -37,8 +37,8 @@ material
 			}
 			shader
 			{
-				vertexShader = Shaders3D/OutLine.vert
-				fragmentShader = Shaders3D/OutLine.frag
+				vertexShader = custom/OutLine_vs
+				fragmentShader = custom/OutLine_fs
 				// Uniforms
 				OutLineColor = 1,0,0
 				OutlineWidth = 0.01
@@ -51,8 +51,8 @@ material
 		{
 			shader
 			{
-				vertexShader = Shaders3D/3d_position_tex.vert
-				fragmentShader = Shaders3D/3d_color_tex.frag
+				vertexShader = custom/position_tex_vs
+				fragmentShader = custom/color_tex_fs
 				sampler u_sampler0
 				{
 					path = MeshRendererTest/boss.png
@@ -75,8 +75,8 @@ material
 			}
 			shader
 			{
-				vertexShader = Shaders3D/SkinnedOutline.vert
-				fragmentShader = Shaders3D/OutLine.frag
+				vertexShader = custom/SkinnedOutline_vs
+				fragmentShader = custom/OutLine_fs
 				// Uniforms
 				OutLineColor = 1,1,0
 				OutlineWidth = 0.02
@@ -95,8 +95,8 @@ material
 			}
 			shader
 			{
-				vertexShader = Shaders3D/SkinnedOutline.vert
-				fragmentShader = Shaders3D/OutLine.frag
+				vertexShader = custom/SkinnedOutline_vs
+				fragmentShader = custom/OutLine_fs
 				// Uniforms
 				OutLineColor = 1,0,0
 				OutlineWidth = 0.01
@@ -109,8 +109,8 @@ material
 		{
 			shader
 			{
-				vertexShader = Shaders3D/3d_position_skin_tex.vert
-				fragmentShader = Shaders3D/3d_color_tex.frag
+				vertexShader = custom/position_skin_tex_vs
+				fragmentShader = custom/color_tex_fs
 				sampler u_sampler0
 				{
 					path = MeshRendererTest/monguger.tga
