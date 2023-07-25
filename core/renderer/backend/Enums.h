@@ -360,7 +360,7 @@ struct ProgramType
         LABEL_DISTANCE_NORMAL,                // positionTextureColor_vert,    label_distanceNormal_frag
         LABEL_DISTANCE_OUTLINE,               // positionTextureColor_vert,    label_distanceOutline_frag
         LABLE_DISTANCE_GLOW,                  // positionTextureColor_vert,    label_distanceGlow_frag
-        
+
         LAYER_RADIA_GRADIENT,  // position_vert,                layer_radialGradient_frag
 
         DUAL_SAMPLER,
@@ -394,12 +394,13 @@ struct ProgramType
         VIDEO_TEXTURE_YUY2,
         VIDEO_TEXTURE_NV12,
         VIDEO_TEXTURE_BGR32,
-        
+
         BUILTIN_COUNT,
 
         VIDEO_TEXTURE_RGB32 = POSITION_TEXTURE_COLOR,
-        CUSTOM_PROGRAM = 0x1000,  // user-define program, used by engine
+        CUSTOM_PROGRAM      = 0x1000,  // user-define program, used by engine
     };
 };
+
 
 NS_AX_BACKEND_END

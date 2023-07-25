@@ -47,51 +47,7 @@ using std::max;
 #define MAX_VERTICES 64000
 #define MAX_INDICES 64000
 
-#define STRINGIFY(A) #A
-
 namespace {
-
-	const char *TWO_COLOR_TINT_VERTEX_SHADER = STRINGIFY(
-			uniform mat4 u_PMatrix;
-			attribute vec4 a_position;
-			attribute vec4 a_color;
-			attribute vec4 a_color2;
-			attribute vec2 a_texCoords;
-
-    \n #ifdef GL_ES\n
-					varying lowp vec4 v_light;
-			varying lowp vec4 v_dark;
-			varying mediump vec2 v_texCoord;
-    \n #else \n
-					varying vec4 v_light;
-			varying vec4 v_dark;
-			varying vec2 v_texCoord;
-
-    \n #endif \n
-
-			void main() {
-				v_light = a_color;
-				v_dark = a_color2;
-				v_texCoord = a_texCoords;
-				gl_Position = u_PMatrix * a_position;
-			});
-
-	const char *TWO_COLOR_TINT_FRAGMENT_SHADER = STRINGIFY(
-        \n #ifdef GL_ES\n
-					precision lowp float;
-    \n #endif \n
-							uniform sampler2D u_texture;
-			varying vec4 v_light;
-			varying vec4 v_dark;
-			varying vec2 v_texCoord;
-
-			void main() {
-				vec4 texColor = texture2D(u_texture, v_texCoord);
-				float alpha = texColor.a * v_light.a;
-				gl_FragColor.a = alpha;
-				gl_FragColor.rgb = ((texColor.a - 1.0) * v_dark.a + 1.0 - texColor.rgb) * v_dark.rgb + texColor.rgb * v_light.rgb;
-			});
-
 
 	std::shared_ptr<backend::ProgramState> __twoColorProgramState = nullptr;
 	backend::UniformLocation __locPMatrix;
@@ -106,21 +62,25 @@ namespace {
         auto locColor = programState->getAttributeLocation("a_color");
         auto locColor2 = programState->getAttributeLocation("a_color2");
 
-        programState->setVertexAttrib("a_position", locPosition, backend::VertexFormat::FLOAT3, offsetof(spine::V3F_C4B_C4B_T2F, position), false);
-        programState->setVertexAttrib("a_color", locColor, backend::VertexFormat::UBYTE4, offsetof(spine::V3F_C4B_C4B_T2F, color), true);
-        programState->setVertexAttrib("a_color2", locColor2, backend::VertexFormat::UBYTE4, offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
-        programState->setVertexAttrib("a_texCoords", locTexcoord, backend::VertexFormat::FLOAT2, offsetof(spine::V3F_C4B_C4B_T2F, texCoords), false);
-        programState->setVertexStride(sizeof(spine::V3F_C4B_C4B_T2F));
+        auto vertexLayout = programState->getMutableVertexLayout();
+        vertexLayout->setAttrib("a_position", locPosition, backend::VertexFormat::FLOAT3,
+                                     offsetof(spine::V3F_C4B_C4B_T2F, position), false);
+        vertexLayout->setAttrib("a_color", locColor, backend::VertexFormat::UBYTE4,
+                                     offsetof(spine::V3F_C4B_C4B_T2F, color), true);
+        vertexLayout->setAttrib("a_color2", locColor2, backend::VertexFormat::UBYTE4,
+                                     offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
+        vertexLayout->setAttrib("a_texCoords", locTexcoord, backend::VertexFormat::FLOAT2,
+                                     offsetof(spine::V3F_C4B_C4B_T2F, texCoords), false);
+        vertexLayout->setStride(sizeof(spine::V3F_C4B_C4B_T2F));
     }
 
 	static void initTwoColorProgramState() {
 		if (__twoColorProgramState) {
 			return;
 		}
-		auto program = backend::Device::getInstance()->newProgram(TWO_COLOR_TINT_VERTEX_SHADER, TWO_COLOR_TINT_FRAGMENT_SHADER);
+                auto program       = ProgramManager::getInstance()->loadProgram("custom/spineTwoColorTint_vs",
+                                                                                      "custom/spineTwoColorTint_fs");
 		auto *programState = new backend::ProgramState(program);
-		program->release();
-
 		updateProgramStateLayout(programState);
 
 		__twoColorProgramState = std::shared_ptr<backend::ProgramState>(programState);

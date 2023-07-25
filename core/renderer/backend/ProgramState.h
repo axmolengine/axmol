@@ -294,32 +294,38 @@ public:
 
     inline const VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
+    VertexLayout* getMutableVertexLayout();
 
-    /**
-     * Updates uniformID, it's part of materialID for batch draw
-     * @param uniformID if not -1, will compute with uniform buffer by XXH32 algorithm and should call
-     *        this function after any unstable uniforms set
-     * @remark If your custom shader uniform not stable, you needs call this function to update uniformID for
-     * render to generate a different materialID
+    void setSharedVertexLayout(VertexLayout* vertexLayout);
+
+    /*
+    * Gets batch id of current program state, part of batch draw materialID
+    */
+    uint64_t getBatchId() const { return _batchId; };
+
+    /*
+    * Update batchID of current program state, by default, custom program was traits with mutable uniforms
+    * so batch ID was set to address of valid ProgramState object
+    * If your programState not volatile, you can invoke this API to set with your custom ProgramId prog->getProgramId()
+    */
+    void updateBatchId();
+
+    /*
+     * Follow API is deprecated, use getMutableVertexLayout instead
      */
-    uint32_t hashOfUniforms();
-
-    void setVertexAttrib(std::string_view name,
-                         std::size_t index,
-                         VertexFormat format,
-                         std::size_t offset,
-                         bool needToBeNormallized);
-    void setVertexStride(uint32_t stride);
-
-    void setVertexLayout(const VertexLayout& vertexLayout);
+    AX_DEPRECATED_ATTRIBUTE void setVertexAttrib(std::string_view name,
+                                                 std::size_t index,
+                                                 VertexFormat format,
+                                                 std::size_t offset,
+                                                 bool needToBeNormallized);
+    AX_DEPRECATED_ATTRIBUTE void setVertexStride(uint32_t stride);
 
     /** Custom shader program's vertex layout maybe not setup
      * so engine specific render node(such as Sprite) should invoke this API when ProgramState changed
      */
-    void validateSharedVertexLayout(std::function <void(Program*)> fnValidate);
+    void validateSharedVertexLayout(VertexLayoutType);
 
 protected:
-
     void ensureVertexLayoutMutable();
 
     /**
@@ -406,13 +412,9 @@ protected:
 
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
     VertexLayout* _vertexLayout = nullptr;
-    bool _ownVertexLayout = false;
+    bool _ownVertexLayout       = false;
 
-    uint32_t _uniformID = 0;
-    bool _uniformDirty  = false;
-#ifdef AX_USE_METAL
-    struct XXH32_state_s* _uniformHashState = nullptr;
-#endif
+    uint64_t _batchId = 0;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

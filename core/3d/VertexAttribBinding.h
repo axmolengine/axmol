@@ -107,7 +107,7 @@ private:
     VertexAttribBinding& operator=(const VertexAttribBinding&);
 
     bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
-    void setVertexAttribPointer(std::string_view name,
+    void setVertexAttribPointer(VertexLayout* vertexLayout, std::string_view name,
                                 backend::VertexFormat type,
                                 bool normalized,
                                 int offset,

@@ -1,6 +1,5 @@
 set(_AX_RENDERER_HEADER
     renderer/CallbackCommand.h
-    renderer/Colorizer.h
     renderer/CustomCommand.h
     renderer/GroupCommand.h
     renderer/Material.h
@@ -63,7 +62,6 @@ set(_AX_RENDERER_SRC
     renderer/TextureCube.cpp
     renderer/TrianglesCommand.cpp
     renderer/Shaders.cpp
-    renderer/Colorizer.cpp
     
     renderer/backend/ProgramManager.cpp
     renderer/backend/ProgramStateRegistry.cpp

@@ -32,7 +32,6 @@
 #include "base/Director.h"
 #include <algorithm>
 
-#include "xxhash.h"
 #include "glslcc/sgs-spec.h"
 
 NS_AX_BACKEND_BEGIN
@@ -204,7 +203,16 @@ bool ProgramState::init(Program* program)
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->resetUniforms(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
+
+    updateBatchId();
+
     return true;
+}
+
+void ProgramState::updateBatchId()
+{
+    _batchId = _program->isBatchEnabled() ? _program->getProgramId()
+                                          : static_cast<uint64_t>(reinterpret_cast<uintptr_t>(this));
 }
 
 void ProgramState::resetUniforms()
@@ -257,7 +265,7 @@ ProgramState* ProgramState::clone() const
 #ifdef AX_USE_METAL
     memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
 #endif
-    cp->_uniformID = _uniformID;
+    cp->_batchId = this->_batchId;
     return cp;
 }
 
@@ -392,8 +400,6 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
     assert(location + offset + size <= _vertexUniformBufferSize);
     memcpy(_vertexUniformBuffer + location + offset, data, size);
 #endif
-
-    _uniformDirty = true;
 }
 
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size)
@@ -426,7 +432,7 @@ void ProgramState::setVertexAttrib(std::string_view name,
 {
     ensureVertexLayoutMutable();
 
-    _vertexLayout->setAttribute(name, index, format, offset, needToBeNormallized);
+    _vertexLayout->setAttrib(name, index, format, offset, needToBeNormallized);
 }
 
 void ProgramState::setVertexStride(uint32_t stride)
@@ -435,16 +441,10 @@ void ProgramState::setVertexStride(uint32_t stride)
     _vertexLayout->setStride(stride);
 }
 
-void ProgramState::setVertexLayout(const VertexLayout& vertexLayout)
-{
-    ensureVertexLayoutMutable();
-    *_vertexLayout = vertexLayout;
-}
-
-void ProgramState::validateSharedVertexLayout(std::function<void(Program*)> fnValidate)
+void ProgramState::validateSharedVertexLayout(VertexLayoutType vlt)
 {
     if (!_ownVertexLayout && !_vertexLayout->isValid())
-        fnValidate(_program);
+        _program->setupVertexLayout(vlt);
 }
 
 void ProgramState::ensureVertexLayoutMutable()
@@ -456,22 +456,21 @@ void ProgramState::ensureVertexLayoutMutable()
     }
 }
 
-uint32_t ProgramState::hashOfUniforms()
+VertexLayout* ProgramState::getMutableVertexLayout()
 {
-    if (!_uniformDirty)
-        return _uniformID;
+    if (_ownVertexLayout || !_vertexLayout->isValid())
+        return _vertexLayout;
 
-    _uniformDirty = false;
-#ifdef AX_USE_METAL
-    XXH32_reset(_uniformHashState, 0);
-    XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
-    XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
-    _uniformID = XXH32_digest(_uniformHashState);
-#else
-    _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
-#endif
+    _ownVertexLayout     = true;
+    return _vertexLayout = new VertexLayout();
+}
 
-    return _uniformID;
+void ProgramState::setSharedVertexLayout(VertexLayout* vertexLayout)
+{
+    if (_ownVertexLayout)
+        delete _vertexLayout;
+    _ownVertexLayout = false;
+    _vertexLayout    = vertexLayout;
 }
 
 void ProgramState::setTexture(backend::TextureBackend* texture)

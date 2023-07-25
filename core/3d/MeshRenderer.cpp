@@ -835,9 +835,9 @@ void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     }
 }
 
-bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
 {
-    if (Node::setProgramState(programState, needsRetain))
+    if (Node::setProgramState(programState, ownPS))
     {
         for (auto&& state : _meshes)
         {

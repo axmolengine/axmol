@@ -36,7 +36,9 @@
 #include "WidgetReader/NodeReader/NodeReader.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include "renderer/Colorizer.h"
+
+#include "renderer/backend/ProgramManager.h"
+#include "renderer/backend/ProgramState.h"
 
 USING_NS_AX;
 using namespace flatbuffers;
@@ -326,8 +328,11 @@ void SpriteReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
         auto filter = options->filter();
         if (hsv != nullptr && filter != nullptr)
         {
-            Colorizer::enableNodeIntelliShading(sprite, Vec3(hsv->x(), hsv->y(), hsv->z()),
-                                                Vec3(filter->x(), filter->y(), filter->z()));
+            auto prog = ProgramManager::getInstance()->getBuiltinProgram(ProgramType::HSV);
+            auto ps   = new backend::ProgramState(prog);
+            sprite->setProgramState(ps, true);
+            Vec3 axhsv{hsv->x(), hsv->y(), hsv->z()};
+            ps->setUniform(ps->getUniformLocation("u_hsv"), &axhsv, sizeof(axhsv));
         }
     }
 }
