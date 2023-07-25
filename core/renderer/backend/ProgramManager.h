@@ -32,8 +32,10 @@
 
 #include <string>
 #include <unordered_map>
-
+#include <string_view>
 #include "ProgramStateRegistry.h"
+
+struct XXH64_state_s;
 
 NS_AX_BACKEND_BEGIN
 /**
@@ -41,31 +43,12 @@ NS_AX_BACKEND_BEGIN
  * @{
  */
 
-struct AX_DLL VertexLayoutHelper
-{
-    static void setupDummy(Program*);
-    static void setupPos(Program*);
-    static void setupTexture(Program*);
-    static void setupSprite(Program*);
-    static void setupDrawNode(Program*);
-    static void setupDrawNode3D(Program*);
-    static void setupSkyBox(Program*);
-    static void setupPU3D(Program*);
-    static void setupPosColor(Program*);
-    static void setupTerrain3D(Program*);
-};
-
 /**
  * Cache and reuse program object.
  */
 class AX_DLL ProgramManager : public Ref
 {
 public:
-    /** new progrma with vertexLayout setup support, user should use this API */
-    static Program* newProgram(std::string_view vertShaderSource,
-                               std::string_view fragShaderSource,
-                               std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy);
-
     /** returns the shared instance */
     static ProgramManager* getInstance();
 
@@ -73,36 +56,73 @@ public:
     static void destroyInstance();
 
     /// get built-in program
-    Program* getBuiltinProgram(uint32_t type) const;
+    Program* getBuiltinProgram(uint32_t type);
 
-    // get custom program, should call registerCustomProgram first
-    Program* getCustomProgram(uint32_t type) const;
+    /*
+     * register a custom program
+     * @returns
+     *   the id of custom program, 0: fail, the id can use by loadProgram
+     */
+    uint64_t registerCustomProgram(std::string_view vsName,
+                                   std::string_view fsName,
+                                   VertexLayoutType vlt = VertexLayoutType::Unspec,
+                                   bool force           = false);
 
-    // register custom program create factory, if custom programType already registered, will failed
-    bool registerCustomProgram(uint32_t type,
-                                      std::string_view vsName,
-                                      std::string_view fsName,
-                               std::function<void(Program*)> fnSetupLayout = VertexLayoutHelper::setupDummy,
-                               bool force = false);
+    /*
+     * load a builtin/or custom program:
+     * @param id: the id of program to load, the id value returned by registerCustomProgram
+     *            or builtin programType, whe the id < ProgramType:BUILTIN_COUNT, this function
+     *            is identical to 'getBuiltinProgram'
+     */
+    Program* loadProgram(uint64_t progId);
+
+    /*
+    * load a program with vsName, fsName as CUSTOM immediately without register
+    * @params
+    *   @param vsName: the vertex shader name: custom/xxx_vs
+    *   @param fsName: the fragment shader name: custom/xxx_vs
+    *   @param vlt: the builtin vertex layout type used for loading program
+    * @returns Program* (nullable)
+    * @remark: the returend program type always ProgramType::CUSTOM_PROGRAM
+    */
+    Program* loadProgram(std::string_view vsName,
+                               std::string_view fsName,
+                               VertexLayoutType vlt = VertexLayoutType::Unspec);
+
+     /**
+     * Unload a program object from cache.
+     * @param program Specifies the program object to move.
+     */
+    void unloadProgram(Program* program);
+
+    /**
+     * Unload all unused program objects from cache.
+     */
+    void unloadUnusedPrograms();
+
+    /**
+     * Unload all program objects from cache.
+     */
+    void unloadAllPrograms();
 
     /**
      * Remove a program object from cache.
      * @param program Specifies the program object to move.
      */
-    void removeProgram(Program* program);
+    AX_DEPRECATED_ATTRIBUTE void removeProgram(Program* prog) { unloadProgram(prog); }
 
     /**
      * Remove all unused program objects from cache.
      */
-    void removeUnusedProgram();
+    AX_DEPRECATED_ATTRIBUTE void removeUnusedProgram() { unloadUnusedPrograms(); }
 
     /**
      * Remove all program objects from cache.
      */
-    void removeAllPrograms();
+    AX_DEPRECATED_ATTRIBUTE void removeAllPrograms() { unloadAllPrograms(); }
 
 protected:
-    ProgramManager() = default;
+    ProgramManager();
     virtual ~ProgramManager();
 
     /**
@@ -110,18 +130,41 @@ protected:
      */
     bool init();
 
-    bool registerProgram(uint32_t internalType,
-                                      std::string_view vsName,
-                                      std::string_view fsName,
-                         std::function<void(Program*)> fnSetupLayout,
-                         bool force = false);
-    Program* addProgram(uint32_t internalType) const;
+    /**
+     * register a program
+     */
+    uint64_t registerProgram(uint32_t progType,
+                             std::string_view vsName,
+                             std::string_view fsName,
+                             VertexLayoutType vlt,
+                             bool force = false);
 
-    std::function<Program*()> _builtinRegistry[(int)backend::ProgramType::BUILTIN_COUNT];
-    std::unordered_map<uint32_t, std::function<Program*()>> _customRegistry;
+    /**
+     * load a custom program by vsName, fsName, vertexLayout
+     */
+    Program* loadProgram(std::string_view vsName,
+                         std::string_view fsName,
+                         uint32_t progType,
+                         uint64_t progId,
+                         VertexLayoutType vlt);
 
-    mutable std::unordered_map<uint32_t, Program*> _cachedPrograms;  ///< The cached program object.
-    static ProgramManager* _sharedProgramManager;                    ///< A shared instance of the program cache.
+    uint64_t computeProgramId(std::string_view vsName, std::string_view fsName);
+
+    struct BuiltinRegInfo
+    {  // builtin shader name is literal string, so use std::string_view ok
+        std::string_view vsName;
+        std::string_view fsName;
+        VertexLayoutType vlt;
+    };
+
+    BuiltinRegInfo _builtinRegistry[(int)backend::ProgramType::BUILTIN_COUNT];
+    std::unordered_map<int64_t, BuiltinRegInfo> _customRegistry;
+
+    std::unordered_map<int64_t, Program*> _cachedPrograms;  ///< The cached program object.
+
+    XXH64_state_s* _programIdGen;
+
+    static ProgramManager* _sharedProgramManager;  ///< A shared instance of the program cache.
 };
 
 using ProgramCache = ProgramManager;  // for compatible
@@ -136,11 +179,12 @@ NS_AX_BACKEND_END
 
 NS_AX_BEGIN
 
-using ProgramType        = ::ax::backend::ProgramType;
-using Program            = ::ax::backend::Program;
-using VertexLayout       = ::ax::backend::VertexLayout;
-using VertexLayoutHelper = ::ax::backend::VertexLayoutHelper;
-using ProgramManager     = ::ax::backend::ProgramManager;
-using ProgramRegistry    = ::ax::backend::ProgramStateRegistry;
+using ProgramType      = ::ax::backend::ProgramType;
+using ProgramState     = ::ax::backend::ProgramState;
+using Program          = ::ax::backend::Program;
+using VertexLayout     = ::ax::backend::VertexLayout;
+using VertexLayoutType = ::ax::backend::VertexLayoutType;
+using ProgramManager   = ::ax::backend::ProgramManager;
+using ProgramRegistry  = ::ax::backend::ProgramStateRegistry;
 
 NS_AX_END

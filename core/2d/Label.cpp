@@ -676,12 +676,12 @@ static Texture2D* _getTexture(Label* label)
 
 void Label::setVertexLayout()
 {
-    _programState->validateSharedVertexLayout(VertexLayoutHelper::setupSprite);
+    _programState->validateSharedVertexLayout(backend::VertexLayoutType::Sprite);
 }
 
-bool Label::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool Label::setProgramState(backend::ProgramState* programState, bool ownPS /*= false*/)
 {
-    if (Node::setProgramState(programState, needsRetain))
+    if (Node::setProgramState(programState, ownPS))
     {
         updateUniformLocations();
         for (auto&& batch : _batchCommands)
@@ -743,8 +743,7 @@ void Label::updateShaderProgram()
         }
     }
 
-    auto* program = backend::Program::getBuiltinProgram(programType);
-    setProgramState(new backend::ProgramState(program), false);
+    this->setProgramStateByProgramId(programType);
 
     updateUniformLocations();
 

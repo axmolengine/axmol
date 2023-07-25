@@ -703,7 +703,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
                         auto& desc        = cmd->getPipelineDescriptor();
                         desc.programState = state;
                         // setup attributes for ImDrawVert
-                        desc.programState->setVertexLayout(pinfo->layout);
+                        desc.programState->setSharedVertexLayout(&pinfo->layout);
                         desc.programState->setUniform(pinfo->projection, &bd->Projection, sizeof(Mat4));
                         desc.programState->setTexture(pinfo->texture, 0, tex->getBackendTexture());
                         // In order to composite our output buffer we need to preserve alpha

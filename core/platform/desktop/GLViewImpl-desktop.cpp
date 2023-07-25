@@ -566,9 +566,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #endif
 
 #if defined(AX_USE_GL)
-    CHECK_GL_ERROR_DEBUG();
     glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
-    CHECK_GL_ERROR_DEBUG();
 
     // check OpenGL version at first
     const GLubyte* glVersion = glGetString(GL_VERSION);

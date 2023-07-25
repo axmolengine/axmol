@@ -358,7 +358,7 @@ void Sprite::setTexture(std::string_view filename)
 void Sprite::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    _programState->validateSharedVertexLayout(VertexLayoutHelper::setupSprite);
+    _programState->validateSharedVertexLayout(backend::VertexLayoutType::Sprite);
 }
 
 void Sprite::setProgramState(uint32_t type)
@@ -366,10 +366,10 @@ void Sprite::setProgramState(uint32_t type)
     setProgramStateWithRegistry(type, _texture);
 }
 
-bool Sprite::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool Sprite::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
 {
     AXASSERT(programState, "argument should not be nullptr");
-    if (Node::setProgramState(programState, needsRetain))
+    if (Node::setProgramState(programState, ownPS))
     {
         auto& pipelineDescriptor        = _trianglesCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;

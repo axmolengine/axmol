@@ -27,8 +27,8 @@ material spaceship
 		{
 			shader
 			{
-				vertexShader = custom/3d_position_tex_vs
-				fragmentShader = custom/3d_color_tex_fs
+				vertexShader = custom/position_tex_vs
+				fragmentShader = custom/color_tex_fs
 				// sampler:
 				//   responsible for setting the texture and its parameters
 				//   the Id of the sampler is the uniform name
@@ -90,8 +90,8 @@ material spaceship
 		{
 			shader
 			{
-				vertexShader = custom/3d_position_tex_vs
-				fragmentShader = custom/3d_color_tex_fs
+				vertexShader = custom/position_tex_vs
+				fragmentShader = custom/color_tex_fs
 				sampler u_sampler0
 				{
 					path = MeshRendererTest/boss.png
@@ -109,8 +109,8 @@ material spaceship
 			{
 				// You can pass "compile time" variables to your shader using a 'defines'
 				defines = MAX_POINT_LIGHT_NUM 1;MAX_SPOT_LIGHT_NUM 1;MAX_DIRECTIONAL_LIGHT_NUM 1
-				vertexShader = custom/3d_position_normal_tex_vs
-				fragmentShader = custom/3d_color_normal_tex_fs
+				vertexShader = custom/position_normal_tex_vs
+				fragmentShader = custom/color_normal_tex_fs
 				sampler u_sampler0
 				{
 					path = MeshRendererTest/boss.png

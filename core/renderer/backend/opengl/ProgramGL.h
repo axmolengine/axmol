@@ -208,8 +208,6 @@ private:
     UniformLocation _builtinUniformLocation[UNIFORM_MAX];
     int _builtinAttributeLocation[Attribute::ATTRIBUTE_MAX];
     std::unordered_map<int, int> _bufferOffset;
-
-    uint32_t _hashOfUniforms = 0;
 };
 // end of _opengl group
 /// @}

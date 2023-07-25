@@ -1491,9 +1491,11 @@ static bool ImGui_ImplAx_CreateDeviceObjects()
 
 static void ImGui_ImplAx_DestroyDeviceObjects()
 {
+    auto pm = ProgramManager::getInstance();
+
     auto bd = ImGui_ImplGlfw_GetBackendData();
-    AX_SAFE_RELEASE_NULL(bd->ProgramInfo.program);
-    AX_SAFE_RELEASE_NULL(bd->ProgramFontInfo.program);
+    pm->unloadProgram(bd->ProgramInfo.program);
+    pm->unloadProgram(bd->ProgramFontInfo.program);
     ImGui_ImplAx_DestroyFontsTexture();
 }
 
@@ -1503,26 +1505,14 @@ static bool ImGui_ImplAx_createShaderPrograms()
 
     auto bd = ImGui_ImplGlfw_GetBackendData();
 
-    enum
-    {
-        ImGuiSprite = 0xFF,
-        ImGuiFont = 0xFE,
-    };
     auto pm = ProgramManager::getInstance();
-    pm->registerCustomProgram(ImGuiSprite, "custom/imgui_sprite_vs"sv, ax::positionTextureColor_frag);
-    pm->registerCustomProgram(ImGuiFont, "custom/imgui_sprite_vs"sv, "custom/imgui_font_fs");
 
-    AX_SAFE_RELEASE(bd->ProgramInfo.program);
-    AX_SAFE_RELEASE(bd->ProgramFontInfo.program);
-
-    bd->ProgramInfo.program     = pm->getCustomProgram(ImGuiSprite);
-    bd->ProgramFontInfo.program = pm->getCustomProgram(ImGuiFont);
+    bd->ProgramInfo.program     = pm->loadProgram("custom/imgui_sprite_vs"sv, ax::positionTextureColor_frag);
+    bd->ProgramFontInfo.program = pm->loadProgram("custom/imgui_sprite_vs"sv, "custom/imgui_font_fs");
 
     IM_ASSERT(bd->ProgramInfo.program);
     IM_ASSERT(bd->ProgramFontInfo.program);
 
-    AX_SAFE_RETAIN(bd->ProgramInfo.program);
-    AX_SAFE_RETAIN(bd->ProgramFontInfo.program);
     if (!bd->ProgramInfo.program || !bd->ProgramFontInfo.program)
         return false;
 
@@ -1727,7 +1717,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
                         auto& desc        = cmd->getPipelineDescriptor();
                         desc.programState = state;
                         // setup attributes for ImDrawVert
-                        desc.programState->setVertexLayout(pinfo->layout);
+                        desc.programState->setSharedVertexLayout(&pinfo->layout);
                         desc.programState->setUniform(pinfo->projection, &bd->Projection, sizeof(Mat4));
                         desc.programState->setTexture(pinfo->texture, 0, tex->getBackendTexture());
                         // In order to composite our output buffer we need to preserve alpha
