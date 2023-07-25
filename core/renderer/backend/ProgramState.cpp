@@ -194,9 +194,6 @@ bool ProgramState::init(Program* program)
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
     _fragmentUniformBuffer     = (char*)calloc(1, _fragmentUniformBufferSize);
 #endif
-#ifdef AX_USE_METAL
-    _uniformHashState = XXH32_createState();
-#endif
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =
@@ -238,9 +235,6 @@ void ProgramState::resetUniforms()
 
 ProgramState::~ProgramState()
 {
-#ifdef AX_USE_METAL
-    XXH32_freeState(_uniformHashState);
-#endif
     AX_SAFE_RELEASE(_program);
     AX_SAFE_FREE(_vertexUniformBuffer);
     AX_SAFE_FREE(_fragmentUniformBuffer);
@@ -418,7 +412,6 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
     {
         memcpy(_fragmentUniformBuffer + location, data, size);
     }
-    _uniformDirty = true;
 #else
     assert(false);
 #endif
