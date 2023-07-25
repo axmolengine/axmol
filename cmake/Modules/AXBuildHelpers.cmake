@@ -407,6 +407,8 @@ function(ax_setup_app_config app_name)
         elseif(APPLE)
             ax_mark_multi_resources(compiled_shader_files RES_TO "Resources/axslc" FOLDERS ${GLSLCC_OUT_DIR})
             target_sources(${app_name} PRIVATE ${compiled_shader_files})
+            # once cmake-3.28.0 released, uncomment follow line instead above 2 lines
+            # set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES_PATH ${GLSLCC_OUT_DIR})
         elseif(WINRT)
             set(app_all_shaders)
             list(APPEND app_all_shaders ${ax_builtin_shaders})
