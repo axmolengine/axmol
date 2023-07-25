@@ -1,14 +1,16 @@
 #version 310 es
 precision highp float;
 precision highp int;
-layout(location = 0) in vec2 v_texture_coord;
+
+layout(location = TEXCOORD0) in vec2 v_texCoord;
+layout(location = NORMAL) in vec3 v_normal;
+
 layout(binding = 0) uniform sampler2D u_sampler0; 
-layout(location = 1) in vec3 v_normal;
 layout(std140, binding = 0) uniform fs_ub {
     vec4 u_color;
 };
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {
@@ -17,7 +19,7 @@ void main(void)
 	vec3 light_color = vec3(1,1,1);
 	vec3 normal  = normalize(v_normal);
 	float diffuse_factor = dot(normal,-light_direction);
-	vec4 diffuse_color = texture(u_sampler0,v_texture_coord);
+	vec4 diffuse_color = texture(u_sampler0,v_texCoord);
 
     if (diffuse_factor > 0.95)      diffuse_factor=1.0;
     else if (diffuse_factor > 0.75) diffuse_factor = 0.8;

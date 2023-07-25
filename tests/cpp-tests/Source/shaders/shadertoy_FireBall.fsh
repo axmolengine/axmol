@@ -6,7 +6,7 @@ precision highp int;
 //vec2   iCenter = center;
 //uniform float     iChannelTime[4];       // channel playback time (in seconds)
 //uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
-vec4      iMouse = vec4(0,0,0,0);                // mouse pixel coords. xy: current (if MLB down),
+//vec4      iMouse = vec4(0,0,0,0);                // mouse pixel coords. xy: current (if MLB down),
 
 
 
@@ -40,7 +40,7 @@ float snoise(vec3 uv, float res)
 	return mix(r0, r1, f.z)*2.-1.;
 }
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {

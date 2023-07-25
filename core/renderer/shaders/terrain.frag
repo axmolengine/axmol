@@ -2,8 +2,8 @@
 precision highp float;
 precision highp int;
 
-layout(location = 0) in vec2 v_texCoord;
-layout(location = 1) in vec3 v_normal;
+layout(location = TEXCOORD0) in vec2 v_texCoord;
+layout(location = NORMAL) in vec3 v_normal;
 layout(binding = 0) uniform sampler2D u_alphaMap;
 layout(binding = 1) uniform sampler2D u_tex0;
 layout(binding = 2) uniform sampler2D u_tex1;
@@ -18,7 +18,7 @@ layout(std140) uniform fs_ub {
     vec3 u_lightDir;
 };
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {

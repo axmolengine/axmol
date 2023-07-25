@@ -3,12 +3,12 @@
 
 
 
-layout(location = 0) in vec4 a_position;
-layout(location = 1) in vec2 a_texCoord;
-layout(location = 2) in vec4 a_color;
+layout(location = POSITION) in vec4 a_position;
+layout(location = TEXCOORD0) in vec2 a_texCoord;
+layout(location = COLOR0) in vec4 a_color;
 
-layout(location = 0) out vec4 v_color;
-layout(location = 1) out vec2 v_texCoord;
+layout(location = COLOR0) out vec4 v_color;
+layout(location = TEXCOORD0) out vec2 v_texCoord;
 
 
 

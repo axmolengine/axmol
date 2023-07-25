@@ -2,6 +2,8 @@
 precision highp float;
 precision highp int;
 
+#include "base.glsl"
+
 #define MAX_DIRECTIONAL_LIGHT_NUM 1
 
 #define MAX_POINT_LIGHT_NUM 1
@@ -16,14 +18,14 @@ precision highp int;
 #endif
 
 
-layout(location = 0) in vec2 TextureCoordOut;
+layout(location = TEXCOORD0) in vec2 v_texCoord;
 #if MAX_POINT_LIGHT_NUM
-layout(location = 1) in vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
+layout(location = POINTLIGHT) in vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
 #if MAX_SPOT_LIGHT_NUM
-layout(location = 2) in vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
+layout(location = SPOTLIGHT) in vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
 #endif
 #if ((MAX_DIRECTIONAL_LIGHT_NUM > 0) || (MAX_POINT_LIGHT_NUM > 0) || (MAX_SPOT_LIGHT_NUM > 0))
-layout(location = 3) in vec3 v_normal;
+layout(location = NORMAL) in vec3 v_normal;
 #endif
 
 #endif
@@ -58,7 +60,7 @@ vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, fl
     return diffuseColor;
 }
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {
@@ -109,9 +111,9 @@ void main(void)
 #endif
 
 #if ((MAX_DIRECTIONAL_LIGHT_NUM > 0) || (MAX_POINT_LIGHT_NUM > 0) || (MAX_SPOT_LIGHT_NUM > 0))
-    FragColor = texture(u_sampler0, TextureCoordOut) * u_color * combinedColor;
+    FragColor = texture(u_sampler0, v_texCoord) * u_color * combinedColor;
 #else
-    FragColor = texture(u_sampler0, TextureCoordOut) * u_color;
+    FragColor = texture(u_sampler0, v_texCoord) * u_color;
 #endif
 
 }

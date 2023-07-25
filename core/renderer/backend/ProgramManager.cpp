@@ -31,6 +31,7 @@
 #include "base/Configuration.h"
 
 #include "xxhash.h"
+#include <inttypes.h>
 
 NS_AX_BACKEND_BEGIN
 
@@ -197,6 +198,8 @@ Program* ProgramManager::loadProgram(std::string_view vsName,
     auto it = _cachedPrograms.find(progId);
     if (it != _cachedPrograms.end())
         return it->second;
+
+    AXLOG("Loading shader: %" PRIu64 " %s, %s ...", progId, vsName.data(), fsName.data());
 
     auto fileUtils  = FileUtils::getInstance();
     auto vertFile   = fileUtils->fullPathForFilename(vsName);

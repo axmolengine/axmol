@@ -1,12 +1,12 @@
 #version 310 es
 
 
-layout(location = 0) in vec4 a_position;
-layout(location = 1) in vec4 a_color;
+layout(location = POSITION) in vec4 a_position;
+layout(location = COLOR0) in vec4 a_color;
 
-layout(location = 2) in vec2 a_texCoord;
+layout(location = TEXCOORD0) in vec2 a_texCoord;
 
-layout(location = 0) out vec4 v_fragmentColor;
+layout(location = COLOR0) out vec4 v_color;
 
 layout(std140) uniform vs_ub {
     float u_alpha;
@@ -17,5 +17,5 @@ void main()
 {
     gl_Position = u_MVPMatrix * a_position;
     gl_PointSize = a_texCoord.x;
-    v_fragmentColor = vec4(a_color.rgb * a_color.a * u_alpha, a_color.a * u_alpha);
+    v_color = vec4(a_color.rgb * a_color.a * u_alpha, a_color.a * u_alpha);
 }

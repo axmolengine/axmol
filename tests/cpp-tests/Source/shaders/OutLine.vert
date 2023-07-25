@@ -1,6 +1,9 @@
 #version 310 es
-layout(location = 0) in vec4 a_position;
-layout(location = 1) in vec3 a_normal;
+
+#include "base.glsl"
+
+layout(location = POSITION) in vec4 a_position;
+layout(location = NORMAL) in vec3 a_normal;
 
 layout(std140, binding = 0) uniform vs_ub {
     float OutlineWidth;

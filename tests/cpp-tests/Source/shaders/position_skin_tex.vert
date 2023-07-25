@@ -1,16 +1,16 @@
 #version 310 es
-layout(location = 0) in vec3 a_position;
+layout(location = POSITION) in vec3 a_position;
 
-layout(location = 1) in vec4 a_blendWeight;
-layout(location = 2) in vec4 a_blendIndex;
+layout(location = BLENDWEIGHT) in vec4 a_blendWeight;
+layout(location = BLENDINDICES) in vec4 a_blendIndex;
 
-layout(location = 3) in vec2 a_texCoord;
+layout(location = TEXCOORD0) in vec2 a_texCoord;
 
 const int SKINNING_JOINT_COUNT = 60;
 // Uniforms
 
 // Varyings
-layout(location = 0) out vec2 TextureCoordOut;
+layout(location = TEXCOORD0) out vec2 v_texCoord;
 
 layout(std140, binding = 0) uniform vs_ub {
     vec4 u_matrixPalette[SKINNING_JOINT_COUNT * 3];
@@ -69,6 +69,6 @@ void main()
     vec4 position = getPosition();
     gl_Position = u_MVPMatrix * position;
     
-    TextureCoordOut = a_texCoord;
-    TextureCoordOut.y = 1.0 - TextureCoordOut.y;
+    v_texCoord = a_texCoord;
+    v_texCoord.y = 1.0 - v_texCoord.y;
 }
