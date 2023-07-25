@@ -1,8 +1,8 @@
 #version 310 es
 precision highp float;
 precision highp int;
-layout(location = 0) in vec2 v_texture_coord;
-layout(location = 1) in vec4 v_position;
+layout(location = TEXCOORD0) in vec2 v_texCoord;
+layout(location = POSITION) in vec4 v_position;
 layout(binding = 0) uniform sampler2D u_sampler0;
 layout(binding = 1) uniform sampler2D u_sampler1;
 layout(std140, binding = 0) uniform fs_ub {
@@ -10,7 +10,7 @@ layout(std140, binding = 0) uniform fs_ub {
     vec4 u_color;
 };
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {
@@ -22,5 +22,5 @@ void main(void)
 	coord.x = dot(v_position.xyz - u_target_pos, UVector) + 0.5;
 	coord.y = dot(v_position.xyz - u_target_pos, VVector) + 0.5;
 
-	FragColor = u_color*texture(u_sampler0,v_texture_coord)*texture(u_sampler1,coord);
+	FragColor = u_color*texture(u_sampler0,v_texCoord)*texture(u_sampler1,coord);
 }

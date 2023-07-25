@@ -1,8 +1,8 @@
 #version 310 es
-layout(location = 0) in vec4 a_position;
-layout(location = 1) in vec3 a_normal;
+layout(location = POSITION) in vec4 a_position;
+layout(location = NORMAL) in vec3 a_normal;
 
-layout(location = 0) out vec3 v_reflect;
+layout(location = TEXCOORD0) out vec3 v_reflect;
 //uniforms
 
 layout(std140, binding = 0) uniform vs_ub {

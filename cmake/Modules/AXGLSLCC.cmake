@@ -111,7 +111,7 @@ function (ax_target_compile_shaders target_name)
         elseif (APPLE) 
             set(OUT_LANG "MSL")
             list(APPEND SC_FLAGS  "--lang=msl")
-            list(APPEND SC_DEFINES "METAL")
+            set(SC_DEFINES "METAL")
         endif()
 
         # automap, no-suffix since 1.18.1 released by axmolengine
@@ -122,6 +122,7 @@ function (ax_target_compile_shaders target_name)
         if (NOT (SOURCE_SC_DEFINES STREQUAL "NOTFOUND"))
             set(SC_DEFINES "${SC_DEFINES},${SOURCE_SC_DEFINES}")
         endif()
+
         if (SC_DEFINES)
             list(APPEND SC_FLAGS "\"--defines=${SC_DEFINES}\"")
         endif()

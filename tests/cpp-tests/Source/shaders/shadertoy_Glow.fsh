@@ -5,8 +5,8 @@ precision highp int;
 
 //uniform float     iChannelTime[4];       // channel playback time (in seconds)
 //uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
-vec4      iMouse = vec4(0,0,0,0);                // mouse pixel coords. xy: current (if MLB down), zw: click
-layout(binding = 0) //uniform sampler2D iChannel0;          // input channel. XX = 2D/Cube
+//vec4      iMouse = vec4(0,0,0,0);                // mouse pixel coords. xy: current (if MLB down), zw: click
+//layout(binding = 0) uniform sampler2D iChannel0;          // input channel. XX = 2D/Cube
 
 
 
@@ -17,7 +17,7 @@ layout(std140, binding = 0) uniform fs_ub {
     vec4 u_Time;
 };
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {

@@ -12,7 +12,7 @@ layout(std140, binding = 0) uniform fs_ub {
     vec4 u_Time;
 };
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {

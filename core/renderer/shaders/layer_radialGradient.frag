@@ -2,10 +2,7 @@
 precision highp float;
 precision highp int;
 
-
-
-
-layout(location = 0) in vec4 v_position;
+layout(location = POSITION) in vec4 v_position;
 
 layout(std140) uniform fs_ub {
     vec4 u_startColor;
@@ -15,7 +12,7 @@ layout(std140) uniform fs_ub {
     float u_expand;
 };
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {

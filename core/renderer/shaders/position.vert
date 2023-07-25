@@ -1,7 +1,7 @@
 #version 310 es
 
 
-layout(location = 0) in vec4 a_position;
+layout(location = POSITION) in vec4 a_position;
 
 layout(location = 0) out vec4 v_position;
 

@@ -4,8 +4,8 @@ precision highp int;
 
 //uniform float     iChannelTime[4];       // channel playback time (in seconds)
 //uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
-vec4      iMouse = vec4(0,0,0,0);                // mouse pixel coords. xy: current (if MLB down), zw: click
-layout(binding = 0) //uniform sampler2D iChannel0;          // input channel. XX = 2D/Cube
+//vec4      iMouse = vec4(0,0,0,0);                // mouse pixel coords. xy: current (if MLB down), zw: click
+//layout(binding = 0) uniform sampler2D iChannel0;          // input channel. XX = 2D/Cube
 
 /*by musk License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
  
@@ -85,7 +85,7 @@ vec3 cc(vec3 color, float factor,float factor2) // color modifier
 	return mix(color,vec3(w)*factor,w*factor2);
 }
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {
@@ -100,15 +100,16 @@ void main(void)
 	//vec2 uv = gl_FragCoord.xy / iResolution.xy - 0.5;
     vec2 uv = (fragCoord.xy - center.xy) / iResolution.xy;
 	uv.x *= iResolution.x/iResolution.y; //fix aspect ratio
-	vec3 mouse = vec3(iMouse.xy/iResolution.xy - 0.5,iMouse.z-.5);
-	mouse.x *= iResolution.x/iResolution.y; //fix aspect ratio
-	if (iMouse.z<.5)
-	{
-		mouse.x=sin(iGlobalTime)*.5;
-		mouse.y=sin(iGlobalTime*.913)*.5;
-	}
+	// vec3 hover = vec3(iMouse.xy/iResolution.xy - 0.5,iMouse.z-.5);
+    vec3 hover = vec3(-0.5, -0.5, -0.5);
+	hover.x *= iResolution.x/iResolution.y; //fix aspect ratio
+	// if (hover.z<.5)
+	//{
+		hover.x=sin(iGlobalTime)*.5;
+		hover.y=sin(iGlobalTime*.913)*.5;
+	//}
 	
-	vec3 color = vec3(1.4,1.2,1.0)*lensflare(uv,mouse.xy);
+	vec3 color = vec3(1.4,1.2,1.0)*lensflare(uv,hover.xy);
 	color -= noise(fragCoord.xy)*.015;
 	color = cc(color,.5,.1);
 	FragColor = vec4(color,1.0);

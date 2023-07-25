@@ -16,7 +16,7 @@ layout(std140, binding = 0) uniform fs_ub {
 float u( float x ) { return (x>0.0)?1.0:0.0; }
 //float u( float x ) { return abs(x)/x; }
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {
