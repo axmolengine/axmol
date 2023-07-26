@@ -32,9 +32,10 @@
 
 NS_AX_BACKEND_BEGIN
 
-struct SLCReflectContext {
+struct SLCReflectContext
+{
     sgs_chunk_refl* refl;
-    yasio::fast_ibstream_view* data;
+    yasio::fast_ibstream_view* ibs;
 };
 
 ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source)
@@ -42,89 +43,100 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
 {
     yasio::fast_ibstream_view ibs(source.data(), source.length());
     uint32_t fourccId = ibs.read<uint32_t>();
-    if(fourccId != SGS_CHUNK) {
+    if (fourccId != SGS_CHUNK)
+    {
         assert(false);
         return;
     }
-    auto sgs_size = ibs.read<uint32_t>(); // always 0, doesn't matter
+    auto sgs_size = ibs.read<uint32_t>();  // always 0, doesn't matter
     struct sgs_chunk chunk;
     ibs.read_bytes(&chunk, static_cast<int>(sizeof(chunk)));
-    
+
     std::string_view mslCode;
-    
-    do {
+
+    do
+    {
         fourccId = ibs.read<uint32_t>();
-        if(fourccId != SGS_CHUNK_STAG) {
+        if (fourccId != SGS_CHUNK_STAG)
+        {
             assert(false);
-            return; // error
+            return;  // error
         }
-        auto stage_size = ibs.read<uint32_t>(); // stage_size
-        auto stage_id = ibs.read<uint32_t>(); // stage_id
+        auto stage_size       = ibs.read<uint32_t>();  // stage_size
+        auto stage_id         = ibs.read<uint32_t>();  // stage_id
         ShaderStage ref_stage = (ShaderStage)-1;
         if (stage_id == SGS_STAGE_VERTEX)
             ref_stage = ShaderStage::VERTEX;
-        else if(stage_id == SGS_STAGE_FRAGMENT)
+        else if (stage_id == SGS_STAGE_FRAGMENT)
             ref_stage = ShaderStage::FRAGMENT;
-        
+
         assert(ref_stage == stage);
-        
+
         int code_size = 0;
-        fourccId = ibs.read<uint32_t>();
-        if (fourccId == SGS_CHUNK_CODE) {
+        fourccId      = ibs.read<uint32_t>();
+        if (fourccId == SGS_CHUNK_CODE)
+        {
             code_size = ibs.read<int>();
-            mslCode = ibs.read_bytes(code_size);
+            mslCode   = ibs.read_bytes(code_size);
         }
-        else if(fourccId == SGS_CHUNK_DATA) {
+        else if (fourccId == SGS_CHUNK_DATA)
+        {
             code_size = ibs.read<int>();
-            mslCode = ibs.read_bytes(code_size);
+            mslCode   = ibs.read_bytes(code_size);
         }
-        else {
+        else
+        {
             // no text or binary code chunk
             assert(false);
         }
-        
+
         sgs_chunk_refl refl;
         size_t refl_size = 0;
-        if(!ibs.eof()) { // try read reflect info
+        if (!ibs.eof())
+        {  // try read reflect info
             fourccId = ibs.read<uint32_t>();
-            if(fourccId == SGS_CHUNK_REFL) {
+            if (fourccId == SGS_CHUNK_REFL)
+            {
                 /*
                  REFL: Reflection data for the shader stage
                  struct sgs_chunk_refl: reflection data header
-                 struct sgs_refl_input[]: array of vertex-shader input attributes (see sgs_chunk_refl for number of inputs)
-                 struct sgs_refl_uniformbuffer[]: array of uniform buffer objects (see sgs_chunk_refl for number of uniform buffers)
-                 struct sgs_refl_texture[]: array of texture objects (see sgs_chunk_refl for number of textures)
-                 struct sgs_refl_texture[]: array of storage image objects (see sgs_chunk_refl for number of storage images)
-                 struct sgs_refl_buffer[]: array of storage buffer objects (see sgs_chunk_refl for number of storage buffers)
+                 struct sgs_refl_input[]: array of vertex-shader input attributes (see sgs_chunk_refl for number of
+                 inputs) struct sgs_refl_uniformbuffer[]: array of uniform buffer objects (see sgs_chunk_refl for number
+                 of uniform buffers) struct sgs_refl_texture[]: array of texture objects (see sgs_chunk_refl for number
+                 of textures) struct sgs_refl_texture[]: array of storage image objects (see sgs_chunk_refl for number
+                 of storage images) struct sgs_refl_buffer[]: array of storage buffer objects (see sgs_chunk_refl for
+                 number of storage buffers)
                  */
                 refl_size = ibs.read<uint32_t>();
                 ibs.read_bytes(&refl, static_cast<int>(sizeof(refl)));
-                
+
                 SLCReflectContext context{&refl, &ibs};
-                
+
                 // refl_inputs
                 parseAttibute(&context);
-                
+
                 // refl_uniformbuffers
                 parseUniform(&context);
-                
+
                 // refl_textures
                 parseTexture(&context);
-                
+
                 // refl_storage_images: ignore
                 ibs.advance(refl.num_storage_images * sizeof(sgs_refl_texture));
-                
+
                 // refl_storage_buffers: ignore
                 ibs.advance(refl.num_storage_buffers * sizeof(sgs_refl_buffer));
             }
-            else {
-                ibs.advance(-4); // move readptr back 4 bytes
+            else
+            {
+                assert(false);
+                return;
             }
         }
 
         assert(ibs.eof());
-    } while(false);  // iterator stages, current only 1 stage
-    
+    } while (false);  // iterator stages, current only 1 stage
+
     auto metalShader = mslCode.data();
     NSString* shader = [NSString stringWithUTF8String:metalShader];
     NSError* error;
@@ -146,26 +158,28 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
         // NSLog(@"%s", glslopt_get_log(glslShader));
         assert(false);
     }
-    
+
     /*
      === attrib: a_position, location: 0
      === attrib: a_color, location: 1
      === attrib: a_texCoord, location: 2
      */
     auto vertexAttribs = [_mtlFunction vertexAttributes];
-    for (MTLVertexAttribute* attrib in vertexAttribs) {
+    for (MTLVertexAttribute* attrib in vertexAttribs)
+    {
         std::string attribName = [[attrib name] UTF8String];
-        int index = static_cast<int>([attrib attributeIndex]);
+        int index              = static_cast<int>([attrib attributeIndex]);
 
         auto& attrinfo = _attributeInfo[attribName];
-        
+
         // !!!Fix attrib location due to glslcc reorder attribs, but reflect info not sync
-        if (index != attrinfo.location) {
+        if (index != attrinfo.location)
+        {
             attrinfo.location = index;
             ax::print("=== Fix attrib: %s, location from %d to %d", attribName.c_str(), (int)attrinfo.location, index);
         }
     }
-    
+
     setBuiltinUniformLocation();
     setBuiltinAttributeLocation();
 
@@ -179,57 +193,64 @@ ShaderModuleMTL::~ShaderModuleMTL()
 
 void ShaderModuleMTL::parseAttibute(SLCReflectContext* context)
 {
-    for(int i = 0; i < context->refl->num_inputs; ++i) {
+    for (int i = 0; i < context->refl->num_inputs; ++i)
+    {
         sgs_refl_input attrib{0};
-        context->data->read_bytes(&attrib, sizeof(attrib));
-        
+        context->ibs->read_bytes(&attrib, sizeof(attrib));
+
         AttributeBindInfo attributeInfo;
-        attributeInfo.attributeName = attrib.name;
-        attributeInfo.location      = attrib.loc;
-        _attributeInfo[attributeInfo.attributeName]  = attributeInfo;
+        attributeInfo.attributeName                 = attrib.name;
+        attributeInfo.location                      = attrib.loc;
+        _attributeInfo[attributeInfo.attributeName] = attributeInfo;
     }
 }
 
 void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
 {
     _uniformBufferSize = 0;
-    for(int i = 0; i < context->refl->num_uniform_buffers; ++i) {
+    for (int i = 0; i < context->refl->num_uniform_buffers; ++i)
+    {
         sgs_refl_ub ub{0};
-        context->data->read_bytes(&ub, sizeof(ub));
-        for(int k = 0; k < ub.num_members; ++k) {
-            sgs_refl_ub_member ubm {0};
-            context->data->read_bytes(&ubm, sizeof(ubm));
-            auto location = YASIO_SZ_ALIGN(ubm.offset, 16); // align offset
-            auto alignedSize = YASIO_SZ_ALIGN(ubm.size_bytes, 16); // align sizeBytes
+        context->ibs->read_bytes(&ub, sizeof(ub));
+        for (int k = 0; k < ub.num_members; ++k)
+        {
+            sgs_refl_ub_member ubm{0};
+            context->ibs->read_bytes(&ubm, sizeof(ubm));
+            auto location = ubm.offset;
             UniformInfo uniform;
-            uniform.count                 = ubm.array_size;
-            uniform.location              = location;
-            uniform.size                  = ubm.size_bytes; // ubm.size_bytes; // nextLocation - location;
-            uniform.bufferOffset          = location;
-            uniform.needConvert           = (ubm.format == SGS_VERTEXFORMAT_FLOAT3) ? true : false;
+            uniform.count        = ubm.array_size;
+            uniform.location     = location;
+            uniform.size         = ubm.size_bytes;
+            uniform.bufferOffset = location;
+            uniform.needConvert  = (ubm.format == SGS_VERTEXFORMAT_FLOAT3) ? true : false;
             // TODO: store basicType in sgs or optimize uniform buffer store
-            uniform.type                  = (ubm.format != SGS_VERTEXFORMAT_INT && ubm.format != SGS_VERTEXFORMAT_INT2
-            && ubm.format != SGS_VERTEXFORMAT_INT3 && ubm.format != SGS_VERTEXFORMAT_INT4) ? SGS_VERTEXFORMAT_FLOAT : SGS_VERTEXFORMAT_INT;
-            uniform.isMatrix              = ubm.format == SGS_VERTEXFORMAT_MAT4 || ubm.format == SGS_VERTEXFORMAT_MAT3 || ubm.format == SGS_VERTEXFORMAT_MAT34 || ubm.format == SGS_VERTEXFORMAT_MAT43;
-            _uniformInfos[ubm.name]        = uniform;
+            uniform.type     = (ubm.format != SGS_VERTEXFORMAT_INT && ubm.format != SGS_VERTEXFORMAT_INT2 &&
+                            ubm.format != SGS_VERTEXFORMAT_INT3 && ubm.format != SGS_VERTEXFORMAT_INT4)
+                                   ? SGS_VERTEXFORMAT_FLOAT
+                                   : SGS_VERTEXFORMAT_INT;
+            uniform.isMatrix = ubm.format == SGS_VERTEXFORMAT_MAT4 || ubm.format == SGS_VERTEXFORMAT_MAT3 ||
+                               ubm.format == SGS_VERTEXFORMAT_MAT34 || ubm.format == SGS_VERTEXFORMAT_MAT43;
+            _uniformInfos[ubm.name]       = uniform;
             _activeUniformInfos[location] = uniform;
-            
+
             if (_maxLocation < location)
                 _maxLocation = (location + 1);
-            
-            _uniformBufferSize += alignedSize;
         }
+        _uniformBufferSize = ub.size_bytes;
+        // current: only support 1 uniform block for metal
+        break;
     }
 }
 
 void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
 {
-    for(int i = 0; i < context->refl->num_textures; ++i) {
-        sgs_refl_texture texinfo {0};
-        context->data->read_bytes(&texinfo, sizeof(texinfo));
+    for (int i = 0; i < context->refl->num_textures; ++i)
+    {
+        sgs_refl_texture texinfo{0};
+        context->ibs->read_bytes(&texinfo, sizeof(texinfo));
         UniformInfo uniform;
-        uniform.count          = -1;
-        uniform.location       = texinfo.binding;
+        uniform.count               = -1;
+        uniform.location            = texinfo.binding;
         _uniformInfos[texinfo.name] = uniform;
     }
 }
@@ -341,6 +362,5 @@ void ShaderModuleMTL::setBuiltinAttributeLocation()
         _attributeLocation[Attribute::NORMAL] = iter->second.location;
     }
 }
-
 
 NS_AX_BACKEND_END
