@@ -2,12 +2,10 @@
 precision highp float;
 precision highp int;
 
-layout(location = COLOR0) in vec4 v_color;
-layout(location = TEXCOORD0) in vec2 v_texCoord;
+// layout(location = COLOR0) in vec4 v_color;
+// layout(location = TEXCOORD0) in vec2 v_texCoord;
 
-
-
-layout(binding = 0) uniform sampler2D u_tex0;
+// layout(binding = 0) uniform sampler2D u_tex0;
 
 /*by musk License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
  
@@ -20,17 +18,17 @@ layout(binding = 0) uniform sampler2D u_tex0;
 
 layout(std140, binding = 0) uniform fs_ub {
     vec2 resolution;
-    vec2 textureResolution;
+    // vec2 textureResolution;
     vec4 u_Time;
 };
 
 float noise(float t)
 {
-	return texture(u_tex0,vec2(t,.0)/textureResolution.xy).x;
+	return 0.0; // texture(u_tex0,vec2(t,.0)/textureResolution.xy).x;
 }
 float noise(vec2 t)
 {
-	return texture(u_tex0,t/textureResolution.xy).x;
+	return 0.0; // texture(u_tex0,t/textureResolution.xy).x;
 }
 
 vec3 lensflare(vec2 uv,vec2 pos)
@@ -85,12 +83,14 @@ vec3 cc(vec3 color, float factor,float factor2) // color modifier
 	return mix(color,vec3(w)*factor,w*factor2);
 }
 
+vec2 texCoord = vec2(0.0,0.0);
+
 layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {
-	vec2 uv = v_texCoord - 0.5;
-	uv.x *= resolution.x/resolution.y; //fix aspect ratio
+	vec2 uv = texCoord - 0.5;
+	//uv.x *= resolution.x/resolution.y; //fix aspect ratio
 //	vec3 mouse = vec3(iMouse.xy/iResolution.xy - 0.5,iMouse.z-.5);
 //	mouse.x *= iResolution.x/iResolution.y; //fix aspect ratio
 //	if (iMouse.z<.5)
@@ -103,7 +103,7 @@ void main(void)
     mouse.y=sin(u_Time[1]*.913)*.5;
 	
 	vec3 color = vec3(1.4,1.2,1.0)*lensflare(uv,mouse.xy);
-	color -= noise(v_texCoord * resolution)*.015;
+	color -= noise(texCoord * resolution)*.015;
 	color = cc(color,.5,.1);
 	FragColor = vec4(color,1.0);
 }
