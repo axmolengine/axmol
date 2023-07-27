@@ -74,10 +74,6 @@ struct UniformInfo
     unsigned int type         = 0;
     unsigned int size         = 0; // element size
     unsigned int bufferOffset = 0;
-
-    // only used in metal
-    bool isMatrix    = false;
-    bool needConvert = false;
 };
 
 struct UniformLocation
