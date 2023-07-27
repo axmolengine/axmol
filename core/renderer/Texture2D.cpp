@@ -403,7 +403,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         if (i > 0 && (width != height || ccNextPOT(width) != width))
         {
             AXLOG(
-                "cocos2d: Texture2D. WARNING. Mipmap level %u is not squared. Texture won't render correctly. width=%d "
+                "axmol: Texture2D. WARNING. Mipmap level %u is not squared. Texture won't render correctly. width=%d "
                 "!= height=%d",
                 i, width, height);
         }

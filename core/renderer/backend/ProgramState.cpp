@@ -36,25 +36,6 @@
 
 NS_AX_BACKEND_BEGIN
 
-namespace
-{
-#define MAT3_SIZE 36
-
-void convertMat3ToMat4x3(const float* src, float* dst)
-{
-    dst[3] = dst[7] = dst[11] = 0.0f;
-    dst[0]                    = src[0];
-    dst[1]                    = src[1];
-    dst[2]                    = src[2];
-    dst[4]                    = src[3];
-    dst[5]                    = src[4];
-    dst[6]                    = src[5];
-    dst[8]                    = src[6];
-    dst[9]                    = src[7];
-    dst[10]                   = src[8];
-}
-}  // namespace
-
 // static field
 std::vector<ProgramState::AutoBindingResolver*> ProgramState::_customAutoBindingResolvers;
 
@@ -266,47 +247,13 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
     }
 }
 
-#ifdef AX_USE_METAL
-void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniformInfo,
-                                             const void* srcData,
-                                             std::size_t srcSize,
-                                             void* buffer)
-{
-    assert(uniformInfo.type == SGS_VERTEXFORMAT_MAT3);
-    int offset = 0;
-    float m4x3[12];
-    for (int i = 0; i < uniformInfo.count; i++)
-    {
-        if (offset >= srcSize)
-            break;
-
-        convertMat3ToMat4x3((float*)((uint8_t*)srcData + offset), m4x3);
-        memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(m4x3), m4x3, sizeof(m4x3));
-        offset += MAT3_SIZE;
-    }
-}
-#endif
-
 void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
 {
     if (location < 0)
         return;
-
-// float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
-#ifdef AX_USE_METAL
-    const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::VERTEX, location);
-    if (uniformInfo.type == SGS_VERTEXFORMAT_MAT3)
-    {
-        convertAndCopyUniformData(uniformInfo, data, size, _vertexUniformBuffer);
-    }
-    else
-    {
-        memcpy(_vertexUniformBuffer + location, data, size);
-    }
-#else
+        
     assert(location + offset + size <= _vertexUniformBufferSize);
     memcpy(_vertexUniformBuffer + location + offset, data, size);
-#endif
 }
 
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size)
@@ -316,15 +263,7 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
 
 // float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
 #ifdef AX_USE_METAL
-    const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::FRAGMENT, location);
-    if (uniformInfo.type == SGS_VERTEXFORMAT_MAT3)
-    {
-        convertAndCopyUniformData(uniformInfo, data, size, _fragmentUniformBuffer);
-    }
-    else
-    {
-        memcpy(_fragmentUniformBuffer + location, data, size);
-    }
+    memcpy(_fragmentUniformBuffer + location, data, size);
 #else
     assert(false);
 #endif

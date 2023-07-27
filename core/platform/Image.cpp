@@ -1641,7 +1641,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     if (!testFormatForPvr3TCSupport(pixelFormat))
     {
         AXLOG(
-            "cocos2d: WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
+            "axmol:WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
             "variant",
             static_cast<unsigned long long>(pixelFormat));
         return false;
@@ -1650,7 +1650,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     if (v3_pixel_formathash.find(pixelFormat) == v3_pixel_formathash.end())
     {
         AXLOG(
-            "cocos2d: WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
+            "axmol:WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
             "variant",
             static_cast<unsigned long long>(pixelFormat));
         return false;
@@ -1662,7 +1662,7 @@ bool Image::initWithPVRv3Data(uint8_t* data, ssize_t dataLen, bool ownData)
     if (!info.bpp)
     {
         AXLOG(
-            "cocos2d: WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
+            "axmol:WARNING: Unsupported PVR Pixel Format: 0x%016llX. Re-encode it with a OpenGL pixel format "
             "variant",
             static_cast<unsigned long long>(pixelFormat));
         return false;
@@ -2313,7 +2313,7 @@ bool Image::saveToFile(std::string_view filename, bool isToRGB)
     if (isCompressed() || (_pixelFormat != backend::PixelFormat::RGB8 && _pixelFormat != backend::PixelFormat::RGBA8))
     {
         AXLOG(
-            "cocos2d: Image: saveToFile is only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 "
+            "axmol:Image: saveToFile is only support for backend::PixelFormat::RGB8 or backend::PixelFormat::RGBA8 "
             "uncompressed data for now");
         return false;
     }

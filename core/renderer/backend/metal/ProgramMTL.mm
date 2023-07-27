@@ -122,34 +122,6 @@ const hlookup::string_map<AttributeBindInfo>& ProgramMTL::getActiveAttributes() 
     return _vertexShader->getAttributeInfo();
 }
 
-// const std::vector<char>& ProgramMTL::cloneUniformBuffer(ShaderStage stage) const
-//{
-//     switch (stage) {
-//         case ShaderStage::VERTEX:
-//             return _vertexShader->cloneUniformBuffer();
-//             break;
-//         case ShaderStage::FRAGMENT:
-//             return _fragmentShader->cloneUniformBuffer();
-//         default:
-//             AXASSERT(false, "Invalid shader stage.");
-//             break;
-//     }
-// }
-
-const UniformInfo& ProgramMTL::getActiveUniformInfo(ShaderStage stage, int location) const
-{
-    switch (stage)
-    {
-    case ShaderStage::VERTEX:
-        return _vertexShader->getActiveUniform(location);
-    case ShaderStage::FRAGMENT:
-        return _fragmentShader->getActiveUniform(location);
-    default:
-        AXASSERT(false, "Invalid shader stage.");
-        break;
-    }
-}
-
 std::size_t ProgramMTL::getUniformBufferSize(ShaderStage stage) const
 {
     switch (stage)
