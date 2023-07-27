@@ -222,24 +222,19 @@ void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
         
         for (int k = 0; k < ub_num_members; ++k)
         {
-            auto name = _sgs_read_name(ibs);
-            auto offset = ibs->read<int32_t>();
-            auto format = ibs->read<uint32_t>();
+            UniformInfo uniform;
+            auto name       = _sgs_read_name(ibs);
+            auto offset     = ibs->read<int32_t>();
+            auto format     = ibs->read<uint32_t>();
             auto size_bytes = ibs->read<uint32_t>();
             auto array_size = ibs->read<uint16_t>();
-            UniformInfo uniform;
-            uniform.count        = array_size;
-            uniform.location     = offset;
-            uniform.size         = size_bytes;
-            uniform.bufferOffset = offset;
-            uniform.needConvert  = format == SGS_VERTEXFORMAT_MAT3;
-            // TODO: store basicType in sgs or optimize uniform buffer store
-            uniform.type     = (format != SGS_VERTEXFORMAT_INT && format != SGS_VERTEXFORMAT_INT2 &&
-                                format != SGS_VERTEXFORMAT_INT3 && format != SGS_VERTEXFORMAT_INT4)
-                                   ? SGS_VERTEXFORMAT_FLOAT
-                                   : SGS_VERTEXFORMAT_INT;
-            uniform.isMatrix = format == SGS_VERTEXFORMAT_MAT4 || format == SGS_VERTEXFORMAT_MAT3;
-            _uniformInfos[name]       = uniform;
+            
+            uniform.count               = array_size;
+            uniform.location            = offset;
+            uniform.size                = size_bytes;
+            uniform.bufferOffset        = offset;
+            uniform.type                = format;
+            _uniformInfos[name]         = uniform;
             _activeUniformInfos[offset] = uniform;
 
             if (_maxLocation < offset)

@@ -39,37 +39,6 @@ NS_AX_BACKEND_BEGIN
 namespace
 {
 #define MAT3_SIZE 36
-#define MAT4X3_SIZE 48
-#define VEC3_SIZE 12
-#define VEC4_SIZE 16
-#define BVEC3_SIZE 3
-#define BVEC4_SIZE 4
-#define IVEC3_SIZE 12
-#define IVEC4_SIZE 16
-
-void convertbVec3TobVec4(const bool* src, bool* dst)
-{
-    dst[0] = src[0];
-    dst[1] = src[1];
-    dst[2] = src[2];
-    dst[3] = false;
-}
-
-void convertiVec3ToiVec4(const int* src, int* dst)
-{
-    dst[0] = src[0];
-    dst[1] = src[1];
-    dst[2] = src[2];
-    dst[3] = 0;
-}
-
-void convertVec3ToVec4(const float* src, float* dst)
-{
-    dst[0] = src[0];
-    dst[1] = src[1];
-    dst[2] = src[2];
-    dst[3] = 0.0f;
-}
 
 void convertMat3ToMat4x3(const float* src, float* dst)
 {
@@ -303,73 +272,17 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
                                              std::size_t srcSize,
                                              void* buffer)
 {
-    // The type is glslcc FOURCC ID
-    auto basicType = uniformInfo.type;
-
+    assert(uniformInfo.type == SGS_VERTEXFORMAT_MAT3);
     int offset = 0;
-    switch (basicType)
+    float m4x3[12];
+    for (int i = 0; i < uniformInfo.count; i++)
     {
-    case SGS_VERTEXFORMAT_FLOAT:
-    {
-        if (uniformInfo.isMatrix)
-        {
-            float m4x3[12];
-            for (int i = 0; i < uniformInfo.count; i++)
-            {
-                if (offset >= srcSize)
-                    break;
+        if (offset >= srcSize)
+            break;
 
-                convertMat3ToMat4x3((float*)((uint8_t*)srcData + offset), m4x3);
-                memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(m4x3), m4x3, sizeof(m4x3));
-                offset += MAT3_SIZE;
-            }
-        }
-        else
-        {
-            float f4[4];
-            for (int i = 0; i < uniformInfo.count; i++)
-            {
-                if (offset >= srcSize)
-                    break;
-
-                convertVec3ToVec4((float*)((uint8_t*)srcData + offset), f4);
-                memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(f4), f4, sizeof(f4));
-                offset += VEC3_SIZE;
-            }
-        }
-        break;
-    }
-        //    case kGlslTypeBool:
-        //    {
-        //        bool b4[4];
-        //        for (int i = 0; i < uniformInfo.count; i++)
-        //        {
-        //            if (offset >= srcSize)
-        //                break;
-        //
-        //            convertbVec3TobVec4((bool*)((uint8_t*)srcData + offset), b4);
-        //            memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(b4), b4, sizeof(b4));
-        //            offset += BVEC3_SIZE;
-        //        }
-        //        break;
-        //    }
-    case SGS_VERTEXFORMAT_INT:
-    {
-        int i4[4];
-        for (int i = 0; i < uniformInfo.count; i++)
-        {
-            if (offset >= srcSize)
-                break;
-
-            convertiVec3ToiVec4((int*)((uint8_t*)srcData + offset), i4);
-            memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(i4), i4, sizeof(i4));
-            offset += IVEC3_SIZE;
-        }
-        break;
-    }
-    default:
-        AX_ASSERT(false);
-        break;
+        convertMat3ToMat4x3((float*)((uint8_t*)srcData + offset), m4x3);
+        memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(m4x3), m4x3, sizeof(m4x3));
+        offset += MAT3_SIZE;
     }
 }
 #endif
@@ -382,7 +295,7 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
 // float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
 #ifdef AX_USE_METAL
     const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::VERTEX, location);
-    if (uniformInfo.needConvert)
+    if (uniformInfo.type == SGS_VERTEXFORMAT_MAT3)
     {
         convertAndCopyUniformData(uniformInfo, data, size, _vertexUniformBuffer);
     }
@@ -404,7 +317,7 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
 // float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
 #ifdef AX_USE_METAL
     const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::FRAGMENT, location);
-    if (uniformInfo.needConvert)
+    if (uniformInfo.type == SGS_VERTEXFORMAT_MAT3)
     {
         convertAndCopyUniformData(uniformInfo, data, size, _fragmentUniformBuffer);
     }
