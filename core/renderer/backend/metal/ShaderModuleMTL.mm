@@ -222,14 +222,13 @@ void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
             uniform.location     = location;
             uniform.size         = ubm.size_bytes;
             uniform.bufferOffset = location;
-            uniform.needConvert  = (ubm.format == SGS_VERTEXFORMAT_FLOAT3) ? true : false;
+            uniform.needConvert  = ubm.format == SGS_VERTEXFORMAT_MAT3;
             // TODO: store basicType in sgs or optimize uniform buffer store
             uniform.type     = (ubm.format != SGS_VERTEXFORMAT_INT && ubm.format != SGS_VERTEXFORMAT_INT2 &&
                             ubm.format != SGS_VERTEXFORMAT_INT3 && ubm.format != SGS_VERTEXFORMAT_INT4)
                                    ? SGS_VERTEXFORMAT_FLOAT
                                    : SGS_VERTEXFORMAT_INT;
-            uniform.isMatrix = ubm.format == SGS_VERTEXFORMAT_MAT4 || ubm.format == SGS_VERTEXFORMAT_MAT3 ||
-                               ubm.format == SGS_VERTEXFORMAT_MAT34 || ubm.format == SGS_VERTEXFORMAT_MAT43;
+            uniform.isMatrix = ubm.format == SGS_VERTEXFORMAT_MAT4 || ubm.format == SGS_VERTEXFORMAT_MAT3;
             _uniformInfos[ubm.name]       = uniform;
             _activeUniformInfos[location] = uniform;
 

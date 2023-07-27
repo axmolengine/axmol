@@ -55,10 +55,10 @@ namespace {
 
 	static void updateProgramStateLayout(backend::ProgramState *programState) {
 		__locPMatrix = programState->getUniformLocation("u_PMatrix");
-		__locTexture = programState->getUniformLocation("u_texture");
+		__locTexture = programState->getUniformLocation("u_tex0");
 
         auto locPosition = programState->getAttributeLocation("a_position");
-        auto locTexcoord = programState->getAttributeLocation("a_texCoords");
+        auto locTexcoord = programState->getAttributeLocation("a_texCoord");
         auto locColor = programState->getAttributeLocation("a_color");
         auto locColor2 = programState->getAttributeLocation("a_color2");
 
@@ -69,7 +69,7 @@ namespace {
                                      offsetof(spine::V3F_C4B_C4B_T2F, color), true);
         vertexLayout->setAttrib("a_color2", locColor2, backend::VertexFormat::UBYTE4,
                                      offsetof(spine::V3F_C4B_C4B_T2F, color2), true);
-        vertexLayout->setAttrib("a_texCoords", locTexcoord, backend::VertexFormat::FLOAT2,
+        vertexLayout->setAttrib("a_texCoord", locTexcoord, backend::VertexFormat::FLOAT2,
                                      offsetof(spine::V3F_C4B_C4B_T2F, texCoords), false);
         vertexLayout->setStride(sizeof(spine::V3F_C4B_C4B_T2F));
     }
