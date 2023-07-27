@@ -363,7 +363,8 @@ bool MixAndMatchExample::init()
     SCALE_SKELETON_NODE(skeletonNode);
 
     // load hsv as custom, we don't want batch draw
-    auto hsvProg = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, hsv_frag); 
+    auto hsvProg = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, hsv_frag, VertexLayoutType::Sprite);
+    
     auto ps1     = new backend::ProgramState(hsvProg);
     SET_UNIFORM(ps1, "u_hsv", Vec3(92.0f, 1.0f, 1.2f));
     skeletonNode->setProgramState(ps1, true);
