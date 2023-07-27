@@ -377,19 +377,6 @@ protected:
     /// Initialize.
     bool init(Program* program);
 
-#ifdef AX_USE_METAL
-    /**
-     * float3 etc in Metal has both sizeof and alignment same as float4, convert it before fill into uniform buffer
-     * @param uniformInfo Specifies the uniform information.
-     * @param srcData Specifies the new values to be used for the specified uniform variable.
-     * @param srcSize Specifies the uniform data size.
-     * @param uniformBuffer Specifies the uniform buffer to update.
-     */
-    void convertAndCopyUniformData(const backend::UniformInfo& uniformInfo,
-                                   const void* srcData,
-                                   std::size_t srcSize,
-                                   void* buffer);
-#endif
     /**
      * Applies the specified custom auto-binding.
      *

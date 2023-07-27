@@ -129,10 +129,10 @@ void ProgramGL::compileProgram()
         {
             auto errorInfo = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
             glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
-            log("cocos2d: ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.get());
+            log("axmol:ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.get());
         }
         else
-            log("cocos2d: ERROR: %s: failed to link program ", __FUNCTION__);
+            log("axmol:ERROR: %s: failed to link program ", __FUNCTION__);
         glDeleteProgram(_program);
         _program = 0;
     }
@@ -461,12 +461,6 @@ int ProgramGL::getOriginalLocation(int location) const
         return -1;
 }
 #endif
-
-const UniformInfo& ProgramGL::getActiveUniformInfo(ShaderStage stage, int location) const
-{
-    static const UniformInfo s_emptyInfo{};
-    return s_emptyInfo;
-}
 
 const hlookup::string_map<UniformInfo>& ProgramGL::getAllActiveUniformInfo(ShaderStage stage) const
 {

@@ -62,16 +62,10 @@ public:
     inline id<MTLFunction> getMTLFunction() const { return _mtlFunction; }
 
     /**
-     * Get current shader uniform informatino.
-     * @return Uniform information. Key is each uniform name, Value is corresponding uniform info.
-     */
-    inline const UniformInfo& getActiveUniform(int location) { return _activeUniformInfos[location]; }
-
-    /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo() const { return _uniformInfos; }
+    inline const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo() const { return _activeUniformInfos; }
 
     /**
      * Get maximum uniform location.
@@ -128,8 +122,7 @@ private:
 
     id<MTLFunction> _mtlFunction = nil;
 
-    hlookup::string_map<UniformInfo> _uniformInfos;
-    std::unordered_map<int, UniformInfo> _activeUniformInfos;
+    hlookup::string_map<UniformInfo> _activeUniformInfos;
     hlookup::string_map<AttributeBindInfo> _attributeInfo;
 
     int _maxLocation = -1;

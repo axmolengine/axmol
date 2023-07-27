@@ -230,15 +230,14 @@ void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
             auto array_size = ibs->read<uint16_t>();
             
             uniform.count               = array_size;
-            uniform.location            = offset;
+            uniform.location            = i;
             uniform.size                = size_bytes;
             uniform.bufferOffset        = offset;
             uniform.type                = format;
-            _uniformInfos[name]         = uniform;
-            _activeUniformInfos[offset] = uniform;
+            _activeUniformInfos[name]         = uniform;
 
-            if (_maxLocation < offset)
-                _maxLocation = (offset + 1);
+            if (_maxLocation < i)
+                _maxLocation = (i + 1);
         }
         _uniformBufferSize = ub_size_bytes;
         // current: only support 1 uniform block for metal
@@ -258,7 +257,7 @@ void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
 
         UniformInfo uniform;
         uniform.location            = binding;
-        _uniformInfos[name] = uniform;
+        _activeUniformInfos[name] = uniform;
     }
 }
 
@@ -269,8 +268,8 @@ int ShaderModuleMTL::getUniformLocation(Uniform name) const
 
 int ShaderModuleMTL::getUniformLocation(std::string_view name) const
 {
-    auto iter = _uniformInfos.find(name);
-    if (iter != _uniformInfos.end())
+    auto iter = _activeUniformInfos.find(name);
+    if (iter != _activeUniformInfos.end())
     {
         return iter->second.location;
     }
@@ -282,43 +281,43 @@ void ShaderModuleMTL::setBuiltinUniformLocation()
 {
     std::fill(_uniformLocation, _uniformLocation + UNIFORM_MAX, -1);
     /// u_mvpMatrix
-    auto iter = _uniformInfos.find(UNIFORM_NAME_MVP_MATRIX);
-    if (iter != _uniformInfos.end())
+    auto iter = _activeUniformInfos.find(UNIFORM_NAME_MVP_MATRIX);
+    if (iter != _activeUniformInfos.end())
     {
         _uniformLocation[Uniform::MVP_MATRIX] = iter->second.location;
     }
 
     /// u_textColor
-    iter = _uniformInfos.find(UNIFORM_NAME_TEXT_COLOR);
-    if (iter != _uniformInfos.end())
+    iter = _activeUniformInfos.find(UNIFORM_NAME_TEXT_COLOR);
+    if (iter != _activeUniformInfos.end())
     {
         _uniformLocation[Uniform::TEXT_COLOR] = iter->second.location;
     }
 
     /// u_effectColor
-    iter = _uniformInfos.find(UNIFORM_NAME_EFFECT_COLOR);
-    if (iter != _uniformInfos.end())
+    iter = _activeUniformInfos.find(UNIFORM_NAME_EFFECT_COLOR);
+    if (iter != _activeUniformInfos.end())
     {
         _uniformLocation[Uniform::EFFECT_COLOR] = iter->second.location;
     }
 
     /// u_effectType
-    iter = _uniformInfos.find(UNIFORM_NAME_EFFECT_TYPE);
-    if (iter != _uniformInfos.end())
+    iter = _activeUniformInfos.find(UNIFORM_NAME_EFFECT_TYPE);
+    if (iter != _activeUniformInfos.end())
     {
         _uniformLocation[Uniform::EFFECT_TYPE] = iter->second.location;
     }
 
     /// u_tex0
-    iter = _uniformInfos.find(UNIFORM_NAME_TEXTURE);
-    if (iter != _uniformInfos.end())
+    iter = _activeUniformInfos.find(UNIFORM_NAME_TEXTURE);
+    if (iter != _activeUniformInfos.end())
     {
         _uniformLocation[Uniform::TEXTURE] = iter->second.location;
     }
 
     /// u_tex1
-    iter = _uniformInfos.find(UNIFORM_NAME_TEXTURE1);
-    if (iter != _uniformInfos.end())
+    iter = _activeUniformInfos.find(UNIFORM_NAME_TEXTURE1);
+    if (iter != _activeUniformInfos.end())
     {
         _uniformLocation[Uniform::TEXTURE1] = iter->second.location;
     }

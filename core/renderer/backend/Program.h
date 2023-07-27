@@ -162,14 +162,6 @@ public:
     virtual std::size_t getUniformBufferSize(ShaderStage stage) const = 0;
 
     /**
-     * Get a uniformInfo in given location from the specific shader stage.
-     * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
-     * @param location Specifies the uniform locaion.
-     * @return The uniformInfo.
-     */
-    virtual const UniformInfo& getActiveUniformInfo(ShaderStage stage, int location) const = 0;
-
-    /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
