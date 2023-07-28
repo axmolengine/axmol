@@ -408,9 +408,12 @@ UniformLocation ProgramGL::getUniformLocation(backend::Uniform name) const
 UniformLocation ProgramGL::getUniformLocation(std::string_view uniform) const
 {
     UniformLocation uniformLocation;
-    if (_activeUniformInfos.find(uniform) != _activeUniformInfos.end())
+    auto iter = _activeUniformInfos.find(uniform);
+    if (iter != _activeUniformInfos.end())
     {
-        const auto& uniformInfo = _activeUniformInfos.at(uniform);
+        uniformLocation.shaderStage = ShaderStage::VERTEX;
+        
+        const auto& uniformInfo = iter->second;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
         uniformLocation.location[0] = _mapToOriginalLocation.at(uniformInfo.location);
 #else
