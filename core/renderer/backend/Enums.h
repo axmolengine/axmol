@@ -52,11 +52,11 @@ enum class BufferType : uint32_t
     UNIFORM = UNIFORM_BUFFER
 };
 
-enum class ShaderStage : uint32_t
+enum class ShaderStage
 {
+    UNKNOWN = -1,
     VERTEX,
-    FRAGMENT,
-    VERTEX_AND_FRAGMENT
+    FRAGMENT
 };
 
 enum class VertexFormat : uint32_t

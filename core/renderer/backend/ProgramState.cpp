@@ -236,14 +236,9 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
         setVertexUniform(uniformLocation.location[0], data, size, uniformLocation.location[1]);
         break;
     case backend::ShaderStage::FRAGMENT:
-        setFragmentUniform(uniformLocation.location[1], data, size);
+        setFragmentUniform(uniformLocation.location[0], data, size, uniformLocation.location[1]);
         break;
-    case backend::ShaderStage::VERTEX_AND_FRAGMENT:
-        setVertexUniform(uniformLocation.location[0], data, size, uniformLocation.location[1]);
-        setFragmentUniform(uniformLocation.location[1], data, size);
-        break;
-    default:
-        break;
+    default:;
     }
 }
 
@@ -256,14 +251,13 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
     memcpy(_vertexUniformBuffer + location + offset, data, size);
 }
 
-void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size)
+void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset)
 {
     if (location < 0)
         return;
 
-// float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
 #ifdef AX_USE_METAL
-    memcpy(_fragmentUniformBuffer + location, data, size);
+    memcpy(_fragmentUniformBuffer + location + offset, data, size);
 #else
     assert(false);
 #endif
@@ -345,14 +339,9 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
         setTexture(uniformLocation.location[0], slot, index, texture, _vertexTextureInfos);
         break;
     case backend::ShaderStage::FRAGMENT:
-        setTexture(uniformLocation.location[1], slot, index, texture, _fragmentTextureInfos);
+        setTexture(uniformLocation.location[0], slot, index, texture, _fragmentTextureInfos);
         break;
-    case backend::ShaderStage::VERTEX_AND_FRAGMENT:
-        setTexture(uniformLocation.location[0], slot, index, texture, _vertexTextureInfos);
-        setTexture(uniformLocation.location[1], slot, index, texture, _fragmentTextureInfos);
-        break;
-    default:
-        break;
+        default:;
     }
 }
 
@@ -366,14 +355,9 @@ void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocati
         setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _vertexTextureInfos);
         break;
     case backend::ShaderStage::FRAGMENT:
-        setTextureArray(uniformLocation.location[1], std::move(slots), std::move(textures), _fragmentTextureInfos);
+        setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _fragmentTextureInfos);
         break;
-    case backend::ShaderStage::VERTEX_AND_FRAGMENT:
-        setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _vertexTextureInfos);
-        setTextureArray(uniformLocation.location[1], std::move(slots), std::move(textures), _fragmentTextureInfos);
-        break;
-    default:
-        break;
+        default:;
     }
 }
 

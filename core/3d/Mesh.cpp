@@ -90,25 +90,6 @@ void Mesh::resetLightUniformValues()
     _spotLightUniformRangeInverseValues.assign(maxSpotLight, 0.0f);
 }
 
-// Generate a dummy texture when the texture file is missing
-static Texture2D* getDummyTexture()
-{
-    auto texture = Director::getInstance()->getTextureCache()->getTextureForKey("/dummyTexture");
-    if (!texture)
-    {
-#ifdef NDEBUG
-        unsigned char data[] = {0, 0, 0, 0};  // 1*1 transparent picture
-#else
-        unsigned char data[] = {255, 0, 0, 255};  // 1*1 red picture
-#endif
-        Image* image = new Image();
-        image->initWithRawData(data, sizeof(data), 1, 1, sizeof(unsigned char));
-        texture = Director::getInstance()->getTextureCache()->addImage(image, "/dummyTexture");
-        image->release();
-    }
-    return texture;
-}
-
 Mesh::Mesh()
     : _skin(nullptr)
     , _visible(true)
@@ -282,7 +263,7 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
     // it doesn't matter if the material is already set or not
     // This functionality is added for compatibility issues
     if (tex == nullptr)
-        tex = getDummyTexture();
+        tex = Director::getInstance()->getTextureCache()->getDummyTexture();
 
     AX_SAFE_RETAIN(tex);
     AX_SAFE_RELEASE(_textures[usage]);

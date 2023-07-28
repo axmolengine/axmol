@@ -84,14 +84,14 @@ public:
      * @param name Specifies the engine built-in uniform enum name.
      * @return The uniform location.
      */
-    int getUniformLocation(Uniform name) const;
+    UniformLocation getUniformLocation(Uniform name) const;
 
     /**
      * Get uniform location by name.
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    int getUniformLocation(std::string_view name) const;
+    UniformLocation getUniformLocation(std::string_view name) const;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
@@ -117,17 +117,18 @@ private:
     void parseAttibute(SLCReflectContext* context);
     void parseUniform(SLCReflectContext* context);
     void parseTexture(SLCReflectContext* context);
-    void setBuiltinUniformLocation();
-    void setBuiltinAttributeLocation();
+    void setBuiltinLocations();
 
     id<MTLFunction> _mtlFunction = nil;
 
     hlookup::string_map<UniformInfo> _activeUniformInfos;
     hlookup::string_map<AttributeBindInfo> _attributeInfo;
-
-    int _maxLocation = -1;
-    int _uniformLocation[UNIFORM_MAX];
+    
     int _attributeLocation[ATTRIBUTE_MAX];
+    
+    int _maxLocation = -1;
+    UniformLocation _uniformLocation[UNIFORM_MAX]; // the builtin uniform locations
+    
     std::size_t _uniformBufferSize = 0;
 };
 

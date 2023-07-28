@@ -179,8 +179,7 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
         assert(false);
     }
 
-    setBuiltinUniformLocation();
-    setBuiltinAttributeLocation();
+    setBuiltinLocations();
 
     [library release];
 }
@@ -230,11 +229,11 @@ void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
             auto array_size = ibs->read<uint16_t>();
             
             uniform.count               = array_size;
-            uniform.location            = i;
+            uniform.location            = ub_binding;
             uniform.size                = size_bytes;
             uniform.bufferOffset        = offset;
             uniform.type                = format;
-            _activeUniformInfos[name]         = uniform;
+            _activeUniformInfos[name]   = uniform;
 
             if (_maxLocation < i)
                 _maxLocation = (i + 1);
@@ -256,71 +255,63 @@ void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
         ibs->advance(sizeof(sgs_refl_texture) - offsetof(sgs_refl_texture, image_dim));
 
         UniformInfo uniform;
-        uniform.location            = binding;
+        uniform.location          = binding;
+        uniform.bufferOffset      = -1;
         _activeUniformInfos[name] = uniform;
     }
 }
 
-int ShaderModuleMTL::getUniformLocation(Uniform name) const
+UniformLocation ShaderModuleMTL::getUniformLocation(Uniform name) const
 {
     return _uniformLocation[name];
 }
 
-int ShaderModuleMTL::getUniformLocation(std::string_view name) const
+UniformLocation ShaderModuleMTL::getUniformLocation(std::string_view name) const
 {
     auto iter = _activeUniformInfos.find(name);
     if (iter != _activeUniformInfos.end())
     {
-        return iter->second.location;
+        return UniformLocation{static_cast<int>(iter->second.location),
+            static_cast<int>(iter->second.bufferOffset), _stage};
     }
-    else
-        return -1;
+    return UniformLocation{};
 }
 
-void ShaderModuleMTL::setBuiltinUniformLocation()
+void ShaderModuleMTL::setBuiltinLocations()
 {
-    std::fill(_uniformLocation, _uniformLocation + UNIFORM_MAX, -1);
-    /// u_mvpMatrix
-    auto iter = _activeUniformInfos.find(UNIFORM_NAME_MVP_MATRIX);
-    if (iter != _activeUniformInfos.end())
-    {
-        _uniformLocation[Uniform::MVP_MATRIX] = iter->second.location;
-    }
+    /*--- Builtin Attribs ---*/
 
-    /// u_textColor
-    iter = _activeUniformInfos.find(UNIFORM_NAME_TEXT_COLOR);
-    if (iter != _activeUniformInfos.end())
-    {
-        _uniformLocation[Uniform::TEXT_COLOR] = iter->second.location;
-    }
+    /// a_position
+    _attributeLocation[Attribute::POSITION] = getAttributeLocation(ATTRIBUTE_NAME_POSITION);
 
-    /// u_effectColor
-    iter = _activeUniformInfos.find(UNIFORM_NAME_EFFECT_COLOR);
-    if (iter != _activeUniformInfos.end())
-    {
-        _uniformLocation[Uniform::EFFECT_COLOR] = iter->second.location;
-    }
+    /// a_color
+    _attributeLocation[Attribute::COLOR] = getAttributeLocation(ATTRIBUTE_NAME_COLOR);
 
-    /// u_effectType
-    iter = _activeUniformInfos.find(UNIFORM_NAME_EFFECT_TYPE);
-    if (iter != _activeUniformInfos.end())
-    {
-        _uniformLocation[Uniform::EFFECT_TYPE] = iter->second.location;
-    }
+    /// a_texCoord
+    _attributeLocation[Attribute::TEXCOORD] = getAttributeLocation(ATTRIBUTE_NAME_TEXCOORD);
+
+    // a_normal
+    _attributeLocation[Attribute::NORMAL] = getAttributeLocation(ATTRIBUTE_NAME_NORMAL);
+
+    /*--- Builtin Uniforms ---*/
+
+    /// u_MVPMatrix
+    _uniformLocation[Uniform::MVP_MATRIX] = getUniformLocation(UNIFORM_NAME_MVP_MATRIX);
 
     /// u_tex0
-    iter = _activeUniformInfos.find(UNIFORM_NAME_TEXTURE);
-    if (iter != _activeUniformInfos.end())
-    {
-        _uniformLocation[Uniform::TEXTURE] = iter->second.location;
-    }
+    _uniformLocation[Uniform::TEXTURE] = getUniformLocation(UNIFORM_NAME_TEXTURE);
 
     /// u_tex1
-    iter = _activeUniformInfos.find(UNIFORM_NAME_TEXTURE1);
-    if (iter != _activeUniformInfos.end())
-    {
-        _uniformLocation[Uniform::TEXTURE1] = iter->second.location;
-    }
+    _uniformLocation[Uniform::TEXTURE1] = getUniformLocation(UNIFORM_NAME_TEXTURE1);
+
+    /// u_textColor
+    _uniformLocation[Uniform::TEXT_COLOR] = getUniformLocation(UNIFORM_NAME_TEXT_COLOR);
+
+    /// u_effectColor
+    _uniformLocation[Uniform::EFFECT_COLOR] = getUniformLocation(UNIFORM_NAME_EFFECT_COLOR);
+
+    /// u_effectType
+    _uniformLocation[Uniform::EFFECT_TYPE] = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
 }
 
 int ShaderModuleMTL::getAttributeLocation(Attribute name) const
@@ -335,38 +326,6 @@ int ShaderModuleMTL::getAttributeLocation(std::string_view name)
         return _attributeInfo[name].location;
     else
         return -1;
-}
-
-void ShaderModuleMTL::setBuiltinAttributeLocation()
-{
-    std::fill(_attributeLocation, _attributeLocation + ATTRIBUTE_MAX, -1);
-    /// a_position
-    auto iter = _attributeInfo.find(ATTRIBUTE_NAME_POSITION);
-    if (iter != _attributeInfo.end())
-    {
-        _attributeLocation[Attribute::POSITION] = iter->second.location;
-    }
-
-    /// a_color
-    iter = _attributeInfo.find(ATTRIBUTE_NAME_COLOR);
-    if (iter != _attributeInfo.end())
-    {
-        _attributeLocation[Attribute::COLOR] = iter->second.location;
-    }
-
-    /// a_texCoord
-    iter = _attributeInfo.find(ATTRIBUTE_NAME_TEXCOORD);
-    if (iter != _attributeInfo.end())
-    {
-        _attributeLocation[Attribute::TEXCOORD] = iter->second.location;
-    }
-
-    /// a_normal
-    iter = _attributeInfo.find(ATTRIBUTE_NAME_NORMAL);
-    if (iter != _attributeInfo.end())
-    {
-        _attributeLocation[Attribute::NORMAL] = iter->second.location;
-    }
 }
 
 NS_AX_BACKEND_END

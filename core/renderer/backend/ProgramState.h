@@ -342,7 +342,7 @@ protected:
      * @param data Specifies the new values to be used for the specified uniform variable.
      * @param size Specifies the uniform data size.
      */
-    void setFragmentUniform(int location, const void* data, std::size_t size);
+    void setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset);
 
     /**
      * Set texture.
