@@ -129,10 +129,10 @@ void ProgramGL::compileProgram()
         {
             auto errorInfo = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(errorInfoLen));
             glGetProgramInfoLog(_program, errorInfoLen, NULL, errorInfo.get());
-            log("axmol:ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.get());
+            ax::log("axmol:ERROR: %s: failed to link program: %s ", __FUNCTION__, errorInfo.get());
         }
         else
-            log("axmol:ERROR: %s: failed to link program ", __FUNCTION__);
+            ax::log("axmol:ERROR: %s: failed to link program ", __FUNCTION__);
         glDeleteProgram(_program);
         _program = 0;
     }
@@ -140,52 +140,39 @@ void ProgramGL::compileProgram()
 
 void ProgramGL::setBuiltinLocations()
 {
-    std::fill(_builtinAttributeLocation, _builtinAttributeLocation + ATTRIBUTE_MAX, -1);
-    //    std::fill(_builtinUniformLocation, _builtinUniformLocation + UNIFORM_MAX, -1);
+    /*--- Builtin Attribs ---*/
 
     /// a_position
-    auto location                                  = glGetAttribLocation(_program, ATTRIBUTE_NAME_POSITION.data());
-    _builtinAttributeLocation[Attribute::POSITION] = location;
+    _builtinAttributeLocation[Attribute::POSITION] = getAttributeLocation(ATTRIBUTE_NAME_POSITION);
 
     /// a_color
-    location                                    = glGetAttribLocation(_program, ATTRIBUTE_NAME_COLOR.data());
-    _builtinAttributeLocation[Attribute::COLOR] = location;
+    _builtinAttributeLocation[Attribute::COLOR] = getAttributeLocation(ATTRIBUTE_NAME_COLOR);
 
     /// a_texCoord
-    location                                       = glGetAttribLocation(_program, ATTRIBUTE_NAME_TEXCOORD.data());
-    _builtinAttributeLocation[Attribute::TEXCOORD] = location;
+    _builtinAttributeLocation[Attribute::TEXCOORD] = getAttributeLocation(ATTRIBUTE_NAME_TEXCOORD);
 
     // a_normal
-    location                                     = glGetAttribLocation(_program, ATTRIBUTE_NAME_NORMAL.data());
-    _builtinAttributeLocation[Attribute::NORMAL] = location;
+    _builtinAttributeLocation[Attribute::NORMAL] = getAttributeLocation(ATTRIBUTE_NAME_NORMAL);
+
+    /*--- Builtin Uniforms ---*/
 
     /// u_MVPMatrix
-    auto uloc                                                = getUniformLocation(UNIFORM_NAME_MVP_MATRIX);
-    _builtinUniformLocation[Uniform::MVP_MATRIX].location[0] = uloc.location[0];
-    _builtinUniformLocation[Uniform::MVP_MATRIX].location[1] = uloc.location[1];
-
-    /// u_textColor
-    uloc                                                     = getUniformLocation(UNIFORM_NAME_TEXT_COLOR);
-    _builtinUniformLocation[Uniform::TEXT_COLOR].location[0] = uloc.location[0];
-    _builtinUniformLocation[Uniform::TEXT_COLOR].location[1] = uloc.location[1];
-
-    /// u_effectColor
-    uloc                                                       = getUniformLocation(UNIFORM_NAME_EFFECT_COLOR);
-    _builtinUniformLocation[Uniform::EFFECT_COLOR].location[0] = uloc.location[0];
-    _builtinUniformLocation[Uniform::EFFECT_COLOR].location[1] = uloc.location[1];
-
-    /// u_effectType
-    uloc                                                      = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
-    _builtinUniformLocation[Uniform::EFFECT_TYPE].location[0] = uloc.location[0];
-    _builtinUniformLocation[Uniform::EFFECT_TYPE].location[1] = uloc.location[1];
+    _builtinUniformLocation[Uniform::MVP_MATRIX] = getUniformLocation(UNIFORM_NAME_MVP_MATRIX);
 
     /// u_tex0
-    uloc                                                  = getUniformLocation(UNIFORM_NAME_TEXTURE);
-    _builtinUniformLocation[Uniform::TEXTURE].location[0] = uloc.location[0];
+    _builtinUniformLocation[Uniform::TEXTURE] = getUniformLocation(UNIFORM_NAME_TEXTURE);
 
     /// u_tex1
-    uloc                                                   = getUniformLocation(UNIFORM_NAME_TEXTURE1);
-    _builtinUniformLocation[Uniform::TEXTURE1].location[0] = uloc.location[0];
+    _builtinUniformLocation[Uniform::TEXTURE1] = getUniformLocation(UNIFORM_NAME_TEXTURE1);
+
+    /// u_textColor
+    _builtinUniformLocation[Uniform::TEXT_COLOR] = getUniformLocation(UNIFORM_NAME_TEXT_COLOR);
+
+    /// u_effectColor
+    _builtinUniformLocation[Uniform::EFFECT_COLOR] = getUniformLocation(UNIFORM_NAME_EFFECT_COLOR);
+
+    /// u_effectType
+    _builtinUniformLocation[Uniform::EFFECT_TYPE] = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
 }
 
 bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned int& location) const
@@ -321,7 +308,7 @@ void ProgramGL::computeUniformInfos()
 
         auto it = uniformIndexMap.find(i);
         if (it != uniformIndexMap.end())
-        { // member of uniform block
+        {  // member of uniform block
            // trim name vs_ub.xxx[0] --> xxx
             auto bracket = uniformName.find_last_of('[');
             if (bracket != std::string_view::npos)
@@ -337,13 +324,13 @@ void ProgramGL::computeUniformInfos()
             uniform.bufferOffset = it->second.second;
         }
         else
-        {// must be samper: sampler2D or samplerCube
+        {  // must be samper: sampler2D or samplerCube
             assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE);
             uniform.location     = glGetUniformLocation(_program, uniformName.data());
-            uniform.bufferOffset = 0;
+            uniform.bufferOffset = -1;
         }
 
-        uniform.size                    = UtilsGL::getGLDataTypeSize(uniform.type);
+        uniform.size                     = UtilsGL::getGLDataTypeSize(uniform.type);
         _activeUniformInfos[uniformName] = uniform;
 
         _maxLocation = _maxLocation <= uniform.location ? (uniform.location + 1) : _maxLocation;
