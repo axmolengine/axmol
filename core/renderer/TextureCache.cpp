@@ -395,11 +395,14 @@ Texture2D* TextureCache::getWhiteTexture()
     unsigned char texls[] = {
         // RGBA8888
         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-    Image image;
-    bool AX_UNUSED isOK = image.initWithRawData(texls, sizeof(texls), 2, 2, 8);
+
+    Image* image = new Image(); // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
+    bool AX_UNUSED isOK = image->initWithRawData(texls, sizeof(texls), 2, 2, 8);
     AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
 
-    return this->addImage(&image, key);
+    texture = this->addImage(image, key);
+    image->release();
+    return texture;
 }
 
 Texture2D* TextureCache::getDummyTexture()
@@ -415,9 +418,11 @@ Texture2D* TextureCache::getDummyTexture()
 #else
     unsigned char texls[] = {255, 0, 0, 255};  // 1*1 red picture
 #endif
-    Image image;
-    bool AX_UNUSED isOK = image.initWithRawData(texls, sizeof(texls), 1, 1, sizeof(unsigned char));
-    return this->addImage(&image, key);
+    Image* image = new Image();  // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
+    bool AX_UNUSED isOK = image->initWithRawData(texls, sizeof(texls), 1, 1, sizeof(unsigned char));
+    texture = this->addImage(image, key);
+    image->release();
+    return texture;
 }
 
 Texture2D* TextureCache::addImage(std::string_view path)
