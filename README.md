@@ -16,6 +16,19 @@
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
 
+
+> ⚠️⚠️⚠️ NOTICE ⚠️⚠️⚠️
+>
+> This branch still at an early develop phase, and the main goals is:
+
+> - OpenGL3/GLES3 support
+> - The GLES2 support was dropped
+> - Mesh instancing draw support
+> - Use glslcc as shader workflow, write shader by ESSL310, build to target platforms: MSL for Apple(macOS/iOS/tvOS), ESSL300 for Android, ANGLE, GLSL330 for Desktop GL
+> - Improve ProgramManager for loading custom shader program more easy
+> - Many other improvements: refer to #1279
+
+
 **[简体中文](README_CN.md)**
 
 ## Supported Platforms
