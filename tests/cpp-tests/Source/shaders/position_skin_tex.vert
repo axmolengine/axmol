@@ -1,4 +1,7 @@
 #version 310 es
+
+#include "base.glsl"
+
 layout(location = POSITION) in vec3 a_position;
 
 layout(location = BLENDWEIGHT) in vec4 a_blendWeight;
