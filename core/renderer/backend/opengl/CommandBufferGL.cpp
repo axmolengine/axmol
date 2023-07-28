@@ -191,6 +191,17 @@ void CommandBufferGL::setIndexBuffer(Buffer* buffer)
     _indexBuffer = static_cast<BufferGL*>(buffer);
 }
 
+void CommandBufferGL::setInstanceBuffer(Buffer* buffer)
+{
+    assert(buffer != nullptr);
+    if (buffer == nullptr || _instanceTransformBuffer == buffer)
+        return;
+
+    buffer->retain();
+    AX_SAFE_RELEASE(_instanceTransformBuffer);
+    _instanceTransformBuffer = static_cast<BufferGL*>(buffer);
+}
+
 void CommandBufferGL::setVertexBuffer(Buffer* buffer)
 {
     assert(buffer != nullptr);
@@ -246,6 +257,32 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
     cleanResources();
 }
 
+void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
+                                            IndexFormat indexType,
+                                            std::size_t count,
+                                            std::size_t offset,
+                                            int instanceCount,
+                                            bool wireframe)
+{
+    prepareDrawing();
+#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
+    if (wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+#else
+    if (wireframe)
+        primitiveType = PrimitiveType::LINE;
+#endif
+    __gl->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
+    glDrawElementsInstanced(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
+                            (GLvoid*)offset, instanceCount);
+    CHECK_GL_ERROR_DEBUG();
+#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
+    if (wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
+    cleanResources();
+}
+
 void CommandBufferGL::endRenderPass()
 {
     AX_SAFE_RELEASE_NULL(_indexBuffer);
@@ -295,6 +332,39 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
         glVertexAttribPointer(attribute.index, UtilsGL::getGLAttributeSize(attribute.format),
                               UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
                               vertexLayout->getStride(), (GLvoid*)attribute.offset);
+    }
+
+    // if we have an instance transform buffer pointer then we must be rendering in instance mode.
+    if (_instanceTransformBuffer)
+    {
+        auto instaceLoc = _programState->getProgram()->getAttributeLocation(Attribute::INSTANCE);
+        if (instaceLoc != -1)
+        {
+            __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
+
+            // Enable 4 attrib arrays for each matrix row.
+            glEnableVertexAttribArray(instaceLoc);
+            glEnableVertexAttribArray(instaceLoc + 1);
+            glEnableVertexAttribArray(instaceLoc + 2);
+            glEnableVertexAttribArray(instaceLoc + 3);
+
+            // Since OpenGL sucks we need to Specify vertex attribute pointers for
+            // instance transforms for each matrix row containting 16 bytes or 4 floats
+            glVertexAttribPointer(instaceLoc, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16, (void*)0);
+            glVertexAttribPointer(instaceLoc + 1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
+                                  (void*)(sizeof(float) * 4));
+            glVertexAttribPointer(instaceLoc + 2, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
+                                  (void*)(2 * sizeof(float) * 4));
+            glVertexAttribPointer(instaceLoc + 3, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
+                                  (void*)(3 * sizeof(float) * 4));
+
+            // Set the divisor for the instance attributes to 1 indicating that it should advance one matrix per
+            // instance.
+            glVertexAttribDivisor(instaceLoc, 1);
+            glVertexAttribDivisor(instaceLoc + 1, 1);
+            glVertexAttribDivisor(instaceLoc + 2, 1);
+            glVertexAttribDivisor(instaceLoc + 3, 1);
+        }
     }
 }
 
@@ -350,6 +420,16 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
 
 void CommandBufferGL::cleanResources()
 {
+    if (_instanceTransformBuffer)
+    {
+        const auto& attribOffset = _programState->getVertexLayout()->getAttributes().size();
+
+        for (GLubyte i = attribOffset; i < attribOffset + 4; i++)
+            glVertexAttribDivisor(i, 0);
+
+        _instanceTransformBuffer = nullptr;
+    }
+
     AX_SAFE_RELEASE_NULL(_programState);
 }
 

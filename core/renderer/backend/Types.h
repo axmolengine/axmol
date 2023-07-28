@@ -66,19 +66,20 @@ struct SamplerDescriptor
 
 struct UniformInfo
 {
-    int count    = 0; // element count
+    int count    = 0;  // element count
     int location = -1;
 
     // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
     // float
     unsigned int type         = 0;
-    unsigned int size         = 0; // element size
+    unsigned int size         = 0;  // element size
     unsigned int bufferOffset = 0;
 };
 
 struct UniformLocation
 {
-    UniformLocation() {
+    UniformLocation()
+    {
         location[0] = -1;
         location[1] = -1;
         shaderStage = ShaderStage::UNKNOWN;
@@ -90,14 +91,12 @@ struct UniformLocation
         shaderStage = stage;
     }
     /**
-     * both opengl and metal, location[0] represent the location, and location[1] represent location offset in uniform block.
+     * both opengl and metal, location[0] represent the location, and location[1] represent location offset in uniform
+     * block.
      */
     int location[2];
     ShaderStage shaderStage;
-    operator bool()
-    {
-        return shaderStage != ShaderStage::UNKNOWN;
-    }
+    operator bool() { return shaderStage != ShaderStage::UNKNOWN; }
     void reset() { location[0] = location[1] = -1; }
     bool operator==(const UniformLocation& other) const;
     std::size_t operator()(const UniformLocation& uniform) const;
@@ -129,6 +128,7 @@ static constexpr auto ATTRIBUTE_NAME_TEXCOORD1 = "a_texCoord1"sv;
 static constexpr auto ATTRIBUTE_NAME_TEXCOORD2 = "a_texCoord2"sv;
 static constexpr auto ATTRIBUTE_NAME_TEXCOORD3 = "a_texCoord3"sv;
 static constexpr auto ATTRIBUTE_NAME_NORMAL    = "a_normal"sv;
+static constexpr auto ATTRIBUTE_NAME_INSTANCE  = "a_instance"sv;
 
 /**
  * @brief a structor to store blend descriptor
