@@ -61,6 +61,7 @@ enum Attribute : uint32_t
     TEXCOORD2,
     TEXCOORD3,
     NORMAL,
+    INSTANCE,
     ATTRIBUTE_MAX  // Maximum attributes
 };
 /**

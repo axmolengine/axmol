@@ -154,6 +154,9 @@ void ProgramGL::setBuiltinLocations()
     // a_normal
     _builtinAttributeLocation[Attribute::NORMAL] = getAttributeLocation(ATTRIBUTE_NAME_NORMAL);
 
+    // a_instance
+    _builtinAttributeLocation[Attribute::INSTANCE] = getAttributeLocation(ATTRIBUTE_NAME_INSTANCE);
+
     /*--- Builtin Uniforms ---*/
 
     /// u_MVPMatrix
@@ -412,7 +415,7 @@ UniformLocation ProgramGL::getUniformLocation(std::string_view uniform) const
     if (iter != _activeUniformInfos.end())
     {
         uniformLocation.shaderStage = ShaderStage::VERTEX;
-        
+
         const auto& uniformInfo = iter->second;
 #if AX_ENABLE_CACHE_TEXTURE_DATA
         uniformLocation.location[0] = _mapToOriginalLocation.at(uniformInfo.location);
