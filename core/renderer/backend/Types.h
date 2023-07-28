@@ -81,24 +81,22 @@ struct UniformLocation
     UniformLocation() {
         location[0] = -1;
         location[1] = -1;
+        shaderStage = ShaderStage::UNKNOWN;
     }
-    UniformLocation(int loc, int offset)
+    UniformLocation(int loc, int offset, ShaderStage stage = ShaderStage::VERTEX)
     {
         location[0] = loc;
         location[1] = offset;
+        shaderStage = stage;
     }
     /**
-     * in metal, those two locations represent to vertex and fragment location.
-     * in opengl, location[0] represent the location, and location[1] represent location offset in uniform block.
+     * both opengl and metal, location[0] represent the location, and location[1] represent location offset in uniform block.
      */
     int location[2];
-    ShaderStage shaderStage = ShaderStage::VERTEX;
+    ShaderStage shaderStage;
     operator bool()
     {
-        if (shaderStage == ShaderStage::VERTEX_AND_FRAGMENT)
-            return location[0] >= 0 && location[1] >= 0;
-        else
-            return location[int(shaderStage)] >= 0;
+        return shaderStage != ShaderStage::UNKNOWN;
     }
     void reset() { location[0] = location[1] = -1; }
     bool operator==(const UniformLocation& other) const;

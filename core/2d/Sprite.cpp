@@ -325,23 +325,6 @@ Sprite::~Sprite()
  * Texture methods
  */
 
-/*
- * This array is the data of a white image with 2 by 2 dimension.
- * It's used for creating a default texture when sprite's texture is set to nullptr.
- * Supposing codes as follows:
- *
- *   auto sp = new Sprite();
- *   sp->init();  // Texture was set to nullptr, in order to make opacity and color to work correctly, we need to create
- * a 2x2 white texture.
- *
- * The test is in "TestCpp/SpriteTest/Sprite without texture".
- */
-static unsigned char cc_2x2_white_image[] = {
-    // RGBA8888
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-
-#define AX_2x2_WHITE_IMAGE_KEY "/cc_2x2_white_image"
-
 // MARK: texture
 void Sprite::setTexture(std::string_view filename)
 {
@@ -394,18 +377,7 @@ void Sprite::setTexture(Texture2D* texture)
     if (texture == nullptr)
     {
         // Gets the texture by key firstly.
-        texture = _director->getTextureCache()->getTextureForKey(AX_2x2_WHITE_IMAGE_KEY);
-
-        // If texture wasn't in cache, create it from RAW data.
-        if (texture == nullptr)
-        {
-            Image* image        = new Image();
-            bool AX_UNUSED isOK = image->initWithRawData(cc_2x2_white_image, sizeof(cc_2x2_white_image), 2, 2, 8);
-            AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
-
-            texture = _director->getTextureCache()->addImage(image, AX_2x2_WHITE_IMAGE_KEY);
-            AX_SAFE_RELEASE(image);
-        }
+        texture = _director->getTextureCache()->getWhiteTexture();
     }
 
     bool needsUpdatePS =

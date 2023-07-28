@@ -4,7 +4,6 @@ layout(location = TEXCOORD0) in vec2 a_texCoord;
 layout(location = TEXCOORD0) out vec2 v_texCoord;
 
 layout(std140, binding = 0) uniform vs_ub {
-    float offset;
     mat4 u_MVPMatrix;
 };
 

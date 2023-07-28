@@ -19,11 +19,11 @@ layout(location = SPOTLIGHT_NORM) in vec3 v_spotLightDirection[MAX_SPOT_LIGHT_NU
 layout(location = NORMAL) in vec3 v_normal;
 #endif
 
-#ifdef USE_NORMAL_MAPPING
-layout(binding = 0) uniform sampler2D u_normalTex;
-#endif
+layout(binding = 0) uniform sampler2D u_tex0;
 
-layout(binding = 1) uniform sampler2D u_tex0;
+#ifdef USE_NORMAL_MAPPING
+layout(binding = 1) uniform sampler2D u_normalTex;
+#endif
 
 layout(std140) uniform fs_ub {
     vec3 u_DirLightSourceColor[MAX_DIRECTIONAL_LIGHT_NUM];

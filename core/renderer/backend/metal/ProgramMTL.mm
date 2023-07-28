@@ -62,49 +62,19 @@ int ProgramMTL::getAttributeLocation(std::string_view name) const
 UniformLocation ProgramMTL::getUniformLocation(backend::Uniform name) const
 {
     UniformLocation uniformLocation;
-    auto vsLocation = _vertexShader->getUniformLocation(name);
-    auto fsLocation = _fragmentShader->getUniformLocation(name);
-    if (vsLocation != -1 && fsLocation != -1)
-    {
-        uniformLocation.shaderStage = ShaderStage::VERTEX_AND_FRAGMENT;
-        uniformLocation.location[0] = vsLocation;
-        uniformLocation.location[1] = fsLocation;
-    }
-    else if (vsLocation != -1)
-    {
-        uniformLocation.shaderStage = ShaderStage::VERTEX;
-        uniformLocation.location[0] = vsLocation;
-    }
-    else
-    {
-        uniformLocation.shaderStage = ShaderStage::FRAGMENT;
-        uniformLocation.location[1] = fsLocation;
-    }
-    return uniformLocation;
+    uniformLocation = _vertexShader->getUniformLocation(name);
+    if (uniformLocation.location[0] != -1)
+        return uniformLocation;
+    return _fragmentShader->getUniformLocation(name);
 }
 
 UniformLocation ProgramMTL::getUniformLocation(std::string_view uniform) const
 {
     UniformLocation uniformLocation;
-    auto vsLocation = _vertexShader->getUniformLocation(uniform);
-    auto fsLocation = _fragmentShader->getUniformLocation(uniform);
-    if (vsLocation != -1 && fsLocation != -1)
-    {
-        uniformLocation.shaderStage = ShaderStage::VERTEX_AND_FRAGMENT;
-        uniformLocation.location[0] = vsLocation;
-        uniformLocation.location[1] = fsLocation;
-    }
-    else if (vsLocation != -1)
-    {
-        uniformLocation.shaderStage = ShaderStage::VERTEX;
-        uniformLocation.location[0] = vsLocation;
-    }
-    else
-    {
-        uniformLocation.shaderStage = ShaderStage::FRAGMENT;
-        uniformLocation.location[1] = fsLocation;
-    }
-    return uniformLocation;
+    uniformLocation = _vertexShader->getUniformLocation(uniform);
+    if (uniformLocation.location[0] != -1)
+        return uniformLocation;
+    return _fragmentShader->getUniformLocation(uniform);
 }
 
 int ProgramMTL::getMaxVertexLocation() const
