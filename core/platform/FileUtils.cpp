@@ -525,8 +525,8 @@ bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string
         // Read the file from hardware
         AX_BREAK_IF(!fileStream);
 
-        fileStream->write(data, static_cast<unsigned int>(dataSize));
-        return true;
+        bool ok = fileStream->write(data, static_cast<unsigned int>(dataSize)) == dataSize;
+        return ok;
     } while (0);
 
     return false;
