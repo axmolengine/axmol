@@ -136,11 +136,8 @@ $manifest = @{
     clang        = '15.0.0+';
     gcc          = '9.0.0+';
     cmake        = '3.26.4+';
-    nuget        = '*'; # any
-    glslcc       = '1.9.0+';
     ninja        = '1.11.1+';
     jdk          = '11.0.19+';
-    nsis         = '3.09';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
@@ -258,8 +255,8 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
     $checkVerCond = $null
     $requiredMin = ''
     $preferredVer = ''
-    if ($manifest.Contains($name)) {
-        $requiredVer = $manifest[$name]
+    $requiredVer = $manifest[$name]
+    if ($requiredVer) {
         $preferredVer = $null
         if ($requiredVer.EndsWith('+')) {
             $preferredVer = $requiredVer.TrimEnd('+')
@@ -424,7 +421,7 @@ function setup_cmake() {
 
 # setup nuget
 function setup_nuget() {
-    if (!$manifest.Contains('nuget')) { return $null }
+    if (!$manifest['nuget']) { return $null }
     $nuget_bin = Join-Path $prefix 'nuget'
     $nuget_prog, $nuget_ver = find_prog -name 'nuget' -path $nuget_bin -mode 'BOTH'
     if ($nuget_prog) {
@@ -448,7 +445,7 @@ function setup_nuget() {
 }
 
 function setup_nsis() {
-    if(!$manifest.Contains('nsis')) { return $null }
+    if(!$manifest['nsis']) { return $null }
     $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION'
     if ($nsis_prog) {
         return $nsis_prog
@@ -469,7 +466,7 @@ function setup_nsis() {
 }
 
 function setup_jdk() {
-    if (!$manifest.Contains('jdk')) { return $null }
+    if (!$manifest['jdk']) { return $null }
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
@@ -514,7 +511,7 @@ function setup_jdk() {
 }
 
 function setup_glslcc() {
-    if (!$manifest.Contains('glslcc')) { return $null }
+    if (!$manifest['glslcc']) { return $null }
     $glslcc_bin = Join-Path $prefix 'glslcc'
     $glslcc_prog, $glslcc_ver = find_prog -name 'glslcc' -path $glslcc_bin -mode 'BOTH'
     if ($glslcc_prog) {
@@ -546,7 +543,7 @@ function setup_glslcc() {
 }
 
 function setup_ninja() {
-    if (!$manifest.Contains('ninja')) { return $null }
+    if (!$manifest['ninja']) { return $null }
     $ninja_prog, $ninja_ver = find_prog -name 'ninja'
     if ($ninja_prog) {
         return $ninja_prog
@@ -569,7 +566,7 @@ function setup_ninja() {
 }
 
 function setup_android_sdk() {
-    if (!$manifest.Contains('ndk')) { return $null }
+    if (!$manifest['ndk']) { return $null }
     # setup ndk
     $ndk_ver = $TOOLCHAIN_VER
     if (!$ndk_ver) {
