@@ -33,7 +33,7 @@
 #include "Types.h"
 #include "RenderPassDescriptor.h"
 #include "PixelBufferDescriptor.h"
-#include "StdC.h"
+#include "platform/StdC.h"
 #include "ProgramState.h"
 #include "VertexLayout.h"
 
