@@ -37,10 +37,6 @@
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
 
-#ifdef AX_USE_METAL
-struct XXH32_state_s;
-#endif
-
 NS_AX_BACKEND_BEGIN
 
 class TextureBackend;
