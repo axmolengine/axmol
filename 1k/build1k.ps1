@@ -982,7 +982,28 @@ if (!$options.setupOnly) {
     } 
     else {
         # step3. configure
-        cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+       
+        $workDir = $(Get-Location).Path
+
+        $mainDep = Join-Path $workDir 'CMakeLists.txt'
+        if(!$b1k.isfile($mainDep)) {
+            throw "Missing CMakeLists.txt in $workDir"
+        }
+
+        $mainDepChanged = $false
+        # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
+        $tempFileItem = Get-Item $mainDep
+        $lastWriteTime = $tempFileItem.LastWriteTime.ToFileTimeUTC()
+        $tempFile = Join-Path $BUILD_DIR 'b1k_cache.txt'
+        if ($b1k.isfile($tempFile)) {
+            $storeTime = Get-Content $tempFile -Raw
+        }
+        $mainDepChanged = "$storeTime" -ne "$lastWriteTime"
+        $cmakeCachePath = Join-Path $workDir "$BUILD_DIR/CMakeCache.txt"
+        if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath)) {
+            cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+            Set-Content $tempFile $lastWriteTime -NoNewline
+        }
 
         # step4. build
         # apply additional build options
