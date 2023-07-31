@@ -90,7 +90,36 @@ void Mesh::resetLightUniformValues()
     _spotLightUniformRangeInverseValues.assign(maxSpotLight, 0.0f);
 }
 
+Mesh::Mesh()
+    : _skin(nullptr)
+    , _visible(true)
+    , _instancing(false)
+    , _instanceTransformBuffer(nullptr)
+    , _instanceTransformBufferDirty(false)
+    , _instanceCount(0)
+    , _dynamicInstancing(false)
+    , _instanceMatrixCache(nullptr)
+    , meshIndexFormat(CustomCommand::IndexFormat::U_SHORT)
+    , _meshIndexData(nullptr)
+    , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
+    , _blendDirty(true)
+    , _material(nullptr)
+    , _texFile("")
+{}
+Mesh::~Mesh()
+{
+    for (auto&& tex : _textures)
+        AX_SAFE_RELEASE(tex.second);
 
+    for (auto&& ins : _instances)
+        AX_SAFE_RELEASE(ins);
+
+    AX_SAFE_RELEASE(_skin);
+    AX_SAFE_RELEASE(_meshIndexData);
+    AX_SAFE_RELEASE(_material);
+    AX_SAFE_RELEASE(_instanceTransformBuffer);
+    AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
+}
 
 void Mesh::enableInstancing(bool instance, int count)
 {
@@ -134,37 +163,6 @@ void Mesh::rebuildInstances()
 void Mesh::setDynamicInstancing(bool dynamic)
 {
     _dynamicInstancing = dynamic;
-}
-
-Mesh::Mesh()
-    : _skin(nullptr)
-    , _visible(true)
-    , _instancing(false)
-    , _instanceTransformBuffer(nullptr)
-    , _instanceTransformBufferDirty(false)
-    , _instanceCount(0)
-    , _dynamicInstancing(false)
-    , _instanceMatrixCache(nullptr)
-    , meshIndexFormat(CustomCommand::IndexFormat::U_SHORT)
-    , _meshIndexData(nullptr)
-    , _blend(BlendFunc::ALPHA_NON_PREMULTIPLIED)
-    , _blendDirty(true)
-    , _material(nullptr)
-    , _texFile("")
-{}
-Mesh::~Mesh()
-{
-    for (auto&& tex : _textures)
-        AX_SAFE_RELEASE(tex.second);
-
-    for (auto&& ins : _instances)
-        AX_SAFE_RELEASE(ins);
-
-    AX_SAFE_RELEASE(_skin);
-    AX_SAFE_RELEASE(_meshIndexData);
-    AX_SAFE_RELEASE(_material);
-    AX_SAFE_RELEASE(_instanceTransformBuffer);
-    AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
 }
 
 backend::Buffer* Mesh::getVertexBuffer() const
@@ -448,6 +446,7 @@ void Mesh::draw(Renderer* renderer,
         if (!_instanceTransformBuffer || _instanceTransformBufferDirty)
         {
             AX_SAFE_RELEASE(_instanceTransformBuffer);
+            AX_SAFE_DELETE_ARRAY(_instanceMatrixCache);
 
             _instanceTransformBuffer = backend::Device::getInstance()->newBuffer(
                 _instanceCount * 64, backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
