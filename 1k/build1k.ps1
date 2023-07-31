@@ -181,6 +181,14 @@ foreach ($arg in $args) {
     }
 }
 
+# translate xtool args
+if ($options.xc.GetType() -eq [string]) {
+    $options.xc = $options.xc.Split(' ')
+}
+if ($options.xb.GetType() -eq [string]) {
+    $options.xb = $options.xb.Split(' ')
+}
+
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
 $b1k.println("PowerShell $pwsh_ver")
@@ -995,6 +1003,8 @@ if (!$options.setupOnly) {
         $tempFileItem = Get-Item $mainDep
         $lastWriteTime = $tempFileItem.LastWriteTime.ToFileTimeUTC()
         $tempFile = Join-Path $BUILD_DIR 'b1k_cache.txt'
+
+        $storeTime = 0
         if ($b1k.isfile($tempFile)) {
             $storeTime = Get-Content $tempFile -Raw
         }
