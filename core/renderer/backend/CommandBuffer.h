@@ -150,7 +150,7 @@ public:
      * Set matrix tranform when drawing instances of the same model
      * @ buffer A buffer object that the device will read matrices from.
      */
-    virtual void setInstanceBuffer(Buffer* buffer){};
+    virtual void setInstanceBuffer(Buffer* buffer) = 0;
 
     /**
      * Draw primitives without an index list.
@@ -193,8 +193,8 @@ public:
                                        IndexFormat indexType,
                                        std::size_t count,
                                        std::size_t offset,
-                                       int instance,
-                                       bool wireframe = false){};
+                                       int instanceCount,
+                                       bool wireframe = false) = 0;
 
     /**
      * Do some resources release.
