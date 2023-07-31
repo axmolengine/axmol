@@ -121,8 +121,7 @@ bool MotionStreak3D::initWithFade(float fade, float minSeg, float stroke, const 
     _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
 
     // shader state
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    setProgramState(new backend::ProgramState(program), false);
+    this->setProgramStateByProgramId(ProgramType::POSITION_TEXTURE_COLOR);
 
     _customCommand.getPipelineDescriptor().programState = _programState;
 

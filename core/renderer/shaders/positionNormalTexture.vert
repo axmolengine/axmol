@@ -1,31 +1,32 @@
 #version 310 es
 
+#include "base.glsl"
 
 #ifdef USE_NORMAL_MAPPING
 #endif
 #ifdef USE_NORMAL_MAPPING
 #endif
 
-layout(location = 0) in vec4 a_position;
-layout(location = 1) in vec2 a_texCoord;
-layout(location = 2) in vec3 a_normal;
+layout(location = POSITION) in vec4 a_position;
+layout(location = TEXCOORD0) in vec2 a_texCoord;
+layout(location = NORMAL) in vec3 a_normal;
 #ifdef USE_NORMAL_MAPPING
-layout(location = 3) in vec3 a_tangent;
-layout(location = 4) in vec3 a_binormal;
+layout(location = TANGENT) in vec3 a_tangent;
+layout(location = BINORMAL) in vec3 a_binormal;
 #endif
-layout(location = 0) out vec2 TextureCoordOut;
+layout(location = TEXCOORD0) out vec2 v_texCoord;
 
 #ifdef USE_NORMAL_MAPPING
-layout(location = 1) out vec3 v_dirLightDirection[MAX_DIRECTIONAL_LIGHT_NUM];
+layout(location = DIRLIGHT) out vec3 v_dirLightDirection[MAX_DIRECTIONAL_LIGHT_NUM];
 #endif
-layout(location = 2) out vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
-layout(location = 3) out vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
+layout(location = POINTLIGHT) out vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
+layout(location = SPOTLIGHT) out vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
 #ifdef USE_NORMAL_MAPPING
-layout(location = 4) out vec3 v_spotLightDirection[MAX_SPOT_LIGHT_NUM];
+layout(location = SPOTLIGHT_NORM) out vec3 v_spotLightDirection[MAX_SPOT_LIGHT_NUM];
 #endif
 
 #ifndef USE_NORMAL_MAPPING
-layout(location = 5) out vec3 v_normal;
+layout(location = NORMAL) out vec3 v_normal;
 #endif
 
 
@@ -89,7 +90,7 @@ void main(void)
     v_normal = u_NormalMatrix * a_normal;
 #endif
 
-    TextureCoordOut = a_texCoord;
-    TextureCoordOut.y = 1.0 - TextureCoordOut.y;
+    v_texCoord = a_texCoord;
+    v_texCoord.y = 1.0 - v_texCoord.y;
     gl_Position = u_PMatrix * ePosition;
 }

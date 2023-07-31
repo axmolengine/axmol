@@ -221,8 +221,6 @@ list(APPEND GAME_HEADER
      Source/SchedulerTest/SchedulerTest.h
      Source/MultiTouchTest/MultiTouchTest.h
      Source/testResource.h
-     Source/ShaderTest/ShaderTest.vsh.h
-     Source/ShaderTest/shaderTest.psh.h
      Source/ShaderTest/ShaderTest.h
      Source/ShaderTest/ShaderTest2.h
      Source/NewRendererTest/NewRendererTest.h

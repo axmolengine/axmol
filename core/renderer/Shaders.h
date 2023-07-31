@@ -47,9 +47,10 @@ extern AX_DLL const std::string_view positionTextureColor_vert;
 extern AX_DLL const std::string_view positionTextureColor_frag;
 extern AX_DLL const std::string_view positionTextureColorAlphaTest_frag;
 extern AX_DLL const std::string_view label_normal_frag;
+extern AX_DLL const std::string_view label_outline_frag;
 extern AX_DLL const std::string_view label_distanceNormal_frag;
-extern AX_DLL const std::string_view labelOutline_frag;
-extern AX_DLL const std::string_view labelDistanceFieldGlow_frag;
+extern AX_DLL const std::string_view label_distanceOutline_frag;
+extern AX_DLL const std::string_view label_distanceGlow_frag;
 extern AX_DLL const std::string_view positionColorLengthTexture_vert;
 extern AX_DLL const std::string_view positionColorLengthTexture_frag;
 extern AX_DLL const std::string_view positionColorTextureAsPointsize_vert;
@@ -72,21 +73,22 @@ extern AX_DLL const std::string_view dualSampler_hsv_frag;
 
 extern AX_DLL const std::string_view videoTextureYUY2_frag;
 extern AX_DLL const std::string_view videoTextureNV12_frag;
-extern AX_DLL const std::string_view videoTextureBGRA_frag;
 
 /* below is 3d shaders */
-extern AX_DLL const std::string_view lineColor3D_frag;
-extern AX_DLL const std::string_view lineColor3D_vert;
+extern AX_DLL const std::string_view lineColor_frag;
+extern AX_DLL const std::string_view lineColor_vert;
 extern AX_DLL const std::string_view color_frag;
 extern AX_DLL const std::string_view colorNormal_frag;
 extern AX_DLL const std::string_view colorNormalTexture_frag;
 extern AX_DLL const std::string_view colorTexture_frag;
+extern AX_DLL const std::string_view colorTextureInstance_frag;
 extern AX_DLL const std::string_view particleTexture_frag;
 extern AX_DLL const std::string_view particleColor_frag;
 extern AX_DLL const std::string_view particle_vert;
 extern AX_DLL const std::string_view positionNormalTexture_vert;
 extern AX_DLL const std::string_view skinPositionNormalTexture_vert;
 extern AX_DLL const std::string_view positionTexture3D_vert;
+extern AX_DLL const std::string_view positionTextureInstance_vert;
 extern AX_DLL const std::string_view skinPositionTexture_vert;
 extern AX_DLL const std::string_view skybox_frag;
 extern AX_DLL const std::string_view skybox_vert;

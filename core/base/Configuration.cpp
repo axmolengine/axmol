@@ -117,7 +117,6 @@ std::string Configuration::getInfo() const
 void Configuration::gatherGPUInfo()
 {
     auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    AXLOG("Supported extensions: %s", _deviceInfo->getExtension());
 
     _valueDict["vendor"]   = Value(_deviceInfo->getVendor());
     _valueDict["renderer"] = Value(_deviceInfo->getRenderer());
@@ -167,7 +166,7 @@ void Configuration::gatherGPUInfo()
     _supportsOESDepth24                = _deviceInfo->checkForFeatureSupported(backend::FeatureType::DEPTH24);
     _valueDict["supports_OES_depth24"] = Value(_supportsOESDepth24);
 
-    _glExtensions = _deviceInfo->getExtension();
+    // _glExtensions = _deviceInfo->getExtension();
 }
 
 Configuration* Configuration::getInstance()
@@ -184,11 +183,6 @@ Configuration* Configuration::getInstance()
 void Configuration::destroyInstance()
 {
     AX_SAFE_RELEASE_NULL(s_sharedConfiguration);
-}
-
-bool Configuration::checkForGLExtension(std::string_view searchName) const
-{
-    return _glExtensions.find(searchName) != std::string::npos;
 }
 
 //

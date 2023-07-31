@@ -7,8 +7,8 @@ material FakeShadow
         {
             shader
             {
-                vertexShader = MeshRendererTest/simple_shadow.vert
-                fragmentShader = MeshRendererTest/simple_shadow.frag
+                vertexShader = custom/simple_shadow_vs
+                fragmentShader = custom/simple_shadow_fs
                 // sampler:
                 //   responsible for setting the texture and its parameters
                 //   the Id of the sampler is the uniform name

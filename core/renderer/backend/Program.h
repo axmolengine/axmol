@@ -30,6 +30,7 @@
 #include "Types.h"
 #include "ShaderCache.h"
 
+#include <functional>
 #include <string>
 #include <vector>
 #include <unordered_map>
@@ -39,6 +40,26 @@ NS_AX_BACKEND_BEGIN
 class ShaderModule;
 class VertexLayout;
 class ProgramManager;
+
+/**
+ * @addtogroup _backend
+ * @{
+ */
+
+enum class VertexLayoutType
+{
+    Unspec,      // needs binding after program load
+    Pos,         // V2F
+    Texture,     // T2F
+    Sprite,      // V3F_C4B_T2F posTexColor
+    DrawNode,    // V2F_C4B_T2F
+    DrawNode3D,  // V3F_C4B
+    SkyBox,      // V3F
+    PU3D,        // V3F_C4B_T2F // same with sprite, TODO: reuse spriete
+    posColor,    // V3F_C4B
+    Terrain3D,   // V3F_T2F_V3F
+    Count
+};
 
 /**
  * @addtogroup _backend
@@ -117,10 +138,21 @@ public:
     std::string_view getFragmentShader() const { return _fragmentShader; }
 
     /**
+    * Sets the program shared vertex layout type, see: VertexLayoutType
+    */
+    void setupVertexLayout(VertexLayoutType vlt);
+
+    /**
      * Get engine built-in program type.
      * @return The built-in program type.
      */
     uint32_t getProgramType() const { return _programType; }
+
+    /**
+     * Get program id.
+     * @return The program id.
+     */
+    int64_t getProgramId() const { return _programId; }
 
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
@@ -130,28 +162,23 @@ public:
     virtual std::size_t getUniformBufferSize(ShaderStage stage) const = 0;
 
     /**
-     * Get a uniformInfo in given location from the specific shader stage.
-     * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
-     * @param location Specifies the uniform locaion.
-     * @return The uniformInfo.
-     */
-    virtual const UniformInfo& getActiveUniformInfo(ShaderStage stage, int location) const = 0;
-
-    /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
     virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const = 0;
 
-    /**
-     * Set engin built-in program type.
-     * @param type Specifies the program type.
-     */
-    void setProgramType(uint32_t type);
-
     inline VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
+    /**
+    * Sets batch draw enabled
+    */
+    void setBatchDrawEnabled(bool enabled) { _batchEnabled = enabled; }
+    bool isBatchEnabled() const { return _batchEnabled; }
+
 protected:
+
+    void setProgramIds(uint32_t progType, uint64_t progId);
+
     /**
      * @param vs Specifes the vertex shader source.
      * @param fs Specifes the fragment shader source.
@@ -192,6 +219,12 @@ protected:
     std::string _fragmentShader;                          ///< Fragment shader.
     VertexLayout* _vertexLayout = nullptr;
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
+    uint64_t _programId   = 0;
+    bool _batchEnabled    = false;
+
+    using VERTEX_LAYOUT_SETUP_FUNC = std::function<void(Program*)>;
+
+    static std::function<void(Program*)> s_vertexLayoutSetupList[static_cast<int>(VertexLayoutType::Count)];
 };
 
 // end of _backend group

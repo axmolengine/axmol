@@ -7,8 +7,8 @@ material BasicToon
         {
             shader
             {
-                vertexShader = MeshRendererTest/toon.vert
-                fragmentShader = MeshRendererTest/toon.frag
+                vertexShader = custom/toon_vs
+                fragmentShader = custom/toon_fs
 
                 sampler u_sampler0
                 {

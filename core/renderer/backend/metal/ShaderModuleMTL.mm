@@ -32,99 +32,131 @@
 
 NS_AX_BACKEND_BEGIN
 
-struct SLCReflectContext {
+struct SLCReflectContext
+{
     sgs_chunk_refl* refl;
-    yasio::fast_ibstream_view* data;
+    yasio::fast_ibstream_view* ibs;
 };
+
+static inline std::string_view _sgs_read_name(yasio::fast_ibstream_view* ibs) {
+    // view bytes without copy
+    std::string_view name = ibs->read_bytes(sizeof(sgs_refl_input::name));
+    auto len = name.find_last_not_of('\0');
+    assert(len != std::string::npos); // name must not empty
+    name.remove_suffix(name.length() - len - 1);
+    return name;
+}
 
 ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std::string_view source)
     : ShaderModule(stage)
 {
     yasio::fast_ibstream_view ibs(source.data(), source.length());
     uint32_t fourccId = ibs.read<uint32_t>();
-    if(fourccId != SGS_CHUNK) {
+    if (fourccId != SGS_CHUNK)
+    {
         assert(false);
         return;
     }
-    auto sgs_size = ibs.read<uint32_t>(); // always 0, doesn't matter
+    auto sgs_size = ibs.read<uint32_t>();  // always 0, doesn't matter
     struct sgs_chunk chunk;
     ibs.read_bytes(&chunk, static_cast<int>(sizeof(chunk)));
-    
+
     std::string_view mslCode;
-    
-    do {
+
+    do
+    {
         fourccId = ibs.read<uint32_t>();
-        if(fourccId != SGS_CHUNK_STAG) {
+        if (fourccId != SGS_CHUNK_STAG)
+        {
             assert(false);
-            return; // error
+            return;  // error
         }
-        auto stage_size = ibs.read<uint32_t>(); // stage_size
-        auto stage_id = ibs.read<uint32_t>(); // stage_id
+        auto stage_size       = ibs.read<uint32_t>();  // stage_size
+        auto stage_id         = ibs.read<uint32_t>();  // stage_id
         ShaderStage ref_stage = (ShaderStage)-1;
         if (stage_id == SGS_STAGE_VERTEX)
             ref_stage = ShaderStage::VERTEX;
-        else if(stage_id == SGS_STAGE_FRAGMENT)
+        else if (stage_id == SGS_STAGE_FRAGMENT)
             ref_stage = ShaderStage::FRAGMENT;
-        
+
         assert(ref_stage == stage);
-        
+
         int code_size = 0;
-        fourccId = ibs.read<uint32_t>();
-        if (fourccId == SGS_CHUNK_CODE) {
+        fourccId      = ibs.read<uint32_t>();
+        if (fourccId == SGS_CHUNK_CODE)
+        {
             code_size = ibs.read<int>();
-            mslCode = ibs.read_bytes(code_size);
+            mslCode   = ibs.read_bytes(code_size);
         }
-        else if(fourccId == SGS_CHUNK_DATA) {
+        else if (fourccId == SGS_CHUNK_DATA)
+        {
             code_size = ibs.read<int>();
-            mslCode = ibs.read_bytes(code_size);
+            mslCode   = ibs.read_bytes(code_size);
         }
-        else {
+        else
+        {
             // no text or binary code chunk
             assert(false);
         }
-        
-        sgs_chunk_refl refl;
+
         size_t refl_size = 0;
-        if(!ibs.eof()) { // try read reflect info
+        if (!ibs.eof())
+        {  // try read reflect info
             fourccId = ibs.read<uint32_t>();
-            if(fourccId == SGS_CHUNK_REFL) {
+            if (fourccId == SGS_CHUNK_REFL)
+            {
                 /*
                  REFL: Reflection data for the shader stage
                  struct sgs_chunk_refl: reflection data header
-                 struct sgs_refl_input[]: array of vertex-shader input attributes (see sgs_chunk_refl for number of inputs)
-                 struct sgs_refl_uniformbuffer[]: array of uniform buffer objects (see sgs_chunk_refl for number of uniform buffers)
-                 struct sgs_refl_texture[]: array of texture objects (see sgs_chunk_refl for number of textures)
-                 struct sgs_refl_texture[]: array of storage image objects (see sgs_chunk_refl for number of storage images)
-                 struct sgs_refl_buffer[]: array of storage buffer objects (see sgs_chunk_refl for number of storage buffers)
+                 struct sgs_refl_input[]: array of vertex-shader input attributes (see sgs_chunk_refl for number of
+                 inputs) struct sgs_refl_uniformbuffer[]: array of uniform buffer objects (see sgs_chunk_refl for number
+                 of uniform buffers) struct sgs_refl_texture[]: array of texture objects (see sgs_chunk_refl for number
+                 of textures) struct sgs_refl_texture[]: array of storage image objects (see sgs_chunk_refl for number
+                 of storage images) struct sgs_refl_buffer[]: array of storage buffer objects (see sgs_chunk_refl for
+                 number of storage buffers)
                  */
-                refl_size = ibs.read<uint32_t>();
-                ibs.read_bytes(&refl, static_cast<int>(sizeof(refl)));
-                
+                const auto refl_size = ibs.read<uint32_t>();
+                const auto refl_data_offset = ibs.tell();
+                sgs_chunk_refl refl;
+                ibs.advance(sizeof(refl.name));
+                refl.num_inputs = ibs.read<uint32_t>();
+                refl.num_textures = ibs.read<uint32_t>();
+                refl.num_uniform_buffers = ibs.read<uint32_t>();
+                refl.num_storage_images = ibs.read<uint32_t>();
+                refl.num_storage_buffers = ibs.read<uint32_t>();
+
+                // skip infos we don't need
+                ibs.advance(sizeof(sgs_chunk_refl) - offsetof(sgs_chunk_refl, flatten_ubos));
+
                 SLCReflectContext context{&refl, &ibs};
-                
+
                 // refl_inputs
                 parseAttibute(&context);
-                
+
                 // refl_uniformbuffers
                 parseUniform(&context);
-                
+
                 // refl_textures
                 parseTexture(&context);
-                
+
                 // refl_storage_images: ignore
                 ibs.advance(refl.num_storage_images * sizeof(sgs_refl_texture));
-                
+
                 // refl_storage_buffers: ignore
                 ibs.advance(refl.num_storage_buffers * sizeof(sgs_refl_buffer));
+                
+                assert(ibs.tell() - refl_data_offset == refl_size);
             }
-            else {
-                ibs.advance(-4); // move readptr back 4 bytes
+            else
+            {
+                assert(false);
+                return;
             }
         }
 
         assert(ibs.eof());
-    } while(false);  // iterator stages, current only 1 stage
-    
+    } while (false);  // iterator stages, current only 1 stage
+
     auto metalShader = mslCode.data();
     NSString* shader = [NSString stringWithUTF8String:metalShader];
     NSError* error;
@@ -146,28 +178,8 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
         // NSLog(@"%s", glslopt_get_log(glslShader));
         assert(false);
     }
-    
-    /*
-     === attrib: a_position, location: 0
-     === attrib: a_color, location: 1
-     === attrib: a_texCoord, location: 2
-     */
-    auto vertexAttribs = [_mtlFunction vertexAttributes];
-    for (MTLVertexAttribute* attrib in vertexAttribs) {
-        std::string attribName = [[attrib name] UTF8String];
-        int index = static_cast<int>([attrib attributeIndex]);
 
-        auto& attrinfo = _attributeInfo[attribName];
-        
-        // !!!Fix attrib location due to glslcc reorder attribs, but reflect info not sync
-        if (index != attrinfo.location) {
-            attrinfo.location = index;
-            ax::print("=== Fix attrib: %s, location from %d to %d", attribName.c_str(), (int)attrinfo.location, index);
-        }
-    }
-    
-    setBuiltinUniformLocation();
-    setBuiltinAttributeLocation();
+    setBuiltinLocations();
 
     [library release];
 }
@@ -179,121 +191,127 @@ ShaderModuleMTL::~ShaderModuleMTL()
 
 void ShaderModuleMTL::parseAttibute(SLCReflectContext* context)
 {
-    for(int i = 0; i < context->refl->num_inputs; ++i) {
-        sgs_refl_input attrib{0};
-        context->data->read_bytes(&attrib, sizeof(attrib));
+    auto ibs = context->ibs;
+    
+    for (int i = 0; i < context->refl->num_inputs; ++i)
+    {
+        std::string_view name = _sgs_read_name(ibs);
+        auto loc = ibs->read<int32_t>();
+        
+        ibs->advance(sizeof(sgs_refl_input) - offsetof(sgs_refl_input, semantic));
         
         AttributeBindInfo attributeInfo;
-        attributeInfo.attributeName = attrib.name;
-        attributeInfo.location      = attrib.loc;
-        _attributeInfo[attributeInfo.attributeName]  = attributeInfo;
+        attributeInfo.attributeName                 = name;
+        attributeInfo.location                      = loc;
+        _attributeInfo[attributeInfo.attributeName] = attributeInfo;
     }
 }
 
 void ShaderModuleMTL::parseUniform(SLCReflectContext* context)
 {
     _uniformBufferSize = 0;
-    for(int i = 0; i < context->refl->num_uniform_buffers; ++i) {
-        sgs_refl_ub ub{0};
-        context->data->read_bytes(&ub, sizeof(ub));
-        for(int k = 0; k < ub.num_members; ++k) {
-            sgs_refl_ub_member ubm {0};
-            context->data->read_bytes(&ubm, sizeof(ubm));
-            auto location = YASIO_SZ_ALIGN(ubm.offset, 16); // align offset
-            auto alignedSize = YASIO_SZ_ALIGN(ubm.size_bytes, 16); // align sizeBytes
+    auto ibs = context->ibs;
+    for (int i = 0; i < context->refl->num_uniform_buffers; ++i)
+    {
+        ibs->advance(sizeof(sgs_refl_ub::name));
+        auto ub_binding = ibs->read<int32_t>();
+        auto ub_size_bytes = ibs->read<uint32_t>();
+        ibs->advance(sizeof(sgs_refl_ub::array_size));
+        auto ub_num_members = ibs->read<uint16_t>();
+        
+        for (int k = 0; k < ub_num_members; ++k)
+        {
             UniformInfo uniform;
-            uniform.count                 = ubm.array_size;
-            uniform.location              = location;
-            uniform.isArray               = ubm.array_size > 1;
-            uniform.size                  = ubm.size_bytes; // ubm.size_bytes; // nextLocation - location;
-            uniform.bufferOffset          = location;
-            uniform.needConvert           = (ubm.format == SGS_VERTEXFORMAT_FLOAT3) ? true : false;
-            uniform.type                  = // static_cast<unsigned int>(parType);
-            uniform.isMatrix              = ubm.format == SGS_VERTEXFORMAT_MAT4 || ubm.format == SGS_VERTEXFORMAT_MAT3 || ubm.format == SGS_VERTEXFORMAT_MAT34 || ubm.format == SGS_VERTEXFORMAT_MAT43;
-            _uniformInfos[ubm.name]        = uniform;
-            _activeUniformInfos[location] = uniform;
+            auto name       = _sgs_read_name(ibs);
+            auto offset     = ibs->read<int32_t>();
+            auto format     = ibs->read<uint32_t>();
+            auto size_bytes = ibs->read<uint32_t>();
+            auto array_size = ibs->read<uint16_t>();
             
-            if (_maxLocation < location)
-                _maxLocation = (location + 1);
-            
-            _uniformBufferSize += alignedSize;
+            uniform.count               = array_size;
+            uniform.location            = ub_binding;
+            uniform.size                = size_bytes;
+            uniform.bufferOffset        = offset;
+            uniform.type                = format;
+            _activeUniformInfos[name]   = uniform;
+
+            if (_maxLocation < i)
+                _maxLocation = (i + 1);
         }
+        _uniformBufferSize = ub_size_bytes;
+        // current: only support 1 uniform block for metal
+        break;
     }
 }
 
 void ShaderModuleMTL::parseTexture(SLCReflectContext* context)
 {
-    for(int i = 0; i < context->refl->num_textures; ++i) {
-        sgs_refl_texture texinfo {0};
-        context->data->read_bytes(&texinfo, sizeof(texinfo));
+    auto ibs = context->ibs;
+    for (int i = 0; i < context->refl->num_textures; ++i)
+    {
+        std::string_view name = _sgs_read_name(ibs);
+        auto binding = ibs->read<int32_t>();
+        
+        ibs->advance(sizeof(sgs_refl_texture) - offsetof(sgs_refl_texture, image_dim));
+
         UniformInfo uniform;
-        uniform.count          = -1;
-        uniform.location       = texinfo.binding;
-        uniform.isArray        = texinfo.is_array;
-        _uniformInfos[texinfo.name] = uniform;
+        uniform.location          = binding;
+        uniform.bufferOffset      = -1;
+        _activeUniformInfos[name] = uniform;
     }
 }
 
-int ShaderModuleMTL::getUniformLocation(Uniform name) const
+UniformLocation ShaderModuleMTL::getUniformLocation(Uniform name) const
 {
     return _uniformLocation[name];
 }
 
-int ShaderModuleMTL::getUniformLocation(std::string_view name) const
+UniformLocation ShaderModuleMTL::getUniformLocation(std::string_view name) const
 {
-    auto iter = _uniformInfos.find(name);
-    if (iter != _uniformInfos.end())
+    auto iter = _activeUniformInfos.find(name);
+    if (iter != _activeUniformInfos.end())
     {
-        return iter->second.location;
+        return UniformLocation{static_cast<int>(iter->second.location),
+            static_cast<int>(iter->second.bufferOffset), _stage};
     }
-    else
-        return -1;
+    return UniformLocation{};
 }
 
-void ShaderModuleMTL::setBuiltinUniformLocation()
+void ShaderModuleMTL::setBuiltinLocations()
 {
-    std::fill(_uniformLocation, _uniformLocation + UNIFORM_MAX, -1);
-    /// u_mvpMatrix
-    auto iter = _uniformInfos.find(UNIFORM_NAME_MVP_MATRIX);
-    if (iter != _uniformInfos.end())
-    {
-        _uniformLocation[Uniform::MVP_MATRIX] = iter->second.location;
-    }
+    /*--- Builtin Attribs ---*/
 
-    /// u_textColor
-    iter = _uniformInfos.find(UNIFORM_NAME_TEXT_COLOR);
-    if (iter != _uniformInfos.end())
-    {
-        _uniformLocation[Uniform::TEXT_COLOR] = iter->second.location;
-    }
+    /// a_position
+    _attributeLocation[Attribute::POSITION] = getAttributeLocation(ATTRIBUTE_NAME_POSITION);
 
-    /// u_effectColor
-    iter = _uniformInfos.find(UNIFORM_NAME_EFFECT_COLOR);
-    if (iter != _uniformInfos.end())
-    {
-        _uniformLocation[Uniform::EFFECT_COLOR] = iter->second.location;
-    }
+    /// a_color
+    _attributeLocation[Attribute::COLOR] = getAttributeLocation(ATTRIBUTE_NAME_COLOR);
 
-    /// u_effectType
-    iter = _uniformInfos.find(UNIFORM_NAME_EFFECT_TYPE);
-    if (iter != _uniformInfos.end())
-    {
-        _uniformLocation[Uniform::EFFECT_TYPE] = iter->second.location;
-    }
+    /// a_texCoord
+    _attributeLocation[Attribute::TEXCOORD] = getAttributeLocation(ATTRIBUTE_NAME_TEXCOORD);
+
+    // a_normal
+    _attributeLocation[Attribute::NORMAL] = getAttributeLocation(ATTRIBUTE_NAME_NORMAL);
+
+    /*--- Builtin Uniforms ---*/
+
+    /// u_MVPMatrix
+    _uniformLocation[Uniform::MVP_MATRIX] = getUniformLocation(UNIFORM_NAME_MVP_MATRIX);
 
     /// u_tex0
-    iter = _uniformInfos.find(UNIFORM_NAME_TEXTURE);
-    if (iter != _uniformInfos.end())
-    {
-        _uniformLocation[Uniform::TEXTURE] = iter->second.location;
-    }
+    _uniformLocation[Uniform::TEXTURE] = getUniformLocation(UNIFORM_NAME_TEXTURE);
 
     /// u_tex1
-    iter = _uniformInfos.find(UNIFORM_NAME_TEXTURE1);
-    if (iter != _uniformInfos.end())
-    {
-        _uniformLocation[Uniform::TEXTURE1] = iter->second.location;
-    }
+    _uniformLocation[Uniform::TEXTURE1] = getUniformLocation(UNIFORM_NAME_TEXTURE1);
+
+    /// u_textColor
+    _uniformLocation[Uniform::TEXT_COLOR] = getUniformLocation(UNIFORM_NAME_TEXT_COLOR);
+
+    /// u_effectColor
+    _uniformLocation[Uniform::EFFECT_COLOR] = getUniformLocation(UNIFORM_NAME_EFFECT_COLOR);
+
+    /// u_effectType
+    _uniformLocation[Uniform::EFFECT_TYPE] = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
 }
 
 int ShaderModuleMTL::getAttributeLocation(Attribute name) const
@@ -309,38 +327,5 @@ int ShaderModuleMTL::getAttributeLocation(std::string_view name)
     else
         return -1;
 }
-
-void ShaderModuleMTL::setBuiltinAttributeLocation()
-{
-    std::fill(_attributeLocation, _attributeLocation + ATTRIBUTE_MAX, -1);
-    /// a_position
-    auto iter = _attributeInfo.find(ATTRIBUTE_NAME_POSITION);
-    if (iter != _attributeInfo.end())
-    {
-        _attributeLocation[Attribute::POSITION] = iter->second.location;
-    }
-
-    /// a_color
-    iter = _attributeInfo.find(ATTRIBUTE_NAME_COLOR);
-    if (iter != _attributeInfo.end())
-    {
-        _attributeLocation[Attribute::COLOR] = iter->second.location;
-    }
-
-    /// a_texCoord
-    iter = _attributeInfo.find(ATTRIBUTE_NAME_TEXCOORD);
-    if (iter != _attributeInfo.end())
-    {
-        _attributeLocation[Attribute::TEXCOORD] = iter->second.location;
-    }
-
-    /// a_normal
-    iter = _attributeInfo.find(ATTRIBUTE_NAME_NORMAL);
-    if (iter != _attributeInfo.end())
-    {
-        _attributeLocation[Attribute::NORMAL] = iter->second.location;
-    }
-}
-
 
 NS_AX_BACKEND_END

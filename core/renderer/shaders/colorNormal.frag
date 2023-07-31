@@ -2,11 +2,12 @@
 precision highp float;
 precision highp int;
 
-layout(location = 0) in vec2 TextureCoordOut;
-layout(location = 1) in vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
-layout(location = 2) in vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
-layout(location = 3) in vec3 v_normal;
+#include "base.glsl"
 
+layout(location = NORMAL) in vec3 v_normal;
+layout(location = TEXCOORD0) in vec2 v_texCoord;
+layout(location = POINTLIGHT) in vec3 v_vertexToPointLightDirection[MAX_POINT_LIGHT_NUM];
+layout(location = SPOTLIGHT) in vec3 v_vertexToSpotLightDirection[MAX_SPOT_LIGHT_NUM];
 
 layout(std140) uniform fs_ub {
     vec3 u_DirLightSourceColor[MAX_DIRECTIONAL_LIGHT_NUM];
@@ -30,7 +31,7 @@ vec3 computeLighting(vec3 normalVector, vec3 lightDirection, vec3 lightColor, fl
     return diffuseColor;
 }
 
-layout(location = 0) out vec4 FragColor;
+layout(location = SV_Target0) out vec4 FragColor;
 
 void main(void)
 {

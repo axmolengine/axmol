@@ -1,4 +1,5 @@
 // sgs spec, define sgs macros and structs, can be include anywhere
+// match with glslcc-1.9.0
 
 #pragma once
 
@@ -19,6 +20,7 @@
 #define SGS_LANG_HLSL sgs_makefourcc('H', 'L', 'S', 'L')
 #define SGS_LANG_GLSL sgs_makefourcc('G', 'L', 'S', 'L')
 #define SGS_LANG_MSL  sgs_makefourcc('M', 'S', 'L', ' ')
+#define SGS_LANG_SPIRV sgs_makefourcc('S', 'P', 'I', 'R')
 
 #define SGS_VERTEXFORMAT_FLOAT      sgs_makefourcc('F', 'L', 'T', '1')
 #define SGS_VERTEXFORMAT_FLOAT2     sgs_makefourcc('F', 'L', 'T', '2')
@@ -30,8 +32,6 @@
 #define SGS_VERTEXFORMAT_INT4       sgs_makefourcc('I', 'N', 'T', '4')
 #define SGS_VERTEXFORMAT_MAT3       sgs_makefourcc('M', 'A', 'T', '3')
 #define SGS_VERTEXFORMAT_MAT4       sgs_makefourcc('M', 'A', 'T', '4')
-#define SGS_VERTEXFORMAT_MAT34      sgs_makefourcc('M', 'T', '3', '4')
-#define SGS_VERTEXFORMAT_MAT43      sgs_makefourcc('M', 'T', '4', '3')
 
 #define SGS_STAGE_VERTEX            sgs_makefourcc('V', 'E', 'R', 'T')
 #define SGS_STAGE_FRAGMENT          sgs_makefourcc('F', 'R', 'A', 'G')

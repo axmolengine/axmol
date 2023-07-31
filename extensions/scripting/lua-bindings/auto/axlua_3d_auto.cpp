@@ -2741,6 +2741,328 @@ int lua_ax_3d_Mesh_calculateAABB(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_3d_Mesh_setInstanceCount(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Mesh* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_Mesh_setInstanceCount'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setInstanceCount'", nullptr);
+            return 0;
+        }
+        cobj->setInstanceCount();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 1) 
+    {
+        int arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.Mesh:setInstanceCount");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setInstanceCount'", nullptr);
+            return 0;
+        }
+        cobj->setInstanceCount(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:setInstanceCount",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_Mesh_setInstanceCount'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_Mesh_enableInstancing(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Mesh* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_Mesh_enableInstancing'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Mesh:enableInstancing");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_enableInstancing'", nullptr);
+            return 0;
+        }
+        cobj->enableInstancing(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        bool arg0;
+        int arg1;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Mesh:enableInstancing");
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.Mesh:enableInstancing");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_enableInstancing'", nullptr);
+            return 0;
+        }
+        cobj->enableInstancing(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:enableInstancing",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_Mesh_enableInstancing'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_Mesh_setDynamicInstancing(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Mesh* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_Mesh_setDynamicInstancing'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.Mesh:setDynamicInstancing");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_setDynamicInstancing'", nullptr);
+            return 0;
+        }
+        cobj->setDynamicInstancing(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:setDynamicInstancing",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_Mesh_setDynamicInstancing'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_Mesh_addInstanceChild(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Mesh* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_Mesh_addInstanceChild'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Node* arg0;
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.Mesh:addInstanceChild");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_addInstanceChild'", nullptr);
+            return 0;
+        }
+        cobj->addInstanceChild(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:addInstanceChild",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_Mesh_addInstanceChild'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_Mesh_shrinkToFitInstances(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Mesh* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_Mesh_shrinkToFitInstances'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_shrinkToFitInstances'", nullptr);
+            return 0;
+        }
+        cobj->shrinkToFitInstances();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:shrinkToFitInstances",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_Mesh_shrinkToFitInstances'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_Mesh_rebuildInstances(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Mesh* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Mesh",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Mesh*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_Mesh_rebuildInstances'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_Mesh_rebuildInstances'", nullptr);
+            return 0;
+        }
+        cobj->rebuildInstances();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Mesh:rebuildInstances",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_Mesh_rebuildInstances'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_3d_Mesh_constructor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -2809,6 +3131,12 @@ int lua_register_ax_3d_Mesh(lua_State* tolua_S)
         tolua_function(tolua_S,"setMeshIndexData",lua_ax_3d_Mesh_setMeshIndexData);
         tolua_function(tolua_S,"setName",lua_ax_3d_Mesh_setName);
         tolua_function(tolua_S,"calculateAABB",lua_ax_3d_Mesh_calculateAABB);
+        tolua_function(tolua_S,"setInstanceCount",lua_ax_3d_Mesh_setInstanceCount);
+        tolua_function(tolua_S,"enableInstancing",lua_ax_3d_Mesh_enableInstancing);
+        tolua_function(tolua_S,"setDynamicInstancing",lua_ax_3d_Mesh_setDynamicInstancing);
+        tolua_function(tolua_S,"addInstanceChild",lua_ax_3d_Mesh_addInstanceChild);
+        tolua_function(tolua_S,"shrinkToFitInstances",lua_ax_3d_Mesh_shrinkToFitInstances);
+        tolua_function(tolua_S,"rebuildInstances",lua_ax_3d_Mesh_rebuildInstances);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::Mesh).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Mesh";
@@ -3600,6 +3928,266 @@ int lua_register_ax_3d_Skybox(lua_State* tolua_S)
     auto typeName = typeid(ax::Skybox).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.Skybox";
     g_typeCast[typeName] = "ax.Skybox";
+    return 1;
+}
+
+int lua_ax_3d_MeshMaterial_getMaterialType(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::MeshMaterial* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::MeshMaterial*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_MeshMaterial_getMaterialType'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_getMaterialType'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getMaterialType();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshMaterial:getMaterialType",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_getMaterialType'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+
+    do 
+    {
+        if (argc == 0)
+        {
+            ax::MeshMaterial::createBuiltInMaterial();
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do 
+    {
+        if (argc == 2)
+        {
+            ax::MeshMaterial::MaterialType arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshMaterial:createBuiltInMaterial");
+            if (!ok) { break; }
+            bool arg1;
+            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.MeshMaterial:createBuiltInMaterial");
+            if (!ok) { break; }
+            ax::MeshMaterial* ret = ax::MeshMaterial::createBuiltInMaterial(arg0, arg1);
+            object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.MeshMaterial:createBuiltInMaterial",argc, 2);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_createBuiltInMaterial'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_3d_MeshMaterial_createWithFilename(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        std::string_view arg0;
+        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.MeshMaterial:createWithFilename");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_createWithFilename'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::MeshMaterial::createWithFilename(arg0);
+        object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:createWithFilename",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_createWithFilename'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_3d_MeshMaterial_createWithProgramState(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 1)
+    {
+        ax::backend::ProgramState* arg0;
+        ok &= luaval_to_object<ax::backend::ProgramState>(tolua_S, 2, "axb.ProgramState",&arg0, "ax.MeshMaterial:createWithProgramState");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_createWithProgramState'", nullptr);
+            return 0;
+        }
+        auto&& ret = ax::MeshMaterial::createWithProgramState(arg0);
+        object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:createWithProgramState",argc, 1);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_createWithProgramState'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_3d_MeshMaterial_releaseBuiltInMaterial(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_releaseBuiltInMaterial'", nullptr);
+            return 0;
+        }
+        ax::MeshMaterial::releaseBuiltInMaterial();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:releaseBuiltInMaterial",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_releaseBuiltInMaterial'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_ax_3d_MeshMaterial_releaseCachedMaterial(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_releaseCachedMaterial'", nullptr);
+            return 0;
+        }
+        ax::MeshMaterial::releaseCachedMaterial();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:releaseCachedMaterial",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_releaseCachedMaterial'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_ax_3d_MeshMaterial_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (MeshMaterial)");
+    return 0;
+}
+
+int lua_register_ax_3d_MeshMaterial(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.MeshMaterial");
+    tolua_cclass(tolua_S,"MeshMaterial","ax.MeshMaterial","ax.Material",nullptr);
+
+    tolua_beginmodule(tolua_S,"MeshMaterial");
+        tolua_function(tolua_S,"getMaterialType",lua_ax_3d_MeshMaterial_getMaterialType);
+        tolua_function(tolua_S,"createBuiltInMaterial", lua_ax_3d_MeshMaterial_createBuiltInMaterial);
+        tolua_function(tolua_S,"createWithFilename", lua_ax_3d_MeshMaterial_createWithFilename);
+        tolua_function(tolua_S,"createWithProgramState", lua_ax_3d_MeshMaterial_createWithProgramState);
+        tolua_function(tolua_S,"releaseBuiltInMaterial", lua_ax_3d_MeshMaterial_releaseBuiltInMaterial);
+        tolua_function(tolua_S,"releaseCachedMaterial", lua_ax_3d_MeshMaterial_releaseCachedMaterial);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::MeshMaterial).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.MeshMaterial";
+    g_typeCast[typeName] = "ax.MeshMaterial";
     return 1;
 }
 
@@ -4762,6 +5350,351 @@ int lua_ax_3d_MeshRenderer_genMaterial(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_3d_MeshRenderer_enableInstancing(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::MeshRenderer* cobj = nullptr;
+    bool ok  = true;
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+#if _AX_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_MeshRenderer_enableInstancing'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 1) {
+            ax::MeshMaterial* arg0;
+            ok &= luaval_to_object<ax::MeshMaterial>(tolua_S, 2, "ax.MeshMaterial",&arg0, "ax.MeshRenderer:enableInstancing");
+
+            if (!ok) { break; }
+            cobj->enableInstancing(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            ax::MeshMaterial* arg0;
+            ok &= luaval_to_object<ax::MeshMaterial>(tolua_S, 2, "ax.MeshMaterial",&arg0, "ax.MeshRenderer:enableInstancing");
+
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.MeshRenderer:enableInstancing");
+
+            if (!ok) { break; }
+            cobj->enableInstancing(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            ax::MeshMaterial::InstanceMaterialType arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:enableInstancing");
+
+            if (!ok) { break; }
+            cobj->enableInstancing(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 2) {
+            ax::MeshMaterial::InstanceMaterialType arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshRenderer:enableInstancing");
+
+            if (!ok) { break; }
+            int arg1;
+            ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ax.MeshRenderer:enableInstancing");
+
+            if (!ok) { break; }
+            cobj->enableInstancing(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.MeshRenderer:enableInstancing",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshRenderer_enableInstancing'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_MeshRenderer_disableInstancing(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::MeshRenderer* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_MeshRenderer_disableInstancing'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_disableInstancing'", nullptr);
+            return 0;
+        }
+        cobj->disableInstancing();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:disableInstancing",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshRenderer_disableInstancing'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_MeshRenderer_setDynamicInstancing(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::MeshRenderer* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_MeshRenderer_setDynamicInstancing'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ax.MeshRenderer:setDynamicInstancing");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_setDynamicInstancing'", nullptr);
+            return 0;
+        }
+        cobj->setDynamicInstancing(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:setDynamicInstancing",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshRenderer_setDynamicInstancing'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_MeshRenderer_addInstanceChild(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::MeshRenderer* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_MeshRenderer_addInstanceChild'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::Node* arg0;
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.MeshRenderer:addInstanceChild");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_addInstanceChild'", nullptr);
+            return 0;
+        }
+        cobj->addInstanceChild(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    if (argc == 2) 
+    {
+        ax::Node* arg0;
+        bool arg1;
+
+        ok &= luaval_to_object<ax::Node>(tolua_S, 2, "ax.Node",&arg0, "ax.MeshRenderer:addInstanceChild");
+
+        ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.MeshRenderer:addInstanceChild");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_addInstanceChild'", nullptr);
+            return 0;
+        }
+        cobj->addInstanceChild(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:addInstanceChild",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshRenderer_addInstanceChild'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_MeshRenderer_shrinkToFitInstances(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::MeshRenderer* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_MeshRenderer_shrinkToFitInstances'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_shrinkToFitInstances'", nullptr);
+            return 0;
+        }
+        cobj->shrinkToFitInstances();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:shrinkToFitInstances",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshRenderer_shrinkToFitInstances'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_3d_MeshRenderer_rebuildInstances(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::MeshRenderer* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.MeshRenderer",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::MeshRenderer*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_MeshRenderer_rebuildInstances'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshRenderer_rebuildInstances'", nullptr);
+            return 0;
+        }
+        cobj->rebuildInstances();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshRenderer:rebuildInstances",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshRenderer_rebuildInstances'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_3d_MeshRenderer_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4858,6 +5791,12 @@ int lua_register_ax_3d_MeshRenderer(lua_State* tolua_S)
         tolua_function(tolua_S,"getMaterial",lua_ax_3d_MeshRenderer_getMaterial);
         tolua_function(tolua_S,"getMeshes",lua_ax_3d_MeshRenderer_getMeshes);
         tolua_function(tolua_S,"genMaterial",lua_ax_3d_MeshRenderer_genMaterial);
+        tolua_function(tolua_S,"enableInstancing",lua_ax_3d_MeshRenderer_enableInstancing);
+        tolua_function(tolua_S,"disableInstancing",lua_ax_3d_MeshRenderer_disableInstancing);
+        tolua_function(tolua_S,"setDynamicInstancing",lua_ax_3d_MeshRenderer_setDynamicInstancing);
+        tolua_function(tolua_S,"addInstanceChild",lua_ax_3d_MeshRenderer_addInstanceChild);
+        tolua_function(tolua_S,"shrinkToFitInstances",lua_ax_3d_MeshRenderer_shrinkToFitInstances);
+        tolua_function(tolua_S,"rebuildInstances",lua_ax_3d_MeshRenderer_rebuildInstances);
         tolua_function(tolua_S,"create", lua_ax_3d_MeshRenderer_create);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::MeshRenderer).name(); // rtti is literal storage
@@ -5087,266 +6026,6 @@ int lua_register_ax_3d_MeshRendererCache(lua_State* tolua_S)
     auto typeName = typeid(ax::MeshRendererCache).name(); // rtti is literal storage
     g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.MeshRendererCache";
     g_typeCast[typeName] = "ax.MeshRendererCache";
-    return 1;
-}
-
-int lua_ax_3d_MeshMaterial_getMaterialType(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::MeshMaterial* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::MeshMaterial*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_3d_MeshMaterial_getMaterialType'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_getMaterialType'", nullptr);
-            return 0;
-        }
-        int ret = (int)cobj->getMaterialType();
-        tolua_pushnumber(tolua_S,(lua_Number)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.MeshMaterial:getMaterialType",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_getMaterialType'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_3d_MeshMaterial_createBuiltInMaterial(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-
-    do 
-    {
-        if (argc == 0)
-        {
-            ax::MeshMaterial::createBuiltInMaterial();
-            lua_settop(tolua_S, 1);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    do 
-    {
-        if (argc == 2)
-        {
-            ax::MeshMaterial::MaterialType arg0;
-            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ax.MeshMaterial:createBuiltInMaterial");
-            if (!ok) { break; }
-            bool arg1;
-            ok &= luaval_to_boolean(tolua_S, 3,&arg1, "ax.MeshMaterial:createBuiltInMaterial");
-            if (!ok) { break; }
-            ax::MeshMaterial* ret = ax::MeshMaterial::createBuiltInMaterial(arg0, arg1);
-            object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
-            return 1;
-        }
-    } while (0);
-    ok  = true;
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "ax.MeshMaterial:createBuiltInMaterial",argc, 2);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_createBuiltInMaterial'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_ax_3d_MeshMaterial_createWithFilename(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 1)
-    {
-        std::string_view arg0;
-        ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.MeshMaterial:createWithFilename");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_createWithFilename'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::MeshMaterial::createWithFilename(arg0);
-        object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:createWithFilename",argc, 1);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_createWithFilename'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_ax_3d_MeshMaterial_createWithProgramState(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 1)
-    {
-        ax::backend::ProgramState* arg0;
-        ok &= luaval_to_object<ax::backend::ProgramState>(tolua_S, 2, "axb.ProgramState",&arg0, "ax.MeshMaterial:createWithProgramState");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_createWithProgramState'", nullptr);
-            return 0;
-        }
-        auto&& ret = ax::MeshMaterial::createWithProgramState(arg0);
-        object_to_luaval<ax::MeshMaterial>(tolua_S, "ax.MeshMaterial",(ax::MeshMaterial*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:createWithProgramState",argc, 1);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_createWithProgramState'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_ax_3d_MeshMaterial_releaseBuiltInMaterial(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_releaseBuiltInMaterial'", nullptr);
-            return 0;
-        }
-        ax::MeshMaterial::releaseBuiltInMaterial();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:releaseBuiltInMaterial",argc, 0);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_releaseBuiltInMaterial'.",&tolua_err);
-#endif
-    return 0;
-}
-int lua_ax_3d_MeshMaterial_releaseCachedMaterial(lua_State* tolua_S)
-{
-    int argc = 0;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertable(tolua_S,1,"ax.MeshMaterial",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    argc = lua_gettop(tolua_S) - 1;
-
-    if (argc == 0)
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_3d_MeshMaterial_releaseCachedMaterial'", nullptr);
-            return 0;
-        }
-        ax::MeshMaterial::releaseCachedMaterial();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.MeshMaterial:releaseCachedMaterial",argc, 0);
-    return 0;
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_3d_MeshMaterial_releaseCachedMaterial'.",&tolua_err);
-#endif
-    return 0;
-}
-static int lua_ax_3d_MeshMaterial_finalize(lua_State* tolua_S)
-{
-    printf("luabindings: finalizing LUA object (MeshMaterial)");
-    return 0;
-}
-
-int lua_register_ax_3d_MeshMaterial(lua_State* tolua_S)
-{
-    tolua_usertype(tolua_S,"ax.MeshMaterial");
-    tolua_cclass(tolua_S,"MeshMaterial","ax.MeshMaterial","ax.Material",nullptr);
-
-    tolua_beginmodule(tolua_S,"MeshMaterial");
-        tolua_function(tolua_S,"getMaterialType",lua_ax_3d_MeshMaterial_getMaterialType);
-        tolua_function(tolua_S,"createBuiltInMaterial", lua_ax_3d_MeshMaterial_createBuiltInMaterial);
-        tolua_function(tolua_S,"createWithFilename", lua_ax_3d_MeshMaterial_createWithFilename);
-        tolua_function(tolua_S,"createWithProgramState", lua_ax_3d_MeshMaterial_createWithProgramState);
-        tolua_function(tolua_S,"releaseBuiltInMaterial", lua_ax_3d_MeshMaterial_releaseBuiltInMaterial);
-        tolua_function(tolua_S,"releaseCachedMaterial", lua_ax_3d_MeshMaterial_releaseCachedMaterial);
-    tolua_endmodule(tolua_S);
-    auto typeName = typeid(ax::MeshMaterial).name(); // rtti is literal storage
-    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.MeshMaterial";
-    g_typeCast[typeName] = "ax.MeshMaterial";
     return 1;
 }
 
@@ -7058,9 +7737,9 @@ TOLUA_API int register_all_ax_3d(lua_State* tolua_S)
 	lua_register_ax_3d_Mesh(tolua_S);
 	lua_register_ax_3d_Skeleton3D(tolua_S);
 	lua_register_ax_3d_Skybox(tolua_S);
+	lua_register_ax_3d_MeshMaterial(tolua_S);
 	lua_register_ax_3d_MeshRenderer(tolua_S);
 	lua_register_ax_3d_MeshRendererCache(tolua_S);
-	lua_register_ax_3d_MeshMaterial(tolua_S);
 	lua_register_ax_3d_Terrain(tolua_S);
 	lua_register_ax_3d_Bundle3D(tolua_S);
 

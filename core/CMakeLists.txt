@@ -43,7 +43,11 @@ cmake_policy(SET CMP0127 NEW)
 project(ax_libs)
 
 if (NOT WINRT)
-    option (AX_USE_ANGLE "Use google angle renderer" OFF)
+    if(WIN32)
+        option (AX_USE_ANGLE "Use google angle renderer" ON)
+    else()
+        option (AX_USE_ANGLE "Use google angle renderer" OFF)
+    endif()
 else()
     set (AX_USE_ANGLE TRUE CACHE BOOL "Use google angle renderer" FORCE)
 endif()
@@ -162,7 +166,7 @@ configure_file(
 include(CMakeDependentOption)
 cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
   "Build the tests when we are the root project" ON
-  "AX_GIT_BRANCH STREQUAL \"dev\"" OFF)
+  "NOT (AX_GIT_BRANCH STREQUAL \"main\")" OFF)
 
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)
@@ -222,13 +226,14 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
 if (AX_ENABLE_EARLY_FEATURES)
-    message(AUTHOR_WARNING "Enable early dev features for local dev test only")
+    message(AUTHOR_WARNING "Enable early dev features for test only")
     # import minimal AXGLSLCC.cmake for shader compiler support
     # the function: ax_target_compile_shaders avaiable from it
     set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
     include(AXGLSLCC)
 
     ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+    set(ax_builtin_shaders ${BUILTIN_SHADER_SOURCES} CACHE STATIC "" FORCE)
 
     # configure engine builtin light num
     if (NOT DEFINED AX_MAX_DIRECTIONAL_LIGHT)

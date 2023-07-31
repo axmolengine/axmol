@@ -12,8 +12,8 @@ material VertexColor
             }
             shader
             {
-                vertexShader = MeshRendererTest/VertexColor.vert
-                fragmentShader = MeshRendererTest/VertexColor.frag
+                vertexShader = custom/VertexColor_vs
+                fragmentShader = custom/VertexColor_fs
                 // sampler:
                 //   responsible for setting the texture and its parameters
                 //   the Id of the sampler is the uniform name

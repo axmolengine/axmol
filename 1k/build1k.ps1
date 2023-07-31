@@ -136,11 +136,8 @@ $manifest = @{
     clang        = '15.0.0+';
     gcc          = '9.0.0+';
     cmake        = '3.26.4+';
-    nuget        = '*'; # any
-    glslcc       = '1.8.1+';
     ninja        = '1.11.1+';
     jdk          = '11.0.19+';
-    nsis         = '3.09';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
@@ -182,6 +179,14 @@ foreach ($arg in $args) {
         }
         $optName = $null
     }
+}
+
+# translate xtool args
+if ($options.xc.GetType() -eq [string]) {
+    $options.xc = $options.xc.Split(' ')
+}
+if ($options.xb.GetType() -eq [string]) {
+    $options.xb = $options.xb.Split(' ')
 }
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
@@ -258,8 +263,8 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
     $checkVerCond = $null
     $requiredMin = ''
     $preferredVer = ''
-    if ($manifest.Contains($name)) {
-        $requiredVer = $manifest[$name]
+    $requiredVer = $manifest[$name]
+    if ($requiredVer) {
         $preferredVer = $null
         if ($requiredVer.EndsWith('+')) {
             $preferredVer = $requiredVer.TrimEnd('+')
@@ -424,7 +429,7 @@ function setup_cmake() {
 
 # setup nuget
 function setup_nuget() {
-    if (!$manifest.Contains('nuget')) { return $null }
+    if (!$manifest['nuget']) { return $null }
     $nuget_bin = Join-Path $prefix 'nuget'
     $nuget_prog, $nuget_ver = find_prog -name 'nuget' -path $nuget_bin -mode 'BOTH'
     if ($nuget_prog) {
@@ -448,7 +453,7 @@ function setup_nuget() {
 }
 
 function setup_nsis() {
-    if(!$manifest.Contains('nsis')) { return $null }
+    if(!$manifest['nsis']) { return $null }
     $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION'
     if ($nsis_prog) {
         return $nsis_prog
@@ -469,7 +474,7 @@ function setup_nsis() {
 }
 
 function setup_jdk() {
-    if (!$manifest.Contains('jdk')) { return $null }
+    if (!$manifest['jdk']) { return $null }
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
@@ -514,7 +519,7 @@ function setup_jdk() {
 }
 
 function setup_glslcc() {
-    if (!$manifest.Contains('glslcc')) { return $null }
+    if (!$manifest['glslcc']) { return $null }
     $glslcc_bin = Join-Path $prefix 'glslcc'
     $glslcc_prog, $glslcc_ver = find_prog -name 'glslcc' -path $glslcc_bin -mode 'BOTH'
     if ($glslcc_prog) {
@@ -546,7 +551,7 @@ function setup_glslcc() {
 }
 
 function setup_ninja() {
-    if (!$manifest.Contains('ninja')) { return $null }
+    if (!$manifest['ninja']) { return $null }
     $ninja_prog, $ninja_ver = find_prog -name 'ninja'
     if ($ninja_prog) {
         return $ninja_prog
@@ -569,7 +574,7 @@ function setup_ninja() {
 }
 
 function setup_android_sdk() {
-    if (!$manifest.Contains('ndk')) { return $null }
+    if (!$manifest['ndk']) { return $null }
     # setup ndk
     $ndk_ver = $TOOLCHAIN_VER
     if (!$ndk_ver) {
@@ -985,7 +990,30 @@ if (!$options.setupOnly) {
     } 
     else {
         # step3. configure
-        cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+       
+        $workDir = $(Get-Location).Path
+
+        $mainDep = Join-Path $workDir 'CMakeLists.txt'
+        if(!$b1k.isfile($mainDep)) {
+            throw "Missing CMakeLists.txt in $workDir"
+        }
+
+        $mainDepChanged = $false
+        # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
+        $tempFileItem = Get-Item $mainDep
+        $lastWriteTime = $tempFileItem.LastWriteTime.ToFileTimeUTC()
+        $tempFile = Join-Path $BUILD_DIR 'b1k_cache.txt'
+
+        $storeTime = 0
+        if ($b1k.isfile($tempFile)) {
+            $storeTime = Get-Content $tempFile -Raw
+        }
+        $mainDepChanged = "$storeTime" -ne "$lastWriteTime"
+        $cmakeCachePath = Join-Path $workDir "$BUILD_DIR/CMakeCache.txt"
+        if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath)) {
+            cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+            Set-Content $tempFile $lastWriteTime -NoNewline
+        }
 
         # step4. build
         # apply additional build options
