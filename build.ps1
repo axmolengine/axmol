@@ -1,5 +1,5 @@
 #
-# This script easy to build win32, linux, winuwp, ios, tvos, osx, android depends on $AX_ROOT/tools/ci/build1k.ps1
+# This script easy to build win32, linux, winuwp, ios, tvos, osx, android depends on $myRoot/1k/build1k.ps1
 # usage: pwsh build.ps1 -p <targetPlatform> -a <arch>
 # options
 #  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
@@ -48,25 +48,6 @@ foreach ($arg in $args) {
     }
 }
 
-function add_quote($value) {
-    $ret = $null
-    $valueType = $value.GetType()
-    if ($valueType -eq [string]) {
-        $ret = "'$value'"
-    }
-    elseif ($valueType -eq [object[]]) {
-        $ret = ''
-        for ($i = 0; $i -lt $value.Count; ++$i) {
-            $subVal = $value[$i]
-            $ret += "'$subVal'"
-            if ($i -ne ($value.Count - 1)) {
-                $ret += ','
-            }
-        }
-    }
-    return $ret
-}
-
 $myRoot = $PSScriptRoot
 $workDir = $(Get-Location).Path
 
@@ -86,7 +67,8 @@ $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
 # start construct full cmd line
-$fullCmdLine = @("$((Resolve-Path -Path "$AX_ROOT/1k/build1k.ps1").Path)")
+$b1k_script = (Resolve-Path -Path "$AX_ROOT/1k/build1k.ps1").Path
+$b1k_args = @()
 
 $search_prior_dir = $options.d
 if (!$search_prior_dir -and $is_engine -and $is_android) {
@@ -170,7 +152,7 @@ if (!$is_android) {
 } else { # android
     # engine ci
     if ($is_engine -and $is_ci) {
-        $fullCmdLine += "'-xc'", "'-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks','-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'"
+        $options.xc += "-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PRELEASE_STORE_PASSWORD=axmol-ci', '-PRELEASE_KEY_ALIAS=axmol-ci', '-PRELEASE_KEY_PASSWORD=axmol-ci'
     }
 }
 
@@ -180,23 +162,23 @@ if (!$bci) {
 }
 
 if ($is_android) {
-    $fullCmdLine += "'-xt'", "'gradle'"
+    $b1k_args += '-xt', 'gradle'
 }
 
 if ($proj_dir) {
-    $fullCmdLine += "'-d'", "'$proj_dir'"
+    $b1k_args += '-d', "$proj_dir"
 }
 $prefix = Join-Path $AX_ROOT 'tools/external'
-$fullCmdLine += "'-prefix'", "'$prefix'"
+$b1k_args += '-prefix', "$prefix"
 
 # remove arg we don't want forward to
 $options.Remove('d')
 foreach ($option in $options.GetEnumerator()) {
     if ($option.Value) {
-        $fullCmdLine += add_quote "-$($option.Key)"
-        $fullCmdLine += add_quote $option.Value
+        $b1k_args += "-$($option.Key)"
+        $b1k_args += "$($option.Value)"
     }
 }
 
-$strFullCmdLine = "$fullCmdLine"
-Invoke-Expression $strFullCmdLine
+. $b1k_script @b1k_args
+$b1k.pause("build done")
