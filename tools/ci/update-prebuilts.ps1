@@ -63,7 +63,6 @@ if ($needUpdate) {
     # update libs
     update_lib angle
     update_lib curl
-    update_lib "glsl-optimizer"
     update_lib "jpeg-turbo"
     update_lib openssl
     update_lib zlib
