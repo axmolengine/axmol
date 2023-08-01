@@ -4,4 +4,3 @@ openssl: 3.0.9
 curl: 8.1.2
 luajit: 2.1-ff6c496
 angle: 113.0.5672.128
-glsl-optimizer: git cdfc9ef

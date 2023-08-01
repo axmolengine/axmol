@@ -85,11 +85,6 @@
 - Version: git 57cbded on Dec 16, 2022 (4609)
 - License: zlib
 
-## glsl-optimizer (Apple Metal Render backend only)
-- Upstream: https://github.com/aras-p/glsl-optimizer
-- Version: git cdfc9ef
-- License: MIT
-
 ## GHC (iOS devices only)
 - [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
 - Version: 1.5.14

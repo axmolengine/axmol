@@ -175,7 +175,6 @@ ShaderModuleMTL::ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, std
     {
         NSLog(@"metal shader is ---------------");
         NSLog(@"%s", metalShader);
-        // NSLog(@"%s", glslopt_get_log(glslShader));
         assert(false);
     }
 
