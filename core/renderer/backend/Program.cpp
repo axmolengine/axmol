@@ -193,6 +193,5 @@ void Program::setProgramIds(uint32_t progType, uint64_t progId)
 {
     _programType  = progType;
     _programId    = progId;
-    _batchEnabled = _programType != ProgramType::CUSTOM_PROGRAM;
 }
 NS_AX_BACKEND_END

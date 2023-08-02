@@ -169,12 +169,6 @@ public:
 
     inline VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
-    /**
-    * Sets batch draw enabled
-    */
-    void setBatchDrawEnabled(bool enabled) { _batchEnabled = enabled; }
-    bool isBatchEnabled() const { return _batchEnabled; }
-
 protected:
 
     void setProgramIds(uint32_t progType, uint64_t progId);
@@ -220,7 +214,6 @@ protected:
     VertexLayout* _vertexLayout = nullptr;
     uint32_t _programType = ProgramType::CUSTOM_PROGRAM;  ///< built-in program type, initial value is CUSTOM_PROGRAM.
     uint64_t _programId   = 0;
-    bool _batchEnabled    = false;
 
     using VERTEX_LAYOUT_SETUP_FUNC = std::function<void(Program*)>;
 

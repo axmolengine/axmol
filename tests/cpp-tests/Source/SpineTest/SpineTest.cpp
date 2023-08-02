@@ -367,6 +367,7 @@ bool MixAndMatchExample::init()
     
     auto ps1     = new backend::ProgramState(hsvProg);
     SET_UNIFORM(ps1, "u_hsv", Vec3(92.0f, 1.0f, 1.2f));
+    ps1->updateBatchId();
     skeletonNode->setProgramState(ps1, true);
 
     /* -------- skeletonNode2 with same spine animation file ------------ */
@@ -397,6 +398,7 @@ bool MixAndMatchExample::init()
 
     auto ps2 = new backend::ProgramState(hsvProg);
     SET_UNIFORM(ps2, "u_hsv", Vec3(-45.0f, 1.0f, 1.2f));
+    ps2->updateBatchId();
     skeletonNode2->setProgramState(ps2, true);
     return true;
 }
