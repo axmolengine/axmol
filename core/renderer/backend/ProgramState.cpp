@@ -138,8 +138,6 @@ bool ProgramState::init(Program* program)
     AX_SAFE_RETAIN(program);
     _program                 = program;
 
-    const auto programId     = program->getProgramId();
-
     _vertexLayout            = program->getVertexLayout();
     _ownVertexLayout         = false;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
@@ -156,6 +154,7 @@ bool ProgramState::init(Program* program)
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 
+    const auto programId     = program->getProgramId();
     if (programId < ProgramType::BUILTIN_COUNT)
         this->_batchId = programId;
 
@@ -420,16 +419,16 @@ ProgramState::AutoBindingResolver::~AutoBindingResolver()
     list.erase(std::remove(list.begin(), list.end(), this), list.end());
 }
 
-void ProgramState::getVertexUniformBuffer(char** buffer, std::size_t& size) const
+const char* ProgramState::getVertexUniformBuffer(std::size_t& size) const
 {
-    *buffer = (char*)_uniformBuffers.data();
     size    = _vertexUniformBufferSize;
+    return _uniformBuffers.data();
 }
 
-void ProgramState::getFragmentUniformBuffer(char** buffer, std::size_t& size) const
+const char* ProgramState::getFragmentUniformBuffer(std::size_t& size) const
 {
-    *buffer = (char*)_uniformBuffers.data() + _vertexUniformBufferSize;
     size    = _fragmentUniformBufferSize;
+    return _uniformBuffers.data() + _vertexUniformBufferSize;
 }
 
 NS_AX_BACKEND_END
