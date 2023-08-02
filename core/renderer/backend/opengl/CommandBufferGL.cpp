@@ -105,7 +105,7 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
         mask |= GL_DEPTH_BUFFER_BIT;
         glClearDepth(descirptor.clearDepthValue);
         __gl->enableDepthTest();
-        
+
         __gl->depthMask(GL_TRUE);
         __gl->depthFunc(GL_ALWAYS);
     }
@@ -224,13 +224,16 @@ void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start,
 {
     prepareDrawing();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
-    if (wireframe) primitiveType = PrimitiveType::LINE;
+    if (wireframe)
+        primitiveType = PrimitiveType::LINE;
 #endif
     glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
     cleanResources();
 }
@@ -243,16 +246,19 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
 {
     prepareDrawing();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
-    if (wireframe) primitiveType = PrimitiveType::LINE;
+    if (wireframe)
+        primitiveType = PrimitiveType::LINE;
 #endif
     __gl->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (wireframe)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
     cleanResources();
 }
@@ -378,12 +384,10 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
         for (auto&& cb : callbacks)
             cb.second(_programState, cb.first);
 
-        
         auto& uniformInfos = program->getAllActiveUniformInfo(ShaderStage::VERTEX);
 
         std::size_t bufferSize = 0;
-        char* buffer           = nullptr;
-        _programState->getVertexUniformBuffer(&buffer, bufferSize);
+        auto buffer            = _programState->getVertexUniformBuffer(bufferSize);
         program->bindUniformBuffers(buffer, bufferSize);
 
         const auto& textureInfo = _programState->getVertexTextureInfos();

@@ -508,16 +508,14 @@ void CommandBufferMTL::setUniformBuffer() const
         // Uniform buffer: glsl-optimizer is bound to index 1, glslcc: bound to 0
         constexpr int bindingIndex = DeviceMTL::VBO_BINDING_INDEX_START;
         std::size_t bufferSize = 0;
-        char* vertexBuffer     = nullptr;
-        _programState->getVertexUniformBuffer(&vertexBuffer, bufferSize);
-        if (vertexBuffer)
+        auto vertexBuffer     = _programState->getVertexUniformBuffer(bufferSize);
+        if (bufferSize)
         {
             [_mtlRenderEncoder setVertexBytes:vertexBuffer length:bufferSize atIndex:bindingIndex];
         }
 
-        char* fragmentBuffer = nullptr;
-        _programState->getFragmentUniformBuffer(&fragmentBuffer, bufferSize);
-        if (fragmentBuffer)
+        auto fragmentBuffer = _programState->getFragmentUniformBuffer(bufferSize);
+        if (bufferSize)
         {
             [_mtlRenderEncoder setFragmentBytes:fragmentBuffer length:bufferSize atIndex:bindingIndex];
         }
