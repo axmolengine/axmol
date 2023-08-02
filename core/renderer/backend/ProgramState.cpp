@@ -31,6 +31,7 @@
 #include "base/EventType.h"
 #include "base/Director.h"
 #include <algorithm>
+#include "xxhash/xxhash.h"
 
 #include "glslcc/sgs-spec.h"
 
@@ -136,14 +137,18 @@ bool ProgramState::init(Program* program)
 {
     AX_SAFE_RETAIN(program);
     _program                 = program;
+
+    const auto programId     = program->getProgramId();
+
     _vertexLayout            = program->getVertexLayout();
     _ownVertexLayout         = false;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
-    _vertexUniformBuffer     = (char*)calloc(1, _vertexUniformBufferSize);
+
 #ifdef AX_USE_METAL
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
-    _fragmentUniformBuffer     = (char*)calloc(1, _fragmentUniformBufferSize);
 #endif
+
+    _uniformBuffers.resize_fit((std::max)(_vertexUniformBufferSize + _fragmentUniformBufferSize, (size_t)1), 0);
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =
@@ -151,15 +156,15 @@ bool ProgramState::init(Program* program)
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 
-    updateBatchId();
+    if (programId < ProgramType::BUILTIN_COUNT)
+        this->_batchId = programId;
 
     return true;
 }
 
 void ProgramState::updateBatchId()
 {
-    _batchId = _program->isBatchEnabled() ? _program->getProgramId()
-                                          : static_cast<uint64_t>(reinterpret_cast<uintptr_t>(this));
+    _batchId = XXH64(_uniformBuffers.data(), _uniformBuffers.size(), _program->getProgramId());
 }
 
 void ProgramState::resetUniforms()
@@ -186,8 +191,6 @@ void ProgramState::resetUniforms()
 ProgramState::~ProgramState()
 {
     AX_SAFE_RELEASE(_program);
-    AX_SAFE_FREE(_vertexUniformBuffer);
-    AX_SAFE_FREE(_fragmentUniformBuffer);
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
@@ -202,13 +205,11 @@ ProgramState* ProgramState::clone() const
     ProgramState* cp          = new ProgramState(_program);
     cp->_vertexTextureInfos   = _vertexTextureInfos;
     cp->_fragmentTextureInfos = _fragmentTextureInfos;
-    memcpy(cp->_vertexUniformBuffer, _vertexUniformBuffer, _vertexUniformBufferSize);
+    cp->_uniformBuffers       = _uniformBuffers;
 
     cp->_ownVertexLayout = _ownVertexLayout;
     cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : new VertexLayout(*_vertexLayout);
-#ifdef AX_USE_METAL
-    memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
-#endif
+
     cp->_batchId = this->_batchId;
     return cp;
 }
@@ -246,9 +247,9 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
 {
     if (location < 0)
         return;
-        
+
     assert(location + offset + size <= _vertexUniformBufferSize);
-    memcpy(_vertexUniformBuffer + location + offset, data, size);
+    memcpy(_uniformBuffers.data() + location + offset, data, size);
 }
 
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset)
@@ -257,7 +258,7 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
         return;
 
 #ifdef AX_USE_METAL
-    memcpy(_fragmentUniformBuffer + location + offset, data, size);
+    memcpy(_uniformBuffers.data() + _vertexUniformBufferSize + location + offset, data, size);
 #else
     assert(false);
 #endif
@@ -341,7 +342,7 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
     case backend::ShaderStage::FRAGMENT:
         setTexture(uniformLocation.location[0], slot, index, texture, _fragmentTextureInfos);
         break;
-        default:;
+    default:;
     }
 }
 
@@ -357,7 +358,7 @@ void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocati
     case backend::ShaderStage::FRAGMENT:
         setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _fragmentTextureInfos);
         break;
-        default:;
+    default:;
     }
 }
 
@@ -421,13 +422,13 @@ ProgramState::AutoBindingResolver::~AutoBindingResolver()
 
 void ProgramState::getVertexUniformBuffer(char** buffer, std::size_t& size) const
 {
-    *buffer = _vertexUniformBuffer;
+    *buffer = (char*)_uniformBuffers.data();
     size    = _vertexUniformBufferSize;
 }
 
 void ProgramState::getFragmentUniformBuffer(char** buffer, std::size_t& size) const
 {
-    *buffer = _fragmentUniformBuffer;
+    *buffer = (char*)_uniformBuffers.data() + _vertexUniformBufferSize;
     size    = _fragmentUniformBufferSize;
 }
 

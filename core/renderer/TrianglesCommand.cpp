@@ -60,16 +60,14 @@ void TrianglesCommand::init(float globalOrder,
         _texture   = texture->getBackendTexture();
         _blendType = blendType;
 
-        // since it would be too expensive to check the uniforms, simplify enable batching for built-in program.
-        // if (_programType == backend::ProgramType::CUSTOM_PROGRAM)
-        //    setSkipBatching(true);
-
         // TODO: minggo set it in Node?
         auto& blendDescriptor                = _pipelineDescriptor.blendDescriptor;
         blendDescriptor.blendEnabled         = true;
         blendDescriptor.sourceRGBBlendFactor = blendDescriptor.sourceAlphaBlendFactor = blendType.src;
         blendDescriptor.destinationRGBBlendFactor = blendDescriptor.destinationAlphaBlendFactor = blendType.dst;
 
+        if (_batchId == -1)
+            setSkipBatching(true);
         if (!isSkipBatching())
             generateMaterialID();
     }

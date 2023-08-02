@@ -333,6 +333,7 @@ void SpriteReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffers::Ta
             sprite->setProgramState(ps, true);
             Vec3 axhsv{hsv->x(), hsv->y(), hsv->z()};
             ps->setUniform(ps->getUniformLocation("u_hsv"), &axhsv, sizeof(axhsv));
+            ps->updateBatchId();
         }
     }
 }

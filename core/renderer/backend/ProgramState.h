@@ -36,6 +36,7 @@
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
+#include "yasio/byte_buffer.hpp"
 
 NS_AX_BACKEND_BEGIN
 
@@ -301,8 +302,7 @@ public:
 
     /*
     * Update batchID of current program state, by default, custom program was traits with mutable uniforms
-    * so batch ID was set to address of valid ProgramState object
-    * If your programState not volatile, you can invoke this API to set with your custom ProgramId prog->getProgramId()
+    * so batch ID was set to -1 indicate batch was disabled
     */
     void updateBatchId();
 
@@ -383,8 +383,7 @@ protected:
 
     backend::Program* _program = nullptr;
     std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
-    char* _vertexUniformBuffer             = nullptr;
-    char* _fragmentUniformBuffer           = nullptr;
+    yasio::sbyte_buffer _uniformBuffers;
     std::size_t _vertexUniformBufferSize   = 0;
     std::size_t _fragmentUniformBufferSize = 0;
 
@@ -397,7 +396,7 @@ protected:
     VertexLayout* _vertexLayout = nullptr;
     bool _ownVertexLayout       = false;
 
-    uint64_t _batchId = 0;
+    uint64_t _batchId = -1;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;
