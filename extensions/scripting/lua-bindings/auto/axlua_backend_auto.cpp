@@ -991,103 +991,6 @@ int lua_ax_backend_Program_getVertexLayout(lua_State* tolua_S)
 
     return 0;
 }
-int lua_ax_backend_Program_setBatchDrawEnabled(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::backend::Program* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_setBatchDrawEnabled'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 1) 
-    {
-        bool arg0;
-
-        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "axb.Program:setBatchDrawEnabled");
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_setBatchDrawEnabled'", nullptr);
-            return 0;
-        }
-        cobj->setBatchDrawEnabled(arg0);
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.Program:setBatchDrawEnabled",argc, 1);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_Program_setBatchDrawEnabled'.",&tolua_err);
-#endif
-
-    return 0;
-}
-int lua_ax_backend_Program_isBatchEnabled(lua_State* tolua_S)
-{
-    int argc = 0;
-    ax::backend::Program* cobj = nullptr;
-    bool ok  = true;
-
-#if _AX_DEBUG >= 1
-    tolua_Error tolua_err;
-#endif
-
-
-#if _AX_DEBUG >= 1
-    if (!tolua_isusertype(tolua_S,1,"axb.Program",0,&tolua_err)) goto tolua_lerror;
-#endif
-
-    cobj = (ax::backend::Program*)tolua_tousertype(tolua_S,1,0);
-
-#if _AX_DEBUG >= 1
-    if (!cobj) 
-    {
-        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_backend_Program_isBatchEnabled'", nullptr);
-        return 0;
-    }
-#endif
-
-    argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_backend_Program_isBatchEnabled'", nullptr);
-            return 0;
-        }
-        auto&& ret = cobj->isBatchEnabled();
-        tolua_pushboolean(tolua_S,(bool)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axb.Program:isBatchEnabled",argc, 0);
-    return 0;
-
-#if _AX_DEBUG >= 1
-    tolua_lerror:
-    tolua_error(tolua_S,"#ferror in function 'lua_ax_backend_Program_isBatchEnabled'.",&tolua_err);
-#endif
-
-    return 0;
-}
 int lua_ax_backend_Program_getBuiltinProgram(lua_State* tolua_S)
 {
     int argc = 0;
@@ -1148,8 +1051,6 @@ int lua_register_ax_backend_Program(lua_State* tolua_S)
         tolua_function(tolua_S,"getProgramId",lua_ax_backend_Program_getProgramId);
         tolua_function(tolua_S,"getUniformBufferSize",lua_ax_backend_Program_getUniformBufferSize);
         tolua_function(tolua_S,"getVertexLayout",lua_ax_backend_Program_getVertexLayout);
-        tolua_function(tolua_S,"setBatchDrawEnabled",lua_ax_backend_Program_setBatchDrawEnabled);
-        tolua_function(tolua_S,"isBatchEnabled",lua_ax_backend_Program_isBatchEnabled);
         tolua_function(tolua_S,"getBuiltinProgram", lua_ax_backend_Program_getBuiltinProgram);
     tolua_endmodule(tolua_S);
     auto typeName = typeid(ax::backend::Program).name(); // rtti is literal storage
