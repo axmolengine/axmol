@@ -68,6 +68,7 @@ void TrianglesCommand::init(float globalOrder,
 
         if (_batchId == -1)
             setSkipBatching(true);
+
         if (!isSkipBatching())
             generateMaterialID();
     }
