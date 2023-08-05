@@ -78,11 +78,8 @@ void TextureInfoGL::applySampler(const SamplerDescriptor& descriptor, bool isPow
 
     // apply sampler for all internal textures
     foreachTextures([this, target](GLuint texID, int index) {
-        glBindTexture(target, textures[index]);
-
+        __gl->bindTexture(target, textures[index]);
         setCurrentTexParameters(target);
-
-        glBindTexture(target, 0);  // unbind
     });
 }
 
@@ -186,6 +183,7 @@ Texture2DGL::~Texture2DGL()
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
+    _textureInfo.destroy(GL_TEXTURE_2D);
 }
 
 void Texture2DGL::updateSamplerDescriptor(const SamplerDescriptor& sampler)
@@ -341,6 +339,7 @@ TextureCubeGL::~TextureCubeGL()
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
+    _textureInfo.destroy(GL_TEXTURE_CUBE_MAP);
 }
 
 void TextureCubeGL::updateSamplerDescriptor(const SamplerDescriptor& sampler)

@@ -255,12 +255,17 @@ struct OpenGLState
     void stencilMaskFront(GLuint v) { try_callu(glStencilMaskSeparate, GL_FRONT, _stencilMaskFront, v); }
     void stencilMaskBack(GLuint v) { try_callu(glStencilMaskSeparate, GL_BACK, _stencilMaskBack, v); }
     void activeTexture(GLenum v) { try_call(glActiveTexture, _activeTexture, v); }
-    void bindTexture(GLenum target, GLuint handle) { try_callx(glBindTexture, _textureBind, target, handle); }
+    void bindTexture(GLenum target, GLuint handle) { try_callx(glBindTexture, _textureBinding, target, handle); }
+    void deleteTexture(GLenum target, GLuint handle)
+    {
+        glDeleteTextures(1, &handle);
+        if (_textureBinding.has_value() && _textureBinding->handle == handle)
+            _textureBinding.reset();
+    }
     GLenum bindBuffer(BufferType type, GLuint buffer)
     {
         auto target = BufferTargets[static_cast<int>(type)];
-        try_callu(glBindBuffer, target, _bufferBindings[static_cast<int>(type)],
-                  buffer);
+        try_callu(glBindBuffer, target, _bufferBindings[static_cast<int>(type)], buffer);
         return target;
     }
     void deleteBuffer(BufferType type, GLuint buffer)
@@ -314,7 +319,7 @@ private:
     std::optional<GLuint> _stencilMaskFront;
     std::optional<GLuint> _stencilMaskBack;
     std::optional<GLenum> _activeTexture;
-    std::optional<CommonBindState> _textureBind;
+    std::optional<CommonBindState> _textureBinding;
     std::optional<UniformBufferBaseBindState> _uniformBufferState;
 };
 

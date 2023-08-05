@@ -42,7 +42,7 @@ struct TextureInfoGL
     void setCurrentTexParameters(GLenum target);
 
     TextureInfoGL() { textures.fill(0); }
-    ~TextureInfoGL() { destroy(); }
+    ~TextureInfoGL() {}
 
     template <typename _Fty>
     void foreachTextures(const _Fty& cb) const
@@ -56,9 +56,9 @@ struct TextureInfoGL
     GLuint ensure(int index, GLenum target);
     void recreateAll(GLenum target);
 
-    void destroy()
+    void destroy(GLenum target)
     {
-        foreachTextures([=](GLuint texID, int) { glDeleteTextures(1, &texID); });
+        foreachTextures([=](GLuint texID, int) { __gl->deleteTexture(target, texID); });
         textures.fill(0);
     }
 
