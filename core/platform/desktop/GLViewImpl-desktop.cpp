@@ -449,10 +449,10 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #elif defined(AX_USE_GL) && defined(AX_USE_GL_CORE_PROFILE)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-#    if defined(__APPLE__)
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // To make MacOS happy; should not be needed
-#    endif
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
+// #    if defined(__APPLE__)
+//     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // To make MacOS happy; should not be needed 330 core
+// #    endif
 #endif
 
     glfwWindowHint(GLFW_RESIZABLE, resizable ? GL_TRUE : GL_FALSE);
@@ -582,10 +582,10 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         return false;
     }
 
-    if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
-        ax::print("[GL:%s] Ready for GLSL", glVersion);
-    else
-        ax::print("Not totally ready :(");
+//    if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
+//        ax::print("[GL:%s] Ready for GLSL", glVersion);
+//    else
+//        ax::print("Not totally ready :(");
 
         // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !defined(AX_USE_GLES)

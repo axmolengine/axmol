@@ -30,15 +30,11 @@ THE SOFTWARE.
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 
-#    import <OpenGL/gl.h>
-#    import <OpenGL/glu.h>
-#    import <OpenGL/glext.h>
+#    import <OpenGL/gl3.h>
+#    import <OpenGL/gl3ext.h>
 
 #    define AX_GL_DEPTH24_STENCIL8 -1
 
-#    define glDeleteVertexArrays glDeleteVertexArraysAPPLE
-#    define glGenVertexArrays glGenVertexArraysAPPLE
-#    define glBindVertexArray glBindVertexArrayAPPLE
 #    define glClearDepthf glClearDepth
 #    define glDepthRangef glDepthRange
 #    define glReleaseShaderCompiler(xxx)
