@@ -38,6 +38,13 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
+## 渲染后端
+
+- OpenGL 3.3+ for Linux, macOS and Win32
+- OpenGL ES 3.0+ for Android and iOS
+- Metal for macOS and iOS
+- ANGLE ES 3.0+ for Win32 and UWP
+
 ## 新的媒体播放器
 
 新的媒体播放器`ui::MediaPlayer`(原命: `ui::VideoPlayer`) 将视频渲染为纹理，使得游戏对视频渲染控制更加灵活，就像普通UI一样，而无需考虑层级问题。这得益于重新升级的跨平台`MediaEngine`, 灵感来自微软的媒体基础库(Microsoft Media Foundation): `IMFMediaEngine`，目前已支持axmol引擎支持的所有平台。
