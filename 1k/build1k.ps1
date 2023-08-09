@@ -100,6 +100,26 @@ class build1k {
         New-Item $path -ItemType Directory 1>$null
     }
 
+    [void] rmdirs([string]$path){
+        if ($this.isdir($path)) {
+            $this.println("Deleting $path ...")
+            Remove-Item $path -Recurse -Force
+        }
+    }
+
+    [void] del([string]$path) {
+        if ($this.isfile($path)) {
+            $this.println("Deleting $path ...")
+            Remove-Item $path -Force
+        }
+    }
+
+    [void] mv([string]$path, [string]$dest){
+        if ($this.isdir($path) -and !$this.isdir($dest)) {
+            Move-Item $path $dest
+        }
+    }
+
     [void] pause($msg) {
         if ($Global:IsWin) {
             $myProcess = [System.Diagnostics.Process]::GetCurrentProcess()
@@ -141,10 +161,7 @@ $manifest = @{
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
-$manifest_file = Join-Path $myRoot 'manifest.ps1'
-if ($b1k.isfile($manifest_file)) {
-    . $manifest_file
-}
+$channels = @{}
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
 $cmdlinetools_rev = '9477386'
@@ -179,6 +196,11 @@ foreach ($arg in $args) {
         }
         $optName = $null
     }
+}
+
+$manifest_file = Join-Path $myRoot 'manifest.ps1'
+if ($b1k.isfile($manifest_file)) {
+    . $manifest_file
 }
 
 # translate xtool args
@@ -315,22 +337,22 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
         if ($checkVerCond) {
             $matched = Invoke-Expression $checkVerCond
             if ($matched) {
-                if (!$silent) { $b1k.println("Found suitable installed ${name}: $prog_path, version: $foundVer") }
+                if (!$silent) { $b1k.println("Using ${name}: $prog_path, version: $foundVer") }
                 $found_rets = $prog_path, $foundVer
             }
             else {
-                if (!$silent) { $b1k.println("The installed ${name}: $prog_path, version: $foundVer not match required: $requiredVer") }
+                # if (!$silent) { $b1k.println("The installed ${name}: $prog_path, version: $foundVer not match required: $requiredVer") }
                 $found_rets = $null, $preferredVer
             }
         }
         else {
-            if (!$silent) { $b1k.println("Found installed ${name}: $prog_path, version: $foundVer") }
+            if (!$silent) { $b1k.println("Using ${name}: $prog_path, version: $foundVer") }
             $found_rets = $prog_path, $foundVer
         }
     }
     else {
         if ($preferredVer) {
-            if (!$silent) { $b1k.println("Not found $name, needs install: $preferredVer") }
+            # if (!$silent) { $b1k.println("Not found $name, needs install: $preferredVer") }
             $found_rets = $null, $preferredVer
         }
         else {
@@ -368,66 +390,22 @@ function download_file($url, $out) {
     }
 }
 
-# setup cmake
-function setup_cmake() {
-    $cmake_prog, $cmake_ver = find_prog -name 'cmake'
-    if ($cmake_prog) {
-        return $cmake_prog
-    }
-    else {
-        $cmake_suffix = @(".zip", ".sh", ".tar.gz").Get($HOST_OS)
-        if ($HOST_OS -ne $HOST_MAC) {
-            $cmake_dir = "cmake-$cmake_ver-$HOST_OS_NAME-x86_64"
+function download_and_expand($url, $out, $dest) {
+    download_file $url $out
+    if($out.EndsWith('.zip')) {
+        Expand-Archive -Path $out -DestinationPath $dest
+    } elseif($out.EndsWith('.tar.gz')) {
+        if (!$dest.EndsWith('/')) {
+            $b1k.mkdirs($dest)
         }
-        else {
-            $cmake_dir = "cmake-$cmake_ver-$HOST_OS_NAME-universal"
-        }
-        $cmake_root = $(Join-Path $prefix $cmake_dir)
-        $cmake_pkg_name = "$cmake_dir$cmake_suffix"
-        $cmake_pkg_path = "$cmake_root$cmake_suffix"
-        if (!$b1k.isdir($cmake_root)) {
-            $cmake_base_uri = 'https://github.com/Kitware/CMake/releases/download'
-            $cmake_url = "$cmake_base_uri/v$cmake_ver/$cmake_pkg_name"
-            if (!$b1k.isfile($cmake_pkg_path)) {
-                download_file "$cmake_url" "$cmake_pkg_path"
-            }
-
-            if ($HOST_OS -eq $HOST_WIN) {
-                Expand-Archive -Path $cmake_pkg_path -DestinationPath $prefix\
-            }
-            elseif ($HOST_OS -eq $HOST_LINUX) {
-                chmod 'u+x' "$cmake_pkg_path"
-                $b1k.mkdirs($cmake_root)
-                & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
-            }
-            elseif ($HOST_OS -eq $HOST_MAC) {
-                tar xvf "$cmake_root.tar.gz" -C "$prefix/"
-            }
-        }
-
-        $cmake_bin = $null
-        if ($HOST_OS -ne $HOST_MAC) {
-            $cmake_bin = Join-Path $cmake_root 'bin'
-        }
-        else {
-            $cmake_bin = "$cmake_root/CMake.app/Contents/bin"
-        }
-        
-        $cmake_prog, $_ = find_prog -name 'cmake' -path $cmake_bin -silent $True
-        if ($cmake_prog) {
-            if (($null -ne $cmake_bin) -and ($env:PATH.IndexOf($cmake_bin) -eq -1)) {
-                $env:PATH = "$cmake_bin$envPathSep$env:PATH"
-            }
-            $b1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
-            return $cmake_prog
-        }
-        else {
-            throw "Install cmake $cmake_ver fail"
-        }
+        tar xvf "$out" -C $dest
+    } elseif($out.EndsWith('.sh')) {
+        chmod 'u+x' "$out"
+        $b1k.mkdirs($dest)
     }
 }
 
-# setup nuget
+# setup nuget, not add to path
 function setup_nuget() {
     if (!$manifest['nuget']) { return $null }
     $nuget_bin = Join-Path $prefix 'nuget'
@@ -436,9 +414,8 @@ function setup_nuget() {
         return $nuget_prog
     }
 
-    if (!$b1k.isdir($nuget_bin)) {
-        $b1k.mkdirs($nuget_bin)
-    }
+    $b1k.rmdirs($nuget_bin)
+    $b1k.mkdirs($nuget_bin)
 
     $nuget_prog = Join-Path $nuget_bin 'nuget.exe'
     download_file "https://dist.nuget.org/win-x86-commandline/$nuget_ver/nuget.exe" $nuget_prog
@@ -447,23 +424,148 @@ function setup_nuget() {
         $b1k.println("Using nuget: $nuget_prog, version: $nuget_ver")
         return $nuget_prog
     }
-    else {
-        throw "Install nuget fail"
+
+    throw "Install nuget fail"
+}
+
+# setup glslcc, not add to path
+function setup_glslcc() {
+    if (!$manifest['glslcc']) { return $null }
+    $glslcc_bin = Join-Path $prefix 'glslcc'
+    $glslcc_prog, $glslcc_ver = find_prog -name 'glslcc' -path $glslcc_bin -mode 'BOTH'
+    if ($glslcc_prog) {
+        return $glslcc_prog
     }
+
+    $suffix = $('win64.zip', 'linux.tar.gz', 'osx.tar.gz').Get($HOST_OS)
+    $b1k.rmdirs($glslcc_bin)
+    $glslcc_pkg = "$prefix/glslcc-$suffix"
+    $b1k.del($glslcc_pkg)
+
+    download_and_expand "https://github.com/axmolengine/glslcc/releases/download/v$glslcc_ver/glslcc-$glslcc_ver-$suffix" "$glslcc_pkg" $glslcc_bin
+
+    $glslcc_prog = (Join-Path $glslcc_bin "glslcc$exeSuffix")
+    if ($b1k.isfile($glslcc_prog)) {
+        $b1k.println("Using glslcc: $glslcc_prog, version: $glslcc_ver")
+        return $glslcc_prog
+    }
+
+    throw "Install glslcc fail"
+}
+
+# setup cmake
+function setup_cmake() {
+    $cmake_prog, $cmake_ver = find_prog -name 'cmake'
+    if ($cmake_prog) {
+        return $cmake_prog
+    }
+
+    $cmake_root = $(Join-Path $prefix 'cmake')
+    $cmake_bin = Join-Path $cmake_root 'bin'
+    $cmake_prog, $cmake_ver = find_prog -name 'cmake' -path $cmake_bin -mode 'ONLY' -silent $true
+    if(!$cmake_prog) {
+        $b1k.rmdirs($cmake_root)
+
+        $cmake_suffix = @(".zip", ".sh", ".tar.gz").Get($HOST_OS)
+        $cmake_dev_hash = $channels['cmake']
+        if ($cmake_dev_hash) {
+            $cmake_ver = "$cmake_ver-$cmake_dev_hash"
+        }
+        
+        if ($HOST_OS -ne $HOST_MAC) {
+            $cmake_pkg_name = "cmake-$cmake_ver-$HOST_OS_NAME-x86_64"
+        }
+        else {
+            $cmake_pkg_name = "cmake-$cmake_ver-$HOST_OS_NAME-universal"
+        }
+
+        $cmake_pkg_path = Join-Path $prefix "$cmake_pkg_name$cmake_suffix"
+
+        if (!$cmake_dev_hash) {
+            $cmake_url = "https://github.com/Kitware/CMake/releases/download/v$cmake_ver/$cmake_pkg_name$cmake_suffix"
+        } else {
+            $cmake_url = "https://cmake.org/files/dev/$cmake_pkg_name$cmake_suffix"
+        }
+
+        $cmake_dir = Join-Path $prefix $cmake_pkg_name
+        if ($IsMacOS) {
+            $cmake_app_contents = Join-Path $cmake_dir 'CMake.app/Contents'
+            if ($b1k.isdir($cmake_app_contents)) {
+                $cmake_dir = $cmake_app_contents
+            }
+        }
+        if (!$b1k.isdir($cmake_dir)) {
+            download_and_expand "$cmake_url" "$cmake_pkg_path" $prefix/
+        }
+
+        if ($b1k.isdir($cmake_dir)) {
+            $b1k.mv($cmake_dir, $cmake_root)
+
+            if ($b1k.isdir($cmake_dir)) {
+                $b1k.rmdirs($cmake_dir)
+            }
+        } elseif ($IsLinux) {
+            & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
+        }
+
+        $cmake_prog, $_ = find_prog -name 'cmake' -path $cmake_bin -silent $true
+        if (!$cmake_prog) {
+            throw "Install cmake $cmake_ver fail"
+        }
+    }
+
+    if (($null -ne $cmake_bin) -and ($env:PATH.IndexOf($cmake_bin) -eq -1)) {
+        $env:PATH = "$cmake_bin$envPathSep$env:PATH"
+    }
+    $b1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
+    return $cmake_prog
+}
+
+function setup_ninja() {
+    if (!$manifest['ninja']) { return $null }
+    $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
+    $ninja_bin = Join-Path $prefix 'ninja'
+    $ninja_prog, $ninja_ver = find_prog -name 'ninja'
+    if ($ninja_prog) {
+        return $ninja_prog
+    }
+
+    $ninja_prog, $ninja_ver = find_prog -name 'ninja' -path $ninja_bin -silent $true
+    if (!$ninja_prog) {
+        $ninja_pkg = "$prefix/ninja-$suffix.zip"
+        $b1k.rmdirs($ninja_bin)
+        $b1k.del($ninja_pkg)
+        
+        download_and_expand "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" $ninja_pkg "$prefix/ninja/"
+    }
+    if ($env:PATH.IndexOf($ninja_bin) -eq -1) {
+        $env:PATH = "$ninja_bin$envPathSep$env:PATH"
+    }
+    $ninja_prog = (Join-Path $ninja_bin "ninja$exeSuffix")
+
+    $b1k.println("Using ninja: $ninja_prog, version: $ninja_ver")
+    return $ninja_prog
 }
 
 function setup_nsis() {
     if(!$manifest['nsis']) { return $null }
+    $nsis_bin = Join-Path $prefix "nsis"
     $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION'
     if ($nsis_prog) {
         return $nsis_prog
     }
 
-    $nsis_bin = Join-Path $prefix "nsis-$nsis_ver"
-    if (!$b1k.isdir($nsis_bin)) {
-        download_file "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" "$prefix/nsis-$nsis_ver.zip"
-        Expand-Archive -Path $prefix/nsis-$nsis_ver.zip -DestinationPath "$prefix"
+    $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION' -path $nsis_bin -silent $true
+    if (!$nsis_prog) {
+        $b1k.rmdirs($nsis_bin)
+
+        download_and_expand "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" "$prefix/nsis-$nsis_ver.zip" "$prefix"
+        $nsis_dir = "$nsis_bin-$nsis_ver"
+        if($b1k.isdir($nsis_dir)) {
+            $b1k.mv($nsis_dir, $nsis_bin)
+        }
     }
+
     if ($env:PATH.IndexOf($nsis_bin) -eq -1) {
         $env:PATH = "$nsis_bin$envPathSep$env:PATH"
     }
@@ -475,40 +577,34 @@ function setup_nsis() {
 
 function setup_jdk() {
     if (!$manifest['jdk']) { return $null }
+    $suffix = $('windows-x64.zip', 'linux-x64.tar.gz', 'macOS-x64.tar.gz').Get($HOST_OS)
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac'
     if ($javac_prog) {
         return $javac_prog
     }
 
-    $suffix = $('windows-x64.zip', 'linux-x64.tar.gz', 'macOS-x64.tar.gz').Get($HOST_OS)
-    $java_home = Join-Path $prefix "jdk-$jdk_ver"
-    if (!$b1k.isdir($java_home)) {
+    $java_home = Join-Path $prefix "jdk"
+    $jdk_bin = Join-Path $java_home 'bin'
+    $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -silent $true
+    if(!$javac_prog) {
+        $b1k.rmdirs($java_home)
+
         # refer to https://learn.microsoft.com/en-us/java/openjdk/download
-        if (!$b1k.isfile("$prefix/microsoft-jdk-$jdk_ver-$suffix")) {
-            download_file "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "$prefix/microsoft-jdk-$jdk_ver-$suffix"
-        }
-
-        # uncompress
-        if ($IsWin) {
-            Expand-Archive -Path "$prefix/microsoft-jdk-$jdk_ver-$suffix" -DestinationPath "$prefix/"
-        }
-        else {
-            tar xvf "$prefix/microsoft-jdk-$jdk_ver-$suffix" -C "$prefix/"
-        }
-
+        download_and_expand "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "$prefix/microsoft-jdk-$jdk_ver-$suffix" "$prefix/"
+        
         # move to plain folder name
         $folderName = (Get-ChildItem -Path $prefix -Filter "jdk-$jdk_ver+*").Name
         if ($folderName) {
-            Move-Item "$prefix/$folderName" $java_home
+            $b1k.mv("$prefix/$folderName", $java_home)
         }
     }
+
     $env:JAVA_HOME = $java_home
     $env:CLASSPATH = ".;$java_home\lib\dt.jar;$java_home\lib\tools.jar"
-    $jdk_bin = Join-Path $java_home 'bin'
     if ($env:PATH.IndexOf($jdk_bin) -eq -1) {
         $env:PATH = "$jdk_bin$envPathSep$env:PATH"
     }
-    $javac_prog = (find_prog -name 'javac' -path $jdk_bin)
+    $javac_prog = find_prog -name 'javac' -path $jdk_bin -silent $true
     if (!$javac_prog) {
         throw "Install jdk $jdk_ver fail"
     }
@@ -518,59 +614,12 @@ function setup_jdk() {
     return $javac_prog
 }
 
-function setup_glslcc() {
-    if (!$manifest['glslcc']) { return $null }
-    $glslcc_bin = Join-Path $prefix 'glslcc'
-    $glslcc_prog, $glslcc_ver = find_prog -name 'glslcc' -path $glslcc_bin -mode 'BOTH'
-    if ($glslcc_prog) {
-        return $glslcc_prog
+function setup_clang() {
+    if (!$manifest.Contains('clang')) { return $null }
+    $clang_prog, $clang_ver = find_prog -name 'clang'
+    if (!$clang_prog) {
+        throw 'required clang $clang_ver not installed, please install it from: https://github.com/llvm/llvm-project/releases'
     }
-
-    $suffix = $('win64.zip', 'linux.tar.gz', 'osx.tar.gz').Get($HOST_OS)
-    if (!$b1k.isdir($glslcc_bin)) {
-        $glslcc_pkg = "$prefix/glslcc-$suffix"
-        if (!$b1k.isfile($glslcc_pkg)) {
-            download_file "https://github.com/axmolengine/glslcc/releases/download/v$glslcc_ver/glslcc-$glslcc_ver-$suffix" "$glslcc_pkg"
-        }
-        if ($IsWin) {
-            Expand-Archive -Path $glslcc_pkg -DestinationPath $glslcc_bin
-        }
-        else {
-            $b1k.mkdirs($glslcc_bin)
-            tar xvf "$glslcc_pkg" -C $glslcc_bin
-        }
-    }
-    if ($env:PATH.IndexOf($glslcc_bin) -eq -1) {
-        $env:PATH = "$glslcc_bin$envPathSep$env:PATH"
-    }
-    $glslcc_prog = (Join-Path $glslcc_bin "glslcc$exeSuffix")
-
-    $b1k.println("Using glslcc: $glslcc_prog, version: $glslcc_ver")
-
-    return $glslcc_prog
-}
-
-function setup_ninja() {
-    if (!$manifest['ninja']) { return $null }
-    $ninja_prog, $ninja_ver = find_prog -name 'ninja'
-    if ($ninja_prog) {
-        return $ninja_prog
-    }
-
-    $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
-    $ninja_bin = (Resolve-Path "$prefix/ninja-$suffix" -ErrorAction SilentlyContinue).Path
-    if (!$ninja_bin) {
-        download_file "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" "$prefix/ninja-$suffix.zip"
-        Expand-Archive -Path $prefix/ninja-$suffix.zip -DestinationPath "$prefix/ninja-$suffix/"
-        $ninja_bin = (Resolve-Path "$prefix/ninja-$suffix" -ErrorAction SilentlyContinue).Path
-    }
-    if ($env:PATH.IndexOf($ninja_bin) -eq -1) {
-        $env:PATH = "$ninja_bin$envPathSep$env:PATH"
-    }
-    $ninja_prog = (Join-Path $ninja_bin "ninja$exeSuffix")
-
-    $b1k.println("Using ninja: $ninja_prog, version: $ninja_ver")
-    return $ninja_prog
 }
 
 function setup_android_sdk() {
@@ -701,14 +750,6 @@ function setup_android_sdk() {
     }
 
     return $sdk_root, $ndk_root
-}
-
-function setup_clang() {
-    if (!$manifest.Contains('clang')) { return $null }
-    $clang_prog, $clang_ver = find_prog -name 'clang'
-    if (!$clang_prog) {
-        throw 'required clang $clang_ver not installed, please install it from: https://github.com/llvm/llvm-project/releases'
-    }
 }
 
 # preprocess methods: 
@@ -907,7 +948,7 @@ $cmake_prog = setup_cmake
 
 if ($BUILD_TARGET -eq 'win32') {
     $nuget_prog = setup_nuget
-    # $nsis_prog = setup_nsis
+    $nsis_prog = setup_nsis
     if ($TOOLCHAIN_NAME -ne 'msvc') {
         $ninja_prog = setup_ninja
         $null = setup_clang

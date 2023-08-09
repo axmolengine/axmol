@@ -12,8 +12,15 @@
 # }
 
 # add or overwrite tool version like follow
-$manifest['nuget']  = '*'; # any
-$manifest['glslcc'] = '1.9.0+';
-# $manifest['nsis']   = '3.09';
+$manifest['nuget'] = '*' # any
+$manifest['glslcc'] = '1.9.0'
+
+if ($IsMacOS) {
+    $manifest['cmake'] = '3.27.20230808'
+    $channels['cmake'] = 'g94eae40' # https://cmake.org/files/dev/cmake-3.27.20230808-g94eae40-windows-i386.msi
+}
+elseif ($options.p -eq 'winuwp') {
+    $manifest['cmake'] = '3.27.1+'
+}
 
 # [void]$manifest
