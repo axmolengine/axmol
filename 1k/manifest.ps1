@@ -16,10 +16,13 @@ $manifest['nuget'] = '*' # any
 $manifest['glslcc'] = '1.9.0'
 
 if ($IsMacOS) {
+    # refer to: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8632
+    # once cmake-3.28.0 released, can simply specify cmake to '3.28.0+'
     $manifest['cmake'] = '3.27.20230808'
-    $channels['cmake'] = 'g94eae40' # https://cmake.org/files/dev/cmake-3.27.20230808-g94eae40-windows-i386.msi
+    $channels['cmake'] = 'g94eae40'
 }
 elseif ($options.p -eq 'winuwp') {
+    # refer to: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8319
     $manifest['cmake'] = '3.27.1+'
 }
 

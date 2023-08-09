@@ -490,16 +490,21 @@ function setup_cmake() {
         $cmake_dir = Join-Path $prefix $cmake_pkg_name
         if ($IsMacOS) {
             $cmake_app_contents = Join-Path $cmake_dir 'CMake.app/Contents'
-            if ($b1k.isdir($cmake_app_contents)) {
-                $cmake_dir = $cmake_app_contents
-            }
         }
         if (!$b1k.isdir($cmake_dir)) {
             download_and_expand "$cmake_url" "$cmake_pkg_path" $prefix/
         }
 
-        if ($b1k.isdir($cmake_dir)) {
-            $b1k.mv($cmake_dir, $cmake_root)
+        if ($b1k.isdir($cmake_dir)) { 
+            $cmake_root0 = $cmake_dir
+            if ($IsMacOS) {
+                $cmake_app_contents = Join-Path $cmake_dir 'CMake.app/Contents'
+                if ($b1k.isdir($cmake_app_contents)) {
+                    $cmake_root0 = $cmake_app_contents
+                }
+                sudo xattr -r -d com.apple.quarantine "$cmake_root0/bin/cmake"
+            }
+            $b1k.mv($cmake_root0, $cmake_root)
 
             if ($b1k.isdir($cmake_dir)) {
                 $b1k.rmdirs($cmake_dir)
