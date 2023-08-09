@@ -81,6 +81,13 @@ THE SOFTWARE.
 #    if !defined(GL_RGBA32F_EXT)
 #        define GL_RGBA32F_EXT 0x8814
 #    endif
+
+#    if !defined(GL_LUMINANCE)
+#        define GL_LUMINANCE 0x1909
+#    endif
+#    if !defined(GL_LUMINANCE_ALPHA)
+#        define GL_LUMINANCE_ALPHA 0x190A
+#    endif
 #endif
 
 /// @endcond

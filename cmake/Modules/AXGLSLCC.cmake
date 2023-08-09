@@ -98,12 +98,12 @@ function (ax_target_compile_shaders target_name)
         
         # shader lang
         set(SC_PROFILE "")
-        if(ANDROID OR WINRT OR AX_USE_ANGLE)
+        if(ANDROID OR WINRT OR (AX_USE_ANGLE AND IOS))
             # version 300 es
             set(OUT_LANG "ESSL")
             set(SC_PROFILE "300")
             list(APPEND SC_FLAGS  "--lang=gles" "--profile=${SC_PROFILE}")
-        elseif (WIN32 OR LINUX)
+        elseif (WIN32 OR LINUX OR (AX_USE_ANGLE AND NOT IOS))
             # version 330
             set(OUT_LANG "GLSL")
             set(SC_PROFILE "330")
@@ -140,7 +140,7 @@ function (ax_target_compile_shaders target_name)
         endif()
 
         # sgs, because Apple Metal lack of shader uniform reflect so use --sgs --refelect
-        if (APPLE)
+        if (APPLE AND NOT AX_USE_ANGLE)
             list(APPEND SC_FLAGS "--sgs" "--reflect")
         endif()
     
