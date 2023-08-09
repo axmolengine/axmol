@@ -1,4 +1,4 @@
-axmol-1.0.0  Aug.9 2023
+axmol-1.0  ??
 
 - [HIGHLIGHT] Reimplemented MediaPlayer support play media(video/audio) files for all platforms, and ui::VideoPlayer was renamed to ui::MediaPlayer
 - [HIGHLIGHT] Windows Store UWP apps support

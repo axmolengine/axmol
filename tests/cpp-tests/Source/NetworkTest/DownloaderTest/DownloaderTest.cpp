@@ -131,7 +131,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            btn->setVisible(false);
+            //btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);
@@ -151,7 +151,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            btn->setVisible(false);
+            //btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);
@@ -172,7 +172,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            btn->setVisible(false);
+            //btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);

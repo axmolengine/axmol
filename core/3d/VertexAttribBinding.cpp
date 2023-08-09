@@ -90,15 +90,17 @@ bool VertexAttribBinding::init(MeshIndexData* meshIndexData, Pass* pass, MeshCom
     // Parse and set attributes
     parseAttributes();
     int offset = 0;
+    auto vertexLayout = _programState->getMutableVertexLayout();
     for (auto k = 0; k < attributeCount; k++)
     {
         auto meshattribute = meshVertexData->getMeshVertexAttrib(k);
-        setVertexAttribPointer(shaderinfos::getAttributeName(meshattribute.vertexAttrib), meshattribute.type, false,
+        setVertexAttribPointer(vertexLayout, shaderinfos::getAttributeName(meshattribute.vertexAttrib),
+                               meshattribute.type, false,
                                offset, 1 << k);
         offset += meshattribute.getAttribSizeBytes();
     }
 
-    _programState->setVertexStride(offset);
+    vertexLayout->setStride(offset);
 
     AXASSERT(offset == meshVertexData->getSizePerVertex(), "vertex layout mismatch!");
 
@@ -133,7 +135,8 @@ const backend::AttributeBindInfo* VertexAttribBinding::getVertexAttribValue(std:
     return nullptr;
 }
 
-void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
+void VertexAttribBinding::setVertexAttribPointer(VertexLayout* vertexLayout,
+                                                 std::string_view name,
                                                  backend::VertexFormat type,
                                                  bool normalized,
                                                  int offset,
@@ -143,7 +146,7 @@ void VertexAttribBinding::setVertexAttribPointer(std::string_view name,
     if (v)
     {
         // AXLOG("axmol: set attribute '%s' location: %d, offset: %d", name.c_str(), v->location, offset);
-        _programState->setVertexAttrib(name, v->location, type, offset, normalized);
+        vertexLayout->setAttrib(name, v->location, type, offset, normalized);
         _vertexAttribsFlags |= flag;
     }
     else

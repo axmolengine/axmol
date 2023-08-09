@@ -40,6 +40,7 @@ MeshMaterialCache* MeshMaterialCache::_cacheInstance = nullptr;
 
 std::unordered_map<std::string, MeshMaterial*> MeshMaterial::_materials;
 MeshMaterial* MeshMaterial::_unLitMaterial         = nullptr;
+MeshMaterial* MeshMaterial::_unLitInstanceMaterial = nullptr;
 MeshMaterial* MeshMaterial::_unLitNoTexMaterial    = nullptr;
 MeshMaterial* MeshMaterial::_vertexLitMaterial     = nullptr;
 MeshMaterial* MeshMaterial::_diffuseMaterial       = nullptr;
@@ -55,6 +56,7 @@ MeshMaterial* MeshMaterial::_quadTextureMaterial = nullptr;
 MeshMaterial* MeshMaterial::_quadColorMaterial = nullptr;
 
 backend::ProgramState* MeshMaterial::_unLitMaterialProgState         = nullptr;
+backend::ProgramState* MeshMaterial::_unLitInstanceMaterialProgState = nullptr;
 backend::ProgramState* MeshMaterial::_unLitNoTexMaterialProgState    = nullptr;
 backend::ProgramState* MeshMaterial::_vertexLitMaterialProgState     = nullptr;
 backend::ProgramState* MeshMaterial::_diffuseMaterialProgState       = nullptr;
@@ -101,6 +103,14 @@ void MeshMaterial::createBuiltInMaterial()
     if (_unLitMaterial && _unLitMaterial->initWithProgramState(_unLitMaterialProgState))
     {
         _unLitMaterial->_type = MeshMaterial::MaterialType::UNLIT;
+    }
+
+    program                         = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_3D_INSTANCE);
+    _unLitInstanceMaterialProgState = new backend::ProgramState(program);
+    _unLitInstanceMaterial  = new MeshMaterial();
+    if (_unLitInstanceMaterial && _unLitInstanceMaterial->initWithProgramState(_unLitInstanceMaterialProgState))
+    {
+        _unLitInstanceMaterial->_type = MeshMaterial::MaterialType::UNLIT_INSTANCE;
     }
 
     program                      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_3D);
@@ -228,6 +238,10 @@ MeshMaterial* MeshMaterial::createBuiltInMaterial(MaterialType type, bool skinne
     {
     case MeshMaterial::MaterialType::UNLIT:
         material = skinned ? _unLitMaterialSkin : _unLitMaterial;
+        break;
+
+    case MeshMaterial::MaterialType::UNLIT_INSTANCE:
+        material = skinned ? /* TODO: implement instanced hardware skinning */ nullptr : _unLitInstanceMaterial;
         break;
 
     case MeshMaterial::MaterialType::UNLIT_NOTEX:

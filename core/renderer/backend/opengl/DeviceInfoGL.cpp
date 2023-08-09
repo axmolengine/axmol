@@ -90,30 +90,47 @@ static bool checkReallySupportsASTC()
 
 bool DeviceInfoGL::init()
 {
+    // These queries work with all GL/GLES versions!
+    _vendor   = (char const*)glGetString(GL_VENDOR);
+    _renderer = (char const*)glGetString(GL_RENDERER);
+    _version  = (char const*)glGetString(GL_VERSION);
+    _shaderVer   = (char const*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+
+    // caps
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxAttributes);
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTextureSize);
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &_maxTextureUnits);
-    _glExtensions = (const char*)glGetString(GL_EXTENSIONS);
+
+    // exts
+#if defined(AX_USE_GL_CORE_PROFILE)
+    GLint NumberOfExtensions{0};
+    glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+    for (GLint i = 0; i < NumberOfExtensions; ++i)
+    {
+        auto extName = (const char*)glGetStringi(GL_EXTENSIONS, i);
+        if (extName)
+            _glExtensions.emplace(extName);
+    }
+#else
+    auto extensions = (const char*)glGetString(GL_EXTENSIONS);
+    if (extensions)
+        _glExtensions    = extensions;
+#endif
     return true;
 }
 
 const char* DeviceInfoGL::getVendor() const
 {
-    return (const char*)glGetString(GL_VENDOR);
+    return _vendor;
 }
 const char* DeviceInfoGL::getRenderer() const
 {
-    return (const char*)glGetString(GL_RENDERER);
+    return _renderer;
 }
 
 const char* DeviceInfoGL::getVersion() const
 {
-    return (const char*)glGetString(GL_VERSION);
-}
-
-const char* DeviceInfoGL::getExtension() const
-{
-    return _glExtensions.c_str();
+    return _version;
 }
 
 bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
@@ -122,43 +139,43 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
     switch (feature)
     {
     case FeatureType::ETC1:
-        featureSupported = checkForGLExtension("GL_OES_compressed_ETC1_RGB8_texture");
+        featureSupported = hasExtension("GL_OES_compressed_ETC1_RGB8_texture"sv);
         break;
     case FeatureType::ETC2:
         featureSupported = checkSupportsCompressedFormat(GL_COMPRESSED_RGBA8_ETC2_EAC);
         break;
     case FeatureType::S3TC:
 #ifdef GL_EXT_texture_compression_s3tc
-        featureSupported = checkForGLExtension("GL_EXT_texture_compression_s3tc");
+        featureSupported = hasExtension("GL_EXT_texture_compression_s3tc"sv);
 #endif
         break;
     case FeatureType::AMD_COMPRESSED_ATC:
-        featureSupported = checkForGLExtension("GL_AMD_compressed_ATC_texture");
+        featureSupported = hasExtension("GL_AMD_compressed_ATC_texture"sv);
         break;
     case FeatureType::PVRTC:
-        featureSupported = checkForGLExtension("GL_IMG_texture_compression_pvrtc");
+        featureSupported = hasExtension("GL_IMG_texture_compression_pvrtc"sv);
         break;
     case FeatureType::IMG_FORMAT_BGRA8888:
-        featureSupported = checkForGLExtension("GL_IMG_texture_format_BGRA8888");
+        featureSupported = hasExtension("GL_IMG_texture_format_BGRA8888"sv);
         break;
     case FeatureType::DISCARD_FRAMEBUFFER:
-        featureSupported = checkForGLExtension("GL_EXT_discard_framebuffer");
+        featureSupported = hasExtension("GL_EXT_discard_framebuffer"sv);
         break;
     case FeatureType::PACKED_DEPTH_STENCIL:
-        featureSupported = checkForGLExtension("GL_OES_packed_depth_stencil");
+        featureSupported = hasExtension("GL_OES_packed_depth_stencil"sv);
         break;
     case FeatureType::VAO:
 #ifdef AX_PLATFORM_PC
-        featureSupported = checkForGLExtension("vertex_array_object");
+        featureSupported = hasExtension("vertex_array_object"sv);
 #else
-        featureSupported = checkForGLExtension("GL_OES_vertex_array_object");
+        featureSupported = hasExtension("GL_OES_vertex_array_object"sv);
 #endif
         break;
     case FeatureType::MAPBUFFER:
-        featureSupported = checkForGLExtension("GL_OES_mapbuffer");
+        featureSupported = hasExtension("GL_OES_mapbuffer"sv);
         break;
     case FeatureType::DEPTH24:
-        featureSupported = checkForGLExtension("GL_OES_depth24");
+        featureSupported = hasExtension("GL_OES_depth24"sv);
         break;
     case FeatureType::ASTC:
         featureSupported = checkReallySupportsASTC();
@@ -169,9 +186,27 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
     return featureSupported;
 }
 
-bool DeviceInfoGL::checkForGLExtension(std::string_view searchName) const
+bool DeviceInfoGL::hasExtension(std::string_view searchName) const
 {
+#if defined(AX_USE_GL_CORE_PROFILE)
+    return _glExtensions.find(searchName) != _glExtensions.end();
+#else
     return _glExtensions.find(searchName) != std::string::npos;
+#endif
+}
+
+std::string DeviceInfoGL::dumpExtensions() const
+{
+#if defined(AX_USE_GL_CORE_PROFILE)
+    std::string strExts;
+    for (auto& extName : _glExtensions) {
+        strExts += extName;
+        strExts += ',';
+    }
+    return strExts;
+#else
+    return _glExtensions;
+#endif
 }
 
 bool DeviceInfoGL::checkSupportsCompressedFormat(int compressedFormat)

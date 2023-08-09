@@ -33,7 +33,7 @@
 #include "Types.h"
 #include "RenderPassDescriptor.h"
 #include "PixelBufferDescriptor.h"
-#include "StdC.h"
+#include "platform/StdC.h"
 #include "ProgramState.h"
 #include "VertexLayout.h"
 
@@ -147,6 +147,12 @@ public:
     virtual void setIndexBuffer(Buffer* buffer) = 0;
 
     /**
+     * Set matrix tranform when drawing instances of the same model
+     * @ buffer A buffer object that the device will read matrices from.
+     */
+    virtual void setInstanceBuffer(Buffer* buffer) = 0;
+
+    /**
      * Draw primitives without an index list.
      * @param primitiveType The type of primitives that elements are assembled into.
      * @param start For each instance, the first index to draw
@@ -172,6 +178,23 @@ public:
                               std::size_t count,
                               std::size_t offset,
                               bool wireframe = false) = 0;
+
+    /**
+     * Draw primitives with an index list instanced.
+     * @param primitiveType The type of primitives that elements are assembled into.
+     * @param indexType The type if indexes, either 16 bit integer or 32 bit integer.
+     * @param count The number of indexes to read from the index buffer for each instance.
+     * @param offset Byte offset within indexBuffer to start reading indexes from.
+     * @param instance Count of instances to draw at once.
+     * @see `setIndexBuffer(Buffer* buffer)`
+     * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
+     */
+    virtual void drawElementsInstanced(PrimitiveType primitiveType,
+                                       IndexFormat indexType,
+                                       std::size_t count,
+                                       std::size_t offset,
+                                       int instanceCount,
+                                       bool wireframe = false) = 0;
 
     /**
      * Do some resources release.

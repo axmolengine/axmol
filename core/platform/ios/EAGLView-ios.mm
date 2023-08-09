@@ -349,7 +349,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if (multiSampling_)
     {
         /* Resolve from msaaFramebuffer to resolveFramebuffer */
-        // glDisable(GL_SCISSOR_TEST);
+        // __gl.disableStencilTest();
         glBindFramebuffer(GL_READ_FRAMEBUFFER_APPLE, [renderer_ msaaFrameBuffer]);
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER_APPLE, [renderer_ defaultFrameBuffer]);
         glResolveMultisampleFramebufferAPPLE();
