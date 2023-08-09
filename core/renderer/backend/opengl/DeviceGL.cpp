@@ -32,7 +32,7 @@
 #include "ProgramGL.h"
 #include "DeviceInfoGL.h"
 #include "RenderTargetGL.h"
-
+#include "MacrosGL.h"
 #include "renderer/backend/ProgramManager.h"
 
 NS_AX_BACKEND_BEGIN
@@ -59,6 +59,7 @@ DeviceGL::DeviceGL()
 #if AX_USE_GL_CORE_PROFILE
     glGenVertexArrays(1, &_defaultVAO);
     glBindVertexArray(_defaultVAO);
+    CHECK_GL_ERROR_DEBUG();
 #endif
 }
 

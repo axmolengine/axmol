@@ -582,10 +582,10 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         return false;
     }
 
-//    if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
-//        ax::print("[GL:%s] Ready for GLSL", glVersion);
-//    else
-//        ax::print("Not totally ready :(");
+   if (glVersion)
+       ax::print("[GL:%s] Ready for GLSL", glVersion);
+   else
+       ax::print("Not totally ready :(");
 
         // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !defined(AX_USE_GLES)
