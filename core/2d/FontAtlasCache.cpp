@@ -56,7 +56,7 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
 {
     auto realFontFilename = config->fontFilePath;  // resolves real file path, to prevent storing multiple atlases for the same file.
     bool useDistanceField = config->distanceFieldEnabled;
-    float outlineSize     = useDistanceField ? 0.0f : static_cast<float>(config->outlineSize);
+    int outlineSize     = useDistanceField ? 0 : config->outlineSize;
 
     std::string key;
     char keyPrefix[ATLAS_MAP_KEY_PREFIX_BUFFER_SIZE];
@@ -70,7 +70,7 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
     if (it == _atlasMap.end())
     {
         auto font = FontFreeType::create(realFontFilename, config->fontSize, config->glyphs, config->customGlyphs,
-                                         useDistanceField, outlineSize);
+                                         useDistanceField, static_cast<float>(outlineSize));
         if (font)
         {
             auto tempAtlas = font->newFontAtlas();
