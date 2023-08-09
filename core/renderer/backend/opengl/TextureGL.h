@@ -29,8 +29,6 @@
 #include "platform/GL.h"
 #include "base/EventListenerCustom.h"
 
-#include "OpenGLState.h"
-
 NS_AX_BACKEND_BEGIN
 
 /**
@@ -42,7 +40,7 @@ struct TextureInfoGL
     void setCurrentTexParameters(GLenum target);
 
     TextureInfoGL() { textures.fill(0); }
-    ~TextureInfoGL() {}
+    ~TextureInfoGL() { destroy(); }
 
     template <typename _Fty>
     void foreachTextures(const _Fty& cb) const
@@ -56,9 +54,9 @@ struct TextureInfoGL
     GLuint ensure(int index, GLenum target);
     void recreateAll(GLenum target);
 
-    void destroy(GLenum target)
+    void destroy()
     {
-        foreachTextures([=](GLuint texID, int) { __gl->deleteTexture(target, texID); });
+        foreachTextures([=](GLuint texID, int) { glDeleteTextures(1, &texID); });
         textures.fill(0);
     }
 

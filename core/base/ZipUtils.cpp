@@ -71,16 +71,16 @@ inline void ZipUtils::decodeEncodedPvr(unsigned int* data, ssize_t len)
     // check if key was set
     // make sure to call caw_setkey_part() for all 4 key parts
     AXASSERT(s_uEncryptedPvrKeyParts[0] != 0,
-             "axmol:CCZ file is encrypted but key part 0 is not set. Did you call "
+             "Cocos2D: CCZ file is encrypted but key part 0 is not set. Did you call "
              "ZipUtils::setPvrEncryptionKeyPart(...)?");
     AXASSERT(s_uEncryptedPvrKeyParts[1] != 0,
-             "axmol:CCZ file is encrypted but key part 1 is not set. Did you call "
+             "Cocos2D: CCZ file is encrypted but key part 1 is not set. Did you call "
              "ZipUtils::setPvrEncryptionKeyPart(...)?");
     AXASSERT(s_uEncryptedPvrKeyParts[2] != 0,
-             "axmol:CCZ file is encrypted but key part 2 is not set. Did you call "
+             "Cocos2D: CCZ file is encrypted but key part 2 is not set. Did you call "
              "ZipUtils::setPvrEncryptionKeyPart(...)?");
     AXASSERT(s_uEncryptedPvrKeyParts[3] != 0,
-             "axmol:CCZ file is encrypted but key part 3 is not set. Did you call "
+             "Cocos2D: CCZ file is encrypted but key part 3 is not set. Did you call "
              "ZipUtils::setPvrEncryptionKeyPart(...)?");
 
     // create long key
@@ -498,8 +498,8 @@ int ZipUtils::inflateCCZFile(const char* path, unsigned char** out)
 
 void ZipUtils::setPvrEncryptionKeyPart(int index, unsigned int value)
 {
-    AXASSERT(index >= 0, "axmol:key part index cannot be less than 0");
-    AXASSERT(index <= 3, "axmol:key part index cannot be greater than 3");
+    AXASSERT(index >= 0, "Cocos2d: key part index cannot be less than 0");
+    AXASSERT(index <= 3, "Cocos2d: key part index cannot be greater than 3");
 
     if (s_uEncryptedPvrKeyParts[index] != value)
     {

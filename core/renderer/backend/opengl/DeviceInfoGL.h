@@ -27,9 +27,6 @@
 
 #include "../DeviceInfo.h"
 
-#include "platform/PlatformConfig.h"
-#include "base/hlookup.h"
-
 NS_AX_BACKEND_BEGIN
 /**
  * @addtogroup _opengl
@@ -69,14 +66,10 @@ public:
     virtual const char* getVersion() const override;
 
     /**
-     * Check does device has extension.
+     * get OpenGL ES extensions.
+     * @return Extension supported by OpenGL ES.
      */
-    virtual bool hasExtension(std::string_view /*extName*/) const override;
-
-    /**
-    * Dump all extensions to string
-    */
-    virtual std::string dumpExtensions() const override;
+    virtual const char* getExtension() const override;
 
     /**
      * Check if feature supported by OpenGL ES.
@@ -86,18 +79,11 @@ public:
     virtual bool checkForFeatureSupported(FeatureType feature) override;
 
 private:
+    bool checkForGLExtension(std::string_view searchName) const;
+
     static bool checkSupportsCompressedFormat(int compressedFormat);
 
-    const char* _vendor{nullptr};
-    const char* _renderer{nullptr};
-    const char* _version{nullptr};
-    const char* _shaderVer{nullptr};
-
-#if defined(AX_USE_GL_CORE_PROFILE)
-    hlookup::string_set _glExtensions;
-#else
     std::string _glExtensions;
-#endif
 };
 
 // end of _opengl group

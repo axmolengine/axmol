@@ -74,7 +74,6 @@ static bool isValidUniform(const char* name);
 
 Material* Material::createWithFilename(std::string_view filepath)
 {
-    AXLOG("Loading material: %s", filepath.data());
     auto validfilename = FileUtils::getInstance()->fullPathForFilename(filepath);
     if (!validfilename.empty())
     {
@@ -367,12 +366,23 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
     // fragmentShader
     const char* fragShader = getOptionalString(shaderProperties, "fragmentShader", nullptr);
 
-    // compileTimeDefines, since axmol-1.1 no longer support compile time defines
-    // const char* compileTimeDefines = getOptionalString(shaderProperties, "defines", "");
+    // compileTimeDefines
+    const char* compileTimeDefines = getOptionalString(shaderProperties, "defines", "");
+
+    auto* fu = FileUtils::getInstance();
 
     if (vertShader && fragShader)
     {
-        auto program      = ProgramManager::getInstance()->loadProgram(vertShader, fragShader);
+
+        auto vertShaderSrc = fu->getStringFromFile(vertShader);
+        auto fragShaderSrc = fu->getStringFromFile(fragShader);
+
+        auto defs = replaceDefines(compileTimeDefines);
+
+        vertShaderSrc = defs + "\n" + vertShaderSrc;
+        fragShaderSrc = defs + "\n" + fragShaderSrc;
+
+        auto* program     = backend::Device::getInstance()->newProgram(vertShaderSrc, fragShaderSrc);
         auto programState = new backend::ProgramState(program);
         pass->setProgramState(programState);
 
@@ -398,7 +408,8 @@ bool Material::parseShader(Pass* pass, Properties* shaderProperties)
             }
             space = shaderProperties->getNextNamespace();
         }
-        programState->release();
+        AX_SAFE_RELEASE(program);
+        AX_SAFE_RELEASE(programState);
     }
 
     return true;

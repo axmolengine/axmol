@@ -42,6 +42,11 @@ NS_AX_BEGIN
 
 #define AX_MAX_PATH 512
 
+// The root path of resources, the character encoding is UTF-8.
+// UTF-8 is the only encoding supported by axmol API by default.
+static std::string s_workingDir;
+static std::string s_exeDir;
+
 // D:\aaa\bbb\ccc\ddd\abc.txt --> D:/aaa/bbb/ccc/ddd/abc.txt
 static std::string convertPathFormatToUnixStyle(const std::string_view& path)
 {
@@ -57,25 +62,29 @@ static std::string convertPathFormatToWinStyle(const std::string_view& path)
     return ret;
 }
 
-static std::string _checkWorkingPath()
+static void _checkWorkingPath()
 {
-    WCHAR utf16Path[AX_MAX_PATH + 2] = {0};
-    size_t nNum                      = GetCurrentDirectoryW(AX_MAX_PATH, utf16Path);
-    utf16Path[nNum++]                = '\\';
-    auto workingDir                     = ntcvt::from_chars(std::wstring_view{utf16Path, static_cast<size_t>(nNum)});
-    std::replace(workingDir.begin(), workingDir.end(), '\\', '/');
-    return workingDir;
+    if (s_workingDir.empty())
+    {
+        WCHAR utf16Path[AX_MAX_PATH + 2] = {0};
+        size_t nNum                      = GetCurrentDirectoryW(AX_MAX_PATH, utf16Path);
+        utf16Path[nNum++]                = '\\';
+        s_workingDir                     = ntcvt::from_chars(std::wstring_view{utf16Path, static_cast<size_t>(nNum)});
+        std::replace(s_workingDir.begin(), s_workingDir.end(), '\\', '/');
+    }
 }
 
-static std::string _checkExePath()
+static void _checkExePath()
 {
-    WCHAR utf16Path[AX_MAX_PATH + 1] = {0};
-    size_t nNum                      = GetModuleFileNameW(NULL, utf16Path, AX_MAX_PATH);
-    std::wstring_view u16pathsv{utf16Path, nNum};
-    u16pathsv.remove_suffix(u16pathsv.length() - u16pathsv.find_last_of('\\') - 1);
-    auto u8path = ntcvt::from_chars(u16pathsv);
-    std::replace(u8path.begin(), u8path.end(), '\\', '/');
-    return u8path;
+    if (s_exeDir.empty())
+    {
+        WCHAR utf16Path[AX_MAX_PATH + 1] = {0};
+        size_t nNum                      = GetModuleFileNameW(NULL, utf16Path, AX_MAX_PATH);
+        std::wstring_view u16pathsv{utf16Path, nNum};
+        u16pathsv.remove_suffix(u16pathsv.length() - u16pathsv.find_last_of('\\') - 1);
+        s_exeDir = ntcvt::from_chars(u16pathsv);
+        std::replace(s_exeDir.begin(), s_exeDir.end(), '\\', '/');
+    }
 }
 
 FileUtils* FileUtils::getInstance()
@@ -97,14 +106,12 @@ FileUtilsWin32::FileUtilsWin32() {}
 
 bool FileUtilsWin32::init()
 {
-    if(s_exeDir.empty()) {
-        s_exeDir = _checkExePath();
-    }
+    _checkWorkingPath();
+    _checkExePath();
 
-    auto workingDir = _checkWorkingPath();
-    bool startedFromSelfLocation = workingDir == s_exeDir;
+    bool startedFromSelfLocation = s_workingDir == s_exeDir;
     if (!startedFromSelfLocation || !isDirectoryExistInternal(AX_CONTENT_DIR))
-        _defaultResRootPath = std::move(workingDir);
+        _defaultResRootPath = s_workingDir;
     else
     {
         _defaultResRootPath.reserve(s_exeDir.size() + AX_CONTENT_DIR_LEN);
@@ -141,7 +148,7 @@ FileUtils::Status FileUtilsWin32::getContents(std::string_view filename, Resizab
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
 
     HANDLE fileHandle = ::CreateFileW(ntcvt::from_chars(fullPath).c_str(), GENERIC_READ,
-                                      FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
+                                      FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, NULL, nullptr);
     if (fileHandle == INVALID_HANDLE_VALUE)
         return FileUtils::Status::OpenFailed;
 

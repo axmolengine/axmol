@@ -120,8 +120,7 @@ Linux: Desktop GL/Vulkan
 #    define AX_USE_ANGLE 0
 #endif
 
-#if ((AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || \
-     (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT))
+#if ((AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT))
 #    define AX_PLATFORM_MOBILE
 #else
 #    define AX_PLATFORM_PC
@@ -167,10 +166,6 @@ Linux: Desktop GL/Vulkan
 #            define AX_USE_GLAD 0
 #        endif
 #    endif
-#endif
-
-#if defined(AX_USE_GL) && !defined(AX_USE_GLES) && !defined(AX_USE_GL_COMPAT_PROFILE)
-#    define AX_USE_GL_CORE_PROFILE 1
 #endif
 
 /// @endcond

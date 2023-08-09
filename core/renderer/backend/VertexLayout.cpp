@@ -28,7 +28,7 @@
 
 NS_AX_BACKEND_BEGIN
 
-void VertexLayout::setAttrib(std::string_view name,
+void VertexLayout::setAttribute(std::string_view name,
                                 std::size_t index,
                                 VertexFormat format,
                                 std::size_t offset,

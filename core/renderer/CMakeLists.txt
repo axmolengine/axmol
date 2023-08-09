@@ -1,5 +1,6 @@
 set(_AX_RENDERER_HEADER
     renderer/CallbackCommand.h
+    renderer/Colorizer.h
     renderer/CustomCommand.h
     renderer/GroupCommand.h
     renderer/Material.h
@@ -62,6 +63,7 @@ set(_AX_RENDERER_SRC
     renderer/TextureCube.cpp
     renderer/TrianglesCommand.cpp
     renderer/Shaders.cpp
+    renderer/Colorizer.cpp
     
     renderer/backend/ProgramManager.cpp
     renderer/backend/ProgramStateRegistry.cpp
@@ -83,7 +85,6 @@ set(_AX_RENDERER_SRC
 if(ANDROID OR WINDOWS OR LINUX OR AX_USE_ANGLE) 
 
 list(APPEND _AX_RENDERER_HEADER
-    renderer/backend/opengl/OpenGLState.h
     renderer/backend/opengl/BufferGL.h
     renderer/backend/opengl/CommandBufferGL.h
     renderer/backend/opengl/DepthStencilStateGL.h
@@ -99,7 +100,6 @@ list(APPEND _AX_RENDERER_HEADER
 )
 
 list(APPEND _AX_RENDERER_SRC
-    renderer/backend/opengl/OpenGLState.cpp
     renderer/backend/opengl/BufferGL.cpp
     renderer/backend/opengl/CommandBufferGL.cpp
     renderer/backend/opengl/DepthStencilStateGL.cpp

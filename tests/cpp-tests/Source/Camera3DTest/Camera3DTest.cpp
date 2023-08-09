@@ -1253,9 +1253,12 @@ void FogTestDemo::onEnter()
     AX_SAFE_RELEASE_NULL(_programState1);
     AX_SAFE_RELEASE_NULL(_programState2);
 
-    auto program      = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
+    auto vertexSource = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.vert");
+    auto fragSource   = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.frag");
+    auto program      = ProgramManager::newProgram(vertexSource, fragSource);
     _programState1    = new backend::ProgramState(program);
     _programState2    = new backend::ProgramState(program);
+    AX_SAFE_RELEASE(program);
 
     _mesh1 = MeshRenderer::create("MeshRendererTest/teapot.c3b");
     _mesh2 = MeshRenderer::create("MeshRendererTest/teapot.c3b");
@@ -1300,12 +1303,15 @@ void FogTestDemo::onEnter()
         AX_SAFE_RELEASE_NULL(_programState1);
         AX_SAFE_RELEASE_NULL(_programState2);
 
-        auto program      = ProgramManager::getInstance()->loadProgram("custom/fog_vs", "custom/fog_fs");
+        auto vertexSource = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.vert");
+        auto fragSource   = FileUtils::getInstance()->getStringFromFile("MeshRendererTest/fog.frag");
+        auto program      = ProgramManager::newProgram(vertexSource, fragSource);
         _programState1    = new backend::ProgramState(program);
         _programState2    = new backend::ProgramState(program);
 
         _mesh1->setProgramState(_programState1);
         _mesh2->setProgramState(_programState2);
+        AX_SAFE_RELEASE(program);
 
         auto fogColor   = Vec4(0.5, 0.5, 0.5, 1.0);
         float fogStart  = 10;

@@ -100,8 +100,7 @@ public:
      - generate 16-bit textures: backend::PixelFormat::RGBA4
      - generate 16-bit textures: backend::PixelFormat::RGB5A1
      - generate 16-bit textures: backend::PixelFormat::RGB565
-     - generate 8-bit textures: backend::PixelFormat::R8 (only use it if you use just 1 color)
-     - generate 16-bit textures: backend::PixelFormat::RG8 (only use it if you use just 2 color)
+     - generate 8-bit textures: backend::PixelFormat::A8 (only use it if you use just 1 color)
 
      How does it work ?
      - If the image is an RGBA (with Alpha) then the default pixel format will be used (it can be a 8-bit, 16-bit or

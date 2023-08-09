@@ -13,7 +13,7 @@
 #if defined(_WIN32)
 extern "C" int _ftruncate(int fd, int64_t size);
 #    include "ntcvt/ntcvt.hpp"
-#    define O_READ_FLAGS O_BINARY | O_RDONLY, 0
+#    define O_READ_FLAGS O_BINARY | O_RDONLY, S_IREAD
 #    define O_WRITE_FLAGS O_CREAT | O_RDWR | O_BINARY | O_TRUNC, S_IWRITE | S_IREAD
 #    define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR | O_BINARY, S_IWRITE | S_IREAD
 
@@ -29,7 +29,7 @@ extern "C" int _ftruncate(int fd, int64_t size);
 #    define posix_ftruncate64 posix_ftruncate
 #    define posix_lseek64 ::_lseeki64
 #else
-#    define O_READ_FLAGS O_RDONLY, 0
+#    define O_READ_FLAGS O_RDONLY
 #    define O_WRITE_FLAGS O_CREAT | O_RDWR | O_TRUNC, S_IRWXU
 #    define O_APPEND_FLAGS O_APPEND | O_CREAT | O_RDWR, S_IRWXU
 

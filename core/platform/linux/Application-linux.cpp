@@ -106,6 +106,24 @@ void Application::setAnimationInterval(float interval)
         std::chrono::nanoseconds{static_cast<std::chrono::nanoseconds::rep>(std::nano::den * interval)};
 }
 
+void Application::setResourceRootPath(std::string_view rootResDir)
+{
+    _resourceRootPath = rootResDir;
+    if (_resourceRootPath[_resourceRootPath.length() - 1] != '/')
+    {
+        _resourceRootPath += '/';
+    }
+    FileUtils* pFileUtils                = FileUtils::getInstance();
+    std::vector<std::string> searchPaths = pFileUtils->getSearchPaths();
+    searchPaths.insert(searchPaths.begin(), _resourceRootPath);
+    pFileUtils->setSearchPaths(searchPaths);
+}
+
+std::string_view Application::getResourceRootPath()
+{
+    return _resourceRootPath;
+}
+
 Application::Platform Application::getTargetPlatform()
 {
     return Platform::Linux;

@@ -674,7 +674,7 @@ public:
      */
     float getAdditionalKerning() const;
 
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(backend::ProgramState* programState, bool needsRetain = true) override;
 
     FontAtlas* getFontAtlas() { return _fontAtlas; }
 
