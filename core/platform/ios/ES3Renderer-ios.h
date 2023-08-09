@@ -34,12 +34,12 @@
 
 #    import "platform/ios/ESRenderer-ios.h"
 
-#    import <OpenGLES/ES2/gl.h>
-#    import <OpenGLES/ES2/glext.h>
+#    import <OpenGLES/ES3/gl.h>
+#    import <OpenGLES/ES3/glext.h>
 
 //#    import "platform/PlatformMacros.h"
 
-@interface CCES2Renderer : NSObject <CCESRenderer> {
+@interface ES3Renderer : NSObject <ESRenderer> {
     // The pixel dimensions of the CAEAGLLayer
     GLint backingWidth_;
     GLint backingHeight_;

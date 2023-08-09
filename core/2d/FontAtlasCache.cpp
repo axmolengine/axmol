@@ -61,8 +61,8 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
 
     std::string atlasName =
         config->distanceFieldEnabled
-            ? fmt::format("df {:.2f} {} {}", config->fontSize, config->outlineSize, config->fontFilePath)
-            : fmt::format("{:.2f} {} {}", config->fontSize, config->outlineSize, config->fontFilePath);
+            ? fmt::format("df {:.2f} {} {}", config->fontSize, outlineSize, realFontFilename)
+            : fmt::format("{:.2f} {} {}", config->fontSize, outlineSize, realFontFilename);
     auto it = _atlasMap.find(atlasName);
 
     if (it == _atlasMap.end())

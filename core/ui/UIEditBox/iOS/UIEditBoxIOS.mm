@@ -320,7 +320,7 @@
 - (void)doAnimationWhenKeyboardMoveWithDuration:(float)duration distance:(float)distance
 {
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
+    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
 
     [eaglView doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
 }
@@ -337,7 +337,7 @@
 - (void)openKeyboard
 {
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
+    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
 
     [eaglView addSubview:self.textInput];
     [self.textInput becomeFirstResponder];
@@ -362,7 +362,7 @@
 - (void)animationSelector
 {
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
+    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
 
     [eaglView doAnimationWhenAnotherEditBeClicked];
 }
@@ -376,7 +376,7 @@
     _returnPressed = NO;
 
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
+    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
 
     if ([eaglView isKeyboardShown])
     {
@@ -469,7 +469,7 @@
     _returnPressed = NO;
 
     auto view            = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglView = (CCEAGLView*)view->getEAGLView();
+    EAGLView* eaglView = (EAGLView*)view->getEAGLView();
 
     if ([eaglView isKeyboardShown])
     {

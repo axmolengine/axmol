@@ -75,7 +75,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #    import "renderer/backend/metal/UtilsMTL.h"
 #else
 #    import "platform/ios/GLViewImpl-ios.h"
-#    import "platform/ios/ES2Renderer-ios.h"
+#    import "platform/ios/ES3Renderer-ios.h"
 #    import "platform/ios/OpenGL_Internal-ios.h"
 #endif
 
@@ -83,14 +83,14 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #define IOS_MAX_TOUCHES_COUNT 10
 
-@interface CCEAGLView ()
+@interface EAGLView ()
 @property(nonatomic) CCInputView* textInputView;
 @property(nonatomic, readwrite, assign) BOOL isKeyboardShown;
 @property(nonatomic, copy) NSNotification* keyboardShowNotification;
 @property(nonatomic, assign) CGRect originalRect;
 @end
 
-@implementation CCEAGLView
+@implementation EAGLView
 
 @synthesize surfaceSize = size_;
 @synthesize pixelFormat = pixelformat_, depthFormat = depthFormat_;
@@ -269,7 +269,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
                                                    kEAGLDrawablePropertyRetainedBacking, pixelformat_,
                                                    kEAGLDrawablePropertyColorFormat, nil];
 
-    renderer_ = [[CCES2Renderer alloc] initWithDepthFormat:depthFormat_
+    renderer_ = [[ES3Renderer alloc] initWithDepthFormat:depthFormat_
                                            withPixelFormat:[self convertPixelFormat:pixelformat_]
                                             withSharegroup:sharegroup
                                          withMultiSampling:multiSampling_
@@ -412,7 +412,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 }
 #endif
 
-#pragma mark CCEAGLView - Point conversion
+#pragma mark EAGLView - Point conversion
 
 - (CGPoint)convertPointFromViewToSurface:(CGPoint)point
 {
@@ -439,7 +439,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 }
 
 // Pass the touches to the superview
-#pragma mark CCEAGLView - Touch Delegate
+#pragma mark EAGLView - Touch Delegate
 - (void)touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
     if (self.isKeyboardShown)

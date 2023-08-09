@@ -104,18 +104,17 @@ elseif(APPLE)
             platform/ios/InputView-ios.mm
             )
 
-        if(NOT AX_USE_ANGLE)
+        if(AX_USE_ANGLE)
             set(_AX_PLATFORM_SPECIFIC_HEADER
                 ${_AX_PLATFORM_SPECIFIC_HEADER}
-                platform/ios/ES2Renderer-ios.h
-                platform/ios/ES2Renderer-ios.h
+                platform/ios/ES3Renderer-ios.h
                 platform/ios/ESRenderer-ios.h
                 platform/ios/GL-ios.h
                 platform/ios/OpenGL_Internal-ios.h
             )
             set(_AX_PLATFORM_SPECIFIC_SRC
                 ${_AX_PLATFORM_SPECIFIC_SRC}
-                platform/ios/ES2Renderer-ios.m
+                platform/ios/ES3Renderer-ios.m
             )
         endif()
     endif()

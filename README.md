@@ -42,6 +42,12 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
+## Renderer Backends
+
+- OpenGL 3.3+ for Linux, macOS and Windows
+- OpenGL ES 3.0+ for Android and iOS
+- Metal for macOS and iOS
+
 ## New MediaPlayer
 
 The new `ui::MediaPlayer`(renamed from `ui::VideoPlayer`) render video as Texture2D with designed corss-platform MediaEngine, the MediaEngine inspired from microsoft
