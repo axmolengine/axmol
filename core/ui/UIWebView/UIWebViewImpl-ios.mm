@@ -132,7 +132,7 @@
     if (!self.wkWebView.superview)
     {
         auto view     = ax::Director::getInstance()->getOpenGLView();
-        auto eaglView = (CCEAGLView*)view->getEAGLView();
+        auto eaglView = (EAGLView*)view->getEAGLView();
         [eaglView addSubview:self.wkWebView];
     }
 }
@@ -501,7 +501,7 @@ void WebViewImpl::draw(ax::Renderer* renderer, ax::Mat4 const& transform, uint32
         auto glView    = director->getOpenGLView();
         auto frameSize = glView->getFrameSize();
 
-        auto scaleFactor = [static_cast<CCEAGLView*>(glView->getEAGLView()) contentScaleFactor];
+        auto scaleFactor = [static_cast<EAGLView*>(glView->getEAGLView()) contentScaleFactor];
 
         auto winSize = director->getWinSize();
 

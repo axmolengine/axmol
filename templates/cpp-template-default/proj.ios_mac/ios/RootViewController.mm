@@ -44,8 +44,8 @@ customization that is not appropriate for viewDidLoad.
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
-    // Initialize the CCEAGLView
-    CCEAGLView* eaglView = [CCEAGLView viewWithFrame:[UIScreen mainScreen].bounds
+    // Initialize the EAGLView
+    EAGLView* eaglView = [EAGLView viewWithFrame:[UIScreen mainScreen].bounds
                                          pixelFormat:(__bridge NSString*)ax::GLViewImpl::_pixelFormat
                                          depthFormat:ax::GLViewImpl::_depthFormat
                                   preserveBackbuffer:NO
@@ -99,7 +99,7 @@ customization that is not appropriate for viewDidLoad.
 
     if (glView)
     {
-        CCEAGLView* eaglView = (__bridge CCEAGLView*)glView->getEAGLView();
+        EAGLView* eaglView = (__bridge EAGLView*)glView->getEAGLView();
 
         if (eaglView)
         {

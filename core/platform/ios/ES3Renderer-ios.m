@@ -32,7 +32,7 @@
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
-#import "platform/ios/ES2Renderer-ios.h"
+#import "platform/ios/ES3Renderer-ios.h"
 // #import "platform/PlatformMacros.h"
 #import "platform/ios/OpenGL_Internal-ios.h"
 
@@ -40,7 +40,7 @@
 #define NSLog(...)       do {} while (0)
 #endif
 
-@implementation CCES2Renderer
+@implementation ES3Renderer
 
 @synthesize context=context_;
 @synthesize defaultFramebuffer=defaultFramebuffer_;
@@ -54,9 +54,9 @@
     if (self = [super init])
     {
         if (! sharegroup)
-                context_ = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+                context_ = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
         else
-                context_ = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 sharegroup:sharegroup];
+                context_ = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3 sharegroup:sharegroup];
 
         if (!context_ || ![EAGLContext setCurrentContext:context_] )
         {
@@ -82,7 +82,7 @@
         if (multiSampling_)
         {
             GLint maxSamplesAllowed;
-            glGetIntegerv(GL_MAX_SAMPLES_APPLE, &maxSamplesAllowed);
+            glGetIntegerv(GL_MAX_SAMPLES, &maxSamplesAllowed);
             samplesToUse_ = MIN(maxSamplesAllowed,requestedSamples);
             
             /* Create the MSAA framebuffer (offscreen) */
@@ -130,7 +130,7 @@
         
         glBindRenderbuffer(GL_RENDERBUFFER, msaaColorbuffer_);
         
-        glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samplesToUse_, pixelFormat_ , backingWidth_, backingHeight_);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, samplesToUse_, pixelFormat_ , backingWidth_, backingHeight_);
         
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, msaaColorbuffer_);
         
@@ -154,13 +154,13 @@
         glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer_);
         
         if( multiSampling_ )
-            glRenderbufferStorageMultisampleAPPLE(GL_RENDERBUFFER, samplesToUse_, depthFormat_,backingWidth_, backingHeight_);
+            glRenderbufferStorageMultisample(GL_RENDERBUFFER, samplesToUse_, depthFormat_,backingWidth_, backingHeight_);
         else
             glRenderbufferStorage(GL_RENDERBUFFER, depthFormat_, backingWidth_, backingHeight_);
 
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer_);
         
-        if (depthFormat_ == GL_DEPTH24_STENCIL8_OES) {
+        if (depthFormat_ == GL_DEPTH24_STENCIL8) {
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuffer_);
         }
 
@@ -212,7 +212,7 @@
 
 - (void)dealloc
 {
-//    AXLOGINFO("deallocing CCES2Renderer: %p", self);
+//    AXLOGINFO("deallocing ES3Renderer: %p", self);
 
     // Tear down GL
     if (defaultFramebuffer_) {
