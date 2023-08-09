@@ -14,11 +14,13 @@ layout(std140) uniform fs_ub {
 
 layout(location = SV_Target0) out vec4 FragColor;
 
+float thickness = 0.15;
+
 void main()
 {
     float dist = texture(u_tex0, v_texCoord).x;
     float smoothing = fwidth(dist);
-    float pivot = abs(0.5 - 0.08 * u_effectColor.w);
+    float pivot = abs(0.5 - thickness * u_effectColor.w);
     float alpha = smoothstep(pivot - smoothing, pivot + smoothing, dist);
     float border = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
     FragColor = vec4( mix(u_effectColor.xyz, u_textColor.rgb, border), alpha);

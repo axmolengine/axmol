@@ -1319,34 +1319,37 @@ LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
 
     TTFConfig ttfConfig("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
 
-    auto label1 = Label::createWithTTF(ttfConfig, "Glow", TextHAlignment::CENTER, size.width);
+    // Glow SDF (GPU)
+    auto label1 = Label::createWithTTF(ttfConfig, "Glow1", TextHAlignment::CENTER, size.width);
     label1->setPosition(Vec2(size.width / 2, size.height * 0.7));
     label1->setTextColor(Color4B::GREEN);
     label1->enableGlow(Color4B::YELLOW);
     addChild(label1);
 
-    ttfConfig.outlineSize = 1;
+    // Glow normal(CPU)
     ttfConfig.distanceFieldEnabled = false;
-    auto label2           = Label::createWithTTF(ttfConfig, "Outline1", TextHAlignment::CENTER, size.width);
+    auto label2                    = Label::createWithTTF(ttfConfig, "Glow2", TextHAlignment::CENTER, size.width);
     label2->setPosition(Vec2(size.width / 2, size.height * 0.6));
-    label2->setTextColor(Color4B::RED);
-    label2->enableOutline(Color4B::BLUE);
+    label2->setTextColor(Color4B::GREEN);
+    label2->enableGlow(Color4B::YELLOW);
     addChild(label2);
 
-    
-    ttfConfig.outlineSize = 2;
-    auto label3           = Label::createWithTTF(ttfConfig, "Outline2", TextHAlignment::CENTER, size.width);
+    // Outline SDF(GPU)
+    ttfConfig.distanceFieldEnabled = true;
+    ttfConfig.outlineSize          = 2;
+    auto label3                    = Label::createWithTTF(ttfConfig, "Outline1", TextHAlignment::CENTER, size.width);
     label3->setPosition(Vec2(size.width / 2, size.height * 0.48));
     label3->setTextColor(Color4B::RED);
     label3->enableOutline(Color4B::BLUE);
     addChild(label3);
 
-    ttfConfig.distanceFieldEnabled = true;
-    ttfConfig.outlineSize = 2;
-    auto label4           = Label::createWithTTF(ttfConfig, "Outline2", TextHAlignment::CENTER, size.width);
+    // Outline normal(CPU by freetype2)
+    ttfConfig.distanceFieldEnabled = false;
+    ttfConfig.outlineSize          = 2;
+    auto label4                    = Label::createWithTTF(ttfConfig, "Outline2", TextHAlignment::CENTER, size.width);
     label4->setPosition(Vec2(size.width / 2, size.height * 0.36));
     label4->setTextColor(Color4B::RED);
-    label4->enableOutline(Color4B::BLUE);
+    label4->enableOutline(Color4B::BLUE, 2);
     addChild(label4);
 }
 
