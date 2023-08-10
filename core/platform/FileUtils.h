@@ -328,7 +328,7 @@ public:
     /**
      * Get default resource root path.
      */
-    const std::string getDefaultResourceRootPath() const;
+    const std::string& getDefaultResourceRootPath() const;
 
     /**
      * Set default resource root path.
@@ -352,13 +352,13 @@ public:
      *  @see fullPathForFilename(const char*).
      *  @lua NA
      */
-    virtual const std::vector<std::string> getSearchPaths() const;
+    virtual const std::vector<std::string>& getSearchPaths() const;
 
     /**
      *  Gets the original search path array set by 'setSearchPaths' or 'addSearchPath'.
      *  @return The array of the original search paths
      */
-    virtual const std::vector<std::string> getOriginalSearchPaths() const;
+    virtual const std::vector<std::string>& getOriginalSearchPaths() const;
 
     /**
      *  Gets the writable path that may not be in the format of an absolute path
