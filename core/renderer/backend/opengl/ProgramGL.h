@@ -30,14 +30,10 @@
 #include "base/EventListenerCustom.h"
 #include "platform/GL.h"
 #include "../Program.h"
-#include "renderer/backend/Device.h"
-#include "renderer/backend/opengl/BufferGL.h"
 
 #include <string>
 #include <vector>
 #include <unordered_map>
-
-#include "base/axstd.h"
 
 NS_AX_BACKEND_BEGIN
 
@@ -61,16 +57,6 @@ struct AttributeInfo
  * @addtogroup _opengl
  * @{
  */
-
-#define MAX_UNIFORM_NAME_LENGTH 256
-
-struct UniformBlockDescriptor
-{
-    UniformBlockDescriptor(BufferGL* ubo, int loc, int size) : _ubo(ubo), _location(loc), _size(size) {}
-    BufferGL* _ubo;
-    int _location;
-    int _size;
-};
 
 /**
  * An OpenGL program.
@@ -152,21 +138,24 @@ public:
     virtual std::size_t getUniformBufferSize(ShaderStage stage) const override;
 
     /**
+     * Get a uniformInfo in given location from the specific shader stage.
+     * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
+     * @param location Specifies the uniform locaion.
+     * @return The uniformInfo.
+     */
+    virtual const UniformInfo& getActiveUniformInfo(ShaderStage stage, int location) const override;
+
+    /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
     virtual const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override;
 
-    void bindUniformBuffers(const char* buffer, size_t bufferSize);
-
 private:
     void compileProgram();
     bool getAttributeLocation(std::string_view attributeName, unsigned int& location) const;
     void computeUniformInfos();
-    void setBuiltinLocations();
-
-    void clearUniformBuffers();
-
+    void computeLocations();
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     virtual void reloadProgram();
     virtual int getMappedLocation(int location) const override;
@@ -181,8 +170,6 @@ private:
     ShaderModuleGL* _vertexShaderModule   = nullptr;
     ShaderModuleGL* _fragmentShaderModule = nullptr;
 
-    axstd::pod_vector<UniformBlockDescriptor> _uniformBuffers;
-
     std::vector<AttributeInfo> _attributeInfos;
     hlookup::string_map<UniformInfo> _activeUniformInfos;
     mutable hlookup::string_map<AttributeBindInfo> _activeAttribs;
@@ -194,9 +181,8 @@ private:
     EventListenerCustom* _backToForegroundListener = nullptr;
 #endif
 
-    std::size_t _totalBufferSize = 0;  // total uniform buffer size (all blocks)
-
-    int _maxLocation = -1;
+    std::size_t _totalBufferSize = 0;
+    int _maxLocation             = -1;
     UniformLocation _builtinUniformLocation[UNIFORM_MAX];
     int _builtinAttributeLocation[Attribute::ATTRIBUTE_MAX];
     std::unordered_map<int, int> _bufferOffset;

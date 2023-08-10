@@ -1,21 +1,43 @@
-#version 310 es
-precision highp float;
-precision highp int;
+/*
+ * cocos2d for iPhone: http://www.cocos2d-iphone.org
+ *
+ * Copyright (c) 2011 Ricardo Quesada
+ * Copyright (c) 2012 Zynga Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 
-layout(location = COLOR0) in vec4 v_color;
-layout(location = TEXCOORD0) in vec2 v_texCoord;
+const char* label_normal_frag = R"(
+#ifdef GL_ES
+precision lowp float;
+#endif
 
-layout(binding = 0) uniform sampler2D u_tex0;
+varying vec4 v_fragmentColor;
+varying vec2 v_texCoord;
 
-layout(std140) uniform fs_ub {
-    vec4 u_textColor;
-};
-
-layout(location = SV_Target0) out vec4 FragColor;
+uniform vec4 u_textColor;
+uniform sampler2D u_tex0;
 
 void main()
 {
-    FragColor =  v_color * vec4(u_textColor.rgb,// RGB from uniform
-        u_textColor.a * texture(u_tex0, v_texCoord).x// x from texture & uniform
+    gl_FragColor =  v_fragmentColor * vec4(u_textColor.rgb,// RGB from uniform
+        u_textColor.a * texture2D(u_tex0, v_texCoord).a// A from texture & uniform
     );
 }
+)";

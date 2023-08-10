@@ -58,7 +58,6 @@ public:
     {
         // Built in materials
         UNLIT,           // unlit material
-        UNLIT_INSTANCE,  // unlit instance material
         UNLIT_NOTEX,     // unlit material (without texture)
         VERTEX_LIT,      // vertex lit
         DIFFUSE,         // diffuse (pixel lighting)
@@ -66,18 +65,6 @@ public:
         BUMPED_DIFFUSE,  // bumped diffuse
         QUAD_TEXTURE,    // textured quad material
         QUAD_COLOR,      // colored quad material (without texture)
-
-        // Custom material
-        CUSTOM,  // Create from a material file
-    };
-
-    /**
-     * Instanced Material types, there are mainly two types of materials. Built-in materials and Custom materials.
-     */
-    enum class InstanceMaterialType
-    {
-        NO_INSTANCING,  // disabled instancing
-        UNLIT_INSTANCE,  // unlit instance material
 
         // Custom material
         CUSTOM,  // Create from a material file
@@ -137,7 +124,6 @@ protected:
     MaterialType _type;
     static std::unordered_map<std::string, MeshMaterial*> _materials;  // cached material
     static MeshMaterial* _unLitMaterial;
-    static MeshMaterial* _unLitInstanceMaterial;
     static MeshMaterial* _unLitNoTexMaterial;
     static MeshMaterial* _vertexLitMaterial;
     static MeshMaterial* _diffuseMaterial;
@@ -153,7 +139,6 @@ protected:
     static MeshMaterial* _quadColorMaterial;
 
     static backend::ProgramState* _unLitMaterialProgState;
-    static backend::ProgramState* _unLitInstanceMaterialProgState;
     static backend::ProgramState* _unLitNoTexMaterialProgState;
     static backend::ProgramState* _vertexLitMaterialProgState;
     static backend::ProgramState* _diffuseMaterialProgState;
