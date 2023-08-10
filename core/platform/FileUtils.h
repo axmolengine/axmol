@@ -374,6 +374,13 @@ public:
      */
     virtual std::string getNativeWritableAbsolutePath() const = 0;
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    /*
+     * Gets application executable root directory
+     * @Note: Only present on targets: win32 and linux
+     */
+    static std::string& getAppRoot() { return s_exeDir; }
+#endif
     /**
      *  Sets writable path.
      */
@@ -795,11 +802,9 @@ protected:
      *  @param searchPath The search path.
      *  @return The full path of the file. It will return an empty string if the full path of the file doesn't exist.
      */
-    virtual std::string getPathForFilename(std::string_view filename,
-                                           std::string_view searchPath) const;
+    virtual std::string getPathForFilename(std::string_view filename, std::string_view searchPath) const;
 
-    virtual std::string getPathForDirectory(std::string_view dir,
-                                            std::string_view searchPath) const;
+    virtual std::string getPathForDirectory(std::string_view dir, std::string_view searchPath) const;
 
     /**
      *  Gets full path for the directory and the filename.
@@ -862,6 +867,12 @@ protected:
      */
     std::string _writablePath;
 
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+    /*
+     * The dir of executable file, only present targets: win32, linux
+     */
+    static std::string s_exeDir;
+#endif
     /**
      *  The singleton pointer of FileUtils.
      */
@@ -888,8 +899,7 @@ protected:
         // move our arguments into our lambda, to potentially avoid copying.
         auto lambda = std::bind(
             [](const T& actionIn, const R& callbackIn, const ARGS&... argsIn) {
-                Director::getInstance()->getScheduler()->runOnAxmolThread(
-                    std::bind(callbackIn, actionIn(argsIn...)));
+            Director::getInstance()->getScheduler()->runOnAxmolThread(std::bind(callbackIn, actionIn(argsIn...)));
             },
             std::forward<T>(action), std::forward<R>(callback), std::forward<ARGS>(args)...);
 

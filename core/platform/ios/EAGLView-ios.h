@@ -74,14 +74,14 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 // CLASS INTERFACE:
 
-/** CCEAGLView Class.
+/** EAGLView Class.
  * This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
  * The view content is basically an EAGL surface you render your OpenGL scene into.
  * Note that setting the view non-opaque will only work if the EAGL surface has an alpha channel.
  */
-@interface CCEAGLView : UIView {
+@interface EAGLView : UIView {
 #if defined(AX_USE_GLES)
-    id<CCESRenderer> renderer_;
+    id<ESRenderer> renderer_;
 #endif
     BOOL preserveBackbuffer_;
     CGRect safeArea_;
@@ -91,13 +91,13 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     unsigned int requestedSamples_;
 }
 
-/** creates an initializes an CCEAGLView with a frame and 0-bit depth buffer, and a RGB565 color buffer */
+/** creates an initializes an EAGLView with a frame and 0-bit depth buffer, and a RGB565 color buffer */
 + (id)viewWithFrame:(CGRect)frame;
-/** creates an initializes an CCEAGLView with a frame, a color buffer format, and 0-bit depth buffer */
+/** creates an initializes an EAGLView with a frame, a color buffer format, and 0-bit depth buffer */
 + (id)viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format;
-/** creates an initializes an CCEAGLView with a frame, a color buffer format, and a depth buffer format */
+/** creates an initializes an EAGLView with a frame, a color buffer format, and a depth buffer format */
 + (id)viewWithFrame:(CGRect)frame pixelFormat:(NSString*)format depthFormat:(GLuint)depth;
-/** creates an initializes an CCEAGLView with a frame, a color buffer format, a depth buffer format, a sharegroup, and
+/** creates an initializes an EAGLView with a frame, a color buffer format, a depth buffer format, a sharegroup, and
  * multisampling */
 + (id)viewWithFrame:(CGRect)frame
            pixelFormat:(NSString*)format
@@ -107,11 +107,11 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
          multiSampling:(BOOL)multisampling
        numberOfSamples:(unsigned int)samples;
 
-/** Initializes an CCEAGLView with a frame and 0-bit depth buffer, and a RGB565 color buffer */
+/** Initializes an EAGLView with a frame and 0-bit depth buffer, and a RGB565 color buffer */
 - (id)initWithFrame:(CGRect)frame;  // These also set the current context
-/** Initializes an CCEAGLView with a frame, a color buffer format, and 0-bit depth buffer */
+/** Initializes an EAGLView with a frame, a color buffer format, and 0-bit depth buffer */
 - (id)initWithFrame:(CGRect)frame pixelFormat:(NSString*)format;
-/** Initializes an CCEAGLView with a frame, a color buffer format, a depth buffer format, a sharegroup and multisampling
+/** Initializes an EAGLView with a frame, a color buffer format, a depth buffer format, a sharegroup and multisampling
  * support */
 - (id)initWithFrame:(CGRect)frame
            pixelFormat:(NSString*)format
@@ -137,7 +137,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 @property(nonatomic, readwrite) BOOL multiSampling;
 @property(nonatomic, readonly) BOOL isKeyboardShown;
 
-/** CCEAGLView uses double-buffer. This method swaps the buffers */
+/** EAGLView uses double-buffer. This method swaps the buffers */
 - (void)swapBuffers;
 
 - (CGRect)convertRectFromViewToSurface:(CGRect)rect;

@@ -41,6 +41,20 @@ NS_AX_BACKEND_BEGIN
 class DeviceMTL : public Device
 {
 public:
+    /* The max vertex attribs, it's not how many device supports which may be lower. */
+    static constexpr uint32_t MAX_VERTEX_ATTRIBS = 16;
+
+    /* The vertex data buffers binding index start, the glslcc(SPIRV-Cross), default UBO binding index is 0, 
+    scope is per stage in MSL
+     */
+    static constexpr uint32_t VBO_BINDING_INDEX_START = 0;
+    
+    /* The vertex instancing buffer binding index */
+    static constexpr uint32_t VBO_INSTANCING_BINDING_INDEX = VBO_BINDING_INDEX_START + 1;
+
+    /* The default attribs binding index */
+    static constexpr uint32_t DEFAULT_ATTRIBS_BINDING_INDEX = VBO_BINDING_INDEX_START + MAX_VERTEX_ATTRIBS;
+
     /**
      * Set CAMetalLayer.
      * @param metalLayer A CAMetalLayer object.

@@ -84,6 +84,12 @@ public:
      * @lua NA
      */
     virtual std::string getDescription() const;
+    
+    /** Gets a 2x2 white  texture  */
+    Texture2D* getWhiteTexture();
+    
+    /** Gets 1x1 dummy texture with alpha=0  */
+    Texture2D* getDummyTexture();
 
     // Dictionary* snapshotTextures();
 

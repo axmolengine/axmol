@@ -88,18 +88,6 @@ public:
     virtual bool openURL(std::string_view url) override;
 
     /**
-     *  Sets the Resource root path.
-     *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
-     */
-    AX_DEPRECATED_ATTRIBUTE void setResourceRootPath(std::string_view rootResDir);
-
-    /**
-     *  Gets the Resource root path.
-     *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead.
-     */
-    AX_DEPRECATED_ATTRIBUTE std::string_view getResourceRootPath();
-
-    /**
      @brief Get target platform
      */
     virtual Platform getTargetPlatform() override;

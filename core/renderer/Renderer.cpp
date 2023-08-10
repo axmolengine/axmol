@@ -594,8 +594,8 @@ void Renderer::setViewPort(int x, int y, unsigned int w, unsigned int h)
 {
     _viewport.x = x;
     _viewport.y = y;
-    _viewport.w = w;
-    _viewport.h = h;
+    _viewport.width = w;
+    _viewport.height = h;
 }
 
 void Renderer::fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset)
@@ -753,6 +753,14 @@ void Renderer::drawCustomCommand(RenderCommand* command)
                                      cmd->getIndexDrawOffset(), cmd->isWireframe());
         _drawnVertices += cmd->getIndexDrawCount();
     }
+    else if (CustomCommand::DrawType::ELEMENT_INSTANCE == drawType)
+    {
+        _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
+        _commandBuffer->setInstanceBuffer(cmd->getInstanceBuffer());
+        _commandBuffer->drawElementsInstanced(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
+                                              cmd->getIndexDrawOffset(), cmd->getInstanceCount(), cmd->isWireframe());
+        _drawnVertices += cmd->getIndexDrawCount() * cmd->getInstanceCount();
+    }
     else
     {
         _commandBuffer->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount(),
@@ -846,7 +854,7 @@ void Renderer::beginRenderPass()
     _commandBuffer->updateDepthStencilState(_dsDesc);
     _commandBuffer->setStencilReferenceValue(_stencilRef);
 
-    _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.w, _viewport.h);
+    _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.width, _viewport.height);
     _commandBuffer->setCullMode(_cullMode);
     _commandBuffer->setWinding(_winding);
     _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
