@@ -53,19 +53,17 @@ endif()
 # choosing render backend
 if(NOT AX_USE_COMPAT_GL)
     if(WINRT OR ANDROID) # winuwp,android use GLES3.0+
-        set(AX_UES_GLES TRUE CACHE BOOL "" FORCE)
+        set(AX_USE_GLES TRUE CACHE BOOL "" FORCE)
     elseif(WIN32 OR LINUX) # win32,linux use GL3.3+
         set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
     elseif(APPLE) # osx,ios/tvos
         set(AX_USE_METAL TRUE CACHE BOOL "" FORCE)
     endif()
 else()
-    if(WIN32 OR ANDROID) # win32,winuwp (ANGLE ES3.0), android use GLES3.0+
-        set(AX_UES_GLES TRUE CACHE BOOL "" FORCE)
+    if(WIN32 OR ANDROID OR IOS) # win32,winuwp (ANGLE ES3.0), android/ios/tvos use GLES3.0+
+        set(AX_USE_GLES TRUE CACHE BOOL "" FORCE)
     elseif(LINUX OR MACOSX) # linux, osx use GL3.3+
         set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
-    elseif(IOS) # ios/tvos use GLES3.0+
-        set(AX_UES_GLES TRUE CACHE BOOL "" FORCE)
     endif()
 endif()
 
