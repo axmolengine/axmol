@@ -172,6 +172,12 @@ SOFTWARE.
 #  define YASIO__HAS_NTOP 0
 #endif
 
+#if defined(_WIN32) && (!defined(WINAPI_FAMILY) || (WINAPI_FAMILY != WINAPI_FAMILY_APP)) && !defined(__MINGW64__) && !defined(__MINGW32__)
+#  define YASIO__HAS_WIN32_TIMEAPI 1
+#else
+#  define YASIO__HAS_WIN32_TIMEAPI 0
+#endif
+
 // 64bits Sense Macros
 #if defined(_M_X64) || defined(_WIN64) || defined(__LP64__) || defined(_LP64) || defined(__x86_64) || defined(__arm64__) || defined(__aarch64__)
 #  define YASIO__64BITS 1
