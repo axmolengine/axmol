@@ -190,7 +190,20 @@ private:
 template <typename _Cont = sbyte_buffer>
 class dynamic_buffer : public dynamic_buffer_span<_Cont> {
 public:
-  dynamic_buffer() : dynamic_buffer_span<_Cont>(&impl_) {}
+  using super_type = dynamic_buffer_span<_Cont>;
+  dynamic_buffer() : super_type(&impl_) {}
+  dynamic_buffer(const dynamic_buffer& rhs) : super_type(&impl_), impl_(rhs.impl_) {}
+  dynamic_buffer(dynamic_buffer&& rhs) YASIO__NOEXCEPT : super_type(&impl_), impl_(std::move(rhs.impl_)) {}
+  dynamic_buffer& operator=(const dynamic_buffer& rhs)
+  {
+    impl_ = rhs.impl_;
+    return *this;
+  }
+  dynamic_buffer& operator=(dynamic_buffer&& rhs) YASIO__NOEXCEPT
+  {
+    impl_ = std::move(rhs.impl_);
+    return *this;
+  }
 
 private:
   _Cont impl_;
@@ -444,13 +457,13 @@ public:
   using buffer_type = typename super_type::buffer_type;
   basic_obstream(size_t capacity = 128) : super_type(&buffer_) { buffer_.reserve(capacity); }
   basic_obstream(const basic_obstream& rhs) : super_type(&buffer_), buffer_(rhs.buffer_) {}
-  basic_obstream(basic_obstream&& rhs) : super_type(&buffer_), buffer_(std::move(rhs.buffer_)) {}
+  basic_obstream(basic_obstream&& rhs) YASIO__NOEXCEPT : super_type(&buffer_), buffer_(std::move(rhs.buffer_)) {}
   basic_obstream& operator=(const basic_obstream& rhs)
   {
     buffer_ = rhs.buffer_;
     return *this;
   }
-  basic_obstream& operator=(basic_obstream&& rhs)
+  basic_obstream& operator=(basic_obstream&& rhs) YASIO__NOEXCEPT
   {
     buffer_ = std::move(rhs.buffer_);
     return *this;
