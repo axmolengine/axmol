@@ -10,13 +10,10 @@
   - AX_USE_ALSOFT: whether use openal-soft for all platforms
     - Apple platform: Use openal-soft instead system deprecated: `OpenAL.framework`
     - Other platforms: Always use openal-soft even this option not enabled
-  - AX_USE_ANGLE: whether use compat gl as renderer backend, default: `FALSE`
-    - windows: whether use angleproject as GLES2 backend
-    - apple: whether use GLES instead Metal backend
-  - AX_USE_COMPAT_GL: deprecated, use AX_USE_ANGLE instead
-  - AX_USE_GLAD: 
-    - Android: use glad load for GLES API loads, default `FALSE`
-    - Other platforms: Always use glad even this option not enabled
+  - AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: `FALSE`
+    - win32: whether use angleproject as GLES3 backend
+    - ios: whether use GLES3 instead Metal backend
+    - macosx: whether use OpenGL3 instead Metal backend
   - AX_USE_LUAJIT: whether use luajit, default: `FALSE`, use plainlua
 - AX_ENABLE_EXT_XXX for extensions
   - AX_ENABLE_EXT_GUI: the traditional GUI extension, default: `TRUE`

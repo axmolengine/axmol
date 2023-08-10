@@ -38,9 +38,7 @@ THE SOFTWARE.
 
 #include "platform/GL.h"
 
-#if AX_USE_GLAD
-#    include <EGL/egl.h>
-#endif
+#include <EGL/egl.h>
 
 #define LOG_TAG "main"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -86,9 +84,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
 {
-#if AX_USE_GLAD
     gladLoadGLES2(eglGetProcAddress);
-#endif
 
     auto director = ax::Director::getInstance();
     auto glView   = director->getOpenGLView();
