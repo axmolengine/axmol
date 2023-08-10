@@ -42,23 +42,31 @@ cmake_policy(SET CMP0127 NEW)
 
 project(ax_libs)
 
+# choose render backend
 if (NOT WINRT)
-    if(WIN32)
-        option (AX_USE_ANGLE "Use google angle renderer" ON)
-    else()
-        option (AX_USE_ANGLE "Use google angle renderer" OFF)
-    endif()
+    option (AX_USE_COMPAT_GL "Use compat gl" OFF)
 else()
-    set (AX_USE_ANGLE TRUE CACHE BOOL "Use google angle renderer" FORCE)
+    option (AX_USE_COMPAT_GL "Use compat gl" ON)
+    set(AX_USE_COMPAT_GL ON)
 endif()
 
-if (NOT AX_USE_ANGLE)  # check deprecated option: AX_USE_COMPAT_GL
-    if (NOT WINRT)
-        option (AX_USE_COMPAT_GL "Use google angle renderer" OFF)
-    else()
-        set (AX_USE_COMPAT_GL TRUE CACHE BOOL "Use google angle renderer" ON)
+# choosing render backend
+if(NOT AX_USE_COMPAT_GL)
+    if(WINRT OR ANDROID) # winuwp,android use GLES3.0+
+        set(AX_UES_GLES TRUE CACHE BOOL "" FORCE)
+    elseif(WIN32 OR LINUX) # win32,linux use GL3.3+
+        set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
+    elseif(APPLE) # osx,ios/tvos
+        set(AX_USE_METAL TRUE CACHE BOOL "" FORCE)
     endif()
-    set (AX_USE_ANGLE ${AX_USE_COMPAT_GL} CACHE BOOL "Use google angle renderer" FORCE)
+else()
+    if(WIN32 OR ANDROID) # win32,winuwp (ANGLE ES3.0), android use GLES3.0+
+        set(AX_UES_GLES TRUE CACHE BOOL "" FORCE)
+    elseif(LINUX OR MACOSX) # linux, osx use GL3.3+
+        set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
+    elseif(IOS) # ios/tvos use GLES3.0+
+        set(AX_UES_GLES TRUE CACHE BOOL "" FORCE)
+    endif()
 endif()
 
 message(STATUS "WINRT=${WINRT}")
@@ -114,11 +122,6 @@ if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID)
   option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
 else()
   set(AX_ENABLE_EXT_IMGUI OFF)
-endif()
-
-if (ANDROID)
-    set(AX_USE_GLAD TRUE CACHE BOOL "Use glad for android GLESv3 support" FORCE)
-    add_definitions(-DAX_USE_GLAD=1)
 endif()
 
 if(XCODE)
