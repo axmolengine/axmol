@@ -77,7 +77,7 @@ function update_lib
     $lib_folder=$args[1]
 
     $myVer = $myVerList[$lib_name]
-    if ($newVerList[$lib_name] -eq $myVer) {
+    if (($newVerList[$lib_name] -eq $myVer) -and ("$env:FORCE_UPDATE" -ne 'true')) {
         println "No update for lib: $lib_name, version: $myVer, skip it"
         return 0
     }
