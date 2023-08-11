@@ -474,11 +474,16 @@ struct FeaturesGL : FeatureSetBase
         &members,
     };
 
-    FeatureInfo bindFramebufferForTimerQueries = {
-        "bindFramebufferForTimerQueries", FeatureCategory::OpenGLWorkarounds,
-        "Some drivers require a non-zero framebuffer when beginQuery for TimeElapsed or"
+    FeatureInfo bindCompleteFramebufferForTimerQueries = {
+        "bindCompleteFramebufferForTimerQueries", FeatureCategory::OpenGLWorkarounds,
+        "Some drivers require a complete framebuffer when beginQuery for TimeElapsed or"
         "Timestampis called.",
         &members, "https://crbug.com/1356053"};
+
+    FeatureInfo disableBaseInstanceVertex = {
+        "disableBaseInstanceVertex", FeatureCategory::OpenGLWorkarounds,
+        "Some drivers have buggy implementations of glDraw*BaseVertex*.", &members,
+        "http://anglebug.com/8172"};
 
     FeatureInfo supportsFragmentShaderInterlockNV = {
         "supportsFragmentShaderInterlockNV", FeatureCategory::OpenGLFeatures,
@@ -509,6 +514,22 @@ struct FeaturesGL : FeatureSetBase
         "supportsShaderPixelLocalStorageEXT", FeatureCategory::OpenGLFeatures,
         "Backend GL context supports EXT_shader_pixel_local_storage extension", &members,
         "http://anglebug.com/7279"};
+
+    FeatureInfo disableClipControl = {
+        "disableClipControl", FeatureCategory::OpenGLFeatures,
+        "Some devices genenerate errors when querying the clip control state", &members,
+        "http://crbug.com/1434317"};
+
+    FeatureInfo scalarizeVecAndMatConstructorArgs = {
+        "scalarizeVecAndMatConstructorArgs", FeatureCategory::OpenGLWorkarounds,
+        "Rewrite vec/mat constructors to work around driver bugs", &members,
+        "http://crbug.com/1420130"};
+
+    FeatureInfo ensureNonEmptyBufferIsBoundForDraw = {
+        "ensureNonEmptyBufferIsBoundForDraw", FeatureCategory::OpenGLFeatures,
+        "Apple OpenGL drivers crash when drawing with a zero-sized buffer bound using a non-zero "
+        "divisor.",
+        &members, "http://crbug.com/1456243"};
 };
 
 inline FeaturesGL::FeaturesGL()  = default;

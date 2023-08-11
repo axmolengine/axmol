@@ -20,6 +20,12 @@ struct FeaturesVk : FeatureSetBase
     FeaturesVk();
     ~FeaturesVk();
 
+    FeatureInfo appendAliasedMemoryDecorationsToSsbo = {
+        "appendAliasedMemoryDecorationsToSsbo", FeatureCategory::VulkanWorkarounds,
+        "Append aliased memory decoration to ssbo in SpirV if the ssbo in GLSL is not declared "
+        "with restrict memory qualifier",
+        &members, "b/266235549"};
+
     FeatureInfo bresenhamLineRasterization = {
         "bresenhamLineRasterization",
         FeatureCategory::VulkanFeatures,
@@ -621,11 +627,11 @@ struct FeaturesVk : FeatureSetBase
         "emulateAdvancedBlendEquations", FeatureCategory::VulkanFeatures,
         "Emulate GL_KHR_blend_equation_advanced", &members, "http://anglebug.com/3586"};
 
-    FeatureInfo precisionSafeDivision = {
-        "precisionSafeDivision",
+    FeatureInfo doubleDepthBiasConstantFactor = {
+        "doubleDepthBiasConstantFactor",
         FeatureCategory::VulkanWorkarounds,
-        "Special case handling for platforms that do not generate 1.0f even when the dividend and "
-        "divisor have the same value",
+        "Due to a Vulkan spec ambiguity, some drivers interpret depthBiasConstantFactor as half "
+        "the expected value",
         &members,
     };
 
@@ -659,6 +665,12 @@ struct FeaturesVk : FeatureSetBase
         "Force static state for VK_DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE_EXT due to "
         "driver bugs",
         &members, "https://bugs.fuchsia.dev/p/fuchsia/issues/detail?id=107106"};
+
+    FeatureInfo forceStaticPrimitiveRestartState = {
+        "forceStaticPrimitiveRestartState", FeatureCategory::VulkanWorkarounds,
+        "Force static state for VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE due to "
+        "driver bugs",
+        &members, "https://issuetracker.google.com/275210062"};
 
     FeatureInfo supportsExtendedDynamicState = {
         "supportsExtendedDynamicState", FeatureCategory::VulkanFeatures,
@@ -694,6 +706,11 @@ struct FeaturesVk : FeatureSetBase
         "sample qualifier",
         &members, "http://anglebug.com/6876"};
 
+    FeatureInfo explicitlyCastMediumpFloatTo16Bit = {
+        "explicitlyCastMediumpFloatTo16Bit", FeatureCategory::VulkanWorkarounds,
+        "Explicitly cast mediump floating point values to 16 bit", &members,
+        "https://issuetracker.google.com/274859104"};
+
     FeatureInfo forceContinuousRefreshOnSharedPresent = {
         "forceContinuousRefreshOnSharedPresent", FeatureCategory::VulkanFeatures,
         "Force to create vulkan swapchain with continuous refresh on shared present", &members,
@@ -702,6 +719,11 @@ struct FeaturesVk : FeatureSetBase
     FeatureInfo supportsImage2dViewOf3d = {
         "supportsImage2dViewOf3d", FeatureCategory::VulkanFeatures,
         "VkDevice supports VK_EXT_image_2d_view_of_3d", &members, "https://anglebug.com/7320"};
+
+    FeatureInfo supportsSampler2dViewOf3d = {
+        "supportsSampler2dViewOf3d", FeatureCategory::VulkanFeatures,
+        "VkDevice supports the sampler2DViewOf3D feature of VK_EXT_image_2d_view_of_3d", &members,
+        "https://anglebug.com/7320"};
 
     FeatureInfo supportsImagelessFramebuffer = {
         "supportsImagelessFramebuffer", FeatureCategory::VulkanFeatures,
@@ -874,6 +896,15 @@ struct FeaturesVk : FeatureSetBase
         "SecondaryCommandPools when using VulkanSecondaryCommandBuffer. ",
         &members,
     };
+
+    FeatureInfo enablePipelineCacheDataCompression = {
+        "enablePipelineCacheDataCompression", FeatureCategory::VulkanFeatures,
+        "enable pipeline cache data compression.", &members,
+        "https://issuetracker.google.com/258207403"};
+
+    FeatureInfo limitSampleCountTo2 = {"limitSampleCountTo2", FeatureCategory::VulkanWorkarounds,
+                                       "Limit sample count to 2 to save memory on low end devices.",
+                                       &members, "http://anglebug.com/8162"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

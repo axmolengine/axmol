@@ -23,14 +23,6 @@
             ]
         },
         {
-            "name": "scalarize_vec_and_mat_constructor_args",
-            "category": "Workarounds",
-            "description": [
-                "Always rewrite vec/mat constructors to be consistent"
-            ],
-            "issue": "http://crbug.com/1165751"
-        },
-        {
             "name": "disable_program_binary",
             "category": "Features",
             "description": [
@@ -145,6 +137,14 @@
                 "Check the filesystem for shaders to use instead of those provided through glShaderSource"
             ],
             "issue": "http://anglebug.com/7761"
+        },
+        {
+            "name": "disable_program_caching",
+            "category": "Features",
+            "description": [
+                "Disables saving programs to the cache"
+            ],
+            "issue": "http://anglebug.com/1423136"
         }
     ]
 }
