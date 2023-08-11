@@ -12,7 +12,7 @@ env:
   PULL_REQUEST: yes
 
 jobs:
-  build-win:
+  build-win32:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
