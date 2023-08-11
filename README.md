@@ -26,7 +26,9 @@
 > - Mesh instancing draw support
 > - Use glslcc as shader workflow, write shader by ESSL310, build to target platforms: MSL for Apple(macOS/iOS/tvOS), ESSL300 for Android, ANGLE, GLSL330 for Desktop GL
 > - Improve ProgramManager for loading custom shader program more easy
-> - Many other improvements: refer to #1279
+> - Improve text rendering, SDF outline support
+> - Improve FileStream, handle large 4GB+ files
+> - Many other improvements: refer to [#1279](https://github.com/axmolengine/axmol/issues/1279)
 
 
 **[简体中文](README_CN.md)**

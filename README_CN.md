@@ -23,7 +23,9 @@
 >   - GLESv3: ESSL300
 >   - Metal: MSL
 > - 增强shader缓存管理和加载机制，加载API更加易用
-> - 其他更多优化，请查看: #1279
+> - 增强文本渲染, 增加SDF outline支持
+> - 增强FileStream, 使之能处理大文件，FileUtils::getContents在所有平台都基于FileStream读取文件
+> - 其他更多优化，请查看: [#1279](https://github.com/axmolengine/axmol/issues/1279)
 
 
 **[English](README.md)** 
