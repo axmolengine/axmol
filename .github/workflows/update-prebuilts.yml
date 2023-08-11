@@ -47,7 +47,7 @@ jobs:
         committer: 'GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>'
         author: 'axmol-bot <axmol-bot@users.noreply.github.com>'
         signoff: false
-        branch: buildware_dist_${{ github.event.inputs.build1k_rel_tag }}
+        branch: 1kdist_${{ github.event.inputs.build1k_rel_tag }}
         delete-branch: true
         title: 'Update thirdparty prebuilts to ${{ github.event.inputs.build1k_rel_tag }}'
         body: |
