@@ -161,8 +161,8 @@ set(_AX_PLATFORM_HEADER
     platform/PlatformMacros.h
     platform/SAXParser.h
     platform/StdC.h
+    platform/IFileStream.h
     platform/FileStream.h
-    platform/PosixFileStream.h
     )
 
 set(_AX_PLATFORM_SRC
@@ -172,5 +172,4 @@ set(_AX_PLATFORM_SRC
     platform/FileUtils.cpp
     platform/Image.cpp
     platform/FileStream.cpp
-    platform/PosixFileStream.cpp
     )

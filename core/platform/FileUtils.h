@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include <mutex>
 #include <memory>
 
-#include "platform/FileStream.h"
+#include "platform/IFileStream.h"
 #include "platform/PlatformMacros.h"
 #include "base/Types.h"
 #include "base/Value.h"
@@ -775,7 +775,7 @@ public:
      *  @param mode The mode to open the file in, being READ | WRITE | APPEND
      *  @return Returns a pointer to the file stream
      */
-    virtual std::unique_ptr<FileStream> openFileStream(std::string_view filePath, FileStream::Mode mode);
+    virtual std::unique_ptr<IFileStream> openFileStream(std::string_view filePath, IFileStream::Mode mode);
 
 protected:
     /**

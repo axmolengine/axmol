@@ -80,7 +80,7 @@ static bool wav_scan_chunk(WAV_FILE* wavf, uint32_t chunkID, void* header, void*
 }
 static bool wav_open(std::string_view fullPath, WAV_FILE* wavf)
 {
-    wavf->Stream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+    wavf->Stream = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
     if (!wavf->Stream)
         return false;
 

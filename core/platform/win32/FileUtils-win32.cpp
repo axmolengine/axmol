@@ -132,48 +132,6 @@ bool FileUtilsWin32::isFileExistInternal(std::string_view strFilePath) const
     return (attr != INVALID_FILE_ATTRIBUTES && !(attr & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-FileUtils::Status FileUtilsWin32::getContents(std::string_view filename, ResizableBuffer* buffer) const
-{
-    if (filename.empty())
-        return FileUtils::Status::NotExists;
-
-    // read the file from hardware
-    std::string fullPath = FileUtils::getInstance()->fullPathForFilename(filename);
-
-    HANDLE fileHandle = ::CreateFileW(ntcvt::from_chars(fullPath).c_str(), GENERIC_READ,
-                                      FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
-    if (fileHandle == INVALID_HANDLE_VALUE)
-        return FileUtils::Status::OpenFailed;
-
-    DWORD hi;
-    auto size = ::GetFileSize(fileHandle, &hi);
-    if (hi > 0)
-    {
-        ::CloseHandle(fileHandle);
-        return FileUtils::Status::TooLarge;
-    }
-    // don't read file content if it is empty
-    if (size == 0)
-    {
-        ::CloseHandle(fileHandle);
-        return FileUtils::Status::OK;
-    }
-
-    buffer->resize(size);
-    DWORD sizeRead = 0;
-    BOOL successed = ::ReadFile(fileHandle, buffer->buffer(), size, &sizeRead, nullptr);
-    ::CloseHandle(fileHandle);
-
-    if (!successed)
-    {
-        AXLOG("Get data from file(%s) failed, error code is %s", filename.data(),
-              std::to_string(::GetLastError()).data());
-        buffer->resize(sizeRead);
-        return FileUtils::Status::ReadFailed;
-    }
-    return FileUtils::Status::OK;
-}
-
 std::string FileUtilsWin32::getPathForFilename(std::string_view filename,
                                                std::string_view searchPath) const
 {
