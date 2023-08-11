@@ -60,7 +60,7 @@ static inline int __axrt_errno_or(int ec)
 #    else
 static HANDLE __axrt_create_file(LPCWSTR path, DWORD omode, DWORD smode, DWORD cflags, DWORD fflags, DWORD fattrs)
 {
-    if (!fmeta)
+    if (!(fflags | fattrs))
         return CreateFile2(path, omode, smode, cflags, nullptr);
     else
     {
