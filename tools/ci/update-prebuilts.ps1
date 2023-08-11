@@ -1,8 +1,13 @@
 $VER=$args[0]
-echo "VER=$VER"
+
+function println($msg) {
+    Write-Host $msg
+}
+
+println "VER=$VER"
 
 $AX_ROOT=(Resolve-Path "$PSScriptRoot/../..").Path
-echo "AX_ROOT=$AX_ROOT"
+println "AX_ROOT=$AX_ROOT"
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
@@ -60,25 +65,23 @@ if ($newVerList.GetType() -eq [string]) {
 }
 
 $myVerList = ConvertFrom-Yaml -Yaml (Get-Content './thirdparty/prebuilts.yml' -raw)
-$updateCount = 0
 
 function update_lib
 {
     $lib_name=$args[0]
     $lib_folder=$args[1]
-    echo "lib_name=$lib_name"
 
     $myVer = $myVerList[$lib_name]
     if ($newVerList[$lib_name] -eq $myVer) {
-        Write-Host "No update for lib: $lib_name, version: $myVer, skip it"
-        return
+        println "No update for lib: $lib_name, version: $myVer, skip it"
+        return 0
     }
 
     $lib_dir="./thirdparty/$lib_folder$lib_name"
     $prebuilt_dir="$lib_dir/prebuilt"
     $inc_dir="$lib_dir/include"
     
-    echo "Updating lib files for ${lib_dir} from ./tmp/package_$VER/$lib_name ..."
+    println "Updating lib files for ${lib_dir} from ./tmp/package_$VER/$lib_name ..."
 
     # https://github.com/axmolengine/build1k/releases/download/v57/angle.zip
     download_and_expand "https://github.com/axmolengine/build1k/releases/download/$VER/$lib_name.zip" "./tmp/package_$VER/$lib_name.zip" "./tmp/package_$VER"
@@ -87,24 +90,25 @@ function update_lib
     Copy-Item ./tmp/package_$VER/$lib_name/prebuilt $lib_dir/ -Container -Recurse
     
     if (Test-Path "./tmp/package_$VER/$lib_name/include" -PathType Container) {
-        echo "Update inc files for ${lib_dir}"
+        println "Update inc files for ${lib_dir}"
         Remove-Item $inc_dir -Recurse -Force
         Copy-Item ./tmp/package_$VER/$lib_name/include $lib_dir/ -Container -Recurse
     }
 
-    ++$updateCount
+    return 1
 }
 
-echo "Updating libs ..."
+println "Updating libs ..."
 
 $libs_list = @('angle', 'curl', 'jpeg-turbo', 'openssl', 'zlib')
 
 # update libs
+$updateCount = 0
 foreach($lib_name in $libs_list) {
-    update_lib $lib_name
+    $updateCount += $(update_lib $lib_name)
 }
 
-update_lib luajit lua/
+$updateCount += $(update_lib luajit lua/)
 
 # update README.md
 $content = $(Get-Content -Path ./thirdparty/README.md.in -raw)
@@ -118,8 +122,8 @@ Set-Content -Path ./thirdparty/README.md -Value "$content"
 Copy-Item -Path './tmp/verlist.yml' './thirdparty/prebuilts.yml' -Force
 
 if ($updateCount -eq 0) {
-    echo "No any lib need update."
+    println "No any lib need update."
     if ("$env.RUNNER_OS" -ne "") {
-        echo "AX_PREBUILTS_NO_UPDATE=true" >> $GITHUB_ENV
+        Write-Output "AX_PREBUILTS_NO_UPDATE=true" >> $GITHUB_ENV
     }
 }
