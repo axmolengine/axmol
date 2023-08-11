@@ -52,8 +52,6 @@ THE SOFTWARE.
 #include "pugixml/pugixml.hpp"
 #include "base/Utils.h"
 
-#include "platform/FileStream.h"
-
 #define USER_DEFAULT_PLAIN_MODE 0
 
 #if !USER_DEFAULT_PLAIN_MODE
