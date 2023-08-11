@@ -50,7 +50,12 @@ function download_and_expand($url, $out, $dest) {
 
 # download version manifest
 cd $AX_ROOT
-mkdirs ./tmp
+
+$cwd = $(Get-Location).Path
+
+$prefix = Join-Path $cwd "tmp/1kdist_$VER"
+
+mkdirs $prefix
 
 # ensure yaml parser module
 if ($null -eq (Get-Module -ListAvailable -Name powershell-yaml)) {
@@ -81,18 +86,18 @@ function update_lib
     $prebuilt_dir="$lib_dir/prebuilt"
     $inc_dir="$lib_dir/include"
     
-    println "Updating lib files for ${lib_dir} from ./tmp/package_$VER/$lib_name ..."
+    println "Updating lib files for ${lib_dir} from $prefix/$lib_name ..."
 
     # https://github.com/axmolengine/build1k/releases/download/v57/angle.zip
-    download_and_expand "https://github.com/axmolengine/build1k/releases/download/$VER/$lib_name.zip" "./tmp/package_$VER/$lib_name.zip" "./tmp/package_$VER"
+    download_and_expand "https://github.com/axmolengine/build1k/releases/download/$VER/$lib_name.zip" "$prefix/$lib_name.zip" "$prefix"
 
     Remove-Item $prebuilt_dir -Recurse -Force
-    Copy-Item ./tmp/package_$VER/$lib_name/prebuilt $lib_dir/ -Container -Recurse
+    Copy-Item $prefix/$lib_name/prebuilt $lib_dir/ -Container -Recurse
     
-    if (Test-Path "./tmp/package_$VER/$lib_name/include" -PathType Container) {
+    if (Test-Path "$prefix/$lib_name/include" -PathType Container) {
         println "Update inc files for ${lib_dir}"
         Remove-Item $inc_dir -Recurse -Force
-        Copy-Item ./tmp/package_$VER/$lib_name/include $lib_dir/ -Container -Recurse
+        Copy-Item $prefix/$lib_name/include $lib_dir/ -Container -Recurse
     }
 
     return 1
@@ -121,8 +126,9 @@ foreach ($item in $newVerList.GetEnumerator() )
 Set-Content -Path ./thirdparty/README.md -Value "$content"
 Copy-Item -Path './tmp/verlist.yml' './thirdparty/prebuilts.yml' -Force
 
+println "Total update lib count $updateCount"
+
 if ($updateCount -eq 0) {
-    println "No any lib need update."
     if ("$env.RUNNER_OS" -ne "") {
         Write-Output "AX_PREBUILTS_NO_UPDATE=true" >> $GITHUB_ENV
     }
