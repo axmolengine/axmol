@@ -422,19 +422,23 @@ std::string getDataMD5Hash(const Data& data)
 
 std::string computeDigest(std::string_view data, std::string_view algorithm, bool toHex)
 {
-    const EVP_MD* md                       = nullptr;
     unsigned char mdValue[EVP_MAX_MD_SIZE] = {0};
     unsigned int mdLen                     = 0;
 
     OpenSSL_add_all_digests();
-    md = EVP_get_digestbyname(algorithm.data());
+    const EVP_MD* md = EVP_get_digestbyname(algorithm.data());
     if (!md || data.empty())
         return std::string{};
 
     EVP_MD_CTX* mdctx = EVP_MD_CTX_create();
-    EVP_DigestInit_ex(mdctx, md, nullptr);
+    auto ok = EVP_DigestInit(mdctx, md);
+    if (!ok)
+    {
+        EVP_MD_CTX_destroy(mdctx);
+        return std::string{};
+    }
     EVP_DigestUpdate(mdctx, data.data(), data.size());
-    EVP_DigestFinal_ex(mdctx, mdValue, &mdLen);
+    EVP_DigestFinal(mdctx, mdValue, &mdLen);
     EVP_MD_CTX_destroy(mdctx);
 
     return toHex ? bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen})
