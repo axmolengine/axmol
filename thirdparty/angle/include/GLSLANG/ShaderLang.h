@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 321
+#define ANGLE_SH_VERSION 329
 
 enum ShShaderSpec
 {
@@ -86,6 +86,8 @@ struct ShCompileOptionsMetal
     int defaultUniformsBindingIndex;
     // Binding index for UBO's argument buffer
     int UBOArgumentBufferBindingIndex;
+
+    bool generateShareableShaders;
 };
 
 // For ANGLE_shader_pixel_local_storage.
@@ -405,9 +407,13 @@ struct ShCompileOptions
     // ceil()ed instead.
     uint64_t roundOutputAfterDithering : 1;
 
-    // Even when the dividend and divisor have the same value some platforms do not return 1.0f.
-    // Need to emit different division code for such platforms.
-    uint64_t precisionSafeDivision : 1;
+    // issuetracker.google.com/274859104 add OpQuantizeToF16 instruction to cast
+    // mediump floating-point values to 16 bit. ARM compiler utilized RelaxedPrecision
+    // to minimize type case and keep a mediump float as 32 bit when assigning it with
+    // a highp floating-point value. It is possible that GLSL shader code is comparing
+    // two meiump values, but ARM compiler is comparing a 32 bit value with a 16 bit value,
+    // causing the comparison to fail.
+    uint64_t castMediumpFloatTo16Bit : 1;
 
     // anglebug.com/7527: packUnorm4x8 fails on Pixel 4 if it is not passed a highp vec4.
     // TODO(anglebug.com/7527): This workaround is currently only applied for pixel local storage.
@@ -416,6 +422,13 @@ struct ShCompileOptions
 
     // Use an integer uniform to pass a bitset of enabled clip distances.
     uint64_t emulateClipDistanceState : 1;
+
+    // issuetracker.google.com/266235549 add aliased memory decoration to ssbo if the variable is
+    // not declared with "restrict" memory qualifier in GLSL
+    uint64_t aliasedSSBOUnlessRestrict : 1;
+
+    // Use fragment shaders to compute and set coverage mask based on the alpha value
+    uint64_t emulateAlphaToCoverage : 1;
 
     ShCompileOptionsMetal metal;
     ShPixelLocalStorageOptions pls;
@@ -965,7 +978,8 @@ extern const char kDriverUniformsVarName[];
 // - 6 bits for sample count
 // - 8 bits for enabled clip planes
 // - 1 bit for whether depth should be transformed to Vulkan clip space
-// - 11 bits unused
+// - 1 bit for whether alpha to coverage is enabled
+// - 10 bits unused
 constexpr uint32_t kDriverUniformsMiscSwapXYMask                  = 0x1;
 constexpr uint32_t kDriverUniformsMiscAdvancedBlendEquationOffset = 1;
 constexpr uint32_t kDriverUniformsMiscAdvancedBlendEquationMask   = 0x1F;
@@ -975,6 +989,8 @@ constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesOffset     = 12;
 constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesMask       = 0xFF;
 constexpr uint32_t kDriverUniformsMiscTransformDepthOffset        = 20;
 constexpr uint32_t kDriverUniformsMiscTransformDepthMask          = 0x1;
+constexpr uint32_t kDriverUniformsMiscAlphaToCoverageOffset       = 21;
+constexpr uint32_t kDriverUniformsMiscAlphaToCoverageMask         = 0x1;
 
 // Interface block array name used for atomic counter emulation
 extern const char kAtomicCountersBlockName[];
@@ -999,14 +1015,17 @@ extern const char kInputAttachmentName[];
 
 namespace mtl
 {
-// Specialization constant to enable GL_SAMPLE_COVERAGE_VALUE emulation.
-extern const char kCoverageMaskEnabledConstName[];
+// Specialization constant to enable multisampled rendering behavior.
+extern const char kMultisampledRenderingConstName[];
 
 // Specialization constant to emulate rasterizer discard.
 extern const char kRasterizerDiscardEnabledConstName[];
 
 // Specialization constant to enable depth write in fragment shaders.
 extern const char kDepthWriteEnabledConstName[];
+
+// Specialization constant to enable alpha to coverage.
+extern const char kEmulateAlphaToCoverageConstName[];
 }  // namespace mtl
 
 }  // namespace sh

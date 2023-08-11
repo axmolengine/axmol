@@ -8,6 +8,14 @@
     ],
     "features": [
         {
+            "name": "append_aliased_memory_decorations_to_ssbo",
+            "category": "Workarounds",
+            "description": [
+                "Append aliased memory decoration to ssbo in SpirV if the ssbo in GLSL is not declared with restrict memory qualifier"
+            ],
+            "issue": "b/266235549"
+        },
+        {
             "name": "bresenham_line_rasterization",
             "category": "Features",
             "description": [
@@ -822,11 +830,11 @@
             "issue": "http://anglebug.com/3586"
         },
         {
-            "name": "precision_safe_division",
+            "name": "double_depth_bias_constant_factor",
             "category": "Workarounds",
             "description": [
-                "Special case handling for platforms that do not generate 1.0f even when the dividend and ",
-                "divisor have the same value"
+                "Due to a Vulkan spec ambiguity, some drivers interpret depthBiasConstantFactor as half ",
+                "the expected value"
             ]
         },
         {
@@ -879,6 +887,15 @@
             "issue": "https://bugs.fuchsia.dev/p/fuchsia/issues/detail?id=107106"
         },
         {
+            "name": "force_static_primitive_restart_state",
+            "category": "Workarounds",
+            "description": [
+                "Force static state for VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE due to ",
+                "driver bugs"
+            ],
+            "issue": "https://issuetracker.google.com/275210062"
+        },
+        {
             "name": "supports_extended_dynamic_state",
             "category": "Features",
             "description": [
@@ -928,6 +945,14 @@
             "issue": "http://anglebug.com/6876"
         },
         {
+            "name": "explicitly_cast_mediump_float_to_16_bit",
+            "category": "Workarounds",
+            "description": [
+                "Explicitly cast mediump floating point values to 16 bit"
+            ],
+            "issue": "https://issuetracker.google.com/274859104"
+        },
+        {
             "name": "force_continuous_refresh_on_shared_present",
             "category": "Features",
             "description": [
@@ -940,6 +965,14 @@
             "category": "Features",
             "description": [
                 "VkDevice supports VK_EXT_image_2d_view_of_3d"
+            ],
+            "issue": "https://anglebug.com/7320"
+        },
+        {
+            "name": "supports_sampler_2d_view_of_3d",
+            "category": "Features",
+            "description": [
+                "VkDevice supports the sampler2DViewOf3D feature of VK_EXT_image_2d_view_of_3d"
             ],
             "issue": "https://anglebug.com/7320"
         },
@@ -1179,6 +1212,20 @@
                 "Use VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT for initializing ",
                 "SecondaryCommandPools when using VulkanSecondaryCommandBuffer. "
             ]
+        },
+        {
+            "name": "enable_pipeline_cache_data_compression",
+            "category": "Features",
+            "description":["enable pipeline cache data compression."],
+            "issue": "https://issuetracker.google.com/258207403"
+        },
+        {
+            "name": "limit_sample_count_to_2",
+            "category": "Workarounds",
+            "description": [
+              "Limit sample count to 2 to save memory on low end devices."
+            ],
+            "issue": "http://anglebug.com/8162"
         }
     ]
 }
