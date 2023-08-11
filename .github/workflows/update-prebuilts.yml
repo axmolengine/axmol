@@ -26,12 +26,16 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
 
+    env: 
+      FORCE_UPDATE: ${{ github.event.inputs.force_update }}
+
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: 'recursive'
 
     - name: Update prebuilts
+
       # Some projects don't allow in-source building, so create a separate build directory
       # We'll use this as our working directory for all subsequent commands
       run: pwsh tools/ci/update-prebuilts.ps1 ${{ github.event.inputs.build1k_rel_tag }}
@@ -61,7 +65,7 @@ jobs:
           pinned
         assignees: axmol-bot
         reviewers: halx99
-        milestone: '1.0.0'
+        milestone: '1.1.x'
         draft: false
 
     - name: Check outputs
