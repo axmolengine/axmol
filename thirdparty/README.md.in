@@ -107,7 +107,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 8.1.1
+- Version: 9.0.0
 - License: MIT
 
 ## lua
@@ -143,12 +143,12 @@
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
-- Version: git ca7c706(316) with modified for UWP apps support
+- Version: git afb604c(318) with modified for UWP apps support
 - License: CC0-1.0
 
 ## mio
 - Upstream: https://github.com/mandreyel/mio
-- Version: git 8c0d3c7 (125)
+- Version: git 8b6b7d8 (136)
 - License: MIT
 
 ## ntcvt (Windows only)
@@ -243,12 +243,12 @@
 
 ## xxHash
 - [![Upstream](https://img.shields.io/github/v/release/Cyan4973/xxHash?label=Upstream)](https://github.com/Cyan4973/xxHash)
-- Version: 0.8.1
+- Version: 0.8.2
 - License: BSD-2-Clause
 
 ## yaml-cpp
 - [![Upstream](https://img.shields.io/github/v/release/jbeder/yaml-cpp?label=Upstream)](https://github.com/jbeder/yaml-cpp)
-- Version: 0.7.0
+- Version: 0.8.0
 - License: MIT
 
 ## yasio
