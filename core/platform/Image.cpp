@@ -434,7 +434,7 @@ void pngWriteCallback(png_structp png_ptr, png_bytep data, size_t length)
     if (png_ptr == NULL)
         return;
 
-    FileStream* fileStream = (FileStream*)png_get_io_ptr(png_ptr);
+    auto fileStream = (IFileStream*)png_get_io_ptr(png_ptr);
 
     const auto check = fileStream->write(data, static_cast<unsigned int>(length));
 
@@ -2348,7 +2348,7 @@ bool Image::saveImageToPNG(std::string_view filePath, bool isToRGB)
         png_infop info_ptr;
         png_bytep* row_pointers;
 
-        auto outStream = FileUtils::getInstance()->openFileStream(filePath, FileStream::Mode::WRITE);
+        auto outStream = FileUtils::getInstance()->openFileStream(filePath, IFileStream::Mode::WRITE);
 
         AX_BREAK_IF(nullptr == outStream);
 
@@ -2491,7 +2491,6 @@ bool Image::saveImageToJPG(std::string_view filePath)
     {
         struct jpeg_compress_struct cinfo;
         struct jpeg_error_mgr jerr;
-        std::unique_ptr<FileStream> outfile; /* target file */
         JSAMPROW row_pointer[1];             /* pointer to JSAMPLE row[s] */
         int row_stride;                      /* physical row width in image buffer */
 
@@ -2499,7 +2498,7 @@ bool Image::saveImageToJPG(std::string_view filePath)
         /* Now we can initialize the JPEG compression object. */
         jpeg_create_compress(&cinfo);
 
-        outfile = FileUtils::getInstance()->openFileStream(filePath, FileStream::Mode::WRITE);
+        auto outfile = FileUtils::getInstance()->openFileStream(filePath, IFileStream::Mode::WRITE);
         AX_BREAK_IF(nullptr == outfile);
 
         unsigned char* outputBuffer = nullptr;
@@ -2526,7 +2525,6 @@ bool Image::saveImageToJPG(std::string_view filePath)
                 jpeg_finish_compress(&cinfo);
                 jpeg_destroy_compress(&cinfo);
 
-                outfile.reset();
                 if (outputBuffer)
                 {
                     free(outputBuffer);
@@ -2569,7 +2567,6 @@ bool Image::saveImageToJPG(std::string_view filePath)
         jpeg_finish_compress(&cinfo);
 
         outfile->write(outputBuffer, static_cast<unsigned int>(outputSize));
-        outfile.reset();
 
         if (outputBuffer)
         {

@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "base/Macros.h"
 #include "base/Director.h"
 #include "platform/SAXParser.h"
-#include "platform/PosixFileStream.h"
+#include "platform/FileStream.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
 #    include <minizip/unzip.h>
@@ -521,7 +521,7 @@ bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string
     auto* fileUtils = FileUtils::getInstance();
     do
     {
-        auto fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::WRITE);
+        auto fileStream = fileUtils->openFileStream(fullPath, IFileStream::Mode::WRITE);
         // Read the file from hardware
         AX_BREAK_IF(!fileStream);
 
@@ -587,11 +587,12 @@ FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuf
 
     const auto fullPath = fileUtils->fullPathForFilename(filename);
 
-    auto fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::READ);
+    FileStream fileStream;
+    fileStream.open(fullPath, IFileStream::Mode::READ);
     if (!fileStream)
         return Status::OpenFailed;
 
-    const auto size = fileStream->size();
+    const auto size = fileStream.size();
     if (size < 0)
     {
         return Status::ObtainSizeFailed;
@@ -603,10 +604,7 @@ FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuf
     }
 
     buffer->resize((size_t)size);
-
-    fileStream->seek(0, SEEK_SET);
-
-    const auto sizeRead = fileStream->read(buffer->buffer(), (unsigned)size);
+    const auto sizeRead = fileStream.read(buffer->buffer(), (unsigned)size);
     if (sizeRead < size)
     {
         buffer->resize(sizeRead);
@@ -1041,10 +1039,10 @@ void FileUtils::listFilesRecursivelyAsync(std::string_view dirPath,
         std::move(callback));
 }
 
-std::unique_ptr<FileStream> FileUtils::openFileStream(std::string_view filePath, FileStream::Mode mode)
+std::unique_ptr<IFileStream> FileUtils::openFileStream(std::string_view filePath, IFileStream::Mode mode)
 {
-    PosixFileStream fs;
-    return fs.open(filePath, mode) ? std::make_unique<PosixFileStream>(std::move(fs)) : nullptr;
+    FileStream fs;
+    return fs.open(filePath, mode) ? std::make_unique<FileStream>(std::move(fs)) : nullptr;
 }
 
 /* !!!Notes for c++fs

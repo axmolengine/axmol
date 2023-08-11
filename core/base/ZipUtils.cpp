@@ -467,7 +467,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
 
     unsigned long destlen = len;
     size_t source         = (size_t)buffer + sizeof(*header);
-    int ret               = uncompress(*out, &destlen, (Bytef*)source, bufferLen - sizeof(*header));
+    int ret               = uncompress(*out, &destlen, (Bytef*)source, static_cast<uLong>(bufferLen - sizeof(*header)));
 
     if (ret != Z_OK)
     {
@@ -528,58 +528,59 @@ static const std::string emptyFilename("");
 struct ZipEntryInfo
 {
     unz_file_pos pos;
-    uLong uncompressed_size;
+    uint64_t uncompressed_size;
+    uint64_t offset;
 };
 
 struct ZipFilePrivate
 {
     ZipFilePrivate()
     {
-        functionOverrides.zopen_file     = ZipFile_open_file_func;
-        functionOverrides.zopendisk_file = ZipFile_opendisk_file_func;
+        functionOverrides.zopen64_file   = ZipFile_open_file_func;
+        functionOverrides.zopendisk64_file = ZipFile_opendisk_file_func;
         functionOverrides.zread_file     = ZipFile_read_file_func;
         functionOverrides.zwrite_file    = ZipFile_write_file_func;
-        functionOverrides.ztell_file     = ZipFile_tell_file_func;
-        functionOverrides.zseek_file     = ZipFile_seek_file_func;
+        functionOverrides.ztell64_file     = ZipFile_tell_file_func;
+        functionOverrides.zseek64_file     = ZipFile_seek_file_func;
         functionOverrides.zclose_file    = ZipFile_close_file_func;
         functionOverrides.zerror_file    = ZipFile_error_file_func;
         functionOverrides.opaque         = this;
     }
 
-    // unzip overrides to support FileStream
-    static long ZipFile_tell_file_func(voidpf opaque, voidpf stream)
+    // unzip overrides to support IFileStream
+    static uint64_t ZipFile_tell_file_func(voidpf opaque, voidpf stream)
     {
         if (stream == nullptr)
             return -1;
 
-        auto* fs = (FileStream*)stream;
+        auto* fs = (IFileStream*)stream;
 
         return fs->tell();
     }
 
-    static long ZipFile_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, int origin)
+    static long ZipFile_seek_file_func(voidpf opaque, voidpf stream, uint64_t offset, int origin)
     {
         if (stream == nullptr)
             return -1;
 
-        auto* fs = (FileStream*)stream;
+        auto* fs = (IFileStream*)stream;
 
-        return fs->seek((int32_t)offset, origin);  // must return 0 for success or -1 for error
+        return fs->seek(offset, origin) != -1 ? 0 : -1;  // must return 0 for success or -1 for error
     }
 
-    static voidpf ZipFile_open_file_func(voidpf opaque, const char* filename, int mode)
+    static voidpf ZCALLBACK ZipFile_open_file_func(voidpf opaque, const void* filename, int mode)
     {
-        FileStream::Mode fsMode;
+        IFileStream::Mode fsMode;
         if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) == ZLIB_FILEFUNC_MODE_READ)
-            fsMode = FileStream::Mode::READ;
+            fsMode = IFileStream::Mode::READ;
         else if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
-            fsMode = FileStream::Mode::APPEND;
+            fsMode = IFileStream::Mode::APPEND;
         else if (mode & ZLIB_FILEFUNC_MODE_CREATE)
-            fsMode = FileStream::Mode::WRITE;
+            fsMode = IFileStream::Mode::WRITE;
         else
             return nullptr;
 
-        return FileUtils::getInstance()->openFileStream(filename, fsMode).release();
+        return FileUtils::getInstance()->openFileStream((const char*)filename, fsMode).release();
     }
 
     static voidpf ZipFile_opendisk_file_func(voidpf opaque, voidpf stream, uint32_t number_disk, int mode)
@@ -609,8 +610,7 @@ struct ZipFilePrivate
         if (stream == nullptr)
             return (uint32_t)-1;
 
-        auto* fs = (FileStream*)stream;
-        return fs->read(buf, size);
+        return static_cast<IFileStream*>(stream)->read(buf, size);
     }
 
     static uint32_t ZipFile_write_file_func(voidpf opaque, voidpf stream, const void* buf, uint32_t size)
@@ -618,8 +618,7 @@ struct ZipFilePrivate
         if (stream == nullptr)
             return (uint32_t)-1;
 
-        auto* fs = (FileStream*)stream;
-        return fs->write(buf, size);
+        return static_cast<IFileStream*>(stream)->write(buf, size);
     }
 
     static int ZipFile_close_file_func(voidpf opaque, voidpf stream)
@@ -627,13 +626,13 @@ struct ZipFilePrivate
         if (stream == nullptr)
             return -1;
 
-        auto* fs          = (FileStream*)stream;
+        auto* fs          = (IFileStream*)stream;
         const auto result = fs->close();  // 0 for success, -1 for error
         delete fs;
         return result;
     }
 
-    // THis isn't supported by FileStream, so just check if the stream is null and open
+    // THis isn't supported by IFileStream, so just check if the stream is null and open
     static int ZipFile_error_file_func(voidpf opaque, voidpf stream)
     {
         if (stream == nullptr)
@@ -641,7 +640,7 @@ struct ZipFilePrivate
             return -1;
         }
 
-        auto* fs = (FileStream*)stream;
+        auto* fs = (IFileStream*)stream;
 
         if (fs->isOpen())
         {
@@ -661,7 +660,7 @@ struct ZipFilePrivate
     typedef hlookup::string_map<struct ZipEntryInfo> FileListContainer;
     FileListContainer fileList;
 
-    zlib_filefunc_def functionOverrides{};
+    zlib_filefunc64_def functionOverrides{};
 };
 
 ZipFile* ZipFile::createWithBuffer(const void* buffer, unsigned int size)
@@ -686,7 +685,7 @@ ZipFile::ZipFile() : _data(new ZipFilePrivate())
 ZipFile::ZipFile(std::string_view zipFile, std::string_view filter) : _data(new ZipFilePrivate())
 {
     _data->zipFileName = zipFile;
-    _data->zipFile     = unzOpen2(zipFile.data(), &_data->functionOverrides);
+    _data->zipFile     = unzOpen2_64(zipFile.data(), &_data->functionOverrides);
     setFilter(filter);
 }
 
@@ -727,10 +726,7 @@ bool ZipFile::setFilter(std::string_view filter)
                 // cache info about filtered files only (like 'assets/')
                 if (filter.empty() || currentFileName.substr(0, filter.length()) == filter)
                 {
-                    ZipEntryInfo entry;
-                    entry.pos                        = posInfo;
-                    entry.uncompressed_size          = (uLong)fileInfo.uncompressed_size;
-                    _data->fileList[currentFileName] = entry;
+                    _data->fileList[currentFileName] = ZipEntryInfo{posInfo, (uint64_t)fileInfo.uncompressed_size, 0};
                 }
             }
             // next file - also get the information about it
@@ -788,45 +784,6 @@ std::vector<std::string> ZipFile::listFiles(std::string_view pathname) const
     }
 
     return std::vector<std::string>{fileSet.begin(), fileSet.end()};
-}
-
-unsigned char* ZipFile::getFileData(std::string_view fileName, ssize_t* size)
-{
-    unsigned char* buffer = nullptr;
-    if (size)
-        *size = 0;
-
-    do
-    {
-        AX_BREAK_IF(!_data->zipFile);
-        AX_BREAK_IF(fileName.empty());
-
-        auto it = _data->fileList.find(fileName);
-        AX_BREAK_IF(it == _data->fileList.end());
-
-        ZipEntryInfo& fileInfo = it->second;
-
-        std::unique_lock<std::mutex> lck(_data->zipFileMtx);
-
-        int nRet = unzGoToFilePos(_data->zipFile, &fileInfo.pos);
-        AX_BREAK_IF(UNZ_OK != nRet);
-
-        nRet = unzOpenCurrentFile(_data->zipFile);
-        AX_BREAK_IF(UNZ_OK != nRet);
-
-        buffer = (unsigned char*)malloc(fileInfo.uncompressed_size);
-        int AX_UNUSED nSize =
-            unzReadCurrentFile(_data->zipFile, buffer, static_cast<unsigned int>(fileInfo.uncompressed_size));
-        AXASSERT(nSize == 0 || nSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
-
-        if (size)
-        {
-            *size = fileInfo.uncompressed_size;
-        }
-        unzCloseCurrentFile(_data->zipFile);
-    } while (0);
-
-    return buffer;
 }
 
 bool ZipFile::getFileData(std::string_view fileName, ResizableBuffer* buffer)
@@ -916,39 +873,32 @@ bool ZipFile::initWithBuffer(const void* buffer, unsigned int size)
     return true;
 }
 
-bool ZipFile::zfopen(std::string_view fileName, ZipFileStream* zfs)
+ZipEntryInfo* ZipFile::vopen(std::string_view fileName)
 {
-    if (!zfs)
-        return false;
     auto it = _data->fileList.find(fileName);
     if (it != _data->fileList.end())
-    {
-        zfs->entry  = &it->second;
-        zfs->offset = 0;
-        return true;
-    }
-    zfs->entry  = nullptr;
-    zfs->offset = -1;
-    return false;
+        return &it->second;
+
+    return nullptr;
 }
 
-int ZipFile::zfread(ZipFileStream* zfs, void* buf, unsigned int size)
+int ZipFile::vread(ZipEntryInfo* entry, void* buf, unsigned int size)
 {
     int n = 0;
     do
     {
-        AX_BREAK_IF(zfs == nullptr || zfs->offset >= zfs->entry->uncompressed_size);
+        AX_BREAK_IF(entry == nullptr || entry->offset >= entry->uncompressed_size);
 
         std::unique_lock<std::mutex> lck(_data->zipFileMtx);
 
-        int nRet = unzGoToFilePos(_data->zipFile, &zfs->entry->pos);
+        int nRet = unzGoToFilePos(_data->zipFile, &entry->pos);
         AX_BREAK_IF(UNZ_OK != nRet);
 
         nRet = unzOpenCurrentFile(_data->zipFile);
-        unzSeek64(_data->zipFile, zfs->offset, SEEK_SET);
+        unzSeek64(_data->zipFile, entry->offset, SEEK_SET);
         n = unzReadCurrentFile(_data->zipFile, buf, size);
         if (n > 0)
-            zfs->offset += n;
+            entry->offset += n;
 
         unzCloseCurrentFile(_data->zipFile);
 
@@ -957,10 +907,10 @@ int ZipFile::zfread(ZipFileStream* zfs, void* buf, unsigned int size)
     return n;
 }
 
-int32_t ZipFile::zfseek(ZipFileStream* zfs, int32_t offset, int origin)
+int64_t ZipFile::vseek(ZipEntryInfo* entry, int64_t offset, int origin)
 {
-    int32_t result = -1;
-    if (zfs != nullptr)
+    int64_t result = -1;
+    if (entry)
     {
         switch (origin)
         {
@@ -968,18 +918,16 @@ int32_t ZipFile::zfseek(ZipFileStream* zfs, int32_t offset, int origin)
             result = offset;
             break;
         case SEEK_CUR:
-            result = zfs->offset + offset;
+            result = entry->offset + offset;
             break;
         case SEEK_END:
-            result = (int32_t)zfs->entry->uncompressed_size + offset;
+            result = (int32_t)entry->uncompressed_size + offset;
             break;
         default:;
         }
 
         if (result >= 0)
-        {
-            zfs->offset = result;
-        }
+            entry->offset = result;
         else
             result = -1;
     }
@@ -987,65 +935,18 @@ int32_t ZipFile::zfseek(ZipFileStream* zfs, int32_t offset, int origin)
     return result;
 }
 
-void ZipFile::zfclose(ZipFileStream* zfs)
+void ZipFile::vclose(ZipEntryInfo* entry)
 {
-    if (zfs != nullptr && zfs->entry != nullptr)
-    {
-        zfs->entry  = nullptr;
-        zfs->offset = -1;
-    }
+    if (entry != nullptr)
+        entry->offset = 0;
 }
 
-long long ZipFile::zfsize(ZipFileStream* zfs)
+int64_t ZipFile::vsize(ZipEntryInfo* entry)
 {
-    if (zfs != nullptr && zfs->entry != nullptr)
-    {
-        return zfs->entry->uncompressed_size;
-    }
+    if (entry != nullptr)
+        return entry->uncompressed_size;
 
-    return -1;
-}
-
-unsigned char* ZipFile::getFileDataFromZip(std::string_view zipFilePath, std::string_view filename, ssize_t* size)
-{
-    unsigned char* buffer = nullptr;
-    unzFile file          = nullptr;
-    *size                 = 0;
-
-    do
-    {
-        AX_BREAK_IF(zipFilePath.empty());
-
-        file = unzOpen(zipFilePath.data());
-        AX_BREAK_IF(!file);
-
-        // minizip 1.2.0 is same with other platforms
-        int ret = unzLocateFile(file, filename.data(), nullptr);
-
-        AX_BREAK_IF(UNZ_OK != ret);
-
-        char filePathA[260];
-        unz_file_info_s fileInfo;
-        ret = unzGetCurrentFileInfo(file, &fileInfo, filePathA, sizeof(filePathA), nullptr, 0, nullptr, 0);
-        AX_BREAK_IF(UNZ_OK != ret);
-
-        ret = unzOpenCurrentFile(file);
-        AX_BREAK_IF(UNZ_OK != ret);
-
-        buffer                   = (unsigned char*)malloc(fileInfo.uncompressed_size);
-        int AX_UNUSED readedSize = unzReadCurrentFile(file, buffer, static_cast<unsigned>(fileInfo.uncompressed_size));
-        AXASSERT(readedSize == 0 || readedSize == (int)fileInfo.uncompressed_size, "the file size is wrong");
-
-        *size = fileInfo.uncompressed_size;
-        unzCloseCurrentFile(file);
-    } while (0);
-
-    if (file)
-    {
-        unzClose(file);
-    }
-
-    return buffer;
+    return 0;
 }
 
 NS_AX_END

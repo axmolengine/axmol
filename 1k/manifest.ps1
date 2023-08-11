@@ -23,7 +23,7 @@ if ($IsMacOS) {
 }
 elseif ($options.p -eq 'winuwp') {
     # refer to: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8319
-    $manifest['cmake'] = '3.27.1+'
+    $manifest['cmake'] = '3.27.2+'
 }
 
 # [void]$manifest
