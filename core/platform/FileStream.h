@@ -24,7 +24,7 @@ union PXFileHandle
     struct
     {
         osfhnd_t osfh;  // underlying OS file HANDLE
-        bool append;            // append mode?
+        bool append;    // append mode?
     };
 #else
     osfhnd_t osfh = -1;  // underlying OS file HANDLE
