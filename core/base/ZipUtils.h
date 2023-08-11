@@ -235,17 +235,11 @@ struct ZipFilePrivate;
 class AX_DLL ZipFile
 {
 public:
-    /**
-     * Constructor, open zip file and store file list.
-     *
-     * @param zipFile Zip file name
-     * @param filter The first part of file names, which should be accessible.
-     *               For example, "assets/". Other files will be missed.
-     *
-     * @since v2.0.5
-     */
-    ZipFile(std::string_view zipFile, std::string_view filter = std::string());
+    static ZipFile* createFromFile(std::string_view zipFile, std::string_view filter = ""sv);
+
     virtual ~ZipFile();
+
+    bool initWithFile(std::string_view zipFile, std::string_view filter = ""sv);
 
     /**
      * Regenerate accessible file list based on a new filter string.
@@ -287,8 +281,6 @@ public:
     std::string getFirstFilename();
     std::string getNextFilename();
 
-    static ZipFile* createWithBuffer(const void* buffer, unsigned int size);
-
     /**
      * zipFile Streaming support, !!!important, the file in zip must no compress level, otherwise
      *  stream seek doesn't work.
@@ -300,10 +292,8 @@ public:
     int64_t vsize(ZipEntryInfo*);
 
 private:
-    /* Only used internal for createWithBuffer() */
     ZipFile();
 
-    bool initWithBuffer(const void* buffer, unsigned int size);
     int getCurrentFileInfo(std::string* filename, unz_file_info_s* info);
 
     /** Internal data like zip file pointer / file list array and so on */

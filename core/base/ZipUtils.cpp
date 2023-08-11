@@ -32,7 +32,6 @@
 #else  // from our embedded sources
 #    include "unzip.h"
 #endif
-#include "ioapi_mem.h"
 #include <ioapi.h>
 
 #include <memory>
@@ -654,7 +653,6 @@ struct ZipFilePrivate
     std::string zipFileName;
     unzFile zipFile;
     std::mutex zipFileMtx;
-    std::unique_ptr<ourmemory_s> memfs;
 
     // std::unordered_map is faster if available on the platform
     typedef hlookup::string_map<struct ZipEntryInfo> FileListContainer;
@@ -663,30 +661,18 @@ struct ZipFilePrivate
     zlib_filefunc64_def functionOverrides{};
 };
 
-ZipFile* ZipFile::createWithBuffer(const void* buffer, unsigned int size)
+ZipFile* ZipFile::createFromFile(std::string_view zipFile, std::string_view filter)
 {
-    ZipFile* zip = new ZipFile();
-    if (zip->initWithBuffer(buffer, size))
-    {
+    auto zip = new ZipFile();
+    if (zip->initWithFile(zipFile, filter))
         return zip;
-    }
-    else
-    {
-        delete zip;
-        return nullptr;
-    }
+    delete zip;
+    return nullptr;
 }
 
 ZipFile::ZipFile() : _data(new ZipFilePrivate())
 {
     _data->zipFile = nullptr;
-}
-
-ZipFile::ZipFile(std::string_view zipFile, std::string_view filter) : _data(new ZipFilePrivate())
-{
-    _data->zipFileName = zipFile;
-    _data->zipFile     = unzOpen2_64(zipFile.data(), &_data->functionOverrides);
-    setFilter(filter);
 }
 
 ZipFile::~ZipFile()
@@ -697,6 +683,13 @@ ZipFile::~ZipFile()
     }
 
     AX_SAFE_DELETE(_data);
+}
+
+bool ZipFile::initWithFile(std::string_view zipFile, std::string_view filter)
+{
+    _data->zipFileName = zipFile;
+    _data->zipFile     = unzOpen2_64(zipFile.data(), &_data->functionOverrides);
+    return setFilter(filter);
 }
 
 bool ZipFile::setFilter(std::string_view filter)
@@ -851,26 +844,6 @@ int ZipFile::getCurrentFileInfo(std::string* filename, unz_file_info_s* info)
         filename->assign(path);
     }
     return ret;
-}
-
-bool ZipFile::initWithBuffer(const void* buffer, unsigned int size)
-{
-    if (!buffer || size == 0)
-        return false;
-
-    zlib_filefunc_def memory_file = {0};
-
-    std::unique_ptr<ourmemory_t> memfs(
-        new ourmemory_t{(char*)const_cast<void*>(buffer), static_cast<uint32_t>(size), 0, 0, 0});
-    fill_memory_filefunc(&memory_file, memfs.get());
-
-    _data->zipFile = unzOpen2(nullptr, &memory_file);
-    if (!_data->zipFile)
-        return false;
-    _data->memfs = std::move(memfs);
-
-    setFilter(emptyFilename);
-    return true;
 }
 
 ZipEntryInfo* ZipFile::vopen(std::string_view fileName)

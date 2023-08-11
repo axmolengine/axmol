@@ -99,7 +99,7 @@ bool FileUtilsAndroid::init()
     std::string assetsPath(getApkPath());
     if (assetsPath.find("/obb/") != std::string::npos)
     {
-        obbfile = new ZipFile(assetsPath);
+        obbfile = ZipFile::createFromFile(assetsPath);
     }
 
     return FileUtils::init();
