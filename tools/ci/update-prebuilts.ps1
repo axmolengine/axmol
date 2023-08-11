@@ -80,15 +80,16 @@ function update_lib
     
     echo "Updating lib files for ${lib_dir} from ./tmp/package_$VER/$lib_name ..."
 
-    download_and_expand "https://github.com/axmolengine/build1k/releases/$VER/$lib_name.zip" "./tmp/package_$VER/$lib_name.zip" "./tmp/package_$VER"
+    # https://github.com/axmolengine/build1k/releases/download/v57/angle.zip
+    download_and_expand "https://github.com/axmolengine/build1k/releases/download/$VER/$lib_name.zip" "./tmp/package_$VER/$lib_name.zip" "./tmp/package_$VER"
 
-    rm -rf $prebuilt_dir
-    cp -r ./tmp/package_$VER/$lib_name/prebuilt $lib_dir/
+    Remove-Item $prebuilt_dir -Recurse -Force
+    Copy-Item ./tmp/package_$VER/$lib_name/prebuilt $lib_dir/ -Container
     
-    if ( Test-Path "./tmp/package_$VER/$lib_name/include" -PathType Container ) {
+    if (Test-Path "./tmp/package_$VER/$lib_name/include" -PathType Container) {
         echo "Update inc files for ${lib_dir}"
-        rm -rf $inc_dir
-        cp -r ./tmp/package_$VER/$lib_name/include $lib_dir/
+        Remove-Item $inc_dir -Recurse -Force
+        Copy-Item ./tmp/package_$VER/$lib_name/include $lib_dir/ -Container
     }
 
     ++$updateCount
