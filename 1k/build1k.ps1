@@ -151,11 +151,11 @@ $b1k = [build1k]::new()
 $manifest = @{
     # C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.36.32532\vc_redist.x64.exe
     msvc         = '14.36.32532';
-    ndk          = 'r23c+';
+    ndk          = 'r23c';
     xcode        = '13.0.0~14.2.0'; # range
     clang        = '15.0.0+';
     gcc          = '9.0.0+';
-    cmake        = '3.26.4+';
+    cmake        = '3.22.1+';
     ninja        = '1.11.1+';
     jdk          = '11.0.19+';
     cmdlinetools = '7.0+'; # android cmdlinetools
