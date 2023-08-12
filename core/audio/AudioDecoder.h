@@ -28,7 +28,7 @@
 
 #include <stdint.h>
 #include <string>
-#include "platform/IFileStream.h"
+#include "platform/FileStream.h"
 
 NS_AX_BEGIN
 

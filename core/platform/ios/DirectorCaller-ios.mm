@@ -139,7 +139,7 @@ static id s_sharedDirectorCaller;
     {
         ax::Director* director = ax::Director::getInstance();
 #if defined(AX_USE_GLES)
-        EAGLContext* cocos2dxContext = [(EAGLView*)director->getOpenGLView()->getEAGLView() context];
+        EAGLContext* cocos2dxContext = [(CCEAGLView*)director->getOpenGLView()->getEAGLView() context];
         if (cocos2dxContext != [EAGLContext currentContext])
             glFlush();
 

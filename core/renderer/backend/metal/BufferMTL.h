@@ -63,7 +63,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateSubData(void* data, unsigned int offset, unsigned int size)`
      */
-    virtual void updateData(const void* data, std::size_t size) override;
+    virtual void updateData(void* data, std::size_t size) override;
 
     /**
      * @brief Update buffer sub-region data
@@ -73,7 +73,7 @@ public:
      * @param size Specifies the size in bytes of the data store region being replaced.
      * @see `updateData(void* data, unsigned int size)`
      */
-    virtual void updateSubData(const void* data, std::size_t offset, std::size_t size) override;
+    virtual void updateSubData(void* data, std::size_t offset, std::size_t size) override;
 
     /**
      * Emply implementation. Mainly used in EGL context lost.

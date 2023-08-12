@@ -53,21 +53,25 @@ void TrianglesCommand::init(float globalOrder,
     }
     _mv = mv;
 
-    auto batchId = _pipelineDescriptor.programState->getBatchId();
-    if (_batchId != batchId || _texture != texture->getBackendTexture() || _blendType != blendType)
+    auto programType = _pipelineDescriptor.programState->getProgram()->getProgramType();
+    auto uniformID   = _pipelineDescriptor.programState->getUniformID();
+    if (_programType != programType || _texture != texture->getBackendTexture() || _blendType != blendType ||
+        _uniformID != uniformID)
     {
-        _batchId   = batchId;
-        _texture   = texture->getBackendTexture();
-        _blendType = blendType;
+        _programType = programType;
+        _texture     = texture->getBackendTexture();
+        _blendType   = blendType;
+        _uniformID   = uniformID;
+
+        // since it would be too expensive to check the uniforms, simplify enable batching for built-in program.
+        if (_programType == backend::ProgramType::CUSTOM_PROGRAM)
+            setSkipBatching(true);
 
         // TODO: minggo set it in Node?
         auto& blendDescriptor                = _pipelineDescriptor.blendDescriptor;
         blendDescriptor.blendEnabled         = true;
         blendDescriptor.sourceRGBBlendFactor = blendDescriptor.sourceAlphaBlendFactor = blendType.src;
         blendDescriptor.destinationRGBBlendFactor = blendDescriptor.destinationAlphaBlendFactor = blendType.dst;
-
-        if (_batchId == -1)
-            setSkipBatching(true);
 
         if (!isSkipBatching())
             generateMaterialID();
@@ -87,7 +91,8 @@ void TrianglesCommand::generateMaterialID()
     struct
     {
         void* texture;
-        uint64_t batchId;
+        uint32_t programType;
+        uint32_t uniformID;
         backend::BlendFactor src;
         backend::BlendFactor dst;
     } hashMe;
@@ -97,11 +102,12 @@ void TrianglesCommand::generateMaterialID()
     // are set to random values by different compilers.
     memset(&hashMe, 0, sizeof(hashMe));
 
-    hashMe.texture = _texture;
-    hashMe.src     = _blendType.src;
-    hashMe.dst     = _blendType.dst;
-    hashMe.batchId = _batchId;
-    _materialID    = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
+    hashMe.texture     = _texture;
+    hashMe.src         = _blendType.src;
+    hashMe.dst         = _blendType.dst;
+    hashMe.programType = _programType;
+    hashMe.uniformID   = _uniformID;
+    _materialID        = XXH32((const void*)&hashMe, sizeof(hashMe), 0);
 }
 
 NS_AX_END

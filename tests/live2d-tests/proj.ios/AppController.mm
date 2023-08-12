@@ -48,7 +48,7 @@ static AppDelegate s_sharedApplication;
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
 
-    EAGLView *eaglView = [EAGLView viewWithFrame: [window bounds]
+    CCEAGLView *eaglView = [CCEAGLView viewWithFrame: [window bounds]
                                          pixelFormat: (NSString*)ax::GLViewImpl::_pixelFormat
                                          depthFormat: ax::GLViewImpl::_depthFormat
                                  preserveBackbuffer: NO
@@ -57,7 +57,7 @@ static AppDelegate s_sharedApplication;
                                     numberOfSamples: ax::GLViewImpl::_multisamplingCount];
 
 
-    // Use RootViewController manage EAGLView
+    // Use RootViewController manage CCEAGLView
     viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
     viewController.extendedLayoutIncludesOpaqueBars = YES;
     viewController.view = eaglView;

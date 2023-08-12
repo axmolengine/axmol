@@ -116,6 +116,7 @@ bool HelloWorld::init()
         // add the label as a child to this layer
         this->addChild(label, 1);
     }
+
     // add "HelloWorld" splash screen"
     auto sprite = Sprite::create("HelloWorld.png"sv);
     if (sprite == nullptr)

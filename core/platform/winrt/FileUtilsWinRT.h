@@ -59,6 +59,7 @@ public:
                                                               std::string_view strFilename) const override;
     //virtual std::string getSuitableFOpen(const std::string_view& filenameUtf8) const override;
     virtual int64_t getFileSize(std::string_view filepath) const override;
+    virtual FileUtils::Status getContents(std::string_view filename, ResizableBuffer* buffer) const override;
     static std::string getAppPath();
 
     std::string getNativeWritableAbsolutePath() const override;
