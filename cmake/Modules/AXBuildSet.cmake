@@ -30,13 +30,6 @@ option(AX_ENABLE_EXT_LUA "Build lua libraries" ON)
 # hold the extensions list to auto link to app
 set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
 
-# configure android GLSLCC compile output, this is the first include cmake module
-if (ANDROID)
-    file(TO_NATIVE_PATH "${PROJECT_SOURCE_DIR}/proj.android/build/runtime/axslc" _GLSLCC_OUT_DIR)
-    set(GLSLCC_OUT_DIR "${_GLSLCC_OUT_DIR}" CACHE STRING "" FORCE)
-    message(AUTHOR_WARNING "Set GLSLCC_OUT_DIR to ${GLSLCC_OUT_DIR} for android")
-endif()
-
 # include helper functions
 include(AXBuildHelpers)
 

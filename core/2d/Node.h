@@ -1828,14 +1828,7 @@ public:
      * Sets ProgramState with retain
      * @param programState
      */
-    virtual bool setProgramState(backend::ProgramState* programState, bool ownPS = false);
-
-    /**
-    * Sets ProgramState by programId
-    * @param progId the program id or programType used to create programState
-    * @return ProgramState* (nullable)
-    */
-    backend::ProgramState* setProgramStateByProgramId(uint64_t progId);
+    virtual bool setProgramState(backend::ProgramState* programState, bool needsRetain = true);
 
     backend::ProgramState* getProgramState() const;
 

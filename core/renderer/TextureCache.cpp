@@ -384,47 +384,6 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
     }
 }
 
-Texture2D* TextureCache::getWhiteTexture()
-{
-    constexpr std::string_view key = "/white-texture"sv;
-    // Gets the texture by key firstly.
-    auto texture = this->getTextureForKey(key);
-    if (texture) return texture;
-
-    // If texture wasn't in cache, create it from RAW data.
-    unsigned char texls[] = {
-        // RGBA8888
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-
-    Image* image = new Image(); // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
-    bool AX_UNUSED isOK = image->initWithRawData(texls, sizeof(texls), 2, 2, 8);
-    AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
-
-    texture = this->addImage(image, key);
-    image->release();
-    return texture;
-}
-
-Texture2D* TextureCache::getDummyTexture()
-{
-    constexpr std::string_view key = "/dummy-texture"sv;
-    // Gets the texture by key firstly.
-    auto texture = this->getTextureForKey(key);
-    if (texture) return texture;
-
-    // If texture wasn't in cache, create it from RAW data.
-#ifdef NDEBUG
-    unsigned char texls[] = {0, 0, 0, 0};  // 1*1 transparent picture
-#else
-    unsigned char texls[] = {255, 0, 0, 255};  // 1*1 red picture
-#endif
-    Image* image = new Image();  // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
-    bool AX_UNUSED isOK = image->initWithRawData(texls, sizeof(texls), 1, 1, sizeof(unsigned char));
-    texture = this->addImage(image, key);
-    image->release();
-    return texture;
-}
-
 Texture2D* TextureCache::addImage(std::string_view path)
 {
     return addImage(path, Texture2D::getDefaultAlphaPixelFormat());

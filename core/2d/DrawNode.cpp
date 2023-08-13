@@ -178,11 +178,11 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
 void DrawNode::setVertexLayout(CustomCommand& cmd)
 {
     auto* programState = cmd.getPipelineDescriptor().programState;
-    programState->validateSharedVertexLayout(backend::VertexLayoutType::DrawNode);
+    programState->validateSharedVertexLayout(VertexLayoutHelper::setupDrawNode);
 }
 
 void DrawNode::freeShaderInternal(CustomCommand& cmd)
-{   
+{
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE_NULL(pipelinePS);
 }

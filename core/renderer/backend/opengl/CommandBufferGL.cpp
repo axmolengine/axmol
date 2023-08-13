@@ -32,10 +32,9 @@
 #include "base/EventDispatcher.h"
 #include "base/EventType.h"
 #include "base/Director.h"
-#include "MacrosGL.h"
-#include "UtilsGL.h"
+#include "renderer/backend/opengl/MacrosGL.h"
+#include "renderer/backend/opengl/UtilsGL.h"
 #include "RenderTargetGL.h"
-#include "DeviceGL.h"
 #include <algorithm>
 
 NS_AX_BACKEND_BEGIN
@@ -104,10 +103,9 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
 
         mask |= GL_DEPTH_BUFFER_BIT;
         glClearDepth(descirptor.clearDepthValue);
-        __gl->enableDepthTest();
-
-        __gl->depthMask(GL_TRUE);
-        __gl->depthFunc(GL_ALWAYS);
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(GL_TRUE);
+        glDepthFunc(GL_ALWAYS);
     }
 
     CHECK_GL_ERROR_DEBUG();
@@ -127,10 +125,10 @@ void CommandBufferGL::beginRenderPass(const RenderTarget* rt, const RenderPassDe
     if (bitmask::any(clearFlags, TargetBufferFlags::DEPTH))
     {
         if (!oldDepthTest)
-            __gl->disableDepthTest();
+            glDisable(GL_DEPTH_TEST);
 
-        __gl->depthMask(oldDepthWrite);
-        __gl->depthFunc(oldDepthFunc);
+        glDepthMask(oldDepthWrite);
+        glDepthFunc(oldDepthFunc);
         glClearDepth(oldDepthClearValue);
     }
 
@@ -167,7 +165,11 @@ void CommandBufferGL::updatePipelineState(const RenderTarget* rt, const Pipeline
 
 void CommandBufferGL::setViewport(int x, int y, unsigned int w, unsigned int h)
 {
-    __gl->viewport(_viewPort.set(x, y, w, h));
+    glViewport(x, y, w, h);
+    _viewPort.x = x;
+    _viewPort.y = y;
+    _viewPort.w = w;
+    _viewPort.h = h;
 }
 
 void CommandBufferGL::setCullMode(CullMode mode)
@@ -177,7 +179,7 @@ void CommandBufferGL::setCullMode(CullMode mode)
 
 void CommandBufferGL::setWinding(Winding winding)
 {
-    __gl->winding(winding);
+    glFrontFace(UtilsGL::toGLFrontFace(winding));
 }
 
 void CommandBufferGL::setIndexBuffer(Buffer* buffer)
@@ -189,17 +191,6 @@ void CommandBufferGL::setIndexBuffer(Buffer* buffer)
     buffer->retain();
     AX_SAFE_RELEASE(_indexBuffer);
     _indexBuffer = static_cast<BufferGL*>(buffer);
-}
-
-void CommandBufferGL::setInstanceBuffer(Buffer* buffer)
-{
-    assert(buffer != nullptr);
-    if (buffer == nullptr || _instanceTransformBuffer == buffer)
-        return;
-
-    buffer->retain();
-    AX_SAFE_RELEASE(_instanceTransformBuffer);
-    _instanceTransformBuffer = static_cast<BufferGL*>(buffer);
 }
 
 void CommandBufferGL::setVertexBuffer(Buffer* buffer)
@@ -224,16 +215,13 @@ void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start,
 {
     prepareDrawing();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
-    if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+    if (wireframe) primitiveType = PrimitiveType::LINE;
 #endif
     glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
     cleanResources();
 }
@@ -246,45 +234,16 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
 {
     prepareDrawing();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
-    if (wireframe)
-        primitiveType = PrimitiveType::LINE;
+    if (wireframe) primitiveType = PrimitiveType::LINE;
 #endif
-    __gl->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
 #ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-#endif
-    cleanResources();
-}
-
-void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
-                                            IndexFormat indexType,
-                                            std::size_t count,
-                                            std::size_t offset,
-                                            int instanceCount,
-                                            bool wireframe)
-{
-    prepareDrawing();
-#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-#else
-    if (wireframe)
-        primitiveType = PrimitiveType::LINE;
-#endif
-    __gl->bindBuffer(BufferType::ELEMENT_ARRAY_BUFFER, _indexBuffer->getHandler());
-    glDrawElementsInstanced(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
-                            (GLvoid*)offset, instanceCount);
-    CHECK_GL_ERROR_DEBUG();
-#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
-    if (wireframe)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    if (wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
     cleanResources();
 }
@@ -300,10 +259,10 @@ void CommandBufferGL::endFrame() {}
 void CommandBufferGL::prepareDrawing() const
 {
     const auto& program = _renderPipeline->getProgram();
-    __gl->useProgram(program->getHandler());
+    glUseProgram(program->getHandler());
 
     bindVertexBuffer(program);
-    bindUniforms(program);
+    setUniforms(program);
 
     // Set depth/stencil state.
     if (_depthStencilStateGL->isEnabled())
@@ -312,10 +271,15 @@ void CommandBufferGL::prepareDrawing() const
         DepthStencilStateGL::reset();
 
     // Set cull mode.
-    if (_cullMode != CullMode::NONE)
-        __gl->enableCullFace(UtilsGL::toGLCullMode(_cullMode));
+    if (CullMode::NONE == _cullMode)
+    {
+        glDisable(GL_CULL_FACE);
+    }
     else
-        __gl->disableCullFace();
+    {
+        glEnable(GL_CULL_FACE);
+        glCullFace(UtilsGL::toGLCullMode(_cullMode));
+    }
 }
 
 void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
@@ -326,9 +290,7 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
     if (!vertexLayout->isValid())
         return;
 
-    // Bind VAO, engine share 1 VAO for all vertexLayouts aka vfmts
-    // optimize proposal: create VAO per vertexLayout, just need bind VAO
-    __gl->bindBuffer(BufferType::ARRAY_BUFFER, _vertexBuffer->getHandler());
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer->getHandler());
 
     const auto& attributes = vertexLayout->getAttributes();
     for (const auto& attributeInfo : attributes)
@@ -339,56 +301,32 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
                               UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
                               vertexLayout->getStride(), (GLvoid*)attribute.offset);
     }
-
-    // if we have an instance transform buffer pointer then we must be rendering in instance mode.
-    if (_instanceTransformBuffer)
-    {
-        auto instaceLoc = _programState->getProgram()->getAttributeLocation(Attribute::INSTANCE);
-        if (instaceLoc != -1)
-        {
-            __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
-
-            // Enable 4 attrib arrays for each matrix row.
-            glEnableVertexAttribArray(instaceLoc);
-            glEnableVertexAttribArray(instaceLoc + 1);
-            glEnableVertexAttribArray(instaceLoc + 2);
-            glEnableVertexAttribArray(instaceLoc + 3);
-
-            // Since OpenGL sucks we need to Specify vertex attribute pointers for
-            // instance transforms for each matrix row containting 16 bytes or 4 floats
-            glVertexAttribPointer(instaceLoc, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16, (void*)0);
-            glVertexAttribPointer(instaceLoc + 1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
-                                  (void*)(sizeof(float) * 4));
-            glVertexAttribPointer(instaceLoc + 2, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
-                                  (void*)(2 * sizeof(float) * 4));
-            glVertexAttribPointer(instaceLoc + 3, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
-                                  (void*)(3 * sizeof(float) * 4));
-
-            // Set the divisor for the instance attributes to 1 indicating that it should advance one matrix per
-            // instance.
-            glVertexAttribDivisor(instaceLoc, 1);
-            glVertexAttribDivisor(instaceLoc + 1, 1);
-            glVertexAttribDivisor(instaceLoc + 2, 1);
-            glVertexAttribDivisor(instaceLoc + 3, 1);
-        }
-    }
 }
 
-void CommandBufferGL::bindUniforms(ProgramGL* program) const
+void CommandBufferGL::setUniforms(ProgramGL* program) const
 {
     if (_programState)
     {
-        assert(program == _programState->getProgram());
-
         auto& callbacks = _programState->getCallbackUniforms();
         for (auto&& cb : callbacks)
             cb.second(_programState, cb.first);
 
-        auto& uniformInfos = program->getAllActiveUniformInfo(ShaderStage::VERTEX);
-
+        auto& uniformInfos     = _programState->getProgram()->getAllActiveUniformInfo(ShaderStage::VERTEX);
         std::size_t bufferSize = 0;
-        auto buffer            = _programState->getVertexUniformBuffer(bufferSize);
-        program->bindUniformBuffers(buffer, bufferSize);
+        char* buffer           = nullptr;
+        _programState->getVertexUniformBuffer(&buffer, bufferSize);
+
+        int i = 0;
+        for (auto&& iter : uniformInfos)
+        {
+            auto& uniformInfo = iter.second;
+            if (uniformInfo.size <= 0)
+                continue;
+
+            int elementCount = uniformInfo.count;
+            setUniform(uniformInfo.isArray, uniformInfo.location, elementCount, uniformInfo.type,
+                       (void*)(buffer + uniformInfo.bufferOffset));
+        }
 
         const auto& textureInfo = _programState->getVertexTextureInfos();
         for (const auto& iter : textureInfo)
@@ -422,35 +360,109 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
     }
 }
 
+#define DEF_TO_INT(pointer, index) (*((GLint*)(pointer) + index))
+#define DEF_TO_FLOAT(pointer, index) (*((GLfloat*)(pointer) + index))
+void CommandBufferGL::setUniform(bool isArray, GLuint location, unsigned int size, GLenum uniformType, void* data) const
+{
+    GLsizei count = size;
+    switch (uniformType)
+    {
+    case GL_INT:
+    case GL_BOOL:
+    case GL_SAMPLER_2D:
+    case GL_SAMPLER_CUBE:
+        if (isArray)
+            glUniform1iv(location, count, (GLint*)data);
+        else
+            glUniform1i(location, DEF_TO_INT(data, 0));
+        break;
+    case GL_INT_VEC2:
+    case GL_BOOL_VEC2:
+        if (isArray)
+            glUniform2iv(location, count, (GLint*)data);
+        else
+            glUniform2i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1));
+        break;
+    case GL_INT_VEC3:
+    case GL_BOOL_VEC3:
+        if (isArray)
+            glUniform3iv(location, count, (GLint*)data);
+        else
+            glUniform3i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1), DEF_TO_INT(data, 2));
+        break;
+    case GL_INT_VEC4:
+    case GL_BOOL_VEC4:
+        if (isArray)
+            glUniform4iv(location, count, (GLint*)data);
+        else
+            glUniform4i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1), DEF_TO_INT(data, 2), DEF_TO_INT(data, 4));
+        break;
+    case GL_FLOAT:
+        if (isArray)
+            glUniform1fv(location, count, (GLfloat*)data);
+        else
+            glUniform1f(location, DEF_TO_FLOAT(data, 0));
+        break;
+    case GL_FLOAT_VEC2:
+        if (isArray)
+            glUniform2fv(location, count, (GLfloat*)data);
+        else
+            glUniform2f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1));
+        break;
+    case GL_FLOAT_VEC3:
+        if (isArray)
+            glUniform3fv(location, count, (GLfloat*)data);
+        else
+            glUniform3f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1), DEF_TO_FLOAT(data, 2));
+        break;
+    case GL_FLOAT_VEC4:
+        if (isArray)
+            glUniform4fv(location, count, (GLfloat*)data);
+        else
+            glUniform4f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1), DEF_TO_FLOAT(data, 2),
+                        DEF_TO_FLOAT(data, 3));
+        break;
+    case GL_FLOAT_MAT2:
+        glUniformMatrix2fv(location, count, GL_FALSE, (GLfloat*)data);
+        break;
+    case GL_FLOAT_MAT3:
+        glUniformMatrix3fv(location, count, GL_FALSE, (GLfloat*)data);
+        break;
+    case GL_FLOAT_MAT4:
+        glUniformMatrix4fv(location, count, GL_FALSE, (GLfloat*)data);
+        break;
+        break;
+
+    default:
+        AXASSERT(false, "invalidate Uniform data type");
+        break;
+    }
+}
+
 void CommandBufferGL::cleanResources()
 {
-    if (_instanceTransformBuffer)
-    {
-        const auto& attribOffset = _programState->getVertexLayout()->getAttributes().size();
-
-        for (GLubyte i = attribOffset; i < attribOffset + 4; i++)
-            glVertexAttribDivisor(i, 0);
-
-        _instanceTransformBuffer = nullptr;
-    }
-
     AX_SAFE_RELEASE_NULL(_programState);
 }
 
 void CommandBufferGL::setLineWidth(float lineWidth)
 {
     if (lineWidth > 0.0f)
-        __gl->lineWidth(lineWidth);
+        glLineWidth(lineWidth);
     else
-        __gl->lineWidth(1.0f);
+        glLineWidth(1.0f);
 }
 
 void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
     if (isEnabled)
-        __gl->enableScissor(x, y, width, height);
+    {
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(x, y, width, height);
+    }
     else
-        __gl->disableScissor();
+    {
+        glDisable(GL_SCISSOR_TEST);
+    }
 }
 
 void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const PixelBufferDescriptor&)> callback)
@@ -458,7 +470,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt, std::function<void(const Pixe
     PixelBufferDescriptor pbd;
     if (rt->isDefaultRenderTarget())
     {  // read pixels from screen
-        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.width, _viewPort.height, _viewPort.width * 4, pbd);
+        readPixels(rt, _viewPort.x, _viewPort.y, _viewPort.w, _viewPort.h, _viewPort.w * 4, pbd);
     }
     else
     {
@@ -491,7 +503,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     GLuint pbo;
     glGenBuffers(1, &pbo);
-    __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, pbo);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
     glBufferData(GL_PIXEL_PACK_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
     auto buffer = (uint8_t*)glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, bufferSize, GL_MAP_READ_BIT);
@@ -517,7 +529,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-    __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, 0);
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
     glDeleteBuffers(1, &pbo);
 #endif
 
