@@ -38,24 +38,37 @@ if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
 endif()
 
+cmake_policy(SET CMP0127 NEW)
+
 project(ax_libs)
 
-if (NOT WINRT)
-    option (AX_USE_ANGLE "Use google angle renderer" OFF)
-else()
-    set (AX_USE_ANGLE TRUE CACHE BOOL "Use google angle renderer" FORCE)
-endif()
-
-if (NOT AX_USE_ANGLE)  # check deprecated option: AX_USE_COMPAT_GL
-    if (NOT WINRT)
-        option (AX_USE_COMPAT_GL "Use google angle renderer" OFF)
-    else()
-        set (AX_USE_COMPAT_GL TRUE CACHE BOOL "Use google angle renderer" ON)
+# choosing render backend
+if(NOT AX_GLES_PROFILE)
+    if(ANDROID) # android: default GLES200 for compatible max devices in marketplace
+        set(AX_GLES_PROFILE 200 CACHE STRING "GLES profile" FORCE)
+    elseif(WINRT) # winuwp: default GLES300
+        set(AX_GLES_PROFILE 300 CACHE STRING "GLES profile" FORCE)
+    elseif(WIN32 OR LINUX) # win32,linux use GL3.3+
+        set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
+    elseif(APPLE) # osx,ios/tvos
+        set(AX_USE_METAL TRUE CACHE BOOL "" FORCE)
     endif()
-    set (AX_USE_ANGLE ${AX_USE_COMPAT_GL} CACHE BOOL "Use google angle renderer" FORCE)
+else()
+    if(LINUX OR MACOSX) # linux, osx use GL3.3+
+        set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
+    endif()
 endif()
 
-message(STATUS "WINRT=${WINRT}")
+if (NOT DEFINED AX_GLES_PROFILE)
+    set(AX_GLES_PROFILE 0 CACHE STRING "GLES profile")
+endif()
+
+# verify GLES profile
+if (NOT (AX_GLES_PROFILE EQUAL 0 OR AX_GLES_PROFILE EQUAL 200 OR AX_GLES_PROFILE EQUAL 300))
+    message(FATAL_ERROR "Invalid AX_GLES_PROFILE, must be: 0 or 200 or 300")
+endif()
+
+message(AUTHOR_WARNING "AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 
 option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON)
 
@@ -84,7 +97,6 @@ endif()
 
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 
-
 # default value for axmol extensions modules to Build
 # total supported extensions count: 12
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
@@ -111,10 +123,7 @@ else()
   set(AX_ENABLE_EXT_IMGUI OFF)
 endif()
 
-if (ANDROID)
-    set(AX_USE_GLAD TRUE CACHE BOOL "Use glad for android GLESv3 support" FORCE)
-    add_definitions(-DAX_USE_GLAD=1)
-endif()
+option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
@@ -132,6 +141,36 @@ if (WIN32)
         add_definitions(-DNTCVT_CP_DEFAULT=CP_ACP)
     endif()
 endif()
+
+# axmolver.h
+find_package(Git)
+if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT}/.git")
+    # Get the current working branch and its latest abbreviated commit hash
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-list --count HEAD
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_BUILD_NUM
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" branch --show-current
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
+        TIMEOUT 5
+        OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+    set(AX_GIT_BRANCH "UNKNOWN")
+    set(AX_GIT_COMMIT_HASH "unknown")
+endif()
+configure_file(
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h")
+
+# early features     
+include(CMakeDependentOption)
+cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
+  "Build the tests when we are the root project" ON
+  "NOT (AX_GIT_BRANCH STREQUAL \"main\")" OFF)
 
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)
@@ -189,6 +228,52 @@ set(_AX_SRC axmol.cpp
 list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
+
+if (AX_ENABLE_EARLY_FEATURES)
+    message(AUTHOR_WARNING "Enable early dev features for test only")
+    # import minimal AXGLSLCC.cmake for shader compiler support
+    # the function: ax_target_compile_shaders avaiable from it
+    set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
+    include(AXGLSLCC)
+
+    ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+    set(ax_builtin_shaders ${BUILTIN_SHADER_SOURCES} CACHE STATIC "" FORCE)
+
+    # configure engine builtin light num
+    if (NOT DEFINED AX_MAX_DIRECTIONAL_LIGHT)
+        set(AX_MAX_DIRECTIONAL_LIGHT 1)
+    endif()
+    if (NOT DEFINED AX_MAX_POINT_LIGHT)
+        set(AX_MAX_POINT_LIGHT 1)
+    endif()
+    if (NOT DEFINED AX_MAX_SPOT_LIGHT)
+        set (AX_MAX_SPOT_LIGHT 1)
+    endif()
+    configure_file(
+        "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h.in"
+        "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h" @ONLY)
+    # SKINPOSITION_NORMAL_TEXTURE_3D:       skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
+    # POSITION_NORMAL_TEXTURE_3D:           skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
+    # POSITION_NORMAL_3D:                   positionNormalTexture.vert,         colorNormal.frag,        LightDefs
+    # POSITION_BUMPEDNORMAL_TEXTURE_3D:     positionNormalTexture.vert,         colorNormalTexture.frag, lightNormMapDef
+    # SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D: skinPositionNormalTexture_vert,     colorNormalTexture.frag, lightNormMapDef
+    set_source_files_properties(
+        ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
+        ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
+        ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
+        ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+        PROPERTIES GLSLCC_DEFINES
+        "MAX_DIRECTIONAL_LIGHT_NUM=${AX_MAX_DIRECTIONAL_LIGHT},MAX_POINT_LIGHT_NUM=${AX_MAX_POINT_LIGHT},MAX_SPOT_LIGHT_NUM=${AX_MAX_SPOT_LIGHT}"
+    )
+    set_source_files_properties(
+        ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
+        ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
+        ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+        PROPERTIES GLSLCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
+    )
+    ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+endif()
+
 
 if (WINRT)
     target_compile_options(${_AX_CORE_LIB} PUBLIC /ZW)
@@ -276,29 +361,6 @@ endif()
 if(ANDROID)
     add_subdirectory(${_AX_ROOT}/core/platform/android ${ENGINE_BINARY_PATH}/core/cpp-android)
 endif()
-
-find_package(Git)
-if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT}/.git")
-    # Get the current working branch and its latest abbreviated commit hash
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-list --count HEAD
-        TIMEOUT 5
-        OUTPUT_VARIABLE AX_BUILD_NUM
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" branch --show-current
-        TIMEOUT 5
-        OUTPUT_VARIABLE AX_GIT_BRANCH
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
-        TIMEOUT 5
-        OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-else()
-    set(AX_GIT_BRANCH "UNKNOWN")
-    set(AX_GIT_COMMIT_HASH "unknown")
-endif()
-configure_file(
-        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
-        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h")
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

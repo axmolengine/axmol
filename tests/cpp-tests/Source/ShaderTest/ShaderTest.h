@@ -153,9 +153,9 @@ protected:
     bool initWithVertex(std::string_view vert, std::string_view frag);
     void loadShaderVertex(std::string_view vert, std::string_view frag);
 
-    virtual bool setProgramState(ax::backend::ProgramState* programState, bool needsRetain = true) override
+    virtual bool setProgramState(ax::backend::ProgramState* programState, bool ownPS = false) override
     {
-        if (Node::setProgramState(programState, needsRetain))
+        if (Node::setProgramState(programState, ownPS))
         {
             _customCommand.getPipelineDescriptor().programState = programState;
             updateUniforms();

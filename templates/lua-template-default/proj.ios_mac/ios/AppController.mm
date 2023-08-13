@@ -53,7 +53,7 @@ static AppDelegate s_sharedApplication;
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    // Use RootViewController to manage CCEAGLView
+    // Use RootViewController to manage EAGLView
     _viewController                       = [[RootViewController alloc] init];
 #if !defined(AX_TARGET_OS_TVOS)
     _viewController.wantsFullScreenLayout = YES;

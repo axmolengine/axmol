@@ -79,6 +79,42 @@ public:
     void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
 };
 
+class MeshRendererStaticInstancingBasicTest : public MeshRendererTestDemo
+{
+public:
+    CREATE_FUNC(MeshRendererStaticInstancingBasicTest);
+    MeshRendererStaticInstancingBasicTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class MeshRendererDynamicInstancingBasicTest : public MeshRendererTestDemo
+{
+public:
+    CREATE_FUNC(MeshRendererDynamicInstancingBasicTest);
+    MeshRendererDynamicInstancingBasicTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class MeshRendererPreallocatedInstancingBufferTest : public MeshRendererTestDemo
+{
+public:
+    CREATE_FUNC(MeshRendererPreallocatedInstancingBufferTest);
+    MeshRendererPreallocatedInstancingBufferTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
+class MeshRendererInstancingStressTest : public MeshRendererTestDemo
+{
+public:
+    CREATE_FUNC(MeshRendererInstancingStressTest);
+    MeshRendererInstancingStressTest();
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
+
 class MeshRendererUVAnimationTest : public MeshRendererTestDemo
 {
 public:

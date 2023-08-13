@@ -95,7 +95,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
         if (frameNames.empty())
         {
             AXLOG(
-                "cocos2d: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to "
+                "axmol: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to "
                 "animation cache.",
                 anim.first.c_str());
             continue;
@@ -111,7 +111,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
             if (!spriteFrame)
             {
                 AXLOG(
-                    "cocos2d: AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the "
+                    "axmol:AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the "
                     "SpriteFrameCache. This frame will not be added to the animation.",
                     anim.first.c_str(), frameName.asString().c_str());
 
@@ -125,7 +125,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
         if (frames.empty())
         {
             AXLOG(
-                "cocos2d: AnimationCache: None of the frames for animation '%s' were found in the SpriteFrameCache. "
+                "axmol:AnimationCache: None of the frames for animation '%s' were found in the SpriteFrameCache. "
                 "Animation is not being added to the Animation Cache.",
                 anim.first.c_str());
             continue;
@@ -133,7 +133,7 @@ void AnimationCache::parseVersion1(const ValueMap& animations)
         else if (frames.size() != frameNameSize)
         {
             AXLOG(
-                "cocos2d: AnimationCache: An animation in your dictionary refers to a frame which is not in the "
+                "axmol:AnimationCache: An animation in your dictionary refers to a frame which is not in the "
                 "SpriteFrameCache. Some or all of the frames for the animation '%s' may be missing.",
                 anim.first.c_str());
         }
@@ -161,7 +161,7 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
         if (frameArray.empty())
         {
             AXLOG(
-                "cocos2d: AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to "
+                "axmol:AnimationCache: Animation '%s' found in dictionary without any frames - cannot add to "
                 "animation cache.",
                 name.c_str());
             continue;
@@ -179,7 +179,7 @@ void AnimationCache::parseVersion2(const ValueMap& animations)
             if (!spriteFrame)
             {
                 AXLOG(
-                    "cocos2d: AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the "
+                    "axmol:AnimationCache: Animation '%s' refers to frame '%s' which is not currently in the "
                     "SpriteFrameCache. This frame will not be added to the animation.",
                     name.c_str(), spriteFrameName.c_str());
 
