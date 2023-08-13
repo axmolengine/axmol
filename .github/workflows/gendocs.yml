@@ -5,7 +5,7 @@ name: gendocs
 on: 
   push:
     branches:
-      - 1.x
+      - main
     paths:
       - core/**/*
       - docs/**/*

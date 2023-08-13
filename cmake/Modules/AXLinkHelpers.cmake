@@ -9,7 +9,7 @@ endif()
 function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" EXCLUDE thirdparty_LIB_DEPENDS)
 
-    message(STATUS "AX_USE_ANGLE=${AX_USE_ANGLE}")
+    message(STATUS "AX_USE_COMPAT_GL=${AX_USE_COMPAT_GL}")
 
     message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
     message(STATUS "AX_ENABLE_MFMEDIA=${AX_ENABLE_MFMEDIA}")
@@ -25,7 +25,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     message(STATUS "AX_ENABLE_EXT_EFFEKSEER=${AX_ENABLE_EXT_EFFEKSEER}")
     message(STATUS "AX_ENABLE_EXT_LUA=${AX_ENABLE_EXT_LUA}")
     
-    ax_config_pred(${APP_NAME} AX_USE_ANGLE)
+    ax_config_pred(${APP_NAME} AX_USE_COMPAT_GL)
     ax_config_pred(${APP_NAME} AX_ENABLE_MFMEDIA)
     ax_config_pred(${APP_NAME} AX_ENABLE_MSEDGE_WEBVIEW2)
 
@@ -182,7 +182,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         endif()
 
         # Copy windows angle binaries
-        if (AX_USE_ANGLE)
+        if (AX_USE_COMPAT_GL)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll

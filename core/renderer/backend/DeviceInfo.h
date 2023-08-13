@@ -84,10 +84,14 @@ public:
     virtual const char* getVersion() const = 0;
 
     /**
-     * get extensions.
-     * @return Extension supported by device.
+     * Check does device has extension.
      */
-    virtual const char* getExtension() const = 0;
+    virtual bool hasExtension(std::string_view /*extName*/) const { return false; };
+
+    /**
+    * Dump all extensions to string
+    */
+    virtual std::string dumpExtensions() const { return {}; };
 
     /**
      * Check if feature supported by device.

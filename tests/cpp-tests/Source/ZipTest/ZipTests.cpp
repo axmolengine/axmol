@@ -27,7 +27,6 @@
 #include <sstream>
 
 #include "unzip/unzip.h"
-#include "unzip/crypt.h"
 
 USING_NS_AX;
 

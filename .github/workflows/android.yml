@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-      - 1.x
+      - main
 
     paths-ignore:
       - '**.md'
@@ -49,7 +49,7 @@ jobs:
       shell: pwsh
       run: |
         $AX_ROOT = $(Get-Location).Path
-        ./build.ps1 -p android -a $env:BUILD_ARCH -xc '-PAX_USE_GLAD=TRUE'
+        ./build.ps1 -p android -a $env:BUILD_ARCH
 
     - uses: actions/upload-artifact@v3
       with:
