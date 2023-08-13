@@ -925,7 +925,7 @@ void CameraCullingDemo::delMeshCallback(Ref* sender)
 
     // update sprite number
     char szText[16];
-    sprintf(szText, "%l sprits", static_cast<int32_t>(_layer3D->getChildrenCount()));
+    sprintf(szText, "%d sprits", static_cast<int32_t>(_layer3D->getChildrenCount()));
     _labelMeshCount->setString(szText);
 }
 
@@ -1266,7 +1266,7 @@ void FogTestDemo::onEnter()
     auto fogColor   = Vec4(0.5, 0.5, 0.5, 1.0);
     float fogStart  = 10;
     float fogEnd    = 60;
-    int fogEquation = 0;
+    float fogEquation = 0;
 
     SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
     SET_UNIFORM("u_fogStart", &fogStart, sizeof(fogStart));
@@ -1310,7 +1310,7 @@ void FogTestDemo::onEnter()
         auto fogColor   = Vec4(0.5, 0.5, 0.5, 1.0);
         float fogStart  = 10;
         float fogEnd    = 60;
-        int fogEquation = 0;
+        float fogEquation = 0;
 
         SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
         SET_UNIFORM("u_fogStart", &fogStart, sizeof(fogStart));
@@ -1328,7 +1328,7 @@ void FogTestDemo::switchTypeCallback(Ref* sender, int type)
         auto fogColor   = Vec4(0.5, 0.5, 0.5, 1.0);
         float fogStart  = 10;
         float fogEnd    = 60;
-        int fogEquation = 0;
+        float fogEquation = 0;
 
         SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
         SET_UNIFORM("u_fogStart", &fogStart, sizeof(fogStart));
@@ -1339,7 +1339,7 @@ void FogTestDemo::switchTypeCallback(Ref* sender, int type)
     {
         auto fogColor    = Vec4(0.5, 0.5, 0.5, 1.0);
         float fogDensity = 0.03f;
-        int fogEquation  = 1;
+        float fogEquation  = 1;
 
         SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
         SET_UNIFORM("u_fogDensity", &fogDensity, sizeof(fogDensity));
@@ -1349,7 +1349,7 @@ void FogTestDemo::switchTypeCallback(Ref* sender, int type)
     {
         auto fogColor    = Vec4(0.5, 0.5, 0.5, 1.0);
         float fogDensity = 0.03f;
-        int fogEquation  = 2;
+        float fogEquation  = 2;
 
         SET_UNIFORM("u_fogColor", &fogColor, sizeof(fogColor));
         SET_UNIFORM("u_fogDensity", &fogDensity, sizeof(fogDensity));
