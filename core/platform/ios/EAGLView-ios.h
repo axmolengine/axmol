@@ -68,7 +68,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import <CoreFoundation/CoreFoundation.h>
 
 #import "platform/PlatformConfig.h"
-#if defined(AX_USE_GLES)
+#if AX_GLES_PROFILE
 #    import "platform/ios/ESRenderer-ios.h"
 #endif
 
@@ -80,7 +80,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
  * Note that setting the view non-opaque will only work if the EAGL surface has an alpha channel.
  */
 @interface EAGLView : UIView {
-#if defined(AX_USE_GLES)
+#if AX_GLES_PROFILE
     id<ESRenderer> renderer_;
 #endif
     BOOL preserveBackbuffer_;
@@ -129,7 +129,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 /** returns surface size in pixels */
 @property(nonatomic, readonly) CGSize surfaceSize;
 
-#if defined(AX_USE_GLES)
+#if AX_GLES_PROFILE
 /** OpenGL context */
 @property(nonatomic, readonly) EAGLContext* context;
 #endif

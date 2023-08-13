@@ -136,7 +136,7 @@ ProgramState::ProgramState(Program* program)
 bool ProgramState::init(Program* program)
 {
     AX_SAFE_RETAIN(program);
-    _program                 = program;
+    _program = program;
 
     _vertexLayout            = program->getVertexLayout();
     _ownVertexLayout         = false;
@@ -154,7 +154,7 @@ bool ProgramState::init(Program* program)
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
 
-    const auto programId     = program->getProgramId();
+    const auto programId = program->getProgramId();
     if (programId < ProgramType::BUILTIN_COUNT)
         this->_batchId = programId;
 
@@ -246,9 +246,13 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
 {
     if (location < 0)
         return;
-
+#if AX_GLES_PROFILE != 200
     assert(location + offset + size <= _vertexUniformBufferSize);
     memcpy(_uniformBuffers.data() + location + offset, data, size);
+#else
+    assert(offset + size <= _vertexUniformBufferSize);
+    memcpy(_uniformBuffers.data() + offset, data, size);
+#endif
 }
 
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset)
@@ -421,13 +425,13 @@ ProgramState::AutoBindingResolver::~AutoBindingResolver()
 
 const char* ProgramState::getVertexUniformBuffer(std::size_t& size) const
 {
-    size    = _vertexUniformBufferSize;
+    size = _vertexUniformBufferSize;
     return _uniformBuffers.data();
 }
 
 const char* ProgramState::getFragmentUniformBuffer(std::size_t& size) const
 {
-    size    = _fragmentUniformBufferSize;
+    size = _fragmentUniformBufferSize;
     return _uniformBuffers.data() + _vertexUniformBufferSize;
 }
 

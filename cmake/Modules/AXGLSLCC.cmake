@@ -98,10 +98,16 @@ function (ax_target_compile_shaders target_name)
         
         # shader lang
         set(SC_PROFILE "")
-        if(AX_USE_GLES)
+        if(AX_GLES_PROFILE)
             # version 300 es
-            set(OUT_LANG "ESSL")
-            set(SC_PROFILE "300")
+            if (AX_DISABLE_GLES2)
+                set(OUT_LANG "ESSL")
+                set(SC_PROFILE "300")
+            else()
+                set(OUT_LANG "GLSL")
+                set(SC_PROFILE "100")
+                set(SC_DEFINES "GLES2")
+            endif()
             list(APPEND SC_FLAGS  "--lang=gles" "--profile=${SC_PROFILE}")
         elseif (AX_USE_GL)
             # version 330

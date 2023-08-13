@@ -47,7 +47,7 @@
 ## Renderer Backends
 
 - OpenGL 3.3+ for Linux, macOS and Win32
-- OpenGL ES 3.0+ for Android and iOS
+- OpenGL ES 2.0+ for Android and iOS
 - Metal for macOS and iOS
 - ANGLE ES 3.0+ for Win32 and UWP
 

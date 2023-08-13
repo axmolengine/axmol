@@ -56,7 +56,7 @@ DeviceGL::DeviceGL()
 
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
 
-#if AX_USE_GL_CORE_PROFILE
+#if AX_GLES_PROFILE != 200
     glGenVertexArrays(1, &_defaultVAO);
     glBindVertexArray(_defaultVAO);
     CHECK_GL_ERROR_DEBUG();

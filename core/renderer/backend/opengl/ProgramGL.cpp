@@ -37,6 +37,87 @@
 
 NS_AX_BACKEND_BEGIN
 
+#if AX_GLES_PROFILE == 200
+#    define DEF_TO_INT(pointer, index) (*((GLint*)(pointer) + index))
+#    define DEF_TO_FLOAT(pointer, index) (*((GLfloat*)(pointer) + index))
+static void setUniform(bool isArray, GLuint location, unsigned int size, GLenum uniformType, void* data)
+{
+    GLsizei count = size;
+    switch (uniformType)
+    {
+    case GL_INT:
+    case GL_BOOL:
+    case GL_SAMPLER_2D:
+    case GL_SAMPLER_CUBE:
+        if (isArray)
+            glUniform1iv(location, count, (GLint*)data);
+        else
+            glUniform1i(location, DEF_TO_INT(data, 0));
+        break;
+    case GL_INT_VEC2:
+    case GL_BOOL_VEC2:
+        if (isArray)
+            glUniform2iv(location, count, (GLint*)data);
+        else
+            glUniform2i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1));
+        break;
+    case GL_INT_VEC3:
+    case GL_BOOL_VEC3:
+        if (isArray)
+            glUniform3iv(location, count, (GLint*)data);
+        else
+            glUniform3i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1), DEF_TO_INT(data, 2));
+        break;
+    case GL_INT_VEC4:
+    case GL_BOOL_VEC4:
+        if (isArray)
+            glUniform4iv(location, count, (GLint*)data);
+        else
+            glUniform4i(location, DEF_TO_INT(data, 0), DEF_TO_INT(data, 1), DEF_TO_INT(data, 2), DEF_TO_INT(data, 4));
+        break;
+    case GL_FLOAT:
+        if (isArray)
+            glUniform1fv(location, count, (GLfloat*)data);
+        else
+            glUniform1f(location, DEF_TO_FLOAT(data, 0));
+        break;
+    case GL_FLOAT_VEC2:
+        if (isArray)
+            glUniform2fv(location, count, (GLfloat*)data);
+        else
+            glUniform2f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1));
+        break;
+    case GL_FLOAT_VEC3:
+        if (isArray)
+            glUniform3fv(location, count, (GLfloat*)data);
+        else
+            glUniform3f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1), DEF_TO_FLOAT(data, 2));
+        break;
+    case GL_FLOAT_VEC4:
+        if (isArray)
+            glUniform4fv(location, count, (GLfloat*)data);
+        else
+            glUniform4f(location, DEF_TO_FLOAT(data, 0), DEF_TO_FLOAT(data, 1), DEF_TO_FLOAT(data, 2),
+                        DEF_TO_FLOAT(data, 3));
+        break;
+    case GL_FLOAT_MAT2:
+        glUniformMatrix2fv(location, count, GL_FALSE, (GLfloat*)data);
+        break;
+    case GL_FLOAT_MAT3:
+        glUniformMatrix3fv(location, count, GL_FALSE, (GLfloat*)data);
+        break;
+    case GL_FLOAT_MAT4:
+        glUniformMatrix4fv(location, count, GL_FALSE, (GLfloat*)data);
+        break;
+        break;
+
+    default:
+        AXASSERT(false, "invalidate Uniform data type");
+        break;
+    }
+}
+#endif
+
 ProgramGL::ProgramGL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
@@ -246,9 +327,7 @@ void ProgramGL::computeUniformInfos()
     /* Query uniform blocks */
     clearUniformBuffers();
 
-    // GLint numAttrs{0};
-    // glGetProgramiv(_program, GL_ACTIVE_ATTRIBUTES, &numAttrs); // works
-
+#if AX_GLES_PROFILE != 200
     GLint numblocks{0};
     glGetProgramiv(_program, GL_ACTIVE_UNIFORM_BLOCKS, &numblocks);
     for (int blockIndex = 0; blockIndex < numblocks; ++blockIndex)
@@ -293,6 +372,7 @@ void ProgramGL::computeUniformInfos()
         // increase _totalBufferSize
         _totalBufferSize += blockSize;
     }
+#endif
 
     /*
      * construct _activeUniformInfos: uniformName-->UniformInfo
@@ -306,34 +386,45 @@ void ProgramGL::computeUniformInfos()
         buffer.resize_fit(MAX_UNIFORM_NAME_LENGTH + 1);
         glGetActiveUniform(_program, i, static_cast<GLint>(buffer.size()), &nameLen, &uniform.count, &uniform.type,
                            buffer.data());
-        std::string_view uniformName{buffer.data(), static_cast<size_t>(nameLen)};
-        // ax::print("--------- uniform fullName: %s", uniformName.data());
+
+        uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
+        std::string_view uniformFullName{buffer.data(), static_cast<size_t>(nameLen)};
+        std::string_view uniformName{uniformFullName};
+
+
+        // Try trim uniform name
+        // trim name vs_ub.xxx[0] --> xxx
+        auto bracket = uniformName.find_last_of('[');
+        if (bracket != std::string_view::npos)
+        {
+            buffer[bracket] = '\0';
+            uniformName     = uniformName.substr(0, bracket);
+        }
+        auto dot = uniformName.find_last_of('.');
+        if (dot != std::string::npos)
+            uniformName.remove_prefix(dot + 1);  // trim uniformName
 
         auto it = uniformIndexMap.find(i);
         if (it != uniformIndexMap.end())
         {  // member of uniform block
-           // trim name vs_ub.xxx[0] --> xxx
-            auto bracket = uniformName.find_last_of('[');
-            if (bracket != std::string_view::npos)
-            {
-                buffer[bracket] = '\0';
-                uniformName     = uniformName.substr(0, bracket);
-            }
-            auto dot = uniformName.find_last_of('.');
-            if (dot != std::string::npos)
-                uniformName.remove_prefix(dot + 1);  // trim uniformName
-
             uniform.location     = it->second.first;
             uniform.bufferOffset = it->second.second;
         }
         else
         {  // must be samper: sampler2D or samplerCube
-            assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE);
-            uniform.location     = glGetUniformLocation(_program, uniformName.data());
-            uniform.bufferOffset = -1;
+            if (uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE)
+            {
+                uniform.location     = glGetUniformLocation(_program, uniformName.data());
+                uniform.bufferOffset = -1;
+            }
+            else
+            { // GLES2.0: GLSL100 
+                uniform.location = glGetUniformLocation(_program, uniformFullName.data());
+                uniform.bufferOffset = (uniform.size == 0) ? 0 : _totalBufferSize;
+                _totalBufferSize += uniform.size * uniform.count;
+            }
         }
 
-        uniform.size                     = UtilsGL::getGLDataTypeSize(uniform.type);
         _activeUniformInfos[uniformName] = uniform;
 
         _maxLocation = _maxLocation <= uniform.location ? (uniform.location + 1) : _maxLocation;
@@ -342,12 +433,25 @@ void ProgramGL::computeUniformInfos()
 
 void ProgramGL::bindUniformBuffers(const char* buffer, size_t bufferSize)
 {
+#if AX_GLES_PROFILE != 200
     for (GLuint blockIdx = 0; blockIdx < static_cast<GLuint>(_uniformBuffers.size()); ++blockIdx)
     {
         auto& desc = _uniformBuffers[blockIdx];
         desc._ubo->updateData(buffer + desc._location, desc._size);
         __gl->bindUniformBufferBase(blockIdx, desc._ubo->getHandler());
     }
+#else
+    for (auto&& iter : _activeUniformInfos)
+    {
+        auto& uniformInfo = iter.second;
+        if (uniformInfo.size <= 0)
+            continue;
+
+        int elementCount = uniformInfo.count;
+        setUniform(uniformInfo.count > 1, uniformInfo.location, elementCount, uniformInfo.type,
+                   (void*)(buffer + uniformInfo.bufferOffset));
+    }
+#endif
 
     CHECK_GL_ERROR_DEBUG();
 }

@@ -68,6 +68,8 @@ public:
      */
     virtual const char* getVersion() const override;
 
+    const char* getShaderVersion() const override;
+
     /**
      * Check does device has extension.
      */
@@ -93,7 +95,7 @@ private:
     const char* _version{nullptr};
     const char* _shaderVer{nullptr};
 
-#if defined(AX_USE_GL_CORE_PROFILE)
+#if AX_GLES_PROFILE != 200
     hlookup::string_set _glExtensions;
 #else
     std::string _glExtensions;

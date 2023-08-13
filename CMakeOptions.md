@@ -10,10 +10,6 @@
   - AX_USE_ALSOFT: whether use openal-soft for all platforms
     - Apple platform: Use openal-soft instead system deprecated: `OpenAL.framework`
     - Other platforms: Always use openal-soft even this option not enabled
-  - AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: `FALSE`
-    - win32: whether use angleproject as GLES3 backend
-    - ios: whether use GLES3 instead Metal backend
-    - macosx: whether use OpenGL3 instead Metal backend
   - AX_USE_LUAJIT: whether use luajit, default: `FALSE`, use plainlua
 - AX_ENABLE_EXT_XXX for extensions
   - AX_ENABLE_EXT_GUI: the traditional GUI extension, default: `TRUE`
@@ -29,6 +25,21 @@
   - AX_ENABLE_EXT_EFFEKSEER: the effekseer extension, default: `FALSE` 
 - AX_WITH_XXX: usually user don't need care it
 - AX_VS_DEPLOYMENT_TARGET: specify windows store deploy target, default: `10.0.17763.0`
+- AX_GLES_PROFILE: speicify GLES profile version for axmol determine render backend, default: `0`
+  - 0: 
+    - win32(Desktop GL 3.3 core profile)
+    - android(GLES2.0)
+    - ios/tvos/osx(Metal)
+  - 200: 
+    - win32(GLES3.0)
+    - android(GLES2.0)
+    - ios/tvos(GLES3.0)
+    - osx(GL 3.3 core profile)
+  - 300: 
+    - win32(GLES3.0)
+    - android(GLES3.0)
+    - ios/tvos(GLES3.0)
+    - osx(GL 3.3 core profile)
 
 ## The options for axmol apps
 

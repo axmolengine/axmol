@@ -188,7 +188,7 @@ function(ax_copy_target_dll ax_target)
     )
 
     # Copy windows angle binaries
-    if (WIN32 AND AX_USE_COMPAT_GL)
+    if (WIN32 AND AX_GLES_PROFILE)
         add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll

@@ -223,7 +223,7 @@ void CommandBufferGL::setProgramState(ProgramState* programState)
 void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count, bool wireframe)
 {
     prepareDrawing();
-#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
+#if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
@@ -231,7 +231,7 @@ void CommandBufferGL::drawArrays(PrimitiveType primitiveType, std::size_t start,
         primitiveType = PrimitiveType::LINE;
 #endif
     glDrawArrays(UtilsGL::toGLPrimitiveType(primitiveType), start, count);
-#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
+#if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
@@ -245,7 +245,7 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
                                    bool wireframe)
 {
     prepareDrawing();
-#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
+#if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
@@ -256,7 +256,7 @@ void CommandBufferGL::drawElements(PrimitiveType primitiveType,
     glDrawElements(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                    (GLvoid*)offset);
     CHECK_GL_ERROR_DEBUG();
-#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
+#if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
@@ -270,8 +270,9 @@ void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
                                             int instanceCount,
                                             bool wireframe)
 {
+#if AX_GLES_PROFILE != 200
     prepareDrawing();
-#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
+#if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 #else
@@ -282,17 +283,19 @@ void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
     glDrawElementsInstanced(UtilsGL::toGLPrimitiveType(primitiveType), count, UtilsGL::toGLIndexType(indexType),
                             (GLvoid*)offset, instanceCount);
     CHECK_GL_ERROR_DEBUG();
-#ifndef AX_USE_GLES  // glPolygonMode is only supported in Desktop OpenGL
+#if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
     cleanResources();
+#endif
 }
 
 void CommandBufferGL::endRenderPass()
 {
     AX_SAFE_RELEASE_NULL(_indexBuffer);
     AX_SAFE_RELEASE_NULL(_vertexBuffer);
+    AX_SAFE_RELEASE_NULL(_instanceTransformBuffer);
 }
 
 void CommandBufferGL::endFrame() {}
@@ -340,6 +343,7 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
                               vertexLayout->getStride(), (GLvoid*)attribute.offset);
     }
 
+#if AX_GLES_PROFILE != 200
     // if we have an instance transform buffer pointer then we must be rendering in instance mode.
     if (_instanceTransformBuffer)
     {
@@ -372,6 +376,7 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
             glVertexAttribDivisor(instaceLoc + 3, 1);
         }
     }
+#endif
 }
 
 void CommandBufferGL::bindUniforms(ProgramGL* program) const
@@ -424,15 +429,15 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
 
 void CommandBufferGL::cleanResources()
 {
+#if AX_GLES_PROFILE != 200
     if (_instanceTransformBuffer)
     {
         const auto& attribOffset = _programState->getVertexLayout()->getAttributes().size();
 
         for (GLubyte i = attribOffset; i < attribOffset + 4; i++)
             glVertexAttribDivisor(i, 0);
-
-        _instanceTransformBuffer = nullptr;
     }
+#endif
 
     AX_SAFE_RELEASE_NULL(_programState);
 }

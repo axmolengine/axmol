@@ -324,7 +324,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     , _mouseX(0.0f)
     , _mouseY(0.0f)
 {
-    _viewName = "AXMOL10";
+    _viewName = "AXMOL20";
     g_keyCodeMap.clear();
     for (auto&& item : g_keyCodeStructArray)
     {
@@ -335,7 +335,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     if (initglfw)
     {
         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
-#if defined(AX_USE_GLES) && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
+#if AX_GLES_PROFILE && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
         glfwInitHint(GLFW_ANGLE_PLATFORM_TYPE, GLFW_ANGLE_PLATFORM_TYPE_D3D11);  // since glfw-3.4
 #endif
 #if defined(_WIN32)
@@ -441,18 +441,16 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 
     Vec2 frameSize = rect.size;
 
-#if defined(AX_USE_GLES)
+#if AX_GLES_PROFILE
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 0);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#elif defined(AX_USE_GL) && defined(AX_USE_GL_CORE_PROFILE)
+#elif defined(AX_USE_GL)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
-// #    if defined(__APPLE__)
-//     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // To make MacOS happy; should not be needed 330 core
-// #    endif
 #endif
 
     glfwWindowHint(GLFW_RESIZABLE, resizable ? GL_TRUE : GL_FALSE);
@@ -582,13 +580,13 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         return false;
     }
 
-   if (glVersion)
-       ax::print("[GL:%s] Ready for GLSL", glVersion);
-   else
-       ax::print("Not totally ready :(");
+    if (glVersion)
+        ax::print("[GL:%s] Ready for GLSL", glVersion);
+    else
+        ax::print("Not totally ready :(");
 
         // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
-#    if !defined(AX_USE_GLES)
+#    if !AX_GLES_PROFILE
         // Enable point size by default.
 #        if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -1306,7 +1304,7 @@ bool GLViewImpl::loadGL()
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#        if !defined(AX_USE_GLES)
+#        if !AX_GLES_PROFILE
     if (!gladLoadGL(glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");

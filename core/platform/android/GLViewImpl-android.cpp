@@ -41,6 +41,10 @@ PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT = 0;
 #define DEFAULT_MARGIN_ANDROID 30.0f
 #define WIDE_SCREEN_ASPECT_RATIO_ANDROID 2.0f
 
+EGLDisplay ax_egl_get_display() {
+    return eglGetCurrentDisplay();
+}
+
 void initExtensions()
 {
     glGenVertexArraysOESEXT    = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");

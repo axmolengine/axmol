@@ -36,9 +36,12 @@ THE SOFTWARE.
 #include <android/api-level.h>
 #include <jni.h>
 
+#ifndef GLAD_GLES2
+#    define GLAD_GLES2
+#endif
 #include "platform/GL.h"
 
-#include <EGL/egl.h>
+#include "glad/egl.h"
 
 #define LOG_TAG "main"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -46,6 +49,8 @@ THE SOFTWARE.
 void cocos_android_app_init(JNIEnv* env) __attribute__((weak));
 
 USING_NS_AX;
+
+extern EGLDisplay ax_egl_get_display();
 
 extern "C" {
 
@@ -84,7 +89,12 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved)
 
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jclass, jint w, jint h)
 {
-    gladLoadGLES2(eglGetProcAddress);
+    auto eglVer  = gladLoaderLoadEGL(ax_egl_get_display());
+    auto glesVer = gladLoaderLoadGLES2();
+    if (glesVer)
+        ax::print("Load GLES success, version: %d, EGL version: %d", glesVer, eglVer);
+    else
+        throw std::runtime_error("Load GLES fail");
 
     auto director = ax::Director::getInstance();
     auto glView   = director->getOpenGLView();

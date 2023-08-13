@@ -83,6 +83,8 @@ public:
      */
     virtual const char* getVersion() const = 0;
 
+    virtual const char* getShaderVersion() const { return ""; }
+
     /**
      * Check does device has extension.
      */

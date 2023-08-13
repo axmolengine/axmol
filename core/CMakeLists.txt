@@ -42,32 +42,33 @@ cmake_policy(SET CMP0127 NEW)
 
 project(ax_libs)
 
-# choose render backend
-if (NOT WINRT)
-    option (AX_USE_COMPAT_GL "Use compat gl" OFF)
-else()
-    option (AX_USE_COMPAT_GL "Use compat gl" ON)
-    set(AX_USE_COMPAT_GL ON)
-endif()
-
 # choosing render backend
-if(NOT AX_USE_COMPAT_GL)
-    if(WINRT OR ANDROID) # winuwp,android use GLES3.0+
-        set(AX_USE_GLES TRUE CACHE BOOL "" FORCE)
+if(NOT AX_GLES_PROFILE)
+    if(ANDROID) # android: default GLES200 for compatible max devices in marketplace
+        set(AX_GLES_PROFILE 200 CACHE STRING "GLES profile" FORCE)
+    elseif(WINRT) # winuwp: default GLES300
+        set(AX_GLES_PROFILE 300 CACHE STRING "GLES profile" FORCE)
     elseif(WIN32 OR LINUX) # win32,linux use GL3.3+
         set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
     elseif(APPLE) # osx,ios/tvos
         set(AX_USE_METAL TRUE CACHE BOOL "" FORCE)
     endif()
 else()
-    if(WIN32 OR ANDROID OR IOS) # win32,winuwp (ANGLE ES3.0), android/ios/tvos use GLES3.0+
-        set(AX_USE_GLES TRUE CACHE BOOL "" FORCE)
-    elseif(LINUX OR MACOSX) # linux, osx use GL3.3+
+    if(LINUX OR MACOSX) # linux, osx use GL3.3+
         set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
     endif()
 endif()
 
-message(STATUS "WINRT=${WINRT}")
+if (NOT DEFINED AX_GLES_PROFILE)
+    set(AX_GLES_PROFILE 0 CACHE STRING "GLES profile")
+endif()
+
+# verify GLES profile
+if (NOT (AX_GLES_PROFILE EQUAL 0 OR AX_GLES_PROFILE EQUAL 200 OR AX_GLES_PROFILE EQUAL 300))
+    message(FATAL_ERROR "Invalid AX_GLES_PROFILE, must be: 0 or 200 or 300")
+endif()
+
+message(AUTHOR_WARNING "AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 
 option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON)
 
@@ -121,6 +122,8 @@ if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID)
 else()
   set(AX_ENABLE_EXT_IMGUI OFF)
 endif()
+
+option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
