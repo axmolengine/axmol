@@ -29,12 +29,10 @@
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
 #    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
-// #define GL_COMPRESSED_RGB8_ETC2 0x9274
 #endif
 
 #if !defined(GL_COMPRESSED_RGBA_ASTC_4x4)
 #    define GL_COMPRESSED_RGBA_ASTC_4x4 0x93B0
-// #define GL_COMPRESSED_RGBA_ASTC_8x8 0x93B7
 #endif
 
 NS_AX_BACKEND_BEGIN
@@ -59,7 +57,7 @@ static GLuint compileShader(GLenum shaderType, const GLchar* source)
     if (logLength > 1)
     {
         auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
-        glGetShaderInfoLog(shader, logLength, nullptr, (GLchar*)errorLog.get());
+        glGetShaderInfoLog(shader, logLength, nullptr, static_cast<GLchar*>(errorLog.get()));
         ax::print("axmol:ERROR: Failed to compile shader, detail: %s\n%s", errorLog.get(), source);
     }
     else
@@ -102,6 +100,7 @@ static bool checkReallySupportsASTC()
                            sizeof(astctexels),  // dataLen,
                            astctexels);
 
+    bool matched = false;
     auto error = glGetError();
     if (!error)
     {
@@ -159,10 +158,10 @@ static bool checkReallySupportsASTC()
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
             // position attribute
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(0));
             glEnableVertexAttribArray(0);
             // texture coord attribute
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(3 * sizeof(float)));
             glEnableVertexAttribArray(1);
 
             // create shader program
@@ -205,8 +204,7 @@ void main()
             // read pixel RGB: should be: 255, 128, 0
             uint8_t pixels[4] = {0};
             glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-            if (pixels[0] != 255 || pixels[1] != 128)
-                error = GL_INVALID_VALUE;
+            matched = (pixels[0] != 255 || pixels[1] != 128);
 
             // clean render resources: VBO, VAO, EBO, program, vShader, fShader
             glDeleteBuffers(1, &VBO);
@@ -218,11 +216,7 @@ void main()
 
             // restore binding to defaultVAO
             glBindVertexArray(defaultVAO);
-
-            error = glGetError();
         }
-        else
-            error = GL_INVALID_VALUE;
 
         // clean framebuffer resources
         glDeleteTextures(1, &colorAttachment);
@@ -230,15 +224,13 @@ void main()
 
         // restore binding to defaultFBO
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
-
-        error = glGetError();
     }
 
     // clean test astc texture
     glDeleteTextures(1, &texID);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    return !error;
+    return matched;
 }
 
 bool DeviceInfoGL::init()
@@ -336,7 +328,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
         featureSupported = hasExtension("GL_OES_depth24"sv);
         break;
     case FeatureType::ASTC:
-        featureSupported = checkSupportsCompressedFormat(GL_COMPRESSED_RGBA_ASTC_4x4_KHR) && checkReallySupportsASTC();
+        featureSupported = checkReallySupportsASTC();
         break;
     default:
         break;
