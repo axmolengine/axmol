@@ -193,18 +193,20 @@ void main()
             glLinkProgram(program);
 
             // render frame
+            glUseProgram(program);
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texID);
+            glUniform1i(glGetUniformLocation(program, "u_tex0"), 0);
 
             glClearColor(0.0, 0.0, 0.0, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
-            glUseProgram(program);
+
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
             // read pixel RGB: should be: 255, 128, 0
             uint8_t pixels[4] = {0};
             glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-            matched = (pixels[0] != 255 || pixels[1] != 128);
+            matched = (pixels[0] == 255 || pixels[1] == 128);
 
             // clean render resources: VBO, VAO, EBO, program, vShader, fShader
             glDeleteBuffers(1, &VBO);
