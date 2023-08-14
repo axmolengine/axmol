@@ -206,7 +206,7 @@ void main()
             // read pixel RGB: should be: 255, 128, 0
             uint8_t pixels[4] = {0};
             glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-            matched = (pixels[0] == 255 || pixels[1] == 128);
+            matched = (pixels[0] == 255 && pixels[1] == 128);
 
             // clean render resources: VBO, VAO, EBO, program, vShader, fShader
             glDeleteBuffers(1, &VBO);
