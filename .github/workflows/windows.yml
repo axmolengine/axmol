@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-      - main
+      - 1.x
 
     paths-ignore:
       - '**.md'
