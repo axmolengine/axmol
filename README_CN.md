@@ -11,23 +11,6 @@
 [![QQ Group](https://img.shields.io/badge/QQGroup-join-green.svg)](https://jq.qq.com/?_wv=1027&k=nvNmzOIY)
 
 
-> ⚠️⚠️⚠️ NOTICE ⚠️⚠️⚠️
->
-> 本分支处于早期开阶段, 主要目标是:
-
-> - OpenGL3/GLESv3支持
-> - 废弃GLES2设备支持
-> - Mesh实例化渲染支持
-> - 使用`glslcc`作为新的引擎着色器工作流，开发者使用ESSL310或GLSL450语法编写shader, 引擎自动使用`glslcc`编译为目标支持平台语法： 
->   - Desktop GL: GLSL330
->   - GLESv3: ESSL300
->   - Metal: MSL
-> - 增强shader缓存管理和加载机制，加载API更加易用
-> - 增强文本渲染, 增加SDF outline支持
-> - 增强FileStream, 使之能处理大文件，FileUtils::getContents在所有平台都基于FileStream读取文件
-> - 其他更多优化，请查看: [#1279](https://github.com/axmolengine/axmol/issues/1279)
-
-
 **[English](README.md)** 
 
 ## 支持平台列表
