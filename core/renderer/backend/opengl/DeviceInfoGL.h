@@ -88,18 +88,15 @@ public:
     virtual bool checkForFeatureSupported(FeatureType feature) override;
 
 private:
-    static bool checkSupportsCompressedFormat(int compressedFormat);
-
     const char* _vendor{nullptr};
     const char* _renderer{nullptr};
     const char* _version{nullptr};
     const char* _shaderVer{nullptr};
 
-#if AX_GLES_PROFILE != 200
-    hlookup::string_set _glExtensions;
-#else
-    std::string _glExtensions;
-#endif
+    std::set<uint32_t> _glExtensions;
+
+    bool _textureCompressionAstc = false;
+    bool _textureCompressionEtc2 = false;
 };
 
 // end of _opengl group
