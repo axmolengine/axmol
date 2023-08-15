@@ -26,6 +26,7 @@
 #include "DeviceInfoGL.h"
 #include "platform/GL.h"
 #include "base/axstd.h"
+#include "xxhash/xxhash.h"
 
 #if !defined(GL_COMPRESSED_RGBA8_ETC2_EAC)
 #    define GL_COMPRESSED_RGBA8_ETC2_EAC 0x9278
@@ -36,6 +37,10 @@
 #endif
 
 NS_AX_BACKEND_BEGIN
+
+static inline uint32_t hashString(std::string_view str) {
+    return !str.empty() ? XXH32(str.data(), str.length(), 0) : 0;
+}
 
 static GLuint compileShader(GLenum shaderType, const GLchar* source)
 {
@@ -69,18 +74,11 @@ static GLuint compileShader(GLenum shaderType, const GLchar* source)
     return 0;
 }
 
-static void setTexParams() {
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-}
-
 /// <summary>
 ///  render 1x1 to back framebuffer to detect whether GPU support astc compressed texture really
 /// </summary>
 /// <returns>true: support, false: not support</returns>
-static bool checkReallySupportsASTC()
+static bool checkASTCRenderability()
 {
     // 1x1/2x2 astc 4x4 compressed texels srgb
     uint8_t astctexels[] = {0xfc, 0xfd, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -89,22 +87,29 @@ static bool checkReallySupportsASTC()
     GLuint texID = 0;
     glGenTextures(1, &texID);
     glBindTexture(GL_TEXTURE_2D, texID);
-    setTexParams();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glCompressedTexImage2D(GL_TEXTURE_2D,
                            0,                                // level
                            GL_COMPRESSED_RGBA_ASTC_4x4_KHR,  // format
-                           1, 1, // texture dim
-                           0,                   // border
-                           sizeof(astctexels),  // dataLen,
+                           1, 1,                             // texture dim
+                           0,                                // border
+                           sizeof(astctexels),               // dataLen,
                            astctexels);
 
-    bool matched = false;
-    auto error = glGetError();
+    bool supported = false;
+    auto error     = glGetError();
     if (!error)
     {
-        // prepare a back frame buffer
+#if AX_GLES_PROFILE != 200
+        // read 1 spixel RGB: should be: 255, 128, 0
+        uint8_t pixel[4] = {0};
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
+        error     = glGetError();
+        supported = !error && pixel[0] == 255 && pixel[1] == 128;
+#else  // GLES no API: glGetTexImage
+       // prepare a back frame buffer
         GLuint defaultFBO{0};
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, reinterpret_cast<GLint*>(&defaultFBO));
 
@@ -116,18 +121,38 @@ static bool checkReallySupportsASTC()
         GLuint colorAttachment = 0;
         glGenTextures(1, &colorAttachment);
         glBindTexture(GL_TEXTURE_2D, colorAttachment);
-        setTexParams();
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
         uint8_t black1x1[] = {0x00, 0x00, 0x00, 0x00};  // 1*1*4
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, black1x1);
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorAttachment, 0);
-        //GLenum buffers[1] = {GL_COLOR_ATTACHMENT0};
-        //glDrawBuffers(1, buffers);
+        // GLenum buffers[1] = {GL_COLOR_ATTACHMENT0};
+        // glDrawBuffers(1, buffers);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
-        { // does back framebuffer reandy for render
-            // render 1 frame to back framebuffer
+        {  // does back framebuffer reandy for render
+            const char* vertexShader = R"(#version 100
+precision highp float;
+attribute vec3 aPos;
+attribute vec2 aTexCoord;
+varying vec2 TexCoord;
+void main()
+{
+	gl_Position = vec4(aPos, 1.0);
+	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
+})";
+
+            const char* fragShader = R"(#version 100
+precision highp float;
+varying vec2 TexCoord;
+uniform sampler2D u_tex0;
+void main()
+{
+	gl_FragColor = texture2D(u_tex0, TexCoord);
+}
+)";
+
             // set up vertex data (and buffer(s)) and configure vertex attributes
             // ------------------------------------------------------------------
             float vertices[] = {
@@ -161,30 +186,11 @@ static bool checkReallySupportsASTC()
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(0));
             glEnableVertexAttribArray(0);
             // texture coord attribute
-            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<const void*>(3 * sizeof(float)));
+            glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
+                                  reinterpret_cast<const void*>(3 * sizeof(float)));
             glEnableVertexAttribArray(1);
 
             // create shader program
-            const char* vertexShader = R"(#version 100
-precision highp float;
-attribute vec3 aPos;
-attribute vec2 aTexCoord;
-varying vec2 TexCoord;
-void main()
-{
-	gl_Position = vec4(aPos, 1.0);
-	TexCoord = vec2(aTexCoord.x, aTexCoord.y);
-})";
-
-            const char* fragShader = R"(#version 100
-precision highp float;
-varying vec2 TexCoord;
-uniform sampler2D u_tex0;
-void main()
-{
-	gl_FragColor = texture2D(u_tex0, TexCoord);
-}
-)";
             auto vShader = compileShader(GL_VERTEX_SHADER, vertexShader);
             auto fShader = compileShader(GL_FRAGMENT_SHADER, fragShader);
             auto program = glCreateProgram();
@@ -198,15 +204,15 @@ void main()
             glBindTexture(GL_TEXTURE_2D, texID);
             glUniform1i(glGetUniformLocation(program, "u_tex0"), 0);
 
-            glClearColor(0.0, 0.0, 0.0, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
             // read pixel RGB: should be: 255, 128, 0
-            uint8_t pixels[4] = {0};
-            glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-            matched = (pixels[0] == 255 && pixels[1] == 128);
+            uint32_t pixel = 0;
+            glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
+            supported = pixel != 0;
 
             // clean render resources: VBO, VAO, EBO, program, vShader, fShader
             glDeleteBuffers(1, &VBO);
@@ -226,13 +232,37 @@ void main()
 
         // restore binding to defaultFBO
         glBindFramebuffer(GL_FRAMEBUFFER, defaultFBO);
+#endif
     }
 
     // clean test astc texture
     glDeleteTextures(1, &texID);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    return matched;
+    return supported;
+}
+
+template<typename _Fty>
+static void GL_EnumAllExtensions(_Fty&& func) {
+#if AX_GLES_PROFILE != 200  // NOT GLES2.0
+    GLint NumberOfExtensions{0};
+    glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+    for (GLint i = 0; i < NumberOfExtensions; ++i)
+    {
+        auto extName = (const char*)glGetStringi(GL_EXTENSIONS, i);
+        if (extName)
+            func(std::string_view{extName});
+    }
+#else
+    auto extensions = (const char*)glGetString(GL_EXTENSIONS);
+    if (extensions)
+    {
+        axstd::split_of_cb(extensions, " \f\n\r\t\v", [&func](const char* start, const char* end, char /*delim*/) {
+            if (start != end)
+                func(std::string_view{start, static_cast<size_t>(end - start)});
+        });
+    }
+#endif
 }
 
 bool DeviceInfoGL::init()
@@ -249,20 +279,28 @@ bool DeviceInfoGL::init()
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &_maxTextureUnits);
 
     // exts
-#if AX_GLES_PROFILE != 200 // NOT GLES2.0
-    GLint NumberOfExtensions{0};
-    glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
-    for (GLint i = 0; i < NumberOfExtensions; ++i)
+    GL_EnumAllExtensions([this](const std::string_view& ext) {
+        const auto key = hashString(ext);
+        _glExtensions.insert(key);
+    });
+
+    // texture compressions
+    axstd::pod_vector<GLint> formats;
+    GLint numFormats{0};
+    glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
+    if (numFormats > 0)
     {
-        auto extName = (const char*)glGetStringi(GL_EXTENSIONS, i);
-        if (extName)
-            _glExtensions.emplace(extName);
+        formats.resize_fit(numFormats);
+        glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, formats.data());
+
+        const auto textureCompressions = std::set<int>{formats.begin(), formats.end()};
+
+        if (textureCompressions.find(GL_COMPRESSED_RGBA_ASTC_4x4_KHR) != textureCompressions.end())
+            _textureCompressionAstc = true;
+
+        if (textureCompressions.find(GL_COMPRESSED_RGBA8_ETC2_EAC) != textureCompressions.end())
+            _textureCompressionEtc2 = true;
     }
-#else
-    auto extensions = (const char*)glGetString(GL_EXTENSIONS);
-    if (extensions)
-        _glExtensions    = extensions;
-#endif
     return true;
 }
 
@@ -294,7 +332,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
         featureSupported = hasExtension("GL_OES_compressed_ETC1_RGB8_texture"sv);
         break;
     case FeatureType::ETC2:
-        featureSupported = checkSupportsCompressedFormat(GL_COMPRESSED_RGBA8_ETC2_EAC);
+        featureSupported = _textureCompressionEtc2;
         break;
     case FeatureType::S3TC:
 #ifdef GL_EXT_texture_compression_s3tc
@@ -330,7 +368,7 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
         featureSupported = hasExtension("GL_OES_depth24"sv);
         break;
     case FeatureType::ASTC:
-        featureSupported = checkReallySupportsASTC();
+        featureSupported = checkASTCRenderability();
         break;
     default:
         break;
@@ -340,56 +378,20 @@ bool DeviceInfoGL::checkForFeatureSupported(FeatureType feature)
 
 bool DeviceInfoGL::hasExtension(std::string_view searchName) const
 {
-#if AX_GLES_PROFILE != 200
-    return _glExtensions.find(searchName) != _glExtensions.end();
-#else
-    return _glExtensions.find(searchName) != std::string::npos;
-#endif
+    const auto key = hashString(searchName);
+    return _glExtensions.find(key) != _glExtensions.end();
 }
 
 std::string DeviceInfoGL::dumpExtensions() const
 {
-#if AX_GLES_PROFILE != 200
     std::string strExts;
-    for (auto& extName : _glExtensions)
-    {
-        strExts += extName;
+
+    GL_EnumAllExtensions([&strExts](const std::string_view& ext) {
+        strExts += ext;
         strExts += ',';
-    }
+    });
+
     return strExts;
-#else
-    return _glExtensions;
-#endif
-}
-
-bool DeviceInfoGL::checkSupportsCompressedFormat(int compressedFormat)
-{
-    const int MAX_ALLOCA_SIZE = 512;
-
-    GLint numFormats = 0;
-    glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
-    GLint* formats = nullptr;
-    int buffersize = numFormats * sizeof(GLint);
-    if (buffersize <= MAX_ALLOCA_SIZE)
-        formats = (GLint*)alloca(buffersize);
-    else
-        formats = (GLint*)malloc(buffersize);
-    glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, formats);
-
-    bool supported = false;
-    for (GLint i = 0; i < numFormats; ++i)
-    {
-        if (formats[i] == compressedFormat)
-        {
-            supported = true;
-            break;
-        }
-    }
-
-    if (buffersize > MAX_ALLOCA_SIZE)
-        free(formats);
-
-    return supported;
 }
 
 NS_AX_BACKEND_END
