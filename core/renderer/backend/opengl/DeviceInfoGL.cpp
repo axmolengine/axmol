@@ -102,7 +102,7 @@ static bool checkASTCRenderability()
     auto error     = glGetError();
     if (!error)
     {
-#if AX_GLES_PROFILE != 200
+#if !AX_GLES_PROFILE
         // read 1 spixel RGB: should be: 255, 128, 0
         uint8_t pixel[4] = {0};
         glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
