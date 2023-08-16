@@ -9,7 +9,7 @@ layout(location = BLENDINDICES) in vec4 a_blendIndex;
 
 layout(location = TEXCOORD0) in vec2 a_texCoord;
 
-const int SKINNING_JOINT_COUNT = 60;
+#define SKINNING_JOINT_COUNT 60
 // Uniforms
 
 // Varyings
