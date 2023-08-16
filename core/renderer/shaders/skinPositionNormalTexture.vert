@@ -15,7 +15,7 @@ layout(location = TANGENT) in vec3 a_tangent;
 layout(location = BINORMAL) in vec3 a_binormal;
 #endif
 
-const int SKINNING_JOINT_COUNT = 60;
+#define SKINNING_JOINT_COUNT 60
 // Uniforms
 
 

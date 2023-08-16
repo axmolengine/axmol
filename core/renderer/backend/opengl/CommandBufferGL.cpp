@@ -270,7 +270,9 @@ void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
                                             int instanceCount,
                                             bool wireframe)
 {
-#if AX_GLES_PROFILE != 200
+    if (UTILS_UNLIKELY(!glDrawElementsInstanced))
+        return;
+
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
@@ -288,7 +290,6 @@ void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 #endif
     cleanResources();
-#endif
 }
 
 void CommandBufferGL::endRenderPass()
@@ -342,10 +343,8 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
                               UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
                               vertexLayout->getStride(), (GLvoid*)attribute.offset);
     }
-
-#if AX_GLES_PROFILE != 200
     // if we have an instance transform buffer pointer then we must be rendering in instance mode.
-    if (_instanceTransformBuffer)
+    if (glDrawElementsInstanced && _instanceTransformBuffer)
     {
         auto instaceLoc = _programState->getProgram()->getAttributeLocation(Attribute::INSTANCE);
         if (instaceLoc != -1)
@@ -376,7 +375,6 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
             glVertexAttribDivisor(instaceLoc + 3, 1);
         }
     }
-#endif
 }
 
 void CommandBufferGL::bindUniforms(ProgramGL* program) const
@@ -429,15 +427,17 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
 
 void CommandBufferGL::cleanResources()
 {
-#if AX_GLES_PROFILE != 200
-    if (_instanceTransformBuffer)
+    if (glDrawElementsInstanced && _instanceTransformBuffer)
     {
-        const auto& attribOffset = _programState->getVertexLayout()->getAttributes().size();
-
-        for (GLubyte i = attribOffset; i < attribOffset + 4; i++)
-            glVertexAttribDivisor(i, 0);
+        auto instaceLoc = _programState->getProgram()->getAttributeLocation(Attribute::INSTANCE);
+        if (instaceLoc != -1)
+        {
+            glVertexAttribDivisor(instaceLoc, 0);
+            glVertexAttribDivisor(instaceLoc + 1, 0);
+            glVertexAttribDivisor(instaceLoc + 2, 0);
+            glVertexAttribDivisor(instaceLoc + 3, 0);
+        }
     }
-#endif
 
     AX_SAFE_RELEASE_NULL(_programState);
 }
