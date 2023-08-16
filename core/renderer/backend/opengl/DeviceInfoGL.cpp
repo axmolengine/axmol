@@ -204,15 +204,16 @@ void main()
             glBindTexture(GL_TEXTURE_2D, texID);
             glUniform1i(glGetUniformLocation(program, "u_tex0"), 0);
 
-            glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
             // read pixel RGB: should be: 255, 128, 0
-            uint32_t pixel = 0;
+            // uint32_t pixel = 0;
+            uint8_t pixel[4];
             glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &pixel);
-            supported = pixel != 0;
+            supported = pixel[0] == 255 && pixel[1] == 128 && pixel[2] == 0;
 
             // clean render resources: VBO, VAO, EBO, program, vShader, fShader
             glDeleteBuffers(1, &VBO);
