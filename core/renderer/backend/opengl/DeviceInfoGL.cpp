@@ -121,7 +121,7 @@ static bool checkASTCRenderability()
         GLuint colorAttachment = 0;
         glGenTextures(1, &colorAttachment);
         glBindTexture(GL_TEXTURE_2D, colorAttachment);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
         uint8_t black1x1[] = {0x00, 0x00, 0x00, 0x00};  // 1*1*4
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, black1x1);
