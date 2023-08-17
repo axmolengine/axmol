@@ -303,8 +303,12 @@ void CommandBufferGL::prepareDrawing() const
     const auto& program = _renderPipeline->getProgram();
     __gl->useProgram(program->getHandler());
 
-    bindVertexBuffer();
-    bindInstanceBuffer(program);
+    bool usedList[OpenGLState::MAX_VERTEX_ATTRIBS] = {0};
+
+    bindVertexBuffer(usedList);
+    bindInstanceBuffer(program, usedList);
+    __gl->disableUnusedVertexAttribs(usedList);
+
     bindUniforms(program);
 
     // Set depth/stencil state.
@@ -320,7 +324,7 @@ void CommandBufferGL::prepareDrawing() const
         __gl->disableCullFace();
 }
 
-void CommandBufferGL::bindVertexBuffer() const
+void CommandBufferGL::bindVertexBuffer(bool* usedList) const
 {
     // Bind vertex buffers and set the attributes.
     auto vertexLayout = _programState->getVertexLayout();
@@ -336,14 +340,16 @@ void CommandBufferGL::bindVertexBuffer() const
     for (const auto& attributeInfo : attributes)
     {
         const auto& attribute = attributeInfo.second;
-        glEnableVertexAttribArray(attribute.index);
+        __gl->enableVertexAttribArray(attribute.index);
         glVertexAttribPointer(attribute.index, UtilsGL::getGLAttributeSize(attribute.format),
                               UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
                               vertexLayout->getStride(), (GLvoid*)attribute.offset);
+
+        usedList[attribute.index] = true;
     }
 }
 
-void CommandBufferGL::bindInstanceBuffer(ProgramGL* program) const
+void CommandBufferGL::bindInstanceBuffer(ProgramGL* program, bool* usedList) const
 {
     // if we have an instance transform buffer pointer then we must be rendering in instance mode.
     if (_instanceTransformBuffer)
@@ -354,10 +360,10 @@ void CommandBufferGL::bindInstanceBuffer(ProgramGL* program) const
             __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
 
             // Enable 4 attrib arrays for each matrix row.
-            glEnableVertexAttribArray(instaceLoc);
-            glEnableVertexAttribArray(instaceLoc + 1);
-            glEnableVertexAttribArray(instaceLoc + 2);
-            glEnableVertexAttribArray(instaceLoc + 3);
+            __gl->enableVertexAttribArray(instaceLoc);
+            __gl->enableVertexAttribArray(instaceLoc + 1);
+            __gl->enableVertexAttribArray(instaceLoc + 2);
+            __gl->enableVertexAttribArray(instaceLoc + 3);
 
             // Since OpenGL sucks we need to Specify vertex attribute pointers for
             // instance transforms for each matrix row containting 16 bytes or 4 floats
@@ -375,6 +381,11 @@ void CommandBufferGL::bindInstanceBuffer(ProgramGL* program) const
             glVertexAttribDivisor(instaceLoc + 1, 1);
             glVertexAttribDivisor(instaceLoc + 2, 1);
             glVertexAttribDivisor(instaceLoc + 3, 1);
+
+            usedList[instaceLoc] = true;
+            usedList[instaceLoc + 1] = true;
+            usedList[instaceLoc + 2] = true;
+            usedList[instaceLoc + 3] = true;
         }
     }
 }
@@ -429,26 +440,7 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
 
 void CommandBufferGL::cleanResources()
 {
-    cleanInstanceResources();
     AX_SAFE_RELEASE_NULL(_programState);
-}
-
-void CommandBufferGL::cleanInstanceResources()
-{
-    if (_instanceTransformBuffer)
-    {
-        auto instaceLoc = _programState->getProgram()->getAttributeLocation(Attribute::INSTANCE);
-        if (instaceLoc != -1)
-        {
-            __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
-
-            for (int i = instaceLoc; i < instaceLoc + 4; ++i)
-            {
-                glVertexAttribDivisor(i, 0);
-                glDisableVertexAttribArray(i);
-            }
-        }
-    }
 }
 
 void CommandBufferGL::setLineWidth(float lineWidth)

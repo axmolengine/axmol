@@ -1,6 +1,6 @@
 #include "CommandBufferGLES2.h"
 
-#if !defined(__APPLE__)
+#if defined(__ANDROID__)
 
 #    include "platform/GL.h"
 
@@ -36,19 +36,12 @@ void CommandBufferGLES2::drawElementsInstanced(PrimitiveType primitiveType,
     CommandBufferGL::drawElementsInstanced(primitiveType, indexType, count, offset, instanceCount, wireframe);
 }
 
-void CommandBufferGLES2::bindInstanceBuffer(ProgramGL* program) const
+void CommandBufferGLES2::bindInstanceBuffer(ProgramGL* program, bool* usedList) const
 {
 
     if (!glDrawElementsInstanced)
         return;
-    CommandBufferGL::bindInstanceBuffer(program);
-}
-
-void CommandBufferGLES2::cleanInstanceResources()
-{
-    if (!glDrawElementsInstanced)
-        return;
-    CommandBufferGL::cleanInstanceResources();
+    CommandBufferGL::bindInstanceBuffer(program, usedList);
 }
 
 NS_AX_BACKEND_END

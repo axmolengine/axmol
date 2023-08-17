@@ -116,6 +116,8 @@ struct OpenGLState
         GL_PIXEL_PACK_BUFFER,     // PIXEL
     };
 
+    constexpr static int MAX_VERTEX_ATTRIBS = 16;
+
     template <typename _Left>
     static inline void try_enable(GLenum target, _Left& opt)
     {
@@ -289,7 +291,41 @@ struct OpenGLState
         _bufferBindings[static_cast<int>(BufferType::ELEMENT_ARRAY_BUFFER)].reset();
     }
 
+    void enableVertexAttribArray(GLuint index)
+    {
+        assert(index < MAX_VERTEX_ATTRIBS);
+        auto& state = _vertexAttribs[index];
+        if (!state.has_value())
+        {
+            glEnableVertexAttribArray(index);
+            state = true;
+        }
+    }
+
+    void disableVertexAttribArray(GLuint index)
+    {
+        assert(index < MAX_VERTEX_ATTRIBS);
+        auto& state = _vertexAttribs[index];
+        if (state.has_value())
+        {
+            glDisableVertexAttribArray(index);
+            state.reset();
+        }
+    }
+
+
+    void disableUnusedVertexAttribs(bool used[MAX_VERTEX_ATTRIBS])
+    {
+        for (auto i = 0; i < MAX_VERTEX_ATTRIBS; ++i)
+        {
+            auto& state = _vertexAttribs[i];
+            if (state.has_value() && !used[i])
+                disableVertexAttribArray(i);
+        }
+    }
+
 private:
+    std::optional<bool> _vertexAttribs[MAX_VERTEX_ATTRIBS];
     std::optional<GLuint> _bufferBindings[(int)BufferType::COUNT];
 
     std::optional<Viewport> _viewPort;
@@ -321,6 +357,8 @@ private:
     std::optional<GLenum> _activeTexture;
     std::optional<CommonBindState> _textureBinding;
     std::optional<UniformBufferBaseBindState> _uniformBufferState;
+
+    
 };
 
 AX_DLL extern OpenGLState* __gl;
