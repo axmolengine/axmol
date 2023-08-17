@@ -85,6 +85,7 @@ if(ANDROID OR WINDOWS OR LINUX OR AX_GLES_PROFILE)
         renderer/backend/opengl/OpenGLState.h
         renderer/backend/opengl/BufferGL.h
         renderer/backend/opengl/CommandBufferGL.h
+        renderer/backend/opengl/CommandBufferGLES2.h
         renderer/backend/opengl/DepthStencilStateGL.h
         renderer/backend/opengl/DeviceGL.h
         renderer/backend/opengl/DeviceInfoGL.h
@@ -101,6 +102,7 @@ if(ANDROID OR WINDOWS OR LINUX OR AX_GLES_PROFILE)
         renderer/backend/opengl/OpenGLState.cpp
         renderer/backend/opengl/BufferGL.cpp
         renderer/backend/opengl/CommandBufferGL.cpp
+        renderer/backend/opengl/CommandBufferGLES2.cpp
         renderer/backend/opengl/DepthStencilStateGL.cpp
         renderer/backend/opengl/DeviceGL.cpp
         renderer/backend/opengl/ProgramGL.cpp

@@ -87,6 +87,11 @@ public:
      */
     virtual bool checkForFeatureSupported(FeatureType feature) override;
 
+    /*
+    * Check does the device only support GLES2.0
+    */
+    bool isGLES2Only() const;
+
 private:
     const char* _vendor{nullptr};
     const char* _renderer{nullptr};

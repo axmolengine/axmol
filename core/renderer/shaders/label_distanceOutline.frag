@@ -1,9 +1,7 @@
 #version 310 es
 precision highp float;
 
-// GLES2 not support const float, will trigger error:
-// a vertex attribute index out of boundary is detected
-#define thickness 0.15
+const float thickness = 0.15;
 
 layout(location = COLOR0) in vec4 v_color;
 layout(location = TEXCOORD0) in vec2 v_texCoord;
@@ -28,5 +26,5 @@ void main()
     float pivot = abs(0.5 - thickness * u_effectColor.w);
     float alpha = smoothstep(pivot - smoothing, pivot + smoothing, dist);
     float border = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
-    FragColor = vec4( mix(u_effectColor.xyz, u_textColor.rgb, border), alpha);
+    FragColor = v_color * vec4( mix(u_effectColor.xyz, u_textColor.rgb, border), alpha);
 }

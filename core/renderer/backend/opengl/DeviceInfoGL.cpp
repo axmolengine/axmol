@@ -38,7 +38,8 @@
 
 NS_AX_BACKEND_BEGIN
 
-static inline uint32_t hashString(std::string_view str) {
+static inline uint32_t hashString(std::string_view str)
+{
     return !str.empty() ? XXH32(str.data(), str.length(), 0) : 0;
 }
 
@@ -243,8 +244,9 @@ void main()
     return supported;
 }
 
-template<typename _Fty>
-static void GL_EnumAllExtensions(_Fty&& func) {
+template <typename _Fty>
+static void GL_EnumAllExtensions(_Fty&& func)
+{
 #if AX_GLES_PROFILE != 200  // NOT GLES2.0
     GLint NumberOfExtensions{0};
     glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
@@ -303,6 +305,11 @@ bool DeviceInfoGL::init()
             _textureCompressionEtc2 = true;
     }
     return true;
+}
+
+bool DeviceInfoGL::isGLES2Only() const
+{
+    return _version && cxx20::starts_with(_version, "OpenGL ES") && (_version[10] - '0') == 2;
 }
 
 const char* DeviceInfoGL::getVendor() const

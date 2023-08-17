@@ -50,7 +50,7 @@ class DepthStencilStateGL;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBufferGL final : public CommandBuffer
+class CommandBufferGL : public CommandBuffer
 {
 public:
     CommandBufferGL();
@@ -219,12 +219,14 @@ protected:
                     uint32_t bytesPerRow,
                     PixelBufferDescriptor& pbd);
 
-private:
+protected:
 
     void prepareDrawing() const;
-    void bindVertexBuffer(ProgramGL* program) const;
+    void bindVertexBuffer() const;
+    virtual void bindInstanceBuffer(ProgramGL* program) const;
     void bindUniforms(ProgramGL* program) const;
     void cleanResources();
+    virtual void cleanInstanceResources();
 
     BufferGL* _vertexBuffer                   = nullptr;
     ProgramState* _programState               = nullptr;

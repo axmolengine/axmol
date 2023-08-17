@@ -35,7 +35,10 @@ void VertexLayout::setAttrib(std::string_view name,
                                 bool needToBeNormallized)
 {
     if (index == -1)
+    {
+        AXLOGWARN("The vertex attribute '%s' vfmt=%d not exist, unused/optimized?", name.data(), format);
         return;
+    }
 
     // FIXME 2021/12/25 TODO: store name key is enough
     hlookup::set_item(

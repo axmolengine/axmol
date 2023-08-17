@@ -17,10 +17,10 @@ void main()
 {
     float dist = texture(u_tex0, v_texCoord).x;
 #ifdef GLES2
-    float width = 0.04;
+    float smoothing = 0.04;
 #else
-    float width = fwidth(dist); // ESSL300, GLSL330 support fwidth
+    float smoothing = fwidth(dist); // ESSL300, GLSL330 support fwidth
 #endif
-    float alpha = smoothstep(0.5-width, 0.5+width, dist) * u_textColor.a;
+    float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist) * u_textColor.a;
     FragColor = v_color * vec4(u_textColor.rgb,alpha);
 }

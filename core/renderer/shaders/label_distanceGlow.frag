@@ -17,12 +17,11 @@ void main()
 {
     float dist = texture(u_tex0, v_texCoord).x;
 #ifdef GLES2
-    float width = 0.04;
+    float smoothing = 0.04;
 #else
-    float width = fwidth(dist);
+    float smoothing = fwidth(dist);
 #endif
-    float alpha = smoothstep(0.5-width, 0.5+width, dist);
-    //glow
+    float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
     float mu = smoothstep(0.5, 1.0, sqrt(dist));
     vec4 color = u_effectColor*(1.0-alpha) + u_textColor*alpha;
     FragColor = v_color * vec4(color.rgb, max(alpha,mu)*color.a);
