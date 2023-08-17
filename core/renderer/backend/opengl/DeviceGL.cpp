@@ -34,7 +34,7 @@
 #include "RenderTargetGL.h"
 #include "MacrosGL.h"
 #include "renderer/backend/ProgramManager.h"
-#if !defined(__ANDROID__)
+#if defined(__ANDROID__)
 #    include "CommandBufferGLES2.h"
 #endif
 
