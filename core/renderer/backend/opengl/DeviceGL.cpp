@@ -34,7 +34,7 @@
 #include "RenderTargetGL.h"
 #include "MacrosGL.h"
 #include "renderer/backend/ProgramManager.h"
-#if !defined(__APPLE__)
+#if !defined(__ANDROID__)
 #    include "CommandBufferGLES2.h"
 #endif
 
@@ -80,7 +80,7 @@ GLint DeviceGL::getDefaultFBO() const
 
 CommandBuffer* DeviceGL::newCommandBuffer()
 {
-#if !defined(__APPLE__)
+#if defined(__ANDROID__)
     return !static_cast<DeviceInfoGL*>(_deviceInfo)->isGLES2Only() ? new CommandBufferGL() : new CommandBufferGLES2();
 #else
     return new CommandBufferGL();

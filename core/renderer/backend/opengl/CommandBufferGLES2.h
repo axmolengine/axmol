@@ -1,6 +1,6 @@
 #include "CommandBufferGL.h"
 
-#if !defined(__APPLE__)
+#if defined(__ANDROID__)
 
 NS_AX_BACKEND_BEGIN
 
@@ -24,9 +24,8 @@ public:
                                int instanceCount,
                                bool wireframe = false) override;
 
-    void bindInstanceBuffer(ProgramGL* program) const override;
+    void bindInstanceBuffer(ProgramGL* program, bool* usedList) const override;
 
-    void cleanInstanceResources() override;
 };
 
 // end of _opengl group

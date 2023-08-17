@@ -222,11 +222,10 @@ protected:
 protected:
 
     void prepareDrawing() const;
-    void bindVertexBuffer() const;
-    virtual void bindInstanceBuffer(ProgramGL* program) const;
+    void bindVertexBuffer(bool* usedList) const;
+    virtual void bindInstanceBuffer(ProgramGL* program, bool* usedList) const;
     void bindUniforms(ProgramGL* program) const;
     void cleanResources();
-    virtual void cleanInstanceResources();
 
     BufferGL* _vertexBuffer                   = nullptr;
     ProgramState* _programState               = nullptr;
