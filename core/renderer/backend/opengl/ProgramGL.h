@@ -161,7 +161,6 @@ public:
 
 private:
     void compileProgram();
-    bool getAttributeLocation(std::string_view attributeName, unsigned int& location) const;
     void computeUniformInfos();
     void setBuiltinLocations();
 

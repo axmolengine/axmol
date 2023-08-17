@@ -6,13 +6,6 @@ project(${target_name})
 
 set(target_src_files "include/glad/gl.h" src/gl.c)
 
-if (ANDROID)
-    list(APPEND target_src_files
-      "include/glad/egl.h"
-      src/egl.c
-    )
-endif()
-
 add_library(${target_name} ${target_src_files})
 
 if(BUILD_SHARED_LIBS)

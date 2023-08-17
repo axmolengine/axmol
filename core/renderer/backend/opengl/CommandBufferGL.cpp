@@ -270,9 +270,6 @@ void CommandBufferGL::drawElementsInstanced(PrimitiveType primitiveType,
                                             int instanceCount,
                                             bool wireframe)
 {
-    if (UTILS_UNLIKELY(!glDrawElementsInstanced))
-        return;
-
     prepareDrawing();
 #if !AX_GLES_PROFILE  // glPolygonMode is only supported in Desktop OpenGL
     if (wireframe)
@@ -306,7 +303,8 @@ void CommandBufferGL::prepareDrawing() const
     const auto& program = _renderPipeline->getProgram();
     __gl->useProgram(program->getHandler());
 
-    bindVertexBuffer(program);
+    bindVertexBuffer();
+    bindInstanceBuffer(program);
     bindUniforms(program);
 
     // Set depth/stencil state.
@@ -322,11 +320,12 @@ void CommandBufferGL::prepareDrawing() const
         __gl->disableCullFace();
 }
 
-void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
+void CommandBufferGL::bindVertexBuffer() const
 {
     // Bind vertex buffers and set the attributes.
     auto vertexLayout = _programState->getVertexLayout();
 
+    const auto& attributes = vertexLayout->getAttributes();
     if (!vertexLayout->isValid())
         return;
 
@@ -334,7 +333,6 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
     // optimize proposal: create VAO per vertexLayout, just need bind VAO
     __gl->bindBuffer(BufferType::ARRAY_BUFFER, _vertexBuffer->getHandler());
 
-    const auto& attributes = vertexLayout->getAttributes();
     for (const auto& attributeInfo : attributes)
     {
         const auto& attribute = attributeInfo.second;
@@ -343,10 +341,14 @@ void CommandBufferGL::bindVertexBuffer(ProgramGL* program) const
                               UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
                               vertexLayout->getStride(), (GLvoid*)attribute.offset);
     }
+}
+
+void CommandBufferGL::bindInstanceBuffer(ProgramGL* program) const
+{
     // if we have an instance transform buffer pointer then we must be rendering in instance mode.
-    if (glDrawElementsInstanced && _instanceTransformBuffer)
+    if (_instanceTransformBuffer)
     {
-        auto instaceLoc = _programState->getProgram()->getAttributeLocation(Attribute::INSTANCE);
+        auto instaceLoc = program->getAttributeLocation(Attribute::INSTANCE);
         if (instaceLoc != -1)
         {
             __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
@@ -427,19 +429,26 @@ void CommandBufferGL::bindUniforms(ProgramGL* program) const
 
 void CommandBufferGL::cleanResources()
 {
-    if (glDrawElementsInstanced && _instanceTransformBuffer)
+    cleanInstanceResources();
+    AX_SAFE_RELEASE_NULL(_programState);
+}
+
+void CommandBufferGL::cleanInstanceResources()
+{
+    if (_instanceTransformBuffer)
     {
         auto instaceLoc = _programState->getProgram()->getAttributeLocation(Attribute::INSTANCE);
         if (instaceLoc != -1)
         {
-            glVertexAttribDivisor(instaceLoc, 0);
-            glVertexAttribDivisor(instaceLoc + 1, 0);
-            glVertexAttribDivisor(instaceLoc + 2, 0);
-            glVertexAttribDivisor(instaceLoc + 3, 0);
+            __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
+
+            for (int i = instaceLoc; i < instaceLoc + 4; ++i)
+            {
+                glVertexAttribDivisor(i, 0);
+                glDisableVertexAttribArray(i);
+            }
         }
     }
-
-    AX_SAFE_RELEASE_NULL(_programState);
 }
 
 void CommandBufferGL::setLineWidth(float lineWidth)

@@ -223,6 +223,8 @@ void ProgramGL::setBuiltinLocations()
 {
     /*--- Builtin Attribs ---*/
 
+    std::fill(_builtinAttributeLocation, _builtinAttributeLocation + Attribute::ATTRIBUTE_MAX, -1);
+
     /// a_position
     _builtinAttributeLocation[Attribute::POSITION] = getAttributeLocation(ATTRIBUTE_NAME_POSITION);
 
@@ -257,19 +259,6 @@ void ProgramGL::setBuiltinLocations()
 
     /// u_effectType
     _builtinUniformLocation[Uniform::EFFECT_TYPE] = getUniformLocation(UNIFORM_NAME_EFFECT_TYPE);
-}
-
-bool ProgramGL::getAttributeLocation(std::string_view attributeName, unsigned int& location) const
-{
-    GLint loc = glGetAttribLocation(_program, attributeName.data());
-    if (-1 == loc)
-    {
-        AXLOG("axmol: %s: can not find vertex attribute of %s", __FUNCTION__, attributeName.data());
-        return false;
-    }
-
-    location = GLuint(loc);
-    return true;
 }
 
 const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() const
