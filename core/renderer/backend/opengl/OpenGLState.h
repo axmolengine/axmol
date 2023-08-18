@@ -293,39 +293,98 @@ struct OpenGLState
 
     void enableVertexAttribArray(GLuint index)
     {
-        assert(index < MAX_VERTEX_ATTRIBS);
-        auto& state = _vertexAttribs[index];
-        if (!state.has_value())
+        const auto mask = 1 << index;
+        if (!(_attribBits & mask))
         {
             glEnableVertexAttribArray(index);
-            state = true;
+            _attribBits |= mask;
         }
     }
 
     void disableVertexAttribArray(GLuint index)
     {
-        assert(index < MAX_VERTEX_ATTRIBS);
-        auto& state = _vertexAttribs[index];
-        if (state.has_value())
+        const auto mask = 1 << index;
+        if (_attribBits & mask)
         {
             glDisableVertexAttribArray(index);
-            state.reset();
+            _attribBits &= ~mask;
         }
     }
 
-
-    void disableUnusedVertexAttribs(bool used[MAX_VERTEX_ATTRIBS])
+    void disableUnusedVertexAttribs(uint32_t usedBits)
     {
-        for (auto i = 0; i < MAX_VERTEX_ATTRIBS; ++i)
+        if (usedBits != _attribBits)
         {
-            auto& state = _vertexAttribs[i];
-            if (state.has_value() && !used[i])
-                disableVertexAttribArray(i);
+            uint32_t unusedEnabledBits = _attribBits & ~usedBits;
+#if defined(_DEBUG)
+            struct VertexBits
+            {
+                uint16_t bit0 : 1;
+                uint16_t bit1 : 1;
+                uint16_t bit2 : 1;
+                uint16_t bit3 : 1;
+                uint16_t bit4 : 1;
+                uint16_t bit5 : 1;
+                uint16_t bit6 : 1;
+                uint16_t bit7 : 1;
+                uint16_t bit8 : 1;
+                uint16_t bit9 : 1;
+                uint16_t bit10 : 1;
+                uint16_t bit11 : 1;
+                uint16_t bit12 : 1;
+                uint16_t bit13 : 1;
+                uint16_t bit14 : 1;
+                uint16_t bit15 : 1;
+                uint16_t reserved;
+            };
+            VertexBits *usedBitsDeb          = reinterpret_cast<VertexBits*>(&usedBits),
+                       *enabledBitsDeb       = reinterpret_cast<VertexBits*>(&_attribBits),
+                       *unusedEnabledBitsDeb = reinterpret_cast<VertexBits*>(&unusedEnabledBits);
+#endif
+            for (auto i = 0; unusedEnabledBits && i < MAX_VERTEX_ATTRIBS; ++i)
+            {
+                if (unusedEnabledBits & 1)
+                    disableVertexAttribArray(i);
+                unusedEnabledBits >>= 1;
+            }
+
+            assert(usedBits == _attribBits);
+        }
+    }
+
+    void setVertexAttribDivisor(GLuint index)
+    {
+        const auto mask = 1 << index;
+        if (!(_divisorBits & mask))
+        {
+#if defined(__ANDROID__) && AX_GLES_PROFILE == 200
+            if (glVertexAttribDivisor)
+                glVertexAttribDivisor(index, 1);
+#else
+            glVertexAttribDivisor(index, 1);
+#endif
+            _divisorBits |= mask;
+        }
+    }
+
+    void unsetVertexAttribDivisor(GLuint index)
+    {
+        const auto mask = 1 << index;
+        if (_divisorBits & mask)
+        {
+#if defined(__ANDROID__) && AX_GLES_PROFILE == 200
+            if (glVertexAttribDivisor)
+                glVertexAttribDivisor(index, 0);
+#else
+            glVertexAttribDivisor(index, 0);
+#endif
+            _divisorBits &= ~mask;
         }
     }
 
 private:
-    std::optional<bool> _vertexAttribs[MAX_VERTEX_ATTRIBS];
+    uint32_t _attribBits{0}; // vertexAttribArray bitset
+    uint32_t _divisorBits{0}; // divisor bitset
     std::optional<GLuint> _bufferBindings[(int)BufferType::COUNT];
 
     std::optional<Viewport> _viewPort;
@@ -357,8 +416,6 @@ private:
     std::optional<GLenum> _activeTexture;
     std::optional<CommonBindState> _textureBinding;
     std::optional<UniformBufferBaseBindState> _uniformBufferState;
-
-    
 };
 
 AX_DLL extern OpenGLState* __gl;
