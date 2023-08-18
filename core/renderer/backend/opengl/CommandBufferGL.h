@@ -222,8 +222,8 @@ protected:
 protected:
 
     void prepareDrawing() const;
-    void bindVertexBuffer(bool* usedList) const;
-    virtual void bindInstanceBuffer(ProgramGL* program, bool* usedList) const;
+    void bindVertexBuffer(uint32_t& usedBits) const;
+    virtual void bindInstanceBuffer(ProgramGL* program, uint32_t& usedBits) const;
     void bindUniforms(ProgramGL* program) const;
     void cleanResources();
 

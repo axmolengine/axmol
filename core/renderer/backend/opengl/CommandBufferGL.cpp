@@ -303,11 +303,11 @@ void CommandBufferGL::prepareDrawing() const
     const auto& program = _renderPipeline->getProgram();
     __gl->useProgram(program->getHandler());
 
-    bool usedList[OpenGLState::MAX_VERTEX_ATTRIBS] = {0};
+    uint32_t usedBits{0};
 
-    bindVertexBuffer(usedList);
-    bindInstanceBuffer(program, usedList);
-    __gl->disableUnusedVertexAttribs(usedList);
+    bindVertexBuffer(usedBits);
+    bindInstanceBuffer(program, usedBits);
+    __gl->disableUnusedVertexAttribs(usedBits);
 
     bindUniforms(program);
 
@@ -324,7 +324,7 @@ void CommandBufferGL::prepareDrawing() const
         __gl->disableCullFace();
 }
 
-void CommandBufferGL::bindVertexBuffer(bool* usedList) const
+void CommandBufferGL::bindVertexBuffer(uint32_t& usedBits) const
 {
     // Bind vertex buffers and set the attributes.
     auto vertexLayout = _programState->getVertexLayout();
@@ -344,48 +344,30 @@ void CommandBufferGL::bindVertexBuffer(bool* usedList) const
         glVertexAttribPointer(attribute.index, UtilsGL::getGLAttributeSize(attribute.format),
                               UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
                               vertexLayout->getStride(), (GLvoid*)attribute.offset);
-
-        usedList[attribute.index] = true;
+        __gl->unsetVertexAttribDivisor(attribute.index);
+        usedBits |= (1 << attribute.index);
     }
 }
 
-void CommandBufferGL::bindInstanceBuffer(ProgramGL* program, bool* usedList) const
+void CommandBufferGL::bindInstanceBuffer(ProgramGL* program, uint32_t& usedBits) const
 {
     // if we have an instance transform buffer pointer then we must be rendering in instance mode.
     if (_instanceTransformBuffer)
     {
-        auto instaceLoc = program->getAttributeLocation(Attribute::INSTANCE);
-        if (instaceLoc != -1)
+        auto instanceLoc = program->getAttributeLocation(Attribute::INSTANCE);
+        if (instanceLoc != -1)
         {
             __gl->bindBuffer(BufferType::ARRAY_BUFFER, _instanceTransformBuffer->getHandler());
 
-            // Enable 4 attrib arrays for each matrix row.
-            __gl->enableVertexAttribArray(instaceLoc);
-            __gl->enableVertexAttribArray(instaceLoc + 1);
-            __gl->enableVertexAttribArray(instaceLoc + 2);
-            __gl->enableVertexAttribArray(instaceLoc + 3);
-
-            // Since OpenGL sucks we need to Specify vertex attribute pointers for
-            // instance transforms for each matrix row containting 16 bytes or 4 floats
-            glVertexAttribPointer(instaceLoc, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16, (void*)0);
-            glVertexAttribPointer(instaceLoc + 1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
-                                  (void*)(sizeof(float) * 4));
-            glVertexAttribPointer(instaceLoc + 2, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
-                                  (void*)(2 * sizeof(float) * 4));
-            glVertexAttribPointer(instaceLoc + 3, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
-                                  (void*)(3 * sizeof(float) * 4));
-
-            // Set the divisor for the instance attributes to 1 indicating that it should advance one matrix per
-            // instance.
-            glVertexAttribDivisor(instaceLoc, 1);
-            glVertexAttribDivisor(instaceLoc + 1, 1);
-            glVertexAttribDivisor(instaceLoc + 2, 1);
-            glVertexAttribDivisor(instaceLoc + 3, 1);
-
-            usedList[instaceLoc] = true;
-            usedList[instaceLoc + 1] = true;
-            usedList[instaceLoc + 2] = true;
-            usedList[instaceLoc + 3] = true;
+            for (auto i = 0; i < 4; ++i)
+            {
+                auto elementLoc = instanceLoc + i;
+                __gl->enableVertexAttribArray(elementLoc);
+                glVertexAttribPointer(elementLoc, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 16,
+                                      (void*)(sizeof(float) * 4 * i));
+                __gl->setVertexAttribDivisor(elementLoc);
+                usedBits |= (1 << elementLoc);
+            }
         }
     }
 }

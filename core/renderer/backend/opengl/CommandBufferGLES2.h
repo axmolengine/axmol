@@ -24,7 +24,7 @@ public:
                                int instanceCount,
                                bool wireframe = false) override;
 
-    void bindInstanceBuffer(ProgramGL* program, bool* usedList) const override;
+    void bindInstanceBuffer(ProgramGL* program, uint32_t& usedBits) const override;
 
 };
 

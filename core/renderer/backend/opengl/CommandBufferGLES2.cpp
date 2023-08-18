@@ -36,12 +36,12 @@ void CommandBufferGLES2::drawElementsInstanced(PrimitiveType primitiveType,
     CommandBufferGL::drawElementsInstanced(primitiveType, indexType, count, offset, instanceCount, wireframe);
 }
 
-void CommandBufferGLES2::bindInstanceBuffer(ProgramGL* program, bool* usedList) const
+void CommandBufferGLES2::bindInstanceBuffer(ProgramGL* program, uint32_t& usedBits) const
 {
 
     if (!glDrawElementsInstanced)
         return;
-    CommandBufferGL::bindInstanceBuffer(program, usedList);
+    CommandBufferGL::bindInstanceBuffer(program, usedBits);
 }
 
 NS_AX_BACKEND_END
