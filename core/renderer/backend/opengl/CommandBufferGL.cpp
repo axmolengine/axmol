@@ -344,7 +344,8 @@ void CommandBufferGL::bindVertexBuffer(uint32_t& usedBits) const
         glVertexAttribPointer(attribute.index, UtilsGL::getGLAttributeSize(attribute.format),
                               UtilsGL::toGLAttributeType(attribute.format), attribute.needToBeNormallized,
                               vertexLayout->getStride(), (GLvoid*)attribute.offset);
-        __gl->unsetVertexAttribDivisor(attribute.index);
+        // non-instance attrib not use divisor, so clear to 0
+        __gl->clearVertexAttribDivisor(attribute.index);
         usedBits |= (1 << attribute.index);
     }
 }

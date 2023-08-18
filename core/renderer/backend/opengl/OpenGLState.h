@@ -367,7 +367,7 @@ struct OpenGLState
         }
     }
 
-    void unsetVertexAttribDivisor(GLuint index)
+    void clearVertexAttribDivisor(GLuint index)
     {
         const auto mask = 1 << index;
         if (_divisorBits & mask)
