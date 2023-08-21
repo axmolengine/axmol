@@ -86,27 +86,34 @@ android {
 }
 
 android.applicationVariants.all { variant ->
-    def project_root_folder = "${projectDir}/../.."
-    def dest_assets_folder = "${projectDir}/assets"
-    def axslc_folder = "${projectDir}/../build/runtime/axslc"
-
-    // delete previous files first
-    delete dest_assets_folder
     def targetName = variant.name.capitalize()
-    def copyTaskName = "copy${targetName}ResourcesToAssets"
-    
-    tasks.register(copyTaskName) {
-        copy {
-            from "${project_root_folder}/Content"
-            into "${dest_assets_folder}"
-            exclude "**/*.gz"
+
+    def copyContentToAssets = "copy${targetName}ContentToAssets"
+    tasks.register("copy${targetName}ContentToAssets") {
+        doFirst {
+            delete "${projectDir}/assets"
         }
-        copy {
-            from "${axslc_folder}"
-            into "${dest_assets_folder}/axslc"
+        doLast {
+            copy {
+                from "${projectDir}/../../Content"
+                into "${projectDir}/assets"
+                exclude "**/*.gz"
+            }
         }
     }
-    tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
+    tasks.getByName("pre${targetName}Build").dependsOn copyContentToAssets
+
+    tasks.register("copy${targetName}AxslcToAssets") {
+        doFirst {
+            delete "${projectDir}/assets/axslc"
+        }
+        doLast {
+            copy {
+                from "${projectDir}/../build/runtime/axslc"
+                into "${projectDir}/assets/axslc"
+            }
+        }
+    }
 }
 
 dependencies {
@@ -116,9 +123,11 @@ dependencies {
 
 project.afterEvaluate {
     if (tasks.findByName("externalNativeBuildDebug")) {
-        compileDebugJavaWithJavac.dependsOn externalNativeBuildDebug
+        copyDebugAxslcToAssets.dependsOn externalNativeBuildDebug
+        compileDebugJavaWithJavac.dependsOn copyDebugAxslcToAssets
     }
     if (tasks.findByName("externalNativeBuildRelease")) {
-        compileReleaseJavaWithJavac.dependsOn externalNativeBuildRelease  
+        copyReleaseAxslcToAssets.dependsOn externalNativeBuildRelease
+        compileReleaseJavaWithJavac.dependsOn copyReleaseAxslcToAssets
     }
 }
