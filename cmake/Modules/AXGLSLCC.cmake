@@ -100,7 +100,7 @@ function (ax_target_compile_shaders target_name)
         set(SC_PROFILE "")
         if(AX_GLES_PROFILE)
             # version 300 es
-            if (AX_DISABLE_GLES2)
+            if (AX_GLES_PROFILE EQUAL 300)
                 set(OUT_LANG "ESSL")
                 set(SC_PROFILE "300")
             else()
