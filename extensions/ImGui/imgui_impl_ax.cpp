@@ -1555,7 +1555,11 @@ bool ImGui_ImplAx_CreateFontsTexture()
     bd->FontTexture = new Texture2D();
 
     bd->FontTexture->setAntiAliasTexParameters();
+#if AX_GLES_PROFILE != 200
     bd->FontTexture->initWithData(pixels, width * height, backend::PixelFormat::R8, width, height);
+#else
+    bd->FontTexture->initWithData(pixels, width * height, backend::PixelFormat::A8, width, height);
+#endif
     io.Fonts->TexID = (ImTextureID)bd->FontTexture;
     return true;
 }

@@ -15,11 +15,12 @@ layout(location = SV_Target0) out vec4 FragColor;
 
 void main()
 {
+#ifndef GLES2
     float dist = texture(u_tex0, v_texCoord).x;
-#ifdef GLES2
-    float smoothing = 0.04;
-#else
     float smoothing = fwidth(dist);
+#else
+    float dist = texture(u_tex0, v_texCoord).w;
+    float smoothing = 0.04;
 #endif
     float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, dist);
     float mu = smoothstep(0.5, 1.0, sqrt(dist));

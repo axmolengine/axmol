@@ -276,6 +276,38 @@ bool DeviceInfoGL::init()
     _version   = (char const*)glGetString(GL_VERSION);
     _shaderVer = (char const*)glGetString(GL_SHADING_LANGUAGE_VERSION);
 
+    if (_version)
+    {
+        auto hint   = strstr(_version, "OpenGL ES");
+        _verInfo.es = !!hint;
+        if (_verInfo.es)
+        {
+            _verInfo.major = hint[10] - '0';
+            _verInfo.minor = hint[12] - '0';
+        }
+        else
+        {
+            _verInfo.major = (_version[0] - '0');
+            _verInfo.minor = (_version[2] - '0');
+        }
+    }
+
+     // check OpenGL version at first
+    if ((!_verInfo.es && (_verInfo.major < 3 || _verInfo.minor < 3)) ||
+        (_verInfo.es && _verInfo.major < 2))
+    {
+        char strComplain[256] = {0};
+        sprintf(strComplain,
+                "OpenGL 3.3+ or OpenGL ES 2.0+ is required (your version is %s). Please upgrade the driver of your video card.",
+                _version);
+        ccMessageBox(strComplain, "OpenGL version too old");
+        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
+        return false;
+    }
+
+    if (_version)
+        ax::print("[GL:%s] Ready for GLSL", _version);
+
     // caps
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &_maxAttributes);
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTextureSize);
@@ -309,7 +341,7 @@ bool DeviceInfoGL::init()
 
 bool DeviceInfoGL::isGLES2Only() const
 {
-    return _version && cxx20::starts_with(_version, "OpenGL ES") && (_version[10] - '0') == 2;
+    return _verInfo.es && _verInfo.major == 2;
 }
 
 const char* DeviceInfoGL::getVendor() const

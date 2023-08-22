@@ -1,4 +1,4 @@
-/****************************************************************************
+    /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd
 
@@ -93,12 +93,19 @@ public:
     bool isGLES2Only() const;
 
 private:
+    std::set<uint32_t> _glExtensions;
+
     const char* _vendor{nullptr};
     const char* _renderer{nullptr};
     const char* _version{nullptr};
     const char* _shaderVer{nullptr};
 
-    std::set<uint32_t> _glExtensions;
+    struct VersionInfo
+    {
+        bool es{false};     // is GLES?
+        uint16_t major{0};  // major version
+        uint16_t minor{0};  // minor version
+    } _verInfo;
 
     bool _textureCompressionAstc = false;
     bool _textureCompressionEtc2 = false;

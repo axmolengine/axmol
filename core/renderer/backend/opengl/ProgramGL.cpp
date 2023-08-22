@@ -308,9 +308,7 @@ void ProgramGL::computeUniformInfos()
 
     yasio::basic_byte_buffer<GLchar> buffer;  // buffer for name
 
-    // OpenGL UBO: uloc[0]: block_index, uloc[1]: offset in block
-    axstd::pod_vector<GLint> uniformOffsets, uniformIndices;
-    std::map<GLuint, std::pair<int, int>> uniformIndexMap;
+    // OpenGL UBO: uloc[0]: block_offset, uloc[1]: offset in block
 
     auto gpuDevice = Device::getInstance();
     /* Query uniform blocks */
@@ -319,6 +317,8 @@ void ProgramGL::computeUniformInfos()
 #if AX_GLES_PROFILE != 200
     GLint numblocks{0};
     glGetProgramiv(_program, GL_ACTIVE_UNIFORM_BLOCKS, &numblocks);
+
+    axstd::pod_vector<GLint> uniformBlcokOffsets(numblocks);
     for (int blockIndex = 0; blockIndex < numblocks; ++blockIndex)
     {
         GLint blockSize{0};
@@ -331,19 +331,6 @@ void ProgramGL::computeUniformInfos()
         glGetActiveUniformBlockiv(_program, blockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &memberCount);
         assert(memberCount > 0);
 
-        // buffer.resize_fit(MAX_UNIFORM_NAME_LENGTH + 1);
-        // GLsizei length{0};
-        // glGetActiveUniformBlockName(_program, blockIndex, buffer.size(), &length, buffer.data());
-        //
-        // ax::print("### ub: %s", buffer.data());
-
-        uniformIndices.resize(memberCount);
-        glGetActiveUniformBlockiv(_program, blockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, uniformIndices.data());
-
-        uniformOffsets.resize(memberCount);
-        glGetActiveUniformsiv(_program, memberCount, reinterpret_cast<const GLuint*>(uniformIndices.data()),
-                              GL_UNIFORM_OFFSET, uniformOffsets.data());
-
         // set bindingIndex at CPU
         glUniformBlockBinding(_program, blockIndex, blockIndex);
 
@@ -355,9 +342,6 @@ void ProgramGL::computeUniformInfos()
 
         CHECK_GL_ERROR_DEBUG();
 
-        for (GLint i = 0; i < memberCount; ++i)
-            uniformIndexMap.emplace(uniformIndices[i], std::make_pair(static_cast<int>(desc._location),
-                                                                      static_cast<int>(uniformOffsets[i])));
         // increase _totalBufferSize
         _totalBufferSize += blockSize;
     }
@@ -379,8 +363,7 @@ void ProgramGL::computeUniformInfos()
         uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
         std::string_view uniformFullName{buffer.data(), static_cast<size_t>(nameLen)};
         std::string_view uniformName{uniformFullName};
-
-
+       
         // Try trim uniform name
         // trim name vs_ub.xxx[0] --> xxx
         auto bracket = uniformName.find_last_of('[');
@@ -393,26 +376,36 @@ void ProgramGL::computeUniformInfos()
         if (dot != std::string::npos)
             uniformName.remove_prefix(dot + 1);  // trim uniformName
 
-        auto it = uniformIndexMap.find(i);
-        if (it != uniformIndexMap.end())
+#if AX_GLES_PROFILE != 200
+        GLint blockIndex{-1};
+        glGetActiveUniformsiv(_program, 1, reinterpret_cast<const GLuint*>(&i), GL_UNIFORM_BLOCK_INDEX, &blockIndex);
+        if (blockIndex != -1)
         {  // member of uniform block
-            uniform.location     = it->second.first;
-            uniform.bufferOffset = it->second.second;
+            auto& blockDesc = _uniformBuffers[blockIndex];
+            GLint uniformOffset{-1};
+            glGetActiveUniformsiv(_program, 1, reinterpret_cast<const GLuint*>(&i), GL_UNIFORM_OFFSET, &uniformOffset);
+            uniform.location     = blockDesc._location;
+            uniform.bufferOffset = uniformOffset;
         }
         else
         {  // must be samper: sampler2D or samplerCube
-            if (uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE)
-            {
-                uniform.location     = glGetUniformLocation(_program, uniformName.data());
-                uniform.bufferOffset = -1;
-            }
-            else
-            { // GLES2.0: GLSL100 
-                uniform.location = glGetUniformLocation(_program, uniformFullName.data());
-                uniform.bufferOffset = (uniform.size == 0) ? 0 : _totalBufferSize;
-                _totalBufferSize += uniform.size * uniform.count;
-            }
+            assert(uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE);
+            uniform.location     = glGetUniformLocation(_program, uniformName.data());
+            uniform.bufferOffset = -1;
         }
+#else
+        if (uniform.type == GL_SAMPLER_2D || uniform.type == GL_SAMPLER_CUBE)
+        {
+            uniform.location     = glGetUniformLocation(_program, uniformName.data());
+            uniform.bufferOffset = -1;
+        }
+        else
+        {  // GLES2.0: GLSL100
+            uniform.location     = glGetUniformLocation(_program, uniformFullName.data());
+            uniform.bufferOffset = (uniform.size == 0) ? 0 : _totalBufferSize;
+            _totalBufferSize += uniform.size * uniform.count;
+        }
+#endif
 
         _activeUniformInfos[uniformName] = uniform;
 

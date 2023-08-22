@@ -335,9 +335,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     if (initglfw)
     {
         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
-#if AX_GLES_PROFILE && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
-        glfwInitHint(GLFW_ANGLE_PLATFORM_TYPE, GLFW_ANGLE_PLATFORM_TYPE_D3D11);  // since glfw-3.4
-#endif
+
 #if defined(_WIN32)
         glfwxInit();
 #else
@@ -560,29 +558,13 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     loadGL();
+
+    // Init device after load GL
+    backend::Device::getInstance();
 #endif
 
 #if defined(AX_USE_GL)
     glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
-
-    // check OpenGL version at first
-    const GLubyte* glVersion = glGetString(GL_VERSION);
-
-    if (utils::atof((const char*)glVersion) < 1.5 && nullptr == strstr((const char*)glVersion, "ANGLE"))
-    {
-        char strComplain[256] = {0};
-        sprintf(strComplain,
-                "OpenGL 1.5 or higher is required (your version is %s). Please upgrade the driver of your video card.",
-                glVersion);
-        ccMessageBox(strComplain, "OpenGL version too old");
-        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
-        return false;
-    }
-
-    if (glVersion)
-        ax::print("[GL:%s] Ready for GLSL", glVersion);
-    else
-        ax::print("Not totally ready :(");
 
         // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !AX_GLES_PROFILE

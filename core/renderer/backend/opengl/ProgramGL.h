@@ -198,7 +198,6 @@ private:
     int _maxLocation = -1;
     UniformLocation _builtinUniformLocation[UNIFORM_MAX];
     int _builtinAttributeLocation[Attribute::ATTRIBUTE_MAX];
-    std::unordered_map<int, int> _bufferOffset;
 };
 // end of _opengl group
 /// @}

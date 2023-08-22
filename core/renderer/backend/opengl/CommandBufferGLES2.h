@@ -1,6 +1,6 @@
 #include "CommandBufferGL.h"
 
-#if defined(__ANDROID__)
+#if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
 
 NS_AX_BACKEND_BEGIN
 
