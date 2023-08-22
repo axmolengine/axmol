@@ -292,14 +292,20 @@ bool DeviceInfoGL::init()
         }
     }
 
-     // check OpenGL version at first
+    // check OpenGL version at first
+    constexpr int REQUIRED_GLES_MAJOR = (AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
     if ((!_verInfo.es && (_verInfo.major < 3 || _verInfo.minor < 3)) ||
-        (_verInfo.es && _verInfo.major < 2))
+        (_verInfo.es && _verInfo.major < REQUIRED_GLES_MAJOR))
     {
         char strComplain[256] = {0};
+#if AX_GLES_PROFILE == 0
         sprintf(strComplain,
-                "OpenGL 3.3+ or OpenGL ES 2.0+ is required (your version is %s). Please upgrade the driver of your video card.",
-                _version);
+                "OpeGL 3.3+ is required (your version is %s). Please upgrade the driver of your video card.", _version);
+#else
+        sprintf(strComplain,
+                "OpeGL ES %d.%d+ is required (your version is %s). Please upgrade the driver of your video card.",
+                REQUIRED_GLES_MAJOR, AX_GLES_PROFILE % AX_GLES_PROFILE, _version);
+#endif
         ccMessageBox(strComplain, "OpenGL version too old");
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
