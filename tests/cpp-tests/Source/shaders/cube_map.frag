@@ -5,7 +5,7 @@ precision highp int;
 layout(location = TEXCOORD0) in vec3 v_reflect;
 layout(binding = 0) uniform samplerCube u_cubeTex;
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec4 u_color;
 };
 

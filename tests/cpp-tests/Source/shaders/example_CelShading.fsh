@@ -13,7 +13,7 @@ layout(binding = 0) uniform sampler2D u_tex0;
 #define EDGE_FILTER_SIZE 3
 #define EDGE_THRESHOLD 0.05
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec2 resolution;
 };
 

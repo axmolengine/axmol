@@ -9,7 +9,7 @@ layout(binding = 0) uniform sampler2D u_tex0;
 
 const float blurSize = 1.0/512.0;
 const float intensity = 0.35;
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec2 resolution;
 };
 

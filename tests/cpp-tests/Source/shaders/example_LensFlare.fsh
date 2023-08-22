@@ -16,7 +16,7 @@ precision highp int;
  
  muuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuusk!*/
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec2 resolution;
     // vec2 textureResolution;
     vec4 u_Time;

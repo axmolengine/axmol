@@ -8,7 +8,7 @@ layout(binding = 0) uniform sampler2D u_normalMap;
 
 layout(binding = 1) uniform sampler2D u_tex0;
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     float u_kBump;
     vec4  u_lightPosInLocalSpace;
     vec2  u_contentSize;
