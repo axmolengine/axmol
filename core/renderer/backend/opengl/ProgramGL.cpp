@@ -286,7 +286,7 @@ const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() c
     {
         glGetActiveAttrib(_program, i, MAX_ATTRIBUTE_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.get());
         CHECK_GL_ERROR_DEBUG();
-        std::string_view name(attrName.get(), attrName.get() + attrNameLen);
+        std::string_view name{attrName.get(), static_cast<size_t>(attrNameLen)};
         info.location = glGetAttribLocation(_program, name.data());
         info.type     = attrType;
         info.size     = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
