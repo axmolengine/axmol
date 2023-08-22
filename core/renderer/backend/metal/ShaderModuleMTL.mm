@@ -200,9 +200,8 @@ void ShaderModuleMTL::parseAttibute(SLCReflectContext* context)
         ibs->advance(sizeof(sgs_refl_input) - offsetof(sgs_refl_input, semantic));
         
         AttributeBindInfo attributeInfo;
-        attributeInfo.attributeName                 = name;
-        attributeInfo.location                      = loc;
-        _attributeInfo[attributeInfo.attributeName] = attributeInfo;
+        attributeInfo.location = loc;
+        _attributeInfo[name]   = attributeInfo;
     }
 }
 

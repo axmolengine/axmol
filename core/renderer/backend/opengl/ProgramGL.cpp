@@ -286,12 +286,12 @@ const hlookup::string_map<AttributeBindInfo>& ProgramGL::getActiveAttributes() c
     {
         glGetActiveAttrib(_program, i, MAX_ATTRIBUTE_NAME_LENGTH, &attrNameLen, &attrSize, &attrType, attrName.get());
         CHECK_GL_ERROR_DEBUG();
-        info.attributeName = std::string(attrName.get(), attrName.get() + attrNameLen);
-        info.location      = glGetAttribLocation(_program, info.attributeName.c_str());
-        info.type          = attrType;
-        info.size          = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
+        std::string_view name(attrName.get(), attrName.get() + attrNameLen);
+        info.location = glGetAttribLocation(_program, name.data());
+        info.type     = attrType;
+        info.size     = UtilsGL::getGLDataTypeSize(attrType) * attrSize;
         CHECK_GL_ERROR_DEBUG();
-        _activeAttribs[info.attributeName] = info;
+        _activeAttribs[name] = info;
     }
 
     return _activeAttribs;
@@ -363,7 +363,7 @@ void ProgramGL::computeUniformInfos()
         uniform.size = UtilsGL::getGLDataTypeSize(uniform.type);
         std::string_view uniformFullName{buffer.data(), static_cast<size_t>(nameLen)};
         std::string_view uniformName{uniformFullName};
-       
+
         // Try trim uniform name
         // trim name vs_ub.xxx[0] --> xxx
         auto bracket = uniformName.find_last_of('[');

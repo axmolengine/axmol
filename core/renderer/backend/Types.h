@@ -104,7 +104,6 @@ struct UniformLocation
 
 struct AttributeBindInfo
 {
-    std::string attributeName;
     int location = -1;
     int size     = 0;
     int type     = 0;
