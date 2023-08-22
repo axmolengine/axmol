@@ -7,7 +7,7 @@ precision highp int;
 layout(binding = 0) uniform sampler2D tex0;
 layout(binding = 1) uniform sampler2D tex1;
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec2 resolution;
     vec2 u_screenSize;
     vec4 u_Time;

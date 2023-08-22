@@ -5,7 +5,7 @@ layout(location = TEXCOORD0) in vec2 v_texCoord;
 layout(location = POSITION) in vec4 v_position;
 layout(binding = 0) uniform sampler2D u_sampler0;
 layout(binding = 1) uniform sampler2D u_sampler1;
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
     vec3 u_target_pos;
     vec4 u_color;
 };

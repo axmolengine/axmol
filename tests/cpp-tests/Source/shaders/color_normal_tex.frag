@@ -32,7 +32,7 @@ layout(location = NORMAL) in vec3 v_normal;
 
 layout(binding = 0) uniform sampler2D u_sampler0;
 
-layout(std140, binding = 0) uniform fs_ub {
+layout(std140) uniform fs_ub {
 #if (MAX_DIRECTIONAL_LIGHT_NUM > 0)
     vec3 u_DirLightSourceColor[MAX_DIRECTIONAL_LIGHT_NUM];
     vec3 u_DirLightSourceDirection[MAX_DIRECTIONAL_LIGHT_NUM];
