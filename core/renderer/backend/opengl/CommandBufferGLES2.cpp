@@ -1,6 +1,6 @@
 #include "CommandBufferGLES2.h"
 
-#if defined(__ANDROID__)
+#if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
 
 #    include "platform/GL.h"
 

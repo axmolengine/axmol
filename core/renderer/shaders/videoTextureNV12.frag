@@ -19,9 +19,14 @@ layout(location = SV_Target0) out vec4 FragColor;
 void main()
 {
     vec3 YUV;
-    
+
+#ifndef GLES2
     YUV.x = texture(u_tex0, v_texCoord).x; // Y
     YUV.yz = texture(u_tex1, v_texCoord).xy; // CbCr
+#else
+    YUV.x = texture(u_tex0, v_texCoord).w; // Y
+    YUV.yz = texture(u_tex1, v_texCoord).xw; // CbCr
+#endif
 	
     /* Convert YUV to RGB */
     vec4 OutColor;
