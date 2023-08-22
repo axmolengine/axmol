@@ -476,8 +476,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
     auto bufferSize = bytesPerRow * height;
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
+#if AX_GLES_PROFILE != 200
     GLuint pbo;
     glGenBuffers(1, &pbo);
     __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, pbo);
@@ -503,8 +502,7 @@ void CommandBufferGL::readPixels(RenderTarget* rt,
         pbd._width  = width;
         pbd._height = height;
     }
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 && defined(GL_ES_VERSION_3_0)) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && defined(GL_PIXEL_PACK_BUFFER))
+#if AX_GLES_PROFILE != 200
     glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
     __gl->bindBuffer(BufferType::PIXEL_PACK_BUFFER, 0);
     glDeleteBuffers(1, &pbo);
