@@ -25,21 +25,11 @@
   - AX_ENABLE_EXT_EFFEKSEER: the effekseer extension, default: `FALSE` 
 - AX_WITH_XXX: usually user don't need care it
 - AX_VS_DEPLOYMENT_TARGET: specify windows store deploy target, default: `10.0.17763.0`
-- AX_GLES_PROFILE: speicify GLES profile version for axmol determine render backend, default: `0`
-  - 0: 
-    - win32(Desktop GL 3.3 core profile)
-    - android(GLES2.0)
-    - ios/tvos/osx(Metal)
-  - 200: 
-    - win32(GLES3.0)
-    - android(GLES2.0)
-    - ios/tvos(GLES3.0)
-    - osx(GL 3.3 core profile)
-  - 300: 
-    - win32(GLES3.0)
-    - android(GLES3.0)
-    - ios/tvos(GLES3.0)
-    - osx(GL 3.3 core profile)
+- AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: FALSE
+  - win32: whether use ANGLE GLES backend
+  - osx: whether use OpenGL instead Metal backend
+  - ios/tvos: whether use GLES instead Metal backend
+- AX_GLES_PROFILE: speicify GLES profile version for axmol determine render backend, valid value `200`, `300` for GLES backend
 
 ## The options for axmol apps
 
