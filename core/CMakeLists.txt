@@ -42,33 +42,40 @@ cmake_policy(SET CMP0127 NEW)
 
 project(ax_libs)
 
-# choosing render backend
-if(NOT AX_GLES_PROFILE)
-    if(ANDROID) # android: default GLES200 for compatible max devices in marketplace
-        set(AX_GLES_PROFILE 200 CACHE STRING "GLES profile" FORCE)
-    elseif(WINRT) # winuwp: default GLES300
-        set(AX_GLES_PROFILE 300 CACHE STRING "GLES profile" FORCE)
-    elseif(WIN32 OR LINUX) # win32,linux use GL3.3+
-        set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
-    elseif(APPLE) # osx,ios/tvos
-        set(AX_USE_METAL TRUE CACHE BOOL "" FORCE)
+option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" OFF)
+
+# choosing render backend for all target platforms: win32, winuwp, ios, tvos, android, linux, osx
+if(APPLE AND (NOT AX_USE_COMPAT_GL))
+    set(AX_USE_METAL ON CACHE BOOL "" FORCE)
+    set(AX_USE_GL OFF CACHE BOOL "" FORCE)
+else() # win32, winuwp, android, linux: OpenGL
+    set(AX_USE_GL ON CACHE BOOL "" FORCE)
+    set(AX_USE_METAL OFF CACHE BOOL "" FORCE)
+endif()
+
+# macos, linux or (win32, ios, tvos and NOT AX_USE_COMPAT_GL) not use GLES profile
+set(_GLES_PROFILE 0) # _GLES_PROFILE is the default GLES profile
+if(ANDROID) # android force use GLES profile
+    set(_GLES_PROFILE 200)
+elseif(WINRT) # winuwp fore use GLES profile
+    set(_GLES_PROFILE 300)
+elseif((NOT MACOSX) AND (NOT LINUX)) # win32, ios, tvos
+    if(AX_USE_COMPAT_GL)
+        set(_GLES_PROFILE 300)
     endif()
-else()
-    if(LINUX OR MACOSX) # linux, osx use GL3.3+
-        set(AX_USE_GL TRUE CACHE BOOL "" FORCE)
+endif()
+
+if(_GLES_PROFILE)
+    set(AX_GLES_PROFILE ${_GLES_PROFILE} CACHE STRING "")
+    if (NOT (AX_GLES_PROFILE EQUAL 200 OR AX_GLES_PROFILE EQUAL 300))
+       message(FATAL_ERROR "${MACOSX} Invalid GLES profile ${AX_GLES_PROFILE}, must be 200 or 300, default ${_GLES_PROFILE}")
     endif()
+else() # force disable GLES profile
+    set(AX_GLES_PROFILE 0 CACHE STRING "" FORCE)
 endif()
 
-if (NOT DEFINED AX_GLES_PROFILE)
-    set(AX_GLES_PROFILE 0 CACHE STRING "GLES profile")
-endif()
-
-# verify GLES profile
-if (NOT (AX_GLES_PROFILE EQUAL 0 OR AX_GLES_PROFILE EQUAL 200 OR AX_GLES_PROFILE EQUAL 300))
-    message(FATAL_ERROR "Invalid AX_GLES_PROFILE, must be: 0 or 200 or 300")
-endif()
-
-message(AUTHOR_WARNING "AX_GLES_PROFILE=${AX_GLES_PROFILE}")
+# print renderer backend profile
+message(AUTHOR_WARNING "AX_USE_GL=${AX_USE_GL}, AX_USE_METAL=${AX_USE_METAL}, AX_GLES_PROFILE=${AX_GLES_PROFILE}")
 
 option (AX_ENABLE_MFMEDIA "Enabling microsoft media foundation" ON)
 

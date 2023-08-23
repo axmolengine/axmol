@@ -40,11 +40,11 @@ THE SOFTWARE.
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/GL-linux.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
-#    if AX_USE_COMPAT_GL
+#    if defined(AX_USE_GL)
 #        include "platform/ios/GL-ios.h"
 #    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#    if AX_USE_COMPAT_GL
+#    if defined(AX_USE_GL)
 #        include "platform/mac/GL-mac.h"
 #    endif
 #endif
