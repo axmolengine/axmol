@@ -29,7 +29,7 @@
   - win32: whether use ANGLE GLES backend
   - osx: whether use OpenGL instead Metal backend
   - ios/tvos: whether use GLES instead Metal backend
-- AX_GLES_PROFILE: speicify GLES profile version for axmol determine render backend, valid value `200`, `300` for GLES backend
+- AX_GLES_PROFILE: speicify GLES profile version for GLES backend, valid value `200`, `300`
 
 ## The options for axmol apps
 
