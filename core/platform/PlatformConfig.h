@@ -138,20 +138,14 @@ Linux: Desktop GL/Vulkan
 #    define AX_PLATFORM_PC
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    if !AX_GLES_PROFILE
+#if defined(__APPLE__)
+#    if !defined(AX_USE_GL)
 #        define AX_USE_METAL
-#    else
+#    endif
+#else  // win32,linux,winuwp,android
+#    if !defined(AX_USE_GL)
 #        define AX_USE_GL
 #    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-#    if !AX_GLES_PROFILE
-#        define AX_USE_METAL
-#    else
-#        define AX_USE_GL
-#    endif
-#else // win32,linux,winuwp,android
-#    define AX_USE_GL
 #endif
 
 /// @endcond

@@ -80,7 +80,7 @@ set(_AX_RENDERER_SRC
     renderer/backend/RenderPassDescriptor.cpp
     )
 
-if(ANDROID OR WINDOWS OR LINUX OR AX_GLES_PROFILE)
+if(ANDROID OR WINDOWS OR LINUX OR AX_USE_GL)
     list(APPEND _AX_RENDERER_HEADER
         renderer/backend/opengl/OpenGLState.h
         renderer/backend/opengl/BufferGL.h

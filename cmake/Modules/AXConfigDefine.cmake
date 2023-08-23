@@ -127,13 +127,13 @@ function(use_ax_compile_define target)
     if(APPLE)
         target_compile_definitions(${target} PUBLIC __APPLE__)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
-        if(AX_GLES_PROFILE)
+        if(AX_USE_GL)
             target_compile_definitions(${target}
+                PUBLIC AX_USE_GL=1
                 PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE}
                 PUBLIC GL_SILENCE_DEPRECATION=1
             )
         endif()
-
         if(IOS)
             if(TVOS)
                 target_compile_definitions(${target} PUBLIC AX_TARGET_OS_TVOS)

@@ -294,7 +294,7 @@ bool DeviceInfoGL::init()
 
     // check OpenGL version at first
     constexpr int REQUIRED_GLES_MAJOR = (AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
-    if ((!_verInfo.es && (_verInfo.major < 3 || _verInfo.minor < 3)) ||
+    if ((!_verInfo.es && (_verInfo.major < 3 || (_verInfo.major == 3 && _verInfo.minor < 3))) ||
         (_verInfo.es && _verInfo.major < REQUIRED_GLES_MAJOR))
     {
         char strComplain[256] = {0};
