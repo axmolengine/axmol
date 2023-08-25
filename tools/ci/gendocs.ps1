@@ -47,11 +47,6 @@ setup_doxygen
 
 Write-Host "Using doxygen $(doxygen --version)"
 
-$CONFIG_NAME = 'doxygen'
-if ($args.Count -gt 0) {
-    $CONFIG_NAME = $args[0]
-}
-
 $AX_ROOT = (Resolve-Path $DIR/../..)
 $axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
 $content = ($(Get-Content -Path $axver_file) | Select-String 'AX_VERSION_STR')
@@ -72,14 +67,53 @@ $docsRoot = (Resolve-Path "$DIR/../../docs").Path
 $store_cwd = (Get-Location).Path
 Set-Location $docsRoot
 
-$content = [Regex]::Replace($(Get-Content doxygen.config -raw), '\bv1.0\b', "v$axver")
-Move-Item 'doxygen.config' 'doxygen.config.bak' -Force
-Set-Content -Path doxygen.config -Value "$content"
 
-doxygen "$CONFIG_NAME.config"
+function mkdirs([string]$path) {
+    if (!(Test-Path $path)) {
+        New-Item $path -ItemType Directory 1>$null
+    }
+}
 
-#restore the old doxygen.config
-Move-Item 'doxygen.config.bak' 'doxygen.config' -Force
+function  configure_file($infile, $outfile, $vars) {
+    $content = $(Get-Content $infile -raw)
+    foreach($var in $vars.GetEnumerator()) {
+        $content = [Regex]::Replace($content, $var.Key, $var.Value)
+    }
+    Set-Content -Path $outfile -Value "$content"
+}
+
+# building latest
+$verMap = @{
+    'latest' = "v$axver"
+    '1.0' = "v1.0.0"
+}
+
+$strVerList = "'$($verMap.Keys -join "','")'"
+
+# set default doc ver
+configure_file './index.html.in' "./out/index.html" @{'@VERSION@' = 'latest'}
+
+foreach($item in $verMap.GetEnumerator()) {
+    $ver = $item.Key
+    $html_out_base = "./out/$ver"
+    mkdirs $html_out_base
+    $release_tag = $item.Value
+
+    if ($ver -eq 'latest') {
+        git checkout dev
+    } elseif($ver -eq '1.0') {
+        git checkout '1.x' # 1.x branch now for v1.0
+    } else {
+        git checkout $release_tag
+    }
+    configure_file './Doxyfile.in' './Doxyfile' @{'@VERSION@'=$release_tag; '@HTML_OUTPUT@' = "$ver/manual"}
+
+    doxygen "./Doxyfile"
+
+    $html_out = Join-Path $html_out_base 'manual'
+    Copy-Item './hacks.js' $html_out
+    Copy-Item './stylesheet.css' $html_out
+    configure_file './menu_version.js.in' "$html_out/menu_version.js" @{'@VERLIST@' = $strVerList; '@VERSION@' = $ver}
+}
 
 Set-Location $store_cwd
-

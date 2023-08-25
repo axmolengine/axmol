@@ -1,0 +1,23 @@
+#back-nav {
+    border-bottom: 1px solid;
+    padding: 0.5em;
+    /*background-color: #FAF9FB;*/
+}
+
+#back-nav h2 {
+    display: inline;
+}
+
+#back-nav ul
+{
+    display: inline;
+    padding: 0;
+    margin: 0;
+}
+
+#back-nav li
+{
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
