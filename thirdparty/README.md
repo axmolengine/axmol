@@ -67,7 +67,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 10.0.0
+- Version: 10.1.0
 - License: MIT
 
 ## FreeType
@@ -107,7 +107,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 9.0.0
+- Version: 9.0.1
 - License: MIT
 
 ## lua
