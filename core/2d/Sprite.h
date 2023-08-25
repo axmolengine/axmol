@@ -425,7 +425,7 @@ public:
     /**
      * Set or Attach new ProgramState
      */
-    bool setProgramState(backend::ProgramState* programState, bool needsRetain = true) override;
+    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
 
     /**
      * Sets the weak reference of the TextureAtlas when the sprite is rendered using via SpriteBatchNode.

@@ -28,6 +28,8 @@ Copyright (c) 2020 C4games Ltd.
 #include "DepthStencilStateGL.h"
 #include "ProgramGL.h"
 #include "UtilsGL.h"
+#include "MacrosGL.h"
+#include "OpenGLState.h"
 
 #include <assert.h>
 
@@ -61,15 +63,16 @@ void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
 
     if (blendEnabled)
     {
-        glEnable(GL_BLEND);
-        glBlendEquationSeparate(rgbBlendOperation, alphaBlendOperation);
-        glBlendFuncSeparate(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
-                            destinationAlphaBlendFactor);
+        __gl->enableBlend();
+
+        __gl->blendEquationSeparate(rgbBlendOperation, alphaBlendOperation);
+        __gl->blendFuncSeparate(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
+                               destinationAlphaBlendFactor);
     }
     else
-        glDisable(GL_BLEND);
+        __gl->disableBlend();
 
-    glColorMask(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
+    __gl->colorMask(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
 }
 
 RenderPipelineGL::~RenderPipelineGL()

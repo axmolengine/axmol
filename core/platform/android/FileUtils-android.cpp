@@ -99,7 +99,7 @@ bool FileUtilsAndroid::init()
     std::string assetsPath(getApkPath());
     if (assetsPath.find("/obb/") != std::string::npos)
     {
-        obbfile = new ZipFile(assetsPath);
+        obbfile = ZipFile::createFromFile(assetsPath);
     }
 
     return FileUtils::init();
@@ -301,64 +301,6 @@ std::vector<std::string> FileUtilsAndroid::listFiles(std::string_view dirPath) c
     }
     AAssetDir_close(dir);
     return fileList;
-}
-
-FileUtils::Status FileUtilsAndroid::getContents(std::string_view filename, ResizableBuffer* buffer) const
-{
-    static const std::string apkprefix("assets/");
-    if (filename.empty())
-        return FileUtils::Status::NotExists;
-
-    auto fullPath = fullPathForFilename(filename);
-
-    if (fullPath[0] == '/')
-        return FileUtils::getContents(fullPath, buffer);
-
-    std::string relativePath;
-    size_t position = fullPath.find(apkprefix);
-    if (0 == position)
-    {
-        // "assets/" is at the beginning of the path and we don't want it
-        relativePath += fullPath.substr(apkprefix.size());
-    }
-    else
-    {
-        relativePath = fullPath;
-    }
-
-    if (obbfile)
-    {
-        if (obbfile->getFileData(relativePath, buffer))
-            return FileUtils::Status::OK;
-    }
-
-    if (nullptr == assetmanager)
-    {
-        LOGD("... FileUtilsAndroid::assetmanager is nullptr");
-        return FileUtils::Status::NotInitialized;
-    }
-
-    AAsset* asset = AAssetManager_open(assetmanager, relativePath.c_str(), AASSET_MODE_UNKNOWN);
-    if (nullptr == asset)
-    {
-        LOGD("AAssetManager_open %s failed", relativePath.c_str());
-        return FileUtils::Status::OpenFailed;
-    }
-
-    auto size = AAsset_getLength(asset);
-    buffer->resize(size);
-
-    int readsize = AAsset_read(asset, buffer->buffer(), size);
-    AAsset_close(asset);
-
-    if (readsize < size)
-    {
-        if (readsize >= 0)
-            buffer->resize(readsize);
-        return FileUtils::Status::ReadFailed;
-    }
-
-    return FileUtils::Status::OK;
 }
 
 std::string FileUtilsAndroid::getWritablePath() const

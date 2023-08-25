@@ -60,7 +60,7 @@ FontAtlas::FontAtlas(Font* theFont) : _font(theFont)
         if (outlineSize > 0)
         {
             _strideShift         = 1;
-            _pixelFormat         = backend::PixelFormat::LA8;
+            _pixelFormat         = AX_GLES_PROFILE != 200 ? backend::PixelFormat::RG8 : backend::PixelFormat::LA8;
             _currentPageDataSize = CacheTextureWidth * CacheTextureHeight << _strideShift;
 
 #if defined(AX_USE_METAL)
@@ -72,7 +72,7 @@ FontAtlas::FontAtlas(Font* theFont) : _font(theFont)
         else
         {
             _strideShift         = 0;
-            _pixelFormat         = backend::PixelFormat::A8;
+            _pixelFormat         = AX_GLES_PROFILE != 200 ? backend::PixelFormat::R8 : backend::PixelFormat::A8;
             _currentPageDataSize = CacheTextureWidth * CacheTextureHeight;
         }
 

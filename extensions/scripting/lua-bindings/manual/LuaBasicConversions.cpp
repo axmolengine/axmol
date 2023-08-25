@@ -3155,7 +3155,7 @@ void program_activeattrs_to_luaval(lua_State* L, const hlookup::string_map<ax::b
 
         lua_newtable(L);
         lua_pushstring(L, "attributeName");
-        lua_pushstring(L, p.second.attributeName.c_str());
+        lua_pushstring(L, p.first.c_str());
         lua_rawset(L, -3);
 
         lua_pushstring(L, "location");
