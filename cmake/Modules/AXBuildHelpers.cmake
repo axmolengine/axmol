@@ -188,7 +188,7 @@ function(ax_copy_target_dll ax_target)
     )
 
     # Copy windows angle binaries
-    if (WIN32 AND AX_GLES_PROFILE)
+    if (WIN32 AND AX_USE_ANGLE)
         add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
@@ -385,33 +385,10 @@ function(ax_setup_app_config app_name)
         )
     endif()
 
-    # auto looking app shaders source dir and add to glslcc compile-list
-    get_target_property(app_shaders_dir ${app_name} SOURCE_DIR)
-    set(app_shaders_dir "${app_shaders_dir}/Source/shaders")
-
-    ax_find_shaders(${app_shaders_dir} app_shaders RECURSE)
-    if (app_shaders)
-        list(LENGTH app_shaders app_shaders_count)
-        message(STATUS "${app_shaders_count} shader sources found in ${app_shaders_dir}")
-        # compile app shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/
-        ax_target_compile_shaders(${app_name} FILES ${app_shaders} CUSTOM)
-        source_group("Source Files/Source/shaders" FILES ${app_shaders}) 
-    else()
-        message(STATUS "No shader found in ${app_shaders_dir}")
-    endif()
-
-    if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
-        get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
-        if ((WIN32 AND (NOT WINRT)) OR LINUX)
-            ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
-        elseif(APPLE)
-            # once cmake-3.28.0 released, uncomment follow line instead above 2 lines
-            set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES_PATH ${GLSLCC_OUT_DIR})
-        elseif(WINRT)
-            set(app_all_shaders)
-            list(APPEND app_all_shaders ${ax_builtin_shaders})
-            list(APPEND app_all_shaders ${app_shaders})
-            ax_target_embed_compiled_shaders(${app_name} ${rt_output} FILES ${app_all_shaders})
+    if((WIN32 AND (NOT WINRT)) OR LINUX)
+        if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
+            get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
+            ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
         endif()
     endif()
 endfunction()

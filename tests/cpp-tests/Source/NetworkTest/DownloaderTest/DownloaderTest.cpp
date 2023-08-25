@@ -37,7 +37,7 @@ USING_NS_AX;
 static const char* sURLList[] = {
     "https://www.cocos2d-x.org/attachments/802/cocos2dx_landscape.png", "https://cocos2d-x.org/images/logo.png",
     "https://www.cocos2d-x.org/attachments/1503/no_exist.txt",  // try to download no exist file
-    "https://www.openssl.org/source/openssl-3.0.10.tar.gz"
+    "https://cdn-fastly.obsproject.com/downloads/OBS-Studio-27.0.1-Full-Installer-x64.exe"  // "https://github.com/openssl/openssl/archive/OpenSSL_1_1_1a.zip",
 };
 const static int sListSize              = (sizeof(sURLList) / sizeof(sURLList[0]));
 static const char* sNameList[sListSize] = {
@@ -131,7 +131,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            //btn->setVisible(false);
+            btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);
@@ -151,7 +151,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            //btn->setVisible(false);
+            btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);
@@ -172,7 +172,7 @@ struct DownloaderTest : public TestCase
             }
             auto btn = (ui::Button*)view->getChildByTag(TAG_BUTTON);
             btn->setEnabled(false);
-            //btn->setVisible(false);
+            btn->setVisible(false);
             auto bar = (ui::LoadingBar*)view->getChildByTag(TAG_PROGRESS_BAR);
             bar->setPercent(0);
             bar->setVisible(true);
@@ -196,7 +196,7 @@ struct DownloaderTest : public TestCase
             bar->setEnabled(true);
             auto path = FileUtils::getInstance()->getWritablePath() + "CppTests/DownloaderTest/" + sNameList[3];
             auto task = this->downloader->createDownloadFileTask(sURLList[3], path, sNameList[3],
-                                                                 "5d689e1534373e0b0540b5c087b5d99a", false);
+                                                                 "730cfe31b344ba77d87d0a896af710d4", false);
             task->progressInfo.totalBytesExpected = 89945032;
         });
         bottomRightView->setName(sNameList[3]);

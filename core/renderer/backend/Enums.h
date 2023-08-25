@@ -42,21 +42,15 @@ enum class BufferUsage : uint32_t
 
 enum class BufferType : uint32_t
 {
-    ARRAY_BUFFER,
-    ELEMENT_ARRAY_BUFFER,
-    UNIFORM_BUFFER,
-    PIXEL_PACK_BUFFER,
-    COUNT,
-    VERTEX  = ARRAY_BUFFER,
-    INDEX   = ELEMENT_ARRAY_BUFFER,
-    UNIFORM = UNIFORM_BUFFER
+    VERTEX,
+    INDEX
 };
 
-enum class ShaderStage
+enum class ShaderStage : uint32_t
 {
-    UNKNOWN = -1,
     VERTEX,
-    FRAGMENT
+    FRAGMENT,
+    VERTEX_AND_FRAGMENT
 };
 
 enum class VertexFormat : uint32_t
@@ -73,14 +67,10 @@ enum class VertexFormat : uint32_t
     USHORT2,
     UBYTE4
 };
+
 /** @typedef backend::PixelFormat
      Possible texture pixel formats
-refer to:
-  https://docs.gl/es3/glTexImage2D
-  https://docs.gl/gl3/glTexImage2D
-  https://developer.apple.com/documentation/metal/mtlpixelformat?language=objc
- */
-
+     */
 enum class PixelFormat : uint32_t
 {
     /* below is compression format */
@@ -138,16 +128,15 @@ enum class PixelFormat : uint32_t
     RGBA4,  // !render as ABGR4
     //! 16-bit textures: RGB5A1
     RGB5A1,  // !render as BGR5A1
-    //! 8-bit textures used as red, GL3/GLES3/Metal     (R,G,0,0)
-    R8,
-    //! 16-bit read and green channel, GL3/GLES3/Metal  (R,G,0,0)
-    RG8,
-    //! 8-bit textures used as masks, GLES2/GLES3/Metal (0,0,0,A) deprecated
+    //! 8-bit textures used as masks, in shader: texColor.a or texColor.w
     A8,
-    //! 8-bit Luminance texture, GLES2/GLES3/Metal ONLY (L,L,L,1) deprecated
+    //! 8-bit Luminance texture, in shader: texColor.r or texColor.x
     L8,
-    //! 16-bit Luminance with alpha, GLES2/GLES3 ONLY   (L,L,L,A) deprecated
+    //! 16-bit Luminance with alpha used as masks, in shader: texColor.xw or texColor.ra, supported GLES 2.0, not supported by Metal backend
     LA8,
+    //! 16-bit read and green channel, supported OpenGES 3.0 or Metal backend
+    RG8,
+
     //!!!Please append normal pixel format
     //! 32-bit texture: RGBA8888
     RGBA32F,
@@ -336,50 +325,47 @@ enum class TextureCubeFace : uint32_t
     NEGATIVE_Z = 5
 };
 
-// clang-format off
 struct ProgramType
 {
     enum : uint32_t
     {
         POSITION_COLOR_LENGTH_TEXTURE,        // positionColorLengthTexture_vert, positionColorLengthTexture_frag
         POSITION_COLOR_TEXTURE_AS_POINTSIZE,  // positionColorTextureAsPointsize_vert, positionColor_frag
-        POSITION_COLOR,                       // positionColor_vert,              positionColor_frag
-        POSITION_UCOLOR,                      // positionUColor_vert,             positionUColor_frag
-        POSITION_TEXTURE,                     // positionTexture_vert,            positionTexture_frag
-        POSITION_TEXTURE_COLOR,               // positionTextureColor_vert,       positionTextureColor_frag
-        POSITION_TEXTURE_COLOR_ALPHA_TEST,    // positionTextureColor_vert,       positionTextureColorAlphaTest_frag
-        LABEL_NORMAL,                         // positionTextureColor_vert,       label_normal_frag
-        LABLE_OUTLINE,                        // positionTextureColor_vert,       labelOutline_frag
-        LABEL_DISTANCE_NORMAL,                // positionTextureColor_vert,       label_distanceNormal_frag
-        LABEL_DISTANCE_OUTLINE,               // positionTextureColor_vert,       label_distanceOutline_frag
-        LABLE_DISTANCE_GLOW,                  // positionTextureColor_vert,       label_distanceGlow_frag
+        POSITION_COLOR,                       // positionColor_vert,           positionColor_frag
+        POSITION_UCOLOR,                      // positionUColor_vert,          positionUColor_frag
+        POSITION_TEXTURE,                     // positionTexture_vert,         positionTexture_frag
+        POSITION_TEXTURE_COLOR,               // positionTextureColor_vert,    positionTextureColor_frag
+        POSITION_TEXTURE_COLOR_ALPHA_TEST,    // positionTextureColor_vert,    positionTextureColorAlphaTest_frag
+        LABEL_NORMAL,                         // positionTextureColor_vert,    label_normal_frag
+        LABLE_OUTLINE,                        // positionTextureColor_vert,    labelOutline_frag
+        LABLE_DISTANCEFIELD_GLOW,             // positionTextureColor_vert,    labelDistanceFieldGlow_frag
+        LABEL_DISTANCE_NORMAL,                // positionTextureColor_vert,    label_distanceNormal_frag
 
-        LAYER_RADIA_GRADIENT,                 // position_vert,                   layer_radialGradient_frag
+        LAYER_RADIA_GRADIENT,  // position_vert,                layer_radialGradient_frag
 
         DUAL_SAMPLER,
         DUAL_SAMPLER_GRAY,
-        ETC1      = DUAL_SAMPLER,             // positionTextureColor_vert,       dualSampler_frag
-        ETC1_GRAY = DUAL_SAMPLER_GRAY,        // positionTextureColor_vert,       dualSamplerGray_frag
-        GRAY_SCALE,                           // positionTextureColor_vert,       grayScale_frag
-        CAMERA_CLEAR,                         // cameraClear_vert,                cameraClear_frag
+        ETC1      = DUAL_SAMPLER,       // positionTextureColor_vert,    etc1_frag
+        ETC1_GRAY = DUAL_SAMPLER_GRAY,  // positionTextureColor_vert,    etc1Gray_frag
+        GRAY_SCALE,                     // positionTextureColor_vert,    grayScale_frag
+        CAMERA_CLEAR,                   // cameraClear_vert,             cameraClear_frag
 
-        TERRAIN_3D,                           // terrain_vert,                    terrain_frag
-        LINE_COLOR_3D,                        // lineColor_vert,                  lineColor_frag
-        SKYBOX_3D,                            // skybox_vert,                     skybox_frag
-        SKINPOSITION_TEXTURE_3D,              // skinPositionTexture_vert,        colorTexture_frag
-        SKINPOSITION_NORMAL_TEXTURE_3D,       // skinPositionNormalTexture_vert,  colorNormalTexture_frag
-        POSITION_NORMAL_TEXTURE_3D,           // positionNormalTexture_vert,      colorNormalTexture_frag
-        POSITION_NORMAL_3D,                   // positionNormalTexture_vert,      colorNormal_frag
-        POSITION_TEXTURE_3D,                  // positionTexture3D_vert,          colorTexture_frag
-        POSITION_TEXTURE_3D_INSTANCE,         // positionTextureInstance_vert,    colorTexture_frag
-        POSITION_3D,                          // positionTexture_vert,            color_frag
-        POSITION_BUMPEDNORMAL_TEXTURE_3D,     // positionNormalTexture_vert,      colorNormalTexture_frag
-        SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D, // skinPositionNormalTexture_vert,  colorNormalTexture_frag
-        PARTICLE_TEXTURE_3D,                  // particle_vert,                   particleTexture_frag
-        PARTICLE_COLOR_3D,                    // particle_vert,                   particleColor_frag
+        TERRAIN_3D,                            // CC3D_terrain_vert,                    CC3D_terrain_frag
+        LINE_COLOR_3D,                         // lineColor3D_vert,                     lineColor3D_frag
+        SKYBOX_3D,                             // CC3D_skybox_vert,                     CC3D_skybox_frag
+        SKINPOSITION_TEXTURE_3D,               // CC3D_skinPositionTexture_vert,        CC3D_colorTexture_frag
+        SKINPOSITION_NORMAL_TEXTURE_3D,        // CC3D_skinPositionNormalTexture_vert,  CC3D_colorNormalTexture_frag
+        POSITION_NORMAL_TEXTURE_3D,            // CC3D_positionNormalTexture_vert,      CC3D_colorNormalTexture_frag
+        POSITION_NORMAL_3D,                    // CC3D_positionNormalTexture_vert,      CC3D_colorNormal_frag
+        POSITION_TEXTURE_3D,                   // CC3D_positionTexture_vert,            CC3D_colorTexture_frag
+        POSITION_3D,                           // CC3D_positionTexture_vert,            CC3D_color_frag
+        POSITION_BUMPEDNORMAL_TEXTURE_3D,      // CC3D_positionNormalTexture_vert,      CC3D_colorNormalTexture_frag
+        SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D,  // CC3D_skinPositionNormalTexture_vert,  CC3D_colorNormalTexture_frag
+        PARTICLE_TEXTURE_3D,                   // CC3D_particle_vert,                   CC3D_particleTexture_frag
+        PARTICLE_COLOR_3D,                     // CC3D_particle_vert,                   CC3D_particleColor_frag
 
-        QUAD_COLOR_2D,                        // quad_vert,                       quadColor_frag
-        QUAD_TEXTURE_2D,                      // quad_vert,                       quadTexture_frag
+        QUAD_COLOR_2D,    // CC2D_quad_vert,                       CC2D_quadColor_frag
+        QUAD_TEXTURE_2D,  // CC2D_quad_vert,                       CC2D_quadTexture_frag
 
         HSV,
         HSV_DUAL_SAMPLER,
@@ -388,13 +374,12 @@ struct ProgramType
         VIDEO_TEXTURE_YUY2,
         VIDEO_TEXTURE_NV12,
         VIDEO_TEXTURE_BGR32,
-
+        
         BUILTIN_COUNT,
 
         VIDEO_TEXTURE_RGB32 = POSITION_TEXTURE_COLOR,
-        CUSTOM_PROGRAM      = 0x1000,  // user-define program, used by engine
+        CUSTOM_PROGRAM = 0x1000,  // user-define program, used by engine
     };
 };
-// clang-format on
 
 NS_AX_BACKEND_END

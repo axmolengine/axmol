@@ -100,7 +100,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
      - Android Gradle Plugin (AGP) 7.4.2  
      - Android SDK Build-Tools 30.0.3 match with AGP, refer to: <https://developer.android.com/studio/releases/gradle-plugin>
      - Gradle 8.1  
-     - NDK r23c  
+     - NDK r23c+  
      - CMake 3.22.1+  
   5. Wait for ```Gradle sync``` finish.
   6. Note: If you use non-sdk provided CMake edition, you will need to download ```ninja``` from <https://github.com/ninja-build/ninja/releases>, and copy ```ninja.exe``` to cmake's bin directory
