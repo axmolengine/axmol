@@ -206,9 +206,6 @@ TODO: should remove it.
     inline std::size_t getIndexDrawOffset() const { return _indexDrawOffset; }
     inline std::size_t getIndexDrawCount() const { return _indexDrawCount; }
 
-    inline void setLineWidth(float lineWidth) { _lineWidth = lineWidth; }
-    inline float getLineWidth() const { return _lineWidth; }
-
     inline IndexFormat getIndexFormat() const { return _indexFormat; }
 
     inline void setIndexFormat(IndexFormat format) { _indexFormat = format; }

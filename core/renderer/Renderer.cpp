@@ -745,7 +745,6 @@ void Renderer::drawCustomCommand(RenderCommand* command)
     _commandBuffer->setProgramState(cmd->getPipelineDescriptor().programState);
 
     auto drawType = cmd->getDrawType();
-    _commandBuffer->setLineWidth(cmd->getLineWidth());
     if (CustomCommand::DrawType::ELEMENT == drawType)
     {
         _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());

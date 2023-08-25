@@ -192,12 +192,6 @@ public:
 
     /**
      * Fixed-function state
-     * @param lineWidth Specifies the width of rasterized lines.
-     */
-    virtual void setLineWidth(float lineWidth) override;
-
-    /**
-     * Fixed-function state
      * @param x, y Specifies the lower left corner of the scissor box
      * @param wdith Specifies the width of the scissor box
      * @param height Specifies the height of the scissor box

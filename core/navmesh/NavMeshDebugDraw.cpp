@@ -210,11 +210,6 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
         initCustomCommand(command);
         command.setBeforeCallback(AX_CALLBACK_0(NavMeshDebugDraw::onBeforeEachCommand, this, iter->depthMask));
 
-        if (iter->type == backend::PrimitiveType::LINE)
-        {
-            command.setLineWidth(iter->size);
-        }
-
         command.setVertexBuffer(_vertexBuffer);
         command.setPrimitiveType(iter->type);
         command.setVertexDrawInfo(iter->start, iter->end - iter->start);

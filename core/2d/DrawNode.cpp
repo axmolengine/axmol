@@ -244,7 +244,6 @@ void DrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     {
         updateBlendState(_customCommandLine);
         updateUniforms(transform, _customCommandLine);
-        _customCommandLine.setLineWidth(_lineWidth);
         _customCommandLine.init(_globalZOrder);
         renderer->addCommand(&_customCommandLine);
     }

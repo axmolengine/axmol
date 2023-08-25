@@ -426,14 +426,6 @@ void CommandBufferGL::cleanResources()
     AX_SAFE_RELEASE_NULL(_programState);
 }
 
-void CommandBufferGL::setLineWidth(float lineWidth)
-{
-    if (lineWidth > 0.0f)
-        __gl->lineWidth(lineWidth);
-    else
-        __gl->lineWidth(1.0f);
-}
-
 void CommandBufferGL::setScissorRect(bool isEnabled, float x, float y, float width, float height)
 {
     if (isEnabled)

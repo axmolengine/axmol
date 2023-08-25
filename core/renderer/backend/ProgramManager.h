@@ -58,9 +58,9 @@ public:
     /// get built-in program
     Program* getBuiltinProgram(uint32_t type);
 
-    /*
+    /**
      * register a custom program
-     * @returns
+     * @return
      *   the id of custom program, 0: fail, the id can use by loadProgram
      */
     uint64_t registerCustomProgram(std::string_view vsName,
@@ -68,7 +68,7 @@ public:
                                    VertexLayoutType vlt = VertexLayoutType::Unspec,
                                    bool force           = false);
 
-    /*
+    /**
      * load a builtin/or custom program:
      * @param id: the id of program to load, the id value returned by registerCustomProgram
      *            or builtin programType, whe the id < ProgramType:BUILTIN_COUNT, this function
@@ -76,14 +76,13 @@ public:
      */
     Program* loadProgram(uint64_t progId);
 
-    /*
-    * load a program with vsName, fsName as CUSTOM immediately without register
-    * @params
-    *   @param vsName: the vertex shader name: custom/xxx_vs
-    *   @param fsName: the fragment shader name: custom/xxx_vs
-    *   @param vlt: the builtin vertex layout type used for loading program
-    * @returns Program* (nullable)
-    * @remark: the returend program type always ProgramType::CUSTOM_PROGRAM
+    /**
+    * @brief Load a program with vsName, fsName as CUSTOM immediately without register
+    * @param vsName the vertex shader name: custom/xxx_vs
+    * @param fsName the fragment shader name: custom/xxx_vs
+    * @param vlt the builtin vertex layout type used for loading program
+    * @return Program* (nullable)
+    * @remark the returend program type always ProgramType::CUSTOM_PROGRAM
     */
     Program* loadProgram(std::string_view vsName,
                                std::string_view fsName,
