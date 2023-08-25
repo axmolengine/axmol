@@ -57,6 +57,8 @@ public:
 
 private:
     virtual bool isFileExistInternal(std::string_view strFilePath) const override;
+
+    static std::string s_exeName;
 };
 
 // end of platform group

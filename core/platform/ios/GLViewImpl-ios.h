@@ -62,7 +62,7 @@ public:
     /** returns whether or not the view is in Retina Display mode */
     virtual bool isRetinaDisplay() const override { return getContentScaleFactor() == 2.0; }
 
-    /** returns the objective-c CCEAGLView instance */
+    /** returns the objective-c EAGLView instance */
     virtual void* getEAGLView() const override { return _eaglView; }
 
     // overrides
@@ -83,7 +83,7 @@ protected:
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor);
     bool initWithFullScreen(std::string_view viewName);
 
-    // the objective-c CCEAGLView instance
+    // the objective-c EAGLView instance
     void* _eaglView;
 };
 
