@@ -50,7 +50,7 @@ class DepthStencilStateGL;
  * @brief Store encoded commands for the GPU to execute.
  * A command buffer stores encoded commands until the buffer is committed for execution by the GPU
  */
-class CommandBufferGL : public CommandBuffer
+class CommandBufferGL final : public CommandBuffer
 {
 public:
     CommandBufferGL();
@@ -133,12 +133,6 @@ public:
     virtual void setIndexBuffer(Buffer* buffer) override;
 
     /**
-     * Set matrix tranform when drawing instances of the same model
-     * @ buffer A buffer object that the device will read matrices from.
-     */
-    virtual void setInstanceBuffer(Buffer* buffer) override;
-
-    /**
      * Draw primitives without an index list.
      * @param primitiveType The type of primitives that elements are assembled into.
      * @param start For each instance, the first index to draw
@@ -161,24 +155,6 @@ public:
                               std::size_t count,
                               std::size_t offset,
                               bool wireframe = false) override;
-
-    /**
-     * Draw primitives with an index list instanced.
-     * @param primitiveType The type of primitives that elements are assembled into.
-     * @param indexType The type if indexes, either 16 bit integer or 32 bit integer.
-     * @param count The number of indexes to read from the index buffer for each instance.
-     * @param offset Byte offset within indexBuffer to start reading indexes from.
-     * @param instance Count of
-     * instances to draw at once.
-     * @see `setIndexBuffer(Buffer* buffer)`
-     * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
-     */
-    virtual void drawElementsInstanced(PrimitiveType primitiveType,
-                                       IndexFormat indexType,
-                                       std::size_t count,
-                                       std::size_t offset,
-                                       int instanceCount,
-                                       bool wireframe = false) override;
 
     /**
      * Do some resources release.
@@ -219,23 +195,29 @@ protected:
                     uint32_t bytesPerRow,
                     PixelBufferDescriptor& pbd);
 
-protected:
+private:
+    struct Viewport
+    {
+        int x          = 0;
+        int y          = 0;
+        unsigned int w = 0;
+        unsigned int h = 0;
+    };
 
     void prepareDrawing() const;
-    void bindVertexBuffer(uint32_t& usedBits) const;
-    virtual void bindInstanceBuffer(ProgramGL* program, uint32_t& usedBits) const;
-    void bindUniforms(ProgramGL* program) const;
+    void bindVertexBuffer(ProgramGL* program) const;
+    void setUniforms(ProgramGL* program) const;
+    void setUniform(bool isArray, GLuint location, unsigned int size, GLenum uniformType, void* data) const;
     void cleanResources();
 
     BufferGL* _vertexBuffer                   = nullptr;
     ProgramState* _programState               = nullptr;
     BufferGL* _indexBuffer                    = nullptr;
-    BufferGL* _instanceTransformBuffer        = nullptr;
     RenderPipelineGL* _renderPipeline         = nullptr;
     CullMode _cullMode                        = CullMode::NONE;
     DepthStencilStateGL* _depthStencilStateGL = nullptr;
     Viewport _viewPort;
-    GLboolean _alphaTestEnabled               = false;
+    GLboolean _alphaTestEnabled = false;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

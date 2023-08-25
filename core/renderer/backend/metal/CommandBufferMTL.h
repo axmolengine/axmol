@@ -136,8 +136,6 @@ public:
      * @ see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
     virtual void setIndexBuffer(Buffer* buffer) override;
-    
-    void setInstanceBuffer(Buffer* buffer) override;
 
     /**
      * Draw primitives without an index list.
@@ -166,13 +164,6 @@ public:
                               std::size_t count,
                               std::size_t offset,
                               bool wireframe) override;
-    
-    void drawElementsInstanced(PrimitiveType primitiveType,
-                               IndexFormat indexType,
-                               std::size_t count,
-                               std::size_t offset,
-                               int instanceCount,
-                               bool wireframe = false) override;
 
     /**
      * Do some resources release.

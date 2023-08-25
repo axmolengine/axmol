@@ -68,10 +68,6 @@
 #include "renderer/backend/Backend.h"
 #include <functional>
 
-#if defined(AX_USE_GL)
-#include "renderer/backend/opengl/OpenGLState.h"
-#endif
-
 USING_NS_AX;
 using namespace backend;
 
@@ -894,32 +890,6 @@ struct ImGui_ImplGlfw_ViewportData
     ~ImGui_ImplGlfw_ViewportData() { IM_ASSERT(Window == nullptr); }
 };
 
-static void ImGui_ImplAx_makeCurrent(GLFWwindow* window)
-{
-    glfwMakeContextCurrent(window);
-
-#if defined(AX_USE_GL)
-    auto p = glfwGetWindowUserPointer(window);
-    if (!p)
-    {
-        p = new OpenGLState();
-        glfwSetWindowUserPointer(window, p);
-#    if defined(AX_USE_GL_CORE_PROFILE)
-        // this is a new OpenGLContext, create default VAO for it when core profile enabled
-        GLuint vao;
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-#    endif
-    }
-
-    if (backend::__gl != p)
-    {
-        backend::__gl->resetVAO();
-        backend::__gl = (OpenGLState*)p;
-    }
-#endif
-}
-
 static void ImGui_ImplGlfw_WindowCloseCallback(GLFWwindow* window)
 {
     if (ImGuiViewport* viewport = ImGui::FindViewportByPlatformHandle(window))
@@ -1003,7 +973,7 @@ static void ImGui_ImplGlfw_CreateWindow(ImGuiViewport* viewport)
     glfwSetWindowSizeCallback(vd->Window, ImGui_ImplGlfw_WindowSizeCallback);
     if (bd->ClientApi == GlfwClientApi_OpenGL)
     {
-        ImGui_ImplAx_makeCurrent(vd->Window);
+        glfwMakeContextCurrent(vd->Window);
         glfwSwapInterval(0);
     }
 }
@@ -1025,11 +995,7 @@ static void ImGui_ImplGlfw_DestroyWindow(ImGuiViewport* viewport)
             for (int i = 0; i < IM_ARRAYSIZE(bd->KeyOwnerWindows); i++)
                 if (bd->KeyOwnerWindows[i] == vd->Window)
                     ImGui_ImplGlfw_KeyCallback(vd->Window, i, 0, GLFW_RELEASE, 0); // Later params are only used for main viewport, on which this function is never called.
-#if defined(AX_USE_GL)
-            auto p = (OpenGLState*)glfwGetWindowUserPointer(vd->Window);
-            if (p)
-                delete p;
-#endif
+
             glfwDestroyWindow(vd->Window);
         }
         vd->Window = nullptr;
@@ -1180,7 +1146,7 @@ static void ImGui_ImplGlfw_RenderWindow(ImGuiViewport* viewport, void*)
     ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
     ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
     if (bd->ClientApi == GlfwClientApi_OpenGL)
-        ImGui_ImplAx_makeCurrent(vd->Window);
+        glfwMakeContextCurrent(vd->Window);
 }
 
 static void ImGui_ImplGlfw_SwapBuffers(ImGuiViewport* viewport, void*)
@@ -1189,7 +1155,7 @@ static void ImGui_ImplGlfw_SwapBuffers(ImGuiViewport* viewport, void*)
     ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
     if (bd->ClientApi == GlfwClientApi_OpenGL)
     {
-        ImGui_ImplAx_makeCurrent(vd->Window);
+        glfwMakeContextCurrent(vd->Window);
         glfwSwapBuffers(vd->Window);
     }
 }
@@ -1330,7 +1296,8 @@ static void ImGui_ImplAx_RenderWindow(ImGuiViewport* viewport, void*)
         ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
         ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
         if (bd->ClientApi == GlfwClientApi_OpenGL) {
-            AddRendererCommand([=]() { ImGui_ImplAx_makeCurrent(vd->Window); });
+            const auto window               = vd->Window;
+            AddRendererCommand([=]() { glfwMakeContextCurrent(window); });
         }
     }
 }
@@ -1342,9 +1309,10 @@ static void ImGui_ImplAx_SwapBuffers(ImGuiViewport* viewport, void*)
         ImGui_ImplGlfw_Data* bd           = ImGui_ImplGlfw_GetBackendData();
         if (bd->ClientApi == GlfwClientApi_OpenGL) {
             ImGui_ImplGlfw_ViewportData* vd = (ImGui_ImplGlfw_ViewportData*)viewport->PlatformUserData;
+            const auto window               = vd->Window;
             AddRendererCommand([=]() {
-                ImGui_ImplAx_makeCurrent(vd->Window);
-                glfwSwapBuffers(vd->Window);
+                glfwMakeContextCurrent(window);
+                glfwSwapBuffers(window);
             });
         }
     }
@@ -1470,7 +1438,7 @@ static void ImGui_ImplAx_CreateWindow(ImGuiViewport* viewport)
     {
         const auto window = vd->Window;
         AddRendererCommand([=]() { 
-            ImGui_ImplAx_makeCurrent(vd->Window);
+            glfwMakeContextCurrent(window); 
             glfwSwapInterval(0); 
         });
     }
@@ -1491,28 +1459,59 @@ static bool ImGui_ImplAx_CreateDeviceObjects()
 
 static void ImGui_ImplAx_DestroyDeviceObjects()
 {
-    auto pm = ProgramManager::getInstance();
-
     auto bd = ImGui_ImplGlfw_GetBackendData();
-    pm->unloadProgram(bd->ProgramInfo.program);
-    pm->unloadProgram(bd->ProgramFontInfo.program);
+    AX_SAFE_RELEASE_NULL(bd->ProgramInfo.program);
+    AX_SAFE_RELEASE_NULL(bd->ProgramFontInfo.program);
     ImGui_ImplAx_DestroyFontsTexture();
 }
 
 static bool ImGui_ImplAx_createShaderPrograms()
 {
-    
+    auto vertex_shader =
+        "uniform mat4 u_MVPMatrix;\n"
+        "attribute vec2 a_position;\n"
+        "attribute vec2 a_texCoord;\n"
+        "attribute vec4 a_color;\n"
+        "varying vec2 v_texCoord;\n"
+        "varying vec4 v_fragmentColor;\n"
+        "void main()\n"
+        "{\n"
+        "    v_texCoord = a_texCoord;\n"
+        "    v_fragmentColor = a_color;\n"
+        "    gl_Position = u_MVPMatrix * vec4(a_position.xy, 0.0, 1.0);\n"
+        "}\n";
+    auto fragment_shader =
+        "#ifdef GL_ES\n"
+        "    precision mediump float;\n"
+        "#endif\n"
+        "uniform sampler2D u_tex0;\n"
+        "varying vec2 v_texCoord;\n"
+        "varying vec4 v_fragmentColor;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_FragColor = v_fragmentColor * texture2D(u_tex0, v_texCoord);\n"
+        "}\n";
+    auto fragment_shader_font =
+        "#ifdef GL_ES\n"
+        "    precision mediump float;\n"
+        "#endif\n"
+        "uniform sampler2D u_tex0;\n"
+        "varying vec2 v_texCoord;\n"
+        "varying vec4 v_fragmentColor;\n"
+        "void main()\n"
+        "{\n"
+        "    float a = texture2D(u_tex0, v_texCoord).a;\n"
+        "    gl_FragColor = vec4(v_fragmentColor.rgb, v_fragmentColor.a * a);\n"
+        "}\n";
 
     auto bd = ImGui_ImplGlfw_GetBackendData();
 
-    auto pm = ProgramManager::getInstance();
-
-    bd->ProgramInfo.program     = pm->loadProgram("custom/imgui_sprite_vs"sv, ax::positionTextureColor_frag);
-    bd->ProgramFontInfo.program = pm->loadProgram("custom/imgui_sprite_vs"sv, "custom/imgui_font_fs");
-
+    AX_SAFE_RELEASE(bd->ProgramInfo.program);
+    AX_SAFE_RELEASE(bd->ProgramFontInfo.program);
+    bd->ProgramInfo.program     = backend::Device::getInstance()->newProgram(vertex_shader, fragment_shader);
+    bd->ProgramFontInfo.program = backend::Device::getInstance()->newProgram(vertex_shader, fragment_shader_font);
     IM_ASSERT(bd->ProgramInfo.program);
     IM_ASSERT(bd->ProgramFontInfo.program);
-
     if (!bd->ProgramInfo.program || !bd->ProgramFontInfo.program)
         return false;
 
@@ -1555,11 +1554,7 @@ bool ImGui_ImplAx_CreateFontsTexture()
     bd->FontTexture = new Texture2D();
 
     bd->FontTexture->setAntiAliasTexParameters();
-#if AX_GLES_PROFILE != 200
-    bd->FontTexture->initWithData(pixels, width * height, backend::PixelFormat::R8, width, height);
-#else
     bd->FontTexture->initWithData(pixels, width * height, backend::PixelFormat::A8, width, height);
-#endif
     io.Fonts->TexID = (ImTextureID)bd->FontTexture;
     return true;
 }
@@ -1721,7 +1716,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
                         auto& desc        = cmd->getPipelineDescriptor();
                         desc.programState = state;
                         // setup attributes for ImDrawVert
-                        desc.programState->setSharedVertexLayout(&pinfo->layout);
+                        desc.programState->setVertexLayout(pinfo->layout);
                         desc.programState->setUniform(pinfo->projection, &bd->Projection, sizeof(Mat4));
                         desc.programState->setTexture(pinfo->texture, 0, tex->getBackendTexture());
                         // In order to composite our output buffer we need to preserve alpha
@@ -1764,8 +1759,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderPlatform()
 
         ImGui_ImplGlfw_Data* bd = ImGui_ImplGlfw_GetBackendData();
         if (bd->ClientApi == GlfwClientApi_OpenGL) {
-            // restore context
-            AddRendererCommand([=]() { ImGui_ImplAx_makeCurrent(prev_current_context); });
+            AddRendererCommand([=]() { glfwMakeContextCurrent(prev_current_context); });
         }
     }
 }
