@@ -90,8 +90,7 @@ $verMap = @{
 
 $strVerList = "'$($verMap.Keys -join "','")'"
 
-# set default doc ver
-configure_file './index.html.in' "./out/index.html" @{'@VERSION@' = 'latest'}
+mkdirs './out'
 
 foreach($item in $verMap.GetEnumerator()) {
     $ver = $item.Key
@@ -115,5 +114,8 @@ foreach($item in $verMap.GetEnumerator()) {
     Copy-Item './stylesheet.css' $html_out
     configure_file './menu_version.js.in' "$html_out/menu_version.js" @{'@VERLIST@' = $strVerList; '@VERSION@' = $ver}
 }
+
+# set default doc ver to 'latest'
+configure_file './index.html.in' "./out/index.html" @{'@VERSION@' = 'latest'}
 
 Set-Location $store_cwd
