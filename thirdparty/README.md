@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 115.0.5790.172
+- Version: 115.0.5790.173
 - License: BSD WITH The ANGLE Project Authors
 
 ## astcenc
@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-8635cba
+  - Version: 2.1-03c3112
   - License: MIT
 
 - tolua
@@ -258,6 +258,6 @@
 
 ## zlib
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
-- Version: 1.2.13
+- Version: 1.3
 - License: zlib
 
