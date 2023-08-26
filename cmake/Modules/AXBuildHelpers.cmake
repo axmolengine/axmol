@@ -1,5 +1,12 @@
 include(CMakeParseArguments)
 
+find_program(PWSH_COMMAND pwsh powershell)
+
+if(NOT PWSH_COMMAND)
+    message("powershell not found.")
+    message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
+endif()
+
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
 function(ax_sync_target_res ax_target)
     set(options SYM_LINK)
@@ -25,8 +32,7 @@ function(ax_sync_target_res ax_target)
         #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET ${sync_target_name} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E echo "    Syncing ${cc_folder} to ${link_folder_abs}"
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
+            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/sync_folder.ps1
                 -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
         )
     endforeach()
@@ -58,19 +64,19 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
-                -s ${src_dir} -d ${dst_dir} -m $<CONFIG>
+            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/sync_folder.ps1
+                -s ${src_dir} -d ${dst_dir}
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/sync_folder.ps1
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
-                    -s ${src_dir} -d ${dst_dir} -m ${CMAKE_BUILD_TYPE}
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/sync_folder.ps1
+                    -s ${src_dir} -d ${dst_dir}
             )
         endif()
     endif()
