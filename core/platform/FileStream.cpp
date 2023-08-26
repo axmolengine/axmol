@@ -42,18 +42,18 @@ NS_AX_BEGIN
 
 struct PXIoF
 {
-    int (*read)(PXFileHandle& fh, void*, unsigned int);
-    int (*write)(PXFileHandle& fh, const void*, unsigned int);
-    int64_t (*seek)(PXFileHandle& fh, int64_t, int);
+    int (*read)(const PXFileHandle& fh, void*, unsigned int);
+    int (*write)(const PXFileHandle& fh, const void*, unsigned int);
+    int64_t (*seek)(const PXFileHandle& fh, int64_t, int);
     int (*close)(PXFileHandle& fh);
-    int64_t (*size)(PXFileHandle& fh);
-    int (*resize)(PXFileHandle& fh, int64_t);
+    int64_t (*size)(const PXFileHandle& fh);
+    int (*resize)(const PXFileHandle& fh, int64_t);
 };
 
-static int64_t axrt_lowio_seek(PXFileHandle& fh, int64_t offst, int origin);
+static int64_t axrt_lowio_seek(const PXFileHandle& fh, int64_t offst, int origin);
 struct __axrt_seek_guard
 {
-    __axrt_seek_guard(PXFileHandle& fh)
+    __axrt_seek_guard(const PXFileHandle& fh)
         : place(axrt_lowio_seek(fh, 0, SEEK_CUR)), end(axrt_lowio_seek(fh, 0, SEEK_END)), fhh(fh)
     {}
 
@@ -62,7 +62,7 @@ struct __axrt_seek_guard
     __axrt_seek_guard(__axrt_seek_guard const&)            = delete;
     __axrt_seek_guard& operator=(__axrt_seek_guard const&) = delete;
 
-    PXFileHandle& fhh;
+    const PXFileHandle& fhh;
     int64_t place;
     int64_t end;
 };
@@ -121,7 +121,7 @@ static bool axrt_lowio_open(std::string_view path, IFileStream::Mode mode, PXFil
     return false;
 }
 
-static int axrt_lowio_read(PXFileHandle& fh, void* buf, unsigned int size)
+static int axrt_lowio_read(const PXFileHandle& fh, void* buf, unsigned int size)
 {
     DWORD dwBytesRead = 0;
     if (::ReadFile(fh.osfh, buf, size, &dwBytesRead, nullptr))
@@ -129,7 +129,7 @@ static int axrt_lowio_read(PXFileHandle& fh, void* buf, unsigned int size)
     errno = EACCES;
     return -1;
 }
-static int axrt_lowio_write(PXFileHandle& fh, const void* buf, unsigned int size)
+static int axrt_lowio_write(const PXFileHandle& fh, const void* buf, unsigned int size)
 {
     if (fh.append)
         ::SetFilePointer(fh.osfh, 0, 0, FILE_END);
@@ -139,7 +139,7 @@ static int axrt_lowio_write(PXFileHandle& fh, const void* buf, unsigned int size
     errno = EACCES;
     return -1;
 }
-static int64_t axrt_lowio_seek(PXFileHandle& fh, int64_t offst, int origin)
+static int64_t axrt_lowio_seek(const PXFileHandle& fh, int64_t offst, int origin)
 {
     LARGE_INTEGER seekpos, newpos;
     seekpos.QuadPart = offst;
@@ -147,6 +147,11 @@ static int64_t axrt_lowio_seek(PXFileHandle& fh, int64_t offst, int origin)
         return newpos.QuadPart;
     errno = EINVAL;
     return -1;
+}
+static int64_t axrt_lowio_size(const PXFileHandle& fh)
+{
+    LARGE_INTEGER endpos;
+    return ::GetFileSizeEx(fh.osfh, &endpos) ? endpos.QuadPart : 0;
 }
 static int axrt_lowio_close(PXFileHandle& fh)
 {
@@ -156,11 +161,6 @@ static int axrt_lowio_close(PXFileHandle& fh)
         fh.osfh = INVALID_HANDLE_VALUE;
     }
     return 0;
-}
-static int64_t axrt_lowio_size(PXFileHandle& fh)
-{
-    LARGE_INTEGER endpos;
-    return ::GetFileSizeEx(fh.osfh, &endpos) ? endpos.QuadPart : 0;
 }
 #else
 #    define __axrt_truncate_file(fh, size) (posix_ftruncate64(fh, size) == 0)
@@ -177,17 +177,23 @@ static bool axrt_lowio_open(std::string_view path, IFileStream::Mode mode, PXFil
     return fh.osfh != -1;
 }
 
-static int axrt_lowio_read(PXFileHandle& fh, void* buf, unsigned int size)
+static int axrt_lowio_read(const PXFileHandle& fh, void* buf, unsigned int size)
 {
     return static_cast<int>(posix_read(fh.osfh, buf, size));
 }
-static int axrt_lowio_write(PXFileHandle& fh, const void* buf, unsigned int size)
+static int axrt_lowio_write(const PXFileHandle& fh, const void* buf, unsigned int size)
 {
     return static_cast<int>(posix_write(fh.osfh, buf, size));
 }
-static int64_t axrt_lowio_seek(PXFileHandle& fh, int64_t offst, int origin)
+static int64_t axrt_lowio_seek(const PXFileHandle& fh, int64_t offst, int origin)
 {
     return posix_lseek64(fh.osfh, offst, origin);
+}
+static int64_t axrt_lowio_size(const PXFileHandle& fh)
+{
+    // Get current file position and seek to end
+    __axrt_seek_guard seek_guard(fh);
+    return seek_guard.end != -1 ? seek_guard.end : 0;
 }
 static int axrt_lowio_close(PXFileHandle& fh)
 {
@@ -199,15 +205,9 @@ static int axrt_lowio_close(PXFileHandle& fh)
     }
     return 0;
 }
-static int64_t axrt_lowio_size(PXFileHandle& fh)
-{
-    // Get current file position and seek to end
-    __axrt_seek_guard seek_guard(fh);
-    return seek_guard.end != -1 ? seek_guard.end : 0;
-}
 #endif
 
-static int axrt_lowio_resize(PXFileHandle& fh, int64_t size)
+static int axrt_lowio_resize(const PXFileHandle& fh, int64_t size)
 {
     // Get current file position and seek to end
     __axrt_seek_guard seek_guard(fh);
@@ -238,23 +238,27 @@ static const PXIoF axrt_lowio_iof = {axrt_lowio_read,  axrt_lowio_write, axrt_lo
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
 
-static int axrt_dummy_write(PXFileHandle& /*fh*/, const void* /*buf*/, unsigned int /*size*/)
+static int axrt_dummy_write(const PXFileHandle& /*fh*/, const void* /*buf*/, unsigned int /*size*/)
 {
     return -1;
 }
-static int axrt_dummy_resize(PXFileHandle& /*fh*/, int64_t /*newsize*/)
+static int axrt_dummy_resize(const PXFileHandle& /*fh*/, int64_t /*newsize*/)
 {
     return -1;
 }
 
 // android AssetManager wrappers
-static int axrt_asset_read(PXFileHandle& fh, void* buf, unsigned int size)
+static int axrt_asset_read(const PXFileHandle& fh, void* buf, unsigned int size)
 {
     return AAsset_read(fh.aasset, buf, size);
 }
-static int64_t axrt_asset_seek(PXFileHandle& fh, int64_t offst, int origin)
+static int64_t axrt_asset_seek(const PXFileHandle& fh, int64_t offst, int origin)
 {
     return AAsset_seek(fh.aasset, offst, origin);
+}
+static int64_t axrt_asset_size(const PXFileHandle& fh)
+{
+    return AAsset_getLength64(fh.aasset);
 }
 static int axrt_asset_close(PXFileHandle& fh)
 {
@@ -265,30 +269,26 @@ static int axrt_asset_close(PXFileHandle& fh)
     }
     return 0;
 }
-static int64_t axrt_asset_size(PXFileHandle& fh)
-{
-    return AAsset_getLength64(fh.aasset);
-}
 static const PXIoF axrt_asset_iof = {axrt_asset_read,  axrt_dummy_write, axrt_asset_seek,
                                      axrt_asset_close, axrt_asset_size,  axrt_dummy_resize};
 
 // android obb
-static int axrt_obb_read(PXFileHandle& fh, void* buf, unsigned int size)
+static int axrt_obb_read(const PXFileHandle& fh, void* buf, unsigned int size)
 {
     return FileUtilsAndroid::getObbFile()->vread(fh.zentry, buf, size);
 }
-static int64_t axrt_obb_seek(PXFileHandle& fh, int64_t offset, int origin)
+static int64_t axrt_obb_seek(const PXFileHandle& fh, int64_t offset, int origin)
 {
     return FileUtilsAndroid::getObbFile()->vseek(fh.zentry, offset, origin);
+}
+static int64_t axrt_obb_size(const PXFileHandle& fh)
+{
+    return FileUtilsAndroid::getObbFile()->vsize(fh.zentry);
 }
 static int axrt_obb_close(PXFileHandle& fh)
 {
     FileUtilsAndroid::getObbFile()->vclose(fh.zentry);
     return 0;
-}
-static int64_t axrt_obb_size(PXFileHandle& fh)
-{
-    return FileUtilsAndroid::getObbFile()->vsize(fh.zentry);
 }
 static const PXIoF axrt_obb_iof = {axrt_obb_read,  axrt_dummy_write, axrt_obb_seek,
                                    axrt_obb_close, axrt_obb_size,    axrt_dummy_resize};
@@ -355,31 +355,31 @@ int FileStream::close()
     return internalClose();
 }
 
-int64_t FileStream::seek(int64_t offset, int origin)
+int64_t FileStream::seek(int64_t offset, int origin) const
 {
     assert(_iof);
     return _iof->seek(_handle, offset, origin);
 }
 
-int FileStream::read(void* buf, unsigned int size)
+int FileStream::read(void* buf, unsigned int size) const
 {
     assert(_iof);
     return _iof->read(_handle, buf, size);
 }
 
-int FileStream::write(const void* buf, unsigned int size)
+int FileStream::write(const void* buf, unsigned int size) const
 {
     assert(_iof);
     return _iof->write(_handle, buf, size);
 }
 
-int64_t FileStream::size()
+int64_t FileStream::size() const
 {
     assert(_iof);
     return _iof->size(_handle);
 }
 
-bool FileStream::resize(int64_t size)
+bool FileStream::resize(int64_t size) const
 {
     assert(_iof);
     return _iof->resize(_handle, size) == 0;

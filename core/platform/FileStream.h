@@ -69,11 +69,11 @@ public:
     bool open(std::string_view path, IFileStream::Mode mode) override;
     int close() override;
 
-    int64_t seek(int64_t offset, int origin) override;
-    int read(void* buf, unsigned int size) override;
-    int write(const void* buf, unsigned int size) override;
-    int64_t size() override;
-    bool resize(int64_t size) override;
+    int64_t seek(int64_t offset, int origin) const override;
+    int read(void* buf, unsigned int size) const override;
+    int write(const void* buf, unsigned int size) const override;
+    int64_t size() const override;
+    bool resize(int64_t size) const override;
     bool isOpen() const override;
 
     osfhnd_t nativeHandle() const override;
