@@ -904,7 +904,7 @@ static void ImGui_ImplAx_makeCurrent(GLFWwindow* window)
     {
         p = new OpenGLState();
         glfwSetWindowUserPointer(window, p);
-#    if defined(AX_USE_GL_CORE_PROFILE)
+#    if AX_GLES_PROFILE != 200
         // this is a new OpenGLContext, create default VAO for it when core profile enabled
         GLuint vao;
         glGenVertexArrays(1, &vao);
