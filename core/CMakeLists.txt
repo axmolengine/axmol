@@ -242,50 +242,42 @@ list(APPEND _AX_SRC ${_AX_HEADER})
 
 add_library(${_AX_CORE_LIB} ${_AX_SRC})
 
-if (AX_ENABLE_EARLY_FEATURES)
-    message(AUTHOR_WARNING "Enable early dev features for test only")
-    # import minimal AXGLSLCC.cmake for shader compiler support
-    # the function: ax_target_compile_shaders avaiable from it
-    set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
-    include(AXGLSLCC)
+ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
+set(ax_builtin_shaders ${BUILTIN_SHADER_SOURCES} CACHE STATIC "" FORCE)
 
-    ax_find_shaders(${_AX_ROOT}/core/renderer/shaders BUILTIN_SHADER_SOURCES)
-    set(ax_builtin_shaders ${BUILTIN_SHADER_SOURCES} CACHE STATIC "" FORCE)
-
-    # configure engine builtin light num
-    if (NOT DEFINED AX_MAX_DIRECTIONAL_LIGHT)
-        set(AX_MAX_DIRECTIONAL_LIGHT 1)
-    endif()
-    if (NOT DEFINED AX_MAX_POINT_LIGHT)
-        set(AX_MAX_POINT_LIGHT 1)
-    endif()
-    if (NOT DEFINED AX_MAX_SPOT_LIGHT)
-        set (AX_MAX_SPOT_LIGHT 1)
-    endif()
-    configure_file(
-        "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h.in"
-        "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h" @ONLY)
-    # SKINPOSITION_NORMAL_TEXTURE_3D:       skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
-    # POSITION_NORMAL_TEXTURE_3D:           skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
-    # POSITION_NORMAL_3D:                   positionNormalTexture.vert,         colorNormal.frag,        LightDefs
-    # POSITION_BUMPEDNORMAL_TEXTURE_3D:     positionNormalTexture.vert,         colorNormalTexture.frag, lightNormMapDef
-    # SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D: skinPositionNormalTexture_vert,     colorNormalTexture.frag, lightNormMapDef
-    set_source_files_properties(
-        ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
-        ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
-        ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
-        ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
-        PROPERTIES GLSLCC_DEFINES
-        "MAX_DIRECTIONAL_LIGHT_NUM=${AX_MAX_DIRECTIONAL_LIGHT},MAX_POINT_LIGHT_NUM=${AX_MAX_POINT_LIGHT},MAX_SPOT_LIGHT_NUM=${AX_MAX_SPOT_LIGHT}"
-    )
-    set_source_files_properties(
-        ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
-        ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
-        ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
-        PROPERTIES GLSLCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
-    )
-    ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
+# configure engine builtin light num
+if (NOT DEFINED AX_MAX_DIRECTIONAL_LIGHT)
+    set(AX_MAX_DIRECTIONAL_LIGHT 1)
 endif()
+if (NOT DEFINED AX_MAX_POINT_LIGHT)
+    set(AX_MAX_POINT_LIGHT 1)
+endif()
+if (NOT DEFINED AX_MAX_SPOT_LIGHT)
+    set (AX_MAX_SPOT_LIGHT 1)
+endif()
+configure_file(
+    "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h.in"
+    "${CMAKE_CURRENT_LIST_DIR}/renderer/RenderConsts.h" @ONLY)
+# SKINPOSITION_NORMAL_TEXTURE_3D:       skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
+# POSITION_NORMAL_TEXTURE_3D:           skinPositionNormalTexture.vert,     colorNormalTexture.frag, LightDefs
+# POSITION_NORMAL_3D:                   positionNormalTexture.vert,         colorNormal.frag,        LightDefs
+# POSITION_BUMPEDNORMAL_TEXTURE_3D:     positionNormalTexture.vert,         colorNormalTexture.frag, lightNormMapDef
+# SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D: skinPositionNormalTexture_vert,     colorNormalTexture.frag, lightNormMapDef
+set_source_files_properties(
+    ${_AX_ROOT}/core/renderer/shaders/colorNormal.frag
+    ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
+    ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
+    ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+    PROPERTIES GLSLCC_DEFINES
+    "MAX_DIRECTIONAL_LIGHT_NUM=${AX_MAX_DIRECTIONAL_LIGHT},MAX_POINT_LIGHT_NUM=${AX_MAX_POINT_LIGHT},MAX_SPOT_LIGHT_NUM=${AX_MAX_SPOT_LIGHT}"
+)
+set_source_files_properties(
+    ${_AX_ROOT}/core/renderer/shaders/colorNormalTexture.frag
+    ${_AX_ROOT}/core/renderer/shaders/positionNormalTexture.vert
+    ${_AX_ROOT}/core/renderer/shaders/skinPositionNormalTexture.vert
+    PROPERTIES GLSLCC_OUTPUT1 "USE_NORMAL_MAPPING=1"
+)
+ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
 
 
 if (WINRT)
