@@ -37,6 +37,11 @@ if (ANDROID)
     message(AUTHOR_WARNING "Set GLSLCC_OUT_DIR to ${GLSLCC_OUT_DIR} for android")
 endif()
 
+# import minimal AXGLSLCC.cmake for shader compiler support
+# the function: ax_target_compile_shaders avaiable from it
+set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
+include(AXGLSLCC)
+
 # include helper functions
 include(AXBuildHelpers)
 
