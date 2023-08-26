@@ -17,7 +17,7 @@ cmake_policy(SET CMP0072 NEW)
 set(ENGINE_BINARY_PATH ${PROJECT_BINARY_DIR}/engine)
 
 if(CMAKE_TOOLCHAIN_FILE)
-    message(STATUS "using toolchain file:" ${CMAKE_TOOLCHAIN_FILE})
+    message(STATUS "Using toolchain file:" ${CMAKE_TOOLCHAIN_FILE})
 endif()
 
 find_program(PYTHON_COMMAND NAMES python3 python2 python)
