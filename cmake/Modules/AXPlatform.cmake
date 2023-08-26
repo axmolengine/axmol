@@ -97,8 +97,8 @@ set(platform_spec_path "${_path_prefix}${platform_spec_path}")
 
 
 ### axpkg url
-set (axpkg_ver v56)
-set (axpkg_base_url "https://github.com/axmolengine/buildware/releases/download/${axpkg_ver}" CACHE STRING "" FORCE)
+set (axpkg_ver v58)
+set (axpkg_base_url "https://github.com/axmolengine/build1k/releases/download/${axpkg_ver}" CACHE STRING "" FORCE)
 
 function(axpkg_require package_name dir)
     if(NOT IS_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/prebuilt)
