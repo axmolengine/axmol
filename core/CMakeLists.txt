@@ -32,7 +32,7 @@
 # include_guard (GLOBAL)
 
 # The version number
-set(_AX_VERSION 1.1)
+set(_AX_VERSION 2.0)
 
 if(NOT DEFINED _AX_CORE_LIB)
     set(_AX_CORE_LIB axmol CACHE INTERNAL "The axmol core lib name" )
@@ -43,6 +43,12 @@ cmake_policy(SET CMP0127 NEW)
 project(ax_libs)
 
 option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" OFF)
+
+if(WIN32)
+    # explicit set source charset to utf-8 for windows targets
+    add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+    add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+endif()
 
 # choosing render backend for all target platforms: win32, winuwp, ios, tvos, android, linux, osx
 if(APPLE AND (NOT AX_USE_COMPAT_GL))
