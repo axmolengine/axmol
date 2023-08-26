@@ -1,7 +1,7 @@
-zlib: 1.2.13
+zlib: 1.3
 jpeg-turbo: 3.0.0
 openssl: 3.0.10
 cares: 1.19.1
 curl: 8.2.1
-luajit: 2.1-8635cba
-angle: 115.0.5790.172
+luajit: 2.1-03c3112
+angle: 115.0.5790.173
