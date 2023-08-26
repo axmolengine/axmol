@@ -63,7 +63,7 @@ if ($null -eq (Get-Module -ListAvailable -Name powershell-yaml)) {
 }
 
 # check upstream prebuilts version
-download_file "https://github.com/axmolengine/buildware/releases/download/$VER/verlist.yml" "./tmp/verlist.yml" $true
+download_file "https://github.com/axmolengine/build1k/releases/download/$VER/verlist.yml" "./tmp/verlist.yml" $true
 $newVerList = ConvertFrom-Yaml -Yaml (Get-Content './tmp/verlist.yml' -raw)
 if ($newVerList.GetType() -eq [string]) {
     throw "Download version manifest file verlist.yml fail"
