@@ -53,7 +53,7 @@ public:
      *  @param origin SEEK_SET, SEEK_CUR, SEEK_END
      *  @return offset from file begining
      */
-    virtual int64_t seek(int64_t offset, int origin) = 0;
+    virtual int64_t seek(int64_t offset, int origin) const = 0;
 
     /**
      *  Read data from file stream
@@ -61,7 +61,7 @@ public:
      *  @param size the amount of data to read in bytes
      *  @return amount of data read successfully, -1 if error
      */
-    virtual int read(void* buf, unsigned int size) = 0;
+    virtual int read(void* buf, unsigned int size) const = 0;
 
     /**
      *  Write data to file stream
@@ -69,24 +69,24 @@ public:
      *  @param size the amount of data to write in bytes
      *  @return amount of data written successfully, -1 if error
      */
-    virtual int write(const void* buf, unsigned int size) = 0;
+    virtual int write(const void* buf, unsigned int size) const = 0;
 
     /**
      *  Get the current position in the file stream
      *  @return current position, -1 if error
      */
-    inline int64_t tell() { return seek(0, SEEK_CUR); }
+    inline int64_t tell() const { return seek(0, SEEK_CUR); }
 
     /**
      *  Get the size of the file stream
      *  @return stream size, -1 if error (Mode::WRITE and Mode::APPEND may return -1)
      */
-    virtual int64_t size() = 0;
+    virtual int64_t size() const = 0;
 
     /*
      * Resize file
      */
-    virtual bool resize(int64_t /*size*/)
+    virtual bool resize(int64_t /*size*/) const
     {
         errno = ENOTSUP;
         return false;
