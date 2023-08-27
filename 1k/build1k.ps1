@@ -175,6 +175,7 @@ $options = @{
     prefix    = $null; 
     xc        = @(); 
     xb        = @(); 
+    nb        = $false; # only gen native project files, skip build
     winsdk    = $null; 
     dll       = $false; 
     setupOnly = $false
@@ -1061,24 +1062,26 @@ if (!$options.setupOnly) {
             Set-Content $tempFile $lastWriteTime -NoNewline
         }
 
-        # step4. build
-        # apply additional build options
-        $BUILD_ALL_OPTIONS = @()
-        $BUILD_ALL_OPTIONS += $buildOptions
-        if (!$optimize_flag) {
-            $BUILD_ALL_OPTIONS += '--config', 'Release'
-        }
+        if (!$options.nb) {
+            # step4. build
+            # apply additional build options
+            $BUILD_ALL_OPTIONS = @()
+            $BUILD_ALL_OPTIONS += $buildOptions
+            if (!$optimize_flag) {
+                $BUILD_ALL_OPTIONS += '--config', 'Release'
+            }
 
-        $BUILD_ALL_OPTIONS += "--parallel"
-        if ($BUILD_TARGET -eq 'linux') {
-            $BUILD_ALL_OPTIONS += "$(nproc)"
-        }
-        if ($TOOLCHAIN_NAME -eq 'xcode') {
-            $BUILD_ALL_OPTIONS += '--', '-quiet'
-        }
-        $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
+            $BUILD_ALL_OPTIONS += "--parallel"
+            if ($BUILD_TARGET -eq 'linux') {
+                $BUILD_ALL_OPTIONS += "$(nproc)"
+            }
+            if ($TOOLCHAIN_NAME -eq 'xcode') {
+                $BUILD_ALL_OPTIONS += '--', '-quiet'
+            }
+            $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 
-        cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
+            cmake --build $BUILD_DIR $BUILD_ALL_OPTIONS | Out-Host
+        }
     }
 
     $env:buildResult = ConvertTo-Json @{
