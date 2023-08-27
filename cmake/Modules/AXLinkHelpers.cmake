@@ -204,6 +204,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             endif()
         endif()
     endif()
+
+    # prebuilt, need copy axslc folder to target output directory
+    get_target_property(rt_output ${APP_NAME} RUNTIME_OUTPUT_DIRECTORY)
+    ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYNC_TARGET_ID axslc)
 endfunction(ax_link_cxx_prebuilt)
 
 function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)

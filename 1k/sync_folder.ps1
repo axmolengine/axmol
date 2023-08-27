@@ -1,54 +1,42 @@
+param(
+    [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+    [string]$srcDir,
+    [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+    [string]$destDir,
+    [Parameter(Mandatory=$false, ValueFromPipeline=$true)]
+    [PSDefaultValue(Value=$null)]
+    $linkOnly
+)
+
+function ParseBoolFuzzy($value) {
+    return $value.startsWith('1') -or $value.StartsWith('t') -or $value.StartsWith('y')
+}
+
 # 0: windows, 1: linux, 2: macos
 $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
-$options = @{
-    s         = $null; 
-    d         = $null;
-    l         = $null;
+$linkOnly = ParseBoolFuzzy("$linkOnly".ToLower())
+
+if(!$srcDir -or !(Test-Path $srcDir -PathType Container)) {
+    throw "The source directory $srcDir not exist"
 }
 
-$optName = $null
-foreach ($arg in $args) {
-    if (!$optName) {
-        if ($arg.StartsWith('-')) { 
-            $optName = $arg.SubString(1)
-        }
-    }
-    else {
-        if ($options.Contains($optName)) {
-            $options[$optName] = $arg
-        }
-        else {
-            $b1k.println("Warning: ignore unrecognized option: $optName")
-        }
-        $optName = $null
-    }
-}
-
-if(!$options.s -or !(Test-Path $options.s -PathType Container)) {
-    throw "The source directory $($options.s) not exist"
-}
-
-if(!$options.d) {
-    throw "Missing dest directory"
-}
-
-if (Test-Path $options.d -PathType Container) { # dest already exist
-    if ($options.l) { # is symlink and dest exist
+if (Test-Path $destDir -PathType Container) { # dest already exist
+    if ($linkOnly) { # is symlink and dest exist
         return
     }
 }
 
 # convert to native path style
 if ($IsWin) {
-    $srcDir = $options.s.Replace('/', '\')
-    $destDir = $options.d.Replace('/', '\')
+    $srcDir = $srcDir.Replace('/', '\')
+    $destDir = $destDir.Replace('/', '\')
 } else {
-    $srcDir = $options.s.Replace('\', '/')
-    $destDir = $options.d.Replace('\', '/')
+    $srcDir = $srcDir.Replace('\', '/')
+    $destDir = $destDir.Replace('\', '/')
 }
 
-if ($options.l) {
+if ($linkOnly) {
     Write-Host "Linking $srcDir to $destDir ..."
     if ($IsWin) {
         cmd.exe /c mklink /J $destDir $srcDir
@@ -59,6 +47,7 @@ if ($options.l) {
     }
 }
 else { # copy directory, remove first?
-    Write-Host "Copying $srcDir to $destDir ..."
-    Copy-Item $srcDir $destDir -Recurse -Force
+    $destLoc = Join-Path $(Split-Path $destDir -Parent) '/'
+    Write-Host "Copying $srcDir into $destLoc ..."
+    Copy-Item $srcDir $destLoc -Recurse -Force
 }
