@@ -1,6 +1,6 @@
 #
 # The simple ios toolchain file: https://github.com/yasio/yasio/blob/dev/cmake/ios.cmake
-# version: 4.0.5
+# version: 4.0.6
 #
 # The supported params:
 #   PLAT: iOS, tvOS, default: iOS
@@ -73,18 +73,6 @@ set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED NO)
 if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
     set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${CMAKE_OSX_DEPLOYMENT_TARGET} CACHE STRING "")
 endif()
-
-if(SIMULATOR)
-    if (PLAT STREQUAL "iOS")
-        set(CMAKE_OSX_SYSROOT "iphonesimulator" CACHE STRING "")
-    elseif(PLAT STREQUAL "tvOS")
-        set(CMAKE_OSX_SYSROOT "appletvsimulator" CACHE STRING "")
-    elseif(PLAT STREQUAL "watchOS")
-        set(CMAKE_OSX_SYSROOT "watchsimulator" CACHE STRING "")
-    else()
-        message(FATAL_ERROR "PLAT=${PLAT} unsupported!")
-    endif()
-endif() 
 
 # Since xcode14, the bitcode was marked deprecated, so we disable by default
 if(ENABLE_BITCODE)
