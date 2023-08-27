@@ -17,16 +17,6 @@ $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 $linkOnly = ParseBoolFuzzy("$linkOnly".ToLower())
 
-if(!$srcDir -or !(Test-Path $srcDir -PathType Container)) {
-    throw "The source directory $srcDir not exist"
-}
-
-if (Test-Path $destDir -PathType Container) { # dest already exist
-    if ($linkOnly) { # is symlink and dest exist
-        return
-    }
-}
-
 # convert to native path style
 if ($IsWin) {
     $srcDir = $srcDir.Replace('/', '\')
@@ -34,6 +24,23 @@ if ($IsWin) {
 } else {
     $srcDir = $srcDir.Replace('\', '/')
     $destDir = $destDir.Replace('\', '/')
+}
+
+if(!$srcDir -or !(Test-Path $srcDir -PathType Container)) {
+    throw "The source directory $srcDir not exist"
+}
+
+if (Test-Path $destDir -PathType Container) { # dest already exist
+    if ($linkOnly) { # is symlink and dest exist
+        $directoryInfo = (Get-Item $destDir)
+        if ($directoryInfo.Target -eq $srcDir) {
+            Write-Host "Symlink $destDir ===> $($directoryInfo.Target) exists"
+            return
+        }
+        Write-Host "Removing old link target $($directoryInfo.Target)"
+        # Remove-Item -Path $destDir
+        $directoryInfo.Delete($false)
+    }
 }
 
 if ($linkOnly) {
@@ -47,7 +54,10 @@ if ($linkOnly) {
     }
 }
 else { # copy directory, remove first?
-    $destLoc = Join-Path $(Split-Path $destDir -Parent) '/'
-    Write-Host "Copying $srcDir into $destLoc ..."
-    Copy-Item $srcDir $destLoc -Recurse -Force
+    Write-Host "Copying $srcDir to $destDir ..."
+    if (!(Test-Path $destDir -PathType Container)) {
+        Copy-Item $srcDir $destDir -Recurse -Force
+    } else {
+        Copy-Item $srcDir/* $destDir/ -Recurse -Force
+    }
 }
