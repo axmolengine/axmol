@@ -38,6 +38,13 @@ function(ax_sync_target_res ax_target)
     endforeach()
 endfunction()
 
+if (NOT COMMAND set_xcode_property)
+    # This little macro lets you set any XCode specific property, from ios.toolchain.cmake
+    function(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
+        set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
+    endfunction(set_xcode_property)
+endif()
+
 ## create a virtual target SYNC_RESOURCE-${ax_target}
 ## Update resource files in Resources/ folder everytime when `Run/Debug` target.
 function(ax_def_sync_resource_target ax_target sync_target_name)
@@ -525,11 +532,6 @@ macro(ax_config_target_xcode_property ax_target)
         set_xcode_property(${real_target} ONLY_ACTIVE_ARCH "YES")
     endif()
 endmacro()
-
-# This little macro lets you set any XCode specific property, from ios.toolchain.cmake
-function(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
-    set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
-endfunction(set_xcode_property)
 
 # works same as find_package, but do additional care to properly find
 macro(ax_find_package pkg_name pkg_prefix)
