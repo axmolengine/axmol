@@ -9,6 +9,7 @@
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
 #  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -xb: additional cross build options: i.e. -xb '--config','Release'
+#  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
 #  -d: specify project dir to compile, i.e. -d /path/your/project/
 # examples:
 #   - win32: 
@@ -31,7 +32,7 @@
 #   on macos: target platform is osx, arch=x64
 #
 
-$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); winsdk = $null }
+$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); nb = $false; winsdk = $null }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -181,4 +182,10 @@ foreach ($option in $options.GetEnumerator()) {
 }
 
 . $b1k_script @b1k_args
-$b1k.pause("build done")
+
+if (!$options.nb) {
+    $b1k.pause('Build done')
+}
+else {
+    $b1k.pause('Generate done')
+}
