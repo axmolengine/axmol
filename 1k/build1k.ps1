@@ -1077,6 +1077,9 @@ if (!$options.setupOnly) {
             }
             if ($TOOLCHAIN_NAME -eq 'xcode') {
                 $BUILD_ALL_OPTIONS += '--', '-quiet'
+                if (($options.p -eq 'ios') -and ($options.a -eq 'x64')) {
+                    $BUILD_ALL_OPTIONS += '-sdk', 'iphonesimulator'
+                }
             }
             $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 
