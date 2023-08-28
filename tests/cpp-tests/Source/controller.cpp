@@ -70,7 +70,9 @@ public:
         addTest("Click and Move", []() { return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
+#if !defined(AX_PLATFORM_EMSCRIPTEN)
         addTest("Curl", []() { return new CurlTests(); });
+#endif
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
         addTest("Network Test", []() { return new NetworkTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });

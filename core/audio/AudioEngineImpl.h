@@ -72,9 +72,9 @@ private:
     void _play2d(AudioCache* cache, AUDIO_ID audioID);
     void _unscheduleUpdate();
     ALuint findValidSource();
-#    if defined(__APPLE__)
+#if defined(__APPLE__) && !AX_USE_ALSOFT
     static ALvoid myAlSourceNotificationCallback(ALuint sid, ALuint notificationID, ALvoid* userData);
-#    endif
+#endif
     ALuint _alSources[MAX_AUDIOINSTANCES];
 
     // available sources

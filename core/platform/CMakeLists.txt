@@ -145,6 +145,26 @@ elseif(LINUX)
         platform/linux/Device-linux.cpp
         platform/desktop/GLViewImpl-desktop.cpp
         )
+elseif(EMSCRIPTEN)
+    include_directories(
+        PUBLIC "${_AX_ROOT}/thirdparty/angle/include"
+        PUBLIC "${_AX_ROOT}/core"
+    )
+    set(_AX_PLATFORM_SPECIFIC_HEADER
+        platform/emscripten/Application-emscripten.h
+        platform/emscripten/GL-emscripten.h
+        platform/emscripten/StdC-emscripten.h
+        platform/emscripten/FileUtils-emscripten.h
+        platform/emscripten/PlatformDefine-emscripten.h
+        platform/emscripten/GLViewImpl-emscripten.h
+        )
+    set(_AX_PLATFORM_SPECIFIC_SRC
+        platform/emscripten/FileUtils-emscripten.cpp
+        platform/emscripten/Common-emscripten.cpp
+        platform/emscripten/Application-emscripten.cpp
+        platform/emscripten/Device-emscripten.cpp
+        platform/emscripten/GLViewImpl-emscripten.cpp
+        )
 endif()
 
 set(_AX_PLATFORM_HEADER

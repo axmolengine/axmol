@@ -389,7 +389,7 @@ bool AudioEngineImpl::init()
             for (int i = 0; i < MAX_AUDIOINSTANCES; ++i)
             {
                 _unusedSourcesPool.push(_alSources[i]);
-#if !AX_USE_ALSOFT
+#if defined(__APPLE__) && !AX_USE_ALSOFT
                 alSourceAddNotificationExt(_alSources[i], AL_BUFFERS_PROCESSED, myAlSourceNotificationCallback,
                                            nullptr);
 #endif

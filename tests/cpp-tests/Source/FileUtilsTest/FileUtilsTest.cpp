@@ -63,7 +63,7 @@ void TestSearchPath::onEnter()
     std::string writablePath             = sharedFileUtils->getWritablePath();
     std::string fileName                 = writablePath + "external.txt";
     char szBuf[100]                      = "Hello Cocos2d-x!";
-    FILE* fp                             = fopen(fileName.c_str(), "wb");
+    auto fp                             = fopen(fileName.c_str(), "wb");
     if (fp)
     {
         size_t ret = fwrite(szBuf, 1, strlen(szBuf), fp);
@@ -258,7 +258,7 @@ void TestFileFuncs::onEnter()
     std::string content   = "Test string content to put into created file";
     std::string msg;
 
-    FILE* out = fopen(filepath.c_str(), "w");
+    auto out = fopen(filepath.c_str(), "w");
     fputs(content.c_str(), out);
     fclose(out);
 
@@ -1002,7 +1002,7 @@ void TestFileFuncsAsync::onEnter()
     std::string content   = "Test string content to put into created file";
     std::string msg;
 
-    FILE* out = fopen(filepath.c_str(), "w");
+    auto out = fopen(filepath.c_str(), "w");
     fputs(content.c_str(), out);
     fclose(out);
 

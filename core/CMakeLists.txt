@@ -76,7 +76,7 @@ endif()
 
 message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
 
-if(NOT APPLE)
+if(NOT APPLE AND (NOT EMSCRIPTEN))
     set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
 else()
     option(AX_USE_ALSOFT "Use ALSOFT on apple" OFF)
@@ -111,7 +111,7 @@ else()
   set(AX_ENABLE_EXT_IMGUI OFF)
 endif()
 
-if (ANDROID)
+if (ANDROID OR EMSCRIPTEN)
     set(AX_USE_GLAD TRUE CACHE BOOL "Use glad for android GLESv3 support" FORCE)
     add_definitions(-DAX_USE_GLAD=1)
 endif()

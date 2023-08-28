@@ -42,6 +42,8 @@ THE SOFTWARE.
 #    include "platform/winrt/Application-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/Application-linux.h"
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#    include "platform/emscripten/Application-emscripten.h"
 #endif
 
 /// @endcond

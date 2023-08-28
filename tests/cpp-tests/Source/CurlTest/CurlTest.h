@@ -25,6 +25,8 @@
 #ifndef _CURL_TEST_H_
 #define _CURL_TEST_H_
 
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_EMSCRIPTEN)
+
 #include "axmol.h"
 #include "../BaseTest.h"
 
@@ -43,5 +45,7 @@ public:
 private:
     ax::Label* _label;
 };
+
+#endif
 
 #endif  // _CURL_TEST_H_
