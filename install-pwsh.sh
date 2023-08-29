@@ -1,6 +1,6 @@
 # Install powershell 7 on macOS, ubuntu linux
 
-HOST_OS=`uname`
+HOST_OS=$(uname)
 
 myRoot=$(dirname "$0")
 
