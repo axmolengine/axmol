@@ -13,7 +13,7 @@ if [ -f "$pwsh_prog" ] ; then
     exit 0
 fi
 
-if [ $HOST_OS = 'Drawin' ] ; then
+if [ $HOST_OS = 'Darwin' ] ; then
     curl -L https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell-7.3.6-osx-x64.pkg -o $myRoot/tmp/powershell-7.3.6-osx-x64.pkg
     sudo xattr -rd com.apple.quarantine $myRoot/powershell-7.3.6-osx-x64.pkg
     sudo installer -pkg $myRoot/tmp/powershell-7.3.6-osx-x64.pkg -target /
