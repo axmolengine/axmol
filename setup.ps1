@@ -154,7 +154,7 @@ if ($IsLinux) {
             Set-Location ..
         }
     } else {
-        $b1k.println("The sudo command not present in current linux distro")
+        $b1k.println("The current OS NOT a deb linux distro")
     }
 }
 
