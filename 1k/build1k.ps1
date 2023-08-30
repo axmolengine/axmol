@@ -36,12 +36,13 @@
 #  -cc: The C/C++ compiler toolchain: clang, msvc, gcc, mingw-gcc or empty use default installed on current OS
 #       msvc: msvc-120, msvc-141
 #       ndk: ndk-r16b, ndk-r16b+
-#  -xt: cross build tool, default: cmake, for android can be gradle
+#  -xt: cross build tool, default: cmake, for android can be gradlew, can be path of cross build tool program
 #  -xc: cross build tool configure options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -xb: cross build tool build options: i.e. -xb '--config','Release'
 #  -prefix: the install location for missing tools in system, default is "$HOME/build1k"
-#  -winsdk: specific windows sdk version, i.e. -winsdk '10.0.19041.0', leave empty, cmake will auto choose latest avaiable
-#  -setupOnly: whether setup only: true, false
+#  -sdk: specific windows sdk version, i.e. -sdk '10.0.19041.0', leave empty, cmake will auto choose latest avaiable
+#  -setupOnly: this param present, only execute step: setup 
+#  -configOnly: if this param present, will skip build step
 # support matrix
 #   | OS        |   Build targets     |  C/C++ compiler toolchain | Cross Build tool |
 #   +----------+----------------------+---------------------------+------------------|
@@ -49,6 +50,10 @@
 #   | Linux    | linux,android        | ndk                       | cmake,gradle     |    
 #   | macOS    | osx,ios,tvos,watchos | xcode                     | cmake            |
 #
+param(
+    [switch]$configOnly,
+    [switch]$setupOnly
+)
 
 $myRoot = $PSScriptRoot
 
@@ -175,10 +180,8 @@ $options = @{
     prefix    = $null; 
     xc        = @(); 
     xb        = @(); 
-    nb        = $false; # only gen native project files, skip build
-    winsdk    = $null; 
-    dll       = $false; 
-    setupOnly = $false
+    sdk       = $null; 
+    dll       = $false
 }
 
 $optName = $null
@@ -216,7 +219,7 @@ $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
 $b1k.println("PowerShell $pwsh_ver")
 
-if (!$options.setupOnly) {
+if (!$setupOnly) {
     $b1k.println("$(Out-String -InputObject $options)")
 }
 
@@ -763,8 +766,8 @@ function setup_android_sdk() {
 function preprocess_win([string[]]$inputOptions) {
     $outputOptions = $inputOptions
 
-    if ($options.winsdk) {
-        $outputOptions += "-DCMAKE_SYSTEM_VERSION=$($options.winsdk)"
+    if ($options.sdk) {
+        $outputOptions += "-DCMAKE_SYSTEM_VERSION=$($options.sdk)"
     }
 
     if ($TOOLCHAIN_NAME -eq 'msvc') {
@@ -827,12 +830,13 @@ function preprocess_linux([string[]]$inputOptions) {
 }
 
 $ninja_prog = $null
+$is_gradlew = $options.xt.IndexOf('gradlew') -ne -1
 function preprocess_andorid([string[]]$inputOptions) {
     $outputOptions = $inputOptions
 
     $t_archs = @{arm64 = 'arm64-v8a'; armv7 = 'armeabi-v7a'; x64 = 'x86_64'; x86 = 'x86'; }
 
-    if ($options.xt -eq 'gradle') {
+    if ($is_gradlew) {
         if ($options.a.GetType() -eq [object[]]) {
             $archlist = [string[]]$options.a
         }
@@ -965,14 +969,14 @@ elseif ($BUILD_TARGET -eq 'android') {
     $sdk_root, $ndk_root = setup_android_sdk
     $env:ANDROID_HOME = $sdk_root
     $env:ANDROID_NDK = $ndk_root
-    # we assume 'gradle' to build apk, so require setup jdk11+
+    # we assume 'gradlew' to build apk, so require setup jdk11+
     # otherwise, build for android libs, needs setup ninja
-    if ($options.xt -ne 'gradle') {
+    if ($is_gradlew) {
         $ninja_prog = setup_ninja
     }  
 }
 
-if (!$options.setupOnly) {
+if (!$setupOnly) {
     $stored_cwd = $(Get-Location).Path
     if ($options.d) {
         Set-Location $options.d
@@ -1027,13 +1031,18 @@ if (!$options.setupOnly) {
         }
     }
 
-    if (($BUILD_TARGET -eq 'android') -and ($options.xt -eq 'gradle')) {
+    if (($BUILD_TARGET -eq 'android') -and $is_gradlew) {
+        $storedLocation = (Get-Location).Path
+        $build_tool = (Get-Command $options.xt).Source
+        $build_tool_dir = Split-Path $build_tool -Parent
+        Set-Location $build_tool_dir
         if ($optimize_flag -eq 'Debug') {
-            ./gradlew assembleDebug $CONFIG_ALL_OPTIONS | Out-Host
+            & $build_tool assembleDebug $CONFIG_ALL_OPTIONS | Out-Host
         }
         else {
-            ./gradlew assembleRelease $CONFIG_ALL_OPTIONS | Out-Host
+            & $build_tool assembleRelease $CONFIG_ALL_OPTIONS | Out-Host
         }
+        Set-Location $storedLocation
     } 
     else {
         # step3. configure
@@ -1062,13 +1071,14 @@ if (!$options.setupOnly) {
             Set-Content $tempFile $lastWriteTime -NoNewline
         }
 
-        if (!$options.nb) {
+        if (!$configOnly) {
             # step4. build
             # apply additional build options
             $BUILD_ALL_OPTIONS = @()
             $BUILD_ALL_OPTIONS += $buildOptions
             if (!$optimize_flag) {
                 $BUILD_ALL_OPTIONS += '--config', 'Release'
+                $optimize_flag = 'Release'
             }
 
             $BUILD_ALL_OPTIONS += "--parallel"
