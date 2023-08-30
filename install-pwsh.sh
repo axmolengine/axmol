@@ -43,9 +43,8 @@ elif [ $HOST_OS = 'Linux' ] ; then
         sudo apt-get install -f
     elif which pacman > /dev/null; then # Linux distro: Arch
         # refer: https://ephos.github.io/posts/2018-9-17-Pwsh-ArchLinux
-        git clone https://aur.archlinux.org/powershell-bin.git
-        cd powershell-bin
-        cat PKGBUILD
+        git clone https://aur.archlinux.org/powershell-bin.git $myRoot/tmp/powershell-bin
+        cd $myRoot/tmp/powershell-bin
         yes | makepkg -si
         cd -
     fi
