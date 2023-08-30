@@ -66,7 +66,8 @@ if (!$AX_ROOT) {
     }
 }
 
-$is_engine = ($workDir -eq $AX_ROOT)
+$search_prior_dir = $options.d
+$is_engine = ($workDir -eq $AX_ROOT) -or ($search_prior_dir -eq $AX_ROOT)
 $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
@@ -74,8 +75,7 @@ $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 $b1k_script = (Resolve-Path -Path "$AX_ROOT/1k/build1k.ps1").Path
 $b1k_args = @()
 
-$search_prior_dir = $options.d
-if (!$search_prior_dir -and $is_engine -and $is_android) {
+if ($is_engine -and $is_android) {
     if ($is_ci) {
         $search_prior_dir = Join-Path $myRoot 'tests/cpp-tests'
     } else {
