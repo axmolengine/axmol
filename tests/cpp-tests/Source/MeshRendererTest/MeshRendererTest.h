@@ -482,7 +482,7 @@ protected:
     std::string _useCaseTitles[(int)USECASE::MAX_CASE_NUM];
 };
 
-// node animation test, cocos2d-x supports both skeletal animation and node animation
+// node animation test, axmol supports both skeletal animation and node animation
 class NodeAnimationTest : public MeshRendererTestDemo
 {
 public:

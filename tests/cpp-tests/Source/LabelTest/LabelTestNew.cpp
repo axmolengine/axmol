@@ -1117,7 +1117,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
 
     TTFConfig ttfConfig("fonts/HKYuanMini.ttf", 25, GlyphCollection::DYNAMIC);
     auto label1 =
-        Label::createWithTTF(ttfConfig, "你好，Cocos2d-x v3的New Label.", TextHAlignment::LEFT, size.width * 0.75f);
+        Label::createWithTTF(ttfConfig, "你好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
     if (label1)
     {
         label1->setTextColor(Color4B(128, 255, 255, 255));
@@ -1131,7 +1131,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
     }
 
     auto label2 =
-        Label::createWithTTF(ttfConfig, "早上好，Cocos2d-x v3的New Label.", TextHAlignment::LEFT, size.width * 0.75f);
+        Label::createWithTTF(ttfConfig, "早上好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
     if (label2)
     {
         label2->setTextColor(Color4B(255, 128, 255, 255));
@@ -1583,13 +1583,13 @@ LabelTTFOldNew::LabelTTFOldNew()
     auto s      = Director::getInstance()->getWinSize();
     float delta = s.height / 4;
 
-    auto label1 = Label::createWithSystemFont("Cocos2d-x Label Test", "arial", 24);
+    auto label1 = Label::createWithSystemFont("Axmol Label Test", "arial", 24);
     addChild(label1, 0, kTagBitmapAtlas1);
     label1->setPosition(Vec2(s.width / 2, delta * 2));
     label1->setColor(Color3B::RED);
 
     TTFConfig ttfConfig("fonts/arial.ttf", 24);
-    auto label2 = Label::createWithTTF(ttfConfig, "Cocos2d-x Label Test");
+    auto label2 = Label::createWithTTF(ttfConfig, "Axmol Label Test");
     addChild(label2, 0, kTagBitmapAtlas2);
     label2->setPosition(Vec2(s.width / 2, delta * 2));
 

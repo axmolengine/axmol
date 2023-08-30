@@ -168,7 +168,7 @@ bool BatchingExample::init()
     _atlas = new (__FILE__, __LINE__) Atlas("spineboy.atlas", &textureLoader, true);
     AXASSERT(_atlas, "Error reading atlas file.");
 
-    // This attachment loader configures attachments with data needed for cocos2d-x rendering.
+    // This attachment loader configures attachments with data needed for axmol rendering.
     // Do not dispose the attachment loader until the skeleton data is disposed!
     _attachmentLoader = new (__FILE__, __LINE__) Cocos2dAtlasAttachmentLoader(_atlas);
 
@@ -213,7 +213,7 @@ bool BatchingExample::init()
 
 BatchingExample::~BatchingExample()
 {
-    // SkeletonAnimation instances are cocos2d-x nodes and are disposed of automatically as normal, but the data created
+    // SkeletonAnimation instances are axmol nodes and are disposed of automatically as normal, but the data created
     // manually to be shared across multiple SkeletonAnimations needs to be disposed of manually.
 
     delete _skeletonData;
