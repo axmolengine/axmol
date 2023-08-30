@@ -107,8 +107,8 @@ else {
 
 
 if ($IsLinux) {
-    $sudo_pinfo = (Get-Command 'sudo' -ErrorAction SilentlyContinue)
-    if ($sudo_pinfo) {
+    $dpkg_cmdi = (Get-Command 'dpkg' -ErrorAction SilentlyContinue)
+    if ($dpkg_cmdi) {
         Write-Host "Are you continue install linux dependencies for axmol? (y/n) " -NoNewline
         $answer = Read-Host
         if ($answer -like 'y*') {
