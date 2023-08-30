@@ -67,7 +67,7 @@ if (!$AX_ROOT) {
 }
 
 $search_prior_dir = $options.d
-$is_engine = ($workDir -eq $AX_ROOT) -or ($search_prior_dir -eq $AX_ROOT)
+$is_engine = ($workDir -eq $AX_ROOT) -and ($search_prior_dir -eq $AX_ROOT)
 $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
@@ -150,6 +150,11 @@ if (!$is_android) {
             )
         )
         $cmake_target = $cmake_targets[$is_ci][$is_engine]
+
+        # reason:
+        #   - android package not accept '-'
+        #   - ios deploy device may failed with unknown error
+        $cmake_target = $cmake_target.Replace('-', '_')
         $options.xb += '--target', $cmake_target
     } else{
         $cmake_target = $options.xb[$bti]
