@@ -52,7 +52,8 @@ else {
 
     if ($profileContent.IndexOf('$env:PATH = ') -eq -1 -or !($axmolCmdInfo = (Get-Command axmol -ErrorAction SilentlyContinue)) -or $axmolCmdInfo.Source -ne "$AX_CONSOLE_ROOT/axmol") {
         $profileContent += "# Add axmol console tool to PATH`n"
-        $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/console:${env:PATH}"{0}' -f "`n"
+        $profileContent += '$env:PATH = "${env:AX_ROOT}/tools/console:${env:PATH}"'
+        $profileContent += "`n"
         ++$profileMods
     }
 
@@ -107,8 +108,7 @@ else {
 
 
 if ($IsLinux) {
-    $dpkg_cmdi = (Get-Command 'dpkg' -ErrorAction SilentlyContinue)
-    if ($dpkg_cmdi) {
+    if ($(Get-Command 'dpkg' -ErrorAction SilentlyContinue)) {
         Write-Host "Are you continue install linux dependencies for axmol? (y/n) " -NoNewline
         $answer = Read-Host
         if ($answer -like 'y*') {
@@ -153,9 +153,12 @@ if ($IsLinux) {
             Set-Location ..
             Set-Location ..
         }
-    } else {
-        $b1k.println("The current OS NOT a deb linux distro")
+    } elseif($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
+        yes|sudo pacman -S git cmake make
+    }
+    else {
+        $b1k.println("The current Linux distro isn't officially supported by axmol community")
     }
 }
 
-$b1k.pause("setup successfully")
+$b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")

@@ -7,7 +7,9 @@
   - How to Install:
       - visit: https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell
       - download from github release page: https://github.com/PowerShell/PowerShell/releases
-  - Note: win7+, system installed PowerShell 5.0 should works, but not recommended
+  - Note:
+    - win7+, system installed PowerShell 5.0 should works, but not recommended
+    - For macOS, Ubuntu, ArchLinux, you can simply run `install-pwsh.sh` in axmol root directory
 
 ## Prerequisites
 
