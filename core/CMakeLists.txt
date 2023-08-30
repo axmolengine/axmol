@@ -130,11 +130,7 @@ option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
-if((WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID)
-  option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON)
-else()
-  set(AX_ENABLE_EXT_IMGUI OFF)
-endif()
+cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID" OFF)
 
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
@@ -179,11 +175,11 @@ configure_file(
         "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
         "${CMAKE_CURRENT_LIST_DIR}/axmolver.h")
 
-# early features     
-include(CMakeDependentOption)
-cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
-  "Build the tests when we are the root project" ON
-  "NOT (AX_GIT_BRANCH STREQUAL \"main\")" OFF)
+# early experimental features     
+# include(CMakeDependentOption)
+# cmake_dependent_option(AX_ENABLE_EARLY_FEATURES
+#   "Build the tests when we are the root project" ON
+#   "NOT (AX_GIT_BRANCH STREQUAL \"dev\")" OFF)
 
 include(2d/CMakeLists.txt)
 include(3d/CMakeLists.txt)
