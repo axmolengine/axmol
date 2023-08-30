@@ -118,7 +118,7 @@ if ($IsLinux) {
     $answer = Read-Host
     if ($answer -like 'y*') {
         if ($(Get-Command 'dpkg' -ErrorAction SilentlyContinue)) {
-            b1k_print "It will take few minutes"
+            $b1k.println("It will take few minutes")
             sudo apt update
             # for vm, libxxf86vm-dev also required
 
@@ -148,16 +148,13 @@ if ($IsLinux) {
             sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
 
             b1k_print "Installing latest freetype for linux ..."
-            mkdirs buildsrc
-            Set-Location buildsrc
-            git clone 'https://github.com/freetype/freetype.git'
-            Set-Location freetype
+            git clone 'https://github.com/freetype/freetype.git' "$AX_ROOT/tmp/freetype"
+            Set-Location "$AX_ROOT/tmp/freetype"
             git checkout 'VER-2-13-0'
             sh autogen.sh
             ./configure '--prefix=/usr' '--enable-freetype-config' '--disable-static'
             sudo make install
-            Set-Location ..
-            Set-Location ..
+            Set-Location -
         } elseif($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
             $DEPENDS = @(
                 'git',
@@ -171,7 +168,14 @@ if ($IsLinux) {
                 'fontconfig',
                 'gtk3'
                 )
-            yes|sudo pacman -S --needed $DEPENDS
+            sudo pacman -S --needed --noconfirm @DEPENDS
+
+            # install libvlc from AUR
+            $b1k.println('Installing libvlc from AUR ...')
+            git clone https://aur.archlinux.org/libvlc.git $AX_ROOT/tmp/libvlc
+            Set-Location "$AX_ROOT/tmp/libvlc"
+            yes | makepkg -si
+            Set-Location -
         }
         else {
             $b1k.println("Skipped dependencies installation, because current Linux distro isn't officially supported by axmol community")
