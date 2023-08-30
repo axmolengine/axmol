@@ -67,7 +67,7 @@ if (!$AX_ROOT) {
 }
 
 $search_prior_dir = $options.d
-$is_engine = ($workDir -eq $AX_ROOT) -and ($search_prior_dir -eq $AX_ROOT)
+$is_engine = ($workDir -eq $AX_ROOT) -and (!$search_prior_dir -or $search_prior_dir -eq $AX_ROOT)
 $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
