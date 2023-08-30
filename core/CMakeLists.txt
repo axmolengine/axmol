@@ -95,14 +95,10 @@ endif()
 if (LINUX)
     include(CheckIncludeFile)
     check_include_file(vlc/vlc.h _AX_HAVE_VLC)
-    if (_AX_HAVE_VLC)
-        option (AX_ENABLE_VLC_MEDIA "Enabling vlc media on linux" ON)
-    else()
-        option (AX_ENABLE_VLC_MEDIA "Enabling vlc media on linux" OFF)
-    endif()
-elseif(WINDOWS AND (NOT WINRT))
-    option (AX_ENABLE_VLC_MEDIA "Enabling vlc media on windows" OFF)
 endif()
+
+include(CMakeDependentOption)
+cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" ON "_AX_HAVE_VLC" OFF)
 
 message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
 
