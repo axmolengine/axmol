@@ -260,7 +260,7 @@ bool Material::parsePass(Technique* technique, Properties* passProperties)
     return true;
 }
 
-// cocos2d-x doesn't support Samplers yet. But will be added soon
+// axmol doesn't support Samplers yet.
 bool Material::parseSampler(backend::ProgramState* programState, Properties* samplerProperties)
 {
     AXASSERT(!samplerProperties->getId().empty(), "Sampler must have an id. The id is the uniform name");
