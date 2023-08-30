@@ -11,7 +11,7 @@ macro(ax_depend)
         endif()
     elseif(LINUX)
         # need review those libs: X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m
-        list(APPEND PLATFORM_SPECIFIC_LIBS dl X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m bsd)
+        list(APPEND PLATFORM_SPECIFIC_LIBS dl X11 Xi Xrandr Xxf86vm Xinerama Xcursor rt m)
         if(_AX_HAVE_VLC)
             list(APPEND PLATFORM_SPECIFIC_LIBS vlc vlccore)
         endif()
