@@ -1,10 +1,16 @@
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
+function mkdirs([string]$path) {
+    if (!(Test-Path $path -PathType Container)) {
+        New-Item $path -ItemType Directory 1>$null
+    }
+}
+
 $build1kPath = Join-Path $myRoot '1k/build1k.ps1'
 $prefix = Join-Path $myRoot 'tools/external'
 if (!(Test-Path $prefix -PathType Container)) {
-    mkdir $prefix | Out-Null
+    mkdirs $prefix
 }
 
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
@@ -59,7 +65,7 @@ else {
 
     $profileDir = Split-Path $PROFILE -Parent
     if (!(Test-Path $profileDir -PathType Container)) {
-        mkdir $profileDir | Out-Null
+        mkdirs $profileDir
     }
 
     if ($profileMods) {
@@ -108,10 +114,10 @@ else {
 
 
 if ($IsLinux) {
-    if ($(Get-Command 'dpkg' -ErrorAction SilentlyContinue)) {
-        Write-Host "Are you continue install linux dependencies for axmol? (y/n) " -NoNewline
-        $answer = Read-Host
-        if ($answer -like 'y*') {
+    Write-Host "Are you continue install linux dependencies for axmol? (y/n) " -NoNewline
+    $answer = Read-Host
+    if ($answer -like 'y*') {
+        if ($(Get-Command 'dpkg' -ErrorAction SilentlyContinue)) {
             b1k_print "It will take few minutes"
             sudo apt update
             # for vm, libxxf86vm-dev also required
@@ -131,7 +137,7 @@ if ($IsLinux) {
             $DEPENDS += 'libfontconfig1-dev'
             $DEPENDS += 'libgtk-3-dev'
             $DEPENDS += 'binutils'
-            $DEPENDS += 'libbsd-dev'
+            # $DEPENDS += 'libbsd-dev'
             $DEPENDS += 'libasound2-dev'
             $DEPENDS += 'libxxf86vm-dev'
             $DEPENDS += 'libvlc-dev', 'libvlccore-dev', 'vlc'
@@ -142,7 +148,7 @@ if ($IsLinux) {
             sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
 
             b1k_print "Installing latest freetype for linux ..."
-            mkdir buildsrc
+            mkdirs buildsrc
             Set-Location buildsrc
             git clone 'https://github.com/freetype/freetype.git'
             Set-Location freetype
@@ -152,12 +158,24 @@ if ($IsLinux) {
             sudo make install
             Set-Location ..
             Set-Location ..
+        } elseif($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
+            $DEPENDS = @(
+                'git',
+                'cmake',
+                'make',
+                'libx11', 
+                'libxrandr',
+                'libxinerama',
+                'libxcursor',
+                'libxi',
+                'fontconfig',
+                'gtk3'
+                )
+            yes|sudo pacman -S --needed $DEPENDS
         }
-    } elseif($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
-        yes|sudo pacman -S git cmake make
-    }
-    else {
-        $b1k.println("The current Linux distro isn't officially supported by axmol community")
+        else {
+            $b1k.println("Skipped dependencies installation, because current Linux distro isn't officially supported by axmol community")
+        }
     }
 }
 
