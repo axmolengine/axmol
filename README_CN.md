@@ -25,11 +25,11 @@
 
 ## 渲染后端
 
-- Metal for macOS and iOS
-- OpenGL 3.3+ for Linux, macOS and Win32
-- OpenGL ES 2.0+ for Android
-- OpenGL ES 3.0+ for iOS
-- ANGLE GLES 3.0+ for Win32 and UWP
+- Metal: macOS, iOS
+- OpenGL 3.3+: Linux, macOS, Win32
+- OpenGL ES 2.0+: Android
+- OpenGL ES 3.0+: iOS
+- ANGLE GLES 3.0+: Win32, WinUWP
 
 ## 新的媒体播放器
 
@@ -67,7 +67,7 @@
 * 使用现代化的GL加载器glad代替glew
 * 增加google angle渲染后端支持
 * C++最低标准要求: C++17/20
-* 设置ios下最低目标平台为ios9.0
+* 设置ios下最低目标平台为ios11.0
 * 使用更快的xml解析库pugixml代替tinyxml2
 * Downloader全平台统一实现，均基于curl
 * 全平台统一使用XML SAX解析plist文件, 移除Apple平台的实现
