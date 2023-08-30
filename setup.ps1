@@ -166,16 +166,10 @@ if ($IsLinux) {
                 'libxcursor',
                 'libxi',
                 'fontconfig',
-                'gtk3'
+                'gtk3',
+                'vlc'
                 )
             sudo pacman -S --needed --noconfirm @DEPENDS
-
-            # install libvlc from AUR
-            $b1k.println('Installing libvlc from AUR ...')
-            git clone https://aur.archlinux.org/libvlc.git $AX_ROOT/tmp/libvlc
-            Set-Location "$AX_ROOT/tmp/libvlc"
-            yes | makepkg -si
-            Set-Location -
         }
         else {
             $b1k.println("Skipped dependencies installation, because current Linux distro isn't officially supported by axmol community")
