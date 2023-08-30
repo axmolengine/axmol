@@ -9,8 +9,6 @@
       - download from github release page: https://github.com/PowerShell/PowerShell/releases
   - Note: win7+, system installed PowerShell 5.0 should works, but not recommended
 
-- [Python-3.7+](https://www.python.org/downloads/)
-
 ## Prerequisites
 
   1. Enter `axmol` root directory
