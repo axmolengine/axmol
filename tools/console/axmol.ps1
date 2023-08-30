@@ -85,7 +85,7 @@ function axmol_deploy() {
     $sub_args = $args
     . axmol_build @sub_args
     if ($options.p -eq 'winuwp') {
-        $appxManifestFile = Join-Path $options.d "$BUILD_DIR/bin/$proj_name/$optimize_flag/Appx/AppxManifest.xml"
+        $appxManifestFile = Join-Path $options.d "$BUILD_DIR/bin/$cmake_target/$optimize_flag/Appx/AppxManifest.xml"
         [XML]$appxManifest = Get-Content $appxManifestFile
         $appxIdentity = $appxManifest.Package.Identity.Name
         $appxPkgFullName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFullName').PackageFullName")
@@ -100,11 +100,11 @@ function axmol_deploy() {
             powershell -Command "Add-AppxPackage -Register '$appxManifestFile'"
         }
         $appxPkgName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFamilyName').PackageFamilyName")
-        println "axmol: Deploy $proj_name done: $appxPkgName"
+        println "axmol: Deploy $cmake_target done: $appxPkgName"
     }
     elseif($options.p -eq 'win32') {
-        $win32exePath = Join-Path $options.d "$BUILD_DIR/bin/$proj_name/$optimize_flag/$proj_name.exe"
-        println "axmol: Deploy $proj_name done: $win32exePath"
+        $win32exePath = Join-Path $options.d "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.exe"
+        println "axmol: Deploy $cmake_target done: $win32exePath"
     }
     elseif ($options.p -eq 'android') {
         $optimize_flag_lower = $optimize_flag.ToLower()
@@ -117,12 +117,12 @@ function axmol_deploy() {
         $androidActivity = $androidManifest.manifest.application.activity.name
         adb install -t -r $apkFullPath
         if ($?) {
-            println "axmol: Deploy $proj_name done: $androidPackage/$androidActivity"
+            println "axmol: Deploy $cmake_target done: $androidPackage/$androidActivity"
         }
     }
     elseif ($options.p -eq 'ios' -or $options.p -eq 'tvos') {
         if ($options.a -eq 'x64') {
-            $ios_app_path = Join-Path $proj_dir "$BUILD_DIR/bin/$proj_name/$optimize_flag/$proj_name.app"
+            $ios_app_path = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.app"
             $ios_bundle_id = get_bundle_id($ios_app_path)
 
             println 'axmol: Finding avaiable simualtor ...'
@@ -132,7 +132,7 @@ function axmol_deploy() {
             xcrun simctl boot $ios_simulator_id '--arch=x86_64'
             println "axmol: Installing $ios_app_path ..."
             xcrun simctl install $ios_simulator_id $ios_app_path
-            println "axmol: Deploy $proj_name done: $ios_bundle_id"
+            println "axmol: Deploy $cmake_target done: $ios_bundle_id"
         } else { # ios device
 
         }
@@ -156,19 +156,20 @@ function axmol_run() {
     }
     elseif($options.p -eq 'ios') {
         if ($ios_bundle_id) {
-            println "Launching $proj_name ..."
+            println "Launching $cmake_target ..."
             xcrun simctl launch $ios_simulator_id $ios_bundle_id 
         }
     }
     elseif($options.p -eq 'osx') {
-        $launch_macapp = Join-Path $proj_dir "$BUILD_DIR/bin/$proj_name/$optimize_flag/$proj_name.app/Contents/MacOS/$proj_name"
+        $launch_macapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.app/Contents/MacOS/$cmake_target"
         & $launch_macapp
     }
     elseif($options.p -eq 'linux') {
         $launch_linuxapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$cmake_target"
-        Start-Process -FilePath $launch_linuxapp -WorkingDirectory "$BUILD_DIR/bin/$cmake_target"
+        println "axmol: Launching $launch_linuxapp ..."
+        Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
     }
-    println "axmol: Launch $proj_name done"
+    println "axmol: Launch $cmake_target done"
 }
 
 $builtinPlugins = @{
