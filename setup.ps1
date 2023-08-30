@@ -146,15 +146,6 @@ if ($IsLinux) {
             # sudo apt install ubuntu-restricted-extras
 
             sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
-
-            b1k_print "Installing latest freetype for linux ..."
-            git clone 'https://github.com/freetype/freetype.git' "$AX_ROOT/tmp/freetype"
-            Set-Location "$AX_ROOT/tmp/freetype"
-            git checkout 'VER-2-13-0'
-            sh autogen.sh
-            ./configure '--prefix=/usr' '--enable-freetype-config' '--disable-static'
-            sudo make install
-            Set-Location -
         } elseif($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
             $DEPENDS = @(
                 'git',
@@ -172,8 +163,14 @@ if ($IsLinux) {
             sudo pacman -S --needed --noconfirm @DEPENDS
         }
         else {
-            $b1k.println("Skipped dependencies installation, because current Linux distro isn't officially supported by axmol community")
+            $b1k.println("Warning: current Linux distro isn't officially supported by axmol community")
         }
+
+        b1k_print "Installing axmol freetype into linux system directory ..."
+        Set-Location "$AX_ROOT/thirdparty/freetype"
+        cmake -B build '-DCMAKE_BUILD_TYPE=Release' '-DCMAKE_INSTALL_PREFIX=/usr' '-DDISABLE_FORCE_DEBUG_POSTFIX=ON' '-DFT_DISABLE_HARFBUZZ=ON' '-DFT_DISABLE_BROTLI=ON' '-DFT_DISABLE_BZIP2=ON' '-DBUILD_SHARED_LIBS=ON'
+        sudo cmake --build build --config Release --target install
+        Set-Location -
     }
 }
 

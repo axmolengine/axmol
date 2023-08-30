@@ -71,8 +71,8 @@
 - License: MIT
 
 ## FreeType
-- [![Upstream](https://img.shields.io/github/v/tag/freetype/freetype?label=Upstream)](https://www.freetype.org/)
-- Version: 2.13.0
+- [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
+- Version: 2.13.2
 - License: BSD-style (The FreeType Project)
 
 ## Glad
