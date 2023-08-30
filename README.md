@@ -84,7 +84,7 @@ View the [Dev setup instructions](docs/DevSetup.md).
 - Use a modern GL loader ```Glad```
 - Google [angle](https://github.com/google/angle) renderer backend support
 - C++ 17/20
-- IOS/TVOS SDK 9.0 as minimal deployment
+- IOS/TVOS SDK 11.0 as minimal deployment
 - Use fast pugixml
 - Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
 - Use SAX parser for all plist files
