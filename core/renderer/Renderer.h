@@ -29,7 +29,6 @@
 #include <stack>
 #include <array>
 #include <deque>
-#include <optional>
 
 #include "platform/PlatformMacros.h"
 #include "renderer/RenderCommand.h"

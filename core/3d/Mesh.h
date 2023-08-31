@@ -35,7 +35,6 @@
 #include "math/Math.h"
 #include "renderer/MeshCommand.h"
 #include "renderer/CustomCommand.h"
-#include "renderer/backend/Backend.h"
 
 NS_AX_BEGIN
 
@@ -243,36 +242,6 @@ public:
 
     std::string getTextureFileName() { return _texFile; }
 
-    void setInstanceCount(int count = 0);
-
-    /** Enables instancing for this Mesh Renderer, keep in mind that
-     a special vertex shader has to be used, make sure that your shader
-     has a mat4 attribute set on the location of total vertex attributes +1
-     */
-    void enableInstancing(bool instance, int count = 0);
-
-    /** Set this to true and instancing objects within this mesh renderer
-    will be recalculated each frame, use it when you plan to move objects,
-    Otherwise, transforms will be built once for better performance.
-    * to update transforms on demand use `rebuildInstances()` */
-    void setDynamicInstancing(bool dynamic);
-
-    /** Adds a child to use it's transformations for instancing.
-    * The child is in the space of this Node, keep in mind that
-    the node isn't added to the scene graph, it is instead retained
-    and it's parent is set to this node, updates and actions will not run.
-    * the reason for this is performance.
-    *
-    * @param child, The child to use for instancing.
-    */
-    void addInstanceChild(Node* child);
-
-    /** shrinks the instance transform buffer after many steps of expansion to increase performance. */
-    void shrinkToFitInstances();
-
-    /** rebuilds the instance transform buffer next frame. */
-    void rebuildInstances();
-
     Mesh();
     virtual ~Mesh();
 
@@ -284,15 +253,6 @@ protected:
     std::map<NTextureData::Usage, Texture2D*> _textures;  // textures that submesh is using
     MeshSkin* _skin;                                      // skin
     bool _visible;                                        // is the submesh visible
-
-    bool _instancing;
-    backend::Buffer* _instanceTransformBuffer;
-    bool _instanceTransformDirty;
-    bool _instanceTransformBufferDirty;
-    int _instanceCount;
-    std::vector<Node*> _instances;
-    float* _instanceMatrixCache;
-    bool _dynamicInstancing;
 
     CustomCommand::IndexFormat meshIndexFormat;
 

@@ -88,34 +88,19 @@ android {
 }
 
 android.applicationVariants.all { variant ->
+
+    delete "${projectDir}/assets"
+    
     def targetName = variant.name.capitalize()
-
-    def copyContentToAssets = "copy${targetName}ContentToAssets"
-    tasks.register("copy${targetName}ContentToAssets") {
-        doFirst {
-            delete "${projectDir}/assets"
-        }
-        doLast {
-            copy {
-                from "${projectDir}/../../Content"
-                into "${projectDir}/assets"
-                exclude "**/*.gz"
-            }
+    def copyTaskName = "copy${targetName}ResourcesToAssets"
+    tasks.register(copyTaskName) {
+        copy {
+            from "${projectDir}/../../Content"
+            into "${projectDir}/assets"
+            exclude "**/*.gz"
         }
     }
-    tasks.getByName("pre${targetName}Build").dependsOn copyContentToAssets
-
-    tasks.register("copy${targetName}AxslcToAssets") {
-        doFirst {
-            delete "${projectDir}/assets/axslc"
-        }
-        doLast {
-            copy {
-                from "${projectDir}/../build/runtime/axslc"
-                into "${projectDir}/assets/axslc"
-            }
-        }
-    }
+    tasks.getByName("pre${targetName}Build").dependsOn copyTaskName
 }
 
 dependencies {
@@ -125,11 +110,9 @@ dependencies {
 
 project.afterEvaluate {
     if (tasks.findByName("externalNativeBuildDebug")) {
-        copyDebugAxslcToAssets.dependsOn externalNativeBuildDebug
-        compileDebugJavaWithJavac.dependsOn copyDebugAxslcToAssets
+        compileDebugJavaWithJavac.dependsOn externalNativeBuildDebug
     }
     if (tasks.findByName("externalNativeBuildRelease")) {
-        copyReleaseAxslcToAssets.dependsOn externalNativeBuildRelease
-        compileReleaseJavaWithJavac.dependsOn copyReleaseAxslcToAssets
+        compileReleaseJavaWithJavac.dependsOn externalNativeBuildRelease  
     }
 }

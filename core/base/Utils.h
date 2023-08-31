@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "base/Data.h"
 #include "renderer/backend/Types.h"
 #include "math/Mat4.h"
-#include "math/Mat3.h"
 
 /** @file ccUtils.h
 Misc free functions
@@ -227,7 +226,7 @@ AX_DLL const Mat4& getAdjustMatrix();
 /**
 Get the Normal Matrix of matrixMV
 */
-AX_DLL Mat3 getNormalMat3OfMat4(const Mat4& mat);
+AX_DLL std::vector<float> getNormalMat3OfMat4(const Mat4& mat);
 
 /**
 @brief Parses a list of space-separated integers.

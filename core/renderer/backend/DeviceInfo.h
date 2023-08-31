@@ -83,17 +83,11 @@ public:
      */
     virtual const char* getVersion() const = 0;
 
-    virtual const char* getShaderVersion() const { return ""; }
-
     /**
-     * Check does device has extension.
+     * get extensions.
+     * @return Extension supported by device.
      */
-    virtual bool hasExtension(std::string_view /*extName*/) const { return false; };
-
-    /**
-    * Dump all extensions to string
-    */
-    virtual std::string dumpExtensions() const { return {}; };
+    virtual const char* getExtension() const = 0;
 
     /**
      * Check if feature supported by device.
