@@ -22,7 +22,7 @@
 
 ## ImGui
 - [![Upstream](https://img.shields.io/github/v/release/ocornut/imgui?label=Upstream)](https://github.com/ocornut/imgui)
-- Version: 1.89.8-docking
+- Version: 1.89.2-88dfd85 on branch docking
 - License: MIT
 
 ## Live2D (OFF default)

@@ -117,19 +117,17 @@ bool GridBase::initWithSize(const Vec2& gridSize, Texture2D* texture, bool flipp
     uint32_t totalSize        = (VERTEX_POSITION_SIZE + VERTEX_TEXCOORD_SIZE) * sizeof(float);
     const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
     auto iter                 = attributeInfo.find("a_position");
-
-    auto layout = _programState->getMutableVertexLayout();
     if (iter != attributeInfo.end())
     {
-        layout->setAttrib("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
+        _programState->setVertexAttrib("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
     }
     iter = attributeInfo.find("a_texCoord");
     if (iter != attributeInfo.end())
     {
-        layout->setAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, texcoordOffset,
+        _programState->setVertexAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, texcoordOffset,
                                    false);
     }
-    layout->setStride(totalSize);
+    _programState->setVertexStride(totalSize);
 
     calculateVertexPoints();
     updateBlendState();
@@ -243,7 +241,7 @@ void GridBase::afterDraw(ax::Node* /*target*/)
     renderer->addCallbackCommand([director, renderer, this]() -> void {
         director->setProjection(_directorProjection);
         const auto& vp = Camera::getDefaultViewport();
-        renderer->setViewPort(vp.x, vp.y, vp.width, vp.height);
+        renderer->setViewPort(vp.x, vp.y, vp.w, vp.h);
         renderer->setRenderTarget(_oldRenderTarget);
     });
 

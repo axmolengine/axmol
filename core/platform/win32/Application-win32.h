@@ -80,6 +80,18 @@ public:
      */
     virtual bool openURL(std::string_view url);
 
+    /**
+     *  Sets the Resource root path.
+     *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
+     */
+    AX_DEPRECATED_ATTRIBUTE void setResourceRootPath(std::string_view rootResDir);
+
+    /**
+     *  Gets the Resource root path.
+     *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead.
+     */
+    AX_DEPRECATED_ATTRIBUTE std::string_view getResourceRootPath();
+
     void setStartupScriptFilename(std::string_view startupScriptFile);
 
     std::string_view getStartupScriptFilename() { return _startupScriptFilename; }

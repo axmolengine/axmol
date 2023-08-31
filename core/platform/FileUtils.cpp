@@ -35,7 +35,7 @@ THE SOFTWARE.
 #include "base/Macros.h"
 #include "base/Director.h"
 #include "platform/SAXParser.h"
-#include "platform/FileStream.h"
+#include "platform/PosixFileStream.h"
 
 #ifdef MINIZIP_FROM_SYSTEM
 #    include <minizip/unzip.h>
@@ -476,11 +476,7 @@ void FileUtils::setDelegate(FileUtils* delegate)
     s_sharedFileUtils = delegate;
 }
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
-std::string FileUtils::s_exeDir;
-#endif
-
-FileUtils::FileUtils() : _writablePath() {}
+FileUtils::FileUtils() : _writablePath("") {}
 
 FileUtils::~FileUtils() {}
 
@@ -521,12 +517,12 @@ bool FileUtils::writeBinaryToFile(const void* data, size_t dataSize, std::string
     auto* fileUtils = FileUtils::getInstance();
     do
     {
-        auto fileStream = fileUtils->openFileStream(fullPath, IFileStream::Mode::WRITE);
+        auto fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::WRITE);
         // Read the file from hardware
         AX_BREAK_IF(!fileStream);
 
-        bool ok = fileStream->write(data, static_cast<unsigned int>(dataSize)) == dataSize;
-        return ok;
+        fileStream->write(data, static_cast<unsigned int>(dataSize));
+        return true;
     } while (0);
 
     return false;
@@ -587,12 +583,11 @@ FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuf
 
     const auto fullPath = fileUtils->fullPathForFilename(filename);
 
-    FileStream fileStream;
-    fileStream.open(fullPath, IFileStream::Mode::READ);
+    auto fileStream = fileUtils->openFileStream(fullPath, FileStream::Mode::READ);
     if (!fileStream)
         return Status::OpenFailed;
 
-    const auto size = fileStream.size();
+    const auto size = fileStream->size();
     if (size < 0)
     {
         return Status::ObtainSizeFailed;
@@ -604,7 +599,10 @@ FileUtils::Status FileUtils::getContents(std::string_view filename, ResizableBuf
     }
 
     buffer->resize((size_t)size);
-    const auto sizeRead = fileStream.read(buffer->buffer(), (unsigned)size);
+
+    fileStream->seek(0, SEEK_SET);
+
+    const auto sizeRead = fileStream->read(buffer->buffer(), (unsigned)size);
     if (sizeRead < size)
     {
         buffer->resize(sizeRead);
@@ -635,7 +633,8 @@ void FileUtils::writeValueVectorToFile(ValueVector vecData,
         std::move(callback), std::move(vecData));
 }
 
-std::string FileUtils::getPathForFilename(std::string_view filename, std::string_view searchPath) const
+std::string FileUtils::getPathForFilename(std::string_view filename,
+                                          std::string_view searchPath) const
 {
     auto file                  = filename;
     std::string_view file_path = hlookup::empty_sv;
@@ -655,7 +654,8 @@ std::string FileUtils::getPathForFilename(std::string_view filename, std::string
     return path;
 }
 
-std::string FileUtils::getPathForDirectory(std::string_view dir, std::string_view searchPath) const
+std::string FileUtils::getPathForDirectory(std::string_view dir,
+                                           std::string_view searchPath) const
 {
     return std::string{searchPath}.append(dir);
 }
@@ -1007,7 +1007,7 @@ void FileUtils::renameFile(std::string_view oldfullpath,
 {
     performOperationOffthread(
         [oldpath = std::string{oldfullpath}, newpath = std::string{newfullpath}]() {
-        return FileUtils::getInstance()->renameFile(oldpath, newpath);
+            return FileUtils::getInstance()->renameFile(oldpath, newpath);
         },
         std::move(callback));
 }
@@ -1032,17 +1032,17 @@ void FileUtils::listFilesRecursivelyAsync(std::string_view dirPath,
     auto fullPath = fullPathForDirectory(dirPath);
     performOperationOffthread(
         [path = std::string{fullPath}]() {
-        std::vector<std::string> retval;
-        FileUtils::getInstance()->listFilesRecursively(path, &retval);
-        return retval;
+            std::vector<std::string> retval;
+            FileUtils::getInstance()->listFilesRecursively(path, &retval);
+            return retval;
         },
         std::move(callback));
 }
 
-std::unique_ptr<IFileStream> FileUtils::openFileStream(std::string_view filePath, IFileStream::Mode mode)
+std::unique_ptr<FileStream> FileUtils::openFileStream(std::string_view filePath, FileStream::Mode mode)
 {
-    FileStream fs;
-    return fs.open(filePath, mode) ? std::make_unique<FileStream>(std::move(fs)) : nullptr;
+    PosixFileStream fs;
+    return fs.open(filePath, mode) ? std::make_unique<PosixFileStream>(std::move(fs)) : nullptr;
 }
 
 /* !!!Notes for c++fs
@@ -1065,17 +1065,17 @@ std::vector<std::string> FileUtils::listFiles(std::string_view dirPath) const
         {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
             /*
-             * Because the object memory model of std::u8string is identical to std::string
-             * so we use force cast to std::string without `memory alloc & copy`, the ASM code will be:
-             *   00F03204  lea         eax,[ebp-28h]
-             *   00F03207  lea         ecx,[edi+20h]
-             *   00F0320A  push        eax
-             *   008E320B  call        std::filesystem::path::u8string (08E1C40h)
-             *   008E3210  mov         esi,eax
-             *   008E3212  mov         byte ptr [ebp-4],6
-             */
+            * Because the object memory model of std::u8string is identical to std::string
+            * so we use force cast to std::string without `memory alloc & copy`, the ASM code will be:
+            *   00F03204  lea         eax,[ebp-28h]  
+            *   00F03207  lea         ecx,[edi+20h]  
+            *   00F0320A  push        eax  
+            *   008E320B  call        std::filesystem::path::u8string (08E1C40h)  
+            *   008E3210  mov         esi,eax  
+            *   008E3212  mov         byte ptr [ebp-4],6
+            */
             auto pathU8Str = entry.path().u8string();
-            auto& pathStr  = *reinterpret_cast<std::string*>(&pathU8Str);
+            auto& pathStr = *reinterpret_cast<std::string*>(&pathU8Str);
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
 #else
             std::string pathStr = entry.path().string();
@@ -1102,7 +1102,7 @@ void FileUtils::listFilesRecursively(std::string_view dirPath, std::vector<std::
         if (isDir || entry.is_regular_file())
         {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-            auto pathU8Str = entry.path().u8string();
+            auto pathU8Str        = entry.path().u8string();
             auto& pathStr  = *reinterpret_cast<std::string*>(&pathU8Str);
             std::replace(pathStr.begin(), pathStr.end(), '\\', '/');
 #else
