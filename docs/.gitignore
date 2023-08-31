@@ -1,4 +1,4 @@
-out/
+dist/
 .tee-*.txt
 Doxyfile
 
