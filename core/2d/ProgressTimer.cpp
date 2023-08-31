@@ -57,15 +57,16 @@ backend::ProgramState* initPipelineDescriptor(ax::CustomCommand& command,
     pipelieDescriptor.programState = programState;
 
     // set custom vertexLayout according to V2F_C4B_T2F structure
-    programState->setVertexAttrib("a_position", program->getAttributeLocation(backend::Attribute::POSITION),
-                                  backend::VertexFormat::FLOAT2, 0, false);
-    programState->setVertexAttrib("a_texCoord", program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                  backend::VertexFormat::FLOAT2,
-                                   offsetof(V2F_C4B_T2F, texCoords), false);
-    programState->setVertexAttrib("a_color", program->getAttributeLocation(backend::Attribute::COLOR),
+    auto vertexLayout = programState->getMutableVertexLayout();
+    vertexLayout->setAttrib("a_position", program->getAttributeLocation(backend::Attribute::POSITION),
+                            backend::VertexFormat::FLOAT2, 0, false);
+    vertexLayout->setAttrib("a_texCoord", program->getAttributeLocation(backend::Attribute::TEXCOORD),
+                            backend::VertexFormat::FLOAT2,
+                             offsetof(V2F_C4B_T2F, texCoords), false);
+    vertexLayout->setAttrib("a_color", program->getAttributeLocation(backend::Attribute::COLOR),
                                   backend::VertexFormat::UBYTE4,
                                    offsetof(V2F_C4B_T2F, colors), true);
-    programState->setVertexStride(sizeof(V2F_C4B_T2F));
+    vertexLayout->setStride(sizeof(V2F_C4B_T2F));
 
     if (ridal)
     {
@@ -107,7 +108,7 @@ bool ProgressTimer::initWithSprite(Sprite* sp)
 
     // TODO: Use ProgramState Vector to Node
     AX_SAFE_RELEASE(_programState2);
-    setProgramState(initPipelineDescriptor(_customCommand, true, _locMVP1, _locTex1), false);
+    setProgramState(initPipelineDescriptor(_customCommand, true, _locMVP1, _locTex1), true);
     _programState2 = initPipelineDescriptor(_customCommand2, false, _locMVP2, _locTex2);
 
     return true;

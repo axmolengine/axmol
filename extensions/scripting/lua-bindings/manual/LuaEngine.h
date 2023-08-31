@@ -45,7 +45,7 @@ extern "C" {
 NS_AX_BEGIN
 
 /**
- * The Lua engine integrated into the cocos2d-x to process the interactive operation between lua and c++.
+ * The Lua engine integrated into the axmol to process the interactive operation between lua and c++.
  *
  * @lua NA
  * @js NA

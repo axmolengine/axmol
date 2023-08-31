@@ -66,7 +66,7 @@ long AssetManagerEx_tell_file_func(voidpf opaque, voidpf stream)
     if (stream == nullptr)
         return -1;
 
-    auto* fs = (FileStream*)stream;
+    auto* fs = (IFileStream*)stream;
 
     return fs->tell();
 }
@@ -76,20 +76,20 @@ long AssetManagerEx_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset
     if (stream == nullptr)
         return -1;
 
-    auto* fs = (FileStream*)stream;
+    auto* fs = (IFileStream*)stream;
 
-    return fs->seek((long)offset, origin);  // must return 0 for success or -1 for error
+    return fs->seek(offset, origin) != -1 ? 0 : -1;  // must return 0 for success or -1 for error
 }
 
 voidpf AssetManagerEx_open_file_func(voidpf opaque, const char* filename, int mode)
 {
-    FileStream::Mode fsMode;
+    IFileStream::Mode fsMode;
     if ((mode & ZLIB_FILEFUNC_MODE_READWRITEFILTER) == ZLIB_FILEFUNC_MODE_READ)
-        fsMode = FileStream::Mode::READ;
+        fsMode = IFileStream::Mode::READ;
     else if (mode & ZLIB_FILEFUNC_MODE_EXISTING)
-        fsMode = FileStream::Mode::APPEND;
+        fsMode = IFileStream::Mode::APPEND;
     else if (mode & ZLIB_FILEFUNC_MODE_CREATE)
-        fsMode = FileStream::Mode::WRITE;
+        fsMode = IFileStream::Mode::WRITE;
     else
         return nullptr;
 
@@ -123,7 +123,7 @@ uint32_t AssetManagerEx_read_file_func(voidpf opaque, voidpf stream, void* buf, 
     if (stream == nullptr)
         return (uint32_t)-1;
 
-    auto* fs = (FileStream*)stream;
+    auto* fs = (IFileStream*)stream;
     return fs->read(buf, size);
 }
 
@@ -132,7 +132,7 @@ uint32_t AssetManagerEx_write_file_func(voidpf opaque, voidpf stream, const void
     if (stream == nullptr)
         return (uint32_t)-1;
 
-    auto* fs = (FileStream*)stream;
+    auto* fs = (IFileStream*)stream;
     return fs->write(buf, size);
 }
 
@@ -141,7 +141,7 @@ int AssetManagerEx_close_file_func(voidpf opaque, voidpf stream)
     if (stream == nullptr)
         return -1;
 
-    auto* fs          = (FileStream*)stream;
+    auto* fs          = (IFileStream*)stream;
     const auto result = fs->close();  // 0 for success, -1 for error
     delete fs;
     return result;
@@ -155,7 +155,7 @@ int AssetManagerEx_error_file_func(voidpf opaque, voidpf stream)
         return -1;
     }
 
-    auto* fs = (FileStream*)stream;
+    auto* fs = (IFileStream*)stream;
 
     if (fs->isOpen())
     {
@@ -480,7 +480,7 @@ bool AssetsManagerEx::decompress(std::string_view zip)
             }
 
             // Create a file to store current file.
-            auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::WRITE);
+            auto fsOut = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::WRITE);
             if (!fsOut)
             {
                 AXLOG("AssetsManagerEx : can not create decompress destination file %s (errno: %d)\n", fullPath.c_str(),

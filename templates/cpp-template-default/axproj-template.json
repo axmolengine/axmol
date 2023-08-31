@@ -1,73 +1,74 @@
 {
-      "do_default":{
-         "project_rename":{
-            "src_project_name":"HelloCpp",
-            "files":[
-            ]
-         },
-         "project_replace_project_name":{
-            "src_project_name":"HelloCpp",
-            "files":[
-               "Source/AppDelegate.cpp",
-               "proj.win32/main.cpp",
-               "proj.android/settings.gradle",
-               "proj.android/app/res/values/strings.xml",
-               "proj.ios_mac/ios/main.m",
-               "proj.ios_mac/ios/Prefix.pch",
-               "CMakeLists.txt"
-            ]
-         },
-         "project_replace_package_name":{
-            "src_package_name":"org.axmol.hellocpp",
-            "files":[
-               "proj.android/app/build.gradle",
-               "proj.android/app/AndroidManifest.xml"
-            ]
-         },
-         "project_replace_so_name": {
-            "src_so_name": "HelloCpp",
-            "files": [
-                "proj.android/app/AndroidManifest.xml"
-            ]
-         },
-         "project_replace_mac_bundleid": {
-            "src_bundle_id": "org.axmol.hellocpp",
-            "files": [
-               "proj.ios_mac/mac/Info.plist"
-            ]
-         },
-         "project_replace_ios_bundleid": {
-            "src_bundle_id": "org.axmol.hellocpp",
-            "files": [
-               "proj.ios_mac/ios/targets/ios/Info.plist",
-               "proj.ios_mac/ios/targets/tvos/Info.plist"
-            ]
-         }
+   "do_default": [
+      {
+         "action": "rep",
+         "from": "HelloCpp",
+         "to": "${projectName}",
+         "files": [
+            "Source/AppDelegate.cpp",
+            "proj.win32/main.cpp",
+            "proj.android/settings.gradle",
+            "proj.android/app/res/values/strings.xml",
+            "proj.ios_mac/ios/main.m",
+            "proj.ios_mac/ios/Prefix.pch",
+            "CMakeLists.txt",
+            "proj.android/app/AndroidManifest.xml"
+         ]
       },
-      "change_orientation": {
-         "modify_files": [
-            {
-               "file_path": "Source/AppDelegate.cpp",
-               "pattern": "static\\s+cocos2d\\:\\:Size\\s+([a-zA-Z_\\d]+)\\s*=\\s*cocos2d\\:\\:Size\\(\\s*(\\d+),\\s*(\\d+)\\)",
-               "replace_string": "static cocos2d::Size \\1 = cocos2d::Size(\\3, \\2)"
-            },
-            {
-               "file_path": "proj.ios_mac/ios/targets/ios/Info.plist",
-               "pattern": "UIInterfaceOrientationLandscapeRight",
-               "replace_string": "UIInterfaceOrientationPortrait"
-            },
-            {
-               "file_path": "proj.ios_mac/ios/targets/ios/Info.plist",
-               "pattern": "UIInterfaceOrientationLandscapeLeft",
-               "replace_string": "UIInterfaceOrientationPortraitUpsideDown"
-            },
-
-            {
-               "file_path": "proj.android/app/AndroidManifest.xml",
-               "pattern": "android:screenOrientation=\\\".*\\\"",
-               "replace_string": "android:screenOrientation=\"portrait\""
-            }
+      {
+         "action": "rep",
+         "from": "org.axmol.hellocpp",
+         "to": "${packageName}",
+         "files": [
+            "proj.android/app/build.gradle",
+            "proj.android/app/AndroidManifest.xml",
+            "proj.ios_mac/mac/Info.plist",
+            "proj.ios_mac/ios/targets/ios/Info.plist",
+            "proj.ios_mac/ios/targets/tvos/Info.plist"
+         ]
+      },
+      {
+         "action": "cp",
+         "from": "$env:AX_ROOT/build.ps1",
+         "to": "${projectDir}/"
+      },
+      {
+         "action": "cp",
+         "from": "$env:AX_ROOT/templates/run.bat.in",
+         "to": "${projectDir}/"
+      },
+      {
+         "action": "del",
+         "files": [
+            "axproj-template.json",
+            "axproj2-template.json"
          ]
       }
+   ],
+   "do_portrait": [
+      {
+         "action": "rep",
+         "from": "UIInterfaceOrientationLandscapeRight",
+         "to": "UIInterfaceOrientationPortrait",
+         "files": ["proj.ios_mac/ios/targets/ios/Info.plist"]
+      },
+      {
+         "action": "rep",
+         "from": "UIInterfaceOrientationLandscapeLeft",
+         "to": "UIInterfaceOrientationPortraitUpsideDown",
+         "files": ["proj.ios_mac/ios/targets/ios/Info.plist"]
+      },
+      {
+         "action": "rep",
+         "pattern": "static\\s+ax\\:\\:Size\\s+([a-zA-Z_\\d]+)\\s*=\\s*ax\\:\\:Size\\(\\s*(\\d+),\\s*(\\d+)\\)",
+         "to": "static ax::Size `$1 = ax::Size(`$3, `$2)",
+         "files": ["Source/AppDelegate.cpp"]
+      },
+      {
+         "action": "rep",
+         "pattern": "android:screenOrientation=\\\".*\\\"",
+         "to": "android:screenOrientation=`\"portrait`\"",
+         "files": ["proj.android/app/AndroidManifest.xml"]
+      }
+   ]
 }
-
