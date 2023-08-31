@@ -39,25 +39,25 @@ NS_AX_BEGIN
 
 static size_t ov_fread_r(void* buffer, size_t element_size, size_t element_count, void* handle)
 {
-    auto* fs = static_cast<IFileStream*>(handle);
+    auto* fs = static_cast<FileStream*>(handle);
     return fs->read(buffer, static_cast<uint32_t>(element_size * element_count));
 }
 
 static int ov_fseek_r(void* handle, ogg_int64_t offset, int whence)
 {
-    auto* fs = static_cast<IFileStream*>(handle);
+    auto* fs = static_cast<FileStream*>(handle);
     return fs->seek(offset, whence) < 0 ? -1 : 0;
 }
 
 static long ov_ftell_r(void* handle)
 {
-    auto* fs = static_cast<IFileStream*>(handle);
+    auto* fs = static_cast<FileStream*>(handle);
     return fs->tell();
 }
 
 static int ov_fclose_r(void* handle)
 {
-    auto* fs = static_cast<IFileStream*>(handle);
+    auto* fs = static_cast<FileStream*>(handle);
     delete fs;
     return 0;
 }
@@ -71,7 +71,7 @@ AudioDecoderOgg::~AudioDecoderOgg()
 
 bool AudioDecoderOgg::open(std::string_view fullPath)
 {
-    auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ).release();
+    auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ).release();
     if (!fs)
     {
         ALOGE("Trouble with ogg(1): %s\n", strerror(errno));

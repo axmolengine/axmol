@@ -68,14 +68,14 @@ BufferMTL::~BufferMTL()
     }
 }
 
-void BufferMTL::updateData(const void* data, std::size_t size)
+void BufferMTL::updateData(void* data, std::size_t size)
 {
     assert(size <= _size);
     updateIndex();
     memcpy((uint8_t*)_mtlBuffer.contents, data, size);
 }
 
-void BufferMTL::updateSubData(const void* data, std::size_t offset, std::size_t size)
+void BufferMTL::updateSubData(void* data, std::size_t offset, std::size_t size)
 {
     assert(offset + size <= _size);
     updateIndex();

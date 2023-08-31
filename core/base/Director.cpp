@@ -1028,7 +1028,7 @@ void Director::reset()
     AsyncTaskPool::destroyInstance();
     backend::ProgramManager::destroyInstance();
 
-    // axmol specific data structures
+    // cocos2d-x specific data structures
     UserDefault::destroyInstance();
     resetMatrixStack();
 
