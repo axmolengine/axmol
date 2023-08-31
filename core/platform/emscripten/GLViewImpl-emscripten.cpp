@@ -559,21 +559,6 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #if defined(AX_USE_GL)
     // check OpenGL version at first
     const GLubyte* glVersion = glGetString(GL_VERSION);
-
-#ifndef EMSCRIPTEN
-    glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
-
-    if (utils::atof((const char*)glVersion) < 1.5 && nullptr == strstr((const char*)glVersion, "ANGLE"))
-    {
-        char strComplain[256] = {0};
-        sprintf(strComplain,
-                "OpenGL 1.5 or higher is required (your version is %s). Please upgrade the driver of your video card.",
-                glVersion);
-        ccMessageBox(strComplain, "OpenGL version too old");
-        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
-        return false;
-    }
-#endif
     
     if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
         ax::print("[GL:%s] Ready for GLSL", glVersion);

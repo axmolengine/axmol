@@ -1,4 +1,4 @@
-# building wasm
+# Axmol WASM
 
 Building axmol for target platform: webgl aka wasm.
 
@@ -6,7 +6,7 @@ After setup, just run follow command:
 
 axmol build -p wasm
 
-## TODO:
+## TODO
 
 ```cpp
 #ifndef EMSCRIPTEN

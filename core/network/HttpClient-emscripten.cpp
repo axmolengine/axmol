@@ -241,7 +241,7 @@ namespace network
         // get response
         response->setResponseCode(fetch->status);
         response->setErrorBuffer(fetch->statusText);
-        response->getResponseData()->assign((char *)fetch->data, (char *)fetch->data + fetch->numBytes);
+        response->getResponseData()->assign(sttaic_cast<const char *>(fetch->data), static_cast<const char *>(fetch->data) + fetch->numBytes);
         emscripten_fetch_close(fetch);
 
         // write cookie back

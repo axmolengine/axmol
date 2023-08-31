@@ -36,8 +36,8 @@ namespace ax { namespace network {
 
         struct DownloadTaskEmscripten : public IDownloadTask
         {
-            DownloadTaskEmscripten(unsigned int id)
-            :id(id)
+            explicit DownloadTaskEmscripten(unsigned int id_)
+            :id(id_)
             ,bytesReceived(0)
             ,fetch(NULL)
             {
@@ -109,7 +109,7 @@ namespace ax { namespace network {
                 return;
             }
             DownloadTaskEmscripten *coTask = iter->second;
-            std::vector<unsigned char> buf((unsigned char*)fetch->data, (unsigned char*)fetch->data + size);
+            std::vector<unsigned char> buf(reinterpret_cast<const uint8_t*>(fetch->data), reinterpret_cast<const uint8_t*>(fetch->data) + size);
             emscripten_fetch_close(fetch);
             coTask->fetch = fetch = NULL;
             
@@ -230,7 +230,7 @@ namespace ax { namespace network {
 
             DownloadTaskEmscripten *coTask = iter->second;
             function<int64_t(void*, int64_t)> transferDataToBuffer; // just a placeholder
-            int dl = dlNow - coTask->bytesReceived;
+            // int dl = dlNow - coTask->bytesReceived;
             coTask->bytesReceived = dlNow;
             downloader->onTaskProgress(*coTask->task, transferDataToBuffer);
         }
