@@ -23,6 +23,14 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
+## 渲染后端
+
+- Metal: macOS, iOS
+- OpenGL 3.3+: Linux, macOS, Win32
+- OpenGL ES 2.0+: Android
+- OpenGL ES 3.0+: iOS
+- ANGLE GLES 3.0+: Win32, WinUWP
+
 ## 新的媒体播放器
 
 新的媒体播放器`ui::MediaPlayer`(原命: `ui::VideoPlayer`) 将视频渲染为纹理，使得游戏对视频渲染控制更加灵活，就像普通UI一样，而无需考虑层级问题。这得益于重新升级的跨平台`MediaEngine`, 灵感来自微软的媒体基础库(Microsoft Media Foundation): `IMFMediaEngine`，目前已支持axmol引擎支持的所有平台。
@@ -74,6 +82,7 @@
 ### 参考链接
 
 - axmol引擎预编译库生成工具: [build1k](https://github.com/axmolengine/build1k), 
+- axmol专用shader编译工具: [axmolengine/glslcc](https://github.com/axmolengine/glslcc), 
 - 一些基于axmol引擎的开源项目: https://github.com/axmolengine/axmol/discussions/694
 - official v4: https://gitee.com/mirrors/cocos2d-x
 - Git快速手册: https://github.com/axmolengine/axmol/discussions/411

@@ -38,7 +38,7 @@
 #    import <OpenGLES/EAGL.h>
 #    import <OpenGLES/EAGLDrawable.h>
 
-@protocol CCESRenderer <NSObject>
+@protocol ESRenderer <NSObject>
 
 - (id)initWithDepthFormat:(unsigned int)depthFormat
           withPixelFormat:(unsigned int)pixelFormat

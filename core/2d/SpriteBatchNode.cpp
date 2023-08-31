@@ -124,13 +124,13 @@ void SpriteBatchNode::setUniformLocation()
 void SpriteBatchNode::setVertexLayout()
 {
     AXASSERT(_programState, "programState should not be nullptr");
-    _programState->validateSharedVertexLayout(VertexLayoutHelper::setupSprite);
+    _programState->validateSharedVertexLayout(backend::VertexLayoutType::Sprite);
 }
 
-bool SpriteBatchNode::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool SpriteBatchNode::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
 {
     AXASSERT(programState, "programState should not be nullptr");
-    if (Node::setProgramState(programState, needsRetain))
+    if (Node::setProgramState(programState, ownPS))
     {
         auto& pipelineDescriptor        = _quadCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = _programState;

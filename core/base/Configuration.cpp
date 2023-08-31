@@ -117,11 +117,11 @@ std::string Configuration::getInfo() const
 void Configuration::gatherGPUInfo()
 {
     auto _deviceInfo = backend::Device::getInstance()->getDeviceInfo();
-    AXLOG("Supported extensions: %s", _deviceInfo->getExtension());
 
     _valueDict["vendor"]   = Value(_deviceInfo->getVendor());
     _valueDict["renderer"] = Value(_deviceInfo->getRenderer());
     _valueDict["version"]  = Value(_deviceInfo->getVersion());
+    _valueDict["glsl"]     = Value(_deviceInfo->getShaderVersion());
 
     _valueDict["max_texture_size"]      = Value(_deviceInfo->getMaxTextureSize());
     _valueDict["max_vertex_attributes"] = Value(_deviceInfo->getMaxAttributes());
@@ -167,7 +167,7 @@ void Configuration::gatherGPUInfo()
     _supportsOESDepth24                = _deviceInfo->checkForFeatureSupported(backend::FeatureType::DEPTH24);
     _valueDict["supports_OES_depth24"] = Value(_supportsOESDepth24);
 
-    _glExtensions = _deviceInfo->getExtension();
+    // _glExtensions = _deviceInfo->getExtension();
 }
 
 Configuration* Configuration::getInstance()
@@ -184,11 +184,6 @@ Configuration* Configuration::getInstance()
 void Configuration::destroyInstance()
 {
     AX_SAFE_RELEASE_NULL(s_sharedConfiguration);
-}
-
-bool Configuration::checkForGLExtension(std::string_view searchName) const
-{
-    return _glExtensions.find(searchName) != std::string::npos;
 }
 
 //
@@ -276,7 +271,7 @@ bool Configuration::supportsMapBuffer() const
     // is always implemented in OpenGL.
 
     // XXX: Warning. On iOS this is always `true`. Avoiding the comparison.
-#if defined(AX_USE_GLES) && !defined(__APPLE__)
+#if AX_GLES_PROFILE && !defined(__APPLE__)
     return _supportsOESMapBuffer;
 #else
     return true;

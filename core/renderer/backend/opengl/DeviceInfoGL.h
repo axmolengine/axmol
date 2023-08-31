@@ -1,4 +1,4 @@
-/****************************************************************************
+    /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
  Copyright (c) 2020 C4games Ltd
 
@@ -26,6 +26,9 @@
 #pragma once
 
 #include "../DeviceInfo.h"
+
+#include "platform/PlatformConfig.h"
+#include "base/hlookup.h"
 
 NS_AX_BACKEND_BEGIN
 /**
@@ -65,11 +68,17 @@ public:
      */
     virtual const char* getVersion() const override;
 
+    const char* getShaderVersion() const override;
+
     /**
-     * get OpenGL ES extensions.
-     * @return Extension supported by OpenGL ES.
+     * Check does device has extension.
      */
-    virtual const char* getExtension() const override;
+    virtual bool hasExtension(std::string_view /*extName*/) const override;
+
+    /**
+    * Dump all extensions to string
+    */
+    virtual std::string dumpExtensions() const override;
 
     /**
      * Check if feature supported by OpenGL ES.
@@ -78,12 +87,28 @@ public:
      */
     virtual bool checkForFeatureSupported(FeatureType feature) override;
 
+    /*
+    * Check does the device only support GLES2.0
+    */
+    bool isGLES2Only() const;
+
 private:
-    bool checkForGLExtension(std::string_view searchName) const;
+    std::set<uint32_t> _glExtensions;
 
-    static bool checkSupportsCompressedFormat(int compressedFormat);
+    const char* _vendor{nullptr};
+    const char* _renderer{nullptr};
+    const char* _version{nullptr};
+    const char* _shaderVer{nullptr};
 
-    std::string _glExtensions;
+    struct VersionInfo
+    {
+        bool es{false};     // is GLES?
+        uint16_t major{0};  // major version
+        uint16_t minor{0};  // minor version
+    } _verInfo;
+
+    bool _textureCompressionAstc = false;
+    bool _textureCompressionEtc2 = false;
 };
 
 // end of _opengl group
