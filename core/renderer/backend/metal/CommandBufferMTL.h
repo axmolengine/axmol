@@ -136,8 +136,6 @@ public:
      * @ see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
     virtual void setIndexBuffer(Buffer* buffer) override;
-    
-    void setInstanceBuffer(Buffer* buffer) override;
 
     /**
      * Draw primitives without an index list.
@@ -166,13 +164,6 @@ public:
                               std::size_t count,
                               std::size_t offset,
                               bool wireframe) override;
-    
-    void drawElementsInstanced(PrimitiveType primitiveType,
-                               IndexFormat indexType,
-                               std::size_t count,
-                               std::size_t offset,
-                               int instanceCount,
-                               bool wireframe = false) override;
 
     /**
      * Do some resources release.
@@ -185,6 +176,14 @@ public:
     virtual void endFrame() override;
 
     void endEncoding();
+
+    /**
+     * Fixed-function state
+     * @param lineWidth Specifies the width of rasterized lines.
+     * @todo Currently metal do not support setting line with. A Corresponding issue had create
+     * here:https://github.com/cocos2d/cocos2d-x/issues/19772
+     */
+    virtual void setLineWidth(float lineWidth) override;
 
     /**
      * Fixed-function state

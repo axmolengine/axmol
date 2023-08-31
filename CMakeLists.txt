@@ -37,7 +37,7 @@ endif()
 
 # ax root path
 set(_AX_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
-set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/)
+set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
 # prevent in-source-build
 include(PreventInSourceBuilds)

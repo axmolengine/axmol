@@ -157,18 +157,16 @@ bool DrawNode3D::init()
 
     const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
     auto iter                 = attributeInfo.find("a_position");
-    auto vertexLayout         = _programState->getMutableVertexLayout();
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttrib(iter->first, iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
+        _programState->setVertexAttrib(iter->first, iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
     }
     iter = attributeInfo.find("a_color");
     if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttrib(iter->first, iter->second.location, backend::VertexFormat::UBYTE4, sizeof(Vec3),
-                                      true);
+        _programState->setVertexAttrib(iter->first, iter->second.location, backend::VertexFormat::UBYTE4, sizeof(Vec3), true);
     }
-    vertexLayout->setStride(sizeof(V3F_C4B));
+    _programState->setVertexStride(sizeof(V3F_C4B));
 
     _customCommand.createVertexBuffer(sizeof(V3F_C4B), INITIAL_VERTEX_BUFFER_LENGTH,
                                       CustomCommand::BufferUsage::DYNAMIC);

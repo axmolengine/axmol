@@ -18,6 +18,10 @@ add_library(${target_name} STATIC
   ${${target_name}_src}
 )
 
+if (AX_USE_GLAD)
+  target_compile_definitions(${target_name} PRIVATE AX_USE_GLAD=1)
+endif()
+
 target_include_directories(${target_name}
   PRIVATE ..
   PRIVATE ../..
