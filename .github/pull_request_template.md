@@ -1,7 +1,7 @@
 Which branch your pull-request should merge into?
 
-- `main`: BugFixs, Minor features
-- `dev`: Big changes, big features, i.e. refactor render flow
+- `dev`: Current 2.0 BugFixs or Features
+- `1.x`: 1.x BugFixs
 
 ## Describe your changes
 
