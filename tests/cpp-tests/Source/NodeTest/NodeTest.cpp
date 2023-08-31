@@ -943,19 +943,19 @@ public:
         sprite->autorelease();
         auto program      = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
         auto programState = new backend::ProgramState(program);
-        sprite->setProgramState(programState, false);
+        sprite->setProgramState(programState, true);
         return sprite;
     }
-    bool setProgramState(backend::ProgramState* programState, bool needsRetain = true) override;
+    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
     virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
 
 protected:
     CustomCommand _customCommand;
 };
 
-bool MySprite::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool MySprite::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
 {
-    if (Sprite::setProgramState(programState, needsRetain))
+    if (Sprite::setProgramState(programState, ownPS))
     {
         auto& pipelineDescriptor        = _customCommand.getPipelineDescriptor();
         pipelineDescriptor.programState = programState;

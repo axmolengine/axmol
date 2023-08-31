@@ -676,12 +676,12 @@ static Texture2D* _getTexture(Label* label)
 
 void Label::setVertexLayout()
 {
-    _programState->validateSharedVertexLayout(VertexLayoutHelper::setupSprite);
+    _programState->validateSharedVertexLayout(backend::VertexLayoutType::Sprite);
 }
 
-bool Label::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool Label::setProgramState(backend::ProgramState* programState, bool ownPS /*= false*/)
 {
-    if (Node::setProgramState(programState, needsRetain))
+    if (Node::setProgramState(programState, ownPS))
     {
         updateUniformLocations();
         for (auto&& batch : _batchCommands)
@@ -691,9 +691,9 @@ bool Label::setProgramState(backend::ProgramState* programState, bool needsRetai
 
         setVertexLayout();
 
-        auto& quadPipeline = _quadCommand.getPipelineDescriptor();
+        auto& quadPipeline        = _quadCommand.getPipelineDescriptor();
         quadPipeline.programState = _programState;
-        
+
         return true;
     }
     return false;
@@ -717,13 +717,9 @@ void Label::updateShaderProgram()
         {
         case ax::LabelEffect::NORMAL:
             if (_useDistanceField)
-            {
                 programType = backend::ProgramType::LABEL_DISTANCE_NORMAL;
-            }
             else if (_useA8Shader)
-            {
                 programType = backend::ProgramType::LABEL_NORMAL;
-            }
             else
             {
                 auto texture = _getTexture(this);
@@ -735,32 +731,26 @@ void Label::updateShaderProgram()
             }
             break;
         case ax::LabelEffect::OUTLINE:
-        {
-            programType = backend::ProgramType::LABLE_OUTLINE;
-        }
-        break;
+            programType =
+                _useDistanceField ? backend::ProgramType::LABEL_DISTANCE_OUTLINE : backend::ProgramType::LABLE_OUTLINE;
+            break;
         case ax::LabelEffect::GLOW:
             if (_useDistanceField)
-            {
-                programType = backend::ProgramType::LABLE_DISTANCEFIELD_GLOW;
-            }
+                programType = backend::ProgramType::LABLE_DISTANCE_GLOW;
             break;
         default:
             return;
         }
     }
 
-    auto* program = backend::Program::getBuiltinProgram(programType);
-    setProgramState(new backend::ProgramState(program), false);
+    this->setProgramStateByProgramId(programType);
 
     updateUniformLocations();
 
     for (auto&& batch : _batchCommands)
-    {
         updateBatchCommand(batch);
-    }
 
-    auto& quadPipeline = _quadCommand.getPipelineDescriptor();
+    auto& quadPipeline        = _quadCommand.getPipelineDescriptor();
     quadPipeline.programState = _programState;
 }
 
@@ -1292,10 +1282,8 @@ bool Label::setTTFConfigInternal(const TTFConfig& ttfConfig)
 
     if (_fontConfig.outlineSize > 0)
     {
-        _fontConfig.distanceFieldEnabled = false;
-        _useDistanceField                = false;
-        _useA8Shader                     = false;
-        _currLabelEffect                 = LabelEffect::OUTLINE;
+        _useA8Shader     = false;
+        _currLabelEffect = LabelEffect::OUTLINE;
         updateShaderProgram();
     }
     else
@@ -1396,11 +1384,16 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
             _effectColorF.b = outlineColor.b / 255.0f;
             _effectColorF.a = outlineColor.a / 255.0f;
 
-            if (outlineSize > 0 && _fontConfig.outlineSize != outlineSize)
-            {
-                _fontConfig.outlineSize = outlineSize;
-                setTTFConfig(_fontConfig);
+            if (!_useDistanceField)
+            {  // not SDF, request font atlas from feetype
+                if (outlineSize > 0 && _fontConfig.outlineSize != outlineSize)
+                {
+                    _fontConfig.outlineSize = outlineSize;
+                    setTTFConfig(_fontConfig);
+                }
             }
+            else
+                updateShaderProgram();
         }
         else if (_effectColorF != outlineColor || _outlineSize != outlineSize)
         {
@@ -1808,7 +1801,6 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
             int effectType = 0;
             Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
-
             // draw shadow
             if (_shadowEnabled)
             {
@@ -1821,24 +1813,33 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 renderer->addCommand(&batch.shadowCommand);
             }
 
-            // draw outline
-            {
-                effectType = 1;
-                updateBuffer(textureAtlas, batch.outLineCommand);
-                auto* programStateOutline = batch.outLineCommand.getPipelineDescriptor().programState;
-                programStateOutline->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                programStateOutline->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
-                batch.outLineCommand.init(_globalZOrder);
-                renderer->addCommand(&batch.outLineCommand);
+            if (_useDistanceField)
+            {  // distance outline
+                effectColor.w = _outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize;
+                batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &effectColor,
+                                                                                   sizeof(Vec4));
             }
-
-            // draw text
+            else
             {
-                effectType             = 0;
-                auto* programStateText = batch.textCommand.getPipelineDescriptor().programState;
+                // draw outline
+                {
+                    effectType = 1;
+                    updateBuffer(textureAtlas, batch.outLineCommand);
+                    auto* programStateOutline = batch.outLineCommand.getPipelineDescriptor().programState;
+                    programStateOutline->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
+                    programStateOutline->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    batch.outLineCommand.init(_globalZOrder);
+                    renderer->addCommand(&batch.outLineCommand);
+                }
 
-                programStateText->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
-                programStateText->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                // draw text
+                {
+                    effectType             = 0;
+                    auto* programStateText = batch.textCommand.getPipelineDescriptor().programState;
+
+                    programStateText->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
+                    programStateText->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                }
             }
         }
         break;
@@ -2012,7 +2013,7 @@ void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
         // Label overflow shrink fix #566
         if (_overflow == Overflow::SHRINK && this->getRenderingFontSize() < _originalFontSize)
             rescaleWithOriginalFontSize();
-     
+
         updateContent();
     }
 
