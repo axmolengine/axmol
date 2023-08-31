@@ -1,5 +1,12 @@
 include(CMakeParseArguments)
 
+find_program(PWSH_COMMAND pwsh powershell)
+
+if(NOT PWSH_COMMAND)
+    message("powershell not found.")
+    message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
+endif()
+
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
 function(ax_sync_target_res ax_target)
     set(options SYM_LINK)
@@ -25,12 +32,18 @@ function(ax_sync_target_res ax_target)
         #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET ${sync_target_name} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E echo "    Syncing ${cc_folder} to ${link_folder_abs}"
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
+            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
                 -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
         )
     endforeach()
 endfunction()
+
+if (NOT COMMAND set_xcode_property)
+    # This little macro lets you set any XCode specific property, from ios.toolchain.cmake
+    function(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
+        set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
+    endfunction(set_xcode_property)
+endif()
 
 ## create a virtual target SYNC_RESOURCE-${ax_target}
 ## Update resource files in Resources/ folder everytime when `Run/Debug` target.
@@ -58,19 +71,19 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
-                -s ${src_dir} -d ${dst_dir} -m $<CONFIG>
+            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
+                -s ${src_dir} -d ${dst_dir}
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
-                    -s ${src_dir} -d ${dst_dir} -m ${CMAKE_BUILD_TYPE}
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
+                    -s ${src_dir} -d ${dst_dir}
             )
         endif()
     endif()
@@ -496,11 +509,6 @@ macro(ax_config_target_xcode_property ax_target)
         set_xcode_property(${real_target} ONLY_ACTIVE_ARCH "YES")
     endif()
 endmacro()
-
-# This little macro lets you set any XCode specific property, from ios.toolchain.cmake
-function(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
-    set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
-endfunction(set_xcode_property)
 
 # works same as find_package, but do additional care to properly find
 macro(ax_find_package pkg_name pkg_prefix)
