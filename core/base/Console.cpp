@@ -1451,7 +1451,7 @@ void Console::commandUpload(socket_native_type fd)
     static std::string writablePath = FileUtils::getInstance()->getWritablePath();
     std::string filepath            = writablePath + std::string(buf);
 
-    auto fs = FileUtils::getInstance()->openFileStream(filepath, IFileStream::Mode::WRITE);
+    auto fs = FileUtils::getInstance()->openFileStream(filepath, FileStream::Mode::WRITE);
     if (!fs)
     {
         const char err[] = "can't create file!\n";

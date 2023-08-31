@@ -26,20 +26,20 @@
 
 #include "../ShaderModule.h"
 #include "../Types.h"
-#include <stdint.h>
+
 #include <string>
 #include <vector>
 #include <memory>
 #include <unordered_map>
 #import <Metal/Metal.h>
 
+struct glslopt_shader;
+
 NS_AX_BACKEND_BEGIN
 /**
  * @addtogroup _metal
  * @{
  */
-
-struct SLCReflectContext;
 
 /**
  * To Create a vertex or fragment shader.
@@ -62,10 +62,16 @@ public:
     inline id<MTLFunction> getMTLFunction() const { return _mtlFunction; }
 
     /**
+     * Get current shader uniform informatino.
+     * @return Uniform information. Key is each uniform name, Value is corresponding uniform info.
+     */
+    inline const UniformInfo& getActiveUniform(int location) { return _activeUniformInfos[location]; }
+
+    /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo() const { return _activeUniformInfos; }
+    inline const hlookup::string_map<UniformInfo>& getAllActiveUniformInfo() const { return _uniformInfos; }
 
     /**
      * Get maximum uniform location.
@@ -84,14 +90,14 @@ public:
      * @param name Specifies the engine built-in uniform enum name.
      * @return The uniform location.
      */
-    UniformLocation getUniformLocation(Uniform name) const;
+    int getUniformLocation(Uniform name) const;
 
     /**
      * Get uniform location by name.
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    UniformLocation getUniformLocation(std::string_view name) const;
+    int getUniformLocation(std::string_view name) const;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
@@ -114,21 +120,21 @@ public:
     inline std::size_t getUniformBufferSize() const { return _uniformBufferSize; }
 
 private:
-    void parseAttibute(SLCReflectContext* context);
-    void parseUniform(SLCReflectContext* context);
-    void parseTexture(SLCReflectContext* context);
-    void setBuiltinLocations();
+    void parseAttibute(id<MTLDevice> mtlDevice, glslopt_shader* shader);
+    void parseUniform(id<MTLDevice> mtlDevice, glslopt_shader* shader);
+    void parseTexture(id<MTLDevice> mtlDevice, glslopt_shader* shader);
+    void setBuiltinUniformLocation();
+    void setBuiltinAttributeLocation();
 
     id<MTLFunction> _mtlFunction = nil;
 
-    hlookup::string_map<UniformInfo> _activeUniformInfos;
+    hlookup::string_map<UniformInfo> _uniformInfos;
+    std::unordered_map<int, UniformInfo> _activeUniformInfos;
     hlookup::string_map<AttributeBindInfo> _attributeInfo;
-    
-    int _attributeLocation[ATTRIBUTE_MAX];
-    
+
     int _maxLocation = -1;
-    UniformLocation _uniformLocation[UNIFORM_MAX]; // the builtin uniform locations
-    
+    int _uniformLocation[UNIFORM_MAX];
+    int _attributeLocation[ATTRIBUTE_MAX];
     std::size_t _uniformBufferSize = 0;
 };
 
