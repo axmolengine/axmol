@@ -522,9 +522,8 @@ function setup_cmake() {
                 $b1k.rmdirs($cmake_dir)
             }
         } elseif ($IsLinux) {
-            chmod +x $cmake_pkg_path
-            mkdirs $cmake_root
-            sh "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
+            $b1k.mkdirs($cmake_root)
+            & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
         }
 
         $cmake_prog, $_ = find_prog -name 'cmake' -path $cmake_bin -silent $true
