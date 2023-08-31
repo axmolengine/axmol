@@ -2,88 +2,94 @@
 // Copyright (c) 2020 C4games Ltd
 #pragma once
 
-#include "platform/IFileStream.h"
-#include "platform/PlatformConfig.h"
 #include <string>
-#include <functional>
 
+#include "platform/PlatformConfig.h"
 #include "platform/PlatformMacros.h"
-
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#    include <android/asset_manager.h>
-#endif
 
 NS_AX_BEGIN
 
-struct ZipEntryInfo;
-
-union PXFileHandle
-{
-    void* value;
-#if defined(_WIN32)
-    struct
-    {
-        osfhnd_t osfh;  // underlying OS file HANDLE
-        bool append;    // append mode?
-    };
-#else
-    osfhnd_t osfh = -1;  // underlying OS file HANDLE
-#endif
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-    AAsset* aasset;
-    ZipEntryInfo* zentry;
-#endif
-};
-
-struct PXIoF;
-
-class AX_DLL FileStream : public IFileStream
+class AX_DLL FileStream
 {
 public:
-    FileStream() = default;
-    virtual ~FileStream();
+    virtual ~FileStream() = default;
 
-    FileStream(const FileStream& other) = delete;
-
-    FileStream(FileStream&& other) noexcept
-        : IFileStream(std::move(other)), _handle(std::move(other._handle)), _iof(other._iof)
+    enum class Mode
     {
-        other.reset();
-    }
+        READ,
+        WRITE,
+        APPEND,
+        OVERLAPPED,
+    };
 
-    FileStream& operator=(const FileStream& other) = delete;
+    /**
+     *  Open a file
+     *  @param path file to open
+     *  @param mode File open mode, being READ | WRITE | APPEND
+     *  @return true if successful, false if not
+     */
+    virtual bool open(std::string_view path, FileStream::Mode mode) = 0;
 
-    FileStream& operator=(FileStream&& other) noexcept
-    {
-        if (this == &other)
-            return *this;
-        IFileStream::operator=(std::move(other));
-        _handle = std::move(other._handle);
-        _iof    = other._iof;
+    /**
+     *  Close a file stream
+     *  @return 0 if successful, -1 if not
+     */
+    virtual int close() = 0;
 
-        other.reset();
+    /**
+     *  Seek to position in a file stream
+     *  @param offset how many bytes to move within the stream
+     *  @param origin SEEK_SET | SEEK_CUR | SEEK_END
+     *  @return 0 if successful, -1 if not
+     */
+    virtual int seek(int64_t offset, int origin) = 0;
 
-        return *this;
-    }
+    /**
+     *  Read data from file stream
+     *  @param buf pointer to data
+     *  @param size the amount of data to read in bytes
+     *  @return amount of data read successfully, -1 if error
+     */
+    virtual int read(void* buf, unsigned int size) = 0;
 
-    bool open(std::string_view path, IFileStream::Mode mode) override;
-    int close() override;
+    /**
+     *  Write data to file stream
+     *  @param buf pointer to data
+     *  @param size the amount of data to write in bytes
+     *  @return amount of data written successfully, -1 if error
+     */
+    virtual int write(const void* buf, unsigned int size) = 0;
 
-    int64_t seek(int64_t offset, int origin) const override;
-    int read(void* buf, unsigned int size) const override;
-    int write(const void* buf, unsigned int size) const override;
-    int64_t size() const override;
-    bool resize(int64_t size) const override;
-    bool isOpen() const override;
+    /**
+     *  Get the current position in the file stream
+     *  @return current position, -1 if error
+     */
+    virtual int64_t tell() = 0;
 
-    osfhnd_t nativeHandle() const override;
+    /**
+     *  Get the size of the file stream
+     *  @return stream size, -1 if error (Mode::WRITE and Mode::APPEND may return -1)
+     */
+    virtual int64_t size() = 0;
 
-private:
-    int internalClose();
-    void reset() { _iof = nullptr; }
+    /**
+     *  Get status of file stream
+     *  @return true if open, false if closed
+     */
+    virtual bool isOpen() const = 0;
 
-    PXFileHandle _handle{};
-    const PXIoF* _iof{nullptr};
+    /*
+    * Get native handle if support
+    * @returns nullptr if not a local disk file
+    *   Windows: HANDLE
+    *   Other: file descriptor
+    */
+    virtual void* getNativeHandle() const { return nullptr; }
+
+    virtual operator bool() const { return isOpen(); }
+
+protected:
+    FileStream(){};
 };
 
 NS_AX_END

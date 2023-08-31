@@ -156,7 +156,7 @@ public:
         _startingPositionInitialized = bStartingPositionInitialized;
     }
 
-    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
+    bool setProgramState(backend::ProgramState* programState, bool needsRetain) override;
 
     MotionStreak();
     virtual ~MotionStreak();

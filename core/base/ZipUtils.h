@@ -224,6 +224,11 @@ private:
 struct ZipEntryInfo;
 struct ZipFilePrivate;
 
+struct ZipFileStream
+{
+    ZipEntryInfo* entry;
+    int32_t offset;
+};
 /**
  * Zip file - reader helper class.
  *
@@ -235,11 +240,17 @@ struct ZipFilePrivate;
 class AX_DLL ZipFile
 {
 public:
-    static ZipFile* createFromFile(std::string_view zipFile, std::string_view filter = ""sv);
-
+    /**
+     * Constructor, open zip file and store file list.
+     *
+     * @param zipFile Zip file name
+     * @param filter The first part of file names, which should be accessible.
+     *               For example, "assets/". Other files will be missed.
+     *
+     * @since v2.0.5
+     */
+    ZipFile(std::string_view zipFile, std::string_view filter = std::string());
     virtual ~ZipFile();
-
-    bool initWithFile(std::string_view zipFile, std::string_view filter = ""sv);
 
     /**
      * Regenerate accessible file list based on a new filter string.
@@ -273,6 +284,17 @@ public:
     /**
      * Get resource file data from a zip file.
      * @param fileName File name
+     * @param[out] size If the file read operation succeeds, it will be the data size, otherwise 0.
+     * @return Upon success, a pointer to the data is returned, otherwise nullptr.
+     * @warning Recall: you are responsible for calling free() on any Non-nullptr pointer returned.
+     *
+     * @since v2.0.5
+     */
+    unsigned char* getFileData(std::string_view fileName, ssize_t* size);
+
+    /**
+     * Get resource file data from a zip file.
+     * @param fileName File name
      * @param[out] buffer If the file read operation succeeds, if will contain the file data.
      * @return True if successful.
      */
@@ -281,19 +303,34 @@ public:
     std::string getFirstFilename();
     std::string getNextFilename();
 
+    static ZipFile* createWithBuffer(const void* buffer, unsigned int size);
+
     /**
      * zipFile Streaming support, !!!important, the file in zip must no compress level, otherwise
      *  stream seek doesn't work.
      */
-    ZipEntryInfo* vopen(std::string_view fileName);
-    int vread(ZipEntryInfo*, void* buf, unsigned int size);
-    int64_t vseek(ZipEntryInfo*, int64_t offset, int origin);
-    void vclose(ZipEntryInfo*);
-    int64_t vsize(ZipEntryInfo*);
+    bool zfopen(std::string_view fileName, ZipFileStream* zfs);
+    int zfread(ZipFileStream* zfs, void* buf, unsigned int size);
+    int32_t zfseek(ZipFileStream* zfs, int32_t offset, int origin);
+    void zfclose(ZipFileStream* zfs);
+    long long zfsize(ZipFileStream* zfs);
+
+    /**
+     *  Gets resource file data from a zip file.
+     *
+     *  @param[in]  filename The resource file name which contains the relative path of the zip file.
+     *  @param[out] size If the file read operation succeeds, it will be the data size, otherwise 0.
+     *  @return Upon success, a pointer to the data is returned, otherwise nullptr.
+     *  @warning Recall: you are responsible for calling free() on any Non-nullptr pointer returned.
+     */
+    AX_DEPRECATED()
+    static unsigned char* getFileDataFromZip(std::string_view zipFilePath, std::string_view filename, ssize_t* size);
 
 private:
+    /* Only used internal for createWithBuffer() */
     ZipFile();
 
+    bool initWithBuffer(const void* buffer, unsigned int size);
     int getCurrentFileInfo(std::string* filename, unz_file_info_s* info);
 
     /** Internal data like zip file pointer / file list array and so on */

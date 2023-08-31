@@ -88,8 +88,6 @@ ShaderNode* ShaderNode::shaderNodeWithVertex(std::string_view vert, std::string_
 
 bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
 {
-    if (vert.empty())
-        vert = position_vert;
     _vertFileName = vert;
     _fragFileName = frag;
 
@@ -105,13 +103,11 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
 
     // init custom command
     auto attrPosLoc = _programState->getAttributeLocation("a_position");
-
-    auto vertexLayout = _programState->getMutableVertexLayout();
-    vertexLayout->setAttrib("a_position", attrPosLoc, backend::VertexFormat::FLOAT2, 0, false);
+    _programState->setVertexAttrib("a_position", attrPosLoc, backend::VertexFormat::FLOAT2, 0, false);
 
     float w = SIZE_X, h = SIZE_Y;
     Vec2 vertices[6] = {Vec2(0.0f, 0.0f), Vec2(w, 0.0f), Vec2(w, h), Vec2(0.0f, 0.0f), Vec2(0.0f, h), Vec2(w, h)};
-    vertexLayout->setStride(sizeof(Vec2));
+    _programState->setVertexStride(sizeof(Vec2));
 
     /*
      * TODO: the Y-coordinate of subclasses are flipped in metal
@@ -129,10 +125,28 @@ bool ShaderNode::initWithVertex(std::string_view vert, std::string_view frag)
 
 void ShaderNode::loadShaderVertex(std::string_view vert, std::string_view frag)
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(vert, frag, VertexLayoutType::Sprite);
+    auto fileUtiles = FileUtils::getInstance();
+
+    // frag
+    auto fragmentFilePath = fileUtiles->fullPathForFilename(frag);
+    auto fragSource       = fileUtiles->getStringFromFile(fragmentFilePath);
+
+    // vert
+    std::string vertSource;
+    if (vert.empty())
+    {
+        vertSource = position_vert;
+    }
+    else
+    {
+        std::string vertexFilePath = fileUtiles->fullPathForFilename(vert);
+        vertSource                 = fileUtiles->getStringFromFile(vertexFilePath);
+    }
+    auto program      = ProgramManager::newProgram(vertSource, fragSource, VertexLayoutHelper::setupSprite);
     auto programState = new backend::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
+    AX_SAFE_RELEASE(program);
 }
 
 void ShaderNode::update(float dt)
@@ -203,7 +217,7 @@ bool ShaderMonjori::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Monjori_fs");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/example_Monjori.fsh");
 
         auto s = Director::getInstance()->getWinSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -233,7 +247,7 @@ bool ShaderMandelbrot::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Mandelbrot_fs");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/example_Mandelbrot.fsh");
 
         auto s = Director::getInstance()->getWinSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -262,7 +276,7 @@ bool ShaderJulia::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Julia_fs");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/example_Julia.fsh");
 
         auto s = Director::getInstance()->getWinSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -291,7 +305,7 @@ bool ShaderHeart::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Heart_fs");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/example_Heart.fsh");
 
         auto s = Director::getInstance()->getWinSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -321,7 +335,7 @@ bool ShaderFlower::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Flower_fs");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/example_Flower.fsh");
 
         auto s = Director::getInstance()->getWinSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -351,7 +365,7 @@ bool ShaderPlasma::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/example_Plasma_fs");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/example_Plasma.fsh");
 
         auto s = Director::getInstance()->getWinSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -434,10 +448,14 @@ bool SpriteBlur::initWithTexture(Texture2D* texture, const Rect& rect)
 
 void SpriteBlur::initProgram()
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs", VertexLayoutType::Sprite);
+    std::string fragSource = FileUtils::getInstance()->getStringFromFile(
+        FileUtils::getInstance()->fullPathForFilename("Shaders/example_Blur.fsh"));
+
+    auto program      = ProgramManager::newProgram(positionTextureColor_vert, fragSource, VertexLayoutHelper::setupSprite);
     auto programState = new backend::ProgramState(program);
     setProgramState(programState);
     AX_SAFE_RELEASE(programState);
+    AX_SAFE_RELEASE(program);
 
     auto size = getTexture()->getContentSizeInPixels();
 
@@ -563,10 +581,10 @@ bool ShaderRetroEffect::init()
     {
 
         auto fragStr = FileUtils::getInstance()->getStringFromFile(
-            FileUtils::getInstance()->fullPathForFilename("custom/example_HorizontalColor_fs"));
+            FileUtils::getInstance()->fullPathForFilename("Shaders/example_HorizontalColor.fsh"));
         char* fragSource = (char*)fragStr.c_str();
 
-        auto program  = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_HorizontalColor_fs", VertexLayoutType::Sprite);
+        auto program  = ProgramManager::newProgram(positionTextureColor_vert, fragSource, VertexLayoutHelper::setupSprite);
         auto p        = new backend::ProgramState(program);
         auto director = Director::getInstance();
         const auto& screenSizeLocation = p->getUniformLocation("u_screenSize");
@@ -587,6 +605,7 @@ bool ShaderRetroEffect::init()
         addChild(_label);
 
         scheduleUpdate();
+        AX_SAFE_RELEASE(program);
         return true;
     }
 
@@ -639,7 +658,7 @@ bool ShaderLensFlare::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/shadertoy_LensFlare_fs");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/shadertoy_LensFlare.fsh");
 
         auto s = Director::getInstance()->getWinSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -671,7 +690,7 @@ bool ShaderGlow::init()
 {
     if (ShaderTestDemo::init())
     {
-        auto sn = ShaderNode::shaderNodeWithVertex("", "custom/shadertoy_Glow_fs");
+        auto sn = ShaderNode::shaderNodeWithVertex("", "Shaders/shadertoy_Glow.fsh");
 
         auto s = Director::getInstance()->getWinSize();
         sn->setPosition(Vec2(s.width / 2, s.height / 2));
@@ -745,7 +764,10 @@ bool ShaderMultiTexture::init()
         addChild(_sprite);
         _sprite->setPosition(Vec2(s.width / 2, s.height / 2));
 
-        auto program        = ProgramManager::getInstance()->loadProgram("custom/example_MultiTexture_vs", "custom/example_MultiTexture_fs", VertexLayoutType::Sprite);
+        auto* fu            = FileUtils::getInstance();
+        auto vertexShader   = fu->getStringFromFile("Shaders/example_MultiTexture.vsh");
+        auto fragmentShader = fu->getStringFromFile("Shaders/example_MultiTexture.fsh");
+        auto program        = ProgramManager::newProgram(vertexShader, fragmentShader, VertexLayoutHelper::setupSprite);
         auto programState   = new backend::ProgramState(program);
         _sprite->setProgramState(programState);
 
@@ -763,6 +785,7 @@ bool ShaderMultiTexture::init()
         menu->setPosition(s.width * 7 / 8, s.height / 2);
 
         AX_SAFE_RELEASE(programState);
+        AX_SAFE_RELEASE(program);
         return true;
     }
 

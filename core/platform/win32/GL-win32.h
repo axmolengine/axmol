@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 #    include "glad/gl.h"
 
-#    if AX_GLES_PROFILE
+#    if defined(AX_USE_GLES)
 #        undef GL_DEPTH_STENCIL
 #        undef GL_DEPTH24_STENCIL8
 #        undef GL_UNSIGNED_INT_24_8
