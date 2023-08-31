@@ -178,6 +178,7 @@ THE SOFTWARE.
 #include "platform/Common.h"
 #include "platform/Device.h"
 #include "platform/FileUtils.h"
+#include "platform/FileStream.h"
 #include "platform/Image.h"
 #include "platform/PlatformConfig.h"
 #include "platform/PlatformMacros.h"

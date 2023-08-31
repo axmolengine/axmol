@@ -180,7 +180,7 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
     auto glView          = ax::Director::getInstance()->getOpenGLView();
-    CCEAGLView* eaglView = (CCEAGLView*)glView->getEAGLView();
+    EAGLView* eaglView = (EAGLView*)glView->getEAGLView();
 
     float factor = eaglView.contentScaleFactor;
 
@@ -208,7 +208,7 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     AXASSERT(fontName != nullptr, "fontName can't be nullptr");
-    CCEAGLView* eaglView = static_cast<CCEAGLView*>(ax::Director::getInstance()->getOpenGLView()->getEAGLView());
+    EAGLView* eaglView = static_cast<EAGLView*>(ax::Director::getInstance()->getOpenGLView()->getEAGLView());
     float retinaFactor   = eaglView.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
 

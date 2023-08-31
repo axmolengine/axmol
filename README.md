@@ -30,6 +30,14 @@
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 
+## Renderer Backends
+
+- Metal for macOS and iOS
+- OpenGL 3.3+ for Linux, macOS and Win32
+- OpenGL ES 2.0+ for Android
+- OpenGL ES 3.0+ for iOS
+- ANGLE GLES 3.0+ for Win32 and UWP
+
 ## New MediaPlayer
 
 The new `ui::MediaPlayer`(renamed from `ui::VideoPlayer`) render video as Texture2D with designed corss-platform MediaEngine, the MediaEngine inspired from microsoft
@@ -96,6 +104,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 ## Reference links
 
 - [build1k](https://github.com/axmolengine/build1k), the axmol prebuilt build-bot
+- [axmolengine/glslcc](https://github.com/axmolengine/glslcc), a fork of glslcc for axmol new shader workflow tool
 - [Some interesting related projects based on axmol](https://github.com/axmolengine/axmol/discussions/694)
 - [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 - [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)

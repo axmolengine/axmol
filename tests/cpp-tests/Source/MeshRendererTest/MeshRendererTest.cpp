@@ -40,6 +40,10 @@ USING_NS_AX;
 MeshRendererTests::MeshRendererTests()
 {
     ADD_TEST_CASE(MeshRendererBasicTest);
+    ADD_TEST_CASE(MeshRendererStaticInstancingBasicTest);
+    ADD_TEST_CASE(MeshRendererDynamicInstancingBasicTest);
+    ADD_TEST_CASE(MeshRendererPreallocatedInstancingBufferTest);
+    ADD_TEST_CASE(MeshRendererInstancingStressTest);
     ADD_TEST_CASE(MeshRendererHitTest);
     ADD_TEST_CASE(AsyncLoadMeshRendererTest);
     //    // 3DEffect use custom shader which is not supported on WP8/WinRT yet.
@@ -224,6 +228,176 @@ std::string MeshRendererBasicTest::title() const
 std::string MeshRendererBasicTest::subtitle() const
 {
     return "Tap screen to add more meshes";
+}
+
+//------------------------------------------------------------------
+//
+// MeshRendererStaticInstancingBasicTest
+//
+//------------------------------------------------------------------
+
+MeshRendererStaticInstancingBasicTest::MeshRendererStaticInstancingBasicTest()
+{
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(3.f);
+    mesh->setTexture("MeshRendererTest/boss.png");
+
+    auto& s = Director::getInstance()->getWinSize();
+    mesh->setPosition(s.width / 2, s.height / 2);
+
+    mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE);
+    mesh->setDynamicInstancing(false);  // false by default
+
+    FastRNG r{};
+
+    for (int i = 0; i < 1000; i++)
+    {
+        auto inst = Node::create();
+        inst->setPosition(70 * r.rangef(), 50 * r.rangef());
+        inst->setRotation(r.maxf(360));
+        mesh->addInstanceChild(inst, false);  // false by default parameter
+    }
+
+    mesh->shrinkToFitInstances();
+
+    addChild(mesh);
+}
+
+std::string MeshRendererStaticInstancingBasicTest::title() const
+{
+    return "Testing Static Instancing";
+}
+
+std::string MeshRendererStaticInstancingBasicTest::subtitle() const
+{
+    return "1000 instances of the same mesh";
+}
+
+//------------------------------------------------------------------
+//
+// MeshRendererDynamicInstancingBasicTest
+//
+//------------------------------------------------------------------
+
+MeshRendererDynamicInstancingBasicTest::MeshRendererDynamicInstancingBasicTest()
+{
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(3.f);
+    mesh->setTexture("MeshRendererTest/boss.png");
+
+    auto& s = Director::getInstance()->getWinSize();
+    mesh->setPosition(s.width / 2, s.height / 2);
+
+    mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE);
+    mesh->setDynamicInstancing(true);
+
+    FastRNG r{};
+
+    for (int i = 0; i < 1000; i++)
+    {
+        auto inst = Node::create();
+        inst->setPosition(70 * r.rangef(), 50 * r.rangef());
+        auto rot = RepeatForever::create(RotateBy::create(r.rangef(0.5, 2), Vec3(0, 0, 360)));
+        inst->runAction(rot);
+        mesh->addInstanceChild(inst, true);
+    }
+
+    mesh->shrinkToFitInstances();
+
+    addChild(mesh);
+}
+
+std::string MeshRendererDynamicInstancingBasicTest::title() const
+{
+    return "Testing Dynamic Instancing";
+}
+
+std::string MeshRendererDynamicInstancingBasicTest::subtitle() const
+{
+    return "1000 instances of the same mesh with actions";
+}
+
+//------------------------------------------------------------------
+//
+// MeshRendererPreallocatedInstancingBufferTest
+//
+//------------------------------------------------------------------
+
+MeshRendererPreallocatedInstancingBufferTest::MeshRendererPreallocatedInstancingBufferTest()
+{
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(3.f);
+    mesh->setTexture("MeshRendererTest/boss.png");
+
+    auto& s = Director::getInstance()->getWinSize();
+    mesh->setPosition(s.width / 2, s.height / 2);
+
+    mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE, 1000);
+    mesh->setDynamicInstancing(true);
+
+    FastRNG r{};
+
+    for (int i = 0; i < 1000; i++)
+    {
+        auto inst = Node::create();
+        inst->setPosition(70 * r.rangef(), 50 * r.rangef());
+        auto rot = RepeatForever::create(RotateBy::create(r.rangef(0.5, 2), Vec3(0, 0, 360)));
+        inst->runAction(rot);
+        mesh->addInstanceChild(inst, true);
+    }
+
+    addChild(mesh);
+}
+
+std::string MeshRendererPreallocatedInstancingBufferTest::title() const
+{
+    return "Testing Preallocated Instancing";
+}
+
+std::string MeshRendererPreallocatedInstancingBufferTest::subtitle() const
+{
+    return "1000 instances of the same mesh with actions";
+}
+
+//------------------------------------------------------------------
+//
+// MeshRendererInstancingStressTest
+//
+//------------------------------------------------------------------
+
+MeshRendererInstancingStressTest::MeshRendererInstancingStressTest()
+{
+    auto mesh = MeshRenderer::create("MeshRendererTest/boss1.obj");
+    mesh->setScale(3.f);
+    mesh->setTexture("MeshRendererTest/boss.png");
+
+    auto& s = Director::getInstance()->getWinSize();
+    mesh->setPosition(s.width / 2, s.height / 2);
+
+    mesh->enableInstancing(ax::MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE, 10000);
+    mesh->setDynamicInstancing(false); // false by default
+
+    FastRNG r{};
+
+    for (int i = 0; i < 10000; i++)
+    {
+        auto inst = Node::create();
+        inst->setPosition(70 * r.rangef(), 50 * r.rangef());
+        inst->setRotation(r.maxf(360));
+        mesh->addInstanceChild(inst, false);  // false by default parameter
+    }
+
+    addChild(mesh);
+}
+
+std::string MeshRendererInstancingStressTest::title() const
+{
+    return "Stress Testing Instancing";
+}
+
+std::string MeshRendererInstancingStressTest::subtitle() const
+{
+    return "10000 instances of the same mesh";
 }
 
 //------------------------------------------------------------------

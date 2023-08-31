@@ -1042,7 +1042,7 @@ function LabelTTFCJKWrappingTest.create()
         cc.p(size.width * 0.85, 0), 1, cc.c4f(1, 0, 0, 1))
     
     local label1 = cc.Label:createWithTTF(
-        ttfConfig, "你好，Cocos2d-x v3的New Label。",
+        ttfConfig, "你好，Axmol Label。",
         cc.TEXT_ALIGNMENT_LEFT, size.width * 0.75)
     label1:setTextColor(cc.c4b(128, 255, 255, 255))
     label1:setPosition(cc.p(size.width * 0.1, size.height * 0.6))
@@ -1050,7 +1050,7 @@ function LabelTTFCJKWrappingTest.create()
     layer:addChild(label1)
     
     local label2 = cc.Label:createWithTTF(
-        ttfConfig, "早上好，Cocos2d-x v3的New Label。",
+        ttfConfig, "早上好，Axmol Label。",
         cc.TEXT_ALIGNMENT_LEFT, size.width * 0.75)
     label2:setTextColor(cc.c4b(255, 128, 255, 255))
     label2:setPosition(cc.p(size.width * 0.1, size.height * 0.4))
@@ -1647,7 +1647,7 @@ function LabelTTFOldNew.create()
     local s = cc.Director:getInstance():getWinSize()
     local delta = s.height/4
 
-    local label1 = cc.Label:createWithSystemFont("Cocos2d-x Label Test", "arial", 24)
+    local label1 = cc.Label:createWithSystemFont("Axmol Label Test", "arial", 24)
     layer:addChild(label1, 0, kTagBitmapAtlas1)
     label1:setPosition(cc.p(s.width/2, delta * 2))
     label1:setColor(cc.c3b(255, 0, 0))
@@ -1670,7 +1670,7 @@ function LabelTTFOldNew.create()
     local ttfConfig = {}
     ttfConfig.fontFilePath = "fonts/arial.ttf"
     ttfConfig.fontSize     = 24
-    local label2 = cc.Label:createWithTTF(ttfConfig, "Cocos2d-x Label Test")
+    local label2 = cc.Label:createWithTTF(ttfConfig, "Axmol Label Test")
     layer:addChild(label2, 0, kTagBitmapAtlas2)
     label2:setPosition(cc.p(s.width/2, delta * 2))
 
