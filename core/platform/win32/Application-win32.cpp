@@ -294,6 +294,25 @@ bool Application::openURL(std::string_view url)
     return (size_t)r > 32;
 }
 
+void Application::setResourceRootPath(std::string_view rootResDir)
+{
+    _resourceRootPath = rootResDir;
+    std::replace(_resourceRootPath.begin(), _resourceRootPath.end(), '\\', '/');
+    if (_resourceRootPath[_resourceRootPath.length() - 1] != '/')
+    {
+        _resourceRootPath += '/';
+    }
+    FileUtils* pFileUtils                = FileUtils::getInstance();
+    std::vector<std::string> searchPaths = pFileUtils->getSearchPaths();
+    searchPaths.insert(searchPaths.begin(), _resourceRootPath);
+    pFileUtils->setSearchPaths(searchPaths);
+}
+
+std::string_view Application::getResourceRootPath(void)
+{
+    return _resourceRootPath;
+}
+
 void Application::setStartupScriptFilename(std::string_view startupScriptFile)
 {
     _startupScriptFilename = startupScriptFile;

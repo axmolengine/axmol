@@ -386,6 +386,10 @@ void SimpleVideoPlayerTest::onExit()
 void SimpleVideoPlayerTest::menuCloseCallback(Ref* sender)
 {
     Director::getInstance()->end();
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+    exit(0);
+#endif
 }
 
 void SimpleVideoPlayerTest::switchStyleCallback(Ref* sender)

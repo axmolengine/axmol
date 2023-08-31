@@ -66,37 +66,37 @@ struct SamplerDescriptor
 
 struct UniformInfo
 {
-    int count    = 0;  // element count
+    int count    = 0;
     int location = -1;
 
     // in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e.
     // float
     unsigned int type         = 0;
-    unsigned int size         = 0;  // element size
+    bool isArray              = false;
+    unsigned int size         = 0;
     unsigned int bufferOffset = 0;
+
+    // only used in metal
+    bool isMatrix    = false;
+    bool needConvert = false;
 };
 
 struct UniformLocation
 {
-    UniformLocation()
-    {
-        location[0] = -1;
-        location[1] = -1;
-        shaderStage = ShaderStage::UNKNOWN;
-    }
-    UniformLocation(int loc, int offset, ShaderStage stage = ShaderStage::VERTEX)
-    {
-        location[0] = loc;
-        location[1] = offset;
-        shaderStage = stage;
-    }
     /**
-     * both opengl and metal, location[0] represent the location, and location[1] represent location offset in uniform
-     * block.
+     * in metal, those two locations represent to vertex and fragment location.
+     * in opengl, location[0] represent the location, and location[1] represent location offset in uniform buffer.
      */
-    int location[2];
-    ShaderStage shaderStage;
-    operator bool() { return shaderStage != ShaderStage::UNKNOWN; }
+    int location[2]         = {-1, -1};
+    ShaderStage shaderStage = ShaderStage::VERTEX;
+    UniformLocation()       = default;
+    operator bool()
+    {
+        if (shaderStage == ShaderStage::VERTEX_AND_FRAGMENT)
+            return location[0] >= 0 && location[1] >= 0;
+        else
+            return location[int(shaderStage)] >= 0;
+    }
     void reset() { location[0] = location[1] = -1; }
     bool operator==(const UniformLocation& other) const;
     std::size_t operator()(const UniformLocation& uniform) const;
@@ -104,6 +104,7 @@ struct UniformLocation
 
 struct AttributeBindInfo
 {
+    std::string attributeName;
     int location = -1;
     int size     = 0;
     int type     = 0;
@@ -127,7 +128,6 @@ static constexpr auto ATTRIBUTE_NAME_TEXCOORD1 = "a_texCoord1"sv;
 static constexpr auto ATTRIBUTE_NAME_TEXCOORD2 = "a_texCoord2"sv;
 static constexpr auto ATTRIBUTE_NAME_TEXCOORD3 = "a_texCoord3"sv;
 static constexpr auto ATTRIBUTE_NAME_NORMAL    = "a_normal"sv;
-static constexpr auto ATTRIBUTE_NAME_INSTANCE  = "a_instance"sv;
 
 /**
  * @brief a structor to store blend descriptor

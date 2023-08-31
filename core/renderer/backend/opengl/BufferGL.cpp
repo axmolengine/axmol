@@ -28,7 +28,6 @@
 #include "base/EventType.h"
 #include "base/EventDispatcher.h"
 #include "renderer/backend/opengl/MacrosGL.h"
-#include "OpenGLState.h"
 
 NS_AX_BACKEND_BEGIN
 
@@ -62,7 +61,8 @@ BufferGL::BufferGL(std::size_t size, BufferType type, BufferUsage usage) : Buffe
 BufferGL::~BufferGL()
 {
     if (_buffer)
-        __gl->deleteBuffer(_type, _buffer);
+        glDeleteBuffers(1, &_buffer);
+
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     AX_SAFE_DELETE_ARRAY(_data);
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
@@ -88,7 +88,7 @@ void BufferGL::reloadBuffer()
     updateData(_data, _bufferAllocated);
 }
 
-void BufferGL::fillBuffer(const void* data, std::size_t offset, std::size_t size)
+void BufferGL::fillBuffer(void* data, std::size_t offset, std::size_t size)
 {
     if (_bufferAlreadyFilled || !_needDefaultStoredData || BufferUsage::STATIC != _usage)
         return;
@@ -102,24 +102,32 @@ void BufferGL::fillBuffer(const void* data, std::size_t offset, std::size_t size
 }
 #endif
 
-void BufferGL::updateData(const void* data, std::size_t size)
+void BufferGL::updateData(void* data, std::size_t size)
 {
     assert(size && size <= _size);
 
     if (_buffer)
     {
-        glBufferData(__gl->bindBuffer(_type, _buffer), size, data, toGLUsage(_usage));
+        if (BufferType::VERTEX == _type)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, _buffer);
+            glBufferData(GL_ARRAY_BUFFER, size, data, toGLUsage(_usage));
+        }
+        else
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, toGLUsage(_usage));
+        }
         CHECK_GL_ERROR_DEBUG();
         _bufferAllocated = size;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
-        if (data)
-            fillBuffer(data, 0, size);
+        fillBuffer(data, 0, size);
 #endif
     }
 }
 
-void BufferGL::updateSubData(const void* data, std::size_t offset, std::size_t size)
+void BufferGL::updateSubData(void* data, std::size_t offset, std::size_t size)
 {
 
     AXASSERT(_bufferAllocated != 0, "updateData should be invoke before updateSubData");
@@ -128,8 +136,16 @@ void BufferGL::updateSubData(const void* data, std::size_t offset, std::size_t s
     if (_buffer)
     {
         CHECK_GL_ERROR_DEBUG();
-
-        glBufferSubData(__gl->bindBuffer(_type, _buffer), offset, size, data);
+        if (BufferType::VERTEX == _type)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, _buffer);
+            glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+        }
+        else
+        {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _buffer);
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+        }
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
         fillBuffer(data, offset, size);
