@@ -28,7 +28,7 @@
 # 
 # The build1k.ps1, will be core script of project https://github.com/axmolengine/build1k
 # options
-#  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
+#  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos,wasm
 #      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64
@@ -202,6 +202,11 @@ foreach ($arg in $args) {
     }
 }
 
+$is_wasm = $options.p -eq 'wasm'
+if ($is_wasm) {
+    $options.a = 'any' # forcing arch to 'any', only for identifying
+}
+
 $manifest_file = Join-Path $myRoot 'manifest.ps1'
 if ($b1k.isfile($manifest_file)) {
     . $manifest_file
@@ -244,6 +249,7 @@ $toolchains = @{
     'ios'     = 'xcode';
     'tvos'    = 'xcode';
     'watchos' = 'xcode';
+    'wasm'    = 'emcc'; # wasm llvm-emcc
 }
 if (!$TOOLCHAIN) {
     $TOOLCHAIN = $toolchains[$BUILD_TARGET]
@@ -761,6 +767,31 @@ function setup_android_sdk() {
     return $sdk_root, $ndk_root
 }
 
+# enable emsdk emcmake
+function setup_emsdk() {
+    $emsdk_cmd = (Get-Command emsdk -ErrorAction SilentlyContinue)
+    if (!$emsdk_cmd) {
+        $emsdk_root = Join-Path $prefix 'emsdk'
+        if (!(Test-Path $emsdk_root -PathType Container)) {
+            git clone 'https://github.com/emscripten-core/emsdk.git' $emsdk_root
+        }
+        else {
+            git -C $emsdk_root pull
+        }
+    } else {
+        $emsdk_root = Split-Path $emsdk_cmd.Source -Parent
+    }
+
+    $emcmake = (Get-Command emcmake -ErrorAction SilentlyContinue)
+    if (!$emcmake) {
+        Set-Location $emsdk_root
+        ./emsdk install latest
+        ./emsdk activate latest
+        . ./emsdk_env.ps1
+        Set-Location -
+    }
+}
+
 # preprocess methods: 
 #   <param>-inputOptions</param> [CMAKE_OPTIONS]
 function preprocess_win([string[]]$inputOptions) {
@@ -899,6 +930,10 @@ function preprocess_ios([string[]]$inputOptions) {
     return $outputOptions
 }
 
+function preprocess_wasm([string[]]$inputOptions) {
+    return $inputOptions
+}
+
 function validHostAndToolchain() {
     $appleTable = @{
         'host'      = @{'macos' = $True };
@@ -925,6 +960,10 @@ function validHostAndToolchain() {
         'ios'     = $appleTable;
         'tvos'    = $appleTable;
         'watchos' = $appleTable;
+        'wasm' = @{
+            'host'      = @{'windows' = $True; 'linux' = $True; 'macos' = $True };
+            'toolchain' = @{'emcc' = $True; };
+        };
     }
     $validInfo = $validTable[$BUILD_TARGET]
     $validOS = $validInfo.host[$HOST_OS_NAME]
@@ -946,6 +985,7 @@ $proprocessTable = @{
     'ios'     = ${function:preprocess_ios};
     'tvos'    = ${function:preprocess_ios};
     'watchos' = ${function:preprocess_ios};
+    'wasm'    = ${Function:preprocess_wasm};
 }
 
 validHostAndToolchain
@@ -975,6 +1015,9 @@ elseif ($BUILD_TARGET -eq 'android') {
         $ninja_prog = setup_ninja
     }  
 }
+elseif($BUILD_TARGET -eq 'wasm') {
+    . setup_emsdk
+}
 
 if (!$setupOnly) {
     $stored_cwd = $(Get-Location).Path
@@ -1003,7 +1046,10 @@ if (!$setupOnly) {
         if ($is_host_target) { # wheither building host target?
             $BUILD_DIR = "build_$($options.a)"
         } else {
-            $BUILD_DIR = "build_${BUILD_TARGET}_$($options.a)"
+            $BUILD_DIR = "build_${BUILD_TARGET}"
+            if (!$is_wasm) {
+                $BUILD_DIR += "_$($options.a)"
+            }
         }
     }
     else {
@@ -1067,7 +1113,11 @@ if (!$setupOnly) {
         $mainDepChanged = "$storeTime" -ne "$lastWriteTime"
         $cmakeCachePath = Join-Path $workDir "$BUILD_DIR/CMakeCache.txt"
         if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath)) {
-            cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+            if (!$is_wasm) {
+                cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+            } else {
+                emcmake cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
+            }
             Set-Content $tempFile $lastWriteTime -NoNewline
         }
 

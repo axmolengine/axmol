@@ -106,3 +106,13 @@ jobs:
       - name: Build
         shell: pwsh
         run: ./build.ps1 -p tvos -a x64
+
+  build-wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - name: Build
+        shell: pwsh
+        run: ./build.ps1 -p wasm

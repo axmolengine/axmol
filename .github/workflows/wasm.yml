@@ -1,0 +1,30 @@
+name: linux
+
+on: 
+  push:
+    branches:
+      - dev
+      - 1.x
+
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  build:
+    if: ${{ !startsWith(github.event.commits[0].message, 'Merge pull request') }}
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+
+    - name: Build
+      # Execute the build.  You can specify a specific target with "--target <NAME>"
+      shell: pwsh
+      run: ./build.ps1 -p wasm
