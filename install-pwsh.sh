@@ -45,7 +45,7 @@ elif [ $HOST_OS = 'Linux' ] ; then
         # refer: https://ephos.github.io/posts/2018-9-17-Pwsh-ArchLinux
         git clone https://aur.archlinux.org/powershell-bin.git $myRoot/tmp/powershell-bin
         cd $myRoot/tmp/powershell-bin
-        yes | makepkg -si
+        makepkg -si --needed --noconfirm
         cd -
     fi
 else
