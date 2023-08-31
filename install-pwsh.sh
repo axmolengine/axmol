@@ -19,9 +19,9 @@ fi
 
 echo "Installing PowerShell $pwsh_ver ..."
 
-$HOST_ARCH=$(uname -m)
+HOST_ARCH=$(uname -m)
 if [ "$HOST_ARCH" = 'x86_64' ] ; then
-    $HOST_ARCH=x64
+    HOST_ARCH=x64
 fi
 
 if [ $HOST_OS = 'Darwin' ] ; then
