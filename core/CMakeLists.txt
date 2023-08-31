@@ -42,13 +42,16 @@ cmake_policy(SET CMP0127 NEW)
 
 project(ax_libs)
 
-option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" OFF)
-
 if(WIN32)
     # explicit set source charset to utf-8 for windows targets
     add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 endif()
+
+include(CMakeDependentOption)
+
+# by default: use angle on win32
+cmake_dependent_option(AX_USE_COMPAT_GL "Whether use compatibility GL as render backend" ON "WIN32" OFF)
 
 # choosing render backend for all target platforms: win32, winuwp, ios, tvos, android, linux, osx
 if(APPLE AND (NOT AX_USE_COMPAT_GL))
@@ -97,7 +100,6 @@ if (LINUX)
     check_include_file(vlc/vlc.h _AX_HAVE_VLC)
 endif()
 
-include(CMakeDependentOption)
 cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" ON "_AX_HAVE_VLC" OFF)
 
 message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
