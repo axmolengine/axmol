@@ -1,0 +1,11 @@
+#pragma once
+
+/* The max directional lights */
+#define AX_MAX_DIRECTIONAL_LIGHT @AX_MAX_DIRECTIONAL_LIGHT@
+
+/* The max point lights */
+#define AX_MAX_POINT_LIGHT @AX_MAX_POINT_LIGHT@
+
+/* The max spot lights */
+#define AX_MAX_SPOT_LIGHT @AX_MAX_SPOT_LIGHT@
+

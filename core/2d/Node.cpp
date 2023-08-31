@@ -45,6 +45,7 @@ THE SOFTWARE.
 #include "2d/Component.h"
 #include "renderer/Material.h"
 #include "math/TransformUtils.h"
+#include "renderer/backend/ProgramManager.h"
 #include "renderer/backend/ProgramStateRegistry.h"
 
 #if AX_NODE_RENDER_SUBPIXEL
@@ -2228,20 +2229,31 @@ void Node::setProgramStateWithRegistry(uint32_t programType, Texture2D* texture)
 {
     auto samplerFlags = texture ? texture->getSamplerFlags() : 0;
     auto programState = backend::ProgramStateRegistry::getInstance()->newProgramState(programType, samplerFlags);
-    setProgramState(programState, false);
+    setProgramState(programState, true);
 }
 
-bool Node::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool Node::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
 {
     if (_programState != programState)
     {
         AX_SAFE_RELEASE(_programState);
         _programState = programState;
-        if (needsRetain)
+        if (!ownPS)
             AX_SAFE_RETAIN(_programState);
         return !!_programState;
     }
     return false;
+}
+
+backend::ProgramState* Node::setProgramStateByProgramId(uint64_t programId)
+{
+    auto prog = ProgramManager::getInstance()->loadProgram(programId);
+    if (prog)
+    {
+        this->setProgramState(new ProgramState(prog), true);
+        return _programState;
+    }
+    return nullptr;
 }
 
 void Node::updateProgramStateTexture(Texture2D* texture)
