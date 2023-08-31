@@ -1,5 +1,5 @@
 #
-# This script easy to build win32, linux, winuwp, ios, tvos, osx, android depends on $AX_ROOT/tools/ci/build1k.ps1
+# This script easy to build win32, linux, winuwp, ios, tvos, osx, android depends on $myRoot/1k/build1k.ps1
 # usage: pwsh build.ps1 -p <targetPlatform> -a <arch>
 # options
 #  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
@@ -9,6 +9,7 @@
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
 #  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -xb: additional cross build options: i.e. -xb '--config','Release'
+#  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
 #  -d: specify project dir to compile, i.e. -d /path/your/project/
 # examples:
 #   - win32: 
@@ -30,8 +31,11 @@
 #   on linux: target platform is linux, arch=x64
 #   on macos: target platform is osx, arch=x64
 #
+param(
+    [switch]$configOnly
+)
 
-$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); winsdk = $null }
+$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -48,25 +52,6 @@ foreach ($arg in $args) {
     }
 }
 
-function add_quote($value) {
-    $ret = $null
-    $valueType = $value.GetType()
-    if ($valueType -eq [string]) {
-        $ret = "'$value'"
-    }
-    elseif ($valueType -eq [object[]]) {
-        $ret = ''
-        for ($i = 0; $i -lt $value.Count; ++$i) {
-            $subVal = $value[$i]
-            $ret += "'$subVal'"
-            if ($i -ne ($value.Count - 1)) {
-                $ret += ','
-            }
-        }
-    }
-    return $ret
-}
-
 $myRoot = $PSScriptRoot
 $workDir = $(Get-Location).Path
 
@@ -81,15 +66,16 @@ if (!$AX_ROOT) {
     }
 }
 
-$is_engine = ($workDir -eq $AX_ROOT)
+$search_prior_dir = $options.d
+$is_engine = ($workDir -eq $AX_ROOT) -and (!$search_prior_dir -or $search_prior_dir -eq $AX_ROOT)
 $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
 # start construct full cmd line
-$fullCmdLine = @("$((Resolve-Path -Path "$AX_ROOT/1k/build1k.ps1").Path)")
+$b1k_script = (Resolve-Path -Path "$AX_ROOT/1k/build1k.ps1").Path
+$b1k_args = @()
 
-$search_prior_dir = $options.d
-if (!$search_prior_dir -and $is_engine -and $is_android) {
+if ($is_engine -and $is_android) {
     if ($is_ci) {
         $search_prior_dir = Join-Path $myRoot 'tests/cpp-tests'
     } else {
@@ -98,12 +84,12 @@ if (!$search_prior_dir -and $is_engine -and $is_android) {
 }
 
 $search_paths = if ($search_prior_dir) { @($search_prior_dir, $workDir, $myRoot) } else { @($workDir, $myRoot) }
-function search_proj($path, $type) {
+function search_proj_file($file_path, $type) {
     foreach ($search_path in $search_paths) {
-        $full_path = Join-Path $search_path $path
+        $full_path = Join-Path $search_path $file_path
         if (Test-Path $full_path -PathType $type) {
-            $ret_path = if ($type -eq 'Container') { $full_path } else { $search_path }
-            return $ret_path
+            # $ret_path = if ($type -eq 'Container') { $full_path } else { $search_path }
+            return $search_path
         }
     }
     return $null
@@ -123,12 +109,11 @@ $search_rules = @(
 )
 
 $search_rule = $search_rules[$is_android]
-$proj_dir = search_proj $search_rule.path $search_rule.type
+$proj_dir = search_proj_file $search_rule.path $search_rule.type
+$proj_name = (Get-Item $proj_dir).BaseName
 
-$proj_name = (Get-Item $myRoot).BaseName
-
-$bti = $null
-$bci = $null
+$bti = $null # cmake target param index
+$bci = $null # cmake optimize flag param index
 # parsing build options
 $nopts = $options.xb.Count
 for ($i = 0; $i -lt $nopts; ++$i) {
@@ -165,38 +150,57 @@ if (!$is_android) {
             )
         )
         $cmake_target = $cmake_targets[$is_ci][$is_engine]
+
+        # reason:
+        #   - android package not accept '-'
+        #   - ios deploy device may failed with unknown error
+        $cmake_target = $cmake_target.Replace('-', '_')
         $options.xb += '--target', $cmake_target
+    } else{
+        $cmake_target = $options.xb[$bti]
     }
 } else { # android
     # engine ci
     if ($is_engine -and $is_ci) {
-        $fullCmdLine += "'-xc'", "'-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks','-PRELEASE_STORE_PASSWORD=axmol-ci','-PRELEASE_KEY_ALIAS=axmol-ci','-PRELEASE_KEY_PASSWORD=axmol-ci'"
+        $options.xc += "-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PRELEASE_STORE_PASSWORD=axmol-ci', '-PRELEASE_KEY_ALIAS=axmol-ci', '-PRELEASE_KEY_PASSWORD=axmol-ci'
     }
 }
 
 if (!$bci) {
     $optimize_flag = @('Debug', 'Release')[$is_ci]
     $options.xb += '--config', $optimize_flag
+} else {
+    $optimize_flag = $options.xc[$bci]
 }
 
 if ($is_android) {
-    $fullCmdLine += "'-xt'", "'gradle'"
+    $b1k_args += '-xt', 'proj.android/gradlew'
 }
 
 if ($proj_dir) {
-    $fullCmdLine += "'-d'", "'$proj_dir'"
+    $b1k_args += '-d', "$proj_dir"
 }
 $prefix = Join-Path $AX_ROOT 'tools/external'
-$fullCmdLine += "'-prefix'", "'$prefix'"
+$b1k_args += '-prefix', "$prefix"
 
 # remove arg we don't want forward to
 $options.Remove('d')
 foreach ($option in $options.GetEnumerator()) {
     if ($option.Value) {
-        $fullCmdLine += add_quote "-$($option.Key)"
-        $fullCmdLine += add_quote $option.Value
+        $b1k_args += "-$($option.Key)"
+        $b1k_args += "$($option.Value)"
     }
 }
 
-$strFullCmdLine = "$fullCmdLine"
-Invoke-Expression $strFullCmdLine
+if (!$configOnly) {
+    . $b1k_script @b1k_args
+} else {
+    . $b1k_script @b1k_args -configOnly
+}
+
+if (!$nb) {
+    $b1k.pause('Build done')
+}
+else {
+    $b1k.pause('Generate done')
+}

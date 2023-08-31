@@ -2,7 +2,7 @@
 
 # Axmol Engine
 
-## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
+## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A fork of Cocos2d-x-4.0)
 
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
@@ -15,6 +15,7 @@
 ![forks](https://img.shields.io/github/forks/axmolengine/axmol?style=plastic)
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
+
 
 **[简体中文](README_CN.md)**
 
@@ -75,7 +76,7 @@ View the [Dev setup instructions](docs/DevSetup.md).
 - Use a modern GL loader ```Glad```
 - Google [angle](https://github.com/google/angle) renderer backend support
 - C++ 17/20
-- IOS/TVOS SDK 9.0 as minimal deployment
+- IOS/TVOS SDK 11.0 as minimal deployment
 - Use fast pugixml
 - Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
 - Use SAX parser for all plist files
@@ -94,10 +95,11 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 
 ## Reference links
 
-- [buildware](https://github.com/axmolengine/buildware), the axmol prebuilt build-bot
+- [build1k](https://github.com/axmolengine/build1k), the axmol prebuilt build-bot
 - [Some interesting related projects based on axmol](https://github.com/axmolengine/axmol/discussions/694)
 - [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 - [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)
 
 ## The axmol Active Stats
+
 ![Alt](https://repobeats.axiom.co/api/embed/6fcb8168a3af91ba9e797a1f14a3c2edc42ac56a.svg "Repobeats analytics image")
