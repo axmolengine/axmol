@@ -1,23 +1,17 @@
-this is a fork of axmol engine.
-add webgl build support.
+# building wasm
 
-build step:
-1. run emsdk_env.bat
+Building axmol for target platform: webgl aka wasm.
 
-2. emcmake cmake -DCMAKE_BUILD_TYPE=Debug -Bbuild_wasm
-cd build_wasm
-   
-3. ninja
+After setup, just run follow command:
 
+axmol build -p wasm
 
+## TODO:
 
-
-
-
-todo:
-1.
+```cpp
 #ifndef EMSCRIPTEN
         const FT_Int spread = DistanceMapSpread;
         FT_Property_Set(_FTlibrary, "sdf", "spread", &spread);
         FT_Property_Set(_FTlibrary, "bsdf", "spread", &spread);
 #endif
+```
