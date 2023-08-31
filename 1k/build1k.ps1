@@ -102,7 +102,9 @@ class build1k {
     }
 
     [void] mkdirs([string]$path) {
-        New-Item $path -ItemType Directory 1>$null
+        if (!(Test-Path $path -PathType Container)) {
+            New-Item $path -ItemType Directory 1>$null
+        }
     }
 
     [void] rmdirs([string]$path){
@@ -514,7 +516,9 @@ function setup_cmake() {
                 $b1k.rmdirs($cmake_dir)
             }
         } elseif ($IsLinux) {
-            & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
+            chmod +x $cmake_pkg_path
+            mkdirs $cmake_root
+            sh "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
         }
 
         $cmake_prog, $_ = find_prog -name 'cmake' -path $cmake_bin -silent $true
