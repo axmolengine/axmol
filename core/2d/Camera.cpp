@@ -498,8 +498,8 @@ void Camera::apply()
 
 void Camera::applyViewport()
 {
-    _director->getRenderer()->setViewPort(_defaultViewport.x, _defaultViewport.y, _defaultViewport.w,
-                                          _defaultViewport.h);
+    _director->getRenderer()->setViewPort(_defaultViewport.x, _defaultViewport.y, _defaultViewport.width,
+                                          _defaultViewport.height);
 }
 
 int Camera::getRenderOrder() const

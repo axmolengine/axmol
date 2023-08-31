@@ -52,7 +52,10 @@ THE SOFTWARE.
 #    include "renderer/backend/metal/DeviceMTL.h"
 #    include "renderer/backend/metal/UtilsMTL.h"
 #else
+#    include "renderer/backend/opengl/DeviceGL.h"
+#    include "renderer/backend/opengl/DeviceInfoGL.h"
 #    include "renderer/backend/opengl/MacrosGL.h"
+#    include "renderer/backend/opengl/OpenGLState.h"
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
 /** glfw3native.h */
@@ -321,7 +324,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     , _mouseX(0.0f)
     , _mouseY(0.0f)
 {
-    _viewName = "AXMOL10";
+    _viewName = "AXMOL20";
     g_keyCodeMap.clear();
     for (auto&& item : g_keyCodeStructArray)
     {
@@ -332,9 +335,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     if (initglfw)
     {
         glfwSetErrorCallback(GLFWEventHandler::onGLFWError);
-#if defined(AX_USE_GLES) && GLFW_VERSION_MAJOR >= 3 && GLFW_VERSION_MINOR >= 4
-        glfwInitHint(GLFW_ANGLE_PLATFORM_TYPE, GLFW_ANGLE_PLATFORM_TYPE_D3D11);  // since glfw-3.4
-#endif
+
 #if defined(_WIN32)
         glfwxInit();
 #else
@@ -389,7 +390,10 @@ GLViewImpl* GLViewImpl::create(std::string_view viewName, bool resizable)
     return nullptr;
 }
 
-GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, const ax::Rect& rect, float frameZoomFactor, bool resizable)
+GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName,
+                                       const ax::Rect& rect,
+                                       float frameZoomFactor,
+                                       bool resizable)
 {
     auto ret = new GLViewImpl;
     if (ret->initWithRect(viewName, rect, frameZoomFactor, resizable))
@@ -435,11 +439,15 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 
     Vec2 frameSize = rect.size;
 
-#if defined(AX_USE_GLES)
+#if AX_GLES_PROFILE
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, AX_GLES_PROFILE / AX_GLES_PROFILE_DEN);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+#elif defined(AX_USE_GL)
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // We want OpenGL 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // We don't want the old OpenGL
 #endif
 
     glfwWindowHint(GLFW_RESIZABLE, resizable ? GL_TRUE : GL_FALSE);
@@ -467,8 +475,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     glfwxSetParent((HWND)_glContextAttrs.viewParent);
 #endif
 
-    _mainWindow = glfwCreateWindow(neededWidth, neededHeight, _viewName.c_str(),
-                                   _monitor, nullptr);
+    _mainWindow = glfwCreateWindow(neededWidth, neededHeight, _viewName.c_str(), _monitor, nullptr);
 
     if (_mainWindow == nullptr)
     {
@@ -513,6 +520,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 
 #if defined(AX_USE_GL)
     glfwMakeContextCurrent(_mainWindow);
+    glfwSetWindowUserPointer(_mainWindow, backend::__gl);
 #endif
 
     /*
@@ -550,32 +558,16 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
     loadGL();
+
+    // Init device after load GL
+    backend::Device::getInstance();
 #endif
 
 #if defined(AX_USE_GL)
     glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
 
-    // check OpenGL version at first
-    const GLubyte* glVersion = glGetString(GL_VERSION);
-
-    if (utils::atof((const char*)glVersion) < 1.5 && nullptr == strstr((const char*)glVersion, "ANGLE"))
-    {
-        char strComplain[256] = {0};
-        sprintf(strComplain,
-                "OpenGL 1.5 or higher is required (your version is %s). Please upgrade the driver of your video card.",
-                glVersion);
-        ccMessageBox(strComplain, "OpenGL version too old");
-        utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
-        return false;
-    }
-
-    if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
-        ax::print("[GL:%s] Ready for GLSL", glVersion);
-    else
-        ax::print("Not totally ready :(");
-
         // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
-#    if !defined(AX_USE_GLES)
+#    if !AX_GLES_PROFILE
         // Enable point size by default.
 #        if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
@@ -1197,15 +1189,14 @@ void GLViewImpl::onGLFWWindowFocusCallback(GLFWwindow* /*window*/, int focused)
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 static bool loadFboExtensions()
 {
-    const char* gl_extensions = (const char*)glGetString(GL_EXTENSIONS);
-
     // If the current opengl driver doesn't have framebuffers methods, check if an extension exists
     if (glGenFramebuffers == nullptr)
     {
-        log("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
-        if (strstr(gl_extensions, "ARB_framebuffer_object"))
+        auto deviceInfo = static_cast<backend::DeviceInfoGL*>(backend::DeviceGL::getInstance()->getDeviceInfo());
+        ax::print("OpenGL: glGenFramebuffers is nullptr, try to detect an extension");
+        if (deviceInfo->hasExtension("ARB_framebuffer_object"sv))
         {
-            log("OpenGL: ARB_framebuffer_object is supported");
+            ax::print("OpenGL: ARB_framebuffer_object is supported");
 
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbuffer");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbuffer");
@@ -1228,9 +1219,9 @@ static bool loadFboExtensions()
                 "glGetFramebufferAttachmentParameteriv");
             glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmap");
         }
-        else if (strstr(gl_extensions, "EXT_framebuffer_object"))
+        else if (deviceInfo->hasExtension("EXT_framebuffer_object"sv))
         {
-            log("OpenGL: EXT_framebuffer_object is supported");
+            ax::print("OpenGL: EXT_framebuffer_object is supported");
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferEXT");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferEXT");
             glDeleteRenderbuffers = (PFNGLDELETERENDERBUFFERSPROC)glfwGetProcAddress("glDeleteRenderbuffersEXT");
@@ -1253,9 +1244,9 @@ static bool loadFboExtensions()
                 "glGetFramebufferAttachmentParameterivEXT");
             glGenerateMipmap = (PFNGLGENERATEMIPMAPPROC)glfwGetProcAddress("glGenerateMipmapEXT");
         }
-        else if (strstr(gl_extensions, "GL_ANGLE_framebuffer_blit"))
+        else if (deviceInfo->hasExtension("GL_ANGLE_framebuffer_blit"sv))
         {
-            log("OpenGL: GL_ANGLE_framebuffer_object is supported");
+            ax::print("OpenGL: GL_ANGLE_framebuffer_object is supported");
 
             glIsRenderbuffer      = (PFNGLISRENDERBUFFERPROC)glfwGetProcAddress("glIsRenderbufferOES");
             glBindRenderbuffer    = (PFNGLBINDRENDERBUFFERPROC)glfwGetProcAddress("glBindRenderbufferOES");
@@ -1279,8 +1270,8 @@ static bool loadFboExtensions()
         }
         else
         {
-            log("OpenGL: No framebuffers extension is supported");
-            log("OpenGL: Any call to Fbo will crash!");
+            ax::print("OpenGL: No framebuffers extension is supported");
+            ax::print("OpenGL: Any call to Fbo will crash!");
             return false;
         }
     }
@@ -1294,7 +1285,7 @@ bool GLViewImpl::loadGL()
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
-#        if !defined(AX_USE_GLES)
+#        if !AX_GLES_PROFILE
     if (!gladLoadGL(glfwGetProcAddress))
     {
         log("glad: Failed to Load GL");
@@ -1309,7 +1300,6 @@ bool GLViewImpl::loadGL()
 #        endif
 
     loadFboExtensions();
-
 #    endif  // (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)
 
     return true;

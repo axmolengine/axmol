@@ -32,8 +32,11 @@
 #include "ProgramGL.h"
 #include "DeviceInfoGL.h"
 #include "RenderTargetGL.h"
-
+#include "MacrosGL.h"
 #include "renderer/backend/ProgramManager.h"
+#if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
+#    include "CommandBufferGLES2.h"
+#endif
 
 NS_AX_BACKEND_BEGIN
 
@@ -55,6 +58,12 @@ DeviceGL::DeviceGL()
     }
 
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_defaultFBO);
+
+#if AX_GLES_PROFILE != 200
+    glGenVertexArrays(1, &_defaultVAO);
+    glBindVertexArray(_defaultVAO);
+    CHECK_GL_ERROR_DEBUG();
+#endif
 }
 
 DeviceGL::~DeviceGL()
@@ -71,7 +80,11 @@ GLint DeviceGL::getDefaultFBO() const
 
 CommandBuffer* DeviceGL::newCommandBuffer()
 {
+#if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
+    return !static_cast<DeviceInfoGL*>(_deviceInfo)->isGLES2Only() ? new CommandBufferGL() : new CommandBufferGLES2();
+#else
     return new CommandBufferGL();
+#endif
 }
 
 Buffer* DeviceGL::newBuffer(std::size_t size, BufferType type, BufferUsage usage)

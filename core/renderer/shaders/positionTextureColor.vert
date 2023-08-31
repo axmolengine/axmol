@@ -1,48 +1,19 @@
-/*
- * cocos2d for iPhone: http://www.cocos2d-iphone.org
- *
- * Copyright (c) 2011 Ricardo Quesada
- * Copyright (c) 2012 Zynga Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+#version 310 es
 
-const char* positionTextureColor_vert = R"(
-attribute vec4 a_position;
-attribute vec2 a_texCoord;
-attribute vec4 a_color;
+layout(location = POSITION) in vec4 a_position;
+layout(location = TEXCOORD0) in vec2 a_texCoord;
+layout(location = COLOR0) in vec4 a_color;
 
-uniform mat4 u_MVPMatrix;
+layout(location = COLOR0) out vec4 v_color;
+layout(location = TEXCOORD0) out vec2 v_texCoord;
 
-#ifdef GL_ES
-varying lowp vec4 v_fragmentColor;
-varying mediump vec2 v_texCoord;
-#else
-varying vec4 v_fragmentColor;
-varying vec2 v_texCoord;
-#endif
+layout(std140) uniform vs_ub {
+    mat4 u_MVPMatrix;
+};
 
 void main()
 {
     gl_Position = u_MVPMatrix * a_position;
-    v_fragmentColor = a_color;
+    v_color = a_color;
     v_texCoord = a_texCoord;
 }
-)";
-
