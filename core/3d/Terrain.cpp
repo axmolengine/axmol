@@ -106,8 +106,7 @@ void ax::Terrain::setLightDir(const Vec3& lightDir)
 
 bool Terrain::initProperties()
 {
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::TERRAIN_3D);
-    setProgramState(new backend::ProgramState(program), false);
+    setProgramStateByProgramId(ProgramType::TERRAIN_3D);
 
     _stateBlock.depthWrite = true;
     _stateBlock.depthTest  = true;

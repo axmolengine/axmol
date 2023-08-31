@@ -31,19 +31,9 @@ THE SOFTWARE.
 #if AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 
 #    define glClearDepth glClearDepthf
-#    define glDeleteVertexArrays glDeleteVertexArraysOES
-#    define glGenVertexArrays glGenVertexArraysOES
-#    define glBindVertexArray glBindVertexArrayOES
-#    define glMapBuffer glMapBufferOES
-#    define glUnmapBuffer glUnmapBufferOES
 
-#    define GL_DEPTH24_STENCIL8 GL_DEPTH24_STENCIL8_OES
-#    define GL_DEPTH_STENCIL GL_DEPTH_STENCIL_OES
-#    define GL_UNSIGNED_INT_24_8 GL_UNSIGNED_INT_24_8_OES
-#    define GL_WRITE_ONLY GL_WRITE_ONLY_OES
-
-#    include <OpenGLES/ES2/gl.h>
-#    include <OpenGLES/ES2/glext.h>
+#    include <OpenGLES/ES3/gl.h>
+#    include <OpenGLES/ES3/glext.h>
 
 /* gles3/gl */
 #    if !defined(GL_SRGB8)

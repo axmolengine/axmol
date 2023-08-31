@@ -29,7 +29,7 @@
 #include <stdint.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
 #include "audio/AudioDecoder.h"
-#include "platform/FileStream.h"
+#include "platform/IFileStream.h"
 
 NS_AX_BEGIN
 
@@ -98,7 +98,7 @@ private:
     static SInt64 getSizeCallback(void* inClientData);
 
     ExtAudioFileRef _extRef;
-    std::unique_ptr<ax::FileStream> _fileStream;
+    std::unique_ptr<IFileStream> _fileStream;
     SInt64 _streamSize;
     AudioFileID _audioFileId;
 
