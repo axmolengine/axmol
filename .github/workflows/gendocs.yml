@@ -36,3 +36,4 @@ jobs:
         allow_empty_commit: false
         force_orphan: true
         publish_branch: gh-pages
+        keep_files: true
