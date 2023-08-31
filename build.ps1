@@ -52,6 +52,16 @@ foreach ($arg in $args) {
     }
 }
 
+function translate_array_opt($opt) {
+    if ($opt -and $opt.GetType().BaseType -ne [array]) {
+        $opt = "$opt".Split(',')
+    }
+    return $opt
+}
+
+$options.xb = translate_array_opt $options.xb
+$options.xc = translate_array_opt $options.xc
+
 $myRoot = $PSScriptRoot
 $workDir = $(Get-Location).Path
 
