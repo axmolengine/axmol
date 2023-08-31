@@ -1,10 +1,11 @@
 this is a fork of axmol engine.
-add webgl build surport.
+add webgl build support.
 
 build step:
 1. run emsdk_env.bat
 
-2. emcmake cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug ..
+2. emcmake cmake -DCMAKE_BUILD_TYPE=Debug -Bbuild_wasm
+cd build_wasm
    
 3. ninja
 
