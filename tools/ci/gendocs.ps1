@@ -64,6 +64,9 @@ if($git_prog) {
 
 $docsRoot = (Resolve-Path "$DIR/../../docs").Path
 
+$docsOut = Join-Path $docsRoot 'out'
+mkdirs $docsOut
+
 $store_cwd = (Get-Location).Path
 Set-Location $docsRoot
 
@@ -89,8 +92,6 @@ $verMap = @{
 }
 
 $strVerList = "'$($verMap.Keys -join "','")'"
-
-mkdirs './out'
 
 foreach($item in $verMap.GetEnumerator()) {
     $ver = $item.Key
@@ -119,3 +120,8 @@ foreach($item in $verMap.GetEnumerator()) {
 configure_file './index.html.in' "./out/index.html" @{'@VERSION@' = 'latest'}
 
 Set-Location $store_cwd
+
+# build html targets to docs
+./build.ps1 -p wasm
+
+Copy-Item 'build_wasm/bin/'

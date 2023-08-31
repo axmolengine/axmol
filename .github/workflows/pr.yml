@@ -108,7 +108,7 @@ jobs:
         run: ./build.ps1 -p tvos -a x64
 
   build-wasm:
-    runs-on: windows-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
         with:
