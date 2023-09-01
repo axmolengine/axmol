@@ -91,13 +91,17 @@ function  configure_file($infile, $outfile, $vars) {
     Set-Content -Path $outfile -Value "$content"
 }
 
-# building latest
-$verMap = @{
-    'latest' = $null;
-    '1.0' = "v1.0.0"
+# query version map to build docs
+$release_tags = $(git tag)
+$verMap = @{'latest' = $null; }
+foreach($item in $release_tags) {
+    if ([Regex]::Match($item, '^v[0-9]+\.[0-9]+\.[0-9]+$').Success) {
+        $docVer = $($item.Split('.')[0..1] -join '.').TrimStart('v')
+        $verMap[$docVer] = $item
+    }
 }
-
 $strVerList = "'$($verMap.Keys -join "','")'"
+Write-Host "$(Out-String -InputObject $verMap)"
 
 foreach($item in $verMap.GetEnumerator()) {
     $ver = $item.Key
