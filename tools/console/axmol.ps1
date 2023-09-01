@@ -25,9 +25,13 @@ if ($git_prog) {
     }
 }
 
+$pwsh_ver = $PSVersionTable.PSVersion.ToString()
+
 # tool usage
 $tool_usage = @'
 axmol-{0} console: A command line tool for axmol engine.
+
+Using PowerShell {1}
 
 Available commands:
         new          Creates a new project.
@@ -41,7 +45,7 @@ Available arguments:
 Example:
         axmol new --help
         axmol run --help
-'@ -f $axmolVersion
+'@ -f $axmolVersion, $pwsh_ver
 
 $cmdName = $args[0]
 if (!$cmdName) {
