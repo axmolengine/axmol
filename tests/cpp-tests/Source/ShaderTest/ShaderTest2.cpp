@@ -183,9 +183,17 @@ protected:
 
 bool Effect::initProgramState(std::string_view fragmentFilename)
 {
-    auto program      = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, fragmentFilename, VertexLayoutType::Sprite);
+    auto fileUtiles       = FileUtils::getInstance();
+    auto fragmentFullPath = fileUtiles->fullPathForFilename(fragmentFilename);
+    auto fragSource       = fileUtiles->getStringFromFile(fragmentFullPath);
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+    _fragSource = fragSource;
+#endif
+    auto program      = ProgramManager::newProgram(positionTextureColor_vert, fragSource, VertexLayoutHelper::setupSprite);
     auto programState = new backend::ProgramState(program);
     AX_SAFE_RELEASE(_programState);
+    AX_SAFE_RELEASE(program);
     _programState = programState;
 
     return _programState != nullptr;
@@ -227,7 +235,7 @@ void EffectBlur::setTarget(EffectSprite* sprite)
 
 bool EffectBlur::init(float blurRadius, float sampleNum)
 {
-    initProgramState("custom/example_Blur_fs");
+    initProgramState("Shaders/example_Blur.fsh");
     _blurRadius    = blurRadius;
     _blurSampleNum = sampleNum;
 
@@ -252,7 +260,7 @@ public:
 
     bool init()
     {
-        initProgramState("custom/example_Outline_fs");
+        initProgramState("Shaders/example_Outline.fsh");
 
         Vec3 color(1.0f, 0.2f, 0.3f);
         float radius    = 0.01f;
@@ -274,7 +282,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_Noisy_fs");
+        initProgramState("Shaders/example_Noisy.fsh");
         return true;
     }
 
@@ -294,7 +302,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_EdgeDetection_fs");
+        initProgramState("Shaders/example_EdgeDetection.fsh");
         return true;
     }
 
@@ -314,7 +322,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_GreyScale_fs");
+        initProgramState("Shaders/example_GreyScale.fsh");
         return true;
     }
 };
@@ -328,7 +336,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_Sepia_fs");
+        initProgramState("Shaders/example_Sepia.fsh");
         return true;
     }
 };
@@ -342,7 +350,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_Bloom_fs");
+        initProgramState("Shaders/example_Bloom.fsh");
         return true;
     }
 
@@ -362,7 +370,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_CelShading_fs");
+        initProgramState("Shaders/example_CelShading.fsh");
         return true;
     }
 
@@ -382,7 +390,7 @@ public:
 protected:
     bool init()
     {
-        initProgramState("custom/example_LensFlare_fs");
+        initProgramState("Shaders/example_LensFlare.fsh");
         return true;
     }
 
@@ -428,7 +436,7 @@ protected:
 
 bool EffectNormalMapped::init()
 {
-    initProgramState("custom/Normal_fs");
+    initProgramState("Shaders3D/Normal.frag");
     _kBump = 2;
     return true;
 }

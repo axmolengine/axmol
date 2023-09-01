@@ -151,7 +151,7 @@ Copy-Item './index.html' "$site_dist/index.html"
 
 function download_appveyor_artifact($dest) {
     $apiUrl = 'https://ci.appveyor.com/api'
-    $token = '<your-api-token>'
+    $token = ${env:AX_DOCS_TOKEN}
     $headers = @{
     "Authorization" = "Bearer ${env:AX_DOCS_TOKEN}"
     "Content-type" = "application/json"
