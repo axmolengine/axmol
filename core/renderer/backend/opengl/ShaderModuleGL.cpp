@@ -63,12 +63,12 @@ void ShaderModuleGL::compileShader(ShaderStage stage, std::string_view source)
         {
             auto errorLog = axstd::make_unique_for_overwrite<char[]>(static_cast<size_t>(logLength));
             glGetShaderInfoLog(_shader, logLength, nullptr, (GLchar*)errorLog.get());
-            ax::log("cocos2d: ERROR: Failed to compile shader, detail: %s\n%s", errorLog.get(),
+            ax::log("axmol:ERROR: Failed to compile shader, detail: %s\n%s", errorLog.get(),
                          source.data());
         }
         else
         {
-            ax::log("cocos2d: ERROR: Failed to compile shader without errors.");
+            ax::log("axmol:ERROR: Failed to compile shader without errors.");
         }
 
         deleteShader();
