@@ -186,9 +186,9 @@ function download_appveyor_artifact($dest) {
     Expand-Archive -Path $localArtifactPath -DestinationPath $dest
 }
 
-download_appveyor_artifact $site_src
+download_appveyor_artifact $(Join-Path $AX_ROOT 'tmp')
 $wasm_dist = Join-Path $site_dist 'wasm/'
 mkdirs $wasm_dist
-Copy-Item $(Join-Path $site_src 'build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
+Copy-Item $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
 
 Set-Location $store_cwd
