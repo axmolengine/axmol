@@ -81,10 +81,40 @@ inline void split_cb(_CStr s, size_t slen, typename std::remove_pointer<_CStr>::
         func(_Start, _End);
 }
 
+template <typename _CStr, typename _Fty>
+inline void split_of_cb(_CStr s, size_t slen, typename std::remove_const<_CStr>::type const delims, _Fty&& func)
+{
+    auto _Start = s;  // the start of every string
+    auto _Ptr   = s;  // source string iterator
+    auto _End   = s + slen;
+    auto _Delim = *delims;
+    while ((_Ptr = strpbrk(_Ptr, delims)))
+    {
+        if (_Ptr >= _End)
+            break;
+
+        if (_Start <= _Ptr)
+        {
+            func(_Start, _Ptr, _Delim);
+            _Delim = *_Ptr;
+        }
+        _Start = _Ptr + 1;
+        ++_Ptr;
+    }
+    if (_Start <= _End)
+        func(_Start, _End, _Delim);
+}
+
 template <typename _Fn>
 inline void split_cb(std::string_view s, char delim, _Fn&& func)
 {
     split_cb(s.data(), s.length(), delim, std::move(func));
+}
+
+template <typename _Fn>
+inline void split_of_cb(std::string_view s, const char* delims, _Fn&& func)
+{
+    split_of_cb(s.data(), s.length(), delims, std::move(func));
 }
 
 }  // namespace axstd

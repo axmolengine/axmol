@@ -38,6 +38,7 @@
 #include "3d/AABB.h"
 #include "3d/Bundle3DData.h"
 #include "3d/MeshVertexIndexData.h"
+#include "3d/MeshMaterial.h"
 
 NS_AX_BEGIN
 
@@ -129,7 +130,7 @@ public:
 
     // overrides
     /** Sets ProgramState, attributes should be bound by the user */
-    bool setProgramState(backend::ProgramState* programState, bool needsRetain = true) override;
+    bool setProgramState(backend::ProgramState* programState, bool ownPS = false) override;
 
     /*
      * Get AABB
@@ -249,6 +250,50 @@ public:
     void afterAsyncLoad(void* param);
 
     static AABB getAABBRecursivelyImp(Node* node);
+
+    /** Enables instancing for this Mesh Renderer, keep in mind that
+     a special vertex shader has to be used, make sure that your shader
+     has a mat4 attribute set on the location of total vertex attributes +1
+
+    @param instanceMat Prebuilt material made to work with instancing.
+    @param count Count of Instances, 0 to enable auto expanstion, but you
+    should call `shrinkToFitInstances` after adding children to maximize performance.*/
+    void enableInstancing(MeshMaterial::InstanceMaterialType instanceMat, int count = 0);
+
+    /* Enables instancing for this Mesh Renderer, keep in mind that
+    / a special vertex shader has to be used, make sure that your shader
+    / has a mat4 attribute set on the location of total vertex attributes +1
+
+    @param instanceMat Custom material that supports instancing.
+    @param count Count of Instances, 0 to enable auto expanstion, but you
+    should call `shrinkToFitInstances` after adding children to maximize performance.*/
+    void enableInstancing(MeshMaterial* instanceMat, int count = 0);
+
+    // Disables instancing for this Mesh Renderer.
+    void disableInstancing();
+
+    /** Set this to true and instancing objects within this mesh renderer
+    will be recalculated each frame, use it when you plan to move objects,
+    Otherwise, transforms will be built once for better performance.
+    * to update transforms on demand use `rebuildInstances()` */
+    void setDynamicInstancing(bool dynamic);
+
+    /** Adds a child to use it's transformations for instancing.
+    * The child is in the space of this Node, keep in mind that
+    the node isn't added to the scene graph, it is instead retained
+    and it's parent is set to this node, updates and actions will not run.
+    * the reason for this is performance.
+    *
+    * @param child, The child to use for instancing.
+    * @param active, Child will run updates & actions but performance issues may arise.
+    */
+    void addInstanceChild(Node* child, bool active = false);
+
+    /** shrinks the instance transform buffer after many steps of expansion to increase performance. */
+    void shrinkToFitInstances();
+
+    /** rebuilds the instance transform buffer next frame. */
+    void rebuildInstances();
 
 protected:
     /** set specific mesh texture, for private use (create mesh stage) only */

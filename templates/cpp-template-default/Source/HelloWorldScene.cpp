@@ -32,7 +32,7 @@ static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
     printf(
-        "Depending on how you compiled you might have to add 'Resources/' in front of filenames in "
+        "Depending on how you compiled you might have to add 'Content/' in front of filenames in "
         "HelloWorldScene.cpp\n");
 }
 
@@ -116,7 +116,6 @@ bool HelloWorld::init()
         // add the label as a child to this layer
         this->addChild(label, 1);
     }
-
     // add "HelloWorld" splash screen"
     auto sprite = Sprite::create("HelloWorld.png"sv);
     if (sprite == nullptr)

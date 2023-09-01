@@ -61,6 +61,8 @@ enum
 
 NewLabelTests::NewLabelTests()
 {
+    ADD_TEST_CASE(LabelOutlineAndGlowTest);
+    ADD_TEST_CASE(LabelTTFDistanceField);
     ADD_TEST_CASE(LabelIssue20523);
     ADD_TEST_CASE(LabelFNTGlyphDesigner);
     ADD_TEST_CASE(LabelFNTColor);
@@ -88,8 +90,6 @@ NewLabelTests::NewLabelTests()
     ADD_TEST_CASE(LabelTTFEmoji);
     ADD_TEST_CASE(LabelAlignmentTest);
     ADD_TEST_CASE(LabelTTFUnicodeNew);
-    ADD_TEST_CASE(LabelTTFDistanceField);
-    ADD_TEST_CASE(LabelOutlineAndGlowTest);
     ADD_TEST_CASE(LabelMultilineWithOutline);
     ADD_TEST_CASE(LabelShadowTest);
     ADD_TEST_CASE(LabelLineHeightTest);
@@ -1117,7 +1117,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
 
     TTFConfig ttfConfig("fonts/HKYuanMini.ttf", 25, GlyphCollection::DYNAMIC);
     auto label1 =
-        Label::createWithTTF(ttfConfig, "你好，Cocos2d-x v3的New Label.", TextHAlignment::LEFT, size.width * 0.75f);
+        Label::createWithTTF(ttfConfig, "你好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
     if (label1)
     {
         label1->setTextColor(Color4B(128, 255, 255, 255));
@@ -1131,7 +1131,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
     }
 
     auto label2 =
-        Label::createWithTTF(ttfConfig, "早上好，Cocos2d-x v3的New Label.", TextHAlignment::LEFT, size.width * 0.75f);
+        Label::createWithTTF(ttfConfig, "早上好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
     if (label2)
     {
         label2->setTextColor(Color4B(255, 128, 255, 255));
@@ -1270,9 +1270,9 @@ LabelTTFDistanceField::LabelTTFDistanceField()
     label1->setTextColor(Color4B::GREEN);
     addChild(label1);
 
-    auto action = Sequence::create(DelayTime::create(1.0f), ScaleTo::create(6.0f, 5.0f, 5.0f),
-                                   ScaleTo::create(6.0f, 1.0f, 1.0f), nullptr);
-    label1->runAction(RepeatForever::create(action));
+     auto action = Sequence::create(DelayTime::create(1.0f), ScaleTo::create(6.0f, 5.0f, 5.0f),
+                                    ScaleTo::create(6.0f, 1.0f, 1.0f), nullptr);
+     label1->runAction(RepeatForever::create(action));
 
     // Draw the label border
     auto& labelContentSize = label1->getContentSize();
@@ -1319,31 +1319,37 @@ LabelOutlineAndGlowTest::LabelOutlineAndGlowTest()
 
     TTFConfig ttfConfig("fonts/arial.ttf", 40, GlyphCollection::DYNAMIC, nullptr, true);
 
-    auto label1 = Label::createWithTTF(ttfConfig, "Glow", TextHAlignment::CENTER, size.width);
+    // Glow SDF (GPU)
+    auto label1 = Label::createWithTTF(ttfConfig, "Glow1", TextHAlignment::CENTER, size.width);
     label1->setPosition(Vec2(size.width / 2, size.height * 0.7));
     label1->setTextColor(Color4B::GREEN);
     label1->enableGlow(Color4B::YELLOW);
     addChild(label1);
 
-    ttfConfig.outlineSize = 1;
-    auto label2           = Label::createWithTTF(ttfConfig, "Outline", TextHAlignment::CENTER, size.width);
+    // Glow normal(CPU)
+    ttfConfig.distanceFieldEnabled = false;
+    auto label2                    = Label::createWithTTF(ttfConfig, "Glow2", TextHAlignment::CENTER, size.width);
     label2->setPosition(Vec2(size.width / 2, size.height * 0.6));
-    label2->setTextColor(Color4B::RED);
-    label2->enableOutline(Color4B::BLUE);
+    label2->setTextColor(Color4B::GREEN);
+    label2->enableGlow(Color4B::YELLOW);
     addChild(label2);
 
-    ttfConfig.outlineSize = 2;
-    auto label3           = Label::createWithTTF(ttfConfig, "Outline", TextHAlignment::CENTER, size.width);
+    // Outline SDF(GPU)
+    ttfConfig.distanceFieldEnabled = true;
+    ttfConfig.outlineSize          = 2;
+    auto label3                    = Label::createWithTTF(ttfConfig, "Outline1", TextHAlignment::CENTER, size.width);
     label3->setPosition(Vec2(size.width / 2, size.height * 0.48));
     label3->setTextColor(Color4B::RED);
     label3->enableOutline(Color4B::BLUE);
     addChild(label3);
 
-    ttfConfig.outlineSize = 3;
-    auto label4           = Label::createWithTTF(ttfConfig, "Outline", TextHAlignment::CENTER, size.width);
+    // Outline normal(CPU by freetype2)
+    ttfConfig.distanceFieldEnabled = false;
+    ttfConfig.outlineSize          = 2;
+    auto label4                    = Label::createWithTTF(ttfConfig, "Outline2", TextHAlignment::CENTER, size.width);
     label4->setPosition(Vec2(size.width / 2, size.height * 0.36));
     label4->setTextColor(Color4B::RED);
-    label4->enableOutline(Color4B::BLUE);
+    label4->enableOutline(Color4B::BLUE, 2);
     addChild(label4);
 }
 
@@ -1577,13 +1583,13 @@ LabelTTFOldNew::LabelTTFOldNew()
     auto s      = Director::getInstance()->getWinSize();
     float delta = s.height / 4;
 
-    auto label1 = Label::createWithSystemFont("Cocos2d-x Label Test", "arial", 24);
+    auto label1 = Label::createWithSystemFont("Axmol Label Test", "arial", 24);
     addChild(label1, 0, kTagBitmapAtlas1);
     label1->setPosition(Vec2(s.width / 2, delta * 2));
     label1->setColor(Color3B::RED);
 
     TTFConfig ttfConfig("fonts/arial.ttf", 24);
-    auto label2 = Label::createWithTTF(ttfConfig, "Cocos2d-x Label Test");
+    auto label2 = Label::createWithTTF(ttfConfig, "Axmol Label Test");
     addChild(label2, 0, kTagBitmapAtlas2);
     label2->setPosition(Vec2(s.width / 2, delta * 2));
 

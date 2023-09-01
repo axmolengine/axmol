@@ -1,6 +1,7 @@
 #pragma once
 #include "../RenderTarget.h"
 #include "platform/GL.h"
+#include "OpenGLState.h"
 
 NS_AX_BACKEND_BEGIN
 

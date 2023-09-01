@@ -78,11 +78,8 @@ void TextureInfoGL::applySampler(const SamplerDescriptor& descriptor, bool isPow
 
     // apply sampler for all internal textures
     foreachTextures([this, target](GLuint texID, int index) {
-        glBindTexture(target, textures[index]);
-
+        __gl->bindTexture(target, textures[index]);
         setCurrentTexParameters(target);
-
-        glBindTexture(target, 0);  // unbind
     });
 }
 
@@ -96,8 +93,8 @@ void TextureInfoGL::setCurrentTexParameters(GLenum target)
 
 void TextureInfoGL::apply(int slot, int index, GLenum target) const
 {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(target, index < AX_META_TEXTURES ? textures[index] : textures[0]);
+    __gl->activeTexture(GL_TEXTURE0 + slot);
+    __gl->bindTexture(target, index < AX_META_TEXTURES ? textures[index] : textures[0]);
 }
 
 GLuint TextureInfoGL::ensure(int index, GLenum target)
@@ -108,7 +105,7 @@ GLuint TextureInfoGL::ensure(int index, GLenum target)
     auto& texID = this->textures[index];
     if (!texID)
         glGenTextures(1, &texID);
-    glBindTexture(target, texID);
+    __gl->bindTexture(target, texID);
 
     setCurrentTexParameters(target);  // set once
 
@@ -186,6 +183,7 @@ Texture2DGL::~Texture2DGL()
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
+    _textureInfo.destroy(GL_TEXTURE_2D);
 }
 
 void Texture2DGL::updateSamplerDescriptor(const SamplerDescriptor& sampler)
@@ -305,7 +303,7 @@ void Texture2DGL::generateMipmaps()
     if (!_hasMipmaps)
     {
         _hasMipmaps = true;
-        glBindTexture(GL_TEXTURE_2D, this->getHandler());
+        __gl->bindTexture(GL_TEXTURE_2D, (GLuint)this->getHandler());
         glGenerateMipmap(GL_TEXTURE_2D);
     }
 }
@@ -341,6 +339,7 @@ TextureCubeGL::~TextureCubeGL()
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
 #endif
+    _textureInfo.destroy(GL_TEXTURE_CUBE_MAP);
 }
 
 void TextureCubeGL::updateSamplerDescriptor(const SamplerDescriptor& sampler)
@@ -362,7 +361,7 @@ void TextureCubeGL::updateFaceData(TextureCubeFace side, void* data, int index)
                  _textureInfo.format, _textureInfo.type, data);
 
     CHECK_GL_ERROR_DEBUG();
-    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    __gl->bindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
 void TextureCubeGL::generateMipmaps()
@@ -373,7 +372,7 @@ void TextureCubeGL::generateMipmaps()
     if (!_hasMipmaps)
     {
         _hasMipmaps = true;
-        glBindTexture(GL_TEXTURE_CUBE_MAP, this->getHandler());
+        __gl->bindTexture(GL_TEXTURE_CUBE_MAP, (GLuint)this->getHandler());
         glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
     }
 }

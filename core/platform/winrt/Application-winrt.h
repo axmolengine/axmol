@@ -88,18 +88,6 @@ public:
         m_openURLDelegate = del;
     }
 
-    /**
-     *  Sets the Resource root path.
-     *  @deprecated Please use CCFileUtils::sharedFileUtils()->setSearchPaths() instead.
-     */
-    AX_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
-
-    /** 
-     *  Gets the Resource root path.
-     *  @deprecated Please use CCFileUtils::sharedFileUtils()->getSearchPaths() instead. 
-     */
-    AX_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath(void);
-
     void setStartupScriptFilename(const std::string& startupScriptFile);
 
     const std::string& getStartupScriptFilename(void)

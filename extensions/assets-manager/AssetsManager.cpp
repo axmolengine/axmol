@@ -75,7 +75,7 @@ long AssetManager_seek_file_func(voidpf opaque, voidpf stream, uint32_t offset, 
 
     auto* fs = (FileStream*)stream;
 
-    return fs->seek((long)offset, origin);  // must return 0 for success or -1 for error
+    return fs->seek(offset, origin) != -1 ? 0 : -1;  // must return 0 for success or -1 for error
 }
 
 voidpf AssetManager_open_file_func(voidpf opaque, const char* filename, int mode)
