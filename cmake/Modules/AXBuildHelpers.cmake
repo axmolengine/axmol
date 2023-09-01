@@ -33,7 +33,7 @@ function(ax_sync_target_res ax_target)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET ${sync_target_name} POST_BUILD
             COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
-                -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
+                -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK} -wasm ${EMSCRIPTEN}
         )
     endforeach()
 endfunction()
@@ -71,18 +71,18 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
+            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1 -wasm ${EMSCRIPTEN}
                 -s ${src_dir} -d ${dst_dir}
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1 -wasm ${EMSCRIPTEN}
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1 -wasm ${EMSCRIPTEN}
                     -s ${src_dir} -d ${dst_dir}
             )
         endif()
