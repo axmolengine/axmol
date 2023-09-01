@@ -64,6 +64,8 @@ public:
     /* override functions */
     bool init() override;
 
+    virtual FileUtils::Status getContents(std::string_view filename, ResizableBuffer* buffer) const override;
+
     virtual std::string getWritablePath() const override;
     std::string getNativeWritableAbsolutePath() const override;
     virtual bool isAbsolutePath(std::string_view strPath) const override;

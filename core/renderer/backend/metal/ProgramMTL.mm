@@ -25,19 +25,20 @@
 #include "ProgramMTL.h"
 #include "ShaderModuleMTL.h"
 #include "base/Macros.h"
-#include "DeviceMTL.h"
 
 NS_AX_BACKEND_BEGIN
 namespace
 {
-// constexpr std::string_view metalSpecificDefine = "#define METAL\n"sv;
+constexpr std::string_view metalSpecificDefine = "#define METAL\n"sv;
 }
 
 ProgramMTL::ProgramMTL(std::string_view vertexShader, std::string_view fragmentShader)
     : Program(vertexShader, fragmentShader)
 {
     _vertexShader = static_cast<ShaderModuleMTL*>(ShaderCache::newVertexShaderModule(vertexShader));
-    _fragmentShader = static_cast<ShaderModuleMTL*>(ShaderCache::newFragmentShaderModule(fragmentShader));
+    std::string combinedSource{metalSpecificDefine};
+    combinedSource += fragmentShader;
+    _fragmentShader = static_cast<ShaderModuleMTL*>(ShaderCache::newFragmentShaderModule(std::move(combinedSource)));
 
     AX_SAFE_RETAIN(_vertexShader);
     AX_SAFE_RETAIN(_fragmentShader);
@@ -62,19 +63,49 @@ int ProgramMTL::getAttributeLocation(std::string_view name) const
 UniformLocation ProgramMTL::getUniformLocation(backend::Uniform name) const
 {
     UniformLocation uniformLocation;
-    uniformLocation = _vertexShader->getUniformLocation(name);
-    if (uniformLocation.location[0] != -1)
-        return uniformLocation;
-    return _fragmentShader->getUniformLocation(name);
+    auto vsLocation = _vertexShader->getUniformLocation(name);
+    auto fsLocation = _fragmentShader->getUniformLocation(name);
+    if (vsLocation != -1 && fsLocation != -1)
+    {
+        uniformLocation.shaderStage = ShaderStage::VERTEX_AND_FRAGMENT;
+        uniformLocation.location[0] = vsLocation;
+        uniformLocation.location[1] = fsLocation;
+    }
+    else if (vsLocation != -1)
+    {
+        uniformLocation.shaderStage = ShaderStage::VERTEX;
+        uniformLocation.location[0] = vsLocation;
+    }
+    else
+    {
+        uniformLocation.shaderStage = ShaderStage::FRAGMENT;
+        uniformLocation.location[1] = fsLocation;
+    }
+    return uniformLocation;
 }
 
 UniformLocation ProgramMTL::getUniformLocation(std::string_view uniform) const
 {
     UniformLocation uniformLocation;
-    uniformLocation = _vertexShader->getUniformLocation(uniform);
-    if (uniformLocation.location[0] != -1)
-        return uniformLocation;
-    return _fragmentShader->getUniformLocation(uniform);
+    auto vsLocation = _vertexShader->getUniformLocation(uniform);
+    auto fsLocation = _fragmentShader->getUniformLocation(uniform);
+    if (vsLocation != -1 && fsLocation != -1)
+    {
+        uniformLocation.shaderStage = ShaderStage::VERTEX_AND_FRAGMENT;
+        uniformLocation.location[0] = vsLocation;
+        uniformLocation.location[1] = fsLocation;
+    }
+    else if (vsLocation != -1)
+    {
+        uniformLocation.shaderStage = ShaderStage::VERTEX;
+        uniformLocation.location[0] = vsLocation;
+    }
+    else
+    {
+        uniformLocation.shaderStage = ShaderStage::FRAGMENT;
+        uniformLocation.location[1] = fsLocation;
+    }
+    return uniformLocation;
 }
 
 int ProgramMTL::getMaxVertexLocation() const
@@ -90,6 +121,34 @@ int ProgramMTL::getMaxFragmentLocation() const
 const hlookup::string_map<AttributeBindInfo>& ProgramMTL::getActiveAttributes() const
 {
     return _vertexShader->getAttributeInfo();
+}
+
+// const std::vector<char>& ProgramMTL::cloneUniformBuffer(ShaderStage stage) const
+//{
+//     switch (stage) {
+//         case ShaderStage::VERTEX:
+//             return _vertexShader->cloneUniformBuffer();
+//             break;
+//         case ShaderStage::FRAGMENT:
+//             return _fragmentShader->cloneUniformBuffer();
+//         default:
+//             AXASSERT(false, "Invalid shader stage.");
+//             break;
+//     }
+// }
+
+const UniformInfo& ProgramMTL::getActiveUniformInfo(ShaderStage stage, int location) const
+{
+    switch (stage)
+    {
+    case ShaderStage::VERTEX:
+        return _vertexShader->getActiveUniform(location);
+    case ShaderStage::FRAGMENT:
+        return _fragmentShader->getActiveUniform(location);
+    default:
+        AXASSERT(false, "Invalid shader stage.");
+        break;
+    }
 }
 
 std::size_t ProgramMTL::getUniformBufferSize(ShaderStage stage) const

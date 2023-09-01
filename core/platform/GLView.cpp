@@ -250,8 +250,8 @@ void GLView::setViewPortInPoints(float x, float y, float w, float h)
     Viewport vp;
     vp.x = (int)(x * _scaleX + _viewPortRect.origin.x);
     vp.y = (int)(y * _scaleY + _viewPortRect.origin.y);
-    vp.width = (unsigned int)(w * _scaleX);
-    vp.height = (unsigned int)(h * _scaleY);
+    vp.w = (unsigned int)(w * _scaleX);
+    vp.h = (unsigned int)(h * _scaleY);
     Camera::setDefaultViewport(vp);
 }
 

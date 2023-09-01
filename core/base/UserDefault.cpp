@@ -52,6 +52,8 @@ THE SOFTWARE.
 #include "pugixml/pugixml.hpp"
 #include "base/Utils.h"
 
+#include "PosixFileStream.h"
+
 #define USER_DEFAULT_PLAIN_MODE 0
 
 #if !USER_DEFAULT_PLAIN_MODE
@@ -134,8 +136,11 @@ void UserDefault::closeFileMapping()
 {
     _rwmmap.reset();
 #if !USER_DEFAULT_PLAIN_MODE
-    if (_fileStream.isOpen())
-        _fileStream.close();
+    if (_fd != -1)
+    {
+        posix_close(_fd);
+        _fd = -1;
+    }
 #endif
 }
 
@@ -379,27 +384,29 @@ void UserDefault::lazyInit()
     _filePath = FileUtils::getInstance()->getNativeWritableAbsolutePath() + USER_DEFAULT_FILENAME;
 
     // construct file mapping
-    if (!_fileStream.open(_filePath, IFileStream::Mode::OVERLAPPED))
+    _fd = posix_open(_filePath.c_str(), O_OVERLAP_FLAGS);
+    if (_fd == -1)
     {
         log("[Warning] UserDefault::init open storage file '%s' failed!", _filePath.c_str());
         return;
     }
 
-    int filesize = static_cast<int>(_fileStream.size());
+    int filesize = static_cast<int>(posix_lseek64(_fd, 0, SEEK_END));
+    posix_lseek64(_fd, 0, SEEK_SET);
 
     if (filesize < _curMapSize)
     {  // construct a empty file mapping
-        if (!_fileStream.resize(_curMapSize))
+        if (posix_ftruncate(_fd, _curMapSize) == -1)
         {
             log("[Warning] UserDefault::init failed to truncate '%s'.", _filePath.c_str());
             return;
         }
-        _rwmmap = std::make_shared<mio::mmap_sink>(_fileStream.nativeHandle(), 0, _curMapSize);
+        posix_lseek(_fd, _curMapSize, SEEK_SET);
+        _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, _curMapSize);
     }
     else
     {  /// load to memory _values
-        _rwmmap = std::make_shared<mio::mmap_sink>(_fileStream.nativeHandle(), 0,
-                                                   mio::map_entire_file);
+        _rwmmap = std::make_shared<mio::mmap_sink>(posix_fd2fh(_fd), 0, mio::map_entire_file);
         if (_rwmmap->is_mapped())
         {  // no error
             yasio::ibstream_view ibs(_rwmmap->data(), _rwmmap->length());
@@ -490,10 +497,11 @@ void UserDefault::flush()
             while (obs.length() > _curMapSize)
                 _curMapSize <<= 1;  // X2
 
-            if (!_fileStream.resize(_curMapSize))
-                ax::log("[Warning] UserDefault::flush failed to truncate '%s'.", _filePath.c_str());
+            if (posix_ftruncate(_fd, _curMapSize) == -1)
+                log("[Warning] UserDefault::flush failed to truncate '%s'.", _filePath.c_str());
 
-            _rwmmap->map(_fileStream.nativeHandle(), 0, _curMapSize, error);
+            posix_lseek(_fd, _curMapSize, SEEK_SET);
+            _rwmmap->map(posix_fd2fh(_fd), 0, _curMapSize, error);
         }
 
         if (!error && _rwmmap->is_mapped())
