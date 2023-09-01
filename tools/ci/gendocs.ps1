@@ -132,7 +132,9 @@ foreach($item in $verMap.GetEnumerator()) {
     }
     configure_file './Doxyfile.in' './Doxyfile' @{'@VERSION@'=$release_tag; '@HTML_OUTPUT@' = "manual/$ver"}
 
-    doxygen "./Doxyfile"
+    Write-Host "Generating docs for $ver ..." -NoNewline
+    doxygen "./Doxyfile" # 1>$null 2>$null
+    Write-Host "done"
 
     Copy-Item './hacks.js' $html_out
     Copy-Item './doc_style.css' "$html_out/stylesheet.css"
@@ -149,7 +151,7 @@ Copy-Item './index.html' "$site_dist/index.html"
 
 function download_appveyor_artifact($dest) {
     $apiUrl = 'https://ci.appveyor.com/api'
-    $token = '<your-api-token>'
+    $token = ${env:AX_DOCS_TOKEN}
     $headers = @{
     "Authorization" = "Bearer ${env:AX_DOCS_TOKEN}"
     "Content-type" = "application/json"
@@ -186,9 +188,10 @@ function download_appveyor_artifact($dest) {
     Expand-Archive -Path $localArtifactPath -DestinationPath $dest
 }
 
-download_appveyor_artifact $site_src
+# deploy wasm cpp_tests demo
+download_appveyor_artifact $(Join-Path $AX_ROOT 'tmp')
 $wasm_dist = Join-Path $site_dist 'wasm/'
 mkdirs $wasm_dist
-Copy-Item $(Join-Path $site_src 'build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
+Copy-Item $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
 
 Set-Location $store_cwd
