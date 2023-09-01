@@ -107,8 +107,6 @@ bool AppDelegate::applicationDidFinishLaunching()
         searchPaths.emplace_back("ActionTimeline");
     }
 
-    auto&& oldSearchPaths = fileUtils->getSearchPaths();
-    std::copy(oldSearchPaths.begin(), oldSearchPaths.end(), std::back_inserter(searchPaths));
     fileUtils->setSearchPaths(searchPaths);
 
     glView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);

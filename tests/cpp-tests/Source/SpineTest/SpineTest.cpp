@@ -28,6 +28,7 @@
 #include <fstream>
 #include <string.h>
 #include "spine/spine.h"
+#include "renderer/Colorizer.h"
 
 USING_NS_AX;
 using namespace std;
@@ -145,6 +146,7 @@ bool SpineTestLayer::init()
                 SET_UNIFORM(skeleton1PS, "resolution", resolution);
                 SET_UNIFORM(skeleton1PS, "blurRadius", blurRadius);
                 SET_UNIFORM(skeleton1PS, "sampleNum", sampleNum);
+                skeleton1PS->updateUniformID();
             }
     
         }
@@ -168,7 +170,7 @@ bool BatchingExample::init()
     _atlas = new (__FILE__, __LINE__) Atlas("spineboy.atlas", &textureLoader, true);
     AXASSERT(_atlas, "Error reading atlas file.");
 
-    // This attachment loader configures attachments with data needed for axmol rendering.
+    // This attachment loader configures attachments with data needed for cocos2d-x rendering.
     // Do not dispose the attachment loader until the skeleton data is disposed!
     _attachmentLoader = new (__FILE__, __LINE__) Cocos2dAtlasAttachmentLoader(_atlas);
 
@@ -213,7 +215,7 @@ bool BatchingExample::init()
 
 BatchingExample::~BatchingExample()
 {
-    // SkeletonAnimation instances are axmol nodes and are disposed of automatically as normal, but the data created
+    // SkeletonAnimation instances are cocos2d-x nodes and are disposed of automatically as normal, but the data created
     // manually to be shared across multiple SkeletonAnimations needs to be disposed of manually.
 
     delete _skeletonData;
@@ -362,13 +364,7 @@ bool MixAndMatchExample::init()
 
     SCALE_SKELETON_NODE(skeletonNode);
 
-    // load hsv as custom, we don't want batch draw
-    auto hsvProg = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, hsv_frag, VertexLayoutType::Sprite);
-    
-    auto ps1     = new backend::ProgramState(hsvProg);
-    SET_UNIFORM(ps1, "u_hsv", Vec3(92.0f, 1.0f, 1.2f));
-    ps1->updateBatchId();
-    skeletonNode->setProgramState(ps1, true);
+    Colorizer::enableNodeIntelliShading(skeletonNode, Vec3(92.0f, 1.0f, 1.2f), Vec3::ZERO);
 
     /* -------- skeletonNode2 with same spine animation file ------------ */
     auto skeletonNode2 = SkeletonAnimation::createWithBinaryFile("mix-and-match-pro.skel", "mix-and-match.atlas", 0.5);
@@ -396,10 +392,7 @@ bool MixAndMatchExample::init()
 
     SCALE_SKELETON_NODE(skeletonNode2);
 
-    auto ps2 = new backend::ProgramState(hsvProg);
-    SET_UNIFORM(ps2, "u_hsv", Vec3(-45.0f, 1.0f, 1.2f));
-    ps2->updateBatchId();
-    skeletonNode2->setProgramState(ps2, true);
+    Colorizer::enableNodeIntelliShading(skeletonNode2, Vec3(45.0f, 1.0f, 1.2f), Vec3::ZERO);
     return true;
 }
 
@@ -523,9 +516,11 @@ bool SpineboyExample::init()
     skeletonNode->setPosition(Vec2(_contentSize.width / 2, 20));
     addChild(skeletonNode);
 
-    auto program = ProgramManager::getInstance()->loadProgram(positionTextureColor_vert, "custom/example_Blur_fs",
-                                                                    VertexLayoutType::Sprite);
-    skeletonNode->setProgramState(new backend::ProgramState(program), true);
+    auto programCache = backend::ProgramCache::getInstance();
+    programCache->registerCustomProgramFactory(101, positionTextureColor_vert,
+                                               FileUtils::getInstance()->getStringFromFile("Shaders/example_Blur.fsh"), VertexLayoutHelper::setupSprite);
+    auto program = programCache->getCustomProgram(101);
+    skeletonNode->setProgramState(new backend::ProgramState(program), false);
 
     //auto skeleton1PS = skeletonNode->getProgramState();
 

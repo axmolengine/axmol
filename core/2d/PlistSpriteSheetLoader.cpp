@@ -418,7 +418,7 @@ void PlistSpriteSheetLoader::reloadSpriteFramesWithDictionary(ValueMap& dict,
             if (!ow || !oh)
             {
                 AXLOGWARN(
-                    "axmol:WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as "
+                    "cocos2d: WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as "
                     "expected. Regenerate the .plist");
             }
             // abs ow/oh

@@ -69,11 +69,10 @@ static const PixelFormatDescriptor s_pixelFormatDescriptors[] = {
     {16, 1, 1, 2, 1, 1, false, "R5G6B5"},    // R5G6B5
     {16, 1, 1, 2, 1, 1, true, "RGBA4"},      // RGBA4
     {16, 1, 1, 2, 1, 1, true, "RGB5A1"},     // RGB5A1
-    {8, 1, 1, 1, 1, 1, true, "R8"},          // R8
-    {16, 1, 1, 2, 1, 1, true, "RG8"},        // RG8
     {8, 1, 1, 1, 1, 1, true, "A8"},          // A8
     {8, 1, 1, 1, 1, 1, false, "L8"},         // L8
     {16, 1, 1, 2, 1, 1, true, "LA8"},        // LA8
+    {16, 1, 1, 2, 1, 1, true, "RG8"},        // RG8
     {128, 1, 1, 4, 1, 1, true, "RGBA32F"},   // RGBA32F
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_IOS)
     {32, 1, 1, 4, 1, 1, false, "D24S8"},  // D24S8
