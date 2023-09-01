@@ -133,7 +133,7 @@ foreach($item in $verMap.GetEnumerator()) {
     configure_file './Doxyfile.in' './Doxyfile' @{'@VERSION@'=$release_tag; '@HTML_OUTPUT@' = "manual/$ver"}
 
     Write-Host "Generating docs for $ver ..." -NoNewline
-    doxygen "./Doxyfile" 1>$null 2>$null
+    doxygen "./Doxyfile" # 1>$null 2>$null
     Write-Host "done"
 
     Copy-Item './hacks.js' $html_out
