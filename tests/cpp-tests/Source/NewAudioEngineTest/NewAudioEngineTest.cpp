@@ -1128,7 +1128,7 @@ void AudioPlayFileInWritablePath::onEnter()
     if (!fileUtils->isFileExist(saveFilePath))
     {
         Data data = fileUtils->getDataFromFile(musicFile);
-        FILE* fp  = fopen(saveFilePath.c_str(), "wb");
+        auto fp  = fopen(saveFilePath.c_str(), "wb");
         if (fp != nullptr)
         {
             fwrite(data.getBytes(), data.getSize(), 1, fp);

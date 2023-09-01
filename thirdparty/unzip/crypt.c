@@ -43,8 +43,8 @@ Microsoft may remove this API in future releases.
 #endif
 
 #include "zlib.h"
-
 #include "crypt.h"
+#include <openssl/rand.h>
 
 /***************************************************************************/
 
@@ -115,7 +115,8 @@ int cryptrand(unsigned char *buf, unsigned int len)
 
     return rlen;
 #else
-    arc4random_buf(buf, len);
+
+    RAND_bytes(buf, len);
     return len;
 #endif
 }

@@ -22,6 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_EMSCRIPTEN)
+
 #include "platform/PlatformConfig.h"
 #include "CurlTest.h"
 #include "stdio.h"
@@ -125,3 +127,5 @@ CurlTest::~CurlTest()
 {
     _label->release();
 }
+
+#endif

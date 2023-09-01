@@ -26,20 +26,26 @@
  ****************************************************************************/
 #pragma once
 
-#if !defined(__APPLE__)
+#if !defined(__APPLE__) && !defined(__EMSCRIPTEN__)
 #    if !defined(AX_USE_ALSOFT)
 #        define AX_USE_ALSOFT 1
 #    endif
 #endif
 
-#if !AX_USE_ALSOFT
-#    import <OpenAL/al.h>
-#    import <OpenAL/alc.h>
-#    define MAX_AUDIOINSTANCES 24
+#if defined(__EMSCRIPTEN__)
+    #import <AL/al.h>
+    #import <AL/alc.h>
+    #define MAX_AUDIOINSTANCES 24
 #else
-#    define AL_ALEXT_PROTOTYPES 1
-#    include "AL/al.h"
-#    include "AL/alc.h"
-#    include "AL/alext.h"
-#    define MAX_AUDIOINSTANCES 32
+    #if !AX_USE_ALSOFT
+    #    import <OpenAL/al.h>
+    #    import <OpenAL/alc.h>
+    #    define MAX_AUDIOINSTANCES 24
+    #else
+    #    define AL_ALEXT_PROTOTYPES 1
+    #    include "AL/al.h"
+    #    include "AL/alc.h"
+    #    include "AL/alext.h"
+    #    define MAX_AUDIOINSTANCES 32
+    #endif
 #endif

@@ -7,6 +7,10 @@ if(NOT PWSH_COMMAND)
     message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
 endif()
 
+if(NOT DEFINED WASM)
+    set(WASM FALSE CACHE BOOL "")
+endif()
+
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
 function(ax_sync_target_res ax_target)
     set(options SYM_LINK)
@@ -33,7 +37,7 @@ function(ax_sync_target_res ax_target)
         get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
         add_custom_command(TARGET ${sync_target_name} POST_BUILD
             COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
-                -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
+                -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK} -wasm "${WASM}"
         )
     endforeach()
 endfunction()
@@ -72,18 +76,18 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
             COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
-                -s ${src_dir} -d ${dst_dir}
+                -s ${src_dir} -d ${dst_dir} -wasm "${WASM}"
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
                 COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
-                -s ${src_dir} -d ${dst_dir}
+                -s ${src_dir} -d ${dst_dir} -wasm "${WASM}"
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
                 COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/cmake/sync_folder.ps1
-                    -s ${src_dir} -d ${dst_dir}
+                    -s ${src_dir} -d ${dst_dir} -wasm "${WASM}"
             )
         endif()
     endif()

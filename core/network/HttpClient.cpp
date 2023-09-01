@@ -26,6 +26,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#if !defined(__EMSCRIPTEN__)
+
 #include "network/HttpClient.h"
 #include <errno.h>
 #include "base/Utils.h"
@@ -191,16 +193,15 @@ yasio::io_service* HttpClient::getInternalService()
     return _service;
 }
 
-bool HttpClient::send(HttpRequest* request)
+void HttpClient::send(HttpRequest* request)
 {
     if (!request)
-        return false;
+        return;
 
     auto response = new HttpResponse(request);
     response->setLocation(request->getUrl(), false);
     processResponse(response, -1);
     response->release();
-    return true;
 }
 
 int HttpClient::tryTakeAvailChannel()
@@ -522,3 +523,5 @@ std::string_view HttpClient::getSSLVerification()
 }  // namespace network
 
 NS_AX_END
+
+#endif

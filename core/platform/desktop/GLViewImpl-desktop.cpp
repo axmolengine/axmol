@@ -74,7 +74,11 @@ THE SOFTWARE.
 #    endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#include "glfw3native.h"
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN)
+
+#else
+    #include <GLFW/glfw3native.h>
+#endif
 
 #if defined(_WIN32)
 #    include "glfw3ext.h"
@@ -553,10 +557,11 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #endif
 
 #if defined(AX_USE_GL)
-    glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
-
     // check OpenGL version at first
     const GLubyte* glVersion = glGetString(GL_VERSION);
+
+#ifndef EMSCRIPTEN
+    glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
 
     if (utils::atof((const char*)glVersion) < 1.5 && nullptr == strstr((const char*)glVersion, "ANGLE"))
     {
@@ -568,7 +573,8 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
         utils::killCurrentProcess();  // kill current process, don't cause crash when driver issue.
         return false;
     }
-
+#endif
+    
     if (GL_ARB_vertex_shader && GL_ARB_fragment_shader)
         ax::print("[GL:%s] Ready for GLSL", glVersion);
     else

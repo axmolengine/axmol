@@ -25,6 +25,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+#include "sol/sol.hpp"
 #include "yasio/bindings/yasio_axlua.hpp"
 #include "yasio/bindings/lyasio.hpp"
 #include "yasio/object_pool.hpp"
@@ -117,12 +119,6 @@ YASIO_LUA_API void clear()
 } // namespace lyasio
 
 #if YASIO__HAS_CXX14
-
-#  if YASIO__HAS_CXX17
-#    include "sol/sol.hpp"
-#  else
-#    include "sol2/sol.hpp"
-#  endif
 
 extern "C" {
 struct lua_State;

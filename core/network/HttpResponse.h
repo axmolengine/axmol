@@ -130,6 +130,8 @@ public:
     const ResponseHeaderMap& getResponseHeaders() const { return _responseHeaders; }
 
 private:
+    void setResponseCode(int value) { _responseCode = value; }
+
     void updateInternalCode(int value)
     {
         if (_internalCode == 0)

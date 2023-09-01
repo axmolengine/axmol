@@ -82,7 +82,7 @@ set(_AX_RENDERER_SRC
     renderer/backend/RenderPassDescriptor.cpp
     )
 
-if(ANDROID OR WINDOWS OR LINUX OR AX_USE_ANGLE) 
+if(ANDROID OR WINDOWS OR LINUX OR EMSCRIPTEN OR AX_USE_ANGLE) 
 
 list(APPEND _AX_RENDERER_HEADER
     renderer/backend/opengl/BufferGL.h

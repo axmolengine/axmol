@@ -257,8 +257,7 @@ bool HttpCookie::updateOrAddCookie(std::string_view cookie, const Uri& uri)
 
 void HttpCookie::writeFile()
 {
-    FILE* out;
-    out = fopen(_cookieFileName.c_str(), "wb");
+    auto out = fopen(_cookieFileName.c_str(), "wb");
     fputs(
         "# Netscape HTTP Cookie File\n"
         "# http://curl.haxx.se/docs/http-cookies.html\n"
