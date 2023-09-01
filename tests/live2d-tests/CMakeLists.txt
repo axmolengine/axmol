@@ -42,7 +42,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
         set(_AX_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../..)
     endif()
 
-    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/)
 
     include(AXBuildSet)
     add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)

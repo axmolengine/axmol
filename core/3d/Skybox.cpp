@@ -64,8 +64,7 @@ bool Skybox::init()
     _customCommand.setAfterCallback(AX_CALLBACK_0(Skybox::onAfterDraw, this));
 
     // create and set our custom shader
-    auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::SKYBOX_3D);
-    setProgramState(new backend::ProgramState(program), false);
+    setProgramStateByProgramId(backend::ProgramType::SKYBOX_3D);
 
     auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
 

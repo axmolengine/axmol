@@ -59,29 +59,29 @@ NS_AX_BEGIN
 #if !AX_USE_MPG123
 static size_t minimp3_read_r(void* buf, size_t size, void* user_data)
 {
-    return ((FileStream*)user_data)->read(buf, size);
+    return ((IFileStream*)user_data)->read(buf, size);
 }
 
 static int minimp3_seek_r(uint64_t position, void* user_data)
 {
-    return ((FileStream*)user_data)->seek(position, SEEK_SET) < 0 ? -1 : 0;
+    return ((IFileStream*)user_data)->seek(position, SEEK_SET) < 0 ? -1 : 0;
 }
 #else
 static bool __mp3Inited = false;
 
 static ssize_t mpg123_read_r(void* handle, void* buffer, size_t count)
 {
-    return ((FileStream*)handle)->read(buffer, count);
+    return ((IFileStream*)handle)->read(buffer, count);
 }
 
 static off_t mpg123_lseek_r(void* handle, off_t offset, int whence)
 {
-    return ((FileStream*)handle)->seek(offset, whence);
+    return ((IFileStream*)handle)->seek(offset, whence);
 }
 
 void mpg123_close_r(void* handle)
 {
-    ((FileStream*)handle)->close();
+    ((IFileStream*)handle)->close();
 }
 #endif
 bool AudioDecoderMp3::lazyInit()
@@ -131,7 +131,7 @@ bool AudioDecoderMp3::open(std::string_view fullPath)
 #if !AX_USE_MPG123
     do
     {
-        _fileStream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+        _fileStream = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
         if (!_fileStream)
         {
             ALOGE("Trouble with minimp3(1): %s\n", strerror(errno));

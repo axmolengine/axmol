@@ -137,7 +137,7 @@ if ($IsLinux) {
             $DEPENDS += 'libfontconfig1-dev'
             $DEPENDS += 'libgtk-3-dev'
             $DEPENDS += 'binutils'
-            $DEPENDS += 'libbsd-dev'
+            # $DEPENDS += 'libbsd-dev'
             $DEPENDS += 'libasound2-dev'
             $DEPENDS += 'libxxf86vm-dev'
             $DEPENDS += 'libvlc-dev', 'libvlccore-dev', 'vlc'
