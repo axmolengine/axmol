@@ -104,17 +104,18 @@ elseif(APPLE)
             platform/ios/InputView-ios.mm
             )
 
-        if(AX_USE_GL)
+        if(NOT AX_USE_ANGLE)
             set(_AX_PLATFORM_SPECIFIC_HEADER
                 ${_AX_PLATFORM_SPECIFIC_HEADER}
-                platform/ios/ES3Renderer-ios.h
+                platform/ios/ES2Renderer-ios.h
+                platform/ios/ES2Renderer-ios.h
                 platform/ios/ESRenderer-ios.h
                 platform/ios/GL-ios.h
                 platform/ios/OpenGL_Internal-ios.h
             )
             set(_AX_PLATFORM_SPECIFIC_SRC
                 ${_AX_PLATFORM_SPECIFIC_SRC}
-                platform/ios/ES3Renderer-ios.m
+                platform/ios/ES2Renderer-ios.m
             )
         endif()
     endif()
@@ -144,6 +145,26 @@ elseif(LINUX)
         platform/linux/Device-linux.cpp
         platform/desktop/GLViewImpl-desktop.cpp
         )
+elseif(EMSCRIPTEN)
+    include_directories(
+        PUBLIC "${_AX_ROOT}/thirdparty/angle/include"
+        PUBLIC "${_AX_ROOT}/core"
+    )
+    set(_AX_PLATFORM_SPECIFIC_HEADER
+        platform/emscripten/Application-emscripten.h
+        platform/emscripten/GL-emscripten.h
+        platform/emscripten/StdC-emscripten.h
+        platform/emscripten/FileUtils-emscripten.h
+        platform/emscripten/PlatformDefine-emscripten.h
+        platform/emscripten/GLViewImpl-emscripten.h
+        )
+    set(_AX_PLATFORM_SPECIFIC_SRC
+        platform/emscripten/FileUtils-emscripten.cpp
+        platform/emscripten/Common-emscripten.cpp
+        platform/emscripten/Application-emscripten.cpp
+        platform/emscripten/Device-emscripten.cpp
+        platform/emscripten/GLViewImpl-emscripten.cpp
+        )
 endif()
 
 set(_AX_PLATFORM_HEADER
@@ -161,8 +182,8 @@ set(_AX_PLATFORM_HEADER
     platform/PlatformMacros.h
     platform/SAXParser.h
     platform/StdC.h
-    platform/IFileStream.h
     platform/FileStream.h
+    platform/PosixFileStream.h
     )
 
 set(_AX_PLATFORM_SRC
@@ -172,4 +193,5 @@ set(_AX_PLATFORM_SRC
     platform/FileUtils.cpp
     platform/Image.cpp
     platform/FileStream.cpp
+    platform/PosixFileStream.cpp
     )

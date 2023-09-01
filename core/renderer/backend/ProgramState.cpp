@@ -31,11 +31,64 @@
 #include "base/EventType.h"
 #include "base/Director.h"
 #include <algorithm>
-#include "xxhash/xxhash.h"
 
-#include "glslcc/sgs-spec.h"
+#include "xxhash.h"
+
+#ifdef AX_USE_METAL
+#    include "glsl_optimizer.h"
+#endif
 
 NS_AX_BACKEND_BEGIN
+
+namespace
+{
+#define MAT3_SIZE 36
+#define MAT4X3_SIZE 48
+#define VEC3_SIZE 12
+#define VEC4_SIZE 16
+#define BVEC3_SIZE 3
+#define BVEC4_SIZE 4
+#define IVEC3_SIZE 12
+#define IVEC4_SIZE 16
+
+void convertbVec3TobVec4(const bool* src, bool* dst)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[3] = false;
+}
+
+void convertiVec3ToiVec4(const int* src, int* dst)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[3] = 0;
+}
+
+void convertVec3ToVec4(const float* src, float* dst)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[3] = 0.0f;
+}
+
+void convertMat3ToMat4x3(const float* src, float* dst)
+{
+    dst[3] = dst[7] = dst[11] = 0.0f;
+    dst[0]                    = src[0];
+    dst[1]                    = src[1];
+    dst[2]                    = src[2];
+    dst[4]                    = src[3];
+    dst[5]                    = src[4];
+    dst[6]                    = src[5];
+    dst[8]                    = src[6];
+    dst[9]                    = src[7];
+    dst[10]                   = src[8];
+}
+}  // namespace
 
 // static field
 std::vector<ProgramState::AutoBindingResolver*> ProgramState::_customAutoBindingResolvers;
@@ -136,34 +189,25 @@ ProgramState::ProgramState(Program* program)
 bool ProgramState::init(Program* program)
 {
     AX_SAFE_RETAIN(program);
-    _program = program;
-
+    _program                 = program;
     _vertexLayout            = program->getVertexLayout();
     _ownVertexLayout         = false;
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
-
+    _vertexUniformBuffer     = (char*)calloc(1, _vertexUniformBufferSize);
 #ifdef AX_USE_METAL
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
+    _fragmentUniformBuffer     = (char*)calloc(1, _fragmentUniformBufferSize);
 #endif
-
-    _uniformBuffers.resize_fit((std::max)(_vertexUniformBufferSize + _fragmentUniformBufferSize, (size_t)1), 0);
+#ifdef AX_USE_METAL
+    _uniformHashState = XXH32_createState();
+#endif
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =
         EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*) { this->resetUniforms(); });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
 #endif
-
-    const auto programId = program->getProgramId();
-    if (programId < ProgramType::BUILTIN_COUNT)
-        this->_batchId = programId;
-
     return true;
-}
-
-void ProgramState::updateBatchId()
-{
-    _batchId = XXH64(_uniformBuffers.data(), _uniformBuffers.size(), _program->getProgramId());
 }
 
 void ProgramState::resetUniforms()
@@ -189,7 +233,12 @@ void ProgramState::resetUniforms()
 
 ProgramState::~ProgramState()
 {
+#ifdef AX_USE_METAL
+    XXH32_freeState(_uniformHashState);
+#endif
     AX_SAFE_RELEASE(_program);
+    AX_SAFE_FREE(_vertexUniformBuffer);
+    AX_SAFE_FREE(_fragmentUniformBuffer);
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
@@ -204,12 +253,14 @@ ProgramState* ProgramState::clone() const
     ProgramState* cp          = new ProgramState(_program);
     cp->_vertexTextureInfos   = _vertexTextureInfos;
     cp->_fragmentTextureInfos = _fragmentTextureInfos;
-    cp->_uniformBuffers       = _uniformBuffers;
+    memcpy(cp->_vertexUniformBuffer, _vertexUniformBuffer, _vertexUniformBufferSize);
 
     cp->_ownVertexLayout = _ownVertexLayout;
     cp->_vertexLayout    = !_ownVertexLayout ? _vertexLayout : new VertexLayout(*_vertexLayout);
-
-    cp->_batchId = this->_batchId;
+#ifdef AX_USE_METAL
+    memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
+#endif
+    cp->_uniformID = _uniformID;
     return cp;
 }
 
@@ -236,46 +287,142 @@ void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, c
         setVertexUniform(uniformLocation.location[0], data, size, uniformLocation.location[1]);
         break;
     case backend::ShaderStage::FRAGMENT:
-        setFragmentUniform(uniformLocation.location[0], data, size, uniformLocation.location[1]);
+        setFragmentUniform(uniformLocation.location[1], data, size);
         break;
-    default:;
+    case backend::ShaderStage::VERTEX_AND_FRAGMENT:
+        setVertexUniform(uniformLocation.location[0], data, size, uniformLocation.location[1]);
+        setFragmentUniform(uniformLocation.location[1], data, size);
+        break;
+    default:
+        break;
     }
 }
+
+#ifdef AX_USE_METAL
+void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniformInfo,
+                                             const void* srcData,
+                                             std::size_t srcSize,
+                                             void* buffer)
+{
+    auto basicType      = static_cast<glslopt_basic_type>(uniformInfo.type);
+    
+    int offset = 0;
+    switch (basicType)
+    {
+    case kGlslTypeFloat:
+    {
+        if (uniformInfo.isMatrix)
+        {
+            float m4x3[12];
+            for (int i = 0; i < uniformInfo.count; i++)
+            {
+                if (offset >= srcSize)
+                    break;
+
+                convertMat3ToMat4x3((float*)((uint8_t*)srcData + offset), m4x3);
+                memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(m4x3), m4x3, sizeof(m4x3));
+                offset += MAT3_SIZE;
+            }
+        }
+        else
+        {
+            float f4[4];
+            for (int i = 0; i < uniformInfo.count; i++)
+            {
+                if (offset >= srcSize)
+                    break;
+
+                convertVec3ToVec4((float*)((uint8_t*)srcData + offset), f4);
+                memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(f4), f4, sizeof(f4));
+                offset += VEC3_SIZE;
+            }
+        }
+        break;
+    }
+    case kGlslTypeBool:
+    {
+        bool b4[4];
+        for (int i = 0; i < uniformInfo.count; i++)
+        {
+            if (offset >= srcSize)
+                break;
+
+            convertbVec3TobVec4((bool*)((uint8_t*)srcData + offset), b4);
+            memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(b4), b4, sizeof(b4));
+            offset += BVEC3_SIZE;
+        }
+        break;
+    }
+    case kGlslTypeInt:
+    {
+        int i4[4];
+        for (int i = 0; i < uniformInfo.count; i++)
+        {
+            if (offset >= srcSize)
+                break;
+
+            convertiVec3ToiVec4((int*)((uint8_t*)srcData + offset), i4);
+            memcpy((uint8_t*)buffer + uniformInfo.location + i * sizeof(i4), i4, sizeof(i4));
+            offset += IVEC3_SIZE;
+        }
+        break;
+    }
+    default:
+        AX_ASSERT(false);
+        break;
+    }
+}
+#endif
 
 void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
 {
     if (location < 0)
         return;
-#if AX_GLES_PROFILE != 200
-    assert(location + offset + size <= _vertexUniformBufferSize);
-    memcpy(_uniformBuffers.data() + location + offset, data, size);
+
+// float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
+#ifdef AX_USE_METAL
+    const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::VERTEX, location);
+    if (uniformInfo.needConvert)
+    {
+        convertAndCopyUniformData(uniformInfo, data, size, _vertexUniformBuffer);
+    }
+    else
+    {
+        memcpy(_vertexUniformBuffer + location, data, size);
+    }
 #else
-    assert(offset + size <= _vertexUniformBufferSize);
-    memcpy(_uniformBuffers.data() + offset, data, size);
+    memcpy(_vertexUniformBuffer + offset, data, size);
 #endif
 }
 
-void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset)
+void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size)
 {
     if (location < 0)
         return;
 
+// float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
 #ifdef AX_USE_METAL
-    memcpy(_uniformBuffers.data() + _vertexUniformBufferSize + location + offset, data, size);
-#else
-    assert(false);
+    const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::FRAGMENT, location);
+    if (uniformInfo.needConvert)
+    {
+        convertAndCopyUniformData(uniformInfo, data, size, _fragmentUniformBuffer);
+    }
+    else
+    {
+        memcpy(_fragmentUniformBuffer + location, data, size);
+    }
 #endif
 }
 
 void ProgramState::setVertexAttrib(std::string_view name,
-                                   std::size_t index,
-                                   VertexFormat format,
-                                   std::size_t offset,
-                                   bool needToBeNormallized)
+    std::size_t index,
+    VertexFormat format,
+    std::size_t offset,
+    bool needToBeNormallized)
 {
     ensureVertexLayoutMutable();
 
-    _vertexLayout->setAttrib(name, index, format, offset, needToBeNormallized);
+    _vertexLayout->setAttribute(name, index, format, offset, needToBeNormallized);
 }
 
 void ProgramState::setVertexStride(uint32_t stride)
@@ -284,36 +431,43 @@ void ProgramState::setVertexStride(uint32_t stride)
     _vertexLayout->setStride(stride);
 }
 
-void ProgramState::validateSharedVertexLayout(VertexLayoutType vlt)
+void ProgramState::setVertexLayout(const VertexLayout& vertexLayout) {
+    ensureVertexLayoutMutable();
+    *_vertexLayout = vertexLayout;
+}
+
+void ProgramState::validateSharedVertexLayout(std::function<void(Program*)> fnValidate)
 {
     if (!_ownVertexLayout && !_vertexLayout->isValid())
-        _program->setupVertexLayout(vlt);
+        fnValidate(_program);
 }
 
 void ProgramState::ensureVertexLayoutMutable()
 {
     if (!_ownVertexLayout)
     {
-        _vertexLayout    = new VertexLayout();
+        _vertexLayout = new VertexLayout();
         _ownVertexLayout = true;
     }
 }
 
-VertexLayout* ProgramState::getMutableVertexLayout()
+void ProgramState::updateUniformID(int uniformID)
 {
-    if (_ownVertexLayout || !_vertexLayout->isValid())
-        return _vertexLayout;
-
-    _ownVertexLayout     = true;
-    return _vertexLayout = new VertexLayout();
-}
-
-void ProgramState::setSharedVertexLayout(VertexLayout* vertexLayout)
-{
-    if (_ownVertexLayout)
-        delete _vertexLayout;
-    _ownVertexLayout = false;
-    _vertexLayout    = vertexLayout;
+    if (uniformID == -1)
+    {
+#ifdef AX_USE_METAL
+        XXH32_reset(_uniformHashState, 0);
+        XXH32_update(_uniformHashState, _vertexUniformBuffer, _vertexUniformBufferSize);
+        XXH32_update(_uniformHashState, _fragmentUniformBuffer, _fragmentUniformBufferSize);
+        _uniformID = XXH32_digest(_uniformHashState);
+#else
+        _uniformID = XXH32(_vertexUniformBuffer, _vertexUniformBufferSize, 0);
+#endif
+    }
+    else
+    {
+        _uniformID = uniformID;
+    }
 }
 
 void ProgramState::setTexture(backend::TextureBackend* texture)
@@ -343,9 +497,14 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation,
         setTexture(uniformLocation.location[0], slot, index, texture, _vertexTextureInfos);
         break;
     case backend::ShaderStage::FRAGMENT:
-        setTexture(uniformLocation.location[0], slot, index, texture, _fragmentTextureInfos);
+        setTexture(uniformLocation.location[1], slot, index, texture, _fragmentTextureInfos);
         break;
-    default:;
+    case backend::ShaderStage::VERTEX_AND_FRAGMENT:
+        setTexture(uniformLocation.location[0], slot, index, texture, _vertexTextureInfos);
+        setTexture(uniformLocation.location[1], slot, index, texture, _fragmentTextureInfos);
+        break;
+    default:
+        break;
     }
 }
 
@@ -359,9 +518,14 @@ void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocati
         setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _vertexTextureInfos);
         break;
     case backend::ShaderStage::FRAGMENT:
-        setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _fragmentTextureInfos);
+        setTextureArray(uniformLocation.location[1], std::move(slots), std::move(textures), _fragmentTextureInfos);
         break;
-    default:;
+    case backend::ShaderStage::VERTEX_AND_FRAGMENT:
+        setTextureArray(uniformLocation.location[0], std::move(slots), std::move(textures), _vertexTextureInfos);
+        setTextureArray(uniformLocation.location[1], std::move(slots), std::move(textures), _fragmentTextureInfos);
+        break;
+    default:
+        break;
     }
 }
 
@@ -423,16 +587,16 @@ ProgramState::AutoBindingResolver::~AutoBindingResolver()
     list.erase(std::remove(list.begin(), list.end(), this), list.end());
 }
 
-const char* ProgramState::getVertexUniformBuffer(std::size_t& size) const
+void ProgramState::getVertexUniformBuffer(char** buffer, std::size_t& size) const
 {
-    size = _vertexUniformBufferSize;
-    return _uniformBuffers.data();
+    *buffer = _vertexUniformBuffer;
+    size    = _vertexUniformBufferSize;
 }
 
-const char* ProgramState::getFragmentUniformBuffer(std::size_t& size) const
+void ProgramState::getFragmentUniformBuffer(char** buffer, std::size_t& size) const
 {
-    size = _fragmentUniformBufferSize;
-    return _uniformBuffers.data() + _vertexUniformBufferSize;
+    *buffer = _fragmentUniformBuffer;
+    size    = _fragmentUniformBufferSize;
 }
 
 NS_AX_BACKEND_END

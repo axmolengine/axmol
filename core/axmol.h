@@ -178,7 +178,6 @@ THE SOFTWARE.
 #include "platform/Common.h"
 #include "platform/Device.h"
 #include "platform/FileUtils.h"
-#include "platform/FileStream.h"
 #include "platform/Image.h"
 #include "platform/PlatformConfig.h"
 #include "platform/PlatformMacros.h"
@@ -226,6 +225,13 @@ THE SOFTWARE.
 #    include "platform/linux/GL-linux.h"
 #    include "platform/linux/StdC-linux.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN)
+    #include "platform/emscripten/Application-emscripten.h"
+    #include "platform/emscripten/GLViewImpl-emscripten.h"
+    #include "platform/emscripten/GL-emscripten.h"
+    #include "platform/emscripten/StdC-emscripten.h"
+#endif // AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
 
 // script_support
 #include "base/ScriptSupport.h"

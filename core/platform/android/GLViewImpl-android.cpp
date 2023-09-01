@@ -27,24 +27,28 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/Macros.h"
 #include "platform/android/jni/JniHelper.h"
-#include "platform/GL.h"
+#include "GL.h"
 
 #include <stdlib.h>
 #include <android/log.h>
 
+// <EGL/egl.h> exists since android 2.3
+#include <EGL/egl.h>
+PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOESEXT       = 0;
+PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOESEXT       = 0;
+PFNGLDELETEVERTEXARRAYSOESPROC glDeleteVertexArraysOESEXT = 0;
+
 #define DEFAULT_MARGIN_ANDROID 30.0f
 #define WIDE_SCREEN_ASPECT_RATIO_ANDROID 2.0f
 
+void initExtensions()
+{
+    glGenVertexArraysOESEXT    = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
+    glBindVertexArrayOESEXT    = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
+    glDeleteVertexArraysOESEXT = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES");
+}
 
 NS_AX_BEGIN
-void GLViewImpl::loadGLES2()
-{
-    auto glesVer = gladLoaderLoadGLES2();
-    if (glesVer)
-        ax::print("Load GLES success, version: %d", glesVer);
-    else
-        throw std::runtime_error("Load GLES fail");
-}
 
 GLViewImpl* GLViewImpl::createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable)
 {
@@ -84,6 +88,7 @@ GLViewImpl* GLViewImpl::createWithFullScreen(std::string_view viewName)
 
 GLViewImpl::GLViewImpl()
 {
+    initExtensions();
 }
 
 GLViewImpl::~GLViewImpl() {}

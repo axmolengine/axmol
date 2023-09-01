@@ -49,7 +49,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
         message(FATAL_ERROR "Please run setup.ps1 add system env var 'AX_ROOT' to specific the engine root")
     endif()
 
-    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
     include(AXBuildSet)
     set(_AX_USE_PREBUILT FALSE)
@@ -92,6 +92,11 @@ if(ANDROID)
 elseif(LINUX)
     list(APPEND GAME_SOURCE
          proj.linux/main.cpp
+         )
+    list(APPEND GAME_SOURCE ${common_content_files})
+elseif(EMSCRIPTEN)
+    list(APPEND GAME_SOURCE
+         proj.emscripten/main.cpp
          )
     list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)
@@ -220,10 +225,36 @@ endif()
 if (_AX_USE_PREBUILT) # support windows and linux
     use_ax_compile_define(${APP_NAME})
 
-    include(${_AX_ROOT}/cmake/AXLinkHelpers.cmake)
+    include(${_AX_ROOT}/cmake/Modules/AXLinkHelpers.cmake)
     ax_link_cxx_prebuilt(${APP_NAME} ${_AX_ROOT} ${AX_PREBUILT_DIR})
 endif()
 
 if (NOT DEFINED BUILD_ENGINE_DONE)
     ax_uwp_set_all_targets_deploy_min_version()
+endif()
+
+set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Content")
+
+if(EMSCRIPTEN)
+    set(CMAKE_C_FLAGS  "-s FORCE_FILESYSTEM=1 -s FETCH=1 -s USE_GLFW=3 -s VERBOSE=1 -s USE_LIBJPEG=1 -s USE_LIBPNG=1 -s USE_ZLIB=1 -s USE_FREETYPE=1")
+    set(CMAKE_CXX_FLAGS  "-s FORCE_FILESYSTEM=1 -s FETCH=1 -s USE_GLFW=3 -s VERBOSE=1 -s USE_LIBJPEG=1 -s USE_LIBPNG=1 -s USE_ZLIB=1 -s USE_FREETYPE=1")
+endif()
+
+if(EMSCRIPTEN)
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
+    target_link_options(${APP_NAME} PRIVATE
+                        "-sEXPORTED_FUNCTIONS=[_main]"
+                        "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
+                        )
+    set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s INITIAL_MEMORY=512MB --shell-file ${CMAKE_CURRENT_SOURCE_DIR}/index.html --use-preload-cache")
+    # Disable wasm, generate js build
+    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s WASM=0")
+    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=https://xxx:8080/axmolwasm/axmolwasm/build/HelloLua.debug.wasm")
+    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=HelloLua.debug.wasm")
+
+    foreach(FOLDER IN LISTS GAME_RES_FOLDER)
+        string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
+    endforeach()
+    
+    set_target_properties(${APP_NAME} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS}")
 endif()

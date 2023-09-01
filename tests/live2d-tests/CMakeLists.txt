@@ -42,7 +42,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
         set(_AX_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../..)
     endif()
 
-    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
     include(AXBuildSet)
     add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
@@ -72,6 +72,11 @@ if(ANDROID)
 elseif(LINUX)
     list(APPEND GAME_SOURCE
          proj.linux/main.cpp
+         )
+    list(APPEND GAME_SOURCE ${common_content_files})
+elseif(EMSCRIPTEN)
+    list(APPEND GAME_SOURCE
+         proj.emscripten/main.cpp
          )
     list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)

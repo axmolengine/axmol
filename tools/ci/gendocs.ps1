@@ -93,6 +93,9 @@ $site_dist = Join-Path $site_src 'dist'
 
 mkdirs $site_dist
 
+$docsOut = Join-Path $docsRoot 'out'
+mkdirs $docsOut
+
 $store_cwd = (Get-Location).Path
 Set-Location $site_src
 
@@ -195,3 +198,8 @@ mkdirs $wasm_dist
 Copy-Item $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
 
 Set-Location $store_cwd
+
+# build html targets to docs
+./build.ps1 -p wasm
+
+Copy-Item 'build_wasm/bin/'

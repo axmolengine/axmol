@@ -29,8 +29,11 @@ THE SOFTWARE.
 #include "2d/FontAtlas.h"
 #include "base/Director.h"
 #include "base/UTF8.h"
+#ifndef EMSCRIPTEN
 #include "freetype/ftmodapi.h"
+#endif
 #include "platform/FileUtils.h"
+#include "platform/FileStream.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -71,25 +74,25 @@ static unsigned long ft_stream_read_callback(FT_Stream stream,
                                              unsigned char* buf,
                                              unsigned long size)
 {
-    auto fstm = (IFileStream*)stream->descriptor.pointer;
-    if (!fstm)
+    auto fd = (FileStream*)stream->descriptor.pointer;
+    if (!fd)
         return 1;
     if (!size && offset >= stream->size)
         return 1;
 
     if (stream->pos != offset)
-        fstm->seek(offset, SEEK_SET);
+        fd->seek(offset, SEEK_SET);
 
     if (buf)
-        return fstm->read(buf, static_cast<unsigned int>(size));
+        return fd->read(buf, static_cast<unsigned int>(size));
 
     return 0;
 }
 
 static void ft_stream_close_callback(FT_Stream stream)
 {
-    const auto* fstrm = (IFileStream*)stream->descriptor.pointer;
-    delete fstrm;
+    const auto* fd = (FileStream*)stream->descriptor.pointer;
+    delete fd;
     stream->size               = 0;
     stream->descriptor.pointer = nullptr;
 }
@@ -123,9 +126,11 @@ bool FontFreeType::initFreeType()
         if (FT_Init_FreeType(&_FTlibrary))
             return false;
 
+#ifndef EMSCRIPTEN
         const FT_Int spread = DistanceMapSpread;
         FT_Property_Set(_FTlibrary, "sdf", "spread", &spread);
         FT_Property_Set(_FTlibrary, "bsdf", "spread", &spread);
+#endif
 
         _FTInitialized = true;
     }
@@ -205,7 +210,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
         if (fullPath.empty())
             return false;
 
-        auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
+        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
         if (!fs)
         {
             return false;
@@ -412,12 +417,15 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
 #endif
         if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
             break;
+
+#ifndef EMSCRIPTEN
         if (_distanceFieldEnabled && _fontFace->glyph->bitmap.buffer)
         {
             // Require freetype version > 2.11.0, because freetype 2.11.0 sdf has memory access bug, see:
             // https://gitlab.freedesktop.org/freetype/freetype/-/issues/1077
             FT_Render_Glyph(_fontFace->glyph, FT_Render_Mode::FT_RENDER_MODE_SDF);
         }
+#endif
 
         auto& metrics       = _fontFace->glyph->metrics;
         outRect.origin.x    = static_cast<float>(metrics.horiBearingX >> 6);

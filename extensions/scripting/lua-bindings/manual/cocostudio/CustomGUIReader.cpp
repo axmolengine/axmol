@@ -22,8 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "scripting/lua-bindings/manual/cocostudio/CustomGUIReader.h"
 #include "scripting/lua-bindings/manual/LuaEngine.h"
+#include "scripting/lua-bindings/manual/cocostudio/CustomGUIReader.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 

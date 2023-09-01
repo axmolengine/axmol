@@ -39,12 +39,14 @@ THE SOFTWARE.
 #    include "platform/winrt/GL-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/GL-linux.h"
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#    include "platform/emscripten/GL-emscripten.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
-#    if defined(AX_USE_GL)
+#    if AX_USE_ANGLE
 #        include "platform/ios/GL-ios.h"
 #    endif
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_MAC
-#    if defined(AX_USE_GL)
+#    if AX_USE_ANGLE
 #        include "platform/mac/GL-mac.h"
 #    endif
 #endif
@@ -80,13 +82,6 @@ THE SOFTWARE.
 
 #    if !defined(GL_RGBA32F_EXT)
 #        define GL_RGBA32F_EXT 0x8814
-#    endif
-
-#    if !defined(GL_LUMINANCE)
-#        define GL_LUMINANCE 0x1909
-#    endif
-#    if !defined(GL_LUMINANCE_ALPHA)
-#        define GL_LUMINANCE_ALPHA 0x190A
 #    endif
 #endif
 

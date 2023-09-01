@@ -83,7 +83,7 @@ protected:
     static bool lazyInit();
     static void destroy();
 
-    std::unique_ptr<IFileStream> _fileStream{};
+    std::unique_ptr<FileStream> _fileStream{};
     mp3dec_handle_t _handle;
 
     friend class AudioDecoderManager;

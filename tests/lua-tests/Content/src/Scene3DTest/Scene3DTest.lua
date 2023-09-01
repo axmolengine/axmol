@@ -312,8 +312,11 @@ function Scene3DTest:create3DWorld()
     --then, create skybox
     --create and set our custom shader
 
-    local program = axb.ProgramManager:getInstance():loadProgram('custom/cube_map_vs', 'custom/cube_map_fs')
+    local cmVert = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/cube_map.vert")
+    local cmFrag = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/cube_map.frag")
+    local program = ccb.Device:getInstance():newProgram(cmVert, cmFrag)
     local state = ccb.ProgramState:new(program)
+    program:release()
     --create the second texture for cylinder
     self._textureCube = cc.TextureCube:create("MeshRendererTest/skybox/left.jpg", "MeshRendererTest/skybox/right.jpg",
                                        "MeshRendererTest/skybox/top.jpg", "MeshRendererTest/skybox/bottom.jpg",

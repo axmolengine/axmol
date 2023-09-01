@@ -5,17 +5,27 @@ param(
     [string]$destDir,
     [Parameter(Mandatory=$false, ValueFromPipeline=$true)]
     [PSDefaultValue(Value=$null)]
-    $linkOnly
+    $linkOnly,
+    $wasm = $null
 )
 
+
 function ParseBoolFuzzy($value) {
+    $value = "$value".ToLower()
     return $value.startsWith('1') -or $value.StartsWith('t') -or $value.StartsWith('y')
+}
+
+$wasm = ParseBoolFuzzy($wasm)
+
+if ($wasm) {
+    Write-Host "sync_folder.ps1: Skipping sync folder for target platform 'wasm'"
+    return 
 }
 
 # 0: windows, 1: linux, 2: macos
 $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
-$linkOnly = ParseBoolFuzzy("$linkOnly".ToLower())
+$linkOnly = ParseBoolFuzzy($linkOnly)
 
 # convert to native path style
 if ($IsWin) {
@@ -27,24 +37,24 @@ if ($IsWin) {
 }
 
 if(!$srcDir -or !(Test-Path $srcDir -PathType Container)) {
-    throw "The source directory $srcDir not exist"
+    throw "sync_folder.ps1: The source directory $srcDir not exist"
 }
 
 if (Test-Path $destDir -PathType Container) { # dest already exist
     if ($linkOnly) { # is symlink and dest exist
         $directoryInfo = (Get-Item $destDir)
         if ($directoryInfo.Target -eq $srcDir) {
-            Write-Host "Symlink $destDir ===> $($directoryInfo.Target) exists"
+            Write-Host "sync_folder.ps1: Symlink $destDir ===> $($directoryInfo.Target) exists"
             return
         }
-        Write-Host "Removing old link target $($directoryInfo.Target)"
+        Write-Host "sync_folder.ps1: Removing old link target $($directoryInfo.Target)"
         # Remove-Item -Path $destDir
         $directoryInfo.Delete($false)
     }
 }
 
 if ($linkOnly) {
-    Write-Host "Linking $srcDir to $destDir ..."
+    Write-Host "sync_folder.ps1: Linking $srcDir to $destDir ..."
     if ($IsWin) {
         cmd.exe /c mklink /J $destDir $srcDir
     }
@@ -54,7 +64,7 @@ if ($linkOnly) {
     }
 }
 else { # copy directory, remove first?
-    Write-Host "Copying $srcDir to $destDir ..."
+    Write-Host "sync_folder.ps1: Copying $srcDir to $destDir ..."
     if (!(Test-Path $destDir -PathType Container)) {
         Copy-Item $srcDir $destDir -Recurse -Force
     } else {
