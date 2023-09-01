@@ -132,7 +132,9 @@ foreach($item in $verMap.GetEnumerator()) {
     }
     configure_file './Doxyfile.in' './Doxyfile' @{'@VERSION@'=$release_tag; '@HTML_OUTPUT@' = "manual/$ver"}
 
-    doxygen "./Doxyfile"
+    Write-Host "Generating docs for $ver ..." -NoNewline
+    doxygen "./Doxyfile" 1>$null 2>$null
+    Write-Host "done"
 
     Copy-Item './hacks.js' $html_out
     Copy-Item './doc_style.css' "$html_out/stylesheet.css"
@@ -186,6 +188,7 @@ function download_appveyor_artifact($dest) {
     Expand-Archive -Path $localArtifactPath -DestinationPath $dest
 }
 
+# deploy wasm cpp_tests demo
 download_appveyor_artifact $(Join-Path $AX_ROOT 'tmp')
 $wasm_dist = Join-Path $site_dist 'wasm/'
 mkdirs $wasm_dist

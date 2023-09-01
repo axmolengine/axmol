@@ -10,6 +10,7 @@ on:
       - core/**/*
       - docs/**/*
       - .github/workflows/gendocs.yml
+      - tools/ci/gendocs.ps1
   workflow_dispatch:
     
 jobs:
