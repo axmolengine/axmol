@@ -27,13 +27,13 @@ public:
     bool init();
     void clearPrograms();
 
-    void registerProgram(uint32_t programType, int textureSamplerFlags, Program*);
+    void registerProgram(uint32_t programType, int textureSamplerFlags, uint32_t builtinProgramType);
 
     ProgramState* newProgramState(uint32_t programType, int textureSamplerFlags);
     uint32_t getProgramType(uint32_t programType, int textureSamplerFlags);
 
 protected:
-    std::unordered_map<uint32_t, Program*> _registry;
+    std::unordered_map<uint32_t, uint32_t> _registry;
 };
 
 // end of _backend group

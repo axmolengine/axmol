@@ -200,13 +200,6 @@ public:
     /** get 3d animate quality */
     Animate3DQuality getAnimate3DQuality() const;
 
-    /** Returns whether or not an OpenGL extension is supported.
-     *
-     * @param searchName A given search name.
-     * @return Is true if an OpenGL extension is supported.
-     */
-    bool checkForGLExtension(std::string_view searchName) const;
-
     /** Initialize method.
      *
      * @return Is true if initialize success.
