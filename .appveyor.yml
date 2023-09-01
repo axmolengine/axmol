@@ -8,3 +8,8 @@ install:
 
 build_script:
   - pwsh: .\build.ps1 -p wasm -xb '--target','cpp_tests'
+  - pwsh: 7z a build_wasm.zip build_wasm/bin/**/*
+
+artifacts:
+  - path: build_wasm.zip
+    name: build_wasm
