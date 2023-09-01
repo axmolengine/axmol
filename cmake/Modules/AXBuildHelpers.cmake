@@ -7,7 +7,7 @@ if(NOT PWSH_COMMAND)
     message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
 endif()
 
-if(NOT DEFINED EMSCRIPTEN)
+if(NOT DEFINED WASM)
     set(WASM FALSE CACHE BOOL "")
 endif()
 
