@@ -108,19 +108,17 @@ namespace network
         }
     }
 
-    void HttpClient::setSSLVerification(const std::string &caFile)
+    void HttpClient::setSSLVerification(std::string_view caFile)
     {
-        AXLOG("HttpClient::setSSLVerification not supported on Emscripten");
-        _sslCaFilename = caFile;
+        AXLOG("HttpClient::setSSLVerification not required on Emscripten");
+        // _sslCaFilename = caFile;
     }
 
     //Add a get task to queue
     void HttpClient::send(HttpRequest *request)
     {
         if (!request)
-        {
             return;
-        }
 
         request->retain();
 
@@ -139,9 +137,7 @@ namespace network
     void HttpClient::sendImmediate(HttpRequest *request)
     {
         if (!request)
-        {
             return;
-        }
 
         request->retain();
         HttpResponse *response = new (std::nothrow) HttpResponse(request);
@@ -240,34 +236,25 @@ namespace network
 
         // get response
         response->setResponseCode(fetch->status);
-        response->setErrorBuffer(fetch->statusText);
-        response->getResponseData()->assign(sttaic_cast<const char *>(fetch->data), static_cast<const char *>(fetch->data) + fetch->numBytes);
+        // response->setErrorBuffer(fetch->statusText);
+        response->getResponseData()->assign(reinterpret_cast<const char *>(fetch->data), reinterpret_cast<const char *>(fetch->data) + fetch->numBytes);
         emscripten_fetch_close(fetch);
 
         // write cookie back
-        std::string cookieFilename = HttpClient::getInstance()->getCookieFilename();
+        auto cookieFilename = HttpClient::getInstance()->getCookieFilename();
         if (!cookieFilename.empty())
         {
             EM_ASM_ARGS({
                 FS.writeFile(UTF8ToString($0), document.cookie);
-            }, cookieFilename.c_str());
+            }, cookieFilename.data());
         }
 
         if (_httpClient)
         {
             // call back
             const ccHttpRequestCallback &callback = request->getCallback();
-            Ref *pTarget = request->getTarget();
-            SEL_HttpResponse pSelector = request->getSelector();
-
-            if (callback != nullptr)
-            {
+            if (callback)
                 callback(HttpClient::getInstance(), response);
-            }
-            else if (pTarget && pSelector)
-            {
-                (pTarget->*pSelector)(HttpClient::getInstance(), response);
-            }
 
             // call next request
             if (!userData->isAlone)
@@ -344,12 +331,12 @@ namespace network
         return _timeoutForRead;
     }
 
-    const std::string &HttpClient::getCookieFilename()
+    std::string_view HttpClient::getCookieFilename()
     {
         return _cookieFilename;
     }
 
-    const std::string &HttpClient::getSSLVerification()
+    std::string_view HttpClient::getSSLVerification()
     {
         return _sslCaFilename;
     }

@@ -64,7 +64,7 @@ public:
      *
      * @return the instance of HttpClient.
      */
-    static HttpClient *getInstance();
+    static HttpClient* getInstance();
 
     /**
      * Release the instance of HttpClient.
@@ -74,7 +74,7 @@ public:
     /**
      * Enable cookie support.
      *
-     * @param cookieFile the filepath of cookie file.
+     * @param [nullable] cookieFile the filepath of cookie file.
      */
     void enableCookies(const char* cookieFile);
 
@@ -83,21 +83,21 @@ public:
      *
      * @return the cookie filename
      */
-    const std::string& getCookieFilename();
+    std::string_view getCookieFilename();
 
     /**
      * Set root certificate path for SSL verification.
      *
      * @param caFile a full path of root certificate.if it is empty, SSL verification is disabled.
      */
-    void setSSLVerification(const std::string& caFile);
+    void setSSLVerification(std::string_view caFile);
 
     /**
      * Get the ssl CA filename
      *
      * @return the ssl CA filename
      */
-    const std::string& getSSLVerification();
+    std::string_view getSSLVerification();
 
     /**
      * Add a get request to task queue
@@ -154,6 +154,8 @@ public:
      * to check for each request/response which to delete
      */
     void clearResponseAndRequestQueue(); 
+
+    void clearResponseQueue() { clearResponseAndRequestQueue(); }
 
     /**
     * Sets a predicate function that is going to be called to determine if we proceed

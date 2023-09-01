@@ -10,7 +10,7 @@ if(EMSCRIPTEN)
     )
 
     set(_AX_NETWORK_SRC
-        network/HttpClient.cpp
+        network/HttpClient-emscripten.cpp
         network/Downloader.cpp
         network/Downloader-emscripten.cpp
         network/HttpCookie.cpp
