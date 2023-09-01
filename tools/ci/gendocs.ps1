@@ -1,14 +1,12 @@
 
 # Can runs on Windows,Linux
-$DIR = $PSScriptRoot
+$myRoot = $PSScriptRoot
 
 $isWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
-$tools_dir = $(Resolve-Path $PSScriptRoot/..).Path # the tools install dir if not found in system
-$tools_dir = Join-Path $tools_dir 'external'
-if (!(Test-Path "$tools_dir" -PathType Container)) {
-    mkdir $tools_dir
-}
+$pwsh_ver = $PSVersionTable.PSVersion.ToString()
+
+$AX_ROOT = (Resolve-Path $myRoot/../..)
 
 function mkdirs([string]$path) {
     if (!(Test-Path $path)) {
@@ -16,26 +14,47 @@ function mkdirs([string]$path) {
     }
 }
 
+function download_file($url, $out) {
+    if($b1k.isfile($out)) { return }
+    $b1k.println("Downloading $url to $out ...")
+    if ($pwsh_ver -ge '7.0') {
+        curl -L $url -o $out
+    }
+    else {
+        Invoke-WebRequest -Uri $url -OutFile $out
+    }
+}
+
+function download_zip_expand($url, $out, $dest) {
+    download_file $url $out
+    Expand-Archive -Path $out -DestinationPath $dest
+}
+
+$prefix = Join-Path $AX_ROOT 'tools/external'
+if (!(Test-Path "$prefix" -PathType Container)) {
+    mkdirs $prefix
+}
+
 function setup_doxygen() {
     $doxygen_ver = '1.9.7'
 
     $doxygen_pkg_name = if ($isWin) {"doxygen-$doxygen_ver.windows.x64.bin.zip"} else {"doxygen-$doxygen_ver.linux.bin.tar.gz"}
-    $doxygen_pkg_path = Join-Path $tools_dir $doxygen_pkg_name
+    $doxygen_pkg_path = Join-Path $prefix $doxygen_pkg_name
     
     if (!(Test-Path $doxygen_pkg_path -PathType Leaf)) {
         $doxygen_ver_ul = $doxygen_ver.Replace('.', '_')
         Invoke-WebRequest -Uri "https://github.com/doxygen/doxygen/releases/download/Release_$doxygen_ver_ul/$doxygen_pkg_name" -OutFile $doxygen_pkg_path | Out-Host
     }
 
-    $doxygen_root = Join-Path $tools_dir "doxygen-$doxygen_ver"
+    $doxygen_root = Join-Path $prefix "doxygen-$doxygen_ver"
     $doxygen_bin = $doxygen_root
     if (!(Test-Path $doxygen_root -PathType Container)) {
         if ($isWin) {
-            mkdir $doxygen_root
+            mkdirs $doxygen_root
             Expand-Archive -Path $doxygen_pkg_path -DestinationPath $doxygen_root
         }
         else {
-            tar xvf $doxygen_pkg_path -C $tools_dir
+            tar xvf $doxygen_pkg_path -C $prefix
         }
     }
 
@@ -52,9 +71,6 @@ function setup_doxygen() {
 setup_doxygen
 
 Write-Host "Using doxygen $(doxygen --version)"
-
-$AX_ROOT = (Resolve-Path $DIR/../..)
-
 function query_axmol_latest() {
     $axver_file = (Resolve-Path $AX_ROOT/core/axmolver.h.in).Path
     $content = ($(Get-Content -Path $axver_file) | Select-String 'AX_VERSION_STR')
@@ -72,7 +88,7 @@ function query_axmol_latest() {
     return $axver
 }
 
-$site_src = (Resolve-Path "$DIR/../../docs").Path
+$site_src = (Resolve-Path "$myRoot/../../docs").Path
 $site_dist = Join-Path $site_src 'dist'
 
 mkdirs $site_dist
@@ -130,5 +146,49 @@ configure_file './doc_index.html.in' "$site_dist/manual/index.html" @{'@VERSION@
 mkdirs "$site_dist/assets/css"
 Copy-Item './style.css'  "$site_dist/assets/css/style.css"
 Copy-Item './index.html' "$site_dist/index.html"
+
+function download_appveyor_artifact($dest) {
+    $apiUrl = 'https://ci.appveyor.com/api'
+    $token = '<your-api-token>'
+    $headers = @{
+    "Authorization" = "Bearer ${env:AX_DOCS_TOKEN}"
+    "Content-type" = "application/json"
+    }
+    $accountName = 'halx99'
+    $projectSlug = 'axmol'
+
+    # get project with last build details
+    $project = Invoke-RestMethod -Method Get -Uri "$apiUrl/projects/$accountName/$projectSlug" -Headers $headers
+
+    # we assume here that build has a single job
+    # get this job id
+    $jobId = $project.build.jobs[0].jobId
+
+    # get job artifacts (just to see what we've got)
+    $artifacts = Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts" -Headers $headers
+
+    # here we just take the first artifact, but you could specify its file name
+    # $artifactFileName = 'MyWebApp.zip'
+    $artifactFileName = $artifacts[0].fileName
+
+    # artifact will be downloaded as
+    mkdirs $dest
+    $localArtifactPath = Join-Path $dest $artifactFileName
+
+    if (!(Test-Path $localArtifactPath -PathType Leaf)) {
+        # download artifact
+        # -OutFile - is local file name where artifact will be downloaded into
+        # the Headers in this call should only contain the bearer token, and no Content-type, otherwise it will fail!
+        Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts/$artifactFileName" `
+        -OutFile $localArtifactPath -Headers @{ "Authorization" = "Bearer $token" }
+    }
+
+    Expand-Archive -Path $localArtifactPath -DestinationPath $dest
+}
+
+download_appveyor_artifact $site_src
+$wasm_dist = Join-Path $site_dist 'wasm/'
+mkdirs $wasm_dist
+Copy-Item $(Join-Path $site_src 'build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
 
 Set-Location $store_cwd

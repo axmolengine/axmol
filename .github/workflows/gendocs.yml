@@ -15,7 +15,6 @@ on:
 jobs:
   build-docs:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
       with:
@@ -24,7 +23,9 @@ jobs:
     # Build the HTML documentation
     - name: Build HTML documentation
       shell: pwsh
-      run: ./tools/ci/gendocs.ps1
+      run: |
+        $env:AX_DOCS_TOKEN = '${{ secrets.AX_BOT_TOKEN }}'
+        ./tools/ci/gendocs.ps1
     
     # Deploy the HTML documentation to GitHub Pages
     - name: GH Pages Deployment
@@ -36,4 +37,3 @@ jobs:
         allow_empty_commit: false
         force_orphan: true
         publish_branch: gh-pages
-        keep_files: true
