@@ -614,7 +614,17 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
 
     do
     {
-        auto zip = ZipFile::createFromFile(zipFilePath);
+        void* buffer = nullptr;
+        ZipFile* zip = nullptr;
+        Data zipFileData(utils->getDataFromFile(zipFilePath));
+        unsigned char* bytes = zipFileData.getBytes();
+        ssize_t size         = zipFileData.getSize();
+
+        if (size > 0)
+        {
+            zip = ZipFile::createWithBuffer(bytes, (unsigned long)size);
+        }
+
         if (zip)
         {
             AXLOG("lua_loadChunksFromZIP() - load zip file: %s", zipFilePath.c_str());
@@ -625,9 +635,9 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
             std::string filename = zip->getFirstFilename();
             while (filename.length())
             {
-                std::string code;
-                ResizableBufferAdapter<std::string> adapter(&code);
-                if (zip->getFileData(filename, &adapter) && !code.empty())
+                ssize_t bufferSize     = 0;
+                unsigned char* zbuffer = zip->getFileData(filename.c_str(), &bufferSize);
+                if (bufferSize)
                 {
                     // remove .lua or .luac extension
                     size_t pos = filename.find_last_of('.');
@@ -649,11 +659,12 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
                         }
                     }
                     AXLOG("[luaLoadChunksFromZIP] add %s to preload", filename.c_str());
-                    if (stack->luaLoadBuffer(L, code.data(), static_cast<int>(code.size()), filename.c_str()) == 0)
+                    if (stack->luaLoadBuffer(L, (char*)zbuffer, (int)bufferSize, filename.c_str()) == 0)
                     {
                         lua_setfield(L, -2, filename.c_str());
                         ++count;
                     }
+                    free(zbuffer);
                 }
                 filename = zip->getNextFilename();
             }
@@ -669,6 +680,10 @@ int LuaStack::luaLoadChunksFromZIP(lua_State* L)
             lua_pushboolean(L, 0);
         }
 
+        if (buffer)
+        {
+            free(buffer);
+        }
     } while (0);
 
     return 1;

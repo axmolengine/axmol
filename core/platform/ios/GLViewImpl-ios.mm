@@ -122,14 +122,14 @@ GLViewImpl::GLViewImpl() {}
 
 GLViewImpl::~GLViewImpl()
 {
-    // EAGLView *glView = (EAGLView*) _eaglView;
+    // CCEAGLView *glView = (CCEAGLView*) _eaglView;
     //[glView release];
 }
 
 bool GLViewImpl::initWithEAGLView(void* eaglView)
 {
     _eaglView          = eaglView;
-    EAGLView* glView = (EAGLView*)_eaglView;
+    CCEAGLView* glView = (CCEAGLView*)_eaglView;
 
     _screenSize.width = _designResolutionSize.width = [glView getWidth];
     _screenSize.height = _designResolutionSize.height = [glView getHeight];
@@ -142,7 +142,7 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float
 {
     CGRect r = CGRectMake(rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
     convertAttrs();
-    EAGLView* eaglView = [EAGLView viewWithFrame:r
+    CCEAGLView* eaglView = [CCEAGLView viewWithFrame:r
                                          pixelFormat:(NSString*)_pixelFormat
                                          depthFormat:_depthFormat
                                   preserveBackbuffer:NO
@@ -186,7 +186,7 @@ bool GLViewImpl::setContentScaleFactor(float contentScaleFactor)
     AX_ASSERT(_resolutionPolicy == ResolutionPolicy::UNKNOWN);  // cannot enable retina mode
     _scaleX = _scaleY = contentScaleFactor;
 
-    EAGLView* eaglView = (EAGLView*)_eaglView;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
     [eaglView setNeedsLayout];
 
     return true;
@@ -194,7 +194,7 @@ bool GLViewImpl::setContentScaleFactor(float contentScaleFactor)
 
 float GLViewImpl::getContentScaleFactor() const
 {
-    EAGLView* eaglView = (EAGLView*)_eaglView;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
 
     float scaleFactor = [eaglView contentScaleFactor];
 
@@ -208,7 +208,7 @@ void GLViewImpl::end()
     [CCDirectorCaller destroy];
 
     // destroy EAGLView
-    EAGLView* eaglView = (EAGLView*)_eaglView;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
 
     [eaglView removeFromSuperview];
     //[eaglView release];
@@ -217,13 +217,13 @@ void GLViewImpl::end()
 
 void GLViewImpl::swapBuffers()
 {
-    EAGLView* eaglView = (EAGLView*)_eaglView;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
     [eaglView swapBuffers];
 }
 
 void GLViewImpl::setIMEKeyboardState(bool open)
 {
-    EAGLView* eaglView = (EAGLView*)_eaglView;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
 
     if (open)
     {
@@ -237,7 +237,7 @@ void GLViewImpl::setIMEKeyboardState(bool open)
 
 Rect GLViewImpl::getSafeAreaRect() const
 {
-    EAGLView* eaglView = (EAGLView*)_eaglView;
+    CCEAGLView* eaglView = (CCEAGLView*)_eaglView;
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000
     float version = [[UIDevice currentDevice].systemVersion floatValue];

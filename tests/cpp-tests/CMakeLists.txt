@@ -26,7 +26,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
         set(_AX_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../..)
     endif()
 
-    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
     include(AXBuildSet)
     add_subdirectory(${_AX_ROOT}/core ${ENGINE_BINARY_PATH}/axmol/core)
@@ -221,6 +221,8 @@ list(APPEND GAME_HEADER
      Source/SchedulerTest/SchedulerTest.h
      Source/MultiTouchTest/MultiTouchTest.h
      Source/testResource.h
+     Source/ShaderTest/ShaderTest.vsh.h
+     Source/ShaderTest/shaderTest.psh.h
      Source/ShaderTest/ShaderTest.h
      Source/ShaderTest/ShaderTest2.h
      Source/NewRendererTest/NewRendererTest.h

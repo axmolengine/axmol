@@ -31,8 +31,11 @@
 
 namespace
 {
-static uint64_t s_blur_program_id = 0;
-static uint64_t s_sepia_program_id = 0;
+enum CustomProgramType : uint32_t
+{
+    BLUR  = 1,
+    SEPIA = 2,
+};
 }
 
 USING_NS_AX;
@@ -71,13 +74,14 @@ private:
 
 NewRendererTests::NewRendererTests()
 {
-     auto programManager = ProgramManager::getInstance();
-     s_blur_program_id   = programManager->registerCustomProgram(positionTextureColor_vert,
-                                                  "custom/example_Blur_fs"sv,
-                                                VertexLayoutType::Sprite);
-     s_sepia_program_id = programManager->registerCustomProgram(positionTextureColor_vert,
-                                                "custom/example_Sepia_fs"sv,
-                                          VertexLayoutType::Sprite);
+    auto programManager = ProgramManager::getInstance();
+    programManager->registerCustomProgramFactory(CustomProgramType::BLUR, positionTextureColor_vert,
+                                               FileUtils::getInstance()->getStringFromFile("Shaders/example_Blur.fsh"),
+                                               VertexLayoutHelper::setupSprite);
+    programManager->registerCustomProgramFactory(
+        CustomProgramType::SEPIA, positionTextureColor_vert,
+                                               FileUtils::getInstance()->getStringFromFile("Shaders/example_Sepia.fsh"),
+                                               VertexLayoutHelper::setupSprite);
 
     ADD_TEST_CASE(NewSpriteTest);
     ADD_TEST_CASE(GroupCommandTest);
@@ -853,7 +857,7 @@ RendererUniformBatch::RendererUniformBatch()
 ax::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
 {
     auto programState =
-        new backend::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
+        new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::BLUR));
     programState->autorelease();
 
     backend::UniformLocation loc = programState->getUniformLocation("resolution");
@@ -873,7 +877,11 @@ ax::backend::ProgramState* RendererUniformBatch::createBlurProgramState()
 
 ax::backend::ProgramState* RendererUniformBatch::createSepiaProgramState()
 {
-    auto programState = new backend::ProgramState(ProgramManager::getInstance()->loadProgram(s_sepia_program_id));
+    auto programState =
+        new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
+
+    // programState->updateUniformID();
+
     programState->autorelease();
     return programState;
 }
@@ -923,7 +931,7 @@ RendererUniformBatch2::RendererUniformBatch2()
 backend::ProgramState* RendererUniformBatch2::createBlurProgramState()
 {
     auto programState =
-        new backend::ProgramState(ProgramManager::getInstance()->loadProgram(s_blur_program_id));
+        new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::BLUR));
 
     backend::UniformLocation loc = programState->getUniformLocation("resolution");
     auto resolution              = Vec2(85, 121);
@@ -943,7 +951,7 @@ backend::ProgramState* RendererUniformBatch2::createBlurProgramState()
 backend::ProgramState* RendererUniformBatch2::createSepiaProgramState()
 {
     auto programState =
-        new backend::ProgramState(ProgramManager::getInstance()->loadProgram(s_sepia_program_id));
+        new backend::ProgramState(ProgramManager::getInstance()->getCustomProgram(CustomProgramType::SEPIA));
     programState->autorelease();
     return programState;
 }
