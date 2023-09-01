@@ -33,7 +33,6 @@ THE SOFTWARE.
 #include <unordered_map>
 #include "mio/mio.hpp"
 #include "yasio/string_view.hpp"
-#include "platform/FileStream.h"
 
 /**
  * @addtogroup base
@@ -279,7 +278,7 @@ protected:
 
     static UserDefault* _userDefault;
     std::string _filePath;
-    FileStream _fileStream;  // the file handle for data persistence
+    int _fd = -1;  // the file handle for data persistence
     std::shared_ptr<mio::mmap_sink> _rwmmap;
     int _curMapSize   = 4096;  // init mapsize is 4K
     int _realSize     = 0;     // real data size without key/value entities count field

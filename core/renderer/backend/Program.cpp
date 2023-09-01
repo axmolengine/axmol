@@ -28,160 +28,17 @@
 
 NS_AX_BACKEND_BEGIN
 
-/*
- * shader vertex layout setup functions
- */
-struct VertexLayoutHelper
-{
-    static void setupDummy(Program*) {}
-    static void setupTexture(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-
-        /// a_position
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT2, 0, false);
-        /// a_texCoord
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, 2 * sizeof(float), false);
-
-        vertexLayout->setStride(4 * sizeof(float));
-    }
-
-    static void setupSprite(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-
-        /// a_position
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT3, 0, false);
-        /// a_texCoord
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), false);
-
-        /// a_color
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors), true);
-        vertexLayout->setStride(sizeof(V3F_C4B_T2F));
-    }
-
-    static void setupDrawNode(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT2, 0, false);
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V2F_C4B_T2F, texCoords), false);
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::UBYTE4, offsetof(V2F_C4B_T2F, colors), true);
-
-        vertexLayout->setStride(sizeof(V2F_C4B_T2F));
-    }
-
-    static void setupDrawNode3D(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT3, 0, false);
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::UBYTE4, offsetof(V3F_C4B, colors), true);
-
-        vertexLayout->setStride(sizeof(V3F_C4B));
-    }
-
-    static void setupSkyBox(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-        auto attrNameLoc  = program->getAttributeLocation(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION);
-        vertexLayout->setAttrib(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION, attrNameLoc,
-                                backend::VertexFormat::FLOAT3, 0, false);
-        vertexLayout->setStride(sizeof(Vec3));
-    }
-
-    static void setupPU3D(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT3, offsetof(V3F_T2F_C4F, position), false);
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_C4F, uv), false);
-
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::FLOAT4, offsetof(V3F_T2F_C4F, color), false);
-
-        vertexLayout->setStride(sizeof(V3F_T2F_C4F));
-    }
-
-    static void setupPos(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT2, 0, false);
-        vertexLayout->setStride(sizeof(Vec2));
-    }
-
-    static void setupPosColor(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT3, 0, false);
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_COLOR, program->getAttributeLocation(backend::Attribute::COLOR),
-                                backend::VertexFormat::FLOAT4, offsetof(V3F_C4F, colors), false);
-        vertexLayout->setStride(sizeof(V3F_C4F));
-    }
-
-    static void setupTerrain3D(Program* program)
-    {
-        auto vertexLayout = program->getVertexLayout();
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_POSITION,
-                                program->getAttributeLocation(backend::Attribute::POSITION),
-                                backend::VertexFormat::FLOAT3, 0, false);
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_TEXCOORD,
-                                program->getAttributeLocation(backend::Attribute::TEXCOORD),
-                                backend::VertexFormat::FLOAT2, offsetof(V3F_T2F_N3F, texcoord), false);
-        vertexLayout->setAttrib(backend::ATTRIBUTE_NAME_NORMAL,
-                                program->getAttributeLocation(backend::Attribute::NORMAL),
-                                backend::VertexFormat::FLOAT3, offsetof(V3F_T2F_N3F, normal), false);
-        vertexLayout->setStride(sizeof(V3F_T2F_N3F));
-    }
-};
-std::function<void(Program*)> Program::s_vertexLayoutSetupList[static_cast<int>(VertexLayoutType::Count)] = {
-    VertexLayoutHelper::setupDummy,    VertexLayoutHelper::setupPos,      VertexLayoutHelper::setupTexture,
-    VertexLayoutHelper::setupSprite,   VertexLayoutHelper::setupDrawNode, VertexLayoutHelper::setupDrawNode3D,
-    VertexLayoutHelper::setupSkyBox,   VertexLayoutHelper::setupPU3D,     VertexLayoutHelper::setupPosColor,
-    VertexLayoutHelper::setupTerrain3D};
-
 Program::Program(std::string_view vs, std::string_view fs)
     : _vertexShader(vs), _fragmentShader(fs), _vertexLayout(new VertexLayout())
 {}
 
-Program::~Program()
-{
+Program::~Program() {
     delete _vertexLayout;
 }
 
-void Program::setupVertexLayout(VertexLayoutType vlt)
+void Program::setProgramType(uint32_t type)
 {
-    if (vlt < VertexLayoutType::Count)
-        s_vertexLayoutSetupList[static_cast<int>(vlt)](this);
+    _programType = type;
 }
 
 Program* Program::getBuiltinProgram(uint32_t type)
@@ -189,9 +46,4 @@ Program* Program::getBuiltinProgram(uint32_t type)
     return ProgramManager::getInstance()->getBuiltinProgram(type);
 }
 
-void Program::setProgramIds(uint32_t progType, uint64_t progId)
-{
-    _programType  = progType;
-    _programId    = progId;
-}
 NS_AX_BACKEND_END

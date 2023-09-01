@@ -238,7 +238,9 @@ void TestController::traverseTestList(TestList* testList)
     {
         _stopAutoTest = true;
         if (std::getenv("AXMOL_START_AUTOTEST"))
-            utils::killCurrentProcess();
+        {
+            exit(0);
+        }
     }
     else
     {

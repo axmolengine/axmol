@@ -221,9 +221,9 @@ void MotionStreak::setTexture(Texture2D* texture)
     }
 }
 
-bool MotionStreak::setProgramState(backend::ProgramState* programState, bool ownPS /*= false*/)
+bool MotionStreak::setProgramState(backend::ProgramState* programState, bool needsRetain)
 {
-    if (Node::setProgramState(programState, ownPS))
+    if (Node::setProgramState(programState, needsRetain))
     {
         AXASSERT(programState, "argument should not be nullptr");
         auto& pipelineDescriptor        = _customCommand.getPipelineDescriptor();
@@ -235,24 +235,23 @@ bool MotionStreak::setProgramState(backend::ProgramState* programState, bool own
         // setup custom vertex layout for V2F_T2F_C4B
         const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
         auto iter                 = attributeInfo.find("a_position");
-        auto layout               = _programState->getMutableVertexLayout();
         if (iter != attributeInfo.end())
         {
-            layout->setAttrib("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
+           _programState->setVertexAttrib("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
         }
         iter = attributeInfo.find("a_texCoord");
         if (iter != attributeInfo.end())
         {
-            layout->setAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
+           _programState->setVertexAttrib("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
                                       2 * sizeof(float), false);
         }
         iter = attributeInfo.find("a_color");
         if (iter != attributeInfo.end())
         {
-            layout->setAttrib("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
+           _programState->setVertexAttrib("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
                                       4 * sizeof(float), true);
         }
-        layout->setStride(4 * sizeof(float) + 4 * sizeof(uint8_t));
+        _programState->setVertexStride(4 * sizeof(float) + 4 * sizeof(uint8_t));
 
         updateProgramStateTexture(_texture);
         return true;
