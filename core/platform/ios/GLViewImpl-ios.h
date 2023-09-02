@@ -83,7 +83,7 @@ protected:
     virtual ~GLViewImpl();
 
     bool initWithEAGLView(void* eaGLView);
-    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable);
+    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
 
     // the objective-c EAGLView instance
