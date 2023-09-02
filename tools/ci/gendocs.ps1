@@ -93,9 +93,6 @@ $site_dist = Join-Path $site_src 'dist'
 
 mkdirs $site_dist
 
-$docsOut = Join-Path $docsRoot 'out'
-mkdirs $docsOut
-
 $store_cwd = (Get-Location).Path
 Set-Location $site_src
 
