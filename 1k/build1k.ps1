@@ -410,7 +410,7 @@ function download_and_expand($url, $out, $dest) {
         if (!$dest.EndsWith('/')) {
             $b1k.mkdirs($dest)
         }
-        tar xvf "$out" -C $dest
+        tar xf "$out" -C $dest
     } elseif($out.EndsWith('.sh')) {
         chmod 'u+x' "$out"
         $b1k.mkdirs($dest)
