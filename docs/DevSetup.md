@@ -41,6 +41,7 @@ then you can simply build your project for all platform targets, i.e.
 - android: `pwsh ./build.ps1 -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
 - ios: `pwsh ./build.ps1 -p ios -a x64` can runs on macOS with xcode13~14.2 installed
 - tvos: `pwsh ./build.ps1 -p tvos -a x64` can runs on macOS with xcode13~14.2 installed
+- wasm: `pwsh ./build.ps1 -p wasm` can runs on Windows, Linux, macOS
 
 ## Quick build engine for host targets?
 
