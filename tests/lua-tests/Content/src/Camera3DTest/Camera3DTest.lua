@@ -722,13 +722,9 @@ function FogTestDemo:createLayer3D()
     self:addChild(layer3D,0)
     self._layer3D = layer3D
 
-    local vertexShader = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/fog.vert")
-    local fragmentShader = cc.FileUtils:getInstance():getStringFromFile("MeshRendererTest/fog.frag")
-
-    local program = ccb.Device:getInstance():newProgram(vertexShader, fragmentShader)
+    local program = axb.ProgramManager:getInstance():loadProgram('custom/fog_vs', 'custom/fog_fs')
     self._shader1 = ccb.ProgramState:new(program)
     self._shader2 = self._shader1:clone()
-    program:release()
 
     self._sprite3D1 = cc.Sprite3D:create("MeshRendererTest/teapot.c3b")
     self._sprite3D2 = cc.Sprite3D:create("MeshRendererTest/teapot.c3b")

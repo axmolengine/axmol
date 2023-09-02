@@ -31,6 +31,9 @@
 #include <string>
 
 NS_AX_BACKEND_BEGIN
+
+// #define AX_USE_UNIFORM_FULL_NAME
+
 /**
  * @addtogroup _backend
  * @{
@@ -58,6 +61,7 @@ enum Attribute : uint32_t
     TEXCOORD2,
     TEXCOORD3,
     NORMAL,
+    INSTANCE,
     ATTRIBUTE_MAX  // Maximum attributes
 };
 /**

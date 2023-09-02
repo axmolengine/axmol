@@ -1028,6 +1028,14 @@ if (!$setupOnly) {
         Set-Location $options.d
     }
 
+    # parsing cmake build options to determine optimize_flag
+    $BUILD_ALL_OPTIONS = @()
+    $BUILD_ALL_OPTIONS += $buildOptions
+    if (!$optimize_flag) {
+        $BUILD_ALL_OPTIONS += '--config', 'Release'
+        $optimize_flag = 'Release'
+    }
+
     # enter building steps
     $b1k.println("Building target $BUILD_TARGET on $HOST_OS_NAME with toolchain $TOOLCHAIN ...")
 
@@ -1115,7 +1123,11 @@ if (!$setupOnly) {
         }
         $mainDepChanged = "$storeTime" -ne "$lastWriteTime"
         $cmakeCachePath = Join-Path $workDir "$BUILD_DIR/CMakeCache.txt"
+
         if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath)) {
+            if ($optimize_flag -eq 'Debug' -and ($options.p -eq 'linux' -or $options.p -eq 'wasm')) {
+                $CONFIG_ALL_OPTIONS += '-DCMAKE_BUILD_TYPE=Debug'
+            }
             if (!$is_wasm) {
                 cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
             } else {
@@ -1127,12 +1139,7 @@ if (!$setupOnly) {
         if (!$configOnly) {
             # step4. build
             # apply additional build options
-            $BUILD_ALL_OPTIONS = @()
-            $BUILD_ALL_OPTIONS += $buildOptions
-            if (!$optimize_flag) {
-                $BUILD_ALL_OPTIONS += '--config', 'Release'
-                $optimize_flag = 'Release'
-            }
+
 
             $BUILD_ALL_OPTIONS += "--parallel"
             if ($BUILD_TARGET -eq 'linux') {

@@ -97,7 +97,7 @@ class axutils {
 //    }
 
     @SuppressWarnings('unused')
-    static String[] findNativeBuildTools(project, ndkVer = "23.2.8568313+", cmakeVer = "3.22.1+") {
+    static String[] findNativeBuildTools(project, ndkVer = "23.2.8568313", cmakeVer = "3.22.1+") {
 
         // Detecting sdkRoot
         def sdkRoot = null
