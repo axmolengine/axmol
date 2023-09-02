@@ -15,8 +15,8 @@ function mkdirs([string]$path) {
 }
 
 function download_file($url, $out) {
-    if($b1k.isfile($out)) { return }
-    $b1k.println("Downloading $url to $out ...")
+    if(Test-Path $out -PathType Leaf) { return }
+    Write-Host "Downloading $url to $out ..."
     if ($pwsh_ver -ge '7.0') {
         curl -L $url -o $out
     }
