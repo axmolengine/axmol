@@ -18,7 +18,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE)
     else()
         message(FATAL_ERROR "Please run setup.ps1 add system env var 'AX_ROOT' to specific the engine root")
     endif()
-    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/)
 
     include(AXBuildSet)
     set(AX_ENABLE_EXT_LUA ON)
@@ -232,7 +232,7 @@ endif()
 if (_AX_USE_PREBUILT) # support windows and linux
     use_ax_compile_define(${APP_NAME})
 
-    include(${_AX_ROOT}/cmake/Modules/AXLinkHelpers.cmake)
+    include(${_AX_ROOT}/cmake/AXLinkHelpers.cmake)
     ax_link_lua_prebuilt(${APP_NAME} ${_AX_ROOT} ${AX_PREBUILT_DIR})
 endif()
 

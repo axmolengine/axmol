@@ -1635,7 +1635,7 @@ void TexturePixelFormat::onEnter()
     Director::getInstance()->getTextureCache()->removeTexture(sprite5->getTexture());
 
     // A8 image (8-bit)
-    auto sprite6 = Sprite::create("Images/test-rgba1.png", PixelFormat::A8);
+    auto sprite6 = Sprite::create("Images/test-rgba1.png", PixelFormat::R8); // 
     sprite6->setPosition(Vec2(6 * s.width / 7, s.height / 2 - 32));
     addChild(sprite6, 0);
 

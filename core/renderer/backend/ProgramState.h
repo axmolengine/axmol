@@ -36,10 +36,7 @@
 #include "renderer/backend/Types.h"
 #include "renderer/backend/Program.h"
 #include "renderer/backend/VertexLayout.h"
-
-#ifdef AX_USE_METAL
-struct XXH32_state_s;
-#endif
+#include "yasio/byte_buffer.hpp"
 
 NS_AX_BACKEND_BEGIN
 
@@ -217,17 +214,17 @@ public:
 
     /**
      * Get vertex uniform buffer. The buffer store all the vertex uniform's data.
-     * @param[out] buffer Specifies the pointer points to a vertex uniform storage.
      * @param[out] size Specifies the size of the buffer in bytes.
+     * @return vertex uniform buffer, not nullable
      */
-    void getVertexUniformBuffer(char** buffer, std::size_t& size) const;
+    const char* getVertexUniformBuffer(std::size_t& size) const;
 
     /**
      * Get fragment uniform buffer. The buffer store all the fragment uniform's data for metal.
-     * @param[out] buffer Specifies the pointer points to a fragment uniform storage.
      * @param[out] size Specifies the size of the buffer in bytes.
+     * @return fragment uniform buffer, not nullable
      */
-    void getFragmentUniformBuffer(char** buffer, std::size_t& size) const;
+    const char* getFragmentUniformBuffer(std::size_t& size) const;
 
     /**
      * An abstract base class that can be extended to support custom material auto bindings.
@@ -294,36 +291,37 @@ public:
 
     inline const VertexLayout* getVertexLayout() const { return _vertexLayout; }
 
-    /**
-     * Gets uniformID, it's part of materialID for batch draw
+    VertexLayout* getMutableVertexLayout();
+
+    void setSharedVertexLayout(VertexLayout* vertexLayout);
+
+    /*
+    * Gets batch id of current program state, part of batch draw materialID
+    */
+    uint64_t getBatchId() const { return _batchId; };
+
+    /*
+    * Update batchID of current program state, by default, custom program was traits with mutable uniforms
+    * so batch ID was set to -1 indicate batch was disabled
+    */
+    void updateBatchId();
+
+    /*
+     * Follow API is deprecated, use getMutableVertexLayout instead
      */
-    uint32_t getUniformID() const { return _uniformID; }
-
-    /**
-     * Updates uniformID, it's part of materialID for batch draw
-     * @param uniformID if not -1, will compute with uniform buffer by XXH32 algorithm and should call
-     *        this function after any unstable uniforms set
-     * @remark If your custom shader uniform not stable, you needs call this function to update uniformID for
-     * render to generate a different materialID
-     */
-    void updateUniformID(int uniformID = -1);
-
-    void setVertexAttrib(std::string_view name,
-                         std::size_t index,
-                         VertexFormat format,
-                         std::size_t offset,
-                         bool needToBeNormallized);
-    void setVertexStride(uint32_t stride);
-
-    void setVertexLayout(const VertexLayout& vertexLayout);
+    AX_DEPRECATED_ATTRIBUTE void setVertexAttrib(std::string_view name,
+                                                 std::size_t index,
+                                                 VertexFormat format,
+                                                 std::size_t offset,
+                                                 bool needToBeNormallized);
+    AX_DEPRECATED_ATTRIBUTE void setVertexStride(uint32_t stride);
 
     /** Custom shader program's vertex layout maybe not setup
      * so engine specific render node(such as Sprite) should invoke this API when ProgramState changed
      */
-    void validateSharedVertexLayout(std::function <void(Program*)> fnValidate);
+    void validateSharedVertexLayout(VertexLayoutType);
 
 protected:
-
     void ensureVertexLayoutMutable();
 
     /**
@@ -340,7 +338,7 @@ protected:
      * @param data Specifies the new values to be used for the specified uniform variable.
      * @param size Specifies the uniform data size.
      */
-    void setFragmentUniform(int location, const void* data, std::size_t size);
+    void setFragmentUniform(int location, const void* data, std::size_t size, std::size_t offset);
 
     /**
      * Set texture.
@@ -375,19 +373,6 @@ protected:
     /// Initialize.
     bool init(Program* program);
 
-#ifdef AX_USE_METAL
-    /**
-     * float3 etc in Metal has both sizeof and alignment same as float4, convert it before fill into uniform buffer
-     * @param uniformInfo Specifies the uniform information.
-     * @param srcData Specifies the new values to be used for the specified uniform variable.
-     * @param srcSize Specifies the uniform data size.
-     * @param uniformBuffer Specifies the uniform buffer to update.
-     */
-    void convertAndCopyUniformData(const backend::UniformInfo& uniformInfo,
-                                   const void* srcData,
-                                   std::size_t srcSize,
-                                   void* buffer);
-#endif
     /**
      * Applies the specified custom auto-binding.
      *
@@ -398,8 +383,7 @@ protected:
 
     backend::Program* _program = nullptr;
     std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
-    char* _vertexUniformBuffer             = nullptr;
-    char* _fragmentUniformBuffer           = nullptr;
+    yasio::sbyte_buffer _uniformBuffers;
     std::size_t _vertexUniformBufferSize   = 0;
     std::size_t _fragmentUniformBufferSize = 0;
 
@@ -410,12 +394,9 @@ protected:
 
     static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
     VertexLayout* _vertexLayout = nullptr;
-    bool _ownVertexLayout = false;
+    bool _ownVertexLayout       = false;
 
-    uint32_t _uniformID = 0;
-#ifdef AX_USE_METAL
-    struct XXH32_state_s* _uniformHashState = nullptr;
-#endif
+    uint64_t _batchId = -1;
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;

@@ -88,7 +88,7 @@ THE SOFTWARE.
 #    define AX_TARGET_PLATFORM AX_PLATFORM_LINUX
 #endif
 
-#if defined(EMSCRIPTEN)
+#if defined(__EMSCRIPTEN__)
     #undef  AX_TARGET_PLATFORM
     #define AX_TARGET_PLATFORM     AX_PLATFORM_EMSCRIPTEN
 #endif
@@ -115,65 +115,42 @@ THE SOFTWARE.
 #endif  // AX_PLATFORM_WIN32
 
 /*
-The google/angle is library which translate native graphics API to GLES2+ APIs
+The google/angle is library which translate native graphics API to GLES3+ APIs
 repo: https://github.com/google/angle
 windows: d3d9/d3d11/Desktop GL/Vulkan
 macOS/iOS: Metal
 Android: GLES/Vulkan
 Linux: Desktop GL/Vulkan
 */
-#ifndef AX_USE_ANGLE
-#    define AX_USE_ANGLE 0
+// 0: indicate: not use GLES
+// mac/iOS/android use system builtin GL/GLES, not ANGLE
+// Windows: use ANGLE GLES
+#ifndef AX_GLES_PROFILE
+#    if defined(__ANDROID__)
+#        define AX_GLES_PROFILE 200
+#    elif (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
+#        define AX_GLES_PROFILE 300
+#    else
+#        define AX_GLES_PROFILE 0
+#    endif
 #endif
 
-#if ((AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT) || (AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN))
+#define AX_GLES_PROFILE_DEN 100
+
+#if ((AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || \
+     (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT) || (AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN))
 #    define AX_PLATFORM_MOBILE
 #else
 #    define AX_PLATFORM_PC
 #endif
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    if !AX_USE_ANGLE
+#if defined(__APPLE__)
+#    if !defined(AX_USE_GL)
 #        define AX_USE_METAL
-#    else
+#    endif
+#else  // win32,linux,winuwp,android
+#    if !defined(AX_USE_GL)
 #        define AX_USE_GL
-#    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
-#    if !AX_USE_ANGLE
-#        define AX_USE_METAL
-#    else
-#        define AX_USE_GL
-#        define AX_USE_GLES
-#    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    define AX_USE_GL
-#    define AX_USE_GLES
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
-#    define AX_USE_GL
-#    if AX_USE_ANGLE
-#        define AX_USE_GLES
-#    endif
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT)
-#    define AX_USE_GL
-#    if !defined(AX_USE_ANGLE)
-#        define AX_USE_ANGLE 1
-#    endif
-#    define AX_USE_GLES
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN)
-    #define AX_USE_GL
-    #define AX_USE_GLES
-#else
-#    define AX_USE_GL
-#endif
-
-#if defined(AX_USE_GL)
-#    if !defined(__ANDROID__)
-#        undef AX_USE_GLAD
-#        define AX_USE_GLAD 1
-#    else
-#        if !defined(AX_USE_GLAD)
-#            define AX_USE_GLAD 0
-#        endif
 #    endif
 #endif
 

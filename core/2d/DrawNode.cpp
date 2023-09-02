@@ -178,11 +178,11 @@ void DrawNode::updateShaderInternal(CustomCommand& cmd,
 void DrawNode::setVertexLayout(CustomCommand& cmd)
 {
     auto* programState = cmd.getPipelineDescriptor().programState;
-    programState->validateSharedVertexLayout(VertexLayoutHelper::setupDrawNode);
+    programState->validateSharedVertexLayout(backend::VertexLayoutType::DrawNode);
 }
 
 void DrawNode::freeShaderInternal(CustomCommand& cmd)
-{
+{   
     auto& pipelinePS = cmd.getPipelineDescriptor().programState;
     AX_SAFE_RELEASE_NULL(pipelinePS);
 }
@@ -244,7 +244,6 @@ void DrawNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
     {
         updateBlendState(_customCommandLine);
         updateUniforms(transform, _customCommandLine);
-        _customCommandLine.setLineWidth(_lineWidth);
         _customCommandLine.init(_globalZOrder);
         renderer->addCommand(&_customCommandLine);
     }

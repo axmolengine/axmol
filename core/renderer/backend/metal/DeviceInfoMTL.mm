@@ -420,11 +420,6 @@ const char* DeviceInfoMTL::getVersion() const
     return featureSetToString(_featureSet);
 }
 
-const char* DeviceInfoMTL::getExtension() const
-{
-    return "";
-}
-
 bool DeviceInfoMTL::checkForFeatureSupported(FeatureType feature)
 {
     bool featureSupported = false;
