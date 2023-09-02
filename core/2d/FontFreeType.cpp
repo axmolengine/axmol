@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include "freetype/ftmodapi.h"
 #endif
 #include "platform/FileUtils.h"
+#include "platform/FileStream.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -73,25 +74,25 @@ static unsigned long ft_stream_read_callback(FT_Stream stream,
                                              unsigned char* buf,
                                              unsigned long size)
 {
-    auto fstm = (IFileStream*)stream->descriptor.pointer;
-    if (!fstm)
+    auto fd = (FileStream*)stream->descriptor.pointer;
+    if (!fd)
         return 1;
     if (!size && offset >= stream->size)
         return 1;
 
     if (stream->pos != offset)
-        fstm->seek(offset, SEEK_SET);
+        fd->seek(offset, SEEK_SET);
 
     if (buf)
-        return fstm->read(buf, static_cast<unsigned int>(size));
+        return fd->read(buf, static_cast<unsigned int>(size));
 
     return 0;
 }
 
 static void ft_stream_close_callback(FT_Stream stream)
 {
-    const auto* fstrm = (IFileStream*)stream->descriptor.pointer;
-    delete fstrm;
+    const auto* fd = (FileStream*)stream->descriptor.pointer;
+    delete fd;
     stream->size               = 0;
     stream->descriptor.pointer = nullptr;
 }
@@ -209,7 +210,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
         if (fullPath.empty())
             return false;
 
-        auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
+        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
         if (!fs)
         {
             return false;

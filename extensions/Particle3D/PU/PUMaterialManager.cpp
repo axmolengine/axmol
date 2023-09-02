@@ -152,7 +152,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
         } while (FindNextFileA(handle, &data));
         FindClose(handle);
     }
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID /* || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX*/)
     std::string::size_type pos    = fileFolder.find("assets/");
     std::string_view relativePath = fileFolder;
     if (pos != std::string::npos)
@@ -176,7 +176,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     ftw(fileFolder.data(), iterPath, 500);
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_TIZEN)
     DIR* d;               // dir handle
     struct dirent* file;  // readdir
     struct stat statbuf;

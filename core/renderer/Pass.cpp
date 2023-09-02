@@ -215,7 +215,7 @@ void Pass::updateMVPUniform(const Mat4& modelView)
     if (_locNormalMatrix)
     {
         auto normalMatrix = utils::getNormalMat3OfMat4(modelView);
-        _programState->setUniform(_locNormalMatrix, &normalMatrix, sizeof(normalMatrix));
+        _programState->setUniform(_locNormalMatrix, normalMatrix.data(), sizeof(normalMatrix[0]) * normalMatrix.size());
     }
 }
 

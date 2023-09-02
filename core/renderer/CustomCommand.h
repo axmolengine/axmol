@@ -48,8 +48,7 @@ public:
     enum class DrawType
     {
         ARRAY,
-        ELEMENT,
-        ELEMENT_INSTANCE
+        ELEMENT
     };
 
     using PrimitiveType = backend::PrimitiveType;
@@ -202,9 +201,11 @@ TODO: should remove it.
         _indexDrawOffset = start * _indexSize;
         _indexDrawCount  = count;
     }
-
     inline std::size_t getIndexDrawOffset() const { return _indexDrawOffset; }
     inline std::size_t getIndexDrawCount() const { return _indexDrawCount; }
+
+    inline void setLineWidth(float lineWidth) { _lineWidth = lineWidth; }
+    inline float getLineWidth() const { return _lineWidth; }
 
     inline IndexFormat getIndexFormat() const { return _indexFormat; }
 
@@ -220,13 +221,6 @@ TODO: should remove it.
      */
     void setAfterCallback(const CallBackFunc& after) { _afterCallback = after; }
 
-    void setInstanceBuffer(backend::Buffer* transformBuffer, int count)
-    {
-        _InstanceTransformBuffer = transformBuffer, _instanceCount = count;
-    }
-    backend::Buffer* getInstanceBuffer() const { return _InstanceTransformBuffer; }
-    int getInstanceCount() const { return _instanceCount; }
-
     const CallBackFunc& getBeforeCallback() { return _beforeCallback; }
 
     const CallBackFunc& getAfterCallback() { return _afterCallback; }
@@ -236,9 +230,6 @@ protected:
 
     backend::Buffer* _vertexBuffer = nullptr;
     backend::Buffer* _indexBuffer  = nullptr;
-
-    backend::Buffer* _InstanceTransformBuffer = nullptr;
-    int _instanceCount                        = 0;
 
     std::size_t _vertexDrawStart = 0;
     std::size_t _vertexDrawCount = 0;

@@ -62,8 +62,6 @@ static int register_all_packages()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-    auto md4Val = utils::computeDigest("hello world", "md4");
-
     // initialize director
     auto director = Director::getInstance();
     auto glView   = director->getOpenGLView();

@@ -74,8 +74,4 @@ add_library(${target_name} STATIC
         ${HEADER}
         ${SOURCE})
 
-
-ax_find_shaders(${CMAKE_CURRENT_LIST_DIR}/shaders IMGUI_SHADER_SOURCES)
-ax_target_compile_shaders(${target_name} FILES ${IMGUI_SHADER_SOURCES} CUSTOM)
-
 setup_ax_extension_config(${target_name})
