@@ -170,6 +170,7 @@ tests/lua-tests/project/proj.tizen/res/
 
 # Ignore x-studio folder
 .xs
+extensions/x-studio.cmake
 
 # Ignore vscode folder
 .vscode/
