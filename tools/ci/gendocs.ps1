@@ -195,8 +195,3 @@ mkdirs $wasm_dist
 Copy-Item $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
 
 Set-Location $store_cwd
-
-# build html targets to docs
-./build.ps1 -p wasm
-
-Copy-Item 'build_wasm/bin/'
