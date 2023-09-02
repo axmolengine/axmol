@@ -52,6 +52,7 @@ public:
         Linux,   /**< Linux */
         macOS,     /**< macOS */
         Android, /**< Android */
+		Emscripten,  /**< Emscripten */
         iOS,      /**< Apple iOS */
     };
 

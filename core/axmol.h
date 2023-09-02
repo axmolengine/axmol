@@ -227,6 +227,13 @@ THE SOFTWARE.
 #    include "platform/linux/StdC-linux.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN)
+    #include "platform/emscripten/Application-emscripten.h"
+    #include "platform/desktop/GLViewImpl-desktop.h"
+    #include "platform/emscripten/GL-emscripten.h"
+    #include "platform/emscripten/StdC-emscripten.h"
+#endif // AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+
 // script_support
 #include "base/ScriptSupport.h"
 

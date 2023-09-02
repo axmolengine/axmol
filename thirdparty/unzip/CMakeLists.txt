@@ -18,7 +18,10 @@ target_compile_definitions(${target_name} PUBLIC NOUNCRYPT=1)
 
 if(MACOSX OR ANDROID OR WINDOWS)
   get_target_property(zlib_header dep_zlib INTERFACE_INCLUDE_DIRECTORIES)
-  target_include_directories(${target_name} PRIVATE ${zlib_header}
-)
+  target_include_directories(${target_name} PRIVATE ${zlib_header})
 endif()
 
+if(NOT NOCRYPT)
+  get_target_property(openssl_header OpenSSL::SSL INTERFACE_INCLUDE_DIRECTORIES)
+  target_include_directories(${target_name} PRIVATE ${openssl_header})
+endif()

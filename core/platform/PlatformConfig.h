@@ -50,6 +50,7 @@ THE SOFTWARE.
 #define AX_PLATFORM_WIN32 3
 #define AX_PLATFORM_LINUX 5
 #define AX_PLATFORM_MAC 8
+#define AX_PLATFORM_EMSCRIPTEN 10
 #define AX_PLATFORM_WINRT 13
 
 // Determine target platform by compile environment macro.
@@ -85,6 +86,11 @@ THE SOFTWARE.
 #if defined(__linux__)
 #    undef AX_TARGET_PLATFORM
 #    define AX_TARGET_PLATFORM AX_PLATFORM_LINUX
+#endif
+
+#if defined(__EMSCRIPTEN__)
+    #undef  AX_TARGET_PLATFORM
+    #define AX_TARGET_PLATFORM     AX_PLATFORM_EMSCRIPTEN
 #endif
 
 // android, override linux
@@ -132,7 +138,7 @@ Linux: Desktop GL/Vulkan
 #define AX_GLES_PROFILE_DEN 100
 
 #if ((AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || \
-     (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT))
+     (AX_TARGET_PLATFORM == AX_PLATFORM_WINRT) || (AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN))
 #    define AX_PLATFORM_MOBILE
 #else
 #    define AX_PLATFORM_PC

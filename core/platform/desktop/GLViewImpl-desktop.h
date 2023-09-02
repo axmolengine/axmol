@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include "base/Ref.h"
 #include "platform/Common.h"
 #include "platform/GLView.h"
-#include "glfw3.h"
+#include <GLFW/glfw3.h>
 
 NS_AX_BEGIN
 

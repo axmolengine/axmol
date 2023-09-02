@@ -81,6 +81,11 @@ if (NOT DEFINED ASTC_ISA_SIMD)
         set(ASTC_ISA_SIMD "none")
     endif()
 
+    # disable simd when emscripten
+    if(EMSCRIPTEN)
+        set(ASTC_ISA_SIMD "none")
+    endif(EMSCRIPTEN)
+
     message(AUTHOR_WARNING "ASTC_ISA_SIMD=${ASTC_ISA_SIMD}")
 endif()
 

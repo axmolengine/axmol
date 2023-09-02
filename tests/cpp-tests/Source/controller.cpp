@@ -48,7 +48,7 @@ public:
 #endif
 
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
-#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
         addTest("Texture2D", []() { return new Texture2DTests(); });
@@ -70,7 +70,9 @@ public:
         addTest("Click and Move", []() { return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
+#if !defined(AX_PLATFORM_EMSCRIPTEN)
         addTest("Curl", []() { return new CurlTests(); });
+#endif
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
         addTest("Network Test", []() { return new NetworkTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });

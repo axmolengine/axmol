@@ -29,7 +29,7 @@
 #    define posix_write ::write
 #    define posix_fd2fh(fd) (fd)
 #    define posix_ftruncate ::ftruncate
-#    if defined(__APPLE__)
+#    if defined(__APPLE__) || defined(__EMSCRIPTEN__)
 #        define posix_lseek64 ::lseek
 #        define posix_ftruncate64 ::ftruncate
 #    else

@@ -66,7 +66,7 @@ endif()
 set(_GLES_PROFILE 0) # _GLES_PROFILE is the default GLES profile
 if(ANDROID) # android force use GLES profile
     set(_GLES_PROFILE 200)
-elseif(WINRT) # winuwp fore use GLES profile
+elseif(WINRT OR WASM) # winuwp/wasm fore use GLES profile
     set(_GLES_PROFILE 300)
 elseif((NOT MACOSX) AND (NOT LINUX)) # win32, ios, tvos
     if(AX_USE_COMPAT_GL)
@@ -104,7 +104,7 @@ cmake_dependent_option(AX_ENABLE_VLC_MEDIA "Enabling vlc media" ON "_AX_HAVE_VLC
 
 message(STATUS "AX_ENABLE_VLC_MEDIA=${AX_ENABLE_VLC_MEDIA}")
 
-if(NOT APPLE)
+if(NOT APPLE AND (NOT EMSCRIPTEN))
     set(AX_USE_ALSOFT ON CACHE BOOL "" FORCE)
 else()
     option(AX_USE_ALSOFT "Use ALSOFT on apple" OFF)
@@ -132,7 +132,7 @@ option(AX_ENABLE_EXT_FAIRYGUI "Build extension FairyGUI" ON)
 option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
-cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
 
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 

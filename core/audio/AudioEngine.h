@@ -383,8 +383,10 @@ protected:
 
     static AudioEngineImpl* _audioEngineImpl;
 
+#ifndef __EMSCRIPTEN__
     class AudioEngineThreadPool;
     static AudioEngineThreadPool* s_threadPool;
+#endif
 
     static bool _isEnabled;
 

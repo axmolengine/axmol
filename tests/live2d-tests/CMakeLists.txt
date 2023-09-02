@@ -74,6 +74,11 @@ elseif(LINUX)
          proj.linux/main.cpp
          )
     list(APPEND GAME_SOURCE ${common_content_files})
+elseif(EMSCRIPTEN)
+    list(APPEND GAME_SOURCE
+         proj.emscripten/main.cpp
+         )
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)
     if(NOT WINRT)
         list(APPEND GAME_HEADER

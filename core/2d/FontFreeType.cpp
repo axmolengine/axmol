@@ -29,7 +29,9 @@ THE SOFTWARE.
 #include "2d/FontAtlas.h"
 #include "base/Director.h"
 #include "base/UTF8.h"
+#ifndef EMSCRIPTEN
 #include "freetype/ftmodapi.h"
+#endif
 #include "platform/FileUtils.h"
 
 #include "ft2build.h"
@@ -123,9 +125,11 @@ bool FontFreeType::initFreeType()
         if (FT_Init_FreeType(&_FTlibrary))
             return false;
 
+#ifndef EMSCRIPTEN
         const FT_Int spread = DistanceMapSpread;
         FT_Property_Set(_FTlibrary, "sdf", "spread", &spread);
         FT_Property_Set(_FTlibrary, "bsdf", "spread", &spread);
+#endif
 
         _FTInitialized = true;
     }
@@ -412,12 +416,15 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
 #endif
         if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
             break;
+
+#ifndef EMSCRIPTEN
         if (_distanceFieldEnabled && _fontFace->glyph->bitmap.buffer)
         {
             // Require freetype version > 2.11.0, because freetype 2.11.0 sdf has memory access bug, see:
             // https://gitlab.freedesktop.org/freetype/freetype/-/issues/1077
             FT_Render_Glyph(_fontFace->glyph, FT_Render_Mode::FT_RENDER_MODE_SDF);
         }
+#endif
 
         auto& metrics       = _fontFace->glyph->metrics;
         outRect.origin.x    = static_cast<float>(metrics.horiBearingX >> 6);

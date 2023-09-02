@@ -55,7 +55,10 @@ AudioEngine::ProfileHelper* AudioEngine::_defaultProfileHelper = nullptr;
 std::unordered_map<AUDIO_ID, AudioEngine::AudioInfo> AudioEngine::_audioIDInfoMap;
 AudioEngineImpl* AudioEngine::_audioEngineImpl = nullptr;
 
+#ifndef __EMSCRIPTEN__
 AudioEngine::AudioEngineThreadPool* AudioEngine::s_threadPool = nullptr;
+#endif
+
 bool AudioEngine::_isEnabled                                  = true;
 
 AudioEngine::AudioInfo::AudioInfo()
@@ -64,6 +67,7 @@ AudioEngine::AudioInfo::AudioInfo()
 
 AudioEngine::AudioInfo::~AudioInfo() {}
 
+#ifndef __EMSCRIPTEN__
 class AudioEngine::AudioEngineThreadPool
 {
 public:
@@ -131,6 +135,7 @@ private:
     std::condition_variable _taskCondition;
     bool _stop;
 };
+#endif
 
 void AudioEngine::end()
 {
@@ -138,11 +143,13 @@ void AudioEngine::end()
     // fix #127
     uncacheAll();
 
+#ifndef __EMSCRIPTEN__
     if (s_threadPool)
     {
         delete s_threadPool;
         s_threadPool = nullptr;
     }
+#endif
 
     delete _audioEngineImpl;
     _audioEngineImpl = nullptr;
@@ -164,10 +171,12 @@ bool AudioEngine::lazyInit()
         }
     }
 
+#ifndef __EMSCRIPTEN__
     if (s_threadPool == nullptr)
     {
         s_threadPool = new AudioEngineThreadPool();
     }
+#endif
 
     return true;
 }
@@ -587,10 +596,12 @@ void AudioEngine::addTask(const std::function<void()>& task)
 {
     lazyInit();
 
+#ifndef __EMSCRIPTEN__
     if (_audioEngineImpl && s_threadPool)
     {
         s_threadPool->addTask(task);
     }
+#endif
 }
 
 int AudioEngine::getPlayingAudioCount()

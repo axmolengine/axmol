@@ -392,7 +392,7 @@ static int ImGui_ImplGlfw_TranslateUntranslatedKey(int key, int scancode)
     GLFWerrorfun prev_error_callback = glfwSetErrorCallback(nullptr);
     const char* key_name = glfwGetKeyName(key, scancode);
     glfwSetErrorCallback(prev_error_callback);
-#if (GLFW_VERSION_COMBINED >= 3300) // Eat errors (see #5908)
+#if (GLFW_VERSION_COMBINED >= 3300) && !defined(__EMSCRIPTEN__) // Eat errors (see #5908)
     (void)glfwGetError(NULL);
 #endif
     if (key_name && key_name[0] != 0 && key_name[1] == 0)
@@ -593,7 +593,7 @@ static bool ImGui_ImplGlfw_Init(GLFWwindow* window, bool install_callbacks, Glfw
     bd->MouseCursors[ImGuiMouseCursor_NotAllowed] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
 #endif
     glfwSetErrorCallback(prev_error_callback);
-#if (GLFW_VERSION_COMBINED >= 3300) // Eat errors (see #5785)
+#if (GLFW_VERSION_COMBINED >= 3300) && !defined(__EMSCRIPTEN__) // Eat errors (see #5785)
     (void)glfwGetError(nullptr);
 #endif
 
@@ -766,7 +766,7 @@ static void ImGui_ImplGlfw_UpdateGamepads()
         return;
 
     io.BackendFlags &= ~ImGuiBackendFlags_HasGamepad;
-#if GLFW_HAS_GAMEPAD_API
+#if GLFW_HAS_GAMEPAD_API && !defined(__EMSCRIPTEN__)
     GLFWgamepadstate gamepad;
     if (!glfwGetGamepadState(GLFW_JOYSTICK_1, &gamepad))
         return;
@@ -1199,7 +1199,7 @@ static void ImGui_ImplGlfw_SwapBuffers(ImGuiViewport* viewport, void*)
 //--------------------------------------------------------------------------------------------------------
 
 // Avoid including <vulkan.h> so we can build without it
-#if GLFW_HAS_VULKAN
+#if GLFW_HAS_VULKAN && !defined(__EMSCRIPTEN__)
 #ifndef VULKAN_H_
 #define VK_DEFINE_HANDLE(object) typedef struct object##_T* object;
 #if defined(__LP64__) || defined(_WIN64) || defined(__x86_64__) || defined(_M_X64) || defined(__ia64) || defined (_M_IA64) || defined(__aarch64__) || defined(__powerpc64__)
@@ -1245,7 +1245,7 @@ static void ImGui_ImplGlfw_InitPlatformInterface()
 #if GLFW_HAS_WINDOW_ALPHA
     platform_io.Platform_SetWindowAlpha = ImGui_ImplGlfw_SetWindowAlpha;
 #endif
-#if GLFW_HAS_VULKAN
+#if GLFW_HAS_VULKAN && !defined(__EMSCRIPTEN__)
     platform_io.Platform_CreateVkSurface = ImGui_ImplGlfw_CreateVkSurface;
 #endif
 

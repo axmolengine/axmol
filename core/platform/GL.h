@@ -39,6 +39,8 @@ THE SOFTWARE.
 #    include "platform/winrt/GL-winrt.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
 #    include "platform/linux/GL-linux.h"
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#    include "platform/emscripten/GL-emscripten.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_IOS
 #    if defined(AX_USE_GL)
 #        include "platform/ios/GL-ios.h"
