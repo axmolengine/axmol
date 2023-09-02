@@ -38,6 +38,7 @@
 - OpenGL ES 2.0+ for Android
 - OpenGL ES 3.0+ for iOS
 - ANGLE GLES 3.0+ for Win32 and UWP
+- WebGL 2.0(Open GLES 3.0): WASM (experimental)
 
 ## New MediaPlayer
 

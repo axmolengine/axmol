@@ -31,6 +31,7 @@
 - OpenGL ES 2.0+: Android
 - OpenGL ES 3.0+: iOS
 - ANGLE GLES 3.0+: Win32, WinUWP
+- WebGL 2.0(Open GLES 3.0): WASM (experimental)
 
 ## 新的媒体播放器
 
