@@ -8,7 +8,7 @@
 #include "imgui_internal.h"
 
 // TODO: mac metal
-#if defined(AX_USE_GL) && defined(AX_PLATORM_PC)
+#if defined(AX_USE_GL) && defined(AX_PLATFORM_PC)
 #    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 1
 #else
 #    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 0
