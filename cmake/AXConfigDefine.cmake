@@ -183,7 +183,7 @@ endfunction()
 # endif()
 
 if(EMSCRIPTEN)
-    set(AX_COMPILE_FLAGS "-s USE_LIBJPEG=1 -s USE_LIBPNG=1 -s USE_ZLIB=1 -s USE_FREETYPE=1")
+    set(AX_COMPILE_FLAGS "-s USE_LIBJPEG=1 -s USE_LIBPNG=1 -s USE_ZLIB=1")
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         string(APPEND AX_COMPILE_FLAGS " -gsource-map")
     endif()

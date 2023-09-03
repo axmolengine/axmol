@@ -29,9 +29,7 @@ THE SOFTWARE.
 #include "2d/FontAtlas.h"
 #include "base/Director.h"
 #include "base/UTF8.h"
-#ifndef EMSCRIPTEN
 #include "freetype/ftmodapi.h"
-#endif
 #include "platform/FileUtils.h"
 
 #include "ft2build.h"
@@ -125,11 +123,9 @@ bool FontFreeType::initFreeType()
         if (FT_Init_FreeType(&_FTlibrary))
             return false;
 
-#ifndef EMSCRIPTEN
         const FT_Int spread = DistanceMapSpread;
         FT_Property_Set(_FTlibrary, "sdf", "spread", &spread);
         FT_Property_Set(_FTlibrary, "bsdf", "spread", &spread);
-#endif
 
         _FTInitialized = true;
     }
