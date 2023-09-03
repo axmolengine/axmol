@@ -198,8 +198,8 @@ $options.Remove('d')
 $b1k_args = [System.Collections.ArrayList]$b1k_args
 foreach ($option in $options.GetEnumerator()) {
     if ($option.Value) {
-        $null = $arglist.Add("-$($option.Key)")
-        $null = $arglist.Add($option.Value)
+        $null = $b1k_args.Add("-$($option.Key)")
+        $null = $b1k_args.Add($option.Value)
     }
 }
 
