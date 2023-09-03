@@ -61,7 +61,7 @@ View the [Dev setup instructions](docs/DevSetup.md).
 
 ## Highlighted Features
 
-* WebAssembly support(experimental)
+* WebAssembly support(experimental) by @nowasm
 - Windows UWP support, refer to: https://github.com/axmolengine/axmol/pull/1108
 - Add apple M1, android x64 support, contributed by @pietpukkel
 - Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
