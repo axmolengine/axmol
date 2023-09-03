@@ -1,13 +1,13 @@
 image: 
   - Visual Studio 2019
     
-version: 1.1.0.{build}
+version: 2.0.0.{build}
 
 install:
   - git submodule update --init --recursive
 
 build_script:
-  - pwsh: .\build.ps1 -p wasm -xb '--target','cpp_tests'
+  - pwsh: .\build.ps1 -p wasm -xb '--target','cpp_tests','--config','Release'
   - pwsh: 7z a build_wasm.zip build_wasm/bin/**/*
 
 artifacts:
