@@ -66,7 +66,7 @@ bool FileUtilsEmscripten::init()
 
 string FileUtilsEmscripten::getWritablePath() const
 {
-    return "/cocos2dxWritablePath/";
+    return "/axmolPersistPath/";
 }
 
 std::string FileUtilsEmscripten::getNativeWritableAbsolutePath() const
