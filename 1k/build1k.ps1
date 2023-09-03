@@ -1008,7 +1008,7 @@ $cmake_prog = setup_cmake
 if ($BUILD_TARGET -eq 'win32') {
     $nuget_prog = setup_nuget
     $nsis_prog = setup_nsis
-    if ($TOOLCHAIN_NAME -ne 'msvc') {
+    if ($TOOLCHAIN_NAME -eq 'clang') {
         $ninja_prog = setup_ninja
         $null = setup_clang
     }
