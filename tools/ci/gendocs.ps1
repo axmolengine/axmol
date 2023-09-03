@@ -15,8 +15,8 @@ function mkdirs([string]$path) {
 }
 
 function download_file($url, $out) {
-    if($b1k.isfile($out)) { return }
-    $b1k.println("Downloading $url to $out ...")
+    if(Test-Path $out -PathType Leaf) { return }
+    Write-Host "Downloading $url to $out ..."
     if ($pwsh_ver -ge '7.0') {
         curl -L $url -o $out
     }
@@ -25,7 +25,11 @@ function download_file($url, $out) {
     }
 }
 
-function download_zip_expand($url, $out, $dest) {
+function download_zip_expand($url, $out, $dest = $null) {
+    if (!$dest) {
+        $dest = $(Split-Path $out -Parent)
+    }
+    mkdirs $dest
     download_file $url $out
     Expand-Archive -Path $out -DestinationPath $dest
 }
@@ -149,54 +153,10 @@ mkdirs "$site_dist/assets/css"
 Copy-Item './style.css'  "$site_dist/assets/css/style.css"
 Copy-Item './index.html' "$site_dist/index.html"
 
-function download_appveyor_artifact($dest) {
-    $apiUrl = 'https://ci.appveyor.com/api'
-    $token = ${env:AX_DOCS_TOKEN}
-    $headers = @{
-    "Authorization" = "Bearer ${env:AX_DOCS_TOKEN}"
-    "Content-type" = "application/json"
-    }
-    $accountName = 'halx99'
-    $projectSlug = 'axmol'
-
-    # get project with last build details
-    $project = Invoke-RestMethod -Method Get -Uri "$apiUrl/projects/$accountName/$projectSlug" -Headers $headers
-
-    # we assume here that build has a single job
-    # get this job id
-    $jobId = $project.build.jobs[0].jobId
-
-    # get job artifacts (just to see what we've got)
-    $artifacts = Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts" -Headers $headers
-
-    # here we just take the first artifact, but you could specify its file name
-    # $artifactFileName = 'MyWebApp.zip'
-    $artifactFileName = $artifacts[0].fileName
-
-    # artifact will be downloaded as
-    mkdirs $dest
-    $localArtifactPath = Join-Path $dest $artifactFileName
-
-    if (!(Test-Path $localArtifactPath -PathType Leaf)) {
-        # download artifact
-        # -OutFile - is local file name where artifact will be downloaded into
-        # the Headers in this call should only contain the bearer token, and no Content-type, otherwise it will fail!
-        Invoke-RestMethod -Method Get -Uri "$apiUrl/buildjobs/$jobId/artifacts/$artifactFileName" `
-        -OutFile $localArtifactPath -Headers @{ "Authorization" = "Bearer $token" }
-    }
-
-    Expand-Archive -Path $localArtifactPath -DestinationPath $dest
-}
-
 # deploy wasm cpp_tests demo
-download_appveyor_artifact $(Join-Path $AX_ROOT 'tmp')
+download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
 $wasm_dist = Join-Path $site_dist 'wasm/'
 mkdirs $wasm_dist
 Copy-Item $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
 
 Set-Location $store_cwd
-
-# build html targets to docs
-./build.ps1 -p wasm
-
-Copy-Item 'build_wasm/bin/'
