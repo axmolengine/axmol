@@ -195,11 +195,11 @@ $b1k_args += '-prefix', "$prefix"
 
 # remove arg we don't want forward to
 $options.Remove('d')
-[System.Collections.ArrayList]$b1k_args = $b1k_args
+$b1k_args = [System.Collections.ArrayList]$b1k_args
 foreach ($option in $options.GetEnumerator()) {
     if ($option.Value) {
-        $b1k_args.Add("-$($option.Key)")
-        $b1k_args.Add($option.Value)
+        $null = $arglist.Add("-$($option.Key)")
+        $null = $arglist.Add($option.Value)
     }
 }
 
