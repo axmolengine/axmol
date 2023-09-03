@@ -26,10 +26,11 @@ function download_file($url, $out) {
 }
 
 function download_zip_expand($url, $out, $dest = $null) {
-    download_file $url $out
     if (!$dest) {
         $dest = $(Split-Path $out -Parent)
     }
+    mkdirs $dest
+    download_file $url $out
     Expand-Archive -Path $out -DestinationPath $dest
 }
 
