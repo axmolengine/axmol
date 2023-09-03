@@ -135,8 +135,8 @@
     <script type='text/javascript'>
       Module.preRun.push(function() {
         addRunDependency('sync_writable_path')
-        FS.mkdir('/cocos2dxWritablePath')
-        FS.mount(IDBFS, {}, '/cocos2dxWritablePath')
+        FS.mkdir('/axmolPersistPath')
+        FS.mount(IDBFS, {}, '/axmolPersistPath')
         FS.syncfs(true, function (err) {
           if (err) {
             throw err
