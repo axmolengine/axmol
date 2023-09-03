@@ -180,7 +180,7 @@ if (!$bci) {
     $optimize_flag = @('Debug', 'Release')[$is_ci]
     $options.xb += '--config', $optimize_flag
 } else {
-    $optimize_flag = $options.xc[$bci]
+    $optimize_flag = $options.xb[$bci]
 }
 
 if ($is_android) {
