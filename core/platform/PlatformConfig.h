@@ -63,6 +63,9 @@ THE SOFTWARE.
                           // TargetConditionals.h
 #        undef AX_TARGET_PLATFORM
 #        define AX_TARGET_PLATFORM AX_PLATFORM_IOS
+#        if TARGET_OS_TV && !defined(AX_TARGET_OS_TVOS)
+#            define AX_TARGET_OS_TVOS 1
+#        endif
 #    elif TARGET_OS_MAC
 #        undef AX_TARGET_PLATFORM
 #        define AX_TARGET_PLATFORM AX_PLATFORM_MAC
@@ -89,8 +92,8 @@ THE SOFTWARE.
 #endif
 
 #if defined(__EMSCRIPTEN__)
-    #undef  AX_TARGET_PLATFORM
-    #define AX_TARGET_PLATFORM     AX_PLATFORM_EMSCRIPTEN
+#    undef AX_TARGET_PLATFORM
+#    define AX_TARGET_PLATFORM AX_PLATFORM_EMSCRIPTEN
 #endif
 
 // android, override linux
