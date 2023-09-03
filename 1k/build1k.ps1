@@ -160,7 +160,8 @@ $manifest = @{
     msvc         = '14.36.32532';
     ndk          = 'r23c';
     xcode        = '13.0.0~14.2.0'; # range
-    clang        = '15.0.0+';
+    # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
+    clang        = '16.0.0+'; # clang-cl msvc14.37 require 16.0.0+
     gcc          = '9.0.0+';
     cmake        = '3.22.1+';
     ninja        = '1.11.1+';
