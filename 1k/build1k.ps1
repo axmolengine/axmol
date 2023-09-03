@@ -107,7 +107,7 @@ class build1k {
         }
     }
 
-    [void] rmdirs([string]$path){
+    [void] rmdirs([string]$path) {
         if ($this.isdir($path)) {
             $this.println("Deleting $path ...")
             Remove-Item $path -Recurse -Force
@@ -121,7 +121,7 @@ class build1k {
         }
     }
 
-    [void] mv([string]$path, [string]$dest){
+    [void] mv([string]$path, [string]$dest) {
         if ($this.isdir($path) -and !$this.isdir($dest)) {
             Move-Item $path $dest
         }
@@ -174,16 +174,16 @@ $channels = @{}
 $cmdlinetools_rev = '9477386'
 
 $options = @{
-    p         = $null; 
-    a         = 'x64'; 
-    d         = $null; 
-    cc        = $null; 
-    xt        = 'cmake'; 
-    prefix    = $null; 
-    xc        = @(); 
-    xb        = @(); 
-    sdk       = $null; 
-    dll       = $false
+    p      = $null; 
+    a      = 'x64'; 
+    d      = $null; 
+    cc     = $null; 
+    xt     = 'cmake'; 
+    prefix = $null; 
+    xc     = @(); 
+    xb     = @(); 
+    sdk    = $null; 
+    dll    = $false
 }
 
 $optName = $null
@@ -392,7 +392,7 @@ function exec_prog($prog, $params) {
 }
 
 function download_file($url, $out) {
-    if($b1k.isfile($out)) { return }
+    if ($b1k.isfile($out)) { return }
     $b1k.println("Downloading $url to $out ...")
     if ($pwsh_ver -ge '7.0') {
         curl -L $url -o $out
@@ -404,14 +404,16 @@ function download_file($url, $out) {
 
 function download_and_expand($url, $out, $dest) {
     download_file $url $out
-    if($out.EndsWith('.zip')) {
+    if ($out.EndsWith('.zip')) {
         Expand-Archive -Path $out -DestinationPath $dest
-    } elseif($out.EndsWith('.tar.gz')) {
+    }
+    elseif ($out.EndsWith('.tar.gz')) {
         if (!$dest.EndsWith('/')) {
             $b1k.mkdirs($dest)
         }
         tar xf "$out" -C $dest
-    } elseif($out.EndsWith('.sh')) {
+    }
+    elseif ($out.EndsWith('.sh')) {
         chmod 'u+x' "$out"
         $b1k.mkdirs($dest)
     }
@@ -475,7 +477,7 @@ function setup_cmake() {
     $cmake_root = $(Join-Path $prefix 'cmake')
     $cmake_bin = Join-Path $cmake_root 'bin'
     $cmake_prog, $cmake_ver = find_prog -name 'cmake' -path $cmake_bin -mode 'ONLY' -silent $true
-    if(!$cmake_prog) {
+    if (!$cmake_prog) {
         $b1k.rmdirs($cmake_root)
 
         $cmake_suffix = @(".zip", ".sh", ".tar.gz").Get($HOST_OS)
@@ -495,7 +497,8 @@ function setup_cmake() {
 
         if (!$cmake_dev_hash) {
             $cmake_url = "https://github.com/Kitware/CMake/releases/download/v$cmake_ver/$cmake_pkg_name$cmake_suffix"
-        } else {
+        }
+        else {
             $cmake_url = "https://cmake.org/files/dev/$cmake_pkg_name$cmake_suffix"
         }
 
@@ -521,7 +524,8 @@ function setup_cmake() {
             if ($b1k.isdir($cmake_dir)) {
                 $b1k.rmdirs($cmake_dir)
             }
-        } elseif ($IsLinux) {
+        }
+        elseif ($IsLinux) {
             $b1k.mkdirs($cmake_root)
             & "$cmake_pkg_path" '--skip-license' '--exclude-subdir' "--prefix=$cmake_root"
         }
@@ -566,7 +570,7 @@ function setup_ninja() {
 }
 
 function setup_nsis() {
-    if(!$manifest['nsis']) { return $null }
+    if (!$manifest['nsis']) { return $null }
     $nsis_bin = Join-Path $prefix "nsis"
     $nsis_prog, $nsis_ver = find_prog -name 'nsis' -cmd 'makensis' -params '/VERSION'
     if ($nsis_prog) {
@@ -579,7 +583,7 @@ function setup_nsis() {
 
         download_and_expand "https://nchc.dl.sourceforge.net/project/nsis/NSIS%203/$nsis_ver/nsis-$nsis_ver.zip" "$prefix/nsis-$nsis_ver.zip" "$prefix"
         $nsis_dir = "$nsis_bin-$nsis_ver"
-        if($b1k.isdir($nsis_dir)) {
+        if ($b1k.isdir($nsis_dir)) {
             $b1k.mv($nsis_dir, $nsis_bin)
         }
     }
@@ -604,7 +608,7 @@ function setup_jdk() {
     $java_home = Join-Path $prefix "jdk"
     $jdk_bin = Join-Path $java_home 'bin'
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -silent $true
-    if(!$javac_prog) {
+    if (!$javac_prog) {
         $b1k.rmdirs($java_home)
 
         # refer to https://learn.microsoft.com/en-us/java/openjdk/download
@@ -781,7 +785,8 @@ function setup_emsdk() {
         else {
             git -C $emsdk_root pull
         }
-    } else {
+    }
+    else {
         $emsdk_root = Split-Path $emsdk_cmd.Source -Parent
     }
 
@@ -963,7 +968,7 @@ function validHostAndToolchain() {
         'ios'     = $appleTable;
         'tvos'    = $appleTable;
         'watchos' = $appleTable;
-        'wasm' = @{
+        'wasm'    = @{
             'host'      = @{'windows' = $True; 'linux' = $True; 'macos' = $True };
             'toolchain' = @{'emcc' = $True; };
         };
@@ -1018,7 +1023,7 @@ elseif ($BUILD_TARGET -eq 'android') {
         $ninja_prog = setup_ninja
     }  
 }
-elseif($BUILD_TARGET -eq 'wasm') {
+elseif ($BUILD_TARGET -eq 'wasm') {
     . setup_emsdk
 }
 
@@ -1028,7 +1033,21 @@ if (!$setupOnly) {
         Set-Location $options.d
     }
 
-    # parsing cmake build options to determine optimize_flag
+    # parsing build optimize flag from build_options
+    $buildOptions = [array]$options.xb
+    $nopts = $buildOptions.Count
+    $optimize_flag = $null
+    for ($i = 0; $i -lt $nopts; ++$i) {
+        $optv = $buildOptions[$i]
+        if ($optv -eq '--config') {
+            if ($i -lt ($nopts - 1)) {
+                $optimize_flag = $buildOptions[$i + 1]
+                ++$i
+            }
+            break
+        }
+    }
+
     $BUILD_ALL_OPTIONS = @()
     $BUILD_ALL_OPTIONS += $buildOptions
     if (!$optimize_flag) {
@@ -1054,9 +1073,11 @@ if (!$setupOnly) {
     }
     if ("$($xopts)".IndexOf('-B') -eq -1) {
         $is_host_target = ($BUILD_TARGET -eq 'win32') -or ($BUILD_TARGET -eq 'linux') -or ($BUILD_TARGET -eq 'osx')
-        if ($is_host_target) { # wheither building host target?
+        if ($is_host_target) {
+            # wheither building host target?
             $BUILD_DIR = "build_$($options.a)"
-        } else {
+        }
+        else {
             $BUILD_DIR = "build_${BUILD_TARGET}"
             if (!$is_wasm) {
                 $BUILD_DIR += "_$($options.a)"
@@ -1072,21 +1093,6 @@ if (!$setupOnly) {
         }
     }
     $b1k.println("CONFIG_ALL_OPTIONS=$CONFIG_ALL_OPTIONS, Count={0}" -f $CONFIG_ALL_OPTIONS.Count)
-
-    # parsing build optimize flag from build_options
-    $buildOptions = [array]$options.xb
-    $nopts = $buildOptions.Count
-    $optimize_flag = $null
-    for ($i = 0; $i -lt $nopts; ++$i) {
-        $optv = $buildOptions[$i]
-        if ($optv -eq '--config') {
-            if ($i -lt ($nopts - 1)) {
-                $optimize_flag = $buildOptions[$i + 1]
-                ++$i
-            }
-            break
-        }
-    }
 
     if (($BUILD_TARGET -eq 'android') -and $is_gradlew) {
         $storedLocation = (Get-Location).Path
@@ -1107,7 +1113,7 @@ if (!$setupOnly) {
         $workDir = $(Get-Location).Path
 
         $mainDep = Join-Path $workDir 'CMakeLists.txt'
-        if(!$b1k.isfile($mainDep)) {
+        if (!$b1k.isfile($mainDep)) {
             throw "Missing CMakeLists.txt in $workDir"
         }
 
@@ -1130,7 +1136,8 @@ if (!$setupOnly) {
             }
             if (!$is_wasm) {
                 cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
-            } else {
+            }
+            else {
                 emcmake cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
             }
             Set-Content $tempFile $lastWriteTime -NoNewline
@@ -1148,7 +1155,7 @@ if (!$setupOnly) {
             if ($TOOLCHAIN_NAME -eq 'xcode') {
                 $BUILD_ALL_OPTIONS += '--', '-quiet'
                 if ($options.a -eq 'x64') {
-                    switch($options.p) {
+                    switch ($options.p) {
                         'ios' { $BUILD_ALL_OPTIONS += '-sdk', 'iphonesimulator' }
                         'tvos' { $BUILD_ALL_OPTIONS += '-sdk', 'appletvsimulator' }
                         'watchos' { $BUILD_ALL_OPTIONS += '-sdk', 'watchsimulator' }
