@@ -238,7 +238,8 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     default:
         break;
     }
-#elif AX_GLES_PROFILE != 200
+#elif !AX_GLES_PROFILE 
+    // Non-GLES doesn't support follow render formats, needs convert PixelFormat::RGBA8
     // Note: axmol-1.1 deprecated A8, L8, LA8 as renderFormat, preferred R8, RG8
     switch (renderFormat)
     {

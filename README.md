@@ -108,7 +108,7 @@ Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](
 
 - [build1k](https://github.com/axmolengine/build1k), the axmol prebuilt build-bot
 - [axmolengine/glslcc](https://github.com/axmolengine/glslcc), a fork of glslcc for axmol new shader workflow tool
-- [Some interesting related projects based on axmol](https://github.com/axmolengine/axmol/discussions/694)
+- [Interesting related](https://github.com/axmolengine/axmol/discussions/694)
 - [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 - [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)
 
