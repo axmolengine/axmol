@@ -29,6 +29,7 @@
 #include <queue>
 #include "base/Director.h"
 #include "platform/FileUtils.h"
+#include "yasio/string_view.hpp"
 
 #if EMSCRIPTEN 
 #include <emscripten/fetch.h>
@@ -86,12 +87,9 @@ namespace network
         auto thiz = _httpClient;
         _httpClient = nullptr;
 
-        Vector<HttpRequest *> requestQueue = thiz->_requestQueue;
+        auto& requestQueue = thiz->_requestQueue;
         for (auto it = requestQueue.begin(); it != requestQueue.end();)
-        {
-            (*it)->release();
             it = requestQueue.erase(it);
-        }
 
         thiz->decreaseThreadCountAndMayDeleteThis();
     }
@@ -120,8 +118,7 @@ namespace network
         if (!request)
             return;
 
-        request->retain();
-
+        // request ref +1 by response or _requestQueue
         if (_threadCount <= 1)
         {
             increaseThreadCount();
@@ -139,7 +136,6 @@ namespace network
         if (!request)
             return;
 
-        request->retain();
         HttpResponse *response = new (std::nothrow) HttpResponse(request);
         processResponse(response, true);
     }
@@ -152,7 +148,9 @@ namespace network
         if (!cookieFilename.empty())
         {
             EM_ASM_ARGS({
-                document.cookie = FS.readFile(UTF8ToString($0));
+                try { // suppress cookie file not exist exception at first time
+                    document.cookie = FS.readFile(UTF8ToString($0));
+                }catch(e){}
             }, cookieFilename.data());
         }
 
@@ -161,6 +159,7 @@ namespace network
         emscripten_fetch_attr_init(&attr);
 
         // set http method
+        bool usePostData = false;
         switch (request->getRequestType())
         {
         case HttpRequest::Type::GET:
@@ -169,10 +168,12 @@ namespace network
 
         case HttpRequest::Type::POST:
             strcpy(attr.requestMethod, "POST");
+            usePostData = true;
             break;
 
         case HttpRequest::Type::PUT:
             strcpy(attr.requestMethod, "PUT");
+            usePostData = true;
             break;
 
         case HttpRequest::Type::DELETE:
@@ -192,18 +193,22 @@ namespace network
 
         // set header
         std::vector<std::string> headers;
-        for (auto &header : request->getHeaders())
+        for (std::string_view header : request->getHeaders())
         {
             size_t pos = header.find(":");
             if (pos != std::string::npos)
             {
-                std::string key = header.substr(0, pos);
-                std::string value = header.substr(pos + 1);
-                headers.push_back(key);
-                headers.push_back(value);
+                if (cxx20::ic::starts_with(header, "user-agent")) {
+                    AXLOGWARN("Ignore user-agent for wasm to avoid cause error: Refused to set unsafe header \"User-Agent\"");
+                    continue;
+                }
+                auto key = header.substr(0, pos);
+                auto value = header.substr(pos + 1);
+                headers.push_back(std::string{key});
+                headers.push_back(std::string{value});
             }
         }
-        
+
         std::vector<const char*> headersCharptr;
         headersCharptr.reserve(headers.size() + 1);
         for (auto &header : headers)
@@ -231,7 +236,7 @@ namespace network
     void HttpClient::onRequestComplete(emscripten_fetch_t *fetch)
     {
         fetchUserData *userData = reinterpret_cast<fetchUserData *>(fetch->userData);
-        HttpResponse *response = userData->response;
+        RefPtr<HttpResponse> response{ReferencedObject<HttpResponse>(userData->response)};
         HttpRequest *request = response->getHttpRequest();
 
         // get response
@@ -249,24 +254,27 @@ namespace network
             }, cookieFilename.data());
         }
 
+        const auto isAlone = userData->isAlone;
+        delete userData;
+    
         if (_httpClient)
         {
             // call back
             const ccHttpRequestCallback &callback = request->getCallback();
             if (callback)
-                callback(HttpClient::getInstance(), response);
+                callback(_httpClient, response);
+            response.reset();
 
             // call next request
-            if (!userData->isAlone)
+            if (!isAlone)
             {
-                Vector<HttpRequest *> requestQueue = _httpClient->_requestQueue;
+                auto& requestQueue = _httpClient->_requestQueue;
                 if (!requestQueue.empty())
                 {
-                    HttpRequest *request = requestQueue.at(0);
+                    HttpRequest *nextRequest = requestQueue.at(0);
+                    HttpResponse *nextResp = new (std::nothrow) HttpResponse(nextRequest);
                     requestQueue.erase(0);
-
-                    HttpResponse *response = new (std::nothrow) HttpResponse(request);
-                    _httpClient->processResponse(response, false);
+                    _httpClient->processResponse(nextResp, false);
                 }
                 else
                 {
@@ -274,10 +282,6 @@ namespace network
                 }
             }
         }
-
-        response->release();
-        request->release();
-        delete userData;
     }
 
     void HttpClient::clearResponseAndRequestQueue()
@@ -287,7 +291,6 @@ namespace network
             if (!_clearRequestPredicate ||
                 _clearRequestPredicate((*it)))
             {
-                (*it)->release();
                 it = _requestQueue.erase(it);
             }
             else
