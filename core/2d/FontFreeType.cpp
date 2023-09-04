@@ -413,14 +413,12 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
         if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
             break;
 
-#ifndef EMSCRIPTEN
         if (_distanceFieldEnabled && _fontFace->glyph->bitmap.buffer)
         {
             // Require freetype version > 2.11.0, because freetype 2.11.0 sdf has memory access bug, see:
             // https://gitlab.freedesktop.org/freetype/freetype/-/issues/1077
             FT_Render_Glyph(_fontFace->glyph, FT_Render_Mode::FT_RENDER_MODE_SDF);
         }
-#endif
 
         auto& metrics       = _fontFace->glyph->metrics;
         outRect.origin.x    = static_cast<float>(metrics.horiBearingX >> 6);
