@@ -482,9 +482,9 @@ static bool ImGui_ImplAx_createShaderPrograms()
         IM_ASSERT(p->uv >= 0);
         IM_ASSERT(p->color >= 0);
         auto& layout = p->layout;
-        layout.setAttribute("a_position", p->position, VertexFormat::FLOAT2, 0, false);
-        layout.setAttribute("a_texCoord", p->uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
-        layout.setAttribute("a_color", p->color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
+        layout.setAttrib("a_position", p->position, VertexFormat::FLOAT2, 0, false);
+        layout.setAttrib("a_texCoord", p->uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
+        layout.setAttrib("a_color", p->color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
         layout.setStride(sizeof(ImDrawVert));
     }
 
@@ -508,7 +508,7 @@ bool ImGui_ImplAx_CreateFontsTexture()
     bd->FontTexture = new Texture2D();
 
     bd->FontTexture->setAntiAliasTexParameters();
-    bd->FontTexture->initWithData(pixels, width * height, backend::PixelFormat::R8, width, height);
+    bd->FontTexture->initWithData(pixels, width * height, AX_GLES_PROFILE != 200 ? backend ::PixelFormat::R8 : backend ::PixelFormat::A8, width, height);
     io.Fonts->TexID = (ImTextureID)bd->FontTexture;
     return true;
 }
