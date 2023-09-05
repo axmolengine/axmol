@@ -23,45 +23,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
-#ifndef __AX_FILEUTILS_EMSCRIPTEN_H__
-#define __AX_FILEUTILS_EMSCRIPTEN_H__
 
 #include "platform/PlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/FileUtils.h"
-#include "platform/PlatformMacros.h"
-#include "base/Types.h"
-#include <string>
-#include <vector>
+#include "platform/Common.h"
+#include "platform/wasm/StdC-wasm.h"
+#include "base/Console.h"
+#include <emscripten/emscripten.h>
 
 NS_AX_BEGIN
 
-/**
- * @addtogroup platform
- * @{
- */
-
-//! @brief  Helper class to handle file operations
-class AX_DLL FileUtilsEmscripten : public FileUtils
+void ccMessageBox(const char * msg, const char * title)
 {
-    friend class FileUtils;
-protected:
-    FileUtilsEmscripten();
-public:
-    /* override functions */
-    bool init() override;
-    virtual std::string getWritablePath() const override;
-    std::string getNativeWritableAbsolutePath() const override;
-private:
-    virtual bool isFileExistInternal(std::string_view path) const override;
-};
+    EM_ASM_ARGS({
+        window.alert(UTF8ToString($0) + ": " + UTF8ToString($1));
+    }, title, msg);
+}
 
-// end of platform group
-/// @}
+void LuaLog(const char * format)
+{
+    puts(format);
+}
 
 NS_AX_END
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
-
-#endif    // __AX_FILEUTILS_EMSCRIPTEN_H__
+#endif //  AX_TARGET_PLATFORM == AX_PLATFORM_WASM

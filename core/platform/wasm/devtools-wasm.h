@@ -2,7 +2,7 @@
 #define __DEVTOOLS_EMSCRIPTEN_H__
 
 #include "platform/PlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
 #include "base/CCScheduler.h"
 #include "base/CCDirector.h"
@@ -30,5 +30,5 @@ private:
     Director* _director;
 };
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 #endif // __DEVTOOLS_EMSCRIPTEN_H__

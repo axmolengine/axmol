@@ -25,9 +25,9 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "platform/PlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/emscripten/Application-emscripten.h"
+#include "platform/wasm/Application-wasm.h"
 #include <unistd.h>
 #include <sys/time.h>
 #include <string>
@@ -198,5 +198,5 @@ LanguageType Application::getCurrentLanguage()
 
 NS_AX_END
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 

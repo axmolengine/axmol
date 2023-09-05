@@ -25,7 +25,7 @@
 #ifndef _CURL_TEST_H_
 #define _CURL_TEST_H_
 
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_EMSCRIPTEN)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_WASM)
 
 #include "axmol.h"
 #include "../BaseTest.h"

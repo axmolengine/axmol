@@ -1,7 +1,7 @@
 #include "platform/PlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "devtools-emscripten.h"
+#include "platform/devtools-wasm.h"
 #include <emscripten.h>
 #include "base/UTF8.h"
 
@@ -67,4 +67,4 @@ extern "C"
     }
 }
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

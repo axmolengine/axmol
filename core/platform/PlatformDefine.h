@@ -41,6 +41,6 @@ THE SOFTWARE.
 #    include "platform/linux/PlatformDefine-linux.h"
 #elif AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 #    include "platform/winrt/PlatformDefine-winrt.h"
-#elif AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
-#    include "platform/emscripten/PlatformDefine-emscripten.h"
+#elif AX_TARGET_PLATFORM == AX_PLATFORM_WASM
+#    include "platform/wasm/PlatformDefine-wasm.h"
 #endif

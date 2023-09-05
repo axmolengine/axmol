@@ -254,6 +254,6 @@ NS_AX_END
 
 #else
 
-#include "network/HttpClient-emscripten.h"
+#include "network/HttpClient-wasm.h"
 
 #endif

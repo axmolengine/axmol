@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_EMSCRIPTEN)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_WASM)
 
 #include "platform/PlatformConfig.h"
 #include "CurlTest.h"

@@ -71,7 +71,7 @@ public:
         addTest("Click and Move", []() { return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
-#if !defined(AX_PLATFORM_EMSCRIPTEN)
+#if !defined(AX_PLATFORM_WASM)
         addTest("Curl", []() { return new CurlTests(); });
 #endif
         addTest("Current Language", []() { return new CurrentLanguageTests(); });

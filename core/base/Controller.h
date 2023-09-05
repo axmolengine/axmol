@@ -28,7 +28,7 @@
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
      AX_TARGET_PLATFORM == AX_PLATFORM_MAC || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX ||   \
      defined(_WIN32) /* win32 & winuwp */ || \
-AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN)
+AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 
 #    include "platform/PlatformMacros.h"
 #    include <string>
