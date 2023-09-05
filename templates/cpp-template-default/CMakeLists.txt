@@ -232,3 +232,7 @@ endif()
 if (NOT DEFINED BUILD_ENGINE_DONE)
     ax_uwp_set_all_targets_deploy_min_version()
 endif()
+
+if (WASM)
+    ax_setup_wasm_app_config(${APP_NAME})
+endif()

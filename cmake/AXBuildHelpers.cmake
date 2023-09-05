@@ -437,14 +437,19 @@ function(ax_setup_app_config app_name)
             endif()
         endif()
     endif()
+endfunction()
 
+# stupid & pitfall: function not emcc not output .html
+macro (ax_setup_wasm_app_config app_name)
     # setup wasm target
     if(WASM)
+        get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
         set(CMAKE_EXECUTABLE_SUFFIX ".html")
         target_link_options(${app_name} PRIVATE
                             "-sEXPORTED_FUNCTIONS=[_main]"
                             "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
                             )
+        message(STATUS "===== wasm app ${app_name} ${_APP_SOURCE_DIR}/index.html ... ")
         set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb -s INITIAL_MEMORY=512MB --shell-file ${_APP_SOURCE_DIR}/index.html --use-preload-cache")
         # Disable wasm, generate js build?
         # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s WASM=0")
@@ -458,8 +463,7 @@ function(ax_setup_app_config app_name)
         
         set_target_properties(${app_name} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS}")
     endif()
-
-endfunction()
+endmacro()
 
 # if cc_variable not set, then set it cc_value
 macro(ax_set_default_value cc_variable cc_value)
