@@ -44,6 +44,7 @@ public:
     RootTests()
     {
 #if __has_include("EffekseerForCocos2d-x.h")
+#pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
 

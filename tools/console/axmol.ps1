@@ -141,9 +141,6 @@ function axmol_deploy() {
 
         }
     }
-    elseif($options.p -eq 'osx') {
-
-    }
 }
 
 function axmol_run() {
@@ -173,7 +170,12 @@ function axmol_run() {
         println "axmol: Launching $launch_linuxapp ..."
         Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
     }
-    println "axmol: Launch $cmake_target done"
+    elseif($options.p -eq 'wasm') {
+        $launch_wasmapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$cmake_target.html"
+        println "axmol: Launching $launch_wasmapp ..."
+        emrun $launch_wasmapp
+    }
+    println "axmol: Launch $cmake_target done, target platform is $(options.p)"
 }
 
 $builtinPlugins = @{

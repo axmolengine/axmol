@@ -108,10 +108,14 @@ public:
 	{
 		if (g_deviceObjectCollection == nullptr)
 		{
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || defined(AX_USE_GLES))
-			g_deviceObjectCollection = Effekseer::MakeRefPtr<EffekseerGraphicsDevice>(EffekseerRendererGL::OpenGLDeviceType::OpenGLES2);
+#if AX_GLES_PROFILE
+#if AX_GLES_PROFILE == 300
+            g_deviceObjectCollection = Effekseer::MakeRefPtr<EffekseerGraphicsDevice>(EffekseerRendererGL::OpenGLDeviceType::OpenGLES3);
 #else
-			g_deviceObjectCollection = Effekseer::MakeRefPtr<EffekseerGraphicsDevice>(EffekseerRendererGL::OpenGLDeviceType::OpenGL2);
+			g_deviceObjectCollection = Effekseer::MakeRefPtr<EffekseerGraphicsDevice>(EffekseerRendererGL::OpenGLDeviceType::OpenGLES2);
+#endif
+#else
+			g_deviceObjectCollection = Effekseer::MakeRefPtr<EffekseerGraphicsDevice>(EffekseerRendererGL::OpenGLDeviceType::OpenGL3);
 #endif
 		}
 

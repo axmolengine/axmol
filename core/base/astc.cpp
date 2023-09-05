@@ -22,7 +22,7 @@
 #include "astcenc/astcenc_internal_entry.h"
 #include "yasio/utils.hpp"
 
-#if !defined(__EMSCRIPTEN__)
+#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
 
 #define ASTCDEC_NO_CONTEXT 1
 #define ASTCDEC_PRINT_BENCHMARK 0
@@ -76,7 +76,11 @@ public:
     }
     astc_decompress_job_manager()
     {
+#if !defined(__EMSCRIPTEN_PTHREADS__)
         int thread_count = std::thread::hardware_concurrency();
+#else
+        constexpr int thread_count = 2;
+#endif
         for (int i = 0; i < thread_count; ++i)
         {
             _threads.emplace_back(std::thread{&astc_decompress_job_manager::run, this});

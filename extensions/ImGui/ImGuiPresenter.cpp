@@ -214,8 +214,8 @@ void ImGuiPresenter::init()
     ImGui::StyleColorsClassic();
 
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
-    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
+    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
+    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
 }
 
 void ImGuiPresenter::cleanup()

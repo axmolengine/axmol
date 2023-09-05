@@ -24,12 +24,11 @@
 
 #include <memory>
 
-// #if _WIN32
-// #include "GL/gl.h"
-// #elif EMSCRIPTEN
-// #include <emscripten.h>
-// #endif
 #include "platform/GL.h"
+
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
 
 //----------------------------------------------------------------------------------
 //

@@ -24,6 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#if !defined(__EMSCRIPTEN__)
 #include "network/Downloader-curl.h"
 
 #include <cinttypes>
@@ -1138,3 +1139,5 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 
 }  // namespace network
 NS_AX_END  // namespace ax
+
+#endif

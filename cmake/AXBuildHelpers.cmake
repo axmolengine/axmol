@@ -346,12 +346,12 @@ endfunction()
 # setup a ax application
 function(ax_setup_app_config app_name)
     if (WINRT)
-        target_include_directories(${APP_NAME} 
+        target_include_directories(${app_name} 
             PRIVATE "proj.winrt"
         )
     endif()
     if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-        target_link_options(${APP_NAME} PRIVATE "/STACK:4194304")
+        target_link_options(${app_name} PRIVATE "/STACK:4194304")
     endif()
     # put all output app into bin/${app_name}
     set_target_properties(${app_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${app_name}")
@@ -359,13 +359,13 @@ function(ax_setup_app_config app_name)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
         if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
-            set_xcode_property(${APP_NAME} CODE_SIGNING_REQUIRED "YES")
-            set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "YES")
+            set_xcode_property(${app_name} CODE_SIGNING_REQUIRED "YES")
+            set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "YES")
         else()
             # By default, explicit disable codesign for macOS PC
-            set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "")
-            set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "NO")
-            set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "NO")
+            set_xcode_property(${app_name} CODE_SIGN_IDENTITY "")
+            set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "NO")
+            set_xcode_property(${app_name} CODE_SIGN_IDENTITY "NO")
         endif()
     elseif(WINDOWS)
         # windows: visual studio/LLVM-clang default is Console app, but we need Windows app
@@ -403,8 +403,8 @@ function(ax_setup_app_config app_name)
     endif()
 
     # auto looking app shaders source dir and add to glslcc compile-list
-    get_target_property(app_shaders_dir ${app_name} SOURCE_DIR)
-    set(app_shaders_dir "${app_shaders_dir}/Source/shaders")
+    get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
+    set(app_shaders_dir "${_APP_SOURCE_DIR}/Source/shaders")
 
     ax_find_shaders(${app_shaders_dir} app_shaders RECURSE)
     if (app_shaders)
@@ -433,10 +433,32 @@ function(ax_setup_app_config app_name)
             else()
                 # --preload-file 
                 # refer to: https://emscripten.org/docs/porting/files/packaging_files.html
-                target_link_options(${APP_NAME} PRIVATE "--preload-file" ${GLSLCC_OUT_DIR}@axslc/)
+                target_link_options(${app_name} PRIVATE "--preload-file" ${GLSLCC_OUT_DIR}@axslc/)
             endif()
         endif()
     endif()
+
+    # setup wasm target
+    if(WASM)
+        set(CMAKE_EXECUTABLE_SUFFIX ".html")
+        target_link_options(${app_name} PRIVATE
+                            "-sEXPORTED_FUNCTIONS=[_main]"
+                            "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
+                            )
+        set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb -s INITIAL_MEMORY=512MB --shell-file ${_APP_SOURCE_DIR}/index.html --use-preload-cache")
+        # Disable wasm, generate js build?
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s WASM=0")
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=https://xxx:8080/axmolwasm/axmolwasm/build/HelloLua.debug.wasm")
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=HelloLua.debug.wasm")
+
+        set(_APP_RES_FOLDER "${_APP_SOURCE_DIR}/Content")
+        foreach(FOLDER IN LISTS _APP_RES_FOLDER)
+            string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
+        endforeach()
+        
+        set_target_properties(${app_name} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS}")
+    endif()
+
 endfunction()
 
 # if cc_variable not set, then set it cc_value

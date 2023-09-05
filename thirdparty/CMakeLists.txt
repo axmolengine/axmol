@@ -185,10 +185,11 @@ if(ANDROID)
 endif()
 
 if(NOT EMSCRIPTEN)
-add_subdirectory(zlib)
-target_link_libraries(thirdparty
-    dep_zlib
-)
+    add_subdirectory(zlib)
+    target_link_libraries(thirdparty
+        dep_zlib
+    )
+endif(NOT EMSCRIPTEN)
 
 # libpng
 add_subdirectory(png)
@@ -202,7 +203,6 @@ configure_target_outdir(png)
 
 set(PNG_PNG_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/png" CACHE STRING "png include dir" FORCE)
 set(PNG_LIBRARY "png" CACHE STRING "png include dir" FORCE)
-endif(NOT EMSCRIPTEN)
 
 if(AX_WITH_BOX2D)
     set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests" FORCE)
@@ -264,12 +264,10 @@ if(AX_WITH_BULLET)
     configure_target_outdir(bullet)
 endif(AX_WITH_BULLET)
 
-if(NOT EMSCRIPTEN)
-if(AX_WITH_JPEG AND NOT WINRT)
+if(AX_WITH_JPEG AND NOT WINRT AND NOT EMSCRIPTEN)
     add_subdirectory(jpeg-turbo)
     target_link_libraries(thirdparty dep_jpeg-turbo)
 endif()
-endif(NOT EMSCRIPTEN)
 
 if(AX_WITH_OPENSSL)
     add_subdirectory(openssl)
@@ -280,14 +278,14 @@ if(AX_WITH_OPENSSL)
         target_link_libraries(thirdparty OpenSSL::Crypto OpenSSL::SSL)
     endif()
     target_compile_definitions(thirdparty PUBLIC OPENSSL_SUPPRESS_DEPRECATED=1)
-endif(AX_WITH_OPENSSL)
-if(NOT EMSCRIPTEN)
+endif()
+
 if(AX_WITH_WEBP)
     add_subdirectory(webp)
     target_link_libraries(thirdparty webp)
     configure_target_outdir(webp)
 endif(AX_WITH_WEBP)
-endif(NOT EMSCRIPTEN)
+
 if(AX_WITH_PUGIXML)
     add_subdirectory(pugixml)
     target_link_libraries(thirdparty pugixml)
@@ -346,17 +344,17 @@ if(AX_ENABLE_EXT_LUA)
         target_compile_definitions(lua-cjson PRIVATE USING_LUAJIT=1)
     endif()
 endif()
-if(NOT EMSCRIPTEN)
-if(AX_WITH_CURL)
+
+if(AX_WITH_CURL AND NOT EMSCRIPTEN)
     add_subdirectory(curl)
     if(ANDROID OR LINUX)
         target_link_libraries(libcurl INTERFACE OpenSSL::SSL)
     endif()
     target_link_libraries(thirdparty libcurl)
-endif(AX_WITH_CURL)
-endif(NOT EMSCRIPTEN)
+endif()
+
 # The openal-soft(LGPL 2.1)
-if(AX_USE_ALSOFT)
+if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
     set(ALSOFT_DLOPEN OFF CACHE BOOL "Check for the dlopen API for loading optional libs" FORCE)
     set(ALSOFT_UTILS OFF CACHE BOOL "Build utility program" FORCE)
     set(ALSOFT_EXAMPLES OFF CACHE BOOL "Build example programs" FORCE)

@@ -79,9 +79,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     //showing how to regsiter a ttf font
-#ifdef AX_PLATFORM_PC
     UIConfig::registerFont(UIConfig::defaultFont, "fonts/DroidSansFallback.ttf");
-#endif
 
     // create a scene. it's an autorelease object
     auto scene = MenuScene::create();
