@@ -107,9 +107,9 @@ elseif(LINUX)
          proj.linux/main.cpp
          )
     list(APPEND GAME_SOURCE ${common_content_files})
-elseif(EMSCRIPTEN)
+elseif(WASM)
     list(APPEND GAME_SOURCE
-         proj.emscripten/main.cpp
+         proj.wasm/main.cpp
          )
     list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)

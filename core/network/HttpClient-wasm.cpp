@@ -25,7 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "network/HttpClient-emscripten.h"
+#include "network/HttpClient-wasm.h"
 #include <queue>
 #include "base/Director.h"
 #include "platform/FileUtils.h"

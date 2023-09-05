@@ -28,7 +28,7 @@ THE SOFTWARE.
 #define AXAPLICATION_H_
 
 #include "platform/PlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
 #include "platform/Common.h"
 #include "platform/ApplicationProtocol.h"
@@ -117,6 +117,6 @@ protected:
 
 NS_AX_END
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
 #endif /* AXAPLICATION_H_ */

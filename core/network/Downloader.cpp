@@ -27,7 +27,7 @@
 #include "network/Downloader.h"
 
 #if EMSCRIPTEN
-#include "network/Downloader-emscripten.h"
+#include "network/Downloader-wasm.h"
 #define DownloaderImpl  DownloaderEmscripten
 #else
 #include "network/Downloader-curl.h"

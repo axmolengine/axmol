@@ -150,18 +150,18 @@ elseif(EMSCRIPTEN)
         PUBLIC "${_AX_ROOT}/core"
     )
     set(_AX_PLATFORM_SPECIFIC_HEADER
-        platform/emscripten/Application-emscripten.h
-        platform/emscripten/GL-emscripten.h
-        platform/emscripten/StdC-emscripten.h
-        platform/emscripten/FileUtils-emscripten.h
-        platform/emscripten/PlatformDefine-emscripten.h
+        platform/wasm/Application-wasm.h
+        platform/wasm/GL-wasm.h
+        platform/wasm/StdC-wasm.h
+        platform/wasm/FileUtils-wasm.h
+        platform/wasm/PlatformDefine-wasm.h
         platform/desktop/GLViewImpl-desktop.h # wasm can share GLviewImpl-desktop based on GLFW
         )
     set(_AX_PLATFORM_SPECIFIC_SRC
-        platform/emscripten/FileUtils-emscripten.cpp
-        platform/emscripten/Common-emscripten.cpp
-        platform/emscripten/Application-emscripten.cpp
-        platform/emscripten/Device-emscripten.cpp
+        platform/wasm/FileUtils-wasm.cpp
+        platform/wasm/Common-wasm.cpp
+        platform/wasm/Application-wasm.cpp
+        platform/wasm/Device-wasm.cpp
         platform/desktop/GLViewImpl-desktop.cpp
         )
 endif()

@@ -25,10 +25,10 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "platform/PlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/emscripten/FileUtils-emscripten.h"
-#include "platform/emscripten/Application-emscripten.h"
+#include "platform/wasm/FileUtils-wasm.h"
+#include "platform/wasm/Application-wasm.h"
 #include "platform/Common.h"
 #include "base/Macros.h"
 #include "base/UTF8.h"
@@ -102,4 +102,4 @@ bool FileUtilsEmscripten::isFileExistInternal(std::string_view path) const
 
 NS_AX_END
 
-#endif // AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN
+#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM

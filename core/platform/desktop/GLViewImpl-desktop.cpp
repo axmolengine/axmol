@@ -77,7 +77,7 @@ THE SOFTWARE.
 #    endif
 #endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN)
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 
 #else
     #include <GLFW/glfw3native.h>

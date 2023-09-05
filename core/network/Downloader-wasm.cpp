@@ -25,7 +25,7 @@
 
 
 #include "platform/FileUtils.h"
-#include "network/Downloader-emscripten.h"
+#include "network/Downloader-wasm.h"
 #include <emscripten.h>
 
 using namespace std;

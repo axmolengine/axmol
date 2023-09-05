@@ -1,6 +1,6 @@
 if(EMSCRIPTEN)
     set(_AX_NETWORK_HEADER
-        network/Downloader-emscripten.h
+        network/Downloader-wasm.h
         network/IDownloaderImpl.h
         network/Downloader.h
         network/Uri.h
@@ -10,9 +10,9 @@ if(EMSCRIPTEN)
     )
 
     set(_AX_NETWORK_SRC
-        network/HttpClient-emscripten.cpp
+        network/HttpClient-wasm.cpp
         network/Downloader.cpp
-        network/Downloader-emscripten.cpp
+        network/Downloader-wasm.cpp
         network/HttpCookie.cpp
         network/Uri.cpp
     )
