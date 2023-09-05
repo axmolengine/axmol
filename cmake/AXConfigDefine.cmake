@@ -178,11 +178,14 @@ function(use_ax_compile_options target)
 endfunction()
 
 if(EMSCRIPTEN)
-    # Enable pthread support globally
-    include(ProcessorCount)
-    ProcessorCount(_PROCESSOR_COUNT) # navigator.hardwareConcurrency
-    add_compile_options(-pthread)
-    add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_PROCESSOR_COUNT})
+    option(AX_ENABLE_WASM_THREADS "Enable wasm pthread support" ON)
+    if (AX_ENABLE_WASM_THREADS)
+        # Enable pthread support globally
+        include(ProcessorCount)
+        ProcessorCount(_PROCESSOR_COUNT) # navigator.hardwareConcurrency
+        add_compile_options(-pthread)
+        add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_PROCESSOR_COUNT})
+    endif()
 
     # Tell emcc build port libs in cache with compiler flag `-pthread` xxx.c.o
     # must via CMAKE_C_FLAGS and CMAKE_CXX_FLAGS?

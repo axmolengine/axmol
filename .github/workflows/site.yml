@@ -1,4 +1,4 @@
-name: gendocs
+name: site
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -9,26 +9,25 @@ on:
     paths:
       - core/**/*
       - docs/**/*
-      - .github/workflows/gendocs.yml
-      - tools/ci/gendocs.ps1
+      - .github/workflows/site.yml
+      - tools/ci/build-site.ps1
   workflow_dispatch:
     
 jobs:
-  build-docs:
+  build-site:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     
-    # Build the HTML documentation
-    - name: Build HTML documentation
+    - name: Build HTML site
       shell: pwsh
       run: |
         $env:AX_DOCS_TOKEN = '${{ secrets.AX_BOT_TOKEN }}'
-        ./tools/ci/gendocs.ps1
+        ./tools/ci/build-site.ps1
     
-    # Deploy the HTML documentation to GitHub Pages
+    # Deploy HTML site to GitHub Pages
     - name: GH Pages Deployment
       uses: peaceiris/actions-gh-pages@v3
       with:
