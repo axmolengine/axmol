@@ -188,10 +188,6 @@ if(EMSCRIPTEN)
     # must via CMAKE_C_FLAGS and CMAKE_CXX_FLAGS?
     set(_AX_EMCC_FLAGS "-sUSE_LIBJPEG=1 -sUSE_ZLIB=1")
 
-    # Generate sourcemap if CMAKE_BUILD_TYPE is 'Debug'
-    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-        string(APPEND _AX_EMCC_FLAGS " -gsource-map")
-    endif()
     set(CMAKE_C_FLAGS  ${_AX_EMCC_FLAGS})
     set(CMAKE_CXX_FLAGS  ${_AX_EMCC_FLAGS})
 endif()
