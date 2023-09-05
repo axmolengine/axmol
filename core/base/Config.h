@@ -270,9 +270,10 @@ THE SOFTWARE.
 
 /** Use 3d physics integration API. */
 #ifndef AX_USE_3D_PHYSICS
-#    if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC ||     \
-         AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_WINRT || \
-         AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN)
+#    if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC ||       \
+         AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_WINRT ||   \
+         AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || \
+         AX_TARGET_PLATFORM == AX_PLATFORM_EMSCRIPTEN)
 #        define AX_USE_3D_PHYSICS 1
 #    endif
 #endif
@@ -311,11 +312,9 @@ THE SOFTWARE.
 /** Support webp or not. If your application don't use webp format picture, you can undefine this macro to save package
  * size.
  */
-#if AX_TARGET_PLATFORM != AX_PLATFORM_EMSCRIPTEN
-        #ifndef AX_USE_WEBP
-                #define AX_USE_WEBP 1
-        #endif  // AX_USE_WEBP
-#endif
+#ifndef AX_USE_WEBP
+#    define AX_USE_WEBP 1
+#endif  // AX_USE_WEBP
 
 /** Enable Lua Script binding */
 #ifndef AX_ENABLE_SCRIPT_BINDING
@@ -364,8 +363,8 @@ THE SOFTWARE.
 /// @name namespace ax
 /// @{
 #ifdef __cplusplus
-#    define NS_AX_BEGIN   \
-        namespace ax \
+#    define NS_AX_BEGIN \
+        namespace ax    \
         {
 #    define NS_AX_END }
 #    define USING_NS_AX using namespace ax
@@ -377,7 +376,8 @@ THE SOFTWARE.
 #    define NS_AX
 #endif
 
-namespace ax {}
+namespace ax
+{}
 namespace axmol = ax;
 //  end of namespace group
 /// @}

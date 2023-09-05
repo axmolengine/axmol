@@ -30,7 +30,6 @@ macro(ax_depend)
     elseif(ANDROID)
         list(APPEND PLATFORM_SPECIFIC_LIBS GLESv2 EGL log android OpenSLES)
     elseif(APPLE)
-
         include_directories(/System/Library/Frameworks)
         find_library(AUDIOTOOLBOX_LIBRARY AudioToolbox)
         find_library(FOUNDATION_LIBRARY Foundation)
@@ -122,6 +121,8 @@ macro(ax_depend)
                 )
             endif()
         endif()
+    elseif(WASM)
+        list(APPEND openal) # refer to: https://emscripten.org/docs/porting/Audio.html
     endif()
 endmacro()
 

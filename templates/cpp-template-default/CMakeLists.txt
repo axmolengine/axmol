@@ -232,29 +232,3 @@ endif()
 if (NOT DEFINED BUILD_ENGINE_DONE)
     ax_uwp_set_all_targets_deploy_min_version()
 endif()
-
-set(GAME_RES_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/Content")
-
-if(EMSCRIPTEN)
-    set(CMAKE_C_FLAGS  "-s FORCE_FILESYSTEM=1 -s FETCH=1 -s USE_GLFW=3 -s VERBOSE=1 -s USE_LIBJPEG=1 -s USE_LIBPNG=1 -s USE_ZLIB=1")
-    set(CMAKE_CXX_FLAGS  "-s FORCE_FILESYSTEM=1 -s FETCH=1 -s USE_GLFW=3 -s VERBOSE=1 -s USE_LIBJPEG=1 -s USE_LIBPNG=1 -s USE_ZLIB=1")
-endif()
-
-if(EMSCRIPTEN)
-    set(CMAKE_EXECUTABLE_SUFFIX ".html")
-    target_link_options(${APP_NAME} PRIVATE
-                        "-sEXPORTED_FUNCTIONS=[_main]"
-                        "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
-                        )
-    set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s INITIAL_MEMORY=512MB --shell-file ${CMAKE_CURRENT_SOURCE_DIR}/index.html --use-preload-cache")
-    # Disable wasm, generate js build
-    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s WASM=0")
-    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=https://xxx:8080/axmolwasm/axmolwasm/build/HelloLua.debug.wasm")
-    # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=HelloLua.debug.wasm")
-
-    foreach(FOLDER IN LISTS GAME_RES_FOLDER)
-        string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
-    endforeach()
-    
-    set_target_properties(${APP_NAME} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS}")
-endif()
