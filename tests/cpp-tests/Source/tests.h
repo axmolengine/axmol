@@ -29,7 +29,7 @@
 #include "Box2DTestBed/Box2DTestBed.h"
 
 #include "ChipmunkTest/ChipmunkTest.h"
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
 #    include "ChipmunkTestBed/ChipmunkTestBed.h"
 #endif
 

@@ -449,7 +449,6 @@ macro (ax_setup_wasm_app_config app_name)
                             "-sEXPORTED_FUNCTIONS=[_main]"
                             "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
                             )
-        message(STATUS "===== wasm app ${app_name} ${_APP_SOURCE_DIR}/index.html ... ")
         set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb -s INITIAL_MEMORY=512MB --shell-file ${_APP_SOURCE_DIR}/index.html --use-preload-cache")
         # Disable wasm, generate js build?
         # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s WASM=0")
