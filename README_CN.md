@@ -24,6 +24,11 @@
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 | WASM(experimental) |[![WASM Build Status](https://ci.appveyor.com/api/projects/status/4slq965fwhbaidnc?svg=true)](https://ci.appveyor.com/project/halx99/axmol)|
 
+
+## 构建
+
+请查看: [Dev setup instructions](docs/DevSetup.md).
+
 ## 渲染后端
 
 - Metal: macOS, iOS
@@ -31,7 +36,7 @@
 - OpenGL ES 2.0+: Android
 - OpenGL ES 3.0+: iOS
 - ANGLE GLES 3.0+: Win32, WinUWP
-- WebGL 2.0(Open GLES 3.0): WASM (experimental)
+- WebGL 2.0(OpenGL ES 3.0): WASM (experimental)
 
 ## 新的媒体播放器
 
@@ -46,11 +51,6 @@
 | Apple iOS             | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
 | Android               | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | ExoPlayer2         |
 | Linux                 | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | libVLC             |
-
-
-## 构建
-
-请查看: [Dev setup instructions](docs/DevSetup.md).
   
 ### 主要特性:
 
