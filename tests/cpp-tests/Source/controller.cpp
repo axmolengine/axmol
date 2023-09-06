@@ -60,18 +60,18 @@ public:
         addTest("Audio - NewAudioEngine", []() { return new AudioEngineTests(); });
 
         addTest("Box2D - Basic", []() { return new Box2DTests(); });
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         addTest("Chipmunk2D - TestBed", []() { return new ChipmunkTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });
         addTest("Click and Move", []() { return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
-#if !defined(AX_PLATFORM_WASM)
+#if !defined(__EMSCRIPTEN__)
         addTest("Curl", []() { return new CurlTests(); });
 #endif
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
