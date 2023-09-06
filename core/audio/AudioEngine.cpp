@@ -55,7 +55,7 @@ AudioEngine::ProfileHelper* AudioEngine::_defaultProfileHelper = nullptr;
 std::unordered_map<AUDIO_ID, AudioEngine::AudioInfo> AudioEngine::_audioIDInfoMap;
 AudioEngineImpl* AudioEngine::_audioEngineImpl = nullptr;
 
-#ifndef __EMSCRIPTEN__
+#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
 AudioEngine::AudioEngineThreadPool* AudioEngine::s_threadPool = nullptr;
 #endif
 
@@ -67,7 +67,7 @@ AudioEngine::AudioInfo::AudioInfo()
 
 AudioEngine::AudioInfo::~AudioInfo() {}
 
-#ifndef __EMSCRIPTEN__
+#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
 class AudioEngine::AudioEngineThreadPool
 {
 public:
@@ -143,7 +143,7 @@ void AudioEngine::end()
     // fix #127
     uncacheAll();
 
-#ifndef __EMSCRIPTEN__
+#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
     if (s_threadPool)
     {
         delete s_threadPool;
@@ -171,7 +171,7 @@ bool AudioEngine::lazyInit()
         }
     }
 
-#ifndef __EMSCRIPTEN__
+#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
     if (s_threadPool == nullptr)
     {
         s_threadPool = new AudioEngineThreadPool();
@@ -596,7 +596,7 @@ void AudioEngine::addTask(const std::function<void()>& task)
 {
     lazyInit();
 
-#ifndef __EMSCRIPTEN__
+#if !defined(__EMSCRIPTEN__) || defined(__EMSCRIPTEN_PTHREADS__)
     if (_audioEngineImpl && s_threadPool)
     {
         s_threadPool->addTask(task);
