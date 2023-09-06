@@ -30,6 +30,12 @@
   - osx: whether use OpenGL instead Metal backend
   - ios/tvos: whether use GLES instead Metal backend
 - AX_GLES_PROFILE: speicify GLES profile version for GLES backend, valid value `200`, `300`
+- AX_WASM_THREADS: specify wasm thread count, valid value: number: `>=0` , string: must be: `auto` or `navigator.hardwareConcurrency`, 
+   - number: explicit set thread count, `0` means disable wasm thread support
+   - string: 
+     - `navigator.hardwareConcurrency`: will be emitted in the JS code which will use the number of cores the browser reports
+     - `auto`: Use cmake to detect host processor count
+default is: `navigator.hardwareConcurrency`
 
 ## The options for axmol apps
 

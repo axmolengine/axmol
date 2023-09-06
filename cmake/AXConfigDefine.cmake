@@ -178,13 +178,23 @@ function(use_ax_compile_options target)
 endfunction()
 
 if(EMSCRIPTEN)
-    option(AX_ENABLE_WASM_THREADS "Enable wasm pthread support" ON)
-    if (AX_ENABLE_WASM_THREADS)
+    set(AX_WASM_THREADS "navigator.hardwareConcurrency" CACHE STRING "Wasm threads count")
+
+    set(_AX_WASM_THREADS_INT 0)
+    if (AX_WASM_THREADS STREQUAL "auto") # not empty string or not 0
         # Enable pthread support globally
         include(ProcessorCount)
-        ProcessorCount(_PROCESSOR_COUNT) # navigator.hardwareConcurrency
+        ProcessorCount(_AX_WASM_THREADS_INT)
+    elseif(AX_WASM_THREADS MATCHES "^([0-9]+)$" OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
+        set(_AX_WASM_THREADS_INT ${AX_WASM_THREADS})
+    endif()
+
+    message(STATUS "AX_WASM_THREADS=${AX_WASM_THREADS}")
+    message(STATUS "_AX_WASM_THREADS_INT=${_AX_WASM_THREADS_INT}")
+
+    if (_AX_WASM_THREADS_INT)
         add_compile_options(-pthread)
-        add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_PROCESSOR_COUNT})
+        add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_AX_WASM_THREADS_INT})
     endif()
 
     # Tell emcc build port libs in cache with compiler flag `-pthread` xxx.c.o
