@@ -568,8 +568,9 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #endif
 
 #if defined(AX_USE_GL)
+#    if !defined(__EMSCRIPTEN__)
     glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
-
+#    endif
         // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !AX_GLES_PROFILE
         // Enable point size by default.
