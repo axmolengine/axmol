@@ -31,6 +31,10 @@
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
 | WASM(experimental) |[![WASM Build Status](https://ci.appveyor.com/api/projects/status/4slq965fwhbaidnc?svg=true)](https://ci.appveyor.com/project/halx99/axmol)|
 
+## Building
+
+View the [Dev setup instructions](docs/DevSetup.md).
+
 ## Renderer Backends
 
 - Metal for macOS and iOS
@@ -38,7 +42,7 @@
 - OpenGL ES 2.0+ for Android
 - OpenGL ES 3.0+ for iOS
 - ANGLE GLES 3.0+ for Win32 and UWP
-- WebGL 2.0(Open GLES 3.0): WASM (experimental)
+- WebGL 2.0(OpenGL ES 3.0): WASM (experimental)
 
 ## New MediaPlayer
 
@@ -54,10 +58,6 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which
 | Apple iOS             | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
 | Android               | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | ExoPlayer2         |
 | Linux                 | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | libVLC             |
-
-## Building
-
-View the [Dev setup instructions](docs/DevSetup.md).
 
 ## Highlighted Features
 
