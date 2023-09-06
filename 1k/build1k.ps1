@@ -146,6 +146,15 @@ class build1k {
             $this.println($msg)
         }
     }
+
+    [string] hash($content) {  
+        $stringAsStream = [System.IO.MemoryStream]::new()
+        $writer = [System.IO.StreamWriter]::new($stringAsStream)
+        $writer.write($content)
+        $writer.Flush()
+        $stringAsStream.Position = 0
+        return (Get-FileHash -InputStream $stringAsStream -Algorithm MD5).Hash
+    }
 }
 $b1k = [build1k]::new()
 
@@ -1118,35 +1127,37 @@ if (!$setupOnly) {
             throw "Missing CMakeLists.txt in $workDir"
         }
 
+        if ($options.p -eq 'linux' -or $options.p -eq 'wasm') {
+            if($optimize_flag -eq 'Debug') {
+                $CONFIG_ALL_OPTIONS += '-DCMAKE_BUILD_TYPE=Debug'
+            }
+            else {
+                $CONFIG_ALL_OPTIONS += '-DCMAKE_BUILD_TYPE=Release'
+            }
+        }
+
         $mainDepChanged = $false
         # A Windows file time is a 64-bit value that represents the number of 100-nanosecond
         $tempFileItem = Get-Item $mainDep
         $lastWriteTime = $tempFileItem.LastWriteTime.ToFileTimeUTC()
         $tempFile = Join-Path $BUILD_DIR 'b1k_cache.txt'
 
-        $storeTime = 0
+        $storeHash = 0
         if ($b1k.isfile($tempFile)) {
-            $storeTime = Get-Content $tempFile -Raw
+            $storeHash = Get-Content $tempFile -Raw
         }
-        $mainDepChanged = "$storeTime" -ne "$lastWriteTime"
+        $hashValue = $b1k.hash("$CONFIG_ALL_OPTIONS#$lastWriteTime")
+        $mainDepChanged = "$storeHash" -ne "$hashValue"
         $cmakeCachePath = Join-Path $workDir "$BUILD_DIR/CMakeCache.txt"
 
         if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath)) {
-            if ($options.p -eq 'linux' -or $options.p -eq 'wasm') {
-                if($optimize_flag -eq 'Debug') {
-                    $CONFIG_ALL_OPTIONS += '-DCMAKE_BUILD_TYPE=Debug'
-                }
-                else {
-                    $CONFIG_ALL_OPTIONS += '-DCMAKE_BUILD_TYPE=Release'
-                }
-            }
             if (!$is_wasm) {
                 cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
             }
             else {
                 emcmake cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
             }
-            Set-Content $tempFile $lastWriteTime -NoNewline
+            Set-Content $tempFile $hashValue -NoNewline
         }
 
         if (!$configOnly) {
