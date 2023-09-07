@@ -141,6 +141,9 @@ public:
     /** Gets the current running Scene. Director can only run one Scene at a time. */
     Scene* getRunningScene() { return _runningScene; }
 
+    /** Gets the top(next) scene which will going to running state. */
+    Scene* getNextScene() { return _nextScene; }
+
     /** Gets the FPS value. */
     float getAnimationInterval() { return _animationInterval; }
     /** Sets the FPS value. FPS = 1/interval. */
