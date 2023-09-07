@@ -29,7 +29,7 @@
       },
       {
          "action": "cp",
-         "from": "$env:AX_ROOT/build.ps1",
+         "from": "$env:AX_ROOT/templates/build.bat",
          "to": "${projectDir}/"
       },
       {
