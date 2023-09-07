@@ -36,7 +36,8 @@
      - `navigator.hardwareConcurrency`: will be emitted in the JS code which will use the number of cores the browser reports
      - `auto`: Use cmake to detect host processor count
 default is: `navigator.hardwareConcurrency`
+- AX_WASM_SHELL_FILE: specify the wasm shell file, by default use `${_AX_ROOT}/core/platform/wasm/shell_minimal.html`
 
 ## The options for axmol apps
 
-- AX_PREBUILT_DIR: specific the prebuilt dir (relative to `AX_ROOT`), it's very useful for fast linking apps with prebuilt engine libs
+- AX_PREBUILT_DIR: specify the prebuilt dir (relative to `AX_ROOT`), it's very useful for fast linking apps with prebuilt engine libs
