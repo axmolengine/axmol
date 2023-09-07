@@ -26,7 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "platform/desktop/GLViewImpl-desktop.h"
+#include "platform/GLViewImpl.h"
 
 #include <cmath>
 #include <unordered_map>
@@ -80,11 +80,15 @@ THE SOFTWARE.
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
 
 #else
-    #include <GLFW/glfw3native.h>
+#    include <GLFW/glfw3native.h>
 #endif
 
 #if defined(_WIN32)
 #    include "glfw3ext.h"
+#endif
+
+#if defined(__EMSCRIPTEN__)
+#    include <emscripten/html5.h>
 #endif
 
 NS_AX_BEGIN
@@ -109,6 +113,14 @@ public:
         if (_view)
             _view->onGLFWMouseMoveCallBack(window, x, y);
     }
+#if defined(__EMSCRIPTEN__)
+    static int onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent, void* /*userData*/)
+    {
+        if (_view)
+            _view->onWebTouchCallback(eventType, touchEvent);
+        return 0;
+    }
+#endif
 
     static void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y)
     {
@@ -547,9 +559,24 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
     {
         frameSize.height = realH / _frameZoomFactor;
     }
-
     glfwSetMouseButtonCallback(_mainWindow, GLFWEventHandler::onGLFWMouseCallBack);
     glfwSetCursorPosCallback(_mainWindow, GLFWEventHandler::onGLFWMouseMoveCallBack);
+#if defined(__EMSCRIPTEN__)
+    // clang-format off
+    _isTouchDevice = !!EM_ASM_INT(return (('ontouchstart' in window) || 
+        (navigator.maxTouchPoints > 0) || 
+        (navigator.msMaxTouchPoints > 0)) ? 1 : 0;
+    );
+    if (_isTouchDevice)
+    {
+        emscripten_set_touchstart_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchend_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchmove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
+        emscripten_set_touchcancel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, this, 1, GLFWEventHandler::onWebTouchCallback);
+    }
+    // clang-format on
+#endif
+
     glfwSetScrollCallback(_mainWindow, GLFWEventHandler::onGLFWMouseScrollCallback);
     glfwSetCharCallback(_mainWindow, GLFWEventHandler::onGLFWCharCallback);
     glfwSetKeyCallback(_mainWindow, GLFWEventHandler::onGLFWKeyCallback);
@@ -571,9 +598,9 @@ bool GLViewImpl::initWithRect(std::string_view viewName, const ax::Rect& rect, f
 #    if !defined(__EMSCRIPTEN__)
     glfwSwapInterval(_glContextAttrs.vsync ? 1 : 0);
 #    endif
-        // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
+    // Will cause OpenGL error 0x0500 when use ANGLE-GLES on desktop
 #    if !AX_GLES_PROFILE
-        // Enable point size by default.
+    // Enable point size by default.
 #        if defined(GL_VERSION_2_0)
     glEnable(GL_VERTEX_PROGRAM_POINT_SIZE);
 #        else
@@ -976,30 +1003,33 @@ void GLViewImpl::onGLFWError(int errorID, const char* errorDesc)
 
 void GLViewImpl::onGLFWMouseCallBack(GLFWwindow* /*window*/, int button, int action, int /*modify*/)
 {
-    if (GLFW_MOUSE_BUTTON_LEFT == button)
+    if (!_isTouchDevice)
     {
-        if (GLFW_PRESS == action)
+        if (GLFW_MOUSE_BUTTON_LEFT == button)
         {
-            _captured = true;
-            if (this->getViewPortRect().equals(ax::Rect::ZERO) ||
-                this->getViewPortRect().containsPoint(Vec2(_mouseX, _mouseY)))
+            if (GLFW_PRESS == action)
             {
-                intptr_t id = 0;
-                this->handleTouchesBegin(1, &id, &_mouseX, &_mouseY);
+                _captured = true;
+                if (this->getViewPortRect().equals(ax::Rect::ZERO) ||
+                    this->getViewPortRect().containsPoint(Vec2(_mouseX, _mouseY)))
+                {
+                    intptr_t id = 0;
+                    this->handleTouchesBegin(1, &id, &_mouseX, &_mouseY);
+                }
             }
-        }
-        else if (GLFW_RELEASE == action)
-        {
-            if (_captured)
+            else if (GLFW_RELEASE == action)
             {
-                _captured   = false;
-                intptr_t id = 0;
-                this->handleTouchesEnd(1, &id, &_mouseX, &_mouseY);
+                if (_captured)
+                {
+                    _captured   = false;
+                    intptr_t id = 0;
+                    this->handleTouchesEnd(1, &id, &_mouseX, &_mouseY);
+                }
             }
         }
     }
 
-    // Because OpenGL and cocos2d-x uses different Y axis, we need to convert the coordinate here
+    // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
     float cursorX = (_mouseX - _viewPortRect.origin.x) / _scaleX;
     float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - _mouseY) / _scaleY;
 
@@ -1035,14 +1065,16 @@ void GLViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
             _mouseY *= 2;
         }
     }
-
-    if (_captured)
+    if (!_isTouchDevice)
     {
-        intptr_t id = 0;
-        this->handleTouchesMove(1, &id, &_mouseX, &_mouseY);
+        if (_captured)
+        {
+            intptr_t id = 0;
+            this->handleTouchesMove(1, &id, &_mouseX, &_mouseY);
+        }
     }
 
-    // Because OpenGL and cocos2d-x uses different Y axis, we need to convert the coordinate here
+    // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
     float cursorX = (_mouseX - _viewPortRect.origin.x) / _scaleX;
     float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - _mouseY) / _scaleY;
 
@@ -1064,10 +1096,58 @@ void GLViewImpl::onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y)
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
+#if defined(__EMSCRIPTEN__)
+void GLViewImpl::onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent)
+{
+    float boundingX = EM_ASM_INT(return canvas.getBoundingClientRect().left);
+    float boundingY = EM_ASM_INT(return canvas.getBoundingClientRect().top);
+    int canvasWidth, canvasHeight;
+    emscripten_get_canvas_element_size("#canvas", &canvasWidth, &canvasHeight);
+    double cssWidth, cssHeight;
+    emscripten_get_element_css_size("#canvas", &cssWidth, &cssHeight);
+    const auto zoomX = canvasWidth / cssWidth;
+    const auto zommY = canvasHeight / cssHeight;
+
+    int numTouches = touchEvent->numTouches;
+    _touchesId.resize(numTouches);
+    _touchesX.resize(numTouches);
+    _touchesY.resize(numTouches);
+    for (int i = 0; i < numTouches; i++)
+    {
+        _touchesId[i] = (touchEvent->touches[i].identifier);
+        // convert coords screen(origin:left-top) to canvas
+        _touchesX[i] = ((touchEvent->touches[i].targetX - boundingX) * zoomX);
+        _touchesY[i] = ((touchEvent->touches[i].targetY - boundingY) * zommY);
+    }
+    if (numTouches)
+    {
+        switch (eventType)
+        {
+        case EMSCRIPTEN_EVENT_TOUCHSTART:
+            _captured = true;
+            handleTouchesBegin(numTouches, _touchesId.data(), _touchesX.data(), _touchesY.data());
+            break;
+        case EMSCRIPTEN_EVENT_TOUCHEND:
+            handleTouchesEnd(numTouches, _touchesId.data(), _touchesX.data(), _touchesY.data());
+            _captured = false;
+            break;
+        case EMSCRIPTEN_EVENT_TOUCHMOVE:
+            if (_captured)
+                handleTouchesMove(numTouches, _touchesId.data(), _touchesX.data(), _touchesY.data());
+            break;
+        case EMSCRIPTEN_EVENT_TOUCHCANCEL:
+            handleTouchesCancel(numTouches, _touchesId.data(), _touchesX.data(), _touchesY.data());
+            _captured = false;
+            break;
+        }
+    }
+}
+#endif
+
 void GLViewImpl::onGLFWMouseScrollCallback(GLFWwindow* /*window*/, double x, double y)
 {
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
-    // Because OpenGL and cocos2d-x uses different Y axis, we need to convert the coordinate here
+    // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
     float cursorX = (_mouseX - _viewPortRect.origin.x) / _scaleX;
     float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - _mouseY) / _scaleY;
     event.setScrollData((float)x, -(float)y);

@@ -105,21 +105,7 @@ function search_proj_file($file_path, $type) {
     return $null
 }
 
-$search_rules = @(
-    # others
-    @{
-        path = 'CMakeLists.txt';
-        type = 'Leaf'
-    },
-    # android
-    @{
-        path = 'proj.android';
-        type = 'Container';
-    }
-)
-
-$search_rule = $search_rules[$is_android]
-$proj_dir = search_proj_file $search_rule.path $search_rule.type
+$proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
 $proj_name = (Get-Item $proj_dir).BaseName
 
 $bti = $null # cmake target param index
@@ -183,7 +169,7 @@ if (!$bci) {
     $optimize_flag = $options.xb[$bci]
 }
 
-if ($is_android) {
+if ($is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)) {
     $b1k_args += '-xt', 'proj.android/gradlew'
 }
 

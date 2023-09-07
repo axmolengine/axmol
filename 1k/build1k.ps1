@@ -1023,15 +1023,11 @@ if ($BUILD_TARGET -eq 'win32') {
     }
 }
 elseif ($BUILD_TARGET -eq 'android') {
+    $ninja_prog = setup_ninja
     $null = setup_jdk # setup android sdk cmdlinetools require jdk
     $sdk_root, $ndk_root = setup_android_sdk
     $env:ANDROID_HOME = $sdk_root
     $env:ANDROID_NDK = $ndk_root
-    # we assume 'gradlew' to build apk, so require setup jdk11+
-    # otherwise, build for android libs, needs setup ninja
-    if ($is_gradlew) {
-        $ninja_prog = setup_ninja
-    }  
 }
 elseif ($BUILD_TARGET -eq 'wasm') {
     . setup_emsdk

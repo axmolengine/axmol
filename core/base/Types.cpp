@@ -424,7 +424,7 @@ void HSV::fromRgba(const Color4F& rgba)
         h = 360 + h;
     }
 
-    this->a = a;
+    this->a = rgba.a;
 }
 
 Color4F HSV::toRgba() const
@@ -641,7 +641,7 @@ void HSL::fromRgba(const Color4F& rgba)
         h /= 6;
     }
     
-    this->a = a;
+    this->a = rgba.a;
 }
 
 float HSL::hue2rgb(float p, float q, float t)
