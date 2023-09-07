@@ -84,7 +84,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #define IOS_MAX_TOUCHES_COUNT 10
 
 @interface EAGLView ()
-@property(nonatomic) CCInputView* textInputView;
+@property(nonatomic) TextInputView* textInputView;
 @property(nonatomic, readwrite, assign) BOOL isKeyboardShown;
 @property(nonatomic, copy) NSNotification* keyboardShowNotification;
 @property(nonatomic, assign) CGRect originalRect;
@@ -181,7 +181,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 {
     if ((self = [super initWithFrame:frame]))
     {
-        self.textInputView = [[CCInputView alloc] initWithFrame:frame];
+        self.textInputView = [[TextInputView alloc] initWithFrame:frame];
 
         originalRect_                 = self.frame;
         self.keyboardShowNotification = nil;
@@ -223,7 +223,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 {
     if ((self = [super initWithCoder:aDecoder]))
     {
-        self.textInputView = [[CCInputView alloc] initWithCoder:aDecoder];
+        self.textInputView = [[TextInputView alloc] initWithCoder:aDecoder];
 #if defined(AX_USE_METAL)
         size_ = [self bounds].size;
 #else

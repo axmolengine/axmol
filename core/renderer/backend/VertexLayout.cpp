@@ -36,7 +36,7 @@ void VertexLayout::setAttrib(std::string_view name,
 {
     if (index == -1)
     {
-        AXLOGWARN("The vertex attribute '%s' vfmt=%d not exist, unused/optimized?", name.data(), format);
+        AXLOGWARN("The vertex attribute '%s' vfmt=%d not exist, unused/optimized?", name.data(), static_cast<int>(format));
         return;
     }
 

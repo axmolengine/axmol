@@ -23,12 +23,18 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
+// Implement GLView based on GLFW for targets: win32,osx,web(wasm)
 #pragma once
 #include "platform/GL.h"
 #include "base/Ref.h"
 #include "platform/Common.h"
 #include "platform/GLView.h"
 #include <GLFW/glfw3.h>
+#if defined(__EMSCRIPTEN__)
+#    include "base/axstd.h"
+struct EmscriptenMouseEvent;
+struct EmscriptenTouchEvent;
+#endif
 
 NS_AX_BEGIN
 
@@ -128,8 +134,8 @@ public:
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     void* getCocoaWindow() override;
-    void* getNSGLContext() override; // stevetranby: added
-#endif  // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
+    void* getNSGLContext() override;  // stevetranby: added
+#endif                                // #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
 
 protected:
     GLViewImpl(bool initglfw = true);
@@ -138,7 +144,7 @@ protected:
     bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable);
     bool initWithFullScreen(std::string_view viewName);
     bool initWithFullscreen(std::string_view viewname, const GLFWvidmode& videoMode, GLFWmonitor* monitor);
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC) // Windows, Linux: use glad to loadGL
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_MAC)  // Windows, Linux: use glad to loadGL
     bool loadGL();
 #endif
     /* update frame layout when enter/exit full screen mode */
@@ -150,6 +156,9 @@ protected:
     void onGLFWError(int errorID, const char* errorDesc);
     void onGLFWMouseCallBack(GLFWwindow* window, int button, int action, int modify);
     void onGLFWMouseMoveCallBack(GLFWwindow* window, double x, double y);
+#if defined(__EMSCRIPTEN__)
+    void onWebTouchCallback(int eventType, const EmscriptenTouchEvent* touchEvent);
+#endif
     void onGLFWMouseScrollCallback(GLFWwindow* window, double x, double y);
     void onGLFWKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     void onGLFWCharCallback(GLFWwindow* window, unsigned int character);
@@ -158,6 +167,7 @@ protected:
     void onGLFWWindowIconifyCallback(GLFWwindow* window, int iconified);
     void onGLFWWindowFocusCallback(GLFWwindow* window, int focused);
 
+    bool _isTouchDevice = false;
     bool _captured;
     bool _isInRetinaMonitor;
     bool _isRetinaEnabled;
@@ -169,6 +179,12 @@ protected:
     GLFWmonitor* _monitor;
 
     std::string _glfwError;
+
+#if defined(__EMSCRIPTEN__)
+    axstd::pod_vector<intptr_t> _touchesId;
+    axstd::pod_vector<float> _touchesX;
+    axstd::pod_vector<float> _touchesY;
+#endif
 
     float _mouseX;
     float _mouseY;

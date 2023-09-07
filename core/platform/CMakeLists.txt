@@ -41,7 +41,7 @@ elseif(WINDOWS)
             platform/win32/FileUtils-win32.h
             platform/win32/StdC-win32.h
             platform/win32/PlatformDefine-win32.h
-            platform/desktop/GLViewImpl-desktop.h
+            platform/GLViewImpl.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
             platform/win32/StdC-win32.cpp
@@ -49,7 +49,7 @@ elseif(WINDOWS)
             platform/win32/Common-win32.cpp
             platform/win32/Application-win32.cpp
             platform/win32/Device-win32.cpp
-            platform/desktop/GLViewImpl-desktop.cpp
+            platform/GLViewImpl.cpp
             )
     else()
         file(GLOB _AX_PLATFORM_SPECIFIC_HEADER platform/winrt/*.h)
@@ -71,16 +71,16 @@ elseif(APPLE)
             platform/mac/StdC-mac.h
             platform/mac/PlatformDefine-mac.h
             platform/mac/Application-mac.h
-            platform/desktop/GLViewImpl-desktop.h
+            platform/GLViewImpl.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
             ${_AX_PLATFORM_SPECIFIC_SRC}
             platform/mac/Application-mac.mm
             platform/mac/Common-mac.mm
             platform/mac/Device-mac.mm
-            platform/desktop/GLViewImpl-desktop.cpp
+            platform/GLViewImpl.cpp
             )
-        set_source_files_properties(platform/desktop/GLViewImpl-desktop.cpp PROPERTIES LANGUAGE OBJCXX)
+        set_source_files_properties(platform/GLViewImpl.cpp PROPERTIES LANGUAGE OBJCXX)
     elseif(IOS)
         set(_AX_PLATFORM_SPECIFIC_HEADER
             ${_AX_PLATFORM_SPECIFIC_HEADER}
@@ -135,14 +135,14 @@ elseif(LINUX)
         platform/linux/StdC-linux.h
         platform/linux/FileUtils-linux.h
         platform/linux/PlatformDefine-linux.h
-        platform/desktop/GLViewImpl-desktop.h
+        platform/GLViewImpl.h
         )
     set(_AX_PLATFORM_SPECIFIC_SRC
         platform/linux/FileUtils-linux.cpp
         platform/linux/Common-linux.cpp
         platform/linux/Application-linux.cpp
         platform/linux/Device-linux.cpp
-        platform/desktop/GLViewImpl-desktop.cpp
+        platform/GLViewImpl.cpp
         )
 elseif(EMSCRIPTEN)
     include_directories(
@@ -155,14 +155,14 @@ elseif(EMSCRIPTEN)
         platform/wasm/StdC-wasm.h
         platform/wasm/FileUtils-wasm.h
         platform/wasm/PlatformDefine-wasm.h
-        platform/desktop/GLViewImpl-desktop.h # wasm can share GLviewImpl-desktop based on GLFW
+        platform/GLViewImpl.h # wasm can share GLviewImpl-desktop based on GLFW
         )
     set(_AX_PLATFORM_SPECIFIC_SRC
         platform/wasm/FileUtils-wasm.cpp
         platform/wasm/Common-wasm.cpp
         platform/wasm/Application-wasm.cpp
         platform/wasm/Device-wasm.cpp
-        platform/desktop/GLViewImpl-desktop.cpp
+        platform/GLViewImpl.cpp
         )
 endif()
 
