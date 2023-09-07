@@ -223,7 +223,7 @@ Build projects to binary.
 
 options:
   -h: show this help message and exit
-  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
+  -p: build target platform, valid value are: win32,winuwp,linux,android,osx,ios,tvos,wasm
       for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
@@ -246,6 +246,7 @@ options:
      - axmol build -p osx -a arm64
    - ios: axmol build -p ios -a x64
    - tvos: axmol build -p tvos -a x64
+   - wasm: axmol build -p wasm
 "@;
     };
     deploy = @{
