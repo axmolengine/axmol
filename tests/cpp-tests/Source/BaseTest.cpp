@@ -159,7 +159,7 @@ void TestList::runThisTest()
      */
 
     GLViewImpl* glView = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
     glView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif
 

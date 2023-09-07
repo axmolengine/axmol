@@ -439,6 +439,8 @@ function(ax_setup_app_config app_name)
     endif()
 endfunction()
 
+set(AX_WASM_SHELL_FILE "${_AX_ROOT}/core/platform/wasm/shell_minimal.html" CACHE STRING "The path of wasm shell file")
+
 # stupid & pitfall: function not emcc not output .html
 macro (ax_setup_wasm_app_config app_name)
     # setup wasm target
@@ -449,7 +451,7 @@ macro (ax_setup_wasm_app_config app_name)
                             "-sEXPORTED_FUNCTIONS=[_main]"
                             "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
                             )
-        set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb -s INITIAL_MEMORY=512MB --shell-file ${_APP_SOURCE_DIR}/index.html --use-preload-cache")
+        set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb -s INITIAL_MEMORY=512MB --shell-file ${AX_WASM_SHELL_FILE} --use-preload-cache")
         # Disable wasm, generate js build?
         # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s WASM=0")
         # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=https://xxx:8080/axmolwasm/axmolwasm/build/HelloLua.debug.wasm")
