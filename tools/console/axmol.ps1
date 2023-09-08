@@ -89,25 +89,39 @@ function axmol_deploy() {
     $sub_args = $args
     . axmol_build @sub_args
     if ($options.p -eq 'winuwp') {
-        $appxManifestFile = Join-Path $options.d "$BUILD_DIR/bin/$cmake_target/$optimize_flag/Appx/AppxManifest.xml"
+        $appxManifestFile = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/Appx/AppxManifest.xml"
+
+        # deploy by visual studio major program: devenv.exe
+        $vswherePath = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
+        $devenvPath =  &$vswherePath -latest -requires Microsoft.Component.MSBuild -find Common*\IDE\devenv.exe | select-object -first 1
+
+        if (Test-Path $devenvPath -PathType Leaf) {
+            $devenvRoot = Split-Path $devenvPath -Parent
+            $env:PATH = "$devenvRoot;$env:PATH"
+            $slnDir = Join-Path $proj_dir $BUILD_DIR
+            $slnFileName = (Get-ChildItem $slnDir *.sln).Name
+            $slnFilePath = Join-Path $slnDir $slnFileName
+            devenv $slnFilePath /deploy $optimize_flag /project $cmake_target /projectconfig $optimize_flag
+        }
+
         [XML]$appxManifest = Get-Content $appxManifestFile
         $appxIdentity = $appxManifest.Package.Identity.Name
-        $appxPkgFullName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFullName').PackageFullName")
-        if ($appxPkgInfo ) {
-            if ($uninst) {
-                println "Uninstalling $appxPkgFullName ..."
-                powershell -Command "Remove-AppxPackage -Package '$appxPkgFullName'"
-                powershell -Command "Add-AppxPackage -Register '$appxManifestFile'"
-            }
-        }
-        else {
-            powershell -Command "Add-AppxPackage -Register '$appxManifestFile'"
-        }
+        # $appxPkgFullName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFullName').PackageFullName")
+        # if ($appxPkgFullName ) {
+        #     if ($uninst) {
+        #         println "Uninstalling $appxPkgFullName ..."
+        #         powershell -Command "Remove-AppxPackage -Package '$appxPkgFullName'"
+        #         powershell -Command "Add-AppxPackage -Register '$appxManifestFile'"
+        #     }
+        # }
+        # else {
+        #     powershell -Command "Add-AppxPackage -Register '$appxManifestFile'"
+        # }
         $appxPkgName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFamilyName').PackageFamilyName")
         println "axmol: Deploy $cmake_target done: $appxPkgName"
     }
     elseif($options.p -eq 'win32') {
-        $win32exePath = Join-Path $options.d "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.exe"
+        $win32exePath = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.exe"
         println "axmol: Deploy $cmake_target done: $win32exePath"
     }
     elseif ($options.p -eq 'android') {
@@ -141,9 +155,6 @@ function axmol_deploy() {
 
         }
     }
-    elseif($options.p -eq 'osx') {
-
-    }
 }
 
 function axmol_run() {
@@ -173,7 +184,12 @@ function axmol_run() {
         println "axmol: Launching $launch_linuxapp ..."
         Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
     }
-    println "axmol: Launch $cmake_target done"
+    elseif($options.p -eq 'wasm') {
+        $launch_wasmapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$cmake_target.html"
+        println "axmol: Launching $launch_wasmapp ..."
+        emrun $launch_wasmapp
+    }
+    println "axmol: Launch $cmake_target done, target platform is $($options.p)"
 }
 
 $builtinPlugins = @{
@@ -207,14 +223,14 @@ Build projects to binary.
 
 options:
   -h: show this help message and exit
-  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
+  -p: build target platform, valid value are: win32,winuwp,linux,android,osx,ios,tvos,wasm
       for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
   -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
   -xb: additional cross build options: i.e. -xb '--config','Release'
-  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
+  -c: no build, only generate natvie project file (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
  examples:
    - win32: 
@@ -247,7 +263,7 @@ options:
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
   -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
   -xb: additional cross build options: i.e. -xb '--config','Release'
-  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
+  -c: no build, only generate natvie project file (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
 "@;
     };
@@ -265,7 +281,7 @@ options:
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
   -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
   -xb: additional cross build options: i.e. -xb '--config','Release'
-  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
+  -c: no build, only generate natvie project file (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
 "@
     }

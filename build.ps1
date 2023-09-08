@@ -2,7 +2,7 @@
 # This script easy to build win32, linux, winuwp, ios, tvos, osx, android depends on $myRoot/1k/build1k.ps1
 # usage: pwsh build.ps1 -p <targetPlatform> -a <arch>
 # options
-#  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
+#  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos
 #      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
@@ -105,21 +105,7 @@ function search_proj_file($file_path, $type) {
     return $null
 }
 
-$search_rules = @(
-    # others
-    @{
-        path = 'CMakeLists.txt';
-        type = 'Leaf'
-    },
-    # android
-    @{
-        path = 'proj.android';
-        type = 'Container';
-    }
-)
-
-$search_rule = $search_rules[$is_android]
-$proj_dir = search_proj_file $search_rule.path $search_rule.type
+$proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
 $proj_name = (Get-Item $proj_dir).BaseName
 
 $bti = $null # cmake target param index
@@ -183,7 +169,7 @@ if (!$bci) {
     $optimize_flag = $options.xb[$bci]
 }
 
-if ($is_android) {
+if ($is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)) {
     $b1k_args += '-xt', 'proj.android/gradlew'
 }
 
