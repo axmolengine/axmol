@@ -1,3 +1,18 @@
+axmol-1.0.1 Sep.8 2023
+
+- [NEW] Add [`install-pwsh.sh`](https://github.com/axmolengine/axmol/blob/dev/install-pwsh.sh) to make installing powershell on `macOS`, `Ubuntu`, `ArchLinux` more easier
+- [NEW] **Axmol console next**, now almost powershell (except luabinding generator required python3)
+  - The axmol console commands `axmol run`, `axmol deploy` aslo support `winuwp`
+  - *The axmol console commands not only used by axmol, it's could be used to build any other project based on cmake build system*, i.e, goto any cmake based project directory, then run command: ```axmol build -p win32 -xb "--target, <your_project_cmake_target>"```
+  
+- [NEW] `ArchLinux` now official supported by axmol community, means, with 2 steps: 
+  1. `install-pwsh.sh`
+  2. `pwsh .\setup.ps1`
+then you can compile for targets: `linux` and `android` (apk) by commands in your axmol's project root directory
+  - `axmol build -p linux` for linux
+  - `axmol build -p android -a arm64` for android
+- [REFINE] Lock android ndk revision to **r23c**
+
 axmol-1.0.0  Aug.9 2023
 
 - [HIGHLIGHT] Reimplemented MediaPlayer support play media(video/audio) files for all platforms, and ui::VideoPlayer was renamed to ui::MediaPlayer
