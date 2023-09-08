@@ -54,32 +54,32 @@
   
 ### 主要特性:
 
-* WebAssembly支持（实验性的）by @nowasm
-* Windows UWP 支持，请参考: https://github.com/axmolengine/axmol/pull/1108
-* 增加tvos支持
-* 增强Windows下工作流，支持链接引擎预编译库, 用法请查看: [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
-* Windows 视频播放支持
-* Windows x64编译支持
-* 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
-* 重构AudioEngine, 全平台OpenAL
-  * [openal-soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enable it
-  * [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no and ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
-* 重构UserDefault, 全平台基于内存映射文件 [mio](https://github.com/mandreyel/mio), 性能提升百倍
-* 模块化所有引擎扩展库, 所有扩展库放到extensions目录下，如cocostudio, spine
-* AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
-* 使用现代化的GL加载器glad代替glew
-* 增加google angle渲染后端支持
-* C++最低标准要求: C++17/20
-* 设置ios下最低目标平台为ios11.0
-* 使用更快的xml解析库pugixml代替tinyxml2
-* Downloader全平台统一实现，均基于curl
-* 全平台统一使用XML SAX解析plist文件, 移除Apple平台的实现
-* Spine 3.8支持
-* 新增FairyGUI支持
-* 新增硬件压缩纹理格式ASTC 4x4/6x6/8x8支持，支持软解
-* 新增硬件压缩纹理格式ETC2 RGB/RGBA支持，支持软解
-* **ImGui集成，非常方便写游戏内嵌小工具，用法详见[ImGui](extensions/ImGui/README.md)**
-* 完整改动列表，请查看[CHANGELOG](CHANGELOG)
+- WebAssembly支持（实验性的）by @nowasm
+- Windows UWP 支持，请参考: https://github.com/axmolengine/axmol/pull/1108
+- 增加tvos支持
+- 增强Windows下工作流，支持链接引擎预编译库, 用法请查看: [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
+- Windows 视频播放支持
+- Windows x64编译支持
+- 基于yasio重构HttpClient以支持并发Http请求，不再需要sendImmidate接口
+- 重构AudioEngine, 全平台OpenAL
+  - [openal-soft](https://github.com/kcat/openal-soft), pass -DAX_USE_ALSOFT=ON to cmake to force enable it
+  - [OpenAL.framework](https://opensource.apple.com/tarballs/OpenAL), if no and ```AX_USE_ALSOFT``` option specified, cmake script will choose it on osx/ios, even through it was mark as deprecated, but still avaiable.
+- 重构UserDefault, 全平台基于内存映射文件 [mio](https://github.com/mandreyel/mio), 性能提升百倍
+- 模块化所有引擎扩展库, 所有扩展库放到extensions目录下，如cocostudio, spine
+- AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
+- 使用现代化的GL加载器glad代替glew
+- 增加google angle渲染后端支持
+- C++最低标准要求: C++17/20
+- 设置ios下最低目标平台为ios11.0
+- 使用更快的xml解析库pugixml代替tinyxml2
+- Downloader全平台统一实现，均基于curl
+- 全平台统一使用XML SAX解析plist文件, 移除Apple平台的实现
+- Spine 3.8支持
+- 新增FairyGUI支持
+- 新增硬件压缩纹理格式ASTC 4x4/6x6/8x8支持，支持软解
+- 新增硬件压缩纹理格式ETC2 RGB/RGBA支持，支持软解
+- **ImGui集成，非常方便写游戏内嵌小工具，用法详见[ImGui](extensions/ImGui/README.md)**
+- 完整改动列表，请查看[CHANGELOG.md](CHANGELOG.md)
 
 
 ### 参考链接
