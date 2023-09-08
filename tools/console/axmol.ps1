@@ -230,7 +230,7 @@ options:
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
   -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
   -xb: additional cross build options: i.e. -xb '--config','Release'
-  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
+  -c: no build, only generate natvie project file (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
  examples:
    - win32: 
@@ -257,14 +257,14 @@ usage: axmol install -p win32 -a x64
 Build and install a project to a device/simulator.
 
 options:
-  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
+  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,wasm
       for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
   -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
   -xb: additional cross build options: i.e. -xb '--config','Release'
-  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
+  -c: no build, only generate natvie project file (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
 "@;
     };
@@ -275,14 +275,14 @@ usage: axmol run -p win32 -a x64
 Build, deploy and run project on the target.
 
 options:
-  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
+  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,wasm
       for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
   -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
   -xb: additional cross build options: i.e. -xb '--config','Release'
-  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
+  -c: no build, only generate natvie project file (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
 "@
     }
