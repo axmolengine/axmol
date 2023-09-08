@@ -28,7 +28,10 @@ if [ $HOST_OS = 'Darwin' ] ; then
     pwsh_pkg="powershell-$pwsh_ver-osx-$HOST_ARCH.pkg"
     pwsh_pkg_out="$myRoot/tmp/$pwsh_pkg"
     if [ ! -f  "$pwsh_pkg_out" ] ; then
-        curl -L "https://github.com/PowerShell/PowerShell/releases/download/v$pwsh_ver/$pwsh_pkg_name" -o "$pwsh_pkg_out"
+        # https://github.com/PowerShell/PowerShell/releases/download/v7.3.6/powershell-7.3.6-osx-x64.pkg
+        pwsh_url="https://github.com/PowerShell/PowerShell/releases/download/v$pwsh_ver/$pwsh_pkg"
+        echo "Downloading $pwsh_url ..."
+        curl -L "$pwsh_url" -o "$pwsh_pkg_out"
     fi
     sudo xattr -rd com.apple.quarantine "$pwsh_pkg_out"
     sudo installer -pkg "$pwsh_pkg_out" -target /
