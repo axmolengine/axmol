@@ -123,9 +123,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     if (AX_ENABLE_EXT_IMGUI)
         list(APPEND LIBS "ImGui")
-        if(AX_ENABLE_EXT_NODE_EXPLORER)
-            list(APPEND LIBS "NodeExplorer")
-        endif()
     endif()
 
     if (WINDOWS)
