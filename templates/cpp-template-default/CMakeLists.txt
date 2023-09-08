@@ -49,7 +49,7 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test HelloCpp into root project
         message(FATAL_ERROR "Please run setup.ps1 add system env var 'AX_ROOT' to specific the engine root")
     endif()
 
-    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/)
+    set(CMAKE_MODULE_PATH ${_AX_ROOT}/cmake/Modules/)
 
     include(AXBuildSet)
     set(_AX_USE_PREBUILT FALSE)
@@ -225,7 +225,7 @@ endif()
 if (_AX_USE_PREBUILT) # support windows and linux
     use_ax_compile_define(${APP_NAME})
 
-    include(${_AX_ROOT}/cmake/AXLinkHelpers.cmake)
+    include(AXLinkHelpers)
     ax_link_cxx_prebuilt(${APP_NAME} ${_AX_ROOT} ${AX_PREBUILT_DIR})
 endif()
 
