@@ -61,7 +61,7 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which
 
 ## Highlighted Features
 
-* WebAssembly support(experimental) by @nowasm
+- WebAssembly support(experimental) by @nowasm
 - Windows UWP support, refer to: https://github.com/axmolengine/axmol/pull/1108
 - Add apple M1, android x64 support, contributed by @pietpukkel
 - Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
@@ -100,7 +100,7 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which
 - Supported 3D physics engines:
   - Bullet Physics SDK
 
-[Read Full changes since cocos2d-x-4.0](CHANGELOG)
+[Read Full changes since cocos2d-x-4.0](CHANGELOG.md)
 
 Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/axmolengine/axmol/milestones) for planed features too.
 
