@@ -32,19 +32,18 @@ Examples:
 - Cpp: `axmol new -p org.axmol.hellocpp -d D:\dev\projects\ -l cpp --portrait HelloCpp`
 - Lua: `axmol new -p org.axmol.hellolua -d D:\dev\projects\ -l lua --portrait HelloLua`
 
-## Quick build your new project by `build.ps1` for all target platforms [`Recommended`]
+## Quick build your new project by `axmol build` for all target platforms [`Recommended`]
 
-If you use latest commits after 6/29/2023 18:50, once you crate a new project, there is a build script `build.ps1` in your project root directory,
-then you can simply build your project for all platform targets, i.e.
+The `axmol build` command will auto setup general depended toolsets, so you can simply build your project for all platform targets, i.e.
 
-- win32: `pwsh .\build.ps1` can runs on Windows with vs2022 installed
-- winuwp: `pwsh .\build.ps1 -p winuwp` can runs on Windows with vs2022 installed
-- linux: `pwsh .\build.ps1` can runs on Linux with g++ installed
-- osx: `pwsh ./build.ps1 -p osx -a x64` can runs on macOS with xcode13~14.2 installed
-- android: `pwsh ./build.ps1 -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
-- ios: `pwsh ./build.ps1 -p ios -a x64` can runs on macOS with xcode13~14.2 installed
-- tvos: `pwsh ./build.ps1 -p tvos -a x64` can runs on macOS with xcode13~14.2 installed
-- wasm: `pwsh ./build.ps1 -p wasm` can runs on Windows, Linux, macOS
+- win32: `axmol build -p win32` can runs on Windows with vs2022 installed
+- winuwp: `axmol build -p winuwp` can runs on Windows with vs2022 installed
+- linux: `axmol build` can runs on Linux with g++ installed
+- osx: `axmol build -p osx -a x64` can runs on macOS with xcode13~14.2 installed
+- android: `axmol build -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
+- ios: `axmol build -p ios -a x64` can runs on macOS with xcode13~14.2 installed
+- tvos: `axmol build -p tvos -a x64` can runs on macOS with xcode13~14.2 installed
+- wasm: `axmol build -p wasm` can runs on Windows, Linux, macOS
 
 ## Quick build engine for host targets?
 

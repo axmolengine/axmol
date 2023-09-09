@@ -1,23 +1,24 @@
-axmol-2.0.0 ???
+axmol-2.0.0 Sep.9 2023
 
-- Wasm build support(WebGL 2.0) by @nowasm , *experimental*
+-  Add *experimental* WebAssembly build support(WebGL 2.0) by [@nowasm](https://github.com/nowasm)
     - List of known issues maybe *help wanted*
-        - WebGL context lost not handled
+        - WebGL context lost not handled yet
      - A demo avaiable on axmol gh-pages: [`cpp-tests.html`](https://axmolengine.github.io/axmol/wasm/cpp_tests/cpp_tests.html), build from branch `dev`
      - Note:  Follow functionals require wasm pthread support, and needs server enable https://web.dev/coop-coep/ response with specified header, and by default thread support was enabled by axmol client build commands
          - AudioEngine
          - ASTC multi-thread software decoder
          - `TextureCache::addImageAsync`
          - `MeshRenderer::createAsync`
-         -  Extension: live2d not support due to it's core not opensource and not contains wasm prebuilt lib files
+         -  Extension: live2d not support due to it's sdk core not opensource and not contains wasm prebuilt libs
      - Quick build and run `cpp_tests` on local machine, the command use `emrun` to preview, and it's response with specified headers which wasm pthread support required, so above functionals with multi-threading works well.
          - `axmol run -p wasm -xb "--target,cpp_tests"`
-- OpenGL3/GLES3 support
+     - Add 2 cmake options: `AX_WASM_THREADS`, `AX_WASM_SHELL_FILE`, refer to [CMakeOptions.md](CMakeOptions.md)
+- OpenGL3/GLES3 support, add new cmake option `AX_GLES_PROFILE` to control GLES profile, refer to [#1279](https://github.com/axmolengine/axmol/issues/1279)
 - Mesh instancing draw support
 - Use [glslcc](https://github.com/axmolengine/glslcc)(a spriv-corss & glslang wrapper tool) as new shader workflow, write shader by ESSL310, build to target platforms: 
     - MSL for Apple(macOS/iOS/tvOS)
-    - ESSL300 for Android, ANGLE, 
-    - GLSL330 for Desktop GL, 
+    - ESSL300 for Android, ANGLE
+    - GLSL330 for Desktop GL
     - GLSL100 for Android old devices e.g android-4.2
     - Restrict ESSL310 input shader: please only define 1 uniform block at per shader stage
 - Improve ProgramManager for loading custom shader program more easy
@@ -25,13 +26,24 @@ axmol-2.0.0 ???
 - Improve FileStream, handle large 4GB+ files
 - Improve ASTC hardware support detection
 - Use ANGLE as default renderer library on win32
-- CHANGED: The prototype of [`ProgramManager::registerCustomProgram`](https://axmolengine.github.io/axmol/manual/latest/d1/db2/classax_1_1backend_1_1_program_manager.html#ab0c9fa9f0ebef5f20a868e2ea6cdc631) was changed
-- ADDED: `ProgramManager::loadProgram`
-- REMOVED: `ProgramManager::getCustomProgram`
-- REMOVED: `CommandBuffer::setLineWidth`
-- Many other improvements: refer to [#1279](https://github.com/axmolengine/axmol/issues/1279)
+- Thirdparty Updates
+    - ANGLE: 113.0.5672.128 ==> 115.0.5790.173
+    - curl: 8.1.2 ==> 8.2.1
+    - fmtlib: 10.0.0 ==> 10.1.0
+    - FreeType: 2.13.0 ==> 2.13.2
+    - llhttp: 8.1.1 ==> 9.0.1
+    - OpenSSL: 3.0.9 ==> 3.0.10
+    - webp: 1.3.0 ==> 1.3.1
+    - xxHash: 0.8.1 ==> 0.8.2
+    - zlib: 1.2.13 ==> 1.3
+- API changes:
+    - CHANGED: The prototype of [`ProgramManager::registerCustomProgram`](https://axmolengine.github.io/axmol/manual/latest/d1/db2/classax_1_1backend_1_1_program_manager.html#ab0c9fa9f0ebef5f20a868e2ea6cdc631) was changed
+    - ADDED: `ProgramManager::loadProgram`
+    - REMOVED: `ProgramManager::getCustomProgram`
+    - REMOVED: `CommandBuffer::setLineWidth`
+- Many other improvements
   
-
+  
 axmol-1.0.1 Sep.8 2023
 
 - [NEW] Add [`install-pwsh.sh`](https://github.com/axmolengine/axmol/blob/dev/install-pwsh.sh) to make installing powershell on `macOS`, `Ubuntu`, `ArchLinux` more easier
