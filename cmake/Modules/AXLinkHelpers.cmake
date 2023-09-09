@@ -13,6 +13,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     message(STATUS "AX_ENABLE_MFMEDIA=${AX_ENABLE_MFMEDIA}")
 
     message(STATUS "AX_ENABLE_EXT_IMGUI=${AX_ENABLE_EXT_IMGUI}")
+    message(STATUS "AX_ENABLE_EXT_NODE_EXPLORER=${AX_ENABLE_EXT_NODE_EXPLORER}")
     message(STATUS "AX_ENABLE_EXT_FAIRYGUI=${AX_ENABLE_EXT_FAIRYGUI}")
     message(STATUS "AX_ENABLE_EXT_LIVE2D=${AX_ENABLE_EXT_LIVE2D}")
     message(STATUS "AX_ENABLE_EXT_GUI=${AX_ENABLE_EXT_GUI}")
@@ -124,6 +125,11 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (AX_ENABLE_EXT_IMGUI)
         list(APPEND LIBS "ImGui")
     endif()
+	
+	if (AX_ENABLE_EXT_NODE_EXPLORER)
+        list(APPEND LIBS "NodeExplorer")
+    endif()
+	
 
     if (WINDOWS)
         target_link_libraries(${APP_NAME}

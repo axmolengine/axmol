@@ -133,6 +133,7 @@ option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
 cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_NODE_EXPLORER "Build extension Node Explorer" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
 
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 

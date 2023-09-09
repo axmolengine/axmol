@@ -24,6 +24,7 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
+#include "NodeExplorer/NodeExplorer.h"
 
 USING_NS_AX;
 
@@ -138,6 +139,8 @@ bool HelloWorld::init()
 
     // scheduleUpdate() is required to ensure update(float) is called on every loop
     scheduleUpdate();
+
+    extension::NodeExplorer::getInstance()->openForScene(this);
 
     return true;
 }

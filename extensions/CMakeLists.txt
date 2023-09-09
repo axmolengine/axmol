@@ -74,6 +74,11 @@ endif()
 
 if(AX_ENABLE_EXT_IMGUI)
   add_subdirectory(ImGui)
+  option(AX_ENABLE_EXT_NODE_EXPLORER "Enable extension NodeExplorer" ON)
+  if(AX_ENABLE_EXT_NODE_EXPLORER)
+      add_subdirectory(NodeExplorer)
+      target_include_directories(NodeExplorer PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui)
+  endif()
 endif()
 
 if(AX_ENABLE_EXT_COCOSTUDIO)
