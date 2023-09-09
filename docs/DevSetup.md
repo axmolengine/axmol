@@ -8,8 +8,7 @@
       - Quick Install 
           - macOS, Ubuntu, ArchLinux: you can simply run `install-pwsh.sh` in axmol root directory [`Recommended`]
           -  win7+, system installed PowerShell 5.0 should works
-      - Manually install powershell-7
-          - visit: [installing-powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) or download from [github release](https://github.com/PowerShell/PowerShell/releases)
+      - Manually Install: [installing-powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) or download from [github release](https://github.com/PowerShell/PowerShell/releases)
 
 ## Prerequisites
 
