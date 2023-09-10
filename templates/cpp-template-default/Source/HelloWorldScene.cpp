@@ -138,7 +138,7 @@ bool HelloWorld::init()
 
     // scheduleUpdate() is required to ensure update(float) is called on every loop
     scheduleUpdate();
-    
+
     return true;
 }
 
