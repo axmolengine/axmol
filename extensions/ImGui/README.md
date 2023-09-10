@@ -7,7 +7,7 @@ Sync from https://github.com/Xrysnow/cocos2d-x-imgui and do a little changes
 * Calculate deltaTime at ```ImGui_ImplCocos2dx_NewFrame``` to avoid error when ```cc.Director``` paused
 * Refine ```Init/Shutdown```, Restore all callbacks for glfw to solve recreate ```ImGuiPresenter``` instance support
 * Use ```FOURCC``` for key of ImGui render loop
-* Add dpi scale support, use ```ImGuiPresenter::getInstance()->scaleAllByDPI(1.0);```
+* Add dpi scale support, use ```ImGuiPresenter::getInstance()->enableDPIScale();```
 * Easy font manager, stable API ```addFont,removeFont,clearFonts``` to manage ImGui fonts, with ImGui API, very hard to do correctly.
 
 ## How to use
@@ -26,6 +26,7 @@ public:
         ImGuiPresenter::getInstance()->addFont(R"(C:\Windows\Fonts\msyh.ttc)", ImGuiPresenter::DEFAULT_FONT_SIZE,
                                            ImGuiPresenter::CHS_GLYPH_RANGE::GENERAL);
         */
+        ImGuiPresenter::getInstance()->enableDPIScale(); // enable dpi scale for 4K display support, depends at least one valid ttf/ttc font was added.
         ImGuiPresenter::getInstance()->addRenderLoop("#im01", AX_CALLBACK_0(GameScene::onImGuiDraw, this), this);
     }
     void onExit() override
