@@ -6,7 +6,7 @@
 
 NS_AX_EXT_BEGIN
 
-static Inspector *_instance = nullptr;
+static Inspector* _instance = nullptr;
 
 Inspector* Inspector::getInstance()
 {

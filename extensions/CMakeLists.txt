@@ -74,7 +74,7 @@ endif()
 
 if(AX_ENABLE_EXT_IMGUI)
   add_subdirectory(ImGui)
-  option(AX_ENABLE_EXT_INSPECTOR "Enable extension NodeExplorer" ON)
+  option(AX_ENABLE_EXT_INSPECTOR "Enable extension Inspector" ON)
   if(AX_ENABLE_EXT_INSPECTOR)
       add_subdirectory(Inspector)
       target_include_directories(Inspector PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui)
