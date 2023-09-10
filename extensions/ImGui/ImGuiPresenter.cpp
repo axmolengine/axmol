@@ -235,6 +235,13 @@ void ImGuiPresenter::cleanup()
     AX_SAFE_RELEASE_NULL(_fontsTexture);
 
     ImGui::DestroyContext();
+
+    if(!_renderLoops.empty()) {
+        for(auto item : _renderLoops) {
+            delete item.second.tracker;
+        }
+        _renderLoops.clear();
+    }
 }
 
 void ImGuiPresenter::setOnInit(const std::function<void(ImGuiPresenter*)>& callBack)
@@ -275,7 +282,7 @@ void ImGuiPresenter::loadCustomFonts(void* ud)
     }
 }
 
-float ImGuiPresenter::scaleAllByDPI(float userScale)
+float ImGuiPresenter::enableDPIScale(float userScale)
 {
     float xscale = 1.0f;
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
@@ -356,7 +363,7 @@ void ImGuiPresenter::beginFrame()
         Director::getInstance()->end();
         return;
     }
-    if (!_renderPiplines.empty())
+    if (!_renderLoops.empty())
     {
         // create frame
         ImGui_ImplAx_NewFrame();
@@ -406,8 +413,17 @@ void ImGuiPresenter::update()
     usedCCRefIdMap.clear();
     usedCCRef.clear();
     // drawing commands
-    for (auto& pipline : _renderPiplines)
-        pipline.second.frame();
+
+    for (auto iter = _renderLoops.begin(); iter != _renderLoops.end(); ) {
+        auto& imLoop = iter->second;
+        if(imLoop.removing) {
+            delete imLoop.tracker;
+            iter = _renderLoops.erase(iter);
+            continue;
+        }
+        imLoop.func(); // invoke ImGui loop func
+        ++iter;
+    }
 
     // commands will be processed after update
 }
@@ -416,7 +432,7 @@ bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> fu
 {
     // TODO: check whether exist
     auto fourccId = fourccValue(id);
-    if (_renderPiplines.find(fourccId) != _renderPiplines.end())
+    if (_renderLoops.find(fourccId) != _renderLoops.end())
     {
         return false;
     }
@@ -429,7 +445,7 @@ bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> fu
 
     if (tracker)
     {
-        _renderPiplines.emplace(fourccId, RenderPipline{tracker, std::move(func)});
+        _renderLoops.emplace(fourccId, ImGuiLoop{tracker, std::move(func)});
         return true;
     }
     return false;
@@ -438,31 +454,9 @@ bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> fu
 void ImGuiPresenter::removeRenderLoop(std::string_view id)
 {
     auto fourccId   = fourccValue(id);
-    const auto iter = _renderPiplines.find(fourccId);
-    if (iter != _renderPiplines.end())
-    {
-        auto tracker = iter->second.tracker;
-        delete tracker;
-        _renderPiplines.erase(iter);
-    }
-
-    if (_renderPiplines.empty())
-        deactiveImGuiViewports();
-}
-
-void ImGuiPresenter::deactiveImGuiViewports()
-{
-    ImGuiContext& g = *GImGui;
-    if (!(g.ConfigFlagsCurrFrame & ImGuiConfigFlags_ViewportsEnable))
-        return;
-
-    // Create/resize/destroy platform windows to match each active viewport.
-    // Skip the main viewport (index 0), which is always fully handled by the application!
-    for (int i = 1; i < g.Viewports.Size; i++)
-    {
-        ImGuiViewportP* viewport = g.Viewports[i];
-        viewport->Window->Active = false;
-    }
+    const auto iter = _renderLoops.find(fourccId);
+    if (iter != _renderLoops.end())
+        iter->second.removing = true;
 }
 
 static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
