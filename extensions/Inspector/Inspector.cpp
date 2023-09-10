@@ -1,4 +1,4 @@
-#include "NodeExplorer.h"
+#include "Inspector.h"
 #include "ImGuiPresenter.h"
 #include "axmol.h"
 #include "fmt/format.h"
@@ -6,19 +6,19 @@
 
 NS_AX_EXT_BEGIN
 
-static NodeExplorer *_instance = nullptr;
+static Inspector *_instance = nullptr;
 
-NodeExplorer* NodeExplorer::getInstance()
+Inspector* Inspector::getInstance()
 {
     if (_instance == nullptr)
     {
-        _instance = new NodeExplorer();
+        _instance = new Inspector();
         _instance->init();
     }
     return _instance;
 }
 
-void NodeExplorer::destroyInstance()
+void Inspector::destroyInstance()
 {
     if (_instance)
     {
@@ -28,15 +28,15 @@ void NodeExplorer::destroyInstance()
     }
 }
 
-void NodeExplorer::init()
+void Inspector::init()
 {
 }
 
-void NodeExplorer::cleanup()
+void Inspector::cleanup()
 {
 }
 
-const char* NodeExplorer::getNodeName(Node* node)
+const char* Inspector::getNodeName(Node* node)
 {
     
     // works because msvc's typeid().name() returns undecorated name
@@ -50,9 +50,9 @@ const char* NodeExplorer::getNodeName(Node* node)
 #endif
 }
 
-void NodeExplorer::drawTreeRecusrive(Node* node, int index)
+void Inspector::drawTreeRecusrive(Node* node, int index)
 {
-    std::string str = fmt::format("[{}] {}", index, NodeExplorer::getNodeName(node));
+    std::string str = fmt::format("[{}] {}", index, Inspector::getNodeName(node));
 
     if (node->getTag() != -1)
     {
@@ -108,7 +108,7 @@ void NodeExplorer::drawTreeRecusrive(Node* node, int index)
     }
 }
 
-void NodeExplorer::drawProperties()
+void Inspector::drawProperties()
 {
     if (_selected_node == nullptr)
     {
@@ -272,26 +272,26 @@ void NodeExplorer::drawProperties()
 
 }
 
-void NodeExplorer::openForScene(Scene* target)
+void Inspector::openForScene(Scene* target)
 {
     _target = target;
     
     ImGuiPresenter::getInstance()->addRenderLoop(
-        "#AX_EXT_NODE_EXPLORER",
-        AX_CALLBACK_0(NodeExplorer::mainLoop, this),
+        "#axinspector",
+        AX_CALLBACK_0(Inspector::mainLoop, this),
         target
     );
     
 }
 
-void NodeExplorer::close()
+void Inspector::close()
 {
     _selected_node = nullptr;
     _target = nullptr;
-    ImGuiPresenter::getInstance()->removeRenderLoop("#AX_EXT_NODE_EXPLORER");
+    ImGuiPresenter::getInstance()->removeRenderLoop("#axinspector");
 }
 
-void NodeExplorer::mainLoop()
+void Inspector::mainLoop()
 {
     if(!_target)
     {
@@ -299,7 +299,7 @@ void NodeExplorer::mainLoop()
         return;
     }
     
-    if (ImGui::Begin("Node Explorer"))
+    if (ImGui::Begin("Inspector"))
     {
         const auto avail = ImGui::GetContentRegionAvail();
         if (ImGui::BeginChild("node.explorer.tree", ImVec2(avail.x * 0.5f, 0), false,ImGuiWindowFlags_HorizontalScrollbar))

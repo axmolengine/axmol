@@ -113,7 +113,7 @@ endif()
 option(AX_UPDATE_BUILD_VERSION "Update build version" ON)
 
 # default value for axmol extensions modules to Build
-# total supported extensions count: 12
+# total supported extensions count: 13
 # extensions dependicies: COCOSTUDIO may depend on spine & dragonBones if they are present in buildset
 
 option(AX_ENABLE_EXT_GUI "Build extension GUI" ON)
@@ -133,7 +133,7 @@ option(AX_ENABLE_EXT_LIVE2D "Build extension Live2D" OFF)
 option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
 cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
-cmake_dependent_option(AX_ENABLE_EXT_NODE_EXPLORER "Build extension Node Explorer" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
 
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 

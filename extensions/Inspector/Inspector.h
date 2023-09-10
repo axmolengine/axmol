@@ -12,10 +12,10 @@ NS_AX_END
 
 NS_AX_EXT_BEGIN
 
-class NodeExplorer
+class Inspector
 {
   public:
-    static NodeExplorer* getInstance();
+    static Inspector* getInstance();
     static void destroyInstance();
     static const char* getNodeName(Node*);
     void openForScene(Scene*);
