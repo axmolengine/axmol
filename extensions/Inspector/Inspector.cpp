@@ -1,6 +1,11 @@
 #include "Inspector.h"
 #include "ImGuiPresenter.h"
 #include "axmol.h"
+
+#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#define FMT_HEADER_ONLY
+#endif
+
 #include "fmt/format.h"
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
@@ -122,50 +127,50 @@ void Inspector::drawProperties()
         _selected_node = nullptr;
         return;
     }
-
-    ImGui::SameLine();
-
-    if (ImGui::Button("Add Child"))
-    {
-        ImGui::OpenPopup("Add Child");
-    }
-
-    if (ImGui::BeginPopupModal("Add Child"))
-    {
-        static int item = 0;
-        ImGui::Combo("Node", &item, "Node\0LabelBMFont\0LabelTTF\0Sprite\0MenuItemSpriteExtra\0");
-
-        static int tag = -1;
-        ImGui::InputInt("Tag", &tag);
-
-        static char text[256]{0};
-        static char labelFont[256]{0};
-        if (item == 1)
-        {
-            ImGui::InputText("Text", text, 256);
-            ImGui::InputText("Font", labelFont, 256);
-        }
-        static int fontSize = 20;
-        if (item == 2)
-        {
-            ImGui::InputText("Text", text, 256);
-            ImGui::InputInt("Font Size", &fontSize);
-        }
-        static bool frame = false;
-        if (item == 3 || item == 4)
-        {
-            ImGui::InputText("Texture", text, 256);
-            ImGui::Checkbox("Frame", &frame);
-        }
-
-        ImGui::Separator();
-        ImGui::SameLine();
-        if (ImGui::Button("Cancel"))
-        {
-            ImGui::CloseCurrentPopup();
-        }
-        ImGui::EndPopup();
-    }
+    
+    //ImGui::SameLine();
+    //
+    //if (ImGui::Button("Add Child"))
+    //{
+    //    ImGui::OpenPopup("Add Child");
+    //}
+    //
+    //if (ImGui::BeginPopupModal("Add Child"))
+    //{
+    //    static int item = 0;
+    //    ImGui::Combo("Node", &item, "Node\0LabelBMFont\0LabelTTF\0Sprite\0MenuItemSpriteExtra\0");
+    //
+    //    static int tag = -1;
+    //    ImGui::InputInt("Tag", &tag);
+    //
+    //    static char text[256]{0};
+    //    if (item == 1)
+    //    {
+    //        static char labelFont[256]{0};
+    //        ImGui::InputText("Text", text, 256);
+    //        ImGui::InputText("Font", labelFont, 256);
+    //    }
+    //    static int fontSize = 20;
+    //    if (item == 2)
+    //    {
+    //        ImGui::InputText("Text", text, 256);
+    //        ImGui::InputInt("Font Size", &fontSize);
+    //    }
+    //    static bool frame = false;
+    //    if (item == 3 || item == 4)
+    //    {
+    //        ImGui::InputText("Texture", text, 256);
+    //        ImGui::Checkbox("Frame", &frame);
+    //    }
+    //
+    //    ImGui::Separator();
+    //    ImGui::SameLine();
+    //    if (ImGui::Button("Cancel"))
+    //    {
+    //        ImGui::CloseCurrentPopup();
+    //    }
+    //    ImGui::EndPopup();
+    //}
 
     ImGui::Text("Addr: 0x%p", _selected_node);
     if (auto userData = _selected_node->getUserData(); userData)

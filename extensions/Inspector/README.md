@@ -12,7 +12,7 @@ call `openForScene(ax::Scene*)` in your `onEnter` overload and `close` in your `
 #include "Inspector/Inspector.h"
 
 class MyScene : public ax::Scene {
-       virtual void onEnter() override {
+        virtual void onEnter() override {
         ax::Scene::onEnter();
         ax::extension::Inspector::getInstance()->openForScene(this);
     }
