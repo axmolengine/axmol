@@ -26,6 +26,7 @@
 #include "BaseTest.h"
 #include "testResource.h"
 #include "controller.h"
+#include "NodeExplorer/NodeExplorer.h"
 
 USING_NS_AX;
 USING_NS_AX_EXT;
@@ -476,6 +477,13 @@ void TestCase::onEnter()
         _nextTestItem->setVisible(false);
         _restartTestItem->setVisible(false);
     }
+    extension::NodeExplorer::getInstance()->openForScene(this);
+}
+
+void TestCase::onExit()
+{
+    Scene::onExit();
+   extension::NodeExplorer::getInstance()->close();
 }
 
 void TestCase::restartTestCallback(Ref* sender)

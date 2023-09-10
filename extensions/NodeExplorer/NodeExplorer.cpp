@@ -286,6 +286,7 @@ void NodeExplorer::openForScene(Scene* target)
 
 void NodeExplorer::close()
 {
+    _selected_node = nullptr;
 	_target = nullptr;
     ImGuiPresenter::getInstance()->removeRenderLoop("#AX_EXT_NODE_EXPLORER");
 }
@@ -301,8 +302,7 @@ void NodeExplorer::mainLoop()
     if (ImGui::Begin("Node Explorer"))
     {
         const auto avail = ImGui::GetContentRegionAvail();
-        if (ImGui::BeginChild("node.explorer.tree", ImVec2(avail.x * 0.5f, 0), false,
-                              ImGuiWindowFlags_HorizontalScrollbar))
+        if (ImGui::BeginChild("node.explorer.tree", ImVec2(avail.x * 0.5f, 0), false,ImGuiWindowFlags_HorizontalScrollbar))
         {
 			drawTreeRecusrive(_target);
         }
