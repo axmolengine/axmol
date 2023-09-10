@@ -482,8 +482,8 @@ void TestCase::onEnter()
 
 void TestCase::onExit()
 {
-    Scene::onExit();
     extension::Inspector::getInstance()->close();
+    Scene::onExit();
 }
 
 void TestCase::restartTestCallback(Ref* sender)
