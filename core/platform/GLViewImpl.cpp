@@ -846,6 +846,8 @@ void GLViewImpl::setWindowed(int width, int height)
 {
     if (!this->isFullscreen())
     {
+        if (glfwGetWindowAttrib(_mainWindow, GLFW_MAXIMIZED))
+            glfwRestoreWindow(_mainWindow);
         this->setFrameSize((float)width, (float)height);
     }
     else
