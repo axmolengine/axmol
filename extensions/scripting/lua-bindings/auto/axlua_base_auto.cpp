@@ -14682,6 +14682,53 @@ int lua_ax_base_Director_getRunningScene(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_base_Director_getNextScene(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::Director* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ax.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_Director_getNextScene'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_Director_getNextScene'", nullptr);
+            return 0;
+        }
+        auto&& ret = cobj->getNextScene();
+        object_to_luaval<ax::Scene>(tolua_S, "ax.Scene",(ax::Scene*)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.Director:getNextScene",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_Director_getNextScene'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_base_Director_getAnimationInterval(lua_State* tolua_S)
 {
     int argc = 0;
@@ -17975,6 +18022,7 @@ int lua_register_ax_base_Director(lua_State* tolua_S)
     tolua_beginmodule(tolua_S,"Director");
         tolua_function(tolua_S,"init",lua_ax_base_Director_init);
         tolua_function(tolua_S,"getRunningScene",lua_ax_base_Director_getRunningScene);
+        tolua_function(tolua_S,"getNextScene",lua_ax_base_Director_getNextScene);
         tolua_function(tolua_S,"getAnimationInterval",lua_ax_base_Director_getAnimationInterval);
         tolua_function(tolua_S,"setAnimationInterval",lua_ax_base_Director_setAnimationInterval);
         tolua_function(tolua_S,"isStatsDisplay",lua_ax_base_Director_isStatsDisplay);
@@ -102489,6 +102537,40 @@ int lua_register_ax_base_Application(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_base_GLViewImpl_loadGLES2(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"ax.GLViewImpl",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 0)
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_GLViewImpl_loadGLES2'", nullptr);
+            return 0;
+        }
+        ax::GLViewImpl::loadGLES2();
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d\n ", "ax.GLViewImpl:loadGLES2",argc, 0);
+    return 0;
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_GLViewImpl_loadGLES2'.",&tolua_err);
+#endif
+    return 0;
+}
 int lua_ax_base_GLViewImpl_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -102647,6 +102729,7 @@ int lua_register_ax_base_GLViewImpl(lua_State* tolua_S)
     tolua_cclass(tolua_S,"GLViewImpl","ax.GLViewImpl","ax.GLView",nullptr);
 
     tolua_beginmodule(tolua_S,"GLViewImpl");
+        tolua_function(tolua_S,"loadGLES2", lua_ax_base_GLViewImpl_loadGLES2);
         tolua_function(tolua_S,"create", lua_ax_base_GLViewImpl_create);
         tolua_function(tolua_S,"createWithRect", lua_ax_base_GLViewImpl_createWithRect);
         tolua_function(tolua_S,"createWithFullScreen", lua_ax_base_GLViewImpl_createWithFullScreen);
