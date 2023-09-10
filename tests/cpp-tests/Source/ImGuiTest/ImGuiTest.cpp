@@ -24,6 +24,7 @@ void ImGuiTest::onEnter()
     TestCase::onEnter();
 
     ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+    ImGuiPresenter::getInstance()->enableDPIScale();
     ImGuiPresenter::getInstance()->addRenderLoop("#test", AX_CALLBACK_0(ImGuiTest::onDrawImGui, this), this);
 }
 
