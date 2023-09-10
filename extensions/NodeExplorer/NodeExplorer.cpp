@@ -8,7 +8,7 @@ NS_AX_EXT_BEGIN
 
 static NodeExplorer *_instance = nullptr;
 
-NodeExplorer *NodeExplorer::getInstance()
+NodeExplorer* NodeExplorer::getInstance()
 {
     if (_instance == nullptr)
     {
@@ -36,9 +36,9 @@ void NodeExplorer::cleanup()
 {
 }
 
-const char *NodeExplorer::getNodeName(Node *node)
+const char* NodeExplorer::getNodeName(Node* node)
 {
-	
+    
     // works because msvc's typeid().name() returns undecorated name
     // typeid(CCNode).name() == "class cocos2d::CCNode"
     // the + 6 gets rid of the class prefix
@@ -46,11 +46,11 @@ const char *NodeExplorer::getNodeName(Node *node)
 #ifdef _MSC_VER
     return typeid(*node).name() + 6;
 #else
-	return typeid(*node).name();
+    return typeid(*node).name();
 #endif
 }
 
-void NodeExplorer::drawTreeRecusrive(Node *node, int index)
+void NodeExplorer::drawTreeRecusrive(Node* node, int index)
 {
     std::string str = fmt::format("[{}] {}", index, NodeExplorer::getNodeName(node));
 
@@ -94,13 +94,13 @@ void NodeExplorer::drawTreeRecusrive(Node *node, int index)
     if (is_open)
     {
         const auto &children = node->getChildren();
-        for (int i = 0; auto *child : children)
+        for (int i = 0; auto* child : children)
         {
-			if(!child)
-			{
-				continue;
-			}
-			
+            if(!child)
+            {
+                continue;
+            }
+            
             drawTreeRecusrive(child, i);
             i++;
         }
@@ -253,7 +253,7 @@ void NodeExplorer::drawProperties()
     _selected_node->setOpacity(static_cast<int>(_color[3] * 255.f));
 
 
-	if (auto label_node = dynamic_cast<LabelProtocol*>(_selected_node); label_node)
+    if (auto label_node = dynamic_cast<LabelProtocol*>(_selected_node); label_node)
     {
         std::string_view label = label_node->getString();
         std::string label_str(label.begin(), label.end());
@@ -274,37 +274,37 @@ void NodeExplorer::drawProperties()
 
 void NodeExplorer::openForScene(Scene* target)
 {
-	_target = target;
-	
-	ImGuiPresenter::getInstance()->addRenderLoop(
-		"#AX_EXT_NODE_EXPLORER",
-		AX_CALLBACK_0(NodeExplorer::mainLoop, this),
-		target
-	);
-	
+    _target = target;
+    
+    ImGuiPresenter::getInstance()->addRenderLoop(
+        "#AX_EXT_NODE_EXPLORER",
+        AX_CALLBACK_0(NodeExplorer::mainLoop, this),
+        target
+    );
+    
 }
 
 void NodeExplorer::close()
 {
     _selected_node = nullptr;
-	_target = nullptr;
+    _target = nullptr;
     ImGuiPresenter::getInstance()->removeRenderLoop("#AX_EXT_NODE_EXPLORER");
 }
 
 void NodeExplorer::mainLoop()
 {
-	if(!_target)
-	{
-		close();
-		return;
-	}
-	
+    if(!_target)
+    {
+        close();
+        return;
+    }
+    
     if (ImGui::Begin("Node Explorer"))
     {
         const auto avail = ImGui::GetContentRegionAvail();
         if (ImGui::BeginChild("node.explorer.tree", ImVec2(avail.x * 0.5f, 0), false,ImGuiWindowFlags_HorizontalScrollbar))
         {
-			drawTreeRecusrive(_target);
+            drawTreeRecusrive(_target);
         }
         ImGui::EndChild();
 
@@ -312,7 +312,7 @@ void NodeExplorer::mainLoop()
 
         if (ImGui::BeginChild("node.explorer.options"))
         {
-			drawProperties();
+            drawProperties();
         }
         ImGui::EndChild();
     }

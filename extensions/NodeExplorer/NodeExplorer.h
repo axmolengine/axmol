@@ -29,7 +29,7 @@ class NodeExplorer
     void drawProperties();
 
     ax::Node* _selected_node = nullptr;
-	ax::Scene* _target = nullptr;
+    ax::Scene* _target = nullptr;
 };
 
 NS_AX_EXT_END
