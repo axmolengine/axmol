@@ -153,10 +153,45 @@ mkdirs "$site_dist/assets/css"
 Copy-Item './style.css'  "$site_dist/assets/css/style.css"
 Copy-Item './index.html' "$site_dist/index.html"
 
-# deploy wasm cpp_tests demo
+# deploy wasm demos to site_dist2
 download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
-$wasm_dist = Join-Path $site_dist 'wasm/'
-mkdirs $wasm_dist
-Copy-Item $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist -Container -Recurse
+
+$wasm_dist2 = Join-Path $site_src 'dist2/wasm/'
+mkdirs $wasm_dist2
+
+function copy_tree_if($source, $dest) {
+    if (Test-Path $source) {
+        Copy-Item $source $dest -Container -Recurse
+    }
+}
+
+copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist2
+copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui_tests') $wasm_dist2
+copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/HelloLua') $wasm_dist2
+
+# redirect old url
+$fake_cpp_tests = Join-Path $site_dist 'wasm/cpp_tests/'
+mkdirs $fake_cpp_tests
+$fake_cpp_tests_html = Join-Path $fake_cpp_tests 'cpp_tests.html'
+$redirect_content = @'
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting</title>
+  <noscript>
+    <meta http-equiv="refresh" content="1; url={0}" />
+  </noscript>
+  <script>
+    window.location.href = '{0}';
+  </script>
+</head>
+<body>
+  Redirecting to <a href="{0}">{0}</a>
+</body>
+</html>
+'@ -f 'https://axmol.netlify.app/wasm/cpp_tests/cpp_tests'
+
+Set-Content -Path $fake_cpp_tests_html -Value $redirect_content
 
 Set-Location $store_cwd
