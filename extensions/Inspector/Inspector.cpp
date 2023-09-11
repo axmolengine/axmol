@@ -7,6 +7,7 @@
 #endif
 
 #include "fmt/format.h"
+#include <memory>
 #include <imgui/misc/cpp/imgui_stdlib.h>
 
 NS_AX_EXT_BEGIN
@@ -27,6 +28,7 @@ void Inspector::destroyInstance()
 {
     if (_instance)
     {
+        _instance->close();
         _instance->cleanup();
         delete _instance;
         _instance = nullptr;
@@ -41,18 +43,39 @@ void Inspector::cleanup()
 {
 }
 
-const char* Inspector::getNodeName(Node* node)
+#if defined(_MSC_VER)
+
+std::string Inspector::demangle(const char* name)
 {
-    
     // works because msvc's typeid().name() returns undecorated name
     // typeid(Node).name() == "class ax::Node"
     // the + 6 gets rid of the class prefix
     // "class ax::Node" + 6 == "ax::Node"
-#ifdef _MSC_VER
-    return typeid(*node).name() + 6;
+    return std::string(name + 6);
+}
+
+#elif defined(__GNUC__) || defined(__clang__)
+
+#include <cxxabi.h>
+std::string Inspector::demangle(const char* mangled_name)
+{
+    int status = -4;
+    std::unique_ptr<char, void (*)(void*)> res{abi::__cxa_demangle(mangled_name, nullptr, nullptr, &status), std::free};
+    return (status == 0) ? res.get() : mangled_name;
+}
+
 #else
-    return typeid(*node).name();
+
+std::string Inspector::demangle(const char* name)
+{
+    return std::string(name);
+}
+
 #endif
+	
+std::string Inspector::getNodeName(Node* node)
+{
+    return Inspector::demangle(typeid(*node).name());
 }
 
 void Inspector::drawTreeRecusrive(Node* node, int index)
@@ -274,26 +297,26 @@ void Inspector::drawProperties()
         auto texture = sprite->getTexture();
         ImGui::TextWrapped("Texture: %s", texture->getPath().c_str());
     }
-
 }
 
 void Inspector::openForScene(Scene* target)
 {
     _target = target;
-    
-    ImGuiPresenter::getInstance()->addRenderLoop(
-        "#insp",
-        AX_CALLBACK_0(Inspector::mainLoop, this),
-        target
-    );
-    
+
+    auto* presenter = ImGuiPresenter::getInstance();
+    presenter->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+    presenter->enableDPIScale();
+    presenter->addRenderLoop("#insp", AX_CALLBACK_0(Inspector::mainLoop , this), target);
 }
 
 void Inspector::close()
 {
     _selected_node = nullptr;
     _target = nullptr;
-    ImGuiPresenter::getInstance()->removeRenderLoop("#insp");
+    
+    auto presenter = ImGuiPresenter::getInstance();
+    presenter->removeRenderLoop("#insp");
+    presenter->clearFonts();
 }
 
 void Inspector::mainLoop()
@@ -307,7 +330,7 @@ void Inspector::mainLoop()
     if (ImGui::Begin("Inspector"))
     {
         const auto avail = ImGui::GetContentRegionAvail();
-        if (ImGui::BeginChild("node.explorer.tree", ImVec2(avail.x * 0.5f, 0), false,ImGuiWindowFlags_HorizontalScrollbar))
+        if (ImGui::BeginChild("node.explorer.tree", ImVec2(avail.x * 0.5f, 0), false, ImGuiWindowFlags_HorizontalScrollbar))
         {
             drawTreeRecusrive(_target);
         }

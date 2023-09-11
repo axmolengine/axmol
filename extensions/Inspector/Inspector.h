@@ -2,6 +2,7 @@
 
 #include "ExtensionMacros.h"
 #include "base/Config.h"
+#include <string>
 
 NS_AX_BEGIN
 
@@ -17,7 +18,8 @@ class Inspector
   public:
     static Inspector* getInstance();
     static void destroyInstance();
-    static const char* getNodeName(Node*);
+    static std::string getNodeName(Node*);
+    static std::string demangle(const char* mangled);
     void openForScene(Scene*);
     void close();
 
