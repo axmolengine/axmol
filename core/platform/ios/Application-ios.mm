@@ -102,7 +102,11 @@ LanguageType Application::getCurrentLanguage()
 
 Application::Platform Application::getTargetPlatform()
 {
+#if TARGET_OS_IOS
     return Platform::iOS;
+#else /*elif TARGET_OS_TV*/
+    return Platform::tvOS;
+#endif
 }
 
 std::string Application::getVersion()

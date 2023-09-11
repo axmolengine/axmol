@@ -190,14 +190,22 @@ cc.UNIFORM_SAMPLER_S    = 'AX_Texture0'
 cc.UNIFORM_SIN_TIME_S   = 'AX_SinTime'
 cc.UNIFORM_TIME_S   = 'AX_Time'
 
-cc.PLATFORM_WINDOWS   = 0
-cc.PLATFORM_UWP       = 1
-cc.PLATFORM_UWP_PHONE = 2
+-- refer to: ApplicationProtocol.h: enum class Platform
+cc.PLATFORM_UNKNOWN   = 0
+cc.PLATFORM_WIN32     = 1
+cc.PLATFORM_WINUWP    = 2
 cc.PLATFORM_LINUX     = 3
-cc.PLATFORM_MACOS     = 4
+cc.PLATFORM_OSX       = 4
 cc.PLATFORM_ANDROID   = 5
 cc.PLATFORM_IOS       = 6
+cc.PLATFORM_TVOS      = 7
+cc.PLATFORM_WASM      = 8
 -- iPAD device of iOS, TODO: provide API: isIPad()
+
+-- platform alias
+cc.PLATFORM_WINDOWS    = cc.PLATFORM_WIN32
+cc.PLATFORM_MACOS      = cc.PLATFORM_OSX
+cc.PLATFORM_EMSCRIPTEN = cc.PLATFORM_WASM
 
 cc.LANGUAGE_ENGLISH    = 0
 cc.LANGUAGE_CHINESE    = 1

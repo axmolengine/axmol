@@ -66,3 +66,5 @@ IndentPPDirectives: AfterHash
 IncludeBlocks: Preserve
 UseTab: Never
 BreakConstructorInitializers: BeforeComma
+
+AlignConsecutiveMacros: AcrossEmptyLines
