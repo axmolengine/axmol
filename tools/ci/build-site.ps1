@@ -130,8 +130,8 @@ Copy-Item './style.css'  "$site_dist/assets/css/style.css"
 Copy-Item './index.html' "$site_dist/index.html"
 
 # build site2(isolated) wasm demos preview with pthread support
-$site_dist2 = Join-Path $site_src 'dist'
-$wasm_dist2 = Join-Path $site_dist2 'dist2/wasm/'
+$site_dist2 = Join-Path $site_src 'dist2'
+$wasm_dist2 = Join-Path $site_dist2 'wasm/'
 mkdirs $wasm_dist2
 Copy-Item $(Join-Path $site_src 'isolated.html') $(Join-Path $site_dist2 'isolated.html')
 Copy-Item $(Join-Path $site_src '_headers') $site_dist2
