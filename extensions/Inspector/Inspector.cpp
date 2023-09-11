@@ -2,12 +2,13 @@
 #include "ImGuiPresenter.h"
 #include "axmol.h"
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#define FMT_HEADER_ONLY
+#if __has_include(<cxxabi.h>)
+#    define AX_HAS_CXXABI 1
+#    include <cxxabi.h>
 #endif
 
-#if defined(__GNUC__) || defined(__clang__)
-#include <cxxabi.h>
+#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
+#define FMT_HEADER_ONLY
 #endif
 
 #include "fmt/format.h"
@@ -47,7 +48,7 @@ void Inspector::cleanup()
 {
 }
 
-#if defined(_MSC_VER)
+#if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
 
 std::string Inspector::demangle(const char* name)
 {
@@ -58,7 +59,7 @@ std::string Inspector::demangle(const char* name)
     return std::string(name + 6);
 }
 
-#elif defined(__GNUC__) || defined(__clang__)
+#elif AX_HAS_CXXABI
 
 std::string Inspector::demangle(const char* mangled_name)
 {
