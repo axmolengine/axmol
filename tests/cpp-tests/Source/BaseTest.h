@@ -100,6 +100,7 @@ public:
     const ax::MenuItemImage* getRestartTestItem() const { return _restartTestItem; }
 
     virtual void onEnter() override;
+    virtual void onExit() override;
     virtual bool init() override;
 
 protected:
