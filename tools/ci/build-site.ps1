@@ -107,6 +107,25 @@ function  configure_file($infile, $outfile, $vars) {
     Set-Content -Path $outfile -Value "$content"
 }
 
+# build site_dist2 aka isolated site wasm demos preview with pthread support
+$site_dist2 = Join-Path $site_src 'dist2'
+$wasm_dist2 = Join-Path $site_dist2 'wasm/'
+mkdirs $wasm_dist2
+Copy-Item $(Join-Path $site_src 'isolated.html') $(Join-Path $site_dist2 'index.html')
+Copy-Item $(Join-Path $site_src '_headers') $site_dist2
+function copy_tree_if($source, $dest) {
+    if (Test-Path $source) {
+        Copy-Item $source $dest -Container -Recurse
+    }
+}
+
+download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
+copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist2
+copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui_tests') $wasm_dist2
+copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/HelloLua') $wasm_dist2
+
+# build manuals
+
 # query version map to build docs
 $release_tags = $(git tag)
 $verMap = @{'latest' = $null; }
@@ -128,47 +147,6 @@ configure_file './doc_index.html.in' "$site_dist/manual/index.html" @{'@VERSION@
 mkdirs "$site_dist/assets/css"
 Copy-Item './style.css'  "$site_dist/assets/css/style.css"
 Copy-Item './index.html' "$site_dist/index.html"
-
-# build site2(isolated) wasm demos preview with pthread support
-$site_dist2 = Join-Path $site_src 'dist2'
-$wasm_dist2 = Join-Path $site_dist2 'wasm/'
-mkdirs $wasm_dist2
-Copy-Item $(Join-Path $site_src 'isolated.html') $(Join-Path $site_dist2 'isolated.html')
-Copy-Item $(Join-Path $site_src '_headers') $site_dist2
-function copy_tree_if($source, $dest) {
-    if (Test-Path $source) {
-        Copy-Item $source $dest -Container -Recurse
-    }
-}
-
-download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
-copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist2
-copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui_tests') $wasm_dist2
-copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/HelloLua') $wasm_dist2
-
-# redirect old url
-$fake_cpp_tests = Join-Path $site_dist 'wasm/cpp_tests/'
-mkdirs $fake_cpp_tests
-$fake_cpp_tests_html = Join-Path $fake_cpp_tests 'cpp_tests.html'
-$redirect_content = @'
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Redirecting</title>
-  <noscript>
-    <meta http-equiv="refresh" content="1; url={0}" />
-  </noscript>
-  <script>
-    window.location.href = '{0}';
-  </script>
-</head>
-<body>
-  Redirecting to <a href="{0}">{0}</a>
-</body>
-</html>
-'@ -f 'https://axmol.netlify.app/wasm/cpp_tests/cpp_tests'
-Set-Content -Path $fake_cpp_tests_html -Value $redirect_content
 
 # build manuals
 foreach($item in $verMap.GetEnumerator()) {
@@ -195,5 +173,29 @@ foreach($item in $verMap.GetEnumerator()) {
     Copy-Item './doc_style.css' "$html_out/stylesheet.css"
     configure_file './menu_version.js.in' "$html_out/menu_version.js" @{'@VERLIST@' = $strVerList; '@VERSION@' = $ver}
 }
+
+# redirect cpp_tests.html to isolated site
+$fake_cpp_tests = Join-Path $site_dist 'wasm/cpp_tests/'
+mkdirs $fake_cpp_tests
+$fake_cpp_tests_html = Join-Path $fake_cpp_tests 'cpp_tests.html'
+$redirect_content = @'
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting</title>
+  <noscript>
+    <meta http-equiv="refresh" content="1; url={0}" />
+  </noscript>
+  <script>
+    window.location.href = '{0}';
+  </script>
+</head>
+<body>
+  Redirecting to <a href="{0}">{0}</a>
+</body>
+</html>
+'@ -f 'https://axmol.netlify.app/wasm/cpp_tests/cpp_tests'
+Set-Content -Path $fake_cpp_tests_html -Value $redirect_content
 
 Set-Location $store_cwd

@@ -29,7 +29,7 @@
 | tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
-| WASM(experimental) |[![WASM Build Status](https://ci.appveyor.com/api/projects/status/4slq965fwhbaidnc?svg=true)](https://ci.appveyor.com/project/halx99/axmol)|
+| WASM(experimental) |[![WASM Build Status](https://ci.appveyor.com/api/projects/status/4slq965fwhbaidnc?svg=true&passingText=wasm%20-%20passing)](https://ci.appveyor.com/project/halx99/axmol)|
 
 ## Building
 
