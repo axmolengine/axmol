@@ -6,6 +6,10 @@
 #define FMT_HEADER_ONLY
 #endif
 
+#if defined(__GNUC__) || defined(__clang__)
+#include <cxxabi.h>
+#endif
+
 #include "fmt/format.h"
 #include <memory>
 #include <imgui/misc/cpp/imgui_stdlib.h>
@@ -56,7 +60,6 @@ std::string Inspector::demangle(const char* name)
 
 #elif defined(__GNUC__) || defined(__clang__)
 
-#include <cxxabi.h>
 std::string Inspector::demangle(const char* mangled_name)
 {
     int status = -4;
