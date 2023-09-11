@@ -9,7 +9,6 @@ install:
 build_script:
   - pwsh: .\build.ps1 -p wasm -xb '--target','cpp_tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'
   - pwsh: .\build.ps1 -p wasm -xb '--target','fairygui_tests','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'
-  - pwsh: .\build.ps1 -p wasm -xb '--target','HelloLua','--config','Release' -xc '-DAX_ENABLE_EXT_EFFEKSEER=ON','-DAX_WASM_THREADS=8'
   - pwsh: 7z a build_wasm.zip build_wasm/bin/**/*
 
 artifacts:
