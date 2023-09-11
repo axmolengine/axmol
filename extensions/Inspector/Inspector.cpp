@@ -45,9 +45,9 @@ const char* Inspector::getNodeName(Node* node)
 {
     
     // works because msvc's typeid().name() returns undecorated name
-    // typeid(CCNode).name() == "class cocos2d::CCNode"
+    // typeid(Node).name() == "class ax::Node"
     // the + 6 gets rid of the class prefix
-    // "class cocos2d::CCNode" + 6 == "cocos2d::CCNode"
+    // "class ax::Node" + 6 == "ax::Node"
 #ifdef _MSC_VER
     return typeid(*node).name() + 6;
 #else
@@ -282,7 +282,7 @@ void Inspector::openForScene(Scene* target)
     _target = target;
     
     ImGuiPresenter::getInstance()->addRenderLoop(
-        "#axinspector",
+        "#insp",
         AX_CALLBACK_0(Inspector::mainLoop, this),
         target
     );
@@ -293,7 +293,7 @@ void Inspector::close()
 {
     _selected_node = nullptr;
     _target = nullptr;
-    ImGuiPresenter::getInstance()->removeRenderLoop("#axinspector");
+    ImGuiPresenter::getInstance()->removeRenderLoop("#insp");
 }
 
 void Inspector::mainLoop()
