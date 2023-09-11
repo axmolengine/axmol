@@ -245,7 +245,7 @@ const char* Application::getCurrentLanguageCode()
 
 Application::Platform Application::getTargetPlatform()
 {
-    return Platform::Windows;
+    return Platform::Win32;
 }
 
 std::string Application::getVersion()

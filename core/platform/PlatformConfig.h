@@ -45,14 +45,19 @@ THE SOFTWARE.
 
 // define supported target platform macro which CC uses.
 #define AX_PLATFORM_UNKNOWN 0
-#define AX_PLATFORM_IOS 1
-#define AX_PLATFORM_ANDROID 2
-#define AX_PLATFORM_WIN32 3
-#define AX_PLATFORM_LINUX 5
-#define AX_PLATFORM_MAC 8
-#define AX_PLATFORM_WASM 10
+#define AX_PLATFORM_WIN32   1
+#define AX_PLATFORM_WINUWP  2
+#define AX_PLATFORM_LINUX   3
+#define AX_PLATFORM_OSX     4
+#define AX_PLATFORM_ANDROID 5
+#define AX_PLATFORM_IOS     6
+#define AX_PLATFORM_TVOS    7
+#define AX_PLATFORM_WASM    8
+
+// alias platform macros
+#define AX_PLATFORM_WINRT      AX_PLATFORM_WINUWP
+#define AX_PLATFORM_MAC        AX_PLATFORM_OSX
 #define AX_PLATFORM_EMSCRIPTEN AX_PLATFORM_WASM
-#define AX_PLATFORM_WINRT 13
 
 // Determine target platform by compile environment macro.
 #define AX_TARGET_PLATFORM AX_PLATFORM_UNKNOWN
