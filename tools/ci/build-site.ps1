@@ -129,43 +129,19 @@ mkdirs "$site_dist/assets/css"
 Copy-Item './style.css'  "$site_dist/assets/css/style.css"
 Copy-Item './index.html' "$site_dist/index.html"
 
-foreach($item in $verMap.GetEnumerator()) {
-    $ver = $item.Key
-    $html_out = Join-Path $site_dist "manual/$ver"
-    mkdirs $html_out
-    $release_tag = $item.Value
-
-    if ($ver -eq 'latest') {
-        git checkout dev
-        $release_tag = query_axmol_latest
-    } elseif($ver -eq '1.0') {
-        git checkout '1.x' # 1.x branch now for v1.0
-    } else {
-        git checkout $release_tag
-    }
-    configure_file './Doxyfile.in' './Doxyfile' @{'@VERSION@'=$release_tag; '@HTML_OUTPUT@' = "manual/$ver"}
-
-    Write-Host "Generating docs for $ver ..." -NoNewline
-    doxygen "./Doxyfile" # 1>$null 2>$null
-    Write-Host "done"
-
-    Copy-Item './hacks.js' $html_out
-    Copy-Item './doc_style.css' "$html_out/stylesheet.css"
-    configure_file './menu_version.js.in' "$html_out/menu_version.js" @{'@VERLIST@' = $strVerList; '@VERSION@' = $ver}
-}
-
-# deploy wasm demos to site_dist2
-download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
-
-$wasm_dist2 = Join-Path $site_src 'dist2/wasm/'
+# build site2(isolated) wasm demos preview with pthread support
+$site_dist2 = Join-Path $site_src 'dist'
+$wasm_dist2 = Join-Path $site_dist2 'dist2/wasm/'
 mkdirs $wasm_dist2
-
+Copy-Item $(Join-Path $site_src 'isolated.html') $(Join-Path $site_dist2 'isolated.html')
+Copy-Item $(Join-Path $site_src '_headers') $site_dist2
 function copy_tree_if($source, $dest) {
     if (Test-Path $source) {
         Copy-Item $source $dest -Container -Recurse
     }
 }
 
+download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
 copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist2
 copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui_tests') $wasm_dist2
 copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/HelloLua') $wasm_dist2
@@ -192,7 +168,32 @@ $redirect_content = @'
 </body>
 </html>
 '@ -f 'https://axmol.netlify.app/wasm/cpp_tests/cpp_tests'
-
 Set-Content -Path $fake_cpp_tests_html -Value $redirect_content
+
+# build manuals
+foreach($item in $verMap.GetEnumerator()) {
+    $ver = $item.Key
+    $html_out = Join-Path $site_dist "manual/$ver"
+    mkdirs $html_out
+    $release_tag = $item.Value
+
+    if ($ver -eq 'latest') {
+        git checkout dev
+        $release_tag = query_axmol_latest
+    } elseif($ver -eq '1.0') {
+        git checkout '1.x' # 1.x branch now for v1.0
+    } else {
+        git checkout $release_tag
+    }
+    configure_file './Doxyfile.in' './Doxyfile' @{'@VERSION@'=$release_tag; '@HTML_OUTPUT@' = "manual/$ver"}
+
+    Write-Host "Generating docs for $ver ..." -NoNewline
+    doxygen "./Doxyfile" # 1>$null 2>$null
+    Write-Host "done"
+
+    Copy-Item './hacks.js' $html_out
+    Copy-Item './doc_style.css' "$html_out/stylesheet.css"
+    configure_file './menu_version.js.in' "$html_out/menu_version.js" @{'@VERLIST@' = $strVerList; '@VERSION@' = $ver}
+}
 
 Set-Location $store_cwd
