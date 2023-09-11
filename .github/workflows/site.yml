@@ -37,3 +37,13 @@ jobs:
         allow_empty_commit: false
         force_orphan: true
         publish_branch: gh-pages
+    # Deploy HTML site to netlify Pages
+    - name: Netlify Pages Deployment
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/dist2/
+        enable_jekyll: false
+        allow_empty_commit: false
+        force_orphan: true
+        publish_branch: netlify-app

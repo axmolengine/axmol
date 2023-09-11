@@ -94,7 +94,6 @@ function query_axmol_latest() {
 
 $site_src = (Resolve-Path "$myRoot/../../docs").Path
 $site_dist = Join-Path $site_src 'dist'
-
 mkdirs $site_dist
 
 $store_cwd = (Get-Location).Path
@@ -120,6 +119,16 @@ foreach($item in $release_tags) {
 $strVerList = "'$($verMap.Keys -join "','")'"
 Write-Host "$(Out-String -InputObject $verMap)"
 
+
+# set default doc ver to 'latest'
+mkdirs "$site_dist/manual"
+configure_file './doc_index.html.in' "$site_dist/manual/index.html" @{'@VERSION@' = 'latest'}
+
+# build home site
+mkdirs "$site_dist/assets/css"
+Copy-Item './style.css'  "$site_dist/assets/css/style.css"
+Copy-Item './index.html' "$site_dist/index.html"
+
 foreach($item in $verMap.GetEnumerator()) {
     $ver = $item.Key
     $html_out = Join-Path $site_dist "manual/$ver"
@@ -144,14 +153,6 @@ foreach($item in $verMap.GetEnumerator()) {
     Copy-Item './doc_style.css' "$html_out/stylesheet.css"
     configure_file './menu_version.js.in' "$html_out/menu_version.js" @{'@VERLIST@' = $strVerList; '@VERSION@' = $ver}
 }
-
-# set default doc ver to 'latest'
-configure_file './doc_index.html.in' "$site_dist/manual/index.html" @{'@VERSION@' = 'latest'}
-
-# build home site
-mkdirs "$site_dist/assets/css"
-Copy-Item './style.css'  "$site_dist/assets/css/style.css"
-Copy-Item './index.html' "$site_dist/index.html"
 
 # deploy wasm demos to site_dist2
 download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
