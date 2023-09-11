@@ -37,7 +37,7 @@ $template_cfg_file = Join-Path $sourcePath 'axproj-template.json'
 $template_cfg = ConvertFrom-Json (Get-Content $template_cfg_file -Raw)
 
 # variable for replace
-$projectDir = $destinationPath
+$projectDir = $(Resolve-Path $destinationPath).Path
 
 println "Creating project $projectName ..."
 

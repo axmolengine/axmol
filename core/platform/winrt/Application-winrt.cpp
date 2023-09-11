@@ -147,14 +147,7 @@ LanguageType Application::getCurrentLanguage()
 
 Application::Platform  Application::getTargetPlatform()
 {
-    if (isWindowsPhone())
-    {
-        return Platform::UWP;
-    }
-    else
-    {
-        return Platform::UWP_Phone;
-    }
+    return Platform::WinUWP;
 }
 
 std::string  Application::getVersion()

@@ -16,16 +16,15 @@ function ParseBoolFuzzy($value) {
 }
 
 $wasm = ParseBoolFuzzy($wasm)
+$linkOnly = ParseBoolFuzzy($linkOnly)
 
-if ($wasm) {
-    Write-Host "sync_folder.ps1: Skipping sync folder for target platform 'wasm'"
+if ($wasm -and $linkOnly) {
+    Write-Host "sync_folder.ps1: Skipping symlink folder for target platform 'wasm'"
     return 
 }
 
 # 0: windows, 1: linux, 2: macos
 $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
-
-$linkOnly = ParseBoolFuzzy($linkOnly)
 
 # convert to native path style
 if ($IsWin) {

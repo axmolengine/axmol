@@ -130,7 +130,7 @@ const std::string& Application::getResourceRootPath()
 
 Application::Platform Application::getTargetPlatform()
 {
-    return Platform::Emscripten;
+    return Platform::Wasm;
 }
 
 std::string Application::getVersion()
