@@ -1,7 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
+    namespace "org.axmol.lib"
+    compileSdk PROP_COMPILE_SDK_VERSION.toInteger()
 
     defaultConfig {
         minSdkVersion PROP_MIN_SDK_VERSION

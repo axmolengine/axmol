@@ -14,6 +14,7 @@
 # add or overwrite tool version like follow
 $manifest['nuget'] = '*' # any
 $manifest['glslcc'] = '1.9.3+'
+$manifest['jdk'] = '17.0.3+'
 
 if ($IsMacOS) {
     # refer to: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8632

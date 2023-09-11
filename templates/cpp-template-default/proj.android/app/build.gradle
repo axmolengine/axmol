@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 apply from: project(':libaxmol').projectDir.toString() + "/axutils.gradle"
 
 android {
-    compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
+    namespace "org.axmol.hellocpp"
+    compileSdk PROP_COMPILE_SDK_VERSION.toInteger()
 
     // Setup native build tools: ndk & cmake
     def nbtInfo = axutils.findNativeBuildTools(project)
