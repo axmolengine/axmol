@@ -7,8 +7,8 @@
 #    include <cxxabi.h>
 #endif
 
-#if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID
-#define FMT_HEADER_ONLY
+#if !defined(FMT_HEADER_ONLY)
+#    define FMT_HEADER_ONLY
 #endif
 
 #include "fmt/format.h"
@@ -76,7 +76,7 @@ std::string Inspector::demangle(const char* name)
 }
 
 #endif
-	
+
 std::string Inspector::getNodeName(Node* node)
 {
     return Inspector::demangle(typeid(*node).name());
@@ -132,7 +132,7 @@ void Inspector::drawTreeRecusrive(Node* node, int index)
             {
                 continue;
             }
-            
+
             drawTreeRecusrive(child, i);
             i++;
         }
@@ -154,7 +154,7 @@ void Inspector::drawProperties()
         _selected_node = nullptr;
         return;
     }
-    
+
     //ImGui::SameLine();
     //
     //if (ImGui::Button("Add Child"))
@@ -317,7 +317,7 @@ void Inspector::close()
 {
     _selected_node = nullptr;
     _target = nullptr;
-    
+
     auto presenter = ImGuiPresenter::getInstance();
     presenter->removeRenderLoop("#insp");
     presenter->clearFonts();
@@ -330,7 +330,7 @@ void Inspector::mainLoop()
         close();
         return;
     }
-    
+
     if (ImGui::Begin("Inspector"))
     {
         const auto avail = ImGui::GetContentRegionAvail();
