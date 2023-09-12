@@ -441,7 +441,8 @@ endif()
 if (AX_ENABLE_VLC_MEDIA AND (NOT _AX_HAVE_VLC))
     message(STATUS "Using axmol prebuilt libvlc")
     add_subdirectory(vlc)
-    ax_add_3rd(VLC::vlc INTERFACE VLC::vlccore)
+    ax_add_3rd(VLC::vlc)
+    ax_add_3rd(VLC::vlccore)
 endif()
 
 # yaml
@@ -466,7 +467,8 @@ endif()
 
 if (WINRT)
     add_subdirectory(angle)
-    ax_add_3rd(angle::GLESv2 INTERFACE angle::EGL)
+    ax_add_3rd(angle::GLESv2)
+    ax_add_3rd(angle::EGL)
 endif()
 
 # put "thirdparty" into thirdparty folder, too
