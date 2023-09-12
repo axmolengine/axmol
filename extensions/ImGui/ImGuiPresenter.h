@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <tuple>
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "ExtensionMacros.h"
 
 #include "imgui/imgui.h"
@@ -36,14 +36,17 @@ public:
     static void destroyInstance();
     static void setOnInit(const std::function<void(ImGuiPresenter*)>& callBack);
 
+    /// deprecated use enableDPIScale instead
+    float scaleAllByDPI(float userScale = 1.0f) { return enableDPIScale(userScale); }
+
     /// <summary>
     /// Scale ImGui with majorMoniter DPI scaling
     /// </summary>
     /// <param name="userScale">Usually is 1.0</param>
     /// <param name="fontFile">The full path of .ttc/.ttf file</param>
     /// <returns>The final contentZoomFactor = userScale * dpiScale</returns>
-    float scaleAllByDPI(float userScale = 1.0f) { return enableDPIScale(userScale); }
     float enableDPIScale(float userScale = 1.0f);
+
     float getContentZoomFactor() const { return _contentZoomFactor; }
 
     void setViewResolution(float width, float height);
