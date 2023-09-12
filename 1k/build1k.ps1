@@ -233,6 +233,10 @@ if ($options.xb.GetType() -eq [string]) {
 }
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
+# $osVer = [System.Environment]::OSVersion.Version.ToString()
+if ([System.Version]$pwsh_ver -lt [System.Version]"7.0.0.0") {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+}
 
 $b1k.println("PowerShell $pwsh_ver")
 
@@ -404,7 +408,7 @@ function exec_prog($prog, $params) {
 function download_file($url, $out) {
     if ($b1k.isfile($out)) { return }
     $b1k.println("Downloading $url to $out ...")
-    if ($pwsh_ver -ge '7.0') {
+    if ([System.Version]$pwsh_ver -ge [System.Version]'7.0.0.0') {
         curl -L $url -o $out
     }
     else {
@@ -442,7 +446,7 @@ function setup_nuget() {
     $b1k.mkdirs($nuget_bin)
 
     $nuget_prog = Join-Path $nuget_bin 'nuget.exe'
-    download_file "https://dist.nuget.org/win-x86-commandline/$nuget_ver/nuget.exe" $nuget_prog
+    download_file "https://dist.nuget.org/win-x86-commandline/v$nuget_ver/nuget.exe" $nuget_prog
 
     if ($b1k.isfile($nuget_prog)) {
         $b1k.println("Using nuget: $nuget_prog, version: $nuget_ver")

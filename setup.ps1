@@ -1,15 +1,86 @@
+# the setup script of axmol, for powershell <= 5.1, 
+# please execute command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass -Force' in PowerShell Terminal
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
-if ($pwsh_ver -le '5.0') {
-    throw "PowerShell 5.0+ required, installed is: $pwsh_ver"
-}
 
 function mkdirs([string]$path) {
     if (!(Test-Path $path -PathType Container)) {
-        New-Item $path -ItemType Directory 1>$null
+        if ([System.Version]$pwsh_ver -ge [System.Version]'5.0.0.0') {
+            New-Item $path -ItemType Directory 1>$null
+        } else {
+            mkdir $path
+        }
     }
+}
+
+if ([System.Version]$pwsh_ver -lt [System.Version]'5.0.0.0') {
+    # try setup WMF5.1, require reboot, try run setup.ps1 several times
+    Write-Host "Installing WMF5.1 ..."
+    $osVer = [System.Environment]::OSVersion.Version
+    
+    if($osVer.Major -ne 6) {
+        throw "Unsupported OSVersion: $($osVer.ToString())"
+    }
+    if ($osVer.Minor -ne 1 -and $osVer -ne 3) {
+        throw "Only win7 SP1 or win8 supported"
+    }
+    
+    $is_win7 = $osVer.Minor -eq 1
+    
+    # [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 5.1 non-win10
+    
+    $prefix = Join-Path (Get-Location).Path 'tmp'
+    
+    mkdirs $prefix
+    $curl = (New-Object Net.WebClient)
+    
+    # .net 4.5.2 prereq by WMF5.1
+    $pkg_out = Join-Path $prefix 'NDP452-KB2901907-x86-x64-AllOS-ENU.exe'
+    if (!(Test-Path $pkg_out -PathType Leaf)) {
+        Write-Host "Downloading $pkg_out ..."
+        $curl.DownloadFile('https://download.microsoft.com/download/E/2/1/E21644B5-2DF2-47C2-91BD-63C560427900/NDP452-KB2901907-x86-x64-AllOS-ENU.exe', $pkg_out)
+        if (!$?) {
+            del $pkg_out
+        }
+    }
+    .\tmp\NDP452-KB2901907-x86-x64-AllOS-ENU.exe /q /norestart
+    
+    # WMF5.1: https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/wmf/setup/install-configure?view=powershell-7.3&source=recommendations#download-and-install-the-wmf-51-package
+    if ($is_win7) {
+        $wmf_pkg = 'Win7AndW2K8R2-KB3191566-x64.zip'
+    } else {
+        $wmf_pkg = 'Win8.1AndW2K12R2-KB3191564-x64.msu'
+    }
+    
+    $pkg_out = Join-Path $prefix "$wmf_pkg"
+    if (!(Test-Path $pkg_out -PathType Leaf)) {
+        Write-Host "Downloading $pkg_out ..."
+        $curl.DownloadFile("https://download.microsoft.com/download/6/F/5/6F5FF66C-6775-42B0-86C4-47D41F2DA187/$wmf_pkg", $pkg_out)
+        if(!$?) {
+           del $pkg_out
+        }
+    }
+    if ($is_win7) {
+        echo "Expanding $pkg_out to $prefix"
+        function Expand-Zip($Path, $DestinationPath)
+        {
+           mkdirs $DestinationPath
+           $shell = new-object -com shell.application
+           $zip = $shell.NameSpace($Path)
+           foreach($item in $zip.items())
+           {
+              $shell.Namespace($DestinationPath).copyhere($item)
+           }
+        }
+        Expand-Zip -Path $pkg_out -DestinationPath $prefix\WMF51
+        & "$prefix\WMF51\Install-WMF5.1.ps1"
+    } else {
+        wusa.exe $pkg_out /quiet /norestart
+    }
+
+    throw "PowerShell 5.0+ required, installed is: $pwsh_ver, after install WMF5.1 and restart computer, try again"
 }
 
 $build1kPath = Join-Path $myRoot '1k/build1k.ps1'
@@ -27,16 +98,24 @@ $AX_CONSOLE_ROOT = Join-Path $AX_ROOT 'tools/console'
 $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 if ($IsWin) {
-    if ($env:AX_ROOT -ne $AX_ROOT) {
+    if ("$env:AX_ROOT" -ne "$AX_ROOT") {
         [Environment]::SetEnvironmentVariable('AX_ROOT', $AX_ROOT, 'User')
     }
 
     $pathList = [System.Collections.ArrayList]$env:PATH.Split(';')
     if ($pathList.IndexOf($AX_CONSOLE_ROOT) -eq -1) {
-        $pathList = [System.Collections.ArrayList][Environment]::GetEnvironmentVariable('PATH', 'User').Split(';')
-        $pathList.Insert(0, $AX_CONSOLE_ROOT)
-        $PATH = $pathList -join ';'
-        [Environment]::SetEnvironmentVariable('PATH', $PATH, 'User')
+        $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User') # we need get real pathList from CurrentUser
+        if ($strPathList) {
+            $pathList = [System.Collections.ArrayList]($strPathList.Split(';'))
+            $pathList.Insert(0, $AX_CONSOLE_ROOT)
+        }
+        else {
+            $pathList = @($AX_CONSOLE_ROOT)
+        }
+        
+        $strPathList = $pathList -join ';'
+        [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
+        $env:PATH = "$AX_CONSOLE_ROOT;$env:PATH" # sync to PowerShell Terminal
     }
 }
 else {

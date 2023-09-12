@@ -12,7 +12,7 @@
 # }
 
 # add or overwrite tool version like follow
-$manifest['nuget'] = '*' # any
+$manifest['nuget'] = '5.5.1' # since 5.6.0, require .net 4.0
 $manifest['glslcc'] = '1.9.3+'
 $manifest['jdk'] = '17.0.3+'
 
