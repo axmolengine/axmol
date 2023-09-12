@@ -46,4 +46,4 @@ jobs:
         enable_jekyll: false
         allow_empty_commit: false
         force_orphan: true
-        publish_branch: netlify-app
+        publish_branch: netlify-pages
