@@ -25,7 +25,7 @@ function download_file($url, $out, $force = $false) {
         Remove-Item $out
     }
     Write-Host "Downloading $url to $out ..."
-    if ($pwsh_ver -ge '7.0') {
+    if ([System.Version]$pwsh_ver -ge [System.Version]'7.0.0.0') {
         curl -L $url -o $out
     }
     else {
