@@ -1,6 +1,11 @@
 $myRoot = $PSScriptRoot
 $AX_ROOT = $myRoot
 
+$pwsh_ver = $PSVersionTable.PSVersion.ToString()
+if ($pwsh_ver -le '5.0') {
+    throw "PowerShell 5.0+ required, installed is: $pwsh_ver"
+}
+
 function mkdirs([string]$path) {
     if (!(Test-Path $path -PathType Container)) {
         New-Item $path -ItemType Directory 1>$null
