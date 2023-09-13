@@ -199,11 +199,11 @@ void Inspector::drawProperties()
     //    ImGui::EndPopup();
     //}
 
-    ImGui::Text("Addr: 0x%p", _selected_node);
+    ImGui::Text("Addr: %p", _selected_node);
     if (auto userData = _selected_node->getUserData(); userData)
     {
         ImGui::SameLine();
-        ImGui::Text("User data: 0x%p", userData);
+        ImGui::Text("User data: %p", userData);
     }
 
     auto pos = _selected_node->getPosition();
