@@ -47,6 +47,11 @@ if (Test-Path $destPath -PathType Container) { # dest already exist
     }
 }
 
+$destLoc = Split-Path $destPath -Parent
+if (!(Test-Path $destLoc -PathType Container)) {
+    New-Item $destLoc -ItemType Directory 1>$null
+}
+
 if ($linkOnly) {
     Write-Host "fsync.ps1: Linking $srcPath to $destPath ..."
     if ($IsWin -and (Test-Path $srcPath -PathType Container)) {
