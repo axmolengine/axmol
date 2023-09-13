@@ -37,7 +37,7 @@ class ImGuiSceneEventTracker : public ImGuiEventTracker
 public:
     bool initWithScene(Scene* scene)
     {
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         _trackLayer = utils::newInstance<Node>(&Node::initLayer);
 
         // note: when at the first click to focus the window, this will not take effect
@@ -79,7 +79,7 @@ public:
 
     ~ImGuiSceneEventTracker()
     {
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         if (_trackLayer)
         {
             if (_trackLayer->getParent())
@@ -100,7 +100,7 @@ class ImGuiGlobalEventTracker : public ImGuiEventTracker
 public:
     bool init()
     {
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         // note: when at the first click to focus the window, this will not take effect
 
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -126,7 +126,7 @@ public:
 
     ~ImGuiGlobalEventTracker()
     {
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
         eventDispatcher->removeEventListener(_mouseListener);
         eventDispatcher->removeEventListener(_touchListener);
