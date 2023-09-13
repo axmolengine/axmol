@@ -1393,7 +1393,11 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
                 }
             }
             else
+            {
+                if (outlineSize > 0)
+                    _currLabelEffect = LabelEffect::OUTLINE;
                 updateShaderProgram();
+            }
         }
         else if (_effectColorF != outlineColor || _outlineSize != outlineSize)
         {
