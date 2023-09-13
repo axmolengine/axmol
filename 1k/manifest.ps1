@@ -15,6 +15,7 @@
 $manifest['nuget'] = '5.5.1' # since 5.6.0, require .net 4.0
 $manifest['glslcc'] = '1.9.3+'
 $manifest['jdk'] = '17.0.3+'
+# $manifest['cmake'] = '3.27.4+'
 
 if ($IsMacOS) {
     # refer to: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8632
