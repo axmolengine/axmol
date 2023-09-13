@@ -353,7 +353,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
         $verStr = $(. $cmd @params 2>$null) | Select-Object -First 1
         if (!$verStr -or ($verStr.IndexOf('--version') -ne -1)) {
             $verInfo = $cmd_info.Version
-            $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Revision)"
+            $verStr = "$($verInfo.Major).$($verInfo.Minor).$($verInfo.Build)"
         }
 
         # full pattern: '(\d+\.)+(\*|\d+)(\-[a-z]+[0-9]*)?' can match x.y.z-rc3, but not require for us
@@ -481,43 +481,37 @@ function setup_glslcc() {
     throw "Install glslcc fail"
 }
 
-# function setup_ninja($ninja_bin) {
-#     if (!$manifest['ninja']) { return $null }
-#     $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
-#     $ninja_bin = Join-Path $prefix 'ninja'
-#     $ninja_prog, $ninja_ver = find_prog -name 'ninja'
-#     if ($ninja_prog) {
-#         return $ninja_prog
-#     }
+function setup_ninja() {
+    if (!$manifest['ninja']) { return $null }
+    $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
+    $ninja_bin = Join-Path $prefix 'ninja'
+    $ninja_prog, $ninja_ver = find_prog -name 'ninja'
+    if ($ninja_prog) {
+        return $ninja_prog
+    }
 
-#     $ninja_prog, $ninja_ver = find_prog -name 'ninja' -path $ninja_bin -silent $true
-#     if (!$ninja_prog) {
-#         $ninja_pkg = "$prefix/ninja-$suffix.zip"
-#         $b1k.rmdirs($ninja_bin)
-#         $b1k.del($ninja_pkg)
+    $ninja_prog, $ninja_ver = find_prog -name 'ninja' -path $ninja_bin -silent $true
+    if (!$ninja_prog) {
+        $ninja_pkg = "$prefix/ninja-$suffix.zip"
+        $b1k.rmdirs($ninja_bin)
+        $b1k.del($ninja_pkg)
         
-#         download_and_expand "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" $ninja_pkg "$prefix/ninja/"
-#     }
-#     if ($env:PATH.IndexOf($ninja_bin) -eq -1) {
-#         $env:PATH = "$ninja_bin$envPathSep$env:PATH"
-#     }
-#     $ninja_prog = (Join-Path $ninja_bin "ninja$exeSuffix")
+        download_and_expand "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$suffix.zip" $ninja_pkg "$prefix/ninja/"
+    }
+    if ($env:PATH.IndexOf($ninja_bin) -eq -1) {
+        $env:PATH = "$ninja_bin$envPathSep$env:PATH"
+    }
+    $ninja_prog = (Join-Path $ninja_bin "ninja$exeSuffix")
 
-#     $b1k.println("Using ninja: $ninja_prog, version: $ninja_ver")
-#     return $ninja_prog
-# }
+    $b1k.println("Using ninja: $ninja_prog, version: $ninja_ver")
+    return $ninja_prog
+}
 
 # setup cmake
-function setup_cmake_and_ninja() {
-    $cmake_prog, $cmake_ver = find_prog -name 'cmake' -silent $true
-    if ($cmake_prog) {
-        $cmake_bin = Split-Path $cmake_prog -Parent
-        $ninja_prog, $ninja_ver = find_prog -name 'ninja' -path $cmake_bin -mode 'ONLY' -silent $true
-        if ($ninja_prog) {
-            $b1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
-            $b1k.println("Using ninja: $ninja_prog, version: $ninja_ver")
-            return $cmake_prog, $ninja_prog
-        } # else cmake bin dir not contains ninja which required by android apk, always setup in axmol tools external dir
+function setup_cmake([switch]$Force = $false) {
+    $cmake_prog, $cmake_ver = find_prog -name 'cmake'
+    if ($cmake_prog -and !$Force) {
+        return $cmake_prog
     }
 
     $cmake_root = $(Join-Path $prefix 'cmake')
@@ -580,28 +574,26 @@ function setup_cmake_and_ninja() {
         if (!$cmake_prog) {
             throw "Install cmake $cmake_ver fail"
         }
+	
+        $b1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
     }
 
     if (($null -ne $cmake_bin) -and ($env:PATH.IndexOf($cmake_bin) -eq -1)) {
         $env:PATH = "$cmake_bin$envPathSep$env:PATH"
     }
+    return $cmake_prog
+}
 
-    # ensure ninja in cmake bin directory
-    $ninja_prog, $ninja_ver = find_prog -name 'ninja' -path $cmake_bin -mode 'ONLY' -silent $true
-    if (!$ninja_prog) {
-        $ninja_suffix = $('win', 'linux', 'mac').Get($HOST_OS)
-        $ninja_pkg = "$prefix/ninja-$ninja_suffix.zip"
-        if ($b1k.isfile($ninja_pkg)) {
-            $b1k.del($ninja_pkg)
-        }
-        download_and_expand "https://github.com/ninja-build/ninja/releases/download/v$ninja_ver/ninja-$ninja_suffix.zip" $ninja_pkg "$cmake_bin/"
-        $ninja_prog, $ninja_ver = find_prog -name 'ninja' -path $cmake_bin -mode 'ONLY' -silent $true
-    }
-
-    $b1k.println("Using cmake: $cmake_prog, version: $cmake_ver")
-    $b1k.println("Using ninja: $ninja_prog, version: $ninja_ver")
-
-    return $cmake_prog, $ninja_prog
+function ensure_cmake_ninja($cmake_prog, $ninja_prog) {
+     # ensure ninja in cmake_bin
+     $cmake_bin = Split-Path $cmake_prog -Parent
+     $cmake_ninja_prog,$__ = find_prog -name 'ninja' -path $cmake_bin -mode 'ONLY' -silent $true
+     if (!$cmake_ninja_prog) { #
+         $ninja_symlink_target = Join-Path $cmake_bin (Split-Path $ninja_prog -Leaf)
+         # try link ninja exist cmake bin directory
+         & "$myRoot\fsync.ps1" -s $ninja_prog -d $ninja_symlink_target -l $true 2>$null
+     }
+     return $?
 }
 
 function setup_nsis() {
@@ -924,6 +916,7 @@ function preprocess_andorid([string[]]$inputOptions) {
     
         $archs = $archlist -join ':' # TODO: modify gradle, split by ';'
 
+        $outputOptions += "-PPROP_CMAKE_VERSION=$($manifest['cmake'])"
         $outputOptions += "-PPROP_APP_ABI=$archs"
         $outputOptions += '--parallel', '--info'
     }
@@ -1037,20 +1030,30 @@ validHostAndToolchain
 
 $null = setup_glslcc
 
-$cmake_prog, $ninja_prog = setup_cmake_and_ninja
+$cmake_prog = setup_cmake
 
 if ($BUILD_TARGET -eq 'win32') {
     $nuget_prog = setup_nuget
     $nsis_prog = setup_nsis
     if ($TOOLCHAIN_NAME -eq 'clang') {
+        $ninja_prog = setup_ninja
         $null = setup_clang
     }
 }
 elseif ($BUILD_TARGET -eq 'android') {
+    $ninja_prog = setup_ninja
     $null = setup_jdk # setup android sdk cmdlinetools require jdk
     $sdk_root, $ndk_root = setup_android_sdk
     $env:ANDROID_HOME = $sdk_root
     $env:ANDROID_NDK = $ndk_root
+
+    # ensure ninja in cmake_bin
+    if(!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
+        $cmake_prog = setup_cmake -Force
+        if(!(ensure_cmake_ninja $cmake_prog $ninja_prog)) {
+            throw "Ensure ninja in cmake bin directory fail"
+        }
+    }
 }
 elseif ($BUILD_TARGET -eq 'wasm') {
     . setup_emsdk
