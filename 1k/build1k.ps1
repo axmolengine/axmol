@@ -819,11 +819,11 @@ function setup_emsdk() {
 
     $emcmake = (Get-Command emcmake -ErrorAction SilentlyContinue)
     if (!$emcmake) {
-        Set-Location $emsdk_root
+        Push-Location $emsdk_root
         ./emsdk install latest
         ./emsdk activate latest
         . ./emsdk_env.ps1
-        Set-Location -
+        Pop-Location
     }
 }
 
