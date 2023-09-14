@@ -87,7 +87,7 @@ public:
     ~UrlTouchListenerComponent() override
     {
         Director::getInstance()->getEventDispatcher()->removeEventListener(_touchListener);
-        _touchListener->release();
+        _touchListener = nullptr;
     }
 
     bool onTouchBegan(Touch* touch, Event* /*event*/)
