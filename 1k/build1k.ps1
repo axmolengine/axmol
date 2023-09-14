@@ -175,6 +175,7 @@ $manifest = @{
     cmake        = '3.22.1+';
     ninja        = '1.11.1+';
     jdk          = '11.0.19+';
+    emsdk        = '3.1.45';
     cmdlinetools = '7.0+'; # android cmdlinetools
 }
 
@@ -819,9 +820,10 @@ function setup_emsdk() {
 
     $emcmake = (Get-Command emcmake -ErrorAction SilentlyContinue)
     if (!$emcmake) {
+        $emsdk_ver = $manifest['emsdk']
         Push-Location $emsdk_root
-        ./emsdk install latest
-        ./emsdk activate latest
+        ./emsdk install $emsdk_ver
+        ./emsdk activate $emsdk_ver
         . ./emsdk_env.ps1
         Pop-Location
     }
