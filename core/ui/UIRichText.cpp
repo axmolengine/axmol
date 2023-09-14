@@ -102,7 +102,7 @@ public:
         return false;
     }
 
-    void onTouchEnded(Touch* touch, Event* /*event*/)
+    void onTouchEnded(Touch* /*touch*/, Event* /*event*/)
     {
         if (_handleOpenUrl)
         {
