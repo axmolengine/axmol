@@ -48,63 +48,77 @@
 USING_NS_AX;
 using namespace ax::ui;
 
-class ListenerComponent : public Component
+class UrlTouchListenerComponent : public Component
 {
 public:
     static const std::string COMPONENT_NAME; /*!< component name */
 
-    static ListenerComponent* create(Node* parent,
+    static UrlTouchListenerComponent* create(Node* parent,
                                      std::string_view url,
-                                     const RichText::OpenUrlHandler handleOpenUrl = nullptr)
+                                     RichText::OpenUrlHandler handleOpenUrl = nullptr)
     {
-        auto component = new ListenerComponent(parent, url, std::move(handleOpenUrl));
+        auto* component = new UrlTouchListenerComponent(parent, url, std::move(handleOpenUrl));
+        component->init();
         component->autorelease();
         return component;
     }
 
-    explicit ListenerComponent(Node* parent, std::string_view url, const RichText::OpenUrlHandler handleOpenUrl)
+    explicit UrlTouchListenerComponent(Node* parent, std::string_view url, RichText::OpenUrlHandler handleOpenUrl)
         : _parent(parent), _url(url), _handleOpenUrl(std::move(handleOpenUrl))
     {
-        setName(ListenerComponent::COMPONENT_NAME);
-
-        _touchListener                 = ax::EventListenerTouchAllAtOnce::create();
-        _touchListener->onTouchesEnded = AX_CALLBACK_2(ListenerComponent::onTouchesEnded, this);
-
-        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_touchListener, _parent);
-        _touchListener->retain();
     }
 
-    virtual ~ListenerComponent()
+    bool init() override
+    {
+        if (!Component::init())
+            return false;
+
+        setName(UrlTouchListenerComponent::COMPONENT_NAME);
+
+        _touchListener               = ax::EventListenerTouchOneByOne::create();
+        _touchListener->onTouchBegan = AX_CALLBACK_2(UrlTouchListenerComponent::onTouchBegan, this);
+        _touchListener->onTouchEnded = AX_CALLBACK_2(UrlTouchListenerComponent::onTouchEnded, this);
+        _touchListener->setSwallowTouches(true);
+
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(_touchListener, _parent);
+        return true;
+    }
+
+    ~UrlTouchListenerComponent() override
     {
         Director::getInstance()->getEventDispatcher()->removeEventListener(_touchListener);
         _touchListener->release();
     }
 
-    void onTouchesEnded(const std::vector<Touch*>& touches, Event* /*event*/)
+    bool onTouchBegan(Touch* touch, Event* /*event*/)
     {
-        for (const auto& touch : touches)
+        // FIXME: Node::getBoundBox() doesn't return it in local coordinates... so create one manually.
+        const auto localRect = Rect(Vec2::ZERO, _parent->getContentSize());
+        if (localRect.containsPoint(_parent->convertTouchToNodeSpace(touch)))
         {
-            // FIXME: Node::getBoundBox() doesn't return it in local coordinates... so create one manually.
-            Rect localRect = Rect(Vec2::ZERO, _parent->getContentSize());
-            if (localRect.containsPoint(_parent->convertTouchToNodeSpace(touch)))
-            {
-                if (_handleOpenUrl)
-                {
-                    _handleOpenUrl(_url);
-                }
-            }
+            return true;
+        }
+
+        return false;
+    }
+
+    void onTouchEnded(Touch* touch, Event* /*event*/)
+    {
+        if (_handleOpenUrl)
+        {
+            _handleOpenUrl(_url);
         }
     }
 
-    void setOpenUrlHandler(const RichText::OpenUrlHandler& handleOpenUrl) { _handleOpenUrl = handleOpenUrl; }
+    void setOpenUrlHandler(RichText::OpenUrlHandler handleOpenUrl) { _handleOpenUrl = std::move(handleOpenUrl); }
 
 private:
     Node* _parent;  // weak ref.
     std::string _url;
     RichText::OpenUrlHandler _handleOpenUrl;
-    EventListenerTouchAllAtOnce* _touchListener;  // strong ref.
+    RefPtr<EventListenerTouchOneByOne> _touchListener;  // strong ref.
 };
-const std::string ListenerComponent::COMPONENT_NAME("cocos2d_ui_UIRichText_ListenerComponent");
+const std::string UrlTouchListenerComponent::COMPONENT_NAME("ax_ui_UIRichText_UrlTouchListenerComponent");
 
 bool RichElement::init(int tag, const Color3B& color, uint8_t opacity)
 {
@@ -1567,8 +1581,8 @@ void RichText::formatText(bool force)
                     if (elmtText->_flags & RichElementText::STRIKETHROUGH_FLAG)
                         label->enableStrikethrough();
                     if (elmtText->_flags & RichElementText::URL_FLAG)
-                        label->addComponent(ListenerComponent::create(
-                            label, elmtText->_url, std::bind(&RichText::openUrl, this, std::placeholders::_1)));
+                        label->addComponent(UrlTouchListenerComponent::create(
+                            label, elmtText->_url, [this](std::string_view url) { openUrl(url); }));
                     if (elmtText->_flags & RichElementText::OUTLINE_FLAG)
                     {
                         label->enableOutline(Color4B(elmtText->_outlineColor), elmtText->_outlineSize);
@@ -1610,7 +1624,7 @@ void RichText::formatText(bool force)
                         elementRenderer->setContentSize(Vec2(currentSize.width * elementRenderer->getScaleX(),
                                                              currentSize.height * elementRenderer->getScaleY()));
                         elementRenderer->addComponent(
-                            ListenerComponent::create(elementRenderer, elmtImage->_url,
+                            UrlTouchListenerComponent::create(elementRenderer, elmtImage->_url,
                                                       std::bind(&RichText::openUrl, this, std::placeholders::_1)));
                         elementRenderer->setColor(element->_color);
                     }
@@ -1891,8 +1905,8 @@ void RichText::handleTextRenderer(std::string_view text,
             if (flags & RichElementText::STRIKETHROUGH_FLAG)
                 textRenderer->enableStrikethrough();
             if (flags & RichElementText::URL_FLAG)
-                textRenderer->addComponent(ListenerComponent::create(
-                    textRenderer, url, std::bind(&RichText::openUrl, this, std::placeholders::_1)));
+                textRenderer->addComponent(UrlTouchListenerComponent::create(
+                    textRenderer, url, [this](std::string_view url) { openUrl(url); }));
             if (flags & RichElementText::OUTLINE_FLAG)
                 textRenderer->enableOutline(Color4B(outlineColor), outlineSize);
             if (flags & RichElementText::SHADOW_FLAG)
@@ -1995,7 +2009,7 @@ void RichText::handleImageRenderer(std::string_view filePath,
         imageRenderer->setScale(1.f, 1.f);
         handleCustomRenderer(imageRenderer);
         imageRenderer->addComponent(
-            ListenerComponent::create(imageRenderer, url, std::bind(&RichText::openUrl, this, std::placeholders::_1)));
+            UrlTouchListenerComponent::create(imageRenderer, url, [this](std::string_view url) { openUrl(url); }));
     }
 }
 
