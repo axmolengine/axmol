@@ -164,6 +164,9 @@ elseif(EMSCRIPTEN)
         platform/wasm/Device-wasm.cpp
         platform/GLViewImpl.cpp
         )
+    if (AX_WASM_ENABLE_DEVTOOLS)
+        list(APPEND _AX_PLATFORM_SPECIFIC_SRC platform/wasm/devtools-wasm.cpp)
+    endif()
 endif()
 
 set(_AX_PLATFORM_HEADER

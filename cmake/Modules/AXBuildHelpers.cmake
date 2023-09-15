@@ -443,14 +443,23 @@ endfunction()
 
 set(AX_WASM_SHELL_FILE "${_AX_ROOT}/core/platform/wasm/shell_minimal.html" CACHE STRING "The path of wasm shell file")
 
+option(AX_WASM_ENABLE_DEVTOOLS "Enable wasm devtools" ON)
+
+set(_AX_WASM_EXPORTS "_main")
+if(AX_WASM_ENABLE_DEVTOOLS)
+    set(_AX_WASM_EXPORTS "${_AX_WASM_EXPORTS},_axmol_director_pause,_axmol_director_resume,_axmol_director_step")
+endif()
+set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
+
 # stupid & pitfall: function not emcc not output .html
 macro (ax_setup_wasm_app_config app_name)
     # setup wasm target
     if(WASM)
+        message(STATUS "#### AX_WASM_EXPORTS=${AX_WASM_EXPORTS}")
         get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
         set(CMAKE_EXECUTABLE_SUFFIX ".html")
         target_link_options(${app_name} PRIVATE
-                            "-sEXPORTED_FUNCTIONS=[_main]"
+                            "-sEXPORTED_FUNCTIONS=[${AX_WASM_EXPORTS}]"
                             "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
                             )
         set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb -s INITIAL_MEMORY=512MB --shell-file ${AX_WASM_SHELL_FILE} --use-preload-cache")

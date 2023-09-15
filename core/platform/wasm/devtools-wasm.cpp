@@ -1,12 +1,11 @@
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "platform/devtools-wasm.h"
+#include "platform/wasm/devtools-wasm.h"
 #include <emscripten.h>
 #include "base/UTF8.h"
 
-using namespace std;
-using namespace cocos2d;
+NS_AX_BEGIN
 
 DevToolsImpl::DevToolsImpl()
 {
@@ -49,21 +48,23 @@ DevToolsImpl* DevToolsImpl::getInstance()
     return &instance;
 }
 
+NS_AX_END
+
 extern "C"
 {
-    void cocos_ccdirector_pause()
+    void axmol_director_pause()
     {
-        DevToolsImpl::getInstance()->pause();
+        ax::DevToolsImpl::getInstance()->pause();
     }
 
-    void cocos_ccdirector_resume()
+    void axmol_director_resume()
     {
-        DevToolsImpl::getInstance()->resume();
+        ax::DevToolsImpl::getInstance()->resume();
     }
 
-    void cocos_ccdirector_step()
+    void axmol_director_step()
     {
-        DevToolsImpl::getInstance()->step();
+        ax::DevToolsImpl::getInstance()->step();
     }
 }
 
