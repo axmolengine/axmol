@@ -4,10 +4,10 @@
 #include "platform/PlatformConfig.h"
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
-#include "base/CCScheduler.h"
-#include "base/CCDirector.h"
+#include "base/Scheduler.h"
+#include "base/Director.h"
 
-using namespace cocos2d;
+NS_AX_BEGIN
 
 class DevToolsImpl
 {
@@ -29,6 +29,8 @@ private:
     Scheduler* _scheduler;
     Director* _director;
 };
+
+NS_AX_END
 
 #endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 #endif // __DEVTOOLS_EMSCRIPTEN_H__
