@@ -65,7 +65,7 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
         var dimHeight = $5;
         var align = $6;
         
-        var canvas = Module.cocosSharedCanvas = Module.cocosSharedCanvas || document.createElement("canvas");
+        var canvas = Module.axmolSharedCanvas = Module.axmolSharedCanvas || document.createElement("canvas");
         var context = canvas.getContext("2d");
         context.font = fontSize + "px " + fontName;
         
@@ -82,6 +82,9 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
         if (dimHeight <= 0) {
             canvasHeight = lineHeight * lines.length;
         }
+
+        canvasWidth = Math.ceil(canvasWidth);
+        canvasHeight = Math.ceil(canvasHeight);
 
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
@@ -122,12 +125,12 @@ Data Device::getTextureDataForText(std::string_view text, const FontDefinition& 
     }, text.data(), textDefinition._fontName.c_str(), textDefinition._fontSize, color, textDefinition._dimensions.width, textDefinition._dimensions.height, align);
     
     width = EM_ASM_INT({
-        return Module.cocosSharedCanvas.width;
+        return Module.axmolSharedCanvas.width;
     });
     height = EM_ASM_INT({
-        return Module.cocosSharedCanvas.height;
+        return Module.axmolSharedCanvas.height;
     });
-    hasPremultipliedAlpha = true;
+    hasPremultipliedAlpha = false;
     
     Data ret;
     ret.fastSet(ptr, width * height * 4);
