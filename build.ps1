@@ -66,35 +66,42 @@ $options.xc = translate_array_opt $options.xc
 $myRoot = $PSScriptRoot
 $workDir = $(Get-Location).Path
 
+# axroot
 $AX_ROOT = $env:AX_ROOT
-if (!$AX_ROOT) {
-    if(Test-Path "$myRoot/core/axmolver.h.in" -PathType Leaf) {
-        $AX_ROOT = $myRoot
-        $env:AX_ROOT = $AX_ROOT
+if (!$AX_ROOT -and (Test-Path "$myRoot/core/axmolver.h.in" -PathType Leaf)) {
+    $AX_ROOT = $myRoot
+    $env:AX_ROOT = $AX_ROOT
+}
+
+# b1kroot preferred axmol, but b1k(1k,build.ps1) can be copy to any isolated directory to work
+$b1k_root = $AX_ROOT
+if(!$b1k_root) {
+    if(Test-Path "$myRoot/1k/build1k.ps1" -PathType Leaf) {
+        $b1k_root = $myRoot
     }
     else {
-        throw "Can't determine axmol engine root, please run python setup.py first"
+        throw "The build1k.ps1 not found"
     }
 }
 
-$search_prior_dir = $options.d
-$is_engine = ($workDir -eq $AX_ROOT) -and (!$search_prior_dir -or $search_prior_dir -eq $AX_ROOT)
+$source_proj_dir = if($options.d) { $option.d } else { $workDir }
+$is_engine = ($source_proj_dir -eq $AX_ROOT)
 $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
 
 # start construct full cmd line
-$b1k_script = (Resolve-Path -Path "$AX_ROOT/1k/build1k.ps1").Path
+$b1k_script = (Resolve-Path -Path "$b1k_root/1k/build1k.ps1").Path
 $b1k_args = @()
 
 if ($is_engine -and $is_android) {
     if ($is_ci) {
-        $search_prior_dir = Join-Path $myRoot 'tests/cpp-tests'
+        $source_proj_dir = Join-Path $myRoot 'tests/cpp-tests'
     } else {
-        $search_prior_dir = Join-Path $myRoot 'templates/cpp-template-default'
+        $source_proj_dir = Join-Path $myRoot 'templates/cpp-template-default'
     }
 }
 
-$search_paths = if ($search_prior_dir) { @($search_prior_dir, $workDir, $myRoot) } else { @($workDir, $myRoot) }
+$search_paths = if ($source_proj_dir -ne $myRoot) { @($source_proj_dir, $myRoot) } else { @($source_proj_dir) }
 function search_proj_file($file_path, $type) {
     foreach ($search_path in $search_paths) {
         $full_path = Join-Path $search_path $file_path
@@ -177,7 +184,7 @@ if ($is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -P
 if ($proj_dir) {
     $b1k_args += '-d', "$proj_dir"
 }
-$prefix = Join-Path $AX_ROOT 'tools/external'
+$prefix = Join-Path $b1k_root 'tools/external'
 $b1k_args += '-prefix', "$prefix"
 
 # remove arg we don't want forward to
