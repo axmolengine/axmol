@@ -253,9 +253,9 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
             break;
 
         // set the requested font size
-        int dpi            = 72;
-        int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
-        if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))
+         int dpi            = 72;
+         int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
+         if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))
             break;
 
         // store the face globally

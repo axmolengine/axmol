@@ -42,6 +42,10 @@ NS_AX_BEGIN
  */
 
 #define AX_DEFAULT_FONT_LABEL_SIZE 12
+#define AX_DEFAULT_BASE_FONT_SIZE  32
+
+AX_DLL bool isDistanceFieldEnabled();
+AX_DLL void setDistanceFieldEnabled(bool enabled);
 
 /**
  * @struct TTFConfig
@@ -50,14 +54,14 @@ NS_AX_BEGIN
 typedef struct _ttfConfig
 {
     std::string fontFilePath;
-    float fontSize;
-
-    GlyphCollection glyphs;
     std::string customGlyphs;
 
-    bool distanceFieldEnabled;
+    GlyphCollection glyphs;
+    float fontSize;
+    float baseFontSize;
     int outlineSize;
 
+    bool distanceFieldEnabled;
     bool italics;
     bool bold;
     bool underline;
@@ -67,7 +71,7 @@ typedef struct _ttfConfig
                float size                             = AX_DEFAULT_FONT_LABEL_SIZE,
                const GlyphCollection& glyphCollection = GlyphCollection::DYNAMIC,
                const char* customGlyphCollection      = nullptr, /* nullable */
-               bool useDistanceField                  = false,
+               bool useDistanceField                  = isDistanceFieldEnabled(),
                int outline                            = 0,
                bool useItalics                        = false,
                bool useBold                           = false,
@@ -75,6 +79,7 @@ typedef struct _ttfConfig
                bool useStrikethrough                  = false)
         : fontFilePath(filePath)
         , fontSize(size)
+        , baseFontSize(AX_DEFAULT_BASE_FONT_SIZE)
         , glyphs(glyphCollection)
         , customGlyphs(customGlyphCollection ? customGlyphCollection : "")
         , distanceFieldEnabled(useDistanceField)
@@ -84,10 +89,6 @@ typedef struct _ttfConfig
         , underline(useUnderline)
         , strikethrough(useStrikethrough)
     {
-        if (outline > 0)
-        {
-            distanceFieldEnabled = false;
-        }
     }
 } TTFConfig;
 
@@ -811,88 +812,108 @@ protected:
 
     void updateBatchCommand(BatchCommand& batch);
 
-    LabelType _currentLabelType;
+    const Mat4& getNodeToParentTransform() const override;
+
+    
     bool _contentDirty;
-    std::u32string _utf32Text;
-    std::string _utf8Text;
-    int _numberOfLines;
+    bool _useDistanceField;
+    bool _useA8Shader;
+    bool _shadowDirty;
 
-    std::string _bmFontPath;
-    std::string _bmSubTextureKey;
-    Rect _bmRect;
+    bool _shadowEnabled;
     bool _bmRotated;
-
-    TTFConfig _fontConfig;
-    float _outlineSize;
-
     bool _systemFontDirty;
-    std::string _systemFont;
+    bool _clipEnabled;
+
+    bool _blendFuncDirty;
+    /// whether or not the label was inside bounds the previous frame
+    bool _insideBounds;
+    bool _isOpacityModifyRGB;
+    bool _enableWrap;
+
+    bool _boldEnabled;
+    bool _strikethroughEnabled;
+    bool _lineBreakWithoutSpaces;
+    uint8_t _shadowOpacity;
+
+    Color3B _shadowColor3B;
+
+    LabelType _currentLabelType;
+    int _numberOfLines;
+    float _outlineSize;
     float _systemFontSize;
-    Sprite* _textSprite;
-    Sprite* _shadowNode;
 
-    FontAtlas* _fontAtlas;
-    Vector<SpriteBatchNode*> _batchNodes;
-    std::vector<LetterInfo> _lettersInfo;
-
-    //! used for optimization
-    Sprite* _reusedLetter;
-    Rect _reusedRect;
     int _lengthOfString;
+    int _uniformEffectColor;
+    int _uniformEffectType;  // 0: None, 1: Outline, 2: Shadow; Only used when outline is enabled.
+    int _uniformTextColor;
 
     // layout relevant properties.
     float _lineHeight;
     float _lineSpacing;
     float _additionalKerning;
-    int* _horizontalKernings;
-    bool _lineBreakWithoutSpaces;
     float _maxLineWidth;
-    Vec2 _labelDimensions;
+
     float _labelWidth;
     float _labelHeight;
     TextHAlignment _hAlignment;
     TextVAlignment _vAlignment;
 
     float _textDesiredHeight;
-    std::vector<float> _linesWidth;
-    std::vector<float> _linesOffsetX;
     float _letterOffsetY;
     float _tailoredTopY;
     float _tailoredBottomY;
 
     LabelEffect _currLabelEffect;
-    Color4F _effectColorF;
-    Color4B _textColor;
-    Color4F _textColorF;
+    float _shadowBlurRadius;
+    float _bmFontSize;
+    float _bmfontScale;
 
+    Overflow _overflow;
+    float _originalFontSize;
+    float _ttfFontScale;
+    Color4B _textColor;
+
+    BlendFunc _blendFunc;
+   
+    Vec2 _labelDimensions;
+    Vec2 _shadowOffset;
+    mutable Vec2 _scaledContentSize;  // !SDF scale
+
+    Sprite* _textSprite;
+    Sprite* _shadowNode;
+    int* _horizontalKernings;
+    FontAtlas* _fontAtlas;
+    //! used for optimization
+    Sprite* _reusedLetter;
+    DrawNode* _underlineNode;
+
+    Rect _bmRect;
+    Rect _reusedRect;
+
+    Color4F _effectColorF;
+    Color4F _textColorF;
+    Color4F _shadowColor4F;
+    Mat4 _shadowTransform;
+
+    std::u32string _utf32Text;
+    std::string _utf8Text;
+
+    std::string _bmFontPath;
+    std::string _bmSubTextureKey;
+    std::string _systemFont;
+
+    TTFConfig _fontConfig;
+
+    Vector<SpriteBatchNode*> _batchNodes;
+    std::vector<LetterInfo> _lettersInfo;
+
+    std::vector<float> _linesWidth;
+    std::vector<float> _linesOffsetX;
+    
     QuadCommand _quadCommand;
 
     std::vector<BatchCommand> _batchCommands;
-
-    Mat4 _shadowTransform;
-    int _uniformEffectColor;
-    int _uniformEffectType;  // 0: None, 1: Outline, 2: Shadow; Only used when outline is enabled.
-    int _uniformTextColor;
-    bool _useDistanceField;
-    bool _useA8Shader;
-
-    bool _shadowDirty;
-    bool _shadowEnabled;
-    Vec2 _shadowOffset;
-
-    Color4F _shadowColor4F;
-    Color3B _shadowColor3B;
-    uint8_t _shadowOpacity;
-    float _shadowBlurRadius;
-
-    bool _clipEnabled;
-    bool _blendFuncDirty;
-    BlendFunc _blendFunc;
-
-    /// whether or not the label was inside bounds the previous frame
-    bool _insideBounds;
-
-    bool _isOpacityModifyRGB;
 
     std::unordered_map<int, Sprite*> _letters;
 
@@ -902,16 +923,6 @@ protected:
 #if AX_LABEL_DEBUG_DRAW
     DrawNode* _debugDrawNode;
 #endif
-
-    bool _enableWrap;
-    float _bmFontSize;
-    float _bmfontScale;
-    Overflow _overflow;
-    float _originalFontSize;
-
-    bool _boldEnabled;
-    DrawNode* _underlineNode;
-    bool _strikethroughEnabled;
 
     backend::UniformLocation _mvpMatrixLocation;
     backend::UniformLocation _textureLocation;

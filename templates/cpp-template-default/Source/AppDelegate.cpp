@@ -62,6 +62,9 @@ static int register_all_packages()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
+    // whether enable global SDF font render support, since axmol-2.0.1
+    ax::setDistanceFieldEnabled(true);
+
     auto md4Val = utils::computeDigest("hello world", "md4");
 
     // initialize director

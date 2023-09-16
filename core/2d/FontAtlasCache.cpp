@@ -59,15 +59,17 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
     bool useDistanceField  = config->distanceFieldEnabled;
     int outlineSize        = useDistanceField ? 0 : config->outlineSize;
 
+    auto baseFontSize = config->distanceFieldEnabled ? config->baseFontSize : config->fontSize;
+
     std::string atlasName =
         config->distanceFieldEnabled
-            ? fmt::format("df {:.2f} {} {}", config->fontSize, outlineSize, realFontFilename)
-            : fmt::format("{:.2f} {} {}", config->fontSize, outlineSize, realFontFilename);
+                                ? fmt::format("df {:.2f} {} {}", baseFontSize, outlineSize, realFontFilename)
+                                : fmt::format("{:.2f} {} {}", baseFontSize, outlineSize, realFontFilename);
     auto it = _atlasMap.find(atlasName);
 
     if (it == _atlasMap.end())
     {
-        auto font = FontFreeType::create(realFontFilename, config->fontSize, config->glyphs, config->customGlyphs,
+        auto font = FontFreeType::create(realFontFilename, baseFontSize, config->glyphs, config->customGlyphs,
                                          useDistanceField, static_cast<float>(outlineSize));
         if (font)
         {

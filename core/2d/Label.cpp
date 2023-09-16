@@ -74,6 +74,18 @@ void updateBlend(backend::BlendDescriptor& blendDescriptor, BlendFunc blendFunc)
 }
 }  // namespace
 
+static bool _distanceFieldEnabled = false;
+
+AX_DLL bool isDistanceFieldEnabled()
+{
+    return _distanceFieldEnabled;
+}
+
+AX_DLL void setDistanceFieldEnabled(bool enabled)
+{
+    _distanceFieldEnabled = enabled;
+}
+
 /**
  * LabelLetter used to update the quad in texture atlas without SpriteBatchNode.
  */
@@ -646,6 +658,7 @@ void Label::reset()
     _enableWrap         = true;
     _bmFontSize         = -1;
     _bmfontScale        = 1.0f;
+    _ttfFontScale       = 1.0f;
     _overflow           = Overflow::NONE;
     _originalFontSize   = 0.0f;
     _boldEnabled        = false;
@@ -1060,7 +1073,10 @@ void Label::updateLabelLetters()
 
                     auto px = letterInfo.positionX + letterDef.width / 2 + _linesOffsetX[letterInfo.lineIndex];
                     auto py = letterInfo.positionY - letterDef.height / 2 + _letterOffsetY;
-                    letterSprite->setPosition(px, py);
+                    if (_currentLabelType == Label::LabelType::TTF && _fontConfig.distanceFieldEnabled)
+                        letterSprite->setPosition(px, py);
+                    else
+                        letterSprite->setPosition(px, py);
                 }
                 else
                 {
@@ -1080,6 +1096,9 @@ bool Label::alignText()
         setContentSize(Vec2::ZERO);
         return true;
     }
+
+    if (_currentLabelType == LabelType::TTF && _fontConfig.distanceFieldEnabled)
+        _ttfFontScale = _fontConfig.fontSize / _fontConfig.baseFontSize;
 
     bool ret = true;
     do
@@ -1194,6 +1213,8 @@ bool Label::updateQuads()
         batchNode->getTextureAtlas()->removeAllQuads();
     }
 
+    const auto fontScale = _currentLabelType == LabelType::TTF ? _ttfFontScale : _bmfontScale;
+
     for (int ctr = 0; ctr < _lengthOfString; ++ctr)
     {
         if (_lettersInfo[ctr].valid)
@@ -1215,14 +1236,14 @@ bool Label::updateQuads()
                     _reusedRect.size.height -= clipTop;
                     py -= clipTop;
                 }
-                if (py - letterDef.height * _bmfontScale < _tailoredBottomY)
+                if (py - letterDef.height * fontScale < _tailoredBottomY)
                 {
                     _reusedRect.size.height = (py < _tailoredBottomY) ? 0.f : (py - _tailoredBottomY);
                 }
             }
 
             auto lineIndex = _lettersInfo[ctr].lineIndex;
-            auto px = _lettersInfo[ctr].positionX + letterDef.width / 2 * _bmfontScale + _linesOffsetX[lineIndex];
+            auto px = _lettersInfo[ctr].positionX + letterDef.width / 2 * fontScale + _linesOffsetX[lineIndex];
 
             if (_labelWidth > 0.f)
             {
@@ -2134,6 +2155,8 @@ Sprite* Label::getLetter(int letterIndex)
         {
             updateContent();
         }
+        
+        
 
         if (_textSprite == nullptr && letterIndex < _lengthOfString)
         {
@@ -2165,13 +2188,14 @@ Sprite* Label::getLetter(int letterIndex)
                 else
                 {
                     this->updateBMFontScale();
+                    const auto fontScale = _currentLabelType == LabelType::TTF ? _ttfFontScale : _bmfontScale;
                     letter =
                         LabelLetter::createWithTexture(_fontAtlas->getTexture(textureID), uvRect, letterDef.rotated);
                     letter->setTextureAtlas(_batchNodes.at(textureID)->getTextureAtlas());
                     letter->setAtlasIndex(letterInfo.atlasIndex);
-                    auto px = letterInfo.positionX + _bmfontScale * uvRect.size.width / 2 +
+                    auto px = letterInfo.positionX + fontScale * uvRect.size.width / 2 +
                               _linesOffsetX[letterInfo.lineIndex];
-                    auto py = letterInfo.positionY - _bmfontScale * uvRect.size.height / 2 + _letterOffsetY;
+                    auto py = letterInfo.positionY - fontScale * uvRect.size.height / 2 + _letterOffsetY;
                     letter->setPosition(px, py);
                     letter->setOpacity(_realOpacity);
                     this->updateLetterSpriteScale(letter);
@@ -2200,7 +2224,7 @@ void Label::setLineHeight(float height)
 float Label::getLineHeight() const
 {
     AXASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
-    return _textSprite ? 0.0f : _lineHeight * _bmfontScale;
+    return _textSprite ? 0.0f : _lineHeight * (_currentLabelType == LabelType::TTF ? _ttfFontScale : _bmfontScale);
 }
 
 void Label::setLineSpacing(float height)
@@ -2610,21 +2634,46 @@ Label::Overflow Label::getOverflow() const
 
 void Label::updateLetterSpriteScale(Sprite* sprite)
 {
-    if (_currentLabelType == LabelType::BMFONT && _bmFontSize > 0)
+    if (_currentLabelType == LabelType::BMFONT)
     {
         sprite->setScale(_bmfontScale);
     }
+    else if (_currentLabelType == LabelType::TTF)
+    {
+        sprite->setScale(_ttfFontScale);
+    }
     else
     {
-        if (std::abs(_bmFontSize) < FLT_EPSILON)
-        {
-            sprite->setScale(0);
-        }
-        else
-        {
-            sprite->setScale(1.0);
-        }
+        sprite->setScale(1.0);
     }
 }
+
+const Mat4& Label::getNodeToParentTransform() const
+{
+    // auto transformDirty = _transformDirty;
+    return Node::getNodeToParentTransform();
+
+    //if (transformDirty && _fontConfig.distanceFieldEnabled)
+    //{
+    //    const auto fontScale = _fontConfig.fontSize / _fontConfig.baseFontSize;
+
+    //    if (fontScale != 1.f)
+    //    {
+    //        _transform.m[0] *= fontScale;
+    //        _transform.m[1] *= fontScale;
+    //        _transform.m[2] *= fontScale;
+    //        _transform.m[4] *= fontScale;
+    //        _transform.m[5] *= fontScale;
+    //        _transform.m[6] *= fontScale;
+    //        _transform.m[8] *= fontScale;
+    //        _transform.m[9] *= fontScale;
+    //        _transform.m[10] *= fontScale;
+    //    }
+    //}
+
+    //return _transform;
+}
+
+static constexpr int xxx = sizeof(Label);
 
 NS_AX_END
