@@ -41,7 +41,7 @@ protected:
     因为这个方法里有强制字体对象指针为FontFnt类型的代码，但我们不使用FontFnt（FontFnt只支持从外部文件中载入配置，更糟糕的是BMFontConfiguration是定义在cpp里的。）
     所以需要重写这个方法。
     */
-    virtual void updateBMFontScale() override;
+    virtual void updateFontScale() override;
 
 private:
     TextFormat* _textFormat;

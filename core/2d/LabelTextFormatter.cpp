@@ -84,8 +84,6 @@ int Label::getFirstWordLen(const std::u32string& utf32Text, int startIndex, int 
     auto nextLetterX = 0;
     FontLetterDefinition letterDef;
     auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
-    
-    const auto fontScale = _currentLabelType == LabelType::TTF ? _ttfFontScale : _bmfontScale;
 
     for (int index = startIndex; index < textLen; ++index)
     {
@@ -105,13 +103,13 @@ int Label::getFirstWordLen(const std::u32string& utf32Text, int startIndex, int 
 
         if (_maxLineWidth > 0.f)
         {
-            auto letterX = (nextLetterX + letterDef.offsetX * fontScale) / contentScaleFactor;
+            auto letterX = (nextLetterX + letterDef.offsetX * _fontScale) / contentScaleFactor;
 
-            if (letterX + letterDef.width * fontScale > _maxLineWidth)
+            if (letterX + letterDef.width * _fontScale > _maxLineWidth)
                 break;
         }
 
-        nextLetterX += static_cast<int>(letterDef.xAdvance * fontScale + _additionalKerning);
+        nextLetterX += static_cast<int>(letterDef.xAdvance * _fontScale + _additionalKerning);
 
         len++;
     }
@@ -136,18 +134,22 @@ bool Label::getFontLetterDef(char32_t character, FontLetterDefinition& letterDef
     return _fontAtlas->getLetterDefinitionForChar(character, letterDef);
 }
 
-void Label::updateBMFontScale()
+void Label::updateFontScale()
 {
     auto font = _fontAtlas->getFont();
     if (_currentLabelType == LabelType::BMFONT)
     {
         FontFNT* bmFont       = (FontFNT*)font;
         auto originalFontSize = bmFont->getOriginalFontSize();
-        _bmfontScale          = _bmFontSize * AX_CONTENT_SCALE_FACTOR() / originalFontSize;
+        _fontScale          = _bmFontSize * AX_CONTENT_SCALE_FACTOR() / originalFontSize;
+    }
+    else if (_currentLabelType == LabelType::TTF && _fontConfig.distanceFieldEnabled)
+    {
+        _fontScale = _fontConfig.fontSize / _fontConfig.baseFontSize;
     }
     else
     {
-        _bmfontScale = 1.0f;
+        _fontScale = 1.0f;
     }
 }
 
@@ -170,9 +172,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
     Vec2 letterPosition;
     bool nextChangeSize = true;
 
-    this->updateBMFontScale();
-
-    const auto fontScale = _currentLabelType == LabelType::TTF ? _ttfFontScale : _bmfontScale;
+    this->updateFontScale();
 
     for (int index = 0; index < textLen;)
     {
@@ -183,7 +183,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             letterRight = 0.f;
             lineIndex++;
             nextTokenX = 0.f;
-            nextTokenY -= _lineHeight * fontScale + lineSpacing;
+            nextTokenY -= _lineHeight * _fontScale + lineSpacing;
             recordPlaceholderInfo(index, character);
             index++;
             continue;
@@ -222,9 +222,9 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
                 continue;
             }
 
-            auto letterX = (nextLetterX + letterDef.offsetX * fontScale) / contentScaleFactor;
+            auto letterX = (nextLetterX + letterDef.offsetX * _fontScale) / contentScaleFactor;
             if (_enableWrap && _maxLineWidth > 0.f && nextTokenX > 0.f &&
-                letterX + letterDef.width * fontScale > _maxLineWidth && !StringUtils::isUnicodeSpace(character) &&
+                letterX + letterDef.width * _fontScale > _maxLineWidth && !StringUtils::isUnicodeSpace(character) &&
                 nextChangeSize)
             {
                 _linesWidth.emplace_back(letterRight - whitespaceWidth);
@@ -232,7 +232,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
                 letterRight         = 0.f;
                 lineIndex++;
                 nextTokenX = 0.f;
-                nextTokenY -= (_lineHeight * fontScale + lineSpacing);
+                nextTokenY -= (_lineHeight * _fontScale + lineSpacing);
                 newLine = true;
                 break;
             }
@@ -240,7 +240,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             {
                 letterPosition.x = letterX;
             }
-            letterPosition.y = (nextTokenY - letterDef.offsetY * fontScale) / contentScaleFactor;
+            letterPosition.y = (nextTokenY - letterDef.offsetY * _fontScale) / contentScaleFactor;
             recordLetterInfo(letterPosition, character, letterIndex, lineIndex);
 
             if (nextChangeSize)
@@ -248,7 +248,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
                 float newLetterWidth = 0.f;
                 if (_horizontalKernings && letterIndex < textLen - 1)
                     newLetterWidth = static_cast<float>(_horizontalKernings[letterIndex + 1]);
-                newLetterWidth += letterDef.xAdvance * fontScale + _additionalKerning;
+                newLetterWidth += letterDef.xAdvance * _fontScale + _additionalKerning;
 
                 nextLetterX += newLetterWidth;
                 tokenRight = nextLetterX / contentScaleFactor;
@@ -266,8 +266,8 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
 
             if (tokenHighestY < letterPosition.y)
                 tokenHighestY = letterPosition.y;
-            if (tokenLowestY > letterPosition.y - letterDef.height * fontScale)
-                tokenLowestY = letterPosition.y - letterDef.height * fontScale;
+            if (tokenLowestY > letterPosition.y - letterDef.height * _fontScale)
+                tokenLowestY = letterPosition.y - letterDef.height * _fontScale;
         }
 
         if (newLine)
@@ -301,7 +301,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
     }
 
     _numberOfLines     = lineIndex + 1;
-    _textDesiredHeight = (_numberOfLines * _lineHeight * fontScale) / contentScaleFactor;
+    _textDesiredHeight = (_numberOfLines * _lineHeight * _fontScale) / contentScaleFactor;
     if (_numberOfLines > 1)
         _textDesiredHeight += (_numberOfLines - 1) * _lineSpacing; // ?? use scaled lineSpacing
     Vec2 contentSize(_labelWidth, _labelHeight);
@@ -347,15 +347,13 @@ bool Label::isHorizontalClamp()
 {
     bool letterClamp = false;
     
-    const auto fontScale = _currentLabelType == LabelType::TTF ? _ttfFontScale : _bmfontScale;
-    
     for (int ctr = 0; ctr < _lengthOfString; ++ctr)
     {
         if (_lettersInfo[ctr].valid)
         {
             auto& letterDef = _fontAtlas->_letterDefinitions[_lettersInfo[ctr].utf32Char];
 
-            auto px        = _lettersInfo[ctr].positionX + letterDef.width / 2 * fontScale;
+            auto px        = _lettersInfo[ctr].positionX + letterDef.width / 2 * _fontScale;
             auto lineIndex = _lettersInfo[ctr].lineIndex;
 
             if (_labelWidth > 0.f)

@@ -785,7 +785,9 @@ protected:
     void createShadowSpriteForSystemFont(const FontDefinition& fontDef);
 
     virtual void updateShaderProgram();
-    virtual void updateBMFontScale();
+    virtual void updateFontScale();
+    /* DEPRECATED: use updateFontScale instead */
+    AX_DEPRECATED_ATTRIBUTE virtual void updateBMFontScale() { updateFontScale(); }
     void scaleFontSize(float fontSize);
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
     void setBMFontSizeInternal(float fontSize);
@@ -811,9 +813,6 @@ protected:
     void updateBuffer(TextureAtlas* textureAtlas, CustomCommand& customCommand);
 
     void updateBatchCommand(BatchCommand& batch);
-
-    const Mat4& getNodeToParentTransform() const override;
-
     
     bool _contentDirty;
     bool _useDistanceField;
@@ -867,11 +866,10 @@ protected:
     LabelEffect _currLabelEffect;
     float _shadowBlurRadius;
     float _bmFontSize;
-    float _bmfontScale;
+    float _fontScale; // The bmFontScale or ttfFontScale(SDF rendering mode)
 
     Overflow _overflow;
     float _originalFontSize;
-    float _ttfFontScale;
     Color4B _textColor;
 
     BlendFunc _blendFunc;
