@@ -28,12 +28,15 @@
 #ifndef _FontFreetype_h_
 #define _FontFreetype_h_
 
-/// @cond DO_NOT_SHOW
-
 #include "2d/Font.h"
 #include <string>
 
+/**
+ * @addtogroup _2d
+ * @{
+ */
 /* freetype fwd decls */
+
 typedef struct FT_LibraryRec_* FT_Library;
 typedef struct FT_StreamRec_* FT_Stream;
 typedef struct FT_FaceRec_* FT_Face;
@@ -46,6 +49,46 @@ class AX_DLL FontFreeType : public Font
 {
 public:
     static const int DistanceMapSpread;
+    static constexpr int DEFAULT_BASE_FONT_SIZE = 32;
+
+     /**
+     * @remark: if you want enable stream parsing, you need do one of follow steps
+     *          a. disable .ttf compress on .apk, see:
+     *             https://simdsoft.com/notes/#build-apk-config-nocompress-file-type-at-appbuildgradle
+     *          b. uncomporess .ttf to disk by yourself.
+     */
+    static void setStreamParsingEnabled(bool bEnabled) { _streamParsingEnabled = bEnabled; }
+    static bool isStreamParsingEnabled() { return _streamParsingEnabled; }
+
+    /**
+     * @brief Set the Missing Glyph Character
+     *
+     * @param charCode
+     */
+    static void setMissingGlyphCharacter(char32_t charCode) { _mssingGlyphCharacter = charCode; };
+
+    /**
+     * @brief Set the Share Distance Field Enabled
+     *
+     * @param enabled
+     */
+    static void setShareDistanceFieldEnabled(bool enabled) { _shareDistanceFieldEnabled = enabled; }
+    static bool isShareDistanceFieldEnabled() { return _shareDistanceFieldEnabled; }
+
+    /**
+     * @brief TrueType fonts with native bytecode hinting * *
+     *
+     *   All applications that handle TrueType fonts with native hinting must
+     *   be aware that TTFs expect different rounding of vertical font
+     *   dimensions.  The application has to cater for this, especially if it
+     *   wants to rely on a TTF's vertical data (for example, to properly align
+     *   box characters vertically).
+     *   - Since freetype-2.8.1 TureType matrics isn't sync to size_matrics
+     *   - By default it's enabled for compatible with cocos2d-x-4.0 or older with freetype-2.5.5
+     *   - Please see freetype.h
+     */
+    static void setNativeBytecodeHintingEnabled(bool bEnabled) { _doNativeBytecodeHinting = bEnabled; }
+    static bool isNativeBytecodeHintingEnabled() { return _doNativeBytecodeHinting; }
 
     static FontFreeType* create(std::string_view fontPath,
                                 float fontSize,
@@ -55,32 +98,6 @@ public:
                                 float outline             = 0);
 
     static void shutdownFreeType();
-
-    /*
-     * @remark: if you want enable stream parsing, you need do one of follow steps
-     *          a. disable .ttf compress on .apk, see:
-     *             https://simdsoft.com/notes/#build-apk-config-nocompress-file-type-at-appbuildgradle
-     *          b. uncomporess .ttf to disk by yourself.
-     */
-    static void setStreamParsingEnabled(bool bEnabled) { _streamParsingEnabled = bEnabled; }
-    static bool isStreamParsingEnabled() { return _streamParsingEnabled; }
-
-    static void setMissingGlyphCharacter(char32_t charCode) { _mssingGlyphCharacter = charCode; };
-
-    /*
-    **TrueType fonts with native bytecode hinting**
-    *
-    *   All applications that handle TrueType fonts with native hinting must
-    *   be aware that TTFs expect different rounding of vertical font
-    *   dimensions.  The application has to cater for this, especially if it
-    *   wants to rely on a TTF's vertical data (for example, to properly align
-    *   box characters vertically).
-    *   - Since freetype-2.8.1 TureType matrics isn't sync to size_matrics
-    *   - By default it's enabled for compatible with cocos2d-x-4.0 or older with freetype-2.5.5
-    *   - Please see freetype.h
-    * */
-    static void setNativeBytecodeHintingEnabled(bool bEnabled) { _doNativeBytecodeHinting = bEnabled; }
-    static bool isNativeBytecodeHintingEnabled() { return _doNativeBytecodeHinting; }
 
     bool isDistanceFieldEnabled() const { return _distanceFieldEnabled; }
 
@@ -113,14 +130,15 @@ private:
     static bool _FTInitialized;
     static bool _streamParsingEnabled;
     static bool _doNativeBytecodeHinting;
+    static bool _shareDistanceFieldEnabled;
     static char32_t _mssingGlyphCharacter;
+
+    static bool initFreeType();
 
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
 
     bool loadFontFace(std::string_view fontPath, float fontSize);
-
-    static bool initFreeType();
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
     unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
@@ -144,7 +162,8 @@ private:
     std::string _customGlyphs;
 };
 
-/// @endcond
+// end group
+/// @}
 
 NS_AX_END
 

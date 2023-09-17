@@ -41,10 +41,11 @@ THE SOFTWARE.
 NS_AX_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
-bool FontFreeType::_FTInitialized           = false;
-bool FontFreeType::_streamParsingEnabled    = true;
-bool FontFreeType::_doNativeBytecodeHinting = true;
-const int FontFreeType::DistanceMapSpread   = 6;
+bool FontFreeType::_FTInitialized             = false;
+bool FontFreeType::_streamParsingEnabled      = true;
+bool FontFreeType::_doNativeBytecodeHinting   = true;
+bool FontFreeType::_shareDistanceFieldEnabled = false;
+const int FontFreeType::DistanceMapSpread     = 6;
 
 // By default, will render square when character glyph missing in current font
 char32_t FontFreeType::_mssingGlyphCharacter = 0;
@@ -252,11 +253,19 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
         if (!face->charmap || face->charmap->encoding != FT_ENCODING_UNICODE)
             break;
 
-        // set the requested font size
-        int dpi            = 72;
-        int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
-        if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))
-            break;
+        if (_distanceFieldEnabled)
+        {
+            if (FT_Set_Pixel_Sizes(face, 0, static_cast<FT_UInt>(fontSize)))
+                break;
+        }
+        else
+        {
+            // set the requested font size
+            int dpi            = 72;
+            int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
+            if (FT_Set_Char_Size(face, 0, fontSizePoints, dpi, dpi))
+                break;
+        }
 
         // store the face globally
         _fontFace = face;
@@ -398,7 +407,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
             if (charUTF8 == "\n")
                 charUTF8 = "\\n";
             ax::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
-                         charUTF8.c_str());
+                    charUTF8.c_str());
 
             if (_mssingGlyphCharacter != 0)
             {
@@ -572,7 +581,7 @@ void FontFreeType::renderCharAt(unsigned char* dest,
                                 int bitmapHeight)
 {
     const int iX = posX;
-    int iY = posY;
+    int iY       = posY;
 
     if (_outlineSize > 0)
     {
