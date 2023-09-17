@@ -145,7 +145,7 @@ void Label::updateFontScale()
     }
     else if (_currentLabelType == LabelType::TTF && _fontConfig.distanceFieldEnabled)
     {
-        _fontScale = _fontConfig.fontSize / _fontConfig.baseFontSize;
+        _fontScale = _fontConfig.fontSize * AX_CONTENT_SCALE_FACTOR() / _fontConfig.baseFontSize;
     }
     else
     {

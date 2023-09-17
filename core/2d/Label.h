@@ -32,6 +32,7 @@
 #include "renderer/CustomCommand.h"
 #include "renderer/QuadCommand.h"
 #include "2d/FontAtlas.h"
+#include "2d/FontFreeType.h"
 #include "base/Types.h"
 
 NS_AX_BEGIN
@@ -42,10 +43,6 @@ NS_AX_BEGIN
  */
 
 #define AX_DEFAULT_FONT_LABEL_SIZE 12
-#define AX_DEFAULT_BASE_FONT_SIZE  32
-
-AX_DLL bool isDistanceFieldEnabled();
-AX_DLL void setDistanceFieldEnabled(bool enabled);
 
 /**
  * @struct TTFConfig
@@ -71,7 +68,7 @@ typedef struct _ttfConfig
                float size                             = AX_DEFAULT_FONT_LABEL_SIZE,
                const GlyphCollection& glyphCollection = GlyphCollection::DYNAMIC,
                const char* customGlyphCollection      = nullptr, /* nullable */
-               bool useDistanceField                  = isDistanceFieldEnabled(),
+               bool useDistanceField                  = FontFreeType::isShareDistanceFieldEnabled(),
                int outline                            = 0,
                bool useItalics                        = false,
                bool useBold                           = false,
@@ -79,7 +76,7 @@ typedef struct _ttfConfig
                bool useStrikethrough                  = false)
         : fontFilePath(filePath)
         , fontSize(size)
-        , baseFontSize(AX_DEFAULT_BASE_FONT_SIZE)
+        , baseFontSize(FontFreeType::DEFAULT_BASE_FONT_SIZE)
         , glyphs(glyphCollection)
         , customGlyphs(customGlyphCollection ? customGlyphCollection : "")
         , distanceFieldEnabled(useDistanceField)

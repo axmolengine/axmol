@@ -56,7 +56,7 @@ void AppDelegate::initGLContextAttrs()
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // whether enable global SDF font render support, since axmol-2.0.1
-    ax::setDistanceFieldEnabled(true);
+    FontFreeType::setShareDistanceFieldEnabled(true);
 
     // As an example, load config file
     // FIXME:: This should be loaded before the Director is initialized,

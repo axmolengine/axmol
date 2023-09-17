@@ -74,18 +74,6 @@ void updateBlend(backend::BlendDescriptor& blendDescriptor, BlendFunc blendFunc)
 }
 }  // namespace
 
-static bool _distanceFieldEnabled = false;
-
-AX_DLL bool isDistanceFieldEnabled()
-{
-    return _distanceFieldEnabled;
-}
-
-AX_DLL void setDistanceFieldEnabled(bool enabled)
-{
-    _distanceFieldEnabled = enabled;
-}
-
 /**
  * LabelLetter used to update the quad in texture atlas without SpriteBatchNode.
  */
