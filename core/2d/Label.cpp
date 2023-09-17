@@ -645,7 +645,7 @@ void Label::reset()
     _insideBounds       = true;
     _enableWrap         = true;
     _bmFontSize         = -1;
-    _bmfontScale        = 1.0f;
+    _fontScale          = 1.0f;
     _overflow           = Overflow::NONE;
     _originalFontSize   = 0.0f;
     _boldEnabled        = false;
@@ -1060,7 +1060,10 @@ void Label::updateLabelLetters()
 
                     auto px = letterInfo.positionX + letterDef.width / 2 + _linesOffsetX[letterInfo.lineIndex];
                     auto py = letterInfo.positionY - letterDef.height / 2 + _letterOffsetY;
-                    letterSprite->setPosition(px, py);
+                    if (_currentLabelType == Label::LabelType::TTF && _fontConfig.distanceFieldEnabled)
+                        letterSprite->setPosition(px, py);
+                    else
+                        letterSprite->setPosition(px, py);
                 }
                 else
                 {
@@ -1215,14 +1218,14 @@ bool Label::updateQuads()
                     _reusedRect.size.height -= clipTop;
                     py -= clipTop;
                 }
-                if (py - letterDef.height * _bmfontScale < _tailoredBottomY)
+                if (py - letterDef.height * _fontScale < _tailoredBottomY)
                 {
                     _reusedRect.size.height = (py < _tailoredBottomY) ? 0.f : (py - _tailoredBottomY);
                 }
             }
 
             auto lineIndex = _lettersInfo[ctr].lineIndex;
-            auto px = _lettersInfo[ctr].positionX + letterDef.width / 2 * _bmfontScale + _linesOffsetX[lineIndex];
+            auto px = _lettersInfo[ctr].positionX + letterDef.width / 2 * _fontScale + _linesOffsetX[lineIndex];
 
             if (_labelWidth > 0.f)
             {
@@ -2134,6 +2137,8 @@ Sprite* Label::getLetter(int letterIndex)
         {
             updateContent();
         }
+        
+        
 
         if (_textSprite == nullptr && letterIndex < _lengthOfString)
         {
@@ -2164,14 +2169,15 @@ Sprite* Label::getLetter(int letterIndex)
                 }
                 else
                 {
-                    this->updateBMFontScale();
+                    this->updateFontScale();
                     letter =
                         LabelLetter::createWithTexture(_fontAtlas->getTexture(textureID), uvRect, letterDef.rotated);
                     letter->setTextureAtlas(_batchNodes.at(textureID)->getTextureAtlas());
                     letter->setAtlasIndex(letterInfo.atlasIndex);
-                    auto px = letterInfo.positionX + _bmfontScale * uvRect.size.width / 2 +
+                    auto px =
+                        letterInfo.positionX + _fontScale * uvRect.size.width / 2 +
                               _linesOffsetX[letterInfo.lineIndex];
-                    auto py = letterInfo.positionY - _bmfontScale * uvRect.size.height / 2 + _letterOffsetY;
+                    auto py = letterInfo.positionY - _fontScale * uvRect.size.height / 2 + _letterOffsetY;
                     letter->setPosition(px, py);
                     letter->setOpacity(_realOpacity);
                     this->updateLetterSpriteScale(letter);
@@ -2200,7 +2206,7 @@ void Label::setLineHeight(float height)
 float Label::getLineHeight() const
 {
     AXASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
-    return _textSprite ? 0.0f : _lineHeight * _bmfontScale;
+    return _textSprite ? 0.0f : _lineHeight * _fontScale;
 }
 
 void Label::setLineSpacing(float height)
@@ -2610,21 +2616,10 @@ Label::Overflow Label::getOverflow() const
 
 void Label::updateLetterSpriteScale(Sprite* sprite)
 {
-    if (_currentLabelType == LabelType::BMFONT && _bmFontSize > 0)
-    {
-        sprite->setScale(_bmfontScale);
-    }
+    if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::TTF)
+        sprite->setScale(_fontScale);
     else
-    {
-        if (std::abs(_bmFontSize) < FLT_EPSILON)
-        {
-            sprite->setScale(0);
-        }
-        else
-        {
-            sprite->setScale(1.0);
-        }
-    }
+        sprite->setScale(1.0);
 }
 
 NS_AX_END
