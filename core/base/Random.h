@@ -38,33 +38,14 @@ THE SOFTWARE.
  */
 NS_AX_BEGIN
 
-
+#define AX_RAND_MAX 2147483647
 
 /**
  * @class RandomHelper
- * @brief A helper class for creating random number.
+ * @brief A helper class for creating device dependent random number 
+ * @remark
+ *     Random Generator: std::mt19937 32bit
  */
-#ifdef EMSCRIPTEN
-#include <emscripten.h>
-
-class AX_DLL RandomHelper
-{
-public:
-    template <typename T>
-    static T random_real(T min, T max)
-    {
-        T randomValue = static_cast<T>(emscripten_random()) / static_cast<T>(0xFFFFFFFF);
-        return min + randomValue * (max - min);
-    }
-
-    template <typename T>
-    static T random_int(T min, T max)
-    {
-        T randomValue = static_cast<T>(emscripten_random()) % (max - min + 1);
-        return min + randomValue;
-    }
-};
-#else
 class AX_DLL RandomHelper
 {
 public:
@@ -87,7 +68,6 @@ public:
 private:
     static std::mt19937& getEngine();
 };
-#endif
 
 /**
  * Returns a random value between `min` and `max`.
@@ -117,12 +97,15 @@ inline double random(double min, double max)
 }
 
 /**
- * Returns a random int between 0 and RAND_MAX.
+ * Returns a random int between 0 and AX_RAND_MAX.
  */
 inline int random()
 {
-    return ax::random(0, RAND_MAX);
+    return ax::random(0, AX_RAND_MAX);
 };
+
+/// Follow random APIs is device independent,  need set seed by std::srand
+/// DEPRECATED: use FastRGN.h or c++11 'std::minstd_rand' or 'std::minstd_rand0' instead
 
 /**
  * Returns a random float between -1 and 1.
@@ -130,14 +113,8 @@ inline int random()
  */
 inline float rand_minus1_1()
 {
-    // FIXME: using the new c++11 random engine generator
-    // without a proper way to set a seed is not useful.
-    // Resorting to the old random method since it can
-    // be seeded using std::srand()
     return ((std::rand() / (float)RAND_MAX) * 2) - 1;
-
-    //    return ax::random(-1.f, 1.f);
-};
+}
 
 /**
  * Returns a random float between 0 and 1.
@@ -145,14 +122,8 @@ inline float rand_minus1_1()
  */
 inline float rand_0_1()
 {
-    // FIXME: using the new c++11 random engine generator
-    // without a proper way to set a seed is not useful.
-    // Resorting to the old random method since it can
-    // be seeded using std::srand()
     return std::rand() / (float)RAND_MAX;
-
-    //    return ax::random(0.f, 1.f);
-};
+}
 
 NS_AX_END
 // end group
