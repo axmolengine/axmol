@@ -129,29 +129,29 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 ### iOS, tvOS and macOS
 
-  1. Ensure xcode12+ & [cmake3.21+](https://github.com/Kitware/CMake/releases) are installed, install cmake command line support: ```sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install```
+  1. Ensure xcode 13/14.2 are installed
   2. Create a new project as shown [here](#creating-a-new-project)
   3. In a console window, navigate into the root directory of the project you created in the previous step
   4. Execute the following command
    ```sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer```
   5. Generate the relevant xcode project using one of the following commands:
      - for ios arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLAT=iOS```
+     ```axmol build -p ios -a arm64 -c```
      - for ios simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLAT=iOS -DARCHS=x64```
+     ```axmol build -p ios -a x64 -c```
      - for tvos arm64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATF=tvOS```
+     ```axmol build -p tvos -a arm64 -c```
      - for tvos simulator x86_64:  
-     ```cmake -S . -B build -GXcode -DCMAKE_TOOLCHAIN_FILE=$AX_ROOT/1k/ios.cmake -DPLATF=tvOS -DARCHS=x64```
+     ```axmol build -p tvos -a x64 -c```
      - for macos x86_64(Intel)
-     ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=x86_64```
+     ```axmol build -p osx -c```
      - for macos arm64(M1)
-     ```cmake -S . -B build -GXcode -DCMAKE_OSX_ARCHITECTURES=arm64```
+     ```axmol build -p osx -a arm64 -c```
 
-  6. After cmake finishes generating, you can open the xcode project at ```build``` folder and run cpp-tests or other test targets.  
+  6. After cmake finishes generating, you can open the xcode project at ```build_${plat}_${arch}``` folder and run cpp-tests or other test targets, for osx x64 should be `build_x64`
   7. Notes  
      - **The code signing is required to run the ios/tvos app on your device, just change the bundle identifier until the auto manage signing is solved**  
-     - **axmol only provides aarm64, x86_64 prebuilt libraries for ios/tvos**
+     - **axmol only provides arm64, x86_64 prebuilt libraries for ios/tvos**
 
 ### Linux (VSCode)
 

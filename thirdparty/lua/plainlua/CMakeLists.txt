@@ -1,5 +1,5 @@
 
-set (AX_LUA_VERSION "5.4.4")
+set (AX_LUA_VERSION "5.4.6")
 
 set(LUA_SRC_PATH ${CMAKE_CURRENT_LIST_DIR})
 

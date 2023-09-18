@@ -26,7 +26,7 @@
   - AX_ENABLE_EXT_EFFEKSEER: the effekseer extension, default: `FALSE` 
 - AX_WITH_XXX: usually user don't need care it
 - AX_VS_DEPLOYMENT_TARGET: specify windows store deploy target, default: `10.0.17763.0`
-- AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: FALSE
+- AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: win32: `TRUE`, others: `FALSE`
   - win32: whether use ANGLE GLES backend
   - osx: whether use OpenGL instead Metal backend
   - ios/tvos: whether use GLES instead Metal backend
@@ -38,6 +38,7 @@
      - `auto`: Use cmake to detect host processor count
 default is: `navigator.hardwareConcurrency`
 - AX_WASM_SHELL_FILE: specify the wasm shell file, by default use `${_AX_ROOT}/core/platform/wasm/shell_minimal.html`
+- AX_WASM_ENABLE_DEVTOOLS: whether enable web devtools aka `pause`, `resume`, `step` buttons in webpage, default: `TRUE`
 
 ## The options for axmol apps
 

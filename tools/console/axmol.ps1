@@ -164,7 +164,7 @@ function axmol_run() {
         explorer.exe shell:AppsFolder\$appxPkgName!App
     }
     elseif($options.p -eq 'win32') {
-        explorer.exe $win32exePath
+        Start-Process -FilePath $win32exePath -WorkingDirectory $(Split-Path $win32exePath -Parent)
     }
     elseif($options.p -eq 'android') {
         adb shell am start -n "$androidPackage/$androidActivity"
