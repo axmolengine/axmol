@@ -234,12 +234,13 @@ if ($options.xb.GetType() -eq [string]) {
 }
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
-# $osVer = [System.Environment]::OSVersion.Version.ToString()
 if ([System.Version]$pwsh_ver -lt [System.Version]"7.0.0.0") {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 }
 
-$b1k.println("PowerShell $pwsh_ver")
+$osVer = if($IsWin) {"Microsoft Windows $([System.Environment]::OSVersion.Version.ToString())"} else {$PSVersionTable.OS}
+
+$b1k.println("PowerShell $pwsh_ver, $osVer")
 
 if (!$setupOnly) {
     $b1k.println("$(Out-String -InputObject $options)")
@@ -409,7 +410,7 @@ function exec_prog($prog, $params) {
 function download_file($url, $out) {
     if ($b1k.isfile($out)) { return }
     $b1k.println("Downloading $url to $out ...")
-    if ([System.Version]$pwsh_ver -ge [System.Version]'7.0.0.0') {
+    if (([System.Version]$pwsh_ver -ge [System.Version]'7.0.0.0') -and !$env:APPVEYOR) {
         curl -L $url -o $out
     }
     else {
