@@ -59,8 +59,17 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config, float& base
     bool useDistanceField  = config->distanceFieldEnabled;
     int outlineSize        = useDistanceField ? 0 : config->outlineSize;
 
-    baseFontSize = config->distanceFieldEnabled ? config->baseFontSize : config->fontSize;
-    if (baseFontSize > config->fontSize)
+    if (config->distanceFieldEnabled)
+    {
+        // some font i.e 'arial.ttf' looks too near between 'T' and 'e' when zoom out, but layout correct
+        // so limit baseFontSize to fontSize(request render size) avoid zoom out font glyph
+        if (baseFontSize > config->fontSize)
+            baseFontSize = config->fontSize;
+
+        // underlaying font engine (freetype2) only support int type, so convert to int avoid precision issues
+        baseFontSize = static_cast<int>(baseFontSize * AX_CONTENT_SCALE_FACTOR());
+    }
+    else
         baseFontSize = config->fontSize;
 
     std::string atlasName =
