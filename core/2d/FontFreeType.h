@@ -24,17 +24,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-
-#ifndef _FontFreetype_h_
-#define _FontFreetype_h_
+#pragma once
 
 #include "2d/Font.h"
 #include <string>
 
-/**
- * @addtogroup _2d
- * @{
- */
 /* freetype fwd decls */
 
 typedef struct FT_LibraryRec_* FT_Library;
@@ -45,6 +39,14 @@ typedef struct FT_BBox_ FT_BBox;
 
 NS_AX_BEGIN
 
+/**
+ * @addtogroup _2d
+ * @{
+ */
+
+/** @class FontFreeType
+* @brief FontFreeType is a class of rendering ttf/ttc characters
+*/
 class AX_DLL FontFreeType : public Font
 {
 public:
@@ -61,14 +63,14 @@ public:
     static bool isStreamParsingEnabled() { return _streamParsingEnabled; }
 
     /**
-     * @brief Set the Missing Glyph Character
+     * @brief Set the Missing Glyph Character, by default render square for missing characters
      *
      * @param charCode
      */
     static void setMissingGlyphCharacter(char32_t charCode) { _mssingGlyphCharacter = charCode; };
 
     /**
-     * @brief Set the Share Distance Field Enabled
+     * @brief Whether enable SDF font rendering globally, by default: disabled, since axmol-2.0.1
      *
      * @param enabled
      */
@@ -162,9 +164,7 @@ private:
     std::string _customGlyphs;
 };
 
-// end group
+// end of _2d group
 /// @}
 
 NS_AX_END
-
-#endif
