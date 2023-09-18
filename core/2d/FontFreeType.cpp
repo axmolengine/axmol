@@ -253,19 +253,11 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
         if (!face->charmap || face->charmap->encoding != FT_ENCODING_UNICODE)
             break;
 
-        if (_distanceFieldEnabled)
-        {
-            if (FT_Set_Pixel_Sizes(face, 0, static_cast<FT_UInt>(fontSize)))
-                break;
-        }
-        else
-        {
-            // set the requested font size
-            int dpi            = 72;
-            int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
-            if (FT_Set_Char_Size(face, 0, fontSizePoints, dpi, dpi))
-                break;
-        }
+        // set the requested font size
+        int dpi            = 72;
+        int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
+        if (FT_Set_Char_Size(face, 0, fontSizePoints, dpi, dpi))
+            break;
 
         // store the face globally
         _fontFace = face;
