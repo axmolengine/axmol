@@ -9,12 +9,11 @@ endif()
 function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     load_cache("${AX_ROOT_DIR}/${AX_PREBUILT_DIR}" EXCLUDE thirdparty_LIB_DEPENDS)
 
-    message(STATUS "AX_USE_ANGLE=${AX_USE_ANGLE}")
-
     message(STATUS "AX_ENABLE_MSEDGE_WEBVIEW2=${AX_ENABLE_MSEDGE_WEBVIEW2}")
     message(STATUS "AX_ENABLE_MFMEDIA=${AX_ENABLE_MFMEDIA}")
 
     message(STATUS "AX_ENABLE_EXT_IMGUI=${AX_ENABLE_EXT_IMGUI}")
+    message(STATUS "AX_ENABLE_EXT_INSPECTOR=${AX_ENABLE_EXT_INSPECTOR}")
     message(STATUS "AX_ENABLE_EXT_FAIRYGUI=${AX_ENABLE_EXT_FAIRYGUI}")
     message(STATUS "AX_ENABLE_EXT_LIVE2D=${AX_ENABLE_EXT_LIVE2D}")
     message(STATUS "AX_ENABLE_EXT_GUI=${AX_ENABLE_EXT_GUI}")
@@ -25,7 +24,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     message(STATUS "AX_ENABLE_EXT_EFFEKSEER=${AX_ENABLE_EXT_EFFEKSEER}")
     message(STATUS "AX_ENABLE_EXT_LUA=${AX_ENABLE_EXT_LUA}")
     
-    ax_config_pred(${APP_NAME} AX_USE_ANGLE)
+    target_compile_definitions(${APP_NAME} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
     ax_config_pred(${APP_NAME} AX_ENABLE_MFMEDIA)
     ax_config_pred(${APP_NAME} AX_ENABLE_MSEDGE_WEBVIEW2)
 
@@ -126,6 +125,11 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (AX_ENABLE_EXT_IMGUI)
         list(APPEND LIBS "ImGui")
     endif()
+	
+	if (AX_ENABLE_EXT_INSPECTOR)
+        list(APPEND LIBS "Inspector")
+    endif()
+	
 
     if (WINDOWS)
         target_link_libraries(${APP_NAME}
@@ -182,7 +186,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         endif()
 
         # Copy windows angle binaries
-        if (AX_USE_ANGLE)
+        if (AX_GLES_PROFILE)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                 ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
@@ -206,6 +210,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             endif()
         endif()
     endif()
+
+    # prebuilt, need copy axslc folder to target output directory
+    get_target_property(rt_output ${APP_NAME} RUNTIME_OUTPUT_DIRECTORY)
+    ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYNC_TARGET_ID axslc)
 endfunction(ax_link_cxx_prebuilt)
 
 function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)

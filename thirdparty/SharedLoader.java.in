@@ -27,6 +27,7 @@ package org.axmol.lib;
 @SuppressWarnings("unused")
 public final class SharedLoader {
     public static void load(){
+        System.loadLibrary("c++_shared");
         @ANDROID_SHARED_LOADS@
     }
 }

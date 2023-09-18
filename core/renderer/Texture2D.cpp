@@ -238,6 +238,17 @@ bool Texture2D::updateWithImage(Image* image, backend::PixelFormat format, int i
     default:
         break;
     }
+#elif !AX_GLES_PROFILE 
+    // Non-GLES doesn't support follow render formats, needs convert PixelFormat::RGBA8
+    // Note: axmol-1.1 deprecated A8, L8, LA8 as renderFormat, preferred R8, RG8
+    switch (renderFormat)
+    {
+    case PixelFormat::A8:
+    case PixelFormat::L8:
+    case PixelFormat::LA8:
+        // Note: conversion to RGBA8 will happends
+        renderFormat = PixelFormat::RGBA8;
+    }
 #endif
 
     if (image->getNumberOfMipmaps() > 1)
@@ -393,7 +404,7 @@ bool Texture2D::updateWithMipmaps(MipmapInfo* mipmaps,
         if (i > 0 && (width != height || ccNextPOT(width) != width))
         {
             AXLOG(
-                "cocos2d: Texture2D. WARNING. Mipmap level %u is not squared. Texture won't render correctly. width=%d "
+                "axmol: Texture2D. WARNING. Mipmap level %u is not squared. Texture won't render correctly. width=%d "
                 "!= height=%d",
                 i, width, height);
         }

@@ -62,6 +62,11 @@ elseif(LINUX)
          proj.linux/main.cpp
          )
     list(APPEND GAME_SOURCE ${common_content_files})
+elseif(WASM)
+    list(APPEND GAME_SOURCE
+         proj.wasm/main.cpp
+         )
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)
     if(NOT WINRT)
         list(APPEND GAME_HEADER
@@ -221,8 +226,6 @@ list(APPEND GAME_HEADER
      Source/SchedulerTest/SchedulerTest.h
      Source/MultiTouchTest/MultiTouchTest.h
      Source/testResource.h
-     Source/ShaderTest/ShaderTest.vsh.h
-     Source/ShaderTest/shaderTest.psh.h
      Source/ShaderTest/ShaderTest.h
      Source/ShaderTest/ShaderTest2.h
      Source/NewRendererTest/NewRendererTest.h
@@ -401,7 +404,7 @@ list(APPEND GAME_SOURCE
    Source/Box2DTest/Box2dTest.cpp
 )
 
-if((WINDOWS OR MACOSX OR LINUX) AND (NOT WINRT))
+if((WINDOWS OR MACOSX OR LINUX OR WASM) AND (NOT WINRT))
     list(APPEND GAME_HEADER
         Source/Box2DTestBed/tests/test.h
         Source/Box2DTestBed/tests/settings.h
@@ -490,42 +493,37 @@ list(APPEND GAME_SOURCE
      Source/ChipmunkTest/ChipmunkTest.cpp
 	 )
 
-if(WINDOWS OR MACOSX OR LINUX)
+if(WINDOWS OR MACOSX OR LINUX OR WASM)
 	list(APPEND GAME_HEADER
 	    Source/ChipmunkTestBed/demo/ChipmunkDemo.h
 		Source/ChipmunkTestBed/ChipmunkTestBed.h
 	)
    set (TESTBED_C_SORUCES
-        Source/ChipmunkTestBed/demo/Bench.c
-        Source/ChipmunkTestBed/demo/Chains.c
-        Source/ChipmunkTestBed/demo/Convex.c
-        Source/ChipmunkTestBed/demo/Crane.c
-        Source/ChipmunkTestBed/demo/Joints.c
-        Source/ChipmunkTestBed/demo/LogoSmash.c
-        Source/ChipmunkTestBed/demo/OneWay.c
-        Source/ChipmunkTestBed/demo/Planet.c
-        Source/ChipmunkTestBed/demo/Player.c
-        Source/ChipmunkTestBed/demo/Plink.c
-        Source/ChipmunkTestBed/demo/Pump.c
-        Source/ChipmunkTestBed/demo/PyramidStack.c
-        Source/ChipmunkTestBed/demo/PyramidTopple.c
-        Source/ChipmunkTestBed/demo/Shatter.c
-        Source/ChipmunkTestBed/demo/Springies.c
-        Source/ChipmunkTestBed/demo/Sticky.c
-        Source/ChipmunkTestBed/demo/Tank.c
-        Source/ChipmunkTestBed/demo/TheoJansen.c
-        Source/ChipmunkTestBed/demo/Buoyancy.c
-        Source/ChipmunkTestBed/demo/ContactGraph.c
-        Source/ChipmunkTestBed/demo/Example.c
-        Source/ChipmunkTestBed/demo/Query.c
-        Source/ChipmunkTestBed/demo/Slice.c
-        Source/ChipmunkTestBed/demo/Unicycle.c
-        Source/ChipmunkTestBed/demo/Tumble.c)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES COMPILE_FLAGS "/TP")
-    else()
-        set_source_files_properties(${TESTBED_C_SORUCES} PROPERTIES LANGUAGE CXX)
-    endif()
+        Source/ChipmunkTestBed/demo/Bench.cpp
+        Source/ChipmunkTestBed/demo/Chains.cpp
+        Source/ChipmunkTestBed/demo/Convex.cpp
+        Source/ChipmunkTestBed/demo/Crane.cpp
+        Source/ChipmunkTestBed/demo/Joints.cpp
+        Source/ChipmunkTestBed/demo/LogoSmash.cpp
+        Source/ChipmunkTestBed/demo/OneWay.cpp
+        Source/ChipmunkTestBed/demo/Planet.cpp
+        Source/ChipmunkTestBed/demo/Player.cpp
+        Source/ChipmunkTestBed/demo/Plink.cpp
+        Source/ChipmunkTestBed/demo/Pump.cpp
+        Source/ChipmunkTestBed/demo/PyramidStack.cpp
+        Source/ChipmunkTestBed/demo/PyramidTopple.cpp
+        Source/ChipmunkTestBed/demo/Shatter.cpp
+        Source/ChipmunkTestBed/demo/Springies.cpp
+        Source/ChipmunkTestBed/demo/Sticky.cpp
+        Source/ChipmunkTestBed/demo/Tank.cpp
+        Source/ChipmunkTestBed/demo/TheoJansen.cpp
+        Source/ChipmunkTestBed/demo/Buoyancy.cpp
+        Source/ChipmunkTestBed/demo/ContactGraph.cpp
+        Source/ChipmunkTestBed/demo/Example.cpp
+        Source/ChipmunkTestBed/demo/Query.cpp
+        Source/ChipmunkTestBed/demo/Slice.cpp
+        Source/ChipmunkTestBed/demo/Unicycle.cpp
+        Source/ChipmunkTestBed/demo/Tumble.cpp)
 	list(APPEND GAME_SOURCE
 		${TESTBED_C_SORUCES}
 		Source/ChipmunkTestBed/ChipmunkTestBed.cpp
@@ -609,4 +607,8 @@ endif()
 
 if (NOT DEFINED BUILD_ENGINE_DONE)
     ax_uwp_set_all_targets_deploy_min_version()
+endif()
+
+if (WASM)
+    ax_setup_wasm_app_config(${APP_NAME})
 endif()

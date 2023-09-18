@@ -1,18 +1,38 @@
-set(_AX_NETWORK_HEADER
-    network/Downloader-curl.h
-    network/IDownloaderImpl.h
-    network/Downloader.h
-    network/Uri.h
-    network/HttpClient.h
-    network/HttpResponse.h
-    network/HttpRequest.h
-    network/HttpCookie.h
+if(EMSCRIPTEN)
+    set(_AX_NETWORK_HEADER
+        network/Downloader-wasm.h
+        network/IDownloaderImpl.h
+        network/Downloader.h
+        network/Uri.h
+        network/HttpClient.h
+        network/HttpResponse.h
+        network/HttpRequest.h
     )
 
-set(_AX_NETWORK_SRC
-    network/HttpClient.cpp
-    network/Downloader.cpp
-    network/Downloader-curl.cpp
-    network/HttpCookie.cpp
-    network/Uri.cpp
+    set(_AX_NETWORK_SRC
+        network/HttpClient-wasm.cpp
+        network/Downloader.cpp
+        network/Downloader-wasm.cpp
+        network/HttpCookie.cpp
+        network/Uri.cpp
     )
+else()
+    set(_AX_NETWORK_HEADER
+        network/Downloader-curl.h
+        network/IDownloaderImpl.h
+        network/Downloader.h
+        network/Uri.h
+        network/HttpClient.h
+        network/HttpResponse.h
+        network/HttpRequest.h
+        network/HttpCookie.h
+    )
+
+    set(_AX_NETWORK_SRC
+        network/HttpClient.cpp
+        network/Downloader.cpp
+        network/Downloader-curl.cpp
+        network/HttpCookie.cpp
+        network/Uri.cpp
+    )
+endif()

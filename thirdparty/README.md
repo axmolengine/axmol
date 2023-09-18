@@ -1,7 +1,7 @@
 # The axmol thirdparty libraries
 ## angle
 - Upstream: https://github.com/google/angle
-- Version: 113.0.5672.128
+- Version: 115.0.5790.173
 - License: BSD WITH The ANGLE Project Authors
 
 ## astcenc
@@ -52,7 +52,7 @@
 
 ## curl
 - [![Upstream](https://img.shields.io/github/v/release/curl/curl?label=Upstream)](https://github.com/curl/curl)
-- Version: 8.1.2
+- Version: 8.2.1
 - License: Curl (MIT/X)
 
 ## FastLZ
@@ -67,12 +67,12 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 10.0.0
+- Version: 10.1.0
 - License: MIT
 
 ## FreeType
-- [![Upstream](https://img.shields.io/github/v/tag/freetype/freetype?label=Upstream)](https://www.freetype.org/)
-- Version: 2.13.0
+- [![Upstream](https://img.shields.io/gitlab/v/tag/freetype/freetype?label=Upstream)](https://gitlab.freedesktop.org/freetype/freetype)
+- Version: 2.13.2
 - License: BSD-style (The FreeType Project)
 
 ## Glad
@@ -84,11 +84,6 @@
 - [![Upstream](https://img.shields.io/github/v/release/glfw/glfw?label=Upstream)](https://github.com/glfw/glfw)
 - Version: git 57cbded on Dec 16, 2022 (4609)
 - License: zlib
-
-## glsl-optimizer (Apple Metal Render backend only)
-- Upstream: https://github.com/aras-p/glsl-optimizer
-- Version: git cdfc9ef
-- License: MIT
 
 ## GHC (iOS devices only)
 - [![Upstream](https://img.shields.io/github/v/release/gulrak/filesystem?label=Upstream)](https://github.com/gulrak/filesystem)
@@ -102,7 +97,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 2.1.5.1
+- Version: 3.0.0
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -112,7 +107,7 @@
 
 ## llhttp
 - [![Upstream](https://img.shields.io/github/v/release/nodejs/llhttp?label=Upstream)](https://github.com/nodejs/llhttp)
-- Version: 8.1.1
+- Version: 9.0.1
 - License: MIT
 
 ## lua
@@ -128,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-ff6c496
+  - Version: 2.1-03c3112
   - License: MIT
 
 - tolua
@@ -148,12 +143,12 @@
 
 ## minimp3
 - Upstream: https://github.com/lieff/minimp3
-- Version: git ca7c706(316) with modified for UWP apps support
+- Version: git afb604c(318) with modified for UWP apps support
 - License: CC0-1.0
 
 ## mio
 - Upstream: https://github.com/mandreyel/mio
-- Version: git 8c0d3c7 (125)
+- Version: git 8b6b7d8 (136)
 - License: MIT
 
 ## ntcvt (Windows only)
@@ -184,7 +179,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.9
+- Version: 3.0.10
 - License: Apache-2.0
 
 ## png
@@ -238,7 +233,7 @@
 
 ## webp
 - [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
-- Version: 1.3.0
+- Version: 1.3.1
 - License: Google Inc
 
 ## xsxml
@@ -248,21 +243,21 @@
 
 ## xxHash
 - [![Upstream](https://img.shields.io/github/v/release/Cyan4973/xxHash?label=Upstream)](https://github.com/Cyan4973/xxHash)
-- Version: 0.8.1
+- Version: 0.8.2
 - License: BSD-2-Clause
 
 ## yaml-cpp
 - [![Upstream](https://img.shields.io/github/v/release/jbeder/yaml-cpp?label=Upstream)](https://github.com/jbeder/yaml-cpp)
-- Version: 0.7.0
+- Version: 0.8.0
 - License: MIT
 
 ## yasio
 - [![Upstream](https://img.shields.io/github/v/release/yasio/yasio?label=Upstream)](https://github.com/yasio/yasio)
-- Version: git 4.0.0
+- Version: 4.1.0
 - License: MIT WITH Anti-996
 
 ## zlib
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
-- Version: 1.2.13
+- Version: 1.3
 - License: zlib
 

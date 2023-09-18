@@ -645,7 +645,7 @@ void Label::reset()
     _insideBounds       = true;
     _enableWrap         = true;
     _bmFontSize         = -1;
-    _bmfontScale        = 1.0f;
+    _fontScale          = 1.0f;
     _overflow           = Overflow::NONE;
     _originalFontSize   = 0.0f;
     _boldEnabled        = false;
@@ -676,12 +676,12 @@ static Texture2D* _getTexture(Label* label)
 
 void Label::setVertexLayout()
 {
-    _programState->validateSharedVertexLayout(VertexLayoutHelper::setupSprite);
+    _programState->validateSharedVertexLayout(backend::VertexLayoutType::Sprite);
 }
 
-bool Label::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool Label::setProgramState(backend::ProgramState* programState, bool ownPS /*= false*/)
 {
-    if (Node::setProgramState(programState, needsRetain))
+    if (Node::setProgramState(programState, ownPS))
     {
         updateUniformLocations();
         for (auto&& batch : _batchCommands)
@@ -691,9 +691,9 @@ bool Label::setProgramState(backend::ProgramState* programState, bool needsRetai
 
         setVertexLayout();
 
-        auto& quadPipeline = _quadCommand.getPipelineDescriptor();
+        auto& quadPipeline        = _quadCommand.getPipelineDescriptor();
         quadPipeline.programState = _programState;
-        
+
         return true;
     }
     return false;
@@ -717,13 +717,9 @@ void Label::updateShaderProgram()
         {
         case ax::LabelEffect::NORMAL:
             if (_useDistanceField)
-            {
                 programType = backend::ProgramType::LABEL_DISTANCE_NORMAL;
-            }
             else if (_useA8Shader)
-            {
                 programType = backend::ProgramType::LABEL_NORMAL;
-            }
             else
             {
                 auto texture = _getTexture(this);
@@ -735,32 +731,26 @@ void Label::updateShaderProgram()
             }
             break;
         case ax::LabelEffect::OUTLINE:
-        {
-            programType = backend::ProgramType::LABLE_OUTLINE;
-        }
-        break;
+            programType =
+                _useDistanceField ? backend::ProgramType::LABEL_DISTANCE_OUTLINE : backend::ProgramType::LABLE_OUTLINE;
+            break;
         case ax::LabelEffect::GLOW:
             if (_useDistanceField)
-            {
-                programType = backend::ProgramType::LABLE_DISTANCEFIELD_GLOW;
-            }
+                programType = backend::ProgramType::LABLE_DISTANCE_GLOW;
             break;
         default:
             return;
         }
     }
 
-    auto* program = backend::Program::getBuiltinProgram(programType);
-    setProgramState(new backend::ProgramState(program), false);
+    this->setProgramStateByProgramId(programType);
 
     updateUniformLocations();
 
     for (auto&& batch : _batchCommands)
-    {
         updateBatchCommand(batch);
-    }
 
-    auto& quadPipeline = _quadCommand.getPipelineDescriptor();
+    auto& quadPipeline        = _quadCommand.getPipelineDescriptor();
     quadPipeline.programState = _programState;
 }
 
@@ -1070,7 +1060,10 @@ void Label::updateLabelLetters()
 
                     auto px = letterInfo.positionX + letterDef.width / 2 + _linesOffsetX[letterInfo.lineIndex];
                     auto py = letterInfo.positionY - letterDef.height / 2 + _letterOffsetY;
-                    letterSprite->setPosition(px, py);
+                    if (_currentLabelType == Label::LabelType::TTF && _fontConfig.distanceFieldEnabled)
+                        letterSprite->setPosition(px, py);
+                    else
+                        letterSprite->setPosition(px, py);
                 }
                 else
                 {
@@ -1225,14 +1218,14 @@ bool Label::updateQuads()
                     _reusedRect.size.height -= clipTop;
                     py -= clipTop;
                 }
-                if (py - letterDef.height * _bmfontScale < _tailoredBottomY)
+                if (py - letterDef.height * _fontScale < _tailoredBottomY)
                 {
                     _reusedRect.size.height = (py < _tailoredBottomY) ? 0.f : (py - _tailoredBottomY);
                 }
             }
 
             auto lineIndex = _lettersInfo[ctr].lineIndex;
-            auto px = _lettersInfo[ctr].positionX + letterDef.width / 2 * _bmfontScale + _linesOffsetX[lineIndex];
+            auto px = _lettersInfo[ctr].positionX + letterDef.width / 2 * _fontScale + _linesOffsetX[lineIndex];
 
             if (_labelWidth > 0.f)
             {
@@ -1292,10 +1285,8 @@ bool Label::setTTFConfigInternal(const TTFConfig& ttfConfig)
 
     if (_fontConfig.outlineSize > 0)
     {
-        _fontConfig.distanceFieldEnabled = false;
-        _useDistanceField                = false;
-        _useA8Shader                     = false;
-        _currLabelEffect                 = LabelEffect::OUTLINE;
+        _useA8Shader     = false;
+        _currLabelEffect = LabelEffect::OUTLINE;
         updateShaderProgram();
     }
     else
@@ -1396,10 +1387,19 @@ void Label::enableOutline(const Color4B& outlineColor, int outlineSize /* = -1 *
             _effectColorF.b = outlineColor.b / 255.0f;
             _effectColorF.a = outlineColor.a / 255.0f;
 
-            if (outlineSize > 0 && _fontConfig.outlineSize != outlineSize)
+            if (!_useDistanceField)
+            {  // not SDF, request font atlas from feetype
+                if (outlineSize > 0 && _fontConfig.outlineSize != outlineSize)
+                {
+                    _fontConfig.outlineSize = outlineSize;
+                    setTTFConfig(_fontConfig);
+                }
+            }
+            else
             {
-                _fontConfig.outlineSize = outlineSize;
-                setTTFConfig(_fontConfig);
+                if (outlineSize > 0)
+                    _currLabelEffect = LabelEffect::OUTLINE;
+                updateShaderProgram();
             }
         }
         else if (_effectColorF != outlineColor || _outlineSize != outlineSize)
@@ -1808,7 +1808,6 @@ void Label::updateEffectUniforms(BatchCommand& batch,
         {
             int effectType = 0;
             Vec4 effectColor(_effectColorF.r, _effectColorF.g, _effectColorF.b, _effectColorF.a);
-
             // draw shadow
             if (_shadowEnabled)
             {
@@ -1821,24 +1820,33 @@ void Label::updateEffectUniforms(BatchCommand& batch,
                 renderer->addCommand(&batch.shadowCommand);
             }
 
-            // draw outline
-            {
-                effectType = 1;
-                updateBuffer(textureAtlas, batch.outLineCommand);
-                auto* programStateOutline = batch.outLineCommand.getPipelineDescriptor().programState;
-                programStateOutline->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
-                programStateOutline->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
-                batch.outLineCommand.init(_globalZOrder);
-                renderer->addCommand(&batch.outLineCommand);
+            if (_useDistanceField)
+            {  // distance outline
+                effectColor.w = _outlineSize > 0 ? _outlineSize : _fontConfig.outlineSize;
+                batch.textCommand.getPipelineDescriptor().programState->setUniform(_effectColorLocation, &effectColor,
+                                                                                   sizeof(Vec4));
             }
-
-            // draw text
+            else
             {
-                effectType             = 0;
-                auto* programStateText = batch.textCommand.getPipelineDescriptor().programState;
+                // draw outline
+                {
+                    effectType = 1;
+                    updateBuffer(textureAtlas, batch.outLineCommand);
+                    auto* programStateOutline = batch.outLineCommand.getPipelineDescriptor().programState;
+                    programStateOutline->setUniform(_effectColorLocation, &effectColor, sizeof(Vec4));
+                    programStateOutline->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                    batch.outLineCommand.init(_globalZOrder);
+                    renderer->addCommand(&batch.outLineCommand);
+                }
 
-                programStateText->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
-                programStateText->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                // draw text
+                {
+                    effectType             = 0;
+                    auto* programStateText = batch.textCommand.getPipelineDescriptor().programState;
+
+                    programStateText->setUniform(_effectColorLocation, &effectColor, sizeof(effectColor));
+                    programStateText->setUniform(_effectTypeLocation, &effectType, sizeof(effectType));
+                }
             }
         }
         break;
@@ -2012,7 +2020,7 @@ void Label::visit(Renderer* renderer, const Mat4& parentTransform, uint32_t pare
         // Label overflow shrink fix #566
         if (_overflow == Overflow::SHRINK && this->getRenderingFontSize() < _originalFontSize)
             rescaleWithOriginalFontSize();
-     
+
         updateContent();
     }
 
@@ -2129,6 +2137,8 @@ Sprite* Label::getLetter(int letterIndex)
         {
             updateContent();
         }
+        
+        
 
         if (_textSprite == nullptr && letterIndex < _lengthOfString)
         {
@@ -2159,14 +2169,15 @@ Sprite* Label::getLetter(int letterIndex)
                 }
                 else
                 {
-                    this->updateBMFontScale();
+                    this->updateFontScale();
                     letter =
                         LabelLetter::createWithTexture(_fontAtlas->getTexture(textureID), uvRect, letterDef.rotated);
                     letter->setTextureAtlas(_batchNodes.at(textureID)->getTextureAtlas());
                     letter->setAtlasIndex(letterInfo.atlasIndex);
-                    auto px = letterInfo.positionX + _bmfontScale * uvRect.size.width / 2 +
+                    auto px =
+                        letterInfo.positionX + _fontScale * uvRect.size.width / 2 +
                               _linesOffsetX[letterInfo.lineIndex];
-                    auto py = letterInfo.positionY - _bmfontScale * uvRect.size.height / 2 + _letterOffsetY;
+                    auto py = letterInfo.positionY - _fontScale * uvRect.size.height / 2 + _letterOffsetY;
                     letter->setPosition(px, py);
                     letter->setOpacity(_realOpacity);
                     this->updateLetterSpriteScale(letter);
@@ -2195,7 +2206,7 @@ void Label::setLineHeight(float height)
 float Label::getLineHeight() const
 {
     AXASSERT(_currentLabelType != LabelType::STRING_TEXTURE, "Not supported system font!");
-    return _textSprite ? 0.0f : _lineHeight * _bmfontScale;
+    return _textSprite ? 0.0f : _lineHeight * _fontScale;
 }
 
 void Label::setLineSpacing(float height)
@@ -2605,21 +2616,10 @@ Label::Overflow Label::getOverflow() const
 
 void Label::updateLetterSpriteScale(Sprite* sprite)
 {
-    if (_currentLabelType == LabelType::BMFONT && _bmFontSize > 0)
-    {
-        sprite->setScale(_bmfontScale);
-    }
+    if (_currentLabelType == LabelType::BMFONT || _currentLabelType == LabelType::TTF)
+        sprite->setScale(_fontScale);
     else
-    {
-        if (std::abs(_bmFontSize) < FLT_EPSILON)
-        {
-            sprite->setScale(0);
-        }
-        else
-        {
-            sprite->setScale(1.0);
-        }
-    }
+        sprite->setScale(1.0);
 }
 
 NS_AX_END

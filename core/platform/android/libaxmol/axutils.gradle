@@ -97,7 +97,10 @@ class axutils {
 //    }
 
     @SuppressWarnings('unused')
-    static String[] findNativeBuildTools(project, ndkVer = "23.2.8568313+", cmakeVer = "3.22.1+") {
+    static String[] findNativeBuildTools(project, cmakeVer = "3.22.1+", ndkVer = "23.2.8568313") {
+        // cmakeVer should overwrite by command line
+        if(project.properties.PROP_CMAKE_VERSION != null)
+            cmakeVer = project.properties.PROP_CMAKE_VERSION
 
         // Detecting sdkRoot
         def sdkRoot = null
@@ -117,10 +120,21 @@ class axutils {
             }
         }
 
-        def rets = new ArrayList(4) // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX)
+        def rets = new ArrayList(5) // ndkVer,ndkPath,cmakeVer,cmakeOptions(AX_USE_XXX, AX_ENABLE_XXX, AX_ENABLE_EXT_XXX),cmakeDir<nullable>
         findNDK(sdkRoot, ndkVer, rets)
         findCMake(sdkRoot, cmakeVer, rets)
         parseCMakeOptions(project.properties, rets)
+        def cmakeDir = rets[4]
+        if (cmakeDir != null) {
+            def symlinkDir = joinPath(sdkRoot, 'cmake', rets[2])
+            def symlinkDirFile = new File(symlinkDir)
+            if (!symlinkDirFile.exists()) {
+                println "Creating symlinkd ${symlinkDir} ==> ${cmakeDir} ..."
+                Files.createSymbolicLink(symlinkDirFile.toPath(), new File(cmakeDir).toPath())
+            } else {
+                println "The symlinkd ${symlinkDir} ==> ${cmakeDir} exist"
+            }
+        }
         return rets
     }
 
@@ -185,10 +199,9 @@ class axutils {
             cmakeVer = cmakeVer.substring(0, cmakeVer.length() - 1)
         }
 
+
         def cmakeBinDirs = []
-
         def cmakeBinDir = null
-
         def verList = []
 
         // Scan installed cmake in $sdk_root/cmake
@@ -207,7 +220,7 @@ class axutils {
         // Collect cmakeBinDirs for search
         for(ver in verList){
             if (ver.startsWith('.')) continue
-            cmakeBinDir = sdkRoot + File.separator + "cmake" + File.separator + ver + File.separator + "bin"
+            cmakeBinDir = joinPath(sdkRoot, "cmake", ver, "bin")
             if(new File(cmakeBinDir).isDirectory()) {
                 cmakeBinDirs.add(cmakeBinDir)
             }
@@ -218,13 +231,23 @@ class axutils {
             cmakeBinDirs.add(cmakeBinDir)
         }
 
+        cmakeBinDir = joinPath(Paths.get("${System.env.AX_ROOT}").toAbsolutePath().toString(), 'tools', 'external', 'cmake', 'bin')
+        cmakeBinDirs.add(cmakeBinDir)
+
         // find in cmakeBinDirs
         def foundCMakeVer = null
+        def index = 0
         for(item in cmakeBinDirs) {
             foundCMakeVer = findCMakeFromBinDir(cmakeVer, item, allowNewerCMake)
             if(foundCMakeVer != null) {
                 break
             }
+            ++index
+        }
+
+        if (index == (cmakeBinDirs.size() - 1)) {
+            // using  cmakeBinDir=axmol/tools/external/cmake/bin
+            rets[4] = joinPath(Paths.get("${System.env.AX_ROOT}").toAbsolutePath().toString(), 'tools', 'external', 'cmake')
         }
 
         if(foundCMakeVer == null) {
@@ -233,6 +256,10 @@ class axutils {
         }
 
         rets[2] = foundCMakeVer
+    }
+
+    private static String joinPath(String first, String... more) {
+        return Paths.get(first, more).toString()
     }
 
     private static void parseCMakeOptions(properties, rets) {
@@ -288,7 +315,7 @@ class axutils {
 
         String ninjaPath = cmakeBin + File.separator + getNinjaProgramName()
         if(!new File(ninjaPath).isFile()) {
-            println("The required ninja program is not present in cmake bin dir: '$cmakeBin'")
+            println("The required ninja program is not present in cmake bin dir: '$cmakeBin', skipped")
             return null
         }
 
@@ -309,7 +336,7 @@ class axutils {
                     def canonVer = minusIdx == -1 ? foundVer : foundVer.substring(0, minusIdx)
                     def ret = axutils.compareVersion(canonVer, cmakeVer)
                     if (ret == 0) {
-                        println("Using found cmake version: $canonVer")
+                        println("Using found cmake ($canonVer,path=$programPath)")
                         foundCMakeVer = canonVer
                     }
                     else if(ret > 0) {

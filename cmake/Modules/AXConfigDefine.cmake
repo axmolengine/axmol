@@ -50,8 +50,8 @@ if (WINDOWS)
 else()
     if(NOT DEFINED CMAKE_C_STANDARD)
         set(CMAKE_C_STANDARD 11)
-        endif()
     endif()
+endif()
 message(STATUS "CMAKE_C_STANDARD=${CMAKE_C_STANDARD}")
 if(NOT DEFINED CMAKE_C_STANDARD_REQUIRED)
     set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -127,28 +127,23 @@ function(use_ax_compile_define target)
     if(APPLE)
         target_compile_definitions(${target} PUBLIC __APPLE__)
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
-        if(AX_USE_ANGLE)
+        if(AX_USE_GL)
             target_compile_definitions(${target}
-                PUBLIC AX_USE_ANGLE=1
+                PUBLIC AX_USE_GL=1
+                PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE}
                 PUBLIC GL_SILENCE_DEPRECATION=1
             )
         endif()
-
-        if(IOS)
-            if(TVOS)
-                target_compile_definitions(${target} PUBLIC AX_TARGET_OS_TVOS)
-            else()
-                target_compile_definitions(${target} PUBLIC AX_TARGET_OS_IPHONE)
-            endif()
-        endif()
-
     elseif(LINUX)
         ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target} PUBLIC _GNU_SOURCE)
     elseif(ANDROID)
+        target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
         target_compile_definitions(${target} PUBLIC USE_FILE32API)
+    elseif(EMSCRIPTEN)
+        target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
     elseif(WINDOWS)
-        ax_config_pred(${target} AX_USE_ANGLE)
+        target_compile_definitions(${target} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
         ax_config_pred(${target} AX_ENABLE_VLC_MEDIA)
         target_compile_definitions(${target}
             PUBLIC WIN32
@@ -171,21 +166,44 @@ function(use_ax_compile_define target)
     endif()
 endfunction()
 
-# Set compiler options
+# Set compiler options for engine lib: axmol
 function(use_ax_compile_options target)
     if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
         # Enable msvc multi-process building
         target_compile_options(${target} PUBLIC /MP)
+    elseif(WASM)
+        # refer to: https://github.com/emscripten-core/emscripten/blob/main/src/settings.js
+        target_link_options(${target} PUBLIC -sFORCE_FILESYSTEM=1 -sFETCH=1 -sUSE_GLFW=3)
     endif()
 endfunction()
 
-# softfp for android armv7a?
-# if(ANDROID)
-# 	if(${ANDROID_ABI} STREQUAL "armeabi-v7a")
-#         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfloat-abi=softfp")
-#         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mfloat-abi=softfp")
-# 	endif()
-# endif()
+if(EMSCRIPTEN)
+    set(AX_WASM_THREADS "navigator.hardwareConcurrency" CACHE STRING "Wasm threads count")
+
+    set(_AX_WASM_THREADS_INT 0)
+    if (AX_WASM_THREADS STREQUAL "auto") # not empty string or not 0
+        # Enable pthread support globally
+        include(ProcessorCount)
+        ProcessorCount(_AX_WASM_THREADS_INT)
+    elseif(AX_WASM_THREADS MATCHES "^([0-9]+)$" OR AX_WASM_THREADS STREQUAL "navigator.hardwareConcurrency")
+        set(_AX_WASM_THREADS_INT ${AX_WASM_THREADS})
+    endif()
+
+    message(STATUS "AX_WASM_THREADS=${AX_WASM_THREADS}")
+    message(STATUS "_AX_WASM_THREADS_INT=${_AX_WASM_THREADS_INT}")
+
+    if (_AX_WASM_THREADS_INT)
+        add_compile_options(-pthread)
+        add_link_options(-pthread -sPTHREAD_POOL_SIZE=${_AX_WASM_THREADS_INT})
+    endif()
+
+    # Tell emcc build port libs in cache with compiler flag `-pthread` xxx.c.o
+    # must via CMAKE_C_FLAGS and CMAKE_CXX_FLAGS?
+    set(_AX_EMCC_FLAGS "-sUSE_LIBJPEG=1 -sUSE_ZLIB=1")
+
+    set(CMAKE_C_FLAGS  ${_AX_EMCC_FLAGS})
+    set(CMAKE_CXX_FLAGS  ${_AX_EMCC_FLAGS})
+endif()
 
 # Try enable asm & nasm compiler support
 set(can_use_assembler TRUE)

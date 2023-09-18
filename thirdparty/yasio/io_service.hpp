@@ -186,6 +186,10 @@ enum
   //   when forward packet enabled, the packet will always dispach when recv data from OS kernel immediately
   YOPT_S_FORWARD_PACKET,
 
+  // Set whether enable high resultion timer on win32
+  // params: hres: int(0)
+  YOPT_S_HRES_TIMER,
+
   // Sets channel length field based frame decode function, native C++ ONLY
   // params: index:int, func:decode_len_fn_t*
   YOPT_C_UNPACK_FN = 101,
@@ -1221,7 +1225,7 @@ private:
   */
   YASIO__DECL transport_handle_t do_dgram_accept(io_channel*, const ip::endpoint& peer, int& error);
 
-  int local_address_family() const { return ((ipsv_ & ipsv_ipv4) || !ipsv_) ? AF_INET : AF_INET6; }
+  YASIO__DECL int local_address_family() const;
 
   YASIO__DECL void update_dns_status();
 
@@ -1274,6 +1278,10 @@ private:
     bool no_dispatch_    = false; // since v4.0.0
     bool forward_packet_ = false; // since v3.39.8
 
+#if YASIO__HAS_WIN32_TIMEAPI
+    bool hres_timer_ = false;
+#endif
+
     // tcp keepalive settings
     struct __unnamed01 {
       int onoff    = 0;
@@ -1306,7 +1314,7 @@ private:
   } options_;
 
   // The ip stack version supported by localhost
-  u_short ipsv_ = 0;
+  mutable u_short ipsv_ = 0;
   // The stop flag to notify all transports needs close
   uint8_t stop_flag_ = 0;
 #if defined(YASIO_SSL_BACKEND)

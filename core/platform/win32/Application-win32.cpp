@@ -245,7 +245,7 @@ const char* Application::getCurrentLanguageCode()
 
 Application::Platform Application::getTargetPlatform()
 {
-    return Platform::Windows;
+    return Platform::Win32;
 }
 
 std::string Application::getVersion()
@@ -292,25 +292,6 @@ bool Application::openURL(std::string_view url)
     std::wstring wURL = ntcvt::from_chars(url, CP_UTF8);
     HINSTANCE r       = ShellExecuteW(NULL, L"open", wURL.c_str(), NULL, NULL, SW_SHOWNORMAL);
     return (size_t)r > 32;
-}
-
-void Application::setResourceRootPath(std::string_view rootResDir)
-{
-    _resourceRootPath = rootResDir;
-    std::replace(_resourceRootPath.begin(), _resourceRootPath.end(), '\\', '/');
-    if (_resourceRootPath[_resourceRootPath.length() - 1] != '/')
-    {
-        _resourceRootPath += '/';
-    }
-    FileUtils* pFileUtils                = FileUtils::getInstance();
-    std::vector<std::string> searchPaths = pFileUtils->getSearchPaths();
-    searchPaths.insert(searchPaths.begin(), _resourceRootPath);
-    pFileUtils->setSearchPaths(searchPaths);
-}
-
-std::string_view Application::getResourceRootPath(void)
-{
-    return _resourceRootPath;
 }
 
 void Application::setStartupScriptFilename(std::string_view startupScriptFile)

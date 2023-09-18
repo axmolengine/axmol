@@ -24,6 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#if !defined(__EMSCRIPTEN__)
 #include "network/Downloader-curl.h"
 
 #include <cinttypes>
@@ -159,7 +160,7 @@ public:
                 }
             }
             // open file
-            _fs = FileUtils::getInstance()->openFileStream(_tempFileName, FileStream::Mode::APPEND);
+            _fs = FileUtils::getInstance()->openFileStream(_tempFileName, IFileStream::Mode::APPEND);
             if (!_fs)
             {
                 _errCode         = DownloadTask::ERROR_OPEN_FILE_FAILED;
@@ -172,7 +173,7 @@ public:
             // init md5 state
             _checksumFileName = _tempFileName + ".chksum";
 
-            _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, FileStream::Mode::OVERLAPPED);
+            _fsMd5 = FileUtils::getInstance()->openFileStream(_checksumFileName, IFileStream::Mode::OVERLAPPED);
             if(!_fsMd5) {
                 _errCode         = DownloadTask::ERROR_OPEN_FILE_FAILED;
                 _errCodeInternal = 0;
@@ -333,10 +334,10 @@ private:
     std::string _tempFileName;
     std::string _checksumFileName;
     std::vector<unsigned char> _buf;
-    std::unique_ptr<FileStream> _fs{};
+    std::unique_ptr<IFileStream> _fs{};
 
     // calculate md5 in downloading time support
-    std::unique_ptr<FileStream> _fsMd5{};  // store md5 state realtime
+    std::unique_ptr<IFileStream> _fsMd5{};  // store md5 state realtime
     MD5state_st _md5State;
 
     void _initInternal()
@@ -1047,7 +1048,7 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 
             if (checkState & kCheckSumStateSucceed)  // No need download
             {
-                auto fsOrigin = pFileUtils->openFileStream(coTask._fileName, FileStream::Mode::READ);
+                auto fsOrigin = pFileUtils->openFileStream(coTask._fileName, IFileStream::Mode::READ);
                 if (fsOrigin)
                 {
                     fsOrigin->seek(0, SEEK_END);
@@ -1138,3 +1139,5 @@ void DownloaderCURL::_onDownloadFinished(DownloadTask& task, int checkState)
 
 }  // namespace network
 NS_AX_END  // namespace ax
+
+#endif

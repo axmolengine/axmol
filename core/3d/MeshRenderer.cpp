@@ -692,6 +692,63 @@ void MeshRenderer::setModelTexture(std::string_view modelPath, std::string_view 
     }
 }
 
+void MeshRenderer::enableInstancing(MeshMaterial::InstanceMaterialType instanceMat, int count)
+{
+    switch (instanceMat)
+    {
+    case MeshMaterial::InstanceMaterialType::UNLIT_INSTANCE:
+    {
+        auto mat = MeshMaterial::createBuiltInMaterial(MeshMaterial::MaterialType::UNLIT_INSTANCE, false);
+        enableInstancing(mat, count);
+    }
+    }
+}
+
+void MeshRenderer::enableInstancing(MeshMaterial* instanceMat, int count)
+{
+    for (auto&& mesh : _meshes)
+    {
+        mesh->enableInstancing(true, MAX(1, count));
+        mesh->setMaterial(instanceMat);
+    }
+}
+
+void MeshRenderer::disableInstancing()
+{
+    for (auto&& mesh : _meshes)
+        mesh->enableInstancing(false, 0);
+}
+
+void MeshRenderer::setDynamicInstancing(bool dynamic)
+{
+    for (auto&& mesh : _meshes)
+        mesh->setDynamicInstancing(dynamic);
+}
+
+void MeshRenderer::addInstanceChild(Node* child, bool active)
+{
+    for (auto&& mesh : _meshes)
+    {
+        mesh->addInstanceChild(child);
+        if (active)
+            addChild(child);
+        else
+            child->setParent(this);
+    }
+}
+
+void MeshRenderer::shrinkToFitInstances()
+{
+    for (auto&& mesh : _meshes)
+        mesh->shrinkToFitInstances();
+}
+
+void MeshRenderer::rebuildInstances()
+{
+    for (auto&& mesh : _meshes)
+        mesh->rebuildInstances();
+}
+
 void MeshRenderer::setTexture(std::string_view texFile)
 {
     auto tex = _director->getTextureCache()->addImage(texFile);
@@ -835,9 +892,9 @@ void MeshRenderer::draw(Renderer* renderer, const Mat4& transform, uint32_t flag
     }
 }
 
-bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool needsRetain)
+bool MeshRenderer::setProgramState(backend::ProgramState* programState, bool ownPS/* = false*/)
 {
-    if (Node::setProgramState(programState, needsRetain))
+    if (Node::setProgramState(programState, ownPS))
     {
         for (auto&& state : _meshes)
         {

@@ -176,18 +176,18 @@ void FUILabel::setGrayed(bool value)
     }
 }
 
-void FUILabel::updateBMFontScale()
+void FUILabel::updateFontScale()
 {
     auto font = _fontAtlas->getFont();
     if (_currentLabelType == LabelType::BMFONT)
     {
         BitmapFont* bmFont = (BitmapFont*)font;
         float originalFontSize = bmFont->getOriginalFontSize();
-        _bmfontScale = _bmFontSize * AX_CONTENT_SCALE_FACTOR() / originalFontSize;
+        _fontScale             = _bmFontSize * AX_CONTENT_SCALE_FACTOR() / originalFontSize;
     }
     else
     {
-        _bmfontScale = 1.0f;
+        ax::Label::updateFontScale();
     }
 }
 

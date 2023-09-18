@@ -46,20 +46,19 @@ public:
      */
     enum class Platform
     {
-        Windows, /**< Windows */
-        UWP,
-        UWP_Phone,
+        Unknown,
+        Win32, /**< Win32 Apps */
+        WinUWP, /**< WinUWP */
         Linux,   /**< Linux */
-        macOS,     /**< macOS */
+        OSX,     /**< macOS */
         Android, /**< Android */
-        iOS,      /**< Apple iOS */
-    };
-
-    enum class SubPlatform {
-        Null,
-        Win32,
-        WinRT,
-        tvOS,
+        iOS,     /**< Apple iOS */
+        tvOS,    /**< Apple tvOS */
+        Wasm,  /**< aka WebAssembly/Emscripten */
+        /* alias */
+        Windows = Win32,
+        macOS = OSX,
+        Emscripten = Wasm
     };
 
     /**

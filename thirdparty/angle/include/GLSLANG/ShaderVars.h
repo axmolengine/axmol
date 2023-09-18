@@ -25,10 +25,12 @@ typedef unsigned int GLenum;
 enum InterpolationType
 {
     INTERPOLATION_SMOOTH,
+    INTERPOLATION_FLAT,
+    INTERPOLATION_NOPERSPECTIVE,
     INTERPOLATION_CENTROID,
     INTERPOLATION_SAMPLE,
-    INTERPOLATION_FLAT,
-    INTERPOLATION_NOPERSPECTIVE
+    INTERPOLATION_NOPERSPECTIVE_CENTROID,
+    INTERPOLATION_NOPERSPECTIVE_SAMPLE
 };
 
 const char *InterpolationTypeToString(InterpolationType type);
@@ -290,6 +292,8 @@ struct InterfaceBlock
     int binding;
     bool staticUse;
     bool active;
+    // Only applied to SSBOs, |isReadOnly| tells if the readonly qualifier is specified.
+    bool isReadOnly;
     BlockType blockType;
     std::vector<ShaderVariable> fields;
 };

@@ -159,7 +159,7 @@ bool RenderTexture::initWithWidthAndHeight(int w,
                                            PixelFormat depthStencilFormat,
                                            bool sharedRenderTarget)
 {
-    AXASSERT(format != backend::PixelFormat::A8, "only RGB and RGBA formats are valid for a render texture");
+    AXASSERT(format == backend::PixelFormat::RGBA8 || format == PixelFormat::RGB8 || format == PixelFormat::RGBA4, "only RGB and RGBA formats are valid for a render texture");
 
     bool ret = false;
     do
@@ -588,7 +588,7 @@ void RenderTexture::onEnd()
     _director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _oldTransMatrix);
 
     Renderer* renderer = _director->getRenderer();
-    renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.w, _oldViewport.h);
+    renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.width, _oldViewport.height);
 
     renderer->setRenderTarget(_oldRenderTarget);
 }

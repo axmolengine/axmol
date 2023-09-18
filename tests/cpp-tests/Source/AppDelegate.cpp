@@ -55,6 +55,9 @@ void AppDelegate::initGLContextAttrs()
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
+    // whether enable global SDF font render support, since axmol-2.0.1
+    FontFreeType::setShareDistanceFieldEnabled(true);
+
     // As an example, load config file
     // FIXME:: This should be loaded before the Director is initialized,
     // FIXME:: but at this point, the director is already initialized
@@ -107,6 +110,8 @@ bool AppDelegate::applicationDidFinishLaunching()
         searchPaths.emplace_back("ActionTimeline");
     }
 
+    auto&& oldSearchPaths = fileUtils->getSearchPaths();
+    std::copy(oldSearchPaths.begin(), oldSearchPaths.end(), std::back_inserter(searchPaths));
     fileUtils->setSearchPaths(searchPaths);
 
     glView->setDesignResolutionSize(g_designSize.width, g_designSize.height, ResolutionPolicy::SHOW_ALL);

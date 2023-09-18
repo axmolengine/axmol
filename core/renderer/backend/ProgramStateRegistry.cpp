@@ -29,14 +29,14 @@ bool ProgramStateRegistry::init()
     return true;
 }
 
-void ProgramStateRegistry::registerProgram(uint32_t programType, int textureSamplerFlags, Program* program)
+void ProgramStateRegistry::registerProgram(uint32_t programType, int textureSamplerFlags, uint32_t builtinProgramType)
 {
     uint32_t key = (static_cast<uint32_t>(programType) << 16) | textureSamplerFlags;
     auto it      = this->_registry.find(key);
     if (it == this->_registry.end())
-        this->_registry.emplace(key, program);
+        this->_registry.emplace(key, builtinProgramType);
     else
-        it->second = program;
+        it->second = builtinProgramType;
 }
 
 void ProgramStateRegistry::clearPrograms()
@@ -52,7 +52,7 @@ ProgramState* ProgramStateRegistry::newProgramState(uint32_t programType, int te
     {
         auto fallback = it->second;
         if (fallback)
-            return new ProgramState(fallback);
+            return new ProgramState(Program::getBuiltinProgram(fallback));
     }
 
     return new ProgramState(Program::getBuiltinProgram(programType));
@@ -66,7 +66,7 @@ uint32_t ProgramStateRegistry::getProgramType(uint32_t programType, int textureS
     {
         auto fallback = it->second;
         if (fallback)
-            return fallback->getProgramType();
+            return fallback;
     }
     return programType;
 }

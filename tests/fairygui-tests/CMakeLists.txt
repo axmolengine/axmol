@@ -74,6 +74,11 @@ elseif(LINUX)
          proj.linux/main.cpp
          )
     list(APPEND GAME_SOURCE ${common_content_files})
+elseif(WASM)
+    list(APPEND GAME_SOURCE
+         proj.wasm/main.cpp
+         )
+    list(APPEND GAME_SOURCE ${common_content_files})
 elseif(WINDOWS)
     if(NOT WINRT)
         list(APPEND GAME_HEADER
@@ -189,4 +194,8 @@ endif()
 
 if (NOT DEFINED BUILD_ENGINE_DONE)
     ax_uwp_set_all_targets_deploy_min_version()
+endif()
+
+if (WASM)
+    ax_setup_wasm_app_config(${APP_NAME})
 endif()

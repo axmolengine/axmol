@@ -127,9 +127,9 @@ static ax::Vec2 convertToUICoordinates(const Vec2& pos)
 {
     auto* bd = ImGui_ImplAndroid_GetBackendData();
     ImGuiIO& io = ImGui::GetIO();
-    auto origin = bd->Window->getVisibleOrigin();
-    auto uiX = ((pos.x - origin.x) * bd->Window->getScaleX()) / io.DisplayFramebufferScale.x;
-    auto uiY = ((pos.y - origin.y) * bd->Window->getScaleY()) / io.DisplayFramebufferScale.y;
+    auto origin = bd->Window->getViewPortRect().origin;
+    auto uiX = (pos.x * bd->Window->getScaleX() + origin.x) / io.DisplayFramebufferScale.x;
+    auto uiY = (pos.y * bd->Window->getScaleY() + origin.y) / io.DisplayFramebufferScale.y;
 
     return Vec2(uiX, uiY);
 }
@@ -445,58 +445,25 @@ static bool ImGui_ImplAx_CreateDeviceObjects()
 static void ImGui_ImplAx_DestroyDeviceObjects()
 {
     auto bd = ImGui_ImplAndroid_GetBackendData();
-    AX_SAFE_RELEASE_NULL(bd->ProgramInfo.program);
-    AX_SAFE_RELEASE_NULL(bd->ProgramFontInfo.program);
+    Director::getInstance()->getEventDispatcher()->removeEventListener(bd->TouchListener);
     AX_SAFE_RELEASE_NULL(bd->TouchListener);
 
     ImGui_ImplAx_DestroyFontsTexture();
+
+    auto pm = ProgramManager::getInstance();
+    pm->unloadProgram(bd->ProgramInfo.program);
+    pm->unloadProgram(bd->ProgramFontInfo.program);
 }
 
 static bool ImGui_ImplAx_createShaderPrograms()
 {
-    auto vertex_shader =
-        "uniform mat4 u_MVPMatrix;\n"
-        "attribute vec2 a_position;\n"
-        "attribute vec2 a_texCoord;\n"
-        "attribute vec4 a_color;\n"
-        "varying vec2 v_texCoord;\n"
-        "varying vec4 v_fragmentColor;\n"
-        "void main()\n"
-        "{\n"
-        "    v_texCoord = a_texCoord;\n"
-        "    v_fragmentColor = a_color;\n"
-        "    gl_Position = u_MVPMatrix * vec4(a_position.xy, 0.0, 1.0);\n"
-        "}\n";
-    auto fragment_shader =
-        "#ifdef GL_ES\n"
-        "    precision mediump float;\n"
-        "#endif\n"
-        "uniform sampler2D u_tex0;\n"
-        "varying vec2 v_texCoord;\n"
-        "varying vec4 v_fragmentColor;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = v_fragmentColor * texture2D(u_tex0, v_texCoord);\n"
-        "}\n";
-    auto fragment_shader_font =
-        "#ifdef GL_ES\n"
-        "    precision mediump float;\n"
-        "#endif\n"
-        "uniform sampler2D u_tex0;\n"
-        "varying vec2 v_texCoord;\n"
-        "varying vec4 v_fragmentColor;\n"
-        "void main()\n"
-        "{\n"
-        "    float a = texture2D(u_tex0, v_texCoord).a;\n"
-        "    gl_FragColor = vec4(v_fragmentColor.rgb, v_fragmentColor.a * a);\n"
-        "}\n";
-
     auto bd = ImGui_ImplAndroid_GetBackendData();
 
-    AX_SAFE_RELEASE(bd->ProgramInfo.program);
-    AX_SAFE_RELEASE(bd->ProgramFontInfo.program);
-    bd->ProgramInfo.program     = backend::Device::getInstance()->newProgram(vertex_shader, fragment_shader);
-    bd->ProgramFontInfo.program = backend::Device::getInstance()->newProgram(vertex_shader, fragment_shader_font);
+    auto pm = ProgramManager::getInstance();
+
+    bd->ProgramInfo.program     = pm->loadProgram("custom/imgui_sprite_vs"sv, ax::positionTextureColor_frag);
+    bd->ProgramFontInfo.program = pm->loadProgram("custom/imgui_sprite_vs"sv, "custom/imgui_font_fs");
+
     IM_ASSERT(bd->ProgramInfo.program);
     IM_ASSERT(bd->ProgramFontInfo.program);
     if (!bd->ProgramInfo.program || !bd->ProgramFontInfo.program)
@@ -515,9 +482,9 @@ static bool ImGui_ImplAx_createShaderPrograms()
         IM_ASSERT(p->uv >= 0);
         IM_ASSERT(p->color >= 0);
         auto& layout = p->layout;
-        layout.setAttribute("a_position", p->position, VertexFormat::FLOAT2, 0, false);
-        layout.setAttribute("a_texCoord", p->uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
-        layout.setAttribute("a_color", p->color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
+        layout.setAttrib("a_position", p->position, VertexFormat::FLOAT2, 0, false);
+        layout.setAttrib("a_texCoord", p->uv, VertexFormat::FLOAT2, offsetof(ImDrawVert, uv), false);
+        layout.setAttrib("a_color", p->color, VertexFormat::UBYTE4, offsetof(ImDrawVert, col), true);
         layout.setStride(sizeof(ImDrawVert));
     }
 
@@ -541,7 +508,7 @@ bool ImGui_ImplAx_CreateFontsTexture()
     bd->FontTexture = new Texture2D();
 
     bd->FontTexture->setAntiAliasTexParameters();
-    bd->FontTexture->initWithData(pixels, width * height, backend::PixelFormat::A8, width, height);
+    bd->FontTexture->initWithData(pixels, width * height, AX_GLES_PROFILE != 200 ? backend ::PixelFormat::R8 : backend ::PixelFormat::A8, width, height);
     io.Fonts->TexID = (ImTextureID)bd->FontTexture;
     return true;
 }
@@ -703,7 +670,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_RenderDrawData(ImDrawData* draw_data)
                         auto& desc        = cmd->getPipelineDescriptor();
                         desc.programState = state;
                         // setup attributes for ImDrawVert
-                        desc.programState->setVertexLayout(pinfo->layout);
+                        desc.programState->setSharedVertexLayout(&pinfo->layout);
                         desc.programState->setUniform(pinfo->projection, &bd->Projection, sizeof(Mat4));
                         desc.programState->setTexture(pinfo->texture, 0, tex->getBackendTexture());
                         // In order to composite our output buffer we need to preserve alpha

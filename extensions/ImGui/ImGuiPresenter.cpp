@@ -1,14 +1,14 @@
 #include "ImGuiPresenter.h"
 #include <assert.h>
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    #include "imgui_impl_ax_android.h"
+#    include "imgui_impl_ax_android.h"
 #else
-    #include "imgui_impl_ax.h"
+#    include "imgui_impl_ax.h"
 #endif
 #include "imgui_internal.h"
 
 // TODO: mac metal
-#if defined(AX_USE_GL)
+#if defined(AX_USE_GL) && defined(AX_PLATFORM_PC)
 #    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 1
 #else
 #    define AX_IMGUI_ENABLE_MULTI_VIEWPORT 0
@@ -37,7 +37,7 @@ class ImGuiSceneEventTracker : public ImGuiEventTracker
 public:
     bool initWithScene(Scene* scene)
     {
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         _trackLayer = utils::newInstance<Node>(&Node::initLayer);
 
         // note: when at the first click to focus the window, this will not take effect
@@ -79,7 +79,7 @@ public:
 
     ~ImGuiSceneEventTracker()
     {
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         if (_trackLayer)
         {
             if (_trackLayer->getParent())
@@ -100,7 +100,7 @@ class ImGuiGlobalEventTracker : public ImGuiEventTracker
 public:
     bool init()
     {
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         // note: when at the first click to focus the window, this will not take effect
 
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -126,7 +126,7 @@ public:
 
     ~ImGuiGlobalEventTracker()
     {
-#ifdef AX_PLATFORM_PC
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
         eventDispatcher->removeEventListener(_mouseListener);
         eventDispatcher->removeEventListener(_touchListener);
@@ -214,8 +214,8 @@ void ImGuiPresenter::init()
     ImGui::StyleColorsClassic();
 
     auto eventDispatcher = Director::getInstance()->getEventDispatcher();
-    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [=](EventCustom*) { beginFrame(); });
-    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [=](EventCustom*) { endFrame(); });
+    eventDispatcher->addCustomEventListener(Director::EVENT_BEFORE_DRAW, [this](EventCustom*) { beginFrame(); });
+    eventDispatcher->addCustomEventListener(Director::EVENT_AFTER_VISIT, [this](EventCustom*) { endFrame(); });
 }
 
 void ImGuiPresenter::cleanup()
@@ -235,6 +235,15 @@ void ImGuiPresenter::cleanup()
     AX_SAFE_RELEASE_NULL(_fontsTexture);
 
     ImGui::DestroyContext();
+
+    if (!_renderLoops.empty())
+    {
+        for (auto item : _renderLoops)
+        {
+            delete item.second.tracker;
+        }
+        _renderLoops.clear();
+    }
 }
 
 void ImGuiPresenter::setOnInit(const std::function<void(ImGuiPresenter*)>& callBack)
@@ -275,12 +284,15 @@ void ImGuiPresenter::loadCustomFonts(void* ud)
     }
 }
 
-float ImGuiPresenter::scaleAllByDPI(float userScale)
+float ImGuiPresenter::enableDPIScale(float userScale)
 {
     float xscale = 1.0f;
 #if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
     // Gets scale
     glfwGetMonitorContentScale(glfwGetPrimaryMonitor(), &xscale, nullptr);
+#else
+    // refer to: https://developer.android.com/training/multiscreen/screendensities?hl=en-us
+    xscale = Device::getDPI() / 160.0f;
 #endif
 
     auto zoomFactor = userScale * xscale;
@@ -356,7 +368,7 @@ void ImGuiPresenter::beginFrame()
         Director::getInstance()->end();
         return;
     }
-    if (!_renderPiplines.empty())
+    if (!_renderLoops.empty())
     {
         // create frame
         ImGui_ImplAx_NewFrame();
@@ -406,63 +418,56 @@ void ImGuiPresenter::update()
     usedCCRefIdMap.clear();
     usedCCRef.clear();
     // drawing commands
-    for (auto& pipline : _renderPiplines)
-        pipline.second.frame();
+
+    for (auto iter = _renderLoops.begin(); iter != _renderLoops.end();)
+    {
+        auto& imLoop = iter->second;
+        if (imLoop.removing)
+        {
+            auto tracker = imLoop.tracker;
+            iter         = _renderLoops.erase(iter);
+            delete tracker;
+            continue;
+        }
+        imLoop.func();  // invoke ImGui loop func
+        ++iter;
+    }
 
     // commands will be processed after update
 }
 
 bool ImGuiPresenter::addRenderLoop(std::string_view id, std::function<void()> func, Scene* target)
 {
-    // TODO: check whether exist
+
+    auto tracker = target ? static_cast<ImGuiEventTracker*>(utils::newInstance<ImGuiSceneEventTracker>(
+                                &ImGuiSceneEventTracker::initWithScene, target))
+                          : static_cast<ImGuiEventTracker*>(utils::newInstance<ImGuiGlobalEventTracker>());
+
     auto fourccId = fourccValue(id);
-    if (_renderPiplines.find(fourccId) != _renderPiplines.end())
+    auto iter     = _renderLoops.find(fourccId);
+    if (iter == _renderLoops.end())
     {
-        return false;
-    }
-
-    ImGuiEventTracker* tracker;
-    if (target)
-        tracker = utils::newInstance<ImGuiSceneEventTracker>(&ImGuiSceneEventTracker::initWithScene, target);
-    else
-        tracker = utils::newInstance<ImGuiGlobalEventTracker>();
-
-    if (tracker)
-    {
-        _renderPiplines.emplace(fourccId, RenderPipline{tracker, std::move(func)});
+        _renderLoops.emplace(fourccId, ImGuiLoop{tracker, std::move(func)});
         return true;
     }
-    return false;
+
+    // allow reuse imLoop, update func, tracker, removing status
+    auto& imLoop   = iter->second;
+    imLoop.func    = std::move(func);
+    imLoop.tracker = tracker;
+
+    if (imLoop.removing)
+        imLoop.removing = false;
+
+    return true;
 }
 
 void ImGuiPresenter::removeRenderLoop(std::string_view id)
 {
     auto fourccId   = fourccValue(id);
-    const auto iter = _renderPiplines.find(fourccId);
-    if (iter != _renderPiplines.end())
-    {
-        auto tracker = iter->second.tracker;
-        delete tracker;
-        _renderPiplines.erase(iter);
-    }
-
-    if (_renderPiplines.empty())
-        deactiveImGuiViewports();
-}
-
-void ImGuiPresenter::deactiveImGuiViewports()
-{
-    ImGuiContext& g = *GImGui;
-    if (!(g.ConfigFlagsCurrFrame & ImGuiConfigFlags_ViewportsEnable))
-        return;
-
-    // Create/resize/destroy platform windows to match each active viewport.
-    // Skip the main viewport (index 0), which is always fully handled by the application!
-    for (int i = 1; i < g.Viewports.Size; i++)
-    {
-        ImGuiViewportP* viewport = g.Viewports[i];
-        viewport->Window->Active = false;
-    }
+    const auto iter = _renderLoops.find(fourccId);
+    if (iter != _renderLoops.end())
+        iter->second.removing = true;
 }
 
 static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
@@ -482,11 +487,11 @@ static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
 }
 
 void ImGuiPresenter::image(Texture2D* tex,
-                     const ImVec2& size,
-                     const ImVec2& uv0,
-                     const ImVec2& uv1,
-                     const ImVec4& tint_col,
-                     const ImVec4& border_col)
+                           const ImVec2& size,
+                           const ImVec2& uv0,
+                           const ImVec2& uv1,
+                           const ImVec4& tint_col,
+                           const ImVec4& border_col)
 {
     if (!tex)
         return;
@@ -518,12 +523,12 @@ void ImGuiPresenter::image(Sprite* sprite, const ImVec2& size, const ImVec4& tin
 }
 
 bool ImGuiPresenter::imageButton(Texture2D* tex,
-                           const ImVec2& size,
-                           const ImVec2& uv0,
-                           const ImVec2& uv1,
-                           int frame_padding,
-                           const ImVec4& bg_col,
-                           const ImVec4& tint_col)
+                                 const ImVec2& size,
+                                 const ImVec2& uv0,
+                                 const ImVec2& uv1,
+                                 int frame_padding,
+                                 const ImVec4& bg_col,
+                                 const ImVec4& tint_col)
 {
     if (!tex)
         return false;
@@ -539,10 +544,10 @@ bool ImGuiPresenter::imageButton(Texture2D* tex,
 }
 
 bool ImGuiPresenter::imageButton(Sprite* sprite,
-                           const ImVec2& size,
-                           int frame_padding,
-                           const ImVec4& bg_col,
-                           const ImVec4& tint_col)
+                                 const ImVec2& size,
+                                 int frame_padding,
+                                 const ImVec4& bg_col,
+                                 const ImVec4& tint_col)
 {
     if (!sprite || !sprite->getTexture())
         return false;

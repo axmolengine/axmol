@@ -62,7 +62,7 @@
 
 GUIDynamicCreateTests::GUIDynamicCreateTests()
 {
-#if AX_TARGET_PLATFORM != AX_PLATFORM_LINUX || defined(AX_ENABLE_VLC_MEDIA)
+#if (AX_TARGET_PLATFORM != AX_PLATFORM_LINUX && AX_TARGET_PLATFORM != AX_PLATFORM_WASM) || defined(AX_ENABLE_VLC_MEDIA)
     addTest("VideoPlayer Test", []() { return new VideoPlayerTests; });
 #endif
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS) && \

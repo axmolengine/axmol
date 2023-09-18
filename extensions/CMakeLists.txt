@@ -10,12 +10,7 @@ function(setup_ax_extension_config target_name)
     cmake_parse_arguments(opt "" "${options}" ""
                           "" ${ARGN} )
 
-  if(ANDROID)
-    target_link_libraries(${target_name} INTERFACE ${_AX_CORE_LIB})
-    target_include_directories(${target_name} PRIVATE $<TARGET_PROPERTY:${_AX_CORE_LIB},INTERFACE_INCLUDE_DIRECTORIES>)
-  else()
     target_link_libraries(${target_name} ${_AX_CORE_LIB})
-  endif()
 
   if(BUILD_SHARED_LIBS)
     target_compile_definitions(${target_name} PRIVATE _USREXDLL=1)
@@ -74,6 +69,11 @@ endif()
 
 if(AX_ENABLE_EXT_IMGUI)
   add_subdirectory(ImGui)
+  option(AX_ENABLE_EXT_INSPECTOR "Enable extension Inspector" ON)
+  if(AX_ENABLE_EXT_INSPECTOR)
+      add_subdirectory(Inspector)
+      target_include_directories(Inspector PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui)
+  endif()
 endif()
 
 if(AX_ENABLE_EXT_COCOSTUDIO)

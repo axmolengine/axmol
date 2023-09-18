@@ -1,7 +1,8 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
+    namespace "org.axmol.lib"
+    compileSdk PROP_COMPILE_SDK_VERSION.toInteger()
 
     defaultConfig {
         minSdkVersion PROP_MIN_SDK_VERSION
@@ -22,13 +23,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        aidl true
+    }
 }
 
 dependencies {
     implementation fileTree(dir: '../java/libs', include: ['*.jar'])
-    
+
     def media3_version = "1.0.2" // exoplayer-2.18.7
-    
+
     // refer to: https://developer.android.com/jetpack/androidx/releases/media3?hl=zh-cn#declaring_dependencies
     // For media playback using ExoPlayer
     api "androidx.media3:media3-exoplayer:$media3_version"

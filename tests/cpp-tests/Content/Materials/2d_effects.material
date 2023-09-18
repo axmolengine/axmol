@@ -7,8 +7,8 @@ material sample
 			shader
 			{
 				defines = THIS_IS_AN_EXAMPLE 1;TOMORROW_IS_HOLIDAY 2
-				vertexShader = Shaders/example_Simple.vsh
-				fragmentShader = Shaders/example_Blur.fsh
+				vertexShader = custom/example_Simple_vs
+				fragmentShader = custom/example_Blur_fs
 				// Uniforms
 				blurRadius = 3
 				sampleNum = 5
@@ -22,8 +22,8 @@ material sample
 		{
 			shader
 			{
-				vertexShader = Shaders/example_Simple.vsh
-				fragmentShader = Shaders/example_Outline.fsh
+				vertexShader = custom/example_Simple_vs
+				fragmentShader = custom/example_Outline_fs
 				u_outlineColor = 0.1, 0.2, 0.3
 				u_radius = 0.01
 				u_threshold = 1.75
@@ -35,8 +35,8 @@ material sample
 		{
 			shader
 			{
-				vertexShader = Shaders/example_Simple.vsh
-				fragmentShader = Shaders/example_Noisy.fsh
+				vertexShader = custom/example_Simple_vs
+				fragmentShader = custom/example_Noisy_fs
 				resolution = 100,100
 			}
 		}
@@ -48,8 +48,8 @@ material sample
 			shader
 			{
 				defines = 
-				vertexShader = Shaders/example_Simple.vsh
-				fragmentShader = Shaders/example_EdgeDetection.fsh
+				vertexShader = custom/example_Simple_vs
+				fragmentShader = custom/example_EdgeDetection_fs
 				resolution = 100, 100
 			}
 		}

@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <tuple>
 
-#include "cocos2d.h"
+#include "axmol.h"
 #include "ExtensionMacros.h"
 
 #include "imgui/imgui.h"
@@ -36,13 +36,17 @@ public:
     static void destroyInstance();
     static void setOnInit(const std::function<void(ImGuiPresenter*)>& callBack);
 
+    /// deprecated use enableDPIScale instead
+    float scaleAllByDPI(float userScale = 1.0f) { return enableDPIScale(userScale); }
+
     /// <summary>
     /// Scale ImGui with majorMoniter DPI scaling
     /// </summary>
     /// <param name="userScale">Usually is 1.0</param>
     /// <param name="fontFile">The full path of .ttc/.ttf file</param>
     /// <returns>The final contentZoomFactor = userScale * dpiScale</returns>
-    float scaleAllByDPI(float userScale);
+    float enableDPIScale(float userScale = 1.0f);
+
     float getContentZoomFactor() const { return _contentZoomFactor; }
 
     void setViewResolution(float width, float height);
@@ -126,18 +130,17 @@ private:
     void update();
     void endFrame();
 
-    static void deactiveImGuiViewports();
-
 private:
     static std::function<void(ImGuiPresenter*)> _onInit;
 
-    struct RenderPipline
+    struct ImGuiLoop
     {
         ImGuiEventTracker* tracker;
-        std::function<void()> frame;
+        std::function<void()> func;
+        bool removing = false;
     };
 
-    std::unordered_map<uint32_t, RenderPipline> _renderPiplines;
+    std::unordered_map<uint32_t, ImGuiLoop> _renderLoops;
 
     std::unordered_map<Ref*, int> usedCCRefIdMap;
     // cocos objects should be retained until next frame

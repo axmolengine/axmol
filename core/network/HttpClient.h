@@ -26,12 +26,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __CCHTTPCLIENT_H__
-#define __CCHTTPCLIENT_H__
+#pragma once
 
+#if !defined(__EMSCRIPTEN__)
 #include <thread>
 #include <condition_variable>
 #include <deque>
+
 #include "base/Scheduler.h"
 #include "network/HttpRequest.h"
 #include "network/HttpResponse.h"
@@ -117,7 +118,8 @@ public:
      *   c. other content type, please see:
      *      https://stackoverflow.com/questions/23714383/what-are-all-the-possible-values-for-http-content-type-header
      */
-    bool send(HttpRequest* request);
+    void send(HttpRequest* request);
+    void sendImmediate(HttpRequest* request){ this->send(request); }
 
     /**
      * Set the timeout value for connecting.
@@ -250,4 +252,8 @@ NS_AX_END
 // end group
 /// @}
 
-#endif  //__CCHTTPCLIENT_H__
+#else
+
+#include "network/HttpClient-wasm.h"
+
+#endif

@@ -6,6 +6,7 @@
     This software is distributed without any warranty.
     See <http://creativecommons.org/publicdomain/zero/1.0/>.
 */
+#include <stddef.h>
 #include "minimp3.h"
 
 /* flags for mp3dec_ex_open_* functions */
@@ -128,8 +129,10 @@ int mp3dec_ex_open_w(mp3dec_ex_t *dec, const wchar_t *file_name, int flags);
 #endif
 #endif /*MINIMP3_EXT_H*/
 
-#ifdef MINIMP3_IMPLEMENTATION
+#if defined(MINIMP3_IMPLEMENTATION) && !defined(_MINIMP3_EX_IMPLEMENTATION_GUARD)
+#define _MINIMP3_EX_IMPLEMENTATION_GUARD
 #include <limits.h>
+#include "minimp3.h"
 
 static void mp3dec_skip_id3v1(const uint8_t *buf, size_t *pbuf_size)
 {
@@ -1190,30 +1193,12 @@ error:
     CloseHandle(file);
     return MP3D_E_IOERROR;
 }
-
-#if defined(WINAPI_FAMILY)
-#if (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
-static int mp3dec_open_file(const char *file_name, mp3dec_map_info_t *map_info)
-{
-    if (!file_name)
-        return MP3D_E_PARAM;
-    HANDLE file = CreateFileA(file_name, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
-    if (INVALID_HANDLE_VALUE == file)
-        return MP3D_E_IOERROR;
-    return mp3dec_open_file_h(file, map_info);
-}
-
-static int mp3dec_open_file_w(const wchar_t *file_name, mp3dec_map_info_t *map_info)
-{
-    if (!file_name)
-        return MP3D_E_PARAM;
-    HANDLE file = CreateFileW(file_name, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
-    if (INVALID_HANDLE_VALUE == file)
-        return MP3D_E_IOERROR;
-    return mp3dec_open_file_h(file, map_info);
-}
+#if !defined(WINAPI_FAMILY) || WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP
+#define __mp3dec_create_file(path, omode, smode, cflags) CreateFileW(path, omode, smode, nullptr, cflags, 0, nullptr)
 #else
-static int mp3dec_open_file(const char* file_name, mp3dec_map_info_t* map_info)
+#define __mp3dec_create_file(path, omode, smode, cflags) CreateFile2(path, omode, smode, cflags, nullptr)
+#endif
+static int mp3dec_open_file(const char *file_name, mp3dec_map_info_t *map_info)
 {
     if (!file_name)
         return MP3D_E_PARAM;
@@ -1228,25 +1213,22 @@ static int mp3dec_open_file(const char* file_name, mp3dec_map_info_t* map_info)
         free(file_name_w);
         return MP3D_E_PARAM;
     }
-
-    HANDLE file = CreateFile2(file_name_w, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0);
+    HANDLE file = __mp3dec_create_file(file_name_w, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING);
     free(file_name_w);
     if (INVALID_HANDLE_VALUE == file)
         return MP3D_E_IOERROR;
     return mp3dec_open_file_h(file, map_info);
 }
 
-static int mp3dec_open_file_w(const wchar_t* file_name, mp3dec_map_info_t* map_info)
+static int mp3dec_open_file_w(const wchar_t *file_name, mp3dec_map_info_t *map_info)
 {
     if (!file_name)
         return MP3D_E_PARAM;
-    HANDLE file = CreateFile2(file_name, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, 0);
+    HANDLE file = __mp3dec_create_file(file_name, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING);
     if (INVALID_HANDLE_VALUE == file)
         return MP3D_E_IOERROR;
     return mp3dec_open_file_h(file, map_info);
 }
-#endif
-#endif
 #else
 #include <stdio.h>
 
@@ -1428,4 +1410,4 @@ void mp3dec_ex_close(mp3dec_ex_t *dec)
 }
 #endif
 
-#endif /*MINIMP3_IMPLEMENTATION*/
+#endif /* MINIMP3_IMPLEMENTATION && !_MINIMP3_EX_IMPLEMENTATION_GUARD */

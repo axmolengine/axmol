@@ -1,5 +1,16 @@
 include(CMakeParseArguments)
 
+find_program(PWSH_COMMAND NAMES pwsh powershell)
+
+if(NOT PWSH_COMMAND)
+    message("powershell not found.")
+    message(FATAL_ERROR "Please install it https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell, and run CMake again.")
+endif()
+
+if(NOT DEFINED WASM)
+    set(WASM FALSE CACHE BOOL "")
+endif()
+
 # copy resource `FILES` and `FOLDERS` to TARGET_FILE_DIR/Resources
 function(ax_sync_target_res ax_target)
     set(options SYM_LINK)
@@ -21,16 +32,24 @@ function(ax_sync_target_res ax_target)
     endif()
 
     # linking folders
-    foreach(cc_folder ${opt_FOLDERS})
-        #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
-        get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
-        add_custom_command(TARGET ${sync_target_name} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E echo "    Syncing ${cc_folder} to ${link_folder_abs}"
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
-                -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
-        )
-    endforeach()
+    if((NOT WASM AND NOT ANDROID) OR NOT opt_SYM_LINK)
+        foreach(cc_folder ${opt_FOLDERS})
+            #get_filename_component(link_folder ${opt_LINK_TO} DIRECTORY)
+            get_filename_component(link_folder_abs ${opt_LINK_TO} ABSOLUTE)
+            add_custom_command(TARGET ${sync_target_name} POST_BUILD
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                    -s ${cc_folder} -d ${link_folder_abs} -l ${opt_SYM_LINK}
+            )
+        endforeach()
+    endif()
 endfunction()
+
+if (NOT COMMAND set_xcode_property)
+    # This little macro lets you set any XCode specific property, from ios.toolchain.cmake
+    function(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
+        set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
+    endfunction(set_xcode_property)
+endif()
 
 ## create a virtual target SYNC_RESOURCE-${ax_target}
 ## Update resource files in Resources/ folder everytime when `Run/Debug` target.
@@ -58,19 +77,19 @@ function(ax_sync_lua_scripts ax_target src_dir dst_dir)
     endif()
     if(MSVC)
         add_custom_command(TARGET ${luacompile_target} POST_BUILD
-            COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
-                -s ${src_dir} -d ${dst_dir} -m $<CONFIG>
+            COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                -s ${src_dir} -d ${dst_dir}
         )
     else()
         if("${CMAKE_BUILD_TYPE}" STREQUAL "")
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
                 -s ${src_dir} -d ${dst_dir}
             )
         else()
             add_custom_command(TARGET ${luacompile_target} POST_BUILD
-                COMMAND ${PYTHON_COMMAND} ARGS ${_AX_ROOT}/cmake/scripts/sync_folder.py
-                    -s ${src_dir} -d ${dst_dir} -m ${CMAKE_BUILD_TYPE}
+                COMMAND ${PWSH_COMMAND} ARGS ${_AX_ROOT}/1k/fsync.ps1
+                    -s ${src_dir} -d ${dst_dir}
             )
         endif()
     endif()
@@ -188,7 +207,7 @@ function(ax_copy_target_dll ax_target)
     )
 
     # Copy windows angle binaries
-    if (WIN32 AND AX_USE_ANGLE)
+    if (WIN32 AND AX_GLES_PROFILE)
         add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
@@ -329,12 +348,12 @@ endfunction()
 # setup a ax application
 function(ax_setup_app_config app_name)
     if (WINRT)
-        target_include_directories(${APP_NAME} 
+        target_include_directories(${app_name} 
             PRIVATE "proj.winrt"
         )
     endif()
     if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-        target_link_options(${APP_NAME} PRIVATE "/STACK:4194304")
+        target_link_options(${app_name} PRIVATE "/STACK:4194304")
     endif()
     # put all output app into bin/${app_name}
     set_target_properties(${app_name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/${app_name}")
@@ -342,13 +361,13 @@ function(ax_setup_app_config app_name)
         # output macOS/iOS .app
         set_target_properties(${app_name} PROPERTIES MACOSX_BUNDLE 1)
         if(IOS AND (NOT ("${CMAKE_OSX_SYSROOT}" MATCHES ".*simulator.*")))
-            set_xcode_property(${APP_NAME} CODE_SIGNING_REQUIRED "YES")
-            set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "YES")
+            set_xcode_property(${app_name} CODE_SIGNING_REQUIRED "YES")
+            set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "YES")
         else()
             # By default, explicit disable codesign for macOS PC
-            set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "")
-            set_xcode_property(${APP_NAME} CODE_SIGNING_ALLOWED "NO")
-            set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "NO")
+            set_xcode_property(${app_name} CODE_SIGN_IDENTITY "")
+            set_xcode_property(${app_name} CODE_SIGNING_ALLOWED "NO")
+            set_xcode_property(${app_name} CODE_SIGN_IDENTITY "NO")
         endif()
     elseif(WINDOWS)
         # windows: visual studio/LLVM-clang default is Console app, but we need Windows app
@@ -385,13 +404,78 @@ function(ax_setup_app_config app_name)
         )
     endif()
 
-    if((WIN32 AND (NOT WINRT)) OR LINUX)
-        if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
-            get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
-            ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
+    # auto looking app shaders source dir and add to glslcc compile-list
+    get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
+    set(app_shaders_dir "${_APP_SOURCE_DIR}/Source/shaders")
+
+    ax_find_shaders(${app_shaders_dir} app_shaders RECURSE)
+    if (app_shaders)
+        list(LENGTH app_shaders app_shaders_count)
+        message(STATUS "${app_shaders_count} shader sources found in ${app_shaders_dir}")
+        # compile app shader to ${CMAKE_BINARY_DIR}/runtime/axslc/custom/
+        ax_target_compile_shaders(${app_name} FILES ${app_shaders} CUSTOM)
+        source_group("Source Files/Source/shaders" FILES ${app_shaders}) 
+    else()
+        message(STATUS "No shader found in ${app_shaders_dir}")
+    endif()
+
+    if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
+        get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
+        if ((WIN32 AND (NOT WINRT)) OR LINUX)
+            ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
+        elseif(APPLE)
+            # once cmake-3.28.0 released, uncomment follow line instead above 2 lines
+            set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES_PATH ${GLSLCC_OUT_DIR})
+        elseif(WINRT OR WASM)
+            set(app_all_shaders)
+            list(APPEND app_all_shaders ${ax_builtin_shaders})
+            list(APPEND app_all_shaders ${app_shaders})
+            if (WINRT)
+                ax_target_embed_compiled_shaders(${app_name} ${rt_output} FILES ${app_all_shaders})
+            else()
+                # --preload-file 
+                # refer to: https://emscripten.org/docs/porting/files/packaging_files.html
+                target_link_options(${app_name} PRIVATE "--preload-file" ${GLSLCC_OUT_DIR}@axslc/)
+            endif()
         endif()
     endif()
 endfunction()
+
+set(AX_WASM_SHELL_FILE "${_AX_ROOT}/core/platform/wasm/shell_minimal.html" CACHE STRING "The path of wasm shell file")
+
+option(AX_WASM_ENABLE_DEVTOOLS "Enable wasm devtools" ON)
+
+set(_AX_WASM_EXPORTS "_main")
+if(AX_WASM_ENABLE_DEVTOOLS)
+    set(_AX_WASM_EXPORTS "${_AX_WASM_EXPORTS},_axmol_director_pause,_axmol_director_resume,_axmol_director_step")
+endif()
+set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
+
+# stupid & pitfall: function not emcc not output .html
+macro (ax_setup_wasm_app_config app_name)
+    # setup wasm target
+    if(WASM)
+        message(STATUS "#### AX_WASM_EXPORTS=${AX_WASM_EXPORTS}")
+        get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
+        set(CMAKE_EXECUTABLE_SUFFIX ".html")
+        target_link_options(${app_name} PRIVATE
+                            "-sEXPORTED_FUNCTIONS=[${AX_WASM_EXPORTS}]"
+                            "-sEXPORTED_RUNTIME_METHODS=[ccall,cwrap]"
+                            )
+        set(EMSCRIPTEN_LINK_FLAGS "-lidbfs.js -s MIN_WEBGL_VERSION=2 -s MAX_WEBGL_VERSION=2 -s STACK_SIZE=4mb -s INITIAL_MEMORY=512MB --shell-file ${AX_WASM_SHELL_FILE} --use-preload-cache")
+        # Disable wasm, generate js build?
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s WASM=0")
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -s SEPARATE_DWARF_URL=https://xxx:8080/axmolwasm/axmolwasm/build/HelloLua.debug.wasm")
+        # string(APPEND EMSCRIPTEN_LINK_FLAGS " -gseparate-dwarf=HelloLua.debug.wasm")
+
+        set(_APP_RES_FOLDER "${_APP_SOURCE_DIR}/Content")
+        foreach(FOLDER IN LISTS _APP_RES_FOLDER)
+            string(APPEND EMSCRIPTEN_LINK_FLAGS " --preload-file ${FOLDER}/@/")
+        endforeach()
+        
+        set_target_properties(${app_name} PROPERTIES LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS}")
+    endif()
+endmacro()
 
 # if cc_variable not set, then set it cc_value
 macro(ax_set_default_value cc_variable cc_value)
@@ -496,11 +580,6 @@ macro(ax_config_target_xcode_property ax_target)
         set_xcode_property(${real_target} ONLY_ACTIVE_ARCH "YES")
     endif()
 endmacro()
-
-# This little macro lets you set any XCode specific property, from ios.toolchain.cmake
-function(set_xcode_property TARGET XCODE_PROPERTY XCODE_VALUE)
-    set_property(TARGET ${TARGET} PROPERTY XCODE_ATTRIBUTE_${XCODE_PROPERTY} ${XCODE_VALUE})
-endfunction(set_xcode_property)
 
 # works same as find_package, but do additional care to properly find
 macro(ax_find_package pkg_name pkg_prefix)

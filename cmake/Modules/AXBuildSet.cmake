@@ -17,18 +17,26 @@ cmake_policy(SET CMP0072 NEW)
 set(ENGINE_BINARY_PATH ${PROJECT_BINARY_DIR}/engine)
 
 if(CMAKE_TOOLCHAIN_FILE)
-    message(STATUS "using toolchain file:" ${CMAKE_TOOLCHAIN_FILE})
+    message(STATUS "Using toolchain file:" ${CMAKE_TOOLCHAIN_FILE})
 endif()
-
-find_program(PYTHON_COMMAND NAMES python3 python2 python)
-find_program(_AX_COMMAND NAME axmol
-    PATHS ${_AX_ROOT}/tools/console/bin $ENV{AX_CONSOLE_ROOT})
 
 # the default behavior of build module
 option(AX_ENABLE_EXT_LUA "Build lua libraries" ON)
 
 # hold the extensions list to auto link to app
 set(_AX_EXTENSION_LIBS "" CACHE INTERNAL "extensions for auto link to target application")
+
+# configure android GLSLCC compile output, this is the first include cmake module
+if (ANDROID)
+    file(TO_NATIVE_PATH "${PROJECT_SOURCE_DIR}/proj.android/build/runtime/axslc" _GLSLCC_OUT_DIR)
+    set(GLSLCC_OUT_DIR "${_GLSLCC_OUT_DIR}" CACHE STRING "" FORCE)
+    message(AUTHOR_WARNING "Set GLSLCC_OUT_DIR to ${GLSLCC_OUT_DIR} for android")
+endif()
+
+# import minimal AXGLSLCC.cmake for shader compiler support
+# the function: ax_target_compile_shaders avaiable from it
+set(GLSLCC_FIND_PROG_ROOT "${_AX_ROOT}/tools/external/glslcc")
+include(AXGLSLCC)
 
 # include helper functions
 include(AXBuildHelpers)
@@ -55,25 +63,4 @@ message(STATUS "CMAKE_MODULE_PATH:" ${CMAKE_MODULE_PATH})
 # delete binary dir if you hope a full clean re-build
 message(STATUS "PROJECT_BINARY_DIR:" ${PROJECT_BINARY_DIR})
 message(STATUS "ENGINE_BINARY_PATH:" ${ENGINE_BINARY_PATH})
-message(STATUS "PYTHON_PATH:"  ${PYTHON_COMMAND})
-message(STATUS "_AX_COMMAND_PATH:"  ${_AX_COMMAND})
 message(STATUS "ARCH_ALIAS:" ${ARCH_ALIAS})
-
-if(_AX_COMMAND)
-    get_filename_component(ax_console_dir ${_AX_COMMAND} DIRECTORY)
-    set(_AX_LUAJIT_ROOT ${ax_console_dir}/../plugins/plugin_luacompile/bin)
-    message(STATUS "_AX_LUAJIT_ROOT:" ${_AX_LUAJIT_ROOT})
-    if("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Windows")
-        find_program(LUAJIT32_COMMAND NAMES luajit-win32 PATHS ${_AX_LUAJIT_ROOT}/32bit NO_SYSTEM_ENVIRONMENT_PATH)
-        find_program(LUAJIT64_COMMAND NAMES luajit-win32 PATHS ${_AX_LUAJIT_ROOT}/64bit NO_SYSTEM_ENVIRONMENT_PATH)
-    elseif("${CMAKE_HOST_SYSTEM_NAME}" STREQUAL "Linux")
-        find_program(LUAJIT32_COMMAND NAMES luajit-linux PATHS ${_AX_LUAJIT_ROOT}/32bit NO_SYSTEM_ENVIRONMENT_PATH)
-        find_program(LUAJIT64_COMMAND NAMES luajit-linux PATHS ${_AX_LUAJIT_ROOT}/64bit NO_SYSTEM_ENVIRONMENT_PATH)
-    endif()
-endif()
-
-
-if(WINDOWS OR LINUX)
-    message(STATUS "LUAJIT32_COMMAND:" ${LUAJIT32_COMMAND})
-    message(STATUS "LUAJIT64_COMMAND:" ${LUAJIT64_COMMAND})
-endif()

@@ -44,11 +44,12 @@ public:
     RootTests()
     {
 #if __has_include("EffekseerForCocos2d-x.h")
+#pragma message("The optional extension Effekseer is enabled.")
         addTest("Effekseer", []() { return new EffekseerTests(); });
 #endif
 
 //        addTest("Node: Scene3D", [](){return new Scene3DTests(); });
-#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
         addTest("ImGui", []() { return new ImGuiTests(); });
 #endif
         addTest("Texture2D", []() { return new Texture2DTests(); });
@@ -59,18 +60,20 @@ public:
         addTest("Audio - NewAudioEngine", []() { return new AudioEngineTests(); });
 
         addTest("Box2D - Basic", []() { return new Box2DTests(); });
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         addTest("Box2D - TestBed", []() { return new Box2DTestBedTests(); });
 #endif
         addTest("Chipmunk2D - Basic", []() { return new ChipmunkTests(); });
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         addTest("Chipmunk2D - TestBed", []() { return new ChipmunkTestBedTests(); });
 #endif
         addTest("Bugs", []() { return new BugsTests(); });
         addTest("Click and Move", []() { return new ClickAndMoveTest(); });
         addTest("Configuration", []() { return new ConfigurationTests(); });
         addTest("Console", []() { return new ConsoleTests(); });
+#if !defined(__EMSCRIPTEN__)
         addTest("Curl", []() { return new CurlTests(); });
+#endif
         addTest("Current Language", []() { return new CurrentLanguageTests(); });
         addTest("Network Test", []() { return new NetworkTests(); });
         addTest("EventDispatcher", []() { return new EventDispatcherTests(); });
@@ -238,9 +241,7 @@ void TestController::traverseTestList(TestList* testList)
     {
         _stopAutoTest = true;
         if (std::getenv("AXMOL_START_AUTOTEST"))
-        {
-            exit(0);
-        }
+            utils::killCurrentProcess();
     }
     else
     {

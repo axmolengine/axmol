@@ -31,7 +31,6 @@ THE SOFTWARE.
 #include "base/UTF8.h"
 #include "freetype/ftmodapi.h"
 #include "platform/FileUtils.h"
-#include "platform/FileStream.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -42,10 +41,11 @@ THE SOFTWARE.
 NS_AX_BEGIN
 
 FT_Library FontFreeType::_FTlibrary;
-bool FontFreeType::_FTInitialized           = false;
-bool FontFreeType::_streamParsingEnabled    = true;
-bool FontFreeType::_doNativeBytecodeHinting = true;
-const int FontFreeType::DistanceMapSpread   = 6;
+bool FontFreeType::_FTInitialized             = false;
+bool FontFreeType::_streamParsingEnabled      = true;
+bool FontFreeType::_doNativeBytecodeHinting   = true;
+bool FontFreeType::_shareDistanceFieldEnabled = false;
+const int FontFreeType::DistanceMapSpread     = 6;
 
 // By default, will render square when character glyph missing in current font
 char32_t FontFreeType::_mssingGlyphCharacter = 0;
@@ -72,25 +72,25 @@ static unsigned long ft_stream_read_callback(FT_Stream stream,
                                              unsigned char* buf,
                                              unsigned long size)
 {
-    auto fd = (FileStream*)stream->descriptor.pointer;
-    if (!fd)
+    auto fstm = (IFileStream*)stream->descriptor.pointer;
+    if (!fstm)
         return 1;
     if (!size && offset >= stream->size)
         return 1;
 
     if (stream->pos != offset)
-        fd->seek(offset, SEEK_SET);
+        fstm->seek(offset, SEEK_SET);
 
     if (buf)
-        return fd->read(buf, static_cast<unsigned int>(size));
+        return fstm->read(buf, static_cast<unsigned int>(size));
 
     return 0;
 }
 
 static void ft_stream_close_callback(FT_Stream stream)
 {
-    const auto* fd = (FileStream*)stream->descriptor.pointer;
-    delete fd;
+    const auto* fstrm = (IFileStream*)stream->descriptor.pointer;
+    delete fstrm;
     stream->size               = 0;
     stream->descriptor.pointer = nullptr;
 }
@@ -206,7 +206,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
         if (fullPath.empty())
             return false;
 
-        auto fs = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+        auto fs = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
         if (!fs)
         {
             return false;
@@ -256,7 +256,7 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
         // set the requested font size
         int dpi            = 72;
         int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
-        if (FT_Set_Char_Size(face, fontSizePoints, fontSizePoints, dpi, dpi))
+        if (FT_Set_Char_Size(face, 0, fontSizePoints, dpi, dpi))
             break;
 
         // store the face globally
@@ -399,7 +399,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
             if (charUTF8 == "\n")
                 charUTF8 = "\\n";
             ax::log("The font face: %s doesn't contains char: <%s>", _fontFace->charmap->face->family_name,
-                         charUTF8.c_str());
+                    charUTF8.c_str());
 
             if (_mssingGlyphCharacter != 0)
             {
@@ -413,6 +413,7 @@ unsigned char* FontFreeType::getGlyphBitmap(char32_t charCode,
 #endif
         if (FT_Load_Glyph(_fontFace, glyphIndex, FT_LOAD_RENDER | FT_LOAD_NO_AUTOHINT))
             break;
+
         if (_distanceFieldEnabled && _fontFace->glyph->bitmap.buffer)
         {
             // Require freetype version > 2.11.0, because freetype 2.11.0 sdf has memory access bug, see:
@@ -572,7 +573,7 @@ void FontFreeType::renderCharAt(unsigned char* dest,
                                 int bitmapHeight)
 {
     const int iX = posX;
-    int iY = posY;
+    int iY       = posY;
 
     if (_outlineSize > 0)
     {

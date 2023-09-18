@@ -42,7 +42,12 @@
 #    include <sys/types.h>
 #    include <sys/stat.h>
 #    include <dirent.h>
+#else
+#    include "base/filesystem.h"
 #endif
+
+#include "yasio/string_view.hpp"
+
 NS_AX_BEGIN
 
 PUMaterial::PUMaterial()
@@ -132,13 +137,12 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 {
     bool state = false;
 #if defined(_WIN32)
-    std::string seg("/");
+    std::string_view seg("/");
     std::string fullPath{fileFolder};
     fullPath += seg;
-    fullPath += std::string("*.material");
+    fullPath += "*.material"sv;
     WIN32_FIND_DATAA data;
-    HANDLE handle =
-        FindFirstFileExA(fullPath.c_str(), FindExInfoStandard, &data, FindExSearchNameMatch, NULL, 0);
+    HANDLE handle = FindFirstFileExA(fullPath.c_str(), FindExInfoStandard, &data, FindExSearchNameMatch, NULL, 0);
     if (handle != INVALID_HANDLE_VALUE)
     {
         state = true;
@@ -148,11 +152,11 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
             fullPath += seg;
             fullPath += data.cFileName;
             loadMaterials(fullPath);
-           
+
         } while (FindNextFileA(handle, &data));
         FindClose(handle);
     }
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID /* || AX_TARGET_PLATFORM == AX_PLATFORM_LINUX*/)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
     std::string::size_type pos    = fileFolder.find("assets/");
     std::string_view relativePath = fileFolder;
     if (pos != std::string::npos)
@@ -176,7 +180,7 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
 
 #elif (AX_TARGET_PLATFORM == AX_PLATFORM_IOS || AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
     ftw(fileFolder.data(), iterPath, 500);
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX || AX_TARGET_PLATFORM == AX_PLATFORM_TIZEN)
+#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
     DIR* d;               // dir handle
     struct dirent* file;  // readdir
     struct stat statbuf;
@@ -204,7 +208,20 @@ bool PUMaterialCache::loadMaterialsFromSearchPaths(std::string_view fileFolder)
     }
     closedir(d);
 #else
-    AXASSERT(0, "no implement for this platform");
+    // use c++17 filesystem
+    for (const auto& entry : stdfs::recursive_directory_iterator(fileFolder))
+    {
+#    if !defined(_WIN32)
+        if (entry.is_regular_file() && cxx20::ends_with(entry.path().native(), ".material"sv))
+#    else
+        if (entry.is_regular_file() && cxx20::ends_with(entry.path().native(), L".material"sv))
+#    endif
+        {
+            auto pathU8Str = entry.path().generic_u8string();
+            auto& pathStr  = *reinterpret_cast<std::string*>(&pathU8Str);
+            loadMaterials(pathStr);
+        }
+    }
 #endif
 
     return state;

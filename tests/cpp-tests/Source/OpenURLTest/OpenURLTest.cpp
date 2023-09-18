@@ -42,7 +42,7 @@ OpenURLTest::OpenURLTest()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
     // create a label to display the tip string
-    _label = Label::createWithTTF("Touch the screen to open\nthe cocos2d-x home page", "fonts/arial.ttf", 22);
+    _label = Label::createWithTTF("Touch the screen to open\nthe axmol home page", "fonts/arial.ttf", 22);
     _label->setPosition(VisibleRect::center());
     addChild(_label, 0);
 

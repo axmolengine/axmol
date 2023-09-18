@@ -43,7 +43,10 @@ public:
     static GLViewImpl* create(std::string_view viewName);
 
     /** creates a GLViewImpl with a title name, a rect and the zoom factor */
-    static GLViewImpl* createWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor = 1.0f);
+    static GLViewImpl* createWithRect(std::string_view viewName,
+                                      const Rect& rect,
+                                      float frameZoomFactor = 1.0f,
+                                      bool resizable        = false);
 
     /** creates a GLViewImpl with a name in fullscreen mode */
     static GLViewImpl* createWithFullScreen(std::string_view viewName);
@@ -62,7 +65,7 @@ public:
     /** returns whether or not the view is in Retina Display mode */
     virtual bool isRetinaDisplay() const override { return getContentScaleFactor() == 2.0; }
 
-    /** returns the objective-c CCEAGLView instance */
+    /** returns the objective-c EAGLView instance */
     virtual void* getEAGLView() const override { return _eaglView; }
 
     // overrides
@@ -80,10 +83,10 @@ protected:
     virtual ~GLViewImpl();
 
     bool initWithEAGLView(void* eaGLView);
-    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor);
+    bool initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor, bool resizable = false);
     bool initWithFullScreen(std::string_view viewName);
 
-    // the objective-c CCEAGLView instance
+    // the objective-c EAGLView instance
     void* _eaglView;
 };
 

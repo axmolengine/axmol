@@ -103,6 +103,10 @@ elseif(LINUX)
         set(_AX_UI_SPECIFIC_HEADER ui/UIMediaPlayer.h ${_AX_UI_SPECIFIC_HEADER})
         set(_AX_UI_SPECIFIC_SRC ui/UIMediaPlayer.cpp ${_AX_UI_SPECIFIC_SRC})
     endif()
+elseif(EMSCRIPTEN)
+    set(_AX_UI_SPECIFIC_SRC
+        ui/UIEditBox/UIEditBoxImpl-stub.cpp
+    )
 elseif(ANDROID)
     set(_AX_UI_SPECIFIC_HEADER
         ui/UIWebView/UIWebView.h

@@ -437,7 +437,7 @@ namespace {
 bool SetRTPriorityPthread(int prio [[maybe_unused]])
 {
     int err{ENOTSUP};
-#if defined(HAVE_PTHREAD_SETSCHEDPARAM) && !defined(__OpenBSD__)
+#if defined(HAVE_PTHREAD_SETSCHEDPARAM) && !defined(__OpenBSD__) && !defined(__EMSCRIPTEN__)
     /* Get the min and max priority for SCHED_RR. Limit the max priority to
      * half, for now, to ensure the thread can't take the highest priority and
      * go rogue.

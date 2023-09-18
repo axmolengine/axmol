@@ -2,7 +2,7 @@
 
 # Axmol Engine
 
-## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A radical fork of Cocos2d-x-4.0)
+## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A fork of Cocos2d-x-4.0)
 
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
@@ -16,6 +16,7 @@
 ![stars](https://img.shields.io/github/stars/axmolengine/axmol?style=plastic)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/axmolengine/axmol?style=plastic)  
 
+
 **[简体中文](README_CN.md)**
 
 ## Supported Platforms
@@ -28,6 +29,20 @@
 | tvOS |[![tvOS Build Status](https://github.com/axmolengine/axmol/workflows/tvos/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Atvos)|
 | Linux |[![Linux Build Status](https://github.com/axmolengine/axmol/workflows/linux/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Alinux)|
 | macOS |[![macOS Build Status](https://github.com/axmolengine/axmol/workflows/osx/badge.svg)](https://github.com/axmolengine/axmol/actions?query=workflow%3Aosx)|
+| WASM(experimental) |[![WASM Build Status](https://ci.appveyor.com/api/projects/status/4slq965fwhbaidnc?svg=true&passingText=wasm%20-%20passing)](https://ci.appveyor.com/project/halx99/axmol)|
+
+## Building
+
+View the [Dev setup instructions](docs/DevSetup.md).
+
+## Renderer Backends
+
+- Metal for macOS and iOS
+- OpenGL 3.3+ for Linux, macOS and Win32
+- OpenGL ES 2.0+ for Android
+- OpenGL ES 3.0+ for iOS
+- ANGLE GLES 3.0+ for Win32 and UWP
+- WebGL 2.0(OpenGL ES 3.0): WASM (experimental)
 
 ## New MediaPlayer
 
@@ -44,12 +59,9 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which
 | Android               | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | ExoPlayer2         |
 | Linux                 | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | libVLC             |
 
-## Building
-
-View the [Dev setup instructions](docs/DevSetup.md).
-
 ## Highlighted Features
 
+- WebAssembly support(experimental) by @nowasm
 - Windows UWP support, refer to: https://github.com/axmolengine/axmol/pull/1108
 - Add apple M1, android x64 support, contributed by @pietpukkel
 - Improve windows workflow, support linking with engine prebuilt libs, read [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
@@ -75,7 +87,7 @@ View the [Dev setup instructions](docs/DevSetup.md).
 - Use a modern GL loader ```Glad```
 - Google [angle](https://github.com/google/angle) renderer backend support
 - C++ 17/20
-- IOS/TVOS SDK 9.0 as minimal deployment
+- IOS/TVOS SDK 11.0 as minimal deployment
 - Use fast pugixml
 - Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
 - Use SAX parser for all plist files
@@ -88,16 +100,18 @@ View the [Dev setup instructions](docs/DevSetup.md).
 - Supported 3D physics engines:
   - Bullet Physics SDK
 
-[Read Full changes since cocos2d-x-4.0](CHANGELOG)
+[Read Full changes since cocos2d-x-4.0](CHANGELOG.md)
 
 Open [APPENDIX.md](APPENDIX.md) for additional information and see [Milestones](https://github.com/axmolengine/axmol/milestones) for planed features too.
 
 ## Reference links
 
-- [buildware](https://github.com/axmolengine/buildware), the axmol prebuilt build-bot
-- [Some interesting related projects based on axmol](https://github.com/axmolengine/axmol/discussions/694)
+- [build1k](https://github.com/axmolengine/build1k), the axmol prebuilt build-bot
+- [axmolengine/glslcc](https://github.com/axmolengine/glslcc), a fork of glslcc for axmol new shader workflow tool
+- [Interesting related](https://github.com/axmolengine/axmol/discussions/694)
 - [Axmols contributing guide](https://github.com/axmolengine/axmol/discussions/411)
 - [Official Cocos2d-x](https://github.com/cocos2d/cocos2d-x)
 
 ## The axmol Active Stats
+
 ![Alt](https://repobeats.axiom.co/api/embed/6fcb8168a3af91ba9e797a1f14a3c2edc42ac56a.svg "Repobeats analytics image")

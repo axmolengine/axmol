@@ -25,13 +25,13 @@ THE SOFTWARE.
 #import "base/IMEDispatcher.h"
 #import "base/Director.h"
 
-@interface CCInputView ()
+@interface TextInputView ()
 
 @property(nonatomic) NSString* myMarkedText;
 
 @end
 
-@implementation CCInputView
+@implementation TextInputView
 
 @synthesize myMarkedText;
 @synthesize hasText;

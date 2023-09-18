@@ -50,8 +50,6 @@ SOFTWARE.
 #include <mutex>
 #include <atomic>
 
-#include "yasio/config.hpp"
-
 namespace yasio
 {
 template <typename _Ty, bool delay = false>

@@ -27,6 +27,10 @@
 #include "testResource.h"
 #include "controller.h"
 
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
+#include "Inspector/Inspector.h"
+#endif
+
 USING_NS_AX;
 USING_NS_AX_EXT;
 
@@ -159,7 +163,7 @@ void TestList::runThisTest()
      */
 
     GLViewImpl* glView = (GLViewImpl*)Director::getInstance()->getOpenGLView();
-#if defined(AX_PLATFORM_PC)
+#if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
     glView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif
 
@@ -476,6 +480,18 @@ void TestCase::onEnter()
         _nextTestItem->setVisible(false);
         _restartTestItem->setVisible(false);
     }
+    
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
+    extension::Inspector::getInstance()->openForScene(this);
+#endif
+}
+
+void TestCase::onExit()
+{
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
+    extension::Inspector::getInstance()->close();
+#endif
+    Scene::onExit();
 }
 
 void TestCase::restartTestCallback(Ref* sender)

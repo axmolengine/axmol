@@ -46,10 +46,6 @@ THE SOFTWARE.
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    include "platform/desktop/GLViewImpl-desktop.h"
-#endif
-
 NS_AX_BEGIN
 
 Layer* Layer::create()

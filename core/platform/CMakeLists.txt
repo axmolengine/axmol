@@ -41,7 +41,7 @@ elseif(WINDOWS)
             platform/win32/FileUtils-win32.h
             platform/win32/StdC-win32.h
             platform/win32/PlatformDefine-win32.h
-            platform/desktop/GLViewImpl-desktop.h
+            platform/GLViewImpl.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
             platform/win32/StdC-win32.cpp
@@ -49,7 +49,7 @@ elseif(WINDOWS)
             platform/win32/Common-win32.cpp
             platform/win32/Application-win32.cpp
             platform/win32/Device-win32.cpp
-            platform/desktop/GLViewImpl-desktop.cpp
+            platform/GLViewImpl.cpp
             )
     else()
         file(GLOB _AX_PLATFORM_SPECIFIC_HEADER platform/winrt/*.h)
@@ -71,16 +71,16 @@ elseif(APPLE)
             platform/mac/StdC-mac.h
             platform/mac/PlatformDefine-mac.h
             platform/mac/Application-mac.h
-            platform/desktop/GLViewImpl-desktop.h
+            platform/GLViewImpl.h
             )
         set(_AX_PLATFORM_SPECIFIC_SRC
             ${_AX_PLATFORM_SPECIFIC_SRC}
             platform/mac/Application-mac.mm
             platform/mac/Common-mac.mm
             platform/mac/Device-mac.mm
-            platform/desktop/GLViewImpl-desktop.cpp
+            platform/GLViewImpl.cpp
             )
-        set_source_files_properties(platform/desktop/GLViewImpl-desktop.cpp PROPERTIES LANGUAGE OBJCXX)
+        set_source_files_properties(platform/GLViewImpl.cpp PROPERTIES LANGUAGE OBJCXX)
     elseif(IOS)
         set(_AX_PLATFORM_SPECIFIC_HEADER
             ${_AX_PLATFORM_SPECIFIC_HEADER}
@@ -104,18 +104,17 @@ elseif(APPLE)
             platform/ios/InputView-ios.mm
             )
 
-        if(NOT AX_USE_ANGLE)
+        if(AX_USE_GL)
             set(_AX_PLATFORM_SPECIFIC_HEADER
                 ${_AX_PLATFORM_SPECIFIC_HEADER}
-                platform/ios/ES2Renderer-ios.h
-                platform/ios/ES2Renderer-ios.h
+                platform/ios/ES3Renderer-ios.h
                 platform/ios/ESRenderer-ios.h
                 platform/ios/GL-ios.h
                 platform/ios/OpenGL_Internal-ios.h
             )
             set(_AX_PLATFORM_SPECIFIC_SRC
                 ${_AX_PLATFORM_SPECIFIC_SRC}
-                platform/ios/ES2Renderer-ios.m
+                platform/ios/ES3Renderer-ios.m
             )
         endif()
     endif()
@@ -136,15 +135,38 @@ elseif(LINUX)
         platform/linux/StdC-linux.h
         platform/linux/FileUtils-linux.h
         platform/linux/PlatformDefine-linux.h
-        platform/desktop/GLViewImpl-desktop.h
+        platform/GLViewImpl.h
         )
     set(_AX_PLATFORM_SPECIFIC_SRC
         platform/linux/FileUtils-linux.cpp
         platform/linux/Common-linux.cpp
         platform/linux/Application-linux.cpp
         platform/linux/Device-linux.cpp
-        platform/desktop/GLViewImpl-desktop.cpp
+        platform/GLViewImpl.cpp
         )
+elseif(EMSCRIPTEN)
+    include_directories(
+        PUBLIC "${_AX_ROOT}/thirdparty/angle/include"
+        PUBLIC "${_AX_ROOT}/core"
+    )
+    set(_AX_PLATFORM_SPECIFIC_HEADER
+        platform/wasm/Application-wasm.h
+        platform/wasm/GL-wasm.h
+        platform/wasm/StdC-wasm.h
+        platform/wasm/FileUtils-wasm.h
+        platform/wasm/PlatformDefine-wasm.h
+        platform/GLViewImpl.h # wasm can share GLviewImpl-desktop based on GLFW
+        )
+    set(_AX_PLATFORM_SPECIFIC_SRC
+        platform/wasm/FileUtils-wasm.cpp
+        platform/wasm/Common-wasm.cpp
+        platform/wasm/Application-wasm.cpp
+        platform/wasm/Device-wasm.cpp
+        platform/GLViewImpl.cpp
+        )
+    if (AX_WASM_ENABLE_DEVTOOLS)
+        list(APPEND _AX_PLATFORM_SPECIFIC_SRC platform/wasm/devtools-wasm.cpp)
+    endif()
 endif()
 
 set(_AX_PLATFORM_HEADER
@@ -162,8 +184,8 @@ set(_AX_PLATFORM_HEADER
     platform/PlatformMacros.h
     platform/SAXParser.h
     platform/StdC.h
+    platform/IFileStream.h
     platform/FileStream.h
-    platform/PosixFileStream.h
     )
 
 set(_AX_PLATFORM_SRC
@@ -173,5 +195,4 @@ set(_AX_PLATFORM_SRC
     platform/FileUtils.cpp
     platform/Image.cpp
     platform/FileStream.cpp
-    platform/PosixFileStream.cpp
     )

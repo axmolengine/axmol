@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <random>
 #include <cstdlib>
 
-#include "platform/PlatformMacros.h"
+#include "platform/PlatformConfig.h"
 
 /**
  * @addtogroup base
@@ -38,10 +38,33 @@ THE SOFTWARE.
  */
 NS_AX_BEGIN
 
+
+
 /**
  * @class RandomHelper
  * @brief A helper class for creating random number.
  */
+#ifdef EMSCRIPTEN
+#include <emscripten.h>
+
+class AX_DLL RandomHelper
+{
+public:
+    template <typename T>
+    static T random_real(T min, T max)
+    {
+        T randomValue = static_cast<T>(emscripten_random()) / static_cast<T>(0xFFFFFFFF);
+        return min + randomValue * (max - min);
+    }
+
+    template <typename T>
+    static T random_int(T min, T max)
+    {
+        T randomValue = static_cast<T>(emscripten_random()) % (max - min + 1);
+        return min + randomValue;
+    }
+};
+#else
 class AX_DLL RandomHelper
 {
 public:
@@ -64,6 +87,7 @@ public:
 private:
     static std::mt19937& getEngine();
 };
+#endif
 
 /**
  * Returns a random value between `min` and `max`.

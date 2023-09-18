@@ -22,6 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#if !defined(__EMSCRIPTEN__)
+
 #include "platform/PlatformConfig.h"
 #include "CurlTest.h"
 #include "stdio.h"
@@ -125,3 +127,5 @@ CurlTest::~CurlTest()
 {
     _label->release();
 }
+
+#endif

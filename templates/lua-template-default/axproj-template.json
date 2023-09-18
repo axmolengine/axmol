@@ -1,113 +1,103 @@
 {
-    "do_default": {
-        "exclude_from_template": [
-            "runtime/config.json",
-            "runtime/version.json"
-        ],
-        "project_replace_project_name": {
-            "src_project_name": "HelloLua",
+    "do_default": [
+        {
+            "action": "rep",
+            "from": "HelloLua",
+            "to": "${projectName}",
             "files": [
                 "config.json",
-                ".project"
-            ]
-        },
-        "append_dir": [
-            {
-                "from": "templates/lua-template-default/Content",
-                "to": "Content",
-                "exclude": []
-            },
-            {
-                "from": "extensions/scripting/lua-bindings/script",
-                "to": "Content/src/axmol",
-                "exclude": []
-            }
-        ]
-    },
-    "do_add_native_support": {
-        "append_dir": [
-            {
-                "from": "extensions/scripting/lua-bindings/manual/lua_module_register.h",
-                "to": "Source/"
-            }
-        ],
-        "project_rename": {
-            "src_project_name": "HelloLua",
-            "files": [
-                "PROJECT_NAME.xsxproj"
-            ]
-        },
-        "project_replace_project_name": {
-            "src_project_name": "HelloLua",
-            "files": [
-                "config.json",
-                ".project",
+                "HelloLua.xsxproj",
                 "proj.win32/main.cpp",
                 "proj.android/settings.gradle",
                 "proj.android/app/res/values/strings.xml",
                 "proj.ios_mac/ios/main.m",
                 "proj.ios_mac/ios/Prefix.pch",
-                "CMakeLists.txt"
-            ]
-        },
-        "project_replace_package_name": {
-            "src_package_name": "org.axmol.hellolua",
-            "files": [
-                "proj.android/app/build.gradle",
-                "proj.android/app/AndroidManifest.xml"]
-        },
-        "project_replace_so_name": {
-            "src_so_name": "HelloLua",
-            "files": [
+                "CMakeLists.txt",
                 "proj.android/app/AndroidManifest.xml"
             ]
         },
-        "project_replace_mac_bundleid": {
-            "src_bundle_id": "org.axmol.hellolua",
-            "files": [
-                "proj.ios_mac/mac/Info.plist"
-            ]
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/extensions/scripting/lua-bindings/script",
+            "to": "${projectDir}/Content/src/axmol",
+            "is_dir": true
         },
-        "project_replace_ios_bundleid": {
-            "src_bundle_id": "org.axmol.hellolua",
+        {
+            "action": "cp",
+            "from": "$env:AX_ROOT/extensions/scripting/lua-bindings/manual/lua_module_register.h",
+            "to": "${projectDir}/Source/"
+        },
+        {
+            "action": "rep",
+            "from": "org.axmol.hellolua",
+            "to": "${packageName}",
             "files": [
+                "proj.android/app/build.gradle",
+                "proj.android/app/AndroidManifest.xml",
+                "proj.ios_mac/mac/Info.plist",
                 "proj.ios_mac/ios/targets/ios/Info.plist",
                 "proj.ios_mac/ios/targets/tvos/Info.plist"
             ]
+        },
+        {
+            "action": "ren",
+            "from": "${projectDir}/HelloLua.xsxproj",
+            "to": "${projectDir}/${projectName}.xsxproj"
+        },
+        {
+           "action": "cp",
+           "from": "$env:AX_ROOT/templates/build.bat",
+           "to": "${projectDir}/"
+        },
+        {
+           "action": "cp",
+           "from": "$env:AX_ROOT/templates/run.bat.in",
+           "to": "${projectDir}/"
+        },
+        {
+           "action": "del",
+           "files": [
+              "axproj-template.json",
+              "axproj2-template.json"
+           ]
         }
-    },
-    "change_orientation": {
-        "modify_files": [
-            {
-                "file_path": "config.json",
-                "pattern": "\\\"isLandscape\\\"\\s*:.*,",
-                "replace_string": "\"isLandscape\": false,"
-            },
-            {
-                "file_path": "Content/src/config.lua",
-                "pattern": "width\\s*=.*,",
-                "replace_string": "width = 640,"
-            },
-            {
-                "file_path": "Content/src/config.lua",
-                "pattern": "height\\s*=.*,",
-                "replace_string": "height = 960,"
-            },
-            {
-                "file_path": "proj.ios_mac/ios/targets/ios/Info.plist",
-                "pattern": "UIInterfaceOrientationLandscapeRight",
-                "replace_string": "UIInterfaceOrientationPortrait"
-            },
-            {
-                "file_path": "proj.ios_mac/ios/targets/ios/Info.plist",
-                "pattern": "UIInterfaceOrientationLandscapeLeft",
-                "replace_string": "UIInterfaceOrientationPortraitUpsideDown"
-            },
-            {
-                "file_path": "proj.android/app/AndroidManifest.xml",
-                "pattern": "android:screenOrientation=\\\".*\\\"",
-                "replace_string": "android:screenOrientation=\"portrait\""
-            }
-        ]
-    }
+    ],
+    "do_portrait": [
+        {
+            "action": "rep",
+            "pattern": "\\\"isLandscape\\\"\\s*:.*,",
+            "to": "`\"isLandscape`\": false,",
+            "files": ["config.json"]
+        },
+        {
+            "action": "rep",
+            "pattern": "width\\s*=.*,",
+            "to": "width = 640,",
+            "files": ["Content/src/config.lua"]
+        },
+        {
+            "action": "rep",
+            "pattern": "height\\s*=.*,",
+            "to": "height = 960,",
+            "files": ["Content/src/config.lua"]
+        },
+        {
+            "action": "rep",
+            "from": "UIInterfaceOrientationLandscapeRight",
+            "to": "UIInterfaceOrientationPortrait",
+            "files": ["proj.ios_mac/ios/targets/ios/Info.plist"]
+        },
+        {
+            "action": "rep",
+            "from": "UIInterfaceOrientationLandscapeLeft",
+            "to": "UIInterfaceOrientationPortraitUpsideDown",
+            "files": ["proj.ios_mac/ios/targets/ios/Info.plist"]
+        },
+        {
+            "action": "rep",
+            "pattern": "android:screenOrientation=\\\".*\\\"",
+            "to": "android:screenOrientation=`\"portrait`\"",
+            "files": ["proj.android/app/AndroidManifest.xml"]
+        }
+    ]
 }

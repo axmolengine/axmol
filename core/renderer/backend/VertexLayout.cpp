@@ -28,14 +28,17 @@
 
 NS_AX_BACKEND_BEGIN
 
-void VertexLayout::setAttribute(std::string_view name,
+void VertexLayout::setAttrib(std::string_view name,
                                 std::size_t index,
                                 VertexFormat format,
                                 std::size_t offset,
                                 bool needToBeNormallized)
 {
     if (index == -1)
+    {
+        AXLOGWARN("The vertex attribute '%s' vfmt=%d not exist, unused/optimized?", name.data(), static_cast<int>(format));
         return;
+    }
 
     // FIXME 2021/12/25 TODO: store name key is enough
     hlookup::set_item(

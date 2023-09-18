@@ -63,7 +63,7 @@ public:
         bool needToBeNormallized = false;
     };
 
-    VertexLayout() = default;
+    VertexLayout()                    = default;
     VertexLayout(const VertexLayout&) = default;
 
     /**
@@ -75,11 +75,20 @@ public:
      * @param needToBeNormallized Specifies whether fixed-point data values should be normalized (true) or converted
      * directly as fixed-point values (false) when they are accessed.
      */
-    void setAttribute(std::string_view name,
+    void setAttrib(std::string_view name,
+                   std::size_t index,
+                   VertexFormat format,
+                   std::size_t offset,
+                   bool needNormalized);
+
+    AX_DEPRECATED_ATTRIBUTE void setAttribute(std::string_view name,
                       std::size_t index,
                       VertexFormat format,
                       std::size_t offset,
-                      bool needToBeNormallized);
+                      bool needNormalized)
+    {
+        setAttrib(name, index, format, offset, needNormalized);
+    }
 
     /**
      * Set stride of vertices.

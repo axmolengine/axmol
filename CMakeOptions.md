@@ -10,13 +10,6 @@
   - AX_USE_ALSOFT: whether use openal-soft for all platforms
     - Apple platform: Use openal-soft instead system deprecated: `OpenAL.framework`
     - Other platforms: Always use openal-soft even this option not enabled
-  - AX_USE_ANGLE: whether use compat gl as renderer backend, default: `FALSE`
-    - windows: whether use angleproject as GLES2 backend
-    - apple: whether use GLES instead Metal backend
-  - AX_USE_COMPAT_GL: deprecated, use AX_USE_ANGLE instead
-  - AX_USE_GLAD: 
-    - Android: use glad load for GLES API loads, default `FALSE`
-    - Other platforms: Always use glad even this option not enabled
   - AX_USE_LUAJIT: whether use luajit, default: `FALSE`, use plainlua
 - AX_ENABLE_EXT_XXX for extensions
   - AX_ENABLE_EXT_GUI: the traditional GUI extension, default: `TRUE`
@@ -28,11 +21,24 @@
   - AX_ENABLE_EXT_COCOSTUDIO: the cocosstudio extension for load .csb: `TRUE`
   - AX_ENABLE_EXT_FAIRYGUI: the fairygui extension, default: `TRUE`
   - AX_ENABLE_EXT_IMGUI: the imgui extension, support macos,win,linux,android, default: `TRUE` 
+  - AX_ENABLE_EXT_INSPECTOR: the imgui inspector extension, support macos,win,linux,android, default: `TRUE` 
   - AX_ENABLE_EXT_LIVE2D: the live2d extension, default: `FALSE` 
   - AX_ENABLE_EXT_EFFEKSEER: the effekseer extension, default: `FALSE` 
 - AX_WITH_XXX: usually user don't need care it
 - AX_VS_DEPLOYMENT_TARGET: specify windows store deploy target, default: `10.0.17763.0`
+- AX_USE_COMPAT_GL: whether use compat gl as renderer backend, default: FALSE
+  - win32: whether use ANGLE GLES backend
+  - osx: whether use OpenGL instead Metal backend
+  - ios/tvos: whether use GLES instead Metal backend
+- AX_GLES_PROFILE: speicify GLES profile version for GLES backend, valid value `200`, `300`
+- AX_WASM_THREADS: specify wasm thread count, valid value: number: `>=0` , string: must be: `auto` or `navigator.hardwareConcurrency`(default), 
+   - number: explicit set thread count, `0` means disable wasm thread support
+   - string: 
+     - `navigator.hardwareConcurrency`: will be emitted in the JS code which will use the number of cores the browser reports
+     - `auto`: Use cmake to detect host processor count
+default is: `navigator.hardwareConcurrency`
+- AX_WASM_SHELL_FILE: specify the wasm shell file, by default use `${_AX_ROOT}/core/platform/wasm/shell_minimal.html`
 
 ## The options for axmol apps
 
-- AX_PREBUILT_DIR: specific the prebuilt dir (relative to `AX_ROOT`), it's very useful for fast linking apps with prebuilt engine libs
+- AX_PREBUILT_DIR: specify the prebuilt dir (relative to `AX_ROOT`), it's very useful for fast linking apps with prebuilt engine libs

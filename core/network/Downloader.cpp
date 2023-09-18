@@ -26,8 +26,13 @@
 
 #include "network/Downloader.h"
 
+#if EMSCRIPTEN
+#include "network/Downloader-wasm.h"
+#define DownloaderImpl  DownloaderEmscripten
+#else
 #include "network/Downloader-curl.h"
 #define DownloaderImpl DownloaderCURL
+#endif
 
 NS_AX_BEGIN
 

@@ -178,6 +178,7 @@ THE SOFTWARE.
 #include "platform/Common.h"
 #include "platform/Device.h"
 #include "platform/FileUtils.h"
+#include "platform/FileStream.h"
 #include "platform/Image.h"
 #include "platform/PlatformConfig.h"
 #include "platform/PlatformMacros.h"
@@ -201,7 +202,7 @@ THE SOFTWARE.
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 #    include "platform/win32/Application-win32.h"
-#    include "platform/desktop/GLViewImpl-desktop.h"
+#    include "platform/GLViewImpl.h"
 #    include "platform/win32/GL-win32.h"
 #    include "platform/win32/StdC-win32.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
@@ -214,17 +215,24 @@ THE SOFTWARE.
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
-#    include "platform/desktop/GLViewImpl-desktop.h"
+#    include "platform/GLViewImpl.h"
 #    include "platform/mac/Application-mac.h"
 #    include "platform/mac/StdC-mac.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_MAC
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
 #    include "platform/linux/Application-linux.h"
-#    include "platform/desktop/GLViewImpl-desktop.h"
+#    include "platform/GLViewImpl.h"
 #    include "platform/linux/GL-linux.h"
 #    include "platform/linux/StdC-linux.h"
 #endif  // AX_TARGET_PLATFORM == AX_PLATFORM_LINUX
+
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
+    #include "platform/wasm/Application-wasm.h"
+    #include "platform/GLViewImpl.h"
+    #include "platform/wasm/GL-wasm.h"
+    #include "platform/wasm/StdC-wasm.h"
+#endif // AX_TARGET_PLATFORM == AX_PLATFORM_WASM
 
 // script_support
 #include "base/ScriptSupport.h"

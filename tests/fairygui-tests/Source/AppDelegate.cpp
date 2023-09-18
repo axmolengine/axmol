@@ -41,7 +41,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glView = director->getOpenGLView();
     if (!glView) {
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
+#if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
         glView = GLViewImpl::createWithRect("Examples", ax::Rect(0, 0, 1280, 720));
 #else
         glView = GLViewImpl::create("Examples");
@@ -79,9 +79,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     //showing how to regsiter a ttf font
-#ifdef AX_PLATFORM_PC
     UIConfig::registerFont(UIConfig::defaultFont, "fonts/DroidSansFallback.ttf");
-#endif
 
     // create a scene. it's an autorelease object
     auto scene = MenuScene::create();
