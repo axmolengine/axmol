@@ -42,7 +42,6 @@ set(_AX_2D_HEADER
     2d/ActionGrid3D.h
     2d/CameraBackgroundBrush.h
     2d/FastTMXTiledMap.h
-    2d/LabelTextFormatter.h
     2d/MenuItem.h
     2d/FontFNT.h
     2d/SpriteBatchNode.h
