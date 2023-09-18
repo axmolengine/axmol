@@ -53,13 +53,15 @@ void FontAtlasCache::purgeCachedData()
     _atlasMap.clear();
 }
 
-FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config)
+FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config, float& baseFontSize)
 {
     auto& realFontFilename = config->fontFilePath;
     bool useDistanceField  = config->distanceFieldEnabled;
     int outlineSize        = useDistanceField ? 0 : config->outlineSize;
 
-    auto baseFontSize = config->distanceFieldEnabled ? config->baseFontSize : config->fontSize;
+    baseFontSize = config->distanceFieldEnabled ? config->baseFontSize : config->fontSize;
+    if (baseFontSize > config->fontSize)
+        baseFontSize = config->fontSize;
 
     std::string atlasName =
         config->distanceFieldEnabled

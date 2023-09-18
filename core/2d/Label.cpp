@@ -1270,7 +1270,8 @@ bool Label::updateQuads()
 
 bool Label::setTTFConfigInternal(const TTFConfig& ttfConfig)
 {
-    FontAtlas* newAtlas = FontAtlasCache::getFontAtlasTTF(&ttfConfig);
+    float baseFontSize  = ttfConfig.baseFontSize;
+    FontAtlas* newAtlas = FontAtlasCache::getFontAtlasTTF(&ttfConfig, baseFontSize);
 
     if (!newAtlas)
     {
@@ -1282,6 +1283,7 @@ bool Label::setTTFConfigInternal(const TTFConfig& ttfConfig)
     setFontAtlas(newAtlas, ttfConfig.distanceFieldEnabled, true);
 
     _fontConfig = ttfConfig;
+    _fontConfig.baseFontSize = baseFontSize;
 
     if (_fontConfig.outlineSize > 0)
     {
