@@ -54,8 +54,8 @@ typedef struct _ttfConfig
     std::string customGlyphs;
 
     GlyphCollection glyphs;
-    float fontSize;
-    float baseFontSize;
+    float fontSize; // The desired render font size
+    int faceSize; // The original face size of font
     int outlineSize;
 
     bool distanceFieldEnabled;
@@ -76,7 +76,7 @@ typedef struct _ttfConfig
                bool useStrikethrough                  = false)
         : fontFilePath(filePath)
         , fontSize(size)
-        , baseFontSize(FontFreeType::DEFAULT_BASE_FONT_SIZE)
+        , faceSize(FontFreeType::DEFAULT_BASE_FONT_SIZE)
         , glyphs(glyphCollection)
         , customGlyphs(customGlyphCollection ? customGlyphCollection : "")
         , distanceFieldEnabled(useDistanceField)
@@ -547,6 +547,16 @@ public:
      */
     void setMaxLineWidth(float maxLineWidth);
     float getMaxLineWidth() { return _maxLineWidth; }
+
+    /**
+     * Set the ttf/ttc font face size to determine how big to generate SDF bitmap
+     * since axmol-2.0.1
+     */
+    void setTTFFaceSize(int faceSize);
+
+    /** Gets ttf/ttc font face size, since axmol-2.0.1 */
+    int getTTFFaceSize() const;
+
     /**
      * Change font size of label type BMFONT
      * Note: This function only scale the BMFONT letter to mimic the font size change effect.
@@ -787,6 +797,7 @@ protected:
     AX_DEPRECATED_ATTRIBUTE virtual void updateBMFontScale() { updateFontScale(); }
     void scaleFontSize(float fontSize);
     bool setTTFConfigInternal(const TTFConfig& ttfConfig);
+    bool updateTTFConfigInternal();
     void setBMFontSizeInternal(float fontSize);
     bool isHorizontalClamped(float letterPositionX, int lineIndex);
     void restoreFontSize();

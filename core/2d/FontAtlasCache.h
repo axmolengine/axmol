@@ -41,7 +41,7 @@ struct _ttfConfig;
 class AX_DLL FontAtlasCache
 {
 public:
-    static FontAtlas* getFontAtlasTTF(const _ttfConfig* config, float& baseFontSize);
+    static FontAtlas* getFontAtlasTTF(_ttfConfig* config);
 
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName);
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName, std::string_view subTextureKey);
