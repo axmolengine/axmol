@@ -1060,10 +1060,7 @@ void Label::updateLabelLetters()
 
                     auto px = letterInfo.positionX + letterDef.width / 2 + _linesOffsetX[letterInfo.lineIndex];
                     auto py = letterInfo.positionY - letterDef.height / 2 + _letterOffsetY;
-                    if (_currentLabelType == Label::LabelType::TTF && _fontConfig.distanceFieldEnabled)
-                        letterSprite->setPosition(px, py);
-                    else
-                        letterSprite->setPosition(px, py);
+                    letterSprite->setPosition(px, py);
                 }
                 else
                 {
@@ -1225,7 +1222,7 @@ bool Label::updateQuads()
             }
 
             auto lineIndex = _lettersInfo[ctr].lineIndex;
-            auto px = _lettersInfo[ctr].positionX + letterDef.width / 2 * _fontScale + _linesOffsetX[lineIndex];
+            auto px        = _lettersInfo[ctr].positionX + letterDef.width / 2 * _fontScale + _linesOffsetX[lineIndex];
 
             if (_labelWidth > 0.f)
             {
@@ -1270,8 +1267,13 @@ bool Label::updateQuads()
 
 bool Label::setTTFConfigInternal(const TTFConfig& ttfConfig)
 {
-    float baseFontSize  = ttfConfig.baseFontSize;
-    FontAtlas* newAtlas = FontAtlasCache::getFontAtlasTTF(&ttfConfig, baseFontSize);
+    _fontConfig = ttfConfig;
+    return updateTTFConfigInternal();
+}
+
+bool Label::updateTTFConfigInternal()
+{
+    FontAtlas* newAtlas = FontAtlasCache::getFontAtlasTTF(&_fontConfig);
 
     if (!newAtlas)
     {
@@ -1280,10 +1282,7 @@ bool Label::setTTFConfigInternal(const TTFConfig& ttfConfig)
     }
 
     _currentLabelType = LabelType::TTF;
-    setFontAtlas(newAtlas, ttfConfig.distanceFieldEnabled, true);
-
-    _fontConfig = ttfConfig;
-    _fontConfig.baseFontSize = baseFontSize;
+    setFontAtlas(newAtlas, _fontConfig.distanceFieldEnabled, true);
 
     if (_fontConfig.outlineSize > 0)
     {
@@ -1756,6 +1755,20 @@ void Label::updateContent()
 #endif
 }
 
+void Label::setTTFFaceSize(int faceSize)
+{
+    if (_fontConfig.faceSize != faceSize)
+    {
+        _fontConfig.faceSize = faceSize;
+        updateTTFConfigInternal();
+    }
+}
+
+int Label::getTTFFaceSize() const
+{
+    return _fontConfig.faceSize;
+}
+
 void Label::setBMFontSize(float fontSize)
 {
     this->setBMFontSizeInternal(fontSize);
@@ -2139,8 +2152,6 @@ Sprite* Label::getLetter(int letterIndex)
         {
             updateContent();
         }
-        
-        
 
         if (_textSprite == nullptr && letterIndex < _lengthOfString)
         {
@@ -2177,8 +2188,7 @@ Sprite* Label::getLetter(int letterIndex)
                     letter->setTextureAtlas(_batchNodes.at(textureID)->getTextureAtlas());
                     letter->setAtlasIndex(letterInfo.atlasIndex);
                     auto px =
-                        letterInfo.positionX + _fontScale * uvRect.size.width / 2 +
-                              _linesOffsetX[letterInfo.lineIndex];
+                        letterInfo.positionX + _fontScale * uvRect.size.width / 2 + _linesOffsetX[letterInfo.lineIndex];
                     auto py = letterInfo.positionY - _fontScale * uvRect.size.height / 2 + _letterOffsetY;
                     letter->setPosition(px, py);
                     letter->setOpacity(_realOpacity);
@@ -2622,6 +2632,432 @@ void Label::updateLetterSpriteScale(Sprite* sprite)
         sprite->setScale(_fontScale);
     else
         sprite->setScale(1.0);
+}
+
+void Label::computeAlignmentOffset()
+{
+    _linesOffsetX.clear();
+    switch (_hAlignment)
+    {
+    case ax::TextHAlignment::LEFT:
+        _linesOffsetX.assign(_numberOfLines, 0);
+        break;
+    case ax::TextHAlignment::CENTER:
+        for (auto&& lineWidth : _linesWidth)
+        {
+            _linesOffsetX.emplace_back((_contentSize.width - lineWidth) / 2.f);
+        }
+        break;
+    case ax::TextHAlignment::RIGHT:
+        for (auto&& lineWidth : _linesWidth)
+        {
+            _linesOffsetX.emplace_back(_contentSize.width - lineWidth);
+        }
+        break;
+    default:
+        break;
+    }
+
+    switch (_vAlignment)
+    {
+    case ax::TextVAlignment::TOP:
+        _letterOffsetY = _contentSize.height;
+        break;
+    case ax::TextVAlignment::CENTER:
+        _letterOffsetY = (_contentSize.height + _textDesiredHeight) / 2.f;
+        break;
+    case ax::TextVAlignment::BOTTOM:
+        _letterOffsetY = _textDesiredHeight;
+        break;
+    default:
+        break;
+    }
+}
+
+int Label::getFirstCharLen(const std::u32string& /*utf32Text*/, int /*startIndex*/, int /*textLen*/) const
+{
+    return 1;
+}
+
+int Label::getFirstWordLen(const std::u32string& utf32Text, int startIndex, int textLen) const
+{
+    int len          = 0;
+    auto nextLetterX = 0;
+    FontLetterDefinition letterDef;
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
+
+    for (int index = startIndex; index < textLen; ++index)
+    {
+        char32_t character = utf32Text[index];
+
+        if (character == StringUtils::UnicodeCharacters::NewLine ||
+            (!StringUtils::isUnicodeNonBreaking(character) &&
+             (StringUtils::isUnicodeSpace(character) || StringUtils::isCJKUnicode(character))))
+        {
+            break;
+        }
+
+        if (!getFontLetterDef(character, letterDef))
+        {
+            break;
+        }
+
+        if (_maxLineWidth > 0.f)
+        {
+            auto letterX = (nextLetterX + letterDef.offsetX * _fontScale) / contentScaleFactor;
+
+            if (letterX + letterDef.width * _fontScale > _maxLineWidth)
+                break;
+        }
+
+        nextLetterX += static_cast<int>(letterDef.xAdvance * _fontScale + _additionalKerning);
+
+        len++;
+    }
+
+    if (len == 0 && textLen)
+        len = 1;
+
+    return len;
+}
+
+bool Label::getFontLetterDef(char32_t character, FontLetterDefinition& letterDef) const
+{
+    if (character == StringUtils::UnicodeCharacters::NoBreakSpace)
+    {
+        // change no-break space to regular space
+        // reason: some fonts have issue with no-break space:
+        //   * no letter definition
+        //   * not normal big width
+        character = StringUtils::UnicodeCharacters::Space;
+    }
+
+    return _fontAtlas->getLetterDefinitionForChar(character, letterDef);
+}
+
+void Label::updateFontScale()
+{
+    const auto scaleFactor = AX_CONTENT_SCALE_FACTOR();
+    auto font              = _fontAtlas->getFont();
+    if (_currentLabelType == LabelType::BMFONT)
+    {
+        FontFNT* bmFont       = (FontFNT*)font;
+        auto originalFontSize = bmFont->getOriginalFontSize();
+        _fontScale            = _bmFontSize * scaleFactor / originalFontSize;
+    }
+    else if (_currentLabelType == LabelType::TTF && _fontConfig.distanceFieldEnabled)
+    {
+        //! Due to underlaying font engine(freetype2) only support int type faceSize, so not only SDF require fontScale,
+        //! and current, we check SDF for compatible purpose only. FUTURE: add macro to control behavior
+
+        //! faceSize=10, factor=1.55, realSize=(int)15.5=15, so should be (15 / 1.55), not 15.5/1.55
+        const auto scaledFaceSize = static_cast<int>(_fontConfig.faceSize * scaleFactor);
+        _fontScale                = _fontConfig.fontSize * scaleFactor / scaledFaceSize;
+    }
+    else
+    {
+        _fontScale = 1.0f;
+    }
+}
+
+bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int, int)>& nextTokenLen)
+{
+    int textLen               = getStringLength();
+    int lineIndex             = 0;
+    float nextTokenX          = 0.f;
+    float nextTokenY          = 0.f;
+    float longestLine         = 0.f;
+    float letterRight         = 0.f;
+    float nextWhitespaceWidth = 0.f;
+
+    auto contentScaleFactor = AX_CONTENT_SCALE_FACTOR();
+
+    float lineSpacing = _lineSpacing * contentScaleFactor;
+    float highestY    = 0.f;
+    float lowestY     = 0.f;
+    FontLetterDefinition letterDef;
+    Vec2 letterPosition;
+    bool nextChangeSize = true;
+
+    this->updateFontScale();
+
+    for (int index = 0; index < textLen;)
+    {
+        char32_t character = _utf32Text[index];
+        if (character == StringUtils::UnicodeCharacters::NewLine)
+        {
+            _linesWidth.emplace_back(letterRight);
+            letterRight = 0.f;
+            lineIndex++;
+            nextTokenX = 0.f;
+            nextTokenY -= _lineHeight * _fontScale + lineSpacing;
+            recordPlaceholderInfo(index, character);
+            index++;
+            continue;
+        }
+
+        auto tokenLen         = nextTokenLen(_utf32Text, index, textLen);
+        float tokenHighestY   = highestY;
+        float tokenLowestY    = lowestY;
+        float tokenRight      = letterRight;
+        float nextLetterX     = nextTokenX;
+        float whitespaceWidth = nextWhitespaceWidth;
+        bool newLine          = false;
+        for (int tmp = 0; tmp < tokenLen; ++tmp)
+        {
+            int letterIndex = index + tmp;
+            character       = _utf32Text[letterIndex];
+            if (character == StringUtils::UnicodeCharacters::CarriageReturn)
+            {
+                recordPlaceholderInfo(letterIndex, character);
+                continue;
+            }
+
+            // \b - Next char not change x position
+            if (character == StringUtils::UnicodeCharacters::NextCharNoChangeX)
+            {
+                nextChangeSize = false;
+                recordPlaceholderInfo(letterIndex, character);
+                continue;
+            }
+
+            if (!getFontLetterDef(character, letterDef))
+            {
+                recordPlaceholderInfo(letterIndex, character);
+                AXLOG("LabelTextFormatter error: can't find letter definition in font file for letter: 0x%x",
+                      character);
+                continue;
+            }
+
+            auto letterX = (nextLetterX + letterDef.offsetX * _fontScale) / contentScaleFactor;
+            if (_enableWrap && _maxLineWidth > 0.f && nextTokenX > 0.f &&
+                letterX + letterDef.width * _fontScale > _maxLineWidth && !StringUtils::isUnicodeSpace(character) &&
+                nextChangeSize)
+            {
+                _linesWidth.emplace_back(letterRight - whitespaceWidth);
+                nextWhitespaceWidth = 0.f;
+                letterRight         = 0.f;
+                lineIndex++;
+                nextTokenX = 0.f;
+                nextTokenY -= (_lineHeight * _fontScale + lineSpacing);
+                newLine = true;
+                break;
+            }
+            else
+            {
+                letterPosition.x = letterX;
+            }
+            letterPosition.y = (nextTokenY - letterDef.offsetY * _fontScale) / contentScaleFactor;
+            recordLetterInfo(letterPosition, character, letterIndex, lineIndex);
+
+            if (nextChangeSize)
+            {
+                float newLetterWidth = 0.f;
+                if (_horizontalKernings && letterIndex < textLen - 1)
+                    newLetterWidth = static_cast<float>(_horizontalKernings[letterIndex + 1]) * _fontScale;
+                newLetterWidth += letterDef.xAdvance * _fontScale + _additionalKerning;
+
+                nextLetterX += newLetterWidth;
+                tokenRight = nextLetterX / contentScaleFactor;
+
+                if (StringUtils::isUnicodeSpace(character))
+                {
+                    nextWhitespaceWidth += newLetterWidth / contentScaleFactor;
+                }
+                else
+                {
+                    nextWhitespaceWidth = 0;
+                }
+            }
+            nextChangeSize = true;
+
+            if (tokenHighestY < letterPosition.y)
+                tokenHighestY = letterPosition.y;
+            if (tokenLowestY > letterPosition.y - letterDef.height * _fontScale)
+                tokenLowestY = letterPosition.y - letterDef.height * _fontScale;
+        }
+
+        if (newLine)
+        {
+            continue;
+        }
+
+        nextTokenX  = nextLetterX;
+        letterRight = tokenRight;
+        if (highestY < tokenHighestY)
+            highestY = tokenHighestY;
+        if (lowestY > tokenLowestY)
+            lowestY = tokenLowestY;
+
+        index += tokenLen;
+    }
+
+    if (_linesWidth.empty())
+    {
+        _linesWidth.emplace_back(letterRight);
+        longestLine = letterRight;
+    }
+    else
+    {
+        _linesWidth.emplace_back(letterRight - nextWhitespaceWidth);
+        for (auto&& lineWidth : _linesWidth)
+        {
+            if (longestLine < lineWidth)
+                longestLine = lineWidth;
+        }
+    }
+
+    _numberOfLines     = lineIndex + 1;
+    _textDesiredHeight = (_numberOfLines * _lineHeight * _fontScale) / contentScaleFactor;
+    if (_numberOfLines > 1)
+        _textDesiredHeight += (_numberOfLines - 1) * _lineSpacing;  // ?? use scaled lineSpacing
+    Vec2 contentSize(_labelWidth, _labelHeight);
+    if (_labelWidth <= 0.f)
+        contentSize.width = longestLine;
+    if (_labelHeight <= 0.f)
+        contentSize.height = _textDesiredHeight;
+    setContentSize(contentSize);
+
+    _tailoredTopY    = contentSize.height;
+    _tailoredBottomY = 0.f;
+    if (highestY > 0.f)
+        _tailoredTopY = contentSize.height + highestY;
+    if (lowestY < -_textDesiredHeight)
+        _tailoredBottomY = _textDesiredHeight + lowestY;
+
+    return true;
+}
+
+bool Label::multilineTextWrapByWord()
+{
+    return multilineTextWrap(AX_CALLBACK_3(Label::getFirstWordLen, this));
+}
+
+bool Label::multilineTextWrapByChar()
+{
+    return multilineTextWrap(AX_CALLBACK_3(Label::getFirstCharLen, this));
+}
+
+bool Label::isVerticalClamp()
+{
+    if (_textDesiredHeight > _contentSize.height)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Label::isHorizontalClamp()
+{
+    bool letterClamp = false;
+
+    for (int ctr = 0; ctr < _lengthOfString; ++ctr)
+    {
+        if (_lettersInfo[ctr].valid)
+        {
+            auto& letterDef = _fontAtlas->_letterDefinitions[_lettersInfo[ctr].utf32Char];
+
+            auto px        = _lettersInfo[ctr].positionX + letterDef.width / 2 * _fontScale;
+            auto lineIndex = _lettersInfo[ctr].lineIndex;
+
+            if (_labelWidth > 0.f)
+            {
+                if (!this->_enableWrap)
+                {
+                    if (px > _contentSize.width)
+                    {
+                        letterClamp = true;
+                        break;
+                    }
+                }
+                else
+                {
+                    auto wordWidth = this->_linesWidth[lineIndex];
+                    if (wordWidth > this->_contentSize.width && (px > _contentSize.width))
+                    {
+                        letterClamp = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return letterClamp;
+}
+
+void Label::shrinkLabelToContentSize(const std::function<bool(void)>& lambda)
+{
+    float fontSize = this->getRenderingFontSize();
+
+    int i                     = 0;
+    auto letterDefinition     = _fontAtlas->_letterDefinitions;
+    auto tempLetterDefinition = letterDefinition;
+    float originalLineHeight  = _lineHeight;
+    bool flag                 = true;
+    while (lambda())
+    {
+        ++i;
+        float newFontSize = fontSize - i;
+        flag              = false;
+        if (newFontSize <= 0)
+        {
+            break;
+        }
+        float scale = newFontSize / fontSize;
+        std::swap(_fontAtlas->_letterDefinitions, tempLetterDefinition);
+        _fontAtlas->scaleFontLetterDefinition(scale);
+        this->setLineHeight(originalLineHeight * scale);
+        if (_maxLineWidth > 0.f && !_lineBreakWithoutSpaces)
+        {
+            multilineTextWrapByWord();
+        }
+        else
+        {
+            multilineTextWrapByChar();
+        }
+        computeAlignmentOffset();
+        tempLetterDefinition = letterDefinition;
+    }
+    this->setLineHeight(originalLineHeight);
+    std::swap(_fontAtlas->_letterDefinitions, letterDefinition);
+
+    if (!flag)
+    {
+        if (fontSize - i >= 0)
+        {
+            this->scaleFontSize(fontSize - i);
+        }
+    }
+}
+
+void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int letterIndex, int lineIndex)
+{
+    if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
+    {
+        LetterInfo tmpInfo;
+        _lettersInfo.emplace_back(tmpInfo);
+    }
+    _lettersInfo[letterIndex].lineIndex  = lineIndex;
+    _lettersInfo[letterIndex].utf32Char  = utf32Char;
+    _lettersInfo[letterIndex].valid      = _fontAtlas->_letterDefinitions[utf32Char].validDefinition;
+    _lettersInfo[letterIndex].positionX  = point.x;
+    _lettersInfo[letterIndex].positionY  = point.y;
+    _lettersInfo[letterIndex].atlasIndex = -1;
+}
+
+void Label::recordPlaceholderInfo(int letterIndex, char32_t utf32Char)
+{
+    if (static_cast<std::size_t>(letterIndex) >= _lettersInfo.size())
+    {
+        LetterInfo tmpInfo;
+        _lettersInfo.emplace_back(tmpInfo);
+    }
+    _lettersInfo[letterIndex].utf32Char = utf32Char;
+    _lettersInfo[letterIndex].valid     = false;
 }
 
 NS_AX_END
