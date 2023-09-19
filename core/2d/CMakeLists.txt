@@ -106,7 +106,6 @@ set(_AX_2D_SRC
     2d/Grid.cpp
     2d/LabelAtlas.cpp
     2d/Label.cpp
-    2d/LabelTextFormatter.cpp
     2d/Layer.cpp
     2d/Light.cpp
     2d/Menu.cpp
