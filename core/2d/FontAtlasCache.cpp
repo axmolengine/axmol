@@ -53,34 +53,27 @@ void FontAtlasCache::purgeCachedData()
     _atlasMap.clear();
 }
 
-FontAtlas* FontAtlasCache::getFontAtlasTTF(const _ttfConfig* config, float& baseFontSize)
+FontAtlas* FontAtlasCache::getFontAtlasTTF(_ttfConfig* config)
 {
     auto& realFontFilename = config->fontFilePath;
     bool useDistanceField  = config->distanceFieldEnabled;
     int outlineSize        = useDistanceField ? 0 : config->outlineSize;
 
-    if (config->distanceFieldEnabled)
-    {
-        // some font i.e 'arial.ttf' looks too near between 'T' and 'e' when zoom out, but layout correct
-        // so limit baseFontSize to fontSize(request render size) avoid zoom out font glyph
-        if (baseFontSize > config->fontSize)
-            baseFontSize = config->fontSize;
+    // underlaying font engine (freetype2) only support int type, so convert to int avoid precision issue
+    if (!config->distanceFieldEnabled)
+        config->faceSize = static_cast<int>(config->fontSize);
 
-        // underlaying font engine (freetype2) only support int type, so convert to int avoid precision issues
-        baseFontSize = static_cast<int>(baseFontSize * AX_CONTENT_SCALE_FACTOR());
-    }
-    else
-        baseFontSize = config->fontSize;
+    auto scaledFaceSize = static_cast<int>(config->faceSize * AX_CONTENT_SCALE_FACTOR());
 
     std::string atlasName =
         config->distanceFieldEnabled
-                                ? fmt::format("df {:.2f} {} {}", baseFontSize, outlineSize, realFontFilename)
-                                : fmt::format("{:.2f} {} {}", baseFontSize, outlineSize, realFontFilename);
+                                ? fmt::format("df {} {} {}", scaledFaceSize, outlineSize, realFontFilename)
+                                : fmt::format("{} {} {}", scaledFaceSize, outlineSize, realFontFilename);
     auto it = _atlasMap.find(atlasName);
 
     if (it == _atlasMap.end())
     {
-        auto font = FontFreeType::create(realFontFilename, baseFontSize, config->glyphs, config->customGlyphs,
+        auto font = FontFreeType::create(realFontFilename, scaledFaceSize, config->glyphs, config->customGlyphs,
                                          useDistanceField, static_cast<float>(outlineSize));
         if (font)
         {

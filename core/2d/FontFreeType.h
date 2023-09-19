@@ -93,7 +93,7 @@ public:
     static bool isNativeBytecodeHintingEnabled() { return _doNativeBytecodeHinting; }
 
     static FontFreeType* create(std::string_view fontPath,
-                                float fontSize,
+                                int faceSize,
                                 GlyphCollection glyphs,
                                 std::string_view customGlyphs,
                                 bool distanceFieldEnabled = false,
@@ -140,7 +140,7 @@ private:
     FontFreeType(bool distanceFieldEnabled = false, float outline = 0);
     virtual ~FontFreeType();
 
-    bool loadFontFace(std::string_view fontPath, float fontSize);
+    bool loadFontFace(std::string_view fontPath, int faceSize);
 
     int getHorizontalKerningForChars(uint64_t firstChar, uint64_t secondChar) const;
     unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
@@ -153,7 +153,7 @@ private:
     FT_Stroker _stroker;
 
     std::string _fontName;
-    float _fontSize;
+    int _faceSize;
     bool _distanceFieldEnabled;
     float _outlineSize;
     int _ascender;

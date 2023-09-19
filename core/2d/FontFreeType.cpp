@@ -96,7 +96,7 @@ static void ft_stream_close_callback(FT_Stream stream)
 }
 
 FontFreeType* FontFreeType::create(std::string_view fontName,
-                                   float fontSize,
+                                   int faceSize,
                                    GlyphCollection glyphs,
                                    std::string_view customGlyphs,
                                    bool distanceFieldEnabled /* = false */,
@@ -106,7 +106,7 @@ FontFreeType* FontFreeType::create(std::string_view fontName,
 
     tempFont->setGlyphCollection(glyphs, customGlyphs);
 
-    if (tempFont->loadFontFace(fontName, fontSize))
+    if (tempFont->loadFontFace(fontName, faceSize))
     {
         tempFont->autorelease();
         return tempFont;
@@ -197,7 +197,7 @@ FontFreeType::~FontFreeType()
     }
 }
 
-bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
+bool FontFreeType::loadFontFace(std::string_view fontPath, int faceSize)
 {
     FT_Face face;
     if (_streamParsingEnabled)
@@ -255,21 +255,21 @@ bool FontFreeType::loadFontFace(std::string_view fontPath, float fontSize)
 
         if (_distanceFieldEnabled)
         {
-            if (FT_Set_Pixel_Sizes(face, 0, static_cast<FT_UInt>(fontSize)))
+            if (FT_Set_Pixel_Sizes(face, 0, faceSize))
                 break;
         }
         else
         {
             // set the requested font size
-            int dpi            = 72;
-            int fontSizePoints = (int)(64.f * fontSize * AX_CONTENT_SCALE_FACTOR());
-            if (FT_Set_Char_Size(face, 0, fontSizePoints, dpi, dpi))
+            int dpi   = 72;
+            int units = faceSize << 6;
+            if (FT_Set_Char_Size(face, 0, units, dpi, dpi))
                 break;
         }
 
         // store the face globally
         _fontFace = face;
-        _fontSize = fontSize;
+        _faceSize = faceSize;
         _fontName = fontPath;
 
         // Notes:
