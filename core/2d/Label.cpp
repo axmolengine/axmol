@@ -2854,7 +2854,7 @@ bool Label::multilineTextWrap(const std::function<int(const std::u32string&, int
             {
                 float newLetterWidth = 0.f;
                 if (_horizontalKernings && letterIndex < textLen - 1)
-                    newLetterWidth = static_cast<float>(_horizontalKernings[letterIndex + 1]);
+                    newLetterWidth = static_cast<float>(_horizontalKernings[letterIndex + 1]) * _fontScale;
                 newLetterWidth += letterDef.xAdvance * _fontScale + _additionalKerning;
 
                 nextLetterX += newLetterWidth;

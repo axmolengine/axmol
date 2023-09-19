@@ -53,6 +53,28 @@ enum
     kTagSprite8,
 };
 
+class LabelIssue1336 : public AtlasDemoNew
+{
+public:
+    CREATE_FUNC(LabelIssue1336);
+
+    LabelIssue1336()
+    {
+        auto size = Director::getInstance()->getWinSize();
+        TTFConfig config("fonts/arial.ttf");
+        config.distanceFieldEnabled = true;
+        config.faceSize             = 72;
+        auto overlapingLabel        = Label::createWithTTF(config, "Te");
+        overlapingLabel->setPosition(Vec2(size.width / 2, size.height / 2));
+        overlapingLabel->setColor(ax::Color3B::WHITE);
+        overlapingLabel->setScale(10);
+        addChild(overlapingLabel, 1);
+    }
+
+    virtual std::string title() const override { return "Github Issue 1336"; }
+    virtual std::string subtitle() const override { return "The label char shouldn't overalpping"; }
+};
+
 //------------------------------------------------------------------
 //
 // AtlasDemoNew
@@ -63,6 +85,7 @@ NewLabelTests::NewLabelTests()
 {
     ADD_TEST_CASE(LabelOutlineAndGlowTest);
     ADD_TEST_CASE(LabelTTFDistanceField);
+    ADD_TEST_CASE(LabelIssue1336);
     ADD_TEST_CASE(LabelIssue20523);
     ADD_TEST_CASE(LabelFNTGlyphDesigner);
     ADD_TEST_CASE(LabelFNTColor);
@@ -571,16 +594,16 @@ std::string LabelFNTGlyphDesigner::subtitle() const
 #define MixedExample \
     "ABC\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt\nDEF"
 
-#define ArrowsMax 0.95
-#define ArrowsMin 0.7
+#define ArrowsMax     0.95
+#define ArrowsMin     0.7
 
-#define LeftAlign 0
-#define CenterAlign 1
-#define RightAlign 2
+#define LeftAlign     0
+#define CenterAlign   1
+#define RightAlign    2
 
 #define LongSentences 0
-#define LineBreaks 1
-#define Mixed 2
+#define LineBreaks    1
+#define Mixed         2
 
 static float alignmentItemPadding  = 50;
 static float menuItemPaddingCenter = 50;
@@ -1116,8 +1139,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
                           Color4F(1.0f, 0.0f, 0.0f, 1.0f));
 
     TTFConfig ttfConfig("fonts/HKYuanMini.ttf", 25, GlyphCollection::DYNAMIC);
-    auto label1 =
-        Label::createWithTTF(ttfConfig, "你好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
+    auto label1 = Label::createWithTTF(ttfConfig, "你好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
     if (label1)
     {
         label1->setTextColor(Color4B(128, 255, 255, 255));
@@ -1130,8 +1152,7 @@ LabelTTFCJKWrappingTest::LabelTTFCJKWrappingTest()
         label1->setTTFConfig(ttfConfig);
     }
 
-    auto label2 =
-        Label::createWithTTF(ttfConfig, "早上好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
+    auto label2 = Label::createWithTTF(ttfConfig, "早上好，Axmol Label.", TextHAlignment::LEFT, size.width * 0.75f);
     if (label2)
     {
         label2->setTextColor(Color4B(255, 128, 255, 255));
@@ -1270,9 +1291,9 @@ LabelTTFDistanceField::LabelTTFDistanceField()
     label1->setTextColor(Color4B::GREEN);
     addChild(label1);
 
-     auto action = Sequence::create(DelayTime::create(1.0f), ScaleTo::create(6.0f, 5.0f, 5.0f),
-                                    ScaleTo::create(6.0f, 1.0f, 1.0f), nullptr);
-     label1->runAction(RepeatForever::create(action));
+    auto action = Sequence::create(DelayTime::create(1.0f), ScaleTo::create(6.0f, 5.0f, 5.0f),
+                                   ScaleTo::create(6.0f, 1.0f, 1.0f), nullptr);
+    label1->runAction(RepeatForever::create(action));
 
     // Draw the label border
     auto& labelContentSize = label1->getContentSize();
@@ -2570,7 +2591,7 @@ LabelWrapNoBreakSpaceTest::LabelWrapNoBreakSpaceTest()
     _label->setLineBreakWithoutSpace(false);
     const char* no_break_space_utf8 = "\xC2\xA0";  // 0xA0 - no-break space
     auto str                        = StringUtils::format(
-                               "The price is $%s1.25. \n\nthe space between \"$\" and \"1.25\" is a no break space.", no_break_space_utf8);
+        "The price is $%s1.25. \n\nthe space between \"$\" and \"1.25\" is a no break space.", no_break_space_utf8);
     _label->setString(str);
     _label->setVerticalAlignment(TextVAlignment::TOP);
     _label->setOverflow(Label::Overflow::CLAMP);
@@ -3609,8 +3630,8 @@ LabelIssue20523::LabelIssue20523()
 
     this->schedule(
         [this, _crashingLabel](float) {
-            ++_i;
-            _crashingLabel->setString(std::to_string(_i));
+        ++_i;
+        _crashingLabel->setString(std::to_string(_i));
         },
         1, AX_REPEAT_FOREVER, 0, "repeat");
 }
