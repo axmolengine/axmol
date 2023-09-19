@@ -4,8 +4,21 @@ param(
     $lang
 )
 
-$is_portrait = ($args[0] -eq '--portrait')
-$projectName = $args[$is_portrait]
+$params = [System.Collections.ArrayList]$args
+$portrait_idx = $params.IndexOf('--portrait')
+$is_portrait = $portrait_idx -ne -1
+if ($is_portrait) {
+    $params.RemoveAt($portrait_idx)
+}
+$projectName = $params[0]
+
+if (!$packageName) {
+    throw "The package name can't be empty"
+}
+
+if (!$projectName) {
+    throw "The project name can't be empty"
+}
 
 if ($lang -eq 'cpp' -or $lang -eq 'lua') {
     if (!(Test-Path $directory -PathType Container)) {
@@ -37,9 +50,9 @@ $template_cfg_file = Join-Path $sourcePath 'axproj-template.json'
 $template_cfg = ConvertFrom-Json (Get-Content $template_cfg_file -Raw)
 
 # variable for replace
-$projectDir = $destinationPath
+$projectDir = $(Resolve-Path $destinationPath).Path
 
-println "Creating project $projectName ..."
+println "Creating project $projectName, is_portrait=$is_portrait ..."
 
 # actionParam
 #   rep
@@ -96,7 +109,7 @@ foreach($actionParam in $template_cfg.do_default) {
     perform_action $actionParam
 }
 
-if ($orient -eq 'portrait') {
+if ($is_portrait) {
     foreach($actionParam in $template_cfg.do_portrait)
     {
         perform_action $actionParam

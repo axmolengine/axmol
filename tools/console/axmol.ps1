@@ -164,7 +164,7 @@ function axmol_run() {
         explorer.exe shell:AppsFolder\$appxPkgName!App
     }
     elseif($options.p -eq 'win32') {
-        explorer.exe $win32exePath
+        Start-Process -FilePath $win32exePath -WorkingDirectory $(Split-Path $win32exePath -Parent)
     }
     elseif($options.p -eq 'android') {
         adb shell am start -n "$androidPackage/$androidActivity"
@@ -256,7 +256,7 @@ usage: axmol install -p win32 -a x64
 Build and install a project to a device/simulator.
 
 options:
-  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
+  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos
       for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
@@ -274,7 +274,7 @@ usage: axmol run -p win32 -a x64
 Build, deploy and run project on the target.
 
 options:
-  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos
+  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos
       for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
@@ -301,4 +301,9 @@ if (!$sub_args[0] -or $help) {
     return
 }
 
-. $plugin.proc @sub_args
+$sub_opts = @{}
+if ($sub_args.IndexOf('-d') -eq -1) {
+    $sub_opts['-d'] = $(Get-Location).Path
+}
+
+. $plugin.proc @sub_args @sub_opts
