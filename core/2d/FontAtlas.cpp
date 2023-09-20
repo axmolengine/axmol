@@ -63,10 +63,6 @@ FontAtlas::FontAtlas(Font* theFont) : _font(theFont)
             _pixelFormat         = AX_GLES_PROFILE != 200 ? backend::PixelFormat::RG8 : backend::PixelFormat::LA8;
             _currentPageDataSize = CacheTextureWidth * CacheTextureHeight << _strideShift;
 
-#if defined(AX_USE_METAL)
-            _currentPageDataSizeRGBA = CacheTextureWidth * CacheTextureHeight * 4;
-#endif
-
             _lineHeight += 2 * outlineSize;
         }
         else
@@ -97,11 +93,6 @@ void FontAtlas::reinit()
         _currentPageData = new uint8_t[_currentPageDataSize];
     _currentPage = -1;
 
-#if defined(AX_USE_METAL)
-    if (_strideShift && !_currentPageDataRGBA)
-        _currentPageDataRGBA = new uint8_t[_currentPageDataSizeRGBA];
-#endif
-
     addNewPage();
 }
 
@@ -120,9 +111,6 @@ FontAtlas::~FontAtlas()
     releaseTextures();
 
     AX_SAFE_DELETE_ARRAY(_currentPageData);
-#if defined(AX_USE_METAL)
-    AX_SAFE_DELETE_ARRAY(_currentPageDataRGBA);
-#endif
 }
 
 void FontAtlas::reset()
@@ -309,32 +297,9 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
 void FontAtlas::updateTextureContent(backend::PixelFormat format, int startY)
 {
-#if !defined(AX_USE_METAL)
     auto data = _currentPageData + (CacheTextureWidth * (int)startY << _strideShift);
     _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, CacheTextureWidth,
                                                     (int)_currentPageOrigY - startY + _currLineHeight);
-#else
-    unsigned char* data = nullptr;
-    if (_strideShift)
-    {
-        int nLen = CacheTextureWidth * ((int)_currentPageOrigY - startY + _currLineHeight);
-        data     = _currentPageData + CacheTextureWidth * (int)startY * 2;
-        memset(_currentPageDataRGBA, 0, 4 * nLen);
-        for (auto i = 0; i < nLen; i++)
-        {
-            _currentPageDataRGBA[i * 4]     = data[i * 2];
-            _currentPageDataRGBA[i * 4 + 3] = data[i * 2 + 1];
-        }
-        _atlasTextures[_currentPage]->updateWithSubData(_currentPageDataRGBA, 0, startY, CacheTextureWidth,
-                                                        (int)_currentPageOrigY - startY + _currLineHeight);
-    }
-    else
-    {
-        data = _currentPageData + CacheTextureWidth * (int)startY;
-        _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, CacheTextureWidth,
-                                                        (int)_currentPageOrigY - startY + _currLineHeight);
-    }
-#endif
 }
 
 void FontAtlas::addNewPage()
@@ -343,21 +308,7 @@ void FontAtlas::addNewPage()
 
     memset(_currentPageData, 0, _currentPageDataSize);
 
-#if !defined(AX_USE_METAL)
     texture->initWithData(_currentPageData, _currentPageDataSize, _pixelFormat, CacheTextureWidth, CacheTextureHeight);
-#else
-    if (_strideShift)
-    {
-        memset(_currentPageDataRGBA, 0, _currentPageDataSizeRGBA);
-        texture->initWithData(_currentPageDataRGBA, _currentPageDataSizeRGBA, backend::PixelFormat::RGBA8,
-                              CacheTextureWidth, CacheTextureHeight);
-    }
-    else
-    {
-        texture->initWithData(_currentPageData, _currentPageDataSize, _pixelFormat, CacheTextureWidth,
-                              CacheTextureHeight);
-    }
-#endif
 
     if (_antialiasEnabled)
         texture->setAntiAliasTexParameters();
