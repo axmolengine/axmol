@@ -147,13 +147,7 @@ protected:
     int _strideShift                  = 0;
     uint8_t* _currentPageData         = nullptr;
     int _currentPageDataSize          = 0;
-#if defined(AX_USE_METAL)
-    // Notes: 
-    // Metal backend doesn't support PixelFormat::LA8
-    // Currently we use RGBA for texture data upload
-    uint8_t* _currentPageDataRGBA = nullptr;
-    int _currentPageDataSizeRGBA  = 0;
-#endif
+
     float _currentPageOrigX = 0;
     float _currentPageOrigY = 0;
     int _letterPadding      = 0;
