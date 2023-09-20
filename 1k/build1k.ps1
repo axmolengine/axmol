@@ -170,7 +170,7 @@ $manifest = @{
     ndk          = 'r23c';
     xcode        = '13.0.0~14.2.0'; # range
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
-    clang        = '16.0.0+'; # clang-cl msvc14.37 require 16.0.0+
+    llvm         = '16.0.6+'; # clang-cl msvc14.37 require 16.0.0+
     gcc          = '9.0.0+';
     cmake        = '3.22.1+';
     ninja        = '1.11.1+';
@@ -665,11 +665,52 @@ function setup_jdk() {
     return $javac_prog
 }
 
-function setup_clang() {
-    if (!$manifest.Contains('clang')) { return $null }
-    $clang_prog, $clang_ver = find_prog -name 'clang'
+# setup llvm for windows only
+function setup_llvm() {
+    if (!$manifest.Contains('llvm')) { return $null }
+    $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang"
     if (!$clang_prog) {
-        throw 'required clang $clang_ver not installed, please install it from: https://github.com/llvm/llvm-project/releases'
+        $llvm_root = Join-Path $prefix 'LLVM'
+        $llvm_bin = Join-Path $llvm_root 'bin'
+        $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang" -path $llvm_bin -silent $true
+        if(!$clang_prog) {
+            # ensure 7z_prog
+            $7z_cmd_info = Get-Command '7z' -ErrorAction SilentlyContinue
+            if($7z_cmd_info) 
+            { 
+                $7z_prog = $7z_cmd_info.Path 
+            }
+            else
+            {
+                $7z_prog = Join-Path $prefix '7z2301-x64\7z.exe'
+                $7z_pkg_out = Join-Path $prefix '7z2301-x64.zip'
+                if (!(Test-Path $7z_prog -PathType Leaf)) {
+                    # https://www.7-zip.org/download.html
+                    download_and_expand -url 'https://github.com/axmolengine/archive/releases/download/v1.0.0/7z2301-x64.zip' -out $7z_pkg_out $prefix/
+                }
+            }
+
+            if (!(Test-Path $7z_prog -PathType Leaf)) {
+                throw "setup 7z fail which is required for setup llvm clang!"
+            }
+
+            # download llvm clang and install extract it at prefix
+            download_file "https://github.com/llvm/llvm-project/releases/download/llvmorg-${clang_ver}/LLVM-${clang_ver}-win64.exe" "$prefix\LLVM-${clang_ver}-win64.exe"
+            $b1k.mkdirs($llvm_root)
+            & $7z_prog x "$prefix\LLVM-${clang_ver}-win64.exe" "-o$llvm_root" -y | Out-Host
+
+            $clang_prog, $clang_ver = find_prog -name 'llvm' -cmd "clang" -path $llvm_bin -silent $true
+            if(!$clang_prog) {
+                throw "setup $clang_ver fail"
+            }
+        }
+
+        $b1k.println("Using llvm: $clang_prog, version: $clang_ver")
+
+        # add our llvm root to PATH temporary
+        if (($env:PATH.IndexOf($llvm_bin) -eq -1)) {
+            $env:PATH = "$llvm_bin$envPathSep$env:PATH"
+        }
     }
 }
 
@@ -1040,7 +1081,7 @@ if ($BUILD_TARGET -eq 'win32') {
     $nsis_prog = setup_nsis
     if ($TOOLCHAIN_NAME -eq 'clang') {
         $ninja_prog = setup_ninja
-        $null = setup_clang
+        $null = setup_llvm
     }
 }
 elseif ($BUILD_TARGET -eq 'android') {
@@ -1110,7 +1151,12 @@ if (!$setupOnly) {
         $is_host_target = ($BUILD_TARGET -eq 'win32') -or ($BUILD_TARGET -eq 'linux') -or ($BUILD_TARGET -eq 'osx')
         if ($is_host_target) {
             # wheither building host target?
-            $BUILD_DIR = "build_$($options.a)"
+            if(($options.cc -eq 'clang') -and ($BUILD_TARGET -eq 'win32')) {
+                $BUILD_DIR = "out_$($options.a)"
+            }
+            else {
+                $BUILD_DIR = "build_$($options.a)"
+            }
         }
         else {
             $BUILD_DIR = "build_${BUILD_TARGET}"
