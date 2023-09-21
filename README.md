@@ -1,6 +1,6 @@
 <p align="center"><a href="https://axmolengine.github.io/axmol" target="_blank" rel="noopener noreferrer"><img width="160" src="docs/logo.png" alt="axmol logo"></a></p>
 
-# Axmol Engine
+# Axmol Engine (Axmol be explain as X Molecule engine)
 
 ## A Multi-platform Engine for Desktop, XBOX (UWP) and Mobile games. (A fork of Cocos2d-x-4.0)
 
@@ -34,6 +34,9 @@
 ## Building
 
 View the [Dev setup instructions](docs/DevSetup.md).
+
+## Axmol WebAssembly preview
+https://axmol.netlify.app/
 
 ## Renderer Backends
 
