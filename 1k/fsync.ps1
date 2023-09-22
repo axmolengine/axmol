@@ -42,8 +42,8 @@ if (Test-Path $destPath -PathType Container) { # dest already exist
             return
         }
         Write-Host "fsync.ps1: Removing old link target $($directoryInfo.Target)"
-        # Remove-Item -Path $destPath
-        $directoryInfo.Delete($false)
+        # force delete if exist dest not symlink
+        $directoryInfo.Delete($true)
     }
 }
 
