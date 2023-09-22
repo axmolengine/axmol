@@ -9,7 +9,8 @@ function mkdirs([string]$path) {
     if (!(Test-Path $path -PathType Container)) {
         if ([System.Version]$pwsh_ver -ge [System.Version]'5.0.0.0') {
             New-Item $path -ItemType Directory 1>$null
-        } else {
+        }
+        else {
             mkdir $path
         }
     }
@@ -20,7 +21,7 @@ if ([System.Version]$pwsh_ver -lt [System.Version]'5.0.0.0') {
     Write-Host "Installing WMF5.1 ..."
     $osVer = [System.Environment]::OSVersion.Version
     
-    if($osVer.Major -ne 6) {
+    if ($osVer.Major -ne 6) {
         throw "Unsupported OSVersion: $($osVer.ToString())"
     }
     if ($osVer.Minor -ne 1 -and $osVer -ne 3) {
@@ -50,7 +51,8 @@ if ([System.Version]$pwsh_ver -lt [System.Version]'5.0.0.0') {
     # WMF5.1: https://learn.microsoft.com/en-us/powershell/scripting/windows-powershell/wmf/setup/install-configure?view=powershell-7.3&source=recommendations#download-and-install-the-wmf-51-package
     if ($is_win7) {
         $wmf_pkg = 'Win7AndW2K8R2-KB3191566-x64.zip'
-    } else {
+    }
+    else {
         $wmf_pkg = 'Win8.1AndW2K12R2-KB3191564-x64.msu'
     }
     
@@ -58,25 +60,24 @@ if ([System.Version]$pwsh_ver -lt [System.Version]'5.0.0.0') {
     if (!(Test-Path $pkg_out -PathType Leaf)) {
         Write-Host "Downloading $pkg_out ..."
         $curl.DownloadFile("https://download.microsoft.com/download/6/F/5/6F5FF66C-6775-42B0-86C4-47D41F2DA187/$wmf_pkg", $pkg_out)
-        if(!$?) {
-           del $pkg_out
+        if (!$?) {
+            del $pkg_out
         }
     }
     if ($is_win7) {
         echo "Expanding $pkg_out to $prefix"
-        function Expand-Zip($Path, $DestinationPath)
-        {
-           mkdirs $DestinationPath
-           $shell = new-object -com shell.application
-           $zip = $shell.NameSpace($Path)
-           foreach($item in $zip.items())
-           {
-              $shell.Namespace($DestinationPath).copyhere($item)
-           }
+        function Expand-Zip($Path, $DestinationPath) {
+            mkdirs $DestinationPath
+            $shell = new-object -com shell.application
+            $zip = $shell.NameSpace($Path)
+            foreach ($item in $zip.items()) {
+                $shell.Namespace($DestinationPath).copyhere($item)
+            }
         }
         Expand-Zip -Path $pkg_out -DestinationPath $prefix\WMF51
         & "$prefix\WMF51\Install-WMF5.1.ps1"
-    } else {
+    }
+    else {
         wusa.exe $pkg_out /quiet /norestart
     }
 
@@ -99,23 +100,42 @@ $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
 
 if ($IsWin) {
     if ("$env:AX_ROOT" -ne "$AX_ROOT") {
+        $env:AX_ROOT = $AX_ROOT
         [Environment]::SetEnvironmentVariable('AX_ROOT', $AX_ROOT, 'User')
     }
 
     $pathList = [System.Collections.ArrayList]$env:PATH.Split(';')
-    if ($pathList.IndexOf($AX_CONSOLE_ROOT) -eq -1) {
-        $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User') # we need get real pathList from CurrentUser
-        if ($strPathList) {
-            $pathList = [System.Collections.ArrayList]($strPathList.Split(';'))
-            $pathList.Insert(0, $AX_CONSOLE_ROOT)
+    $isMeInPath = $pathList.IndexOf($AX_CONSOLE_ROOT) -ne -1
+    $oldCmdRoot = $null
+    $cmdInfo = Get-Command 'axmol' -ErrorAction SilentlyContinue
+    if ($cmdInfo) {
+        $cmdRootTmp = Split-Path $cmdInfo.Source -Parent
+        if ($cmdRootTmp -ne $AX_CONSOLE_ROOT) {
+            $oldCmdRoot = $cmdRootTmp
         }
-        else {
-            $pathList = @($AX_CONSOLE_ROOT)
+    }
+    
+    if (!$isMeInPath -or $oldCmdRoot) {
+        $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User') # we need get real pathList from CurrentUser
+        if ($strPathList) { 
+            $pathList = [System.Collections.ArrayList]($strPathList.Split(';')) 
+        }
+        else { 
+            $pathList = New-Object System.Collections.ArrayList 
+        }
+        
+        if ($oldCmdRoot) {
+            $pathList.Remove($oldCmdRoot)
+        }
+        
+        if ($isMeInPath -and ($pathList[0] -ne $AX_CONSOLE_ROOT)) {
+            $pathList.Remove($AX_CONSOLE_ROOT)
+            $pathList.Insert(0, $AX_CONSOLE_ROOT)
         }
         
         $strPathList = $pathList -join ';'
         [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
-        $env:PATH = "$AX_CONSOLE_ROOT;$env:PATH" # sync to PowerShell Terminal
+        $env:PATH = $strPathList # sync to PowerShell Terminal
     }
 }
 else {
@@ -128,15 +148,16 @@ else {
     }
 
     $profileMods = 0
-    $matchRet = [Regex]::Match($profileContent,"env\:AX_ROOT\s+\=\s+.*")
+    $matchRet = [Regex]::Match($profileContent, "env\:AX_ROOT\s+\=\s+.*")
     if (!$matchRet.Success) {
         $profileContent += "# Add environment variable AX_ROOT for axmol`n"
         $profileContent += '$env:AX_ROOT = "{0}"{1}' -f $AX_ROOT, "`n"
         ++$profileMods
     }
-    elseif($env:AX_ROOT -ne $AX_ROOT) { # contains AX_ROOT statement, but not equal us
+    elseif ($env:AX_ROOT -ne $AX_ROOT) {
+        # contains AX_ROOT statement, but not equal us
         Write-Host "Updating env AX_ROOT from ${env:AX_ROOT} to $AX_ROOT"
-        $profileContent = [Regex]::Replace($profileContent,"env\:AX_ROOT\s+\=\s+.*", "env:AX_ROOT = '$AX_ROOT'")
+        $profileContent = [Regex]::Replace($profileContent, "env\:AX_ROOT\s+\=\s+.*", "env:AX_ROOT = '$AX_ROOT'")
         ++$profileMods
     }
 
@@ -160,19 +181,20 @@ else {
     function updateUnixProfile($profileFile) {
         $profileMods = 0
         $profileContent = Get-Content $profileFile -raw
-        $matchRet = [Regex]::Match($profileContent,"export AX_ROOT\=.*")
+        $matchRet = [Regex]::Match($profileContent, "export AX_ROOT\=.*")
         if (!$matchRet.Success) {
             $profileContent += "# Add environment variable AX_ROOT for axmol`n"
             $profileContent += 'export AX_ROOT="{0}"{1}' -f $AX_ROOT, "`n"
             ++$profileMods
-        } else {
+        }
+        else {
             $stmtLine = 'export AX_ROOT="{0}"' -f $AX_ROOT
-            if($matchRet.Value -ne $stmtLine) {
-                $profileContent = [Regex]::Replace($profileContent,"export AX_ROOT\=.*", $stmtLine)
+            if ($matchRet.Value -ne $stmtLine) {
+                $profileContent = [Regex]::Replace($profileContent, "export AX_ROOT\=.*", $stmtLine)
             }
         }
 
-        if($profileContent.IndexOf('export PATH=$AX_ROOT/tools/console:')) {
+        if ($profileContent.IndexOf('export PATH=$AX_ROOT/tools/console:')) {
             $profileContent += "# Add axmol console tool to PATH`n"
             $profileContent += 'export PATH=$AX_ROOT/tools/console:$PATH' -f "`n"
             ++$profileMods
@@ -186,12 +208,13 @@ else {
         updateUnixProfile ~/.bashrc
     }
     
-    if(Test-Path ~/.zshrc -PathType Leaf) {
+    if (Test-Path ~/.zshrc -PathType Leaf) {
         updateUnixProfile ~/.zshrc
     }
 
     # update macos launchctl
-    if ($IsMacOS) { # for GUI app, android studio can find AX_ROOT
+    if ($IsMacOS) {
+        # for GUI app, android studio can find AX_ROOT
         launchctl setenv AX_ROOT $env:AX_ROOT
     }
 }
@@ -230,7 +253,8 @@ if ($IsLinux) {
             # sudo apt install ubuntu-restricted-extras
 
             sudo apt install --allow-unauthenticated --yes $DEPENDS > /dev/null
-        } elseif($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
+        }
+        elseif ($(Get-Command 'pacman' -ErrorAction SilentlyContinue)) {
             $DEPENDS = @(
                 'git',
                 'cmake',
@@ -243,7 +267,7 @@ if ($IsLinux) {
                 'fontconfig',
                 'gtk3',
                 'vlc'
-                )
+            )
             sudo pacman -S --needed --noconfirm @DEPENDS
         }
         else {
