@@ -634,11 +634,13 @@ function setup_jdk() {
         return $javac_prog
     }
 
-    $java_home = Join-Path $prefix "jdk"
+    $jdk_root = Join-Path $prefix "jdk"
+    $java_home = if(!$IsMacOS) { $jdk_root } else { Join-Path $jdk_root 'Contents/Home' }
     $jdk_bin = Join-Path $java_home 'bin'
+    
     $javac_prog, $jdk_ver = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -silent $true
     if (!$javac_prog) {
-        $b1k.rmdirs($java_home)
+        $b1k.rmdirs($jdk_root)
 
         # refer to https://learn.microsoft.com/en-us/java/openjdk/download
         download_and_expand "https://aka.ms/download-jdk/microsoft-jdk-$jdk_ver-$suffix" "$prefix/microsoft-jdk-$jdk_ver-$suffix" "$prefix/"
@@ -646,7 +648,7 @@ function setup_jdk() {
         # move to plain folder name
         $folderName = (Get-ChildItem -Path $prefix -Filter "jdk-$jdk_ver+*").Name
         if ($folderName) {
-            $b1k.mv("$prefix/$folderName", $java_home)
+            $b1k.mv("$prefix/$folderName", $jdk_root)
         }
     }
 
@@ -655,7 +657,7 @@ function setup_jdk() {
     if ($env:PATH.IndexOf($jdk_bin) -eq -1) {
         $env:PATH = "$jdk_bin$envPathSep$env:PATH"
     }
-    $javac_prog = find_prog -name 'javac' -path $jdk_bin -silent $true
+    $javac_prog = find_prog -name 'jdk' -cmd 'javac' -path $jdk_bin -mode 'ONLY' -silent $true
     if (!$javac_prog) {
         throw "Install jdk $jdk_ver fail"
     }
