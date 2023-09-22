@@ -34,16 +34,20 @@ if(!$srcPath -or !(Test-Path $srcPath -PathType Any)) {
     throw "fsync.ps1: The source directory $srcPath not exist"
 }
 
-if (Test-Path $destPath -PathType Container) { # dest already exist
+if (Test-Path $destPath -PathType Any) { # dest already exist
     if ($linkOnly) { # is symlink and dest exist
-        $directoryInfo = (Get-Item $destPath)
-        if ($directoryInfo.Target -eq $srcPath) {
-            Write-Host "fsync.ps1: Symlink $destPath ===> $($directoryInfo.Target) exists"
+        $fileItem = (Get-Item $destPath)
+        if ($fileItem.Target -eq $srcPath) {
+            Write-Host "fsync.ps1: Symlink $destPath ===> $($fileItem.Target) exists"
             return
         }
-        Write-Host "fsync.ps1: Removing old link target $($directoryInfo.Target)"
+        Write-Host "fsync.ps1: Removing old link target $($fileItem.Target)"
         # force delete if exist dest not symlink
-        $directoryInfo.Delete($true)
+        if ($fileItem.PSIsContainer -and !$fileItem.Target) {
+            $fileItem.Delete($true)
+        } else {
+            $fileItem.Delete()
+        }
     }
 }
 
