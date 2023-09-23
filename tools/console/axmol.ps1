@@ -304,7 +304,7 @@ if (!$sub_args[0] -or $help) {
 
 $sub_opts = @{}
 if ($sub_args.IndexOf('-d') -eq -1) {
-    $sub_opts['-d'] = $(Get-Location).Path
+    $sub_opts['d'] = $(Get-Location).Path
 }
 
 . $plugin.proc @sub_args @sub_opts
