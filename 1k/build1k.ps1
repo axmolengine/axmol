@@ -52,7 +52,8 @@
 #
 param(
     [switch]$configOnly,
-    [switch]$setupOnly
+    [switch]$setupOnly,
+    [switch]$forceConfig
 )
 
 $myRoot = $PSScriptRoot
@@ -440,22 +441,22 @@ function setup_nuget() {
     if (!$manifest['nuget']) { return $null }
     $nuget_bin = Join-Path $prefix 'nuget'
     $nuget_prog, $nuget_ver = find_prog -name 'nuget' -path $nuget_bin -mode 'BOTH'
-    if ($nuget_prog) {
-        return $nuget_prog
+    if (!$nuget_prog) {
+        $b1k.rmdirs($nuget_bin)
+        $b1k.mkdirs($nuget_bin)
+
+        $nuget_prog = Join-Path $nuget_bin 'nuget.exe'
+        download_file "https://dist.nuget.org/win-x86-commandline/v$nuget_ver/nuget.exe" $nuget_prog
+        if (!$b1k.isfile($nuget_prog)) {
+            throw "Install nuget fail"
+        }
     }
 
-    $b1k.rmdirs($nuget_bin)
-    $b1k.mkdirs($nuget_bin)
-
-    $nuget_prog = Join-Path $nuget_bin 'nuget.exe'
-    download_file "https://dist.nuget.org/win-x86-commandline/v$nuget_ver/nuget.exe" $nuget_prog
-
-    if ($b1k.isfile($nuget_prog)) {
-        $b1k.println("Using nuget: $nuget_prog, version: $nuget_ver")
-        return $nuget_prog
+    if ($env:PATH.IndexOf($nuget_bin) -eq -1) {
+        $env:PATH = "$nuget_bin$envPathSep$env:PATH"
     }
-
-    throw "Install nuget fail"
+    $b1k.println("Using nuget: $nuget_prog, version: $nuget_ver")
+    return $nuget_prog
 }
 
 # setup glslcc, not add to path
@@ -1078,8 +1079,11 @@ $null = setup_glslcc
 
 $cmake_prog = setup_cmake
 
-if ($BUILD_TARGET -eq 'win32') {
+if($BUILD_TARGET -eq 'win32' -or $BUILD_TARGET -eq 'winuwp') {
     $nuget_prog = setup_nuget
+}
+
+if ($BUILD_TARGET -eq 'win32') {
     $nsis_prog = setup_nsis
     if ($TOOLCHAIN_NAME -eq 'clang') {
         $ninja_prog = setup_ninja
@@ -1223,7 +1227,7 @@ if (!$setupOnly) {
         $mainDepChanged = "$storeHash" -ne "$hashValue"
         $cmakeCachePath = Join-Path $workDir "$BUILD_DIR/CMakeCache.txt"
 
-        if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath)) {
+        if ($mainDepChanged -or !$b1k.isfile($cmakeCachePath) -or $forceConfig) {
             if (!$is_wasm) {
                 cmake -B $BUILD_DIR $CONFIG_ALL_OPTIONS | Out-Host
             }
