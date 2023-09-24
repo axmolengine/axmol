@@ -440,7 +440,7 @@ function download_and_expand($url, $out, $dest) {
 function setup_nuget() {
     if (!$manifest['nuget']) { return $null }
     $nuget_bin = Join-Path $prefix 'nuget'
-    $nuget_prog, $nuget_ver = find_prog -name 'nuget' -path $nuget_bin -mode 'BOTH'
+    $nuget_prog, $nuget_ver = find_prog -name 'nuget' -path $nuget_bin -mode 'BOTH' -silent $true
     if (!$nuget_prog) {
         $b1k.rmdirs($nuget_bin)
         $b1k.mkdirs($nuget_bin)
