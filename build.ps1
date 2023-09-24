@@ -33,7 +33,8 @@
 #   on macos: target platform is osx, arch=x64
 #
 param(
-    [switch]$configOnly
+    [switch]$configOnly,
+    [switch]$forceConfig
 )
 
 $options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null }
@@ -42,7 +43,7 @@ $optName = $null
 foreach ($arg in $args) {
     if (!$optName) {
         if ($arg.StartsWith('-')) { 
-            $optName = $arg.SubString(1)
+            $optName = $arg.SubString(1).TrimEnd(':')
         }
     }
     else {
@@ -84,7 +85,7 @@ if(!$b1k_root) {
     }
 }
 
-$source_proj_dir = if($options.d) { $option.d } else { $workDir }
+$source_proj_dir = if($options.d) { $options.d } else { $workDir }
 $is_engine = ($source_proj_dir -eq $AX_ROOT)
 $is_android = $options.p -eq 'android'
 $is_ci = $env:GITHUB_ACTIONS -eq 'true'
@@ -197,11 +198,15 @@ foreach ($option in $options.GetEnumerator()) {
     }
 }
 
-if (!$configOnly) {
-    . $b1k_script @b1k_args
-} else {
-    . $b1k_script @b1k_args -configOnly
+$forward_args = @{}
+if ($configOnly) {
+    $forward_args['configOnly'] = $true
 }
+if ($forceConfig) {
+    $forward_args['forceConfig'] = $true
+}
+
+. $b1k_script @b1k_args @forward_args
 
 if (!$nb) {
     $b1k.pause('Build done')
