@@ -21,7 +21,8 @@ jobs:
       with:
         submodules: 'recursive'
     - uses: ilammy/msvc-dev-cmd@v1.12.1
-      with: 
+      with:
+        toolset: '14.37'
         arch: 'x64'
     - name: Build
       shell: pwsh
@@ -37,7 +38,8 @@ jobs:
           with:
             submodules: 'recursive'
         - uses: ilammy/msvc-dev-cmd@v1.12.1
-          with: 
+          with:
+            toolset: '14.37'
             arch: 'x64'
         - name: Build
           shell: pwsh
@@ -54,7 +56,8 @@ jobs:
           with:
             submodules: 'recursive'
         - uses: ilammy/msvc-dev-cmd@v1.12.1
-          with: 
+          with:
+            toolset: '14.37'
             arch: 'x64'
             uwp: true
         - name: Build
