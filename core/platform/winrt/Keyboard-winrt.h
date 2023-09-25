@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
@@ -28,29 +28,31 @@ THE SOFTWARE.
 
 #pragma once
 
-#include <agile.h>
+#include <winrt/Windows.UI.Xaml.h>
 #include "platform/winrt/InputEvent.h"
 
 NS_AX_BEGIN
 
-ref class KeyBoardWinRT sealed
+class KeyBoardWinRT
 {
 public:
     KeyBoardWinRT();
     virtual ~KeyBoardWinRT();
 
-    void ShowKeyboard(Platform::String^ text);
-    void HideKeyboard(Platform::String^ text);
+    void ShowKeyboard(const winrt::hstring& text);
+    void HideKeyboard(const winrt::hstring& text);
 
-internal:
-    void OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs^ args);
+public:
+    void OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
 
 private:
-    void OnTextChanged(Platform::Object^ sender, Windows::UI::Xaml::Controls::TextChangedEventArgs^ args);
-	void OnTextCompositionStarted(Windows::UI::Xaml::Controls::TextBox^, Windows::UI::Xaml::Controls::TextCompositionStartedEventArgs^ args);
-	void OnTextCompositionEnded(Windows::UI::Xaml::Controls::TextBox^, Windows::UI::Xaml::Controls::TextCompositionEndedEventArgs^ args);
+    void OnTextChanged(const Windows::Foundation::IInspectable& sender,
+                       Windows::UI::Xaml::Controls::TextChangedEventArgs const& args);
+	void OnTextCompositionStarted(Windows::UI::Xaml::Controls::TextBox, Windows::UI::Xaml::Controls::TextCompositionStartedEventArgs const& args);
+    void OnTextCompositionEnded(Windows::UI::Xaml::Controls::TextBox,
+                                Windows::UI::Xaml::Controls::TextCompositionEndedEventArgs const& args);
 
-    Windows::UI::Xaml::Controls::TextBox^ m_textBox;
+    Windows::UI::Xaml::Controls::TextBox m_textBox{nullptr};
 
 	bool m_useInputMethod;
 };

@@ -24,21 +24,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "platform/PlatformConfig.h"
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
 #include "platform/winrt/GLViewImpl-winrt.h"
-using namespace Windows::UI::Core;
-using namespace Windows::Foundation;
-
-#else
-#include "platform/wp8/GLViewImpl-wp8.h"
-#endif
 #include "base/Director.h"
 #include <algorithm>
 #include "platform/FileUtils.h"
 #include "platform/winrt/WinRTUtils.h"
 #include "platform/Application.h"
-// #include "tinyxml2/tinyxml2.h"
+
 #include "pugixml/pugixml.hpp"
+
+#include <winrt/Windows.System.UserProfile.h>
+#include <winrt/Windows.Foundation.Collections.h>
+
+using namespace Windows::UI::Core;
+using namespace Windows::Foundation;
 
 /**
 @brief    This function change the PVRFrame show/hide setting in register.
@@ -111,29 +110,8 @@ Application* Application::getInstance()
 const char * Application::getCurrentLanguageCode()
 {
 	static std::string code = "en";
-
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
-    auto languages = Windows::System::UserProfile::GlobalizationPreferences::Languages;
-    code = PlatformStringToString(languages->GetAt(0));
-#else
-    ULONG numLanguages = 0;
-    DWORD cchLanguagesBuffer = 0;
-    BOOL result = GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, NULL, &cchLanguagesBuffer);
-
-    if (result) {
-        WCHAR* pwszLanguagesBuffer = new WCHAR[cchLanguagesBuffer];
-        result = GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &numLanguages, pwszLanguagesBuffer, &cchLanguagesBuffer);
-        if (result) {
-
-            code = ntcvt::from_chars(pwszLanguagesBuffer);
-        }
-
-        if (pwszLanguagesBuffer)
-        {
-            delete [] pwszLanguagesBuffer;
-        }
-    }
-#endif
+    auto languages = Windows::System::UserProfile::GlobalizationPreferences::Languages();
+    code = PlatformStringToString(languages.GetAt(0));
     return code.c_str();
 }
 
@@ -171,24 +149,12 @@ std::string  Application::getVersion()
 
 bool Application::openURL(std::string_view url)
 {
-#if AX_TARGET_PLATFORM == AX_PLATFORM_WINRT
     auto dispatcher = ax::GLViewImpl::sharedOpenGLView()->getDispatcher();
-    dispatcher->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, ref new DispatchedHandler([url]() {
-        auto uri = ref new Windows::Foundation::Uri(PlatformStringFromString(url));
-        concurrency::task<bool> launchUriOperation(Windows::System::Launcher::LaunchUriAsync(uri));
+    dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, DispatchedHandler([url]() {
+        auto uri = Windows::Foundation::Uri(PlatformStringFromString(url));
+        Windows::System::Launcher::LaunchUriAsync(uri);
     }));
     return true;
-#else
-    if (m_openURLDelegate)
-    {
-        m_openURLDelegate(PlatformStringFromString(url));
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-#endif
 }
 
 void Application::setStartupScriptFilename(const std::string& startupScriptFile)

@@ -28,7 +28,6 @@
 #include <iostream>
 #include <fstream>
 
-using namespace Platform;
 using namespace Windows::UI::Core;
 using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::Graphics::Display;
@@ -43,8 +42,8 @@ AxmolRenderer::AxmolRenderer(int width,
                              int height,
                              float dpi,
                              DisplayOrientations orientation,
-                             CoreDispatcher ^ dispatcher,
-                             Panel ^ panel)
+                             CoreDispatcher const& dispatcher,
+                             Panel const& panel)
     : m_width(width), m_height(height), m_dpi(dpi), m_dispatcher(dispatcher), m_panel(panel), m_orientation(orientation)
 {
     appDelegate.reset(new AppDelegate());
@@ -63,8 +62,8 @@ void AxmolRenderer::Resume()
             "AXMOL10", ax::Rect{0, 0, static_cast<float>(m_width), static_cast<float>(m_height)});
         glview->UpdateOrientation(m_orientation);
         glview->SetDPI(m_dpi);
-        glview->setDispatcher(m_dispatcher.Get());
-        glview->setPanel(m_panel.Get());
+        glview->setDispatcher(m_dispatcher);
+        glview->setPanel(m_panel);
         director->setOpenGLView(glview);
         Application::getInstance()->run();
     }
@@ -146,7 +145,7 @@ void AxmolRenderer::Draw(size_t width, size_t height, float dpi, DisplayOrientat
     glView->Render();
 }
 
-void AxmolRenderer::QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs ^ args)
+void AxmolRenderer::QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs const& args)
 {
     GLViewImpl::sharedOpenGLView()->QueuePointerEvent(type, args);
 }
@@ -156,7 +155,7 @@ void AxmolRenderer::QueueBackButtonEvent()
     GLViewImpl::sharedOpenGLView()->QueueBackKeyPress();
 }
 
-void AxmolRenderer::QueueKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs ^ args)
+void AxmolRenderer::QueueKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
 {
     GLViewImpl::sharedOpenGLView()->QueueWinRTKeyboardEvent(type, args);
 }

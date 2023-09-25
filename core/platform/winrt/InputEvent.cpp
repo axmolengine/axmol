@@ -37,7 +37,6 @@ NS_AX_BEGIN
 AccelerometerEvent::AccelerometerEvent(const Acceleration& event)
     : m_event(event)
 {
-
 }
 
 void AccelerometerEvent::execute()
@@ -48,7 +47,7 @@ void AccelerometerEvent::execute()
 }
 
 
-PointerEvent::PointerEvent(PointerEventType type, Windows::UI::Core::PointerEventArgs^ args)
+PointerEvent::PointerEvent(PointerEventType type, const Windows::UI::Core::PointerEventArgs& args)
     : m_type(type), m_args(args)
 {
 
@@ -59,36 +58,36 @@ void PointerEvent::execute()
     switch(m_type)
     {
     case PointerEventType::PointerPressed:
-        GLViewImpl::sharedOpenGLView()->OnPointerPressed(m_args.Get());
+        GLViewImpl::sharedOpenGLView()->OnPointerPressed(m_args);
         break;
     case PointerEventType::PointerMoved:
-        GLViewImpl::sharedOpenGLView()->OnPointerMoved(m_args.Get());
+        GLViewImpl::sharedOpenGLView()->OnPointerMoved(m_args);
         break;           
     case PointerEventType::PointerReleased:
-        GLViewImpl::sharedOpenGLView()->OnPointerReleased(m_args.Get());
+        GLViewImpl::sharedOpenGLView()->OnPointerReleased(m_args);
         break;
     case ax::MousePressed:
-        GLViewImpl::sharedOpenGLView()->OnMousePressed(m_args.Get());
+        GLViewImpl::sharedOpenGLView()->OnMousePressed(m_args);
         break;
     case ax::MouseMoved:
-        GLViewImpl::sharedOpenGLView()->OnMouseMoved(m_args.Get());
+        GLViewImpl::sharedOpenGLView()->OnMouseMoved(m_args);
         break;
     case ax::MouseReleased:
-        GLViewImpl::sharedOpenGLView()->OnMouseReleased(m_args.Get());
+        GLViewImpl::sharedOpenGLView()->OnMouseReleased(m_args);
         break;
     case ax::MouseWheelChanged:
-        GLViewImpl::sharedOpenGLView()->OnMouseWheelChanged(m_args.Get());
+        GLViewImpl::sharedOpenGLView()->OnMouseWheelChanged(m_args);
         break;
     }
 }
 
 KeyboardEvent::KeyboardEvent(AxmolKeyEvent type)
-    : m_type(type), m_text(nullptr)
+    : m_type(type), m_text()
 {
 
 }
 
-KeyboardEvent::KeyboardEvent(AxmolKeyEvent type, Platform::String ^ text)
+KeyboardEvent::KeyboardEvent(AxmolKeyEvent type, const winrt::hstring& text)
     : m_type(type), m_text(text)
 {
 
@@ -100,7 +99,7 @@ void KeyboardEvent::execute()
     {
     case AxmolKeyEvent::Text:
     {
-        std::string utf8String = PlatformStringToString(m_text.Get());
+        std::string utf8String = PlatformStringToString(m_text);
         IMEDispatcher::sharedDispatcher()->dispatchInsertText(utf8String.c_str(), utf8String.size());
         break;
     }
@@ -124,14 +123,14 @@ void KeyboardEvent::execute()
     }
 }
 
-WinRTKeyboardEvent::WinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs^ args)
+WinRTKeyboardEvent::WinRTKeyboardEvent(WinRTKeyboardEventType type, const Windows::UI::Core::KeyEventArgs& args)
 	: m_type(type), m_key(args)
 {
 }
 
 void WinRTKeyboardEvent::execute()
 {
-	GLViewImpl::sharedOpenGLView()->OnWinRTKeyboardEvent(m_type, m_key.Get());
+	GLViewImpl::sharedOpenGLView()->OnWinRTKeyboardEvent(m_type, m_key);
 }
 
 BackButtonEvent::BackButtonEvent()
@@ -154,7 +153,9 @@ void CustomInputEvent::execute()
     m_fun();
 }
 
-UIEditBoxEvent::UIEditBoxEvent(Platform::Object^ sender, Platform::String^ text, Windows::Foundation::EventHandler<Platform::String^>^ handle) 
+UIEditBoxEvent::UIEditBoxEvent(const Windows::Foundation::IInspectable& sender,
+                               const winrt::hstring& text,
+    const winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&>& handle) 
     : m_sender(sender)
     , m_text(text)
     , m_handler(handle)
@@ -164,13 +165,17 @@ UIEditBoxEvent::UIEditBoxEvent(Platform::Object^ sender, Platform::String^ text,
 
 void UIEditBoxEvent::execute()
 {
-    if (m_handler.Get())
+    if (m_handler)
     {
-        m_handler.Get()->Invoke(m_sender.Get(), m_text.Get());
+        m_handler(m_sender, m_text);
     }
 }
 
-UIEditBoxEndEvent::UIEditBoxEndEvent(Platform::Object^ sender, Platform::String^ text, int action, Windows::Foundation::EventHandler<ax::EndEventArgs^>^ handle)
+UIEditBoxEndEvent::UIEditBoxEndEvent(
+    const Windows::Foundation::IInspectable& sender,
+    const winrt::hstring& text,
+    int action,
+    winrt::delegate<Windows::Foundation::IInspectable const&, EndEventArgs const&>& handle)
   : m_sender(sender)
   , m_text(text)
   , m_action(action)
@@ -181,10 +186,10 @@ UIEditBoxEndEvent::UIEditBoxEndEvent(Platform::Object^ sender, Platform::String^
 
 void UIEditBoxEndEvent::execute()
 {
-  if (m_handler.Get())
+  if (m_handler)
   {
-    auto args = ref new EndEventArgs(m_action, m_text.Get());
-    m_handler.Get()->Invoke(m_sender.Get(), args);
+    EndEventArgs args(m_action, m_text);
+    m_handler(m_sender, args);
   }
 }
 

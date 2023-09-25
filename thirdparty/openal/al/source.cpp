@@ -84,6 +84,7 @@ namespace {
 
 using namespace std::placeholders;
 using std::chrono::nanoseconds;
+using seconds_d = std::chrono::duration<double>;
 
 Voice *GetSourceVoice(ALsource *source, ALCcontext *context)
 {
@@ -434,7 +435,7 @@ struct VoicePos {
  * GetSampleOffset
  *
  * Retrieves the voice position, fixed-point fraction, and bufferlist item
- * using the givem offset type and offset. If the offset is out of range,
+ * using the given offset type and offset. If the offset is out of range,
  * returns an empty optional.
  */
 std::optional<VoicePos> GetSampleOffset(al::deque<ALbufferQueueItem> &BufferList,
@@ -718,8 +719,7 @@ inline ALenum GetSourceState(ALsource *source, Voice *voice)
 
 bool EnsureSources(ALCcontext *context, size_t needed)
 {
-    size_t count{std::accumulate(context->mSourceList.cbegin(), context->mSourceList.cend(),
-        size_t{0},
+    size_t count{std::accumulate(context->mSourceList.cbegin(), context->mSourceList.cend(), 0_uz,
         [](size_t cur, const SourceSubList &sublist) noexcept -> size_t
         { return cur + static_cast<ALuint>(al::popcount(sublist.FreeMask)); })};
 
@@ -764,6 +764,8 @@ ALsource *AllocSource(ALCcontext *context)
 
 void FreeSource(ALCcontext *context, ALsource *source)
 {
+    context->mSourceNames.erase(source->id);
+
     const ALuint id{source->id - 1};
     const size_t lidx{id >> 6};
     const ALuint slidx{id & 0x3f};
@@ -1419,9 +1421,9 @@ auto GetCheckers(ALCcontext *const Context, const SourceProp prop, const al::spa
     );
 }
 
-template<typename T, size_t N>
-void SetProperty(ALsource *const Source, ALCcontext *const Context, const SourceProp prop,
-    const al::span<const T,N> values) try
+template<typename T>
+NOINLINE void SetProperty(ALsource *const Source, ALCcontext *const Context, const SourceProp prop,
+    const al::span<const T> values) try
 {
     auto&& [CheckSize, CheckValue] = GetCheckers(Context, prop, values);
     ALCdevice *device{Context->mALDevice.get()};
@@ -2004,15 +2006,14 @@ auto GetSizeChecker(ALCcontext *const Context, const SourceProp prop, const al::
     };
 }
 
-template<typename T, size_t N>
-[[nodiscard]]
+template<typename T>
+[[nodiscard]] NOINLINE
 bool GetProperty(ALsource *const Source, ALCcontext *const Context, const SourceProp prop,
-    const al::span<T,N> values) try
+    const al::span<T> values) try
 {
+    using std::chrono::duration_cast;
     auto CheckSize = GetSizeChecker(Context, prop, values);
     ALCdevice *device{Context->mALDevice.get()};
-    ClockLatency clocktime;
-    nanoseconds srcclock;
 
     switch(prop)
     {
@@ -2164,20 +2165,22 @@ bool GetProperty(ALsource *const Source, ALCcontext *const Context, const Source
             /* Get the source offset with the clock time first. Then get the
              * clock time with the device latency. Order is important.
              */
+            ClockLatency clocktime{};
+            nanoseconds srcclock{};
             values[0] = GetSourceSampleOffset(Source, Context, &srcclock);
             {
                 std::lock_guard<std::mutex> _{device->StateLock};
                 clocktime = GetClockLatency(device, device->Backend.get());
             }
             if(srcclock == clocktime.ClockTime)
-                values[1] = clocktime.Latency.count();
+                values[1] = nanoseconds{clocktime.Latency}.count();
             else
             {
                 /* If the clock time incremented, reduce the latency by that
                  * much since it's that much closer to the source offset it got
                  * earlier.
                  */
-                const nanoseconds diff{std::min(clocktime.Latency, clocktime.ClockTime-srcclock)};
+                const auto diff = std::min(clocktime.Latency, clocktime.ClockTime-srcclock);
                 values[1] = nanoseconds{clocktime.Latency - diff}.count();
             }
             return true;
@@ -2188,6 +2191,7 @@ bool GetProperty(ALsource *const Source, ALCcontext *const Context, const Source
         if constexpr(std::is_same_v<T,int64_t>)
         {
             CheckSize(2);
+            nanoseconds srcclock{};
             values[0] = GetSourceSampleOffset(Source, Context, &srcclock);
             values[1] = srcclock.count();
             return true;
@@ -2201,22 +2205,23 @@ bool GetProperty(ALsource *const Source, ALCcontext *const Context, const Source
             /* Get the source offset with the clock time first. Then get the
              * clock time with the device latency. Order is important.
              */
+            ClockLatency clocktime{};
+            nanoseconds srcclock{};
             values[0] = GetSourceSecOffset(Source, Context, &srcclock);
             {
                 std::lock_guard<std::mutex> _{device->StateLock};
                 clocktime = GetClockLatency(device, device->Backend.get());
             }
             if(srcclock == clocktime.ClockTime)
-                values[1] = static_cast<double>(clocktime.Latency.count()) / 1'000'000'000.0;
+                values[1] = duration_cast<seconds_d>(clocktime.Latency).count();
             else
             {
                 /* If the clock time incremented, reduce the latency by that
                  * much since it's that much closer to the source offset it got
                  * earlier.
                  */
-                const nanoseconds diff{clocktime.ClockTime - srcclock};
-                const nanoseconds latency{clocktime.Latency - std::min(clocktime.Latency, diff)};
-                values[1] = static_cast<double>(latency.count()) / 1'000'000'000.0;
+                const auto diff = std::min(clocktime.Latency, clocktime.ClockTime-srcclock);
+                values[1] = duration_cast<seconds_d>(clocktime.Latency - diff).count();
             }
             return true;
         }
@@ -2226,8 +2231,9 @@ bool GetProperty(ALsource *const Source, ALCcontext *const Context, const Source
         if constexpr(std::is_same_v<T,double>)
         {
             CheckSize(2);
+            nanoseconds srcclock{};
             values[0] = GetSourceSecOffset(Source, Context, &srcclock);
-            values[1] = static_cast<double>(srcclock.count()) / 1'000'000'000.0;
+            values[1] = duration_cast<seconds_d>(srcclock).count();
             return true;
         }
         break;
@@ -2625,6 +2631,7 @@ void StartSources(ALCcontext *const context, const al::span<ALsource*> srchandle
 
 } // namespace
 
+AL_API DECL_FUNC2(void, alGenSources, ALsizei, ALuint*)
 FORCE_ALIGN void AL_APIENTRY alGenSourcesDirect(ALCcontext *context, ALsizei n, ALuint *sources) noexcept
 {
     if(n < 0) UNLIKELY
@@ -2670,6 +2677,7 @@ FORCE_ALIGN void AL_APIENTRY alGenSourcesDirect(ALCcontext *context, ALsizei n, 
     }
 }
 
+AL_API DECL_FUNC2(void, alDeleteSources, ALsizei, const ALuint*)
 FORCE_ALIGN void AL_APIENTRY alDeleteSourcesDirect(ALCcontext *context, ALsizei n,
     const ALuint *sources) noexcept
 {
@@ -2697,6 +2705,7 @@ FORCE_ALIGN void AL_APIENTRY alDeleteSourcesDirect(ALCcontext *context, ALsizei 
     std::for_each(sources, sources_end, delete_source);
 }
 
+AL_API DECL_FUNC1(ALboolean, alIsSource, ALuint)
 FORCE_ALIGN ALboolean AL_APIENTRY alIsSourceDirect(ALCcontext *context, ALuint source) noexcept
 {
     std::lock_guard<std::mutex> _{context->mSourceLock};
@@ -2706,6 +2715,7 @@ FORCE_ALIGN ALboolean AL_APIENTRY alIsSourceDirect(ALCcontext *context, ALuint s
 }
 
 
+AL_API DECL_FUNC3(void, alSourcef, ALuint, ALenum, ALfloat)
 FORCE_ALIGN void AL_APIENTRY alSourcefDirect(ALCcontext *context, ALuint source, ALenum param,
     ALfloat value) noexcept
 {
@@ -2715,10 +2725,10 @@ FORCE_ALIGN void AL_APIENTRY alSourcefDirect(ALCcontext *context, ALuint source,
     if(!Source) UNLIKELY
         return context->setError(AL_INVALID_NAME, "Invalid source ID %u", source);
 
-    SetProperty(Source, context, static_cast<SourceProp>(param),
-        al::span<const float,1>{&value, 1u});
+    SetProperty<float>(Source, context, static_cast<SourceProp>(param), al::span{&value, 1u});
 }
 
+AL_API DECL_FUNC5(void, alSource3f, ALuint, ALenum, ALfloat, ALfloat, ALfloat)
 FORCE_ALIGN void AL_APIENTRY alSource3fDirect(ALCcontext *context, ALuint source, ALenum param,
     ALfloat value1, ALfloat value2, ALfloat value3) noexcept
 {
@@ -2729,9 +2739,10 @@ FORCE_ALIGN void AL_APIENTRY alSource3fDirect(ALCcontext *context, ALuint source
         return context->setError(AL_INVALID_NAME, "Invalid source ID %u", source);
 
     const float fvals[3]{ value1, value2, value3 };
-    SetProperty(Source, context, static_cast<SourceProp>(param), al::span{fvals});
+    SetProperty<float>(Source, context, static_cast<SourceProp>(param), al::span{fvals});
 }
 
+AL_API DECL_FUNC3(void, alSourcefv, ALuint, ALenum, const ALfloat*)
 FORCE_ALIGN void AL_APIENTRY alSourcefvDirect(ALCcontext *context, ALuint source, ALenum param,
     const ALfloat *values) noexcept
 {
@@ -2748,6 +2759,7 @@ FORCE_ALIGN void AL_APIENTRY alSourcefvDirect(ALCcontext *context, ALuint source
 }
 
 
+AL_API DECL_FUNCEXT3(void, alSourced,SOFT, ALuint, ALenum, ALdouble)
 FORCE_ALIGN void AL_APIENTRY alSourcedDirectSOFT(ALCcontext *context, ALuint source, ALenum param,
     ALdouble value) noexcept
 {
@@ -2757,10 +2769,10 @@ FORCE_ALIGN void AL_APIENTRY alSourcedDirectSOFT(ALCcontext *context, ALuint sou
     if(!Source) UNLIKELY
         return context->setError(AL_INVALID_NAME, "Invalid source ID %u", source);
 
-    SetProperty(Source, context, static_cast<SourceProp>(param),
-        al::span<const double,1>{&value, 1});
+    SetProperty<double>(Source, context, static_cast<SourceProp>(param), al::span{&value, 1});
 }
 
+AL_API DECL_FUNCEXT5(void, alSource3d,SOFT, ALuint, ALenum, ALdouble, ALdouble, ALdouble)
 FORCE_ALIGN void AL_APIENTRY alSource3dDirectSOFT(ALCcontext *context, ALuint source, ALenum param,
     ALdouble value1, ALdouble value2, ALdouble value3) noexcept
 {
@@ -2771,9 +2783,10 @@ FORCE_ALIGN void AL_APIENTRY alSource3dDirectSOFT(ALCcontext *context, ALuint so
         return context->setError(AL_INVALID_NAME, "Invalid source ID %u", source);
 
     const double dvals[3]{value1, value2, value3};
-    SetProperty(Source, context, static_cast<SourceProp>(param), al::span{dvals});
+    SetProperty<double>(Source, context, static_cast<SourceProp>(param), al::span{dvals});
 }
 
+AL_API DECL_FUNCEXT3(void, alSourcedv,SOFT, ALuint, ALenum, const ALdouble*)
 FORCE_ALIGN void AL_APIENTRY alSourcedvDirectSOFT(ALCcontext *context, ALuint source, ALenum param,
     const ALdouble *values) noexcept
 {
@@ -2790,6 +2803,7 @@ FORCE_ALIGN void AL_APIENTRY alSourcedvDirectSOFT(ALCcontext *context, ALuint so
 }
 
 
+AL_API DECL_FUNC3(void, alSourcei, ALuint, ALenum, ALint)
 FORCE_ALIGN void AL_APIENTRY alSourceiDirect(ALCcontext *context, ALuint source, ALenum param,
     ALint value) noexcept
 {
@@ -2799,10 +2813,10 @@ FORCE_ALIGN void AL_APIENTRY alSourceiDirect(ALCcontext *context, ALuint source,
     if(!Source) UNLIKELY
         return context->setError(AL_INVALID_NAME, "Invalid source ID %u", source);
 
-    SetProperty(Source, context, static_cast<SourceProp>(param),
-        al::span<const int,1>{&value, 1u});
+    SetProperty<int>(Source, context, static_cast<SourceProp>(param), al::span{&value, 1u});
 }
 
+AL_API DECL_FUNC5(void, alSource3i, ALuint, ALenum, ALint, ALint, ALint)
 FORCE_ALIGN void AL_APIENTRY alSource3iDirect(ALCcontext *context, ALuint source, ALenum param,
     ALint value1, ALint value2, ALint value3) noexcept
 {
@@ -2813,9 +2827,10 @@ FORCE_ALIGN void AL_APIENTRY alSource3iDirect(ALCcontext *context, ALuint source
         return context->setError(AL_INVALID_NAME, "Invalid source ID %u", source);
 
     const int ivals[3]{ value1, value2, value3 };
-    SetProperty(Source, context, static_cast<SourceProp>(param), al::span{ivals});
+    SetProperty<int>(Source, context, static_cast<SourceProp>(param), al::span{ivals});
 }
 
+AL_API DECL_FUNC3(void, alSourceiv, ALuint, ALenum, const ALint*)
 FORCE_ALIGN void AL_APIENTRY alSourceivDirect(ALCcontext *context, ALuint source, ALenum param,
     const ALint *values) noexcept
 {
@@ -2832,6 +2847,7 @@ FORCE_ALIGN void AL_APIENTRY alSourceivDirect(ALCcontext *context, ALuint source
 }
 
 
+AL_API DECL_FUNCEXT3(void, alSourcei64,SOFT, ALuint, ALenum, ALint64SOFT)
 FORCE_ALIGN void AL_APIENTRY alSourcei64DirectSOFT(ALCcontext *context, ALuint source,
     ALenum param, ALint64SOFT value) noexcept
 {
@@ -2841,10 +2857,10 @@ FORCE_ALIGN void AL_APIENTRY alSourcei64DirectSOFT(ALCcontext *context, ALuint s
     if(!Source) UNLIKELY
         return context->setError(AL_INVALID_NAME, "Invalid source ID %u", source);
 
-    SetProperty(Source, context, static_cast<SourceProp>(param),
-        al::span<const int64_t,1>{&value, 1u});
+    SetProperty<int64_t>(Source, context, static_cast<SourceProp>(param), al::span{&value, 1u});
 }
 
+AL_API DECL_FUNCEXT5(void, alSource3i64,SOFT, ALuint, ALenum, ALint64SOFT, ALint64SOFT, ALint64SOFT)
 FORCE_ALIGN void AL_APIENTRY alSource3i64DirectSOFT(ALCcontext *context, ALuint source,
     ALenum param, ALint64SOFT value1, ALint64SOFT value2, ALint64SOFT value3) noexcept
 {
@@ -2855,9 +2871,10 @@ FORCE_ALIGN void AL_APIENTRY alSource3i64DirectSOFT(ALCcontext *context, ALuint 
         return context->setError(AL_INVALID_NAME, "Invalid source ID %u", source);
 
     const int64_t i64vals[3]{ value1, value2, value3 };
-    SetProperty(Source, context, static_cast<SourceProp>(param), al::span{i64vals});
+    SetProperty<int64_t>(Source, context, static_cast<SourceProp>(param), al::span{i64vals});
 }
 
+AL_API DECL_FUNCEXT3(void, alSourcei64v,SOFT, ALuint, ALenum, const ALint64SOFT*)
 FORCE_ALIGN void AL_APIENTRY alSourcei64vDirectSOFT(ALCcontext *context, ALuint source,
     ALenum param, const ALint64SOFT *values) noexcept
 {
@@ -2874,6 +2891,7 @@ FORCE_ALIGN void AL_APIENTRY alSourcei64vDirectSOFT(ALCcontext *context, ALuint 
 }
 
 
+AL_API DECL_FUNC3(void, alGetSourcef, ALuint, ALenum, ALfloat*)
 FORCE_ALIGN void AL_APIENTRY alGetSourcefDirect(ALCcontext *context, ALuint source, ALenum param,
     ALfloat *value) noexcept
 {
@@ -2884,10 +2902,10 @@ FORCE_ALIGN void AL_APIENTRY alGetSourcefDirect(ALCcontext *context, ALuint sour
     if(!value) UNLIKELY
         return context->setError(AL_INVALID_VALUE, "NULL pointer");
 
-    std::ignore = GetProperty(Source, context, static_cast<SourceProp>(param),
-        al::span<float,1>{value, 1});
+    std::ignore = GetProperty(Source, context, static_cast<SourceProp>(param), al::span{value, 1});
 }
 
+AL_API DECL_FUNC5(void, alGetSource3f, ALuint, ALenum, ALfloat*, ALfloat*, ALfloat*)
 FORCE_ALIGN void AL_APIENTRY alGetSource3fDirect(ALCcontext *context, ALuint source, ALenum param,
     ALfloat *value1, ALfloat *value2, ALfloat *value3) noexcept
 {
@@ -2899,7 +2917,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSource3fDirect(ALCcontext *context, ALuint sou
         return context->setError(AL_INVALID_VALUE, "NULL pointer");
 
     float fvals[3];
-    if(GetProperty(Source, context, static_cast<SourceProp>(param), al::span{fvals}))
+    if(GetProperty<float>(Source, context, static_cast<SourceProp>(param), al::span{fvals}))
     {
         *value1 = fvals[0];
         *value2 = fvals[1];
@@ -2907,6 +2925,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSource3fDirect(ALCcontext *context, ALuint sou
     }
 }
 
+AL_API DECL_FUNC3(void, alGetSourcefv, ALuint, ALenum, ALfloat*)
 FORCE_ALIGN void AL_APIENTRY alGetSourcefvDirect(ALCcontext *context, ALuint source, ALenum param,
     ALfloat *values) noexcept
 {
@@ -2923,6 +2942,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSourcefvDirect(ALCcontext *context, ALuint sou
 }
 
 
+AL_API DECL_FUNCEXT3(void, alGetSourced,SOFT, ALuint, ALenum, ALdouble*)
 FORCE_ALIGN void AL_APIENTRY alGetSourcedDirectSOFT(ALCcontext *context, ALuint source,
     ALenum param, ALdouble *value) noexcept
 {
@@ -2933,10 +2953,10 @@ FORCE_ALIGN void AL_APIENTRY alGetSourcedDirectSOFT(ALCcontext *context, ALuint 
     if(!value) UNLIKELY
         return context->setError(AL_INVALID_VALUE, "NULL pointer");
 
-    std::ignore = GetProperty(Source, context, static_cast<SourceProp>(param),
-        al::span<double,1>{value, 1u});
+    std::ignore = GetProperty(Source, context, static_cast<SourceProp>(param), al::span{value, 1});
 }
 
+AL_API DECL_FUNCEXT5(void, alGetSource3d,SOFT, ALuint, ALenum, ALdouble*, ALdouble*, ALdouble*)
 FORCE_ALIGN void AL_APIENTRY alGetSource3dDirectSOFT(ALCcontext *context, ALuint source,
     ALenum param, ALdouble *value1, ALdouble *value2, ALdouble *value3) noexcept
 {
@@ -2948,7 +2968,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSource3dDirectSOFT(ALCcontext *context, ALuint
         return context->setError(AL_INVALID_VALUE, "NULL pointer");
 
     double dvals[3];
-    if(GetProperty(Source, context, static_cast<SourceProp>(param), al::span{dvals}))
+    if(GetProperty<double>(Source, context, static_cast<SourceProp>(param), al::span{dvals}))
     {
         *value1 = dvals[0];
         *value2 = dvals[1];
@@ -2956,6 +2976,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSource3dDirectSOFT(ALCcontext *context, ALuint
     }
 }
 
+AL_API DECL_FUNCEXT3(void, alGetSourcedv,SOFT, ALuint, ALenum, ALdouble*)
 FORCE_ALIGN void AL_APIENTRY alGetSourcedvDirectSOFT(ALCcontext *context, ALuint source,
     ALenum param, ALdouble *values) noexcept
 {
@@ -2972,6 +2993,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSourcedvDirectSOFT(ALCcontext *context, ALuint
 }
 
 
+AL_API DECL_FUNC3(void, alGetSourcei, ALuint, ALenum, ALint*)
 FORCE_ALIGN void AL_APIENTRY alGetSourceiDirect(ALCcontext *context, ALuint source, ALenum param,
     ALint *value) noexcept
 {
@@ -2982,10 +3004,10 @@ FORCE_ALIGN void AL_APIENTRY alGetSourceiDirect(ALCcontext *context, ALuint sour
     if(!value) UNLIKELY
         return context->setError(AL_INVALID_VALUE, "NULL pointer");
 
-    std::ignore = GetProperty(Source, context, static_cast<SourceProp>(param),
-        al::span{value, 1u});
+    std::ignore = GetProperty(Source, context, static_cast<SourceProp>(param), al::span{value, 1});
 }
 
+AL_API DECL_FUNC5(void, alGetSource3i, ALuint, ALenum, ALint*, ALint*, ALint*)
 FORCE_ALIGN void AL_APIENTRY alGetSource3iDirect(ALCcontext *context, ALuint source, ALenum param,
     ALint *value1, ALint *value2, ALint *value3) noexcept
 {
@@ -2997,7 +3019,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSource3iDirect(ALCcontext *context, ALuint sou
         return context->setError(AL_INVALID_VALUE, "NULL pointer");
     
     int ivals[3];
-    if(GetProperty(Source, context, static_cast<SourceProp>(param), al::span{ivals}))
+    if(GetProperty<int>(Source, context, static_cast<SourceProp>(param), al::span{ivals}))
     {
         *value1 = ivals[0];
         *value2 = ivals[1];
@@ -3005,6 +3027,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSource3iDirect(ALCcontext *context, ALuint sou
     }
 }
 
+AL_API DECL_FUNC3(void, alGetSourceiv, ALuint, ALenum, ALint*)
 FORCE_ALIGN void AL_APIENTRY alGetSourceivDirect(ALCcontext *context, ALuint source, ALenum param,
     ALint *values) noexcept
 {
@@ -3021,6 +3044,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSourceivDirect(ALCcontext *context, ALuint sou
 }
 
 
+AL_API DECL_FUNCEXT3(void, alGetSourcei64,SOFT, ALuint, ALenum, ALint64SOFT*)
 FORCE_ALIGN void AL_APIENTRY alGetSourcei64DirectSOFT(ALCcontext *context, ALuint source, ALenum param, ALint64SOFT *value) noexcept
 {
     std::lock_guard<std::mutex> _{context->mSourceLock};
@@ -3030,10 +3054,10 @@ FORCE_ALIGN void AL_APIENTRY alGetSourcei64DirectSOFT(ALCcontext *context, ALuin
     if(!value) UNLIKELY
         return context->setError(AL_INVALID_VALUE, "NULL pointer");
 
-    std::ignore = GetProperty(Source, context, static_cast<SourceProp>(param),
-        al::span{value, 1u});
+    std::ignore = GetProperty(Source, context, static_cast<SourceProp>(param), al::span{value, 1});
 }
 
+AL_API DECL_FUNCEXT5(void, alGetSource3i64,SOFT, ALuint, ALenum, ALint64SOFT*, ALint64SOFT*, ALint64SOFT*)
 FORCE_ALIGN void AL_APIENTRY alGetSource3i64DirectSOFT(ALCcontext *context, ALuint source,
     ALenum param, ALint64SOFT *value1, ALint64SOFT *value2, ALint64SOFT *value3) noexcept
 {
@@ -3045,7 +3069,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSource3i64DirectSOFT(ALCcontext *context, ALui
         return context->setError(AL_INVALID_VALUE, "NULL pointer");
 
     int64_t i64vals[3];
-    if(GetProperty(Source, context, static_cast<SourceProp>(param), al::span{i64vals}))
+    if(GetProperty<int64_t>(Source, context, static_cast<SourceProp>(param), al::span{i64vals}))
     {
         *value1 = i64vals[0];
         *value2 = i64vals[1];
@@ -3053,6 +3077,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSource3i64DirectSOFT(ALCcontext *context, ALui
     }
 }
 
+AL_API DECL_FUNCEXT3(void, alGetSourcei64v,SOFT, ALuint, ALenum, ALint64SOFT*)
 FORCE_ALIGN void AL_APIENTRY alGetSourcei64vDirectSOFT(ALCcontext *context, ALuint source,
     ALenum param, ALint64SOFT *values) noexcept
 {
@@ -3069,6 +3094,7 @@ FORCE_ALIGN void AL_APIENTRY alGetSourcei64vDirectSOFT(ALCcontext *context, ALui
 }
 
 
+AL_API DECL_FUNC1(void, alSourcePlay, ALuint)
 FORCE_ALIGN void AL_APIENTRY alSourcePlayDirect(ALCcontext *context, ALuint source) noexcept
 {
     std::lock_guard<std::mutex> _{context->mSourceLock};
@@ -3079,6 +3105,7 @@ FORCE_ALIGN void AL_APIENTRY alSourcePlayDirect(ALCcontext *context, ALuint sour
     StartSources(context, {&srchandle, 1});
 }
 
+FORCE_ALIGN DECL_FUNCEXT2(void, alSourcePlayAtTime,SOFT, ALuint, ALint64SOFT)
 FORCE_ALIGN void AL_APIENTRY alSourcePlayAtTimeDirectSOFT(ALCcontext *context, ALuint source,
     ALint64SOFT start_time) noexcept
 {
@@ -3093,6 +3120,7 @@ FORCE_ALIGN void AL_APIENTRY alSourcePlayAtTimeDirectSOFT(ALCcontext *context, A
     StartSources(context, {&srchandle, 1}, nanoseconds{start_time});
 }
 
+AL_API DECL_FUNC2(void, alSourcePlayv, ALsizei, const ALuint*)
 FORCE_ALIGN void AL_APIENTRY alSourcePlayvDirect(ALCcontext *context, ALsizei n,
     const ALuint *sources) noexcept
 {
@@ -3104,11 +3132,11 @@ FORCE_ALIGN void AL_APIENTRY alSourcePlayvDirect(ALCcontext *context, ALsizei n,
     std::array<ALsource*,8> source_storage;
     al::span<ALsource*> srchandles;
     if(static_cast<ALuint>(n) <= source_storage.size()) LIKELY
-        srchandles = {source_storage.data(), static_cast<ALuint>(n)};
+        srchandles = al::span{source_storage}.first(static_cast<ALuint>(n));
     else
     {
         extra_sources.resize(static_cast<ALuint>(n));
-        srchandles = {extra_sources.data(), extra_sources.size()};
+        srchandles = extra_sources;
     }
 
     std::lock_guard<std::mutex> _{context->mSourceLock};
@@ -3123,6 +3151,7 @@ FORCE_ALIGN void AL_APIENTRY alSourcePlayvDirect(ALCcontext *context, ALsizei n,
     StartSources(context, srchandles);
 }
 
+FORCE_ALIGN DECL_FUNCEXT3(void, alSourcePlayAtTimev,SOFT, ALsizei, const ALuint*, ALint64SOFT)
 FORCE_ALIGN void AL_APIENTRY alSourcePlayAtTimevDirectSOFT(ALCcontext *context, ALsizei n,
     const ALuint *sources, ALint64SOFT start_time) noexcept
 {
@@ -3137,11 +3166,11 @@ FORCE_ALIGN void AL_APIENTRY alSourcePlayAtTimevDirectSOFT(ALCcontext *context, 
     std::array<ALsource*,8> source_storage;
     al::span<ALsource*> srchandles;
     if(static_cast<ALuint>(n) <= source_storage.size()) LIKELY
-        srchandles = {source_storage.data(), static_cast<ALuint>(n)};
+        srchandles = al::span{source_storage}.first(static_cast<ALuint>(n));
     else
     {
         extra_sources.resize(static_cast<ALuint>(n));
-        srchandles = {extra_sources.data(), extra_sources.size()};
+        srchandles = extra_sources;
     }
 
     std::lock_guard<std::mutex> _{context->mSourceLock};
@@ -3157,9 +3186,11 @@ FORCE_ALIGN void AL_APIENTRY alSourcePlayAtTimevDirectSOFT(ALCcontext *context, 
 }
 
 
+AL_API DECL_FUNC1(void, alSourcePause, ALuint)
 FORCE_ALIGN void AL_APIENTRY alSourcePauseDirect(ALCcontext *context, ALuint source) noexcept
 { alSourcePausevDirect(context, 1, &source); }
 
+AL_API DECL_FUNC2(void, alSourcePausev, ALsizei, const ALuint*)
 FORCE_ALIGN void AL_APIENTRY alSourcePausevDirect(ALCcontext *context, ALsizei n,
     const ALuint *sources) noexcept
 {
@@ -3171,11 +3202,11 @@ FORCE_ALIGN void AL_APIENTRY alSourcePausevDirect(ALCcontext *context, ALsizei n
     std::array<ALsource*,8> source_storage;
     al::span<ALsource*> srchandles;
     if(static_cast<ALuint>(n) <= source_storage.size()) LIKELY
-        srchandles = {source_storage.data(), static_cast<ALuint>(n)};
+        srchandles = al::span{source_storage}.first(static_cast<ALuint>(n));
     else
     {
         extra_sources.resize(static_cast<ALuint>(n));
-        srchandles = {extra_sources.data(), extra_sources.size()};
+        srchandles = extra_sources;
     }
 
     std::lock_guard<std::mutex> _{context->mSourceLock};
@@ -3227,9 +3258,11 @@ FORCE_ALIGN void AL_APIENTRY alSourcePausevDirect(ALCcontext *context, ALsizei n
 }
 
 
+AL_API DECL_FUNC1(void, alSourceStop, ALuint)
 FORCE_ALIGN void AL_APIENTRY alSourceStopDirect(ALCcontext *context, ALuint source) noexcept
 { alSourceStopvDirect(context, 1, &source); }
 
+AL_API DECL_FUNC2(void, alSourceStopv, ALsizei, const ALuint*)
 FORCE_ALIGN void AL_APIENTRY alSourceStopvDirect(ALCcontext *context, ALsizei n,
     const ALuint *sources) noexcept
 {
@@ -3241,11 +3274,11 @@ FORCE_ALIGN void AL_APIENTRY alSourceStopvDirect(ALCcontext *context, ALsizei n,
     std::array<ALsource*,8> source_storage;
     al::span<ALsource*> srchandles;
     if(static_cast<ALuint>(n) <= source_storage.size()) LIKELY
-        srchandles = {source_storage.data(), static_cast<ALuint>(n)};
+        srchandles = al::span{source_storage}.first(static_cast<ALuint>(n));
     else
     {
         extra_sources.resize(static_cast<ALuint>(n));
-        srchandles = {extra_sources.data(), extra_sources.size()};
+        srchandles = extra_sources;
     }
 
     std::lock_guard<std::mutex> _{context->mSourceLock};
@@ -3284,9 +3317,11 @@ FORCE_ALIGN void AL_APIENTRY alSourceStopvDirect(ALCcontext *context, ALsizei n,
 }
 
 
+AL_API DECL_FUNC1(void, alSourceRewind, ALuint)
 FORCE_ALIGN void AL_APIENTRY alSourceRewindDirect(ALCcontext *context, ALuint source) noexcept
 { alSourceRewindvDirect(context, 1, &source); }
 
+AL_API DECL_FUNC2(void, alSourceRewindv, ALsizei, const ALuint*)
 FORCE_ALIGN void AL_APIENTRY alSourceRewindvDirect(ALCcontext *context, ALsizei n,
     const ALuint *sources) noexcept
 {
@@ -3298,11 +3333,11 @@ FORCE_ALIGN void AL_APIENTRY alSourceRewindvDirect(ALCcontext *context, ALsizei 
     std::array<ALsource*,8> source_storage;
     al::span<ALsource*> srchandles;
     if(static_cast<ALuint>(n) <= source_storage.size()) LIKELY
-        srchandles = {source_storage.data(), static_cast<ALuint>(n)};
+        srchandles = al::span{source_storage}.first(static_cast<ALuint>(n));
     else
     {
         extra_sources.resize(static_cast<ALuint>(n));
-        srchandles = {extra_sources.data(), extra_sources.size()};
+        srchandles = extra_sources;
     }
 
     std::lock_guard<std::mutex> _{context->mSourceLock};
@@ -3343,6 +3378,7 @@ FORCE_ALIGN void AL_APIENTRY alSourceRewindvDirect(ALCcontext *context, ALsizei 
 }
 
 
+AL_API DECL_FUNC3(void, alSourceQueueBuffers, ALuint, ALsizei, const ALuint*)
 FORCE_ALIGN void AL_APIENTRY alSourceQueueBuffersDirect(ALCcontext *context, ALuint src,
     ALsizei nb, const ALuint *buffers) noexcept
 {
@@ -3467,6 +3503,7 @@ FORCE_ALIGN void AL_APIENTRY alSourceQueueBuffersDirect(ALCcontext *context, ALu
     }
 }
 
+AL_API DECL_FUNC3(void, alSourceUnqueueBuffers, ALuint, ALsizei, ALuint*)
 FORCE_ALIGN void AL_APIENTRY alSourceUnqueueBuffersDirect(ALCcontext *context, ALuint src,
     ALsizei nb, ALuint *buffers) noexcept
 {
@@ -3516,46 +3553,6 @@ FORCE_ALIGN void AL_APIENTRY alSourceUnqueueBuffersDirect(ALCcontext *context, A
     } while(--nb);
 }
 
-
-AL_API DECL_FUNC2(void, alGenSources, ALsizei, ALuint*)
-AL_API DECL_FUNC2(void, alDeleteSources, ALsizei, const ALuint*)
-AL_API DECL_FUNC1(ALboolean, alIsSource, ALuint)
-AL_API DECL_FUNC1(void, alSourcePlay, ALuint)
-AL_API DECL_FUNC1(void, alSourcePause, ALuint)
-AL_API DECL_FUNC1(void, alSourceStop, ALuint)
-AL_API DECL_FUNC1(void, alSourceRewind, ALuint)
-AL_API DECL_FUNC2(void, alSourcePlayv, ALsizei, const ALuint*)
-AL_API DECL_FUNC2(void, alSourcePausev, ALsizei, const ALuint*)
-AL_API DECL_FUNC2(void, alSourceStopv, ALsizei, const ALuint*)
-AL_API DECL_FUNC2(void, alSourceRewindv, ALsizei, const ALuint*)
-AL_API DECL_FUNC3(void, alSourcef, ALuint, ALenum, ALfloat)
-AL_API DECL_FUNC5(void, alSource3f, ALuint, ALenum, ALfloat, ALfloat, ALfloat)
-AL_API DECL_FUNC3(void, alSourcefv, ALuint, ALenum, const ALfloat*)
-AL_API DECL_FUNC3(void, alSourcei, ALuint, ALenum, ALint)
-AL_API DECL_FUNC5(void, alSource3i, ALuint, ALenum, ALint, ALint, ALint)
-AL_API DECL_FUNC3(void, alSourceiv, ALuint, ALenum, const ALint*)
-AL_API DECL_FUNCEXT3(void, alSourced,SOFT, ALuint, ALenum, ALdouble)
-AL_API DECL_FUNCEXT5(void, alSource3d,SOFT, ALuint, ALenum, ALdouble, ALdouble, ALdouble)
-AL_API DECL_FUNCEXT3(void, alSourcedv,SOFT, ALuint, ALenum, const ALdouble*)
-AL_API DECL_FUNCEXT3(void, alSourcei64,SOFT, ALuint, ALenum, ALint64SOFT)
-AL_API DECL_FUNCEXT5(void, alSource3i64,SOFT, ALuint, ALenum, ALint64SOFT, ALint64SOFT, ALint64SOFT)
-AL_API DECL_FUNCEXT3(void, alSourcei64v,SOFT, ALuint, ALenum, const ALint64SOFT*)
-AL_API DECL_FUNC3(void, alGetSourcef, ALuint, ALenum, ALfloat*)
-AL_API DECL_FUNC5(void, alGetSource3f, ALuint, ALenum, ALfloat*, ALfloat*, ALfloat*)
-AL_API DECL_FUNC3(void, alGetSourcefv, ALuint, ALenum, ALfloat*)
-AL_API DECL_FUNC3(void, alGetSourcei, ALuint, ALenum, ALint*)
-AL_API DECL_FUNC5(void, alGetSource3i, ALuint, ALenum, ALint*, ALint*, ALint*)
-AL_API DECL_FUNC3(void, alGetSourceiv, ALuint, ALenum, ALint*)
-AL_API DECL_FUNCEXT3(void, alGetSourced,SOFT, ALuint, ALenum, ALdouble*)
-AL_API DECL_FUNCEXT5(void, alGetSource3d,SOFT, ALuint, ALenum, ALdouble*, ALdouble*, ALdouble*)
-AL_API DECL_FUNCEXT3(void, alGetSourcedv,SOFT, ALuint, ALenum, ALdouble*)
-AL_API DECL_FUNCEXT3(void, alGetSourcei64,SOFT, ALuint, ALenum, ALint64SOFT*)
-AL_API DECL_FUNCEXT5(void, alGetSource3i64,SOFT, ALuint, ALenum, ALint64SOFT*, ALint64SOFT*, ALint64SOFT*)
-AL_API DECL_FUNCEXT3(void, alGetSourcei64v,SOFT, ALuint, ALenum, ALint64SOFT*)
-AL_API DECL_FUNC3(void, alSourceQueueBuffers, ALuint, ALsizei, const ALuint*)
-AL_API DECL_FUNC3(void, alSourceUnqueueBuffers, ALuint, ALsizei, ALuint*)
-FORCE_ALIGN DECL_FUNCEXT2(void, alSourcePlayAtTime,SOFT, ALuint, ALint64SOFT)
-FORCE_ALIGN DECL_FUNCEXT3(void, alSourcePlayAtTimev,SOFT, ALsizei, const ALuint*, ALint64SOFT)
 
 AL_API void AL_APIENTRY alSourceQueueBufferLayersSOFT(ALuint, ALsizei, const ALuint*) noexcept
 {
@@ -3614,6 +3611,18 @@ void UpdateAllSourceProps(ALCcontext *context)
         ++vidx;
     }
 }
+
+void ALsource::SetName(ALCcontext *context, ALuint id, std::string_view name)
+{
+    std::lock_guard<std::mutex> _{context->mSourceLock};
+
+    auto source = LookupSource(context, id);
+    if(!source) UNLIKELY
+        return context->setError(AL_INVALID_NAME, "Invalid source ID %u", id);
+
+    context->mSourceNames.insert_or_assign(id, name);
+}
+
 
 SourceSubList::~SourceSubList()
 {
@@ -3687,7 +3696,8 @@ ALsource* ALsource::EaxLookupSource(ALCcontext& al_context, ALuint source_id) no
 
 void ALsource::eax_set_sends_defaults(EaxSends& sends, const EaxFxSlotIds& ids) noexcept
 {
-    for (auto i = size_t{}; i < EAX_MAX_FXSLOTS; ++i) {
+    for(size_t i{0};i < EAX_MAX_FXSLOTS;++i)
+    {
         auto& send = sends[i];
         send.guidReceivingFXSlotID = *(ids[i]);
         send.lSend = EAXSOURCE_DEFAULTSEND;
@@ -3799,7 +3809,8 @@ void ALsource::eax5_set_active_fx_slots_defaults(EAX50ACTIVEFXSLOTS& slots) noex
 
 void ALsource::eax5_set_speaker_levels_defaults(EaxSpeakerLevels& speaker_levels) noexcept
 {
-    for (auto i = size_t{}; i < eax_max_speakers; ++i) {
+    for(size_t i{0};i < eax_max_speakers;++i)
+    {
         auto& speaker_level = speaker_levels[i];
         speaker_level.lSpeakerID = static_cast<long>(EAXSPEAKER_FRONT_LEFT + i);
         speaker_level.lLevel = EAXSOURCE_DEFAULTSPEAKERLEVEL;
@@ -3870,7 +3881,7 @@ void ALsource::eax2_translate(const Eax2Props& src, Eax5Props& dst) noexcept
     dst.source.ulFlags = src.dwFlags;
     dst.source.flMacroFXFactor = EAXSOURCE_DEFAULTMACROFXFACTOR;
 
-    // Set everyting else to defaults.
+    // Set everything else to defaults.
     //
     eax5_set_sends_defaults(dst.sends);
     eax5_set_active_fx_slots_defaults(dst.active_fx_slots);
@@ -3884,7 +3895,7 @@ void ALsource::eax3_translate(const Eax3Props& src, Eax5Props& dst) noexcept
     static_cast<Eax3Props&>(dst.source) = src;
     dst.source.flMacroFXFactor = EAXSOURCE_DEFAULTMACROFXFACTOR;
 
-    // Set everyting else to defaults.
+    // Set everything else to defaults.
     //
     eax5_set_sends_defaults(dst.sends);
     eax5_set_active_fx_slots_defaults(dst.active_fx_slots);
@@ -3902,7 +3913,7 @@ void ALsource::eax4_translate(const Eax4Props& src, Eax5Props& dst) noexcept
     //
     dst.sends = src.sends;
 
-    for (auto i = size_t{}; i < EAX_MAX_FXSLOTS; ++i)
+    for(size_t i{0};i < EAX_MAX_FXSLOTS;++i)
         dst.sends[i].guidReceivingFXSlotID = *(eax5_fx_slot_ids[i]);
 
     // Active FX slots.
@@ -3964,19 +3975,21 @@ EaxAlLowPassParam ALsource::eax_create_direct_filter_param() const noexcept
         static_cast<float>(mEax.source.lDirectHF) +
         static_cast<float>(mEax.source.lObstruction);
 
-    for (auto i = std::size_t{}; i < EAX_MAX_FXSLOTS; ++i)
+    for(size_t i{0};i < EAX_MAX_FXSLOTS;++i)
     {
         if(!mEaxActiveFxSlots[i])
             continue;
 
-        if(has_source_occlusion) {
+        if(has_source_occlusion)
+        {
             const auto& fx_slot = mEaxAlContext->eaxGetFxSlot(i);
             const auto& fx_slot_eax = fx_slot.eax_get_eax_fx_slot();
             const auto is_environmental_fx = ((fx_slot_eax.ulFlags & EAXFXSLOTFLAGS_ENVIRONMENT) != 0);
             const auto is_primary = (mEaxPrimaryFxSlotId.value_or(-1) == fx_slot.eax_get_index());
             const auto is_listener_environment = (is_environmental_fx && is_primary);
 
-            if(is_listener_environment) {
+            if(is_listener_environment)
+            {
                 gain_mb += eax_calculate_dst_occlusion_mb(
                     mEax.source.lOcclusion,
                     mEax.source.flOcclusionDirectRatio,
@@ -3988,7 +4001,8 @@ EaxAlLowPassParam ALsource::eax_create_direct_filter_param() const noexcept
 
         const auto& send = mEax.sends[i];
 
-        if(send.lOcclusion != 0) {
+        if(send.lOcclusion != 0)
+        {
             gain_mb += eax_calculate_dst_occlusion_mb(
                 send.lOcclusion,
                 send.flOcclusionDirectRatio,
@@ -4063,8 +4077,9 @@ void ALsource::eax_update_direct_filter()
 
 void ALsource::eax_update_room_filters()
 {
-    for (auto i = size_t{}; i < EAX_MAX_FXSLOTS; ++i) {
-        if (!mEaxActiveFxSlots[i])
+    for(size_t i{0};i < EAX_MAX_FXSLOTS;++i)
+    {
+        if(!mEaxActiveFxSlots[i])
             continue;
 
         auto& fx_slot = mEaxAlContext->eaxGetFxSlot(i);
@@ -4870,7 +4885,7 @@ void ALsource::eax_commit_active_fx_slots()
 
     // Deactivate EFX auxiliary effect slots for inactive slots. Active slots
     // will be updated with the room filters.
-    for(auto i = size_t{}; i < EAX_MAX_FXSLOTS; ++i)
+    for(size_t i{0};i < EAX_MAX_FXSLOTS;++i)
     {
         if(!mEaxActiveFxSlots[i])
             eax_set_al_source_send(nullptr, i, EaxAlLowPassParam{1.0f, 1.0f});

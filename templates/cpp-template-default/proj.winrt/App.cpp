@@ -22,10 +22,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "App.xaml.h"
-#include "OpenGLESPage.xaml.h"
+#include "App.h"
 
-using namespace Platform;
+#include "OpenGLESPage.h"
+
+using namespace winrt;
 using namespace Windows::ApplicationModel;
 using namespace Windows::ApplicationModel::Activation;
 using namespace Windows::Foundation;
@@ -39,31 +40,45 @@ using namespace Windows::UI::Xaml::Input;
 using namespace Windows::UI::Xaml::Interop;
 using namespace Windows::UI::Xaml::Media;
 using namespace Windows::UI::Xaml::Navigation;
-using namespace ax;
 using namespace AxmolAppWinRT;
+using namespace AxmolAppWinRT::implementation;
 
+/// <summary>
+/// Creates the singleton application object.  This is the first line of authored code
+/// executed, and as such is the logical equivalent of main() or WinMain().
+/// </summary>
 App::App()
 {
-    InitializeComponent();
-    Suspending += ref new SuspendingEventHandler(this, &App::OnSuspending);
-    Resuming += ref new EventHandler<Object^>(this, &App::OnResuming);
+    Suspending({ this, &App::OnSuspending });
+	Resuming({this, &App::OnResuming});
+
+    // Resuming({ this, &AppOnResuming });
+
+#if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
+    UnhandledException([this](IInspectable const&, UnhandledExceptionEventArgs const& e)
+    {
+        if (IsDebuggerPresent())
+        {
+            auto errorMessage = e.Message();
+            __debugbreak();
+        }
+    });
+#endif
 }
 
 /// <summary>
-/// Invoked when the application is launched normally by the end user.	Other entry points
+/// Invoked when the application is launched normally by the end user.  Other entry points
 /// will be used such as when the application is launched to open a specific file.
 /// </summary>
 /// <param name="e">Details about the launch request and process.</param>
-void App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs^ e)
+void App::OnLaunched(LaunchActivatedEventArgs const& e)
 {
-    // if our app is prelaunched do nothing
-    // see https://msdn.microsoft.com/en-us/windows/uwp/launch-resume/handle-app-prelaunch
-    if (e->PrelaunchActivated)
+    Frame rootFrame{ nullptr };
+    auto content = Window::Current().Content();
+    if (content)
     {
-        return;
+        rootFrame = content.try_as<Frame>();
     }
-
-    auto rootFrame = dynamic_cast<Frame^>(Window::Current->Content);
 
     // Do not repeat app initialization when the Window already has content,
     // just ensure that the window is active
@@ -71,48 +86,45 @@ void App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEvent
     {
         // Create a Frame to act as the navigation context and associate it with
         // a SuspensionManager key
-        rootFrame = ref new Frame();
+        rootFrame = Frame();
 
-        rootFrame->NavigationFailed += ref new Windows::UI::Xaml::Navigation::NavigationFailedEventHandler(this, &App::OnNavigationFailed);
+        rootFrame.NavigationFailed({ this, &App::OnNavigationFailed });
 
-        if (e->PreviousExecutionState == ApplicationExecutionState::Terminated)
+        if (e.PreviousExecutionState() == ApplicationExecutionState::Terminated)
         {
-            // TODO: Restore the saved session state only when appropriate, scheduling the
+            // Restore the saved session state only when appropriate, scheduling the
             // final launch steps after the restore is complete
-
         }
-
-        // Place the frame in the current Window
-        Window::Current->Content = rootFrame;
-        // Ensure the current window is active
     }
 
-    if (rootFrame->Content == nullptr)
+    if (e.PrelaunchActivated() == false)
     {
-        // When the navigation stack isn't restored navigate to the first page,
-        // configuring the new page by passing required information as a navigation
-        // parameter
-        rootFrame->Content = mPage = ref new OpenGLESPage(&mOpenGLES);
+        if (rootFrame.Content() == nullptr)
+        {
+            // When the navigation stack isn't restored navigate to the first page,
+            // configuring the new page by passing required information as a navigation
+            // parameter
+            rootFrame.Content(winrt::make<OpenGLESPage>(&mOpenGLES));
+            //rootFrame.Navigate(xaml_typename<AxmolAppWinRT::OpenGLESPage>(), box_value(e.Arguments()));
+            mPage = rootFrame.Content();
+        }
+        // Place the frame in the current Window
+        Window::Current().Content(rootFrame);
+        // Ensure the current window is active
+        Window::Current().Activate();
     }
-    // Ensure the current window is active
-    Window::Current->Activate();
 }
 
-
 /// <summary>
-/// Invoked when application execution is being suspended. Application state is saved
+/// Invoked when application execution is being suspended.  Application state is saved
 /// without knowing whether the application will be terminated or resumed with the contents
 /// of memory still intact.
 /// </summary>
-void App::OnSuspending(Object^ sender, SuspendingEventArgs^ e)
+/// <param name="sender">The source of the suspend request.</param>
+/// <param name="e">Details about the suspend request.</param>
+void App::OnSuspending([[maybe_unused]] IInspectable const& sender, [[maybe_unused]] SuspendingEventArgs const& e)
 {
-    (void)sender;	// Unused parameter
-    (void)e;		// Unused parameter
-
-    if (mPage)
-    {
-        mPage->SetVisibility(false);
-    }
+    // Save application state and stop any background activity
 }
 
 /// <summary>
@@ -120,15 +132,13 @@ void App::OnSuspending(Object^ sender, SuspendingEventArgs^ e)
 /// </summary>
 /// <param name="sender">The source of the resume request.</param>
 /// <param name="args">Details about the resume request.</param>
-void App::OnResuming(Object ^sender, Object ^args)
+void App::OnResuming(IInspectable const& sender, IInspectable const& args)
 {
     (void)sender; // Unused parameter
     (void)args; // Unused parameter
 
     if (mPage)
-    {
-        mPage->SetVisibility(true);
-    }
+        mPage.as<OpenGLESPage>()->SetVisibility(true);
 }
 
 /// <summary>
@@ -136,11 +146,7 @@ void App::OnResuming(Object ^sender, Object ^args)
 /// </summary>
 /// <param name="sender">The Frame which failed navigation</param>
 /// <param name="e">Details about the navigation failure</param>
-void App::OnNavigationFailed(Platform::Object ^sender, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs ^e)
+void App::OnNavigationFailed(IInspectable const&, NavigationFailedEventArgs const& e)
 {
-    throw ref new FailureException("Failed to load Page " + e->SourcePageType.Name);
+    //throw hresult_error(E_FAIL, hstring(L"Failed to load Page ") + e.SourcePageType().Name);
 }
-
-
-
-
