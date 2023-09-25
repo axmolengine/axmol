@@ -47,6 +47,7 @@ jobs:
         # well on Windows or Mac.  You can convert this to a matrix build if you need
         # cross-platform coverage.
         # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
+        # build uwp debug avoid github CI fail with memory issue
         runs-on: windows-latest
         steps:
         - uses: actions/checkout@v3
@@ -58,7 +59,7 @@ jobs:
             uwp: true
         - name: Build
           shell: pwsh
-          run: .\build.ps1 -p winuwp -a x64
+          run: .\build.ps1 -p winuwp -a x64 -xb '--config','Debug'
         - uses: actions/upload-artifact@v3
           with:
             name: x64

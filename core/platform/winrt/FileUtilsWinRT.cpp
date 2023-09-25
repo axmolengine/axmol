@@ -29,6 +29,9 @@ THE SOFTWARE.
 #include "platform/Common.h"
 #include "ntcvt/ntcvt.hpp"
 
+#include <winrt/Windows.Storage.h>
+#include <winrt/Windows.ApplicationModel.h>
+
 NS_AX_BEGIN
 
 #define AX_MAX_PATH 512
@@ -82,7 +85,7 @@ std::string FileUtilsWinRT::getNativeWritableAbsolutePath() const {
         return _writablePath;
     }
 
-    auto localFolderPath = Windows::Storage::ApplicationData::Current->LocalFolder->Path;
+    auto localFolderPath = winrt::Windows::Storage::ApplicationData::Current().LocalFolder().Path();
     std::string ret      = PlatformStringToString(localFolderPath);
     ret += '\\';
     std::replace(ret.begin(), ret.end(), '\\', '/');
@@ -315,8 +318,8 @@ std::string FileUtilsWinRT::getWritablePath() const
 
 std::string FileUtilsWinRT::getAppPath()
 {
-    Windows::ApplicationModel::Package^ package = Windows::ApplicationModel::Package::Current;
-    return convertPathFormatToUnixStyle(std::string(PlatformStringToString(package->InstalledLocation->Path)));
+    auto package = winrt::Windows::ApplicationModel::Package::Current();
+    return convertPathFormatToUnixStyle(PlatformStringToString(package.InstalledLocation().Path()));
 }
 
 NS_AX_END

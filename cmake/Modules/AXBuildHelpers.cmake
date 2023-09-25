@@ -180,8 +180,16 @@ function(get_target_depends_ext_dlls ax_target all_depend_dlls_out)
 endfunction()
 
 
-# copy the `ax_target` needed dlls into TARGET_FILE_DIR
-function(ax_copy_target_dll ax_target)
+# sync the `ax_target` depended(prebuilt) dlls into TARGET_FILE_DIR
+function(ax_sync_target_dlls ax_target)
+    set(options LUA)
+    cmake_parse_arguments(opt "${options}" "" "" ${ARGN})
+
+    # winrt mark dll as deploy item in ax_setup_winrt_sources
+    if(WINRT)
+        return()
+    endif()
+
     get_target_depends_ext_dlls(${ax_target} all_depend_dlls)
 
     # remove repeat items
@@ -234,10 +242,9 @@ function(ax_copy_target_dll ax_target)
         $<TARGET_FILE_DIR:${ax_target}>/plugins
         )
     endif()
-endfunction()
 
-function(ax_copy_lua_dlls ax_target)
-    if(NOT AX_USE_LUAJIT)
+    # if lua
+    if(opt_LUA AND NOT AX_USE_LUAJIT)
         if(NOT CMAKE_GENERATOR MATCHES "Ninja")
             set(BUILD_CONFIG_DIR "\$\(Configuration\)/")
         endif()
@@ -260,11 +267,21 @@ function(ax_mark_resources)
         set(opt_RESOURCEBASE Resources)
     endif()
 
-    get_filename_component(BASEDIR_ABS ${opt_BASEDIR} ABSOLUTE)
+    if(opt_BASEDIR)
+        get_filename_component(BASEDIR_ABS ${opt_BASEDIR} ABSOLUTE)
+    else()
+        set(BASEDIR_ABS "")
+    endif()
     foreach(RES_FILE ${opt_FILES} ${opt_UNPARSED_ARGUMENTS})
-        get_filename_component(RES_FILE_ABS ${RES_FILE} ABSOLUTE)
-        file(RELATIVE_PATH RES ${BASEDIR_ABS} ${RES_FILE_ABS})
-        get_filename_component(RES_LOC ${RES} PATH)
+
+        if(BASEDIR_ABS)
+            get_filename_component(RES_FILE_ABS ${RES_FILE} ABSOLUTE)
+            file(RELATIVE_PATH RES ${BASEDIR_ABS} ${RES_FILE_ABS})
+            get_filename_component(RES_LOC ${RES} PATH)
+        else()
+            set(RES_LOC "")
+        endif()
+
         if (APPLE)
             set_source_files_properties(${RES_FILE} PROPERTIES
                                         MACOSX_PACKAGE_LOCATION "${opt_RESOURCEBASE}/${RES_LOC}"
@@ -279,16 +296,15 @@ function(ax_mark_resources)
             #  MakeAppx : error : 0x8007007b - The filename, directory name, or volume label syntax is incorrect.
             if (opt_RESOURCEBASE STREQUAL ".")
                 set(basedir "")
-                if (NOT DEFINED basedir)
-                    message(FATAL_ERROR "empty string as false")
-                endif()
             else()
                 set(basedir "${opt_RESOURCEBASE}\\")
             endif()
             get_filename_component(RES_EXTENSION ${RES_FILE} LAST_EXT)
             string(TOLOWER "${RES_EXTENSION}" RES_EXTENSION)
             if (RES_EXTENSION STREQUAL ".obj")
-                set_source_files_properties(${RES_FILE} PROPERTIES HEADER_FILE_ONLY 1)
+                # refer to: https://gitlab.kitware.com/cmake/cmake/issues/18820
+                get_property(__res_loc SOURCE ${RES_FILE} PROPERTY LOCATION)
+                set_property(SOURCE ${RES_FILE} PROPERTY EXTERNAL_OBJECT 0)
             endif()
             string(REPLACE "/" "\\" VSDEPLOY_LOC "${basedir}${RES_LOC}")
             # dir path can have one trailing / -> remove
@@ -452,9 +468,29 @@ endif()
 set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
 
 # stupid & pitfall: function not emcc not output .html
-macro (ax_setup_wasm_app_config app_name)
-    # setup wasm target
-    if(WASM)
+macro (ax_setup_app_props app_name)
+    if(WINRT)
+        get_target_property(app_vcxproj_dir ${APP_NAME} BINARY_DIR)
+        configure_file(
+            "${_AX_ROOT}/cmake/Directory.Build.targets.in"
+            "${app_vcxproj_dir}/Directory.Build.targets"
+            COPYONLY
+        )
+        set_target_properties(
+            ${APP_NAME}
+            PROPERTIES
+            # ----- C++/WinRT -----
+            # VS_PACKAGE_REFERENCES "Microsoft.Windows.CppWinRT_${AX_CPPWINRT_VERISON}"
+            VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
+            VS_GLOBAL_CppWinRTOptimized true
+            VS_GLOBAL_CppWinRTRootNamespaceAutoMerge true
+            VS_GLOBAL_CppWinRTGenerateWindowsMetadata true
+            VS_GLOBAL_MinimalCoreWin true
+            VS_GLOBAL_AppContainerApplication true
+            VS_GLOBAL_RootNameSpace "AxmolAppWinRT" # this is important for cppwinrt to fix Generated Files\XamlMetaDataProvider.idl(4): error MIDL2025: [msg]syntax error [context]: expecting NamespaceTag near "{"
+        )
+        target_link_libraries(${APP_NAME} ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
+    elseif(WASM)
         message(STATUS "#### AX_WASM_EXPORTS=${AX_WASM_EXPORTS}")
         get_target_property(_APP_SOURCE_DIR ${app_name} SOURCE_DIR)
         set(CMAKE_EXECUTABLE_SUFFIX ".html")
@@ -490,20 +526,46 @@ macro(ax_setup_winrt_sources )
     ax_mark_multi_resources(platform_content_files RES_TO "Content" FOLDERS "${CMAKE_CURRENT_SOURCE_DIR}/proj.winrt/Content")
 
     get_target_depends_ext_dlls(thirdparty prebuilt_dlls)
+
+    if (NOT prebuilt_dlls) 
+        set(prebuilt_dlls
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/prebuilt/${platform_name}/${ARCH_ALIAS}/zlib1.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}/libssl-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}/libcrypto-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/prebuilt/${platform_name}/${ARCH_ALIAS}/libcurl.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/d3dcompiler_47.dll)
+    endif()
     ax_mark_multi_resources(prebuilt_dlls RES_TO "." FILES ${prebuilt_dlls})
 
     list(APPEND PLATFORM_SOURCES
         proj.winrt/App.xaml
-        proj.winrt/App.xaml.h
-        proj.winrt/App.xaml.cpp
+        proj.winrt/App.idl
+        proj.winrt/App.h
+        proj.winrt/App.cpp
         proj.winrt/Package.appxmanifest
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.idl
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.h
+        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.cpp
         ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLES.h
         ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLES.cpp
-        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml
-        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml.h
-        ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml.cpp
         ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.h
         ${_AX_ROOT}/core/platform/winrt/xaml/AxmolRenderer.cpp
+    )
+
+    file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/proj.winrt/App.xaml" APP_XAML_FULL_PATH)
+    set_property(
+        SOURCE proj.winrt/App.h proj.winrt/App.cpp proj.winrt/App.idl
+        PROPERTY VS_SETTINGS
+        "DependentUpon=${APP_XAML_FULL_PATH}"
+    )
+    file(TO_NATIVE_PATH "${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.xaml" MAINPAGE_XAML_FULL_PATH)
+    set_property(
+        SOURCE ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.h ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.cpp ${_AX_ROOT}/core/platform/winrt/xaml/OpenGLESPage.idl
+        PROPERTY VS_SETTINGS
+        "DependentUpon=${MAINPAGE_XAML_FULL_PATH}"
     )
 
     list(APPEND GAME_INC_DIRS ${_AX_ROOT}/core/platform/winrt/xaml)
