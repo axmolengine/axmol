@@ -134,6 +134,7 @@ option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
 cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
 cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR WASM" OFF)
 
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 

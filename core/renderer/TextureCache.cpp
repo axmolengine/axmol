@@ -387,16 +387,22 @@ void TextureCache::addImageAsyncCallBack(float /*dt*/)
 Texture2D* TextureCache::getWhiteTexture()
 {
     constexpr std::string_view key = "/white-texture"sv;
+    return getWhiteTexture(key, 0xFF);
+}
+
+Texture2D* TextureCache::getWhiteTexture(std::string_view key, uint8_t luma)
+{
     // Gets the texture by key firstly.
     auto texture = this->getTextureForKey(key);
-    if (texture) return texture;
+    if (texture)
+        return texture;
 
     // If texture wasn't in cache, create it from RAW data.
     unsigned char texls[] = {
         // RGBA8888
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+        luma, luma, luma, 0xFF, luma, luma, luma, 0xFF, luma, luma, luma, 0xFF, luma, luma, luma, 0xFF};
 
-    Image* image = new Image(); // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
+    Image* image        = new Image();  // Notes: andorid: VolatileTextureMgr traits image as dynmaic object
     bool AX_UNUSED isOK = image->initWithRawData(texls, sizeof(texls), 2, 2, 8);
     AXASSERT(isOK, "The 2x2 empty texture was created unsuccessfully.");
 

@@ -33,7 +33,6 @@
 #include "2d/FontCharMap.h"
 #include "2d/Label.h"
 #include "platform/FileUtils.h"
-
 #include "base/format.h"
 
 NS_AX_BEGIN
@@ -53,6 +52,11 @@ void FontAtlasCache::purgeCachedData()
     _atlasMap.clear();
 }
 
+void FontAtlasCache::preloadFontAtlas(std::string_view fontatlasFile)
+{
+    FontAtlas::loadFontAtlas(fontatlasFile, _atlasMap);
+}
+
 FontAtlas* FontAtlasCache::getFontAtlasTTF(_ttfConfig* config)
 {
     auto& realFontFilename = config->fontFilePath;
@@ -67,7 +71,7 @@ FontAtlas* FontAtlasCache::getFontAtlasTTF(_ttfConfig* config)
 
     std::string atlasName =
         config->distanceFieldEnabled
-                                ? fmt::format("df {} {} {}", scaledFaceSize, outlineSize, realFontFilename)
+                                ? fmt::format("df {} {}", scaledFaceSize, realFontFilename)
                                 : fmt::format("{} {} {}", scaledFaceSize, outlineSize, realFontFilename);
     auto it = _atlasMap.find(atlasName);
 

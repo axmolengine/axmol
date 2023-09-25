@@ -578,7 +578,9 @@ void FontFreeType::renderCharAt(unsigned char* dest,
                                 int posY,
                                 unsigned char* bitmap,
                                 int bitmapWidth,
-                                int bitmapHeight)
+                                int bitmapHeight,
+                                int atlasWidth,
+                                int atlasHeight)
 {
     const int iX = posX;
     int iY       = posY;
@@ -588,7 +590,7 @@ void FontFreeType::renderCharAt(unsigned char* dest,
         for (int32_t y = 0; y < bitmapHeight; ++y)
         {
             int32_t bitmap_y = y * bitmapWidth;
-            memcpy(dest + (iX + (iY * FontAtlas::CacheTextureWidth)) * 2, bitmap + bitmap_y * 2, bitmapWidth * 2);
+            memcpy(dest + (iX + (iY * atlasWidth)) * 2, bitmap + bitmap_y * 2, bitmapWidth * 2);
             ++iY;
         }
         delete[] bitmap;
@@ -598,7 +600,7 @@ void FontFreeType::renderCharAt(unsigned char* dest,
         for (int32_t y = 0; y < bitmapHeight; ++y)
         {
             int32_t bitmap_y = y * bitmapWidth;
-            memcpy(dest + (iX + (iY * FontAtlas::CacheTextureWidth)), bitmap + bitmap_y, bitmapWidth);
+            memcpy(dest + (iX + (iY * atlasWidth)), bitmap + bitmap_y, bitmapWidth);
             ++iY;
         }
     }

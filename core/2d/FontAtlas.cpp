@@ -38,6 +38,11 @@
 #include "base/EventDispatcher.h"
 #include "base/EventType.h"
 
+#include "simdjson/simdjson.h"
+#include "zlib.h"
+#include "fmt/format.h"
+#include "base/ZipUtils.h"
+
 NS_AX_BEGIN
 
 const int FontAtlas::CacheTextureWidth     = 512;
@@ -45,7 +50,101 @@ const int FontAtlas::CacheTextureHeight    = 512;
 const char* FontAtlas::CMD_PURGE_FONTATLAS = "__cc_PURGE_FONTATLAS";
 const char* FontAtlas::CMD_RESET_FONTATLAS = "__cc_RESET_FONTATLAS";
 
-FontAtlas::FontAtlas(Font* theFont) : _font(theFont)
+void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_map<FontAtlas*>& outAtlasMap)
+{
+    using namespace simdjson;
+
+    struct PaddingString : protected yasio::sbyte_buffer
+    {
+    public:
+        using value_type = yasio::sbyte_buffer::value_type;
+        size_t size() const { return this->yasio::sbyte_buffer::size(); }
+        void resize(size_t size)
+        {
+            this->yasio::sbyte_buffer::resize_fit(size + SIMDJSON_PADDING);
+            this->yasio::sbyte_buffer::data()[size] = '\0';
+        }
+
+        char* data() { return this->yasio::sbyte_buffer::data(); };
+    };
+
+    try
+    {
+        PaddingString strJson;
+        FileUtils::getInstance()->getContents(fontatlasFile, &strJson);
+        ondemand::parser parser;
+        padded_string_view json(strJson.data(), strJson.size());
+        ondemand::document settings = parser.iterate(json);
+        std::string_view type       = settings["type"];
+        if (type != "fontatlas")
+        {
+            ax::print("Load fontatlas %s fail, invalid asset type: ", fontatlasFile.data(), type.data());
+            return;
+        }
+
+        // std::string_view version   = settings["version"];
+        std::string_view atlasName = settings["atlasName"];
+
+        auto it = outAtlasMap.find(atlasName);
+        if (it != outAtlasMap.end())
+        {
+            if (it->second->getReferenceCount() != 1)
+            {
+                ax::print("Load fontatlas %s fail, due to exist fontatlas with same key %s and in used",
+                          fontatlasFile.data(), atlasName.data());
+                return;
+            }
+            else
+                it->second->release();
+            outAtlasMap.erase(it);
+        }
+
+        std::string_view sourceFont = settings["sourceFont"];
+        int faceSize                = static_cast<int>(static_cast<int64_t>(settings["faceSize"]));
+        auto font = FontFreeType::create(sourceFont, faceSize, GlyphCollection::DYNAMIC, ""sv, true, 0.0f);
+        if (!font)
+        {
+            ax::print("Load fontatils %s fail due to create source font %s fail", fontatlasFile.data(),
+                      sourceFont.data());
+            return;
+        }
+
+        int atlasDim[2];
+
+        auto atliasDim = settings["atlasDim"].get_array();
+        int index      = 0;
+        for (auto value : atliasDim)
+        {
+            atlasDim[index++] = static_cast<int>(value.get_int64());
+            if (index >= 2)
+                break;
+        }
+
+        auto fontAtlas = new FontAtlas(font, atlasDim[0], atlasDim[1], AX_CONTENT_SCALE_FACTOR());
+
+        try
+        {
+            fontAtlas->initWithSettings(&settings);
+            outAtlasMap.emplace(atlasName, fontAtlas);
+        }
+        catch (std::exception& ex)
+        {
+            fontAtlas->release();
+            throw ex;  // rethrow
+        }
+    }
+    catch (std::exception& ex)
+    {
+        ax::print("Load fontatils %s fail due to exception occured: %s", fontatlasFile.data(), ex.what());
+    }
+}
+
+FontAtlas::FontAtlas(Font* theFont)
+    : FontAtlas(theFont, CacheTextureWidth, CacheTextureHeight, AX_CONTENT_SCALE_FACTOR())
+{}
+
+FontAtlas::FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scaleFactor)
+    : _font(theFont), _width(atlasWidth), _height(atlasHeight), _scaleFactor(scaleFactor)
 {
     _font->retain();
 
@@ -61,7 +160,7 @@ FontAtlas::FontAtlas(Font* theFont) : _font(theFont)
         {
             _strideShift         = 1;
             _pixelFormat         = AX_GLES_PROFILE != 200 ? backend::PixelFormat::RG8 : backend::PixelFormat::LA8;
-            _currentPageDataSize = CacheTextureWidth * CacheTextureHeight << _strideShift;
+            _currentPageDataSize = _width * _height << _strideShift;
 
             _lineHeight += 2 * outlineSize;
         }
@@ -69,7 +168,7 @@ FontAtlas::FontAtlas(Font* theFont) : _font(theFont)
         {
             _strideShift         = 0;
             _pixelFormat         = AX_GLES_PROFILE != 200 ? backend::PixelFormat::R8 : backend::PixelFormat::A8;
-            _currentPageDataSize = CacheTextureWidth * CacheTextureHeight;
+            _currentPageDataSize = _width * _height;
         }
 
         if (_fontFreeType->isDistanceFieldEnabled())
@@ -111,6 +210,54 @@ FontAtlas::~FontAtlas()
     releaseTextures();
 
     AX_SAFE_DELETE_ARRAY(_currentPageData);
+}
+
+void FontAtlas::initWithSettings(void* opaque /*simdjson::ondemand::document*/)
+{
+    if (!_currentPageData)
+        _currentPageData = new uint8_t[_currentPageDataSize];
+    _currentPage = -1;
+
+    simdjson::ondemand::document& settings = *(simdjson::ondemand::document*)opaque;
+
+    // pages
+    for (auto page : settings["pages"].get_array())
+    {
+        auto comprData   = utils::base64Decode(page);
+        auto uncomprData = ZipUtils::decompressGZ(std::span{comprData}, _currentPageDataSize);
+        addNewPageWithData(uncomprData.data(), uncomprData.size());
+    }
+
+    _currentPageOrigX = static_cast<float>(settings["pageX"].get_double());
+    _currentPageOrigY = static_cast<float>(settings["pageY"].get_double());
+
+    // letters
+    FontLetterDefinition tempDef;
+    tempDef.rotated         = false;
+    tempDef.validDefinition = true;
+
+    std::string strCharCode;
+    for (auto field : settings["letters"].get_object())
+    {
+        strCharCode         = static_cast<std::string_view>(field.unescaped_key());
+        auto letterInfo     = field.value();
+        tempDef.U         = static_cast<float>(letterInfo["U"].get_double());
+        tempDef.V         = static_cast<float>(letterInfo["V"].get_double());
+        tempDef.xAdvance  = static_cast<float>(letterInfo["advance"].get_double());
+        tempDef.width     = static_cast<float>(letterInfo["width"].get_double());
+        tempDef.height    = static_cast<float>(letterInfo["height"].get_double());
+        tempDef.offsetX   = static_cast<float>(letterInfo["offsetX"].get_double());
+        tempDef.offsetY   = static_cast<float>(letterInfo["offsetY"].get_double());
+        tempDef.textureID = letterInfo["page"].get_int64();
+
+        auto charCode = atoi(strCharCode.c_str());
+
+        tempDef.U /= _scaleFactor;
+        tempDef.V /= _scaleFactor;
+        tempDef.width /= _scaleFactor;
+        tempDef.height /= _scaleFactor;
+        _letterDefinitions.emplace(charCode, tempDef);
+    }
 }
 
 void FontAtlas::reset()
@@ -222,7 +369,6 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
     Rect tempRect;
     FontLetterDefinition tempDef;
 
-    auto scaleFactor = AX_CONTENT_SCALE_FACTOR();
     auto pixelFormat = _pixelFormat;
 
     int startY = (int)_currentPageOrigY;
@@ -238,16 +384,17 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
             tempDef.offsetX         = tempRect.origin.x - adjustForDistanceMap - adjustForExtend;
             tempDef.offsetY         = _fontAscender + tempRect.origin.y - adjustForDistanceMap - adjustForExtend;
 
-            if (_currentPageOrigX + tempDef.width > CacheTextureWidth)
+            if (_currentPageOrigX + tempDef.width > _width)
             {
                 _currentPageOrigY += _currLineHeight;
                 _currLineHeight   = 0;
                 _currentPageOrigX = 0;
-                if (_currentPageOrigY + _lineHeight + _letterPadding + _letterEdgeExtend >= CacheTextureHeight)
+                if (_currentPageOrigY + _lineHeight + _letterPadding + _letterEdgeExtend >= _height)
                 {
                     updateTextureContent(pixelFormat, startY);
 
                     startY = 0;
+
                     addNewPage();
                 }
             }
@@ -257,17 +404,18 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
                 _currLineHeight = glyphHeight;
             }
             _fontFreeType->renderCharAt(_currentPageData, (int)_currentPageOrigX + adjustForExtend,
-                                        (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight);
+                                        (int)_currentPageOrigY + adjustForExtend, bitmap, bitmapWidth, bitmapHeight,
+                                        _width, _height);
 
             tempDef.U         = _currentPageOrigX;
             tempDef.V         = _currentPageOrigY;
             tempDef.textureID = _currentPage;
             _currentPageOrigX += tempDef.width + 1;
             // take from pixels to points
-            tempDef.width   = tempDef.width / scaleFactor;
-            tempDef.height  = tempDef.height / scaleFactor;
-            tempDef.U       = tempDef.U / scaleFactor;
-            tempDef.V       = tempDef.V / scaleFactor;
+            tempDef.width   = tempDef.width / _scaleFactor;
+            tempDef.height  = tempDef.height / _scaleFactor;
+            tempDef.U       = tempDef.U / _scaleFactor;
+            tempDef.V       = tempDef.V / _scaleFactor;
             tempDef.rotated = false;
         }
         else
@@ -297,18 +445,25 @@ bool FontAtlas::prepareLetterDefinitions(const std::u32string& utf32Text)
 
 void FontAtlas::updateTextureContent(backend::PixelFormat format, int startY)
 {
-    auto data = _currentPageData + (CacheTextureWidth * (int)startY << _strideShift);
-    _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, CacheTextureWidth,
+    auto data = _currentPageData + (_width * (int)startY << _strideShift);
+    _atlasTextures[_currentPage]->updateWithSubData(data, 0, startY, _width,
                                                     (int)_currentPageOrigY - startY + _currLineHeight);
 }
 
 void FontAtlas::addNewPage()
 {
-    auto texture = new Texture2D();
-
     memset(_currentPageData, 0, _currentPageDataSize);
+    addNewPageWithData(_currentPageData, _currentPageDataSize);
 
-    texture->initWithData(_currentPageData, _currentPageDataSize, _pixelFormat, CacheTextureWidth, CacheTextureHeight);
+    _currentPageOrigY = 0;
+}
+
+void FontAtlas::addNewPageWithData(const uint8_t* data, size_t size)
+{
+    assert(_currentPageDataSize == size);
+
+    auto texture = new Texture2D();
+    texture->initWithData(data, _currentPageDataSize, _pixelFormat, _width, _height);
 
     if (_antialiasEnabled)
         texture->setAntiAliasTexParameters();
@@ -317,8 +472,6 @@ void FontAtlas::addNewPage()
 
     setTexture(++_currentPage, texture);
     texture->release();
-
-    _currentPageOrigY = 0;
 }
 
 void FontAtlas::setTexture(unsigned int slot, Texture2D* texture)

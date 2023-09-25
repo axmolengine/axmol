@@ -61,6 +61,126 @@ bool ZipUtils::s_bEncryptionKeyIsValid = false;
 
 // --------------------- ZipUtils ---------------------
 
+yasio::byte_buffer ZipUtils::compressGZ(const void* in, size_t inlen, int level)
+{
+    int err;
+    Bytef buffer[512];
+    z_stream d_stream; /* compression stream */
+
+    d_stream.zalloc = nullptr;
+    d_stream.zfree  = nullptr;
+    d_stream.opaque = (voidpf)0;
+
+    d_stream.next_in   = (Bytef*)in;
+    d_stream.avail_in  = inlen;
+    d_stream.next_out  = buffer;
+    d_stream.avail_out = sizeof(buffer);
+    yasio::byte_buffer output;
+    err = deflateInit2(&d_stream, level, Z_DEFLATED, MAX_WBITS + 16 /*well: normaly, gzip is: 16*/, MAX_MEM_LEVEL - 1,
+                       Z_DEFAULT_STRATEGY);
+    if (err != Z_OK)  //
+        return output;
+
+    for (;;)
+    {
+        err = deflate(&d_stream, Z_FINISH);
+
+        if (err == Z_STREAM_END)
+        {
+            output.insert(output.end(), buffer, buffer + sizeof(buffer) - d_stream.avail_out);
+            break;
+        }
+
+        switch (err)
+        {
+        case Z_NEED_DICT:
+            err = Z_DATA_ERROR;
+        case Z_DATA_ERROR:
+        case Z_MEM_ERROR:
+            goto _L_end;
+        }
+
+        // not enough buffer ?
+        if (err != Z_STREAM_END)
+        {
+            output.insert(output.end(), buffer, buffer + sizeof(buffer));
+
+            d_stream.next_out  = buffer;
+            d_stream.avail_out = sizeof(buffer);
+        }
+    }
+
+_L_end:
+    deflateEnd(&d_stream);
+    if (err != Z_STREAM_END)
+    {
+        output.clear();
+    }
+
+    return output;
+}
+
+yasio::byte_buffer ZipUtils::decompressGZ(const void* in, size_t inlen, int expected_size)
+{  // inflate
+    int err;
+    Bytef buffer[512];
+    z_stream d_stream; /* decompression stream */
+
+    d_stream.zalloc = nullptr;
+    d_stream.zfree  = nullptr;
+    d_stream.opaque = (voidpf)0;
+
+    d_stream.next_in   = (Bytef*)in;
+    d_stream.avail_in  = inlen;
+    d_stream.next_out  = buffer;
+    d_stream.avail_out = sizeof(buffer);
+    yasio::byte_buffer output;
+    err = inflateInit2(&d_stream, MAX_WBITS + 32 /*well: normaly, gzip is: 16*/);
+    if (err != Z_OK)  //
+        return output;
+
+    output.reserve(expected_size != -1 ? expected_size : (inlen << 2));
+
+    for (;;)
+    {
+        err = inflate(&d_stream, Z_NO_FLUSH);
+
+        if (err == Z_STREAM_END)
+        {
+            output.insert(output.end(), buffer, buffer + sizeof(buffer) - d_stream.avail_out);
+            break;
+        }
+
+        switch (err)
+        {
+        case Z_NEED_DICT:
+            err = Z_DATA_ERROR;
+        case Z_DATA_ERROR:
+        case Z_MEM_ERROR:
+            goto _L_end;
+        }
+
+        // not enough memory ?
+        if (err != Z_STREAM_END)
+        {
+            // *out = (unsigned char*)realloc(*out, bufferSize * BUFFER_INC_FACTOR);
+            output.insert(output.end(), buffer, buffer + sizeof(buffer));
+
+            d_stream.next_out  = buffer;
+            d_stream.avail_out = sizeof(buffer);
+        }
+    }
+
+_L_end:
+    inflateEnd(&d_stream);
+    if (err != Z_STREAM_END)
+    {
+        output.clear();
+    }
+
+    return output;
+}
+
 inline void ZipUtils::decodeEncodedPvr(unsigned int* data, ssize_t len)
 {
     const int enclen    = 1024;
