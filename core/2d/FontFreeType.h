@@ -110,7 +110,9 @@ public:
                       int posY,
                       unsigned char* bitmap,
                       int bitmapWidth,
-                      int bitmapHeight);
+                      int bitmapHeight,
+                      int atlasWidth,
+                      int atlasHeight);
 
     int* getHorizontalKerningForTextUTF32(const std::u32string& text, int& outNumLetters) const override;
 
@@ -122,6 +124,8 @@ public:
 
     virtual FontAtlas* newFontAtlas() override;
     virtual int getFontMaxHeight() const override { return _lineHeight; }
+
+    std::string_view getGlyphCollection() const;
 
     static void releaseFont(std::string_view fontName);
 
@@ -146,7 +150,6 @@ private:
     unsigned char* getGlyphBitmapWithOutline(unsigned int glyphIndex, FT_BBox& bbox);
 
     void setGlyphCollection(GlyphCollection glyphs, std::string_view customGlyphs);
-    std::string_view getGlyphCollection() const;
 
     FT_Face _fontFace;
     FT_Stream _fontStream;
