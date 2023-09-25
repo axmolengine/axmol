@@ -61,19 +61,6 @@ inline HRESULT CreateInstance(REFCLSID clsid, winrt::com_ptr<T>& ptr)
                             reinterpret_cast<void**>(ptr.put()));
 }
 
-// struct ComException
-//{
-//     HRESULT const hr;
-//     std::string where;
-//     ComException(const char* expression, HRESULT const value) : where(expression), hr(value) {}
-// };
-//
-// inline void _AssertHR(const char* expression, HRESULT hr)
-//{
-//     if (FAILED(hr))
-//         throw ComException(expression, hr);
-// }
-
 #    define ASSERT_HR(expression) winrt::check_hresult(expression)
 
 class TextRenderer

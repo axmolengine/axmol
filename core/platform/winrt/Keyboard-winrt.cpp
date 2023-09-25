@@ -239,12 +239,6 @@ void KeyBoardWinRT::ShowKeyboard(winrt::hstring const& text)
 
 				m_textBox.TextCompositionEnded(Windows::Foundation::TypedEventHandler<Windows::UI::Xaml::Controls::TextBox,
 					Windows::UI::Xaml::Controls::TextCompositionEndedEventArgs>(this, &KeyBoardWinRT::OnTextCompositionEnded));
-#if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
-                // Need to use InputScopeNameValue::Search to prevent auto-capitalize
-                m_textBox->InputScope = ref new InputScope();
-                auto n = m_textBox->InputScope->Names;
-                n->Append(ref new InputScopeName(InputScopeNameValue::Search));
-#endif
                 panel.get().Children().Append(m_textBox);
             }
             m_textBox.SelectionLength(0);

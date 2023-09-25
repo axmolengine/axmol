@@ -35,18 +35,6 @@ THE SOFTWARE.
 #include <winrt/Windows.UI.Core.h>
 using namespace winrt;
 
-/*
-C++/CX	                            C++/WinRT
-winrt::agile_ref^	                winrt::agile_ref
-Platform::Array^	                See Port Platform::Array^
-Platform::Exception^	            winrt::hresult_error
-Platform::InvalidArgumentException^	winrt::hresult_invalid_argument
-Platform::Object^	                winrt::Windows::Foundation::IInspectable
-Platform::String^	                winrt::hstring
-
-Windows::Foundation::EventRegistrationToken --> winrt::event_token
-*/
-
 NS_AX_BEGIN
 
 enum PointerEventType

@@ -218,24 +218,6 @@ bool replaceXamlElement(Windows::Foundation::IInspectable const& parent,
     return true;
 }
 
-// Function that reads from a binary file asynchronously.
-//Concurrency::task<Platform::Array<byte>^> ReadDataAsync(winrt::hstring path)
-//{
-//	using namespace Windows::Storage;
-//	using namespace Concurrency;
-//		
-//	//return create_task(StorageFile::GetFileFromPathAsync(path)).then([&](StorageFile^ f)
-//	//{
-//	//	return FileIO::ReadBufferAsync(f);
-//
-//	//}).then([] (Streams::IBuffer^ fileBuffer) -> Platform::Array<byte>^ 
-//	//{
-//	//	auto fileData = ref new Platform::Array<byte>(fileBuffer->Length);
-//	//	Streams::DataReader::FromBuffer(fileBuffer)->ReadBytes(fileData);
-//	//	return fileData;
-//	//});
-//}
-
 std::string computeHashForFile(const std::string& filePath)
 {
     std::string ret = filePath;

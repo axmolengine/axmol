@@ -28,7 +28,6 @@ THE SOFTWARE.
 #define __CCWINRT_UTILS_H__
 
 #include "platform/PlatformMacros.h"
-//#include <ppltasks.h>
 
 #include <string>
 
@@ -47,9 +46,6 @@ bool replaceXamlElement(Windows::Foundation::IInspectable const& parent,
 
 std::string PlatformStringToString(const winrt::hstring& s);
 winrt::hstring PlatformStringFromString(std::string_view s);
-
-//unused
-//Windows::Foundation::IAsyncOperation<std::vector<uint8_t>> ReadDataAsync(const winrt::hstring& path);
 
 void AX_DLL printIPAddresses();
 

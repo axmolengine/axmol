@@ -110,8 +110,6 @@ GLViewImpl::~GLViewImpl()
 {
     AX_ASSERT(this == s_pEglView);
     s_pEglView = nullptr;
-
-    // TODO: cleanup
 }
 
 bool GLViewImpl::initWithRect(std::string_view viewName, const Rect& rect, float frameZoomFactor)
@@ -140,7 +138,6 @@ void GLViewImpl::setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispatche
 
 void GLViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel)
 {
-    // TODO: use winrt::agile_ref;
     m_panel = panel;
 }
 
