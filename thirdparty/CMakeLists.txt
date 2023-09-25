@@ -473,6 +473,10 @@ if (WINRT)
     ax_add_3rd(angle::EGL)
 endif()
 
+add_subdirectory(simdjson)
+configure_target_outdir(simdjson)
+ax_add_3rd(simdjson)
+
 # put "thirdparty" into thirdparty folder, too
 configure_target_outdir(thirdparty)
 
