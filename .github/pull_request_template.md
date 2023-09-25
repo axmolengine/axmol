@@ -1,6 +1,6 @@
 Which branch your pull-request should merge into?
 
-- `dev`: Current 2.0 BugFixs or Features
+- `dev`: Current 2.x BugFixs or Features
 - `1.x`: 1.x BugFixs
 
 ## Describe your changes
