@@ -3043,7 +3043,7 @@ void Label::recordLetterInfo(const ax::Vec2& point, char32_t utf32Char, int lett
     }
     _lettersInfo[letterIndex].lineIndex  = lineIndex;
     _lettersInfo[letterIndex].utf32Char  = utf32Char;
-    _lettersInfo[letterIndex].valid      = _fontAtlas->_letterDefinitions[utf32Char].validDefinition;
+    _lettersInfo[letterIndex].valid      = _fontAtlas->_letterDefinitions[utf32Char].validDefinition && utf32Char != ' ';
     _lettersInfo[letterIndex].positionX  = point.x;
     _lettersInfo[letterIndex].positionY  = point.y;
     _lettersInfo[letterIndex].atlasIndex = -1;
