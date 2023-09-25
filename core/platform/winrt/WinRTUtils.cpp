@@ -24,34 +24,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "platform/winrt/WinRTUtils.h"
-#include <wrl/client.h>
-#include <wrl/wrappers/corewrappers.h>
-#include <ppl.h>
-#include <ppltasks.h>
-#include <sstream>
 #include "base/Macros.h"
 #include "platform/PlatformMacros.h"
 #include "platform/FileUtils.h"
 #include "base/UserDefault.h"
 #include "ntcvt/ntcvt.hpp"
 
+#include <winrt/Windows.Networking.Connectivity.h>
+#include <winrt/Windows.Foundation.Metadata.h>
+#include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.UI.Xaml.Controls.h>
+
+using namespace winrt;
+using namespace Windows::Graphics::Display;
+using namespace concurrency;
+using namespace Windows::Storage;
+using namespace Windows::Storage::Pickers;
+using namespace Windows::Storage::Streams;
+using namespace Windows::Networking::Connectivity;
 using namespace Windows::UI::Xaml;
 using namespace Windows::UI::Xaml::Controls;
 
 NS_AX_BEGIN
 
-using namespace Windows::Graphics::Display;
-using namespace concurrency;
-using namespace Platform;
-using namespace Windows::Storage;
-using namespace Windows::Storage::Pickers;
-using namespace Windows::Storage::Streams;
-using namespace Windows::Networking::Connectivity;
-
 bool isWindowsPhone()
 {
 #if _MSC_VER >= 1900
-    if (Windows::Foundation::Metadata::ApiInformation::IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+    if (Windows::Foundation::Metadata::ApiInformation::IsTypePresent(L"Windows.Phone.UI.Input.HardwareButtons"))
         return true;
     else
         return false;
@@ -62,14 +61,14 @@ bool isWindowsPhone()
 #endif
 }
 
-std::string PlatformStringToString(Platform::String^ s) {
-    return ntcvt::from_chars(std::wstring_view(s->Data(), s->Length()));
+std::string PlatformStringToString(const winrt::hstring& s) {
+    return ntcvt::from_chars(std::wstring_view(s.data(), s.size()));
 }
 
-Platform::String^ PlatformStringFromString(std::string_view s)
+winrt::hstring PlatformStringFromString(std::string_view s)
 {
     std::wstring ws = ntcvt::from_chars(s);
-    return ref new Platform::String(ws.data(), static_cast<unsigned int>(ws.length()));
+    return winrt::hstring(ws.data(), static_cast<unsigned int>(ws.length()));
 }
 
 #if 0
@@ -89,14 +88,14 @@ float getScaledDPIValue(float v) {
 void AX_DLL printIPAddresses()
 {
     auto hostnames = NetworkInformation::GetHostNames();
-    int length = hostnames->Size;
+    int length = hostnames.Size();
 
     for(int i = 0; i < length; i++)
     {
-        auto hn = hostnames->GetAt(i);
-        if (hn->IPInformation != nullptr)
+        auto hn = hostnames.GetAt(i);
+        if (hn.IPInformation() != nullptr)
         {
-            std::string s = PlatformStringToString(hn->DisplayName);
+            std::string s = PlatformStringToString(hn.DisplayName());
             log("IP Address: %s:", s.c_str());
         }
     }
@@ -107,48 +106,48 @@ std::string AX_DLL getDeviceIPAddresses()
     std::stringstream result;
 
     auto hostnames = NetworkInformation::GetHostNames();
-    int length = hostnames->Size;
+    int length = hostnames.Size();
 
     for(int i = 0; i < length; i++)
     {
-        auto hn = hostnames->GetAt(i);
-        if (hn->IPInformation != nullptr)
+        auto hn = hostnames.GetAt(i);
+        if (hn.IPInformation() != nullptr)
         {
-            result << PlatformStringToString(hn->DisplayName) << std::endl;
+            result << PlatformStringToString(hn.DisplayName()) << std::endl;
         }
     }
 
     return result.str();
 }
 
-Platform::Object^ findXamlElement(Platform::Object^ parent, Platform::String^ name)
+Windows::Foundation::IInspectable findXamlElement(Windows::Foundation::IInspectable const& parent, winrt::hstring const& name)
 {
-    if (parent == nullptr || name == nullptr || name->Length() == 0)
+    if (parent == nullptr || name.empty())
     {
         return nullptr;
     }
 
-    FrameworkElement^ element = dynamic_cast<FrameworkElement^>(parent);
-    if (element == nullptr)
+    FrameworkElement element = parent.try_as<FrameworkElement>();
+    if (!element)
     {
         return nullptr;
     }
 
-    if (element->Name == name)
+    if (element.Name() == name)
     {
         return element;
     }
 
-    Panel^ panel = dynamic_cast<Panel^>(element);
-    if (panel == nullptr)
+    Panel panel = element.try_as <Panel>();
+    if (!panel)
     {
         return nullptr;
     }
 
-    int count = panel->Children->Size;
+    int count = panel.Children().Size();
     for (int i = 0; i < count; i++)
     {
-        auto result = findXamlElement(panel->Children->GetAt(i), name);
+        auto result = findXamlElement(panel.Children().GetAt(i), name);
         if (result != nullptr)
         {
             return result;
@@ -159,80 +158,83 @@ Platform::Object^ findXamlElement(Platform::Object^ parent, Platform::String^ na
 }
 
 
-bool removeXamlElement(Platform::Object^ parent, Platform::Object^ element)
+bool removeXamlElement(Windows::Foundation::IInspectable const& parent,
+                       Windows::Foundation::IInspectable const& element)
 {
-    Panel^ panel = dynamic_cast<Panel^>(parent);
+    Panel panel = parent.try_as<Panel>();
     if (panel == nullptr)
     {
         return false;
     }
 
-    UIElement^ uiElement = dynamic_cast<UIElement^>(element);
+    auto uiElement = element.try_as<UIElement>();
     if (uiElement == nullptr)
     {
         return false;
     }
 
     unsigned int index;
-    if (!panel->Children->IndexOf(uiElement, &index))
+    if (!panel.Children().IndexOf(uiElement, index))
     {
         return false;
     }
 
-    panel->Children->RemoveAt(index);
+    panel.Children().RemoveAt(index);
 
     return true;
 }
 
-bool replaceXamlElement(Platform::Object^ parent, Platform::Object^ add, Platform::Object^ remove)
+bool replaceXamlElement(Windows::Foundation::IInspectable const& parent,
+                        Windows::Foundation::IInspectable const& add,
+                        Windows::Foundation::IInspectable const& remove)
 {
-    Panel^ panel = dynamic_cast<Panel^>(parent);
+    Panel panel = parent.try_as<Panel>();
     if (panel == nullptr)
     {
         return false;
     }
 
-    UIElement^ addElement = dynamic_cast<UIElement^>(add);
+    UIElement addElement = add.try_as<UIElement>();
     if (addElement == nullptr)
     {
         return false;
     }
 
-    UIElement^ removeElement = dynamic_cast<UIElement^>(remove);
+    UIElement removeElement = remove.try_as<UIElement>();
     if (removeElement == nullptr)
     {
         return false;
     }
 
     unsigned int index;
-    if (!panel->Children->IndexOf(removeElement, &index))
+    if (!panel.Children().IndexOf(removeElement, index))
     {
         return false;
     }
 
-    panel->Children->RemoveAt(index);
-    panel->Children->InsertAt(index, addElement);
+    panel.Children().RemoveAt(index);
+    panel.Children().InsertAt(index, addElement);
 
     return true;
 }
 
 // Function that reads from a binary file asynchronously.
-Concurrency::task<Platform::Array<byte>^> ReadDataAsync(Platform::String^ path)
-{
-	using namespace Windows::Storage;
-	using namespace Concurrency;
-		
-	return create_task(StorageFile::GetFileFromPathAsync(path)).then([&](StorageFile^ f)
-	{
-		return FileIO::ReadBufferAsync(f);
-
-	}).then([] (Streams::IBuffer^ fileBuffer) -> Platform::Array<byte>^ 
-	{
-		auto fileData = ref new Platform::Array<byte>(fileBuffer->Length);
-		Streams::DataReader::FromBuffer(fileBuffer)->ReadBytes(fileData);
-		return fileData;
-	});
-}
+//Concurrency::task<Platform::Array<byte>^> ReadDataAsync(winrt::hstring path)
+//{
+//	using namespace Windows::Storage;
+//	using namespace Concurrency;
+//		
+//	//return create_task(StorageFile::GetFileFromPathAsync(path)).then([&](StorageFile^ f)
+//	//{
+//	//	return FileIO::ReadBufferAsync(f);
+//
+//	//}).then([] (Streams::IBuffer^ fileBuffer) -> Platform::Array<byte>^ 
+//	//{
+//	//	auto fileData = ref new Platform::Array<byte>(fileBuffer->Length);
+//	//	Streams::DataReader::FromBuffer(fileBuffer)->ReadBytes(fileData);
+//	//	return fileData;
+//	//});
+//}
 
 std::string computeHashForFile(const std::string& filePath)
 {
@@ -257,11 +259,13 @@ std::string computeHashForFile(const std::string& filePath)
     extParams.hTemplateFile = nullptr;
     extParams.lpSecurityAttributes = nullptr;
 
-    Microsoft::WRL::Wrappers::FileHandle file(CreateFile2(std::wstring(filePath.begin(), filePath.end()).c_str(), GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, &extParams));
-
-    if (file.Get() != INVALID_HANDLE_VALUE) {
+    winrt::file_handle handle{CreateFile2(std::wstring(filePath.begin(), filePath.end()).c_str(), GENERIC_READ,
+                                         FILE_SHARE_READ, OPEN_EXISTING, &extParams)};
+    if (handle)
+    {
         FILE_BASIC_INFO  fInfo = { 0 };
-        if (GetFileInformationByHandleEx(file.Get(), FileBasicInfo, &fInfo, sizeof(FILE_BASIC_INFO))) {
+        if (GetFileInformationByHandleEx(handle.get(), FileBasicInfo, &fInfo, sizeof(FILE_BASIC_INFO)))
+        {
             std::stringstream ss;
             ss << ret << "_";
             ss << fInfo.CreationTime.QuadPart;

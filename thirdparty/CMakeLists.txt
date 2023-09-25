@@ -382,11 +382,13 @@ if(AX_USE_ALSOFT AND NOT EMSCRIPTEN)
     target_include_directories(thirdparty INTERFACE openal)
 
     add_subdirectory(openal EXCLUDE_FROM_ALL)
-    configure_target_outdir(common)
-
+    configure_target_outdir(alcommon)
     configure_target_outdir(OpenAL)
     ax_add_3rd(OpenAL)
     target_compile_definitions(thirdparty INTERFACE AX_USE_ALSOFT=1)
+
+    set_target_properties(alcommon PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
+    set_target_properties(OpenAL PROPERTIES CXX_STANDARD ${_AX_CXX_STD})
 
     if(ANDROID)
         set(ANDROID_SHARED_LOADS "${ANDROID_SHARED_LOADS}System.loadLibrary(\"openal\");" CACHE INTERNAL "Android Shared Loads" )

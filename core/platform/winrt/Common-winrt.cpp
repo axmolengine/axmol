@@ -38,8 +38,8 @@ NS_AX_BEGIN
 void ccMessageBox(const char * pszMsg, const char * pszTitle)
 {
     // Create the message dialog and set its content
-    Platform::String^ message = PlatformStringFromString(pszMsg);
-    Platform::String^ title = PlatformStringFromString(pszTitle);
+    auto message = PlatformStringFromString(pszMsg);
+    auto title = PlatformStringFromString(pszTitle);
     GLViewImpl::sharedOpenGLView()->ShowMessageBox(title, message);
 }
 

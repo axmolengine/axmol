@@ -56,6 +56,9 @@ inline const FuncExport alcFunctions[]{
 
     DECL(alcReopenDeviceSOFT),
 
+    DECL(alcEventControlSOFT),
+    DECL(alcEventCallbackSOFT),
+
     DECL(alEnable),
     DECL(alDisable),
     DECL(alIsEnabled),
@@ -217,6 +220,7 @@ inline const FuncExport alcFunctions[]{
     DECL(alGetDebugMessageLogEXT),
 
     /* Direct Context functions */
+    DECL(alcGetProcAddress2),
     DECL(alEnableDirect),
     DECL(alDisableDirect),
     DECL(alIsEnabledDirect),
@@ -364,9 +368,13 @@ inline const FuncExport alcFunctions[]{
     DECL(alPushDebugGroupDirectEXT),
     DECL(alPopDebugGroupDirectEXT),
     DECL(alGetDebugMessageLogDirectEXT),
+    DECL(alObjectLabelEXT),
+    DECL(alObjectLabelDirectEXT),
+    DECL(alGetObjectLabelEXT),
+    DECL(alGetObjectLabelDirectEXT),
 
-    DECL(alcEventControlSOFT),
-    DECL(alcEventCallbackSOFT),
+    /* Extra functions */
+    DECL(alsoft_set_log_callback),
 #ifdef ALSOFT_EAX
 }, eaxFunctions[]{
     DECL(EAXGet),
@@ -481,6 +489,12 @@ inline const EnumExport alcEnumerations[]{
 
     DECL(ALC_CONTEXT_FLAGS_EXT),
     DECL(ALC_CONTEXT_DEBUG_BIT_EXT),
+
+    DECL(ALC_PLAYBACK_DEVICE_SOFT),
+    DECL(ALC_CAPTURE_DEVICE_SOFT),
+    DECL(ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT),
+    DECL(ALC_EVENT_TYPE_DEVICE_ADDED_SOFT),
+    DECL(ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT),
 
 
     DECL(AL_INVALID),
@@ -859,8 +873,14 @@ inline const EnumExport alcEnumerations[]{
     DECL(AL_MAX_DEBUG_MESSAGE_LENGTH_EXT),
     DECL(AL_MAX_DEBUG_LOGGED_MESSAGES_EXT),
     DECL(AL_MAX_DEBUG_GROUP_STACK_DEPTH_EXT),
+    DECL(AL_MAX_LABEL_LENGTH_EXT),
     DECL(AL_STACK_OVERFLOW_EXT),
     DECL(AL_STACK_UNDERFLOW_EXT),
+    DECL(AL_BUFFER_EXT),
+    DECL(AL_SOURCE_EXT),
+    DECL(AL_FILTER_EXT),
+    DECL(AL_EFFECT_EXT),
+    DECL(AL_AUXILIARY_EFFECT_SLOT_EXT),
 
     DECL(AL_STOP_SOURCES_ON_DISCONNECT_SOFT),
 #ifdef ALSOFT_EAX

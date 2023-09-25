@@ -152,6 +152,7 @@ enum PropertyValue : ALenum {
     MaxDebugMessageLength = AL_MAX_DEBUG_MESSAGE_LENGTH_EXT,
     MaxDebugLoggedMessages = AL_MAX_DEBUG_LOGGED_MESSAGES_EXT,
     MaxDebugGroupDepth = AL_MAX_DEBUG_GROUP_STACK_DEPTH_EXT,
+    MaxLabelLength = AL_MAX_LABEL_LENGTH_EXT,
     ContextFlags = AL_CONTEXT_FLAGS_EXT,
 #ifdef ALSOFT_EAX
     EaxRamSize = AL_EAX_RAM_SIZE,
@@ -228,7 +229,7 @@ void GetValue(ALCcontext *context, ALenum pname, T *values)
     case AL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH_EXT:
     {
         std::lock_guard<std::mutex> _{context->mDebugCbLock};
-        *values = cast_value(context->mDebugLog.empty() ? size_t{0}
+        *values = cast_value(context->mDebugLog.empty() ? 0_uz
             : (context->mDebugLog.front().mMessage.size()+1));
         return;
     }
@@ -243,6 +244,10 @@ void GetValue(ALCcontext *context, ALenum pname, T *values)
 
     case AL_MAX_DEBUG_GROUP_STACK_DEPTH_EXT:
         *values = cast_value(MaxDebugGroupDepth);
+        return;
+
+    case AL_MAX_LABEL_LENGTH_EXT:
+        *values = cast_value(MaxObjectLabelLength);
         return;
 
     case AL_CONTEXT_FLAGS_EXT:
@@ -302,6 +307,7 @@ AL_API const ALchar* AL_APIENTRY alsoft_get_version(void) noexcept
 }
 
 
+AL_API DECL_FUNC1(void, alEnable, ALenum)
 FORCE_ALIGN void AL_APIENTRY alEnableDirect(ALCcontext *context, ALenum capability) noexcept
 {
     switch(capability)
@@ -327,6 +333,7 @@ FORCE_ALIGN void AL_APIENTRY alEnableDirect(ALCcontext *context, ALenum capabili
     }
 }
 
+AL_API DECL_FUNC1(void, alDisable, ALenum)
 FORCE_ALIGN void AL_APIENTRY alDisableDirect(ALCcontext *context, ALenum capability) noexcept
 {
     switch(capability)
@@ -352,6 +359,7 @@ FORCE_ALIGN void AL_APIENTRY alDisableDirect(ALCcontext *context, ALenum capabil
     }
 }
 
+AL_API DECL_FUNC1(ALboolean, alIsEnabled, ALenum)
 FORCE_ALIGN ALboolean AL_APIENTRY alIsEnabledDirect(ALCcontext *context, ALenum capability) noexcept
 {
     std::lock_guard<std::mutex> _{context->mPropLock};
@@ -404,6 +412,7 @@ DECL_GETFUNC(ALvoid*, alGetPointer,SOFT)
 #undef DECL_GETFUNC
 
 
+AL_API DECL_FUNC2(void, alGetBooleanv, ALenum, ALboolean*)
 FORCE_ALIGN void AL_APIENTRY alGetBooleanvDirect(ALCcontext *context, ALenum pname, ALboolean *values) noexcept
 {
     if(!values) UNLIKELY
@@ -411,6 +420,7 @@ FORCE_ALIGN void AL_APIENTRY alGetBooleanvDirect(ALCcontext *context, ALenum pna
     GetValue(context, pname, values);
 }
 
+AL_API DECL_FUNC2(void, alGetDoublev, ALenum, ALdouble*)
 FORCE_ALIGN void AL_APIENTRY alGetDoublevDirect(ALCcontext *context, ALenum pname, ALdouble *values) noexcept
 {
     if(!values) UNLIKELY
@@ -418,6 +428,7 @@ FORCE_ALIGN void AL_APIENTRY alGetDoublevDirect(ALCcontext *context, ALenum pnam
     GetValue(context, pname, values);
 }
 
+AL_API DECL_FUNC2(void, alGetFloatv, ALenum, ALfloat*)
 FORCE_ALIGN void AL_APIENTRY alGetFloatvDirect(ALCcontext *context, ALenum pname, ALfloat *values) noexcept
 {
     if(!values) UNLIKELY
@@ -425,6 +436,7 @@ FORCE_ALIGN void AL_APIENTRY alGetFloatvDirect(ALCcontext *context, ALenum pname
     GetValue(context, pname, values);
 }
 
+AL_API DECL_FUNC2(void, alGetIntegerv, ALenum, ALint*)
 FORCE_ALIGN void AL_APIENTRY alGetIntegervDirect(ALCcontext *context, ALenum pname, ALint *values) noexcept
 {
     if(!values) UNLIKELY
@@ -432,6 +444,7 @@ FORCE_ALIGN void AL_APIENTRY alGetIntegervDirect(ALCcontext *context, ALenum pna
     GetValue(context, pname, values);
 }
 
+AL_API DECL_FUNCEXT2(void, alGetInteger64v,SOFT, ALenum, ALint64SOFT*)
 FORCE_ALIGN void AL_APIENTRY alGetInteger64vDirectSOFT(ALCcontext *context, ALenum pname, ALint64SOFT *values) noexcept
 {
     if(!values) UNLIKELY
@@ -439,6 +452,7 @@ FORCE_ALIGN void AL_APIENTRY alGetInteger64vDirectSOFT(ALCcontext *context, ALen
     GetValue(context, pname, values);
 }
 
+AL_API DECL_FUNCEXT2(void, alGetPointerv,SOFT, ALenum, ALvoid**)
 FORCE_ALIGN void AL_APIENTRY alGetPointervDirectSOFT(ALCcontext *context, ALenum pname, ALvoid **values) noexcept
 {
     if(!values) UNLIKELY
@@ -467,6 +481,7 @@ FORCE_ALIGN void AL_APIENTRY alGetPointervDirectSOFT(ALCcontext *context, ALenum
     }
 }
 
+AL_API DECL_FUNC1(const ALchar*, alGetString, ALenum)
 FORCE_ALIGN const ALchar* AL_APIENTRY alGetStringDirect(ALCcontext *context, ALenum pname) noexcept
 {
     const ALchar *value{nullptr};
@@ -526,6 +541,7 @@ FORCE_ALIGN const ALchar* AL_APIENTRY alGetStringDirect(ALCcontext *context, ALe
     return value;
 }
 
+AL_API DECL_FUNC1(void, alDopplerFactor, ALfloat)
 FORCE_ALIGN void AL_APIENTRY alDopplerFactorDirect(ALCcontext *context, ALfloat value) noexcept
 {
     if(!(value >= 0.0f && std::isfinite(value)))
@@ -538,6 +554,7 @@ FORCE_ALIGN void AL_APIENTRY alDopplerFactorDirect(ALCcontext *context, ALfloat 
     }
 }
 
+AL_API DECL_FUNC1(void, alSpeedOfSound, ALfloat)
 FORCE_ALIGN void AL_APIENTRY alSpeedOfSoundDirect(ALCcontext *context, ALfloat value) noexcept
 {
     if(!(value > 0.0f && std::isfinite(value)))
@@ -550,6 +567,7 @@ FORCE_ALIGN void AL_APIENTRY alSpeedOfSoundDirect(ALCcontext *context, ALfloat v
     }
 }
 
+AL_API DECL_FUNC1(void, alDistanceModel, ALenum)
 FORCE_ALIGN void AL_APIENTRY alDistanceModelDirect(ALCcontext *context, ALenum value) noexcept
 {
     if(auto model = DistanceModelFromALenum(value))
@@ -564,12 +582,14 @@ FORCE_ALIGN void AL_APIENTRY alDistanceModelDirect(ALCcontext *context, ALenum v
 }
 
 
+AL_API DECL_FUNCEXT(void, alDeferUpdates,SOFT)
 FORCE_ALIGN void AL_APIENTRY alDeferUpdatesDirectSOFT(ALCcontext *context) noexcept
 {
     std::lock_guard<std::mutex> _{context->mPropLock};
     context->deferUpdates();
 }
 
+AL_API DECL_FUNCEXT(void, alProcessUpdates,SOFT)
 FORCE_ALIGN void AL_APIENTRY alProcessUpdatesDirectSOFT(ALCcontext *context) noexcept
 {
     std::lock_guard<std::mutex> _{context->mPropLock};
@@ -577,6 +597,7 @@ FORCE_ALIGN void AL_APIENTRY alProcessUpdatesDirectSOFT(ALCcontext *context) noe
 }
 
 
+AL_API DECL_FUNCEXT2(const ALchar*, alGetStringi,SOFT, ALenum,ALsizei)
 FORCE_ALIGN const ALchar* AL_APIENTRY alGetStringiDirectSOFT(ALCcontext *context, ALenum pname, ALsizei index) noexcept
 {
     const ALchar *value{nullptr};
@@ -595,22 +616,6 @@ FORCE_ALIGN const ALchar* AL_APIENTRY alGetStringiDirectSOFT(ALCcontext *context
     return value;
 }
 
-AL_API DECL_FUNC1(void, alEnable, ALenum)
-AL_API DECL_FUNC1(void, alDisable, ALenum)
-AL_API DECL_FUNC1(ALboolean, alIsEnabled, ALenum)
-AL_API DECL_FUNC2(void, alGetBooleanv, ALenum, ALboolean*)
-AL_API DECL_FUNC2(void, alGetDoublev, ALenum, ALdouble*)
-AL_API DECL_FUNC2(void, alGetFloatv, ALenum, ALfloat*)
-AL_API DECL_FUNC2(void, alGetIntegerv, ALenum, ALint*)
-AL_API DECL_FUNCEXT2(void, alGetInteger64v,SOFT, ALenum, ALint64SOFT*)
-AL_API DECL_FUNCEXT2(void, alGetPointerv,SOFT, ALenum, ALvoid**)
-AL_API DECL_FUNC1(const ALchar*, alGetString, ALenum)
-AL_API DECL_FUNC1(void, alDopplerFactor, ALfloat)
-AL_API DECL_FUNC1(void, alSpeedOfSound, ALfloat)
-AL_API DECL_FUNC1(void, alDistanceModel, ALenum)
-AL_API DECL_FUNCEXT(void, alDeferUpdates,SOFT)
-AL_API DECL_FUNCEXT(void, alProcessUpdates,SOFT)
-AL_API DECL_FUNCEXT2(const ALchar*, alGetStringi,SOFT, ALenum,ALsizei)
 
 AL_API void AL_APIENTRY alDopplerVelocity(ALfloat value) noexcept
 {

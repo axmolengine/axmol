@@ -24,6 +24,7 @@ if (WINRT)
             unset(CMAKE_VS_WINDOWS_TARGET_PLATFORM_MIN_VERSION)
         endif()
     endif()
+    set(AX_CPPWINRT_VERISON "2.0.230706.1" CACHE STRING "")
 endif()
 
 # config c standard
@@ -57,15 +58,17 @@ if(NOT DEFINED CMAKE_C_STANDARD_REQUIRED)
     set(CMAKE_C_STANDARD_REQUIRED ON)
 endif()
 
-# config c++ standard
-if(NOT DEFINED CMAKE_CXX_STANDARD)
-    if (NOT WINRT)
-        set(CMAKE_CXX_STANDARD 20)
-    else()
-        set(CMAKE_CXX_STANDARD 17)
-    endif()
+# config c++ standard, minimal require c++20
+set(_AX_MIN_CXX_STD 20)
+if (NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD ${_AX_MIN_CXX_STD})
 endif()
-message(STATUS "CMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD}")
+if (CMAKE_CXX_STANDARD GREATER_EQUAL ${_AX_MIN_CXX_STD})
+    message(STATUS "Building axmol with c++${CMAKE_CXX_STANDARD}")
+else()
+    message(STATUS "Building axmol require c++ std >= ${_AX_MIN_CXX_STD}")
+endif()
+set(_AX_CXX_STD ${CMAKE_CXX_STANDARD} CACHE STRING "" FORCE)
 
 if(NOT DEFINED CMAKE_CXX_STANDARD_REQUIRED)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)

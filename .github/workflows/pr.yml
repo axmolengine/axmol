@@ -37,7 +37,7 @@ jobs:
           uwp: true
       - name: Build
         shell: pwsh
-        run: .\build.ps1 -p winuwp -a x64
+        run: .\build.ps1 -p winuwp -a x64 -xb '--config', 'Debug'
 
   build-linux:
     runs-on: ubuntu-latest

@@ -16,36 +16,23 @@ extern LogLevel gLogLevel;
 
 extern FILE *gLogFile;
 
+
+using LogCallbackFunc = void(*)(void *userptr, char level, const char *message, int length) noexcept;
+
+void al_set_log_callback(LogCallbackFunc callback, void *userptr);
+
+
 #ifdef __USE_MINGW_ANSI_STDIO
-[[gnu::format(gnu_printf,3,4)]]
+[[gnu::format(gnu_printf,2,3)]]
 #else
-[[gnu::format(printf,3,4)]]
+[[gnu::format(printf,2,3)]]
 #endif
-void al_print(LogLevel level, FILE *logfile, const char *fmt, ...);
+void al_print(LogLevel level, const char *fmt, ...);
 
-#if (!defined(_WIN32) || defined(NDEBUG)) && !defined(__ANDROID__)
-#define TRACE(...) do {                                                       \
-    if(gLogLevel >= LogLevel::Trace) UNLIKELY                                 \
-        al_print(LogLevel::Trace, gLogFile, __VA_ARGS__);                     \
-} while(0)
+#define TRACE(...) al_print(LogLevel::Trace, __VA_ARGS__)
 
-#define WARN(...) do {                                                        \
-    if(gLogLevel >= LogLevel::Warning) UNLIKELY                               \
-        al_print(LogLevel::Warning, gLogFile, __VA_ARGS__);                   \
-} while(0)
+#define WARN(...) al_print(LogLevel::Warning, __VA_ARGS__)
 
-#define ERR(...) do {                                                         \
-    if(gLogLevel >= LogLevel::Error) UNLIKELY                                 \
-        al_print(LogLevel::Error, gLogFile, __VA_ARGS__);                     \
-} while(0)
-
-#else
-
-#define TRACE(...) al_print(LogLevel::Trace, gLogFile, __VA_ARGS__)
-
-#define WARN(...) al_print(LogLevel::Warning, gLogFile, __VA_ARGS__)
-
-#define ERR(...) al_print(LogLevel::Error, gLogFile, __VA_ARGS__)
-#endif
+#define ERR(...) al_print(LogLevel::Error, __VA_ARGS__)
 
 #endif /* CORE_LOGGING_H */

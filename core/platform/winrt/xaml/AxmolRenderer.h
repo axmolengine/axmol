@@ -18,9 +18,14 @@
 */
 #pragma once
 
-#include <agile.h>
 #include "platform/winrt/InputEvent.h"
 #include "base/Types.h"
+
+#include <winrt/Windows.Graphics.Display.h>
+#include <winrt/Windows.Graphics.h>
+#include <winrt/Windows.UI.Xaml.Controls.h>
+
+using namespace winrt;
 
 class AppDelegate;
 
@@ -31,13 +36,13 @@ public:
                   int height,
                   float dpi, 
         Windows::Graphics::Display::DisplayOrientations orientation, 
-        Windows::UI::Core::CoreDispatcher^ dispatcher, Windows::UI::Xaml::Controls::Panel^ panel);
+        Windows::UI::Core::CoreDispatcher const& dispatcher, Windows::UI::Xaml::Controls::Panel const& panel);
     AxmolRenderer(const AxmolRenderer&) = delete;
     ~AxmolRenderer();
     void SetQueueOperationCb(std::function<void(ax::AsyncOperation, void*)> op);
     void Draw(size_t width, size_t height, float dpi, Windows::Graphics::Display::DisplayOrientations orientation);
-	void QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs^ args);
-    void QueueKeyboardEvent(ax::WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs ^ args);
+	void QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs const& args);
+    void QueueKeyboardEvent(ax::WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
 	void QueueBackButtonEvent();
     void Pause();
     void Resume();
@@ -50,7 +55,7 @@ private:
     int m_height;
     float m_dpi;
 
-    Platform::Agile<Windows::UI::Core::CoreDispatcher> m_dispatcher;
-    Platform::Agile<Windows::UI::Xaml::Controls::Panel> m_panel;
+    winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher;
+    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> m_panel;
     Windows::Graphics::Display::DisplayOrientations m_orientation;
 };

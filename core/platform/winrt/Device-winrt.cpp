@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 #    include <dwrite.h>
 #    include <d2d1.h>
-#    include <wrl/client.h>
 #    include <wincodec.h>
 #    include <Shlwapi.h>
 #    include <shellapi.h>
@@ -41,10 +40,13 @@ THE SOFTWARE.
 #    include "platform/StdC.h"
 #    include "platform/winrt/GLViewImpl-winrt.h"
 
+#    include <winrt/Windows.Devices.Sensors.h>
+
+using namespace winrt;
 using namespace Windows::Graphics::Display;
 using namespace Windows::Devices::Sensors;
 using namespace Windows::Foundation;
-using namespace Microsoft::WRL;
+
 #    if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 using namespace Windows::Phone::Devices::Notification;
 #    endif  // (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
@@ -52,44 +54,45 @@ using namespace Windows::Phone::Devices::Notification;
 NS_AX_BEGIN
 
 template <typename T>
-inline HRESULT CreateInstance(REFCLSID clsid, Microsoft::WRL::ComPtr<T>& ptr)
+inline HRESULT CreateInstance(REFCLSID clsid, winrt::com_ptr<T>& ptr)
 {
     ASSERT(!ptr);
     return CoCreateInstance(clsid, nullptr, CLSCTX_INPROC_SERVER, __uuidof(T),
-                            reinterpret_cast<void**>(ptr.GetAddressOf()));
+                            reinterpret_cast<void**>(ptr.put()));
 }
 
-struct ComException
-{
-    HRESULT const hr;
-    std::string where;
-    ComException(const char* expression, HRESULT const value) : where(expression), hr(value) {}
-};
+// struct ComException
+//{
+//     HRESULT const hr;
+//     std::string where;
+//     ComException(const char* expression, HRESULT const value) : where(expression), hr(value) {}
+// };
+//
+// inline void _AssertHR(const char* expression, HRESULT hr)
+//{
+//     if (FAILED(hr))
+//         throw ComException(expression, hr);
+// }
 
-inline void _AssertHR(const char* expression, HRESULT hr)
-{
-    if (FAILED(hr))
-        throw ComException(expression, hr);
-}
-
-#    define ASSERT_HR(expression) _AssertHR(#expression, (expression))
+#    define ASSERT_HR(expression) winrt::check_hresult(expression)
 
 class TextRenderer
 {
-    ComPtr<ID2D1Factory> _d2d1Factory;
-    ComPtr<IDWriteFactory> _dwriteFactory;
-    ComPtr<IWICImagingFactory> _imageFactory;
+    winrt::com_ptr<ID2D1Factory> _d2d1Factory;
+    winrt::com_ptr<IDWriteFactory> _dwriteFactory;
+    winrt::com_ptr<IWICImagingFactory> _imageFactory;
 
-    ComPtr<IDWriteTextFormat> _textFormat;
-    ComPtr<ID2D1RenderTarget> _renderTarget;
-    ComPtr<ID2D1SolidColorBrush> _fillBrush;
+    winrt::com_ptr<IDWriteTextFormat> _textFormat;
+    winrt::com_ptr<ID2D1RenderTarget> _renderTarget;
+    winrt::com_ptr<ID2D1SolidColorBrush> _fillBrush;
 
-    ComPtr<IWICBitmap> _wicBitmap;
+    winrt::com_ptr<IWICBitmap> _wicBitmap;
 
 public:
     TextRenderer()
     {
-        ASSERT_HR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), &_dwriteFactory));
+        ASSERT_HR(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                                      (::IUnknown**)_dwriteFactory.put()));
 
         D2D1_FACTORY_OPTIONS fo = {};
 
@@ -97,7 +100,7 @@ public:
         fo.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
 #    endif
 
-        ASSERT_HR(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, fo, _d2d1Factory.GetAddressOf()));
+        ASSERT_HR(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, fo, _d2d1Factory.put()));
 
         ASSERT_HR(CreateInstance(CLSID_WICImagingFactory, _imageFactory));
     }
@@ -118,7 +121,7 @@ public:
 
             ASSERT_HR(_dwriteFactory->CreateTextFormat(wfontName.c_str(), nullptr, fontWeight, fontStyle,
                                                        DWRITE_FONT_STRETCH_NORMAL, textDefinition._fontSize, L"",
-                                                       _textFormat.ReleaseAndGetAddressOf()));
+                                                       _textFormat.put()));
 
             if (textDefinition._alignment == TextHAlignment::CENTER)
                 _textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -126,7 +129,7 @@ public:
             if (textDefinition._vertAlignment == TextVAlignment::CENTER)
                 _textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
-            return _textFormat;
+            return static_cast<bool>(_textFormat);
 
             bRet = true;
         } while (0);
@@ -145,7 +148,7 @@ public:
         do
         {
             HRESULT hr = S_OK;
-            ComPtr<IDWriteTextLayout> pTextLayout;
+            winrt::com_ptr<IDWriteTextLayout> pTextLayout;
             const float maxWidth  = nWidthLimit == 0 ? 16384.0f : static_cast<float>(nWidthLimit);
             const float maxHeight = nHeightLimit == 0 ? 16384.0f : static_cast<float>(nWidthLimit);
 
@@ -166,8 +169,8 @@ public:
                 _textFormat->SetTrimming(&trimOptions, nullptr);
             }
             // Create a text layout
-            hr = _dwriteFactory->CreateTextLayout(text, static_cast<UINT32>(nLen), _textFormat.Get(), maxWidth,
-                                                  maxHeight, pTextLayout.GetAddressOf());
+            hr = _dwriteFactory->CreateTextLayout(text, static_cast<UINT32>(nLen), _textFormat.get(), maxWidth,
+                                                  maxHeight, pTextLayout.put());
 
             if (SUCCEEDED(hr))
             {
@@ -197,14 +200,12 @@ public:
         props.pixelFormat                   = pixelFormat;
 
         ASSERT_HR(_imageFactory->CreateBitmap(nWidth, nHeight, GUID_WICPixelFormat32bppPBGRA, WICBitmapCacheOnLoad,
-                                              _wicBitmap.ReleaseAndGetAddressOf()));
+                                              _wicBitmap.put()));
 
-        ASSERT_HR(
-            _d2d1Factory->CreateWicBitmapRenderTarget(_wicBitmap.Get(), props, _renderTarget.ReleaseAndGetAddressOf()));
+        ASSERT_HR(_d2d1Factory->CreateWicBitmapRenderTarget(_wicBitmap.get(), props, _renderTarget.put()));
 
         // CreateDeviceResources();
-        ASSERT_HR(_renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White),
-                                                       _fillBrush.ReleaseAndGetAddressOf()));
+        ASSERT_HR(_renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), _fillBrush.put()));
         return true;
     }
 
@@ -345,8 +346,8 @@ public:
             // draw text
             _renderTarget->BeginDraw();
 
-            _renderTarget->DrawText(fixedText ? (LPCTSTR)fixedText : pwszBuffer, nLen, _textFormat.Get(), &rcText,
-                                    _fillBrush.Get());
+            _renderTarget->DrawText(fixedText ? (LPCTSTR)fixedText : pwszBuffer, nLen, _textFormat.get(), &rcText,
+                                    _fillBrush.get());
             _renderTarget->EndDraw();
 
             nRet = true;
@@ -377,17 +378,17 @@ int Device::getDPI()
     return ax::GLViewImpl::sharedOpenGLView()->GetDPI();
 }
 
-static Accelerometer ^ sAccelerometer = nullptr;
+static Accelerometer sAccelerometer = nullptr;
 
 void Device::setAccelerometerEnabled(bool isEnabled)
 {
-    static Windows::Foundation::EventRegistrationToken sToken;
+    static winrt::event_token sToken;
     static bool sEnabled = false;
 
     // we always need to reset the accelerometer
     if (sAccelerometer)
     {
-        sAccelerometer->ReadingChanged -= sToken;
+        sAccelerometer.ReadingChanged(sToken);
         sAccelerometer = nullptr;
         sEnabled       = false;
     }
@@ -407,19 +408,18 @@ void Device::setAccelerometerEnabled(bool isEnabled)
         setAccelerometerInterval(0.0f);
         sEnabled = true;
 
-        sToken = sAccelerometer->ReadingChanged +=
-            ref new TypedEventHandler<Accelerometer ^, AccelerometerReadingChangedEventArgs ^>(
-                [](Accelerometer ^ a, AccelerometerReadingChangedEventArgs ^ e) {
+        sToken = sAccelerometer.ReadingChanged(
+                [](Accelerometer const& a, AccelerometerReadingChangedEventArgs const& e) {
             if (!sEnabled)
             {
                 return;
             }
 
-            AccelerometerReading ^ reading = e->Reading;
+            auto&& reading = e.Reading();
             ax::Acceleration acc;
-            acc.x         = reading->AccelerationX;
-            acc.y         = reading->AccelerationY;
-            acc.z         = reading->AccelerationZ;
+            acc.x         = reading.AccelerationX();
+            acc.y         = reading.AccelerationY();
+            acc.z         = reading.AccelerationZ();
             acc.timestamp = 0;
 
             auto orientation = GLViewImpl::sharedOpenGLView()->getDeviceOrientation();
@@ -429,28 +429,28 @@ void Device::setAccelerometerEnabled(bool isEnabled)
                 switch (orientation)
                 {
                 case DisplayOrientations::Portrait:
-                    acc.x = reading->AccelerationX;
-                    acc.y = reading->AccelerationY;
+                    acc.x = reading.AccelerationX();
+                    acc.y = reading.AccelerationY();
                     break;
 
                 case DisplayOrientations::Landscape:
-                    acc.x = -reading->AccelerationY;
-                    acc.y = reading->AccelerationX;
+                    acc.x = -reading.AccelerationY();
+                    acc.y = reading.AccelerationX();
                     break;
 
                 case DisplayOrientations::PortraitFlipped:
-                    acc.x = -reading->AccelerationX;
-                    acc.y = reading->AccelerationY;
+                    acc.x = -reading.AccelerationX();
+                    acc.y = reading.AccelerationY();
                     break;
 
                 case DisplayOrientations::LandscapeFlipped:
-                    acc.x = reading->AccelerationY;
-                    acc.y = -reading->AccelerationX;
+                    acc.x = reading.AccelerationY();
+                    acc.y = -reading.AccelerationX();
                     break;
 
                 default:
-                    acc.x = reading->AccelerationX;
-                    acc.y = reading->AccelerationY;
+                    acc.x = reading.AccelerationX();
+                    acc.y = reading.AccelerationY();
                     break;
                 }
             }
@@ -460,28 +460,28 @@ void Device::setAccelerometerEnabled(bool isEnabled)
                 switch (orientation)
                 {
                 case DisplayOrientations::Portrait:
-                    acc.x = reading->AccelerationY;
-                    acc.y = -reading->AccelerationX;
+                    acc.x = reading.AccelerationY();
+                    acc.y = -reading.AccelerationX();
                     break;
 
                 case DisplayOrientations::Landscape:
-                    acc.x = reading->AccelerationX;
-                    acc.y = reading->AccelerationY;
+                    acc.x = reading.AccelerationX();
+                    acc.y = reading.AccelerationY();
                     break;
 
                 case DisplayOrientations::PortraitFlipped:
-                    acc.x = -reading->AccelerationY;
-                    acc.y = reading->AccelerationX;
+                    acc.x = -reading.AccelerationY();
+                    acc.y = reading.AccelerationX();
                     break;
 
                 case DisplayOrientations::LandscapeFlipped:
-                    acc.x = -reading->AccelerationX;
-                    acc.y = -reading->AccelerationY;
+                    acc.x = -reading.AccelerationX();
+                    acc.y = -reading.AccelerationY();
                     break;
 
                 default:
-                    acc.x = reading->AccelerationY;
-                    acc.y = -reading->AccelerationX;
+                    acc.x = reading.AccelerationY();
+                    acc.y = -reading.AccelerationX();
                     break;
                 }
             }
@@ -498,11 +498,11 @@ void Device::setAccelerometerInterval(float interval)
     {
         try
         {
-            int minInterval                = sAccelerometer->MinimumReportInterval;
-            int reqInterval                = (int)interval;
-            sAccelerometer->ReportInterval = reqInterval < minInterval ? minInterval : reqInterval;
+            int minInterval = sAccelerometer.MinimumReportInterval();
+            int reqInterval = (int)interval;
+            sAccelerometer.ReportInterval(reqInterval < minInterval ? minInterval : reqInterval);
         }
-        catch (Platform::COMException ^)
+        catch (winrt::hresult_error const& /*ex*/)
         {
             AXLOG("Device::setAccelerometerInterval not supported on this device");
         }

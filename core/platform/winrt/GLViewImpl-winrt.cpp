@@ -32,31 +32,13 @@ THE SOFTWARE.
 #include "base/EventListenerKeyboard.h"
 #include "platform/winrt/Application-winrt.h"
 #include "platform/winrt/WinRTUtils.h"
-// #include "deprecated/NotificationCenter.h"
 #include "base/EventDispatcher.h"
 #include "base/EventMouse.h"
-
 #include <map>
 
-using namespace Platform;
-using namespace Concurrency;
-using namespace Windows::System;
-using namespace Windows::Foundation;
-using namespace Windows::Foundation::Collections;
-using namespace Windows::Graphics::Display;
-using namespace Windows::UI::Input;
-using namespace Windows::UI::Core;
-using namespace Windows::UI::Xaml;
-using namespace Windows::UI::Xaml::Controls;
-using namespace Windows::UI::Xaml::Media;
-using namespace Windows::UI::Xaml::Input;
-using namespace Windows::System;
-using namespace Windows::UI::ViewManagement;
-using namespace Windows::ApplicationModel;
-using namespace Windows::ApplicationModel::Core;
-using namespace Windows::ApplicationModel::Activation;
-using namespace Platform;
-using namespace Microsoft::WRL;
+#include <winrt/Windows.UI.Xaml.Controls.h>
+#include <winrt/Windows.UI.Popups.h>
+#include <winrt/Windows.UI.Input.h>
 
 NS_AX_BEGIN
 
@@ -111,13 +93,13 @@ GLViewImpl::GLViewImpl()
     , m_windowVisible(true)
     , m_width(0)
     , m_height(0)
-    , m_orientation(DisplayOrientations::Landscape)
+    , m_orientation(Windows::Graphics::Display::DisplayOrientations::Landscape)
     , m_appShouldExit(false)
     , _lastMouseButtonPressed(EventMouse::MouseButton::BUTTON_UNSET)
 {
     s_pEglView = this;
-    _viewName  = "axmol";
-    m_keyboard = ref new KeyBoardWinRT();
+    _viewName  = "axmol2";
+    m_keyboard = KeyBoardWinRT();
 
     m_backButtonListener                = EventListenerKeyboard::create();
     m_backButtonListener->onKeyReleased = AX_CALLBACK_2(GLViewImpl::BackButtonListener, this);
@@ -151,13 +133,14 @@ void ax::GLViewImpl::setCursorVisible(bool isVisible)
     _isCursorVisible = isVisible;
 }
 
-void GLViewImpl::setDispatcher(Windows::UI::Core::CoreDispatcher ^ dispatcher)
+void GLViewImpl::setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispatcher> dispatcher)
 {
     m_dispatcher = dispatcher;
 }
 
-void GLViewImpl::setPanel(Windows::UI::Xaml::Controls::Panel ^ panel)
+void GLViewImpl::setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel)
 {
+    // TODO: use winrt::agile_ref;
     m_panel = panel;
 }
 
@@ -167,17 +150,17 @@ void GLViewImpl::setIMEKeyboardState(bool bOpen)
     setIMEKeyboardState(bOpen, str);
 }
 
-bool GLViewImpl::ShowMessageBox(Platform::String ^ title, Platform::String ^ message)
+bool GLViewImpl::ShowMessageBox(const winrt::hstring& title, const winrt::hstring& message)
 {
-    if (m_dispatcher.Get())
+    if (m_dispatcher)
     {
-        m_dispatcher.Get()->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal,
-                                     ref new Windows::UI::Core::DispatchedHandler([title, message]() {
+        m_dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal,
+                                     Windows::UI::Core::DispatchedHandler([title, message]() {
                                          // Show the message dialog
-                                         auto msg = ref new Windows::UI::Popups::MessageDialog(message, title);
+                                         auto msg = Windows::UI::Popups::MessageDialog(message, title);
                                          // Set the command to be invoked when a user presses 'ESC'
-                                         msg->CancelCommandIndex = 1;
-                                         msg->ShowAsync();
+                                         msg.CancelCommandIndex(1);
+                                         msg.ShowAsync();
                                      }));
 
         return true;
@@ -189,11 +172,11 @@ void GLViewImpl::setIMEKeyboardState(bool bOpen, std::string_view str)
 {
     if (bOpen)
     {
-        m_keyboard->ShowKeyboard(PlatformStringFromString(str));
+        m_keyboard.ShowKeyboard(PlatformStringFromString(str));
     }
     else
     {
-        m_keyboard->HideKeyboard(PlatformStringFromString(str));
+        m_keyboard.HideKeyboard(PlatformStringFromString(str));
     }
 }
 
@@ -210,9 +193,11 @@ void GLViewImpl::end()
     m_appShouldExit = true;
 }
 
-void GLViewImpl::OnSuspending(Platform::Object ^ sender, SuspendingEventArgs ^ args) {}
+void GLViewImpl::OnSuspending(Windows::Foundation::IInspectable const& sender,
+                              Windows::ApplicationModel::SuspendingEventArgs const& args)
+{}
 
-void GLViewImpl::OnResuming(Platform::Object ^ sender, Platform::Object ^ args) {}
+void GLViewImpl::OnResuming(Windows::Foundation::IInspectable const& sender) {}
 
 // user pressed the Back Key on the phone
 void GLViewImpl::OnBackKeyPress()
@@ -262,21 +247,23 @@ bool GLViewImpl::AppShouldExit()
     return m_appShouldExit;
 }
 
-void GLViewImpl::OnPointerPressed(CoreWindow ^ sender, PointerEventArgs ^ args)
+void GLViewImpl::OnPointerPressed(Windows::UI::Core::CoreWindow const& sender,
+                                  Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerPressed(args);
 }
 
-void GLViewImpl::OnPointerPressed(PointerEventArgs ^ args)
+void GLViewImpl::OnPointerPressed(Windows::UI::Core::PointerEventArgs const& args)
 {
-    intptr_t id = args->CurrentPoint->PointerId;
+    intptr_t id = args.CurrentPoint().PointerId();
     Vec2 pt     = GetPoint(args);
     handleTouchesBegin(1, &id, &pt.x, &pt.y);
 }
 
-void GLViewImpl::OnPointerWheelChanged(CoreWindow ^ sender, PointerEventArgs ^ args)
+void GLViewImpl::OnPointerWheelChanged(Windows::UI::Core::CoreWindow const& sender,
+                                       Windows::UI::Core::PointerEventArgs const& args)
 {
-    float direction = (float)args->CurrentPoint->Properties->MouseWheelDelta;
+    float direction = (float)args.CurrentPoint().Properties().MouseWheelDelta();
     intptr_t id     = 0;
     Vec2 p(0.0f, 0.0f);
     handleTouchesBegin(1, &id, &p.x, &p.y);
@@ -285,33 +272,36 @@ void GLViewImpl::OnPointerWheelChanged(CoreWindow ^ sender, PointerEventArgs ^ a
     handleTouchesEnd(1, &id, &p.x, &p.y);
 }
 
-void GLViewImpl::OnVisibilityChanged(CoreWindow ^ sender, VisibilityChangedEventArgs ^ args)
+void GLViewImpl::OnVisibilityChanged(Windows::UI::Core::CoreWindow const& sender,
+                                     Windows::UI::Core::VisibilityChangedEventArgs const& args)
 {
-    m_windowVisible = args->Visible;
+    m_windowVisible = args.Visible();
 }
 
-void GLViewImpl::OnWindowClosed(CoreWindow ^ sender, CoreWindowEventArgs ^ args)
+void GLViewImpl::OnWindowClosed(Windows::UI::Core::CoreWindow const& sender,
+                                Windows::UI::Core::CoreWindowEventArgs const& args)
 {
     m_windowClosed = true;
 }
 
-void GLViewImpl::OnPointerMoved(CoreWindow ^ sender, PointerEventArgs ^ args)
+void GLViewImpl::OnPointerMoved(Windows::UI::Core::CoreWindow const& sender,
+                                Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerMoved(args);
 }
 
-void GLViewImpl::OnPointerMoved(PointerEventArgs ^ args)
+void GLViewImpl::OnPointerMoved(Windows::UI::Core::PointerEventArgs const& args)
 {
-    auto currentPoint = args->CurrentPoint;
-    if (currentPoint->IsInContact)
+    auto currentPoint = args.CurrentPoint();
+    if (currentPoint.IsInContact())
     {
         if (m_lastPointValid)
         {
-            intptr_t id = args->CurrentPoint->PointerId;
+            intptr_t id = args.CurrentPoint().PointerId();
             Vec2 p      = GetPoint(args);
             handleTouchesMove(1, &id, &p.x, &p.y);
         }
-        m_lastPoint      = currentPoint->Position;
+        m_lastPoint      = currentPoint.Position();
         m_lastPointValid = true;
     }
     else
@@ -320,24 +310,25 @@ void GLViewImpl::OnPointerMoved(PointerEventArgs ^ args)
     }
 }
 
-void GLViewImpl::OnPointerReleased(CoreWindow ^ sender, PointerEventArgs ^ args)
+void GLViewImpl::OnPointerReleased(Windows::UI::Core::CoreWindow const& sender,
+                                   Windows::UI::Core::PointerEventArgs const& args)
 {
     OnPointerReleased(args);
 }
 
-void GLViewImpl::OnPointerReleased(PointerEventArgs ^ args)
+void GLViewImpl::OnPointerReleased(Windows::UI::Core::PointerEventArgs const& args)
 {
-    intptr_t id = args->CurrentPoint->PointerId;
+    intptr_t id = args.CurrentPoint().PointerId();
     Vec2 pt     = GetPoint(args);
     handleTouchesEnd(1, &id, &pt.x, &pt.y);
 }
 
-void ax::GLViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs ^ args)
+void ax::GLViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 mousePosition = GetPointMouse(args);
 
     // Emulated touch, if left mouse button
-    if (args->CurrentPoint->Properties->IsLeftButtonPressed)
+    if (args.CurrentPoint().Properties().IsLeftButtonPressed())
     {
         intptr_t id = 0;
         Vec2 pt     = GetPoint(args);
@@ -355,15 +346,15 @@ void ax::GLViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs ^ args)
 
     EventMouse event(EventMouse::MouseEventType::MOUSE_DOWN);
     // Set current button
-    if (args->CurrentPoint->Properties->IsLeftButtonPressed)
+    if (args.CurrentPoint().Properties().IsLeftButtonPressed())
     {
         _lastMouseButtonPressed = EventMouse::MouseButton::BUTTON_LEFT;
     }
-    else if (args->CurrentPoint->Properties->IsRightButtonPressed)
+    else if (args.CurrentPoint().Properties().IsRightButtonPressed())
     {
         _lastMouseButtonPressed = EventMouse::MouseButton::BUTTON_RIGHT;
     }
-    else if (args->CurrentPoint->Properties->IsMiddleButtonPressed)
+    else if (args.CurrentPoint().Properties().IsMiddleButtonPressed())
     {
         _lastMouseButtonPressed = EventMouse::MouseButton::BUTTON_MIDDLE;
     }
@@ -372,12 +363,12 @@ void ax::GLViewImpl::OnMousePressed(Windows::UI::Core::PointerEventArgs ^ args)
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void ax::GLViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs ^ args)
+void ax::GLViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 mousePosition = GetPointMouse(args);
 
     // Emulated touch, if left mouse button
-    if (args->CurrentPoint->Properties->IsLeftButtonPressed)
+    if (args.CurrentPoint().Properties().IsLeftButtonPressed())
     {
         intptr_t id = 0;
         Vec2 pt     = GetPoint(args);
@@ -386,15 +377,15 @@ void ax::GLViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs ^ args)
 
     EventMouse event(EventMouse::MouseEventType::MOUSE_MOVE);
     // Set current button
-    if (args->CurrentPoint->Properties->IsLeftButtonPressed)
+    if (args.CurrentPoint().Properties().IsLeftButtonPressed())
     {
         event.setMouseButton(EventMouse::MouseButton::BUTTON_LEFT);
     }
-    else if (args->CurrentPoint->Properties->IsRightButtonPressed)
+    else if (args.CurrentPoint().Properties().IsRightButtonPressed())
     {
         event.setMouseButton(EventMouse::MouseButton::BUTTON_RIGHT);
     }
-    else if (args->CurrentPoint->Properties->IsMiddleButtonPressed)
+    else if (args.CurrentPoint().Properties().IsMiddleButtonPressed())
     {
         event.setMouseButton(EventMouse::MouseButton::BUTTON_MIDDLE);
     }
@@ -402,7 +393,7 @@ void ax::GLViewImpl::OnMouseMoved(Windows::UI::Core::PointerEventArgs ^ args)
     Director::getInstance()->getEventDispatcher()->dispatchEvent(&event);
 }
 
-void ax::GLViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs ^ args)
+void ax::GLViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 mousePosition = GetPointMouse(args);
 
@@ -423,15 +414,15 @@ void ax::GLViewImpl::OnMouseReleased(Windows::UI::Core::PointerEventArgs ^ args)
     _lastMouseButtonPressed = EventMouse::MouseButton::BUTTON_UNSET;
 }
 
-void ax::GLViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs ^ args)
+void ax::GLViewImpl::OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs const& args)
 {
     Vec2 mousePosition = GetPointMouse(args);
     EventMouse event(EventMouse::MouseEventType::MOUSE_SCROLL);
     // Because OpenGL and axmol uses different Y axis, we need to convert the coordinate here
     float cursorX = (mousePosition.x - _viewPortRect.origin.x) / _scaleX;
     float cursorY = (_viewPortRect.origin.y + _viewPortRect.size.height - mousePosition.y) / _scaleY;
-    float delta   = args->CurrentPoint->Properties->MouseWheelDelta;
-    if (args->CurrentPoint->Properties->IsHorizontalMouseWheel)
+    float delta   = args.CurrentPoint().Properties().MouseWheelDelta();
+    if (args.CurrentPoint().Properties().IsHorizontalMouseWheel())
     {
         event.setScrollData(delta / WHEEL_DELTA, 0.0f);
     }
@@ -488,7 +479,7 @@ void GLViewImpl::OnRendering()
 }
 
 // called by orientation change from WP8 XAML
-void GLViewImpl::UpdateOrientation(DisplayOrientations orientation)
+void GLViewImpl::UpdateOrientation(Windows::Graphics::Display::DisplayOrientations orientation)
 {
     if (m_orientation != orientation)
     {
@@ -535,7 +526,7 @@ void GLViewImpl::UpdateWindowSize()
     }
 }
 
-ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point p)
+ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)
 {
     ax::Vec2 returnValue;
 
@@ -555,18 +546,18 @@ ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point p)
     return returnValue;
 }
 
-Vec2 GLViewImpl::GetPoint(PointerEventArgs ^ args)
+Vec2 GLViewImpl::GetPoint(Windows::UI::Core::PointerEventArgs const& args)
 {
 
-    return TransformToOrientation(args->CurrentPoint->Position);
+    return TransformToOrientation(args.CurrentPoint().Position());
 }
 
-Vec2 GLViewImpl::GetPointMouse(PointerEventArgs ^ args)
+Vec2 GLViewImpl::GetPointMouse(Windows::UI::Core::PointerEventArgs const& args)
 {
 
-    Vec2 position = TransformToOrientation(args->CurrentPoint->Position);
+    Vec2 position = TransformToOrientation(args.CurrentPoint().Position());
 
-    // Because Windows and cocos2d-x uses different Y axis, we need to convert the coordinate here
+    // Because Windows and axmol uses different Y axis, we need to convert the coordinate here
     position.x = (position.x - _viewPortRect.origin.x) / _scaleX;
     position.y = (_viewPortRect.origin.y + _viewPortRect.size.height - position.y) / _scaleY;
 
@@ -579,21 +570,21 @@ void GLViewImpl::QueueBackKeyPress()
     mInputEvents.push(e);
 }
 
-void GLViewImpl::QueuePointerEvent(PointerEventType type, PointerEventArgs ^ args)
+void GLViewImpl::QueuePointerEvent(PointerEventType type, Windows::UI::Core::PointerEventArgs const& args)
 {
     std::shared_ptr<PointerEvent> e(new PointerEvent(type, args));
     mInputEvents.push(e);
 }
 
-void GLViewImpl::QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventArgs ^ args)
+void GLViewImpl::QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
 {
     std::shared_ptr<WinRTKeyboardEvent> e(new WinRTKeyboardEvent(type, args));
     mInputEvents.push(e);
 }
 
-void GLViewImpl::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventArgs ^ args)
+void GLViewImpl::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
 {
-    m_keyboard->OnWinRTKeyboardEvent(type, args);
+    m_keyboard.OnWinRTKeyboardEvent(type, args);
 }
 
 void GLViewImpl::QueueEvent(std::shared_ptr<InputEvent>& event)

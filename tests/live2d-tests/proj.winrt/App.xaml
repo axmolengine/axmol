@@ -2,12 +2,11 @@
     x:Class="AxmolAppWinRT.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:AxmolAppWinRT"
-    xmlns:localData="using:Shared">
+    xmlns:local="using:AxmolAppWinRT">
 
     <Application.Resources>
 
-      <x:String x:Key="AppName">HelloCpp</x:String>
+      <x:String x:Key="AppName">live2d_tests</x:String>
 
     </Application.Resources>
 </Application>

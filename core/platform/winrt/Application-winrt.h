@@ -83,7 +83,7 @@ public:
     @brief Set the callback responsible for opening a URL.
     @param del The delegate that will handle opening a URL. We can't pass back a Platform::String due to name clash.
     */
-    void SetXamlOpenURLDelegate(const std::function<void(::Platform::String^)>& del)
+    void SetXamlOpenURLDelegate(const std::function<void(const winrt::hstring&)>& del)
     {
         m_openURLDelegate = del;
     }
@@ -100,7 +100,7 @@ protected:
     std::string         m_resourceRootPath;
     std::string         m_startupScriptFilename;
 
-    std::function<void(::Platform::String^)> m_openURLDelegate;
+    std::function<void(const winrt::hstring&)> m_openURLDelegate;
 
     static Application * sm_pSharedApplication;
 };
