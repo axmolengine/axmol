@@ -100953,39 +100953,47 @@ int lua_ax_base_TextureCache_getWhiteTexture(lua_State* tolua_S)
     int argc = 0;
     ax::TextureCache* cobj = nullptr;
     bool ok  = true;
-
 #if _AX_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
 #if _AX_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"ax.TextureCache",0,&tolua_err)) goto tolua_lerror;
 #endif
-
     cobj = (ax::TextureCache*)tolua_tousertype(tolua_S,1,0);
-
 #if _AX_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_base_TextureCache_getWhiteTexture'", nullptr);
         return 0;
     }
 #endif
-
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_TextureCache_getWhiteTexture'", nullptr);
-            return 0;
+    do{
+        if (argc == 2) {
+            std::string_view arg0;
+            ok &= luaval_to_std_string_view(tolua_S, 2,&arg0, "ax.TextureCache:getWhiteTexture");
+
+            if (!ok) { break; }
+            uint16_t arg1;
+            ok &= luaval_to_uint16(tolua_S, 3,&arg1, "ax.TextureCache:getWhiteTexture");
+
+            if (!ok) { break; }
+            ax::Texture2D* ret = cobj->getWhiteTexture(arg0, arg1);
+            object_to_luaval<ax::Texture2D>(tolua_S, "ax.Texture2D",(ax::Texture2D*)ret);
+            return 1;
         }
-        auto&& ret = cobj->getWhiteTexture();
-        object_to_luaval<ax::Texture2D>(tolua_S, "ax.Texture2D",(ax::Texture2D*)ret);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.TextureCache:getWhiteTexture",argc, 0);
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 0) {
+            ax::Texture2D* ret = cobj->getWhiteTexture();
+            object_to_luaval<ax::Texture2D>(tolua_S, "ax.Texture2D",(ax::Texture2D*)ret);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "ax.TextureCache:getWhiteTexture",argc, 0);
     return 0;
 
 #if _AX_DEBUG >= 1
