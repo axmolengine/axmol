@@ -4,22 +4,16 @@ $llvm_ver = '15.0.7'
 
 $AX_ROOT = (Resolve-Path $myRoot/../..).Path
 
-# Store env path
-$storedEnvPath = $env:Path
-
 (Get-Command python.exe).Path
-python -V
 
 pip install PyYAML Cheetah3
 
 ## setup ndk
 $setup_script = (Resolve-Path $AX_ROOT/setup.ps1).Path
 
-Get-Command 'curl'
-
-. $setup_script -p android
-
-Get-Command 'curl'
+echo "before setup py_ver: $(python -V), PATH=$env:PATH"
+. $setup_script
+echo "after setup py_ver: $(python -V), PATH=$env:PATH"
 
 echo "$ndk_root=$ndk_root"
 
@@ -42,5 +36,4 @@ Push-Location $AX_ROOT/tools/tolua
 
 python genbindings.py --ndk_root "$ndk_root"
 
-$env:Path = $storedEnvPath
 Pop-Location
