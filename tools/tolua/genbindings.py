@@ -135,7 +135,7 @@ def main():
         g_ndk_root = _check_ndk_root_env()
 
     if not os.path.isdir(g_ndk_root): 
-        print("The ndk-r19c root not specified, please specifiy via --ndk_root '/path/to/ndk'")
+        print("The ndk-r23c root not specified, please specifiy via --ndk_root '/path/to/ndk'")
         sys.exit(1)
 
     # del the " in the path
