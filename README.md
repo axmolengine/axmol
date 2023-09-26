@@ -50,7 +50,7 @@ https://axmol.netlify.app/
 ## New MediaPlayer
 
 The new `ui::MediaPlayer`(renamed from `ui::VideoPlayer`) render video as Texture2D with designed corss-platform MediaEngine, the MediaEngine inspired from microsoft
-media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which axmol engine does.
+media foundation `IMFMediaEngine`, the `MediaPlayer` support all native platforms.
 
 |  Target Platform      | Video Compress Format | Video Pixel Format   | Container Format | Backend            |
 |-----------------------|-----------------------|----------------------|----------------- |--------------------|
@@ -61,6 +61,7 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all platforms which
 | Apple iOS             | H264, HEVC(hvc1)      | NV12, BGR32          | .mp4             | AVFoundation       |
 | Android               | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | ExoPlayer2         |
 | Linux                 | H264, HEVC            | NV12                 | .mp4,.mkv,.webm  | libVLC             |
+| WASM                  | NA                    | NA                   | NA               | NA                 |
 
 ## Highlighted Features
 
