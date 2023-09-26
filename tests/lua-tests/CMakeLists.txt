@@ -4,9 +4,7 @@ set(APP_NAME lua_tests)
 
 project(${APP_NAME})
 
-set (_AX_TOP_LEVEL_APP FALSE)
 if(NOT DEFINED BUILD_ENGINE_DONE)
-    set(_AX_TOP_LEVEL_APP TRUE)
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
     endif()
@@ -45,23 +43,22 @@ set(GAME_INC_DIRS
   "${CMAKE_CURRENT_SOURCE_DIR}/Source"
 )
 
+
+set(shared_content_folder "${_AX_ROOT}/tests/cpp-tests/Content")
 set(content_folder "${CMAKE_CURRENT_SOURCE_DIR}/Content")
 set(engine_script_folder "${_AX_ROOT}/extensions/scripting/lua-bindings/script")
 
 if(APPLE)
     ax_mark_multi_resources(content_files RES_TO "Resources" FOLDERS ${content_folder})
-    set(common_content_files ${content_files})
-    if (NOT _AX_TOP_LEVEL_APP)
-        ax_mark_multi_resources(engine_script_files RES_TO "Resources/src/axmol" FOLDERS ${engine_script_folder})
-        set(common_content_files ${common_content_files} ${engine_script_files})
-    endif()
+    ax_mark_multi_resources(shared_content_files RES_TO "Resources/res" FOLDERS ${shared_content_folder})
+    set(common_content_files ${content_files} ${shared_content_files})
+    ax_mark_multi_resources(engine_script_files RES_TO "Resources/src/axmol" FOLDERS ${engine_script_folder})
+    set(common_content_files ${common_content_files} ${engine_script_files})
 elseif(WINDOWS)
     ax_mark_multi_resources(content_files RES_TO "Content" FOLDERS ${content_folder})
     set(common_content_files ${content_files})
-    if (NOT _AX_TOP_LEVEL_APP)
-        ax_mark_multi_resources(engine_script_files RES_TO "Content/src/axmol" FOLDERS ${engine_script_folder})
-        set(common_content_files ${common_content_files} ${engine_script_files})
-    endif()
+    ax_mark_multi_resources(engine_script_files RES_TO "Content/src/axmol" FOLDERS ${engine_script_folder})
+    set(common_content_files ${common_content_files} ${engine_script_files})
 endif()
 
 if(ANDROID)
@@ -179,9 +176,6 @@ if(APPLE)
 
     if(MACOSX)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist")
-        set_target_properties(${APP_NAME} PROPERTIES
-            LINK_FLAGS "-pagezero_size 10000 -image_base 100000000"
-        )
     elseif(TVOS)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}//proj.ios_mac/ios/targets/tvos/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
@@ -207,9 +201,7 @@ if ((NOT APPLE) AND (NOT WINRT))
     ax_sync_target_res(${APP_NAME} LINK_TO "${CMAKE_CURRENT_SOURCE_DIR}/Content/res" SYNC_TARGET_ID "1" FOLDERS "${_AX_ROOT}/tests/cpp-tests/Content" SYM_LINK 1)
 
     ax_get_resource_path(APP_RES_DIR ${APP_NAME})
-    if (NOT _AX_TOP_LEVEL_APP)
-        ax_sync_lua_scripts(${APP_NAME} ${engine_script_folder} "${content_folder}/src/axmol")
-    endif()
+    ax_sync_lua_scripts(${APP_NAME} ${engine_script_folder} "${content_folder}/src/axmol")
     ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
 
     if((WINDOWS AND (NOT (CMAKE_GENERATOR MATCHES "Ninja"))))
