@@ -1106,6 +1106,7 @@ elseif ($BUILD_TARGET -eq 'android') {
     }
 }
 elseif ($BUILD_TARGET -eq 'wasm') {
+    $ninja_prog = setup_ninja
     . setup_emsdk
 }
 
