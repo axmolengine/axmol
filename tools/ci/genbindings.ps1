@@ -3,7 +3,6 @@ $myRoot = $PSScriptRoot
 $llvm_ver = '15.0.7'
 
 $AX_ROOT = (Resolve-Path $myRoot/../..).Path
-$env:AX_ROOT = $AX_ROOT
 
 # Store env path
 $storedEnvPath = $env:Path
@@ -16,7 +15,11 @@ pip install PyYAML Cheetah3
 ## setup ndk
 $setup_script = (Resolve-Path $AX_ROOT/setup.ps1).Path
 
+Get-Command 'curl'
+
 . $setup_script -p android
+
+Get-Command 'curl'
 
 echo "$ndk_root=$ndk_root"
 
@@ -24,8 +27,7 @@ $prefix = Join-Path $AX_ROOT 'tmp'
 $llvm_out = Join-Path $prefix "llvmorg-$llvm_ver.zip"
 
 ## download win64 libclang.dll 
-curl -L "https://github.com/axmolengine/buildware/releases/download/llvmorg-$llvm_ver/llvmorg-$llvm_ver.zip" -o "$llvm_out"
-Expand-Archive -Path "$llvm_out" -DestinationPath $prefix
+download_and_expand -url "https://github.com/axmolengine/buildware/releases/download/llvmorg-$llvm_ver/llvmorg-$llvm_ver.zip" -out "$llvm_out" -dest $prefix
 Copy-Item "$prefix/llvmorg-$llvm_ver/llvm/prebuilt/windows/x64/libclang.dll" -Destination "$AX_ROOT/tools/bindings-generator/libclang"
 
 ## ensure $env:AX_ROOT/core/axmolver.h exists

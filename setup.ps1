@@ -104,7 +104,7 @@ if ($IsWin) {
         [Environment]::SetEnvironmentVariable('AX_ROOT', $AX_ROOT, 'User')
     }
 
-    $pathList = [System.Collections.ArrayList]$env:PATH.Split(';')
+    $pathList = [System.Collections.ArrayList]$env:PATH.Split(';') # eval with system + user
     $isMeInPath = $pathList.IndexOf($AX_CONSOLE_ROOT) -ne -1
     $oldCmdRoot = $null
     $cmdInfo = Get-Command 'axmol' -ErrorAction SilentlyContinue
@@ -116,6 +116,7 @@ if ($IsWin) {
     }
     
     if (!$isMeInPath -or $oldCmdRoot) {
+        # Add console bin to User PATH
         $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User') # we need get real pathList from CurrentUser
         if ($strPathList) { 
             $pathList = [System.Collections.ArrayList]($strPathList.Split(';')) 
@@ -135,7 +136,10 @@ if ($IsWin) {
         
         $strPathList = $pathList -join ';'
         [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
-        $env:PATH = $strPathList # sync to PowerShell Terminal
+
+        # Re-eval env:PATH to system + user
+        $strPathListM = [Environment]::GetEnvironmentVariable('PATH', 'Machine')
+        $env:PATH = "$strPathListM;$strPathList" # sync to PowerShell Terminal
     }
 }
 else {
