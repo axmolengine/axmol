@@ -27,6 +27,7 @@ $prefix = Join-Path $AX_ROOT 'tmp'
 $llvm_out = Join-Path $prefix "llvmorg-$llvm_ver.zip"
 
 ## download win64 libclang.dll 
+$b1k.mkdirs($prefix)
 download_and_expand -url "https://github.com/axmolengine/buildware/releases/download/llvmorg-$llvm_ver/llvmorg-$llvm_ver.zip" -out "$llvm_out" -dest $prefix
 Copy-Item "$prefix/llvmorg-$llvm_ver/llvm/prebuilt/windows/x64/libclang.dll" -Destination "$AX_ROOT/tools/bindings-generator/libclang"
 
