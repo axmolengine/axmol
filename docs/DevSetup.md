@@ -36,14 +36,18 @@ Examples:
 
 The `axmol build` command will auto setup general depended toolsets, so you can simply build your project for all platform targets, i.e.
 
-- win32: `axmol build -p win32` can runs on Windows with vs2022 installed
-- winuwp: `axmol build -p winuwp` can runs on Windows with vs2022 installed
-- linux: `axmol build` can runs on Linux with g++ installed
-- osx: `axmol build -p osx -a x64` can runs on macOS with xcode13~14.2 installed
+- win32: `axmol build -p win32`
+- winuwp: `axmol build -p winuwp`
+- linux: `axmol build`
+- osx: `axmol build -p osx -a x64`
 - android: `axmol build -p android -a arm64` can runs on Windows,Linux,macOS and script will auto setup android sdk
-- ios: `axmol build -p ios -a x64` can runs on macOS with xcode13~14.2 installed
-- tvos: `axmol build -p tvos -a x64` can runs on macOS with xcode13~14.2 installed
-- wasm: `axmol build -p wasm` can runs on Windows, Linux, macOS
+- ios:
+  - for device: `axmol build -p ios -a arm64 -c`, generate xcodeproj, open by xcode to setup code sign cert and build
+  - for simulator: `axmol build -p ios -a x64`
+- tvos:
+  - for device: `axmol build -p tvos -a arm64 -c`, generate xcodeproj, open by xcode to setup code sign cert and build
+  - for simulator: `axmol build -p tvos -a x64`
+- wasm: `axmol build -p wasm` can runs on Windows, Linux, macOS, require a preinstalled [python3](https://www.python.org/) should be in env `PATH`
 
 ## Quick build engine for host targets?
 
