@@ -139,7 +139,7 @@ if ($IsWin) {
 
         # Re-eval env:PATH to system + user
         $strPathListM = [Environment]::GetEnvironmentVariable('PATH', 'Machine')
-        $env:PATH = "$strPathListM;$strPathList" # sync to PowerShell Terminal
+        $env:PATH = "$strPathList;$strPathListM" # sync to PowerShell Terminal
     }
 }
 else {
