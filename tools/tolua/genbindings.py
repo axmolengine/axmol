@@ -25,7 +25,7 @@ def _check_ndk_root_env():
         sdkRoot = os.environ.get('ANDROID_HOME', None)
         for _, ndkVers, _ in os.walk("{0}{1}ndk".format(sdkRoot, os.path.sep)):
             for ndkVer in ndkVers:
-                if (ndkVer == '19.2.5345600'):
+                if (ndkVer == '23.2.8568313'):
                     ANDROID_NDK = "{0}{1}ndk{1}{2}".format(sdkRoot, os.path.sep, ndkVer)
                     break
             break
@@ -169,21 +169,21 @@ def main():
         print('path: %s or path: %s are not valid! ' % (x86_llvm_path, x64_llvm_path))
         sys.exit(1)
 
-    x86_gcc_toolchain_path = ""
-    x64_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86_64')))
-    if not os.path.exists(x64_gcc_toolchain_path):
-        x86_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s' % (cur_platform)))
-    if not os.path.exists(x86_gcc_toolchain_path):
-        x86_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86')))
+    # x86_gcc_toolchain_path = ""
+    # x64_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86_64')))
+    # if not os.path.exists(x64_gcc_toolchain_path):
+    #     x86_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s' % (cur_platform)))
+    # if not os.path.exists(x86_gcc_toolchain_path):
+    #     x86_gcc_toolchain_path = os.path.abspath(os.path.join(g_ndk_root, 'toolchains/arm-linux-androideabi-4.9/prebuilt', '%s-%s' % (cur_platform, 'x86')))
 
-    if os.path.isdir(x64_gcc_toolchain_path):
-        gcc_toolchain_path = x64_gcc_toolchain_path
-    elif os.path.isdir(x86_gcc_toolchain_path):
-        gcc_toolchain_path = x86_gcc_toolchain_path
-    else:
-        print('gcc toolchain not found!')
-        print('path: %s or path: %s are not valid! ' % (x64_gcc_toolchain_path, x86_gcc_toolchain_path))
-        sys.exit(1)
+    # if os.path.isdir(x64_gcc_toolchain_path):
+    #     gcc_toolchain_path = x64_gcc_toolchain_path
+    # elif os.path.isdir(x86_gcc_toolchain_path):
+    #     gcc_toolchain_path = x86_gcc_toolchain_path
+    # else:
+    #     print('gcc toolchain not found!')
+    #     print('path: %s or path: %s are not valid! ' % (x64_gcc_toolchain_path, x86_gcc_toolchain_path))
+    #     sys.exit(1)
 
 
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -202,10 +202,11 @@ def main():
     
     config.set('DEFAULT', 'androidndkdir', g_ndk_root)
     config.set('DEFAULT', 'clangllvmdir', llvm_path)
-    config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
+    # config.set('DEFAULT', 'gcc_toolchain_dir', gcc_toolchain_path)
     config.set('DEFAULT', 'axdir', ax_root)
     config.set('DEFAULT', 'cxxgeneratordir', cxx_generator_root)
     config.set('DEFAULT', 'extra_flags', extraFlags)
+    config.set('DEFAULT', 'cxx_std', 'c++20')
 
     conf_ini_file = os.path.abspath(os.path.join(os.path.dirname(__file__), 'userconf.ini'))
 

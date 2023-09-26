@@ -1,3 +1,6 @@
+$ndk_ver = 'r23c'
+$llvm_ver = '15.0.7'
+
 # Store env path
 $storedEnvPath = $env:Path
 
@@ -30,16 +33,16 @@ python -V
 pip install PyYAML Cheetah3
 
 ## download ndk
-curl -L "https://dl.google.com/android/repository/android-ndk-r19c-windows-x86_64.zip" -o "android-ndk-r19c-windows-x86_64.zip"
-Expand-Archive -Path android-ndk-r19c-windows-x86_64.zip -DestinationPath .\
+curl -L "https://dl.google.com/android/repository/android-ndk-$ndk_ver-windows-x86_64.zip" -o "android-ndk-$ndk_ver-windows-x86_64.zip"
+Expand-Archive -Path android-ndk-$ndk_ver-windows-x86_64.zip -DestinationPath .\
 ls
-$ndk_root=(Resolve-Path .\android-ndk-r19c).Path
+$ndk_root=(Resolve-Path .\android-ndk-$ndk_ver).Path
 # $env:ANDROID_NDK=$ndk_root
 
 ## download win64 libclang.dll 
-curl -L "https://github.com/axmolengine/buildware/releases/download/llvmorg-15.0.7/llvmorg-15.0.7.zip" -o "llvmorg-15.0.7.zip"
-Expand-Archive -Path llvmorg-15.0.7.zip -DestinationPath .\
-Copy-Item ".\llvmorg-15.0.7\llvm\prebuilt\windows\x64\libclang.dll" -Destination "..\tools\bindings-generator\libclang"
+curl -L "https://github.com/axmolengine/buildware/releases/download/llvmorg-$llvm_ver/llvmorg-$llvm_ver.zip" -o "llvmorg-$llvm_ver.zip"
+Expand-Archive -Path llvmorg-$llvm_ver.zip -DestinationPath .\
+Copy-Item ".\llvmorg-$llvm_ver\llvm\prebuilt\windows\x64\libclang.dll" -Destination "..\tools\bindings-generator\libclang"
 
 ## ensure $env:AX_ROOT/core/axmolver.h exists
 $env:AX_ROOT = (Resolve-Path $PSScriptRoot\..\..).Path
