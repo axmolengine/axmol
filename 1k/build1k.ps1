@@ -241,7 +241,7 @@ if ([System.Version]$pwsh_ver -lt [System.Version]"7.0.0.0") {
 
 $osVer = if($IsWin) {"Microsoft Windows $([System.Environment]::OSVersion.Version.ToString())"} else {$PSVersionTable.OS}
 
-$b1k.println("PowerShell $pwsh_ver, $osVer")
+$b1k.println("PowerShell $pwsh_ver on $osVer")
 
 if (!$setupOnly) {
     $b1k.println("$(Out-String -InputObject $options)")

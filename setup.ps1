@@ -91,7 +91,7 @@ if (!(Test-Path $prefix -PathType Container)) {
 }
 
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
-. $build1kPath -setupOnly -prefix $prefix
+. $build1kPath -setupOnly -prefix $prefix @args
 
 $AX_CONSOLE_ROOT = Join-Path $AX_ROOT 'tools/console'
 
