@@ -12,7 +12,7 @@ pip install PyYAML Cheetah3
 $setup_script = (Resolve-Path $AX_ROOT/setup.ps1).Path
 
 echo "before setup py_ver: $(python -V), PATH=$env:PATH"
-. $setup_script
+. $setup_script -p android
 echo "after setup py_ver: $(python -V), PATH=$env:PATH"
 
 echo "$ndk_root=$ndk_root"
