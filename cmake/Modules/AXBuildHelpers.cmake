@@ -1,6 +1,6 @@
 include(CMakeParseArguments)
 
-find_program(PWSH_COMMAND NAMES pwsh powershell)
+find_program(PWSH_COMMAND NAMES pwsh powershell NO_PACKAGE_ROOT_PATH NO_CMAKE_PATH NO_CMAKE_ENVIRONMENT_PATH NO_CMAKE_SYSTEM_PATH NO_CMAKE_FIND_ROOT_PATH)
 
 if(NOT PWSH_COMMAND)
     message("powershell not found.")
