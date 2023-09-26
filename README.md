@@ -7,8 +7,8 @@
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
+[![cxxstd](https://img.shields.io/badge/cxxstd-c++20-8A2BE2.svg)](https://github.com/axmolengine/axmol)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
-[![vscode.dev](https://img.shields.io/badge/vscode.dev-green.svg)](https://vscode.dev/github/axmolengine/axmol)
 [![Discord](https://img.shields.io/discord/1099599084895088670?label=discord)](https://discord.com/channels/1099599084895088670)
   
 ![issues](https://img.shields.io/github/issues/axmolengine/axmol?style=plastic)
@@ -90,7 +90,6 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all native platform
 - Implement all .wav formats supported by ```OpenAL Soft```, such as MS-ADPCM, ADPCM, ...
 - Use a modern GL loader ```Glad```
 - Google [angle](https://github.com/google/angle) renderer backend support
-- C++ 17/20
 - IOS/TVOS SDK 11.0 as minimal deployment
 - Use fast pugixml
 - Use [curl](https://github.com/curl/curl) for transferring data with URL syntax
