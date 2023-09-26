@@ -104,8 +104,8 @@ if ($IsWin) {
         [Environment]::SetEnvironmentVariable('AX_ROOT', $AX_ROOT, 'User')
     }
 
-    $pathList = [System.Collections.ArrayList]$env:PATH.Split(';') # eval with system + user
-    $isMeInPath = $pathList.IndexOf($AX_CONSOLE_ROOT) -ne -1
+    #  checking evaluated env:PATH with system + user
+    $isMeInPath = $env:PATH.IndexOf($AX_CONSOLE_ROOT) -ne -1
     $oldCmdRoot = $null
     $cmdInfo = Get-Command 'axmol' -ErrorAction SilentlyContinue
     if ($cmdInfo) {
@@ -115,31 +115,37 @@ if ($IsWin) {
         }
     }
     
-    if (!$isMeInPath -or $oldCmdRoot) {
-        # Add console bin to User PATH
-        $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User') # we need get real pathList from CurrentUser
+    function RefreshPath ($strPathList) {
         if ($strPathList) { 
-            $pathList = [System.Collections.ArrayList]($strPathList.Split(';')) 
+            $pathList = [System.Collections.ArrayList]($strPathList.Split(';'))
         }
         else { 
             $pathList = New-Object System.Collections.ArrayList 
         }
         
-        if ($oldCmdRoot) {
-            $pathList.Remove($oldCmdRoot)
+        if ($Global:oldCmdRoot) {
+            $pathList.Remove($Global:oldCmdRoot)
         }
         
-        if ($isMeInPath -and ($pathList[0] -ne $AX_CONSOLE_ROOT)) {
-            $pathList.Remove($AX_CONSOLE_ROOT)
-            $pathList.Insert(0, $AX_CONSOLE_ROOT)
+        if ($Global:isMeInPath) {
+            if ($pathList[0] -ne $Global:AX_CONSOLE_ROOT) {
+                $pathList.Remove($Global:AX_CONSOLE_ROOT)
+                $pathList.Insert(0, $Global:AX_CONSOLE_ROOT)
+            }
         }
-        
-        $strPathList = $pathList -join ';'
+        else {
+            $pathList.Insert(0, $Global:AX_CONSOLE_ROOT)
+        }
+        return $pathList -join ';'
+    }
+    
+    if (!$isMeInPath -or $oldCmdRoot) {
+        # Add console bin to User PATH
+        $strPathList = RefreshPath ([Environment]::GetEnvironmentVariable('PATH', 'User')) # we need get real pathList from CurrentUser
         [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
 
-        # Re-eval env:PATH to system + user
-        $strPathListM = [Environment]::GetEnvironmentVariable('PATH', 'Machine')
-        $env:PATH = "$strPathList;$strPathListM" # sync to PowerShell Terminal
+        # Re-eval env:PATH to system + users
+        $env:PATH = RefreshPath $env:PATH # sync to PowerShell Terminal
     }
 }
 else {
