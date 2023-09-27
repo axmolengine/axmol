@@ -52,6 +52,11 @@ class Buffer;
  * @{
  */
 
+/**
+ * !!! uncomment if you want reduce bandwidth of GPU, then the tiled layer size will be limited to 128x128
+*/
+#define AX_FAST_TILEMAP_32_BIT_INDICES 1
+
 /** @brief FastTMXLayer represents the TMX layer.
 
  * It is a subclass of SpriteBatchNode. By default the tiles are rendered using a TextureAtlas.

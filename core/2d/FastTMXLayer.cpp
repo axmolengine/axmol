@@ -250,7 +250,7 @@ void FastTMXLayer::updateTiles(const Rect& culledRect)
             int offset  = iter->second;
             iter->second++;
 
-            unsigned short quadIndex = static_cast<unsigned short>(_tileToQuadIndex[tileIndex]);
+            auto quadIndex = static_cast<decltype(_indices)::value_type>(_tileToQuadIndex[tileIndex]);
             _indices[6 * offset + 0] = quadIndex * 4 + 0;
             _indices[6 * offset + 1] = quadIndex * 4 + 1;
             _indices[6 * offset + 2] = quadIndex * 4 + 2;
@@ -284,11 +284,7 @@ void FastTMXLayer::updateVertexBuffer()
 
 void FastTMXLayer::updateIndexBuffer()
 {
-#ifdef AX_FAST_TILEMAP_32_BIT_INDICES
-    unsigned int indexBufferSize = (unsigned int)(sizeof(unsigned int) * _indices.size());
-#else
-    unsigned int indexBufferSize = (unsigned int)(sizeof(unsigned short) * _indices.size());
-#endif
+    auto indexBufferSize = (sizeof(decltype(_indices)::value_type) * _indices.size());
     if (!_indexBuffer)
     {
         auto device  = backend::Device::getInstance();
@@ -444,10 +440,11 @@ void FastTMXLayer::updatePrimitives()
         {
             auto command = new CustomCommand();
             command->setVertexBuffer(_vertexBuffer);
-
+  
+#ifdef AX_FAST_TILEMAP_32_BIT_INDICES
+            CustomCommand::IndexFormat indexFormat = CustomCommand::IndexFormat::U_INT;
+#else
             CustomCommand::IndexFormat indexFormat = CustomCommand::IndexFormat::U_SHORT;
-#if AX_FAST_TILEMAP_32_BIT_INDICES
-            indexFormat = CustomCommand::IndexFormat::U_INT;
 #endif
             command->setIndexBuffer(_indexBuffer, indexFormat);
 
