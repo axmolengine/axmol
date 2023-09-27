@@ -161,8 +161,10 @@ if (!$is_android) {
         #   - ios deploy device may failed with unknown error
         $cmake_target = $cmake_target.Replace('-', '_')
         $options.xb += '--target', $cmake_target
+        $env:b1k_override_target = $null
     } else{
         $cmake_target = $options.xb[$bti]
+        $env:b1k_override_target = $true
     }
 } else { # android
     # engine ci
