@@ -1246,11 +1246,15 @@ if (!$setupOnly) {
                 if (!$b1k.isfile($cmakeCachePath)) {
                     throw "The cmake generate incomplete, pelase add '-f' to re-generate again"
                 }
-                $strProjName = Get-Content $cmakeCachePath | Select-String 'CMAKE_PROJECT_NAME'
-                $proj_name = $strProjName.Line.Split('=')[1]
-                if ($proj_name -cne $cmake_target) {
-                    $b1k.println("Correcting cmake target name: $cmake_target ==> $proj_name")
-                    $BUILD_ALL_OPTIONS[$target_argi] = $cmake_target = $proj_name
+                
+                # if not override from command line, assume target from project name
+                if (!$env:b1k_override_target) { 
+                    $strProjName = Get-Content $cmakeCachePath | Select-String 'CMAKE_PROJECT_NAME'
+                    $proj_name = $strProjName.Line.Split('=')[1]
+                    if ($proj_name -cne $cmake_target) {
+                        $b1k.println("Correcting cmake target name: $cmake_target ==> $proj_name")
+                        $BUILD_ALL_OPTIONS[$target_argi] = $cmake_target = $proj_name
+                    }
                 }
             }
 
