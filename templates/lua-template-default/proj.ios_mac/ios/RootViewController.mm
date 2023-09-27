@@ -53,8 +53,10 @@ customization that is not appropriate for viewDidLoad.
                                        multiSampling:NO
                                      numberOfSamples:0];
 
-    // Enable or disable multiple touches
-    [eaglView setMultipleTouchEnabled:NO];
+    // uncumment if you want disable multiple touches
+// #if !defined(AX_TARGET_OS_TVOS)
+//     [eaglView setMultipleTouchEnabled:NO];
+// #endif
 
     // Set EAGLView as view of RootViewController
     self.view = eaglView;
