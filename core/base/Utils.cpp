@@ -791,9 +791,9 @@ std::string urlDecode(std::string_view st)
     return decoded;
 }
 
-AX_DLL std::string base64Encode(std::string_view s)
+AX_DLL std::string base64Encode(std::span<uint8_t> s)
 {
-    size_t n = ax::base64::encoded_size(s.length());
+    size_t n = ax::base64::encoded_size(s.size());
     if (n > 0)
     {
         std::string ret;
@@ -809,7 +809,7 @@ AX_DLL std::string base64Encode(std::string_view s)
         ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::encode(p, s.data(), s.length()); });
 #else
         ret.resize(n);
-        ret.resize(ax::base64::encode(&ret.front(), s.data(), s.length()));
+        ret.resize(ax::base64::encode(&ret.front(), s.data(), s.size()));
 #endif
 
         return ret;
@@ -817,23 +817,16 @@ AX_DLL std::string base64Encode(std::string_view s)
     return std::string{};
 }
 
-AX_DLL std::string base64Decode(std::string_view s)
+AX_DLL yasio::byte_buffer base64Decode(std::string_view s)
 {
     size_t n = ax::base64::decoded_size(s.length());
     if (n > 0)
     {
-        std::string ret;
-
-#if _AX_HAS_CXX23
-        ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::decode(p, s.data(), s.length()); });
-#else
-        ret.resize(n);
-        ret.resize(ax::base64::decode(&ret.front(), s.data(), s.length()));
-#endif
-
+        axstd::byte_buffer ret{n, std::true_type{}};
+        ret.resize_fit(ax::base64::decode(&ret.front(), s.data(), s.size()));
         return ret;
     }
-    return std::string{};
+    return yasio::byte_buffer{};
 }
 
 int base64Encode(const unsigned char* in, unsigned int inLength, char** out)

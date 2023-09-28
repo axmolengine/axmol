@@ -436,7 +436,6 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary)
 bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_view dirname)
 {
     bool ret              = false;
-    unsigned char* buffer = nullptr;
     Image* image          = nullptr;
     do
     {
@@ -635,20 +634,18 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                     if (dataLen != 0)
                     {
                         // if it fails, try to get it from the base64-gzipped data
-                        int decodeLen =
-                            utils::base64Decode((unsigned char*)textureData.c_str(), (unsigned int)dataLen, &buffer);
-                        AXASSERT(buffer != nullptr, "CCParticleSystem: error decoding textureImageData");
-                        AX_BREAK_IF(!buffer);
+                        yasio::byte_buffer buffer = utils::base64Decode(textureData);
+                        AXASSERT(!buffer.empty(), "CCParticleSystem: error decoding textureImageData");
+                        AX_BREAK_IF(buffer.empty());
 
-                        unsigned char* deflated = nullptr;
-                        ssize_t deflatedLen     = ZipUtils::inflateMemory(buffer, decodeLen, &deflated);
-                        AXASSERT(deflated != nullptr, "CCParticleSystem: error ungzipping textureImageData");
-                        AX_BREAK_IF(!deflated);
+                        auto deflated           = ZipUtils::decompressGZ(std::span{buffer});
+                        AXASSERT(!deflated.empty(), "CCParticleSystem: error ungzipping textureImageData");
+                        AX_BREAK_IF(deflated.empty());
 
                         // For android, we should retain it in VolatileTexture::addImage which invoked in
                         // Director::getInstance()->getTextureCache()->addUIImage()
                         image     = new Image();
-                        bool isOK = image->initWithImageData(deflated, deflatedLen, true);
+                        bool isOK = image->initWithImageData(deflated.release_pointer(), deflated.size(), true);
                         AXASSERT(isOK, "CCParticleSystem: error init image with Data");
                         AX_BREAK_IF(!isOK);
 
@@ -666,7 +663,6 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
             ret = true;
         }
     } while (0);
-    free(buffer);
     return ret;
 }
 
