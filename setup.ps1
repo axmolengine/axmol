@@ -93,7 +93,8 @@ if (!(Test-Path $prefix -PathType Container)) {
 # setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
 . $build1kPath -setupOnly -prefix $prefix @args
 
-$AX_CONSOLE_ROOT = Join-Path $AX_ROOT 'tools/console'
+# powershell 7 require mark as global explicit if want access in function via $Global:xxx
+$Global:AX_CONSOLE_ROOT = Join-Path $AX_ROOT 'tools/console'
 
 # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables
 $IsWin = $IsWindows -or ("$env:OS" -eq 'Windows_NT')
@@ -105,9 +106,9 @@ if ($IsWin) {
     }
 
     #  checking evaluated env:PATH with system + user
-    $isMeInPath = $env:PATH.IndexOf($AX_CONSOLE_ROOT) -ne -1
-    $oldCmdRoot = $null
-    $cmdInfo = Get-Command 'axmol' -ErrorAction SilentlyContinue
+    $Global:isMeInPath = $env:PATH.IndexOf($AX_CONSOLE_ROOT) -ne -1
+    $Global:oldCmdRoot = $null
+    $Global:cmdInfo = Get-Command 'axmol' -ErrorAction SilentlyContinue
     if ($cmdInfo) {
         $cmdRootTmp = Split-Path $cmdInfo.Source -Parent
         if ($cmdRootTmp -ne $AX_CONSOLE_ROOT) {
@@ -117,7 +118,7 @@ if ($IsWin) {
     
     function RefreshPath ($strPathList) {
         if ($strPathList) { 
-            $pathList = [System.Collections.ArrayList]($strPathList.Split(';'))
+            $pathList = [System.Collections.ArrayList]($strPathList.Split(';', [System.StringSplitOptions]::RemoveEmptyEntries))
         }
         else { 
             $pathList = New-Object System.Collections.ArrayList 
@@ -141,7 +142,8 @@ if ($IsWin) {
     
     if (!$isMeInPath -or $oldCmdRoot) {
         # Add console bin to User PATH
-        $strPathList = RefreshPath ([Environment]::GetEnvironmentVariable('PATH', 'User')) # we need get real pathList from CurrentUser
+        $strPathList = [Environment]::GetEnvironmentVariable('PATH', 'User')
+        $strPathList = RefreshPath $strPathList 
         [Environment]::SetEnvironmentVariable('PATH', $strPathList, 'User')
 
         # Re-eval env:PATH to system + users
