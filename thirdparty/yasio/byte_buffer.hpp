@@ -25,70 +25,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Version: 3.39.5
+Version: 4.2.0
 
 The byte_buffer concepts:
    a. The memory model is similar to to std::vector<char>, std::string
    b. Support resize fit
    c. By default resize without fill (uninitialized and for overwrite)
    d. Support release internal buffer ownership with `release_pointer`
-   e. Since 3.39.5, default allocator use new/delete instead `malloc/free`
-     - yasio::default_byte_allocator (new/delete)
-     - yasio::crt_byte_allocator (malloc/free)
 */
 #ifndef YASIO__BYTE_BUFFER_HPP
 #define YASIO__BYTE_BUFFER_HPP
-#include <stddef.h>
-#include <string.h>
-#include <stdint.h>
 #include <utility>
 #include <memory>
 #include <iterator>
 #include <limits>
 #include <algorithm>
-#include <type_traits>
-#include <stdexcept>
 #include <initializer_list>
-#include <type_traits>
+#include "yasio/buffer_alloc.hpp"
 #include "yasio/compiler/feature_test.hpp"
 
 namespace yasio
 {
-#define _YASIO_VERIFY_RANGE(cond, mesg)                 \
-  do                                                    \
-  {                                                     \
-    if (cond)                                           \
-      ; /* contextually convertible to bool paranoia */ \
-    else                                                \
-    {                                                   \
-      throw std::out_of_range(mesg);                    \
-    }                                                   \
-                                                        \
-  } while (false)
-
-template <bool _Test, class _Ty = void>
-using enable_if_t = typename ::std::enable_if<_Test, _Ty>::type;
-
-template <typename _Elem>
-struct is_byte_type {
-  static const bool value =
-      std::is_same<_Elem, char>::value || std::is_same<_Elem, unsigned char>::value;
-};
-
 template <typename _Elem, enable_if_t<is_byte_type<_Elem>::value, int> = 0>
-struct default_byte_allocator {
-  static _Elem* allocate(size_t count) { return new _Elem[count]; }
-  static void deallocate(_Elem* pBlock, size_t) { delete[] pBlock; }
-};
+using default_byte_allocater = default_buffer_allocator<_Elem>;
 
-template <typename _Elem, enable_if_t<is_byte_type<_Elem>::value, int> = 0>
-struct crt_byte_allocator {
-  static _Elem* allocate(size_t count) { return malloc(count); }
-  static void deallocate(_Elem* pBlock, size_t) { free(pBlock); }
-};
-
-template <typename _Elem, typename _Alloc = default_byte_allocator<_Elem>,
-          enable_if_t<is_byte_type<_Elem>::value, int> = 0>
+template <typename _Elem, typename _Alloc = default_byte_allocater<_Elem>>
 class basic_byte_buffer {
 public:
   using pointer         = _Elem*;
@@ -104,10 +65,7 @@ public:
   explicit basic_byte_buffer(size_type count) { resize(count); }
   basic_byte_buffer(size_type count, std::true_type /*fit*/) { resize_fit(count); }
   basic_byte_buffer(size_type count, const_reference val) { resize(count, val); }
-  basic_byte_buffer(size_type count, const_reference val, std::true_type /*fit*/)
-  {
-    resize_fit(count, val);
-  }
+  basic_byte_buffer(size_type count, const_reference val, std::true_type /*fit*/) { resize_fit(count, val); }
   template <typename _Iter>
   basic_byte_buffer(_Iter first, _Iter last)
   {
@@ -119,10 +77,7 @@ public:
     assign(first, last, std::true_type{});
   }
   basic_byte_buffer(const basic_byte_buffer& rhs) { assign(rhs); };
-  basic_byte_buffer(const basic_byte_buffer& rhs, std::true_type /*fit*/)
-  {
-    assign(rhs, std::true_type{});
-  }
+  basic_byte_buffer(const basic_byte_buffer& rhs, std::true_type /*fit*/) { assign(rhs, std::true_type{}); }
   basic_byte_buffer(basic_byte_buffer&& rhs) YASIO__NOEXCEPT { assign(std::move(rhs)); }
   template <typename _Ty, enable_if_t<std::is_integral<_Ty>::value, int> = 0>
   basic_byte_buffer(std::initializer_list<_Ty> rhs)
@@ -166,10 +121,7 @@ public:
     _Assign_range(first, last, std::true_type{});
   }
   void assign(const basic_byte_buffer& rhs) { _Assign_range(rhs.begin(), rhs.end()); }
-  void assign(const basic_byte_buffer& rhs, std::true_type)
-  {
-    _Assign_range(rhs.begin(), rhs.end(), std::true_type{});
-  }
+  void assign(const basic_byte_buffer& rhs, std::true_type) { _Assign_range(rhs.begin(), rhs.end(), std::true_type{}); }
   void assign(basic_byte_buffer&& rhs) { _Assign_rv(std::move(rhs)); }
   template <typename _Ty, enable_if_t<std::is_integral<_Ty>::value, int> = 0>
   void assign(std::initializer_list<_Ty> rhs)
@@ -190,13 +142,11 @@ public:
   template <typename _Iter>
   iterator insert(iterator _Where, _Iter first, const _Iter last)
   {
-    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where <= _Mylast && first <= last,
-                        "byte_buffer: out of range!");
+    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where <= _Mylast && first <= last, "byte_buffer: out of range!");
     if (first != last)
     {
-      auto ifirst        = (iterator)std::addressof(*first);
-      auto ilast         = (iterator)(std::addressof(*first) + std::distance(first, last));
-      auto count         = std::distance(ifirst, ilast);
+      auto ifirst        = std::addressof(*first);
+      auto count         = std::distance(first, last) * sizeof(*ifirst);
       auto insertion_pos = std::distance(_Myfirst, _Where);
       if (_Where == _Mylast)
       {
@@ -204,10 +154,10 @@ public:
         {
           auto old_size = _Mylast - _Myfirst;
           resize(old_size + count);
-          std::copy_n(ifirst, count, _Myfirst + old_size);
+          std::copy_n((iterator)ifirst, count, _Myfirst + old_size);
         }
         else if (count == 1)
-          push_back(static_cast<value_type>(*ifirst));
+          push_back(static_cast<value_type>(*(iterator)ifirst));
       }
       else
       {
@@ -218,7 +168,7 @@ public:
           _Where       = _Myfirst + insertion_pos;
           auto move_to = _Where + count;
           std::copy_n(_Where, _Mylast - move_to, move_to);
-          std::copy_n(ifirst, count, _Where);
+          std::copy_n((iterator)ifirst, count, _Where);
         }
       }
       return _Myfirst + insertion_pos;
@@ -244,8 +194,7 @@ public:
   }
   iterator erase(iterator first, iterator last)
   {
-    _YASIO_VERIFY_RANGE((first <= last) && first >= _Myfirst && last <= _Mylast,
-                        "byte_buffer: out of range!");
+    _YASIO_VERIFY_RANGE((first <= last) && first >= _Myfirst && last <= _Mylast, "byte_buffer: out of range!");
     _Mylast = std::move(last, _Mylast, first);
     return first;
   }
@@ -259,10 +208,7 @@ public:
     _YASIO_VERIFY_RANGE(_Myfirst < _Mylast, "byte_buffer: out of range!");
     return *(_Mylast - 1);
   }
-  static YASIO__CONSTEXPR size_type max_size() YASIO__NOEXCEPT
-  {
-    return (std::numeric_limits<ptrdiff_t>::max)();
-  }
+  static YASIO__CONSTEXPR size_type max_size() YASIO__NOEXCEPT { return (std::numeric_limits<ptrdiff_t>::max)(); }
   iterator begin() YASIO__NOEXCEPT { return _Myfirst; }
   iterator end() YASIO__NOEXCEPT { return _Mylast; }
   const_iterator begin() const YASIO__NOEXCEPT { return _Myfirst; }
@@ -297,7 +243,7 @@ public:
   {
     auto old_cap = this->capacity();
     if (old_cap < new_size)
-      _Reallocate_exactly(_Calculate_growth(new_size), new_size);
+      _Resize_uninitialized(new_size, _Calculate_growth(new_size));
     else
       _Mylast = _Myfirst + new_size;
   }
@@ -311,31 +257,24 @@ public:
   void resize_fit(size_type new_size)
   {
     if (this->capacity() < new_size)
-      _Reallocate_exactly(new_size, new_size);
+      _Resize_uninitialized(new_size, new_size);
     else
       _Mylast = _Myfirst + new_size;
   }
   void reserve(size_type new_cap)
   {
     if (this->capacity() < new_cap)
-      _Reallocate_exactly(new_cap, this->size());
+      _Resize_uninitialized(this->size(), new_cap);
   }
   void shrink_to_fit()
   { // reduce capacity to size, provide strong guarantee
-    const pointer _Oldlast = _Mylast;
-    if (_Oldlast != _Myend)
-    { // something to do
-      const pointer _Oldfirst = _Myfirst;
-      if (_Oldfirst == _Oldlast)
-        _Tidy();
-      else
-      {
-        const auto _OldSize = static_cast<size_type>(_Oldlast - _Oldfirst);
-        _Reallocate_exactly(_OldSize, _OldSize);
-      }
+    if (_Myfirst)
+    {
+      const auto _Count = this->size();
+      _Resize_uninitialized(_Count, _Count);
     }
   }
-  /** Release internal buffer ownership
+  /** detach internal buffer ownership
    * Note: this is a unsafe operation, after take the internal buffer, you are responsible for
    * destroy it once you don't need it, i.e:
    *   yasio::byte_buffer buf;
@@ -349,13 +288,26 @@ public:
    *   yasio::byte_buffer::allocator_type::deallocate(rawbuf, rawbufCapacity);
    *
    */
-  pointer release_pointer() YASIO__NOEXCEPT
+  template <typename _Intty>
+  pointer detach(_Intty& len)
   {
+    len      = static_cast<_Intty>(this->size());
     auto ptr = _Myfirst;
     _Myfirst = nullptr;
     _Mylast  = nullptr;
     _Myend   = nullptr;
     return ptr;
+  }
+  void attach(pointer ptr, size_t len)
+  {
+    _Tidy();
+    _Myfirst = ptr;
+    _Myend = _Mylast = ptr + len;
+  }
+  pointer release_pointer() YASIO__NOEXCEPT
+  {
+    size_t ignored_len;
+    return this->detach(ignored_len);
   }
 
 private:
@@ -365,10 +317,10 @@ private:
     _Mylast = _Myfirst;
     if (last > first)
     {
-      auto ifirst = (iterator)std::addressof(*first);
-      auto ilast  = (iterator)std::addressof(*last);
-      resize(std::distance(ifirst, ilast));
-      std::copy(ifirst, ilast, _Myfirst);
+      auto ifirst           = std::addressof(*first);
+      const auto size_bytes = std::distance(first, last) * sizeof(*ifirst);
+      resize(size_bytes);
+      std::copy_n((iterator)ifirst, size_bytes, _Myfirst);
     }
   }
   template <typename _Iter>
@@ -377,8 +329,10 @@ private:
     _Mylast = _Myfirst;
     if (last > first)
     {
-      resize_fit(std::distance(first, last));
-      std::copy(first, last, _Myfirst);
+      auto ifirst           = std::addressof(*first);
+      const auto size_bytes = std::distance(first, last) * sizeof(*ifirst);
+      resize_fit(size_bytes);
+      std::copy_n((iterator)ifirst, size_bytes, _Myfirst);
     }
   }
   void _Assign_rv(basic_byte_buffer&& rhs)
@@ -386,17 +340,16 @@ private:
     memcpy(this, &rhs, sizeof(rhs));
     memset(&rhs, 0, sizeof(rhs));
   }
-  void _Reallocate_exactly(size_type new_cap, size_type new_size)
+  void _Resize_uninitialized(size_type new_size, size_type new_cap)
   {
-    const pointer _Newvec = _Alloc::allocate(new_cap);
-    if (_Myfirst)
+    _Myfirst = _Alloc::reallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst), new_cap);
+    if (_Myfirst || !new_cap)
     {
-      std::copy(_Myfirst, _Mylast, _Newvec);
-      _Alloc::deallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst));
+      _Mylast = _Myfirst + new_size;
+      _Myend  = _Myfirst + new_cap;
     }
-    _Myfirst = _Newvec;
-    _Mylast  = _Newvec + new_size;
-    _Myend   = _Newvec + new_cap;
+    else
+      throw std::bad_alloc{};
   }
   size_type _Calculate_growth(const size_type _Newsize) const
   {
@@ -417,12 +370,9 @@ private:
   void _Tidy() YASIO__NOEXCEPT
   { // free all storage
     if (_Myfirst)
-    { // destroy and deallocate old array
+    {
       _Alloc::deallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst));
-
-      _Myfirst = nullptr;
-      _Mylast  = nullptr;
-      _Myend   = nullptr;
+      _Myfirst = _Mylast = _Myend = nullptr;
     }
   }
 
