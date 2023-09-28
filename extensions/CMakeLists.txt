@@ -24,6 +24,10 @@ function(setup_ax_extension_config target_name)
       FOLDER "Extensions"
   )
 
+  if (WINRT)
+    set_property(TARGET ${target_name} PROPERTY VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props)
+  endif()
+
   if(NOT opt_DNTLINK)
       set(_AX_EXTENSION_LIBS "${target_name};${_AX_EXTENSION_LIBS}" CACHE INTERNAL "extensions for auto link to target application")
   endif()
@@ -73,6 +77,10 @@ if(AX_ENABLE_EXT_IMGUI)
   if(AX_ENABLE_EXT_INSPECTOR)
       add_subdirectory(Inspector)
       target_include_directories(Inspector PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui)
+  endif()
+  if (AX_ENABLE_EXT_SDFGEN)
+      add_subdirectory(SDFGen)
+      target_include_directories(SDFGen PUBLIC ${CMAKE_CURRENT_LIST_DIR}/ImGui)
   endif()
 endif()
 

@@ -20,7 +20,7 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10.6'
+        python-version: '3.11.5'
 
     - name: Build
       run: tools\ci\genbindings.ps1

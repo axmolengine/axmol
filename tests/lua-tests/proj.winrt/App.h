@@ -24,24 +24,23 @@
 
 #pragma once
 
-#include "App.g.h"
+#include "pch.h"
+
+#include "App.xaml.g.h"
 #include "OpenGLES.h"
-#include "OpenGLESPage.xaml.h"
 
-namespace AxmolAppWinRT
+using namespace winrt;
+
+namespace winrt::AxmolAppWinRT::implementation
 {
-    ref class App sealed
+    struct App : AppT<App>
     {
-    public:
         App();
-        virtual void OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs^ e) override;
-
-    private:
-        void OnSuspending(Platform::Object^ sender, Windows::ApplicationModel::SuspendingEventArgs^ e);
-        void OnResuming(Platform::Object ^sender, Platform::Object ^args);
-        void OnNavigationFailed(Platform::Object ^sender, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs ^e);
-
-        OpenGLESPage^ mPage;
+        void OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs const&);
+        void OnSuspending(IInspectable const&, Windows::ApplicationModel::SuspendingEventArgs const&);
+        void OnResuming(IInspectable const&, IInspectable const&);
+        void OnNavigationFailed(IInspectable const&, Windows::UI::Xaml::Navigation::NavigationFailedEventArgs const&);
+        Windows::Foundation::IInspectable mPage;
         OpenGLES mOpenGLES;
     };
 }

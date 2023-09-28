@@ -62,77 +62,11 @@ AL_API void AL_APIENTRY alAuxiliaryEffectSlotStopvSOFT(ALsizei n, const ALuint *
 #define AL_STOP_SOURCES_ON_DISCONNECT_SOFT       0x19AB
 #endif
 
-#ifndef ALC_EXT_debug
-#define ALC_EXT_debug
-#define ALC_CONTEXT_FLAGS_EXT                    0x19CE
-#define ALC_CONTEXT_DEBUG_BIT_EXT                0x0001
-#endif
-
-#ifndef AL_EXT_debug
-#define AL_EXT_debug
-#define AL_DONT_CARE_EXT                         0x0002
-#define AL_DEBUG_OUTPUT_EXT                      0x19B2
-#define AL_DEBUG_CALLBACK_FUNCTION_EXT           0x19B3
-#define AL_DEBUG_CALLBACK_USER_PARAM_EXT         0x19B4
-#define AL_DEBUG_SOURCE_API_EXT                  0x19B5
-#define AL_DEBUG_SOURCE_AUDIO_SYSTEM_EXT         0x19B6
-#define AL_DEBUG_SOURCE_THIRD_PARTY_EXT          0x19B7
-#define AL_DEBUG_SOURCE_APPLICATION_EXT          0x19B8
-#define AL_DEBUG_SOURCE_OTHER_EXT                0x19B9
-#define AL_DEBUG_TYPE_ERROR_EXT                  0x19BA
-#define AL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_EXT    0x19BB
-#define AL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_EXT     0x19BC
-#define AL_DEBUG_TYPE_PORTABILITY_EXT            0x19BD
-#define AL_DEBUG_TYPE_PERFORMANCE_EXT            0x19BE
-#define AL_DEBUG_TYPE_MARKER_EXT                 0x19BF
-#define AL_DEBUG_TYPE_PUSH_GROUP_EXT             0x19C0
-#define AL_DEBUG_TYPE_POP_GROUP_EXT              0x19C1
-#define AL_DEBUG_TYPE_OTHER_EXT                  0x19C2
-#define AL_DEBUG_SEVERITY_HIGH_EXT               0x19C3
-#define AL_DEBUG_SEVERITY_MEDIUM_EXT             0x19C4
-#define AL_DEBUG_SEVERITY_LOW_EXT                0x19C5
-#define AL_DEBUG_SEVERITY_NOTIFICATION_EXT       0x19C6
-#define AL_DEBUG_LOGGED_MESSAGES_EXT             0x19C7
-#define AL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH_EXT  0x19C8
-#define AL_MAX_DEBUG_MESSAGE_LENGTH_EXT          0x19C9
-#define AL_MAX_DEBUG_LOGGED_MESSAGES_EXT         0x19CA
-#define AL_MAX_DEBUG_GROUP_STACK_DEPTH_EXT       0x19CB
-#define AL_STACK_OVERFLOW_EXT                    0x19CC
-#define AL_STACK_UNDERFLOW_EXT                   0x19CD
-#define AL_CONTEXT_FLAGS_EXT                     0x19CE
-
-typedef void (AL_APIENTRY*ALDEBUGPROCEXT)(ALenum source, ALenum type, ALuint id, ALenum severity, ALsizei length, const ALchar *message, void *userParam) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALDEBUGMESSAGECALLBACKEXT)(ALDEBUGPROCEXT callback, void *userParam) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALDEBUGMESSAGEINSERTEXT)(ALenum source, ALenum type, ALuint id, ALenum severity, ALsizei length, const ALchar *message) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALDEBUGMESSAGECONTROLEXT)(ALenum source, ALenum type, ALenum severity, ALsizei count, const ALuint *ids, ALboolean enable) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALPUSHDEBUGGROUPEXT)(ALenum source, ALuint id, ALsizei length, const ALchar *message) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALPOPDEBUGGROUPEXT)(void) AL_API_NOEXCEPT17;
-typedef ALuint (AL_APIENTRY*LPALGETDEBUGMESSAGELOGEXT)(ALuint count, ALsizei logBufSize, ALenum *sources, ALenum *types, ALuint *ids, ALenum *severities, ALsizei *lengths, ALchar *logBuf) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALDEBUGMESSAGECALLBACKDIRECTEXT)(ALCcontext *context, ALDEBUGPROCEXT callback, void *userParam) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALDEBUGMESSAGEINSERTDIRECTEXT)(ALCcontext *context, ALenum source, ALenum type, ALuint id, ALenum severity, ALsizei length, const ALchar *message) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALDEBUGMESSAGECONTROLDIRECTEXT)(ALCcontext *context, ALenum source, ALenum type, ALenum severity, ALsizei count, const ALuint *ids, ALboolean enable) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALPUSHDEBUGGROUPDIRECTEXT)(ALCcontext *context, ALenum source, ALuint id, ALsizei length, const ALchar *message) AL_API_NOEXCEPT17;
-typedef void (AL_APIENTRY*LPALPOPDEBUGGROUPDIRECTEXT)(ALCcontext *context) AL_API_NOEXCEPT17;
-typedef ALuint (AL_APIENTRY*LPALGETDEBUGMESSAGELOGDIRECTEXT)(ALCcontext *context, ALuint count, ALsizei logBufSize, ALenum *sources, ALenum *types, ALuint *ids, ALenum *severities, ALsizei *lengths, ALchar *logBuf) AL_API_NOEXCEPT17;
-#ifdef AL_ALEXT_PROTOTYPES
-void AL_APIENTRY alDebugMessageCallbackEXT(ALDEBUGPROCEXT callback, void *userParam) AL_API_NOEXCEPT;
-void AL_APIENTRY alDebugMessageInsertEXT(ALenum source, ALenum type, ALuint id, ALenum severity, ALsizei length, const ALchar *message) AL_API_NOEXCEPT;
-void AL_APIENTRY alDebugMessageControlEXT(ALenum source, ALenum type, ALenum severity, ALsizei count, const ALuint *ids, ALboolean enable)  AL_API_NOEXCEPT;
-void AL_APIENTRY alPushDebugGroupEXT(ALenum source, ALuint id, ALsizei length, const ALchar *message)  AL_API_NOEXCEPT;
-void AL_APIENTRY alPopDebugGroupEXT(void)  AL_API_NOEXCEPT;
-ALuint AL_APIENTRY alGetDebugMessageLogEXT(ALuint count, ALsizei logBufSize, ALenum *sources, ALenum *types, ALuint *ids, ALenum *severities, ALsizei *lengths, ALchar *logBuf)  AL_API_NOEXCEPT;
-void AL_APIENTRY alDebugMessageCallbackDirectEXT(ALCcontext *context, ALDEBUGPROCEXT callback, void *userParam)  AL_API_NOEXCEPT;
-void AL_APIENTRY alDebugMessageInsertDirectEXT(ALCcontext *context, ALenum source, ALenum type, ALuint id, ALenum severity, ALsizei length, const ALchar *message)  AL_API_NOEXCEPT;
-void AL_APIENTRY alDebugMessageControlDirectEXT(ALCcontext *context, ALenum source, ALenum type, ALenum severity, ALsizei count, const ALuint *ids, ALboolean enable) AL_API_NOEXCEPT;
-void AL_APIENTRY alPushDebugGroupDirectEXT(ALCcontext *context, ALenum source, ALuint id, ALsizei length, const ALchar *message) AL_API_NOEXCEPT;
-void AL_APIENTRY alPopDebugGroupDirectEXT(ALCcontext *context) AL_API_NOEXCEPT;
-ALuint AL_APIENTRY alGetDebugMessageLogDirectEXT(ALCcontext *context, ALuint count, ALsizei logBufSize, ALenum *sources, ALenum *types, ALuint *ids, ALenum *severities, ALsizei *lengths, ALchar *logBuf) AL_API_NOEXCEPT;
-#endif
-#endif
-
 
 #ifndef AL_EXT_direct_context
 #define AL_EXT_direct_context
+typedef ALCvoid* (ALC_APIENTRY *LPALCGETPROCADDRESS2)(ALCdevice *device, const ALCchar *funcname) AL_API_NOEXCEPT17;
+
 typedef void (AL_APIENTRY *LPALENABLEDIRECT)(ALCcontext *context, ALenum capability) AL_API_NOEXCEPT17;
 typedef void (AL_APIENTRY *LPALDISABLEDIRECT)(ALCcontext *context, ALenum capability) AL_API_NOEXCEPT17;
 typedef ALboolean (AL_APIENTRY *LPALISENABLEDDIRECT)(ALCcontext *context, ALenum capability) AL_API_NOEXCEPT17;
@@ -241,11 +175,20 @@ typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTFDIRECT)(ALCcontext *contex
 typedef void (AL_APIENTRY *LPALGETAUXILIARYEFFECTSLOTFVDIRECT)(ALCcontext *context, ALuint effectslot, ALenum param, ALfloat *values) AL_API_NOEXCEPT17;
 /* AL_EXT_BUFFER_DATA_STATIC */
 typedef void (AL_APIENTRY *LPALBUFFERDATASTATICDIRECT)(ALCcontext *context, ALuint buffer, ALenum format, ALvoid *data, ALsizei size, ALsizei freq) AL_API_NOEXCEPT17;
-/* AL_SOFT_buffer_sub_data */
-typedef void (AL_APIENTRY *LPALBUFFERSUBDATADIRECTSOFT)(ALCcontext *context, ALuint buffer, ALenum format, const ALvoid *data, ALsizei offset, ALsizei length) AL_API_NOEXCEPT17;
+/* AL_EXT_debug */
+typedef void (AL_APIENTRY*LPALDEBUGMESSAGECALLBACKDIRECTEXT)(ALCcontext *context, ALDEBUGPROCEXT callback, void *userParam) AL_API_NOEXCEPT17;
+typedef void (AL_APIENTRY*LPALDEBUGMESSAGEINSERTDIRECTEXT)(ALCcontext *context, ALenum source, ALenum type, ALuint id, ALenum severity, ALsizei length, const ALchar *message) AL_API_NOEXCEPT17;
+typedef void (AL_APIENTRY*LPALDEBUGMESSAGECONTROLDIRECTEXT)(ALCcontext *context, ALenum source, ALenum type, ALenum severity, ALsizei count, const ALuint *ids, ALboolean enable) AL_API_NOEXCEPT17;
+typedef void (AL_APIENTRY*LPALPUSHDEBUGGROUPDIRECTEXT)(ALCcontext *context, ALenum source, ALuint id, ALsizei length, const ALchar *message) AL_API_NOEXCEPT17;
+typedef void (AL_APIENTRY*LPALPOPDEBUGGROUPDIRECTEXT)(ALCcontext *context) AL_API_NOEXCEPT17;
+typedef ALuint (AL_APIENTRY*LPALGETDEBUGMESSAGELOGDIRECTEXT)(ALCcontext *context, ALuint count, ALsizei logBufSize, ALenum *sources, ALenum *types, ALuint *ids, ALenum *severities, ALsizei *lengths, ALchar *logBuf) AL_API_NOEXCEPT17;
+typedef void (AL_APIENTRY*LPALOBJECTLABELDIRECTEXT)(ALCcontext *context, ALenum identifier, ALuint name, ALsizei length, const ALchar *label) AL_API_NOEXCEPT17;
+typedef void (AL_APIENTRY*LPALGETOBJECTLABELDIRECTEXT)(ALCcontext *context, ALenum identifier, ALuint name, ALsizei bufSize, ALsizei *length, ALchar *label) AL_API_NOEXCEPT17;
 /* AL_EXT_FOLDBACK */
 typedef void (AL_APIENTRY *LPALREQUESTFOLDBACKSTARTDIRECT)(ALCcontext *context, ALenum mode, ALsizei count, ALsizei length, ALfloat *mem, LPALFOLDBACKCALLBACK callback) AL_API_NOEXCEPT17;
 typedef void (AL_APIENTRY *LPALREQUESTFOLDBACKSTOPDIRECT)(ALCcontext *context) AL_API_NOEXCEPT17;
+/* AL_SOFT_buffer_sub_data */
+typedef void (AL_APIENTRY *LPALBUFFERSUBDATADIRECTSOFT)(ALCcontext *context, ALuint buffer, ALenum format, const ALvoid *data, ALsizei offset, ALsizei length) AL_API_NOEXCEPT17;
 /* AL_SOFT_source_latency */
 typedef void (AL_APIENTRY *LPALSOURCEDDIRECTSOFT)(ALCcontext*,ALuint,ALenum,ALdouble) AL_API_NOEXCEPT17;
 typedef void (AL_APIENTRY *LPALSOURCE3DDIRECTSOFT)(ALCcontext*,ALuint,ALenum,ALdouble,ALdouble,ALdouble) AL_API_NOEXCEPT17;
@@ -283,6 +226,8 @@ typedef ALenum (AL_APIENTRY *LPEAXGETDIRECT)(ALCcontext *context, const struct _
 typedef ALboolean (AL_APIENTRY *LPEAXSETBUFFERMODEDIRECT)(ALCcontext *context, ALsizei n, const ALuint *buffers, ALint value) AL_API_NOEXCEPT17;
 typedef ALenum (AL_APIENTRY *LPEAXGETBUFFERMODEDIRECT)(ALCcontext *context, ALuint buffer, ALint *pReserved) AL_API_NOEXCEPT17;
 #ifdef AL_ALEXT_PROTOTYPES
+ALCvoid* AL_APIENTRY alcGetProcAddress2(ALCdevice *device, const ALchar *funcName) AL_API_NOEXCEPT;
+
 void AL_APIENTRY alEnableDirect(ALCcontext *context, ALenum capability) AL_API_NOEXCEPT;
 void AL_APIENTRY alDisableDirect(ALCcontext *context, ALenum capability) AL_API_NOEXCEPT;
 ALboolean AL_APIENTRY alIsEnabledDirect(ALCcontext *context, ALenum capability) AL_API_NOEXCEPT;
@@ -400,10 +345,19 @@ void AL_APIENTRY alGetAuxiliaryEffectSlotfvDirect(ALCcontext *context, ALuint ef
 
 void AL_APIENTRY alBufferDataStaticDirect(ALCcontext *context, ALuint buffer, ALenum format, ALvoid *data, ALsizei size, ALsizei freq) AL_API_NOEXCEPT;
 
-void AL_APIENTRY alBufferSubDataDirectSOFT(ALCcontext *context, ALuint buffer, ALenum format, const ALvoid *data, ALsizei offset, ALsizei length) AL_API_NOEXCEPT;
+void AL_APIENTRY alDebugMessageCallbackDirectEXT(ALCcontext *context, ALDEBUGPROCEXT callback, void *userParam)  AL_API_NOEXCEPT;
+void AL_APIENTRY alDebugMessageInsertDirectEXT(ALCcontext *context, ALenum source, ALenum type, ALuint id, ALenum severity, ALsizei length, const ALchar *message)  AL_API_NOEXCEPT;
+void AL_APIENTRY alDebugMessageControlDirectEXT(ALCcontext *context, ALenum source, ALenum type, ALenum severity, ALsizei count, const ALuint *ids, ALboolean enable) AL_API_NOEXCEPT;
+void AL_APIENTRY alPushDebugGroupDirectEXT(ALCcontext *context, ALenum source, ALuint id, ALsizei length, const ALchar *message) AL_API_NOEXCEPT;
+void AL_APIENTRY alPopDebugGroupDirectEXT(ALCcontext *context) AL_API_NOEXCEPT;
+ALuint AL_APIENTRY alGetDebugMessageLogDirectEXT(ALCcontext *context, ALuint count, ALsizei logBufSize, ALenum *sources, ALenum *types, ALuint *ids, ALenum *severities, ALsizei *lengths, ALchar *logBuf) AL_API_NOEXCEPT;
+void AL_APIENTRY alObjectLabelDirectEXT(ALCcontext *context, ALenum identifier, ALuint name, ALsizei length, const ALchar *label) AL_API_NOEXCEPT;
+void AL_APIENTRY alGetObjectLabelDirectEXT(ALCcontext *context, ALenum identifier, ALuint name, ALsizei bufSize, ALsizei *length, ALchar *label) AL_API_NOEXCEPT;
 
 void AL_APIENTRY alRequestFoldbackStartDirect(ALCcontext *context, ALenum mode, ALsizei count, ALsizei length, ALfloat *mem, LPALFOLDBACKCALLBACK callback) AL_API_NOEXCEPT;
 void AL_APIENTRY alRequestFoldbackStopDirect(ALCcontext *context) AL_API_NOEXCEPT;
+
+void AL_APIENTRY alBufferSubDataDirectSOFT(ALCcontext *context, ALuint buffer, ALenum format, const ALvoid *data, ALsizei offset, ALsizei length) AL_API_NOEXCEPT;
 
 void AL_APIENTRY alSourcedDirectSOFT(ALCcontext *context, ALuint source, ALenum param, ALdouble value) AL_API_NOEXCEPT;
 void AL_APIENTRY alSource3dDirectSOFT(ALCcontext *context, ALuint source, ALenum param, ALdouble value1, ALdouble value2, ALdouble value3) AL_API_NOEXCEPT;
@@ -443,26 +397,11 @@ ALenum AL_APIENTRY EAXGetBufferModeDirect(ALCcontext *context, ALuint buffer, AL
 #endif
 #endif
 
-#ifndef ALC_SOFT_system_events
-#define ALC_SOFT_system_events
-#define ALC_PLAYBACK_DEVICE_SOFT                 0x19CF
-#define ALC_CAPTURE_DEVICE_SOFT                  0x19D0
-#define ALC_EVENT_TYPE_DEFAULT_DEVICE_CHANGED_SOFT 0x19D1
-#define ALC_EVENT_TYPE_DEVICE_ADDED_SOFT         0x19D2
-#define ALC_EVENT_TYPE_DEVICE_REMOVED_SOFT       0x19D3
-typedef void (ALC_APIENTRY*ALCEVENTPROCTYPESOFT)(ALCenum eventType, ALCenum deviceType,
-    ALCdevice *device, ALCsizei length, const ALCchar *message, void *userParam) ALC_API_NOEXCEPT17;
-typedef ALCboolean (ALC_APIENTRY*LPALCEVENTCONTROLSOFT)(ALCsizei count, const ALCenum *events, ALCboolean enable) ALC_API_NOEXCEPT17;
-typedef void (ALC_APIENTRY*LPALCEVENTCALLBACKSOFT)(ALCEVENTPROCTYPESOFT callback, void *userParam) ALC_API_NOEXCEPT17;
-#ifdef AL_ALEXT_PROTOTYPES
-ALCboolean ALC_APIENTRY alcEventControlSOFT(ALCsizei count, const ALCenum *events, ALCboolean enable) ALC_API_NOEXCEPT;
-void ALC_APIENTRY alcEventCallbackSOFT(ALCEVENTPROCTYPESOFT callback, void *userParam) ALC_API_NOEXCEPT;
-#endif
-#endif
-
-/* Non-standard export. Not part of any extension. */
+/* Non-standard exports. Not part of any extension. */
 AL_API const ALchar* AL_APIENTRY alsoft_get_version(void) noexcept;
 
+typedef void (ALC_APIENTRY*LPALSOFTLOGCALLBACK)(void *userptr, char level, const char *message, int length) noexcept;
+void ALC_APIENTRY alsoft_set_log_callback(LPALSOFTLOGCALLBACK callback, void *userptr) noexcept;
 
 /* Functions from abandoned extensions. Only here for binary compatibility. */
 AL_API void AL_APIENTRY alSourceQueueBufferLayersSOFT(ALuint src, ALsizei nb,

@@ -27,7 +27,7 @@
 
 # build engine library and all tests
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.22)
 
 project(axmol)
 
@@ -65,10 +65,10 @@ if(AX_BUILD_TESTS)
     # add cpp-template-default into project(axmol) for tmp test
     add_test_target(HelloCpp ${_AX_ROOT}/templates/cpp-template-default )
 
-	  # add cpp tests default
+	# add cpp tests default
     add_test_target(cpp_tests ${_AX_ROOT}/tests/cpp-tests)
     
-	  # add fairygui tests when fairygui extension is enabled
+	# add fairygui tests when fairygui extension is enabled
     if(AX_ENABLE_EXT_FAIRYGUI)
         add_test_target(fairygui_tests ${_AX_ROOT}/tests/fairygui-tests)
     endif()

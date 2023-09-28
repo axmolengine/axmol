@@ -28,22 +28,24 @@ THE SOFTWARE.
 #define __CCWINRT_UTILS_H__
 
 #include "platform/PlatformMacros.h"
-#include <ppltasks.h>
 
 #include <string>
+
+#include <winrt/Windows.Foundation.h>
+using namespace winrt;
 
 NS_AX_BEGIN
 
 bool isWindowsPhone();
 
-Platform::Object^ findXamlElement(Platform::Object^ parent, Platform::String^ name);
-bool removeXamlElement(Platform::Object^ parent, Platform::Object^ element);
-bool replaceXamlElement(Platform::Object^ parent, Platform::Object^ add, Platform::Object^ remove);
+Windows::Foundation::IInspectable findXamlElement(Windows::Foundation::IInspectable const& parent, const winrt::hstring& name);
+bool removeXamlElement(Windows::Foundation::IInspectable const& parent, Windows::Foundation::IInspectable const& element);
+bool replaceXamlElement(Windows::Foundation::IInspectable const& parent,
+                        Windows::Foundation::IInspectable const& add,
+                        Windows::Foundation::IInspectable const& remove);
 
-std::string PlatformStringToString(Platform::String^ s);
-Platform::String^ PlatformStringFromString(std::string_view s);
-
-Concurrency::task<Platform::Array<byte>^> ReadDataAsync(Platform::String^ path);
+std::string PlatformStringToString(const winrt::hstring& s);
+winrt::hstring PlatformStringFromString(std::string_view s);
 
 void AX_DLL printIPAddresses();
 

@@ -34,11 +34,14 @@ THE SOFTWARE.
 #include "base/EventKeyboard.h"
 #include "base/EventMouse.h"
 
-#include <agile.h>
 #include <concurrent_queue.h>
 #include <string>
 #include <memory>
-#include <wrl/client.h>
+
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.Graphics.Display.h>
+
+using namespace winrt;
 
 NS_AX_BEGIN
 
@@ -71,42 +74,45 @@ public:
 
     bool isCursorVisible() { return _isCursorVisible; }
 
-    void setDispatcher(Windows::UI::Core::CoreDispatcher ^ dispatcher);
-    Windows::UI::Core::CoreDispatcher ^ getDispatcher() { return m_dispatcher.Get(); }
+    void setDispatcher(winrt::agile_ref<Windows::UI::Core::CoreDispatcher> dispatcher);
+    winrt::agile_ref<Windows::UI::Core::CoreDispatcher> getDispatcher() const { return m_dispatcher; }
 
-        void setPanel(Windows::UI::Xaml::Controls::Panel ^ panel);
-    Windows::UI::Xaml::Controls::Panel ^ getPanel() { return m_panel.Get(); }
+    void setPanel(winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> panel);
+    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> getPanel() { return m_panel; }
 
-        void OnPointerPressed(Windows::UI::Core::PointerEventArgs ^ args);
-    void OnPointerMoved(Windows::UI::Core::PointerEventArgs ^ args);
-    void OnPointerReleased(Windows::UI::Core::PointerEventArgs ^ args);
+    void OnPointerPressed(Windows::UI::Core::PointerEventArgs const& args);
+    void OnPointerMoved(Windows::UI::Core::PointerEventArgs const& args);
+    void OnPointerReleased(Windows::UI::Core::PointerEventArgs const& args);
 
-    void OnMousePressed(Windows::UI::Core::PointerEventArgs ^ args);
-    void OnMouseMoved(Windows::UI::Core::PointerEventArgs ^ args);
-    void OnMouseReleased(Windows::UI::Core::PointerEventArgs ^ args);
-    void OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs ^ args);
+    void OnMousePressed(Windows::UI::Core::PointerEventArgs const& args);
+    void OnMouseMoved(Windows::UI::Core::PointerEventArgs const& args);
+    void OnMouseReleased(Windows::UI::Core::PointerEventArgs const& args);
+    void OnMouseWheelChanged(Windows::UI::Core::PointerEventArgs const& args);
 
-    void OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs ^ args);
+    void OnWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
 
-    void OnPointerPressed(Windows::UI::Core::CoreWindow ^ sender, Windows::UI::Core::PointerEventArgs ^ args);
-    void OnPointerWheelChanged(Windows::UI::Core::CoreWindow ^, Windows::UI::Core::PointerEventArgs ^ args);
-    void OnPointerMoved(Windows::UI::Core::CoreWindow ^, Windows::UI::Core::PointerEventArgs ^ args);
-    void OnPointerReleased(Windows::UI::Core::CoreWindow ^ sender, Windows::UI::Core::PointerEventArgs ^ args);
-    void OnVisibilityChanged(Windows::UI::Core::CoreWindow ^ sender,
-                             Windows::UI::Core::VisibilityChangedEventArgs ^ args);
-    void OnWindowClosed(Windows::UI::Core::CoreWindow ^ sender, Windows::UI::Core::CoreWindowEventArgs ^ args);
-    void OnResuming(Platform::Object ^ sender, Platform::Object ^ args);
-    void OnSuspending(Platform::Object ^ sender, Windows::ApplicationModel::SuspendingEventArgs ^ args);
+    void OnPointerPressed(Windows::UI::Core::CoreWindow const& sender, Windows::UI::Core::PointerEventArgs const& args);
+    void OnPointerWheelChanged(Windows::UI::Core::CoreWindow const&, Windows::UI::Core::PointerEventArgs const& args);
+    void OnPointerMoved(Windows::UI::Core::CoreWindow const&, Windows::UI::Core::PointerEventArgs const& args);
+    void OnPointerReleased(Windows::UI::Core::CoreWindow const& sender,
+                           Windows::UI::Core::PointerEventArgs const& args);
+    void OnVisibilityChanged(Windows::UI::Core::CoreWindow const& sender,
+                             Windows::UI::Core::VisibilityChangedEventArgs const& args);
+    void OnWindowClosed(Windows::UI::Core::CoreWindow const& sender,
+                        Windows::UI::Core::CoreWindowEventArgs const& args);
+    void OnResuming(Windows::Foundation::IInspectable const& sender);
+    void OnSuspending(Windows::Foundation::IInspectable const& sender,
+                      Windows::ApplicationModel::SuspendingEventArgs const& args);
     void OnBackKeyPress();
     bool AppShouldExit();
     void BackButtonListener(ax::EventKeyboard::KeyCode keyCode, ax::Event* event);
 
     void QueueBackKeyPress();
-    void QueuePointerEvent(PointerEventType type, Windows::UI::Core::PointerEventArgs ^ args);
-    void QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs ^ args);
+    void QueuePointerEvent(PointerEventType type, Windows::UI::Core::PointerEventArgs const& args);
+    void QueueWinRTKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args);
     void QueueEvent(std::shared_ptr<InputEvent>& event);
 
-    bool ShowMessageBox(Platform::String ^ title, Platform::String ^ message);
+    bool ShowMessageBox(const winrt::hstring& title, const winrt::hstring& message);
 
     int Run();
     void Render();
@@ -158,12 +164,12 @@ private:
     void OnRendering();
     void UpdateWindowSize();
 
-    ax::Vec2 TransformToOrientation(Windows::Foundation::Point point);
-    ax::Vec2 GetPoint(Windows::UI::Core::PointerEventArgs ^ args);
-    ax::Vec2 GetPointMouse(Windows::UI::Core::PointerEventArgs ^ args);
+    ax::Vec2 TransformToOrientation(Windows::Foundation::Point const& point);
+    ax::Vec2 GetPoint(Windows::UI::Core::PointerEventArgs const& args);
+    ax::Vec2 GetPointMouse(Windows::UI::Core::PointerEventArgs const& args);
 
     Windows::Foundation::Rect m_windowBounds;
-    Windows::Foundation::EventRegistrationToken m_eventToken;
+    winrt::event_token m_eventToken;
     Windows::Foundation::Point m_lastPoint;
 
     float m_width;
@@ -186,10 +192,10 @@ private:
 
     std::function<void(AsyncOperation, void*)> mQueueOperationCb;
 
-    Platform::Agile<Windows::UI::Core::CoreDispatcher> m_dispatcher;
-    Platform::Agile<Windows::UI::Xaml::Controls::Panel> m_panel;
+    winrt::agile_ref<Windows::UI::Core::CoreDispatcher> m_dispatcher;
+    winrt::agile_ref<Windows::UI::Xaml::Controls::Panel> m_panel;
 
-    KeyBoardWinRT ^ m_keyboard;
+    KeyBoardWinRT m_keyboard;
 
     ax::EventListenerKeyboard* m_backButtonListener;
 };

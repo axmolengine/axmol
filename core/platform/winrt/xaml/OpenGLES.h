@@ -29,13 +29,18 @@
 #include <EGL/eglplatform.h>
 #include <angle_windowsstore.h>
 
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.UI.Xaml.Controls.h>
+
+using namespace winrt;
+
 class OpenGLES
 {
 public:
     OpenGLES();
     ~OpenGLES();
 
-    EGLSurface CreateSurface(Windows::UI::Xaml::Controls::SwapChainPanel^ panel, const Windows::Foundation::Size* renderSurfaceSize, const float* renderResolutionScale);
+    EGLSurface CreateSurface(Windows::UI::Xaml::Controls::SwapChainPanel const& panel, const Windows::Foundation::Size* renderSurfaceSize, const float* renderResolutionScale);
     void GetSurfaceDimensions(const EGLSurface surface, EGLint *width, EGLint *height);
     void DestroySurface(const EGLSurface surface);
     void MakeCurrent(const EGLSurface surface);

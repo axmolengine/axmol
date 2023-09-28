@@ -134,6 +134,7 @@ option(AX_ENABLE_EXT_EFFEKSEER "Build extension Effekseer" OFF)
 
 cmake_dependent_option(AX_ENABLE_EXT_IMGUI "Build extension ImGui" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
 cmake_dependent_option(AX_ENABLE_EXT_INSPECTOR "Build extension Inspector" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR ANDROID OR WASM" OFF)
+cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ON "(WINDOWS AND NOT WINRT) OR MACOSX OR LINUX OR WASM" OFF)
 
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
@@ -278,11 +279,6 @@ set_source_files_properties(
 )
 ax_target_compile_shaders(${_AX_CORE_LIB} FILES ${BUILTIN_SHADER_SOURCES})
 
-
-if (WINRT)
-    target_compile_options(${_AX_CORE_LIB} PUBLIC /ZW)
-endif()
-
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MFMEDIA)
 ax_config_pred(${_AX_CORE_LIB} AX_ENABLE_MSEDGE_WEBVIEW2)
 
@@ -330,7 +326,8 @@ target_precompile_headers(${_AX_CORE_LIB} PRIVATE
 )
 
 if(WINDOWS)
-    if(AX_ENABLE_MSEDGE_WEBVIEW2)
+    # cppwinrt or webview2 require nuget
+    if(WINDOWS_STORE OR AX_ENABLE_MSEDGE_WEBVIEW2)
         find_program(NUGET_EXE NAMES nuget 
             PATHS ${_AX_ROOT}/tools/external/nuget)
             
@@ -338,7 +335,18 @@ if(WINDOWS)
             message("NUGET.EXE not found.")
             message(FATAL_ERROR "Please run setup.ps1 again to download NUGET.EXE, and run CMake again.")
         endif()
-     
+    endif()
+
+    if(WINDOWS_STORE)
+        # intsall cppwinrt package for xaml apps
+        exec_program(${NUGET_EXE}
+                ARGS install "Microsoft.Windows.CppWinRT" -Version ${AX_CPPWINRT_VERISON} -ExcludeVersion -OutputDirectory "\"${CMAKE_BINARY_DIR}/packages\"")
+        set_target_properties(${_AX_CORE_LIB} PROPERTIES
+            VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
+        )
+        target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
+    endif()
+    if(AX_ENABLE_MSEDGE_WEBVIEW2)
         exec_program(${NUGET_EXE}
             ARGS install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory "\"${CMAKE_BINARY_DIR}/packages\"")
 

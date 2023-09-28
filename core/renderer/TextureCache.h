@@ -85,9 +85,12 @@ public:
      */
     virtual std::string getDescription() const;
     
-    /** Gets a 2x2 white  texture  */
+    /** Gets a 2x2 white texture  */
     Texture2D* getWhiteTexture();
-    
+
+    /** Gets a 2x2 texture whith specify luma and key */
+    Texture2D* getWhiteTexture(std::string_view key, uint8_t luma);
+
     /** Gets 1x1 dummy texture with alpha=0  */
     Texture2D* getDummyTexture();
 

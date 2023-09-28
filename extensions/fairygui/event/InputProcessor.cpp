@@ -263,7 +263,7 @@ void InputProcessor::setEnd(TouchInfo* touch, GObject* target)
 {
     touch->began = false;
 
-    auto now = clock();
+    auto now = ::clock();
     float elapsed = (now - touch->lastClickTime) / (double)CLOCKS_PER_SEC;
 
     if (elapsed < 0.45f)

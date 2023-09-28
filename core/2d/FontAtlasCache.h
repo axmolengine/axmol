@@ -41,6 +41,11 @@ struct _ttfConfig;
 class AX_DLL FontAtlasCache
 {
 public:
+    /**
+     * @brief preload a SDF fontatlas
+     * since axmol-2.1.0, must call before creating any Label
+     */
+    static void preloadFontAtlas(std::string_view fontatlasFile);
     static FontAtlas* getFontAtlasTTF(_ttfConfig* config);
 
     static FontAtlas* getFontAtlasFNT(std::string_view fontFileName);

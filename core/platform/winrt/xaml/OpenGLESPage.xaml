@@ -8,6 +8,6 @@
     mc:Ignorable="d">
 
     <SwapChainPanel x:Name="swapChainPanel">
-        <Canvas x:Name="cocos2d_canvas" Visibility="Collapsed" />
+        <Canvas x:Name="axmol_canvas" Visibility="Collapsed" />
     </SwapChainPanel>
 </Page>

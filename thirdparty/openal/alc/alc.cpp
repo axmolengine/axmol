@@ -162,13 +162,6 @@
 #endif // ALSOFT_EAX
 
 
-FILE *gLogFile{stderr};
-#ifdef _DEBUG
-LogLevel gLogLevel{LogLevel::Warning};
-#else
-LogLevel gLogLevel{LogLevel::Error};
-#endif
-
 /************************************************
  * Library initialization
  ************************************************/
@@ -314,12 +307,12 @@ constexpr ALCchar alcNoDeviceExtList[] =
     "ALC_SOFT_loopback "
     "ALC_SOFT_loopback_bformat "
     "ALC_SOFT_reopen_device "
-    "ALC_SOFTX_system_events";
+    "ALC_SOFT_system_events";
 constexpr ALCchar alcExtensionList[] =
     "ALC_ENUMERATE_ALL_EXT "
     "ALC_ENUMERATION_EXT "
     "ALC_EXT_CAPTURE "
-    "ALC_EXTX_debug "
+    "ALC_EXT_debug "
     "ALC_EXT_DEDICATED "
     "ALC_EXTX_direct_context "
     "ALC_EXT_disconnect "
@@ -333,7 +326,7 @@ constexpr ALCchar alcExtensionList[] =
     "ALC_SOFT_output_mode "
     "ALC_SOFT_pause_device "
     "ALC_SOFT_reopen_device "
-    "ALC_SOFTX_system_events";
+    "ALC_SOFT_system_events";
 constexpr int alcMajorVersion{1};
 constexpr int alcMinorVersion{1};
 
@@ -373,7 +366,7 @@ void alc_initconfig(void)
         if(logf) gLogFile = logf;
         else
         {
-            auto u8name = wstr_to_utf8(logfile->c_str());
+            auto u8name = wstr_to_utf8(*logfile);
             ERR("Failed to open log file '%s'\n", u8name.c_str());
         }
     }
@@ -1853,6 +1846,11 @@ ContextRef VerifyContext(ALCcontext *context)
 
 } // namespace
 
+FORCE_ALIGN void ALC_APIENTRY alsoft_set_log_callback(LPALSOFTLOGCALLBACK callback, void *userptr) noexcept
+{
+    al_set_log_callback(callback, userptr);
+}
+
 /** Returns a new reference to the currently active context for this thread. */
 ContextRef GetContextRef(void)
 {
@@ -2566,6 +2564,9 @@ ALC_API ALCboolean ALC_APIENTRY alcIsExtensionPresent(ALCdevice *device, const A
 }
 
 
+ALCvoid* ALC_APIENTRY alcGetProcAddress2(ALCdevice *device, const ALCchar *funcName) noexcept
+{ return alcGetProcAddress(device, funcName); }
+
 ALC_API ALCvoid* ALC_APIENTRY alcGetProcAddress(ALCdevice *device, const ALCchar *funcName) noexcept
 {
     if(!funcName)
@@ -2662,7 +2663,21 @@ ALC_API ALCcontext* ALC_APIENTRY alcCreateContext(ALCdevice *device, const ALCin
         }
     }
 
-    ContextRef context{new ALCcontext{dev, ctxflags}};
+    ContextRef context{[](auto&& ...args) -> ContextRef
+    {
+        try {
+            return ContextRef{new ALCcontext{std::forward<decltype(args)>(args)...}};
+        }
+        catch(std::exception& e) {
+            ERR("Failed to create ALCcontext: %s\n", e.what());
+            return ContextRef{};
+        }
+    }(dev, ctxflags)};
+    if(!context)
+    {
+        alcSetError(dev.get(), ALC_OUT_OF_MEMORY);
+        return nullptr;
+    }
     context->init();
 
     if(auto volopt = dev->configValue<float>(nullptr, "volume-adjust"))
@@ -2716,7 +2731,7 @@ ALC_API ALCcontext* ALC_APIENTRY alcCreateContext(ALCdevice *device, const ALCin
 
     if(ALeffectslot *slot{context->mDefaultSlot.get()})
     {
-        ALenum sloterr{slot->initEffect(ALCcontext::sDefaultEffect.type,
+        ALenum sloterr{slot->initEffect(0, ALCcontext::sDefaultEffect.type,
             ALCcontext::sDefaultEffect.Props, context.get())};
         if(sloterr == AL_NO_ERROR)
             slot->updateProps(context.get());
@@ -2893,9 +2908,26 @@ ALC_API ALCdevice* ALC_APIENTRY alcOpenDevice(const ALCchar *deviceName) noexcep
     device->NumAuxSends = DefaultSends;
 
     try {
+        /* We need to ensure the device name isn't too long. The string_view is
+         * printed using the "%.*s" formatter, which uses an int for the
+         * precision/length. It wouldn't be a significant problem if larger
+         * values simply printed fewer characters due to truncation, but
+         * negative values are ignored, treating it like a normal null-
+         * terminated string, and string_views don't need to be null-
+         * terminated.
+         *
+         * Other than the annoyance of checking, this shouldn't be a problem.
+         * Two billion bytes is enough for a device name.
+         */
+        const std::string_view devname{deviceName ? deviceName : ""};
+        if(devname.length() >= std::numeric_limits<int>::max())
+            throw al::backend_exception{al::backend_error::NoDevice,
+                "Device name too long (%zu >= %d)", devname.length(),
+                std::numeric_limits<int>::max()};
+
         auto backend = PlaybackFactory->createBackend(device.get(), BackendType::Playback);
         std::lock_guard<std::recursive_mutex> _{ListLock};
-        backend->open(deviceName);
+        backend->open(devname);
         device->Backend = std::move(backend);
     }
     catch(al::backend_exception &e) {
@@ -3012,14 +3044,20 @@ ALC_API ALCdevice* ALC_APIENTRY alcCaptureOpenDevice(const ALCchar *deviceName, 
     device->UpdateSize = static_cast<uint>(samples);
     device->BufferSize = static_cast<uint>(samples);
 
+    TRACE("Capture format: %s, %s, %uhz, %u / %u buffer\n", DevFmtChannelsString(device->FmtChans),
+        DevFmtTypeString(device->FmtType), device->Frequency, device->UpdateSize,
+        device->BufferSize);
+
     try {
-        TRACE("Capture format: %s, %s, %uhz, %u / %u buffer\n",
-            DevFmtChannelsString(device->FmtChans), DevFmtTypeString(device->FmtType),
-            device->Frequency, device->UpdateSize, device->BufferSize);
+        const std::string_view devname{deviceName ? deviceName : ""};
+        if(devname.length() >= std::numeric_limits<int>::max())
+            throw al::backend_exception{al::backend_error::NoDevice,
+                "Device name too long (%zu >= %d)", devname.length(),
+                std::numeric_limits<int>::max()};
 
         auto backend = CaptureFactory->createBackend(device.get(), BackendType::Capture);
         std::lock_guard<std::recursive_mutex> _{ListLock};
-        backend->open(deviceName);
+        backend->open(devname);
         device->Backend = std::move(backend);
     }
     catch(al::backend_exception &e) {
@@ -3381,8 +3419,14 @@ FORCE_ALIGN ALCboolean ALC_APIENTRY alcReopenDeviceSOFT(ALCdevice *device,
 
     BackendPtr newbackend;
     try {
+        const std::string_view devname{deviceName ? deviceName : ""};
+        if(devname.length() >= std::numeric_limits<int>::max())
+            throw al::backend_exception{al::backend_error::NoDevice,
+                "Device name too long (%zu >= %d)", devname.length(),
+                std::numeric_limits<int>::max()};
+
         newbackend = PlaybackFactory->createBackend(dev.get(), BackendType::Playback);
-        newbackend->open(deviceName);
+        newbackend->open(devname);
     }
     catch(al::backend_exception &e) {
         listlock.unlock();

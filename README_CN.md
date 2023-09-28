@@ -7,6 +7,7 @@
 [![dev](https://img.shields.io/github/v/release/axmolengine/axmol?include_prereleases&label=release)](https://github.com/axmolengine/axmol/releases)
 [![LICENSE](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/axmolengine/axmol/blob/master/LICENSE)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/81fa1aba09ab41a98b949064b928d06e)](https://www.codacy.com/gh/axmolengine/axmol/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=axmolengine/axmol&amp;utm_campaign=Badge_Grade)
+[![cxxstd](https://img.shields.io/badge/cxxstd-c++20-8A2BE2.svg)](https://github.com/axmolengine/axmol)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/axmolengine/axmol/pulls)
 [![QQ Group](https://img.shields.io/badge/QQGroup-join-green.svg)](https://jq.qq.com/?_wv=1027&k=nvNmzOIY)
 
@@ -69,7 +70,6 @@
 - AudioEngine实现wav所有 ```openal-soft``` 支持的封装格式, 例如MS-ADPCM, ADPCM等
 - 使用现代化的GL加载器glad代替glew
 - 增加google angle渲染后端支持
-- C++最低标准要求: C++17/20
 - 设置ios下最低目标平台为ios11.0
 - 使用更快的xml解析库pugixml代替tinyxml2
 - Downloader全平台统一实现，均基于curl

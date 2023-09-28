@@ -1477,7 +1477,7 @@ void ScrollPane::onTouchBegin(EventContext* context)
     _isHoldAreaDone = false;
     _velocity.setZero();
     _velocityScale = 1;
-    _lastMoveTime = clock();
+    _lastMoveTime = ::clock();
 }
 
 void ScrollPane::onTouchMove(EventContext* context)
@@ -1612,7 +1612,7 @@ void ScrollPane::onTouchMove(EventContext* context)
     }
 
     auto deltaTime = Director::getInstance()->getDeltaTime();
-    float elapsed = (clock() - _lastMoveTime) / (double)CLOCKS_PER_SEC;
+    float elapsed = (::clock() - _lastMoveTime) / (double)CLOCKS_PER_SEC;
     elapsed = elapsed * 60 - 1;
     if (elapsed > 1)
         _velocity = _velocity * pow(0.833f, elapsed);
@@ -1631,7 +1631,7 @@ void ScrollPane::onTouchMove(EventContext* context)
 
     _lastTouchPos = pt;
     _lastTouchGlobalPos = evt->getPosition();
-    _lastMoveTime = clock();
+    _lastMoveTime = ::clock();
 
     if (_overlapSize.width > 0)
         _xPos = clampf(-_container->getPositionX(), 0, _overlapSize.width);
@@ -1725,7 +1725,7 @@ void ScrollPane::onTouchEnd(EventContext* context)
     {
         if (!_inertiaDisabled)
         {
-            float elapsed = (clock() - _lastMoveTime) / (double)CLOCKS_PER_SEC;
+            float elapsed = (::clock() - _lastMoveTime) / (double)CLOCKS_PER_SEC;
             elapsed = elapsed * 60 - 1;
             if (elapsed > 1)
                 _velocity = _velocity * pow(0.833f, elapsed);

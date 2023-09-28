@@ -2,6 +2,7 @@
 #include "ImGuiTest.h"
 
 #include "ImGui/ImGuiPresenter.h"
+#include "SDFGen/SDFGen.h"
 
 USING_NS_AX;
 USING_NS_AX_EXT;
@@ -22,7 +23,9 @@ ImGuiTests::ImGuiTests()
 void ImGuiTest::onEnter()
 {
     TestCase::onEnter();
-
+#    if !defined(__ANDROID__)
+    SDFGen::getInstance()->open();
+#endif
     ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
     ImGuiPresenter::getInstance()->enableDPIScale();
     ImGuiPresenter::getInstance()->addRenderLoop("#test", AX_CALLBACK_0(ImGuiTest::onDrawImGui, this), this);
@@ -33,6 +36,9 @@ void ImGuiTest::onExit()
     ImGuiPresenter::getInstance()->removeRenderLoop("#test");
     ImGuiPresenter::getInstance()->clearFonts();
 
+#    if !defined(__ANDROID__)
+    SDFGen::getInstance()->close();
+#    endif
     ImGuiPresenter::destroyInstance();
 
     TestCase::onExit();

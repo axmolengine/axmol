@@ -9,7 +9,7 @@ Prerequisites
 On Windows:
 ------------
 
-* Make sure that you have installed `android-ndk-r19c` or later.
+* Make sure that you have installed `android-ndk-r23c` or later.
 * Install python3.7+(64bit) from https://www.python.org with `Add to 'PATH'` install option.
 * Install python dependices by pip.
 <pre>
@@ -30,10 +30,10 @@ On MAC:
     pip3 install PyYAML Cheetah3
 </pre>
     
-* Download NDK 64bit r19c or later from [Android NDK](https://developer.android.com/ndk/downloads/index.html)
+* Download NDK 64bit r23c or later from [Android NDK](https://developer.android.com/ndk/downloads/index.html)
 * Run
 <pre>
-    export ANDROID_NDK=/path/to/android-ndk-19c
+    export ANDROID_NDK=/path/to/android-ndk-r23c
     ./genbindings.py
 </pre>
 
@@ -50,9 +50,9 @@ On Ubuntu Linux 22.04 64bit
     sudo apt-get install python3-pip
     sudo pip3 install PyYAML Cheetah3
 </pre>
-* Download NDK 64bit r19c or later from [Android NDK](https://developer.android.com/ndk/downloads/index.html)
+* Download NDK 64bit r23c from [Android NDK](https://developer.android.com/ndk/downloads/index.html)
 * Go to "tools/tolua", Run
 <pre>
-    export ANDROID_NDK=/path/to/android-ndk-r19c
+    export ANDROID_NDK=/path/to/android-ndk-r23c
     python3 ./genbindings.py
 </pre>

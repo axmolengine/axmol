@@ -23,7 +23,7 @@
 #include "strutils.h"
 
 
-/* Mixing thread piority level */
+/* Mixing thread priority level */
 int RTPrioLevel{1};
 
 /* Allow reducing the process's RTTime limit for RTKit. */
@@ -156,7 +156,7 @@ std::vector<std::string> SearchDataFiles(const char *ext, const char *subdir)
     std::replace(path.begin(), path.end(), '/', '\\');
     DirectorySearch(path.c_str(), ext, &results);
 
-#if !defined(ALSOFT_UWP)
+#if !defined(ALSOFT_UWP) && !defined(_GAMING_XBOX)
     /* Search the local and global data dirs. */
     for(auto id : std::array{CSIDL_APPDATA, CSIDL_COMMON_APPDATA})
     {
@@ -437,7 +437,7 @@ namespace {
 bool SetRTPriorityPthread(int prio [[maybe_unused]])
 {
     int err{ENOTSUP};
-#if defined(HAVE_PTHREAD_SETSCHEDPARAM) && !defined(__OpenBSD__) && !defined(__EMSCRIPTEN__)
+#if defined(HAVE_PTHREAD_SETSCHEDPARAM) && !defined(__OpenBSD__)
     /* Get the min and max priority for SCHED_RR. Limit the max priority to
      * half, for now, to ensure the thread can't take the highest priority and
      * go rogue.

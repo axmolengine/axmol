@@ -207,9 +207,6 @@ if(APPLE)
         set_target_properties(${APP_NAME} PROPERTIES
                               MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/mac/Info.plist"
                               )
-        set_target_properties(${APP_NAME} PROPERTIES
-            LINK_FLAGS "-pagezero_size 10000 -image_base 100000000"
-        )
     elseif(TVOS)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/targets/tvos/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
@@ -222,9 +219,8 @@ if(APPLE)
         set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     endif()
 elseif(WINDOWS)
-    if((NOT _AX_USE_PREBUILT) AND (NOT WINRT))
-        ax_copy_target_dll(${APP_NAME})
-        ax_copy_lua_dlls(${APP_NAME})
+    if((NOT _AX_USE_PREBUILT))
+        ax_sync_target_dlls(${APP_NAME} LUA)
     endif()
 endif()
 
@@ -259,6 +255,4 @@ if (NOT DEFINED BUILD_ENGINE_DONE)
     ax_uwp_set_all_targets_deploy_min_version()
 endif()
 
-if (WASM)
-    ax_setup_wasm_app_config(${APP_NAME})
-endif()
+ax_setup_app_props(${APP_NAME})

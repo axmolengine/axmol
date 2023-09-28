@@ -66,10 +66,12 @@ public:
     static const int CacheTextureHeight;
     static const char* CMD_PURGE_FONTATLAS;
     static const char* CMD_RESET_FONTATLAS;
+    static void loadFontAtlas(std::string_view fontatlasFile, hlookup::string_map<FontAtlas*>& outAtlasMap);
     /**
      * @js ctor
      */
     FontAtlas(Font* theFont);
+    FontAtlas(Font* theFont, int atlasWidth, int atlasHeight, float scaleFactor = 1.0f);
     /**
      * @js NA
      * @lua NA
@@ -81,9 +83,13 @@ public:
 
     bool prepareLetterDefinitions(const std::u32string& utf16String);
 
+    const auto& getLetterDefinitions() const { return _letterDefinitions; }
+
     const std::unordered_map<unsigned int, Texture2D*>& getTextures() const { return _atlasTextures; }
 
-    void addNewPage();
+    virtual void addNewPage();
+
+    void addNewPageWithData(const uint8_t* data, size_t size);
 
     void setTexture(unsigned int slot, Texture2D* texture);
     Texture2D* getTexture(int slot);
@@ -118,6 +124,8 @@ public:
     void setAliasTexParameters();
 
 protected:
+    void initWithSettings(void* opaque /*simdjson::ondemand::document*/);
+
     void reset();
 
     void reinit();
@@ -137,9 +145,15 @@ protected:
 
     std::unordered_map<unsigned int, Texture2D*> _atlasTextures;
     std::unordered_map<char32_t, FontLetterDefinition> _letterDefinitions;
-    float _lineHeight           = 0.f;
+
     Font* _font                 = nullptr;
     FontFreeType* _fontFreeType = nullptr;
+
+    int _width         = 0;  // atlas width
+    int _height        = 0;  // atlas height
+    float _scaleFactor = 1.0f;
+
+    float _lineHeight = 0.f;
 
     // Dynamic GlyphCollection related stuff
     int _currentPage                  = -1;
@@ -147,13 +161,7 @@ protected:
     int _strideShift                  = 0;
     uint8_t* _currentPageData         = nullptr;
     int _currentPageDataSize          = 0;
-#if defined(AX_USE_METAL)
-    // Notes: 
-    // Metal backend doesn't support PixelFormat::LA8
-    // Currently we use RGBA for texture data upload
-    uint8_t* _currentPageDataRGBA = nullptr;
-    int _currentPageDataSizeRGBA  = 0;
-#endif
+
     float _currentPageOrigX = 0;
     float _currentPageOrigY = 0;
     int _letterPadding      = 0;

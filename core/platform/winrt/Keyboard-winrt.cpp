@@ -33,8 +33,12 @@ THE SOFTWARE.
 #include "base/Director.h"
 #include "base/EventDispatcher.h"
 
-using namespace ax;
-using namespace Platform;
+#include <winrt/Windows.System.h>
+#include <winrt/Windows.System.Threading.h>
+#include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.UI.Xaml.Controls.h>
+
+using namespace winrt;
 using namespace Windows::System;
 using namespace Windows::System::Threading;
 using namespace Windows::UI::Core;
@@ -212,7 +216,7 @@ KeyBoardWinRT::~KeyBoardWinRT()
 }
 
 
-void KeyBoardWinRT::ShowKeyboard(Platform::String^ text)
+void KeyBoardWinRT::ShowKeyboard(winrt::hstring const& text)
 {
     auto panel = ax::GLViewImpl::sharedOpenGLView()->getPanel();
     auto dispatcher = ax::GLViewImpl::sharedOpenGLView()->getDispatcher();
@@ -220,37 +224,31 @@ void KeyBoardWinRT::ShowKeyboard(Platform::String^ text)
     if (dispatcher && panel)
     {
         // run on main UI thread
-        dispatcher->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, ref new DispatchedHandler([this, text, panel]()
+        dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, [this, text, panel]()
         {
             if (m_textBox == nullptr)
             {
 				m_useInputMethod = false;
-                m_textBox = ref new TextBox();
-                m_textBox->Opacity = 0.0;
-                m_textBox->Width = 1;
-                m_textBox->Height = 1;
-                m_textBox->TextChanged += ref new TextChangedEventHandler(this, &KeyBoardWinRT::OnTextChanged);
-				m_textBox->TextCompositionStarted += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Xaml::Controls::TextBox^,
-					Windows::UI::Xaml::Controls::TextCompositionStartedEventArgs^>(this, &KeyBoardWinRT::OnTextCompositionStarted);
+                m_textBox = TextBox();
+                m_textBox.Opacity(0.0);
+                m_textBox.Width(1);
+                m_textBox.Height(1);
+                m_textBox.TextChanged(TextChangedEventHandler(this, &KeyBoardWinRT::OnTextChanged));
+				m_textBox.TextCompositionStarted(Windows::Foundation::TypedEventHandler<Windows::UI::Xaml::Controls::TextBox,
+					Windows::UI::Xaml::Controls::TextCompositionStartedEventArgs>(this, &KeyBoardWinRT::OnTextCompositionStarted));
 
-				m_textBox->TextCompositionEnded += ref new Windows::Foundation::TypedEventHandler<Windows::UI::Xaml::Controls::TextBox^,
-					Windows::UI::Xaml::Controls::TextCompositionEndedEventArgs^>(this, &KeyBoardWinRT::OnTextCompositionEnded);
-#if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
-                // Need to use InputScopeNameValue::Search to prevent auto-capitalize
-                m_textBox->InputScope = ref new InputScope();
-                auto n = m_textBox->InputScope->Names;
-                n->Append(ref new InputScopeName(InputScopeNameValue::Search));
-#endif
-                panel->Children->Append(m_textBox);
+				m_textBox.TextCompositionEnded(Windows::Foundation::TypedEventHandler<Windows::UI::Xaml::Controls::TextBox,
+					Windows::UI::Xaml::Controls::TextCompositionEndedEventArgs>(this, &KeyBoardWinRT::OnTextCompositionEnded));
+                panel.get().Children().Append(m_textBox);
             }
-            m_textBox->SelectionLength = 0;
-            m_textBox->SelectionStart = 32768;
-            m_textBox->Focus(FocusState::Programmatic);
-        }));
+            m_textBox.SelectionLength(0);
+            m_textBox.SelectionStart(32768);
+            m_textBox.Focus(FocusState::Programmatic);
+        });
     }
 }
 
-void KeyBoardWinRT::HideKeyboard(Platform::String^ text)
+void KeyBoardWinRT::HideKeyboard(winrt::hstring const& text)
 {
     auto panel = ax::GLViewImpl::sharedOpenGLView()->getPanel();
     auto dispatcher = ax::GLViewImpl::sharedOpenGLView()->getDispatcher();
@@ -258,14 +256,15 @@ void KeyBoardWinRT::HideKeyboard(Platform::String^ text)
     if (dispatcher && panel)
     {
         // run on main UI thread
-        dispatcher->RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, ref new DispatchedHandler([this, text, panel]()
+        dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal,
+                                  DispatchedHandler([this, text, panel]()
         {
             if (m_textBox != nullptr)
             {
                 unsigned int index;
-                if (panel->Children->IndexOf(m_textBox, &index))
+                if (panel.get().Children().IndexOf(m_textBox, index))
                 {
-                    panel->Children->RemoveAt(index);
+                    panel.get().Children().RemoveAt(index);
                 }
             }
             m_textBox = nullptr;
@@ -273,14 +272,14 @@ void KeyBoardWinRT::HideKeyboard(Platform::String^ text)
     }
 }
 
-void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventArgs^ args)
+void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventArgs const& args)
 {
     bool pressed = (type == WinRTKeyboardEventType::KeyPressed);
 
     // Is key repeats
-    bool repeat = pressed && args->KeyStatus.WasKeyDown;
+    bool repeat = pressed && args.KeyStatus().WasKeyDown;
 
-    int key = static_cast<int>(args->VirtualKey);
+    int key = static_cast<int>(args.VirtualKey());
     auto it = g_keyCodeMap.find(key);
     if (it != g_keyCodeMap.end())
     {
@@ -326,34 +325,35 @@ void KeyBoardWinRT::OnWinRTKeyboardEvent(WinRTKeyboardEventType type, KeyEventAr
     }
 }
 
-void KeyBoardWinRT::OnTextChanged(Platform::Object^ sender, TextChangedEventArgs^ args)
+void KeyBoardWinRT::OnTextChanged(const Windows::Foundation::IInspectable& sender, TextChangedEventArgs const& args)
 {
 	if (m_useInputMethod) {
 		return;
 	}
-    auto text = m_textBox->Text;
-    if (text)
+    auto text = m_textBox.Text();
+    if (!text.empty())
     {
         std::shared_ptr<ax::InputEvent> e(new ax::KeyboardEvent(AxmolKeyEvent::Text, text));
         ax::GLViewImpl::sharedOpenGLView()->QueueEvent(e);
-        m_textBox->Text = L"";
+        m_textBox.Text(L"");
     }
 }
 
-void KeyBoardWinRT::OnTextCompositionStarted(Windows::UI::Xaml::Controls::TextBox^, Windows::UI::Xaml::Controls::TextCompositionStartedEventArgs^ args)
+void KeyBoardWinRT::OnTextCompositionStarted(Windows::UI::Xaml::Controls::TextBox, Windows::UI::Xaml::Controls::TextCompositionStartedEventArgs const& args)
 {
 	m_useInputMethod = true;
 }
 
-void KeyBoardWinRT::OnTextCompositionEnded(Windows::UI::Xaml::Controls::TextBox^, Windows::UI::Xaml::Controls::TextCompositionEndedEventArgs^ args)
+void KeyBoardWinRT::OnTextCompositionEnded(Windows::UI::Xaml::Controls::TextBox,
+                                           Windows::UI::Xaml::Controls::TextCompositionEndedEventArgs const& args)
 {
 	m_useInputMethod = false;
-	auto text = m_textBox->Text;
-	if (text)
+	auto text = m_textBox.Text();
+	if (!text.empty())
 	{
 		std::shared_ptr<ax::InputEvent> e(new ax::KeyboardEvent(AxmolKeyEvent::Text, text));
 		ax::GLViewImpl::sharedOpenGLView()->QueueEvent(e);
-		m_textBox->Text = L"";
+		m_textBox.Text(L"");
 	}
 }
 

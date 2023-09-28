@@ -19,7 +19,8 @@ jobs:
         with:
           submodules: 'recursive'
       - uses: ilammy/msvc-dev-cmd@v1.12.1
-        with: 
+        with:
+          toolset: '14.37'
           arch: ${{ env.BUILD_ARCH }}
       - name: Build
         shell: pwsh
@@ -32,12 +33,13 @@ jobs:
         with:
           submodules: 'recursive'
       - uses: ilammy/msvc-dev-cmd@v1.12.1
-        with: 
+        with:
+          toolset: '14.37'
           arch: x64
           uwp: true
       - name: Build
         shell: pwsh
-        run: .\build.ps1 -p winuwp -a x64
+        run: .\build.ps1 -p winuwp -a x64 -xb '--config', 'Debug'
 
   build-linux:
     runs-on: ubuntu-latest
