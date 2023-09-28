@@ -33,7 +33,7 @@
 #      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
 #  -a: build arch: x86,x64,armv7,arm64
 #  -d: the build workspace, i.e project root which contains root CMakeLists.txt, empty use script run working directory aka cwd
-#  -cc: The C/C++ compiler toolchain: clang, msvc, gcc, mingw-gcc or empty use default installed on current OS
+#  -cc: The C/C++ compiler toolchain: clang, msvc, gcc(mingw) or empty use default installed on current OS
 #       msvc: msvc-120, msvc-141
 #       ndk: ndk-r16b, ndk-r16b+
 #  -xt: cross build tool, default: cmake, for android can be gradlew, can be path of cross build tool program
@@ -44,10 +44,10 @@
 #  -setupOnly: this param present, only execute step: setup 
 #  -configOnly: if this param present, will skip build step
 # support matrix
-#   | OS        |   Build targets     |  C/C++ compiler toolchain | Cross Build tool |
+#   | OS       |   Build targets      |  C/C++ compiler toolchain | Cross Build tool |
 #   +----------+----------------------+---------------------------+------------------|
-#   | Windows  |  win32,winuwp        | msvc,clang,mingw-gcc      | cmake            |
-#   | Linux    | linux,android        | ndk                       | cmake,gradle     |    
+#   | Windows  |  win32,winuwp        | msvc,clang,gcc(mingw)     | cmake            |
+#   | Linux    | linux,android        | gcc,ndk                   | cmake,gradle     |
 #   | macOS    | osx,ios,tvos,watchos | xcode                     | cmake            |
 #
 param(
@@ -167,7 +167,7 @@ $b1k = [build1k]::new()
 # x.y.z~x2.y2.z2 : range
 $manifest = @{
     # C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.36.32532\vc_redist.x64.exe
-    msvc         = '14.36.32532';
+    msvc         = '14.37';
     ndk          = 'r23c';
     xcode        = '13.0.0~14.2.0'; # range
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
@@ -1025,7 +1025,7 @@ function validHostAndToolchain() {
     $validTable = @{
         'win32'   = @{
             'host'      = @{'windows' = $True };
-            'toolchain' = @{'msvc' = $True; 'clang' = $True; 'mingw-gcc' = $True };
+            'toolchain' = @{'msvc' = $True; 'clang' = $True; 'gcc' = $True };
         };
         'winuwp'  = @{
             'host'      = @{'windows' = $True };
@@ -1085,8 +1085,10 @@ if($BUILD_TARGET -eq 'win32' -or $BUILD_TARGET -eq 'winuwp') {
 
 if ($BUILD_TARGET -eq 'win32') {
     $nsis_prog = setup_nsis
-    if ($TOOLCHAIN_NAME -eq 'clang') {
+    if ($TOOLCHAIN_NAME -eq 'gcc' -or $TOOLCHAIN_NAME -eq 'clang') {
         $ninja_prog = setup_ninja
+    }
+    if ($TOOLCHAIN_NAME -eq 'clang') {
         $null = setup_llvm
     }
 }
@@ -1190,11 +1192,15 @@ if (!$setupOnly) {
         $build_tool = (Get-Command $options.xt).Source
         $build_tool_dir = Split-Path $build_tool -Parent
         Set-Location $build_tool_dir
-        if ($optimize_flag -eq 'Debug') {
-            & $build_tool assembleDebug $CONFIG_ALL_OPTIONS | Out-Host
-        }
-        else {
-            & $build_tool assembleRelease $CONFIG_ALL_OPTIONS | Out-Host
+        if (!$configOnly) {
+            if ($optimize_flag -eq 'Debug') {
+                & $build_tool assembleDebug $CONFIG_ALL_OPTIONS | Out-Host
+            }
+            else {
+                & $build_tool assembleRelease $CONFIG_ALL_OPTIONS | Out-Host
+            }
+        } else {
+            & $build_tool tasks
         }
         Set-Location $storedLocation
     } 
@@ -1288,3 +1294,4 @@ if (!$setupOnly) {
 
     Set-Location $stored_cwd
 }
+
