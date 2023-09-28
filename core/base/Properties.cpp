@@ -427,7 +427,7 @@ signed char Properties::readChar()
 {
     if (eof())
         return EOF;
-    return _data->_bytes[(*_dataIdx)++];
+    return static_cast<axstd::byte_buffer&>(*_data)[(*_dataIdx)++];
 }
 
 char* Properties::readLine(char* output, int num)
@@ -439,9 +439,9 @@ char* Properties::readLine(char* output, int num)
     const ssize_t dataIdx = *_dataIdx;
     int i;
 
-    for (i = 0; i < num && dataIdx + i < _data->_size; i++)
+    for (i = 0; i < num && dataIdx + i < _data->size(); i++)
     {
-        auto c = _data->_bytes[dataIdx + i];
+        auto c = static_cast<axstd::byte_buffer&>(*_data)[dataIdx + i];
         if (c == '\n')
             break;
         output[i] = c;
@@ -464,7 +464,7 @@ bool Properties::seekFromCurrent(int offset)
 
 bool Properties::eof()
 {
-    return (*_dataIdx >= _data->_size);
+    return (*_dataIdx >= _data->size());
 }
 
 void Properties::skipWhiteSpace()

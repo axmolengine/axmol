@@ -37,6 +37,7 @@ THE SOFTWARE.
 #include "renderer/backend/Types.h"
 #include "math/Mat4.h"
 #include "math/Mat3.h"
+#include "base/axstd.h"
 
 /** @file ccUtils.h
 Misc free functions
@@ -412,7 +413,7 @@ AX_DLL std::string urlDecode(std::string_view st);
  *
  @since axmol-1.0.0
  */
-AX_DLL std::string base64Encode(std::string_view s);
+AX_DLL std::string base64Encode(std::span<uint8_t> s);
 
 /**
  * Decodes a 64base encoded buffer
@@ -420,7 +421,7 @@ AX_DLL std::string base64Encode(std::string_view s);
  *
  @since axmol-1.0.0
  */
-AX_DLL std::string base64Decode(std::string_view s);
+AX_DLL yasio::byte_buffer base64Decode(std::string_view s);
 
 /**
  * Encodes bytes into a 64base encoded memory with terminating '\0' character.
