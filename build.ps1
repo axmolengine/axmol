@@ -37,7 +37,7 @@ param(
     [switch]$forceConfig
 )
 
-$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null }
+$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null; dll = $false }
 
 $optName = $null
 foreach ($arg in $args) {
