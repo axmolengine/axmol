@@ -36,7 +36,7 @@ Data::Data()
     AXLOGINFO("In the empty constructor of Data.");
 }
 
-Data::Data(Data&& other) : _impl(std::move(other))
+Data::Data(Data&& other) : _impl(std::move(other._impl))
 {
     AXLOGINFO("In the move constructor of Data.");
 }
@@ -67,14 +67,9 @@ Data& Data::operator=(Data&& other)
     if (this != &other)
     {
         AXLOGINFO("In the move assignment of Data.");
-        move(other);
+        this->_impl = std::move(other._impl);
     }
     return *this;
-}
-
-void Data::move(Data& other)
-{
-    this->_impl = std::move(other._impl);
 }
 
 bool Data::isNull() const
