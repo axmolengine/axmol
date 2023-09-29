@@ -371,7 +371,7 @@ private:
   { // free all storage
     if (_Myfirst)
     {
-      _Alloc::deallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst));
+      _Alloc::reallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst), 0);
       _Myfirst = _Mylast = _Myend = nullptr;
     }
   }
