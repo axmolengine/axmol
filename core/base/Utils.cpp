@@ -791,9 +791,9 @@ std::string urlDecode(std::string_view st)
     return decoded;
 }
 
-AX_DLL std::string base64Encode(std::span<uint8_t> s)
+AX_DLL std::string base64Encode(const void* in, size_t inlen)
 {
-    size_t n = ax::base64::encoded_size(s.size());
+    size_t n = ax::base64::encoded_size(inlen);
     if (n > 0)
     {
         std::string ret;
@@ -806,10 +806,10 @@ AX_DLL std::string base64Encode(std::span<uint8_t> s)
          * 
          */
 #if _AX_HAS_CXX23
-        ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::encode(p, s.data(), s.length()); });
+        ret.resize_and_overwrite(n, [in, inlen](char* out, size_t) { return ax::base64::encode(out, in, inlen); });
 #else
         ret.resize(n);
-        ret.resize(ax::base64::encode(&ret.front(), s.data(), s.size()));
+        ret.resize(ax::base64::encode(&ret.front(), in, inlen));
 #endif
 
         return ret;
