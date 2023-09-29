@@ -157,8 +157,6 @@ public:
     unsigned char* takeBuffer(ssize_t* size);
 
 private:
-    void move(Data& other);
-
     mutable axstd::byte_buffer _impl;
 };
 
