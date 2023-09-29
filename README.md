@@ -77,7 +77,7 @@ media foundation `IMFMediaEngine`, the `MediaPlayer` support all native platform
   - Some links to third party libs which support axmol too.
 - ['Upstream-Version-License'](extensions/README.md) Extensions
   - Extensions license overview for easier publishing of your commercial apps based on axmol framework.
-  - Spine-3.8 support
+  - Spine support
   - ```FairyGUI``` support
   - DragonBones support
   - Live2D support
