@@ -411,9 +411,15 @@ AX_DLL std::string urlDecode(std::string_view st);
  * Encodes bytes into a 64base buffer
  * @returns base64 encoded string
  *
- @since axmol-1.0.0
+ @since axmol-2.1.0
  */
-AX_DLL std::string base64Encode(std::span<uint8_t> s);
+AX_DLL std::string base64Encode(const void* in, size_t inlen);
+
+template<typename _Ty, size_t _Extent = std::dynamic_extent>
+inline std::string base64Encode(std::span<_Ty, _Extent> in)
+{
+    return base64Encode(in.data(), in.size_bytes());
+}
 
 /**
  * Decodes a 64base encoded buffer
