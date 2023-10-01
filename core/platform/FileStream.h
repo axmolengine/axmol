@@ -73,6 +73,7 @@ public:
     int read(void* buf, unsigned int size) const override;
     int write(const void* buf, unsigned int size) const override;
     int64_t size() const override;
+    int64_t tell() const override;
     bool resize(int64_t size) const override;
     bool isOpen() const override;
 
