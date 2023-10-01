@@ -356,7 +356,7 @@ void ProgramGL::computeUniformInfos()
     glGetProgramiv(_program, GL_ACTIVE_UNIFORMS, &numOfUniforms);
     for (GLint i = 0; i < numOfUniforms; ++i)
     {
-        buffer.resize_fit(MAX_UNIFORM_NAME_LENGTH + 1);
+        buffer.resize(MAX_UNIFORM_NAME_LENGTH + 1);
         glGetActiveUniform(_program, i, static_cast<GLint>(buffer.size()), &nameLen, &uniform.count, &uniform.type,
                            buffer.data());
 

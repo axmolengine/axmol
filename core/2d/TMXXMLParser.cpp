@@ -444,10 +444,10 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
             Vec2 layerSize      = layer->_layerSize;
-            int tilesAmount     = static_cast<int>(layerSize.width * layerSize.height);
+            auto tilesAmount     = static_cast<size_t>(layerSize.width * layerSize.height);
 
             layer->_tiles =
-                (uint32_t*)axstd::byte_buffer{tilesAmount * sizeof(uint32_t), 0, std::true_type{}}.release_pointer();
+                (uint32_t*)axstd::pod_vector<uint32_t>(tilesAmount, 0U).release_pointer();
         }
         else if (encoding == "base64")
         {
@@ -740,8 +740,8 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             }
 
             // 32-bits per gid
-            axstd::byte_buffer buffer{gidTokens.size() * 4, std::true_type{}};
-            uint32_t* bufferPtr = reinterpret_cast<uint32_t*>(buffer.data());
+            axstd::pod_vector<uint32_t> buffer(gidTokens.size());
+            uint32_t* bufferPtr = buffer.data();
             for (const auto& gidToken : gidTokens)
             {
                 auto tileGid = (uint32_t)strtoul(gidToken.c_str(), nullptr, 10);
@@ -749,7 +749,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                 bufferPtr++;
             }
 
-            layer->_tiles = reinterpret_cast<uint32_t*>(buffer.release_pointer());
+            layer->_tiles = buffer.release_pointer();
 
             tmxMapInfo->setCurrentString("");
         }

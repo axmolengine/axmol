@@ -31,8 +31,9 @@ SOFTWARE.
 #include <stddef.h>
 #include <string.h>
 #include <stdint.h>
-#include <type_traits>
 #include <stdexcept>
+#include <utility>
+#include "yasio/type_traits.hpp"
 
 #define _YASIO_VERIFY_RANGE(cond, mesg)                 \
   do                                                    \
@@ -56,9 +57,44 @@ struct is_byte_type {
   static const bool value = std::is_same<_Elem, char>::value || std::is_same<_Elem, unsigned char>::value;
 };
 
-template <typename _Elem, enable_if_t<std::is_integral<_Elem>::value, int> = 0>
+template <typename _Elem, enable_if_t<std::is_trivially_copyable<_Elem>::value, int> = 0>
 struct default_buffer_allocator {
   static _Elem* reallocate(void* block, size_t /*size*/, size_t new_size) { return static_cast<_Elem*>(::realloc(block, new_size * sizeof(_Elem))); }
+};
+template <typename _Elem, enable_if_t<std::is_trivially_copyable<_Elem>::value, int> = 0>
+struct std_buffer_allocator {
+  static _Elem* reallocate(void* block, size_t size, size_t new_size)
+  {
+    if (!block)
+      return new (std::nothrow) _Elem[new_size];
+    void* new_block = nullptr;
+    if (new_size)
+    {
+      if (new_size <= size)
+        return block;
+      new_block = new (std::nothrow) _Elem[new_size];
+      if (new_block)
+        memcpy(new_block, block, size);
+    }
+    delete[] (_Elem*)(block);
+    return (_Elem*)new_block;
+  }
+};
+template <typename _Ty, bool = std::is_trivially_constructible<_Ty>::value /* trivially_constructible */>
+struct construct_helper {
+  template <typename... Args>
+  static _Ty* construct_at(_Ty* p, Args&&... args)
+  {
+    return ::new (static_cast<void*>(p)) _Ty{std::forward<Args>(args)...};
+  }
+};
+template <typename _Ty /* not trivially_constructible */>
+struct construct_helper<_Ty, false> {
+  template <typename... Args>
+  static _Ty* construct_at(_Ty* p, Args&&... args)
+  {
+    return ::new (static_cast<void*>(p)) _Ty(std::forward<Args>(args)...);
+  }
 };
 } // namespace yasio
 

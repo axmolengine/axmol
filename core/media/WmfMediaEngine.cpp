@@ -498,7 +498,7 @@ done:
 void WmfMediaEngine::HandleVideoSample(const uint8_t* buf, size_t len)
 {
     std::unique_lock<std::mutex> lck(m_frameBuffer1Mtx);
-    m_frameBuffer1.assign(buf, buf + len, std::true_type{});
+    m_frameBuffer1.assign(buf, buf + len);
 }
 
 void WmfMediaEngine::ClearPendingBuffers()

@@ -335,7 +335,7 @@ bool DeviceInfoGL::init()
     glGetIntegerv(GL_NUM_COMPRESSED_TEXTURE_FORMATS, &numFormats);
     if (numFormats > 0)
     {
-        formats.resize_fit(numFormats);
+        formats.resize(numFormats);
         glGetIntegerv(GL_COMPRESSED_TEXTURE_FORMATS, formats.data());
 
         const auto textureCompressions = std::set<int>{formats.begin(), formats.end()};

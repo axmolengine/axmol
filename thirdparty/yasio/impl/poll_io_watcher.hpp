@@ -6,9 +6,8 @@
 // Copyright (c) 2012-2023 HALX99 (halx99 at live dot com)
 #ifndef YASIO__POLL_IO_WATCHER_HPP
 #define YASIO__POLL_IO_WATCHER_HPP
-#include <vector>
+#include "yasio/pod_vector.hpp"
 #include "yasio/impl/socket.hpp"
-#include "yasio/impl/pod_vector.hpp"
 #include "yasio/impl/select_interrupter.hpp"
 
 namespace yasio
@@ -92,7 +91,7 @@ protected:
     {
       auto events = add_events & ~remove_events;
       if (events)
-        fdset.emplace_back(pollfd{fd, static_cast<short>(events), 0});
+        fdset.push_back(pollfd{fd, static_cast<short>(events), static_cast<short>(0)});
     }
   }
 
