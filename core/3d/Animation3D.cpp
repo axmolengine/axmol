@@ -100,6 +100,8 @@ Animation3D::Curve::~Curve()
     AX_SAFE_RELEASE_NULL(scaleCurve);
 }
 
+//constexpr bool kkk = std::is_trivially_copyable<Quaternion>::value;
+
 bool Animation3D::init(const Animation3DData& data)
 {
     _duration = data._totalTime;

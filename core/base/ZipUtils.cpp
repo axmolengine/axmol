@@ -319,7 +319,8 @@ int ZipUtils::inflateGZipFile(const char* path, unsigned char** out)
     }
 
     /* 512k initial decompress buffer */
-    yasio::byte_buffer buffer{512};
+    yasio::byte_buffer buffer;
+    buffer.reserve(512);
 
     uint8_t readBuffer[512];
 
@@ -474,7 +475,7 @@ int ZipUtils::inflateCCZBuffer(const unsigned char* buffer, ssize_t bufferLen, u
         return -1;
     }
 
-    axstd::byte_buffer outBuffer{len, std::true_type{}};
+    axstd::byte_buffer outBuffer(len);
 
     unsigned long destlen = len;
     size_t source         = (size_t)buffer + sizeof(*header);

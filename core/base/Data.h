@@ -42,8 +42,6 @@ NS_AX_BEGIN
 
 class AX_DLL Data
 {
-    friend class Properties;
-
 public:
 
     /* stl compatible */
