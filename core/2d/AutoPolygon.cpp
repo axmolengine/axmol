@@ -643,7 +643,7 @@ TrianglesCommand::Triangles AutoPolygon::triangulate(const std::vector<Vec2>& po
                 // vert does not exist yet, so we need to create a new one,
                 auto c4b         = Color4B::WHITE;
                 auto t2f         = Tex2F(0, 0);  // don't worry about tex coords now, we calculate that later
-                verts.emplace_back(V3F_C4B_T2F{v3, c4b, t2f});
+                verts.push_back(V3F_C4B_T2F{v3, c4b, t2f});
                 indices[idx++] = vdx++;;
             }
         }
