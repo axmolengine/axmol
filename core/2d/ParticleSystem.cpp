@@ -645,7 +645,8 @@ bool ParticleSystem::initWithDictionary(const ValueMap& dictionary, std::string_
                         // For android, we should retain it in VolatileTexture::addImage which invoked in
                         // Director::getInstance()->getTextureCache()->addUIImage()
                         image     = new Image();
-                        bool isOK = image->initWithImageData(deflated.release_pointer(), deflated.size(), true);
+                        const auto imageDataLen = deflated.size();
+                        bool isOK = image->initWithImageData(deflated.release_pointer(), imageDataLen, true);
                         AXASSERT(isOK, "CCParticleSystem: error init image with Data");
                         AX_BREAK_IF(!isOK);
 

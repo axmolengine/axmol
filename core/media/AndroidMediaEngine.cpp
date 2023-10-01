@@ -130,7 +130,7 @@ void AndroidMediaEngine::handleVideoSample(const uint8_t* buf,
                                            int videoY)
 {
     std::unique_lock<std::mutex> lck(_frameBuffer1Mtx);
-    _frameBuffer1.assign(buf, buf + len, std::true_type{});
+    _frameBuffer1.assign(buf, buf + len);
     _outputDim.set(outputX, outputY);
     _videoDim.set(videoX, videoY);
 }
