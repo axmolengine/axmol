@@ -23,18 +23,18 @@ void* VlcMediaEngine::libvlc_video_lock(void* data, void** p_pixels)
     mediaEngine->_frameBuffer1Mtx.lock();
     if constexpr (VLC_OUTPUT_FORMAT == ax::MEVideoPixelFormat::NV12)
     {
-        outputBuffer.resize_fit(bufferDim.x * bufferDim.y + (bufferDim.x * bufferDim.y >> 1));  // NV12
+        outputBuffer.resize(bufferDim.x * bufferDim.y + (bufferDim.x * bufferDim.y >> 1));  // NV12
         p_pixels[0] = outputBuffer.data();
         p_pixels[1] = outputBuffer.data() + (bufferDim.x * bufferDim.y);
     }
     else if constexpr (VLC_OUTPUT_FORMAT == ax::MEVideoPixelFormat::YUY2)
     {
-        outputBuffer.resize_fit(bufferDim.x * bufferDim.y + ((bufferDim.x >> 1) * bufferDim.y * 4));  // YUY2
+        outputBuffer.resize(bufferDim.x * bufferDim.y + ((bufferDim.x >> 1) * bufferDim.y * 4));  // YUY2
         p_pixels[0] = outputBuffer.data();
     }
     else
     {
-        outputBuffer.resize_fit(bufferDim.x * bufferDim.y * 4);  // RGBA32
+        outputBuffer.resize(bufferDim.x * bufferDim.y * 4);  // RGBA32
         p_pixels[0] = outputBuffer.data();
     }
     return nullptr;
