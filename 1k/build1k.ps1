@@ -730,57 +730,59 @@ function setup_android_sdk() {
         $ndk_ver = $ndk_ver.Substring(0, $ndk_ver.Length - 1)
     }
 
-    $sdk_root_envs = @('ANDROID_HOME', 'ANDROID_SDK_ROOT')
+    $my_sdk_root = Join-Path $prefix 'adt/sdk'
+
+    $sdk_dirs = @("$env:ANDROID_HOME", "$env:ANDROID_SDK_ROOT", $my_sdk_root)
 
     $ndk_minor_base = [int][char]'a'
     
     # looking up require ndk installed in exists sdk roots
     $sdk_root = $null
-    foreach ($sdk_root_env in $sdk_root_envs) {
-        $sdk_dir = [Environment]::GetEnvironmentVariable($sdk_root_env)
-        $b1k.println("Looking require $ndk_ver$IsGraterThan in env:$sdk_root_env=$sdk_dir")
-        if ("$sdk_dir" -ne '') {
-            $sdk_root = $sdk_dir
-            $ndk_root = $null
+    foreach ($sdk_dir in $sdk_dirs) {
+        if (!$sdk_dir -or !(Test-Path $sdk_dir -PathType Container)) {
+            continue
+        }
+        $b1k.println("Looking require $ndk_ver$IsGraterThan in $sdk_dir")
+        $sdk_root = $sdk_dir
+        $ndk_root = $null
 
-            $ndk_major = ($ndk_ver -replace '[^0-9]', '')
-            $ndk_minor_off = "$ndk_major".Length + 1
-            $ndk_minor = if ($ndk_minor_off -lt $ndk_ver.Length) { "$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)" } else { '0' }
-            $ndk_rev_base = "$ndk_major.$ndk_minor"
+        $ndk_major = ($ndk_ver -replace '[^0-9]', '')
+        $ndk_minor_off = "$ndk_major".Length + 1
+        $ndk_minor = if ($ndk_minor_off -lt $ndk_ver.Length) { "$([int][char]$ndk_ver.Substring($ndk_minor_off) - $ndk_minor_base)" } else { '0' }
+        $ndk_rev_base = "$ndk_major.$ndk_minor"
 
-            $ndk_parent = Join-Path $sdk_dir 'ndk'
-            if (!$b1k.isdir($ndk_parent)) {
-                continue
-            }
+        $ndk_parent = Join-Path $sdk_dir 'ndk'
+        if (!$b1k.isdir($ndk_parent)) {
+            continue
+        }
 
-            # find ndk in sdk
-            $ndks = [ordered]@{}
-            $ndk_rev_max = '0.0'
-            foreach ($item in $(Get-ChildItem -Path "$ndk_parent")) {
-                $ndkDir = $item.FullName
-                $sourceProps = "$ndkDir/source.properties"
-                if ($b1k.isfile($sourceProps)) {
-                    $verLine = $(Get-Content $sourceProps | Select-Object -Index 1)
-                    $ndk_rev = $($verLine -split '=').Trim()[1].split('.')[0..1] -join '.'
-                    $ndks.Add($ndk_rev, $ndkDir)
-                    if ($ndk_rev_max -le $ndk_rev) {
-                        $ndk_rev_max = $ndk_rev
-                    }
+        # find ndk in sdk
+        $ndks = [ordered]@{}
+        $ndk_rev_max = '0.0'
+        foreach ($item in $(Get-ChildItem -Path "$ndk_parent")) {
+            $ndkDir = $item.FullName
+            $sourceProps = "$ndkDir/source.properties"
+            if ($b1k.isfile($sourceProps)) {
+                $verLine = $(Get-Content $sourceProps | Select-Object -Index 1)
+                $ndk_rev = $($verLine -split '=').Trim()[1].split('.')[0..1] -join '.'
+                $ndks.Add($ndk_rev, $ndkDir)
+                if ($ndk_rev_max -le $ndk_rev) {
+                    $ndk_rev_max = $ndk_rev
                 }
             }
-            if ($IsGraterThan) {
-                if ($ndk_rev_max -ge $ndk_rev_base) {
-                    $ndk_root = $ndks[$ndk_rev_max]
-                }
+        }
+        if ($IsGraterThan) {
+            if ($ndk_rev_max -ge $ndk_rev_base) {
+                $ndk_root = $ndks[$ndk_rev_max]
             }
-            else {
-                $ndk_root = $ndks[$ndk_rev_base]
-            }
+        }
+        else {
+            $ndk_root = $ndks[$ndk_rev_base]
+        }
 
-            if ($null -ne $ndk_root) {
-                $b1k.println("Found $ndk_root in $sdk_root ...")
-                break
-            }
+        if ($null -ne $ndk_root) {
+            $b1k.println("Found $ndk_root in $sdk_root ...")
+            break
         }
     }
 
