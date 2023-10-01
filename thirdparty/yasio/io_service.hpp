@@ -1089,7 +1089,7 @@ public:
   */
   int write(transport_handle_t thandle, const void* buf, size_t len, completion_cb_t completion_handler = nullptr)
   {
-    return write(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len, std::true_type{}}, std::move(completion_handler));
+    return write(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len}, std::move(completion_handler));
   }
   YASIO__DECL int write(transport_handle_t thandle, sbyte_buffer buffer, completion_cb_t completion_handler = nullptr);
   YASIO__DECL int forward(transport_handle_t thandle, const void* buf, size_t len, completion_cb_t completion_handler);
@@ -1103,7 +1103,7 @@ public:
    */
   int write_to(transport_handle_t thandle, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t completion_handler = nullptr)
   {
-    return write_to(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len, std::true_type{}}, to, std::move(completion_handler));
+    return write_to(thandle, sbyte_buffer{(const char*)buf, (const char*)buf + len}, to, std::move(completion_handler));
   }
   YASIO__DECL int write_to(transport_handle_t thandle, sbyte_buffer buffer, const ip::endpoint& to, completion_cb_t completion_handler = nullptr);
   YASIO__DECL int forward_to(transport_handle_t thandle, const void* buf, size_t len, const ip::endpoint& to, completion_cb_t completion_handler);

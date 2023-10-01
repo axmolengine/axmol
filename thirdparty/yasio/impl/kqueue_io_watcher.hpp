@@ -9,11 +9,10 @@
 #include <sys/types.h>
 #include <sys/event.h>
 #include <sys/time.h>
-#include <vector>
 #include <chrono>
 #include <map>
+#include "yasio/pod_vector.hpp"
 #include "yasio/impl/socket.hpp"
-#include "yasio/impl/pod_vector.hpp"
 #include "yasio/impl/select_interrupter.hpp"
 
 #if defined(__NetBSD__) && __NetBSD_Version__ < 999001500

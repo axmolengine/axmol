@@ -266,6 +266,7 @@ public:
 
   bool eof() const { return ptr_ == last_; }
 
+protected:
   // will throw std::out_of_range
   const char* consume(size_t size)
   {
@@ -305,7 +306,7 @@ public:
       auto size = fin.tellg();
       if (size > 0)
       {
-        blob_.resize_fit(static_cast<size_t>(size));
+        blob_.resize(static_cast<size_t>(size));
         fin.seekg(0, std::ios_base::beg);
         fin.read(blob_.data(), blob_.size());
         this->reset(blob_.data(), static_cast<int>(blob_.size()));

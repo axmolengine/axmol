@@ -216,9 +216,9 @@ static std::string getUriStringFromArgs(ArgType* args)
     return {};
 }
 
-static std::string getDataURI(std::string_view data, std::string_view mime_type)
+static std::string getDataURI(const ax::Data& data, std::string_view mime_type)
 {
-    auto encodedData = utils::base64Encode(data);
+    auto encodedData = utils::base64Encode(std::span{data.getBytes(), data.getBytes() + data.getSize()});
     return std::string{"data:"}.append(mime_type).append(";base64,").append(utils::urlEncode(encodedData));
 }
 
@@ -669,9 +669,7 @@ void WebViewImpl::loadData(const Data& data,
 {
     if (_createSucceeded)
     {
-        const std::string dataString(reinterpret_cast<char*>(data.getBytes()),
-                                     static_cast<unsigned int>(data.getSize()));
-        const auto url = getDataURI(dataString, MIMEType);
+        const auto url = getDataURI(data, MIMEType);
         _systemWebControl->loadURL(url, false);
     }
 }

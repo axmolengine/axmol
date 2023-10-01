@@ -46,11 +46,6 @@ namespace yasio
 {
 namespace detail
 {
-template <typename _Ty>
-struct aligned_storage_size {
-  static const size_t value = sizeof(typename std::aligned_storage<sizeof(_Ty)>::type);
-};
-
 class object_pool {
 #if defined(_DEBUG)
   typedef struct free_link_node {

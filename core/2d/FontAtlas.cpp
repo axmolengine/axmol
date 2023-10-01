@@ -61,7 +61,7 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_ma
         size_t size() const { return this->yasio::sbyte_buffer::size(); }
         void resize(size_t size)
         {
-            this->yasio::sbyte_buffer::resize_fit(size + SIMDJSON_PADDING);
+            this->yasio::sbyte_buffer::resize(size + SIMDJSON_PADDING);
             this->yasio::sbyte_buffer::data()[size] = '\0';
         }
 

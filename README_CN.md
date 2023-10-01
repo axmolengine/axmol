@@ -74,7 +74,7 @@
 - 使用更快的xml解析库pugixml代替tinyxml2
 - Downloader全平台统一实现，均基于curl
 - 全平台统一使用XML SAX解析plist文件, 移除Apple平台的实现
-- Spine 3.8支持
+- Spine支持
 - 新增FairyGUI支持
 - 新增硬件压缩纹理格式ASTC 4x4/6x6/8x8支持，支持软解
 - 新增硬件压缩纹理格式ETC2 RGB/RGBA支持，支持软解

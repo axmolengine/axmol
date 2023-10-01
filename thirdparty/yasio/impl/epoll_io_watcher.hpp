@@ -9,8 +9,8 @@
 #include <vector>
 #include <chrono>
 #include <map>
+#include "yasio/pod_vector.hpp"
 #include "yasio/impl/socket.hpp"
-#include "yasio/impl/pod_vector.hpp"
 #include "yasio/impl/select_interrupter.hpp"
 
 #if !defined(_WIN32)

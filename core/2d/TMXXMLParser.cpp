@@ -444,13 +444,10 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
             Vec2 layerSize      = layer->_layerSize;
-            int tilesAmount     = static_cast<int>(layerSize.width * layerSize.height);
+            auto tilesAmount     = static_cast<size_t>(layerSize.width * layerSize.height);
 
-            uint32_t* tiles = (uint32_t*)malloc(tilesAmount * sizeof(uint32_t));
-            // set all value to 0
-            memset(tiles, 0, tilesAmount * sizeof(int));
-
-            layer->_tiles = tiles;
+            layer->_tiles =
+                (uint32_t*)axstd::pod_vector<uint32_t>(tilesAmount, 0U).release_pointer();
         }
         else if (encoding == "base64")
         {
@@ -690,10 +687,8 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
             auto currentString = tmxMapInfo->getCurrentString();
 
-            unsigned char* buffer;
-            auto len = utils::base64Decode((unsigned char*)currentString.data(), (unsigned int)currentString.length(),
-                                           &buffer);
-            if (!buffer)
+            auto buffer = utils::base64Decode(currentString);
+            if (buffer.empty())
             {
                 AXLOG("axmol: TiledMap: decode data error");
                 return;
@@ -701,36 +696,30 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
 
             if (tmxMapInfo->getLayerAttribs() & (TMXLayerAttribGzip | TMXLayerAttribZlib))
             {
-                unsigned char* deflated = nullptr;
                 Vec2 s                  = layer->_layerSize;
                 // int sizeHint = s.width * s.height * sizeof(uint32_t);
                 ssize_t sizeHint = s.width * s.height * sizeof(unsigned int);
 
-                ssize_t AX_UNUSED inflatedLen = ZipUtils::inflateMemoryWithHint(buffer, len, &deflated, sizeHint);
-                AXASSERT(inflatedLen == sizeHint, "inflatedLen should be equal to sizeHint!");
+                buffer = ZipUtils::decompressGZ(std::span{buffer}, sizeHint);
+                AXASSERT(buffer.size() == sizeHint, "inflatedLen should be equal to sizeHint!");
 
-                free(buffer);
-                buffer = nullptr;
-
-                if (!deflated)
+                if (buffer.empty())
                 {
                     AXLOG("axmol: TiledMap: inflate data error");
                     return;
                 }
 
-                layer->_tiles = reinterpret_cast<uint32_t*>(deflated);
+                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.release_pointer());
             }
             else
             {
-                layer->_tiles = reinterpret_cast<uint32_t*>(buffer);
+                layer->_tiles = reinterpret_cast<uint32_t*>(buffer.release_pointer());
             }
 
             tmxMapInfo->setCurrentString("");
         }
         else if (tmxMapInfo->getLayerAttribs() & TMXLayerAttribCSV)
         {
-            unsigned char* buffer;
-
             TMXLayerInfo* layer = tmxMapInfo->getLayers().back();
 
             tmxMapInfo->setStoringCharacters(false);
@@ -751,14 +740,8 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
             }
 
             // 32-bits per gid
-            buffer = (unsigned char*)malloc(gidTokens.size() * 4);
-            if (!buffer)
-            {
-                AXLOG("axmol: TiledMap: CSV buffer not allocated.");
-                return;
-            }
-
-            uint32_t* bufferPtr = reinterpret_cast<uint32_t*>(buffer);
+            axstd::pod_vector<uint32_t> buffer(gidTokens.size());
+            uint32_t* bufferPtr = buffer.data();
             for (const auto& gidToken : gidTokens)
             {
                 auto tileGid = (uint32_t)strtoul(gidToken.c_str(), nullptr, 10);
@@ -766,7 +749,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
                 bufferPtr++;
             }
 
-            layer->_tiles = reinterpret_cast<uint32_t*>(buffer);
+            layer->_tiles = buffer.release_pointer();
 
             tmxMapInfo->setCurrentString("");
         }

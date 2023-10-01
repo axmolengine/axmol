@@ -205,11 +205,9 @@ void captureScreen(std::function<void(bool, std::string_view)> afterCap, std::st
         AsyncTaskPool::getInstance()->enqueue(
             AsyncTaskPool::TaskType::TASK_IO,
             [_afterCap = std::move(_afterCap), image = std::move(image), _outfile = std::move(_outfile)]() mutable {
-                bool ok = image->saveToFile(_outfile);
-                Director::getInstance()->getScheduler()->runOnAxmolThread(
-                    [ok, _afterCap = std::move(_afterCap), _outfile = std::move(_outfile)] {
-                        _afterCap(ok, _outfile);
-                    });
+            bool ok = image->saveToFile(_outfile);
+            Director::getInstance()->getScheduler()->runOnAxmolThread(
+                [ok, _afterCap = std::move(_afterCap), _outfile = std::move(_outfile)] { _afterCap(ok, _outfile); });
             });
     });
 }
@@ -431,7 +429,7 @@ std::string computeDigest(std::string_view data, std::string_view algorithm, boo
         return std::string{};
 
     EVP_MD_CTX* mdctx = EVP_MD_CTX_create();
-    auto ok = EVP_DigestInit(mdctx, md);
+    auto ok           = EVP_DigestInit(mdctx, md);
     if (!ok)
     {
         EVP_MD_CTX_destroy(mdctx);
@@ -791,9 +789,9 @@ std::string urlDecode(std::string_view st)
     return decoded;
 }
 
-AX_DLL std::string base64Encode(std::string_view s)
+AX_DLL std::string base64Encode(const void* in, size_t inlen)
 {
-    size_t n = ax::base64::encoded_size(s.length());
+    size_t n = ax::base64::encoded_size(inlen);
     if (n > 0)
     {
         std::string ret;
@@ -803,13 +801,13 @@ AX_DLL std::string base64Encode(std::string_view s)
          *    - https://learn.microsoft.com/en-us/cpp/overview/visual-cpp-language-conformance?view=msvc-170
          *    - https://github.com/microsoft/STL/wiki/Changelog#vs-2022-171
          *    - https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
-         * 
+         *
          */
 #if _AX_HAS_CXX23
-        ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::encode(p, s.data(), s.length()); });
+        ret.resize_and_overwrite(n, [in, inlen](char* out, size_t) { return ax::base64::encode(out, in, inlen); });
 #else
         ret.resize(n);
-        ret.resize(ax::base64::encode(&ret.front(), s.data(), s.length()));
+        ret.resize(ax::base64::encode(&ret.front(), in, inlen));
 #endif
 
         return ret;
@@ -817,23 +815,16 @@ AX_DLL std::string base64Encode(std::string_view s)
     return std::string{};
 }
 
-AX_DLL std::string base64Decode(std::string_view s)
+AX_DLL yasio::byte_buffer base64Decode(std::string_view s)
 {
     size_t n = ax::base64::decoded_size(s.length());
     if (n > 0)
     {
-        std::string ret;
-
-#if _AX_HAS_CXX23
-        ret.resize_and_overwrite(n, [&](char* p, size_t) { return ax::base64::decode(p, s.data(), s.length()); });
-#else
-        ret.resize(n);
-        ret.resize(ax::base64::decode(&ret.front(), s.data(), s.length()));
-#endif
-
+        axstd::byte_buffer ret;
+        ret.resize_and_overwrite(n, [&s](uint8_t* out, size_t) { return ax::base64::decode(out, s.data(), s.size()); });
         return ret;
     }
-    return std::string{};
+    return yasio::byte_buffer{};
 }
 
 int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
@@ -843,9 +834,9 @@ int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
     char* tmp = nullptr;
     if (n > 0 && (tmp = (char*)malloc(n + 1)))
     {
-        auto ret  = ax::base64::encode(tmp, in, inLength);
+        auto ret = ax::base64::encode(tmp, in, inLength);
         tmp[ret] = '\0';
-        *out      = tmp;
+        *out     = tmp;
         return ret;
     }
     *out = nullptr;
@@ -854,7 +845,7 @@ int base64Encode(const unsigned char* in, unsigned int inLength, char** out)
 
 AX_DLL int base64Decode(const unsigned char* in, unsigned int inLength, unsigned char** out)
 {
-    size_t n = ax::base64::decoded_size(inLength);
+    size_t n           = ax::base64::decoded_size(inLength);
     unsigned char* tmp = nullptr;
     if (n > 0 && (tmp = (unsigned char*)malloc(n)))
     {

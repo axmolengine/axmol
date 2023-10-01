@@ -146,7 +146,7 @@ bool ProgramState::init(Program* program)
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
 #endif
 
-    _uniformBuffers.resize_fit((std::max)(_vertexUniformBufferSize + _fragmentUniformBufferSize, (size_t)1), 0);
+    _uniformBuffers.resize((std::max)(_vertexUniformBufferSize + _fragmentUniformBufferSize, (size_t)1), 0);
 
 #if AX_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener =

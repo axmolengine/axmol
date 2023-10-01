@@ -133,7 +133,7 @@ public:
         for (auto& data : _pageDatas)
         {
             auto compData = ZipUtils::compressGZ(std::span{data});
-            auto pixels   = utils::base64Encode(std::string_view{reinterpret_cast<const char*>(compData.data()), compData.size()});
+            auto pixels   = utils::base64Encode(std::span{compData});
             pages.push_back(std::move(pixels));
         }
 

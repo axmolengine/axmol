@@ -67,7 +67,7 @@
 
 ## {fmt}
 - [![Upstream](https://img.shields.io/github/v/release/fmtlib/fmt?label=Upstream)](https://github.com/fmtlib/fmt)
-- Version: 10.1.0
+- Version: 10.1.1
 - License: MIT
 
 ## FreeType
@@ -244,7 +244,7 @@
 
 ## webp
 - [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
-- Version: 1.3.1
+- Version: 1.3.2
 - License: Google Inc
 
 ## xsxml

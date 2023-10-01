@@ -3,7 +3,8 @@
 #include <type_traits>
 #include <memory>
 #include <string_view>
-#include "pod_vector.h"
+#include <span>
+#include "yasio/byte_buffer.hpp"
 
 // Tests whether compiler has c++23 support
 #if (defined(__cplusplus) && __cplusplus > 202002L) || \
@@ -19,6 +20,11 @@
 
 namespace axstd
 {
+using byte_buffer = yasio::byte_buffer;
+using sbyte_buffer = yasio::sbyte_buffer;
+template <typename _Elem, typename _Alloc = yasio::default_buffer_allocator<_Elem>>
+using pod_vector = yasio::pod_vector<_Elem, _Alloc>;
+
 /* make_unique_for_overwrite since c++20, but not all platformm support */
 template <class _Ty, std::enable_if_t<!std::is_array_v<_Ty>, int> = 0>
 inline std::unique_ptr<_Ty> make_unique_for_overwrite()

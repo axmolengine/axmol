@@ -9,7 +9,7 @@
 #  -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
 #  -xc: additional cmake options: i.e.  -xc '-Dbuild','-DCMAKE_BUILD_TYPE=Release'
 #  -xb: additional cross build options: i.e. -xb '--config','Release'
-#  -nb: no build, only generate natvie project file (vs .sln, xcodeproj)
+#  -c(configOnly): no build, only generate natvie project file (vs .sln, xcodeproj)
 #  -d: specify project dir to compile, i.e. -d /path/your/project/
 # examples:
 #   - win32: 
@@ -37,7 +37,7 @@ param(
     [switch]$forceConfig
 )
 
-$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null }
+$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null; dll = $false }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -61,8 +61,12 @@ function translate_array_opt($opt) {
     return $opt
 }
 
-$options.xb = translate_array_opt $options.xb
-$options.xc = translate_array_opt $options.xc
+if ($options.xb.Count -ne 0) {
+    $options.xb = translate_array_opt $options.xb
+}
+if ($options.xc.Count -ne 0) {
+    $options.xc = translate_array_opt $options.xc
+}
 
 $myRoot = $PSScriptRoot
 $workDir = $(Get-Location).Path
@@ -210,9 +214,10 @@ if ($forceConfig) {
 
 . $b1k_script @b1k_args @forward_args
 
-if (!$nb) {
+if (!$configOnly) {
     $b1k.pause('Build done')
 }
 else {
     $b1k.pause('Generate done')
 }
+

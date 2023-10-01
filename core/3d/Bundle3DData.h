@@ -49,8 +49,8 @@ using ilist_u32_t = std::initializer_list<uint32_t>;
 
 // The underlaying GL driver support U_INT8, U_SHORT, U_INT32, but we support U_SHORT and U_INT32 only
 template <typename _T>
-inline constexpr bool is_index_format_type_v = std::is_integral_v<_T> &&
-                                               (std::is_same_v<_T, uint16_t> || std::is_same_v<_T, uint32_t>);
+inline constexpr bool is_index_format_type_v =
+    std::is_integral_v<_T> && (std::is_same_v<_T, uint16_t> || std::is_same_v<_T, uint32_t>);
 
 class IndexArray
 {
@@ -65,8 +65,12 @@ public:
     IndexArray(backend::IndexFormat indexFormat) : _stride(formatToStride(indexFormat)) {}
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
-    IndexArray(std::initializer_list<_Ty> rhs) : _stride(sizeof(_Ty)), _buffer(rhs)
-    {}
+    IndexArray(std::initializer_list<_Ty> rhs) : _stride(sizeof(_Ty))
+    {
+        auto ifirst     = reinterpret_cast<const uint8_t*>(std::addressof(*rhs.begin()));
+        auto size_bytes = rhs.size() * sizeof(_Ty);
+        _buffer.assign(ifirst, ifirst + size_bytes);
+    }
 
     IndexArray(const IndexArray& rhs) : _stride(rhs._stride), _buffer(rhs._buffer) {}
     IndexArray(IndexArray&& rhs) noexcept : _stride(rhs._stride), _buffer(std::move(rhs._buffer)) {}
@@ -107,28 +111,17 @@ public:
     void emplace_back(const _Ty& val)
     {
         assert(_stride == sizeof(_Ty));
-        _buffer.insert(_buffer.end(), &val, &val + 1);
-    }
-
-    /** Inserts a list containing unsigned int (uint16_t/uint32_t) data. */
-    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
-    void insert(_Ty* position, std::initializer_list<_Ty> ilist)
-    {
-        _buffer.insert((yasio::byte_buffer::iterator)position, ilist.begin(), ilist.end());
+        const auto ifirst = reinterpret_cast<const uint8_t*>(&val);
+        _buffer.insert(_buffer.end(), ifirst, ifirst + sizeof(val));
     }
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
     void insert(_Ty* position, _Ty* first, _Ty* last)
     {
         assert(_stride == sizeof(_Ty));
-        _buffer.insert((yasio::byte_buffer::iterator)position, first, last);
-    }
-
-    template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>
-    void insert(size_t offset, std::initializer_list<_Ty> ilist)
-    {
-        assert(_stride == sizeof(_Ty));
-        _buffer.insert((yasio::byte_buffer::iterator)(begin<_Ty>() + offset), ilist.begin(), ilist.end());
+        auto ifirst     = reinterpret_cast<const uint8_t*>(first);
+        auto size_bytes = std::distance(first, last) * sizeof(_Ty);
+        _buffer.insert((yasio::byte_buffer::iterator)position, ifirst, ifirst + size_bytes);
     }
 
     template <typename _Ty = uint16_t, std::enable_if_t<is_index_format_type_v<_Ty>, int> = 0>

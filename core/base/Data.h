@@ -31,6 +31,7 @@
 #include <stdint.h>           // for ssize_t on android
 #include <string>             // for ssize_t on linux
 #include "platform/StdC.h"  // for ssize_t on window
+#include "base/axstd.h"
 
 /**
  * @addtogroup base
@@ -41,14 +42,15 @@ NS_AX_BEGIN
 
 class AX_DLL Data
 {
-    friend class Properties;
-
 public:
 
     /* stl compatible */
     using value_type = uint8_t;
-    size_t size() const { return _size; }
-    uint8_t* data() const { return _bytes; }
+    size_t size() const { return _impl.size(); }
+    const uint8_t* data() const { return _impl.data(); }
+    uint8_t* data() { return _impl.data(); }
+
+    operator yasio::byte_buffer&(){ return _impl; }
 
     /**
      * This parameter is defined for convenient reference if a null Data object is needed.
@@ -153,11 +155,7 @@ public:
     unsigned char* takeBuffer(ssize_t* size);
 
 private:
-    void move(Data& other);
-
-private:
-    uint8_t* _bytes;
-    ssize_t _size;
+    mutable axstd::byte_buffer _impl;
 };
 
 NS_AX_END

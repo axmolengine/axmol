@@ -259,13 +259,13 @@ YASIO_LUA_API int luaopen_yasio(lua_State* L)
       "write",
       sol::overload(
           [](io_service* service, transport_handle_t transport, cxx17::string_view s) {
-            return service->write(transport, yasio::sbyte_buffer{s.data(), s.data() + s.length(), std::true_type{}});
+            return service->write(transport, yasio::sbyte_buffer{s.data(), s.data() + s.length()});
           },
           [](io_service* service, transport_handle_t transport, yasio::obstream* obs) { return service->write(transport, std::move(obs->buffer())); }),
       "write_to",
       sol::overload(
           [](io_service* service, transport_handle_t transport, cxx17::string_view s, cxx17::string_view ip, u_short port) {
-            return service->write_to(transport, yasio::sbyte_buffer{s.data(), s.data() + s.length(), std::true_type{}}, ip::endpoint{ip.data(), port});
+            return service->write_to(transport, yasio::sbyte_buffer{s.data(), s.data() + s.length()}, ip::endpoint{ip.data(), port});
           },
           [](io_service* service, transport_handle_t transport, yasio::obstream* obs, cxx17::string_view ip, u_short port) {
             return service->write_to(transport, std::move(obs->buffer()), ip::endpoint{ip.data(), port});
@@ -403,7 +403,7 @@ struct lua_type_traits<yasio::sbyte_buffer> {
   {
     size_t size        = 0;
     const char* buffer = lua_tolstring(l, index, &size);
-    return yasio::sbyte_buffer(buffer, buffer + size, std::true_type{});
+    return yasio::sbyte_buffer(buffer, buffer + size);
   }
   static int push(lua_State* l, push_type s)
   {

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="yasio::pod_vector&lt;*&gt;">
+    <AlternativeType Name="std::vector&lt;*&gt;" />
+    <DisplayString>{{ size={_Mylast - _Myfirst} capacity={_Myend - _Myfirst} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_Mylast - _Myfirst</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_Myend - _Myfirst</Item>
+      <ArrayItems>
+        <Size>_Mylast - _Myfirst</Size>
+        <ValuePointer>_Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
   <Type Name="yasio::basic_byte_buffer&lt;*&gt;">
     <DisplayString>{{ size={_Mylast - _Myfirst} {_Myfirst,[_Mylast - _Myfirst]s8} }}</DisplayString>
     <Expand>
@@ -11,8 +23,36 @@
       </ArrayItems>
     </Expand>
   </Type>
-  <Type Name="yasio::pod_vector&lt;*&gt;">
-    <DisplayString>{{ size={_Mylast - _Myfirst} capacity={_Myend - _Myfirst} }}</DisplayString>
+  <Type Name="yasio::basic_string&lt;char,*&gt;">
+    <DisplayString>{_Myfirst,s8}</DisplayString>
+    <StringView>_Myfirst,s8</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_Mylast - _Myfirst</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_Myend - _Myfirst</Item>
+      <ArrayItems>
+        <Size>_Mylast - _Myfirst</Size>
+        <ValuePointer>_Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="yasio::basic_string&lt;wchar_t,*&gt;">
+    <AlternativeType Name="yasio::basic_string&lt;unsigned short,*&gt;" />
+    <AlternativeType Name="yasio::basic_string&lt;char16_t,*&gt;" />
+    <DisplayString>{_Myfirst,su}</DisplayString>
+    <StringView>_Myfirst,su</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_Mylast - _Myfirst</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_Myend - _Myfirst</Item>
+      <ArrayItems>
+        <Size>_Mylast - _Myfirst</Size>
+        <ValuePointer>_Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="yasio::basic_string&lt;char32_t,*&gt;">
+    <AlternativeType Name="yasio::basic_string&lt;char32_t,*&gt;" />
+    <DisplayString>{_Myfirst,s32}</DisplayString>
+    <StringView>_Myfirst,s32</StringView>
     <Expand>
       <Item Name="[size]" ExcludeView="simple">_Mylast - _Myfirst</Item>
       <Item Name="[capacity]" ExcludeView="simple">_Myend - _Myfirst</Item>
