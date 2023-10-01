@@ -75,7 +75,7 @@ public:
      *  Get the current position in the file stream
      *  @return current position, -1 if error
      */
-    inline int64_t tell() const { return seek(0, SEEK_CUR); }
+    virtual int64_t tell() const = 0;
 
     /**
      *  Get the size of the file stream

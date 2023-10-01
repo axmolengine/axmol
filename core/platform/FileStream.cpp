@@ -139,10 +139,10 @@ static int axrt_lowio_write(const PXFileHandle& fh, const void* buf, unsigned in
     errno = EACCES;
     return -1;
 }
-static int64_t axrt_lowio_seek(const PXFileHandle& fh, int64_t offst, int origin)
+static int64_t axrt_lowio_seek(const PXFileHandle& fh, int64_t offset, int origin)
 {
     LARGE_INTEGER seekpos, newpos;
-    seekpos.QuadPart = offst;
+    seekpos.QuadPart = offset;
     if (SetFilePointerEx(fh.osfh, seekpos, &newpos, origin))
         return newpos.QuadPart;
     errno = EINVAL;
@@ -185,9 +185,9 @@ static int axrt_lowio_write(const PXFileHandle& fh, const void* buf, unsigned in
 {
     return static_cast<int>(posix_write(fh.osfh, buf, size));
 }
-static int64_t axrt_lowio_seek(const PXFileHandle& fh, int64_t offst, int origin)
+static int64_t axrt_lowio_seek(const PXFileHandle& fh, int64_t offset, int origin)
 {
-    return posix_lseek64(fh.osfh, offst, origin);
+    return posix_lseek64(fh.osfh, offset, origin);
 }
 static int64_t axrt_lowio_size(const PXFileHandle& fh)
 {
@@ -252,9 +252,9 @@ static int axrt_asset_read(const PXFileHandle& fh, void* buf, unsigned int size)
 {
     return AAsset_read(fh.aasset, buf, size);
 }
-static int64_t axrt_asset_seek(const PXFileHandle& fh, int64_t offst, int origin)
+static int64_t axrt_asset_seek(const PXFileHandle& fh, int64_t offset, int origin)
 {
-    return AAsset_seek(fh.aasset, offst, origin);
+    return AAsset_seek(fh.aasset, offset, origin);
 }
 static int64_t axrt_asset_size(const PXFileHandle& fh)
 {
@@ -377,6 +377,12 @@ int64_t FileStream::size() const
 {
     assert(_iof);
     return _iof->size(_handle);
+}
+
+int64_t FileStream::tell() const
+{
+    assert(_iof);
+    return _iof->seek(_handle, 0, SEEK_CUR);
 }
 
 bool FileStream::resize(int64_t size) const
