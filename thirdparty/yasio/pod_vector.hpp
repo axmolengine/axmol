@@ -186,12 +186,11 @@ public:
   void push_back(const value_type& v)
   {
     expand(1);
-    *(_Mylast - 1) = v;
+    _Mylast[-1] = v;
   }
   template <typename... _Valty>
   inline value_type& emplace_back(_Valty&&... _Val)
   {
-    static_assert(std::is_scalar<value_type>::value || ::yasio::is_aligned_storage<value_type>::value, "pod_vector: incompatible pod type");
     if (_Mylast != _Myend)
       return *construct_helper<value_type>::construct_at(_Mylast++, std::forward<_Valty>(_Val)...);
     return *_Emplace_back_reallocate(std::forward<_Valty>(_Val)...);
@@ -216,7 +215,7 @@ public:
   value_type& back()
   {
     _YASIO_VERIFY_RANGE(_Myfirst < _Mylast, "pod_vector: out of range!");
-    return *(_Mylast - 1);
+    return _Mylast[-1];
   }
   static YASIO__CONSTEXPR size_type max_size() YASIO__NOEXCEPT { return (std::numeric_limits<ptrdiff_t>::max)() / sizeof(value_type); }
   iterator begin() YASIO__NOEXCEPT { return _Myfirst; }
@@ -261,11 +260,18 @@ public:
   }
   void shrink_to_fit()
   { // reduce capacity to size, provide strong guarantee
-    if (_Myfirst)
-    {
-      const auto count = this->size();
-      _Reallocate_exactly(count);
-      _Eos(count);
+    const pointer _Oldlast = _Mylast;
+    if (_Oldlast != _Myend)
+    { // something to do
+      const pointer _Oldfirst = _Myfirst;
+      if (_Oldfirst == _Oldlast)
+        _Tidy();
+      else
+      {
+        const auto count = static_cast<size_type>(_Oldlast - _Oldfirst);
+        _Reallocate_exactly(count);
+        _Eos(count);
+      }
     }
   }
   void reserve(size_type new_cap)
@@ -310,7 +316,7 @@ public:
     resize(new_size);
     memset(_Myfirst, 0x0, size_bytes());
   }
-  size_t size_bytes() const YASIO__NOEXCEPT { return (_Mylast - _Myfirst) * sizeof(value_type); }
+  size_t size_bytes() const YASIO__NOEXCEPT { return this->size() * sizeof(value_type); }
   template <typename _Intty>
   pointer detach_abi(_Intty& len) YASIO__NOEXCEPT
   {
@@ -321,18 +327,18 @@ public:
     _Myend   = nullptr;
     return ptr;
   }
+  pointer detach_abi() YASIO__NOEXCEPT
+  {
+    size_t ignored_len;
+    return this->detach_abi(ignored_len);
+  }
   void attach_abi(pointer ptr, size_t len)
   {
     _Tidy();
     _Myfirst = ptr;
     _Myend = _Mylast = ptr + len;
   }
-  pointer release_pointer() YASIO__NOEXCEPT
-  {
-    size_t ignored_len;
-    return this->detach_abi(ignored_len);
-  }
-
+  pointer release_pointer() YASIO__NOEXCEPT { return detach_abi(); }
 private:
   void _Eos(size_t size) YASIO__NOEXCEPT { _Mylast = _Myfirst + size; }
   template <typename... _Valty>
@@ -354,14 +360,17 @@ private:
   template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
   void _Assign_range(_Iter first, _Iter last)
   {
-    _Mylast = _Myfirst;
-    if (last > first)
+    auto ifirst = std::addressof(*first);
+    static_assert(sizeof(*ifirst) == sizeof(value_type), "pod_vector: iterator type incompatible!");
+    if (ifirst != _Myfirst)
     {
-      auto ifirst = std::addressof(*first);
-      static_assert(sizeof(*ifirst) == sizeof(value_type), "pod_vector: iterator type incompatible!");
-      const auto count = std::distance(first, last);
-      resize(count);
-      std::copy_n((iterator)ifirst, count, _Myfirst);
+      _Mylast = _Myfirst;
+      if (last > first)
+      {
+        const auto count = std::distance(first, last);
+        resize(count);
+        std::copy_n((iterator)ifirst, count, _Myfirst);
+      }
     }
   }
   void _Assign_rv(pod_vector&& rhs)
@@ -371,9 +380,12 @@ private:
   }
   void _Reallocate_exactly(size_type new_cap)
   {
-    _Myfirst = _Alloc::reallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst), new_cap);
-    if (_Myfirst || !new_cap)
-      _Myend = _Myfirst + new_cap;
+    auto _Newvec = _Alloc::reallocate(_Myfirst, static_cast<size_type>(_Myend - _Myfirst), new_cap);
+    if (_Newvec || !new_cap)
+    {
+      _Myfirst = _Newvec;
+      _Myend   = _Newvec + new_cap;
+    }
     else
       throw std::bad_alloc{};
   }
