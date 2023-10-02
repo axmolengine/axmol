@@ -91,9 +91,9 @@ ssize_t Data::copy(const unsigned char* bytes, const ssize_t size)
 {
     AXASSERT(size >= 0, "copy size should be non-negative");
     AXASSERT(bytes, "bytes should not be nullptr");
-
-    _impl.assign(bytes, bytes + size);
-    return size;
+    if (size > 0 && bytes != _impl.data())
+        _impl.assign(bytes, bytes + size);
+    return _impl.size();
 }
 
 uint8_t* Data::resize(ssize_t size)
@@ -106,6 +106,7 @@ void Data::fastSet(uint8_t* bytes, const ssize_t size)
 {
     AXASSERT(size >= 0, "fastSet size should be non-negative");
     // AXASSERT(bytes, "bytes should not be nullptr");
+    (void)_impl.release_pointer();  // forget internal pointer
     _impl.attach_abi(bytes, size);
 }
 
