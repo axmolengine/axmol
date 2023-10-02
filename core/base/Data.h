@@ -37,6 +37,7 @@
  * @addtogroup base
  * @js NA
  * @lua NA
+ * @DEPRECATED use axstd::byte_buffer directly
  */
 NS_AX_BEGIN
 
@@ -112,7 +113,7 @@ public:
     uint8_t* resize(ssize_t size);
 
     /** Fast set the buffer pointer and its size. Please use it carefully.
-     *  @param bytes The buffer pointer, note that it have to be allocated by 'malloc' or 'calloc',
+     *  @param bytes [not nullable] The buffer pointer, note that it have to be allocated by 'malloc' or 'calloc',
      *         since in the destructor of Data, the buffer will be deleted by 'free'.
      *  @note 1. This method will move the ownship of 'bytes'pointer to Data,
      *        2. The pointer should not be used outside after it was passed to this method.
