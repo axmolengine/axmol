@@ -139,7 +139,12 @@ for ($i = 0; $i -lt $nopts; ++$i) {
     }
 }
 
-if (!$is_android) {
+$use_gradle = $is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)
+if ($use_gradle) {
+    $b1k_args += '-xt', 'proj.android/gradlew'
+}
+
+if (!$use_gradle) {
     if (!$bti) {
         # non android, specific cmake target
         $cmake_targets = @(
@@ -182,10 +187,6 @@ if (!$bci) {
     $options.xb += '--config', $optimize_flag
 } else {
     $optimize_flag = $options.xb[$bci]
-}
-
-if ($is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)) {
-    $b1k_args += '-xt', 'proj.android/gradlew'
 }
 
 if ($proj_dir) {
