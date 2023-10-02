@@ -37,7 +37,7 @@ struct aligned_storage_size {
 };
 template <typename _Ty>
 struct is_aligned_storage {
-  static const bool value = aligned_storage_size<_Ty>::value % sizeof(_Ty) == 0;
+  static const bool value = aligned_storage_size<_Ty>::value == sizeof(_Ty);
 };
 template <class _Iter>
 struct is_iterator : public std::integral_constant<bool, !std::is_integral<_Iter>::value> {};
