@@ -111,7 +111,7 @@ android.applicationVariants.all { variant ->
         }
         doLast {
             copy {
-                from "${projectDir}/build/assets/runtime/axslc"
+                from "${projectDir}/build/runtime/axslc"
                 into "${projectDir}/build/assets/axslc"
             }
         }
