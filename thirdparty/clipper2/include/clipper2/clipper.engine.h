@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  26 March 2023                                                   *
+* Date      :  6 October 2023                                                  *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  This is the main polygon clipping module                        *
@@ -10,9 +10,10 @@
 #ifndef CLIPPER_ENGINE_H
 #define CLIPPER_ENGINE_H
 
-constexpr auto CLIPPER2_VERSION = "1.2.2";
+constexpr auto CLIPPER2_VERSION = "1.2.3";
 
 #include <cstdlib>
+#include <stdint.h> //#541
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -91,10 +92,11 @@ namespace Clipper2Lib {
 		OutPt* pts = nullptr;
 		PolyPath* polypath = nullptr;
 		OutRecList* splits = nullptr;
+		OutRec* recursive_split = nullptr;
 		Rect64 bounds = {};
 		Path64 path;
 		bool is_open = false;
-		bool horz_done = false;
+
 		~OutRec() { 
 			if (splits) delete splits;
 			// nb: don't delete the split pointers
@@ -179,6 +181,20 @@ namespace Clipper2Lib {
 	typedef std::vector<LocalMinima_ptr> LocalMinimaList;
 	typedef std::vector<IntersectNode> IntersectNodeList;
 
+	// ReuseableDataContainer64 ------------------------------------------------
+
+	class ReuseableDataContainer64 {
+	private:
+		friend class ClipperBase;
+		LocalMinimaList minima_list_;
+		std::vector<Vertex*> vertex_lists_;
+		void AddLocMin(Vertex& vert, PathType polytype, bool is_open);
+	public:
+		virtual ~ReuseableDataContainer64();
+		void Clear();
+		void AddPaths(const Paths64& paths, PathType polytype, bool is_open);
+	};
+
 	// ClipperBase -------------------------------------------------------------
 
 	class ClipperBase {
@@ -235,7 +251,6 @@ namespace Clipper2Lib {
 		void DoTopOfScanbeam(const int64_t top_y);
 		Active *DoMaxima(Active &e);
 		void JoinOutrecPaths(Active &e1, Active &e2);
-		void CompleteSplit(OutPt* op1, OutPt* op2, OutRec& outrec);
 		void FixSelfIntersects(OutRec* outrec);
 		void DoSplitOp(OutRec* outRec, OutPt* splitOp);
 		
@@ -256,8 +271,8 @@ namespace Clipper2Lib {
 		bool ExecuteInternal(ClipType ct, FillRule ft, bool use_polytrees);
 		void CleanCollinear(OutRec* outrec);
 		bool CheckBounds(OutRec* outrec);
+		bool CheckSplitOwner(OutRec* outrec, OutRecList* splits);
 		void RecursiveCheckOwners(OutRec* outrec, PolyPath* polypath);
-		void DeepCheckOwners(OutRec* outrec, PolyPath* polypath);
 #ifdef USINGZ
 		ZCallback64 zCallback_ = nullptr;
 		void SetZ(const Active& e1, const Active& e2, Point64& pt);
@@ -271,6 +286,7 @@ namespace Clipper2Lib {
 		bool PreserveCollinear = true;
 		bool ReverseSolution = false;
 		void Clear();
+		void AddReuseableData(const ReuseableDataContainer64& reuseable_data);
 #ifdef USINGZ
 		int64_t DefaultZ = 0;
 #endif
@@ -332,7 +348,7 @@ namespace Clipper2Lib {
 
 		const PolyPath64* operator [] (size_t index) const
 		{ 
-			return childs_[index].get(); 
+			return childs_[index].get(); //std::unique_ptr
 		} 
 
 		const PolyPath64* Child(size_t index) const
@@ -375,12 +391,12 @@ namespace Clipper2Lib {
 	class PolyPathD : public PolyPath {
 	private:
 		PolyPathDList childs_;
-		double inv_scale_;
+		double scale_;
 		PathD polygon_;
 	public:
 		explicit PolyPathD(PolyPathD* parent = nullptr) : PolyPath(parent)
 		{
-			inv_scale_ = parent ? parent->inv_scale_ : 1.0;
+			scale_ = parent ? parent->scale_ : 1.0;
 		}
 
 		~PolyPathD() {
@@ -400,14 +416,14 @@ namespace Clipper2Lib {
 		PolyPathDList::const_iterator begin() const { return childs_.cbegin(); }
 		PolyPathDList::const_iterator end() const { return childs_.cend(); }
 
-		void SetInvScale(double value) { inv_scale_ = value; }
-		double InvScale() { return inv_scale_; }
+		void SetScale(double value) { scale_ = value; }
+		double Scale() { return scale_; }
 		PolyPathD* AddChild(const Path64& path) override
 		{
 			int error_code = 0;
 			auto p = std::make_unique<PolyPathD>(this);
 			PolyPathD* result = childs_.emplace_back(std::move(p)).get();
-			result->polygon_ = ScalePath<double, int64_t>(path, inv_scale_, error_code);
+			result->polygon_ = ScalePath<double, int64_t>(path, scale_, error_code);
 			return result;
 		}
 
@@ -595,7 +611,7 @@ namespace Clipper2Lib {
 			if (ExecuteInternal(clip_type, fill_rule, true))
 			{
 				polytree.Clear();
-				polytree.SetInvScale(invScale_);
+				polytree.SetScale(invScale_);
 				open_paths.clear();
 				BuildTreeD(polytree, open_paths);
 			}

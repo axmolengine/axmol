@@ -41,7 +41,7 @@ android {
         java.srcDir "src"
         res.srcDir "res"
         manifest.srcFile "AndroidManifest.xml"
-        assets.srcDir "assets"
+        assets.srcDir "build/assets"
     }
 
     externalNativeBuild {
@@ -92,14 +92,14 @@ android.applicationVariants.all { variant ->
     def targetName = variant.name.capitalize()
 
     def copyContentToAssets = "copy${targetName}ContentToAssets"
-    tasks.register("copy${targetName}ContentToAssets") {
+    tasks.register(copyContentToAssets) {
         doFirst {
-            delete "${projectDir}/assets"
+            delete "${projectDir}/build/assets"
         }
         doLast {
             copy {
                 from "${projectDir}/../../Content"
-                into "${projectDir}/assets"
+                into "${projectDir}/build/assets"
                 exclude "**/*.gz"
             }
         }
@@ -108,12 +108,12 @@ android.applicationVariants.all { variant ->
 
     tasks.register("copy${targetName}AxslcToAssets") {
         doFirst {
-            delete "${projectDir}/assets/axslc"
+            delete "${projectDir}/build/assets/axslc"
         }
         doLast {
             copy {
-                from "${projectDir}/../build/runtime/axslc"
-                into "${projectDir}/assets/axslc"
+                from "${projectDir}/build/runtime/axslc"
+                into "${projectDir}/build/assets/axslc"
             }
         }
     }

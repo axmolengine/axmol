@@ -70,6 +70,9 @@ struct UniformBlockDescriptor
     BufferGL* _ubo;
     int _location;
     int _size;
+#if !AX_64BITS
+    int __padding;
+#endif
 };
 
 /**

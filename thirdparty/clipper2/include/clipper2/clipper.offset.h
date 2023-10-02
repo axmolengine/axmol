@@ -1,6 +1,6 @@
 /*******************************************************************************
 * Author    :  Angus Johnson                                                   *
-* Date      :  22 March 2023                                                   *
+* Date      :  24 September 2023                                               *
 * Website   :  http://www.angusj.com                                           *
 * Copyright :  Angus Johnson 2010-2023                                         *
 * Purpose   :  Path Offset (Inflate/Shrink)                                    *
@@ -15,7 +15,9 @@
 
 namespace Clipper2Lib {
 
-enum class JoinType { Square, Round, Miter };
+enum class JoinType { Square, Bevel, Round, Miter };
+//Square : Joins are 'squared' at exactly the offset distance (more complex code)
+//Bevel  : Similar to Square, but the offset distance varies with angle (simple code & faster)
 
 enum class EndType {Polygon, Joined, Butt, Square, Round};
 //Butt   : offsets both sides of a path, with square blunt ends
@@ -24,6 +26,7 @@ enum class EndType {Polygon, Joined, Butt, Square, Round};
 //Joined : offsets both sides of a path, with joined ends
 //Polygon: offsets only one side of a closed path
 
+typedef std::function<double(const Path64& path, const PathD& path_normals, size_t curr_idx, size_t prev_idx)> DeltaCallback64;
 
 class ClipperOffset {
 private:
@@ -43,7 +46,6 @@ private:
 	int   error_code_ = 0;
 	double delta_ = 0.0;
 	double group_delta_ = 0.0;
-	double abs_group_delta_ = 0.0;
 	double temp_lim_ = 0.0;
 	double steps_per_rad_ = 0.0;
 	double step_sin_ = 0.0;
@@ -51,7 +53,7 @@ private:
 	PathD norms;
 	Paths64 solution;
 	std::vector<Group> groups_;
-	JoinType join_type_ = JoinType::Square;
+	JoinType join_type_ = JoinType::Bevel;
 	EndType end_type_ = EndType::Polygon;
 
 	double miter_limit_ = 0.0;
@@ -62,7 +64,9 @@ private:
 #ifdef USINGZ
 	ZCallback64 zCallback64_ = nullptr;
 #endif
+	DeltaCallback64 deltaCallback64_ = nullptr;
 
+	void DoBevel(Group& group, const Path64& path, size_t j, size_t k);
 	void DoSquare(Group& group, const Path64& path, size_t j, size_t k);
 	void DoMiter(Group& group, const Path64& path, size_t j, size_t k, double cos_a);
 	void DoRound(Group& group, const Path64& path, size_t j, size_t k, double angle);
@@ -70,7 +74,7 @@ private:
 	void OffsetPolygon(Group& group, Path64& path);
 	void OffsetOpenJoined(Group& group, Path64& path);
 	void OffsetOpenPath(Group& group, Path64& path);
-	void OffsetPoint(Group& group, Path64& path, size_t j, size_t& k);
+	void OffsetPoint(Group& group, Path64& path, size_t j, size_t k);
 	void DoGroupOffset(Group &group);
 	void ExecuteInternal(double delta);
 public:
@@ -91,6 +95,7 @@ public:
 	
 	void Execute(double delta, Paths64& paths);
 	void Execute(double delta, PolyTree64& polytree);
+	void Execute(DeltaCallback64 delta_cb, Paths64& paths);
 
 	double MiterLimit() const { return miter_limit_; }
 	void MiterLimit(double miter_limit) { miter_limit_ = miter_limit; }
@@ -108,6 +113,8 @@ public:
 #ifdef USINGZ
 	void SetZCallback(ZCallback64 cb) { zCallback64_ = cb; }
 #endif
+	void SetDeltaCallback(DeltaCallback64 cb) { deltaCallback64_ = cb; }
+
 };
 
 }

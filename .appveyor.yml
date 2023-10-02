@@ -1,7 +1,7 @@
 image: 
   - Visual Studio 2019
     
-version: 2.0.1.{build}
+version: 2.1.0.{build}
 
 install:
   - git submodule update --init --recursive
