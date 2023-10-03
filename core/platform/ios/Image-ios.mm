@@ -115,7 +115,7 @@ bool ax::Image::saveToFile(std::string_view filename, bool isToRGB)
             data = UIImageJPEGRepresentation(image, 1.0f);
         }
 
-        auto outStream = FileUtils::getInstance()->openFileStream(filename, FileStream::Mode::WRITE);
+        auto outStream = FileUtils::getInstance()->openFileStream(filename, IFileStream::Mode::WRITE);
         outStream->write(data.bytes, data.length);
     }
 
