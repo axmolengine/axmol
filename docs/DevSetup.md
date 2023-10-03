@@ -47,7 +47,7 @@ The `axmol build` command will auto setup general depended toolsets, so you can 
 - tvos:
   - for device: `axmol build -p tvos -a arm64 -c`, generate xcodeproj, open by xcode to setup code sign cert and build
   - for simulator: `axmol build -p tvos -a x64`
-- wasm: `axmol build -p wasm` can runs on Windows, Linux, macOS, require a preinstalled [python3](https://www.python.org/) should be in env `PATH`
+- wasm: `axmol build -p wasm` can runs on Windows 8.1+, Linux, macOS, require a preinstalled [python3](https://www.python.org/) should be in env `PATH`
 
 ## Quick build engine for host targets?
 
