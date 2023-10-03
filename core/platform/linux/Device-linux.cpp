@@ -391,7 +391,7 @@ public:
         if (lowerCasePath.find(".ttf") != std::string::npos)
         {
             fontPath        = ax::FileUtils::getInstance()->fullPathForFilename(fontPath);
-            auto fileStream = ax::FileUtils::getInstance()->openFileStream(fontPath, FileStream::Mode::READ);
+            auto fileStream = ax::FileUtils::getInstance()->openFileStream(fontPath, IFileStream::Mode::READ);
             if (fileStream)
             {
                 fontCache.insert(std::pair<std::string, std::string>(family_name, fontPath));

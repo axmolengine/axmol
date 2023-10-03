@@ -40,8 +40,10 @@ struct PXIoF;
 class AX_DLL FileStream : public IFileStream
 {
 public:
+    using IFileStream::Mode;
+    
     FileStream() = default;
-    virtual ~FileStream();
+    ~FileStream() override;
 
     FileStream(const FileStream& other) = delete;
 
