@@ -184,7 +184,7 @@ namespace ax { namespace network {
                 }
 
                 // open file
-                auto _fs = util->openFileStream(storagePath, FileStream::Mode::READ);
+                auto _fs = util->openFileStream(storagePath, IFileStream::Mode::READ);
                 if (!_fs)
                 {
                     errCode = DownloadTask::ERROR_OPEN_FILE_FAILED;

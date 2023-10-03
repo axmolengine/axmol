@@ -52,7 +52,7 @@ bool AudioDecoderEXT::open(std::string_view fullPath)
     {
         BREAK_IF_ERR_LOG(fullPath.empty(), "Invalid path!");
 
-        _fileStream = FileUtils::getInstance()->openFileStream(fullPath, FileStream::Mode::READ);
+        _fileStream = FileUtils::getInstance()->openFileStream(fullPath, IFileStream::Mode::READ);
         BREAK_IF_ERR_LOG(_fileStream == nullptr, "FileUtils::openFileStream FAILED for file: %s", fullPath.data());
         if (_fileStream)
         {
