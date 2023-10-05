@@ -31,11 +31,9 @@ SOFTWARE.
 
 namespace yasio
 {
-template <typename _Elem, enable_if_t<is_byte_type<_Elem>::value, int> = 0>
-using default_bytes_allocater = default_buffer_allocator<_Elem>;
 
-template <typename _Elem, typename _Alloc = default_bytes_allocater<_Elem>>
-using basic_byte_buffer = array_buffer<_Elem, _Alloc>;
+template <typename _Ty, typename _Alloc = buffer_allocator<_Ty>, enable_if_t<is_byte_type<_Ty>::value, int> = 0>
+using basic_byte_buffer = array_buffer<_Ty, _Alloc>;
 
 using sbyte_buffer = basic_byte_buffer<char>;
 using byte_buffer  = basic_byte_buffer<unsigned char>;

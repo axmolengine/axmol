@@ -147,6 +147,7 @@ template <typename _Cont = sbyte_buffer>
 class dynamic_buffer_span {
 public:
   using implementation_type = _Cont;
+  using size_type = typename _Cont::size_type;
   implementation_type& get_implementation() { return *this->outs_; }
   const implementation_type& get_implementation() const { return *this->impl_; }
 
@@ -166,8 +167,8 @@ public:
     ::memcpy(outs_->data() + offset, d, n);
     return n;
   }
-  void fill_bytes(size_t count, uint8_t val) { outs_->insert(outs_->end(), count, val); }
-  void reserve(size_t capacity) { outs_->reserve(capacity); }
+  void fill_bytes(size_t count, uint8_t val) { outs_->insert(outs_->end(), static_cast<size_type>(count), val); }
+  void reserve(size_t capacity) { outs_->reserve(static_cast<size_type>(capacity)); }
   void shrink_to_fit() { outs_->shrink_to_fit(); };
   void clear() { outs_->clear(); }
   char* data() { return outs_->data(); }

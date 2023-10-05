@@ -33,6 +33,7 @@ SOFTWARE.
 #include <stdint.h>
 #include <stdexcept>
 #include <utility>
+#include "yasio/compiler/feature_test.hpp"
 #include "yasio/type_traits.hpp"
 
 #define _YASIO_VERIFY_RANGE(cond, mesg)                 \
@@ -49,36 +50,47 @@ SOFTWARE.
 
 namespace yasio
 {
-template <bool _Test, class _Ty = void>
-using enable_if_t = typename ::std::enable_if<_Test, _Ty>::type;
-
-template <typename _Elem>
-struct is_byte_type {
-  static const bool value = std::is_same<_Elem, char>::value || std::is_same<_Elem, unsigned char>::value;
+using uint = unsigned int;
+template <typename _Alty>
+struct buffer_allocator_traits {
+  using value_type = typename _Alty::value_type;
+  using size_type  = uint;
+  static YASIO__CONSTEXPR size_type max_size() { return static_cast<size_type>(-1) / sizeof(value_type); }
+  static value_type* reallocate(void* block, size_t size, size_t new_size)
+  {
+    return static_cast<value_type*>(_Alty::reallocate(block, size, new_size * sizeof(value_type)));
+  }
+  static void deallocate(void* block, size_t size) { _Alty::deallocate(block, size); }
 };
-
-template <typename _Elem, enable_if_t<std::is_trivially_copyable<_Elem>::value, int> = 0>
-struct default_buffer_allocator {
-  static _Elem* reallocate(void* block, size_t /*size*/, size_t new_size) { return static_cast<_Elem*>(::realloc(block, new_size * sizeof(_Elem))); }
+template <typename _Ty, enable_if_t<std::is_trivially_copyable<_Ty>::value, int> = 0>
+struct buffer_allocator {
+  using value_type = _Ty;
+  static value_type* reallocate(void* block, size_t /*size*/, size_t new_size)
+  {
+    return static_cast<value_type*>(::realloc(block, new_size * sizeof(value_type)));
+  }
+  static void deallocate(void* block, size_t /*size*/) { ::free(block); }
 };
-template <typename _Elem, enable_if_t<std::is_trivially_copyable<_Elem>::value, int> = 0>
+template <typename _Ty, enable_if_t<std::is_trivially_copyable<_Ty>::value, int> = 0>
 struct std_buffer_allocator {
-  static _Elem* reallocate(void* block, size_t size, size_t new_size)
+  using value_type = _Ty;
+  static value_type* reallocate(void* block, size_t size, size_t new_size)
   {
     if (!block)
-      return new (std::nothrow) _Elem[new_size];
+      return new (std::nothrow) value_type[new_size];
     void* new_block = nullptr;
     if (new_size)
     {
       if (new_size <= size)
         return block;
-      new_block = new (std::nothrow) _Elem[new_size];
+      new_block = new (std::nothrow) value_type[new_size];
       if (new_block)
         memcpy(new_block, block, size);
     }
-    delete[] (_Elem*)(block);
-    return (_Elem*)new_block;
+    delete[] (value_type*)block;
+    return (value_type*)new_block;
   }
+  static void deallocate(void* block, size_t /*size*/) { delete[] (value_type*)block; }
 };
 template <typename _Ty, bool = std::is_trivially_constructible<_Ty>::value /* trivially_constructible */>
 struct construct_helper {

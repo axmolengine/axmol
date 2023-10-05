@@ -194,9 +194,9 @@ public:
     size_t bsize() const { return _buffer.size(); }
 
     /** Resizes the count of indices in the container. */
-    void resize(size_t size) { _buffer.resize(size * _stride); }
+    void resize(size_t size) {_buffer.resize(static_cast<yasio::byte_buffer::size_type>(size * _stride)); }
     /** Resizes the container in bytes. */
-    void bresize(size_t size) { _buffer.resize(size); }
+    void bresize(size_t size) { _buffer.resize(static_cast<yasio::byte_buffer::size_type>(size)); }
 
     /** Returns true if the container is empty. Otherwise, false. */
     bool empty() const { return _buffer.empty(); }
