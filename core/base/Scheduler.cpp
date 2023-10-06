@@ -703,20 +703,20 @@ bool Scheduler::isTargetPaused(void* target)
     return false;  // should never get here
 }
 
-std::set<const void*> Scheduler::pauseAllTargets()
+std::set<void*> Scheduler::pauseAllTargets()
 {
     return pauseAllTargetsWithMinPriority(PRIORITY_SYSTEM);
 }
 
-std::set<const void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
+std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
 {
-    std::set<const void*> idsWithSelectors;
+    std::set<void*> idsWithSelectors;
 
     // Custom Selectors
     for (auto& [target, element] : _hashForTimers)
     {
         element.paused = true;
-        idsWithSelectors.insert(target);
+        idsWithSelectors.insert((void*)target);
     }
 
     // Updates selectors

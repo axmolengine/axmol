@@ -189,7 +189,6 @@ typedef struct _hashSelectorEntry
     int timerIndex;
     Timer* currentTimer;
     bool paused;
-    UT_hash_handle hh;
 } tHashTimerEntry;
 
 #if AX_ENABLE_SCRIPT_BINDING
@@ -462,7 +461,7 @@ public:
       You should NEVER call this method, unless you know what you are doing.
      @since v2.0.0
       */
-    std::set<const void*> pauseAllTargets();
+    std::set<void*> pauseAllTargets();
 
     /** Pause all selectors from all targets with a minimum priority.
       You should only call this with PRIORITY_NON_SYSTEM_MIN or higher.
@@ -470,7 +469,7 @@ public:
             priority is higher than minPriority will be paused.
       @since v2.0.0
       */
-    std::set<const void*> pauseAllTargetsWithMinPriority(int minPriority);
+    std::set<void*> pauseAllTargetsWithMinPriority(int minPriority);
 
     /** Resume selectors on a set of targets.
      This can be useful for undoing a call to pauseAllSelectors.
