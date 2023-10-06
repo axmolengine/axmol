@@ -255,6 +255,12 @@ public:
         return _data[index];
     }
 
+    T operator[](size_t index) const
+    {
+        AXASSERT(index >= 0 && index < size(), "index out of range in getObjectAtIndex()");
+        return _data[index]; 
+    }
+
     /** Returns the first element in the Vector. */
     T front() const { return _data.front(); }
 
