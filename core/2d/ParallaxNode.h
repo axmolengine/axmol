@@ -30,11 +30,8 @@ THE SOFTWARE.
 
 #include "2d/Node.h"
 #include "base/Vector.h"
-/*#include "Array.h"*/
 
 NS_AX_BEGIN
-
-struct _ccArray;
 
 /**
  * @addtogroup _2d

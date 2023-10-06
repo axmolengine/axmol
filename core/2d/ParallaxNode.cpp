@@ -65,7 +65,7 @@ private:
 
 ParallaxNode::ParallaxNode()
 {
-    _parallaxArray.reserve(5);  // = ccArrayNew(5);
+    _parallaxArray.reserve(5);
     _lastPosition.set(-100.0f, -100.0f);
 }
 
@@ -96,7 +96,6 @@ void ParallaxNode::addChild(Node* child, int z, const Vec2& ratio, const Vec2& o
     PointObject* obj = PointObject::create(ratio, offset);
     obj->setChild(child);
     _parallaxArray.pushBack(obj);
-    //ccArrayAppendObjectWithResize(_parallaxArray, (Ref*)obj);
 
     Vec2 pos = this->absolutePosition();
     pos.x    = -pos.x + pos.x * ratio.x + offset.x;
