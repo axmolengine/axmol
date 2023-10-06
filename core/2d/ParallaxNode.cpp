@@ -26,7 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 #include "2d/ParallaxNode.h"
-#include "base/CArray.h"
 
 NS_AX_BEGIN
 
@@ -66,17 +65,12 @@ private:
 
 ParallaxNode::ParallaxNode()
 {
-    _parallaxArray = ccArrayNew(5);
+    _parallaxArray.reserve(5);  // = ccArrayNew(5);
     _lastPosition.set(-100.0f, -100.0f);
 }
 
 ParallaxNode::~ParallaxNode()
 {
-    if (_parallaxArray)
-    {
-        ccArrayFree(_parallaxArray);
-        _parallaxArray = nullptr;
-    }
 }
 
 ParallaxNode* ParallaxNode::create()
@@ -101,7 +95,8 @@ void ParallaxNode::addChild(Node* child, int z, const Vec2& ratio, const Vec2& o
     AXASSERT(child != nullptr, "Argument must be non-nil");
     PointObject* obj = PointObject::create(ratio, offset);
     obj->setChild(child);
-    ccArrayAppendObjectWithResize(_parallaxArray, (Ref*)obj);
+    _parallaxArray.pushBack(obj);
+    //ccArrayAppendObjectWithResize(_parallaxArray, (Ref*)obj);
 
     Vec2 pos = this->absolutePosition();
     pos.x    = -pos.x + pos.x * ratio.x + offset.x;
@@ -113,12 +108,12 @@ void ParallaxNode::addChild(Node* child, int z, const Vec2& ratio, const Vec2& o
 
 void ParallaxNode::removeChild(Node* child, bool cleanup)
 {
-    for (int i = 0; i < _parallaxArray->num; i++)
+    for (auto iter = _parallaxArray.begin(); iter != _parallaxArray.end(); ++iter)
     {
-        PointObject* point = (PointObject*)_parallaxArray->arr[i];
+        PointObject* point = (PointObject*)*iter;
         if (point->getChild() == child)
         {
-            ccArrayRemoveObjectAtIndex(_parallaxArray, i, true);
+            _parallaxArray.erase(iter);
             break;
         }
     }
@@ -127,7 +122,7 @@ void ParallaxNode::removeChild(Node* child, bool cleanup)
 
 void ParallaxNode::removeAllChildrenWithCleanup(bool cleanup)
 {
-    ccArrayRemoveAllObjects(_parallaxArray);
+    _parallaxArray.clear();
     Node::removeAllChildrenWithCleanup(cleanup);
 }
 
@@ -155,9 +150,9 @@ void ParallaxNode::visit(Renderer* renderer, const Mat4& parentTransform, uint32
     Vec2 pos = this->absolutePosition();
     if (!pos.equals(_lastPosition))
     {
-        for (int i = 0; i < _parallaxArray->num; i++)
+        for (auto item : _parallaxArray)
         {
-            PointObject* point = (PointObject*)_parallaxArray->arr[i];
+            auto point = static_cast<PointObject*>(item);
             float x            = -pos.x + pos.x * point->getRatio().x + point->getOffset().x;
             float y            = -pos.y + pos.y * point->getRatio().y + point->getOffset().y;
             point->getChild()->setPosition(x, y);
