@@ -89,7 +89,10 @@ void ActionManager::removeActionAtIndex(ssize_t index,
         else
         {
             if (actionIt != _targets.end())
+            {
+                actionIt->first->release();
                 actionIt = _targets.erase(actionIt);
+            }
         }
     }
 }
@@ -214,7 +217,7 @@ void ActionManager::removeAction(Action* action)
     }
 
     Ref* target   = action->getOriginalTarget();
-    auto actionIt = _targets.find((Node*)target);
+    auto actionIt = _targets.find(static_cast<Node*>(target));
     if (actionIt != _targets.end())
     {
         auto i = actionIt->second.actions.getIndex(action);
@@ -325,7 +328,7 @@ Action* ActionManager::getActionByTag(int tag, const Node* target) const
 {
     AXASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
 
-    auto it = _targets.find((Node*)target);
+    auto it = _targets.find(const_cast<Node*>(target));
     if (it != _targets.end())
     {
         auto& actions = it->second.actions;

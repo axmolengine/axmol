@@ -524,13 +524,13 @@ protected:
     axstd::pod_vector<_listEntry*> _updates0List;    // list priority == 0
     axstd::pod_vector<_listEntry*> _updatesPosList;  // list priority > 0
     // hash used to fetch quickly the list entries for pause,delete,etc
-    std::unordered_map<const void*, _hashUpdateEntry> _hashForUpdates;
+    std::unordered_map<void*, _hashUpdateEntry> _hashForUpdates;
 
     // the vector holds list entries that needs to be deleted after update
     std::vector<_listEntry*> _updateDeleteVector;
 
     // Used for "selectors with interval"
-    std::unordered_map<const void*, _hashSelectorEntry> _hashForTimers;
+    std::unordered_map<void*, _hashSelectorEntry> _hashForTimers;
     struct _hashSelectorEntry* _currentTarget;
     bool _currentTargetSalvaged;
     // If true unschedule will not remove anything from a hash. Elements will only be marked for deletion.

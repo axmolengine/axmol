@@ -91,7 +91,7 @@ protected:
     {
       auto events = add_events & ~remove_events;
       if (events)
-        fdset.push_back(pollfd{fd, static_cast<short>(events), static_cast<short>(0)});
+        fdset.emplace_back(fd, static_cast<short>(events), static_cast<short>(0));
     }
   }
 

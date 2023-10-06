@@ -392,8 +392,6 @@ void Scheduler::appendIn(axstd::pod_vector<tListEntry*>& list,
 
 void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void* target, int priority, bool paused)
 {
-    tHashUpdateEntry* hashElement = nullptr;
-    // HASH_FIND_PTR(_hashForUpdates, &target, hashElement);
     auto updateIt = _hashForUpdates.find(target);
     if (updateIt != _hashForUpdates.end())
     {
@@ -431,7 +429,7 @@ bool Scheduler::isScheduled(std::string_view key, const void* target) const
     AXASSERT(!key.empty(), "Argument key must not be empty");
     AXASSERT(target, "Argument target must be non-nullptr");
 
-    auto timerIt = _hashForTimers.find(target);
+    auto timerIt = _hashForTimers.find(const_cast<void*>(target));
 
     if (timerIt == _hashForTimers.end())
     {
@@ -485,8 +483,7 @@ void Scheduler::unscheduleUpdate(void* target)
         return;
     }
 
-    tHashUpdateEntry* element = nullptr;
-    auto updateIt             = _hashForUpdates.find(target);
+    auto updateIt = _hashForUpdates.find(target);
     if (updateIt != _hashForUpdates.end())
         this->removeUpdateFromHash(updateIt->second.entry);
 }
@@ -666,7 +663,7 @@ std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
     for (auto& [target, element] : _hashForTimers)
     {
         element.paused = true;
-        idsWithSelectors.insert((void*)target);
+        idsWithSelectors.insert(target);
     }
 
     // Updates selectors
@@ -777,7 +774,7 @@ void Scheduler::update(float dt)
             // The 'timers' array may change while inside this loop
             for (elt->timerIndex = 0; elt->timerIndex < elt->timers->size(); ++(elt->timerIndex))
             {
-                elt->currentTimer = (Timer*)(elt->timers->at(elt->timerIndex));
+                elt->currentTimer = elt->timers->at(elt->timerIndex);
                 AXASSERT(!elt->currentTimer->isAborted(), "An aborted timer should not be updated");
 
                 elt->currentTimer->update(dt);
@@ -920,7 +917,7 @@ bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Ref* target) const
     AXASSERT(selector, "Argument selector must be non-nullptr");
     AXASSERT(target, "Argument target must be non-nullptr");
 
-    auto timerIt = _hashForTimers.find(target);
+    auto timerIt = _hashForTimers.find(const_cast<Ref*>(target));
     if (timerIt == _hashForTimers.end())
     {
         return false;
