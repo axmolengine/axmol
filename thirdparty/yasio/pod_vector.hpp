@@ -193,7 +193,7 @@ public:
         _Mylast      = _Myfirst + _Mysize;
         auto move_to = _Where + 1;
         std::copy_n(_Where, _Mylast - move_to, move_to);
-        construct_helper<value_type>::construct_at(_Where, std::forward<_Valty>(_Val)...);
+        ::yasio::construct_at(_Where, std::forward<_Valty>(_Val)...);
       }
     }
     return _Myfirst + _Off;
@@ -224,16 +224,12 @@ public:
     return *this;
   }
   void push_back(value_type&& v) { push_back(v); }
-  void push_back(const value_type& v)
-  {
-    expand(1);
-    back() = v;
-  }
+  void push_back(const value_type& v) { emplace_back(v); }
   template <typename... _Valty>
   inline value_type& emplace_back(_Valty&&... _Val)
   {
     if (_Mysize < _Myres)
-      return *construct_helper<value_type>::construct_at(_Myfirst + _Mysize++, std::forward<_Valty>(_Val)...);
+      return *::yasio::construct_at(_Myfirst + _Mysize++, std::forward<_Valty>(_Val)...);
     return *_Emplace_back_reallocate(std::forward<_Valty>(_Val)...);
   }
   iterator erase(iterator _Where)
@@ -390,7 +386,7 @@ private:
 
     const size_type _Newsize = _Oldsize + 1;
     _Resize_reallocate<_Reallocation_policy::_At_least>(_Newsize);
-    const pointer _Newptr = construct_helper<value_type>::construct_at(_Myfirst + _Oldsize, std::forward<_Valty>(_Val)...);
+    const pointer _Newptr = ::yasio::construct_at(_Myfirst + _Oldsize, std::forward<_Valty>(_Val)...);
     return _Newptr;
   }
   template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
