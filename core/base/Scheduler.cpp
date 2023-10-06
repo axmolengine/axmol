@@ -274,13 +274,13 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
 
     if (element->timers == nullptr)
     {
-        element->timers = ccArrayNew(10);
+        element->timers = new Vector<Timer*>(10);
     }
     else
     {
-        for (int i = 0; i < element->timers->num; ++i)
+        for (int i = 0; i < element->timers->size(); ++i)
         {
-            TimerTargetCallback* timer = dynamic_cast<TimerTargetCallback*>(element->timers->arr[i]);
+            TimerTargetCallback* timer = dynamic_cast<TimerTargetCallback*>(element->timers->at(i));
 
             if (timer && !timer->isExhausted() && key == timer->getKey())
             {
@@ -290,12 +290,11 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
                 return;
             }
         }
-        ccArrayEnsureExtraCapacity(element->timers, 1);
     }
 
     TimerTargetCallback* timer = new TimerTargetCallback();
     timer->initWithCallback(this, callback, target, key, interval, repeat, delay);
-    ccArrayAppendObject(element->timers, timer);
+    element->timers->pushBack(timer);
     timer->release();
 }
 
@@ -314,9 +313,9 @@ void Scheduler::unschedule(std::string_view key, void* target)
     if (timerIt != _hashForTimers.end())
     {
         auto& element = timerIt->second;
-        for (int i = 0; i < element.timers->num; ++i)
+        for (int i = 0; i < element.timers->size(); ++i)
         {
-            TimerTargetCallback* timer = dynamic_cast<TimerTargetCallback*>(element.timers->arr[i]);
+            TimerTargetCallback* timer = dynamic_cast<TimerTargetCallback*>(element.timers->at(i));
 
             if (timer && key == timer->getKey())
             {
@@ -326,7 +325,7 @@ void Scheduler::unschedule(std::string_view key, void* target)
                     timer->setAborted();
                 }
 
-                ccArrayRemoveObjectAtIndex(element.timers, i, true);
+                element.timers->erase(i);
 
                 // update timerIndex in case we are in tick:, looping over the actions
                 if (element.timerIndex >= i)
@@ -334,7 +333,7 @@ void Scheduler::unschedule(std::string_view key, void* target)
                     element.timerIndex--;
                 }
 
-                if (element.timers->num == 0)
+                if (element.timers->size() == 0)
                 {
                     if (_currentTarget == &element)
                     {
@@ -342,7 +341,7 @@ void Scheduler::unschedule(std::string_view key, void* target)
                     }
                     else
                     {
-                        ccArrayFree(element.timers);
+                        delete element.timers;
                         _hashForTimers.erase(timerIt);
                     }
                 }
@@ -493,9 +492,9 @@ bool Scheduler::isScheduled(std::string_view key, const void* target) const
         return false;
     }
 
-    for (int i = 0; i < timers->num; ++i)
+    for (int i = 0; i < timers->size(); ++i)
     {
-        TimerTargetCallback* timer = dynamic_cast<TimerTargetCallback*>(timers->arr[i]);
+        TimerTargetCallback* timer = static_cast<TimerTargetCallback*>(timers->at(i));
 
         if (timer && !timer->isExhausted() && key == timer->getKey())
         {
@@ -599,12 +598,12 @@ void Scheduler::unscheduleAllForTarget(void* target)
     if (timerIt != _hashForTimers.end())
     {
         auto& element = timerIt->second;
-        if (ccArrayContainsObject(element.timers, element.currentTimer) && (!element.currentTimer->isAborted()))
+        if (element.timers->contains(element.currentTimer) && (!element.currentTimer->isAborted()))
         {
             element.currentTimer->retain();
             element.currentTimer->setAborted();
         }
-        ccArrayRemoveAllObjects(element.timers);
+        element.timers->clear();
 
         if (_currentTarget == &element)
         {
@@ -612,7 +611,7 @@ void Scheduler::unscheduleAllForTarget(void* target)
         }
         else
         {
-            ccArrayFree(element.timers);
+            delete element.timers;
             _hashForTimers.erase(timerIt);
         }
     }
@@ -828,9 +827,9 @@ void Scheduler::update(float dt)
         if (!_currentTarget->paused)
         {
             // The 'timers' array may change while inside this loop
-            for (elt->timerIndex = 0; elt->timerIndex < elt->timers->num; ++(elt->timerIndex))
+            for (elt->timerIndex = 0; elt->timerIndex < elt->timers->size(); ++(elt->timerIndex))
             {
-                elt->currentTimer = (Timer*)(elt->timers->arr[elt->timerIndex]);
+                elt->currentTimer = (Timer*)(elt->timers->at(elt->timerIndex));
                 AXASSERT(!elt->currentTimer->isAborted(), "An aborted timer should not be updated");
 
                 elt->currentTimer->update(dt);
@@ -852,9 +851,9 @@ void Scheduler::update(float dt)
         // elt = (tHashTimerEntry*)elt->hh.next;
 
         // only delete currentTarget if no actions were scheduled during the cycle (issue #481)
-        if (_currentTargetSalvaged && _currentTarget->timers->num == 0)
+        if (_currentTargetSalvaged && _currentTarget->timers->size() == 0)
         {
-            ccArrayFree(_currentTarget->timers);
+            delete _currentTarget->timers;
             it = _hashForTimers.erase(it);
         }
         else
@@ -939,13 +938,13 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
     auto timers = timerIt->second.timers;
     if (!timers)
     {
-        timers = timerIt->second.timers = ccArrayNew(10);
+        timers = timerIt->second.timers = new Vector<Timer*>(10);
     }
     else
     {
-        for (int i = 0; i < timers->num; ++i)
+        for (int i = 0; i < timers->size(); ++i)
         {
-            TimerTargetSelector* timer = dynamic_cast<TimerTargetSelector*>(timers->arr[i]);
+            TimerTargetSelector* timer = static_cast<TimerTargetSelector*>(timers->at(i));
 
             if (timer && !timer->isExhausted() && selector == timer->getSelector())
             {
@@ -955,12 +954,11 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
                 return;
             }
         }
-        ccArrayEnsureExtraCapacity(timers, 1);
     }
 
     TimerTargetSelector* timer = new TimerTargetSelector();
     timer->initWithSelector(this, selector, target, interval, repeat, delay);
-    ccArrayAppendObject(timers, timer);
+    timers->pushBack(timer);
     timer->release();
 }
 
@@ -986,9 +984,9 @@ bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Ref* target) const
         return false;
     }
 
-    for (int i = 0; i < timers->num; ++i)
+    for (int i = 0; i < timers->size(); ++i)
     {
-        TimerTargetSelector* timer = dynamic_cast<TimerTargetSelector*>(timers->arr[i]);
+        TimerTargetSelector* timer = static_cast<TimerTargetSelector*>(timers->at(i));
 
         if (timer && !timer->isExhausted() && selector == timer->getSelector())
         {
@@ -1012,9 +1010,9 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Ref* target)
     {
         auto& element = timerIt->second;
         auto timers   = element.timers;
-        for (int i = 0; i < timers->num; ++i)
+        for (int i = 0; i < timers->size(); ++i)
         {
-            TimerTargetSelector* timer = dynamic_cast<TimerTargetSelector*>(timers->arr[i]);
+            TimerTargetSelector* timer = dynamic_cast<TimerTargetSelector*>(timers->at(i));
 
             if (timer && selector == timer->getSelector())
             {
@@ -1024,7 +1022,7 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Ref* target)
                     timer->setAborted();
                 }
 
-                ccArrayRemoveObjectAtIndex(timers, i, true);
+                timers->erase(i);
 
                 // update timerIndex in case we are in tick:, looping over the actions
                 if (element.timerIndex >= i)
@@ -1032,7 +1030,7 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Ref* target)
                     element.timerIndex--;
                 }
 
-                if (timers->num == 0)
+                if (timers->size() == 0)
                 {
                     if (_currentTarget == &element)
                     {
@@ -1040,7 +1038,7 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Ref* target)
                     }
                     else
                     {
-                        ccArrayFree(element.timers);
+                        delete element.timers;
                         _hashForTimers.erase(timerIt);
                     }
                 }

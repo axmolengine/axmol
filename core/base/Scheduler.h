@@ -38,7 +38,6 @@ THE SOFTWARE.
 
 #include "uthash/uthash.h"
 #include "uthash/utlist.h"
-#include "base/CArray.h"
 
 NS_AX_BEGIN
 
@@ -185,7 +184,7 @@ typedef struct _hashUpdateEntry
 // Hash Element used for "selectors with interval"
 typedef struct _hashSelectorEntry
 {
-    ccArray* timers;
+    Vector<Timer*>* timers;
     int timerIndex;
     Timer* currentTimer;
     bool paused;
