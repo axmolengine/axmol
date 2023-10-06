@@ -32,10 +32,13 @@ THE SOFTWARE.
 #include <functional>
 #include <mutex>
 #include <set>
-
+#include <list>
 #include "base/Ref.h"
 #include "base/Vector.h"
+
 #include "uthash/uthash.h"
+#include "uthash/utlist.h"
+#include "base/CArray.h"
 
 NS_AX_BEGIN
 
@@ -155,6 +158,40 @@ private:
 struct _listEntry;
 struct _hashSelectorEntry;
 struct _hashUpdateEntry;
+
+
+// data structures
+
+// A list double-linked list used for "updates with priority"
+typedef struct _listEntry
+{
+    struct _listEntry *prev, *next;
+    ccSchedulerFunc callback;
+    void* target;
+    int priority;
+    bool paused;
+    bool markedForDeletion;  // selector will no longer be called and entry will be removed at end of the next tick
+} tListEntry;
+
+typedef struct _hashUpdateEntry
+{
+    tListEntry** list;  // Which list does it belong to ?
+    tListEntry* entry;  // entry in the list
+    //void* target;
+    ccSchedulerFunc callback;
+    //UT_hash_handle hh;
+} tHashUpdateEntry;
+
+// Hash Element used for "selectors with interval"
+typedef struct _hashSelectorEntry
+{
+    ccArray* timers;
+    void* target;
+    int timerIndex;
+    Timer* currentTimer;
+    bool paused;
+    UT_hash_handle hh;
+} tHashTimerEntry;
 
 #if AX_ENABLE_SCRIPT_BINDING
 class SchedulerScriptHandlerEntry;
@@ -476,7 +513,6 @@ protected:
      */
     void schedulePerFrame(const ccSchedulerFunc& callback, void* target, int priority, bool paused);
 
-    void removeHashElement(struct _hashSelectorEntry* element);
     void removeUpdateFromHash(struct _listEntry* entry);
 
     // update specific
@@ -492,12 +528,14 @@ protected:
     struct _listEntry* _updatesNegList;        // list of priority < 0
     struct _listEntry* _updates0List;          // list priority == 0
     struct _listEntry* _updatesPosList;        // list priority > 0
-    struct _hashUpdateEntry* _hashForUpdates;  // hash used to fetch quickly the list entries for pause,delete,etc
+    //struct _hashUpdateEntry* _hashForUpdates;  // hash used to fetch quickly the list entries for pause,delete,etc
+    std::unordered_map<const void*, _hashUpdateEntry> _hashForUpdates;
     std::vector<struct _listEntry*>
         _updateDeleteVector;  // the vector holds list entries that needs to be deleted after update
 
     // Used for "selectors with interval"
-    struct _hashSelectorEntry* _hashForTimers;
+    //struct _hashSelectorEntry* _hashForTimers;
+    std::unordered_map<const void*, _hashSelectorEntry> _hashForTimers;
     struct _hashSelectorEntry* _currentTarget;
     bool _currentTargetSalvaged;
     // If true unschedule will not remove anything from a hash. Elements will only be marked for deletion.
