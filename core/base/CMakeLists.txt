@@ -75,7 +75,6 @@ set(_AX_BASE_HEADER
     base/EventListenerTouch.h
     base/EventListenerAcceleration.h
     base/firePngData.h
-    base/CArray.h
     base/EventListener.h
     base/Scheduler.h
     base/EventType.h
@@ -124,7 +123,6 @@ set(_AX_BASE_SRC
     base/ZipUtils.cpp
     base/atitc.cpp
     base/base64.cpp
-    base/CArray.cpp
     base/FPSImages.cpp
     base/Random.cpp
     base/Types.cpp

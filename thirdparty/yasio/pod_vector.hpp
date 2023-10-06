@@ -162,6 +162,43 @@ public:
     }
     return _Where;
   }
+  iterator insert(iterator _Where, const value_type& _Val)
+  { // insert _Val at _Where
+    return emplace(_Where, _Val);
+  }
+  iterator insert(iterator _Where, value_type&& _Val)
+  { // insert by moving _Val at _Where
+    return emplace(_Where, std::move(_Val));
+  }
+  template <typename... _Valty>
+  iterator emplace(iterator _Where, _Valty&&... _Val)
+  {
+    auto _Off = std::distance(_Myfirst, _Where);
+    _YASIO_VERIFY_RANGE(_Off <= _Mysize, "pod_vector: out of range!");
+#if YASIO__HAS_CXX20
+    emplace_back(std::forward<_Valty>(_Val)...);
+    std::rotate(begin() + _Off, end() - 1, end());
+    return (begin() + _Off);
+#else
+    auto _Mylast = _Myfirst + _Mysize;
+    if (_Where == _Mylast)
+      emplace_back(std::forward<_Valty>(_Val)...);
+    else
+    {
+      if (_Off >= 0)
+      {
+        const auto old_size = _Mysize;
+        expand(1);
+        _Where       = _Myfirst + _Off;
+        _Mylast      = _Myfirst + _Mysize;
+        auto move_to = _Where + 1;
+        std::copy_n(_Where, _Mylast - move_to, move_to);
+        construct_helper<value_type>::construct_at(_Where, std::forward<_Valty>(_Val)...);
+      }
+    }
+    return _Myfirst + _Off;
+#endif
+  }
   template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
   pod_vector& append(_Iter first, const _Iter last)
   {
@@ -436,7 +473,34 @@ private:
   size_type _Myres  = 0;
 };
 
+#pragma region c++20 like std::erase
+template <typename _Ty, typename _Alloc>
+void erase(pod_vector<_Ty, _Alloc>& cont, const _Ty& value)
+{
+  cont.erase(std::remove(cont.begin(), cont.end(), value), cont.end());
+}
+template <typename _Ty, typename _Alloc, typename _Pr>
+void erase_if(pod_vector<_Ty, _Alloc>& cont, _Pr pred)
+{
+  cont.erase(std::remove_if(cont.begin(), cont.end(), pred), cont.end());
+}
+#pragma endregion
+
+template <typename _Cont>
+inline typename _Cont::iterator insert_sorted(_Cont& vec, typename _Cont::value_type const& item)
+{
+  return vec.insert(std::upper_bound(vec.begin(), vec.end(), item), item);
+}
+
+template <typename _Cont, typename _Pred>
+inline typename _Cont::iterator insert_sorted(_Cont& vec, typename _Cont::value_type const& item, _Pred pred)
+{
+  return vec.insert(std::upper_bound(vec.begin(), vec.end(), item, pred), item);
+}
+
+// alias: array_buffer
 template <typename _Ty, typename _Alloc = buffer_allocator<_Ty>>
 using array_buffer = pod_vector<_Ty, _Alloc>;
+
 } // namespace yasio
 #endif

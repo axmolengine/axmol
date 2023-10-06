@@ -33,7 +33,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-// implementation Timer 
+// implementation Timer
 
 Timer::Timer()
     : _scheduler(nullptr)
@@ -216,9 +216,6 @@ const int Scheduler::PRIORITY_NON_SYSTEM_MIN = PRIORITY_SYSTEM + 1;
 
 Scheduler::Scheduler()
     : _timeScale(1.0f)
-    , _updatesNegList(nullptr)
-    , _updates0List(nullptr)
-    , _updatesPosList(nullptr)
     , _currentTarget(nullptr)
     , _currentTargetSalvaged(false)
     , _updateHashLocked(false)
@@ -255,10 +252,10 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
     AXASSERT(target, "Argument target must be non-nullptr");
     AXASSERT(!key.empty(), "key should not be empty!");
 
-   /* tHashTimerEntry* element = nullptr;
-    HASH_FIND_PTR(_hashForTimers, &target, element);*/
+    /* tHashTimerEntry* element = nullptr;
+     HASH_FIND_PTR(_hashForTimers, &target, element);*/
     tHashTimerEntry* element = nullptr;
-    auto timerIt = _hashForTimers.find(target);
+    auto timerIt             = _hashForTimers.find(target);
     if (timerIt == _hashForTimers.end())
     {
         element = &_hashForTimers.emplace(target, _hashSelectorEntry{}).first->second;
@@ -352,68 +349,31 @@ void Scheduler::unschedule(std::string_view key, void* target)
     }
 }
 
-void Scheduler::priorityIn(tListEntry** list, const ccSchedulerFunc& callback, void* target, int priority, bool paused)
+void Scheduler::priorityIn(axstd::pod_vector<tListEntry*>& list,
+                           const ccSchedulerFunc& callback,
+                           void* target,
+                           int priority,
+                           bool paused)
 {
     tListEntry* listElement = new tListEntry();
 
-    listElement->callback = callback;
-    listElement->target   = target;
-    listElement->priority = priority;
-    listElement->paused   = paused;
-    listElement->next = listElement->prev = nullptr;
-    listElement->markedForDeletion        = false;
+    listElement->callback          = callback;
+    listElement->target            = target;
+    listElement->priority          = priority;
+    listElement->paused            = paused;
+    listElement->markedForDeletion = false;
+    axstd::insert_sorted(list, listElement,
+                         [](const tListEntry* lhs, const tListEntry* rhs) { return lhs->priority < rhs->priority; });
 
-    // empty list ?
-    if (!*list)
-    {
-        DL_APPEND(*list, listElement);
-    }
-    else
-    {
-        bool added = false;
-
-        for (tListEntry* element = *list; element; element = element->next)
-        {
-            if (priority < element->priority)
-            {
-                if (element == *list)
-                {
-                    DL_PREPEND(*list, listElement);
-                }
-                else
-                {
-                    listElement->next = element;
-                    listElement->prev = element->prev;
-
-                    element->prev->next = listElement;
-                    element->prev       = listElement;
-                }
-
-                added = true;
-                break;
-            }
-        }
-
-        // Not added? priority has the higher value. Append it.
-        if (!added)
-        {
-            DL_APPEND(*list, listElement);
-        }
-    }
-
-    // update hash entry for quick access
-    // tHashUpdateEntry* hashElement = (tHashUpdateEntry*)calloc(sizeof(*hashElement), 1);
-    // hashElement->target           = target;
-    // hashElement->list             = list;
-    // hashElement->entry            = listElement;
-    // memset(&hashElement->hh, 0, sizeof(hashElement->hh));
-    // HASH_ADD_PTR(_hashForUpdates, target, hashElement);
     auto& hashElement = _hashForUpdates.emplace(target, tHashUpdateEntry{}).first->second;
-    hashElement.list  = list;
+    hashElement.list  = &list;
     hashElement.entry = listElement;
 }
 
-void Scheduler::appendIn(_listEntry** list, const ccSchedulerFunc& callback, void* target, bool paused)
+void Scheduler::appendIn(axstd::pod_vector<tListEntry*>& list,
+                         const ccSchedulerFunc& callback,
+                         void* target,
+                         bool paused)
 {
     tListEntry* listElement = new tListEntry();
 
@@ -423,18 +383,10 @@ void Scheduler::appendIn(_listEntry** list, const ccSchedulerFunc& callback, voi
     listElement->priority          = 0;
     listElement->markedForDeletion = false;
 
-    DL_APPEND(*list, listElement);
-
-    // update hash entry for quicker access
-    // tHashUpdateEntry* hashElement = (tHashUpdateEntry*)calloc(sizeof(*hashElement), 1);
-    // hashElement->target           = target;
-    // hashElement->list             = list;
-    // hashElement->entry            = listElement;
-    // memset(&hashElement->hh, 0, sizeof(hashElement->hh));
-    // HASH_ADD_PTR(_hashForUpdates, target, hashElement);
+    list.emplace_back(listElement);
 
     auto& hashElement = _hashForUpdates.emplace(target, tHashUpdateEntry{}).first->second;
-    hashElement.list  = list;
+    hashElement.list  = &list;
     hashElement.entry = listElement;
 }
 
@@ -461,16 +413,16 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void* target, 
     // is an special list for updates with priority 0
     if (priority == 0)
     {
-        appendIn(&_updates0List, callback, target, paused);
+        appendIn(_updates0List, callback, target, paused);
     }
     else if (priority < 0)
     {
-        priorityIn(&_updatesNegList, callback, target, priority, paused);
+        priorityIn(_updatesNegList, callback, target, priority, paused);
     }
     else
     {
         // priority > 0
-        priorityIn(&_updatesPosList, callback, target, priority, paused);
+        priorityIn(_updatesPosList, callback, target, priority, paused);
     }
 }
 
@@ -512,7 +464,7 @@ void Scheduler::removeUpdateFromHash(struct _listEntry* entry)
     {
         auto& element = updateIt->second;
         // list entry
-        DL_DELETE(*element.list, element.entry);
+        axstd::erase(*element.list, entry);
         if (!_updateHashLocked)
             AX_SAFE_DELETE(element.entry);
         else
@@ -553,10 +505,9 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
     }
 
     // Updates selectors
-    tListEntry *entry, *tmp;
     if (minPriority < 0)
     {
-        DL_FOREACH_SAFE(_updatesNegList, entry, tmp)
+        for (auto&& entry : _updatesNegList)
         {
             if (entry->priority >= minPriority)
             {
@@ -567,13 +518,13 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
 
     if (minPriority <= 0)
     {
-        DL_FOREACH_SAFE(_updates0List, entry, tmp)
+        for (auto&& entry : _updates0List)
         {
             unscheduleUpdate(entry->target);
         }
     }
 
-    DL_FOREACH_SAFE(_updatesPosList, entry, tmp)
+    for (auto&& entry : _updatesPosList)
     {
         if (entry->priority >= minPriority)
         {
@@ -719,10 +670,9 @@ std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
     }
 
     // Updates selectors
-    tListEntry *entry, *tmp;
     if (minPriority < 0)
     {
-        DL_FOREACH_SAFE(_updatesNegList, entry, tmp)
+        for (auto&& entry : _updatesNegList)
         {
             if (entry->priority >= minPriority)
             {
@@ -734,14 +684,14 @@ std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
 
     if (minPriority <= 0)
     {
-        DL_FOREACH_SAFE(_updates0List, entry, tmp)
+        for (auto&& entry : _updates0List)
         {
             entry->paused = true;
             idsWithSelectors.insert(entry->target);
         }
     }
 
-    DL_FOREACH_SAFE(_updatesPosList, entry, tmp)
+    for (auto&& entry : _updatesPosList)
     {
         if (entry->priority >= minPriority)
         {
@@ -788,10 +738,8 @@ void Scheduler::update(float dt)
     //
 
     // Iterate over all the Updates' selectors
-    tListEntry *entry, *tmp;
-
     // updates with priority < 0
-    DL_FOREACH_SAFE(_updatesNegList, entry, tmp)
+    for (auto&& entry : _updatesNegList)
     {
         if ((!entry->paused) && (!entry->markedForDeletion))
         {
@@ -800,7 +748,7 @@ void Scheduler::update(float dt)
     }
 
     // updates with priority == 0
-    DL_FOREACH_SAFE(_updates0List, entry, tmp)
+    for (auto&& entry : _updates0List)
     {
         if ((!entry->paused) && (!entry->markedForDeletion))
         {
@@ -809,7 +757,7 @@ void Scheduler::update(float dt)
     }
 
     // updates with priority > 0
-    DL_FOREACH_SAFE(_updatesPosList, entry, tmp)
+    for (auto&& entry : _updatesPosList)
     {
         if ((!entry->paused) && (!entry->markedForDeletion))
         {

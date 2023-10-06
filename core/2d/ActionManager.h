@@ -36,9 +36,14 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-class Action;
-
-struct _hashElement;
+struct _ActionItem
+{
+    Vector<Action*> actions;
+    int actionIndex;
+    Action* currentAction;
+    bool currentActionSalvaged;
+    bool paused;
+};
 
 /**
  * @addtogroup actions
@@ -195,14 +200,15 @@ public:
 
 protected:
     // declared in ActionManager.m
+    void removeAllActionsDirect(std::unordered_map<Node*, _ActionItem>::iterator& actionIt);
 
-    void removeActionAtIndex(ssize_t index, struct _hashElement* element);
-    void deleteHashElement(struct _hashElement* element);
-    void actionAllocWithHashElement(struct _hashElement* element);
+    void removeActionAtIndex(ssize_t index, _ActionItem& element,
+                             std::unordered_map<Node*, _ActionItem>::iterator actionIt);
+    void actionAllocWithHashElement(_ActionItem& element);
 
 protected:
-    struct _hashElement* _targets;
-    struct _hashElement* _currentTarget;
+    std::unordered_map<Node*, _ActionItem> _targets;
+    _ActionItem* _currentTarget;
     bool _currentTargetSalvaged;
 };
 

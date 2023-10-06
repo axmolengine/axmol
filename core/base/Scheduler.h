@@ -33,11 +33,9 @@ THE SOFTWARE.
 #include <mutex>
 #include <set>
 #include <list>
+#include "base/axstd.h"
 #include "base/Ref.h"
 #include "base/Vector.h"
-
-#include "uthash/uthash.h"
-#include "uthash/utlist.h"
 
 NS_AX_BEGIN
 
@@ -158,13 +156,11 @@ struct _listEntry;
 struct _hashSelectorEntry;
 struct _hashUpdateEntry;
 
-
 // data structures
 
 // A list double-linked list used for "updates with priority"
 typedef struct _listEntry
 {
-    struct _listEntry *prev, *next;
     ccSchedulerFunc callback;
     void* target;
     int priority;
@@ -174,11 +170,9 @@ typedef struct _listEntry
 
 typedef struct _hashUpdateEntry
 {
-    tListEntry** list;  // Which list does it belong to ?
-    tListEntry* entry;  // entry in the list
-    //void* target;
+    axstd::pod_vector<tListEntry*>* list;  // Which list does it belong to ?
+    tListEntry* entry;                     // entry in the list
     ccSchedulerFunc callback;
-    //UT_hash_handle hh;
 } tHashUpdateEntry;
 
 // Hash Element used for "selectors with interval"
@@ -514,24 +508,28 @@ protected:
 
     // update specific
 
-    void priorityIn(struct _listEntry** list, const ccSchedulerFunc& callback, void* target, int priority, bool paused);
-    void appendIn(struct _listEntry** list, const ccSchedulerFunc& callback, void* target, bool paused);
+    void priorityIn(axstd::pod_vector<_listEntry*>& list,
+                    const ccSchedulerFunc& callback,
+                    void* target,
+                    int priority,
+                    bool paused);
+    void appendIn(axstd::pod_vector<_listEntry*>& list, const ccSchedulerFunc& callback, void* target, bool paused);
 
     float _timeScale;
 
     //
     // "updates with priority" stuff
     //
-    struct _listEntry* _updatesNegList;        // list of priority < 0
-    struct _listEntry* _updates0List;          // list priority == 0
-    struct _listEntry* _updatesPosList;        // list priority > 0
-    //struct _hashUpdateEntry* _hashForUpdates;  // hash used to fetch quickly the list entries for pause,delete,etc
+    axstd::pod_vector<_listEntry*> _updatesNegList;  // list of priority < 0
+    axstd::pod_vector<_listEntry*> _updates0List;    // list priority == 0
+    axstd::pod_vector<_listEntry*> _updatesPosList;  // list priority > 0
+    // hash used to fetch quickly the list entries for pause,delete,etc
     std::unordered_map<const void*, _hashUpdateEntry> _hashForUpdates;
-    std::vector<struct _listEntry*>
-        _updateDeleteVector;  // the vector holds list entries that needs to be deleted after update
+
+    // the vector holds list entries that needs to be deleted after update
+    std::vector<_listEntry*> _updateDeleteVector;
 
     // Used for "selectors with interval"
-    //struct _hashSelectorEntry* _hashForTimers;
     std::unordered_map<const void*, _hashSelectorEntry> _hashForTimers;
     struct _hashSelectorEntry* _currentTarget;
     bool _currentTargetSalvaged;
