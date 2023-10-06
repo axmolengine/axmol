@@ -262,8 +262,6 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
     if (timerIt == _hashForTimers.end())
     {
         element = &_hashForTimers.emplace(target, _hashSelectorEntry{}).first->second;
-        element->target = target;
-
 
         // Is this the 1st element ? Then set the pause level to all the selectors of this target
         element->paused = paused;
@@ -705,20 +703,20 @@ bool Scheduler::isTargetPaused(void* target)
     return false;  // should never get here
 }
 
-std::set<void*> Scheduler::pauseAllTargets()
+std::set<const void*> Scheduler::pauseAllTargets()
 {
     return pauseAllTargetsWithMinPriority(PRIORITY_SYSTEM);
 }
 
-std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
+std::set<const void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
 {
-    std::set<void*> idsWithSelectors;
+    std::set<const void*> idsWithSelectors;
 
     // Custom Selectors
-    for (auto& [_, element] : _hashForTimers)
+    for (auto& [target, element] : _hashForTimers)
     {
         element.paused = true;
-        idsWithSelectors.insert(element.target);
+        idsWithSelectors.insert(target);
     }
 
     // Updates selectors
@@ -929,7 +927,6 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
     if (timerIt == _hashForTimers.end())
     {
         timerIt = _hashForTimers.emplace(target, tHashTimerEntry{}).first;
-        timerIt->second.target = target;
 
         // Is this the 1st element ? Then set the pause level to all the selectors of this target
         timerIt->second.paused = paused;

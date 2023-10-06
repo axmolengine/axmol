@@ -186,7 +186,6 @@ typedef struct _hashUpdateEntry
 typedef struct _hashSelectorEntry
 {
     ccArray* timers;
-    void* target;
     int timerIndex;
     Timer* currentTimer;
     bool paused;
@@ -463,7 +462,7 @@ public:
       You should NEVER call this method, unless you know what you are doing.
      @since v2.0.0
       */
-    std::set<void*> pauseAllTargets();
+    std::set<const void*> pauseAllTargets();
 
     /** Pause all selectors from all targets with a minimum priority.
       You should only call this with PRIORITY_NON_SYSTEM_MIN or higher.
@@ -471,7 +470,7 @@ public:
             priority is higher than minPriority will be paused.
       @since v2.0.0
       */
-    std::set<void*> pauseAllTargetsWithMinPriority(int minPriority);
+    std::set<const void*> pauseAllTargetsWithMinPriority(int minPriority);
 
     /** Resume selectors on a set of targets.
      This can be useful for undoing a call to pauseAllSelectors.
