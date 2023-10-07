@@ -9,8 +9,7 @@
 #include "ImGuiPresenter.h"
 #include <imgui/misc/cpp/imgui_stdlib.h>
 #include <zlib.h>
-#include "json/json.hpp"
-
+#include "base/JsonWriter.h"
 #include "yasio/utils.hpp"
 
 NS_AX_EXT_BEGIN
@@ -97,52 +96,54 @@ public:
 
         auto start = yasio::highp_clock();
 
-        nlohmann::json xasset;
+        JsonWriter<> xasset;
 
-        xasset.emplace("version", AX_VERSION_STR "-" AX_GIT_COMMIT_HASH);
-        xasset.emplace("type", "fontatlas");
-        xasset.emplace("sourceFont", _params->sourceFont);
-        xasset.emplace("atlasName", _atlasName);
-        xasset.emplace("spread", 6);
-        xasset.emplace("faceSize", _params->faceSize);
+        xasset.writeStartObject();
 
-        xasset.emplace("atlasDim", _params->atlasDim);
+        xasset.writeString("version"sv, AX_VERSION_STR "-" AX_GIT_COMMIT_HASH);
+        xasset.writeString("type"sv, "fontatlas"sv);
+        xasset.writeString("sourceFont"sv, _params->sourceFont);
+        xasset.writeString("atlasName"sv, _atlasName);
+        xasset.writeNumber("spread"sv, 6);
+        xasset.writeNumber("faceSize"sv, _params->faceSize);
 
-        nlohmann::json letters;
+        xasset.writeNumberArray("atlasDim"sv, _params->atlasDim);
+
+        xasset.writeStartObject("letters"sv);
         std::string charCode;
         for (auto& letterInfo : getLetterDefinitions())
         {
             charCode.clear();
             fmt::format_to(charCode, "{}", (int32_t)letterInfo.first);
 
-            nlohmann::json info;
-            info.emplace("U", letterInfo.second.U);
-            info.emplace("V", letterInfo.second.V);
-            info.emplace("width", letterInfo.second.width);
-            info.emplace("height", letterInfo.second.height);
-            info.emplace("offsetX", letterInfo.second.offsetX);
-            info.emplace("offsetY", letterInfo.second.offsetY);
-            info.emplace("page", letterInfo.second.textureID);
-            info.emplace("advance", letterInfo.second.xAdvance);
-            letters.emplace(charCode, std::move(info));
+            xasset.writeStartObject(charCode);
+            xasset.writeNumber("U", letterInfo.second.U);
+            xasset.writeNumber("V", letterInfo.second.V);
+            xasset.writeNumber("width", letterInfo.second.width);
+            xasset.writeNumber("height", letterInfo.second.height);
+            xasset.writeNumber("offsetX", letterInfo.second.offsetX);
+            xasset.writeNumber("offsetY", letterInfo.second.offsetY);
+            xasset.writeNumber("page", letterInfo.second.textureID);
+            xasset.writeNumber("advance", letterInfo.second.xAdvance);
+            xasset.writeEndObject();
         }
-        xasset.emplace("letters", std::move(letters));
+        xasset.writeEndObject();
 
-        nlohmann::json pages;
-
+        xasset.writeStartArray("pages");
         for (auto& data : _pageDatas)
         {
             auto compData = ZipUtils::compressGZ(std::span{data});
             auto pixels   = utils::base64Encode(std::span{compData});
-            pages.push_back(std::move(pixels));
+            xasset.writeStringValue(pixels);
         }
+        xasset.writeEndArray();
 
-        xasset.emplace("pages", std::move(pages));
+        xasset.writeNumber("pageX", _currentPageOrigX);
+        xasset.writeNumber("pageY", _currentPageOrigY);
 
-        xasset.emplace("pageX", _currentPageOrigX);
-        xasset.emplace("pageY", _currentPageOrigY);
+        xasset.writeEndObject();
 
-        auto str = xasset.dump(2);
+        auto str = static_cast<std::string_view>(xasset);
 
         fu->writeStringToFile(str, storePath);
 
@@ -283,7 +284,6 @@ void SDFGen::onImGuiDraw()
             }
             ImGui::EndCombo();
         }
-        
 
         if (ImGui::Button("Refresh Font List"))
         {
