@@ -100,12 +100,6 @@
 - Version: 3.0.0
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
-## json (nlohmann)
-
-- [![Upstream](https://img.shields.io/github/v/release/nlohmann/json?label=Upstream)](https://github.com/nlohmann/json)
-- Version: 3.11.2-6d4b72d
-- License: MIT
-
 ## kcp
 - [![Upstream](https://img.shields.io/github/v/release/skywind3000/kcp?label=Upstream)](https://github.com/skywind3000/kcp)
 - Version: 1.7

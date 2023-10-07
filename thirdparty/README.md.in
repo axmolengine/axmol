@@ -100,12 +100,6 @@
 - Version: ${JPEG_TURBO_VERSION}
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
-## json (nlohmann)
-
-- [![Upstream](https://img.shields.io/github/v/release/nlohmann/json?label=Upstream)](https://github.com/nlohmann/json)
-- Version: git 5fec803
-- License: MIT
-
 ## kcp
 - [![Upstream](https://img.shields.io/github/v/release/skywind3000/kcp?label=Upstream)](https://github.com/skywind3000/kcp)
 - Version: 1.7
