@@ -48,7 +48,7 @@ ActionManager::~ActionManager()
 }
 
 // private
-void ActionManager::actionAllocWithHashElement(_ActionItem& element)
+void ActionManager::reserveActionCapacity(_ActionHandle& element)
 {
     // 4 actions per Node by default
     if (!element.actions.capacity())
@@ -61,8 +61,8 @@ void ActionManager::actionAllocWithHashElement(_ActionItem& element)
     }
 }
 void ActionManager::removeActionAtIndex(ssize_t index,
-                                        _ActionItem& element,
-                                        std::unordered_map<Node*, _ActionItem>::iterator actionIt)
+                                        _ActionHandle& element,
+                                        std::unordered_map<Node*, _ActionHandle>::iterator actionIt)
 {
     Action* action = static_cast<Action*>(element.actions[index]);
 
@@ -88,8 +88,7 @@ void ActionManager::removeActionAtIndex(ssize_t index,
         }
         else
         {
-            if (actionIt != _targets.end())
-                actionIt = _targets.erase(actionIt);
+            eraseTargetActionHandle(actionIt);
         }
     }
 }
@@ -143,21 +142,19 @@ void ActionManager::addAction(Action* action, Node* target, bool paused)
     if (action == nullptr || target == nullptr)
         return;
 
-    _ActionItem* actionItem{nullptr};
-    auto it = _targets.find(target);
-    if (it == _targets.end())
+    auto actionIt = _targets.find(target);
+    if (actionIt == _targets.end())
     {
-        actionItem         = &_targets.emplace(target, _ActionItem{}).first->second;
-        actionItem->paused = paused;
+        actionIt                = _targets.emplace(target, _ActionHandle{}).first;
+        actionIt->second.paused = paused;
         target->retain();
     }
-    else
-        actionItem = &it->second;
 
-    actionAllocWithHashElement(*actionItem);
+    auto& actionHandle = actionIt->second;
+    reserveActionCapacity(actionHandle);
 
-    AXASSERT(!actionItem->actions.contains(action), "action already be added!");
-    actionItem->actions.pushBack(action);
+    AXASSERT(!actionHandle.actions.contains(action), "action already be added!");
+    actionHandle.actions.pushBack(action);
 
     action->startWithTarget(target);
 }
@@ -166,8 +163,8 @@ void ActionManager::addAction(Action* action, Node* target, bool paused)
 
 void ActionManager::removeAllActions()
 {
-    for (auto it = _targets.begin(); it != _targets.end();)
-        removeAllActionsDirect(it);
+    for (auto actionIt = _targets.begin(); actionIt != _targets.end();)
+        removeTargetActionHandle(actionIt);
 }
 
 void ActionManager::removeAllActionsFromTarget(Node* target)
@@ -180,10 +177,10 @@ void ActionManager::removeAllActionsFromTarget(Node* target)
 
     auto actionIt = _targets.find(target);
     if (actionIt != _targets.end())
-        removeAllActionsDirect(actionIt);
+        removeTargetActionHandle(actionIt);
 }
 
-void ActionManager::removeAllActionsDirect(std::unordered_map<Node*, _ActionItem>::iterator& actionIt)
+void ActionManager::removeTargetActionHandle(std::unordered_map<Node*, _ActionHandle>::iterator& actionIt)
 {
     auto& element = actionIt->second;
     if (element.actions.contains(element.currentAction) && !element.currentActionSalvaged)
@@ -200,9 +197,14 @@ void ActionManager::removeAllActionsDirect(std::unordered_map<Node*, _ActionItem
     }
     else
     {
-        actionIt->first->release();
-        actionIt = _targets.erase(actionIt);
+        eraseTargetActionHandle(actionIt);
     }
+}
+
+void ActionManager::eraseTargetActionHandle(std::unordered_map<Node*, _ActionHandle>::iterator& actionIt)
+{
+    actionIt->first->release();
+    actionIt = _targets.erase(actionIt);
 }
 
 void ActionManager::removeAction(Action* action)
@@ -214,7 +216,7 @@ void ActionManager::removeAction(Action* action)
     }
 
     Ref* target   = action->getOriginalTarget();
-    auto actionIt = _targets.find((Node*)target);
+    auto actionIt = _targets.find(static_cast<Node*>(target));
     if (actionIt != _targets.end())
     {
         auto i = actionIt->second.actions.getIndex(action);
@@ -325,7 +327,7 @@ Action* ActionManager::getActionByTag(int tag, const Node* target) const
 {
     AXASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
 
-    auto it = _targets.find((Node*)target);
+    auto it = _targets.find(const_cast<Node*>(target));
     if (it != _targets.end())
     {
         auto& actions = it->second.actions;
@@ -440,9 +442,7 @@ void ActionManager::update(float dt)
         // if some node reference 'target', it's reference count >= 2 (issues #14050)
         if ((_currentTargetSalvaged && _currentTarget->actions.empty()) || actionIt->first->getReferenceCount() == 1)
         {
-            // deleteHashElement(_currentTarget);
-            actionIt->first->release();
-            actionIt = _targets.erase(actionIt);
+            eraseTargetActionHandle(actionIt);
         }
         else
             ++actionIt;
