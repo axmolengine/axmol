@@ -1274,13 +1274,6 @@ if (!$setupOnly) {
             }
             if ($TOOLCHAIN_NAME -eq 'xcode') {
                 $BUILD_ALL_OPTIONS += '--', '-quiet'
-                if ($options.a -eq 'x64') {
-                    switch ($options.p) {
-                        'ios' { $BUILD_ALL_OPTIONS += '-sdk', 'iphonesimulator' }
-                        'tvos' { $BUILD_ALL_OPTIONS += '-sdk', 'appletvsimulator' }
-                        'watchos' { $BUILD_ALL_OPTIONS += '-sdk', 'watchsimulator' }
-                    }
-                }
             }
             $b1k.println("BUILD_ALL_OPTIONS=$BUILD_ALL_OPTIONS, Count={0}" -f $BUILD_ALL_OPTIONS.Count)
 
