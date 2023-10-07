@@ -1,11 +1,11 @@
 #
-# The simple ios toolchain file: https://github.com/yasio/yasio/blob/dev/cmake/ios.cmake
-# version: 4.0.7
+# The minimal ios toolchain file: https://github.com/yasio/yasio/blob/dev/cmake/ios.cmake
+# version: 4.1.1
 #
 # The supported params:
 #   PLAT: iOS, tvOS, default: iOS
 #   ARCHS: arm64, x86_64, default: arm64
-#   DEPLOYMENT_TARGET: default: iOS=11.0, tvOS=15.0, watchOS=8.0
+#   DEPLOYMENT_TARGET: default: iOS=11.0/12.0, tvOS=15.0, watchOS=8.0
 #   SIMULATOR: TRUE, FALSE, UNDEFINED(auto determine by archs) 
 #   ENABLE_BITCODE: FALSE(default)
 # 
@@ -32,7 +32,11 @@ if(NOT DEFINED DEPLOYMENT_TARGET)
         if("${ARCHS}" MATCHES ".*armv7.*")
            set(DEPLOYMENT_TARGET "10.0" CACHE STRING "" FORCE)
         else()
-           set(DEPLOYMENT_TARGET "11.0" CACHE STRING "" FORCE)
+           if (XCODE_VERSION LESS "14.3.0")
+               set(DEPLOYMENT_TARGET "11.0" CACHE STRING "" FORCE)
+           else() # xcode 14.3+ require 12.0 for c++ std::get
+               set(DEPLOYMENT_TARGET "12.0" CACHE STRING "" FORCE)
+           endif()
         endif()
     elseif (PLAT STREQUAL "tvOS")
         set(DEPLOYMENT_TARGET "15.0" CACHE STRING "" FORCE)
