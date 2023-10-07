@@ -22,6 +22,8 @@ jobs:
         with:
           toolset: '14.37'
           arch: ${{ env.BUILD_ARCH }}
+      - run: .\setup.ps1
+        shell: pwsh
       - name: Build
         shell: pwsh
         run: .\build.ps1 -p win32 -a x64
@@ -37,6 +39,8 @@ jobs:
           toolset: '14.37'
           arch: x64
           uwp: true
+      - run: .\setup.ps1
+        shell: pwsh
       - name: Build
         shell: pwsh
         run: .\build.ps1 -p winuwp -a x64 -xb '--config', 'Debug'
