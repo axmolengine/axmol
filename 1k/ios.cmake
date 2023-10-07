@@ -1,6 +1,6 @@
 #
 # The simple ios toolchain file: https://github.com/yasio/yasio/blob/dev/cmake/ios.cmake
-# version: 4.0.6
+# version: 4.0.7
 #
 # The supported params:
 #   PLAT: iOS, tvOS, default: iOS
@@ -8,6 +8,12 @@
 #   DEPLOYMENT_TARGET: default: iOS=11.0, tvOS=15.0, watchOS=8.0
 #   SIMULATOR: TRUE, FALSE, UNDEFINED(auto determine by archs) 
 #   ENABLE_BITCODE: FALSE(default)
+# 
+# !!!Note: iOS simulator, there is no xcode General tab, and we must set
+# CMAKE_OSX_SYSROOT properly for simulator, otherwise will lead cmake based
+# project detect C/C++ header from device sysroot which is not present in 
+# simulator sysroot, then cause compiling errors
+#
 #
 
 # PLAT
@@ -73,6 +79,28 @@ set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED NO)
 if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
     set(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET ${CMAKE_OSX_DEPLOYMENT_TARGET} CACHE STRING "")
 endif()
+
+if(SIMULATOR)
+    if (PLAT STREQUAL "iOS")
+        set(_SDK_NAME "iphonesimulator")
+    elseif(PLAT STREQUAL "tvOS")
+        set(_SDK_NAME "appletvsimulator")
+    elseif(PLAT STREQUAL "watchOS")
+        set(_SDK_NAME "watchsimulator")
+    else()
+        message(FATAL_ERROR "PLAT=${PLAT} unsupported!")
+    endif()
+    
+    find_program(XCODEBUILD_PROG xcodebuild)
+    if(NOT XCODEBUILD_PROG)
+        message(FATAL_ERROR "xcodebuild not found. Please install either the standalone commandline tools or Xcode.")
+    endif()
+    execute_process(COMMAND ${XCODEBUILD_PROG} -version -sdk ${_SDK_NAME} SDKVersion
+          OUTPUT_VARIABLE _SDK_VER
+          ERROR_QUIET
+          OUTPUT_STRIP_TRAILING_WHITESPACE)
+    set(CMAKE_OSX_SYSROOT "${_SDK_NAME}${_SDK_VER}" CACHE STRING "")
+endif() 
 
 # Since xcode14, the bitcode was marked deprecated, so we disable by default
 if(ENABLE_BITCODE)
