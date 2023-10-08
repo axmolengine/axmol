@@ -167,8 +167,8 @@ void Particle3DQuadRender::render(Renderer* renderer, const Mat4& transform, Par
     auto afterCommand = renderer->nextCallbackCommand();
     afterCommand->init(depthZ);
 
-    beforeCommand->func = [=]() { onBeforeDraw(); };  // AX_CALLBACK_0(Particle3DQuadRender::onBeforeDraw, this);
-    afterCommand->func  = [=]() { onAfterDraw(); };   // AX_CALLBACK_0(Particle3DQuadRender::onAfterDraw, this);
+    beforeCommand->func = [this] { onBeforeDraw(); };  // AX_CALLBACK_0(Particle3DQuadRender::onBeforeDraw, this);
+    afterCommand->func  = [this] { onAfterDraw(); };   // AX_CALLBACK_0(Particle3DQuadRender::onAfterDraw, this);
 
     _meshCommand.setVertexBuffer(_vertexBuffer);
     _meshCommand.setIndexBuffer(_indexBuffer, MeshCommand::IndexFormat::U_SHORT);
