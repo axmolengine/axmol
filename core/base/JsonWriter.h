@@ -54,7 +54,7 @@ struct JsonWriterImpl<false>
 template <bool _Pretty = true>
 class JsonWriter
 {
-    using writer_type = JsonWriterImpl<_Pretty>::type;
+    using writer_type = typename JsonWriterImpl<_Pretty>::type;
 
 public:
     JsonWriter()
