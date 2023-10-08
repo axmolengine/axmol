@@ -182,17 +182,6 @@ public:
         return *this;
     }
 
-    // Don't uses operator since we could not decide whether it needs 'retain'/'release'.
-    //    T& operator[](int index)
-    //    {
-    //        return _data[index];
-    //    }
-    //
-    //    const T& operator[](int index) const
-    //    {
-    //        return _data[index];
-    //    }
-
     /**
      * Requests that the vector capacity be at least enough to contain n elements.
      * @param capacity Minimum capacity requested of the Vector.
@@ -249,7 +238,7 @@ public:
     iterator find(T object) { return std::find(_data.begin(), _data.end(), object); }
 
     /** Returns the element at position 'index' in the Vector. */
-    T at(ssize_t index) const
+    T at(size_t index) const
     {
         AXASSERT(index >= 0 && index < size(), "index out of range in getObjectAtIndex()");
         return _data[index];
@@ -257,7 +246,7 @@ public:
 
     T operator[](size_t index) const
     {
-        AXASSERT(index >= 0 && index < size(), "index out of range in getObjectAtIndex()");
+        AXASSERT(index < size(), "index out of range in getObjectAtIndex()");
         return _data[index]; 
     }
 
