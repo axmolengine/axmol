@@ -156,16 +156,19 @@ private:
 
 struct SchedHandle
 {
-    SchedHandle(axstd::pod_vector<SchedHandle*>& o) : owner(o) {}
-    axstd::pod_vector<SchedHandle*>& owner; // the owner sched list
+    SchedHandle(axstd::pod_vector<SchedHandle*>& o, const ccSchedulerFunc& cb, void* t, int pri, bool psd) noexcept
+        : owner(o), callback(cb), target(t), priority(pri), paused(psd)
+    {}
+    SchedHandle(const SchedHandle&) = delete;
+    axstd::pod_vector<SchedHandle*>& owner;  // the owner sched list of this sched
     ccSchedulerFunc callback;
     void* target;
     int priority;
     bool paused;
-    bool markedForDeletion;  // selector will no longer be called and entry will be removed at end of the next tick
+    // selector will no longer be called and entry will be removed at end of the next tick
+    bool markedForDeletion = false;
 };
 
-// Hash Element used for "selectors with interval"
 struct TimerHandle
 {
     Vector<Timer*> timers;
@@ -494,8 +497,6 @@ protected:
      */
     void schedulePerFrame(const ccSchedulerFunc& callback, void* target, int priority, bool paused);
 
-    void removeUpdateFromHash(struct SchedHandle* entry);
-
     // update specific
 
     void priorityIn(axstd::pod_vector<SchedHandle*>& list,
@@ -524,7 +525,7 @@ protected:
     struct TimerHandle* _currentTarget;
     bool _currentTargetSalvaged;
     // If true unschedule will not remove anything from a hash. Elements will only be marked for deletion.
-    bool _updateHashLocked;
+    bool _indexMapLocked;
 
 #if AX_ENABLE_SCRIPT_BINDING
     Vector<SchedulerScriptHandlerEntry*> _scriptHandlerEntries;

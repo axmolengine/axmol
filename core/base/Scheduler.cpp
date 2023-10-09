@@ -218,7 +218,7 @@ Scheduler::Scheduler()
     : _timeScale(1.0f)
     , _currentTarget(nullptr)
     , _currentTargetSalvaged(false)
-    , _updateHashLocked(false)
+    , _indexMapLocked(false)
 #if AX_ENABLE_SCRIPT_BINDING
     , _scriptHandlerEntries(20)
 #endif
@@ -252,7 +252,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
     AXASSERT(target, "Argument target must be non-nullptr");
     AXASSERT(!key.empty(), "key should not be empty!");
 
-    auto timerIt         = _timersMap.find(target);
+    auto timerIt = _timersMap.find(target);
     if (timerIt == _timersMap.end())
     {
         timerIt = _timersMap.emplace(target, TimerHandle{}).first;
@@ -347,13 +347,7 @@ void Scheduler::priorityIn(axstd::pod_vector<SchedHandle*>& list,
                            int priority,
                            bool paused)
 {
-    auto sched = new SchedHandle(list);
-
-    sched->callback          = callback;
-    sched->target            = target;
-    sched->priority          = priority;
-    sched->paused            = paused;
-    sched->markedForDeletion = false;
+    auto sched = new SchedHandle(list, callback, target, priority, paused);
     axstd::insert_sorted(list, sched,
                          [](const SchedHandle* lhs, const SchedHandle* rhs) { return lhs->priority < rhs->priority; });
 
@@ -365,16 +359,8 @@ void Scheduler::appendIn(axstd::pod_vector<SchedHandle*>& list,
                          void* target,
                          bool paused)
 {
-    auto sched = new SchedHandle(list);
-
-    sched->callback          = callback;
-    sched->target            = target;
-    sched->paused            = paused;
-    sched->priority          = 0;
-    sched->markedForDeletion = false;
-
+    auto sched = new SchedHandle(list, callback, target, 0, paused);
     list.emplace_back(sched);
-
     _schedIndexMap.emplace(target, sched);
 }
 
@@ -431,27 +417,6 @@ bool Scheduler::isScheduled(std::string_view key, const void* target) const
     return found;
 }
 
-void Scheduler::removeUpdateFromHash(struct SchedHandle* entry)
-{
-    auto updateIt = _schedIndexMap.find(entry->target);
-    if (updateIt != _schedIndexMap.end())
-    {
-        auto& sched = updateIt->second;
-        // list entry
-        axstd::erase(sched->owner, entry);
-        if (!_updateHashLocked)
-            AX_SAFE_DELETE(sched);
-        else
-        {
-            sched->markedForDeletion = true;
-            _updateDeleteVector.emplace_back(sched);
-        }
-
-        // hash entry
-        _schedIndexMap.erase(updateIt);
-    }
-}
-
 void Scheduler::unscheduleUpdate(void* target)
 {
     if (target == nullptr)
@@ -461,7 +426,19 @@ void Scheduler::unscheduleUpdate(void* target)
 
     auto updateIt = _schedIndexMap.find(target);
     if (updateIt != _schedIndexMap.end())
-        this->removeUpdateFromHash(updateIt->second);
+    {
+        auto& sched = updateIt->second;
+        axstd::erase(sched->owner, sched);
+        if (!_indexMapLocked)
+            AX_SAFE_DELETE(sched);
+        else
+        {
+            sched->markedForDeletion = true;
+            _updateDeleteVector.emplace_back(sched);
+        }
+
+        _schedIndexMap.erase(updateIt);
+    }
 }
 
 void Scheduler::unscheduleAll()
@@ -698,7 +675,7 @@ void Scheduler::removeAllPendingActions()
 // main loop
 void Scheduler::update(float dt)
 {
-    _updateHashLocked = true;
+    _indexMapLocked = true;
 
     if (_timeScale != 1.0f)
     {
@@ -781,8 +758,8 @@ void Scheduler::update(float dt)
 
     _updateDeleteVector.clear();
 
-    _updateHashLocked = false;
-    _currentTarget    = nullptr;
+    _indexMapLocked = false;
+    _currentTarget  = nullptr;
 
 #if AX_ENABLE_SCRIPT_BINDING
     //
