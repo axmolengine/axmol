@@ -32,7 +32,6 @@ THE SOFTWARE.
 #include <functional>
 #include <mutex>
 #include <set>
-#include <list>
 #include "base/axstd.h"
 #include "base/Ref.h"
 #include "base/Vector.h"
