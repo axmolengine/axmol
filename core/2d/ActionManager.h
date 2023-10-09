@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 NS_AX_BEGIN
 
-struct _ActionHandle
+struct ActionHandle
 {
     Vector<Action*> actions;
     int actionIndex;
@@ -200,19 +200,19 @@ public:
 
 protected:
     // declared in ActionManager.m
-    void removeTargetActionHandle(std::unordered_map<Node*, _ActionHandle>::iterator& actionIt);
+    void removeTargetActionHandle(std::unordered_map<Node*, ActionHandle>::iterator& actionIt);
 
     void removeActionAtIndex(ssize_t index,
-                             _ActionHandle& element,
-                             std::unordered_map<Node*, _ActionHandle>::iterator actionIt);
+                             ActionHandle& element,
+                             std::unordered_map<Node*, ActionHandle>::iterator actionIt);
 
-    void reserveActionCapacity(_ActionHandle& element);
+    void reserveActionCapacity(ActionHandle& element);
 
-    void eraseTargetActionHandle(std::unordered_map<Node*, _ActionHandle>::iterator& actionIt);
+    void eraseTargetActionHandle(std::unordered_map<Node*, ActionHandle>::iterator& actionIt);
 
 protected:
-    std::unordered_map<Node*, _ActionHandle> _targets;
-    _ActionHandle* _currentTarget;
+    std::unordered_map<Node*, ActionHandle> _targets;
+    ActionHandle* _currentTarget;
     bool _currentTargetSalvaged;
 };
 

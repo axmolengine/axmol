@@ -48,7 +48,7 @@ ActionManager::~ActionManager()
 }
 
 // private
-void ActionManager::reserveActionCapacity(_ActionHandle& element)
+void ActionManager::reserveActionCapacity(ActionHandle& element)
 {
     // 4 actions per Node by default
     if (!element.actions.capacity())
@@ -61,8 +61,8 @@ void ActionManager::reserveActionCapacity(_ActionHandle& element)
     }
 }
 void ActionManager::removeActionAtIndex(ssize_t index,
-                                        _ActionHandle& element,
-                                        std::unordered_map<Node*, _ActionHandle>::iterator actionIt)
+                                        ActionHandle& element,
+                                        std::unordered_map<Node*, ActionHandle>::iterator actionIt)
 {
     Action* action = static_cast<Action*>(element.actions[index]);
 
@@ -145,7 +145,7 @@ void ActionManager::addAction(Action* action, Node* target, bool paused)
     auto actionIt = _targets.find(target);
     if (actionIt == _targets.end())
     {
-        actionIt                = _targets.emplace(target, _ActionHandle{}).first;
+        actionIt                = _targets.emplace(target, ActionHandle{}).first;
         actionIt->second.paused = paused;
         target->retain();
     }
@@ -180,7 +180,7 @@ void ActionManager::removeAllActionsFromTarget(Node* target)
         removeTargetActionHandle(actionIt);
 }
 
-void ActionManager::removeTargetActionHandle(std::unordered_map<Node*, _ActionHandle>::iterator& actionIt)
+void ActionManager::removeTargetActionHandle(std::unordered_map<Node*, ActionHandle>::iterator& actionIt)
 {
     auto& element = actionIt->second;
     if (element.actions.contains(element.currentAction) && !element.currentActionSalvaged)
@@ -201,7 +201,7 @@ void ActionManager::removeTargetActionHandle(std::unordered_map<Node*, _ActionHa
     }
 }
 
-void ActionManager::eraseTargetActionHandle(std::unordered_map<Node*, _ActionHandle>::iterator& actionIt)
+void ActionManager::eraseTargetActionHandle(std::unordered_map<Node*, ActionHandle>::iterator& actionIt)
 {
     actionIt->first->release();
     actionIt = _targets.erase(actionIt);

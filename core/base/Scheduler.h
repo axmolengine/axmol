@@ -152,37 +152,27 @@ private:
  * @{
  */
 
-struct _listEntry;
-struct _hashSelectorEntry;
-struct _hashUpdateEntry;
-
 // data structures
 
-// A list double-linked list used for "updates with priority"
-typedef struct _listEntry
+struct SchedHandle
 {
+    SchedHandle(axstd::pod_vector<SchedHandle*>& o) : owner(o) {}
+    axstd::pod_vector<SchedHandle*>& owner; // the owner sched list
     ccSchedulerFunc callback;
     void* target;
     int priority;
     bool paused;
     bool markedForDeletion;  // selector will no longer be called and entry will be removed at end of the next tick
-} tListEntry;
-
-typedef struct _hashUpdateEntry
-{
-    axstd::pod_vector<tListEntry*>* list;  // Which list does it belong to ?
-    tListEntry* entry;                     // entry in the list
-    ccSchedulerFunc callback;
-} tHashUpdateEntry;
+};
 
 // Hash Element used for "selectors with interval"
-typedef struct _hashSelectorEntry
+struct TimerHandle
 {
     Vector<Timer*> timers;
     int timerIndex;
     Timer* currentTimer;
     bool paused;
-} tHashTimerEntry;
+};
 
 #if AX_ENABLE_SCRIPT_BINDING
 class SchedulerScriptHandlerEntry;
@@ -504,34 +494,34 @@ protected:
      */
     void schedulePerFrame(const ccSchedulerFunc& callback, void* target, int priority, bool paused);
 
-    void removeUpdateFromHash(struct _listEntry* entry);
+    void removeUpdateFromHash(struct SchedHandle* entry);
 
     // update specific
 
-    void priorityIn(axstd::pod_vector<_listEntry*>& list,
+    void priorityIn(axstd::pod_vector<SchedHandle*>& list,
                     const ccSchedulerFunc& callback,
                     void* target,
                     int priority,
                     bool paused);
-    void appendIn(axstd::pod_vector<_listEntry*>& list, const ccSchedulerFunc& callback, void* target, bool paused);
+    void appendIn(axstd::pod_vector<SchedHandle*>& list, const ccSchedulerFunc& callback, void* target, bool paused);
 
     float _timeScale;
 
     //
     // "updates with priority" stuff
     //
-    axstd::pod_vector<_listEntry*> _updatesNegList;  // list of priority < 0
-    axstd::pod_vector<_listEntry*> _updates0List;    // list priority == 0
-    axstd::pod_vector<_listEntry*> _updatesPosList;  // list priority > 0
-    // hash used to fetch quickly the list entries for pause,delete,etc
-    std::unordered_map<void*, _hashUpdateEntry> _hashForUpdates;
+    axstd::pod_vector<SchedHandle*> _updatesNegList;  // list of priority < 0
+    axstd::pod_vector<SchedHandle*> _updates0List;    // list priority == 0
+    axstd::pod_vector<SchedHandle*> _updatesPosList;  // list priority > 0
+    // weak reference SchedHandle map used to fetch quickly the list entries for pause,delete,etc
+    std::unordered_map<void*, SchedHandle*> _schedIndexMap;
 
     // the vector holds list entries that needs to be deleted after update
-    std::vector<_listEntry*> _updateDeleteVector;
+    std::vector<SchedHandle*> _updateDeleteVector;
 
     // Used for "selectors with interval"
-    std::unordered_map<void*, _hashSelectorEntry> _hashForTimers;
-    struct _hashSelectorEntry* _currentTarget;
+    std::unordered_map<void*, TimerHandle> _timersMap;
+    struct TimerHandle* _currentTarget;
     bool _currentTargetSalvaged;
     // If true unschedule will not remove anything from a hash. Elements will only be marked for deletion.
     bool _updateHashLocked;

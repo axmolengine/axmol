@@ -252,32 +252,31 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
     AXASSERT(target, "Argument target must be non-nullptr");
     AXASSERT(!key.empty(), "key should not be empty!");
 
-    tHashTimerEntry* element = nullptr;
-    auto timerIt             = _hashForTimers.find(target);
-    if (timerIt == _hashForTimers.end())
+    auto timerIt         = _timersMap.find(target);
+    if (timerIt == _timersMap.end())
     {
-        element = &_hashForTimers.emplace(target, _hashSelectorEntry{}).first->second;
+        timerIt = _timersMap.emplace(target, TimerHandle{}).first;
 
         // Is this the 1st element ? Then set the pause level to all the selectors of this target
-        element->paused = paused;
+        timerIt->second.paused = paused;
     }
     else
     {
-        element = &timerIt->second;
         AXASSERT(timerIt->second.paused == paused, "element's paused should be paused!");
     }
 
-    if (element->timers.empty())
+    auto& timers = timerIt->second.timers;
+    if (timers.empty())
     {
-        element->timers.reserve(10);
+        timers.reserve(10);
     }
     else
     {
-        auto timerIt = std::find_if(element->timers.begin(), element->timers.end(), [&key](Timer* const itimer) {
+        auto timerIt = std::find_if(timers.begin(), timers.end(), [&key](Timer* const itimer) {
             TimerTargetCallback* timer = dynamic_cast<TimerTargetCallback*>(itimer);
             return timer && !timer->isExhausted() && key == timer->getKey();
         });
-        if (timerIt != element->timers.end())
+        if (timerIt != timers.end())
         {
             AXLOG("Scheduler#schedule. Reiniting timer with interval %.4f, repeat %u, delay %.4f", interval, repeat,
                   delay);
@@ -288,7 +287,7 @@ void Scheduler::schedule(const ccSchedulerFunc& callback,
 
     TimerTargetCallback* timer = new TimerTargetCallback();
     timer->initWithCallback(this, callback, target, key, interval, repeat, delay);
-    element->timers.pushBack(timer);
+    timers.pushBack(timer);
     timer->release();
 }
 
@@ -300,39 +299,39 @@ void Scheduler::unschedule(std::string_view key, void* target)
         return;
     }
 
-    auto timerIt = _hashForTimers.find(target);
-    if (timerIt != _hashForTimers.end())
+    auto timerIt = _timersMap.find(target);
+    if (timerIt != _timersMap.end())
     {
-        auto& element = timerIt->second;
-        for (int i = 0; i < element.timers.size(); ++i)
+        auto& timerHandle = timerIt->second;
+        for (int i = 0; i < timerHandle.timers.size(); ++i)
         {
-            TimerTargetCallback* timer = dynamic_cast<TimerTargetCallback*>(element.timers[i]);
+            TimerTargetCallback* timer = dynamic_cast<TimerTargetCallback*>(timerHandle.timers[i]);
 
             if (timer && key == timer->getKey())
             {
-                if (timer == element.currentTimer && (!timer->isAborted()))
+                if (timer == timerHandle.currentTimer && (!timer->isAborted()))
                 {
                     timer->retain();
                     timer->setAborted();
                 }
 
-                element.timers.erase(i);
+                timerHandle.timers.erase(i);
 
                 // update timerIndex in case we are in tick:, looping over the actions
-                if (element.timerIndex >= i)
+                if (timerHandle.timerIndex >= i)
                 {
-                    element.timerIndex--;
+                    timerHandle.timerIndex--;
                 }
 
-                if (element.timers.empty())
+                if (timerHandle.timers.empty())
                 {
-                    if (_currentTarget == &element)
+                    if (_currentTarget == &timerHandle)
                     {
                         _currentTargetSalvaged = true;
                     }
                     else
                     {
-                        _hashForTimers.erase(timerIt);
+                        _timersMap.erase(timerIt);
                     }
                 }
 
@@ -342,54 +341,50 @@ void Scheduler::unschedule(std::string_view key, void* target)
     }
 }
 
-void Scheduler::priorityIn(axstd::pod_vector<tListEntry*>& list,
+void Scheduler::priorityIn(axstd::pod_vector<SchedHandle*>& list,
                            const ccSchedulerFunc& callback,
                            void* target,
                            int priority,
                            bool paused)
 {
-    tListEntry* listElement = new tListEntry();
+    auto sched = new SchedHandle(list);
 
-    listElement->callback          = callback;
-    listElement->target            = target;
-    listElement->priority          = priority;
-    listElement->paused            = paused;
-    listElement->markedForDeletion = false;
-    axstd::insert_sorted(list, listElement,
-                         [](const tListEntry* lhs, const tListEntry* rhs) { return lhs->priority < rhs->priority; });
+    sched->callback          = callback;
+    sched->target            = target;
+    sched->priority          = priority;
+    sched->paused            = paused;
+    sched->markedForDeletion = false;
+    axstd::insert_sorted(list, sched,
+                         [](const SchedHandle* lhs, const SchedHandle* rhs) { return lhs->priority < rhs->priority; });
 
-    auto& hashElement = _hashForUpdates.emplace(target, tHashUpdateEntry{}).first->second;
-    hashElement.list  = &list;
-    hashElement.entry = listElement;
+    _schedIndexMap.emplace(target, sched);
 }
 
-void Scheduler::appendIn(axstd::pod_vector<tListEntry*>& list,
+void Scheduler::appendIn(axstd::pod_vector<SchedHandle*>& list,
                          const ccSchedulerFunc& callback,
                          void* target,
                          bool paused)
 {
-    tListEntry* listElement = new tListEntry();
+    auto sched = new SchedHandle(list);
 
-    listElement->callback          = callback;
-    listElement->target            = target;
-    listElement->paused            = paused;
-    listElement->priority          = 0;
-    listElement->markedForDeletion = false;
+    sched->callback          = callback;
+    sched->target            = target;
+    sched->paused            = paused;
+    sched->priority          = 0;
+    sched->markedForDeletion = false;
 
-    list.emplace_back(listElement);
+    list.emplace_back(sched);
 
-    auto& hashElement = _hashForUpdates.emplace(target, tHashUpdateEntry{}).first->second;
-    hashElement.list  = &list;
-    hashElement.entry = listElement;
+    _schedIndexMap.emplace(target, sched);
 }
 
 void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void* target, int priority, bool paused)
 {
-    auto updateIt = _hashForUpdates.find(target);
-    if (updateIt != _hashForUpdates.end())
+    auto updateIt = _schedIndexMap.find(target);
+    if (updateIt != _schedIndexMap.end())
     {
         // change priority: should unschedule it first
-        if (updateIt->second.entry->priority != priority)
+        if (updateIt->second->priority != priority)
         {
             unscheduleUpdate(target);
         }
@@ -422,9 +417,9 @@ bool Scheduler::isScheduled(std::string_view key, const void* target) const
     AXASSERT(!key.empty(), "Argument key must not be empty");
     AXASSERT(target, "Argument target must be non-nullptr");
 
-    auto timerIt = _hashForTimers.find(const_cast<void*>(target));
+    auto timerIt = _timersMap.find(const_cast<void*>(target));
 
-    if (timerIt == _hashForTimers.end())
+    if (timerIt == _timersMap.end())
         return false;
 
     auto&& timers    = timerIt->second.timers;
@@ -436,24 +431,24 @@ bool Scheduler::isScheduled(std::string_view key, const void* target) const
     return found;
 }
 
-void Scheduler::removeUpdateFromHash(struct _listEntry* entry)
+void Scheduler::removeUpdateFromHash(struct SchedHandle* entry)
 {
-    auto updateIt = _hashForUpdates.find(entry->target);
-    if (updateIt != _hashForUpdates.end())
+    auto updateIt = _schedIndexMap.find(entry->target);
+    if (updateIt != _schedIndexMap.end())
     {
-        auto& element = updateIt->second;
+        auto& sched = updateIt->second;
         // list entry
-        axstd::erase(*element.list, entry);
+        axstd::erase(sched->owner, entry);
         if (!_updateHashLocked)
-            AX_SAFE_DELETE(element.entry);
+            AX_SAFE_DELETE(sched);
         else
         {
-            element.entry->markedForDeletion = true;
-            _updateDeleteVector.emplace_back(element.entry);
+            sched->markedForDeletion = true;
+            _updateDeleteVector.emplace_back(sched);
         }
 
         // hash entry
-        _hashForUpdates.erase(updateIt);
+        _schedIndexMap.erase(updateIt);
     }
 }
 
@@ -464,9 +459,9 @@ void Scheduler::unscheduleUpdate(void* target)
         return;
     }
 
-    auto updateIt = _hashForUpdates.find(target);
-    if (updateIt != _hashForUpdates.end())
-        this->removeUpdateFromHash(updateIt->second.entry);
+    auto updateIt = _schedIndexMap.find(target);
+    if (updateIt != _schedIndexMap.end())
+        this->removeUpdateFromHash(updateIt->second);
 }
 
 void Scheduler::unscheduleAll()
@@ -477,9 +472,9 @@ void Scheduler::unscheduleAll()
 void Scheduler::unscheduleAllWithMinPriority(int minPriority)
 {
     // Custom Selectors
-    for (auto& [_, element] : _hashForTimers)
+    for (auto& [target, timerHandle] : _timersMap)
     {
-        unscheduleAllForTarget(&element);
+        unscheduleAllForTarget(target);
     }
 
     // Updates selectors
@@ -523,24 +518,24 @@ void Scheduler::unscheduleAllForTarget(void* target)
     }
 
     // Custom Selectors
-    auto timerIt = _hashForTimers.find(target);
-    if (timerIt != _hashForTimers.end())
+    auto timerIt = _timersMap.find(target);
+    if (timerIt != _timersMap.end())
     {
-        auto& element = timerIt->second;
-        if (element.timers.contains(element.currentTimer) && (!element.currentTimer->isAborted()))
+        auto& timerHandle = timerIt->second;
+        if (timerHandle.timers.contains(timerHandle.currentTimer) && (!timerHandle.currentTimer->isAborted()))
         {
-            element.currentTimer->retain();
-            element.currentTimer->setAborted();
+            timerHandle.currentTimer->retain();
+            timerHandle.currentTimer->setAborted();
         }
-        element.timers.clear();
+        timerHandle.timers.clear();
 
-        if (_currentTarget == &element)
+        if (_currentTarget == &timerHandle)
         {
             _currentTargetSalvaged = true;
         }
         else
         {
-            _hashForTimers.erase(timerIt);
+            _timersMap.erase(timerIt);
         }
     }
 
@@ -576,17 +571,17 @@ void Scheduler::resumeTarget(void* target)
     AXASSERT(target != nullptr, "target can't be nullptr!");
 
     // custom selectors
-    auto timerIt = _hashForTimers.find(target);
-    if (timerIt != _hashForTimers.end())
+    auto timerIt = _timersMap.find(target);
+    if (timerIt != _timersMap.end())
     {
         timerIt->second.paused = false;
     }
 
     // update selector
-    auto updateIt = _hashForUpdates.find(target);
-    if (updateIt != _hashForUpdates.end())
+    auto updateIt = _schedIndexMap.find(target);
+    if (updateIt != _schedIndexMap.end())
     {
-        updateIt->second.entry->paused = false;
+        updateIt->second->paused = false;
     }
 }
 
@@ -595,17 +590,17 @@ void Scheduler::pauseTarget(void* target)
     AXASSERT(target != nullptr, "target can't be nullptr!");
 
     // custom selectors
-    auto timerIt = _hashForTimers.find(target);
-    if (timerIt != _hashForTimers.end())
+    auto timerIt = _timersMap.find(target);
+    if (timerIt != _timersMap.end())
     {
         timerIt->second.paused = false;
     }
 
     // update selector
-    auto updateIt = _hashForUpdates.find(target);
-    if (updateIt != _hashForUpdates.end())
+    auto updateIt = _schedIndexMap.find(target);
+    if (updateIt != _schedIndexMap.end())
     {
-        updateIt->second.entry->paused = true;
+        updateIt->second->paused = true;
     }
 }
 
@@ -614,17 +609,17 @@ bool Scheduler::isTargetPaused(void* target)
     AXASSERT(target != nullptr, "target must be non nil");
 
     // Custom selectors
-    auto timerIt = _hashForTimers.find(target);
-    if (timerIt != _hashForTimers.end())
+    auto timerIt = _timersMap.find(target);
+    if (timerIt != _timersMap.end())
     {
         return timerIt->second.paused;
     }
 
     // We should check update selectors if target does not have custom selectors
-    auto updateIt = _hashForUpdates.find(target);
-    if (updateIt != _hashForUpdates.end())
+    auto updateIt = _schedIndexMap.find(target);
+    if (updateIt != _schedIndexMap.end())
     {
-        return updateIt->second.entry->paused;
+        return updateIt->second->paused;
     }
 
     return false;  // should never get here
@@ -640,9 +635,9 @@ std::set<void*> Scheduler::pauseAllTargetsWithMinPriority(int minPriority)
     std::set<void*> idsWithSelectors;
 
     // Custom Selectors
-    for (auto& [target, element] : _hashForTimers)
+    for (auto& [target, timerHandle] : _timersMap)
     {
-        element.paused = true;
+        timerHandle.paused = true;
         idsWithSelectors.insert(target);
     }
 
@@ -743,7 +738,7 @@ void Scheduler::update(float dt)
     }
 
     // Iterate over all the custom selectors
-    for (auto it = _hashForTimers.begin(); it != _hashForTimers.end();)
+    for (auto it = _timersMap.begin(); it != _timersMap.end();)
     {
         auto elt               = &it->second;
         _currentTarget         = elt;
@@ -774,7 +769,7 @@ void Scheduler::update(float dt)
         // only delete currentTarget if no actions were scheduled during the cycle (issue #481)
         if (_currentTargetSalvaged && _currentTarget->timers.empty())
         {
-            it = _hashForTimers.erase(it);
+            it = _timersMap.erase(it);
         }
         else
             ++it;
@@ -841,11 +836,11 @@ void Scheduler::schedule(SEL_SCHEDULE selector,
 {
     AXASSERT(target, "Argument target must be non-nullptr");
 
-    auto timerIt = _hashForTimers.find(target);
+    auto timerIt = _timersMap.find(target);
 
-    if (timerIt == _hashForTimers.end())
+    if (timerIt == _timersMap.end())
     {
-        timerIt = _hashForTimers.emplace(target, tHashTimerEntry{}).first;
+        timerIt = _timersMap.emplace(target, TimerHandle{}).first;
 
         // Is this the 1st element ? Then set the pause level to all the selectors of this target
         timerIt->second.paused = paused;
@@ -891,8 +886,8 @@ bool Scheduler::isScheduled(SEL_SCHEDULE selector, const Ref* target) const
     AXASSERT(selector, "Argument selector must be non-nullptr");
     AXASSERT(target, "Argument target must be non-nullptr");
 
-    auto timerIt = _hashForTimers.find(const_cast<Ref*>(target));
-    if (timerIt == _hashForTimers.end())
+    auto timerIt = _timersMap.find(const_cast<Ref*>(target));
+    if (timerIt == _timersMap.end())
     {
         return false;
     }
@@ -915,18 +910,18 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Ref* target)
         return;
     }
 
-    auto timerIt = _hashForTimers.find(target);
-    if (timerIt != _hashForTimers.end())
+    auto timerIt = _timersMap.find(target);
+    if (timerIt != _timersMap.end())
     {
-        auto& element = timerIt->second;
-        auto&& timers   = element.timers;
+        auto& timerHandle = timerIt->second;
+        auto&& timers     = timerHandle.timers;
         for (int i = 0; i < timers.size(); ++i)
         {
             TimerTargetSelector* timer = dynamic_cast<TimerTargetSelector*>(timers[i]);
 
             if (timer && selector == timer->getSelector())
             {
-                if (timer == element.currentTimer && !timer->isAborted())
+                if (timer == timerHandle.currentTimer && !timer->isAborted())
                 {
                     timer->retain();
                     timer->setAborted();
@@ -935,20 +930,20 @@ void Scheduler::unschedule(SEL_SCHEDULE selector, Ref* target)
                 timers.erase(i);
 
                 // update timerIndex in case we are in tick:, looping over the actions
-                if (element.timerIndex >= i)
+                if (timerHandle.timerIndex >= i)
                 {
-                    element.timerIndex--;
+                    timerHandle.timerIndex--;
                 }
 
                 if (timers.empty())
                 {
-                    if (_currentTarget == &element)
+                    if (_currentTarget == &timerHandle)
                     {
                         _currentTargetSalvaged = true;
                     }
                     else
                     {
-                        _hashForTimers.erase(timerIt);
+                        _timersMap.erase(timerIt);
                     }
                 }
 
