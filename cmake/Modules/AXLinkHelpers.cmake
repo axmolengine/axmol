@@ -42,6 +42,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     ax_config_pred(${APP_NAME} AX_ENABLE_MFMEDIA)
     ax_config_pred(${APP_NAME} AX_ENABLE_MSEDGE_WEBVIEW2)
 
+    if (AX_ISA_SIMD MATCHES "sse")
+        target_compile_definitions(${APP_NAME} PRIVATE AX_USE_SSE=1)
+    endif()
+
     if (NOT AX_USE_SHARED_PREBUILT)
         target_compile_definitions(${APP_NAME}
             PRIVATE AX_STATIC=1

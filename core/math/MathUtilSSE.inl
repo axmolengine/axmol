@@ -1,6 +1,6 @@
 NS_AX_MATH_BEGIN
 
-#ifdef __SSE__
+#ifdef AX_USE_SSE
 
 void MathUtil::addMatrix(const __m128 m[4], float scalar, __m128 dst[4])
 {

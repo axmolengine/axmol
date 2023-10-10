@@ -28,7 +28,7 @@
 #include "math/Vec3.h"
 #include "math/Vec4.h"
 
-#ifdef __SSE__
+#ifdef AX_USE_SSE
 #    include <xmmintrin.h>
 #endif
 
@@ -72,7 +72,11 @@ NS_AX_MATH_BEGIN
  *
  * @see Transform
  */
+#ifdef AX_USE_SSE
+class AX_DLL alignas(16) Mat4
+#else
 class AX_DLL Mat4
+#endif
 {
 public:
     // //temp add conversion
@@ -90,7 +94,7 @@ public:
     /**
      * Stores the columns of this 4x4 matrix.
      * */
-#ifdef __SSE__
+#ifdef AX_USE_SSE
     union
     {
         __m128 col[4];

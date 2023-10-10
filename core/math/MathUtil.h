@@ -23,7 +23,7 @@
 #ifndef MATHUTIL_H_
 #define MATHUTIL_H_
 
-#ifdef __SSE__
+#ifdef AX_USE_SSE
 #    include <xmmintrin.h>
 #endif
 
@@ -94,7 +94,7 @@ private:
     static bool isNeon64Enabled();
 
 private:
-#ifdef __SSE__
+#ifdef AX_USE_SSE
     static void addMatrix(const __m128 m[4], float scalar, __m128 dst[4]);
 
     static void addMatrix(const __m128 m1[4], const __m128 m2[4], __m128 dst[4]);
