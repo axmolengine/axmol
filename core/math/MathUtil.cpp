@@ -54,7 +54,7 @@ This file was modified to fit the cocos2d-x project
 
 #endif
 
-#if defined(__SSE__)
+#if defined(AX_USE_SSE)
 #    define USE_SSE
 #    define INCLUDE_SSE
 #endif

@@ -359,6 +359,11 @@ if(WINDOWS)
     endif()
 endif()
 
+# AX_USE_SSE
+if (AX_ISA_SIMD MATCHES "sse")
+    target_compile_definitions(${_AX_CORE_LIB} PUBLIC AX_USE_SSE=1)
+endif()
+
 # engine extensions
 add_subdirectory(${_AX_ROOT}/extensions ${ENGINE_BINARY_PATH}/extensions)
 

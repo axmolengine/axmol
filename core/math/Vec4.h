@@ -23,7 +23,7 @@
 #ifndef MATH_VEC4_H
 #define MATH_VEC4_H
 
-#ifdef __SSE__
+#ifdef AX_USE_SSE
 #    include <xmmintrin.h>
 #endif
 
@@ -44,7 +44,7 @@ class Mat4;
 class AX_DLL Vec4
 {
 public:
-#ifdef __SSE__
+#ifdef AX_USE_SSE
     union
     {
         struct
