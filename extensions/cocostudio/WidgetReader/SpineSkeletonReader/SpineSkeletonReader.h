@@ -22,14 +22,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __X365LIBS__SpineSkeletonReader__
-#define __X365LIBS__SpineSkeletonReader__
+#ifndef SPINESKELETONREADER_H
+#define SPINESKELETONREADER_H
 
 #include "CocosStudioExport.h"
 #include "WidgetReader/NodeReaderProtocol.h"
 #include "WidgetReader/NodeReaderDefine.h"
 
-#if defined(AX_BUILD_WITH_SPINE)
+#if defined(AX_ENABLE_EXT_SPINE)
 
 namespace cocostudio
 {
