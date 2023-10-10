@@ -84,9 +84,6 @@ public:
     void writeBoolValue(bool value) { writer().Bool(value); }
     void writeNumberValue(int value) { writer().Int(value); }
     void writeNumberValue(long long value) { writer().Int64(value); }
-#if !defined(_WIN32)
-    void writeNumberValue(time_t value) { writer().Int64(value); }
-#endif
     void writeNumberValue(double value) { writer().Double(value); }
     void writeStringValue(std::string_view value)
     {
@@ -119,13 +116,6 @@ public:
         writePropertyName(propertyName);
         writeNumberValue(value);
     }
-#if !defined(_WIN32)
-    void writeNumber(std::string_view propertyName, time_t value)
-    {
-        writePropertyName(propertyName);
-        writeNumberValue(value);
-    }
-#endif
     void writeNumber(std::string_view propertyName, double value)
     {
         writePropertyName(propertyName);
@@ -154,12 +144,12 @@ public:
     void writeStartArray(std::string_view propertyName)
     {
         writePropertyName(propertyName);
-        writer().StartArray();
+        writeStartArray();
     }
     void writeStartObject(std::string_view propertyName)
     {
         writePropertyName(propertyName);
-        writer().StartObject();
+        writeStartObject();
     }
     void writeStartArray() { writer().StartArray(); }
     void writeEndArray() { writer().EndArray(); }
