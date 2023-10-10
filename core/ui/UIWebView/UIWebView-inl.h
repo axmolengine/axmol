@@ -26,7 +26,7 @@
 
 /// @cond DO_NOT_SHOW
 
-#if (defined(_WIN32) && defined(_AX_HAVE_WEBVIEW2)) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
+#if (defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID || AX_TARGET_PLATFORM == AX_PLATFORM_IOS)
 
 #include "ui/UIWebView/UIWebView.h"
 #include "platform/GLView.h"

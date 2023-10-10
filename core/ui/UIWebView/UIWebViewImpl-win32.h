@@ -28,7 +28,7 @@
 
 #include "platform/PlatformMacros.h"
 
-#if defined(_WIN32) && defined(_AX_HAVE_WEBVIEW2)
+#if defined(_WIN32) && defined(AX_ENABLE_MSEDGE_WEBVIEW2)
 
 #    include <string>
 #    include "StdC.h"

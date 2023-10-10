@@ -356,7 +356,6 @@ if(WINDOWS)
         else()
             target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/Microsoft.Web.WebView2.targets)
         endif()
-        target_compile_definitions(${_AX_CORE_LIB} PUBLIC _AX_HAVE_WEBVIEW2)
     endif()
 endif()
 
