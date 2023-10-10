@@ -26,7 +26,19 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     message(STATUS "AX_ENABLE_EXT_EFFEKSEER=${AX_ENABLE_EXT_EFFEKSEER}")
     message(STATUS "AX_ENABLE_EXT_LUA=${AX_ENABLE_EXT_LUA}")
     
-    target_compile_definitions(${APP_NAME} PUBLIC AX_GLES_PROFILE=${AX_GLES_PROFILE})
+    # compile defines can't inherit when link prebuits, so need add manually
+    target_compile_definitions(${APP_NAME} 
+        PRIVATE AX_GLES_PROFILE=${AX_GLES_PROFILE}
+        PRIVATE OPENSSL_SUPPRESS_DEPRECATED=1
+        PRIVATE NOUNCRYPT=1
+        PRIVATE P2T_STATIC_EXPORTS=1
+        PRIVATE BT_USE_SSE_IN_API=1
+        PRIVATE CP_USE_DOUBLES=0
+        PRIVATE CP_USE_CGTYPES=0
+        PRIVATE FMT_HEADER_ONLY=1
+    )
+
+    ax_config_pred(${APP_NAME} AX_USE_ALSOFT)
     ax_config_pred(${APP_NAME} AX_ENABLE_MFMEDIA)
     ax_config_pred(${APP_NAME} AX_ENABLE_MSEDGE_WEBVIEW2)
 
@@ -213,10 +225,6 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
             endif()
         endif()
     endif()
-
-    # prebuilt, need copy axslc folder to target output directory
-    get_target_property(rt_output ${APP_NAME} RUNTIME_OUTPUT_DIRECTORY)
-    ax_sync_target_res(${APP_NAME} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYNC_TARGET_ID axslc)
 endfunction(ax_link_cxx_prebuilt)
 
 function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
