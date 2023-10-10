@@ -79,7 +79,7 @@
 #include "WidgetReader/SkeletonReader/BoneNodeReader.h"
 #include "WidgetReader/SkeletonReader/SkeletonNodeReader.h"
 
-#if defined(AX_BUILD_WITH_SPINE) && AX_BUILD_WITH_SPINE
+#if defined(AX_ENABLE_EXT_SPINE)
 #    include "WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
 #endif
 #include "WidgetReader/RichTextReader/RichTextReader.h"
@@ -238,7 +238,7 @@ CSLoader::CSLoader()
 
     /// Added by x-studio
     CREATE_CLASS_NODE_READER_INFO(RichTextReader);
-#if defined(AX_BUILD_WITH_SPINE) && AX_BUILD_WITH_SPINE
+#if defined(AX_ENABLE_EXT_SPINE)
     CREATE_CLASS_NODE_READER_INFO(SpineSkeletonReader);
 #endif
     CREATE_CLASS_NODE_READER_INFO(RadioButtonReader);

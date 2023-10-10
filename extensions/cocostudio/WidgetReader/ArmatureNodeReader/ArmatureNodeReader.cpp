@@ -7,7 +7,7 @@
 #include "CSParseBinary_generated.h"
 #include "WidgetReader/ArmatureNodeReader/CSArmatureNode_generated.h"
 #include "Armature.h"
-#if defined(AX_BUILD_WITH_DRANGBONES) && AX_BUILD_WITH_DRANGBONES
+#if defined(AX_ENABLE_EXT_DRAGONBONES)
 #    include "DragonBones/CCDragonBonesHeaders.h"
 #endif
 
@@ -142,7 +142,7 @@ void ArmatureNodeReader::setPropsWithFlatBuffers(ax::Node* node, const flatbuffe
     if (FileUtils::getInstance()->isFileExist(filepath))
     {
         fileExist = true;
-#if defined(AX_BUILD_WITH_DRANGBONES) && AX_BUILD_WITH_DRANGBONES
+#if defined(AX_ENABLE_EXT_DRAGONBONES)
         auto filep = filepath.rfind('.');
         if (filep != std::string::npos && strcmp(&filepath[filep], ".json") == 0)
         {  // Currently, adjust by file ext, regard as DragonBones 4.5/5.0

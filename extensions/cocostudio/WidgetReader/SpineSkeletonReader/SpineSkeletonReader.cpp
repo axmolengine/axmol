@@ -24,7 +24,7 @@
 
 #include "WidgetReader/SpineSkeletonReader/SpineSkeletonReader.h"
 
-#if defined(AX_BUILD_WITH_SPINE)
+#if defined(AX_ENABLE_EXT_SPINE)
 #    include "SpineSkeletonDataCache.h"
 
 #    include "2d/Sprite.h"
