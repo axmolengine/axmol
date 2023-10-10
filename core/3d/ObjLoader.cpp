@@ -41,12 +41,10 @@
 namespace tinyobj
 {
 
-#define TINYOBJ_SSCANF_BUFFER_SIZE (4096)
-
 struct vertex_index
 {
     int v_idx, vt_idx, vn_idx;
-    vertex_index(){};
+    vertex_index() : v_idx(0), vt_idx(0), vn_idx(0){};
     vertex_index(int idx) : v_idx(idx), vt_idx(idx), vn_idx(idx){};
     vertex_index(int vidx, int vtidx, int vnidx) : v_idx(vidx), vt_idx(vtidx), vn_idx(vnidx){};
 };
@@ -211,7 +209,8 @@ static bool tryParseDouble(const char* s, const char* s_end, double* result)
         }
     }
     else if (*curr == 'e' || *curr == 'E')
-    {}
+    {
+    }
     else
     {
         goto assemble;
@@ -322,6 +321,11 @@ static vertex_index parseTriple(const char*& token, int vsize, int vnsize, int v
     vi.vn_idx = fixIndex(atoi(token), vnsize);
     token += strcspn(token, "/ \t\r");
     return vi;
+}
+
+static std::string_view nextWord(const char* token) {
+    const char* endptr = strpbrk(token, " \t");
+    return endptr ? std::string_view{token, static_cast<size_t>(endptr - token)} : token;
 }
 
 static unsigned int updateVertex(std::map<vertex_index, unsigned int>& vertexCache,
@@ -453,7 +457,7 @@ static std::string& replacePathSeperator(std::string& path)
     return path;
 }
 
-std::string LoadMtl(std::map<std::string, int>& material_map,
+std::string LoadMtl(hlookup::string_map<int>& material_map,
                     std::vector<material_t>& materials,
                     std::istream& inStream)
 {
@@ -506,7 +510,7 @@ std::string LoadMtl(std::map<std::string, int>& material_map,
             // flush previous material.
             if (!material.name.empty())
             {
-                material_map.insert(std::pair<std::string, int>(material.name, static_cast<int>(materials.size())));
+                material_map.emplace(material.name, static_cast<int>(materials.size()));
                 materials.emplace_back(material);
             }
 
@@ -514,14 +518,9 @@ std::string LoadMtl(std::map<std::string, int>& material_map,
             InitMaterial(material);
 
             // set new mtl name
-            char namebuf[TINYOBJ_SSCANF_BUFFER_SIZE];
             token += 7;
-#ifdef _MSC_VER
-            sscanf_s(token, "%s", namebuf, static_cast<unsigned int>(_countof(namebuf)));
-#else
-            sscanf(token, "%s", namebuf);
-#endif
-            material.name = namebuf;
+
+            material.name = nextWord(token);
             continue;
         }
 
@@ -671,7 +670,7 @@ std::string LoadMtl(std::map<std::string, int>& material_map,
             std::ptrdiff_t len = _space - token;
             std::string key(token, len);
             std::string value = _space + 1;
-            material.unknown_parameter.insert(std::pair<std::string, std::string>(key, value));
+            material.unknown_parameter.emplace(std::move(key), std::move(value));
         }
     }
     // flush last material.
@@ -683,7 +682,7 @@ std::string LoadMtl(std::map<std::string, int>& material_map,
 
 std::string MaterialFileReader::operator()(std::string_view matId,
                                            std::vector<material_t>& materials,
-                                           std::map<std::string, int>& matMap)
+                                           hlookup::string_map<int>& matMap)
 {
     std::string filepath;
 
@@ -751,7 +750,7 @@ std::string LoadObj(std::vector<shape_t>& shapes,
     std::string name;
 
     // material
-    std::map<std::string, int> material_map;
+    hlookup::string_map<int> material_map;
     std::map<vertex_index, unsigned int> vertexCache;
     int material = -1;
 
@@ -855,14 +854,9 @@ std::string LoadObj(std::vector<shape_t>& shapes,
         // use mtl
         if ((0 == strncmp(token, "usemtl", 6)) && isSpace((token[6])))
         {
-
-            char namebuf[TINYOBJ_SSCANF_BUFFER_SIZE];
             token += 7;
-#ifdef _MSC_VER
-            sscanf_s(token, "%s", namebuf, (unsigned int)_countof(namebuf));
-#else
-            sscanf(token, "%s", namebuf);
-#endif
+
+            auto tmpName = nextWord(token);
 
             // Create face group per material.
             bool ret = exportFaceGroupToShape(shape, vertexCache, v, vn, vt, faceGroup, material, name, true);
@@ -873,9 +867,10 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             shape = shape_t();
             faceGroup.clear();
 
-            if (material_map.find(namebuf) != material_map.end())
+            auto iter = material_map.find(tmpName);
+            if (iter != material_map.end())
             {
-                material = material_map[namebuf];
+                material = iter->second;
             }
             else
             {
@@ -889,15 +884,9 @@ std::string LoadObj(std::vector<shape_t>& shapes,
         // load mtl
         if ((0 == strncmp(token, "mtllib", 6)) && isSpace((token[6])))
         {
-            char namebuf[TINYOBJ_SSCANF_BUFFER_SIZE];
             token += 7;
-#ifdef _MSC_VER
-            sscanf_s(token, "%s", namebuf, _countof(namebuf));
-#else
-            sscanf(token, "%s", namebuf);
-#endif
 
-            std::string err_mtl = readMatFn(namebuf, materials, material_map);
+            std::string err_mtl = readMatFn(nextWord(token), materials, material_map);
             if (!err_mtl.empty())
             {
                 faceGroup.clear();  // for safety
@@ -962,14 +951,8 @@ std::string LoadObj(std::vector<shape_t>& shapes,
             shape = shape_t();
 
             // @todo { multiple object name? }
-            char namebuf[TINYOBJ_SSCANF_BUFFER_SIZE];
             token += 2;
-#ifdef _MSC_VER
-            sscanf_s(token, "%s", namebuf, _countof(namebuf));
-#else
-            sscanf(token, "%s", namebuf);
-#endif
-            name = std::string(namebuf);
+            name = nextWord(token);
 
             continue;
         }
