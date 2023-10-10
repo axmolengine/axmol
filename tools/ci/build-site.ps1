@@ -120,7 +120,11 @@ function copy_tree_if($source, $dest) {
 }
 
 download_zip_expand 'https://ci.appveyor.com/api/projects/halx99/axmol/artifacts/build_wasm.zip?branch=dev' $(Join-Path $AX_ROOT 'tmp/build_wasm.zip')
-copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests') $wasm_dist2
+$cpp_tests_dir = $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/cpp_tests')
+if (!(Test-Path $cpp_tests_dir -PathType Container)) {
+    throw "Missing wasm cpp_tests, caused by last wasm ci build fail."
+}
+copy_tree_if $cpp_tests_dir $wasm_dist2
 copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/fairygui_tests') $wasm_dist2
 copy_tree_if $(Join-Path $AX_ROOT 'tmp/build_wasm/bin/HelloLua') $wasm_dist2
 
