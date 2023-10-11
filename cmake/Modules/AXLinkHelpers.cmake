@@ -46,7 +46,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         target_compile_definitions(${APP_NAME} PRIVATE AX_USE_SSE=1)
     endif()
 
-    if (NOT AX_USE_SHARED_PREBUILT)
+    if (NOT BUILD_SHARED_LIBS)
         target_compile_definitions(${APP_NAME}
             PRIVATE AX_STATIC=1
         )
@@ -232,7 +232,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 endfunction(ax_link_cxx_prebuilt)
 
 function(ax_link_lua_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
-    if (NOT AX_USE_SHARED_PREBUILT)
+    if (NOT BUILD_SHARED_LIBS)
         target_compile_definitions(${APP_NAME}
 	        PRIVATE _USRLUASTATIC=1
         )
