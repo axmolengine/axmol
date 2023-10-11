@@ -43,6 +43,8 @@
 #include "fmt/format.h"
 #include "base/ZipUtils.h"
 
+#include "base/PaddedString.h"
+
 NS_AX_BEGIN
 
 const int FontAtlas::CacheTextureWidth     = 512;
@@ -54,27 +56,11 @@ void FontAtlas::loadFontAtlas(std::string_view fontatlasFile, hlookup::string_ma
 {
     using namespace simdjson;
 
-    struct PaddingString : protected yasio::sbyte_buffer
-    {
-    public:
-        using value_type = yasio::sbyte_buffer::value_type;
-        size_t size() const { return this->yasio::sbyte_buffer::size(); }
-        void resize(size_t size)
-        {
-            this->yasio::sbyte_buffer::resize(size + SIMDJSON_PADDING);
-            this->yasio::sbyte_buffer::data()[size] = '\0';
-        }
-
-        char* data() { return this->yasio::sbyte_buffer::data(); };
-    };
-
     try
     {
-        PaddingString strJson;
-        FileUtils::getInstance()->getContents(fontatlasFile, &strJson);
+        auto strJson = PaddedString::load(fontatlasFile);
         ondemand::parser parser;
-        padded_string_view json(strJson.data(), strJson.size());
-        ondemand::document settings = parser.iterate(json);
+        ondemand::document settings = parser.iterate(strJson);
         std::string_view type       = settings["type"];
         if (type != "fontatlas")
         {

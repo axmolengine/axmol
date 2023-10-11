@@ -21,6 +21,9 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
+
+ A simple wrapper dotnet Utf8JsonWriter like API style of rapidjson
+
  ****************************************************************************/
 
 #pragma once
