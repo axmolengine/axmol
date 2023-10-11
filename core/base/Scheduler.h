@@ -517,7 +517,7 @@ protected:
     std::unordered_map<void*, SchedHandle*> _schedIndexMap;
 
     // the vector holds list entries that needs to be deleted after update
-    std::vector<SchedHandle*> _updateDeleteVector;
+    axstd::pod_vector<SchedHandle*> _updateDeleteVector;
 
     // Used for "selectors with interval"
     std::unordered_map<void*, TimerHandle> _timersMap;
