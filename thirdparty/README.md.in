@@ -102,7 +102,7 @@
 
 ## kcp
 - [![Upstream](https://img.shields.io/github/v/release/skywind3000/kcp?label=Upstream)](https://github.com/skywind3000/kcp)
-- Version: 1.7
+- Version: 1.7-f2aa30e
 - License: MIT
 
 ## llhttp
