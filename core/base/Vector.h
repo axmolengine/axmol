@@ -182,17 +182,6 @@ public:
         return *this;
     }
 
-    // Don't uses operator since we could not decide whether it needs 'retain'/'release'.
-    //    T& operator[](int index)
-    //    {
-    //        return _data[index];
-    //    }
-    //
-    //    const T& operator[](int index) const
-    //    {
-    //        return _data[index];
-    //    }
-
     /**
      * Requests that the vector capacity be at least enough to contain n elements.
      * @param capacity Minimum capacity requested of the Vector.
@@ -253,6 +242,11 @@ public:
     {
         AXASSERT(index >= 0 && index < size(), "index out of range in getObjectAtIndex()");
         return _data[index];
+    }
+
+    T operator[](ssize_t index) const
+    {
+        return this->at(index); 
     }
 
     /** Returns the first element in the Vector. */
