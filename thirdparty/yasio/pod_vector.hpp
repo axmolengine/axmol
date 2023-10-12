@@ -107,60 +107,97 @@ public:
     std::swap(_Myres, rhs._Myres);
   }
   template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
-  iterator insert(iterator _Where, _Iter first, _Iter last)
+  iterator insert(iterator pos, _Iter first, _Iter last)
   {
-    auto _Mylast = _Myfirst + _Mysize;
-    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where <= _Mylast && first <= last, "pod_vector: out of range!");
+    auto mlast = _Myfirst + _Mysize;
+    _YASIO_VERIFY_RANGE(pos >= _Myfirst && pos <= mlast && first <= last, "pod_vector: out of range!");
     if (first != last)
     {
-      auto insertion_pos = static_cast<size_type>(std::distance(_Myfirst, _Where));
-      if (_Where == _Mylast)
+      auto insertion_off = static_cast<size_type>(std::distance(_Myfirst, pos));
+      if (pos == mlast)
         append(first, last);
       else
       {
         auto ifirst = std::addressof(*first);
         static_assert(sizeof(*ifirst) == sizeof(value_type), "pod_vector: iterator type incompatible!");
         auto count = static_cast<size_type>(std::distance(first, last));
-        if (insertion_pos >= 0)
+        if (insertion_off >= 0)
         {
-          auto old_size = _Mylast - _Myfirst;
+          auto old_size = mlast - _Myfirst;
           expand(count);
-          _Where       = _Myfirst + insertion_pos;
-          _Mylast      = _Myfirst + _Mysize;
-          auto move_to = _Where + count;
-          std::copy_n(_Where, _Mylast - move_to, move_to);
-          std::copy_n((iterator)ifirst, count, _Where);
+          pos          = _Myfirst + insertion_off;
+          mlast      = _Myfirst + _Mysize;
+          auto move_to = pos + count;
+          std::copy_n(pos, mlast - move_to, move_to);
+          std::copy_n((iterator)ifirst, count, pos);
         }
       }
-      return _Myfirst + insertion_pos;
+      return _Myfirst + insertion_off;
     }
-    return _Where;
+    return pos;
   }
-  iterator insert(iterator _Where, size_type count, const_reference val)
+  iterator insert(iterator pos, size_type count, const_reference val)
   {
-    auto _Mylast = _Myfirst + _Mysize;
-    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where <= _Mylast, "pod_vector: out of range!");
+    auto mlast = _Myfirst + _Mysize;
+    _YASIO_VERIFY_RANGE(pos >= _Myfirst && pos <= mlast, "pod_vector: out of range!");
     if (count)
     {
-      auto insertion_pos = std::distance(_Myfirst, _Where);
-      if (_Where == _Mylast)
+      auto insertion_off = std::distance(_Myfirst, pos);
+      if (pos == mlast)
         append(count, val);
       else
       {
-        if (insertion_pos >= 0)
+        if (insertion_off >= 0)
         {
           const auto old_size = _Mysize;
           expand(count);
-          _Where       = _Myfirst + insertion_pos;
-          _Mylast      = _Myfirst + _Mysize;
-          auto move_to = _Where + count;
-          std::copy_n(_Where, _Mylast - move_to, move_to);
-          std::fill_n(_Where, count, val);
+          pos          = _Myfirst + insertion_off;
+          mlast      = _Myfirst + _Mysize;
+          auto move_to = pos + count;
+          std::copy_n(pos, mlast - move_to, move_to);
+          std::fill_n(pos, count, val);
         }
       }
-      return _Myfirst + insertion_pos;
+      return _Myfirst + insertion_off;
     }
-    return _Where;
+    return pos;
+  }
+  iterator insert(iterator pos, const value_type& val)
+  { // insert val at pos
+    return emplace(pos, val);
+  }
+  iterator insert(iterator pos, value_type&& val)
+  { // insert by moving val at pos
+    return emplace(pos, std::move(val));
+  }
+  template <typename... _Valty>
+  iterator emplace(iterator pos, _Valty&&... val)
+  {
+    auto insertion_off = std::distance(_Myfirst, pos);
+    _YASIO_VERIFY_RANGE(insertion_off <= _Mysize, "pod_vector: out of range!");
+#if YASIO__HAS_CXX20
+    emplace_back(std::forward<_Valty>(val)...);
+    std::rotate(begin() + insertion_off, end() - 1, end());
+    return (begin() + insertion_off);
+#else
+    auto mlast = _Myfirst + _Mysize;
+    if (pos == mlast)
+      emplace_back(std::forward<_Valty>(val)...);
+    else
+    {
+      if (insertion_off >= 0)
+      {
+        const auto old_size = _Mysize;
+        expand(1);
+        pos          = _Myfirst + insertion_off;
+        mlast        = _Myfirst + _Mysize;
+        auto move_to = pos + 1;
+        std::copy_n(pos, mlast - move_to, move_to);
+        ::yasio::construct_at(pos, std::forward<_Valty>(val)...);
+      }
+    }
+    return _Myfirst + insertion_off;
+#endif
   }
   template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
   pod_vector& append(_Iter first, const _Iter last)
@@ -186,31 +223,27 @@ public:
     expand(count, val);
     return *this;
   }
-  void push_back(value_type&& v) { push_back(v); }
-  void push_back(const value_type& v)
-  {
-    expand(1);
-    back() = v;
-  }
+  void push_back(value_type&& val) { push_back(val); }
+  void push_back(const value_type& val) { emplace_back(val); }
   template <typename... _Valty>
-  inline value_type& emplace_back(_Valty&&... _Val)
+  inline value_type& emplace_back(_Valty&&... val)
   {
     if (_Mysize < _Myres)
-      return *construct_helper<value_type>::construct_at(_Myfirst + _Mysize++, std::forward<_Valty>(_Val)...);
-    return *_Emplace_back_reallocate(std::forward<_Valty>(_Val)...);
+      return *::yasio::construct_at(_Myfirst + _Mysize++, std::forward<_Valty>(val)...);
+    return *_Emplace_back_reallocate(std::forward<_Valty>(val)...);
   }
-  iterator erase(iterator _Where)
+  iterator erase(iterator pos)
   {
-    const auto _Mylast = _Myfirst + _Mysize;
-    _YASIO_VERIFY_RANGE(_Where >= _Myfirst && _Where < _Mylast, "pod_vector: out of range!");
-    _Mysize = static_cast<size_type>(std::move(_Where + 1, _Mylast, _Where) - _Myfirst);
-    return _Where;
+    const auto mlast = _Myfirst + _Mysize;
+    _YASIO_VERIFY_RANGE(pos >= _Myfirst && pos < mlast, "pod_vector: out of range!");
+    _Mysize = static_cast<size_type>(std::move(pos + 1, mlast, pos) - _Myfirst);
+    return pos;
   }
   iterator erase(iterator first, iterator last)
   {
-    const auto _Mylast = _Myfirst + _Mysize;
-    _YASIO_VERIFY_RANGE((first <= last) && first >= _Myfirst && last <= _Mylast, "pod_vector: out of range!");
-    _Mysize = static_cast<size_type>(std::move(last, _Mylast, first) - _Myfirst);
+    const auto mlast = _Myfirst + _Mysize;
+    _YASIO_VERIFY_RANGE((first <= last) && first >= _Myfirst && last <= mlast, "pod_vector: out of range!");
+    _Mysize = static_cast<size_type>(std::move(last, mlast, first) - _Myfirst);
     return first;
   }
   value_type& front()
@@ -280,10 +313,10 @@ public:
       _Reallocate<_Reallocation_policy::_Exactly>(new_cap);
   }
   template <typename _Operation>
-  void resize_and_overwrite(const size_type _New_size, _Operation _Op)
+  void resize_and_overwrite(const size_type new_size, _Operation op)
   {
-    _Reallocate<_Reallocation_policy::_Exactly>(_New_size);
-    _Eos(std::move(_Op)(_Myfirst, _New_size));
+    _Reallocate<_Reallocation_policy::_Exactly>(new_size);
+    _Eos(std::move(op)(_Myfirst, new_size));
   }
 #pragma endregion
   void resize(size_type new_size, const_reference val)
@@ -344,7 +377,7 @@ public:
 private:
   void _Eos(size_type size) YASIO__NOEXCEPT { _Mysize = size; }
   template <typename... _Valty>
-  pointer _Emplace_back_reallocate(_Valty&&... _Val)
+  pointer _Emplace_back_reallocate(_Valty&&... val)
   {
     const auto _Oldsize = _Mysize;
 
@@ -353,7 +386,7 @@ private:
 
     const size_type _Newsize = _Oldsize + 1;
     _Resize_reallocate<_Reallocation_policy::_At_least>(_Newsize);
-    const pointer _Newptr = construct_helper<value_type>::construct_at(_Myfirst + _Oldsize, std::forward<_Valty>(_Val)...);
+    const pointer _Newptr = ::yasio::construct_at(_Myfirst + _Oldsize, std::forward<_Valty>(val)...);
     return _Newptr;
   }
   template <typename _Iter, ::yasio::enable_if_t<::yasio::is_iterator<_Iter>::value, int> = 0>
@@ -405,21 +438,21 @@ private:
     else
       throw std::bad_alloc{};
   }
-  size_type _Calculate_growth(const size_type _Newsize) const
+  size_type _Calculate_growth(const size_type new_size) const
   {
     // given _Oldcapacity and _Newsize, calculate geometric growth
-    const size_type _Oldcapacity = capacity();
-    YASIO__CONSTEXPR auto _Max   = max_size();
+    const size_type old_cap = capacity();
+    YASIO__CONSTEXPR auto max_cap   = max_size();
 
-    if (_Oldcapacity > _Max - _Oldcapacity / 2)
-      return _Max; // geometric growth would overflow
+    if (old_cap > max_cap - old_cap / 2)
+      return max_cap; // geometric growth would overflow
 
-    const size_type _Geometric = _Oldcapacity + (_Oldcapacity >> 1);
+    const size_type geometric = old_cap + (old_cap >> 1);
 
-    if (_Geometric < _Newsize)
-      return _Newsize; // geometric growth would be insufficient
+    if (geometric < new_size)
+      return new_size; // geometric growth would be insufficient
 
-    return _Geometric; // geometric growth is sufficient
+    return geometric; // geometric growth is sufficient
   }
   void _Tidy() YASIO__NOEXCEPT
   { // free all storage
@@ -436,7 +469,34 @@ private:
   size_type _Myres  = 0;
 };
 
+#pragma region c++20 like std::erase
+template <typename _Ty, typename _Alloc>
+void erase(pod_vector<_Ty, _Alloc>& cont, const _Ty& val)
+{
+  cont.erase(std::remove(cont.begin(), cont.end(), val), cont.end());
+}
+template <typename _Ty, typename _Alloc, typename _Pr>
+void erase_if(pod_vector<_Ty, _Alloc>& cont, _Pr pred)
+{
+  cont.erase(std::remove_if(cont.begin(), cont.end(), pred), cont.end());
+}
+#pragma endregion
+
+template <typename _Cont>
+inline typename _Cont::iterator insert_sorted(_Cont& vec, typename _Cont::value_type const& val)
+{
+  return vec.insert(std::upper_bound(vec.begin(), vec.end(), val), val);
+}
+
+template <typename _Cont, typename _Pred>
+inline typename _Cont::iterator insert_sorted(_Cont& vec, typename _Cont::value_type const& val, _Pred pred)
+{
+  return vec.insert(std::upper_bound(vec.begin(), vec.end(), val, pred), val);
+}
+
+// alias: array_buffer
 template <typename _Ty, typename _Alloc = buffer_allocator<_Ty>>
 using array_buffer = pod_vector<_Ty, _Alloc>;
+
 } // namespace yasio
 #endif

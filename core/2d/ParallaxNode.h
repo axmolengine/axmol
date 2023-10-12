@@ -29,11 +29,9 @@ THE SOFTWARE.
 #define __CCPARALLAX_NODE_H__
 
 #include "2d/Node.h"
-/*#include "Array.h"*/
+#include "base/Vector.h"
 
 NS_AX_BEGIN
-
-struct _ccArray;
 
 /**
  * @addtogroup _2d
@@ -71,13 +69,13 @@ public:
      *
      * @param parallaxArray An array of layers for the Parallax node.
      */
-    void setParallaxArray(struct _ccArray* parallaxArray) { _parallaxArray = parallaxArray; }
+    void setParallaxArray(Vector<Ref*> parallaxArray) { _parallaxArray = std::move(parallaxArray); }
     /** Returns the array of layers of the Parallax node.
      *
      * @return An array of layers for the Parallax node.
      */
-    struct _ccArray* getParallaxArray() { return _parallaxArray; }
-    const struct _ccArray* getParallaxArray() const { return _parallaxArray; }
+    Vector<Ref*>& getParallaxArray() { return _parallaxArray; }
+    const Vector<Ref*>& getParallaxArray() const { return _parallaxArray; }
 
     //
     // Overrides
@@ -104,7 +102,7 @@ protected:
     Vec2 absolutePosition();
 
     Vec2 _lastPosition;
-    struct _ccArray* _parallaxArray;
+    Vector<Ref*> _parallaxArray;
 
 private:
     AX_DISALLOW_COPY_AND_ASSIGN(ParallaxNode);

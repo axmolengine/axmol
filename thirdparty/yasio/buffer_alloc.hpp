@@ -92,22 +92,29 @@ struct std_buffer_allocator {
   }
   static void deallocate(void* block, size_t /*size*/) { delete[] (value_type*)block; }
 };
-template <typename _Ty, bool = std::is_trivially_constructible<_Ty>::value /* trivially_constructible */>
+template <typename _Ty, bool = true>
 struct construct_helper {
-  template <typename... Args>
-  static _Ty* construct_at(_Ty* p, Args&&... args)
-  {
-    return ::new (static_cast<void*>(p)) _Ty{std::forward<Args>(args)...};
-  }
-};
-template <typename _Ty /* not trivially_constructible */>
-struct construct_helper<_Ty, false> {
   template <typename... Args>
   static _Ty* construct_at(_Ty* p, Args&&... args)
   {
     return ::new (static_cast<void*>(p)) _Ty(std::forward<Args>(args)...);
   }
 };
+template <typename _Ty>
+struct construct_helper<_Ty, false> {
+  template <typename... Args>
+  static _Ty* construct_at(_Ty* p, Args&&... args)
+  {
+    return ::new (static_cast<void*>(p)) _Ty{std::forward<Args>(args)...};
+  }
+};
+
+template <typename _Ty, typename... Args>
+inline _Ty* construct_at(_Ty* p, Args&&... args)
+{
+  return construct_helper<_Ty, std::is_constructible<_Ty, Args&&...>::value>::construct_at(p, std::forward<Args>(args)...);
+}
+
 } // namespace yasio
 
 #endif

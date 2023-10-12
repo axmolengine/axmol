@@ -24,6 +24,9 @@ using byte_buffer = yasio::byte_buffer;
 using sbyte_buffer = yasio::sbyte_buffer;
 template <typename _Elem, typename _Alloc = yasio::buffer_allocator<_Elem>>
 using pod_vector = yasio::pod_vector<_Elem, _Alloc>;
+using yasio::erase;
+using yasio::erase_if;
+using yasio::insert_sorted;
 
 /* make_unique_for_overwrite since c++20, but not all platformm support */
 template <class _Ty, std::enable_if_t<!std::is_array_v<_Ty>, int> = 0>

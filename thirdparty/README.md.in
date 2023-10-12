@@ -231,11 +231,6 @@
 - Version: 1.2 with bugfixs & improvements
 - License: zlib
 
-## uthash 
-- [![Upstream](https://img.shields.io/github/v/tag/troydhanson/uthash?label=Upstream)](https://github.com/troydhanson/uthash)
-- Version: 2.3.0
-- License: BSD license (https://troydhanson.github.io/uthash/license.html)
-
 ## webp
 - [![Upstream](https://img.shields.io/github/v/tag/webmproject/libwebp?label=Upstream)](https://github.com/webmproject/libwebp)
 - Version: 1.3.2

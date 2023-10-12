@@ -32,10 +32,9 @@ THE SOFTWARE.
 #include <functional>
 #include <mutex>
 #include <set>
-
+#include "base/axstd.h"
 #include "base/Ref.h"
 #include "base/Vector.h"
-#include "uthash/uthash.h"
 
 NS_AX_BEGIN
 
@@ -152,9 +151,30 @@ private:
  * @{
  */
 
-struct _listEntry;
-struct _hashSelectorEntry;
-struct _hashUpdateEntry;
+// data structures
+
+struct SchedHandle
+{
+    SchedHandle(axstd::pod_vector<SchedHandle*>& o, const ccSchedulerFunc& cb, void* t, int pri, bool psd) noexcept
+        : owner(o), callback(cb), target(t), priority(pri), paused(psd)
+    {}
+    SchedHandle(const SchedHandle&) = delete;
+    axstd::pod_vector<SchedHandle*>& owner;  // the owner sched list of this sched
+    ccSchedulerFunc callback;
+    void* target;
+    int priority;
+    bool paused;
+    // selector will no longer be called and entry will be removed at end of the next tick
+    bool markedForDeletion = false;
+};
+
+struct TimerHandle
+{
+    Vector<Timer*> timers;
+    int timerIndex;
+    Timer* currentTimer;
+    bool paused;
+};
 
 #if AX_ENABLE_SCRIPT_BINDING
 class SchedulerScriptHandlerEntry;
@@ -476,32 +496,35 @@ protected:
      */
     void schedulePerFrame(const ccSchedulerFunc& callback, void* target, int priority, bool paused);
 
-    void removeHashElement(struct _hashSelectorEntry* element);
-    void removeUpdateFromHash(struct _listEntry* entry);
-
     // update specific
 
-    void priorityIn(struct _listEntry** list, const ccSchedulerFunc& callback, void* target, int priority, bool paused);
-    void appendIn(struct _listEntry** list, const ccSchedulerFunc& callback, void* target, bool paused);
+    void priorityIn(axstd::pod_vector<SchedHandle*>& list,
+                    const ccSchedulerFunc& callback,
+                    void* target,
+                    int priority,
+                    bool paused);
+    void appendIn(axstd::pod_vector<SchedHandle*>& list, const ccSchedulerFunc& callback, void* target, bool paused);
 
     float _timeScale;
 
     //
     // "updates with priority" stuff
     //
-    struct _listEntry* _updatesNegList;        // list of priority < 0
-    struct _listEntry* _updates0List;          // list priority == 0
-    struct _listEntry* _updatesPosList;        // list priority > 0
-    struct _hashUpdateEntry* _hashForUpdates;  // hash used to fetch quickly the list entries for pause,delete,etc
-    std::vector<struct _listEntry*>
-        _updateDeleteVector;  // the vector holds list entries that needs to be deleted after update
+    axstd::pod_vector<SchedHandle*> _updatesNegList;  // list of priority < 0
+    axstd::pod_vector<SchedHandle*> _updates0List;    // list priority == 0
+    axstd::pod_vector<SchedHandle*> _updatesPosList;  // list priority > 0
+    // weak reference SchedHandle map used to fetch quickly the list entries for pause,delete,etc
+    std::unordered_map<void*, SchedHandle*> _schedIndexMap;
+
+    // the vector holds list entries that needs to be deleted after update
+    axstd::pod_vector<SchedHandle*> _updateDeleteVector;
 
     // Used for "selectors with interval"
-    struct _hashSelectorEntry* _hashForTimers;
-    struct _hashSelectorEntry* _currentTarget;
+    std::unordered_map<void*, TimerHandle> _timersMap;
+    struct TimerHandle* _currentTarget;
     bool _currentTargetSalvaged;
     // If true unschedule will not remove anything from a hash. Elements will only be marked for deletion.
-    bool _updateHashLocked;
+    bool _indexMapLocked;
 
 #if AX_ENABLE_SCRIPT_BINDING
     Vector<SchedulerScriptHandlerEntry*> _scriptHandlerEntries;
