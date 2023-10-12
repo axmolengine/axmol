@@ -78,8 +78,9 @@ public:
     size_t size() const { return viable_size; }
     void resize(size_t size)
     {
-        assert(!data_ptr);
-        data_ptr    = simdjson::internal::allocate_padded_buffer(size);
+        assert(!data_ptr || size <= viable_size); // not allow enlarge
+        if (!data_ptr)
+            data_ptr = simdjson::internal::allocate_padded_buffer(size);
         viable_size = size;
     }
 
