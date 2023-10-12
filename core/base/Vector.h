@@ -238,16 +238,15 @@ public:
     iterator find(T object) { return std::find(_data.begin(), _data.end(), object); }
 
     /** Returns the element at position 'index' in the Vector. */
-    T at(size_t index) const
+    T at(ssize_t index) const
     {
         AXASSERT(index >= 0 && index < size(), "index out of range in getObjectAtIndex()");
         return _data[index];
     }
 
-    T operator[](size_t index) const
+    T operator[](ssize_t index) const
     {
-        AXASSERT(index < size(), "index out of range in getObjectAtIndex()");
-        return _data[index]; 
+        return this->at(index); 
     }
 
     /** Returns the first element in the Vector. */
