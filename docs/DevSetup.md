@@ -70,7 +70,7 @@ Using a powershell console window, goto `axmol\tests\<testdir e.g. 'cpp-tests'>`
 
      For example, say `SOURCE_DIR` is the current path `"."`, and `BUILD_DIR` (out-of-source build directory) is named `"build"`:
 
-     a) C++ 20:
+     since axmol-2.1 c++20 required for all platforms
         - for 32 bit Visual Studio 2019:
             ```cmake -S . -B build -G "Visual Studio 16 2019" -A Win32```
         - for 64 bit Visual Studio 2019:
@@ -80,14 +80,9 @@ Using a powershell console window, goto `axmol\tests\<testdir e.g. 'cpp-tests'>`
         - for 64 bit Visual Studio 2022:
             ```cmake -S . -B build -G "Visual Studio 17 2022" -A x64```
 
-     b) C++17
-         - add `-DCMAKE_CXX_STANDARD=17` for C++17 on your command line like:
-         cmake -S . -B build `-DCMAKE_CXX_STANDARD=17` -G "Visual Studio 17 2022" -A x64
-
-
   6. Use Visual Studio to open the newly created solution file. For example, `./build/ProjectName.sln`
 
-#### Windows UWP (Visual Studio 2022), because microsoft limit, only support C++17
+#### Windows UWP (Visual Studio 2022), ~because microsoft limit, only support C++17~, since axmol-2.1, migrated to cppwinrt, so c++20 supportedn
   ```cmake -B build_uwp -DCMAKE_SYSTEM_NAME=WindowsStore "-DCMAKE_SYSTEM_VERSION=10.0" "-DAX_VS_DEPLOYMENT_TARGET=10.0.17763.0"```  
 
 ##### Creating the Visual Studio solution for all axmol test projects (Win/UWP)
@@ -133,7 +128,7 @@ See [windows workflow guide](https://github.com/axmolengine/axmol/issues/564)
 
 ### iOS, tvOS and macOS
 
-  1. Ensure xcode 13/14.2 are installed
+  1. Ensure xcode 13+ are installed
   2. Create a new project as shown [here](#creating-a-new-project)
   3. In a console window, navigate into the root directory of the project you created in the previous step
   4. Execute the following command
