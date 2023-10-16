@@ -438,7 +438,11 @@ function(ax_setup_app_config app_name)
     if (IS_DIRECTORY ${GLSLCC_OUT_DIR})
         get_target_property(rt_output ${app_name} RUNTIME_OUTPUT_DIRECTORY)
         if ((WIN32 AND (NOT WINRT)) OR LINUX)
-            ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
+            if (NOT DEFINED AX_PREBUILT_DIR)
+                ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYM_LINK 1 SYNC_TARGET_ID axslc)
+            else() # linking with prebuilt, can't use symlink
+                ax_sync_target_res(${app_name} LINK_TO "${rt_output}/${CMAKE_CFG_INTDIR}/axslc" FOLDERS ${GLSLCC_OUT_DIR} SYNC_TARGET_ID axslc)
+            endif()
         elseif(APPLE)
             # once cmake-3.28.0 released, uncomment follow line instead above 2 lines
             set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES_PATH ${GLSLCC_OUT_DIR})
