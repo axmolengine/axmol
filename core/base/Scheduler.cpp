@@ -449,9 +449,9 @@ void Scheduler::unscheduleAll()
 void Scheduler::unscheduleAllWithMinPriority(int minPriority)
 {
     // Custom Selectors
-    for (auto& [target, timerHandle] : _timersMap)
+    for (auto timerIt = _timersMap.begin(); timerIt != _timersMap.end();)
     {
-        unscheduleAllForTarget(target);
+        unscheduleAllForTarget(timerIt);
     }
 
     // Updates selectors
@@ -497,26 +497,32 @@ void Scheduler::unscheduleAllForTarget(void* target)
     // Custom Selectors
     auto timerIt = _timersMap.find(target);
     if (timerIt != _timersMap.end())
-    {
-        auto& timerHandle = timerIt->second;
-        if (timerHandle.timers.contains(timerHandle.currentTimer) && (!timerHandle.currentTimer->isAborted()))
-        {
-            timerHandle.currentTimer->retain();
-            timerHandle.currentTimer->setAborted();
-        }
-        timerHandle.timers.clear();
+        unscheduleAllForTarget(timerIt);
+    else
+        unscheduleUpdate(target);
+}
 
-        if (_currentTarget == &timerHandle)
-        {
-            _currentTargetSalvaged = true;
-        }
-        else
-        {
-            _timersMap.erase(timerIt);
-        }
+void Scheduler::unscheduleAllForTarget(std::unordered_map<void*, TimerHandle>::iterator& timerIt)
+{
+    auto const target = timerIt->first;
+    auto& timerHandle = timerIt->second;
+    if (timerHandle.timers.contains(timerHandle.currentTimer) && (!timerHandle.currentTimer->isAborted()))
+    {
+        timerHandle.currentTimer->retain();
+        timerHandle.currentTimer->setAborted();
+    }
+    timerHandle.timers.clear();
+
+    if (_currentTarget == &timerHandle)
+    {
+        _currentTargetSalvaged = true;
+        ++timerIt;
+    }
+    else
+    {
+        timerIt = _timersMap.erase(timerIt);
     }
 
-    // update selector
     unscheduleUpdate(target);
 }
 

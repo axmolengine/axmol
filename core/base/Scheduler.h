@@ -505,6 +505,8 @@ protected:
                     bool paused);
     void appendIn(axstd::pod_vector<SchedHandle*>& list, const ccSchedulerFunc& callback, void* target, bool paused);
 
+    void unscheduleAllForTarget(std::unordered_map<void*, TimerHandle>::iterator& timerIt);
+
     float _timeScale;
 
     //
