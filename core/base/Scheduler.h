@@ -155,11 +155,11 @@ private:
 
 struct SchedHandle
 {
-    SchedHandle(axstd::pod_vector<SchedHandle*>& o, const ccSchedulerFunc& cb, void* t, int pri, bool psd) noexcept
+    SchedHandle(axstd::pod_vector<SchedHandle*>* o, const ccSchedulerFunc& cb, void* t, int pri, bool psd) noexcept
         : owner(o), callback(cb), target(t), priority(pri), paused(psd)
     {}
     SchedHandle(const SchedHandle&) = delete;
-    axstd::pod_vector<SchedHandle*>& owner;  // the owner sched list of this sched
+    axstd::pod_vector<SchedHandle*>* owner;  // the owner sched list of this sched
     ccSchedulerFunc callback;
     void* target;
     int priority;
@@ -505,9 +505,15 @@ protected:
                     bool paused);
     void appendIn(axstd::pod_vector<SchedHandle*>& list, const ccSchedulerFunc& callback, void* target, bool paused);
 
+    void addToWaitList(const ccSchedulerFunc& callback, void* target, int priority, bool paused);
+
+    void activeWaitList();
+
     void unscheduleAllForTarget(std::unordered_map<void*, TimerHandle>::iterator& timerIt);
 
     float _timeScale;
+
+    axstd::pod_vector<SchedHandle*> _waitList; // list wait active
 
     //
     // "updates with priority" stuff
