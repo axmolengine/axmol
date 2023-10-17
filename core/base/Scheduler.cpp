@@ -347,7 +347,7 @@ void Scheduler::priorityIn(axstd::pod_vector<SchedHandle*>& list,
                            int priority,
                            bool paused)
 {
-    auto sched = new SchedHandle(list, callback, target, priority, paused);
+    auto sched = new SchedHandle(&list, callback, target, priority, paused);
     axstd::insert_sorted(list, sched,
                          [](const SchedHandle* lhs, const SchedHandle* rhs) { return lhs->priority < rhs->priority; });
 
@@ -359,9 +359,43 @@ void Scheduler::appendIn(axstd::pod_vector<SchedHandle*>& list,
                          void* target,
                          bool paused)
 {
-    auto sched = new SchedHandle(list, callback, target, 0, paused);
+    auto sched = new SchedHandle(&list, callback, target, 0, paused);
     list.emplace_back(sched);
     _schedIndexMap.emplace(target, sched);
+}
+
+void Scheduler::addToWaitList(const ccSchedulerFunc& callback, void* target, int priority, bool paused)
+{
+    auto sched = new SchedHandle(&_waitList, callback, target, priority, paused);
+    _waitList.emplace_back(sched);
+    _schedIndexMap.emplace(target, sched);
+}
+
+void Scheduler::activeWaitList()
+{
+    for (auto sched : _waitList)
+    {
+        if (sched->priority == 0)
+        {
+            sched->owner = &_updates0List;
+            _updates0List.emplace_back(sched);
+        }
+        else if (sched->priority > 0)
+        {
+            sched->owner = &_updatesPosList;
+            axstd::insert_sorted(_updatesPosList, sched, [](const SchedHandle* lhs, const SchedHandle* rhs) {
+                return lhs->priority < rhs->priority;
+            });
+        }
+        else
+        {
+            sched->owner = &_updatesNegList;
+            axstd::insert_sorted(_updatesNegList, sched, [](const SchedHandle* lhs, const SchedHandle* rhs) {
+                return lhs->priority < rhs->priority;
+            });
+        }
+    }
+    _waitList.clear();
 }
 
 void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void* target, int priority, bool paused)
@@ -381,20 +415,27 @@ void Scheduler::schedulePerFrame(const ccSchedulerFunc& callback, void* target, 
         }
     }
 
-    // most of the updates are going to be 0, that's way there
-    // is an special list for updates with priority 0
-    if (priority == 0)
+    if (!_indexMapLocked)
     {
-        appendIn(_updates0List, callback, target, paused);
-    }
-    else if (priority < 0)
-    {
-        priorityIn(_updatesNegList, callback, target, priority, paused);
+        // most of the updates are going to be 0, that's way there
+        // is an special list for updates with priority 0
+        if (priority == 0)
+        {
+            appendIn(_updates0List, callback, target, paused);
+        }
+        else if (priority < 0)
+        {
+            priorityIn(_updatesNegList, callback, target, priority, paused);
+        }
+        else
+        {
+            // priority > 0
+            priorityIn(_updatesPosList, callback, target, priority, paused);
+        }
     }
     else
     {
-        // priority > 0
-        priorityIn(_updatesPosList, callback, target, priority, paused);
+        addToWaitList(callback, target, priority, paused);
     }
 }
 
@@ -428,9 +469,12 @@ void Scheduler::unscheduleUpdate(void* target)
     if (updateIt != _schedIndexMap.end())
     {
         auto& sched = updateIt->second;
-        axstd::erase(sched->owner, sched);
+
         if (!_indexMapLocked)
-            AX_SAFE_DELETE(sched);
+        {
+            axstd::erase(*sched->owner, sched);
+            delete sched;
+        }
         else
         {
             sched->markedForDeletion = true;
@@ -452,6 +496,11 @@ void Scheduler::unscheduleAllWithMinPriority(int minPriority)
     for (auto timerIt = _timersMap.begin(); timerIt != _timersMap.end();)
     {
         unscheduleAllForTarget(timerIt);
+    }
+
+    for (auto&& entry : _waitList)
+    {
+        unscheduleUpdate(entry->target);
     }
 
     // Updates selectors
@@ -681,6 +730,10 @@ void Scheduler::removeAllPendingActions()
 // main loop
 void Scheduler::update(float dt)
 {
+    // active waitlist
+    if (!_waitList.empty())
+        activeWaitList();
+
     _indexMapLocked = true;
 
     if (_timeScale != 1.0f)
@@ -759,8 +812,11 @@ void Scheduler::update(float dt)
     }
 
     // delete all updates that are removed in update
-    for (auto&& e : _updateDeleteVector)
-        delete e;
+    for (auto&& sched : _updateDeleteVector)
+    {
+        axstd::erase(*sched->owner, sched);
+        delete sched;
+    }
 
     _updateDeleteVector.clear();
 
