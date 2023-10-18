@@ -17,35 +17,168 @@
 
 NS_AX_EXT_BEGIN
 
-static Inspector* _instance = nullptr;
+namespace
+{
+Inspector* g_instance = nullptr;
+}
+
+bool InspectorNodePropertyHandler::isSupportedType(Node* node)
+{
+    return true;
+}
+
+void InspectorNodePropertyHandler::drawProperties(Node* node)
+{
+    if (auto userData = node->getUserData(); userData)
+    {
+        ImGui::SameLine();
+        ImGui::Text("User data: %p", userData);
+    }
+
+    auto pos      = node->getPosition();
+    float _pos[2] = {pos.x, pos.y};
+    ImGui::DragFloat2("Position", _pos);
+    node->setPosition({_pos[0], _pos[1]});
+
+    // need to use getScaleX() because of assert
+    float _scale[3] = {node->getScaleX(), node->getScaleX(), node->getScaleY()};
+    ImGui::DragFloat3("Scale", _scale, 0.025f);
+
+    if (auto scale_0 = node->getScaleX(); scale_0 != _scale[0])
+    {
+        node->setScale(_scale[0]);
+    }
+    else
+    {
+        node->setScaleX(_scale[1]);
+        node->setScaleY(_scale[2]);
+    }
+
+    float rotation[3] = {node->getRotationSkewX(), node->getRotationSkewX(),
+                         node->getRotationSkewY()};
+    if (ImGui::DragFloat3("Rotation", rotation, 1.0f))
+    {
+        if (node->getRotationSkewX() != rotation[0])
+        {
+            node->setRotation(rotation[0]);
+        }
+        else
+        {
+            node->setRotationSkewX(rotation[1]);
+            node->setRotationSkewY(rotation[2]);
+        }
+    }
+
+    auto contentSize = node->getContentSize();
+    float _cont[2]   = {contentSize.x, contentSize.y};
+    ImGui::DragFloat2("Content Size", _cont);
+    node->setContentSize({_cont[0], _cont[1]});
+
+    auto anchor    = node->getAnchorPoint();
+    float _anch[2] = {anchor.x, anchor.y};
+    ImGui::DragFloat2("Anchor Point", _anch);
+    node->setAnchorPoint({_anch[0], _anch[1]});
+
+    int localZOrder = node->getLocalZOrder();
+    ImGui::InputInt("Local Z", &localZOrder);
+    if (node->getLocalZOrder() != localZOrder)
+    {
+        node->setLocalZOrder(localZOrder);
+    }
+
+    float globalZOrder = node->getGlobalZOrder();
+    ImGui::InputFloat("Global Z", &globalZOrder);
+    if (node->getGlobalZOrder() != globalZOrder)
+    {
+        node->setGlobalZOrder(globalZOrder);
+    }
+
+    auto visible = node->isVisible();
+    ImGui::Checkbox("Visible", &visible);
+    if (visible != node->isVisible())
+    {
+        node->setVisible(visible);
+    }
+
+    auto color      = node->getColor();
+    float _color[4] = {color.r / 255.f, color.g / 255.f, color.b / 255.f, node->getOpacity() / 255.f};
+    ImGui::ColorEdit4("Color", _color);
+    node->setColor({static_cast<GLubyte>(_color[0] * 255), static_cast<GLubyte>(_color[1] * 255),
+                              static_cast<GLubyte>(_color[2] * 255)});
+    node->setOpacity(static_cast<int>(_color[3] * 255.f));
+}
+
+bool InspectorSpritePropertyHandler::isSupportedType(Node* node)
+{
+    return dynamic_cast<Sprite*>(node) != nullptr;
+}
+
+void InspectorSpritePropertyHandler::drawProperties(Node* node)
+{
+    auto* sprite = dynamic_cast<ax::Sprite*>(node);
+
+    ImGui::SameLine();
+    bool flipx = sprite->isFlippedX();
+    bool flipy = sprite->isFlippedY();
+    ImGui::Checkbox("FlipX", &flipx);
+    ImGui::SameLine();
+    ImGui::Checkbox("FlipY", &flipy);
+    sprite->setFlippedX(flipx);
+    sprite->setFlippedY(flipy);
+
+    auto texture = sprite->getTexture();
+    ImGui::TextWrapped("Texture: %s", texture->getPath().c_str());
+}
+
+bool InspectorLabelProtocolPropertyHandler::isSupportedType(Node* node)
+{
+    return dynamic_cast<LabelProtocol*>(node) != nullptr;
+}
+
+void InspectorLabelProtocolPropertyHandler::drawProperties(Node* node)
+{
+    auto label_node = dynamic_cast<LabelProtocol*>(node);
+
+    std::string_view label = label_node->getString();
+    std::string label_str(label);
+
+    if (ImGui::InputTextMultiline("Text", &label_str, {0, 50}))
+    {
+        label_node->setString(label_str);
+    }
+}
 
 Inspector* Inspector::getInstance()
 {
-    if (_instance == nullptr)
+    if (g_instance == nullptr)
     {
-        _instance = new Inspector();
-        _instance->init();
+        g_instance = new Inspector();
+        g_instance->init();
     }
-    return _instance;
+    return g_instance;
 }
 
 void Inspector::destroyInstance()
 {
-    if (_instance)
+    if (g_instance)
     {
-        _instance->close();
-        _instance->cleanup();
-        delete _instance;
-        _instance = nullptr;
+        g_instance->close();
+        g_instance->cleanup();
+        delete g_instance;
+        g_instance = nullptr;
     }
 }
 
 void Inspector::init()
 {
+    addPropertyHandler("__NODE__", std::make_unique<InspectorNodePropertyHandler>());
+    addPropertyHandler("__SPRITE__", std::make_unique<InspectorSpritePropertyHandler>());
+    addPropertyHandler("__LABEL_PROTOCOL__", std::make_unique<InspectorLabelProtocolPropertyHandler>());
 }
 
 void Inspector::cleanup()
 {
+    _propertyHandlers.clear();
 }
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
@@ -56,7 +189,7 @@ std::string Inspector::demangle(const char* name)
     // typeid(Node).name() == "class ax::Node"
     // the + 6 gets rid of the class prefix
     // "class ax::Node" + 6 == "ax::Node"
-    return std::string(name + 6);
+    return { name + 6 };
 }
 
 #elif AX_HAS_CXXABI
@@ -72,29 +205,35 @@ std::string Inspector::demangle(const char* mangled_name)
 
 std::string Inspector::demangle(const char* name)
 {
-    return std::string(name);
+    return { name };
 }
 
 #endif
 
-std::string Inspector::getNodeName(Node* node)
+std::string Inspector::getNodeTypeName(Node* node)
 {
-    return Inspector::demangle(typeid(*node).name());
+    return demangle(typeid(*node).name());
 }
 
-void Inspector::drawTreeRecusrive(Node* node, int index)
+void Inspector::drawTreeRecursive(Node* node, int index)
 {
-    std::string str = fmt::format("[{}] {}", index, Inspector::getNodeName(node));
+    std::string str = fmt::format("[{}] {}", index, getNodeTypeName(node));
 
     if (node->getTag() != -1)
     {
-        str += fmt::format(" ({})", node->getTag());
+        fmt::format_to(std::back_inserter(str), " ({})", node->getTag());
+    }
+
+    const auto nodeName = node->getName();
+    if (!nodeName.empty())
+    {
+        fmt::format_to(std::back_inserter(str), " \"{}\"", nodeName);
     }
 
     const auto childrenCount = node->getChildrenCount();
     if (childrenCount != 0)
     {
-        str += fmt::format(" {{{}}}", childrenCount);
+        fmt::format_to(std::back_inserter(str), " {{{}}}", childrenCount);
     }
 
     auto flags = ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_SpanFullWidth;
@@ -121,8 +260,6 @@ void Inspector::drawTreeRecusrive(Node* node, int index)
         }
     }
 
-    const auto children_count = node->getChildrenCount();
-
     if (is_open)
     {
         const auto &children = node->getChildren();
@@ -133,7 +270,7 @@ void Inspector::drawTreeRecusrive(Node* node, int index)
                 continue;
             }
 
-            drawTreeRecusrive(child, i);
+            drawTreeRecursive(child, i);
             i++;
         }
         ImGui::TreePop();
@@ -155,151 +292,58 @@ void Inspector::drawProperties()
         return;
     }
 
-    //ImGui::SameLine();
+    // ImGui::SameLine();
     //
-    //if (ImGui::Button("Add Child"))
+    // if (ImGui::Button("Add Child"))
     //{
-    //    ImGui::OpenPopup("Add Child");
-    //}
+    //     ImGui::OpenPopup("Add Child");
+    // }
     //
-    //if (ImGui::BeginPopupModal("Add Child"))
+    // if (ImGui::BeginPopupModal("Add Child"))
     //{
-    //    static int item = 0;
-    //    ImGui::Combo("Node", &item, "Node\0LabelBMFont\0LabelTTF\0Sprite\0MenuItemSpriteExtra\0");
+    //     static int item = 0;
+    //     ImGui::Combo("Node", &item, "Node\0LabelBMFont\0LabelTTF\0Sprite\0MenuItemSpriteExtra\0");
     //
-    //    static int tag = -1;
-    //    ImGui::InputInt("Tag", &tag);
+    //     static int tag = -1;
+    //     ImGui::InputInt("Tag", &tag);
     //
-    //    static char text[256]{0};
-    //    if (item == 1)
-    //    {
-    //        static char labelFont[256]{0};
-    //        ImGui::InputText("Text", text, 256);
-    //        ImGui::InputText("Font", labelFont, 256);
-    //    }
-    //    static int fontSize = 20;
-    //    if (item == 2)
-    //    {
-    //        ImGui::InputText("Text", text, 256);
-    //        ImGui::InputInt("Font Size", &fontSize);
-    //    }
-    //    static bool frame = false;
-    //    if (item == 3 || item == 4)
-    //    {
-    //        ImGui::InputText("Texture", text, 256);
-    //        ImGui::Checkbox("Frame", &frame);
-    //    }
+    //     static char text[256]{0};
+    //     if (item == 1)
+    //     {
+    //         static char labelFont[256]{0};
+    //         ImGui::InputText("Text", text, 256);
+    //         ImGui::InputText("Font", labelFont, 256);
+    //     }
+    //     static int fontSize = 20;
+    //     if (item == 2)
+    //     {
+    //         ImGui::InputText("Text", text, 256);
+    //         ImGui::InputInt("Font Size", &fontSize);
+    //     }
+    //     static bool frame = false;
+    //     if (item == 3 || item == 4)
+    //     {
+    //         ImGui::InputText("Texture", text, 256);
+    //         ImGui::Checkbox("Frame", &frame);
+    //     }
     //
-    //    ImGui::Separator();
-    //    ImGui::SameLine();
-    //    if (ImGui::Button("Cancel"))
-    //    {
-    //        ImGui::CloseCurrentPopup();
-    //    }
-    //    ImGui::EndPopup();
-    //}
+    //     ImGui::Separator();
+    //     ImGui::SameLine();
+    //     if (ImGui::Button("Cancel"))
+    //     {
+    //         ImGui::CloseCurrentPopup();
+    //     }
+    //     ImGui::EndPopup();
+    // }
 
     ImGui::Text("Addr: %p", _selected_node);
-    if (auto userData = _selected_node->getUserData(); userData)
-    {
-        ImGui::SameLine();
-        ImGui::Text("User data: %p", userData);
-    }
 
-    auto pos = _selected_node->getPosition();
-    float _pos[2] = {pos.x, pos.y};
-    ImGui::DragFloat2("Position", _pos);
-    _selected_node->setPosition({_pos[0], _pos[1]});
-
-        // need to use getScaleX() because of assert
-    float _scale[3] = {_selected_node->getScaleX(), _selected_node->getScaleX(), _selected_node->getScaleY()};
-    ImGui::DragFloat3("Scale", _scale, 0.025f);
-
-    if (auto scale_0 = _selected_node->getScaleX(); scale_0 != _scale[0])
+    for (auto&& propertyHandler : _propertyHandlers)
     {
-        _selected_node->setScale(_scale[0]);
-    }
-    else
-    {
-        _selected_node->setScaleX(_scale[1]);
-        _selected_node->setScaleY(_scale[2]);
-    }
-
-    float rotation[3] = {_selected_node->getRotationSkewX(), _selected_node->getRotationSkewX(),
-                         _selected_node->getRotationSkewY()};
-    if (ImGui::DragFloat3("Rotation", rotation, 1.0f))
-    {
-        if (_selected_node->getRotationSkewX() != rotation[0])
+        if (propertyHandler.second->isSupportedType(_selected_node))
         {
-            _selected_node->setRotation(rotation[0]);
+            propertyHandler.second->drawProperties(_selected_node);
         }
-        else
-        {
-            _selected_node->setRotationSkewX(rotation[1]);
-            _selected_node->setRotationSkewY(rotation[2]);
-        }
-    }
-
-    auto contect = _selected_node->getContentSize();
-    float _cont[2] = {contect.x, contect.y};
-    ImGui::DragFloat2("Content Size", _cont);
-    _selected_node->setContentSize({_cont[0], _cont[1]});
-
-    auto anchor = _selected_node->getAnchorPoint();
-    float _anch[2] = {anchor.x, anchor.y};
-    ImGui::DragFloat2("Anchor Point", _anch);
-    _selected_node->setAnchorPoint({_anch[0], _anch[1]});
-
-    int zOrder = _selected_node->getLocalZOrder();
-    ImGui::InputInt("Z", &zOrder);
-    if (_selected_node->getLocalZOrder() != zOrder)
-    {
-        _selected_node->setLocalZOrder(zOrder);
-    }
-
-    auto visible = _selected_node->isVisible();
-    ImGui::Checkbox("Visible", &visible);
-    if (visible != _selected_node->isVisible())
-    {
-        _selected_node->setVisible(visible);
-    }
-
-    if (auto sprite = dynamic_cast<ax::Sprite*>(_selected_node))
-    {
-        ImGui::SameLine();
-        bool flipx = sprite->isFlippedX();
-        bool flipy = sprite->isFlippedY();
-        ImGui::Checkbox("FlipX", &flipx);
-        ImGui::SameLine();
-        ImGui::Checkbox("FlipY", &flipy);
-        sprite->setFlippedX(flipx);
-        sprite->setFlippedY(flipy);
-    }
-
-
-    auto color = _selected_node->getColor();
-    float _color[4] = {color.r / 255.f, color.g / 255.f, color.b / 255.f, _selected_node->getOpacity() / 255.f};
-    ImGui::ColorEdit4("Color", _color);
-    _selected_node->setColor({static_cast<GLubyte>(_color[0] * 255), static_cast<GLubyte>(_color[1] * 255),
-                              static_cast<GLubyte>(_color[2] * 255)});
-    _selected_node->setOpacity(static_cast<int>(_color[3] * 255.f));
-
-
-    if (auto label_node = dynamic_cast<LabelProtocol*>(_selected_node); label_node)
-    {
-        std::string_view label = label_node->getString();
-        std::string label_str(label.begin(), label.end());
-
-        if (ImGui::InputTextMultiline("Text", &label_str, {0, 50}))
-        {
-            label_node->setString(label_str);
-        }
-    }
-
-    if (auto sprite = dynamic_cast<ax::Sprite*>(_selected_node))
-    {
-        auto texture = sprite->getTexture();
-        ImGui::TextWrapped("Texture: %s", texture->getPath().c_str());
     }
 }
 
@@ -323,6 +367,17 @@ void Inspector::close()
     presenter->clearFonts();
 }
 
+bool Inspector::addPropertyHandler(std::string_view handlerId, std::unique_ptr<InspectPropertyHandler> handler)
+{
+    auto result = _propertyHandlers.try_emplace(std::string(handlerId), std::move(handler));
+    return result.second;
+}
+
+void Inspector::removePropertyHandler(const std::string& handlerId)
+{
+    _propertyHandlers.erase(handlerId);
+}
+
 void Inspector::mainLoop()
 {
     if(!_target)
@@ -336,7 +391,7 @@ void Inspector::mainLoop()
         const auto avail = ImGui::GetContentRegionAvail();
         if (ImGui::BeginChild("node.explorer.tree", ImVec2(avail.x * 0.5f, 0), false, ImGuiWindowFlags_HorizontalScrollbar))
         {
-            drawTreeRecusrive(_target);
+            drawTreeRecursive(_target);
         }
         ImGui::EndChild();
 
