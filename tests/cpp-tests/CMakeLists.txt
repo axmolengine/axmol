@@ -182,6 +182,7 @@ list(APPEND GAME_HEADER
      Source/TextureCacheTest/TextureCacheTest.h
      Source/MotionStreakTest/MotionStreakTest.h
      Source/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.h
+     Source/ExtensionsTest/JSONDefaultTest/JSONDefaultTest.h
      Source/ExtensionsTest/ExtensionsTest.h
      Source/ExtensionsTest/TableViewTest/CustomTableViewCell.h
      Source/ExtensionsTest/TableViewTest/TableViewTestScene.h
@@ -287,6 +288,7 @@ list(APPEND GAME_SOURCE
      Source/EffectsAdvancedTest/EffectsAdvancedTest.cpp
      Source/EffectsTest/EffectsTest.cpp
      Source/ExtensionsTest/AssetsManagerExTest/AssetsManagerExTest.cpp
+     Source/ExtensionsTest/JSONDefaultTest/JSONDefaultTest.cpp
      Source/ExtensionsTest/ExtensionsTest.cpp
      Source/ExtensionsTest/TableViewTest/CustomTableViewCell.cpp
      Source/ExtensionsTest/TableViewTest/TableViewTestScene.cpp

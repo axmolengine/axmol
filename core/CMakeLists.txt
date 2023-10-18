@@ -138,6 +138,8 @@ cmake_dependent_option(AX_ENABLE_EXT_SDFGEN "Build extension SDFGen" ON "(WINDOW
 
 option(AX_DISABLE_GLES2 "Whether disable GLES2 support" OFF)
 
+option(AX_ENABLE_EXT_JSONDEFAULT "Build extension JSONDefault" ON)
+
 if(XCODE)
     # set(CMAKE_BUILD_WITH_INSTALL_RPATH YES)
     # set(CMAKE_INSTALL_RPATH "@executable_path/Frameworks")

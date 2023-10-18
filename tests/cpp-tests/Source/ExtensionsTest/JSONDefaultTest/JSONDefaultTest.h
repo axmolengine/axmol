@@ -22,15 +22,26 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "ExtensionsTest.h"
-#include "../testResource.h"
-#include "AssetsManagerExTest/AssetsManagerExTest.h"
-#include "TableViewTest/TableViewTestScene.h"
-#include "JSONDefaultTest/JSONDefaultTest.h"
+#ifndef _JSONDEFAULT_TEST_H_
+#define _JSONDEFAULT_TEST_H_
 
-ExtensionsTests::ExtensionsTests()
+#include "axmol.h"
+#include "BaseTest.h"
+#include "2d/Label.h"
+
+DEFINE_TEST_SUITE(JSONDefaultTests);
+
+class JSONDefaultTest : public TestCase
 {
-    addTest("AssetsManagerExTest", []() { return new AssetsManagerExTests; });
-    addTest("TableViewTest", []() { return new TableViewTests; });
-    addTest("JSONDefaultTest", []() { return new JSONDefaultTests; });
-}
+public:
+    CREATE_FUNC(JSONDefaultTest);
+    JSONDefaultTest();
+    ~JSONDefaultTest();
+
+private:
+    void doTest();
+    void printValue();
+    ax::Label* _label;
+};
+
+#endif  // _JSONDEFAULT_TEST_H_
