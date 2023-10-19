@@ -169,16 +169,44 @@ void Inspector::destroyInstance()
     }
 }
 
+void Inspector::setFontPath(std::string_view fontPath)
+{
+    _fontPath = std::string(fontPath);
+}
+
 void Inspector::init()
 {
+    _fontPath = "fonts/arial.ttf";
+
     addPropertyHandler("__NODE__", std::make_unique<InspectorNodePropertyHandler>());
     addPropertyHandler("__SPRITE__", std::make_unique<InspectorSpritePropertyHandler>());
     addPropertyHandler("__LABEL_PROTOCOL__", std::make_unique<InspectorLabelProtocolPropertyHandler>());
+
+    _beforeNewSceneEventListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
+        Director::EVENT_BEFORE_SET_NEXT_SCENE, [this](EventCustom*) {
+            if (!_autoAddToScenes)
+                return;
+
+        getInstance()->close();
+    });
+    _afterNewSceneEventListener = Director::getInstance()->getEventDispatcher()->addCustomEventListener(
+        Director::EVENT_AFTER_SET_NEXT_SCENE, [this](EventCustom*) {
+            if (!_autoAddToScenes)
+                return;
+
+        getInstance()->openForCurrentScene();
+    });
 }
 
 void Inspector::cleanup()
 {
     _propertyHandlers.clear();
+    auto* eventDispatcher = Director::getInstance()->getEventDispatcher();
+    eventDispatcher->removeEventListener(_beforeNewSceneEventListener);
+    eventDispatcher->removeEventListener(_afterNewSceneEventListener);
+
+    _beforeNewSceneEventListener = nullptr;
+    _afterNewSceneEventListener = nullptr;
 }
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_WIN32
@@ -285,6 +313,13 @@ void Inspector::drawProperties()
         return;
     }
 
+    if (_selected_node && _selected_node->getReferenceCount() <= 1)
+    {
+        // Node no longer exists in the scene, and we're holding the only reference to it, so release it
+        _selected_node = nullptr;
+        return;
+    }
+
     if (ImGui::Button("Delete"))
     {
         _selected_node->removeFromParentAndCleanup(true);
@@ -349,12 +384,26 @@ void Inspector::drawProperties()
 
 void Inspector::openForScene(Scene* target)
 {
+    if (_target == target)
+        return;
+
     _target = target;
 
+    if (_target == nullptr)
+    {
+        close();
+        return;
+    }
+
     auto* presenter = ImGuiPresenter::getInstance();
-    presenter->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
+    presenter->addFont(FileUtils::getInstance()->fullPathForFilename(getFontPath()));
     presenter->enableDPIScale();
     presenter->addRenderLoop("#insp", AX_CALLBACK_0(Inspector::mainLoop , this), target);
+}
+
+void Inspector::openForCurrentScene()
+{
+    openForScene(Director::getInstance()->getRunningScene());
 }
 
 void Inspector::close()
@@ -376,6 +425,20 @@ bool Inspector::addPropertyHandler(std::string_view handlerId, std::unique_ptr<I
 void Inspector::removePropertyHandler(const std::string& handlerId)
 {
     _propertyHandlers.erase(handlerId);
+}
+
+void Inspector::setAutoAddToScenes(bool autoAdd)
+{
+    if (_autoAddToScenes == autoAdd)
+        return;
+
+    _autoAddToScenes = autoAdd;
+    close();
+
+    if (_autoAddToScenes)
+    {
+        openForCurrentScene();
+    }
 }
 
 void Inspector::mainLoop()
