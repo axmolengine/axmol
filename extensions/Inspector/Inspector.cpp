@@ -313,7 +313,7 @@ void Inspector::drawProperties()
         return;
     }
 
-    if (_selected_node && _selected_node->getReferenceCount() <= 1)
+    if (_selected_node->getReferenceCount() <= 1)
     {
         // Node no longer exists in the scene, and we're holding the only reference to it, so release it
         _selected_node = nullptr;
