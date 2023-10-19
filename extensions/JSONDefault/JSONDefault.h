@@ -28,6 +28,7 @@ THE SOFTWARE.
 #define __SUPPORT_JSONDEFAULT_H__
 
 #include "platform/PlatformMacros.h"
+#include "ExtensionMacros.h"
 #include <string>
 
 #include "yasio/string_view.hpp"
@@ -36,10 +37,10 @@ THE SOFTWARE.
 #include "rapidjson/document.h"
 
 /**
- * @addtogroup base
+ * @addtogroup extensions
  * @{
  */
-NS_AX_BEGIN
+NS_AX_EXT_BEGIN
 
 /**
  * JSONDefault acts as a tiny database. You can save and get base type values by
@@ -51,7 +52,7 @@ NS_AX_BEGIN
  * bool, int, float, double, string
  *
  */
-class AX_DLL JSONDefault
+class JSONDefault
 {
 public:
     // get value methods
@@ -276,8 +277,8 @@ protected:
     std::string _iv;
 };
 
-NS_AX_END
-// end of base group
+NS_AX_EXT_END
+// end of extensions group
 /** @} */
 
 #endif  // __SUPPORT_JSONDEFAULT_H__

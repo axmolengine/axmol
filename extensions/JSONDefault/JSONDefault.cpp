@@ -38,7 +38,7 @@ THE SOFTWARE.
 
 #define JSON_DEFAULT_FILENAME "JSONDefault.json"
 
-NS_AX_BEGIN
+NS_AX_EXT_BEGIN
 
 /**
  * implements of JSONDefault
@@ -299,4 +299,4 @@ void JSONDefault::reset()
     flush();
 }
 
-NS_AX_END
+NS_AX_EXT_END
