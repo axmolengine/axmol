@@ -114,4 +114,8 @@ if(AX_ENABLE_EXT_LUA)
   add_subdirectory(scripting/lua-bindings)
 endif()
 
+if(AX_ENABLE_EXT_JSONDEFAULT)
+  add_subdirectory(JSONDefault)
+endif()
+
 message(STATUS "Enabled ${_AX_CORE_LIB} extensions:${_AX_EXTENSION_LIBS}")
