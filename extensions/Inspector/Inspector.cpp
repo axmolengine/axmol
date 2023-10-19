@@ -371,7 +371,7 @@ void Inspector::drawProperties()
     //     ImGui::EndPopup();
     // }
 
-    ImGui::Text("Addr: %p", _selected_node);
+    ImGui::Text("Addr: %p", _selected_node.get());
 
     for (auto&& propertyHandler : _propertyHandlers)
     {
