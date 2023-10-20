@@ -16,7 +16,9 @@
 
 NS_AX_EXT_BEGIN
 
-static uint32_t fourccValue(std::string_view str)
+namespace
+{
+uint32_t fourccValue(std::string_view str)
 {
     if (str.empty() || str[0] != '#')
         return (uint32_t)-1;
@@ -25,10 +27,114 @@ static uint32_t fourccValue(std::string_view str)
     return value;
 }
 
+std::tuple<ImVec2, ImVec2> getTwoPointTextureUV(Sprite* sp)
+{
+    ImVec2 uv0, uv1;
+    if (!sp || !sp->getTexture())
+        return std::tuple{uv0, uv1};
+    const auto& rect        = sp->getTextureRect();
+    const auto tex          = sp->getTexture();
+    const float atlasWidth  = (float)tex->getPixelsWide();
+    const float atlasHeight = (float)tex->getPixelsHigh();
+    uv0.x                   = rect.origin.x / atlasWidth;
+    uv0.y                   = rect.origin.y / atlasHeight;
+    uv1.x                   = (rect.origin.x + rect.size.width) / atlasWidth;
+    uv1.y                   = (rect.origin.y + rect.size.height) / atlasHeight;
+    return std::tuple{uv0, uv1};
+}
+
+std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(Texture2D* tex, const Rect& rectInPixels, bool rotated)
+{
+    ImVec2 uv0, uv1, uv2, uv3;
+
+    const auto atlasWidth  = (float)tex->getPixelsWide();
+    const auto atlasHeight = (float)tex->getPixelsHigh();
+
+    float rw = rectInPixels.size.width;
+    float rh = rectInPixels.size.height;
+
+    if (rotated)
+        std::swap(rw, rh);
+
+#if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+    float left   = (2 * rectInPixels.origin.x + 1) / (2 * atlasWidth);
+    float right  = left + (rw * 2 - 2) / (2 * atlasWidth);
+    float top    = (2 * rectInPixels.origin.y + 1) / (2 * atlasHeight);
+    float bottom = top + (rh * 2 - 2) / (2 * atlasHeight);
+#else
+    float left   = rectInPixels.origin.x / atlasWidth;
+    float right  = (rectInPixels.origin.x + rw) / atlasWidth;
+    float top    = rectInPixels.origin.y / atlasHeight;
+    float bottom = (rectInPixels.origin.y + rh) / atlasHeight;
+#endif  // AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+
+    if (rotated)
+    {
+        uv0.x = right;
+        uv0.y = top;
+        uv1.x = right;
+        uv1.y = bottom;
+        uv2.x = left;
+        uv2.y = bottom;
+        uv3.x = left;
+        uv3.y = top;
+    }
+    else
+    {
+        uv0.x = left;
+        uv0.y = top;
+        uv1.x = right;
+        uv1.y = top;
+        uv2.x = right;
+        uv2.y = bottom;
+        uv3.x = left;
+        uv3.y = bottom;
+    }
+
+    return std::tuple{uv0, uv1, uv2, uv3};
+}
+
+std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(Sprite* sp)
+{
+    if (!sp || !sp->getTexture())
+        return std::tuple{ImVec2(), ImVec2(), ImVec2(), ImVec2()};
+
+    const auto rectInPixels = AX_RECT_POINTS_TO_PIXELS(sp->getTextureRect());
+    return getFourPointTextureUV(sp->getTexture(), rectInPixels, sp->isTextureRectRotated());
+}
+
+std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(SpriteFrame* frame)
+{
+    if (!frame || !frame->getTexture())
+        return std::tuple{ImVec2(), ImVec2(), ImVec2(), ImVec2()};
+
+    const auto rectInPixels = frame->getRectInPixels();
+    return getFourPointTextureUV(frame->getTexture(), rectInPixels, frame->isRotated());
+}
+
+ImVec2 operator+(const ImVec2& lhs, const ImVec2& rhs)
+{
+    return { lhs.x + rhs.x, lhs.y + rhs.y };
+}
+
+ImVec2 ImRotate(const ImVec2& v, float cos_a, float sin_a)
+{
+    return { v.x * cos_a - v.y * sin_a, v.x * sin_a + v.y * cos_a };
+}
+
+ImVec2& operator+=(ImVec2& lhs, const ImVec2& rhs)
+{
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+    return lhs;
+}
+}
+
+
 class ImGuiEventTracker
 {
 public:
-    virtual ~ImGuiEventTracker() {}
+    virtual ~ImGuiEventTracker() = default;
 };
 
 // Track scene event and check whether routed to the scene graph
@@ -77,7 +183,7 @@ public:
         return true;
     }
 
-    ~ImGuiSceneEventTracker()
+    ~ImGuiSceneEventTracker() override
     {
 #if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         if (_trackLayer)
@@ -124,7 +230,7 @@ public:
         return true;
     }
 
-    ~ImGuiGlobalEventTracker()
+    ~ImGuiGlobalEventTracker() override
     {
 #if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
         auto eventDispatcher = Director::getInstance()->getEventDispatcher();
@@ -309,7 +415,7 @@ float ImGuiPresenter::enableDPIScale(float userScale)
             fontConf.SizePixels = (fontConf.SizePixels / _contentZoomFactor) * zoomFactor;
         }
 
-        // Destory font informations, let implcocos2dx recreate at newFrame
+        // Destroy font information, let ImplAx recreate at newFrame
         ImGui_ImplAx_SetDeviceObjectsDirty();
 
         ImGui::GetStyle().ScaleAllSizes(zoomFactor);
@@ -470,22 +576,6 @@ void ImGuiPresenter::removeRenderLoop(std::string_view id)
         iter->second.removing = true;
 }
 
-static std::tuple<ImVec2, ImVec2> getTextureUV(Sprite* sp)
-{
-    ImVec2 uv0, uv1;
-    if (!sp || !sp->getTexture())
-        return std::tuple<ImVec2, ImVec2>{uv0, uv1};
-    const auto& rect        = sp->getTextureRect();
-    const auto tex          = sp->getTexture();
-    const float atlasWidth  = (float)tex->getPixelsWide();
-    const float atlasHeight = (float)tex->getPixelsHigh();
-    uv0.x                   = rect.origin.x / atlasWidth;
-    uv0.y                   = rect.origin.y / atlasHeight;
-    uv1.x                   = (rect.origin.x + rect.size.width) / atlasWidth;
-    uv1.y                   = (rect.origin.y + rect.size.height) / atlasHeight;
-    return std::tuple<ImVec2, ImVec2>{uv0, uv1};
-}
-
 void ImGuiPresenter::image(Texture2D* tex,
                            const ImVec2& size,
                            const ImVec2& uv0,
@@ -505,20 +595,113 @@ void ImGuiPresenter::image(Texture2D* tex,
     ImGui::PopID();
 }
 
-void ImGuiPresenter::image(Sprite* sprite, const ImVec2& size, const ImVec4& tint_col, const ImVec4& border_col)
+void ImGuiPresenter::image(Sprite* sprite,
+                           const ImVec2& size,
+                           bool keepAspectRatio,
+                           const ImVec4& tint_col,
+                           const ImVec4& border_col)
 {
     if (!sprite || !sprite->getTexture())
         return;
+
     auto size_       = size;
     const auto& rect = sprite->getTextureRect();
     if (size_.x <= 0.f)
         size_.x = rect.size.width;
     if (size_.y <= 0.f)
         size_.y = rect.size.height;
-    ImVec2 uv0, uv1;
-    std::tie(uv0, uv1) = getTextureUV(sprite);
+
+    if (keepAspectRatio)
+    {
+        const auto rectInPixels = AX_RECT_POINTS_TO_PIXELS(rect);
+        const auto scale =
+            std::min(1.0f, std::min(size_.x / rectInPixels.size.width, size_.y / rectInPixels.size.height));
+        size_ = ImVec2(rectInPixels.size.width * scale, rectInPixels.size.height * scale);
+    }
+
+    auto [uv0, uv1, uv2, uv3] = getFourPointTextureUV(sprite);
+
+    const auto* window = ImGui::GetCurrentWindow();
+
+    ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size_);
+    if (border_col.w > 0.0f)
+        bb.Max += ImVec2(2, 2);
+
+    ImGui::ItemSize(bb);
+    if (!ImGui::ItemAdd(bb, 0))
+        return;
+
+    const ImVec2 pos[4] = {ImVec2(bb.Min.x, bb.Min.y), ImVec2(bb.Max.x, bb.Min.y), ImVec2(bb.Max.x, bb.Max.y),
+                           ImVec2(bb.Min.x, bb.Max.y)};
+
     ImGui::PushID(getCCRefId(sprite));
-    ImGui::Image((ImTextureID)sprite->getTexture(), size_, uv0, uv1, tint_col, border_col);
+    if (border_col.w > 0.0f)
+    {
+        window->DrawList->AddRect(bb.Min, bb.Max, ImGui::GetColorU32(border_col), 0.0f);
+        window->DrawList->AddImageQuad((ImTextureID)sprite->getTexture(), pos[0] + ImVec2(1, 1), pos[1] + ImVec2(-1, 1),
+                                       pos[2] + ImVec2(1, -1), pos[3] + ImVec2(-1, -1), uv0, uv1, uv2, uv3,
+                                       ImGui::GetColorU32(tint_col));
+    }
+    else
+    {
+
+        window->DrawList->AddImageQuad((ImTextureID)sprite->getTexture(), pos[0], pos[1], pos[2], pos[3], uv0, uv1, uv2,
+                                       uv3, ImGui::GetColorU32(tint_col));
+    }
+    ImGui::PopID();
+}
+
+void ImGuiPresenter::image(SpriteFrame* spriteFrame,
+                           const ImVec2& size,
+                           bool keepAspectRatio,
+                           const ImVec4& tint_col,
+                           const ImVec4& border_col)
+{
+    if (!spriteFrame || !spriteFrame->getTexture())
+        return;
+
+    auto size_       = size;
+    const auto& rect = spriteFrame->getOriginalSizeInPixels();
+    if (size_.x <= 0.f)
+        size_.x = rect.width;
+    if (size_.y <= 0.f)
+        size_.y = rect.height;
+
+    if (keepAspectRatio)
+    {
+        const auto scale = std::min(1.0f, std::min(size_.x / rect.width, size_.y / rect.height));
+        size_            = ImVec2(rect.width * scale, rect.height * scale);
+    }
+
+    auto [uv0, uv1, uv2, uv3] = getFourPointTextureUV(spriteFrame);
+
+    const auto* window = ImGui::GetCurrentWindow();
+
+    ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size_);
+    if (border_col.w > 0.0f)
+        bb.Max += ImVec2(2, 2);
+
+    ImGui::ItemSize(bb);
+    if (!ImGui::ItemAdd(bb, 0))
+        return;
+
+    const ImVec2 pos[4] = {ImVec2(bb.Min.x, bb.Min.y), ImVec2(bb.Max.x, bb.Min.y), ImVec2(bb.Max.x, bb.Max.y),
+                           ImVec2(bb.Min.x, bb.Max.y)};
+
+    ImGui::PushID(getCCRefId(spriteFrame));
+    if (border_col.w > 0.0f)
+    {
+        window->DrawList->AddRect(bb.Min, bb.Max, ImGui::GetColorU32(border_col), 0.0f);
+        window->DrawList->AddImageQuad((ImTextureID)spriteFrame->getTexture(), pos[0] + ImVec2(1, 1),
+                                       pos[1] + ImVec2(-1, 1), pos[2] + ImVec2(1, -1), pos[3] + ImVec2(-1, -1), uv0,
+                                       uv1, uv2, uv3, ImGui::GetColorU32(tint_col));
+    }
+    else
+    {
+
+        window->DrawList->AddImageQuad((ImTextureID)spriteFrame->getTexture(), pos[0], pos[1], pos[2], pos[3], uv0, uv1,
+                                       uv2, uv3, ImGui::GetColorU32(tint_col));
+    }
     ImGui::PopID();
 }
 
@@ -557,8 +740,7 @@ bool ImGuiPresenter::imageButton(Sprite* sprite,
         size_.x = rect.size.width;
     if (size_.y <= 0.f)
         size_.y = rect.size.height;
-    ImVec2 uv0, uv1;
-    std::tie(uv0, uv1) = getTextureUV(sprite);
+    auto [uv0, uv1] = getTwoPointTextureUV(sprite);
     ImGui::PushID(getCCRefId(sprite));
     const auto ret =
         ImGui::ImageButton((ImTextureID)sprite->getTexture(), size_, uv0, uv1, frame_padding, bg_col, tint_col);
@@ -619,17 +801,15 @@ std::tuple<ImTextureID, int> ImGuiPresenter::useTexture(Texture2D* texture)
 {
     if (!texture)
         return std::tuple<ImTextureID, int>{nullptr, 0};
-    return std::tuple<ImTextureID, int>{(ImTextureID)texture, getCCRefId(texture)};
+    return std::tuple{(ImTextureID)texture, getCCRefId(texture)};
 }
 
 std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiPresenter::useSprite(Sprite* sprite)
 {
     if (!sprite || !sprite->getTexture())
         return std::tuple<ImTextureID, ImVec2, ImVec2, int>{nullptr, {}, {}, 0};
-    ImVec2 uv0, uv1;
-    std::tie(uv0, uv1) = getTextureUV(sprite);
-    return std::tuple<ImTextureID, ImVec2, ImVec2, int>{(ImTextureID)sprite->getTexture(), uv0, uv1,
-                                                        getCCRefId(sprite)};
+    auto [uv0, uv1] = getTwoPointTextureUV(sprite);
+    return std::tuple{(ImTextureID)sprite->getTexture(), uv0, uv1, getCCRefId(sprite)};
 }
 
 std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiPresenter::useNode(Node* node, const ImVec2& pos)
@@ -642,8 +822,7 @@ std::tuple<ImTextureID, ImVec2, ImVec2, int> ImGuiPresenter::useNode(Node* node,
     tr.m[12] = pos.x;
     tr.m[13] = pos.y + size.height;
     node->setNodeToParentTransform(tr);
-    return std::tuple<ImTextureID, ImVec2, ImVec2, int>{
-        (ImTextureID)node, pos, ImVec2(pos.x + size.width, pos.y + size.height), getCCRefId(node)};
+    return std::tuple{(ImTextureID)node, pos, ImVec2(pos.x + size.width, pos.y + size.height), getCCRefId(node)};
 }
 
 void ImGuiPresenter::setNodeColor(Node* node, const ImVec4& col)
