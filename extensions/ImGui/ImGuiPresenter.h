@@ -90,6 +90,11 @@ public:
                bool keepAspectRatio = true,
                const ImVec4& tint_col   = ImVec4(1, 1, 1, 1),
                const ImVec4& border_col = ImVec4(0, 0, 0, 0));
+    void image(SpriteFrame* spriteFrame,
+               const ImVec2& size,
+               bool keepAspectRatio     = true,
+               const ImVec4& tint_col   = ImVec4(1, 1, 1, 1),
+               const ImVec4& border_col = ImVec4(0, 0, 0, 0));
     bool imageButton(Texture2D* tex,
                      const ImVec2& size,
                      const ImVec2& uv0      = ImVec2(0, 0),

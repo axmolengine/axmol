@@ -43,22 +43,17 @@ std::tuple<ImVec2, ImVec2> getTwoPointTextureUV(Sprite* sp)
     return std::tuple{uv0, uv1};
 }
 
-std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(Sprite* sp)
+std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(Texture2D* tex, const Rect& rectInPixels, bool rotated)
 {
     ImVec2 uv0, uv1, uv2, uv3;
-    if (!sp || !sp->getTexture())
-        return std::tuple{uv0, uv1, uv2, uv3};
 
-    const auto rectInPixels = AX_RECT_POINTS_TO_PIXELS(sp->getTextureRect());
-    const auto* tex         = sp->getTexture();
-    const auto atlasWidth   = (float)tex->getPixelsWide();
-    const auto atlasHeight  = (float)tex->getPixelsHigh();
+    const auto atlasWidth  = (float)tex->getPixelsWide();
+    const auto atlasHeight = (float)tex->getPixelsHigh();
 
     float rw = rectInPixels.size.width;
     float rh = rectInPixels.size.height;
 
-    const auto rectRotated = sp->isTextureRectRotated();
-    if (rectRotated)
+    if (rotated)
         std::swap(rw, rh);
 
 #if AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
@@ -73,7 +68,7 @@ std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(Sprite* sp)
     float bottom = (rectInPixels.origin.y + rh) / atlasHeight;
 #endif  // AX_FIX_ARTIFACTS_BY_STRECHING_TEXEL
 
-    if (rectRotated)
+    if (rotated)
     {
         uv0.x = right;
         uv0.y = top;
@@ -97,6 +92,24 @@ std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(Sprite* sp)
     }
 
     return std::tuple{uv0, uv1, uv2, uv3};
+}
+
+std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(Sprite* sp)
+{
+    if (!sp || !sp->getTexture())
+        return std::tuple{ImVec2(), ImVec2(), ImVec2(), ImVec2()};
+
+    const auto rectInPixels = AX_RECT_POINTS_TO_PIXELS(sp->getTextureRect());
+    return getFourPointTextureUV(sp->getTexture(), rectInPixels, sp->isTextureRectRotated());
+}
+
+std::tuple<ImVec2, ImVec2, ImVec2, ImVec2> getFourPointTextureUV(SpriteFrame* frame)
+{
+    if (!frame || !frame->getTexture())
+        return std::tuple{ImVec2(), ImVec2(), ImVec2(), ImVec2()};
+
+    const auto rectInPixels = frame->getRectInPixels();
+    return getFourPointTextureUV(frame->getTexture(), rectInPixels, frame->isRotated());
 }
 
 ImVec2 operator+(const ImVec2& lhs, const ImVec2& rhs)
@@ -634,6 +647,60 @@ void ImGuiPresenter::image(Sprite* sprite,
 
         window->DrawList->AddImageQuad((ImTextureID)sprite->getTexture(), pos[0], pos[1], pos[2], pos[3], uv0, uv1, uv2,
                                        uv3, ImGui::GetColorU32(tint_col));
+    }
+    ImGui::PopID();
+}
+
+void ImGuiPresenter::image(SpriteFrame* spriteFrame,
+                           const ImVec2& size,
+                           bool keepAspectRatio,
+                           const ImVec4& tint_col,
+                           const ImVec4& border_col)
+{
+    if (!spriteFrame || !spriteFrame->getTexture())
+        return;
+
+    auto size_       = size;
+    const auto& rect = spriteFrame->getOriginalSizeInPixels();
+    if (size_.x <= 0.f)
+        size_.x = rect.width;
+    if (size_.y <= 0.f)
+        size_.y = rect.height;
+
+    if (keepAspectRatio)
+    {
+        const auto scale = std::min(1.0f, std::min(size_.x / rect.width, size_.y / rect.height));
+        size_            = ImVec2(rect.width * scale, rect.height * scale);
+    }
+
+    auto [uv0, uv1, uv2, uv3] = getFourPointTextureUV(spriteFrame);
+
+    const auto* window = ImGui::GetCurrentWindow();
+
+    ImRect bb(window->DC.CursorPos, window->DC.CursorPos + size_);
+    if (border_col.w > 0.0f)
+        bb.Max += ImVec2(2, 2);
+
+    ImGui::ItemSize(bb);
+    if (!ImGui::ItemAdd(bb, 0))
+        return;
+
+    const ImVec2 pos[4] = {ImVec2(bb.Min.x, bb.Min.y), ImVec2(bb.Max.x, bb.Min.y), ImVec2(bb.Max.x, bb.Max.y),
+                           ImVec2(bb.Min.x, bb.Max.y)};
+
+    ImGui::PushID(getCCRefId(spriteFrame));
+    if (border_col.w > 0.0f)
+    {
+        window->DrawList->AddRect(bb.Min, bb.Max, ImGui::GetColorU32(border_col), 0.0f);
+        window->DrawList->AddImageQuad((ImTextureID)spriteFrame->getTexture(), pos[0] + ImVec2(1, 1),
+                                       pos[1] + ImVec2(-1, 1), pos[2] + ImVec2(1, -1), pos[3] + ImVec2(-1, -1), uv0,
+                                       uv1, uv2, uv3, ImGui::GetColorU32(tint_col));
+    }
+    else
+    {
+
+        window->DrawList->AddImageQuad((ImTextureID)spriteFrame->getTexture(), pos[0], pos[1], pos[2], pos[3], uv0, uv1,
+                                       uv2, uv3, ImGui::GetColorU32(tint_col));
     }
     ImGui::PopID();
 }
