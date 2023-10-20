@@ -37,7 +37,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.2.3
+- Version: 1.2.2
 - License: BSL-1.0
 
 ## ConcurrentQueue
@@ -97,7 +97,7 @@
 
 ## jpeg-turbo
 - [![Upstream](https://img.shields.io/github/v/release/libjpeg-turbo/libjpeg-turbo?label=Upstream)](https://github.com/libjpeg-turbo/libjpeg-turbo)
-- Version: 3.0.0
+- Version: git ec32420
 - License: BSD-style (IJG,BSD-3-Clause,zlib)
 
 ## kcp
@@ -123,7 +123,7 @@
 
 - luajit
   - Upstream: https://github.com/LuaJIT/LuaJIT
-  - Version: 2.1-03c3112
+  - Version: 2.1-656ecbc
   - License: MIT
 
 - tolua
@@ -179,7 +179,7 @@
 
 ## OpenSSL
 - [![Upstream](https://img.shields.io/github/v/tag/openssl/openssl?label=Upstream)](https://github.com/openssl/openssl)
-- Version: 3.0.10
+- Version: 3.0.11
 - License: Apache-2.0
 
 ## png
@@ -258,6 +258,6 @@
 
 ## zlib
 - [![Upstream](https://img.shields.io/github/v/tag/madler/zlib?label=Upstream)](https://github.com/madler/zlib)
-- Version: 1.3
+- Version: git 09155ea
 - License: zlib
 
