@@ -128,6 +128,8 @@ void InspectorSpritePropertyHandler::drawProperties(Node* node)
 
     auto texture = sprite->getTexture();
     ImGui::TextWrapped("Texture: %s", texture->getPath().c_str());
+
+    ImGuiPresenter::getInstance()->image(sprite, ImVec2(256, 256));
 }
 
 bool InspectorLabelProtocolPropertyHandler::isSupportedType(Node* node)
