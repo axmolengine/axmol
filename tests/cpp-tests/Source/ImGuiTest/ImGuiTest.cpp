@@ -26,6 +26,10 @@ void ImGuiTest::onEnter()
 #    if !defined(__ANDROID__)
     SDFGen::getInstance()->open();
 #endif
+
+    auto cache = SpriteFrameCache::getInstance();
+    cache->addSpriteFramesWithFile("animations/grossini.plist");
+
     ImGuiPresenter::getInstance()->addFont(FileUtils::getInstance()->fullPathForFilename("fonts/arial.ttf"));
     ImGuiPresenter::getInstance()->enableDPIScale();
     ImGuiPresenter::getInstance()->addRenderLoop("#test", AX_CALLBACK_0(ImGuiTest::onDrawImGui, this), this);
@@ -40,6 +44,8 @@ void ImGuiTest::onExit()
     SDFGen::getInstance()->close();
 #    endif
     ImGuiPresenter::destroyInstance();
+
+    SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
 
     TestCase::onExit();
 }
@@ -59,6 +65,9 @@ void ImGuiTest::onDrawImGui()
             show_another_window ^= 1;
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
                     ImGui::GetIO().Framerate);
+
+        auto spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName("grossini_dance_05.png");
+        ImGuiPresenter::getInstance()->image(spriteFrame, ImVec2(256, 256), false);
     }
 
     // 2. Show another simple window, this time using an explicit Begin/End pair
