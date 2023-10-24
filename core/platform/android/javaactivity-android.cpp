@@ -29,12 +29,14 @@ THE SOFTWARE.
 #include "base/EventCustom.h"
 #include "base/EventType.h"
 #include "base/EventDispatcher.h"
+#include "renderer/backend/Device.h"
 #include "renderer/TextureCache.h"
 #include "platform/android/jni/JniHelper.h"
 
 #include <android/log.h>
 #include <android/api-level.h>
 #include <jni.h>
+
 
 #define LOG_TAG "main"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
@@ -94,6 +96,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
     }
     else
     {
+        backend::Device::getInstance()->resetState();
         ax::Director::getInstance()->resetMatrixStack();
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent);
