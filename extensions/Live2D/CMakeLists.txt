@@ -42,6 +42,9 @@ else()
     target_link_libraries(${LIB_NAME} Live2DCubismCore)
 endif()
 
+ax_find_shaders("${CMAKE_CURRENT_LIST_DIR}/Framework/src/Rendering/axmol/shaders" LIVE2D_SHADER_SOURCES)
+ax_target_compile_shaders(${LIB_NAME} FILES ${LIVE2D_SHADER_SOURCES} CUSTOM)
+
 setup_ax_extension_config(${LIB_NAME})
 
 unset(LIB_NAME)

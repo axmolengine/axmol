@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -62,16 +62,18 @@ void LAppSprite::RenderImmidiate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
         programState = new ax::backend::ProgramState(_program);
     }
 
+    auto layout = programState->getMutableVertexLayout();
     // attribute属性を登録
-    programState->setVertexAttrib("position", _program->getAttributeLocation("position"), backend::VertexFormat::FLOAT2, 0, false);
-    programState->setVertexAttrib("uv", _program->getAttributeLocation("uv"), backend::VertexFormat::FLOAT2, sizeof(float) * 2, false);
+    layout->setAttrib("a_position", _program->getAttributeLocation("a_position"), backend::VertexFormat::FLOAT2, 0, false);
+    layout->setAttrib("a_texCoord", _program->getAttributeLocation("a_texCoord"), backend::VertexFormat::FLOAT2,
+                            sizeof(float) * 2, false);
 
     // uniform属性の登録
-    programState->setTexture(_program->getUniformLocation("texture"), 0, texture);
+    programState->setTexture(_program->getUniformLocation("u_tex0"), 0, texture);
 
     programState->setUniform(_program->getUniformLocation("baseColor"), _spriteColor, sizeof(float) * 4);
 
-    programState->setVertexStride(sizeof(float) * 4);
+    layout->setStride(sizeof(float) * 4);
 
     blendDescriptor->sourceRGBBlendFactor = ax::backend::BlendFactor::ONE;
     blendDescriptor->destinationRGBBlendFactor = ax::backend::BlendFactor::ONE_MINUS_SRC_ALPHA;

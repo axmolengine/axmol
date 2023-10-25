@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright(c) Live2D Inc. All rights reserved.
  *
  * Use of this source code is governed by the Live2D Open Software license
@@ -306,7 +306,7 @@ private:
      *
      * @return  シェーダプログラムのアドレス
      */
-    ax::backend::Program* LoadShaderProgram(const csmChar* vertShaderSrc, const csmChar* fragShaderSrc);
+    ax::backend::Program* LoadShaderProgram(const csmChar* vertShaderPath, const csmChar* fragShaderPath);
 
 #ifdef CSM_TARGET_ANDROID_ES2
 public:
