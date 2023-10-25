@@ -142,12 +142,27 @@ bool Director::init()
 
     _renderer = new Renderer;
 
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    // listen the event that renderer was recreated on Android/WP8
+    _rendererRecreatedListener = EventListenerCustom::create(
+        EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+            _isStatusLabelUpdated = true; // Force recreation of textures
+        });
+
+    _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
+#endif
+
     return true;
 }
 
 Director::~Director()
 {
     AXLOGINFO("deallocing Director: %p", this);
+
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    _eventDispatcher->removeEventListener(_rendererRecreatedListener);
+    _rendererRecreatedListener = nullptr;
+#endif
 
     AX_SAFE_RELEASE(_FPSLabel);
     AX_SAFE_RELEASE(_drawnVerticesLabel);
@@ -1079,6 +1094,16 @@ void Director::restartDirector()
 #endif
 
     setGLDefaultValues();
+
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    // listen the event that renderer was recreated on Android/WP8
+    _rendererRecreatedListener = EventListenerCustom::create(
+            EVENT_RENDERER_RECREATED, [this](EventCustom*) {
+                _isStatusLabelUpdated = true; // Force recreation of textures
+            });
+
+    _eventDispatcher->addEventListenerWithFixedPriority(_rendererRecreatedListener, -1);
+#endif
 }
 
 void Director::setNextScene()
