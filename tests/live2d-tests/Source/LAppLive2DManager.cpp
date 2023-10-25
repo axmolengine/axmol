@@ -318,31 +318,6 @@ void LAppLive2DManager::ChangeScene(Csm::csmInt32 index)
 
 void LAppLive2DManager::CreateShader()
 {
-//    const char* vertexShader =
-//        "attribute vec3 position;"
-//        "attribute vec2 uv;"
-//        "varying vec2 vuv;"
-//        "void main(void){"
-//#if defined(AX_USE_METAL)
-//        "    gl_Position = vec4(position.x, -position.y, position.z, 1.0);"
-//#else
-//        "    gl_Position = vec4(position, 1.0);"
-//#endif
-//        "    vuv = uv;"
-//        "}";
-//
-//    const char* fragmentShader =
-//#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-//        "precision mediump float;"
-//#endif
-//        "varying vec2 vuv;"
-//        "uniform sampler2D texture;"
-//        "uniform vec4 baseColor;"
-//        "void main(void){"
-//        "    gl_FragColor = texture2D(texture, vuv) * baseColor;"
-//        "    gl_FragColor = vec4(gl_FragColor.rgb * gl_FragColor.a,  gl_FragColor.a);"
-//        "}";
-
     auto* program = ProgramManager::getInstance()->loadProgram("custom/live2d_test_vs", "custom/live2d_test_fs");
     _program = program;
 }
