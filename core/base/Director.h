@@ -497,7 +497,7 @@ public:
      * returns the axmol thread id.
      Useful to know if certain code is already running on the axmol thread
      */
-    const std::thread::id& getCocos2dThreadId() const { return getAxmolThreadId(); } 
+    const std::thread::id& getCocos2dThreadId() const { return getAxmolThreadId(); }
     const std::thread::id& getAxmolThreadId() const { return _axmol_thread_id; }
 
     /** Enable node tree children indexer map, the concept is like database INDEX
@@ -666,6 +666,10 @@ protected:
 #if defined(AX_PLATFORM_PC)
     /* axmol priority operations in render thread for PC platforms */
     moodycamel::ConcurrentQueue<std::function<void()>> _operations;
+#endif
+
+#if AX_ENABLE_CACHE_TEXTURE_DATA
+    EventListenerCustom* _rendererRecreatedListener = nullptr;
 #endif
 
     // GLView will recreate stats labels to fit visible rect
