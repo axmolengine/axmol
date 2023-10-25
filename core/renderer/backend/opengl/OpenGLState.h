@@ -194,6 +194,8 @@ struct OpenGLState
     using Winding  = backend::Winding;
     using UtilsGL  = backend::UtilsGL;
 
+    static void reset();
+
     void viewport(const Viewport& v) { try_callf(glViewport, _viewPort, v, v.x, v.y, v.width, v.height); }
     void winding(Winding v) { try_callf(glFrontFace, _winding, v, UtilsGL::toGLFrontFace(v)); }
     void enableDepthTest() { try_enable(GL_DEPTH_TEST, _depthTest); }

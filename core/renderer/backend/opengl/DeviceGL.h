@@ -25,6 +25,7 @@
 
 #include "../Device.h"
 #include "platform/GL.h"
+#include "OpenGLState.h"
 
 NS_AX_BACKEND_BEGIN
 /**
@@ -94,6 +95,8 @@ public:
      * @return A Program instance.
      */
     virtual Program* newProgram(std::string_view vertexShader, std::string_view fragmentShader) override;
+
+    void resetState() override;
 
 protected:
     /**
