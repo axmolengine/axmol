@@ -147,4 +147,9 @@ Program* DeviceGL::newProgram(std::string_view vertexShader, std::string_view fr
     return new ProgramGL(vertexShader, fragmentShader);
 }
 
+void DeviceGL::resetState()
+{
+    OpenGLState::reset();
+}
+
 NS_AX_BACKEND_END

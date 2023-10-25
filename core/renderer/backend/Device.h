@@ -135,6 +135,8 @@ public:
      */
     inline DeviceInfo* getDeviceInfo() const { return _deviceInfo; }
 
+    virtual void resetState() {};
+
 protected:
     /**
      * New a shaderModule, not auto released.
