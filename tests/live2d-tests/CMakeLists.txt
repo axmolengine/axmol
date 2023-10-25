@@ -29,6 +29,8 @@ set(APP_NAME live2d_tests)
 
 project(${APP_NAME})
 
+set(AX_ENABLE_EXT_LIVE2D ON CACHE BOOL "Build extension Live2D" FORCE)
+
 if(NOT DEFINED BUILD_ENGINE_DONE)
     if(XCODE)
         set(CMAKE_XCODE_GENERATE_TOP_LEVEL_PROJECT_ONLY TRUE)
