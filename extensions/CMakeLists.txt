@@ -6,11 +6,12 @@ if(BUILD_SHARED_LIBS)
 endif()
 
 function(setup_ax_extension_config target_name)
-    set(options DNTLINK opt_DNTLINK)
-    cmake_parse_arguments(opt "" "${options}" ""
+  set(options DNTLINK opt_DNTLINK)
+  set(options LINK_SCOPE opt_LINK_SCOPE)
+  cmake_parse_arguments(opt "" "${options}" ""
                           "" ${ARGN} )
 
-    target_link_libraries(${target_name} ${_AX_CORE_LIB})
+  target_link_libraries(${target_name} ${opt_LINK_SCOPE} ${_AX_CORE_LIB})
 
   if(BUILD_SHARED_LIBS)
     target_compile_definitions(${target_name} PRIVATE _USREXDLL=1)
@@ -31,7 +32,7 @@ function(setup_ax_extension_config target_name)
   if(NOT opt_DNTLINK)
       set(_AX_EXTENSION_LIBS "${target_name};${_AX_EXTENSION_LIBS}" CACHE INTERNAL "extensions for auto link to target application")
   endif()
-  
+
   if(XCODE OR VS)
     ax_mark_code_files("${target_name}")
   endif()
