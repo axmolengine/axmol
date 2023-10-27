@@ -88,7 +88,7 @@ function axmol_build() {
 function axmol_deploy() {
     $sub_args = $args
     . axmol_build @sub_args
-    if ($options.p -eq 'winuwp') {
+    if ($BUILD_TARGET -eq 'winuwp') {
         $appxManifestFile = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/Appx/AppxManifest.xml"
 
         # deploy by visual studio major program: devenv.exe
@@ -120,11 +120,11 @@ function axmol_deploy() {
         $appxPkgName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFamilyName').PackageFamilyName")
         println "axmol: Deploy $cmake_target done: $appxPkgName"
     }
-    elseif($options.p -eq 'win32') {
+    elseif($BUILD_TARGET -eq 'win32') {
         $win32exePath = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.exe"
         println "axmol: Deploy $cmake_target done: $win32exePath"
     }
-    elseif ($options.p -eq 'android') {
+    elseif ($BUILD_TARGET -eq 'android') {
         $optimize_flag_lower = $optimize_flag.ToLower()
         $apkDir = Join-Path $proj_dir "proj.android/app/build/outputs/apk/$optimize_flag_lower"
         $apkName = (Get-ChildItem -Path "$apkDir/*.apk").Name
@@ -138,13 +138,13 @@ function axmol_deploy() {
             println "axmol: Deploy $cmake_target done: $androidPackage/$androidActivity"
         }
     }
-    elseif ($options.p -eq 'ios' -or $options.p -eq 'tvos') {
+    elseif ($BUILD_TARGET -eq 'ios' -or $BUILD_TARGET -eq 'tvos') {
         if ($options.a -eq 'x64') {
             $ios_app_path = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.app"
             $ios_bundle_id = get_bundle_id($ios_app_path)
 
             println 'axmol: Finding avaiable simualtor ...'
-            $ios_simulator_id, $simulator_info = find_simulator_id($options.p)
+            $ios_simulator_id, $simulator_info = find_simulator_id($BUILD_TARGET)
 
             println "axmol: Booting $simulator_info ..."
             xcrun simctl boot $ios_simulator_id '--arch=x86_64'
@@ -160,36 +160,36 @@ function axmol_deploy() {
 function axmol_run() {
     $sub_args = $args
     . axmol_deploy @sub_args
-    if ($options.p -eq 'winuwp') {
+    if ($BUILD_TARGET -eq 'winuwp') {
         explorer.exe shell:AppsFolder\$appxPkgName!App
     }
-    elseif($options.p -eq 'win32') {
+    elseif($BUILD_TARGET -eq 'win32') {
         Start-Process -FilePath $win32exePath -WorkingDirectory $(Split-Path $win32exePath -Parent)
     }
-    elseif($options.p -eq 'android') {
+    elseif($BUILD_TARGET -eq 'android') {
         adb shell am start -n "$androidPackage/$androidActivity"
     }
-    elseif($options.p -eq 'ios') {
+    elseif($BUILD_TARGET -eq 'ios') {
         if ($ios_bundle_id) {
             println "Launching $cmake_target ..."
             xcrun simctl launch $ios_simulator_id $ios_bundle_id 
         }
     }
-    elseif($options.p -eq 'osx') {
+    elseif($BUILD_TARGET -eq 'osx') {
         $launch_macapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.app/Contents/MacOS/$cmake_target"
         & $launch_macapp
     }
-    elseif($options.p -eq 'linux') {
+    elseif($BUILD_TARGET -eq 'linux') {
         $launch_linuxapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$cmake_target"
         println "axmol: Launching $launch_linuxapp ..."
         Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
     }
-    elseif($options.p -eq 'wasm') {
+    elseif($BUILD_TARGET -eq 'wasm') {
         $launch_wasmapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$cmake_target.html"
         println "axmol: Launching $launch_wasmapp ..."
         emrun $launch_wasmapp
     }
-    println "axmol: Launch $cmake_target done, target platform is $($options.p)"
+    println "axmol: Launch $cmake_target done, target platform is $($BUILD_TARGET)"
 }
 
 $builtinPlugins = @{
@@ -297,7 +297,7 @@ if (!$plugin) {
 
 # -h will consumed by param
 $sub_args = $args[1..($args.Count - 1)]
-if (!$sub_args[0] -or $help) {
+if (!$sub_args[0] -or $help -or $sub_args[0] -eq '--help') {
     println $plugin.usage
     return
 }

@@ -62,10 +62,10 @@ function translate_array_opt($opt) {
 }
 
 if ($options.xb.Count -ne 0) {
-    $options.xb = translate_array_opt $options.xb
+    [Array]$options.xb = translate_array_opt $options.xb
 }
 if ($options.xc.Count -ne 0) {
-    $options.xc = translate_array_opt $options.xc
+    [Array]$options.xc = translate_array_opt $options.xc
 }
 
 $myRoot = $PSScriptRoot
