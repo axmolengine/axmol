@@ -970,7 +970,7 @@ function preprocess_andorid([string[]]$inputOptions) {
         $outputOptions += '--parallel', '--info'
     }
     else {
-        $cmake_toolchain_file = "$ndk_root\build\cmake\android.toolchain.cmake"
+        $cmake_toolchain_file = Join-Path $ndk_root 'build/cmake/android.toolchain.cmake'
         $arch = $t_archs[$options.a]
         $outputOptions += '-G', 'Ninja', '-DANDROID_STL=c++_shared', "-DCMAKE_MAKE_PROGRAM=$ninja_prog", "-DCMAKE_TOOLCHAIN_FILE=$cmake_toolchain_file", "-DANDROID_ABI=$arch"
         # If set to ONLY, then only the roots in CMAKE_FIND_ROOT_PATH will be searched
