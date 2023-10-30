@@ -98,17 +98,17 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
             final long now = System.nanoTime();
             final long interval = now - this.mLastTickInNanoSeconds;
 
-            /*
-             * Render time MUST be counted in, or the FPS will slower than appointed.
-            */
-            this.mLastTickInNanoSeconds = System.nanoTime();
-            AxmolRenderer.nativeRender();
             if (interval < AxmolRenderer.sAnimationInterval) {
                 try {
                     Thread.sleep((AxmolRenderer.sAnimationInterval - interval) / AxmolRenderer.NANOSECONDSPERMICROSECOND);
                 } catch (final Exception e) {
                 }
             }
+            /*
+             * Render time MUST be counted in, or the FPS will slower than appointed.
+            */
+            this.mLastTickInNanoSeconds = System.nanoTime();
+            AxmolRenderer.nativeRender();
         }
     }
 
