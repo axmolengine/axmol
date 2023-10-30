@@ -73,7 +73,13 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(final GL10 GL10, final EGLConfig EGLConfig) {
         AxmolRenderer.nativeInit(this.mScreenWidth, this.mScreenHeight);
         this.mLastTickInNanoSeconds = System.nanoTime();
-        mNativeInitCompleted = true;
+
+        if (mNativeInitCompleted) {
+            // This must be from an OpenGL context loss
+            nativeOnContextLost();
+        } else {
+            mNativeInitCompleted = true;
+        }
     }
 
     @Override
@@ -91,18 +97,18 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
         } else {
             final long now = System.nanoTime();
             final long interval = now - this.mLastTickInNanoSeconds;
-        
+
+            /*
+             * Render time MUST be counted in, or the FPS will slower than appointed.
+            */
+            this.mLastTickInNanoSeconds = System.nanoTime();
+            AxmolRenderer.nativeRender();
             if (interval < AxmolRenderer.sAnimationInterval) {
                 try {
                     Thread.sleep((AxmolRenderer.sAnimationInterval - interval) / AxmolRenderer.NANOSECONDSPERMICROSECOND);
                 } catch (final Exception e) {
                 }
             }
-            /*
-             * Render time MUST be counted in, or the FPS will slower than appointed.
-            */
-            this.mLastTickInNanoSeconds = System.nanoTime();
-            AxmolRenderer.nativeRender();
         }
     }
 
@@ -117,6 +123,7 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
     private static native boolean nativeKeyEvent(final int keyCode,boolean isPressed);
     private static native void nativeRender();
     private static native void nativeInit(final int width, final int height);
+    private static native void nativeOnContextLost();
     private static native void nativeOnSurfaceChanged(final int width, final int height);
     private static native void nativeOnPause();
     private static native void nativeOnResume();
@@ -147,12 +154,12 @@ public class AxmolRenderer implements GLSurfaceView.Renderer {
 
     public void handleOnPause() {
         /**
-         * onPause may be invoked before onSurfaceCreated, 
+         * onPause may be invoked before onSurfaceCreated,
          * and engine will be initialized correctly after
          * onSurfaceCreated is invoked. Can not invoke any
          * native method before onSurfaceCreated is invoked
          */
-        if (! mNativeInitCompleted)
+        if (!mNativeInitCompleted)
             return;
 
         AxmolRenderer.nativeOnPause();

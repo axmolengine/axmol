@@ -60,6 +60,7 @@ import com.android.vending.expansion.zipfile.APKExpansionSupport;
 import com.android.vending.expansion.zipfile.ZipResourceFile;
 
 import com.enhance.gameservice.IGameTuningService;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.io.IOException;
 import java.io.File;
@@ -772,6 +773,10 @@ public class AxmolEngine {
 
     public static int getSDKVersion() {
         return Build.VERSION.SDK_INT;
+    }
+
+    public static void restartProcess() {
+        ProcessPhoenix.triggerRebirth(sActivity);
     }
 
     private static AxmolAccelerometer getAccelerometer() {

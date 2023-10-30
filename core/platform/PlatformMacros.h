@@ -94,6 +94,16 @@ Copyright (c) 2021 Bytedance Inc.
 #    define AX_ENABLE_CACHE_TEXTURE_DATA 0
 #endif
 
+/** @def AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
+ * Enable this if application should be restarted after the OpenGL context is lost
+ *
+ */
+#if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID && !AX_ENABLE_CACHE_TEXTURE_DATA)
+#    define AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST 1
+#else
+#    define AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST 0
+#endif
+
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
 /** Application will crash in glDrawElements function on some win32 computers and some android devices.
  *  Indices should be bound again while drawing to avoid this bug.
