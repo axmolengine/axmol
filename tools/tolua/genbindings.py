@@ -25,7 +25,7 @@ def _check_ndk_root_env():
         sdkRoot = os.environ.get('ANDROID_HOME', None)
         for _, ndkVers, _ in os.walk("{0}{1}ndk".format(sdkRoot, os.path.sep)):
             for ndkVer in ndkVers:
-                if (ndkVer == '23.2.8568313'):
+                if (ndkVer == '26.1.10909125'):
                     ANDROID_NDK = "{0}{1}ndk{1}{2}".format(sdkRoot, os.path.sep, ndkVer)
                     break
             break
@@ -135,7 +135,7 @@ def main():
         g_ndk_root = _check_ndk_root_env()
 
     if not os.path.isdir(g_ndk_root): 
-        print("The ndk-r23c root not specified, please specifiy via --ndk_root '/path/to/ndk'")
+        print("The ndk-r26b root not specified, please specifiy via --ndk_root '/path/to/ndk'")
         sys.exit(1)
 
     # del the " in the path
