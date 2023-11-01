@@ -41,7 +41,7 @@ jobs:
     - uses: actions/setup-java@v3
       with:
         distribution: 'microsoft' # See 'Supported distributions' for available options
-        java-version: '11'
+        java-version: '17'
 
     - name: Build
       # Execute the build.  You can specify a specific target with "--target <NAME>"
