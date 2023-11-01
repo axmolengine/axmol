@@ -295,7 +295,7 @@ public abstract class AxmolActivity extends Activity implements AxmolEngineListe
                                        ViewGroup.LayoutParams.WRAP_CONTENT);
         AxmolEditBox edittext = new AxmolEditBox(this);
         edittext.setLayoutParams(edittext_layout_params);
-
+        edittext.setVisibility(View.GONE);
 
         mFrameLayout.addView(edittext);
 
