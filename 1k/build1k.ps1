@@ -30,7 +30,7 @@
 # options
 #  -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,watchos,wasm
 #      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
-#      if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
+#      if not found, by default will install ndk-r26b or can be specified by option: -cc 'ndk-r26b'
 #  -a: build arch: x86,x64,armv7,arm64
 #  -d: the build workspace, i.e project root which contains root CMakeLists.txt, empty use script run working directory aka cwd
 #  -cc: The C/C++ compiler toolchain: clang, msvc, gcc(mingw) or empty use default installed on current OS
@@ -168,7 +168,7 @@ $b1k = [build1k]::new()
 $manifest = @{
     # C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.36.32532\vc_redist.x64.exe
     msvc         = '14.37';
-    ndk          = 'r23c';
+    ndk          = 'r26b';
     xcode        = '13.0.0~14.2.0'; # range
     # _EMIT_STL_ERROR(STL1000, "Unexpected compiler version, expected Clang 16.0.0 or newer.");
     llvm         = '16.0.6+'; # clang-cl msvc14.37 require 16.0.0+
@@ -183,7 +183,7 @@ $manifest = @{
 $channels = @{}
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
-$cmdlinetools_rev = '9477386'
+$cmdlinetools_rev = '10406996'
 
 $options = @{
     p      = $null; 
