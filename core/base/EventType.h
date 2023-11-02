@@ -47,5 +47,11 @@
 // cocos\platform\wp8-xaml\cpp\Cocos2dRenderer.cpp.
 #define EVENT_COME_TO_BACKGROUND "event_come_to_background"
 
+// The application will be restarted.
+// This message is used for notifying application code of a pending application restart.
+// This message is posted in core/platform/android/javaactivity.cpp
+#define EVENT_APP_RESTARTING "event_app_restarting"
+
+
 /// @endcond
 #endif  // __CCEVENT_TYPE_H__

@@ -101,8 +101,27 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
         ax::EventCustom recreatedEvent(EVENT_RENDERER_RECREATED);
         director->getEventDispatcher()->dispatchEvent(&recreatedEvent);
         director->setGLDefaultValues();
+#if AX_ENABLE_CACHE_TEXTURE_DATA
         ax::VolatileTextureMgr::reloadAllTextures();
+#endif
     }
+}
+
+JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnContextLost(JNIEnv*, jclass)
+{
+#if AX_ENABLE_RESTART_APPLICATION_ON_CONTEXT_LOST
+    auto director = ax::Director::getInstance();
+    ax::EventCustom recreatedEvent(EVENT_APP_RESTARTING);
+    director->getEventDispatcher()->dispatchEvent(&recreatedEvent);
+
+    //  Pop to root scene, replace with an empty scene, and clear all cached data before restarting
+    director->popToRootScene();
+    auto rootScene = Scene::create();
+    director->replaceScene(rootScene);
+    director->purgeCachedData();
+
+    JniHelper::callStaticVoidMethod("org/axmol/lib/AxmolEngine", "restartProcess");
+#endif
 }
 
 JNIEXPORT jintArray JNICALL Java_org_axmol_lib_AxmolActivity_getGLContextAttrs(JNIEnv* env, jclass)
