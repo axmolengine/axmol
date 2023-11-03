@@ -6,7 +6,7 @@ project(${lib_name})
 include(AXPlatform)
 
 # -----macro: set openssl sub target-----
-macro(set_openssl_sub_target sub_target_name sub_lib_name)
+macro(set_angle_sub_target sub_target_name sub_lib_name)
   add_library(${sub_target_name} SHARED IMPORTED GLOBAL)
 
   set_target_properties(${sub_target_name} PROPERTIES
@@ -21,9 +21,9 @@ endmacro()
 
 # -----sub target 1: GLESv2-----
 set(target_name angle::GLESv2 GLESv2)
-set_openssl_sub_target(${target_name})
+set_angle_sub_target(${target_name})
 
 # -----sub target 2: EGL-----
 set(target_name angle::EGL EGL)
-set_openssl_sub_target(${target_name})
+set_angle_sub_target(${target_name})
 
