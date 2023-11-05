@@ -68,6 +68,12 @@ jobs:
         run: |
           $AX_ROOT = $(Get-Location).Path
           ./build.ps1 -p android -a arm64
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.arch }}
+          path: |
+            templates/**/*.apk
+            tests/**/*.apk
 
   build-osx:
     runs-on: macos-12
