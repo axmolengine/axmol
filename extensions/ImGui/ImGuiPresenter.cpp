@@ -392,16 +392,9 @@ void ImGuiPresenter::loadCustomFonts(void* ud)
 
 float ImGuiPresenter::enableDPIScale(float userScale)
 {
-    float xscale = 1.0f;
-#if (AX_TARGET_PLATFORM != AX_PLATFORM_ANDROID)
-    // Gets scale
-    glfwGetMonitorContentScale(glfwGetPrimaryMonitor(), &xscale, nullptr);
-#else
-    // refer to: https://developer.android.com/training/multiscreen/screendensities?hl=en-us
-    xscale = Device::getDPI() / 160.0f;
-#endif
+    float devicePixelRatio = Device::getPixelRatio();
 
-    auto zoomFactor = userScale * xscale;
+    auto zoomFactor = userScale * devicePixelRatio;
 
     auto imFonts = ImGui::GetIO().Fonts;
 

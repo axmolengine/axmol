@@ -88,8 +88,8 @@ function axmol_build() {
 function axmol_deploy() {
     $sub_args = $args
     . axmol_build @sub_args
-    if ($BUILD_TARGET -eq 'winuwp') {
-        $appxManifestFile = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/Appx/AppxManifest.xml"
+    if ($TARGET_OS -eq 'winuwp') {
+        $appxManifestFile = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/Appx/AppxManifest.xml"
 
         # deploy by visual studio major program: devenv.exe
         $vswherePath = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
@@ -120,11 +120,11 @@ function axmol_deploy() {
         $appxPkgName = (powershell -Command "(Get-AppxPackage -Name '$appxIdentity' | Select-Object -Unique 'PackageFamilyName').PackageFamilyName")
         println "axmol: Deploy $cmake_target done: $appxPkgName"
     }
-    elseif($BUILD_TARGET -eq 'win32') {
-        $win32exePath = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.exe"
+    elseif($TARGET_OS -eq 'win32') {
+        $win32exePath = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.exe"
         println "axmol: Deploy $cmake_target done: $win32exePath"
     }
-    elseif ($BUILD_TARGET -eq 'android') {
+    elseif ($TARGET_OS -eq 'android') {
         $optimize_flag_lower = $optimize_flag.ToLower()
         $apkDir = Join-Path $proj_dir "proj.android/app/build/outputs/apk/$optimize_flag_lower"
         $apkName = (Get-ChildItem -Path "$apkDir/*.apk").Name
@@ -138,13 +138,13 @@ function axmol_deploy() {
             println "axmol: Deploy $cmake_target done: $androidPackage/$androidActivity"
         }
     }
-    elseif ($BUILD_TARGET -eq 'ios' -or $BUILD_TARGET -eq 'tvos') {
+    elseif ($TARGET_OS -eq 'ios' -or $TARGET_OS -eq 'tvos') {
         if ($options.a -eq 'x64') {
-            $ios_app_path = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.app"
+            $ios_app_path = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.app"
             $ios_bundle_id = get_bundle_id($ios_app_path)
 
             println 'axmol: Finding avaiable simualtor ...'
-            $ios_simulator_id, $simulator_info = find_simulator_id($BUILD_TARGET)
+            $ios_simulator_id, $simulator_info = find_simulator_id($TARGET_OS)
 
             println "axmol: Booting $simulator_info ..."
             xcrun simctl boot $ios_simulator_id '--arch=x86_64'
@@ -160,36 +160,36 @@ function axmol_deploy() {
 function axmol_run() {
     $sub_args = $args
     . axmol_deploy @sub_args
-    if ($BUILD_TARGET -eq 'winuwp') {
+    if ($TARGET_OS -eq 'winuwp') {
         explorer.exe shell:AppsFolder\$appxPkgName!App
     }
-    elseif($BUILD_TARGET -eq 'win32') {
+    elseif($TARGET_OS -eq 'win32') {
         Start-Process -FilePath $win32exePath -WorkingDirectory $(Split-Path $win32exePath -Parent)
     }
-    elseif($BUILD_TARGET -eq 'android') {
+    elseif($TARGET_OS -eq 'android') {
         adb shell am start -n "$androidPackage/$androidActivity"
     }
-    elseif($BUILD_TARGET -eq 'ios') {
+    elseif($TARGET_OS -eq 'ios') {
         if ($ios_bundle_id) {
             println "Launching $cmake_target ..."
             xcrun simctl launch $ios_simulator_id $ios_bundle_id 
         }
     }
-    elseif($BUILD_TARGET -eq 'osx') {
-        $launch_macapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$optimize_flag/$cmake_target.app/Contents/MacOS/$cmake_target"
+    elseif($TARGET_OS -eq 'osx') {
+        $launch_macapp = Join-Path $BUILD_DIR "bin/$cmake_target/$optimize_flag/$cmake_target.app/Contents/MacOS/$cmake_target"
         & $launch_macapp
     }
-    elseif($BUILD_TARGET -eq 'linux') {
-        $launch_linuxapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$cmake_target"
+    elseif($TARGET_OS -eq 'linux') {
+        $launch_linuxapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target"
         println "axmol: Launching $launch_linuxapp ..."
         Start-Process -FilePath $launch_linuxapp -WorkingDirectory $(Split-Path $launch_linuxapp -Parent)
     }
-    elseif($BUILD_TARGET -eq 'wasm') {
-        $launch_wasmapp = Join-Path $proj_dir "$BUILD_DIR/bin/$cmake_target/$cmake_target.html"
+    elseif($TARGET_OS -eq 'wasm') {
+        $launch_wasmapp = Join-Path $BUILD_DIR "bin/$cmake_target/$cmake_target.html"
         println "axmol: Launching $launch_wasmapp ..."
         emrun $launch_wasmapp
     }
-    println "axmol: Launch $cmake_target done, target platform is $($BUILD_TARGET)"
+    println "axmol: Launch $cmake_target done, target platform is $($TARGET_OS)"
 }
 
 $builtinPlugins = @{

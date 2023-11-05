@@ -83,6 +83,11 @@ public:
      *  @return The DPI of device.
      */
     static int getDPI();
+    
+    /**
+     * Gets the device pixel ratio
+     */
+    static float getPixelRatio();
 
     /**
      * To enable or disable accelerometer.

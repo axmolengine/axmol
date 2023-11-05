@@ -47,6 +47,12 @@ int Device::getDPI()
     return dpi;
 }
 
+float Device::getPixelRatio() 
+{
+    // refer to: https://developer.android.com/training/multiscreen/screendensities?hl=en-us
+    return Device::getDPI() / 160.0f;
+}
+
 void Device::setAccelerometerEnabled(bool isEnabled)
 {
     if (isEnabled)
