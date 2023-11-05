@@ -340,7 +340,7 @@ GLViewImpl::GLViewImpl(bool initglfw)
     , _mouseX(0.0f)
     , _mouseY(0.0f)
 {
-    _viewName = "AXMOL20";
+    _viewName = "axmol2";
     g_keyCodeMap.clear();
     for (auto&& item : g_keyCodeStructArray)
     {

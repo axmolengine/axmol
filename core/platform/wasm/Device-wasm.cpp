@@ -37,7 +37,12 @@ NS_AX_BEGIN
 
 int Device::getDPI()
 {
-    return 160;
+    return static_cast<int>(160 * Device::getPixelRatio());
+}
+
+float Device::getPixelRatio() 
+{
+    return EM_ASM_DOUBLE(return window.devicePixelRatio);
 }
 
 void Device::setAccelerometerEnabled(bool isEnabled)
