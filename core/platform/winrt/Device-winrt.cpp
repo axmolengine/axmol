@@ -365,6 +365,11 @@ int Device::getDPI()
     return ax::GLViewImpl::sharedOpenGLView()->GetDPI();
 }
 
+float Device::getPixelRatio() 
+{
+    return Device::getDPI() / 96.0f;
+}
+
 static Accelerometer sAccelerometer = nullptr;
 
 void Device::setAccelerometerEnabled(bool isEnabled)

@@ -37,7 +37,7 @@ param(
     [switch]$forceConfig
 )
 
-$options = @{p = $null; a = 'x64'; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null; dll = $false }
+$options = @{p = $null; a = $null; d = $null; cc = $null; xc = @(); xb = @(); sdk = $null; dll = $false }
 
 $optName = $null
 foreach ($arg in $args) {
@@ -62,10 +62,10 @@ function translate_array_opt($opt) {
 }
 
 if ($options.xb.Count -ne 0) {
-    [Array]$options.xb = translate_array_opt $options.xb
+    [array]$options.xb = (translate_array_opt $options.xb)
 }
 if ($options.xc.Count -ne 0) {
-    [Array]$options.xc = translate_array_opt $options.xc
+    [array]$options.xc = (translate_array_opt $options.xc)
 }
 
 $myRoot = $PSScriptRoot
@@ -121,31 +121,14 @@ function search_proj_file($file_path, $type) {
 $proj_dir = search_proj_file 'CMakeLists.txt' 'Leaf'
 $proj_name = (Get-Item $proj_dir).BaseName
 
-$bti = $null # cmake target param index
-$bci = $null # cmake optimize flag param index
-# parsing build options
-$nopts = $options.xb.Count
-for ($i = 0; $i -lt $nopts; ++$i) {
-    $optv = $options.xb[$i]
-    if ($optv -eq '--target') {
-        if ($i -lt ($nopts - 1)) {
-            $bti = $i + 1
-        }
-    }
-    elseif($optv -eq '--config') {
-        if ($i -lt ($nopts - 1)) {
-            $bci = $i + 1
-        }
-    }
-}
-
 $use_gradle = $is_android -and (Test-Path $(Join-Path $proj_dir 'proj.android/gradlew') -PathType Leaf)
 if ($use_gradle) {
     $b1k_args += '-xt', 'proj.android/gradlew'
 }
 
 if (!$use_gradle) {
-    if (!$bti) {
+    $cm_target_index = $options.xb.IndexOf('--target')
+    if ($cm_target_index -eq -1) {
         # non android, specific cmake target
         $cmake_targets = @(
             # local developer
@@ -170,23 +153,20 @@ if (!$use_gradle) {
         #   - ios deploy device may failed with unknown error
         $cmake_target = $cmake_target.Replace('-', '_')
         $options.xb += '--target', $cmake_target
-        $env:b1k_override_target = $null
-    } else{
-        $cmake_target = $options.xb[$bti]
-        $env:b1k_override_target = $true
+    } else {
+        $cmake_target = $options.xb[$cm_target_index + 1]
     }
-} else { # android
+
+    if($is_android) {
+        if ($options.xc.IndexOf('-DANDROID_STL')) {
+            $options.xc += '-DANDROID_STL=c++_shared'
+        }
+    }
+} else { # android gradle
     # engine ci
     if ($is_engine -and $is_ci) {
         $options.xc += "-PRELEASE_STORE_FILE=$AX_ROOT/tools/ci/axmol-ci.jks", '-PRELEASE_STORE_PASSWORD=axmol-ci', '-PRELEASE_KEY_ALIAS=axmol-ci', '-PRELEASE_KEY_PASSWORD=axmol-ci'
     }
-}
-
-if (!$bci) {
-    $optimize_flag = @('Debug', 'Release')[$is_ci]
-    $options.xb += '--config', $optimize_flag
-} else {
-    $optimize_flag = $options.xb[$bci]
 }
 
 if ($proj_dir) {

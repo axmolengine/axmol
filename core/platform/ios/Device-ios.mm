@@ -315,34 +315,41 @@ static CCAccelerometerDispatcher* s_pAccelerometerDispatcher;
 
 NS_AX_BEGIN
 
+static float getDevicePixelRatio(int& sdpi) {
+    float scale = 1.0f;
+
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+        scale = [[UIScreen mainScreen] scale];
+
+    UIUserInterfaceIdiom userInterfaceIdiom = [UIDevice.currentDevice userInterfaceIdiom];
+    if (userInterfaceIdiom == UIUserInterfaceIdiomPad)
+        sdpi = 132;
+    else if (userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        sdpi = 163;
+    else
+        sdpi = 160;
+
+    return scale;
+}
+
 int Device::getDPI()
 {
     static int dpi = -1;
 
     if (dpi == -1)
     {
-        float scale = 1.0f;
-
-        if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
-        {
-            scale = [[UIScreen mainScreen] scale];
-        }
-
-        UIUserInterfaceIdiom userInterfaceIdiom = [UIDevice.currentDevice userInterfaceIdiom];
-        if (userInterfaceIdiom == UIUserInterfaceIdiomPad)
-        {
-            dpi = 132 * scale;
-        }
-        else if (userInterfaceIdiom == UIUserInterfaceIdiomPhone)
-        {
-            dpi = 163 * scale;
-        }
-        else
-        {
-            dpi = 160 * scale;
-        }
+        int sdpi; // the standard dpi without scaling
+        float scale = getDevicePixelRatio(sdpi);
+        return static_cast<int>(scale * sdpi);
     }
+    
     return dpi;
+}
+
+float Device::getPixelRatio() 
+{
+    int ignored_sdpi;
+    return getDevicePixelRatio(ignored_sdpi);
 }
 
 void Device::setAccelerometerEnabled(bool isEnabled)

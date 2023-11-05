@@ -106,6 +106,11 @@ int Device::getDPI()
     return dpi;
 }
 
+float Device::getPixelRatio() 
+{
+    return Device::getDPI() / 96.0f;
+}
+
 void Device::setAccelerometerEnabled(bool isEnabled) {}
 
 void Device::setAccelerometerInterval(float interval) {}
