@@ -70,7 +70,7 @@ jobs:
           ./build.ps1 -p android -a arm64
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.arch }}
+          name: android_artifact
           path: |
             templates/**/*.apk
             tests/**/*.apk
