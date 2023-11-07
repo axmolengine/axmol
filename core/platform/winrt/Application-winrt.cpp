@@ -32,7 +32,9 @@ THE SOFTWARE.
 #include "platform/Application.h"
 
 #include "pugixml/pugixml.hpp"
+#include "fmt/format.h"
 
+#include <winrt/Windows.ApplicationModel.h>
 #include <winrt/Windows.System.UserProfile.h>
 #include <winrt/Windows.Foundation.Collections.h>
 
@@ -130,21 +132,11 @@ Application::Platform  Application::getTargetPlatform()
 
 std::string  Application::getVersion()
 {
-    std::string r;
-    std::string s = FileUtils::getInstance()->getStringFromFile("WMAppManifest.xml");
-    if (!s.empty()) {
-        pugi::xml_document doc;
-        if (doc.load_buffer_inplace(&s.front(), s.size())) {
-            auto app = doc.document_element().child("App");
-            if (app) {
-                auto version = app.attribute("Version").value();
-                if (!version.empty()) {
-                    r = version;
-                }
-            }
-        }
-    }
-    return r;
+    auto package   = winrt::Windows::ApplicationModel::Package::Current();
+    auto packageId = package.Id();
+    auto version   = packageId.Version();
+
+    return fmt::format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
 }
 
 bool Application::openURL(std::string_view url)
