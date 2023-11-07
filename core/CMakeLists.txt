@@ -340,6 +340,9 @@ if(WINDOWS)
     endif()
 
     if(WINDOWS_STORE)
+        file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} AX_TOP_SOLUTION_DIR)
+        configure_file(${_AX_ROOT}/cmake/CppWinRT.props.in ${CMAKE_BINARY_DIR}/CppWinRT.props @ONLY)
+       
         # intsall cppwinrt package for xaml apps
         exec_program(${NUGET_EXE}
                 ARGS install "Microsoft.Windows.CppWinRT" -Version ${AX_CPPWINRT_VERISON} -ExcludeVersion -OutputDirectory "\"${CMAKE_BINARY_DIR}/packages\"")
