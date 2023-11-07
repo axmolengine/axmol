@@ -98,7 +98,7 @@ function axmol_deploy() {
         if (Test-Path $devenvPath -PathType Leaf) {
             $devenvRoot = Split-Path $devenvPath -Parent
             $env:PATH = "$devenvRoot;$env:PATH"
-            $slnDir = Join-Path $proj_dir $BUILD_DIR
+            $slnDir = $BUILD_DIR
             $slnFileName = (Get-ChildItem $slnDir *.sln).Name
             $slnFilePath = Join-Path $slnDir $slnFileName
             devenv $slnFilePath /deploy $optimize_flag /project $cmake_target /projectconfig $optimize_flag
