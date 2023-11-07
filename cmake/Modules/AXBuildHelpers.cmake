@@ -474,18 +474,12 @@ set(AX_WASM_EXPORTS "${_AX_WASM_EXPORTS}" CACHE STRING "" FORCE)
 # stupid & pitfall: function not emcc not output .html
 macro (ax_setup_app_props app_name)
     if(WINRT)
-        get_target_property(app_vcxproj_dir ${APP_NAME} BINARY_DIR)
-        configure_file(
-            "${_AX_ROOT}/cmake/Directory.Build.targets.in"
-            "${app_vcxproj_dir}/Directory.Build.targets"
-            COPYONLY
-        )
         set_target_properties(
             ${APP_NAME}
             PROPERTIES
             # ----- C++/WinRT -----
             # VS_PACKAGE_REFERENCES "Microsoft.Windows.CppWinRT_${AX_CPPWINRT_VERISON}"
-            VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
+            VS_PROJECT_IMPORT "${_AX_ROOT}/cmake/CppWinRT.props"
             VS_GLOBAL_CppWinRTOptimized true
             VS_GLOBAL_CppWinRTRootNamespaceAutoMerge true
             VS_GLOBAL_CppWinRTGenerateWindowsMetadata true

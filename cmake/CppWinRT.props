@@ -1,4 +1,5 @@
 <Project>
+  <Import Project="$(SolutionDir)packages\Microsoft.Windows.CppWinRT\build\native\Microsoft.Windows.CppWinRT.props" />
   <ItemGroup>
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
   </ItemGroup>
