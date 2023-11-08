@@ -127,8 +127,7 @@ public:
 
     HRESULT Read(void* pv, ULONG cb, ULONG* pcbRead) override
     {
-        if (!_fileStream || (_mode != IFileStream::Mode::READ && _mode != IFileStream::Mode::OVERLAPPED &&
-                             _mode != IFileStream::Mode::APPEND))
+        if (!_fileStream || _mode == IFileStream::Mode::WRITE)
             return STG_E_ACCESSDENIED;
 
         if (!pv)
