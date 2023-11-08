@@ -33,9 +33,11 @@ NS_AX_BEGIN
 
 #if AX_USE_WIC
 
-	IWICImagingFactory* WICImageLoader::_wicFactory = NULL;
+IWICImagingFactory* WICImageLoader::_wicFactory = NULL;
 
-static WICConvert g_WICConvert[] = 
+namespace {
+
+WICConvert g_WICConvert[] = 
 {
 	// Note target GUID in this conversion table must be one of those directly supported by cocos2d-x
 
@@ -75,6 +77,136 @@ static WICConvert g_WICConvert[] =
 
 	// We don't support n-channel formats
 };
+
+class SimpleFileStream : public IStream
+{
+    std::unique_ptr<IFileStream> _fileStream;
+    long _cRef;
+    IFileStream::Mode _mode;
+
+public:
+    explicit SimpleFileStream(std::string_view path, IFileStream::Mode mode) noexcept : _cRef(1), _mode(mode)
+    {
+        _fileStream = FileUtils::getInstance()->openFileStream(path, mode);
+    }
+
+    virtual ~SimpleFileStream()
+    {
+        if (_fileStream)
+            _fileStream->close();
+    }
+
+    STDMETHODIMP QueryInterface(REFIID riid, void** ppv) override
+    {
+        if (__uuidof(IStream) == riid)
+        {
+            *ppv = static_cast<IStream*>(this);
+        }
+        else
+        {
+            *ppv = nullptr;
+            return E_NOINTERFACE;
+        }
+
+        AddRef();
+
+        return S_OK;
+    }
+
+    STDMETHODIMP_(ULONG) AddRef() override { return InterlockedIncrement(&_cRef); }
+
+    STDMETHODIMP_(ULONG) Release() override
+    {
+        LONG cRef = InterlockedDecrement(&_cRef);
+        if (cRef == 0)
+        {
+            delete this;
+        }
+        return cRef;
+    }
+
+    HRESULT Read(void* pv, ULONG cb, ULONG* pcbRead) override
+    {
+        if (!_fileStream || _mode == IFileStream::Mode::WRITE)
+            return STG_E_ACCESSDENIED;
+
+        if (!pv)
+            return STG_E_INVALIDPOINTER;
+
+        const auto result = _fileStream->read(pv, cb);
+        if (result < 0)
+            return STG_E_ACCESSDENIED;
+
+        if (result < cb)
+            return S_FALSE;
+
+        if (pcbRead)
+            *pcbRead = result;
+
+        return S_OK;
+    }
+
+    HRESULT Write(const void* pv, ULONG cb, ULONG* pcbWritten) override
+    {
+        if (!_fileStream || _mode == IFileStream::Mode::READ)
+            return STG_E_ACCESSDENIED;
+
+        if (!pv)
+            return STG_E_INVALIDPOINTER;
+
+        const auto result = _fileStream->write(pv, cb);
+        if (result < 0)
+        {
+            return STG_E_CANTSAVE;
+        }
+
+        if (pcbWritten)
+            *pcbWritten = result;
+
+        return S_OK;
+    }
+
+    HRESULT Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition) override
+    {
+        if (!_fileStream || (dwOrigin != STREAM_SEEK_CUR && dwOrigin != STREAM_SEEK_SET && dwOrigin != STREAM_SEEK_END))
+            return STG_E_INVALIDFUNCTION;
+
+        const auto result =
+            _fileStream->seek(dlibMove.QuadPart, dwOrigin);  // dwOrigin is compatible with SEEK_SET, SEEK_CUR, SEEK_END
+
+        if (result < 0)
+            return STG_E_INVALIDFUNCTION;
+
+        if (plibNewPosition)
+            plibNewPosition->QuadPart = result;
+
+        return S_OK;
+    }
+
+    HRESULT SetSize(ULARGE_INTEGER libNewSize) override
+    {
+        if (_fileStream != nullptr && _fileStream->resize(libNewSize.QuadPart))
+        {
+            return S_OK;
+        }
+
+        return STG_E_INVALIDFUNCTION;
+    }
+
+    HRESULT CopyTo(IStream* pstm, ULARGE_INTEGER cb, ULARGE_INTEGER* pcbRead, ULARGE_INTEGER* pcbWritten) override
+    {
+        return E_NOTIMPL;
+    }
+
+    HRESULT Commit(DWORD grfCommitFlags) override { return S_OK; }
+    HRESULT Revert() override { return E_NOTIMPL; }
+    HRESULT LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType) override { return E_NOTIMPL; }
+    HRESULT UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType) override { return E_NOTIMPL; }
+    HRESULT Stat(STATSTG* pstatstg, DWORD grfStatFlag) override { return E_NOTIMPL; }
+    HRESULT Clone(IStream** ppstm) override { return E_NOTIMPL; }
+};
+
+}
 
 WICImageLoader::WICImageLoader() :
 	_width(0),
@@ -317,6 +449,7 @@ bool WICImageLoader::encodeImageData(std::string_view path, const uint8_t* data,
 	IWICImagingFactory* pFact = getWICFactory();
 
 	HRESULT hr = E_FAIL;
+    IStream* outStream  = new SimpleFileStream(path, IFileStream::Mode::WRITE);
 	IWICStream* pStream = NULL;
 
 	if (NULL != pFact) {
@@ -324,7 +457,7 @@ bool WICImageLoader::encodeImageData(std::string_view path, const uint8_t* data,
 	}
 
 	if (SUCCEEDED(hr)) {
-		hr = pStream->InitializeFromFilename(ntcvt::from_chars(path).c_str(), GENERIC_WRITE);
+        hr = pStream->InitializeFromIStream(outStream);
 	}
 
 	IWICBitmapEncoder* pEnc = NULL;
@@ -376,6 +509,7 @@ bool WICImageLoader::encodeImageData(std::string_view path, const uint8_t* data,
 		hr = pEnc->Commit();
 	}
 
+    SafeRelease(&outStream);
 	SafeRelease(&pStream);
 	SafeRelease(&pEnc);
 	SafeRelease(&pFrame);
