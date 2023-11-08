@@ -131,6 +131,9 @@ public:
                              _mode != IFileStream::Mode::APPEND))
             return STG_E_ACCESSDENIED;
 
+        if (!pv)
+            return STG_E_INVALIDPOINTER;
+
         const auto result = _fileStream->read(pv, cb);
         if (result < 0)
             return STG_E_ACCESSDENIED;
@@ -148,6 +151,9 @@ public:
     {
         if (!_fileStream || _mode == IFileStream::Mode::READ)
             return STG_E_ACCESSDENIED;
+
+        if (!pv)
+            return STG_E_INVALIDPOINTER;
 
         const auto result = _fileStream->write(pv, cb);
         if (result < 0)
