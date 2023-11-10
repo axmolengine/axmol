@@ -106,16 +106,19 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
             public void handleMessage(final Message msg) {
                 switch (msg.what) {
                     case HANDLER_OPEN_IME_KEYBOARD:
-                        if (null != AxmolGLSurfaceView.this.mEditText && AxmolGLSurfaceView.this.mEditText.requestFocus()) {
-                            AxmolGLSurfaceView.this.mEditText.removeTextChangedListener(AxmolGLSurfaceView.sTextInputWraper);
-                            AxmolGLSurfaceView.this.mEditText.setText("");
-                            final String text = (String) msg.obj;
-                            AxmolGLSurfaceView.this.mEditText.append(text);
-                            AxmolGLSurfaceView.sTextInputWraper.setOriginText(text);
-                            AxmolGLSurfaceView.this.mEditText.addTextChangedListener(AxmolGLSurfaceView.sTextInputWraper);
-                            final InputMethodManager imm = (InputMethodManager) AxmolGLSurfaceView.mGLSurfaceView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.showSoftInput(AxmolGLSurfaceView.this.mEditText, 0);
-                            Log.d("GLSurfaceView", "showSoftInput");
+                        if (null != AxmolGLSurfaceView.this.mEditText) {
+                            AxmolGLSurfaceView.this.mEditText.setVisibility(View.VISIBLE);
+                            if (AxmolGLSurfaceView.this.mEditText.requestFocus()) {
+                                AxmolGLSurfaceView.this.mEditText.removeTextChangedListener(AxmolGLSurfaceView.sTextInputWraper);
+                                AxmolGLSurfaceView.this.mEditText.setText("");
+                                final String text = (String) msg.obj;
+                                AxmolGLSurfaceView.this.mEditText.append(text);
+                                AxmolGLSurfaceView.sTextInputWraper.setOriginText(text);
+                                AxmolGLSurfaceView.this.mEditText.addTextChangedListener(AxmolGLSurfaceView.sTextInputWraper);
+                                final InputMethodManager imm = (InputMethodManager) AxmolGLSurfaceView.mGLSurfaceView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.showSoftInput(AxmolGLSurfaceView.this.mEditText, 0);
+                                Log.d("GLSurfaceView", "showSoftInput");
+                            }
                         }
                         break;
 
@@ -126,6 +129,7 @@ public class AxmolGLSurfaceView extends GLSurfaceView {
                             imm.hideSoftInputFromWindow(AxmolGLSurfaceView.this.mEditText.getWindowToken(), 0);
                             AxmolGLSurfaceView.this.requestFocus();
                             // can take effect after GLSurfaceView has focus
+                            AxmolGLSurfaceView.this.mEditText.setVisibility(View.GONE);
                             ((AxmolActivity)AxmolGLSurfaceView.mGLSurfaceView.getContext()).hideVirtualButton();
                             Log.d("GLSurfaceView", "HideSoftInput");
                         }
