@@ -1,3 +1,5 @@
+#pragma once
+
 #include "CommandBufferGL.h"
 
 #if !defined(__APPLE__) && AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
