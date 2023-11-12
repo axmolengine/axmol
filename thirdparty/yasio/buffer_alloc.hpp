@@ -54,7 +54,7 @@ using uint = unsigned int;
 template <typename _Alty>
 struct buffer_allocator_traits {
   using value_type = typename _Alty::value_type;
-  using size_type  = uint;
+  using size_type  = size_t;
   static YASIO__CONSTEXPR size_type max_size() { return static_cast<size_type>(-1) / sizeof(value_type); }
   static value_type* reallocate(void* block, size_t size, size_t new_size)
   {
