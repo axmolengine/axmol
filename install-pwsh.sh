@@ -23,7 +23,7 @@ function check_pwsh {
             exit 0
         fi
     fi
-    "Installing PowerShell $pwsh_ver ..."
+    echo "Installing PowerShell $pwsh_ver ..."
 }
 
 HOST_ARCH=$(uname -m)
