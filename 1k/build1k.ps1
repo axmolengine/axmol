@@ -189,7 +189,7 @@ $manifest = @{
 $channels = @{}
 
 # refer to: https://developer.android.com/studio#command-line-tools-only
-$cmdlinetools_rev = '9477386'
+$cmdlinetools_rev = '10406996'
 
 $options = @{
     p      = $null; 
@@ -301,7 +301,7 @@ if (!$TOOLCHAIN_VER) {
     $TOOLCHAIN_NAME = $TOOLCHAIN
 }
 
-$external_prefix = if ($options.prefix) { $options.prefix } else { Join-Path $HOME 'build1k' }
+$external_prefix = if ($options.prefix) { $options.prefix } else { Join-Path $HOME '.build1k' }
 if (!$b1k.isdir($external_prefix)) {
     $b1k.mkdirs($external_prefix)
 }
@@ -334,7 +334,7 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
         $preferredVer = $null
         if ($requiredVer.EndsWith('+')) {
             $preferredVer = $requiredVer.TrimEnd('+')
-            $checkVerCond = '$foundVer -ge $preferredVer'
+            $checkVerCond = '[System.Version]$foundVer -ge [System.Version]$preferredVer'
         }
         elseif ($requiredVer -eq '*') {
             $checkVerCond = '$True'
@@ -346,10 +346,10 @@ function find_prog($name, $path = $null, $mode = 'ONLY', $cmd = $null, $params =
             $preferredVer = $verArr[$isRange]
             if ($isRange -gt 1) {
                 $requiredMin = $verArr[0]
-                $checkVerCond = '$foundVer -ge $requiredMin -and $foundVer -le $preferredVer'
+                $checkVerCond = '[System.Version]$foundVer -ge [System.Version]$requiredMin -and [System.Version]$foundVer -le [System.Version]$preferredVer'
             }
             else {
-                $checkVerCond = '$foundVer -eq $preferredVer'
+                $checkVerCond = '[System.Version]$foundVer -eq [System.Version]$preferredVer'
             }
         }
         if (!$checkVerCond) {
@@ -426,12 +426,7 @@ function exec_prog($prog, $params) {
 function download_file($url, $out) {
     if ($b1k.isfile($out)) { return }
     $b1k.println("Downloading $url to $out ...")
-    if (([System.Version]$pwsh_ver -ge [System.Version]'7.0.0.0') -and !$env:APPVEYOR) {
-        curl -L $url -o $out
-    }
-    else {
-        Invoke-WebRequest -Uri $url -OutFile $out
-    }
+    Invoke-WebRequest -Uri $url -OutFile $out
 }
 
 function download_and_expand($url, $out, $dest) {
@@ -485,7 +480,7 @@ function setup_glslcc() {
 
     $suffix = $('win64.zip', 'linux.tar.gz', 'osx.tar.gz').Get($HOST_OS)
     $b1k.rmdirs($glslcc_bin)
-    $glslcc_pkg = "$external_prefix/glslcc-$suffix"
+    $glslcc_pkg = Join-Path $external_prefix "glslcc-$suffix"
     $b1k.del($glslcc_pkg)
 
     download_and_expand "https://github.com/axmolengine/glslcc/releases/download/v$glslcc_ver/glslcc-$glslcc_ver-$suffix" "$glslcc_pkg" $glslcc_bin
@@ -804,7 +799,8 @@ function setup_android_sdk() {
     if (!$b1k.isdir("$ndk_root")) {
         $sdkmanager_prog, $sdkmanager_ver = $null, $null
         if ($b1k.isdir($sdk_root)) {
-            $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$sdk_root/cmdline-tools/latest/bin" -params "--version", "--sdk_root=$sdk_root")
+            $cmdlinetools_bin = Join-Path $sdk_root 'cmdline-tools/latest/bin'
+            $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root")
         }
         else {
             $sdk_root = Join-Path $external_prefix 'adt/sdk'
@@ -814,7 +810,8 @@ function setup_android_sdk() {
         }
 
         if (!$sdkmanager_prog) {
-            $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$external_prefix/cmdline-tools/bin" -params "--version", "--sdk_root=$sdk_root")
+            $cmdlinetools_bin = Join-Path $external_prefix 'cmdline-tools/bin'
+            $sdkmanager_prog, $sdkmanager_ver = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root")
             $suffix = $('win', 'linux', 'mac').Get($HOST_OS)
             if (!$sdkmanager_prog) {
                 $b1k.println("Installing cmdlinetools version: $sdkmanager_ver ...")
@@ -824,7 +821,7 @@ function setup_android_sdk() {
                 $cmdlinetools_url = "https://dl.google.com/android/repository/$cmdlinetools_pkg_name"
                 download_file $cmdlinetools_url $cmdlinetools_pkg_path
                 Expand-Archive -Path $cmdlinetools_pkg_path -DestinationPath "$external_prefix/"
-                $sdkmanager_prog, $_ = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path "$external_prefix/cmdline-tools/bin" -params "--version", "--sdk_root=$sdk_root" -silent $True)
+                $sdkmanager_prog, $_ = (find_prog -name 'cmdlinetools' -cmd 'sdkmanager' -path $cmdlinetools_bin -params "--version", "--sdk_root=$sdk_root" -silent $True)
                 if (!$sdkmanager_prog) {
                     throw "Install cmdlinetools version: $sdkmanager_ver fail"
                 }
