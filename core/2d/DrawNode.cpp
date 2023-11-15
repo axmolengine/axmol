@@ -36,12 +36,44 @@
 #include "base/Utils.h"
 #include "renderer/Shaders.h"
 #include "renderer/backend/ProgramState.h"
+#include "poly2tri/poly2tri.h"
 
 NS_AX_BEGIN
 
 static inline Tex2F v2ToTex2F(const Vec2& v)
 {
     return {v.x, v.y};
+}
+
+/** Is a polygon convex?
+ * @param verts A pointer to point coordinates.
+ * @param count The number of verts measured in points.
+ */
+inline bool isConvex(const Vec2* verts, int count)
+{
+    bool isPositive = false, isNegative = false;
+    for (int i = 0; i < count; i++)
+    {
+        Vec2 A = verts[i];
+        Vec2 B = verts[(i + 1) % count];
+        Vec2 C = verts[(i + 2) % count];
+
+        double crossProduct = (B.x - A.x) * (C.y - B.y) - (B.y - A.y) * (C.x - B.x);
+
+        if (crossProduct > 0)
+        {
+            isPositive = true;
+        }
+        else if (crossProduct < 0)
+        {
+            isNegative = true;
+        }
+
+        if (isPositive && isNegative)
+            return false;  // Polygon is concave
+    }
+
+    return true;  // Polygon is convex
 }
 
 // implementation of DrawNode
@@ -603,17 +635,55 @@ void DrawNode::drawPolygon(const Vec2* verts,
     V2F_C4B_T2F_Triangle* triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
     V2F_C4B_T2F_Triangle* cursor    = triangles;
 
-    for (int i = 0; i < count - 2; i++)
+    if (count >= 3 && !isConvex(verts, count))
     {
-        V2F_C4B_T2F_Triangle tmp = {
-            {verts[0], fillColor, v2ToTex2F(Vec2::ZERO)},
-            {verts[i + 1], fillColor, v2ToTex2F(Vec2::ZERO)},
-            {verts[i + 2], fillColor, v2ToTex2F(Vec2::ZERO)},
-        };
+        std::vector<p2t::Point> p2pointsStorage;
+        p2pointsStorage.reserve(count);
+        std::vector<p2t::Point*> p2points;
+        p2points.reserve(count);
 
-        *cursor++ = tmp;
+        for (int i = 0; i < count; ++i)
+        {
+            p2points.emplace_back(&p2pointsStorage.emplace_back((double)verts[i].x, (double)verts[i].y));
+        }
+        p2t::CDT cdt(p2points);
+        cdt.Triangulate();
+        std::vector<p2t::Triangle*> tris = cdt.GetTriangles();
+
+        if ((tris.size() * 3) > vertex_count)
+        {
+            ensureCapacity((tris.size() * 3));
+            triangles = (V2F_C4B_T2F_Triangle*)(_bufferTriangle + _bufferCountTriangle);
+            cursor    = triangles;
+        }
+
+        for (auto&& t : tris)
+        {
+            p2t::Point* vec1 = t->GetPoint(0);
+            p2t::Point* vec2 = t->GetPoint(1);
+            p2t::Point* vec3 = t->GetPoint(2);
+
+            V2F_C4B_T2F_Triangle tmp = {
+                {Vec2(vec1->x, vec1->y), fillColor, Tex2F(0.0, 0.0)},
+                {Vec2(vec2->x, vec2->y), fillColor, Tex2F(0.0, 0.0)},
+                {Vec2(vec3->x, vec3->y), fillColor, Tex2F(0.0, 0.0)},
+            };
+            *cursor++ = tmp;
+        }
     }
+    else
+    {
+        for (int i = 0; i < count - 2; i++)
+        {
+            V2F_C4B_T2F_Triangle tmp = {
+                {verts[0], fillColor, v2ToTex2F(Vec2::ZERO)},
+                {verts[i + 1], fillColor, v2ToTex2F(Vec2::ZERO)},
+                {verts[i + 2], fillColor, v2ToTex2F(Vec2::ZERO)},
+            };
 
+            *cursor++ = tmp;
+        }
+    }
     if (outline)
     {
         struct ExtrudeVerts
