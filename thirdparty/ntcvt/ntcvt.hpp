@@ -24,7 +24,7 @@ template <class _Elem, class _Traits = std::char_traits<_Elem>,
 class intrusive_string : public std::basic_string<_Elem, _Traits, _Alloc>
 {
 public:
-#if _MSC_VER >= 1935 // VS2022 v17.8.0+
+#if _MSC_VER >= 1938 // VS2022 v17.8.0+
   using _Alty        = std::_Rebind_alloc_t<_Alloc, _Elem>;
   using _Alty_traits = std::allocator_traits<_Alty>;
 
