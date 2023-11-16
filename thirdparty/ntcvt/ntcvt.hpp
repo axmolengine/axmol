@@ -1,4 +1,6 @@
-// v1.0 works on vs2010 or later
+// v1.0.1 add vs2022 17.8.0 support
+// v1.0.0 works on vs2010 to vs2022 17.7.x
+
 #ifndef SIMDSOFT__NTCVT_HPP
 #define SIMDSOFT__NTCVT_HPP
 
@@ -33,7 +35,12 @@ public:
                          std::_String_iter_types<
                              _Elem, typename _Alty_traits::size_type,
                              typename _Alty_traits::difference_type, typename _Alty_traits::pointer,
+#   if _MSC_VER < 1938
                              typename _Alty_traits::const_pointer, _Elem&, const _Elem&>>>;
+#   else //  VS2022 17.8.0+
+                             typename _Alty_traits::const_pointer>>>;
+#   endif
+
 #endif
   // See also afxmfc CString::GetBufferSetLength
   // Why do this hack?
