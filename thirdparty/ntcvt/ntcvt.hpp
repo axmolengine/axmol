@@ -1,4 +1,6 @@
-// v1.0 works on vs2010 or later
+// v1.0.1 add vs2022 17.8.0 support
+// v1.0.0 works on vs2010 to vs2022 17.7.x
+
 #ifndef SIMDSOFT__NTCVT_HPP
 #define SIMDSOFT__NTCVT_HPP
 
