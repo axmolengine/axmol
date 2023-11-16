@@ -93,3 +93,14 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+
+class Issue1319Test : public DrawPrimitivesBaseTest
+{
+public:
+    CREATE_FUNC(Issue1319Test);
+
+    Issue1319Test();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+};
