@@ -10,22 +10,19 @@
 #     jdk          = '11.0.19+';
 #     cmdlinetools = '7.0+'; # android cmdlinetools
 # }
+# For maintaining axmol, halx99 contributed 2 PR to cmake
+# 3.27.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8319
+# 3.28.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8632
+#
 
 # add or overwrite tool version like follow
 $manifest['nuget'] = '5.5.1' # since 5.6.0, require .net 4.0
 $manifest['glslcc'] = '1.9.3+'
-$manifest['jdk'] = '17.0.3+'
-# $manifest['cmake'] = '3.27.4+'
 
 if ($IsMacOS) {
     # refer to: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8632
     # once cmake-3.28.0 released, can simply specify cmake to '3.28.0+'
-    $manifest['cmake'] = '3.27.20230808'
-    $channels['cmake'] = 'g94eae40'
-}
-elseif ($options.p -eq 'winuwp') {
-    # refer to: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8319
-    $manifest['cmake'] = '3.27.2+'
+    $manifest['cmake'] = '3.28.0-rc5'
 }
 
 # [void]$manifest
