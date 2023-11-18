@@ -10,7 +10,7 @@ mkdir -p $myRoot/tmp
 
 pwsh_ver=$1
 if [ "$pwsh_ver" = "" ] ; then
-    pwsh_ver='7.3.7'
+    pwsh_ver='7.3.9'
 fi
 
 function check_pwsh {
@@ -54,8 +54,9 @@ elif [ $HOST_OS = 'Linux' ] ; then
         sudo dpkg -i "$pwsh_pkg_out"
         sudo apt-get install -f
     elif which pacman > /dev/null; then # Linux distro: Arch
-        check_pwsh '7.3.6'
         # refer: https://ephos.github.io/posts/2018-9-17-Pwsh-ArchLinux
+        # available pwsh version, refer to: https://aur.archlinux.org/packages/powershell-bin
+        check_pwsh $pwsh_ver
         git clone https://aur.archlinux.org/powershell-bin.git $myRoot/tmp/powershell-bin
         cd $myRoot/tmp/powershell-bin
         makepkg -si --needed --noconfirm
