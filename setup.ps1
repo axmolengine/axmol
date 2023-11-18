@@ -5,6 +5,8 @@ $AX_ROOT = $myRoot
 
 $pwsh_ver = $PSVersionTable.PSVersion.ToString()
 
+Set-Alias println Write-Host
+
 function mkdirs([string]$path) {
     if (!(Test-Path $path -PathType Container)) {
         if ([System.Version]$pwsh_ver -ge [System.Version]'5.0.0.0') {
@@ -83,15 +85,6 @@ if ([System.Version]$pwsh_ver -lt [System.Version]'5.0.0.0') {
 
     throw "PowerShell 5.0+ required, installed is: $pwsh_ver, after install WMF5.1 and restart computer, try again"
 }
-
-$build1kPath = Join-Path $myRoot '1k/build1k.ps1'
-$prefix = Join-Path $myRoot 'tools/external'
-if (!(Test-Path $prefix -PathType Container)) {
-    mkdirs $prefix
-}
-
-# setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
-. $build1kPath -setupOnly -prefix $prefix @args
 
 # powershell 7 require mark as global explicit if want access in function via $Global:xxx
 $Global:AX_CONSOLE_ROOT = Join-Path $AX_ROOT 'tools/console'
@@ -237,7 +230,7 @@ if ($IsLinux) {
     $answer = Read-Host
     if ($answer -like 'y*') {
         if ($(Get-Command 'dpkg' -ErrorAction SilentlyContinue)) {
-            $b1k.println("It will take few minutes")
+            println "It will take few minutes"
             sudo apt update
             # for vm, libxxf86vm-dev also required
 
@@ -251,12 +244,10 @@ if ($IsLinux) {
             $DEPENDS += 'libglu1-mesa-dev'
             $DEPENDS += 'libgl2ps-dev'
             $DEPENDS += 'libxi-dev'
-            $DEPENDS += 'libzip-dev'
-            $DEPENDS += 'libpng-dev'
             $DEPENDS += 'libfontconfig1-dev'
             $DEPENDS += 'libgtk-3-dev'
             $DEPENDS += 'binutils'
-            # $DEPENDS += 'libbsd-dev'
+            $DEPENDS += 'g++'
             $DEPENDS += 'libasound2-dev'
             $DEPENDS += 'libxxf86vm-dev'
             $DEPENDS += 'libvlc-dev', 'libvlccore-dev', 'vlc'
@@ -283,15 +274,18 @@ if ($IsLinux) {
             sudo pacman -S --needed --noconfirm @DEPENDS
         }
         else {
-            $b1k.println("Warning: current Linux distro isn't officially supported by axmol community")
+            println "Warning: current Linux distro isn't officially supported by axmol community"
         }
-
-        b1k_print "Installing axmol freetype into linux system directory ..."
-        Set-Location "$AX_ROOT/thirdparty/freetype"
-        cmake -B build '-DCMAKE_BUILD_TYPE=Release' '-DCMAKE_INSTALL_PREFIX=/usr' '-DDISABLE_FORCE_DEBUG_POSTFIX=ON' '-DFT_DISABLE_HARFBUZZ=ON' '-DFT_DISABLE_BROTLI=ON' '-DFT_DISABLE_BZIP2=ON' '-DBUILD_SHARED_LIBS=ON'
-        sudo cmake --build build --config Release --target install
-        Set-Location -
     }
 }
+
+$build1kPath = Join-Path $myRoot '1k/build1k.ps1'
+$prefix = Join-Path $myRoot 'tools/external'
+if (!(Test-Path $prefix -PathType Container)) {
+    mkdirs $prefix
+}
+
+# setup toolchains: glslcc, cmake, ninja, ndk, jdk, ...
+. $build1kPath -setupOnly -prefix $prefix @args
 
 $b1k.pause("setup successfully, please restart the terminal to make added system variables take effect")

@@ -53,7 +53,7 @@
 #endif
 #include "UIScale9SpriteTest.h"
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || defined(_WIN32)
+    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || defined(_WIN32) || defined(__linux__)
 #    include "UIEditBoxTest.h"
 #endif
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32)
@@ -71,7 +71,7 @@ GUIDynamicCreateTests::GUIDynamicCreateTests()
     addTest("WebView Test", []() { return new WebViewTests; });
 #endif
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_IOS) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || \
-    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || defined(_WIN32)
+    (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || defined(_WIN32) || defined(__linux__)
     addTest("EditBox Test", []() { return new UIEditBoxTests; });
 #endif
     addTest("Focus Test", []() { return new UIFocusTests; });
