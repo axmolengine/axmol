@@ -538,11 +538,9 @@ if (AX_ENABLE_EXT_EFFEKSEER)
 endif()
 
 
-if(NOT LINUX)
-    list(APPEND GAME_SOURCE
-         Source/UITest/CocoStudioGUITest/UIEditBoxTest.cpp
-         )
-endif()
+list(APPEND GAME_SOURCE
+        Source/UITest/CocoStudioGUITest/UIEditBoxTest.cpp
+        )
 
 # mark app complie info and libs info
 set(all_code_files

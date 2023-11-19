@@ -111,7 +111,7 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
     if (WINDOWS)
         target_link_libraries(${APP_NAME} winmm Version)
     else()
-        target_link_libraries(${APP_NAME} X11 fontconfig glib-2.0 gtk-3 gobject-2.0)
+        target_link_libraries(${APP_NAME} X11 fontconfig)
     endif()
 
     # Linking engine and thirdparty libs
