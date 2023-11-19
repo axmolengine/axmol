@@ -39,9 +39,6 @@ THE SOFTWARE.
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
-
-using namespace std;
-
 // as FcFontMatch is quite an expensive call, cache the results of getFontFile
 static std::map<std::string, std::string> fontCache;
 
@@ -75,7 +72,7 @@ struct LineBreakLine
         if (glyphs.empty() == false)
         {
             LineBreakGlyph& glyph = glyphs.at(glyphs.size() - 1);
-            lineWidth             = glyph.paintPosition + max(glyph.glyphWidth, glyph.horizAdvance - glyph.bearingX);
+            lineWidth             = glyph.paintPosition + std::max(glyph.glyphWidth, glyph.horizAdvance - glyph.bearingX);
         }
     }
 };
@@ -208,7 +205,7 @@ public:
             if (unicode == '\n')
             {
                 currentLine.calculateWidth();
-                iMaxLineWidth = max(iMaxLineWidth, currentLine.lineWidth);
+                iMaxLineWidth = std::max(iMaxLineWidth, currentLine.lineWidth);
                 textLines.emplace_back(currentLine);
                 currentLine.reset();
                 prevGlyphIndex       = 0;
@@ -282,7 +279,7 @@ public:
                             currentLine.glyphs.erase(it, currentLine.glyphs.end());
                         }
                         currentLine.calculateWidth();
-                        iMaxLineWidth = max(iMaxLineWidth, currentLine.lineWidth);
+                        iMaxLineWidth = std::max(iMaxLineWidth, currentLine.lineWidth);
                         textLines.emplace_back(currentLine);
                         currentLine.reset();
                         currentPaintPosition = 0;
@@ -304,7 +301,7 @@ public:
                         currentPaintPosition = 0;
                         glyph.kerning        = 0;
                         currentLine.calculateWidth();
-                        iMaxLineWidth = max(iMaxLineWidth, currentLine.lineWidth);
+                        iMaxLineWidth = std::max(iMaxLineWidth, currentLine.lineWidth);
                         textLines.emplace_back(currentLine);
                         currentLine.reset();
                     }
@@ -333,7 +330,7 @@ public:
         if (currentLine.glyphs.empty() == false)
         {
             currentLine.calculateWidth();
-            iMaxLineWidth = max(iMaxLineWidth, currentLine.lineWidth);
+            iMaxLineWidth = std::max(iMaxLineWidth, currentLine.lineWidth);
             textLines.emplace_back(currentLine);
         }
         return true;

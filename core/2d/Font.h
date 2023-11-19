@@ -25,8 +25,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef _CCFont_h_
-#define _CCFont_h_
+#pragma once
 
 /// @cond DO_NOT_SHOW
 
@@ -49,4 +48,4 @@ public:
 NS_AX_END
 
 /// @endcond
-#endif
+
