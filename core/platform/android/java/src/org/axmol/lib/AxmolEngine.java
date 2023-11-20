@@ -93,6 +93,7 @@ public class AxmolEngine {
     private static boolean sActivityVisible;
     private static String sPackageName;
     private static Activity sActivity = null;
+    private static GameServicesManager sGameServicesManager = null;
     private static AxmolEngineListener sAxmolEngineListener;
     private static Set<OnActivityResultListener> onActivityResultListeners = new LinkedHashSet<OnActivityResultListener>();
     private static Vibrator sVibrateService = null;
@@ -146,6 +147,8 @@ public class AxmolEngine {
             BitmapHelper.setContext(activity);
 
             AxmolEngine.sVibrateService = (Vibrator)activity.getSystemService(Context.VIBRATOR_SERVICE);
+
+            AxmolEngine.sGameServicesManager = new GameServicesManager(activity);
 
             sInited = true;
 
@@ -312,6 +315,38 @@ public class AxmolEngine {
 
     public static void selectionChanged() {
         ((AxmolActivity)sActivity).selectionChanged();
+    }
+
+    public static void authenticatePlayer() {
+        sGameServicesManager.authenticatePlayer();
+    }
+
+    public static void showLeaderboard(String leaderboardIdentifier) {
+        sGameServicesManager.showLeaderboard(leaderboardIdentifier);
+    }
+
+    public static void showAllLeaderboards() {
+        sGameServicesManager.showAllLeaderboards();
+    }
+
+    public static void showAchievements() {
+        sGameServicesManager.showAchievements();
+    }
+
+    public static void getMyScore(String leaderboardIdentifier) {
+        sGameServicesManager.getMyScore(leaderboardIdentifier);
+    }
+
+    public static void submitScore(String leaderboardIdentifier, long score) {
+        sGameServicesManager.submitScore(leaderboardIdentifier, score);
+    }
+
+    public static void unlockAchievement(String achievementIdentifier) {
+        sGameServicesManager.unlockAchievement(achievementIdentifier);
+    }
+
+    public static void setAchievementSteps(String achievementIdentifier, double steps) {
+        sGameServicesManager.setAchievementSteps(achievementIdentifier, steps);
     }
 
  	public static String getVersion() {

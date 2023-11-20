@@ -30,6 +30,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: '../java/libs', include: ['*.jar'])
+    // Required to enable Google Play Games Services on Android
+    implementation 'com.google.android.gms:play-services-games-v2:19.0.0'
 
     def media3_version = "1.0.2" // exoplayer-2.18.7
 

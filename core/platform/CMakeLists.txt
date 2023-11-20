@@ -30,6 +30,7 @@ if(ANDROID)
         platform/android/GLViewImpl-android.cpp
         platform/android/FileUtils-android.cpp
         platform/android/EnhanceAPI-android.cpp
+        platform/android/GameCenter-android.cpp
     )
 elseif(WINDOWS)
 
@@ -49,6 +50,7 @@ elseif(WINDOWS)
             platform/win32/Common-win32.cpp
             platform/win32/Application-win32.cpp
             platform/win32/Device-win32.cpp
+            platform/win32/GameCenter-win32.cpp
             platform/GLViewImpl.cpp
             )
     else()
@@ -64,6 +66,7 @@ elseif(APPLE)
     set(_AX_PLATFORM_SPECIFIC_SRC
         platform/apple/FileUtils-apple.mm
         platform/apple/Device-apple.mm
+        platform/apple/GameCenter-apple.mm
         )
     if(MACOSX)
         set(_AX_PLATFORM_SPECIFIC_HEADER
@@ -142,6 +145,7 @@ elseif(LINUX)
         platform/linux/Common-linux.cpp
         platform/linux/Application-linux.cpp
         platform/linux/Device-linux.cpp
+        platform/linux/GameCenter-linux.cpp
         platform/GLViewImpl.cpp
         )
 elseif(EMSCRIPTEN)
@@ -162,6 +166,7 @@ elseif(EMSCRIPTEN)
         platform/wasm/Common-wasm.cpp
         platform/wasm/Application-wasm.cpp
         platform/wasm/Device-wasm.cpp
+        platform/wasm/GameCenter-wasm.cpp
         platform/GLViewImpl.cpp
         )
     if (AX_WASM_ENABLE_DEVTOOLS)
@@ -186,6 +191,7 @@ set(_AX_PLATFORM_HEADER
     platform/StdC.h
     platform/IFileStream.h
     platform/FileStream.h
+    platform/GameCenter.h
     )
 
 set(_AX_PLATFORM_SRC

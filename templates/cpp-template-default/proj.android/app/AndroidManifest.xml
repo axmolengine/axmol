@@ -3,17 +3,21 @@
     android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    
+
     <uses-feature android:glEsVersion="0x00020000" />
-    
+
     <application
         android:label="@string/app_name"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher">
-        
+
         <!-- Tell AxmolActivity the name of our .so -->
         <meta-data android:name="android.app.lib_name"
                    android:value="HelloCpp" />
+
+        <!-- Required to enable Google Play Games Services on Android -->
+        <meta-data android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/app_id" />
 
         <activity
             android:name="org.axmol.cpp.AppActivity"
