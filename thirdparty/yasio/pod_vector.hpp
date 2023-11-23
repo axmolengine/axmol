@@ -25,12 +25,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-Version: 5.0.0
+Version: 4.1.1
 
 The pod_vector aka array_buffer concepts:
    a. The memory model is similar to to std::vector, but only accept trivially_copyable(no destructor & no custom copy constructor) types
    b. The resize behavior differrent stl, always allocate exactly
-   c. By default resize without fill (uninitialized and for overwrite)
+   c. By default resize without fill (uninitialized and for overwrite),
+      use insert/append insetad if you want fill memory inside container
    d. Support release internal buffer ownership with `release_pointer`
    e. Transparent iterator
    f. expand/append/insert/push_back will trigger memory allocate growth strategy MSVC

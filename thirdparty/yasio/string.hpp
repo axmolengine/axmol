@@ -27,9 +27,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 The yasio dedicated string (API not 100% compatible with stl) concepts:
-   a. no SSO, no COW, sizeof(yasio::string) = 16(x64), 12(x86)
+   a. no SSO, no COW, sizeof(yasio::string) = 24(x64), 12(x86)
    b. The resize behavior differrent stl, always allocate exactly
-   c. By default resize without fill (uninitialized and for overwrite)
+   c. By default resize without fill (uninitialized and for overwrite),
+      use insert/append insetad if you want fill memory inside container
    d. Support release internal buffer ownership with `release_pointer`
    e. Transparent iterator
    f. The operations expand/append/insert/push_back/+= will trigger memory allocate growth strategy MSVC

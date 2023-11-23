@@ -1780,12 +1780,17 @@ bool io_service::do_read(transport_handle_t transport)
       if (!options_.forward_packet_)
       {
         YASIO_KLOGV("[index: %d] do_read status ok, bytes transferred: %d, buffer used: %d", transport->cindex(), n, n + transport->offset_);
+        const int bytes_to_strip = transport->ctx_->uparams_.initial_bytes_to_strip;
         if (transport->expected_size_ == -1)
         { // decode length
           int length = transport->ctx_->decode_len_(transport->buffer_, transport->offset_ + n);
           if (length > 0)
           {
-            int bytes_to_strip        = ::yasio::clamp(transport->ctx_->uparams_.initial_bytes_to_strip, 0, length - 1);
+            if (length < bytes_to_strip)
+            {
+              transport->set_last_errno(yasio::errc::invalid_packet, yasio::io_base::error_stage::READ);
+              break;
+            }
             transport->expected_size_ = length;
             transport->expected_packet_.reserve((std::min)(length - bytes_to_strip,
                                                            YASIO_MAX_PDU_BUFFER_SIZE)); // #perfomance, avoid memory reallocte.
@@ -1800,7 +1805,7 @@ bool io_service::do_read(transport_handle_t transport)
           }
         }
         else // process incompleted pdu
-          unpack(transport, transport->expected_size_ - static_cast<int>(transport->expected_packet_.size()), n, 0);
+          unpack(transport, transport->expected_size_ - static_cast<int>(transport->expected_packet_.size() + bytes_to_strip), n, 0);
       }
       else if (n > 0)
       { // forward packet, don't perform unpack, it's useful for implement streaming based protocol, like http, websocket and ...
@@ -1816,20 +1821,21 @@ bool io_service::do_read(transport_handle_t transport)
   } while (false);
   return ret;
 }
-void io_service::unpack(transport_handle_t transport, int bytes_expected, int bytes_transferred, int bytes_to_strip)
+void io_service::unpack(transport_handle_t transport, int bytes_want /*want consume bytes from recv buffer per time*/, int bytes_transferred,
+                        int bytes_to_strip)
 {
   auto& offset         = transport->offset_;
   auto bytes_available = bytes_transferred + offset;
   auto& pkt            = transport->expected_packet_;
-  pkt.insert(pkt.end(), transport->buffer_ + bytes_to_strip, transport->buffer_ + (std::min)(bytes_expected, bytes_available));
+  pkt.insert(pkt.end(), transport->buffer_ + bytes_to_strip, transport->buffer_ + (std::min)(bytes_want, bytes_available));
 
   // set 'offset' to bytes of remain buffer
-  offset = bytes_available - bytes_expected;
+  offset = bytes_available - bytes_want;
   if (offset >= 0)
   { /* pdu received properly */
     if (offset > 0)
     { /* move remain data to head of buffer and hold 'offset'. */
-      ::memmove(transport->buffer_, transport->buffer_ + bytes_expected, offset);
+      ::memmove(transport->buffer_, transport->buffer_ + bytes_want, offset);
       this->wait_duration_ = 0;
     }
     // move properly pdu to ready queue, the other thread who care about will retrieve it.

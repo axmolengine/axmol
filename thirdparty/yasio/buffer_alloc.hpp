@@ -50,7 +50,6 @@ SOFTWARE.
 
 namespace yasio
 {
-using uint = unsigned int;
 template <typename _Alty>
 struct buffer_allocator_traits {
   using value_type = typename _Alty::value_type;

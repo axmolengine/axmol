@@ -241,11 +241,8 @@ private:
                     int x            = rem - (y * row_blocks);
 
                     unsigned int offset           = (((z * yblocks + y) * xblocks) + x) * 16;
-                    const uint8_t* bp             = data + offset;
-                    physical_compressed_block pcb = *(const physical_compressed_block*)bp;
                     symbolic_compressed_block scb;
-
-                    physical_to_symbolic(bsd, pcb, scb);
+                    physical_to_symbolic(bsd, data + offset, scb);
 
                     decompress_symbolic_block(ASTCENC_PRF_LDR, bsd, x * block_x, y * block_y, z * block_z, scb, blk);
 
@@ -332,11 +329,8 @@ int astc_decompress_image(const uint8_t* in,
         int x            = rem - (y * row_blocks);
 
         unsigned int offset           = (((z * yblocks + y) * xblocks) + x) * 16;
-        const uint8_t* bp             = in + offset;
-        physical_compressed_block pcb = *(const physical_compressed_block*) bp;
         symbolic_compressed_block scb;
-
-        physical_to_symbolic(*bsd, pcb, scb);
+        physical_to_symbolic(*bsd, in + offset, scb);
 
         decompress_symbolic_block(ASTCENC_PRF_LDR, *bsd, x * block_x, y * block_y, z * block_z, scb, blk);
 
