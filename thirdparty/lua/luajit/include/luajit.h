@@ -30,9 +30,9 @@
 
 #include "lua.h"
 
-#define LUAJIT_VERSION		"LuaJIT 2.1.1692716794"
+#define LUAJIT_VERSION		"LuaJIT 2.1.1699198486"
 #define LUAJIT_VERSION_NUM	20199  /* Deprecated. */
-#define LUAJIT_VERSION_SYM	luaJIT_version_2_1_1692716794
+#define LUAJIT_VERSION_SYM	luaJIT_version_2_1_1699198486
 #define LUAJIT_COPYRIGHT	"Copyright (C) 2005-2023 Mike Pall"
 #define LUAJIT_URL		"https://luajit.org/"
 
