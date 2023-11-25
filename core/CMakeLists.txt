@@ -306,7 +306,7 @@ target_include_directories(${_AX_CORE_LIB}
     INTERFACE ${_AX_ROOT}/extensions
     INTERFACE ${_AX_ROOT}/core/base
     INTERFACE ${_AX_ROOT}/core/audio
-    INTERFACE ${_AX_ROOT}/core/platform/${PLATFORM_FOLDER}
+    INTERFACE ${_AX_ROOT}/core/platform/${PLATFORM_NAME}
 )
 
 set_target_properties(${_AX_CORE_LIB}

@@ -100,10 +100,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
 
     SET (CONFIGURATION_SUBFOLDER "")
     target_link_directories(${APP_NAME}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/${platform_name}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/${platform_name}/${ARCH_ALIAS}
-        PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/${platform_name}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/jpeg-turbo/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}
+        PRIVATE ${AX_ROOT_DIR}/thirdparty/curl/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}
         PRIVATE ${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/lib  # cmake will auto add suffix '/$(Configuration)', refer to https://github.com/Kitware/CMake/blob/master/Source/cmVisualStudio10TargetGenerator.cxx#L4145
     )
 
@@ -184,10 +184,10 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         endif()
         add_custom_command(TARGET ${APP_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
-            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
-            "${AX_ROOT_DIR}/thirdparty/curl/prebuilt/${platform_name}/${ARCH_ALIAS}/libcurl.dll"
-            "${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/${platform_name}/${ARCH_ALIAS}/zlib1.dll"
+            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/thirdparty/openssl/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3${ssl_dll_suffix}.dll"
+            "${AX_ROOT_DIR}/thirdparty/curl/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll"
+            "${AX_ROOT_DIR}/thirdparty/zlib/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll"
             "${AX_ROOT_DIR}/${AX_PREBUILT_DIR}/bin/${BUILD_CONFIG_DIR}OpenAL32.dll"
             $<TARGET_FILE_DIR:${APP_NAME}>)
 
@@ -212,9 +212,9 @@ function(ax_link_cxx_prebuilt APP_NAME AX_ROOT_DIR AX_PREBUILT_DIR)
         if (AX_GLES_PROFILE)
             add_custom_command(TARGET ${APP_NAME} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
-                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libEGL.dll
-                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/d3dcompiler_47.dll
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+                ${AX_ROOT_DIR}/thirdparty/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
                 $<TARGET_FILE_DIR:${APP_NAME}>
             )
         endif()
