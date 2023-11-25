@@ -342,18 +342,18 @@ if(WINDOWS)
     if(WINDOWS_STORE)
         file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR} AX_TOP_SOLUTION_DIR)
         configure_file(${_AX_ROOT}/cmake/CppWinRT.props.in ${CMAKE_BINARY_DIR}/CppWinRT.props @ONLY)
-       
+
         # intsall cppwinrt package for xaml apps
-        exec_program(${NUGET_EXE}
-                ARGS install "Microsoft.Windows.CppWinRT" -Version ${AX_CPPWINRT_VERISON} -ExcludeVersion -OutputDirectory "\"${CMAKE_BINARY_DIR}/packages\"")
+        execute_process(COMMAND "${NUGET_EXE}"
+                install "Microsoft.Windows.CppWinRT" -Version ${AX_CPPWINRT_VERISON} -ExcludeVersion -OutputDirectory "${CMAKE_BINARY_DIR}/packages")
         set_target_properties(${_AX_CORE_LIB} PROPERTIES
             VS_PROJECT_IMPORT ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.props
         )
         target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT/build/native/Microsoft.Windows.CppWinRT.targets)
     endif()
     if(AX_ENABLE_MSEDGE_WEBVIEW2)
-        exec_program(${NUGET_EXE}
-            ARGS install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory "\"${CMAKE_BINARY_DIR}/packages\"")
+        execute_process(COMMAND "${NUGET_EXE}"
+            install "Microsoft.Web.WebView2" -Version 1.0.992.28 -ExcludeVersion -OutputDirectory "${CMAKE_BINARY_DIR}/packages")
 
         if(CMAKE_GENERATOR MATCHES "Ninja")
             target_link_libraries(${_AX_CORE_LIB} ${CMAKE_BINARY_DIR}/packages/Microsoft.Web.WebView2/build/native/${ARCH_ALIAS}/WebView2Loader.dll.lib)
