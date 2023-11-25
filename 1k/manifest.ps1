@@ -18,6 +18,7 @@
 # add or overwrite tool version like follow
 $manifest['nuget'] = '5.5.1' # since 5.6.0, require .net 4.0
 $manifest['glslcc'] = '1.9.3+'
+$manifest['emsdk'] = '3.1.49'
 
 if ($IsMacOS) {
     # refer to: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8632

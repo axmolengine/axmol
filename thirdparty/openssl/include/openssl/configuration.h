@@ -39,6 +39,8 @@
 
 #elif defined(__linux__)
 #  include "linux/openssl/configuration.h"
+#elif defined(__EMSCRIPTEN__)
+#  include "wasm/openssl/configuration.h"
 #else
 #  error "unsupported platform"
 #endif
