@@ -218,9 +218,9 @@ function(ax_sync_target_dlls ax_target)
     if (WIN32 AND AX_GLES_PROFILE)
         add_custom_command(TARGET ${ax_target} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libEGL.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/d3dcompiler_47.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll
             $<TARGET_FILE_DIR:${ax_target}>
         )
     endif()
@@ -527,13 +527,13 @@ macro(ax_setup_winrt_sources )
 
     if (NOT prebuilt_dlls) 
         set(prebuilt_dlls
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/prebuilt/${platform_name}/${ARCH_ALIAS}/zlib1.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}/libssl-3-x64.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/prebuilt/${platform_name}/${ARCH_ALIAS}/libcrypto-3-x64.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/prebuilt/${platform_name}/${ARCH_ALIAS}/libcurl.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libGLESv2.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/libEGL.dll
-            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${platform_name}/${ARCH_ALIAS}/d3dcompiler_47.dll)
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/zlib/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/zlib1.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libssl-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/openssl/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libcrypto-3-x64.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/curl/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libcurl.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libGLESv2.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/libEGL.dll
+            ${_AX_ROOT}/${_AX_THIRDPARTY_NAME}/angle/prebuilt/${PLATFORM_NAME}/${ARCH_ALIAS}/d3dcompiler_47.dll)
     endif()
     ax_mark_multi_resources(prebuilt_dlls RES_TO "." FILES ${prebuilt_dlls})
 
