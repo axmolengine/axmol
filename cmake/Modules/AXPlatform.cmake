@@ -72,8 +72,8 @@ endif()
 # set platform specific path
 set(_path_prefix ${CMAKE_CURRENT_SOURCE_DIR}/prebuilt/)
 set(platform_spec_path "${_path_prefix}${PLATFORM_FOLDER}")
-if(ANDROID)
-    set(platform_spec_path "${platform_spec_path}/${ANDROID_ABI}")
+if(ANDROID OR WIN32)
+    set(platform_spec_path "${platform_spec_path}/${ARCH_ALIAS}")
 endif()
 
 ### axpkg url
