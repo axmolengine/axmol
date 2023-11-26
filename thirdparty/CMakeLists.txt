@@ -195,6 +195,9 @@ endif()
 add_subdirectory(fmt EXCLUDE_FROM_ALL)
 
 ax_add_3rd(fmt-header-only)
+set_target_properties(fmt PROPERTIES
+    FOLDER "ThirdParty"
+)
 
 # bellow are non header only libs
 
