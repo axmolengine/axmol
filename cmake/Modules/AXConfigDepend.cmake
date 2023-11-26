@@ -59,7 +59,6 @@ macro(ax_depend)
             find_library(APPLICATIONSERVICES_LIBRARY ApplicationServices)
             find_library(IOKIT_LIBRARY IOKit)
             find_library(APPKIT_LIBRARY AppKit)
-            #find_library(ICONV_LIBRARY iconv)
             find_library(AUDIOUNIT_LIBRARY AudioUnit)
             find_library(COREAUDIO_LIBRARY CoreAudio)
             find_library(SYSTEMCONFIGURATION_LIBRARY SystemConfiguration)
@@ -70,7 +69,6 @@ macro(ax_depend)
                  ${IOKIT_LIBRARY}
                  ${_AX_APPLE_LIBS}
                  ${APPKIT_LIBRARY}
-                 #${ICONV_LIBRARY}
                  ${AUDIOUNIT_LIBRARY}
                  ${COREAUDIO_LIBRARY}
                  ${SYSTEMCONFIGURATION_LIBRARY}
@@ -80,13 +78,9 @@ macro(ax_depend)
             find_library(UIKIT_LIBRARY UIKit)
             find_library(OPENGLES_LIBRARY OpenGLES)            
             find_library(AVKIT_LIBRARY AVKit)
-            # find_library(CORE_MEDIA_LIBRARY CoreMedia)
             find_library(CORE_TEXT_LIBRARY CoreText)
             find_library(SECURITY_LIBRARY Security)
             find_library(CORE_GRAPHICS_LIBRARY CoreGraphics)
-            # find_library(AV_FOUNDATION_LIBRARY AVFoundation)
-            find_library(ZLIB z)
-            #find_library(ICONVLIB iconv)
 
             if(NOT TVOS)
                 find_library(CORE_MOTION_LIBRARY CoreMotion)
@@ -97,14 +91,11 @@ macro(ax_depend)
                  ${UIKIT_LIBRARY}
                  ${OPENGLES_LIBRARY}
                  ${AVKIT_LIBRARY}
-                 ${CORE_MEDIA_LIBRARY}
                  ${CORE_TEXT_LIBRARY}
                  ${SECURITY_LIBRARY}
                  ${CORE_GRAPHICS_LIBRARY}
                  ${AV_FOUNDATION_LIBRARY}
                  ${_AX_APPLE_LIBS}
-                 ${ZLIB}
-                 #${ICONVLIB}
                  )
 
             if(NOT TVOS)
