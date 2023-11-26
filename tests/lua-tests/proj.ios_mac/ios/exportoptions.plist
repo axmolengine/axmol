@@ -9,7 +9,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>Bundle Identifier</key>
-		<string>Provision Prifile Name</string>
+		<string>Provision Profile Name</string>
 	</dict>
 </dict>
 </plist>
