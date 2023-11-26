@@ -274,57 +274,6 @@ void Controller::registerListeners()
           }
         };
     }
-    else if (_impl->_gcController.gamepad != nil)
-    {
-        _impl->_gcController.gamepad.dpad.up.valueChangedHandler =
-            ^(GCControllerButtonInput* button, float value, BOOL pressed) {
-              onButtonEvent(Key::BUTTON_DPAD_UP, pressed, value, button.isAnalog);
-            };
-
-        _impl->_gcController.gamepad.dpad.down.valueChangedHandler =
-            ^(GCControllerButtonInput* button, float value, BOOL pressed) {
-              onButtonEvent(Key::BUTTON_DPAD_DOWN, pressed, value, button.isAnalog);
-            };
-
-        _impl->_gcController.gamepad.dpad.left.valueChangedHandler =
-            ^(GCControllerButtonInput* button, float value, BOOL pressed) {
-              onButtonEvent(Key::BUTTON_DPAD_LEFT, pressed, value, button.isAnalog);
-            };
-
-        _impl->_gcController.gamepad.dpad.right.valueChangedHandler =
-            ^(GCControllerButtonInput* button, float value, BOOL pressed) {
-              onButtonEvent(Key::BUTTON_DPAD_RIGHT, pressed, value, button.isAnalog);
-            };
-
-        _impl->_gcController.gamepad.valueChangedHandler = ^(GCGamepad* gamepad, GCControllerElement* element) {
-          if (element == gamepad.buttonA)
-          {
-              onButtonEvent(Key::BUTTON_A, gamepad.buttonA.isPressed, gamepad.buttonA.value, gamepad.buttonA.isAnalog);
-          }
-          else if (element == gamepad.buttonB)
-          {
-              onButtonEvent(Key::BUTTON_B, gamepad.buttonB.isPressed, gamepad.buttonB.value, gamepad.buttonB.isAnalog);
-          }
-          else if (element == gamepad.buttonX)
-          {
-              onButtonEvent(Key::BUTTON_X, gamepad.buttonX.isPressed, gamepad.buttonX.value, gamepad.buttonX.isAnalog);
-          }
-          else if (element == gamepad.buttonY)
-          {
-              onButtonEvent(Key::BUTTON_Y, gamepad.buttonY.isPressed, gamepad.buttonY.value, gamepad.buttonY.isAnalog);
-          }
-          else if (element == gamepad.leftShoulder)
-          {
-              onButtonEvent(Key::BUTTON_LEFT_SHOULDER, gamepad.leftShoulder.isPressed, gamepad.leftShoulder.value,
-                            gamepad.leftShoulder.isAnalog);
-          }
-          else if (element == gamepad.rightShoulder)
-          {
-              onButtonEvent(Key::BUTTON_RIGHT_SHOULDER, gamepad.rightShoulder.isPressed, gamepad.rightShoulder.value,
-                            gamepad.rightShoulder.isAnalog);
-          }
-        };
-    }
 #    if defined(AX_TARGET_OS_TVOS)
     else if (_impl->_gcController.microGamepad != nil)
     {
