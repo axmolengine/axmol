@@ -40,7 +40,7 @@ if (_PNG_ISA_SIMD STREQUAL "neon")
   #    1: use instrinsics
   #    2: use handcode
   set(libpng_optimize_flag "PNG_ARM_NEON_OPT=2")
-elseif(_PNG_ISA_SIMD)
+elseif(_PNG_ISA_SIMD MATCHES "sse")
   set(libpng_intel_sources
     intel/intel_init.c
     intel/filter_sse2_intrinsics.c)

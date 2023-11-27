@@ -61,64 +61,60 @@ if(AX_ISA_LEVEL)
     endif()
     ### end check -msse2 flag
 
-    if (NOT TVOS)
-        macro(ax_check_c_source source outputVar)
-            if (NOT CMAKE_CROSSCOMPILING)
-                check_c_source_runs("${source}" ${outputVar})
-            else() 
-                check_c_source_compiles("${source}" ${outputVar})
-            endif()
-        endmacro(ax_check_c_source source var)
-        
-        # Checking intel SIMD Intrinsics
-        include(CheckCSourceRuns)
-        if(APPLE)
-            set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
+    macro(ax_check_c_source source outputVar)
+        if (NOT CMAKE_CROSSCOMPILING)
+            check_c_source_runs("${source}" ${outputVar})
+        else() 
+            check_c_source_compiles("${source}" ${outputVar})
         endif()
-        ax_check_c_source("#include <immintrin.h>
+    endmacro(ax_check_c_source source var)
+    
+    # Checking intel SIMD Intrinsics
+    include(CheckCSourceRuns)
+    if(APPLE)
+        set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -mpopcnt")
+    endif()
+    ax_check_c_source("#include <immintrin.h>
+        int main()
+        {
+            __m256 m = _mm256_set_ps(0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f);
+            return (int)*(float*)&m;
+        }" AX_HAVE_AVX2_INTRINSICS)
+    ax_check_c_source("#include <nmmintrin.h>
+        int main()
+        {
+            unsigned int v = 0;
+            return (int)_mm_popcnt_u32(v);
+        }" AX_HAVE_SSE42_INTRINSICS)
+    ax_check_c_source("#include <smmintrin.h>
+        int main()
+        {
+            __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0);
+            return *(int*)&shuf;
+        }" AX_HAVE_SSE41_INTRINSICS)
+
+    if (NOT AX_HAVE_SSE2_INTRINSICS)
+        ax_check_c_source("#include <emmintrin.h>
             int main()
             {
-                __m256 m = _mm256_set_ps(0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f);
-                return (int)*(float*)&m;
-            }" AX_HAVE_AVX2_INTRINSICS)
-        ax_check_c_source("#include <nmmintrin.h>
+                __m128d m = _mm_set_sd(0.0);
+                return (int)*(double*)&m;
+            }" AX_HAVE_SSE2_INTRINSICS)
+    endif()
+
+    set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
+
+    ### Checking ARM SIMD neon
+    if (NOT WASM) # wasm neon stupid not work, so skipped
+        check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
+        if(AX_HAVE_ARM_NEON_H)
+            check_c_source_compiles("#include <arm_neon.h>
             int main()
             {
-                unsigned int v = 0;
-                return (int)_mm_popcnt_u32(v);
-            }" AX_HAVE_SSE42_INTRINSICS)
-        ax_check_c_source("#include <smmintrin.h>
-            int main()
-            {
-                __m128i shuf = _mm_set_epi8(0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0);
-                return *(int*)&shuf;
-            }" AX_HAVE_SSE41_INTRINSICS)
-
-        if (NOT AX_HAVE_SSE2_INTRINSICS)
-            ax_check_c_source("#include <emmintrin.h>
-                int main()
-                {
-                    __m128d m = _mm_set_sd(0.0);
-                    return (int)*(double*)&m;
-                }" AX_HAVE_SSE2_INTRINSICS)
+                int32x4_t ret4 = vdupq_n_s32(0);
+                return vgetq_lane_s32(ret4, 0);
+            }" AX_HAVE_NEON_INTRINSICS)
         endif()
-
-        set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
-
-        ### Checking ARM SIMD neon
-        if (NOT WASM) # wasm neon stupid not work, so skipped
-            check_include_file(arm_neon.h AX_HAVE_ARM_NEON_H)
-            if(AX_HAVE_ARM_NEON_H)
-                check_c_source_compiles("#include <arm_neon.h>
-                int main()
-                {
-                    int32x4_t ret4 = vdupq_n_s32(0);
-                    return vgetq_lane_s32(ret4, 0);
-                }" AX_HAVE_NEON_INTRINSICS)
-            endif()
-        endif()
-    else()
-        message(AUTHOR_WARNING "Skipping AVX2/SSE4/NEON detection for astc-encoder when build target 'tvos'")
     endif()
 
     set(CMAKE_REQUIRED_FLAGS ${OLD_REQUIRED_FLAGS})
