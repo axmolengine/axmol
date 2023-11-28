@@ -87,14 +87,22 @@
             ]
         },
         {
+            "action": "rep",
+            "pattern": "image name=\\\".*\\\" width=\\\".*\\\" height=\\\".*\\\"",
+            "to": "image name=`\"LaunchScreenBackground.png`\" width=`\"1242`\" height=`\"2208`\"",
+            "files": [
+                "proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard"
+            ]
+        },
+        {
             "action": "cp",
-            "from": "${projectDir}/proj.ios_mac/ios/LaunchScreenBackgroundPortrait.png",
-            "to": "${projectDir}/proj.ios_mac/ios/LaunchScreenBackground.png"
+            "from": "${projectDir}/proj.ios_mac/ios/targets/ios/LaunchScreenBackgroundPortrait.png",
+            "to": "${projectDir}/proj.ios_mac/ios/targets/ios/LaunchScreenBackground.png"
         },
         {
             "action": "del",
             "files": [
-                "proj.ios_mac/ios/LaunchScreenBackgroundPortrait.png"
+                "proj.ios_mac/ios/targets/ios/LaunchScreenBackgroundPortrait.png"
             ]
         }
     ]
