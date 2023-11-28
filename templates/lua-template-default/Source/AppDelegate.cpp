@@ -51,13 +51,6 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-// if you want to use the package manager to install more packages,
-// don't modify or remove this function
-static int register_all_packages()
-{
-    return 0;  // flag for packages manager
-}
-
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // set default FPS
@@ -68,8 +61,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     ScriptEngineManager::getInstance()->setScriptEngine(engine);
     lua_State* L = engine->getLuaStack()->getLuaState();
     lua_module_register(L);
-
-    register_all_packages();
 
     LuaStack* stack = engine->getLuaStack();
 
