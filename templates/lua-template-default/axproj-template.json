@@ -36,7 +36,8 @@
                 "proj.android/app/AndroidManifest.xml",
                 "proj.ios_mac/mac/Info.plist",
                 "proj.ios_mac/ios/targets/ios/Info.plist",
-                "proj.ios_mac/ios/targets/tvos/Info.plist"
+                "proj.ios_mac/ios/targets/tvos/Info.plist",
+                "CMakeLists.txt"
             ]
         },
         {
@@ -45,21 +46,20 @@
             "to": "${projectDir}/${projectName}.xsxproj"
         },
         {
-           "action": "cp",
-           "from": "$env:AX_ROOT/templates/build.bat",
-           "to": "${projectDir}/"
+            "action": "cp",
+            "from": "$env:AX_ROOT/templates/build.bat",
+            "to": "${projectDir}/"
         },
         {
-           "action": "cp",
-           "from": "$env:AX_ROOT/templates/run.bat.in",
-           "to": "${projectDir}/"
+            "action": "cp",
+            "from": "$env:AX_ROOT/templates/run.bat.in",
+            "to": "${projectDir}/"
         },
         {
-           "action": "del",
-           "files": [
-              "axproj-template.json",
-              "axproj2-template.json"
-           ]
+            "action": "del",
+            "files": [
+                "axproj-template.json"
+            ]
         }
     ],
     "do_portrait": [
@@ -67,37 +67,68 @@
             "action": "rep",
             "pattern": "\\\"isLandscape\\\"\\s*:.*,",
             "to": "`\"isLandscape`\": false,",
-            "files": ["config.json"]
+            "files": [
+                "config.json"
+            ]
         },
         {
             "action": "rep",
             "pattern": "width\\s*=.*,",
             "to": "width = 640,",
-            "files": ["Content/src/config.lua"]
+            "files": [
+                "Content/src/config.lua"
+            ]
         },
         {
             "action": "rep",
             "pattern": "height\\s*=.*,",
             "to": "height = 960,",
-            "files": ["Content/src/config.lua"]
+            "files": [
+                "Content/src/config.lua"
+            ]
         },
         {
             "action": "rep",
             "from": "UIInterfaceOrientationLandscapeRight",
             "to": "UIInterfaceOrientationPortrait",
-            "files": ["proj.ios_mac/ios/targets/ios/Info.plist"]
+            "files": [
+                "proj.ios_mac/ios/targets/ios/Info.plist"
+            ]
         },
         {
             "action": "rep",
             "from": "UIInterfaceOrientationLandscapeLeft",
             "to": "UIInterfaceOrientationPortraitUpsideDown",
-            "files": ["proj.ios_mac/ios/targets/ios/Info.plist"]
+            "files": [
+                "proj.ios_mac/ios/targets/ios/Info.plist"
+            ]
         },
         {
             "action": "rep",
             "pattern": "android:screenOrientation=\\\".*\\\"",
             "to": "android:screenOrientation=`\"portrait`\"",
-            "files": ["proj.android/app/AndroidManifest.xml"]
+            "files": [
+                "proj.android/app/AndroidManifest.xml"
+            ]
+        },
+        {
+            "action": "rep",
+            "pattern": "orientation=\\\".*\\\"",
+            "to": "orientation=`\"portrait`\"",
+            "files": [
+                "proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard"
+            ]
+        },
+        {
+            "action": "cp",
+            "from": "${projectDir}/proj.ios_mac/ios/LaunchScreenBackgroundPortrait.png",
+            "to": "${projectDir}/proj.ios_mac/ios/LaunchScreenBackground.png"
+        },
+        {
+            "action": "del",
+            "files": [
+                "proj.ios_mac/ios/LaunchScreenBackgroundPortrait.png"
+            ]
         }
     ]
 }

@@ -73,7 +73,7 @@ file(GLOB_RECURSE GAME_HEADER
 file(GLOB_RECURSE GAME_SOURCE
     Source/*.cpp
     )
-    
+
 set(GAME_INC_DIRS
   "${CMAKE_CURRENT_SOURCE_DIR}/Source"
 )
@@ -176,7 +176,7 @@ if(NOT ANDROID)
     add_executable(${APP_NAME} ${APP_SOURCES})
 else()
     add_library(${APP_NAME} SHARED ${APP_SOURCES})
-    
+
     # whole archive for jni
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
     add_subdirectory(${_AX_ROOT}/extensions/scripting/lua-bindings/proj.android ${ENGINE_BINARY_PATH}/extensions/lua-android)
@@ -210,14 +210,14 @@ if(APPLE)
     elseif(TVOS)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/targets/tvos/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "Brand Assets")
-        set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
-        set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
     elseif(IOS)
         set_target_properties(${APP_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/proj.ios_mac/ios/targets/ios/Info.plist")
         set_xcode_property(${APP_NAME} ASSETCATALOG_COMPILER_APPICON_NAME "AppIcon")
-        set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "")
-        set_xcode_property(${APP_NAME} CODE_SIGN_IDENTITY "iPhone Developer")
+        set_xcode_property(${APP_NAME} TARGETED_DEVICE_FAMILY "1,2")
     endif()
+
+    # For code-signing, set the DEVELOPMENT_TEAM:
+    #set_xcode_property(${APP_NAME} DEVELOPMENT_TEAM "GRLXXXX2K9")
 elseif(WINDOWS)
     if((NOT _AX_USE_PREBUILT))
         ax_sync_target_dlls(${APP_NAME} LUA)
@@ -230,7 +230,7 @@ if ((NOT APPLE) AND (NOT WINRT))
         ax_sync_lua_scripts(${APP_NAME} ${engine_script_folder} "${content_folder}/src/axmol")
     endif()
     ax_sync_target_res(${APP_NAME} LINK_TO ${APP_RES_DIR} FOLDERS ${content_folder} SYM_LINK 1)
-    
+
     if((WINDOWS AND (NOT (CMAKE_GENERATOR MATCHES "Ninja"))))
         set_property(TARGET ${APP_NAME} PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${content_folder}")
         if(NOT DEFINED BUILD_ENGINE_DONE)
