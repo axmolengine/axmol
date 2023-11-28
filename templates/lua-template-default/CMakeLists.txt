@@ -133,13 +133,13 @@ elseif(APPLE)
 
         if (TVOS)
             set(APP_UI_RES
-                proj.ios_mac/ios/LaunchScreenBackground.png
+                proj.ios_mac/ios/targets/tvos/LaunchScreenBackground.png
                 proj.ios_mac/ios/targets/tvos/LaunchScreen.storyboard
                 proj.ios_mac/ios/targets/tvos/Images.xcassets
                 )
         else()
             set(APP_UI_RES
-                proj.ios_mac/ios/LaunchScreenBackground.png
+                proj.ios_mac/ios/targets/ios/LaunchScreenBackground.png
                 proj.ios_mac/ios/targets/ios/LaunchScreen.storyboard
                 proj.ios_mac/ios/targets/ios/Images.xcassets
                 )

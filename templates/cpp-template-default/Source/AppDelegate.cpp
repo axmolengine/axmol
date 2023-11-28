@@ -53,13 +53,6 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-// if you want to use the package manager to install more packages,
-// don't modify or remove this function
-static int register_all_packages()
-{
-    return 0;  // flag for packages manager
-}
-
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
@@ -105,8 +98,6 @@ bool AppDelegate::applicationDidFinishLaunching()
         director->setContentScaleFactor(MIN(smallResolutionSize.height / designResolutionSize.height,
                                             smallResolutionSize.width / designResolutionSize.width));
     }
-
-    register_all_packages();
 
     // create a scene. it's an autorelease object
     auto scene = utils::createInstance<HelloWorld>();
