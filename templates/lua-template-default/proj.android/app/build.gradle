@@ -50,7 +50,6 @@ android {
     }
 
     signingConfigs {
-
        release {
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 storeFile file(RELEASE_STORE_FILE)
