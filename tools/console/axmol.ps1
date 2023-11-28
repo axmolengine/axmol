@@ -172,7 +172,7 @@ function axmol_run() {
     elseif($TARGET_OS -eq 'ios') {
         if ($ios_bundle_id) {
             println "Launching $cmake_target ..."
-            xcrun simctl launch $ios_simulator_id $ios_bundle_id 
+            xcrun simctl launch $ios_simulator_id $ios_bundle_id
         }
     }
     elseif($TARGET_OS -eq 'osx') {
@@ -208,7 +208,7 @@ options:
                         Set a package name for project.
     -d DIRECTORY
                         Set the path where to place the new project.
-    -l {cpp,lua}, {cpp,lua}
+    -l {cpp,lua}
                         Major programming language you want to use, should be [cpp | lua]
     --portrait
                         Set the project be portrait.
@@ -224,7 +224,7 @@ Build projects to binary.
 options:
   -h: show this help message and exit
   -p: build target platform, valid value are: win32,winuwp,linux,android,osx,ios,tvos,wasm
-      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
+      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
@@ -233,15 +233,15 @@ options:
   -c: no build, only generate natvie project file (vs .sln, xcodeproj)
   -d: specify project dir to compile, i.e. -d /path/your/project/
  examples:
-   - win32: 
+   - win32:
      - axmol build -p win32
      - axmol build -p win32 -cc clang
    - winuwp: axmol build -p winuwp
    - linux: axmol build -p linux
-   - android: 
+   - android:
      - axmol build -p android -a arm64
      - axmol build -p android -a 'arm64;x64'
-   - osx: 
+   - osx:
      - axmol build -p osx -a x64
      - axmol build -p osx -a arm64
    - ios: axmol build -p ios -a x64
@@ -258,7 +258,7 @@ Build and install a project to a device/simulator.
 
 options:
   -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,wasm
-      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
+      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
@@ -276,7 +276,7 @@ Build, deploy and run project on the target.
 
 options:
   -p: build target platform: win32,winuwp,linux,android,osx,ios,tvos,wasm
-      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first, 
+      for android: will search ndk in sdk_root which is specified by env:ANDROID_HOME first,
       if not found, by default will install ndk-r16b or can be specified by option: -cc 'ndk-r23c'
   -a: build arch: x86,x64,armv7,arm64; for android can be list by ';', i.e: 'arm64;x64'
   -cc: toolchain: for win32 you can specific -cc clang to use llvm-clang, please install llvm-clang from https://github.com/llvm/llvm-project/releases
