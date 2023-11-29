@@ -10,9 +10,11 @@
 #     jdk          = '11.0.19+';
 #     cmdlinetools = '7.0+'; # android cmdlinetools
 # }
-# For maintaining axmol, halx99 contributed 2 PR to cmake
+# For maintaining axmol, halx99 contributed some PRs to https://gitlab.kitware.com/cmake
 # 3.27.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8319
 # 3.28.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/8632
+#         https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9008
+# 3.28.0: https://gitlab.kitware.com/cmake/cmake/-/merge_requests/9014
 #
 
 # add or overwrite tool version like follow

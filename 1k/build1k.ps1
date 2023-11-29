@@ -85,7 +85,7 @@ else {
 
 $exeSuffix = if ($HOST_OS -eq 0) { '.exe' } else { '' }
 
-$cmake_generator = $null
+$Script:cmake_generator = $null
 
 class build1k {
     [void] println($msg) {
@@ -131,19 +131,24 @@ class build1k {
     }
 
     [void] pause($msg) {
-        if ($Global:IsWin) {
+        $executed_from_explorer = $false
+        do {
+            if (!$Global:IsWin) { break }
             $myProcess = [System.Diagnostics.Process]::GetCurrentProcess()
+            if ($myProcess.ProcessName.EndsWith('_ise')) { break }
             $parentProcess = $myProcess.Parent
             if (!$parentProcess) {
                 $myPID = $myProcess.Id
                 $instance = Get-WmiObject Win32_Process -Filter "ProcessId = $myPID"
-                $parentProcess = Get-Process -Id $instance.ParentProcessID
+                $parentProcess = Get-Process -Id $instance.ParentProcessID -ErrorAction SilentlyContinue
+                if (!$parentProcess) { break }
             }
-            $parentProcessName = $parentProcess.ProcessName
-            if ($parentProcessName -like "explorer") {
-                $this.print("$msg, press any key to continue . . .")
-                cmd /c pause 1>$null
-            }
+            
+            $executed_from_explorer = ($parentProcess.ProcessName -like "explorer")
+        } while ($false)
+        if ($executed_from_explorer) {
+            $this.print("$msg, press any key to continue . . .")
+            cmd /c pause 1>$null
         }
         else {
             $this.println($msg)
@@ -221,11 +226,6 @@ foreach ($arg in $args) {
         }
         $optName = $null
     }
-}
-
-$manifest_file = Join-Path $myRoot 'manifest.ps1'
-if ($b1k.isfile($manifest_file)) {
-    . $manifest_file
 }
 
 # translate xtool args
@@ -309,6 +309,12 @@ if (!$b1k.isdir($external_prefix)) {
 }
 
 $b1k.println("proj_dir=$((Get-Location).Path), external_prefix=$external_prefix")
+
+# load toolset manifest
+$manifest_file = Join-Path $myRoot 'manifest.ps1'
+if ($b1k.isfile($manifest_file)) {
+    . $manifest_file
+}
 
 # accept x.y.z-rc1
 function version_eq($ver1, $ver2) {
@@ -998,12 +1004,12 @@ function preprocess_win([string[]]$inputOptions) {
                 '140' = 'Visual Studio 14 2015'
                 "150" = 'Visual Studio 15 2017';
             }
-            $cmake_generator = $gens[$TOOLCHAIN_VER]
-            if (!$cmake_generator) {
+            $Script:cmake_generator = $gens[$TOOLCHAIN_VER]
+            if (!$Script:cmake_generator) {
                 throw "Unsupported toolchain: $TOOLCHAIN"
             }
             if ($options.a -eq "x64") {
-                $cmake_generator += ' Win64'
+                $Script:cmake_generator += ' Win64'
             }
         }
         
@@ -1018,11 +1024,11 @@ function preprocess_win([string[]]$inputOptions) {
     }
     elseif ($TOOLCHAIN_NAME -eq 'clang') {
         $outputOptions += '-DCMAKE_C_COMPILER=clang', '-DCMAKE_CXX_COMPILER=clang++'
-        $cmake_generator = 'Ninja Multi-Config'
+        $Script:cmake_generator = 'Ninja Multi-Config'
     }
     else {
         # Generate mingw
-        $cmake_generator = 'Ninja Multi-Config'
+        $Script:cmake_generator = 'Ninja Multi-Config'
     }
     return $outputOptions
 }
@@ -1417,6 +1423,8 @@ if (!$setupOnly) {
     $env:buildResult = ConvertTo-Json @{
         buildDir     = $BUILD_DIR
         targetOS     = $TARGET_OS
+        hostArch     = $hostArch
+        isHostArch   = $TARGET_ARCH -eq $hostArch
         isHostTarget = $is_host_target
         compilerID   = $TOOLCHAIN_NAME
     }
