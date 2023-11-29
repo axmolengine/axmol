@@ -37,7 +37,7 @@
 
 ## Clipper2
 - [![Upstream](https://img.shields.io/github/v/tag/AngusJohnson/Clipper2?label=Upstream)](https://github.com/AngusJohnson/Clipper2)
-- Version: 1.2.3
+- Version: 1.3.0
 - License: BSL-1.0
 
 ## ConcurrentQueue
