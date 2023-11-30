@@ -24,7 +24,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "UIRichText.h"
 #include "ui/UIRichText.h"
 
 #include <sstream>
