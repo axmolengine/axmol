@@ -28753,6 +28753,103 @@ int lua_ax_ui_RichText_getHorizontalAlignment(lua_State* tolua_S)
 
     return 0;
 }
+int lua_ax_ui_RichText_setVerticalAlignment(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichText* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_setVerticalAlignment'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        ax::ui::RichText::VerticalAlignment arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "axui.RichText:setVerticalAlignment");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_setVerticalAlignment'", nullptr);
+            return 0;
+        }
+        cobj->setVerticalAlignment(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:setVerticalAlignment",argc, 1);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_setVerticalAlignment'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_ax_ui_RichText_getVerticalAlignment(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ui::RichText* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if _AX_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"axui.RichText",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (ax::ui::RichText*)tolua_tousertype(tolua_S,1,0);
+
+#if _AX_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_ax_ui_RichText_getVerticalAlignment'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_ui_RichText_getVerticalAlignment'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getVerticalAlignment();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "axui.RichText:getVerticalAlignment",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_ui_RichText_getVerticalAlignment'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_ax_ui_RichText_setFontColor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -30886,6 +30983,8 @@ int lua_register_ax_ui_RichText(lua_State* tolua_S)
         tolua_function(tolua_S,"getWrapMode",lua_ax_ui_RichText_getWrapMode);
         tolua_function(tolua_S,"setHorizontalAlignment",lua_ax_ui_RichText_setHorizontalAlignment);
         tolua_function(tolua_S,"getHorizontalAlignment",lua_ax_ui_RichText_getHorizontalAlignment);
+        tolua_function(tolua_S,"setVerticalAlignment",lua_ax_ui_RichText_setVerticalAlignment);
+        tolua_function(tolua_S,"getVerticalAlignment",lua_ax_ui_RichText_getVerticalAlignment);
         tolua_function(tolua_S,"setFontColor",lua_ax_ui_RichText_setFontColor);
         tolua_function(tolua_S,"getFontColor",lua_ax_ui_RichText_getFontColor);
         tolua_function(tolua_S,"getFontColor3B",lua_ax_ui_RichText_getFontColor3B);
