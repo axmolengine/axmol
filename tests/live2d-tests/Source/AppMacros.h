@@ -51,6 +51,6 @@ static ax::CCSize designResolutionSize = ax::CCSizeMake(2048, 1536);
 #endif
 
 // The font size 24 is designed for small resolution, so we should change it to fit for current design resolution
-#define TITLE_FONT_SIZE  (ax::CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width / smallResource.size.width * 24)
+#define TITLE_FONT_SIZE  (ax::CCEGLView::sharedGLView()->getDesignResolutionSize().width / smallResource.size.width * 24)
 
 #endif /* __APPMACROS_H__ */

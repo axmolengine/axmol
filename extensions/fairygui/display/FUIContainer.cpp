@@ -310,7 +310,7 @@ void FUIContainer::restoreAllProgramStates()
 
 void FUIContainer::onBeforeVisitScissor()
 {
-    auto glView = Director::getInstance()->getOpenGLView();
+    auto glView = Director::getInstance()->getGLView();
     _rectClippingSupport->_scissorOldState = glView->isScissorEnabled();
     Rect clippingRect = getClippingRect();
     if (false == _rectClippingSupport->_scissorOldState)
@@ -337,7 +337,7 @@ void FUIContainer::onAfterVisitScissor()
 {
     if (_rectClippingSupport->_scissorOldState)
     {
-        auto glView = Director::getInstance()->getOpenGLView();
+        auto glView = Director::getInstance()->getGLView();
         glView->setScissorInPoints(_rectClippingSupport->_clippingOldRect.origin.x,
             _rectClippingSupport->_clippingOldRect.origin.y,
             _rectClippingSupport->_clippingOldRect.size.width,

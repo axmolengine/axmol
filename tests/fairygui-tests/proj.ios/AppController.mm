@@ -79,7 +79,7 @@ static AppDelegate s_sharedApplication;
 #if !TARGET_OS_TV
     [[UIApplication sharedApplication] setStatusBarHidden: YES];
 #endif
-    
+
     //Launching the app with the arguments -NSAllowsDefaultLineBreakStrategy NO to force back to the old behavior.
     if ( [[UIDevice currentDevice].systemVersion floatValue] >= 13.0f)
     {
@@ -88,7 +88,7 @@ static AppDelegate s_sharedApplication;
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
     ax::GLViewImpl *glView = ax::GLViewImpl::createWithEAGLView(eaglView);
-    ax::Director::getInstance()->setOpenGLView(glView);
+    ax::Director::getInstance()->setGLView(glView);
 
     app->run();
     return YES;

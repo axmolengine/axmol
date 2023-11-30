@@ -25,7 +25,7 @@ THE SOFTWARE.
 local display = {}
 
 local director = cc.Director:getInstance()
-local view = director:getOpenGLView()
+local view = director:getGLView()
 
 if not view then
     local width = 960
@@ -39,7 +39,7 @@ if not view then
         end
     end
     view = cc.GLViewImpl:createWithRect("Axmol-Lua", cc.rect(0, 0, width, height))
-    director:setOpenGLView(view)
+    director:setGLView(view)
 end
 
 local framesize = view:getFrameSize()

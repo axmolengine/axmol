@@ -758,11 +758,11 @@ void LAppModel::MakeRenderingTarget()
     if (!_renderSprite && !_renderBuffer->IsValid())
     {
         float aspectFactor = 1.0f;
-        int frameW = Director::getInstance()->getOpenGLView()->getFrameSize().width, frameH = Director::getInstance()->getOpenGLView()->getFrameSize().height;
+        int frameW = Director::getInstance()->getGLView()->getFrameSize().width, frameH = Director::getInstance()->getGLView()->getFrameSize().height;
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // Retina対策でこっちからとる
-        GLViewImpl *glimpl = (GLViewImpl *)Director::getInstance()->getOpenGLView();
+        GLViewImpl *glimpl = (GLViewImpl *)Director::getInstance()->getGLView();
         int renderW = frameW;
         int renderH = frameH;
         glfwGetFramebufferSize(glimpl->getWindow(), &frameW, &frameH);
@@ -793,7 +793,7 @@ void LAppModel::MakeRenderingTarget()
 
         // レンダリングバッファの描画先をそのテクスチャにする
         _renderBuffer->CreateOffscreenFrame(frameW, frameH, _renderSprite);
-        
+
         _renderSprite->setScale(aspectFactor);
     }
 }

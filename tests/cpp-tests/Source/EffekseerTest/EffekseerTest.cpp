@@ -75,13 +75,13 @@ bool EffekseerTest::init()
     if (!TestCase::init())
         return false;
 
-    
-    auto rsize = _director->getOpenGLView()->getDesignResolutionSize();
+
+    auto rsize = _director->getGLView()->getDesignResolutionSize();
 
 	//auto sprite = Sprite::create("HelloWorld.png");
 	//sprite->setPosition(Vec2(320, 200));
 	//this->addChild(sprite, 0);
-	
+
 	// for update
 	this->scheduleUpdate();
 
@@ -129,10 +129,10 @@ void EffekseerTest::update(float delta)
 			auto emitter = efk::EffectEmitter::create(manager);
 			emitter->setEffect(effect);
 			emitter->setPlayOnEnter(true);
-			
+
 			emitter->setRotation3D(cocos2d::Vec3(0, 90, 0));
 			emitter->setPosition(Vec2(320, 150));
-			
+
 			// emitter->setScale(13);
 			this->addChild(emitter, 0);
 

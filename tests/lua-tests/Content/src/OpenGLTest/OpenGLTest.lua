@@ -2,7 +2,7 @@ local vertDefaultSource = "\n".."\n" ..
                   "attribute vec4 a_position;\n" ..
                   "attribute vec2 a_texCoord;\n" ..
                   "attribute vec4 a_color;\n\n" ..
-                  "\n#ifdef GL_ES\n" .. 
+                  "\n#ifdef GL_ES\n" ..
                   "varying lowp vec4 v_fragmentColor;\n" ..
                   "varying mediump vec2 v_texCoord;\n" ..
                   "\n#else\n" ..
@@ -10,7 +10,7 @@ local vertDefaultSource = "\n".."\n" ..
                   "varying vec2 v_texCoord;" ..
                   "\n#endif\n" ..
                   "void main()\n" ..
-                  "{\n" .. 
+                  "{\n" ..
                   "   gl_Position = AX_MVPMatrix * a_position;\n"..
                   "   v_fragmentColor = a_color;\n"..
                   "   v_texCoord = a_texCoord;\n" ..
@@ -36,11 +36,11 @@ local function OpenGLTestMainLayer()
             end
             ShowCurrentTest()
         end
-    
+
         local function restartCallback()
             ShowCurrentTest()
         end
-    
+
         local function nextCallback()
             curCase = curCase + 1
             curCase = curCase % maxCases
@@ -56,13 +56,13 @@ local function OpenGLTestMainLayer()
         item2:registerScriptTapHandler(restartCallback)
         ordercallbackmenu:addChild(item2,kItemTagBasic)
         local item3 = cc.MenuItemImage:create(s_pPathF1, s_pPathF2)
-        ordercallbackmenu:addChild(item3,kItemTagBasic) 
+        ordercallbackmenu:addChild(item3,kItemTagBasic)
         item3:registerScriptTapHandler(nextCallback)
-                
+
         item1:setPosition(cc.p(size.width / 2 - item2:getContentSize().width * 2, item2:getContentSize().height / 2))
         item2:setPosition(cc.p(size.width / 2, item2:getContentSize().height / 2))
         item3:setPosition(cc.p(size.width / 2 + item2:getContentSize().width * 2, item2:getContentSize().height / 2))
-        
+
         ordercallbackmenu:setPosition(cc.p(0, 0))
 
         return ordercallbackmenu
@@ -103,7 +103,7 @@ local function OpenGLTestMainLayer()
             return "GLGetUniformTest"
         end
     end
-    
+
     local function GetSubTitle()
         if 0 == curCase then
             return "Should see moving colors, and a sin effect on the letters"
@@ -151,7 +151,7 @@ local function OpenGLTestMainLayer()
         local subLabelTitle = cc.Label:createWithTTF(GetSubTitle(), s_thonburiPath, 16)
         layer:addChild(subLabelTitle, 15)
         subLabelTitle:setAnchorPoint(cc.p(0.5, 0.5))
-        subLabelTitle:setPosition(cc.p(size.width/2, size.height-80)) 
+        subLabelTitle:setPosition(cc.p(size.width/2, size.height-80))
     end
 
     local function updateRetroEffect(fTime)
@@ -174,7 +174,7 @@ local function OpenGLTestMainLayer()
         local RetroEffectlayer = cc.Layer:create()
         InitTitle(RetroEffectlayer)
         local program = cc.GLProgram:create("Shaders/example_ColorBars.vsh", "Shaders/example_ColorBars.fsh")
-        program:bindAttribLocation(cc.ATTRIBUTE_NAME_POSITION, cc.VERTEX_ATTRIB_POSITION) 
+        program:bindAttribLocation(cc.ATTRIBUTE_NAME_POSITION, cc.VERTEX_ATTRIB_POSITION)
         program:bindAttribLocation(cc.ATTRIBUTE_NAME_TEX_COORD, cc.VERTEX_ATTRIB_TEX_COORD)
         program:link()
         program:updateUniforms()
@@ -204,9 +204,9 @@ local function OpenGLTestMainLayer()
 
         local resolution = cc.p(256, 256)
         local director = cc.Director:getInstance()
-        local frameSize = director:getOpenGLView():getFrameSize()
+        local frameSize = director:getGLView():getFrameSize()
         local visibleSize = director:getVisibleSize()
-        local retinaFactor = director:getOpenGLView():getRetinaFactor()
+        local retinaFactor = director:getGLView():getRetinaFactor()
         local center = cc.p( size.width / 2 * frameSize.width / visibleSize.width * retinaFactor, size.height / 2 * frameSize.height / visibleSize.height * retinaFactor)
 
         local function initBuffers()
@@ -243,7 +243,7 @@ local function OpenGLTestMainLayer()
             gl.drawArrays(gl.TRIANGLES, 0, 6)
             gl.bindBuffer(gl.ARRAY_BUFFER, 0)
         end
-  
+
         shaderNodeLayer:scheduleUpdateWithPriorityLua(update,0)
         glNode:registerScriptDrawHandler(draw)
         time = 0
@@ -255,7 +255,7 @@ local function OpenGLTestMainLayer()
                 glProgram:release()
             end
         end
-        
+
         shaderNodeLayer:registerScriptHandler(onNodeEvent)
 
         return shaderNodeLayer
@@ -327,14 +327,14 @@ local function OpenGLTestMainLayer()
                         strFmt = strFmt..shadersTable[i].." "
                     end
                     print(strFmt)
-                end 
-  
+                end
+
                 if nil ~= schedulEntry then
                     scheduler:unscheduleScriptEntry(schedulEntry)
                 end
             end
         end
-        
+
         if nil ~= schedulEntry then
             scheduler:unscheduleScriptEntry(schedulEntry)
         end
@@ -514,7 +514,7 @@ local function OpenGLTestMainLayer()
                 scheduler:unscheduleScriptEntry(schedulEntry)
             end
         end
-        
+
         if nil ~= schedulEntry then
             scheduler:unscheduleScriptEntry(schedulEntry)
         end
@@ -691,7 +691,7 @@ local function OpenGLTestMainLayer()
 
             gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems)
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, 0)          
+            gl.bindBuffer(gl.ARRAY_BUFFER, 0)
         end
 
         local fshader = compileShader(fsh, 'fragment')
@@ -745,7 +745,7 @@ local function OpenGLTestMainLayer()
             gl.bufferData(gl.ARRAY_BUFFER, 6, vertices, gl.STATIC_DRAW)
 
             triangleVertexColorBuffer.buffer_id = gl.createBuffer()
-            gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer.buffer_id) 
+            gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer.buffer_id)
             local colors = {
             1.0, 0.0, 0.0, 1.0,
             1.0, 0.0, 0.0, 1.0,
@@ -763,7 +763,7 @@ local function OpenGLTestMainLayer()
                 0,           0
             }
             gl.bufferData(gl.ARRAY_BUFFER, 8, vertices, gl.STATIC_DRAW)
-            
+
             squareVertexColorBuffer.buffer_id = gl.createBuffer()
             gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer.buffer_id)
             colors = {
@@ -916,7 +916,7 @@ local function OpenGLTestMainLayer()
         end
     end
 
-    function ShowCurrentTest()    
+    function ShowCurrentTest()
         local curScene = cc.Scene:create()
         if nil ~= curScene then
             if nil ~= curLayer then
@@ -931,8 +931,8 @@ local function OpenGLTestMainLayer()
                 curLayer:addChild(OrderCallbackMenu(),15)
                 curScene:addChild(CreateBackMenuItem())
                 cc.Director:getInstance():replaceScene(curScene)
-            end            
-        end 
+            end
+        end
     end
     curLayer = createLayerByCurCase(curCase)
     curLayer:addChild(OrderCallbackMenu(),15)

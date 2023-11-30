@@ -320,7 +320,7 @@ void Layout::stencilClippingVisit(Renderer* renderer, const Mat4& parentTransfor
 
 void Layout::onBeforeVisitScissor()
 {
-    auto glView = _director->getOpenGLView();
+    auto glView = _director->getGLView();
     // apply scissor test
     _scissorOldState = glView->isScissorEnabled();
     if (false == _scissorOldState)
@@ -346,7 +346,7 @@ void Layout::onAfterVisitScissor()
         // revert scissor box
         if (false == _clippingOldRect.equals(_clippingRect))
         {
-            auto glView = _director->getOpenGLView();
+            auto glView = _director->getGLView();
             glView->setScissorInPoints(_clippingOldRect.origin.x, _clippingOldRect.origin.y,
                                        _clippingOldRect.size.width, _clippingOldRect.size.height);
         }

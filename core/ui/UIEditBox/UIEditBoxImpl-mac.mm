@@ -57,7 +57,7 @@ EditBoxImplMac::~EditBoxImplMac()
 
 void EditBoxImplMac::createNativeControl(const ax::Rect& frame)
 {
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
     Size size   = frame.size;
     NSRect rect = NSMakeRect(0, 0, size.width * glView->getScaleX(), size.height * glView->getScaleY());
 
@@ -75,7 +75,7 @@ NSFont* EditBoxImplMac::constructFont(const char* fontName, int fontSize)
     NSString* fntName  = [NSString stringWithUTF8String:fontName];
     fntName            = [[fntName lastPathComponent] stringByDeletingPathExtension];
     float retinaFactor = _inRetinaMode ? 2.0f : 1.0f;
-    auto glView        = ax::Director::getInstance()->getOpenGLView();
+    auto glView        = ax::Director::getInstance()->getGLView();
     float scaleFactor  = glView->getScaleX();
 
     if (fontSize == -1)
@@ -193,7 +193,7 @@ void EditBoxImplMac::setNativeVisible(bool visible)
 
 void EditBoxImplMac::updateNativeFrame(const ax::Rect& rect)
 {
-    GLView* eglView = Director::getInstance()->getOpenGLView();
+    GLView* eglView = Director::getInstance()->getGLView();
     auto frameSize  = eglView->getFrameSize();
     // Coordinate System on OSX has its origin at the lower left corner.
     //    https://developer.apple.com/library/ios/documentation/General/Conceptual/Devpedia-CocoaApp/CoordinateSystem.html

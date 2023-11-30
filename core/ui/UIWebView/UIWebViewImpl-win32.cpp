@@ -316,10 +316,10 @@ private:
 #endif
 
         /*
-        * Note: New OS feature 'Beta: Use Unicode UTF-8 for worldwide language support' since win10/win11 
+        * Note: New OS feature 'Beta: Use Unicode UTF-8 for worldwide language support' since win10/win11
         *   - OFF: GetACP() equal to current system locale, such as chinese simplified is 936, english is 437
         *   - ON: GetACP() always equal to 65001(UTF-8)
-        * Remark: 
+        * Remark:
         *   The macro CP_ACP for ntcvt::from_chars works for converting chraset from current code page(936,437,65001) to utf-16
         */
         std::wstring userDataFolder  = ntcvt::from_chars(std::getenv("APPDATA"), CP_ACP);
@@ -836,7 +836,7 @@ void Win32WebControl::lazyInit()
 {
 #    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     // reset the main windows style so that its drawing does not cover the webview sub window
-    auto hwnd        = ax::Director::getInstance()->getOpenGLView()->getWin32Window();
+    auto hwnd        = ax::Director::getInstance()->getGLView()->getWin32Window();
     const auto style = GetWindowLong(hwnd, GWL_STYLE);
     SetWindowLong(hwnd, GWL_STYLE, style | WS_CLIPCHILDREN);
 
@@ -861,7 +861,7 @@ bool Win32WebControl::createWebView(const std::function<bool(std::string_view)>&
 #    if AX_TARGET_PLATFORM != AX_PLATFORM_WINRT
     do
     {
-        HWND hwnd           = ax::Director::getInstance()->getOpenGLView()->getWin32Window();
+        HWND hwnd           = ax::Director::getInstance()->getGLView()->getWin32Window();
         HINSTANCE hInstance = GetModuleHandle(nullptr);
         WNDCLASSEX wc;
         ZeroMemory(&wc, sizeof(WNDCLASSEX));

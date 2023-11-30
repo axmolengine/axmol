@@ -45,7 +45,7 @@ std::string WindowTest::title() const
 void WindowTestWindowed1::onEnter()
 {
     WindowTest::onEnter();
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
     view->setWindowed(480, 320);
 }
 
@@ -57,7 +57,7 @@ std::string WindowTestWindowed1::subtitle() const
 void WindowTestWindowed2::onEnter()
 {
     WindowTest::onEnter();
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
     view->setWindowed(960, 640);
 }
 
@@ -70,7 +70,7 @@ bool WindowTestFullscreen1::init()
 {
     // @remark: Set full screen before layout renderer elements to ensure VisibleRect is
     // correct with full screen window size
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
     view->setFullscreen();
     return WindowTest::init();
 }
@@ -82,7 +82,7 @@ std::string WindowTestFullscreen1::subtitle() const
 
 bool WindowTestFullscreen2::init()
 {
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
     view->setFullscreen(1);
     return WindowTest::init();
 }
@@ -94,7 +94,7 @@ std::string WindowTestFullscreen2::subtitle() const
 
 bool WindowTestFullscreen3::init()
 {
-    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    GLViewImpl* view = (GLViewImpl*)Director::getInstance()->getGLView();
     view->setFullscreen(2);
     return WindowTest::init();
 }

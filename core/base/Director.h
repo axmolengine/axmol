@@ -166,12 +166,12 @@ public:
      * Get the GLView.
      * @lua NA
      */
-    GLView* getOpenGLView() { return _openGLView; }
+    GLView* getGLView() { return _glView; }
     /**
      * Sets the GLView.
      * @lua NA
      */
-    void setOpenGLView(GLView* openGLView);
+    void setGLView(GLView* glView);
 
     /*
      * Gets singleton of TextureCache.
@@ -588,9 +588,9 @@ protected:
     float _deltaTime              = 0.0f;
     bool _deltaTimePassedByCaller = false;
 
-    /* The _openGLView, where everything is rendered, GLView is a abstract class,cocos2d-x provide GLViewImpl
+    /* The _glView, where everything is rendered, GLView is a abstract class,cocos2d-x provide GLViewImpl
      which inherit from it as default renderer context,you can have your own by inherit from it*/
-    GLView* _openGLView = nullptr;
+    GLView* _glView = nullptr;
 
     // texture cache belongs to this director
     TextureCache* _textureCache = nullptr;

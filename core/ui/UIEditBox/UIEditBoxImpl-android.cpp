@@ -96,7 +96,7 @@ EditBoxImplAndroid::~EditBoxImplAndroid()
 void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 {
     auto director  = ax::Director::getInstance();
-    auto glView    = director->getOpenGLView();
+    auto glView    = director->getGLView();
     auto frameSize = glView->getFrameSize();
 
     auto winSize    = director->getWinSize();
@@ -118,7 +118,7 @@ void EditBoxImplAndroid::createNativeControl(const Rect& frame)
 void EditBoxImplAndroid::setNativeFont(const char* pFontName, int fontSize)
 {
     auto director            = ax::Director::getInstance();
-    auto glView              = director->getOpenGLView();
+    auto glView              = director->getGLView();
     auto isFontFileExists    = ax::FileUtils::getInstance()->isFileExist(pFontName);
     std::string realFontPath = pFontName;
     if (isFontFileExists)

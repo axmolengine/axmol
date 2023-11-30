@@ -547,7 +547,7 @@ bool GRoot::initWithScene(ax::Scene* scene, int zOrder)
 
 void GRoot::onWindowSizeChanged()
 {
-    const ax::Size& rs = Director::getInstance()->getOpenGLView()->getDesignResolutionSize();
+    const ax::Size& rs = Director::getInstance()->getGLView()->getDesignResolutionSize();
     setSize(rs.width, rs.height);
 
     updateContentScaleLevel();

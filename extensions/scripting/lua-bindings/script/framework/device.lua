@@ -42,7 +42,7 @@ elseif target == cc.PLATFORM_ANDROID then
 elseif target == cc.PLATFORM_IOS then
     device.platform = "ios"
     local director = cc.Director:getInstance()
-    local view = director:getOpenGLView()
+    local view = director:getGLView()
     local framesize = view:getFrameSize()
     local w, h = framesize.width, framesize.height
     if w == 640 and h == 960 then

@@ -464,7 +464,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
     glView->handleTouchesBegin(i, (intptr_t*)ids, xs, ys);
 }
 
@@ -499,7 +499,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
     glView->handleTouchesMove(i, (intptr_t*)ids, xs, ys, fs, ms);
 }
 
@@ -524,7 +524,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
     glView->handleTouchesEnd(i, (intptr_t*)ids, xs, ys);
 }
 
@@ -549,7 +549,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
         ++i;
     }
 
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
     glView->handleTouchesCancel(i, (intptr_t*)ids, xs, ys);
 }
 
@@ -577,7 +577,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
     if (dis < 0.0f)
         dis = 0.0f;
 
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
     dis *= glView->getScaleY();
 
     dis /= self.contentScaleFactor;
@@ -719,7 +719,7 @@ UIInterfaceOrientation getFixedOrientation(UIInterfaceOrientation statusBarOrien
         break;
     }
 
-    auto glView  = ax::Director::getInstance()->getOpenGLView();
+    auto glView  = ax::Director::getInstance()->getGLView();
     float scaleX = glView->getScaleX();
     float scaleY = glView->getScaleY();
 

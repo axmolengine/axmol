@@ -45,7 +45,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeRender(JNIEnv*, jc
 
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnPause(JNIEnv*, jclass)
 {
-    if (Director::getInstance()->getOpenGLView())
+    if (Director::getInstance()->getGLView())
     {
         Application::getInstance()->applicationDidEnterBackground();
         ax::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
@@ -56,7 +56,7 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnPause(JNIEnv*, j
 JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeOnResume(JNIEnv*, jclass)
 {
     static bool firstTime = true;
-    if (Director::getInstance()->getOpenGLView())
+    if (Director::getInstance()->getGLView())
     {
         // don't invoke at first to keep the same logic as iOS
         // can refer to https://github.com/cocos2d/cocos2d-x/issues/14206

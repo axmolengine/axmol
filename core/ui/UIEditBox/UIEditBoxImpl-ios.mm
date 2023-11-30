@@ -62,7 +62,7 @@ EditBoxImplIOS::~EditBoxImplIOS()
 
 void EditBoxImplIOS::createNativeControl(const Rect& frame)
 {
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
 
     Rect rect(0, 0, frame.size.width * glView->getScaleX(), frame.size.height * glView->getScaleY());
 
@@ -179,7 +179,7 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
 
 void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
 {
-    auto glView          = ax::Director::getInstance()->getOpenGLView();
+    auto glView          = ax::Director::getInstance()->getGLView();
     EAGLView* eaglView = (EAGLView*)glView->getEAGLView();
 
     float factor = eaglView.contentScaleFactor;
@@ -208,13 +208,13 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     AXASSERT(fontName != nullptr, "fontName can't be nullptr");
-    EAGLView* eaglView = static_cast<EAGLView*>(ax::Director::getInstance()->getOpenGLView()->getEAGLView());
+    EAGLView* eaglView = static_cast<EAGLView*>(ax::Director::getInstance()->getGLView()->getEAGLView());
     float retinaFactor   = eaglView.contentScaleFactor;
     NSString* fntName    = [NSString stringWithUTF8String:fontName];
 
     fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
 
-    auto glView       = ax::Director::getInstance()->getOpenGLView();
+    auto glView       = ax::Director::getInstance()->getGLView();
     float scaleFactor = glView->getScaleX();
 
     if (fontSize == -1)

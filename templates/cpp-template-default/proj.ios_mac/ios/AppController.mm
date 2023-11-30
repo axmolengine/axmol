@@ -85,7 +85,7 @@ static AppDelegate s_sharedApplication;
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
     ax::GLView* glView = ax::GLViewImpl::createWithEAGLView((__bridge void*)_viewController.view);
-    ax::Director::getInstance()->setOpenGLView(glView);
+    ax::Director::getInstance()->setGLView(glView);
 
     // run the cocos2d-x game scene
     app->run();
