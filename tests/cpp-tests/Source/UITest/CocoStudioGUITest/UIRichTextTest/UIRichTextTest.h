@@ -29,267 +29,178 @@
 
 DEFINE_TEST_SUITE(UIRichTextTests);
 
-class UIRichTextTest : public UIScene
+class UIRichTextTestBase : public UIScene
+{
+public:
+    UIRichTextTestBase() = default;
+    ~UIRichTextTestBase() override = 0; // Pure virtual to prevent instancing this class
+
+    bool init() override;
+    virtual void touchEvent(Ref* pSender, ax::ui::Widget::TouchEventType type);
+    virtual void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    virtual void switchHorizontalAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+    virtual void switchVerticalAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
+
+protected:
+    virtual void createButtonPanel();
+
+    ax::ui::RichText* _richText{};
+    ax::Vec2 _defaultContentSize;
+};
+
+inline UIRichTextTestBase::~UIRichTextTestBase() = default;
+
+
+class UIRichTextTest : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextTest);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLBasic : public UIScene
+class UIRichTextXMLBasic : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLBasic);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLSmallBig : public UIScene
+class UIRichTextXMLSmallBig : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLSmallBig);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLColor : public UIScene
+class UIRichTextXMLColor : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLColor);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLSUIB : public UIScene
+class UIRichTextXMLSUIB : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLSUIB);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLSUIB2 : public UIScene
+class UIRichTextXMLSUIB2 : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLSUIB2);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLSUIB3 : public UIScene
+class UIRichTextXMLSUIB3 : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLSUIB3);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLImg : public UIScene
+class UIRichTextXMLImg : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLImg);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLUrl : public UIScene
+class UIRichTextXMLUrl : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLUrl);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLUrlImg : public UIScene
+class UIRichTextXMLUrlImg : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLUrlImg);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLFace : public UIScene
+class UIRichTextXMLFace : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLFace);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLBR : public UIScene
+class UIRichTextXMLBR : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLBR);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLInvalid : public UIScene
+class UIRichTextXMLInvalid : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLInvalid);
 
     bool init() override;
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLOutline : public UIScene
+class UIRichTextXMLOutline : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLOutline);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLShadow : public UIScene
+class UIRichTextXMLShadow : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLShadow);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLGlow : public UIScene
+class UIRichTextXMLGlow : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLGlow);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLExtend : public UIScene
+class UIRichTextXMLExtend : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLExtend);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextXMLSpace : public UIScene
+class UIRichTextXMLSpace : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextXMLSpace);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
-class UIRichTextNewline : public UIScene
+class UIRichTextNewline : public UIRichTextTestBase
 {
 public:
     CREATE_FUNC(UIRichTextNewline);
 
     bool init() override;
-    void touchEvent(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchWrapMode(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-    void switchAlignment(ax::Ref* sender, ax::ui::Widget::TouchEventType type);
-
-protected:
-    ax::ui::RichText* _richText;
 };
 
 #endif /* defined(__TestCpp__UIRichTextTest__) */
