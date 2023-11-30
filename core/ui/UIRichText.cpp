@@ -1987,7 +1987,7 @@ void RichText::handleTextRenderer(std::string_view text,
             currentText = utf8Text.getAsCharSequence();
         }
     }
-    
+
     // std::getline discards the delimiter, so if it exists at the end of the text, then
     // a new line entry should be added
     if (!text.empty() && (text.back() == '\n'))
@@ -2063,6 +2063,8 @@ void RichText::formatRenderers()
 
     if (_ignoreSize)
     {
+        const auto verticalAlignment = static_cast<VerticalAlignment>(_defaults.at(KEY_VERTICAL_ALIGNMENT).asInt());
+
         float newContentSizeWidth = 0.0f;
         float nextPosY            = 0.0f;
         std::vector<std::pair<Vector<Node*>*, float>> rowWidthPairs;
@@ -2073,10 +2075,25 @@ void RichText::formatRenderers()
             float maxY     = 0.0f;
             for (auto&& iter : element)
             {
-                iter->setAnchorPoint(Vec2::ZERO);
-                iter->setPosition(nextPosX, nextPosY);
+                auto& iSize = iter->getContentSize();
+
+                if (verticalAlignment == VerticalAlignment::CENTER)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+                    iter->setPosition(nextPosX, nextPosY + iSize.height / 2);
+                }
+                else if (verticalAlignment == VerticalAlignment::TOP)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+                    iter->setPosition(nextPosX, nextPosY + iSize.height);
+                }
+                else  // if (verticalAlignment == VerticalAlignment::BOTTOM)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+                    iter->setPosition(nextPosX, nextPosY);
+                }
+
                 this->addProtectedChild(iter, 1);
-                Vec2 iSize = iter->getContentSize();
                 newContentSizeWidth += iSize.width;
                 nextPosX += iSize.width;
                 maxY = std::max(maxY, iSize.height);
