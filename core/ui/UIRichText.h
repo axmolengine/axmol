@@ -387,6 +387,13 @@ public:
         RIGHT,
     };
 
+    enum class VerticalAlignment
+    {
+        TOP,
+        CENTER,
+        BOTTOM
+    };
+
     /**
      * @brief call to open a resource specified by a URL
      * @param url a URL
@@ -403,6 +410,7 @@ public:
     static const std::string KEY_VERTICAL_SPACE;                   /*!< key of vertical space */
     static const std::string KEY_WRAP_MODE;                        /*!< key of per word, or per char */
     static const std::string KEY_HORIZONTAL_ALIGNMENT;             /*!< key of left, right, or center */
+    static const std::string KEY_VERTICAL_ALIGNMENT;             /*!< key of left, right, or center */
     static const std::string KEY_FONT_COLOR_STRING;                /*!< key of font color */
     static const std::string KEY_FONT_SIZE;                        /*!< key of font size */
     static const std::string KEY_FONT_SMALL;                       /*!< key of font size small */
@@ -522,6 +530,8 @@ public:
     void setHorizontalAlignment(
         HorizontalAlignment a); /*!< sets the horizontal alignment mode: LEFT, CENTER, or RIGHT */
     HorizontalAlignment getHorizontalAlignment() const; /*!< returns the current horizontal alignment mode */
+    void setVerticalAlignment(VerticalAlignment a); /*!< sets the vertical alignment mode: TOP, CENTER, or BOTTOM */
+    VerticalAlignment getVerticalAlignment() const;     /*!< returns the current vertical alignment mode */
     void setFontColor(
         std::string_view color);             /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
     std::string getFontColor();              /*!< return the current font color */

@@ -1005,6 +1005,7 @@ ValueMap MyXMLVisitor::tagAttrMapWithXMLElement(const char** attrs)
 const std::string RichText::KEY_VERTICAL_SPACE("KEY_VERTICAL_SPACE");
 const std::string RichText::KEY_WRAP_MODE("KEY_WRAP_MODE");
 const std::string RichText::KEY_HORIZONTAL_ALIGNMENT("KEY_HORIZONTAL_ALIGNMENT");
+const std::string RichText::KEY_VERTICAL_ALIGNMENT("KEY_VERTICAL_ALIGNMENT");
 const std::string RichText::KEY_FONT_COLOR_STRING("KEY_FONT_COLOR_STRING");
 const std::string RichText::KEY_FONT_SIZE("KEY_FONT_SIZE");
 const std::string RichText::KEY_FONT_SMALL("KEY_FONT_SMALL");
@@ -1047,6 +1048,7 @@ RichText::RichText() : _formatTextDirty(true), _leftSpaceWidth(0.0f)
     _defaults[KEY_VERTICAL_SPACE]           = 0.0f;
     _defaults[KEY_WRAP_MODE]                = static_cast<int>(WrapMode::WRAP_PER_WORD);
     _defaults[KEY_HORIZONTAL_ALIGNMENT]     = static_cast<int>(HorizontalAlignment::LEFT);
+    _defaults[KEY_VERTICAL_ALIGNMENT]       = static_cast<int>(VerticalAlignment::BOTTOM);
     _defaults[KEY_FONT_COLOR_STRING]        = "#ffffff";
     _defaults[KEY_FONT_SIZE]                = 12.0f;
     _defaults[KEY_FONT_FACE]                = "Verdana";
@@ -1182,6 +1184,20 @@ void RichText::setHorizontalAlignment(ax::ui::RichText::HorizontalAlignment a)
     {
         _defaults[KEY_HORIZONTAL_ALIGNMENT] = static_cast<int>(a);
         _formatTextDirty                    = true;
+    }
+}
+
+RichText::VerticalAlignment RichText::getVerticalAlignment() const
+{
+    return static_cast<RichText::VerticalAlignment>(_defaults.at(KEY_VERTICAL_ALIGNMENT).asInt());
+}
+
+void RichText::setVerticalAlignment(ax::ui::RichText::VerticalAlignment a)
+{
+    if (static_cast<RichText::VerticalAlignment>(_defaults.at(KEY_VERTICAL_ALIGNMENT).asInt()) != a)
+    {
+        _defaults[KEY_VERTICAL_ALIGNMENT] = static_cast<int>(a);
+        _formatTextDirty                  = true;
     }
 }
 
@@ -1400,6 +1416,10 @@ void RichText::setDefaults(const ValueMap& defaults)
     if (defaults.find(KEY_HORIZONTAL_ALIGNMENT) != defaults.end())
     {
         _defaults[KEY_HORIZONTAL_ALIGNMENT] = defaults.at(KEY_HORIZONTAL_ALIGNMENT).asInt();
+    }
+    if (defaults.find(KEY_VERTICAL_ALIGNMENT) != defaults.end())
+    {
+        _defaults[KEY_VERTICAL_ALIGNMENT] = defaults.at(KEY_VERTICAL_ALIGNMENT).asInt();
     }
     if (defaults.find(KEY_FONT_COLOR_STRING) != defaults.end())
     {
@@ -1967,7 +1987,7 @@ void RichText::handleTextRenderer(std::string_view text,
             currentText = utf8Text.getAsCharSequence();
         }
     }
-    
+
     // std::getline discards the delimiter, so if it exists at the end of the text, then
     // a new line entry should be added
     if (!text.empty() && (text.back() == '\n'))
@@ -2043,6 +2063,8 @@ void RichText::formatRenderers()
 
     if (_ignoreSize)
     {
+        const auto verticalAlignment = static_cast<VerticalAlignment>(_defaults.at(KEY_VERTICAL_ALIGNMENT).asInt());
+
         float newContentSizeWidth = 0.0f;
         float nextPosY            = 0.0f;
         std::vector<std::pair<Vector<Node*>*, float>> rowWidthPairs;
@@ -2053,10 +2075,25 @@ void RichText::formatRenderers()
             float maxY     = 0.0f;
             for (auto&& iter : element)
             {
-                iter->setAnchorPoint(Vec2::ZERO);
-                iter->setPosition(nextPosX, nextPosY);
+                auto& iSize = iter->getContentSize();
+
+                if (verticalAlignment == VerticalAlignment::CENTER)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+                    iter->setPosition(nextPosX, nextPosY + iSize.height / 2);
+                }
+                else if (verticalAlignment == VerticalAlignment::TOP)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+                    iter->setPosition(nextPosX, nextPosY + iSize.height);
+                }
+                else  // if (verticalAlignment == VerticalAlignment::BOTTOM)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+                    iter->setPosition(nextPosX, nextPosY);
+                }
+
                 this->addProtectedChild(iter, 1);
-                Vec2 iSize = iter->getContentSize();
                 newContentSizeWidth += iSize.width;
                 nextPosX += iSize.width;
                 maxY = std::max(maxY, iSize.height);
@@ -2095,17 +2132,33 @@ void RichText::formatRenderers()
         }
         _customSize.height = newContentSizeHeight;
 
+        const auto verticalAlignment = static_cast<VerticalAlignment>(_defaults.at(KEY_VERTICAL_ALIGNMENT).asInt());
+
         // align renders
         float nextPosY = _customSize.height;
         for (size_t i = 0, size = _elementRenders.size(); i < size; i++)
         {
-            Vector<Node*>& row = _elementRenders[i];
-            float nextPosX     = 0.0f;
-            nextPosY -= (i != 0 ? maxHeights[i] + verticalSpace : maxHeights[i]);
+            Vector<Node*>& row    = _elementRenders[i];
+            float nextPosX        = 0.0f;
+            const auto lineHeight = maxHeights[i];
+            nextPosY -= (i != 0 ? lineHeight + verticalSpace : lineHeight);
             for (auto&& iter : row)
             {
-                iter->setAnchorPoint(Vec2::ZERO);
-                iter->setPosition(nextPosX, nextPosY);
+                if (verticalAlignment == VerticalAlignment::CENTER)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
+                    iter->setPosition(nextPosX, nextPosY + lineHeight / 2);
+                }
+                else if (verticalAlignment == VerticalAlignment::TOP)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+                    iter->setPosition(nextPosX, nextPosY + lineHeight);
+                }
+                else // if (verticalAlignment == VerticalAlignment::BOTTOM)
+                {
+                    iter->setAnchorPoint(Vec2::ANCHOR_BOTTOM_LEFT);
+                    iter->setPosition(nextPosX, nextPosY);
+                }
                 this->addProtectedChild(iter, 1);
                 nextPosX += iter->getContentSize().width;
             }
