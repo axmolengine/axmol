@@ -40,7 +40,7 @@ void ccMessageBox(const char * pszMsg, const char * pszTitle)
     // Create the message dialog and set its content
     auto message = PlatformStringFromString(pszMsg);
     auto title = PlatformStringFromString(pszTitle);
-    GLViewImpl::sharedOpenGLView()->ShowMessageBox(title, message);
+    GLViewImpl::sharedGLView()->ShowMessageBox(title, message);
 }
 
 void LuaLog(const char *pszMsg)

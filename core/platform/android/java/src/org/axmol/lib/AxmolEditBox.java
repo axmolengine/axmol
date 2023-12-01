@@ -124,7 +124,7 @@ public class AxmolEditBox extends EditText {
     private static final int kTextVerticalAlignmentCenter = 1;
     private static final int kTextVerticalAlignmentBottom = 2;
 
-    private int mInputFlagConstraints; 
+    private int mInputFlagConstraints;
     private int mInputModeConstraints;
     private  int mMaxLength;
 
@@ -160,11 +160,11 @@ public class AxmolEditBox extends EditText {
         this.setLayoutParams(layoutParams);
     }
 
-    public float getOpenGLViewScaleX() {
+    public float getGLViewScaleX() {
         return mScaleX;
     }
 
-    public void setOpenGLViewScaleX(float mScaleX) {
+    public void setGLViewScaleX(float mScaleX) {
         this.mScaleX = mScaleX;
     }
 
@@ -223,7 +223,7 @@ public class AxmolEditBox extends EditText {
         }
         this.setGravity(gravity);
     }
-    
+
     public void setTextVerticalAlignment(int alignment) {
         int gravity = this.getGravity();
         int padding = EditBoxHelper.getPadding(mScaleX);

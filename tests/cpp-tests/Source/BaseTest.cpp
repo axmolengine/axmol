@@ -162,7 +162,7 @@ void TestList::runThisTest()
      * otherwise, the layout will incorrect
      */
 
-    GLViewImpl* glView = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    GLViewImpl* glView = (GLViewImpl*)Director::getInstance()->getGLView();
 #if defined(AX_PLATFORM_PC) || defined(__EMSCRIPTEN__)
     glView->setWindowed(g_resourceSize.width, g_resourceSize.height);
 #endif
@@ -480,7 +480,7 @@ void TestCase::onEnter()
         _nextTestItem->setVisible(false);
         _restartTestItem->setVisible(false);
     }
-    
+
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID) || defined(__EMSCRIPTEN__)
     extension::Inspector::getInstance()->openForScene(this);
 #endif

@@ -93,7 +93,7 @@ static AppDelegate s_sharedApplication;
 
     // IMPORTANT: Setting the GLView should be done after creating the RootViewController
     ax::GLView* glView = ax::GLViewImpl::createWithEAGLView(eaglView);
-    ax::Director::getInstance()->setOpenGLView(glView);
+    ax::Director::getInstance()->setGLView(glView);
 
     app->run();
     return YES;

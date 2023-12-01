@@ -33,7 +33,7 @@ void VisibleRect::lazyInit()
 {
     // no lazy init
     // Useful if we change the resolution in runtime
-    s_visibleRect = Director::getInstance()->getOpenGLView()->getVisibleRect();
+    s_visibleRect = Director::getInstance()->getGLView()->getVisibleRect();
 }
 
 Rect VisibleRect::getVisibleRect()

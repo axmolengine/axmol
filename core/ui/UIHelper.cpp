@@ -187,7 +187,7 @@ Rect Helper::restrictCapInsetRect(const ax::Rect& capInsets, const Vec2& texture
 Rect Helper::convertBoundingBoxToScreen(Node* node)
 {
     auto director  = Director::getInstance();
-    auto glView    = director->getOpenGLView();
+    auto glView    = director->getGLView();
     auto frameSize = glView->getFrameSize();
 
     auto winSize    = director->getWinSize();

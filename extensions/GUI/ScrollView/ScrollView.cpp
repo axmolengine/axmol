@@ -46,7 +46,7 @@ NS_AX_EXT_BEGIN
 
 static float convertDistanceFromPointToInch(float pointDis)
 {
-    auto glView  = Director::getInstance()->getOpenGLView();
+    auto glView  = Director::getInstance()->getGLView();
     float factor = (glView->getScaleX() + glView->getScaleY()) / 2;
     return pointDis * factor / Device::getDPI();
 }
@@ -582,7 +582,7 @@ void ScrollView::onBeforeDraw()
     //    {
     //        _scissorRestored = false;
     //        Rect frame = getViewRect();
-    //        auto glView = Director::getInstance()->getOpenGLView();
+    //        auto glView = Director::getInstance()->getGLView();
     //
     //        if (glView->getVR() == nullptr) {
     //            if (glView->isScissorEnabled()) {
@@ -623,7 +623,7 @@ void ScrollView::onAfterDraw()
     // TODO:minggo
     //    if (_clippingToBounds)
     //    {
-    //        auto glView = Director::getInstance()->getOpenGLView();
+    //        auto glView = Director::getInstance()->getGLView();
     //        if (glView->getVR() == nullptr) {
     //            if (_scissorRestored) {//restore the parent's scissor rect
     //                glView->setScissorInPoints(_parentScissorRect.origin.x, _parentScissorRect.origin.y,

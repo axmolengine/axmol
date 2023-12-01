@@ -109,7 +109,7 @@ void OpenGLESPage::CreateInput()
         mCoreInput.PointerReleased({this, &OpenGLESPage::_OnPointerReleased});
         mCoreInput.PointerWheelChanged({this, &OpenGLESPage::_OnPointerWheelChanged});
 
-        if (GLViewImpl::sharedOpenGLView() && !GLViewImpl::sharedOpenGLView()->isCursorVisible())
+        if (GLViewImpl::sharedGLView() && !GLViewImpl::sharedGLView()->isCursorVisible())
         {
             mCoreInput.PointerCursor(nullptr);
         }
@@ -270,10 +270,10 @@ void OpenGLESPage::StartRenderLoop()
             mRenderer->Draw(panelWidth, panelHeight, mDpi, mOrientation);
 
             // Recreate input dispatch
-            if (GLViewImpl::sharedOpenGLView() && mCursorVisible != GLViewImpl::sharedOpenGLView()->isCursorVisible())
+            if (GLViewImpl::sharedGLView() && mCursorVisible != GLViewImpl::sharedGLView()->isCursorVisible())
             {
                 CreateInput();
-                mCursorVisible = GLViewImpl::sharedOpenGLView()->isCursorVisible();
+                mCursorVisible = GLViewImpl::sharedGLView()->isCursorVisible();
             }
 
             if (mRenderer->AppShouldExit())

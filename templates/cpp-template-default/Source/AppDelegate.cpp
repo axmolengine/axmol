@@ -57,7 +57,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 {
     // initialize director
     auto director = Director::getInstance();
-    auto glView   = director->getOpenGLView();
+    auto glView   = director->getGLView();
     if (!glView)
     {
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
@@ -67,7 +67,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #else
         glView = GLViewImpl::create("HelloCpp");
 #endif
-        director->setOpenGLView(glView);
+        director->setGLView(glView);
     }
 
     // turn on display FPS

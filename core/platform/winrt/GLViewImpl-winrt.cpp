@@ -450,7 +450,7 @@ void GLViewImpl::centerWindow()
     // not implemented in WinRT. Window is always full screen
 }
 
-GLViewImpl* GLViewImpl::sharedOpenGLView()
+GLViewImpl* GLViewImpl::sharedGLView()
 {
     return s_pEglView;
 }
@@ -510,7 +510,7 @@ void GLViewImpl::UpdateWindowSize()
         GLView::setFrameSize(width, height);
     }
 
-    auto view = Director::getInstance()->getOpenGLView();
+    auto view = Director::getInstance()->getGLView();
     if (view && view->getResolutionPolicy() != ResolutionPolicy::UNKNOWN)
     {
         Size resSize               = view->getDesignResolutionSize();
@@ -531,7 +531,7 @@ ax::Vec2 GLViewImpl::TransformToOrientation(Windows::Foundation::Point const& p)
     float y     = p.Y;
     returnValue = Vec2(x, y);
 
-    float zoomFactor = GLViewImpl::sharedOpenGLView()->getFrameZoomFactor();
+    float zoomFactor = GLViewImpl::sharedGLView()->getFrameZoomFactor();
     if (zoomFactor > 0.0f)
     {
         returnValue.x /= zoomFactor;

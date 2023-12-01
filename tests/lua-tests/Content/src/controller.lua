@@ -3,7 +3,7 @@ if(version() >= 504) then
     collectgarbage("incremental")
 else
     -- avoid memory leak
-    collectgarbage("setpause", 100) 
+    collectgarbage("setpause", 100)
     collectgarbage("setstepmul", 5000)
 end
 
@@ -13,10 +13,10 @@ AX_USE_DEPRECATED_API = true
 require "axmol.init"
 
 local director = cc.Director:getInstance()
-local glView   = director:getOpenGLView()
+local glView   = director:getGLView()
 if nil == glView then
     glView = cc.GLViewImpl:createWithRect("Lua Tests", cc.rect(0,0,960,640), 1.0, true)
-    director:setOpenGLView(glView)
+    director:setGLView(glView)
 end
 
 --turn on display FPS
@@ -41,7 +41,7 @@ local function addSearchPath(resPrefix, height)
     local searchPaths = fileUtils:getSearchPaths()
     table.insert(searchPaths, 1, resPrefix)
     table.insert(searchPaths, 1, resPrefix .. "cocosbuilderRes")
-    
+
     if screenSize.height > 320 then
         table.insert(searchPaths, 1, resPrefix .. "hd")
         table.insert(searchPaths, 1, resPrefix .. "ccs-res")

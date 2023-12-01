@@ -76,8 +76,8 @@ EditBoxWinRT::EditBoxWinRT(
     , _multiline(false)
     , _maxLength(0 /* unlimited */)
 {
-    m_dispatcher = ax::GLViewImpl::sharedOpenGLView()->getDispatcher();
-    m_panel      = ax::GLViewImpl::sharedOpenGLView()->getPanel();
+    m_dispatcher = ax::GLViewImpl::sharedGLView()->getDispatcher();
+    m_panel      = ax::GLViewImpl::sharedGLView()->getPanel();
 }
 
 void EditBoxWinRT::closeKeyboard()
@@ -145,7 +145,7 @@ void EditBoxWinRT::onTextChanged(Windows::Foundation::IInspectable const& sender
         text = _textBox.as<TextBox>().Text();
     }
     std::shared_ptr<ax::InputEvent> inputEvent(new UIEditBoxEvent(*this, text, _changeHandler));
-    ax::GLViewImpl::sharedOpenGLView()->QueueEvent(inputEvent);
+    ax::GLViewImpl::sharedGLView()->QueueEvent(inputEvent);
 }
 
 void EditBoxWinRT::onKeyDown(Windows::Foundation::IInspectable const& sender,
@@ -166,7 +166,7 @@ void EditBoxWinRT::onGotFocus(Windows::Foundation::IInspectable const& sender,
 {
     Concurrency::critical_section::scoped_lock lock(_critical_section);
     std::shared_ptr<ax::InputEvent> inputEvent(new UIEditBoxEvent(*this, winrt::hstring{}, _beginHandler));
-    ax::GLViewImpl::sharedOpenGLView()->QueueEvent(inputEvent);
+    ax::GLViewImpl::sharedGLView()->QueueEvent(inputEvent);
     _isEditing = true;
 }
 
@@ -206,7 +206,7 @@ void EditBoxWinRT::onLostFocus(Windows::Foundation::IInspectable const& sender,
 
     std::shared_ptr<ax::InputEvent> inputEvent(
         new UIEditBoxEndEvent(*this, text, static_cast<int>(action), _endHandler));
-    ax::GLViewImpl::sharedOpenGLView()->QueueEvent(inputEvent);
+    ax::GLViewImpl::sharedGLView()->QueueEvent(inputEvent);
 
     _textBox.LostFocus(_unfocusToken);
     _textBox.GotFocus(_focusToken);
@@ -339,7 +339,7 @@ void EditBoxWinRT::_setTexVerticalAlignment(Windows::UI::Xaml::Controls::Control
 
 void EditBoxWinRT::_setPadding(Windows::UI::Xaml::Controls::Control editBox)
 {
-    double padding = EDIT_BOX_PADDING * ax::Director::getInstance()->getOpenGLView()->getScaleX();
+    double padding = EDIT_BOX_PADDING * ax::Director::getInstance()->getGLView()->getScaleX();
     if (_multiline)
     {
         editBox.Padding(Thickness{padding, padding, 0.0, 0.0});
@@ -458,7 +458,7 @@ void UIEditBoxImplWinrt::setNativeFont(const char* pFontName, int fontSize)
     auto transform = _editBox->getNodeToWorldTransform();
     ax::Vec3 scale;
     transform.getScale(&scale);
-    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getOpenGLView()->getScaleY() /** scale.y*/);
+    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getGLView()->getScaleY() /** scale.y*/);
 
     // fontFamily
     auto font = ax::FontFreeType::create(pFontName, fontSize, ax::GlyphCollection::DYNAMIC, ""sv);
@@ -507,14 +507,14 @@ void UIEditBoxImplWinrt::nativeOpenKeyboard()
     // Update the text
     _system_control->setText(PlatformStringFromString(getText()));
     // Size
-    auto glView    = ax::Director::getInstance()->getOpenGLView();
+    auto glView    = ax::Director::getInstance()->getGLView();
     auto transform = _editBox->getNodeToWorldTransform();
     ax::Vec3 scale;
     transform.getScale(&scale);
     Windows::Foundation::Size xamlSize = {_editBox->getContentSize().width * glView->getScaleX() * scale.x,
                                           _editBox->getContentSize().height * glView->getScaleY() * scale.y};
     _system_control->setSize(xamlSize);
-    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getOpenGLView()->getScaleY() /** scale.y*/);
+    _system_control->setFontSize(_fontSize * ax::Director::getInstance()->getGLView()->getScaleY() /** scale.y*/);
     // Position
     auto directorInstance = ax::Director::getInstance();
     auto frameSize        = glView->getFrameSize();
@@ -544,7 +544,7 @@ void UIEditBoxImplWinrt::setNativeMaxLength(int maxLength)
 
 ax::Vec2 UIEditBoxImplWinrt::convertDesignCoordToXamlCoord(const ax::Vec2& designCoord)
 {
-    auto glView      = ax::Director::getInstance()->getOpenGLView();
+    auto glView      = ax::Director::getInstance()->getGLView();
     float viewH      = glView->getFrameSize().height;
     Vec2 visiblePos  = Vec2(designCoord.x * glView->getScaleX(), designCoord.y * glView->getScaleY());
     Vec2 screenGLPos = visiblePos + glView->getViewPortRect().origin;

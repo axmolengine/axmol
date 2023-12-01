@@ -95,7 +95,7 @@ customization that is not appropriate for viewDidLoad.
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
 
     if (glView)
     {

@@ -65,7 +65,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // initialize director
     auto director = Director::getInstance();
-    auto glView   = director->getOpenGLView();
+    auto glView   = director->getGLView();
     if (!glView)
     {
         std::string title = "Cpp Tests";
@@ -77,7 +77,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #else
         glView = GLViewImpl::createWithRect(title, Rect(0, 0, g_resourceSize.width, g_resourceSize.height));
 #endif
-        director->setOpenGLView(glView);
+        director->setGLView(glView);
     }
 
     director->setStatsDisplay(true);

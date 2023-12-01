@@ -98,7 +98,7 @@ public class EditBoxHelper {
                 editBox.setBackgroundColor(Color.TRANSPARENT);
                 editBox.setTextColor(Color.WHITE);
                 editBox.setSingleLine();
-                editBox.setOpenGLViewScaleX(scaleX);
+                editBox.setGLViewScaleX(scaleX);
                 editBox.setPadding(getPadding(scaleX), 0, 0, 0);
 
 
@@ -438,7 +438,7 @@ public class EditBoxHelper {
             Log.e(TAG, "closeKeyboardOnUiThread doesn't run on UI thread!");
             return;
         }
-        
+
         final InputMethodManager imm = (InputMethodManager) mActivity.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         AxmolEditBox editBox = mEditBoxArray.get(index);
         if (null != editBox) {
