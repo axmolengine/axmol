@@ -64,7 +64,7 @@ int Application::run()
     constexpr std::chrono::nanoseconds _1ms{1000000};
 
     auto director = Director::getInstance();
-    auto glView   = director->getOpenGLView();
+    auto glView   = director->getGLView();
 
     // Retain glView to avoid glView being released in the while loop
     glView->retain();

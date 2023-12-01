@@ -54,7 +54,7 @@ AxmolRenderer::~AxmolRenderer() {}
 void AxmolRenderer::Resume()
 {
     auto director = ax::Director::getInstance();
-    auto glview   = director->getOpenGLView();
+    auto glview   = director->getGLView();
 
     if (!glview)
     {
@@ -64,7 +64,7 @@ void AxmolRenderer::Resume()
         glview->SetDPI(m_dpi);
         glview->setDispatcher(m_dispatcher);
         glview->setPanel(m_panel);
-        director->setOpenGLView(glview);
+        director->setGLView(glview);
         Application::getInstance()->run();
     }
     else
@@ -77,7 +77,7 @@ void AxmolRenderer::Resume()
 
 void AxmolRenderer::Pause()
 {
-    if (Director::getInstance()->getOpenGLView())
+    if (Director::getInstance()->getGLView())
     {
         Application::getInstance()->applicationDidEnterBackground();
         ax::EventCustom backgroundEvent(EVENT_COME_TO_BACKGROUND);
@@ -87,7 +87,7 @@ void AxmolRenderer::Pause()
 
 bool AxmolRenderer::AppShouldExit()
 {
-    return GLViewImpl::sharedOpenGLView()->AppShouldExit();
+    return GLViewImpl::sharedGLView()->AppShouldExit();
 }
 
 void AxmolRenderer::DeviceLost()
@@ -95,7 +95,7 @@ void AxmolRenderer::DeviceLost()
     Pause();
 
     auto director = ax::Director::getInstance();
-    if (director->getOpenGLView())
+    if (director->getGLView())
     {
         // TODO:
         // ax::GL::invalidateStateCache();
@@ -115,12 +115,12 @@ void AxmolRenderer::DeviceLost()
 
 void AxmolRenderer::SetQueueOperationCb(std::function<void(AsyncOperation, void*)> cb)
 {
-    GLViewImpl::sharedOpenGLView()->SetQueueOperationCb(std::move(cb));
+    GLViewImpl::sharedGLView()->SetQueueOperationCb(std::move(cb));
 }
 
 void AxmolRenderer::Draw(size_t width, size_t height, float dpi, DisplayOrientations orientation)
 {
-    auto glView = GLViewImpl::sharedOpenGLView();
+    auto glView = GLViewImpl::sharedGLView();
 
     if (orientation != m_orientation)
     {
@@ -147,15 +147,15 @@ void AxmolRenderer::Draw(size_t width, size_t height, float dpi, DisplayOrientat
 
 void AxmolRenderer::QueuePointerEvent(ax::PointerEventType type, Windows::UI::Core::PointerEventArgs const& args)
 {
-    GLViewImpl::sharedOpenGLView()->QueuePointerEvent(type, args);
+    GLViewImpl::sharedGLView()->QueuePointerEvent(type, args);
 }
 
 void AxmolRenderer::QueueBackButtonEvent()
 {
-    GLViewImpl::sharedOpenGLView()->QueueBackKeyPress();
+    GLViewImpl::sharedGLView()->QueueBackKeyPress();
 }
 
 void AxmolRenderer::QueueKeyboardEvent(WinRTKeyboardEventType type, Windows::UI::Core::KeyEventArgs const& args)
 {
-    GLViewImpl::sharedOpenGLView()->QueueWinRTKeyboardEvent(type, args);
+    GLViewImpl::sharedGLView()->QueueWinRTKeyboardEvent(type, args);
 }

@@ -67,7 +67,7 @@ Application::~Application()
 extern "C" void mainLoopIter(void)
 {
     auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
+    auto glview = director->getGLView();
 
     director->mainLoop();
     glview->pollEvents();
@@ -83,7 +83,7 @@ int Application::run()
     }
 
     auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
+    auto glview = director->getGLView();
 
     // Retain glview to avoid glview being released in the while loop
     glview->retain();

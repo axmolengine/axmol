@@ -218,8 +218,8 @@ KeyBoardWinRT::~KeyBoardWinRT()
 
 void KeyBoardWinRT::ShowKeyboard(winrt::hstring const& text)
 {
-    auto panel = ax::GLViewImpl::sharedOpenGLView()->getPanel();
-    auto dispatcher = ax::GLViewImpl::sharedOpenGLView()->getDispatcher();
+    auto panel = ax::GLViewImpl::sharedGLView()->getPanel();
+    auto dispatcher = ax::GLViewImpl::sharedGLView()->getDispatcher();
 
     if (dispatcher && panel)
     {
@@ -250,8 +250,8 @@ void KeyBoardWinRT::ShowKeyboard(winrt::hstring const& text)
 
 void KeyBoardWinRT::HideKeyboard(winrt::hstring const& text)
 {
-    auto panel = ax::GLViewImpl::sharedOpenGLView()->getPanel();
-    auto dispatcher = ax::GLViewImpl::sharedOpenGLView()->getDispatcher();
+    auto panel = ax::GLViewImpl::sharedGLView()->getPanel();
+    auto dispatcher = ax::GLViewImpl::sharedGLView()->getDispatcher();
 
     if (dispatcher && panel)
     {
@@ -334,7 +334,7 @@ void KeyBoardWinRT::OnTextChanged(const Windows::Foundation::IInspectable& sende
     if (!text.empty())
     {
         std::shared_ptr<ax::InputEvent> e(new ax::KeyboardEvent(AxmolKeyEvent::Text, text));
-        ax::GLViewImpl::sharedOpenGLView()->QueueEvent(e);
+        ax::GLViewImpl::sharedGLView()->QueueEvent(e);
         m_textBox.Text(L"");
     }
 }
@@ -352,7 +352,7 @@ void KeyBoardWinRT::OnTextCompositionEnded(Windows::UI::Xaml::Controls::TextBox,
 	if (!text.empty())
 	{
 		std::shared_ptr<ax::InputEvent> e(new ax::KeyboardEvent(AxmolKeyEvent::Text, text));
-		ax::GLViewImpl::sharedOpenGLView()->QueueEvent(e);
+		ax::GLViewImpl::sharedGLView()->QueueEvent(e);
 		m_textBox.Text(L"");
 	}
 }

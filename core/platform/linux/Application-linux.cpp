@@ -61,7 +61,7 @@ int Application::run()
     std::chrono::steady_clock::time_point lastTime{};
 
     auto director = Director::getInstance();
-    auto glView   = director->getOpenGLView();
+    auto glView   = director->getGLView();
 
     // Retain glView to avoid glView being released in the while loop
     glView->retain();

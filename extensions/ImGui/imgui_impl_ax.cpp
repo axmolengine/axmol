@@ -1527,7 +1527,7 @@ IMGUI_IMPL_API void ImGui_ImplAx_SetDeviceObjectsDirty()
 IMGUI_IMPL_API void ImGui_ImplAx_SetViewResolution(float width, float height)
 {
     // Resize (expand) window
-    auto* view = (GLViewImpl*)Director::getInstance()->getOpenGLView();
+    auto* view = (GLViewImpl*)Director::getInstance()->getGLView();
     view->setWindowed(width, height);
 }
 

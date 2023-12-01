@@ -74,8 +74,8 @@ LAppLive2DManager::LAppLive2DManager()
 
     CreateShader();
 
-    int width = static_cast<int>(ax::Director::getInstance()->getOpenGLView()->getFrameSize().width);
-    int height = static_cast<int>(ax::Director::getInstance()->getOpenGLView()->getFrameSize().height);
+    int width = static_cast<int>(ax::Director::getInstance()->getGLView()->getFrameSize().width);
+    int height = static_cast<int>(ax::Director::getInstance()->getGLView()->getFrameSize().height);
 
     // 画面全体を覆うサイズ
     _sprite = new LAppSprite(_program);
@@ -89,7 +89,7 @@ LAppLive2DManager::LAppLive2DManager()
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_MAC)
         // Retina対策でこっちからとる
-        GLViewImpl *glimpl = (GLViewImpl *)Director::getInstance()->getOpenGLView();
+        GLViewImpl *glimpl = (GLViewImpl *)Director::getInstance()->getGLView();
         glfwGetFramebufferSize(glimpl->getWindow(), &width, &height);
 #endif
 
@@ -231,7 +231,7 @@ void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
             model->Draw(commandBuffer, projection);///< 参照渡しなのでprojectionは変質する
 
             _renderBuffer->EndDraw(commandBuffer);
-        
+
             float uvVertex[] =
             {
                 1.0f, 1.0f,
@@ -239,13 +239,13 @@ void LAppLive2DManager::OnUpdate(Csm::Rendering::CubismCommandBuffer_Cocos2dx* c
                 0.0f, 0.0f,
                 1.0f, 0.0f,
             };
-        
+
             // program退避
             Csm::Rendering::CubismCommandBuffer_Cocos2dx* lastCommandBuffer = commandBuffer;
-        
+
             _sprite->SetColor(1.0f, 1.0f, 1.0f, 0.25f + (float)i * 0.5f);
             _sprite->RenderImmidiate(commandBuffer, _renderBuffer->GetColorBuffer()->getBackendTexture(), uvVertex);
-        
+
             // 元に戻す
             commandBuffer = lastCommandBuffer;
         }

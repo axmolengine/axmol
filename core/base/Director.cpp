@@ -250,8 +250,8 @@ void Director::setDefaultValues()
 
 void Director::setGLDefaultValues()
 {
-    // This method SHOULD be called only after openGLView_ was initialized
-    AXASSERT(_openGLView, "opengl view should not be null");
+    // This method SHOULD be called only after glView_ was initialized
+    AXASSERT(_glView, "opengl view should not be null");
 
     _renderer->setDepthTest(false);
     _renderer->setDepthCompareFunction(backend::CompareFunction::LESS_EQUAL);
@@ -266,9 +266,9 @@ void Director::drawScene()
     // calculate "global" dt
     calculateDeltaTime();
 
-    if (_openGLView)
+    if (_glView)
     {
-        _openGLView->pollEvents();
+        _glView->pollEvents();
     }
 
     // tick before glClear: issue #533
@@ -302,8 +302,8 @@ void Director::drawScene()
         _renderer->clearDrawStats();
 
         // render the scene
-        if (_openGLView)
-            _openGLView->renderScene(_runningScene, _renderer);
+        if (_glView)
+            _glView->renderScene(_runningScene, _renderer);
 
         _eventDispatcher->dispatchEvent(_eventAfterVisit);
     }
@@ -332,9 +332,9 @@ void Director::drawScene()
     _totalFrames++;
 
     // swap buffers
-    if (_openGLView)
+    if (_glView)
     {
-        _openGLView->swapBuffers();
+        _glView->swapBuffers();
     }
 
     _renderer->endFrame();
@@ -381,30 +381,30 @@ float Director::getDeltaTime() const
 {
     return _deltaTime;
 }
-void Director::setOpenGLView(GLView* openGLView)
+void Director::setGLView(GLView* glView)
 {
-    AXASSERT(openGLView, "opengl view should not be null");
+    AXASSERT(glView, "opengl view should not be null");
 
-    if (_openGLView != openGLView)
+    if (_glView != glView)
     {
         // Configuration. Gather GPU info
         Configuration* conf = Configuration::getInstance();
         conf->gatherGPUInfo();
         AXLOG("%s\n", conf->getInfo().c_str());
 
-        if (_openGLView)
-            _openGLView->release();
-        _openGLView = openGLView;
-        _openGLView->retain();
+        if (_glView)
+            _glView->release();
+        _glView = glView;
+        _glView->retain();
 
         // set size
-        _winSizeInPoints = _openGLView->getDesignResolutionSize();
+        _winSizeInPoints = _glView->getDesignResolutionSize();
 
         _isStatusLabelUpdated = true;
 
         _renderer->init();
 
-        if (_openGLView)
+        if (_glView)
         {
             setGLDefaultValues();
         }
@@ -437,9 +437,9 @@ void Director::destroyTextureCache()
 
 void Director::setViewport()
 {
-    if (_openGLView)
+    if (_glView)
     {
-        _openGLView->setViewPortInPoints(0, 0, _winSizeInPoints.width, _winSizeInPoints.height);
+        _glView->setViewPortInPoints(0, 0, _winSizeInPoints.width, _winSizeInPoints.height);
     }
 }
 
@@ -662,7 +662,7 @@ void Director::purgeCachedData()
     FontFNT::purgeCachedData();
     FontAtlasCache::purgeCachedData();
 
-    if (s_SharedDirector->getOpenGLView())
+    if (s_SharedDirector->getGLView())
     {
         SpriteFrameCache::getInstance()->removeUnusedSpriteFrames();
         _textureCache->removeUnusedTextures();
@@ -707,7 +707,7 @@ Vec2 Director::convertToGL(const Vec2& uiPoint)
     // Calculate z=0 using -> transform*[0, 0, 0, 1]/w
     float zClip = transform.m[14] / transform.m[15];
 
-    Vec2 glSize = _openGLView->getDesignResolutionSize();
+    Vec2 glSize = _glView->getDesignResolutionSize();
     Vec4 clipCoord(2.0f * uiPoint.x / glSize.width - 1.0f, 1.0f - 2.0f * uiPoint.y / glSize.height, zClip, 1);
 
     Vec4 glCoord;
@@ -739,7 +739,7 @@ Vec2 Director::convertToUI(const Vec2& glPoint)
     clipCoord.y = clipCoord.y / clipCoord.w;
     clipCoord.z = clipCoord.z / clipCoord.w;
 
-    Vec2 glSize  = _openGLView->getDesignResolutionSize();
+    Vec2 glSize  = _glView->getDesignResolutionSize();
     float factor = 1.0f / glCoord.w;
     return Vec2(glSize.width * (clipCoord.x * 0.5f + 0.5f) * factor,
                 glSize.height * (-clipCoord.y * 0.5f + 0.5f) * factor);
@@ -757,9 +757,9 @@ Vec2 Director::getWinSizeInPixels() const
 
 Vec2 Director::getVisibleSize() const
 {
-    if (_openGLView)
+    if (_glView)
     {
-        return _openGLView->getVisibleSize();
+        return _glView->getVisibleSize();
     }
     else
     {
@@ -769,9 +769,9 @@ Vec2 Director::getVisibleSize() const
 
 Vec2 Director::getVisibleOrigin() const
 {
-    if (_openGLView)
+    if (_glView)
     {
-        return _openGLView->getVisibleOrigin();
+        return _glView->getVisibleOrigin();
     }
     else
     {
@@ -781,9 +781,9 @@ Vec2 Director::getVisibleOrigin() const
 
 Rect Director::getSafeAreaRect() const
 {
-    if (_openGLView)
+    if (_glView)
     {
-        return _openGLView->getSafeAreaRect();
+        return _glView->getSafeAreaRect();
     }
     else
     {
@@ -1057,10 +1057,10 @@ void Director::purgeDirector()
     //    CHECK_GL_ERROR_DEBUG();
 
     // OpenGL view
-    if (_openGLView)
+    if (_glView)
     {
-        _openGLView->end();
-        _openGLView = nullptr;
+        _glView->end();
+        _glView = nullptr;
     }
 
     // delete Director
@@ -1498,7 +1498,7 @@ void Director::queueOperation(AsyncOperation op, void* param)
 #if defined(AX_PLATFORM_PC)
     _operations.enqueue([=]() { op(param); });
 #else
-    _openGLView->queueOperation(op, param);
+    _glView->queueOperation(op, param);
 #endif
 }
 

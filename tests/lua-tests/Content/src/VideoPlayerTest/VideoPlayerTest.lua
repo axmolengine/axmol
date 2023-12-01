@@ -1,4 +1,4 @@
-local visibleRect = cc.Director:getInstance():getOpenGLView():getVisibleRect()
+local visibleRect = cc.Director:getInstance():getGLView():getVisibleRect()
 local centerPos   = cc.p(visibleRect.x + visibleRect.width / 2,visibleRect.y + visibleRect.height /2)
 
 local function VideoPlayerTest()
@@ -6,7 +6,7 @@ local function VideoPlayerTest()
     titleLabel = cc.Label:createWithTTF("VideoPlayerTest", s_arialPath, 28)
     titleLabel:setAnchorPoint(cc.p(0.5, 0.5))
     layer:addChild(titleLabel, 1)
-    
+
     cc.MenuItemFont:setFontSize(16)
 
     widget = ccs.GUIReader:getInstance():widgetFromJsonFile("cocosui/UITest/UITest.json")
@@ -35,7 +35,7 @@ local function VideoPlayerTest()
     videoPlayer:setContentSize(cc.size(widgetSize.width * 0.4,widgetSize.height * 0.4))
     videoPlayer:addEventListener(onVideoEventCallback)
     layer:addChild(videoPlayer)
-        
+
     local screenSize = cc.Director:getInstance():getWinSize()
     local rootSize = widget:getContentSize()
     layer:setPosition(cc.p((screenSize.width - rootSize.width) / 2,(screenSize.height - rootSize.height) / 2))
@@ -95,7 +95,7 @@ local function VideoPlayerTest()
         if nil ~= videoPlayer then
             print('start play video')
             local videoFullPath = cc.FileUtils:getInstance():fullPathForFilename("video/h264/1280x720.mp4")
-            videoPlayer:setFileName(videoFullPath)   
+            videoPlayer:setFileName(videoFullPath)
             videoPlayer:play()
             print('start play video succeed')
         end

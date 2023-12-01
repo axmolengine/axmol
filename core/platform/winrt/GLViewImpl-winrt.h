@@ -131,7 +131,7 @@ public:
     /**
     @brief    get the shared main open gl window
     */
-    static GLViewImpl* sharedOpenGLView();
+    static GLViewImpl* sharedGLView();
 
     void ProcessEvents();
 

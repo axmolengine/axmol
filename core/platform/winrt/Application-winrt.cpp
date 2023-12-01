@@ -84,7 +84,7 @@ int Application::run()
         return 0;
     }
 
-	GLViewImpl::sharedOpenGLView()->Run();
+	GLViewImpl::sharedGLView()->Run();
 	return 0;
 }
 
@@ -141,7 +141,7 @@ std::string  Application::getVersion()
 
 bool Application::openURL(std::string_view url)
 {
-    auto dispatcher = ax::GLViewImpl::sharedOpenGLView()->getDispatcher();
+    auto dispatcher = ax::GLViewImpl::sharedGLView()->getDispatcher();
     dispatcher.get().RunAsync(Windows::UI::Core::CoreDispatcherPriority::Normal, DispatchedHandler([url]() {
         auto uri = Windows::Foundation::Uri(PlatformStringFromString(url));
         Windows::System::Launcher::LaunchUriAsync(uri);

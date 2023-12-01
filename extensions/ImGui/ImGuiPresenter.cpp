@@ -308,9 +308,9 @@ void ImGuiPresenter::init()
     }
 
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-    ImGui_ImplAndroid_InitForAx(Director::getInstance()->getOpenGLView(), true);
+    ImGui_ImplAndroid_InitForAx(Director::getInstance()->getGLView(), true);
 #else
-    auto window = static_cast<GLViewImpl*>(Director::getInstance()->getOpenGLView())->getWindow();
+    auto window = static_cast<GLViewImpl*>(Director::getInstance()->getGLView())->getWindow();
     ImGui_ImplGlfw_InitForAx(window, true);
 #endif
     ImGui_ImplAx_Init();

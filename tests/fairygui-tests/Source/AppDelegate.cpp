@@ -39,14 +39,14 @@ static int register_all_packages()
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
     auto director = Director::getInstance();
-    auto glView = director->getOpenGLView();
+    auto glView = director->getGLView();
     if (!glView) {
 #if defined(AX_PLATFORM_PC) || (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
         glView = GLViewImpl::createWithRect("Examples", ax::Rect(0, 0, 1280, 720));
 #else
         glView = GLViewImpl::create("Examples");
 #endif
-        director->setOpenGLView(glView);
+        director->setGLView(glView);
     }
 
     // turn on display FPS

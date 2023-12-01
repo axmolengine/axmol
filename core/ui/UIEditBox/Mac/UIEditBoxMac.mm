@@ -131,7 +131,7 @@
 
 - (NSWindow*)window
 {
-    auto glView = ax::Director::getInstance()->getOpenGLView();
+    auto glView = ax::Director::getInstance()->getGLView();
     return (NSWindow*)glView->getCocoaWindow();
 }
 

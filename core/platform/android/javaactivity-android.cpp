@@ -85,12 +85,12 @@ JNIEXPORT void JNICALL Java_org_axmol_lib_AxmolRenderer_nativeInit(JNIEnv*, jcla
     GLViewImpl::loadGLES2();
 
     auto director = ax::Director::getInstance();
-    auto glView   = director->getOpenGLView();
+    auto glView   = director->getGLView();
     if (!glView)
     {
         glView = ax::GLViewImpl::create("Android app");
         glView->setFrameSize(w, h);
-        director->setOpenGLView(glView);
+        director->setGLView(glView);
 
         ax::Application::getInstance()->run();
     }

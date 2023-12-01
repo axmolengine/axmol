@@ -58,25 +58,25 @@ void PointerEvent::execute()
     switch(m_type)
     {
     case PointerEventType::PointerPressed:
-        GLViewImpl::sharedOpenGLView()->OnPointerPressed(m_args);
+        GLViewImpl::sharedGLView()->OnPointerPressed(m_args);
         break;
     case PointerEventType::PointerMoved:
-        GLViewImpl::sharedOpenGLView()->OnPointerMoved(m_args);
-        break;           
+        GLViewImpl::sharedGLView()->OnPointerMoved(m_args);
+        break;
     case PointerEventType::PointerReleased:
-        GLViewImpl::sharedOpenGLView()->OnPointerReleased(m_args);
+        GLViewImpl::sharedGLView()->OnPointerReleased(m_args);
         break;
     case ax::MousePressed:
-        GLViewImpl::sharedOpenGLView()->OnMousePressed(m_args);
+        GLViewImpl::sharedGLView()->OnMousePressed(m_args);
         break;
     case ax::MouseMoved:
-        GLViewImpl::sharedOpenGLView()->OnMouseMoved(m_args);
+        GLViewImpl::sharedGLView()->OnMouseMoved(m_args);
         break;
     case ax::MouseReleased:
-        GLViewImpl::sharedOpenGLView()->OnMouseReleased(m_args);
+        GLViewImpl::sharedGLView()->OnMouseReleased(m_args);
         break;
     case ax::MouseWheelChanged:
-        GLViewImpl::sharedOpenGLView()->OnMouseWheelChanged(m_args);
+        GLViewImpl::sharedGLView()->OnMouseWheelChanged(m_args);
         break;
     }
 }
@@ -118,7 +118,7 @@ void KeyboardEvent::execute()
             break;
         default:
             break;
-        }        
+        }
         break;
     }
 }
@@ -130,7 +130,7 @@ WinRTKeyboardEvent::WinRTKeyboardEvent(WinRTKeyboardEventType type, const Window
 
 void WinRTKeyboardEvent::execute()
 {
-	GLViewImpl::sharedOpenGLView()->OnWinRTKeyboardEvent(m_type, m_key);
+	GLViewImpl::sharedGLView()->OnWinRTKeyboardEvent(m_type, m_key);
 }
 
 BackButtonEvent::BackButtonEvent()
@@ -140,7 +140,7 @@ BackButtonEvent::BackButtonEvent()
 
 void BackButtonEvent::execute()
 {
-    GLViewImpl::sharedOpenGLView()->OnBackKeyPress();
+    GLViewImpl::sharedGLView()->OnBackKeyPress();
 }
 
 CustomInputEvent::CustomInputEvent(const std::function<void()>& fun)
@@ -155,7 +155,7 @@ void CustomInputEvent::execute()
 
 UIEditBoxEvent::UIEditBoxEvent(const Windows::Foundation::IInspectable& sender,
                                const winrt::hstring& text,
-    const winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&>& handle) 
+    const winrt::delegate<Windows::Foundation::IInspectable const&, winrt::hstring const&>& handle)
     : m_sender(sender)
     , m_text(text)
     , m_handler(handle)

@@ -362,10 +362,10 @@ static TextRenderer& sharedTextRenderer()
 
 int Device::getDPI()
 {
-    return ax::GLViewImpl::sharedOpenGLView()->GetDPI();
+    return ax::GLViewImpl::sharedGLView()->GetDPI();
 }
 
-float Device::getPixelRatio() 
+float Device::getPixelRatio()
 {
     return Device::getDPI() / 96.0f;
 }
@@ -414,7 +414,7 @@ void Device::setAccelerometerEnabled(bool isEnabled)
             acc.z         = reading.AccelerationZ();
             acc.timestamp = 0;
 
-            auto orientation = GLViewImpl::sharedOpenGLView()->getDeviceOrientation();
+            auto orientation = GLViewImpl::sharedGLView()->getDeviceOrientation();
 
             if (isWindowsPhone())
             {
@@ -479,7 +479,7 @@ void Device::setAccelerometerEnabled(bool isEnabled)
             }
 
             std::shared_ptr<ax::InputEvent> event(new AccelerometerEvent(acc));
-            ax::GLViewImpl::sharedOpenGLView()->QueueEvent(event);
+            ax::GLViewImpl::sharedGLView()->QueueEvent(event);
             });
     }
 }

@@ -391,7 +391,7 @@ void MediaPlayer::setFullScreenEnabled(bool enabled)
         _fullScreenEnabled = enabled;
 
         auto pvd = reinterpret_cast<PrivateVideoDescriptor*>(_videoContext);
-        Widget::setContentSize(enabled ? _director->getOpenGLView()->getDesignResolutionSize()
+        Widget::setContentSize(enabled ? _director->getGLView()->getDesignResolutionSize()
                                        : pvd->_originalViewSize);
     }
 }

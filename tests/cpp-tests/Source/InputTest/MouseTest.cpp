@@ -125,9 +125,9 @@ HideMouseTest::HideMouseTest()
 {
 
     _lis              = EventListenerMouse::create();
-    _lis->onMouseDown = [](Event* e) { Director::getInstance()->getOpenGLView()->setCursorVisible(false); };
+    _lis->onMouseDown = [](Event* e) { Director::getInstance()->getGLView()->setCursorVisible(false); };
 
-    _lis->onMouseUp = [](Event* e) { Director::getInstance()->getOpenGLView()->setCursorVisible(true); };
+    _lis->onMouseUp = [](Event* e) { Director::getInstance()->getGLView()->setCursorVisible(true); };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(_lis, this);
 }
