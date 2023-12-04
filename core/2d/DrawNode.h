@@ -57,6 +57,19 @@ class PointArray;
 class AX_DLL DrawNode : public Node
 {
 public:
+
+    /** Different draw modus types.
+     *
+     *.
+     */
+    enum drawModus
+    {
+        Fill,
+        Outline,
+        Line,
+        Semi,
+    };
+
     /** creates and initialize a DrawNode node.
      *
      * @return Return an autorelease object.
@@ -292,7 +305,33 @@ public:
      * @param color The solid circle color.
      * @js NA
      */
-    void drawSolidCircle(const Vec2& center, float radius, float angle, unsigned int segments, const Color4B& color);
+    void drawSolidCircle(const Vec2& center,
+                 float radius,
+                 float angle,
+                 unsigned int segments,
+                 const Color4B& color);
+
+     /** Draws a pie given the center, radius, angle, start angle, end angle  and number of segments.
+     * @param center The circle center point.
+     * @param radius The circle rotate of radius.
+     * @param angle  The circle angle.
+     * @param startAngle The start angle.
+     * @param endAngle The end angle.
+     * @param scaleX The scale value in x.
+     * @param scaleY The scale value in y.
+     * @param color The solid circle color.
+     * @param drawModus The draw modus 
+     * @js NA
+     */
+    void drawPie(const Vec2& center,
+                 float radius,
+                 float angle,
+                 int startAngle,
+                 int endAngle,
+                 float scaleX,
+                 float scaleY,
+                 const Color4B& color,
+                 int drawModus);
 
     /** draw a segment with a radius and color.
      *

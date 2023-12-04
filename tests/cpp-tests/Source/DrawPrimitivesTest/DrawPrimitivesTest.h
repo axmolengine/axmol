@@ -104,3 +104,29 @@ public:
     virtual std::string title() const override;
     virtual std::string subtitle() const override;
 };
+
+class DrawNodeTestNewFeature1 : public DrawPrimitivesBaseTest
+{
+public:
+    CREATE_FUNC(DrawNodeTestNewFeature1);
+
+    DrawNodeTestNewFeature1();
+
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+    void update(float dt);
+
+    void initSliders();
+    void changeStartAngle(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeEndAngle(Ref* pSender, ax::ui::Slider::EventType type);
+    void changeAngle(Ref* pSender, ax::ui::Slider::EventType type);
+
+private:
+    ax::DrawNode* drawNode;
+    ax::Label* _StartAngleLabel;
+    float startAngle = 0;
+    ax::Label* _EndAngleLabel;
+    float endAngle = 0;
+    ax::Label* _AngleLabel;
+    float angle = 0;
+};
