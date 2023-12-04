@@ -61,7 +61,7 @@ NS_AX_BEGIN
  * @{
  */
 
-class Coroutine
+class AX_DLL Coroutine
 {
 public:
     class promise_type;
