@@ -655,7 +655,6 @@ private:
     ax::Node* _target;
 };
 
-#ifdef AX_SUPPORT_COROUTINE
 class ActionCoroutineTest : public ActionsDemo
 {
 public:
@@ -672,6 +671,5 @@ private:
     ax::Label* _label;
     uint64_t _frameCount;
 };
-#endif  // AX_SUPPORT_COROUTINE
 
 #endif

@@ -32,30 +32,28 @@ THE SOFTWARE.
 
 #include "2d/Action.h"
 
-#if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32 || AX_TARGET_PLATFORM == AX_PLATFORM_WINUWP || \
-     AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID)
-#    if __has_include(<experimental/coroutine>)
-#        include <experimental/coroutine>
-#        define COROUTINE_HANDLE(x) std::experimental::coroutine_handle<x>;
-#        define SUSPEND_ALWAYS      std::experimental::suspend_always{};
-#        define AX_SUPPORT_COROUTINE
-#    endif  // __has_include(<experimental/coroutine>)
-
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_OSX || AX_TARGET_PLATFORM == AX_PLATFORM_IOS || \
-       AX_TARGET_PLATFORM == AX_PLATFORM_TVOS)
-#    if __has_include(<coroutine>)
-#        include <coroutine>
-#        define COROUTINE_HANDLE(x) std::coroutine_handle<x>;
-#        define SUSPEND_ALWAYS      std::suspend_always{};
-#        define AX_SUPPORT_COROUTINE
-#    endif  // __has_include(<coroutine>)
-
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
-#elif (AX_TARGET_PLATFORM == AX_PLATFORM_WASM)
-
+#if __has_include(<coroutine>)
+#    include <coroutine>
+namespace axstd
+{
+using suspend_always = std::suspend_always;
+template <typename _Ty>
+using coroutine_handle = std::coroutine_handle<_Ty>;
+}  // namespace axstd
+#elif __has_include(<experimental/coroutine>)
+// fallback to experimental, currently only for android, in the future may don't required,
+// for example: we upgrade ndk in the future releases of axmol
+#    include <experimental/coroutine>
+namespace axstd
+{
+using suspend_always = std::experimental::suspend_always;
+template <typename _Ty>
+using coroutine_handle = std::experimental::coroutine_handle<_Ty>;
+}  // namespace axstd
+#else
+#    error This compiler missing c++20 coroutine
 #endif
 
-#ifdef AX_SUPPORT_COROUTINE
 NS_AX_BEGIN
 
 /**
@@ -68,7 +66,7 @@ class Coroutine
 public:
     class promise_type;
 
-    using handle = COROUTINE_HANDLE(promise_type);
+    using handle = axstd::coroutine_handle<promise_type>;
     class promise_type
     {
     public:
@@ -76,18 +74,18 @@ public:
 
         Action* currentAction() const noexcept { return _currentAction; }
 
-        auto final_suspend() const noexcept { return SUSPEND_ALWAYS; }
+        auto final_suspend() const noexcept { return axstd::suspend_always{}; }
 
         auto get_return_object() noexcept { return Coroutine(handle::from_promise(*this)); }
 
-        auto initial_suspend() const noexcept { return SUSPEND_ALWAYS; }
+        auto initial_suspend() const noexcept { return axstd::suspend_always{}; }
 
         auto yield_value(Action* action)
         {
             AX_SAFE_RELEASE(_currentAction);
             _currentAction = action;
             AX_SAFE_RETAIN(_currentAction);
-            return SUSPEND_ALWAYS;
+            return axstd::suspend_always{};
         }
 
         void return_void() {}
@@ -157,5 +155,4 @@ private:
 
 NS_AX_END
 
-#endif  // AX_SUPPORT_COROUTINE
 #endif  // __ACTION_CCCOROUTINE_ACTION_H__

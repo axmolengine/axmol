@@ -29,8 +29,6 @@ THE SOFTWARE.
 
 #include "ActionCoroutine.h"
 
-#ifdef AX_SUPPORT_COROUTINE
-
 NS_AX_BEGIN
 
 //
@@ -121,5 +119,3 @@ bool ActionCoroutine::initWithCoroutine(Coroutine&& coroutine) noexcept
 }
 
 NS_AX_END
-
-#endif  // AX_SUPPORT_COROUTINE
