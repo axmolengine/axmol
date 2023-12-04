@@ -402,13 +402,12 @@ Node* findChild(Node* levelRoot, int tag)
     return nullptr;
 }
 
-std::string getFileMD5Hash(std::string_view filename)
+std::string getFileMD5Hash(std::string_view filename, uint32_t bufferSize)
 {
     if (filename.empty())
         return std::string{};
 
-    constexpr auto bufferSize = 16 * 1024;
-    auto fs                   = FileUtils::getInstance()->openFileStream(filename, FileStream::Mode::READ);
+    auto fs = FileUtils::getInstance()->openFileStream(filename, FileStream::Mode::READ);
 
     if (!fs || !fs->isOpen())
         return std::string{};

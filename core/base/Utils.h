@@ -187,9 +187,10 @@ inline T findChild(Node* levelRoot, int tag)
 /**
  *  Gets the md5 hash for the given file.
  *  @param filename The file to calculate md5 hash.
+ *  @param bufferSize The size of buffer used for reading the file
  *  @return The md5 hash for the file
  */
-AX_DLL std::string getFileMD5Hash(std::string_view filename);
+AX_DLL std::string getFileMD5Hash(std::string_view filename, uint32_t bufferSize = 16 * 1024);
 
 /**
  *  Gets the md5 hash for the given buffer.
