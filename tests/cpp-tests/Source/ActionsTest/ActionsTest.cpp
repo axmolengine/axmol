@@ -95,6 +95,9 @@ ActionsTests::ActionsTests()
     ADD_TEST_CASE(Issue14936_2);
     ADD_TEST_CASE(SequenceWithFinalInstant);
     ADD_TEST_CASE(Issue18003);
+#ifdef AX_SUPPORT_COROUTINE
+    ADD_TEST_CASE(ActionCoroutineTest);
+#endif
 }
 
 std::string ActionsDemo::title() const
@@ -2415,3 +2418,65 @@ std::string Issue18003::subtitle() const
 {
     return "issue18003: should not crash";
 }
+
+#ifdef AX_SUPPORT_COROUTINE
+//------------------------------------------------------------------
+//
+// ActionCoroutine
+//
+//------------------------------------------------------------------
+void ActionCoroutineTest::onEnter()
+{
+    ActionsDemo::onEnter();
+
+    _frameCount = 1;
+    centerSprites(0);
+
+    auto action = ActionCoroutine::create(coroutineCallback());
+    this->runAction(action);
+
+    auto s = Director::getInstance()->getWinSize();
+    _label = Label::createWithTTF(StringUtils::format("frame count : %llu", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    _label->setPosition(s.width / 2, s.height / 2 + 100);
+    addChild(_label, 1, 1);
+
+    scheduleUpdate();
+}
+
+void ActionCoroutineTest::update(float delta)
+{
+    _frameCount++;
+    _label->setString(StringUtils::format("frame count : %llu", _frameCount));
+}
+
+std::string ActionCoroutineTest::title() const
+{
+    return "Coroutine";
+}
+
+std::string ActionCoroutineTest::subtitle() const
+{
+    return "";
+}
+
+Coroutine ActionCoroutineTest::coroutineCallback()
+{
+    auto s = Director::getInstance()->getWinSize();
+
+    auto label1 = Label::createWithTTF(StringUtils::format("First (%llu)", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    label1->setPosition(s.width / 4 * 1, s.height / 2);
+    addChild(label1);
+    co_yield DelayTime::create(3.0f);   // delay 3s
+
+    auto label2 = Label::createWithTTF(StringUtils::format("after 3sec (%llu)", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    label2->setPosition(s.width / 4 * 2, s.height / 2);
+    addChild(label2);
+    co_yield nullptr;   // next frame
+
+    auto label3 = Label::createWithTTF(StringUtils::format("next frame (%llu)", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    label3->setPosition(s.width / 4 * 3, s.height / 2);
+    addChild(label3);
+
+    // co_return;   // return coroutine
+}
+#endif  // AX_SUPPORT_COROUTINE

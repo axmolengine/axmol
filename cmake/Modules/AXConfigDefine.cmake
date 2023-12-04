@@ -111,6 +111,10 @@ if (FULL_MSVC)
     add_compile_options(/Bv)
 endif()
 
+if (FULL_MSVC)
+    add_compile_options(/await)
+endif()
+
 set(CMAKE_DEBUG_POSTFIX "" CACHE STRING "Library postfix for debug builds. Normally left blank." FORCE)
 
 # set hash style to both for android old device compatible

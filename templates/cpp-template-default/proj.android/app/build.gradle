@@ -25,7 +25,7 @@ android {
             cmake {
                 arguments "-DCMAKE_FIND_ROOT_PATH=", "-DANDROID_STL=c++_shared", "-DANDROID_TOOLCHAIN=clang", "-DANDROID_ARM_NEON=TRUE"
                 arguments.addAll(cmakeOptions)
-                cppFlags "-frtti -fexceptions -fsigned-char"
+                cppFlags "-frtti -fexceptions -fsigned-char -fcoroutines-ts -stdlib=libc++"
             }
         }
 

@@ -655,4 +655,23 @@ private:
     ax::Node* _target;
 };
 
+#ifdef AX_SUPPORT_COROUTINE
+class ActionCoroutineTest : public ActionsDemo
+{
+public:
+    CREATE_FUNC(ActionCoroutineTest);
+
+    virtual void onEnter() override;
+    virtual std::string title() const override;
+    virtual std::string subtitle() const override;
+
+    void update(float delta) override;
+    ax::Coroutine coroutineCallback();
+
+private:
+    ax::Label* _label;
+    uint64_t _frameCount;
+};
+#endif  // AX_SUPPORT_COROUTINE
+
 #endif
