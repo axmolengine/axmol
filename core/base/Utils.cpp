@@ -468,23 +468,15 @@ std::string computeFileDigest(std::string_view filename, std::string_view algori
     }
 
     int bytesRead;
-    auto totalSize = 0;
     while ((bytesRead = fs->read(buffer.get(), bufferSize)) > 0)
     {
-        totalSize += bytesRead;
         EVP_DigestUpdate(mdctx, buffer.get(), bytesRead);
     }
 
-    if (totalSize > 0)
-    {
-        EVP_DigestFinal(mdctx, mdValue, &mdLen);
-        EVP_MD_CTX_destroy(mdctx);
-        return toHex ? bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen})
-                     : std::string{(const char*)mdValue, (size_t)mdLen};
-    }
-
+    EVP_DigestFinal(mdctx, mdValue, &mdLen);
     EVP_MD_CTX_destroy(mdctx);
-    return std::string{};
+    return toHex ? bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen})
+                 : std::string{(const char*)mdValue, (size_t)mdLen};
 }
 
 LanguageType getLanguageTypeByISO2(const char* code)
