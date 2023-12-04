@@ -187,9 +187,10 @@ inline T findChild(Node* levelRoot, int tag)
 /**
  *  Gets the md5 hash for the given file.
  *  @param filename The file to calculate md5 hash.
+ *  @param bufferSize The size of buffer used for reading the file
  *  @return The md5 hash for the file
  */
-AX_DLL std::string getFileMD5Hash(std::string_view filename);
+AX_DLL std::string getFileMD5Hash(std::string_view filename, uint32_t bufferSize = 16 * 1024);
 
 /**
  *  Gets the md5 hash for the given buffer.
@@ -200,11 +201,25 @@ AX_DLL std::string getDataMD5Hash(const Data& data);
 
 /**
  *  Gets the hash for the given buffer with specific algorithm.
- *  @param data The buffer to calculate md5 hash.
+ *  @param data The buffer to calculate the hash.
  *  @param algorithm The hash algorithm, support "md5", "sha1", "sha256", "sha512" and more
+ *  @param toHex Convert to lowercase hex string
  *  @return The hash for the data
  */
 AX_DLL std::string computeDigest(std::string_view data, std::string_view algorithm, bool toHex = true);
+
+/**
+ *  Gets the hash for the given file with specific algorithm.
+ *  @param filename The path of the file to hash.
+ *  @param algorithm The hash algorithm, support "md5", "sha1", "sha256", "sha512" and more
+ *  @param bufferSize Chunk size used for hashing
+ *  @param toHex Convert to lowercase hex string
+ *  @return The hash for the file
+ */
+AX_DLL std::string computeFileDigest(std::string_view filename,
+                                     std::string_view algorithm,
+                                     uint32_t bufferSize = 16 * 1024,
+                                     bool toHex          = true);
 
 /**
 @brief Converts language iso 639-1 code to LanguageType enum.
