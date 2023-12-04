@@ -95,6 +95,7 @@ ActionsTests::ActionsTests()
     ADD_TEST_CASE(Issue14936_2);
     ADD_TEST_CASE(SequenceWithFinalInstant);
     ADD_TEST_CASE(Issue18003);
+    ADD_TEST_CASE(ActionCoroutineTest);
 }
 
 std::string ActionsDemo::title() const
@@ -887,17 +888,17 @@ void ActionCallFunction::onEnter()
 
     centerSprites(3);
 
-    auto action1 = Sequence::create(
-        MoveBy::create(2, Vec2(200.0f, 0.0f)), CallFunc::create(std::bind(&ActionCallFunction::callback1, this)),
-        CallFunc::create(
-            // lambda
-            [&]() {
-                auto s     = Director::getInstance()->getWinSize();
-                auto label = Label::createWithTTF("called:lambda callback", "fonts/Marker Felt.ttf", 16.0f);
-                label->setPosition(s.width / 4 * 1, s.height / 2 - 40);
-                this->addChild(label);
-            }),
-        nullptr);
+    auto action1 = Sequence::create(MoveBy::create(2, Vec2(200.0f, 0.0f)),
+                                    CallFunc::create(std::bind(&ActionCallFunction::callback1, this)),
+                                    CallFunc::create(
+                                        // lambda
+                                        [&]() {
+        auto s     = Director::getInstance()->getWinSize();
+        auto label = Label::createWithTTF("called:lambda callback", "fonts/Marker Felt.ttf", 16.0f);
+        label->setPosition(s.width / 4 * 1, s.height / 2 - 40);
+        this->addChild(label);
+    }),
+                                    nullptr);
 
     auto action2 =
         Sequence::create(ScaleBy::create(2, 2), FadeOut::create(2),
@@ -1655,9 +1656,9 @@ void Issue1305::onEnter()
 
     scheduleOnce(
         [&](float dt) {
-            _spriteTmp->setPosition(250, 250);
-            addChild(_spriteTmp);
-        },
+        _spriteTmp->setPosition(250, 250);
+        addChild(_spriteTmp);
+    },
         2, "update_key");
 }
 
@@ -2079,20 +2080,20 @@ void PauseResumeActions::onEnter()
 
     this->schedule(
         [&](float dt) {
-            log("Pausing");
-            auto director = Director::getInstance();
+        log("Pausing");
+        auto director = Director::getInstance();
 
-            _pausedTargets = director->getActionManager()->pauseAllRunningActions();
-        },
+        _pausedTargets = director->getActionManager()->pauseAllRunningActions();
+    },
         3, false, 0, "pause_key");
 
     this->schedule(
         [&](float dt) {
-            log("Resuming");
-            auto director = Director::getInstance();
-            director->getActionManager()->resumeTargets(_pausedTargets);
-            _pausedTargets.clear();
-        },
+        log("Resuming");
+        auto director = Director::getInstance();
+        director->getActionManager()->resumeTargets(_pausedTargets);
+        _pausedTargets.clear();
+    },
         5, false, 0, "resume_key");
 }
 
@@ -2316,8 +2317,7 @@ void SequenceWithFinalInstant::onEnter()
         called = true;
     });
 
-    const auto action =
-        ax::Sequence::create(ax::DelayTime::create(0.05f), ax::CallFunc::create(f), nullptr);
+    const auto action = ax::Sequence::create(ax::DelayTime::create(0.05f), ax::CallFunc::create(f), nullptr);
 
     _target->runAction(action);
     _manager->update(0);
@@ -2414,4 +2414,68 @@ void Issue18003::onExit()
 std::string Issue18003::subtitle() const
 {
     return "issue18003: should not crash";
+}
+
+//------------------------------------------------------------------
+//
+// ActionCoroutine
+//
+//------------------------------------------------------------------
+void ActionCoroutineTest::onEnter()
+{
+    ActionsDemo::onEnter();
+
+    _frameCount = 1;
+    centerSprites(0);
+
+    auto action = ActionCoroutine::create(coroutineCallback());
+    this->runAction(action);
+
+    auto s = Director::getInstance()->getWinSize();
+    _label =
+        Label::createWithTTF(StringUtils::format("frame count : %" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    _label->setPosition(s.width / 2, s.height / 2 + 100);
+    addChild(_label, 1, 1);
+
+    scheduleUpdate();
+}
+
+void ActionCoroutineTest::update(float delta)
+{
+    _frameCount++;
+    _label->setString(StringUtils::format("frame count : %" PRIu64 ")", _frameCount));
+}
+
+std::string ActionCoroutineTest::title() const
+{
+    return "Coroutine";
+}
+
+std::string ActionCoroutineTest::subtitle() const
+{
+    return "";
+}
+
+Coroutine ActionCoroutineTest::coroutineCallback()
+{
+    auto s = Director::getInstance()->getWinSize();
+
+    auto label1 =
+        Label::createWithTTF(StringUtils::format("First (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    label1->setPosition(s.width / 4 * 1, s.height / 2);
+    addChild(label1);
+    co_yield DelayTime::create(3.0f);  // delay 3s
+
+    auto label2 =
+        Label::createWithTTF(StringUtils::format("after 3sec (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    label2->setPosition(s.width / 4 * 2, s.height / 2);
+    addChild(label2);
+    co_yield nullptr;  // next frame
+
+    auto label3 =
+        Label::createWithTTF(StringUtils::format("next frame (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+    label3->setPosition(s.width / 4 * 3, s.height / 2);
+    addChild(label3);
+
+    // co_return;   // return coroutine
 }

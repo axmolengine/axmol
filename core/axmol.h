@@ -112,6 +112,7 @@ THE SOFTWARE.
 #include "2d/ActionTiledGrid.h"
 #include "2d/ActionTween.h"
 #include "2d/TweenFunction.h"
+#include "2d/ActionCoroutine.h"
 
 // 2d nodes
 #include "2d/AtlasNode.h"
