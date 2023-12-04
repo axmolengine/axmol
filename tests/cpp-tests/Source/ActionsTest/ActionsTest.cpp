@@ -2433,7 +2433,7 @@ void ActionCoroutineTest::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
     _label =
-        Label::createWithTTF(StringUtils::format("frame count : %llu", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+        Label::createWithTTF(StringUtils::format("frame count : %" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     _label->setPosition(s.width / 2, s.height / 2 + 100);
     addChild(_label, 1, 1);
 
@@ -2443,7 +2443,7 @@ void ActionCoroutineTest::onEnter()
 void ActionCoroutineTest::update(float delta)
 {
     _frameCount++;
-    _label->setString(StringUtils::format("frame count : %llu", _frameCount));
+    _label->setString(StringUtils::format("frame count : %" PRIu64 ")", _frameCount));
 }
 
 std::string ActionCoroutineTest::title() const
@@ -2461,19 +2461,19 @@ Coroutine ActionCoroutineTest::coroutineCallback()
     auto s = Director::getInstance()->getWinSize();
 
     auto label1 =
-        Label::createWithTTF(StringUtils::format("First (%llu)", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+        Label::createWithTTF(StringUtils::format("First (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label1->setPosition(s.width / 4 * 1, s.height / 2);
     addChild(label1);
     co_yield DelayTime::create(3.0f);  // delay 3s
 
     auto label2 =
-        Label::createWithTTF(StringUtils::format("after 3sec (%llu)", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+        Label::createWithTTF(StringUtils::format("after 3sec (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label2->setPosition(s.width / 4 * 2, s.height / 2);
     addChild(label2);
     co_yield nullptr;  // next frame
 
     auto label3 =
-        Label::createWithTTF(StringUtils::format("next frame (%llu)", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
+        Label::createWithTTF(StringUtils::format("next frame (%" PRIu64 ")", _frameCount), "fonts/Marker Felt.ttf", 16.0f);
     label3->setPosition(s.width / 4 * 3, s.height / 2);
     addChild(label3);
 
