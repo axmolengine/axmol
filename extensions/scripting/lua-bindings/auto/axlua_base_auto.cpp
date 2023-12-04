@@ -50576,6 +50576,63 @@ int lua_register_ax_base_ActionTween(lua_State* tolua_S)
     return 1;
 }
 
+int lua_ax_base_ActionCoroutine_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    ax::ActionCoroutine* cobj = nullptr;
+    bool ok  = true;
+
+#if _AX_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_ax_base_ActionCoroutine_constructor'", nullptr);
+            return 0;
+        }
+        cobj = new ax::ActionCoroutine();
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"ax.ActionCoroutine");
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ax.ActionCoroutine:ActionCoroutine",argc, 0);
+    return 0;
+
+#if _AX_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_ax_base_ActionCoroutine_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_ax_base_ActionCoroutine_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (ActionCoroutine)");
+    return 0;
+}
+
+int lua_register_ax_base_ActionCoroutine(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"ax.ActionCoroutine");
+    tolua_cclass(tolua_S,"ActionCoroutine","ax.ActionCoroutine","ax.Action",nullptr);
+
+    tolua_beginmodule(tolua_S,"ActionCoroutine");
+        tolua_function(tolua_S,"new",lua_ax_base_ActionCoroutine_constructor);
+    tolua_endmodule(tolua_S);
+    auto typeName = typeid(ax::ActionCoroutine).name(); // rtti is literal storage
+    g_luaType[reinterpret_cast<uintptr_t>(typeName)] = "ax.ActionCoroutine";
+    g_typeCast[typeName] = "ax.ActionCoroutine";
+    return 1;
+}
+
 int lua_ax_base_AtlasNode_updateAtlasValues(lua_State* tolua_S)
 {
     int argc = 0;
@@ -112025,6 +112082,7 @@ TOLUA_API int register_all_ax_base(lua_State* tolua_S)
 	lua_register_ax_base_SplitRows(tolua_S);
 	lua_register_ax_base_SplitCols(tolua_S);
 	lua_register_ax_base_ActionTween(tolua_S);
+	lua_register_ax_base_ActionCoroutine(tolua_S);
 	lua_register_ax_base_AtlasNode(tolua_S);
 	lua_register_ax_base_ClippingNode(tolua_S);
 	lua_register_ax_base_ClippingRectangleNode(tolua_S);
