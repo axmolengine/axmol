@@ -331,7 +331,7 @@ public:
                  float scaleX,
                  float scaleY,
                  const Color4B& color,
-                 int DrawMode);
+                 DrawMode drawMode);
 
     /** draw a segment with a radius and color.
      *
