@@ -415,6 +415,8 @@ protected:
     int _currentFirstGID;
     bool _recordFirstGID;
     std::string _externalTilesetFilename;
+    //! current property key
+    std::string _currentPropertyKey;
 };
 
 // end of tilemap_parallax_nodes group
