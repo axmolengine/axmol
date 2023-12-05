@@ -800,18 +800,18 @@ void DrawNode::drawPie(const Vec2& center,
     }
     switch (drawModus)
     {
-    case drawModus::Fill:
+    case DrawModus::Fill:
         vertices[n++] = center;
         drawSolidPoly(vertices, n, color);
         break;
-    case drawModus::Outline:
+    case DrawModus::Outline:
         vertices[n++] = center;
         drawPoly(vertices, n, true, color);
         break;
-    case drawModus::Line:
+    case DrawModus::Line:
         drawPoly(vertices, n, false, color);
         break;
-    case drawModus::Semi:
+    case DrawModus::Semi:
         drawPoly(vertices, n, true, color);
         break;
 
