@@ -35,6 +35,7 @@ DrawPrimitivesTests::DrawPrimitivesTests()
     ADD_TEST_CASE(DrawNodeTest);
     ADD_TEST_CASE(Issue11942Test);
     ADD_TEST_CASE(BetterCircleRendering);
+    ADD_TEST_CASE(DrawNodeTestNewFeature1);
     ADD_TEST_CASE(Issue829Test);
     ADD_TEST_CASE(Issue1319Test);
 }
@@ -362,6 +363,124 @@ string BetterCircleRendering::title() const
 string BetterCircleRendering::subtitle() const
 {
     return "Green: smoother rendering; Red: faster but badly rendering";
+}
+
+
+DrawNodeTestNewFeature1::DrawNodeTestNewFeature1()
+{
+    drawNode = DrawNode::create();
+    addChild(drawNode, 10);
+
+    initSliders();
+
+    scheduleUpdate();
+}
+
+void DrawNodeTestNewFeature1::changeEndAngle(ax::Ref* pSender, ax::ui::Slider::EventType type)
+{
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        ax::ui::Slider* sEndAngle = dynamic_cast<ax::ui::Slider*>(pSender);
+        endAngle                  = sEndAngle->getPercent() * 3.6;
+        _EndAngleLabel->setString("endAngle: (" + Value(endAngle).asString() + ")");
+    }
+}
+
+void DrawNodeTestNewFeature1::changeStartAngle(ax::Ref* pSender, ax::ui::Slider::EventType type)
+{
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        ax::ui::Slider* sStartAngle = dynamic_cast<ax::ui::Slider*>(pSender);
+        startAngle                  = sStartAngle->getPercent() * 3.6;
+        _StartAngleLabel->setString("startAngle: (" + Value(startAngle).asString() + ")");
+    }
+}
+
+void DrawNodeTestNewFeature1::changeAngle(ax::Ref* pSender, ax::ui::Slider::EventType type)
+{
+    if (type == ax::ui::Slider::EventType::ON_PERCENTAGE_CHANGED)
+    {
+        ax::ui::Slider* sStartAngle = dynamic_cast<ax::ui::Slider*>(pSender);
+        angle                       = sStartAngle->getPercent() * 3.6;
+        _AngleLabel->setString("Angle: (" + Value(angle).asString() + ")");
+    }
+}
+
+void DrawNodeTestNewFeature1::initSliders()
+{
+    angle      = 324;
+    endAngle   = 360;
+    startAngle = 0;
+
+    auto vsize                       = Director::getInstance()->getVisibleSize();
+    ax::ui::Slider* sliderStartAngle = ax::ui::Slider::create();
+    sliderStartAngle->setPercent(startAngle);
+    sliderStartAngle->loadBarTexture("cocosui/sliderTrack.png");
+    sliderStartAngle->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+    sliderStartAngle->loadProgressBarTexture("cocosui/sliderProgress.png");
+    sliderStartAngle->setPosition(Vec2(vsize.width / 2, vsize.height / 6));
+
+    sliderStartAngle->addEventListener(AX_CALLBACK_2(DrawNodeTestNewFeature1::changeStartAngle, this));
+
+    auto ttfConfig   = TTFConfig("fonts/arial.ttf", 8);
+    _StartAngleLabel = Label::createWithTTF(ttfConfig, "StartAngle");
+    addChild(_StartAngleLabel, 20);
+    _StartAngleLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 15));
+
+    addChild(sliderStartAngle, 20);
+
+    ax::ui::Slider* sliderEndAngle = ax::ui::Slider::create();
+    sliderEndAngle->setPercent(endAngle);
+    sliderEndAngle->loadBarTexture("cocosui/sliderTrack.png");
+    sliderEndAngle->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+    sliderEndAngle->loadProgressBarTexture("cocosui/sliderProgress.png");
+    sliderEndAngle->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 35));
+    sliderEndAngle->addEventListener(AX_CALLBACK_2(DrawNodeTestNewFeature1::changeEndAngle, this));
+
+    _EndAngleLabel = Label::createWithTTF(ttfConfig, "endAngle");
+
+    addChild(_EndAngleLabel, 20);
+    _EndAngleLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 50));
+    addChild(sliderEndAngle, 20);
+
+    ax::ui::Slider* sliderAngle = ax::ui::Slider::create();
+    sliderAngle->setPercent(angle);
+    sliderAngle->loadBarTexture("cocosui/sliderTrack.png");
+    sliderAngle->loadSlidBallTextures("cocosui/sliderThumb.png", "cocosui/sliderThumb.png", "");
+    sliderAngle->loadProgressBarTexture("cocosui/sliderProgress.png");
+    sliderAngle->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 65));
+    sliderAngle->addEventListener(AX_CALLBACK_2(DrawNodeTestNewFeature1::changeAngle, this));
+
+    _AngleLabel = Label::createWithTTF(ttfConfig, "Angle");
+
+    addChild(_AngleLabel, 20);
+    _AngleLabel->setPosition(Vec2(vsize.width / 2, vsize.height / 6 + 80));
+    addChild(sliderAngle, 20);
+}
+
+void DrawNodeTestNewFeature1::update(float dt)
+{
+    drawNode->clear();
+
+    // Pie
+    drawNode->drawPie(VisibleRect::center() - Vec2(170.0f, -35.0f), 50, angle, startAngle, endAngle, 1.0f, 1.0f,
+                      Color4F::BLUE, drawNode->DrawMode::Fill);
+    drawNode->drawPie(VisibleRect::center() - Vec2(60.0f, -35.0f), 50, angle, startAngle, endAngle, 1.0f, 1.0f,
+                      Color4F::BLUE, drawNode->DrawMode::Outline);
+    drawNode->drawPie(VisibleRect::center() + Vec2(60.0f, 35.0f), 50, angle, startAngle, endAngle, 1.0f, 1.0f,
+                      Color4F::BLUE, drawNode->DrawMode::Line);
+    drawNode->drawPie(VisibleRect::center() + Vec2(170.0f, 35.0f), 50, angle, startAngle, endAngle, 1.0f, 1.0f,
+                      Color4F::BLUE, drawNode->DrawMode::Semi);
+}
+
+string DrawNodeTestNewFeature1::title() const
+{
+    return "DrawNode::drawPie";
+}
+
+string DrawNodeTestNewFeature1::subtitle() const
+{
+    return "Filled, Outlined, Line, Semi";
 }
 
 Issue829Test::Issue829Test()

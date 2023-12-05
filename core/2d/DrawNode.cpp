@@ -754,6 +754,72 @@ void DrawNode::drawSolidPoly(const Vec2* poli, unsigned int numberOfPoints, cons
     drawPolygon(poli, numberOfPoints, color, 0.0, Color4B());
 }
 
+void DrawNode::drawPie(const Vec2& center,
+                       float radius,
+                       float angle,
+                       int startAngle,
+                       int endAngle,
+                       float scaleX,
+                       float scaleY,
+                       const Color4B& color,
+                       DrawMode drawMode)
+{
+    // not a real line!
+    if (startAngle == endAngle)
+        return;
+
+#define DEGREES 360
+
+    const float coef = 2.0f * (float)M_PI / DEGREES;
+    Vec2* vertices   = _abuf.get<Vec2>(DEGREES + 2);
+
+    int n        = 0;
+    float rads   = 0;
+    float _angle = AX_DEGREES_TO_RADIANS(angle);
+
+    if (startAngle > endAngle)
+    {
+        int tmp    = endAngle;
+        endAngle   = startAngle;
+        startAngle = tmp;
+    }
+
+    for (int i = 0; i <= DEGREES; i++)
+    {
+        if (startAngle <= i && endAngle >= i)
+        {
+            rads = i * coef;
+
+            float j = radius * cosf(rads + _angle) * scaleX + center.x;
+            float k = radius * sinf(rads + _angle) * scaleY + center.y;
+
+            vertices[n].x = j;
+            vertices[n].y = k;
+            n++;
+        }
+    }
+    switch (drawMode)
+    {
+    case DrawMode::Fill:
+        vertices[n++] = center;
+        drawSolidPoly(vertices, n, color);
+        break;
+    case DrawMode::Outline:
+        vertices[n++] = center;
+        drawPoly(vertices, n, true, color);
+        break;
+    case DrawMode::Line:
+        drawPoly(vertices, n, false, color);
+        break;
+    case DrawMode::Semi:
+        drawPoly(vertices, n, true, color);
+        break;
+
+    default:
+        break;
+    }
+}
+
 void DrawNode::drawSolidCircle(const Vec2& center,
                                float radius,
                                float angle,
