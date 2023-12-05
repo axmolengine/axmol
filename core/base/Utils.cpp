@@ -402,12 +402,9 @@ Node* findChild(Node* levelRoot, int tag)
     return nullptr;
 }
 
-std::string getFileMD5Hash(std::string_view filename)
+std::string getFileMD5Hash(std::string_view filename, uint32_t bufferSize)
 {
-    Data data;
-    FileUtils::getInstance()->getContents(filename, &data);
-
-    return getDataMD5Hash(data);
+    return computeFileDigest(filename, "md5"sv, bufferSize);
 }
 
 std::string getDataMD5Hash(const Data& data)
@@ -439,6 +436,45 @@ std::string computeDigest(std::string_view data, std::string_view algorithm, boo
     EVP_DigestFinal(mdctx, mdValue, &mdLen);
     EVP_MD_CTX_destroy(mdctx);
 
+    return toHex ? bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen})
+                 : std::string{(const char*)mdValue, (size_t)mdLen};
+}
+
+std::string computeFileDigest(std::string_view filename, std::string_view algorithm, uint32_t bufferSize, bool toHex)
+{
+    if (filename.empty())
+        return std::string{};
+
+    auto fs = FileUtils::getInstance()->openFileStream(filename, FileStream::Mode::READ);
+
+    if (!fs || !fs->isOpen())
+        return std::string{};
+
+    std::unique_ptr<uint8_t[]> buffer(new uint8_t[bufferSize]);
+    unsigned char mdValue[EVP_MAX_MD_SIZE] = {0};
+    unsigned int mdLen                     = 0;
+
+    OpenSSL_add_all_digests();
+    const EVP_MD* md = EVP_get_digestbyname(algorithm.data());
+    if (!md)
+        return std::string{};
+
+    EVP_MD_CTX* mdctx = EVP_MD_CTX_create();
+    auto ok           = EVP_DigestInit(mdctx, md);
+    if (!ok)
+    {
+        EVP_MD_CTX_destroy(mdctx);
+        return std::string{};
+    }
+
+    int bytesRead;
+    while ((bytesRead = fs->read(buffer.get(), bufferSize)) > 0)
+    {
+        EVP_DigestUpdate(mdctx, buffer.get(), bytesRead);
+    }
+
+    EVP_DigestFinal(mdctx, mdValue, &mdLen);
+    EVP_MD_CTX_destroy(mdctx);
     return toHex ? bin2hex(std::string_view{(const char*)mdValue, (size_t)mdLen})
                  : std::string{(const char*)mdValue, (size_t)mdLen};
 }

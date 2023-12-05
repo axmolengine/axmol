@@ -194,7 +194,7 @@
 
 ## pugixml
 - [![Upstream](https://img.shields.io/github/v/tag/halx99/pugixml?label=Upstream)](https://github.com/halx99/pugixml) by halx99 for string_view support
-  - original repo: https://github.com/zeux/pugixml
+  - original repo:  [![Upstream](https://img.shields.io/github/v/tag/zeux/pugixml?label=Upstream)](https://github.com/zeux/pugixml)
   - all tests passed: https://github.com/halx99/pugixml/actions/runs/4090401630
 - Version: 1.13
 - License: MIT
