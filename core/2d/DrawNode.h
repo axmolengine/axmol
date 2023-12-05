@@ -62,7 +62,7 @@ public:
      *
      *.
      */
-    enum DrawModus
+    enum DrawMode
     {
         Fill,
         Outline,

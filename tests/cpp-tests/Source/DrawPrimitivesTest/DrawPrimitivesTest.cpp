@@ -464,13 +464,13 @@ void DrawNodeTestNewFeature1::update(float dt)
 
     // Pie
     drawNode->drawPie(VisibleRect::center() - Vec2(170.0f, -35.0f), 50, angle, startAngle, endAngle, 1.0f, 1.0f,
-                      Color4F::BLUE, drawNode->DrawModus::Fill);
+                      Color4F::BLUE, drawNode->DrawMode::Fill);
     drawNode->drawPie(VisibleRect::center() - Vec2(60.0f, -35.0f), 50, angle, startAngle, endAngle, 1.0f, 1.0f,
-                      Color4F::BLUE, drawNode->DrawModus::Outline);
+                      Color4F::BLUE, drawNode->DrawMode::Outline);
     drawNode->drawPie(VisibleRect::center() + Vec2(60.0f, 35.0f), 50, angle, startAngle, endAngle, 1.0f, 1.0f,
-                      Color4F::BLUE, drawNode->DrawModus::Line);
+                      Color4F::BLUE, drawNode->DrawMode::Line);
     drawNode->drawPie(VisibleRect::center() + Vec2(170.0f, 35.0f), 50, angle, startAngle, endAngle, 1.0f, 1.0f,
-                      Color4F::BLUE, drawNode->DrawModus::Semi);
+                      Color4F::BLUE, drawNode->DrawMode::Semi);
 }
 
 string DrawNodeTestNewFeature1::title() const
