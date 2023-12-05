@@ -798,7 +798,7 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
     {
         tmxMapInfo->setStoringCharacters(false);
         auto currentString = tmxMapInfo->getCurrentString();
-        if (currentString.size() > 0 && _currentPropertyKey.size() > 0)
+        if (!currentString.empty() && !_currentPropertyKey.empty())
         {
             if (tmxMapInfo->getParentElement() == TMXPropertyMap)
             {
@@ -848,7 +848,7 @@ void TMXMapInfo::textHandler(void* /*ctx*/, const char* ch, size_t len)
     TMXMapInfo* tmxMapInfo = this;
     std::string text(ch, 0, len);
 
-    if (_currentPropertyKey.size() > 0)
+    if (!_currentPropertyKey.empty())
     {
         text = std::regex_replace(text, std::regex("[\r]"), "");
     }
