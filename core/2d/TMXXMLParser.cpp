@@ -521,10 +521,13 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
     }
     else if (elementName == "property")
     {
+        _currentPropertyKey.clear();
+        tmxMapInfo->setStoringCharacters(true);
         if (tmxMapInfo->getParentElement() == TMXPropertyNone)
         {
             AXLOG("TMX tile map: Parent element is unsupported. Cannot add property named '%s' with value '%s'",
                   attributeDict["name"].asString().c_str(), attributeDict["value"].asString().c_str());
+            tmxMapInfo->setStoringCharacters(false);
         }
         else if (tmxMapInfo->getParentElement() == TMXPropertyMap)
         {
@@ -532,6 +535,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             Value value     = attributeDict["value"];
             std::string key = attributeDict["name"].asString();
             tmxMapInfo->getProperties().emplace(key, value);
+            _currentPropertyKey = key;
         }
         else if (tmxMapInfo->getParentElement() == TMXPropertyLayer)
         {
@@ -541,6 +545,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             std::string key     = attributeDict["name"].asString();
             // Add the property to the layer
             layer->getProperties().emplace(key, value);
+            _currentPropertyKey = key;
         }
         else if (tmxMapInfo->getParentElement() == TMXPropertyObjectGroup)
         {
@@ -549,6 +554,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
             Value value                 = attributeDict["value"];
             std::string key             = attributeDict["name"].asString();
             objectGroup->getProperties().emplace(key, value);
+            _currentPropertyKey = key;
         }
         else if (tmxMapInfo->getParentElement() == TMXPropertyObject)
         {
@@ -558,6 +564,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
             std::string propertyName = attributeDict["name"].asString();
             dict[propertyName]       = attributeDict["value"];
+            _currentPropertyKey      = propertyName;
         }
         else if (tmxMapInfo->getParentElement() == TMXPropertyTile)
         {
@@ -565,6 +572,7 @@ void TMXMapInfo::startElement(void* /*ctx*/, const char* name, const char** atts
 
             std::string propertyName = attributeDict["name"].asString();
             dict[propertyName]       = attributeDict["value"];
+            _currentPropertyKey      = propertyName;
         }
     }
     else if (elementName == "polygon")
@@ -786,13 +794,68 @@ void TMXMapInfo::endElement(void* /*ctx*/, const char* name)
     {
         tmxMapInfo->setParentElement(TMXPropertyNone);
     }
+    else if (elementName == "property")
+    {
+        tmxMapInfo->setStoringCharacters(false);
+        auto currentString = tmxMapInfo->getCurrentString();
+        if (!currentString.empty() && !_currentPropertyKey.empty())
+        {
+            if (tmxMapInfo->getParentElement() == TMXPropertyMap)
+            {
+                auto& valueMap = tmxMapInfo->getProperties();
+                if (valueMap.contains(_currentPropertyKey) == true)
+                {
+                    valueMap[_currentPropertyKey] = currentString;
+                }
+            }
+            else if (tmxMapInfo->getParentElement() == TMXPropertyLayer)
+            {
+                auto layer     = tmxMapInfo->getLayers().back();
+                auto& valueMap = layer->getProperties();
+                if (valueMap.contains(_currentPropertyKey) == true)
+                {
+                    valueMap[_currentPropertyKey] = currentString;
+                }
+            }
+            else if (tmxMapInfo->getParentElement() == TMXPropertyObjectGroup)
+            {
+                auto objectGroup = tmxMapInfo->getObjectGroups().back();
+                auto& valueMap   = objectGroup->getProperties();
+                if (valueMap.contains(_currentPropertyKey) == true)
+                {
+                    valueMap[_currentPropertyKey] = currentString;
+                }
+            }
+            else if (tmxMapInfo->getParentElement() == TMXPropertyObject)
+            {
+                auto objectGroup          = tmxMapInfo->getObjectGroups().back();
+                ValueMap& dict            = objectGroup->getObjects().rbegin()->asValueMap();
+                dict[_currentPropertyKey] = currentString;
+            }
+            else if (tmxMapInfo->getParentElement() == TMXPropertyTile)
+            {
+                ValueMap& dict            = tmxMapInfo->getTileProperties().at(tmxMapInfo->getParentGID()).asValueMap();
+                dict[_currentPropertyKey] = currentString;
+            }
+        }
+        tmxMapInfo->setCurrentString("");
+        _currentPropertyKey.clear();
+    }
 }
 
 void TMXMapInfo::textHandler(void* /*ctx*/, const char* ch, size_t len)
 {
     TMXMapInfo* tmxMapInfo = this;
     std::string text(ch, 0, len);
-    text = std::regex_replace(text, std::regex("[\n\r ]"), "");
+
+    if (!_currentPropertyKey.empty())
+    {
+        text = std::regex_replace(text, std::regex("[\r]"), "");
+    }
+    else
+    {
+        text = std::regex_replace(text, std::regex("[\n\r ]"), "");
+    }
 
     if (tmxMapInfo->isStoringCharacters())
     {
