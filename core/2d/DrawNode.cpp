@@ -762,7 +762,7 @@ void DrawNode::drawPie(const Vec2& center,
                        float scaleX,
                        float scaleY,
                        const Color4B& color,
-                       int drawModus)
+                       int DrawMode)
 {
     // not a real line!
     if (startAngle == endAngle)
@@ -798,7 +798,7 @@ void DrawNode::drawPie(const Vec2& center,
             n++;
         }
     }
-    switch (drawModus)
+    switch (DrawMode)
     {
     case DrawMode::Fill:
         vertices[n++] = center;

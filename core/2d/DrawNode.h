@@ -320,7 +320,7 @@ public:
      * @param scaleX The scale value in x.
      * @param scaleY The scale value in y.
      * @param color The solid circle color.
-     * @param drawModus The draw modus 
+     * @param DrawMode The draw mode 
      * @js NA
      */
     void drawPie(const Vec2& center,
@@ -331,7 +331,7 @@ public:
                  float scaleX,
                  float scaleY,
                  const Color4B& color,
-                 int drawModus);
+                 int DrawMode);
 
     /** draw a segment with a radius and color.
      *
