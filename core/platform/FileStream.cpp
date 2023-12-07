@@ -1,5 +1,4 @@
-// Copyright (c) 2018-2019 HALX99.
-// Copyright (c) 2020 C4games Ltd
+// Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
 #include "platform/FileStream.h"
 
 #if AX_TARGET_PLATFORM == AX_PLATFORM_ANDROID

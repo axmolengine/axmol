@@ -1,6 +1,6 @@
     /****************************************************************************
  Copyright (c) 2018-2019 Xiamen Yaji Software Co., Ltd.
- Copyright (c) 2020 C4games Ltd
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md)
 
  https://axmolengine.github.io/
 

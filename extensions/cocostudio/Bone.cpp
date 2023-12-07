@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2013-2017 Chukong Technologies Inc.
-Copyright (c) 2021 Bytedance Inc.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 

@@ -1,6 +1,6 @@
 #/****************************************************************************
 # Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2021-2022 Bytedance Inc.
+# Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 #
 # https://axmolengine.github.io/
 #

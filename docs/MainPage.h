@@ -19,7 +19,7 @@ This project is a fork of <A HREF="https://github.com/cocos2d/cocos2d-x">"cocos2
 @section sec2 License
 Copyright (c) 2010-2012 cocos2d-x.org \n
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd. \n
-Copyright (c) 2021-2023 Bytedance Inc. \n
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md). \n
 \n
 Permission is hereby granted, free of charge, to any person obtaining a copy \n
 of this software and associated documentation files (the "Software"), to deal \n

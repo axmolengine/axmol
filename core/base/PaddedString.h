@@ -1,6 +1,6 @@
 /****************************************************************************
 
- Copyright (c) 2023 HALX99.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 

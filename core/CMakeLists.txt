@@ -2,7 +2,7 @@
 # Copyright (c) 2013 cocos2d-x.org
 # Copyright (c) 2014 martell malone
 # Copyright (c) 2015-2017 Chukong Technologies Inc.
-# Copyright (c) 2021-2023 Bytedance Inc.
+# Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 # 
 # https://axmolengine.github.io/
 #
@@ -158,28 +158,30 @@ if (WIN32)
 endif()
 
 # axmolver.h
-find_package(Git)
-if(AX_UPDATE_BUILD_VERSION AND GIT_FOUND AND EXISTS "${_AX_ROOT}/.git")
+find_program(GIT_COMMAND NAMES git)
+if(AX_UPDATE_BUILD_VERSION AND GIT_COMMAND AND EXISTS "${_AX_ROOT}/.git")
     # Get the current working branch and its latest abbreviated commit hash
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-list --count HEAD
+    execute_process(COMMAND ${GIT_COMMAND} -C "${_AX_ROOT}" rev-list --count HEAD
         TIMEOUT 5
         OUTPUT_VARIABLE AX_BUILD_NUM
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" branch --show-current
+    execute_process(COMMAND ${GIT_COMMAND} -C "${_AX_ROOT}" branch --show-current
         TIMEOUT 5
         OUTPUT_VARIABLE AX_GIT_BRANCH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
+    execute_process(COMMAND ${GIT_COMMAND} -C "${_AX_ROOT}" rev-parse --short=7 HEAD
         TIMEOUT 5
         OUTPUT_VARIABLE AX_GIT_COMMIT_HASH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
+    set(AX_GIT_PRESENT 1)
 else()
     set(AX_GIT_BRANCH "UNKNOWN")
     set(AX_GIT_COMMIT_HASH "unknown")
+    set(AX_GIT_PRESENT 0)
 endif()
 configure_file(
         "${CMAKE_CURRENT_LIST_DIR}/axmolver.h.in"
-        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h")
+        "${CMAKE_CURRENT_LIST_DIR}/axmolver.h" @ONLY)
 
 # early experimental features     
 # include(CMakeDependentOption)

@@ -4,6 +4,12 @@ $llvm_ver = '15.0.7'
 
 $AX_ROOT = (Resolve-Path $myRoot/../..).Path
 
+# ensure prebuilt lib downloaded
+Push-Location $AX_ROOT
+$build_script = Join-Path $AX_ROOT 'build.ps1'
+&$build_script -xc '-DAX_USE_LUAJIT=ON' -c
+Pop-Location
+
 (Get-Command python.exe).Path
 
 pip install PyYAML Cheetah3
@@ -28,7 +34,9 @@ Copy-Item "$prefix/llvmorg-$llvm_ver/llvm/prebuilt/windows/x64/libclang.dll" -De
 ## ensure $env:AX_ROOT/core/axmolver.h exists
 echo "AX_ROOT=$AX_ROOT"
 if (!(Test-Path "$AX_ROOT/core/axmolver.h" -PathType Leaf)) {
-    Copy-Item "$AX_ROOT/core/axmolver.h.in" -Destination "$AX_ROOT/core/axmolver.h"
+    $content = [System.IO.File]::ReadAllText("$AX_ROOT/core/axmolver.h.in")
+    $content = $content.Replace('@AX_GIT_PRESENT@', '0')
+    [System.IO.File]::WriteAllText("$AX_ROOT/core/axmolver.h")
 }
 
 ## run genbindings.py

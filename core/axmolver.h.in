@@ -15,11 +15,14 @@
 #define AX_VERSION_NUM AX_VERSION_MAKE(AX_VERSION_MAJOR, AX_VERSION_MINOR, AX_VERSION_PATCH)
 #define AX_VERSION AX_VERSION_NUM
 
+/* #Define indicate whether axmol/.git present */
+#define AX_GIT_PRESENT @AX_GIT_PRESENT@
+
 /* Define to the library build number from git commit count */
-#define AX_BUILD_NUM "${AX_BUILD_NUM}"
+#define AX_BUILD_NUM "@AX_BUILD_NUM@"
 
 /* Define the branch being built */
-#define AX_GIT_BRANCH "${AX_GIT_BRANCH}"
+#define AX_GIT_BRANCH "@AX_GIT_BRANCH@"
 
 /* Define the hash of the head commit */
-#define AX_GIT_COMMIT_HASH "${AX_GIT_COMMIT_HASH}"
+#define AX_GIT_COMMIT_HASH "@AX_GIT_COMMIT_HASH@"

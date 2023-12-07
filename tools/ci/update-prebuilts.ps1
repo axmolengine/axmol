@@ -49,7 +49,7 @@ function download_and_expand($url, $out, $dest) {
 }
 
 # download version manifest
-cd $AX_ROOT
+Set-Location $AX_ROOT
 
 $cwd = $(Get-Location).Path
 
@@ -63,57 +63,18 @@ if ($null -eq (Get-Module -ListAvailable -Name powershell-yaml)) {
 }
 
 # check upstream prebuilts version
-download_file "https://github.com/axmolengine/build1k/releases/download/$VER/verlist.yml" "./tmp/verlist.yml" $true
+download_file "https://github.com/axmolengine/1k/releases/download/$VER/verlist.yml" "./tmp/verlist.yml" $true
 $newVerList = ConvertFrom-Yaml -Yaml (Get-Content './tmp/verlist.yml' -raw)
 if ($newVerList.GetType() -eq [string]) {
     throw "Download version manifest file verlist.yml fail"
 }
 
-$myVerList = ConvertFrom-Yaml -Yaml (Get-Content './thirdparty/prebuilts.yml' -raw)
+$manifest_old_hash = Get-FileHash -Path './thirdparty/manifest.json' -Algorithm MD5
+$readme_old_hash = Get-FileHash -Path './thirdparty/README.md.in' -Algorithm MD5
 
-function update_lib
-{
-    $lib_name=$args[0]
-    $lib_folder=$args[1]
+$myVerList = ConvertFrom-Json (Get-Content './thirdparty/manifest.json' -raw)
 
-    $myVer = $myVerList[$lib_name]
-    if (($newVerList[$lib_name] -eq $myVer) -and ("$env:FORCE_UPDATE" -ne 'true')) {
-        println "No update for lib: $lib_name, version: $myVer, skip it"
-        return 0
-    }
-
-    $lib_dir="./thirdparty/$lib_folder$lib_name"
-    $prebuilt_dir="$lib_dir/prebuilt"
-    $inc_dir="$lib_dir/include"
-    
-    println "Updating lib files for ${lib_dir} from $prefix/$lib_name ..."
-
-    # https://github.com/axmolengine/build1k/releases/download/v57/angle.zip
-    download_and_expand "https://github.com/axmolengine/build1k/releases/download/$VER/$lib_name.zip" "$prefix/$lib_name.zip" "$prefix"
-
-    Remove-Item $prebuilt_dir -Recurse -Force
-    Copy-Item $prefix/$lib_name/prebuilt $lib_dir/ -Container -Recurse
-    
-    if (Test-Path "$prefix/$lib_name/include" -PathType Container) {
-        println "Update inc files for ${lib_dir}"
-        Remove-Item $inc_dir -Recurse -Force
-        Copy-Item $prefix/$lib_name/include $lib_dir/ -Container -Recurse
-    }
-
-    return 1
-}
-
-println "Updating libs ..."
-
-$libs_list = @('angle', 'curl', 'jpeg-turbo', 'openssl', 'zlib')
-
-# update libs
-$updateCount = 0
-foreach($lib_name in $libs_list) {
-    $updateCount += $(update_lib $lib_name)
-}
-
-$updateCount += $(update_lib luajit lua/)
+println "Updating thirdparty/manifest.json, thirdparty/README.md ..."
 
 # update README.md
 $content = $(Get-Content -Path ./thirdparty/README.md.in -raw)
@@ -122,13 +83,26 @@ foreach ($item in $newVerList.GetEnumerator() )
     $key = ([Regex]::Replace($item.Name, '-', '_')).ToUpper()
     $key = "${key}_VERSION"
     $content = $content -replace "\$\{$key\}",$item.Value
+
+    $curVer = $myVerList.PSObject.Properties[$item.Name]
+    if ($curVer -ne $item.Value) {
+        $myVerList.PSObject.Properties[$item.Name].Value = $curVer.Value
+    }
 }
+
 Set-Content -Path ./thirdparty/README.md -Value "$content"
-Copy-Item -Path './tmp/verlist.yml' './thirdparty/prebuilts.yml' -Force
 
-println "Total update lib count $updateCount"
+$myVerList.PSObject.Properties['1kdist'].Value = $VER.TrimStart('v')
+$content = (ConvertTo-Json $myVerList).Replace("`r`n", "`n")
+$content += "`n"
+Set-Content -Path './thirdparty/manifest.json' -Value "$content" -NoNewline
 
-if ($updateCount -eq 0) {
+$manifest_new_hash = Get-FileHash -Path './thirdparty/manifest.json' -Algorithm MD5
+$readme_new_hash = Get-FileHash -Path './thirdparty/README.md.in' -Algorithm MD5
+
+$modified = ($manifest_new_hash.Hash -ne $manifest_old_hash.Hash) -or ($readme_new_hash.Hash -ne $readme_old_hash.Hash)
+
+if($modified) {
     if ("$env.RUNNER_OS" -ne "") {
         Write-Output "AX_PREBUILTS_NO_UPDATE=true" >> $GITHUB_ENV
     }

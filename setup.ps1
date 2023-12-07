@@ -279,7 +279,7 @@ if ($IsLinux) {
     }
 }
 
-$build1kPath = Join-Path $myRoot '1k/build1k.ps1'
+$build1kPath = Join-Path $myRoot '1k/build.ps1'
 $prefix = Join-Path $myRoot 'tools/external'
 if (!(Test-Path $prefix -PathType Container)) {
     mkdirs $prefix

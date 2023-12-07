@@ -1,6 +1,6 @@
 /****************************************************************************
- Copyright (c) 2018-2020 HALX99.
- Copyright (c) 2021 Bytedance Inc.
+
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 

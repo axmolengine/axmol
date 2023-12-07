@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="yasio::pod_vector&lt;*&gt;">
+    <AlternativeType Name="std::vector&lt;*&gt;" />
+    <DisplayString>{{ size={_Mysize} capacity={_Myres} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_Mysize</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_Myres</Item>
+      <ArrayItems>
+        <Size>_Mysize</Size>
+        <ValuePointer>_Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="yasio::basic_byte_buffer&lt;*&gt;">
+    <DisplayString>{{ size={_Mysize} {_Myfirst,[_Mysize]s8} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_Mysize</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_Myres</Item>
+      <ArrayItems>
+        <Size>_Mysize</Size>
+        <ValuePointer>_Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="yasio::basic_string&lt;char,*&gt;">
+    <AlternativeType Name="yasio::basic_string&lt;char8_t,*&gt;" />
+    <DisplayString Condition="_Myfirst != nullptr">{_Myfirst,s8}</DisplayString>
+    <DisplayString Condition="_Myfirst == nullptr">{&amp;_Myfirst,s8}</DisplayString>
+    <StringView Condition="_Myfirst != nullptr">_Myfirst,s8</StringView>
+    <StringView Condition="_Myfirst == nullptr">&amp;_Myfirst,s8</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_Mysize</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_Myres</Item>
+      <ArrayItems Condition="_Myfirst != nullptr">
+        <Size>_Mysize</Size>
+        <ValuePointer>_Myfirst</ValuePointer>
+      </ArrayItems>
+      <ArrayItems Condition="_Myfirst == nullptr">
+        <Size>_Mysize</Size>
+        <ValuePointer>&amp;_Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="yasio::basic_string&lt;wchar_t,*&gt;">
+    <AlternativeType Name="yasio::basic_string&lt;unsigned short,*&gt;" />
+    <AlternativeType Name="yasio::basic_string&lt;char16_t,*&gt;" />
+    <DisplayString Condition="_Myfirst != nullptr">{_Myfirst,su}</DisplayString>
+    <DisplayString Condition="_Myfirst == nullptr">{&amp;_Myfirst,su}</DisplayString>
+    <StringView Condition="_Myfirst != nullptr">_Myfirst,su</StringView>
+    <StringView Condition="_Myfirst == nullptr">&amp;_Myfirst,su</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_Mysize</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_Myres</Item>
+      <ArrayItems Condition="_Myfirst != nullptr">
+        <Size>_Mysize</Size>
+        <ValuePointer>_Myfirst</ValuePointer>
+      </ArrayItems>
+      <ArrayItems Condition="_Myfirst == nullptr">
+        <Size>_Mysize</Size>
+        <ValuePointer>&amp;_Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="yasio::basic_string&lt;char32_t,*&gt;">
+    <DisplayString Condition="_Myfirst != nullptr">{_Myfirst,s32}</DisplayString>
+    <DisplayString Condition="_Myfirst == nullptr">{&amp;_Myfirst,s32}</DisplayString>
+    <StringView Condition="_Myfirst != nullptr">_Myfirst,s32</StringView>
+    <StringView Condition="_Myfirst == nullptr">&amp;_Myfirst,s32</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">_Mysize</Item>
+      <Item Name="[capacity]" ExcludeView="simple">_Myres</Item>
+      <ArrayItems Condition="_Myfirst != nullptr">
+        <Size>_Mysize</Size>
+        <ValuePointer>_Myfirst</ValuePointer>
+      </ArrayItems>
+      <ArrayItems Condition="_Myfirst == nullptr">
+        <Size>_Mysize</Size>
+        <ValuePointer>&amp;_Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+</AutoVisualizer>

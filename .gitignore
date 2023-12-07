@@ -110,7 +110,7 @@ CMakeSettings.json
 
 # ignore all build
 /build
-/build*
+/build_*
 
 # ignore ninja build dir
 /out
@@ -220,3 +220,6 @@ tools/bindings-generator/libclang/*.so
 templates/lua-template-default/Content/src/axmol
 tests/lua-tests/Content/src/axmol
 tests/lua-tests/Content/res
+tests/cpp-tests/Content
+tests/fairygui-tests/Content
+tests/live2d-tests/Content

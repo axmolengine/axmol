@@ -1,7 +1,7 @@
 
 /****************************************************************************
  Copyright (c) 2021 @denghe
- Copyright (c) 2021 Bytedance Inc.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  https://axmolengine.github.io/
 

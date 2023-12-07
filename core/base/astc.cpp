@@ -1,6 +1,6 @@
 /******************************************************************************
 
- Copyright (c) 2021-2022 Bytedance Inc.
+ Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
  ASTC Texture Decompression.
 

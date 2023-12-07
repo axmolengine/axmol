@@ -2,7 +2,7 @@
  * Copyright 2017 Facebook, Inc.
  * Copyright (c) 2017 Chukong Technologies
  * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
- * Copyright (c) 2021 Bytedance Inc.
+ * Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

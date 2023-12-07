@@ -4,7 +4,7 @@ Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
 Copyright (c) 2013-2016 Chukong Technologies Inc.
 Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
-Copyright (c) 2021-2023 Bytedance Inc.
+Copyright (c) 2019-present Axmol Engine contributors (see AUTHORS.md).
 
 https://axmolengine.github.io/
 
@@ -35,7 +35,11 @@ NS_AX_BEGIN
 
 AX_DLL const char* axmolVersion()
 {
+#if AX_GIT_PRESENT
     return "axmol-" AX_VERSION_STR "-" AX_GIT_COMMIT_HASH;
+#else
+    return "axmol-" AX_VERSION_STR;
+#endif
 }
 
 AX_DLL const char* cocos2dVersion()

@@ -49,7 +49,7 @@ if (NOT (${CMAKE_SYSTEM_NAME} MATCHES "WindowsStore"))
     target_link_libraries(${PROJECT_NAME} glad)
 else()
     target_include_directories(${PROJECT_NAME} 
-        PUBLIC "${_AX_ROOT}/thirdparty/angle/include"
+        PUBLIC "${_AX_ROOT}/thirdparty/angle/_d/include"
         PUBLIC "${_AX_ROOT}/core"
         )
 endif()
