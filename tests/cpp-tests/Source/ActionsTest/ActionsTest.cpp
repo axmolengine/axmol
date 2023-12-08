@@ -2428,7 +2428,7 @@ void ActionCoroutineTest::onEnter()
     _frameCount = 1;
     centerSprites(0);
 
-    auto action = ActionCoroutine::create(coroutineCallback());
+    auto action = ActionCoroutine::create(AX_CALLBACK_0(ActionCoroutineTest::coroutineCallback, this));
     this->runAction(action);
 
     auto s = Director::getInstance()->getWinSize();
@@ -2443,7 +2443,7 @@ void ActionCoroutineTest::onEnter()
 void ActionCoroutineTest::update(float delta)
 {
     _frameCount++;
-    _label->setString(StringUtils::format("frame count : %" PRIu64 ")", _frameCount));
+    _label->setString(StringUtils::format("frame count : %" PRIu64 "", _frameCount));
 }
 
 std::string ActionCoroutineTest::title() const

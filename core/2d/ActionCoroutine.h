@@ -128,7 +128,10 @@ public:
      * @return A pointer of ActionCoroutine. If creation failed, return nil.
      * @lua NA
      */
-    static ActionCoroutine* create(Coroutine&& coroutine);
+    static ActionCoroutine* create(const std::function<Coroutine()>& function);
+    static ActionCoroutine* create(const std::function<Coroutine(void*)>& function, void* arg);
+    static ActionCoroutine* create(const std::function<Coroutine(void*, void*)>& function, void* arg1, void* arg2);
+    static ActionCoroutine* create(const std::function<Coroutine(void*, void*, void*)>& function, void* arg1, void* arg2, void* arg3);
 
     //
     // Overrides
@@ -143,7 +146,10 @@ public:
     /** initializes the action with the Coroutine
      * @lua NA
      */
-    bool initWithCoroutine(Coroutine&& coroutine) noexcept;
+    bool initWithCoroutine(const std::function<Coroutine()>& function) noexcept;
+    bool initWithCoroutine(const std::function<Coroutine(void*)>& function, void* arg) noexcept;
+    bool initWithCoroutine(const std::function<Coroutine(void*, void*)>& function, void* arg1, void* arg2) noexcept;
+    bool initWithCoroutine(const std::function<Coroutine(void*, void*, void*)>& function, void* arg1, void* arg2, void* arg3) noexcept;
 
 protected:
     /** Coroutine */
