@@ -445,7 +445,7 @@ function(ax_setup_app_config app_name)
             endif()
         elseif(APPLE)
             # once cmake-3.28.0 released, uncomment follow line instead above 2 lines
-            set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES_PATH ${GLSLCC_OUT_DIR})
+            set_target_properties(${app_name} PROPERTIES XCODE_EMBED_RESOURCES ${GLSLCC_OUT_DIR})
         elseif(WINRT OR WASM)
             set(app_all_shaders)
             list(APPEND app_all_shaders ${ax_builtin_shaders})
