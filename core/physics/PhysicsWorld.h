@@ -248,6 +248,14 @@ public:
     void setGravity(const Vec2& gravity);
 
     /**
+     * set the slop and bias value of this physics world.
+     *
+     * @param slop Amount of encouraged penetration between colliding shapes. Used to reduce oscillating contacts and keep the collision cache warm.
+     * @param bias Determines how fast overlapping shapes are pushed apart. Expressed as a fraction of the error remaining after each second. Defaults to pow(1.0 - 0.1, 60.0) meaning that Chipmunk fixes 10% of overlap each frame at 60Hz.
+     */
+    void setSlopBias(float slop, float bias);
+
+    /**
      * Set the speed of this physics world.
      *
      * @attention if you setAutoStep(false), this won't work.

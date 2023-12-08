@@ -885,6 +885,12 @@ void PhysicsWorld::setGravity(const Vec2& gravity)
     cpSpaceSetGravity(_cpSpace, PhysicsHelper::vec22cpv(gravity));
 }
 
+void PhysicsWorld::setSlopBias(float slop, float bias)
+{
+    cpSpaceSetCollisionSlop(_cpSpace, slop);
+    cpSpaceSetCollisionBias(_cpSpace, bias);
+}
+
 void PhysicsWorld::setSubsteps(int steps)
 {
     if (steps > 0)
