@@ -128,7 +128,7 @@ public:
      * @return A pointer of ActionCoroutine. If creation failed, return nil.
      * @lua NA
      */
-    static ActionCoroutine* create(Coroutine&& coroutine);
+    static ActionCoroutine* create(const std::function<Coroutine()>& function);
 
     //
     // Overrides
@@ -143,7 +143,7 @@ public:
     /** initializes the action with the Coroutine
      * @lua NA
      */
-    bool initWithCoroutine(Coroutine&& coroutine) noexcept;
+    bool initWithCoroutine(const std::function<Coroutine()>& function) noexcept;
 
 protected:
     /** Coroutine */
