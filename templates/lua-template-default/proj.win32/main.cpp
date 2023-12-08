@@ -22,9 +22,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "main.h"
-#include "cocos2d.h"
 #include "AppDelegate.h"
 
+#include "axmol.h"
 USING_NS_AX;
 
 // uncomment below line, open debug console

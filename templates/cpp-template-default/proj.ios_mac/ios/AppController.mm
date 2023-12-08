@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #import "AppController.h"
-#import "cocos2d.h"
+#import "axmol.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
 
@@ -36,30 +36,27 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-// cocos2d application instance
+// axmol application instance
 static AppDelegate s_sharedApplication;
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-
     ax::Application* app = ax::Application::getInstance();
 
-    // Initialize the GLView attributes
+    // initialize the GLView attributes
     app->initGLContextAttrs();
     ax::GLViewImpl::convertAttrs();
 
-    // Override point for customization after application launch.
-
-    // Add the view controller's view to the window and display.
+    // add the view controller's view to the window and display
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    // Use RootViewController to manage EAGLView
+    // use RootViewController to manage EAGLView
     _viewController                       = [[RootViewController alloc] init];
 #if !defined(AX_TARGET_OS_TVOS)
     _viewController.wantsFullScreenLayout = YES;
 #endif
 
-    // Set RootViewController to window
+    // set RootViewController to window
     if ([[UIDevice currentDevice].systemVersion floatValue] < 6.0)
     {
         // warning: addSubView doesn't work on iOS6
@@ -77,17 +74,17 @@ static AppDelegate s_sharedApplication;
     [[UIApplication sharedApplication] setStatusBarHidden:true];
 #endif
 
-    // Launching the app with the arguments -NSAllowsDefaultLineBreakStrategy NO to force back to the old behavior.
+    // launching the app with the arguments -NSAllowsDefaultLineBreakStrategy NO to force back to the old behavior.
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 13.0f)
     {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSAllowsDefaultLineBreakStrategy"];
     }
 
-    // IMPORTANT: Setting the GLView should be done after creating the RootViewController
+    // setting the GLView should be done after creating the RootViewController
     ax::GLView* glView = ax::GLViewImpl::createWithEAGLView((__bridge void*)_viewController.view);
     ax::Director::getInstance()->setGLView(glView);
 
-    // run the cocos2d-x game scene
+    // run the game scene
     app->run();
 
     return YES;

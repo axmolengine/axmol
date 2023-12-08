@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 #import "RootViewController.h"
-#import "cocos2d.h"
+#import "axmol.h"
 #import "platform/ios/EAGLView-ios.h"
 
 @implementation RootViewController

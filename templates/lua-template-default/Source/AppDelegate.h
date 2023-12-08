@@ -25,14 +25,15 @@
 
 #pragma once
 
-#include "cocos2d.h"
+#include "axmol.h"
+USING_NS_AX;
 
 /**
-@brief    The cocos2d Application.
+@brief    The axmol Application.
 
 Private inheritance here hides part of interface from Director.
 */
-class AppDelegate : private ax::Application
+class AppDelegate : private Application
 {
 public:
     AppDelegate();

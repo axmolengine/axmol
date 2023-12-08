@@ -23,15 +23,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __HELLO_WORLD_SCENE_H__
+#define __HELLO_WORLD_SCENE_H__
 
 #include "axmol.h"
+USING_NS_AX;
 
-
-class HelloWorld : public ax::Scene
+class HelloWorldScene : public Scene
 {
-    enum class ExampleGameState
+    enum class GameState
     {
         init = 0,
         update,
@@ -40,31 +40,31 @@ class HelloWorld : public ax::Scene
         menu1,
         menu2,
     };
-    
+
 public:
     bool init() override;
     void update(float delta) override;
 
     // touch
-    void onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event);
-    void onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event);
+    void onTouchesBegan(const std::vector<Touch*>& touches, Event* event);
+    void onTouchesMoved(const std::vector<Touch*>& touches, Event* event);
+    void onTouchesEnded(const std::vector<Touch*>& touches, Event* event);
 
     // mouse
-    void onMouseDown(ax::Event* event);
-    void onMouseUp(ax::Event* event);
-    void onMouseMove(ax::Event* event);
-    void onMouseScroll(ax::Event* event);
+    void onMouseDown(Event* event);
+    void onMouseUp(Event* event);
+    void onMouseMove(Event* event);
+    void onMouseScroll(Event* event);
 
     // Keyboard
-    void onKeyPressed(ax::EventKeyboard::KeyCode code, ax::Event* event);
-    void onKeyReleased(ax::EventKeyboard::KeyCode code, ax::Event* event);
+    void onKeyPressed(EventKeyboard::KeyCode code, Event* event);
+    void onKeyReleased(EventKeyboard::KeyCode code, Event* event);
 
     // a selector callback
     void menuCloseCallback(Ref* sender);
 
 private:
-    ExampleGameState _gameState = ExampleGameState::init;
+    GameState _gameState = GameState::init;
 };
 
-#endif  // __HELLOWORLD_SCENE_H__
+#endif  // __HELLO_WORLD_SCENE_H__

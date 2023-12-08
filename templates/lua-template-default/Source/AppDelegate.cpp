@@ -25,7 +25,6 @@
 
 #include "AppDelegate.h"
 #include "scripting/lua-bindings/manual/LuaEngine.h"
-#include "cocos2d.h"
 #include "scripting/lua-bindings/manual/lua_module_register.h"
 
 #define USE_AUDIO_ENGINE 1
@@ -33,9 +32,6 @@
 #if USE_AUDIO_ENGINE
 #    include "audio/AudioEngine.h"
 #endif
-
-USING_NS_AX;
-using namespace std;
 
 AppDelegate::AppDelegate() {}
 
@@ -47,7 +43,6 @@ void AppDelegate::initGLContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
-
     GLView::setGLContextAttrs(glContextAttrs);
 }
 

@@ -23,13 +23,13 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "cocos2d.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string>
 
+#include "axmol.h"
 USING_NS_AX;
 
 int main(int argc, char** argv)

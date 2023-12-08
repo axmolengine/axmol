@@ -32,12 +32,10 @@
 #    include "audio/AudioEngine.h"
 #endif
 
-USING_NS_AX;
-
-static ax::Size designResolutionSize = ax::Size(1280, 720);
-static ax::Size smallResolutionSize  = ax::Size(480, 320);
-static ax::Size mediumResolutionSize = ax::Size(1024, 768);
-static ax::Size largeResolutionSize  = ax::Size(2048, 1536);
+static Size designResolutionSize = Size(1280, 720);
+static Size smallResolutionSize  = Size(480, 320);
+static Size mediumResolutionSize = Size(1024, 768);
+static Size largeResolutionSize  = Size(2048, 1536);
 
 AppDelegate::AppDelegate() {}
 
@@ -63,7 +61,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if (AX_TARGET_PLATFORM == AX_PLATFORM_WIN32) || (AX_TARGET_PLATFORM == AX_PLATFORM_MAC) || \
     (AX_TARGET_PLATFORM == AX_PLATFORM_LINUX)
         glView = GLViewImpl::createWithRect(
-            "HelloCpp", ax::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+            "HelloCpp", Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
         glView = GLViewImpl::create("HelloCpp");
 #endif
@@ -100,7 +98,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 
     // create a scene. it's an autorelease object
-    auto scene = utils::createInstance<HelloWorld>();
+    auto scene = utils::createInstance<HelloWorldScene>();
 
     // run
     director->runWithScene(scene);

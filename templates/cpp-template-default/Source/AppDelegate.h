@@ -27,13 +27,14 @@
 #define _APP_DELEGATE_H_
 
 #include "axmol.h"
+USING_NS_AX;
 
 /**
 @brief    The axmol Application.
 
 Private inheritance here hides part of interface from Director.
 */
-class AppDelegate : private ax::Application
+class AppDelegate : private Application
 {
 public:
     AppDelegate();

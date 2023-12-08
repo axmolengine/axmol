@@ -8,5 +8,5 @@
 #endif
 
 #ifdef __cplusplus
-	#include "cocos2d.h"
+	#include "axmol.h"
 #endif

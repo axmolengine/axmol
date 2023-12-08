@@ -25,8 +25,6 @@
 
 #include "HelloWorldScene.h"
 
-USING_NS_AX;
-
 // Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
@@ -37,7 +35,7 @@ static void problemLoading(const char* filename)
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
+bool HelloWorldScene::init()
 {
     //////////////////////////////
     // 1. super init first
@@ -57,7 +55,7 @@ bool HelloWorld::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
     auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-        AX_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+        AX_CALLBACK_1(HelloWorldScene::menuCloseCallback, this));
 
     if (closeItem == nullptr || closeItem->getContentSize().width <= 0 || closeItem->getContentSize().height <= 0)
     {
@@ -80,21 +78,21 @@ bool HelloWorld::init()
 
     // Some templates (uncomment what you  need)
     auto touchListener = EventListenerTouchAllAtOnce::create();
-    touchListener->onTouchesBegan = AX_CALLBACK_2(HelloWorld::onTouchesBegan, this);
-    touchListener->onTouchesMoved = AX_CALLBACK_2(HelloWorld::onTouchesMoved, this);
-    touchListener->onTouchesEnded = AX_CALLBACK_2(HelloWorld::onTouchesEnded, this);
+    touchListener->onTouchesBegan = AX_CALLBACK_2(HelloWorldScene::onTouchesBegan, this);
+    touchListener->onTouchesMoved = AX_CALLBACK_2(HelloWorldScene::onTouchesMoved, this);
+    touchListener->onTouchesEnded = AX_CALLBACK_2(HelloWorldScene::onTouchesEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
     //auto mouseListener           = EventListenerMouse::create();
-    //mouseListener->onMouseMove   = AX_CALLBACK_1(HelloWorld::onMouseMove, this);
-    //mouseListener->onMouseUp     = AX_CALLBACK_1(HelloWorld::onMouseUp, this);
-    //mouseListener->onMouseDown   = AX_CALLBACK_1(HelloWorld::onMouseDown, this);
-    //mouseListener->onMouseScroll = AX_CALLBACK_1(HelloWorld::onMouseScroll, this);
+    //mouseListener->onMouseMove   = AX_CALLBACK_1(HelloWorldScene::onMouseMove, this);
+    //mouseListener->onMouseUp     = AX_CALLBACK_1(HelloWorldScene::onMouseUp, this);
+    //mouseListener->onMouseDown   = AX_CALLBACK_1(HelloWorldScene::onMouseDown, this);
+    //mouseListener->onMouseScroll = AX_CALLBACK_1(HelloWorldScene::onMouseScroll, this);
     //_eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     //auto keyboardListener           = EventListenerKeyboard::create();
-    //keyboardListener->onKeyPressed  = AX_CALLBACK_2(HelloWorld::onKeyPressed, this);
-    //keyboardListener->onKeyReleased = AX_CALLBACK_2(HelloWorld::onKeyReleased, this);
+    //keyboardListener->onKeyPressed  = AX_CALLBACK_2(HelloWorldScene::onKeyPressed, this);
+    //keyboardListener->onKeyReleased = AX_CALLBACK_2(HelloWorldScene::onKeyReleased, this);
     //_eventDispatcher->addEventListenerWithFixedPriority(keyboardListener, 11);
 
 
@@ -143,7 +141,7 @@ bool HelloWorld::init()
 }
 
 
-void HelloWorld::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void HelloWorldScene::onTouchesBegan(const std::vector<Touch*>& touches, Event* event)
 {
     for (auto&& t : touches)
     {
@@ -151,7 +149,7 @@ void HelloWorld::onTouchesBegan(const std::vector<ax::Touch*>& touches, ax::Even
     }
 }
 
-void HelloWorld::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void HelloWorldScene::onTouchesMoved(const std::vector<Touch*>& touches, Event* event)
 {
     for (auto&& t : touches)
     {
@@ -159,7 +157,7 @@ void HelloWorld::onTouchesMoved(const std::vector<ax::Touch*>& touches, ax::Even
     }
 }
 
-void HelloWorld::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Event* event)
+void HelloWorldScene::onTouchesEnded(const std::vector<Touch*>& touches, Event* event)
 {
     for (auto&& t : touches)
     {
@@ -167,55 +165,55 @@ void HelloWorld::onTouchesEnded(const std::vector<ax::Touch*>& touches, ax::Even
     }
 }
 
-void HelloWorld::onMouseDown(Event* event)
+void HelloWorldScene::onMouseDown(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
     AXLOG("onMouseDown detected, Key: %d", static_cast<int>(e->getMouseButton()));
 }
 
-void HelloWorld::onMouseUp(Event* event)
+void HelloWorldScene::onMouseUp(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
     AXLOG("onMouseUp detected, Key: %d", static_cast<int>(e->getMouseButton()));
 }
 
-void HelloWorld::onMouseMove(Event* event)
+void HelloWorldScene::onMouseMove(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
     AXLOG("onMouseMove detected, X:%f  Y:%f", e->getCursorX(), e->getCursorY());
 }
 
-void HelloWorld::onMouseScroll(Event* event)
+void HelloWorldScene::onMouseScroll(Event* event)
 {
     EventMouse* e = static_cast<EventMouse*>(event);
     AXLOG("onMouseScroll detected, X:%f  Y:%f", e->getScrollX(), e->getScrollY());
 }
 
-void HelloWorld::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
+void HelloWorldScene::onKeyPressed(EventKeyboard::KeyCode code, Event* event)
 {
     AXLOG("onKeyPressed, keycode: %d", static_cast<int>(code));
 }
 
-void HelloWorld::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
+void HelloWorldScene::onKeyReleased(EventKeyboard::KeyCode code, Event* event)
 {
     AXLOG("onKeyReleased, keycode: %d", static_cast<int>(code));
 }
 
-void HelloWorld::update(float delta)
+void HelloWorldScene::update(float delta)
 {
     switch (_gameState)
     {
-    case ExampleGameState::init:
+    case GameState::init:
     {
-        _gameState = ExampleGameState::update;
+        _gameState = GameState::update;
         break;
     }
 
-    case ExampleGameState::update:
+    case GameState::update:
     {
         /////////////////////////////
         // Add your codes below...like....
-        // 
+        //
         // UpdateJoyStick();
         // UpdatePlayer();
         // UpdatePhysics();
@@ -223,7 +221,7 @@ void HelloWorld::update(float delta)
         break;
     }
 
-    case ExampleGameState::pause:
+    case GameState::pause:
     {
         /////////////////////////////
         // Add your codes below...like....
@@ -233,26 +231,26 @@ void HelloWorld::update(float delta)
         break;
     }
 
-    case ExampleGameState::menu1:
+    case GameState::menu1:
     {    /////////////////////////////
         // Add your codes below...like....
-        // 
+        //
         // UpdateMenu1();
         break;
     }
 
-    case ExampleGameState::menu2:
+    case GameState::menu2:
     {    /////////////////////////////
         // Add your codes below...like....
-        // 
+        //
         // UpdateMenu2();
         break;
     }
 
-    case ExampleGameState::end:
+    case GameState::end:
     {    /////////////////////////////
         // Add your codes below...like....
-        // 
+        //
         // CleanUpMyCrap();
         menuCloseCallback(this);
         break;
@@ -261,7 +259,7 @@ void HelloWorld::update(float delta)
     } //switch
 }
 
-void HelloWorld::menuCloseCallback(Ref* sender)
+void HelloWorldScene::menuCloseCallback(Ref* sender)
 {
     // Close the axmol game scene and quit the application
     _director->end();

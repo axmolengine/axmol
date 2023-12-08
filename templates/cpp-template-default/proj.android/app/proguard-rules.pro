@@ -16,7 +16,7 @@
 #   public *;
 #}
 
-# Proguard Cocos2d-x for release
+# Proguard axmol for release
 -keep public class org.axmol.** { *; }
 -dontwarn org.axmol.**
 -keep public class com.chukong.** { *; }
@@ -28,7 +28,7 @@
 -keep class org.apache.http.** { *; }
 -dontwarn org.apache.http.**
 
-# Proguard Android Webivew for release. uncomment if you are using a webview in cocos2d-x
+# Proguard Android Webivew for release. uncomment if you are using a webview in axmol
 #-keep public class android.net.http.SslError
 #-keep public class android.webkit.WebViewClient
 
