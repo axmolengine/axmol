@@ -55,7 +55,7 @@ bool TableViewTest::init()
     testNode->setName("testNode");
     tableView->addChild(testNode);
     tableView->removeChild(testNode, true);
-    CCAssert(nullptr == tableView->getChildByName("testNode"), "The added child has been removed!");
+    AXASSERT(nullptr == tableView->getChildByName("testNode"), "The added child has been removed!");
 
     tableView = TableView::create(this, Size(60.0f, 250.0f));
     tableView->setDirection(ScrollView::Direction::VERTICAL);

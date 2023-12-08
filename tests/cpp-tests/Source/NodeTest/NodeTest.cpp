@@ -1270,14 +1270,14 @@ void NodeNameTest::test(float dt)
         ++i;
         return false;
     });
-    CCAssert(i == 100, "");
+    AXASSERT(i == 100, "");
 
     i = 0;
     parent->enumerateChildren("node[[:digit:]]+", [&i](Node* node) -> bool {
         ++i;
         return true;
     });
-    CCAssert(i == 1, "");
+    AXASSERT(i == 1, "");
 
     // enumerateChildren
     // name = node[[digit]]+/node
@@ -1303,14 +1303,14 @@ void NodeNameTest::test(float dt)
         ++i;
         return false;
     });
-    CCAssert(i == 10, "");
+    AXASSERT(i == 10, "");
 
     i = 0;
     parent->enumerateChildren("node1/node", [&i](Node* node) -> bool {
         ++i;
         return true;
     });
-    CCAssert(i == 1, "");
+    AXASSERT(i == 1, "");
 
     // search from root
     parent = Node::create();
@@ -1334,14 +1334,14 @@ void NodeNameTest::test(float dt)
         ++i;
         return false;
     });
-    CCAssert(i == 100, "");
+    AXASSERT(i == 100, "");
 
     i = 0;
     parent->enumerateChildren("node[[:digit:]]+/node", [&i](Node* node) -> bool {
         ++i;
         return true;
     });
-    CCAssert(i == 1, "");
+    AXASSERT(i == 1, "");
 
     // search from parent
     // name is xxx/..
@@ -1350,14 +1350,14 @@ void NodeNameTest::test(float dt)
         ++i;
         return true;
     });
-    CCAssert(i == 1, "");
+    AXASSERT(i == 1, "");
 
     i = 0;
     parent->getChildByName("node1")->enumerateChildren("node[[:digit:]]+/node/..", [&i](Node* node) -> bool {
         ++i;
         return false;
     });
-    CCAssert(i == 100, "");
+    AXASSERT(i == 100, "");
 
     // name = //xxx : search recursively
     parent = Node::create();
@@ -1382,21 +1382,21 @@ void NodeNameTest::test(float dt)
         ++i;
         return false;
     });
-    CCAssert(i == 110, "");  // 100(children) + 10(parent)
+    AXASSERT(i == 110, "");  // 100(children) + 10(parent)
 
     i = 0;
     parent->enumerateChildren("//node[[:digit:]]+", [&i](Node* node) -> bool {
         ++i;
         return true;
     });
-    CCAssert(i == 1, "");
+    AXASSERT(i == 1, "");
 
     i = 0;
     parent->getChildByName("node1")->enumerateChildren("//node[[:digit:]]+/..", [&i](Node* node) -> bool {
         ++i;
         return false;
     });
-    CCAssert(i == 110, "");
+    AXASSERT(i == 110, "");
 
     // utils::findChildren()
 
@@ -1408,7 +1408,7 @@ void NodeNameTest::test(float dt)
         parent->addChild(child);
     }
     auto findChildren = utils::findChildren(*parent, "node");
-    CCAssert(findChildren.size() == 50, "");
+    AXASSERT(findChildren.size() == 50, "");
 }
 
 //------------------------------------------------------------------
